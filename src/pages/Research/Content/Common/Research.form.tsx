@@ -58,7 +58,7 @@ const ResearchFormLabel = ({ children, ...props }) => (
 
 const ResearchForm = observer((props: IProps) => {
   const { formValues, parentType } = props
-  const { create, update } = buttons.draft
+  const { create } = buttons.draft
 
   formValues.researchStatus = formValues.researchStatus || 'In progress'
 
@@ -106,8 +106,6 @@ const ResearchForm = observer((props: IProps) => {
     await store.uploadResearch(formValues)
   }
 
-  const draftButtonText =
-    formValues.moderation !== IModerationStatus.DRAFT ? create : update
   const pageTitle = headings.overview[parentType]
 
   return (
@@ -323,7 +321,7 @@ const ResearchForm = observer((props: IProps) => {
                     disabled={submitting}
                     sx={{ width: '100%', display: 'block' }}
                   >
-                    <span>{draftButtonText}</span>
+                    <span>{create}</span>
                   </Button>
 
                   <Button

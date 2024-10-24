@@ -1,10 +1,10 @@
 import { Button } from 'oa-components'
-import { IModerationStatus } from 'oa-shared'
 import { Flex, Text } from 'theme-ui'
 
 import { buttons } from '../../labels'
 
 import type { FormApi } from 'final-form'
+import type { IModerationStatus } from 'oa-shared'
 
 interface IProps {
   form: FormApi
@@ -14,10 +14,8 @@ interface IProps {
 }
 
 export const HowtoButtonDraft = (props: IProps) => {
-  const { form, formId, moderation, submitting } = props
-  const { create, description, update } = buttons.draft
-
-  const text = moderation !== IModerationStatus.DRAFT ? create : update
+  const { form, formId, submitting } = props
+  const { create, description } = buttons.draft
 
   return (
     <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
@@ -31,7 +29,7 @@ export const HowtoButtonDraft = (props: IProps) => {
         sx={{ width: '100%', display: 'block' }}
         form={formId}
       >
-        <span>{text}</span>
+        <span>{create}</span>
       </Button>
       <Text sx={{ fontSize: 1, textAlign: 'center' }}>{description}</Text>
     </Flex>

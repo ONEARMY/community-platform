@@ -19,7 +19,6 @@ export const headings = {
 export const buttons = {
   draft: {
     create: 'Save draft',
-    update: 'Revert to draft',
     description: 'A draft can be saved any time',
   },
   files: 'Re-upload files (this will delete the existing ones)',

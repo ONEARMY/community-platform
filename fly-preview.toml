@@ -1,10 +1,18 @@
+primary_region = 'cdg'
+
 [build]
+dockerfile = "Dockerfile.preview"
 
 [http_service]
 internal_port = 3000
 force_https = true
-auto_stop_machines = 'off'
+auto_stop_machines = 'stop'
 processes = ['app']
 
 [env]
 VITE_BRANCH = "preview"
+
+[[vm]]
+memory = '4gb'
+cpu_kind = 'shared'
+cpus = 1

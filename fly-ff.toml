@@ -6,7 +6,8 @@ primary_region = 'ams'
 [http_service]
 internal_port = 3000
 force_https = true
-auto_stop_machines = 'off'
+auto_stop_machines = 'suspend'
+min_machines_running = 1
 processes = ['app']
 
 [env]

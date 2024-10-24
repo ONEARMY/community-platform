@@ -31,4 +31,46 @@ export const profileTags: ITag[] = [
     _deleted: false,
     label: 'Mould Making',
   },
+  {
+    _id: '4ax6TzzVsAtG6Au8nEXJ',
+    _created: '2018-01-02T00:00:00.001Z',
+    _deleted: false,
+    label: 'PET',
+  },
+  {
+    _id: 'farYGhuqJc6wrAwa2xyx',
+    _created: '2018-01-02T00:00:00.001Z',
+    _deleted: false,
+    label: 'HDPE',
+  },
+  {
+    _id: 'XjBLmxaYi2Hu3H2n4QBw',
+    _created: '2018-01-02T00:00:00.001Z',
+    _deleted: false,
+    label: 'PVC',
+  },
+  {
+    _id: 'HDNJjX4ohKFfM7YznEpL',
+    _created: '2018-01-02T00:00:00.001Z',
+    _deleted: false,
+    label: 'LDPE',
+  },
+  {
+    _id: 'P7pk8KAQwzqHLqhGUvoy',
+    _created: '2018-01-02T00:00:00.001Z',
+    _deleted: false,
+    label: 'PP',
+  },
+  {
+    _id: '3PLMJ7mXxZFRqrTLcM2h',
+    _created: '2018-01-02T00:00:00.001Z',
+    _deleted: false,
+    label: 'PS',
+  },
+  {
+    _id: '3E6Eyxf7EYmPLXeF8nd3',
+    _created: '2018-01-02T00:00:00.001Z',
+    _deleted: false,
+    label: 'Other Plastics',
+  },
 ]

@@ -7195,6 +7195,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@keyv/serialize@npm:*":
+  version: 1.0.1
+  resolution: "@keyv/serialize@npm:1.0.1"
+  dependencies:
+    buffer: ^6.0.3
+  checksum: ff3dd9a6246b17fca3d1b0aba312dea931059fdecc36027f4d8133e59dbb3554a0a516b1f3dfc7fb2b3ca7a3d6fa307804f299566ab214febd3fb9d0502eebed
+  languageName: node
+  linkType: hard
+
 "@leichtgewicht/ip-codec@npm:^2.0.1":
   version: 2.0.5
   resolution: "@leichtgewicht/ip-codec@npm:2.0.5"
@@ -14722,6 +14731,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"buffer@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "buffer@npm:6.0.3"
+  dependencies:
+    base64-js: ^1.3.1
+    ieee754: ^1.2.1
+  checksum: 5ad23293d9a731e4318e420025800b42bf0d264004c0286c8cc010af7a270c7a0f6522e84f54b9ad65cbd6db20b8badbfd8d2ebf4f80fa03dab093b89e68c3f9
+  languageName: node
+  linkType: hard
+
 "builtin-modules@npm:^3.3.0":
   version: 3.3.0
   resolution: "builtin-modules@npm:3.3.0"
@@ -21761,7 +21780,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ieee754@npm:^1.1.13":
+"ieee754@npm:^1.1.13, ieee754@npm:^1.2.1":
   version: 1.2.1
   resolution: "ieee754@npm:1.2.1"
   checksum: 5144c0c9815e54ada181d80a0b810221a253562422e7c6c3a60b1901154184f49326ec239d618c416c1c5945a2e197107aee8d986a3dd836b53dffefd99b5e7e
@@ -23844,6 +23863,15 @@ __metadata:
   dependencies:
     json-buffer: 3.0.1
   checksum: 74a24395b1c34bd44ad5cb2b49140d087553e170625240b86755a6604cd65aa16efdbdeae5cdb17ba1284a0fbb25ad06263755dbc71b8d8b06f74232ce3cdd72
+  languageName: node
+  linkType: hard
+
+"keyv@npm:^5.1.2":
+  version: 5.1.2
+  resolution: "keyv@npm:5.1.2"
+  dependencies:
+    "@keyv/serialize": "*"
+  checksum: 959978b3574e704edf3772f9b447dc779c24a53c09c0297912ac55595013d8b6cbfa529f2019b3952deeadafe82257cc7fac2fdc0077d242553a74015a36d198
   languageName: node
   linkType: hard
 
@@ -27416,6 +27444,7 @@ __metadata:
     husky: ^9.0.11
     idb: ^8.0.0
     isbot: ^5.1.13
+    keyv: ^5.1.2
     leaflet: ^1.5.1
     leaflet.markercluster: ^1.4.1
     lint-staged: ^15.2.7

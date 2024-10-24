@@ -31,14 +31,12 @@ const MapsPage = observer(() => {
   const [showNewMap, setShowNewMap] = useState<boolean>(false)
   const [zoom, setZoom] = useState<number>(INITIAL_ZOOM)
 
-  const { userStore } = useCommonStores().stores
   const navigate = useNavigate()
   const location = useLocation()
   const mapPinService = useContext(MapPinServiceContext)
 
   const mapRef = useRef<Map>(null)
   const newMapRef = useRef<Map>(null)
-  const user = userStore.activeUser
 
   if (!mapPinService) {
     return null
@@ -54,7 +52,7 @@ const MapsPage = observer(() => {
     const fetchMapPins = async () => {
       setNotification('Loading...')
       try {
-        const pins = await mapPinService.getMapPins(user?._id)
+        const pins = await mapPinService.getMapPins()
         setMapPins(pins)
         setNotification('')
       } catch (error) {
@@ -74,19 +72,6 @@ const MapsPage = observer(() => {
       setSelectedPin(null)
     }
   }, [location.hash])
-
-  useEffect(() => {
-    const userName = user?._id
-    if (!userName) {
-      return
-    }
-
-    mapPinService.getMapPinSelf(userName).then((userMapPin) => {
-      if (userMapPin && !mapPins.find((pin) => pin._id === userMapPin._id)) {
-        setMapPins([...mapPins, userMapPin])
-      }
-    })
-  }, [user])
 
   const promptUserLocation = async () => {
     try {
@@ -127,7 +112,7 @@ const MapsPage = observer(() => {
     // If only the mapPins where preloaded with the "detail" property, i think that this could fly away
     const pin = await mapPinService.getMapPinByUserId(userId)
     if (pin) {
-      logger.info(`Fetched map pin by user id`, { userId })
+      logger.info(`Fetched map pin by user id`, { userId, pin })
       setCenter(pin.location)
       setSelectedPin(pin)
     } else {

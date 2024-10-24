@@ -74,19 +74,4 @@ describe('map.service', () => {
       expect(result).toBeNull()
     })
   })
-
-  describe('getMapPinSelf', () => {
-    it('fetches user map pin', async () => {
-      // prepare
-      const userId = faker.internet.userName()
-
-      // act
-      await mapPinService.getMapPinSelf(userId)
-
-      // assert
-      expect(mockCollection).toHaveBeenCalledWith(DB_ENDPOINTS.mappins)
-      expect(mockWhere).toHaveBeenCalledWith('_id', '==', userId)
-      expect(mockGetDocs).toHaveBeenCalled()
-    })
-  })
 })

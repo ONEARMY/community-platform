@@ -86,7 +86,6 @@ const Wrapper = (path = '/map') => {
         shortDescription: 'description',
       },
     }),
-    getMapPinSelf: vi.fn().mockResolvedValue({}),
     getMapPins: vi.fn().mockImplementation(() => {
       return Promise.resolve([])
     }),

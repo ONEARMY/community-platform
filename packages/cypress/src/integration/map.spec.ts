@@ -145,7 +145,7 @@ describe('[Map]', () => {
 
     cy.step('Zoom out button works')
     cy.get('[data-cy="WorldViewButton"]').click()
-    cy.window().its('map').invoke('getZoom').should('equal', 1)
+    cy.window().its('mapRef').invoke('getZoom').should('equal', 1)
 
     cy.step('Zoom in button prompts for user location and zooms')
     cy.stub(window.navigator.geolocation, 'getCurrentPosition').callsFake(

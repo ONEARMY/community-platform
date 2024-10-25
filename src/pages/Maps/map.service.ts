@@ -1,9 +1,5 @@
 import { createContext } from 'react'
-import { collection, getDocs, query, where } from 'firebase/firestore'
-import { API_URL } from 'src/config/config'
 import { logger } from 'src/logger'
-import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
-import { firestore } from 'src/utils/firebase'
 
 import type { IMapPin } from 'oa-shared'
 

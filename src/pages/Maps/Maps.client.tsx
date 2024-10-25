@@ -1,7 +1,6 @@
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { filterMapPinsByType } from 'src/stores/Maps/filter'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import { Box } from 'theme-ui'

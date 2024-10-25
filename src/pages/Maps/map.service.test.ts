@@ -1,5 +1,3 @@
-import { faker } from '@faker-js/faker'
-import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
 import { describe, expect, it, vi } from 'vitest'
 
 import { mapPinService } from './map.service'

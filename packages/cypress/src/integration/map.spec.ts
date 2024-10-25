@@ -133,6 +133,7 @@ describe('[Map]', () => {
 
     cy.get('.icon-cluster-many')
       .first()
+      .scrollIntoView()
       .should('be.visible')
       .within(() => {
         cy.get('.icon-cluster-text').should('have.text', '3').and('be.visible')

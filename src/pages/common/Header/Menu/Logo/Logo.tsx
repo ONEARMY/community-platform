@@ -1,11 +1,13 @@
-import { useTheme } from '@emotion/react'
 import { Link } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { VERSION } from 'src/config/config'
-import { Box, Flex, Image, Text } from 'theme-ui'
+import { Box, Flex, Image, Text, useThemeUI } from 'theme-ui'
+
+import type { ThemeWithName } from 'oa-themes'
 
 const Logo = observer(() => {
-  const theme = useTheme()
+  const themeUi = useThemeUI()
+  const theme = themeUi.theme as ThemeWithName
 
   const name = import.meta.env.VITE_SITE_NAME || process.env.VITE_SITE_NAME
   const logo = theme.logo

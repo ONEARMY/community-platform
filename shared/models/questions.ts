@@ -20,6 +20,7 @@ export namespace IQuestion {
     _deleted: boolean
     subscribers?: UserIdList
     commentCount?: number
+    keywords?: string[]
   } & DBDoc &
     FormInput &
     ISharedFeatures

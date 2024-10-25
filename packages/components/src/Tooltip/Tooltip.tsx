@@ -1,4 +1,4 @@
-import ReactTooltip from 'react-tooltip'
+import { Tooltip as ReactTooltip } from 'react-tooltip'
 import styled from '@emotion/styled'
 
 const StyledTooltip = styled(ReactTooltip)`
@@ -8,16 +8,16 @@ const StyledTooltip = styled(ReactTooltip)`
 `
 
 type TooltipProps = {
+  id: string
   children?: React.ReactNode
 }
 
-export const Tooltip = ({ children, ...props }: TooltipProps) => {
+export const Tooltip = ({ children, id }: TooltipProps) => {
   return (
     <StyledTooltip
-      event="mouseenter focus"
-      eventOff="mouseleave blur"
-      effect="solid"
-      {...props}
+      id={id}
+      openEvents={{ mouseenter: true, focus: true }}
+      closeEvents={{ mouseleave: true, blur: true }}
     >
       {children}
     </StyledTooltip>

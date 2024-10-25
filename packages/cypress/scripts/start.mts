@@ -90,14 +90,14 @@ async function main() {
 async function startAppServer() {
   const { CROSSENV_BIN } = PATHS
   // by default spawns will not respect colours used in stdio, so try to force
-  const crossEnvArgs = `FORCE_COLOR=1 VITE_SITE_VARIANT=test-ci`
+  const crossEnvArgs = `VITE_SITE_VARIANT=test-ci`
 
   // run local debug server for testing unless production build specified
   let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none yarn start`
 
   // create local build if not running on ci (which will have build already generated)
   if (isCi) {
-    serverCmd = 'yarn start-ci'
+    serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} yarn start-ci`
   }
 
   /******************* Run the main commands ******************* */
@@ -107,6 +107,10 @@ async function startAppServer() {
     shell: true,
     stdio: ['pipe', 'pipe', 'inherit'],
     cwd: PATHS.PLATFORM_ROOT_DIR,
+    env: {
+      ...process.env,
+      VITE_SITE_VARIANT: 'test-ci',
+    },
   })
 
   child.stdout.on('data', (d) => {
@@ -134,7 +138,7 @@ function runTests() {
   const CI_BROWSER = e.CI_BROWSER || 'chrome'
   const CI_GROUP = e.CI_GROUP || '1x-chrome'
   // not currently used, but can pass variables accessed by Cypress.env()
-  const CYPRESS_ENV = `DUMMY_VAR=1`
+  const CYPRESS_ENV = `VITE_SITE_VARIANT=test-ci`
   // use workflow ID so that jobs running in parallel can be assigned to same cypress build
   // cypress will use this to split tests between parallel runs
   const buildId = e.CIRCLE_WORKFLOW_ID || generateAlphaNumeric(8)
@@ -149,11 +153,14 @@ function runTests() {
 
   console.log(`Running cypress with cmd: ${testCMD}`)
 
-  const spawn = spawnSync(`${CROSSENV_BIN} FORCE_COLOR=1 ${testCMD}`, {
-    shell: true,
-    stdio: ['inherit', 'inherit', 'pipe'],
-    cwd: PATHS.WORKSPACE_DIR,
-  })
+  const spawn = spawnSync(
+    `${CROSSENV_BIN} VITE_SITE_VARIANT=test-ci ${testCMD}`,
+    {
+      shell: true,
+      stdio: ['inherit', 'inherit', 'pipe'],
+      cwd: PATHS.WORKSPACE_DIR,
+    },
+  )
   console.log('testing complete with exit code', spawn.status)
   if (spawn.status === 1) {
     console.error('error', spawn.stderr.toString())

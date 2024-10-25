@@ -5,6 +5,8 @@ import { deleteDB } from 'idb'
 
 import { Auth, TestDB } from './db/firebase'
 
+import type { IHowtoDB, IQuestionDB, IResearchDB } from 'oa-shared'
+import type { IUserSignUpDetails } from '../utils/TestUtils'
 import type { firebase } from './db/firebase'
 
 declare global {
@@ -31,6 +33,15 @@ declare global {
         opStr: any,
         value: string,
       ): Chainable<any[]>
+      addHowto(howto: IHowtoDB, user: IUserSignUpDetails): Chainable<void>
+      addQuestion(
+        question: IQuestionDB,
+        user: IUserSignUpDetails,
+      ): Chainable<void>
+      addResearch(
+        research: IResearchDB,
+        user: IUserSignUpDetails,
+      ): Chainable<void>
       step(message: string)
       setSessionStorage(key: string, value: string): Promise<void>
     }
@@ -96,6 +107,7 @@ Cypress.Commands.add('clearServiceWorkers', () => {
         Auth.signOut().then(() => resolve())
       })
     })
+    cy.wait(2000)
     cy.wrap(checkUI ? 'check logout ui' : 'skip ui check').then(() => {
       if (checkUI) {
         cy.get('[data-cy=login]')
@@ -157,6 +169,33 @@ Cypress.Commands.add(
     return firestore.queryDocuments(collectionName, fieldPath, opStr, value)
   },
 )
+
+Cypress.Commands.add('addHowto', (howto, user) => {
+  const slug = `${howto.slug}-${user.username}`
+
+  return firestore.addDocument('howtos', {
+    ...howto,
+    slug,
+  })
+})
+
+Cypress.Commands.add('addQuestion', (question, user) => {
+  const slug = `${question.slug}-for-${user.username}`
+
+  return firestore.addDocument('questions', {
+    ...question,
+    slug,
+  })
+})
+
+Cypress.Commands.add('addResearch', (research, user) => {
+  const slug = `${user.username}-in-${research.slug}`
+
+  return firestore.addDocument('research', {
+    ...research,
+    slug,
+  })
+})
 
 Cypress.Commands.add('step', (message: string) => {
   Cypress.log({

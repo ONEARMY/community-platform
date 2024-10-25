@@ -1,5 +1,6 @@
 import type { ILatLng } from './common'
 import type { IModerationStatus } from './moderation'
+import type { ITag } from './tags'
 import type { IUserBadges, ProfileTypeName, WorkspaceType } from './user'
 
 /**
@@ -68,6 +69,7 @@ export interface IProfileCreator {
   displayName: string
   isContactableByPublic: boolean
   profileType: ProfileTypeName
+  tags?: ITag[]
   workspaceType?: string
   userImage?: string
 }

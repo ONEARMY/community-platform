@@ -15,6 +15,7 @@ import { MapPinServiceContext } from './map.service'
 
 import type { ILatLng, IMapPin } from 'oa-shared'
 import type { Map } from 'react-leaflet'
+import type { IMapPinService } from './map.service'
 
 import './styles.css'
 
@@ -32,14 +33,10 @@ const MapsPage = observer(() => {
 
   const navigate = useNavigate()
   const location = useLocation()
-  const mapPinService = useContext(MapPinServiceContext)
+  const mapPinService = useContext(MapPinServiceContext) as IMapPinService
 
   const mapRef = useRef<Map>(null)
   const newMapRef = useRef<Map>(null)
-
-  if (!mapPinService) {
-    return null
-  }
 
   useEffect(() => {
     if (!selectedPin) {
@@ -65,8 +62,11 @@ const MapsPage = observer(() => {
   useEffect(() => {
     const pinId = location.hash.slice(1)
     if (pinId.length > 0) {
-      if (selectedPin) setSelectedPin(null)
-      else selectPinByUserId(pinId)
+      if (selectedPin) {
+        setSelectedPin(null)
+      } else {
+        selectPinByUserId(pinId)
+      }
     } else {
       setSelectedPin(null)
     }

@@ -59,6 +59,7 @@ export namespace IResearch {
     totalUpdates?: number
     totalUsefulVotes?: number
     totalCommentCount: number
+    latestCommentDate?: string
     keywords?: string[]
   } & Omit<FormInput, 'collaborators'> &
     DBDoc

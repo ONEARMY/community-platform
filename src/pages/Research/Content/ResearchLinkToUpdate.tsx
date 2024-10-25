@@ -35,8 +35,13 @@ export const ResearchLinkToUpdate = ({ research, update }: IProps) => {
       onClick={async () => copyURLtoClipboard(slug, _id)}
       data-cy="ResearchLinkToUpdate"
     >
-      <Icon glyph="hyperlink" data-tip={label} size={30} />
-      <Tooltip />
+      <Icon
+        glyph="hyperlink"
+        data-tooltip-id="link-update"
+        data-tooltip-content={label}
+        size={30}
+      />
+      <Tooltip id="link-update" />
     </InternalLink>
   )
 }

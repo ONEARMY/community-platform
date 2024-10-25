@@ -48,7 +48,8 @@ const FileDetails = (props: {
           cursor: 'pointer',
         }}
         onClick={() => redirectToSignIn && redirectToSignIn()}
-        data-tip={redirectToSignIn ? 'Login to download' : ''}
+        data-tooltip-id="login-download"
+        data-tooltip-content={redirectToSignIn ? 'Login to download' : ''}
       >
         <Icon size={24} glyph={glyph} mr={3} />
         <Text
@@ -65,7 +66,7 @@ const FileDetails = (props: {
         </Text>
         <Text sx={{ fontSize: 1 }}>{size}</Text>
       </Flex>
-      <Tooltip />
+      <Tooltip id="login-download" />
     </>
   )
 }

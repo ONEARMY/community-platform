@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Form } from 'react-final-form'
 import { ARRAY_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
@@ -12,9 +12,10 @@ import { isModuleSupported, MODULE } from 'src/modules'
 import { Flex } from 'theme-ui'
 import { v4 as uuid } from 'uuid'
 
+import { EnvironmentContext } from '../common/EnvironmentContext'
 import { CollectionSection } from './content/sections/Collection.section'
-import { ExpertiseSection } from './content/sections/Expertise.section'
 import { FocusSection } from './content/sections/Focus.section'
+import { ProfileTags } from './content/sections/ProfileTags.section'
 import { PublicContactSection } from './content/sections/PublicContact.section'
 import { UserImagesSection } from './content/sections/UserImages.section'
 import { UserInfosSection } from './content/sections/UserInfos.section'
@@ -27,6 +28,7 @@ import type { IUser } from 'oa-shared'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
 export const SettingsPageUserProfile = () => {
+  const env = useContext(EnvironmentContext)
   const [notification, setNotification] = useState<
     IFormNotification | undefined
   >(undefined)
@@ -106,11 +108,11 @@ export const SettingsPageUserProfile = () => {
     openingHours: user.openingHours || [{}],
     workspaceType: user.workspaceType || null,
     collectedPlasticTypes: user.collectedPlasticTypes || null,
-    machineBuilderXp: user.machineBuilderXp || null,
     isContactableByPublic:
       user.isContactableByPublic || DEFAULT_PUBLIC_CONTACT_PREFERENCE,
     userImage: user.userImage || null,
     coverImages,
+    tags: user.tags || {},
   }
 
   const formId = 'userProfileForm'
@@ -149,7 +151,10 @@ export const SettingsPageUserProfile = () => {
 
             <form id={formId} onSubmit={handleSubmit}>
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
-                {isModuleSupported(MODULE.MAP) && <FocusSection />}
+                {isModuleSupported(
+                  env?.VITE_SUPPORTED_MODULES || '',
+                  MODULE.MAP,
+                ) && <FocusSection />}
 
                 {values.profileType === ProfileTypeList.WORKSPACE && (
                   <WorkspaceSection />
@@ -167,13 +172,7 @@ export const SettingsPageUserProfile = () => {
                 )}
 
                 {values.profileType === ProfileTypeList.MACHINE_BUILDER && (
-                  <ExpertiseSection
-                    required={
-                      values.machineBuilderXp
-                        ? values.machineBuilderXp.length === 0
-                        : true
-                    }
-                  />
+                  <ProfileTags />
                 )}
 
                 <UserInfosSection formValues={values} />

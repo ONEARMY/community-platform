@@ -1,21 +1,11 @@
-import {
-  action,
-  computed,
-  makeObservable,
-  observable,
-  runInAction,
-  toJS,
-} from 'mobx'
+import { action, makeObservable, observable, runInAction, toJS } from 'mobx'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { needsModeration } from 'src/utils/helpers'
 import { getKeywords } from 'src/utils/searchHelper'
 
 import { incrementDocViewCount } from '../common/incrementDocViewCount'
-import {
-  changeMentionToUserReference,
-  changeUserReferenceToPlainText,
-} from '../common/mentions'
+import { changeMentionToUserReference } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
@@ -35,7 +25,6 @@ const COLLECTION_NAME = 'howtos'
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
-  public activeHowto: IHowtoDB | null = null
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
 
   constructor(rootStore: IRootStore) {
@@ -43,81 +32,31 @@ export class HowtoStore extends ModuleStore {
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
     makeObservable(this, {
-      activeHowto: observable,
       uploadStatus: observable,
-      removeActiveHowto: action,
-      setActiveHowtoBySlug: action,
       toggleUsefulByUser: action,
       updateUploadStatus: action,
       resetUploadStatus: action,
       deleteHowTo: action,
-      userVotedActiveHowToUseful: computed,
-      votedUsefulCount: computed,
     })
-  }
-
-  public removeActiveHowto() {
-    this.activeHowto = null
-  }
-
-  public async setActiveHowtoBySlug(slug?: string) {
-    // clear any cached data and then load the new howto
-    logger.debug(`HowtoStore.setActiveHowtoBySlug:`, { slug })
-    let activeHowto: IHowtoDB | null = null
-
-    if (slug) {
-      const collection = await this.db
-        .collection<IHowto>(COLLECTION_NAME)
-        .getWhere('slug', '==', slug)
-      activeHowto = collection.length > 0 ? collection[0] : null
-
-      // try previous slugs if slug is not recognized as primary
-      if (!activeHowto) {
-        const collection = await this.db
-          .collection<IHowto>(COLLECTION_NAME)
-          .getWhere('previousSlugs', 'array-contains', slug)
-
-        activeHowto = collection.length > 0 ? collection[0] : null
-      }
-
-      // Change all UserReferences to mentions
-      if (activeHowto) {
-        if (activeHowto.description) {
-          activeHowto.description = changeUserReferenceToPlainText(
-            activeHowto.description,
-          )
-        }
-
-        activeHowto.steps.forEach((step) => {
-          if (!step.text) return
-          step.text = changeUserReferenceToPlainText(step.text)
-        })
-      }
-    }
-    runInAction(() => {
-      this.activeHowto = activeHowto
-    })
-    return activeHowto
   }
 
   public async toggleUsefulByUser(
-    docId: string,
+    howto: IHowtoDB,
     userName: string,
   ): Promise<void> {
     const updatedItem = (await toggleDocUsefulByUser(
       COLLECTION_NAME,
-      docId,
+      howto._id,
       userName,
     )) as IHowtoDB
 
     runInAction(() => {
-      this.activeHowto = updatedItem
       if ((updatedItem.votedUsefulBy || []).includes(userName)) {
         this.userNotificationsStore.triggerNotification(
           'howto_useful',
-          this.activeHowto._createdBy,
-          '/how-to/' + this.activeHowto.slug,
-          this.activeHowto.title,
+          howto._createdBy,
+          '/how-to/' + howto.slug,
+          howto.title,
         )
       }
     })
@@ -184,11 +123,6 @@ export class HowtoStore extends ModuleStore {
     setLastEditTimestamp = false,
   ) {
     const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(howToItem._id)
-
-    logger.debug('updateHowtoItem', {
-      before: this.activeHowto,
-      after: howToItem,
-    })
 
     const { text: description, users } = await this.addUserReference(
       howToItem.description || '',
@@ -277,7 +211,9 @@ export class HowtoStore extends ModuleStore {
   }
 
   // upload a new or update an existing how-to
-  public async uploadHowTo(values: IHowtoFormInput | IHowtoDB) {
+  public async uploadHowTo(
+    values: IHowtoFormInput | IHowtoDB,
+  ): Promise<IHowtoDB | null> {
     logger.debug('uploading howto', { values })
     this.updateUploadStatus('Start')
     // create a reference either to the existing document (if editing) or a new document if creating
@@ -290,6 +226,8 @@ export class HowtoStore extends ModuleStore {
     logger.debug('uploadHowto.existingDoc', { existingDoc })
 
     const user = this.activeUser as IUser
+
+    let howto: IHowtoDB | null = null
     try {
       // upload any pending images, avoid trying to re-upload images previously saved
       // if cover already uploaded stored as object not array
@@ -331,7 +269,7 @@ export class HowtoStore extends ModuleStore {
       const keywords = getKeywords(values.title + ' ' + values.description)
       keywords.push(_createdBy)
 
-      const howTo: IHowto = {
+      const howToData: IHowto = {
         ...(existingDoc || {}),
         _id,
         _createdBy,
@@ -358,9 +296,9 @@ export class HowtoStore extends ModuleStore {
         ...(time ? { time } : {}),
       }
 
-      logger.debug('populating database', howTo)
+      logger.debug('populating database', howToData)
       // set the database document
-      this.activeHowto = await this.updateHowtoItem(howTo, true)
+      howto = await this.updateHowtoItem(howToData, true)
       this.updateUploadStatus('Database')
       logger.debug('post added')
       // complete
@@ -369,15 +307,8 @@ export class HowtoStore extends ModuleStore {
       logger.error('error', error)
       throw new Error(error.message)
     }
-  }
 
-  private async addCommentNotification(howto: IHowto) {
-    await this.userNotificationsStore.triggerNotification(
-      'new_comment_discussion',
-      howto._createdBy,
-      '/how-to/' + howto.slug,
-      howto.title,
-    )
+    return howto
   }
 
   private async findMentionsInSteps(steps: IHowToStepFormInput[]) {
@@ -442,17 +373,6 @@ export class HowtoStore extends ModuleStore {
     }
 
     return steps
-  }
-
-  get userVotedActiveHowToUseful(): boolean {
-    if (!this.activeUser) return false
-    return (this.activeHowto?.votedUsefulBy || []).includes(
-      this.activeUser.userName,
-    )
-  }
-
-  get votedUsefulCount(): number {
-    return (this.activeHowto?.votedUsefulBy || []).length
   }
 }
 

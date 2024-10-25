@@ -78,8 +78,6 @@ const factory = async (
 
   store.toggleUsefulByUser = vi.fn()
 
-  await store.setActiveHowtoBySlug('howto')
-
   return {
     store,
     howToItem,
@@ -214,16 +212,6 @@ describe('howto.store', () => {
       expect(getFn).toHaveBeenCalledTimes(2)
       expect(getFn).toHaveBeenCalledWith('server')
       expect(deletedHowTo._deleted).toBeTruthy()
-    })
-  })
-
-  describe('unsetActiveHowTo', () => {
-    it('removes state from activeHowto property', async () => {
-      const { store } = await factory()
-
-      store.removeActiveHowto()
-
-      expect(store.activeHowto).toBe(null)
     })
   })
 

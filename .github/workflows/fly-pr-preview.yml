@@ -3,7 +3,7 @@ on:
   # Run this workflow on every PR event. Existing review apps will be updated when the PR is updated.
   pull_request_target:
     # Trigger when labels are changed or more commits added to a PR that contains labels
-    types: [labeled, synchronize]
+    types: [closed, labeled, synchronize]
     # Only create a preview if changes have been made to the main src code or backend functions
     paths:
       - 'src/**'
@@ -16,7 +16,7 @@ on:
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
   # Set these to your Fly.io organization and preferred region.
-  FLY_REGION: cdg
+  FLY_REGION: ams
   FLY_ORG: one-army
 
 jobs:
@@ -45,8 +45,7 @@ jobs:
 
       - name: Deploy PR app to Fly.io
         id: deploy
-        uses: superfly/fly-pr-review-apps@1.2.1
+        uses: superfly/fly-pr-review-apps@1.3.0
         with:
           config: fly-preview.toml
           name: community-platform-pr-${{ github.event.number }}
-          secrets: VITE_SITE_VARIANT=preview VITE_PROJECT_VERSION=${GITHUB_SHA}

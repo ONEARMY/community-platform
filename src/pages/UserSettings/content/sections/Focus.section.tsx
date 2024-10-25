@@ -1,21 +1,22 @@
 import { Field } from 'react-final-form'
-import { useTheme } from '@emotion/react'
 import { ExternalLink } from 'oa-components'
 import { getSupportedProfileTypes } from 'src/modules/profile'
 import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
-import { Box, Flex, Grid, Heading, Paragraph, Text } from 'theme-ui'
+import { Box, Flex, Grid, Heading, Paragraph, Text, useThemeUI } from 'theme-ui'
 
 import { FlexSectionContainer } from '../elements'
 import { CustomRadioField } from '../fields/CustomRadio.field'
 
 import type { ProfileTypeName } from 'oa-shared'
+import type { ThemeWithName } from 'oa-themes'
 
 const ProfileTypes = () => {
   const profileGuidelinesUrl =
     import.meta.env.VITE_PROFILE_GUIDELINES_URL ||
     process.env.VITE_PROFILE_GUIDELINES_URL
   const { description, error } = fields.activities
-  const theme = useTheme()
+  const themeUi = useThemeUI()
+  const theme = themeUi.theme as ThemeWithName
   const profileTypes = getSupportedProfileTypes().filter(({ label }) =>
     Object.keys(theme.badges).includes(label),
   )

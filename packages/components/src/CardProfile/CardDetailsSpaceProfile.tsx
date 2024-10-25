@@ -2,6 +2,7 @@ import { Box, Flex, Image, Text } from 'theme-ui'
 
 import { Category } from '../Category/Category'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
+import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList'
 import { Username } from '../Username/Username'
 
 import type { IProfileCreator } from 'oa-shared'
@@ -19,6 +20,7 @@ export const CardDetailsSpaceProfile = ({ creator, isLink }: IProps) => {
     countryCode,
     coverImage,
     profileType,
+    tags,
     workspaceType,
   } = creator
 
@@ -82,7 +84,8 @@ export const CardDetailsSpaceProfile = ({ creator, isLink }: IProps) => {
             isLink={isLink}
           />
         </Flex>
-        {workspaceType && (
+
+        {workspaceType && profileType === 'workspace' && (
           <Category
             category={{ label: workspaceLabel }}
             sx={{
@@ -92,6 +95,9 @@ export const CardDetailsSpaceProfile = ({ creator, isLink }: IProps) => {
             }}
           />
         )}
+
+        {tags && <ProfileTagsList tags={tags} />}
+
         {about && (
           <Text variant="quiet" sx={{ fontSize: 2 }}>
             {aboutTextStart || about}

@@ -71,14 +71,15 @@ const ResearchUpdate = (props: IProps) => {
         <>
           <Button
             data-cy="DraftUpdateLabel"
-            data-tip="Only visible to you (and other collaborators)"
+            data-tooltip-id="visible-tooltip"
+            data-tooltip-content="Only visible to you (and other collaborators)"
             sx={{ alignSelf: 'flex-start', backgroundColor: 'softblue' }}
             variant="subtle"
             small
           >
             Draft Update
           </Button>
-          <Tooltip />
+          <Tooltip id="visible-tooltip" />
         </>
       )}
 

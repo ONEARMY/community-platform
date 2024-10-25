@@ -3,6 +3,7 @@ import type { DBDoc } from './db'
 import type { IModerationStatus } from './moderation'
 import type { INotification, INotificationSettings } from './notifications'
 import type { IUploadedFileMeta } from './storage'
+import type { ISelectedTags } from './tags'
 
 /* eslint-disable @typescript-eslint/naming-convention */
 export enum UserRole {
@@ -109,13 +110,6 @@ export type PlasticTypeLabel =
   | 'ps'
   | 'other'
 
-export type MachineBuilderXpLabel =
-  | 'electronics'
-  | 'machining'
-  | 'welding'
-  | 'assembling'
-  | 'mould-making'
-
 export type WorkspaceType =
   | 'shredder'
   | 'sheetpress'
@@ -141,10 +135,6 @@ export interface IWorkspaceType {
   imageSrc?: string
   textLabel: string
   subText?: string
-}
-
-export interface IMAchineBuilderXp {
-  label: MachineBuilderXpLabel
 }
 
 export interface IOpeningHours {
@@ -193,17 +183,17 @@ export interface IUser {
   isContactableByPublic?: boolean
   patreon?: PatreonUser | null
   totalUseful?: number
+  total_views?: number
+
+  // New generic profile field for all profile types
+  tags?: ISelectedTags
 
   // Primary PP profile type related fields
   profileType: ProfileTypeName
-  workspaceType?: WorkspaceType | null
+  workspaceType?: WorkspaceType | null // <-- to-do replace with tags
+  collectedPlasticTypes?: PlasticTypeLabel[] | null // <-- to-do replace with tags
   mapPinDescription?: string | null
   openingHours?: IOpeningHours[]
-  collectedPlasticTypes?: PlasticTypeLabel[] | null
-  machineBuilderXp?: IMAchineBuilderXp[] | null
-  isExpert?: boolean | null
-  isV4Member?: boolean | null
-  total_views?: number
 }
 
 export interface IUserBadges {

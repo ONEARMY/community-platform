@@ -1,12 +1,14 @@
-import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Flex, Text } from 'theme-ui'
 
 import { ExternalLink } from '../ExternalLink/ExternalLink'
 import { Icon } from '../Icon/Icon'
 
-export const SiteFooter = () => {
-  const theme = useTheme() as any
+type SiteFooterProps = {
+  siteName: string
+}
+
+export const SiteFooter = ({ siteName }: SiteFooterProps) => {
   const discordButtonWidth = 310
 
   const Anchor = styled(ExternalLink)`
@@ -20,12 +22,13 @@ export const SiteFooter = () => {
     flex-direction: column;
     margin-top: 45px;
     line-heigh: 1.5;
-    padding: 45px ${theme.space[4]}px;
+    padding: 45px ${(props) => (props.theme as any).space[4]}px;
     position: relative;
     text-align: center;
 
-    @media only screen and (min-width: ${theme
-        .breakpoints[1]}) and (max-width: ${theme.breakpoints[2]}) {
+    @media only screen and (min-width: ${(props) =>
+        (props.theme as any).breakpoints[1]}) and (max-width: ${(props) =>
+        (props.theme as any).breakpoints[2]}) {
       align-items: flex-start;
       padding-top: 35px;
       padding-bottom: 35px;
@@ -34,7 +37,8 @@ export const SiteFooter = () => {
       text-align: left;
     }
 
-    @media only screen and (min-width: ${theme.breakpoints[2]}) {
+    @media only screen and (min-width: ${(props) =>
+        (props.theme as any).breakpoints[2]}) {
       flex-direction: row;
       padding-right: ${discordButtonWidth}px;
       text-align: left;
@@ -42,8 +46,9 @@ export const SiteFooter = () => {
   `
 
   const OneArmyIcon = styled(Icon)`
-    @media only screen and (min-width: ${theme
-        .breakpoints[1]}) and (max-width: ${theme.breakpoints[2]}) {
+    @media only screen and (min-width: ${(props) =>
+        (props.theme as any).breakpoints[1]}) and (max-width: ${(props) =>
+        (props.theme as any).breakpoints[2]}) {
       position: absolute;
       top: 45px;
       left: 30px;
@@ -60,7 +65,7 @@ export const SiteFooter = () => {
     >
       <OneArmyIcon glyph={'star-active'} mb={[3, 3, 0]} />
       <Text ml={[0, 0, 0, 3]} mr={1}>
-        {theme.name} is a project by{' '}
+        {siteName} is a project by{' '}
         <Anchor href="https://onearmy.earth/">One Army</Anchor>.
       </Text>
 

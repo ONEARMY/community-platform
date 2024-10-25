@@ -1,3 +1,9 @@
+export interface IUserSignUpDetails {
+  username: string
+  email: string
+  password: string
+}
+
 export enum Page {
   HOWTO = '/how-to',
   ACADEMY = '/academy',
@@ -20,7 +26,7 @@ export enum DbCollectionName {
   howtos = 'howtos',
 }
 
-export const generateNewUserDetails = () => {
+export const generateNewUserDetails = (): IUserSignUpDetails => {
   const username = `CI_${generateAlphaNumeric(7)}`.toLocaleLowerCase()
   return {
     username,

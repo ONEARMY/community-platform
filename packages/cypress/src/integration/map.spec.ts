@@ -136,9 +136,7 @@ describe('[Map]', () => {
       .within(() => {
         cy.get('.icon-cluster-text').should('have.text', '3').and('be.visible')
       })
-  })
 
-  it('[Shows zoom buttons and they function correctly]', () => {
     cy.step('Shows the zoom out and zoom in buttons')
     cy.get('[data-cy="WorldViewButton"]', { timeout: 10000 })
       .should('exist')

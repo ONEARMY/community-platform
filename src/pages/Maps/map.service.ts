@@ -16,7 +16,7 @@ const getMapPins = async () => {
     return mapPins
   } catch (error) {
     logger.error('Failed to fetch map pins', { error })
-    return null
+    return []
   }
 }
 

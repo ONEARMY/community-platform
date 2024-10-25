@@ -25,7 +25,7 @@ describe('map.service', () => {
     it('fetches map pins', async () => {
       // prepare
       global.fetch = vi.fn().mockResolvedValue({
-        json: () => Promise.resolve([{ _id: '1' }]),
+        json: () => Promise.resolve({ mapPins: [{ _id: '1' }] }),
       })
 
       // act
@@ -51,7 +51,7 @@ describe('map.service', () => {
     it('fetches map pin by user id', async () => {
       // prepare
       global.fetch = vi.fn().mockResolvedValue({
-        json: () => Promise.resolve({ _id: '1' }),
+        json: () => Promise.resolve({ mapPin: { _id: '1' } }),
       })
 
       // act

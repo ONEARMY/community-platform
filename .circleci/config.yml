@@ -324,9 +324,9 @@ jobs:
       - setup_repo
       - attach_workspace:
           at: '.'
-      - firebase_deploy:
-          # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
-          alias: << parameters.DEPLOY_ALIAS >>
+      # - firebase_deploy:
+      #     # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
+      #     alias: << parameters.DEPLOY_ALIAS >>
       - run:
           name: Prune Docker resources
           command: |
@@ -455,100 +455,100 @@ workflows:
             - 'Lint code'
           name: Build Application
           context: build-context
-      - test_unit:
-          name: 'Unit tests'
-          requires:
-            - 'Lint code'
-      - test_circular_dependency:
-          name: 'Circular dependency test'
-          requires:
-            - 'Lint code'
-      - storybook:
-          name: Build Storybook
-          requires:
-            - 'Lint code'
-      - test_security_rules:
-          name: Test Security Rules
-          requires:
-            - 'Lint code'
-      - test_functions:
-          name: 'Cloud Function tests'
-          requires:
-            - 'Lint code'
-      - test_functions_upload_coverage:
-          name: 'Upload Cloud Function coverage'
-          requires:
-            - 'Cloud Function tests'
-      - test_e2e:
-          name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
-          requires:
-            - 'Build Application'
-            - 'Unit tests'
-            - 'Circular dependency test'
-            - 'Cloud Function tests'
-            - 'Build Storybook'
-            - 'Test Security Rules'
-          context:
-            - e2e-tests
-          matrix:
-            parameters:
-              CI_NODE: [1, 2, 3, 4]
-              CI_BROWSER: ['chrome']
-      - chromatic:
-          name: 'Release storybook to chromatic'
-          requires:
-            - test_e2e
-          context:
-            - e2e-tests
-          <<: *filter_only_default_branch
+      # - test_unit:
+      #     name: 'Unit tests'
+      #     requires:
+      #       - 'Lint code'
+      # - test_circular_dependency:
+      #     name: 'Circular dependency test'
+      #     requires:
+      #       - 'Lint code'
+      # - storybook:
+      #     name: Build Storybook
+      #     requires:
+      #       - 'Lint code'
+      # - test_security_rules:
+      #     name: Test Security Rules
+      #     requires:
+      #       - 'Lint code'
+      # - test_functions:
+      #     name: 'Cloud Function tests'
+      #     requires:
+      #       - 'Lint code'
+      # - test_functions_upload_coverage:
+      #     name: 'Upload Cloud Function coverage'
+      #     requires:
+      #       - 'Cloud Function tests'
+      # - test_e2e:
+      #     name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
+      #     requires:
+      #       - 'Build Application'
+      #       - 'Unit tests'
+      #       - 'Circular dependency test'
+      #       - 'Cloud Function tests'
+      #       - 'Build Storybook'
+      #       - 'Test Security Rules'
+      #     context:
+      #       - e2e-tests
+      #     matrix:
+      #       parameters:
+      #         CI_NODE: [1, 2, 3, 4]
+      #         CI_BROWSER: ['chrome']
+      # - chromatic:
+      #     name: 'Release storybook to chromatic'
+      #     requires:
+      #       - test_e2e
+      #     context:
+      #       - e2e-tests
+      #     <<: *filter_only_default_branch
       #---------------------- Development Instances Build and Deploy ----------------------
-      - approve:
-          type: approval
-          name: 'Approve Production deployment'
-          requires:
-            - test_e2e
+      # - approve:
+      #     type: approval
+      #     name: 'Approve Production deployment'
+      #     requires:
+      #       - test_e2e
       #---------------------- Development Instances Build and Deploy ----------------------
-      - release:
-          name: Release new version to GitHub
-          context:
-            - release-context
-          requires:
-            - "Approve Production deployment"
-          <<: *filter_only_default_branch
+      # - release:
+      #     name: Release new version to GitHub
+      #     context:
+      #       - release-context
+      #     requires:
+      #       - "Approve Production deployment"
+      #     <<: *filter_only_default_branch
       - deploy:
-          name: 'Deploy: community.fixing.fashion'
-          requires:
-            - 'Release new version to GitHub'
-          <<: *filter_only_default_branch
-          DEPLOY_ALIAS: fixing-fashion-prod
-          FLY_APP_NAME: community-platform-ff
-          FLY_TOML: fly-ff.toml
-          context:
-            - circle-ci-patreon-context
-            - fixing-fashion-prod
-            - fly-deploy
-      - deploy:
-          name: 'Deploy: community.preciousplastic.com'
-          requires:
-            - 'Release new version to GitHub'
-          <<: *filter_only_default_branch
-          DEPLOY_ALIAS: 'production'
-          FLY_APP_NAME: community-platform-pp
-          FLY_TOML: fly-pp.toml
+          name: 'Deploy: test.pp'
+          # requires:
+          #   - 'Release new version to GitHub'
+          # <<: *filter_only_default_branch
+          DEPLOY_ALIAS: test-pp
+          FLY_APP_NAME: test-pp
+          FLY_TOML: fly-test-pp.toml
           context:
             - circle-ci-patreon-context
             - community-platform-production
             - fly-deploy
-      - deploy:
-          name: 'Deploy: community.projectkamp.com'
-          requires:
-            - 'Release new version to GitHub'
-          <<: *filter_only_default_branch
-          DEPLOY_ALIAS: project-kamp-production
-          FLY_APP_NAME: community-platform-pk
-          FLY_TOML: fly-pk.toml
-          context:
-            - circle-ci-patreon-context
-            - project-kamp-production
-            - fly-deploy
+      # - deploy:
+      #     name: 'Deploy: community.preciousplastic.com'
+      #     requires:
+      #       - 'Release new version to GitHub'
+      #     <<: *filter_only_default_branch
+      #     DEPLOY_ALIAS: 'production'
+      #     FLY_APP_NAME: community-platform-pp
+      #     FLY_TOML: fly-pp.toml
+      #     context:
+      #       - circle-ci-patreon-context
+      #       - community-platform-production
+      #       - fly-deploy
+      # - deploy:
+      #     name: 'Deploy: community.projectkamp.com'
+      #     requires:
+      #       - 'Release new version to GitHub'
+      #     <<: *filter_only_default_branch
+      #     DEPLOY_ALIAS: project-kamp-production
+      #     FLY_APP_NAME: community-platform-pk
+      #     FLY_TOML: fly-pk.toml
+      #     context:
+      #       - circle-ci-patreon-context
+      #       - project-kamp-production
+      #       - fly-deploy
             

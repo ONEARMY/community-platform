@@ -149,6 +149,12 @@ export const MapWithList = (props: IProps) => {
 
   const mobileListDisplay = showMobileList ? 'block' : 'none'
 
+  useEffect(() => {
+    if (mapRef.current) {
+      ;(window as any).mapInstance = mapRef.current
+    }
+  }, [mapRef])
+
   return (
     <Flex
       sx={{

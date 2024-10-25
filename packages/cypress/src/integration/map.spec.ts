@@ -130,5 +130,38 @@ describe('[Map]', () => {
     cy.intercept(urlLondon).as('londonSearch')
     cy.wait('@londonSearch')
     cy.contains('London, Greater London, England, United Kingdom').click()
+
+    cy.get('.icon-cluster-many')
+      .should('be.visible')
+      .within(() => {
+        cy.get('.icon-cluster-text').should('have.text', '3').and('be.visible')
+      })
+  })
+
+  it('[Shows zoom buttons and they function correctly]', () => {
+    cy.step('Shows the zoom out and zoom in buttons')
+    cy.get('[data-cy="WorldViewButton"]', { timeout: 10000 }) 
+      .should('exist')
+      .and('be.visible')
+    cy.get('[data-cy="LocationViewButton"]').should('exist').and('be.visible')
+
+    cy.step('Zoom out button works')
+    cy.get('[data-cy="WorldViewButton"]').click()
+    cy.window().its('map').invoke('getZoom').should('equal', 1)
+
+    cy.step('Zoom in button prompts for user location and zooms')
+    cy.stub(window.navigator.geolocation, 'getCurrentPosition').callsFake(
+      (cb) => {
+        return cb({ coords: { latitude: 40.7128, longitude: -74.006 } })
+      },
+    )
+    cy.get('[data-cy="LocationViewButton"]').click()
+    cy.window()
+      .its('map')
+      .invoke('getCenter')
+      .should((center) => {
+        expect(center).to.have.property('lat', 40.7128)
+        expect(center).to.have.property('lng', -74.006)
+      })
   })
 })

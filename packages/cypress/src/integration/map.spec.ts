@@ -140,7 +140,7 @@ describe('[Map]', () => {
 
   it('[Shows zoom buttons and they function correctly]', () => {
     cy.step('Shows the zoom out and zoom in buttons')
-    cy.get('[data-cy="WorldViewButton"]', { timeout: 10000 }) 
+    cy.get('[data-cy="WorldViewButton"]', { timeout: 10000 })
       .should('exist')
       .and('be.visible')
     cy.get('[data-cy="LocationViewButton"]').should('exist').and('be.visible')

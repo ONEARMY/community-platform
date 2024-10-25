@@ -132,6 +132,7 @@ describe('[Map]', () => {
     cy.contains('London, Greater London, England, United Kingdom').click()
 
     cy.get('.icon-cluster-many')
+      .first()
       .should('be.visible')
       .within(() => {
         cy.get('.icon-cluster-text').should('have.text', '3').and('be.visible')

@@ -1,90 +1,44 @@
 import React, { useEffect } from 'react'
 import { useNavigate, useParams } from '@remix-run/react'
-import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
-import { BlockedRoute, Loader } from 'oa-components'
+import { BlockedRoute } from 'oa-components'
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common/ResearchUpdate.form'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { isAllowedToEditContent } from 'src/utils/helpers'
 import { Text } from 'theme-ui'
 
-import type { IResearch, IUser } from 'oa-shared'
+import type { IResearch, IResearchDB, IUser } from 'oa-shared'
 
 interface IState {
   formValues: IResearch.UpdateDB
-  isLoading: boolean
   loggedInUser?: IUser | undefined
 }
 type IProps = {
-  updateId?: string
+  updateId: string
+  research: IResearchDB
 }
 
 const EditUpdate = observer((props: IProps) => {
   const { update, slug } = useParams()
   const store = useResearchStore()
   const navigate = useNavigate()
-  const [state, setState] = React.useState<IState>({
-    formValues: {} as IResearch.UpdateDB,
-    isLoading: !store.activeResearchItem,
+  const [{ formValues, loggedInUser }] = React.useState<IState>({
+    formValues: props.research.updates.find(
+      (upd) => upd._id === update,
+    ) as IResearch.UpdateDB,
     loggedInUser: store.activeUser as IUser,
   })
 
-  React.useEffect(() => {
-    const init = async () => {
-      let loggedInUser = store.activeUser
-      if (!loggedInUser) {
-        // TODO - handle the case where user is still loading
-        await new Promise<void>((resolve) =>
-          setTimeout(() => {
-            loggedInUser = store.activeUser
-            resolve()
-          }, 3000),
-        )
-      }
-      const updateId = props.updateId ? props.updateId : update
-      if (store.activeResearchItem) {
-        const update = store.activeResearchItem.updates.find(
-          (upd) => upd._id === updateId,
-        )
-        setState((prevState) => ({
-          ...prevState,
-          formValues: toJS(update) as IResearch.UpdateDB,
-          isLoading: false,
-          loggedInUser: loggedInUser as IUser,
-        }))
-      } else {
-        const doc = await store.setActiveResearchItemBySlug(slug)
-        let update
-        if (doc) {
-          update = doc.updates.find((upd) => upd._id === updateId)
-        }
-        setState((prevState) => ({
-          ...prevState,
-          formValues: update as IResearch.UpdateDB,
-          isLoading: false,
-          loggedInUser: loggedInUser as IUser,
-        }))
-      }
-    }
-    init()
-  }, [slug, update, props.updateId])
-
   useEffect(() => {
-    if (store.activeResearchItem) {
-      if (
-        !state.loggedInUser ||
-        !isAllowedToEditContent(store.activeResearchItem, state.loggedInUser)
-      ) {
-        navigate('/research/' + store.activeResearchItem.slug)
-      }
+    if (
+      !loggedInUser ||
+      !isAllowedToEditContent(props.research, loggedInUser)
+    ) {
+      navigate('/research/' + props.research.slug)
     }
-  }, [state.loggedInUser, store.activeResearchItem])
+  }, [loggedInUser, formValues])
 
-  if (state.isLoading) {
-    return <Loader />
-  }
-
-  if (!state.formValues) {
+  if (!formValues) {
     return (
       <Text mt="50px" sx={{ width: '100%', textAlign: 'center' }}>
         Research update not found
@@ -92,10 +46,7 @@ const EditUpdate = observer((props: IProps) => {
     )
   }
 
-  if (
-    state.formValues.locked &&
-    state.formValues.locked.by !== state.loggedInUser?.userName
-  ) {
+  if (formValues.locked && formValues.locked.by !== loggedInUser?.userName) {
     return (
       <BlockedRoute
         redirectLabel="Back to research"
@@ -108,8 +59,9 @@ const EditUpdate = observer((props: IProps) => {
 
   return (
     <ResearchUpdateForm
-      formValues={state.formValues}
-      redirectUrl={'/research/' + store.activeResearchItem?.slug}
+      formValues={formValues}
+      research={props.research}
+      redirectUrl={'/research/' + props.research.slug}
       parentType="edit"
     />
   )

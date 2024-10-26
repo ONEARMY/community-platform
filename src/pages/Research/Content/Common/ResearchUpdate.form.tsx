@@ -27,13 +27,14 @@ import { TitleField } from '../CreateResearch/Form/TitleField'
 import { ResearchErrors } from './ResearchErrors'
 import { UpdateSubmitStatus } from './SubmitStatus'
 
-import type { IResearch } from 'oa-shared'
+import type { IResearch, IResearchDB } from 'oa-shared'
 import type { MainFormAction } from 'src/common/Form/types'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
 
 interface IProps {
+  research: IResearchDB
   formValues: any
   parentType: MainFormAction
   redirectUrl?: string
@@ -73,10 +74,14 @@ export const ResearchUpdateForm = observer((props: IProps) => {
   // Managing locked state
   React.useEffect(() => {
     if (store.activeUser)
-      store.lockResearchUpdate(store.activeUser.userName, formValues._id)
+      store.lockResearchUpdate(
+        props.research,
+        store.activeUser.userName,
+        formValues._id,
+      )
 
     return () => {
-      store.unlockResearchUpdate(formValues._id)
+      store.unlockResearchUpdate(props.research, formValues._id)
     }
   }, [store.activeUser])
 
@@ -105,7 +110,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
 
     setInvalidFileWarning(false)
 
-    await store.uploadUpdate({
+    await store.uploadUpdate(props.research, {
       ...formValues,
       collaborators: Array.from(
         new Set(
@@ -123,7 +128,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
 
   const handleDelete = async (_updateId: string) => {
     setShowDeleteModal(false)
-    await store.deleteUpdate(_updateId)
+    await store.deleteUpdate(props.research, _updateId)
     if (redirectUrl) {
       window.location.assign(redirectUrl)
     }
@@ -158,7 +163,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
     <>
       {showSubmitModal && (
         <UpdateSubmitStatus
-          {...props}
+          slug={props.research.slug}
           onClose={() => {
             setShowSubmitModal(false)
             store.resetUpdateUploadStatus()
@@ -324,16 +329,16 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                     labels={update}
                   />
 
-                  {store.activeResearchItem ? (
+                  {props.research ? (
                     <ResearchEditorOverview
                       sx={{ mt: 2 }}
                       updates={getResearchUpdates(
-                        store.activeResearchItem.updates || [],
-                        store.activeResearchItem._id,
+                        props.research.updates || [],
+                        props.research._id,
                         !isEdit,
                         values.title,
                       )}
-                      researchSlug={store.activeResearchItem?.slug}
+                      researchSlug={props.research?.slug}
                       showCreateUpdateButton={isEdit}
                       showBackToResearchButton={true}
                     />

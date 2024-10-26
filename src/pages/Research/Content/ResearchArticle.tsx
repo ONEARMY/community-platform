@@ -197,6 +197,7 @@ const ResearchArticle = observer(({ research }: ResearchArticleProps) => {
           getPublicUpdates(research, researchStore.activeUser).map(
             (update, index) => (
               <ResearchUpdate
+                research={research}
                 update={update}
                 key={update._id}
                 updateIndex={index}

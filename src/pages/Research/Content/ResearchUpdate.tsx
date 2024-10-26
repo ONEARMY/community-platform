@@ -18,9 +18,10 @@ import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 import { ResearchLinkToUpdate } from './ResearchLinkToUpdate'
 import { ResearchUpdateDiscussion } from './ResearchUpdateDiscussion'
 
-import type { IResearch } from 'oa-shared'
+import type { IResearch, IResearchDB } from 'oa-shared'
 
 interface IProps {
+  research: IResearchDB
   update: IResearch.Update
   updateIndex: number
   isEditable: boolean
@@ -48,10 +49,9 @@ const ResearchUpdate = (props: IProps) => {
   const loggedInUser = useCommonStores().stores.userStore.activeUser
 
   const contributors = useContributorsData(collaborators || [])
-  const research = researchStore.activeResearchItem
 
   const handleDownloadClick = async () => {
-    researchStore.incrementDownloadCount(_id)
+    researchStore.incrementDownloadCount(props.research, _id)
   }
 
   const displayNumber = updateIndex + 1
@@ -103,9 +103,7 @@ const ResearchUpdate = (props: IProps) => {
             <Heading sx={{ textAlign: 'center' }}>{displayNumber}</Heading>
           </Card>
 
-          {research && (
-            <ResearchLinkToUpdate research={research} update={update} />
-          )}
+          <ResearchLinkToUpdate research={props.research} update={update} />
         </Flex>
 
         <Flex
@@ -212,7 +210,7 @@ const ResearchUpdate = (props: IProps) => {
             </Flex>
             <ResearchUpdateDiscussion
               update={update}
-              research={research}
+              research={props.research}
               showComments={showComments}
             />
           </Card>

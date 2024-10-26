@@ -1,19 +1,18 @@
-import { json, type LoaderFunctionArgs } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { json, useLoaderData } from '@remix-run/react'
 import { isPreciousPlastic } from 'src/config/config'
 import { AuthRoute } from 'src/pages/common/AuthRoute'
 import { RESEARCH_EDITOR_ROLES } from 'src/pages/Research/constants'
-import EditResearch from 'src/pages/Research/Content/EditResearch'
+import EditUpdate from 'src/pages/Research/Content/EditUpdate'
 import { researchService } from 'src/pages/Research/research.service'
 
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { IResearchDB } from 'oa-shared'
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const research = await researchService.getBySlug(params.slug as string)
 
-  return json({ research })
+  return json({ research, updateId: params.updateId as string })
 }
-
 export default function Index() {
   const data = useLoaderData<typeof loader>()
   const research = data.research as IResearchDB
@@ -21,7 +20,7 @@ export default function Index() {
 
   return (
     <AuthRoute roleRequired={roles}>
-      <EditResearch research={research} />
+      <EditUpdate research={research} updateId={data.updateId} />
     </AuthRoute>
   )
 }

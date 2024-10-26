@@ -1,8 +1,7 @@
-import * as React from 'react'
-import { useNavigate, useParams } from '@remix-run/react'
-import { toJS } from 'mobx'
+import { useEffect, useState } from 'react'
+import { useNavigate } from '@remix-run/react'
 import { observer } from 'mobx-react'
-import { BlockedRoute, Loader } from 'oa-components'
+import { BlockedRoute } from 'oa-components'
 import ResearchForm from 'src/pages/Research/Content/Common/Research.form'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { isAllowedToEditContent } from 'src/utils/helpers'
@@ -10,58 +9,33 @@ import { Text } from 'theme-ui'
 
 import { logger } from '../../../../logger'
 
-import type { IResearch, IUser } from 'oa-shared'
+import type { IResearch, IResearchDB, IUser } from 'oa-shared'
 
 interface IState {
   formValues: IResearch.ItemDB | null
-  isLoading: boolean
   loggedInUser?: IUser | undefined
 }
 
-const EditResearch = observer(() => {
-  const { slug } = useParams()
+type EditResearchProps = {
+  research: IResearchDB
+}
+
+const EditResearch = observer(({ research }: EditResearchProps) => {
   const store = useResearchStore()
   const navigate = useNavigate()
-  const [{ formValues, isLoading, loggedInUser }, setState] =
-    React.useState<IState>({
-      formValues: store.activeResearchItem,
-      isLoading: !store.activeResearchItem,
+  const [{ formValues, loggedInUser }, setState] = useState<IState>({
+    formValues: research,
+    loggedInUser: store.activeUser as IUser,
+  })
+
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
       loggedInUser: store.activeUser as IUser,
-    })
+    }))
+  }, [store.activeUser])
 
-  React.useEffect(() => {
-    const init = async () => {
-      let loggedInUser = store.activeUser
-      if (!loggedInUser) {
-        // TODO - handle the case where user is still loading
-        await new Promise<void>((resolve) =>
-          setTimeout(() => {
-            loggedInUser = store.activeUser
-            resolve()
-          }, 3000),
-        )
-      }
-      if (store.activeResearchItem) {
-        setState((prevState) => ({
-          ...prevState,
-          formValues: toJS(store.activeResearchItem) as IResearch.ItemDB,
-          isLoading: false,
-          loggedInUser: loggedInUser as IUser,
-        }))
-      } else {
-        const doc = await store.setActiveResearchItemBySlug(slug)
-        setState((prevState) => ({
-          ...prevState,
-          formValues: doc as IResearch.ItemDB,
-          isLoading: false,
-          loggedInUser: loggedInUser as IUser,
-        }))
-      }
-    }
-    init()
-  }, [slug])
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       formValues &&
       (!loggedInUser || !isAllowedToEditContent(formValues, loggedInUser))
@@ -69,10 +43,6 @@ const EditResearch = observer(() => {
       navigate('/research/' + formValues.slug)
     }
   }, [loggedInUser && formValues])
-
-  if (isLoading) {
-    return <Loader />
-  }
 
   if (!formValues) {
     return (
@@ -95,6 +65,7 @@ const EditResearch = observer(() => {
     <ResearchForm
       data-testid="EditResearch"
       formValues={formValues}
+      research={research}
       parentType="edit"
     />
   )

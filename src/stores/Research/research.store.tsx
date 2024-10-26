@@ -175,6 +175,7 @@ export class ResearchStore extends ModuleStore {
     const user = this.activeUser as IUser
     const updates = (await dbRef.get('server'))?.updates || [] // save old updates when editing
     const collaborators = await this._setCollaborators(values.collaborators)
+    let updatedResearch: IResearchDB | null = null
 
     try {
       const userCountry = getUserCountry(user)
@@ -203,7 +204,11 @@ export class ResearchStore extends ModuleStore {
       }
       logger.debug('populating database', researchItem)
       // set the database document
-      await this._updateResearchItem(dbRef, researchItem, true)
+      updatedResearch = await this._updateResearchItem(
+        dbRef,
+        researchItem,
+        true,
+      )
       this.updateResearchUploadStatus('Database')
       logger.debug('post added')
       // complete
@@ -213,6 +218,8 @@ export class ResearchStore extends ModuleStore {
       //TODO: Add error handling here :(
       //throw new Error(error.message)
     }
+
+    return updatedResearch
   }
 
   /**

@@ -34,9 +34,10 @@ export const ContentAuthorTimestamp = ({
           '&!important': {
             color: 'lightgrey',
           },
+          mt: 1,
+          mb: 2,
         }}
-        mt={1}
-        mb={2}
+        data-testid="last-update"
       >
         Last update <DisplayDate date={modified} />
       </Text>

@@ -225,6 +225,7 @@ export class ResearchStore extends ModuleStore {
     update: IResearch.Update | IResearch.UpdateDB,
   ) {
     logger.debug(`uploadUpdate`, { update })
+    let updatedItem: IResearchDB | null = null
     if (item) {
       const dbRef = this.db
         .collection<IResearch.Item>(COLLECTION_NAME)
@@ -300,7 +301,7 @@ export class ResearchStore extends ModuleStore {
         logger.debug('created:', newItem._created)
 
         // set the database document
-        await this._updateResearchItem(dbRef, newItem, true)
+        updatedItem = await this._updateResearchItem(dbRef, newItem, true)
         logger.debug('populate db ok')
         this.updateUpdateUploadStatus('Database')
         this.updateUpdateUploadStatus('Complete')
@@ -308,6 +309,8 @@ export class ResearchStore extends ModuleStore {
         logger.error('error', error)
       }
     }
+
+    return updatedItem
   }
 
   public async deleteUpdate(item: IResearchDB, updateId: string) {
@@ -601,29 +604,7 @@ export class ResearchStore extends ModuleStore {
       )
     }
 
-    return await dbRef.get('server')
-  }
-
-  private async _getResearchItemBySlug(
-    slug: string,
-  ): Promise<IResearchDB | null> {
-    const collection = await this.db
-      .collection<IResearch.ItemDB>(COLLECTION_NAME)
-      .getWhere('slug', '==', slug)
-
-    if (collection && collection.length) {
-      return collection[0]
-    }
-
-    const previousSlugCollection = await this.db
-      .collection<IResearch.ItemDB>(COLLECTION_NAME)
-      .getWhere('previousSlugs', 'array-contains', slug)
-
-    if (previousSlugCollection && previousSlugCollection.length) {
-      return previousSlugCollection[0]
-    }
-
-    return null
+    return (await dbRef.get('server')) as IResearchDB
   }
 
   private async _toggleSubscriber(docId: string, userId: string) {

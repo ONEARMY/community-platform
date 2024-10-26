@@ -20,6 +20,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import ResearchArticle from './ResearchArticle'
 
+import type { IResearchDB } from 'oa-shared'
 import type { Mock } from 'vitest'
 
 const Theme = testingThemeStyles
@@ -58,10 +59,7 @@ vi.mock('src/stores/Research/research.store')
 
 describe('Research Article', () => {
   const mockResearchStore = {
-    activeResearchItem: FactoryResearchItem(),
-    setActiveResearchItemBySlug: vi.fn().mockResolvedValue(true),
     addSubscriberToResearchArticle: vi.fn(),
-    needsModeration: vi.fn(),
     formatResearchCommentList: vi.fn(),
     incrementViewCount: vi.fn(),
   }
@@ -78,15 +76,12 @@ describe('Research Article', () => {
       ],
     })
 
-    ;(useResearchStore as Mock).mockReturnValue({
-      ...mockResearchStore,
-      activeResearchItem,
-    })
+    ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
 
     // Act
     let wrapper
     act(() => {
-      wrapper = getWrapper()
+      wrapper = getWrapper(activeResearchItem)
     })
 
     // Assert
@@ -103,17 +98,16 @@ describe('Research Article', () => {
 
   it('does not display contributors when undefined', async () => {
     // Arrange
-    ;(useResearchStore as Mock).mockReturnValue({
-      ...mockResearchStore,
-      activeResearchItem: FactoryResearchItem({
-        collaborators: undefined,
-      }),
-    })
+    ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
 
     // Act
     let wrapper
     await act(async () => {
-      wrapper = getWrapper()
+      wrapper = getWrapper(
+        FactoryResearchItem({
+          collaborators: undefined,
+        }),
+      )
     })
 
     // Assert
@@ -124,17 +118,16 @@ describe('Research Article', () => {
 
   it('displays contributors', async () => {
     // Arrange
-    ;(useResearchStore as Mock).mockReturnValue({
-      ...mockResearchStore,
-      activeResearchItem: FactoryResearchItem({
-        collaborators: ['example-username', 'another-example-username'],
-      }),
-    })
+    ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
 
     // Act
     let wrapper
     act(() => {
-      wrapper = getWrapper()
+      wrapper = getWrapper(
+        FactoryResearchItem({
+          collaborators: ['example-username', 'another-example-username'],
+        }),
+      )
     })
 
     // Assert
@@ -150,16 +143,17 @@ describe('Research Article', () => {
     // Arrange
     ;(useResearchStore as Mock).mockReturnValue({
       ...mockResearchStore,
-      activeResearchItem: FactoryResearchItem({
-        userHasSubscribed: false,
-      }),
       activeUser,
     })
 
     // Act
     let wrapper
     act(() => {
-      wrapper = getWrapper()
+      wrapper = getWrapper(
+        FactoryResearchItem({
+          userHasSubscribed: false,
+        }),
+      )
     })
 
     await waitFor(() => {
@@ -200,40 +194,39 @@ describe('Research Article', () => {
   describe('Research Update', () => {
     it('displays contributors', async () => {
       // Arrange
-      ;(useResearchStore as Mock).mockReturnValue({
-        ...mockResearchStore,
-        activeResearchItem: FactoryResearchItem({
-          collaborators: ['example-username', 'another-example-username'],
-          updates: [
-            FactoryResearchItemUpdate({
-              title: 'Research Update #1',
-              collaborators: [
-                'third-example-username',
-                'fourth-example-username',
-              ],
-              status: ResearchUpdateStatus.PUBLISHED,
-              _deleted: false,
-            }),
-            FactoryResearchItemUpdate({
-              title: 'Research Update #2',
-              collaborators: null!,
-              status: ResearchUpdateStatus.PUBLISHED,
-              _deleted: false,
-            }),
-            FactoryResearchItemUpdate({
-              title: 'Research Update #3',
-              collaborators: undefined,
-              status: ResearchUpdateStatus.PUBLISHED,
-              _deleted: false,
-            }),
-          ],
-        }),
-      })
+      ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
 
       // wait for Promise to resolve and state to update
       let wrapper
       act(() => {
-        wrapper = getWrapper()
+        wrapper = getWrapper(
+          FactoryResearchItem({
+            collaborators: ['example-username', 'another-example-username'],
+            updates: [
+              FactoryResearchItemUpdate({
+                title: 'Research Update #1',
+                collaborators: [
+                  'third-example-username',
+                  'fourth-example-username',
+                ],
+                status: ResearchUpdateStatus.PUBLISHED,
+                _deleted: false,
+              }),
+              FactoryResearchItemUpdate({
+                title: 'Research Update #2',
+                collaborators: null!,
+                status: ResearchUpdateStatus.PUBLISHED,
+                _deleted: false,
+              }),
+              FactoryResearchItemUpdate({
+                title: 'Research Update #3',
+                collaborators: undefined,
+                status: ResearchUpdateStatus.PUBLISHED,
+                _deleted: false,
+              }),
+            ],
+          }),
+        )
       })
 
       // Assert
@@ -265,27 +258,21 @@ describe('Research Article', () => {
         title: 'A title',
         description: 'A description',
       })
-      ;(useResearchStore as Mock).mockReturnValue({
-        ...mockResearchStore,
-        formatResearchCommentList: vi.fn().mockImplementation((c) => {
-          return c
-        }),
-        activeResearchItem: FactoryResearchItem({
-          updates: [update],
-        }),
-      })
+      ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
       // Act
-      const wrapper = getWrapper()
+      const item = FactoryResearchItem({
+        _created,
+        _modified: _created,
+        _contentModifiedTimestamp: _created,
+        updates: [update],
+      })
+      const wrapper = getWrapper(item)
 
       // Assert
       await waitFor(() => {
-        expect(() =>
-          wrapper.getAllByText(
-            `${formatDistanceToNow(_created, { addSuffix: true })}`,
-          ),
-        ).toThrow()
-      })
-      await waitFor(() => {
+        const lastUpdate = wrapper.getByTestId('last-update')
+        expect(lastUpdate).not.toBeVisible()
+
         expect(() =>
           wrapper.getAllByText((content) => content.includes('edited')),
         ).toThrow()
@@ -311,13 +298,14 @@ describe('Research Article', () => {
         formatResearchCommentList: vi.fn().mockImplementation((c) => {
           return c
         }),
-        activeResearchItem: FactoryResearchItem({
-          updates: [update],
-        }),
       })
 
       // Act
-      const wrapper = getWrapper()
+      const wrapper = getWrapper(
+        FactoryResearchItem({
+          updates: [update],
+        }),
+      )
       // Assert
       await waitFor(() => {
         expect(() =>
@@ -342,29 +330,28 @@ describe('Research Article', () => {
 
   it('shows only published updates', async () => {
     // Arrange
-    ;(useResearchStore as Mock).mockReturnValue({
-      ...mockResearchStore,
-      activeResearchItem: FactoryResearchItem({
-        collaborators: ['example-username', 'another-example-username'],
-        updates: [
-          FactoryResearchItemUpdate({
-            title: 'Research Update #1',
-            status: ResearchUpdateStatus.PUBLISHED,
-            _deleted: false,
-          }),
-          FactoryResearchItemUpdate({
-            title: 'Research Update #2',
-            status: ResearchUpdateStatus.DRAFT,
-            _deleted: false,
-          }),
-        ],
-      }),
-    })
+    ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
 
     // Act
     let wrapper
     act(() => {
-      wrapper = getWrapper()
+      wrapper = getWrapper(
+        FactoryResearchItem({
+          collaborators: ['example-username', 'another-example-username'],
+          updates: [
+            FactoryResearchItemUpdate({
+              title: 'Research Update #1',
+              status: ResearchUpdateStatus.PUBLISHED,
+              _deleted: false,
+            }),
+            FactoryResearchItemUpdate({
+              title: 'Research Update #2',
+              status: ResearchUpdateStatus.DRAFT,
+              _deleted: false,
+            }),
+          ],
+        }),
+      )
     })
 
     // Assert
@@ -377,25 +364,24 @@ describe('Research Article', () => {
   describe('Breadcrumbs', () => {
     it('displays breadcrumbs with category', async () => {
       // Arrange
-      ;(useResearchStore as Mock).mockReturnValue({
-        ...mockResearchStore,
-        activeResearchItem: FactoryResearchItem({
-          title: 'Innovative Study',
-          researchCategory: {
-            label: 'Science',
-            _id: faker.string.uuid(),
-            _modified: faker.date.past().toString(),
-            _created: faker.date.past().toString(),
-            _deleted: faker.datatype.boolean(),
-            _contentModifiedTimestamp: faker.date.past().toString(),
-          },
-        }),
-      })
+      ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
 
       // Act
       let wrapper
       act(() => {
-        wrapper = getWrapper()
+        wrapper = getWrapper(
+          FactoryResearchItem({
+            title: 'Innovative Study',
+            researchCategory: {
+              label: 'Science',
+              _id: faker.string.uuid(),
+              _modified: faker.date.past().toString(),
+              _created: faker.date.past().toString(),
+              _deleted: faker.datatype.boolean(),
+              _contentModifiedTimestamp: faker.date.past().toString(),
+            },
+          }),
+        )
       })
 
       // Assert: Check the breadcrumb items and chevrons
@@ -420,18 +406,17 @@ describe('Research Article', () => {
 
     it('displays breadcrumbs without category', async () => {
       // Arrange
-      ;(useResearchStore as Mock).mockReturnValue({
-        ...mockResearchStore,
-        activeResearchItem: FactoryResearchItem({
-          title: 'Innovative Study',
-          researchCategory: undefined, // No category provided
-        }),
-      })
+      ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
 
       // Act
       let wrapper
       act(() => {
-        wrapper = getWrapper()
+        wrapper = getWrapper(
+          FactoryResearchItem({
+            title: 'Innovative Study',
+            researchCategory: undefined, // No category provided
+          }),
+        )
       })
 
       // Assert: Check the breadcrumb items and chevrons
@@ -453,10 +438,14 @@ describe('Research Article', () => {
   })
 })
 
-const getWrapper = () => {
+const getWrapper = (research: IResearchDB) => {
   const router = createMemoryRouter(
     createRoutesFromElements(
-      <Route path="/research/:slug" key={1} element={<ResearchArticle />} />,
+      <Route
+        path="/research/:slug"
+        key={1}
+        element={<ResearchArticle research={research} />}
+      />,
     ),
     {
       initialEntries: ['/research/article'],

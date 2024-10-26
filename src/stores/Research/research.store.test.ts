@@ -120,8 +120,6 @@ const factory = async (
     deleteComment: vi.fn(),
   }
 
-  await store.setActiveResearchItemBySlug('fish')
-
   return {
     store,
     researchItem,
@@ -145,7 +143,7 @@ describe('research.store', () => {
         const newUpdate = FactoryResearchItemUpdate()
 
         // Act
-        await store.uploadUpdate(newUpdate)
+        await store.uploadUpdate(researchItem, newUpdate)
 
         // Assert
         const [newResearchItem] = setFn.mock.calls[0]
@@ -164,7 +162,7 @@ describe('research.store', () => {
         const editedUpdate = toJS(researchItem.updates[0])
 
         // Act
-        await store.uploadUpdate(editedUpdate)
+        await store.uploadUpdate(researchItem, editedUpdate)
 
         // Assert
         const [newResearchItem] = setFn.mock.calls[0]
@@ -182,19 +180,22 @@ describe('research.store', () => {
         const { store, researchItem } = await factoryResearchItem()
         const update = toJS(researchItem.updates[0])
 
-        await store.uploadUpdate(update)
+        await store.uploadUpdate(researchItem, update)
 
-        const count = await store.incrementDownloadCount(update._id)
+        const count = await store.incrementDownloadCount(
+          researchItem,
+          update._id,
+        )
         expect(count).toBe(1)
       })
 
       it('preserves @mention within Research description', async () => {
-        const { store, setFn } = await factoryResearchItem({
+        const { store, setFn, researchItem } = await factoryResearchItem({
           description: '@username',
         })
 
         // Act
-        await store.uploadUpdate(FactoryResearchItemUpdate())
+        await store.uploadUpdate(researchItem, FactoryResearchItemUpdate())
 
         // Assert
         const [newResearchItem] = setFn.mock.calls[0]
@@ -202,7 +203,7 @@ describe('research.store', () => {
       })
 
       it('preserves @mention within an existing Update description', async () => {
-        const { store, setFn } = await factoryResearchItem({
+        const { store, setFn, researchItem } = await factoryResearchItem({
           description: '@username',
           updates: [
             FactoryResearchItemUpdate({
@@ -212,7 +213,7 @@ describe('research.store', () => {
         })
 
         // Act
-        await store.uploadUpdate(FactoryResearchItemUpdate())
+        await store.uploadUpdate(researchItem, FactoryResearchItemUpdate())
 
         // Assert
         const [newResearchItem] = setFn.mock.calls[0]
@@ -227,7 +228,7 @@ describe('research.store', () => {
         const { store, researchItem, setFn } = await factoryResearchItem()
 
         // Act
-        await store.deleteUpdate(researchItem.updates[0]._id)
+        await store.deleteUpdate(researchItem, researchItem.updates[0]._id)
 
         // Assert
         expect(setFn).toBeCalledTimes(1)
@@ -240,10 +241,10 @@ describe('research.store', () => {
       })
 
       it('handles malformed update id', async () => {
-        const { store, setFn } = await factoryResearchItem()
+        const { store, setFn, researchItem } = await factoryResearchItem()
 
         // Act
-        await store.deleteUpdate('malformed-id')
+        await store.deleteUpdate(researchItem, 'malformed-id')
 
         // Assert
         expect(setFn).not.toBeCalled()
@@ -480,8 +481,11 @@ describe('research.store', () => {
       })
 
       // Act
-      await store.uploadUpdate(FactoryResearchItemUpdate())
-      await store.uploadUpdate(FactoryResearchItemUpdate())
+      const item = await store.uploadUpdate(
+        researchItem,
+        FactoryResearchItemUpdate(),
+      )
+      await store.uploadUpdate(item!, FactoryResearchItemUpdate())
 
       // Assert
       expect(setFn).toHaveBeenCalledTimes(2)
@@ -495,35 +499,6 @@ describe('research.store', () => {
         `/research/${researchItem.slug}`,
         researchItem.title,
       )
-    })
-
-    it('matches subscriber state for logged in user', async () => {
-      const { store } = await factoryResearchItem(
-        {
-          subscribers: ['subscriber'],
-        },
-        FactoryUser({
-          _id: 'fake-user-id',
-          userName: 'subscriber',
-        }),
-      )
-
-      // Assert
-      expect(store.userHasSubscribed).toBe(true)
-    })
-
-    it('does not match subscriber state for logged in user', async () => {
-      const { store } = await factoryResearchItem(
-        {
-          subscribers: ['subscriber'],
-        },
-        FactoryUser({
-          userName: 'another-user',
-        }),
-      )
-
-      // Assert
-      expect(store.userHasSubscribed).toBe(false)
     })
   })
 })

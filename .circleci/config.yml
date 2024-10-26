@@ -401,12 +401,17 @@ jobs:
             - browser-tools/install-firefox
       # call main testing script
       - run:
+          name: Export application credentials
+          command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service_account.json
+      - run:
           command: npm run test ci prod
           environment:
             VITE_SITE_VARIANT: test-ci
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>
             CI_GROUP: ci-<< parameters.CI_BROWSER >>
+            GOOGLE_APPLICATION_CREDENTIALS: service_account.json
+            VITE_FIREBASE_PROJECT_ID: $VITE_FIREBASE_PROJECT_ID
       - store_artifacts:
           path: ./packages/cypress/src/screenshots/
 

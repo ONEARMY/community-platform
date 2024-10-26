@@ -8,17 +8,14 @@ import {
   runInAction,
   toJS,
 } from 'mobx'
-import { IModerationStatus, ResearchStatus } from 'oa-shared'
+import { IModerationStatus } from 'oa-shared'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { hasAdminRights, needsModeration, randomID } from 'src/utils/helpers'
 import { getKeywords } from 'src/utils/searchHelper'
 
 import { incrementDocViewCount } from '../common/incrementDocViewCount'
-import {
-  changeMentionToUserReference,
-  changeUserReferenceToPlainText,
-} from '../common/mentions'
+import { changeMentionToUserReference } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
@@ -48,10 +45,8 @@ export class ResearchStore extends ModuleStore {
   constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this, {
-      activeResearchItem: observable,
       researchUploadStatus: observable,
       updateUploadStatus: observable,
-      setActiveResearchItemBySlug: action,
       toggleUsefulByUser: action,
       deleteResearch: action,
       updateResearchUploadStatus: action,
@@ -67,42 +62,6 @@ export class ResearchStore extends ModuleStore {
       votedUsefulCount: computed,
       subscribersCount: computed,
     })
-  }
-
-  public async setActiveResearchItemBySlug(slug?: string) {
-    logger.debug(`setActiveResearchItemBySlug:`, { slug })
-    let activeResearchItem: IResearchDB | null = null
-
-    const enrichResearchUpdate = async (update: IResearch.UpdateDB) => {
-      const enrichedResearchUpdated = cloneDeep(update)
-      enrichedResearchUpdated.description = changeUserReferenceToPlainText(
-        update.description,
-      )
-      return enrichedResearchUpdated
-    }
-
-    if (slug) {
-      activeResearchItem = await this._getResearchItemBySlug(slug)
-
-      if (activeResearchItem) {
-        activeResearchItem.collaborators =
-          activeResearchItem.collaborators || []
-        activeResearchItem.description = changeUserReferenceToPlainText(
-          activeResearchItem.description,
-        )
-        activeResearchItem.researchStatus =
-          activeResearchItem.researchStatus || ResearchStatus.IN_PROGRESS
-        const researchUpdates = activeResearchItem.updates || []
-        activeResearchItem.updates = await Promise.all(
-          researchUpdates.map(enrichResearchUpdate),
-        )
-      }
-    }
-
-    runInAction(() => {
-      this.activeResearchItem = activeResearchItem
-    })
-    return activeResearchItem
   }
 
   public async addSubscriberToResearchArticle(
@@ -265,16 +224,9 @@ export class ResearchStore extends ModuleStore {
       }
       logger.debug('populating database', researchItem)
       // set the database document
-      const updatedItem = await this._updateResearchItem(
-        dbRef,
-        researchItem,
-        true,
-      )
+      await this._updateResearchItem(dbRef, researchItem, true)
       this.updateResearchUploadStatus('Database')
       logger.debug('post added')
-      if (updatedItem) {
-        this.setActiveResearchItemBySlug(updatedItem.slug)
-      }
       // complete
       this.updateResearchUploadStatus('Complete')
     } catch (error) {
@@ -407,13 +359,7 @@ export class ResearchStore extends ModuleStore {
         newItem.updates[existingUpdateIndex]._deleted = true
 
         // set the database document
-        const updatedItem = await this._updateResearchItem(dbRef, newItem, true)
-
-        if (updatedItem) {
-          this.setActiveResearchItemBySlug(updatedItem.slug)
-        }
-
-        return updatedItem
+        await this._updateResearchItem(dbRef, newItem, true)
       } catch (error) {
         logger.error('error deleting article', error)
       }
@@ -448,11 +394,7 @@ export class ResearchStore extends ModuleStore {
           updates: [...toJS(newUpdates)],
         }
 
-        const updatedItem = await this._updateResearchItem(dbRef, newItem)
-
-        if (updatedItem) {
-          this.setActiveResearchItemBySlug(updatedItem.slug)
-        }
+        await this._updateResearchItem(dbRef, newItem)
       }
 
       return downloadCount
@@ -740,17 +682,13 @@ export class ResearchStore extends ModuleStore {
     return null
   }
 
-  private async _toggleSubscriber(docId, userId) {
+  private async _toggleSubscriber(docId: string, userId: string) {
     const updatedItem = await toggleDocSubscriberStatusByUserName(
       this.db,
       COLLECTION_NAME,
       docId,
       userId,
     )
-
-    if (updatedItem) {
-      this.setActiveResearchItemBySlug(updatedItem.slug)
-    }
 
     return updatedItem
   }

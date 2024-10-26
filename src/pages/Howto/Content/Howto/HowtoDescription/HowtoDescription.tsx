@@ -110,17 +110,14 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             <ClientOnly fallback={<></>}>
               {() => (
                 <>
-                  {props.votedUsefulCount !== undefined &&
-                    howto.moderation === IModerationStatus.ACCEPTED && (
-                      <Box>
-                        <UsefulStatsButton
-                          votedUsefulCount={props.votedUsefulCount}
-                          hasUserVotedUseful={props.hasUserVotedUseful}
-                          isLoggedIn={loggedInUser ? true : false}
-                          onUsefulClick={props.onUsefulClick}
-                        />
-                      </Box>
-                    )}
+                  {howto.moderation === IModerationStatus.ACCEPTED && (
+                    <UsefulStatsButton
+                      votedUsefulCount={props.votedUsefulCount}
+                      hasUserVotedUseful={props.hasUserVotedUseful}
+                      isLoggedIn={loggedInUser ? true : false}
+                      onUsefulClick={props.onUsefulClick}
+                    />
+                  )}
                 </>
               )}
             </ClientOnly>

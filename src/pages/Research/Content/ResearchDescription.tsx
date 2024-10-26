@@ -12,6 +12,8 @@ import {
   Username,
 } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
+// eslint-disable-next-line import/no-unresolved
+import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
 import { TagList } from 'src/common/Tags/TagsList'
 import { logger } from 'src/logger'
@@ -115,20 +117,25 @@ const ResearchDescription = ({
           )}
           <Flex sx={{ justifyContent: 'space-between' }}>
             <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
-              {research.moderation === IModerationStatus.ACCEPTED && (
-                <UsefulStatsButton
-                  votedUsefulCount={votedUsefulCount}
-                  hasUserVotedUseful={props.hasUserVotedUseful}
-                  isLoggedIn={props.loggedInUser ? true : false}
-                  onUsefulClick={props.onUsefulClick}
-                />
-              )}
-              <FollowButton
-                hasUserSubscribed={props.hasUserSubscribed}
-                isLoggedIn={props.loggedInUser ? true : false}
-                onFollowClick={props.onFollowClick}
-              ></FollowButton>
-              {/* Check if research should be moderated */}
+              <ClientOnly fallback={<></>}>
+                {() => (
+                  <>
+                    {research.moderation === IModerationStatus.ACCEPTED && (
+                      <UsefulStatsButton
+                        votedUsefulCount={votedUsefulCount}
+                        hasUserVotedUseful={props.hasUserVotedUseful}
+                        isLoggedIn={!!props.loggedInUser}
+                        onUsefulClick={props.onUsefulClick}
+                      />
+                    )}
+                    <FollowButton
+                      hasUserSubscribed={props.hasUserSubscribed}
+                      isLoggedIn={!!props.loggedInUser}
+                      onFollowClick={props.onFollowClick}
+                    />
+                  </>
+                )}
+              </ClientOnly>
               {props.needsModeration &&
                 research.moderation ===
                   IModerationStatus.AWAITING_MODERATION && (

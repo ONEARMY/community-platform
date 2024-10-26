@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from '@remix-run/react'
 import { Text, useThemeUI } from 'theme-ui'
 
@@ -18,6 +18,7 @@ export interface IProps {
 export const UsefulStatsButton = (props: IProps) => {
   const { theme } = useThemeUI() as any
   const navigate = useNavigate()
+  const uuid = useMemo(() => crypto.randomUUID(), [])
 
   const [disabled, setDisabled] = useState<boolean>()
 
@@ -35,7 +36,7 @@ export const UsefulStatsButton = (props: IProps) => {
     <>
       <Button
         type="button"
-        data-tooltip-id="login-vote"
+        data-tooltip-id={uuid}
         data-tooltip-content={props.isLoggedIn ? '' : 'Login to add your vote'}
         data-cy={props.isLoggedIn ? 'vote-useful' : 'vote-useful-redirect'}
         onClick={() =>
@@ -73,7 +74,7 @@ export const UsefulStatsButton = (props: IProps) => {
           {props.hasUserVotedUseful ? 'Marked as useful' : 'Mark as useful'}
         </Text>
       </Button>
-      <Tooltip id="login-vote" />
+      <Tooltip id={uuid} />
     </>
   )
 }

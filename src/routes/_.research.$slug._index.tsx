@@ -21,6 +21,8 @@ export const meta = mergeMeta<typeof loader>(({ data }) => {
     return []
   }
 
+  console.log(JSON.stringify(research))
+
   const title = `${research.title} - Research - ${import.meta.env.VITE_SITE_NAME}`
 
   return generateTags(

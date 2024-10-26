@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useLocation } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import {
@@ -9,6 +9,8 @@ import {
   UserEngagementWrapper,
 } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
+// eslint-disable-next-line import/no-unresolved
+import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -46,20 +48,32 @@ const ResearchArticle = observer(({ research }: ResearchArticleProps) => {
   const researchStore = useResearchStore()
   const { aggregationsStore } = useCommonStores().stores
   const loggedInUser = researchStore.activeUser
+  const [subscribed, setSubscribed] = useState<boolean>(
+    research.subscribers?.includes(loggedInUser?.userName || '') || false,
+  )
+  const [subscribersCount, setSubscribersCount] = useState<number>(
+    research.subscribers?.length || 0,
+  )
+  const [voted, setVoted] = useState<boolean>(false)
+  const [usefulCount, setUsefulCount] = useState<number>(
+    research.votedUsefulBy?.length || 0,
+  )
 
-  const moderateResearch = async (accepted: boolean) => {
-    const item = researchStore.activeResearchItem
-    if (item) {
-      item.moderation = accepted
-        ? IModerationStatus.ACCEPTED
-        : IModerationStatus.REJECTED
-      await researchStore.moderateResearch(item)
+  useEffect(() => {
+    // This could be improved if we can load the user profile server-side
+    if (researchStore?.activeUser) {
+      if (research.votedUsefulBy?.includes(researchStore.activeUser._id)) {
+        setVoted(true)
+      }
+
+      if (research.subscribers?.includes(researchStore.activeUser._id)) {
+        setSubscribed(true)
+      }
     }
-  }
+  }, [researchStore?.activeUser])
 
   const onUsefulClick = async (
-    researchId: string,
-    researchSlug: string,
+    vote: 'add' | 'delete',
     eventCategory = 'Research',
   ) => {
     if (!loggedInUser?.userName) {
@@ -67,12 +81,17 @@ const ResearchArticle = observer(({ research }: ResearchArticleProps) => {
     }
 
     // Trigger update without waiting
-    await researchStore.toggleUsefulByUser(researchId, loggedInUser?.userName)
-    const hasUserVotedUseful = researchStore.userVotedActiveResearchUseful
+    await researchStore.toggleUsefulByUser(research, loggedInUser?.userName)
+    setVoted((prev) => !prev)
+
+    setUsefulCount((prev) => {
+      return vote === 'add' ? prev + 1 : prev - 1
+    })
+
     trackEvent({
       category: eventCategory,
-      action: hasUserVotedUseful ? 'ResearchUseful' : 'ResearchUsefulRemoved',
-      label: researchSlug,
+      action: vote === 'add' ? 'ResearchUseful' : 'ResearchUsefulRemoved',
+      label: research.slug,
     })
   }
 
@@ -95,7 +114,7 @@ const ResearchArticle = observer(({ research }: ResearchArticleProps) => {
 
     let action: string
 
-    if (research.subscribers?.includes(loggedInUser?.userName || '')) {
+    if (subscribed) {
       researchStore.removeSubscriberFromResearchArticle(
         research._id,
         loggedInUser?.userName,
@@ -108,6 +127,11 @@ const ResearchArticle = observer(({ research }: ResearchArticleProps) => {
       )
       action = 'Subscribed'
     }
+
+    setSubscribersCount((prev) => prev + (subscribed ? -1 : 1))
+    // toggle subscribed
+    setSubscribed((prev) => !prev)
+
     trackEvent({
       category: 'Research',
       action: action,
@@ -142,20 +166,18 @@ const ResearchArticle = observer(({ research }: ResearchArticleProps) => {
       <ResearchDescription
         research={research}
         key={research._id}
-        votedUsefulCount={researchStore.votedUsefulCount}
+        votedUsefulCount={usefulCount}
         loggedInUser={loggedInUser as IUser}
         isEditable={isEditable}
         isDeletable={isDeletable}
-        needsModeration={researchStore.needsModeration(research)}
-        hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
-        hasUserSubscribed={researchStore.userHasSubscribed}
-        moderateResearch={moderateResearch}
+        hasUserVotedUseful={voted}
+        hasUserSubscribed={subscribed}
         onUsefulClick={() =>
-          onUsefulClick(research._id, research.slug, 'ResearchDescription')
+          onUsefulClick(voted ? 'delete' : 'add', 'ResearchDescription')
         }
         onFollowClick={() => onFollowClick(research.slug)}
         contributors={contributors}
-        subscribersCount={researchStore.subscribersCount}
+        subscribersCount={subscribersCount}
         commentsCount={research.totalCommentCount}
         updatesCount={
           research.updates?.filter((u) =>
@@ -186,42 +208,43 @@ const ResearchArticle = observer(({ research }: ResearchArticleProps) => {
           )}
       </Flex>
 
-      <UserEngagementWrapper>
-        <Box
-          sx={{
-            marginBottom: [6, 6, 12],
-          }}
-        >
-          {researchAuthor && (
-            <ArticleCallToAction
-              author={researchAuthor}
-              contributors={contributors}
+      <ClientOnly fallback={<></>}>
+        {() => (
+          <UserEngagementWrapper>
+            <Box
+              sx={{
+                marginBottom: [6, 6, 12],
+              }}
             >
-              {research.moderation === IModerationStatus.ACCEPTED && (
-                <UsefulStatsButton
-                  isLoggedIn={!!loggedInUser}
-                  votedUsefulCount={researchStore.votedUsefulCount}
-                  hasUserVotedUseful={
-                    researchStore.userVotedActiveResearchUseful
-                  }
-                  onUsefulClick={async () =>
-                    await onUsefulClick(
-                      research._id,
-                      research.slug,
-                      'ArticleCallToAction',
-                    )
-                  }
-                />
+              {researchAuthor && (
+                <ArticleCallToAction
+                  author={researchAuthor}
+                  contributors={contributors}
+                >
+                  {research.moderation === IModerationStatus.ACCEPTED && (
+                    <UsefulStatsButton
+                      isLoggedIn={!!loggedInUser}
+                      votedUsefulCount={usefulCount}
+                      hasUserVotedUseful={voted}
+                      onUsefulClick={() =>
+                        onUsefulClick(
+                          voted ? 'delete' : 'add',
+                          'ArticleCallToAction',
+                        )
+                      }
+                    />
+                  )}
+                  <FollowButton
+                    isLoggedIn={!!loggedInUser}
+                    hasUserSubscribed={subscribed}
+                    onFollowClick={() => onFollowClick(research.slug)}
+                  />
+                </ArticleCallToAction>
               )}
-              <FollowButton
-                isLoggedIn={!!loggedInUser}
-                hasUserSubscribed={researchStore.userHasSubscribed}
-                onFollowClick={() => onFollowClick(research.slug)}
-              />
-            </ArticleCallToAction>
-          )}
-        </Box>
-      </UserEngagementWrapper>
+            </Box>
+          </UserEngagementWrapper>
+        )}
+      </ClientOnly>
 
       {isEditable && (
         <Flex my={4}>

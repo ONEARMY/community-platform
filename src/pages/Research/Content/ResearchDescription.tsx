@@ -25,21 +25,19 @@ import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 import { ContentAuthorTimestamp } from '../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import { researchStatusColour } from '../researchHelpers'
 
-import type { IResearch, ITag, IUser } from 'oa-shared'
+import type { IResearch, IResearchDB, ITag, IUser } from 'oa-shared'
 
 interface IProps {
   research: IResearch.ItemDB & { tagList?: ITag[] }
   isEditable: boolean
   isDeletable: boolean
   loggedInUser: IUser | undefined
-  needsModeration: boolean
   votedUsefulCount?: number
   hasUserVotedUseful: boolean
   hasUserSubscribed: boolean
   subscribersCount: number
   commentsCount: number
   updatesCount: number
-  moderateResearch: (accepted: boolean) => void
   onUsefulClick: () => Promise<void>
   onFollowClick: () => void
   contributors?: { userName: string; isVerified: boolean }[]
@@ -60,19 +58,19 @@ const ResearchDescription = ({
 
   const store = useResearchStore()
 
-  const handleDelete = async (_id: string) => {
+  const handleDelete = async (research: IResearchDB) => {
     try {
-      await store.deleteResearch(_id)
+      await store.deleteResearch(research._id)
       trackEvent({
         category: 'Research',
         action: 'Deleted',
-        label: store.activeResearchItem?.title,
+        label: research.title,
       })
       logger.debug(
         {
           category: 'Research',
           action: 'Deleted',
-          label: store.activeResearchItem?.title,
+          label: research.title,
         },
         'Research marked for deletion',
       )
@@ -136,27 +134,6 @@ const ResearchDescription = ({
                   </>
                 )}
               </ClientOnly>
-              {props.needsModeration &&
-                research.moderation ===
-                  IModerationStatus.AWAITING_MODERATION && (
-                  <Flex sx={{ justifyContent: 'space-between' }}>
-                    <Button
-                      type="button"
-                      data-cy="accept"
-                      variant="primary"
-                      icon="check"
-                      mr={1}
-                      onClick={() => props.moderateResearch(true)}
-                    />
-                    <Button
-                      type="button"
-                      data-cy="reject-research"
-                      variant="outline"
-                      icon="delete"
-                      onClick={() => props.moderateResearch(false)}
-                    />
-                  </Flex>
-                )}
               {/* Show edit button for the creator of the research OR a super-admin */}
               {isEditable && (
                 <Link to={'/research/' + research.slug + '/edit'}>
@@ -185,9 +162,7 @@ const ResearchDescription = ({
                     message="Are you sure you want to delete this Research?"
                     confirmButtonText="Delete"
                     handleCancel={() => setShowDeleteModal(false)}
-                    handleConfirm={() =>
-                      handleDelete && handleDelete(research._id)
-                    }
+                    handleConfirm={() => handleDelete && handleDelete(research)}
                   />
                 </Fragment>
               )}

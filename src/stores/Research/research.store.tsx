@@ -1,17 +1,10 @@
 import { createContext, useContext } from 'react'
 import lodash from 'lodash'
-import {
-  action,
-  computed,
-  makeObservable,
-  observable,
-  runInAction,
-  toJS,
-} from 'mobx'
+import { action, makeObservable, observable, runInAction, toJS } from 'mobx'
 import { IModerationStatus } from 'oa-shared'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
-import { hasAdminRights, needsModeration, randomID } from 'src/utils/helpers'
+import { hasAdminRights, randomID } from 'src/utils/helpers'
 import { getKeywords } from 'src/utils/searchHelper'
 
 import { incrementDocViewCount } from '../common/incrementDocViewCount'
@@ -36,7 +29,6 @@ const { cloneDeep } = lodash
 const COLLECTION_NAME = 'research'
 
 export class ResearchStore extends ModuleStore {
-  public activeResearchItem: IResearch.ItemDB | null = null
   public researchUploadStatus: IResearchUploadStatus =
     getInitialResearchUploadStatus()
   public updateUploadStatus: IUpdateUploadStatus =
@@ -57,10 +49,6 @@ export class ResearchStore extends ModuleStore {
       unlockResearchItem: action,
       lockResearchUpdate: action,
       unlockResearchUpdate: action,
-      userVotedActiveResearchUseful: computed,
-      userHasSubscribed: computed,
-      votedUsefulCount: computed,
-      subscribersCount: computed,
     })
   }
 
@@ -82,34 +70,29 @@ export class ResearchStore extends ModuleStore {
   }
 
   public async toggleUsefulByUser(
-    docId: string,
+    research: IResearchDB,
     userName: string,
   ): Promise<void> {
     const updatedItem = (await toggleDocUsefulByUser(
       COLLECTION_NAME,
-      docId,
+      research._id,
       userName,
     )) as IResearch.ItemDB
 
     runInAction(() => {
-      this.activeResearchItem = updatedItem
       if ((updatedItem?.votedUsefulBy || []).includes(userName)) {
         this.userNotificationsStore.triggerNotification(
           'research_useful',
-          this.activeResearchItem._createdBy,
-          '/research/' + this.activeResearchItem.slug,
-          this.activeResearchItem.title,
+          research._createdBy,
+          '/research/' + research.slug,
+          research.title,
         )
-        for (
-          let i = 0;
-          i < (this.activeResearchItem.collaborators || []).length;
-          i++
-        ) {
+        for (let i = 0; i < (research.collaborators || []).length; i++) {
           this.userNotificationsStore.triggerNotification(
             'research_useful',
-            this.activeResearchItem.collaborators[i],
-            '/research/' + this.activeResearchItem.slug,
-            this.activeResearchItem.title,
+            research.collaborators[i],
+            '/research/' + research.slug,
+            research.title,
           )
         }
       }
@@ -151,10 +134,6 @@ export class ResearchStore extends ModuleStore {
     }
     const doc = this.db.collection(COLLECTION_NAME).doc(research._id)
     return doc.set(toJS(research))
-  }
-
-  public needsModeration(research: IResearch.ItemDB) {
-    return needsModeration(research, toJS(this.activeUser || undefined))
   }
 
   public updateResearchUploadStatus(update: keyof IResearchUploadStatus) {
@@ -241,9 +220,11 @@ export class ResearchStore extends ModuleStore {
    *
    * @param update
    */
-  public async uploadUpdate(update: IResearch.Update | IResearch.UpdateDB) {
+  public async uploadUpdate(
+    item: IResearchDB,
+    update: IResearch.Update | IResearch.UpdateDB,
+  ) {
     logger.debug(`uploadUpdate`, { update })
-    const item = this.activeResearchItem
     if (item) {
       const dbRef = this.db
         .collection<IResearch.Item>(COLLECTION_NAME)
@@ -322,10 +303,6 @@ export class ResearchStore extends ModuleStore {
         await this._updateResearchItem(dbRef, newItem, true)
         logger.debug('populate db ok')
         this.updateUpdateUploadStatus('Database')
-        const createdItem = (await dbRef.get('server')) as IResearch.ItemDB
-        runInAction(() => {
-          this.activeResearchItem = createdItem
-        })
         this.updateUpdateUploadStatus('Complete')
       } catch (error) {
         logger.error('error', error)
@@ -333,8 +310,7 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
-  public async deleteUpdate(updateId: string) {
-    const item = this.activeResearchItem
+  public async deleteUpdate(item: IResearchDB, updateId: string) {
     if (item) {
       const dbRef = this.db
         .collection<IResearch.Item>(COLLECTION_NAME)
@@ -371,10 +347,12 @@ export class ResearchStore extends ModuleStore {
    *
    * @param updateId
    */
-  public async incrementDownloadCount(updateId: string): Promise<number> {
+  public async incrementDownloadCount(
+    item: IResearchDB,
+    updateId: string,
+  ): Promise<number> {
     try {
       let downloadCount = 0
-      const item = this.activeResearchItem
 
       if (item) {
         const dbRef = this.db
@@ -404,30 +382,7 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
-  get userVotedActiveResearchUseful(): boolean {
-    if (!this.activeUser) return false
-    return (this.activeResearchItem?.votedUsefulBy || []).includes(
-      this.activeUser.userName,
-    )
-  }
-
-  get userHasSubscribed(): boolean {
-    return (
-      this.activeResearchItem?.subscribers?.includes(
-        this.activeUser?.userName ?? '',
-      ) ?? false
-    )
-  }
-
-  get votedUsefulCount(): number {
-    return (this.activeResearchItem?.votedUsefulBy || []).length
-  }
-
-  get subscribersCount(): number {
-    return (this.activeResearchItem?.subscribers || []).length
-  }
-  public async lockResearchItem(username: string) {
-    const item = this.activeResearchItem
+  public async lockResearchItem(item: IResearchDB, username: string) {
     if (item) {
       const dbRef = this.db
         .collection<IResearch.Item>(COLLECTION_NAME)
@@ -440,14 +395,10 @@ export class ResearchStore extends ModuleStore {
         },
       }
       await this._updateResearchItem(dbRef, newItem)
-      runInAction(() => {
-        this.activeResearchItem = newItem
-      })
     }
   }
 
-  public async unlockResearchItem() {
-    const item = this.activeResearchItem
+  public async unlockResearchItem(item: IResearchDB) {
     if (item) {
       const dbRef = this.db
         .collection<IResearch.Item>(COLLECTION_NAME)
@@ -457,14 +408,14 @@ export class ResearchStore extends ModuleStore {
         locked: null,
       }
       await this._updateResearchItem(dbRef, newItem)
-      runInAction(() => {
-        this.activeResearchItem = newItem
-      })
     }
   }
 
-  public async lockResearchUpdate(username: string, updateId: string) {
-    const item = this.activeResearchItem
+  public async lockResearchUpdate(
+    item: IResearchDB,
+    username: string,
+    updateId: string,
+  ) {
     if (item) {
       const dbRef = this.db
         .collection<IResearch.Item>(COLLECTION_NAME)
@@ -482,14 +433,10 @@ export class ResearchStore extends ModuleStore {
         }
       }
       await this._updateResearchItem(dbRef, newItem)
-      runInAction(() => {
-        this.activeResearchItem = newItem
-      })
     }
   }
 
-  public async unlockResearchUpdate(updateId: string) {
-    const item = this.activeResearchItem
+  public async unlockResearchUpdate(item: IResearchDB, updateId: string) {
     if (item) {
       const dbRef = this.db
         .collection<IResearch.Item>(COLLECTION_NAME)
@@ -504,9 +451,6 @@ export class ResearchStore extends ModuleStore {
         newItem.updates[updateIndex].locked = null
       }
       await this._updateResearchItem(dbRef, newItem)
-      runInAction(() => {
-        this.activeResearchItem = newItem
-      })
     }
   }
 

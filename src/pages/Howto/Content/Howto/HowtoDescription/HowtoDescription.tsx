@@ -36,7 +36,6 @@ import type { IHowtoDB, ITag, IUser } from 'oa-shared'
 interface IProps {
   howto: IHowtoDB & { tagList?: ITag[] }
   loggedInUser: IUser | undefined
-  needsModeration: boolean
   commentsCount: number
   votedUsefulCount?: number
   verified?: boolean

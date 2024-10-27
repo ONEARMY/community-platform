@@ -215,7 +215,7 @@ describe('Research Article', () => {
               FactoryResearchItemUpdate({
                 title: 'Research Update #2',
                 collaborators: null!,
-                status: ResearchUpdateStatus.PUBLISHED,
+                status: ResearchUpdateStatus.DRAFT,
                 _deleted: false,
               }),
               FactoryResearchItemUpdate({
@@ -444,7 +444,16 @@ const getWrapper = (research: IResearchDB) => {
       <Route
         path="/research/:slug"
         key={1}
-        element={<ResearchArticle research={research} />}
+        element={
+          <ResearchArticle
+            research={research}
+            publicUpdates={research.updates.filter(
+              (x) =>
+                x._deleted !== true &&
+                x.status === ResearchUpdateStatus.PUBLISHED,
+            )}
+          />
+        }
       />,
     ),
     {

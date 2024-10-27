@@ -257,6 +257,7 @@ describe('Research Article', () => {
         _modified: _created,
         title: 'A title',
         description: 'A description',
+        status: ResearchUpdateStatus.PUBLISHED,
       })
       ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
       // Act

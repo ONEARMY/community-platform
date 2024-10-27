@@ -208,7 +208,7 @@ const ResearchArticle = observer(
               update={update}
               key={update._id}
               updateIndex={index}
-              isEditable={false}
+              isEditable={isEditable}
               slug={research.slug}
             />
           ))}

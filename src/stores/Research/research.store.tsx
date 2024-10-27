@@ -47,8 +47,6 @@ export class ResearchStore extends ModuleStore {
       resetUpdateUploadStatus: action,
       lockResearchItem: action,
       unlockResearchItem: action,
-      lockResearchUpdate: action,
-      unlockResearchUpdate: action,
     })
   }
 
@@ -421,47 +419,33 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
-  public async lockResearchUpdate(
-    item: IResearchDB,
+  public async toggleLockResearchUpdate(
+    researchId: string,
     username: string,
     updateId: string,
+    lock: boolean,
   ) {
-    if (item) {
-      const dbRef = this.db
-        .collection<IResearch.Item>(COLLECTION_NAME)
-        .doc(item._id)
-      const updateIndex = item.updates.findIndex((upd) => upd._id === updateId)
-      const newItem = {
-        ...item,
-        updates: [...item.updates],
-      }
+    const dbRef = this.db
+      .collection<IResearch.Item>(COLLECTION_NAME)
+      .doc(researchId)
 
-      if (updateIndex && newItem.updates[updateIndex]) {
-        newItem.updates[updateIndex].locked = {
-          by: username,
-          at: new Date().toISOString(),
-        }
-      }
-      await this._updateResearchItem(dbRef, newItem)
+    const item = toJS(await dbRef.get('server')) as IResearchDB
+    const updateIndex = item.updates.findIndex((upd) => upd._id === updateId)
+    const updatedItem = {
+      ...item,
+      updates: [...item.updates],
     }
-  }
 
-  public async unlockResearchUpdate(item: IResearchDB, updateId: string) {
-    if (item) {
-      const dbRef = this.db
-        .collection<IResearch.Item>(COLLECTION_NAME)
-        .doc(item._id)
-      const updateIndex = item.updates.findIndex((upd) => upd._id === updateId)
-      const newItem = {
-        ...item,
-        updates: [...item.updates],
-      }
-
-      if (newItem.updates[updateIndex]) {
-        newItem.updates[updateIndex].locked = null
-      }
-      await this._updateResearchItem(dbRef, newItem)
+    if (updatedItem.updates[updateIndex]) {
+      updatedItem.updates[updateIndex].locked = lock
+        ? {
+            by: username,
+            at: new Date().toISOString(),
+          }
+        : null
     }
+
+    await dbRef.set(updatedItem)
   }
 
   private async _setCollaborators(

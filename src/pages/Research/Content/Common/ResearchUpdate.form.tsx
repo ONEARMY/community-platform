@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import styled from '@emotion/styled'
 import arrayMutators from 'final-form-arrays'
@@ -54,34 +54,40 @@ export const ResearchUpdateForm = observer((props: IProps) => {
   const { deletion, draft } = buttons
 
   const store = useResearchStore()
-  const [formState, setFormState] = React.useState<{ dirty: boolean }>({
+  const [formState, setFormState] = useState<{ dirty: boolean }>({
     dirty: false,
   })
-  const [showDeleteModal, setShowDeleteModal] = React.useState(false)
-  const [showSubmitModal, setShowSubmitModal] = React.useState<boolean>(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showSubmitModal, setShowSubmitModal] = useState<boolean>(false)
   const [showInvalidFileWarning, setInvalidFileWarning] =
-    React.useState<boolean>(false)
-  const [isDraft, setIsDraft] = React.useState<boolean>(
+    useState<boolean>(false)
+  const [isDraft, setIsDraft] = useState<boolean>(
     formValues.status === ResearchUpdateStatus.DRAFT,
   )
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (store.updateUploadStatus?.Complete) {
       window.removeEventListener('beforeunload', beforeUnload, false)
     }
   }, [store.updateUploadStatus?.Complete])
 
   // Managing locked state
-  React.useEffect(() => {
+  useEffect(() => {
     if (store.activeUser)
-      store.lockResearchUpdate(
-        props.research,
+      store.toggleLockResearchUpdate(
+        props.research._id,
         store.activeUser.userName,
         formValues._id,
+        true,
       )
 
     return () => {
-      store.unlockResearchUpdate(props.research, formValues._id)
+      store.toggleLockResearchUpdate(
+        props.research._id,
+        '',
+        formValues._id,
+        false,
+      )
     }
   }, [store.activeUser])
 
@@ -135,7 +141,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
   }
 
   // Display a confirmation dialog when leaving the page outside the React Router
-  const unloadDecorator = React.useCallback(
+  const unloadDecorator = useCallback(
     (form) => {
       return form.subscribe(
         ({ dirty }) => {

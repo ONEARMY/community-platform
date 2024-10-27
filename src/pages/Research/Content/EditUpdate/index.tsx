@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { useNavigate, useParams } from '@remix-run/react'
+import { useEffect, useMemo } from 'react'
+import { useNavigate } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { BlockedRoute } from 'oa-components'
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common/ResearchUpdate.form'
@@ -7,27 +7,24 @@ import { useResearchStore } from 'src/stores/Research/research.store'
 import { isAllowedToEditContent } from 'src/utils/helpers'
 import { Text } from 'theme-ui'
 
-import type { IResearch, IResearchDB, IUser } from 'oa-shared'
+import type { IResearch, IResearchDB } from 'oa-shared'
 
-interface IState {
-  formValues: IResearch.UpdateDB
-  loggedInUser?: IUser | undefined
-}
 type IProps = {
   updateId: string
   research: IResearchDB
 }
 
 const EditUpdate = observer((props: IProps) => {
-  const { update, slug } = useParams()
   const store = useResearchStore()
   const navigate = useNavigate()
-  const [{ formValues, loggedInUser }] = React.useState<IState>({
-    formValues: props.research.updates.find(
-      (upd) => upd._id === update,
-    ) as IResearch.UpdateDB,
-    loggedInUser: store.activeUser as IUser,
-  })
+  const loggedInUser = store.activeUser
+  const formValues = useMemo<IResearch.UpdateDB>(
+    () =>
+      props.research.updates.find(
+        (upd) => upd._id === props.updateId,
+      ) as IResearch.UpdateDB,
+    [props.updateId, props.research.updates],
+  )
 
   useEffect(() => {
     if (
@@ -50,7 +47,7 @@ const EditUpdate = observer((props: IProps) => {
     return (
       <BlockedRoute
         redirectLabel="Back to research"
-        redirectUrl={`/research/${slug}`}
+        redirectUrl={`/research/${props.research.slug}`}
       >
         This research update is currently being edited by another editor.
       </BlockedRoute>

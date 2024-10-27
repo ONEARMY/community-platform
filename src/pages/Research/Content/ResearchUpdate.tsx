@@ -1,4 +1,5 @@
-import { Link } from '@remix-run/react'
+import { useMemo } from 'react'
+import { Link, useLocation } from '@remix-run/react'
 import {
   Button,
   DisplayDate,
@@ -8,6 +9,8 @@ import {
   Username,
   VideoPlayer,
 } from 'oa-components'
+// eslint-disable-next-line import/no-unresolved
+import { ClientOnly } from 'remix-utils/client-only'
 import { DownloadWrapper } from 'src/common/DownloadWrapper'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -15,6 +18,7 @@ import { useResearchStore } from 'src/stores/Research/research.store'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
+import { getResearchUpdateId } from './helper'
 import { ResearchLinkToUpdate } from './ResearchLinkToUpdate'
 import { ResearchUpdateDiscussion } from './ResearchUpdateDiscussion'
 
@@ -26,11 +30,11 @@ interface IProps {
   updateIndex: number
   isEditable: boolean
   slug: string
-  showComments: boolean
 }
 
 const ResearchUpdate = (props: IProps) => {
-  const { update, updateIndex, isEditable, slug, showComments } = props
+  const location = useLocation()
+  const { update, updateIndex, isEditable, slug } = props
   const {
     _id,
     _created,
@@ -56,6 +60,11 @@ const ResearchUpdate = (props: IProps) => {
 
   const displayNumber = updateIndex + 1
   const isDraft = status == 'draft'
+
+  const showComments = useMemo(
+    () => update._id === getResearchUpdateId(location.hash),
+    [location.hash],
+  )
 
   return (
     <Flex
@@ -187,7 +196,9 @@ const ResearchUpdate = (props: IProps) => {
             </Flex>
             <Box sx={{ width: '100%' }}>
               {videoUrl ? (
-                <VideoPlayer videoUrl={videoUrl} />
+                <ClientOnly fallback={<></>}>
+                  {() => <VideoPlayer videoUrl={videoUrl} />}
+                </ClientOnly>
               ) : (
                 <ImageGallery
                   images={formatImagesForGallery(images) as any}
@@ -208,11 +219,15 @@ const ResearchUpdate = (props: IProps) => {
                 fileDownloadCount={downloadCount}
               />
             </Flex>
-            <ResearchUpdateDiscussion
-              update={update}
-              research={props.research}
-              showComments={showComments}
-            />
+            <ClientOnly fallback={<></>}>
+              {() => (
+                <ResearchUpdateDiscussion
+                  update={update}
+                  research={props.research}
+                  showComments={showComments}
+                />
+              )}
+            </ClientOnly>
           </Card>
         </Flex>
       </Flex>

@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Form } from 'react-final-form'
 import { ARRAY_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
@@ -8,11 +8,9 @@ import { ProfileTypeList } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
-import { isModuleSupported, MODULE } from 'src/modules'
 import { Flex } from 'theme-ui'
 import { v4 as uuid } from 'uuid'
 
-import { EnvironmentContext } from '../common/EnvironmentContext'
 import { FocusSection } from './content/sections/Focus.section'
 import { ProfileTags } from './content/sections/ProfileTags.section'
 import { PublicContactSection } from './content/sections/PublicContact.section'
@@ -27,7 +25,6 @@ import type { IUser } from 'oa-shared'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
 export const SettingsPageUserProfile = () => {
-  const env = useContext(EnvironmentContext)
   const [notification, setNotification] = useState<
     IFormNotification | undefined
   >(undefined)
@@ -148,10 +145,7 @@ export const SettingsPageUserProfile = () => {
 
             <form id={formId} onSubmit={handleSubmit}>
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
-                {isModuleSupported(
-                  env?.VITE_SUPPORTED_MODULES || '',
-                  MODULE.MAP,
-                ) && <FocusSection />}
+                <FocusSection />
 
                 {values.profileType === ProfileTypeList.WORKSPACE && (
                   <WorkspaceSection />

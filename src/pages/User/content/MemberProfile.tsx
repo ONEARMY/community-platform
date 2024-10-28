@@ -94,6 +94,7 @@ export const MemberProfile = ({ docs, user }: IProps) => {
                   howtoCount={docs?.howtos.length || 0}
                   researchCount={docs?.research.length || 0}
                   usefulCount={user.totalUseful || 0}
+                  totalViews={0}
                   sx={{ alignSelf: 'stretch' }}
                 />
               }
@@ -107,7 +108,7 @@ export const MemberProfile = ({ docs, user }: IProps) => {
                 researchCount={docs?.research.length || 0}
                 usefulCount={user.totalUseful || 0}
                 sx={{ alignSelf: 'stretch' }}
-                totalViews={user.total_views}
+                totalViews={user.total_views || 0}
               />
             </AuthWrapper>
           </Flex>

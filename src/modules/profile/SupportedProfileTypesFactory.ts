@@ -16,11 +16,9 @@ import FixingFashionSpace from 'src/assets/images/themes/fixing-fashion/avatar_s
 import PreciousPlasticMember from 'src/assets/images/themes/precious-plastic/avatar_member_sm.svg'
 import ProjectKampMember from 'src/assets/images/themes/project-kamp/avatar_member_sm.svg'
 import ProjectKampSpace from 'src/assets/images/themes/project-kamp/avatar_space_sm.svg'
+import { getConfigurationOption } from 'src/config/config'
 
 import type { IProfileTypeDetails } from './types'
-
-const DEFAULT_PROFILE_TYPES =
-  'member,workspace,community-builder,collection-point,machine-builder'
 
 const MemberAndSpace = {
   'fixing-fashion': {
@@ -29,7 +27,7 @@ const MemberAndSpace = {
   },
   'precious-plastic': {
     member: PreciousPlasticMember,
-    space: undefined,
+    space: LogoCommunity,
   },
   'project-kamp': {
     member: ProjectKampMember,
@@ -39,8 +37,10 @@ const MemberAndSpace = {
 type ProfileType = keyof typeof MemberAndSpace
 
 const getProfileTypes = () => {
-  const theme: ProfileType =
-    import.meta.env.VITE_THEME || process.env.VITE_THEME || 'precious-plastic'
+  const theme = getConfigurationOption(
+    'VITE_THEME',
+    'precious-plastic',
+  ) as ProfileType
 
   const PROFILE_TYPES: IProfileTypeDetails[] = [
     {
@@ -91,7 +91,7 @@ const getProfileTypes = () => {
 }
 
 export const SupportedProfileTypesFactory = (configurationString: string) => {
-  const supportedProfileTypes = (configurationString || DEFAULT_PROFILE_TYPES)
+  const supportedProfileTypes = configurationString
     .split(',')
     .map((s) => s.trim())
   return () =>

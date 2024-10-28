@@ -275,6 +275,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                           howtoCount={docs?.howtos.length || 0}
                           usefulCount={user.totalUseful || 0}
                           researchCount={docs?.research.length || 0}
+                          totalViews={0}
                         />
                       }
                     >
@@ -286,7 +287,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                         howtoCount={docs?.howtos.length || 0}
                         usefulCount={user.totalUseful || 0}
                         researchCount={docs?.research.length || 0}
-                        totalViews={user.total_views}
+                        totalViews={user.total_views || 0}
                       />
                     </AuthWrapper>
                   </Box>

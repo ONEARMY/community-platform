@@ -18,7 +18,7 @@ export interface UserStatisticsProps {
   howtoCount: number
   usefulCount: number
   researchCount: number
-  totalViews?: number
+  totalViews: number
   sx?: ThemeUIStyleObject | undefined
 }
 
@@ -74,14 +74,14 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           </InternalLink>
         )}
 
-        {props.usefulCount && (
+        {props.usefulCount > 0 && (
           <Flex data-testid="useful-stat">
             <ElWithBeforeIcon icon={starActiveSVG} />
             {`Useful: ${props.usefulCount}`}
           </Flex>
         )}
 
-        {props.howtoCount && (
+        {props.howtoCount > 0 && (
           <InternalLink
             to={'/how-to?q=' + props.userName}
             sx={{ color: 'black' }}
@@ -89,12 +89,12 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           >
             <Flex data-testid="howto-stat">
               <ElWithBeforeIcon icon={HowToCountIcon} />
-              How‑to:&nbsp;{props.howtoCount}
+              {`How-to: ${props.howtoCount}`}
             </Flex>
           </InternalLink>
         )}
 
-        {props.researchCount && (
+        {props.researchCount > 0 && (
           <InternalLink
             to={'/research?q=' + props.userName}
             sx={{ color: 'black' }}
@@ -102,12 +102,12 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           >
             <Flex data-testid="research-stat">
               <ElWithBeforeIcon icon={ResearchIcon} />
-              Research:&nbsp;{props.researchCount}
+              {`Research: ${props.researchCount}`}
             </Flex>
           </InternalLink>
         )}
 
-        {props.totalViews && (
+        {props.totalViews > 0 && (
           <Flex data-testid="profile-views-stat">
             <Icon glyph="view" size={22} />
             <Box ml={1}>{`Views: ${props.totalViews}`}</Box>

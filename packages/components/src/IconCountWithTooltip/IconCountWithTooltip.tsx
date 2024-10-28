@@ -15,7 +15,7 @@ export interface IconCountWithTooltipProps {
 
 export const IconCountWithTooltip = (props: IconCountWithTooltipProps) => {
   const { count, dataCy, icon, text } = props
-  const id = useMemo(() => crypto.randomUUID(), [])
+  const id = useMemo(() => (Math.random() * 16).toString(), [])
 
   return (
     <>

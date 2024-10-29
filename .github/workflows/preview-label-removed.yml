@@ -18,6 +18,6 @@ jobs:
     steps:
       - name: Destroy fly.io preview app
         id: destroy
-        uses: iSCJT/fly-destroy-app@1.0.0
+        uses: iSCJT/fly-destroy-app@v1
         with:
           name: community-platform-pr-${{ github.event.number }}

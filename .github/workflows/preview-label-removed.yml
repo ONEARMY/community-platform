@@ -1,0 +1,23 @@
+name: Destroy fly preview app when label removed
+
+on:
+  pull_request_target:
+    types:
+      - unlabeled
+
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+jobs:
+  label_removed:
+    if: github.event.label.name == 'Review allow-preview ✅'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    concurrency:
+      group: pr-${{ github.event.number }}
+    steps:
+      - name: Destroy fly.io preview app
+        id: destroy
+        uses: iSCJT/fly-destroy-app@1.0.0
+        with:
+          name: community-platform-pr-${{ github.event.number }}

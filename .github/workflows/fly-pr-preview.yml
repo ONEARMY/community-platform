@@ -43,7 +43,22 @@ jobs:
           # pull the repo from the pull request source, not the default local repo
           ref: ${{ github.event.pull_request.head.sha }}
 
+      - name: Remove label if closed
+        if: github.event.pull_request.closed
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: github.event.number,
+              name: 'Review allow-preview ✅',
+            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Deploy PR app to Fly.io
+        if: github.event.pull_request.closed == false
         id: deploy
         uses: superfly/fly-pr-review-apps@1.3.0
         with:

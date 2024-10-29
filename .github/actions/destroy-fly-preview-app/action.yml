@@ -1,0 +1,12 @@
+name: "Destroy fly.io app"
+description: "Destroy fly.io app if matching app name found"
+author: iSCJT
+branding:
+  icon: "delete"
+  color: "red"
+runs:
+  using: "docker"
+  image: "Dockerfile"
+inputs:
+  name:
+    description: Fly app name

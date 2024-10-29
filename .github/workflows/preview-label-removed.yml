@@ -16,8 +16,11 @@ jobs:
     concurrency:
       group: pr-${{ github.event.number }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
       - name: Destroy fly.io preview app
         id: destroy
-        uses: iSCJT/fly-destroy-app@v1
+        uses: ./.github/actions/destroy-fly-preview-app
         with:
           name: community-platform-pr-${{ github.event.number }}

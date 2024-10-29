@@ -12,6 +12,26 @@ import { ResearchUpdateForm } from './ResearchUpdate.form'
 
 const Theme = testingThemeStyles
 
+vi.mock('src/common/hooks/useCommonStores', () => {
+  return {
+    useCommonStores: () => ({
+      stores: {
+        researchStore: {
+          updateUploadStatus: {
+            Start: false,
+            Images: false,
+            Files: false,
+            Database: false,
+            Complete: false,
+          },
+          isTitleThatReusesSlug: vi.fn(),
+          unlockResearchUpdate: vi.fn(),
+        },
+      },
+    }),
+  }
+})
+
 vi.mock('src/stores/Research/research.store', () => {
   return {
     useResearchStore: () => ({

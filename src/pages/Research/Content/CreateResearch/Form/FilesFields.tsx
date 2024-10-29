@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { Field } from 'react-final-form'
 import { Button, DownloadStaticFile, FieldInput } from 'oa-components'
+import { UserRole } from 'oa-shared'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FileInputField } from 'src/common/Form/FileInput.field'
 import { MAX_LINK_LENGTH } from 'src/pages/constants'
 import { buttons, update as updateLabels } from 'src/pages/Research/labels'
@@ -77,10 +79,33 @@ const UploadNewFiles = () => {
         <Label mb={2} htmlFor={identity} style={{ fontSize: '12px' }}>
           {files.title}
         </Label>
-        <Field hasText={false} name={'files'} component={FileInputField} />
-        <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
-          {files.description}
-        </Text>
+        <AuthWrapper
+          roleRequired={UserRole.ADMIN}
+          fallback={
+            <>
+              <Field
+                hasText={false}
+                name={'files'}
+                component={FileInputField}
+              />
+              <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
+                {files.description}
+              </Text>
+            </>
+          }
+        >
+          <>
+            <Field
+              hasText={false}
+              name={'files'}
+              admin={true}
+              component={FileInputField}
+            />
+            <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
+              {'Maximum file size 300MB'}
+            </Text>
+          </>
+        </AuthWrapper>
       </Flex>
     </>
   )

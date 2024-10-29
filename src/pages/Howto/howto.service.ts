@@ -207,7 +207,16 @@ const getBySlug = async (slug: string) => {
     return null
   }
 
-  const howto = snapshot.docs[0].data() as IHowtoDB
+  let howto: IHowtoDB | null = null
+
+  for (const doc of snapshot.docs) {
+    const howtoDoc = doc.data() as IHowtoDB
+
+    if (!howtoDoc._deleted) {
+      howto = howtoDoc
+      break
+    }
+  }
 
   if (!howto) {
     return null

@@ -14,27 +14,25 @@ export const loader = async () => {
   const cachedMappins = await cache.get('mappins')
 
   // check if cached map pins are availbe, if not - load from db and cache them
-  if (cachedMappins) {
-    return json({ mapPins: cachedMappins })
-  } else {
-    const collectionRef = collection(firestore, DB_ENDPOINTS.mappins)
-    const userMapPinQuery = query(
-      collectionRef,
-      where('_deleted', '==', false),
-      where('moderation', '==', 'accepted'),
-    )
+  if (cachedMappins) return json({ mapPins: cachedMappins })
 
-    const queryResults = await getDocs(userMapPinQuery)
+  const collectionRef = collection(firestore, DB_ENDPOINTS.mappins)
+  const userMapPinQuery = query(
+    collectionRef,
+    where('_deleted', '==', false),
+    where('moderation', '==', 'accepted'),
+  )
 
-    const mapPins: IMapPin[] = []
-    queryResults.forEach((doc) => {
-      mapPins.push(doc.data() as IMapPin)
-    })
-    const mapPinsWithCDN = _transformCreatorImagesToCND(mapPins)
+  const queryResults = await getDocs(userMapPinQuery)
 
-    cache.set('mappins', mapPinsWithCDN)
-    return json({ mapPins: mapPinsWithCDN })
-  }
+  const mapPins: IMapPin[] = []
+  queryResults.forEach((doc) => {
+    mapPins.push(doc.data() as IMapPin)
+  })
+  const mapPinsWithCDN = _transformCreatorImagesToCND(mapPins)
+
+  cache.set('mappins', mapPinsWithCDN)
+  return json({ mapPins: mapPinsWithCDN })
 }
 
 export const action = async ({ request }) => {

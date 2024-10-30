@@ -69,19 +69,20 @@ function formatMapPinForResponse(data) {
 
 // taken from platform-api
 async function getUserProfile(userId) {
-  const collectionRef1 = collection(firestore, DB_ENDPOINTS.users)
-  const usersQuery1 = query(collectionRef1, where('_authId', '==', userId))
-  const queryResults1 = await getDocs(usersQuery1)
+  const usersCollection = collection(firestore, DB_ENDPOINTS.users)
 
-  if (queryResults1.docs.length === 1) {
-    return queryResults1.docs[0].data()
+  const usersByAuthId = await getDocs(
+    query(usersCollection, where('_authId', '==', userId)),
+  )
+  if (usersByAuthId.docs.length === 1) {
+    return usersByAuthId.docs[0].data()
   }
+  
+  const usersById = await getDocs(
+    query(usersCollection, where('_id', '==', userId)),
+  )
 
-  const collectionRef2 = collection(firestore, DB_ENDPOINTS.users)
-  const usersQuery2 = query(collectionRef2, where('_id', '==', userId))
-  const queryResults2 = await getDocs(usersQuery2)
-
-  if (queryResults2.docs.length === 1) {
-    return queryResults2.docs[0].data()
+  if (usersById.docs.length === 1) {
+    return usersById.docs[0].data()
   }
 }

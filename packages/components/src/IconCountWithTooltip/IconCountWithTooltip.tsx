@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Text } from 'theme-ui'
 
 import { Icon } from '../Icon/Icon'
@@ -14,11 +15,13 @@ export interface IconCountWithTooltipProps {
 
 export const IconCountWithTooltip = (props: IconCountWithTooltipProps) => {
   const { count, dataCy, icon, text } = props
+  const id = useMemo(() => (Math.random() * 16).toString(), [])
+
   return (
     <>
       <Text
         data-cy={dataCy}
-        data-tooltip-id="icon-count"
+        data-tooltip-id={id}
         data-tooltip-content={text}
         color="black"
         sx={{
@@ -31,7 +34,7 @@ export const IconCountWithTooltip = (props: IconCountWithTooltipProps) => {
         {count}
         <Icon glyph={icon} ml={1} />
       </Text>
-      <Tooltip id="icon-count" />
+      <Tooltip id={id} />
     </>
   )
 }

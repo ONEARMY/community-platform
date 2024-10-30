@@ -133,7 +133,10 @@ export const QuestionListing = () => {
             marginBottom: 5,
             border: '2px solid black',
             borderRadius: 5,
-            overflowX: 'hidden',
+            background: 'lightGrey',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2px',
           }}
         >
           {questions.map((question, index) => (

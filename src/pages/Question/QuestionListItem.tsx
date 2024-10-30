@@ -40,9 +40,8 @@ export const QuestionListItem = ({ question, query }: IProps) => {
       data-id={question._id}
       sx={{
         position: 'relative',
-        border: 'none',
-        borderBottom: '2px solid #cccccc',
-        borderRadius: 0,
+        border: 0,
+        overflow: 'hidden',
       }}
     >
       <Flex
@@ -125,21 +124,16 @@ export const QuestionListItem = ({ question, query }: IProps) => {
             paddingX: 12,
           }}
         >
-          <Box>
-            <IconCountWithTooltip
-              count={(votedUsefulBy || []).length}
-              icon="star-active"
-              text={listing.usefulness}
-            />
-          </Box>
-
-          <Box>
-            <IconCountWithTooltip
-              count={(question as any).commentCount || 0}
-              icon="comment"
-              text={listing.totalComments}
-            />
-          </Box>
+          <IconCountWithTooltip
+            count={(votedUsefulBy || []).length}
+            icon="star-active"
+            text={listing.usefulness}
+          />
+          <IconCountWithTooltip
+            count={(question as any).commentCount || 0}
+            icon="comment"
+            text={listing.totalComments}
+          />
         </Flex>
       </Flex>
 

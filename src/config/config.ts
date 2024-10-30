@@ -156,6 +156,11 @@ export const API_URL = _c(
   'https://platform-api-voymtdup6a-uc.a.run.app',
 )
 
+export const VITE_PLATFORM_PROFILES =
+  typeof localStorage !== 'undefined'
+    ? localStorage.getItem('VITE_PLATFORM_PROFILES')
+    : _c('VITE_PLATFORM_PROFILES', '')
+
 export const isPreciousPlastic = (): boolean => {
   return (
     _c('VITE_PLATFORM_THEME') === 'precious-plastic' ||

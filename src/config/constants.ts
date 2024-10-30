@@ -18,6 +18,7 @@ export const _supportedConfigurationOptions = [
   'VITE_ALGOLIA_PLACES_API_KEY',
   'VITE_BRANCH',
   'VITE_SITE_VARIANT',
+  'VITE_THEME',
   'VITE_LOG_LEVEL',
   'VITE_LOG_TRANSPORT',
   'VITE_SUPPORTED_MODULES',

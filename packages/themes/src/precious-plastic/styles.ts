@@ -58,6 +58,10 @@ export const styles: ThemeWithName = {
       lowDetail: MachineBadgeLowDetail,
       normal: MachineBadge,
     },
+    space: {
+      lowDetail: LocalComBadgeLowDetail,
+      normal: LocalComBadge,
+    },
   },
   buttons: getButtons(colors),
   colors,

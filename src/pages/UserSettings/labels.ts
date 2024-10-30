@@ -104,16 +104,8 @@ export const fields: ILabels = {
     title: 'Old password',
     placeholder: 'Old password',
   },
-  openingHours: {
-    description: 'add opening day',
-    title: 'Opening time(s)',
-  },
   password: {
     title: 'Password',
-  },
-  plastic: {
-    description: 'Choose at least one plastic type',
-    title: 'Plastic types accepted',
   },
   publicContentPreference: {
     title: 'Contact Preference',
@@ -150,7 +142,6 @@ export const headings = {
   accountSettings: 'Account settings',
   changeEmail: 'Change Email',
   changePassword: 'Change Password',
-  collection: 'Collection',
   createProfile: 'Create profile',
   editProfile: 'Edit profile',
   focus: 'Focus',

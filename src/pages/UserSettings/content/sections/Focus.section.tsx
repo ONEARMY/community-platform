@@ -29,7 +29,7 @@ const ProfileTypes = () => {
     <Field
       name="profileType"
       render={(props) => (
-        <FlexSectionContainer>
+        <FlexSectionContainer data-cy="FocusSection">
           <Flex sx={{ flexDirection: 'column', gap: 1 }}>
             <Heading as="h2">{headings.focus}</Heading>
             <Paragraph>

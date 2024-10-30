@@ -10,7 +10,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/wait-on": "^5.3.4",
     "cross-env": "^7.0.3",
-    "cypress": "13.6.6",
+    "cypress": "13.15.1",
     "cypress-file-upload": "5.0.8",
     "dotenv": "^10.0.0",
     "eslint-plugin-mocha": "^10.4.3",

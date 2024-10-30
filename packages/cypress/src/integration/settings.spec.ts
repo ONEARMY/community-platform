@@ -2,7 +2,10 @@ import { ExternalLinkLabel } from 'oa-shared'
 
 import { SingaporeStubResponse } from '../fixtures/searchResults'
 import { UserMenuItem } from '../support/commandsUi'
-import { generateNewUserDetails } from '../utils/TestUtils'
+import {
+  generateNewUserDetails,
+  setIsPreciousPlastic,
+} from '../utils/TestUtils'
 
 const locationStub = {
   administrative: '',
@@ -19,31 +22,26 @@ const mapDetails = (description) => ({
   locationName: locationStub.value,
 })
 describe('[Settings]', () => {
-  describe('[Precious Plastic]', () => {
-    localStorage.setItem(
-      'VITE_PLATFORM_PROFILES',
-      'member,workspace,community-builder,collection-point,machine-builder',
-    )
+  it('[Cancel edit profile and get confirmation]', () => {
+    cy.signUpNewUser()
 
+    cy.step('Go to User Settings')
+    cy.clickMenuItem(UserMenuItem.Settings)
+
+    cy.get('[data-cy=displayName').clear().type('Wrong user')
+
+    cy.step('Confirm shown when attempting to go to another page')
+    cy.get('[data-cy=page-link]').contains('How-to').click()
+    cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible')
+  })
+
+  describe('[Fixing Fashion]', () => {
     beforeEach(() => {
-      cy.interceptAddressSearchFetch(SingaporeStubResponse)
+      localStorage.setItem('VITE_PLATFORM_PROFILES', 'member,space')
       cy.visit('/sign-in')
     })
 
-    describe('[Focus Member]', () => {
-      it('[Cancel edit profile and get confirmation]', () => {
-        cy.signUpNewUser()
-
-        cy.step('Go to User Settings')
-        cy.clickMenuItem(UserMenuItem.Settings)
-
-        cy.get('[data-cy=displayName').clear().type('Wrong user')
-
-        cy.step('Confirm shown when attempting to go to another page')
-        cy.get('[data-cy=page-link]').contains('How-to').click()
-        cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible')
-      })
-
+    it('[Member]', () => {
       it('[Edit a new profile]', () => {
         const country = 'Bolivia'
         const userImage = 'avatar'
@@ -167,6 +165,24 @@ describe('[Settings]', () => {
         cy.contains('Notification setting saved successfully')
         cy.get('.data-cy__single-value').last().should('have.text', 'Daily')
       })
+    })
+
+    it('[Space]', () => {
+      cy.signUpNewUser()
+      cy.visit('/settings')
+      cy.setSettingFocus('space')
+    })
+  })
+
+  describe('[Precious Plastic]', () => {
+    beforeEach(() => {
+      localStorage.setItem(
+        'VITE_PLATFORM_PROFILES',
+        'member,workspace,community-builder,collection-point,machine-builder',
+      )
+      setIsPreciousPlastic()
+      cy.interceptAddressSearchFetch(SingaporeStubResponse)
+      cy.visit('/sign-in')
     })
 
     describe('[Focus Workplace]', () => {
@@ -429,6 +445,20 @@ describe('[Settings]', () => {
         cy.get('[data-cy="profile-link"]').should('have.attr', 'href', url)
         cy.contains(`Send a message to ${displayName}`)
       })
+    })
+  })
+
+  describe('[Project Kamp]', () => {
+    beforeEach(() => {
+      localStorage.setItem('VITE_PLATFORM_PROFILES', 'member')
+      cy.visit('/sign-in')
+    })
+
+    it('[Member]', () => {
+      cy.signUpNewUser()
+      cy.visit('/settings')
+      cy.contains('Infos')
+      cy.get('[data-cy=FocusSection]').should('not.exist')
     })
   })
 })

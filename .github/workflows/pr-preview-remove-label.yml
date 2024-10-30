@@ -1,0 +1,35 @@
+name: Remove PR Preview Label
+on:
+  # Run this workflow on every PR event. Existing review apps will be updated when the PR is updated.
+  pull_request_target:
+    # Trigger when labels are changed or more commits added to a PR that contains labels
+    types: [closed]
+
+jobs:
+  preview_app:
+    if: contains(github.event.pull_request.labels.*.name, 'Review allow-preview ✅')
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    # Only run one deployment at a time per PR.
+    concurrency:
+      group: pr-${{ github.event.number }}
+
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
+        with:
+          # pull the repo from the pull request source, not the default local repo
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Remove preview label
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: github.event.number,
+              name: 'Review allow-preview ✅',
+            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

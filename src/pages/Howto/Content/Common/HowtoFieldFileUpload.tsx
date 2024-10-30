@@ -1,4 +1,6 @@
 import { Field } from 'react-final-form'
+import { UserRole } from 'oa-shared'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FileInputField } from 'src/common/Form/FileInput.field'
 import { FormFieldWrapper } from 'src/pages/Howto/Content/Common/FormFieldWrapper'
 import { Text } from 'theme-ui'
@@ -10,11 +12,34 @@ export const HowtoFieldFileUpload = () => {
   const name = 'files'
 
   return (
-    <FormFieldWrapper htmlFor={name} text={title}>
-      <Field id={name} name={name} data-cy={name} component={FileInputField} />
-      <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
-        {description}
-      </Text>
-    </FormFieldWrapper>
+    <AuthWrapper
+      roleRequired={UserRole.ADMIN}
+      fallback={
+        <FormFieldWrapper htmlFor={name} text={title}>
+          <Field
+            id={name}
+            name={name}
+            data-cy={name}
+            component={FileInputField}
+          />
+          <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
+            {description}
+          </Text>
+        </FormFieldWrapper>
+      }
+    >
+      <FormFieldWrapper htmlFor={name} text={title}>
+        <Field
+          id={name}
+          name={name}
+          data-cy={name}
+          admin={true}
+          component={FileInputField}
+        />
+        <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
+          {'Maximum file size 300MB'}
+        </Text>
+      </FormFieldWrapper>
+    </AuthWrapper>
   )
 }

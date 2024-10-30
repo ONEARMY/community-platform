@@ -1,0 +1,29 @@
+name: Destroy Fly PR Preview
+
+on:
+  pull_request_target:
+    types:
+      - unlabeled
+
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+jobs:
+  label_removed:
+    if: github.event.label.name == 'Review allow-preview ✅'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    concurrency:
+      group: pr-${{ github.event.number }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # pull the repo from the pull request source, not the default local repo
+          ref: ${{ github.event.pull_request.head.sha }}
+        
+      - name: Destroy fly.io preview app
+        id: destroy
+        uses: ./.github/actions/destroy-fly-preview-app
+        with:
+          name: community-platform-pr-${{ github.event.number }}

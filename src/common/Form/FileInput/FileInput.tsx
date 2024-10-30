@@ -6,6 +6,7 @@ import { Button, DownloadStaticFile } from 'oa-components'
 import { Flex } from 'theme-ui'
 
 import { UPPY_CONFIG } from './UppyConfig'
+import { UPPY_CONFIG_ADMIN } from './UppyConfigAdmin'
 
 import type { UppyFile } from '@uppy/core'
 
@@ -18,14 +19,20 @@ interface IUppyFiles {
 interface IProps {
   onFilesChange?: (files: (Blob | File)[]) => void
   'data-cy'?: string
+  admin: boolean
 }
 interface IState {
   open: boolean
 }
 export const FileInput = (props: IProps) => {
   const [state, setState] = useState<IState>({ open: false })
+  const uploadConfig = props.admin ? UPPY_CONFIG_ADMIN : UPPY_CONFIG
   const [uppy] = useState(
-    () => new Uppy({ ...UPPY_CONFIG, onBeforeUpload: () => uploadTriggered() }),
+    () =>
+      new Uppy({
+        ...uploadConfig,
+        onBeforeUpload: () => uploadTriggered(),
+      }),
   )
 
   useEffect(() => {

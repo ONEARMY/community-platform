@@ -134,7 +134,7 @@ export const Howto = observer(({ howto }: HowtoParams) => {
               </Button>
               {howto.moderation === IModerationStatus.ACCEPTED && (
                 <UsefulStatsButton
-                  votedUsefulCount={howto.votedUsefulBy?.length || 0}
+                  votedUsefulCount={usefulCount}
                   hasUserVotedUseful={voted}
                   isLoggedIn={!!loggedInUser}
                   onUsefulClick={() =>

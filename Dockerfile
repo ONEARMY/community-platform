@@ -27,7 +27,6 @@ ARG VITE_FIREBASE_STORAGE_BUCKET
 ARG VITE_SENTRY_DSN
 ARG VITE_GA_TRACKING_ID
 ARG VITE_PATREON_CLIENT_ID
-ARG VITE_PLATFORM_THEME
 ARG VITE_PLATFORM_PROFILES
 ARG VITE_PROJECT_VERSION
 ARG VITE_SUPPORTED_MODULES
@@ -67,12 +66,12 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     --mount=type=secret,id=VITE_SENTRY_DSN \
     --mount=type=secret,id=VITE_GA_TRACKING_ID \
     --mount=type=secret,id=VITE_PATREON_CLIENT_ID \
-    --mount=type=secret,id=VITE_PLATFORM_THEME \
     --mount=type=secret,id=VITE_PROJECT_VERSION \
     --mount=type=secret,id=VITE_SUPPORTED_MODULES \
     --mount=type=secret,id=VITE_ACADEMY_RESOURCE \
     --mount=type=secret,id=VITE_API_URL \
     --mount=type=secret,id=VITE_PROFILE_GUIDELINES_URL \
+    --mount=type=secret,id=VITE_PLATFORM_PROFILES \
     --mount=type=secret,id=VITE_SITE_NAME \
     --mount=type=secret,id=VITE_THEME \
     --mount=type=secret,id=VITE_DONATIONS_BODY \
@@ -92,7 +91,6 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     VITE_SENTRY_DSN="$(cat /run/secrets/VITE_SENTRY_DSN)" && \
     VITE_GA_TRACKING_ID="$(cat /run/secrets/VITE_GA_TRACKING_ID)" && \
     VITE_PATREON_CLIENT_ID="$(cat /run/secrets/VITE_PATREON_CLIENT_ID)" && \
-    VITE_PLATFORM_THEME="$(cat /run/secrets/VITE_PLATFORM_THEME)" && \
     VITE_PLATFORM_PROFILES="$(cat /run/secrets/VITE_PLATFORM_PROFILES)" && \
     VITE_PROJECT_VERSION="$(cat /run/secrets/VITE_PROJECT_VERSION)" && \
     VITE_SUPPORTED_MODULES="$(cat /run/secrets/VITE_SUPPORTED_MODULES)" && \
@@ -118,7 +116,6 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     echo "VITE_SENTRY_DSN=\"${VITE_SENTRY_DSN}\"" >> .env && \
     echo "VITE_GA_TRACKING_ID=\"${VITE_GA_TRACKING_ID}\"" >> .env && \
     echo "VITE_PATREON_CLIENT_ID=\"${VITE_PATREON_CLIENT_ID}\"" >> .env && \
-    echo "VITE_PLATFORM_THEME=\"${VITE_PLATFORM_THEME}\"" >> .env && \
     echo "VITE_PLATFORM_PROFILES=\"${VITE_PLATFORM_PROFILES}\"" >> .env && \
     echo "VITE_PROJECT_VERSION=\"${VITE_PROJECT_VERSION}\"" >> .env && \
     echo "VITE_SUPPORTED_MODULES=\"${VITE_SUPPORTED_MODULES}\"" >> .env && \

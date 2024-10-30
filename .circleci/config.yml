@@ -358,7 +358,6 @@ jobs:
               --build-secret VITE_SENTRY_DSN="$VITE_SENTRY_DSN" \
               --build-secret VITE_GA_TRACKING_ID="$VITE_GA_TRACKING_ID" \
               --build-secret VITE_PATREON_CLIENT_ID="$VITE_PATREON_CLIENT_ID" \
-              --build-secret VITE_PLATFORM_THEME="$VITE_PLATFORM_THEME" \
               --build-secret VITE_PLATFORM_PROFILES="$VITE_PLATFORM_PROFILES" \
               --build-secret VITE_PROJECT_VERSION="$VITE_PROJECT_VERSION" \
               --build-secret VITE_SUPPORTED_MODULES="$VITE_SUPPORTED_MODULES" \

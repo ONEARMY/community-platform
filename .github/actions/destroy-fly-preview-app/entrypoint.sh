@@ -11,5 +11,6 @@ if ! flyctl status --app "$app"; then
   exit 1
 fi
 
-flyctl apps destroy "$app" -y || true
+flyctl apps destroy "$app" -y
+echo "App $app successfully destroyed"
 exit 0

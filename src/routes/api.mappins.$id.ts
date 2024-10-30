@@ -77,7 +77,7 @@ async function getUserProfile(userId) {
   if (usersByAuthId.docs.length === 1) {
     return usersByAuthId.docs[0].data()
   }
-  
+
   const usersById = await getDocs(
     query(usersCollection, where('_id', '==', userId)),
   )

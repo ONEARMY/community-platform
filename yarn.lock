@@ -5596,6 +5596,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@keyv/serialize@npm:*":
+  version: 1.0.1
+  resolution: "@keyv/serialize@npm:1.0.1"
+  dependencies:
+    buffer: ^6.0.3
+  checksum: ff3dd9a6246b17fca3d1b0aba312dea931059fdecc36027f4d8133e59dbb3554a0a516b1f3dfc7fb2b3ca7a3d6fa307804f299566ab214febd3fb9d0502eebed
+  languageName: node
+  linkType: hard
+
 "@leichtgewicht/ip-codec@npm:^2.0.1":
   version: 2.0.5
   resolution: "@leichtgewicht/ip-codec@npm:2.0.5"
@@ -22124,6 +22133,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"keyv@npm:^5.1.2":
+  version: 5.1.2
+  resolution: "keyv@npm:5.1.2"
+  dependencies:
+    "@keyv/serialize": "*"
+  checksum: 959978b3574e704edf3772f9b447dc779c24a53c09c0297912ac55595013d8b6cbfa529f2019b3952deeadafe82257cc7fac2fdc0077d242553a74015a36d198
+  languageName: node
+  linkType: hard
+
 "kind-of@npm:^6.0.0, kind-of@npm:^6.0.2":
   version: 6.0.3
   resolution: "kind-of@npm:6.0.3"
@@ -25688,6 +25706,7 @@ __metadata:
     husky: ^9.0.11
     idb: ^8.0.0
     isbot: ^5.1.13
+    keyv: ^5.1.2
     leaflet: ^1.5.1
     leaflet.markercluster: ^1.4.1
     lint-staged: ^15.2.7

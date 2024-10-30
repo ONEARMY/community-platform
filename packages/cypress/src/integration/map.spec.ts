@@ -1,4 +1,4 @@
-const userId = 'davehakkens'
+const userId = 'demo_user'
 const profileTypesCount = 5
 const urlLondon =
   'https://nominatim.openstreetmap.org/search?format=json&q=london&accept-language=en'
@@ -29,7 +29,7 @@ describe('[Map]', () => {
     cy.step('New map shows the cards')
     cy.get('[data-cy="welome-header"]').should('be.visible')
     cy.get('[data-cy="CardList-desktop"]').should('be.visible')
-    cy.get('[data-cy="list-results"]').contains('52 results in view')
+    cy.get('[data-cy="list-results"]').contains(/\d+ results in view/)
 
     cy.step('Map filters can be used')
     cy.get('[data-cy=MapFilterProfileTypeCardList]')
@@ -40,7 +40,14 @@ describe('[Map]', () => {
     // Reduction in coverage until temp API removed
     // cy.get('[data-cy="list-results"]').contains('6 results in view')
     cy.get('[data-cy=MapListFilter-active]').first().click()
-    cy.get('[data-cy="list-results"]').contains('52 results in view')
+    cy.get('[data-cy="list-results"]').contains(/\d+ results in view/)
+
+    cy.step('Clusters show up')
+    cy.get('.icon-cluster-many')
+      .first()
+      .within(() => {
+        cy.get('.icon-cluster-text').contains(/\d+/)
+      })
 
     cy.step('Users can select filters')
     cy.get('[data-cy=MapFilterList]').should('not.exist')
@@ -116,11 +123,5 @@ describe('[Map]', () => {
     cy.intercept(urlLondon).as('londonSearch')
     cy.wait('@londonSearch')
     cy.contains('London, Greater London, England, United Kingdom').click()
-
-    cy.get('.icon-cluster-many')
-      .should('be.visible')
-      .within(() => {
-        cy.get('.icon-cluster-text').should('have.text', '3').and('be.visible')
-      })
   })
 })

@@ -99,6 +99,7 @@
     "fuse.js": "^6.4.6",
     "helmet": "^7.1.0",
     "isbot": "^5.1.13",
+    "keyv": "^5.1.2",
     "leaflet": "^1.5.1",
     "leaflet.markercluster": "^1.4.1",
     "mobx": "6.9.0",

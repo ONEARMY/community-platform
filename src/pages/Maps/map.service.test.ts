@@ -1,5 +1,3 @@
-import { faker } from '@faker-js/faker'
-import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
 import { describe, expect, it, vi } from 'vitest'
 
 import { mapPinService } from './map.service'
@@ -27,7 +25,7 @@ describe('map.service', () => {
     it('fetches map pins', async () => {
       // prepare
       global.fetch = vi.fn().mockResolvedValue({
-        json: () => Promise.resolve([{ _id: '1' }]),
+        json: () => Promise.resolve({ mapPins: [{ _id: '1' }] }),
       })
 
       // act
@@ -53,7 +51,7 @@ describe('map.service', () => {
     it('fetches map pin by user id', async () => {
       // prepare
       global.fetch = vi.fn().mockResolvedValue({
-        json: () => Promise.resolve({ _id: '1' }),
+        json: () => Promise.resolve({ mapPin: { _id: '1' } }),
       })
 
       // act
@@ -72,21 +70,6 @@ describe('map.service', () => {
 
       // assert
       expect(result).toBeNull()
-    })
-  })
-
-  describe('getMapPinSelf', () => {
-    it('fetches user map pin', async () => {
-      // prepare
-      const userId = faker.internet.userName()
-
-      // act
-      await mapPinService.getMapPinSelf(userId)
-
-      // assert
-      expect(mockCollection).toHaveBeenCalledWith(DB_ENDPOINTS.mappins)
-      expect(mockWhere).toHaveBeenCalledWith('_id', '==', userId)
-      expect(mockGetDocs).toHaveBeenCalled()
     })
   })
 })

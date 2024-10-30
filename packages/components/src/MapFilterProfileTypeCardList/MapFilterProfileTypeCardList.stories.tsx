@@ -17,22 +17,22 @@ export default {
 const availableFilters = [
   {
     label: 'Workspace',
-    slug: 'workspace' as ProfileTypeName,
+    _id: 'workspace' as ProfileTypeName,
     filterType: 'ProfileType',
   },
   {
     label: 'Machine Builder',
-    slug: 'machine-builder' as ProfileTypeName,
+    _id: 'machine-builder' as ProfileTypeName,
     filterType: 'ProfileType',
   },
   {
     label: 'Collection Point',
-    slug: 'collection-point' as ProfileTypeName,
+    _id: 'collection-point' as ProfileTypeName,
     filterType: 'ProfileType',
   },
   {
     label: 'Want to get started',
-    slug: 'member' as ProfileTypeName,
+    _id: 'member' as ProfileTypeName,
     filterType: 'ProfileType',
   },
 ]
@@ -42,7 +42,7 @@ export const Basic: StoryFn<typeof MapFilterProfileTypeCardList> = () => {
 
   const onFilterChange = (option: MapFilterOption) => {
     const isFilterPresent = !!availableFilters.find(
-      (pinFilter) => pinFilter.slug == option.slug,
+      (pinFilter) => pinFilter._id == option._id,
     )
     if (isFilterPresent) {
       return setActiveFilters((filter) =>
@@ -68,7 +68,7 @@ export const OnlyOne: StoryFn<typeof MapFilterProfileTypeCardList> = () => {
 
   const onFilterChange = (option: MapFilterOption) => {
     const isFilterPresent = !!availableFilters.find(
-      (pinFilter) => pinFilter.slug == option.slug,
+      (pinFilter) => pinFilter._id == option._id,
     )
     if (isFilterPresent) {
       return setActiveFilters((filter) =>
@@ -95,7 +95,7 @@ export const OnlyTwo: StoryFn<typeof MapFilterProfileTypeCardList> = () => {
 
   const onFilterChange = (option: MapFilterOption) => {
     const isFilterPresent = !!availableFilters.find(
-      (pinFilter) => pinFilter.slug == option.slug,
+      (pinFilter) => pinFilter._id == option._id,
     )
     if (isFilterPresent) {
       return setActiveFilters((filter) =>

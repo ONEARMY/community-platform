@@ -41,7 +41,7 @@ describe('[Map]', () => {
     // cy.get('[data-cy="list-results"]').contains('6 results in view')
     cy.get('[data-cy=MapListFilter-active]').first().click()
     cy.get('[data-cy="list-results"]').contains(/\d+ results in view/)
-    
+
     cy.step('Clusters show up')
     cy.get('.icon-cluster-many')
       .first()

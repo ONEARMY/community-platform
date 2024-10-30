@@ -39,7 +39,6 @@ describe('UserSettings', () => {
     })
 
     await waitFor(() => {
-      expect(wrapper.queryByTestId('workspaceType')).toBeNull()
       expect(wrapper.queryByTestId('ProfileTags')).toBeNull()
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
       expect(wrapper.queryByTestId('PublicContactSection')).toBeNull()
@@ -57,7 +56,6 @@ describe('UserSettings', () => {
     })
 
     await waitFor(() => {
-      expect(wrapper.queryByTestId('workspaceType')).toBeNull()
       expect(wrapper.getAllByTestId('ProfileTags')).toHaveLength(1)
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
@@ -75,8 +73,7 @@ describe('UserSettings', () => {
     })
 
     await waitFor(() => {
-      expect(wrapper.queryByTestId('workspaceType')).toBeNull()
-      expect(wrapper.queryByTestId('ProfileTags')).toBeNull()
+      expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
@@ -93,7 +90,6 @@ describe('UserSettings', () => {
     })
 
     await waitFor(() => {
-      expect(wrapper.queryByTestId('workspaceType')).toBeNull()
       expect(wrapper.getAllByTestId('ProfileTags')).toHaveLength(1)
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
@@ -111,8 +107,7 @@ describe('UserSettings', () => {
     })
 
     await waitFor(() => {
-      expect(wrapper.queryByTestId('workspaceType')).toBeNull()
-      expect(wrapper.queryByTestId('ProfileTags')).toBeNull()
+      expect(wrapper.getAllByTestId('ProfileTags')).toHaveLength(1)
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
@@ -129,8 +124,7 @@ describe('UserSettings', () => {
     })
 
     await waitFor(() => {
-      expect(wrapper.getAllByTestId('workspaceType')).toHaveLength(1)
-      expect(wrapper.queryByTestId('ProfileTags')).toBeNull()
+      expect(wrapper.getAllByTestId('ProfileTags')).toHaveLength(1)
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)

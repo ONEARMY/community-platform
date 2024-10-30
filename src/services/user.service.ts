@@ -1,9 +1,9 @@
-import { profileTags } from 'oa-shared'
+import { getProfileTagsForTheme } from 'src/utils/getProfileTagsForTheme'
 
 import type { ITag } from 'oa-shared'
 
 const getProfileTags: () => ITag[] = () => {
-  return profileTags
+  return getProfileTagsForTheme()
 }
 
 export const userService = {

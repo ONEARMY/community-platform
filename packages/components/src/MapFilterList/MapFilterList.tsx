@@ -97,7 +97,7 @@ export const MapFilterList = (props: IProps) => {
                 >
                   <MemberBadge
                     size={30}
-                    profileType={typeFilter.slug as ProfileTypeName}
+                    profileType={typeFilter._id as ProfileTypeName}
                   />
                   <Text variant="quiet" sx={{ fontSize: 1 }}>
                     {typeFilter.label}

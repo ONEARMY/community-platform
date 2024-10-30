@@ -2,6 +2,7 @@ export * from './data'
 export * from './models'
 export * from './messages'
 export * from './mocks'
+export * from './theme'
 
 /*************************************************************************************
  * Shared Constants and Generators

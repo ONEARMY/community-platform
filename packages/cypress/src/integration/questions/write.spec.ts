@@ -6,7 +6,7 @@ const item = questions[0]
 
 describe('[Question]', () => {
   describe('[Create a question]', () => {
-    const initialRandomId = generateAlphaNumeric(8)
+    const initialRandomId = generateAlphaNumeric(8).toLowerCase()
     const initialTitle = initialRandomId + ' Health cost of plastic?'
     const initialExpectedSlug = initialRandomId + '-health-cost-of-plastic'
     const initialQuestionDescription =
@@ -14,7 +14,7 @@ describe('[Question]', () => {
     const category = 'exhibition'
     const tag1 = 'product'
     const tag2 = 'workshop'
-    const updatedRandomId = generateAlphaNumeric(8)
+    const updatedRandomId = generateAlphaNumeric(8).toLowerCase()
     const updatedTitle = updatedRandomId + ' Real health cost of plastic?'
     const updatedExpectedSlug = updatedRandomId + '-real-health-cost-of-plastic'
     const updatedQuestionDescription = `${initialQuestionDescription} and super awesome goggles`

@@ -61,7 +61,7 @@ export const Controls = ({
         justifyContent: 'center',
         width: '100%',
         position: 'absolute',
-        top: '60px',
+        top: '200px',
         zIndex: 2000,
         transform: 'translateX("-50%")',
       }}

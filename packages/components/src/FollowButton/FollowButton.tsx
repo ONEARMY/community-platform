@@ -16,7 +16,7 @@ export interface IProps {
 export const FollowButton = (props: IProps) => {
   const { hasUserSubscribed, isLoggedIn, onFollowClick, sx } = props
   const navigate = useNavigate()
-  const uuid = useMemo(() => crypto.randomUUID(), [])
+  const uuid = useMemo(() => (Math.random() * 16).toString(), [])
 
   return (
     <>

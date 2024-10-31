@@ -18,7 +18,7 @@ export interface IProps {
 export const UsefulStatsButton = (props: IProps) => {
   const { theme } = useThemeUI() as any
   const navigate = useNavigate()
-  const uuid = useMemo(() => crypto.randomUUID(), [])
+  const uuid = useMemo(() => (Math.random() * 16).toString(), [])
 
   const [disabled, setDisabled] = useState<boolean>()
 

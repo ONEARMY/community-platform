@@ -154,7 +154,7 @@ describe('[Research]', () => {
     })
 
     it('[Any PP user]', () => {
-      const randomId = crypto.randomUUID().slice(0, 8)
+      const randomId = (Math.random() * 16).toString()
       const title = randomId + ' PP plastic stuff'
       const expectSlug = randomId + '-pp-plastic-stuff'
       const description = 'Bespoke research topic'
@@ -255,7 +255,7 @@ describe('[Research]', () => {
 
   describe('[Displays draft updates for Author]', () => {
     it('[By Authenticated]', () => {
-      const randomId = crypto.randomUUID().slice(0, 8)
+      const randomId = (Math.random() * 16).toString()
       const updateTitle = `${randomId} Create a research update`
       const updateDescription = 'This is the description for the update.'
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'

@@ -4,6 +4,10 @@ const urlLondon =
   'https://nominatim.openstreetmap.org/search?format=json&q=london&accept-language=en'
 
 describe('[Map]', () => {
+  beforeEach(() => {
+    localStorage.setItem('VITE_THEME', 'fixing-fashion')
+  })
+
   it('[Shows expected pins]', () => {
     cy.viewport('macbook-16')
 
@@ -54,9 +58,8 @@ describe('[Map]', () => {
     cy.get('[data-cy=MapFilterList-OpenButton]').first().click()
     cy.get('[data-cy=MapFilterList]').should('be.visible')
     cy.get('[data-cy=MapFilterList-CloseButton]').first().click()
-
     cy.step('As the user moves in the list updates')
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < 6; i++) {
       cy.get('.leaflet-control-zoom-in').click()
     }
     cy.get('[data-cy="list-results"]').contains('1 result')
@@ -83,10 +86,10 @@ describe('[Map]', () => {
     cy.get('[data-cy=PinProfileCloseButton]').click()
     cy.url().should('not.include', `#${userId}`)
     cy.get('[data-cy=PinProfile]').should('not.exist')
-
-    cy.step('New map pins can be hidden by clicking the map')
     cy.get(`[data-cy=pin-${userId}]`).click()
     cy.url().should('include', `#${userId}`)
+
+    cy.step('New map pins can be hidden by clicking the map')
     cy.get('[data-cy=PinProfile]').should('be.visible')
     cy.get('.markercluster-map').click(10, 10)
     cy.url().should('not.include', `#${userId}`)
@@ -94,12 +97,16 @@ describe('[Map]', () => {
 
     cy.step('Mobile list view can be shown')
     cy.viewport('samsung-note9')
+    cy.get('.leaflet-control-zoom-out').click()
+    cy.get('.leaflet-control-zoom-out').click()
+    cy.get('.leaflet-control-zoom-out').click()
     cy.get('[data-cy="CardList-desktop"]').should('not.be.visible')
     cy.get('[data-cy="CardList-mobile"]').should('not.be.visible')
 
     cy.get('[data-cy="ShowMobileListButton"]').click()
     cy.get('[data-cy="CardList-mobile"]').within(() => {
       cy.get('[data-cy=CardListItem]')
+        .last()
         .within(() => {
           cy.contains(userId)
           cy.get('[data-cy="MemberBadge-member"]')

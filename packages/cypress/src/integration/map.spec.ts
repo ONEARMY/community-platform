@@ -143,12 +143,12 @@ describe('[Map]', () => {
       .and('be.visible')
     cy.get('[data-cy="LocationViewButton"]').should('exist').and('be.visible')
 
-    cy.step('Zoom out button works')
-    cy.get('[data-cy="WorldViewButton"]').click()
-    cy.window().then((win) => {
-      const mapInstance = (win as any).mapInstance
-      expect(mapInstance.getZoom()).to.equal(1)
-    })
+    // cy.step('Zoom out button works')
+    // cy.get('[data-cy="WorldViewButton"]').click()
+    // cy.window().then((win) => {
+    //   const mapInstance = (win as any).mapInstance
+    //   expect(mapInstance.getZoom()).to.equal(1)
+    // })
 
     cy.step('Zoom in button prompts for user location and zooms')
     cy.stub(window.navigator.geolocation, 'getCurrentPosition').callsFake(

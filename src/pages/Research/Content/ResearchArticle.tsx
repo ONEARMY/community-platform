@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react'
-import { Link, useLocation, useParams } from '@remix-run/react'
+import { useEffect, useState } from 'react'
+import { Link, useLocation } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import {
   ArticleCallToAction,
   Button,
   FollowButton,
-  Loader,
   UsefulStatsButton,
   UserEngagementWrapper,
 } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
+// eslint-disable-next-line import/no-unresolved
+import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
-import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import {
   getResearchCommentId,
   getResearchUpdateId,
@@ -24,277 +24,252 @@ import {
   isAllowedToDeleteContent,
   isAllowedToEditContent,
 } from 'src/utils/helpers'
-import { seoTagsUpdate, SeoTagsUpdateComponent } from 'src/utils/seo'
 import { Box, Flex } from 'theme-ui'
 
-import {
-  getPublicUpdates,
-  researchUpdateStatusFilter,
-} from '../researchHelpers'
+import { researchUpdateStatusFilter } from '../researchHelpers'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 
-import type { IUploadedFileMeta, IUser } from 'oa-shared'
+import type { IResearch, IResearchDB, IUser } from 'oa-shared'
 
-const areCommentsVisible = (updateId) => {
-  return updateId === getResearchUpdateId(window.location.hash)
+type ResearchArticleProps = {
+  research: IResearchDB
+  publicUpdates: IResearch.UpdateDB[]
 }
 
-const ResearchArticle = observer(() => {
-  const { slug } = useParams()
-  const location = useLocation()
-  const researchStore = useResearchStore()
-  const { aggregationsStore } = useCommonStores().stores
-  const [isLoading, setIsLoading] = React.useState(true)
-  const item = researchStore.activeResearchItem
-  const loggedInUser = researchStore.activeUser
-
-  const moderateResearch = async (accepted: boolean) => {
-    const item = researchStore.activeResearchItem
-    if (item) {
-      item.moderation = accepted
-        ? IModerationStatus.ACCEPTED
-        : IModerationStatus.REJECTED
-      await researchStore.moderateResearch(item)
-    }
-  }
-
-  const onUsefulClick = async (
-    researchId: string,
-    researchSlug: string,
-    eventCategory = 'Research',
-  ) => {
-    if (!loggedInUser?.userName) {
-      return
-    }
-
-    // Trigger update without waiting
-    await researchStore.toggleUsefulByUser(researchId, loggedInUser?.userName)
-    const hasUserVotedUseful = researchStore.userVotedActiveResearchUseful
-    trackEvent({
-      category: eventCategory,
-      action: hasUserVotedUseful ? 'ResearchUseful' : 'ResearchUsefulRemoved',
-      label: researchSlug,
-    })
-  }
-
-  const scrollIntoRelevantSection = () => {
-    if (getResearchCommentId(location.hash) === '') return
-    const section = document.getElementById(
-      `update_${getResearchUpdateId(location.hash)}`,
+const ResearchArticle = observer(
+  ({ research, publicUpdates }: ResearchArticleProps) => {
+    const [updates, setUpdates] = useState(publicUpdates)
+    const location = useLocation()
+    const researchStore = useResearchStore()
+    const { aggregationsStore } = useCommonStores().stores
+    const loggedInUser = researchStore.activeUser
+    const [subscribed, setSubscribed] = useState<boolean>(
+      research.subscribers?.includes(loggedInUser?.userName || '') || false,
     )
-    section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+    const [subscribersCount, setSubscribersCount] = useState<number>(
+      research.subscribers?.length || 0,
+    )
+    const [voted, setVoted] = useState<boolean>(false)
+    const [usefulCount, setUsefulCount] = useState<number>(
+      research.votedUsefulBy?.length || 0,
+    )
 
-  useEffect(() => {
-    const init = async () => {
-      const researchItem = await researchStore.setActiveResearchItemBySlug(slug)
-      setIsLoading(false)
-      setTimeout(() => {
-        // Needed for browser and loading delay issues
-        scrollIntoRelevantSection()
-      }, 500)
-
-      // Update SEO tags
-      if (researchItem) {
-        // Use whatever image used in most recent update for SEO image
-        const latestImage = researchItem?.updates
-          ?.map((u) => (u.images?.[0] as IUploadedFileMeta)?.downloadUrl)
-          .filter((url: string) => !!url)
-          .pop()
-        seoTagsUpdate({
-          title: `${researchItem.title} - Research`,
-          description: researchItem.description,
-          imageUrl: latestImage,
-        })
+    useEffect(() => {
+      // Only public updates (non draft) are server-side rendered.
+      // But we still need to display the draft updates when the currentUser is the author/contributor.
+      // Since the current user is only loaded client-side, we need to check and re-set the updates.
+      if (!researchStore.activeUser) {
+        return
       }
-    }
-    setIsLoading(true)
-    init()
 
-    // Reset the store's active item and seo tags on component cleanup
-    return () => {
-      researchStore.setActiveResearchItemBySlug()
-      seoTagsUpdate({})
-    }
-  }, [slug])
-
-  useEffect(() => {
-    scrollIntoRelevantSection()
-  }, [location.hash])
-
-  const onFollowClick = (researchSlug: string) => {
-    if (!loggedInUser?.userName || !item) {
-      return null
-    }
-
-    let action: string
-
-    if (item.subscribers?.includes(loggedInUser?.userName || '')) {
-      researchStore.removeSubscriberFromResearchArticle(
-        item._id,
-        loggedInUser?.userName,
-      )
-      action = 'Unsubscribed'
-    } else {
-      researchStore.addSubscriberToResearchArticle(
-        item._id,
-        loggedInUser?.userName,
-      )
-      action = 'Subscribed'
-    }
-    trackEvent({
-      category: 'Research',
-      action: action,
-      label: researchSlug,
-    })
-  }
-
-  const collaborators = Array.isArray(item?.collaborators)
-    ? item?.collaborators
-    : ((item?.collaborators as string | undefined)?.split(',') || []).filter(
-        Boolean,
+      const authorUpdates = research.updates?.filter((update) =>
+        researchUpdateStatusFilter(research, update, researchStore.activeUser),
       )
 
-  const contributors = useContributorsData(collaborators || [])
-
-  const isEditable =
-    !!researchStore.activeUser &&
-    !!item &&
-    isAllowedToEditContent(item, researchStore.activeUser)
-  const isDeletable =
-    !!researchStore.activeUser &&
-    !!item &&
-    isAllowedToDeleteContent(item, researchStore.activeUser)
-
-  const researchAuthor = item
-    ? {
-        userName: item._createdBy,
-        countryCode: item.creatorCountry,
-        isVerified: aggregationsStore.isVerified(item._createdBy),
+      if (authorUpdates.length !== updates.length) {
+        setUpdates(authorUpdates)
       }
-    : undefined
+    }, [researchStore.activeUser])
 
-  if (isLoading) {
-    return <Loader />
-  }
-
-  if (!item) {
-    return <NotFoundPage />
-  }
-
-  const research = { ...item }
-
-  return (
-    <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
-      <SeoTagsUpdateComponent
-        title={`${item.title} - Research`}
-        description={item.description}
-        imageUrl={(item.updates?.at(0)?.images?.[0] as any)?.downloadUrl}
-      />
-
-      <Breadcrumbs content={item} variant="research" />
-      <ResearchDescription
-        research={research}
-        key={item._id}
-        votedUsefulCount={researchStore.votedUsefulCount}
-        loggedInUser={loggedInUser as IUser}
-        isEditable={isEditable}
-        isDeletable={isDeletable}
-        needsModeration={researchStore.needsModeration(item)}
-        hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
-        hasUserSubscribed={researchStore.userHasSubscribed}
-        moderateResearch={moderateResearch}
-        onUsefulClick={() =>
-          onUsefulClick(item._id, item.slug, 'ResearchDescription')
+    useEffect(() => {
+      // This could be improved if we can load the user profile server-side
+      if (researchStore?.activeUser) {
+        if (research.votedUsefulBy?.includes(researchStore.activeUser._id)) {
+          setVoted(true)
         }
-        onFollowClick={() => onFollowClick(item.slug)}
-        contributors={contributors}
-        subscribersCount={researchStore.subscribersCount}
-        commentsCount={item.totalCommentCount}
-        updatesCount={
-          item.updates?.filter((u) =>
-            researchUpdateStatusFilter(item, u, researchStore.activeUser),
-          ).length || 0
-        }
-      />
-      <Flex
-        sx={{
-          flexDirection: 'column',
-          marginTop: 8,
-          marginBottom: 4,
-          gap: [4, 6],
-        }}
-      >
-        {item &&
-          getPublicUpdates(item, researchStore.activeUser).map(
-            (update, index) => (
-              <ResearchUpdate
-                update={update}
-                key={update._id}
-                updateIndex={index}
-                isEditable={isEditable}
-                slug={item.slug}
-                showComments={areCommentsVisible(update._id)}
-              />
-            ),
-          )}
-      </Flex>
 
-      <UserEngagementWrapper>
-        <Box
+        if (research.subscribers?.includes(researchStore.activeUser._id)) {
+          setSubscribed(true)
+        }
+      }
+    }, [researchStore?.activeUser])
+
+    const onUsefulClick = async (
+      vote: 'add' | 'delete',
+      eventCategory = 'Research',
+    ) => {
+      if (!loggedInUser?.userName) {
+        return
+      }
+
+      // Trigger update without waiting
+      await researchStore.toggleUsefulByUser(research, loggedInUser?.userName)
+      setVoted((prev) => !prev)
+
+      setUsefulCount((prev) => {
+        return vote === 'add' ? prev + 1 : prev - 1
+      })
+
+      trackEvent({
+        category: eventCategory,
+        action: vote === 'add' ? 'ResearchUseful' : 'ResearchUsefulRemoved',
+        label: research.slug,
+      })
+    }
+
+    const scrollIntoRelevantSection = () => {
+      if (getResearchCommentId(location.hash) === '') return
+      const section = document.getElementById(
+        `update_${getResearchUpdateId(location.hash)}`,
+      )
+      section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+
+    useEffect(() => {
+      scrollIntoRelevantSection()
+    }, [location.hash])
+
+    const onFollowClick = (researchSlug: string) => {
+      if (!loggedInUser?.userName || !research) {
+        return null
+      }
+
+      let action: string
+
+      if (subscribed) {
+        researchStore.removeSubscriberFromResearchArticle(
+          research._id,
+          loggedInUser?.userName,
+        )
+        action = 'Unsubscribed'
+      } else {
+        researchStore.addSubscriberToResearchArticle(
+          research._id,
+          loggedInUser?.userName,
+        )
+        action = 'Subscribed'
+      }
+
+      setSubscribersCount((prev) => prev + (subscribed ? -1 : 1))
+      // toggle subscribed
+      setSubscribed((prev) => !prev)
+
+      trackEvent({
+        category: 'Research',
+        action: action,
+        label: researchSlug,
+      })
+    }
+
+    const collaborators = Array.isArray(research?.collaborators)
+      ? research?.collaborators
+      : (
+          (research?.collaborators as string | undefined)?.split(',') || []
+        ).filter(Boolean)
+
+    const contributors = useContributorsData(collaborators || [])
+
+    const isEditable =
+      !!researchStore.activeUser &&
+      isAllowedToEditContent(research, researchStore.activeUser)
+    const isDeletable =
+      !!researchStore.activeUser &&
+      isAllowedToDeleteContent(research, researchStore.activeUser)
+
+    const researchAuthor = {
+      userName: research._createdBy,
+      countryCode: research.creatorCountry,
+      isVerified: aggregationsStore.isVerified(research._createdBy),
+    }
+
+    return (
+      <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
+        <Breadcrumbs content={research} variant="research" />
+        <ResearchDescription
+          research={research}
+          key={research._id}
+          votedUsefulCount={usefulCount}
+          loggedInUser={loggedInUser as IUser}
+          isEditable={isEditable}
+          isDeletable={isDeletable}
+          hasUserVotedUseful={voted}
+          hasUserSubscribed={subscribed}
+          onUsefulClick={() =>
+            onUsefulClick(voted ? 'delete' : 'add', 'ResearchDescription')
+          }
+          onFollowClick={() => onFollowClick(research.slug)}
+          contributors={contributors}
+          subscribersCount={subscribersCount}
+          commentsCount={research.totalCommentCount}
+          updatesCount={publicUpdates.length}
+        />
+        <Flex
           sx={{
-            marginBottom: [6, 6, 12],
+            flexDirection: 'column',
+            marginTop: 8,
+            marginBottom: 4,
+            gap: [4, 6],
           }}
         >
-          {researchAuthor && (
-            <ArticleCallToAction
-              author={researchAuthor}
-              contributors={contributors}
-            >
-              {item.moderation === IModerationStatus.ACCEPTED && (
-                <UsefulStatsButton
-                  isLoggedIn={!!loggedInUser}
-                  votedUsefulCount={researchStore.votedUsefulCount}
-                  hasUserVotedUseful={
-                    researchStore.userVotedActiveResearchUseful
-                  }
-                  onUsefulClick={async () =>
-                    await onUsefulClick(
-                      item._id,
-                      item.slug,
-                      'ArticleCallToAction',
-                    )
-                  }
-                />
-              )}
-              <FollowButton
-                isLoggedIn={!!loggedInUser}
-                hasUserSubscribed={researchStore.userHasSubscribed}
-                onFollowClick={() => onFollowClick(item.slug)}
-              />
-            </ArticleCallToAction>
-          )}
-        </Box>
-      </UserEngagementWrapper>
-
-      {isEditable && (
-        <Flex my={4}>
-          <Link to={`/research/${item.slug}/new-update`}>
-            <Button
-              type="button"
-              large
-              ml={2}
-              mb={[3, 3, 0]}
-              data-cy="addResearchUpdateButton"
-            >
-              Add update
-            </Button>
-          </Link>
+          {updates.map((update, index) => (
+            <ResearchUpdate
+              research={research}
+              update={update}
+              key={update._id}
+              updateIndex={index}
+              isEditable={isEditable}
+              slug={research.slug}
+            />
+          ))}
         </Flex>
-      )}
-    </Box>
-  )
-})
+
+        <ClientOnly fallback={<></>}>
+          {() => (
+            <UserEngagementWrapper>
+              <Box
+                sx={{
+                  marginBottom: [6, 6, 12],
+                }}
+              >
+                {researchAuthor && (
+                  <ArticleCallToAction
+                    author={researchAuthor}
+                    contributors={contributors}
+                  >
+                    {research.moderation === IModerationStatus.ACCEPTED && (
+                      <UsefulStatsButton
+                        isLoggedIn={!!loggedInUser}
+                        votedUsefulCount={usefulCount}
+                        hasUserVotedUseful={voted}
+                        onUsefulClick={() =>
+                          onUsefulClick(
+                            voted ? 'delete' : 'add',
+                            'ArticleCallToAction',
+                          )
+                        }
+                      />
+                    )}
+                    <FollowButton
+                      isLoggedIn={!!loggedInUser}
+                      hasUserSubscribed={subscribed}
+                      onFollowClick={() => onFollowClick(research.slug)}
+                    />
+                  </ArticleCallToAction>
+                )}
+              </Box>
+            </UserEngagementWrapper>
+          )}
+        </ClientOnly>
+
+        {isEditable && (
+          <Flex my={4}>
+            <Link to={`/research/${research.slug}/new-update`}>
+              <Button
+                type="button"
+                large
+                ml={2}
+                mb={[3, 3, 0]}
+                data-cy="addResearchUpdateButton"
+              >
+                Add update
+              </Button>
+            </Link>
+          </Flex>
+        )}
+      </Box>
+    )
+  },
+)
 
 export default ResearchArticle

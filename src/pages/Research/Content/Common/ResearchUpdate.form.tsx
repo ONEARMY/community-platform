@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import styled from '@emotion/styled'
 import arrayMutators from 'final-form-arrays'
@@ -27,13 +27,14 @@ import { TitleField } from '../CreateResearch/Form/TitleField'
 import { ResearchErrors } from './ResearchErrors'
 import { UpdateSubmitStatus } from './SubmitStatus'
 
-import type { IResearch } from 'oa-shared'
+import type { IResearch, IResearchDB } from 'oa-shared'
 import type { MainFormAction } from 'src/common/Form/types'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
 
 interface IProps {
+  research: IResearchDB
   formValues: any
   parentType: MainFormAction
   redirectUrl?: string
@@ -53,30 +54,40 @@ export const ResearchUpdateForm = observer((props: IProps) => {
   const { deletion, draft } = buttons
 
   const store = useResearchStore()
-  const [formState, setFormState] = React.useState<{ dirty: boolean }>({
+  const [formState, setFormState] = useState<{ dirty: boolean }>({
     dirty: false,
   })
-  const [showDeleteModal, setShowDeleteModal] = React.useState(false)
-  const [showSubmitModal, setShowSubmitModal] = React.useState<boolean>(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showSubmitModal, setShowSubmitModal] = useState<boolean>(false)
   const [showInvalidFileWarning, setInvalidFileWarning] =
-    React.useState<boolean>(false)
-  const [isDraft, setIsDraft] = React.useState<boolean>(
+    useState<boolean>(false)
+  const [isDraft, setIsDraft] = useState<boolean>(
     formValues.status === ResearchUpdateStatus.DRAFT,
   )
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (store.updateUploadStatus?.Complete) {
       window.removeEventListener('beforeunload', beforeUnload, false)
     }
   }, [store.updateUploadStatus?.Complete])
 
   // Managing locked state
-  React.useEffect(() => {
+  useEffect(() => {
     if (store.activeUser)
-      store.lockResearchUpdate(store.activeUser.userName, formValues._id)
+      store.toggleLockResearchUpdate(
+        props.research._id,
+        store.activeUser.userName,
+        formValues._id,
+        true,
+      )
 
     return () => {
-      store.unlockResearchUpdate(formValues._id)
+      store.toggleLockResearchUpdate(
+        props.research._id,
+        '',
+        formValues._id,
+        false,
+      )
     }
   }, [store.activeUser])
 
@@ -105,7 +116,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
 
     setInvalidFileWarning(false)
 
-    await store.uploadUpdate({
+    await store.uploadUpdate(props.research, {
       ...formValues,
       collaborators: Array.from(
         new Set(
@@ -123,14 +134,14 @@ export const ResearchUpdateForm = observer((props: IProps) => {
 
   const handleDelete = async (_updateId: string) => {
     setShowDeleteModal(false)
-    await store.deleteUpdate(_updateId)
+    await store.deleteUpdate(props.research, _updateId)
     if (redirectUrl) {
       window.location.assign(redirectUrl)
     }
   }
 
   // Display a confirmation dialog when leaving the page outside the React Router
-  const unloadDecorator = React.useCallback(
+  const unloadDecorator = useCallback(
     (form) => {
       return form.subscribe(
         ({ dirty }) => {
@@ -158,7 +169,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
     <>
       {showSubmitModal && (
         <UpdateSubmitStatus
-          {...props}
+          slug={props.research.slug}
           onClose={() => {
             setShowSubmitModal(false)
             store.resetUpdateUploadStatus()
@@ -324,16 +335,16 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                     labels={update}
                   />
 
-                  {store.activeResearchItem ? (
+                  {props.research ? (
                     <ResearchEditorOverview
                       sx={{ mt: 2 }}
                       updates={getResearchUpdates(
-                        store.activeResearchItem.updates || [],
-                        store.activeResearchItem._id,
+                        props.research.updates || [],
+                        props.research._id,
                         !isEdit,
                         values.title,
                       )}
-                      researchSlug={store.activeResearchItem?.slug}
+                      researchSlug={props.research?.slug}
                       showCreateUpdateButton={isEdit}
                       showBackToResearchButton={true}
                     />

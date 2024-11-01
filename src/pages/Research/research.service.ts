@@ -11,6 +11,7 @@ import {
 } from 'firebase/firestore'
 import { IModerationStatus } from 'oa-shared'
 import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
+import { changeUserReferenceToPlainText } from 'src/utils/mentions.utils'
 
 import { firestore } from '../../utils/firebase'
 
@@ -20,7 +21,12 @@ import type {
   QueryFilterConstraint,
   QueryNonFilterConstraint,
 } from 'firebase/firestore'
-import type { ICategory, IResearch, ResearchStatus } from 'oa-shared'
+import type {
+  ICategory,
+  IResearch,
+  IResearchDB,
+  ResearchStatus,
+} from 'oa-shared'
 import type { ResearchSortOption } from './ResearchSortOptions'
 
 const search = async (
@@ -165,11 +171,57 @@ const getDrafts = async (userId: string) => {
   return docs.docs ? docs.docs.map((x) => x.data() as IResearch.Item) : []
 }
 
+const getBySlug = async (slug: string) => {
+  // Get all that match the slug, to avoid creating an index (blocker for cypress tests)
+  let snapshot = await getDocs(
+    query(
+      collection(firestore, DB_ENDPOINTS.research),
+      where('slug', '==', slug),
+    ),
+  )
+
+  if (snapshot.size === 0) {
+    // try previous slugs if slug is not recognized as primary
+    snapshot = await getDocs(
+      query(
+        collection(firestore, DB_ENDPOINTS.research),
+        where('previousSlugs', 'array-contains', slug),
+      ),
+    )
+  }
+
+  if (snapshot.size === 0) {
+    return null
+  }
+
+  const research = snapshot.docs[0].data() as IResearchDB
+
+  if (!research) {
+    return null
+  }
+
+  // Change all UserReferences to mentions
+  if (research.description) {
+    research.description = changeUserReferenceToPlainText(research.description)
+  }
+
+  for (const update of research.updates) {
+    if (!update.description) {
+      continue
+    }
+
+    update.description = changeUserReferenceToPlainText(update.description)
+  }
+
+  return research
+}
+
 export const researchService = {
   search,
   getResearchCategories,
   getDrafts,
   getDraftCount,
+  getBySlug,
 }
 
 export const exportedForTesting = {

@@ -1,24 +1,14 @@
 import { createContext, useContext } from 'react'
 import lodash from 'lodash'
-import {
-  action,
-  computed,
-  makeObservable,
-  observable,
-  runInAction,
-  toJS,
-} from 'mobx'
-import { IModerationStatus, ResearchStatus } from 'oa-shared'
+import { action, makeObservable, observable, runInAction, toJS } from 'mobx'
+import { IModerationStatus } from 'oa-shared'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
-import { hasAdminRights, needsModeration, randomID } from 'src/utils/helpers'
+import { hasAdminRights, randomID } from 'src/utils/helpers'
 import { getKeywords } from 'src/utils/searchHelper'
 
 import { incrementDocViewCount } from '../common/incrementDocViewCount'
-import {
-  changeMentionToUserReference,
-  changeUserReferenceToPlainText,
-} from '../common/mentions'
+import { changeMentionToUserReference } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
@@ -39,7 +29,6 @@ const { cloneDeep } = lodash
 const COLLECTION_NAME = 'research'
 
 export class ResearchStore extends ModuleStore {
-  public activeResearchItem: IResearch.ItemDB | null = null
   public researchUploadStatus: IResearchUploadStatus =
     getInitialResearchUploadStatus()
   public updateUploadStatus: IUpdateUploadStatus =
@@ -48,10 +37,8 @@ export class ResearchStore extends ModuleStore {
   constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this, {
-      activeResearchItem: observable,
       researchUploadStatus: observable,
       updateUploadStatus: observable,
-      setActiveResearchItemBySlug: action,
       toggleUsefulByUser: action,
       deleteResearch: action,
       updateResearchUploadStatus: action,
@@ -60,49 +47,7 @@ export class ResearchStore extends ModuleStore {
       resetUpdateUploadStatus: action,
       lockResearchItem: action,
       unlockResearchItem: action,
-      lockResearchUpdate: action,
-      unlockResearchUpdate: action,
-      userVotedActiveResearchUseful: computed,
-      userHasSubscribed: computed,
-      votedUsefulCount: computed,
-      subscribersCount: computed,
     })
-  }
-
-  public async setActiveResearchItemBySlug(slug?: string) {
-    logger.debug(`setActiveResearchItemBySlug:`, { slug })
-    let activeResearchItem: IResearchDB | null = null
-
-    const enrichResearchUpdate = async (update: IResearch.UpdateDB) => {
-      const enrichedResearchUpdated = cloneDeep(update)
-      enrichedResearchUpdated.description = changeUserReferenceToPlainText(
-        update.description,
-      )
-      return enrichedResearchUpdated
-    }
-
-    if (slug) {
-      activeResearchItem = await this._getResearchItemBySlug(slug)
-
-      if (activeResearchItem) {
-        activeResearchItem.collaborators =
-          activeResearchItem.collaborators || []
-        activeResearchItem.description = changeUserReferenceToPlainText(
-          activeResearchItem.description,
-        )
-        activeResearchItem.researchStatus =
-          activeResearchItem.researchStatus || ResearchStatus.IN_PROGRESS
-        const researchUpdates = activeResearchItem.updates || []
-        activeResearchItem.updates = await Promise.all(
-          researchUpdates.map(enrichResearchUpdate),
-        )
-      }
-    }
-
-    runInAction(() => {
-      this.activeResearchItem = activeResearchItem
-    })
-    return activeResearchItem
   }
 
   public async addSubscriberToResearchArticle(
@@ -123,34 +68,29 @@ export class ResearchStore extends ModuleStore {
   }
 
   public async toggleUsefulByUser(
-    docId: string,
+    research: IResearchDB,
     userName: string,
   ): Promise<void> {
     const updatedItem = (await toggleDocUsefulByUser(
       COLLECTION_NAME,
-      docId,
+      research._id,
       userName,
     )) as IResearch.ItemDB
 
     runInAction(() => {
-      this.activeResearchItem = updatedItem
       if ((updatedItem?.votedUsefulBy || []).includes(userName)) {
         this.userNotificationsStore.triggerNotification(
           'research_useful',
-          this.activeResearchItem._createdBy,
-          '/research/' + this.activeResearchItem.slug,
-          this.activeResearchItem.title,
+          research._createdBy,
+          '/research/' + research.slug,
+          research.title,
         )
-        for (
-          let i = 0;
-          i < (this.activeResearchItem.collaborators || []).length;
-          i++
-        ) {
+        for (let i = 0; i < (research.collaborators || []).length; i++) {
           this.userNotificationsStore.triggerNotification(
             'research_useful',
-            this.activeResearchItem.collaborators[i],
-            '/research/' + this.activeResearchItem.slug,
-            this.activeResearchItem.title,
+            research.collaborators[i],
+            '/research/' + research.slug,
+            research.title,
           )
         }
       }
@@ -194,10 +134,6 @@ export class ResearchStore extends ModuleStore {
     return doc.set(toJS(research))
   }
 
-  public needsModeration(research: IResearch.ItemDB) {
-    return needsModeration(research, toJS(this.activeUser || undefined))
-  }
-
   public updateResearchUploadStatus(update: keyof IResearchUploadStatus) {
     this.researchUploadStatus[update] = true
   }
@@ -237,6 +173,7 @@ export class ResearchStore extends ModuleStore {
     const user = this.activeUser as IUser
     const updates = (await dbRef.get('server'))?.updates || [] // save old updates when editing
     const collaborators = await this._setCollaborators(values.collaborators)
+    let updatedResearch: IResearchDB | null = null
 
     try {
       const userCountry = getUserCountry(user)
@@ -265,16 +202,13 @@ export class ResearchStore extends ModuleStore {
       }
       logger.debug('populating database', researchItem)
       // set the database document
-      const updatedItem = await this._updateResearchItem(
+      updatedResearch = await this._updateResearchItem(
         dbRef,
         researchItem,
         true,
       )
       this.updateResearchUploadStatus('Database')
       logger.debug('post added')
-      if (updatedItem) {
-        this.setActiveResearchItemBySlug(updatedItem.slug)
-      }
       // complete
       this.updateResearchUploadStatus('Complete')
     } catch (error) {
@@ -282,6 +216,8 @@ export class ResearchStore extends ModuleStore {
       //TODO: Add error handling here :(
       //throw new Error(error.message)
     }
+
+    return updatedResearch
   }
 
   /**
@@ -289,9 +225,12 @@ export class ResearchStore extends ModuleStore {
    *
    * @param update
    */
-  public async uploadUpdate(update: IResearch.Update | IResearch.UpdateDB) {
+  public async uploadUpdate(
+    item: IResearchDB,
+    update: IResearch.Update | IResearch.UpdateDB,
+  ) {
     logger.debug(`uploadUpdate`, { update })
-    const item = this.activeResearchItem
+    let updatedItem: IResearchDB | null = null
     if (item) {
       const dbRef = this.db
         .collection<IResearch.Item>(COLLECTION_NAME)
@@ -367,22 +306,19 @@ export class ResearchStore extends ModuleStore {
         logger.debug('created:', newItem._created)
 
         // set the database document
-        await this._updateResearchItem(dbRef, newItem, true)
+        updatedItem = await this._updateResearchItem(dbRef, newItem, true)
         logger.debug('populate db ok')
         this.updateUpdateUploadStatus('Database')
-        const createdItem = (await dbRef.get('server')) as IResearch.ItemDB
-        runInAction(() => {
-          this.activeResearchItem = createdItem
-        })
         this.updateUpdateUploadStatus('Complete')
       } catch (error) {
         logger.error('error', error)
       }
     }
+
+    return updatedItem
   }
 
-  public async deleteUpdate(updateId: string) {
-    const item = this.activeResearchItem
+  public async deleteUpdate(item: IResearchDB, updateId: string) {
     if (item) {
       const dbRef = this.db
         .collection<IResearch.Item>(COLLECTION_NAME)
@@ -407,13 +343,7 @@ export class ResearchStore extends ModuleStore {
         newItem.updates[existingUpdateIndex]._deleted = true
 
         // set the database document
-        const updatedItem = await this._updateResearchItem(dbRef, newItem, true)
-
-        if (updatedItem) {
-          this.setActiveResearchItemBySlug(updatedItem.slug)
-        }
-
-        return updatedItem
+        await this._updateResearchItem(dbRef, newItem, true)
       } catch (error) {
         logger.error('error deleting article', error)
       }
@@ -425,10 +355,12 @@ export class ResearchStore extends ModuleStore {
    *
    * @param updateId
    */
-  public async incrementDownloadCount(updateId: string): Promise<number> {
+  public async incrementDownloadCount(
+    item: IResearchDB,
+    updateId: string,
+  ): Promise<number> {
     try {
       let downloadCount = 0
-      const item = this.activeResearchItem
 
       if (item) {
         const dbRef = this.db
@@ -448,11 +380,7 @@ export class ResearchStore extends ModuleStore {
           updates: [...toJS(newUpdates)],
         }
 
-        const updatedItem = await this._updateResearchItem(dbRef, newItem)
-
-        if (updatedItem) {
-          this.setActiveResearchItemBySlug(updatedItem.slug)
-        }
+        await this._updateResearchItem(dbRef, newItem)
       }
 
       return downloadCount
@@ -462,30 +390,7 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
-  get userVotedActiveResearchUseful(): boolean {
-    if (!this.activeUser) return false
-    return (this.activeResearchItem?.votedUsefulBy || []).includes(
-      this.activeUser.userName,
-    )
-  }
-
-  get userHasSubscribed(): boolean {
-    return (
-      this.activeResearchItem?.subscribers?.includes(
-        this.activeUser?.userName ?? '',
-      ) ?? false
-    )
-  }
-
-  get votedUsefulCount(): number {
-    return (this.activeResearchItem?.votedUsefulBy || []).length
-  }
-
-  get subscribersCount(): number {
-    return (this.activeResearchItem?.subscribers || []).length
-  }
-  public async lockResearchItem(username: string) {
-    const item = this.activeResearchItem
+  public async lockResearchItem(item: IResearchDB, username: string) {
     if (item) {
       const dbRef = this.db
         .collection<IResearch.Item>(COLLECTION_NAME)
@@ -498,14 +403,10 @@ export class ResearchStore extends ModuleStore {
         },
       }
       await this._updateResearchItem(dbRef, newItem)
-      runInAction(() => {
-        this.activeResearchItem = newItem
-      })
     }
   }
 
-  public async unlockResearchItem() {
-    const item = this.activeResearchItem
+  public async unlockResearchItem(item: IResearchDB) {
     if (item) {
       const dbRef = this.db
         .collection<IResearch.Item>(COLLECTION_NAME)
@@ -515,57 +416,36 @@ export class ResearchStore extends ModuleStore {
         locked: null,
       }
       await this._updateResearchItem(dbRef, newItem)
-      runInAction(() => {
-        this.activeResearchItem = newItem
-      })
     }
   }
 
-  public async lockResearchUpdate(username: string, updateId: string) {
-    const item = this.activeResearchItem
-    if (item) {
-      const dbRef = this.db
-        .collection<IResearch.Item>(COLLECTION_NAME)
-        .doc(item._id)
-      const updateIndex = item.updates.findIndex((upd) => upd._id === updateId)
-      const newItem = {
-        ...item,
-        updates: [...item.updates],
-      }
+  public async toggleLockResearchUpdate(
+    researchId: string,
+    username: string,
+    updateId: string,
+    lock: boolean,
+  ) {
+    const dbRef = this.db
+      .collection<IResearch.Item>(COLLECTION_NAME)
+      .doc(researchId)
 
-      if (updateIndex && newItem.updates[updateIndex]) {
-        newItem.updates[updateIndex].locked = {
-          by: username,
-          at: new Date().toISOString(),
-        }
-      }
-      await this._updateResearchItem(dbRef, newItem)
-      runInAction(() => {
-        this.activeResearchItem = newItem
-      })
+    const item = toJS(await dbRef.get('server')) as IResearchDB
+    const updateIndex = item.updates.findIndex((upd) => upd._id === updateId)
+    const updatedItem = {
+      ...item,
+      updates: [...item.updates],
     }
-  }
 
-  public async unlockResearchUpdate(updateId: string) {
-    const item = this.activeResearchItem
-    if (item) {
-      const dbRef = this.db
-        .collection<IResearch.Item>(COLLECTION_NAME)
-        .doc(item._id)
-      const updateIndex = item.updates.findIndex((upd) => upd._id === updateId)
-      const newItem = {
-        ...item,
-        updates: [...item.updates],
-      }
-
-      if (newItem.updates[updateIndex]) {
-        newItem.updates[updateIndex].locked = null
-      }
-      await this._updateResearchItem(dbRef, newItem)
-      runInAction(() => {
-        this.activeResearchItem = newItem
-      })
+    if (updatedItem.updates[updateIndex]) {
+      updatedItem.updates[updateIndex].locked = lock
+        ? {
+            by: username,
+            at: new Date().toISOString(),
+          }
+        : null
     }
+
+    await dbRef.set(updatedItem)
   }
 
   private async _setCollaborators(
@@ -715,42 +595,16 @@ export class ResearchStore extends ModuleStore {
       )
     }
 
-    return await dbRef.get('server')
+    return (await dbRef.get('server')) as IResearchDB
   }
 
-  private async _getResearchItemBySlug(
-    slug: string,
-  ): Promise<IResearchDB | null> {
-    const collection = await this.db
-      .collection<IResearch.ItemDB>(COLLECTION_NAME)
-      .getWhere('slug', '==', slug)
-
-    if (collection && collection.length) {
-      return collection[0]
-    }
-
-    const previousSlugCollection = await this.db
-      .collection<IResearch.ItemDB>(COLLECTION_NAME)
-      .getWhere('previousSlugs', 'array-contains', slug)
-
-    if (previousSlugCollection && previousSlugCollection.length) {
-      return previousSlugCollection[0]
-    }
-
-    return null
-  }
-
-  private async _toggleSubscriber(docId, userId) {
+  private async _toggleSubscriber(docId: string, userId: string) {
     const updatedItem = await toggleDocSubscriberStatusByUserName(
       this.db,
       COLLECTION_NAME,
       docId,
       userId,
     )
-
-    if (updatedItem) {
-      this.setActiveResearchItemBySlug(updatedItem.slug)
-    }
 
     return updatedItem
   }

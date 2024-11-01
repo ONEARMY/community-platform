@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useNavigate } from '@remix-run/react'
 
 import { Button } from '../Button/Button'
@@ -15,6 +16,7 @@ export interface IProps {
 export const FollowButton = (props: IProps) => {
   const { hasUserSubscribed, isLoggedIn, onFollowClick, sx } = props
   const navigate = useNavigate()
+  const uuid = useMemo(() => (Math.random() * 16).toString(), [])
 
   return (
     <>
@@ -22,7 +24,7 @@ export const FollowButton = (props: IProps) => {
         type="button"
         data-testid={isLoggedIn ? 'follow-button' : 'follow-redirect'}
         data-cy={isLoggedIn ? 'follow-button' : 'follow-redirect'}
-        data-tooltip-id="login-follow"
+        data-tooltip-id={uuid}
         data-tooltip-content={isLoggedIn ? '' : 'Login to follow'}
         icon="thunderbolt"
         variant="outline"
@@ -36,7 +38,7 @@ export const FollowButton = (props: IProps) => {
       >
         {hasUserSubscribed ? 'Following' : 'Follow'}
       </Button>
-      <Tooltip id="login-follow" />
+      <Tooltip id={uuid} />
     </>
   )
 }

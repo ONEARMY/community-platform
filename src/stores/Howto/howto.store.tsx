@@ -1,7 +1,6 @@
 import { action, makeObservable, observable, runInAction, toJS } from 'mobx'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
-import { needsModeration } from 'src/utils/helpers'
 import { getKeywords } from 'src/utils/searchHelper'
 
 import { incrementDocViewCount } from '../common/incrementDocViewCount'
@@ -98,10 +97,6 @@ export class HowtoStore extends ModuleStore {
       db: this.db,
       doc: howTo,
     })
-  }
-
-  public needsModeration(howto: IHowto) {
-    return needsModeration(howto, toJS(this.activeUser) as IUser)
   }
 
   private async addUserReference(msg: string): Promise<{

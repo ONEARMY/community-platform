@@ -50,7 +50,6 @@ export const Howto = observer(({ howto }: HowtoParams) => {
   }, [howtoStore?.activeUser])
 
   const onUsefulClick = async (
-    howToSlug: string,
     vote: 'add' | 'delete',
     eventCategory: string,
   ) => {
@@ -69,7 +68,7 @@ export const Howto = observer(({ howto }: HowtoParams) => {
     trackEvent({
       category: eventCategory,
       action: vote === 'add' ? 'HowtoUseful' : 'HowtoUsefulRemoved',
-      label: howToSlug,
+      label: howto.slug,
     })
   }
 
@@ -79,17 +78,12 @@ export const Howto = observer(({ howto }: HowtoParams) => {
       <HowtoDescription
         howto={howto}
         key={howto._id}
-        needsModeration={howtoStore.needsModeration(howto)}
         loggedInUser={loggedInUser as IUser}
         commentsCount={totalCommentsCount}
         votedUsefulCount={usefulCount}
         hasUserVotedUseful={voted}
         onUsefulClick={async () =>
-          await onUsefulClick(
-            howto.slug,
-            voted ? 'delete' : 'add',
-            'HowtoDescription',
-          )
+          await onUsefulClick(voted ? 'delete' : 'add', 'HowtoDescription')
         }
       />
       <Box sx={{ mt: 9 }}>
@@ -139,7 +133,6 @@ export const Howto = observer(({ howto }: HowtoParams) => {
                   isLoggedIn={!!loggedInUser}
                   onUsefulClick={() =>
                     onUsefulClick(
-                      howto.slug,
                       voted ? 'delete' : 'add',
                       'ArticleCallToAction',
                     )

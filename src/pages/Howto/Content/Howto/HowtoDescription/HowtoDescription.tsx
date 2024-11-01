@@ -36,7 +36,6 @@ import type { IHowtoDB, ITag, IUser } from 'oa-shared'
 interface IProps {
   howto: IHowtoDB & { tagList?: ITag[] }
   loggedInUser: IUser | undefined
-  needsModeration: boolean
   commentsCount: number
   votedUsefulCount?: number
   verified?: boolean
@@ -110,17 +109,14 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             <ClientOnly fallback={<></>}>
               {() => (
                 <>
-                  {props.votedUsefulCount !== undefined &&
-                    howto.moderation === IModerationStatus.ACCEPTED && (
-                      <Box>
-                        <UsefulStatsButton
-                          votedUsefulCount={props.votedUsefulCount}
-                          hasUserVotedUseful={props.hasUserVotedUseful}
-                          isLoggedIn={loggedInUser ? true : false}
-                          onUsefulClick={props.onUsefulClick}
-                        />
-                      </Box>
-                    )}
+                  {howto.moderation === IModerationStatus.ACCEPTED && (
+                    <UsefulStatsButton
+                      votedUsefulCount={props.votedUsefulCount}
+                      hasUserVotedUseful={props.hasUserVotedUseful}
+                      isLoggedIn={loggedInUser ? true : false}
+                      onUsefulClick={props.onUsefulClick}
+                    />
+                  )}
                 </>
               )}
             </ClientOnly>

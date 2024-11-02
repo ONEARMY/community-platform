@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Flex, Heading } from 'theme-ui'
 
 import UserCreatedDocumentsItem from './UserCreatedDocumentsItem'
@@ -6,13 +5,13 @@ import UserCreatedDocumentsItem from './UserCreatedDocumentsItem'
 import type { UserCreatedDocs } from '../types'
 
 interface IProps {
-  docs: UserCreatedDocs | undefined
+  docs: UserCreatedDocs
 }
 
 const UserCreatedDocuments = ({ docs }: IProps) => {
   return (
     <>
-      {(docs?.howtos.length > 0 || docs?.research.length > 0) && (
+      {(docs.howtos.length > 0 || docs.research.length > 0) && (
         <Flex pt={2} sx={{ justifyContent: 'space-between', gap: 4 }}>
           {docs?.howtos.length > 0 && (
             <Flex

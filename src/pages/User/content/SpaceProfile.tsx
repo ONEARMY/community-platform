@@ -36,7 +36,7 @@ import type { UserCreatedDocs } from '../types'
 
 interface IProps {
   user: IUser
-  docs: UserCreatedDocs | undefined
+  docs: UserCreatedDocs
 }
 
 const getCoverImages = (user: IUser) => {

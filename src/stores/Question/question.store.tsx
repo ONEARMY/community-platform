@@ -1,8 +1,6 @@
 import { createContext, useContext } from 'react'
-import { action, computed, makeObservable } from 'mobx'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
-import { isAllowedToEditContent } from 'src/utils/helpers'
 import { getKeywords } from 'src/utils/searchHelper'
 
 import { incrementDocViewCount } from '../common/incrementDocViewCount'
@@ -23,18 +21,8 @@ import type { IRootStore } from '../RootStore'
 const COLLECTION_NAME = 'questions' as DBEndpoint
 
 export class QuestionStore extends ModuleStore {
-  public activeQuestionItem: IQuestionDB | undefined
-
   constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
-    makeObservable(this, {
-      fetchQuestionBySlug: action,
-      votedUsefulCount: computed,
-      userVotedActiveQuestionUseful: computed,
-      subscriberCount: computed,
-      userCanEditQuestion: computed,
-      userHasSubscribed: computed,
-    })
   }
 
   public async incrementViewCount(question: Partial<IQuestionDB>) {
@@ -43,42 +31,6 @@ export class QuestionStore extends ModuleStore {
       db: this.db,
       doc: question,
     })
-  }
-
-  public async fetchQuestionBySlug(slug: string) {
-    logger.debug(`fetchQuestionBySlug:`, { slug })
-    return await this._getQuestionItemBySlug(slug)
-  }
-
-  get votedUsefulCount(): number {
-    if (!this.activeQuestionItem || !this.activeQuestionItem.votedUsefulBy) {
-      return 0
-    }
-    return this.activeQuestionItem?.votedUsefulBy.length
-  }
-
-  get userVotedActiveQuestionUseful(): boolean {
-    if (!this.activeUser) return false
-    return (this.activeQuestionItem?.votedUsefulBy || []).includes(
-      this.activeUser.userName,
-    )
-  }
-
-  get subscriberCount(): number {
-    return (this.activeQuestionItem?.subscribers || []).length
-  }
-
-  get userCanEditQuestion(): boolean {
-    if (!this.activeQuestionItem) return false
-    return isAllowedToEditContent(this.activeQuestionItem, this.activeUser)
-  }
-
-  get userHasSubscribed(): boolean {
-    return (
-      this.activeQuestionItem?.subscribers?.includes(
-        this.activeUser?.userName ?? '',
-      ) ?? false
-    )
   }
 
   public async upsertQuestion(values: IQuestion.FormInput) {
@@ -130,35 +82,21 @@ export class QuestionStore extends ModuleStore {
     return dbRef.get('server') || null
   }
 
-  public async toggleSubscriberStatusByUserName() {
-    if (!this.activeQuestionItem || !this.activeUser) return
+  public async toggleSubscriber(id: string, username: string) {
+    if (!username) {
+      throw Error('Requires a logged in user')
+    }
 
-    const updatedQuestion = await toggleDocSubscriberStatusByUserName(
+    return await toggleDocSubscriberStatusByUserName(
       this.db,
       COLLECTION_NAME,
-      this.activeQuestionItem._id,
-      this.activeUser.userName,
+      id,
+      username,
     )
-
-    if (updatedQuestion) {
-      this.activeQuestionItem = updatedQuestion
-      return updatedQuestion
-    }
   }
 
-  public async toggleUsefulByUser() {
-    if (!this.activeQuestionItem || !this.activeUser) return
-
-    const updatedQuestion = await toggleDocUsefulByUser(
-      COLLECTION_NAME,
-      this.activeQuestionItem._id,
-      this.activeUser.userName,
-    )
-
-    if (updatedQuestion) {
-      this.activeQuestionItem = updatedQuestion as IQuestionDB
-      return updatedQuestion
-    }
+  public async toggleUsefulByUser(questionId: string, userName: string) {
+    return await toggleDocUsefulByUser(COLLECTION_NAME, questionId, userName)
   }
 
   private async loadImages(
@@ -175,32 +113,6 @@ export class QuestionStore extends ModuleStore {
       logger.debug('upload images ok')
       return images
     }
-  }
-
-  private async _getQuestionItemBySlug(
-    slug: string,
-  ): Promise<IQuestionDB | null> {
-    if (this.activeQuestionItem?.slug === slug) return this.activeQuestionItem
-
-    const collection = await this.db
-      .collection<IQuestion.Item>(COLLECTION_NAME)
-      .getWhere('slug', '==', slug)
-
-    logger.info(`_getQuestionItemBySlug.collection`, { collection })
-    if (collection && collection.length) {
-      return collection[0]
-    }
-
-    const previousSlugs = await this.db
-      .collection<IQuestion.Item>(COLLECTION_NAME)
-      .getWhere('previousSlugs', 'array-contains', slug)
-
-    logger.info(`_getQuestionItemBySlug.collection`, { previousSlugs })
-    if (previousSlugs && previousSlugs.length) {
-      return previousSlugs[0]
-    }
-
-    return null
   }
 }
 

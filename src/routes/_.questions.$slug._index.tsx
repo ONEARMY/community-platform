@@ -21,7 +21,7 @@ export const meta = mergeMeta<typeof loader>(({ data }) => {
     return []
   }
 
-  const title = `${question.title} - Research - ${import.meta.env.VITE_SITE_NAME}`
+  const title = `${question.title} - Question - ${import.meta.env.VITE_SITE_NAME}`
   const imageUrl = (question.images?.at(0) as IUploadedFileMeta)?.downloadUrl
 
   return generateTags(title, question.description, imageUrl)

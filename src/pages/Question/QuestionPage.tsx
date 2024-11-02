@@ -224,12 +224,14 @@ export const QuestionPage = ({ question }: QuestionPageProps) => {
           ]}
         />
       </Card>
-      {question._id && (
-        <QuestionDiscussion
-          questionDocId={question._id}
-          setTotalCommentsCount={setTotalCommentsCount}
-        />
-      )}
+      <ClientOnly fallback={<></>}>
+        {() => (
+          <QuestionDiscussion
+            questionDocId={question._id}
+            setTotalCommentsCount={setTotalCommentsCount}
+          />
+        )}
+      </ClientOnly>
     </Box>
   )
 }

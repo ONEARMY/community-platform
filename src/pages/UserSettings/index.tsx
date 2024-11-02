@@ -5,13 +5,13 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 
 import { SettingsPage } from './SettingsPage'
 
-import type { IUser } from 'oa-shared'
+import type { IUserDB } from 'oa-shared'
 
 const Settings = observer(() => {
   const { userStore } = useCommonStores().stores
-  const currentUser = userStore.user as IUser
+  const currentUser = userStore.user as IUserDB
 
-  return currentUser ? <SettingsPage /> : <Loader />
+  return currentUser ? <SettingsPage profile={currentUser} /> : <Loader />
 })
 
 export default Settings

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { Button, InternalLink } from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { Flex, Text } from 'theme-ui'
+import { Flex } from 'theme-ui'
 
 import { MemberProfile } from './MemberProfile'
 import { SpaceProfile } from './SpaceProfile'
@@ -24,27 +24,12 @@ export const UserProfile = observer(
   ({ profile, userCreatedDocs }: UserProfileProps) => {
     const { userStore } = useCommonStores().stores
     const isViewingOwnProfile = useMemo(
-      () => userStore.activeUser?._id === profile._id,
+      () => userStore.activeUser?._id === profile?._id,
       [userStore.activeUser?._id],
     )
     const showMemberProfile =
-      profile.profileType === ProfileTypeList.MEMBER ||
-      profile.profileType === undefined
-
-    if (!profile) {
-      return (
-        <Text
-          sx={{
-            width: '100%',
-            textAlign: 'center',
-            display: 'block',
-            marginTop: 10,
-          }}
-        >
-          User not found
-        </Text>
-      )
-    }
+      profile?.profileType === ProfileTypeList.MEMBER ||
+      profile?.profileType === undefined
 
     return (
       <Flex

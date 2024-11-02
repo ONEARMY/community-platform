@@ -3,6 +3,7 @@ import { useLoaderData } from '@remix-run/react'
 import { UserProfile } from 'src/pages/User/content/UserProfile'
 import { userService } from 'src/services/user.service'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
+import { Text } from 'theme-ui'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { IUserDB } from 'oa-shared'
@@ -34,6 +35,21 @@ export default function Index() {
   const data = useLoaderData<typeof loader>()
   const profile = data.profile as IUserDB
   const userCreatedDocs = data.userCreatedDocs as UserCreatedDocs
+
+  if (!profile) {
+    return (
+      <Text
+        sx={{
+          width: '100%',
+          textAlign: 'center',
+          display: 'block',
+          marginTop: 10,
+        }}
+      >
+        User not found
+      </Text>
+    )
+  }
 
   return <UserProfile profile={profile} userCreatedDocs={userCreatedDocs} />
 }

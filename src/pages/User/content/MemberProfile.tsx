@@ -147,7 +147,13 @@ export const MemberProfile = ({ docs, user }: IProps) => {
             <UserContactAndLinks links={userLinks} />
           </Flex>
         </Flex>
-        <UserCreatedDocuments docs={docs} />
+        <ClientOnly fallback={<></>}>
+          {() => (
+            <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+              <UserCreatedDocuments docs={docs} />
+            </AuthWrapper>
+          )}
+        </ClientOnly>
       </Card>
     </Flex>
   )

@@ -17,6 +17,8 @@ exports.aggregations = require('./aggregations')
 
 exports.database = require('./database')
 
+exports.supabaseCreateAuthUser = require('./supabaseMigration')
+
 exports.userUpdates = UserUpdates.handleUserUpdates
 
 exports.discussionUpdates = DiscussionUpdates.handleDiscussionUpdate

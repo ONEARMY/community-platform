@@ -34,7 +34,7 @@ export interface configVars {
   prerender: {
     api_key: string
   }
-  migration: {
+  migration?: {
     api_key: string
   }
 }

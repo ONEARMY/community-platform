@@ -12,11 +12,9 @@ import { Flex } from 'theme-ui'
 import { v4 as uuid } from 'uuid'
 
 import { FocusSection } from './content/sections/Focus.section'
-import { ProfileTags } from './content/sections/ProfileTags.section'
 import { PublicContactSection } from './content/sections/PublicContact.section'
 import { UserImagesSection } from './content/sections/UserImages.section'
 import { UserInfosSection } from './content/sections/UserInfos.section'
-import { WorkspaceSection } from './content/sections/Workspace.section'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from './constants'
 import { buttons } from './labels'
@@ -101,7 +99,6 @@ export const SettingsPageUserProfile = () => {
     links,
     location: user.location || null,
     about: user.about || null,
-    workspaceType: user.workspaceType || null,
     isContactableByPublic:
       user.isContactableByPublic || DEFAULT_PUBLIC_CONTACT_PREFERENCE,
     userImage: user.userImage || null,
@@ -146,15 +143,6 @@ export const SettingsPageUserProfile = () => {
             <form id={formId} onSubmit={handleSubmit}>
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
                 <FocusSection />
-
-                {values.profileType === ProfileTypeList.WORKSPACE && (
-                  <WorkspaceSection />
-                )}
-
-                {(values.profileType === ProfileTypeList.MACHINE_BUILDER ||
-                  values.profileType === ProfileTypeList.COLLECTION_POINT) && (
-                  <ProfileTags />
-                )}
 
                 <UserInfosSection formValues={values} />
 

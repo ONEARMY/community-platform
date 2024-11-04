@@ -1,3 +1,4 @@
+import { getProfileTagsForTheme } from 'src/utils/getProfileTagsForTheme'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { DB_ENDPOINTS, IModerationStatus, profileTags } from 'oa-shared'
 import { firestore } from 'src/utils/firebase'
@@ -5,8 +6,8 @@ import { firestore } from 'src/utils/firebase'
 import type { IHowtoDB, IResearchDB, ITag, IUserDB } from 'oa-shared'
 import type { UserCreatedDocs } from 'src/pages/User/types'
 
-const getProfileTags = (): ITag[] => {
-  return profileTags
+const getProfileTags: () => ITag[] = () => {
+  return getProfileTagsForTheme()
 }
 
 const getById = async (id: string): Promise<IUserDB | null> => {

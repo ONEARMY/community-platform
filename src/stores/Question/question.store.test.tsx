@@ -81,48 +81,6 @@ describe('question.store', () => {
     })
   })
 
-  describe('fetchQuestionBySlug', () => {
-    it('handles empty query response', async () => {
-      const { store } = factory()
-      const newQuestion = FactoryQuestionItem({
-        title: 'How do you survive living in a tent?',
-      })
-
-      // Act
-      expect(await store.fetchQuestionBySlug(newQuestion.slug)).toBe(null)
-    })
-
-    it('returns a valid response', async () => {
-      const { store, getWhereFn } = factory()
-      const newQuestion = FactoryQuestionItem({
-        title: 'Question title',
-      })
-
-      getWhereFn.mockResolvedValue([newQuestion])
-
-      // Act
-      const questionDoc = await store.fetchQuestionBySlug(newQuestion.slug)
-
-      expect(getWhereFn.mock.calls[0]).toEqual(['slug', '==', newQuestion.slug])
-      expect(questionDoc).toStrictEqual(newQuestion)
-    })
-
-    it('returns a valid response when a previous slug', async () => {
-      const { store, getWhereFn } = factory()
-      const newQuestion = FactoryQuestionItem({
-        title: 'Can I run a shredder at home?',
-        previousSlugs: ['shredder-at-home'],
-      })
-
-      getWhereFn.mockResolvedValue([newQuestion])
-
-      // Act
-      const questionDoc = await store.fetchQuestionBySlug('shredder-at-home')
-
-      expect(questionDoc).toStrictEqual(newQuestion)
-    })
-  })
-
   describe('incrementViews', () => {
     it('increments views by one', async () => {
       const { store, updateFn } = factory()
@@ -150,9 +108,9 @@ describe('question.store', () => {
   describe('toggleSubscriberStatusByUserName', () => {
     it('calls the toggle subscriber function', async () => {
       const { store } = factory()
-      store.activeQuestionItem = FactoryQuestionItem()
+      const question = FactoryQuestionItem()
 
-      await store.toggleSubscriberStatusByUserName()
+      await store.toggleSubscriber(question._id, store.activeUser!._id)
 
       expect(mockToggleDocSubscriber).toHaveBeenCalled()
     })
@@ -161,9 +119,9 @@ describe('question.store', () => {
   describe('toggleUsefulByUser', () => {
     it('calls the toogle voted for function', async () => {
       const { store } = factory()
-      store.activeQuestionItem = FactoryQuestionItem()
+      const question = FactoryQuestionItem()
 
-      await store.toggleUsefulByUser()
+      await store.toggleUsefulByUser(question._id, store.activeUser!._id)
 
       expect(mockToggleDocUsefulByUser).toHaveBeenCalled()
     })

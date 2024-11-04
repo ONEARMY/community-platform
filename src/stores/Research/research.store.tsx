@@ -50,21 +50,20 @@ export class ResearchStore extends ModuleStore {
     })
   }
 
-  public async addSubscriberToResearchArticle(
+  public async toggleSubscriber(
     docId: string,
-    userId: string,
+    username: string,
   ): Promise<void> {
-    await this._toggleSubscriber(docId, userId)
+    if (!username) {
+      throw Error('Requires a logged in user')
+    }
 
-    return
-  }
-
-  public async removeSubscriberFromResearchArticle(
-    docId: string,
-    userId: string,
-  ): Promise<void> {
-    await this._toggleSubscriber(docId, userId)
-    return
+    await toggleDocSubscriberStatusByUserName(
+      this.db,
+      COLLECTION_NAME,
+      docId,
+      username,
+    )
   }
 
   public async toggleUsefulByUser(
@@ -596,17 +595,6 @@ export class ResearchStore extends ModuleStore {
     }
 
     return (await dbRef.get('server')) as IResearchDB
-  }
-
-  private async _toggleSubscriber(docId: string, userId: string) {
-    const updatedItem = await toggleDocSubscriberStatusByUserName(
-      this.db,
-      COLLECTION_NAME,
-      docId,
-      userId,
-    )
-
-    return updatedItem
   }
 }
 

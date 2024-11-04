@@ -76,8 +76,8 @@ export interface IProfileCreator {
 
 // Overlap with IWorkspaceType
 export interface MapFilterOption {
+  _id: string
   label: string
-  slug: string
   filterType: string
   imageSrc?: string
 }

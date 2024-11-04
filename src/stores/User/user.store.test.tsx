@@ -310,7 +310,6 @@ describe('userStore', () => {
       const userProfile = FactoryUser({
         _id: 'my-user-profile',
         profileType: 'workspace',
-        workspaceType: 'extrusion',
         profileCreationTrigger: 'test-a',
       })
       store.activeUser = userProfile
@@ -331,7 +330,7 @@ describe('userStore', () => {
       )
       expect(store.db.update).toHaveBeenCalledWith(
         expect.not.objectContaining({
-          workspaceType: userProfile.workspaceType,
+          profileCreationTrigger: userProfile.profileCreationTrigger,
         }),
       )
     })

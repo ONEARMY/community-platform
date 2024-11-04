@@ -15,6 +15,7 @@ import {
   projectKampTheme,
 } from 'oa-themes'
 
+import { VITE_THEME } from './config/config'
 import { ClientStyleContext, ServerStyleContext } from './styles/context'
 import { generateTags } from './utils/seo.utils'
 
@@ -85,7 +86,7 @@ const Document = withEmotionCache(
 )
 
 const getEnvironmentTheme = () => {
-  switch (import.meta.env.VITE_THEME) {
+  switch (VITE_THEME) {
     case 'project-kamp':
       return projectKampTheme
     case 'fixing-fashion':

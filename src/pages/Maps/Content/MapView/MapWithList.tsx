@@ -285,7 +285,7 @@ export const MapWithList = (props: IProps) => {
             icon="gps-location"
             showIconOnly
           />
-          <Tooltip id="locationButton-tooltip"/>
+          <Tooltip id="locationButton-tooltip" />
 
           {/* Globe button to Zoom out to world view */}
           <Button
@@ -313,7 +313,7 @@ export const MapWithList = (props: IProps) => {
             icon="globe"
             showIconOnly
           />
-          <Tooltip id="globeButton-tooltip/>
+          <Tooltip id="globeButton-tooltip" />
 
           {notification && notification !== '' && (
             <Button sx={{ zIndex: 1000 }} variant="subtle">

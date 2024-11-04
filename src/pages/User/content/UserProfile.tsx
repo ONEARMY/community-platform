@@ -2,6 +2,8 @@ import { useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Button, InternalLink } from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
+// eslint-disable-next-line import/no-unresolved
+import { ClientOnly } from 'remix-utils/client-only'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Flex } from 'theme-ui'
 
@@ -57,19 +59,25 @@ export const UserProfile = observer(
           </InternalLink>
         )}
 
-        {showMemberProfile ? (
-          <MemberProfile
-            data-cy="memberProfile"
-            user={profile}
-            docs={userCreatedDocs}
-          />
-        ) : (
-          <SpaceProfile
-            data-cy="spaceProfile"
-            user={profile}
-            docs={userCreatedDocs}
-          />
-        )}
+        <ClientOnly fallback={<></>}>
+          {() => (
+            <>
+              {showMemberProfile ? (
+                <MemberProfile
+                  data-cy="memberProfile"
+                  user={profile}
+                  docs={userCreatedDocs}
+                />
+              ) : (
+                <SpaceProfile
+                  data-cy="spaceProfile"
+                  user={profile}
+                  docs={userCreatedDocs}
+                />
+              )}
+            </>
+          )}
+        </ClientOnly>
       </Flex>
     )
   },

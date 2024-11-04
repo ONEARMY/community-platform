@@ -9,6 +9,8 @@ import {
   UserStatistics,
 } from 'oa-components'
 import { ExternalLinkLabel, UserRole } from 'oa-shared'
+// eslint-disable-next-line import/no-unresolved
+import { ClientOnly } from 'remix-utils/client-only'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { ProfileTags } from 'src/common/ProfileTags'
 import { isPreciousPlastic } from 'src/config/config'
@@ -232,7 +234,9 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             )}
             <TabPanel>
               <Box>
-                <UserContactForm user={user} />
+                <ClientOnly fallback={<></>}>
+                  {() => <UserContactForm user={user} />}
+                </ClientOnly>
                 <UserContactAndLinks links={userLinks} />
               </Box>
             </TabPanel>

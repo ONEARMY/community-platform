@@ -133,27 +133,29 @@ describe('[Map]', () => {
   })
 
   it('Test zoom out/ globe button + zoom in to users location button', () => {
-      cy.get('[data-cy="WorldViewButton"]', { timeout: 10000 })
-        .should('exist')
-        .and('be.visible')
-      cy.get('[data-cy="LocationViewButton"]').should('exist').and('be.visible')
-    
-      // Assuming the map element has a class or ID you can target
-      const mapZoomProxySelector = '.leaflet-proxy.leaflet-zoom-animated'
-  
-      // Click the zoom-related button
-      cy.get('[data-cy="LocationViewButton"]').click() // Adjust to your zoom button selector
-  
-      // Wait for the zoom action to complete
-      cy.wait(500) // Adjust based on zoom animation timing
-  
-      // Check if the transform contains 'scale(1)'
-      cy.get(mapZoomProxySelector).invoke('css', 'transform').should('contain', 'scale(1)')
+    cy.get('[data-cy="WorldViewButton"]', { timeout: 10000 })
+      .should('exist')
+      .and('be.visible')
+    cy.get('[data-cy="LocationViewButton"]').should('exist').and('be.visible')
 
-      cy.step('Zoom in button prompts for user location and zooms')
-      cy.get('[data-cy="WorldViewButton"]', { timeout: 10000 })
-        .should('exist')
-        .and('be.visible')
-      cy.get('[data-cy="LocationViewButton"]').should('exist').and('be.visible')
-    })
+    // Assuming the map element has a class or ID you can target
+    const mapZoomProxySelector = '.leaflet-proxy.leaflet-zoom-animated'
+
+    // Click the zoom-related button
+    cy.get('[data-cy="LocationViewButton"]').click() // Adjust to your zoom button selector
+
+    // Wait for the zoom action to complete
+    cy.wait(500) // Adjust based on zoom animation timing
+
+    // Check if the transform contains 'scale(1)'
+    cy.get(mapZoomProxySelector)
+      .invoke('css', 'transform')
+      .should('contain', 'scale(1)')
+
+    cy.step('Zoom in button prompts for user location and zooms')
+    cy.get('[data-cy="WorldViewButton"]', { timeout: 10000 })
+      .should('exist')
+      .and('be.visible')
+    cy.get('[data-cy="LocationViewButton"]').should('exist').and('be.visible')
+  })
 })

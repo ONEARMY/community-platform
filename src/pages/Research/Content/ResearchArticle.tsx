@@ -44,13 +44,11 @@ const ResearchArticle = observer(
     const researchStore = useResearchStore()
     const { aggregationsStore } = useCommonStores().stores
     const loggedInUser = researchStore.activeUser
-    const [subscribed, setSubscribed] = useState<boolean>(
-      research.subscribers?.includes(loggedInUser?.userName || '') || false,
-    )
+    const [subscribed, setSubscribed] = useState<boolean>(false)
+    const [voted, setVoted] = useState<boolean>(false)
     const [subscribersCount, setSubscribersCount] = useState<number>(
       research.subscribers?.length || 0,
     )
-    const [voted, setVoted] = useState<boolean>(false)
     const [usefulCount, setUsefulCount] = useState<number>(
       research.votedUsefulBy?.length || 0,
     )
@@ -120,26 +118,12 @@ const ResearchArticle = observer(
       scrollIntoRelevantSection()
     }, [location.hash])
 
-    const onFollowClick = (researchSlug: string) => {
-      if (!loggedInUser?.userName || !research) {
-        return null
+    const onFollowClick = async () => {
+      if (!loggedInUser?._id) {
+        return
       }
-
-      let action: string
-
-      if (subscribed) {
-        researchStore.removeSubscriberFromResearchArticle(
-          research._id,
-          loggedInUser?.userName,
-        )
-        action = 'Unsubscribed'
-      } else {
-        researchStore.addSubscriberToResearchArticle(
-          research._id,
-          loggedInUser?.userName,
-        )
-        action = 'Subscribed'
-      }
+      await researchStore.toggleSubscriber(research._id, loggedInUser._id)
+      const action = subscribed ? 'Unsubscribed' : 'Subscribed'
 
       setSubscribersCount((prev) => prev + (subscribed ? -1 : 1))
       // toggle subscribed
@@ -148,7 +132,7 @@ const ResearchArticle = observer(
       trackEvent({
         category: 'Research',
         action: action,
-        label: researchSlug,
+        label: research.slug,
       })
     }
 
@@ -188,7 +172,7 @@ const ResearchArticle = observer(
           onUsefulClick={() =>
             onUsefulClick(voted ? 'delete' : 'add', 'ResearchDescription')
           }
-          onFollowClick={() => onFollowClick(research.slug)}
+          onFollowClick={onFollowClick}
           contributors={contributors}
           subscribersCount={subscribersCount}
           commentsCount={research.totalCommentCount}
@@ -243,7 +227,7 @@ const ResearchArticle = observer(
                     <FollowButton
                       isLoggedIn={!!loggedInUser}
                       hasUserSubscribed={subscribed}
-                      onFollowClick={() => onFollowClick(research.slug)}
+                      onFollowClick={onFollowClick}
                     />
                   </ArticleCallToAction>
                 )}

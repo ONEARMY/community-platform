@@ -15,7 +15,9 @@ export const toggleDocSubscriberStatusByUserName = async (
     .doc(_id)
   const docData = await toJS(dbRef.get('server'))
 
-  if (!docData) return
+  if (!docData) {
+    throw Error('Not found')
+  }
 
   const subscribers = !(docData?.subscribers || []).includes(userName)
     ? [userName].concat(docData?.subscribers || [])

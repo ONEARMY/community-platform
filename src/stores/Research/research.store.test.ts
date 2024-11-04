@@ -435,10 +435,7 @@ describe('research.store', () => {
         })
 
       // Act
-      await store.addSubscriberToResearchArticle(
-        researchItem._id,
-        'an-interested-user',
-      )
+      await store.toggleSubscriber(researchItem._id, 'an-interested-user')
 
       // Assert
       expect(updateFn).toHaveBeenCalledTimes(1)
@@ -460,10 +457,7 @@ describe('research.store', () => {
         })
 
       // Act
-      await store.removeSubscriberFromResearchArticle(
-        researchItem._id,
-        'remove-me',
-      )
+      await store.toggleSubscriber(researchItem._id, 'remove-me')
 
       // Assert
       expect(updateFn).toHaveBeenCalledTimes(1)

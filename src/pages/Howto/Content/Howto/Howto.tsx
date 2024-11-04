@@ -82,8 +82,8 @@ export const Howto = observer(({ howto }: HowtoParams) => {
         commentsCount={totalCommentsCount}
         votedUsefulCount={usefulCount}
         hasUserVotedUseful={voted}
-        onUsefulClick={async () =>
-          await onUsefulClick(voted ? 'delete' : 'add', 'HowtoDescription')
+        onUsefulClick={() =>
+          onUsefulClick(voted ? 'delete' : 'add', 'HowtoDescription')
         }
       />
       <Box sx={{ mt: 9 }}>

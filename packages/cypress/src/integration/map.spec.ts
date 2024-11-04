@@ -133,6 +133,9 @@ describe('[Map]', () => {
   })
 
   it('Test zoom out/ globe button + zoom in to users location button', () => {
+    cy.viewport('macbook-16')
+    cy.visit('/map')
+
     cy.get('[data-cy="WorldViewButton"]', { timeout: 10000 })
       .should('exist')
       .and('be.visible')

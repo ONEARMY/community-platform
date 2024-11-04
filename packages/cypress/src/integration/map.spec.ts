@@ -145,6 +145,20 @@ describe('[Map]', () => {
     // Assuming the map element has a class or ID you can target
     const mapZoomProxySelector = '.leaflet-proxy.leaflet-zoom-animated'
 
+    // Wait for the zoom action to complete
+    cy.wait(500) // Adjust based on zoom animation timing
+
+    // Check if the transform matrix has scale factor 1 (for matrix(a, b, c, d, e, f), 'a' and 'd' should be 1)
+    cy.get(mapZoomProxySelector)
+      .invoke('css', 'transform')
+      .then((transform) => {
+        const matrixValues = transform.match(/matrix\(([^)]+)\)/)[1].split(', ')
+        const scaleX = parseFloat(matrixValues[0]) // 'a' value from matrix
+        const scaleY = parseFloat(matrixValues[3]) // 'd' value from matrix
+        expect(scaleX).to.eq(1)
+        expect(scaleY).to.eq(1)
+      })
+
     // Click the zoom-related button
     cy.get('[data-cy="LocationViewButton"]').click() // Adjust to your zoom button selector
 
@@ -158,8 +172,8 @@ describe('[Map]', () => {
         const matrixValues = transform.match(/matrix\(([^)]+)\)/)[1].split(', ')
         const scaleX = parseFloat(matrixValues[0]) // 'a' value from matrix
         const scaleY = parseFloat(matrixValues[3]) // 'd' value from matrix
-        expect(scaleX).to.eq(1)
-        expect(scaleY).to.eq(1)
+        expect(scaleX).to.eq(32)
+        expect(scaleY).to.eq(32)
       })
 
     cy.step('Zoom in button prompts for user location and zooms')

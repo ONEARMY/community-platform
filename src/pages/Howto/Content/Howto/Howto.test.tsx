@@ -150,7 +150,7 @@ describe('Howto', () => {
       act(() => {
         wrapper = factory(
           {
-            ...mockHowtoStore(),
+            ...(mockHowtoStore() as any),
           },
           FactoryHowto({
             _createdBy: 'HowtoAuthor',

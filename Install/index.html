@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.5.2">
 <title data-rh="true">Installing your own instance | OneArmy Community Platform</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://docs.platform.onearmy.earth/Install"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Installing your own instance | OneArmy Community Platform"><meta data-rh="true" name="description" content="Requirements"><meta data-rh="true" property="og:description" content="Requirements"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://docs.platform.onearmy.earth/Install"><link data-rh="true" rel="alternate" href="https://docs.platform.onearmy.earth/Install" hreflang="en"><link data-rh="true" rel="alternate" href="https://docs.platform.onearmy.earth/Install" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.55ec4173.css">
-<script src="/assets/js/runtime~main.7f2975a4.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.ff16e239.js" defer="defer"></script>
 <script src="/assets/js/main.c3c35978.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -50,7 +50,7 @@ This occurs more commonly when deploying from a CI environment, and usually sign
 <li><code>VITE_FIREBASE_PROJECT_ID</code></li>
 <li><code>VITE_FIREBASE_STORAGE_BUCKET</code></li>
 <li><code>VITE_GA_TRACKING_ID</code></li>
-<li><code>VITE_PLATFORM_THEME</code></li>
+<li><code>VITE_THEME</code></li>
 <li><code>VITE_CDN_URL</code> - <code>https://cdn-url.com</code> - this is the URL to the CDN where the assets are stored. This is used to load the assets from the CDN instead of the local server. It should <strong>not</strong> include a trailing slash.</li>
 <li><code>VITE_PLATFORM_PROFILES</code> - comma separated list of available profiles. Use <code>ProfileType</code> from modules/profile/index for guidance here. For example: <code>member,workspace</code></li>
 <li><code>VITE_SUPPORTED_MODULES</code> – comma separated list of available modules. See <code>/src/modules/index.ts</code> for the definitions.</li>

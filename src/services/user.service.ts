@@ -1,7 +1,7 @@
-import { getProfileTagsForTheme } from 'src/utils/getProfileTagsForTheme'
 import { collection, getDocs, query, where } from 'firebase/firestore'
-import { DB_ENDPOINTS, IModerationStatus, profileTags } from 'oa-shared'
+import { DB_ENDPOINTS, IModerationStatus } from 'oa-shared'
 import { firestore } from 'src/utils/firebase'
+import { getProfileTagsForTheme } from 'src/utils/getProfileTagsForTheme'
 
 import type { IHowtoDB, IResearchDB, ITag, IUserDB } from 'oa-shared'
 import type { UserCreatedDocs } from 'src/pages/User/types'

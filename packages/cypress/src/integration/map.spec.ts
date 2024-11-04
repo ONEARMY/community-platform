@@ -151,10 +151,16 @@ describe('[Map]', () => {
     // Wait for the zoom action to complete
     cy.wait(500) // Adjust based on zoom animation timing
 
-    // Check if the transform contains 'scale(1)'
+    // Check if the transform matrix has scale factor 1 (for matrix(a, b, c, d, e, f), 'a' and 'd' should be 1)
     cy.get(mapZoomProxySelector)
       .invoke('css', 'transform')
-      .should('contain', 'scale(1)')
+      .then((transform) => {
+        const matrixValues = transform.match(/matrix\(([^)]+)\)/)[1].split(', ')
+        const scaleX = parseFloat(matrixValues[0]) // 'a' value from matrix
+        const scaleY = parseFloat(matrixValues[3]) // 'd' value from matrix
+        expect(scaleX).to.eq(1)
+        expect(scaleY).to.eq(1)
+      })
 
     cy.step('Zoom in button prompts for user location and zooms')
     cy.get('[data-cy="WorldViewButton"]', { timeout: 10000 })

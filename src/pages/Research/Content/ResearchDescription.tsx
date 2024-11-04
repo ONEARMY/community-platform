@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Link, useNavigate } from '@remix-run/react'
 import {
   Button,
@@ -19,7 +19,6 @@ import { TagList } from 'src/common/Tags/TagsList'
 import { logger } from 'src/logger'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { buildStatisticsLabel } from 'src/utils/helpers'
-import { incrementViewCount } from 'src/utils/incrementViewCount'
 import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
@@ -81,14 +80,6 @@ const ResearchDescription = ({
       // at least log the error
     }
   }
-
-  useEffect(() => {
-    incrementViewCount({
-      store,
-      document: research,
-      documentType: 'research',
-    })
-  }, [research._id])
 
   return (
     <Card

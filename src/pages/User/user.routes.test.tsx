@@ -28,7 +28,6 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
     stores: {
       userStore: {
         updateUserBadge: mockUpdateUserBadge,
-        incrementViewCount: vi.fn(),
       },
       aggregationsStore: {
         updateVerifiedUsers: vi.fn(),

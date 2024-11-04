@@ -18,7 +18,6 @@ import { logger } from '../../logger'
 import { auth, EmailAuthProvider } from '../../utils/firebase'
 import { getLocationData } from '../../utils/getLocationData'
 import { formatLowerNoSpecial } from '../../utils/helpers'
-import { incrementDocViewCount } from '../common/incrementDocViewCount'
 import { ModuleStore } from '../common/module.store'
 import { Storage } from '../storage'
 
@@ -272,14 +271,6 @@ export class UserStore extends ModuleStore {
     })
     await this.refreshActiveUserDetails()
     return this.activeUser
-  }
-
-  public async incrementViewCount(user: Partial<IUserDB>) {
-    return await incrementDocViewCount({
-      collection: COLLECTION_NAME,
-      db: this.db,
-      doc: user,
-    })
   }
 
   public async updateUserImpact(

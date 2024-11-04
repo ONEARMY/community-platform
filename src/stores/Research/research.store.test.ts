@@ -412,21 +412,6 @@ describe('research.store', () => {
     })
   })
 
-  describe('incrementViews', () => {
-    it('increments views by one', async () => {
-      const { store, researchItem, updateFn } = await factoryResearchItem()
-
-      // Act
-      await store.incrementViewCount(researchItem)
-      const updatedTotalViews = researchItem.total_views + 1
-
-      expect(updateFn).toHaveBeenCalledWith(
-        expect.objectContaining({ total_views: updatedTotalViews }),
-        expect.anything(),
-      )
-    })
-  })
-
   describe('Subscribe', () => {
     it('adds subscriber to the research article', async () => {
       const { store, researchItem, updateFn } =

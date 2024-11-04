@@ -1,6 +1,7 @@
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { UserProfile } from 'src/pages/User/content/UserProfile'
+import { pageViewService } from 'src/services/pageView.service'
 import { userService } from 'src/services/user.service'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 import { Text } from 'theme-ui'
@@ -15,6 +16,11 @@ export async function loader({ params }: LoaderFunctionArgs) {
     userService.getById(userId),
     userService.getUserCreatedDocs(userId),
   ])
+
+  if (profile?._id) {
+    // not awaited to not block the render
+    pageViewService.incrementViewCount('users', profile._id)
+  }
 
   return json({ profile, userCreatedDocs: userCreatedDocs || [] })
 }

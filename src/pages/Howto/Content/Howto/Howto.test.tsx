@@ -25,7 +25,6 @@ const mockHowtoStore = () => ({
   setActiveHowtoBySlug: vi.fn(),
   activeHowto: howto,
   needsModeration: vi.fn().mockReturnValue(false),
-  incrementViewCount: vi.fn(),
   removeActiveHowto: vi.fn(),
 })
 
@@ -151,7 +150,7 @@ describe('Howto', () => {
       act(() => {
         wrapper = factory(
           {
-            ...mockHowtoStore(),
+            ...(mockHowtoStore() as any),
           },
           FactoryHowto({
             _createdBy: 'HowtoAuthor',

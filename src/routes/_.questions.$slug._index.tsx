@@ -3,6 +3,7 @@ import { useLoaderData } from '@remix-run/react'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { questionService } from 'src/pages/Question/question.service'
 import { QuestionPage } from 'src/pages/Question/QuestionPage'
+import { pageViewService } from 'src/services/pageView.service'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -10,6 +11,11 @@ import type { IQuestionDB, IUploadedFileMeta } from 'oa-shared'
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const question = await questionService.getBySlug(params.slug as string)
+
+  if (question?._id) {
+    // not awaited to not block the render
+    pageViewService.incrementViewCount('questions', question._id)
+  }
 
   return json({ question })
 }

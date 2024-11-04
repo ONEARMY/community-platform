@@ -3,6 +3,7 @@ import { useLoaderData } from '@remix-run/react'
 import { Howto } from 'src/pages/Howto/Content/Howto/Howto'
 import { howtoService } from 'src/pages/Howto/howto.service'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
+import { pageViewService } from 'src/services/pageView.service'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -10,6 +11,11 @@ import type { IHowtoDB } from 'oa-shared'
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const howto = await howtoService.getBySlug(params.slug as string)
+
+  if (howto?._id) {
+    // not awaited to not block the render
+    pageViewService.incrementViewCount('howtos', howto._id)
+  }
 
   return json({ howto })
 }

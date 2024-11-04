@@ -4,6 +4,7 @@ import { ResearchUpdateStatus } from 'oa-shared'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import ResearchArticle from 'src/pages/Research/Content/ResearchArticle'
 import { researchService } from 'src/pages/Research/research.service'
+import { pageViewService } from 'src/services/pageView.service'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -15,6 +16,11 @@ export async function loader({ params }: LoaderFunctionArgs) {
     research?.updates.filter(
       (x) => x.status !== ResearchUpdateStatus.DRAFT && x._deleted !== true,
     ) || []
+
+  if (research?._id) {
+    // not awaited to not block the render
+    pageViewService.incrementViewCount('research', research._id)
+  }
 
   return json({ research, publicUpdates })
 }

@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Link, useNavigate } from '@remix-run/react'
 import {
   Button,
@@ -25,7 +25,6 @@ import {
   isAllowedToDeleteContent,
   isAllowedToEditContent,
 } from 'src/utils/helpers'
-import { incrementViewCount } from 'src/utils/incrementViewCount'
 import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../../../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
@@ -72,14 +71,6 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
       // at least log the error
     }
   }
-
-  useEffect(() => {
-    incrementViewCount({
-      document: howto,
-      documentType: 'howto',
-      store: stores.howtoStore,
-    })
-  }, [howto._id])
 
   return (
     <Card>

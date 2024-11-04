@@ -12,7 +12,7 @@ import {
 } from 'firebase/auth'
 import lodash from 'lodash'
 import { action, makeObservable, observable, toJS } from 'mobx'
-import { EmailNotificationFrequency, IModerationStatus } from 'oa-shared'
+import { EmailNotificationFrequency } from 'oa-shared'
 
 import { logger } from '../../logger'
 import { auth, EmailAuthProvider } from '../../utils/firebase'
@@ -156,31 +156,6 @@ export class UserStore extends ModuleStore {
       .getWhere('_id', '==', _authID)
 
     return lookup2[0]
-  }
-
-  public async getUserCreatedDocs(userID: string) {
-    const howtos = await this.db
-      .collection('howtos')
-      .getWhere('_createdBy', '==', userID)
-    const research = await this.db
-      .collection('research')
-      .getWhere('_createdBy', '==', userID)
-    const researchCollaborated = await this.db
-      .collection('research')
-      .getWhere('collaborators', 'array-contains', userID)
-    const researchCombined = [...research, ...researchCollaborated]
-
-    const howtosFiltered = howtos.filter(
-      (doc) => doc.moderation === IModerationStatus.ACCEPTED,
-    )
-    const researchFiltered = researchCombined.filter(
-      (doc) => doc.moderation === IModerationStatus.ACCEPTED,
-    )
-
-    return {
-      howtos: howtosFiltered,
-      research: researchFiltered,
-    }
   }
 
   public async updateUserBadge(userId: string, badges: IUserBadges) {

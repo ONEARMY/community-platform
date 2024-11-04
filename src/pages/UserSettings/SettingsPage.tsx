@@ -15,21 +15,27 @@ import { SettingsPageNotifications } from './SettingsPageNotifications'
 import { SettingsPageUserProfile } from './SettingsPageUserProfile'
 
 import type { availableGlyphs, ITab } from 'oa-components'
+import type { IUserDB } from 'oa-shared'
 
-export const SettingsPage = () => {
+type SettingsPageProps = {
+  profile: IUserDB
+}
+
+export const SettingsPage = ({ profile }: SettingsPageProps) => {
   const env = useContext(EnvironmentContext)
   const { userStore } = useCommonStores().stores
 
-  const user = userStore.activeUser
-  if (!user) return null
+  if (userStore.activeUser?._id !== profile._id) {
+    return null
+  }
 
-  const isMember = user.profileType === ProfileTypeList.MEMBER
+  const isMember = profile.profileType === ProfileTypeList.MEMBER
   const showImpactTab = !isMember && isPreciousPlastic()
   const showMapTab = isModuleSupported(
     env?.VITE_SUPPORTED_MODULES || '',
     MODULE.MAP,
   )
-  const incompleteProfile = !isProfileComplete(user || undefined)
+  const incompleteProfile = !isProfileComplete(profile || undefined)
 
   const profileTab = {
     title: 'Profile',

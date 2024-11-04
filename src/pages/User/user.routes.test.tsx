@@ -12,6 +12,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { UserRoutes } from './user.routes'
 
+import type { IUserDB } from 'oa-shared'
+
 const Theme = testingThemeStyles
 
 // eslint-disable-next-line prefer-const
@@ -25,9 +27,7 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
   useCommonStores: () => ({
     stores: {
       userStore: {
-        getUserProfile: mockGetUserProfile,
         updateUserBadge: mockUpdateUserBadge,
-        getUserCreatedDocs: vi.fn(),
         incrementViewCount: vi.fn(),
       },
       aggregationsStore: {
@@ -64,19 +64,6 @@ describe('User', () => {
     })
   })
 
-  it('displays user not found page', async () => {
-    // Act
-    let wrapper
-    act(() => {
-      wrapper = getWrapper(null, '/u/does-not-exist')
-    })
-
-    // Assert
-    await waitFor(() => {
-      expect(wrapper.getByText('User not found')).toBeInTheDocument()
-    })
-  })
-
   describe('workspace', () => {
     it('handles workspace with no images', async () => {
       const user = FactoryUser({
@@ -98,13 +85,16 @@ describe('User', () => {
   })
 })
 
-const getWrapper = (user, url?) => {
+const getWrapper = (user: IUserDB, url?: string) => {
   mockGetUserProfile.mockResolvedValue(user)
 
-  const router = createMemoryRouter(createRoutesFromElements(UserRoutes), {
-    initialEntries: [url || `/u/${user.userName}`],
-    basename: '/u',
-  })
+  const router = createMemoryRouter(
+    createRoutesFromElements(UserRoutes(user)),
+    {
+      initialEntries: [url || `/u/${user?.userName}`],
+      basename: '/u',
+    },
+  )
 
   return render(
     <Provider

@@ -1,5 +1,7 @@
 import { MemberBadge, Username, UserStatistics } from 'oa-components'
 import { ExternalLinkLabel, ProfileTypeList, UserRole } from 'oa-shared'
+// eslint-disable-next-line import/no-unresolved
+import { ClientOnly } from 'remix-utils/client-only'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
@@ -13,7 +15,7 @@ import type { IUserDB } from 'oa-shared'
 import type { UserCreatedDocs } from '../types'
 
 interface IProps {
-  docs: UserCreatedDocs | undefined
+  docs: UserCreatedDocs
   user: IUserDB
 }
 
@@ -83,34 +85,38 @@ export const MemberProfile = ({ docs, user }: IProps) => {
                 height: '120px',
               }}
             />
-            <AuthWrapper
-              roleRequired={UserRole.BETA_TESTER}
-              fallback={
-                <UserStatistics
-                  userName={user.userName}
-                  country={user.location?.country}
-                  isVerified={user.verified}
-                  isSupporter={!!user.badges?.supporter}
-                  howtoCount={docs?.howtos.length || 0}
-                  researchCount={docs?.research.length || 0}
-                  usefulCount={user.totalUseful || 0}
-                  totalViews={0}
-                  sx={{ alignSelf: 'stretch' }}
-                />
-              }
-            >
-              <UserStatistics
-                userName={user.userName}
-                country={user.location?.country}
-                isVerified={user.verified}
-                isSupporter={!!user.badges?.supporter}
-                howtoCount={docs?.howtos.length || 0}
-                researchCount={docs?.research.length || 0}
-                usefulCount={user.totalUseful || 0}
-                sx={{ alignSelf: 'stretch' }}
-                totalViews={user.total_views || 0}
-              />
-            </AuthWrapper>
+            <ClientOnly fallback={<></>}>
+              {() => (
+                <AuthWrapper
+                  roleRequired={UserRole.BETA_TESTER}
+                  fallback={
+                    <UserStatistics
+                      userName={user.userName}
+                      country={user.location?.country}
+                      isVerified={user.verified}
+                      isSupporter={!!user.badges?.supporter}
+                      howtoCount={docs?.howtos.length || 0}
+                      researchCount={docs?.research.length || 0}
+                      usefulCount={user.totalUseful || 0}
+                      totalViews={0}
+                      sx={{ alignSelf: 'stretch' }}
+                    />
+                  }
+                >
+                  <UserStatistics
+                    userName={user.userName}
+                    country={user.location?.country}
+                    isVerified={user.verified}
+                    isSupporter={!!user.badges?.supporter}
+                    howtoCount={docs?.howtos.length || 0}
+                    researchCount={docs?.research.length || 0}
+                    usefulCount={user.totalUseful || 0}
+                    sx={{ alignSelf: 'stretch' }}
+                    totalViews={user.total_views || 0}
+                  />
+                </AuthWrapper>
+              )}
+            </ClientOnly>
           </Flex>
           <Flex sx={{ flexGrow: 2, width: '100%', flexDirection: 'column' }}>
             <Flex
@@ -141,9 +147,13 @@ export const MemberProfile = ({ docs, user }: IProps) => {
             <UserContactAndLinks links={userLinks} />
           </Flex>
         </Flex>
-        <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
-          <UserCreatedDocuments docs={docs} />
-        </AuthWrapper>
+        <ClientOnly fallback={<></>}>
+          {() => (
+            <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+              <UserCreatedDocuments docs={docs} />
+            </AuthWrapper>
+          )}
+        </ClientOnly>
       </Card>
     </Flex>
   )

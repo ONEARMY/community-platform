@@ -1,8 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { EmailNotificationFrequency, IModerationStatus } from 'oa-shared'
-import { FactoryHowto } from 'src/test/factories/Howto'
-import { FactoryResearchItem } from 'src/test/factories/ResearchItem'
+import { EmailNotificationFrequency } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -184,98 +182,6 @@ describe('userStore', () => {
         links: expect.any(Array),
         notifications: expect.any(Array),
       })
-    })
-  })
-
-  describe('getUserCreatedDocs', () => {
-    it('returns documents created and collaborated on by the user, with accepted moderation status', async () => {
-      // Mock database calls
-      store.db.getWhere.mockReturnValueOnce([
-        FactoryHowto({
-          _createdBy: 'testUserID',
-          moderation: IModerationStatus.ACCEPTED,
-        }),
-      ])
-      store.db.getWhere.mockReturnValueOnce([
-        FactoryResearchItem({
-          _createdBy: 'testUserID',
-          moderation: IModerationStatus.ACCEPTED,
-        }),
-      ])
-      store.db.getWhere.mockReturnValueOnce([
-        FactoryResearchItem({
-          collaborators: ['testUserID'],
-          moderation: IModerationStatus.ACCEPTED,
-        }),
-      ])
-
-      // Act
-      const res = await store.getUserCreatedDocs('testUserID')
-
-      // Assert
-      expect(res).toEqual({
-        howtos: [
-          expect.objectContaining({
-            _createdBy: 'testUserID',
-            moderation: IModerationStatus.ACCEPTED,
-          }),
-        ],
-        research: [
-          expect.objectContaining({
-            _createdBy: 'testUserID',
-            moderation: IModerationStatus.ACCEPTED,
-          }),
-          expect.objectContaining({
-            collaborators: ['testUserID'],
-            moderation: IModerationStatus.ACCEPTED,
-          }),
-        ],
-      })
-    })
-
-    it('returns an empty object if no documents are found', async () => {
-      // Mock database calls to return empty arrays
-      store.db.getWhere.mockReturnValueOnce([])
-      store.db.getWhere.mockReturnValueOnce([])
-      store.db.getWhere.mockReturnValueOnce([])
-
-      // Act
-      const res = await store.getUserCreatedDocs('testUserID')
-
-      // Assert
-      expect(res).toEqual({ howtos: [], research: [] })
-    })
-
-    it('filters out documents with moderation status other than "accepted"', async () => {
-      // Mock database calls to include documents with different moderation statuses
-      store.db.getWhere.mockReturnValueOnce([
-        FactoryHowto({
-          _createdBy: 'testUserID',
-          moderation: IModerationStatus.DRAFT,
-        }),
-        FactoryHowto({
-          _createdBy: 'testUserID',
-          moderation: IModerationStatus.REJECTED,
-        }),
-        FactoryHowto({
-          _createdBy: 'testUserID',
-          moderation: IModerationStatus.ACCEPTED,
-        }),
-      ])
-      store.db.getWhere.mockReturnValueOnce([
-        FactoryResearchItem({ moderation: IModerationStatus.DRAFT }),
-        FactoryResearchItem({ moderation: IModerationStatus.ACCEPTED }),
-      ])
-      store.db.getWhere.mockReturnValueOnce([
-        FactoryResearchItem({ moderation: IModerationStatus.DRAFT }),
-      ])
-
-      // Act
-      const res = await store.getUserCreatedDocs('testUserID')
-
-      // Assert
-      expect(res.howtos).toHaveLength(1) // Only the accepted howto should be included
-      expect(res.research).toHaveLength(1) // Only the accepted research document should be included
     })
   })
 

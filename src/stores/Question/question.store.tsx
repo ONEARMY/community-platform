@@ -3,7 +3,6 @@ import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { getKeywords } from 'src/utils/searchHelper'
 
-import { incrementDocViewCount } from '../common/incrementDocViewCount'
 import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
@@ -12,7 +11,6 @@ import type {
   IConvertedFileMeta,
   IModerationStatus,
   IQuestion,
-  IQuestionDB,
   IUploadedFileMeta,
 } from 'oa-shared'
 import type { DBEndpoint } from '../databaseV2/endpoints'
@@ -23,14 +21,6 @@ const COLLECTION_NAME = 'questions' as DBEndpoint
 export class QuestionStore extends ModuleStore {
   constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
-  }
-
-  public async incrementViewCount(question: Partial<IQuestionDB>) {
-    await incrementDocViewCount({
-      collection: COLLECTION_NAME,
-      db: this.db,
-      doc: question,
-    })
   }
 
   public async upsertQuestion(values: IQuestion.FormInput) {

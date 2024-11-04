@@ -25,7 +25,6 @@ const mockHowtoStore = () => ({
   setActiveHowtoBySlug: vi.fn(),
   activeHowto: howto,
   needsModeration: vi.fn().mockReturnValue(false),
-  incrementViewCount: vi.fn(),
   removeActiveHowto: vi.fn(),
 })
 

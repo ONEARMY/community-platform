@@ -3,7 +3,6 @@ import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { getKeywords } from 'src/utils/searchHelper'
 
-import { incrementDocViewCount } from '../common/incrementDocViewCount'
 import { changeMentionToUserReference } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
@@ -89,14 +88,6 @@ export class HowtoStore extends ModuleStore {
 
       return updatedHowto.total_downloads
     }
-  }
-
-  public async incrementViewCount(howTo: Partial<IHowtoDB>) {
-    return await incrementDocViewCount({
-      collection: COLLECTION_NAME,
-      db: this.db,
-      doc: howTo,
-    })
   }
 
   private async addUserReference(msg: string): Promise<{

@@ -7,7 +7,6 @@ import { getUserCountry } from 'src/utils/getUserCountry'
 import { hasAdminRights, randomID } from 'src/utils/helpers'
 import { getKeywords } from 'src/utils/searchHelper'
 
-import { incrementDocViewCount } from '../common/incrementDocViewCount'
 import { changeMentionToUserReference } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
@@ -96,14 +95,6 @@ export class ResearchStore extends ModuleStore {
     })
 
     return
-  }
-
-  public async incrementViewCount(researchItem: Partial<IResearch.ItemDB>) {
-    return await incrementDocViewCount({
-      collection: COLLECTION_NAME,
-      db: this.db,
-      doc: researchItem,
-    })
   }
 
   public async deleteResearch(id: string) {

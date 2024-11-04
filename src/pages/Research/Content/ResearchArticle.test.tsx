@@ -61,7 +61,6 @@ describe('Research Article', () => {
   const mockResearchStore = {
     addSubscriberToResearchArticle: vi.fn(),
     formatResearchCommentList: vi.fn(),
-    incrementViewCount: vi.fn(),
   }
 
   it('displays content statistics', async () => {

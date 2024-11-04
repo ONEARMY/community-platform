@@ -146,8 +146,8 @@ describe('[Map]', () => {
     const mapZoomProxySelector = '.leaflet-proxy.leaflet-zoom-animated'
 
     cy.get('[data-cy="WorldViewButton"]').click()
-    cy.wait(500) 
-    
+    cy.wait(500)
+
     // Check if the transform matrix has scale factor 1 (for matrix(a, b, c, d, e, f), 'a' and 'd' should be 1)
     cy.get(mapZoomProxySelector)
       .invoke('css', 'transform')
@@ -159,9 +159,8 @@ describe('[Map]', () => {
         expect(scaleY).to.eq(1)
       })
 
-    
-    cy.get('[data-cy="LocationViewButton"]').click() 
-    cy.wait(500) 
+    cy.get('[data-cy="LocationViewButton"]').click()
+    cy.wait(500)
 
     // Check if the transform matrix has scale factor 1 (for matrix(a, b, c, d, e, f), 'a' and 'd' should be 1)
     cy.get(mapZoomProxySelector)

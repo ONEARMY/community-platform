@@ -1,5 +1,6 @@
-import { Flex, Heading, Image, Text } from 'theme-ui'
+import { Flex, Heading, Text } from 'theme-ui'
 
+import { Button } from '../Button/Button'
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
 import { MapFilterListItem } from './MapFilterListItem'
@@ -16,20 +17,25 @@ export interface IProps {
   availableFilters: MapFilterOptionsList
   onClose: () => void
   onFilterChange: (filter: MapFilterOption) => void
+  pinCount: number
 }
 
 export const MapFilterList = (props: IProps) => {
-  const { activeFilters, availableFilters, onClose, onFilterChange } = props
+  const { activeFilters, availableFilters, onClose, onFilterChange, pinCount } =
+    props
 
   const profileFilters = availableFilters.filter(
     ({ filterType }) => filterType === 'profileType',
   )
-  const workspaceFilters = availableFilters.filter(
-    ({ filterType }) => filterType === 'workspaceType',
+
+  const tagFilters = availableFilters.filter(
+    ({ filterType }) => filterType === 'profileTag',
   )
 
   const isActive = (checkingFilter: string) =>
     !!activeFilters.find((filter) => filter.label === checkingFilter)
+
+  const buttonLabel = `Show ${pinCount} result${pinCount === 1 ? '' : 's'}`
 
   return (
     <Flex
@@ -37,10 +43,12 @@ export const MapFilterList = (props: IProps) => {
       sx={{
         flexDirection: 'column',
         position: 'relative',
-        gap: 2,
+        gap: 4,
       }}
     >
-      <Flex sx={{ gap: 2 }}>
+      <Flex
+        sx={{ alignItems: 'center', gap: 2, justifyContent: 'space-between' }}
+      >
         <Heading as="h3" variant="small">
           So what are you looking for?
         </Heading>
@@ -53,37 +61,8 @@ export const MapFilterList = (props: IProps) => {
         />
       </Flex>
 
-      {workspaceFilters.length > 0 && (
-        <>
-          <Text>Workspace:</Text>
-          <MapFilterListWrapper>
-            {workspaceFilters.map((typeFilter, index) => {
-              const onClick = () => onFilterChange(typeFilter)
-
-              return (
-                <MapFilterListItem
-                  active={isActive(typeFilter.label)}
-                  key={index}
-                  onClick={onClick}
-                >
-                  {typeFilter.imageSrc && (
-                    <Image
-                      src={typeFilter.imageSrc}
-                      sx={{ height: 30, width: 30 }}
-                    />
-                  )}
-                  <Text variant="quiet" sx={{ fontSize: 1 }}>
-                    {typeFilter.label}
-                  </Text>
-                </MapFilterListItem>
-              )
-            })}
-          </MapFilterListWrapper>
-        </>
-      )}
-
       {profileFilters.length > 0 && (
-        <>
+        <Flex sx={{ gap: 1, flexDirection: 'column' }}>
           <Text>Profiles:</Text>
           <MapFilterListWrapper>
             {profileFilters.map((typeFilter, index) => {
@@ -94,6 +73,7 @@ export const MapFilterList = (props: IProps) => {
                   active={isActive(typeFilter.label)}
                   key={index}
                   onClick={onClick}
+                  filterType="profile"
                 >
                   <MemberBadge
                     size={30}
@@ -106,8 +86,42 @@ export const MapFilterList = (props: IProps) => {
               )
             })}
           </MapFilterListWrapper>
-        </>
+        </Flex>
       )}
+
+      {tagFilters.length > 0 && (
+        <Flex sx={{ gap: 1, flexDirection: 'column' }}>
+          <Text>Activities:</Text>
+          <MapFilterListWrapper>
+            {tagFilters.map((typeFilter, index) => {
+              const onClick = () => onFilterChange(typeFilter)
+
+              return (
+                <MapFilterListItem
+                  active={isActive(typeFilter.label)}
+                  key={index}
+                  onClick={onClick}
+                  sx={{ maxWidth: 'auto', width: 'auto' }}
+                  filterType="tag"
+                >
+                  <Text variant="quiet" sx={{ fontSize: 1 }}>
+                    {typeFilter.label}
+                  </Text>
+                </MapFilterListItem>
+              )
+            })}
+          </MapFilterListWrapper>
+        </Flex>
+      )}
+
+      <Button
+        data-cy="MapFilterList-ShowResultsButton"
+        icon="sliders"
+        onClick={() => onClose()}
+        sx={{ alignSelf: 'flex-start' }}
+      >
+        {buttonLabel}
+      </Button>
     </Flex>
   )
 }

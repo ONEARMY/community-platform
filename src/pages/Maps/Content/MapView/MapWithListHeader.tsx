@@ -46,14 +46,20 @@ export const MapWithListHeader = (props: IProps) => {
   const toggleFilterModal = () => setShowFilters(!showFilters)
   const hasFiltersSelected = activePinFilters.length !== 0
 
+  const sx = {
+    width: ['350px', '600px'],
+    minWidth: '350px',
+  }
+
   return (
     <>
-      <Modal onDidDismiss={toggleFilterModal} isOpen={showFilters}>
+      <Modal onDidDismiss={toggleFilterModal} isOpen={showFilters} sx={sx}>
         <MapFilterList
           activeFilters={activePinFilters}
           availableFilters={availableFilters}
           onClose={toggleFilterModal}
           onFilterChange={onFilterChange}
+          pinCount={filteredPins?.length || 0}
         />
       </Modal>
 

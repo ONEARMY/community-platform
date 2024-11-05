@@ -1,18 +1,25 @@
 import { CardButton } from '../CardButton/CardButton'
 
+import type { ThemeUIStyleObject } from 'theme-ui'
+
 interface IProps {
   active: boolean
   onClick: () => void
   children: React.ReactNode
+  filterType: string
+  sx?: ThemeUIStyleObject | undefined
 }
 
-export const MapFilterListItem = ({ active, onClick, children }: IProps) => {
+export const MapFilterListItem = (props: IProps) => {
+  const { active, onClick, children, filterType, sx } = props
   return (
     <CardButton
-      data-cy={`MapFilterListItem${active ? '-active' : ''}`}
+      data-cy={`MapFilterListItem-${filterType}${active ? '-active' : ''}`}
       onClick={onClick}
       extrastyles={{
         display: 'flex',
+        maxWidth: ['100%', '49%'],
+        width: '500px',
         flexDirection: 'row',
         backgroundColor: 'offWhite',
         padding: 1,
@@ -27,6 +34,7 @@ export const MapFilterListItem = ({ active, onClick, children }: IProps) => {
               borderColor: 'offWhite',
               ':hover': { borderColor: 'offWhite' },
             }),
+        ...sx,
       }}
     >
       {children}

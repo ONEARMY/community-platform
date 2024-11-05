@@ -9,13 +9,6 @@ export const FactoryMapPin = (
   _id: faker.string.uuid(),
   _deleted: faker.datatype.boolean(),
   type: faker.helpers.arrayElement(Object.values(ProfileTypeList)),
-  subType: faker.helpers.arrayElement([
-    'shredder',
-    'sheetpress',
-    'extrusion',
-    'injection',
-    'mix',
-  ]),
   verified: faker.datatype.boolean(),
   moderation: faker.helpers.arrayElement([
     IModerationStatus.DRAFT,

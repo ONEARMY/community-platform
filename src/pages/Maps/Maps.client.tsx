@@ -1,6 +1,7 @@
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
+import { isPreciousPlastic } from 'src/config/config'
 import { filterMapPinsByType } from 'src/stores/Maps/filter'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import { Box } from 'theme-ui'
@@ -75,7 +76,6 @@ const MapsPage = observer(() => {
   const promptUserLocation = async () => {
     try {
       const position = await GetLocation()
-      console.log('position: ', position)
       setCenter({
         lat: position.coords.latitude,
         lng: position.coords.longitude,
@@ -96,9 +96,11 @@ const MapsPage = observer(() => {
     ])
   }, [mapPins])
 
+  // Only really for the old map - can be removed soon
   const visibleMapPins = useMemo(() => {
-    return filterMapPinsByType(mapPins, activePinFilters)
-  }, [mapPins, activePinFilters])
+    const hideMemberPins = !showNewMap && isPreciousPlastic()
+    return filterMapPinsByType(mapPins, activePinFilters, hideMemberPins)
+  }, [activePinFilters, mapPins, showNewMap])
 
   const selectPinByUserId = async (userId: string) => {
     // First check the mapPins to see if the pin is already
@@ -157,19 +159,19 @@ const MapsPage = observer(() => {
         <MapWithList
           activePin={selectedPin}
           center={center}
+          initialZoom={INITIAL_ZOOM}
           mapRef={newMapRef}
           notification={notification}
+          onBlur={onBlur}
           onLocationChange={(latlng) => setCenter(latlng)}
           onPinClicked={(pin) => {
             selectPinByUserId(pin._id)
             navigate(`/map#${pin._id}`)
           }}
-          onBlur={onBlur}
           pins={visibleMapPins}
+          promptUserLocation={promptUserLocation}
           setZoom={setZoom}
           zoom={zoom}
-          promptUserLocation={promptUserLocation}
-          INITIAL_ZOOM={INITIAL_ZOOM}
         />
       )}
     </Box>

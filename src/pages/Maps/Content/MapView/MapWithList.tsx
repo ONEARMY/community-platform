@@ -66,6 +66,14 @@ export const MapWithList = (props: IProps) => {
     )
   }, [pins])
 
+  const buttonStyle = {
+    backgroundColor: 'white',
+    padding: '20px',
+    ':hover': {
+      backgroundColor: 'lightgray',
+    },
+  }
+
   useEffect(() => {
     const workspaceTypeFilters = activePinFilters
       .filter(({ filterType }) => filterType === 'workspaceType')
@@ -240,6 +248,43 @@ export const MapWithList = (props: IProps) => {
         onresize={handleLocationFilter}
         useFlyTo
       >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 2,
+            right: 2,
+            zIndex: 1000,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+          }}
+        >
+          {/* Location button to Zoom in to your location */}
+          <Button
+            data-tip="Zoom in to your location"
+            data-cy="LocationViewButton"
+            sx={buttonStyle}
+            onClick={() => {
+              promptUserLocation()
+              setZoom(6)
+            }}
+            icon="gps-location"
+          />
+          <Tooltip id="locationButton-tooltip" />
+
+          {/* Globe button to Zoom out to world view */}
+          <Button
+            data-tip="Zoom out to world view"
+            data-cy="WorldViewButton"
+            sx={buttonStyle}
+            onClick={() => {
+              setZoom(1)
+            }}
+            icon="globe"
+          />
+          <Tooltip id="worldViewButton-tooltip" />
+        </Box>
+
         <Flex
           sx={{
             flexDirection: 'column',
@@ -257,63 +302,6 @@ export const MapWithList = (props: IProps) => {
           >
             Show list view
           </Button>
-
-          {/* Location button to Zoom in to your location */}
-          <Button
-            data-tip="Zoom in to your location"
-            data-cy="LocationViewButton"
-            sx={{
-              zIndex: 1000,
-              backgroundColor: 'white',
-              borderRadius: '50%',
-              padding: '6px',
-              width: '32px',
-              height: '32px',
-              display: 'flex',
-              justifyContent: 'center',
-              position: 'absolute',
-              bottom: '125px',
-              right: '30px',
-              ':hover': {
-                backgroundColor: 'lightgray',
-              },
-            }}
-            onClick={() => {
-              promptUserLocation()
-              setZoom(6)
-            }}
-            icon="gps-location"
-            showIconOnly
-          />
-          <Tooltip id="locationButton-tooltip" />
-
-          {/* Globe button to Zoom out to world view */}
-          <Button
-            data-tip="Zoom out to world view"
-            data-cy="WorldViewButton"
-            sx={{
-              zIndex: 1000,
-              backgroundColor: 'white',
-              borderRadius: '50%',
-              padding: '6px',
-              width: '32px',
-              height: '32px',
-              display: 'flex',
-              justifyContent: 'center',
-              position: 'absolute',
-              bottom: '85px',
-              right: '30px',
-              ':hover': {
-                backgroundColor: 'lightgray',
-              },
-            }}
-            onClick={() => {
-              setZoom(1)
-            }}
-            icon="globe"
-            showIconOnly
-          />
-          <Tooltip id="globeButton-tooltip" />
 
           {notification && notification !== '' && (
             <Button sx={{ zIndex: 1000 }} variant="subtle">

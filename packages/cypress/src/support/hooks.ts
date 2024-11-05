@@ -16,6 +16,7 @@ before(() => {
   Cypress.Promise.onPossiblyUnhandledRejection((error) => {
     throw error
   })
+  localStorage.clear()
   cy.clearServiceWorkers()
   cy.deleteIDB('OneArmyCache')
 })

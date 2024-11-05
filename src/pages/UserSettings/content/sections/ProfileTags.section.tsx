@@ -3,7 +3,7 @@ import TagsSelect from 'src/common/Tags/TagsSelect'
 import { fields } from 'src/pages/UserSettings/labels'
 import { userService } from 'src/services/user.service'
 import { COMPARISONS } from 'src/utils/comparisons'
-import { Flex, Heading, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 
 import { FlexSectionContainer } from '../elements'
 
@@ -17,11 +17,13 @@ export const ProfileTags = () => {
         sx={{
           flexDirection: 'column',
           justifyContent: 'space-between',
-          gap: 2,
+          gap: 1,
         }}
       >
-        <Heading as="h2">{title}</Heading>
-        <Text variant="quiet">{description}</Text>
+        <Text>{title}</Text>
+        <Text variant="quiet" sx={{ fontSize: 2 }}>
+          {description}
+        </Text>
         <Field
           name="tags"
           component={WrappedTagsSelect}
@@ -41,6 +43,7 @@ const WrappedTagsSelect = ({ input, ...rest }) => {
       value={input.value}
       onChange={(tags) => input.onChange(tags)}
       tagsSource={profileTags}
+      isForm
       {...rest}
     />
   )

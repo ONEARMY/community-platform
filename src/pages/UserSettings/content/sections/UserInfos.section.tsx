@@ -23,6 +23,7 @@ import {
 } from '../../constants'
 import { FlexSectionContainer } from '../elements'
 import { ProfileLinkField } from '../fields/ProfileLink.field'
+import { ProfileTags } from './ProfileTags.section'
 
 import type { IUser } from 'oa-shared'
 
@@ -79,6 +80,8 @@ export const UserInfosSection = ({ formValues }: IProps) => {
             validateFields={[]}
           />
         </Flex>
+
+        {!isMemberProfile && <ProfileTags />}
 
         <Flex sx={{ flexDirection: 'column', gap: 1 }}>
           <Text>{`${about.title} *`}</Text>

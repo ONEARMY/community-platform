@@ -1,8 +1,19 @@
-import { profileTags } from 'oa-shared'
+import { allCommunityProfileTags } from 'oa-shared'
 
+import { CONFIG } from '../config/config'
 import { valuesAreDeepEqual } from '../Utils'
 
 import type { ISelectedTags, ITag, IUserDB } from 'oa-shared'
+
+const projectName = () => {
+  const productionOptions = {
+    onearmyworld: 'precious-plastic',
+    'fixing-fashion-prod': 'fixing-fashion',
+    'project-kamp-community': 'project-kamp',
+  }
+
+  return productionOptions[CONFIG.service.project_id] || 'precious-plastic'
+}
 
 export const hasDetailsChanged = (
   prevUser: IUserDB,
@@ -87,8 +98,10 @@ export const getFirstCoverImage = (coverImages: IUserDB['coverImages']) => {
 // For ease, duplicated from src/utils/getValidTags.ts
 export const getValidTags = (tagIds: ISelectedTags) => {
   const selectedTagIds = Object.keys(tagIds).filter((id) => tagIds[id] === true)
+  const projectTags = allCommunityProfileTags[projectName()]
+
   const tags: ITag[] = selectedTagIds
-    .map((id) => profileTags.find(({ _id }) => id === _id))
+    .map((id) => projectTags.find(({ _id }) => id === _id))
     .filter((tag): tag is ITag => !!tag)
     .filter(({ _deleted }) => _deleted !== true)
 

@@ -16,6 +16,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { QuestionPage } from './QuestionPage'
 
+import type { IQuestionDB } from 'oa-shared'
 import type { Mock } from 'vitest'
 
 const Theme = testingThemeStyles
@@ -62,12 +63,6 @@ describe('Questions', () => {
   beforeEach(() => {
     // Setup a fresh instance of the mock store before each test
     mockQuestionStore = {
-      activeQuestionItem: mockQuestionItem,
-      incrementViewCount: vi.fn(),
-      fetchQuestionBySlug: vi.fn(() => {
-        return mockQuestionItem
-      }),
-      upsertQuestion: vi.fn(),
       toggleSubscriberStatusByUserName: vi.fn(),
       toggleUsefulByUser: vi.fn(),
     }
@@ -92,18 +87,11 @@ describe('Questions', () => {
         _deleted: faker.datatype.boolean(),
         _contentModifiedTimestamp: faker.date.past().toString(),
       }
-      ;(useQuestionStore as Mock).mockReturnValue({
-        ...mockQuestionStore,
-        activeQuestionItem: mockQuestionItem,
-        fetchQuestionBySlug: vi.fn(() => {
-          return mockQuestionItem
-        }),
-      })
 
       // Act
       let wrapper
       act(() => {
-        wrapper = getWrapper()
+        wrapper = getWrapper(mockQuestionItem)
       })
 
       // Assert: Check the breadcrumb items and chevrons
@@ -133,18 +121,11 @@ describe('Questions', () => {
       mockQuestionItem.title =
         'Do you prefer camping near a lake or in a forest?'
       mockQuestionItem.questionCategory = undefined
-      ;(useQuestionStore as Mock).mockReturnValue({
-        ...mockQuestionStore,
-        activeQuestionItem: mockQuestionItem,
-        fetchQuestionBySlug: vi.fn(() => {
-          return mockQuestionItem
-        }),
-      })
 
       // Act
       let wrapper
       act(() => {
-        wrapper = getWrapper()
+        wrapper = getWrapper(mockQuestionItem)
       })
 
       // Assert: Check the breadcrumb items and chevrons
@@ -168,10 +149,14 @@ describe('Questions', () => {
   })
 })
 
-const getWrapper = () => {
+const getWrapper = (question: IQuestionDB) => {
   const router = createMemoryRouter(
     createRoutesFromElements(
-      <Route path="/questions/:slug" key={1} element={<QuestionPage />} />,
+      <Route
+        path="/questions/:slug"
+        key={1}
+        element={<QuestionPage question={question} />}
+      />,
     ),
     {
       initialEntries: ['/questions/question'],

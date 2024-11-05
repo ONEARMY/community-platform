@@ -1,4 +1,6 @@
+import type { IHowtoDB, IResearchDB } from 'oa-shared'
+
 export interface UserCreatedDocs {
-  howtos: any
-  research: any
+  howtos: IHowtoDB[]
+  research: IResearchDB[]
 }

@@ -12,9 +12,8 @@ import {
   QuestionStore,
   QuestionStoreContext,
 } from 'src/stores/Question/question.store'
-import { SeoTagsUpdateComponent } from 'src/utils/seo'
 
-export async function clientLoader() {
+export async function loader() {
   return null
 }
 
@@ -29,7 +28,6 @@ export default function Index() {
 
   return (
     <Main style={{ flex: 1 }}>
-      <SeoTagsUpdateComponent title="Questions" />
       <QuestionStoreContext.Provider value={new QuestionStore(rootStore)}>
         <DiscussionStoreContext.Provider value={new DiscussionStore(rootStore)}>
           <Outlet />

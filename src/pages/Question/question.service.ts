@@ -20,7 +20,7 @@ import type {
   QueryFilterConstraint,
   QueryNonFilterConstraint,
 } from 'firebase/firestore'
-import type { ICategory, IQuestion } from 'oa-shared'
+import type { ICategory, IQuestion, IQuestionDB } from 'oa-shared'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 export enum QuestionSearchParams {
@@ -160,11 +160,38 @@ const getSort = (sort: QuestionSortOption) => {
   }
 }
 
+const getBySlug = async (slug: string) => {
+  // Get all that match the slug, to avoid creating an index (blocker for cypress tests)
+  let snapshot = await getDocs(
+    query(
+      collection(firestore, DB_ENDPOINTS.questions),
+      where('slug', '==', slug),
+    ),
+  )
+
+  if (snapshot.size === 0) {
+    // try previous slugs if slug is not recognized as primary
+    snapshot = await getDocs(
+      query(
+        collection(firestore, DB_ENDPOINTS.questions),
+        where('previousSlugs', 'array-contains', slug),
+      ),
+    )
+  }
+
+  if (snapshot.size === 0) {
+    return null
+  }
+
+  return snapshot.docs[0].data() as IQuestionDB
+}
+
 export const questionService = {
   search,
   getQuestionCategories,
   getDraftCount,
   getDrafts,
+  getBySlug,
 }
 
 export const exportedForTesting = {

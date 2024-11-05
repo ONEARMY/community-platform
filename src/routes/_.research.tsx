@@ -6,7 +6,7 @@ import {
   ResearchStoreContext,
 } from 'src/stores/Research/research.store'
 
-export async function clientLoader() {
+export async function loader() {
   return null
 }
 

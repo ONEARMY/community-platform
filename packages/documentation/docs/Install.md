@@ -46,7 +46,7 @@ You will need to set up a CircleCI context for each target environment. This con
 - `VITE_FIREBASE_PROJECT_ID`
 - `VITE_FIREBASE_STORAGE_BUCKET`
 - `VITE_GA_TRACKING_ID`
-- `VITE_PLATFORM_THEME`
+- `VITE_THEME`
 - `VITE_CDN_URL` - `https://cdn-url.com` - this is the URL to the CDN where the assets are stored. This is used to load the assets from the CDN instead of the local server. It should **not** include a trailing slash.
 - `VITE_PLATFORM_PROFILES` - comma separated list of available profiles. Use `ProfileType` from modules/profile/index for guidance here. For example: `member,workspace`
 - `VITE_SUPPORTED_MODULES` – comma separated list of available modules. See `/src/modules/index.ts` for the definitions.

@@ -80,6 +80,11 @@ const getSiteVariant = (): siteVariants => {
 
 const siteVariant = getSiteVariant()
 
+export const isProductionEnvironment = (): boolean => {
+  const site = getSiteVariant()
+  return site === 'production' ? true : false
+}
+
 /*********************************************************************************************** /
                                         Production
 /********************************************************************************************** */

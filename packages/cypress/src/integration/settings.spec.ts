@@ -51,6 +51,7 @@ describe('[Settings]', () => {
       const description = "I'm a very active member"
       const mapPinDescription = 'Fun, vibrant and full of amazing people'
       const profileType = 'member'
+      const tag = 'Sewing'
       const user = generateNewUserDetails()
       const url = 'https://social.network'
 
@@ -79,6 +80,7 @@ describe('[Settings]', () => {
         country,
         description,
       })
+      cy.selectTag(tag, '[data-cy=tag-select]')
       cy.get('[data-cy="country:BO"]')
 
       cy.step('Errors if trying to upload invalid image')
@@ -242,6 +244,40 @@ describe('[Settings]', () => {
       cy.visit('/sign-in')
     })
 
+    it('Can create member', () => {
+      // Comprehensive member test above for FF,
+      // minimal spec here for PP specific functionality
+
+      const country = 'Bolivia'
+      const displayName = 'settings_member_new'
+      const description = "I'm a very active member"
+      const profileType = 'member'
+      const user = generateNewUserDetails()
+      const tag = 'Melting'
+
+      cy.signUpNewUser(user)
+      cy.get('[data-cy=complete-profile-button]').click()
+
+      cy.step('Can set the required fields')
+      cy.setSettingFocus(profileType)
+      cy.setSettingBasicUserInfo({
+        displayName,
+        country,
+        description,
+      })
+      cy.selectTag(tag, '[data-cy=tag-select]')
+      cy.setSettingAddContactLink({
+        index: 0,
+        label: ExternalLinkLabel.SOCIAL_MEDIA,
+        url: 'http://something.to.delete/',
+      })
+      cy.saveSettingsForm()
+
+      cy.step('Updated settings display on profile')
+      cy.visit(`u/${user.username}`)
+      cy.contains(tag)
+    })
+
     it('Can create space', () => {
       const coverImage = 'profile-cover-1-edited'
       const userImage = 'avatar'
@@ -365,10 +401,40 @@ describe('[Settings]', () => {
     })
 
     it('[Member]', () => {
+      // Comprehensive member test above for FF,
+      // minimal spec here for PK specific functionality
+
       cy.signUpNewUser()
       cy.visit('/settings')
       cy.contains('Infos')
       cy.get('[data-cy=FocusSection]').should('not.exist')
+
+      const country = 'Bolivia'
+      const displayName = 'settings_member_new'
+      const description = "I'm a very active member"
+      const tag = 'Landscaping'
+      const user = generateNewUserDetails()
+
+      cy.signUpNewUser(user)
+      cy.get('[data-cy=complete-profile-button]').click()
+
+      cy.step('Can set the required fields')
+      cy.setSettingBasicUserInfo({
+        displayName,
+        country,
+        description,
+      })
+      cy.selectTag(tag, '[data-cy=tag-select]')
+      cy.setSettingAddContactLink({
+        index: 0,
+        label: ExternalLinkLabel.SOCIAL_MEDIA,
+        url: 'http://something.to.delete/',
+      })
+      cy.saveSettingsForm()
+
+      cy.step('Updated settings display on profile')
+      cy.visit(`u/${user.username}`)
+      cy.contains(tag)
     })
   })
 })

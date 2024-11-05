@@ -3,7 +3,6 @@ import type { DBDoc } from './db'
 import type { IModerationStatus } from './moderation'
 import type { INotification, INotificationSettings } from './notifications'
 import type { IUploadedFileMeta } from './storage'
-import type { ISelectedTags } from './tags'
 
 /* eslint-disable @typescript-eslint/naming-convention */
 export enum UserRole {
@@ -99,6 +98,10 @@ export const ProfileTypeList = {
 export type ProfileTypeName =
   (typeof ProfileTypeList)[keyof typeof ProfileTypeList]
 
+export type MemberOrSpace =
+  | (typeof ProfileTypeList)['MEMBER']
+  | (typeof ProfileTypeList)['SPACE']
+
 // Below are primarily used for PP
 
 export type WorkspaceType =
@@ -165,7 +168,7 @@ export interface IUser {
   total_views?: number
 
   // New generic profile field for all profile types
-  tags?: ISelectedTags
+  tags?: { [key: string]: boolean }
 
   // Primary PP profile type related fields
   profileType: ProfileTypeName

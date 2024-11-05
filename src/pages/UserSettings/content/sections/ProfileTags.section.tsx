@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Field } from 'react-final-form'
 import TagsSelect from 'src/common/Tags/TagsSelect'
 import { fields } from 'src/pages/UserSettings/labels'
@@ -7,8 +8,32 @@ import { Flex, Text } from 'theme-ui'
 
 import { FlexSectionContainer } from '../elements'
 
-export const ProfileTags = () => {
+interface IProps {
+  isMemberProfile: boolean
+}
+
+export const ProfileTags = ({ isMemberProfile }: IProps) => {
   const { description, title } = fields.tags
+
+  const WrappedTagsSelect = ({ input, ...rest }) => {
+    const { getProfileTags } = userService
+    const profileTags = getProfileTags(isMemberProfile ? 'member' : 'space')
+
+    return (
+      <TagsSelect
+        value={input.value}
+        onChange={(tags) => input.onChange(tags)}
+        tagsSource={profileTags}
+        isForm
+        {...rest}
+      />
+    )
+  }
+
+  const memoWrappedTagsSelect = useMemo(
+    () => WrappedTagsSelect,
+    [isMemberProfile],
+  )
 
   return (
     <FlexSectionContainer>
@@ -26,25 +51,10 @@ export const ProfileTags = () => {
         </Text>
         <Field
           name="tags"
-          component={WrappedTagsSelect}
+          component={memoWrappedTagsSelect}
           isEqual={COMPARISONS.tags}
         />
       </Flex>
     </FlexSectionContainer>
-  )
-}
-
-const WrappedTagsSelect = ({ input, ...rest }) => {
-  const { getProfileTags } = userService
-  const profileTags = getProfileTags()
-
-  return (
-    <TagsSelect
-      value={input.value}
-      onChange={(tags) => input.onChange(tags)}
-      tagsSource={profileTags}
-      isForm
-      {...rest}
-    />
   )
 }

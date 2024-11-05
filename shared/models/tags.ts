@@ -2,6 +2,7 @@
 // maps tag keys to boolean values. e.g. [{tag1:true,tag2:true}]
 
 import type { DBDoc } from './db'
+import type { MemberOrSpace } from './user'
 
 // this is to allow easier query of multiple tags within the database (e.g. selectedTags.tag1==true && selectedTags.tag2==true)
 export interface ISelectedTags {
@@ -18,4 +19,8 @@ when building tag uploader it should enforce reasonable max size image (say 500p
 export interface ITag extends DBDoc {
   label: string
   image?: string
+}
+
+export interface IProfileTag extends ITag {
+  profileType: MemberOrSpace
 }

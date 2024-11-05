@@ -64,7 +64,7 @@ export const ChangeEmailForm = () => {
           {headings.changeEmail}
         </Heading>
         <ButtonIcon
-          data-cy="MapFilterList-CloseButton"
+          data-cy="ChangeEmail-DropdownButton"
           icon={dropdownIcon}
           onClick={() => setIsExpanded(!isExpanded)}
           sx={{

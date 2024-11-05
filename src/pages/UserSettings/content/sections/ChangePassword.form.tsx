@@ -59,7 +59,7 @@ export const ChangePasswordForm = () => {
           {headings.changePassword}
         </Heading>
         <ButtonIcon
-          data-cy="MapFilterList-CloseButton"
+          data-cy="ChangePassword-DropdownButton"
           icon={dropdownIcon}
           sx={{
             paddingRight: 3,

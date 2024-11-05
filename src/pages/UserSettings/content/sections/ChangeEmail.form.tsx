@@ -143,21 +143,6 @@ export const ChangeEmailForm = () => {
           }}
         />
       )}
-
-      {/* <Button
-        type="button"
-        data-cy="changeEmailButton"
-        onClick={() => setIsExpanded(!isExpanded)}
-        variant="secondary"
-        sx={{
-          alignSelf: 'flex-start',
-        }}
-      >
-        <Flex sx={{ gap: 2 }}>
-          <Text>{buttons.changeEmail}</Text>
-          <Icon glyph={glyph} />
-        </Flex>
-      </Button> */}
     </Flex>
   )
 }

@@ -6,14 +6,12 @@ import { logger } from 'src/logger'
 import useDrafts from 'src/pages/common/Drafts/useDrafts'
 import { Box, Flex } from 'theme-ui'
 
-import { ITEMS_PER_PAGE } from '../constants'
 import { listing } from '../labels'
 import { researchService } from '../research.service'
 import { ResearchFilterHeader } from './ResearchListHeader'
 import ResearchListItem from './ResearchListItem'
 import { ResearchSearchParams } from './ResearchSearchParams'
 
-import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
 import type { IResearch, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from '../ResearchSortOptions'
 
@@ -26,9 +24,7 @@ const ResearchList = observer(() => {
       getDrafts: researchService.getDrafts,
     })
   const [total, setTotal] = useState<number>(0)
-  const [lastVisible, setLastVisible] = useState<
-    QueryDocumentSnapshot<DocumentData, DocumentData> | undefined
-  >(undefined)
+  const [lastId, setLastId] = useState<string | undefined>(undefined)
 
   const [searchParams, setSearchParams] = useSearchParams()
   const q = searchParams.get(ResearchSearchParams.q) || ''
@@ -55,9 +51,7 @@ const ResearchList = observer(() => {
     }
   }, [q, category, status, sort])
 
-  const fetchResearchItems = async (
-    skipFrom?: QueryDocumentSnapshot<DocumentData, DocumentData>,
-  ) => {
+  const fetchResearchItems = async (lastDocId?: string) => {
     setIsFetching(true)
 
     try {
@@ -68,18 +62,17 @@ const ResearchList = observer(() => {
         category,
         sort,
         status,
-        skipFrom,
-        ITEMS_PER_PAGE,
+        lastDocId,
       )
 
-      if (skipFrom) {
+      if (lastDocId) {
         // if skipFrom is set, means we are requesting another page that should be appended
         setResearchItems((items) => [...items, ...result.items])
       } else {
         setResearchItems(result.items)
       }
 
-      setLastVisible(result.lastVisible)
+      setLastId(result.items[result.items.length - 1]._id)
 
       setTotal(result.total)
     } catch (error) {
@@ -128,7 +121,7 @@ const ResearchList = observer(() => {
               >
                 <Button
                   type="button"
-                  onClick={() => fetchResearchItems(lastVisible)}
+                  onClick={() => fetchResearchItems(lastId)}
                 >
                   {listing.loadMore}
                 </Button>

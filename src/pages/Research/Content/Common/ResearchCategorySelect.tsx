@@ -13,11 +13,7 @@ const ResearchFieldCategory = () => {
   useEffect(() => {
     const getCategories = async () => {
       const categories = await researchService.getResearchCategories()
-      setOptions(
-        categories
-          .filter((x) => !x._deleted)
-          .map((x) => ({ label: x.label, value: x })),
-      )
+      setOptions(categories.map((x) => ({ label: x.label, value: x })))
     }
 
     getCategories()

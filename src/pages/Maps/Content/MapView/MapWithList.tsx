@@ -29,6 +29,7 @@ interface IProps {
   setZoom: (arg: number) => void
   zoom: number
   promptUserLocation: () => Promise<void>
+  INITIAL_ZOOM: number
 }
 
 export const MapWithList = (props: IProps) => {
@@ -44,6 +45,7 @@ export const MapWithList = (props: IProps) => {
     setZoom,
     zoom,
     promptUserLocation,
+    INITIAL_ZOOM
   } = props
 
   const [activePinFilters, setActivePinFilters] =
@@ -278,7 +280,7 @@ export const MapWithList = (props: IProps) => {
             data-cy="WorldViewButton"
             sx={buttonStyle}
             onClick={() => {
-              setZoom(1)
+              setZoom(INITIAL_ZOOM)
             }}
             icon="globe"
           />

@@ -169,6 +169,7 @@ const MapsPage = observer(() => {
           setZoom={setZoom}
           zoom={zoom}
           promptUserLocation={promptUserLocation}
+          INITIAL_ZOOM={INITIAL_ZOOM}
         />
       )}
     </Box>

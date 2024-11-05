@@ -3,11 +3,19 @@ import { DB_ENDPOINTS, IModerationStatus } from 'oa-shared'
 import { firestore } from 'src/utils/firebase'
 import { getProfileTagsForTheme } from 'src/utils/getProfileTagsForTheme'
 
-import type { IHowtoDB, IResearchDB, ITag, IUserDB } from 'oa-shared'
+import type {
+  IHowtoDB,
+  IResearchDB,
+  ITag,
+  IUserDB,
+  MemberOrSpace,
+} from 'oa-shared'
 import type { UserCreatedDocs } from 'src/pages/User/types'
 
-const getProfileTags: () => ITag[] = () => {
-  return getProfileTagsForTheme()
+const getProfileTags: (profileType: MemberOrSpace) => ITag[] = (
+  profileType,
+) => {
+  return getProfileTagsForTheme(profileType)
 }
 
 const getById = async (id: string): Promise<IUserDB | null> => {

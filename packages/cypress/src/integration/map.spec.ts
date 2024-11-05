@@ -77,7 +77,7 @@ describe('[Map]', () => {
     cy.get(`[data-cy=pin-${userId}]`).click()
     cy.get('[data-cy=PinProfile]').within(() => {
       cy.get('[data-cy=Username]').contains(userId)
-      cy.contains('Wants to get started')
+      cy.get('[data-cy=ProfileTagsList]').contains('Organise Meetups')
     })
     cy.url().should('include', `#${userId}`)
 

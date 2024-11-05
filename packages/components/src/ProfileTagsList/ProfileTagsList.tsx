@@ -10,7 +10,7 @@ export interface IProps {
 
 export const ProfileTagsList = ({ tags }: IProps) => {
   return (
-    <Flex sx={{ gap: 2, flexWrap: 'wrap' }}>
+    <Flex data-cy="ProfileTagsList" sx={{ gap: 2, flexWrap: 'wrap' }}>
       {tags.map(
         (tag, index) =>
           tag?.label && (

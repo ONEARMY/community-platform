@@ -8,7 +8,7 @@ export const compressImage = (image: File): Promise<File> => {
     }
 
     new Compressor(image, {
-      quality: 0.6, // 0 to 1
+      quality: 0.8, // 0 to 1
       success: (compressed) => {
         resolve(compressed as File)
       },

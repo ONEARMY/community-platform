@@ -1,6 +1,5 @@
 import { Box, Flex, Image, Text } from 'theme-ui'
 
-import { Category } from '../Category/Category'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
 import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList'
 import { Username } from '../Username/Username'
@@ -13,22 +12,11 @@ interface IProps {
 }
 
 export const CardDetailsSpaceProfile = ({ creator, isLink }: IProps) => {
-  const {
-    _id,
-    about,
-    badges,
-    countryCode,
-    coverImage,
-    profileType,
-    tags,
-    workspaceType,
-  } = creator
+  const { _id, about, badges, countryCode, coverImage, profileType, tags } =
+    creator
 
   const aboutTextStart =
     about && about.length > 80 ? about.slice(0, 78) + '...' : false
-  const workspaceLabel = workspaceType
-    ? workspaceType.charAt(0).toUpperCase() + workspaceType.slice(1)
-    : ''
 
   return (
     <Flex sx={{ flexDirection: 'column', width: '100%' }}>
@@ -84,17 +72,6 @@ export const CardDetailsSpaceProfile = ({ creator, isLink }: IProps) => {
             isLink={isLink}
           />
         </Flex>
-
-        {workspaceType && profileType === 'workspace' && (
-          <Category
-            category={{ label: workspaceLabel }}
-            sx={{
-              border: '1px solid #0087B6',
-              backgroundColor: '#ECFAFF',
-              color: '#0087B6',
-            }}
-          />
-        )}
 
         {tags && <ProfileTagsList tags={tags} />}
 

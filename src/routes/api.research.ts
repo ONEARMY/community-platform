@@ -19,8 +19,7 @@ import { firestore } from 'src/utils/firebase'
 
 import type {
   QueryFilterConstraint,
-  QueryNonFilterConstraint,
-} from 'firebase/firestore'
+  QueryNonFilterConstraint} from 'firebase/firestore';
 import type { IResearch, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts'
 

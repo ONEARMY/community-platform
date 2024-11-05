@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Form } from 'react-final-form'
-import { Button, FieldInput, Icon } from 'oa-components'
+import { Button, ButtonIcon, FieldInput } from 'oa-components'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FormFieldWrapper } from 'src/pages/Howto/Content/Common'
@@ -22,7 +22,7 @@ export const ChangePasswordForm = () => {
 
   const { userStore } = useCommonStores().stores
   const formId = 'changePassword'
-  const glyph = isExpanded ? 'arrow-full-up' : 'arrow-full-down'
+  const dropdownIcon = isExpanded ? 'chevron-up' : 'chevron-down'
 
   const onSubmit = async (values: IFormValues) => {
     const { oldPassword, newPassword } = values
@@ -45,7 +45,36 @@ export const ChangePasswordForm = () => {
       sx={{ flexDirection: 'column', gap: 2 }}
     >
       <UserContactError submitResults={submitResults} />
-
+      <Flex
+        sx={{
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          ':hover': {
+            cursor: 'pointer',
+          },
+        }}
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <Heading as="h3" variant="small">
+          {headings.changePassword}
+        </Heading>
+        <ButtonIcon
+          data-cy="MapFilterList-CloseButton"
+          icon={dropdownIcon}
+          sx={{
+            paddingRight: 3,
+            paddingLeft: 2,
+            border: 'none',
+            ':hover': {
+              backgroundColor: 'unset',
+              cursor: 'pointer',
+            },
+          }}
+        />
+      </Flex>
+      <Text sx={{ fontSize: 1 }}>
+        Here you can change your password to be a stronger one. 💪
+      </Text>
       {isExpanded && (
         <Form
           onSubmit={onSubmit}
@@ -62,12 +91,8 @@ export const ChangePasswordForm = () => {
             return (
               <Flex
                 data-cy="changePasswordForm"
-                sx={{ flexDirection: 'column', gap: 1 }}
+                sx={{ flexDirection: 'column', gap: 1, marginTop: 5 }}
               >
-                <Heading as="h3" variant="small">
-                  {headings.changePassword}
-                </Heading>
-
                 <FormFieldWrapper
                   text={fields.oldPassword.title}
                   htmlFor="oldPassword"
@@ -130,21 +155,6 @@ export const ChangePasswordForm = () => {
           }}
         />
       )}
-
-      <Button
-        type="button"
-        data-cy="changePasswordButton"
-        onClick={() => setIsExpanded(!isExpanded)}
-        variant="secondary"
-        sx={{
-          alignSelf: 'flex-start',
-        }}
-      >
-        <Flex sx={{ gap: 2 }}>
-          <Text>{buttons.changePassword}</Text>
-          <Icon glyph={glyph} />
-        </Flex>
-      </Button>
     </Flex>
   )
 }

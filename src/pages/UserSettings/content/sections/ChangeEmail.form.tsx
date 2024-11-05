@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Field, Form } from 'react-final-form'
-import { Button, FieldInput, Icon } from 'oa-components'
+import { Button, ButtonIcon, FieldInput } from 'oa-components'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FormFieldWrapper } from 'src/pages/Howto/Content/Common'
@@ -22,7 +22,7 @@ export const ChangeEmailForm = () => {
 
   const { userStore } = useCommonStores().stores
   const formId = 'changeEmail'
-  const glyph = isExpanded ? 'arrow-full-up' : 'arrow-full-down'
+  const dropdownIcon = isExpanded ? 'chevron-up' : 'chevron-down'
 
   useEffect(() => {
     getUserEmail()
@@ -54,7 +54,33 @@ export const ChangeEmailForm = () => {
       sx={{ flexDirection: 'column', gap: 2 }}
     >
       <UserContactError submitResults={submitResults} />
-
+      <Flex
+        sx={{
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Heading as="h3" variant="small">
+          {headings.changeEmail}
+        </Heading>
+        <ButtonIcon
+          data-cy="MapFilterList-CloseButton"
+          icon={dropdownIcon}
+          onClick={() => setIsExpanded(!isExpanded)}
+          sx={{
+            paddingRight: 3,
+            paddingLeft: 2,
+            border: 'none',
+            ':hover': {
+              backgroundColor: 'unset',
+              cursor: 'pointer',
+            },
+          }}
+        />
+      </Flex>
+      <Text sx={{ fontSize: 1 }}>
+        {fields.email.title}: <strong>{currentEmail}</strong>
+      </Text>
       {isExpanded && currentEmail && (
         <Form
           onSubmit={onSubmit}
@@ -67,16 +93,8 @@ export const ChangeEmailForm = () => {
             return (
               <Flex
                 data-cy="changeEmailForm"
-                sx={{ flexDirection: 'column', gap: 2 }}
+                sx={{ flexDirection: 'column', gap: 2, marginTop: 5 }}
               >
-                <Heading as="h3" variant="small">
-                  {headings.changeEmail}
-                </Heading>
-
-                <Text sx={{ fontSize: 1 }}>
-                  {fields.email.title}: <strong>{currentEmail}</strong>
-                </Text>
-
                 <FormFieldWrapper
                   text={fields.newEmail.title}
                   htmlFor="newEmail"
@@ -126,7 +144,7 @@ export const ChangeEmailForm = () => {
         />
       )}
 
-      <Button
+      {/* <Button
         type="button"
         data-cy="changeEmailButton"
         onClick={() => setIsExpanded(!isExpanded)}
@@ -139,7 +157,7 @@ export const ChangeEmailForm = () => {
           <Text>{buttons.changeEmail}</Text>
           <Icon glyph={glyph} />
         </Flex>
-      </Button>
+      </Button> */}
     </Flex>
   )
 }

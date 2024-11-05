@@ -81,7 +81,7 @@ export const UserInfosSection = ({ formValues }: IProps) => {
           />
         </Flex>
 
-        {!isMemberProfile && <ProfileTags />}
+        <ProfileTags />
 
         <Flex sx={{ flexDirection: 'column', gap: 1 }}>
           <Text>{`${about.title} *`}</Text>

@@ -17,6 +17,8 @@ const ProfileTypes = () => {
   const { description, error } = fields.activities
   const themeUi = useThemeUI()
   const theme = themeUi.theme as ThemeWithName
+
+  // Only profile types with a valid theme badge will display
   const profileTypes = getSupportedProfileTypes().filter(({ label }) =>
     Object.keys(theme.badges).includes(label),
   )

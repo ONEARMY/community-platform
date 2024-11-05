@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useEffect, useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { observer } from 'mobx-react'
@@ -41,13 +41,14 @@ import {
 import { buttons, headings, overview } from '../../labels'
 import ResearchFieldCategory from './ResearchCategorySelect'
 
-import type { IResearch } from 'oa-shared'
+import type { IResearch, IResearchDB } from 'oa-shared'
 import type { MainFormAction } from 'src/common/Form/types'
 
 interface IProps {
   'data-testid'?: string
   formValues: any
   parentType: MainFormAction
+  research?: IResearchDB
 }
 
 const ResearchFormLabel = ({ children, ...props }) => (
@@ -72,22 +73,27 @@ const ResearchForm = observer((props: IProps) => {
   } = overview
 
   const store = useResearchStore()
-  const [showSubmitModal, setShowSubmitModal] = React.useState(false)
-  const [submissionHandler, setSubmissionHandler] = React.useState({
+  const [showSubmitModal, setShowSubmitModal] = useState(false)
+  const [submissionHandler, setSubmissionHandler] = useState({
     draft: formValues.moderation === IModerationStatus.DRAFT,
     shouldSubmit: false,
   })
+  const [slug, setSlug] = useState<string>('')
 
   // Managing locked state
-  React.useEffect(() => {
-    if (store.activeUser) store.lockResearchItem(store.activeUser.userName)
+  useEffect(() => {
+    if (store.activeUser && props.research) {
+      store.lockResearchItem(props.research, store.activeUser.userName)
+    }
 
     return () => {
-      store.unlockResearchItem()
+      if (props.research) {
+        store.unlockResearchItem(props.research)
+      }
     }
   }, [store.activeUser])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (submissionHandler.shouldSubmit) {
       const form = document.getElementById('researchForm')
       if (typeof form !== 'undefined' && form !== null) {
@@ -103,7 +109,11 @@ const ResearchForm = observer((props: IProps) => {
     formValues.moderation = submissionHandler.draft
       ? IModerationStatus.DRAFT
       : IModerationStatus.ACCEPTED // No moderation for researches for now
-    await store.uploadResearch(formValues)
+    const updatedResearh = await store.uploadResearch(formValues)
+
+    if (updatedResearh) {
+      setSlug(updatedResearh.slug)
+    }
   }
 
   const pageTitle = headings.overview[parentType]
@@ -112,6 +122,7 @@ const ResearchForm = observer((props: IProps) => {
     <div data-testid={props['data-testid']}>
       {showSubmitModal && (
         <ResearchSubmitStatus
+          slug={slug}
           onClose={() => {
             setShowSubmitModal(false)
             store.resetResearchUploadStatus()

@@ -5,6 +5,7 @@ import { useResearchStore } from 'src/stores/Research/research.store'
 import { Box, Flex, Heading, Text } from 'theme-ui'
 
 interface IProps {
+  slug: string
   onClose: () => void
 }
 
@@ -36,7 +37,7 @@ export const ResearchSubmitStatus = observer((props: IProps) => {
           </Flex>
         ))}
       </Box>
-      {store.activeResearchItem && store.activeResearchItem?.slug ? (
+      {props.slug ? (
         <Button
           type="button"
           data-cy={store.researchUploadStatus.Complete ? 'view-research' : ''}
@@ -46,7 +47,7 @@ export const ResearchSubmitStatus = observer((props: IProps) => {
           }
           icon="arrow-forward"
           onClick={() => {
-            navigate('/research/' + store.activeResearchItem!.slug)
+            navigate('/research/' + props.slug)
             props.onClose()
           }}
         >
@@ -93,7 +94,7 @@ export const UpdateSubmitStatus = observer((props: IProps) => {
         variant={!uploadStatus.Complete ? 'disabled' : 'outline'}
         icon="arrow-forward"
         onClick={() => {
-          navigate('/research/' + store.activeResearchItem!.slug)
+          navigate('/research/' + props.slug)
           props.onClose()
         }}
       >

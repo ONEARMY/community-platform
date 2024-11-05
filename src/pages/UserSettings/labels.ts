@@ -122,13 +122,8 @@ export const fields: ILabels = {
     description:
       "You set this when you signed up and it can't be changed now. Sorry.",
   },
-  workspaceType: {
-    description: 'What kind of Precious Plastic workspace do you run?',
-    error: 'Please select your workspace type',
-    title: 'Workspace',
-  },
   tags: {
-    description: 'Select up to five tags for your profile',
+    description: 'What are your main activities? (choose max five)',
     title: 'Tags',
   },
 }

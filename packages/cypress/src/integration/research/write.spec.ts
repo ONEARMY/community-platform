@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker'
 
 import { RESEARCH_TITLE_MIN_LENGTH } from '../../../../../src/pages/Research/constants'
 import {
+  generateAlphaNumeric,
   generateNewUserDetails,
   setIsPreciousPlastic,
 } from '../../utils/TestUtils'
@@ -154,7 +155,7 @@ describe('[Research]', () => {
     })
 
     it('[Any PP user]', () => {
-      const randomId = crypto.randomUUID().slice(0, 8)
+      const randomId = generateAlphaNumeric(8).toLowerCase()
       const title = randomId + ' PP plastic stuff'
       const expectSlug = randomId + '-pp-plastic-stuff'
       const description = 'Bespoke research topic'
@@ -255,7 +256,7 @@ describe('[Research]', () => {
 
   describe('[Displays draft updates for Author]', () => {
     it('[By Authenticated]', () => {
-      const randomId = crypto.randomUUID().slice(0, 8)
+      const randomId = generateAlphaNumeric(8).toLowerCase()
       const updateTitle = `${randomId} Create a research update`
       const updateDescription = 'This is the description for the update.'
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'

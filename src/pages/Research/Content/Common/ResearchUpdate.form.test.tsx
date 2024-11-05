@@ -4,7 +4,10 @@ import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { createRoutesFromElements, Route } from '@remix-run/react'
 import { render } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
-import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
+import {
+  FactoryResearchItem,
+  FactoryResearchItemUpdate,
+} from 'src/test/factories/ResearchItem'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -43,7 +46,7 @@ vi.mock('src/stores/Research/research.store', () => {
         Complete: false,
       },
       isTitleThatReusesSlug: vi.fn(),
-      unlockResearchUpdate: vi.fn(),
+      toggleLockResearchUpdate: vi.fn(),
     }),
   }
 })
@@ -86,6 +89,7 @@ const getWrapper = (formValues, parentType, navProps) => {
         index
         element={
           <ResearchUpdateForm
+            research={FactoryResearchItem()}
             formValues={formValues}
             parentType={parentType}
             {...navProps}

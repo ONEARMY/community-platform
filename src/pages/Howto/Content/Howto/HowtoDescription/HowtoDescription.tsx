@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Link, useNavigate } from '@remix-run/react'
 import {
   Button,
@@ -25,7 +25,6 @@ import {
   isAllowedToDeleteContent,
   isAllowedToEditContent,
 } from 'src/utils/helpers'
-import { incrementViewCount } from 'src/utils/incrementViewCount'
 import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../../../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
@@ -36,7 +35,6 @@ import type { IHowtoDB, ITag, IUser } from 'oa-shared'
 interface IProps {
   howto: IHowtoDB & { tagList?: ITag[] }
   loggedInUser: IUser | undefined
-  needsModeration: boolean
   commentsCount: number
   votedUsefulCount?: number
   verified?: boolean
@@ -74,14 +72,6 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
     }
   }
 
-  useEffect(() => {
-    incrementViewCount({
-      document: howto,
-      documentType: 'howto',
-      store: stores.howtoStore,
-    })
-  }, [howto._id])
-
   return (
     <Card>
       <Flex
@@ -110,17 +100,14 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             <ClientOnly fallback={<></>}>
               {() => (
                 <>
-                  {props.votedUsefulCount !== undefined &&
-                    howto.moderation === IModerationStatus.ACCEPTED && (
-                      <Box>
-                        <UsefulStatsButton
-                          votedUsefulCount={props.votedUsefulCount}
-                          hasUserVotedUseful={props.hasUserVotedUseful}
-                          isLoggedIn={loggedInUser ? true : false}
-                          onUsefulClick={props.onUsefulClick}
-                        />
-                      </Box>
-                    )}
+                  {howto.moderation === IModerationStatus.ACCEPTED && (
+                    <UsefulStatsButton
+                      votedUsefulCount={props.votedUsefulCount}
+                      hasUserVotedUseful={props.hasUserVotedUseful}
+                      isLoggedIn={loggedInUser ? true : false}
+                      onUsefulClick={props.onUsefulClick}
+                    />
+                  )}
                 </>
               )}
             </ClientOnly>

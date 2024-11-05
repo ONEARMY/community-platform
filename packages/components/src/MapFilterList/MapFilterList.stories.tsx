@@ -11,59 +11,59 @@ export default {
 // Copied from src/pages/Maps/Content/MapView/allMapFilterOptions.ts
 const availableFilters: MapFilterOptionsList = [
   {
+    _id: 'workspace',
     filterType: 'profileType',
     label: 'Workspace',
-    slug: 'workspace',
   },
   {
+    _id: 'machine-builder',
     filterType: 'profileType',
     label: 'Machine Builder',
-    slug: 'machine-builder',
   },
   {
+    _id: 'community-builder',
     filterType: 'profileType',
     label: 'Community Point',
-    slug: 'community-builder',
   },
   {
+    _id: 'collection-point',
     filterType: 'profileType',
     label: 'Collection Point',
-    slug: 'collection-point',
   },
   {
+    _id: 'space',
     filterType: 'profileType',
     label: 'Space',
-    slug: 'space',
   },
   {
+    _id: 'member',
     filterType: 'profileType',
     label: 'Want to get started',
-    slug: 'member',
   },
   {
+    _id: 'shredder',
     filterType: 'workspaceType',
     label: 'Shredder',
-    slug: 'shredder',
   },
   {
+    _id: 'sheetpress',
     filterType: 'workspaceType',
     label: 'Sheetpress',
-    slug: 'sheetpress',
   },
   {
+    _id: 'extrusion',
     filterType: 'workspaceType',
     label: 'Extrusion',
-    slug: 'extrusion',
   },
   {
+    _id: 'injection',
     filterType: 'workspaceType',
     label: 'Injection',
-    slug: 'injection',
   },
   {
+    _id: 'mix',
     filterType: 'workspaceType',
     label: 'Mix',
-    slug: 'mix',
   },
 ]
 

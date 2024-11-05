@@ -6,14 +6,24 @@ import { NotFoundPage } from '../NotFound/NotFound'
 import { SettingsPage } from '../UserSettings/SettingsPage'
 import { UserProfile } from './content/UserProfile'
 
-export const UserRoutes = (
+import type { IUserDB } from 'oa-shared'
+
+export const UserRoutes = (user: IUserDB) => (
   <>
-    <Route path=":id" element={<UserProfile />} />
+    <Route
+      path=":id"
+      element={
+        <UserProfile
+          profile={user}
+          userCreatedDocs={{ howtos: [], research: [] }}
+        />
+      }
+    />
     <Route
       path=":id/edit"
       element={
         <AuthRoute roleRequired={UserRole.ADMIN}>
-          <SettingsPage />
+          <SettingsPage profile={user} />
         </AuthRoute>
       }
     />
@@ -21,6 +31,6 @@ export const UserRoutes = (
   </>
 )
 
-const UserProfileRoutes = () => <Routes>{UserRoutes}</Routes>
+const UserProfileRoutes = (user: IUserDB) => <Routes>{UserRoutes(user)}</Routes>
 
 export default UserProfileRoutes

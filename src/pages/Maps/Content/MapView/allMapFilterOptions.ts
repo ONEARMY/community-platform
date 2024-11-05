@@ -1,46 +1,42 @@
-import { WORKSPACE_TYPES } from 'src/pages/UserSettings/content/sections/Workspace.section'
+import { getProfileTagsForTheme } from 'src/utils/getProfileTagsForTheme'
 
 import type { MapFilterOptionsList } from 'oa-shared'
 
-const workspaceTypes = WORKSPACE_TYPES.map(
-  ({ textLabel, label, imageSrc }) => ({
-    filterType: 'workspaceType',
-    label: textLabel,
-    slug: label,
-    imageSrc,
-  }),
-)
+const profileTags = getProfileTagsForTheme().map((tag) => ({
+  filterType: 'profileTag',
+  ...tag,
+}))
 
 export const allMapFilterOptions: MapFilterOptionsList = [
   {
+    _id: 'workspace',
     filterType: 'profileType',
     label: 'Workspace',
-    slug: 'workspace',
   },
   {
+    _id: 'machine-builder',
     filterType: 'profileType',
     label: 'Machine Builder',
-    slug: 'machine-builder',
   },
   {
+    _id: 'community-builder',
     filterType: 'profileType',
     label: 'Community Point',
-    slug: 'community-builder',
   },
   {
+    _id: 'collection-point',
     filterType: 'profileType',
     label: 'Collection Point',
-    slug: 'collection-point',
   },
   {
+    _id: 'space',
     filterType: 'profileType',
     label: 'Space',
-    slug: 'space',
   },
   {
+    _id: 'member',
     filterType: 'profileType',
     label: 'Want to get started',
-    slug: 'member',
   },
-  ...workspaceTypes,
+  ...profileTags,
 ]

@@ -60,14 +60,14 @@ export const MapWithList = (props: IProps) => {
     const filtersNeeded = [...new Set(pinDetails.flat())]
 
     return allMapFilterOptions.filter((validFilter) =>
-      filtersNeeded.some((neededfilter) => neededfilter === validFilter.slug),
+      filtersNeeded.some((neededfilter) => neededfilter === validFilter._id),
     )
   }, [pins])
 
   useEffect(() => {
     const workspaceTypeFilters = activePinFilters
       .filter(({ filterType }) => filterType === 'workspaceType')
-      .map(({ slug }) => slug)
+      .map(({ _id }) => _id)
 
     if (workspaceTypeFilters.length > 0) {
       const workspaceFilteredList = allPinsInView.filter(
@@ -80,7 +80,7 @@ export const MapWithList = (props: IProps) => {
 
     const profileTypeFilters = activePinFilters
       .filter(({ filterType }) => filterType === 'profileType')
-      .map(({ slug }) => slug)
+      .map(({ _id }) => _id)
 
     if (profileTypeFilters.length > 0) {
       const profileTypeFilteredList = allPinsInView.filter(
@@ -126,9 +126,9 @@ export const MapWithList = (props: IProps) => {
 
       return setActivePinFilters([
         {
+          _id: 'workspace',
           filterType: 'profileType',
           label: 'Workspace',
-          slug: 'workspace',
         },
         ...existingWorkspaceTypeFilters,
         changedOption,

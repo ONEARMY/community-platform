@@ -6,10 +6,9 @@ import {
   query,
   where,
 } from 'firebase/firestore'
+import { IModerationStatus } from 'oa-shared'
 import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
 import { firestore } from 'src/utils/firebase'
-
-import { IModerationStatus } from 'oa-shared'
 
 // runs on the server
 export const loader = async ({ request }) => {

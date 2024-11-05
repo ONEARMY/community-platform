@@ -1,5 +1,6 @@
 import { logger } from 'src/logger'
-import type { IResearch, ICategory, ResearchStatus } from 'oa-shared'
+
+import type { ICategory, IResearch, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from './ResearchSortOptions'
 
 const search = async (

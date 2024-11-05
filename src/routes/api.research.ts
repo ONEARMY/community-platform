@@ -1,25 +1,26 @@
 import { json } from '@remix-run/node'
 import {
   and,
-  doc,
-  getDoc,
   collection,
+  doc,
   getCountFromServer,
+  getDoc,
   getDocs,
   limit,
   orderBy,
   query,
   startAfter,
   where,
-  QueryFilterConstraint,
-  QueryNonFilterConstraint,
 } from 'firebase/firestore'
-import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
-import { firestore } from 'src/utils/firebase'
-import { ITEMS_PER_PAGE } from 'src/pages/Research/constants'
-
-import type { IResearch, ResearchStatus } from 'oa-shared'
 import { IModerationStatus } from 'oa-shared'
+import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
+import { ITEMS_PER_PAGE } from 'src/pages/Research/constants'
+import { firestore } from 'src/utils/firebase'
+
+import type {
+  QueryFilterConstraint,
+  QueryNonFilterConstraint} from 'firebase/firestore';
+import type { IResearch, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts'
 
 // runs on the server

@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
+
 import { researchService } from './research.service'
 
 describe('research.service', () => {

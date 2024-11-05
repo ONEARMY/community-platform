@@ -41,8 +41,7 @@ describe('[Map]', () => {
       .children()
       .should('have.length', profileTypesCount)
     cy.get('[data-cy=MapListFilter]').first().click()
-    // Reduction in coverage until temp API removed
-    // cy.get('[data-cy="list-results"]').contains('6 results in view')
+
     cy.get('[data-cy=MapListFilter-active]').first().click()
     cy.get('[data-cy="list-results"]').contains(/\d+ results in view/)
 
@@ -57,7 +56,12 @@ describe('[Map]', () => {
     cy.get('[data-cy=MapFilterList]').should('not.exist')
     cy.get('[data-cy=MapFilterList-OpenButton]').first().click()
     cy.get('[data-cy=MapFilterList]').should('be.visible')
-    cy.get('[data-cy=MapFilterList-CloseButton]').first().click()
+    cy.get('[data-cy=MapFilterListItem-profile]').first().click()
+    cy.get('[data-cy=MapFilterListItem-profile-active]').first().click()
+    cy.get('[data-cy=MapFilterListItem-tag]').first().click()
+    cy.get('[data-cy=MapFilterListItem-tag-active]').first().click()
+    cy.get('[data-cy=MapFilterList-ShowResultsButton]').first().click()
+
     cy.step('As the user moves in the list updates')
     for (let i = 0; i < 6; i++) {
       cy.get('.leaflet-control-zoom-in').click()

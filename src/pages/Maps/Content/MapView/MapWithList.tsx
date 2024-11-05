@@ -3,6 +3,7 @@ import { Tooltip } from 'react-tooltip'
 import { Button, Map } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
 
+import { filterPins } from '../../utils/filterPins'
 import { allMapFilterOptions } from './allMapFilterOptions'
 import { Clusters } from './Cluster.client'
 import { latLongFilter } from './latLongFilter'
@@ -21,32 +22,35 @@ import type { Map as MapType } from 'react-leaflet'
 interface IProps {
   activePin: IMapPin | null
   center: ILatLng
+  initialZoom: number
   mapRef: React.RefObject<MapType>
   notification?: string
   onBlur: () => void
   onPinClicked: (pin: IMapPin) => void
   onLocationChange: (latlng: ILatLng) => void
   pins: IMapPin[]
+  promptUserLocation: () => Promise<void>
   setZoom: (arg: number) => void
   zoom: number
-  promptUserLocation: () => Promise<void>
-  INITIAL_ZOOM: number
 }
+
+const ZOOM_IN_TOOLTIP = 'Zoom in to your location'
+const ZOOM_OUT_TOOLTIP = 'Zoom out to world view'
 
 export const MapWithList = (props: IProps) => {
   const {
     activePin,
     center,
+    initialZoom,
     mapRef,
     notification,
     onBlur,
     onLocationChange,
     onPinClicked,
     pins,
+    promptUserLocation,
     setZoom,
     zoom,
-    promptUserLocation,
-    INITIAL_ZOOM,
   } = props
 
   const [activePinFilters, setActivePinFilters] =
@@ -60,10 +64,9 @@ export const MapWithList = (props: IProps) => {
   const availableFilters = useMemo(() => {
     const pinDetails = pins.map(({ creator }) => [
       creator?.profileType,
-      creator?.workspaceType,
+      ...(creator?.tags ? creator.tags.map(({ _id }) => _id) : []),
     ])
     const filtersNeeded = [...new Set(pinDetails.flat())]
-
     return allMapFilterOptions.filter((validFilter) =>
       filtersNeeded.some((neededfilter) => neededfilter === validFilter._id),
     )
@@ -71,43 +74,16 @@ export const MapWithList = (props: IProps) => {
 
   const buttonStyle = {
     backgroundColor: 'white',
-    padding: '20px',
+    borderRadius: 99,
+    padding: 4,
     ':hover': {
       backgroundColor: 'lightgray',
     },
   }
 
-  const ZOOM_IN_TOOLTIP = 'Zoom in to your location'
-  const ZOOM_OUT_TOOLTIP = 'Zoom out to world view'
-
   useEffect(() => {
-    const workspaceTypeFilters = activePinFilters
-      .filter(({ filterType }) => filterType === 'workspaceType')
-      .map(({ _id }) => _id)
-
-    if (workspaceTypeFilters.length > 0) {
-      const workspaceFilteredList = allPinsInView.filter(
-        ({ creator }) =>
-          creator?.workspaceType &&
-          workspaceTypeFilters.includes(creator.workspaceType),
-      )
-      return setFilteredPins(workspaceFilteredList)
-    }
-
-    const profileTypeFilters = activePinFilters
-      .filter(({ filterType }) => filterType === 'profileType')
-      .map(({ _id }) => _id)
-
-    if (profileTypeFilters.length > 0) {
-      const profileTypeFilteredList = allPinsInView.filter(
-        ({ creator }) =>
-          creator?.profileType &&
-          profileTypeFilters.includes(creator?.profileType),
-      )
-      return setFilteredPins(profileTypeFilteredList)
-    }
-
-    setFilteredPins(allPinsInView)
+    const filtered = filterPins(activePinFilters, allPinsInView)
+    return setFilteredPins(filtered)
   }, [activePinFilters, allPinsInView])
 
   const handleLocationFilter = () => {
@@ -132,29 +108,10 @@ export const MapWithList = (props: IProps) => {
       )
     }
 
-    const addingWorkspaceTypeFilter =
-      changedOption.filterType === 'workspaceType'
-
-    if (addingWorkspaceTypeFilter) {
-      const existingWorkspaceTypeFilters = activePinFilters.filter(
-        ({ filterType }) => filterType === 'workspaceType',
-      )
-
-      return setActivePinFilters([
-        {
-          _id: 'workspace',
-          filterType: 'profileType',
-          label: 'Workspace',
-        },
-        ...existingWorkspaceTypeFilters,
-        changedOption,
-      ])
-    }
-
-    const existingProfileTypeFilters = activePinFilters.filter(
-      ({ filterType }) => filterType === 'profileType',
-    )
-    return setActivePinFilters([...existingProfileTypeFilters, changedOption])
+    return setActivePinFilters((activePinFilters) => [
+      ...activePinFilters,
+      changedOption,
+    ])
   }
 
   const isViewportGreaterThanTablet = window.innerWidth > 1024
@@ -257,15 +214,15 @@ export const MapWithList = (props: IProps) => {
         <Box
           sx={{
             position: 'absolute',
-            top: 2,
-            right: 2,
+            top: 0,
+            right: 0,
+            padding: 4,
             zIndex: 1000,
             display: 'flex',
             flexDirection: 'column',
             gap: 2,
           }}
         >
-          {/* Location button to Zoom in to your location */}
           <Button
             data-tooltip-content={ZOOM_IN_TOOLTIP}
             data-cy="LocationViewButton"
@@ -279,14 +236,13 @@ export const MapWithList = (props: IProps) => {
           />
           <Tooltip id="locationButton-tooltip" place="left" />
 
-          {/* Globe button to Zoom out to world view */}
           <Button
             data-tooltip-content={ZOOM_OUT_TOOLTIP}
             data-cy="WorldViewButton"
             data-tooltip-id="worldViewButton-tooltip"
             sx={buttonStyle}
             onClick={() => {
-              setZoom(INITIAL_ZOOM)
+              setZoom(initialZoom)
             }}
             icon="globe"
           />

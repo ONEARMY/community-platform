@@ -48,7 +48,6 @@ export class MapsStore extends ModuleStore {
       retrievePinFilters: action,
       setActivePinFilters: action,
       setActivePin: action,
-      getPinsNumberByFilterType: action,
     })
   }
 
@@ -119,7 +118,7 @@ export class MapsStore extends ModuleStore {
       return
     }
 
-    const mapPins = filterMapPinsByType(this.mapPins, filters)
+    const mapPins = filterMapPinsByType(this.mapPins, filters, false)
     this.filteredPins = mapPins
   }
 
@@ -287,9 +286,5 @@ export class MapsStore extends ModuleStore {
       verifiedBadge: !!u.badges?.verified,
       country: u.location?.countryCode || u.country?.toLowerCase() || null,
     }
-  }
-
-  public getPinsNumberByFilterType(filter: Array<string>): number {
-    return filterMapPinsByType(this.mapPins, filter).length
   }
 }

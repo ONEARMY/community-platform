@@ -51,7 +51,7 @@ describe('[Settings]', () => {
       const description = "I'm a very active member"
       const mapPinDescription = 'Fun, vibrant and full of amazing people'
       const profileType = 'member'
-      const tag = 'Sewing'
+      const tag = ['Sewing', 'Accounting']
       const user = generateNewUserDetails()
       const url = 'https://social.network'
 
@@ -80,7 +80,8 @@ describe('[Settings]', () => {
         country,
         description,
       })
-      cy.selectTag(tag, '[data-cy=tag-select]')
+      cy.selectTag(tag[0], '[data-cy=tag-select]')
+      cy.selectTag(tag[1], '[data-cy=tag-select]')
       cy.get('[data-cy="country:BO"]')
 
       cy.step('Errors if trying to upload invalid image')
@@ -131,6 +132,8 @@ describe('[Settings]', () => {
       cy.contains(displayName)
       cy.contains(description)
       cy.contains(country)
+      cy.contains(tag[0])
+      cy.contains(tag[1])
       cy.get('[data-cy="country:bo"]')
       cy.get(`[data-cy="MemberBadge-${profileType}"]`)
       cy.get('[data-cy="profile-avatar"]')
@@ -153,7 +156,13 @@ describe('[Settings]', () => {
       cy.get('[data-cy="tab-Profile"]').click()
       cy.get('[data-cy=location-dropdown]').should('not.exist')
 
+      cy.step('Can view pin on new map')
+      cy.visit('/map#ci_myn7wmq')
+      cy.get('[data-cy=Banner]').contains('Test it out!').click()
+      cy.get('[data-cy=CardListItem]').contains(user.username)
+
       cy.step('Can delete map pin')
+      cy.visit('/settings')
       cy.get('[data-cy="tab-Map"]').click()
       cy.get('[data-cy=remove-map-pin]').click()
       cy.get('[data-cy="Confirm.modal: Confirm"]').click()

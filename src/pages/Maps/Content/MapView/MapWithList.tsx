@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Tooltip } from 'react-tooltip'
 import { Button, Map } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
-import { Tooltip } from 'react-tooltip'
 
 import { allMapFilterOptions } from './allMapFilterOptions'
 import { Clusters } from './Cluster.client'

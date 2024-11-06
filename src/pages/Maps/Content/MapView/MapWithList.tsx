@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Button, Map, Tooltip } from 'oa-components'
+import { Button, Map } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
+import { Tooltip } from 'react-tooltip'
 
 import { allMapFilterOptions } from './allMapFilterOptions'
 import { Clusters } from './Cluster.client'
@@ -45,7 +46,7 @@ export const MapWithList = (props: IProps) => {
     setZoom,
     zoom,
     promptUserLocation,
-    INITIAL_ZOOM
+    INITIAL_ZOOM,
   } = props
 
   const [activePinFilters, setActivePinFilters] =
@@ -76,8 +77,8 @@ export const MapWithList = (props: IProps) => {
     },
   }
 
-  const ZOOM_IN_TOOLTIP = "Zoom in to your location"
-  const ZOOM_OUT_TOOLTIP = "Zoom out to world view"
+  const ZOOM_IN_TOOLTIP = 'Zoom in to your location'
+  const ZOOM_OUT_TOOLTIP = 'Zoom out to world view'
 
   useEffect(() => {
     const workspaceTypeFilters = activePinFilters
@@ -266,8 +267,9 @@ export const MapWithList = (props: IProps) => {
         >
           {/* Location button to Zoom in to your location */}
           <Button
-            data-tip={ZOOM_IN_TOOLTIP}
+            data-tooltip-content={ZOOM_IN_TOOLTIP}
             data-cy="LocationViewButton"
+            data-tooltip-id="locationButton-tooltip"
             sx={buttonStyle}
             onClick={() => {
               promptUserLocation()
@@ -275,19 +277,20 @@ export const MapWithList = (props: IProps) => {
             }}
             icon="gps-location"
           />
-          <Tooltip id="locationButton-tooltip" />
+          <Tooltip id="locationButton-tooltip" place="left" />
 
           {/* Globe button to Zoom out to world view */}
           <Button
-            data-tip={ZOOM_OUT_TOOLTIP}
+            data-tooltip-content={ZOOM_OUT_TOOLTIP}
             data-cy="WorldViewButton"
+            data-tooltip-id="worldViewButton-tooltip"
             sx={buttonStyle}
             onClick={() => {
               setZoom(INITIAL_ZOOM)
             }}
             icon="globe"
           />
-          <Tooltip id="worldViewButton-tooltip" />
+          <Tooltip id="worldViewButton-tooltip" place="top" />
         </Box>
 
         <Flex

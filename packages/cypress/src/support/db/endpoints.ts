@@ -2,8 +2,6 @@ import { generateDBEndpoints } from 'oa-shared'
 
 // React apps populate a process variable, however it might not always be accessible outside
 // (e.g. cypress will instead use it's own env to populate a prefix)
-const process = globalThis.process || ({} as any)
-const e = import.meta.env || process.env || ({} as any)
 
 /**
  * A prefix can be used to simplify large-scale schema changes or multisite hosting
@@ -11,10 +9,6 @@ const e = import.meta.env || process.env || ({} as any)
  * e.g. oa_
  * SessionStorage prefixes are used to allow test ci environments to dynamically set a db endpoint
  */
-const DB_PREFIX =
-  (typeof sessionStorage !== 'undefined' && sessionStorage.DB_PREFIX) ||
-  e.VITE_DB_PREFIX ||
-  ''
 
 /**
  * Mapping of generic database endpoints to specific prefixed and revisioned versions for the

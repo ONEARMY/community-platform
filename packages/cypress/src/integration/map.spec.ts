@@ -143,7 +143,7 @@ describe('[Map]', () => {
       .and('be.visible')
     cy.get('[data-cy="WorldViewButton"]').should('exist').and('be.visible')
 
-    const mapZoomProxySelector = '.leaflet-proxy.leaflet-zoom-animated'
+    const mapZoomProxySelector = '.leaflet-tile-container.leaflet-zoom-animated'
 
     cy.get('[data-cy="WorldViewButton"]').click()
     cy.wait(500)

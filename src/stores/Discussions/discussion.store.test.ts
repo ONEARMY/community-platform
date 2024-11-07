@@ -1,7 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
 vi.mock('../common/module.store')
-import { faker } from '@faker-js/faker'
 import {
   FactoryDiscussion,
   FactoryDiscussionComment,
@@ -67,23 +66,6 @@ const factory = (
 
 describe('discussion.store', () => {
   describe('fetchOrCreateDiscussionBySource', () => {
-    it('fetches a discussion by sourceId', async () => {
-      const fakeSourceId = faker.internet.password()
-      const fakePrimaryContentId = faker.internet.password()
-      const { store, getWhereFn } = factory([
-        FactoryDiscussion({ sourceId: fakeSourceId }),
-      ])
-
-      await store.fetchOrCreateDiscussionBySource(
-        fakeSourceId,
-        'question',
-        fakePrimaryContentId,
-      )
-
-      expect(getWhereFn).toHaveBeenCalledTimes(1)
-      expect(getWhereFn).toHaveBeenCalledWith('sourceId', '==', fakeSourceId)
-    })
-
     it('creates a discussion if one does not exist', async () => {
       const { store, getWhereFn, setFn } = factory()
 

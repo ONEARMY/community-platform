@@ -76,9 +76,6 @@ export const MapWithList = (props: IProps) => {
     },
   }
 
-  const ZOOM_IN_TOOLTIP = "Zoom in to your location"
-  const ZOOM_OUT_TOOLTIP = "Zoom out to world view"
-
   useEffect(() => {
     const workspaceTypeFilters = activePinFilters
       .filter(({ filterType }) => filterType === 'workspaceType')
@@ -266,7 +263,7 @@ export const MapWithList = (props: IProps) => {
         >
           {/* Location button to Zoom in to your location */}
           <Button
-            data-tip={ZOOM_IN_TOOLTIP}
+            data-tip="Zoom in to your location"
             data-cy="LocationViewButton"
             sx={buttonStyle}
             onClick={() => {
@@ -279,7 +276,7 @@ export const MapWithList = (props: IProps) => {
 
           {/* Globe button to Zoom out to world view */}
           <Button
-            data-tip={ZOOM_OUT_TOOLTIP}
+            data-tip="Zoom out to world view"
             data-cy="WorldViewButton"
             sx={buttonStyle}
             onClick={() => {

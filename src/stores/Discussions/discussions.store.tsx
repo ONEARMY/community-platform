@@ -36,15 +36,17 @@ export class DiscussionStore extends ModuleStore {
     sourceType: IDiscussion['sourceType'],
     primaryContentId: IDiscussion['primaryContentId'],
   ): Promise<IDiscussionDB | null> {
-    const foundDiscussion =
-      toJS(
-        await this.db
-          .collection<IDiscussion>(DISCUSSIONS_COLLECTION)
-          .getWhere('sourceId', '==', sourceId),
-      )[0] || null
+    const discussions = toJS(
+      await this.db
+        .collection<IDiscussion>(DISCUSSIONS_COLLECTION)
+        .getWhere('sourceId', '==', sourceId, 1),
+    )
+
+    const foundDiscussion = discussions
+      ? discussions.find((x) => x.comments.length > 0) || discussions.at(0)
+      : null
 
     if (foundDiscussion) {
-      await this._validatePrimaryContentId(foundDiscussion, primaryContentId)
       return this._formatDiscussion(foundDiscussion)
     }
 

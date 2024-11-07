@@ -171,6 +171,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/JoseAConcepcion"><img src="https://avatars.githubusercontent.com/u/99701565?v=4?s=60" width="60px;" alt="José Antonio Concepción"/><br /><sub><b>José Antonio Concepción</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=JoseAConcepcion" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jaykayudo"><img src="https://avatars.githubusercontent.com/u/58009744?v=4?s=60" width="60px;" alt="Joshua Kelechi"/><br /><sub><b>Joshua Kelechi</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=jaykayudo" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mchen10"><img src="https://avatars.githubusercontent.com/u/16161485?v=4?s=60" width="60px;" alt="Michael Chen"/><br /><sub><b>Michael Chen</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=mchen10" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/motuz0001"><img src="https://avatars.githubusercontent.com/u/61076969?v=4?s=60" width="60px;" alt="Matúš Motyka"/><br /><sub><b>Matúš Motyka</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=motuz0001" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

@@ -169,8 +169,8 @@ describe('[Map]', () => {
         const matrixValues = transform.match(/matrix\(([^)]+)\)/)[1].split(', ')
         const scaleX = parseFloat(matrixValues[0]) // 'a' value from matrix
         const scaleY = parseFloat(matrixValues[3]) // 'd' value from matrix
-        expect(scaleX).to.eq(32)
-        expect(scaleY).to.eq(32)
+        expect(scaleX).to.eq(8)
+        expect(scaleY).to.eq(8)
       })
 
     cy.step('Zoom in button prompts for user location and zooms')

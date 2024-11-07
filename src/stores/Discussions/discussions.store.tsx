@@ -39,7 +39,7 @@ export class DiscussionStore extends ModuleStore {
     const discussions = toJS(
       await this.db
         .collection<IDiscussion>(DISCUSSIONS_COLLECTION)
-        .getWhere('sourceId', '==', sourceId, 1),
+        .getWhere('sourceId', '==', sourceId),
     )
 
     const foundDiscussion = discussions

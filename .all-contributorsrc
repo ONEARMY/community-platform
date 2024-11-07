@@ -835,6 +835,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "motuz0001",
+      "name": "Matúš Motyka",
+      "avatar_url": "https://avatars.githubusercontent.com/u/61076969?v=4",
+      "profile": "https://github.com/motuz0001",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

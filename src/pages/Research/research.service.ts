@@ -1,6 +1,15 @@
+import { collection, getDocs, query, where } from 'firebase/firestore'
 import { logger } from 'src/logger'
+import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
+import { firestore } from 'src/utils/firebase'
+import { changeUserReferenceToPlainText } from 'src/utils/mentions.utils'
 
-import type { ICategory, IResearch, ResearchStatus } from 'oa-shared'
+import type {
+  ICategory,
+  IResearch,
+  IResearchDB,
+  ResearchStatus,
+} from 'oa-shared'
 import type { ResearchSortOption } from './ResearchSortOptions'
 
 const search = async (

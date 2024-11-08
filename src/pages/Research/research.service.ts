@@ -1,9 +1,8 @@
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { logger } from 'src/logger'
 import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
+import { firestore } from 'src/utils/firebase'
 import { changeUserReferenceToPlainText } from 'src/utils/mentions.utils'
-
-import { firestore } from '../../utils/firebase'
 
 import type {
   ICategory,

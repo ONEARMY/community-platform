@@ -2,15 +2,20 @@ import '@testing-library/jest-dom/vitest'
 
 import { describe, expect, it, vi } from 'vitest'
 
-import { exportedForTesting } from './question.service'
+import { exportedForTesting } from '../api.questions'
 
 const mockWhere = vi.fn()
 const mockOrderBy = vi.fn()
+const mockStartAfter = vi.fn()
 const mockLimit = vi.fn()
+const mockedDoc = { exists: true }
 vi.mock('firebase/firestore', () => ({
   collection: vi.fn(),
   query: vi.fn(),
   and: vi.fn(),
+  getDoc: () => Promise.resolve(mockedDoc),
+  doc: vi.fn(),
+  startAfter: (doc) => mockStartAfter(doc),
   where: (path, op, value) => mockWhere(path, op, value),
   limit: (limit) => mockLimit(limit),
   orderBy: (field, direction) => mockOrderBy(field, direction),
@@ -91,5 +96,16 @@ describe('question.search', () => {
 
     // assert
     expect(mockLimit).toHaveBeenLastCalledWith(take)
+  })
+
+  it('should call from lastDocId', () => {
+    // prepare
+    const lastDocId = 'doc1'
+
+    // act
+    exportedForTesting.createQueries(['test'], '', 'Newest', lastDocId)
+
+    // assert
+    expect(mockStartAfter).toHaveBeenCalledWith(mockedDoc)
   })
 })

@@ -6,13 +6,13 @@ import { firestore } from 'src/utils/firebase'
 
 import type { ICategory } from 'oa-shared'
 
-const cache = new Keyv<ICategory[]>({ ttl: 600000 }) // ttl: 10 minutes
+const cache = new Keyv<ICategory[]>({ ttl: 3600000 }) // ttl: 60 minutes
 
 // runs on the server
 export const loader = async () => {
   const cachedCategories = await cache.get('researchCategories')
 
-  // check if cached map pins are availbe, if not - load from db and cache them
+  // check if cached categories are available, if not - load from db and cache them
   if (cachedCategories) return json({ categories: cachedCategories })
 
   const collectionRef = collection(firestore, DB_ENDPOINTS.researchCategories)

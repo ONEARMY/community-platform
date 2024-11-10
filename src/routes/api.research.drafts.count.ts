@@ -14,7 +14,7 @@ import { firestore } from 'src/utils/firebase'
 export const loader = async ({ request }) => {
   const url = new URL(request.url)
   const searchParams = url.searchParams
-  const userId: string | null = searchParams.get('user_id')
+  const userId: string | null = searchParams.get('userId')
 
   const collectionRef = collection(firestore, DB_ENDPOINTS.research)
   const filters = and(

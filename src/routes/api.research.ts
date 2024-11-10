@@ -38,9 +38,9 @@ export const loader = async ({ request }) => {
   const status: ResearchStatus | null = searchParams.get(
     'status',
   ) as ResearchStatus
-  const lastDocId: string | null = searchParams.get('last_doc_id')
+  const lastDocId: string | null = searchParams.get('lastDocId')
   const drafts: boolean = searchParams.get('drafts') != undefined
-  const userId: string | null = searchParams.get('user_id')
+  const userId: string | null = searchParams.get('userId')
 
   const { itemsQuery, countQuery } = await createSearchQuery(
     words,

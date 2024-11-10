@@ -20,9 +20,14 @@ const search = async (
   lastDocId?: string,
 ) => {
   try {
-    const response = await fetch(
-      `/api/research?words=${words.join(',')}&category=${category}&sort=${sort}&status=${status ?? ''}&last_doc_id=${lastDocId ?? ''}`,
-    )
+    const url = new URL('/api/research', window.location.origin)
+    url.searchParams.append('words', words.join(','))
+    url.searchParams.append('category', category)
+    url.searchParams.append('sort', sort)
+    url.searchParams.append('status', status ?? '')
+    url.searchParams.append('lastDocId', lastDocId ?? '')
+
+    const response = await fetch(url)
     const { items, total } = (await response.json()) as {
       items: IResearch.Item[]
       total: number
@@ -51,7 +56,7 @@ const getResearchCategories = async () => {
 
 const getDraftCount = async (userId: string) => {
   try {
-    const response = await fetch(`/api/research/drafts/count?user_id=${userId}`)
+    const response = await fetch(`/api/research/drafts/count?userId=${userId}`)
     const { total } = (await response.json()) as { total: number }
 
     return total
@@ -63,7 +68,7 @@ const getDraftCount = async (userId: string) => {
 
 const getDrafts = async (userId: string) => {
   try {
-    const response = await fetch(`/api/research?drafts=true&user_id=${userId}`)
+    const response = await fetch(`/api/research?drafts=true&userId=${userId}`)
     const { items } = (await response.json()) as { items: IResearch.Item[] }
 
     return items

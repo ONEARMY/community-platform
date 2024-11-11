@@ -20,4 +20,4 @@ This script requires access to a service worker with specific permissions for so
 
 For more information about the script and known limitations see the source code at [scripts/maintenance/resetStagingSite.ts](https://github.com/ONEARMY/community-platform/blob/master/scripts/maintenance/resetStagingSite.ts).
 
-The script is currently run weekly via the github action, see the source code at [.github/workflows/reset-staging-site.yml](https://github.com/ONEARMY/community-platform/blob/master/.github/workflows/reset-staging-site.yml))
+The script is currently run weekly via the github action, see the source code at [.github/workflows/reset-staging-site.yml](https://github.com/ONEARMY/community-platform/blob/master/.github/workflows/reset-staging-site.yml).

@@ -158,6 +158,7 @@ describe('[Settings]', () => {
 
       cy.step('Can view pin on new map')
       cy.visit(`/map#${user.username}`)
+      cy.wait(2000)
       cy.get('[data-cy=Banner]').contains('Test it out!').click()
       cy.get('[data-cy=CardListItem]').contains(user.username)
 

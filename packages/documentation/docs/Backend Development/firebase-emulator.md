@@ -50,7 +50,7 @@ This starts the Firebase emulator, loads code, and watches for changes. The data
 
 ## Note
 
-It is assumed that all of these commands will be ran from the root directory of the project. Running them from elsewhere may cause issues.
+It is assumed that all of these commands will be run from the root directory of the project. Running them from elsewhere may cause issues.
 
 ## Visiting the frontend
 

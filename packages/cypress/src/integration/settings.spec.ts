@@ -157,7 +157,7 @@ describe('[Settings]', () => {
       cy.get('[data-cy=location-dropdown]').should('not.exist')
 
       cy.step('Can view pin on new map')
-      cy.visit('/map#ci_myn7wmq')
+      cy.visit(`/map#${user.username}`)
       cy.get('[data-cy=Banner]').contains('Test it out!').click()
       cy.get('[data-cy=CardListItem]').contains(user.username)
 

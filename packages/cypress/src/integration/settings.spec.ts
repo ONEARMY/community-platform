@@ -45,6 +45,8 @@ describe('[Settings]', () => {
     })
 
     it('Can create member', () => {
+      cy.viewport('macbook-16')
+
       const country = 'Bolivia'
       const userImage = 'avatar'
       const displayName = 'settings_member_new'

@@ -53,15 +53,14 @@ export const Select = (props: Props) => {
       },
     }),
 
-    option: (
-      provided,
-      { data, isFocused }: { data: any; isFocused: boolean },
-    ) => ({
+    option: (provided, { data, isFocused, isDisabled }: any) => ({
       ...provided,
       backgroundColor: isFocused ? theme.colors.white : theme.colors.background,
       boxShadow: 'none',
       cursor: 'pointer',
-      color: data.color || theme.colors.black,
+      color: !isDisabled
+        ? data.color || theme.colors.black
+        : theme.colors.lightgrey,
     }),
 
     menu: (provided) => ({
@@ -225,6 +224,7 @@ export const Select = (props: Props) => {
       onChange={(v) => props.onChange && props.onChange(v)}
       value={props.value}
       onInputChange={props.onInputChange}
+      isOptionDisabled={props.isOptionDisabled}
     />
   )
 }

@@ -23,4 +23,5 @@ export interface ITag extends DBDoc {
 
 export interface IProfileTag extends ITag {
   profileType: MemberOrSpace
+  color?: string
 }

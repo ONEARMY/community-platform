@@ -5,24 +5,18 @@ import { filterPins } from './filterPins'
 
 describe('filterPins', () => {
   const memberFilter = {
-    _created: 'yesterday',
-    _deleted: false,
     _id: 'member',
     filterType: 'profileType',
     label: 'member',
   }
 
   const tagFilter = {
-    _created: 'yesterday',
-    _deleted: false,
-    _id: 'tag1',
+    _id: 'designer',
     filterType: 'profileTag',
-    label: 'designer',
+    label: 'Designer',
   }
 
-  const anotherFilter = {
-    _created: 'yesterday',
-    _deleted: false,
+  const builderFilter = {
     _id: 'tag2',
     filterType: 'profileTag',
     label: 'builder',
@@ -68,7 +62,7 @@ describe('filterPins', () => {
     _deleted: false,
     _id: 'bob_the_tagged',
     moderation: IModerationStatus.ACCEPTED,
-    type: ProfileTypeList.WORKSPACE,
+    type: ProfileTypeList.MEMBER,
     location: { lat: 0, lng: 0 },
     verified: true,
     creator: {
@@ -78,7 +72,15 @@ describe('filterPins', () => {
       displayName: 'Bob the Member',
       isContactableByPublic: false,
       profileType: ProfileTypeList.MEMBER,
-      tags: [tagFilter],
+      tags: [
+        {
+          _created: 'now',
+          _deleted: false,
+          _id: 'designer',
+          label: 'Designer',
+          profileType: ProfileTypeList.MEMBER,
+        },
+      ],
     },
   }
 
@@ -108,7 +110,7 @@ describe('filterPins', () => {
   })
 
   it('returns an empty arry when no pins meet the filter criteria', () => {
-    const activePinFilters = [anotherFilter]
+    const activePinFilters = [builderFilter]
 
     expect(filterPins(activePinFilters, allPinsInView)).toEqual([])
   })

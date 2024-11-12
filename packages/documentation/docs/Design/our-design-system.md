@@ -27,7 +27,7 @@ We have an organization in Figma named ONE ARMY with one project for Community P
 
 <iframe width="100%" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FVC8FQTLpCteDHV3nRNyBdE%2FCommunity-Platform-PUBLIC-V2.0%3Ftype%3Ddesign%26mode%3Ddesign%26t%3DR0gwaHMw71Cbi3nx-1" allowfullscreen></iframe>
 
-Figma at time of writing has a peculiar limitation on Free Team Projects, on the number of pages you can have in a file. We were able to keep all of the pages we had in our file when we migrated though, so we're consolidating our designs to a few pages to be able to make the most of our time in the free tier. Please please do not delete any empty slot pages if you're editing the file 🙏🏻.
+Figma at time of writing has a peculiar limitation on Free Team Projects, on the number of pages you can have in a file. We were able to keep all of the pages we had in our file when we migrated though, so we're consolidating our designs to a few pages to be able to make the most of our time in the free tier. Please do not delete any empty slot pages if you're editing the file 🙏🏻.
 
 ** Have a look at our [FIGMA file](https://www.figma.com/file/VC8FQTLpCteDHV3nRNyBdE/Community-Platform-PUBLIC-V2.0)**
 

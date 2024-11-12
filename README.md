@@ -173,6 +173,9 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mchen10"><img src="https://avatars.githubusercontent.com/u/16161485?v=4?s=60" width="60px;" alt="Michael Chen"/><br /><sub><b>Michael Chen</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=mchen10" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/motuz0001"><img src="https://avatars.githubusercontent.com/u/61076969?v=4?s=60" width="60px;" alt="Matúš Motyka"/><br /><sub><b>Matúš Motyka</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=motuz0001" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/cypherpepe"><img src="https://avatars.githubusercontent.com/u/125112044?v=4?s=60" width="60px;" alt="Cypher Pepe"/><br /><sub><b>Cypher Pepe</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=cypherpepe" title="Documentation">📖</a></td>
+    </tr>
   </tbody>
 </table>
 

@@ -844,6 +844,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "cypherpepe",
+      "name": "Cypher Pepe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/125112044?v=4",
+      "profile": "https://github.com/cypherpepe",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "projectName": "community-platform",

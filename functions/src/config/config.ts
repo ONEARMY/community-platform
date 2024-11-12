@@ -21,6 +21,9 @@ if (Object.keys(c).length === 0) {
         slack_webhook: 'http://simulated-webhook-receiver:30102/slack',
       },
       service: null,
+      migration: {
+        api_key: 'fake_key',
+      },
     } as any
   } else {
     c = {

@@ -21,4 +21,7 @@ export const runtimeConfigTest: configVars = {
   prerender: {
     api_key: 'fake_prerender_key',
   },
+  migration: {
+    api_key: 'fake_migration_key',
+  },
 }

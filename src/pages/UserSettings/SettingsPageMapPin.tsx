@@ -192,7 +192,7 @@ export const SettingsPageMapPin = () => {
       }
       const updatedUser = await userStore.updateUserLocation(updatingUser)
       if (updatedUser) {
-        mapsStore.setUserPin(toJS(updatedUser))
+        await mapsStore.setUserPin(toJS(updatedUser))
       }
       setNotification({
         message: mapForm.succesfulSave,

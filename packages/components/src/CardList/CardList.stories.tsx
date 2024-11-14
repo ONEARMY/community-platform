@@ -8,7 +8,7 @@ export default {
   component: CardList,
 } as Meta<typeof CardList>
 
-const allItems = [
+const list = [
   {
     _deleted: false,
     _id: 'first-one',
@@ -49,38 +49,21 @@ const onPinClick = () => undefined
 export const Default: StoryFn<typeof CardList> = () => {
   return (
     <CardList
-      list={allItems}
+      list={list}
       onBlur={onBlur}
       onPinClick={onPinClick}
-      filteredList={null}
       selectedPin={undefined}
       viewport="stories"
     />
   )
 }
 
-export const FiltedDisplay: StoryFn<typeof CardList> = () => {
-  const filteredList = [allItems[0], allItems[2]]
-
+export const WhenDisplayIsZero: StoryFn<typeof CardList> = () => {
   return (
     <CardList
-      list={allItems}
+      list={list}
       onBlur={onBlur}
       onPinClick={onPinClick}
-      filteredList={filteredList}
-      selectedPin={undefined}
-      viewport="stories"
-    />
-  )
-}
-
-export const WhenFiltedDisplayIsZero: StoryFn<typeof CardList> = () => {
-  return (
-    <CardList
-      list={allItems}
-      onBlur={onBlur}
-      onPinClick={onPinClick}
-      filteredList={[]}
       selectedPin={undefined}
       viewport="stories"
     />

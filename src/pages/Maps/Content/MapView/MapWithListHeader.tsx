@@ -7,7 +7,7 @@ import {
   Modal,
   OsmGeocoding,
 } from 'oa-components'
-import { Flex, Heading, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 
 import type {
   ILatLng,
@@ -17,14 +17,14 @@ import type {
 } from 'oa-shared'
 
 interface IProps {
+  pins: IMapPin[]
+
   activePinFilters: MapFilterOptionsList
   availableFilters: MapFilterOptionsList
-  filteredPins: IMapPin[] | null
   onBlur: () => void
   onPinClick: (pin: IMapPin) => void
   onFilterChange: (filter: MapFilterOption) => void
   onLocationChange: (latlng: ILatLng) => void
-  pins: IMapPin[]
   selectedPin: IMapPin | undefined
   setShowMobileList?: (set: boolean) => void
   viewport: 'desktop' | 'mobile'
@@ -33,14 +33,13 @@ interface IProps {
 export const MapWithListHeader = (props: IProps) => {
   const [showFilters, setShowFilters] = useState<boolean>(false)
   const {
+    pins,
     activePinFilters,
     availableFilters,
-    filteredPins,
     onBlur,
     onFilterChange,
     onLocationChange,
     onPinClick,
-    pins,
     selectedPin,
     setShowMobileList,
     viewport,
@@ -64,7 +63,7 @@ export const MapWithListHeader = (props: IProps) => {
           availableFilters={availableFilters}
           onClose={toggleFilterModal}
           onFilterChange={onFilterChange}
-          pinCount={filteredPins?.length || 0}
+          pinCount={pins.length}
         />
       </Modal>
 
@@ -77,20 +76,7 @@ export const MapWithListHeader = (props: IProps) => {
           paddingTop: isMobile ? '50px' : 2,
         }}
       >
-        <Heading
-          data-cy="welome-header"
-          sx={{
-            paddingX: 4,
-          }}
-          variant={isMobile ? 'small' : 'heading'}
-        >
-          Welcome to our world!{' '}
-          {pins && `${pins.length} members (and counting...)`}
-        </Heading>
-
-        <Flex
-          sx={{ paddingX: 4, gap: 2, flexDirection: 'row', overflow: 'hidden' }}
-        >
+        <Flex sx={{ paddingX: 4, gap: 2, flexDirection: 'row' }}>
           <OsmGeocoding
             callback={({ lat, lon }) => {
               if (lat && lon) {
@@ -122,7 +108,6 @@ export const MapWithListHeader = (props: IProps) => {
       <CardList
         columnsCountBreakPoints={isMobile ? { 300: 1, 600: 2 } : undefined}
         list={pins}
-        filteredList={filteredPins}
         onBlur={onBlur}
         onPinClick={onPinClick}
         selectedPin={selectedPin}

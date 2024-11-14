@@ -15,25 +15,7 @@ describe('[Map]', () => {
     cy.visit('/map')
     cy.title().should('include', `Map`)
 
-    cy.step('Old map pins can be clicked on')
-    cy.get(`[data-cy=pin-${userId}]`).click()
-    cy.get('[data-cy=MapMemberCard]').within(() => {
-      cy.get('[data-cy=Username]').contains(userId)
-    })
-    cy.url().should('include', `#${userId}`)
-
-    cy.step('Old map pins can be hidden')
-    cy.get('.markercluster-map').click(0, 0)
-    cy.get('[data-cy=MapMemberCard]').should('not.exist')
-    cy.url().should('not.include', `#${userId}`)
-
-    cy.step('Link to new map visible and clickable')
-    cy.wait(500) // wait for interaction
-    cy.get('[data-cy=Banner]').contains('Test it out!').click()
-    cy.get('[data-cy=Banner]').contains('go back to the old one!')
-
-    cy.step('New map shows the cards')
-    cy.get('[data-cy="welome-header"]').should('be.visible')
+    cy.step('Shows the cards')
     cy.get('[data-cy="CardList-desktop"]').should('be.visible')
     cy.get('[data-cy="list-results"]').contains(/\d+ results in view/)
 
@@ -69,10 +51,14 @@ describe('[Map]', () => {
     cy.get('[data-cy=MapFilterList-ShowResultsButton]').first().click()
 
     cy.step('As the user moves in the list updates')
+    cy.visit(`/map#${userId}`)
+    cy.wait(500) // Wait for animation to complete
     for (let i = 0; i < 6; i++) {
       cy.get('.leaflet-control-zoom-in').click()
     }
+
     cy.get('[data-cy="list-results"]').contains('1 result')
+    cy.wait(500) // Wait for animation to complete
     cy.get('[data-cy="CardList-desktop"]').within(() => {
       cy.get('[data-cy=CardListItem]').within(() => {
         cy.contains(userId)
@@ -85,7 +71,7 @@ describe('[Map]', () => {
       .contains(userId)
     cy.get('[data-cy=CardListItem-selected]').first().click()
 
-    cy.step('New map pins can be clicked on')
+    cy.step('Map pins can be clicked on')
     cy.get(`[data-cy=pin-${userId}]`).click()
     cy.get('[data-cy=PinProfile]').within(() => {
       cy.get('[data-cy=Username]').contains(userId)
@@ -93,7 +79,7 @@ describe('[Map]', () => {
     })
     cy.url().should('include', `#${userId}`)
 
-    cy.step('New map pins can be hidden with the cross button')
+    cy.step('Map pins can be hidden with the cross button')
     cy.get('[data-cy=PinProfile]').should('be.visible')
     cy.get('[data-cy=PinProfileCloseButton]').click()
     cy.url().should('not.include', `#${userId}`)
@@ -136,8 +122,6 @@ describe('[Map]', () => {
   it('Test zoom out/ globe button + zoom in to users location button', () => {
     cy.viewport('macbook-16')
     cy.visit('/map')
-    cy.get('[data-cy=Banner]').contains('Test it out!').click()
-    cy.wait(500)
 
     cy.get('[data-cy="WorldViewButton"]', { timeout: 10000 })
       .should('exist')

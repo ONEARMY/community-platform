@@ -19,8 +19,8 @@ import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel, isAllowedToEditContent } from 'src/utils/helpers'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
+import CommentSectionV2 from '../common/CommentsV2/CommentSectionV2'
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
-import { QuestionDiscussion } from './QuestionDiscussion'
 
 import type { IQuestionDB } from 'oa-shared'
 
@@ -31,7 +31,6 @@ type QuestionPageProps = {
 export const QuestionPage = ({ question }: QuestionPageProps) => {
   const store = useQuestionStore()
   const activeUser = store.activeUser
-  const [totalCommentsCount, setTotalCommentsCount] = useState(0)
   const [voted, setVoted] = useState<boolean>(false)
   const [subscribed, setSubscribed] = useState<boolean>(false)
   const [usefulCount, setUsefulCount] = useState<number>(
@@ -205,31 +204,19 @@ export const QuestionPage = ({ question }: QuestionPageProps) => {
                 usePlural: false,
               }),
             },
-            {
-              icon: 'star',
-              label: buildStatisticsLabel({
-                stat: usefulCount,
-                statUnit: 'useful',
-                usePlural: false,
-              }),
-            },
-            {
-              icon: 'comment',
-              label: buildStatisticsLabel({
-                stat: totalCommentsCount,
-                statUnit: 'comment',
-                usePlural: true,
-              }),
-            },
           ]}
         />
       </Card>
       <ClientOnly fallback={<></>}>
         {() => (
-          <QuestionDiscussion
-            questionDocId={question._id}
-            setTotalCommentsCount={setTotalCommentsCount}
-          />
+          <Card
+            sx={{
+              marginTop: 5,
+              padding: 4,
+            }}
+          >
+            <CommentSectionV2 sourceId={question._id} />
+          </Card>
         )}
       </ClientOnly>
     </Box>

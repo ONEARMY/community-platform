@@ -14,17 +14,18 @@ export interface IProps {
 export const CardProfile = ({ item, isLink = false }: IProps) => {
   const { creator } = item
 
-  const isMember = creator?.profileType === 'member'
+  const isWorkspace = creator?.profileType && creator?.profileType !== 'member'
+  const isMember = !isWorkspace && creator
 
   return (
     <Flex sx={{ alignItems: 'stretch', alignContent: 'stretch' }}>
+      {isWorkspace && (
+        <CardDetailsSpaceProfile creator={creator} isLink={isLink} />
+      )}
       {isMember && (
         <CardDetailsMemberProfile creator={creator} isLink={isLink} />
       )}
-      {!isMember && creator && (
-        <CardDetailsSpaceProfile creator={creator} isLink={isLink} />
-      )}
-      {!creator && <CardDetailsFallback item={item} isLink={isLink} />}
+      {(!isWorkspace && !isMember)  && <CardDetailsFallback item={item} isLink={isLink} />}
     </Flex>
   )
 }

@@ -20,7 +20,6 @@ interface IProps {
 export const MapList = (props: IProps) => {
   const {
     pins,
-
     allToggleFilters,
     activePinFilters,
     setActivePinFilters,

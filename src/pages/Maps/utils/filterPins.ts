@@ -35,5 +35,5 @@ export const filterPins = (
     return tagFilteredList
   }
 
-  return filteredPins.length === 0 ? pins : filteredPins
+  return filteredPins
 }

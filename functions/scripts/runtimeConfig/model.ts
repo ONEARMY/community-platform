@@ -1,4 +1,4 @@
-import { configVars } from 'oa-shared/models/config'
+import type { configVars } from 'oa-shared/models/config'
 
 /** Variables populates in the same way firebase functions:config:set does for use in testing */
 export const runtimeConfigTest: configVars = {
@@ -17,8 +17,5 @@ export const runtimeConfigTest: configVars = {
   service: null as any,
   deployment: {
     site_url: 'http://localhost:4000',
-  },
-  prerender: {
-    api_key: 'fake_prerender_key',
   },
 }

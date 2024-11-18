@@ -73,7 +73,7 @@ export const MapWithListHeader = (props: IProps) => {
           backgroundColor: 'background',
           gap: 2,
           paddingY: 2,
-          paddingTop: isMobile ? '50px' : 2,
+          paddingTop: isMobile ? '50px' : 6,
         }}
       >
         <Flex sx={{ paddingX: 4, gap: 2, flexDirection: 'row' }}>

@@ -95,7 +95,7 @@ export const MapContainer = (props: IProps) => {
       />
 
       <MapView
-        allPins={allPins}
+        allPins={filteredPins}
         center={center}
         setCenter={setCenter}
         mapRef={mapRef}

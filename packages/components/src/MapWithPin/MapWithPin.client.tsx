@@ -15,7 +15,7 @@ import 'leaflet/dist/leaflet.css'
 
 const useUserLocation = 'Use my current location'
 const mapInstructions =
-  "To move your pin, grab it to move it or double click where you want it to go. Tap on your pin to see how it'll look on the map."
+  'To move your pin, grab it to move it or double click where you want it to go.'
 
 export interface Props {
   mapRef: React.RefObject<MapType>
@@ -33,7 +33,6 @@ export interface Props {
 }
 
 export const MapWithPin = (props: Props) => {
-  const [dragging, setDragging] = useState<boolean>(false)
   const [zoom, setZoom] = useState(props.zoom || 1)
   const [center, setCenter] = useState(
     props.center || [props.position.lat, props.position.lng],
@@ -87,10 +86,10 @@ export const MapWithPin = (props: Props) => {
         <Box
           sx={{
             position: 'absolute',
-            width: '100%',
             zIndex: 2,
-            padding: 2,
-            bottom: 0,
+            padding: 4,
+            top: 0,
+            right: 0,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -137,13 +136,11 @@ export const MapWithPin = (props: Props) => {
             height: '500px',
             zIndex: 1,
           }}
-          ondragstart={() => setDragging(true)}
-          ondragend={() => setDragging(false)}
         >
-          <ZoomControl position="bottomleft" />
-          {!dragging && (
-            <>
-              {popup}
+          <ZoomControl position="topleft" />
+          <>
+            {popup}
+            {position && (
               <MapPin
                 position={position}
                 markerIcon={markerIcon}
@@ -156,8 +153,8 @@ export const MapWithPin = (props: Props) => {
                     })
                 }}
               />
-            </>
-          )}
+            )}
+          </>
         </Map>
       </div>
     </Flex>

@@ -4,6 +4,7 @@ import clusterIcon from 'src/assets/icons/map-cluster.svg'
 import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg'
 import { logger } from 'src/logger'
 import Workspace from 'src/pages/User/workspace/Workspace'
+import { useThemeUI } from 'theme-ui'
 
 import type { MarkerCluster } from 'leaflet'
 import type { IMapPin } from 'oa-shared'
@@ -16,19 +17,41 @@ import './sprites.css'
  * such as total pins. Currently none used, but retaining
  */
 export const createClusterIcon = () => {
+  const { theme } = useThemeUI() as any
   return (cluster: MarkerCluster) => {
     const className = ['icon']
     let icon: any
-    if (cluster.getChildCount() > 1) {
+    let outlineSize: number = 0
+    const clusterChildCount: number = cluster.getChildCount()
+    if (clusterChildCount > 1) {
       className.push('icon-cluster-many')
       icon = clusterIcon
-    } else if (cluster.getChildCount() === 1) {
+      // Calcute Outline CSS
+      if (clusterChildCount > 49) {
+        outlineSize = 24
+      } else {
+        outlineSize = 4 + ((clusterChildCount - 2) / 50) * 20
+      }
+    } else if (clusterChildCount === 1) {
       icon = cluster[0].pinType.icon
     }
     const { fontSize, iconSize, lineHeight } = getClusterSizes(cluster)
 
+    // Prepare Outline CSS for groups
+    const borderRadius = lineHeight / 2
+    const themeBaseColorForRgba: RegExpExecArray | null =
+      /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(theme.colors.accent.base)
+
     return L.divIcon({
-      html: `<img src="${icon}" /><span class="icon-cluster-text" style="font-size: ${fontSize}px; line-height: ${lineHeight}px">${cluster.getChildCount()}</span>`,
+      html: `<img src="${icon}" /><span class="icon-cluster-text" style="
+        font-size: ${fontSize}px;
+        line-height: ${lineHeight}px;
+        border-radius: ${borderRadius}px;
+        outline: ${outlineSize}px solid rgba(
+          ${parseInt(themeBaseColorForRgba![1], 16)},
+          ${parseInt(themeBaseColorForRgba![2], 16)},
+          ${parseInt(themeBaseColorForRgba![3], 16)}, 0.5);
+        ">${clusterChildCount}</span>`,
       className: className.join(' '),
       iconSize: L.point(iconSize, iconSize, true),
     })

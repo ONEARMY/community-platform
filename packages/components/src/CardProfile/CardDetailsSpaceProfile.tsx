@@ -30,6 +30,7 @@ export const CardDetailsSpaceProfile = ({ creator, isLink }: IProps) => {
                 alignSelf: 'stretch',
                 objectFit: 'cover',
               }}
+              loading="lazy"
             />
           </Flex>
           <Box

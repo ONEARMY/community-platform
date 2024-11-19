@@ -67,7 +67,7 @@ export interface IProfileCreator {
   countryCode: string
   coverImage?: string
   displayName: string
-  isContactableByPublic: boolean
+  isContactableByPublic?: boolean
   profileType: ProfileTypeName
   tags?: ITag[]
   workspaceType?: string

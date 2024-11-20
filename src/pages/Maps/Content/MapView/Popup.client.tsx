@@ -64,19 +64,23 @@ export const Popup = (props: IProps) => {
         {newMap && onClose && <PinProfile item={activePin} onClose={onClose} />}
         {!newMap && (
           <MapMemberCard
-            loading={!activePin.detail}
-            imageUrl={activePin.detail?.heroImageUrl}
+            loading={!activePin.creator}
+            imageUrl={
+              activePin.creator?.coverImage ||
+              activePin.creator?.userImage ||
+              ''
+            }
             comments={
               activePin.comments &&
               activePin.moderation === IModerationStatus.IMPROVEMENTS_NEEDED
                 ? activePin.comments
                 : null
             }
-            description={activePin.detail?.shortDescription}
+            description={activePin.creator?.about || ''}
             user={{
-              isVerified: !!activePin.detail?.verifiedBadge,
-              userName: activePin.detail?.name,
-              countryCode: activePin.detail?.country?.toLowerCase(),
+              isVerified: !!activePin.creator?.badges?.verified,
+              userName: activePin.creator?._id || '',
+              countryCode: activePin.creator?.countryCode,
             }}
             heading={getHeading(activePin)}
           />

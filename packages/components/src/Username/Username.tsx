@@ -7,6 +7,7 @@ import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
 import { InternalLink } from '../InternalLink/InternalLink'
 import { twoCharacterCountryCodes } from './TwoCharacterCountryCodes'
 
+import type { HTMLAttributeAnchorTarget } from 'react'
 import type { ThemeUIStyleObject } from 'theme-ui'
 import type { User } from '../types/common'
 
@@ -14,12 +15,13 @@ export interface IProps {
   user: User
   sx?: ThemeUIStyleObject
   isLink?: boolean
+  target?: HTMLAttributeAnchorTarget
 }
 
 const isValidCountryCode = (str: string) =>
   str && twoCharacterCountryCodes.has(str.toUpperCase())
 
-export const Username = ({ user, sx, isLink = true }: IProps) => {
+export const Username = ({ user, sx, target, isLink = true }: IProps) => {
   const { countryCode, userName, isSupporter, isVerified } = user
 
   const UserNameBody = (
@@ -83,6 +85,7 @@ export const Username = ({ user, sx, isLink = true }: IProps) => {
   return (
     <InternalLink
       to={`/u/${userName}`}
+      target={target || '_self'}
       sx={{
         border: '1px solid transparent',
         display: 'inline-flex',

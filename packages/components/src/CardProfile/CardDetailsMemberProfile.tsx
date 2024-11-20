@@ -58,6 +58,7 @@ export const CardDetailsMemberProfile = ({ creator, isLink }: IProps) => {
           }}
           sx={{ alignSelf: 'flex-start' }}
           isLink={isLink}
+          target="_blank"
         />
         {tags && <ProfileTagsList tags={tags} />}
       </Flex>

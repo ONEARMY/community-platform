@@ -1,11 +1,10 @@
-import { Flex, Image, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 
 import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
-import VerifiedBadgeIcon from '../../assets/icons/icon-verified-badge.svg'
-import SupporterBadgeIcon from '../../assets/icons/supporter.svg'
 import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
 import { InternalLink } from '../InternalLink/InternalLink'
 import { twoCharacterCountryCodes } from './TwoCharacterCountryCodes'
+import { UserBadge } from './UserBadge'
 
 import type { HTMLAttributeAnchorTarget } from 'react'
 import type { ThemeUIStyleObject } from 'theme-ui'
@@ -61,20 +60,8 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
       </Flex>
 
       <Text sx={{ color: 'black' }}>{userName}</Text>
-      {isVerified && (
-        <Image
-          src={VerifiedBadgeIcon}
-          sx={{ ml: 1, height: 16, width: 16 }}
-          data-testid="Username: verified badge"
-        />
-      )}
-      {isSupporter && !isVerified && (
-        <Image
-          src={SupporterBadgeIcon}
-          sx={{ ml: 1, height: 16, width: 16 }}
-          data-testid="Username: supporter badge"
-        />
-      )}
+      {isVerified && <UserBadge badgeName="verified" />}
+      {isSupporter && !isVerified && <UserBadge badgeName="supporter" />}
     </Flex>
   )
 

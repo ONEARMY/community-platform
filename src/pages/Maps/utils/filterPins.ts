@@ -4,33 +4,48 @@ export const filterPins = (
   activePinFilters: MapFilterOptionsList,
   allPinsInView: IMapPin[],
 ): IMapPin[] => {
-  const profileTypeFilters = activePinFilters
+  if (activePinFilters.length === 0) return allPinsInView
+
+  const typeFilters = activePinFilters
     .filter(({ filterType }) => filterType === 'profileType')
     .map(({ _id }) => _id)
 
-  const filteredPins: IMapPin[] = []
+  let filteredPins: IMapPin[] = []
 
-  if (profileTypeFilters.length > 0) {
+  if (typeFilters.length > 0) {
     const profileTypeFilteredList = allPinsInView.filter(
       ({ creator }) =>
-        creator?.profileType &&
-        profileTypeFilters.includes(creator?.profileType),
+        creator?.profileType && typeFilters.includes(creator?.profileType),
     )
     filteredPins.push(...profileTypeFilteredList)
   }
 
-  const profileTagFilters = activePinFilters
+  const tagFilters = activePinFilters
     .filter(({ filterType }) => filterType === 'profileTag')
     .map(({ _id }) => _id)
 
-  if (profileTagFilters.length > 0) {
+  if (tagFilters.length > 0) {
     const listToFilter = filteredPins.length > 0 ? filteredPins : allPinsInView
     const tagFilteredList = listToFilter.filter(({ creator }) => {
       const tagIds = creator?.tags?.map(({ _id }) => _id)
-      return profileTagFilters.some((tagId) => tagIds?.includes(tagId))
+      return tagFilters.some((tagId) => tagIds?.includes(tagId))
     })
-    return tagFilteredList
+    filteredPins = tagFilteredList
   }
 
-  return filteredPins.length === 0 ? allPinsInView : filteredPins
+  const badgeFilters = activePinFilters
+    .filter(({ filterType }) => filterType === 'badge')
+    .map(({ _id }) => _id)
+
+  if (badgeFilters.length > 0) {
+    const listToFilter = filteredPins.length > 0 ? filteredPins : allPinsInView
+    const badgeFilteredList = listToFilter.filter(({ creator }) => {
+      if (!creator?.badges) return
+      const badges = Object.keys(creator?.badges).map((key) => key)
+      return badgeFilters.some((badge) => badges?.includes(badge))
+    })
+    filteredPins = badgeFilteredList
+  }
+
+  return filteredPins
 }

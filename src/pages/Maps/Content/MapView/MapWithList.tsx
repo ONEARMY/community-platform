@@ -20,13 +20,13 @@ import type {
 import type { Map as MapType } from 'react-leaflet'
 
 interface IProps {
-  activePin: IMapPin | null
+  selectedPin: IMapPin | undefined
   center: ILatLng
   initialZoom: number
   mapRef: React.RefObject<MapType>
   notification?: string
   onBlur: () => void
-  onPinClicked: (pin: IMapPin) => void
+  onPinClick: (pin: IMapPin) => void
   onLocationChange: (latlng: ILatLng) => void
   pins: IMapPin[]
   promptUserLocation: () => Promise<void>
@@ -39,14 +39,14 @@ const ZOOM_OUT_TOOLTIP = 'Zoom out to world view'
 
 export const MapWithList = (props: IProps) => {
   const {
-    activePin,
+    selectedPin,
     center,
     initialZoom,
     mapRef,
     notification,
     onBlur,
     onLocationChange,
-    onPinClicked,
+    onPinClick,
     pins,
     promptUserLocation,
     setZoom,
@@ -149,6 +149,8 @@ export const MapWithList = (props: IProps) => {
           onBlur={onBlur}
           onFilterChange={onFilterChange}
           onLocationChange={onLocationChange}
+          onPinClick={onPinClick}
+          selectedPin={selectedPin}
           filteredPins={filteredPins}
           viewport="desktop"
         />
@@ -189,7 +191,9 @@ export const MapWithList = (props: IProps) => {
           onBlur={onBlur}
           onFilterChange={onFilterChange}
           onLocationChange={onLocationChange}
+          onPinClick={onPinClick}
           pins={pins}
+          selectedPin={selectedPin}
           setShowMobileList={setShowMobileList}
           viewport="mobile"
         />
@@ -273,10 +277,10 @@ export const MapWithList = (props: IProps) => {
             </Button>
           )}
         </Flex>
-        <Clusters pins={pins} onPinClick={onPinClicked} prefix="new" />
-        {activePin && (
+        <Clusters pins={pins} onPinClick={onPinClick} prefix="new" />
+        {selectedPin && (
           <Popup
-            activePin={activePin}
+            activePin={selectedPin}
             mapRef={mapRef}
             onClose={onBlur}
             newMap

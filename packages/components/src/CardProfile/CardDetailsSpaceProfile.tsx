@@ -71,6 +71,7 @@ export const CardDetailsSpaceProfile = ({ creator, isLink }: IProps) => {
             }}
             sx={{ alignSelf: 'flex-start' }}
             isLink={isLink}
+            target="_blank"
           />
         </Flex>
 

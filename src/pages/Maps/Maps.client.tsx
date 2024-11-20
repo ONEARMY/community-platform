@@ -28,7 +28,7 @@ const MapsPage = observer(() => {
   const [center, setCenter] = useState<ILatLng>(INITIAL_CENTER)
   const [mapPins, setMapPins] = useState<IMapPin[]>([])
   const [notification, setNotification] = useState<string>('')
-  const [selectedPin, setSelectedPin] = useState<IMapPin | null>(null)
+  const [selectedPin, setSelectedPin] = useState<IMapPin | undefined>()
   const [showNewMap, setShowNewMap] = useState<boolean>(false)
   const [zoom, setZoom] = useState<number>(INITIAL_ZOOM)
 
@@ -63,13 +63,7 @@ const MapsPage = observer(() => {
   useEffect(() => {
     const pinId = location.hash.slice(1)
     if (pinId.length > 0) {
-      if (selectedPin) {
-        setSelectedPin(null)
-      } else {
-        selectPinByUserId(pinId)
-      }
-    } else {
-      setSelectedPin(null)
+      setSelectedPin(selectedPin)
     }
   }, [location.hash])
 
@@ -108,7 +102,7 @@ const MapsPage = observer(() => {
     const preLoadedPin = mapPins.find((pin) => pin._id === userId)
     if (preLoadedPin) {
       setCenter(preLoadedPin.location)
-      setSelectedPin(preLoadedPin)
+      return setSelectedPin(preLoadedPin)
     }
 
     // If only the mapPins where preloaded with the "detail" property, i think that this could fly away
@@ -123,8 +117,15 @@ const MapsPage = observer(() => {
   }
 
   const onBlur = () => {
-    setSelectedPin(null)
     navigate('/map')
+    setSelectedPin(undefined)
+  }
+
+  const onPinClick = (pin) => {
+    navigate(`/map#${pin._id}`)
+    if (pin._id !== selectedPin?._id) {
+      selectPinByUserId(pin._id)
+    }
   }
 
   return (
@@ -144,10 +145,7 @@ const MapsPage = observer(() => {
             activePin={selectedPin}
             mapRef={mapRef}
             pins={visibleMapPins}
-            onPinClicked={(pin) => {
-              selectPinByUserId(pin._id)
-              navigate(`/map#${pin._id}`)
-            }}
+            onPinClick={onPinClick}
             onBlur={onBlur}
             center={center}
             zoom={zoom}
@@ -157,17 +155,14 @@ const MapsPage = observer(() => {
       )}
       {showNewMap && (
         <MapWithList
-          activePin={selectedPin}
+          selectedPin={selectedPin}
           center={center}
           initialZoom={INITIAL_ZOOM}
           mapRef={newMapRef}
           notification={notification}
           onBlur={onBlur}
           onLocationChange={(latlng) => setCenter(latlng)}
-          onPinClicked={(pin) => {
-            selectPinByUserId(pin._id)
-            navigate(`/map#${pin._id}`)
-          }}
+          onPinClick={onPinClick}
           pins={visibleMapPins}
           promptUserLocation={promptUserLocation}
           setZoom={setZoom}

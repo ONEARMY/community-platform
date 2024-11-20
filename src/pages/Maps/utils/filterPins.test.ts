@@ -17,7 +17,7 @@ describe('filterPins', () => {
   }
 
   const builderFilter = {
-    _id: 'tag2',
+    _id: 'builder',
     filterType: 'profileTag',
     label: 'builder',
   }

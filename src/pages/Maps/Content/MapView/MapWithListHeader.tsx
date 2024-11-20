@@ -53,6 +53,7 @@ export const MapWithListHeader = (props: IProps) => {
   const sx = {
     width: ['350px', '600px'],
     minWidth: '350px',
+    padding: '0 !important',
   }
 
   return (

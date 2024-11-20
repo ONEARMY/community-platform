@@ -141,7 +141,7 @@ export class MapsStore extends ModuleStore {
     }
   }
   // call additional action when pin detail received to inform mobx correctly of update
-  private async getPinDetail(pin: IMapPin) {
+  public async getPinDetail(pin: IMapPin) {
     const detail: IMapPinDetail = await this.getUserProfilePin(pin._id)
     const pinWithDetail: IMapPinWithDetail = { ...pin, detail }
     return pinWithDetail

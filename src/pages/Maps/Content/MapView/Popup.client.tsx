@@ -1,9 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { Popup as LeafletPopup } from 'react-leaflet'
 import L from 'leaflet'
-import { MapMemberCard, PinProfile } from 'oa-components'
-import { IModerationStatus } from 'oa-shared'
-import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
+import { PinProfile } from 'oa-components'
 
 import type { ILatLng, IMapPin, IMapPinWithDetail } from 'oa-shared'
 import type { Map } from 'react-leaflet'

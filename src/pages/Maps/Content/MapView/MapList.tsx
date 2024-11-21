@@ -6,27 +6,30 @@ import { MapWithListHeader } from './MapWithListHeader'
 import type { IMapPin, MapFilterOption, MapFilterOptionsList } from 'oa-shared'
 
 interface IProps {
-  pins: IMapPin[]
-  allToggleFilters: MapFilterOptionsList
-
   activePinFilters: MapFilterOptionsList
+  allToggleFilters: MapFilterOptionsList
+  onBlur: () => void
+  onLocationChange: (ILatLng) => void
+  onPinClick: (pin: IMapPin) => void
+  pins: IMapPin[]
+  selectedPin: IMapPin | undefined
   setActivePinFilters: (MapFilterOption) => void
   setShowMobileList: (boolean) => void
   showMobileList: boolean
-  onBlur: () => void
-  onLocationChange: (ILatLng) => void
 }
 
 export const MapList = (props: IProps) => {
   const {
-    pins,
-    allToggleFilters,
     activePinFilters,
+    allToggleFilters,
+    onBlur,
+    onLocationChange,
+    onPinClick,
+    pins,
+    selectedPin,
     setActivePinFilters,
     setShowMobileList,
     showMobileList,
-    onBlur,
-    onLocationChange,
   } = props
 
   const onFilterChange = (changedOption: MapFilterOption) => {
@@ -50,6 +53,18 @@ export const MapList = (props: IProps) => {
 
   const mobileListDisplay = showMobileList ? 'block' : 'none'
 
+  const headerProps = {
+    activePinFilters,
+    availableFilters: allToggleFilters,
+    onBlur,
+    onFilterChange,
+    onLocationChange,
+    onPinClick,
+    pins,
+    selectedPin,
+    setShowMobileList,
+  }
+
   return (
     <>
       {/* Desktop list view */}
@@ -61,15 +76,7 @@ export const MapList = (props: IProps) => {
           overflow: 'scroll',
         }}
       >
-        <MapWithListHeader
-          pins={pins}
-          activePinFilters={activePinFilters}
-          availableFilters={allToggleFilters}
-          onBlur={onBlur}
-          onFilterChange={onFilterChange}
-          onLocationChange={onLocationChange}
-          viewport="desktop"
-        />
+        <MapWithListHeader {...headerProps} viewport="desktop" />
       </Box>
 
       {/* Mobile/tablet list view */}
@@ -100,16 +107,7 @@ export const MapList = (props: IProps) => {
             Show map view
           </Button>
         </Flex>
-        <MapWithListHeader
-          pins={pins}
-          activePinFilters={activePinFilters}
-          availableFilters={allToggleFilters}
-          onBlur={onBlur}
-          onFilterChange={onFilterChange}
-          onLocationChange={onLocationChange}
-          setShowMobileList={setShowMobileList}
-          viewport="mobile"
-        />
+        <MapWithListHeader {...headerProps} viewport="mobile" />
       </Box>
     </>
   )

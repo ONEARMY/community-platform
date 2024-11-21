@@ -16,7 +16,6 @@ export interface IProps {
   onPinClick: (arg: IMapPin) => void
   selectedPin: IMapPin | undefined
   viewport: string
-  
 }
 
 const DEFAULT_BREAKPOINTS = { 600: 1, 1100: 2, 1600: 3 }
@@ -26,14 +25,8 @@ const ITEMS_PER_RENDER = 20
 export const CardList = (props: IProps) => {
   const [renderCount, setRenderCount] = useState<number>(ITEMS_PER_RENDER)
   const [displayItems, setDisplayItems] = useState<JSX.Element[]>([])
-  const {
-    list,
-    onBlur,
-    onPinClick,
-    selectedPin,
-    viewport,
-  } = props
-  
+  const { list, onBlur, onPinClick, selectedPin, viewport } = props
+
   useEffect(() => {
     setRenderCount(ITEMS_PER_RENDER)
   }, [list])
@@ -45,18 +38,20 @@ export const CardList = (props: IProps) => {
         (a, b) =>
           Date.parse(b.creator?._lastActive || '0') -
           Date.parse(a.creator?._lastActive || '0'),
-      ).map((item) => {
-      const isSelectedPin = item._id === selectedPin?._id
-      return (
-        <CardListItem
-          item={item}
-          key={item._id}
-          isSelectedPin={isSelectedPin}
-          onPinClick={isSelectedPin ? onBlur : onPinClick}
-          viewport={viewport}
-        />
       )
-    })
+      .map((item) => {
+        const isSelectedPin = item._id === selectedPin?._id
+
+        return (
+          <CardListItem
+            item={item}
+            key={item._id}
+            isSelectedPin={isSelectedPin}
+            onPinClick={isSelectedPin ? onBlur : onPinClick}
+            viewport={viewport}
+          />
+        )
+      })
 
     setDisplayItems(toRender)
   }, [renderCount, list])

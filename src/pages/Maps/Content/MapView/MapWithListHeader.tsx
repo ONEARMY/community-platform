@@ -18,7 +18,6 @@ import type {
 
 interface IProps {
   pins: IMapPin[]
-
   activePinFilters: MapFilterOptionsList
   availableFilters: MapFilterOptionsList
   onBlur: () => void

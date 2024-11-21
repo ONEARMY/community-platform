@@ -20,14 +20,17 @@ import './sprites.css'
 export const createClusterIcon = () => {
   const { theme } = useThemeUI() as any
   const path = clusterIcon
-  let iconAsString:string = ""
+  let iconAsString: string = ''
   useEffect(() => {
     fetch(path)
-      .then(response => response.text())
-      .then(data => {
-        iconAsString = data.replaceAll(/#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})/g, theme.colors.accent.base)
+      .then((response) => response.text())
+      .then((data) => {
+        iconAsString = data.replaceAll(
+          /#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})/g,
+          theme.colors.accent.base,
+        )
       })
-  }, [path, theme]);
+  }, [path, theme])
   return (cluster: MarkerCluster) => {
     const className = ['icon']
     let icon: any

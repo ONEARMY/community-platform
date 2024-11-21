@@ -53,19 +53,18 @@ describe('[Map]', () => {
     cy.step('As the user moves in the list updates')
     cy.visit(`/map#${userId}`)
     cy.wait(500) // Wait for animation to complete
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 7; i++) {
       cy.get('.leaflet-control-zoom-in').click()
     }
 
     cy.get('[data-cy="list-results"]').contains('1 result')
     cy.wait(500) // Wait for animation to complete
     cy.get('[data-cy="CardList-desktop"]').within(() => {
-      cy.get('[data-cy=CardListItem]').within(() => {
+      cy.get('[data-cy=CardListItem-selected]').within(() => {
         cy.contains(userId)
         cy.get('[data-cy="MemberBadge-workshop"]')
       })
     })
-    cy.get('[data-cy=CardListItem]').contains(userId).click()
     cy.get('[data-cy="PinProfile"]')
       .get('[data-cy="Username"]')
       .contains(userId)

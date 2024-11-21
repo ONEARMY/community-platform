@@ -30,6 +30,7 @@ export const createClusterIcon = () => {
           theme.colors.accent.base,
         )
       })
+      .catch((fetchError) => console.error(fetchError))
   }, [path, theme])
   return (cluster: MarkerCluster) => {
     const className = ['icon']

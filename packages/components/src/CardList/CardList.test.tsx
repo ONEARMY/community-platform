@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 
 import { render } from '../test/utils'
 import { EMPTY_LIST, type IProps } from './CardList'
-import { Default, WhenFiltedDisplayIsZero } from './CardList.stories'
+import { Default, WhenDisplayIsZero } from './CardList.stories'
 
 describe('CardList', () => {
   it('Shows all items when no filtering is done', () => {
@@ -15,7 +15,7 @@ describe('CardList', () => {
 
   it('Shows the no item label when filted items is empty', () => {
     const { getByText } = render(
-      <WhenFiltedDisplayIsZero {...(WhenFiltedDisplayIsZero.args as IProps)} />,
+      <WhenDisplayIsZero {...(WhenDisplayIsZero.args as IProps)} />,
     )
 
     expect(getByText(EMPTY_LIST)).toBeInTheDocument()

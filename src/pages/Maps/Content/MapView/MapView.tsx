@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import { Tooltip } from 'react-tooltip'
 import { Button, Map } from 'oa-components'
 import { logger } from 'src/logger'
@@ -17,14 +16,15 @@ import type { Map as MapType, MapProps } from 'react-leaflet'
 interface IProps {
   allPins: IMapPin[]
   center: ILatLng
-  setCenter: (ILatLng) => void
   mapRef: RefObject<MapType<MapProps, any>>
-  setBoundaries: (LatLngBounds) => void
-  setShowMobileList: (boolean) => void
-  zoom: number
-  setZoom: (number) => void
-  onPinClick: (IMapPin) => void
   onBlur: () => void
+  onPinClick: (IMapPin) => void
+  selectedPin: IMapPin | undefined
+  setBoundaries: (LatLngBounds) => void
+  setCenter: (ILatLng) => void
+  setShowMobileList: (boolean) => void
+  setZoom: (number) => void
+  zoom: number
 }
 
 const INITIAL_ZOOM = 3
@@ -35,18 +35,16 @@ export const MapView = (props: IProps) => {
   const {
     allPins,
     center,
-    setBoundaries,
-    setCenter,
     mapRef,
     onBlur,
     onPinClick,
-    zoom,
+    selectedPin,
+    setBoundaries,
+    setCenter,
     setShowMobileList,
     setZoom,
+    zoom,
   } = props
-  const [activePin, setActivePin] = useState<IMapPin | null>(null)
-
-  const location = useLocation()
 
   const buttonStyle = {
     backgroundColor: 'white',
@@ -56,19 +54,6 @@ export const MapView = (props: IProps) => {
       backgroundColor: 'lightgray',
     },
   }
-
-  useEffect(() => {
-    const pinId = location.hash.slice(1)
-    if (pinId.length > 0) {
-      if (activePin) {
-        setActivePin(null)
-      } else {
-        selectPinByUserId(pinId)
-      }
-    } else {
-      setActivePin(null)
-    }
-  }, [location.hash])
 
   const promptUserLocation = async () => {
     try {
@@ -86,16 +71,6 @@ export const MapView = (props: IProps) => {
     if (mapRef.current) {
       const boundaries = mapRef.current.leafletElement.getBounds()
       setBoundaries(boundaries)
-    }
-  }
-
-  const selectPinByUserId = async (userId: string) => {
-    // First check the mapPins to see if the pin is already
-    // partially loaded
-    const preLoadedPin = allPins.find((pin) => pin._id === userId)
-    if (preLoadedPin) {
-      setCenter(preLoadedPin.location)
-      setActivePin(preLoadedPin)
     }
   }
 
@@ -119,7 +94,7 @@ export const MapView = (props: IProps) => {
       maxZoom={18}
       style={{ flex: 1 }}
       zoomControl={isViewportGreaterThanTablet}
-      onclick={() => onBlur()}
+      onclick={onBlur}
       ondragend={handleLocationChange}
       onzoomend={handleLocationChange}
       onresize={handleLocationChange}
@@ -182,8 +157,8 @@ export const MapView = (props: IProps) => {
         </Button>
       </Flex>
       <Clusters pins={allPins} onPinClick={onPinClick} prefix="new" />
-      {activePin && (
-        <Popup activePin={activePin} mapRef={mapRef} onClose={onBlur} newMap />
+      {selectedPin && (
+        <Popup activePin={selectedPin} mapRef={mapRef} onClose={onBlur} />
       )}
     </Map>
   )

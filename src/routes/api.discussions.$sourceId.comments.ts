@@ -28,11 +28,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       source_id_legacy, 
       parent_id,
       created_by,
-      profiles(id, username, display_name, is_verified, photo_url, country)
+      profiles(id, firebase_auth_id, display_name, is_verified, photo_url, country)
     `,
     )
     .eq(sourceParam, sourceId)
-    .order('created_at', { ascending: false })
 
   if (result.error) {
     console.error(result.error)
@@ -70,7 +69,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 }
 
 export async function action({ params, request }: LoaderFunctionArgs) {
-  const { valid, username } = await verifyFirebaseToken(
+  const { valid, user_id } = await verifyFirebaseToken(
     request.headers.get('firebaseToken')!,
   )
 
@@ -78,7 +77,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     return json({}, { status: 401, statusText: 'unauthorized' })
   }
 
-  if (!username) {
+  if (!user_id) {
     return json({}, { status: 400, statusText: 'user not found' })
   }
 
@@ -105,15 +104,12 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   const profile = await client
     .from('profiles')
     .select()
-    .eq('username', username)
+    .eq('firebase_auth_id', user_id)
     .single()
 
   if (profile.error || !profile.data) {
     console.log(profile)
-    return json(
-      {},
-      { status: 400, statusText: 'profile not found ' + username },
-    )
+    return json({}, { status: 400, statusText: 'profile not found ' + user_id })
   }
 
   const newComment = {
@@ -141,7 +137,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
       source_id_legacy, 
       parent_id,
       created_by,
-      profiles(id, username, display_name, is_verified, photo_url, country)
+      profiles(id, firebase_auth_id, display_name, is_verified, photo_url, country)
     `,
     )
     .single()

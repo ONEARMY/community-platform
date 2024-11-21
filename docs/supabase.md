@@ -47,3 +47,13 @@ How?
 - Whenever a comment is created or deleted, it triggers the update_comment_count function.
 - The function checks the Operation kind (Insert/Delete), the source_type and source_id.
 - Fron the source_type it will update the according content total (howtos, research, questions) that matches the source_id
+
+# Local firebase sync testing/debugging
+
+We can create and deploy the sync function to the firebase dev environment.
+Then, using ngrok, expose our local supabase url to the internet, and point the firebase function to it.
+
+To authenticate, we need to create these 3 secrets, for each firebase project:
+firebase functions:secrets:set SUPABASE_API_URL
+firebase functions:secrets:set SUPABASE_API_KEY
+firebase functions:secrets:set TENANT_ID

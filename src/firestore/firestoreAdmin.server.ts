@@ -15,9 +15,8 @@ export const verifyFirebaseToken = async (idToken: string) => {
   try {
     // Verify the ID token
     const decodedToken = await admin.auth().verifyIdToken(idToken)
-    const username = decodedToken.name
 
-    return { valid: true, username }
+    return { valid: true, user_id: decodedToken.user_id }
   } catch (error) {
     console.error('Error verifying Firebase ID token:', error)
     return { valid: false, error: error.message }

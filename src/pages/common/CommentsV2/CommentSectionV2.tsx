@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Comment } from 'src/models/comment.model'
 import { auth } from 'src/utils/firebase'
-import { Box, Flex, Heading } from 'theme-ui'
+import { Box, Button, Flex, Heading } from 'theme-ui'
 
 import { CommentItemV2 } from './CommentItemV2'
 import { CreateCommentV2 } from './CreateCommentV2'
@@ -11,11 +11,28 @@ import type { Reply } from 'src/models/comment.model'
 type CommentsV2Props = {
   sourceId: number | string
 }
+const commentPageSize = 10
 
 const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
   const [comments, setComments] = useState<Comment[]>([])
+  const [newCommentIds, setNewCommentIds] = useState<number[]>([])
+  const [commentLimit, setCommentLimit] = useState<number>(commentPageSize)
+  const displayedComments = useMemo(() => {
+    return comments
+      .filter((x) => !newCommentIds.includes(x.id))
+      .slice(0, commentLimit)
+  }, [comments, commentLimit, newCommentIds])
+  const newComments = useMemo(() => {
+    return comments.filter((x) => newCommentIds.includes(x.id))
+  }, [comments, newCommentIds])
+  const displayShowMore = useMemo(
+    () => comments.length - newCommentIds.length > commentLimit,
+    [comments, commentLimit, newCommentIds],
+  )
   const commentCount = useMemo(
-    () => comments.filter((x) => !x.deleted).length,
+    () =>
+      comments.filter((x) => !x.deleted).length +
+      comments.flatMap((x) => x.replies).filter((x) => !!x).length,
     [comments],
   )
 
@@ -24,7 +41,6 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
       try {
         const result = await fetch(`/api/discussions/${sourceId}/comments`)
         const { comments } = await result.json()
-        console.log(comments)
         setComments(comments || [])
       } catch (err) {
         console.error(err)
@@ -50,7 +66,8 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
       if (result.status === 201) {
         const newComment = Comment.fromDB(await result.json())
 
-        setComments((comments) => [newComment, ...comments])
+        setComments((comments) => [...comments, newComment])
+        setNewCommentIds([...newCommentIds, newComment.id])
       } else {
         // show error
       }
@@ -240,7 +257,34 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
       <Heading as="h3" data-cy="DiscussionTitle">
         {title}
       </Heading>
-      {comments.map((comment) => (
+      {displayedComments.map((comment) => (
+        <Box key={comment.id}>
+          <CommentItemV2
+            comment={comment}
+            onEdit={editComment}
+            onDelete={deleteComment}
+            onReply={(reply) => postReply(comment.id, reply)}
+            onEditReply={(id, reply) => editReply(id, reply, comment.id)}
+            onDeleteReply={(id) => deleteReply(id, comment.id)}
+          />
+        </Box>
+      ))}
+
+      {displayShowMore && (
+        <Flex>
+          <Button
+            type="button"
+            sx={{ margin: '0 auto' }}
+            variant="outline"
+            data-cy="show-more-comments"
+            onClick={() => setCommentLimit((prev) => prev + commentPageSize)}
+          >
+            show more comments
+          </Button>
+        </Flex>
+      )}
+
+      {newComments.map((comment) => (
         <Box key={comment.id}>
           <CommentItemV2
             comment={comment}

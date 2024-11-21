@@ -1,6 +1,6 @@
 export class DBCommentAuthor {
   id: number
-  username: string
+  firebase_auth_id: string
   display_name: string
   photo_url: string
   country: string
@@ -14,7 +14,7 @@ export class DBCommentAuthor {
     return new DBCommentAuthor({
       id: obj.id,
       display_name: obj.name,
-      username: obj.username,
+      firebase_auth_id: obj.firebaseAuthId,
       photo_url: obj.photoUrl,
       is_verified: obj.isVerified,
       country: obj.country,
@@ -25,7 +25,7 @@ export class DBCommentAuthor {
 export class CommentAuthor {
   id: number
   name: string
-  username: string
+  firebaseAuthId: string
   photoUrl: string
   country: string
   isVerified: boolean
@@ -38,7 +38,7 @@ export class CommentAuthor {
     return new CommentAuthor({
       id: obj.id,
       name: obj.display_name,
-      username: obj.username,
+      firebaseAuthId: obj.firebase_auth_id,
       photoUrl: obj.photo_url,
       isVerified: obj.is_verified,
       country: obj.country,

@@ -6,7 +6,7 @@ import type { DBComment } from 'src/models/comment.model'
 import type { DBProfile } from 'src/models/profile.model'
 
 export async function action({ params, request }: LoaderFunctionArgs) {
-  const { valid, username } = await verifyFirebaseToken(
+  const { valid, user_id } = await verifyFirebaseToken(
     request.headers.get('firebaseToken')!,
   )
 
@@ -14,11 +14,11 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     return json({}, { status: 401, statusText: 'unauthorized' })
   }
 
-  if (!username) {
+  if (!user_id) {
     return json({}, { status: 400, statusText: 'user not found' })
   }
 
-  const user = await getProfileByUsername(request, username)
+  const user = await getProfileByFirebaseAuthId(request, user_id)
 
   if (!user) {
     return json({}, { status: 400, statusText: 'user not found' })
@@ -121,13 +121,16 @@ async function deleteComment(request: Request, id: string, userId: number) {
   return new Response(null, { headers, status: 204 })
 }
 
-async function getProfileByUsername(request: Request, username: string) {
+async function getProfileByFirebaseAuthId(
+  request: Request,
+  firebaseAuthId: string,
+) {
   const { client } = createSupabaseServerClient(request)
 
   const { data, error } = await client
     .from('profiles')
     .select()
-    .eq('username', username)
+    .eq('firebase_auth_id', firebaseAuthId)
     .single()
 
   if (error || !data) {

@@ -4,6 +4,7 @@ import * as Admin from './admin'
 import * as UserUpdates from './userUpdates'
 import * as DiscussionUpdates from './discussionUpdates'
 import * as QuestionUpdates from './questionUpdates'
+import * as SupabaseSync from './supabaseSync'
 import * as Messages from './messages/messages'
 
 // the following endpoints are exposed for use by various triggers
@@ -24,6 +25,10 @@ exports.discussionUpdates = DiscussionUpdates.handleDiscussionUpdate
 exports.questionCreate = QuestionUpdates.handleQuestionCreate
 exports.questionUpdate = QuestionUpdates.handleQuestionUpdate
 exports.questionDelete = QuestionUpdates.handleQuestionDelete
+exports.supabaseProfileCreate = SupabaseSync.supabaseProfileCreate
+exports.supabaseProfileUpdate = SupabaseSync.supabaseProfileUpdate
+exports.supabaseProfileDelete = SupabaseSync.supabaseProfileDelete
+
 // CC Note, 2020-04-40
 // folder-based naming conventions should be encourage from now on
 exports.adminGetUserEmail = Admin.getUserEmail

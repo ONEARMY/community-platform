@@ -37,7 +37,7 @@ export const PinProfile = (props: IProps) => {
         {isWorkspace && creator?.isContactableByPublic !== false && (
           <Flex sx={{ justifyContent: 'flex-end' }}>
             <InternalLink
-              to={`/u/${creator?._id}`}
+              to={`/u/${creator?._id}#contact`}
               data-cy="PinProfileMessageLink"
               target="_blank"
             >

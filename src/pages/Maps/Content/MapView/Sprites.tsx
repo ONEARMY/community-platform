@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import L from 'leaflet'
 import { IModerationStatus } from 'oa-shared'
 import clusterIcon from 'src/assets/icons/map-cluster.svg'
@@ -18,6 +19,15 @@ import './sprites.css'
  */
 export const createClusterIcon = () => {
   const { theme } = useThemeUI() as any
+  const path = clusterIcon
+  let iconAsString:string = ""
+  useEffect(() => {
+    fetch(path)
+      .then(response => response.text())
+      .then(data => {
+        iconAsString = data.replaceAll(/#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})/g, theme.colors.accent.base)
+      })
+  }, [path, theme]);
   return (cluster: MarkerCluster) => {
     const className = ['icon']
     let icon: any
@@ -25,7 +35,7 @@ export const createClusterIcon = () => {
     const clusterChildCount: number = cluster.getChildCount()
     if (clusterChildCount > 1) {
       className.push('icon-cluster-many')
-      icon = clusterIcon
+      icon = iconAsString
       // Calcute Outline CSS
       if (clusterChildCount > 49) {
         outlineSize = 24
@@ -33,7 +43,7 @@ export const createClusterIcon = () => {
         outlineSize = 4 + ((clusterChildCount - 2) / 50) * 20
       }
     } else if (clusterChildCount === 1) {
-      icon = cluster[0].pinType.icon
+      icon = `<img src="${cluster[0].pinType.icon} />`
     }
     const { fontSize, iconSize, lineHeight } = getClusterSizes(cluster)
 
@@ -43,7 +53,7 @@ export const createClusterIcon = () => {
       /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(theme.colors.accent.base)
 
     return L.divIcon({
-      html: `<img src="${icon}" /><span class="icon-cluster-text" style="
+      html: `${icon}<span class="icon-cluster-text" style="
         font-size: ${fontSize}px;
         line-height: ${lineHeight}px;
         border-radius: ${borderRadius}px;

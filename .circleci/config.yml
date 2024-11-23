@@ -133,17 +133,6 @@ examples:
 #  Jobs - Independently specified lists of tasks and environments for execution
 ######################################################################################################
 jobs:
-  spellcheck:
-    docker: *docker
-    resource_class: small
-    steps:
-      - checkout
-      - attach_workspace:
-          at: '.'
-      - run:
-          name: Check spelling on documentation
-          command: |
-            npx cspell "**/*.md" --config ./.cspell.json
   lint:
     docker: *docker
     resource_class: medium+
@@ -305,7 +294,7 @@ jobs:
           command: yarn storybook:build
   deploy:
     docker:
-      - image: cimg/node:20.7.0          
+      - image: cimg/node:20.7.0
     resource_class: medium+
     parameters:
       # optional environment variables to set during build process
@@ -337,7 +326,7 @@ jobs:
       - run:
           name: Add fly to PATH
           command: echo "export PATH=\"/home/circleci/.fly/bin:$PATH\"" >> $BASH_ENV
-      - run: 
+      - run:
           name: Login fly
           command: flyctl auth token $FLY_API_TOKEN --debug --verbose
       - run:
@@ -421,7 +410,7 @@ jobs:
           at: '.'
       - run:
           command: yarn build-storybook
-          
+
   release:
     docker: *docker
     resource_class: medium+
@@ -513,7 +502,7 @@ workflows:
           context:
             - release-context
           requires:
-            - "Approve Production deployment"
+            - 'Approve Production deployment'
           <<: *filter_only_default_branch
       - deploy:
           name: 'Deploy: community.fixing.fashion'
@@ -551,4 +540,3 @@ workflows:
             - circle-ci-patreon-context
             - project-kamp-production
             - fly-deploy
-            

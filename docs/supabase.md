@@ -52,6 +52,7 @@ How?
 
 We can create and deploy the sync function to the firebase dev environment.
 Then, using ngrok, expose our local supabase url to the internet, and point the firebase function to it.
+(ngrok http http://127.0.0.1:54321)
 
 To authenticate, we need to create these 3 secrets, for each firebase project:
 firebase functions:secrets:set SUPABASE_API_URL

@@ -8,7 +8,6 @@ import {
   ConfirmModal,
   DisplayDate,
   EditComment,
-  Icon,
   LinkifyText,
   Modal,
   Username,
@@ -54,12 +53,12 @@ export const CommentItemV2 = observer(
     const isReply = !!comment.parentId
     const item = isReply ? 'ReplyItem' : 'CommentItem'
     const isEditable = useMemo(() => {
-      if (!userStore.activeUser?.userName) {
+      if (!userStore.activeUser?._authID) {
         return false
       }
 
-      return userStore.activeUser?.userName === comment.createdBy?.username
-    }, [userStore.activeUser, comment.createdBy?.username])
+      return userStore.activeUser?._authID === comment.createdBy?.firebaseAuthId
+    }, [userStore.activeUser?._authID, comment.createdBy?.firebaseAuthId])
 
     useEffect(() => {
       if (textRef.current) {
@@ -195,48 +194,33 @@ export const CommentItemV2 = observer(
           <Flex
             sx={{
               alignItems: 'stretch',
-              flexDirection: 'row',
+              flexDirection: 'column',
+              flex: 1,
             }}
           >
-            <Box
-              sx={{
-                paddingTop: 1,
-                paddingRight: 2,
-              }}
-            >
-              <Icon glyph="arrow-curved-bottom-right" />
-            </Box>
-            <Flex
-              sx={{
-                alignItems: 'stretch',
-                flexDirection: 'column',
-                flex: 1,
-              }}
-            >
-              {showReplies && (
-                <>
-                  {comment.replies?.map((x) => (
-                    <CommentReply
-                      key={x.id}
-                      comment={x}
-                      onEdit={(id: number, comment: string) =>
-                        onEditReply(id, comment)
-                      }
-                      onDelete={(id: number) => onDeleteReply(id)}
-                    />
-                  ))}
+            {showReplies && (
+              <>
+                {comment.replies?.map((x) => (
+                  <CommentReply
+                    key={x.id}
+                    comment={x}
+                    onEdit={(id: number, comment: string) =>
+                      onEditReply(id, comment)
+                    }
+                    onDelete={(id: number) => onDeleteReply(id)}
+                  />
+                ))}
 
-                  {!comment.deleted && (
-                    <CreateReplyV2 onSubmit={(comment) => onReply(comment)} />
-                  )}
-                </>
-              )}
-              <ButtonShowReplies
-                isShowReplies={showReplies}
-                replies={(comment.replies || []) as any}
-                setIsShowReplies={() => setShowReplies(!showReplies)}
-              />
-            </Flex>
+                {!comment.deleted && (
+                  <CreateReplyV2 onSubmit={(comment) => onReply(comment)} />
+                )}
+              </>
+            )}
+            <ButtonShowReplies
+              isShowReplies={showReplies}
+              replies={(comment.replies || []) as any}
+              setIsShowReplies={() => setShowReplies(!showReplies)}
+            />
           </Flex>
         </Flex>
 

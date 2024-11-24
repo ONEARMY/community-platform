@@ -163,7 +163,11 @@ export const QuestionListing = () => {
             justifyContent: 'center',
           }}
         >
-          <Button type="button" onClick={() => fetchQuestions(lastVisibleId)}>
+          <Button
+            type="button"
+            onClick={() => fetchQuestions(lastVisibleId)}
+            data-cy="load-more"
+          >
             {listing.loadMore}
           </Button>
         </Flex>

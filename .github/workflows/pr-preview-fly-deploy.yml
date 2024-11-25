@@ -65,3 +65,13 @@ jobs:
         with:
           config: fly-preview.toml
           name: community-platform-pr-${{ github.event.number }}
+
+      - name: Set Fly.io Secrets
+        env:
+          SUPABASE_API_URL: ${{ secrets.SUPABASE_API_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+          FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+        run: |
+          fly secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID FIREBASE_PRIVATE_KEY=$FIREBASE_PRIVATE_KEY FIREBASE_CLIENT_EMAIL=$FIREBASE_CLIENT_EMAIL

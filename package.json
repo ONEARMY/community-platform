@@ -19,6 +19,7 @@
     "start:themes": "yarn workspace oa-themes dev",
     "start:components": "yarn workspace oa-components dev",
     "start:shared": "yarn workspace oa-shared dev",
+    "start:prod": "yarn build:shared && yarn build:themes && yarn build:components && node ./server.js",
     "start:platform": "yarn build:shared && node ./server.js",
     "start:platform:for-emulated-backend": "yarn build:shared && vite --port 4000",
     "start:platform-ci": "yarn build:shared && cross-env NODE_ENV=production node ./server.js",

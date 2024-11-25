@@ -1,4 +1,5 @@
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
+import { UserRole } from 'oa-shared'
 import { verifyFirebaseToken } from 'src/firestore/firestoreAdmin.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
@@ -37,13 +38,13 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   }
 
   if (request.method === 'DELETE') {
-    return deleteComment(request, params.id, user.id)
+    return deleteComment(request, params.id, user)
   }
 
-  return updateComment(request, params.id, user.id)
+  return updateComment(request, params.id, user)
 }
 
-async function updateComment(request: Request, id: string, userId: number) {
+async function updateComment(request: Request, id: string, user: DBProfile) {
   const { client, headers } = createSupabaseServerClient(request)
 
   const json = await request.json()
@@ -64,7 +65,7 @@ async function updateComment(request: Request, id: string, userId: number) {
 
   const comment = data as DBComment
 
-  if (comment.created_by !== userId) {
+  if (comment.created_by !== user.id && !isUserAdmin(user)) {
     return json({}, { status: 403, statusText: 'forbidden' })
   }
 
@@ -72,7 +73,6 @@ async function updateComment(request: Request, id: string, userId: number) {
     .from('comments')
     .update({ comment: json.comment })
     .eq('id', id)
-    .eq('created_by', userId)
 
   if (result.error) {
     console.error(result.error)
@@ -85,14 +85,13 @@ async function updateComment(request: Request, id: string, userId: number) {
   return new Response(null, { headers, status: 204 })
 }
 
-async function deleteComment(request: Request, id: string, userId: number) {
+async function deleteComment(request: Request, id: string, user: DBProfile) {
   const { client, headers } = createSupabaseServerClient(request)
 
   const { data, error } = await client
     .from('comments')
     .select()
     .eq('id', id)
-    .eq('created_by', userId)
     .single()
 
   if (error || !data) {
@@ -101,8 +100,8 @@ async function deleteComment(request: Request, id: string, userId: number) {
 
   const comment = data as DBComment
 
-  if (comment.created_by !== userId) {
-    return json({}, { status: 403, statusText: 'not authorized' })
+  if (comment.created_by !== user.id && !isUserAdmin(user)) {
+    return json({}, { status: 403, statusText: 'forbidden' })
   }
 
   const result = await client
@@ -138,4 +137,12 @@ async function getProfileByFirebaseAuthId(
   }
 
   return data as DBProfile
+}
+
+function isUserAdmin(user: DBProfile) {
+  return (
+    user.roles &&
+    user.roles.includes(UserRole.ADMIN) &&
+    user.roles.includes(UserRole.SUPER_ADMIN)
+  )
 }

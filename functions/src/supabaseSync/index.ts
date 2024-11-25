@@ -35,7 +35,11 @@ export const supabaseProfileUpdate = functions
       profileBefore.userImage?.downloadUrl !==
         profileAfter.userImage?.downloadUrl ||
       profileBefore.verified !== profileAfter.verified ||
-      profileBefore.country !== profileAfter.country
+      profileBefore.country !== profileAfter.country ||
+      arraysAreEqual(
+        profileBefore.userRoles || [],
+        profileAfter.userRoles || [],
+      )
     ) {
       await insertOrUpdateProfile(change.after)
     }
@@ -60,7 +64,7 @@ async function insertOrUpdateProfile(
   const { data } = await client
     .from('profiles')
     .select()
-    .eq('username', user.userName)
+    .eq('firebase_auth_id', user._authID)
     .single()
 
   if (data) {
@@ -68,13 +72,13 @@ async function insertOrUpdateProfile(
     const { error } = await client
       .from('profiles')
       .update({
-        username: user.userName,
         display_name: user.displayName,
         is_verified: user.verified,
         photo_url: user.userImage?.downloadUrl || null,
         country: user.location?.countryCode || null,
+        roles: user.userRoles,
       })
-      .eq('username', user.userName)
+      .eq('firebase_auth_id', user._authID)
 
     if (error) {
       console.log({ ...error })
@@ -84,14 +88,15 @@ async function insertOrUpdateProfile(
     const { error } = await client
       .from('profiles')
       .insert({
-        username: user.userName,
+        firebase_auth_id: user._authID,
         display_name: user.displayName,
         is_verified: user.verified,
         photo_url: user.userImage?.downloadUrl || null,
         country: user.location?.countryCode || null,
         tenant_id: process.env.TENANT_ID,
+        roles: user.userRoles,
       })
-      .eq('username', user.userName)
+      .eq('firebase_auth_id', user._authID)
 
     if (error) {
       console.log({ ...error })
@@ -104,5 +109,20 @@ async function deleteProfile(docSnapshot: firestore.QueryDocumentSnapshot) {
 
   const user = docSnapshot.data() as IUser
 
-  await client.from('profiles').delete().eq('username', user.userName)
+  await client.from('profiles').delete().eq('firebase_auth_id', user._authID)
+}
+
+function arraysAreEqual(arr1: string[], arr2: string[]) {
+  // Check if lengths are different
+  if (arr1.length !== arr2.length) {
+    return false
+  }
+  // Compare each element
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false
+    }
+  }
+
+  return true
 }

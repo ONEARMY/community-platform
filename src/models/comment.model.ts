@@ -50,9 +50,10 @@ export class DBComment {
   id: number
   created_at: string
   created_by: number | null
-  modified_at: string
+  modified_at: string | null
   comment: string
   source_id: number | null
+  source_type: string
   source_id_legacy: string | null
   parent_id: number | null
   deleted: boolean | null
@@ -67,10 +68,11 @@ export class DBComment {
       id: obj.id,
       created_at: obj.createdAt.toUTCString(),
       created_by: obj.createdBy?.id || null,
-      modified_at: obj.modifiedAt.toUTCString(),
+      modified_at: obj.modifiedAt ? obj.modifiedAt.toUTCString() : null,
       comment: obj.comment,
       source_id: typeof obj.sourceId === 'number' ? obj.sourceId : null,
       source_id_legacy: typeof obj.sourceId === 'string' ? obj.sourceId : null,
+      source_type: obj.sourceType,
       parent_id: obj.parentId,
       deleted: obj.deleted,
     })
@@ -80,10 +82,11 @@ export class DBComment {
 export class Comment {
   id: number
   createdAt: Date
-  modifiedAt: Date
+  modifiedAt: Date | null
   createdBy: CommentAuthor | null
   comment: string
   sourceId: number | string
+  sourceType: string
   parentId: number | null
   deleted: boolean | null
   replies?: Reply[]
@@ -97,9 +100,10 @@ export class Comment {
       id: obj.id,
       createdAt: new Date(obj.created_at),
       createdBy: obj.profile ? CommentAuthor.fromDB(obj.profile) : null,
-      modifiedAt: new Date(obj.modified_at),
+      modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
       comment: obj.comment,
       sourceId: obj.source_id || obj.source_id_legacy || 0,
+      sourceType: obj.source_type,
       parentId: obj.parent_id,
       deleted: obj.deleted,
       replies: replies,

@@ -117,9 +117,13 @@ export const CommentReply = observer(
                         }}
                       />
                       <Text sx={{ fontSize: 1, color: 'darkGrey' }}>
-                        {compareDesc(comment.createdAt, comment.modifiedAt) >
-                          0 && 'Edited '}
-                        <DisplayDate date={comment.modifiedAt} />
+                        {comment.modifiedAt &&
+                          compareDesc(comment.createdAt, comment.modifiedAt) >
+                            0 &&
+                          'Edited '}
+                        <DisplayDate
+                          date={comment.modifiedAt || comment.createdAt}
+                        />
                       </Text>
                     </Flex>
 

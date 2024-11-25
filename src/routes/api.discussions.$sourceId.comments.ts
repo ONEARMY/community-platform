@@ -2,8 +2,10 @@ import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { verifyFirebaseToken } from 'src/firestore/firestoreAdmin.server'
 import { Comment, DBComment } from 'src/models/comment.model'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { notificationsService } from 'src/services/notificationsService.server'
 
 import type { DBCommentAuthor } from 'src/models/comment.model'
+import type { DBProfile } from 'src/models/profile.model'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   if (!params.sourceId) {
@@ -25,7 +27,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       modified_at, 
       deleted, 
       source_id, 
-      source_id_legacy, 
+      source_id_legacy,
+      source_type,
       parent_id,
       created_by,
       profiles(id, firebase_auth_id, display_name, is_verified, photo_url, country)
@@ -101,14 +104,13 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 
   const { client, headers } = createSupabaseServerClient(request)
 
-  const profile = await client
+  const currentUser = await client
     .from('profiles')
     .select()
     .eq('firebase_auth_id', user_id)
     .single()
 
-  if (profile.error || !profile.data) {
-    console.log(profile)
+  if (currentUser.error || !currentUser.data) {
     return json({}, { status: 400, statusText: 'profile not found ' + user_id })
   }
 
@@ -118,10 +120,10 @@ export async function action({ params, request }: LoaderFunctionArgs) {
       typeof params.sourceId === 'string' ? params.sourceId : null,
     source_id: typeof params.sourceId === 'number' ? params.sourceId : null,
     source_type: data.sourceType,
-    created_by: profile.data.id,
+    created_by: currentUser.data.id,
     parent_id: data.parentId ?? null,
     tenant_id: process.env.TENANT_ID,
-  }
+  } as Partial<DBComment>
 
   const commentResult = await client
     .from('comments')
@@ -136,11 +138,21 @@ export async function action({ params, request }: LoaderFunctionArgs) {
       source_id, 
       source_id_legacy, 
       parent_id,
+      source_type,
       created_by,
       profiles(id, firebase_auth_id, display_name, is_verified, photo_url, country)
     `,
     )
     .single()
+
+  if (!commentResult.error) {
+    // Do not await
+    notificationsService.sendCommentNotification(
+      client,
+      commentResult.data as DBComment,
+      currentUser.data as DBProfile,
+    )
+  }
 
   return json(
     new DBComment({

@@ -12,6 +12,7 @@ import {
   Modal,
   Username,
 } from 'oa-components'
+import { UserRole } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Box, Flex, Text } from 'theme-ui'
 
@@ -57,7 +58,11 @@ export const CommentItemV2 = observer(
         return false
       }
 
-      return userStore.activeUser?._authID === comment.createdBy?.firebaseAuthId
+      return (
+        userStore.activeUser?._authID === comment.createdBy?.firebaseAuthId ||
+        userStore.activeUser.userRoles?.includes(UserRole.ADMIN) ||
+        userStore.activeUser.userRoles?.includes(UserRole.SUPER_ADMIN)
+      )
     }, [userStore.activeUser?._authID, comment.createdBy?.firebaseAuthId])
 
     useEffect(() => {
@@ -122,9 +127,13 @@ export const CommentItemV2 = observer(
                       }}
                     />
                     <Text sx={{ fontSize: 1, color: 'darkGrey' }}>
-                      {compareDesc(comment.createdAt, comment.modifiedAt) > 0 &&
+                      {comment.modifiedAt &&
+                        compareDesc(comment.createdAt, comment.modifiedAt) >
+                          0 &&
                         'Edited '}
-                      <DisplayDate date={comment.modifiedAt} />
+                      <DisplayDate
+                        date={comment.modifiedAt || comment.createdAt}
+                      />
                     </Text>
                   </Flex>
 

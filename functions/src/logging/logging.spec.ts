@@ -17,7 +17,7 @@ const handler = handleCloudLoggingRequest({
   } as unknown as Logging,
 })
 
-app.post('/', handler)
+app.post('/', () => handler)
 
 const request = supertest(app)
 

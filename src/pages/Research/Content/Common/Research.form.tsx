@@ -74,24 +74,11 @@ const ResearchForm = observer((props: IProps) => {
 
   const store = useResearchStore()
   const [showSubmitModal, setShowSubmitModal] = useState(false)
-  const [submissionHandler, setSubmissionHandler] = useState({
+  const [submissionHandler, setSubmissionHandler] = useState(() => ({
     draft: formValues.moderation === IModerationStatus.DRAFT,
     shouldSubmit: false,
-  })
+  }))
   const [slug, setSlug] = useState<string>('')
-
-  // Managing locked state
-  useEffect(() => {
-    if (store.activeUser && props.research) {
-      store.lockResearchItem(props.research, store.activeUser.userName)
-    }
-
-    return () => {
-      if (props.research) {
-        store.unlockResearchItem(props.research)
-      }
-    }
-  }, [store.activeUser])
 
   useEffect(() => {
     if (submissionHandler.shouldSubmit) {
@@ -105,11 +92,11 @@ const ResearchForm = observer((props: IProps) => {
     }
   }, [submissionHandler])
 
-  const onSubmit = async (formValues: IResearch.FormInput) => {
-    formValues.moderation = submissionHandler.draft
+  const onSubmit = async (values: IResearch.FormInput) => {
+    values.moderation = submissionHandler.draft
       ? IModerationStatus.DRAFT
       : IModerationStatus.ACCEPTED // No moderation for researches for now
-    const updatedResearh = await store.uploadResearch(formValues)
+    const updatedResearh = await store.uploadResearch(values)
 
     if (updatedResearh) {
       setSlug(updatedResearh.slug)

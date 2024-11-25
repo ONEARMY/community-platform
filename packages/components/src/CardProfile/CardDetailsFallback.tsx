@@ -22,6 +22,7 @@ export const CardDetailsFallback = ({ item, isLink }: IProps) => {
           user={{ userName: _id }}
           sx={{ alignSelf: 'flex-start' }}
           isLink={isLink}
+          target="_blank"
         />
         {subType && (
           <Category

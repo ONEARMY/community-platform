@@ -34,10 +34,10 @@ export const PinProfile = (props: IProps) => {
       <Box sx={{ width: '100%', height: '100%', zIndex: 2 }}>
         <CardProfile item={item} isLink />
 
-        {!isMember && creator?.isContactableByPublic && (
+        {!isMember && creator?.isContactableByPublic !== false && (
           <Flex sx={{ justifyContent: 'flex-end' }}>
             <InternalLink
-              to={`/u/${creator._id}`}
+              to={`/u/${creator?._id}`}
               data-cy="PinProfileMessageLink"
             >
               <Button icon="contact" sx={{ margin: 1 }} small>

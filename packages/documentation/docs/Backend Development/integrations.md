@@ -44,4 +44,4 @@ The implementation is at [`functions/src/config/config.ts`](https://github.com/O
 
 ## Development
 
-Contact a maintainer in order to access the config variables needed to test these integrations locally. Or, set up your own test account on the integration platform and and generate keys to play with! Just remember not to remove any sensitive info before pushing to Github 🤫
+Contact a maintainer in order to access the config variables needed to test these integrations locally. Or, set up your own test account on the integration platform and generate keys to play with! Just remember not to remove any sensitive info before pushing to Github 🤫

@@ -33,8 +33,6 @@ exports.supabaseProfileDelete = SupabaseSync.supabaseProfileDelete
 // folder-based naming conventions should be encourage from now on
 exports.adminGetUserEmail = Admin.getUserEmail
 
-exports.seo = require('./seo')
-
 exports.sendMessage = Messages.sendMessage
 exports.emailNotifications = require('./emailNotifications')
 

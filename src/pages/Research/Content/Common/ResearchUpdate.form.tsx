@@ -71,26 +71,6 @@ export const ResearchUpdateForm = observer((props: IProps) => {
     }
   }, [store.updateUploadStatus?.Complete])
 
-  // Managing locked state
-  useEffect(() => {
-    if (store.activeUser)
-      store.toggleLockResearchUpdate(
-        props.research._id,
-        store.activeUser.userName,
-        formValues._id,
-        true,
-      )
-
-    return () => {
-      store.toggleLockResearchUpdate(
-        props.research._id,
-        '',
-        formValues._id,
-        false,
-      )
-    }
-  }, [store.activeUser])
-
   const trySubmitForm = (isDraft: boolean) => {
     const form = document.getElementById('updateForm')
     setIsDraft(isDraft)

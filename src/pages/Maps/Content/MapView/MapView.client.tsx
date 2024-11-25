@@ -9,18 +9,18 @@ import type { ILatLng, IMapPin } from 'oa-shared'
 import type { Map as MapType } from 'react-leaflet'
 
 interface IProps {
-  activePin: IMapPin | null
+  activePin: IMapPin | undefined
   center: ILatLng
   mapRef: React.RefObject<MapType>
   pins: Array<IMapPin>
   zoom: number
-  onPinClicked: (pin: IMapPin) => void
+  onPinClick: (pin: IMapPin) => void
   onBlur: () => void
   setZoom: (arg: number) => void
 }
 
 export const MapView = (props: IProps) => {
-  const { activePin, center, mapRef, onPinClicked, pins, zoom, setZoom } = props
+  const { activePin, center, mapRef, onPinClick, pins, zoom, setZoom } = props
   const isViewportGreaterThanTablet = window.innerWidth > 1024
   const mapCenter: LatLngExpression = center ? [center.lat, center.lng] : [0, 0]
   const mapZoom = center ? zoom : 2
@@ -45,7 +45,7 @@ export const MapView = (props: IProps) => {
         props.onBlur()
       }}
     >
-      <Clusters pins={pins} onPinClick={onPinClicked} />
+      <Clusters pins={pins} onPinClick={onPinClick} />
       {activePin && <Popup activePin={activePin} mapRef={mapRef} />}
     </Map>
   )

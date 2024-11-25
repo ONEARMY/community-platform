@@ -36,6 +36,7 @@ export const CardDetailsMemberProfile = ({ creator, isLink }: IProps) => {
             <Avatar
               src={userImage}
               sx={{ width: '60px', height: '60px', objectFit: 'cover' }}
+              loading="lazy"
             />
             <MemberBadge
               profileType={profileType}
@@ -57,6 +58,7 @@ export const CardDetailsMemberProfile = ({ creator, isLink }: IProps) => {
           }}
           sx={{ alignSelf: 'flex-start' }}
           isLink={isLink}
+          target="_blank"
         />
         {tags && <ProfileTagsList tags={tags} />}
       </Flex>

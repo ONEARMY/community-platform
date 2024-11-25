@@ -43,18 +43,46 @@ const allItems = [
   },
 ]
 
+const onBlur = () => undefined
+const onPinClick = () => undefined
+
 export const Default: StoryFn<typeof CardList> = () => {
-  return <CardList dataCy="stories" list={allItems} filteredList={null} />
+  return (
+    <CardList
+      list={allItems}
+      onBlur={onBlur}
+      onPinClick={onPinClick}
+      filteredList={null}
+      selectedPin={undefined}
+      viewport="stories"
+    />
+  )
 }
 
 export const FiltedDisplay: StoryFn<typeof CardList> = () => {
   const filteredList = [allItems[0], allItems[2]]
 
   return (
-    <CardList dataCy="stories" list={allItems} filteredList={filteredList} />
+    <CardList
+      list={allItems}
+      onBlur={onBlur}
+      onPinClick={onPinClick}
+      filteredList={filteredList}
+      selectedPin={undefined}
+      viewport="stories"
+    />
   )
 }
 
 export const WhenFiltedDisplayIsZero: StoryFn<typeof CardList> = () => {
-  return <CardList dataCy="stories" list={allItems} filteredList={[]} />
+  return (
+    <CardList
+      list={allItems}
+      onBlur={onBlur}
+      onPinClick={onPinClick}
+      filteredList={[]}
+      selectedPin={undefined}
+      viewport="stories"
+    />
+  )
 }

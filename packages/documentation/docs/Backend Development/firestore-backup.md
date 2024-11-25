@@ -16,7 +16,7 @@ The export will automatically be populated into the default storage bucket, in a
 
 ### Configuring Permissions
 
-In order to allow automated backups, additional permissions likely be required on the service account that firebase uses. By default this should be the account named
+In order to allow automated backups, additional permissions are likely to be required on the service account that firebase uses. By default this should be the account named
 
 `PROJECT_ID@appspot.gserviceaccount.com`
 

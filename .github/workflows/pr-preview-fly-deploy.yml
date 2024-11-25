@@ -48,12 +48,16 @@ jobs:
           # pull the repo from the pull request source, not the default local repo
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: supabase/setup-cli@v1
+      - name: Install supabase CLI
+        uses: supabase/setup-cli@v1
         with:
           version: latest
 
-      - run: supabase link --project-ref $SUPABASE_PROJECT_ID
-      - run: supabase db push
+      - name: Link Supabase project
+        run: supabase link --project-ref $SUPABASE_PROJECT_ID
+
+      - name: Push Supabase DB
+        run: supabase db push
 
       - name: Deploy PR app to Fly.io
         id: deploy

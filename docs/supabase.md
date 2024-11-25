@@ -2,6 +2,24 @@
 
 Supabase is an open source Firebase alternative, based on Postgres.
 
+## Getting Started
+
+To install the supabase locally, follow https://supabase.com/docs/guides/local-development/cli/getting-started?queryGroups=platform&platform=windows
+Installing as a dev dependency doesn't always work well, so it is recommended to install for your OS.
+
+Ensure you run the `supabase` commands on the project folder root.
+
+Follow the steps to run locally
+https://supabase.com/docs/guides/local-development/cli/getting-started#running-supabase-locally
+
+`supabase init`
+`supabase start`
+
+## Migrations
+
+After making schema changes, use the this command to create a migration file:
+`supabase db diff --file [migration_name]`
+
 ## Technical Decisions
 
 # Multi-tenant

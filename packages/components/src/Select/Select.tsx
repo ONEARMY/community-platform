@@ -53,14 +53,14 @@ export const Select = (props: Props) => {
       },
     }),
 
-    option: (provided, state) => ({
+    option: (provided, { data, isFocused, isDisabled }: any) => ({
       ...provided,
-      backgroundColor: state.isFocused
-        ? theme.colors.white
-        : theme.colors.background,
+      backgroundColor: isFocused ? theme.colors.white : theme.colors.background,
       boxShadow: 'none',
       cursor: 'pointer',
-      color: theme.colors.black,
+      color: !isDisabled
+        ? data.color || theme.colors.black
+        : theme.colors.lightgrey,
     }),
 
     menu: (provided) => ({
@@ -73,12 +73,29 @@ export const Select = (props: Props) => {
       },
     }),
 
-    multiValue: (provided) => ({
+    multiValue: (provided, { data }: { data: any }) => ({
       ...provided,
-      backgroundColor: theme.colors.softblue,
+      borderRadius: data.color ? 99 : 4,
+      backgroundColor: data.color ? `${data.color}20` : theme.colors.white,
       padding: '2px',
-      border: '1px solid ' + theme.colors.softgrey,
-      color: theme.colors.grey,
+      border: '1px solid ',
+      borderColor: data.color || theme.colors.softgrey,
+      color: data.color || theme.colors.grey,
+    }),
+
+    multiValueLabel: (provided, { data }: { data: any }) => ({
+      ...provided,
+      color: data.color || theme.colors.grey,
+    }),
+
+    multiValueRemove: (provided, { data }: { data: any }) => ({
+      ...provided,
+      borderRadius: data.color ? 99 : 4,
+      color: data.color || theme.colors.grey,
+      ':hover': {
+        backgroundColor: data.color || theme.colors.grey,
+        color: 'white',
+      },
     }),
 
     indicatorSeparator: (provided) => ({
@@ -207,6 +224,7 @@ export const Select = (props: Props) => {
       onChange={(v) => props.onChange && props.onChange(v)}
       value={props.value}
       onInputChange={props.onInputChange}
+      isOptionDisabled={props.isOptionDisabled}
     />
   )
 }

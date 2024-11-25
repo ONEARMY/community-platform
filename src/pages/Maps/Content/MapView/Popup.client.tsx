@@ -5,7 +5,7 @@ import { MapMemberCard, PinProfile } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 
-import type { IMapPin, IMapPinWithDetail } from 'oa-shared'
+import type { ILatLng, IMapPin, IMapPinWithDetail } from 'oa-shared'
 import type { Map } from 'react-leaflet'
 
 import './popup.css'
@@ -15,12 +15,13 @@ interface IProps {
   mapRef: React.RefObject<Map>
   newMap?: boolean
   onClose?: () => void
+  customPosition?: ILatLng
 }
 
 export const Popup = (props: IProps) => {
   const leafletRef = useRef<LeafletPopup>(null)
   const activePin = props.activePin as IMapPinWithDetail
-  const { mapRef, newMap, onClose } = props
+  const { mapRef, newMap, onClose, customPosition } = props
 
   useEffect(() => {
     openPopup()
@@ -47,8 +48,14 @@ export const Popup = (props: IProps) => {
     activePin.location && (
       <LeafletPopup
         ref={leafletRef}
-        position={[activePin.location.lat, activePin.location.lng]}
+        position={
+          customPosition
+            ? customPosition
+            : [activePin.location.lat, activePin.location.lng]
+        }
         offset={new L.Point(2, -10)}
+        closeOnClick={false}
+        closeOnEscapeKey={false}
         closeButton={false}
         className={activePin !== undefined ? '' : 'closed'}
         minWidth={230}
@@ -57,19 +64,23 @@ export const Popup = (props: IProps) => {
         {newMap && onClose && <PinProfile item={activePin} onClose={onClose} />}
         {!newMap && (
           <MapMemberCard
-            loading={!activePin.detail}
-            imageUrl={activePin.detail?.heroImageUrl}
+            loading={!activePin.creator}
+            imageUrl={
+              activePin.creator?.coverImage ||
+              activePin.creator?.userImage ||
+              ''
+            }
             comments={
               activePin.comments &&
               activePin.moderation === IModerationStatus.IMPROVEMENTS_NEEDED
                 ? activePin.comments
                 : null
             }
-            description={activePin.detail?.shortDescription}
+            description={activePin.creator?.about || ''}
             user={{
-              isVerified: !!activePin.detail?.verifiedBadge,
-              userName: activePin.detail?.name,
-              countryCode: activePin.detail?.country?.toLowerCase(),
+              isVerified: !!activePin.creator?.badges?.verified,
+              userName: activePin.creator?._id || '',
+              countryCode: activePin.creator?.countryCode,
             }}
             heading={getHeading(activePin)}
           />

@@ -31,7 +31,4 @@ export interface configVars {
   analytics: IAnalytics
   integrations: IIntergrations
   deployment: IDeployment
-  prerender: {
-    api_key: string
-  }
 }

@@ -47,3 +47,6 @@ functions/firebase-debug.log
 .pnp.*
 
 *.tsbuildinfo
+supabase/.branches
+supabase/.temp
+supabase/.env

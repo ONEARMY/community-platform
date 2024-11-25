@@ -35,7 +35,7 @@ export const createClusterIcon = () => {
   }
 }
 
-export const createMarkerIcon = (pin: IMapPin) => {
+export const createMarkerIcon = (pin: IMapPin, draggable?: boolean) => {
   const icon =
     pin.moderation === IModerationStatus.ACCEPTED
       ? Workspace.findWorkspaceBadge(pin.type, true, pin.verified)
@@ -45,7 +45,7 @@ export const createMarkerIcon = (pin: IMapPin) => {
   }
   return L.divIcon({
     className: `icon-marker icon-${pin.type}`,
-    html: `<img data-cy="pin-${pin._id}" src="${icon}" />`,
+    html: `<img data-cy="pin-${pin._id}" src="${icon}" style="${draggable ? 'cursor: grab' : ''}" />`,
     iconSize: L.point(38, 38, true),
   })
 }

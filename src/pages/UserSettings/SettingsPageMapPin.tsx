@@ -1,42 +1,37 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Field, Form } from 'react-final-form'
+import { useNavigate } from 'react-router'
 import { toJS } from 'mobx'
 import {
   Button,
   ConfirmModal,
   ExternalLink,
-  FieldTextarea,
   FlagIconEvents,
   Loader,
   MapWithPin,
 } from 'oa-components'
 import { IModerationStatus, ProfileTypeList } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import {
-  buttons,
-  fields,
-  headings,
-  mapForm,
-} from 'src/pages/UserSettings/labels'
+import { buttons, headings, mapForm } from 'src/pages/UserSettings/labels'
 import { randomIntFromInterval } from 'src/utils/helpers'
-import { required } from 'src/utils/validators'
 import { Alert, Box, Flex, Heading, Text } from 'theme-ui'
 
+import { createMarkerIcon } from '../Maps/Content/MapView/Sprites'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
-import { MAX_PIN_LENGTH } from './constants'
 
-import type { ILocation, IMapPin, IUserDB } from 'oa-shared'
+import type { DivIcon } from 'leaflet'
+import type { ILatLng, ILocation, IMapPin, IUserDB } from 'oa-shared'
+import type { Map } from 'react-leaflet'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
 interface IPinProps {
   mapPin: IMapPin | undefined
 }
 
-interface ILocationProps {
-  location: IUserDB['location']
-}
+const LocationDataTextDisplay = ({ user }: { user: IUserDB }) => {
+  const { _id, location } = user
+  const navigate = useNavigate()
 
-const LocationDataTextDisplay = ({ location }: ILocationProps) => {
   if (!location?.latlng)
     return (
       <Text
@@ -49,20 +44,30 @@ const LocationDataTextDisplay = ({ location }: ILocationProps) => {
     )
 
   return (
-    <Text
-      variant="paragraph"
-      data-cy="LocationDataTextDisplay"
-      data-testid="LocationDataTextDisplay"
-    >
-      {mapForm.locationLabel}
-      <br />
-      {location?.name}{' '}
-      <FlagIconEvents
-        countryCode={location.countryCode}
-        title={location.countryCode}
-      />
-      <br />
-    </Text>
+    <>
+      <Text
+        variant="paragraph"
+        data-cy="LocationDataTextDisplay"
+        data-testid="LocationDataTextDisplay"
+      >
+        {mapForm.locationLabel}
+        <br />
+        {location?.name}{' '}
+        <FlagIconEvents
+          countryCode={location.countryCode}
+          title={location.countryCode}
+        />
+        <br />
+      </Text>
+      <Button
+        onClick={() => navigate(`/map#${_id}`)}
+        sx={{ alignSelf: 'flex-start' }}
+        icon="map"
+        variant="secondary"
+      >
+        See your pin on the map
+      </Button>
+    </>
   )
 }
 
@@ -148,32 +153,39 @@ export const SettingsPageMapPin = () => {
   const communityProgramUrl =
     import.meta.env.VITE_COMMUNITY_PROGRAM_URL ||
     process.env.VITE_COMMUNITY_PROGRAM_URL
-  const [mapPin, setMapPin] = useState<IMapPin>()
+  const [mapPin, setMapPin] = useState<IMapPin | undefined>()
+  const [markerIcon, setMarkerIcon] = useState<DivIcon>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [notification, setNotification] = useState<
     IFormNotification | undefined
   >(undefined)
 
-  const { mapsStore, userStore } = useCommonStores().stores
-  const user = userStore.activeUser
-  const { addPinTitle, yourPinTitle } = headings.map
+  const newMapRef = useRef<Map>(null)
 
-  const formId = 'MapSection'
+  const { mapsStore, userStore } = useCommonStores().stores
+
+  const user = userStore.activeUser
+  if (!user) {
+    return null
+  }
+
   const isMember = user?.profileType === ProfileTypeList.MEMBER
+  const { addPinTitle, yourPinTitle } = headings.map
+  const formId = 'MapSection'
 
   useEffect(() => {
     const init = async () => {
       if (!user) return
 
-      const pin = (await mapsStore.getPin(user.userName)) || null
+      const pin = await mapsStore.getPin(user.userName)
+
       setMapPin(pin)
+      pin && setMarkerIcon(createMarkerIcon(pin, true))
       setIsLoading(false)
     }
 
     init()
   }, [user, notification])
-
-  if (!user) return null
 
   const defaultLocation = {
     latlng: {
@@ -192,7 +204,8 @@ export const SettingsPageMapPin = () => {
       }
       const updatedUser = await userStore.updateUserLocation(updatingUser)
       if (updatedUser) {
-        await mapsStore.setUserPin(toJS(updatedUser))
+        const pin = toJS(updatedUser)
+        await mapsStore.setUserPin(pin)
       }
       setNotification({
         message: mapForm.succesfulSave,
@@ -278,7 +291,7 @@ export const SettingsPageMapPin = () => {
                 submitFailed={submitFailed}
               />
 
-              <LocationDataTextDisplay location={user?.location} />
+              <LocationDataTextDisplay user={user} />
 
               <Field
                 name="location"
@@ -289,33 +302,18 @@ export const SettingsPageMapPin = () => {
 
                   return (
                     <MapWithPin
+                      mapRef={newMapRef}
                       position={location.latlng}
-                      draggable={true}
-                      updatePosition={(newPosition) => {
+                      updatePosition={(newPosition: ILatLng) => {
                         onChange({ latlng: newPosition })
                       }}
+                      markerIcon={markerIcon}
+                      zoom={2}
+                      center={[0, 0]}
                     />
                   )
                 }}
               />
-
-              <Flex sx={{ flexDirection: 'column', gap: 0 }}>
-                <Text sx={{ fontSize: 2 }}>
-                  {fields.mapPinDescription.title}
-                </Text>
-                <Field
-                  data-cy="pin-description"
-                  name="mapPinDescription"
-                  component={FieldTextarea}
-                  maxLength={MAX_PIN_LENGTH}
-                  style={{ height: 'inherit' }}
-                  rows="1"
-                  showCharacterCount
-                  placeholder={fields.mapPinDescription.placeholder}
-                  validate={required}
-                  validateFields={[]}
-                />
-              </Flex>
 
               <Button
                 type="submit"

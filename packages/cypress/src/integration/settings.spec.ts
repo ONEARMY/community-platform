@@ -13,11 +13,10 @@ const locationStub = {
   value: 'Singapore',
 }
 
-const mapDetails = (description) => ({
-  description,
+const mapDetails = {
   searchKeyword: 'singapo',
   locationName: locationStub.value,
-})
+}
 
 describe('[Settings]', () => {
   beforeEach(() => {
@@ -51,7 +50,6 @@ describe('[Settings]', () => {
       const userImage = 'avatar'
       const displayName = 'settings_member_new'
       const description = "I'm a very active member"
-      const mapPinDescription = 'Fun, vibrant and full of amazing people'
       const profileType = 'member'
       const tag = ['Sewing', 'Accounting']
       const user = generateNewUserDetails()
@@ -148,7 +146,7 @@ describe('[Settings]', () => {
       cy.get('[data-cy="tab-Map"]').click()
       cy.get('[data-cy=descriptionMember').should('be.visible')
       cy.contains('No map pin currently saved')
-      cy.fillSettingMapPin(mapDetails(mapPinDescription))
+      cy.fillSettingMapPin(mapDetails)
       cy.get('[data-cy=save-map-pin]').click()
       cy.contains('Map pin saved successfully')
       cy.contains('Your current map pin is here:')

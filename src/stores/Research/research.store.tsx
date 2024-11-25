@@ -44,8 +44,6 @@ export class ResearchStore extends ModuleStore {
       updateUpdateUploadStatus: action,
       resetResearchUploadStatus: action,
       resetUpdateUploadStatus: action,
-      lockResearchItem: action,
-      unlockResearchItem: action,
     })
   }
 
@@ -378,64 +376,6 @@ export class ResearchStore extends ModuleStore {
       logger.error(err)
       throw new Error(err)
     }
-  }
-
-  public async lockResearchItem(item: IResearchDB, username: string) {
-    if (item) {
-      const dbRef = this.db
-        .collection<IResearch.Item>(COLLECTION_NAME)
-        .doc(item._id)
-      const newItem = {
-        ...item,
-        locked: {
-          by: username,
-          at: new Date().toISOString(),
-        },
-      }
-      await this._updateResearchItem(dbRef, newItem)
-    }
-  }
-
-  public async unlockResearchItem(item: IResearchDB) {
-    if (item) {
-      const dbRef = this.db
-        .collection<IResearch.Item>(COLLECTION_NAME)
-        .doc(item._id)
-      const newItem = {
-        ...item,
-        locked: null,
-      }
-      await this._updateResearchItem(dbRef, newItem)
-    }
-  }
-
-  public async toggleLockResearchUpdate(
-    researchId: string,
-    username: string,
-    updateId: string,
-    lock: boolean,
-  ) {
-    const dbRef = this.db
-      .collection<IResearch.Item>(COLLECTION_NAME)
-      .doc(researchId)
-
-    const item = toJS(await dbRef.get('server')) as IResearchDB
-    const updateIndex = item.updates.findIndex((upd) => upd._id === updateId)
-    const updatedItem = {
-      ...item,
-      updates: [...item.updates],
-    }
-
-    if (updatedItem.updates[updateIndex]) {
-      updatedItem.updates[updateIndex].locked = lock
-        ? {
-            by: username,
-            at: new Date().toISOString(),
-          }
-        : null
-    }
-
-    await dbRef.set(updatedItem)
   }
 
   private async _setCollaborators(

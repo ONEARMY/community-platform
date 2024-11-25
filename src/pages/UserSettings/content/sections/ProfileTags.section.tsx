@@ -24,6 +24,7 @@ export const ProfileTags = ({ isMemberProfile }: IProps) => {
         value={input.value}
         onChange={(tags) => input.onChange(tags)}
         tagsSource={profileTags}
+        maxTotal={5}
         isForm
         {...rest}
       />

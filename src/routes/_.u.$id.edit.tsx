@@ -4,7 +4,7 @@ import { UserRole } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { AuthRoute } from 'src/pages/common/AuthRoute'
-import { SettingsPage } from 'src/pages/UserSettings/SettingsPage'
+import { SettingsPage } from 'src/pages/UserSettings/SettingsPage.client'
 import { userService } from 'src/services/user.service'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 

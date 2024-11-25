@@ -10,6 +10,9 @@ export default {
   component: CardListItem,
 } as Meta<typeof CardListItem>
 
+const onPinClick = () => undefined
+const viewport = 'desktop'
+
 export const DefaultMember: StoryFn<typeof CardListItem> = () => {
   const item = {
     _deleted: false,
@@ -31,7 +34,12 @@ export const DefaultMember: StoryFn<typeof CardListItem> = () => {
 
   return (
     <div style={{ width: '500px' }}>
-      <CardListItem item={item} />
+      <CardListItem
+        item={item}
+        isSelectedPin={false}
+        onPinClick={onPinClick}
+        viewport={viewport}
+      />
     </div>
   )
 }
@@ -63,7 +71,12 @@ export const DefaultSpace: StoryFn<typeof CardListItem> = () => {
 
   return (
     <div style={{ width: '500px' }}>
-      <CardListItem item={item} />
+      <CardListItem
+        item={item}
+        isSelectedPin={false}
+        onPinClick={onPinClick}
+        viewport={viewport}
+      />
     </div>
   )
 }
@@ -80,7 +93,12 @@ export const DefaultFallback: StoryFn<typeof CardListItem> = () => {
 
   return (
     <div style={{ width: '500px' }}>
-      <CardListItem item={item} />
+      <CardListItem
+        item={item}
+        isSelectedPin={false}
+        onPinClick={onPinClick}
+        viewport={viewport}
+      />
     </div>
   )
 }

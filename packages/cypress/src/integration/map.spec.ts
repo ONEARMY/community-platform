@@ -27,6 +27,7 @@ describe('[Map]', () => {
     cy.url().should('not.include', `#${userId}`)
 
     cy.step('Link to new map visible and clickable')
+    cy.wait(500) // wait for interaction
     cy.get('[data-cy=Banner]').contains('Test it out!').click()
     cy.get('[data-cy=Banner]').contains('go back to the old one!')
 
@@ -68,14 +69,16 @@ describe('[Map]', () => {
     }
     cy.get('[data-cy="list-results"]').contains('1 result')
     cy.get('[data-cy="CardList-desktop"]').within(() => {
-      cy.get('[data-cy=CardListItem]')
-        .within(() => {
-          cy.contains(userId)
-          cy.get('[data-cy="MemberBadge-member"]')
-        })
-        .should('have.attr', 'href')
-        .and('include', `/u/${userId}`)
+      cy.get('[data-cy=CardListItem]').within(() => {
+        cy.contains(userId)
+        cy.get('[data-cy="MemberBadge-member"]')
+      })
     })
+    cy.get('[data-cy=CardListItem]').contains(userId).click()
+    cy.get('[data-cy="PinProfile"]')
+      .get('[data-cy="Username"]')
+      .contains(userId)
+    cy.get('[data-cy=CardListItem-selected]').first().click()
 
     cy.step('New map pins can be clicked on')
     cy.get(`[data-cy=pin-${userId}]`).click()
@@ -115,8 +118,6 @@ describe('[Map]', () => {
           cy.contains(userId)
           cy.get('[data-cy="MemberBadge-member"]')
         })
-        .should('have.attr', 'href')
-        .and('include', `/u/${userId}`)
     })
     cy.get('[data-cy=MapFilterProfileTypeCardList-ButtonRight]')
       .last()

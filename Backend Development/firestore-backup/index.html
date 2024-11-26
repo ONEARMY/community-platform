@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.5.2">
 <title data-rh="true">Firestore DB Backup | OneArmy Community Platform</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://docs.platform.onearmy.earth/Backend Development/firestore-backup"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Firestore DB Backup | OneArmy Community Platform"><meta data-rh="true" name="description" content="Automated Backups"><meta data-rh="true" property="og:description" content="Automated Backups"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://docs.platform.onearmy.earth/Backend Development/firestore-backup"><link data-rh="true" rel="alternate" href="https://docs.platform.onearmy.earth/Backend Development/firestore-backup" hreflang="en"><link data-rh="true" rel="alternate" href="https://docs.platform.onearmy.earth/Backend Development/firestore-backup" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.55ec4173.css">
-<script src="/assets/js/runtime~main.a8d959e0.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.e6c1cd9c.js" defer="defer"></script>
 <script src="/assets/js/main.c3c35978.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -15,7 +15,7 @@ Currently a backup is created as part of the <a href="https://github.com/ONEARMY
 <p>The export will automatically be populated into the default storage bucket, in an <em>backups</em> folder</p>
 <p><img decoding="async" loading="lazy" src="/assets/images/firestore-backup-folder-5346018e0f40e7a76ea030f6d4ca6904.png" width="791" height="482" class="img_ev3q"></p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="configuring-permissions">Configuring Permissions<a href="#configuring-permissions" class="hash-link" aria-label="Direct link to Configuring Permissions" title="Direct link to Configuring Permissions">​</a></h3>
-<p>In order to allow automated backups, additional permissions likely be required on the service account that firebase uses. By default this should be the account named</p>
+<p>In order to allow automated backups, additional permissions are likely to be required on the service account that firebase uses. By default this should be the account named</p>
 <p><code>PROJECT_ID@appspot.gserviceaccount.com</code></p>
 <p>Permissions can be configured on the <a href="https://console.cloud.google.com/iam-admin/iam" target="_blank" rel="noopener noreferrer">Google Cloud IAM</a> page. As a minimum, <strong>Cloud Datastore</strong> access will be required</p>
 <p><img decoding="async" loading="lazy" src="/assets/images/firestore-backup-permissions-411088a5bdef07da6a48a81e9f43c963.png" width="336" height="279" class="img_ev3q"></p>

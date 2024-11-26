@@ -16,6 +16,8 @@ import type { Map as MapType, MapProps } from 'react-leaflet'
 interface IProps {
   allPins: IMapPin[] | null
   center: ILatLng
+  initialCenter: ILatLng
+  initialZoom: number
   mapRef: RefObject<MapType<MapProps, any>>
   onBlur: () => void
   onPinClick: (IMapPin) => void
@@ -27,7 +29,6 @@ interface IProps {
   zoom: number
 }
 
-const INITIAL_ZOOM = 3
 const ZOOM_IN_TOOLTIP = 'Zoom in to your location'
 const ZOOM_OUT_TOOLTIP = 'Zoom out to world view'
 
@@ -35,6 +36,8 @@ export const MapView = (props: IProps) => {
   const {
     allPins,
     center,
+    initialCenter,
+    initialZoom,
     mapRef,
     onBlur,
     onPinClick,
@@ -119,7 +122,7 @@ export const MapView = (props: IProps) => {
           sx={buttonStyle}
           onClick={() => {
             promptUserLocation()
-            setZoom(6)
+            setZoom(9)
           }}
           icon="gps-location"
         />
@@ -131,7 +134,8 @@ export const MapView = (props: IProps) => {
           data-tooltip-id="worldViewButton-tooltip"
           sx={buttonStyle}
           onClick={() => {
-            setZoom(INITIAL_ZOOM)
+            setCenter(initialCenter)
+            setZoom(initialZoom)
           }}
           icon="globe"
         />

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import {
   Button,
   CardList,
+  Loader,
   MapFilterList,
   MemberTypeVerticalList,
   Modal,
@@ -17,9 +18,10 @@ import type {
 } from 'oa-shared'
 
 interface IProps {
-  pins: IMapPin[]
+  pins: IMapPin[] | null
   activePinFilters: MapFilterOptionsList
   availableFilters: MapFilterOptionsList
+  notification: string
   onBlur: () => void
   onPinClick: (pin: IMapPin) => void
   onFilterChange: (filter: MapFilterOption) => void
@@ -35,6 +37,7 @@ export const MapWithListHeader = (props: IProps) => {
     pins,
     activePinFilters,
     availableFilters,
+    notification,
     onBlur,
     onFilterChange,
     onLocationChange,
@@ -54,16 +57,33 @@ export const MapWithListHeader = (props: IProps) => {
     padding: '0 !important',
   }
 
+  if (notification) {
+    return (
+      <Flex
+        sx={{
+          background: 'background',
+          height: '100%',
+          width: '100%',
+          justifyContent: 'center',
+        }}
+      >
+        <Loader label={notification} sx={{ alignSelf: 'center' }} />
+      </Flex>
+    )
+  }
+
   return (
     <>
       <Modal onDidDismiss={toggleFilterModal} isOpen={showFilters} sx={sx}>
-        <MapFilterList
-          activeFilters={activePinFilters}
-          availableFilters={availableFilters}
-          onClose={toggleFilterModal}
-          onFilterChange={onFilterChange}
-          pinCount={pins.length}
-        />
+        {pins && (
+          <MapFilterList
+            activeFilters={activePinFilters}
+            availableFilters={availableFilters}
+            onClose={toggleFilterModal}
+            onFilterChange={onFilterChange}
+            pinCount={pins.length}
+          />
+        )}
       </Modal>
 
       <Flex
@@ -104,14 +124,16 @@ export const MapWithListHeader = (props: IProps) => {
           onFilterChange={onFilterChange}
         />
       </Flex>
-      <CardList
-        columnsCountBreakPoints={isMobile ? { 300: 1, 600: 2 } : undefined}
-        list={pins}
-        onBlur={onBlur}
-        onPinClick={onPinClick}
-        selectedPin={selectedPin}
-        viewport={viewport}
-      />
+      {pins && (
+        <CardList
+          columnsCountBreakPoints={isMobile ? { 300: 1, 600: 2 } : undefined}
+          list={pins}
+          onBlur={onBlur}
+          onPinClick={onPinClick}
+          selectedPin={selectedPin}
+          viewport={viewport}
+        />
+      )}
     </>
   )
 }

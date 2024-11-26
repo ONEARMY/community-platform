@@ -175,6 +175,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/cypherpepe"><img src="https://avatars.githubusercontent.com/u/125112044?v=4?s=60" width="60px;" alt="Cypher Pepe"/><br /><sub><b>Cypher Pepe</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=cypherpepe" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://johannesross.de"><img src="https://avatars.githubusercontent.com/u/74828657?v=4?s=60" width="60px;" alt="Johannes Roß"/><br /><sub><b>Johannes Roß</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=johannes-ross" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

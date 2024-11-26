@@ -14,7 +14,7 @@ import type { RefObject } from 'react'
 import type { Map as MapType, MapProps } from 'react-leaflet'
 
 interface IProps {
-  allPins: IMapPin[]
+  allPins: IMapPin[] | null
   center: ILatLng
   mapRef: RefObject<MapType<MapProps, any>>
   onBlur: () => void
@@ -156,7 +156,9 @@ export const MapView = (props: IProps) => {
           Show list view
         </Button>
       </Flex>
-      <Clusters pins={allPins} onPinClick={onPinClick} prefix="new" />
+      {allPins && (
+        <Clusters pins={allPins} onPinClick={onPinClick} prefix="new" />
+      )}
       {selectedPin && (
         <Popup activePin={selectedPin} mapRef={mapRef} onClose={onBlur} />
       )}

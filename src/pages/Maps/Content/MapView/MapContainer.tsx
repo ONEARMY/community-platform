@@ -11,22 +11,23 @@ import type { ILatLng, IMapPin, MapFilterOptionsList } from 'oa-shared'
 import type { Map as MapType } from 'react-leaflet'
 
 interface IProps {
-  allPins: IMapPin[]
+  allPins: IMapPin[] | null
   allToggleFilters: MapFilterOptionsList
+  notification: string
 }
 
 const INITIAL_CENTER = { lat: 51.0, lng: 19.0 }
 const INITIAL_ZOOM = 3
 
 export const MapContainer = (props: IProps) => {
-  const { allPins, allToggleFilters } = props
+  const { allPins, allToggleFilters, notification } = props
 
   const [selectedPin, setSelectedPin] = useState<IMapPin | undefined>()
   const [activePinFilters, setActivePinFilters] =
     useState<MapFilterOptionsList>([])
   const [boundaries, setBoundaries] = useState(null)
   const [center, setCenter] = useState<ILatLng>(INITIAL_CENTER)
-  const [filteredPins, setFilteredPins] = useState<IMapPin[]>(allPins)
+  const [filteredPins, setFilteredPins] = useState<IMapPin[] | null>(null)
   const [showMobileList, setShowMobileList] = useState<boolean>(false)
   const [zoom, setZoom] = useState<number>(INITIAL_ZOOM)
 
@@ -35,11 +36,19 @@ export const MapContainer = (props: IProps) => {
   const mapRef = useRef<MapType>(null)
 
   useEffect(() => {
-    const filteredByLocation = boundaries
-      ? latLongFilter(boundaries, allPins)
-      : allPins
-    const newFiltered = filterPins(activePinFilters, filteredByLocation)
-    return setFilteredPins(newFiltered)
+    if (allPins) {
+      setFilteredPins(allPins)
+    }
+  }, [allPins])
+
+  useEffect(() => {
+    if (allPins) {
+      const filteredByLocation = boundaries
+        ? latLongFilter(boundaries, allPins)
+        : allPins
+      const newFiltered = filterPins(activePinFilters, filteredByLocation)
+      return setFilteredPins(newFiltered)
+    }
   }, [activePinFilters, boundaries])
 
   useEffect(() => {
@@ -48,9 +57,11 @@ export const MapContainer = (props: IProps) => {
   }, [location.hash])
 
   const selectPinByUserId = async (userId: string | undefined) => {
-    const preLoadedPin = allPins.find((pin) => pin._id === userId)
-    preLoadedPin && setCenter(preLoadedPin.location)
-    setSelectedPin(preLoadedPin)
+    if (allPins) {
+      const preLoadedPin = allPins.find((pin) => pin._id === userId)
+      preLoadedPin && setCenter(preLoadedPin.location)
+      setSelectedPin(preLoadedPin)
+    }
   }
 
   const onBlur = () => {
@@ -74,6 +85,7 @@ export const MapContainer = (props: IProps) => {
       <MapList
         allToggleFilters={allToggleFilters}
         activePinFilters={activePinFilters}
+        notification={notification}
         onBlur={onBlur}
         onLocationChange={onLocationChange}
         onPinClick={onPinClick}

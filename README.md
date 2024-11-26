@@ -175,6 +175,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/cypherpepe"><img src="https://avatars.githubusercontent.com/u/125112044?v=4?s=60" width="60px;" alt="Cypher Pepe"/><br /><sub><b>Cypher Pepe</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=cypherpepe" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.behance.net/dalibormrska"><img src="https://avatars.githubusercontent.com/u/35503298?v=4?s=60" width="60px;" alt="Dalibor Mrška"/><br /><sub><b>Dalibor Mrška</b></sub></a><br /><a href="#design-dalibormrska" title="Design">🎨</a></td>
     </tr>
   </tbody>
 </table>

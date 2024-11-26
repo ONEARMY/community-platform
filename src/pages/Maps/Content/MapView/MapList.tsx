@@ -8,10 +8,11 @@ import type { IMapPin, MapFilterOption, MapFilterOptionsList } from 'oa-shared'
 interface IProps {
   activePinFilters: MapFilterOptionsList
   allToggleFilters: MapFilterOptionsList
+  notification: string
   onBlur: () => void
   onLocationChange: (ILatLng) => void
   onPinClick: (pin: IMapPin) => void
-  pins: IMapPin[]
+  pins: IMapPin[] | null
   selectedPin: IMapPin | undefined
   setActivePinFilters: (MapFilterOption) => void
   setShowMobileList: (boolean) => void
@@ -22,6 +23,7 @@ export const MapList = (props: IProps) => {
   const {
     activePinFilters,
     allToggleFilters,
+    notification,
     onBlur,
     onLocationChange,
     onPinClick,
@@ -56,6 +58,7 @@ export const MapList = (props: IProps) => {
   const headerProps = {
     activePinFilters,
     availableFilters: allToggleFilters,
+    notification,
     onBlur,
     onFilterChange,
     onLocationChange,

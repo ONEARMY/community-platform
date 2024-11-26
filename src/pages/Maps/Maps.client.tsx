@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Loader } from 'oa-components'
 import { Box } from 'theme-ui'
 
 import { allMapFilterOptions } from './Content/MapView/allMapFilterOptions'
@@ -50,10 +49,11 @@ const MapsPage = () => {
 
   return (
     <Box id="mapPage" sx={{ height: 'calc(100vh - 120px)', width: '100%' }}>
-      {notification !== '' && <Loader label={notification} />}
-      {allPins && notification === '' && (
-        <MapContainer allPins={allPins} allToggleFilters={allToggleFilters} />
-      )}
+      <MapContainer
+        allPins={allPins}
+        allToggleFilters={allToggleFilters}
+        notification={notification}
+      />
     </Box>
   )
 }

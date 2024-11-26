@@ -61,13 +61,18 @@ async function insertOrUpdateProfile(
   const { client } = createSupabaseServerClient()
   const user = docSnapshot.data() as IUser
 
-  const { data } = await client
+  const profileRequest = await client
     .from('profiles')
     .select()
     .eq('firebase_auth_id', user._authID)
     .single()
 
-  if (data) {
+  if (profileRequest.error) {
+    functions.logger.log(profileRequest.error)
+    return
+  }
+
+  if (profileRequest.data) {
     // Update
     const { error } = await client
       .from('profiles')
@@ -81,7 +86,7 @@ async function insertOrUpdateProfile(
       .eq('firebase_auth_id', user._authID)
 
     if (error) {
-      console.log({ ...error })
+      functions.logger.log({ ...error })
     }
   } else {
     // Insert
@@ -99,7 +104,7 @@ async function insertOrUpdateProfile(
       .eq('firebase_auth_id', user._authID)
 
     if (error) {
-      console.log({ ...error })
+      functions.logger.log({ ...error })
     }
   }
 }

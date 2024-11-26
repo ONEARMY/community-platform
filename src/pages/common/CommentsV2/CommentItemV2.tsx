@@ -120,7 +120,7 @@ export const CommentItemV2 = observer(
                   >
                     <Username
                       user={{
-                        userName: comment.createdBy?.name || '',
+                        userName: comment.createdBy?.username || '',
                         countryCode: comment.createdBy?.country,
                         isVerified: comment.createdBy?.isVerified,
                         // TODO: isSupporter

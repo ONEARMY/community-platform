@@ -26,6 +26,12 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
   }),
 }))
 
+vi.mock('oa-components', () => ({
+  __esModule: true,
+  DiscussionContainer: () => <>Start the discussion</>,
+  Loader: () => <></>,
+}))
+
 // Happy path well tested in cypress
 describe('DiscussionWrapper', () => {
   it('loads the component', async () => {

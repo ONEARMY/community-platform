@@ -862,6 +862,15 @@
       "contributions": [
         "design"
       ]
+    },
+    {
+      "login": "sky-coderay",
+      "name": "Skylar Ray",
+      "avatar_url": "https://avatars.githubusercontent.com/u/137945430?v=4",
+      "profile": "https://github.com/sky-coderay",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "projectName": "community-platform",

@@ -59,10 +59,10 @@ jobs:
       - name: Push Supabase DB
         run: supabase db push
 
-      - name: Set up Flyctl
+      - name: Install Fly CLI
         run: |
           curl -L https://fly.io/install.sh | sh
-          export PATH="$HOME/.fly/bin:$PATH"
+          echo "$HOME/.fly/bin" >> "$GITHUB_PATH"
 
       - name: Deploy PR app to Fly.io
         id: deploy

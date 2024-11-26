@@ -16,8 +16,8 @@ interface IProps {
   notification: string
 }
 
-const INITIAL_CENTER = { lat: 51.0, lng: 19.0 }
-const INITIAL_ZOOM = 3
+export const INITIAL_CENTER = { lat: 30.0, lng: 19.0 }
+export const INITIAL_ZOOM = 2
 
 export const MapContainer = (props: IProps) => {
   const { allPins, allToggleFilters, notification } = props
@@ -99,6 +99,8 @@ export const MapContainer = (props: IProps) => {
       <MapView
         allPins={filteredPins}
         center={center}
+        initialCenter={INITIAL_CENTER}
+        initialZoom={INITIAL_ZOOM}
         mapRef={mapRef}
         setBoundaries={setBoundaries}
         setZoom={setZoom}

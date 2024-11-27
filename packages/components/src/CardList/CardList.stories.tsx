@@ -61,7 +61,7 @@ export const Default: StoryFn<typeof CardList> = () => {
 export const WhenDisplayIsZero: StoryFn<typeof CardList> = () => {
   return (
     <CardList
-      list={list}
+      list={[]}
       onBlur={onBlur}
       onPinClick={onPinClick}
       selectedPin={undefined}

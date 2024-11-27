@@ -32,9 +32,9 @@ export const MapFilterList = (props: IProps) => {
     ({ filterType }) => filterType === 'profileType',
   )
 
-  const tagFilters = availableFilters.filter(
-    ({ filterType }) => filterType === 'profileTag',
-  )
+  const tagFilters = availableFilters
+    .filter(({ filterType }) => filterType === 'profileTag')
+    .sort((a, b) => (a.label > b.label ? 1 : 0))
 
   const isActive = (checkingFilter: string) =>
     !!activeFilters.find((filter) => filter.label === checkingFilter)

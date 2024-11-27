@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
-import InfiniteScroll from 'react-infinite-scroll-component'
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import { Flex, Text } from 'theme-ui'
 
+import { Button } from '../Button/Button'
 import { CardListItem } from '../CardListItem/CardListItem'
 import { Icon } from '../Icon/Icon'
-import { Loader } from '../Loader/Loader'
 
 import type { IMapPin } from 'oa-shared'
 
@@ -58,6 +57,7 @@ export const CardList = (props: IProps) => {
 
   const addRenderItems = () =>
     setRenderCount((count) => count + ITEMS_PER_RENDER)
+
   const hasMore = !(displayItems.length === list.length)
 
   const isListEmpty = list.length === 0
@@ -90,19 +90,16 @@ export const CardList = (props: IProps) => {
       </Flex>
       {isListEmpty && EMPTY_LIST}
       {!isListEmpty && (
-        <InfiniteScroll
-          dataLength={displayItems.length}
-          next={addRenderItems}
-          hasMore={hasMore}
-          loader={<Loader />}
-          scrollThreshold={0.6}
-          endMessage={<></>}
-          style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
-        >
+        <>
           <ResponsiveMasonry columnsCountBreakPoints={columnsCountBreakPoints}>
             <Masonry>{displayItems}</Masonry>
           </ResponsiveMasonry>
-        </InfiniteScroll>
+          {hasMore && (
+            <Flex sx={{ justifyContent: 'center' }}>
+              <Button onClick={addRenderItems}>Show more </Button>
+            </Flex>
+          )}
+        </>
       )}
     </Flex>
   )

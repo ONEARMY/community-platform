@@ -38,7 +38,11 @@ const MapsPage = () => {
       const pinDetails = allPins.map(({ creator }) => [
         creator?.profileType,
         ...(creator?.tags ? creator.tags.map(({ _id }) => _id) : []),
+        ...(creator?.badges
+          ? Object.keys(creator?.badges).filter((key) => key)
+          : []),
       ])
+
       const filtersNeeded = [...new Set(pinDetails.flat())]
       const allNeededPinFilters = allMapFilterOptions.filter((validFilter) =>
         filtersNeeded.some((neededfilter) => neededfilter === validFilter._id),

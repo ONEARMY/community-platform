@@ -25,7 +25,9 @@ export const CardProfile = ({ item, isLink = false }: IProps) => {
       {isMember && (
         <CardDetailsMemberProfile creator={creator} isLink={isLink} />
       )}
-      {(!isWorkspace && !isMember)  && <CardDetailsFallback item={item} isLink={isLink} />}
+      {!isWorkspace && !isMember && (
+        <CardDetailsFallback item={item} isLink={isLink} />
+      )}
     </Flex>
   )
 }

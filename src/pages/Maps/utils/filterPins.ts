@@ -7,32 +7,47 @@ export const filterPins = (
   if (activePinFilters.length === 0) {
     return pins
   }
-  const profileTypeFilters = activePinFilters
+  const typeFilters = activePinFilters
     .filter(({ filterType }) => filterType === 'profileType')
     .map(({ _id }) => _id)
 
-  const filteredPins: IMapPin[] = []
+  let filteredPins: IMapPin[] = []
 
-  if (profileTypeFilters.length > 0) {
+  if (typeFilters.length > 0) {
     const profileTypeFilteredList = pins.filter(
       ({ creator }) =>
-        creator?.profileType &&
-        profileTypeFilters.includes(creator?.profileType),
+        creator?.profileType && typeFilters.includes(creator?.profileType),
     )
     filteredPins.push(...profileTypeFilteredList)
   }
 
-  const profileTagFilters = activePinFilters
+  const tagFilters = activePinFilters
     .filter(({ filterType }) => filterType === 'profileTag')
     .map(({ _id }) => _id)
 
-  if (profileTagFilters.length > 0) {
+  if (tagFilters.length > 0) {
     const listToFilter = filteredPins.length > 0 ? filteredPins : pins
     const tagFilteredList = listToFilter.filter(({ creator }) => {
       const tagIds = creator?.tags?.map(({ _id }) => _id)
-      return profileTagFilters.some((tagId) => tagIds?.includes(tagId))
+      return tagFilters.some((tagId) => tagIds?.includes(tagId))
     })
-    return tagFilteredList
+    filteredPins = tagFilteredList
+  }
+
+  const badgeFilters = activePinFilters
+    .filter(({ filterType }) => filterType === 'badge')
+    .map(({ _id }) => _id)
+
+  if (badgeFilters.length > 0) {
+    const listToFilter = filteredPins.length > 0 ? filteredPins : pins
+    const badgeFilteredList = listToFilter.filter(({ creator }) => {
+      if (!creator?.badges) return
+      const badges = Object.keys(creator?.badges).filter(
+        (key) => creator?.badges && creator.badges[key],
+      )
+      return badgeFilters.filter((badge) => badges.includes(badge)).length > 0
+    })
+    filteredPins = badgeFilteredList
   }
 
   return filteredPins

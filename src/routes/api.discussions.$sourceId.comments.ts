@@ -4,7 +4,7 @@ import { Comment, DBComment } from 'src/models/comment.model'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { notificationsService } from 'src/services/notificationsService.server'
 
-import type { DBCommentAuthor } from 'src/models/comment.model'
+import type { DBCommentAuthor, Reply } from 'src/models/comment.model'
 import type { DBProfile } from 'src/models/profile.model'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
@@ -35,6 +35,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     `,
     )
     .eq(sourceParam, sourceId)
+    .order('created_at', { ascending: false })
 
   if (result.error) {
     console.error(result.error)
@@ -61,10 +62,13 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   const commentWithReplies = (commentsByParentId[0] ?? []).map(
     (mainComment: DBComment) => {
-      const replies = (commentsByParentId[mainComment.id] ?? []).map(
+      const replies: Reply[] = (commentsByParentId[mainComment.id] ?? []).map(
         (reply: DBComment) => Comment.fromDB(reply),
       )
-      return Comment.fromDB(mainComment, replies)
+      return Comment.fromDB(
+        mainComment,
+        replies.sort((a, b) => a.id - b.id),
+      )
     },
   )
 

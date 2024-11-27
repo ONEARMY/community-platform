@@ -170,7 +170,7 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
         setComments((comments) =>
           comments.map((comment) => {
             if (comment.id === id) {
-              comment.replies = [newReply, ...(comment.replies || [])]
+              comment.replies = [...(comment.replies || []), newReply]
             }
             return comment
           }),

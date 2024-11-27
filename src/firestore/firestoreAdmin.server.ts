@@ -1,7 +1,7 @@
 import admin from 'firebase-admin'
 
 // Initialize Firebase Admin with your service account key
-if (admin.apps.length === 0) {
+if (admin.apps.length === 0 && process.env.FIREBASE_PROJECT_ID) {
   admin.initializeApp({
     credential: admin.credential.cert({
       projectId: process.env.FIREBASE_PROJECT_ID,

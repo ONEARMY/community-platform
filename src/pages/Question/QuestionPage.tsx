@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from '@remix-run/react'
+import { observer } from 'mobx-react'
 import {
   Category,
   ContentStatistics,
@@ -28,7 +29,7 @@ type QuestionPageProps = {
   question: IQuestionDB
 }
 
-export const QuestionPage = ({ question }: QuestionPageProps) => {
+export const QuestionPage = observer(({ question }: QuestionPageProps) => {
   const store = useQuestionStore()
   const activeUser = store.activeUser
   const [voted, setVoted] = useState<boolean>(false)
@@ -229,4 +230,4 @@ export const QuestionPage = ({ question }: QuestionPageProps) => {
       </ClientOnly>
     </Box>
   )
-}
+})

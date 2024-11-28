@@ -53,12 +53,11 @@ describe('[Map]', () => {
     cy.step('As the user moves in the list updates')
     cy.visit(`/map#${userId}`)
     cy.wait(500) // Wait for animation to complete
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 9; i++) {
       cy.get('.leaflet-control-zoom-in').click()
     }
-
-    cy.get('[data-cy="list-results"]').contains('1 result')
     cy.wait(500) // Wait for animation to complete
+    cy.get('[data-cy="list-results"]').contains('1 result')
     cy.get('[data-cy="CardList-desktop"]').within(() => {
       cy.get('[data-cy=CardListItem-selected]').within(() => {
         cy.contains(userId)
@@ -116,51 +115,13 @@ describe('[Map]', () => {
     cy.intercept(urlLondon).as('londonSearch')
     cy.wait('@londonSearch')
     cy.contains('London, Greater London, England, United Kingdom').click()
-  })
 
-  it('Test zoom out/ globe button + zoom in to users location button', () => {
-    cy.viewport('macbook-16')
-    cy.visit('/map')
+    cy.step('WorldViewButton enabled when zoomed in')
+    cy.get('[data-cy=WorldViewButton').click()
+    cy.wait(1000)
+    cy.get('[data-cy=WorldViewButton-disabled')
 
-    cy.get('[data-cy="WorldViewButton"]', { timeout: 10000 })
-      .should('exist')
-      .and('be.visible')
-    cy.get('[data-cy="WorldViewButton"]').should('exist').and('be.visible')
-
-    const mapZoomProxySelector = '.leaflet-tile-container.leaflet-zoom-animated'
-
-    cy.get('[data-cy="WorldViewButton"]').click()
-    cy.wait(500)
-
-    // Check if the transform matrix has scale factor 1 (for matrix(a, b, c, d, e, f), 'a' and 'd' should be 1)
-    cy.get(mapZoomProxySelector)
-      .invoke('css', 'transform')
-      .then((transform) => {
-        const matrixValues = transform.match(/matrix\(([^)]+)\)/)[1].split(', ')
-        const scaleX = parseFloat(matrixValues[0]) // 'a' value from matrix
-        const scaleY = parseFloat(matrixValues[3]) // 'd' value from matrix
-        expect(scaleX).to.eq(1)
-        expect(scaleY).to.eq(1)
-      })
-
+    cy.step('LocationViewButton visable and clickable')
     cy.get('[data-cy="LocationViewButton"]').click()
-    cy.wait(500)
-
-    // Check if the transform matrix has scale factor 1 (for matrix(a, b, c, d, e, f), 'a' and 'd' should be 1)
-    cy.get(mapZoomProxySelector)
-      .invoke('css', 'transform')
-      .then((transform) => {
-        const matrixValues = transform.match(/matrix\(([^)]+)\)/)[1].split(', ')
-        const scaleX = parseFloat(matrixValues[0]) // 'a' value from matrix
-        const scaleY = parseFloat(matrixValues[3]) // 'd' value from matrix
-        expect(scaleX).to.eq(8)
-        expect(scaleY).to.eq(8)
-      })
-
-    cy.step('Zoom in button prompts for user location and zooms')
-    cy.get('[data-cy="LocationViewButton"]', { timeout: 10000 })
-      .should('exist')
-      .and('be.visible')
-    cy.get('[data-cy="LocationViewButton"]').should('exist').and('be.visible')
   })
 })

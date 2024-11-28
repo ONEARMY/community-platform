@@ -128,7 +128,6 @@ export const MapWithListHeader = (props: IProps) => {
         <CardList
           columnsCountBreakPoints={isMobile ? { 300: 1, 600: 2 } : undefined}
           list={pins}
-          onBlur={onBlur}
           onPinClick={onPinClick}
           selectedPin={selectedPin}
           viewport={viewport}

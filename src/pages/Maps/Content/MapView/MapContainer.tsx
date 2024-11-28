@@ -54,13 +54,13 @@ export const MapContainer = (props: IProps) => {
   useEffect(() => {
     const pinId = location.hash.slice(1)
     selectPinByUserId(pinId.length > 0 ? pinId : undefined)
-  }, [location.hash])
+  }, [location.hash, allPins])
 
   const selectPinByUserId = async (userId: string | undefined) => {
     if (allPins) {
-      const preLoadedPin = allPins.find((pin) => pin._id === userId)
-      preLoadedPin && setCenter(preLoadedPin.location)
-      setSelectedPin(preLoadedPin)
+      const foundPin = allPins.find((pin) => pin._id === userId)
+      foundPin && setCenter(foundPin.location)
+      setSelectedPin(foundPin)
     }
   }
 

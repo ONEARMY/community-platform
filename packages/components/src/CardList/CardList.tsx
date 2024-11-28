@@ -11,7 +11,6 @@ import type { IMapPin } from 'oa-shared'
 export interface IProps {
   columnsCountBreakPoints?: { [key: number]: number }
   list: IMapPin[]
-  onBlur: () => void
   onPinClick: (arg: IMapPin) => void
   selectedPin: IMapPin | undefined
   viewport: string
@@ -24,7 +23,7 @@ const ITEMS_PER_RENDER = 20
 export const CardList = (props: IProps) => {
   const [renderCount, setRenderCount] = useState<number>(ITEMS_PER_RENDER)
   const [displayItems, setDisplayItems] = useState<JSX.Element[]>([])
-  const { list, onBlur, onPinClick, selectedPin, viewport } = props
+  const { list, onPinClick, selectedPin, viewport } = props
 
   useEffect(() => {
     setRenderCount(ITEMS_PER_RENDER)
@@ -32,12 +31,12 @@ export const CardList = (props: IProps) => {
 
   useEffect(() => {
     const toRender = list
-      .slice(0, renderCount)
       .sort(
         (a, b) =>
           Date.parse(b.creator?._lastActive || '0') -
           Date.parse(a.creator?._lastActive || '0'),
       )
+      .slice(0, renderCount)
       .map((item) => {
         const isSelectedPin = item._id === selectedPin?._id
 
@@ -46,7 +45,7 @@ export const CardList = (props: IProps) => {
             item={item}
             key={item._id}
             isSelectedPin={isSelectedPin}
-            onPinClick={isSelectedPin ? onBlur : onPinClick}
+            onPinClick={onPinClick}
             viewport={viewport}
           />
         )

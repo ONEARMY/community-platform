@@ -43,14 +43,12 @@ const list = [
   },
 ]
 
-const onBlur = () => undefined
 const onPinClick = () => undefined
 
 export const Default: StoryFn<typeof CardList> = () => {
   return (
     <CardList
       list={list}
-      onBlur={onBlur}
       onPinClick={onPinClick}
       selectedPin={undefined}
       viewport="stories"
@@ -62,7 +60,6 @@ export const WhenDisplayIsZero: StoryFn<typeof CardList> = () => {
   return (
     <CardList
       list={[]}
-      onBlur={onBlur}
       onPinClick={onPinClick}
       selectedPin={undefined}
       viewport="stories"

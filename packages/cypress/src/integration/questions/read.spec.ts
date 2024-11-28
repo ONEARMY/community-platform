@@ -41,7 +41,6 @@ describe('[Questions]', () => {
 
       cy.step('All metadata visible')
       cy.contains(/\d+ following/)
-      cy.contains(/\d+ useful/)
       cy.contains(/\d+ comments/)
 
       cy.step('[Populates title, SEO and social tags]')

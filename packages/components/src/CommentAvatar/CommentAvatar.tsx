@@ -18,6 +18,7 @@ export const CommentAvatar = ({ name, photoUrl }: CommentAvatarProps) => {
         height: ['30px', '50px'],
       }}
       alt={name ? `Avatar of ${name}` : 'Avatar of comment author'}
+      loading="lazy"
     />
   )
 }

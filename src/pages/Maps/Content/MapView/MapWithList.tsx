@@ -65,6 +65,9 @@ export const MapWithList = (props: IProps) => {
     const pinDetails = pins.map(({ creator }) => [
       creator?.profileType,
       ...(creator?.tags ? creator.tags.map(({ _id }) => _id) : []),
+      ...(creator?.badges
+        ? Object.keys(creator?.badges).filter((key) => key)
+        : []),
     ])
     const filtersNeeded = [...new Set(pinDetails.flat())]
     return allMapFilterOptions.filter((validFilter) =>

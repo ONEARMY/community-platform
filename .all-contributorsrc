@@ -853,6 +853,33 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "dalibormrska",
+      "name": "Dalibor Mrška",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35503298?v=4",
+      "profile": "https://www.behance.net/dalibormrska",
+      "contributions": [
+        "design"
+      ]
+    },
+    {
+      "login": "sky-coderay",
+      "name": "Skylar Ray",
+      "avatar_url": "https://avatars.githubusercontent.com/u/137945430?v=4",
+      "profile": "https://github.com/sky-coderay",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "johannes-ross",
+      "name": "Johannes Roß",
+      "avatar_url": "https://avatars.githubusercontent.com/u/74828657?v=4",
+      "profile": "http://johannesross.de",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

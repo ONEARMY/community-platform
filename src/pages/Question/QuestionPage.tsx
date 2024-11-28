@@ -204,6 +204,14 @@ export const QuestionPage = ({ question }: QuestionPageProps) => {
                 usePlural: false,
               }),
             },
+            {
+              icon: 'star',
+              label: buildStatisticsLabel({
+                stat: usefulCount,
+                statUnit: 'useful',
+                usePlural: false,
+              }),
+            },
           ]}
         />
       </Card>

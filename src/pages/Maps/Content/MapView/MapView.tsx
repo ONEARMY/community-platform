@@ -87,6 +87,8 @@ export const MapView = (props: IProps) => {
     }
   }, [mapRef])
 
+  const isWorldViewButtonDisabled = zoom === initialZoom
+
   return (
     <Map
       ref={mapRef}
@@ -130,13 +132,14 @@ export const MapView = (props: IProps) => {
 
         <Button
           data-tooltip-content={ZOOM_OUT_TOOLTIP}
-          data-cy="WorldViewButton"
+          data-cy={`WorldViewButton${isWorldViewButtonDisabled ? '-disabled' : ''}`}
           data-tooltip-id="worldViewButton-tooltip"
           sx={buttonStyle}
           onClick={() => {
             setCenter(initialCenter)
             setZoom(initialZoom)
           }}
+          disabled={isWorldViewButtonDisabled}
           icon="globe"
         />
         <Tooltip id="worldViewButton-tooltip" place="top" />

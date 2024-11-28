@@ -2,8 +2,8 @@ import { useMemo } from 'react'
 import { Field } from 'react-final-form'
 import TagsSelect from 'src/common/Tags/TagsSelect'
 import { fields } from 'src/pages/UserSettings/labels'
-import { userService } from 'src/services/user.service'
 import { COMPARISONS } from 'src/utils/comparisons'
+import { getProfileTagsForTheme } from 'src/utils/getProfileTagsForTheme'
 import { Flex, Text } from 'theme-ui'
 
 import { FlexSectionContainer } from '../elements'
@@ -16,8 +16,9 @@ export const ProfileTags = ({ isMemberProfile }: IProps) => {
   const { description, title } = fields.tags
 
   const WrappedTagsSelect = ({ input, ...rest }) => {
-    const { getProfileTags } = userService
-    const profileTags = getProfileTags(isMemberProfile ? 'member' : 'space')
+    const profileTags = getProfileTagsForTheme(
+      isMemberProfile ? 'member' : 'space',
+    )
 
     return (
       <TagsSelect

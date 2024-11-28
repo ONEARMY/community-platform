@@ -4,7 +4,7 @@ import { ResearchUpdateStatus } from 'oa-shared'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import ResearchArticle from 'src/pages/Research/Content/ResearchArticle'
 import { researchService } from 'src/pages/Research/research.service'
-import { pageViewService } from 'src/services/pageView.service'
+import { pageViewService } from 'src/services/pageViewService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'

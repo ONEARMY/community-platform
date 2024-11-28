@@ -12,6 +12,7 @@ import {
   Modal,
   Username,
 } from 'oa-components'
+import { UserRole } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Box, Flex, Text } from 'theme-ui'
 
@@ -43,7 +44,11 @@ export const CommentReply = observer(
         return false
       }
 
-      return userStore.activeUser?._authID === comment.createdBy?.firebaseAuthId
+      return (
+        userStore.activeUser?._authID === comment.createdBy?.firebaseAuthId ||
+        userStore.activeUser.userRoles?.includes(UserRole.ADMIN) ||
+        userStore.activeUser.userRoles?.includes(UserRole.SUPER_ADMIN)
+      )
     }, [userStore.activeUser?._authID, comment.createdBy?.firebaseAuthId])
 
     useEffect(() => {

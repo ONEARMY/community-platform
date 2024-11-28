@@ -1,22 +1,9 @@
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { DB_ENDPOINTS, IModerationStatus } from 'oa-shared'
 import { firestore } from 'src/utils/firebase'
-import { getProfileTagsForTheme } from 'src/utils/getProfileTagsForTheme'
 
-import type {
-  IHowtoDB,
-  IResearchDB,
-  ITag,
-  IUserDB,
-  MemberOrSpace,
-} from 'oa-shared'
+import type { IHowtoDB, IResearchDB, IUserDB } from 'oa-shared'
 import type { UserCreatedDocs } from 'src/pages/User/types'
-
-const getProfileTags: (profileType: MemberOrSpace) => ITag[] = (
-  profileType,
-) => {
-  return getProfileTagsForTheme(profileType)
-}
 
 const getById = async (id: string): Promise<IUserDB | null> => {
   // Get all that match the slug, to avoid creating an index (blocker for cypress tests)
@@ -89,6 +76,5 @@ const getHowtosByAuthor = async (userId: string) => {
 
 export const userService = {
   getById,
-  getProfileTags,
   getUserCreatedDocs,
 }

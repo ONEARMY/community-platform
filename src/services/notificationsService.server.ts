@@ -3,7 +3,7 @@ import { DB_ENDPOINTS } from 'oa-shared'
 import { firestore } from 'src/utils/firebase'
 import { randomID } from 'src/utils/helpers'
 
-import { userService } from './user.service'
+import { userService } from './userService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { INotification, IUserDB, NotificationType } from 'oa-shared'

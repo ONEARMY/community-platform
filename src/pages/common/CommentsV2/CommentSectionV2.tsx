@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Comment } from 'src/models/comment.model'
-import { auth } from 'src/utils/firebase'
+import { commentService } from 'src/services/commentService'
 import { Box, Button, Flex, Heading } from 'theme-ui'
 
 import { CommentItemV2 } from './CommentItemV2'
@@ -52,16 +52,7 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
 
   const postComment = async (comment: string) => {
     try {
-      const result = await fetch(`/api/discussions/${sourceId}/comments`, {
-        method: 'POST',
-        body: JSON.stringify({
-          comment,
-          sourceType: 'questions',
-        }),
-        headers: {
-          firebaseToken: await auth.currentUser!.getIdToken(),
-        },
-      })
+      const result = await commentService.postComment(sourceId, comment)
 
       if (result.status === 201) {
         const newComment = Comment.fromDB(await result.json())
@@ -78,18 +69,7 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
 
   const editComment = async (id: number, comment: string) => {
     try {
-      const result = await fetch(
-        `/api/discussions/${sourceId}/comments/${id}`,
-        {
-          method: 'PUT',
-          body: JSON.stringify({
-            comment,
-          }),
-          headers: {
-            firebaseToken: await auth.currentUser!.getIdToken(),
-          },
-        },
-      )
+      const result = await commentService.editcomment(sourceId, id, comment)
 
       if (result.status === 204) {
         setComments((comments) =>
@@ -101,7 +81,7 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
           }),
         )
       } else {
-        // show error
+        // TODO: show error
       }
     } catch (err) {
       console.log(err)
@@ -110,15 +90,7 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
 
   const deleteComment = async (id: number) => {
     try {
-      const result = await fetch(
-        `/api/discussions/${sourceId}/comments/${id}`,
-        {
-          method: 'DELETE',
-          headers: {
-            firebaseToken: await auth.currentUser!.getIdToken(),
-          },
-        },
-      )
+      const result = await commentService.deleteComment(sourceId, id)
 
       if (result.status === 204) {
         setComments((comments) =>
@@ -152,17 +124,7 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
 
   const postReply = async (id: number, reply: string) => {
     try {
-      const result = await fetch(`/api/discussions/${sourceId}/comments`, {
-        method: 'POST',
-        body: JSON.stringify({
-          parentId: id,
-          comment: reply,
-          sourceType: 'questions',
-        }),
-        headers: {
-          firebaseToken: await auth.currentUser!.getIdToken(),
-        },
-      })
+      const result = await commentService.postComment(sourceId, reply, id)
 
       if (result.status === 201) {
         const newReply = Comment.fromDB(await result.json()) as Reply
@@ -185,16 +147,7 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
 
   const editReply = async (id: number, replyText: string, parentId: number) => {
     try {
-      const result = await fetch(
-        `/api/discussions/${sourceId}/comments/${id}`,
-        {
-          method: 'PUT',
-          body: JSON.stringify({ comment: replyText }),
-          headers: {
-            firebaseToken: await auth.currentUser!.getIdToken(),
-          },
-        },
-      )
+      const result = await commentService.editcomment(sourceId, id, replyText)
 
       if (result.status === 204) {
         setComments((comments) =>
@@ -220,15 +173,7 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
 
   const deleteReply = async (id: number, parentId: number) => {
     try {
-      const result = await fetch(
-        `/api/discussions/${sourceId}/comments/${id}`,
-        {
-          method: 'DELETE',
-          headers: {
-            firebaseToken: await auth.currentUser!.getIdToken(),
-          },
-        },
-      )
+      const result = await commentService.deleteComment(sourceId, id)
 
       if (result.status === 204) {
         setComments((comments) =>

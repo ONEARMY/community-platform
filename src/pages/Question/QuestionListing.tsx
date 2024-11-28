@@ -4,7 +4,7 @@ import { Button, Loader } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
 import { questionService } from 'src/pages/Question/question.service'
-import { commentService } from 'src/services/comment.service'
+import { commentService } from 'src/services/commentService'
 import { Flex, Heading } from 'theme-ui'
 
 import { ITEMS_PER_PAGE } from './constants'

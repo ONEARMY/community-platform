@@ -159,7 +159,7 @@ describe('[Settings]', () => {
       cy.step('Can view pin on new map')
       cy.visit(`/map#${user.username}`)
       cy.wait(2000)
-      cy.get('[data-cy=CardListItem]').contains(user.username)
+      cy.get('[data-cy=CardListItem-selected]').contains(user.username)
 
       cy.step('Can delete map pin')
       cy.visit('/settings')

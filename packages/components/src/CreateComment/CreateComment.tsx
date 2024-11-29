@@ -121,6 +121,7 @@ export const CreateComment = (props: Props) => {
         >
           <Button
             data-cy={isReply ? 'reply-submit' : 'comment-submit'}
+            data-testid="send-comment-button"
             disabled={!comment.trim() || !isLoggedIn || isLoading}
             variant="primary"
             onClick={() => {

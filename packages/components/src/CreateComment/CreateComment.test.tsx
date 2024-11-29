@@ -53,7 +53,7 @@ describe('CreateComment Component', () => {
         onChange={mockOnChange}
       />,
     )
-    expect(screen.getByText('Leave a comment')).not.toBeDisabled()
+    expect(screen.getByTestId('send-comment-button')).not.toBeDisabled()
   })
 
   it('disables submit button when no comment is entered', () => {
@@ -66,7 +66,7 @@ describe('CreateComment Component', () => {
         onChange={mockOnChange}
       />,
     )
-    expect(screen.getByText('Leave a comment')).toBeDisabled()
+    expect(screen.getByTestId('send-comment-button')).toBeDisabled()
   })
 
   it('handles user input in textarea', () => {
@@ -96,7 +96,7 @@ describe('CreateComment Component', () => {
         onChange={mockOnChange}
       />,
     )
-    const button = screen.getByText('Leave a comment')
+    const button = screen.getByTestId('send-comment-button')
     fireEvent.click(button)
     expect(mockOnSubmit).toHaveBeenCalledWith('Test comment')
   })

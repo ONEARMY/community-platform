@@ -17,7 +17,7 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Box, Flex, Text } from 'theme-ui'
 
 import { CommentReply } from './CommentReply'
-import { CreateReplyV2 } from './CreateReplyV2'
+import { CreateCommentV2 } from './CreateCommentV2'
 
 import type { Comment } from 'src/models/comment.model'
 
@@ -51,8 +51,7 @@ export const CommentItemV2 = observer(
     const { userStore } = useCommonStores().stores
 
     const maxHeight = isShowMore ? 'max-content' : '128px'
-    const isReply = !!comment.parentId
-    const item = isReply ? 'ReplyItem' : 'CommentItem'
+    const item = 'CommentItem'
     const isEditable = useMemo(() => {
       if (!userStore.activeUser?._authID) {
         return false
@@ -221,7 +220,10 @@ export const CommentItemV2 = observer(
                 ))}
 
                 {!comment.deleted && (
-                  <CreateReplyV2 onSubmit={(comment) => onReply(comment)} />
+                  <CreateCommentV2
+                    onSubmit={(comment) => onReply(comment)}
+                    buttonLabel="Leave a reply"
+                  />
                 )}
               </>
             )}
@@ -241,7 +243,7 @@ export const CommentItemV2 = observer(
               setShowEditModal(false)
             }}
             handleCancel={() => setShowEditModal(false)}
-            isReply={isReply}
+            isReply={false}
           />
         </Modal>
 

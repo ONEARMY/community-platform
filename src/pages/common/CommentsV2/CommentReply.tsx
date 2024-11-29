@@ -37,8 +37,7 @@ export const CommentReply = observer(
     const { userStore } = useCommonStores().stores
 
     const maxHeight = isShowMore ? 'max-content' : '128px'
-    const isReply = !!comment.parentId
-    const item = isReply ? 'ReplyItem' : 'CommentItem'
+    const item = 'ReplyItem'
     const isEditable = useMemo(() => {
       if (!userStore.activeUser?._authID) {
         return false
@@ -204,7 +203,7 @@ export const CommentReply = observer(
                 setShowEditModal(false)
               }}
               handleCancel={() => setShowEditModal(false)}
-              isReply={isReply}
+              isReply={true}
             />
           </Modal>
 

@@ -21,7 +21,7 @@ vi.mock('src/common/hooks/useCommonStores', () => {
   }
 })
 
-vi.mock('src/services/message.service', () => {
+vi.mock('src/services/messageService', () => {
   return {
     messageService: {
       sendMessage: () =>

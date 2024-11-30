@@ -369,10 +369,10 @@ jobs:
       SUPABASE_ACCESS_TOKEN: $SUPABASE_ACCESS_TOKEN
       SUPABASE_DB_PASSWORD: $SUPABASE_DB_PASSWORD
     docker:
-      - image: supabase/cli:latest
+      - image: cimg/node:20.7.0
     steps:
       - checkout
-      - run: supabase login --token
+      - run: npm install -g @supabase/cli
       - run: supabase link --project-ref $SUPABASE_PROJECT_ID
       - run: supabase db push
   # Run cypress e2e tests on chrome

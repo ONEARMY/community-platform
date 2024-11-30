@@ -371,16 +371,7 @@ jobs:
     docker:
       - image: cimg/node:20.7.0
     steps:
-      - run:
-          name: Install Homebrew
-          command: |
-            apt-get update && apt-get install -y build-essential curl file git
-            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-            echo >> /home/circleci/.profile
-            echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/circleci/.profile
-            eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-      - checkout
-      - run: brew install supabase/tap/supabase
+      - run: npm install -g supabase
       - run: supabase link --project-ref $SUPABASE_PROJECT_ID
       - run: supabase db push
   # Run cypress e2e tests on chrome

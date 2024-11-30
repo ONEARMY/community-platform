@@ -371,7 +371,7 @@ jobs:
     docker:
       - image: cimg/node:20.7.0
     steps:
-      - run: npm install -g supabase
+      - run: sudo npm install -g supabase
       - run: supabase login
       - run: supabase link --project-ref $SUPABASE_PROJECT_ID
       - run: supabase db push

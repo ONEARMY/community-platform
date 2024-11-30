@@ -365,14 +365,11 @@ jobs:
           name: Set Supabase Secrets
           command: flyctl -a << parameters.FLY_APP_NAME >> secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID FIREBASE_PRIVATE_KEY="$FIREBASE_PRIVATE_KEY" FIREBASE_CLIENT_EMAIL=$FIREBASE_CLIENT_EMAIL
   deploy-supabase:
-    environment:
-      SUPABASE_ACCESS_TOKEN: $SUPABASE_ACCESS_TOKEN
-      SUPABASE_DB_PASSWORD: $SUPABASE_DB_PASSWORD
     docker:
       - image: cimg/node:20.7.0
     steps:
       - run: npx supabase login --token $SUPABASE_ACCESS_TOKEN
-      - run: npx supabase link --project-ref $SUPABASE_PROJECT_ID
+      - run: npx supabase link --project-ref $SUPABASE_PROJECT_ID --password $SUPABASE_DB_PASSWORD
       - run: npx supabase db push
   # Run cypress e2e tests on chrome
   test_e2e:

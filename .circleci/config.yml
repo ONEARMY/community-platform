@@ -372,7 +372,7 @@ jobs:
       - image: cimg/node:20.7.0
     steps:
       - checkout
-      - run: npm install -g @supabase/cli
+      - run: npm install -g supabase
       - run: supabase link --project-ref $SUPABASE_PROJECT_ID
       - run: supabase db push
   # Run cypress e2e tests on chrome

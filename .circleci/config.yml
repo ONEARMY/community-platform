@@ -368,6 +368,7 @@ jobs:
     docker:
       - image: cimg/node:20.7.0
     steps:
+      - checkout
       - attach_workspace:
           at: '.'
       - run: npx supabase login --token $SUPABASE_ACCESS_TOKEN

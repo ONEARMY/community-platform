@@ -371,7 +371,7 @@ jobs:
     docker:
       - image: cimg/node:20.7.0
     steps:
-      - run: npx supabase login
+      - run: npx supabase login --token $SUPABASE_ACCESS_TOKEN
       - run: npx supabase link --project-ref $SUPABASE_PROJECT_ID
       - run: npx supabase db push
   # Run cypress e2e tests on chrome

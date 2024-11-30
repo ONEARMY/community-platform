@@ -1,8 +1,8 @@
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { UserProfile } from 'src/pages/User/content/UserProfile'
-import { pageViewService } from 'src/services/pageView.service'
-import { userService } from 'src/services/user.service'
+import { pageViewService } from 'src/services/pageViewService.server'
+import { userService } from 'src/services/userService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 import { Text } from 'theme-ui'
 

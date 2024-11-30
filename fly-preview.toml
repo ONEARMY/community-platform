@@ -13,6 +13,6 @@ processes = ['app']
 VITE_BRANCH = "preview"
 
 [[vm]]
-memory = '4gb'
+memory = '1gb'
 cpu_kind = 'shared'
 cpus = 2

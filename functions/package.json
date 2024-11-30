@@ -19,6 +19,7 @@
   "dependencies": {
     "@google-cloud/logging": "^11.0.0",
     "@rollup/plugin-replace": "^5.0.5",
+    "@supabase/ssr": "^0.5.2",
     "axios": "^1.7.2",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",

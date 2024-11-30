@@ -3,7 +3,7 @@ import { useLoaderData } from '@remix-run/react'
 import { Howto } from 'src/pages/Howto/Content/Howto/Howto'
 import { howtoService } from 'src/pages/Howto/howto.service'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
-import { pageViewService } from 'src/services/pageView.service'
+import { pageViewService } from 'src/services/pageViewService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'

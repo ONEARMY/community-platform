@@ -4,6 +4,7 @@ import { Button, Loader } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
 import { questionService } from 'src/pages/Question/question.service'
+import { commentService } from 'src/services/commentService'
 import { Flex, Heading } from 'theme-ui'
 
 import { ITEMS_PER_PAGE } from './constants'
@@ -73,12 +74,28 @@ export const QuestionListing = () => {
         setLastVisible(result.lastVisible)
 
         setTotal(result.total)
+
+        getCommentCounts(result.items.map((x) => x._id))
       }
     } catch (error) {
       logger.error('error fetching questions', error)
     }
 
     setIsFetching(false)
+  }
+
+  const getCommentCounts = async (questionIds: string[]) => {
+    try {
+      const count = await commentService.getCommentCount(questionIds)
+
+      if (count.size > 0) {
+        setQuestions((questions) =>
+          questions.map((x) => ({ ...x, commentCount: count.get(x._id) || 0 })),
+        )
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const showLoadMore =

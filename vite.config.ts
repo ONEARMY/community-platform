@@ -36,6 +36,9 @@ export default defineConfig({
   define: {
     global: 'globalThis',
   },
+  build: {
+    sourcemap: process.env.NODE_ENV !== 'production', // to enable local server-side debugging
+  },
   plugins: [
     !process.env.VITEST
       ? remix({

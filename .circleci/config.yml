@@ -361,6 +361,17 @@ jobs:
               --build-secret VITE_HOWTOS_HEADING="$VITE_HOWTOS_HEADING" \
               --build-secret VITE_COMMUNITY_PROGRAM_URL="$VITE_COMMUNITY_PROGRAM_URL" \
               --build-secret VITE_QUESTIONS_GUIDELINES_URL="$VITE_QUESTIONS_GUIDELINES_URL"
+  deploy-supabase:
+    environment:
+      SUPABASE_ACCESS_TOKEN: $SUPABASE_ACCESS_TOKEN
+      SUPABASE_DB_PASSWORD: $SUPABASE_DB_PASSWORD
+    docker:
+      - image: supabase/cli:latest
+    steps:
+      - checkout
+      - run: supabase login --token
+      - run: supabase link --project-ref $SUPABASE_PROJECT_ID
+      - run: supabase db push
   # Run cypress e2e tests on chrome
   test_e2e:
     docker: *docker
@@ -486,24 +497,25 @@ workflows:
           context:
             - e2e-tests
           <<: *filter_only_default_branch
-      #---------------------- Development Instances Build and Deploy ----------------------
+      #---------------------- Approval ----------------------
       - approve:
           type: approval
           name: 'Approve Production deployment'
           requires:
             - test_e2e
-      #---------------------- Development Instances Build and Deploy ----------------------
-      - release:
-          name: Release new version to GitHub
-          context:
-            - release-context
+          <<: *filter_only_default_branch
+      #---------------------- Deploy ----------------------
+      - deploy-supabase:
+          name: 'Deploy to Supabase'
           requires:
             - 'Approve Production deployment'
           <<: *filter_only_default_branch
+          context:
+            - supabase-deploy
       - deploy:
           name: 'Deploy: community.fixing.fashion'
           requires:
-            - 'Release new version to GitHub'
+            - 'Deploy to Supabase'
           <<: *filter_only_default_branch
           DEPLOY_ALIAS: fixing-fashion-prod
           FLY_APP_NAME: community-platform-ff
@@ -515,7 +527,7 @@ workflows:
       - deploy:
           name: 'Deploy: community.preciousplastic.com'
           requires:
-            - 'Release new version to GitHub'
+            - 'Deploy to Supabase'
           <<: *filter_only_default_branch
           DEPLOY_ALIAS: 'production'
           FLY_APP_NAME: community-platform-pp
@@ -527,7 +539,7 @@ workflows:
       - deploy:
           name: 'Deploy: community.projectkamp.com'
           requires:
-            - 'Release new version to GitHub'
+            - 'Deploy to Supabase'
           <<: *filter_only_default_branch
           DEPLOY_ALIAS: project-kamp-production
           FLY_APP_NAME: community-platform-pk
@@ -536,3 +548,10 @@ workflows:
             - circle-ci-patreon-context
             - project-kamp-production
             - fly-deploy
+      - release:
+          name: Release new version to GitHub
+          context:
+            - release-context
+          requires:
+            - 'Deploy: community.preciousplastic.com'
+          <<: *filter_only_default_branch

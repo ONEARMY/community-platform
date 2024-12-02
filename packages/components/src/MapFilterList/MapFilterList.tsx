@@ -33,6 +33,7 @@ export const MapFilterList = (props: IProps) => {
   )
 
   const tagFilters = availableFilters
+    .slice(0)
     .filter(({ filterType }) => filterType === 'profileTag')
     .sort((a, b) => (a.label > b.label ? 1 : 0))
 

@@ -40,14 +40,15 @@ export const MapList = (props: IProps) => {
     )
 
     if (isFilterPresent) {
-      return setActivePinFilters((filter) =>
+      setActivePinFilters((filter) =>
         filter.filter(
           (existingOption) => existingOption.label !== changedOption.label,
         ),
       )
+      return
     }
 
-    return setActivePinFilters((activePinFilters) => [
+    setActivePinFilters((activePinFilters) => [
       ...activePinFilters,
       changedOption,
     ])

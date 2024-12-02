@@ -4,16 +4,21 @@ const urlLondon =
   'https://nominatim.openstreetmap.org/search?format=json&q=london&accept-language=en'
 
 describe('[Map]', () => {
-  beforeEach(() => {
-    localStorage.setItem('VITE_THEME', 'fixing-fashion')
-  })
-
   it('[Shows expected pins]', () => {
+    localStorage.setItem('VITE_THEME', 'fixing-fashion')
     cy.viewport('macbook-16')
 
     cy.step('Shows all pins onload')
     cy.visit('/map')
     cy.title().should('include', `Map`)
+
+    cy.step('No filters selected by default')
+    cy.visit('/map')
+    cy.get('[data-cy=MapFilterProfileTypeCardList]')
+      .first()
+      .within(() => {
+        cy.get('[data-cy="MapListFilter-active"]').should('have.length', 0)
+      })
 
     cy.step('Shows the cards')
     cy.get('[data-cy="CardList-desktop"]').should('be.visible')
@@ -123,5 +128,19 @@ describe('[Map]', () => {
 
     cy.step('LocationViewButton visable and clickable')
     cy.get('[data-cy="LocationViewButton"]').click()
+  })
+
+  it("Doesn't show member pins when config is set", () => {
+    localStorage.setItem('VITE_THEME', 'precious-plastic') // Not essential
+    localStorage.setItem('VITE_HIDE_MEMBER_PINS_BY_DEFAULT', 'true')
+
+    cy.step('Every profile type other than member is set')
+    cy.visit('/map')
+    cy.get('[data-cy=MapFilterProfileTypeCardList]')
+      .first()
+      .within(() => {
+        cy.get('[data-cy="MapListFilter-active"]').should('have.length', 4)
+        cy.get('[data-cy="MapListFilter"]').should('have.length', 1)
+      })
   })
 })

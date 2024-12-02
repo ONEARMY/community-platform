@@ -172,6 +172,10 @@ export const VITE_PLATFORM_PROFILES = getFromLocalStorage(
   'VITE_PLATFORM_PROFILES',
 )
 
+export const VITE_HIDE_MEMBER_PINS_BY_DEFAULT = getFromLocalStorage(
+  'VITE_HIDE_MEMBER_PINS_BY_DEFAULT',
+)
+
 export const isPreciousPlastic = (): boolean => {
   return getFromLocalStorage('VITE_THEME') === 'precious-plastic'
 }

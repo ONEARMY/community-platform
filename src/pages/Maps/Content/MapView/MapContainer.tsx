@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Flex } from 'theme-ui'
 
 import { filterPins } from '../../utils/filterPins'
+import { setDefaultPinFilters } from '../../utils/setDefaultPinFilters'
 import { latLongFilter } from './latLongFilter'
 import { MapList } from './MapList'
 import { MapView } from './MapView'
@@ -40,6 +41,13 @@ export const MapContainer = (props: IProps) => {
       setFilteredPins(allPins)
     }
   }, [allPins])
+
+  useEffect(() => {
+    if (allToggleFilters) {
+      const defaultSetFilteringOptions = setDefaultPinFilters(allToggleFilters)
+      setActivePinFilters(defaultSetFilteringOptions)
+    }
+  }, [allToggleFilters])
 
   useEffect(() => {
     if (allPins) {

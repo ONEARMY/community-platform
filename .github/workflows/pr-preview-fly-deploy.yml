@@ -18,6 +18,15 @@ env:
   # Set these to your Fly.io organization and preferred region.
   FLY_REGION: ams
   FLY_ORG: one-army
+  SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+  SUPABASE_DB_PASSWORD: ${{ secrets.PREVIEW_DB_PASSWORD }}
+  SUPABASE_PROJECT_ID: ${{ secrets.PREVIEW_PROJECT_ID }}
+  SUPABASE_API_URL: ${{ secrets.SUPABASE_API_URL }}
+  SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+  FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+  FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+  FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+  FLY_APP_NAME: community-platform-pr-${{ github.event.number }}
 
 jobs:
   preview_app:
@@ -37,10 +46,6 @@ jobs:
       # The script in the `deploy` sets the URL output for each review app.
       url: ${{ steps.deploy.outputs.url }}
 
-    env:
-      SUPABASE_ACCESS_TOKEN: ${{ secrets.preview.SUPABASE_ACCESS_TOKEN }}
-      SUPABASE_DB_PASSWORD: ${{ secrets.preview.PREVIEW_DB_PASSWORD }}
-      SUPABASE_PROJECT_ID: ${{ secrets.preview.PREVIEW_PROJECT_ID }}
     steps:
       - name: Get code
         uses: actions/checkout@v4
@@ -72,12 +77,5 @@ jobs:
           name: community-platform-pr-${{ github.event.number }}
 
       - name: Set Fly.io Secrets
-        env:
-          SUPABASE_API_URL: ${{ secrets.preview.SUPABASE_API_URL }}
-          SUPABASE_KEY: ${{ secrets.preview.SUPABASE_KEY }}
-          FIREBASE_PROJECT_ID: ${{ secrets.preview.FIREBASE_PROJECT_ID }}
-          FIREBASE_PRIVATE_KEY: ${{ secrets.preview.FIREBASE_PRIVATE_KEY }}
-          FIREBASE_CLIENT_EMAIL: ${{ secrets.preview.FIREBASE_CLIENT_EMAIL }}
-          FLY_APP_NAME: community-platform-pr-${{ github.event.number }}
         run: |
           fly -a $FLY_APP_NAME secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID FIREBASE_PRIVATE_KEY="$FIREBASE_PRIVATE_KEY" FIREBASE_CLIENT_EMAIL=$FIREBASE_CLIENT_EMAIL

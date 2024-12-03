@@ -1,7 +1,7 @@
 name: Deploy Fly PR Preview
 on:
   # Run this workflow on every PR event. Existing review apps will be updated when the PR is updated.
-  pull_request:
+  pull_request_target:
     # Trigger when labels are changed or more commits added to a PR that contains labels
     types: [labeled, synchronize]
     # Only create a preview if changes have been made to the main src code or backend functions

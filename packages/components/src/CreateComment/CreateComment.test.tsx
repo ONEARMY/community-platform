@@ -37,7 +37,9 @@ describe('CreateComment Component', () => {
         onChange={mockOnChange}
       />,
     )
-    expect(screen.getByText('Login')).toBeInTheDocument()
+    expect(
+      screen.getByText('Hi there! Login to leave a comment'),
+    ).toBeInTheDocument()
     expect(
       screen.queryByPlaceholderText('Leave your questions or feedback...'),
     ).toBeNull()

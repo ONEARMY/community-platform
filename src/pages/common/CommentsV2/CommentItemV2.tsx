@@ -48,6 +48,7 @@ export const CommentItemV2 = observer(
     const [textHeight, setTextHeight] = useState(0)
     const [isShowMore, setShowMore] = useState(false)
     const [showReplies, setShowReplies] = useState(false)
+
     const { userStore } = useCommonStores().stores
 
     const maxHeight = isShowMore ? 'max-content' : '128px'

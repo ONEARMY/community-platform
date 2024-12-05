@@ -61,7 +61,7 @@ describe('[Map]', () => {
     cy.get('[data-cy="CardList-desktop"]').within(() => {
       cy.get('[data-cy=CardListItem-selected]').within(() => {
         cy.contains(userId)
-        cy.get('[data-cy="MemberBadge-member"]')
+        cy.get('[data-cy="MemberBadge-workshop"]')
       })
     })
     cy.get('[data-cy="PinProfile"]')
@@ -102,17 +102,12 @@ describe('[Map]', () => {
     cy.get('[data-cy="ShowMobileListButton"]').click()
     cy.get('[data-cy="CardList-mobile"]').within(() => {
       cy.get('[data-cy=CardListItem]')
-        .last()
+        .first()
         .within(() => {
           cy.contains(userId)
-          cy.get('[data-cy="MemberBadge-member"]')
+          cy.get('[data-cy="MemberBadge-workshop"]')
         })
     })
-    cy.get('[data-cy=MapFilterProfileTypeCardList-ButtonRight]')
-      .last()
-      .click()
-      .click()
-    cy.get('[data-cy=MapListFilter]').last().click()
 
     cy.step('Mobile list view can be hidden')
     cy.get('[data-cy="ShowMapButton"]').click()

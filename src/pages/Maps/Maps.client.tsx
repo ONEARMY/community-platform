@@ -38,7 +38,10 @@ const MapsPage = () => {
 
     const pinDetails = allPins.map(({ creator }) => [
       creator?.profileType,
-      ...(creator?.tags ? creator.tags.map(({ _id }) => _id) : []),
+      // Hiding member tags for the moment
+      ...(creator?.tags && creator?.profileType !== 'member'
+        ? creator.tags.map(({ _id }) => _id)
+        : []),
       ...(creator?.badges
         ? Object.keys(creator?.badges).filter((key) => key)
         : []),

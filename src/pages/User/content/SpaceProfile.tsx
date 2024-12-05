@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom'
 import {
   ImageGallery,
   MemberBadge,
@@ -62,16 +63,21 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
     userImage,
   } = user
 
+  const useLocationHook = useLocation()
+
   const coverImage = getCoverImages(user)
   const hasContributed = docs?.howtos.length + docs?.research.length > 0
   const hasImpacted = !!impact
 
-  const userLinks = links.filter(
-    (linkItem) =>
-      ![ExternalLinkLabel.DISCORD, ExternalLinkLabel.FORUM].includes(
-        linkItem.label,
-      ),
-  )
+  const userLinks =
+    links?.filter(
+      (linkItem) =>
+        ![ExternalLinkLabel.DISCORD, ExternalLinkLabel.FORUM].includes(
+          linkItem.label,
+        ),
+    ) || []
+
+  const defaultValue = useLocationHook?.hash?.slice(1) || 'profile'
 
   return (
     <Card data-cy="SpaceProfile">
@@ -157,16 +163,24 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             </Flex>
           </Box>
 
-          <Tabs defaultValue={0}>
+          <Tabs defaultValue={defaultValue}>
             <TabsList>
-              <Tab>Profile</Tab>
-              {hasContributed && <Tab data-cy="ContribTab">Contributions</Tab>}
-              {hasImpacted && isPreciousPlastic() && (
-                <Tab data-cy="ImpactTab">{heading}</Tab>
+              <Tab value="profile">Profile</Tab>
+              {hasContributed && (
+                <Tab data-cy="ContribTab" value="contributions">
+                  Contributions
+                </Tab>
               )}
-              <Tab data-cy="contact-tab">Contact</Tab>
+              {hasImpacted && isPreciousPlastic() && (
+                <Tab data-cy="ImpactTab" value="impact">
+                  {heading}
+                </Tab>
+              )}
+              <Tab data-cy="contact-tab" value="contact">
+                Contact
+              </Tab>
             </TabsList>
-            <TabPanel>
+            <TabPanel value="profile">
               <Box sx={{ mt: 1 }}>
                 <Flex
                   sx={{
@@ -223,16 +237,16 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
               </Box>
             </TabPanel>
             {hasContributed && (
-              <TabPanel>
+              <TabPanel value="contributions">
                 <UserCreatedDocuments docs={docs} />
               </TabPanel>
             )}
             {hasImpacted && isPreciousPlastic() && (
-              <TabPanel>
+              <TabPanel value="impact">
                 <Impact impact={impact} user={user} />
               </TabPanel>
             )}
-            <TabPanel>
+            <TabPanel value="contact">
               <Box>
                 <ClientOnly fallback={<></>}>
                   {() => <UserContactForm user={user} />}

@@ -106,8 +106,12 @@ describe('[Map]', () => {
 
     cy.get('[data-cy="ShowMobileListButton"]').click()
     cy.get('[data-cy="CardList-mobile"]').within(() => {
-      cy.contains(userId)
-      cy.get('[data-cy="MemberBadge-workshop"]')
+      cy.get('[data-cy=CardListItem]')
+        .first()
+        .within(() => {
+          cy.contains(userId)
+          cy.get('[data-cy="MemberBadge-workshop"]')
+        })
     })
 
     cy.step('Mobile list view can be hidden')

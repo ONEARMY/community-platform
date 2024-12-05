@@ -40,7 +40,7 @@ export const MapFilterList = (props: IProps) => {
   const isActive = (checkingFilter: string) =>
     !!activeFilters.find((filter) => filter.label === checkingFilter)
 
-  const buttonLabel = `Show ${pinCount} result${pinCount === 1 ? '' : 's'}`
+  const buttonLabel = `${pinCount} result${pinCount === 1 ? '' : 's'} in current view`
 
   return (
     <Flex
@@ -61,9 +61,15 @@ export const MapFilterList = (props: IProps) => {
           padding: 2,
         }}
       >
-        <Heading as="h3" variant="small">
-          So what are you looking for?
-        </Heading>
+        <Flex sx={{ flexDirection: 'column' }}>
+          <Heading as="h3" variant="small">
+            Filter what you see
+          </Heading>
+
+          <Text variant="quiet">
+            Zoom out on the map to search the whole world
+          </Text>
+        </Flex>
 
         <ButtonIcon
           data-cy="MapFilterList-CloseButton"
@@ -112,7 +118,7 @@ export const MapFilterList = (props: IProps) => {
 
         {tagFilters.length > 0 && (
           <Flex sx={{ gap: 1, flexDirection: 'column' }}>
-            <Text>Activities</Text>
+            <Text>Spaces activities</Text>
             <MapFilterListWrapper>
               {tagFilters.map((typeFilter, index) => {
                 const onClick = () => onFilterChange(typeFilter)

@@ -14,10 +14,13 @@ describe('[Map]', () => {
 
     cy.step('No filters selected by default')
     cy.visit('/map')
-    cy.get('[data-cy=MapFilterProfileTypeCardList]')
+    cy.get('[data-cy=MemberTypeVerticalList]')
       .first()
       .within(() => {
-        cy.get('[data-cy="MapListFilter-active"]').should('have.length', 0)
+        cy.get('[data-cy="MemberTypeVerticalList-Item-active"]').should(
+          'have.length',
+          0,
+        )
       })
 
     cy.step('Shows the cards')
@@ -106,8 +109,12 @@ describe('[Map]', () => {
 
     cy.get('[data-cy="ShowMobileListButton"]').click()
     cy.get('[data-cy="CardList-mobile"]').within(() => {
-      cy.contains(userId)
-      cy.get('[data-cy="MemberBadge-workshop"]')
+      cy.get('[data-cy=CardListItem]')
+        .first()
+        .within(() => {
+          cy.contains(userId)
+          cy.get('[data-cy="MemberBadge-workshop"]')
+        })
     })
 
     cy.step('Mobile list view can be hidden')
@@ -136,11 +143,17 @@ describe('[Map]', () => {
 
     cy.step('Every profile type other than member is set')
     cy.visit('/map')
-    cy.get('[data-cy=MapFilterProfileTypeCardList]')
+    cy.get('[data-cy=MemberTypeVerticalList]')
       .first()
       .within(() => {
-        cy.get('[data-cy="MapListFilter-active"]').should('have.length', 4)
-        cy.get('[data-cy="MapListFilter"]').should('have.length', 1)
+        cy.get('[data-cy="MemberTypeVerticalList-Item-active"]').should(
+          'have.length',
+          4,
+        )
+        cy.get('[data-cy="MemberTypeVerticalList-Item"]').should(
+          'have.length',
+          1,
+        )
       })
   })
 })

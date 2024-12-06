@@ -157,7 +157,7 @@ export const HowtoForm = observer((props: IProps) => {
                 mt={4}
               >
                 <FormContainer id={formId} onSubmit={handleSubmit}>
-                  {/* How To Info */}
+                  {/* Project Info */}
                   <Flex sx={{ flexDirection: 'column' }}>
                     <Card sx={{ bg: 'softblue' }}>
                       <Flex px={3} py={2} sx={{ alignItems: 'center' }}>

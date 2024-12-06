@@ -33,7 +33,7 @@ export async function createHowtoModerationEmail(howto: IHowtoDB) {
       message: templates.getHowToApprovalEmail(toUser, howto),
     })
   } else if (howto.moderation === IModerationStatus.AWAITING_MODERATION) {
-    // If a how to is resumbitted, send another submission confirmation email.
+    // If a project is resumbitted, send another submission confirmation email.
     await db.collection(DB_ENDPOINTS.emails).add({
       to: toUserEmail,
       message: templates.getHowToSubmissionEmail(toUser, howto),

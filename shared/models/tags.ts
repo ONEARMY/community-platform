@@ -1,4 +1,4 @@
-// when tags are saved in things like how-tos, it is done so as a json object which
+// when tags are saved in things like projects, it is done so as a json object which
 // maps tag keys to boolean values. e.g. [{tag1:true,tag2:true}]
 
 import type { DBDoc } from './db'

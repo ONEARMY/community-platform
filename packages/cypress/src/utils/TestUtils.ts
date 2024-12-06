@@ -5,7 +5,7 @@ export interface IUserSignUpDetails {
 }
 
 export enum Page {
-  HOWTO = '/how-to',
+  HOWTO = '/library',
   ACADEMY = '/academy',
   SETTINGS = '/settings',
 }

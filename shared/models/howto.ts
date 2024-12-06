@@ -14,7 +14,7 @@ export enum DifficultyLevel {
   VERY_HARD = 'Very Hard',
 }
 
-// By default all how-to form input fields come as strings
+// By default all project form input fields come as strings
 // The IHowto interface can imposes the correct formats on fields
 // Additionally convert from local filemeta to uploaded filemeta
 export interface IHowto extends IHowtoFormInput {

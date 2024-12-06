@@ -289,7 +289,7 @@ export class DiscussionStore extends ModuleStore {
           .doc(discussion.sourceId)
         const parentContent = toJS(await dbRef.get('server'))
         const parentPath =
-          collectionName === 'howtos' ? 'how-to' : collectionName
+          collectionName === 'howtos' ? 'library' : collectionName
 
         if (parentContent) {
           const recipientsToNotify = getDiscussionContributorsToNotify(

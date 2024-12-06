@@ -53,7 +53,7 @@ export class HowtoStore extends ModuleStore {
         this.userNotificationsStore.triggerNotification(
           'howto_useful',
           howto._createdBy,
-          '/how-to/' + howto.slug,
+          '/library/' + howto.slug,
           howto.title,
         )
       }
@@ -163,7 +163,7 @@ export class HowtoStore extends ModuleStore {
         this.userNotificationsStore.triggerNotification(
           'howto_mention',
           mention.username,
-          `/how-to/${howToItem.slug}#${mention.location}`,
+          `/library/${howToItem.slug}#${mention.location}`,
           howToItem.title,
         )
       }
@@ -196,11 +196,11 @@ export class HowtoStore extends ModuleStore {
     }
   }
 
-  // upload a new or update an existing how-to
+  // upload a new or update an existing project
   public async uploadHowTo(
     values: IHowtoFormInput | IHowtoDB,
   ): Promise<IHowtoDB | null> {
-    logger.debug('uploading howto', { values })
+    logger.debug('uploading project', { values })
     this.updateUploadStatus('Start')
     // create a reference either to the existing document (if editing) or a new document if creating
     const dbRef = this.db
@@ -286,7 +286,7 @@ export class HowtoStore extends ModuleStore {
       // set the database document
       howto = await this.updateHowtoItem(howToData, true)
       this.updateUploadStatus('Database')
-      logger.debug('post added')
+      logger.debug('project added')
       // complete
       this.updateUploadStatus('Complete')
     } catch (error) {

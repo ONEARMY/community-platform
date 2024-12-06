@@ -51,7 +51,7 @@ const _getSourceData = async (sourceType: string, sourceId: string) => {
     doc(firestore, DB_ENDPOINTS[sourceType], sourceId),
   )
 
-  const parentPath = sourceType === 'howtos' ? 'how-to' : sourceType
+  const parentPath = sourceType === 'howtos' ? 'library' : sourceType
 
   const item = sourceItem.data()
 

@@ -36,7 +36,7 @@ describe('UserStatistics', () => {
     )
     const howtoLink = getByTestId('howto-link')
 
-    expect(howtoLink.getAttribute('href')).toBe('/how-to?q=Test User')
+    expect(howtoLink.getAttribute('href')).toBe('/library?q=Test User')
   })
 
   it('renders research link when on research stats', () => {
@@ -72,7 +72,7 @@ describe('UserStatistics', () => {
     )
     const howtoCount = getByTestId('howto-stat')
 
-    expect(howtoCount).toHaveTextContent(/^How[-‑]?to: 10$/)
+    expect(howtoCount).toHaveTextContent(/^Projects: 10$/)
   })
 
   it('renders research count when researchCount is provided', () => {

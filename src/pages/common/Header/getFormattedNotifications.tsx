@@ -19,7 +19,7 @@ export const getFormattedNotificationMessage = (
       return (
         <Box>
           {'New comment on your '}
-          <InternalLink to={relevantUrl}>how-to</InternalLink>
+          <InternalLink to={relevantUrl}>project</InternalLink>
           {' by '}
           <InternalLink to={'/u/' + triggeredBy.userId}>
             {triggeredBy.displayName}
@@ -30,7 +30,7 @@ export const getFormattedNotificationMessage = (
       return (
         <Box>
           {'You were mentioned in a '}
-          <InternalLink to={relevantUrl}>how-to</InternalLink>
+          <InternalLink to={relevantUrl}>project</InternalLink>
           {' by '}
           <InternalLink to={'/u/' + triggeredBy.userId}>
             {triggeredBy.displayName}
@@ -45,7 +45,7 @@ export const getFormattedNotificationMessage = (
             {triggeredBy.displayName}
           </InternalLink>
           {' found your '}
-          <InternalLink to={relevantUrl}>how-to</InternalLink>
+          <InternalLink to={relevantUrl}>project</InternalLink>
           {' useful'}
         </Box>
       )
@@ -53,7 +53,7 @@ export const getFormattedNotificationMessage = (
       return (
         <Box>
           {'Yay, your '}
-          <InternalLink to={relevantUrl}>how-to</InternalLink>
+          <InternalLink to={relevantUrl}>project</InternalLink>
           {' has been approved'}
         </Box>
       )
@@ -61,7 +61,7 @@ export const getFormattedNotificationMessage = (
       return (
         <Box>
           {'Your '}
-          <InternalLink to={relevantUrl}>how-to</InternalLink>
+          <InternalLink to={relevantUrl}>project</InternalLink>
           {' needs some updates before we can approve it'}
         </Box>
       )

@@ -1,15 +1,10 @@
 /* eslint-disable unicorn/filename-case */
-import { AuthRoute } from 'src/pages/common/AuthRoute'
-import CreateHowto from 'src/pages/Howto/Content/CreateHowto/CreateHowto'
 
-export async function clientLoader() {
-  return null
-}
+// The library/projects section use to be called 'how-tos' so this
+// exists to ensure users get to the right place
 
-export default function Index() {
-  return (
-    <AuthRoute>
-      <CreateHowto />
-    </AuthRoute>
-  )
+import { redirect } from '@remix-run/node'
+
+export function loader() {
+  return redirect('/library/create', 301)
 }

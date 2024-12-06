@@ -1,5 +1,5 @@
 // This is basically an identical set of steps to the discussion tests for
-// questions and how-tos. Any changes here should be replicated there.
+// questions and projects. Any changes here should be replicated there.
 
 import { ExternalLinkLabel } from 'oa-shared'
 

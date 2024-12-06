@@ -1,7 +1,7 @@
 import { Avatar, Box, Flex } from 'theme-ui'
 
-import { Category } from '../Category/Category'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
+import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList'
 import { Username } from '../Username/Username'
 
 import type { IProfileCreator } from 'oa-shared'
@@ -12,7 +12,7 @@ interface IProps {
 }
 
 export const CardDetailsMemberProfile = ({ creator, isLink }: IProps) => {
-  const { _id, badges, countryCode, profileType, userImage } = creator
+  const { _id, badges, countryCode, profileType, tags, userImage } = creator
 
   return (
     <Flex
@@ -36,6 +36,7 @@ export const CardDetailsMemberProfile = ({ creator, isLink }: IProps) => {
             <Avatar
               src={userImage}
               sx={{ width: '60px', height: '60px', objectFit: 'cover' }}
+              loading="lazy"
             />
             <MemberBadge
               profileType={profileType}
@@ -57,15 +58,9 @@ export const CardDetailsMemberProfile = ({ creator, isLink }: IProps) => {
           }}
           sx={{ alignSelf: 'flex-start' }}
           isLink={isLink}
+          target="_blank"
         />
-        <Category
-          category={{ label: 'Wants to get started' }}
-          sx={{
-            border: '1px solid #A72E5A',
-            backgroundColor: '#F7C7D9',
-            color: '#A72E5A',
-          }}
-        />
+        {tags && <ProfileTagsList tags={tags} />}
       </Flex>
     </Flex>
   )

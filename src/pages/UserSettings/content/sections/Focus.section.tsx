@@ -58,9 +58,6 @@ const ProfileTypes = () => {
                     name="profileType"
                     isSelected={profile.label === props.input.value}
                     onChange={(v) => props.input.onChange(v as ProfileTypeName)}
-                    imageSrc={
-                      theme.badges[profile.label]?.normal || profile.imageSrc
-                    }
                     textLabel={profile.textLabel}
                   />
                 </Box>

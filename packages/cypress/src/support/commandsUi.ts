@@ -18,7 +18,6 @@ interface IInfo {
 type ILink = Omit<IUser['links'][0] & { index: number }, 'key'>
 
 interface IMapPin {
-  description: string
   searchKeyword: string
   locationName: string
 }
@@ -144,7 +143,6 @@ Cypress.Commands.add('fillSettingMapPin', (mapPin: IMapPin) => {
   cy.wait('@fetchAddress').then(() => {
     cy.get('[data-cy="osm-geocoding-results"]').find('li:eq(0)').click()
   })
-  cy.get('[data-cy=pin-description]').clear().type(mapPin.description)
 })
 
 Cypress.Commands.add('setSettingPublicContact', () => {

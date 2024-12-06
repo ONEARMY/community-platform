@@ -24,7 +24,7 @@ const SignUpMessagePage = () => (
             We've sent you an email. Please find a confirmation link in your
             mailbox.
           </Text>
-          <Link to="/settings">
+          <Link to="/settings" data-cy="complete-profile-button">
             <Button
               type="button"
               variant="primary"

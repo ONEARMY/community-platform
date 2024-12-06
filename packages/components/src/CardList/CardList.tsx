@@ -9,15 +9,26 @@ import type { IMapPin } from 'oa-shared'
 
 export interface IProps {
   columnsCountBreakPoints?: { [key: number]: number }
-  dataCy: string
   filteredList: IMapPin[] | null
   list: IMapPin[]
+  onBlur: () => void
+  onPinClick: (arg: IMapPin) => void
+  selectedPin: IMapPin | undefined
+  viewport: string
 }
 
 export const EMPTY_LIST = 'Oh nos! Nothing to show!'
 
 export const CardList = (props: IProps) => {
-  const { columnsCountBreakPoints, dataCy, filteredList, list } = props
+  const {
+    columnsCountBreakPoints,
+    filteredList,
+    list,
+    onBlur,
+    onPinClick,
+    selectedPin,
+    viewport,
+  } = props
 
   const listToShow = filteredList === null ? list : filteredList
   const displayItems = listToShow
@@ -26,7 +37,18 @@ export const CardList = (props: IProps) => {
         Date.parse(b.creator?._lastActive || '0') -
         Date.parse(a.creator?._lastActive || '0'),
     )
-    .map((item) => <CardListItem item={item} key={item._id} />)
+    .map((item) => {
+      const isSelectedPin = item._id === selectedPin?._id
+      return (
+        <CardListItem
+          item={item}
+          key={item._id}
+          isSelectedPin={isSelectedPin}
+          onPinClick={isSelectedPin ? onBlur : onPinClick}
+          viewport={viewport}
+        />
+      )
+    })
 
   const isListEmpty = displayItems.length === 0
   const hasListLoaded = list
@@ -36,7 +58,7 @@ export const CardList = (props: IProps) => {
 
   return (
     <Flex
-      data-cy={`CardList-${dataCy}`}
+      data-cy={`CardList-${viewport}`}
       sx={{
         flexDirection: 'column',
         gap: 2,

@@ -53,7 +53,7 @@ The steps are as follows:
 
 ### Recognising Contributors
 
-We have adopted [all contributors](https://allcontributors.org/) and their tooling for managing the contributors listing on the [project README.me](https://github.com/ONEARMY/community-platform/blob/master/README.md).
+We have adopted [all contributors](https://allcontributors.org/) and their tooling for managing the contributors listing on the [project README.md](https://github.com/ONEARMY/community-platform/blob/master/README.md).
 
 After merging a new contributors PR:
 

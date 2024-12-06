@@ -1,14 +1,14 @@
 import { getProfileTagsForTheme } from './getProfileTagsForTheme'
 
-import type { ISelectedTags, ITag } from 'oa-shared'
+import type { IProfileTag, ISelectedTags } from 'oa-shared'
 
 // For ease, duplicated from functions/src/uperUpdates/utils.ts
-export const getValidTags = (tagIds: ISelectedTags): ITag[] => {
+export const getValidTags = (tagIds: ISelectedTags): IProfileTag[] => {
   const selectedTagIds = Object.keys(tagIds).filter((id) => tagIds[id] === true)
 
-  const tags: ITag[] = selectedTagIds
+  const tags: IProfileTag[] = selectedTagIds
     .map((id) => getProfileTagsForTheme().find(({ _id }) => id === _id))
-    .filter((tag): tag is ITag => !!tag)
+    .filter((tag): tag is IProfileTag => !!tag)
     .filter(({ _deleted }) => _deleted !== true)
 
   return tags

@@ -3,7 +3,7 @@ import { useLoaderData } from '@remix-run/react'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { questionService } from 'src/pages/Question/question.service'
 import { QuestionPage } from 'src/pages/Question/QuestionPage'
-import { pageViewService } from 'src/services/pageView.service'
+import { pageViewService } from 'src/services/pageViewService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -18,6 +18,12 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 
   return json({ question })
+}
+
+export function HydrateFallback() {
+  // This is required because all routes are loaded client-side. Avoids a page flicker before css is loaded.
+  // Can be removed once ALL pages are using SSR.
+  return <div></div>
 }
 
 export const meta = mergeMeta<typeof loader>(({ data }) => {

@@ -34,7 +34,7 @@ const asOptions = (mapPins, items: Array<IMapGrouping>): FilterGroupOption[] =>
       return {
         label: item.displayName,
         value,
-        number: filterMapPinsByType(mapPins, filterType).length,
+        number: filterMapPinsByType(mapPins, filterType, false).length,
         imageElement:
           (item.type as string) === 'verified' ? (
             <Image src={VerifiedBadgeIcon} width={ICON_SIZE} />

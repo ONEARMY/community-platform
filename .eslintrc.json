@@ -30,10 +30,10 @@
       {
         "order": [
           "[static-properties]",
-          "[static-methods]",
           "[properties]",
           "[conventional-private-properties]",
           "constructor",
+          "[static-methods]",
           "[methods]",
           "[conventional-private-methods]"
         ],
@@ -49,7 +49,6 @@
     ],
     "import/newline-after-import": "error",
     "import/no-named-as-default": "off",
-    "max-classes-per-file": "error",
     "no-useless-escape": "error",
     "react/display-name": "error",
     "react/jsx-no-target-blank": "warn",

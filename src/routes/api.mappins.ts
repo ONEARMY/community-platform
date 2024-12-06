@@ -1,6 +1,7 @@
 import { json } from '@remix-run/node'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import Keyv from 'keyv'
+import { isProductionEnvironment } from 'src/config/config'
 import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { firestore } from 'src/utils/firebase'
@@ -13,8 +14,10 @@ const cache = new Keyv<IMapPin[]>({ ttl: 600000 }) // ttl: 10 minutes
 export const loader = async () => {
   const cachedMappins = await cache.get('mappins')
 
-  // check if cached map pins are availbe, if not - load from db and cache them
-  if (cachedMappins) return json({ mapPins: cachedMappins })
+  // check if cached map pins are available and a producation environment, if not - load from db and cache them
+  if (cachedMappins && isProductionEnvironment()) {
+    return json({ mapPins: cachedMappins })
+  }
 
   const collectionRef = collection(firestore, DB_ENDPOINTS.mappins)
   const userMapPinQuery = query(

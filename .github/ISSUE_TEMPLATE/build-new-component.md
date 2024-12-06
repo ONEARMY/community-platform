@@ -10,7 +10,7 @@ assignees: ''
 
 ### Description
 
-Write a quick descritpion of what is the component for, and as mainy details you consider useful to the person that will have to build it.
+Write a quick description of what is the component for, and as mainy details you consider useful to the person that will have to build it.
 
 ### Page related
 

@@ -44,6 +44,7 @@ export const updateMapPins = async (prevUser: IUserDB, user: IUserDB) => {
   const tags = user.tags ? getValidTags(user.tags) : []
 
   const creator = {
+    _id,
     _lastActive,
     about,
     badges,

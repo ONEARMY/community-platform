@@ -4,6 +4,7 @@ import { ExternalLinkLabel, ProfileTypeList, UserRole } from 'oa-shared'
 import { ClientOnly } from 'remix-utils/client-only'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
+import { ProfileTags } from 'src/common/ProfileTags'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { Avatar, Box, Card, Flex, Heading, Paragraph } from 'theme-ui'
@@ -20,9 +21,21 @@ interface IProps {
 }
 
 export const MemberProfile = ({ docs, user }: IProps) => {
-  const { userImage } = user
+  const {
+    about,
+    badges,
+    displayName,
+    links,
+    location,
+    tags,
+    totalUseful,
+    total_views,
+    userImage,
+    userName,
+  } = user
+  const isVerified = user.verified
 
-  const userLinks = (user?.links || []).filter(
+  const userLinks = (links || []).filter(
     (linkItem) =>
       ![ExternalLinkLabel.DISCORD, ExternalLinkLabel.FORUM].includes(
         linkItem.label,
@@ -91,59 +104,58 @@ export const MemberProfile = ({ docs, user }: IProps) => {
                   roleRequired={UserRole.BETA_TESTER}
                   fallback={
                     <UserStatistics
-                      userName={user.userName}
-                      country={user.location?.country}
-                      isVerified={user.verified}
-                      isSupporter={!!user.badges?.supporter}
+                      userName={userName}
+                      country={location?.country}
+                      isVerified={isVerified}
+                      isSupporter={!!badges?.supporter}
                       howtoCount={docs?.howtos.length || 0}
                       researchCount={docs?.research.length || 0}
-                      usefulCount={user.totalUseful || 0}
+                      usefulCount={totalUseful || 0}
                       totalViews={0}
                       sx={{ alignSelf: 'stretch' }}
                     />
                   }
                 >
                   <UserStatistics
-                    userName={user.userName}
-                    country={user.location?.country}
-                    isVerified={user.verified}
-                    isSupporter={!!user.badges?.supporter}
+                    userName={userName}
+                    country={location?.country}
+                    isVerified={isVerified}
+                    isSupporter={!!badges?.supporter}
                     howtoCount={docs?.howtos.length || 0}
                     researchCount={docs?.research.length || 0}
-                    usefulCount={user.totalUseful || 0}
+                    usefulCount={totalUseful || 0}
                     sx={{ alignSelf: 'stretch' }}
-                    totalViews={user.total_views || 0}
+                    totalViews={total_views || 0}
                   />
                 </AuthWrapper>
               )}
             </ClientOnly>
           </Flex>
-          <Flex sx={{ flexGrow: 2, width: '100%', flexDirection: 'column' }}>
-            <Flex
-              sx={{
-                alignItems: 'center',
-                pt: [2, 0],
-              }}
-            >
+          <Flex
+            sx={{ flexDirection: 'column', flexGrow: 2, gap: 2, width: '100%' }}
+          >
+            <Flex sx={{ alignItems: 'center' }}>
               <Username
                 user={{
-                  userName: user.userName,
+                  userName,
                   countryCode: getUserCountry(user),
-                  isVerified: user.verified,
+                  isVerified,
                 }}
               />
             </Flex>
-            <Box sx={{ flexDirection: 'column' }} mb={3}>
+            <Box sx={{ flexDirection: 'column' }}>
               <Heading
                 as="h1"
                 color={'black'}
                 style={{ wordWrap: 'break-word' }}
                 data-cy="userDisplayName"
               >
-                {user.displayName}
+                {displayName}
               </Heading>
             </Box>
-            {user.about && <Paragraph>{user.about}</Paragraph>}
+
+            {tags && <ProfileTags tagIds={tags} />}
+            {about && <Paragraph>{about}</Paragraph>}
             <UserContactAndLinks links={userLinks} />
           </Flex>
         </Flex>

@@ -127,6 +127,8 @@ export const glyphs: IGlyphs = {
   volunteer: iconMap.volunteer,
   website: iconMap.website,
   search: iconMap.search,
+  globe: iconMap.globe,
+  'gps-location': iconMap.gpsLocation,
 }
 
 export type Props = IProps & VerticalAlignProps & SpaceProps

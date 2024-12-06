@@ -50,7 +50,13 @@ const search = async (
     : undefined
 
   const items = documentSnapshots.docs
-    ? documentSnapshots.docs.map((x) => x.data() as IQuestion.Item)
+    ? documentSnapshots.docs.map((x) => {
+        const item = x.data() as IQuestion.Item
+        return {
+          ...item,
+          commentCount: 0,
+        }
+      })
     : []
   const total = (await getCountFromServer(countQuery)).data().count
 

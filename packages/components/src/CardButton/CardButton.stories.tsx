@@ -9,7 +9,7 @@ export default {
 
 export const Basic: StoryFn<typeof CardButton> = () => (
   <div style={{ width: '300px' }}>
-    <CardButton>
+    <CardButton isSelected={false}>
       <div style={{ padding: '20px' }}>Basic Implementation</div>
     </CardButton>
   </div>

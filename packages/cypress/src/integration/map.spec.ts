@@ -27,6 +27,7 @@ describe('[Map]', () => {
     cy.url().should('not.include', `#${userId}`)
 
     cy.step('Link to new map visible and clickable')
+    cy.wait(500) // wait for interaction
     cy.get('[data-cy=Banner]').contains('Test it out!').click()
     cy.get('[data-cy=Banner]').contains('go back to the old one!')
 
@@ -41,8 +42,7 @@ describe('[Map]', () => {
       .children()
       .should('have.length', profileTypesCount)
     cy.get('[data-cy=MapListFilter]').first().click()
-    // Reduction in coverage until temp API removed
-    // cy.get('[data-cy="list-results"]').contains('6 results in view')
+
     cy.get('[data-cy=MapListFilter-active]').first().click()
     cy.get('[data-cy="list-results"]').contains(/\d+ results in view/)
 
@@ -57,27 +57,34 @@ describe('[Map]', () => {
     cy.get('[data-cy=MapFilterList]').should('not.exist')
     cy.get('[data-cy=MapFilterList-OpenButton]').first().click()
     cy.get('[data-cy=MapFilterList]').should('be.visible')
-    cy.get('[data-cy=MapFilterList-CloseButton]').first().click()
+    cy.get('[data-cy=MapFilterListItem-profile]').first().click()
+    cy.get('[data-cy=MapFilterListItem-profile-active]').first().click()
+    cy.get('[data-cy=MapFilterListItem-tag]').first().click()
+    cy.get('[data-cy=MapFilterListItem-tag-active]').first().click()
+    cy.get('[data-cy=MapFilterList-ShowResultsButton]').first().click()
+
     cy.step('As the user moves in the list updates')
     for (let i = 0; i < 6; i++) {
       cy.get('.leaflet-control-zoom-in').click()
     }
     cy.get('[data-cy="list-results"]').contains('1 result')
     cy.get('[data-cy="CardList-desktop"]').within(() => {
-      cy.get('[data-cy=CardListItem]')
-        .within(() => {
-          cy.contains(userId)
-          cy.get('[data-cy="MemberBadge-member"]')
-        })
-        .should('have.attr', 'href')
-        .and('include', `/u/${userId}`)
+      cy.get('[data-cy=CardListItem]').within(() => {
+        cy.contains(userId)
+        cy.get('[data-cy="MemberBadge-member"]')
+      })
     })
+    cy.get('[data-cy=CardListItem]').contains(userId).click()
+    cy.get('[data-cy="PinProfile"]')
+      .get('[data-cy="Username"]')
+      .contains(userId)
+    cy.get('[data-cy=CardListItem-selected]').first().click()
 
     cy.step('New map pins can be clicked on')
     cy.get(`[data-cy=pin-${userId}]`).click()
     cy.get('[data-cy=PinProfile]').within(() => {
       cy.get('[data-cy=Username]').contains(userId)
-      cy.contains('Wants to get started')
+      cy.get('[data-cy=ProfileTagsList]').contains('Organise Meetups')
     })
     cy.url().should('include', `#${userId}`)
 
@@ -111,8 +118,6 @@ describe('[Map]', () => {
           cy.contains(userId)
           cy.get('[data-cy="MemberBadge-member"]')
         })
-        .should('have.attr', 'href')
-        .and('include', `/u/${userId}`)
     })
     cy.get('[data-cy=MapFilterProfileTypeCardList-ButtonRight]')
       .last()
@@ -130,5 +135,53 @@ describe('[Map]', () => {
     cy.intercept(urlLondon).as('londonSearch')
     cy.wait('@londonSearch')
     cy.contains('London, Greater London, England, United Kingdom').click()
+  })
+
+  it('Test zoom out/ globe button + zoom in to users location button', () => {
+    cy.viewport('macbook-16')
+    cy.visit('/map')
+    cy.get('[data-cy=Banner]').contains('Test it out!').click()
+    cy.wait(500)
+
+    cy.get('[data-cy="WorldViewButton"]', { timeout: 10000 })
+      .should('exist')
+      .and('be.visible')
+    cy.get('[data-cy="WorldViewButton"]').should('exist').and('be.visible')
+
+    const mapZoomProxySelector = '.leaflet-tile-container.leaflet-zoom-animated'
+
+    cy.get('[data-cy="WorldViewButton"]').click()
+    cy.wait(500)
+
+    // Check if the transform matrix has scale factor 1 (for matrix(a, b, c, d, e, f), 'a' and 'd' should be 1)
+    cy.get(mapZoomProxySelector)
+      .invoke('css', 'transform')
+      .then((transform) => {
+        const matrixValues = transform.match(/matrix\(([^)]+)\)/)[1].split(', ')
+        const scaleX = parseFloat(matrixValues[0]) // 'a' value from matrix
+        const scaleY = parseFloat(matrixValues[3]) // 'd' value from matrix
+        expect(scaleX).to.eq(1)
+        expect(scaleY).to.eq(1)
+      })
+
+    cy.get('[data-cy="LocationViewButton"]').click()
+    cy.wait(500)
+
+    // Check if the transform matrix has scale factor 1 (for matrix(a, b, c, d, e, f), 'a' and 'd' should be 1)
+    cy.get(mapZoomProxySelector)
+      .invoke('css', 'transform')
+      .then((transform) => {
+        const matrixValues = transform.match(/matrix\(([^)]+)\)/)[1].split(', ')
+        const scaleX = parseFloat(matrixValues[0]) // 'a' value from matrix
+        const scaleY = parseFloat(matrixValues[3]) // 'd' value from matrix
+        expect(scaleX).to.eq(8)
+        expect(scaleY).to.eq(8)
+      })
+
+    cy.step('Zoom in button prompts for user location and zooms')
+    cy.get('[data-cy="LocationViewButton"]', { timeout: 10000 })
+      .should('exist')
+      .and('be.visible')
+    cy.get('[data-cy="LocationViewButton"]').should('exist').and('be.visible')
   })
 })

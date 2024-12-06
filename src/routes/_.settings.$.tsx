@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import Main from 'src/pages/common/Layout/Main'
-import { SettingsPage } from 'src/pages/UserSettings/SettingsPage'
+import { SettingsPage } from 'src/pages/UserSettings/SettingsPage.client'
 import { Flex, Text } from 'theme-ui'
 
 import type { IUser, IUserDB } from 'oa-shared'

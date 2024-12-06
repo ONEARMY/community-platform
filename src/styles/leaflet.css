@@ -364,7 +364,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 }
 
 .leaflet-control-zoom.leaflet-bar.leaflet-control{
-	margin: 30px;
+	margin: 20px;
 	border: 2px solid; 
 	border-radius: 10px;
 	border-bottom: 2px solid #000000;

@@ -6,6 +6,7 @@ import express from 'express'
 import helmet from 'helmet'
 
 dotenv.config()
+dotenv.config({ path: '.env.local', override: true })
 
 const viteDevServer =
   process.env.NODE_ENV === 'production'

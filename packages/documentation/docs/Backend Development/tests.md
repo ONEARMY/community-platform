@@ -69,7 +69,7 @@ jest.mock('src/common/hooks/useCommonStores', () => {
 ```
 
 **Class Methods**
-Replace specific class method with an alternative mock method. E.g. if the code relates to the active user, a mock stub could be used instead. An an artificial example:
+Replace specific class method with an alternative mock method. E.g. if the code relates to the active user, a mock stub could be used instead. An artificial example:
 
 ```ts
 import UserMethods from './userMethods'

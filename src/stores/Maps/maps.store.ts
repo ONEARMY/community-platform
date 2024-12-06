@@ -48,7 +48,6 @@ export class MapsStore extends ModuleStore {
       retrievePinFilters: action,
       setActivePinFilters: action,
       setActivePin: action,
-      getPinsNumberByFilterType: action,
     })
   }
 
@@ -119,7 +118,7 @@ export class MapsStore extends ModuleStore {
       return
     }
 
-    const mapPins = filterMapPinsByType(this.mapPins, filters)
+    const mapPins = filterMapPinsByType(this.mapPins, filters, false)
     this.filteredPins = mapPins
   }
 
@@ -142,7 +141,7 @@ export class MapsStore extends ModuleStore {
     }
   }
   // call additional action when pin detail received to inform mobx correctly of update
-  private async getPinDetail(pin: IMapPin) {
+  public async getPinDetail(pin: IMapPin) {
     const detail: IMapPinDetail = await this.getUserProfilePin(pin._id)
     const pinWithDetail: IMapPinWithDetail = { ...pin, detail }
     return pinWithDetail
@@ -287,9 +286,5 @@ export class MapsStore extends ModuleStore {
       verifiedBadge: !!u.badges?.verified,
       country: u.location?.countryCode || u.country?.toLowerCase() || null,
     }
-  }
-
-  public getPinsNumberByFilterType(filter: Array<string>): number {
-    return filterMapPinsByType(this.mapPins, filter).length
   }
 }

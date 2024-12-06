@@ -1,6 +1,6 @@
 {
   "name": "simulated-webook-receiver",
-  "packageManager": "yarn@3.6.4",
+  "packageManager": "yarn@4.5.1",
   "dependencies": {
     "express": "^4.19.2"
   }

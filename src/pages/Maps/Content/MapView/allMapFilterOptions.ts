@@ -38,5 +38,15 @@ export const allMapFilterOptions: MapFilterOptionsList = [
     filterType: 'profileType',
     label: 'Want to get started',
   },
+  {
+    _id: 'verified',
+    filterType: 'badge',
+    label: 'Verified',
+  },
+  {
+    _id: 'supporter',
+    filterType: 'badge',
+    label: 'Supporter',
+  },
   ...profileTags,
 ]

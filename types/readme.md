@@ -1,4 +1,4 @@
-When installing 3rd party packages typescript will expect a corresponding typing file
+When installing 3rd party packages TypeScript will expect a corresponding typing file
 You can try to see if one is available via
 
 ```

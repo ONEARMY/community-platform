@@ -1,5 +1,3 @@
-import { MAX_PIN_LENGTH } from './constants'
-
 import type { ILabels } from 'src/common/Form/types'
 
 export const buttons = {
@@ -87,10 +85,6 @@ export const fields: ILabels = {
   location: {
     error: 'Please select your location',
     title: 'Your location (flag)',
-  },
-  mapPinDescription: {
-    placeholder: `Short description of your pin (max ${MAX_PIN_LENGTH} characters)`,
-    title: 'Short description of your pin',
   },
   newEmail: {
     placeholder: 'New email address',

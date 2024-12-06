@@ -65,6 +65,21 @@ const availableFilters: MapFilterOptionsList = [
     filterType: 'workspaceType',
     label: 'Mix',
   },
+  {
+    _id: 'tag1',
+    filterType: 'profileTag',
+    label: 'Tag 1',
+  },
+  {
+    _id: 'tag2',
+    filterType: 'profileTag',
+    label: 'Tag 2',
+  },
+  {
+    _id: 'tag3',
+    filterType: 'profileTag',
+    label: 'Tag 3',
+  },
 ]
 
 export const Default: StoryFn<typeof MapFilterList> = () => {
@@ -82,6 +97,7 @@ export const Default: StoryFn<typeof MapFilterList> = () => {
       availableFilters={availableFilters}
       onFilterChange={onFilterChange}
       onClose={onClose}
+      pinCount={7}
     />
   )
 }

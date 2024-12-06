@@ -72,5 +72,6 @@ export { UserEngagementWrapper } from './UserEngagementWrapper/UserEngagementWra
 export { Username } from './Username/Username'
 export { UserStatistics } from './UserStatistics/UserStatistics'
 export { VideoPlayer } from './VideoPlayer/VideoPlayer'
+export { CommentAvatar } from './CommentAvatar/CommentAvatar'
 export type { availableGlyphs } from './Icon/types'
 export type { ITab } from './SettingsFormWrapper/SettingsFormTab'

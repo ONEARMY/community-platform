@@ -13,11 +13,10 @@ const locationStub = {
   value: 'Singapore',
 }
 
-const mapDetails = (description) => ({
-  description,
+const mapDetails = {
   searchKeyword: 'singapo',
   locationName: locationStub.value,
-})
+}
 
 describe('[Settings]', () => {
   beforeEach(() => {
@@ -45,12 +44,14 @@ describe('[Settings]', () => {
     })
 
     it('Can create member', () => {
+      cy.viewport('macbook-16')
+
       const country = 'Bolivia'
       const userImage = 'avatar'
       const displayName = 'settings_member_new'
       const description = "I'm a very active member"
-      const mapPinDescription = 'Fun, vibrant and full of amazing people'
       const profileType = 'member'
+      const tag = ['Sewing', 'Accounting']
       const user = generateNewUserDetails()
       const url = 'https://social.network'
 
@@ -79,6 +80,8 @@ describe('[Settings]', () => {
         country,
         description,
       })
+      cy.selectTag(tag[0], '[data-cy=tag-select]')
+      cy.selectTag(tag[1], '[data-cy=tag-select]')
       cy.get('[data-cy="country:BO"]')
 
       cy.step('Errors if trying to upload invalid image')
@@ -129,6 +132,8 @@ describe('[Settings]', () => {
       cy.contains(displayName)
       cy.contains(description)
       cy.contains(country)
+      cy.contains(tag[0])
+      cy.contains(tag[1])
       cy.get('[data-cy="country:bo"]')
       cy.get(`[data-cy="MemberBadge-${profileType}"]`)
       cy.get('[data-cy="profile-avatar"]')
@@ -141,7 +146,7 @@ describe('[Settings]', () => {
       cy.get('[data-cy="tab-Map"]').click()
       cy.get('[data-cy=descriptionMember').should('be.visible')
       cy.contains('No map pin currently saved')
-      cy.fillSettingMapPin(mapDetails(mapPinDescription))
+      cy.fillSettingMapPin(mapDetails)
       cy.get('[data-cy=save-map-pin]').click()
       cy.contains('Map pin saved successfully')
       cy.contains('Your current map pin is here:')
@@ -151,7 +156,14 @@ describe('[Settings]', () => {
       cy.get('[data-cy="tab-Profile"]').click()
       cy.get('[data-cy=location-dropdown]').should('not.exist')
 
+      cy.step('Can view pin on new map')
+      cy.visit(`/map#${user.username}`)
+      cy.wait(2000)
+      cy.get('[data-cy=Banner]').contains('Test it out!').click()
+      cy.get('[data-cy=CardListItem]').contains(user.username)
+
       cy.step('Can delete map pin')
+      cy.visit('/settings')
       cy.get('[data-cy="tab-Map"]').click()
       cy.get('[data-cy=remove-map-pin]').click()
       cy.get('[data-cy="Confirm.modal: Confirm"]').click()
@@ -240,6 +252,40 @@ describe('[Settings]', () => {
       )
       localStorage.setItem('VITE_THEME', 'precious-plastic')
       cy.visit('/sign-in')
+    })
+
+    it('Can create member', () => {
+      // Comprehensive member test above for FF,
+      // minimal spec here for PP specific functionality
+
+      const country = 'Bolivia'
+      const displayName = 'settings_member_new'
+      const description = "I'm a very active member"
+      const profileType = 'member'
+      const user = generateNewUserDetails()
+      const tag = 'Melting'
+
+      cy.signUpNewUser(user)
+      cy.get('[data-cy=complete-profile-button]').click()
+
+      cy.step('Can set the required fields')
+      cy.setSettingFocus(profileType)
+      cy.setSettingBasicUserInfo({
+        displayName,
+        country,
+        description,
+      })
+      cy.selectTag(tag, '[data-cy=tag-select]')
+      cy.setSettingAddContactLink({
+        index: 0,
+        label: ExternalLinkLabel.SOCIAL_MEDIA,
+        url: 'http://something.to.delete/',
+      })
+      cy.saveSettingsForm()
+
+      cy.step('Updated settings display on profile')
+      cy.visit(`u/${user.username}`)
+      cy.contains(tag)
     })
 
     it('Can create space', () => {
@@ -365,10 +411,40 @@ describe('[Settings]', () => {
     })
 
     it('[Member]', () => {
+      // Comprehensive member test above for FF,
+      // minimal spec here for PK specific functionality
+
       cy.signUpNewUser()
       cy.visit('/settings')
       cy.contains('Infos')
       cy.get('[data-cy=FocusSection]').should('not.exist')
+
+      const country = 'Bolivia'
+      const displayName = 'settings_member_new'
+      const description = "I'm a very active member"
+      const tag = 'Landscaping'
+      const user = generateNewUserDetails()
+
+      cy.signUpNewUser(user)
+      cy.get('[data-cy=complete-profile-button]').click()
+
+      cy.step('Can set the required fields')
+      cy.setSettingBasicUserInfo({
+        displayName,
+        country,
+        description,
+      })
+      cy.selectTag(tag, '[data-cy=tag-select]')
+      cy.setSettingAddContactLink({
+        index: 0,
+        label: ExternalLinkLabel.SOCIAL_MEDIA,
+        url: 'http://something.to.delete/',
+      })
+      cy.saveSettingsForm()
+
+      cy.step('Updated settings display on profile')
+      cy.visit(`u/${user.username}`)
+      cy.contains(tag)
     })
   })
 })

@@ -30,6 +30,8 @@ import websiteSVG from '../../assets/icons/icon-website.svg'
 import impactSVG from '../../assets/icons/impact.svg'
 import machineSVG from '../../assets/icons/machine.svg'
 import mapSVG from '../../assets/icons/map.svg'
+import globe from '../../assets/icons/map-globe.svg'
+import gpsLocation from '../../assets/icons/map-gpsLocation.svg'
 import patreonSVG from '../../assets/icons/patreon.svg'
 import plasticSVG from '../../assets/icons/plastic.svg'
 import profileSVG from '../../assets/icons/profile.svg'
@@ -97,4 +99,6 @@ export const iconMap = {
   volunteer: <ImageIcon src={volunteerSVG} />,
   website: <ImageIcon src={websiteSVG} />,
   search: <ImageIcon src={searchSVG} />,
+  globe: <ImageIcon src={globe}></ImageIcon>,
+  gpsLocation: <ImageIcon src={gpsLocation}></ImageIcon>,
 }

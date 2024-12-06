@@ -3,7 +3,7 @@ import { UserRole } from 'oa-shared'
 
 import { AuthRoute } from '../common/AuthRoute'
 import { NotFoundPage } from '../NotFound/NotFound'
-import { SettingsPage } from '../UserSettings/SettingsPage'
+import { SettingsPage } from '../UserSettings/SettingsPage.client'
 import { UserProfile } from './content/UserProfile'
 
 import type { IUserDB } from 'oa-shared'

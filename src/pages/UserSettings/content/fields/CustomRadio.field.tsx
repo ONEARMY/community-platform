@@ -1,15 +1,16 @@
 import React from 'react'
-import { Flex, Image, Input, Label, Text } from 'theme-ui'
+import { MemberBadge } from 'oa-components'
+import { Flex, Input, Label, Text } from 'theme-ui'
 
 import { HiddenInput } from '../elements'
 
+import type { ProfileTypeName } from 'oa-shared'
 import type { FieldRenderProps } from 'react-final-form'
 
 interface IProps {
   value: string
   onChange: (value: string) => void
   isSelected: boolean
-  imageSrc?: string
   textLabel?: string
   subText?: string
   name: string
@@ -43,7 +44,6 @@ const isRequired = (value: any) => (value ? undefined : 'Required')
 export const CustomRadioField = (props: IProps) => {
   const {
     value,
-    imageSrc,
     isSelected,
     textLabel,
     subText,
@@ -98,22 +98,17 @@ export const CustomRadioField = (props: IProps) => {
           props.onChange(v.target.value)
         }}
       />
-      {imageSrc && (
-        <Flex
-          sx={{
-            width: ['130px', '130px', '100%'],
-            height: ['130px', '130px', '100%'],
-            alignItems: 'center',
-          }}
-        >
-          <Image loading="lazy" px={3} src={imageSrc} />
-        </Flex>
-      )}
       <Flex
         sx={{
-          flexDirection: 'column',
+          width: ['130px', '130px', '100%'],
+          height: ['130px', '130px', '100%'],
+          alignContent: 'center',
+          padding: 2,
         }}
       >
+        <MemberBadge size={130} profileType={value as ProfileTypeName} />
+      </Flex>
+      <Flex sx={{ flexDirection: 'column' }}>
         {textLabel && (
           <Text
             sx={{

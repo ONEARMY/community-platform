@@ -10,7 +10,7 @@ import {
   UserContactNotLoggedIn,
 } from 'src/pages/User/contact'
 import { contact } from 'src/pages/User/labels'
-import { messageService } from 'src/services/message.service'
+import { messageService } from 'src/services/messageService'
 import { isUserContactable } from 'src/utils/helpers'
 import { Box, Flex, Heading } from 'theme-ui'
 

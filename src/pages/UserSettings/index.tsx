@@ -2,7 +2,7 @@ import { observer } from 'mobx-react'
 import { Loader } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 
-import { SettingsPage } from './SettingsPage'
+import { SettingsPage } from './SettingsPage.client'
 
 import type { IUserDB } from 'oa-shared'
 

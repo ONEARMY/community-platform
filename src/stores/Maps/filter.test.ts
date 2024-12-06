@@ -7,9 +7,9 @@ import type { IMapPin } from 'oa-shared'
 describe('filterMapPinsByType', () => {
   it('excludes deleted items', () => {
     const mapPins: Partial<IMapPin>[] = [{ _deleted: true, type: 'member' }]
-    expect(filterMapPinsByType(mapPins as IMapPin[], ['member'])).toHaveLength(
-      0,
-    )
+    expect(
+      filterMapPinsByType(mapPins as IMapPin[], ['member'], false),
+    ).toHaveLength(0)
   })
 
   it('excludes deleted verified items', () => {
@@ -17,7 +17,7 @@ describe('filterMapPinsByType', () => {
       { _deleted: true, type: 'member', verified: true },
     ]
     expect(
-      filterMapPinsByType(mapPins as IMapPin[], ['verified']),
+      filterMapPinsByType(mapPins as IMapPin[], ['verified'], false),
     ).toHaveLength(0)
   })
 
@@ -26,9 +26,9 @@ describe('filterMapPinsByType', () => {
       { _deleted: false, type: 'member' },
       { _deleted: false, type: 'machine-builder' },
     ]
-    expect(filterMapPinsByType(mapPins as IMapPin[], ['member'])).toHaveLength(
-      1,
-    )
+    expect(
+      filterMapPinsByType(mapPins as IMapPin[], ['member'], false),
+    ).toHaveLength(1)
   })
 
   it('returns only verified pins', () => {
@@ -37,7 +37,7 @@ describe('filterMapPinsByType', () => {
       { _deleted: false, type: 'machine-builder' },
     ]
     expect(
-      filterMapPinsByType(mapPins as IMapPin[], ['verified']),
+      filterMapPinsByType(mapPins as IMapPin[], ['verified'], false),
     ).toHaveLength(1)
   })
 
@@ -47,7 +47,7 @@ describe('filterMapPinsByType', () => {
       { _deleted: false, type: 'machine-builder', verified: true },
     ]
     expect(
-      filterMapPinsByType(mapPins as IMapPin[], ['verified', 'member']),
+      filterMapPinsByType(mapPins as IMapPin[], ['verified', 'member'], false),
     ).toHaveLength(1)
   })
 })

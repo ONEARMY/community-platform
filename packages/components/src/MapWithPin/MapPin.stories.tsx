@@ -12,8 +12,7 @@ export const Default: StoryFn<typeof MapPin> = () => {
   return (
     <MapPin
       position={position}
-      draggable={true}
-      ondragend={(lng: number) => {
+      onDrag={(lng: number) => {
         position.lng = lng
       }}
     />

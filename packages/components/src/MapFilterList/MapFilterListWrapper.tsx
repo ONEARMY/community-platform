@@ -10,9 +10,9 @@ export const MapFilterListWrapper = ({ children }: IProps) => (
     data-cy="MapFilterList"
     sx={{
       listStyle: 'none',
-      flexWrap: 'nowrap',
+      flexWrap: 'wrap',
       gap: 2,
-      flexDirection: 'column',
+      flexDirection: 'row',
       padding: 0,
     }}
   >

@@ -21,9 +21,11 @@ interface IProps {
   availableFilters: MapFilterOptionsList
   filteredPins: IMapPin[] | null
   onBlur: () => void
+  onPinClick: (pin: IMapPin) => void
   onFilterChange: (filter: MapFilterOption) => void
   onLocationChange: (latlng: ILatLng) => void
   pins: IMapPin[]
+  selectedPin: IMapPin | undefined
   setShowMobileList?: (set: boolean) => void
   viewport: 'desktop' | 'mobile'
 }
@@ -37,7 +39,9 @@ export const MapWithListHeader = (props: IProps) => {
     onBlur,
     onFilterChange,
     onLocationChange,
+    onPinClick,
     pins,
+    selectedPin,
     setShowMobileList,
     viewport,
   } = props
@@ -46,14 +50,21 @@ export const MapWithListHeader = (props: IProps) => {
   const toggleFilterModal = () => setShowFilters(!showFilters)
   const hasFiltersSelected = activePinFilters.length !== 0
 
+  const sx = {
+    width: ['350px', '600px'],
+    minWidth: '350px',
+    padding: '0 !important',
+  }
+
   return (
     <>
-      <Modal onDidDismiss={toggleFilterModal} isOpen={showFilters}>
+      <Modal onDidDismiss={toggleFilterModal} isOpen={showFilters} sx={sx}>
         <MapFilterList
           activeFilters={activePinFilters}
           availableFilters={availableFilters}
           onClose={toggleFilterModal}
           onFilterChange={onFilterChange}
+          pinCount={filteredPins?.length || 0}
         />
       </Modal>
 
@@ -108,9 +119,12 @@ export const MapWithListHeader = (props: IProps) => {
       </Flex>
       <CardList
         columnsCountBreakPoints={isMobile ? { 300: 1, 600: 2 } : undefined}
-        dataCy={viewport}
         list={pins}
         filteredList={filteredPins}
+        onBlur={onBlur}
+        onPinClick={onPinClick}
+        selectedPin={selectedPin}
+        viewport={viewport}
       />
     </>
   )

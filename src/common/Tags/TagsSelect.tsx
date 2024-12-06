@@ -15,6 +15,7 @@ export interface IProps extends Partial<FieldRenderProps<any, any>> {
   styleVariant?: 'selector' | 'filter'
   placeholder?: string
   tagsSource?: ITag[]
+  maxTotal?: number
 }
 interface IState {
   selectedTags: string[]
@@ -58,6 +59,9 @@ const TagsSelect = (props: IProps) => {
     return selectedJson
   }
 
+  const isOptionDisabled = () =>
+    state.selectedTags.length >= (props.maxTotal || 4)
+
   return (
     <FieldContainer
       // provide a data attribute that can be used to see if tags populated
@@ -68,11 +72,12 @@ const TagsSelect = (props: IProps) => {
         options={allTagsData}
         placeholder={props.placeholder}
         isClearable={true}
+        isOptionDisabled={isOptionDisabled}
         isMulti={true}
         value={_getSelected(allTagsData)}
         getOptionLabel={(tag: ITag) => tag.label}
         getOptionValue={(tag: ITag) => tag._id}
-        onChange={(values) => onSelectedTagsChanged(values as ITag[])}
+        onChange={onSelectedTagsChanged}
       />
     </FieldContainer>
   )

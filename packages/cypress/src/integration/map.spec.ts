@@ -71,7 +71,7 @@ describe('[Map]', () => {
     cy.get('[data-cy="CardList-desktop"]').within(() => {
       cy.get('[data-cy=CardListItem]').within(() => {
         cy.contains(userId)
-        cy.get('[data-cy="MemberBadge-member"]')
+        cy.get('[data-cy="MemberBadge-workshop"]')
       })
     })
     cy.get('[data-cy=CardListItem]').contains(userId).click()
@@ -116,7 +116,7 @@ describe('[Map]', () => {
         .last()
         .within(() => {
           cy.contains(userId)
-          cy.get('[data-cy="MemberBadge-member"]')
+          cy.get('[data-cy="MemberBadge-workshop"]')
         })
     })
     cy.get('[data-cy=MapFilterProfileTypeCardList-ButtonRight]')

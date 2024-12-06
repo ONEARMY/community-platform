@@ -28,7 +28,7 @@ This platform aims to tackle these problems by creating a strong unified communi
 
 ## ⚡️ &nbsp; What is this platform?
 
-Our community platform helps people to grow communities and make it easier to collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally and more. It aims to provide the tools to connect both online and offline. Amongst other features we have How-to and Maps.
+Our community platform helps people to grow communities and make it easier to collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally and more. It aims to provide the tools to connect both online and offline. Amongst other features we have a library of projects, research, questions, commenting and a map.
 
 ### Have a look on our [website](https://platform.onearmy.earth) to have a clear overview
 

@@ -19,7 +19,7 @@ export const howto: IHowtoDB = {
   mentions: [],
   totalComments: 0,
   time: '< 1 week',
-  description: 'Hi! Super quick how-to for commenting',
+  description: 'Hi! Super quick project for commenting',
   difficulty_level: DifficultyLevel.EASY,
   files: [],
   fileLink: 'http://google.com/',

@@ -60,8 +60,8 @@ export const HowtoFieldTitle = (props: IProps) => {
       {duplicateTitleNotice && (
         <Card sx={{ bg: 'softblue', padding: 2, marginTop: 1, border: 0 }}>
           <Text sx={{ fontSize: 1 }}>
-            Did you know there is an existing how-to with the title '{text}'?
-            Using a unique title helps readers decide which how-to better meet
+            Did you know there is an existing project with the title '{text}'?
+            Using a unique title helps readers decide which one better meets
             their needs.
           </Text>
         </Card>

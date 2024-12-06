@@ -49,7 +49,7 @@ export const capitalizeFirstLetter = (str: string) => {
 }
 
 /** Show only items which are either accepted, the user has created, or an admin can see
- * HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
+ * HACK - ARH - 2019/12/11 filter unaccepted projects, should be done serverside
  */
 export const filterModerableItems = <T>(
   items: (IModerable & T)[],

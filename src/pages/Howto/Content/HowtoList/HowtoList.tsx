@@ -149,7 +149,9 @@ export const HowtoList = observer(() => {
       >
         <Flex sx={{ alignItems: 'center', flexDirection: 'column' }}>
           <Heading as="p" sx={{ textAlign: 'center', maxWidth: '500px' }}>
-            Inspire the {siteName} world. Share your how-to!
+            Contribute to the {siteName} library,
+            <br />
+            share your project.
           </Heading>
         </Flex>
       </MoreContainer>

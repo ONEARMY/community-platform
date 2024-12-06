@@ -187,7 +187,7 @@ const MAP_PIN_NOTIFICATIONS = ['map_pin_approved', 'map_pin_needs_updates']
 
 const getResourceLabel = (type: NotificationType) => {
   if (HOWTO_NOTIFICATIONS.includes(type)) {
-    return 'how-to'
+    return 'project'
   }
   if (RESEARCH_NOTIFICATIONS.includes(type)) {
     return 'research'

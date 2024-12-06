@@ -3,11 +3,12 @@ import { Form } from 'react-final-form'
 import { ARRAY_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
 import { toJS } from 'mobx'
-import { Button, Loader } from 'oa-components'
+import { Button } from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
+import { auth } from 'src/utils/firebase'
 import { Flex } from 'theme-ui'
 import { v4 as uuid } from 'uuid'
 
@@ -26,16 +27,12 @@ export const SettingsPageUserProfile = () => {
   const [notification, setNotification] = useState<
     IFormNotification | undefined
   >(undefined)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-
   const { userStore } = useCommonStores().stores
   const user = toJS(userStore.activeUser)
 
   if (!user) return null
 
   const saveProfile = async (values: IUser) => {
-    setIsLoading(true)
-
     const toUpdate = {
       _id: user._id,
       ...values,
@@ -47,10 +44,24 @@ export const SettingsPageUserProfile = () => {
 
     try {
       logger.debug({ profile: toUpdate }, 'SettingsPage.saveProfile')
-      await userStore.updateUserProfile(toUpdate, 'settings-save-profile')
+
+      const formData = new FormData()
+      const image = (toUpdate.userImage as any)?.photoData as File | undefined
+      if (image) {
+        formData.append('image', image) // assuming 'file' is the file input field
+      }
+      formData.append('displayName', toUpdate.displayName)
+
+      await fetch('/api/profile/' + user.userName, {
+        method: 'PUT',
+        body: formData,
+        headers: {
+          firebaseToken: await auth.currentUser!.getIdToken(),
+        },
+      })
 
       setNotification({
-        message: 'Profile Saved',
+        message: 'Profile updated!',
         icon: 'check',
         show: true,
         variant: 'success',
@@ -67,7 +78,6 @@ export const SettingsPageUserProfile = () => {
         variant: 'failure',
       })
     }
-    setIsLoading(false)
   }
 
   const validateForm = (v: IUser) => {
@@ -126,8 +136,6 @@ export const SettingsPageUserProfile = () => {
         invalid,
         errors,
       }) => {
-        if (isLoading) return <Loader sx={{ alignSelf: 'center' }} />
-
         const isMember = values.profileType === ProfileTypeList.MEMBER
 
         return (

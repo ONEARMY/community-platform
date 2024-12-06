@@ -1,7 +1,7 @@
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
-import { UserRole } from 'oa-shared'
 import { verifyFirebaseToken } from 'src/firestore/firestoreAdmin.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { profilesService as profileService } from 'src/services/profileService.server'
 
 import type { DBComment } from 'src/models/comment.model'
 import type { DBProfile } from 'src/models/profile.model'
@@ -19,7 +19,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     return json({}, { status: 400, statusText: 'user not found' })
   }
 
-  const user = await getProfileByFirebaseAuthId(request, user_id)
+  const user = await profileService.getProfileByFirebaseAuthId(request, user_id)
 
   if (!user) {
     return json({}, { status: 400, statusText: 'user not found' })
@@ -65,7 +65,7 @@ async function updateComment(request: Request, id: string, user: DBProfile) {
 
   const comment = data as DBComment
 
-  if (comment.created_by !== user.id && !isUserAdmin(user)) {
+  if (comment.created_by !== user.id && !profileService.isUserAdmin(user)) {
     return json({}, { status: 403, statusText: 'forbidden' })
   }
 
@@ -100,7 +100,7 @@ async function deleteComment(request: Request, id: string, user: DBProfile) {
 
   const comment = data as DBComment
 
-  if (comment.created_by !== user.id && !isUserAdmin(user)) {
+  if (comment.created_by !== user.id && !profileService.isUserAdmin(user)) {
     return json({}, { status: 403, statusText: 'forbidden' })
   }
 
@@ -118,31 +118,4 @@ async function deleteComment(request: Request, id: string, user: DBProfile) {
   }
 
   return new Response(null, { headers, status: 204 })
-}
-
-async function getProfileByFirebaseAuthId(
-  request: Request,
-  firebaseAuthId: string,
-) {
-  const { client } = createSupabaseServerClient(request)
-
-  const { data, error } = await client
-    .from('profiles')
-    .select()
-    .eq('firebase_auth_id', firebaseAuthId)
-    .single()
-
-  if (error || !data) {
-    return null
-  }
-
-  return data as DBProfile
-}
-
-function isUserAdmin(user: DBProfile) {
-  return (
-    user.roles &&
-    user.roles.includes(UserRole.ADMIN) &&
-    user.roles.includes(UserRole.SUPER_ADMIN)
-  )
 }

@@ -3,9 +3,9 @@ import { verifyFirebaseToken } from 'src/firestore/firestoreAdmin.server'
 import { Comment, DBComment } from 'src/models/comment.model'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { notificationsService } from 'src/services/notificationsService.server'
+import { profilesService } from 'src/services/profileService.server'
 
 import type { DBCommentAuthor, Reply } from 'src/models/comment.model'
-import type { DBProfile } from 'src/models/profile.model'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   if (!params.sourceId) {
@@ -108,13 +108,12 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 
   const { client, headers } = createSupabaseServerClient(request)
 
-  const currentUser = await client
-    .from('profiles')
-    .select()
-    .eq('firebase_auth_id', user_id)
-    .single()
+  const currentUser = await profilesService.getProfileByFirebaseAuthId(
+    request,
+    user_id,
+  )
 
-  if (currentUser.error || !currentUser.data) {
+  if (!currentUser) {
     return json({}, { status: 400, statusText: 'profile not found ' + user_id })
   }
 
@@ -124,7 +123,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
       typeof params.sourceId === 'string' ? params.sourceId : null,
     source_id: typeof params.sourceId === 'number' ? params.sourceId : null,
     source_type: data.sourceType,
-    created_by: currentUser.data.id,
+    created_by: currentUser.id,
     parent_id: data.parentId ?? null,
     tenant_id: process.env.TENANT_ID,
   } as Partial<DBComment>
@@ -154,7 +153,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     notificationsService.sendCommentNotification(
       client,
       commentResult.data as DBComment,
-      currentUser.data as DBProfile,
+      currentUser,
     )
   }
 

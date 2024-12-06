@@ -6,7 +6,7 @@ import { IResearchDB, ResearchUpdateStatus } from 'oa-shared/models/research'
 import { CONFIG } from '../config/config'
 
 import type { AxiosError, AxiosResponse } from 'axios'
-import type { IMapPin,IResearch } from 'oa-shared/models'
+import type { IMapPin, IResearch } from 'oa-shared/models'
 
 const SITE_URL = CONFIG.deployment.site_url
 // e.g. https://dev.onearmy.world or https://community.preciousplastic.com

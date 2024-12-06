@@ -10,7 +10,7 @@ import { generateNewUserDetails } from '../../utils/TestUtils'
 
 describe('[Library]', () => {
   beforeEach(() => {
-    cy.visit('/how-to')
+    cy.visit('/library')
   })
   type Category = 'brainstorm' | 'exhibition' | 'product'
   type Duration = '<1 week' | '1-2 weeks' | '3-4 weeks'
@@ -104,6 +104,7 @@ describe('[Library]', () => {
   describe('[Create a project]', () => {
     const randomId = faker.random.alphaNumeric(8)
     const creator = generateNewUserDetails()
+
     const expected = {
       _createdBy: creator.username,
       _deleted: false,
@@ -188,10 +189,10 @@ describe('[Library]', () => {
       cy.signUpNewUser(creator)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy="MemberBadge-member"]').should('be.visible')
-      cy.visit('/how-to')
+      cy.visit('/library')
 
-      cy.get('a[href="/how-to/create"]').should('be.visible')
       cy.step('Access the create project page')
+      cy.get('a[href="/library/create"]').should('be.visible')
       cy.get('[data-cy=create]').click()
       cy.contains('Add your project').should('be.visible')
 
@@ -224,7 +225,7 @@ describe('[Library]', () => {
       cy.step('A basic draft was created')
       cy.fillIntroTitle(`qwerty ${randomId}`)
       cy.get('[data-cy=draft]').click()
-      const firstSlug = `/how-to/qwerty-${randomId}`
+      const firstSlug = `/library/qwerty-${randomId}`
       cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
         .click()
         .url()
@@ -295,7 +296,7 @@ describe('[Library]', () => {
       cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
         .click()
         .url()
-        .should('include', `/how-to/${slug}`)
+        .should('include', `/library/${slug}`)
 
       cy.step('Howto was created correctly')
       cy.get('[data-cy=file-download-counter]')
@@ -323,26 +324,26 @@ describe('[Library]', () => {
     })
 
     it('[By Anonymous]', () => {
-      cy.step('Ask users to login before creating an how-to')
-      cy.visit('/how-to/create')
+      cy.step('Ask users to login before creating a project')
+      cy.visit('/library/create')
       cy.get('div').contains('Please login to access this page')
     })
 
     it('[Warning on leaving page]', () => {
       cy.login(creator.email, creator.password)
       cy.get('[data-cy=loader]').should('not.exist')
-      cy.get('a[href="/how-to/create"]').should('be.visible')
       cy.step('Access the create project')
+      cy.get('a[href="/library/create"]').should('be.visible')
       cy.get('[data-cy=create]').click()
       cy.fillIntroTitle(expected.title)
-      cy.get('[data-cy=page-link][href*="/how-to"]').click()
+      cy.get('[data-cy=page-link][href*="/library"]').click()
       cy.get('[data-cy="Confirm.modal: Cancel"]').click()
-      cy.url().should('match', /\/how-to\/create$/)
+      cy.url().should('match', /\/library\/create$/)
 
       cy.step('Clear title input')
       cy.get('[data-cy=intro-title]').clear().blur({ force: true })
-      cy.get('[data-cy=page-link][href*="/how-to"]').click()
-      cy.url().should('match', /\/how-to?/)
+      cy.get('[data-cy=page-link][href*="/library"]').click()
+      cy.url().should('match', /\/library?/)
     })
   })
 })

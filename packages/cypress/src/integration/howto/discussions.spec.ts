@@ -17,7 +17,7 @@ const howtoDiscussion = Object.values(MOCK_DATA.discussions).find(
 describe('[Howto.Discussions]', () => {
   it('can open using deep links', () => {
     const firstComment = howtoDiscussion.comments[0]
-    cy.visit(`/how-to/${item.slug}#comment:${firstComment._id}`)
+    cy.visit(`/library/${item.slug}#comment:${firstComment._id}`)
     cy.wait(2000)
     cy.checkCommentItem(firstComment.text, 2)
   })
@@ -27,12 +27,12 @@ describe('[Howto.Discussions]', () => {
     cy.addHowto(howto, visitor)
     cy.signUpNewUser(visitor)
 
-    const newComment = `An interesting howto. ${visitor.username}`
-    const updatedNewComment = `An interesting howto. The answer must be that when the sky is red, the apocalypse _might_ be on the way. Yours, ${visitor.username}`
+    const newComment = `An interesting project. ${visitor.username}`
+    const updatedNewComment = `An interesting project. The answer must be that when the sky is red, the apocalypse _might_ be on the way. Yours, ${visitor.username}`
     const newReply = `Thanks Dave and Ben. What does everyone else think? - ${visitor.username}`
     const updatedNewReply = `Anyone else? All the best, ${visitor.username}`
 
-    const howtoPath = `/how-to/howto-for-discussion-${visitor.username}`
+    const howtoPath = `/library/howto-for-discussion-${visitor.username}`
 
     cy.step('Can add comment')
     cy.visit(howtoPath)

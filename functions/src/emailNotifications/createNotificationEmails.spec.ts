@@ -102,7 +102,7 @@ describe('create email test', () => {
           userId: 'user_1',
         },
         relevantUrl: '/test',
-        title: 'Test how-to',
+        title: 'Test project',
         type: 'new_comment_discussion',
       }),
       notificationFactory('user_2', 'notification_2', {
@@ -139,7 +139,7 @@ describe('create email test', () => {
           userId: 'user_1',
         },
         relevantUrl: '/test',
-        title: 'Test how-to',
+        title: 'Test project',
         type: 'new_comment_discussion',
       }),
     ]
@@ -218,8 +218,8 @@ describe('create email test', () => {
         to,
       } = doc.data()
       expect(html).toContain('https://community.preciousplastic.com/test')
-      // 1st notification: how-to
-      expect(html).toContain('how-to')
+      // 1st notification: project
+      expect(html).toContain('project')
       expect(html).toContain('https://community.preciousplastic.com/u/user_2')
       // 2nd notification: new comment
       expect(html).toContain('New comment')
@@ -263,7 +263,7 @@ describe('create email test', () => {
       // 1st notification: new comment
       expect(html).toContain('New comment')
       expect(html).toContain('https://community.preciousplastic.com/u/user_1')
-      expect(html).toContain('Test how-to')
+      expect(html).toContain('Test project')
       // 2nd notification: new comment
       expect(html).toContain('https://community.preciousplastic.com/u/user_3')
       expect(html).toContain('Test research')

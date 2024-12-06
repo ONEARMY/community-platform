@@ -89,7 +89,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           >
             <Flex data-testid="howto-stat">
               <ElWithBeforeIcon icon={HowToCountIcon} />
-              {`How-to: ${props.howtoCount}`}
+              {`Projects: ${props.howtoCount}`}
             </Flex>
           </InternalLink>
         )}

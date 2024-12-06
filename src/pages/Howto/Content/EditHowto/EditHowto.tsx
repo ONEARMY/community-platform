@@ -27,7 +27,7 @@ const EditHowto = ({ howto }: EditHowtoProps) => {
   if (!formValues) {
     return (
       <Text mt="50px" sx={{ width: '100%', textAlign: 'center' }}>
-        How-to not found
+        Project not found
       </Text>
     )
   }

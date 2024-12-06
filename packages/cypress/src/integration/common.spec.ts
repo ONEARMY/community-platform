@@ -25,8 +25,8 @@ describe('[Common]', () => {
     cy.wait(2000)
     cy.url().should('include', '/academy')
 
-    cy.step('Go to How-to page')
     cy.get('[data-cy=page-link]').contains('How-to').click()
+    cy.step('Go to library page')
     cy.wait(2000)
     cy.url().should('include', '/how-to')
 

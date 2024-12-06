@@ -134,7 +134,7 @@ export const getNotificationEmail = (
   }
 }
 
-export const HOW_TO_APPROVAL_SUBJECT = 'Your how-to has been approved!'
+export const HOW_TO_APPROVAL_SUBJECT = 'Your project has been approved!'
 export const getHowToApprovalEmail = (
   user: IUserDB,
   howto: IHowtoDB,
@@ -183,7 +183,7 @@ export const getSenderMessageEmail = ({
   }
 }
 
-export const HOW_TO_SUBMISSION_SUBJECT = 'Your how-to has been submitted'
+export const HOW_TO_SUBMISSION_SUBJECT = 'Your project has been submitted'
 export const getHowToSubmissionEmail = (
   user: IUserDB,
   howto: IHowtoDB,
@@ -234,7 +234,7 @@ export const getUserVerifiedBadgeAddedEmail = (user: IUserDB): Email => ({
   html: getEmailHtml('verified-badge-added', { user, site }),
 })
 
-export const HOW_TO_REJECTED_SUBJECT = 'Your how-to has been rejected'
+export const HOW_TO_REJECTED_SUBJECT = 'Your project has been rejected'
 export const getHowToRejectedEmail = (
   user: IUserDB,
   howto: IHowtoDB,
@@ -257,7 +257,7 @@ export const getMapPinRejectedEmail = (user: IUserDB): Email => ({
 })
 
 export const HOW_TO_NEEDS_IMPROVEMENTS_SUBJECT =
-  'Your how-to needs improvements'
+  'Your project needs improvements'
 export const getHowToNeedsImprovementsEmail = (
   user: IUserDB,
   howto: IHowtoDB,

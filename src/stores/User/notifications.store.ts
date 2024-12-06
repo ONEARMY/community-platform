@@ -68,7 +68,7 @@ export class UserNotificationsStore extends ModuleStore {
     try {
       const triggeredBy = this.user
       if (triggeredBy) {
-        // do not get notified when you're the one making a new comment or how-to useful vote
+        // do not get notified when you're the one making a new comment or project useful vote
         if (triggeredBy._id === userId) {
           return
         }

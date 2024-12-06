@@ -33,7 +33,7 @@ export const meta = mergeMeta<typeof loader>(({ data }) => {
     return []
   }
 
-  const title = `${howto.title} - How-to - ${import.meta.env.VITE_SITE_NAME}`
+  const title = `${howto.title} - Library - ${import.meta.env.VITE_SITE_NAME}`
 
   return generateTags(title, howto.description, howto.cover_image?.downloadUrl)
 })

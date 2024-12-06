@@ -41,7 +41,7 @@ const generateSteps = (
     steps.push({ text: item.title })
   } else if (variant == 'howto') {
     const item = content as IHowto
-    steps.push({ text: 'How To', link: '/how-to' })
+    steps.push({ text: 'Library', link: '/how-to' })
 
     if (item.category) {
       steps.push({

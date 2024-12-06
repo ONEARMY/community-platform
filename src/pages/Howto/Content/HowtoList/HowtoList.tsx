@@ -184,7 +184,7 @@ export const HowtoList = observer(() => {
           <Heading as="p" sx={{ textAlign: 'center' }}>
             Inspire the {siteName} world.
             <br />
-            Share your how-to!
+            Share your project!
           </Heading>
         </Flex>
       </MoreContainer>

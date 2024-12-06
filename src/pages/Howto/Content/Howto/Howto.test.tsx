@@ -84,7 +84,7 @@ describe('Howto', () => {
       })
     })
 
-    it('hides feedback when how-to is accepted', async () => {
+    it('hides feedback when project is accepted', async () => {
       let wrapper
       howto.moderation = IModerationStatus.ACCEPTED
       howto.moderatorFeedback = 'Moderation comments'
@@ -196,7 +196,7 @@ describe('Howto', () => {
       await waitFor(() => {
         const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
         expect(breadcrumbItems).toHaveLength(3)
-        expect(breadcrumbItems[0]).toHaveTextContent('How To')
+        expect(breadcrumbItems[0]).toHaveTextContent('Library')
         expect(breadcrumbItems[1]).toHaveTextContent('DIY')
         expect(breadcrumbItems[2]).toHaveTextContent('DIY Recycling Machine')
 
@@ -223,7 +223,7 @@ describe('Howto', () => {
       await waitFor(() => {
         const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
         expect(breadcrumbItems).toHaveLength(2)
-        expect(breadcrumbItems[0]).toHaveTextContent('How To')
+        expect(breadcrumbItems[0]).toHaveTextContent('Library')
         expect(breadcrumbItems[1]).toHaveTextContent('DIY Recycling Machine')
 
         // Assert: Check that the first breadcrumb item contains a link

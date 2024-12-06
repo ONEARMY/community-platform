@@ -1,11 +1,11 @@
 import { MOCK_DATA } from '../../data'
 
-describe('[How To]', () => {
+describe('[Library]', () => {
   describe('[SEO Metadata]', () => {
     const { slug, title, description, cover_image } =
       MOCK_DATA.howtos.cmMzzlQP00fCckYIeL2e
 
-    const pageTitle = `${title} - How-to - Precious Plastic`
+    const pageTitle = `${title} - Library - Precious Plastic`
 
     it('[Populates title and description tags]', () => {
       cy.visit(`/how-to/${slug}`)

@@ -85,7 +85,7 @@ describe('Create howto submission emails', () => {
     })
   })
 
-  it('Does not create email for draft how tos', async () => {
+  it('Does not create email for draft projects', async () => {
     const howto = getMockHowto('user_1', IModerationStatus.DRAFT)
     await createHowtoSubmissionEmail(howto)
 

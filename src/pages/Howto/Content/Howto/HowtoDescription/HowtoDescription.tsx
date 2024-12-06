@@ -32,6 +32,8 @@ import { HowtoDownloads } from '../HowtoDownloads/HowtoDownloads'
 
 import type { IHowtoDB, ITag, IUser } from 'oa-shared'
 
+const DELETION_LABEL = 'Project marked for deletion'
+
 interface IProps {
   howto: IHowtoDB & { tagList?: ITag[] }
   loggedInUser: IUser | undefined
@@ -62,7 +64,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           action: 'Deleted',
           label: howto.title,
         },
-        'How-to marked for deletion',
+        DELETION_LABEL,
       )
 
       navigate('/how-to')
@@ -111,7 +113,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 </>
               )}
             </ClientOnly>
-            {/* Check if logged in user is the creator of the how-to OR a super-admin */}
+            {/* Check if logged in user is the creator of the project OR a super-admin */}
             {loggedInUser && isAllowedToEditContent(howto, loggedInUser) && (
               <Link to={'/how-to/' + howto.slug + '/edit'}>
                 <Button type="button" variant="primary" data-cy="edit">
@@ -136,7 +138,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 <ConfirmModal
                   key={howto._id}
                   isOpen={showDeleteModal}
-                  message="Are you sure you want to delete this How-To?"
+                  message="Are you sure you want to delete this project?"
                   confirmButtonText="Delete"
                   handleCancel={() => setShowDeleteModal(false)}
                   handleConfirm={() => handleDelete && handleDelete(howto._id)}
@@ -278,7 +280,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                     width: '100%',
                   }}
                   crossOrigin=""
-                  alt={howto.cover_image_alt ?? 'how-to cover'}
+                  alt={howto.cover_image_alt ?? 'project cover image'}
                 />
               )}
             </Box>

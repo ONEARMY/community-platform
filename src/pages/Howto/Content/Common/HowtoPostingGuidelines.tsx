@@ -26,7 +26,7 @@ export const HowtoPostingGuidelines = () => (
         </span>
       </>,
       <>
-        Create your How-to{' '}
+        Create your Project{' '}
         <span role="img" aria-label="writing-hand">
           ✍️
         </span>

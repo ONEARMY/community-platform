@@ -1,4 +1,4 @@
-// describe('[How To]', () => {
+// describe('[Library]', () => {
 //   beforeEach(() => {
 //     cy.visit('/how-to')
 //   })
@@ -45,7 +45,7 @@
 //       cy.url().should('not.include', 'search=h')
 //     })
 
-//     it('should show how-to list items after visit a how-to', () => {
+//     it('should show project list items after visit a project', () => {
 //       cy.get('[data-cy=card]:eq(0)').click()
 
 //       cy.go('back')

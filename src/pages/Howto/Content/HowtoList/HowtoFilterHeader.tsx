@@ -175,7 +175,7 @@ export const HowtoFilterHeader = (props: IProps) => {
               handleShowDrafts={handleShowDrafts}
             />
           )}
-          <Link to={isUserLoggedIn ? '/how-to/create' : '/sign-up'}>
+          <Link to={isUserLoggedIn ? '/library/create' : '/sign-up'}>
             <Button
               type="button"
               sx={{ width: '100%' }}

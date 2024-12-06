@@ -26,7 +26,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
                 return (
                   <UserCreatedDocumentsItem
                     key={item._id}
-                    type="how-to"
+                    type="library"
                     item={item}
                   />
                 )

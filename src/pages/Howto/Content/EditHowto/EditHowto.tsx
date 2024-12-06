@@ -35,7 +35,7 @@ const EditHowto = ({ howto }: EditHowtoProps) => {
   if (loggedInUser && isAllowedToEditContent(formValues, loggedInUser)) {
     return <HowtoForm formValues={formValues} parentType="edit" />
   } else {
-    return <Navigate to={'/how-to/' + formValues.slug} />
+    return <Navigate to={'/library/' + formValues.slug} />
   }
 }
 

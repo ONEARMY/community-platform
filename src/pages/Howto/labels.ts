@@ -167,11 +167,11 @@ export const steps: ILabels = {
 
 export const listing = {
   create: 'Add your project',
-  empty: 'No project to show',
+  empty: 'No projects to show!',
   usefulness: 'How useful it is',
   totalComments: 'Total comments',
   filterCategory: 'Filter by category',
-  search: 'Search for a project',
+  search: 'Search the library',
   sort: 'Sort by category',
   loadMore: 'Load More',
 }

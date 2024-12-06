@@ -9,11 +9,11 @@ import {
 import type { ILabels } from 'src/common/Form/types'
 
 export const headings = {
-  create: '<span>Create</span> a How-To',
-  edit: '<span>Edit</span> a How-To',
+  create: '<span>Add</span> your project',
+  edit: '<span>Edit</span> your project',
   errors: "Ouch, something's wrong",
-  files: 'Do you have supporting files to help others replicate your How-to?',
-  uploading: 'Uploading How To',
+  files: 'Do you have supporting files to help others replicate your project?',
+  uploading: 'Uploading project',
 }
 
 export const buttons = {
@@ -31,7 +31,7 @@ export const buttons = {
     },
     add: 'Add step',
   },
-  view: 'View How-To',
+  view: 'View Project',
 }
 
 export const errors = {
@@ -86,7 +86,7 @@ export const intro: ILabels = {
   },
   title: {
     placeholder: `Make a chair from... (${HOWTO_TITLE_MIN_LENGTH} - ${HOWTO_TITLE_MAX_LENGTH} characters)`,
-    title: 'Title of your How-to',
+    title: 'Title of your project',
   },
 }
 
@@ -166,12 +166,12 @@ export const steps: ILabels = {
 }
 
 export const listing = {
-  create: 'Create a How-To',
-  empty: 'No how-tos to show',
+  create: 'Add your project',
+  empty: 'No project to show',
   usefulness: 'How useful it is',
   totalComments: 'Total comments',
   filterCategory: 'Filter by category',
-  search: 'Search for how-tos',
-  sort: 'Sort by',
+  search: 'Search for a project',
+  sort: 'Sort by category',
   loadMore: 'Load More',
 }

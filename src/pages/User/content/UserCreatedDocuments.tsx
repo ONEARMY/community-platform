@@ -20,7 +20,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
               sx={{ flexDirection: 'column', flexBasis: '50%' }}
             >
               <Heading as="h3" variant="small" mb={1}>
-                How-To's
+                Library
               </Heading>
               {docs?.howtos.map((item) => {
                 return (

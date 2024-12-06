@@ -48,7 +48,7 @@ interface IState {
 // `
 
 /**
- * Ensure that the How to description meets the following criteria:
+ * Ensure that the project description meets the following criteria:
  * - required
  * - minimum character length of 100 characters
  * - maximum character length of 1000 characters

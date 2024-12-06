@@ -52,7 +52,7 @@ describe('HowtoFieldFiles', () => {
     )
 
     await screen.findByText(
-      'Do you have supporting files to help others replicate your How-to?',
+      'Do you have supporting files to help others replicate your project?',
     )
   })
 

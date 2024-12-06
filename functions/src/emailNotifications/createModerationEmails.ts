@@ -1,15 +1,18 @@
 import * as functions from 'firebase-functions'
-import { QueryDocumentSnapshot } from 'firebase-admin/firestore'
-import { IModerationStatus, IModerable } from 'oa-shared'
+import { IModerationStatus } from 'oa-shared'
+
+import { withErrorAlerting } from '../alerting/errorAlerting'
+import { MEMORY_LIMIT_512_MB } from '../consts'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
 import * as templates from './templateHelpers'
 import { getUserAndEmail } from './utils'
-import { Change } from 'firebase-functions/v1'
-import { withErrorAlerting } from '../alerting/errorAlerting'
-import { MEMORY_LIMIT_512_MB } from '../consts'
-import { IHowtoDB } from 'oa-shared/models/howto'
-import { IMapPin } from 'oa-shared/models/maps'
+
+import type { QueryDocumentSnapshot } from 'firebase-admin/firestore'
+import type { Change } from 'firebase-functions/v1'
+import type { IModerable } from 'oa-shared'
+import type { IHowtoDB } from 'oa-shared/models/howto'
+import type { IMapPin } from 'oa-shared/models/maps'
 
 export async function handleModerationUpdate<T extends IModerable>(
   change: Change<QueryDocumentSnapshot<T>>,
@@ -33,7 +36,7 @@ export async function createHowtoModerationEmail(howto: IHowtoDB) {
       message: templates.getHowToApprovalEmail(toUser, howto),
     })
   } else if (howto.moderation === IModerationStatus.AWAITING_MODERATION) {
-    // If a how to is resumbitted, send another submission confirmation email.
+    // If a library project is resumbitted, send another submission confirmation email.
     await db.collection(DB_ENDPOINTS.emails).add({
       to: toUserEmail,
       message: templates.getHowToSubmissionEmail(toUser, howto),

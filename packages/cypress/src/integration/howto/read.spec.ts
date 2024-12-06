@@ -43,8 +43,8 @@ describe('[How To]', () => {
     })
   })
 
-  describe('[Read a How-to]', () => {
     const specificHowtoUrl = '/how-to/make-an-interlocking-brick'
+  describe('[Read a project]', () => {
     const coverFileRegex = /brick-12-1.jpg/
 
     describe('[By Everyone]', () => {
@@ -57,8 +57,8 @@ describe('[How To]', () => {
         cy.step('Edit button is not available')
         cy.get('[data-cy=edit]').should('not.exist')
 
-        cy.step('How-to has basic info')
-        cy.title().should('eq', `${howto.title} - How-to - Precious Plastic`)
+        cy.step('Project has basic info')
+        cy.title().should('eq', `${howto.title} - Library - Precious Plastic`)
         cy.get('[data-cy=how-to-basis]').then(($summary) => {
           expect($summary).to.contain('howto_creator', 'Author')
           expect($summary).to.contain('Last update', 'Edit')
@@ -69,7 +69,7 @@ describe('[How To]', () => {
           )
           expect($summary).to.contain('3-4 weeks', 'Duration')
           expect($summary).to.contain(DifficultyLevel.HARD, 'Difficulty')
-          expect($summary.find('img[alt="how-to cover"]'))
+          expect($summary.find('img[alt="project cover image"]'))
             .to.have.attr('src')
             .match(coverFileRegex)
         })
@@ -84,7 +84,7 @@ describe('[How To]', () => {
         )
 
         cy.step('Breadcrumbs work')
-        cy.get('[data-cy=breadcrumbsItem]').first().should('contain', 'How To')
+        cy.get('[data-cy=breadcrumbsItem]').first().should('contain', 'Library')
         cy.get('[data-cy=breadcrumbsItem]')
           .first()
           .children()
@@ -251,8 +251,8 @@ describe('[How To]', () => {
     })
   })
 
-  describe('[Fail to find a How-to]', () => {
     const howToNotFoundUrl = `/how-to/this-how-to-does-not-exist`
+  describe('[Fail to find a project]', () => {
 
     it('[Redirects to search]', () => {
       cy.visit(howToNotFoundUrl)

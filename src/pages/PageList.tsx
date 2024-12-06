@@ -21,7 +21,7 @@ const ResearchModule: IPageNavigation = {
 const howTo: IPageNavigation = {
   module: MODULE.HOWTO,
   path: '/how-to',
-  title: 'How-tos',
+  title: 'Library',
 }
 const settings: IPageNavigation = {
   module: MODULE.CORE,

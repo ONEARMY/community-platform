@@ -20,7 +20,7 @@ const ResearchModule: IPageNavigation = {
 
 const howTo: IPageNavigation = {
   module: MODULE.HOWTO,
-  path: '/how-to',
+  path: '/library',
   title: 'Library',
 }
 const settings: IPageNavigation = {

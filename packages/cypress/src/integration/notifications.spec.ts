@@ -10,9 +10,9 @@ const DB_WAIT_TIME = 5000
 describe('[Notifications]', () => {
   // Can't test like this now because we are now using the same users collection for all tests.
   // it('[are not generated when the howTo author is triggering notification]', () => {
-  //   cy.visit('how-to')
+  //   cy.visit('library')
   //   cy.login('event_reader@test.com', 'test1234')
-  //   cy.visit('/how-to/testing-testing')
+  //   cy.visit('/library/testing-testing')
   //   cy.wait(2000)
   //   cy.get('[data-cy="vote-useful"]').contains('useful').click()
   //   cy.step('Verify the notification has not been added')
@@ -28,8 +28,8 @@ describe('[Notifications]', () => {
     const visitor = generateNewUserDetails()
     cy.signUpNewUser(visitor)
 
-    cy.visit('how-to')
-    cy.visit('/how-to/testing-testing')
+    cy.visit('library')
+    cy.visit('/library/testing-testing')
     cy.wait(DB_WAIT_TIME)
     cy.get('[data-cy="vote-useful"]').contains('useful').click()
     cy.wait(DB_WAIT_TIME)
@@ -46,7 +46,7 @@ describe('[Notifications]', () => {
             triggeredBy.userId === visitor.username && type === 'howto_useful',
         )
         expect(notification['type']).to.equal('howto_useful')
-        expect(notification['relevantUrl']).to.equal('/how-to/testing-testing')
+        expect(notification['relevantUrl']).to.equal('/library/testing-testing')
         expect(notification['read']).to.equal(false)
         expect(notification['triggeredBy']['displayName']).to.equal(
           visitor.username,
@@ -85,9 +85,9 @@ describe('[Notifications]', () => {
   })
 
   it('[appear in notifications modal]', () => {
-    cy.visit('how-to')
+    cy.visit('library')
     cy.login('event_reader@test.com', 'test1234')
-    cy.visit('/how-to/testing-testing')
+    cy.visit('/library/testing-testing')
     cy.get(
       '[data-cy="notifications-desktop"] [data-cy="toggle-notifications-modal"]',
     ).click()
@@ -95,9 +95,9 @@ describe('[Notifications]', () => {
   })
 
   it('[notifications modal is closed when clicking on the notifications icon for the second time or clicking on the header]', () => {
-    cy.visit('how-to')
+    cy.visit('library')
     cy.login('event_reader@test.com', 'test1234')
-    cy.visit('/how-to/testing-testing')
+    cy.visit('/library/testing-testing')
     cy.get(
       '[data-cy="notifications-desktop"] [data-cy="toggle-notifications-modal"]',
     ).click()
@@ -117,9 +117,9 @@ describe('[Notifications]', () => {
 
   // Commented as it is working, but very flaky
   // it('[are marked read when clicking on clear button]', () => {
-  //   cy.visit('how-to')
+  //   cy.visit('library')
   //   cy.login('event_reader@test.com', 'test1234')
-  //   cy.visit('/how-to/testing-testing')
+  //   cy.visit('/library/testing-testing')
   //   cy.get(
   //     '[data-cy="notifications-desktop"] [data-cy="toggle-notifications-modal"]',
   //   ).click()

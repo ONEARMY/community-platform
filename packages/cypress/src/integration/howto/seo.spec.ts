@@ -8,7 +8,7 @@ describe('[Library]', () => {
     const pageTitle = `${title} - Library - Precious Plastic`
 
     it('[Populates title and description tags]', () => {
-      cy.visit(`/how-to/${slug}`)
+      cy.visit(`/library/${slug}`)
       // General
       cy.title().should('eq', pageTitle)
       cy.get('meta[name="description"]').should(

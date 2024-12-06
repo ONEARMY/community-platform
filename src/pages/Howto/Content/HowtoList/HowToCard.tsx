@@ -30,7 +30,7 @@ export const HowToCard = ({ howto }: IProps) => {
     >
       <RouterLink
         key={howto._id}
-        to={`/how-to/${encodeURIComponent(howto.slug)}`}
+        to={`/library/${encodeURIComponent(howto.slug)}`}
       >
         <Image
           style={{
@@ -67,7 +67,7 @@ export const HowToCard = ({ howto }: IProps) => {
           <Heading as="h2" variant="small" color={'black'}>
             <RouterLink
               key={howto._id}
-              to={`/how-to/${encodeURIComponent(howto.slug)}`}
+              to={`/library/${encodeURIComponent(howto.slug)}`}
               style={{ width: '100%', color: 'black' }}
             >
               {capitalizeFirstLetter(howto.title || '')}

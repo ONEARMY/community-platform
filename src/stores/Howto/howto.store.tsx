@@ -53,7 +53,7 @@ export class HowtoStore extends ModuleStore {
         this.userNotificationsStore.triggerNotification(
           'howto_useful',
           howto._createdBy,
-          '/how-to/' + howto.slug,
+          '/library/' + howto.slug,
           howto.title,
         )
       }
@@ -163,7 +163,7 @@ export class HowtoStore extends ModuleStore {
         this.userNotificationsStore.triggerNotification(
           'howto_mention',
           mention.username,
-          `/how-to/${howToItem.slug}#${mention.location}`,
+          `/library/${howToItem.slug}#${mention.location}`,
           howToItem.title,
         )
       }

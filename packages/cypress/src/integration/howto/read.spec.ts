@@ -12,7 +12,7 @@ describe('[Library]', () => {
 
   describe('[List projects]', () => {
     // const howtoSlug = 'make-glass-like-beams'
-    // const howtoUrl = `/how-to/${howtoSlug}`
+    // const howtoUrl = `/library/${howtoSlug}`
     // const coverFileRegex = /howto-beams-glass-0-3.jpg/
     // it('[By Everyone]', () => {
     //   cy.step('More projects button is hidden')
@@ -44,12 +44,12 @@ describe('[Library]', () => {
     // })
   })
 
-    const specificHowtoUrl = '/how-to/make-an-interlocking-brick'
   describe('[Read a project]', () => {
+    const specificHowtoUrl = '/library/make-an-interlocking-brick'
     const coverFileRegex = /brick-12-1.jpg/
 
     beforeEach(() => {
-      cy.visit('/how-to')
+      cy.visit('/library')
     })
 
     describe('[By Everyone]', () => {
@@ -58,7 +58,10 @@ describe('[Library]', () => {
         // Hack to avoid flaky test as the tags are not being loaded on time
         cy.queryDocuments('howtos', '_id', '==', howto._id)
 
-        cy.visit(specificHowtoUrl)
+        cy.step('Old url pattern redirects to the new location')
+        cy.visit('/how-to/make-an-interlocking-brick')
+        cy.url().should('include', specificHowtoUrl)
+
         cy.step('Edit button is not available')
         cy.get('[data-cy=edit]').should('not.exist')
 
@@ -94,7 +97,7 @@ describe('[Library]', () => {
           .first()
           .children()
           .should('have.attr', 'href')
-          .and('equal', `/how-to`)
+          .and('equal', `/library`)
 
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(1)
@@ -103,7 +106,7 @@ describe('[Library]', () => {
           .eq(1)
           .children()
           .should('have.attr', 'href')
-          .and('equal', `/how-to?category=${howto.category._id}`)
+          .and('equal', `/library?category=${howto.category._id}`)
 
         cy.get('[data-cy=breadcrumbsItem]').eq(2).should('contain', howto.title)
 
@@ -214,7 +217,7 @@ describe('[Library]', () => {
   })
 
   describe('[Read a soft-deleted How-to]', () => {
-    const deletedHowtoUrl = '/how-to/deleted-how-to'
+    const deletedHowtoUrl = '/library/deleted-how-to'
     beforeEach(() => {
       cy.visit(deletedHowtoUrl)
     })
@@ -256,8 +259,8 @@ describe('[Library]', () => {
     })
   })
 
-    const howToNotFoundUrl = `/how-to/this-how-to-does-not-exist`
   describe('[Fail to find a project]', () => {
+    const howToNotFoundUrl = `/library/this-project-does-not-exist`
 
     it('[Redirects to search]', () => {
       cy.visit(howToNotFoundUrl)

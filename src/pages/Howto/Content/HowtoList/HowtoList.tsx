@@ -129,7 +129,7 @@ export const HowtoList = observer(() => {
               handleShowDrafts={handleShowDrafts}
             />
           )}
-          <Link to={userStore!.user ? '/how-to/create' : '/sign-up'}>
+          <Link to={userStore!.user ? '/library/create' : '/sign-up'}>
             <Box sx={{ width: '100%', display: 'block' }} mb={[3, 3, 0]}>
               <Button
                 type="button"

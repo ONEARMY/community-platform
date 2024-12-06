@@ -1,6 +1,6 @@
 // describe('[Library]', () => {
 //   beforeEach(() => {
-//     cy.visit('/how-to')
+//     cy.visit('/library')
 //   })
 
 //   describe('[By Everyone]', () => {

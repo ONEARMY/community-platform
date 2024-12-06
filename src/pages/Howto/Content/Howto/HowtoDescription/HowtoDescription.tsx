@@ -67,7 +67,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
         DELETION_LABEL,
       )
 
-      navigate('/how-to')
+      navigate('/library')
     } catch (err) {
       logger.error(err)
       // at least log the error
@@ -115,7 +115,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             </ClientOnly>
             {/* Check if logged in user is the creator of the project OR a super-admin */}
             {loggedInUser && isAllowedToEditContent(howto, loggedInUser) && (
-              <Link to={'/how-to/' + howto.slug + '/edit'}>
+              <Link to={'/library/' + howto.slug + '/edit'}>
                 <Button type="button" variant="primary" data-cy="edit">
                   Edit
                 </Button>

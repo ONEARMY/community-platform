@@ -151,7 +151,10 @@ const ResearchList = observer(() => {
       </Flex>
 
       {showDrafts ? (
-        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+        <ul
+          style={{ listStyle: 'none', padding: 0, margin: 0 }}
+          data-cy="ResearchList"
+        >
           {drafts.map((item) => {
             return <ResearchListItem key={item._id} item={item} />
           })}
@@ -159,7 +162,10 @@ const ResearchList = observer(() => {
       ) : (
         <>
           {researchItems && researchItems.length !== 0 && (
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            <ul
+              style={{ listStyle: 'none', padding: 0, margin: 0 }}
+              data-cy="ResearchList"
+            >
               {researchItems.map((item) => (
                 <ResearchListItem key={item._id} item={item} />
               ))}
@@ -181,6 +187,7 @@ const ResearchList = observer(() => {
               >
                 <Button
                   type="button"
+                  data-cy="loadMoreButton"
                   onClick={() => fetchResearchItems(lastId)}
                 >
                   {listing.loadMore}

@@ -24,7 +24,8 @@ import type { IQuestion } from 'oa-shared'
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions'
 
 export const loader = async ({ request }) => {
-  const params = new URLSearchParams(request.url)
+  const url = new URL(request.url)
+  const params = new URLSearchParams(url.search)
   const words: string[] =
     params.get('words') != '' ? params.get('words')?.split(',') ?? [] : []
   const category = params.get('category') || ''
@@ -96,8 +97,6 @@ const createQueries = async (
     if (!lastDocSnapshot.exists) {
       throw new Error('Document with the provided ID does not exist.')
     }
-    console.log('lastDocSnapshot', lastDocSnapshot)
-    console.log('startAfter', startAfter)
     startAfter(lastDocSnapshot)
     constraints.push(startAfter(lastDocSnapshot))
   }

@@ -23,9 +23,13 @@ const search = async (
   lastDocId?: string | undefined,
 ) => {
   try {
-    const response = await fetch(
-      `/api/questions?words=${words.join(',')}&category=${category}&sort=${sort}&lastDocId=${lastDocId ?? ''}`,
-    )
+    const url = new URL('/api/questions', window.location.origin)
+    url.searchParams.set('words', words.join(','))
+    url.searchParams.set('category', category)
+    url.searchParams.set('sort', sort)
+    url.searchParams.set('lastDocId', lastDocId ?? '')
+    const response = await fetch(url)
+
     const { items, total } = (await response.json()) as {
       items: IQuestion.Item[]
       total: number

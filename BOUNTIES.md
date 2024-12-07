@@ -24,7 +24,7 @@ _Note_ - the exact bounty level is not included as knowing in advance how much w
 
 ## How do I claim them?
 
-### Step 1 - Assigned the issue
+### Step 1 - Assign the issue
 
 Drop a message in the issue thread to say that you are interested taking it on. If the issue is already assigned, or we think it might be too much for a new or individual contributor we might suggest looking at other issues instead. Otherwise it's all yours :D
 

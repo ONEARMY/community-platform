@@ -67,11 +67,6 @@ async function insertOrUpdateProfile(
     .eq('firebase_auth_id', user._authID)
     .single()
 
-  if (profileRequest.error) {
-    functions.logger.log(profileRequest.error)
-    return
-  }
-
   if (profileRequest.data) {
     // Update
     const { error } = await client

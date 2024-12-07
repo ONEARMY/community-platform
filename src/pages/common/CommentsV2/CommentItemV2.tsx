@@ -71,7 +71,7 @@ export const CommentItemV2 = observer(
     }, [textRef])
 
     const showMore = () => {
-      setShowMore(!isShowMore)
+      setShowMore((prev) => !prev)
     }
 
     return (

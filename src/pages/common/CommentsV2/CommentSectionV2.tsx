@@ -40,7 +40,28 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
     const fetchComments = async () => {
       try {
         const result = await fetch(`/api/discussions/${sourceId}/comments`)
-        const { comments } = await result.json()
+        const { comments } = (await result.json()) as { comments: Comment[] }
+
+        const highlightedCommentId = location.hash.replace('#comment:', '')
+
+        if (highlightedCommentId) {
+          const highlightedComment = comments.find(
+            (x) => x.id === +highlightedCommentId,
+          )
+          if (highlightedComment) {
+            highlightedComment.highlighted = true
+          } else {
+            // find in replies and set highlighted
+            const highlightedReply = comments
+              .flatMap((x) => x.replies)
+              .find((x) => x?.id === +highlightedCommentId)
+
+            if (highlightedReply) {
+              highlightedReply.highlighted = true
+            }
+          }
+        }
+
         setComments(comments || [])
       } catch (err) {
         console.error(err)

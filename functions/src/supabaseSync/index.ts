@@ -94,6 +94,7 @@ async function insertOrUpdateProfile(
         photo_url: user.userImage?.downloadUrl || null,
         country: user.location?.countryCode || null,
         tenant_id: process.env.TENANT_ID,
+        username: user.userName,
         roles: user.userRoles,
       })
       .eq('firebase_auth_id', user._authID)

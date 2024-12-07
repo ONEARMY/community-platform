@@ -85,7 +85,7 @@ export const questions = {
     _modified: '2024-03-18T15:14:25.029Z',
     commentCount: 0,
     creatorCountry: '',
-    description: "What's the deal with sreenings?",
+    description: "What's the deal with screenings?",
     images: [],
     keywords: ['screening', 'question', 'intro'],
     latestCommentDate: '20 March 2024 at 10:10:10 UTC',

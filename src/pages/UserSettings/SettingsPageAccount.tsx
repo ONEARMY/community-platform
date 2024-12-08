@@ -31,8 +31,8 @@ export const SettingsPageAccount = observer(() => {
       </Flex>
 
       <PatreonIntegration user={userStore.activeUser} />
-      <ChangeEmailForm />
       <ChangePasswordForm />
+      <ChangeEmailForm />
 
       <Text variant="body">
         {title}

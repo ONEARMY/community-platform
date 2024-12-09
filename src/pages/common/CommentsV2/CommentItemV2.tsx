@@ -241,12 +241,10 @@ export const CommentItemV2 = observer(
                   />
                 ))}
 
-                {!comment.deleted && (
-                  <CreateCommentV2
-                    onSubmit={(comment) => onReply(comment)}
-                    buttonLabel="Leave a reply"
-                  />
-                )}
+                <CreateCommentV2
+                  onSubmit={(comment) => onReply(comment)}
+                  buttonLabel="Leave a reply"
+                />
               </>
             )}
             <ButtonShowReplies

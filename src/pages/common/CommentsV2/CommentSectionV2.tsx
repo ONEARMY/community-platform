@@ -60,6 +60,15 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
               highlightedReply.highlighted = true
             }
           }
+
+          // ensure highlighted comment is visible
+          const index = comments.findIndex(
+            (x) => x.highlighted || x.replies?.some((y) => y.highlighted),
+          )
+
+          if (index > 5) {
+            setCommentLimit(index + 1)
+          }
         }
 
         setComments(comments || [])

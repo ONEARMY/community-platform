@@ -93,6 +93,7 @@ export class Comment {
   sourceType: string
   parentId: number | null
   deleted: boolean | null
+  highlighted?: boolean
   replies?: Reply[]
 
   constructor(obj: Comment) {

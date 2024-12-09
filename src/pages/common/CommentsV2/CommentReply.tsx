@@ -1,4 +1,4 @@
-import { createRef, useEffect, useMemo, useState } from 'react'
+import { createRef, useEffect, useMemo, useRef, useState } from 'react'
 import { compareDesc } from 'date-fns'
 import { observer } from 'mobx-react'
 import {
@@ -30,6 +30,7 @@ export interface ICommentItemProps {
 export const CommentReply = observer(
   ({ comment, onEdit, onDelete }: ICommentItemProps) => {
     const textRef = createRef<any>()
+    const commentRef = useRef<HTMLDivElement>()
     const [showEditModal, setShowEditModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [textHeight, setTextHeight] = useState(0)
@@ -60,6 +61,15 @@ export const CommentReply = observer(
       setShowMore(!isShowMore)
     }
 
+    useEffect(() => {
+      if (comment.highlighted) {
+        commentRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        })
+      }
+    }, [comment.highlighted])
+
     return (
       <Flex>
         <Box
@@ -75,15 +85,25 @@ export const CommentReply = observer(
           data-cy={isEditable ? `Own${item}` : item}
           sx={{ flexDirection: 'column', width: '100%' }}
         >
-          <Flex sx={{ gap: 2 }}>
-            {comment.deleted && (
-              <Box sx={{ marginBottom: 2 }} data-cy="deletedComment">
+          <Flex sx={{ gap: 2 }} ref={commentRef as any}>
+            {comment.deleted ? (
+              <Box
+                sx={{
+                  marginBottom: 2,
+                  border: `${comment.highlighted ? '2px dashed black' : 'none'}`,
+                }}
+                data-cy="deletedComment"
+              >
                 <Text sx={{ color: 'grey' }}>[{DELETED_COMMENT}]</Text>
               </Box>
-            )}
-
-            {!comment.deleted && (
-              <Flex sx={{ gap: 2, flexGrow: 1 }}>
+            ) : (
+              <Flex
+                sx={{
+                  gap: 2,
+                  flexGrow: 1,
+                  border: `${comment.highlighted ? '2px dashed black' : 'none'}`,
+                }}
+              >
                 <Box data-cy="commentAvatar" data-testid="commentAvatar">
                   <CommentAvatar
                     name={comment.createdBy?.name}

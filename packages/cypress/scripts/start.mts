@@ -45,6 +45,7 @@ export const generateAlphaNumeric = (length: number) => {
 }
 
 const e2eEnv = config()
+config({ path: '.env.local' })
 
 const isCi = process.argv.includes('ci')
 // const isProduction = process.argv.includes('prod')
@@ -54,6 +55,8 @@ fs.writeFileSync(
   'cypress.env.json',
   JSON.stringify({
     TENANT_ID: tenantId,
+    SUPABASE_API_URL: process.env.SUPABASE_API_URL,
+    SUPABASE_KEY: process.env.SUPABASE_KEY,
   }),
 )
 

@@ -1,23 +1,53 @@
-import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
-import { questionService } from 'src/pages/Question/question.service'
 import { QuestionPage } from 'src/pages/Question/QuestionPage'
-import { pageViewService } from 'src/services/pageViewService.server'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { IQuestionDB, IUploadedFileMeta } from 'oa-shared'
+import type { IUploadedFileMeta } from 'oa-shared'
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  const question = await questionService.getBySlug(params.slug as string)
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  const { client, headers } = createSupabaseServerClient(request)
 
-  if (question?._id) {
-    // not awaited to not block the render
-    pageViewService.incrementViewCount('questions', question._id)
+  const result = await client
+    .from('questions')
+    .select(
+      `
+      id,
+      created_at,
+      created_by,
+      modified_at,
+      comment_count,
+      description,
+      moderation,
+      slug,
+      category,
+      tags,
+      title,
+      total_views,
+      tenant_id,
+      profiles(id, firebase_auth_id, display_name, username, is_verified, country)
+    `,
+    )
+    .or(`slug.eq.${params.slug},previous_slugs.cs.{"${params.slug}"}`)
+    .neq('deleted', true)
+    .single()
+
+  if (result.error || !result.data) {
+    return Response.json({ question: null }, { headers })
   }
 
-  return json({ question })
+  const question = result.data as any
+
+  if (question.id) {
+    client
+      .from('questions')
+      .update('total_views', (question.total_views || 0) + 1)
+      .eq('id', question.id)
+  }
+
+  return Response.json({ question }, { headers })
 }
 
 export function HydrateFallback() {
@@ -27,7 +57,7 @@ export function HydrateFallback() {
 }
 
 export const meta = mergeMeta<typeof loader>(({ data }) => {
-  const question = data?.question as IQuestionDB
+  const question = data?.question as DBQuestion
 
   if (!question) {
     return []
@@ -41,7 +71,7 @@ export const meta = mergeMeta<typeof loader>(({ data }) => {
 
 export default function Index() {
   const data = useLoaderData<typeof loader>()
-  const question = data.question as IQuestionDB
+  const question = data.question as DBQuestion
 
   if (!question) {
     return <NotFoundPage />

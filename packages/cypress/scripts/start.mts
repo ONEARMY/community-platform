@@ -48,6 +48,14 @@ const e2eEnv = config()
 
 const isCi = process.argv.includes('ci')
 // const isProduction = process.argv.includes('prod')
+const tenantId = generateAlphaNumeric(8)
+
+fs.writeFileSync(
+  'cypress.env.json',
+  JSON.stringify({
+    TENANT_ID: tenantId,
+  }),
+)
 
 // Prevent unhandled errors being silently ignored
 process.on('unhandledRejection', (err) => {
@@ -110,6 +118,7 @@ async function startAppServer() {
     env: {
       ...process.env,
       VITE_SITE_VARIANT: 'test-ci',
+      TENANT_ID: tenantId,
     },
   })
 

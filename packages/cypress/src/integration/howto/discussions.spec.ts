@@ -3,24 +3,24 @@
 
 import { ExternalLinkLabel } from 'oa-shared'
 
-// import { MOCK_DATA } from '../../data'
+import { MOCK_DATA } from '../../data'
 import { howto } from '../../fixtures/howto'
 import { generateNewUserDetails } from '../../utils/TestUtils'
 
-// const howtos = Object.values(MOCK_DATA.howtos)
+const howtos = Object.values(MOCK_DATA.howtos)
 
-// const item = howtos[0]
-// const howtoDiscussion = Object.values(MOCK_DATA.discussions).find(
-//   ({ sourceId }) => sourceId === item._id,
-// )
+const item = howtos[0]
+const howtoDiscussion = Object.values(MOCK_DATA.discussions).find(
+  ({ sourceId }) => sourceId === item._id,
+)
 
 describe('[Howto.Discussions]', () => {
-  // it('can open using deep links', () => {
-  //   const firstComment = howtoDiscussion.comments[0]
-  //   cy.visit(`/how-to/${item.slug}#comment:${firstComment._id}`)
-  //   cy.wait(2000)
-  //   cy.checkCommentItem(firstComment.text, 2)
-  // })
+  it('can open using deep links', () => {
+    const firstComment = howtoDiscussion.comments[0]
+    cy.visit(`/how-to/${item.slug}#comment:${firstComment._id}`)
+    cy.wait(2000)
+    cy.checkCommentItem(firstComment.text, 2)
+  })
 
   it('allows authenticated users to contribute to discussions', () => {
     const visitor = generateNewUserDetails()

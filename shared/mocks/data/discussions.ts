@@ -201,7 +201,7 @@ export const discussions = {
         creatorCountry: 'bo',
         creatorName: 'demo_admin',
         parentCommentId: null,
-        text: "Thanks for this how-to, it's taught me loads.",
+        text: "Thanks for this project, it's taught me loads.",
       },
       {
         _created: '2022-03-29T22:10:12.271Z',

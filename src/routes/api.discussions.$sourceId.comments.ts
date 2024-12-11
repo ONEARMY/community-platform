@@ -1,15 +1,19 @@
-import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { verifyFirebaseToken } from 'src/firestore/firestoreAdmin.server'
 import { Comment, DBComment } from 'src/models/comment.model'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { notificationsService } from 'src/services/notificationsService.server'
 
+import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { Params } from '@remix-run/react'
 import type { DBCommentAuthor, Reply } from 'src/models/comment.model'
 import type { DBProfile } from 'src/models/profile.model'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   if (!params.sourceId) {
-    return json({}, { status: 400, statusText: 'sourceId is required' })
+    return Response.json(
+      {},
+      { status: 400, statusText: 'sourceId is required' },
+    )
   }
 
   const { client, headers } = createSupabaseServerClient(request)
@@ -40,7 +44,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   if (result.error) {
     console.error(result.error)
 
-    return json({}, { headers, status: 500 })
+    return Response.json({}, { headers, status: 500 })
   }
 
   const dbComments = result.data.map(
@@ -67,43 +71,38 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       )
       return Comment.fromDB(
         mainComment,
-        replies.sort((a, b) => a.id - b.id),
+        replies.filter((x) => !x.deleted).sort((a, b) => a.id - b.id),
       )
     },
   )
 
-  return json({ comments: commentWithReplies }, { headers })
+  // remove deleted comments that don't have replies
+  const deletedFilter = commentWithReplies.filter(
+    (comment: Comment) =>
+      !comment.deleted || (comment.replies?.length || 0) > 0,
+  )
+
+  return Response.json({ comments: deletedFilter }, { headers })
 }
 
 export async function action({ params, request }: LoaderFunctionArgs) {
-  const { valid, user_id } = await verifyFirebaseToken(
+  const tokenValidation = await verifyFirebaseToken(
     request.headers.get('firebaseToken')!,
   )
 
-  if (!valid) {
-    return json({}, { status: 401, statusText: 'unauthorized' })
-  }
-
-  if (!user_id) {
-    return json({}, { status: 400, statusText: 'user not found' })
-  }
-
-  if (!params.sourceId) {
-    return json({}, { status: 400, statusText: 'sourceId is required' })
-  }
-
-  if (request.method !== 'POST') {
-    return json({}, { status: 405, statusText: 'method not allowed' })
-  }
-
+  const userId = tokenValidation.user_id
   const data = await request.json()
 
-  if (!data.comment) {
-    return json({}, { status: 400, statusText: 'comment is required' })
-  }
+  const { valid, status, statusText } = await validateRequest(
+    params,
+    request,
+    tokenValidation.valid,
+    userId,
+    data,
+  )
 
-  if (!data.sourceType) {
-    return json({}, { status: 400, statusText: 'sourceType is required' })
+  if (!valid) {
+    return Response.json({}, { status, statusText })
   }
 
   const { client, headers } = createSupabaseServerClient(request)
@@ -111,11 +110,14 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   const currentUser = await client
     .from('profiles')
     .select()
-    .eq('firebase_auth_id', user_id)
+    .eq('firebase_auth_id', userId)
     .single()
 
   if (currentUser.error || !currentUser.data) {
-    return json({}, { status: 400, statusText: 'profile not found ' + user_id })
+    return Response.json(
+      {},
+      { status: 400, statusText: 'profile not found ' + userId },
+    )
   }
 
   const newComment = {
@@ -158,7 +160,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     )
   }
 
-  return json(
+  return Response.json(
     new DBComment({
       ...(commentResult.data as DBComment),
       profile: (commentResult.data as any).profiles as DBCommentAuthor,
@@ -168,4 +170,38 @@ export async function action({ params, request }: LoaderFunctionArgs) {
       status: commentResult.error ? 500 : 201,
     },
   )
+}
+
+async function validateRequest(
+  params: Params<string>,
+  request: Request,
+  isTokenValid: boolean,
+  userId: string,
+  data: any,
+) {
+  if (!isTokenValid) {
+    return { status: 401, statusText: 'unauthorized' }
+  }
+
+  if (!userId) {
+    return { status: 400, statusText: 'user not found' }
+  }
+
+  if (!params.sourceId) {
+    return { status: 400, statusText: 'sourceId is required' }
+  }
+
+  if (request.method !== 'POST') {
+    return { status: 405, statusText: 'method not allowed' }
+  }
+
+  if (!data.comment) {
+    return { status: 400, statusText: 'comment is required' }
+  }
+
+  if (!data.sourceType) {
+    return { status: 400, statusText: 'sourceType is required' }
+  }
+
+  return { valid: true }
 }

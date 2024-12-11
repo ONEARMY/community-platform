@@ -1,4 +1,4 @@
-import { createRef, useEffect, useMemo, useState } from 'react'
+import { createRef, useEffect, useMemo, useRef, useState } from 'react'
 import { compareDesc } from 'date-fns'
 import { observer } from 'mobx-react'
 import {
@@ -43,11 +43,14 @@ export const CommentItemV2 = observer(
     onDeleteReply,
   }: ICommentItemProps) => {
     const textRef = createRef<any>()
+    const commentRef = useRef<HTMLDivElement>()
     const [showEditModal, setShowEditModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [textHeight, setTextHeight] = useState(0)
     const [isShowMore, setShowMore] = useState(false)
-    const [showReplies, setShowReplies] = useState(false)
+    const [showReplies, setShowReplies] = useState(
+      () => !!comment.replies?.some((x) => x.highlighted),
+    )
     const { userStore } = useCommonStores().stores
 
     const maxHeight = isShowMore ? 'max-content' : '128px'
@@ -71,8 +74,17 @@ export const CommentItemV2 = observer(
     }, [textRef])
 
     const showMore = () => {
-      setShowMore(!isShowMore)
+      setShowMore((prev) => !prev)
     }
+
+    useEffect(() => {
+      if (comment.highlighted) {
+        commentRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        })
+      }
+    }, [comment.highlighted])
 
     return (
       <Flex
@@ -80,15 +92,25 @@ export const CommentItemV2 = observer(
         data-cy={isEditable ? `Own${item}` : item}
         sx={{ flexDirection: 'column' }}
       >
-        <Flex sx={{ gap: 2, flexDirection: 'column' }}>
-          {comment.deleted && (
-            <Box sx={{ marginBottom: 2 }} data-cy="deletedComment">
+        <Flex sx={{ gap: 2, flexDirection: 'column' }} ref={commentRef as any}>
+          {comment.deleted ? (
+            <Box
+              sx={{
+                marginBottom: 2,
+                border: `${comment.highlighted ? '2px dashed black' : 'none'}`,
+              }}
+              data-cy="deletedComment"
+            >
               <Text sx={{ color: 'grey' }}>[{DELETED_COMMENT}]</Text>
             </Box>
-          )}
-
-          {!comment.deleted && (
-            <Flex sx={{ gap: 2, flexGrow: 1 }}>
+          ) : (
+            <Flex
+              sx={{
+                gap: 2,
+                flexGrow: 1,
+                border: `${comment.highlighted ? '2px dashed black' : 'none'}`,
+              }}
+            >
               <Box data-cy="commentAvatar" data-testid="commentAvatar">
                 <CommentAvatar
                   name={comment.createdBy?.name}
@@ -219,12 +241,10 @@ export const CommentItemV2 = observer(
                   />
                 ))}
 
-                {!comment.deleted && (
-                  <CreateCommentV2
-                    onSubmit={(comment) => onReply(comment)}
-                    buttonLabel="Leave a reply"
-                  />
-                )}
+                <CreateCommentV2
+                  onSubmit={(comment) => onReply(comment)}
+                  buttonLabel="Leave a reply"
+                />
               </>
             )}
             <ButtonShowReplies

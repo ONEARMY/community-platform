@@ -880,6 +880,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "detrina",
+      "name": "Devkuni",
+      "avatar_url": "https://avatars.githubusercontent.com/u/155117116?v=4",
+      "profile": "https://github.com/detrina",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "projectName": "community-platform",

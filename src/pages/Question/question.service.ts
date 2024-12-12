@@ -1,26 +1,13 @@
+import { collection, getDocs, query, where } from 'firebase/firestore'
 import {
-  and,
-  collection,
-  getCountFromServer,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  startAfter,
-  where,
-} from 'firebase/firestore'
-import { IModerationStatus } from 'oa-shared'
-import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
+  DB_ENDPOINTS,
+  type ICategory,
+  type IQuestion,
+  type IQuestionDB,
+} from 'oa-shared'
+import { logger } from 'src/logger'
+import { firestore } from 'src/utils/firebase'
 
-import { firestore } from '../../utils/firebase'
-
-import type {
-  DocumentData,
-  QueryDocumentSnapshot,
-  QueryFilterConstraint,
-  QueryNonFilterConstraint,
-} from 'firebase/firestore'
-import type { ICategory, IQuestion, IQuestionDB } from 'oa-shared'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 export enum QuestionSearchParams {
@@ -33,141 +20,43 @@ const search = async (
   words: string[],
   category: string,
   sort: QuestionSortOption,
-  snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
-  take: number = 10,
+  lastDocId?: string | undefined,
 ) => {
-  const { itemsQuery, countQuery } = createQueries(
-    words,
-    category,
-    sort,
-    snapshot,
-    take,
-  )
+  try {
+    const url = new URL('/api/questions', window.location.origin)
+    url.searchParams.set('words', words.join(','))
+    url.searchParams.set('category', category)
+    url.searchParams.set('sort', sort)
+    url.searchParams.set('lastDocId', lastDocId ?? '')
+    const response = await fetch(url)
 
-  const documentSnapshots = await getDocs(itemsQuery)
-  const lastVisible = documentSnapshots.docs
-    ? documentSnapshots.docs[documentSnapshots.docs.length - 1]
-    : undefined
-
-  const items = documentSnapshots.docs
-    ? documentSnapshots.docs.map((x) => {
-        const item = x.data() as IQuestion.Item
-        return {
-          ...item,
-          commentCount: 0,
-        }
-      })
-    : []
-  const total = (await getCountFromServer(countQuery)).data().count
-
-  return { items, total, lastVisible }
-}
-
-const createQueries = (
-  words: string[],
-  category: string,
-  sort: QuestionSortOption,
-  snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
-  take: number = 10,
-) => {
-  const collectionRef = collection(firestore, DB_ENDPOINTS.questions)
-  let filters: QueryFilterConstraint[] = [
-    and(
-      where('_deleted', '!=', true),
-      where('moderation', '==', IModerationStatus.ACCEPTED),
-    ),
-  ]
-  let constraints: QueryNonFilterConstraint[] = []
-
-  if (words?.length > 0) {
-    filters = [...filters, and(where('keywords', 'array-contains-any', words))]
-  }
-
-  if (category) {
-    filters = [...filters, where('questionCategory._id', '==', category)]
-  }
-
-  if (sort) {
-    const sortConstraint = getSort(sort)
-
-    if (sortConstraint) {
-      constraints = [...constraints, sortConstraint]
+    const { items, total } = (await response.json()) as {
+      items: IQuestion.Item[]
+      total: number
     }
+    const lastVisibleId = items ? items[items.length - 1]._id : undefined
+    return { items, total, lastVisibleId }
+  } catch (error) {
+    logger.error('Failed to fetch questions', { error })
+    return { items: [], total: 0 }
   }
-
-  const countQuery = query(collectionRef, and(...filters), ...constraints)
-
-  if (snapshot) {
-    constraints = [...constraints, startAfter(snapshot)]
-  }
-
-  const itemsQuery = query(
-    collectionRef,
-    and(...filters),
-    ...constraints,
-    limit(take),
-  )
-
-  return { countQuery, itemsQuery }
 }
 
 const getQuestionCategories = async () => {
-  const collectionRef = collection(firestore, DB_ENDPOINTS.questionCategories)
+  try {
+    const response = await fetch(`/api/questions/categories`)
+    const responseJson = (await response.json()) as {
+      categories: ICategory[]
+    }
 
-  return (await getDocs(query(collectionRef))).docs.map(
-    (x) => x.data() as ICategory,
-  )
-}
-
-const createDraftQuery = (userId: string) => {
-  const collectionRef = collection(firestore, DB_ENDPOINTS.questions)
-  const filters = and(
-    where('_createdBy', '==', userId),
-    where('moderation', 'in', [
-      IModerationStatus.AWAITING_MODERATION,
-      IModerationStatus.DRAFT,
-      IModerationStatus.IMPROVEMENTS_NEEDED,
-      IModerationStatus.REJECTED,
-    ]),
-    where('_deleted', '!=', true),
-  )
-
-  const countQuery = query(collectionRef, filters)
-  const itemsQuery = query(collectionRef, filters, orderBy('_modified', 'desc'))
-
-  return { countQuery, itemsQuery }
-}
-
-const getDraftCount = async (userId: string) => {
-  const { countQuery } = createDraftQuery(userId)
-
-  return (await getCountFromServer(countQuery)).data().count
-}
-
-const getDrafts = async (userId: string) => {
-  const { itemsQuery } = createDraftQuery(userId)
-  const docs = await getDocs(itemsQuery)
-
-  return docs.docs ? docs.docs.map((x) => x.data() as IQuestion.Item) : []
-}
-
-const getSort = (sort: QuestionSortOption) => {
-  switch (sort) {
-    case 'Comments':
-      return orderBy('commentCount', 'desc')
-    case 'LeastComments':
-      return orderBy('commentCount', 'asc')
-    case 'Newest':
-      return orderBy('_created', 'desc')
-    case 'LatestComments':
-      return orderBy('latestCommentDate', 'desc')
-    case 'LatestUpdated':
-      return orderBy('_modified', 'desc')
+    return responseJson.categories
+  } catch (error) {
+    logger.error('Failed to fetch questions', { error })
+    return []
   }
 }
 
 const getBySlug = async (slug: string) => {
-  // Get all that match the slug, to avoid creating an index (blocker for cypress tests)
   let snapshot = await getDocs(
     query(
       collection(firestore, DB_ENDPOINTS.questions),
@@ -195,11 +84,5 @@ const getBySlug = async (slug: string) => {
 export const questionService = {
   search,
   getQuestionCategories,
-  getDraftCount,
-  getDrafts,
   getBySlug,
-}
-
-export const exportedForTesting = {
-  createQueries,
 }

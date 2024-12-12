@@ -45,6 +45,10 @@ export const QuestionFilterHeader = () => {
     initCategories()
   }, [])
 
+  useEffect(() => {
+    setSearchString(q || '')
+  }, [q])
+
   const updateFilter = useCallback(
     (key: QuestionSearchParams, value: string) => {
       const params = new URLSearchParams(searchParams.toString())

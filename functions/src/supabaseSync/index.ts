@@ -67,11 +67,6 @@ async function insertOrUpdateProfile(
     .eq('firebase_auth_id', user._authID)
     .single()
 
-  if (profileRequest.error) {
-    functions.logger.log(profileRequest.error)
-    return
-  }
-
   if (profileRequest.data) {
     // Update
     const { error } = await client
@@ -99,6 +94,7 @@ async function insertOrUpdateProfile(
         photo_url: user.userImage?.downloadUrl || null,
         country: user.location?.countryCode || null,
         tenant_id: process.env.TENANT_ID,
+        username: user.userName,
         roles: user.userRoles,
       })
       .eq('firebase_auth_id', user._authID)

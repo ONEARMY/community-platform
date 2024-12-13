@@ -37,13 +37,17 @@ describe('[Map]', () => {
     cy.get('[data-cy="list-results"]').contains(/\d+ results in view/)
 
     cy.step('Map filters can be used')
-    cy.get('[data-cy=MapFilterProfileTypeCardList]')
+    cy.get('[data-cy=MemberTypeVerticalList]')
       .first()
-      .children()
-      .should('have.length', profileTypesCount)
-    cy.get('[data-cy=MapListFilter]').first().click()
+      .within(() => {
+        cy.get('[data-cy=MemberTypeVerticalList-Item]').should(
+          'have.length',
+          profileTypesCount,
+        )
+      })
+    cy.get('[data-cy=MemberTypeVerticalList-Item]').first().click()
 
-    cy.get('[data-cy=MapListFilter-active]').first().click()
+    cy.get('[data-cy=MemberTypeVerticalList-Item-active]').first().click()
     cy.get('[data-cy="list-results"]').contains(/\d+ results in view/)
 
     cy.step('Clusters show up')

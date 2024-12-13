@@ -45,7 +45,7 @@ interface IGlyphProps {
   glyph: keyof IGlyphs
 }
 
-export interface IProps {
+export interface IProps extends React.ButtonHTMLAttributes<HTMLElement> {
   glyph: keyof IGlyphs
   color?: string
   size?: number | string

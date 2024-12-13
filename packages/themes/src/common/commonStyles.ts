@@ -26,7 +26,7 @@ export const commonStyles = {
     error: 'red',
     background: '#f4f6f7',
     silver: '#c0c0c0',
-    softgrey: '#c2d4e4',
+    softgrey: '#c2c2c2',
     lightgrey: '#ababac',
     darkGrey: '#686868',
     subscribed: 'orange',

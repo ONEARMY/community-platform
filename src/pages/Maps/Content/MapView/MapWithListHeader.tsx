@@ -3,7 +3,7 @@ import {
   Button,
   CardList,
   MapFilterList,
-  MapFilterProfileTypeCardList,
+  MemberTypeVerticalList,
   Modal,
   OsmGeocoding,
 } from 'oa-components'
@@ -88,7 +88,9 @@ export const MapWithListHeader = (props: IProps) => {
           {pins && `${pins.length} members (and counting...)`}
         </Heading>
 
-        <Flex sx={{ paddingX: 4, gap: 2, flexDirection: 'row' }}>
+        <Flex
+          sx={{ paddingX: 4, gap: 2, flexDirection: 'row', overflow: 'hidden' }}
+        >
           <OsmGeocoding
             callback={({ lat, lon }) => {
               if (lat && lon) {
@@ -111,7 +113,7 @@ export const MapWithListHeader = (props: IProps) => {
           </Button>
         </Flex>
 
-        <MapFilterProfileTypeCardList
+        <MemberTypeVerticalList
           activeFilters={activePinFilters}
           availableFilters={availableFilters}
           onFilterChange={onFilterChange}

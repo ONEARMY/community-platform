@@ -1,16 +1,44 @@
 import '@testing-library/jest-dom/vitest'
 
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { render } from '../test/utils'
-import { Default } from './CategoryVerticalList.stories'
+import {
+  Basic,
+  OnlyOne,
+  WhenGlyphNotPresent,
+} from './CategoryVerticalList.stories'
 
 import type { IProps } from './CategoryVerticalList'
 
 describe('CategoryVerticalList', () => {
-  it('validates the component behaviour', () => {
-    const { getByText } = render(<Default {...(Default.args as IProps)} />)
+  // https://stackoverflow.com/a/62148101
+  beforeEach(() => {
+    const mockIntersectionObserver = vi.fn()
+    mockIntersectionObserver.mockReturnValue({
+      observe: () => null,
+      unobserve: () => null,
+      disconnect: () => null,
+    })
+    window.IntersectionObserver = mockIntersectionObserver
+  })
 
-    expect(getByText('CategoryVerticalList')).toBeInTheDocument()
+  it('renders each member type given', async () => {
+    const { findAllByTestId } = render(<Basic {...(Basic.args as IProps)} />)
+
+    expect(await findAllByTestId('CategoryVerticalList-Item')).toHaveLength(10)
+  })
+
+  it('renders default category glyph when specific glyph is missing', async () => {
+    const { findAllByTestId } = render(
+      <WhenGlyphNotPresent {...(WhenGlyphNotPresent.args as IProps)} />,
+    )
+
+    expect(await findAllByTestId('category-icon')).toHaveLength(2)
+  })
+
+  it("doesn't render items when only one exists", () => {
+    const { getByTestId } = render(<OnlyOne {...(OnlyOne.args as IProps)} />)
+    expect(() => getByTestId('MemberTypeVerticalList-Item')).toThrow()
   })
 })

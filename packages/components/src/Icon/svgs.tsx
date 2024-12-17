@@ -11,6 +11,7 @@ import employeeSVG from '../../assets/icons/employee.svg'
 import eyeSVG from '../../assets/icons/eye.svg'
 import eyeCrossedSVG from '../../assets/icons/eye-crossed.svg'
 import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
+import guidesSVG from '../../assets/icons/guides.svg'
 import hyperlinkSVG from '../../assets/icons/hyperlink.svg'
 import arrowFullDownSVG from '../../assets/icons/icon-arrow-down.svg'
 import arrowFullUpSVG from '../../assets/icons/icon-arrow-up.svg'
@@ -29,14 +30,18 @@ import viewSVG from '../../assets/icons/icon-views.svg'
 import websiteSVG from '../../assets/icons/icon-website.svg'
 import impactSVG from '../../assets/icons/impact.svg'
 import machineSVG from '../../assets/icons/machine.svg'
+import machinesSVG from '../../assets/icons/machines.svg'
 import mapSVG from '../../assets/icons/map.svg'
 import globe from '../../assets/icons/map-globe.svg'
 import gpsLocation from '../../assets/icons/map-gpsLocation.svg'
+import mouldsSVG from '../../assets/icons/moulds.svg'
 import patreonSVG from '../../assets/icons/patreon.svg'
 import plasticSVG from '../../assets/icons/plastic.svg'
+import productsSVG from '../../assets/icons/products.svg'
 import profileSVG from '../../assets/icons/profile.svg'
 import revenueSVG from '../../assets/icons/revenue.svg'
 import slidersSVG from '../../assets/icons/sliders.svg'
+import starterKitsSVG from '../../assets/icons/starter-kits.svg'
 import stepSVG from '../../assets/icons/step.svg'
 import supporterSVG from '../../assets/icons/supporter.svg'
 import thunderboltSVG from '../../assets/icons/thunderbolt.svg'
@@ -73,21 +78,26 @@ export const iconMap = {
   emailOutline: <ImageIcon src={emailOutlineSVG} />,
   employee: <ImageIcon src={employeeSVG} />,
   flagUnknown: <ImageIcon src={flagUnknownSVG} />,
+  guides: <ImageIcon src={guidesSVG} />,
   hide: <ImageIcon src={eyeCrossedSVG} />,
   hyperlink: <ImageIcon src={hyperlinkSVG} />,
   impact: <ImageIcon src={impactSVG} />,
   loading: <ImageIcon src={loadingSVG} data-cy="icon-loading" />,
   machine: <ImageIcon src={machineSVG} />,
+  machines: <ImageIcon src={machinesSVG} />,
   map: <ImageIcon src={mapSVG} />,
+  moulds: <ImageIcon src={mouldsSVG} />,
   patreon: <ImageIcon src={patreonSVG} />,
   plastic: <ImageIcon src={plasticSVG} />,
   profile: <ImageIcon src={profileSVG} />,
+  products: <ImageIcon src={productsSVG} />,
   revenue: <ImageIcon src={revenueSVG} />,
   show: <ImageIcon src={eyeSVG} />,
   sliders: <ImageIcon src={slidersSVG} />,
   socialMedia: <ImageIcon src={socialMediaSVG} />,
   star: <ImageIcon src={starSVG} />,
   starActive: <ImageIcon src={starActiveSVG} />,
+  starterKits: <ImageIcon src={starterKitsSVG} />,
   step: <ImageIcon src={stepSVG} />,
   supporter: <ImageIcon src={supporterSVG} />,
   thunderbolt: <ImageIcon src={thunderboltSVG} />,

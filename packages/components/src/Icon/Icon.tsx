@@ -41,10 +41,6 @@ import type { SpaceProps, VerticalAlignProps } from 'styled-system'
 import type { ThemeUIStyleObject } from 'theme-ui'
 import type { IGlyphs } from './types'
 
-interface IGlyphProps {
-  glyph: keyof IGlyphs
-}
-
 export interface IProps extends React.ButtonHTMLAttributes<HTMLElement> {
   glyph: keyof IGlyphs
   color?: string
@@ -88,6 +84,7 @@ export const glyphs: IGlyphs = {
   facebook: <FaFacebookF />,
   filter: <FaFilter />,
   'flag-unknown': iconMap.flagUnknown,
+  guides: iconMap.guides,
   hide: iconMap.hide,
   hyperlink: iconMap.hyperlink,
   image: <MdImage />,
@@ -97,19 +94,23 @@ export const glyphs: IGlyphs = {
   'location-on': <MdLocationOn />,
   lock: <MdLock />,
   machine: iconMap.machine,
+  machines: iconMap.machines,
   'mail-outline': <MdMailOutline />,
   map: iconMap.map,
   menu: <MdMenu />,
+  moulds: iconMap.moulds,
   'more-vert': <MdMoreVert />,
   notifications: <MdNotifications />,
   patreon: iconMap.patreon,
   pdf: <FaFilePdf />,
   plastic: iconMap.plastic,
+  products: iconMap.products,
   profile: iconMap.profile,
   revenue: iconMap.revenue,
   slack: <FaSlack />,
   sliders: iconMap.sliders,
   star: iconMap.star,
+  'starter kits': iconMap.starterKits,
   'star-active': iconMap.starActive,
   step: iconMap.step,
   thunderbolt: iconMap.thunderbolt,
@@ -157,17 +158,20 @@ const sizeMap = {
   xl: 64,
 }
 
-const Glyph = ({ glyph }: IGlyphProps) => {
-  return glyphs[glyph] || null
+const getGlyph = (glyph: string) => {
+  return glyph in glyphs ? glyphs[glyph as keyof IGlyphs] : null
 }
 
 export const Icon = (props: Props) => {
   const { glyph, size, sx } = props
 
+  if (!getGlyph(glyph)) {
+    return null
+  }
+
   const isSizeNumeric = !isNaN(size as any)
 
   let definedSize = 16
-
   if (isSizeNumeric) {
     definedSize = size as number
   } else if (Object.keys(sizeMap).includes(size as string)) {
@@ -199,7 +203,7 @@ export const Icon = (props: Props) => {
           },
         }}
       >
-        <Glyph glyph={glyph} />
+        {getGlyph(glyph)}
       </IconContext.Provider>
     </IconWrapper>
   )

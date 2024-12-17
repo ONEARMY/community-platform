@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useSearchParams } from '@remix-run/react'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { Button, Loader, MoreContainer } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
-import DraftButton from 'src/pages/common/Drafts/DraftButton'
 import useDrafts from 'src/pages/common/Drafts/useDrafts'
-import { Box, Flex, Grid, Heading } from 'theme-ui'
+import { Flex, Grid, Heading } from 'theme-ui'
 
 import { ITEMS_PER_PAGE } from '../../constants'
 import { howtoService, HowtosSearchParams } from '../../howto.service'
@@ -98,51 +97,12 @@ export const HowtoList = observer(() => {
     howtos.length < total
 
   return (
-    <Box>
-      <Flex sx={{ paddingTop: [10, 26], paddingBottom: [10, 26] }}>
-        <Heading
-          as="h1"
-          sx={{
-            marginX: 'auto',
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: 5,
-          }}
-        >
-          {import.meta.env.VITE_HOWTOS_HEADING}
-        </Heading>
-      </Flex>
-      <Flex
-        sx={{
-          flexWrap: 'nowrap',
-          justifyContent: 'space-between',
-          flexDirection: ['column', 'column', 'row'],
-        }}
-      >
-        {!showDrafts ? <HowtoFilterHeader /> : <div></div>}
-
-        <Flex sx={{ gap: 2, justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
-          {userStore?.user && (
-            <DraftButton
-              showDrafts={showDrafts}
-              draftCount={draftCount}
-              handleShowDrafts={handleShowDrafts}
-            />
-          )}
-          <Link to={userStore!.user ? '/how-to/create' : '/sign-up'}>
-            <Box sx={{ width: '100%', display: 'block' }} mb={[3, 3, 0]}>
-              <Button
-                type="button"
-                sx={{ width: '100%' }}
-                variant="primary"
-                data-cy="create"
-              >
-                {listing.create}
-              </Button>
-            </Box>
-          </Link>
-        </Flex>
-      </Flex>
+    <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
+      <HowtoFilterHeader
+        draftCount={draftCount}
+        handleShowDrafts={handleShowDrafts}
+        showDrafts={showDrafts}
+      />
 
       <Grid
         columns={[1, 2, 2, 3]}
@@ -179,15 +139,20 @@ export const HowtoList = observer(() => {
 
       {(isFetching || isFetchingDrafts) && <Loader />}
 
-      <MoreContainer m={'0 auto'} pt={60} pb={90}>
-        <Flex sx={{ alignItems: 'center', flexDirection: 'column' }} mt={5}>
-          <Heading as="p" sx={{ textAlign: 'center' }}>
-            Inspire the {siteName} world.
-            <br />
-            Share your how-to!
+      <MoreContainer
+        sx={{
+          paddingTop: [20, 70],
+          paddingBottom: [40, 90],
+          paddingX: 80,
+          alignSelf: 'center',
+        }}
+      >
+        <Flex sx={{ alignItems: 'center', flexDirection: 'column' }}>
+          <Heading as="p" sx={{ textAlign: 'center', maxWidth: '500px' }}>
+            Inspire the {siteName} world. Share your how-to!
           </Heading>
         </Flex>
       </MoreContainer>
-    </Box>
+    </Flex>
   )
 })

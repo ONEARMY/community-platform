@@ -47,9 +47,9 @@ export const howto: IHowtoDB = {
   moderation: IModerationStatus.ACCEPTED,
   tags: {},
   category: {
-    _id: '000',
+    _id: 'categoryNtr9asrGucgt7JKdRpc',
     _created,
     _deleted: false,
-    label: 'product',
+    label: 'Moulds',
   },
 }

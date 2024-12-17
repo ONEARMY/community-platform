@@ -5,52 +5,47 @@ import { MOCK_DATA } from '../../data'
 const howtos = Object.values(MOCK_DATA.howtos)
 
 describe('[How To]', () => {
-  // const SKIP_TIMEOUT = { timeout: 300 }
-  // const totalHowTo = Object.values(MOCK_DATA.howtos).filter(
-  //   (howTo) => howTo._deleted === false,
-  // ).length
+  beforeEach(() => {
+    cy.visit('/how-to')
+  })
 
   describe('[List how-tos]', () => {
-    // const howtoSlug = 'make-glass-like-beams'
-    // const howtoUrl = `/how-to/${howtoSlug}`
-    // const coverFileRegex = /howto-beams-glass-0-3.jpg/
-    // it('[By Everyone]', () => {
-    //   cy.step('More How-tos button is hidden')
-    //   cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
-    //   cy.step('All how-tos are shown')
-    //   cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
-    //   cy.step('Select a category')
-    //   cy.get('[data-cy=category-select]')
-    //   cy.selectTag('product', '[data-cy=category-select]')
-    //   cy.get('[data-cy=card]').its('length').should('be.eq', 4)
-    //   cy.step('Type and select a category')
-    //   cy.selectTag('injection', '[data-cy=category-select]')
-    //   cy.get('[data-cy=card]').its('length').should('be.eq', 2)
-    //   cy.step('Remove all category filter')
-    //   cy.get('.data-cy__clear-indicator').click()
-    //   cy.get('.data-cy__multi-value__label').should('not.exist')
-    //   cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
-    //   cy.step('How-to cards has basic info')
-    //   cy.get(`[data-cy=card][data-cy-howto-slug=${howtoSlug}]`).within(() => {
-    //     cy.contains('Make glass-like beams').should('be.visible')
-    //     cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
-    //     cy.contains('howto_creator').should('be.visible')
-    //     cy.contains('product').should('be.visible')
-    //     cy.get('a').should('have.attr', 'href').and('eq', howtoUrl)
-    //   })
-    //   cy.step(`Open how-to details when click on a how-to ${howtoUrl}`)
-    //   cy.get(`[data-cy=card] a[href="${howtoUrl}"]:first`, SKIP_TIMEOUT).click()
-    //   cy.url().should('include', howtoUrl)
-    // })
+    it('[By Everyone]', () => {
+      cy.step('Can search for items')
+      cy.get('[data-cy=howtos-search-box]').click().type('beams')
+      cy.get('[data-cy=card]').its('length').should('be.eq', 1)
+
+      cy.step('All basic info displayed on each card')
+      const howtoSlug = 'make-glass-like-beams'
+      const howtoUrl = `/how-to/${howtoSlug}`
+      const coverFileRegex = /howto-beams-glass-0-3.jpg/
+
+      cy.get('[data-cy=card]').within(() => {
+        cy.contains('Make glass-like beams').should('be.visible')
+        cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
+        cy.get('[data-cy=Username]').contains('howto_creator')
+        cy.get('[data-cy=category]').contains('Guides')
+        cy.get('a').should('have.attr', 'href').and('eq', howtoUrl)
+      })
+
+      cy.step('Can clear search')
+      cy.get('[data-cy=close]').click()
+      cy.get('[data-cy=card]').its('length').should('be.above', 1)
+
+      cy.step('Can select a category to limit items displayed')
+      cy.get('[data-cy=category]').contains('Moulds')
+      cy.get('[data-cy=CategoryVerticalList]').within(() => {
+        cy.contains('Guides').click()
+      })
+      cy.get('[data-cy=CategoryVerticalList-Item-active]')
+      cy.get('[data-cy=category]').contains('Guides')
+      cy.get('[data-cy=category]').contains('Moulds').should('not.exist')
+    })
   })
 
   describe('[Read a How-to]', () => {
     const specificHowtoUrl = '/how-to/make-an-interlocking-brick'
     const coverFileRegex = /brick-12-1.jpg/
-
-    beforeEach(() => {
-      cy.visit('/how-to')
-    })
 
     describe('[By Everyone]', () => {
       it('[See all info]', () => {

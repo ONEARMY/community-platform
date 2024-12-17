@@ -62,7 +62,9 @@ export const glyphs: IGlyphs = {
   'arrow-full-down': iconMap.arrowFullDown,
   'arrow-full-up': iconMap.arrowFullUp,
   bazar: iconMap.bazar,
+  category: iconMap.category,
   comment: iconMap.comment,
+  construction: iconMap.construction,
   contact: iconMap.contact,
   check: <MdCheck />,
   'chevron-down': iconMap.chevronDown,
@@ -84,12 +86,16 @@ export const glyphs: IGlyphs = {
   facebook: <FaFacebookF />,
   filter: <FaFilter />,
   'flag-unknown': iconMap.flagUnknown,
+  food: iconMap.food,
+  globe: iconMap.globe,
+  'gps-location': iconMap.gpsLocation,
   guides: iconMap.guides,
   hide: iconMap.hide,
   hyperlink: iconMap.hyperlink,
   image: <MdImage />,
   impact: iconMap.impact,
   instagram: <FaInstagram />,
+  landscaping: iconMap.landscaping,
   loading: iconMap.loading,
   'location-on': <MdLocationOn />,
   lock: <MdLock />,
@@ -101,12 +107,14 @@ export const glyphs: IGlyphs = {
   moulds: iconMap.moulds,
   'more-vert': <MdMoreVert />,
   notifications: <MdNotifications />,
+  other: iconMap.other,
   patreon: iconMap.patreon,
   pdf: <FaFilePdf />,
   plastic: iconMap.plastic,
   products: iconMap.products,
   profile: iconMap.profile,
   revenue: iconMap.revenue,
+  search: iconMap.search,
   slack: <FaSlack />,
   sliders: iconMap.sliders,
   star: iconMap.star,
@@ -122,14 +130,12 @@ export const glyphs: IGlyphs = {
   show: iconMap.show,
   update: iconMap.update,
   upload: <FaCloudUploadAlt />,
+  utilities: iconMap.utilities,
   useful: iconMap.useful,
   verified: iconMap.verified,
   view: iconMap.view,
   volunteer: iconMap.volunteer,
   website: iconMap.website,
-  search: iconMap.search,
-  globe: iconMap.globe,
-  'gps-location': iconMap.gpsLocation,
 }
 
 export type Props = IProps & VerticalAlignProps & SpaceProps
@@ -158,7 +164,7 @@ const sizeMap = {
   xl: 64,
 }
 
-const getGlyph = (glyph: string) => {
+export const getGlyph = (glyph: string) => {
   return glyph in glyphs ? glyphs[glyph as keyof IGlyphs] : null
 }
 

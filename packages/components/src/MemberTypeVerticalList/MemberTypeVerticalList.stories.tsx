@@ -10,7 +10,7 @@ export default {
   component: MemberTypeVerticalList,
 } as Meta<typeof MemberTypeVerticalList>
 
-export const availableFilters: MapFilterOption[] = [
+const availableFilters: MapFilterOption[] = [
   {
     label: 'Workspace',
     _id: 'workspace',
@@ -22,6 +22,11 @@ export const availableFilters: MapFilterOption[] = [
     filterType: 'profileType',
   },
   {
+    label: 'Community Builder',
+    _id: 'community-builder',
+    filterType: 'profileType',
+  },
+  {
     label: 'Collection Point',
     _id: 'collection-point',
     filterType: 'profileType',
@@ -29,6 +34,11 @@ export const availableFilters: MapFilterOption[] = [
   {
     label: 'Want to get started',
     _id: 'member',
+    filterType: 'profileType',
+  },
+  {
+    label: 'Generic Without Icon',
+    _id: 'none',
     filterType: 'profileType',
   },
 ]

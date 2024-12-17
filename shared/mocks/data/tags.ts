@@ -80,15 +80,6 @@ export const tags = {
     image: '',
     _deleted: false,
   },
-  nSyOlKXPaBgWMsnCFPrc: {
-    _createdBy: 'tag_creator',
-    _modified: '2019-03-17T18:52:50.469Z',
-    _created: '2018-09-12T19:13:01.768Z',
-    _id: 'nSyOlKXPaBgWMsnCFPrc',
-    label: 'event_testing',
-    image: '',
-    _deleted: false,
-  },
   q1mMA0Xz3K5oix4r6grC: {
     _createdBy: 'tag_creator',
     _modified: '2017-01-19T07:07:12.730Z',

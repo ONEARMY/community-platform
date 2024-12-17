@@ -77,7 +77,7 @@ export const iconMap = {
   chevronLeft: <ImageIcon src={chevronLeftSVG} />,
   chevronRight: <ImageIcon src={chevronRightSVG} />,
   chevronUp: <ImageIcon src={chevronUpSVG} />,
-  close: <ImageIcon src={closeSVG} data-cy='close' />,
+  close: <ImageIcon src={closeSVG} data-cy="close" />,
   comment: <ImageIcon src={commentSVG} />,
   construction: <ImageIcon src={constructionSVG} />,
   contact: <ImageIcon src={contactSVG} />,

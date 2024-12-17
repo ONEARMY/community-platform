@@ -1,11 +1,12 @@
 import { useLoaderData } from '@remix-run/react'
+import { Question } from 'src/models/question.model'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { QuestionPage } from 'src/pages/Question/QuestionPage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { IUploadedFileMeta } from 'oa-shared'
+import type { DBQuestion } from 'src/models/question.model'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -38,14 +39,16 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return Response.json({ question: null }, { headers })
   }
 
-  const question = result.data as any
+  const dbQuestion = result.data as unknown as DBQuestion
 
-  if (question.id) {
+  if (dbQuestion.id) {
     client
       .from('questions')
-      .update('total_views', (question.total_views || 0) + 1)
-      .eq('id', question.id)
+      .update({ total_views: (dbQuestion.total_views || 0) + 1 })
+      .eq('id', dbQuestion.id)
   }
+
+  const question = Question.fromDB(dbQuestion)
 
   return Response.json({ question }, { headers })
 }
@@ -57,21 +60,21 @@ export function HydrateFallback() {
 }
 
 export const meta = mergeMeta<typeof loader>(({ data }) => {
-  const question = data?.question as DBQuestion
+  const question = data?.question as Question
 
   if (!question) {
     return []
   }
 
   const title = `${question.title} - Question - ${import.meta.env.VITE_SITE_NAME}`
-  const imageUrl = (question.images?.at(0) as IUploadedFileMeta)?.downloadUrl
+  const imageUrl = question.images?.at(0)?.url
 
   return generateTags(title, question.description, imageUrl)
 })
 
 export default function Index() {
   const data = useLoaderData<typeof loader>()
-  const question = data.question as DBQuestion
+  const question = data.question as Question
 
   if (!question) {
     return <NotFoundPage />

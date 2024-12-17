@@ -1,18 +1,17 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
-import { SearchField, Select } from 'oa-components'
+import { CategoryVerticalList, SearchField, Select } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import DraftButton from 'src/pages/common/Drafts/DraftButton'
 import { Button, Flex, Heading } from 'theme-ui'
 
-import { CategoriesSelectV2 } from '../../../common/Category/CategoriesSelectV2'
 import { howtoService, HowtosSearchParams } from '../../howto.service'
 import { listing } from '../../labels'
 import { HowtoSortOptions } from './HowtoSortOptions'
 
-import type { SelectValue } from '../../../common/Category/CategoriesSelectV2'
+import type { ICategory } from 'shared/lib'
 import type { HowtoSortOption } from './HowtoSortOptions'
 
 interface IProps {
@@ -23,16 +22,15 @@ interface IProps {
 
 export const HowtoFilterHeader = (props: IProps) => {
   const { draftCount, handleShowDrafts, showDrafts } = props
-  const [categories, setCategories] = useState<SelectValue[]>([])
+  const [categories, setCategories] = useState<ICategory[]>([])
   const [searchString, setSearchString] = useState<string>('')
 
   const [searchParams, setSearchParams] = useSearchParams()
   const categoryParam = searchParams.get(HowtosSearchParams.category)
-  const category = categories?.find((x) => x.value === categoryParam) ?? null
+  const category = categories?.find((cat) => cat._id === categoryParam) ?? null
   const q = searchParams.get(HowtosSearchParams.q)
   const sort = searchParams.get(HowtosSearchParams.sort) as HowtoSortOption
 
-  const _inputStyle = { width: ['100%', '100%', '230px'] }
   const headingTitle = import.meta.env.VITE_HOWTOS_HEADING
   const isUserLoggedIn = useCommonStores().stores.userStore?.user
 
@@ -45,12 +43,10 @@ export const HowtoFilterHeader = (props: IProps) => {
   useEffect(() => {
     const initCategories = async () => {
       const categories = (await howtoService.getHowtoCategories()) || []
-      setCategories(
-        categories.map((x) => ({
-          value: x._id,
-          label: x.label,
-        })),
+      const notDeletedCategories = categories.filter(
+        ({ _deleted }) => _deleted === false,
       )
+      setCategories(notDeletedCategories)
     }
 
     initCategories()
@@ -93,7 +89,14 @@ export const HowtoFilterHeader = (props: IProps) => {
 
   return (
     <>
-      <Flex sx={{ paddingTop: [10, 26], paddingBottom: [10, 26] }}>
+      <Flex
+        sx={{
+          paddingTop: [6, 12],
+          paddingBottom: [4, 8],
+          flexDirection: 'column',
+          gap: [4, 8],
+        }}
+      >
         <Heading
           as="h1"
           sx={{
@@ -105,10 +108,22 @@ export const HowtoFilterHeader = (props: IProps) => {
         >
           {headingTitle}
         </Heading>
+        <Flex sx={{ justifyContent: 'center' }}>
+          <CategoryVerticalList
+            allCategories={categories}
+            activeCategory={category}
+            setActiveCategory={(updatedCategory) =>
+              updateFilter(
+                HowtosSearchParams.category,
+                updatedCategory ? updatedCategory._id : '',
+              )
+            }
+          />
+        </Flex>
       </Flex>
+
       <Flex
         sx={{
-          flexWrap: 'nowrap',
           justifyContent: 'space-between',
           flexDirection: ['column', 'column', 'row'],
           gap: 2,
@@ -116,18 +131,7 @@ export const HowtoFilterHeader = (props: IProps) => {
       >
         {!showDrafts ? (
           <Flex sx={{ gap: 2, flexDirection: ['column', 'row', 'row'] }}>
-            <Flex sx={_inputStyle}>
-              <CategoriesSelectV2
-                value={category}
-                onChange={(updatedCategory) =>
-                  updateFilter(HowtosSearchParams.category, updatedCategory)
-                }
-                placeholder={listing.filterCategory}
-                isForm={false}
-                categories={categories}
-              />
-            </Flex>
-            <Flex sx={_inputStyle}>
+            <Flex sx={{ width: ['100%', '100%', '220px'] }}>
               <FieldContainer>
                 <Select
                   options={HowtoSortOptions.toArray(!!q)}
@@ -142,7 +146,7 @@ export const HowtoFilterHeader = (props: IProps) => {
                 />
               </FieldContainer>
             </Flex>
-            <Flex sx={_inputStyle}>
+            <Flex sx={{ width: ['100%', '100%', '270px'] }}>
               <SearchField
                 dataCy="howtos-search-box"
                 placeHolder={listing.search}
@@ -163,7 +167,7 @@ export const HowtoFilterHeader = (props: IProps) => {
           <div></div>
         )}
 
-        <Flex sx={{ gap: 2, alignContent: 'flex-end' }}>
+        <Flex sx={{ gap: 2, alignContent: 'flex-end', alignSelf: 'flex-end' }}>
           {isUserLoggedIn && (
             <DraftButton
               showDrafts={showDrafts}

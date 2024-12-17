@@ -2,7 +2,7 @@ import { Text } from 'theme-ui'
 
 import { CardButton } from '../CardButton/CardButton'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
-import { VerticalList } from '../VerticalList/VerticalList'
+import { VerticalList } from '../VerticalList/VerticalList.client'
 
 import type {
   MapFilterOption,

@@ -1,8 +1,8 @@
 import { Text } from 'theme-ui'
 
 import { CardButton } from '../CardButton/CardButton'
-import { Icon } from '../Icon/Icon'
-import { VerticalList } from '../VerticalList/VerticalList'
+import { getGlyph, Icon } from '../Icon/Icon'
+import { VerticalList } from '../VerticalList/VerticalList.client'
 
 import type { ICategory } from 'oa-shared'
 import type { availableGlyphs } from '../Icon/types'
@@ -24,12 +24,14 @@ export const CategoryVerticalList = (props: IProps) => {
     <VerticalList dataCy="CategoryVerticalList">
       {allCategories.map((category, index) => {
         const active = category._id === activeCategory?._id
+        const glyph = category.label.toLowerCase() as availableGlyphs
+        const hasGlyph = getGlyph(glyph)
 
         return (
           <CardButton
             data-cy={`CategoryVerticalList-Item${active ? '-active' : ''}`}
             data-testid="CategoryVerticalList-Item"
-            title={category._id}
+            title={category.label}
             key={index}
             onClick={() => setActiveCategory(active ? null : category)}
             extrastyles={{
@@ -55,10 +57,7 @@ export const CategoryVerticalList = (props: IProps) => {
                   }),
             }}
           >
-            <Icon
-              size={40}
-              glyph={category.label.toLowerCase() as availableGlyphs}
-            />
+            <Icon size={40} glyph={hasGlyph ? glyph : 'category'} />
             <Text variant="quiet" sx={{ fontSize: 1 }}>
               {category.label}
             </Text>

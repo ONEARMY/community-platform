@@ -12,6 +12,12 @@ describe('[Research]', () => {
 
   describe('[Read a research article]', () => {
     describe('[By Everyone]', () => {
+      it('[List View]', () => {
+        cy.step('Has expected page title')
+        cy.visit('/research')
+        cy.title().should('include', `Research`)
+      })
+
       it('[Visible to everyone]', () => {
         cy.step('Can visit research')
         cy.visit(researchArticleUrl)

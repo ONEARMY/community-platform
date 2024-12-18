@@ -11,6 +11,8 @@ describe('[How To]', () => {
 
   describe('[List how-tos]', () => {
     it('[By Everyone]', () => {
+      cy.title().should('include', `Library`)
+
       cy.step('Can search for items')
       cy.get('[data-cy=howtos-search-box]').click().type('beams')
       cy.get('[data-cy=card]').its('length').should('be.eq', 1)

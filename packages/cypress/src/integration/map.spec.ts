@@ -13,6 +13,7 @@ describe('[Map]', () => {
 
     cy.step('Shows all pins onload')
     cy.visit('/map')
+    cy.title().should('include', `Map`)
 
     cy.step('Old map pins can be clicked on')
     cy.get(`[data-cy=pin-${userId}]`).click()

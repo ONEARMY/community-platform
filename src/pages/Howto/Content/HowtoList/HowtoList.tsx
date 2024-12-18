@@ -11,7 +11,7 @@ import { ITEMS_PER_PAGE } from '../../constants'
 import { howtoService, HowtosSearchParams } from '../../howto.service'
 import { listing } from '../../labels'
 import HowToCard from './HowToCard'
-import { HowtoFilterHeader } from './HowtoFilterHeader'
+import { HowtoHeader } from './HowtoListHeader'
 
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
 import type { IHowto } from 'oa-shared'
@@ -98,7 +98,7 @@ export const HowtoList = observer(() => {
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
-      <HowtoFilterHeader
+      <HowtoHeader
         draftCount={draftCount}
         handleShowDrafts={handleShowDrafts}
         showDrafts={showDrafts}

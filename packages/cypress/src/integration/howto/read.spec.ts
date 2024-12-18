@@ -11,6 +11,7 @@ describe('[How To]', () => {
 
   describe('[List how-tos]', () => {
     it('[By Everyone]', () => {
+      cy.step('Has expected page title')
       cy.title().should('include', `Library`)
 
       cy.step('Can search for items')

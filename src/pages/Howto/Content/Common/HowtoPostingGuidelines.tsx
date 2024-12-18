@@ -12,7 +12,7 @@ export const HowtoPostingGuidelines = () => (
       </>,
       <>
         Read{' '}
-        <ExternalLink sx={{ color: 'blue' }} href="/academy/create/howto">
+        <ExternalLink sx={{ color: 'blue' }} href="/academy/create/library">
           our guidelines{' '}
           <span role="img" aria-label="nerd-face">
             🤓

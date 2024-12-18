@@ -229,7 +229,7 @@ describe('Create howto moderation emails', () => {
       )
       // Check that the email contains the correct howto guidelines link
       expect(html).toContain(
-        'https://community.preciousplastic.com/academy/create/howto',
+        'https://community.preciousplastic.com/academy/create/library',
       )
       expect(html).toContain(MOCK_HOW_TO_MODERATION_COMMENT)
       // Check that the email contains the correct PP signoff

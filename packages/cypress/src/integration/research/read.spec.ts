@@ -13,9 +13,61 @@ describe('[Research]', () => {
   describe('[Read a research article]', () => {
     describe('[By Everyone]', () => {
       it('[List View]', () => {
-        cy.step('Has expected page title')
         cy.visit('/research')
+
+        cy.step('Has expected page title')
         cy.title().should('include', `Research`)
+
+        cy.step('Can search for items')
+        cy.get('[data-cy=research-search-box]').click().type('qwerty')
+        cy.get('[data-cy=ResearchListItem]').its('length').should('be.eq', 1)
+
+        cy.step('All basic info displayed on each card')
+        const researchTitle = 'Qwerty'
+        const researchUrl = '/research/qwerty'
+        const coverImageFileName = '1426018318_414579695-17fcd6de5f7'
+
+        cy.get('[data-cy=ResearchListItem]').within(() => {
+          cy.contains(researchTitle).should('be.visible')
+          cy.get('img')
+            .should('have.attr', 'src')
+            .and('include', coverImageFileName)
+          cy.get('[data-cy=Username]').contains('event_reader')
+          cy.get('[data-cy=category]').contains('Landscaping')
+          cy.get('a').should('have.attr', 'href').and('eq', researchUrl)
+          cy.get('[data-cy=ItemResearchStatus]').contains('In progress')
+          cy.get('[data-tooltip-content="How useful is it"]')
+          cy.get('[data-tooltip-content="Total comments"]')
+          cy.get('[data-tooltip-content="Amount of updates"]')
+        })
+
+        cy.step('Can clear search')
+        cy.get('[data-cy=close]').click()
+        cy.get('[data-cy=ResearchListItem]').its('length').should('be.above', 1)
+
+        cy.step('Can select a category to limit items displayed')
+        cy.get('[data-cy=category]').contains('Food')
+        cy.get('[data-cy=CategoryVerticalList]').within(() => {
+          cy.contains('Landscaping').click()
+        })
+        cy.get('[data-cy=CategoryVerticalList-Item-active]')
+        cy.get('[data-cy=category]').contains('Landscaping')
+        cy.get('[data-cy=category]').contains('Food').should('not.exist')
+
+        cy.step('Can remove the category filter by selecting it again')
+        cy.get('[data-cy=CategoryVerticalList]').within(() => {
+          cy.contains('Landscaping').click()
+        })
+        cy.get('[data-cy=category]').contains('Food')
+
+        cy.step('Can filter by research status')
+        cy.get('[data-cy=ItemResearchStatus]').contains('In progress')
+        cy.contains('Filter by status').click({ force: true })
+        cy.contains('Completed').click({ force: true })
+        cy.get('[data-cy=ItemResearchStatus]').contains('Completed')
+        cy.get('[data-cy=ItemResearchStatus]')
+          .contains('In progress')
+          .should('not.exist')
       })
 
       it('[Visible to everyone]', () => {

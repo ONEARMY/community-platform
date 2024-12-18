@@ -20,10 +20,10 @@ export const research = {
       _modified: '2012-10-27T01:47:57.948Z',
       _created: '2012-08-02T07:27:04.609Z',
       _id: 'ehdI345E36hWyk3Ockr',
-      label: 'Best',
+      label: 'Landscaping',
       _deleted: false,
     },
-    title: 'qwerty',
+    title: 'Qwerty',
     updates: [
       {
         _created: '2022-03-27T22:10:11.271Z',

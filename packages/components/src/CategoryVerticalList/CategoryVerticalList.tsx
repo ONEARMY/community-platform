@@ -16,13 +16,17 @@ export interface IProps {
 export const CategoryVerticalList = (props: IProps) => {
   const { activeCategory, allCategories, setActiveCategory } = props
 
-  if (!allCategories || !allCategories.length || allCategories.length < 2) {
+  if (!allCategories || !allCategories.length || allCategories.length < 3) {
     return null
   }
 
+  const orderedCategories = allCategories.toSorted((a, b) =>
+    a._created > b._created ? 1 : -1,
+  )
+
   return (
     <VerticalList dataCy="CategoryVerticalList">
-      {allCategories.map((category, index) => {
+      {orderedCategories.map((category, index) => {
         const active = category._id === activeCategory?._id
         const glyph = category.label.toLowerCase() as availableGlyphs
         const hasGlyph = getGlyph(glyph)

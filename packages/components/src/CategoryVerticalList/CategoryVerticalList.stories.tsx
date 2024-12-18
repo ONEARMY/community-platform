@@ -12,14 +12,14 @@ export default {
 
 const allCategoriesForPreciousPlastic = [
   {
-    _created: '2022-12-03T18:03:51.313Z',
+    _created: '2024-12-03T18:03:51.313Z',
     _deleted: false,
     _id: '78XHeJmfQISA7tfBnDs1',
     _modified: '2022-12-03T18:03:51.313Z',
     label: 'Guides',
   },
   {
-    _created: '2022-12-03T18:03:51.313Z',
+    _created: '2022-12-01T18:03:51.313Z',
     _deleted: false,
     _id: '78XHeJmfQISA7tfBnDsL',
     _modified: '2022-12-03T18:03:51.313Z',
@@ -121,6 +121,13 @@ export const WhenGlyphNotPresent: StoryFn<typeof CategoryVerticalList> = () => {
       _modified: '2022-12-03T18:03:51.313Z',
       label: 'No Glphy B',
     },
+    {
+      _created: '2022-12-03T18:03:51.313Z',
+      _deleted: false,
+      _id: '36dgbhs',
+      _modified: '2022-12-03T18:03:51.313Z',
+      label: 'No Glphy C',
+    },
   ]
 
   return (
@@ -137,11 +144,16 @@ export const WhenGlyphNotPresent: StoryFn<typeof CategoryVerticalList> = () => {
 export const OnlyOne: StoryFn<typeof CategoryVerticalList> = () => {
   const [activeCategory, setActiveCategory] = useState<ICategory | null>(null)
 
+  const twoCategories = [
+    allCategoriesForPreciousPlastic[0],
+    allCategoriesForPreciousPlastic[1],
+  ]
+
   return (
     <div style={{ maxWidth: '500px' }}>
       <CategoryVerticalList
         activeCategory={activeCategory}
-        allCategories={[allCategoriesForPreciousPlastic[0]]}
+        allCategories={twoCategories}
         setActiveCategory={setActiveCategory}
       />
       (Shouldn't see anything, only renders for two or more)

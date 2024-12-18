@@ -26,7 +26,18 @@ describe('CategoryVerticalList', () => {
   it('renders each member type given', async () => {
     const { findAllByTestId } = render(<Basic {...(Basic.args as IProps)} />)
 
-    expect(await findAllByTestId('CategoryVerticalList-Item')).toHaveLength(10)
+    const allItems = await findAllByTestId('CategoryVerticalList-Item')
+
+    expect(allItems).toHaveLength(10)
+  })
+
+  it('orders by _created with oldest first', async () => {
+    const { findAllByTestId } = render(<Basic {...(Basic.args as IProps)} />)
+
+    const allItems = await findAllByTestId('CategoryVerticalList-Item')
+
+    expect(allItems[0].title).toEqual('Machines')
+    expect(allItems[9].title).toEqual('Guides')
   })
 
   it('renders default category glyph when specific glyph is missing', async () => {
@@ -34,10 +45,12 @@ describe('CategoryVerticalList', () => {
       <WhenGlyphNotPresent {...(WhenGlyphNotPresent.args as IProps)} />,
     )
 
-    expect(await findAllByTestId('category-icon')).toHaveLength(2)
+    const allItems = await findAllByTestId('category-icon')
+
+    expect(allItems).toHaveLength(3)
   })
 
-  it("doesn't render items when only one exists", () => {
+  it("doesn't render items when less than three at present", () => {
     const { getByTestId } = render(<OnlyOne {...(OnlyOne.args as IProps)} />)
     expect(() => getByTestId('MemberTypeVerticalList-Item')).toThrow()
   })

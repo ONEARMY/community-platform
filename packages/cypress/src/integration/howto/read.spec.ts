@@ -17,7 +17,7 @@ describe('[How To]', () => {
 
       cy.step('All basic info displayed on each card')
       const howtoSlug = 'make-glass-like-beams'
-      const howtoUrl = `/how-to/${howtoSlug}`
+      const howtoUrl = `/library/${howtoSlug}`
       const coverFileRegex = /howto-beams-glass-0-3.jpg/
 
       cy.get('[data-cy=card]').within(() => {

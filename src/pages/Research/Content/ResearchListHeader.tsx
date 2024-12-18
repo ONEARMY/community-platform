@@ -1,19 +1,30 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useSearchParams } from '@remix-run/react'
+import { Link, useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
-import { SearchField, Select } from 'oa-components'
+import { CategoryVerticalList, SearchField, Select } from 'oa-components'
 import { ResearchStatus } from 'oa-shared'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { Flex } from 'theme-ui'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { isPreciousPlastic } from 'src/config/config'
+import DraftButton from 'src/pages/common/Drafts/DraftButton'
+import { ListHeader } from 'src/pages/common/Layout/ListHeader'
+import { Button, Flex } from 'theme-ui'
 
-import { CategoriesSelectV2 } from '../../common/Category/CategoriesSelectV2'
+import { RESEARCH_EDITOR_ROLES } from '../constants'
 import { listing } from '../labels'
 import { researchService } from '../research.service'
 import { ResearchSortOptions } from '../ResearchSortOptions'
 import { ResearchSearchParams } from './ResearchSearchParams'
 
-import type { SelectValue } from '../../common/Category/CategoriesSelectV2'
+import type { ICategory } from 'oa-shared'
 import type { ResearchSortOption } from '../ResearchSortOptions'
+
+interface IProps {
+  draftCount: number
+  handleShowDrafts: () => void
+  showDrafts: boolean
+}
 
 const researchStatusOptions = [
   { label: 'All', value: '' },
@@ -23,33 +34,29 @@ const researchStatusOptions = [
   })),
 ]
 
-export const ResearchFilterHeader = () => {
-  const [categories, setCategories] = useState<SelectValue[]>([])
+export const ResearchFilterHeader = (props: IProps) => {
+  const { draftCount, handleShowDrafts, showDrafts } = props
+
+  const [categories, setCategories] = useState<ICategory[]>([])
   const [searchString, setSearchString] = useState<string>('')
 
   const [searchParams, setSearchParams] = useSearchParams()
   const categoryParam = searchParams.get(ResearchSearchParams.category)
-  const category = categories?.find((x) => x.value === categoryParam) ?? null
+  const category = categories?.find((x) => x._id === categoryParam) ?? null
   const q = searchParams.get(ResearchSearchParams.q)
   const sort = searchParams.get(ResearchSearchParams.sort) as ResearchSortOption
   const status =
     (searchParams.get(ResearchSearchParams.status) as ResearchStatus) || ''
 
-  // TODO: create a library component for this
-  const _inputStyle = {
-    width: ['100%', '100%', '230px'],
-    mr: [0, 0, 2],
-    mb: [3, 3, 0],
-  }
+  const isUserLoggedIn = useCommonStores().stores.userStore?.user
 
   useEffect(() => {
     const initCategories = async () => {
       const categories = (await researchService.getResearchCategories()) || []
-      setCategories(
-        categories.map((x) => {
-          return { value: x._id, label: x.label }
-        }),
+      const notDeletedCategories = categories.filter(
+        ({ _deleted }) => _deleted === false,
       )
+      setCategories(notDeletedCategories)
     }
 
     initCategories()
@@ -71,7 +78,7 @@ export const ResearchFilterHeader = () => {
   const onSearchInputChange = useCallback(
     debounce((value: string) => {
       searchValue(value)
-    }, 1000),
+    }, 500),
     [searchParams],
   )
 
@@ -90,29 +97,62 @@ export const ResearchFilterHeader = () => {
     setSearchParams(params)
   }
 
-  return (
+  const actionComponents = (
+    <>
+      {isPreciousPlastic() ? (
+        <>
+          {isUserLoggedIn && (
+            <DraftButton
+              showDrafts={showDrafts}
+              draftCount={draftCount}
+              handleShowDrafts={handleShowDrafts}
+            />
+          )}
+          <Link to={isUserLoggedIn ? '/research/create' : '/sign-up'}>
+            <Button type="button" variant="primary" data-cy="create">
+              {listing.create}
+            </Button>
+          </Link>
+        </>
+      ) : (
+        <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
+          <DraftButton
+            showDrafts={showDrafts}
+            draftCount={draftCount}
+            handleShowDrafts={handleShowDrafts}
+          />
+          <Link to="/research/create">
+            <Button type="button" variant="primary" data-cy="create">
+              {listing.create}
+            </Button>
+          </Link>
+        </AuthWrapper>
+      )}
+    </>
+  )
+
+  const categoryComponent = (
+    <CategoryVerticalList
+      allCategories={categories}
+      activeCategory={category}
+      setActiveCategory={(updatedCategory) =>
+        updateFilter(
+          ResearchSearchParams.category,
+          updatedCategory ? updatedCategory._id : '',
+        )
+      }
+    />
+  )
+
+  const filteringComponents = (
     <Flex
       sx={{
-        flexWrap: 'nowrap',
-        justifyContent: 'space-between',
+        gap: 2,
         flexDirection: ['column', 'column', 'row'],
-        mb: 3,
+        flexWrap: 'wrap',
       }}
     >
-      {/* Categories */}
-      <Flex sx={_inputStyle}>
-        <CategoriesSelectV2
-          value={category}
-          onChange={(updatedCategory) =>
-            updateFilter(ResearchSearchParams.category, updatedCategory)
-          }
-          placeholder={listing.filterCategory}
-          isForm={false}
-          categories={categories}
-        />
-      </Flex>
-      {/* Sort */}
-      <Flex sx={_inputStyle}>
+      <Flex sx={{ width: ['100%', '100%', '220px'] }}>
         <FieldContainer>
           <Select
             options={ResearchSortOptions.toArray(!!q)}
@@ -124,8 +164,8 @@ export const ResearchFilterHeader = () => {
           />
         </FieldContainer>
       </Flex>
-      {/* Status filter */}
-      <Flex sx={_inputStyle}>
+
+      <Flex sx={{ width: ['100%', '100%', '220px'] }}>
         <FieldContainer>
           <Select
             options={researchStatusOptions}
@@ -137,8 +177,8 @@ export const ResearchFilterHeader = () => {
           />
         </FieldContainer>
       </Flex>
-      {/* Text search */}
-      <Flex sx={_inputStyle}>
+
+      <Flex sx={{ width: ['100%', '100%', '270px'] }}>
         <SearchField
           dataCy="research-search-box"
           placeHolder={listing.search}
@@ -155,5 +195,15 @@ export const ResearchFilterHeader = () => {
         />
       </Flex>
     </Flex>
+  )
+
+  return (
+    <ListHeader
+      actionComponents={actionComponents}
+      showDrafts={showDrafts}
+      headingTitle={listing.heading}
+      categoryComponent={categoryComponent}
+      filteringComponents={filteringComponents}
+    />
   )
 }

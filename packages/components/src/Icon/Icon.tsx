@@ -95,7 +95,7 @@ export const glyphs: IGlyphs = {
   image: <MdImage />,
   impact: iconMap.impact,
   instagram: <FaInstagram />,
-  landscaping: iconMap.landscaping,
+  landscape: iconMap.landscape,
   loading: iconMap.loading,
   'location-on': <MdLocationOn />,
   lock: <MdLock />,

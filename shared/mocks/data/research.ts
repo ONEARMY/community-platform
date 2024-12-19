@@ -20,7 +20,7 @@ export const research = {
       _modified: '2012-10-27T01:47:57.948Z',
       _created: '2012-08-02T07:27:04.609Z',
       _id: 'ehdI345E36hWyk3Ockr',
-      label: 'Landscaping',
+      label: 'Landscape',
       _deleted: false,
     },
     title: 'Qwerty',

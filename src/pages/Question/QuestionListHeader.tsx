@@ -1,45 +1,39 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useSearchParams } from '@remix-run/react'
+import { Link, useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
-import { SearchField, Select } from 'oa-components'
+import { CategoryVerticalList, SearchField, Select } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import {
   QuestionSearchParams,
   questionService,
 } from 'src/pages/Question/question.service'
-import { Flex } from 'theme-ui'
+import { Button, Flex } from 'theme-ui'
 
-import { CategoriesSelectV2 } from '../common/Category/CategoriesSelectV2'
-import { listing } from './labels'
+import { ListHeader } from '../common/Layout/ListHeader'
+import { headings, listing } from './labels'
 import { QuestionSortOptions } from './QuestionSortOptions'
 
-import type { SelectValue } from '../common/Category/CategoriesSelectV2'
+import type { ICategory } from 'shared/lib'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
-export const QuestionFilterHeader = () => {
-  const [categories, setCategories] = useState<SelectValue[]>([])
+export const QuestionListHeader = () => {
+  const [categories, setCategories] = useState<ICategory[]>([])
   const [searchString, setSearchString] = useState<string>('')
 
   const [searchParams, setSearchParams] = useSearchParams()
   const categoryParam = searchParams.get(QuestionSearchParams.category)
-  const category = categories?.find((x) => x.value === categoryParam) ?? null
+  const category = categories?.find((x) => x._id === categoryParam) ?? null
   const q = searchParams.get(QuestionSearchParams.q)
   const sort = searchParams.get(QuestionSearchParams.sort) as QuestionSortOption
-
-  const _inputStyle = {
-    width: ['100%', '100%', '230px'],
-    mr: [0, 0, 2],
-    mb: [3, 3, 0],
-  }
 
   useEffect(() => {
     const initCategories = async () => {
       const categories = (await questionService.getQuestionCategories()) || []
-      setCategories(
-        categories.map((x) => {
-          return { value: x._id, label: x.label }
-        }),
+      const notDeletedCategories = categories.filter(
+        ({ _deleted }) => _deleted === false,
       )
+      setCategories(notDeletedCategories)
     }
 
     initCategories()
@@ -84,27 +78,40 @@ export const QuestionFilterHeader = () => {
     setSearchParams(params)
   }
 
-  return (
+  const { userStore } = useCommonStores().stores
+
+  const actionComponents = (
+    <Flex>
+      <Link to={userStore.user ? '/questions/create' : '/sign-up'}>
+        <Button type="button" data-cy="create" variant="primary">
+          {listing.create}
+        </Button>
+      </Link>
+    </Flex>
+  )
+
+  const categoryComponent = (
+    <CategoryVerticalList
+      allCategories={categories}
+      activeCategory={category}
+      setActiveCategory={(updatedCategory) =>
+        updateFilter(
+          QuestionSearchParams.category,
+          updatedCategory ? updatedCategory._id : '',
+        )
+      }
+    />
+  )
+
+  const filteringComponents = (
     <Flex
       sx={{
-        flexWrap: 'nowrap',
-        justifyContent: 'space-between',
+        gap: 2,
         flexDirection: ['column', 'column', 'row'],
-        mb: 3,
+        flexWrap: 'wrap',
       }}
     >
-      <Flex sx={_inputStyle}>
-        <CategoriesSelectV2
-          value={category}
-          onChange={(updatedCategory) =>
-            updateFilter(QuestionSearchParams.category, updatedCategory)
-          }
-          placeholder={listing.filterCategory}
-          isForm={false}
-          categories={categories}
-        />
-      </Flex>
-      <Flex sx={_inputStyle}>
+      <Flex sx={{ width: ['100%', '100%', '230px'] }}>
         <FieldContainer>
           <Select
             options={QuestionSortOptions.toArray(!!q)}
@@ -116,7 +123,7 @@ export const QuestionFilterHeader = () => {
           />
         </FieldContainer>
       </Flex>
-      <Flex sx={_inputStyle}>
+      <Flex sx={{ width: ['100%', '100%', '300px'] }}>
         <SearchField
           dataCy="questions-search-box"
           placeHolder={listing.search}
@@ -133,5 +140,15 @@ export const QuestionFilterHeader = () => {
         />
       </Flex>
     </Flex>
+  )
+
+  return (
+    <ListHeader
+      actionComponents={actionComponents}
+      showDrafts={false}
+      headingTitle={headings.list}
+      categoryComponent={categoryComponent}
+      filteringComponents={filteringComponents}
+    />
   )
 }

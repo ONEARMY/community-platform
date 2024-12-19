@@ -30,25 +30,25 @@ export const MemberTypeVerticalList = (props: IProps) => {
   return (
     <VerticalList dataCy="MemberTypeVerticalList">
       {items.map((item, index) => {
-        const active = activeFilters.find(
+        const isSelected = !!activeFilters.find(
           (filter) => item.label === filter.label,
         )
         return (
           <CardButton
-            data-cy={`MemberTypeVerticalList-Item${active ? '-active' : ''}`}
+            data-cy={`MemberTypeVerticalList-Item${isSelected ? '-active' : ''}`}
             data-testid="MemberTypeVerticalList-Item"
             title={item._id}
             key={index}
             onClick={() => onFilterChange(item)}
             extrastyles={{
               background: 'none',
-              textAlign: 'center',
-              width: '130px',
+              flexDirection: 'column',
               minWidth: '130px',
               marginX: 1,
-              height: '75px',
-              flexDirection: 'column',
-              ...(active
+              paddingY: 2,
+              textAlign: 'center',
+              width: '130px',
+              ...(isSelected
                 ? {
                     borderColor: 'green',
                     ':hover': { borderColor: 'green' },
@@ -58,9 +58,9 @@ export const MemberTypeVerticalList = (props: IProps) => {
                     ':hover': { borderColor: 'background' },
                   }),
             }}
+            isSelected={isSelected}
           >
             <MemberBadge size={40} profileType={item._id as ProfileTypeName} />
-            <br />
             <Text variant="quiet" sx={{ fontSize: 1 }}>
               {item.label}
             </Text>

@@ -7,6 +7,8 @@ import { Icon } from '../Icon/Icon'
 import type { publicApiType } from 'react-horizontal-scrolling-menu'
 import type { availableGlyphs } from '../Icon/types'
 
+import './styles.css'
+
 interface IProps {
   disabled: boolean
   glyph: availableGlyphs
@@ -14,16 +16,19 @@ interface IProps {
 }
 
 const Arrow = ({ disabled, glyph, onClick }: IProps) => {
+  const start = glyph === 'chevron-right' ? 0 : 1
+  const end = glyph === 'chevron-right' ? 1 : 0
+  const background = `linear-gradient(to right, rgba(255, 255, 255, ${start}) 0%, rgba(255, 255, 255, ${end}) 100%)`
+
   return (
     <Flex
       sx={{
         width: '35px',
         overflow: 'hidden',
         alignItems: 'center',
-        position: 'relative',
         borderRadius: 2,
-        ':hover': !disabled ? { backgroundColor: 'lightGrey' } : {},
-        ':active': !disabled ? { backgroundColor: 'softgrey' } : {},
+        ':hover': !disabled ? { background } : {},
+        ':active': !disabled ? { backgroundColor: 'white' } : {},
       }}
     >
       {disabled ? null : (

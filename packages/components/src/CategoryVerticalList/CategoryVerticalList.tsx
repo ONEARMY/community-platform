@@ -27,30 +27,28 @@ export const CategoryVerticalList = (props: IProps) => {
   return (
     <VerticalList dataCy="CategoryVerticalList">
       {orderedCategories.map((category, index) => {
-        const active = category._id === activeCategory?._id
+        const isSelected = category._id === activeCategory?._id
         const glyph = category.label.toLowerCase() as availableGlyphs
         const hasGlyph = getGlyph(glyph)
 
         return (
           <CardButton
-            data-cy={`CategoryVerticalList-Item${active ? '-active' : ''}`}
+            data-cy={`CategoryVerticalList-Item${isSelected ? '-active' : ''}`}
             data-testid="CategoryVerticalList-Item"
             title={category.label}
             key={index}
-            onClick={() => setActiveCategory(active ? null : category)}
+            onClick={() => setActiveCategory(isSelected ? null : category)}
             extrastyles={{
               alignItems: 'center',
               background: 'none',
-              display: 'flex',
               flexDirection: 'column',
-              gap: 2,
               justifyContent: 'center',
               minWidth: '130px',
               marginX: 1,
-              padding: 1,
+              paddingY: 2,
               textAlign: 'center',
               width: '130px',
-              ...(active
+              ...(isSelected
                 ? {
                     borderColor: 'green',
                     ':hover': { borderColor: 'green' },
@@ -60,6 +58,7 @@ export const CategoryVerticalList = (props: IProps) => {
                     ':hover': { borderColor: 'background' },
                   }),
             }}
+            isSelected={isSelected}
           >
             <Icon size={40} glyph={hasGlyph ? glyph : 'category'} />
             <Text variant="quiet" sx={{ fontSize: 1 }}>

@@ -2,7 +2,11 @@ import Highlighter from 'react-highlight-words'
 import { Text } from 'theme-ui'
 
 const HighLighted = ({ children }: { children: string }) => {
-  return <Text sx={{ background: 'accent.hover' }}>{children}</Text>
+  return (
+    <Text data-cy="HightedText" sx={{ background: 'accent.hover' }}>
+      {children}
+    </Text>
+  )
 }
 
 export interface IProps {

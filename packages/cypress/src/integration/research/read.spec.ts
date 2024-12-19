@@ -33,7 +33,7 @@ describe('[Research]', () => {
             .should('have.attr', 'src')
             .and('include', coverImageFileName)
           cy.get('[data-cy=Username]').contains('event_reader')
-          cy.get('[data-cy=category]').contains('Landscaping')
+          cy.get('[data-cy=category]').contains('Landscape')
           cy.get('a').should('have.attr', 'href').and('eq', researchUrl)
           cy.get('[data-cy=ItemResearchStatus]').contains('In progress')
           cy.get('[data-tooltip-content="How useful is it"]')
@@ -48,15 +48,15 @@ describe('[Research]', () => {
         cy.step('Can select a category to limit items displayed')
         cy.get('[data-cy=category]').contains('Food')
         cy.get('[data-cy=CategoryVerticalList]').within(() => {
-          cy.contains('Landscaping').click()
+          cy.contains('Landscape').click()
         })
         cy.get('[data-cy=CategoryVerticalList-Item-active]')
-        cy.get('[data-cy=category]').contains('Landscaping')
+        cy.get('[data-cy=category]').contains('Landscape')
         cy.get('[data-cy=category]').contains('Food').should('not.exist')
 
         cy.step('Can remove the category filter by selecting it again')
         cy.get('[data-cy=CategoryVerticalList]').within(() => {
-          cy.contains('Landscaping').click()
+          cy.contains('Landscape').click()
         })
         cy.get('[data-cy=category]').contains('Food')
 

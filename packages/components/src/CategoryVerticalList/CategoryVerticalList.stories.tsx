@@ -68,7 +68,7 @@ const allCategoriesForProjectKamp = [
     _deleted: false,
     _id: '45378bdfg',
     _modified: '2022-12-03T18:03:51.313Z',
-    label: 'Landscaping',
+    label: 'Landscape',
   },
   {
     _created: '2022-12-03T18:03:51.313Z',

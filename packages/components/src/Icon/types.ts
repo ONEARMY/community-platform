@@ -40,7 +40,7 @@ export type availableGlyphs =
   | 'image'
   | 'impact'
   | 'instagram'
-  | 'landscaping'
+  | 'landscape'
   | 'loading'
   | 'location-on'
   | 'lock'

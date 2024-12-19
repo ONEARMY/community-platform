@@ -17,7 +17,7 @@ export const PinProfile = (props: IProps) => {
   const { item, onClose } = props
   const { creator } = item
 
-  const isMember = creator?.profileType === 'member'
+  const isWorkspace = creator?.profileType && creator?.profileType !== 'member'
 
   return (
     <CardButton sx={{ '&:hover': 'none' }} data-cy="PinProfile">
@@ -34,11 +34,12 @@ export const PinProfile = (props: IProps) => {
       <Box sx={{ width: '100%', height: '100%', zIndex: 2 }}>
         <CardProfile item={item} isLink />
 
-        {!isMember && creator?.isContactableByPublic !== false && (
+        {isWorkspace && creator?.isContactableByPublic !== false && (
           <Flex sx={{ justifyContent: 'flex-end' }}>
             <InternalLink
-              to={`/u/${creator?._id}`}
+              to={`/u/${creator?._id}#contact`}
               data-cy="PinProfileMessageLink"
+              target="_blank"
             >
               <Button icon="contact" sx={{ margin: 1 }} small>
                 Send Message

@@ -1,60 +1,68 @@
+import { useEffect, useState } from 'react'
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import { Flex, Text } from 'theme-ui'
 
+import { Button } from '../Button/Button'
 import { CardListItem } from '../CardListItem/CardListItem'
 import { Icon } from '../Icon/Icon'
-import { Loader } from '../Loader/Loader'
 
 import type { IMapPin } from 'oa-shared'
 
 export interface IProps {
   columnsCountBreakPoints?: { [key: number]: number }
-  filteredList: IMapPin[] | null
   list: IMapPin[]
-  onBlur: () => void
   onPinClick: (arg: IMapPin) => void
   selectedPin: IMapPin | undefined
   viewport: string
 }
 
+const DEFAULT_BREAKPOINTS = { 600: 1, 1100: 2, 1600: 3 }
 export const EMPTY_LIST = 'Oh nos! Nothing to show!'
+const ITEMS_PER_RENDER = 20
 
 export const CardList = (props: IProps) => {
-  const {
-    columnsCountBreakPoints,
-    filteredList,
-    list,
-    onBlur,
-    onPinClick,
-    selectedPin,
-    viewport,
-  } = props
+  const [renderCount, setRenderCount] = useState<number>(ITEMS_PER_RENDER)
+  const [displayItems, setDisplayItems] = useState<JSX.Element[]>([])
+  const { list, onPinClick, selectedPin, viewport } = props
 
-  const listToShow = filteredList === null ? list : filteredList
-  const displayItems = listToShow
-    .sort(
-      (a, b) =>
-        Date.parse(b.creator?._lastActive || '0') -
-        Date.parse(a.creator?._lastActive || '0'),
-    )
-    .map((item) => {
-      const isSelectedPin = item._id === selectedPin?._id
-      return (
-        <CardListItem
-          item={item}
-          key={item._id}
-          isSelectedPin={isSelectedPin}
-          onPinClick={isSelectedPin ? onBlur : onPinClick}
-          viewport={viewport}
-        />
+  useEffect(() => {
+    setRenderCount(ITEMS_PER_RENDER)
+  }, [list])
+
+  useEffect(() => {
+    const toRender = list
+      .sort(
+        (a, b) =>
+          Date.parse(b.creator?._lastActive || '0') -
+          Date.parse(a.creator?._lastActive || '0'),
       )
-    })
+      .slice(0, renderCount)
+      .map((item) => {
+        const isSelectedPin = item._id === selectedPin?._id
 
-  const isListEmpty = displayItems.length === 0
-  const hasListLoaded = list
-  const results = `${displayItems.length} result${
-    displayItems.length == 1 ? '' : 's'
-  } in view`
+        return (
+          <CardListItem
+            item={item}
+            key={item._id}
+            isSelectedPin={isSelectedPin}
+            onPinClick={onPinClick}
+            viewport={viewport}
+          />
+        )
+      })
+
+    setDisplayItems(toRender)
+  }, [renderCount, list])
+
+  const addRenderItems = () =>
+    setRenderCount((count) => count + ITEMS_PER_RENDER)
+
+  const hasMore = !(displayItems.length === list.length)
+
+  const isListEmpty = list.length === 0
+  const results = `${list.length} result${list.length == 1 ? '' : 's'} in view`
+  const columnsCountBreakPoints =
+    props.columnsCountBreakPoints || DEFAULT_BREAKPOINTS
 
   return (
     <Flex
@@ -65,34 +73,30 @@ export const CardList = (props: IProps) => {
         padding: 2,
       }}
     >
-      {!hasListLoaded && <Loader />}
-      {hasListLoaded && (
+      <Flex
+        sx={{
+          justifyContent: 'space-between',
+          paddingX: 2,
+          paddingTop: 2,
+          fontSize: 2,
+        }}
+      >
+        <Text data-cy="list-results">{results}</Text>
+        <Flex sx={{ alignItems: 'center', gap: 1 }}>
+          <Text> Most recently active</Text>
+          <Icon glyph="arrow-full-down" />
+        </Flex>
+      </Flex>
+      {isListEmpty && EMPTY_LIST}
+      {!isListEmpty && (
         <>
-          <Flex
-            sx={{
-              justifyContent: 'space-between',
-              paddingX: 2,
-              paddingTop: 2,
-              fontSize: 2,
-            }}
-          >
-            <Text data-cy="list-results">{results}</Text>
-            <Flex sx={{ alignItems: 'center', gap: 1 }}>
-              <Text> Most recently active</Text>
-              <Icon glyph="arrow-full-down" />
+          <ResponsiveMasonry columnsCountBreakPoints={columnsCountBreakPoints}>
+            <Masonry>{displayItems}</Masonry>
+          </ResponsiveMasonry>
+          {hasMore && (
+            <Flex sx={{ justifyContent: 'center' }}>
+              <Button onClick={addRenderItems}>Show more </Button>
             </Flex>
-          </Flex>
-          {isListEmpty && EMPTY_LIST}
-          {!isListEmpty && (
-            <ResponsiveMasonry
-              columnsCountBreakPoints={
-                columnsCountBreakPoints
-                  ? columnsCountBreakPoints
-                  : { 600: 1, 1100: 2, 1600: 3 }
-              }
-            >
-              <Masonry>{displayItems}</Masonry>
-            </ResponsiveMasonry>
           )}
         </>
       )}

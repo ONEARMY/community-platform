@@ -1,5 +1,6 @@
 import { Avatar, Box, Flex } from 'theme-ui'
 
+import defaultProfileImage from '../../assets/images/default_member.svg'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
 import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList'
 import { Username } from '../Username/Username'
@@ -24,29 +25,26 @@ export const CardDetailsMemberProfile = ({ creator, isLink }: IProps) => {
         alignContent: 'stretch',
       }}
     >
-      {userImage && (
-        <Box sx={{ aspectRatio: 1, width: '60px', height: '60px' }}>
-          <Flex
-            sx={{
-              alignContent: 'flex-start',
-              justifyContent: 'flex-end',
-              flexWrap: 'wrap',
-            }}
-          >
-            <Avatar
-              src={userImage}
-              sx={{ width: '60px', height: '60px', objectFit: 'cover' }}
-              loading="lazy"
-            />
-            <MemberBadge
-              profileType={profileType}
-              size={22}
-              sx={{ transform: 'translateY(-22px)' }}
-            />
-          </Flex>
-        </Box>
-      )}
-      {!userImage && <MemberBadge profileType={profileType} size={50} />}
+      <Box sx={{ aspectRatio: 1, width: '60px', height: '60px' }}>
+        <Flex
+          sx={{
+            alignContent: 'flex-start',
+            justifyContent: 'flex-end',
+            flexWrap: 'wrap',
+          }}
+        >
+          <Avatar
+            src={userImage || defaultProfileImage}
+            sx={{ width: '60px', height: '60px', objectFit: 'cover' }}
+            loading="lazy"
+          />
+          <MemberBadge
+            profileType={profileType}
+            size={22}
+            sx={{ transform: 'translateY(-22px)' }}
+          />
+        </Flex>
+      </Box>
 
       <Flex sx={{ flexDirection: 'column', gap: 1, flex: 1 }}>
         <Username

@@ -3,16 +3,10 @@ import { IModerationStatus, ProfileTypeList } from 'oa-shared'
 import { logger } from 'src/logger'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 import { getValidTags } from 'src/utils/getValidTags'
-import {
-  hasAdminRights,
-  isAllowedToPin,
-  needsModeration,
-} from 'src/utils/helpers'
+import { hasAdminRights, needsModeration } from 'src/utils/helpers'
 
 import { ModuleStore } from '../common/module.store'
 import { getUserAvatar } from '../User/user.store'
-import { filterMapPinsByType } from './filter'
-import { MAP_GROUPINGS } from './maps.groupings'
 
 import type {
   IMapGrouping,
@@ -22,12 +16,9 @@ import type {
   IUploadedFileMeta,
   IUser,
   IUserDB,
-  ProfileTypeName,
 } from 'oa-shared'
 import type { IDBEndpoint } from 'src/models/dbEndpoints'
 import type { IRootStore } from '../RootStore'
-
-type IFilterToRemove = ProfileTypeName | undefined
 
 const COLLECTION_NAME: IDBEndpoint = 'mappins'
 export class MapsStore extends ModuleStore {
@@ -44,17 +35,10 @@ export class MapsStore extends ModuleStore {
       mapPins: observable,
       filteredPins: observable,
       processDBMapPins: action,
-      retrieveMapPins: action,
-      retrievePinFilters: action,
-      setActivePinFilters: action,
-      setActivePin: action,
     })
   }
 
-  public processDBMapPins(
-    pins: IMapPin[],
-    filterToRemove: IFilterToRemove = undefined,
-  ) {
+  public processDBMapPins(pins: IMapPin[]) {
     if (pins.length === 0) {
       this.mapPins = []
       return
@@ -83,68 +67,6 @@ export class MapsStore extends ModuleStore {
         return { ...p, verified: this.aggregationsStore.isVerified(p._id) }
       })
     this.mapPins = pins
-
-    const filters = this.activePinFilters
-      .filter(({ type }) => type !== filterToRemove)
-      .map(({ subType, type }) => (subType ? subType : type))
-    this.setActivePinFilters(filters)
-  }
-
-  public async retrieveMapPins(filterToRemove: IFilterToRemove = undefined) {
-    // TODO: make the function accept a bounding box to reduce load from DB
-
-    if (this.mapPins?.length > 0) {
-      // we already fetched pins
-      return
-    }
-
-    // TODO: the client-side filtering done at `processDBMapPins` should be here
-    this.db.collection<IMapPin>(COLLECTION_NAME).syncLocally(
-      (update) => {
-        this.processDBMapPins(update, filterToRemove)
-      },
-      { keepAlive: false },
-    )
-  }
-
-  public async retrievePinFilters() {
-    // TODO: get from database
-    this.activePinFilters = MAP_GROUPINGS
-  }
-
-  public async setActivePinFilters(filters: Array<string>) {
-    if (filters.length === 0) {
-      this.filteredPins = this.mapPins
-      return
-    }
-
-    const mapPins = filterMapPinsByType(this.mapPins, filters, false)
-    this.filteredPins = mapPins
-  }
-
-  /**
-   * Set the location and id of current active pin, and automatically
-   * generate full pin details from database
-   * @param pin - map pin meta containing location and id for detail lookup
-   * set undefined to remove any active popup
-   */
-  public async setActivePin(pin?: IMapPin | IMapPinWithDetail) {
-    // HACK - CC - 2021-07-14 ignore hardcoded pin details, should be retrieved
-    // from profile on open instead (needs cleaning from DB)
-    if (pin && Object.prototype.hasOwnProperty.call(pin, 'detail')) {
-      delete pin['detail']
-    }
-    this.activePin = pin
-    if (pin) {
-      const pinWithDetail = await this.getPinDetail(pin)
-      this.activePin = pinWithDetail
-    }
-  }
-  // call additional action when pin detail received to inform mobx correctly of update
-  public async getPinDetail(pin: IMapPin) {
-    const detail: IMapPinDetail = await this.getUserProfilePin(pin._id)
-    const pinWithDetail: IMapPinWithDetail = { ...pin, detail }
-    return pinWithDetail
   }
 
   // get base pin geo information
@@ -159,13 +81,6 @@ export class MapsStore extends ModuleStore {
 
   public needsModeration(pin: IMapPin) {
     return needsModeration(pin, this.activeUser as IUser)
-  }
-
-  public canSeePin(pin: IMapPin) {
-    return (
-      pin.moderation === IModerationStatus.ACCEPTED ||
-      isAllowedToPin(pin, this.activeUser as IUser)
-    )
   }
 
   public async setUserPin(user: IUserDB) {

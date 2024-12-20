@@ -24,7 +24,6 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
       },
       mapsStore: {
         getPin: vi.fn().mockResolvedValue(mockPin),
-        getPinDetail: vi.fn().mockResolvedValue(mockPin),
       },
       themeStore: {
         currentTheme: {

@@ -28,6 +28,7 @@ export const _supportedConfigurationOptions = [
   'VITE_PATREON_CLIENT_ID',
   'VITE_API_URL',
   'VITE_SITE_NAME',
+  'VITE_HIDE_MEMBER_PINS_BY_DEFAULT',
 ] as const
 
 export type ConfigurationOption =

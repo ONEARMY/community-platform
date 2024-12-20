@@ -85,7 +85,12 @@ export const QuestionListing = () => {
 
       if (count.size > 0) {
         setQuestions((questions) =>
-          questions.map((x) => ({ ...x, commentCount: count.get(x._id) || 0 })),
+          questions.map((x) => {
+            const commentCount =
+              (count.has(x._id) ? count.get(x._id) : x.commentCount) || 0
+
+            return { ...x, commentCount }
+          }),
         )
       }
     } catch (error) {

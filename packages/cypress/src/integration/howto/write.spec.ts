@@ -8,9 +8,9 @@ import {
 import { guidance, headings } from '../../../../../src/pages/Howto/labels'
 import { generateNewUserDetails } from '../../utils/TestUtils'
 
-describe('[How To]', () => {
+describe('[Library]', () => {
   beforeEach(() => {
-    cy.visit('/how-to')
+    cy.visit('/library')
   })
   type Category = 'brainstorm' | 'exhibition' | 'product'
   type Duration = '<1 week' | '1-2 weeks' | '3-4 weeks'
@@ -101,20 +101,21 @@ describe('[How To]', () => {
     cy.get(`[data-cy=${element}]`).clear()
   }
 
-  describe('[Create a how-to]', () => {
+  describe('[Create a project]', () => {
     const randomId = faker.random.alphaNumeric(8)
     const creator = generateNewUserDetails()
+
     const expected = {
       _createdBy: creator.username,
       _deleted: false,
       category: 'Moulds',
-      description: 'After creating, the how-to will be deleted',
+      description: 'After creating, the project will be deleted',
       moderation: IModerationStatus.AWAITING_MODERATION,
       difficulty_level: DifficultyLevel.MEDIUM,
       time: '1-2 weeks',
-      title: `Create a how-to test ${randomId}`,
-      slug: `create-a-how-to-test-${randomId}`,
-      previousSlugs: ['qwerty', `create-a-how-to-test-${randomId}`],
+      title: `Create a project test ${randomId}`,
+      slug: `create-a-project-test-${randomId}`,
+      previousSlugs: ['qwerty', `create-a-project-test-${randomId}`],
       fileLink: 'http://google.com/',
       files: [],
       total_downloads: 0,
@@ -188,23 +189,23 @@ describe('[How To]', () => {
       cy.signUpNewUser(creator)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy="MemberBadge-member"]').should('be.visible')
-      cy.visit('/how-to')
+      cy.visit('/library')
 
-      cy.step('Access the create how-to page')
-      cy.get('a[href="/how-to/create"]').should('be.visible')
+      cy.step('Access the create project page')
+      cy.get('a[href="/library/create"]').should('be.visible')
       cy.get('[data-cy=create]').click()
-      cy.contains('Create a How-To').should('be.visible')
+      cy.contains('Add your project').should('be.visible')
 
       cy.step('Warn if title is identical with the existing ones')
       cy.fillIntroTitle('Make glass-like beams')
       cy.contains(
-        "Did you know there is an existing how-to with the title 'Make glass-like beams'? Using a unique title helps readers decide which how-to better meet their needs.",
+        "Did you know there is an existing project with the title 'Make glass-like beams'?",
       ).should('be.visible')
 
       cy.step('Warn if title is identical with a previously existing one')
       cy.fillIntroTitle('Make glassy beams')
       cy.contains(
-        "Did you know there is an existing how-to with the title 'Make glassy beams'? Using a unique title helps readers decide which how-to better meet their needs.",
+        "Did you know there is an existing project with the title 'Make glassy beams'?",
       ).should('be.visible')
 
       cy.step('Warn if title has less than minimum required characters')
@@ -224,14 +225,14 @@ describe('[How To]', () => {
       cy.step('A basic draft was created')
       cy.fillIntroTitle(`qwerty ${randomId}`)
       cy.get('[data-cy=draft]').click()
-      const firstSlug = `/how-to/qwerty-${randomId}`
+      const firstSlug = `/library/qwerty-${randomId}`
       cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
         .click()
         .url()
         .should('include', firstSlug)
       cy.get('[data-cy=moderationstatus-draft]').should('be.visible')
 
-      cy.step('Back to completing the how-to')
+      cy.step('Back to completing the project')
       cy.get('[data-cy=edit]').click()
 
       checkWhitespaceTrim('intro-title')
@@ -295,7 +296,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
         .click()
         .url()
-        .should('include', `/how-to/${slug}`)
+        .should('include', `/library/${slug}`)
 
       cy.step('Howto was created correctly')
       cy.get('[data-cy=file-download-counter]')
@@ -323,26 +324,26 @@ describe('[How To]', () => {
     })
 
     it('[By Anonymous]', () => {
-      cy.step('Ask users to login before creating an how-to')
-      cy.visit('/how-to/create')
+      cy.step('Ask users to login before creating a project')
+      cy.visit('/library/create')
       cy.get('div').contains('Please login to access this page')
     })
 
     it('[Warning on leaving page]', () => {
       cy.login(creator.email, creator.password)
       cy.get('[data-cy=loader]').should('not.exist')
-      cy.step('Access the create-how-to')
-      cy.get('a[href="/how-to/create"]').should('be.visible')
+      cy.step('Access the create project')
+      cy.get('a[href="/library/create"]').should('be.visible')
       cy.get('[data-cy=create]').click()
       cy.fillIntroTitle(expected.title)
-      cy.get('[data-cy=page-link][href*="/how-to"]').click()
+      cy.get('[data-cy=page-link][href*="/library"]').click()
       cy.get('[data-cy="Confirm.modal: Cancel"]').click()
-      cy.url().should('match', /\/how-to\/create$/)
+      cy.url().should('match', /\/library\/create$/)
 
       cy.step('Clear title input')
       cy.get('[data-cy=intro-title]').clear().blur({ force: true })
-      cy.get('[data-cy=page-link][href*="/how-to"]').click()
-      cy.url().should('match', /\/how-to?/)
+      cy.get('[data-cy=page-link][href*="/library"]').click()
+      cy.url().should('match', /\/library?/)
     })
   })
 })

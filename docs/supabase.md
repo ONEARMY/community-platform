@@ -24,7 +24,7 @@ After making schema changes, use the this command to create a migration file:
 Multi-tenancy is a requirement because:
 
 - Single login for all websites.
-- Easier maintenence and migrations.
+- Easier maintenance and migrations.
 
 With supabase there are a few ways we can do multi-tenancy:
 

@@ -5,52 +5,50 @@ import { MOCK_DATA } from '../../data'
 const howtos = Object.values(MOCK_DATA.howtos)
 
 describe('[How To]', () => {
-  // const SKIP_TIMEOUT = { timeout: 300 }
-  // const totalHowTo = Object.values(MOCK_DATA.howtos).filter(
-  //   (howTo) => howTo._deleted === false,
-  // ).length
-
-  describe('[List how-tos]', () => {
-    // const howtoSlug = 'make-glass-like-beams'
-    // const howtoUrl = `/how-to/${howtoSlug}`
-    // const coverFileRegex = /howto-beams-glass-0-3.jpg/
-    // it('[By Everyone]', () => {
-    //   cy.step('More How-tos button is hidden')
-    //   cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
-    //   cy.step('All how-tos are shown')
-    //   cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
-    //   cy.step('Select a category')
-    //   cy.get('[data-cy=category-select]')
-    //   cy.selectTag('product', '[data-cy=category-select]')
-    //   cy.get('[data-cy=card]').its('length').should('be.eq', 4)
-    //   cy.step('Type and select a category')
-    //   cy.selectTag('injection', '[data-cy=category-select]')
-    //   cy.get('[data-cy=card]').its('length').should('be.eq', 2)
-    //   cy.step('Remove all category filter')
-    //   cy.get('.data-cy__clear-indicator').click()
-    //   cy.get('.data-cy__multi-value__label').should('not.exist')
-    //   cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
-    //   cy.step('How-to cards has basic info')
-    //   cy.get(`[data-cy=card][data-cy-howto-slug=${howtoSlug}]`).within(() => {
-    //     cy.contains('Make glass-like beams').should('be.visible')
-    //     cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
-    //     cy.contains('howto_creator').should('be.visible')
-    //     cy.contains('product').should('be.visible')
-    //     cy.get('a').should('have.attr', 'href').and('eq', howtoUrl)
-    //   })
-    //   cy.step(`Open how-to details when click on a how-to ${howtoUrl}`)
-    //   cy.get(`[data-cy=card] a[href="${howtoUrl}"]:first`, SKIP_TIMEOUT).click()
-    //   cy.url().should('include', howtoUrl)
-    // })
+  beforeEach(() => {
+    cy.visit('/library')
   })
 
-  describe('[Read a How-to]', () => {
-    const specificHowtoUrl = '/how-to/make-an-interlocking-brick'
-    const coverFileRegex = /brick-12-1.jpg/
+  describe('[List how-tos]', () => {
+    it('[By Everyone]', () => {
+      cy.step('Has expected page title')
+      cy.title().should('include', `Library`)
 
-    beforeEach(() => {
-      cy.visit('/how-to')
+      cy.step('Can search for items')
+      cy.get('[data-cy=howtos-search-box]').click().type('beams')
+      cy.get('[data-cy=card]').its('length').should('be.eq', 1)
+
+      cy.step('All basic info displayed on each card')
+      const howtoSlug = 'make-glass-like-beams'
+      const howtoUrl = `/library/${howtoSlug}`
+      const coverFileRegex = /howto-beams-glass-0-3.jpg/
+
+      cy.get('[data-cy=card]').within(() => {
+        cy.contains('Make glass-like beams').should('be.visible')
+        cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
+        cy.get('[data-cy=Username]').contains('howto_creator')
+        cy.get('[data-cy=category]').contains('Guides')
+        cy.get('a').should('have.attr', 'href').and('eq', howtoUrl)
+      })
+
+      cy.step('Can clear search')
+      cy.get('[data-cy=close]').click()
+      cy.get('[data-cy=card]').its('length').should('be.above', 1)
+
+      cy.step('Can select a category to limit items displayed')
+      cy.get('[data-cy=category]').contains('Moulds')
+      cy.get('[data-cy=CategoryVerticalList]').within(() => {
+        cy.contains('Guides').click()
+      })
+      cy.get('[data-cy=CategoryVerticalList-Item-active]')
+      cy.get('[data-cy=category]').contains('Guides')
+      cy.get('[data-cy=category]').contains('Moulds').should('not.exist')
     })
+  })
+
+  describe('[Read a project]', () => {
+    const specificHowtoUrl = '/library/make-an-interlocking-brick'
+    const coverFileRegex = /brick-12-1.jpg/
 
     describe('[By Everyone]', () => {
       it('[See all info]', () => {
@@ -58,12 +56,15 @@ describe('[How To]', () => {
         // Hack to avoid flaky test as the tags are not being loaded on time
         cy.queryDocuments('howtos', '_id', '==', howto._id)
 
-        cy.visit(specificHowtoUrl)
+        cy.step('Old url pattern redirects to the new location')
+        cy.visit('/library/make-an-interlocking-brick')
+        cy.url().should('include', specificHowtoUrl)
+
         cy.step('Edit button is not available')
         cy.get('[data-cy=edit]').should('not.exist')
 
-        cy.step('How-to has basic info')
-        cy.title().should('eq', `${howto.title} - How-to - Precious Plastic`)
+        cy.step('Project has basic info')
+        cy.title().should('eq', `${howto.title} - Library - Precious Plastic`)
         cy.get('[data-cy=how-to-basis]').then(($summary) => {
           expect($summary).to.contain('howto_creator', 'Author')
           expect($summary).to.contain('Last update', 'Edit')
@@ -74,7 +75,7 @@ describe('[How To]', () => {
           )
           expect($summary).to.contain('3-4 weeks', 'Duration')
           expect($summary).to.contain(DifficultyLevel.HARD, 'Difficulty')
-          expect($summary.find('img[alt="how-to cover"]'))
+          expect($summary.find('img[alt="project cover image"]'))
             .to.have.attr('src')
             .match(coverFileRegex)
         })
@@ -89,12 +90,12 @@ describe('[How To]', () => {
         )
 
         cy.step('Breadcrumbs work')
-        cy.get('[data-cy=breadcrumbsItem]').first().should('contain', 'How To')
+        cy.get('[data-cy=breadcrumbsItem]').first().should('contain', 'Library')
         cy.get('[data-cy=breadcrumbsItem]')
           .first()
           .children()
           .should('have.attr', 'href')
-          .and('equal', `/how-to`)
+          .and('equal', `/library`)
 
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(1)
@@ -103,7 +104,7 @@ describe('[How To]', () => {
           .eq(1)
           .children()
           .should('have.attr', 'href')
-          .and('equal', `/how-to?category=${howto.category._id}`)
+          .and('equal', `/library?category=${howto.category._id}`)
 
         cy.get('[data-cy=breadcrumbsItem]').eq(2).should('contain', howto.title)
 
@@ -214,7 +215,7 @@ describe('[How To]', () => {
   })
 
   describe('[Read a soft-deleted How-to]', () => {
-    const deletedHowtoUrl = '/how-to/deleted-how-to'
+    const deletedHowtoUrl = '/library/deleted-how-to'
     beforeEach(() => {
       cy.visit(deletedHowtoUrl)
     })
@@ -256,8 +257,8 @@ describe('[How To]', () => {
     })
   })
 
-  describe('[Fail to find a How-to]', () => {
-    const howToNotFoundUrl = `/how-to/this-how-to-does-not-exist`
+  describe('[Fail to find a project]', () => {
+    const howToNotFoundUrl = `/library/this-project-does-not-exist`
 
     it('[Redirects to search]', () => {
       cy.visit(howToNotFoundUrl)

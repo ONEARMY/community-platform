@@ -4,7 +4,7 @@ import type { Meta, StoryFn } from '@storybook/react'
 import type { MapFilterOptionsList } from 'oa-shared'
 
 export default {
-  title: 'Components/MapFilterList',
+  title: 'Map/MapFilterList',
   component: MapFilterList,
 } as Meta<typeof MapFilterList>
 

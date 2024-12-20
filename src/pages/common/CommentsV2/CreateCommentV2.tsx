@@ -1,10 +1,14 @@
 import { useState } from 'react'
 import { Link } from '@remix-run/react'
 import { observer } from 'mobx-react'
-import { MemberBadge } from 'oa-components'
+import { Button, MemberBadge } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
-import { Box, Button, Flex, Text, Textarea } from 'theme-ui'
+import { Box, Flex, Text, Textarea } from 'theme-ui'
+
+import type { ChangeEvent } from 'react'
+
+import './CreateCommentV2.css'
 
 export interface Props {
   onSubmit: (value: string) => void
@@ -22,6 +26,15 @@ export const CreateCommentV2 = observer((props: Props) => {
   const [comment, setComment] = useState<string>('')
   const { userStore } = useCommonStores().stores
   const isLoggedIn = !!userStore.activeUser
+  const [isFocused, setIsFocused] = useState<boolean>(false)
+
+  const commentIsActive = comment.length > 0 || isFocused
+
+  const onChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    ;(event.target.parentNode! as HTMLDivElement).dataset.replicatedValue =
+      event.target.value
+    setComment(event.target.value)
+  }
 
   return (
     <Flex
@@ -33,79 +46,98 @@ export const CreateCommentV2 = observer((props: Props) => {
         padding: 3,
       }}
     >
-      <Flex sx={{ flexDirection: 'column', gap: 3 }}>
-        <Flex data-target="create-comment-container">
-          <Box sx={{ lineHeight: 0, marginTop: 2, display: ['none', 'block'] }}>
+      <Flex sx={{ flexDirection: 'column' }}>
+        <Flex data-target="create-comment-container" sx={{ gap: 2 }}>
+          <Box
+            sx={{
+              lineHeight: 0,
+              display: ['none', 'block'],
+              flexShrink: 0,
+            }}
+          >
             <MemberBadge profileType={userProfileType} useLowDetailVersion />
           </Box>
           <Box
             sx={{
               display: 'block',
               background: 'white',
-              flexGrow: 1,
-              marginLeft: [2, 5],
+              flex: 1,
+              marginLeft: [0, 3],
               borderRadius: 1,
               position: 'relative',
+              width: 'min-content',
               '&:before': {
+                display: ['none', 'block'],
                 content: '""',
                 position: 'absolute',
                 borderWidth: '1em 1em',
                 borderStyle: 'solid',
                 borderColor: 'transparent white transparent transparent',
-                margin: '1em -2em',
+                margin: '.5em -2em',
               },
             }}
           >
             {!isLoggedIn ? (
               <LoginPrompt />
             ) : (
-              <>
-                <Textarea
-                  value={comment}
-                  maxLength={MAX_COMMENT_LENGTH}
-                  onChange={(event) => setComment(event.target.value)}
-                  aria-label="Comment"
-                  placeholder={placeholder}
-                  sx={{
-                    background: 'none',
-                    resize: 'vertical',
-                    padding: 3,
-                    '&:focus': {
-                      borderColor: 'transparent',
-                    },
-                  }}
-                />
+              <Flex sx={{ flexDirection: 'column' }}>
+                <Box
+                  className={`grow-wrap ${commentIsActive ? 'value-set' : ''}`}
+                >
+                  <Textarea
+                    value={comment}
+                    maxLength={MAX_COMMENT_LENGTH}
+                    onChange={(event) => onChange(event)}
+                    aria-label="Comment"
+                    placeholder={placeholder}
+                    rows={1}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                  />
+                </Box>
                 <Text
                   sx={{
-                    fontSize: 2,
-                    position: 'absolute',
-                    right: 0,
-                    bottom: -5,
-                    pointerEvents: 'none',
-                    padding: 1,
+                    fontSize: 1,
+                    display: commentIsActive ? 'flex' : 'none',
+                    alignSelf: 'flex-end',
+                    padding: 2,
                   }}
                 >
                   {comment.length}/{MAX_COMMENT_LENGTH}
                 </Text>
-              </>
+              </Flex>
             )}
           </Box>
-        </Flex>
 
-        <Flex sx={{ alignSelf: 'flex-end' }}>
-          <Button
-            disabled={!comment.trim() || !isLoggedIn || isLoading}
-            variant="primary"
-            onClick={() => {
-              if (!isLoading) {
-                onSubmit(comment)
-                setComment('')
-              }
+          <Flex
+            sx={{
+              alignSelf: 'flex-end',
+              height: ['40px', '52px'],
+              width: ['40px', 'auto'],
             }}
-            sx={{ marginTop: isLoggedIn ? 3 : 0 }}
           >
-            {isLoading ? 'Loading...' : buttonLabel}
-          </Button>
+            <Button
+              disabled={!comment.trim() || !isLoggedIn || isLoading}
+              variant="primary"
+              icon={isLoading ? undefined : 'contact'}
+              onClick={() => {
+                if (!isLoading) {
+                  onSubmit(comment)
+                  setComment('')
+                }
+              }}
+              sx={{
+                height: ['40px', '100%'],
+                width: ['40px', 'auto'],
+                padding: [0, 1],
+                'div:first-of-type': {
+                  display: ['flex', 'none'],
+                },
+              }}
+            >
+              <Text sx={{ display: ['none', 'block'] }}>{buttonLabel}</Text>
+            </Button>
+          </Flex>
         </Flex>
       </Flex>
     </Flex>

@@ -46,7 +46,7 @@ const HowToSubmitStatus = observer((props: IProps) => {
         variant={!uploadStatus.Complete ? 'disabled' : 'outline'}
         icon="arrow-forward"
         onClick={() => {
-          navigate('/how-to/' + props.slug)
+          navigate('/library/' + props.slug)
           props.onClose()
         }}
       >

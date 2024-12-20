@@ -1,31 +1,23 @@
 import { useEffect, useState } from 'react'
-import { Link, useSearchParams } from '@remix-run/react'
+import { useSearchParams } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { Button, Loader } from 'oa-components'
-import { AuthWrapper } from 'src/common/AuthWrapper'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { isPreciousPlastic } from 'src/config/config'
 import { logger } from 'src/logger'
-import DraftButton from 'src/pages/common/Drafts/DraftButton'
 import useDrafts from 'src/pages/common/Drafts/useDrafts'
-import { Box, Flex, Heading, useThemeUI } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 
-import { ITEMS_PER_PAGE, RESEARCH_EDITOR_ROLES } from '../constants'
+import { ITEMS_PER_PAGE } from '../constants'
 import { listing } from '../labels'
 import { researchService } from '../research.service'
-import { ResearchFilterHeader } from './ResearchFilterHeader'
+import { ResearchFilterHeader } from './ResearchListHeader'
 import ResearchListItem from './ResearchListItem'
 import { ResearchSearchParams } from './ResearchSearchParams'
 
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
 import type { IResearch, ResearchStatus } from 'oa-shared'
-import type { ThemeWithName } from 'oa-themes'
 import type { ResearchSortOption } from '../ResearchSortOptions'
 
 const ResearchList = observer(() => {
-  const themeUi = useThemeUI()
-  const theme = themeUi.theme as ThemeWithName
-  const { userStore } = useCommonStores().stores
   const [isFetching, setIsFetching] = useState<boolean>(true)
   const [researchItems, setResearchItems] = useState<IResearch.Item[]>([])
   const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } =
@@ -98,63 +90,12 @@ const ResearchList = observer(() => {
   }
 
   return (
-    <>
-      <Flex my={[18, 26]}>
-        <Heading
-          as="h1"
-          sx={{
-            width: '100%',
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: theme.fontSizes[5],
-          }}
-        >
-          {listing.heading}
-        </Heading>
-      </Flex>
-
-      <Flex
-        sx={{
-          flexWrap: 'nowrap',
-          justifyContent: 'space-between',
-          flexDirection: ['column', 'column', 'row'],
-          mb: 3,
-        }}
-      >
-        {!showDrafts ? <ResearchFilterHeader /> : <div></div>}
-
-        <Flex sx={{ gap: 2 }} mb={[3, 3, 0]}>
-          {isPreciousPlastic() ? (
-            <>
-              {userStore.activeUser && (
-                <DraftButton
-                  showDrafts={showDrafts}
-                  draftCount={draftCount}
-                  handleShowDrafts={handleShowDrafts}
-                />
-              )}
-              <Link to={userStore.activeUser ? '/research/create' : '/sign-up'}>
-                <Button type="button" variant="primary" data-cy="create">
-                  {listing.create}
-                </Button>
-              </Link>
-            </>
-          ) : (
-            <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
-              <DraftButton
-                showDrafts={showDrafts}
-                draftCount={draftCount}
-                handleShowDrafts={handleShowDrafts}
-              />
-              <Link to="/research/create">
-                <Button type="button" variant="primary" data-cy="create">
-                  {listing.create}
-                </Button>
-              </Link>
-            </AuthWrapper>
-          )}
-        </Flex>
-      </Flex>
+    <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
+      <ResearchFilterHeader
+        draftCount={draftCount}
+        handleShowDrafts={handleShowDrafts}
+        showDrafts={showDrafts}
+      />
 
       {showDrafts ? (
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
@@ -197,7 +138,7 @@ const ResearchList = observer(() => {
       )}
 
       {(isFetching || isFetchingDrafts) && <Loader />}
-    </>
+    </Flex>
   )
 })
 export default ResearchList

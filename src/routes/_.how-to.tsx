@@ -1,16 +1,12 @@
 /* eslint-disable unicorn/filename-case */
-import { Outlet } from '@remix-run/react'
-import Main from 'src/pages/common/Layout/Main'
 
-export async function loader() {
-  return null
-}
+// The library/projects section use to be called 'how-tos' so this
+// exists to ensure users get to the right place
 
-// This is a Layout file, it will render for all howto routes
-export default function Index() {
-  return (
-    <Main sx={{ flex: 1 }}>
-      <Outlet />
-    </Main>
-  )
+import { redirect } from '@remix-run/node'
+
+import type { LoaderFunctionArgs } from '@remix-run/node'
+
+export function loader({ params }: LoaderFunctionArgs) {
+  return redirect(`/library/${params.slug}`, 301)
 }

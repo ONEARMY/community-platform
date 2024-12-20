@@ -17,7 +17,7 @@ describe('[Common]', () => {
   })
 
   it('[Page Navigation]', () => {
-    cy.visit('/how-to')
+    cy.visit('/library')
     cy.wait(2000)
 
     cy.step('Go to Academy page')
@@ -25,10 +25,10 @@ describe('[Common]', () => {
     cy.wait(2000)
     cy.url().should('include', '/academy')
 
-    cy.step('Go to How-to page')
-    cy.get('[data-cy=page-link]').contains('How-to').click()
+    cy.step('Go to library page')
+    cy.get('[data-cy=page-link]').contains('Library').click()
     cy.wait(2000)
-    cy.url().should('include', '/how-to')
+    cy.url().should('include', '/library')
 
     cy.step('Go to Map page')
     cy.get('[data-cy=page-link]').contains('Map').click()
@@ -38,12 +38,12 @@ describe('[Common]', () => {
 
   describe('[User feeback button]', () => {
     it('[Desktop]', () => {
-      cy.visit('/how-to')
+      cy.visit('/library')
       cy.wait(2000)
       cy.get('[data-cy=feedback]').should('contain', 'Report a Problem')
       cy.get('[data-cy=feedback]')
         .should('have.attr', 'href')
-        .and('contain', '/how-to?sort=Newest')
+        .and('contain', '/library?sort=Newest')
 
       cy.visit('/map')
       cy.wait(2000)
@@ -55,12 +55,12 @@ describe('[Common]', () => {
     it('[Mobile]', () => {
       cy.viewport('iphone-6')
 
-      cy.visit('/how-to')
+      cy.visit('/library')
       cy.wait(2000)
       cy.get('[data-cy=feedback]').should('contain', 'Problem?')
       cy.get('[data-cy=feedback]')
         .should('have.attr', 'href')
-        .and('contain', '/how-to?sort=Newest')
+        .and('contain', '/library?sort=Newest')
 
       cy.visit('/map')
       cy.wait(2000)
@@ -73,7 +73,7 @@ describe('[Common]', () => {
   describe('[User Menu]', () => {
     it('[By Anonymous]', () => {
       cy.step('Login and Join buttons are available')
-      cy.visit('/how-to')
+      cy.visit('/library')
       cy.wait(2000)
       cy.get('[data-cy=login]').should('be.visible')
       cy.get('[data-cy=join]').should('be.visible')
@@ -81,7 +81,7 @@ describe('[Common]', () => {
     })
 
     it('[By Authenticated]', () => {
-      cy.visit('/how-to')
+      cy.visit('/library')
 
       cy.step('Login and Join buttons are unavailable to logged-in users')
       const user = generateNewUserDetails()

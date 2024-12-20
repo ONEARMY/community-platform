@@ -83,13 +83,13 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 
         {props.howtoCount > 0 && (
           <InternalLink
-            to={'/how-to?q=' + props.userName}
+            to={'/library?q=' + props.userName}
             sx={{ color: 'black' }}
             data-testid="howto-link"
           >
             <Flex data-testid="howto-stat">
               <ElWithBeforeIcon icon={HowToCountIcon} />
-              {`How-to: ${props.howtoCount}`}
+              {`Library: ${props.howtoCount}`}
             </Flex>
           </InternalLink>
         )}

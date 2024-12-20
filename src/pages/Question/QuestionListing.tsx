@@ -7,12 +7,10 @@ import { questionService } from 'src/pages/Question/question.service'
 import { commentService } from 'src/services/commentService'
 import { Flex, Heading } from 'theme-ui'
 
-import { ITEMS_PER_PAGE } from './constants'
 import { headings, listing } from './labels'
 import { QuestionFilterHeader } from './QuestionFilterHeader'
 import { QuestionListItem } from './QuestionListItem'
 
-import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
 import type { IQuestion } from 'oa-shared'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
@@ -20,9 +18,9 @@ export const QuestionListing = () => {
   const [isFetching, setIsFetching] = useState<boolean>(true)
   const [questions, setQuestions] = useState<IQuestion.Item[]>([])
   const [total, setTotal] = useState<number>(0)
-  const [lastVisible, setLastVisible] = useState<
-    QueryDocumentSnapshot<DocumentData, DocumentData> | undefined
-  >(undefined)
+  const [lastVisibleId, setLastVisibleId] = useState<string | undefined>(
+    undefined,
+  )
   const { userStore } = useCommonStores().stores
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -47,9 +45,7 @@ export const QuestionListing = () => {
     }
   }, [q, category, sort])
 
-  const fetchQuestions = async (
-    skipFrom?: QueryDocumentSnapshot<DocumentData, DocumentData>,
-  ) => {
+  const fetchQuestions = async (skipFrom?: string | undefined) => {
     setIsFetching(true)
 
     try {
@@ -60,7 +56,6 @@ export const QuestionListing = () => {
         category,
         sort,
         skipFrom,
-        ITEMS_PER_PAGE,
       )
 
       if (result) {
@@ -71,7 +66,7 @@ export const QuestionListing = () => {
           setQuestions(result.items)
         }
 
-        setLastVisible(result.lastVisible)
+        setLastVisibleId(result.lastVisibleId)
 
         setTotal(result.total)
 
@@ -90,7 +85,12 @@ export const QuestionListing = () => {
 
       if (count.size > 0) {
         setQuestions((questions) =>
-          questions.map((x) => ({ ...x, commentCount: count.get(x._id) || 0 })),
+          questions.map((x) => {
+            const commentCount =
+              (count.has(x._id) ? count.get(x._id) : x.commentCount) || 0
+
+            return { ...x, commentCount }
+          }),
         )
       }
     } catch (error) {
@@ -168,7 +168,11 @@ export const QuestionListing = () => {
             justifyContent: 'center',
           }}
         >
-          <Button type="button" onClick={() => fetchQuestions(lastVisible)}>
+          <Button
+            type="button"
+            onClick={() => fetchQuestions(lastVisibleId)}
+            data-cy="load-more"
+          >
             {listing.loadMore}
           </Button>
         </Flex>

@@ -14,6 +14,7 @@ import eyeSVG from '../../assets/icons/eye.svg'
 import eyeCrossedSVG from '../../assets/icons/eye-crossed.svg'
 import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
 import foodSVG from '../../assets/icons/food.svg'
+import fromTheTeamSVG from '../../assets/icons/from-the-team.svg'
 import guidesSVG from '../../assets/icons/guides.svg'
 import hyperlinkSVG from '../../assets/icons/hyperlink.svg'
 import arrowFullDownSVG from '../../assets/icons/icon-arrow-down.svg'
@@ -44,6 +45,7 @@ import patreonSVG from '../../assets/icons/patreon.svg'
 import plasticSVG from '../../assets/icons/plastic.svg'
 import productsSVG from '../../assets/icons/products.svg'
 import profileSVG from '../../assets/icons/profile.svg'
+import recyclingSVG from '../../assets/icons/recycling.svg'
 import revenueSVG from '../../assets/icons/revenue.svg'
 import slidersSVG from '../../assets/icons/sliders.svg'
 import starterKitsSVG from '../../assets/icons/starter-kits.svg'
@@ -87,6 +89,7 @@ export const iconMap = {
   employee: <ImageIcon src={employeeSVG} />,
   flagUnknown: <ImageIcon src={flagUnknownSVG} />,
   food: <ImageIcon src={foodSVG} />,
+  fromTheTeam: <ImageIcon src={fromTheTeamSVG} />,
   guides: <ImageIcon src={guidesSVG} />,
   hide: <ImageIcon src={eyeCrossedSVG} />,
   hyperlink: <ImageIcon src={hyperlinkSVG} />,
@@ -102,6 +105,7 @@ export const iconMap = {
   plastic: <ImageIcon src={plasticSVG} />,
   profile: <ImageIcon src={profileSVG} />,
   products: <ImageIcon src={productsSVG} />,
+  recycling: <ImageIcon src={recyclingSVG} />,
   revenue: <ImageIcon src={revenueSVG} />,
   show: <ImageIcon src={eyeSVG} />,
   sliders: <ImageIcon src={slidersSVG} />,

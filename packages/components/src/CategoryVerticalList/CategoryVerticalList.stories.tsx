@@ -46,6 +46,20 @@ const allCategoriesForPreciousPlastic = [
     _modified: '2022-12-03T18:03:51.313Z',
     label: 'Starter Kits',
   },
+  {
+    _created: '2022-12-04T18:03:51.313Z',
+    _deleted: false,
+    _id: '78XHeamfjxgvs7tfBnDaL',
+    _modified: '2022-12-03T18:03:51.313Z',
+    label: 'Recycling',
+  },
+  {
+    _created: '2022-12-05T18:03:51.313Z',
+    _deleted: false,
+    _id: '78XHeamfsdfs7tfBnDaL',
+    _modified: '2022-12-03T18:03:51.313Z',
+    label: 'From the Team',
+  },
 ]
 
 const allCategoriesForProjectKamp = [

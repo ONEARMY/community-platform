@@ -144,7 +144,6 @@ export const HowtoForm = observer((props: IProps) => {
           submitFailed,
           submitSucceeded,
           submitting,
-          values,
         }) => {
           return (
             <Flex mx={-2} bg="inherit" sx={{ flexWrap: 'wrap' }}>
@@ -202,7 +201,6 @@ export const HowtoForm = observer((props: IProps) => {
                             <HowtoFieldDifficulty />
                             <HowtoFieldDescription />
                             <HowtoFieldFiles
-                              category={values.category}
                               fileEditMode={fileEditMode}
                               files={formValues.files}
                               onClick={() => {

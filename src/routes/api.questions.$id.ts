@@ -1,64 +1,29 @@
-// TODO: split this in separate files once we update remix to not use file-based routing
-
-import { IModerationStatus } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 import { verifyFirebaseToken } from 'src/firestore/firestoreAdmin.server'
 import { Question } from 'src/models/question.model'
-import { ITEMS_PER_PAGE } from 'src/pages/Question/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { convertToSlug } from 'src/utils/slug'
 import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { Params } from '@remix-run/react'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions'
+import type { DBImage, Image } from 'src/models/image.model'
+import type { DBProfile } from 'src/models/profile.model'
+import type { DBQuestion } from 'src/models/question.model'
 
-export const loader = async ({ request }) => {
-  const url = new URL(request.url)
-  const params = new URLSearchParams(url.search)
-  const q = params.get('q')
-  const category = Number(params.get('category')) || undefined
-  const sort = params.get('sort') as QuestionSortOption
-  const skip = Number(params.get('skip')) || 0
-  let take = Number(params.get('take')) || ITEMS_PER_PAGE
-
-  if (take > 100) {
-    take = 100
-  }
-
-  const { client, headers } = createSupabaseServerClient(request)
-
-  let query = client.from('questions').select('*', { count: 'exact' })
-
-  if (q) {
-    query = query.textSearch('questions_search_fields', q)
-  }
-
-  if (category) {
-    query = query.eq('category', category)
-  }
-
-  if (sort === 'Newest') {
-    query = query.order('created_at', { ascending: false })
-  } else if (sort === 'LatestUpdated') {
-    query = query.order('modified_at', { ascending: false })
-  }
-
-  const queryResult = await query.range(skip, take)
-
-  const total = queryResult.count
-  const items = queryResult.data
-
-  return Response.json({ items, total }, { headers })
-}
-
-export const action = async ({ request }: LoaderFunctionArgs) => {
+export const action = async ({ request, params }: LoaderFunctionArgs) => {
   try {
     const formData = await request.formData()
+    const imagesToKeepIds = formData
+      .getAll('existingImages')
+      .map((x) => (JSON.parse(x as string) as Image).id)
+
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
       category: formData.has('category')
-        ? (formData.get('category') as string)
+        ? Number(formData.get('category'))
         : null,
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
@@ -71,23 +36,16 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const { client, headers } = createSupabaseServerClient(request)
 
     const { valid, status, statusText } = await validateRequest(
+      params,
       request,
       tokenValidation.valid,
       tokenValidation.user_id,
       data,
+      client,
     )
 
     if (!valid) {
       return Response.json({}, { status, statusText })
-    }
-
-    const slug = convertToSlug(data.title)
-
-    if (await isDuplicateSlug(slug, client)) {
-      return Response.json({
-        status: 409,
-        statusText: 'This question already exists',
-      })
     }
 
     const uploadedImages = formData.getAll('images') as File[]
@@ -102,31 +60,45 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         },
       )
     }
-    const userRequest = await client
-      .from('profiles')
-      .select()
-      .eq('firebase_auth_id', tokenValidation.user_id)
-      .single()
 
-    if (userRequest.error || !userRequest.data) {
-      console.log(userRequest.error)
-      return Response.json({}, { status: 400, statusText: 'User not found' })
+    const questionId = Number(params.id)
+
+    let images: DBImage[] = []
+
+    if (imagesToKeepIds.length > 0) {
+      const questionImages = await client
+        .from('questions')
+        .select('images')
+        .eq('id', params.id)
+        .single()
+
+      if (questionImages.data && questionImages.data?.images?.length > 0) {
+        images = questionImages.data.images.filter((x) =>
+          imagesToKeepIds.includes(x.id),
+        )
+      }
     }
 
-    const user = userRequest.data
+    if (uploadedImages.length > 0) {
+      const imageResult = await uploadImages(questionId, uploadedImages, client)
 
+      if (imageResult) {
+        images = [...images, ...imageResult.images]
+      }
+    }
+
+    const slug = convertToSlug(data.title)
     const questionResult = await client
       .from('questions')
-      .insert({
-        created_by: user.id,
+      .update({
         title: data.title,
         description: data.description,
-        moderation: IModerationStatus.ACCEPTED,
         slug,
         category: data.category,
         tags: data.tags,
-        tenant_id: process.env.TENANT_ID,
+        images,
       })
+      .eq('id', params.id)
       .select()
 
     if (questionResult.error || !questionResult.data) {
@@ -135,25 +107,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const question = Question.fromDB(questionResult.data[0], [])
 
-    if (uploadedImages.length > 0) {
-      const questionId = Number(questionResult.data[0].id)
-
-      const imageResult = await uploadImages(questionId, uploadedImages, client)
-
-      if (imageResult?.images && imageResult.images.length > 0) {
-        const updateResult = await client
-          .from('questions')
-          .update({ images: imageResult.images })
-          .eq('id', questionId)
-          .select()
-
-        if (updateResult.data) {
-          question.images = updateResult.data[0].images
-        }
-      }
-    }
-
-    return Response.json({ question }, { headers, status: 201 })
+    return Response.json({ question }, { headers, status: 200 })
   } catch (error) {
     console.log(error)
     return Response.json(
@@ -163,14 +117,18 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   }
 }
 
-async function isDuplicateSlug(slug: string, client: SupabaseClient) {
+async function isDuplicateSlug(
+  slug: string,
+  id: number,
+  client: SupabaseClient,
+) {
   const { data } = await client
     .from('questions')
-    .select('slug')
+    .select('id,slug')
     .eq('slug', slug)
     .single()
 
-  return !!data
+  return !!data?.id && data.id !== id
 }
 
 async function uploadImages(
@@ -185,7 +143,7 @@ async function uploadImages(
   // const files = await Promise.all(uploadedImages.map(image => image.arrayBuffer()))
 
   const errors: string[] = []
-  const images: { id: string; path: string; fullPath: string }[] = []
+  const images: DBImage[] = []
 
   for (const image of uploadedImages) {
     const result = await client.storage
@@ -216,10 +174,12 @@ function validateImages(images: File[]) {
 }
 
 async function validateRequest(
+  params: Params<string>,
   request: Request,
   isTokenValid: boolean,
   userId: string,
   data: any,
+  client: SupabaseClient,
 ) {
   if (!isTokenValid) {
     return { status: 401, statusText: 'unauthorized' }
@@ -229,8 +189,12 @@ async function validateRequest(
     return { status: 400, statusText: 'user not found' }
   }
 
-  if (request.method !== 'POST') {
+  if (request.method !== 'PUT') {
     return { status: 405, statusText: 'method not allowed' }
+  }
+
+  if (!params.id) {
+    return { status: 400, statusText: 'id is required' }
   }
 
   if (!data.title) {
@@ -239,6 +203,48 @@ async function validateRequest(
 
   if (!data.description) {
     return { status: 400, statusText: 'description is required' }
+  }
+
+  const slug = convertToSlug(data.title)
+  const questionId = Number(params.id!)
+
+  if (await isDuplicateSlug(slug, questionId, client)) {
+    return {
+      status: 409,
+      statusText: 'This question already exists',
+    }
+  }
+
+  const existingQuestionResult = await client
+    .from('questions')
+    .select()
+    .eq('id', questionId)
+    .single()
+
+  if (existingQuestionResult.error || !existingQuestionResult.data) {
+    return { status: 400, statusText: 'Question not found' }
+  }
+
+  const existingQuestion = existingQuestionResult.data as DBQuestion
+
+  const userRequest = await client
+    .from('profiles')
+    .select()
+    .eq('firebase_auth_id', userId)
+    .single()
+
+  if (userRequest.error || !userRequest.data) {
+    return { status: 400, statusText: 'User not found' }
+  }
+
+  const user = userRequest.data as DBProfile
+
+  if (
+    existingQuestion.created_by !== user.id &&
+    !user.roles?.includes(UserRole.ADMIN) &&
+    !user.roles?.includes(UserRole.SUPER_ADMIN)
+  ) {
+    return { status: 403, statusText: 'Unauthorized' }
   }
 
   return { valid: true }

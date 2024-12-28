@@ -49,14 +49,7 @@ export const QuestionListing = () => {
     setIsFetching(true)
 
     try {
-      const searchWords = q ? q.toLocaleLowerCase().split(' ') : []
-
-      const result = await questionService.search(
-        searchWords,
-        category,
-        sort,
-        skipFrom,
-      )
+      const result = await questionService.search(q, category, sort, skipFrom)
 
       if (result) {
         if (skipFrom) {

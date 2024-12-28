@@ -1,39 +1,28 @@
 export class DBImage {
-  url: string
-  name: string
-  extension: string
-  size: number
+  id: string
+  path: string
+  fullPath: string
 
   constructor(obj: DBImage) {
     Object.assign(this, obj)
   }
-
-  static toDB(obj: Image) {
-    return new DBImage({
-      url: obj.url,
-      name: obj.name,
-      extension: obj.extension,
-      size: obj.size,
-    })
-  }
 }
 
 export class Image {
-  url: string
-  name: string
-  extension: string
-  size: number
+  id: string
+  path: string
+  fullPath: string
 
   constructor(obj: Image) {
     Object.assign(this, obj)
   }
 
   static fromDB(obj: DBImage) {
+    const apiUrl = process?.env?.SUPABASE_API_URL
     return new Image({
-      url: obj.url,
-      name: obj.name,
-      extension: obj.extension,
-      size: obj.size,
+      id: obj.id,
+      path: obj.path,
+      fullPath: apiUrl + '/storage/v1/object/public/' + obj.fullPath,
     })
   }
 }

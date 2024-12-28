@@ -1,13 +1,9 @@
 import { collection, getDocs, query, where } from 'firebase/firestore'
-import {
-  DB_ENDPOINTS,
-  type ICategory,
-  type IQuestion,
-  type IQuestionDB,
-} from 'oa-shared'
+import { DB_ENDPOINTS, type IQuestion, type IQuestionDB } from 'oa-shared'
 import { logger } from 'src/logger'
 import { firestore } from 'src/utils/firebase'
 
+import type { Category } from 'src/models/category.model'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 export enum QuestionSearchParams {
@@ -17,14 +13,14 @@ export enum QuestionSearchParams {
 }
 
 const search = async (
-  words: string[],
+  q: string,
   category: string,
   sort: QuestionSortOption,
   lastDocId?: string | undefined,
 ) => {
   try {
     const url = new URL('/api/questions', window.location.origin)
-    url.searchParams.set('words', words.join(','))
+    url.searchParams.set('q', q)
     url.searchParams.set('category', category)
     url.searchParams.set('sort', sort)
     url.searchParams.set('lastDocId', lastDocId ?? '')
@@ -44,12 +40,8 @@ const search = async (
 
 const getQuestionCategories = async () => {
   try {
-    const response = await fetch(`/api/questions/categories`)
-    const responseJson = (await response.json()) as {
-      categories: ICategory[]
-    }
-
-    return responseJson.categories
+    const response = await fetch('/api/categories/questions')
+    return (await response.json()) as Category[]
   } catch (error) {
     logger.error('Failed to fetch questions', { error })
     return []

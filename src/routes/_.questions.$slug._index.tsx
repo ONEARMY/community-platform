@@ -1,8 +1,10 @@
 import { useLoaderData } from '@remix-run/react'
 import { Question } from 'src/models/question.model'
+import { Tag } from 'src/models/tag.model'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { QuestionPage } from 'src/pages/Question/QuestionPage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { questionServiceServer } from 'src/services/questionService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -11,29 +13,7 @@ import type { DBQuestion } from 'src/models/question.model'
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const result = await client
-    .from('questions')
-    .select(
-      `
-      id,
-      created_at,
-      created_by,
-      modified_at,
-      comment_count,
-      description,
-      moderation,
-      slug,
-      category,
-      tags,
-      title,
-      total_views,
-      tenant_id,
-      profiles(id, firebase_auth_id, display_name, username, is_verified, country)
-    `,
-    )
-    .or(`slug.eq.${params.slug},previous_slugs.cs.{"${params.slug}"}`)
-    .neq('deleted', true)
-    .single()
+  const result = await questionServiceServer.getBySlug(client, params.slug!)
 
   if (result.error || !result.data) {
     return Response.json({ question: null }, { headers })
@@ -48,7 +28,35 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       .eq('id', dbQuestion.id)
   }
 
-  const question = Question.fromDB(dbQuestion)
+  const tagIds = dbQuestion.tags
+  let tags: Tag[] = []
+  if (tagIds?.length > 0) {
+    const tagsResult = await client
+      .from('tags')
+      .select('id,name')
+      .in('id', tagIds)
+
+    if (tagsResult.data) {
+      tags = tagsResult.data.map((x) => Tag.fromDB(x))
+    }
+  }
+
+  const [usefulVotes, subscribers] = await Promise.all([
+    client
+      .from('useful_votes')
+      .select('*', { count: 'exact' })
+      .eq('content_id', dbQuestion.id)
+      .eq('content_type', 'questions'),
+    client
+      .from('subscribers')
+      .select('user_id', { count: 'exact' })
+      .eq('content_id', dbQuestion.id)
+      .eq('content_type', 'questions'),
+  ])
+
+  const question = Question.fromDB(dbQuestion, tags)
+  question.usefulCount = usefulVotes.count || 0
+  question.subscriberCount = subscribers.count || 0
 
   return Response.json({ question }, { headers })
 }
@@ -67,7 +75,7 @@ export const meta = mergeMeta<typeof loader>(({ data }) => {
   }
 
   const title = `${question.title} - Question - ${import.meta.env.VITE_SITE_NAME}`
-  const imageUrl = question.images?.at(0)?.url
+  const imageUrl = question.images?.at(0)?.path
 
   return generateTags(title, question.description, imageUrl)
 })

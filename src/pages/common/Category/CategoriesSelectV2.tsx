@@ -2,16 +2,14 @@ import { Select } from 'oa-components'
 
 import { FieldContainer } from '../../../common/Form/FieldContainer'
 
-import type { ICategory } from 'oa-shared'
-
-export type SelectValue = { label: string; value: string | ICategory }
+export type SelectValue = { label: string; value: string }
 
 export type CategoriesSelectProps = {
   value: SelectValue | null
   placeholder: string
   isForm: boolean
   categories: SelectValue[]
-  onChange: (value: string) => void
+  onChange: (value: SelectValue) => void
 }
 
 export const CategoriesSelectV2 = ({
@@ -22,7 +20,7 @@ export const CategoriesSelectV2 = ({
   onChange,
 }: CategoriesSelectProps) => {
   const handleChange = (changedValue) => {
-    onChange(changedValue?.value ?? null)
+    onChange(changedValue ?? null)
   }
 
   return (

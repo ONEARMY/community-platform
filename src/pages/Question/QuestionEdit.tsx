@@ -4,10 +4,10 @@ import { UserRole } from 'oa-shared'
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 
-import type { IQuestionDB } from 'oa-shared'
+import type { Question } from 'src/models/question.model'
 
 type QuestionEdit = {
-  question: IQuestionDB
+  question: Question
 }
 
 export const QuestionEdit = ({ question }: QuestionEdit) => {
@@ -17,7 +17,7 @@ export const QuestionEdit = ({ question }: QuestionEdit) => {
 
   useEffect(() => {
     if (
-      question?._createdBy !== store.activeUser?.userName &&
+      question.author?.firebaseAuthId !== store.activeUser?._authID &&
       !store.activeUser?.userRoles?.includes(UserRole.ADMIN)
     ) {
       navigate(`/questions/${slug}`)
@@ -29,7 +29,7 @@ export const QuestionEdit = ({ question }: QuestionEdit) => {
     <QuestionForm
       data-testid="question-create-form"
       parentType="edit"
-      formValues={question}
+      question={question}
     />
   )
 }

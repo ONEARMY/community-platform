@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import {
@@ -14,6 +14,8 @@ import {
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
+import { subscribersService } from 'src/services/subscribersService'
+import { usefulService } from 'src/services/usefulService'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
@@ -38,28 +40,55 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
   const [subscribersCount, setSubscribersCount] = useState<number>(
     question.subscriberCount,
   )
+
+  useEffect(() => {
+    const getSubscribed = async () => {
+      const subscribed = await subscribersService.isSubscribed(
+        'questions',
+        question.id,
+      )
+      setSubscribed(subscribed)
+    }
+
+    const getVoted = async () => {
+      const voted = await usefulService.hasVoted('questions', question.id)
+      setVoted(voted)
+    }
+
+    if (activeUser) {
+      getSubscribed()
+      getVoted()
+    }
+  }, [activeUser, question])
+
   const isEditable = useMemo(() => {
     return (
       hasAdminRights(activeUser as IUser) ||
-      (question.createdBy?.firebaseAuthId &&
-        question.createdBy?.firebaseAuthId === activeUser?._authID)
+      (question.author?.firebaseAuthId &&
+        question.author?.firebaseAuthId === activeUser?._authID)
     )
-  }, [activeUser, question.createdBy])
-
-  // TODO: Is Subscribed API
-  // TODO: Is Useful API
+  }, [activeUser, question.author])
 
   const onUsefulClick = async (vote: 'add' | 'delete') => {
     if (!activeUser) {
       return
     }
 
-    // await store.toggleUsefulByUser(question._id, activeUser?.userName)
-    // setVoted((prev) => !prev)
+    if (vote === 'add') {
+      const response = await usefulService.add('questions', question.id)
 
-    // setUsefulCount((prev) => {
-    //   return vote === 'add' ? prev + 1 : prev - 1
-    // })
+      if (response.ok) {
+        setVoted(true)
+        setUsefulCount((prev) => prev + 1 || 1)
+      }
+    } else {
+      const response = await usefulService.remove('questions', question.id)
+
+      if (response.ok) {
+        setVoted(false)
+        setUsefulCount((prev) => prev - 1 || 0)
+      }
+    }
 
     trackEvent({
       category: 'QuestionPage',
@@ -73,18 +102,28 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
       return
     }
 
-    // await store.toggleSubscriber(question._id, activeUser._id)
-    // const action = subscribed ? 'Unsubscribed' : 'Subscribed'
+    if (!subscribed) {
+      const response = await subscribersService.add('questions', question.id)
 
-    // setSubscribersCount((prev) => prev + (subscribed ? -1 : 1))
-    // // toggle subscribed
-    // setSubscribed((prev) => !prev)
+      if (response.ok) {
+        setSubscribed(true)
+        setSubscribersCount((prev) => prev + 1 || 1)
+      }
+    } else {
+      const response = await subscribersService.remove('questions', question.id)
 
-    // trackEvent({
-    //   category: 'Question',
-    //   action: action,
-    //   label: question.slug,
-    // })
+      if (response.ok) {
+        setSubscribed(false)
+        setSubscribersCount((prev) => prev - 1 || 0)
+      }
+    }
+    const action = subscribed ? 'Unsubscribed' : 'Subscribed'
+
+    trackEvent({
+      category: 'Question',
+      action: action,
+      label: question.slug,
+    })
   }
 
   return (
@@ -121,15 +160,9 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
             </ClientOnly>
           </Flex>
 
-          {/* <ModerationStatus
-            status={question.moderation}
-            contentType="question"
-            sx={{ top: 0, position: 'absolute', right: 0 }}
-          /> */}
-
           <ContentAuthorTimestamp
-            userName={question.createdBy?.username || ''}
-            countryCode={question.createdBy?.country || ''}
+            userName={question.author?.username || ''}
+            countryCode={question.author?.country || ''}
             created={question.createdAt}
             modified={question.modifiedAt || undefined}
             action="Asked"

@@ -1,8 +1,11 @@
-import { Category, DBCategory } from './category.model'
-import { DBImage, Image } from './image.model'
-import { Tag } from './tag.model'
+import { Category } from './category.model'
+import { Image } from './image.model'
 
-import type { DBTag } from './tag.model'
+import type { IConvertedFileMeta } from 'oa-shared'
+import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
+import type { DBCategory } from './category.model'
+import type { DBImage } from './image.model'
+import type { Tag } from './tag.model'
 
 export class DBQuestionAuthor {
   readonly id: number
@@ -49,7 +52,6 @@ export class DBQuestion {
   readonly subscriber_count?: number
   readonly total_views?: number
   readonly category: DBCategory | null
-  readonly tags_db: DBTag[]
   created_by: number | null
   modified_at: string | null
   title: string
@@ -57,26 +59,24 @@ export class DBQuestion {
   description: string
   images: DBImage[] | null
   category_id?: number
-  tagIds: number[]
+  tags: number[]
 
-  constructor(obj: Omit<DBQuestion, 'id' | 'tags_db'>) {
+  constructor(obj: Omit<DBQuestion, 'id'>) {
     Object.assign(this, obj)
   }
 
   static toDB(obj: Question) {
     return new DBQuestion({
       created_at: obj.createdAt.toUTCString(),
-      created_by: obj.createdBy?.id || null,
+      created_by: obj.author?.id || null,
       modified_at: obj.modifiedAt ? obj.modifiedAt.toUTCString() : null,
       title: obj.title,
       slug: obj.slug,
       deleted: obj.deleted,
       description: obj.description,
-      images: obj.images
-        ? obj.images.map((image) => DBImage.toDB(image))
-        : null,
-      category: obj.category ? DBCategory.toDB(obj.category) : null,
-      tagIds: obj.tags ? obj.tags.map((tag) => tag.id) : [],
+      images: obj.images,
+      category: obj.category ?? null,
+      tags: obj.tagIds ?? [],
     })
   }
 }
@@ -84,7 +84,7 @@ export class DBQuestion {
 export class Question {
   id: number
   createdAt: Date
-  createdBy: QuestionAuthor | null
+  author: QuestionAuthor | null
   modifiedAt: Date | null
   title: string
   slug: string
@@ -95,17 +95,18 @@ export class Question {
   subscriberCount: number
   category: Category | null
   totalViews: number
-  tags: Tag[] | null
+  tags: Tag[]
+  tagIds?: number[]
 
   constructor(obj: Question) {
     Object.assign(this, obj)
   }
 
-  static fromDB(obj: DBQuestion) {
+  static fromDB(obj: DBQuestion, tags: Tag[]) {
     return new Question({
       id: obj.id,
       createdAt: new Date(obj.created_at),
-      createdBy: obj.author ? QuestionAuthor.fromDB(obj.author) : null,
+      author: obj.author ? QuestionAuthor.fromDB(obj.author) : null,
       modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
       title: obj.title,
       slug: obj.slug,
@@ -118,9 +119,19 @@ export class Question {
       subscriberCount: obj.subscriber_count || 0,
       category: obj.category ? Category.fromDB(obj.category) : null,
       totalViews: obj.total_views || 0,
-      tags: obj.tags_db ? obj.tags_db.map((tag) => Tag.fromDB(tag)) : null,
+      tagIds: obj.tags,
+      tags: tags,
     })
   }
 }
 
 export type Reply = Omit<Question, 'replies'>
+
+export type QuestionFormData = {
+  title: string
+  description: string
+  category: SelectValue | null
+  tags?: number[]
+  images: IConvertedFileMeta[] | null
+  existingImages: Image[] | null
+}

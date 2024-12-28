@@ -37,7 +37,7 @@ export const QuestionFilterHeader = () => {
       const categories = (await questionService.getQuestionCategories()) || []
       setCategories(
         categories.map((x) => {
-          return { value: x._id, label: x.label }
+          return { value: x.id.toString(), label: x.name }
         }),
       )
     }
@@ -97,7 +97,7 @@ export const QuestionFilterHeader = () => {
         <CategoriesSelectV2
           value={category}
           onChange={(updatedCategory) =>
-            updateFilter(QuestionSearchParams.category, updatedCategory)
+            updateFilter(QuestionSearchParams.category, updatedCategory?.value)
           }
           placeholder={listing.filterCategory}
           isForm={false}

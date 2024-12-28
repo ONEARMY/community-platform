@@ -6,6 +6,6 @@ export const QuestionCreate = (props) => {
       data-testid="question-create-form"
       parentType="create"
       {...props}
-    ></QuestionForm>
+    />
   )
 }

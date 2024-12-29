@@ -1,20 +1,43 @@
 import { faker } from '@faker-js/faker'
 
-import type { IModerationStatus, IQuestion } from 'oa-shared'
+import type { Question } from 'src/models/question.model'
 
 export const FactoryQuestionItem = (
-  questionOverloads: Partial<IQuestion.Item> = {},
-): IQuestion.Item => ({
-  _id: faker.string.uuid(),
-  _created: faker.date.past().toString(),
-  _deleted: faker.datatype.boolean(),
-  _contentModifiedTimestamp: faker.date.past().toString(),
-  _createdBy: faker.internet.userName(),
-  _modified: faker.date.past().toString(),
+  questionOverloads: Partial<Question> = {},
+): Question => ({
+  id: faker.number.int(),
+  createdAt: faker.date.past(),
+  deleted: faker.datatype.boolean(),
+  modifiedAt: faker.date.past(),
   title: faker.lorem.sentence(),
   description: faker.lorem.paragraph(),
   slug: faker.lorem.slug(),
-  moderation: 'accepted' as IModerationStatus.ACCEPTED,
-  tags: {},
+  tags: [
+    {
+      id: faker.number.int(),
+      name: faker.lorem.words(1),
+    },
+    {
+      id: faker.number.int(),
+      name: faker.lorem.words(1),
+    },
+  ],
+  author: {
+    id: faker.number.int(),
+    name: faker.internet.userName(),
+    country: faker.location.countryCode(),
+    isVerified: faker.datatype.boolean(),
+    firebaseAuthId: faker.string.uuid(),
+    photoUrl: faker.image.avatar(),
+    username: faker.internet.userName(),
+  },
+  category: {
+    id: faker.number.int(),
+    name: faker.lorem.words(1),
+  },
+  images: [],
+  subscriberCount: faker.number.int(),
+  totalViews: faker.number.int(),
+  usefulCount: faker.number.int(),
   ...questionOverloads,
 })

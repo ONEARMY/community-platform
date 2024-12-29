@@ -16,7 +16,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { QuestionPage } from './QuestionPage'
 
-import type { IQuestionDB } from 'oa-shared'
+import type { Question } from 'src/models/question.model'
 import type { Mock } from 'vitest'
 
 const Theme = testingThemeStyles
@@ -79,13 +79,9 @@ describe('Questions', () => {
       // Arrange
       mockQuestionItem.title =
         'Do you prefer camping near a lake or in a forest?'
-      mockQuestionItem.questionCategory = {
-        label: 'Preference',
-        _id: faker.string.uuid(),
-        _modified: faker.date.past().toString(),
-        _created: faker.date.past().toString(),
-        _deleted: faker.datatype.boolean(),
-        _contentModifiedTimestamp: faker.date.past().toString(),
+      mockQuestionItem.category = {
+        name: 'Preference',
+        id: faker.number.int(),
       }
 
       // Act
@@ -120,7 +116,7 @@ describe('Questions', () => {
       // Arrange
       mockQuestionItem.title =
         'Do you prefer camping near a lake or in a forest?'
-      mockQuestionItem.questionCategory = undefined
+      mockQuestionItem.category = null
 
       // Act
       let wrapper
@@ -149,7 +145,7 @@ describe('Questions', () => {
   })
 })
 
-const getWrapper = (question: IQuestionDB) => {
+const getWrapper = (question: Question) => {
   const router = createMemoryRouter(
     createRoutesFromElements(
       <Route

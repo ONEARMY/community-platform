@@ -16,7 +16,7 @@ const ResearchFieldCategory = () => {
       setOptions(
         categories
           .filter((x) => !x._deleted)
-          .map((x) => ({ label: x.label, value: x })),
+          .map((x) => ({ label: x.label, value: x._id })),
       )
     }
 

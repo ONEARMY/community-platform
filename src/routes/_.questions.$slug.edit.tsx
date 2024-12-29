@@ -23,7 +23,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const dbQuestion = result.data as unknown as DBQuestion
 
-  const question = Question.fromDB(dbQuestion)
+  const question = Question.fromDB(dbQuestion, [])
 
   return Response.json({ question }, { headers })
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import {
@@ -39,7 +39,6 @@ type ResearchArticleProps = {
 
 const ResearchArticle = observer(
   ({ research, publicUpdates }: ResearchArticleProps) => {
-    const [updates, setUpdates] = useState(publicUpdates)
     const location = useLocation()
     const researchStore = useResearchStore()
     const { aggregationsStore } = useCommonStores().stores
@@ -53,22 +52,18 @@ const ResearchArticle = observer(
       research.votedUsefulBy?.length || 0,
     )
 
-    useEffect(() => {
+    const updates = useMemo(() => {
       // Only public updates (non draft) are server-side rendered.
       // But we still need to display the draft updates when the currentUser is the author/contributor.
       // Since the current user is only loaded client-side, we need to check and re-set the updates.
       if (!researchStore.activeUser) {
-        return
+        return publicUpdates
       }
 
-      const authorUpdates = research.updates?.filter((update) =>
+      return research.updates?.filter((update) =>
         researchUpdateStatusFilter(research, update, researchStore.activeUser),
       )
-
-      if (authorUpdates.length !== updates.length) {
-        setUpdates(authorUpdates)
-      }
-    }, [researchStore.activeUser])
+    }, [researchStore.activeUser, publicUpdates, research.updates])
 
     useEffect(() => {
       // This could be improved if we can load the user profile server-side

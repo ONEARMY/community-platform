@@ -58,7 +58,7 @@ export const QuestionImagesField = (props: IProps) => {
             }}
           >
             <ImageInputWrapper hasUploadedImg={true}>
-              <ImageComponent src={image.fullPath} />
+              <ImageComponent src={image.publicUrl} />
               <DeleteImage onClick={() => props.removeExistingImage(i)} />
             </ImageInputWrapper>
           </FieldContainer>

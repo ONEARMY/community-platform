@@ -10,19 +10,9 @@ export class DBImage {
 
 export class Image {
   id: string
-  path: string
-  fullPath: string
+  publicUrl: string
 
   constructor(obj: Image) {
     Object.assign(this, obj)
-  }
-
-  static fromDB(obj: DBImage) {
-    const apiUrl = process?.env?.SUPABASE_API_URL
-    return new Image({
-      id: obj.id,
-      path: obj.path,
-      fullPath: apiUrl + '/storage/v1/object/public/' + obj.fullPath,
-    })
   }
 }

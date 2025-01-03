@@ -33,10 +33,10 @@ export const formatImagesForGalleryV2 = (
 
   return imageList
     .filter(Boolean)
-    .filter((i: Image) => !!i?.fullPath)
+    .filter((i: Image) => !!i?.publicUrl)
     .map((image: Image, index: number) => ({
-      downloadUrl: image.fullPath,
-      thumbnailUrl: image.fullPath, // TODO
+      downloadUrl: image.publicUrl.split('?')[0],
+      thumbnailUrl: image.publicUrl,
       alt: `${altPrefix ? altPrefix + ' ' : ''}Gallery image ${index + 1}`,
     }))
 }

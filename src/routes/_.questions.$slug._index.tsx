@@ -1,10 +1,12 @@
 import { useLoaderData } from '@remix-run/react'
+import { ImageSize } from 'src/config/imageTransforms'
 import { Question } from 'src/models/question.model'
 import { Tag } from 'src/models/tag.model'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { QuestionPage } from 'src/pages/Question/QuestionPage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { questionServiceServer } from 'src/services/questionService.server'
+import { storageServiceServer } from 'src/services/storageService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -54,7 +56,15 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       .eq('content_type', 'questions'),
   ])
 
-  const question = Question.fromDB(dbQuestion, tags)
+  const images = dbQuestion.images
+    ? storageServiceServer.getImagesPublicUrls(
+        client,
+        dbQuestion.images,
+        ImageSize.GALLERY,
+      )
+    : []
+
+  const question = Question.fromDB(dbQuestion, tags, images)
   question.usefulCount = usefulVotes.count || 0
   question.subscriberCount = subscribers.count || 0
 
@@ -75,7 +85,7 @@ export const meta = mergeMeta<typeof loader>(({ data }) => {
   }
 
   const title = `${question.title} - Question - ${import.meta.env.VITE_SITE_NAME}`
-  const imageUrl = question.images?.at(0)?.path
+  const imageUrl = question.images?.at(0)?.publicUrl
 
   return generateTags(title, question.description, imageUrl)
 })

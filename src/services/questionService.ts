@@ -28,7 +28,7 @@ const upsert = async (id: number | null, question: QuestionFormData) => {
 
   if (question.existingImages && question.existingImages.length > 0) {
     for (const image of question.existingImages) {
-      data.append('existingImages', JSON.stringify(image))
+      data.append('existingImages', image.id)
     }
   }
 

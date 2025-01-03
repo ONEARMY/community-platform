@@ -8,16 +8,14 @@ import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBImage, Image } from 'src/models/image.model'
+import type { DBImage } from 'src/models/image.model'
 import type { DBProfile } from 'src/models/profile.model'
 import type { DBQuestion } from 'src/models/question.model'
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   try {
     const formData = await request.formData()
-    const imagesToKeepIds = formData
-      .getAll('existingImages')
-      .map((x) => (JSON.parse(x as string) as Image).id)
+    const imagesToKeepIds = formData.getAll('existingImages')
 
     const data = {
       title: formData.get('title') as string,

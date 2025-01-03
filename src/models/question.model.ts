@@ -1,10 +1,9 @@
 import { Category } from './category.model'
-import { Image } from './image.model'
 
 import type { IConvertedFileMeta } from 'oa-shared'
 import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
 import type { DBCategory } from './category.model'
-import type { DBImage } from './image.model'
+import type { DBImage, Image } from './image.model'
 import type { Tag } from './tag.model'
 
 export class DBQuestionAuthor {
@@ -64,21 +63,6 @@ export class DBQuestion {
   constructor(obj: Omit<DBQuestion, 'id'>) {
     Object.assign(this, obj)
   }
-
-  static toDB(obj: Question) {
-    return new DBQuestion({
-      created_at: obj.createdAt.toUTCString(),
-      created_by: obj.author?.id || null,
-      modified_at: obj.modifiedAt ? obj.modifiedAt.toUTCString() : null,
-      title: obj.title,
-      slug: obj.slug,
-      deleted: obj.deleted,
-      description: obj.description,
-      images: obj.images,
-      category: obj.category ?? null,
-      tags: obj.tagIds ?? [],
-    })
-  }
 }
 
 export class Question {
@@ -102,7 +86,7 @@ export class Question {
     Object.assign(this, obj)
   }
 
-  static fromDB(obj: DBQuestion, tags: Tag[]) {
+  static fromDB(obj: DBQuestion, tags: Tag[], images?: Image[]) {
     return new Question({
       id: obj.id,
       createdAt: new Date(obj.created_at),
@@ -111,9 +95,7 @@ export class Question {
       title: obj.title,
       slug: obj.slug,
       description: obj.description,
-      images: obj.images
-        ? obj.images.map((image) => Image.fromDB(image))
-        : null,
+      images: images || [],
       deleted: obj.deleted || false,
       usefulCount: obj.useful_count || 0,
       subscriberCount: obj.subscriber_count || 0,

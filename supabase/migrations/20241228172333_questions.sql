@@ -62,6 +62,8 @@ alter table "public"."profiles" add column "type" text;
 
 alter table "public"."questions" add column "images" json[];
 
+alter table "public"."questions" add column "legacy_id" text;
+
 CREATE INDEX comments_created_by_idx ON public.comments USING btree (created_by);
 
 CREATE INDEX questions_category_idx ON public.questions USING btree (category);

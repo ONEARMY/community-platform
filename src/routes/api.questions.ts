@@ -1,4 +1,4 @@
-// TODO: split this in separate files once we update remix to not use file-based routing
+// TODO: split this in separate files once we update remix to NOT use file-based routing
 
 import { IModerationStatus } from 'oa-shared'
 import { verifyFirebaseToken } from 'src/firestore/firestoreAdmin.server'
@@ -10,6 +10,7 @@ import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient } from '@supabase/supabase-js'
+import type { DBQuestion } from 'src/models/question.model'
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions'
 
 export const loader = async ({ request }) => {
@@ -19,15 +20,25 @@ export const loader = async ({ request }) => {
   const category = Number(params.get('category')) || undefined
   const sort = params.get('sort') as QuestionSortOption
   const skip = Number(params.get('skip')) || 0
-  let take = Number(params.get('take')) || ITEMS_PER_PAGE
-
-  if (take > 100) {
-    take = 100
-  }
 
   const { client, headers } = createSupabaseServerClient(request)
 
-  let query = client.from('questions').select('*', { count: 'exact' })
+  let query = client.from('questions').select(
+    `
+      id,
+      created_at,
+      created_by,
+      modified_at,
+      comment_count,
+      description,
+      slug,
+      category:category(id,name),
+      tags,
+      title,
+      total_views,
+      author:profiles(id, display_name, username, is_verified, country)`,
+    { count: 'exact' },
+  )
 
   if (q) {
     query = query.textSearch('questions_search_fields', q)
@@ -43,10 +54,33 @@ export const loader = async ({ request }) => {
     query = query.order('modified_at', { ascending: false })
   }
 
-  const queryResult = await query.range(skip, take)
+  const queryResult = await query.range(skip, skip + ITEMS_PER_PAGE) // 0 based
 
   const total = queryResult.count
-  const items = queryResult.data
+  const data = queryResult.data as unknown as DBQuestion[]
+
+  const items = data.map((x) => Question.fromDB(x, [], []))
+
+  if (items && items.length > 0) {
+    // Populate useful votes
+    const votes = await client.rpc('get_useful_votes_count_by_content_id', {
+      p_content_type: 'questions',
+      p_content_ids: items.map((x) => x.id),
+    })
+
+    if (votes.data) {
+      const votesByContentId = votes.data.reduce((acc, current) => {
+        acc.set(current.content_id, current.count)
+        return acc
+      }, new Map())
+
+      for (const item of items) {
+        if (votesByContentId.has(item.id)) {
+          item.usefulCount = votesByContentId.get(item.id)!
+        }
+      }
+    }
+  }
 
   return Response.json({ items, total }, { headers })
 }

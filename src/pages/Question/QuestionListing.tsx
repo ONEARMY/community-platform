@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Link, useSearchParams } from '@remix-run/react'
+import { useSearchParams } from '@remix-run/react'
 import { Button, Loader } from 'oa-components'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
 import { questionService } from 'src/pages/Question/question.service'
 import { Flex, Heading } from 'theme-ui'
 
-import { headings, listing } from './labels'
-import { QuestionFilterHeader } from './QuestionFilterHeader'
+import { listing } from './labels'
+import { QuestionListHeader } from './QuestionListHeader'
 import { QuestionListItem } from './QuestionListItem'
 
 import type { Question } from 'src/models/question.model'
@@ -17,7 +16,6 @@ export const QuestionListing = () => {
   const [isFetching, setIsFetching] = useState<boolean>(true)
   const [questions, setQuestions] = useState<Question[]>([])
   const [total, setTotal] = useState<number>(0)
-  const { userStore } = useCommonStores().stores
 
   const [searchParams, setSearchParams] = useSearchParams()
   const q = searchParams.get('q') || ''
@@ -68,38 +66,8 @@ export const QuestionListing = () => {
     !isFetching && questions && questions.length > 0 && questions.length < total
 
   return (
-    <>
-      <Flex my={[18, 26]}>
-        <Heading
-          as="h1"
-          sx={{
-            width: '100%',
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: 5,
-          }}
-        >
-          {headings.list}
-        </Heading>
-      </Flex>
-      <Flex
-        mb={3}
-        sx={{
-          flexWrap: 'nowrap',
-          justifyContent: 'space-between',
-          flexDirection: ['column', 'column', 'row'],
-        }}
-      >
-        <QuestionFilterHeader />
-
-        <Flex sx={{ gap: 2 }}>
-          <Link to={userStore.user ? '/questions/create' : '/sign-up'}>
-            <Button type="button" data-cy="create" variant="primary">
-              {listing.create}
-            </Button>
-          </Link>
-        </Flex>
-      </Flex>
+    <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
+      <QuestionListHeader />
 
       {questions?.length === 0 && !isFetching && (
         <Heading as="h1" sx={{ marginTop: 4 }}>
@@ -129,11 +97,7 @@ export const QuestionListing = () => {
       )}
 
       {showLoadMore && (
-        <Flex
-          sx={{
-            justifyContent: 'center',
-          }}
-        >
+        <Flex sx={{ justifyContent: 'center' }}>
           <Button
             type="button"
             onClick={() => fetchQuestions(questions.length)}
@@ -145,6 +109,6 @@ export const QuestionListing = () => {
       )}
 
       {isFetching && <Loader />}
-    </>
+    </Flex>
   )
 }

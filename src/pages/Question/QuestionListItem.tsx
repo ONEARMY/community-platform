@@ -54,6 +54,7 @@ export const QuestionListItem = ({ question, query }: IProps) => {
             )} */}
 
             <Heading
+              data-cy="question-list-item-title"
               as="h2"
               sx={{
                 color: 'black',

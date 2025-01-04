@@ -28,7 +28,7 @@ describe('CategoryVerticalList', () => {
 
     const allItems = await findAllByTestId('CategoryVerticalList-Item')
 
-    expect(allItems).toHaveLength(10)
+    expect(allItems).toHaveLength(12)
   })
 
   it('orders by _created with oldest first', async () => {
@@ -37,7 +37,7 @@ describe('CategoryVerticalList', () => {
     const allItems = await findAllByTestId('CategoryVerticalList-Item')
 
     expect(allItems[0].title).toEqual('Machines')
-    expect(allItems[9].title).toEqual('Guides')
+    expect(allItems[11].title).toEqual('Guides')
   })
 
   it('renders default category glyph when specific glyph is missing', async () => {

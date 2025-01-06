@@ -49,6 +49,7 @@ export class DBQuestion {
   readonly author?: DBQuestionAuthor
   readonly useful_count?: number
   readonly subscriber_count?: number
+  readonly comment_count?: number
   readonly total_views?: number
   readonly category: DBCategory | null
   created_by: number | null
@@ -77,6 +78,7 @@ export class Question {
   deleted: boolean
   usefulCount: number
   subscriberCount: number
+  commentCount: number
   category: Category | null
   totalViews: number
   tags: Tag[]
@@ -99,6 +101,7 @@ export class Question {
       deleted: obj.deleted || false,
       usefulCount: obj.useful_count || 0,
       subscriberCount: obj.subscriber_count || 0,
+      commentCount: obj.comment_count || 0,
       category: obj.category ? Category.fromDB(obj.category) : null,
       totalViews: obj.total_views || 0,
       tagIds: obj.tags,

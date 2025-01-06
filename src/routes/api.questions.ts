@@ -50,8 +50,10 @@ export const loader = async ({ request }) => {
 
   if (sort === 'Newest') {
     query = query.order('created_at', { ascending: false })
-  } else if (sort === 'LatestUpdated') {
-    query = query.order('modified_at', { ascending: false })
+  } else if (sort === 'Comments') {
+    query = query.order('comment_count', { ascending: false })
+  } else if (sort === 'LeastComments') {
+    query = query.order('comment_count', { ascending: true })
   }
 
   const queryResult = await query.range(skip, skip + ITEMS_PER_PAGE) // 0 based

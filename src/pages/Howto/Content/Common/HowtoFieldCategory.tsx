@@ -9,7 +9,7 @@ import { intro } from 'src/pages/Howto/labels'
 
 import { howtoService } from '../../howto.service'
 
-import type { ICategory } from 'shared/lib'
+import type { ICategory } from 'oa-shared'
 import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
 
 export const HowtoFieldCategory = () => {

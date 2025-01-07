@@ -9,7 +9,7 @@ import {
 describe('transformImpactData', () => {
   it('returns data structured as field inputs', () => {
     const description =
-      'What was your revenue (in USD)? By revenue we mean all money coming in.'
+      'What was your annual revenue (in USD)? By revenue we mean all money coming in.'
 
     const impactFields = [
       {

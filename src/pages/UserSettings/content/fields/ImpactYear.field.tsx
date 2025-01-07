@@ -25,6 +25,7 @@ export const ImpactYearField = (props: Props) => {
         type="submit"
         onClick={handleSubmit}
         form={formId}
+        sx={{ alignSelf: 'start' }}
       >
         {buttons.impact.save}
       </Button>

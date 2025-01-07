@@ -5,7 +5,7 @@ import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { UserContactError } from 'src/pages/User/contact'
 import { form } from 'src/pages/UserSettings/labels'
-import { Box, Heading } from 'theme-ui'
+import { Flex, Heading, Text } from 'theme-ui'
 
 import {
   sortImpactYearDisplayFields,
@@ -17,6 +17,7 @@ import { ImpactYearDisplayField } from '../fields/ImpactYearDisplay.field'
 
 import type { IImpactYear, IImpactYearFieldList } from 'oa-shared'
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
+import type { ThemeUIStyleObject } from 'theme-ui'
 
 interface Props {
   year: IImpactYear
@@ -37,9 +38,11 @@ export const ImpactYearSection = observer(({ year }: Props) => {
   const sx = {
     backgroundColor: 'background',
     borderRadius: 2,
+    gap: 1,
     marginBottom: 2,
     padding: 2,
-  }
+    flexDirection: 'column',
+  } as ThemeUIStyleObject
 
   useEffect(() => {
     const fetchImpact = () => {
@@ -86,11 +89,16 @@ export const ImpactYearSection = observer(({ year }: Props) => {
   }
 
   return (
-    <Box sx={sx} id={`year_${year}`}>
+    <Flex sx={sx} id={`year_${year}`}>
+      <UserContactError submitResults={submitResults} />
+
       <Heading as="h3" variant="small" ref={impactDivRef}>
         {year}
       </Heading>
-      <UserContactError submitResults={submitResults} />
+      <Text as="h4" variant="quiet" sx={{ marginBottom: 2 }}>
+        All fields optional
+      </Text>
+
       <Form
         id={formId}
         initialValues={impact ? transformImpactData(impact) : undefined}
@@ -113,6 +121,6 @@ export const ImpactYearSection = observer(({ year }: Props) => {
           )
         }}
       />
-    </Box>
+    </Flex>
   )
 })

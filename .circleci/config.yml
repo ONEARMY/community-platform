@@ -360,7 +360,7 @@ jobs:
               --build-secret VITE_DONATIONS_IMAGE_URL="$VITE_DONATIONS_IMAGE_URL" \
               --build-secret VITE_HOWTOS_HEADING="$VITE_HOWTOS_HEADING" \
               --build-secret VITE_COMMUNITY_PROGRAM_URL="$VITE_COMMUNITY_PROGRAM_URL" \
-              --build-secret VITE_QUESTIONS_GUIDELINES_URL="$VITE_QUESTIONS_GUIDELINES_URL"
+              --build-secret VITE_QUESTIONS_GUIDELINES_URL="$VITE_QUESTIONS_GUIDELINES_URL" \
               --build-secret VITE_HIDE_MEMBER_PINS_BY_DEFAULT="$VITE_HIDE_MEMBER_PINS_BY_DEFAULT"
       - run:
           name: Set Supabase Secrets

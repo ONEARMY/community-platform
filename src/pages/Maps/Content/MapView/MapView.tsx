@@ -1,10 +1,9 @@
 import { useEffect } from 'react'
 import { Tooltip } from 'react-tooltip'
 import { Button, Map } from 'oa-components'
-import { logger } from 'src/logger'
 import { Box, Flex } from 'theme-ui'
 
-import { GetLocation } from '../../utils/geolocation'
+import { ButtonZoomIn } from './ButtonZoomIn'
 import { Clusters } from './Cluster.client'
 import { Popup } from './Popup.client'
 
@@ -29,7 +28,6 @@ interface IProps {
   zoom: number
 }
 
-const ZOOM_IN_TOOLTIP = 'Zoom in to your location'
 const ZOOM_OUT_TOOLTIP = 'Zoom out to world view'
 
 export const MapView = (props: IProps) => {
@@ -56,18 +54,6 @@ export const MapView = (props: IProps) => {
     ':hover': {
       backgroundColor: 'lightgray',
     },
-  }
-
-  const promptUserLocation = async () => {
-    try {
-      const position = await GetLocation()
-      setCenter({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      })
-    } catch (error) {
-      logger.error(error)
-    }
   }
 
   const handleLocationChange = () => {
@@ -111,24 +97,13 @@ export const MapView = (props: IProps) => {
           top: 0,
           right: 0,
           padding: 4,
-          zIndex: 1000,
+          zIndex: 4000,
           display: 'flex',
           flexDirection: 'column',
           gap: 2,
         }}
       >
-        <Button
-          data-tooltip-content={ZOOM_IN_TOOLTIP}
-          data-cy="LocationViewButton"
-          data-tooltip-id="locationButton-tooltip"
-          sx={buttonStyle}
-          onClick={() => {
-            promptUserLocation()
-            setZoom(9)
-          }}
-          icon="gps-location"
-        />
-        <Tooltip id="locationButton-tooltip" place="left" />
+        <ButtonZoomIn setCenter={setCenter} setZoom={setZoom} />
 
         <Button
           data-tooltip-content={ZOOM_OUT_TOOLTIP}

@@ -97,7 +97,7 @@ export const MapList = (props: IProps) => {
             justifyContent: 'center',
             paddingBottom: 2,
             position: 'absolute',
-            zIndex: 1000,
+            zIndex: 2,
             width: '100%',
           }}
         >

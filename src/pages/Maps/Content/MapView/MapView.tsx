@@ -102,7 +102,7 @@ export const MapView = (props: IProps) => {
       onclick={onBlur}
       ondragend={handleLocationChange}
       onzoomend={handleLocationChange}
-      onresize={handleLocationChange}
+      onresize={isViewportGreaterThanTablet ? handleLocationChange : undefined}
       useFlyTo
     >
       <Box

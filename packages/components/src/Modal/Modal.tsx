@@ -50,6 +50,10 @@ export const Modal = (props: Props) => {
     z-index: 4001;
   `
 
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : 'unset'
+  }, [isOpen])
+
   return (
     <>
       {isOpen && (

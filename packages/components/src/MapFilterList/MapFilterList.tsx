@@ -82,7 +82,7 @@ export const MapFilterList = (props: IProps) => {
       <Flex
         sx={{
           flexDirection: 'column',
-          flex: 'auto',
+          flex: 1,
           gap: 2,
           overflow: 'scroll',
           padding: 2,

@@ -107,8 +107,6 @@ export const MapContainer = (props: IProps) => {
       <MapView
         allPins={filteredPins}
         center={center}
-        initialCenter={INITIAL_CENTER}
-        initialZoom={INITIAL_ZOOM}
         mapRef={mapRef}
         setBoundaries={setBoundaries}
         setZoom={setZoom}

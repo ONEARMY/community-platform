@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { Tooltip } from 'react-tooltip'
 import { Button, Map } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
 
@@ -15,8 +14,6 @@ import type { Map as MapType, MapProps } from 'react-leaflet'
 interface IProps {
   allPins: IMapPin[] | null
   center: ILatLng
-  initialCenter: ILatLng
-  initialZoom: number
   mapRef: RefObject<MapType<MapProps, any>>
   onBlur: () => void
   onPinClick: (IMapPin) => void
@@ -28,14 +25,10 @@ interface IProps {
   zoom: number
 }
 
-const ZOOM_OUT_TOOLTIP = 'Zoom out to world view'
-
 export const MapView = (props: IProps) => {
   const {
     allPins,
     center,
-    initialCenter,
-    initialZoom,
     mapRef,
     onBlur,
     onPinClick,
@@ -46,15 +39,6 @@ export const MapView = (props: IProps) => {
     setZoom,
     zoom,
   } = props
-
-  const buttonStyle = {
-    backgroundColor: 'white',
-    borderRadius: 99,
-    padding: 4,
-    ':hover': {
-      backgroundColor: 'lightgray',
-    },
-  }
 
   const handleLocationChange = () => {
     if (mapRef.current) {
@@ -72,8 +56,6 @@ export const MapView = (props: IProps) => {
       ;(window as any).mapInstance = mapRef.current
     }
   }, [mapRef])
-
-  const isWorldViewButtonDisabled = zoom === initialZoom
 
   return (
     <Map
@@ -104,20 +86,6 @@ export const MapView = (props: IProps) => {
         }}
       >
         <ButtonZoomIn setCenter={setCenter} setZoom={setZoom} />
-
-        <Button
-          data-tooltip-content={ZOOM_OUT_TOOLTIP}
-          data-cy={`WorldViewButton${isWorldViewButtonDisabled ? '-disabled' : ''}`}
-          data-tooltip-id="worldViewButton-tooltip"
-          sx={buttonStyle}
-          onClick={() => {
-            setCenter(initialCenter)
-            setZoom(initialZoom)
-          }}
-          disabled={isWorldViewButtonDisabled}
-          icon="globe"
-        />
-        <Tooltip id="worldViewButton-tooltip" place="top" />
       </Box>
 
       <Flex

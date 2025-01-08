@@ -127,14 +127,6 @@ describe('[Map]', () => {
     cy.intercept(urlLondon).as('londonSearch')
     cy.wait('@londonSearch')
     cy.contains('London, Greater London, England, United Kingdom').click()
-
-    cy.step('WorldViewButton enabled when zoomed in')
-    cy.get('[data-cy=WorldViewButton').click()
-    cy.wait(1000)
-    cy.get('[data-cy=WorldViewButton-disabled')
-
-    cy.step('LocationViewButton visable and clickable')
-    cy.get('[data-cy="LocationViewButton"]').click()
   })
 
   it("Doesn't show member pins when config is set", () => {

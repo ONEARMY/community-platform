@@ -11,10 +11,10 @@ import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Box, Card, Flex, Heading, Image } from 'theme-ui'
 
-import type { IHowto } from 'oa-shared'
+import type { ILibrary } from 'oa-shared'
 
 interface IProps {
-  howto: IHowto
+  howto: ILibrary.Item
 }
 
 export const HowToCard = ({ howto }: IProps) => {

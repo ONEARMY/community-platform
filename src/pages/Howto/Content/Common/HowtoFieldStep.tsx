@@ -21,7 +21,7 @@ import {
 } from '../../constants'
 import { buttons, errors, steps } from '../../labels'
 
-import type { IHowtoStep, IUploadedFileMeta } from 'oa-shared'
+import type { ILibrary, IUploadedFileMeta } from 'oa-shared'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -30,7 +30,7 @@ const ImageInputFieldWrapper = styled.div`
 `
 
 interface IProps {
-  step: any | IHowtoStep
+  step: any | ILibrary.Step
   index: number
   images: IUploadedFileMeta[]
   onDelete: (index: number) => void

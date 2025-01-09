@@ -11,7 +11,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { HowtoForm } from './Howto.form'
 
-import type { IHowtoDB } from 'oa-shared'
+import type { ILibrary } from 'oa-shared'
 import type { ParentType } from './Howto.form'
 
 const Theme = testingThemeStyles
@@ -161,7 +161,7 @@ describe('Howto form', () => {
   })
 })
 
-const Wrapper = (formValues: IHowtoDB, parentType: ParentType, navProps) => {
+const Wrapper = (formValues: ILibrary.DB, parentType: ParentType, navProps) => {
   const ReactStub = createRemixStub(
     [
       {

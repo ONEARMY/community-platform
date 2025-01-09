@@ -1,17 +1,17 @@
 import { Breadcrumbs as BreadcrumbsComponent } from 'oa-components'
 
-import type { IHowto, IQuestion, IResearch } from 'oa-shared'
+import type { ILibrary, IQuestion, IResearch } from 'oa-shared'
 
 type Step = { text: string; link?: string }
 
 interface BreadcrumbsProps {
   steps?: Step[]
-  content?: IResearch.ItemDB | IQuestion.Item | IHowto
+  content?: IResearch.ItemDB | IQuestion.Item | ILibrary.Item
   variant?: 'research' | 'question' | 'howto'
 }
 
 const generateSteps = (
-  content: IResearch.ItemDB | IQuestion.Item | IHowto | undefined,
+  content: IResearch.ItemDB | IQuestion.Item | ILibrary.Item | undefined,
   variant: 'research' | 'question' | 'howto' | undefined,
 ) => {
   const steps: Step[] = []
@@ -40,7 +40,7 @@ const generateSteps = (
 
     steps.push({ text: item.title })
   } else if (variant == 'howto') {
-    const item = content as IHowto
+    const item = content as ILibrary.Item
     steps.push({ text: 'Library', link: '/library' })
 
     if (item.category) {

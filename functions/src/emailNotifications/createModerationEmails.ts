@@ -10,8 +10,7 @@ import { getUserAndEmail } from './utils'
 
 import type { QueryDocumentSnapshot } from 'firebase-admin/firestore'
 import type { Change } from 'firebase-functions/v1'
-import type { IModerable } from 'oa-shared'
-import type { IHowtoDB } from 'oa-shared/models/howto'
+import type { ILibrary, IModerable } from 'oa-shared'
 import type { IMapPin } from 'oa-shared/models/maps'
 
 export async function handleModerationUpdate<T extends IModerable>(
@@ -27,7 +26,7 @@ export async function handleModerationUpdate<T extends IModerable>(
   }
 }
 
-export async function createHowtoModerationEmail(howto: IHowtoDB) {
+export async function createHowtoModerationEmail(howto: ILibrary.DB) {
   const { toUser, toUserEmail } = await getUserAndEmail(howto._createdBy)
 
   if (howto.moderation === IModerationStatus.ACCEPTED) {

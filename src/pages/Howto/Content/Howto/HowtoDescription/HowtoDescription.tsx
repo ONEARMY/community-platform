@@ -30,12 +30,12 @@ import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui'
 import { ContentAuthorTimestamp } from '../../../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import { HowtoDownloads } from '../HowtoDownloads/HowtoDownloads'
 
-import type { IHowtoDB, ITag, IUser } from 'oa-shared'
+import type { ILibrary, ITag, IUser } from 'oa-shared'
 
 const DELETION_LABEL = 'Project marked for deletion'
 
 interface IProps {
-  howto: IHowtoDB & { tagList?: ITag[] }
+  howto: ILibrary.DB & { tagList?: ITag[] }
   loggedInUser: IUser | undefined
   commentsCount: number
   votedUsefulCount?: number

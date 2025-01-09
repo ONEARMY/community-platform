@@ -18,15 +18,10 @@ import HowtoDescription from './HowtoDescription/HowtoDescription'
 import { HowtoDiscussion } from './HowToDiscussion/HowToDiscussion'
 import Step from './Step/Step'
 
-import type {
-  IHowtoDB,
-  IHowtoStep,
-  IHowToStepFormInput,
-  IUser,
-} from 'oa-shared'
+import type { ILibrary, IUser } from 'oa-shared'
 
 type HowtoParams = {
-  howto: IHowtoDB
+  howto: ILibrary.DB
 }
 
 export const Howto = observer(({ howto }: HowtoParams) => {
@@ -87,8 +82,8 @@ export const Howto = observer(({ howto }: HowtoParams) => {
         }
       />
       <Box sx={{ mt: 9 }}>
-        {howto.steps.map((step: IHowToStepFormInput, index: number) => (
-          <Step step={step as IHowtoStep} key={index} stepindex={index} />
+        {howto.steps.map((step: ILibrary.StepInput, index: number) => (
+          <Step step={step as ILibrary.Step} key={index} stepindex={index} />
         ))}
       </Box>
       <ClientOnly fallback={<></>}>

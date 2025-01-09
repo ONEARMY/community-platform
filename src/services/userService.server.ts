@@ -2,7 +2,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore'
 import { DB_ENDPOINTS, IModerationStatus } from 'oa-shared'
 import { firestore } from 'src/utils/firebase'
 
-import type { IHowtoDB, IResearchDB, IUserDB } from 'oa-shared'
+import type { ILibrary, IResearchDB, IUserDB } from 'oa-shared'
 import type { UserCreatedDocs } from 'src/pages/User/types'
 
 const getById = async (id: string): Promise<IUserDB | null> => {
@@ -71,7 +71,7 @@ const getHowtosByAuthor = async (userId: string) => {
         where('_createdBy', '==', userId),
       ),
     )
-  ).docs.map((doc) => doc.data() as IHowtoDB)
+  ).docs.map((doc) => doc.data() as ILibrary.DB)
 }
 
 export const userService = {

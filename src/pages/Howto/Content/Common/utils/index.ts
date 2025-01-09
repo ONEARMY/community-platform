@@ -1,1 +1,0 @@
-export { transformHowtoErrors } from './transformHowtoErrors'

@@ -1,7 +1,7 @@
 import { Field } from 'react-final-form'
 import { FieldInput } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { FormFieldWrapper } from 'src/pages/Howto/Content/Common'
+import { FormFieldWrapper } from 'src/pages/Library/Content/Common'
 import {
   QUESTION_MAX_TITLE_LENGTH,
   QUESTION_MIN_TITLE_LENGTH,

@@ -1,6 +1,6 @@
 import { getSpecialCharacters, stripSpecialCharacters } from './helpers'
 
-import type { HowtoStore } from 'src/stores/Howto/howto.store'
+import type { HowtoStore } from 'src/stores/Library/library.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
 
 type storeTypes = HowtoStore | ResearchStore | QuestionStore

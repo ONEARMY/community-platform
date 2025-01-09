@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/filename-case */
-import { HowtoList } from 'src/pages/Howto/Content/HowtoList/HowtoList'
+import { HowtoList } from 'src/pages/Library/Content/List/LibraryList'
 import { SeoTagsUpdateComponent } from 'src/utils/seo'
 
 export async function clientLoader() {

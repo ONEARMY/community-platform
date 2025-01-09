@@ -7,12 +7,12 @@ type Step = { text: string; link?: string }
 
 interface BreadcrumbsProps {
   steps?: Step[]
-    content?: IResearch.ItemDB | Question | ILibrary
+  content?: IResearch.ItemDB | Question | ILibrary.Item
   variant?: 'research' | 'question' | 'howto'
 }
 
 const generateSteps = (
-    content: IResearch.ItemDB | Question | ILibrary | undefined,
+  content: IResearch.ItemDB | Question | ILibrary.Item | undefined,
   variant: 'research' | 'question' | 'howto' | undefined,
 ) => {
   const steps: Step[] = []

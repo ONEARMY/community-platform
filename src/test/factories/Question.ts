@@ -37,6 +37,7 @@ export const FactoryQuestionItem = (
   },
   images: [],
   subscriberCount: faker.number.int(),
+  commentCount: faker.number.int(),
   totalViews: faker.number.int(),
   usefulCount: faker.number.int(),
   ...questionOverloads,

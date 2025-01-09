@@ -6,15 +6,15 @@ import { Text } from 'theme-ui'
 
 import { HowtoForm } from '../Common/Howto.form'
 
-import type { IHowtoDB, IUser } from 'oa-shared'
+import type { ILibrary, IUser } from 'oa-shared'
 
 interface IState {
-  formValues: IHowtoDB
+  formValues: ILibrary.DB
   loggedInUser?: IUser | undefined
 }
 
 type EditHowtoProps = {
-  howto: IHowtoDB
+  howto: ILibrary.DB
 }
 
 const EditHowto = ({ howto }: EditHowtoProps) => {

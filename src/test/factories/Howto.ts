@@ -1,14 +1,9 @@
 import { faker } from '@faker-js/faker'
-import {
-  DifficultyLevel,
-  type IHowtoDB,
-  type IHowtoStep,
-  IModerationStatus,
-} from 'oa-shared'
+import { DifficultyLevel, type ILibrary, IModerationStatus } from 'oa-shared'
 
 export const FactoryHowto = (
-  howtoOverloads: Partial<IHowtoDB> = {},
-): IHowtoDB => ({
+  howtoOverloads: Partial<ILibrary.DB> = {},
+): ILibrary.DB => ({
   files: [],
   fileLink: '',
   difficulty_level: faker.helpers.arrayElement([
@@ -61,8 +56,8 @@ export const FactoryHowto = (
 })
 
 export const FactoryHowtoStep = (
-  howtoStepOverloads: Partial<IHowtoStep> = {},
-): IHowtoStep => ({
+  howtoStepOverloads: Partial<ILibrary.Step> = {},
+): ILibrary.Step => ({
   images: [
     {
       downloadUrl: faker.internet.url(),
@@ -80,8 +75,8 @@ export const FactoryHowtoStep = (
 })
 
 export const FactoryHowtoDraft = (
-  howtoOverloads: Partial<IHowtoDB> = {},
-): IHowtoDB => ({
+  howtoOverloads: Partial<ILibrary.DB> = {},
+): ILibrary.DB => ({
   _id: faker.string.uuid(),
   _contentModifiedTimestamp: faker.date.past().toString(),
   _created: faker.date.past().toString(),

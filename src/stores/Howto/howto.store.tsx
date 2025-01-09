@@ -9,10 +9,7 @@ import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
 import type {
   IConvertedFileMeta,
-  IHowto,
-  IHowtoDB,
-  IHowtoFormInput,
-  IHowToStepFormInput,
+  ILibrary,
   IUploadedFileMeta,
   IUser,
   UserMention,
@@ -23,7 +20,7 @@ const COLLECTION_NAME = 'howtos'
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
-  public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
+  public uploadStatus: ILibraryItemUploadStatus = getInitialUploadStatus()
 
   constructor(rootStore: IRootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
@@ -39,14 +36,14 @@ export class HowtoStore extends ModuleStore {
   }
 
   public async toggleUsefulByUser(
-    howto: IHowtoDB,
+    howto: ILibrary.DB,
     userName: string,
   ): Promise<void> {
     const updatedItem = (await toggleDocUsefulByUser(
       COLLECTION_NAME,
       howto._id,
       userName,
-    )) as IHowtoDB
+    )) as ILibrary.DB
 
     runInAction(() => {
       if ((updatedItem.votedUsefulBy || []).includes(userName)) {
@@ -60,7 +57,7 @@ export class HowtoStore extends ModuleStore {
     })
   }
 
-  public updateUploadStatus(update: keyof IHowToUploadStatus) {
+  public updateUploadStatus(update: keyof ILibraryItemUploadStatus) {
     this.uploadStatus[update] = true
   }
 
@@ -69,12 +66,14 @@ export class HowtoStore extends ModuleStore {
   }
 
   public async incrementDownloadCount(howToID: string) {
-    const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(howToID)
+    const dbRef = this.db
+      .collection<ILibrary.Item>(COLLECTION_NAME)
+      .doc(howToID)
     const howToData = await toJS(dbRef.get('server'))
     const totalDownloads = howToData?.total_downloads || 0
 
     if (howToData) {
-      const updatedHowto: IHowto = {
+      const updatedHowto: ILibrary.Item = {
         ...howToData,
         total_downloads: totalDownloads! + 1,
       }
@@ -105,10 +104,12 @@ export class HowtoStore extends ModuleStore {
   }
 
   private async updateHowtoItem(
-    howToItem: IHowto,
+    howToItem: ILibrary.Item,
     setLastEditTimestamp = false,
   ) {
-    const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(howToItem._id)
+    const dbRef = this.db
+      .collection<ILibrary.Item>(COLLECTION_NAME)
+      .doc(howToItem._id)
 
     const { text: description, users } = await this.addUserReference(
       howToItem.description || '',
@@ -181,7 +182,7 @@ export class HowtoStore extends ModuleStore {
         return
       }
 
-      const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(id)
+      const dbRef = this.db.collection<ILibrary.Item>(COLLECTION_NAME).doc(id)
       const howToData = await dbRef.get('server')
 
       if (id && howToData) {
@@ -198,14 +199,14 @@ export class HowtoStore extends ModuleStore {
 
   // upload a new or update an existing project
   public async uploadHowTo(
-    values: IHowtoFormInput | IHowtoDB,
-  ): Promise<IHowtoDB | null> {
+    values: ILibrary.FormInput | ILibrary.DB,
+  ): Promise<ILibrary.DB | null> {
     logger.debug('uploading project', { values })
     this.updateUploadStatus('Start')
     // create a reference either to the existing document (if editing) or a new document if creating
     const dbRef = this.db
-      .collection<IHowto>(COLLECTION_NAME)
-      .doc((values as IHowtoDB)._id)
+      .collection<ILibrary.Item>(COLLECTION_NAME)
+      .doc((values as ILibrary.DB)._id)
     const id = dbRef.id
 
     const existingDoc = await dbRef.get('server')
@@ -213,7 +214,7 @@ export class HowtoStore extends ModuleStore {
 
     const user = this.activeUser as IUser
 
-    let howto: IHowtoDB | null = null
+    let howto: ILibrary.DB | null = null
     try {
       // upload any pending images, avoid trying to re-upload images previously saved
       // if cover already uploaded stored as object not array
@@ -246,7 +247,7 @@ export class HowtoStore extends ModuleStore {
       const creatorCountry = this.getCreatorCountry(user, values)
       const fileLink = values.fileLink ?? ''
       const totalComments = values.totalComments ? values.totalComments : 0
-      const mentions = (values as IHowtoDB)?.mentions ?? []
+      const mentions = (values as ILibrary.DB)?.mentions ?? []
       const slug = await this.setSlug(values)
       const previousSlugs = this.setPreviousSlugs(values, slug)
       const total_downloads = values['total_downloads'] ?? 0
@@ -255,7 +256,7 @@ export class HowtoStore extends ModuleStore {
       const keywords = getKeywords(values.title + ' ' + values.description)
       keywords.push(_createdBy)
 
-      const howToData: IHowto = {
+      const howToData: ILibrary.Item = {
         ...(existingDoc || {}),
         _id,
         _createdBy,
@@ -297,7 +298,7 @@ export class HowtoStore extends ModuleStore {
     return howto
   }
 
-  private async findMentionsInSteps(steps: IHowToStepFormInput[]) {
+  private async findMentionsInSteps(steps: ILibrary.StepInput[]) {
     const stepMentions: UserMention[] = []
 
     for (const step of steps) {
@@ -320,7 +321,7 @@ export class HowtoStore extends ModuleStore {
     }
   }
 
-  private getCreatorCountry(user: IUser, values: IHowtoFormInput) {
+  private getCreatorCountry(user: IUser, values: ILibrary.FormInput) {
     const { creatorCountry, _createdBy } = values
     const userCountry = getUserCountry(user)
 
@@ -344,7 +345,7 @@ export class HowtoStore extends ModuleStore {
     }
   }
 
-  private async uploadStepImages(steps: IHowToStepFormInput[], id: string) {
+  private async uploadStepImages(steps: ILibrary.StepInput[], id: string) {
     for (const step of steps) {
       // determine any new images to upload
       const stepImages = (step.images as IConvertedFileMeta[]).filter(
@@ -362,7 +363,7 @@ export class HowtoStore extends ModuleStore {
   }
 }
 
-interface IHowToUploadStatus {
+interface ILibraryItemUploadStatus {
   Start: boolean
   Cover: boolean
   Files: boolean
@@ -371,7 +372,7 @@ interface IHowToUploadStatus {
   Complete: boolean
 }
 
-const getInitialUploadStatus = (): IHowToUploadStatus => ({
+const getInitialUploadStatus = (): ILibraryItemUploadStatus => ({
   Start: false,
   Cover: false,
   'Step Images': false,

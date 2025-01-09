@@ -3,12 +3,12 @@ import { DifficultyLevel, IModerationStatus } from 'oa-shared'
 
 import { generateAlphaNumeric } from '../utils/TestUtils'
 
-import type { IHowtoDB } from 'oa-shared'
+import type { ILibrary } from 'oa-shared'
 
 const _id = generateAlphaNumeric(20)
 const _created = dateformat(Date.now(), 'yyyy-mm-dd')
 
-export const howto: IHowtoDB = {
+export const howto: ILibrary.DB = {
   _id,
   _deleted: false,
   _createdBy: 'howto_super_user',

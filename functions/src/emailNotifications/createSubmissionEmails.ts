@@ -11,9 +11,8 @@ import {
   getSenderMessageEmail,
 } from './templateHelpers'
 import { getUserAndEmail, isValidMessageRequest } from './utils'
-import { IMessageDB } from 'oa-shared/models/messages'
-import { IHowtoDB } from 'oa-shared/models/howto'
-import { IMapPin } from 'oa-shared/models/maps'
+
+import type { ILibrary, IMapPin, IMessageDB } from 'oa-shared'
 
 export async function createMessageEmails(message: IMessageDB) {
   const isValid = await isValidMessageRequest(message)
@@ -38,7 +37,7 @@ export async function createMessageEmails(message: IMessageDB) {
   }
 }
 
-export async function createHowtoSubmissionEmail(howto: IHowtoDB) {
+export async function createHowtoSubmissionEmail(howto: ILibrary.DB) {
   const { toUser, toUserEmail } = await getUserAndEmail(howto._createdBy)
 
   if (howto.moderation === IModerationStatus.AWAITING_MODERATION) {

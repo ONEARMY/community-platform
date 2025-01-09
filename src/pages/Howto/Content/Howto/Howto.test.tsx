@@ -14,7 +14,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { Howto } from './Howto'
 
-import type { IHowtoDB } from 'oa-shared'
+import type { ILibrary } from 'oa-shared'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 
 const Theme = preciousPlasticTheme.styles
@@ -48,7 +48,7 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
 
 const factory = (
   howtoStore?: Partial<HowtoStore>,
-  overrideHowto?: IHowtoDB,
+  overrideHowto?: ILibrary.DB,
 ) => {
   const ReactStub = createRemixStub([
     {

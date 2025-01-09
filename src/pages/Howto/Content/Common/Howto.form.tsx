@@ -35,7 +35,7 @@ import { HowtoPostingGuidelines } from './HowtoPostingGuidelines'
 import { HowToSubmitStatus } from './SubmitStatus'
 
 import type { FormApi } from 'final-form'
-import type { IHowtoFormInput } from 'oa-shared'
+import type { ILibrary } from 'oa-shared'
 
 export type ParentType = 'create' | 'edit'
 
@@ -77,7 +77,7 @@ export const HowtoForm = observer((props: IProps) => {
   const formId = 'howtoForm'
   const headingText = parentType === 'create' ? create : edit
 
-  const checkFilesValid = (formValues: IHowtoFormInput) => {
+  const checkFilesValid = (formValues: ILibrary.FormInput) => {
     if (
       formValues.fileLink &&
       formValues.files &&
@@ -90,7 +90,7 @@ export const HowtoForm = observer((props: IProps) => {
       return true
     }
   }
-  const onSubmit = async (formValues: IHowtoFormInput, form: FormApi) => {
+  const onSubmit = async (formValues: ILibrary.FormInput, form: FormApi) => {
     if (!checkFilesValid(formValues)) {
       return
     }

@@ -14,7 +14,7 @@ import HowToCard from './HowToCard'
 import { HowtoHeader } from './HowtoListHeader'
 
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
-import type { IHowto } from 'oa-shared'
+import type { ILibrary } from 'oa-shared'
 import type { HowtoSortOption } from './HowtoSortOptions'
 
 export const HowtoList = observer(() => {
@@ -22,13 +22,13 @@ export const HowtoList = observer(() => {
 
   const { userStore } = useCommonStores().stores
   const [isFetching, setIsFetching] = useState<boolean>(true)
-  const [howtos, setHowtos] = useState<IHowto[]>([])
+  const [howtos, setHowtos] = useState<ILibrary.Item[]>([])
   const [total, setTotal] = useState<number>(0)
   const [lastVisible, setLastVisible] = useState<
     QueryDocumentSnapshot<DocumentData, DocumentData> | undefined
   >(undefined)
   const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } =
-    useDrafts<IHowto>({
+    useDrafts<ILibrary.Item>({
       getDraftCount: howtoService.getDraftCount,
       getDrafts: howtoService.getDrafts,
     })

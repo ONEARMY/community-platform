@@ -23,7 +23,7 @@ import type {
   QueryFilterConstraint,
   QueryNonFilterConstraint,
 } from 'firebase/firestore'
-import type { ICategory, IHowto, IHowtoDB, IUserDB } from 'oa-shared'
+import type { ICategory, ILibrary, IUserDB } from 'oa-shared'
 import type { HowtoSortOption } from './Content/HowtoList/HowtoSortOptions'
 
 export enum HowtosSearchParams {
@@ -55,7 +55,7 @@ const search = async (
     : undefined
 
   const items = documentSnapshots.docs
-    ? documentSnapshots.docs.map((x) => x.data() as IHowto)
+    ? documentSnapshots.docs.map((x) => x.data() as ILibrary.Item)
     : []
   const total = (await getCountFromServer(countQuery)).data().count
 
@@ -166,7 +166,7 @@ const getDrafts = async (userId: string) => {
   const { itemsQuery } = createDraftQuery(userId)
   const docs = await getDocs(itemsQuery)
 
-  return docs.docs ? docs.docs.map((x) => x.data() as IHowto) : []
+  return docs.docs ? docs.docs.map((x) => x.data() as ILibrary.Item) : []
 }
 
 const getSort = (sort: HowtoSortOption) => {
@@ -207,7 +207,7 @@ const getBySlug = async (slug: string) => {
     return null
   }
 
-  const howto = snapshot.docs[0].data() as IHowtoDB
+  const howto = snapshot.docs[0].data() as ILibrary.DB
 
   if (!howto) {
     return null

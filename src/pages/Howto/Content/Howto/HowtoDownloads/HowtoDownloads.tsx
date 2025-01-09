@@ -10,10 +10,10 @@ import {
   updateHowtoDownloadCooldown,
 } from './downloadCooldown'
 
-import type { IHowtoDB, IUser } from 'oa-shared'
+import type { ILibrary, IUser } from 'oa-shared'
 
 interface IProps {
-  howto: IHowtoDB
+  howto: ILibrary.DB
   loggedInUser: IUser | undefined
 }
 

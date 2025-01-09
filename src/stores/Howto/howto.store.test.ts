@@ -10,7 +10,7 @@ import { FactoryUser } from 'src/test/factories/User'
 
 import { HowtoStore } from './howto.store'
 
-import type { IHowtoDB, IUser } from 'oa-shared'
+import type { ILibrary, IUser } from 'oa-shared'
 import type { IRootStore } from '../RootStore'
 
 const mockGetDoc = vi.fn()
@@ -24,7 +24,7 @@ vi.mock('firebase/firestore', () => ({
 }))
 
 const factory = async (
-  howTos: IHowtoDB[] = [FactoryHowto({})],
+  howTos: ILibrary.DB[] = [FactoryHowto({})],
   userOverloads?: Partial<IUser>,
 ) => {
   const store = new HowtoStore({} as IRootStore)

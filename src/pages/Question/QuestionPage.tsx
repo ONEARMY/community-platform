@@ -13,10 +13,10 @@ import {
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { subscribersService } from 'src/services/subscribersService'
 import { usefulService } from 'src/services/usefulService'
-import { useQuestionStore } from 'src/stores/Question/question.store'
 import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
@@ -32,8 +32,8 @@ type QuestionPageProps = {
 }
 
 export const QuestionPage = observer(({ question }: QuestionPageProps) => {
-  const store = useQuestionStore()
-  const activeUser = store.activeUser
+  const { userStore } = useCommonStores().stores
+  const activeUser = userStore.activeUser
   const [voted, setVoted] = useState<boolean>(false)
   const [subscribed, setSubscribed] = useState<boolean>(false)
   const [usefulCount, setUsefulCount] = useState<number>(question.usefulCount)

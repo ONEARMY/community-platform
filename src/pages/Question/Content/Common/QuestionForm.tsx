@@ -135,10 +135,7 @@ export const QuestionForm = (props: IProps) => {
                   <QuestionPostingGuidelines />
                 </Box>
                 <Card sx={{ marginTop: 4, padding: 4, overflow: 'visible' }}>
-                  <QuestionTitleField
-                    formValues={question}
-                    parentType={parentType}
-                  />
+                  <QuestionTitleField />
                   <QuestionDescriptionField />
                   <QuestionImagesField
                     inputsAvailable={numberOfImageInputsAvailable}

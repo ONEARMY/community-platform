@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useNavigate, useParams } from '@remix-run/react'
 import { UserRole } from 'oa-shared'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm'
-import { useQuestionStore } from 'src/stores/Question/question.store'
 
 import type { Question } from 'src/models/question.model'
 
@@ -13,17 +13,17 @@ type QuestionEdit = {
 export const QuestionEdit = ({ question }: QuestionEdit) => {
   const { slug } = useParams()
   const navigate = useNavigate()
-  const store = useQuestionStore()
+  const { userStore } = useCommonStores().stores
 
   useEffect(() => {
     if (
-      question.author?.firebaseAuthId !== store.activeUser?._authID &&
-      !store.activeUser?.userRoles?.includes(UserRole.ADMIN)
+      question.author?.firebaseAuthId !== userStore.activeUser?._authID &&
+      !userStore.activeUser?.userRoles?.includes(UserRole.ADMIN)
     ) {
       navigate(`/questions/${slug}`)
       return
     }
-  }, [slug, store.activeUser?.userName])
+  }, [slug, userStore.activeUser?.userName])
 
   return (
     <QuestionForm

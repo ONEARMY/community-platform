@@ -8,10 +8,6 @@ import {
   DiscussionStore,
   DiscussionStoreContext,
 } from 'src/stores/Discussions/discussions.store'
-import {
-  QuestionStore,
-  QuestionStoreContext,
-} from 'src/stores/Question/question.store'
 
 export async function loader() {
   return null
@@ -28,11 +24,9 @@ export default function Index() {
 
   return (
     <Main style={{ flex: 1 }}>
-      <QuestionStoreContext.Provider value={new QuestionStore(rootStore)}>
-        <DiscussionStoreContext.Provider value={new DiscussionStore(rootStore)}>
-          <Outlet />
-        </DiscussionStoreContext.Provider>
-      </QuestionStoreContext.Provider>
+      <DiscussionStoreContext.Provider value={new DiscussionStore(rootStore)}>
+        <Outlet />
+      </DiscussionStoreContext.Provider>
     </Main>
   )
 }

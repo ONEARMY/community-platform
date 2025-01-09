@@ -3,13 +3,12 @@ import { getSpecialCharacters, stripSpecialCharacters } from './helpers'
 import type { HowtoStore } from 'src/stores/Library/library.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
 
-type storeTypes = HowtoStore | ResearchStore | QuestionStore
+type storeTypes = HowtoStore | ResearchStore
 
 import { isUrl } from './urlHelper'
 
 import type { Mutator } from 'final-form'
 import type { MainFormAction } from 'src/common/Form/types'
-import type { QuestionStore } from 'src/stores/Question/question.store'
 /****************************************************************************
  *            General Validation Methods
  * **************************************************************************/

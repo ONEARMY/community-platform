@@ -50,7 +50,11 @@ const upsert = async (id: number | null, question: QuestionFormData) => {
         })
 
   if (response.status !== 200 && response.status !== 201) {
-    throw new Error('Error saving question')
+    if (response.status === 409) {
+      throw new Error('That question has already been asked', { cause: 409 })
+    }
+
+    throw new Error('Error saving question', { cause: 500 })
   }
 
   const newQuestion = await response.json()

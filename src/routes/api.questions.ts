@@ -120,10 +120,13 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const slug = convertToSlug(data.title)
 
     if (await isDuplicateSlug(slug, client)) {
-      return Response.json({
-        status: 409,
-        statusText: 'This question already exists',
-      })
+      return Response.json(
+        {},
+        {
+          status: 409,
+          statusText: 'This question already exists',
+        },
+      )
     }
 
     const uploadedImages = formData.getAll('images') as File[]

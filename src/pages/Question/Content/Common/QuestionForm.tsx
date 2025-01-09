@@ -8,7 +8,7 @@ import { QuestionPostingGuidelines } from 'src/pages/Question/Content/Common'
 import * as LABELS from 'src/pages/Question/labels'
 import { questionService } from 'src/services/questionService'
 import { setAllowDraftSaveFalse } from 'src/utils/validators'
-import { Box, Card, Flex, Heading } from 'theme-ui'
+import { Alert, Box, Card, Flex, Heading } from 'theme-ui'
 
 import { QUESTION_MAX_IMAGES } from '../../constants'
 import { QuestionImagesField } from './FormFields/QuestionImage.field'
@@ -39,6 +39,7 @@ export const QuestionForm = (props: IProps) => {
     tags: [],
     images: [],
   })
+  const [saveError, setSaveError] = useState<string | null>(null)
   const id = question?.id || null
 
   useEffect(() => {
@@ -62,6 +63,8 @@ export const QuestionForm = (props: IProps) => {
   }, [question])
 
   const onSubmit = async (formValues: Partial<QuestionFormData>) => {
+    setSaveError(null)
+
     try {
       const result = await questionService.upsert(id, {
         title: formValues.title!,
@@ -76,6 +79,9 @@ export const QuestionForm = (props: IProps) => {
         navigate('/questions/' + result.slug)
       }
     } catch (e) {
+      if (e.cause && e.message) {
+        setSaveError(e.message)
+      }
       logger.error(e)
     }
   }
@@ -182,6 +188,11 @@ export const QuestionForm = (props: IProps) => {
                 >
                   {LABELS.buttons[parentType]}
                 </Button>
+                {saveError && (
+                  <Alert variant="failure" sx={{ mt: 3 }}>
+                    {saveError}
+                  </Alert>
+                )}
               </Box>
             </Flex>
           </Flex>

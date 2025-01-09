@@ -8,7 +8,7 @@ import type { ILibrary } from 'oa-shared'
 const _id = generateAlphaNumeric(20)
 const _created = dateformat(Date.now(), 'yyyy-mm-dd')
 
-export const howto: ILibrary.DB = {
+export const library: ILibrary.DB = {
   _id,
   _deleted: false,
   _createdBy: 'howto_super_user',

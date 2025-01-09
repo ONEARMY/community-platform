@@ -19,7 +19,7 @@ describe('Useful', () => {
     mockGetDoc.mockResolvedValue({ data: () => ({ votedUsefulBy: [] }) })
 
     // Act
-    await toggleDocUsefulByUser('howtos', 'id', 'an-interested-user')
+    await toggleDocUsefulByUser('library', 'id', 'an-interested-user')
 
     // Assert
     expect(mockUpdateDoc).toHaveBeenCalledWith(undefined, {
@@ -37,7 +37,7 @@ describe('Useful', () => {
     })
 
     // Act
-    await toggleDocUsefulByUser('howtos', 'id', 'an-interested-user')
+    await toggleDocUsefulByUser('library', 'id', 'an-interested-user')
 
     // Assert
     expect(mockUpdateDoc).toHaveBeenCalledWith(undefined, {
@@ -55,7 +55,7 @@ describe('Useful', () => {
     })
 
     // Act
-    await toggleDocUsefulByUser('howtos', 'id', 'an-interested-user')
+    await toggleDocUsefulByUser('library', 'id', 'an-interested-user')
 
     // Assert
     expect(mockUpdateDoc).toHaveBeenCalledWith(undefined, {

@@ -90,7 +90,7 @@ A couple tips to help implementing:
 gcloud firestore export gs://[BUCKET_NAME] --collection-ids=[COLLECTION_ID_1],[COLLECTION_ID_2]
 ```
 
-E.g. for the staging server, updating howtos:
+E.g. for the staging server, updating the library:
 
 ```
 gcloud firestore export gs://precious-plastics-v4-dev-exports/2020-10-12 --collection-ids=v3_howtos

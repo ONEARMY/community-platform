@@ -4,19 +4,17 @@
 import { ExternalLinkLabel } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
-import { howto } from '../../fixtures/library'
+import { library } from '../../fixtures/library'
 import { generateNewUserDetails } from '../../utils/TestUtils'
 
-const howtos = Object.values(MOCK_DATA.howtos)
-
-const item = howtos[0]
-const howtoDiscussion = Object.values(MOCK_DATA.discussions).find(
+const item = Object.values(MOCK_DATA.library)[0]
+const libraryDiscussion = Object.values(MOCK_DATA.discussions).find(
   ({ sourceId }) => sourceId === item._id,
 )
 
-describe('[Howto.Discussions]', () => {
+describe('[Library.Discussions]', () => {
   it('can open using deep links', () => {
-    const firstComment = howtoDiscussion.comments[0]
+    const firstComment = libraryDiscussion.comments[0]
     cy.visit(`/library/${item.slug}#comment:${firstComment._id}`)
     cy.wait(2000)
     cy.checkCommentItem(firstComment.text, 2)
@@ -24,7 +22,7 @@ describe('[Howto.Discussions]', () => {
 
   it('allows authenticated users to contribute to discussions', () => {
     const visitor = generateNewUserDetails()
-    cy.addHowto(howto, visitor)
+    cy.addProject(library, visitor)
     cy.signUpNewUser(visitor)
 
     const newComment = `An interesting project. ${visitor.username}`
@@ -32,10 +30,10 @@ describe('[Howto.Discussions]', () => {
     const newReply = `Thanks Dave and Ben. What does everyone else think? - ${visitor.username}`
     const updatedNewReply = `Anyone else? All the best, ${visitor.username}`
 
-    const howtoPath = `/library/howto-for-discussion-${visitor.username}`
+    const projectPath = `/library/howto-for-discussion-${visitor.username}`
 
     cy.step('Can add comment')
-    cy.visit(howtoPath)
+    cy.visit(projectPath)
     cy.contains('Start the discussion')
     cy.contains('0 comments')
     cy.addComment(newComment)
@@ -48,7 +46,7 @@ describe('[Howto.Discussions]', () => {
     const secondCommentor = generateNewUserDetails()
     cy.logout()
     cy.signUpNewUser(secondCommentor)
-    cy.visit(howtoPath)
+    cy.visit(projectPath)
     cy.addReply(newReply)
     cy.wait(1000)
     cy.contains('2 comments')
@@ -78,7 +76,7 @@ describe('[Howto.Discussions]', () => {
     cy.step('First commentor can respond')
     cy.logout()
     cy.login(visitor.email, visitor.password)
-    cy.visit(howtoPath)
+    cy.visit(projectPath)
 
     cy.addReply(secondReply)
 

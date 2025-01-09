@@ -18,21 +18,23 @@ import {
 import { Box, Card, Flex, Heading } from 'theme-ui'
 
 import { headings, intro } from '../../labels'
-import { HowtoButtonDraft } from './LibraryButtonDraft'
-import { HowtoButtonPublish } from './LibraryButtonPublish'
-import { HowtoFieldCategory } from './LibraryCategory.field'
-import { HowtoFieldCoverImage } from './LibraryCoverImage.field'
-import { HowtoFieldCoverImageAlt } from './LibraryCoverImageAlt.field'
-import { HowtoFieldDescription } from './LibraryDescription.field'
-import { HowtoFieldDifficulty } from './LibraryDifficulty.field'
-import { HowtoErrors } from './LibraryErrors'
-import { HowtoFieldFiles } from './LibraryFiles.field'
-import { HowtoPostingGuidelines } from './LibraryPostingGuidelines'
-import { HowtoFieldStepsContainer } from './LibraryStepsContainer.field'
-import { HowtoFieldTags } from './LibraryTags.field'
-import { HowtoFieldTime } from './LibraryTime.field'
-import { HowtoFieldTitle } from './LibraryTitle.field'
-import { HowToSubmitStatus } from './SubmitStatus'
+import {
+  LibraryButtonDraft,
+  LibraryButtonPublish,
+  LibraryCategoryField,
+  LibraryCoverImageAltField,
+  LibraryCoverImageField,
+  LibraryDescriptionField,
+  LibraryDifficultyField,
+  LibraryErrors,
+  LibraryFilesField,
+  LibraryPostingGuidelines,
+  LibraryStepsContainerField,
+  LibraryTagsField,
+  LibraryTimeField,
+  LibraryTitleField,
+  SubmitStatus,
+} from './'
 
 import type { FormApi } from 'final-form'
 import type { ILibrary } from 'oa-shared'
@@ -55,8 +57,8 @@ interface IProps {
 const FormContainer = styled.form`
   width: 100%;
 `
-export const HowtoForm = observer((props: IProps) => {
-  const { howtoStore } = useCommonStores().stores
+export const LibraryForm = observer((props: IProps) => {
+  const { LibraryStore } = useCommonStores().stores
 
   const [state, setState] = useState<IState>({
     formSaved: false,
@@ -67,14 +69,14 @@ export const HowtoForm = observer((props: IProps) => {
     showInvalidFileWarning:
       props.formValues.files?.length > 0 && props.formValues.fileLink,
   })
-  const [howtoSlug, setHowtoSlug] = useState<string>('')
+  const [itemSlug, setItemSlug] = useState<string>('')
 
   const { formValues, parentType } = props
   const { fileEditMode, showSubmitModal, showInvalidFileWarning } = state
   const { heading } = intro
   const { create, edit } = headings
 
-  const formId = 'howtoForm'
+  const formId = 'libraryForm'
   const headingText = parentType === 'create' ? create : edit
 
   const checkFilesValid = (formValues: ILibrary.FormInput) => {
@@ -101,8 +103,8 @@ export const HowtoForm = observer((props: IProps) => {
         : IModerationStatus.AWAITING_MODERATION
     }
     logger.debug('submitting form', formValues)
-    const howto = await howtoStore.uploadHowTo(formValues)
-    howto && setHowtoSlug(howto.slug)
+    const howto = await LibraryStore.upload(formValues)
+    howto && setItemSlug(howto.slug)
     form.reset(formValues)
   }
   // automatically generate the slug when the title changes
@@ -116,12 +118,12 @@ export const HowtoForm = observer((props: IProps) => {
   return (
     <>
       {showSubmitModal && (
-        <HowToSubmitStatus
+        <SubmitStatus
           {...props}
-          slug={howtoSlug}
+          slug={itemSlug}
           onClose={() => {
             setState((state) => ({ ...state, showSubmitModal: false }))
-            howtoStore.resetUploadStatus()
+            LibraryStore.resetUploadStatus()
           }}
         />
       )}
@@ -172,7 +174,7 @@ export const HowtoForm = observer((props: IProps) => {
                     <Box
                       sx={{ mt: '20px', display: ['block', 'block', 'none'] }}
                     >
-                      <HowtoPostingGuidelines />
+                      <LibraryPostingGuidelines />
                     </Box>
                     <Card mt={3}>
                       <Flex
@@ -191,16 +193,16 @@ export const HowtoForm = observer((props: IProps) => {
                             px={2}
                             sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                           >
-                            <HowtoFieldTitle
-                              store={howtoStore}
+                            <LibraryTitleField
+                              store={LibraryStore}
                               _id={formValues._id}
                             />
-                            <HowtoFieldCategory />
-                            <HowtoFieldTags />
-                            <HowtoFieldTime />
-                            <HowtoFieldDifficulty />
-                            <HowtoFieldDescription />
-                            <HowtoFieldFiles
+                            <LibraryCategoryField />
+                            <LibraryTagsField />
+                            <LibraryTimeField />
+                            <LibraryDifficultyField />
+                            <LibraryDescriptionField />
+                            <LibraryFilesField
                               fileEditMode={fileEditMode}
                               files={formValues.files}
                               onClick={() => {
@@ -219,14 +221,14 @@ export const HowtoForm = observer((props: IProps) => {
                             sx={{ flexDirection: 'column', flex: [1, 1, 3] }}
                             data-cy={'intro-cover'}
                           >
-                            <HowtoFieldCoverImage />
-                            <HowtoFieldCoverImageAlt />
+                            <LibraryCoverImageField />
+                            <LibraryCoverImageAltField />
                           </Flex>
                         </Flex>
                       </Flex>
                     </Card>
 
-                    <HowtoFieldStepsContainer />
+                    <LibraryStepsContainerField />
                   </Flex>
                 </FormContainer>
               </Flex>
@@ -250,23 +252,23 @@ export const HowtoForm = observer((props: IProps) => {
                   }}
                 >
                   <Box sx={{ display: ['none', 'none', 'block'] }}>
-                    <HowtoPostingGuidelines />
+                    <LibraryPostingGuidelines />
                   </Box>
 
-                  <HowtoButtonDraft
+                  <LibraryButtonDraft
                     form={form}
                     formId={formId}
                     moderation={formValues.moderation}
                     submitting={submitting}
                   />
 
-                  <HowtoButtonPublish
+                  <LibraryButtonPublish
                     form={form}
                     formId={formId}
                     submitting={submitting}
                   />
 
-                  <HowtoErrors
+                  <LibraryErrors
                     errors={errors}
                     isVisible={submitFailed && hasValidationErrors}
                   />

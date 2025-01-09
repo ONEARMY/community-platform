@@ -30,13 +30,13 @@ describe('UserStatistics', () => {
     expect(locationLink).toHaveTextContent('Greenland')
   })
 
-  it('renders howto link when on howto stats', () => {
+  it('renders project link when on library stats', () => {
     const { getByTestId } = render(
       <Default {...(Default.args as UserStatisticsProps)} />,
     )
-    const howtoLink = getByTestId('howto-link')
+    const libraryLink = getByTestId('library-link')
 
-    expect(howtoLink.getAttribute('href')).toBe('/library?q=Test User')
+    expect(libraryLink.getAttribute('href')).toBe('/library?q=Test User')
   })
 
   it('renders research link when on research stats', () => {
@@ -66,13 +66,13 @@ describe('UserStatistics', () => {
     expect(usefulCount).toHaveTextContent('Useful: 20')
   })
 
-  it('renders howto count when howtoCount is provided', () => {
+  it('renders library count when libraryCount is provided', () => {
     const { getByTestId } = render(
       <Default {...(Default.args as UserStatisticsProps)} />,
     )
-    const howtoCount = getByTestId('howto-stat')
+    const libraryCount = getByTestId('library-stat')
 
-    expect(howtoCount).toHaveTextContent(/^Library: 10$/)
+    expect(libraryCount).toHaveTextContent(/^Library: 10$/)
   })
 
   it('renders research count when researchCount is provided', () => {

@@ -9,7 +9,7 @@ We currently have 3 bounty levels
 | Level | Amount | It should take...                                           | E.g.                                |
 | ----- | ------ | ----------------------------------------------------------- | ----------------------------------- |
 | 1     | €20    | Roughly 1-2 hours work for a junior/intermediate developer  | Small bugfixes, UI tweaks           |
-| 2     | €40    | Roughly 3-5 hours work for an intermediate/senior developer | Minor feature, e.g. Howto search    |
+| 2     | €40    | Roughly 3-5 hours work for an intermediate/senior developer | Minor feature, e.g. Library search    |
 | 3     | €85    | Roughly 6+ hours work for a more senior developer           | Major feature, e.g. Research module |
 
 ---

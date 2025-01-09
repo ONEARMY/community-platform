@@ -167,6 +167,7 @@ describe('[Research]', () => {
         .invoke('removeAttr', 'target')
         .click()
       cy.go('back')
+      cy.wait(2000)
       cy.reload()
       cy.get('[data-cy=file-download-counter]').should(
         'have.text',

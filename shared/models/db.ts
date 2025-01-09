@@ -11,7 +11,7 @@ import type { ISODateString } from './common'
  * In the future all endpoints should try to just retain prefix-base-revision, e.g. oa_users_rev20201012
  **************************************************************************************/
 export const generateDBEndpoints = () => ({
-  howtos: `v3_howtos`,
+  library: `v3_howtos`,
   users: `v3_users`,
   user_notifications: `user_notifications_rev20221209`,
   tags: `v3_tags`,
@@ -30,11 +30,11 @@ export const generateDBEndpoints = () => ({
 
 /**
  * A list of known subcollections used in endpoints, e.g.
- * /howtos/my-howto-id/stats
+ * /library/my-project-id/stats
  */
 export const dbEndpointSubcollections = {
   user: ['revisions'],
-  howtos: ['stats'],
+  library: ['stats'],
   research: ['stats'],
 }
 // React apps populate a process variable, however it might not always be accessible outside
@@ -50,7 +50,7 @@ if (!('process' in globalThis)) {
  * current implementation
  * @example
  * ```
- * const allHowtos = await db.get(DB_ENDPOINTS.howtos)
+ * const allLibraryItems = await db.get(DB_ENDPOINTS.library)
  * ```
  */
 export const DB_ENDPOINTS = generateDBEndpoints()

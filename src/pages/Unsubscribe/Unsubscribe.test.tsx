@@ -33,10 +33,10 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
       aggregationsStore: {
         isVerified: vi.fn(),
         users_verified: {
-          HowtoAuthor: true,
+          LibraryAuthor: true,
         },
       },
-      howtoStore: {},
+      LibraryStore: {},
     },
   }),
 }))

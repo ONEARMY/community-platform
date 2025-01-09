@@ -1,11 +1,11 @@
 import { Field } from 'react-final-form'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
-import { FormFieldWrapper } from 'src/pages/Library/Content/Common/FormFieldWrapper'
+import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { COMPARISONS } from 'src/utils/comparisons'
 
 import { intro } from '../../labels'
 
-export const HowtoFieldTags = () => {
+export const LibraryTagsField = () => {
   return (
     <FormFieldWrapper text={intro.tags.title} required>
       <Field

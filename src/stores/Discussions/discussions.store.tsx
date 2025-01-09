@@ -288,8 +288,6 @@ export class DiscussionStore extends ModuleStore {
           .collection<IDiscussionSourceModelOptions>(collectionName)
           .doc(discussion.sourceId)
         const parentContent = toJS(await dbRef.get('server'))
-        const parentPath =
-          collectionName === 'howtos' ? 'library' : collectionName
 
         if (parentContent) {
           const recipientsToNotify = getDiscussionContributorsToNotify(
@@ -303,7 +301,7 @@ export class DiscussionStore extends ModuleStore {
               this.userNotificationsStore.triggerNotification(
                 'new_comment_discussion',
                 recipient,
-                `/${parentPath}/${parentContent.slug}#comment:${commentId}`,
+                `/${collectionName}/${parentContent.slug}#comment:${commentId}`,
                 parentContent.title,
               )
             }),

@@ -18,7 +18,7 @@ const ResearchModule: IPageNavigation = {
   title: 'Research',
 }
 
-const howTo: IPageNavigation = {
+const library: IPageNavigation = {
   module: MODULE.HOWTO,
   path: '/library',
   title: 'Library',
@@ -49,7 +49,7 @@ export const getAvailablePageList = (
 }
 
 export const COMMUNITY_PAGES: IPageNavigation[] = [
-  howTo,
+  library,
   maps,
   academy,
   ResearchModule,

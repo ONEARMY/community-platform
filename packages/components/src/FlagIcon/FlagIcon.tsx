@@ -10,7 +10,7 @@ export const FlagIconEvents = styled(ReactCountryFlag)`
   width: 35px !important;
 `
 
-export const FlagIconHowTos = styled(ReactCountryFlag)`
+export const FlagIconLibrary = styled(ReactCountryFlag)`
   border-radius: 3px;
   background-size: cover !important;
   height: 14px;

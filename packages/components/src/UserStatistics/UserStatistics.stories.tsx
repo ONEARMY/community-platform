@@ -17,7 +17,7 @@ Default.args = {
   country: 'Greenland',
   isVerified: true,
   isSupporter: true,
-  howtoCount: 10,
+  libraryCount: 10,
   usefulCount: 20,
   researchCount: 2,
 }

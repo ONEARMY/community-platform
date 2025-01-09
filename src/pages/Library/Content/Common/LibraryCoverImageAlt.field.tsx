@@ -1,11 +1,11 @@
 import { Field } from 'react-final-form'
 import { FieldInput } from 'oa-components'
-import { FormFieldWrapper } from 'src/pages/Library/Content/Common/FormFieldWrapper'
+import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { Box, Text } from 'theme-ui'
 
 import { intro } from '../../labels'
 
-export const HowtoFieldCoverImageAlt = () => {
+export const LibraryCoverImageAltField = () => {
   const { description, placeholder, title } = intro.cover_image_alt
   const name = 'cover_image_alt'
 

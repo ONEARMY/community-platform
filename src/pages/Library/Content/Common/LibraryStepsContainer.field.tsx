@@ -1,7 +1,7 @@
 import { FieldArray } from 'react-final-form-arrays'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Button } from 'oa-components'
-import { HowtoFieldStep } from 'src/pages/Library/Content/Common/LibraryStep.field'
+import { LibraryStepField } from 'src/pages/Library/Content/Common/LibraryStep.field'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { Box, Flex, Heading, Text } from 'theme-ui'
 
@@ -40,7 +40,7 @@ const AnimationContainer = ({ children }: IPropsAnimation) => {
   )
 }
 
-export const HowtoFieldStepsContainer = () => {
+export const LibraryStepsContainerField = () => {
   return (
     <FieldArray name="steps" isEqual={COMPARISONS.step}>
       {({ fields }) => (
@@ -59,7 +59,7 @@ export const HowtoFieldStepsContainer = () => {
               <AnimationContainer
                 key={`${fields.value[index]._animationKey}-1`}
               >
-                <HowtoFieldStep
+                <LibraryStepField
                   key={`${fields.value[index]._animationKey}-2`}
                   step={name}
                   index={index}

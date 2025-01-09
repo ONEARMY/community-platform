@@ -5,7 +5,7 @@ import type { ILibrary, IResearchDB, IUserDB, ProfileTypeName } from 'oa-shared'
 declare global {
   namespace Chai {
     interface Assertion {
-      eqHowtoStep(expect: any, index: number)
+      eqProjectStep(expect: any, index: number)
     }
   }
 }
@@ -29,7 +29,7 @@ chai.use((chaiObj) => {
   chaiObj.Assertion.addMethod('inViewport', assertIsInViewport)
 })
 
-const eqHowto = (chaiObj) => {
+const eqProject = (chaiObj) => {
   function compare(this: any, expected: any) {
     const subject: ILibrary.Item = this._obj
     const {
@@ -74,15 +74,15 @@ const eqHowto = (chaiObj) => {
     )
 
     expected.steps.forEach((step, index) => {
-      expect(subject.steps[index], `Have step ${index}`).to.eqHowtoStep(
+      expect(subject.steps[index], `Have step ${index}`).to.eqProjectStep(
         step,
         index,
       )
     })
   }
-  chaiObj.Assertion.addMethod('eqHowto', compare)
+  chaiObj.Assertion.addMethod('eqProject', compare)
 }
-const eqHowtoStep = (chaiObj) => {
+const eqProjectStep = (chaiObj) => {
   function compare(this: any, expected: any, index: number) {
     const subject: ILibrary.Step = this._obj
     const { _animationKey, text, title } = expected
@@ -97,7 +97,7 @@ const eqHowtoStep = (chaiObj) => {
     )
   }
 
-  chaiObj.Assertion.addMethod('eqHowtoStep', compare)
+  chaiObj.Assertion.addMethod('eqProjectStep', compare)
 }
 
 const eqResearch = (chaiObj) => {
@@ -208,8 +208,8 @@ const eqSettings = (chaiObj) => {
 
   chaiObj.Assertion.addMethod('eqSettings', compare)
 }
-chai.use(eqHowto)
-chai.use(eqHowtoStep)
+chai.use(eqProject)
+chai.use(eqProjectStep)
 chai.use(eqResearch)
 chai.use(eqSettings)
 chai.use(chaiSubset)

@@ -35,7 +35,7 @@ export const notifyPinPublished = functions
       .catch(handleErr)
   })
 
-export const notifyHowtoPublished = functions
+export const notifyLibraryItemPublished = functions
   .runWith({ memory: '512MB' })
   .firestore.document('v3_howtos/{id}')
   .onUpdate(async (change, context) => {

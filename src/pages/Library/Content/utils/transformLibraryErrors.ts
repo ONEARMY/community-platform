@@ -26,7 +26,7 @@ const introErrors = (errors: ITopLevelErrorsList): IErrorsListSet => {
   return { errors, keys, labels, title }
 }
 
-export const transformHowtoErrors = (
+export const transformLibraryErrors = (
   errors: ITopLevelErrorsList,
 ): IErrorsListSet[] => {
   const transformedErrorsSet = [introErrors(errors)]

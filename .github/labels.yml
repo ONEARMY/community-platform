@@ -18,7 +18,7 @@
   { 'name': 'In progress', 'color': '440B89', 'description': '' },
   { 'name': 'Mod: DevOps 🤖', 'color': 'BFD4F2', 'description': '' },
   { 'name': 'Mod: Discussions 💬', 'color': 'BFD4F2', 'description': '' },
-  { 'name': 'Mod: HowTo 📰', 'color': 'BFD4F2', 'description': '' },
+  { 'name': 'Mod: Library 📰', 'color': 'BFD4F2', 'description': '' },
   { 'name': 'Mod: Maps 🗺', 'color': 'BFD4F2', 'description': '' },
   { 'name': 'Mod: Other ⬜️', 'color': 'BFD4F2', 'description': '' },
   { 'name': 'Mod: Profiles 👱', 'color': 'BFD4F2', 'description': '' },

@@ -1,9 +1,9 @@
 import { intro, steps } from 'src/pages/Library/labels'
 import { describe, expect, it } from 'vitest'
 
-import { transformHowtoErrors } from './transformLibraryErrors'
+import { transformLibraryErrors } from './transformLibraryErrors'
 
-describe('transformHowtoErrors', () => {
+describe('transformLibraryErrors', () => {
   describe('introErrors', () => {
     it('transforms a shallow list of intro errors into a set', () => {
       const errors = {
@@ -21,7 +21,7 @@ describe('transformHowtoErrors', () => {
         },
       ]
 
-      expect(transformHowtoErrors(errors)).toEqual(expected)
+      expect(transformLibraryErrors(errors)).toEqual(expected)
     })
   })
 
@@ -54,7 +54,7 @@ describe('transformHowtoErrors', () => {
         labels: steps,
       }
 
-      const set = transformHowtoErrors(errors)
+      const set = transformLibraryErrors(errors)
       expect(set).toEqual([expectedStepTwo, expectedStepThree])
     })
   })

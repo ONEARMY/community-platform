@@ -2,25 +2,25 @@ import { DifficultyLevel } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
 
-const howtos = Object.values(MOCK_DATA.howtos)
+const library = Object.values(MOCK_DATA.library)
 
 describe('[How To]', () => {
   beforeEach(() => {
     cy.visit('/library')
   })
 
-  describe('[List how-tos]', () => {
+  describe('[List Library Projects]', () => {
     it('[By Everyone]', () => {
       cy.step('Has expected page title')
       cy.title().should('include', `Library`)
 
       cy.step('Can search for items')
-      cy.get('[data-cy=howtos-search-box]').click().type('beams')
+      cy.get('[data-cy=library-search-box]').click().type('beams')
       cy.get('[data-cy=card]').its('length').should('be.eq', 1)
 
       cy.step('All basic info displayed on each card')
-      const howtoSlug = 'make-glass-like-beams'
-      const howtoUrl = `/library/${howtoSlug}`
+      const projectSlug = 'make-glass-like-beams'
+      const projectUrl = `/library/${projectSlug}`
       const coverFileRegex = /howto-beams-glass-0-3.jpg/
 
       cy.get('[data-cy=card]').within(() => {
@@ -28,7 +28,7 @@ describe('[How To]', () => {
         cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
         cy.get('[data-cy=Username]').contains('howto_creator')
         cy.get('[data-cy=category]').contains('Guides')
-        cy.get('a').should('have.attr', 'href').and('eq', howtoUrl)
+        cy.get('a').should('have.attr', 'href').and('eq', projectUrl)
       })
 
       cy.step('Can clear search')
@@ -47,25 +47,25 @@ describe('[How To]', () => {
   })
 
   describe('[Read a project]', () => {
-    const specificHowtoUrl = '/library/make-an-interlocking-brick'
+    const itemUrl = '/library/make-an-interlocking-brick'
     const coverFileRegex = /brick-12-1.jpg/
 
     describe('[By Everyone]', () => {
       it('[See all info]', () => {
-        const howto = howtos[0]
+        const item = library[0]
         // Hack to avoid flaky test as the tags are not being loaded on time
-        cy.queryDocuments('howtos', '_id', '==', howto._id)
+        cy.queryDocuments('library', '_id', '==', item._id)
 
         cy.step('Old url pattern redirects to the new location')
         cy.visit('/library/make-an-interlocking-brick')
-        cy.url().should('include', specificHowtoUrl)
+        cy.url().should('include', itemUrl)
 
         cy.step('Edit button is not available')
         cy.get('[data-cy=edit]').should('not.exist')
 
         cy.step('Project has basic info')
-        cy.title().should('eq', `${howto.title} - Library - Precious Plastic`)
-        cy.get('[data-cy=how-to-basis]').then(($summary) => {
+        cy.title().should('eq', `${item.title} - Library - Precious Plastic`)
+        cy.get('[data-cy=library-basis]').then(($summary) => {
           expect($summary).to.contain('howto_creator', 'Author')
           expect($summary).to.contain('Last update', 'Edit')
           expect($summary).to.contain('Make an interlocking brick', 'Title')
@@ -99,14 +99,14 @@ describe('[How To]', () => {
 
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(1)
-          .should('contain', howto.category.label)
+          .should('contain', item.category.label)
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(1)
           .children()
           .should('have.attr', 'href')
-          .and('equal', `/library?category=${howto.category._id}`)
+          .and('equal', `/library?category=${item.category._id}`)
 
-        cy.get('[data-cy=breadcrumbsItem]').eq(2).should('contain', howto.title)
+        cy.get('[data-cy=breadcrumbsItem]').eq(2).should('contain', item.title)
 
         cy.step('Download file button should redirect to sign in')
         cy.get('div[data-tooltip-content="Login to download"]')
@@ -116,7 +116,7 @@ describe('[How To]', () => {
           .should('include', 'sign-in')
 
         cy.step('All steps are shown')
-        cy.visit(specificHowtoUrl)
+        cy.visit(itemUrl)
         cy.get('[data-cy^=step_]').should('have.length', 12)
 
         cy.step('All step info is shown')
@@ -155,14 +155,14 @@ describe('[How To]', () => {
 
       it('[Delete button should not be visible to everyone', () => {
         cy.step('Delete button should not be visible')
-        cy.get('[data-cy="How-To: delete button"]').should('not.exist')
+        cy.get('[data-cy="Library: delete button"]').should('not.exist')
       })
     })
 
     describe('[By Authenticated]', () => {
       it('[Allows opening of attachments]', () => {
         cy.signUpNewUser()
-        cy.visit(specificHowtoUrl)
+        cy.visit(itemUrl)
         cy.step('[Presents the donation request before opening of attachments]')
         cy.step('Shows modal')
         cy.wait(2000)
@@ -181,14 +181,14 @@ describe('[How To]', () => {
 
     describe('[By Owner]', () => {
       beforeEach(() => {
-        cy.visit(specificHowtoUrl)
+        cy.visit(itemUrl)
         cy.login('howto_creator@test.com', 'test1234')
       })
 
       it('[Delete button is visible]', () => {
         cy.step('Delete button should be visible to the author of the how-to')
 
-        cy.get('[data-cy="How-To: delete button"]').should('be.visible')
+        cy.get('[data-cy="Library: delete button"]').should('be.visible')
       })
 
       it('[Edit button is visible]', () => {
@@ -196,28 +196,29 @@ describe('[How To]', () => {
         cy.get('[data-cy=edit]')
           .click()
           .url()
-          .should('include', `${specificHowtoUrl}/edit`)
+          .should('include', `${itemUrl}/edit`)
       })
     })
 
     describe('[By Admin]', () => {
       beforeEach(() => {
         cy.login('demo_admin@example.com', 'demo_admin')
-        cy.visit(specificHowtoUrl)
+        cy.visit(itemUrl)
       })
 
       it('[Delete button is visible]', () => {
         cy.step('Delete button should be visible to the author of the article')
 
-        cy.get('[data-cy="How-To: delete button"]').should('be.visible')
+        cy.get('[data-cy="Library: delete button"]').should('be.visible')
       })
     })
   })
 
   describe('[Read a soft-deleted How-to]', () => {
-    const deletedHowtoUrl = '/library/deleted-how-to'
+    const deletedUrl = '/library/deleted-how-to'
+
     beforeEach(() => {
-      cy.visit(deletedHowtoUrl)
+      cy.visit(deletedUrl)
     })
 
     describe('[By Everyone]', () => {
@@ -233,35 +234,35 @@ describe('[How To]', () => {
     describe('[By Owner]', () => {
       beforeEach(() => {
         cy.login('demo_user@example.com', 'demo_user')
-        cy.visit(deletedHowtoUrl)
+        cy.visit(deletedUrl)
       })
 
       it('[Delete Button is disabled]', () => {
         cy.step('Delete button should be disabled')
 
-        cy.get('[data-cy="How-To: delete button"]').should('be.disabled')
+        cy.get('[data-cy="Library: delete button"]').should('be.disabled')
       })
     })
 
     describe('[By Admin]', () => {
       beforeEach(() => {
         cy.login('demo_user@example.com', 'demo_user')
-        cy.visit(deletedHowtoUrl)
+        cy.visit(deletedUrl)
       })
 
       it('[Delete Button is disabled]', () => {
         cy.step('Delete button should be disabled')
 
-        cy.get('[data-cy="How-To: delete button"]').should('be.disabled')
+        cy.get('[data-cy="Library: delete button"]').should('be.disabled')
       })
     })
   })
 
   describe('[Fail to find a project]', () => {
-    const howToNotFoundUrl = `/library/this-project-does-not-exist`
+    const notFoundUrl = `/library/this-project-does-not-exist`
 
     it('[Redirects to search]', () => {
-      cy.visit(howToNotFoundUrl)
+      cy.visit(notFoundUrl)
       cy.get('[data-test="NotFound: Heading"').should('be.visible')
     })
   })

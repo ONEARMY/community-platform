@@ -24,9 +24,9 @@ import type {
   QueryNonFilterConstraint,
 } from 'firebase/firestore'
 import type { ICategory, ILibrary, IUserDB } from 'oa-shared'
-import type { HowtoSortOption } from './Content/List/LibrarySortOptions'
+import type { LibrarySortOption } from './Content/List/LibrarySortOptions'
 
-export enum HowtosSearchParams {
+export enum LibrarySearchParams {
   category = 'category',
   q = 'q',
   sort = 'sort',
@@ -35,7 +35,7 @@ export enum HowtosSearchParams {
 const search = async (
   words: string[],
   category: string,
-  sort: HowtoSortOption,
+  sort: LibrarySortOption,
   currentUser?: IUserDB,
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
   take: number = 10,
@@ -82,12 +82,12 @@ const moderationFilters = (currentUser?: IUserDB) => {
 const createQueries = (
   words: string[],
   category: string,
-  sort: HowtoSortOption,
+  sort: LibrarySortOption,
   currentUser?: IUserDB,
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
   take: number = 10,
 ) => {
-  const collectionRef = collection(firestore, DB_ENDPOINTS.howtos)
+  const collectionRef = collection(firestore, DB_ENDPOINTS.library)
   let filters: QueryFilterConstraint[] = [
     and(where('_deleted', '!=', true), moderationFilters(currentUser)),
   ]
@@ -125,7 +125,7 @@ const createQueries = (
   return { countQuery, itemsQuery }
 }
 
-const getHowtoCategories = async () => {
+const getLibraryCategories = async () => {
   const collectionRef = collection(firestore, DB_ENDPOINTS.categories)
 
   return (await getDocs(query(collectionRef))).docs.map(
@@ -134,7 +134,7 @@ const getHowtoCategories = async () => {
 }
 
 const createDraftQuery = (userId: string) => {
-  const collectionRef = collection(firestore, DB_ENDPOINTS.howtos)
+  const collectionRef = collection(firestore, DB_ENDPOINTS.library)
   const filters = and(
     where('_createdBy', '==', userId),
     where('moderation', 'in', [
@@ -169,7 +169,7 @@ const getDrafts = async (userId: string) => {
   return docs.docs ? docs.docs.map((x) => x.data() as ILibrary.Item) : []
 }
 
-const getSort = (sort: HowtoSortOption) => {
+const getSort = (sort: LibrarySortOption) => {
   switch (sort) {
     case 'MostComments':
       return orderBy('totalComments', 'desc')
@@ -188,7 +188,7 @@ const getBySlug = async (slug: string) => {
   // Get all that match the slug, to avoid creating an index (blocker for cypress tests)
   let snapshot = await getDocs(
     query(
-      collection(firestore, DB_ENDPOINTS.howtos),
+      collection(firestore, DB_ENDPOINTS.library),
       where('slug', '==', slug),
     ),
   )
@@ -197,7 +197,7 @@ const getBySlug = async (slug: string) => {
     // try previous slugs if slug is not recognized as primary
     snapshot = await getDocs(
       query(
-        collection(firestore, DB_ENDPOINTS.howtos),
+        collection(firestore, DB_ENDPOINTS.library),
         where('previousSlugs', 'array-contains', slug),
       ),
     )
@@ -226,9 +226,9 @@ const getBySlug = async (slug: string) => {
   return howto
 }
 
-export const howtoService = {
+export const libraryService = {
   search,
-  getHowtoCategories,
+  getLibraryCategories,
   getDraftCount,
   getDrafts,
   getBySlug,

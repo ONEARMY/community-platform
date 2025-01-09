@@ -1,15 +1,15 @@
 import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
-import { FactoryHowto } from 'src/test/factories/Library'
+import { FactoryLibraryItem } from 'src/test/factories/Library'
 import { vi } from 'vitest'
 
-export const HowtoFormProvider = ({
+export const LibraryFormProvider = ({
   children,
 }: {
   children: React.ReactNode
 }) => {
   const formProps = {
-    formValues: FactoryHowto(),
+    formValues: FactoryLibraryItem(),
     onSubmit: vi.fn(),
     mutators: { ...arrayMutators },
     component: () => children,

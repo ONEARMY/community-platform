@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, vi } from 'vitest'
 
-import { HowtoFormProvider } from './LibraryFormProvider'
-import { HowtoFieldStep } from './LibraryStep.field'
+import { LibraryFormProvider } from './LibraryFormProvider'
+import { LibraryStepField } from './LibraryStep.field'
 
-describe('HowtoFieldStep', () => {
+describe('LibraryStepField', () => {
   it('renders', async () => {
     const props = {
       step: [],
@@ -15,9 +15,9 @@ describe('HowtoFieldStep', () => {
     }
 
     render(
-      <HowtoFormProvider>
-        <HowtoFieldStep {...props} />
-      </HowtoFormProvider>,
+      <LibraryFormProvider>
+        <LibraryStepField {...props} />
+      </LibraryFormProvider>,
     )
 
     await screen.findByText('Step 1 *')

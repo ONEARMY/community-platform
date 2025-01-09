@@ -1,5 +1,14 @@
-import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
+import { IModerationStatus } from 'oa-shared'
+
+import { getMockLibraryItem } from '../emulator/seed/content-generate'
 import { DB_ENDPOINTS } from '../models'
+import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
+import { PP_SIGNOFF } from './constants'
+import {
+  createHowtoModerationEmail,
+  createMapPinModerationEmail,
+  handleModerationUpdate,
+} from './createModerationEmails'
 import {
   HOW_TO_APPROVAL_SUBJECT,
   HOW_TO_NEEDS_IMPROVEMENTS_SUBJECT,
@@ -10,15 +19,8 @@ import {
   MAP_PIN_REJECTED_SUBJECT,
   MAP_PIN_SUBMISSION_SUBJECT,
 } from './templateHelpers'
-import { getMockHowto } from '../emulator/seed/content-generate'
-import {
-  createHowtoModerationEmail,
-  createMapPinModerationEmail,
-  handleModerationUpdate,
-} from './createModerationEmails'
-import { PP_SIGNOFF } from './constants'
-import { IUserDB } from 'oa-shared/models/user'
-import { IModerationStatus } from 'oa-shared'
+
+import type { IUserDB } from 'oa-shared/models/user'
 
 jest.mock('../Firebase/auth', () => ({
   firebaseAuth: {
@@ -43,7 +45,7 @@ const userFactory = (_id: string, user: Partial<IUserDB> = {}): IUserDB =>
     ...user,
   }) as IUserDB
 
-describe('Create howto moderation emails', () => {
+describe('Create library moderation emails', () => {
   const db = FirebaseEmulatedTest.admin.firestore()
 
   beforeEach(async () => {
@@ -62,17 +64,17 @@ describe('Create howto moderation emails', () => {
     await FirebaseEmulatedTest.clearFirestoreDB()
   })
 
-  it('Creates an email for an accepted howto', async () => {
-    const howtoApproved = getMockHowto('user_1')
-    const howtoAwaitingModeration = {
-      ...howtoApproved,
+  it('Creates an email for an accepted library items', async () => {
+    const projectApproved = getMockLibraryItem('user_1')
+    const projectAwaitingModeration = {
+      ...projectApproved,
       moderation: IModerationStatus.AWAITING_MODERATION,
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
-      howtoAwaitingModeration,
-      howtoApproved,
-      'howtos',
-      howtoApproved._id,
+      projectAwaitingModeration,
+      projectApproved,
+      'library',
+      projectApproved._id,
     )
 
     await handleModerationUpdate(change, createHowtoModerationEmail)
@@ -103,7 +105,10 @@ describe('Create howto moderation emails', () => {
   })
 
   it('Creates an email for a howto awaiting moderation', async () => {
-    const howtoRejected = getMockHowto('user_1', IModerationStatus.REJECTED)
+    const howtoRejected = getMockLibraryItem(
+      'user_1',
+      IModerationStatus.REJECTED,
+    )
     const howtoAwaitingModeration = {
       ...howtoRejected,
       moderation: IModerationStatus.AWAITING_MODERATION,
@@ -111,7 +116,7 @@ describe('Create howto moderation emails', () => {
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
       howtoRejected,
       howtoAwaitingModeration,
-      'howtos',
+      'library',
       howtoAwaitingModeration._id,
     )
 
@@ -143,7 +148,7 @@ describe('Create howto moderation emails', () => {
   })
 
   it('Creates an email for a rejected howto', async () => {
-    const howtoAwaitingModeration = getMockHowto(
+    const howtoAwaitingModeration = getMockLibraryItem(
       'user_1',
       IModerationStatus.AWAITING_MODERATION,
     )
@@ -154,7 +159,7 @@ describe('Create howto moderation emails', () => {
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
       howtoAwaitingModeration,
       howtoRejected,
-      'howtos',
+      'library',
       howtoAwaitingModeration._id,
     )
 
@@ -189,7 +194,7 @@ describe('Create howto moderation emails', () => {
   })
 
   it('Creates an email for a howto that needs improvements', async () => {
-    const howtoAwaitingModeration = getMockHowto(
+    const howtoAwaitingModeration = getMockLibraryItem(
       'user_1',
       IModerationStatus.AWAITING_MODERATION,
     )
@@ -202,7 +207,7 @@ describe('Create howto moderation emails', () => {
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
       howtoAwaitingModeration,
       howtoNeedsImprovements,
-      'howtos',
+      'library',
       howtoAwaitingModeration._id,
     )
 
@@ -238,8 +243,8 @@ describe('Create howto moderation emails', () => {
     })
   })
 
-  it('Does not create an email for non-approved howtos', async () => {
-    const howtoApproved = getMockHowto('user_1')
+  it('Does not create an email for non-approved library items', async () => {
+    const howtoApproved = getMockLibraryItem('user_1')
     const howtoDraft = {
       ...howtoApproved,
       moderation: IModerationStatus.DRAFT,
@@ -247,7 +252,7 @@ describe('Create howto moderation emails', () => {
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
       howtoApproved,
       howtoDraft,
-      'howtos',
+      'library',
       howtoApproved._id,
     )
 

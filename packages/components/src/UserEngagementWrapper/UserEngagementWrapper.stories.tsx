@@ -16,8 +16,8 @@ export const Default: StoryFn<typeof UserEngagementWrapper> = () => (
       <Box sx={{ margin: 3 }}>
         <ArticleCallToAction
           author={{
-            userName: 'howto._createdBy',
-            countryCode: 'howto.creatorCountry',
+            userName: 'library._createdBy',
+            countryCode: 'us',
             isVerified: true,
           }}
         >

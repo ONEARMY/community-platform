@@ -15,7 +15,7 @@ export interface UserStatisticsProps {
   country?: string
   isVerified: boolean
   isSupporter?: boolean
-  howtoCount: number
+  libraryCount: number
   usefulCount: number
   researchCount: number
   totalViews: number
@@ -81,15 +81,15 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           </Flex>
         )}
 
-        {props.howtoCount > 0 && (
+        {props.libraryCount > 0 && (
           <InternalLink
             to={'/library?q=' + props.userName}
             sx={{ color: 'black' }}
-            data-testid="howto-link"
+            data-testid="library-link"
           >
-            <Flex data-testid="howto-stat">
+            <Flex data-testid="library-stat">
               <ElWithBeforeIcon icon={HowToCountIcon} />
-              {`Library: ${props.howtoCount}`}
+              {`Library: ${props.libraryCount}`}
             </Flex>
           </InternalLink>
         )}
@@ -122,5 +122,5 @@ const isEmpty = (props: UserStatisticsProps) =>
   !props.isVerified &&
   !props.isSupporter &&
   !props.usefulCount &&
-  !props.howtoCount &&
+  !props.libraryCount &&
   !props.totalViews

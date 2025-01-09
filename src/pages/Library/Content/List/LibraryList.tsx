@@ -9,34 +9,34 @@ import { Flex, Grid, Heading } from 'theme-ui'
 
 import { ITEMS_PER_PAGE } from '../../constants'
 import { listing } from '../../labels'
-import { howtoService, HowtosSearchParams } from '../../library.service'
-import HowToCard from './LibraryCard'
-import { HowtoHeader } from './LibraryListHeader'
+import { LibrarySearchParams, libraryService } from '../../library.service'
+import { LibraryCard } from './LibraryCard'
+import { LibraryListHeader } from './LibraryListHeader'
 
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
 import type { ILibrary } from 'oa-shared'
-import type { HowtoSortOption } from './LibrarySortOptions'
+import type { LibrarySortOption } from './LibrarySortOptions'
 
-export const HowtoList = observer(() => {
+export const LibraryList = observer(() => {
   const siteName = import.meta.env.VITE_SITE_NAME
 
   const { userStore } = useCommonStores().stores
   const [isFetching, setIsFetching] = useState<boolean>(true)
-  const [howtos, setHowtos] = useState<ILibrary.Item[]>([])
+  const [library, setLibrary] = useState<ILibrary.Item[]>([])
   const [total, setTotal] = useState<number>(0)
   const [lastVisible, setLastVisible] = useState<
     QueryDocumentSnapshot<DocumentData, DocumentData> | undefined
   >(undefined)
   const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } =
     useDrafts<ILibrary.Item>({
-      getDraftCount: howtoService.getDraftCount,
-      getDrafts: howtoService.getDrafts,
+      getDraftCount: libraryService.getDraftCount,
+      getDrafts: libraryService.getDrafts,
     })
 
   const [searchParams, setSearchParams] = useSearchParams()
-  const q = searchParams.get(HowtosSearchParams.q) || ''
-  const category = searchParams.get(HowtosSearchParams.category) || ''
-  const sort = searchParams.get(HowtosSearchParams.sort) as HowtoSortOption
+  const q = searchParams.get(LibrarySearchParams.q) || ''
+  const category = searchParams.get(LibrarySearchParams.category) || ''
+  const sort = searchParams.get(LibrarySearchParams.sort) as LibrarySortOption
 
   useEffect(() => {
     if (!sort) {
@@ -44,18 +44,18 @@ export const HowtoList = observer(() => {
       const params = new URLSearchParams(searchParams.toString())
 
       if (q) {
-        params.set(HowtosSearchParams.sort, 'MostRelevant')
+        params.set(LibrarySearchParams.sort, 'MostRelevant')
       } else {
-        params.set(HowtosSearchParams.sort, 'Newest')
+        params.set(LibrarySearchParams.sort, 'Newest')
       }
       setSearchParams(params)
     } else {
       // search only when sort is set (avoids duplicate requests)
-      fetchHowtos()
+      fetchLibrary()
     }
   }, [q, category, sort])
 
-  const fetchHowtos = async (
+  const fetchLibrary = async (
     skipFrom?: QueryDocumentSnapshot<DocumentData, DocumentData>,
   ) => {
     setIsFetching(true)
@@ -63,7 +63,7 @@ export const HowtoList = observer(() => {
     try {
       const searchWords = q ? q.toLocaleLowerCase().split(' ') : []
 
-      const result = await howtoService.search(
+      const result = await libraryService.search(
         searchWords,
         category,
         sort,
@@ -74,16 +74,16 @@ export const HowtoList = observer(() => {
 
       if (skipFrom) {
         // if skipFrom is set, means we are requesting another page that should be appended
-        setHowtos((howtos) => [...howtos, ...result.items])
+        setLibrary((library) => [...library, ...result.items])
       } else {
-        setHowtos(result.items)
+        setLibrary(result.items)
       }
 
       setLastVisible(result.lastVisible)
 
       setTotal(result.total)
     } catch (error) {
-      logger.error('error fetching howtos', error)
+      logger.error('error fetching library', error)
     }
 
     setIsFetching(false)
@@ -92,13 +92,13 @@ export const HowtoList = observer(() => {
   const showLoadMore =
     !isFetching &&
     !showDrafts &&
-    howtos &&
-    howtos.length > 0 &&
-    howtos.length < total
+    library &&
+    library.length > 0 &&
+    library.length < total
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
-      <HowtoHeader
+      <LibraryListHeader
         draftCount={draftCount}
         handleShowDrafts={handleShowDrafts}
         showDrafts={showDrafts}
@@ -112,14 +112,14 @@ export const HowtoList = observer(() => {
       >
         {showDrafts ? (
           drafts.map((item) => {
-            return <HowToCard key={item._id} howto={item} />
+            return <LibraryCard key={item._id} item={item} />
           })
         ) : (
           <>
-            {howtos &&
-              howtos.length > 0 &&
-              howtos.map((howto, index) => (
-                <HowToCard key={index} howto={howto} />
+            {library &&
+              library.length > 0 &&
+              library.map((item, index) => (
+                <LibraryCard key={index} item={item} />
               ))}
           </>
         )}
@@ -131,7 +131,7 @@ export const HowtoList = observer(() => {
             justifyContent: 'center',
           }}
         >
-          <Button type="button" onClick={() => fetchHowtos(lastVisible)}>
+          <Button type="button" onClick={() => fetchLibrary(lastVisible)}>
             {listing.loadMore}
           </Button>
         </Flex>

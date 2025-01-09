@@ -2,48 +2,15 @@
 // how-tos and research. Any changes here should be replicated there.
 
 import { MOCK_DATA } from '../../data'
-import { clearDatabase, seedDatabase } from '../../support/commands'
+import { clearDatabase } from '../../support/commands'
+import { seedQuestionComments } from './seedQuestions'
 // import { question } from '../../fixtures/question'
 // import { generateNewUserDetails } from '../../utils/TestUtils'
 
 describe('[Questions.Discussions]', () => {
   before(() => {
     cy.then(async () => {
-      const tenantId = Cypress.env('TENANT_ID')
-      Cypress.log({
-        displayName: 'Seeding database for tenant',
-        message: tenantId,
-      })
-
-      const profileData = await seedDatabase(
-        {
-          profiles: [
-            {
-              firebase_auth_id: 'demo_user',
-              username: 'demo_user',
-              tenant_id: tenantId,
-              created_at: new Date().toUTCString(),
-              display_name: 'Demo User',
-              is_verified: false,
-            },
-          ],
-        },
-        tenantId,
-      )
-      await seedDatabase(
-        {
-          comments: [
-            {
-              tenant_id: tenantId,
-              created_at: new Date().toUTCString(),
-              comment: 'First comment',
-              created_by: profileData.profiles.data[0].id,
-              source_type: 'question',
-            },
-          ],
-        },
-        tenantId,
-      )
+      await seedQuestionComments()
     })
   })
 
@@ -108,6 +75,6 @@ describe('[Questions.Discussions]', () => {
       displayName: 'Clearing database for tenant',
       message: tenantId,
     })
-    clearDatabase(['profiles', 'comments'], tenantId)
+    clearDatabase(['profiles', 'questions', 'comments'], tenantId)
   })
 })

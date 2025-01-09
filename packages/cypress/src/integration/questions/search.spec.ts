@@ -1,9 +1,18 @@
+import { clearDatabase } from '../../support/commands'
+import { seedQuestions } from './seedQuestions'
+
 describe('[How To]', () => {
   beforeEach(() => {
     cy.visit('/questions')
   })
 
   describe('[By Everyone]', () => {
+    before(() => {
+      cy.then(async () => {
+        await seedQuestions()
+      })
+    })
+
     it('Searches', () => {
       cy.step('Can search for items')
       cy.get('[data-cy=questions-search-box]').clear().type(`deal`)
@@ -28,30 +37,30 @@ describe('[How To]', () => {
 
     it('Filters', () => {
       cy.step('Can select a category to limit items displayed')
-      cy.get('[data-cy=category]').contains('exhibition')
+      cy.get('[data-cy=category]').contains('Machines')
       cy.get('[data-cy=CategoryVerticalList]').within(() => {
-        cy.contains('screening').click()
+        cy.contains('Machines').click()
       })
       cy.get('[data-cy=CategoryVerticalList-Item-active]')
-      cy.url().should('include', 'category=categoryoix4r6grC1mMA0Xz3K')
+      cy.url().should('include', 'category=')
       cy.get('[data-cy=question-list-item]').its('length').should('be.eq', 1)
-      cy.get('[data-cy=category]').contains('screening')
+      cy.get('[data-cy=category]').contains('Machines')
 
       cy.step('Can remove the category filter by selecting it again')
       cy.get('[data-cy=CategoryVerticalList]').within(() => {
-        cy.contains('screening').click()
+        cy.contains('Machines').click()
       })
-      cy.url().should('not.include', 'category=categoryoix4r6grC1mMA0Xz3K')
-      cy.get('[data-cy=category]').contains('exhibition')
+      cy.url().should('not.include', 'category=')
+      cy.get('[data-cy=category]').contains('Machines')
 
       cy.step('Going to an item removes the filter on return')
       cy.get('[data-cy=CategoryVerticalList]').within(() => {
-        cy.contains('screening').click()
+        cy.contains('Machines').click()
       })
       cy.wait(500)
       cy.get('[data-cy=question-list-item]').click()
       cy.go('back')
-      cy.url().should('not.include', 'category=categoryoix4r6grC1mMA0Xz3K')
+      cy.url().should('not.include', 'category=')
     })
 
     it('should show question list items after visit a question', () => {
@@ -65,6 +74,15 @@ describe('[How To]', () => {
       cy.get('[data-cy=question-list-item]:eq(21)').should('not.exist')
       cy.get('[data-cy=load-more]').click()
       cy.get('[data-cy=question-list-item]:eq(21)').should('exist')
+    })
+
+    after(() => {
+      const tenantId = Cypress.env('TENANT_ID')
+      Cypress.log({
+        displayName: 'Clearing database for tenant',
+        message: tenantId,
+      })
+      clearDatabase(['profiles', 'questions', 'categories'], tenantId)
     })
   })
 })

@@ -1,4 +1,4 @@
-export { categories } from './categories'
+export { categories, categoriesV2 } from './categories'
 export { discussions } from './discussions'
 export { howtos } from './library'
 export { mappins } from './mappins'

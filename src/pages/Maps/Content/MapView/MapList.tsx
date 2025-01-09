@@ -77,7 +77,8 @@ export const MapList = (props: IProps) => {
           display: ['none', 'none', 'block', 'block'],
           background: 'white',
           flex: 1,
-          overflow: 'scroll',
+          overflowY: 'scroll',
+          overflowX: 'hidden',
         }}
       >
         <MapWithListHeader {...headerProps} viewport="desktop" />

@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { AuthRoute } from 'src/pages/common/AuthRoute'
-import CreateHowto from 'src/pages/Howto/Content/CreateHowto/CreateHowto'
+import CreateHowto from 'src/pages/Library/CreateLibrary'
 
 export async function clientLoader() {
   return null

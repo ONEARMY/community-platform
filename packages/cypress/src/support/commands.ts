@@ -5,7 +5,7 @@ import { deleteDB } from 'idb'
 
 import { Auth, TestDB } from './db/firebase'
 
-import type { IHowtoDB, IQuestionDB, IResearchDB } from 'oa-shared'
+import type { ILibrary, IQuestionDB, IResearchDB } from 'oa-shared'
 import type { IUserSignUpDetails } from '../utils/TestUtils'
 import type { firebase } from './db/firebase'
 
@@ -33,7 +33,7 @@ declare global {
         opStr: any,
         value: string,
       ): Chainable<any[]>
-      addHowto(howto: IHowtoDB, user: IUserSignUpDetails): Chainable<void>
+      addHowto(howto: ILibrary.DB, user: IUserSignUpDetails): Chainable<void>
       addQuestion(
         question: IQuestionDB,
         user: IUserSignUpDetails,

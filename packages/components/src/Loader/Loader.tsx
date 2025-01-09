@@ -43,7 +43,7 @@ export const Loader = ({ label, sx }: Props) => {
           />
         )}
         <Text sx={{ width: '100%', textAlign: 'center' }}>
-          {label || 'loading...'}
+          {label || 'Loading...'}
         </Text>
       </Flex>
     </>

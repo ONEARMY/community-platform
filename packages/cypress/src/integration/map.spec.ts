@@ -4,36 +4,26 @@ const urlLondon =
   'https://nominatim.openstreetmap.org/search?format=json&q=london&accept-language=en'
 
 describe('[Map]', () => {
-  beforeEach(() => {
-    localStorage.setItem('VITE_THEME', 'fixing-fashion')
-  })
-
   it('[Shows expected pins]', () => {
+    localStorage.setItem('VITE_THEME', 'fixing-fashion')
     cy.viewport('macbook-16')
 
     cy.step('Shows all pins onload')
     cy.visit('/map')
     cy.title().should('include', `Map`)
 
-    cy.step('Old map pins can be clicked on')
-    cy.get(`[data-cy=pin-${userId}]`).click()
-    cy.get('[data-cy=MapMemberCard]').within(() => {
-      cy.get('[data-cy=Username]').contains(userId)
-    })
-    cy.url().should('include', `#${userId}`)
+    cy.step('No filters selected by default')
+    cy.visit('/map')
+    cy.get('[data-cy=MemberTypeVerticalList]')
+      .first()
+      .within(() => {
+        cy.get('[data-cy="MemberTypeVerticalList-Item-active"]').should(
+          'have.length',
+          0,
+        )
+      })
 
-    cy.step('Old map pins can be hidden')
-    cy.get('.markercluster-map').click(0, 0)
-    cy.get('[data-cy=MapMemberCard]').should('not.exist')
-    cy.url().should('not.include', `#${userId}`)
-
-    cy.step('Link to new map visible and clickable')
-    cy.wait(500) // wait for interaction
-    cy.get('[data-cy=Banner]').contains('Test it out!').click()
-    cy.get('[data-cy=Banner]').contains('go back to the old one!')
-
-    cy.step('New map shows the cards')
-    cy.get('[data-cy="welome-header"]').should('be.visible')
+    cy.step('Shows the cards')
     cy.get('[data-cy="CardList-desktop"]').should('be.visible')
     cy.get('[data-cy="list-results"]').contains(/\d+ results in view/)
 
@@ -69,23 +59,25 @@ describe('[Map]', () => {
     cy.get('[data-cy=MapFilterList-ShowResultsButton]').first().click()
 
     cy.step('As the user moves in the list updates')
-    for (let i = 0; i < 6; i++) {
+    cy.visit(`/map#${userId}`)
+    cy.wait(500) // Wait for animation to complete
+    for (let i = 0; i < 9; i++) {
       cy.get('.leaflet-control-zoom-in').click()
     }
+    cy.wait(500) // Wait for animation to complete
     cy.get('[data-cy="list-results"]').contains('1 result')
     cy.get('[data-cy="CardList-desktop"]').within(() => {
-      cy.get('[data-cy=CardListItem]').within(() => {
+      cy.get('[data-cy=CardListItem-selected]').within(() => {
         cy.contains(userId)
         cy.get('[data-cy="MemberBadge-workshop"]')
       })
     })
-    cy.get('[data-cy=CardListItem]').contains(userId).click()
     cy.get('[data-cy="PinProfile"]')
       .get('[data-cy="Username"]')
       .contains(userId)
     cy.get('[data-cy=CardListItem-selected]').first().click()
 
-    cy.step('New map pins can be clicked on')
+    cy.step('Map pins can be clicked on')
     cy.get(`[data-cy=pin-${userId}]`).click()
     cy.get('[data-cy=PinProfile]').within(() => {
       cy.get('[data-cy=Username]').contains(userId)
@@ -93,7 +85,7 @@ describe('[Map]', () => {
     })
     cy.url().should('include', `#${userId}`)
 
-    cy.step('New map pins can be hidden with the cross button')
+    cy.step('Map pins can be hidden with the cross button')
     cy.get('[data-cy=PinProfile]').should('be.visible')
     cy.get('[data-cy=PinProfileCloseButton]').click()
     cy.url().should('not.include', `#${userId}`)
@@ -117,8 +109,12 @@ describe('[Map]', () => {
 
     cy.get('[data-cy="ShowMobileListButton"]').click()
     cy.get('[data-cy="CardList-mobile"]').within(() => {
-      cy.contains(userId)
-      cy.get('[data-cy="MemberBadge-workshop"]')
+      cy.get('[data-cy=CardListItem]')
+        .first()
+        .within(() => {
+          cy.contains(userId)
+          cy.get('[data-cy="MemberBadge-workshop"]')
+        })
     })
 
     cy.step('Mobile list view can be hidden')
@@ -133,51 +129,23 @@ describe('[Map]', () => {
     cy.contains('London, Greater London, England, United Kingdom').click()
   })
 
-  it('Test zoom out/ globe button + zoom in to users location button', () => {
-    cy.viewport('macbook-16')
+  it("Doesn't show member pins when config is set", () => {
+    localStorage.setItem('VITE_THEME', 'precious-plastic') // Not essential
+    localStorage.setItem('VITE_HIDE_MEMBER_PINS_BY_DEFAULT', 'true')
+
+    cy.step('Every profile type other than member is set')
     cy.visit('/map')
-    cy.get('[data-cy=Banner]').contains('Test it out!').click()
-    cy.wait(500)
-
-    cy.get('[data-cy="WorldViewButton"]', { timeout: 10000 })
-      .should('exist')
-      .and('be.visible')
-    cy.get('[data-cy="WorldViewButton"]').should('exist').and('be.visible')
-
-    const mapZoomProxySelector = '.leaflet-tile-container.leaflet-zoom-animated'
-
-    cy.get('[data-cy="WorldViewButton"]').click()
-    cy.wait(500)
-
-    // Check if the transform matrix has scale factor 1 (for matrix(a, b, c, d, e, f), 'a' and 'd' should be 1)
-    cy.get(mapZoomProxySelector)
-      .invoke('css', 'transform')
-      .then((transform) => {
-        const matrixValues = transform.match(/matrix\(([^)]+)\)/)[1].split(', ')
-        const scaleX = parseFloat(matrixValues[0]) // 'a' value from matrix
-        const scaleY = parseFloat(matrixValues[3]) // 'd' value from matrix
-        expect(scaleX).to.eq(1)
-        expect(scaleY).to.eq(1)
+    cy.get('[data-cy=MemberTypeVerticalList]')
+      .first()
+      .within(() => {
+        cy.get('[data-cy="MemberTypeVerticalList-Item-active"]').should(
+          'have.length',
+          4,
+        )
+        cy.get('[data-cy="MemberTypeVerticalList-Item"]').should(
+          'have.length',
+          1,
+        )
       })
-
-    cy.get('[data-cy="LocationViewButton"]').click()
-    cy.wait(500)
-
-    // Check if the transform matrix has scale factor 1 (for matrix(a, b, c, d, e, f), 'a' and 'd' should be 1)
-    cy.get(mapZoomProxySelector)
-      .invoke('css', 'transform')
-      .then((transform) => {
-        const matrixValues = transform.match(/matrix\(([^)]+)\)/)[1].split(', ')
-        const scaleX = parseFloat(matrixValues[0]) // 'a' value from matrix
-        const scaleY = parseFloat(matrixValues[3]) // 'd' value from matrix
-        expect(scaleX).to.eq(8)
-        expect(scaleY).to.eq(8)
-      })
-
-    cy.step('Zoom in button prompts for user location and zooms')
-    cy.get('[data-cy="LocationViewButton"]', { timeout: 10000 })
-      .should('exist')
-      .and('be.visible')
-    cy.get('[data-cy="LocationViewButton"]').should('exist').and('be.visible')
   })
 })

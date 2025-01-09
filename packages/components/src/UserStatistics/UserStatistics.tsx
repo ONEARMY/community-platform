@@ -1,6 +1,6 @@
 import { Box, Card, Flex } from 'theme-ui'
 
-import HowToCountIcon from '../../assets/icons/icon-how-to.svg'
+import HowToCountIcon from '../../assets/icons/icon-library.svg'
 import ResearchIcon from '../../assets/icons/icon-research.svg'
 import starActiveSVG from '../../assets/icons/icon-star-active.svg'
 import { ElWithBeforeIcon } from '../ElWithBeforeIcon/ElWithBeforeIcon'

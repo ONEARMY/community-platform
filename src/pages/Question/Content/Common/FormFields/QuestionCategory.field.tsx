@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Field } from 'react-final-form'
 import { CategoriesSelectV2 } from 'src/pages/common/Category/CategoriesSelectV2'
-import { FormFieldWrapper } from 'src/pages/Howto/Content/Common'
+import { FormFieldWrapper } from 'src/pages/Library/Content/Common'
 import { fields } from 'src/pages/Question/labels'
 import { questionService } from 'src/pages/Question/question.service'
 

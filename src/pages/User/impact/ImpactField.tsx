@@ -1,6 +1,6 @@
 import { impactQuestions } from 'src/pages/UserSettings/content/impactQuestions'
 import { numberWithCommas } from 'src/utils/helpers'
-import { Box, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 
 import { ImpactIcon } from './ImpactIcon'
 
@@ -17,10 +17,11 @@ export const ImpactField = ({ field }: Props) => {
   if (!impactQuestion || !isVisible) return null
 
   const sx = {
+    alignItems: 'center',
     backgroundColor: 'background',
     borderRadius: 1,
+    gap: 1,
     padding: 1,
-    mt: 2,
   }
 
   const prefix = impactQuestion?.prefix || ''
@@ -29,10 +30,9 @@ export const ImpactField = ({ field }: Props) => {
   const text = `${prefix} ${numberWithCommas(value)} ${suffix} ${label}`
 
   return (
-    <Box sx={sx}>
-      <Text variant="label">
-        <ImpactIcon id={id} /> {text}
-      </Text>
-    </Box>
+    <Flex sx={sx}>
+      <ImpactIcon id={id} />
+      <Text variant="label">{text}</Text>
+    </Flex>
   )
 }

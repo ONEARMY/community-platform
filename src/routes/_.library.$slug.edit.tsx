@@ -2,10 +2,10 @@ import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 /* eslint-disable unicorn/filename-case */
 import { AuthRoute } from 'src/pages/common/AuthRoute'
-import EditHowto from 'src/pages/Howto/Content/EditHowto/EditHowto'
-import { howtoService } from 'src/pages/Howto/howto.service'
+import EditHowto from 'src/pages/Library/EditLibrary'
+import { howtoService } from 'src/pages/Library/library.service'
 
-import type { IHowtoDB } from 'oa-shared'
+import type { ILibrary } from 'oa-shared'
 import type { LoaderFunctionArgs } from 'react-router'
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -16,7 +16,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 export default function Index() {
   const data = useLoaderData<typeof loader>()
-  const howto = data.howto as IHowtoDB // there is some inference issue, shouldn't need 'as'
+  const howto = data.howto as ILibrary.DB
 
   return (
     <AuthRoute>

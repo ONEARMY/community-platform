@@ -1,4 +1,4 @@
-export type HowtoSortOption =
+export type LibrarySortOption =
   | 'MostRelevant'
   | 'Newest'
   | 'MostUseful'
@@ -6,14 +6,14 @@ export type HowtoSortOption =
   | 'MostDownloads'
   | 'MostComments'
 
-const BaseOptions = new Map<HowtoSortOption, string>()
+const BaseOptions = new Map<LibrarySortOption, string>()
 BaseOptions.set('Newest', 'Newest')
 BaseOptions.set('MostComments', 'Most Comments')
 BaseOptions.set('LatestUpdated', 'Latest Updated')
 BaseOptions.set('MostUseful', 'Most Useful')
 BaseOptions.set('MostDownloads', 'Most Downloads')
 
-const QueryParamOptions = new Map<HowtoSortOption, string>(BaseOptions)
+const QueryParamOptions = new Map<LibrarySortOption, string>(BaseOptions)
 QueryParamOptions.set('MostRelevant', 'Most Relevant')
 
 const toArray = (hasQueryParam: boolean) => {
@@ -24,7 +24,7 @@ const toArray = (hasQueryParam: boolean) => {
   }))
 }
 
-export const HowtoSortOptions = {
-  get: (key: HowtoSortOption) => QueryParamOptions.get(key) ?? '',
+export const LibrarySortOptions = {
+  get: (key: LibrarySortOption) => QueryParamOptions.get(key) ?? '',
   toArray,
 }

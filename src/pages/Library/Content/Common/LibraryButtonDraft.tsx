@@ -13,7 +13,7 @@ interface IProps {
   submitting: boolean
 }
 
-export const HowtoButtonDraft = (props: IProps) => {
+export const LibraryButtonDraft = (props: IProps) => {
   const { form, formId, submitting } = props
   const { create, description } = buttons.draft
 

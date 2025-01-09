@@ -1,13 +1,13 @@
 import { Field } from 'react-final-form'
 import { SelectField } from 'src/common/Form/Select.field'
-import { FormFieldWrapper } from 'src/pages/Library/Content/Common/FormFieldWrapper'
+import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { draftValidationWrapper, required } from 'src/utils/validators'
 
 import { intro } from '../../labels'
 import { DIFFICULTY_OPTIONS } from './FormSettings'
 
-export const HowtoFieldDifficulty = () => {
+export const LibraryDifficultyField = () => {
   const { placeholder, title } = intro.difficulty_level
   const name = 'difficulty_level'
 

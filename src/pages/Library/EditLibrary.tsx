@@ -4,7 +4,7 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isAllowedToEditContent } from 'src/utils/helpers'
 import { Text } from 'theme-ui'
 
-import { HowtoForm } from './Content/Common/Library.form'
+import { LibraryForm } from './Content/Common/Library.form'
 
 import type { ILibrary, IUser } from 'oa-shared'
 
@@ -13,15 +13,15 @@ interface IState {
   loggedInUser?: IUser | undefined
 }
 
-type EditHowtoProps = {
-  howto: ILibrary.DB
+type EditLibraryProps = {
+  item: ILibrary.DB
 }
 
-const EditHowto = ({ howto }: EditHowtoProps) => {
-  const { howtoStore } = useCommonStores().stores
+const EditLibrary = ({ item }: EditLibraryProps) => {
+  const { LibraryStore } = useCommonStores().stores
   const [{ formValues, loggedInUser }] = useState<IState>({
-    formValues: howto,
-    loggedInUser: howtoStore.activeUser as IUser,
+    formValues: item,
+    loggedInUser: LibraryStore.activeUser as IUser,
   })
 
   if (!formValues) {
@@ -33,10 +33,10 @@ const EditHowto = ({ howto }: EditHowtoProps) => {
   }
 
   if (loggedInUser && isAllowedToEditContent(formValues, loggedInUser)) {
-    return <HowtoForm formValues={formValues} parentType="edit" />
+    return <LibraryForm formValues={formValues} parentType="edit" />
   } else {
     return <Navigate to={'/library/' + formValues.slug} />
   }
 }
 
-export default EditHowto
+export default EditLibrary

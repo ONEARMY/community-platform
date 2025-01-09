@@ -1,7 +1,7 @@
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import { Howto } from 'src/pages/Library/Content/Page/Library'
-import { howtoService } from 'src/pages/Library/library.service'
+import { Library } from 'src/pages/Library/Content/Page/Library'
+import { libraryService } from 'src/pages/Library/library.service'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { pageViewService } from 'src/services/pageViewService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
@@ -10,14 +10,14 @@ import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { ILibrary } from 'oa-shared'
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const howto = await howtoService.getBySlug(params.slug as string)
+  const item = await libraryService.getBySlug(params.slug as string)
 
-  if (howto?._id) {
+  if (item?._id) {
     // not awaited to not block the render
-    pageViewService.incrementViewCount('howtos', howto._id)
+    pageViewService.incrementViewCount('library', item._id)
   }
 
-  return json({ howto })
+  return json({ item })
 }
 
 export function HydrateFallback() {
@@ -27,24 +27,24 @@ export function HydrateFallback() {
 }
 
 export const meta = mergeMeta<typeof loader>(({ data }) => {
-  const howto = data?.howto as ILibrary.DB
+  const item = data?.item as ILibrary.DB
 
-  if (!howto) {
+  if (!item) {
     return []
   }
 
-  const title = `${howto.title} - Library - ${import.meta.env.VITE_SITE_NAME}`
+  const title = `${item.title} - Library - ${import.meta.env.VITE_SITE_NAME}`
 
-  return generateTags(title, howto.description, howto.cover_image?.downloadUrl)
+  return generateTags(title, item.description, item.cover_image?.downloadUrl)
 })
 
 export default function Index() {
   const data = useLoaderData<typeof loader>()
-  const howto = data.howto as ILibrary.DB // there is some inference issue, shouldn't need 'as'
+  const item = data.item as ILibrary.DB // there is some inference issue, shouldn't need 'as'
 
-  if (!howto) {
+  if (!item) {
     return <NotFoundPage />
   }
 
-  return <Howto howto={howto} />
+  return <Library item={item} />
 }

@@ -1,23 +1,21 @@
 import { useEffect, useState } from 'react'
 import { Field } from 'react-final-form'
 import { CategoriesSelectV2 } from 'src/pages/common/Category/CategoriesSelectV2'
-import {
-  FormFieldWrapper,
-  HowtoCategoryGuidance,
-} from 'src/pages/Library/Content/Common'
+import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
+import { LibraryCategoryGuidance } from 'src/pages/Library/Content/Common'
 import { intro } from 'src/pages/Library/labels'
 
-import { howtoService } from '../../library.service'
+import { libraryService } from '../../library.service'
 
 import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
 
-export const HowtoFieldCategory = () => {
+export const LibraryCategoryField = () => {
   const { placeholder, title } = intro.category
   const [options, setOptions] = useState<SelectValue[]>([])
 
   useEffect(() => {
     const getCategories = async () => {
-      const categories = await howtoService.getHowtoCategories()
+      const categories = await libraryService.getHowtoCategories()
       setOptions(
         categories
           .filter((x) => !x._deleted)
@@ -41,7 +39,7 @@ export const HowtoFieldCategory = () => {
               placeholder={placeholder || ''}
               categories={options}
             />
-            <HowtoCategoryGuidance category={input.value} type="main" />
+            <LibraryCategoryGuidance category={input.value} type="main" />
           </>
         )}
       />

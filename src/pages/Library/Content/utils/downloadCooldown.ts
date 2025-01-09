@@ -1,5 +1,5 @@
 interface localStorageExpiry {
-  howtoID: string
+  id: string
   expiry: number
 }
 
@@ -13,39 +13,38 @@ export const retrieveLocalStorageArray = (): localStorageExpiry[] => {
   }
 }
 
-export const retrieveHowtoDownloadCooldown = (
-  howtoID: string,
+export const retrieveLibraryDownloadCooldown = (
+  id: string,
 ): localStorageExpiry | undefined => {
   const downloadCooldownArray = retrieveLocalStorageArray()
   if (downloadCooldownArray) {
-    return downloadCooldownArray.find((elem) => elem.howtoID === howtoID)
+    return downloadCooldownArray.find((elem) => elem.id === id)
   }
 }
 
-export const isHowtoDownloadCooldownExpired = (
-  howtoCooldown: localStorageExpiry,
+export const isLibraryDownloadCooldownExpired = (
+  cooldown: localStorageExpiry,
 ): boolean => {
   const now = new Date()
-  if (now.getTime() > howtoCooldown.expiry) {
+  if (now.getTime() > cooldown.expiry) {
     return true
   } else {
     return false
   }
 }
-export const createHowtoExpiryObject = (
-  howtoID: string,
-): localStorageExpiry => {
+
+export const CreateLibraryExpiryObject = (id: string): localStorageExpiry => {
   const now = new Date()
   const twelveHoursInMiliseconds = 12 * 60 * 60 * 1000
   return {
-    howtoID: howtoID,
+    id,
     expiry: now.getTime() + twelveHoursInMiliseconds,
   }
 }
 
-export const addHowtoDownloadCooldown = (howtoID: string) => {
+export const addLibraryDownloadCooldown = (id: string) => {
   const downloadCooldownArray = retrieveLocalStorageArray()
-  const expiryObject = createHowtoExpiryObject(howtoID)
+  const expiryObject = CreateLibraryExpiryObject(id)
 
   downloadCooldownArray.push(expiryObject)
   localStorage.setItem(
@@ -54,12 +53,10 @@ export const addHowtoDownloadCooldown = (howtoID: string) => {
   )
 }
 
-export const updateHowtoDownloadCooldown = (howtoID: string) => {
+export const updateLibraryDownloadCooldown = (id: string) => {
   const downloadCooldownArray = retrieveLocalStorageArray()
-  const expiryObject = createHowtoExpiryObject(howtoID)
-  const foundIndex = downloadCooldownArray.findIndex(
-    (elem) => elem.howtoID === howtoID,
-  )
+  const expiryObject = CreateLibraryExpiryObject(id)
+  const foundIndex = downloadCooldownArray.findIndex((elem) => elem.id === id)
 
   downloadCooldownArray[foundIndex] = expiryObject
   localStorage.setItem(

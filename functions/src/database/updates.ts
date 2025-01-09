@@ -28,21 +28,21 @@ export const contentModifiedTimestamp = functions
         `${logPrefix}Starting contentModifiedTimestamp Setting`,
       )
 
-      const howtoUpdates = []
+      const libraryUpdates = []
       const researchUpdates = []
-      const howtos = await db.collection(DB_ENDPOINTS.howtos).get()
+      const library = await db.collection(DB_ENDPOINTS.library).get()
       const research = await db.collection(DB_ENDPOINTS.research).get()
 
-      if (!howtos.empty) {
-        // Get howto updates
-        howtos.forEach((ht) => {
+      if (!library.empty) {
+        // Get library updates
+        library.forEach((ht) => {
           const data = ht.data()
-          howtoUpdates.push({
+          libraryUpdates.push({
             id: ht.id,
             _contentModifiedTimestamp: data._modified,
           })
         })
-        await batchGeneration(howtoUpdates, 'howtos', dryRun, logPrefix)
+        await batchGeneration(libraryUpdates, 'library', dryRun, logPrefix)
       }
 
       if (!research.empty) {
@@ -68,8 +68,8 @@ export const contentModifiedTimestamp = functions
         _dryRun: dryRun,
         operations,
         meta: {
-          howtoUpdates: howtoUpdates,
-          researchUpdates: researchUpdates,
+          libraryUpdates,
+          researchUpdates,
         },
       }
     } catch (error) {
@@ -83,7 +83,7 @@ export const contentModifiedTimestamp = functions
 
 async function batchGeneration(
   updateData: Record<string, any>[],
-  collection: 'howtos' | 'research',
+  collection: 'library' | 'research',
   dryRun: boolean,
   logPrefix: string,
 ) {

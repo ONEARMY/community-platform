@@ -1,15 +1,15 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it } from 'vitest'
 
-import { HowtoFieldDescription } from './LibraryDescription.field'
-import { HowtoFormProvider } from './LibraryFormProvider'
+import { LibraryDescriptionField } from './LibraryDescription.field'
+import { LibraryFormProvider } from './LibraryFormProvider'
 
 describe('HowtoFieldStepsDescription', () => {
   it('renders', async () => {
     render(
-      <HowtoFormProvider>
-        <HowtoFieldDescription />
-      </HowtoFormProvider>,
+      <LibraryFormProvider>
+        <LibraryDescriptionField />
+      </LibraryFormProvider>,
     )
 
     await screen.findByText('Short description *')

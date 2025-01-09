@@ -3,14 +3,14 @@ import { guidance } from 'src/pages/Library/labels'
 import { FactoryCategory } from 'src/test/factories/Category'
 import { describe, it, vi } from 'vitest'
 
-import { HowtoFieldFiles } from './LibraryFiles.field'
-import { HowtoFormProvider } from './LibraryFormProvider'
+import { LibraryFilesField } from './LibraryFiles.field'
+import { LibraryFormProvider } from './LibraryFormProvider'
 
 vi.mock('src/common/hooks/useCommonStores', () => {
   return {
     useCommonStores: () => ({
       stores: {
-        howtoStore: {
+        LibraryStore: {
           uploadStatus: {
             Start: false,
             Cover: false,
@@ -20,7 +20,7 @@ vi.mock('src/common/hooks/useCommonStores', () => {
             Complete: false,
           },
           validateTitleForSlug: vi.fn(),
-          uploadHowTo: vi.fn(),
+          upload: vi.fn(),
         },
         tagsStore: {
           allTags: [
@@ -46,9 +46,9 @@ describe('HowtoFieldFiles', () => {
     }
 
     render(
-      <HowtoFormProvider>
-        <HowtoFieldFiles {...props} />
-      </HowtoFormProvider>,
+      <LibraryFormProvider>
+        <LibraryFilesField {...props} />
+      </LibraryFormProvider>,
     )
 
     await screen.findByText(
@@ -66,9 +66,9 @@ describe('HowtoFieldFiles', () => {
     }
 
     render(
-      <HowtoFormProvider>
-        <HowtoFieldFiles {...props} />
-      </HowtoFormProvider>,
+      <LibraryFormProvider>
+        <LibraryFilesField {...props} />
+      </LibraryFormProvider>,
     )
 
     await screen.findByText(guidance.moulds.files)

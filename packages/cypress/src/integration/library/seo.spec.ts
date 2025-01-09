@@ -3,7 +3,7 @@ import { MOCK_DATA } from '../../data'
 describe('[Library]', () => {
   describe('[SEO Metadata]', () => {
     const { slug, title, description, cover_image } =
-      MOCK_DATA.howtos.cmMzzlQP00fCckYIeL2e
+      MOCK_DATA.library.cmMzzlQP00fCckYIeL2e
 
     const pageTitle = `${title} - Library - Precious Plastic`
 

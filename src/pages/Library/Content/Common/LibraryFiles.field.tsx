@@ -1,9 +1,9 @@
 import { Button, DownloadStaticFile } from 'oa-components'
+import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import {
-  FormFieldWrapper,
-  HowtoCategoryGuidance,
-  HowtoFieldFileLink,
-  HowtoFieldFileUpload,
+  LibraryCategoryGuidance,
+  LibraryFileLinkField,
+  LibraryFileUploadField,
 } from 'src/pages/Library/Content/Common'
 import { Flex, Text } from 'theme-ui'
 
@@ -20,7 +20,7 @@ interface IProps {
   showInvalidFileWarning: boolean
 }
 
-export const HowtoFieldFiles = (props: IProps) => {
+export const LibraryFilesField = (props: IProps) => {
   const { category, onClick, showInvalidFileWarning, files, fileEditMode } =
     props
 
@@ -29,13 +29,13 @@ export const HowtoFieldFiles = (props: IProps) => {
       <Flex sx={{ mb: 2 }}>{showInvalidFileWarning && <Error />}</Flex>
       <FormFieldWrapper htmlFor="description" text={headings.files}>
         <Flex sx={{ flexDirection: 'column' }} mb={[4, 4, 0]}>
-          <HowtoCategoryGuidance category={category} type="files" />
+          <LibraryCategoryGuidance category={category} type="files" />
           {files?.length && !fileEditMode ? (
             <FilesWrapper files={files} onClick={onClick} />
           ) : (
             <>
-              <HowtoFieldFileLink />
-              <HowtoFieldFileUpload />
+              <LibraryFileLinkField />
+              <LibraryFileUploadField />
             </>
           )}
         </Flex>

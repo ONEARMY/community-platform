@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Field } from 'react-final-form'
 import { FieldInput } from 'oa-components'
-import { FormFieldWrapper } from 'src/pages/Library/Content/Common/FormFieldWrapper'
+import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { composeValidators, minValue, required } from 'src/utils/validators'
 import { Card, Text } from 'theme-ui'
@@ -9,14 +9,14 @@ import { Card, Text } from 'theme-ui'
 import { HOWTO_TITLE_MAX_LENGTH, HOWTO_TITLE_MIN_LENGTH } from '../../constants'
 import { intro } from '../../labels'
 
-import type { HowtoStore } from 'src/stores/Library/library.store'
+import type { LibraryStore } from 'src/stores/Library/library.store'
 
 interface IProps {
-  store: HowtoStore
+  store: LibraryStore
   _id: string
 }
 
-export const HowtoFieldTitle = (props: IProps) => {
+export const LibraryTitleField = (props: IProps) => {
   const { store, _id } = props
   const { placeholder, title } = intro.title
 

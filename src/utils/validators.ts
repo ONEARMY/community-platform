@@ -1,9 +1,9 @@
 import { getSpecialCharacters, stripSpecialCharacters } from './helpers'
 
-import type { HowtoStore } from 'src/stores/Library/library.store'
+import type { LibraryStore } from 'src/stores/Library/library.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
 
-type storeTypes = HowtoStore | ResearchStore | QuestionStore
+type storeTypes = LibraryStore | ResearchStore | QuestionStore
 
 import { isUrl } from './urlHelper'
 

@@ -1,27 +1,27 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, vi } from 'vitest'
 
-import { HowtoFormProvider } from './LibraryFormProvider'
-import { HowtoFieldTitle } from './LibraryTitle.field'
+import { LibraryFormProvider } from './LibraryFormProvider'
+import { LibraryTitleField } from './LibraryTitle.field'
 
-import type { HowtoStore } from 'src/stores/Library/library.store'
+import type { LibraryStore } from 'src/stores/Library/library.store'
 import type { ParentType } from './Library.form'
 
 vi.mock('src/stores/Library/library.store')
 const store = await vi.importMock('src/stores/Library/library.store')
 
-describe('HowtoFieldTitle', () => {
+describe('LibraryTitleField', () => {
   it('renders', async () => {
     const props = {
       _id: 'random-123',
       parentType: 'create' as ParentType,
-      store: store as any as HowtoStore,
+      store: store as any as LibraryStore,
     }
 
     render(
-      <HowtoFormProvider>
-        <HowtoFieldTitle {...props} />
-      </HowtoFormProvider>,
+      <LibraryFormProvider>
+        <LibraryTitleField {...props} />
+      </LibraryFormProvider>,
     )
 
     await screen.findByText('0 / 50')

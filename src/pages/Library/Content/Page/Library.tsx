@@ -14,46 +14,56 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { Box } from 'theme-ui'
 
-import HowtoDescription from './LibraryDescription'
-import { HowtoDiscussion } from './LibraryDiscussion'
+import { LibraryDescription } from './LibraryDescription'
+import { LibraryDiscussion } from './LibraryDiscussion'
 import Step from './LibraryStep'
 
 import type { ILibrary, IUser } from 'oa-shared'
 
-type HowtoParams = {
-  howto: ILibrary.DB
+interface IProps {
+  item: ILibrary.DB
 }
 
-export const Howto = observer(({ howto }: HowtoParams) => {
-  const { howtoStore, userStore, aggregationsStore } = useCommonStores().stores
+export const Library = observer(({ item }: IProps) => {
+  const {
+    _createdBy,
+    _id,
+    creatorCountry,
+    moderation,
+    slug,
+    steps,
+    votedUsefulBy,
+  } = item
+  const { LibraryStore, userStore, aggregationsStore } =
+    useCommonStores().stores
   const [totalCommentsCount, setTotalCommentsCount] = useState<number>(0)
   const [voted, setVoted] = useState<boolean>(false)
   const [usefulCount, setUsefulCount] = useState<number>(
-    howto.votedUsefulBy?.length || 0,
+    votedUsefulBy?.length || 0,
   )
   const loggedInUser = userStore.activeUser
-  const isVerified = aggregationsStore.isVerified(howto._createdBy)
+  const isVerified = aggregationsStore.isVerified(_createdBy)
 
   useEffect(() => {
     // This could be improved if we can load the user profile server-side
     if (
-      howtoStore?.activeUser &&
-      howto.votedUsefulBy?.includes(howtoStore.activeUser._id)
+      LibraryStore?.activeUser &&
+      votedUsefulBy?.includes(LibraryStore.activeUser._id)
     ) {
       setVoted(true)
     }
-  }, [howtoStore?.activeUser])
+  }, [LibraryStore?.activeUser])
 
   const onUsefulClick = async (
     vote: 'add' | 'delete',
     eventCategory: string,
   ) => {
-    const loggedInUser = howtoStore.activeUser
+    const loggedInUser = LibraryStore.activeUser
     if (!loggedInUser?.userName) {
       return
     }
 
-    await howtoStore.toggleUsefulByUser(howto, loggedInUser?.userName)
+    await LibraryStore.toggleUsefulByUser(item, loggedInUser?.userName)
     setVoted((prev) => !prev)
 
     setUsefulCount((prev) => {
@@ -62,27 +72,27 @@ export const Howto = observer(({ howto }: HowtoParams) => {
 
     trackEvent({
       category: eventCategory,
-      action: vote === 'add' ? 'HowtoUseful' : 'HowtoUsefulRemoved',
-      label: howto.slug,
+      action: vote === 'add' ? 'LibraryUseful' : 'LibraryUsefulRemoved',
+      label: slug,
     })
   }
 
   return (
     <>
-      <Breadcrumbs content={howto} variant="howto" />
-      <HowtoDescription
-        howto={howto}
-        key={howto._id}
+      <Breadcrumbs content={item} variant="library" />
+      <LibraryDescription
+        item={item}
+        key={_id}
         loggedInUser={loggedInUser as IUser}
         commentsCount={totalCommentsCount}
         votedUsefulCount={usefulCount}
         hasUserVotedUseful={voted}
         onUsefulClick={() =>
-          onUsefulClick(voted ? 'delete' : 'add', 'HowtoDescription')
+          onUsefulClick(voted ? 'delete' : 'add', 'LibraryDescription')
         }
       />
       <Box sx={{ mt: 9 }}>
-        {howto.steps.map((step: ILibrary.StepInput, index: number) => (
+        {steps.map((step: ILibrary.StepInput, index: number) => (
           <Step step={step as ILibrary.Step} key={index} stepindex={index} />
         ))}
       </Box>
@@ -91,8 +101,8 @@ export const Howto = observer(({ howto }: HowtoParams) => {
           <UserEngagementWrapper>
             <ArticleCallToAction
               author={{
-                userName: howto._createdBy,
-                countryCode: howto.creatorCountry,
+                userName: _createdBy,
+                countryCode: creatorCountry,
                 isVerified,
               }}
             >
@@ -102,8 +112,8 @@ export const Howto = observer(({ howto }: HowtoParams) => {
                 onClick={() => {
                   trackEvent({
                     category: 'ArticleCallToAction',
-                    action: 'ScrollHowtoComment',
-                    label: howto.slug,
+                    action: 'ScrollLibraryComment',
+                    label: slug,
                   })
                   document
                     .querySelector('[data-target="create-comment-container"]')
@@ -121,7 +131,7 @@ export const Howto = observer(({ howto }: HowtoParams) => {
               >
                 Leave a comment
               </Button>
-              {howto.moderation === IModerationStatus.ACCEPTED && (
+              {moderation === IModerationStatus.ACCEPTED && (
                 <UsefulStatsButton
                   votedUsefulCount={usefulCount}
                   hasUserVotedUseful={voted}
@@ -135,8 +145,8 @@ export const Howto = observer(({ howto }: HowtoParams) => {
                 />
               )}
             </ArticleCallToAction>
-            <HowtoDiscussion
-              howtoDocId={howto._id}
+            <LibraryDiscussion
+              docId={_id}
               setTotalCommentsCount={setTotalCommentsCount}
             />
           </UserEngagementWrapper>

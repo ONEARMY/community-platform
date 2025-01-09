@@ -2,13 +2,13 @@ import { describe, expect, it, vi } from 'vitest'
 
 vi.mock('../common/module.store')
 import {
-  FactoryHowto,
-  FactoryHowtoDraft,
-  FactoryHowtoStep,
+  FactoryLibraryItem,
+  FactoryLibraryItemDraft,
+  FactoryLibraryItemStep,
 } from 'src/test/factories/Library'
 import { FactoryUser } from 'src/test/factories/User'
 
-import { HowtoStore } from './library.store'
+import { LibraryStore } from './library.store'
 
 import type { ILibrary, IUser } from 'oa-shared'
 import type { IRootStore } from '../RootStore'
@@ -24,12 +24,12 @@ vi.mock('firebase/firestore', () => ({
 }))
 
 const factory = async (
-  howTos: ILibrary.DB[] = [FactoryHowto({})],
+  items: ILibrary.DB[] = [FactoryLibraryItem({})],
   userOverloads?: Partial<IUser>,
 ) => {
-  const store = new HowtoStore({} as IRootStore)
+  const store = new LibraryStore({} as IRootStore)
 
-  const howToItem = howTos[0]
+  const libraryItem = items[0]
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -54,11 +54,11 @@ const factory = async (
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  store.db.get.mockResolvedValue(howToItem)
+  store.db.get.mockResolvedValue(libraryItem)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  store.db.getWhere.mockReturnValue([howToItem])
+  store.db.getWhere.mockReturnValue([libraryItem])
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -80,7 +80,7 @@ const factory = async (
 
   return {
     store,
-    howToItem,
+    libraryItem,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     setFn: store.db.set,
@@ -93,42 +93,46 @@ const factory = async (
   }
 }
 
-describe('howto.store', () => {
-  describe('uploadHowTo', () => {
+describe('item.store', () => {
+  describe('upload', () => {
     it('creates a draft when only a title is provided', async () => {
-      const howtos = [FactoryHowtoDraft({})]
-      const { store, howToItem, setFn } = await factory(howtos)
+      const library = [FactoryLibraryItemDraft({})]
+      const { store, libraryItem, setFn } = await factory(library)
 
-      await store.uploadHowTo(howToItem)
+      await store.upload(libraryItem)
 
-      const [newHowto] = setFn.mock.calls[0]
+      const [newItem] = setFn.mock.calls[0]
       expect(setFn).toHaveBeenCalledTimes(1)
-      expect(newHowto.title).toBe('Quick draft')
+      expect(newItem.title).toBe('Quick draft')
     })
 
     it('updates an existing item', async () => {
       const { store, setFn } = await factory([
-        FactoryHowto({
+        FactoryLibraryItem({
           _created: '2020-01-01T00:00:00.000Z',
           votedUsefulBy: ['fake-user', 'fake-user2'],
         }),
       ])
 
-      const howto = FactoryHowtoDraft({})
-      await store.uploadHowTo(howto)
+      const item = FactoryLibraryItemDraft({})
+      await store.upload(item)
 
-      const [originalHowto] = setFn.mock.calls[0]
+      const [originalItem] = setFn.mock.calls[0]
       expect(setFn).toHaveBeenCalledTimes(1)
-      expect(originalHowto.title).toBe('Quick draft')
+      expect(originalItem.title).toBe('Quick draft')
 
-      const updatedHowtos = FactoryHowtoDraft({
-        _id: originalHowto._id,
-        steps: [FactoryHowtoStep(), FactoryHowtoStep(), FactoryHowtoStep()],
+      const updatedItem = FactoryLibraryItemDraft({
+        _id: originalItem._id,
+        steps: [
+          FactoryLibraryItemStep(),
+          FactoryLibraryItemStep(),
+          FactoryLibraryItemStep(),
+        ],
       })
 
-      await store.uploadHowTo(updatedHowtos)
+      await store.upload(updatedItem)
 
-      const [finalHowto] = setFn.mock.calls[1]
+      const [finalItem] = setFn.mock.calls[1]
       expect(setFn).toHaveBeenCalledTimes(2)
       expect(setFn).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -137,91 +141,93 @@ describe('howto.store', () => {
         }),
         expect.anything(),
       )
-      expect(finalHowto.steps).toHaveLength(3)
+      expect(finalItem.steps).toHaveLength(3)
     })
 
     it('captures mentions within description', async () => {
-      const howtos = [
-        FactoryHowto({
+      const items = [
+        FactoryLibraryItem({
           description: '@username',
         }),
       ]
-      const { store, howToItem, setFn } = await factory(howtos)
+      const { store, libraryItem, setFn } = await factory(items)
 
       // Act
-      await store.uploadHowTo(howToItem)
+      await store.upload(libraryItem)
 
-      const [newHowto] = setFn.mock.calls[0]
+      const [newItem] = setFn.mock.calls[0]
       expect(setFn).toHaveBeenCalledTimes(1)
-      expect(newHowto.description).toBe('@@{userId:username}')
-      expect(newHowto.mentions).toHaveLength(1)
+      expect(newItem.description).toBe('@@{userId:username}')
+      expect(newItem.mentions).toHaveLength(1)
     })
 
     it('captures mentions within a how-step', async () => {
-      const howtos = [
-        FactoryHowto({
+      const items = [
+        FactoryLibraryItem({
           steps: [
-            FactoryHowtoStep({
+            FactoryLibraryItemStep({
               text: 'Step description featuring a @username',
             }),
           ],
         }),
       ]
-      const { store, howToItem, setFn } = await factory(howtos)
+      const { store, libraryItem, setFn } = await factory(items)
 
       // Act
-      await store.uploadHowTo(howToItem)
+      await store.upload(libraryItem)
 
-      const [newHowto] = setFn.mock.calls[0]
+      const [newItem] = setFn.mock.calls[0]
       expect(setFn).toHaveBeenCalledTimes(1)
-      expect(newHowto.steps[0].text).toBe(
+      expect(newItem.steps[0].text).toBe(
         'Step description featuring a @@{userId:username}',
       )
-      expect(newHowto.mentions).toHaveLength(1)
+      expect(newItem.mentions).toHaveLength(1)
     })
   })
 
-  describe('deleteHowTo', () => {
+  describe('delete', () => {
     it('handles legacy docs without previousSlugs', async () => {
-      const howtoDoc = FactoryHowto({})
-      howtoDoc.previousSlugs = []
-      const { store, howToItem, setFn, getFn } = await factory([howtoDoc])
+      const item = FactoryLibraryItem({})
+      item.previousSlugs = []
+      const { store, libraryItem, setFn, getFn } = await factory([item])
 
       // Act
-      await store.deleteHowTo(howToItem._id)
+      await store.delete(libraryItem._id)
 
       // Assert
-      const [deletedHowTo] = setFn.mock.calls[0]
+      const [deletedItem] = setFn.mock.calls[0]
 
       expect(setFn).toHaveBeenCalledTimes(1)
       expect(getFn).toHaveBeenCalledTimes(2)
       expect(getFn).toHaveBeenCalledWith('server')
-      expect(deletedHowTo._deleted).toBeTruthy()
+      expect(deletedItem._deleted).toBeTruthy()
     })
 
     it('updates _deleted property after confirming delete', async () => {
-      const { store, howToItem, setFn, getFn } = await factory()
+      const { store, libraryItem, setFn, getFn } = await factory()
 
       // Act
-      await store.deleteHowTo(howToItem._id)
+      await store.delete(libraryItem._id)
 
       // Assert
-      const [deletedHowTo] = setFn.mock.calls[0]
+      const [deletedItem] = setFn.mock.calls[0]
 
       expect(setFn).toHaveBeenCalledTimes(1)
       expect(getFn).toHaveBeenCalledTimes(2)
       expect(getFn).toHaveBeenCalledWith('server')
-      expect(deletedHowTo._deleted).toBeTruthy()
+      expect(deletedItem._deleted).toBeTruthy()
     })
   })
 
   describe('incrementDownloadCount', () => {
     it('increments download count by one', async () => {
-      const { store, howToItem, setFn } = await factory()
+      const { store, libraryItem, setFn } = await factory()
 
-      const downloads = howToItem.total_downloads!
+      const downloads = libraryItem.total_downloads!
       // Act
-      const updatedDownloads = await store.incrementDownloadCount(howToItem._id)
+      const updatedDownloads = await store.incrementDownloadCount(
+        libraryItem._id,
+      )
 
       expect(setFn).toBeCalledTimes(1)
       expect(updatedDownloads).toBe(downloads + 1)

@@ -1,8 +1,9 @@
-import { firebaseApp } from './admin'
+import { getFirestore } from 'firebase-admin/firestore'
 
 import { DB_ENDPOINTS } from '../models'
-import { getFirestore } from 'firebase-admin/firestore'
-import { DBDoc, DBEndpoint } from 'oa-shared/models/db'
+import { firebaseApp } from './admin'
+
+import type { DBDoc, DBEndpoint } from 'oa-shared/models/db'
 
 // TODO - ideally should remove default export to force using functions which have mapping
 export const db = getFirestore(firebaseApp)

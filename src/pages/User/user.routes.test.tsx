@@ -32,7 +32,7 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
       aggregationsStore: {
         updateVerifiedUsers: vi.fn(),
         users_verified: {
-          HowtoAuthor: true,
+          LibraryAuthor: true,
         },
       },
       mapsStore: {

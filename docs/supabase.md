@@ -45,7 +45,7 @@ How?
 
 # Comment Counts
 
-Currently we can sort questions/research/howtos by the number of comments.
+Currently we can sort questions/research/library by the number of comments.
 With supabase there are a few ways we can do this:
 
 1. A comment count view
@@ -61,7 +61,7 @@ How?
 
 - Whenever a comment is created or deleted, it triggers the update_comment_count function.
 - The function checks the Operation kind (Insert/Delete), the source_type and source_id.
-- Fron the source_type it will update the according content total (howtos, research, questions) that matches the source_id
+- Fron the source_type it will update the according content total (library, research, questions) that matches the source_id
 
 # Local firebase sync testing/debugging
 

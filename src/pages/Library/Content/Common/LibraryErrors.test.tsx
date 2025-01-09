@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
-import { HowtoErrors } from './LibraryErrors'
-import { HowtoFormProvider } from './LibraryFormProvider'
+import { LibraryErrors } from './LibraryErrors'
+import { LibraryFormProvider } from './LibraryFormProvider'
 
 describe('HowtoErrors', () => {
   it('renders component when visible and has intro errors', async () => {
@@ -13,9 +13,9 @@ describe('HowtoErrors', () => {
     }
 
     render(
-      <HowtoFormProvider>
-        <HowtoErrors isVisible={true} errors={errors} />
-      </HowtoFormProvider>,
+      <LibraryFormProvider>
+        <LibraryErrors isVisible={true} errors={errors} />
+      </LibraryFormProvider>,
     )
 
     await screen.findByText(titleError, { exact: false })
@@ -29,9 +29,9 @@ describe('HowtoErrors', () => {
     }
 
     render(
-      <HowtoFormProvider>
-        <HowtoErrors isVisible={true} errors={errors} />
-      </HowtoFormProvider>,
+      <LibraryFormProvider>
+        <LibraryErrors isVisible={true} errors={errors} />
+      </LibraryFormProvider>,
     )
 
     await screen.findByText(text, { exact: false })
@@ -44,9 +44,9 @@ describe('HowtoErrors', () => {
     }
 
     const { container } = render(
-      <HowtoFormProvider>
-        <HowtoErrors isVisible={false} errors={errors} />
-      </HowtoFormProvider>,
+      <LibraryFormProvider>
+        <LibraryErrors isVisible={false} errors={errors} />
+      </LibraryFormProvider>,
     )
 
     expect(container.innerHTML).toBe('')

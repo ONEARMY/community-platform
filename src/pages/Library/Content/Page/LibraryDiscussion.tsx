@@ -2,12 +2,12 @@ import { DiscussionWrapper } from 'src/common/DiscussionWrapper'
 import { Card, Flex } from 'theme-ui'
 
 interface IProps {
-  howtoDocId: string
+  docId: string
   setTotalCommentsCount: (number) => void
 }
 
-export const HowtoDiscussion = (props: IProps) => {
-  const { howtoDocId, setTotalCommentsCount } = props
+export const LibraryDiscussion = (props: IProps) => {
+  const { docId, setTotalCommentsCount } = props
 
   return (
     <Flex
@@ -26,7 +26,7 @@ export const HowtoDiscussion = (props: IProps) => {
         <Card sx={{ gap: 2, padding: 3 }}>
           <DiscussionWrapper
             sourceType="howto"
-            sourceId={howtoDocId}
+            sourceId={docId}
             setTotalCommentsCount={setTotalCommentsCount}
           />
         </Card>

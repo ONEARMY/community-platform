@@ -1,13 +1,13 @@
 import { Field } from 'react-final-form'
 import { FieldTextarea } from 'oa-components'
-import { FormFieldWrapper } from 'src/pages/Library/Content/Common/FormFieldWrapper'
+import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { draftValidationWrapper, required } from 'src/utils/validators'
 
 import { HOWTO_MAX_LENGTH } from '../../constants'
 import { intro } from '../../labels'
 
-export const HowtoFieldDescription = () => {
+export const LibraryDescriptionField = () => {
   const { description, title } = intro.description
   const name = 'description'
 

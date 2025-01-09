@@ -19,7 +19,7 @@ export const Awaiting: StoryFn<typeof ModerationStatus> = () => (
 )
 
 export const HowtoDraft: StoryFn<typeof ModerationStatus> = () => (
-  <ModerationStatus contentType={'howto'} status={'draft'} />
+  <ModerationStatus contentType={'library'} status={'draft'} />
 )
 
 export const Accepted: StoryFn<typeof ModerationStatus> = () => (

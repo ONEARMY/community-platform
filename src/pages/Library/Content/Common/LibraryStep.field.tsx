@@ -53,7 +53,7 @@ interface IState {
  * - minimum character length of 100 characters
  * - maximum character length of 1000 characters
  */
-export const HowtoFieldStep = (props: IProps) => {
+export const LibraryStepField = (props: IProps) => {
   const { step, index } = props
   const [state, setState] = useState<IState>({
     showDeleteModal: false,
@@ -96,7 +96,7 @@ export const HowtoFieldStep = (props: IProps) => {
   const isAboveMinimumStep = index >= HOWTO_MIN_REQUIRED_STEPS
 
   return (
-    // NOTE - animation parent container in CreateHowTo
+    // NOTE - animation parent container in CreateLibrary
     <Card data-cy={`step_${index}`} mt={5} key={index}>
       <Flex p={3} sx={{ flexDirection: 'column' }}>
         <Flex p={0}>

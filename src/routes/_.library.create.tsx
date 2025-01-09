@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { AuthRoute } from 'src/pages/common/AuthRoute'
-import CreateHowto from 'src/pages/Library/CreateLibrary'
+import CreateLibrary from 'src/pages/Library/CreateLibrary'
 
 export async function clientLoader() {
   return null
@@ -9,7 +9,7 @@ export async function clientLoader() {
 export default function Index() {
   return (
     <AuthRoute>
-      <CreateHowto />
+      <CreateLibrary />
     </AuthRoute>
   )
 }

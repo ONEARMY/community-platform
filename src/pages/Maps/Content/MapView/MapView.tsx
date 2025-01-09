@@ -79,7 +79,7 @@ export const MapView = (props: IProps) => {
           top: 0,
           right: 0,
           padding: 4,
-          zIndex: 4000,
+          zIndex: 1001,
           display: 'flex',
           flexDirection: 'column',
           gap: 2,

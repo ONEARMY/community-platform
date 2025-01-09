@@ -32,20 +32,18 @@ export const NotificationsDesktop = (props: Props) => {
           areThereNotifications={areThereNotifications}
         />
         {showMobileNotifications && (
-          <Flex>
-            <div data-cy="notifications-modal-desktop">
-              <NotificationList
-                notifications={notifications}
-                markAllNotified={markAllNotified}
-                markAllRead={() => markAllRead && markAllRead()}
-                sx={{
-                  width: '250px',
-                  position: 'absolute',
-                  right: '10px',
-                  top: '60px',
-                }}
-              />
-            </div>
+          <Flex data-cy="notifications-modal-desktop">
+            <NotificationList
+              notifications={notifications}
+              markAllNotified={markAllNotified}
+              markAllRead={() => markAllRead && markAllRead()}
+              sx={{
+                width: '250px',
+                position: 'absolute',
+                right: '10px',
+                top: '60px',
+              }}
+            />
           </Flex>
         )}
       </div>

@@ -1,13 +1,13 @@
 import { Field } from 'react-final-form'
 import { SelectField } from 'src/common/Form/Select.field'
-import { FormFieldWrapper } from 'src/pages/Library/Content/Common/FormFieldWrapper'
+import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { draftValidationWrapper, required } from 'src/utils/validators'
 
 import { intro } from '../../labels'
 import { TIME_OPTIONS } from './FormSettings'
 
-export const HowtoFieldTime = () => {
+export const LibraryTimeField = () => {
   const { placeholder, title } = intro.time
   const name = 'time'
 

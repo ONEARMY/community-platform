@@ -13,7 +13,7 @@ import type { IDBDocChange } from '../models'
  * Side-effects to be carried out on various user updates, namely:
  * - create user revision history
  * - update map pin location on change
- * - update howTo creator flag on change
+ * - update library creator flag on change
  * - update userName and flag on any comments made by user
  *********************************************************************/
 export const handleUserUpdates = functions
@@ -44,7 +44,7 @@ async function updateDocuments(change: IDBDocChange) {
 
   const didChangeCountry = isUserCountryDifferent(prevInfo, info)
   if (didChangeCountry) {
-    // Update country flag in user's created howTos
+    // Update country flag in user's created projects
     const country = newCountryCode ? newCountryCode : newCountry.toLowerCase()
     await updatePostsCountry(info._id, country)
   }
@@ -63,36 +63,31 @@ async function updatePostsCountry(userId: string, country: IUserDB['country']) {
     console.error('Missing information to set creatorCountry')
     return false
   }
-  console.log(
-    "Updating howto's, researches and question from user",
-    userId,
-    'to country:',
-    country,
-  )
+  console.log('Updating items from user', userId, 'to country:', country)
 
-  // 1. Update howTos
-  let updatedHowToCount = 0
-  const howToQuerySnapshot = await db
-    .collection(DB_ENDPOINTS.howtos)
+  // 1. Update Library
+  let updatedCount = 0
+  const querySnapshot = await db
+    .collection(DB_ENDPOINTS.library)
     .where('_createdBy', '==', userId)
     .get()
 
-  if (howToQuerySnapshot) {
-    for (const doc of howToQuerySnapshot.docs) {
+  if (querySnapshot) {
+    for (const doc of querySnapshot.docs) {
       try {
         await doc.ref.update({
           creatorCountry: country,
           _modified: new Date().toISOString(),
         })
-        updatedHowToCount += 1
+        updatedCount += 1
       } catch (error) {
-        console.error('Error updating HowToCountry: ', error)
+        console.error('Error updating Library Country: ', error)
       }
     }
   } else {
-    console.log('Error getting user howTo')
+    console.log('Error getting user library items')
   }
-  console.log('Successfully updated', updatedHowToCount, 'howTos!')
+  console.log('Successfully updated', updatedCount, 'library projects!')
 
   // 2. Update Researches
   let updatedResearchCount = 0

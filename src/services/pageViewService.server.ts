@@ -4,7 +4,7 @@ import { firestore } from 'src/utils/firebase'
 
 type PageViewCollections = Pick<
   typeof DB_ENDPOINTS,
-  'users' | 'questions' | 'research' | 'howtos'
+  'users' | 'questions' | 'research' | 'library'
 >
 
 const incrementViewCount = async (

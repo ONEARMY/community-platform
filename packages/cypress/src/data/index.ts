@@ -3,7 +3,7 @@
  * Can be imported locally as individual namespaces or combined
  * @example
  * ```
- * import { howtos } from '../data'
+ * import { library } from '../data'
  * ```
  * or
  * ```

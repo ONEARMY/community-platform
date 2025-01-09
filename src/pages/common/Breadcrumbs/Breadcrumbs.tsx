@@ -7,12 +7,12 @@ type Step = { text: string; link?: string }
 interface BreadcrumbsProps {
   steps?: Step[]
   content?: IResearch.ItemDB | IQuestion.Item | ILibrary.Item
-  variant?: 'research' | 'question' | 'howto'
+  variant?: 'research' | 'question' | 'library'
 }
 
 const generateSteps = (
   content: IResearch.ItemDB | IQuestion.Item | ILibrary.Item | undefined,
-  variant: 'research' | 'question' | 'howto' | undefined,
+  variant: 'research' | 'question' | 'library' | undefined,
 ) => {
   const steps: Step[] = []
   if (variant == 'research') {
@@ -39,7 +39,7 @@ const generateSteps = (
     }
 
     steps.push({ text: item.title })
-  } else if (variant == 'howto') {
+  } else if (variant == 'library') {
     const item = content as ILibrary.Item
     steps.push({ text: 'Library', link: '/library' })
 

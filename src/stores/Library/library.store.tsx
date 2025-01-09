@@ -16,11 +16,11 @@ import type {
 } from 'oa-shared'
 import type { IRootStore } from '../RootStore'
 
-const COLLECTION_NAME = 'howtos'
+const COLLECTION_NAME = 'library'
 
-export class HowtoStore extends ModuleStore {
+export class LibraryStore extends ModuleStore {
   // we have two property relating to docs that can be observed
-  public uploadStatus: ILibraryItemUploadStatus = getInitialUploadStatus()
+  public uploadStatus: IitemUploadStatus = getInitialUploadStatus()
 
   constructor(rootStore: IRootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
@@ -31,17 +31,17 @@ export class HowtoStore extends ModuleStore {
       toggleUsefulByUser: action,
       updateUploadStatus: action,
       resetUploadStatus: action,
-      deleteHowTo: action,
+      delete: action,
     })
   }
 
   public async toggleUsefulByUser(
-    howto: ILibrary.DB,
+    item: ILibrary.DB,
     userName: string,
   ): Promise<void> {
     const updatedItem = (await toggleDocUsefulByUser(
       COLLECTION_NAME,
-      howto._id,
+      item._id,
       userName,
     )) as ILibrary.DB
 
@@ -49,15 +49,15 @@ export class HowtoStore extends ModuleStore {
       if ((updatedItem.votedUsefulBy || []).includes(userName)) {
         this.userNotificationsStore.triggerNotification(
           'howto_useful',
-          howto._createdBy,
-          '/library/' + howto.slug,
-          howto.title,
+          item._createdBy,
+          '/library/' + item.slug,
+          item.title,
         )
       }
     })
   }
 
-  public updateUploadStatus(update: keyof ILibraryItemUploadStatus) {
+  public updateUploadStatus(update: keyof IitemUploadStatus) {
     this.uploadStatus[update] = true
   }
 
@@ -65,27 +65,25 @@ export class HowtoStore extends ModuleStore {
     this.uploadStatus = getInitialUploadStatus()
   }
 
-  public async incrementDownloadCount(howToID: string) {
-    const dbRef = this.db
-      .collection<ILibrary.Item>(COLLECTION_NAME)
-      .doc(howToID)
-    const howToData = await toJS(dbRef.get('server'))
-    const totalDownloads = howToData?.total_downloads || 0
+  public async incrementDownloadCount(id: string) {
+    const dbRef = this.db.collection<ILibrary.Item>(COLLECTION_NAME).doc(id)
+    const item = await toJS(dbRef.get('server'))
+    const totalDownloads = item?.total_downloads || 0
 
-    if (howToData) {
-      const updatedHowto: ILibrary.Item = {
-        ...howToData,
+    if (item) {
+      const updatedItem: ILibrary.Item = {
+        ...item,
         total_downloads: totalDownloads! + 1,
       }
 
       await dbRef.set(
         {
-          ...updatedHowto,
+          ...updatedItem,
         },
         { keep_modified_timestamp: true },
       )
 
-      return updatedHowto.total_downloads
+      return updatedItem.total_downloads
     }
   }
 
@@ -103,16 +101,13 @@ export class HowtoStore extends ModuleStore {
     }
   }
 
-  private async updateHowtoItem(
-    howToItem: ILibrary.Item,
-    setLastEditTimestamp = false,
-  ) {
+  private async updateitem(item: ILibrary.Item, setLastEditTimestamp = false) {
     const dbRef = this.db
       .collection<ILibrary.Item>(COLLECTION_NAME)
-      .doc(howToItem._id)
+      .doc(item._id)
 
     const { text: description, users } = await this.addUserReference(
-      howToItem.description || '',
+      item.description || '',
     )
 
     const mentions = users.map((username) => ({
@@ -120,16 +115,14 @@ export class HowtoStore extends ModuleStore {
       location: 'description',
     }))
 
-    const { steps, stepMentions } = await this.findMentionsInSteps(
-      howToItem.steps,
-    )
+    const { steps, stepMentions } = await this.findMentionsInSteps(item.steps)
 
     mentions.push(...stepMentions)
-    const previousSlugs = this.setPreviousSlugs(howToItem, howToItem.slug)
+    const previousSlugs = this.setPreviousSlugs(item, item.slug)
 
     await dbRef.set(
       {
-        ...howToItem,
+        ...item,
         previousSlugs,
         description,
         mentions,
@@ -146,7 +139,7 @@ export class HowtoStore extends ModuleStore {
     // Location: Where in the document does the mention exist?
     // - Introduction
     // - Steps
-    const previousMentionsList = howToItem.mentions || []
+    const previousMentionsList = item.mentions || []
     logger.debug(`Mentions:`, {
       before: previousMentionsList,
       after: mentions,
@@ -164,8 +157,8 @@ export class HowtoStore extends ModuleStore {
         this.userNotificationsStore.triggerNotification(
           'howto_mention',
           mention.username,
-          `/library/${howToItem.slug}#${mention.location}`,
-          howToItem.title,
+          `/library/${item.slug}#${mention.location}`,
+          item.title,
         )
       }
     })
@@ -174,7 +167,7 @@ export class HowtoStore extends ModuleStore {
     return $doc ? $doc : null
   }
 
-  public async deleteHowTo(id: string) {
+  public async delete(id: string) {
     try {
       const user = this.activeUser
 
@@ -183,11 +176,11 @@ export class HowtoStore extends ModuleStore {
       }
 
       const dbRef = this.db.collection<ILibrary.Item>(COLLECTION_NAME).doc(id)
-      const howToData = await dbRef.get('server')
+      const item = await dbRef.get('server')
 
-      if (id && howToData) {
-        await this.updateHowtoItem({
-          ...howToData,
+      if (id && item) {
+        await this.updateitem({
+          ...item,
           _deleted: true,
         })
       }
@@ -198,7 +191,7 @@ export class HowtoStore extends ModuleStore {
   }
 
   // upload a new or update an existing project
-  public async uploadHowTo(
+  public async upload(
     values: ILibrary.FormInput | ILibrary.DB,
   ): Promise<ILibrary.DB | null> {
     logger.debug('uploading project', { values })
@@ -210,11 +203,11 @@ export class HowtoStore extends ModuleStore {
     const id = dbRef.id
 
     const existingDoc = await dbRef.get('server')
-    logger.debug('uploadHowto.existingDoc', { existingDoc })
+    logger.debug('upload.existingDoc', { existingDoc })
 
     const user = this.activeUser as IUser
 
-    let howto: ILibrary.DB | null = null
+    let item: ILibrary.DB | null = null
     try {
       // upload any pending images, avoid trying to re-upload images previously saved
       // if cover already uploaded stored as object not array
@@ -256,7 +249,7 @@ export class HowtoStore extends ModuleStore {
       const keywords = getKeywords(values.title + ' ' + values.description)
       keywords.push(_createdBy)
 
-      const howToData: ILibrary.Item = {
+      const itemData: ILibrary.Item = {
         ...(existingDoc || {}),
         _id,
         _createdBy,
@@ -283,9 +276,9 @@ export class HowtoStore extends ModuleStore {
         ...(time ? { time } : {}),
       }
 
-      logger.debug('populating database', howToData)
+      logger.debug('populating database', itemData)
       // set the database document
-      howto = await this.updateHowtoItem(howToData, true)
+      item = await this.updateitem(itemData, true)
       this.updateUploadStatus('Database')
       logger.debug('project added')
       // complete
@@ -295,7 +288,7 @@ export class HowtoStore extends ModuleStore {
       throw new Error(error.message)
     }
 
-    return howto
+    return item
   }
 
   private async findMentionsInSteps(steps: ILibrary.StepInput[]) {
@@ -363,7 +356,7 @@ export class HowtoStore extends ModuleStore {
   }
 }
 
-interface ILibraryItemUploadStatus {
+interface IitemUploadStatus {
   Start: boolean
   Cover: boolean
   Files: boolean
@@ -372,7 +365,7 @@ interface ILibraryItemUploadStatus {
   Complete: boolean
 }
 
-const getInitialUploadStatus = (): ILibraryItemUploadStatus => ({
+const getInitialUploadStatus = (): IitemUploadStatus => ({
   Start: false,
   Cover: false,
   'Step Images': false,

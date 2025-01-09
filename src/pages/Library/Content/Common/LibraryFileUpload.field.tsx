@@ -2,12 +2,12 @@ import { Field } from 'react-final-form'
 import { UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FileInputField } from 'src/common/Form/FileInput.field'
-import { FormFieldWrapper } from 'src/pages/Library/Content/Common/FormFieldWrapper'
+import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { Text } from 'theme-ui'
 
 import { intro } from '../../labels'
 
-export const HowtoFieldFileUpload = () => {
+export const LibraryFileUploadField = () => {
   const { description, title } = intro.files
   const name = 'files'
 

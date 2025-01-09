@@ -1,18 +1,18 @@
 // (note - typings don't currently exist for firebase-tools: https://github.com/firebase/firebase-tools/issues/2378)
-import * as firebase_tools from 'firebase-tools'
-import { DB_ENDPOINTS } from '../../models'
-import { db } from '../../Firebase/firestoreDB'
-import { splitArrayToChunks } from '../../Utils/data.utils'
-import type { firestore } from 'firebase-admin'
 import axios from 'axios'
+import * as firebase_tools from 'firebase-tools'
 
-const USE_SMALL_SAMPLE_SEED = false
+import { db } from '../../Firebase/firestoreDB'
+import { DB_ENDPOINTS } from '../../models'
+import { splitArrayToChunks } from '../../Utils/data.utils'
+
+import type { firestore } from 'firebase-admin'
 
 /**
  * Script used to generate a cleaner export of seed data for use in development
  *
  * Given a full dump of site data in the emulator, strips away all user docs and revisions
- * for users that have not posted content to mappins, howtos or research
+ * for users that have not posted content to mappins, library or research
  * (basically anywhere their profile might be linked from)
  */
 export async function seedDataClean() {
@@ -36,13 +36,13 @@ export async function seedDataClean() {
 
   // setup variables and types for tracking data
   const keptUsers = {}
-  const endpointsToCheck = ['mappins', 'howtos', 'research'] as const
+  const endpointsToCheck = ['mappins', 'library', 'research'] as const
   type ICheckedEndpoint = (typeof endpointsToCheck)[number]
   const allDocs: {
     [endpoint in ICheckedEndpoint]: firestore.QuerySnapshot<firestore.DocumentData>
   } = {} as any
 
-  // Get list of users with howtos or mappins to retain data
+  // Get list of users with library or mappins to retain data
   for (const endpoint of endpointsToCheck) {
     const mappedEndpoint = DB_ENDPOINTS[endpoint]
     if (mappedEndpoint) {
@@ -86,34 +86,6 @@ export async function seedDataClean() {
   returnMessage.endpoints.kept.users = Object.keys(keptUsers).length
 
   return returnMessage
-}
-
-/**
- *   WiP - If limiting seed size reduce the overall user list
- *   TODO - this will be too random and also end up with lots more howtos than anything else. Ideally should provide
- */
-async function WiPReduceSeedSize(allDocs) {
-  // specific list of data
-  if (USE_SMALL_SAMPLE_SEED) {
-    const sampleSize = 20
-    const keptUsers = {}
-    const shuffledHowtos = allDocs.howtos.docs
-      .sort(() => 0.5 - Math.random())
-      .slice(0, sampleSize)
-    shuffledHowtos.forEach((doc) => (keptUsers[doc.data()._createdBy] = true))
-    // Delete howtos
-    const deletedHowtos = await batchDeleteDocs(
-      allDocs.howtos.docs.filter((d) => !keptUsers[d.data()._createdBy]),
-      '[Howtos Deleted]',
-    )
-    // Delete mappins
-    const deletedMappins = await batchDeleteDocs(
-      allDocs.mappins.docs.filter((d) => !keptUsers[d.id]),
-      '[Mappins Deleted]',
-    )
-    // Delete research (TBD)
-    return { deletedHowtos, deletedMappins, keptUsers }
-  }
 }
 
 /** Execute a firestore query and delete all retrieved docs, subject to optional filter function */
@@ -165,68 +137,4 @@ async function deleteCollectionAPI(endpoint: string) {
   const apiHost =
     'http://0.0.0.0:4003/emulator/v1/projects/demo-community-platform-emulated' // http://[::1] for non-docker env
   return axios.delete(`${apiHost}/databases/(default)/documents/${endpoint}`)
-}
-
-/**
- * Use firebase tools to fully delete collection and subcollection from command-line tools
- * https://firebase.google.com/docs/firestore/solutions/delete-collections
- *
- * NOTE CC 2021-09-29 - Seems to have stopped working with current emulators (not sure why)
- * reverting to api method instead. Might be fixed with updated host endpoint used above and in firebase.json
- */
-async function deleteCollectionCLI(endpoint: string) {
-  // Note - whilst we are only operating on the emulator user will probably
-  // still need to be logged into firebase to call
-  // https://github.com/firebase/firebase-tools/issues/1940
-  await firebase_tools.firestore
-    .delete(endpoint, {
-      recursive: true,
-      yes: true,
-    })
-    .catch((err) => {
-      console.error(err)
-      process.exit(1)
-    })
-}
-
-/**
- * Iterative method to delete all documents in a collection, by reading all documents in batches and deleting
- * Copied from https://github.com/firebase/snippets-node/blob/e5f6214059bdbc63f94ba6600f7f84e96325548d/firestore/main/index.js#L889-L921
- *
- * Note 1 - this is less efficient than the cli method, but also available outside of node environment
- * Note 2 - This fails to delete subcollections, and manual methods above added instead
- */
-async function deleteCollectionIteratively(
-  collectionPath: string,
-  batchSize = 500,
-) {
-  const collectionRef = db.collection(collectionPath)
-  const query = collectionRef.orderBy('__name__').limit(batchSize)
-  return new Promise((resolve, reject) => {
-    deleteQueryBatch(query, resolve).catch(reject)
-  })
-}
-
-async function deleteQueryBatch(query, resolve) {
-  const snapshot = await query.get()
-
-  const batchSize = snapshot.size
-  if (batchSize === 0) {
-    // When there are no documents left, we are done
-    resolve()
-    return
-  }
-
-  // Delete documents in a batch
-  const batch = db.batch()
-  snapshot.docs.forEach((doc) => {
-    batch.delete(doc.ref)
-  })
-  await batch.commit()
-
-  // Recurse on the next process tick, to avoid
-  // exploding the stack.
-  process.nextTick(async () => {
-    await deleteQueryBatch(query, resolve)
-  })
 }

@@ -1,6 +1,11 @@
-export const howtos = {
+import type { DifficultyLevel, ILibrary, IModerationStatus } from '../../models'
+
+type LibraryList = { [id: string]: ILibrary.DB }
+
+export const library: LibraryList = {
   gPpPDEvfNT9a6w5FWzaj: {
-    moderation: 'accepted',
+    moderation: 'accepted' as IModerationStatus,
+    mentions: [],
     _id: 'gPpPDEvfNT9a6w5FWzaj',
     _createdBy: 'howto_creator',
     tags: {
@@ -314,7 +319,7 @@ export const howtos = {
         'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-12-1.jpg?alt=media&token=457a344a-571c-4eb7-8b59-63bdd769eb36',
       contentType: 'image/jpeg',
     },
-    difficulty_level: 'Hard',
+    difficulty_level: 'Hard' as DifficultyLevel,
     files: [
       {
         size: 384323,
@@ -344,6 +349,7 @@ export const howtos = {
   '0EwdD1IMrwXcOncqVwOl': {
     slug: 'set-up-devsite-to-help-coding',
     previousSlugs: ['set-up-devsite-to-help-coding'],
+    mentions: [],
     _deleted: false,
     time: '< 1 week',
     description:
@@ -360,10 +366,11 @@ export const howtos = {
       updated: '2019-07-08T07:24:14.736Z',
     },
     _id: '0EwdD1IMrwXcOncqVwOl',
-    difficulty_level: 'Easy',
+    difficulty_level: 'Easy' as DifficultyLevel,
     files: [],
     fileLink: 'http://google.com/',
     total_downloads: 10,
+    totalComments: 0,
     steps: [
       {
         title: 'Get the code',
@@ -478,20 +485,24 @@ export const howtos = {
         title: 'Have fun 🤙',
       },
     ],
-    moderation: 'accepted',
-    id: 'DBgbCKle7h4CcNxeUP2V',
+    moderation: 'accepted' as IModerationStatus,
     _createdBy: 'howto_editor',
     tags: {},
     category: {
       label: 'product',
+      _id: 'project',
+      _created: '2019-09-16T17:54:19.978Z',
+      _deleted: false,
     },
     title: 'Set up devsite to help coding!',
     _modified: '2019-09-16T17:54:19.978Z',
     _created: '2019-07-08T07:24:24.456Z',
   },
   I6qwynw8c9AqnpYupZnp: {
-    difficulty_level: 'Medium',
+    difficulty_level: 'Medium' as DifficultyLevel,
     files: [],
+    mentions: [],
+    totalComments: 2,
     steps: [
       {
         title: 'Gather your materials ',
@@ -1364,15 +1375,18 @@ export const howtos = {
         title: 'Finish the raincoat',
       },
     ],
-    moderation: 'accepted',
+    moderation: 'accepted' as IModerationStatus,
     _createdBy: 'howto_creator',
     tags: {
       g36hWyk3OckrLSH1ehdIE: true,
     },
     category: {
       label: 'product',
+      _deleted: false,
+      _modified: '2019-04-15T18:51:56.479Z',
+      _created: '2018-11-29T12:56:47.901Z',
+      _id: 'categoryNtr9asrGucgt7JKdRpc',
     },
-    id: 'oIVF73weEIlVJQYfolcg',
     title: 'Make a raincoat with plastic bags',
     _modified: '2019-09-27T13:52:31.679Z',
     _created: '2019-06-26T14:58:44.067Z',
@@ -1412,7 +1426,9 @@ export const howtos = {
       contentType: 'image/jpeg',
     },
     _id: 'MCM9YtFY8mbIrVueCQ3p',
-    difficulty_level: 'Medium',
+    difficulty_level: 'Medium' as DifficultyLevel,
+    mentions: [],
+    totalComments: 2,
     files: [],
     steps: [
       {
@@ -1836,7 +1852,7 @@ export const howtos = {
         ],
       },
     ],
-    moderation: 'accepted',
+    moderation: 'accepted' as IModerationStatus,
     _createdBy: 'howto_creator',
     tags: {
       Cdg3VhG5Yv9BjBEDMcH8: true,
@@ -1845,8 +1861,11 @@ export const howtos = {
     },
     category: {
       label: 'product',
+      _deleted: false,
+      _modified: '2019-04-15T18:51:56.479Z',
+      _created: '2018-11-29T12:56:47.901Z',
+      _id: 'categoryNtr9asrGucgt7JKdRpc',
     },
-    id: 'DUjTZCQJ6OmSMkEYdZ6f',
     title: 'Make a handplane (simple mould)',
     _modified: '2019-10-04T14:02:46.083Z',
     _created: '2019-05-22T16:27:27.010Z',
@@ -1854,7 +1873,6 @@ export const howtos = {
     previousSlugs: ['make-a-handplane-simple-mould'],
   },
   OgxS9mtt3ZugcTzEPEXt: {
-    id: 'fUBiAC99ciXpvPcfJ0Fk',
     _createdBy: 'howto_creator',
     tags: {
       DJN99ErXz8FHy035YdMO: true,
@@ -1862,7 +1880,13 @@ export const howtos = {
     },
     category: {
       label: 'injection',
+      _deleted: false,
+      _modified: '2019-04-15T18:51:56.479Z',
+      _created: '2018-11-29T12:56:47.901Z',
+      _id: 'categoryNtr9asrGucgt7JKdRpc',
     },
+    mentions: [],
+    totalComments: 2,
     title: 'Create an extruded lamp',
     _modified: '2019-09-27T10:28:06.541Z',
     _created: '2019-06-21T10:42:50.592Z',
@@ -1885,7 +1909,7 @@ export const howtos = {
         'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2FhowtosV1%2FfUBiAC99ciXpvPcfJ0Fk%2Fhow-to-extruded-lamp-31.png?alt=media&token=966219f8-c487-477a-a8f7-b97ed21dbf1d',
     },
     _id: 'OgxS9mtt3ZugcTzEPEXt',
-    difficulty_level: 'Medium',
+    difficulty_level: 'Medium' as DifficultyLevel,
     files: [],
     steps: [
       {
@@ -2321,7 +2345,7 @@ export const howtos = {
         ],
       },
     ],
-    moderation: 'accepted',
+    moderation: 'accepted' as IModerationStatus,
   },
   Xxz9DJdfWl03DdbK5acB: {
     title: 'Create bottle top earrings',
@@ -2345,7 +2369,9 @@ export const howtos = {
       fullPath: 'uploads/howtosV1/EmJEqraybHdZpkRu6FdB/how-to-bori-15.png',
     },
     _id: 'Xxz9DJdfWl03DdbK5acB',
-    difficulty_level: 'Easy',
+    difficulty_level: 'Easy' as DifficultyLevel,
+    mentions: [],
+    totalComments: 5,
     files: [],
     steps: [
       {
@@ -2565,8 +2591,7 @@ export const howtos = {
         ],
       },
     ],
-    moderation: 'accepted',
-    id: 'EmJEqraybHdZpkRu6FdB',
+    moderation: 'accepted' as IModerationStatus,
     _createdBy: 'howto_creator',
     tags: {
       g36hWyk3OckrLSH1ehdIE: true,
@@ -2574,6 +2599,10 @@ export const howtos = {
     },
     category: {
       label: 'injection',
+      _deleted: false,
+      _modified: '2019-04-15T18:51:56.479Z',
+      _created: '2018-11-29T12:56:47.901Z',
+      _id: 'categoryNtr9asrGucgt7JKdRpc',
     },
   },
   cmMzzlQP00fCckYIeL2e: {
@@ -2592,7 +2621,9 @@ export const howtos = {
       size: 36389,
     },
     _id: 'cmMzzlQP00fCckYIeL2e',
-    difficulty_level: 'Easy',
+    difficulty_level: 'Easy' as DifficultyLevel,
+    mentions: [],
+    totalComments: 4,
     files: [],
     steps: [
       {
@@ -2839,13 +2870,17 @@ export const howtos = {
         _animationKey: 'uniquemjlfze',
       },
     ],
-    moderation: 'accepted',
+    moderation: 'accepted' as IModerationStatus,
     _createdBy: 'howto_creator',
     tags: {
       g2rhzzwstNhU62CUs9ak: true,
     },
     category: {
       label: 'product',
+      _deleted: false,
+      _modified: '2019-04-15T18:51:56.479Z',
+      _created: '2018-11-29T12:56:47.901Z',
+      _id: 'categoryNtr9asrGucgt7JKdRpc',
     },
     title: 'Make glass-like beams',
     _modified: '2019-09-18T21:53:33.211Z',
@@ -2862,6 +2897,7 @@ export const howtos = {
     _id: 'zVVjXc34gKhUNIcgLEXg',
     _modified: '2022-01-06T14:50:38.830Z',
     totalComments: 0,
+    mentions: [],
     cover_image: {
       contentType: 'image/jpeg',
       downloadUrl:
@@ -2876,9 +2912,9 @@ export const howtos = {
     },
     creatorCountry: '',
     description: 'Test1',
-    difficulty_level: 'Medium',
+    difficulty_level: 'Medium' as DifficultyLevel,
     files: [],
-    moderation: 'accepted',
+    moderation: 'accepted' as IModerationStatus,
     slug: 'testing-testing',
     previousSlugs: ['testing-testing'],
     steps: [
@@ -2890,11 +2926,9 @@ export const howtos = {
           'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
       },
     ],
-    tags: [
-      {
-        uruGBJvokGat2aCvZW0J: true,
-      },
-    ],
+    tags: {
+      uruGBJvokGat2aCvZW0J: true,
+    },
     time: '< 1 hour',
     title: 'Testing-testing',
   },
@@ -2904,6 +2938,8 @@ export const howtos = {
     _deleted: true,
     _id: 'zVVjXc34gKhIBVcgLEXg',
     _modified: '2022-01-06T14:50:38.830Z',
+    mentions: [],
+    previousSlugs: ['deleted-how-to'],
     cover_image: {
       contentType: 'image/jpeg',
       downloadUrl:
@@ -2918,9 +2954,9 @@ export const howtos = {
     },
     creatorCountry: '',
     description: 'deleted how to',
-    difficulty_level: 'Medium',
+    difficulty_level: 'Medium' as DifficultyLevel,
     files: [],
-    moderation: 'accepted',
+    moderation: 'accepted' as IModerationStatus,
     slug: 'deleted-how-to',
     steps: [
       {
@@ -2931,11 +2967,7 @@ export const howtos = {
           'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
       },
     ],
-    tags: [
-      {
-        uruGBJvokGat2aCvZW0J: true,
-      },
-    ],
+    tags: { uruGBJvokGat2aCvZW0J: true },
     time: '< 1 hour',
     title: 'Deleted how to',
     totalComments: 0,

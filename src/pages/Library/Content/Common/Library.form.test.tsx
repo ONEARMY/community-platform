@@ -5,11 +5,11 @@ import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { FactoryHowto } from 'src/test/factories/Library'
+import { FactoryLibraryItem } from 'src/test/factories/Library'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { describe, expect, it, vi } from 'vitest'
 
-import { HowtoForm } from './Library.form'
+import { LibraryForm } from './Library.form'
 
 import type { ILibrary } from 'oa-shared'
 import type { ParentType } from './Library.form'
@@ -20,7 +20,7 @@ vi.mock('src/common/hooks/useCommonStores', () => {
   return {
     useCommonStores: () => ({
       stores: {
-        howtoStore: {
+        LibraryStore: {
           uploadStatus: {
             Start: false,
             Cover: false,
@@ -30,7 +30,7 @@ vi.mock('src/common/hooks/useCommonStores', () => {
             Complete: false,
           },
           validateTitleForSlug: vi.fn(),
-          uploadHowTo: vi.fn(),
+          upload: vi.fn(),
         },
         tagsStore: {
           allTags: [
@@ -49,7 +49,7 @@ describe('Howto form', () => {
   describe('Provides user information', () => {
     it('shows maximum file size', () => {
       // Arrange
-      const formValues = FactoryHowto()
+      const formValues = FactoryLibraryItem()
       // Act
       let wrapper
       act(() => {
@@ -64,7 +64,7 @@ describe('Howto form', () => {
   describe('Invalid file warning', () => {
     it('Does not appear when submitting only fileLink', () => {
       // Arrange
-      const formValues = FactoryHowto({ fileLink: 'www.test.com' })
+      const formValues = FactoryLibraryItem({ fileLink: 'www.test.com' })
       // Act
       let wrapper
       act(() => {
@@ -79,7 +79,7 @@ describe('Howto form', () => {
 
     it('Does not appear when submitting only files', () => {
       // Arrange
-      const formValues = FactoryHowto({
+      const formValues = FactoryLibraryItem({
         files: [
           new File(['test file content'], 'test-file.pdf', {
             type: 'application/pdf',
@@ -101,7 +101,7 @@ describe('Howto form', () => {
 
     it('Appears when submitting 2 file types', () => {
       // Arrange
-      const formValues = FactoryHowto({
+      const formValues = FactoryLibraryItem({
         files: [
           new File(['test file content'], 'test-file.pdf', {
             type: 'application/pdf',
@@ -122,7 +122,7 @@ describe('Howto form', () => {
 
     it('Does not appear when files are removed and filelink added', async () => {
       // Arrange
-      const formValues = FactoryHowto({
+      const formValues = FactoryLibraryItem({
         files: [
           new File(['test file content'], 'test-file.pdf', {
             type: 'application/pdf',
@@ -169,7 +169,7 @@ const Wrapper = (formValues: ILibrary.DB, parentType: ParentType, navProps) => {
         Component: () => (
           <Provider {...useCommonStores().stores}>
             <ThemeProvider theme={Theme}>
-              <HowtoForm
+              <LibraryForm
                 formValues={formValues}
                 parentType={parentType}
                 {...navProps}

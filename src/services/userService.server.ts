@@ -19,8 +19,8 @@ const getById = async (id: string): Promise<IUserDB | null> => {
 }
 
 const getUserCreatedDocs = async (userId: string): Promise<UserCreatedDocs> => {
-  const [howtos, research, researchCollaborated] = await Promise.all([
-    getHowtosByAuthor(userId),
+  const [library, research, researchCollaborated] = await Promise.all([
+    getLibraryByAuthor(userId),
     getResearchByAuthor(userId),
     getResearchByCollaborator(userId),
   ])
@@ -28,7 +28,7 @@ const getUserCreatedDocs = async (userId: string): Promise<UserCreatedDocs> => {
   const researchCombined = [...research, ...researchCollaborated].filter(
     (item, index, self) => index === self.findIndex((t) => t._id === item._id),
   )
-  const howtosFiltered = howtos.filter(
+  const libraryFiltered = library.filter(
     (doc) => doc.moderation === IModerationStatus.ACCEPTED,
   )
   const researchFiltered = researchCombined.filter(
@@ -36,7 +36,7 @@ const getUserCreatedDocs = async (userId: string): Promise<UserCreatedDocs> => {
   )
 
   return {
-    howtos: howtosFiltered,
+    library: libraryFiltered,
     research: researchFiltered,
   }
 }
@@ -63,11 +63,11 @@ const getResearchByCollaborator = async (userId: string) => {
   ).docs.map((doc) => doc.data() as IResearchDB)
 }
 
-const getHowtosByAuthor = async (userId: string) => {
+const getLibraryByAuthor = async (userId: string) => {
   return (
     await getDocs(
       query(
-        collection(firestore, DB_ENDPOINTS.howtos),
+        collection(firestore, DB_ENDPOINTS.library),
         where('_createdBy', '==', userId),
       ),
     )

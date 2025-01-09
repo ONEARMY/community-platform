@@ -25,13 +25,13 @@ describe('userUpdates', () => {
   }
 
   describe('updateDocuments', () => {
-    it('updates howto when user country has changed', async () => {
+    it('updates library project when user country has changed', async () => {
       // Arrange
       const userId = uuid()
       const newCountryCode = 'nl'
       const wrapped = test.wrap(handleUserUpdates)
 
-      await db.collection(DB_ENDPOINTS.howtos).add({
+      await db.collection(DB_ENDPOINTS.library).add({
         _createdBy: userId,
         creatorCountry: 'uk',
       })
@@ -57,7 +57,7 @@ describe('userUpdates', () => {
       // Assert
       const doc = (
         await db
-          .collection(DB_ENDPOINTS.howtos)
+          .collection(DB_ENDPOINTS.library)
           .where('_createdBy', '==', userId)
           .get()
       ).docs[0].data()
@@ -65,13 +65,13 @@ describe('userUpdates', () => {
       expect(doc.creatorCountry).toBe(newCountryCode)
     })
 
-    it.skip('updates howto comments when user country has changed', async () => {
+    it.skip('updates library comments when user country has changed', async () => {
       // Arrange
       const userId = uuid()
       const newCountryCode = 'nl'
       const wrapped = test.wrap(handleUserUpdates)
 
-      await db.collection(DB_ENDPOINTS.howtos).add({
+      await db.collection(DB_ENDPOINTS.library).add({
         _createdBy: userId,
         creatorCountry: 'uk',
         comments: [
@@ -102,7 +102,7 @@ describe('userUpdates', () => {
       // Assert
       const doc = (
         await db
-          .collection(DB_ENDPOINTS.howtos)
+          .collection(DB_ENDPOINTS.library)
           .where('comments', 'array-contains', {
             _creatorId: userId,
             creatorCountry: newCountryCode,
@@ -113,13 +113,13 @@ describe('userUpdates', () => {
       expect(doc?.comments[0].creatorCountry).toBe(newCountryCode)
     })
 
-    it.skip('updates the comments on multiple howtos when a user country has changed', async () => {
+    it.skip('updates the comments on library when a user country has changed', async () => {
       // Arrange
       const userId = uuid()
       const newCountryCode = 'nl'
       const wrapped = test.wrap(handleUserUpdates)
 
-      await db.collection(DB_ENDPOINTS.howtos).add({
+      await db.collection(DB_ENDPOINTS.library).add({
         _createdBy: uuid(),
         creatorCountry: 'uk',
         comments: [
@@ -129,7 +129,7 @@ describe('userUpdates', () => {
         ],
       })
 
-      await db.collection(DB_ENDPOINTS.howtos).add({
+      await db.collection(DB_ENDPOINTS.library).add({
         _createdBy: userId,
         creatorCountry: 'uk',
         comments: [
@@ -158,24 +158,24 @@ describe('userUpdates', () => {
       )
 
       // Assert
-      const howtoDocuments = await db
-        .collection(DB_ENDPOINTS.howtos)
+      const libraryDocuments = await db
+        .collection(DB_ENDPOINTS.library)
         .where('comments', 'array-contains', {
           _creatorId: userId,
           creatorCountry: newCountryCode,
         })
-        .get()
-      const doc = (
-        await db
-          .collection(DB_ENDPOINTS.howtos)
-          .where('comments', 'array-contains', {
-            _creatorId: userId,
-            creatorCountry: newCountryCode,
-          })
-          .get()
-      )?.docs[0]?.data()
+        .get()(
+          await db
+            .collection(DB_ENDPOINTS.library)
+            .where('comments', 'array-contains', {
+              _creatorId: userId,
+              creatorCountry: newCountryCode,
+            })
+            .get(),
+        )
+        ?.docs[0]?.data()
 
-      expect(howtoDocuments.docs).toHaveLength(2)
+      expect(libraryDocuments.docs).toHaveLength(2)
     })
   })
 

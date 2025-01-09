@@ -7,25 +7,25 @@ import type { ILibrary, IUserDB } from 'oa-shared'
 import type { IMockAuthUser } from 'oa-shared/mocks/auth'
 
 /**
- * Populate additional mock howtos alongside production data for ease of testing
+ * Populate additional mock library projects alongside production data for ease of testing
  * TODO - should create from factories used in unit mocks once available in shared
  */
 export async function seedContentGenerate() {
-  // create mock howtos just for demo_beta_tester and demo_admin users
+  // create mock library projects just for demo_beta_tester and demo_admin users
   for (const user of Object.values(MOCK_AUTH_USERS).slice(1, 3)) {
-    await setMockHowto(user)
+    await setMockLibrary(user)
     await setMockNotifications(user)
   }
   return
 }
 
-export function getMockHowto(
+export function getMockLibraryItem(
   uid: string,
   moderation: ILibrary.DB['moderation'] = IModerationStatus.ACCEPTED,
 ) {
   const _id = `00_${uid}_howto`
   const loginInfo = `username : ${uid}@example.com\npassword : ${uid}`
-  const howto: ILibrary.DB = {
+  const library: ILibrary.DB = {
     _id,
     _created: new Date().toISOString(),
     _modified: new Date().toISOString(),
@@ -47,13 +47,14 @@ export function getMockHowto(
     previousSlugs: [_id],
     totalComments: 0,
   }
-  return howto
+
+  return library
 }
 
-export async function setMockHowto(user: Pick<IMockAuthUser, 'uid'>) {
+export async function setMockLibrary(user: Pick<IMockAuthUser, 'uid'>) {
   const { uid } = user
-  const howto = getMockHowto(uid)
-  await setDoc('howtos', howto._id, howto)
+  const library = getMockLibraryItem(uid)
+  await setDoc('library', library._id, library)
 }
 
 async function setMockNotifications(user: IMockAuthUser) {

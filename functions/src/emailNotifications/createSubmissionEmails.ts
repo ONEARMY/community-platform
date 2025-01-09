@@ -68,7 +68,7 @@ export const handleMessageSubmission = functions
 
 export const handleHowToSubmission = functions
   .runWith({ memory: '512MB' })
-  .firestore.document(`${DB_ENDPOINTS.howtos}/{id}`)
+  .firestore.document(`${DB_ENDPOINTS.library}/{id}`)
   .onCreate((snapshot, context) =>
     withErrorAlerting(context, createHowtoSubmissionEmail, [snapshot.data()]),
   )

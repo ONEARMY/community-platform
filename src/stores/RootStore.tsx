@@ -1,7 +1,7 @@
 import { AggregationsStore } from './Aggregations/aggregations.store'
 import { DatabaseV2 } from './databaseV2/DatabaseV2'
 import { DiscussionStore } from './Discussions/discussions.store'
-import { HowtoStore } from './Library/library.store'
+import { LibraryStore } from './Library/library.store'
 import { MapsStore } from './Maps/maps.store'
 import { QuestionStore } from './Question/question.store'
 import { ResearchStore } from './Research/research.store'
@@ -15,7 +15,7 @@ export interface IRootStore {
 }
 
 export interface IStores {
-  howtoStore: HowtoStore
+  LibraryStore: LibraryStore
   userStore: UserStore
   tagsStore: TagsStore
   researchStore: ResearchStore
@@ -43,7 +43,7 @@ export class RootStore implements IRootStore {
 const stores = (rootStore: IRootStore) => {
   const stores: IStores = {
     aggregationsStore: new AggregationsStore(rootStore),
-    howtoStore: new HowtoStore(rootStore),
+    LibraryStore: new LibraryStore(rootStore),
     userStore: new UserStore(rootStore),
     tagsStore: new TagsStore(rootStore),
     researchStore: new ResearchStore(rootStore),

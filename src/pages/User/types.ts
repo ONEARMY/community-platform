@@ -1,6 +1,6 @@
 import type { ILibrary, IResearchDB } from 'oa-shared'
 
 export interface UserCreatedDocs {
-  howtos: ILibrary.DB[]
+  library: ILibrary.DB[]
   research: IResearchDB[]
 }

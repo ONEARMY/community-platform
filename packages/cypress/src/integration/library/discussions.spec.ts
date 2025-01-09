@@ -7,9 +7,9 @@ import { MOCK_DATA } from '../../data'
 import { howto } from '../../fixtures/library'
 import { generateNewUserDetails } from '../../utils/TestUtils'
 
-const howtos = Object.values(MOCK_DATA.howtos)
+const library = Object.values(MOCK_DATA.library)
 
-const item = howtos[0]
+const item = library[0]
 const howtoDiscussion = Object.values(MOCK_DATA.discussions).find(
   ({ sourceId }) => sourceId === item._id,
 )

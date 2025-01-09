@@ -180,7 +180,7 @@ type IDexieSchema = { [key in IFrontendEndpoints]: string }
 const DEFAULT_SCHEMA = '_id,_modified'
 
 const SCHEMA_BASE: IDexieSchema = {
-  howtos: `${DEFAULT_SCHEMA},_createdBy,slug,previousSlugs`,
+  library: `${DEFAULT_SCHEMA},_createdBy,slug,previousSlugs`,
   mappins: DEFAULT_SCHEMA,
   messages: `${DEFAULT_SCHEMA}`,
   tags: DEFAULT_SCHEMA,

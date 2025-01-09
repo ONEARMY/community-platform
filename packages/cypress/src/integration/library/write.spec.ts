@@ -217,7 +217,7 @@ describe('[Library]', () => {
       cy.fillIntroTitle(`qwerty ${randomId}`)
       cy.get('[data-cy=draft]').click()
       const firstSlug = `/library/qwerty-${randomId}`
-      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
+      cy.get('[data-cy=view-project]:enabled', { timeout: 20000 })
         .click()
         .url()
         .should('include', firstSlug)
@@ -278,13 +278,13 @@ describe('[Library]', () => {
 
       cy.step('A full draft was saved')
       cy.get('[data-cy=draft]').click()
-      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 }).click()
+      cy.get('[data-cy=view-project]:enabled', { timeout: 20000 }).click()
 
       cy.step('A full draft can be submitted for review')
       cy.get('[data-cy=edit]').click()
 
       cy.get('[data-cy=submit]').click()
-      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
+      cy.get('[data-cy=view-project]:enabled', { timeout: 20000 })
         .click()
         .url()
         .should('include', `/library/${slug}`)

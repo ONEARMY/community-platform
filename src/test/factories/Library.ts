@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker'
 import { DifficultyLevel, type ILibrary, IModerationStatus } from 'oa-shared'
 
-export const FactoryHowto = (
-  howtoOverloads: Partial<ILibrary.DB> = {},
+export const FactoryLibraryItem = (
+  itemOverloads: Partial<ILibrary.DB> = {},
 ): ILibrary.DB => ({
   files: [],
   fileLink: '',
@@ -23,7 +23,7 @@ export const FactoryHowto = (
   title: faker.lorem.words(4),
   description: faker.lorem.paragraph(),
   category: {
-    label: 'howto',
+    label: 'Library Cat',
     _id: faker.string.uuid(),
     _modified: faker.date.past().toString(),
     _created: faker.date.past().toString(),
@@ -52,11 +52,11 @@ export const FactoryHowto = (
   total_downloads: faker.number.int(),
   votedUsefulBy: [],
   totalComments: 0,
-  ...howtoOverloads,
+  ...itemOverloads,
 })
 
-export const FactoryHowtoStep = (
-  howtoStepOverloads: Partial<ILibrary.Step> = {},
+export const FactoryLibraryItemStep = (
+  itemOverloads: Partial<ILibrary.Step> = {},
 ): ILibrary.Step => ({
   images: [
     {
@@ -71,11 +71,11 @@ export const FactoryHowtoStep = (
   ],
   title: faker.lorem.text(),
   text: faker.lorem.paragraphs(2),
-  ...howtoStepOverloads,
+  ...itemOverloads,
 })
 
-export const FactoryHowtoDraft = (
-  howtoOverloads: Partial<ILibrary.DB> = {},
+export const FactoryLibraryItemDraft = (
+  itemOverloads: Partial<ILibrary.DB> = {},
 ): ILibrary.DB => ({
   _id: faker.string.uuid(),
   _contentModifiedTimestamp: faker.date.past().toString(),
@@ -93,5 +93,5 @@ export const FactoryHowtoDraft = (
   tags: {},
   total_downloads: 0,
   totalComments: 0,
-  ...howtoOverloads,
+  ...itemOverloads,
 })

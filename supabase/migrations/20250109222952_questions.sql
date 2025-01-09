@@ -73,6 +73,8 @@ CREATE INDEX questions_category_idx ON public.questions USING btree (category);
 
 CREATE INDEX questions_created_by_idx ON public.questions USING btree (created_by);
 
+CREATE UNIQUE INDEX questions_slug_key ON public.questions USING btree (slug);
+
 CREATE UNIQUE INDEX subscribers_pkey ON public.subscribers USING btree (id);
 
 CREATE UNIQUE INDEX tags_pkey ON public.tags USING btree (id);
@@ -84,6 +86,8 @@ alter table "public"."subscribers" add constraint "subscribers_pkey" PRIMARY KEY
 alter table "public"."tags" add constraint "tags_pkey" PRIMARY KEY using index "tags_pkey";
 
 alter table "public"."useful_votes" add constraint "useful_votes_pkey" PRIMARY KEY using index "useful_votes_pkey";
+
+alter table "public"."questions" add constraint "questions_slug_key" UNIQUE using index "questions_slug_key";
 
 alter table "public"."subscribers" add constraint "subscribers_user_id_fkey" FOREIGN KEY (user_id) REFERENCES profiles(id) ON UPDATE CASCADE ON DELETE CASCADE not valid;
 

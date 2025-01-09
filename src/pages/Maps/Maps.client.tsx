@@ -55,7 +55,7 @@ const MapsPage = () => {
   }, [allPins])
 
   return (
-    <Box id="mapPage" sx={{ height: 'calc(100vh - 120px)', width: '100%' }}>
+    <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)', width: '100%' }}>
       <MapContainer
         allPins={allPins}
         allToggleFilters={allToggleFilters}

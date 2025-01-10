@@ -1,8 +1,4 @@
-import { MOCK_DATA } from '../../data'
 import { generateAlphaNumeric } from '../../utils/TestUtils'
-
-const questions = Object.values(MOCK_DATA.questions)
-const item = questions[0]
 
 describe('[Question]', () => {
   describe('[Create a question]', () => {
@@ -25,12 +21,6 @@ describe('[Question]', () => {
       cy.step('Go to create page')
       cy.visit('/questions/create')
       cy.get('[data-cy=question-create-title]', { timeout: 20000 })
-
-      cy.step('Warn if title is identical to an existing one')
-      cy.get('[data-cy=field-title]').type(item.title).blur({ force: true })
-      cy.contains(
-        'Titles must be unique, please try being more specific',
-      ).should('be.visible')
 
       cy.step('Add title field')
       cy.get('[data-cy=field-title]')

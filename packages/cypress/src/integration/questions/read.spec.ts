@@ -1,6 +1,6 @@
 import { MOCK_DATA } from '../../data'
 import { clearDatabase } from '../../support/commands'
-import { seedQuestions } from './seedQuestions'
+import { seedQuestions } from '../../support/seedQuestions'
 
 const question = MOCK_DATA.questions[0]
 

@@ -1,5 +1,5 @@
 import { clearDatabase } from '../../support/commands'
-import { seedQuestions } from './seedQuestions'
+import { seedQuestions } from '../../support/seedQuestions'
 
 describe('[How To]', () => {
   beforeEach(() => {

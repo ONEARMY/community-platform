@@ -1,5 +1,5 @@
-import { MOCK_DATA } from '../../data'
-import { seedDatabase } from '../../support/commands'
+import { MOCK_DATA } from '../data'
+import { seedDatabase } from './commands'
 
 export const seedQuestionComments = async () => {
   const tenantId = Cypress.env('TENANT_ID')

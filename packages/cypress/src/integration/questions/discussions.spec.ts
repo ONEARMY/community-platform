@@ -3,7 +3,7 @@
 
 import { MOCK_DATA } from '../../data'
 import { clearDatabase } from '../../support/commands'
-import { seedQuestionComments } from './seedQuestions'
+import { seedQuestionComments } from '../../support/seedQuestions'
 // import { question } from '../../fixtures/question'
 // import { generateNewUserDetails } from '../../utils/TestUtils'
 

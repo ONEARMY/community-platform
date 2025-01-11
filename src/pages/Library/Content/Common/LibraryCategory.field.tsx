@@ -49,9 +49,9 @@ export const HowtoFieldCategory = () => {
               placeholder={placeholder || ''}
               categories={options}
             />
-            {input?.value && (
+            {input?.value?.value && (
               <HowtoCategoryGuidance
-                category={categories.find((x) => x._id === input.value)}
+                category={categories.find((x) => x._id === input.value.value)}
                 type="main"
               />
             )}

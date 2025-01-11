@@ -28,7 +28,6 @@ declare global {
       login(
         username: string,
         password: string,
-        checkUI?: boolean,
       ): Promise<firebase.auth.UserCredential>
       /** logout of firebase, optionally check ui login element updated*/
       logout(checkUI?: boolean): Chainable<void>

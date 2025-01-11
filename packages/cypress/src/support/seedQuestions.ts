@@ -4,7 +4,7 @@ import { seedDatabase } from './commands'
 export const seedQuestionComments = async () => {
   const tenantId = Cypress.env('TENANT_ID')
   Cypress.log({
-    displayName: 'Seeding database question comments for tenant',
+    displayName: 'Seeding database question with comments for tenant',
     message: tenantId,
   })
 
@@ -35,7 +35,7 @@ export const seedQuestionComments = async () => {
     },
     tenantId,
   )
-  await seedDatabase(
+  const commentData = await seedDatabase(
     {
       comments: [
         {
@@ -47,6 +47,36 @@ export const seedQuestionComments = async () => {
           source_id: questionData.questions.data[0].id,
         },
       ],
+    },
+    tenantId,
+  )
+
+  return commentData
+}
+
+export const seedCategories = async () => {
+  const tenantId = Cypress.env('TENANT_ID')
+
+  return await seedDatabase(
+    {
+      categories: MOCK_DATA.categoriesV2.map((category) => ({
+        ...category,
+        tenant_id: tenantId,
+      })),
+    },
+    tenantId,
+  )
+}
+
+export const seedTags = async () => {
+  const tenantId = Cypress.env('TENANT_ID')
+
+  return await seedDatabase(
+    {
+      tags: MOCK_DATA.tagsV2.map((category) => ({
+        ...category,
+        tenant_id: tenantId,
+      })),
     },
     tenantId,
   )
@@ -74,22 +104,14 @@ export const seedQuestions = async () => {
     },
     tenantId,
   )
-  const categoryData = await seedDatabase(
-    {
-      categories: MOCK_DATA.categoriesV2.map((category) => ({
-        ...category,
-        tenant_id: tenantId,
-      })),
-    },
-    tenantId,
-  )
+  const categoryData = await seedCategories()
   await seedDatabase(
     {
-      questions: MOCK_DATA.questions.map((question, index) => ({
+      questions: MOCK_DATA.questions.map((question) => ({
         ...question,
         tenant_id: tenantId,
         created_by: profileData.profiles.data[0].id,
-        category: index === 0 ? categoryData.categories.data[0].id : null,
+        category: categoryData.categories.data[0].id,
       })),
     },
     tenantId,

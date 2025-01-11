@@ -8,22 +8,18 @@ import { seedQuestionComments } from '../../support/seedQuestions'
 // import { generateNewUserDetails } from '../../utils/TestUtils'
 
 describe('[Questions.Discussions]', () => {
+  let commentId = ''
   before(() => {
     cy.then(async () => {
-      await seedQuestionComments()
+      const commentData = await seedQuestionComments()
+      commentId = commentData.comments.data[0].id
     })
   })
 
   it('can open using deep links', () => {
-    const item = Object.values(MOCK_DATA.questions)[0]
-    // const discussion = Object.values(MOCK_DATA.discussions).find(
-    //   ({ sourceId }) => sourceId === item._id,
-    // )
-    // const firstComment = discussion.comments[0]
-
-    cy.visit(`/questions/${item.slug}`) //#comment:${firstComment._id}`)
-    // cy.wait(2000)
-    // cy.checkCommentItem('@demo_user - I like your logo', 2)
+    const question = MOCK_DATA.questions[0]
+    cy.visit(`/questions/${question.slug}#comment:${commentId}`)
+    cy.get(`[id="comment:${commentId}"]`).should('be.visible')
   })
 
   // it('allows authenticated users to contribute to discussions', () => {

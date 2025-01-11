@@ -102,7 +102,6 @@ export const QuestionForm = (props: IProps) => {
       onSubmit={onSubmit}
       mutators={{ setAllowDraftSaveFalse }}
       initialValues={initialValues}
-      validateOnBlur={true}
       render={({ submitting, handleSubmit, valid, values }) => {
         const numberOfImageInputsAvailable = (values as any)?.images
           ? Math.min(

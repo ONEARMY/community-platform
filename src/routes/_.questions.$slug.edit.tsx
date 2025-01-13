@@ -1,4 +1,5 @@
 import { useLoaderData } from '@remix-run/react'
+import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { Question } from 'src/models/question.model'
 import { AuthRoute } from 'src/pages/common/AuthRoute'
 import { QuestionEdit } from 'src/pages/Question/QuestionEdit'
@@ -28,7 +29,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     ? storageServiceServer.getImagesPublicUrls(
         client,
         dbQuestion.images,
-        // IMAGE_SIZES.GALLERY,
+        IMAGE_SIZES.GALLERY,
       )
     : []
 

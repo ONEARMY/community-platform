@@ -1,4 +1,4 @@
-import { json, Outlet, useLoaderData } from '@remix-run/react'
+import { Outlet, useLoaderData } from '@remix-run/react'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { Alerts } from 'src/common/Alerts/Alerts'
@@ -11,13 +11,22 @@ import {
 } from 'src/pages/common/EnvironmentContext'
 import GlobalSiteFooter from 'src/pages/common/GlobalSiteFooter/GlobalSiteFooter'
 import Header from 'src/pages/common/Header/Header'
+import { SessionContext } from 'src/pages/common/SessionContext'
 import { StickyButton } from 'src/pages/common/StickyButton'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { Flex } from 'theme-ui'
 
-export async function loader() {
-  const envVariables = getEnvVariables()
+import type { LoaderFunctionArgs } from '@remix-run/node'
 
-  return json(envVariables)
+export async function loader({ request }: LoaderFunctionArgs) {
+  const environment = getEnvVariables()
+  const { client } = createSupabaseServerClient(request)
+
+  const {
+    data: { user },
+  } = await client.auth.getUser()
+
+  return Response.json({ environment, user })
 }
 
 export function HydrateFallback() {
@@ -28,25 +37,27 @@ export function HydrateFallback() {
 
 // This is a Layout file, it will render for all routes that have _. prefix.
 export default function Index() {
-  const envVariables = useLoaderData<typeof loader>()
+  const { environment, user } = useLoaderData<typeof loader>()
 
   return (
-    <EnvironmentContext.Provider value={envVariables}>
-      <Flex
-        sx={{ height: '100vh', flexDirection: 'column' }}
-        data-cy="page-container"
-      >
-        <Analytics />
-        <ScrollToTop />
-        <ClientOnly fallback={<></>}>{() => <DevSiteHeader />}</ClientOnly>
-        <Alerts />
-        <Header />
+    <EnvironmentContext.Provider value={environment}>
+      <SessionContext.Provider value={user}>
+        <Flex
+          sx={{ height: '100vh', flexDirection: 'column' }}
+          data-cy="page-container"
+        >
+          <Analytics />
+          <ScrollToTop />
+          <ClientOnly fallback={<></>}>{() => <DevSiteHeader />}</ClientOnly>
+          <Alerts />
+          <Header />
 
-        <Outlet />
+          <Outlet />
 
-        <GlobalSiteFooter />
-        <ClientOnly fallback={<></>}>{() => <StickyButton />}</ClientOnly>
-      </Flex>
+          <GlobalSiteFooter />
+          <ClientOnly fallback={<></>}>{() => <StickyButton />}</ClientOnly>
+        </Flex>
+      </SessionContext.Provider>
     </EnvironmentContext.Provider>
   )
 }

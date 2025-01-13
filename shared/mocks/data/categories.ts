@@ -28,3 +28,18 @@ export const categories = {
     _created: '2012-05-17T17:08:03.110Z',
   },
 }
+
+export const categoriesV2 = [
+  {
+    name: 'Machines',
+    type: 'questions',
+  },
+  {
+    name: 'Moulds',
+    type: 'questions',
+  },
+  {
+    name: 'Other',
+    type: 'questions',
+  },
+]

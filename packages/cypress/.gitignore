@@ -4,3 +4,4 @@ screenshots
 fixtures/seed/*.rej
 build
 *.js
+cypress.env.json

@@ -2,7 +2,7 @@ import {
   Category,
   IconCountWithTooltip,
   InternalLink,
-  ModerationStatus,
+  // ModerationStatus,
 } from 'oa-components'
 import { Highlighter } from 'src/common/Highlighter'
 import { Box, Card, Flex, Heading } from 'theme-ui'
@@ -10,34 +10,22 @@ import { Box, Card, Flex, Heading } from 'theme-ui'
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 import { listing } from './labels'
 
-import type { IQuestion } from 'oa-shared'
+import type { Question } from 'src/models/question.model'
 
 interface IProps {
-  question: IQuestion.Item
+  question: Question
   query?: string
 }
 
 export const QuestionListItem = ({ question, query }: IProps) => {
-  const {
-    _created,
-    _createdBy,
-    creatorCountry,
-    description,
-    moderation,
-    questionCategory,
-    slug,
-    title,
-    votedUsefulBy,
-  } = question
-
-  const url = `/questions/${encodeURIComponent(slug)}`
+  const url = `/questions/${encodeURIComponent(question.slug)}`
   const searchWords = [query || '']
 
   return (
     <Card
       as="li"
       data-cy="question-list-item"
-      data-id={question._id}
+      data-id={question.id}
       sx={{
         position: 'relative',
         border: 0,
@@ -59,11 +47,11 @@ export const QuestionListItem = ({ question, query }: IProps) => {
           }}
         >
           <Flex sx={{ gap: 2, flexWrap: 'wrap' }}>
-            {moderation !== 'accepted' && (
+            {/* {moderation !== 'accepted' && (
               <Box>
                 <ModerationStatus status={moderation} contentType="question" />
               </Box>
-            )}
+            )} */}
 
             <Heading
               data-cy="question-list-item-title"
@@ -95,21 +83,24 @@ export const QuestionListItem = ({ question, query }: IProps) => {
               >
                 <Highlighter
                   searchWords={searchWords}
-                  textToHighlight={title}
+                  textToHighlight={question.title}
                 />
               </InternalLink>
             </Heading>
 
-            {questionCategory && (
-              <Category category={questionCategory} sx={{ fontSize: 2 }} />
+            {question.category && (
+              <Category
+                category={{ label: question.category.name }}
+                sx={{ fontSize: 2 }}
+              />
             )}
           </Flex>
 
           <Flex>
             <UserNameTag
-              userName={_createdBy}
-              countryCode={creatorCountry}
-              created={_created}
+              userName={question.author?.username || ''}
+              countryCode={question.author?.country || ''}
+              created={question.createdAt}
               action="Asked"
             />
           </Flex>
@@ -126,7 +117,7 @@ export const QuestionListItem = ({ question, query }: IProps) => {
           }}
         >
           <IconCountWithTooltip
-            count={(votedUsefulBy || []).length}
+            count={question.usefulCount}
             icon="star-active"
             text={listing.usefulness}
           />
@@ -139,10 +130,10 @@ export const QuestionListItem = ({ question, query }: IProps) => {
       </Flex>
 
       {query && (
-        <Box sx={{ padding: 3 }}>
+        <Box sx={{ padding: 3, paddingTop: 0 }}>
           <Highlighter
             searchWords={searchWords}
-            textToHighlight={description}
+            textToHighlight={question.description}
           />
         </Box>
       )}

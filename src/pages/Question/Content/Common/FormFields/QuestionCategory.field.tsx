@@ -10,8 +10,7 @@ import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
 export const QuestionCategoryField = () => {
   const [categories, setCategories] = useState<SelectValue[]>([])
 
-  const { placeholder, title } = fields.category
-  const name = 'questionCategory'
+  const name = 'category'
 
   useEffect(() => {
     const initCategories = async () => {
@@ -21,8 +20,8 @@ export const QuestionCategoryField = () => {
       }
 
       const selectOptions = categories.map((category) => ({
-        value: category,
-        label: category.label,
+        value: category.id.toString(),
+        label: category.name,
       }))
       setCategories(selectOptions)
     }
@@ -31,10 +30,11 @@ export const QuestionCategoryField = () => {
   }, [])
 
   return (
-    <FormFieldWrapper htmlFor={name} text={title}>
+    <FormFieldWrapper htmlFor={name} text={fields.category.title}>
       <Field
         name={name}
         id={name}
+        isEqual={(a, b) => !!a && a?.value === b?.value}
         render={({ input, ...rest }) => (
           <CategoriesSelectV2
             {...rest}
@@ -42,7 +42,7 @@ export const QuestionCategoryField = () => {
             isForm={true}
             onChange={input.onChange}
             value={input.value}
-            placeholder={placeholder as string}
+            placeholder={fields.category.placeholder as string}
           />
         )}
       />

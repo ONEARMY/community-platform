@@ -1,21 +1,46 @@
-import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+import { IMAGE_SIZES } from 'src/config/imageTransforms'
+import { Question } from 'src/models/question.model'
 import { AuthRoute } from 'src/pages/common/AuthRoute'
-import { questionService } from 'src/pages/Question/question.service'
 import { QuestionEdit } from 'src/pages/Question/QuestionEdit'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { questionServiceServer } from 'src/services/questionService.server'
+import { storageServiceServer } from 'src/services/storageService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { IQuestionDB } from 'oa-shared'
+import type { DBQuestion } from 'src/models/question.model'
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  const question = await questionService.getBySlug(params.slug as string)
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  const { client, headers } = createSupabaseServerClient(request)
 
-  return json({ question })
+  if (!params.slug) {
+    return Response.json({ question: null }, { headers })
+  }
+
+  const result = await questionServiceServer.getBySlug(client, params.slug!)
+
+  if (result.error || !result.data) {
+    return Response.json({ question: null }, { headers })
+  }
+
+  const dbQuestion = result.data as unknown as DBQuestion
+
+  const images = dbQuestion.images
+    ? storageServiceServer.getImagesPublicUrls(
+        client,
+        dbQuestion.images,
+        IMAGE_SIZES.GALLERY,
+      )
+    : []
+
+  const question = Question.fromDB(dbQuestion, [], images)
+
+  return Response.json({ question }, { headers })
 }
 
 export default function Index() {
   const data = useLoaderData<typeof loader>()
-  const question = data.question as IQuestionDB
+  const question = data.question as Question
 
   return (
     <AuthRoute>

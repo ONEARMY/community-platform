@@ -177,7 +177,6 @@ describe('[Library]', () => {
       ]
       const categoryGuidanceMain =
         'Cover image should show the fully built mould'
-      const categoryGuidanceFiles = 'Include files to replicate the mould'
 
       cy.signUpNewUser(creator)
       cy.get('[data-cy=loader]').should('not.exist')
@@ -234,10 +233,8 @@ describe('[Library]', () => {
 
       cy.step('Select a category and see further guidance')
       cy.contains(categoryGuidanceMain).should('not.exist')
-      cy.contains(categoryGuidanceFiles).should('not.exist')
       selectCategory(category as Category)
       cy.contains(categoryGuidanceMain).should('be.visible')
-      cy.contains(categoryGuidanceFiles).should('be.visible')
 
       selectTimeDuration(time as Duration)
       selectDifficultLevel(difficulty_level)

@@ -1,26 +1,14 @@
 export class DBCommentAuthor {
-  id: number
-  firebase_auth_id: string
-  display_name: string
-  username: string
-  photo_url: string
-  country: string
-  is_verified: boolean
+  readonly id: number
+  readonly firebase_auth_id: string
+  readonly display_name: string
+  readonly username: string
+  readonly photo_url: string
+  readonly country: string
+  readonly is_verified: boolean
 
   constructor(obj: DBCommentAuthor) {
     Object.assign(this, obj)
-  }
-
-  static toDB(obj: CommentAuthor) {
-    return new DBCommentAuthor({
-      id: obj.id,
-      display_name: obj.name,
-      username: obj.username,
-      firebase_auth_id: obj.firebaseAuthId,
-      photo_url: obj.photoUrl,
-      is_verified: obj.isVerified,
-      country: obj.country,
-    })
   }
 }
 
@@ -51,8 +39,9 @@ export class CommentAuthor {
 }
 
 export class DBComment {
-  id: number
-  created_at: string
+  readonly id: number
+  readonly created_at: string
+  readonly profile?: DBCommentAuthor
   created_by: number | null
   modified_at: string | null
   comment: string
@@ -61,7 +50,6 @@ export class DBComment {
   source_id_legacy: string | null
   parent_id: number | null
   deleted: boolean | null
-  profile?: DBCommentAuthor
 
   constructor(obj: DBComment) {
     Object.assign(this, obj)

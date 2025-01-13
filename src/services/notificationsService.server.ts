@@ -1,4 +1,4 @@
-import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import { doc, updateDoc } from 'firebase/firestore'
 import { DB_ENDPOINTS } from 'oa-shared'
 import { firestore } from 'src/utils/firebase'
 import { randomID } from 'src/utils/helpers'
@@ -9,6 +9,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type { INotification, IUserDB, NotificationType } from 'oa-shared'
 import type { DBComment } from 'src/models/comment.model'
 import type { DBProfile } from 'src/models/profile.model'
+import type { DBQuestion } from 'src/models/question.model'
 
 const sendCommentNotification = async (
   client: SupabaseClient,
@@ -16,19 +17,19 @@ const sendCommentNotification = async (
   triggeredBy: DBProfile,
 ) => {
   const { url, title, createdBy } = await _getSourceData(
+    client,
     comment.source_type!,
-    comment.source_id_legacy!,
+    comment.source_id!,
   )
 
-  const authorsResult = await client.rpc(
-    'comment_authors_by_source_id_legacy',
-    {
-      source_id_legacy_input: comment.source_id_legacy,
-    },
-  )
+  const authorsResult = await client.rpc('comment_authors_by_source_id', {
+    source_id_input: comment.source_id,
+  })
 
   const recipientsToNotify = new Set<string>(authorsResult.data)
-  recipientsToNotify.add(createdBy)
+  if (createdBy) {
+    recipientsToNotify.add(createdBy)
+  }
   recipientsToNotify.delete(triggeredBy.username) // don't send notification to who triggered it
 
   const urlWithDeepLink = `${url}#comment:${comment.id}`
@@ -46,19 +47,23 @@ const sendCommentNotification = async (
   )
 }
 
-const _getSourceData = async (sourceType: string, sourceId: string) => {
-  const sourceItem = await getDoc(
-    doc(firestore, DB_ENDPOINTS[sourceType], sourceId),
-  )
-
-  const parentPath = sourceType === 'howtos' ? 'library' : sourceType
-
-  const item = sourceItem.data()
+const _getSourceData = async (
+  client: SupabaseClient,
+  sourceType: string,
+  sourceId: number,
+) => {
+  const itemResult = await client
+    .from(sourceType)
+    .select('id,slug,title,created_by,author:profiles(id,username)')
+    .eq('id', sourceId)
+    .single()
+  const item = itemResult.data as unknown as DBQuestion
+  const parentPath = sourceType === 'projects' ? 'library' : sourceType
 
   return {
     url: `/${parentPath}/${item?.slug}`,
     title: item?.title,
-    createdBy: item?._createdBy,
+    createdBy: item?.author?.username,
   }
 }
 

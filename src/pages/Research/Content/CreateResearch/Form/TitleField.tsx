@@ -1,6 +1,5 @@
 import { Field } from 'react-final-form'
 import { FieldInput } from 'oa-components'
-import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
   composeValidators,
@@ -16,15 +15,14 @@ import {
 } from '../../../constants'
 import { update as updateLabels } from '../../../labels'
 
-export const TitleField = ({ formValues, parentType }) => {
-  const store = useResearchStore()
+export const TitleField = () => {
   const { title, placeholder } = updateLabels.title
 
   const titleValidator = () =>
     composeValidators(
       required,
       minValue(RESEARCH_TITLE_MIN_LENGTH),
-      validateTitle(parentType, formValues._id, store),
+      validateTitle(),
     )
 
   return (

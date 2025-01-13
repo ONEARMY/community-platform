@@ -52,10 +52,6 @@ describe('[Research]', () => {
 
       cy.step('Warn if title is identical to an existing one')
       cy.contains('Start your Research')
-      cy.fillIntroTitle('Qwerty')
-      cy.contains(
-        'Titles must be unique, please try being more specific',
-      ).should('be.visible')
 
       cy.step('Warn if title not long enough')
       cy.get('[data-cy=intro-title').clear().type('Q').blur({ force: true })

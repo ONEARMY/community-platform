@@ -176,6 +176,33 @@ Cypress.Commands.add('signUpNewUser', (user?) => {
   cy.fillSignupForm(username, email, password)
   cy.get('[data-cy=submit]').click()
   cy.url().should('include', 'sign-up-message')
+  // .then(() => {
+  //   if (addToSupabase) {
+  //     console.log(username)
+  //     firestore
+  //       .queryDocument('users', '_id', '==', username)
+  //       .then((users) => {
+  //         console.log(users.docs)
+  //         const user = users.docs[0].data()
+  //         const tenantId = Cypress.env('TENANT_ID')
+  //         seedDatabase(
+  //           {
+  //             profiles: [
+  //               {
+  //                 firebase_auth_id: user._authID,
+  //                 username: username,
+  //                 tenant_id: tenantId,
+  //                 created_at: new Date().toUTCString(),
+  //                 display_name: username,
+  //                 is_verified: false,
+  //               },
+  //             ],
+  //           },
+  //           tenantId,
+  //         )
+  //       })
+  //   }
+  // })
 })
 
 Cypress.Commands.add('toggleUserMenuOn', () => {

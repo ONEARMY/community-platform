@@ -100,7 +100,6 @@ export const guidance = {
       '<li>(As many steps as needed) talk about the challenges</li>' +
       '<li>Tips & tricks</li>' +
       '<li>Show the final outcome</li></ol>',
-    files: '👍 Include files to replicate if needed.',
   },
   machines: {
     main:
@@ -112,8 +111,6 @@ export const guidance = {
       '<li>Explain how to run it</li>' +
       '<li>Tips & tricks</li>' +
       '<li>Link to the Bazar if you sell it there</li></ol>',
-    files:
-      '✅ Include files to replicate the machine (drawings, cad, 3d files, etc..)',
   },
   moulds: {
     main:
@@ -126,7 +123,6 @@ export const guidance = {
       '<li>Tips & tricks</li>' +
       '<li>Show the final product</li>' +
       '<li>Link to the Bazar if you sell it there</li></ol>',
-    files: '✅ Include files to replicate the mould (cad, 3d files, etc..)',
   },
   products: {
     main:
@@ -138,7 +134,6 @@ export const guidance = {
       '<li>Tips & tricks</li>' +
       '<li>Show the final product</li>' +
       '<li>Link to the Bazar if you sell it there</li></ol>',
-    files: '👍 Include files to replicate the product if needed.',
   },
 }
 

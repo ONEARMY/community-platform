@@ -14,26 +14,25 @@ import { ListHeader } from '../common/Layout/ListHeader'
 import { headings, listing } from './labels'
 import { QuestionSortOptions } from './QuestionSortOptions'
 
-import type { ICategory } from 'shared/lib'
+import type { ICategory } from 'oa-shared'
+import type { Category } from 'src/models/category.model'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 export const QuestionListHeader = () => {
-  const [categories, setCategories] = useState<ICategory[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [searchString, setSearchString] = useState<string>('')
 
   const [searchParams, setSearchParams] = useSearchParams()
   const categoryParam = searchParams.get(QuestionSearchParams.category)
-  const category = categories?.find((x) => x._id === categoryParam) ?? null
+  const category =
+    (categoryParam && categories?.find((x) => x.id === +categoryParam)) ?? null
   const q = searchParams.get(QuestionSearchParams.q)
   const sort = searchParams.get(QuestionSearchParams.sort) as QuestionSortOption
 
   useEffect(() => {
     const initCategories = async () => {
       const categories = (await questionService.getQuestionCategories()) || []
-      const notDeletedCategories = categories.filter(
-        ({ _deleted }) => _deleted === false,
-      )
-      setCategories(notDeletedCategories)
+      setCategories(categories)
     }
 
     initCategories()
@@ -80,6 +79,14 @@ export const QuestionListHeader = () => {
 
   const { userStore } = useCommonStores().stores
 
+  const allCategories = categories.map(
+    (x) => ({ _id: x.id, label: x.name }) as unknown as ICategory,
+  )
+
+  const activeCategory = category
+    ? ({ _id: category.id, label: category.name } as unknown as ICategory)
+    : null
+
   const actionComponents = (
     <Flex>
       <Link to={userStore.user ? '/questions/create' : '/sign-up'}>
@@ -92,8 +99,8 @@ export const QuestionListHeader = () => {
 
   const categoryComponent = (
     <CategoryVerticalList
-      allCategories={categories}
-      activeCategory={category}
+      allCategories={allCategories}
+      activeCategory={activeCategory}
       setActiveCategory={(updatedCategory) =>
         updateFilter(
           QuestionSearchParams.category,

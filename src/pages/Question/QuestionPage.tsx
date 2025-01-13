@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import {
@@ -7,71 +7,88 @@ import {
   FollowButton,
   ImageGallery,
   LinkifyText,
-  ModerationStatus,
+  TagList,
   UsefulStatsButton,
 } from 'oa-components'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
-import { TagList } from 'src/common/Tags/TagsList'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
-import { useQuestionStore } from 'src/stores/Question/question.store'
-import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
-import { buildStatisticsLabel, isAllowedToEditContent } from 'src/utils/helpers'
+import { subscribersService } from 'src/services/subscribersService'
+import { usefulService } from 'src/services/usefulService'
+import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
+import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import CommentSectionV2 from '../common/CommentsV2/CommentSectionV2'
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 
-import type { IQuestionDB } from 'oa-shared'
+import type { IUser } from 'oa-shared'
+import type { Question } from 'src/models/question.model'
 
 type QuestionPageProps = {
-  question: IQuestionDB
+  question: Question
 }
 
 export const QuestionPage = observer(({ question }: QuestionPageProps) => {
-  const store = useQuestionStore()
-  const activeUser = store.activeUser
+  const { userStore } = useCommonStores().stores
+  const activeUser = userStore.activeUser
   const [voted, setVoted] = useState<boolean>(false)
   const [subscribed, setSubscribed] = useState<boolean>(false)
-  const [usefulCount, setUsefulCount] = useState<number>(
-    question.votedUsefulBy?.length || 0,
-  )
+  const [usefulCount, setUsefulCount] = useState<number>(question.usefulCount)
   const [subscribersCount, setSubscribersCount] = useState<number>(
-    question.subscribers?.length || 0,
+    question.subscriberCount,
   )
-  const isEditable =
-    !!activeUser && isAllowedToEditContent(question, activeUser)
 
   useEffect(() => {
-    // This could be improved if we can load the user profile server-side
-    if (!store?.activeUser) {
-      return
+    const getSubscribed = async () => {
+      const subscribed = await subscribersService.isSubscribed(
+        'questions',
+        question.id,
+      )
+      setSubscribed(subscribed)
     }
 
-    if (
-      store?.activeUser &&
-      question.votedUsefulBy?.includes(store.activeUser._id)
-    ) {
-      setVoted(true)
+    const getVoted = async () => {
+      const voted = await usefulService.hasVoted('questions', question.id)
+      setVoted(voted)
     }
 
-    if (question.subscribers?.includes(store.activeUser._id)) {
-      setSubscribed(true)
+    if (activeUser) {
+      getSubscribed()
+      getVoted()
     }
-  }, [store?.activeUser])
+  }, [activeUser, question])
+
+  const isEditable = useMemo(() => {
+    return (
+      hasAdminRights(activeUser as IUser) ||
+      (question.author?.firebaseAuthId &&
+        question.author?.firebaseAuthId === activeUser?._authID)
+    )
+  }, [activeUser, question.author])
 
   const onUsefulClick = async (vote: 'add' | 'delete') => {
     if (!activeUser) {
       return
     }
 
-    await store.toggleUsefulByUser(question._id, activeUser?.userName)
-    setVoted((prev) => !prev)
+    if (vote === 'add') {
+      const response = await usefulService.add('questions', question.id)
 
-    setUsefulCount((prev) => {
-      return vote === 'add' ? prev + 1 : prev - 1
-    })
+      if (response.ok) {
+        setVoted(true)
+        setUsefulCount((prev) => prev + 1 || 1)
+      }
+    } else {
+      const response = await usefulService.remove('questions', question.id)
+
+      if (response.ok) {
+        setVoted(false)
+        setUsefulCount((prev) => prev - 1 || 0)
+      }
+    }
 
     trackEvent({
       category: 'QuestionPage',
@@ -85,12 +102,22 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
       return
     }
 
-    await store.toggleSubscriber(question._id, activeUser._id)
-    const action = subscribed ? 'Unsubscribed' : 'Subscribed'
+    if (!subscribed) {
+      const response = await subscribersService.add('questions', question.id)
 
-    setSubscribersCount((prev) => prev + (subscribed ? -1 : 1))
-    // toggle subscribed
-    setSubscribed((prev) => !prev)
+      if (response.ok) {
+        setSubscribed(true)
+        setSubscribersCount((prev) => prev + 1 || 1)
+      }
+    } else {
+      const response = await subscribersService.remove('questions', question.id)
+
+      if (response.ok) {
+        setSubscribed(false)
+        setSubscribersCount((prev) => prev - 1 || 0)
+      }
+    }
+    const action = subscribed ? 'Unsubscribed' : 'Subscribed'
 
     trackEvent({
       category: 'Question',
@@ -133,23 +160,17 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
             </ClientOnly>
           </Flex>
 
-          <ModerationStatus
-            status={question.moderation}
-            contentType="question"
-            sx={{ top: 0, position: 'absolute', right: 0 }}
-          />
-
           <ContentAuthorTimestamp
-            userName={question._createdBy}
-            countryCode={question.creatorCountry}
-            created={question._created}
-            modified={question._contentModifiedTimestamp || question._modified}
+            userName={question.author?.username || ''}
+            countryCode={question.author?.country || ''}
+            created={question.createdAt}
+            modified={question.modifiedAt || undefined}
             action="Asked"
           />
 
           <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-            {question.questionCategory && (
-              <Category category={question.questionCategory} />
+            {question.category && (
+              <Category category={{ label: question.category.name }} />
             )}
             <Heading
               as="h1"
@@ -169,13 +190,16 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
 
             {question.images && (
               <ImageGallery
-                images={formatImagesForGallery(question.images) as any}
+                images={formatImagesForGalleryV2(question.images) as any}
                 allowPortrait={true}
               />
             )}
 
             {question.tags && (
-              <TagList data-cy="question-tags" tags={question.tags} />
+              <TagList
+                data-cy="question-tags"
+                tags={question.tags.map((t) => ({ label: t.name }))}
+              />
             )}
           </Flex>
         </Flex>
@@ -192,7 +216,7 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
             {
               icon: 'view',
               label: buildStatisticsLabel({
-                stat: question.total_views,
+                stat: question.totalViews,
                 statUnit: 'view',
                 usePlural: true,
               }),
@@ -224,7 +248,7 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
               padding: 4,
             }}
           >
-            <CommentSectionV2 sourceId={question._id} />
+            <CommentSectionV2 sourceId={question.id} />
           </Card>
         )}
       </ClientOnly>

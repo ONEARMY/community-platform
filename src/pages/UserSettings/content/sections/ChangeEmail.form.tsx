@@ -55,6 +55,23 @@ export const ChangeEmailForm = () => {
     >
       <UserContactError submitResults={submitResults} />
 
+      <Flex
+        data-cy="changeEmailHeadingContainer"
+        sx={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          cursor: 'pointer',
+          userSelect: 'none',
+        }}
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <Heading as="h3" variant="small">
+          {headings.changeEmail}
+        </Heading>
+        <Icon glyph={glyph} />
+      </Flex>
+
       {isExpanded && currentEmail && (
         <Form
           onSubmit={onSubmit}
@@ -69,10 +86,6 @@ export const ChangeEmailForm = () => {
                 data-cy="changeEmailForm"
                 sx={{ flexDirection: 'column', gap: 2 }}
               >
-                <Heading as="h3" variant="small">
-                  {headings.changeEmail}
-                </Heading>
-
                 <Text sx={{ fontSize: 1 }}>
                   {fields.email.title}: <strong>{currentEmail}</strong>
                 </Text>
@@ -125,21 +138,6 @@ export const ChangeEmailForm = () => {
           }}
         />
       )}
-
-      <Button
-        type="button"
-        data-cy="changeEmailButton"
-        onClick={() => setIsExpanded(!isExpanded)}
-        variant="secondary"
-        sx={{
-          alignSelf: 'flex-start',
-        }}
-      >
-        <Flex sx={{ gap: 2 }}>
-          <Text>{buttons.changeEmail}</Text>
-          <Icon glyph={glyph} />
-        </Flex>
-      </Button>
     </Flex>
   )
 }

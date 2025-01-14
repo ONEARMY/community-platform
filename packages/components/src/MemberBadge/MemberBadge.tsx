@@ -29,7 +29,7 @@ export const MemberBadge = (props: Props) => {
       loading="lazy"
       className="avatar"
       data-cy={`MemberBadge-${profileType}`}
-      sx={{ width: badgeSize, borderRadius: '50%', cursor: 'pointer', ...sx }}
+      sx={{ width: badgeSize, borderRadius: '50%', ...sx }}
       width={badgeSize}
       height={badgeSize}
       title={title}

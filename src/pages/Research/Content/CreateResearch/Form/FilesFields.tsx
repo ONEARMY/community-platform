@@ -45,6 +45,7 @@ const AlreadyAddedFiles = ({ formValues, setFileEditMode }) => {
         type="button"
         variant="outline"
         icon="delete"
+        data-cy="delete-file"
         onClick={deleteFile}
       >
         {buttons.files}
@@ -86,6 +87,7 @@ const UploadNewFiles = () => {
               <Field
                 hasText={false}
                 name={'files'}
+                data-cy="file-input-field"
                 component={FileInputField}
               />
               <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
@@ -98,6 +100,7 @@ const UploadNewFiles = () => {
             <Field
               hasText={false}
               name={'files'}
+              data-cy="file-input-field"
               admin={true}
               component={FileInputField}
             />

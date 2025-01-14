@@ -1,14 +1,18 @@
 import { useState } from 'react'
 import { Form } from 'react-final-form'
 import { Button, FieldInput, Icon } from 'oa-components'
-import { PasswordField } from 'src/common/Form/PasswordField'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { FormFieldWrapper } from 'src/pages/Library/Content/Common'
-import { UserContactError } from 'src/pages/User/contact/UserContactError'
-import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
+import { PasswordField } from '../../../../src/common/Form/PasswordField'
+import { useCommonStores } from '../../../../src/common/hooks/useCommonStores'
+import { FormFieldWrapper } from '../../../../src/pages/Library/Content/Common'
+import { UserContactError } from '../../../../src/pages/User/contact/UserContactError'
+import {
+  buttons,
+  fields,
+  headings,
+} from '../../../../src/pages/UserSettings/labels'
 import { Flex, Heading } from 'theme-ui'
 
-import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
+import type { SubmitResults } from '../../../../src/pages/User/contact/UserContactError'
 
 interface IFormValues {
   oldPassword: string

@@ -7,8 +7,8 @@ import { fields, headings } from 'src/pages/UserSettings/labels'
 import { Flex, Heading, Text } from 'theme-ui'
 
 import { PatreonIntegration } from './content/fields/PatreonIntegration'
-import { ChangeEmailForm } from './content/sections/ChangeEmail.form'
-import { ChangePasswordForm } from './content/sections/ChangePassword.form'
+import { ChangeEmailForm } from '../../../packages/components/src/ChangeEmailForm/ChangeEmailForm'
+import { ChangePasswordForm } from '../../../packages/components/src/ChangePasswordForm/ChangePasswordForm'
 
 export const SettingsPageAccount = observer(() => {
   const { description, title } = fields.deleteAccount

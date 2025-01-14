@@ -70,9 +70,18 @@ export const ChangeEmailForm = () => {
         }}
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <Heading as="h3" variant="small">
-          {headings.changeEmail}
-        </Heading>
+        <Flex
+          data-cy="changeEmailHeadingSubContainer"
+          sx={{ flexDirection: 'column' }}
+        >
+          <Heading as="h3" variant="small">
+            {headings.changeEmail}
+          </Heading>
+          <Text sx={{ fontSize: 1, color: 'gray' }}>
+            {fields.email.title}:{' '}
+            <Text sx={{ textDecorationLine: 'underline' }}>{currentEmail}</Text>
+          </Text>
+        </Flex>
         <Icon glyph={glyph} />
       </Flex>
 
@@ -90,10 +99,6 @@ export const ChangeEmailForm = () => {
                 data-cy="changeEmailForm"
                 sx={{ flexDirection: 'column', gap: 2 }}
               >
-                <Text sx={{ fontSize: 1 }}>
-                  {fields.email.title}: <strong>{currentEmail}</strong>
-                </Text>
-
                 <FormFieldWrapper
                   text={fields.newEmail.title}
                   htmlFor="newEmail"

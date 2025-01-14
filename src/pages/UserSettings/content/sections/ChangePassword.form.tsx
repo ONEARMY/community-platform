@@ -6,7 +6,7 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FormFieldWrapper } from 'src/pages/Library/Content/Common'
 import { UserContactError } from 'src/pages/User/contact/UserContactError'
 import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
-import { Flex, Heading, Text } from 'theme-ui'
+import { Flex, Heading } from 'theme-ui'
 
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
 
@@ -46,6 +46,23 @@ export const ChangePasswordForm = () => {
     >
       <UserContactError submitResults={submitResults} />
 
+      <Flex
+        data-cy="changePasswordHeadingContainer"
+        sx={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          cursor: 'pointer',
+          userSelect: 'none',
+        }}
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <Heading as="h3" variant="small">
+          {headings.changePassword}
+        </Heading>
+        <Icon glyph={glyph} />
+      </Flex>
+
       {isExpanded && (
         <Form
           onSubmit={onSubmit}
@@ -64,10 +81,6 @@ export const ChangePasswordForm = () => {
                 data-cy="changePasswordForm"
                 sx={{ flexDirection: 'column', gap: 1 }}
               >
-                <Heading as="h3" variant="small">
-                  {headings.changePassword}
-                </Heading>
-
                 <FormFieldWrapper
                   text={fields.oldPassword.title}
                   htmlFor="oldPassword"
@@ -130,21 +143,6 @@ export const ChangePasswordForm = () => {
           }}
         />
       )}
-
-      <Button
-        type="button"
-        data-cy="changePasswordButton"
-        onClick={() => setIsExpanded(!isExpanded)}
-        variant="secondary"
-        sx={{
-          alignSelf: 'flex-start',
-        }}
-      >
-        <Flex sx={{ gap: 2 }}>
-          <Text>{buttons.changePassword}</Text>
-          <Icon glyph={glyph} />
-        </Flex>
-      </Button>
     </Flex>
   )
 }

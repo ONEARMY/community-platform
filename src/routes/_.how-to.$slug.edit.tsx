@@ -1,26 +1,12 @@
-import { json } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
 /* eslint-disable unicorn/filename-case */
-import { AuthRoute } from 'src/pages/common/AuthRoute'
-import EditHowto from 'src/pages/Howto/Content/EditHowto/EditHowto'
-import { howtoService } from 'src/pages/Howto/howto.service'
 
-import type { IHowtoDB } from 'oa-shared'
-import type { LoaderFunctionArgs } from 'react-router'
+// The library/projects section use to be called 'how-tos' so this
+// exists to ensure users get to the right place
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  const howto = await howtoService.getBySlug(params.slug as string)
+import { redirect } from '@remix-run/node'
 
-  return json({ howto })
-}
+import type { LoaderFunctionArgs } from '@remix-run/node'
 
-export default function Index() {
-  const data = useLoaderData<typeof loader>()
-  const howto = data.howto as IHowtoDB // there is some inference issue, shouldn't need 'as'
-
-  return (
-    <AuthRoute>
-      <EditHowto howto={howto} />
-    </AuthRoute>
-  )
+export function loader({ params }: LoaderFunctionArgs) {
+  return redirect(`/library/${params.slug}/edit`, 301)
 }

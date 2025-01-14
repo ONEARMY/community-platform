@@ -1,7 +1,7 @@
 import { AggregationsStore } from './Aggregations/aggregations.store'
 import { DatabaseV2 } from './databaseV2/DatabaseV2'
 import { DiscussionStore } from './Discussions/discussions.store'
-import { HowtoStore } from './Howto/howto.store'
+import { HowtoStore } from './Library/library.store'
 import { MapsStore } from './Maps/maps.store'
 import { QuestionStore } from './Question/question.store'
 import { ResearchStore } from './Research/research.store'

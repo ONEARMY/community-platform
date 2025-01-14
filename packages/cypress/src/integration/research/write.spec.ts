@@ -52,7 +52,7 @@ describe('[Research]', () => {
 
       cy.step('Warn if title is identical to an existing one')
       cy.contains('Start your Research')
-      cy.fillIntroTitle('qwerty')
+      cy.fillIntroTitle('Qwerty')
       cy.contains(
         'Titles must be unique, please try being more specific',
       ).should('be.visible')
@@ -305,6 +305,7 @@ describe('[Research]', () => {
       const updateDescription = 'This is the description for the update.'
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
       const expected = {
+        category: 'Food',
         description: 'After creating, the research will be deleted.',
         title: `${randomId} Create research article test`,
         slug: `${randomId}-create-research-article-test`,
@@ -321,6 +322,7 @@ describe('[Research]', () => {
       cy.step('Enter research article details')
       cy.get('[data-cy=intro-title').clear().type(expected.title).blur()
       cy.get('[data-cy=intro-description]').clear().type(expected.description)
+      cy.selectTag(expected.category, '[data-cy=category-select]')
       cy.get('[data-cy=submit]').click()
 
       cy.get('[data-cy=view-research]:enabled', { timeout: 20000 }).click()
@@ -331,6 +333,7 @@ describe('[Research]', () => {
       cy.step('Research article displays correctly')
       cy.contains(expected.title)
       cy.contains(expected.description)
+      cy.contains(expected.category)
 
       cy.get('[data-cy=addResearchUpdateButton]').click()
 

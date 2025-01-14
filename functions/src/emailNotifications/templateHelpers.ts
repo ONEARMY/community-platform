@@ -1,17 +1,20 @@
+import { getEmailHtml } from './templates/index'
 import { NOTIFICATION_LIST_IMAGE } from './constants'
 import {
-  getProjectImageSrc,
-  SITE_URL,
-  getProjectName,
   getNotificationListItem,
+  getProjectImageSrc,
+  getProjectName,
   getProjectSignoff,
+  SITE_URL,
 } from './utils'
-import { getEmailHtml } from './templates/index'
-import { IUserDB } from 'oa-shared/models/user'
-import { INotification } from 'oa-shared/models/notifications'
-import { IHowtoDB } from 'oa-shared/models/howto'
-import { IMapPin } from 'oa-shared/models/maps'
-import { IMessageDB } from 'oa-shared/models/messages'
+
+import type {
+  ILibrary,
+  IMapPin,
+  IMessageDB,
+  INotification,
+  IUserDB,
+} from 'oa-shared'
 
 export interface Email {
   html: string
@@ -134,10 +137,10 @@ export const getNotificationEmail = (
   }
 }
 
-export const HOW_TO_APPROVAL_SUBJECT = 'Your how-to has been approved!'
+export const HOW_TO_APPROVAL_SUBJECT = 'Your project has been approved!'
 export const getHowToApprovalEmail = (
   user: IUserDB,
-  howto: IHowtoDB,
+  howto: ILibrary.DB,
 ): Email => {
   return {
     html: getEmailHtml('how-to-approval', {
@@ -183,10 +186,10 @@ export const getSenderMessageEmail = ({
   }
 }
 
-export const HOW_TO_SUBMISSION_SUBJECT = 'Your how-to has been submitted'
+export const HOW_TO_SUBMISSION_SUBJECT = 'Your project has been submitted'
 export const getHowToSubmissionEmail = (
   user: IUserDB,
-  howto: IHowtoDB,
+  howto: ILibrary.DB,
 ): Email => {
   return {
     html: getEmailHtml('how-to-submission', {
@@ -234,10 +237,10 @@ export const getUserVerifiedBadgeAddedEmail = (user: IUserDB): Email => ({
   html: getEmailHtml('verified-badge-added', { user, site }),
 })
 
-export const HOW_TO_REJECTED_SUBJECT = 'Your how-to has been rejected'
+export const HOW_TO_REJECTED_SUBJECT = 'Your project has been rejected'
 export const getHowToRejectedEmail = (
   user: IUserDB,
-  howto: IHowtoDB,
+  howto: ILibrary.DB,
 ): Email => ({
   subject: HOW_TO_REJECTED_SUBJECT,
   html: getEmailHtml('how-to-rejected', {
@@ -257,10 +260,10 @@ export const getMapPinRejectedEmail = (user: IUserDB): Email => ({
 })
 
 export const HOW_TO_NEEDS_IMPROVEMENTS_SUBJECT =
-  'Your how-to needs improvements'
+  'Your project needs improvements'
 export const getHowToNeedsImprovementsEmail = (
   user: IUserDB,
-  howto: IHowtoDB,
+  howto: ILibrary.DB,
 ): Email => ({
   subject: HOW_TO_NEEDS_IMPROVEMENTS_SUBJECT,
   html: getEmailHtml('how-to-needs-improvements', {

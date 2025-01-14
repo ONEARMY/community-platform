@@ -28,7 +28,7 @@ This platform aims to tackle these problems by creating a strong unified communi
 
 ## ⚡️ &nbsp; What is this platform?
 
-Our community platform helps people to grow communities and make it easier to collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally and more. It aims to provide the tools to connect both online and offline. Amongst other features we have How-to and Maps.
+Our community platform helps people to grow communities and make it easier to collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally and more. It aims to provide the tools to connect both online and offline. Amongst other features we have a library of projects, research, questions, commenting and a map.
 
 ### Have a look on our [website](https://platform.onearmy.earth) to have a clear overview
 
@@ -178,6 +178,8 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://www.behance.net/dalibormrska"><img src="https://avatars.githubusercontent.com/u/35503298?v=4?s=60" width="60px;" alt="Dalibor Mrška"/><br /><sub><b>Dalibor Mrška</b></sub></a><br /><a href="#design-dalibormrska" title="Design">🎨</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/sky-coderay"><img src="https://avatars.githubusercontent.com/u/137945430?v=4?s=60" width="60px;" alt="Skylar Ray"/><br /><sub><b>Skylar Ray</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=sky-coderay" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://johannesross.de"><img src="https://avatars.githubusercontent.com/u/74828657?v=4?s=60" width="60px;" alt="Johannes Roß"/><br /><sub><b>Johannes Roß</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=johannes-ross" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/detrina"><img src="https://avatars.githubusercontent.com/u/155117116?v=4?s=60" width="60px;" alt="Devkuni"/><br /><sub><b>Devkuni</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=detrina" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Bilogweb3"><img src="https://avatars.githubusercontent.com/u/155262265?v=4?s=60" width="60px;" alt="Bilog WEB3"/><br /><sub><b>Bilog WEB3</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Bilogweb3" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>

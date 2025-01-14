@@ -13842,6 +13842,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"compute-scroll-into-view@npm:^3.0.2":
+  version: 3.1.0
+  resolution: "compute-scroll-into-view@npm:3.1.0"
+  checksum: 10/cc5211d49bced5ad23385da5c2eaf69b6045628581b0dcb9f4dd407bfee51bbd26d2bce426be26edf2feaf8c243706f5a7c3759827d89cc5a01a5cf7d299a5eb
+  languageName: node
+  linkType: hard
+
 "concat-map@npm:0.0.1":
   version: 0.0.1
   resolution: "concat-map@npm:0.0.1"
@@ -25093,6 +25100,7 @@ __metadata:
     react: "npm:^18.3.1"
     react-country-flag: "npm:^3.1.0"
     react-dom: "npm:^18.3.1"
+    react-horizontal-scrolling-menu: "npm:^8.2.0"
     react-icons: "npm:^5.3.0"
     react-image-crop: "npm:^11.0.5"
     react-player: "npm:^2.16.0"
@@ -27712,6 +27720,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-horizontal-scrolling-menu@npm:^8.2.0":
+  version: 8.2.0
+  resolution: "react-horizontal-scrolling-menu@npm:8.2.0"
+  dependencies:
+    smooth-scroll-into-view-if-needed: "npm:^2.0.2"
+  peerDependencies:
+    react: ">=16.8"
+    react-dom: ">=16.8"
+  checksum: 10/a58758726a51829cc8fb2786ac5c141fccff94d326ca07d62b98ae3ea56c134ac2ecaade7b4acb60c9f95774a34d68bb5a084059de3fa088a461ac656cd80591
+  languageName: node
+  linkType: hard
+
 "react-icons@npm:^5.3.0":
   version: 5.3.0
   resolution: "react-icons@npm:5.3.0"
@@ -29283,6 +29303,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"scroll-into-view-if-needed@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "scroll-into-view-if-needed@npm:3.1.0"
+  dependencies:
+    compute-scroll-into-view: "npm:^3.0.2"
+  checksum: 10/1ea10d84b79db592493ed22563e307a4eaf858527b4c345e70cc26b9c51383636edda31a09d383541fafb5b50a94e59384d85351662cb7d6e5d70805c0d18798
+  languageName: node
+  linkType: hard
+
 "section-matter@npm:^1.0.0":
   version: 1.0.0
   resolution: "section-matter@npm:1.0.0"
@@ -29726,6 +29755,15 @@ __metadata:
   version: 4.2.0
   resolution: "smart-buffer@npm:4.2.0"
   checksum: 10/927484aa0b1640fd9473cee3e0a0bcad6fce93fd7bbc18bac9ad0c33686f5d2e2c422fba24b5899c184524af01e11dd2bd051c2bf2b07e47aff8ca72cbfc60d2
+  languageName: node
+  linkType: hard
+
+"smooth-scroll-into-view-if-needed@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "smooth-scroll-into-view-if-needed@npm:2.0.2"
+  dependencies:
+    scroll-into-view-if-needed: "npm:^3.1.0"
+  checksum: 10/2e9c26987a4af19fbc7a3c1ebb8cbfe0d5412e7ab7fa0802a374a5ec213df14cd4fa7c8fc91d81e49015617460b4562f43c0a66ed02314e834456b69687030df
   languageName: node
   linkType: hard
 

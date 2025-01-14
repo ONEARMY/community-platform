@@ -32,7 +32,7 @@ describe('[Settings]', () => {
     cy.get('[data-cy=displayName').clear().type('Wrong user')
 
     cy.step('Confirm shown when attempting to go to another page')
-    cy.get('[data-cy=page-link]').contains('How-to').click()
+    cy.get('[data-cy=page-link]').contains('Library').click()
     cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible')
   })
 
@@ -159,8 +159,7 @@ describe('[Settings]', () => {
       cy.step('Can view pin on new map')
       cy.visit(`/map#${user.username}`)
       cy.wait(2000)
-      cy.get('[data-cy=Banner]').contains('Test it out!').click()
-      cy.get('[data-cy=CardListItem]').contains(user.username)
+      cy.get('[data-cy=CardListItem-selected]').contains(user.username)
 
       cy.step('Can delete map pin')
       cy.visit('/settings')

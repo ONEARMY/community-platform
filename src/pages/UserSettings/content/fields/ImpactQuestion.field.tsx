@@ -46,6 +46,7 @@ export const ImpactQuestionField = ({ field, formId }: Props) => {
               name={`${field.id}.value`}
               sx={{ background: 'white' }}
               type="number"
+              formatOnBlur
             />
           </Box>
 

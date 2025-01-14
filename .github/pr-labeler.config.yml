@@ -1,6 +1,6 @@
 # Configuration for pr-labeller actions
-"Mod: HowTo 📰":
-  - src/pages/Howto/**/*
+"Mod: Library 📰":
+  - src/pages/Library/**/*
 "Mod: Maps 🗺":
   - src/pages/Maps/**/*
 "Mod: Research 🔬":

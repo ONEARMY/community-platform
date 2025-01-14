@@ -14,21 +14,20 @@ const DEFAULT_COLOR = '#999999'
 
 export const ProfileTagsList = ({ sx, tags }: IProps) => {
   return (
-    <Flex data-cy="ProfileTagsList" sx={{ gap: 2, flexWrap: 'wrap', ...sx }}>
+    <Flex data-cy="ProfileTagsList" sx={{ gap: 1, flexWrap: 'wrap', ...sx }}>
       {tags.map(
-        (tag, index) =>
-          tag?.label && (
+        ({ color, label }, index) =>
+          label && (
             <Category
               key={index}
-              category={{ label: tag.label }}
+              category={{ label }}
               sx={{
                 borderRadius: 99,
                 border: '1px solid',
-                borderColor: tag.color ? tag.color : DEFAULT_COLOR,
-                backgroundColor: tag.color
-                  ? `${tag.color}20`
-                  : `${DEFAULT_COLOR}20`,
-                color: tag.color ? tag.color : DEFAULT_COLOR,
+                borderColor: color || DEFAULT_COLOR,
+                backgroundColor: color ? `${color}20` : `${DEFAULT_COLOR}20`,
+                color: color || DEFAULT_COLOR,
+                fontSize: '11px',
               }}
             />
           ),

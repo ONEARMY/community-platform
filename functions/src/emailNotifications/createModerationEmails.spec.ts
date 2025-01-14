@@ -94,7 +94,7 @@ describe('Create howto moderation emails', () => {
       expect(html).toContain('Mock Howto')
       // Check that the email contains the correct howto link
       expect(html).toContain(
-        'https://community.preciousplastic.com/how-to/00_user_1_howto',
+        'https://community.preciousplastic.com/library/00_user_1_howto',
       )
       // Check that the email contains the correct PP signoff
       expect(html).toContain(PP_SIGNOFF)
@@ -134,7 +134,7 @@ describe('Create howto moderation emails', () => {
       expect(html).toContain('Mock Howto')
       // Check that the email contains the correct howto link
       expect(html).toContain(
-        'https://community.preciousplastic.com/how-to/00_user_1_howto',
+        'https://community.preciousplastic.com/library/00_user_1_howto',
       )
       // Check that the email contains the correct PP signoff
       expect(html).toContain(PP_SIGNOFF)
@@ -180,7 +180,7 @@ describe('Create howto moderation emails', () => {
       )
       // Check that the email contains the correct howto link
       expect(html).toContain(
-        'https://community.preciousplastic.com/how-to/00_user_1_howto',
+        'https://community.preciousplastic.com/library/00_user_1_howto',
       )
       // Check that the email contains the correct PP signoff
       expect(html).toContain(PP_SIGNOFF)
@@ -225,11 +225,11 @@ describe('Create howto moderation emails', () => {
       expect(html).toContain('Mock Howto')
       // Check that the email contains the correct howto link
       expect(html).toContain(
-        'https://community.preciousplastic.com/how-to/00_user_1_howto',
+        'https://community.preciousplastic.com/library/00_user_1_howto',
       )
       // Check that the email contains the correct howto guidelines link
       expect(html).toContain(
-        'https://community.preciousplastic.com/academy/create/howto',
+        'https://community.preciousplastic.com/academy/create/library',
       )
       expect(html).toContain(MOCK_HOW_TO_MODERATION_COMMENT)
       // Check that the email contains the correct PP signoff

@@ -15,7 +15,7 @@ export const QuestionTagsField = () => {
         id={name}
         component={TagsSelectFieldV2}
         category="question"
-        isEqual={COMPARISONS.tagsV2}
+        isEqual={COMPARISONS.tagsSupabase}
       />
     </FormFieldWrapper>
   )

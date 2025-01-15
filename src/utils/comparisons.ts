@@ -16,7 +16,7 @@ export const COMPARISONS = {
   tags: (a: ISelectedTags, b: ISelectedTags): boolean => {
     return _.isEqual(a, b)
   },
-  tagsV2: (a: Tag, b: Tag): boolean => {
+  tagsSupabase: (a: Tag, b: Tag): boolean => {
     return !!a && a?.id === b?.id
   },
   image: (a, b): boolean => {

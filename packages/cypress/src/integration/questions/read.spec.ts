@@ -86,14 +86,7 @@ describe('[Questions]', () => {
         .should('have.attr', 'href')
         .and('equal', `/questions`)
 
-      // cy.get('[data-cy=breadcrumbsItem]')
-      //   .eq(1)
-      //   .should('contain', questionCategory.label)
-      // cy.get('[data-cy=breadcrumbsItem]')
-      //   .eq(1)
-      //   .children()
-      //   .should('have.attr', 'href')
-      //   .and('equal', `/questions?category=${questionCategory._id}`)
+      cy.get('[data-cy=breadcrumbsItem]').eq(1).should('contain', 'Machines')
 
       cy.get('[data-cy=breadcrumbsItem]').eq(2).should('contain', title)
 
@@ -102,10 +95,10 @@ describe('[Questions]', () => {
       cy.visit(`/questions/${slug}`) // Page doesn't reload after login
 
       // cy.get('[data-cy=follow-button]').click()
-      // cy.contains(`${subscribers.length + 1} following`)
+      // cy.contains(`1 following`)
 
       // cy.get('[data-cy=vote-useful]').click()
-      // cy.contains(`${votedUsefulBy.length + 1} useful`)
+      // cy.contains(`1 useful`)
     })
   })
 

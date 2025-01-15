@@ -91,7 +91,7 @@ export const tags = {
   },
 }
 
-export const tagsV2 = [
+export const tagsSupabase = [
   {
     created_at: '2012-08-02T07:27:04.609Z',
     name: 'product',

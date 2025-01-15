@@ -59,7 +59,7 @@ export const seedCategories = async () => {
 
   return await seedDatabase(
     {
-      categories: MOCK_DATA.categoriesV2.map((category) => ({
+      categories: MOCK_DATA.categoriesSupabase.map((category) => ({
         ...category,
         tenant_id: tenantId,
       })),
@@ -73,7 +73,7 @@ export const seedTags = async () => {
 
   return await seedDatabase(
     {
-      tags: MOCK_DATA.tagsV2.map((category) => ({
+      tags: MOCK_DATA.tagsSupabase.map((category) => ({
         ...category,
         tenant_id: tenantId,
       })),

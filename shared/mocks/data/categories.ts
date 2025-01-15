@@ -29,7 +29,7 @@ export const categories = {
   },
 }
 
-export const categoriesV2 = [
+export const categoriesSupabase = [
   {
     name: 'Machines',
     type: 'questions',

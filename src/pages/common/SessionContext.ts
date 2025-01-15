@@ -1,5 +1,5 @@
 import { createContext } from 'react'
 
-import type { User } from '@supabase/supabase-js'
+import type { DBProfile } from 'src/models/profile.model'
 
-export const SessionContext = createContext<User | null>(null)
+export const SessionContext = createContext<DBProfile | null>(null)

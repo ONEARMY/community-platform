@@ -5,7 +5,6 @@ import {
   reauthenticateWithCredential,
   sendEmailVerification,
   sendPasswordResetEmail,
-  signInWithEmailAndPassword,
   updateEmail,
   updatePassword,
   updateProfile,
@@ -115,10 +114,6 @@ export class UserStore extends ModuleStore {
         photoURL: currentUser.photoURL,
       })
     }
-  }
-
-  public async login(email: string, password: string) {
-    return signInWithEmailAndPassword(auth, email, password)
   }
 
   public async getUserByUsername(username: string): Promise<IUserDB | null> {
@@ -309,6 +304,15 @@ export class UserStore extends ModuleStore {
     const user = await this.db
       .collection<IUser>(COLLECTION_NAME)
       .doc(this.activeUser._id)
+      .get('server')
+
+    this._updateActiveUser(user)
+  }
+
+  public async refreshActiveUserDetailsById(id: string) {
+    const user = await this.db
+      .collection<IUser>(COLLECTION_NAME)
+      .doc(id)
       .get('server')
 
     this._updateActiveUser(user)

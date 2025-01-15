@@ -1,9 +1,10 @@
-import React from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { NavLink } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { preciousPlasticTheme } from 'oa-themes'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { SessionContext } from 'src/pages/common/SessionContext'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { Box, Flex } from 'theme-ui'
 
@@ -11,10 +12,6 @@ import { AuthWrapper } from '../../../../../common/AuthWrapper'
 
 // TODO: Remove direct usage of Theme
 const theme = preciousPlasticTheme.styles
-
-interface IProps {
-  username: string
-}
 
 const ModalContainer = styled(Box)`
   max-width: 100%;
@@ -69,20 +66,20 @@ const LogoutButton = styled.button`
   }
 `
 
-export const ProfileModal = observer((props: IProps) => {
+export const ProfileModal = observer(() => {
   const { userStore } = useCommonStores().stores
+  const profile = useContext(SessionContext)
 
   const logout = () => {
     userStore.logout()
   }
 
-  const { username } = props
   return (
     <ModalContainer data-cy="user-menu-list">
       <ModalContainerInner>
         <Flex>
           <ModalLink
-            to={'/u/' + username}
+            to={'/u/' + profile?.username}
             data-cy="menu-Profile"
             className={({ isActive }) => (isActive ? 'current' : '')}
           >

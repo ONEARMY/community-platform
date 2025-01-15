@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Foco from 'react-foco'
 import { useNavigate } from '@remix-run/react'
 import { observer } from 'mobx-react'
@@ -98,7 +98,7 @@ const Profile = observer((props: IProps) => {
       <Flex>
         {state.showProfileModal && (
           <Foco onClickOutside={() => toggleProfileModal()}>
-            <ProfileModal username={user.userName} />
+            <ProfileModal />
           </Foco>
         )}
       </Flex>

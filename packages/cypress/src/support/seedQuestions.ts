@@ -51,6 +51,23 @@ export const seedQuestionComments = async () => {
     tenantId,
   )
 
+  await seedDatabase(
+    {
+      comments: [
+        {
+          tenant_id: tenantId,
+          created_at: new Date().toUTCString(),
+          comment: 'First Reply',
+          created_by: profileData.profiles.data[0].id,
+          source_type: 'question',
+          source_id: questionData.questions.data[0].id,
+          parent_id: commentData.comments.data[0].id,
+        },
+      ],
+    },
+    tenantId,
+  )
+
   return commentData
 }
 

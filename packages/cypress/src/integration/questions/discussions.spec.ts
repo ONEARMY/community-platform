@@ -20,6 +20,9 @@ describe('[Questions.Discussions]', () => {
     const question = MOCK_DATA.questions[0]
     cy.visit(`/questions/${question.slug}#comment:${commentId}`)
     cy.get(`[id="comment:${commentId}"]`).should('be.visible')
+    cy.get(`[id="comment:${commentId}"]`).contains('Show 1 reply')
+    cy.get('[data-cy=show-replies]').click()
+    cy.get(`[data-cy="ReplyItem"]`).contains('First Reply')
   })
 
   // it('allows authenticated users to contribute to discussions', () => {

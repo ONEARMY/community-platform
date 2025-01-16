@@ -35,7 +35,9 @@ export const MemberTypeVerticalList = (props: IProps) => {
         )
         return (
           <CardButton
-            data-cy={`MemberTypeVerticalList-Item${isSelected ? '-active' : ''}`}
+            data-cy={`MemberTypeVerticalList-Item${
+              isSelected ? '-active' : ''
+            }`}
             data-testid="MemberTypeVerticalList-Item"
             title={item._id}
             key={index}

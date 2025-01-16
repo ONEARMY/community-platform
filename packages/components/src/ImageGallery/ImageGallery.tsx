@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import styled from '@emotion/styled'
 import PhotoSwipeLightbox from 'photoswipe/lightbox'
-import { Box, Flex, Image as ThemeImage } from 'theme-ui'
+import { Flex, Image as ThemeImage } from 'theme-ui'
 
 import { Icon } from '../Icon/Icon'
+import { ImageGalleryThumbnail } from '../ImageGalleryThumbnail/ImageGalleryThumbnail'
+import { Loader } from '../Loader/Loader'
 
 import type { PhotoSwipeOptions } from 'photoswipe/lightbox'
-import type { CardProps } from 'theme-ui'
 
 import 'photoswipe/style.css'
 
@@ -35,17 +36,8 @@ interface IState {
   activeImageIndex: number
   showLightbox: boolean
   images: Array<IImageGalleryItem>
+  showActiveImgLoading: boolean
 }
-
-const ThumbCard = styled<CardProps & React.ComponentProps<any>>(Box)`
-  cursor: pointer;
-  padding: 5px;
-  overflow: hidden;
-  transition: 0.2s ease-in-out;
-  &:hover {
-    transform: translateY(-5px);
-  }
-`
 
 const NavButton = styled('button')`
   background: transparent;
@@ -62,6 +54,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
     activeImageIndex: 0,
     showLightbox: false,
     images: [],
+    showActiveImgLoading: true,
   })
   const lightbox = useRef<PhotoSwipeLightbox>()
 
@@ -113,6 +106,14 @@ export const ImageGallery = (props: ImageGalleryProps) => {
     setState({
       ...state,
       activeImageIndex: imageIndex,
+      showActiveImgLoading: imageIndex !== activeImageIndex,
+    })
+  }
+
+  const setActiveImgLoaded = () => {
+    setState({
+      ...state,
+      showActiveImgLoading: false,
     })
   }
 
@@ -132,7 +133,16 @@ export const ImageGallery = (props: ImageGalleryProps) => {
 
   return activeImage ? (
     <Flex sx={{ flexDirection: 'column' }}>
-      <Flex sx={{ width: '100%', position: 'relative' }}>
+      {state.showActiveImgLoading && (
+        <Loader sx={{ position: 'absolute', alignSelf: 'center' }} />
+      )}
+      <Flex
+        sx={{
+          width: '100%',
+          position: 'relative',
+          opacity: `${state.showActiveImgLoading ? 0 : 1}`,
+        }}
+      >
         <ThemeImage
           loading="lazy"
           data-cy="active-image"
@@ -144,9 +154,8 @@ export const ImageGallery = (props: ImageGalleryProps) => {
             height: [300, 450],
           }}
           src={activeImage.downloadUrl}
-          onClick={() => {
-            triggerLightbox()
-          }}
+          onClick={triggerLightbox}
+          onLoad={setActiveImgLoaded}
           alt={activeImage.alt ?? activeImage.name}
           crossOrigin=""
         />
@@ -193,36 +202,22 @@ export const ImageGallery = (props: ImageGalleryProps) => {
           </>
         ) : null}
       </Flex>
-      {showThumbnails ? (
+      {showThumbnails && (
         <Flex sx={{ width: '100%', flexWrap: 'wrap' }} mx={[2, 2, '-5px']}>
           {images.map((image, index: number) => (
-            <ThumbCard
-              data-cy="thumbnail"
-              data-testid="thumbnail"
-              mb={3}
-              mt={4}
-              opacity={image === activeImage ? 1.0 : 0.5}
-              onClick={() => setActive(index)}
-              key={index}
-            >
-              <ThemeImage
-                loading="lazy"
-                src={image.thumbnailUrl}
-                key={index}
-                alt={image.alt ?? image.name}
-                sx={{
-                  width: 100,
-                  height: 67,
-                  objectFit: props.allowPortrait ? 'contain' : 'cover',
-                  borderRadius: 1,
-                  border: '1px solid offWhite',
-                }}
-                crossOrigin=""
-              />
-            </ThumbCard>
+            <ImageGalleryThumbnail
+              activeImageIndex={activeImageIndex}
+              allowPortrait={props.allowPortrait ?? false}
+              setActiveIndex={setActive}
+              key={image.thumbnailUrl}
+              alt={image.alt}
+              index={index}
+              name={image.name}
+              thumbnailUrl={image.thumbnailUrl}
+            />
           ))}
         </Flex>
-      ) : null}
+      )}
     </Flex>
   ) : null
 }

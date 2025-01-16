@@ -40,7 +40,9 @@ export const MapFilterList = (props: IProps) => {
   const isActive = (checkingFilter: string) =>
     !!activeFilters.find((filter) => filter.label === checkingFilter)
 
-  const buttonLabel = `${pinCount} result${pinCount === 1 ? '' : 's'} in current view`
+  const buttonLabel = `${pinCount} result${
+    pinCount === 1 ? '' : 's'
+  } in current view`
 
   return (
     <Flex

@@ -241,10 +241,6 @@ export class ResearchStore extends ModuleStore {
         logger.debug('upload images ok')
         this.updateUpdateUploadStatus('Images')
 
-        if ((update.files && update.files.length) || update.fileLink) {
-          updateWithMeta.downloadCount = 0
-        }
-
         if (update.files && update.files.length) {
           const fileMeta = await this.uploadCollectionBatch(
             update.files as File[],
@@ -255,6 +251,11 @@ export class ResearchStore extends ModuleStore {
         }
         logger.debug('upload files ok')
         this.updateUpdateUploadStatus('Files')
+
+        // give downloadCount an initial value of 0 whether we're adding a file or not
+        if (updateWithMeta.downloadCount == undefined) {
+          updateWithMeta.downloadCount = 0
+        }
 
         // populate DB
         const existingUpdateIndex = item.updates.findIndex(

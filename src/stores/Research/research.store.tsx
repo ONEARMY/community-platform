@@ -253,8 +253,8 @@ export class ResearchStore extends ModuleStore {
         this.updateUpdateUploadStatus('Files')
 
         // give downloadCount an initial value of 0 whether we're adding a file or not
-        if(updateWithMeta.downloadCount == undefined) {
-          updateWithMeta.downloadCount = 0;
+        if (updateWithMeta.downloadCount == undefined) {
+          updateWithMeta.downloadCount = 0
         }
 
         // populate DB

@@ -119,9 +119,7 @@ Cypress.Commands.add('setSettingImage', (image, selector) => {
 })
 
 Cypress.Commands.add('setFile', (filePath, selector) => {
-  cy.get(`[data-cy=${selector}]`)
-    .find(':file')
-    .attachFile(filePath)
+  cy.get(`[data-cy=${selector}]`).find(':file').attachFile(filePath)
 })
 
 Cypress.Commands.add('setSettingImpactData', (year: number, fields) => {

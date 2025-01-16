@@ -1,7 +1,8 @@
-import { CONFIG } from '../config/config'
-import * as functions from 'firebase-functions'
 import axios from 'axios'
+import * as functions from 'firebase-functions'
 import { IModerationStatus } from 'oa-shared'
+
+import { CONFIG } from '../config/config'
 
 const SITE_URL = CONFIG.deployment.site_url
 // e.g. https://dev.onearmy.world or https://community.preciousplastic.com
@@ -39,8 +40,8 @@ export const notifyHowtoAwaitingModeration = functions
 
     return await axios
       .post(SLACK_WEBHOOK_URL, {
-        text: `📓 Yeah! New How To *${title}* by _${user}_ awaiting moderation,
-            check it out: ${SITE_URL}/how-to/${slug}`,
+        text: `📓 Yeah! New library project *${title}* by _${user}_ awaiting moderation,
+            check it out: ${SITE_URL}/library/${slug}`,
       })
       .catch((err) => {
         console.error(err)

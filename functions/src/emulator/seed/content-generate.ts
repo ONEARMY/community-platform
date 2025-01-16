@@ -1,11 +1,10 @@
+import { DifficultyLevel, IModerationStatus } from 'oa-shared'
 import { MOCK_AUTH_USERS } from 'oa-shared/mocks/auth'
 
 import { setDoc, updateDoc } from '../../Firebase/firestoreDB'
 
+import type { ILibrary, IUserDB } from 'oa-shared'
 import type { IMockAuthUser } from 'oa-shared/mocks/auth'
-import { DifficultyLevel, IHowtoDB } from 'oa-shared/models/howto'
-import { IModerationStatus } from 'oa-shared'
-import { IUserDB } from 'oa-shared/models/user'
 
 /**
  * Populate additional mock howtos alongside production data for ease of testing
@@ -22,11 +21,11 @@ export async function seedContentGenerate() {
 
 export function getMockHowto(
   uid: string,
-  moderation: IHowtoDB['moderation'] = IModerationStatus.ACCEPTED,
+  moderation: ILibrary.DB['moderation'] = IModerationStatus.ACCEPTED,
 ) {
   const _id = `00_${uid}_howto`
   const loginInfo = `username : ${uid}@example.com\npassword : ${uid}`
-  const howto: IHowtoDB = {
+  const howto: ILibrary.DB = {
     _id,
     _created: new Date().toISOString(),
     _modified: new Date().toISOString(),

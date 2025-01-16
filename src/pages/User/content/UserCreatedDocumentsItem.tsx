@@ -4,7 +4,7 @@ import { Icon } from 'oa-components'
 import { Flex, Heading, Text } from 'theme-ui'
 
 interface IProps {
-  type: 'event' | 'how-to' | 'research'
+  type: 'library' | 'research'
   item: Record<string, any>
 }
 

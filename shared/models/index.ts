@@ -1,6 +1,6 @@
 export * from './common'
 export * from './db'
-export * from './howto'
+export * from './library'
 export * from './maps'
 export * from './notifications'
 export * from './research'

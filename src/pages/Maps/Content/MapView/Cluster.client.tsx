@@ -31,7 +31,7 @@ export const Clusters: React.FunctionComponent<IProps> = ({
       spiderfyOnMaxZoom={true}
       // Pin Icon size is always 37x37 px
       // This means max overlay of pins is 5px when not clustered
-      maxClusterRadius={32}
+      maxClusterRadius={54}
     >
       {pins
         .filter(({ location }) => Boolean(location))

@@ -41,11 +41,7 @@ import type { SpaceProps, VerticalAlignProps } from 'styled-system'
 import type { ThemeUIStyleObject } from 'theme-ui'
 import type { IGlyphs } from './types'
 
-interface IGlyphProps {
-  glyph: keyof IGlyphs
-}
-
-export interface IProps {
+export interface IProps extends React.ButtonHTMLAttributes<HTMLElement> {
   glyph: keyof IGlyphs
   color?: string
   size?: number | string
@@ -66,7 +62,9 @@ export const glyphs: IGlyphs = {
   'arrow-full-down': iconMap.arrowFullDown,
   'arrow-full-up': iconMap.arrowFullUp,
   bazar: iconMap.bazar,
+  category: iconMap.category,
   comment: iconMap.comment,
+  construction: iconMap.construction,
   contact: iconMap.contact,
   check: <MdCheck />,
   'chevron-down': iconMap.chevronDown,
@@ -88,28 +86,41 @@ export const glyphs: IGlyphs = {
   facebook: <FaFacebookF />,
   filter: <FaFilter />,
   'flag-unknown': iconMap.flagUnknown,
+  food: iconMap.food,
+  'from the team': iconMap.fromTheTeam,
+  globe: iconMap.globe,
+  'gps-location': iconMap.gpsLocation,
+  guides: iconMap.guides,
   hide: iconMap.hide,
   hyperlink: iconMap.hyperlink,
   image: <MdImage />,
   impact: iconMap.impact,
   instagram: <FaInstagram />,
+  landscape: iconMap.landscape,
   loading: iconMap.loading,
   'location-on': <MdLocationOn />,
   lock: <MdLock />,
   machine: iconMap.machine,
+  machines: iconMap.machines,
   'mail-outline': <MdMailOutline />,
   map: iconMap.map,
   menu: <MdMenu />,
+  moulds: iconMap.moulds,
   'more-vert': <MdMoreVert />,
   notifications: <MdNotifications />,
+  other: iconMap.other,
   patreon: iconMap.patreon,
   pdf: <FaFilePdf />,
   plastic: iconMap.plastic,
+  products: iconMap.products,
   profile: iconMap.profile,
+  recycling: iconMap.recycling,
   revenue: iconMap.revenue,
+  search: iconMap.search,
   slack: <FaSlack />,
   sliders: iconMap.sliders,
   star: iconMap.star,
+  'starter kits': iconMap.starterKits,
   'star-active': iconMap.starActive,
   step: iconMap.step,
   thunderbolt: iconMap.thunderbolt,
@@ -121,14 +132,12 @@ export const glyphs: IGlyphs = {
   show: iconMap.show,
   update: iconMap.update,
   upload: <FaCloudUploadAlt />,
+  utilities: iconMap.utilities,
   useful: iconMap.useful,
   verified: iconMap.verified,
   view: iconMap.view,
   volunteer: iconMap.volunteer,
   website: iconMap.website,
-  search: iconMap.search,
-  globe: iconMap.globe,
-  'gps-location': iconMap.gpsLocation,
 }
 
 export type Props = IProps & VerticalAlignProps & SpaceProps
@@ -157,17 +166,20 @@ const sizeMap = {
   xl: 64,
 }
 
-const Glyph = ({ glyph }: IGlyphProps) => {
-  return glyphs[glyph] || null
+export const getGlyph = (glyph: string) => {
+  return glyph in glyphs ? glyphs[glyph as keyof IGlyphs] : null
 }
 
 export const Icon = (props: Props) => {
   const { glyph, size, sx } = props
 
+  if (!getGlyph(glyph)) {
+    return null
+  }
+
   const isSizeNumeric = !isNaN(size as any)
 
   let definedSize = 16
-
   if (isSizeNumeric) {
     definedSize = size as number
   } else if (Object.keys(sizeMap).includes(size as string)) {
@@ -199,7 +211,7 @@ export const Icon = (props: Props) => {
           },
         }}
       >
-        <Glyph glyph={glyph} />
+        {getGlyph(glyph)}
       </IconContext.Provider>
     </IconWrapper>
   )

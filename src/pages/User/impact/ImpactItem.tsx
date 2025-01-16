@@ -1,5 +1,5 @@
 import { sortImpactYearDisplayFields } from 'src/pages/UserSettings/utils'
-import { Box, Heading } from 'theme-ui'
+import { Box, Flex, Heading } from 'theme-ui'
 
 import { ImpactField } from './ImpactField'
 import { ImpactMissing } from './ImpactMissing'
@@ -35,9 +35,11 @@ export const ImpactItem = ({ fields, user, year }: Props) => {
           {year}
         </Heading>
         {visibleFields && visibleFields.length > 0 ? (
-          visibleFields.map((field, index) => {
-            return <ImpactField field={field} key={index} />
-          })
+          <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+            {visibleFields.map((field, index) => {
+              return <ImpactField field={field} key={index} />
+            })}
+          </Flex>
         ) : (
           <ImpactMissing
             fields={fields}

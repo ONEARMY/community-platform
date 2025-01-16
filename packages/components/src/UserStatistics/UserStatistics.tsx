@@ -1,6 +1,6 @@
 import { Box, Card, Flex } from 'theme-ui'
 
-import HowToCountIcon from '../../assets/icons/icon-how-to.svg'
+import HowToCountIcon from '../../assets/icons/icon-library.svg'
 import ResearchIcon from '../../assets/icons/icon-research.svg'
 import starActiveSVG from '../../assets/icons/icon-star-active.svg'
 import { ElWithBeforeIcon } from '../ElWithBeforeIcon/ElWithBeforeIcon'
@@ -83,13 +83,13 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 
         {props.howtoCount > 0 && (
           <InternalLink
-            to={'/how-to?q=' + props.userName}
+            to={'/library?q=' + props.userName}
             sx={{ color: 'black' }}
             data-testid="howto-link"
           >
             <Flex data-testid="howto-stat">
               <ElWithBeforeIcon icon={HowToCountIcon} />
-              {`How-to: ${props.howtoCount}`}
+              {`Library: ${props.howtoCount}`}
             </Flex>
           </InternalLink>
         )}

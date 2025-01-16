@@ -1,12 +1,12 @@
 import axios from 'axios'
 import * as functions from 'firebase-functions'
-import { IResearchDB, ResearchUpdateStatus } from 'oa-shared/models/research'
 import { IModerationStatus } from 'oa-shared'
+import { IResearchDB, ResearchUpdateStatus } from 'oa-shared/models/research'
 
 import { CONFIG } from '../config/config'
 
 import type { AxiosError, AxiosResponse } from 'axios'
-import type { IResearch, IMapPin } from 'oa-shared/models'
+import type { IMapPin, IResearch } from 'oa-shared/models'
 
 const SITE_URL = CONFIG.deployment.site_url
 // e.g. https://dev.onearmy.world or https://community.preciousplastic.com
@@ -51,8 +51,8 @@ export const notifyHowtoPublished = functions
     const { _createdBy, title, slug } = info
     await axios
       .post(DISCORD_WEBHOOK_URL, {
-        content: `📓 Yeah! New How To **${title}** by *${_createdBy}*
-            check it out: <${SITE_URL}/how-to/${slug}>`,
+        content: `📓 Yeah! New library project **${title}** by *${_createdBy}*
+            check it out: <${SITE_URL}/library/${slug}>`,
       })
       .then(handleResponse, handleErr)
       .catch(handleErr)

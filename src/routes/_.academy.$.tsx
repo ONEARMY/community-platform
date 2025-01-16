@@ -8,7 +8,7 @@ export async function clientLoader() {
 
 export default function Index() {
   return (
-    <Main style={{ flex: 1 }} ignoreMaxWidth={true}>
+    <Main style={{ flex: 1, overflow: 'hidden' }} ignoreMaxWidth={true}>
       <SeoTagsUpdateComponent title="Academy" />
       <Academy />
     </Main>

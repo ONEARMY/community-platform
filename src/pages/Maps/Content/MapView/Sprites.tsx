@@ -58,6 +58,7 @@ export const createClusterIcon = () => {
 
     return L.divIcon({
       html: `${icon}<span class="icon-cluster-text" style="
+        background: ${theme.colors.accent.base};
         font-size: ${fontSize}px;
         line-height: ${lineHeight}px;
         border-radius: ${borderRadius}px;
@@ -98,22 +99,22 @@ const getClusterSizes = (cluster: MarkerCluster) => {
   switch (order) {
     case 1:
       return {
-        fontSize: 20,
+        fontSize: 18,
         iconSize: 26,
-        lineHeight: 26,
+        lineHeight: 22,
       }
     case 2:
       return {
-        fontSize: 20,
+        fontSize: 18,
         iconSize: 32,
-        lineHeight: 32,
+        lineHeight: 28,
       }
 
     default:
       return {
-        fontSize: 20,
+        fontSize: 18,
         iconSize: 44,
-        lineHeight: 44,
+        lineHeight: 40,
       }
   }
 }

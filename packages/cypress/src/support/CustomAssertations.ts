@@ -1,12 +1,6 @@
 import chaiSubset from 'chai-subset'
 
-import type {
-  IHowto,
-  IHowtoStep,
-  IResearchDB,
-  IUserDB,
-  ProfileTypeName,
-} from 'oa-shared'
+import type { ILibrary, IResearchDB, IUserDB, ProfileTypeName } from 'oa-shared'
 
 declare global {
   namespace Chai {
@@ -37,7 +31,7 @@ chai.use((chaiObj) => {
 
 const eqHowto = (chaiObj) => {
   function compare(this: any, expected: any) {
-    const subject: IHowto = this._obj
+    const subject: ILibrary.Item = this._obj
     const {
       _createdBy,
       _deleted,
@@ -90,7 +84,7 @@ const eqHowto = (chaiObj) => {
 }
 const eqHowtoStep = (chaiObj) => {
   function compare(this: any, expected: any, index: number) {
-    const subject: IHowtoStep = this._obj
+    const subject: ILibrary.Step = this._obj
     const { _animationKey, text, title } = expected
     expect(subject, `Step ${index} with info`).to.containSubset({
       _animationKey,

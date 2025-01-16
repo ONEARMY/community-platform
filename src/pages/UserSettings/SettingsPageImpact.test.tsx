@@ -60,11 +60,11 @@ describe('SettingsPageImpact', () => {
       )
 
       expect(wrapper.getAllByText('Edit data', { exact: false })).toHaveLength(
-        5,
+        6,
       )
       expect(
         wrapper.getAllByText('Do you have impact data for this year?'),
-      ).toHaveLength(4)
+      ).toHaveLength(5)
     })
   })
 })

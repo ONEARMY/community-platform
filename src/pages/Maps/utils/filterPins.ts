@@ -2,10 +2,11 @@ import type { IMapPin, MapFilterOptionsList } from 'oa-shared'
 
 export const filterPins = (
   activePinFilters: MapFilterOptionsList,
-  allPinsInView: IMapPin[],
+  pins: IMapPin[],
 ): IMapPin[] => {
-  if (activePinFilters.length === 0) return allPinsInView
-
+  if (activePinFilters.length === 0) {
+    return pins
+  }
   const typeFilters = activePinFilters
     .filter(({ filterType }) => filterType === 'profileType')
     .map(({ _id }) => _id)
@@ -13,7 +14,7 @@ export const filterPins = (
   let filteredPins: IMapPin[] = []
 
   if (typeFilters.length > 0) {
-    const profileTypeFilteredList = allPinsInView.filter(
+    const profileTypeFilteredList = pins.filter(
       ({ creator }) =>
         creator?.profileType && typeFilters.includes(creator?.profileType),
     )
@@ -25,7 +26,7 @@ export const filterPins = (
     .map(({ _id }) => _id)
 
   if (tagFilters.length > 0) {
-    const listToFilter = filteredPins.length > 0 ? filteredPins : allPinsInView
+    const listToFilter = filteredPins.length > 0 ? filteredPins : pins
     const tagFilteredList = listToFilter.filter(({ creator }) => {
       const tagIds = creator?.tags?.map(({ _id }) => _id)
       return tagFilters.some((tagId) => tagIds?.includes(tagId))
@@ -38,11 +39,13 @@ export const filterPins = (
     .map(({ _id }) => _id)
 
   if (badgeFilters.length > 0) {
-    const listToFilter = filteredPins.length > 0 ? filteredPins : allPinsInView
+    const listToFilter = filteredPins.length > 0 ? filteredPins : pins
     const badgeFilteredList = listToFilter.filter(({ creator }) => {
       if (!creator?.badges) return
-      const badges = Object.keys(creator?.badges).map((key) => key)
-      return badgeFilters.some((badge) => badges?.includes(badge))
+      const badges = Object.keys(creator?.badges).filter(
+        (key) => creator?.badges && creator.badges[key],
+      )
+      return badgeFilters.filter((badge) => badges.includes(badge)).length > 0
     })
     filteredPins = badgeFilteredList
   }

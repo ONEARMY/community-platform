@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Field, Form } from 'react-final-form'
-import { Button, FieldInput, Icon } from 'oa-components'
+import { Button, FieldInput, Accordion } from 'oa-components'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { UserContactError } from 'src/pages/User/contact/UserContactError'
-import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
-import { Flex, Heading, Text } from 'theme-ui'
+import { buttons, fields } from 'src/pages/UserSettings/labels'
+import { Flex } from 'theme-ui'
 
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
 
@@ -16,13 +16,11 @@ interface IFormValues {
 }
 
 export const ChangeEmailForm = () => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
   const [currentEmail, setCurrentEmail] = useState<string | null>(null)
 
   const { userStore } = useCommonStores().stores
   const formId = 'changeEmail'
-  const glyph = isExpanded ? 'arrow-full-up' : 'arrow-full-down'
 
   useEffect(() => {
     getUserEmail()
@@ -36,7 +34,6 @@ export const ChangeEmailForm = () => {
         type: 'success',
         message: `Email changed to ${newEmail}. You've been sent two emails now(!) One to your old email address to check this was you and the other to your new address to verify it.`,
       })
-      setIsExpanded(false)
       getUserEmail()
     } catch (error) {
       setSubmitResults({ type: 'error', message: error.message })
@@ -54,8 +51,10 @@ export const ChangeEmailForm = () => {
       sx={{ flexDirection: 'column', gap: 2 }}
     >
       <UserContactError submitResults={submitResults} />
-
-      {isExpanded && currentEmail && (
+      <Accordion
+        title="Change Email"
+        subtitle={`${fields.email.title}: ${currentEmail}`}
+      >
         <Form
           onSubmit={onSubmit}
           id={formId}
@@ -69,14 +68,6 @@ export const ChangeEmailForm = () => {
                 data-cy="changeEmailForm"
                 sx={{ flexDirection: 'column', gap: 2 }}
               >
-                <Heading as="h3" variant="small">
-                  {headings.changeEmail}
-                </Heading>
-
-                <Text sx={{ fontSize: 1 }}>
-                  {fields.email.title}: <strong>{currentEmail}</strong>
-                </Text>
-
                 <FormFieldWrapper
                   text={fields.newEmail.title}
                   htmlFor="newEmail"
@@ -124,22 +115,7 @@ export const ChangeEmailForm = () => {
             )
           }}
         />
-      )}
-
-      <Button
-        type="button"
-        data-cy="changeEmailButton"
-        onClick={() => setIsExpanded(!isExpanded)}
-        variant="secondary"
-        sx={{
-          alignSelf: 'flex-start',
-        }}
-      >
-        <Flex sx={{ gap: 2 }}>
-          <Text>{buttons.changeEmail}</Text>
-          <Icon glyph={glyph} />
-        </Flex>
-      </Button>
+      </Accordion>
     </Flex>
   )
 }

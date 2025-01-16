@@ -898,6 +898,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "ebradbury",
+      "name": "Elliot Bradbury",
+      "avatar_url": "https://avatars.githubusercontent.com/u/253679?v=4",
+      "profile": "https://github.com/ebradbury",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

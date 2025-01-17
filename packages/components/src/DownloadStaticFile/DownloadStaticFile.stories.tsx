@@ -14,6 +14,7 @@ export const Default: StoryFn<typeof DownloadStaticFile> = () => (
       size: 1200000,
       downloadUrl: 'https://example.com',
     }}
+    fileDownloadCount={346}
   />
 )
 export const LoggedOut: StoryFn<typeof DownloadStaticFile> = () => (
@@ -26,5 +27,6 @@ export const LoggedOut: StoryFn<typeof DownloadStaticFile> = () => (
     redirectToSignIn={async () => {
       alert('Redirect to Sign In')
     }}
+    fileDownloadCount={6}
   />
 )

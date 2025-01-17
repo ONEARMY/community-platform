@@ -5,7 +5,7 @@ import { CategoryVerticalList, SearchField, Select } from 'oa-components'
 import { ResearchStatus } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { UserAction } from 'src/common/UserAction'
 import { isPreciousPlastic } from 'src/config/config'
 import DraftButton from 'src/pages/common/Drafts/DraftButton'
 import { ListHeader } from 'src/pages/common/Layout/ListHeader'
@@ -47,8 +47,6 @@ export const ResearchFilterHeader = (props: IProps) => {
   const sort = searchParams.get(ResearchSearchParams.sort) as ResearchSortOption
   const status =
     (searchParams.get(ResearchSearchParams.status) as ResearchStatus) || ''
-
-  const isUserLoggedIn = useCommonStores().stores.userStore?.user
 
   useEffect(() => {
     const initCategories = async () => {
@@ -98,24 +96,11 @@ export const ResearchFilterHeader = (props: IProps) => {
   }
 
   const actionComponents = (
-    <>
-      {isPreciousPlastic() ? (
-        <>
-          {isUserLoggedIn && (
-            <DraftButton
-              showDrafts={showDrafts}
-              draftCount={draftCount}
-              handleShowDrafts={handleShowDrafts}
-            />
-          )}
-          <Link to={isUserLoggedIn ? '/research/create' : '/sign-up'}>
-            <Button type="button" variant="primary" data-cy="create">
-              {listing.create}
-            </Button>
-          </Link>
-        </>
-      ) : (
-        <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
+    <UserAction
+      loggedIn={
+        <AuthWrapper
+          roleRequired={isPreciousPlastic() ? undefined : RESEARCH_EDITOR_ROLES}
+        >
           <DraftButton
             showDrafts={showDrafts}
             draftCount={draftCount}
@@ -127,8 +112,17 @@ export const ResearchFilterHeader = (props: IProps) => {
             </Button>
           </Link>
         </AuthWrapper>
-      )}
-    </>
+      }
+      loggedOut={
+        isPreciousPlastic() && (
+          <Link to="/sign-up">
+            <Button type="button" variant="primary" data-cy="sign-up">
+              {listing.join}
+            </Button>
+          </Link>
+        )
+      }
+    />
   )
 
   const categoryComponent = (

@@ -156,8 +156,8 @@ describe('[Research]', () => {
         '0 downloads',
       )
 
-      // download the file then check the counter
       cy.step('Download counter increments')
+      cy.wait(1000)
       cy.get('[data-cy=downloadButton]').click()
       cy.get('[data-cy=DonationRequestSkip]')
         .invoke('removeAttr', 'target')
@@ -316,6 +316,7 @@ describe('[Research]', () => {
         slug: `${randomId}-create-research-article-test`,
       }
 
+      cy.get('[data-cy="sign-up"]')
       cy.login(researcherEmail, researcherPassword)
 
       cy.step('Create the research article')

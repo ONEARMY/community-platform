@@ -162,6 +162,7 @@ export const steps: ILabels = {
 
 export const listing = {
   create: 'Add your project',
+  join: 'Sign up to add your project',
   empty: 'No projects to show!',
   usefulness: 'How useful it is',
   totalComments: 'Total comments',

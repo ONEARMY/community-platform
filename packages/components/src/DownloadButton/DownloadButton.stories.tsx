@@ -8,7 +8,7 @@ export default {
 } as Meta<typeof DownloadButton>
 
 export const Default: StoryFn<typeof DownloadButton> = () => (
-  <DownloadButton onClick={() => {}} />
+  <DownloadButton onClick={() => {}} fileDownloadCount={7} />
 )
 
 export const CustomDetails: StoryFn<typeof DownloadButton> = () => (
@@ -16,5 +16,6 @@ export const CustomDetails: StoryFn<typeof DownloadButton> = () => (
     onClick={() => {}}
     glyph="download-cloud"
     label="Hello there"
+    fileDownloadCount={726}
   />
 )

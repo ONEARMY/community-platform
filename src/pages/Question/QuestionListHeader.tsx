@@ -3,7 +3,7 @@ import { Link, useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
 import { CategoryVerticalList, SearchField, Select } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { UserAction } from 'src/common/UserAction'
 import {
   QuestionSearchParams,
   questionService,
@@ -76,16 +76,23 @@ export const QuestionListHeader = () => {
     setSearchParams(params)
   }
 
-  const { userStore } = useCommonStores().stores
-
   const actionComponents = (
-    <Flex>
-      <Link to={userStore.user ? '/questions/create' : '/sign-up'}>
-        <Button type="button" data-cy="create" variant="primary">
-          {listing.create}
-        </Button>
-      </Link>
-    </Flex>
+    <UserAction
+      loggedIn={
+        <Link to="/questions/create">
+          <Button type="button" data-cy="create-question" variant="primary">
+            {listing.create}
+          </Button>
+        </Link>
+      }
+      loggedOut={
+        <Link to="/sign-up">
+          <Button type="button" data-cy="sign-up" variant="primary">
+            {listing.join}
+          </Button>
+        </Link>
+      }
+    />
   )
 
   const categoryComponent = (

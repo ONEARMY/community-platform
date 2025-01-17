@@ -92,7 +92,10 @@ const Profile = observer((props: IProps) => {
             }}
           />
         ) : (
-          <MemberBadge profileType={user.profileType} />
+          <MemberBadge
+            profileType={user.profileType}
+            sx={{ cursor: 'pointer' }}
+          />
         )}
       </Flex>
       <Flex>

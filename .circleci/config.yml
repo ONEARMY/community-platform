@@ -372,8 +372,8 @@ jobs:
       - checkout
       - attach_workspace:
           at: '.'
-      - run: npx supabase login --token $SUPABASE_ACCESS_TOKEN
-      - run: (yes || true) | npx supabase db push --db-url $SUPABASE_DB_URL
+      - run: npx supabase@2.6.8 login --token $SUPABASE_ACCESS_TOKEN
+      - run: (yes || true) | npx supabase@2.6.8 db push --db-url $SUPABASE_DB_URL --debug
   # Run cypress e2e tests on chrome
   test_e2e:
     docker: *docker

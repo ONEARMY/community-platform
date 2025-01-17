@@ -23,7 +23,7 @@ What kind of change does this PR introduce?
 _Describe the new behaviour_
 _If useful, provide screenshot or capture to highlight main changes_
 
-## Does this PR introduce a breaking change?
+## Does this PR introduce a DB Schema Change or Migration?
 
 - [ ] Yes
 - [ ] No

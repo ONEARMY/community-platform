@@ -3,7 +3,7 @@ import { Flex, Heading, Text } from 'theme-ui'
 
 import { Icon } from '../Icon/Icon'
 
-import type { ThemeUIStyleObject } from 'theme-ui';
+import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface IProps {
   children: React.ReactNode
@@ -19,7 +19,7 @@ export const Accordion = (props: IProps) => {
   return (
     <Flex
       data-cy="AccordionContainer"
-      sx={{ flexDirection: 'column', gap: 2, ...sx }}
+      sx={{ flexDirection: 'column', gap: 2, cursor: 'pointer', ...sx }}
     >
       <Flex
         sx={{

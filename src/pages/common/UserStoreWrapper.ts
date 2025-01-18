@@ -3,19 +3,30 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 
 import { SessionContext } from './SessionContext'
 
-export const UserStoreWrapper = ({
-  children,
-}: {
-  children: React.ReactNode
-}) => {
-  const profile = useContext(SessionContext)
+export const UserStoreWrapper = (props: { children: React.ReactNode }) => {
+  const user = useContext(SessionContext)
   const { userStore } = useCommonStores().stores
 
   useEffect(() => {
-    if (profile) {
-      userStore.refreshActiveUserDetailsById(profile.username)
-    }
-  }, [profile])
+    const syncProfile = async () => {
+      try {
+        const response = await fetch('/api/profile')
+        if (response.ok) {
+          const { profile } = await response.json()
 
-  return children
+          // TODO: actually use the profile from supabase?
+          userStore.refreshActiveUserDetailsById(profile.username)
+          return
+        }
+      } catch (error) {
+        console.error(error)
+      }
+
+      userStore._updateActiveUser(null)
+    }
+
+    syncProfile()
+  }, [user?.id])
+
+  return props.children
 }

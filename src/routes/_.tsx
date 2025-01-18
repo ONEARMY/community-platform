@@ -15,26 +15,19 @@ import { SessionContext } from 'src/pages/common/SessionContext'
 import { StickyButton } from 'src/pages/common/StickyButton'
 import { UserStoreWrapper } from 'src/pages/common/UserStoreWrapper'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { profileServiceServer } from 'src/services/profileService.server'
 import { Flex } from 'theme-ui'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { DBProfile } from 'src/models/profile.model'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const environment = getEnvVariables()
   const { client } = createSupabaseServerClient(request)
 
-  let profile: DBProfile | null = null
   const {
     data: { user },
   } = await client.auth.getUser()
 
-  if (user) {
-    profile = await profileServiceServer.getByAuthId(user.id, client)
-  }
-
-  return Response.json({ environment, profile })
+  return Response.json({ environment, user })
 }
 
 export function HydrateFallback() {
@@ -45,12 +38,13 @@ export function HydrateFallback() {
 
 // This is a Layout file, it will render for all routes that have _. prefix.
 export default function Index() {
-  const { environment, profile } = useLoaderData<typeof loader>()
+  const { environment, user } = useLoaderData<typeof loader>()
 
   return (
     <EnvironmentContext.Provider value={environment}>
-      <SessionContext.Provider value={profile}>
+      <SessionContext.Provider value={user}>
         <UserStoreWrapper>
+          {JSON.stringify(user)}
           <Flex
             sx={{ height: '100vh', flexDirection: 'column' }}
             data-cy="page-container"

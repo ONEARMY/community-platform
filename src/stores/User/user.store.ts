@@ -1,22 +1,10 @@
 import pkg from 'countries-list'
-import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  reauthenticateWithCredential,
-  sendEmailVerification,
-  sendPasswordResetEmail,
-  updateEmail,
-  updatePassword,
-  updateProfile,
-} from 'firebase/auth'
 import lodash from 'lodash'
 import { action, makeObservable, observable, toJS } from 'mobx'
 import { EmailNotificationFrequency } from 'oa-shared'
 
 import { logger } from '../../logger'
-import { auth, EmailAuthProvider } from '../../utils/firebase'
 import { getLocationData } from '../../utils/getLocationData'
-import { formatLowerNoSpecial } from '../../utils/helpers'
 import { ModuleStore } from '../common/module.store'
 import { Storage } from '../storage'
 
@@ -29,7 +17,6 @@ import type {
   IUserBadges,
   IUserDB,
 } from 'oa-shared'
-import type { IFirebaseUser } from 'src/utils/firebase'
 import type { IRootStore } from '../RootStore'
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -60,7 +47,6 @@ export class UserStore extends ModuleStore {
       updateUserImpact: action,
       _updateActiveUser: action,
     })
-    this._listenToAuthStateChanges()
   }
 
   public async getUsersStartingWith(prefix: string, limit?: number) {
@@ -77,43 +63,6 @@ export class UserStore extends ModuleStore {
 
   public setUpdateStatus(update: keyof IUserUpdateStatus) {
     this.updateStatus[update] = true
-  }
-
-  // when registering a new user create firebase auth profile as well as database user profile
-  public async registerNewUser(
-    email: string,
-    password: string,
-    displayName: string,
-  ) {
-    // stop auto detect of login as will pick up with incomplete information during registration
-    this._unsubscribeFromAuthStateChanges()
-    await createUserWithEmailAndPassword(auth, email, password)
-    // once registered populate auth profile displayname with the chosen username
-    if (auth?.currentUser) {
-      await this.safeUpdateProfile(auth.currentUser, displayName)
-      // populate db user profile and resume auth listener
-      await this._createUserProfile('registration')
-      // when checking auth state change also send confirmation email
-      this._listenToAuthStateChanges(true)
-    }
-  }
-
-  private async safeUpdateProfile(currentUser: User, displayName: string) {
-    // It should be possible to pass photoURL as null to updateProfile
-    // but the emulator counts this as an error:
-    //   auth/invalid-json-payload-received.-/photourl-must-be-string
-    //
-    // source: https://github.com/firebase/firebase-tools/issues/6424
-    if (currentUser.photoURL === null) {
-      await updateProfile(currentUser, {
-        displayName,
-      })
-    } else {
-      await updateProfile(currentUser, {
-        displayName,
-        photoURL: currentUser.photoURL,
-      })
-    }
   }
 
   public async getUserByUsername(username: string): Promise<IUserDB | null> {
@@ -318,144 +267,47 @@ export class UserStore extends ModuleStore {
     this._updateActiveUser(user)
   }
 
-  public async sendEmailVerification() {
-    logger.info('sendEmailVerification', { authCurrentUser: auth.currentUser })
-    if (auth.currentUser) {
-      return sendEmailVerification(auth.currentUser)
-    }
-  }
-
-  public async getUserEmail() {
-    const user = this.authUser as firebase.default.User
-    return user.email as string
-  }
-
   public async getUserEmailIsVerified() {
     if (!this.authUser) return
     return this.authUser.emailVerified
   }
 
-  public async changeUserPassword(oldPassword: string, newPassword: string) {
-    if (!this.authUser) return
+  // private async _createUserProfile(trigger: string) {
+  //   const authUser = auth.currentUser as firebase.default.User
+  //   const displayName = authUser.displayName as string
+  //   const userName = formatLowerNoSpecial(displayName)
+  //   const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
 
-    const user = this.authUser as firebase.default.User
-    const credentials = EmailAuthProvider.credential(
-      user.email as string,
-      oldPassword,
-    )
-    await reauthenticateWithCredential(user, credentials)
-    return updatePassword(user, newPassword)
-  }
+  //   if (userName === authUser.uid) {
+  //     logger.error(
+  //       'attempted to create duplicate user record with authId',
+  //       userName,
+  //     )
+  //     throw new Error('attempted to create duplicate user')
+  //   }
 
-  public async changeUserEmail(password: string, newEmail: string) {
-    if (!this.authUser) return
-
-    const user = this.authUser as firebase.default.User
-    const credentials = EmailAuthProvider.credential(
-      user.email as string,
-      password,
-    )
-    await reauthenticateWithCredential(user, credentials)
-    await updateEmail(user, newEmail)
-    return this.sendEmailVerification()
-  }
-
-  public async sendPasswordResetEmail(email: string) {
-    return sendPasswordResetEmail(auth, email)
-  }
-
-  public async logout() {
-    return auth.signOut()
-  }
-
-  public async deleteUser(reauthPw: string) {
-    // as delete operation is sensitive requires user to revalidate credentials first
-    const authUser = auth.currentUser as firebase.default.User
-    const credential = EmailAuthProvider.credential(
-      authUser.email as string,
-      reauthPw,
-    )
-    await authUser.reauthenticateWithCredential(credential)
-    const user = this.user as IUser
-    await this.db.collection(COLLECTION_NAME).doc(user.userName).delete()
-    await authUser.delete()
-    // TODO - delete user avatar
-    // TODO - show deleted notification
-    // TODO show notification if invalid credential
-  }
-
-  // handle user sign in, when firebase authenticates want to also fetch user document from the database
-  private async _userSignedIn(user: IFirebaseUser | null) {
-    if (!user) return null
-
-    // legacy user formats did not save names so get profile via email - this option be removed in later version
-    // (assumes migration strategy and check)
-    const userMeta = await this.getUserProfile(user.uid)
-    if (!userMeta) return
-
-    this._updateActiveUser(userMeta)
-    logger.debug('user signed in', user)
-
-    await this._updateUserRequest(userMeta._id, {})
-    return userMeta
-  }
-
-  private async _createUserProfile(trigger: string) {
-    const authUser = auth.currentUser as firebase.default.User
-    const displayName = authUser.displayName as string
-    const userName = formatLowerNoSpecial(displayName)
-    const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
-
-    if (userName === authUser.uid) {
-      logger.error(
-        'attempted to create duplicate user record with authId',
-        userName,
-      )
-      throw new Error('attempted to create duplicate user')
-    }
-
-    logger.debug('creating user profile', userName)
-    if (!userName) {
-      throw new Error('No Username Provided')
-    }
-    const user: IUser = {
-      coverImages: [],
-      links: [],
-      verified: false,
-      _authID: authUser.uid,
-      displayName,
-      userName,
-      notifications: [],
-      profileCreated: new Date().toISOString(),
-      profileCreationTrigger: trigger,
-      profileType: 'member',
-      notification_settings: {
-        emailFrequency: EmailNotificationFrequency.WEEKLY,
-      },
-    }
-    // update db
-    await dbRef.set(user)
-  }
-
-  // use firebase auth to listen to change to signed in user
-  // on sign in want to load user profile
-  // strange implementation return the unsubscribe object on subscription, so stored
-  // to authUnsubscribe variable for use later
-  private _listenToAuthStateChanges(checkEmailVerification = false) {
-    this.authUnsubscribe = onAuthStateChanged(auth, (authUser) => {
-      this.authUser = authUser
-      if (authUser) {
-        this._userSignedIn(authUser as firebase.default.User)
-        // send verification email if not verified and after first sign-up only
-        if (!authUser.emailVerified && checkEmailVerification) {
-          this.sendEmailVerification()
-        }
-      } else {
-        // Explicitly update user to null when logged out
-        this._updateActiveUser(null)
-      }
-    })
-  }
+  //   logger.debug('creating user profile', userName)
+  //   if (!userName) {
+  //     throw new Error('No Username Provided')
+  //   }
+  //   const user: IUser = {
+  //     coverImages: [],
+  //     links: [],
+  //     verified: false,
+  //     _authID: authUser.uid,
+  //     displayName,
+  //     userName,
+  //     notifications: [],
+  //     profileCreated: new Date().toISOString(),
+  //     profileCreationTrigger: trigger,
+  //     profileType: 'member',
+  //     notification_settings: {
+  //       emailFrequency: EmailNotificationFrequency.WEEKLY,
+  //     },
+  //   }
+  //   // update db
+  //   await dbRef.set(user)
+  // }
 
   private async _updateUserRequest(userId: string, updateFields: PartialUser) {
     const _lastActive = new Date().toISOString()

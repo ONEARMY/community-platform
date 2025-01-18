@@ -20,7 +20,6 @@ export const ChangePasswordForm = () => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
 
-  const { userStore } = useCommonStores().stores
   const formId = 'changePassword'
   const glyph = isExpanded ? 'arrow-full-up' : 'arrow-full-down'
 
@@ -28,7 +27,8 @@ export const ChangePasswordForm = () => {
     const { oldPassword, newPassword } = values
 
     try {
-      await userStore.changeUserPassword(oldPassword, newPassword)
+      // TODO
+      // await userStore.changeUserPassword(oldPassword, newPassword)
       setSubmitResults({
         type: 'success',
         message: `Password changed.`,

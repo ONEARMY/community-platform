@@ -1,10 +1,8 @@
-import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { NavLink } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { preciousPlasticTheme } from 'oa-themes'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { SessionContext } from 'src/pages/common/SessionContext'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { Box, Flex } from 'theme-ui'
 
@@ -50,7 +48,7 @@ const ModalLink = styled(NavLink)`
   }
 `
 
-const LogoutButton = styled.button`
+const LogoutButton = styled.a`
   font-family: inherit;
   font-size: inherit;
   color: inherit;
@@ -68,18 +66,12 @@ const LogoutButton = styled.button`
 
 export const ProfileModal = observer(() => {
   const { userStore } = useCommonStores().stores
-  const profile = useContext(SessionContext)
-
-  const logout = () => {
-    userStore.logout()
-  }
-
   return (
     <ModalContainer data-cy="user-menu-list">
       <ModalContainerInner>
         <Flex>
           <ModalLink
-            to={'/u/' + profile?.username}
+            to={'/u/' + userStore.activeUser?.userName}
             data-cy="menu-Profile"
             className={({ isActive }) => (isActive ? 'current' : '')}
           >
@@ -100,7 +92,7 @@ export const ProfileModal = observer(() => {
           </AuthWrapper>
         ))}
         <Flex>
-          <LogoutButton onClick={() => logout()} data-cy="menu-Logout">
+          <LogoutButton href="/logout" data-cy="menu-Logout">
             Log out
           </LogoutButton>
         </Flex>

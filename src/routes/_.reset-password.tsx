@@ -2,7 +2,6 @@ import { Field, Form } from 'react-final-form'
 import { redirect } from '@remix-run/node'
 import { Link, useActionData } from '@remix-run/react'
 import { Button, FieldInput, HeroBanner } from 'oa-components'
-import { PasswordField } from 'src/common/Form/PasswordField'
 import Main from 'src/pages/common/Layout/Main'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { getReturnUrl } from 'src/utils/redirect.server'
@@ -27,19 +26,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
   const formData = await request.formData()
 
-  const { error } = await client.auth.signInWithPassword({
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
+  const url = new URL(request.url)
+  const emailRedirectUrl = url.protocol + '//' + url.host + '/update-password'
+
+  await client.auth.resetPasswordForEmail(formData.get('email') as string, {
+    redirectTo: emailRedirectUrl,
   })
 
-  if (error) {
-    return Response.json(
-      { error: 'Invalid username or password.' },
-      { headers },
-    )
-  }
-
-  return redirect(getReturnUrl(request), { headers })
+  // Always return success and display a generic message, even when the user doesn't exist, for security reasons.
+  return Response.json({ success: true }, { headers })
 }
 
 export const meta = mergeMeta<typeof loader>(() => {
@@ -57,7 +52,7 @@ export default function Index() {
         onSubmit={() => {}}
         render={({ submitting, invalid }) => {
           return (
-            <form data-cy="login-form" method="post">
+            <form data-cy="reset-password-form" method="post">
               <Flex
                 sx={{
                   bg: 'inherit',
@@ -82,10 +77,10 @@ export default function Index() {
                       }}
                     >
                       <Flex sx={{ gap: 2, flexDirection: 'column' }}>
-                        <Heading>Log in</Heading>
-                        <Text sx={{ fontSize: 1 }} color={'grey'}>
-                          <Link to="/sign-up" data-cy="no-account">
-                            Don't have an account? Sign-up here
+                        <Heading>Reset Password</Heading>
+                        <Text sx={{ fontSize: 1 }} color="grey">
+                          <Link to="/sign-in" data-cy="no-account">
+                            Go back to Login
                           </Link>
                         </Text>
                       </Flex>
@@ -94,49 +89,42 @@ export default function Index() {
                         <Text color="red">{actionResponse?.error}</Text>
                       )}
 
-                      <Flex sx={{ flexDirection: 'column' }}>
-                        <Label htmlFor="title">Email</Label>
-                        <Field
-                          name="email"
-                          type="email"
-                          data-cy="email"
-                          component={FieldInput}
-                          validate={required}
-                        />
-                      </Flex>
-                      <Flex sx={{ flexDirection: 'column' }}>
-                        <Label htmlFor="title">Password</Label>
-                        <PasswordField
-                          name="password"
-                          data-cy="password"
-                          component={FieldInput}
-                          validate={required}
-                        />
-                      </Flex>
-                      <Flex sx={{ justifyContent: 'space-between' }}>
-                        <Text sx={{ fontSize: 1 }} color={'grey'}>
-                          <Link to="/reset-password" data-cy="lost-password">
-                            Forgotten password?
-                          </Link>
+                      {actionResponse?.success ? (
+                        <Text color="green">
+                          Please check your inbox (and your spam folder) for
+                          further instructions.
                         </Text>
-                      </Flex>
+                      ) : (
+                        <>
+                          <Flex sx={{ flexDirection: 'column' }}>
+                            <Label htmlFor="title">Email</Label>
+                            <Field
+                              name="email"
+                              type="email"
+                              data-cy="email"
+                              component={FieldInput}
+                              validate={required}
+                            />
+                          </Flex>
 
-                      <Flex>
-                        <Button
-                          large
-                          data-cy="submit"
-                          sx={{
-                            borderRadius: 3,
-                            width: '100%',
-                            justifyContent: 'center',
-                          }}
-                          variant="primary"
-                          disabled={submitting || invalid}
-                          type="submit"
-                        >
-                          Log in
-                        </Button>
-                      </Flex>
+                          <Flex>
+                            <Button
+                              large
+                              data-cy="submit"
+                              sx={{
+                                borderRadius: 3,
+                                width: '100%',
+                                justifyContent: 'center',
+                              }}
+                              variant="primary"
+                              disabled={submitting || invalid}
+                              type="submit"
+                            >
+                              Reset password
+                            </Button>
+                          </Flex>
+                        </>
+                      )}
                     </Flex>
                   </Card>
                 </Flex>

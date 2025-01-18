@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { Button, FieldInput, Icon } from 'oa-components'
 import { PasswordField } from 'src/common/Form/PasswordField'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { SessionContext } from 'src/pages/common/SessionContext'
 import { FormFieldWrapper } from 'src/pages/Library/Content/Common'
 import { UserContactError } from 'src/pages/User/contact/UserContactError'
 import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
@@ -16,22 +16,18 @@ interface IFormValues {
 }
 
 export const ChangeEmailForm = () => {
+  const user = useContext(SessionContext)
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
-  const [currentEmail, setCurrentEmail] = useState<string | null>(null)
 
-  const { userStore } = useCommonStores().stores
   const formId = 'changeEmail'
   const glyph = isExpanded ? 'arrow-full-up' : 'arrow-full-down'
-
-  useEffect(() => {
-    getUserEmail()
-  }, [])
 
   const onSubmit = async (values: IFormValues) => {
     const { password, newEmail } = values
     try {
-      await userStore.changeUserEmail(password, newEmail)
+      // TODO
+      // await userStore.changeUserEmail(password, newEmail)
       setSubmitResults({
         type: 'success',
         message: `Email changed to ${newEmail}. You've been sent two emails now(!) One to your old email address to check this was you and the other to your new address to verify it.`,
@@ -44,8 +40,8 @@ export const ChangeEmailForm = () => {
   }
 
   const getUserEmail = async () => {
-    const email = await userStore.getUserEmail()
-    setCurrentEmail(email)
+    // TODO
+    // const email = await userStore.getUserEmail()
   }
 
   return (
@@ -55,14 +51,14 @@ export const ChangeEmailForm = () => {
     >
       <UserContactError submitResults={submitResults} />
 
-      {isExpanded && currentEmail && (
+      {isExpanded && (
         <Form
           onSubmit={onSubmit}
           id={formId}
           render={({ handleSubmit, submitting, values }) => {
             const { password, newEmail } = values
             const disabled =
-              submitting || !password || !newEmail || newEmail === currentEmail
+              submitting || !password || !newEmail || newEmail === user?.email
 
             return (
               <Flex
@@ -74,7 +70,7 @@ export const ChangeEmailForm = () => {
                 </Heading>
 
                 <Text sx={{ fontSize: 1 }}>
-                  {fields.email.title}: <strong>{currentEmail}</strong>
+                  {fields.email.title}: <strong>{user?.email}</strong>
                 </Text>
 
                 <FormFieldWrapper

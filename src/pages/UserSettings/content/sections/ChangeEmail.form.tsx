@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Field, Form } from 'react-final-form'
-import { Button, FieldInput, Accordion } from 'oa-components'
+import { Accordion, Button, FieldInput } from 'oa-components'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
@@ -52,6 +52,7 @@ export const ChangeEmailForm = () => {
     >
       <UserContactError submitResults={submitResults} />
       <Accordion
+        data-cy="changeEmailAccordion"
         title="Change Email"
         subtitle={`${fields.email.title}: ${currentEmail}`}
       >

@@ -18,7 +18,7 @@ export const Accordion = (props: IProps) => {
 
   return (
     <Flex
-      data-cy="AccordionContainer"
+      data-cy="accordionContainer"
       sx={{ flexDirection: 'column', gap: 2, cursor: 'pointer', ...sx }}
     >
       <Flex

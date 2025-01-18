@@ -80,7 +80,7 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="tab-Account"]').click()
 
       cy.step('Update Email')
-      cy.get('[data-cy="changeEmailButton"]').click()
+      cy.get('[data-cy="accordionContainer"]').click({ multiple: true })
       cy.get('[data-cy="changeEmailForm"]')
         .contains(`Current email address: ${email}`)
         .should('be.visible')
@@ -92,7 +92,7 @@ describe('[User sign-up]', () => {
         .should('be.visible')
 
       cy.step('Update Password')
-      cy.get('[data-cy="changePasswordButton"]').click()
+      cy.get('[data-cy="accordionContainer"]').click({ multiple: true })
       cy.get('[data-cy="oldPassword"]').clear().type(password)
       cy.get('[data-cy="newPassword"]').clear().type(newPassword)
       cy.get('[data-cy="repeatNewPassword"]').clear().type(newPassword)

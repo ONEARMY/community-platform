@@ -1,15 +1,13 @@
-import { json } from '@remix-run/node'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
-// runs on the server
-export async function loader() {
-  // TODO: get tags from firebase and cache them
+import type { LoaderFunctionArgs } from '@remix-run/node'
 
-  return json(
-    [
-      {
-        test: 'tags',
-      },
-    ],
-    { status: 501 },
-  )
+export async function loader({ request }: LoaderFunctionArgs) {
+  const { client, headers } = createSupabaseServerClient(request)
+
+  const tagsResult = await client.from('tags').select('id,name')
+
+  const tags = tagsResult.data || []
+
+  return Response.json(tags, { headers, status: 200 })
 }

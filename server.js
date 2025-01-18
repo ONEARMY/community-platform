@@ -43,6 +43,7 @@ const imgSrc = [
   'onearmy.github.io',
   'cdn.jsdelivr.net',
   '*.google-analytics.com',
+  process.env.SUPABASE_API_URL,
 ]
 
 const cdnUrl = import.meta.env?.VITE_CDN_URL || process.env?.VITE_CDN_URL

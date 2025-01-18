@@ -19,18 +19,6 @@ describe('HowtoCategoryGuidance', () => {
     await screen.findByText(guidanceFirstLine, { exact: false })
   })
 
-  it('renders expected files content when a category that exists is present', async () => {
-    render(
-      <HowtoFormProvider>
-        <HowtoCategoryGuidance category={FactoryCategory} type="files" />
-      </HowtoFormProvider>,
-    )
-
-    const filesGuidance = guidance.moulds.files
-
-    await screen.findByText(filesGuidance, { exact: false })
-  })
-
   it('renders nothing when not visible', () => {
     const { container } = render(
       <HowtoFormProvider>

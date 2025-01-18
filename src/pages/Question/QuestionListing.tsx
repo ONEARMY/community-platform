@@ -3,23 +3,19 @@ import { useSearchParams } from '@remix-run/react'
 import { Button, Loader } from 'oa-components'
 import { logger } from 'src/logger'
 import { questionService } from 'src/pages/Question/question.service'
-import { commentService } from 'src/services/commentService'
 import { Flex, Heading } from 'theme-ui'
 
 import { listing } from './labels'
 import { QuestionListHeader } from './QuestionListHeader'
 import { QuestionListItem } from './QuestionListItem'
 
-import type { IQuestion } from 'oa-shared'
+import type { Question } from 'src/models/question.model'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 export const QuestionListing = () => {
   const [isFetching, setIsFetching] = useState<boolean>(true)
-  const [questions, setQuestions] = useState<IQuestion.Item[]>([])
+  const [questions, setQuestions] = useState<Question[]>([])
   const [total, setTotal] = useState<number>(0)
-  const [lastVisibleId, setLastVisibleId] = useState<string | undefined>(
-    undefined,
-  )
 
   const [searchParams, setSearchParams] = useSearchParams()
   const q = searchParams.get('q') || ''
@@ -43,55 +39,27 @@ export const QuestionListing = () => {
     }
   }, [q, category, sort])
 
-  const fetchQuestions = async (skipFrom?: string | undefined) => {
+  const fetchQuestions = async (skip: number = 0) => {
     setIsFetching(true)
 
     try {
-      const searchWords = q ? q.toLocaleLowerCase().split(' ') : []
-
-      const result = await questionService.search(
-        searchWords,
-        category,
-        sort,
-        skipFrom,
-      )
+      const result = await questionService.search(q, category, sort, skip)
 
       if (result) {
-        if (skipFrom) {
+        if (skip) {
           // if skipFrom is set, means we are requesting another page that should be appended
           setQuestions((questions) => [...questions, ...result.items])
         } else {
           setQuestions(result.items)
         }
 
-        setLastVisibleId(result.lastVisibleId)
         setTotal(result.total)
-        getCommentCounts(result.items.map((x) => x._id))
       }
     } catch (error) {
       logger.error('error fetching questions', error)
     }
 
     setIsFetching(false)
-  }
-
-  const getCommentCounts = async (questionIds: string[]) => {
-    try {
-      const count = await commentService.getCommentCount(questionIds)
-
-      if (count.size > 0) {
-        setQuestions((questions) =>
-          questions.map((x) => {
-            const commentCount =
-              (count.has(x._id) ? count.get(x._id) : x.commentCount) || 0
-
-            return { ...x, commentCount }
-          }),
-        )
-      }
-    } catch (error) {
-      console.error(error)
-    }
   }
 
   const showLoadMore =
@@ -132,7 +100,7 @@ export const QuestionListing = () => {
         <Flex sx={{ justifyContent: 'center' }}>
           <Button
             type="button"
-            onClick={() => fetchQuestions(lastVisibleId)}
+            onClick={() => fetchQuestions(questions.length)}
             data-cy="load-more"
           >
             {listing.loadMore}

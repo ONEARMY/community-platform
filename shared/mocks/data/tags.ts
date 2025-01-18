@@ -90,3 +90,46 @@ export const tags = {
     _deleted: false,
   },
 }
+
+export const tagsSupabase = [
+  {
+    created_at: '2012-08-02T07:27:04.609Z',
+    name: 'product',
+  },
+  {
+    created_at: '2017-11-20T05:58:20.458Z',
+    name: 'exhibition',
+  },
+  {
+    created_at: '2015-05-06T23:21:18.386Z',
+    name: 'howto_testing',
+  },
+  {
+    created_at: '2014-01-30T01:24:05.344Z',
+    name: 'brainstorm',
+  },
+  {
+    created_at: '2018-05-19T04:57:18.471Z',
+    name: 'compression',
+  },
+  {
+    created_at: '2018-11-29T12:56:47.901Z',
+    name: 'mould',
+  },
+  {
+    created_at: '2013-02-19T08:22:56.462Z',
+    name: 'injection',
+  },
+  {
+    created_at: '2012-05-17T17:08:03.110Z',
+    name: 'workshop',
+  },
+  {
+    created_at: '2016-03-26T21:06:51.974Z',
+    name: 'extrusion',
+  },
+  {
+    created_at: '2015-02-23T23:04:03.609Z',
+    name: 'screening',
+  },
+]

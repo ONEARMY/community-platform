@@ -195,11 +195,7 @@ const ResearchForm = observer((props: IProps) => {
                                 validate={composeValidators(
                                   required,
                                   minValue(RESEARCH_TITLE_MIN_LENGTH),
-                                  validateTitle(
-                                    parentType,
-                                    formValues._id,
-                                    store,
-                                  ),
+                                  validateTitle(),
                                 )}
                                 isEqual={COMPARISONS.textInput}
                                 component={FieldInput}

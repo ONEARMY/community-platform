@@ -1,17 +1,15 @@
 export type QuestionSortOption =
   | 'MostRelevant'
   | 'Newest'
-  | 'LatestUpdated'
   | 'LatestComments'
   | 'Comments'
   | 'LeastComments'
 
 const BaseOptions = new Map<QuestionSortOption, string>()
 BaseOptions.set('Newest', 'Newest')
-BaseOptions.set('LatestUpdated', 'Latest Updated')
 // BaseOptions.set('LatestComments', 'Latest Comments')
-// BaseOptions.set('Comments', 'Comments')
-// BaseOptions.set('LeastComments', 'Least Comments')
+BaseOptions.set('Comments', 'Comments')
+BaseOptions.set('LeastComments', 'Least Comments')
 
 const QueryParamOptions = new Map<QuestionSortOption, string>(BaseOptions)
 QueryParamOptions.set('MostRelevant', 'Most Relevant')

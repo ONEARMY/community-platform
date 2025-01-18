@@ -1,16 +1,5 @@
 import { auth } from 'src/utils/firebase'
 
-const getCommentCount = async (ids: string[]): Promise<Map<string, number>> => {
-  const result = await fetch(`/api/comments/count`, {
-    method: 'POST',
-    body: JSON.stringify({
-      ids,
-    }),
-  })
-
-  return new Map<string, number>(Object.entries(await result.json()))
-}
-
 const deleteComment = async (sourceId: string | number, id: number) => {
   return await fetch(`/api/discussions/${sourceId}/comments/${id}`, {
     method: 'DELETE',
@@ -55,7 +44,6 @@ const postComment = async (
 }
 
 export const commentService = {
-  getCommentCount,
   postComment,
   editcomment,
   deleteComment,

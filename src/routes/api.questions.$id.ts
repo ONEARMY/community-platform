@@ -1,0 +1,249 @@
+import { UserRole } from 'oa-shared'
+import { verifyFirebaseToken } from 'src/firestore/firestoreAdmin.server'
+import { Question } from 'src/models/question.model'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { convertToSlug } from 'src/utils/slug'
+import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
+
+import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { Params } from '@remix-run/react'
+import type { SupabaseClient } from '@supabase/supabase-js'
+import type { DBImage } from 'src/models/image.model'
+import type { DBProfile } from 'src/models/profile.model'
+import type { DBQuestion } from 'src/models/question.model'
+
+export const action = async ({ request, params }: LoaderFunctionArgs) => {
+  try {
+    const formData = await request.formData()
+    const imagesToKeepIds = formData.getAll('existingImages')
+
+    const data = {
+      title: formData.get('title') as string,
+      description: formData.get('description') as string,
+      category: formData.has('category')
+        ? Number(formData.get('category'))
+        : null,
+      tags: formData.has('tags')
+        ? formData.getAll('tags').map((x) => Number(x))
+        : null,
+    }
+
+    const tokenValidation = await verifyFirebaseToken(
+      request.headers.get('firebaseToken')!,
+    )
+    const { client, headers } = createSupabaseServerClient(request)
+
+    const { valid, status, statusText } = await validateRequest(
+      params,
+      request,
+      tokenValidation.valid,
+      tokenValidation.user_id,
+      data,
+      client,
+    )
+
+    if (!valid) {
+      return Response.json({}, { status, statusText })
+    }
+
+    const uploadedImages = formData.getAll('images') as File[]
+    const imageValidation = validateImages(uploadedImages)
+
+    if (!imageValidation.valid) {
+      return Response.json(
+        {},
+        {
+          status: 400,
+          statusText: imageValidation.errors.join(', '),
+        },
+      )
+    }
+
+    const questionId = Number(params.id)
+
+    let images: DBImage[] = []
+
+    if (imagesToKeepIds.length > 0) {
+      const questionImages = await client
+        .from('questions')
+        .select('images')
+        .eq('id', params.id)
+        .single()
+
+      if (questionImages.data && questionImages.data?.images?.length > 0) {
+        images = questionImages.data.images.filter((x) =>
+          imagesToKeepIds.includes(x.id),
+        )
+      }
+    }
+
+    if (uploadedImages.length > 0) {
+      const imageResult = await uploadImages(questionId, uploadedImages, client)
+
+      if (imageResult) {
+        images = [...images, ...imageResult.images]
+      }
+    }
+
+    const slug = convertToSlug(data.title)
+    const questionResult = await client
+      .from('questions')
+      .update({
+        title: data.title,
+        description: data.description,
+        slug,
+        category: data.category,
+        tags: data.tags,
+        images,
+      })
+      .eq('id', params.id)
+      .select()
+
+    if (questionResult.error || !questionResult.data) {
+      throw questionResult.error
+    }
+
+    const question = Question.fromDB(questionResult.data[0], [])
+
+    return Response.json({ question }, { headers, status: 200 })
+  } catch (error) {
+    console.log(error)
+    return Response.json(
+      {},
+      { status: 500, statusText: 'Error creating question' },
+    )
+  }
+}
+
+async function isDuplicateSlug(
+  slug: string,
+  id: number,
+  client: SupabaseClient,
+) {
+  const { data } = await client
+    .from('questions')
+    .select('id,slug')
+    .eq('slug', slug)
+    .single()
+
+  return !!data?.id && data.id !== id
+}
+
+async function uploadImages(
+  questionId: number,
+  uploadedImages: File[],
+  client: SupabaseClient,
+) {
+  if (!uploadedImages || uploadedImages.length === 0) {
+    return null
+  }
+
+  // const files = await Promise.all(uploadedImages.map(image => image.arrayBuffer()))
+
+  const errors: string[] = []
+  const images: DBImage[] = []
+
+  for (const image of uploadedImages) {
+    const result = await client.storage
+      .from(process.env.TENANT_ID as string)
+      .upload(`questions/${questionId}/${image.name}`, image)
+
+    if (result.data === null) {
+      errors.push(`Error uploading image: ${image.name}`)
+      continue
+    }
+
+    images.push(result.data)
+  }
+
+  return { images, errors }
+}
+
+function validateImages(images: File[]) {
+  const errors: string[] = []
+  for (const image of images) {
+    if (!SUPPORTED_IMAGE_EXTENSIONS.includes(image.type)) {
+      errors.push(`Unsupported image extension: ${image.type}`)
+      continue
+    }
+  }
+
+  return { valid: errors.length === 0, errors }
+}
+
+async function validateRequest(
+  params: Params<string>,
+  request: Request,
+  isTokenValid: boolean,
+  userId: string,
+  data: any,
+  client: SupabaseClient,
+) {
+  if (!isTokenValid) {
+    return { status: 401, statusText: 'unauthorized' }
+  }
+
+  if (!userId) {
+    return { status: 400, statusText: 'user not found' }
+  }
+
+  if (request.method !== 'PUT') {
+    return { status: 405, statusText: 'method not allowed' }
+  }
+
+  if (!params.id) {
+    return { status: 400, statusText: 'id is required' }
+  }
+
+  if (!data.title) {
+    return { status: 400, statusText: 'title is required' }
+  }
+
+  if (!data.description) {
+    return { status: 400, statusText: 'description is required' }
+  }
+
+  const slug = convertToSlug(data.title)
+  const questionId = Number(params.id!)
+
+  if (await isDuplicateSlug(slug, questionId, client)) {
+    return {
+      status: 409,
+      statusText: 'This question already exists',
+    }
+  }
+
+  const existingQuestionResult = await client
+    .from('questions')
+    .select()
+    .eq('id', questionId)
+    .single()
+
+  if (existingQuestionResult.error || !existingQuestionResult.data) {
+    return { status: 400, statusText: 'Question not found' }
+  }
+
+  const existingQuestion = existingQuestionResult.data as DBQuestion
+
+  const userRequest = await client
+    .from('profiles')
+    .select()
+    .eq('firebase_auth_id', userId)
+    .single()
+
+  if (userRequest.error || !userRequest.data) {
+    return { status: 400, statusText: 'User not found' }
+  }
+
+  const user = userRequest.data as DBProfile
+
+  if (
+    existingQuestion.created_by !== user.id &&
+    !user.roles?.includes(UserRole.ADMIN) &&
+    !user.roles?.includes(UserRole.SUPER_ADMIN)
+  ) {
+    return { status: 403, statusText: 'Unauthorized' }
+  }
+
+  return { valid: true }
+}

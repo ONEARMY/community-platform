@@ -1,5 +1,6 @@
 import 'cypress-file-upload'
 
+import { createClient } from '@supabase/supabase-js'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { deleteDB } from 'idb'
 
@@ -8,6 +9,10 @@ import { Auth, TestDB } from './db/firebase'
 import type { ILibrary, IQuestionDB, IResearchDB } from 'oa-shared'
 import type { IUserSignUpDetails } from '../utils/TestUtils'
 import type { firebase } from './db/firebase'
+
+type SeedData = {
+  [tableName: string]: Array<Record<string, any>>
+}
 
 declare global {
   namespace Cypress {
@@ -23,7 +28,6 @@ declare global {
       login(
         username: string,
         password: string,
-        checkUI?: boolean,
       ): Promise<firebase.auth.UserCredential>
       /** logout of firebase, optionally check ui login element updated*/
       logout(checkUI?: boolean): Chainable<void>
@@ -235,3 +239,36 @@ Cypress.Commands.add('checkCommentItem', (comment: string, length: number) => {
   cy.checkCommentInViewport()
   cy.contains(comment)
 })
+
+const supabaseClient = (tenantId: string) =>
+  createClient(Cypress.env('SUPABASE_API_URL'), Cypress.env('SUPABASE_KEY'), {
+    global: {
+      headers: {
+        'x-tenant-id': tenantId,
+      },
+    },
+  })
+
+export const seedDatabase = async (
+  data: SeedData,
+  tenantId: string,
+): Promise<any> => {
+  const supabase = supabaseClient(tenantId)
+  const results = {}
+
+  // Convert to Promise.All
+  for (const [table, rows] of Object.entries(data)) {
+    results[table] = await supabase.from(table).insert(rows).select()
+  }
+
+  return results
+}
+
+export const clearDatabase = async (tables: string[], tenantId: string) => {
+  const supabase = supabaseClient(tenantId)
+
+  // sequential so there are no constraint issues
+  for (const table of tables) {
+    await supabase.from(table).delete().eq('tenant_id', tenantId)
+  }
+}

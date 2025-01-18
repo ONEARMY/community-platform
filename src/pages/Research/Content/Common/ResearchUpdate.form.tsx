@@ -221,10 +221,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                             px={2}
                             sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                           >
-                            <TitleField
-                              parentType={parentType}
-                              formValues={formValues}
-                            />
+                            <TitleField />
                             <DescriptionField />
                             <MediaFields values={values} />
                             <FilesFields

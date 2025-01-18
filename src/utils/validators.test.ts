@@ -14,10 +14,6 @@ vi.mock('src/stores/common/module.store')
 
 import { QUESTION_MIN_TITLE_LENGTH } from 'src/pages/Question/constants'
 
-import { ResearchStore } from '../stores/Research/research.store'
-
-import type { IRootStore } from 'src/stores/RootStore'
-
 describe('draftValidationWrapper', () => {
   it('forwards to the validator when draft save is not allowed', () => {
     const allowDraftSave = false
@@ -40,39 +36,15 @@ describe('draftValidationWrapper', () => {
 })
 
 describe('validateTitle', () => {
-  const isReusedMock = vi.fn()
-
-  class MockStore extends ResearchStore {
-    isTitleThatReusesSlug = isReusedMock
-  }
-
   afterEach(() => {
     vi.restoreAllMocks()
   })
 
   it('returns false when title reduces to a new slug', async () => {
-    isReusedMock.mockReturnValue(false)
     const title = 'A Clockwork Orange'
-    const validator = validateTitle(
-      'create',
-      'new-id',
-      new MockStore({} as IRootStore),
-    )
+    const validator = validateTitle()
 
-    expect(await validator(title)).toEqual(false)
-    expect(isReusedMock).toHaveBeenCalledWith(title, undefined)
-  })
-
-  it('returns helpful message when title reduces to a duplicate slug', async () => {
-    isReusedMock.mockReturnValue(true)
-    const duplicatedTitle = 'Creating a ToDo list'
-    const id = 'existing-id'
-    const validator = validateTitle('edit', id, new MockStore({} as IRootStore))
-
-    expect(await validator(duplicatedTitle)).toEqual(
-      'Titles must be unique, please try being more specific',
-    )
-    expect(isReusedMock).toHaveBeenCalledWith(duplicatedTitle, id)
+    expect(validator(title)).toEqual(false)
   })
 })
 

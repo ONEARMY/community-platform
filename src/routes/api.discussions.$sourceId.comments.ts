@@ -122,9 +122,8 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 
   const newComment = {
     comment: data.comment,
-    source_id_legacy:
-      typeof params.sourceId === 'string' ? params.sourceId : null,
-    source_id: typeof params.sourceId === 'number' ? params.sourceId : null,
+    source_id_legacy: isNaN(+params.sourceId!) ? params.sourceId : null,
+    source_id: isNaN(+params.sourceId!) ? null : +params.sourceId!,
     source_type: data.sourceType,
     created_by: currentUser.data.id,
     parent_id: data.parentId ?? null,

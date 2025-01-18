@@ -1,14 +1,14 @@
+import { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import { useNavigate } from '@remix-run/react'
 import { Button, ElWithBeforeIcon } from 'oa-components'
-import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { logger } from 'src/logger'
 import { QuestionPostingGuidelines } from 'src/pages/Question/Content/Common'
 import * as LABELS from 'src/pages/Question/labels'
-import { useQuestionStore } from 'src/stores/Question/question.store'
+import { questionService } from 'src/services/questionService'
 import { setAllowDraftSaveFalse } from 'src/utils/validators'
-import { Box, Card, Flex, Heading } from 'theme-ui'
+import { Alert, Box, Card, Flex, Heading } from 'theme-ui'
 
 import { QUESTION_MAX_IMAGES } from '../../constants'
 import { QuestionImagesField } from './FormFields/QuestionImage.field'
@@ -19,59 +19,106 @@ import {
   QuestionTitleField,
 } from './FormFields'
 
-import type { IQuestion } from 'oa-shared'
 import type { MainFormAction } from 'src/common/Form/types'
+import type { Question, QuestionFormData } from 'src/models/question.model'
 
 interface IProps {
   'data-testid'?: string
-  formValues?: any
+  question: Question
   parentType: MainFormAction
 }
 
 export const QuestionForm = (props: IProps) => {
-  const { formValues, parentType } = props
-
+  const { question, parentType } = props
   const navigate = useNavigate()
-  const store = useQuestionStore()
+  const [initialValues, setInitialValues] = useState<QuestionFormData>({
+    title: '',
+    description: '',
+    existingImages: [],
+    category: null,
+    tags: [],
+    images: [],
+  })
+  const [saveError, setSaveError] = useState<string | null>(null)
+  const id = question?.id || null
 
-  const onSubmit = async (formValues: Partial<IQuestion.FormInput>) => {
+  useEffect(() => {
+    if (!question) {
+      return
+    }
+
+    setInitialValues({
+      title: question.title,
+      description: question.description,
+      existingImages: question.images,
+      category: question.category
+        ? {
+            value: question.category.id?.toString(),
+            label: question.category.name,
+          }
+        : null,
+      tags: question.tagIds,
+      images: null,
+    })
+  }, [question])
+
+  const onSubmit = async (formValues: Partial<QuestionFormData>) => {
+    setSaveError(null)
+
     try {
-      const newDocument = await store.upsertQuestion(
-        formValues as IQuestion.FormInput,
-      )
-      if (newDocument) {
-        navigate('/questions/' + newDocument.slug)
+      const result = await questionService.upsert(id, {
+        title: formValues.title!,
+        description: formValues.description!,
+        tags: formValues.tags,
+        category: formValues.category || null,
+        images: formValues.images || null,
+        existingImages: initialValues.existingImages || null,
+      })
+
+      if (result) {
+        navigate('/questions/' + result.slug)
       }
     } catch (e) {
+      if (e.cause && e.message) {
+        setSaveError(e.message)
+      }
       logger.error(e)
     }
   }
 
-  const publishButtonText =
-    formValues?.moderation === IModerationStatus.DRAFT
-      ? LABELS.buttons.create
-      : LABELS.buttons[parentType]
-
-  const headingText = LABELS.headings[parentType]
+  const removeExistingImage = (index: number) => {
+    setInitialValues((prevState: QuestionFormData) => {
+      return {
+        ...prevState,
+        existingImages:
+          prevState.existingImages?.filter((_, i) => i !== index) ?? null,
+      }
+    })
+  }
 
   return (
     <Form
       data-testid={props['data-testid']}
       onSubmit={onSubmit}
       mutators={{ setAllowDraftSaveFalse }}
-      initialValues={formValues}
-      render={({ submitting, handleSubmit, pristine, valid, values }) => {
+      initialValues={initialValues}
+      render={({ submitting, handleSubmit, valid, values }) => {
         const numberOfImageInputsAvailable = (values as any)?.images
-          ? Math.min((values as any).images.length + 1, QUESTION_MAX_IMAGES)
+          ? Math.min(
+              (values as any).images.filter((x) => !!x).length + 1,
+              QUESTION_MAX_IMAGES,
+            )
           : 1
 
         return (
-          <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
+          <Flex sx={{ flexWrap: 'wrap', backgroundColor: 'inherit', mx: -2 }}>
             <Flex
-              bg="inherit"
-              px={2}
-              sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
-              mt={4}
+              sx={{
+                backgroundColor: 'inherit',
+                px: 2,
+                mt: 4,
+                width: ['100%', '100%', `${(2 / 3) * 100}%`],
+              }}
             >
               <Box
                 as="form"
@@ -84,7 +131,7 @@ export const QuestionForm = (props: IProps) => {
                     data-cy={`question-${parentType}-title`}
                     sx={{ alignItems: 'center', paddingX: 3, paddingY: 2 }}
                   >
-                    <Heading as="h1">{headingText}</Heading>
+                    <Heading as="h1">{LABELS.headings[parentType]}</Heading>
                     <Box ml="15px">
                       <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
                     </Box>
@@ -94,13 +141,12 @@ export const QuestionForm = (props: IProps) => {
                   <QuestionPostingGuidelines />
                 </Box>
                 <Card sx={{ marginTop: 4, padding: 4, overflow: 'visible' }}>
-                  <QuestionTitleField
-                    formValues={formValues}
-                    parentType={parentType}
-                  />
+                  <QuestionTitleField />
                   <QuestionDescriptionField />
                   <QuestionImagesField
                     inputsAvailable={numberOfImageInputsAvailable}
+                    existingImages={initialValues.existingImages}
+                    removeExistingImage={removeExistingImage}
                   />
                   <QuestionCategoryField />
                   <QuestionTagsField />
@@ -112,10 +158,10 @@ export const QuestionForm = (props: IProps) => {
                 flexDirection: 'column',
                 width: ['100%', '100%', `${100 / 3}%`],
                 height: '100%',
+                px: 2,
+                backgroundColor: 'inherit',
+                mt: [0, 0, 4],
               }}
-              bg="inherit"
-              px={2}
-              mt={[0, 0, 4]}
             >
               <Box
                 sx={{
@@ -129,19 +175,24 @@ export const QuestionForm = (props: IProps) => {
                 <Button
                   large
                   data-cy="submit"
-                  mt={3}
                   variant="primary"
                   type="submit"
-                  disabled={submitting || pristine || !valid}
+                  disabled={submitting || !valid}
                   onClick={handleSubmit}
                   sx={{
+                    mt: 3,
                     width: '100%',
                     mb: ['40px', '40px', 0],
                     display: 'block',
                   }}
                 >
-                  {publishButtonText}
+                  {LABELS.buttons[parentType]}
                 </Button>
+                {saveError && (
+                  <Alert variant="failure" sx={{ mt: 3 }}>
+                    {saveError}
+                  </Alert>
+                )}
               </Box>
             </Flex>
           </Flex>

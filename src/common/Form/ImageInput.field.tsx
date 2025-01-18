@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Text } from 'theme-ui'
 
 import { ImageInput } from './ImageInput/ImageInput'
@@ -23,27 +22,25 @@ export const ImageInputField = (props: IProps) => {
   }
 
   return (
-    <>
-      <FieldContainer
-        style={{
-          height: '100%',
-          width: '100%',
-          overflow: 'hidden',
-        }}
-        invalid={meta.touched && meta.error}
-        data-cy={dataCy}
-      >
-        {meta.error && meta.touched && (
-          <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>
-        )}
+    <FieldContainer
+      style={{
+        height: '100%',
+        width: '100%',
+        overflow: 'hidden',
+      }}
+      invalid={meta.touched && meta.error}
+      data-cy={dataCy}
+    >
+      {meta.error && meta.touched && (
+        <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>
+      )}
 
-        <ImageInput
-          {...rest}
-          dataTestId={dataTestId}
-          value={input.value}
-          onFilesChange={onFilesChange}
-        />
-      </FieldContainer>
-    </>
+      <ImageInput
+        {...rest}
+        dataTestId={dataTestId}
+        value={input.value}
+        onFilesChange={onFilesChange}
+      />
+    </FieldContainer>
   )
 }

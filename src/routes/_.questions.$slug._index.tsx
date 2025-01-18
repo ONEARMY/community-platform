@@ -1,23 +1,74 @@
-import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+import { IMAGE_SIZES } from 'src/config/imageTransforms'
+import { Question } from 'src/models/question.model'
+import { Tag } from 'src/models/tag.model'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
-import { questionService } from 'src/pages/Question/question.service'
 import { QuestionPage } from 'src/pages/Question/QuestionPage'
-import { pageViewService } from 'src/services/pageViewService.server'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { questionServiceServer } from 'src/services/questionService.server'
+import { storageServiceServer } from 'src/services/storageService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { IQuestionDB, IUploadedFileMeta } from 'oa-shared'
+import type { DBQuestion } from 'src/models/question.model'
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  const question = await questionService.getBySlug(params.slug as string)
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  const { client, headers } = createSupabaseServerClient(request)
 
-  if (question?._id) {
-    // not awaited to not block the render
-    pageViewService.incrementViewCount('questions', question._id)
+  const result = await questionServiceServer.getBySlug(client, params.slug!)
+
+  if (result.error || !result.data) {
+    return Response.json({ question: null }, { headers })
   }
 
-  return json({ question })
+  const dbQuestion = result.data as unknown as DBQuestion
+
+  if (dbQuestion.id) {
+    client
+      .from('questions')
+      .update({ total_views: (dbQuestion.total_views || 0) + 1 })
+      .eq('id', dbQuestion.id)
+  }
+
+  const tagIds = dbQuestion.tags
+  let tags: Tag[] = []
+  if (tagIds?.length > 0) {
+    const tagsResult = await client
+      .from('tags')
+      .select('id,name')
+      .in('id', tagIds)
+
+    if (tagsResult.data) {
+      tags = tagsResult.data.map((x) => Tag.fromDB(x))
+    }
+  }
+
+  const [usefulVotes, subscribers] = await Promise.all([
+    client
+      .from('useful_votes')
+      .select('*', { count: 'exact' })
+      .eq('content_id', dbQuestion.id)
+      .eq('content_type', 'questions'),
+    client
+      .from('subscribers')
+      .select('user_id', { count: 'exact' })
+      .eq('content_id', dbQuestion.id)
+      .eq('content_type', 'questions'),
+  ])
+
+  const images = dbQuestion.images
+    ? storageServiceServer.getImagesPublicUrls(
+        client,
+        dbQuestion.images,
+        IMAGE_SIZES.GALLERY,
+      )
+    : []
+
+  const question = Question.fromDB(dbQuestion, tags, images)
+  question.usefulCount = usefulVotes.count || 0
+  question.subscriberCount = subscribers.count || 0
+
+  return Response.json({ question }, { headers })
 }
 
 export function HydrateFallback() {
@@ -27,21 +78,21 @@ export function HydrateFallback() {
 }
 
 export const meta = mergeMeta<typeof loader>(({ data }) => {
-  const question = data?.question as IQuestionDB
+  const question = data?.question as Question
 
   if (!question) {
     return []
   }
 
   const title = `${question.title} - Question - ${import.meta.env.VITE_SITE_NAME}`
-  const imageUrl = (question.images?.at(0) as IUploadedFileMeta)?.downloadUrl
+  const imageUrl = question.images?.at(0)?.publicUrl
 
   return generateTags(title, question.description, imageUrl)
 })
 
 export default function Index() {
   const data = useLoaderData<typeof loader>()
-  const question = data.question as IQuestionDB
+  const question = data.question as Question
 
   if (!question) {
     return <NotFoundPage />

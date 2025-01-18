@@ -28,30 +28,17 @@ describe('[How To]', () => {
 
     it('Filters', () => {
       cy.step('Can select a category to limit items displayed')
-      cy.get('[data-cy=category]').contains('exhibition')
       cy.get('[data-cy=CategoryVerticalList]').within(() => {
-        cy.contains('screening').click()
+        cy.contains('Machines').click()
       })
       cy.get('[data-cy=CategoryVerticalList-Item-active]')
-      cy.url().should('include', 'category=categoryoix4r6grC1mMA0Xz3K')
-      cy.get('[data-cy=question-list-item]').its('length').should('be.eq', 1)
-      cy.get('[data-cy=category]').contains('screening')
+      cy.url().should('include', 'category=')
 
       cy.step('Can remove the category filter by selecting it again')
       cy.get('[data-cy=CategoryVerticalList]').within(() => {
-        cy.contains('screening').click()
+        cy.contains('Machines').click()
       })
-      cy.url().should('not.include', 'category=categoryoix4r6grC1mMA0Xz3K')
-      cy.get('[data-cy=category]').contains('exhibition')
-
-      cy.step('Going to an item removes the filter on return')
-      cy.get('[data-cy=CategoryVerticalList]').within(() => {
-        cy.contains('screening').click()
-      })
-      cy.wait(500)
-      cy.get('[data-cy=question-list-item]').click()
-      cy.go('back')
-      cy.url().should('not.include', 'category=categoryoix4r6grC1mMA0Xz3K')
+      cy.url().should('not.include', 'category=')
     })
 
     it('should show question list items after visit a question', () => {

@@ -7,17 +7,15 @@ import { act, render, waitFor, within } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
 import { UserRole } from 'oa-shared'
-import { useQuestionStore } from 'src/stores/Question/question.store'
 import { FactoryDiscussion } from 'src/test/factories/Discussion'
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { QuestionPage } from './QuestionPage'
 
-import type { IQuestionDB } from 'oa-shared'
-import type { Mock } from 'vitest'
+import type { Question } from 'src/models/question.model'
 
 const Theme = testingThemeStyles
 
@@ -58,17 +56,6 @@ vi.mock('src/stores/Question/question.store')
 vi.mock('src/stores/Discussions/discussions.store')
 
 describe('Questions', () => {
-  let mockQuestionStore
-
-  beforeEach(() => {
-    // Setup a fresh instance of the mock store before each test
-    mockQuestionStore = {
-      toggleSubscriberStatusByUserName: vi.fn(),
-      toggleUsefulByUser: vi.fn(),
-    }
-    ;(useQuestionStore as Mock).mockReturnValue(mockQuestionStore)
-  })
-
   afterEach(() => {
     // Clear all mocks after each test to ensure there's no leakage between tests
     vi.clearAllMocks()
@@ -79,13 +66,9 @@ describe('Questions', () => {
       // Arrange
       mockQuestionItem.title =
         'Do you prefer camping near a lake or in a forest?'
-      mockQuestionItem.questionCategory = {
-        label: 'Preference',
-        _id: faker.string.uuid(),
-        _modified: faker.date.past().toString(),
-        _created: faker.date.past().toString(),
-        _deleted: faker.datatype.boolean(),
-        _contentModifiedTimestamp: faker.date.past().toString(),
+      mockQuestionItem.category = {
+        name: 'Preference',
+        id: faker.number.int(),
       }
 
       // Act
@@ -120,7 +103,7 @@ describe('Questions', () => {
       // Arrange
       mockQuestionItem.title =
         'Do you prefer camping near a lake or in a forest?'
-      mockQuestionItem.questionCategory = undefined
+      mockQuestionItem.category = null
 
       // Act
       let wrapper
@@ -149,7 +132,7 @@ describe('Questions', () => {
   })
 })
 
-const getWrapper = (question: IQuestionDB) => {
+const getWrapper = (question: Question) => {
   const router = createMemoryRouter(
     createRoutesFromElements(
       <Route

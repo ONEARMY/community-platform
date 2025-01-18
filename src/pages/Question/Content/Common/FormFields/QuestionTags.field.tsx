@@ -1,22 +1,21 @@
 import { Field } from 'react-final-form'
-import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
+import { TagsSelectFieldV2 } from 'src/common/Form/TagsSelectFieldV2'
 import { FormFieldWrapper } from 'src/pages/Library/Content/Common'
 import { fields } from 'src/pages/Question/labels'
 import { COMPARISONS } from 'src/utils/comparisons'
 
 export const QuestionTagsField = () => {
-  const { title } = fields.tags
   const name = 'tags'
 
   return (
-    <FormFieldWrapper htmlFor={name} text={title}>
+    <FormFieldWrapper htmlFor={name} text={fields.tags.title}>
       <Field
         data-cy={`field-${name}`}
         name={name}
         id={name}
-        component={TagsSelectField}
+        component={TagsSelectFieldV2}
         category="question"
-        isEqual={COMPARISONS.tags}
+        isEqual={COMPARISONS.tagsSupabase}
       />
     </FormFieldWrapper>
   )

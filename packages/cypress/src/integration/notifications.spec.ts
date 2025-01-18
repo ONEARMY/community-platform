@@ -1,11 +1,11 @@
-import { generateNewUserDetails } from '../utils/TestUtils'
+// import { generateNewUserDetails } from '../utils/TestUtils'
 
 /**
  * Time to wait before checking database for updates to try ensure writes
  * TODO - CC 2022-04-25 - Likely some of these waits can be replaced by search for UI elements
  * that should respond to change
  */
-const DB_WAIT_TIME = 5000
+// const DB_WAIT_TIME = 5000
 
 describe('[Notifications]', () => {
   // Can't test like this now because we are now using the same users collection for all tests.

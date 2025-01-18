@@ -1,120 +1,109 @@
-import '@testing-library/jest-dom/vitest'
-
-import { ResearchStatus } from 'oa-shared'
 import { describe, expect, it, vi } from 'vitest'
 
-import { exportedForTesting } from './research.service'
+import { researchService } from './research.service'
 
-const mockWhere = vi.fn()
-const mockOrderBy = vi.fn()
-const mockLimit = vi.fn()
-vi.mock('firebase/firestore', () => ({
-  collection: vi.fn(),
-  query: vi.fn(),
-  and: vi.fn(),
-  where: (path, op, value) => mockWhere(path, op, value),
-  limit: (limit) => mockLimit(limit),
-  orderBy: (field, direction) => mockOrderBy(field, direction),
-}))
+describe('research.service', () => {
+  describe('search', () => {
+    it('fetches research articles based on search criteria', async () => {
+      // Mock successful fetch response
+      global.fetch = vi.fn().mockResolvedValue({
+        json: () =>
+          Promise.resolve({
+            items: [{ id: '1', title: 'Sample Research' }],
+            total: 1,
+          }),
+      })
 
-vi.mock('../../stores/databaseV2/endpoints', () => ({
-  DB_ENDPOINTS: {
-    research: 'research',
-    researchCategories: 'researchCategories',
-  },
-}))
+      // Call search with mock parameters
+      const result = await researchService.search(
+        ['sample'],
+        'science',
+        'Newest',
+        null,
+      )
 
-vi.mock('../../config/config', () => ({
-  getConfigurationOption: vi.fn(),
-  FIREBASE_CONFIG: {
-    apiKey: 'AIyChVN',
-    databaseURL: 'https://test.firebaseio.com',
-    projectId: 'test',
-    storageBucket: 'test.appspot.com',
-  },
-  localStorage: vi.fn(),
-  SITE: 'unit-tests',
-}))
+      // Assert results
+      expect(result).toEqual({
+        items: [{ id: '1', title: 'Sample Research' }],
+        total: 1,
+      })
+    })
 
-describe('research.search', () => {
-  it('searches for text', () => {
-    // prepare
-    const words = ['test', 'text']
+    it('handles errors in search', async () => {
+      global.fetch = vi.fn().mockRejectedValue('error')
 
-    // act
-    exportedForTesting.createSearchQuery(words, '', 'MostRelevant', null)
+      const result = await researchService.search(
+        ['sample'],
+        'science',
+        'Newest',
+        null,
+      )
 
-    // assert
-    expect(mockWhere).toHaveBeenCalledWith(
-      'keywords',
-      'array-contains-any',
-      words,
-    )
+      expect(result).toEqual({ items: [], total: 0 })
+    })
   })
 
-  it('filters by category', () => {
-    // prepare
-    const category = 'cat1'
+  describe('getResearchCategories', () => {
+    it('fetches research categories', async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        json: () =>
+          Promise.resolve({ categories: [{ id: 'cat1', name: 'Science' }] }),
+      })
 
-    // act
-    exportedForTesting.createSearchQuery([], category, 'MostRelevant', null)
+      const result = await researchService.getResearchCategories()
 
-    // assert
-    expect(mockWhere).toHaveBeenCalledWith(
-      'researchCategory._id',
-      '==',
-      category,
-    )
+      expect(result).toEqual([{ id: 'cat1', name: 'Science' }])
+    })
+
+    it('handles errors in fetching research categories', async () => {
+      global.fetch = vi.fn().mockRejectedValue('error')
+
+      const result = await researchService.getResearchCategories()
+
+      expect(result).toEqual([])
+    })
   })
 
-  it('should not call orderBy if sorting by most relevant', () => {
-    // act
-    exportedForTesting.createSearchQuery(['test'], '', 'MostRelevant', null)
+  describe('getDraftCount', () => {
+    it('fetches draft count for a user', async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        json: () => Promise.resolve({ total: 5 }),
+      })
 
-    // assert
-    expect(mockOrderBy).toHaveBeenCalledTimes(0)
+      const result = await researchService.getDraftCount('user123')
+
+      expect(result).toBe(5)
+    })
+
+    it('handles errors in fetching draft count', async () => {
+      global.fetch = vi.fn().mockRejectedValue('error')
+
+      const result = await researchService.getDraftCount('user123')
+
+      expect(result).toBe(0)
+    })
   })
 
-  it('should call orderBy when sorting is not MostRelevant', () => {
-    // act
-    exportedForTesting.createSearchQuery(['test'], '', 'Newest', null)
+  describe('getDrafts', () => {
+    it('fetches research drafts for a user', async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        json: () =>
+          Promise.resolve({
+            items: [{ id: 'draft1', title: 'Draft Research' }],
+          }),
+      })
 
-    // assert
-    expect(mockOrderBy).toHaveBeenLastCalledWith('_created', 'desc')
-  })
+      const result = await researchService.getDrafts('user123')
 
-  it('should filter by research status', () => {
-    // act
-    exportedForTesting.createSearchQuery(
-      ['test'],
-      '',
-      'Newest',
-      ResearchStatus.COMPLETED,
-    )
+      expect(result).toEqual([{ id: 'draft1', title: 'Draft Research' }])
+    })
 
-    // assert
-    expect(mockWhere).toHaveBeenCalledWith(
-      'researchStatus',
-      '==',
-      ResearchStatus.COMPLETED,
-    )
-  })
+    it('handles errors in fetching drafts', async () => {
+      global.fetch = vi.fn().mockRejectedValue('error')
 
-  it('should limit results', () => {
-    // prepare
-    const take = 12
+      const result = await researchService.getDrafts('user123')
 
-    // act
-    exportedForTesting.createSearchQuery(
-      ['test'],
-      '',
-      'Newest',
-      null,
-      undefined,
-      take,
-    )
-
-    // assert
-    expect(mockLimit).toHaveBeenLastCalledWith(take)
+      expect(result).toEqual([])
+    })
   })
 })

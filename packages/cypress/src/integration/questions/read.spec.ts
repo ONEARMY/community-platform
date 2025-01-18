@@ -1,15 +1,8 @@
 import { MOCK_DATA } from '../../data'
-import { clearDatabase } from '../../support/commands'
-import { seedQuestions } from '../../support/seedQuestions'
 
 const question = MOCK_DATA.questions[0]
 
 describe('[Questions]', () => {
-  before(() => {
-    cy.then(async () => {
-      await seedQuestions()
-    })
-  })
   describe('[List questions]', () => {
     it('[By Everyone]', () => {
       cy.visit(`/questions/`)
@@ -86,14 +79,7 @@ describe('[Questions]', () => {
         .should('have.attr', 'href')
         .and('equal', `/questions`)
 
-      // cy.get('[data-cy=breadcrumbsItem]')
-      //   .eq(1)
-      //   .should('contain', questionCategory.label)
-      // cy.get('[data-cy=breadcrumbsItem]')
-      //   .eq(1)
-      //   .children()
-      //   .should('have.attr', 'href')
-      //   .and('equal', `/questions?category=${questionCategory._id}`)
+      cy.get('[data-cy=breadcrumbsItem]').eq(1).should('contain', 'Machines')
 
       cy.get('[data-cy=breadcrumbsItem]').eq(2).should('contain', title)
 
@@ -102,19 +88,10 @@ describe('[Questions]', () => {
       cy.visit(`/questions/${slug}`) // Page doesn't reload after login
 
       // cy.get('[data-cy=follow-button]').click()
-      // cy.contains(`${subscribers.length + 1} following`)
+      // cy.contains(`1 following`)
 
       // cy.get('[data-cy=vote-useful]').click()
-      // cy.contains(`${votedUsefulBy.length + 1} useful`)
+      // cy.contains(`1 useful`)
     })
-  })
-
-  after(() => {
-    const tenantId = Cypress.env('TENANT_ID')
-    Cypress.log({
-      displayName: 'Clearing database for tenant',
-      message: tenantId,
-    })
-    clearDatabase(['profiles', 'questions', 'categories'], tenantId)
   })
 })

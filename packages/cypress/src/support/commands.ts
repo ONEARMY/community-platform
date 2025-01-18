@@ -267,9 +267,8 @@ export const seedDatabase = async (
 export const clearDatabase = async (tables: string[], tenantId: string) => {
   const supabase = supabaseClient(tenantId)
 
-  await Promise.all(
-    tables.map((table) =>
-      supabase.from(table).delete().eq('tenant_id', tenantId),
-    ),
-  )
+  // sequential so there are no constraint issues
+  for (const table of tables) {
+    await supabase.from(table).delete().eq('tenant_id', tenantId)
+  }
 }

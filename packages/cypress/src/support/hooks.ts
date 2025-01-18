@@ -1,3 +1,6 @@
+import { clearDatabase } from './commands'
+import { seedQuestions } from './seedQuestions'
+
 /**
  * Before all tests begin seed the database. CY runs this before all specs.
  * Note, cy also automatically will clear browser caches.
@@ -16,6 +19,9 @@ before(() => {
   Cypress.Promise.onPossiblyUnhandledRejection((error) => {
     throw error
   })
+  cy.then(async () => {
+    await seedQuestions()
+  })
   localStorage.clear()
   cy.clearServiceWorkers()
   cy.deleteIDB('OneArmyCache')
@@ -24,4 +30,16 @@ before(() => {
 afterEach(() => {
   // ensure all tests are also logged out (skip ui check in case page not loaded)
   cy.logout(false)
+})
+
+after(() => {
+  const tenantId = Cypress.env('TENANT_ID')
+  Cypress.log({
+    displayName: 'Clearing database for tenant',
+    message: tenantId,
+  })
+  clearDatabase(
+    ['profiles', 'questions', 'comments', 'categories', 'tags'],
+    tenantId,
+  )
 })

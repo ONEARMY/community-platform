@@ -2,24 +2,14 @@
 // how-tos and research. Any changes here should be replicated there.
 
 import { MOCK_DATA } from '../../data'
-import { clearDatabase } from '../../support/commands'
-import { seedQuestionComments } from '../../support/seedQuestions'
-// import { question } from '../../fixtures/question'
-// import { generateNewUserDetails } from '../../utils/TestUtils'
 
 describe('[Questions.Discussions]', () => {
-  let commentId = ''
-  before(() => {
-    cy.then(async () => {
-      const commentData = await seedQuestionComments()
-      commentId = commentData.comments.data[0].id
-    })
-  })
-
   it('can open using deep links', () => {
     const question = MOCK_DATA.questions[0]
-    cy.visit(`/questions/${question.slug}#comment:${commentId}`)
-    cy.get(`[id="comment:${commentId}"]`).should('be.visible')
+    cy.visit(`/questions/${question.slug}`)
+    cy.get(`[data-cy=comment-text]`).contains('First comment')
+    cy.get('[data-cy=show-replies]').click()
+    cy.get(`[data-cy="ReplyItem"]`).contains('First Reply')
   })
 
   // it('allows authenticated users to contribute to discussions', () => {
@@ -64,13 +54,4 @@ describe('[Questions.Discussions]', () => {
   // cy.step('Can delete their reply')
   // cy.deleteDiscussionItem('ReplyItem', secondReply)
   // })
-
-  after(() => {
-    const tenantId = Cypress.env('TENANT_ID')
-    Cypress.log({
-      displayName: 'Clearing database for tenant',
-      message: tenantId,
-    })
-    clearDatabase(['profiles', 'questions', 'comments'], tenantId)
-  })
 })

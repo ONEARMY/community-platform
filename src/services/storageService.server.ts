@@ -7,16 +7,19 @@ import type { DBImage } from 'src/models/image.model'
 const getImagesPublicUrls = (
   client: SupabaseClient,
   images: DBImage[],
-  size: ImageSize,
+  size?: ImageSize,
 ) => {
   return images?.map((x) => {
     const { data } = client.storage
       .from(process.env.TENANT_ID as string)
-      .getPublicUrl(x.path, {
-        transform: {
-          height: size,
-        },
-      })
+      .getPublicUrl(
+        x.path,
+        size
+          ? {
+              transform: size,
+            }
+          : undefined,
+      )
     return new Image({ id: x.id, publicUrl: data.publicUrl })
   })
 }

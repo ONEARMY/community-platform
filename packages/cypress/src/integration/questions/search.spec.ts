@@ -1,18 +1,9 @@
-import { clearDatabase } from '../../support/commands'
-import { seedQuestions } from '../../support/seedQuestions'
-
 describe('[How To]', () => {
   beforeEach(() => {
     cy.visit('/questions')
   })
 
   describe('[By Everyone]', () => {
-    before(() => {
-      cy.then(async () => {
-        await seedQuestions()
-      })
-    })
-
     it('Searches', () => {
       cy.step('Can search for items')
       cy.get('[data-cy=questions-search-box]').clear().type(`deal`)
@@ -61,15 +52,6 @@ describe('[How To]', () => {
       cy.get('[data-cy=question-list-item]:eq(21)').should('not.exist')
       cy.get('[data-cy=load-more]').click()
       cy.get('[data-cy=question-list-item]:eq(21)').should('exist')
-    })
-
-    after(() => {
-      const tenantId = Cypress.env('TENANT_ID')
-      Cypress.log({
-        displayName: 'Clearing database for tenant',
-        message: tenantId,
-      })
-      clearDatabase(['profiles', 'questions', 'categories'], tenantId)
     })
   })
 })

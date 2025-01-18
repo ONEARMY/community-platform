@@ -43,7 +43,10 @@ export const ChangePasswordForm = () => {
     >
       <UserContactError submitResults={submitResults} />
 
-      <Accordion title="Change Password">
+      <Accordion
+        title="Change Password"
+        subtitle="Here you can change your password to a stronger one."
+      >
         <Form
           onSubmit={onSubmit}
           id={formId}

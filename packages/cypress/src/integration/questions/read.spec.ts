@@ -1,15 +1,8 @@
 import { MOCK_DATA } from '../../data'
-import { clearDatabase } from '../../support/commands'
-import { seedQuestions } from '../../support/seedQuestions'
 
 const question = MOCK_DATA.questions[0]
 
 describe('[Questions]', () => {
-  before(() => {
-    cy.then(async () => {
-      await seedQuestions()
-    })
-  })
   describe('[List questions]', () => {
     it('[By Everyone]', () => {
       cy.visit(`/questions/`)
@@ -100,14 +93,5 @@ describe('[Questions]', () => {
       // cy.get('[data-cy=vote-useful]').click()
       // cy.contains(`1 useful`)
     })
-  })
-
-  after(() => {
-    const tenantId = Cypress.env('TENANT_ID')
-    Cypress.log({
-      displayName: 'Clearing database for tenant',
-      message: tenantId,
-    })
-    clearDatabase(['profiles', 'questions', 'categories'], tenantId)
   })
 })

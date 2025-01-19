@@ -23,9 +23,9 @@ export async function action({ request, params }: LoaderFunctionArgs) {
     .from('profiles')
     .select()
     .eq('firebase_auth_id', user_id)
-    .single()
+    .limit(1)
 
-  if (!profileResult.data || profileResult.error) {
+  if (!profileResult.data?.at(0) || profileResult.error) {
     console.error(profileResult.error + ' user:' + user_id)
     return Response.json({}, { status: 400, statusText: 'user not found' })
   }
@@ -35,7 +35,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
     result = await client.from('subscribers').insert({
       content_type: params.contentType,
       content_id: Number(params.contentId),
-      user_id: profileResult.data.id,
+      user_id: profileResult.data[0].id,
       tenant_id: process.env.TENANT_ID!,
     })
   } else {
@@ -44,7 +44,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
       .delete()
       .eq('content_type', params.contentType)
       .eq('content_id', Number(params.contentId))
-      .eq('user_id', profileResult.data.id)
+      .eq('user_id', profileResult.data[0].id)
       .eq('tenant_id', process.env.TENANT_ID!)
   }
 

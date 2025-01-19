@@ -229,13 +229,13 @@ async function validateRequest(
     .from('profiles')
     .select()
     .eq('firebase_auth_id', userId)
-    .single()
+    .limit(1)
 
-  if (userRequest.error || !userRequest.data) {
+  if (userRequest.error || !userRequest.data?.at(0)) {
     return { status: 400, statusText: 'User not found' }
   }
 
-  const user = userRequest.data as DBProfile
+  const user = userRequest.data[0] as DBProfile
 
   if (
     existingQuestion.created_by !== user.id &&

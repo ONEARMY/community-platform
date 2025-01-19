@@ -126,13 +126,13 @@ async function getProfileByFirebaseAuthId(
     .from('profiles')
     .select()
     .eq('firebase_auth_id', firebaseAuthId)
-    .single()
+    .limit(1)
 
-  if (error || !data) {
+  if (error || !data?.at(0)) {
     return null
   }
 
-  return data as DBProfile
+  return data[0] as DBProfile
 }
 
 function isUserAdmin(user: DBProfile) {

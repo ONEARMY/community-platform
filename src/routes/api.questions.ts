@@ -145,14 +145,14 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       .from('profiles')
       .select()
       .eq('firebase_auth_id', tokenValidation.user_id)
-      .single()
+      .limit(1)
 
-    if (userRequest.error || !userRequest.data) {
+    if (userRequest.error || !userRequest.data?.at(0)) {
       console.log(userRequest.error)
       return Response.json({}, { status: 400, statusText: 'User not found' })
     }
 
-    const user = userRequest.data
+    const user = userRequest.data[0]
 
     const questionResult = await client
       .from('questions')

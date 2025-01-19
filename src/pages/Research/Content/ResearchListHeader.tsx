@@ -108,7 +108,7 @@ export const ResearchFilterHeader = (props: IProps) => {
               handleShowDrafts={handleShowDrafts}
             />
           )}
-          <Link to={isUserLoggedIn ? '/research/create' : '/sign-up'}>
+          <Link to={isUserLoggedIn ? '/research/create' : '/sign-in'}>
             <Button type="button" variant="primary" data-cy="create">
               {listing.create}
             </Button>

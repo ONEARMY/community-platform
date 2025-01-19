@@ -14,7 +14,7 @@ enum Status {
 const StatusMessage = ({ status }: { status: Status }) => {
   const loginLink = (
     <a
-      href="/sign-in"
+      href={'/sign-in?returnUrl=' + encodeURIComponent(location.pathname)}
       style={{
         textDecoration: 'underline',
         color: 'inherit',

@@ -1,48 +1,55 @@
 import { UserRole } from 'oa-shared'
-import { verifyFirebaseToken } from 'src/firestore/firestoreAdmin.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
+import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { DBComment } from 'src/models/comment.model'
 import type { DBProfile } from 'src/models/profile.model'
 
-export async function action({ params, request }: LoaderFunctionArgs) {
-  const tokenValidation = await verifyFirebaseToken(
-    request.headers.get('firebaseToken')!,
-  )
+type Supabase = {
+  headers: Headers
+  client: SupabaseClient<any, 'public', any>
+}
 
-  const userId = tokenValidation.user_id
+export async function action({ params, request }: LoaderFunctionArgs) {
+  const supabase = createSupabaseServerClient(request)
+
+  const {
+    data: { user },
+  } = await supabase.client.auth.getUser()
 
   const { valid, status, statusText } = await validateRequest(
     params,
     request,
-    tokenValidation.valid,
-    userId,
+    user,
   )
 
   if (!valid) {
     return Response.json({}, { status, statusText })
   }
 
-  const user = await getProfileByFirebaseAuthId(request, userId)
+  const profile = await getProfileByAuthId(request, user!.id)
 
-  if (!user) {
+  if (!profile) {
     return Response.json({}, { status: 400, statusText: 'user not found' })
   }
 
   const commentId: string = params.id!
 
   if (request.method === 'DELETE') {
-    return deleteComment(request, commentId, user)
+    return deleteComment(supabase, commentId, profile)
   }
 
-  return updateComment(request, commentId, user)
+  return updateComment(supabase, request, commentId, profile)
 }
 
-async function updateComment(request: Request, id: string, user: DBProfile) {
-  const { client, headers } = createSupabaseServerClient(request)
-
+async function updateComment(
+  { client, headers }: Supabase,
+  request: Request,
+  id: string,
+  user: DBProfile,
+) {
   const json = await request.json()
 
   if (!json.comment) {
@@ -81,9 +88,11 @@ async function updateComment(request: Request, id: string, user: DBProfile) {
   return new Response(null, { headers, status: 204 })
 }
 
-async function deleteComment(request: Request, id: string, user: DBProfile) {
-  const { client, headers } = createSupabaseServerClient(request)
-
+async function deleteComment(
+  { client, headers }: Supabase,
+  id: string,
+  user: DBProfile,
+) {
   const { data, error } = await client
     .from('comments')
     .select()
@@ -116,16 +125,13 @@ async function deleteComment(request: Request, id: string, user: DBProfile) {
   return new Response(null, { headers, status: 204 })
 }
 
-async function getProfileByFirebaseAuthId(
-  request: Request,
-  firebaseAuthId: string,
-) {
+async function getProfileByAuthId(request: Request, authId: string) {
   const { client } = createSupabaseServerClient(request)
 
   const { data, error } = await client
     .from('profiles')
     .select()
-    .eq('firebase_auth_id', firebaseAuthId)
+    .eq('auth_id', authId)
     .single()
 
   if (error || !data) {
@@ -146,15 +152,10 @@ function isUserAdmin(user: DBProfile) {
 async function validateRequest(
   params: Params<string>,
   request: Request,
-  isTokenValid: boolean,
-  userId: string,
+  user: User | null,
 ) {
-  if (!isTokenValid) {
+  if (!user) {
     return { status: 401, statusText: 'unauthorized' }
-  }
-
-  if (!userId) {
-    return { status: 400, statusText: 'user not found' }
   }
 
   if (!params.sourceId) {

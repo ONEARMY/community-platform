@@ -150,7 +150,7 @@ const LoginPrompt = () => {
       <Text data-cy="comments-login-prompt">
         Hi there!{' '}
         <Link
-          to="/sign-in"
+          to={'/sign-in?returnUrl=' + encodeURIComponent(location.pathname)}
           style={{
             textDecoration: 'underline',
             color: 'inherit',

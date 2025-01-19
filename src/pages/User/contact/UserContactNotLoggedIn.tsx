@@ -18,7 +18,7 @@ export const UserContactNotLoggedIn = ({ displayName }: Props) => {
         </Text>
         <Flex sx={{ alignItems: 'center', flexDirection: 'row', gap: 2 }}>
           <Link
-            to="/sign-in"
+            to={'/sign-in?returnUrl=' + encodeURIComponent(location.pathname)}
             style={{
               textDecoration: 'underline',
               color: 'inherit',
@@ -26,7 +26,9 @@ export const UserContactNotLoggedIn = ({ displayName }: Props) => {
           >
             Login
           </Link>
-          <Link to="/sign-up">
+          <Link
+            to={'/sign-in?returnUrl=' + encodeURIComponent(location.pathname)}
+          >
             <Button type="button" icon="star">
               Sign-up now
             </Button>

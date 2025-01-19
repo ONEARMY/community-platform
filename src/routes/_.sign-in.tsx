@@ -83,8 +83,14 @@ export default function Index() {
                     >
                       <Flex sx={{ gap: 2, flexDirection: 'column' }}>
                         <Heading>Log in</Heading>
-                        <Text sx={{ fontSize: 1 }} color={'grey'}>
-                          <Link to="/sign-up" data-cy="no-account">
+                        <Text sx={{ fontSize: 1 }} color="grey">
+                          <Link
+                            to={
+                              '/sign-up?returnUrl=' +
+                              encodeURIComponent(location.pathname)
+                            }
+                            data-cy="no-account"
+                          >
                             Don't have an account? Sign-up here
                           </Link>
                         </Text>

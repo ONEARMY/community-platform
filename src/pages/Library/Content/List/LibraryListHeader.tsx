@@ -146,7 +146,7 @@ export const HowtoHeader = (props: IProps) => {
           handleShowDrafts={handleShowDrafts}
         />
       )}
-      <Link to={isUserLoggedIn ? '/library/create' : '/sign-up'}>
+      <Link to={isUserLoggedIn ? '/library/create' : '/sign-in'}>
         <Button
           type="button"
           sx={{ width: '100%' }}

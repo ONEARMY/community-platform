@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-unresolved
+import { ClientOnly } from 'remix-utils/client-only'
 import { Box, Flex } from 'theme-ui'
 
 import ProfileButtonItem from './ProfileButtonItem'
@@ -32,51 +34,67 @@ const ProfileButtons = (props: IProps) => {
             display: 'block',
           }}
         >
-          <ProfileButtonItem
-            link="/sign-in"
-            text="Login"
-            variant="secondary"
-            sx={{
-              ..._commonMobileBtnStyle,
-              fontWeight: 'bold',
-              marginRight: 2,
-              marginBottom: 2,
-            }}
-            isMobile={true}
-          />
-          <ProfileButtonItem
-            link={'/sign-up'}
-            text="Join"
-            variant="outline"
-            isMobile={true}
-            sx={{
-              ..._commonMobileBtnStyle,
-            }}
-          />
+          <ClientOnly fallback={<></>}>
+            {() => (
+              <>
+                <ProfileButtonItem
+                  link={
+                    '/sign-in?returnUrl=' +
+                    encodeURIComponent(location.pathname)
+                  }
+                  text="Login"
+                  variant="secondary"
+                  sx={{
+                    ..._commonMobileBtnStyle,
+                    fontWeight: 'bold',
+                    marginRight: 2,
+                    marginBottom: 2,
+                  }}
+                  isMobile={true}
+                />
+                <ProfileButtonItem
+                  link={
+                    '/sign-in?returnUrl=' +
+                    encodeURIComponent(location.pathname)
+                  }
+                  text="Join"
+                  variant="outline"
+                  isMobile={true}
+                  sx={{
+                    ..._commonMobileBtnStyle,
+                  }}
+                />
+              </>
+            )}
+          </ClientOnly>
         </Box>
       </Flex>
     )
   }
 
   return (
-    <>
-      <ProfileButtonItem
-        link="/sign-in"
-        text="Login"
-        variant="secondary"
-        sx={{
-          fontWeight: 'bold',
-          marginRight: 2,
-          fontSize: 2,
-        }}
-      />
-      <ProfileButtonItem
-        link="/sign-up"
-        text="Join"
-        variant="outline"
-        sx={{ fontSize: 2 }}
-      />
-    </>
+    <ClientOnly fallback={<></>}>
+      {() => (
+        <>
+          <ProfileButtonItem
+            link={'/sign-in?returnUrl=' + encodeURIComponent(location.pathname)}
+            text="Login"
+            variant="secondary"
+            sx={{
+              fontWeight: 'bold',
+              marginRight: 2,
+              fontSize: 2,
+            }}
+          />
+          <ProfileButtonItem
+            link={'/sign-in?returnUrl=' + encodeURIComponent(location.pathname)}
+            text="Join"
+            variant="outline"
+            sx={{ fontSize: 2 }}
+          />
+        </>
+      )}
+    </ClientOnly>
   )
 }
 

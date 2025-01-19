@@ -59,7 +59,11 @@ export const DownloadWithDonationAsk = (props: IProps) => {
 
       {!isLoggedIn && (
         <DownloadButton
-          onClick={() => navigate('/sign-in')}
+          onClick={() =>
+            navigate(
+              '/sign-in?returnUrl=' + encodeURIComponent(location.pathname),
+            )
+          }
           isLoggedIn={false}
         />
       )}

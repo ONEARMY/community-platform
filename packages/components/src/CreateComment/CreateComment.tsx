@@ -150,7 +150,7 @@ const LoginPrompt = () => {
     <Box sx={{ padding: [3, 4] }}>
       <Text data-cy="comments-login-prompt">
         <Link
-          to="/sign-in"
+          to={'/sign-in?returnUrl=' + encodeURIComponent(location.pathname)}
           style={{
             textDecoration: 'underline',
             color: 'inherit',

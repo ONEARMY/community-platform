@@ -89,7 +89,13 @@ export const QuestionListHeader = () => {
 
   const actionComponents = (
     <Flex>
-      <Link to={userStore.user ? '/questions/create' : '/sign-up'}>
+      <Link
+        to={
+          userStore.user
+            ? '/questions/create'
+            : '/sign-in?returnUrl=' + encodeURIComponent(location.pathname)
+        }
+      >
         <Button type="button" data-cy="create" variant="primary">
           {listing.create}
         </Button>

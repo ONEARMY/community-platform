@@ -34,7 +34,13 @@ export const FollowButton = (props: IProps) => {
           py: 0,
           ...sx,
         }}
-        onClick={() => (isLoggedIn ? onFollowClick() : navigate('/sign-in'))}
+        onClick={() =>
+          isLoggedIn
+            ? onFollowClick()
+            : navigate(
+                '/sign-in?returnUrl=' + encodeURIComponent(location.pathname),
+              )
+        }
       >
         {hasUserSubscribed ? 'Following' : 'Follow'}
       </Button>

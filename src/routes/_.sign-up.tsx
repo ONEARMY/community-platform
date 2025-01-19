@@ -143,7 +143,10 @@ export default function Index() {
                         <Heading>Create an account</Heading>
                         <Text color={'grey'} sx={{ fontSize: 1 }}>
                           <Link
-                            to="/sign-in"
+                            to={
+                              '/sign-in?returnUrl=' +
+                              encodeURIComponent(location.pathname)
+                            }
                             style={{
                               textDecoration: 'underline',
                             }}

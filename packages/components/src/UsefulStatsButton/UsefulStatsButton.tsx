@@ -40,7 +40,11 @@ export const UsefulStatsButton = (props: IProps) => {
         data-tooltip-content={props.isLoggedIn ? '' : 'Login to add your vote'}
         data-cy={props.isLoggedIn ? 'vote-useful' : 'vote-useful-redirect'}
         onClick={() =>
-          props.isLoggedIn ? handleUsefulClick() : navigate('/sign-in')
+          props.isLoggedIn
+            ? handleUsefulClick()
+            : navigate(
+                '/sign-in?returnUrl=' + encodeURIComponent(location.pathname),
+              )
         }
         disabled={disabled}
         sx={{

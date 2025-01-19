@@ -37,16 +37,10 @@ const upsert = async (id: number | null, question: QuestionFormData) => {
       ? await fetch(`/api/questions`, {
           method: 'POST',
           body: data,
-          headers: {
-            firebaseToken: await auth.currentUser!.getIdToken(),
-          },
         })
       : await fetch(`/api/questions/${id}`, {
           method: 'PUT',
           body: data,
-          headers: {
-            firebaseToken: await auth.currentUser!.getIdToken(),
-          },
         })
 
   if (response.status !== 200 && response.status !== 201) {

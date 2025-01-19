@@ -313,9 +313,9 @@ jobs:
       - setup_repo
       - attach_workspace:
           at: '.'
-      # - firebase_deploy:
-      #     # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
-      #     alias: << parameters.DEPLOY_ALIAS >>
+      - firebase_deploy:
+          # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
+          alias: << parameters.DEPLOY_ALIAS >>
       - run:
           name: Prune Docker resources
           command: |

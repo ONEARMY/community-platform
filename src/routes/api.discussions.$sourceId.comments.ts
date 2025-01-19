@@ -111,9 +111,9 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     .from('profiles')
     .select()
     .eq('firebase_auth_id', userId)
-    .single()
+    .limit(1)
 
-  if (currentUser.error || !currentUser.data) {
+  if (currentUser.error || !currentUser.data?.at(0)) {
     return Response.json(
       {},
       { status: 400, statusText: 'profile not found ' + userId },
@@ -125,7 +125,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     source_id_legacy: isNaN(+params.sourceId!) ? params.sourceId : null,
     source_id: isNaN(+params.sourceId!) ? null : +params.sourceId!,
     source_type: data.sourceType,
-    created_by: currentUser.data.id,
+    created_by: currentUser.data[0].id,
     parent_id: data.parentId ?? null,
     tenant_id: process.env.TENANT_ID,
   } as Partial<DBComment>
@@ -155,7 +155,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     notificationsService.sendCommentNotification(
       client,
       commentResult.data as DBComment,
-      currentUser.data as DBProfile,
+      currentUser.data[0] as DBProfile,
     )
   }
 

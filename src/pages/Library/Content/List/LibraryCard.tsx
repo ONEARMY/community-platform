@@ -87,6 +87,7 @@ export const HowToCard = ({ howto }: IProps) => {
 
         <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
           <Box>{howto.category && <Category category={howto.category} />}</Box>
+          <Box>{howto.category && <Category category={howto.category} />}</Box>
 
           <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
             <IconCountWithTooltip

@@ -1,6 +1,8 @@
-import type { StoryFn, Meta } from '@storybook/react'
-import { Accordion } from './Accordion'
 import { Text } from 'theme-ui'
+
+import { Accordion } from './Accordion'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/Accordion',

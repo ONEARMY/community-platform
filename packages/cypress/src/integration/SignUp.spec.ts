@@ -80,6 +80,7 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="tab-Account"]').click()
 
       cy.step('Update Email')
+      cy.get('[data-cy=changeEmailAccordion]').click()
       cy.get('[data-cy="changeEmailButton"]').click()
       cy.get('[data-cy="changeEmailForm"]')
         .contains(`Current email address: ${email}`)

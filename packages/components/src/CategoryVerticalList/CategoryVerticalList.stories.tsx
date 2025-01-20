@@ -3,7 +3,11 @@ import { useState } from 'react'
 import { CategoryVerticalList } from './CategoryVerticalList'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { ICategory } from 'oa-shared'
+import type {
+  CategorizableContentTypes,
+  DBCategory,
+  ICategory,
+} from 'oa-shared'
 
 export default {
   title: 'Components/CategoryVerticalList',
@@ -12,96 +16,87 @@ export default {
 
 const allCategoriesForPreciousPlastic = [
   {
-    _created: '2024-12-03T18:03:51.313Z',
-    _deleted: false,
-    _id: '78XHeJmfQISA7tfBnDs1',
-    _modified: '2022-12-03T18:03:51.313Z',
-    label: 'Guides',
+    created_at: new Date('2024-12-03T18:03:51.313Z'),
+    id: 1,
+    name: 'Guides',
+    type: 'questions' as CategorizableContentTypes,
   },
   {
-    _created: '2022-12-01T18:03:51.313Z',
-    _deleted: false,
-    _id: '78XHeJmfQISA7tfBnDsL',
-    _modified: '2022-12-03T18:03:51.313Z',
-    label: 'Machines',
+    created_at: new Date('2022-12-01T18:03:51.313Z'),
+    id: 2,
+    name: 'Machines',
+    type: 'questions' as CategorizableContentTypes,
   },
   {
-    _created: '2022-12-03T18:03:51.313Z',
-    _deleted: false,
-    _id: '78XHeJmfQISA7tfBnDaL',
-    _modified: '2022-12-03T18:03:51.313Z',
-    label: 'Moulds',
+    created_at: new Date('2022-12-03T18:03:51.313Z'),
+    id: 3,
+    name: 'Moulds',
+    type: 'questions' as CategorizableContentTypes,
   },
   {
-    _created: '2022-12-03T18:03:51.313Z',
-    _deleted: false,
-    _id: '78XHeamfQISA7tfBnDaL',
-    _modified: '2022-12-03T18:03:51.313Z',
-    label: 'Products',
+    created_at: new Date('2022-12-03T18:03:51.313Z'),
+    id: 4,
+    name: 'Products',
+    type: 'questions' as CategorizableContentTypes,
   },
   {
-    _created: '2022-12-03T18:03:51.313Z',
-    _deleted: false,
-    _id: '78XHeamfjISA7tfBnDaL',
-    _modified: '2022-12-03T18:03:51.313Z',
-    label: 'Starter Kits',
+    created_at: new Date('2022-12-03T18:03:51.313Z'),
+    id: 5,
+    name: 'Starter Kits',
+    type: 'questions' as CategorizableContentTypes,
   },
   {
-    _created: '2022-12-04T18:03:51.313Z',
-    _deleted: false,
-    _id: '78XHeamfjxgvs7tfBnDaL',
-    _modified: '2022-12-03T18:03:51.313Z',
-    label: 'Recycling',
+    created_at: new Date('2022-12-04T18:03:51.313Z'),
+    id: 6,
+    name: 'Recycling',
+    type: 'questions' as CategorizableContentTypes,
   },
   {
-    _created: '2022-12-05T18:03:51.313Z',
-    _deleted: false,
-    _id: '78XHeamfsdfs7tfBnDaL',
+    created_at: new Date('2022-12-05T18:03:51.313Z'),
+    id: 7,
     _modified: '2022-12-03T18:03:51.313Z',
-    label: 'From the Team',
+    name: 'From the Team',
+    type: 'questions' as CategorizableContentTypes,
   },
 ]
 
 const allCategoriesForProjectKamp = [
   {
-    _created: '2022-12-03T18:03:51.313Z',
-    _deleted: false,
-    _id: '744674',
-    _modified: '2022-12-03T18:03:51.313Z',
-    label: 'Construction',
+    created_at: new Date('2022-12-03T18:03:51.313Z'),
+    id: 8,
+    name: 'Construction',
+    type: 'questions' as CategorizableContentTypes,
   },
   {
-    _created: '2022-12-03T18:03:51.313Z',
-    _deleted: false,
-    _id: 'hgdfr',
-    _modified: '2022-12-03T18:03:51.313Z',
-    label: 'Food',
+    created_at: new Date('2022-12-03T18:03:51.313Z'),
+    id: 9,
+    name: 'Food',
+    type: 'questions' as CategorizableContentTypes,
   },
   {
-    _created: '2022-12-03T18:03:51.313Z',
-    _deleted: false,
-    _id: '45378bdfg',
-    _modified: '2022-12-03T18:03:51.313Z',
-    label: 'Landscape',
+    created_at: new Date('2022-12-03T18:03:51.313Z'),
+    id: 10,
+    name: 'Landscape',
+    type: 'questions' as CategorizableContentTypes,
   },
   {
-    _created: '2022-12-03T18:03:51.313Z',
-    _deleted: false,
-    _id: 'sebnt5w3',
-    _modified: '2022-12-03T18:03:51.313Z',
-    label: 'Other',
+    created_at: new Date('2022-12-03T18:03:51.313Z'),
+    id: 11,
+    name: 'Other',
+    type: 'questions' as CategorizableContentTypes,
   },
   {
-    _created: '2022-12-03T18:03:51.313Z',
-    _deleted: false,
-    _id: 'hwdfgiu52',
-    _modified: '2022-12-03T18:03:51.313Z',
-    label: 'Utilities',
+    created_at: new Date('2022-12-03T18:03:51.313Z'),
+    id: 12,
+    name: 'Utilities',
+    type: 'questions' as CategorizableContentTypes,
   },
 ]
 
 export const Basic: StoryFn<typeof CategoryVerticalList> = () => {
-  const [activeCategory, setActiveCategory] = useState<ICategory | null>(null)
+  const [activeCategory, setActiveCategory] = useState<
+    DBCategory | ICategory | null
+  >(null)
   const allCategories = [
     ...allCategoriesForPreciousPlastic,
     ...allCategoriesForProjectKamp,
@@ -119,28 +114,27 @@ export const Basic: StoryFn<typeof CategoryVerticalList> = () => {
 }
 
 export const WhenGlyphNotPresent: StoryFn<typeof CategoryVerticalList> = () => {
-  const [activeCategory, setActiveCategory] = useState<ICategory | null>(null)
+  const [activeCategory, setActiveCategory] = useState<
+    DBCategory | ICategory | null
+  >(null)
   const noGlyphCategories = [
     {
-      _created: '2022-12-03T18:03:51.313Z',
-      _deleted: false,
-      _id: '78XHeamfQISA7tfBnDaL',
-      _modified: '2022-12-03T18:03:51.313Z',
-      label: 'No Glphy A',
+      created_at: new Date('2022-12-03T18:03:51.313Z'),
+      id: 13,
+      name: 'No Glphy A',
+      type: 'questions' as CategorizableContentTypes,
     },
     {
-      _created: '2022-12-03T18:03:51.313Z',
-      _deleted: false,
-      _id: '36dgbhs',
-      _modified: '2022-12-03T18:03:51.313Z',
-      label: 'No Glphy B',
+      created_at: new Date('2022-12-03T18:03:51.313Z'),
+      id: 14,
+      name: 'No Glphy B',
+      type: 'questions' as CategorizableContentTypes,
     },
     {
-      _created: '2022-12-03T18:03:51.313Z',
-      _deleted: false,
-      _id: '36dgbhs',
-      _modified: '2022-12-03T18:03:51.313Z',
-      label: 'No Glphy C',
+      created_at: new Date('2022-12-03T18:03:51.313Z'),
+      id: 15,
+      name: 'No Glphy C',
+      type: 'questions' as CategorizableContentTypes,
     },
   ]
 
@@ -156,7 +150,9 @@ export const WhenGlyphNotPresent: StoryFn<typeof CategoryVerticalList> = () => {
 }
 
 export const OnlyOne: StoryFn<typeof CategoryVerticalList> = () => {
-  const [activeCategory, setActiveCategory] = useState<ICategory | null>(null)
+  const [activeCategory, setActiveCategory] = useState<
+    DBCategory | ICategory | null
+  >(null)
 
   const twoCategories = [
     allCategoriesForPreciousPlastic[0],

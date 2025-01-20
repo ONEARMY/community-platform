@@ -4,13 +4,13 @@ import { CardButton } from '../CardButton/CardButton'
 import { getGlyph, Icon } from '../Icon/Icon'
 import { VerticalList } from '../VerticalList/VerticalList.client'
 
-import type { ICategory } from 'oa-shared'
+import type { DBCategory, ICategory } from 'oa-shared'
 import type { availableGlyphs } from '../Icon/types'
 
 export interface IProps {
-  activeCategory: ICategory | null
-  allCategories: ICategory[]
-  setActiveCategory: (category: ICategory | null) => void
+  activeCategory: DBCategory | ICategory | null
+  allCategories: (DBCategory | ICategory)[]
+  setActiveCategory: (category: DBCategory | ICategory | null) => void
 }
 
 export const CategoryVerticalList = (props: IProps) => {
@@ -21,21 +21,38 @@ export const CategoryVerticalList = (props: IProps) => {
   }
 
   const orderedCategories = allCategories.toSorted((a, b) =>
-    a._created > b._created ? 1 : -1,
+    (a as DBCategory).created_at
+      ? (a as DBCategory).created_at > (b as DBCategory).created_at
+        ? 1
+        : -1
+      : (a as ICategory)._created > (b as ICategory)._created
+        ? 1
+        : -1,
   )
+
+  const isCategorySelected = (category: DBCategory | ICategory) => {
+    if ((category as DBCategory).id) {
+      return (category as DBCategory).id === (activeCategory as DBCategory)?.id
+    }
+    if ((category as ICategory)._id) {
+      return (category as ICategory)._id === (activeCategory as ICategory)?._id
+    }
+  }
 
   return (
     <VerticalList dataCy="CategoryVerticalList">
       {orderedCategories.map((category, index) => {
-        const isSelected = category._id === activeCategory?._id
-        const glyph = category.label.toLowerCase() as availableGlyphs
+        const isSelected = isCategorySelected(category)
+        const name =
+          (category as DBCategory).name || (category as ICategory).label
+        const glyph = name.toLowerCase() as availableGlyphs
         const hasGlyph = getGlyph(glyph)
 
         return (
           <CardButton
             data-cy={`CategoryVerticalList-Item${isSelected ? '-active' : ''}`}
             data-testid="CategoryVerticalList-Item"
-            title={category.label}
+            title={name}
             key={index}
             onClick={() => setActiveCategory(isSelected ? null : category)}
             extrastyles={{
@@ -62,7 +79,7 @@ export const CategoryVerticalList = (props: IProps) => {
           >
             <Icon size={40} glyph={hasGlyph ? glyph : 'category'} />
             <Text variant="quiet" sx={{ fontSize: 1 }}>
-              {category.label}
+              {name}
             </Text>
           </CardButton>
         )

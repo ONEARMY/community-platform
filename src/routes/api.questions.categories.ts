@@ -2,9 +2,9 @@ import Keyv from 'keyv'
 import { isProductionEnvironment } from 'src/config/config'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
-import type { Category } from 'src/models/category.model'
+import type { DBCategory } from 'oa-shared'
 
-const cache = new Keyv<Category[]>({ ttl: 3600000 }) // ttl: 60 minutes
+const cache = new Keyv<DBCategory[]>({ ttl: 3600000 }) // ttl: 60 minutes
 
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request)

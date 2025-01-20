@@ -14,7 +14,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const categoriesResult = await client
     .from('categories')
-    .select('id,name')
+    .select('id,name,created_at')
     .eq('type', params.type)
 
   const categories = categoriesResult.data || []

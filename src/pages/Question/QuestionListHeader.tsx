@@ -14,12 +14,11 @@ import { ListHeader } from '../common/Layout/ListHeader'
 import { headings, listing } from './labels'
 import { QuestionSortOptions } from './QuestionSortOptions'
 
-import type { ICategory } from 'oa-shared'
-import type { Category } from 'src/models/category.model'
+import type { DBCategory } from 'oa-shared'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 export const QuestionListHeader = () => {
-  const [categories, setCategories] = useState<Category[]>([])
+  const [categories, setCategories] = useState<DBCategory[]>([])
   const [searchString, setSearchString] = useState<string>('')
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -79,14 +78,6 @@ export const QuestionListHeader = () => {
 
   const { userStore } = useCommonStores().stores
 
-  const allCategories = categories.map(
-    (x) => ({ _id: x.id, label: x.name }) as unknown as ICategory,
-  )
-
-  const activeCategory = category
-    ? ({ _id: category.id, label: category.name } as unknown as ICategory)
-    : null
-
   const actionComponents = (
     <Flex>
       <Link to={userStore.user ? '/questions/create' : '/sign-up'}>
@@ -99,12 +90,12 @@ export const QuestionListHeader = () => {
 
   const categoryComponent = (
     <CategoryVerticalList
-      allCategories={allCategories}
-      activeCategory={activeCategory}
+      allCategories={categories}
+      activeCategory={category !== '' ? category : null}
       setActiveCategory={(updatedCategory) =>
         updateFilter(
           QuestionSearchParams.category,
-          updatedCategory ? updatedCategory._id : '',
+          updatedCategory ? (updatedCategory as DBCategory).id.toString() : '',
         )
       }
     />

@@ -138,7 +138,7 @@ export const ResearchFilterHeader = (props: IProps) => {
       setActiveCategory={(updatedCategory) =>
         updateFilter(
           ResearchSearchParams.category,
-          updatedCategory ? updatedCategory._id : '',
+          updatedCategory ? (updatedCategory as ICategory)._id : '',
         )
       }
     />

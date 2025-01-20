@@ -6,6 +6,7 @@
     "composite": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
+    "strictPropertyInitialization": false,
     "esModuleInterop": true
   },
   "exclude": ["../node_modules", "./lib"]

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { guidance } from 'src/pages/Library/labels'
-import { FactoryCategory } from 'src/test/factories/Category'
+import { FactoryOldCategory } from 'src/test/factories/OldCategory'
 import { describe, expect, it } from 'vitest'
 
 import { LibraryCategoryGuidance } from './LibraryCategoryGuidance'
@@ -10,7 +10,7 @@ describe('HowtoCategoryGuidance', () => {
   it('renders expected main content when a category that exists is present', async () => {
     render(
       <LibraryFormProvider>
-        <LibraryCategoryGuidance category={FactoryCategory} type="main" />
+        <LibraryCategoryGuidance category={FactoryOldCategory} type="main" />
       </LibraryFormProvider>,
     )
 

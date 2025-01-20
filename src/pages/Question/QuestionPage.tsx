@@ -169,9 +169,7 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
           />
 
           <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-            {question.category && (
-              <Category category={{ label: question.category.name }} />
-            )}
+            {question.category && <Category category={question.category} />}
             <Heading
               as="h1"
               data-cy="question-title"

@@ -1,7 +1,7 @@
 import { Flex, Text } from 'theme-ui'
 
 import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
-import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
+import { FlagIconLibrary } from '../FlagIcon/FlagIcon'
 import { InternalLink } from '../InternalLink/InternalLink'
 import { twoCharacterCountryCodes } from './TwoCharacterCountryCodes'
 import { UserBadge } from './UserBadge'
@@ -34,7 +34,7 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
       <Flex mr={1}>
         {countryCode && isValidCountryCode(countryCode) ? (
           <Flex data-testid="Username: known flag">
-            <FlagIconHowTos
+            <FlagIconLibrary
               countryCode={countryCode}
               svg={true}
               title={countryCode}

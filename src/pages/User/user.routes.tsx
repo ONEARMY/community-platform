@@ -15,7 +15,7 @@ export const UserRoutes = (user: IUserDB) => (
       element={
         <UserProfile
           profile={user}
-          userCreatedDocs={{ howtos: [], research: [] }}
+          userCreatedDocs={{ library: [], research: [] }}
         />
       }
     />

@@ -1,7 +1,7 @@
 import { IModerationStatus } from 'oa-shared'
-import { IUserDB, UserRole } from 'oa-shared/models/user'
+import { UserRole } from 'oa-shared/models/user'
 
-import { getMockHowto } from '../emulator/seed/content-generate'
+import { getMockLibraryItem } from '../emulator/seed/content-generate'
 import { DB_ENDPOINTS } from '../models'
 import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
 import { PP_SIGNOFF } from './constants'
@@ -15,8 +15,10 @@ import {
   MAP_PIN_SUBMISSION_SUBJECT,
 } from './templateHelpers'
 import * as utils from './utils'
-import { IMapPin } from 'oa-shared/models/maps'
-import { IMessageDB } from 'oa-shared/models/messages'
+
+import type { IMapPin } from 'oa-shared/models/maps'
+import type { IMessageDB } from 'oa-shared/models/messages'
+import type { IUserDB } from 'oa-shared/models/user'
 
 jest.mock('../Firebase/auth', () => ({
   firebaseAuth: {
@@ -61,7 +63,10 @@ describe('Create howto submission emails', () => {
   })
 
   it('Creates an email for a submitted howto', async () => {
-    const howto = getMockHowto('user_1', IModerationStatus.AWAITING_MODERATION)
+    const howto = getMockLibraryItem(
+      'user_1',
+      IModerationStatus.AWAITING_MODERATION,
+    )
     await createHowtoSubmissionEmail(howto)
 
     // Only one submitted howto email should have been created
@@ -86,7 +91,7 @@ describe('Create howto submission emails', () => {
   })
 
   it('Does not create email for draft projects', async () => {
-    const howto = getMockHowto('user_1', IModerationStatus.DRAFT)
+    const howto = getMockLibraryItem('user_1', IModerationStatus.DRAFT)
     await createHowtoSubmissionEmail(howto)
 
     // No new emails should have been created

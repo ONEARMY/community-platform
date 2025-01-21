@@ -82,7 +82,7 @@ export async function createMapPinModerationEmail(mapPin: IMapPin) {
 
 export const handleHowToModerationUpdate = functions
   .runWith({ memory: MEMORY_LIMIT_512_MB })
-  .firestore.document(`${DB_ENDPOINTS.howtos}/{id}`)
+  .firestore.document(`${DB_ENDPOINTS.library}/{id}`)
   .onUpdate((change, context) =>
     withErrorAlerting(context, handleModerationUpdate, [
       change,

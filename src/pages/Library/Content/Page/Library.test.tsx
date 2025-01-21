@@ -9,24 +9,22 @@ import { Provider } from 'mobx-react'
 import { GlobalStyles } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import { preciousPlasticTheme } from 'oa-themes'
-import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Library'
+import {
+  FactoryLibraryItem,
+  FactoryLibraryItemStep,
+} from 'src/test/factories/Library'
 import { describe, expect, it, vi } from 'vitest'
 
-import { Howto } from './Library'
+import { Library } from './Library'
 
 import type { ILibrary } from 'oa-shared'
-import type { HowtoStore } from 'src/stores/Library/library.store'
+import type { LibraryStore } from 'src/stores/Library/library.store'
 
 const Theme = preciousPlasticTheme.styles
 
-const howto = FactoryHowto()
+const item = FactoryLibraryItem()
 
-const mockHowtoStore = () => ({
-  setActiveHowtoBySlug: vi.fn(),
-  activeHowto: howto,
-  needsModeration: vi.fn().mockReturnValue(false),
-  removeActiveHowto: vi.fn(),
-})
+const mockLibraryStore = () => ({})
 
 vi.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -35,19 +33,19 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
     stores: {
       userStore: {},
       aggregationsStore: {
-        isVerified: vi.fn((userId) => userId === 'HowtoAuthor'),
+        isVerified: vi.fn((userId) => userId === 'LibraryAuthor'),
         users_verified: {
-          HowtoAuthor: true,
+          LibraryAuthor: true,
         },
       },
-      howtoStore: mockHowtoStore(),
+      LibraryStore: mockLibraryStore(),
       tagsStore: {},
     },
   }),
 }))
 
 const factory = (
-  howtoStore?: Partial<HowtoStore>,
+  LibraryStore?: Partial<LibraryStore>,
   overrideHowto?: ILibrary.DB,
 ) => {
   const ReactStub = createRemixStub([
@@ -57,8 +55,8 @@ const factory = (
         <>
           <Global styles={GlobalStyles} />
           <ThemeProvider theme={Theme}>
-            <Provider howtoStore={howtoStore}>
-              <Howto howto={overrideHowto ?? howto} />
+            <Provider LibraryStore={LibraryStore}>
+              <Library item={overrideHowto ?? item} />
             </Provider>
           </ThemeProvider>
         </>
@@ -68,12 +66,12 @@ const factory = (
 
   return render(<ReactStub />)
 }
-describe('Howto', () => {
+describe('Library', () => {
   describe('moderator feedback', () => {
     it('displays feedback for items which are not accepted', async () => {
       let wrapper
-      howto.moderation = IModerationStatus.AWAITING_MODERATION
-      howto.moderatorFeedback = 'Moderation comments'
+      item.moderation = IModerationStatus.AWAITING_MODERATION
+      item.moderatorFeedback = 'Moderation comments'
 
       act(() => {
         wrapper = factory()
@@ -86,8 +84,8 @@ describe('Howto', () => {
 
     it('hides feedback when project is accepted', async () => {
       let wrapper
-      howto.moderation = IModerationStatus.ACCEPTED
-      howto.moderatorFeedback = 'Moderation comments'
+      item.moderation = IModerationStatus.ACCEPTED
+      item.moderatorFeedback = 'Moderation comments'
 
       await act(async () => {
         wrapper = factory()
@@ -99,11 +97,11 @@ describe('Howto', () => {
 
   it('displays content statistics', async () => {
     let wrapper
-    howto._id = 'testid'
-    howto._createdBy = 'HowtoAuthor'
-    howto.steps = [FactoryHowtoStep({})]
-    howto.moderation = IModerationStatus.ACCEPTED
-    howto.total_views = 0
+    item._id = 'testid'
+    item._createdBy = 'LibraryAuthor'
+    item.steps = [FactoryLibraryItemStep({})]
+    item.moderation = IModerationStatus.ACCEPTED
+    item.total_views = 0
 
     act(() => {
       wrapper = factory()
@@ -120,7 +118,7 @@ describe('Howto', () => {
   it('shows verified badge', async () => {
     let wrapper
 
-    howto._createdBy = 'HowtoAuthor'
+    item._createdBy = 'LibraryAuthor'
 
     act(() => {
       wrapper = factory()
@@ -133,7 +131,7 @@ describe('Howto', () => {
 
   it('does not show verified badge', async () => {
     let wrapper
-    howto._createdBy = 'NotHowtoAuthor'
+    item._createdBy = 'NotLibraryAuthor'
 
     await act(async () => {
       wrapper = factory()
@@ -150,11 +148,11 @@ describe('Howto', () => {
       act(() => {
         wrapper = factory(
           {
-            ...(mockHowtoStore() as any),
+            ...(mockLibraryStore() as any),
           },
-          FactoryHowto({
-            _createdBy: 'HowtoAuthor',
-            steps: [FactoryHowtoStep()],
+          FactoryLibraryItem({
+            _createdBy: 'LibraryAuthor',
+            steps: [FactoryLibraryItemStep()],
           }),
         )
       })
@@ -167,7 +165,7 @@ describe('Howto', () => {
     it('shows 2 steps', async () => {
       let wrapper
       act(() => {
-        howto.steps = [FactoryHowtoStep(), FactoryHowtoStep()]
+        item.steps = [FactoryLibraryItemStep(), FactoryLibraryItemStep()]
         wrapper = factory()
       })
 
@@ -181,8 +179,8 @@ describe('Howto', () => {
     it('displays breadcrumbs with category', async () => {
       let wrapper
       act(() => {
-        howto.title = 'DIY Recycling Machine'
-        howto.category = {
+        item.title = 'DIY Recycling Machine'
+        item.category = {
           label: 'DIY',
           _id: faker.string.uuid(),
           _modified: faker.date.past().toString(),
@@ -215,8 +213,8 @@ describe('Howto', () => {
     it('displays breadcrumbs without category', async () => {
       let wrapper
       act(() => {
-        howto.title = 'DIY Recycling Machine'
-        howto.category = undefined
+        item.title = 'DIY Recycling Machine'
+        item.category = undefined
         wrapper = factory()
       })
 

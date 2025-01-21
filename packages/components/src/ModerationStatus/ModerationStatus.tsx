@@ -4,7 +4,7 @@ import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface Props {
   status: string
-  contentType: 'event' | 'howto' | 'research' | 'question'
+  contentType: 'event' | 'library' | 'research' | 'question'
   sx?: ThemeUIStyleObject
 }
 
@@ -26,7 +26,9 @@ export const ModerationStatus = (props: Props) => {
   switch (status) {
     case 'rejected':
       moderationMessage =
-        'howto' === contentType ? 'Needs to improve to be accepted' : 'Rejected'
+        'library' === contentType
+          ? 'Needs to improve to be accepted'
+          : 'Rejected'
       break
     case 'draft':
       moderationMessage = 'Draft'

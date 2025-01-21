@@ -1,18 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Field } from 'react-final-form'
 import { CategoriesSelectV2 } from 'src/pages/common/Category/CategoriesSelectV2'
-import {
-  FormFieldWrapper,
-  HowtoCategoryGuidance,
-} from 'src/pages/Library/Content/Common'
+import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
+import { LibraryCategoryGuidance } from 'src/pages/Library/Content/Common'
 import { intro } from 'src/pages/Library/labels'
 
-import { howtoService } from '../../library.service'
+import { libraryService } from '../../library.service'
 
 import type { ICategory } from 'oa-shared'
 import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
 
-export const HowtoFieldCategory = () => {
+export const LibraryCategoryField = () => {
   const { placeholder, title } = intro.category
 
   const [categories, setCategories] = useState<ICategory[]>([])
@@ -26,7 +24,7 @@ export const HowtoFieldCategory = () => {
 
   useEffect(() => {
     const getCategories = async () => {
-      const categories = await howtoService.getHowtoCategories()
+      const categories = await libraryService.getLibraryCategories()
 
       if (categories) {
         setCategories(categories)
@@ -50,7 +48,7 @@ export const HowtoFieldCategory = () => {
               categories={options}
             />
             {input?.value?.value && (
-              <HowtoCategoryGuidance
+              <LibraryCategoryGuidance
                 category={categories.find((x) => x._id === input.value.value)}
                 type="main"
               />

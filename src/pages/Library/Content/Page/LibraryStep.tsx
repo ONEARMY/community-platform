@@ -3,7 +3,6 @@ import { ImageGallery, LinkifyText, VideoPlayer } from 'oa-components'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
-import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
 import type { ILibrary } from 'oa-shared'
@@ -19,11 +18,6 @@ const FlexStepNumber = styled(Flex)`
 
 const Step = (props: IProps) => {
   const { stepindex, step } = props
-
-  {
-    /* HACK 2021-07-16 - new howtos auto capitalize title but not older */
-  }
-  const title = step.title && capitalizeFirstLetter(step.title)
 
   return (
     <Flex
@@ -62,7 +56,7 @@ const Step = (props: IProps) => {
               }}
             >
               <Heading as="h2" mb={0} data-cy="step-title">
-                {title}
+                {step.title}
               </Heading>
               <Box>
                 <Text

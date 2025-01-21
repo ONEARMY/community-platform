@@ -66,7 +66,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
   const useLocationHook = useLocation()
 
   const coverImage = getCoverImages(user)
-  const hasContributed = docs?.howtos.length + docs?.research.length > 0
+  const hasContributed = docs?.library.length + docs?.research.length > 0
   const hasImpacted = !!impact
 
   const userLinks =
@@ -214,7 +214,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                           country={location?.country}
                           isVerified={user.verified}
                           isSupporter={!!user.badges?.supporter}
-                          howtoCount={docs?.howtos.length || 0}
+                          libraryCount={docs?.library.length || 0}
                           usefulCount={user.totalUseful || 0}
                           researchCount={docs?.research.length || 0}
                           totalViews={0}
@@ -226,7 +226,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                         country={location?.country}
                         isVerified={user.verified}
                         isSupporter={!!user.badges?.supporter}
-                        howtoCount={docs?.howtos.length || 0}
+                        libraryCount={docs?.library.length || 0}
                         usefulCount={user.totalUseful || 0}
                         researchCount={docs?.research.length || 0}
                         totalViews={user.total_views || 0}

@@ -11,11 +11,11 @@ interface IProps {
   onClose: () => void
 }
 
-const HowToSubmitStatus = observer((props: IProps) => {
+export const SubmitStatus = observer((props: IProps) => {
   const navigate = useNavigate()
-  const { howtoStore } = useCommonStores().stores
+  const { LibraryStore } = useCommonStores().stores
 
-  const uploadStatus = howtoStore.uploadStatus
+  const uploadStatus = LibraryStore.uploadStatus
   return (
     <Modal isOpen={!!uploadStatus.Start}>
       <Flex sx={{ justifyContent: 'space-between' }}>
@@ -41,7 +41,7 @@ const HowToSubmitStatus = observer((props: IProps) => {
       </Box>
       <Button
         type="button"
-        data-cy={uploadStatus.Complete ? 'view-howto' : ''}
+        data-cy={uploadStatus.Complete ? 'view-project' : ''}
         disabled={!uploadStatus.Complete}
         variant={!uploadStatus.Complete ? 'disabled' : 'outline'}
         icon="arrow-forward"
@@ -55,5 +55,3 @@ const HowToSubmitStatus = observer((props: IProps) => {
     </Modal>
   )
 })
-
-export { HowToSubmitStatus }

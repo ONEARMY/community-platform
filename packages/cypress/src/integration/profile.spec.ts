@@ -34,7 +34,7 @@ describe('[Profile]', () => {
       )
 
       cy.get('[data-cy=userDisplayName]').contains(eventReader.userName)
-      cy.get('[data-testid=howto-stat]').contains('1')
+      cy.get('[data-testid=library-stat]').contains('1')
       cy.get('[data-testid=research-stat]').contains('1')
 
       cy.step('Cannot see profile views')

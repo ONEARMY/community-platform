@@ -108,7 +108,7 @@ export const MemberProfile = ({ docs, user }: IProps) => {
                       country={location?.country}
                       isVerified={isVerified}
                       isSupporter={!!badges?.supporter}
-                      howtoCount={docs?.howtos.length || 0}
+                      libraryCount={docs?.library.length || 0}
                       researchCount={docs?.research.length || 0}
                       usefulCount={totalUseful || 0}
                       totalViews={0}
@@ -121,7 +121,7 @@ export const MemberProfile = ({ docs, user }: IProps) => {
                     country={location?.country}
                     isVerified={isVerified}
                     isSupporter={!!badges?.supporter}
-                    howtoCount={docs?.howtos.length || 0}
+                    libraryCount={docs?.library.length || 0}
                     researchCount={docs?.research.length || 0}
                     usefulCount={totalUseful || 0}
                     sx={{ alignSelf: 'stretch' }}

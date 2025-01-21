@@ -10,7 +10,7 @@ import type { DBEndpoint } from '../databaseV2/endpoints'
 
 export type DiscussionEndpoints = Extract<
   DBEndpoint,
-  'howtos' | 'research' | 'questions'
+  'library' | 'research' | 'questions'
 >
 
 export type CommentsTotalEvent = 'add' | 'delete' | 'neutral'
@@ -62,7 +62,7 @@ export const updateDiscussionMetadata = async (
       : undefined
 
   switch (collectionName) {
-    case 'howtos':
+    case 'library':
       return await db
         .collection(collectionName)
         .doc(sourceId)
@@ -106,8 +106,8 @@ export const getCollectionName = (
   switch (sourceType) {
     case 'question':
       return 'questions'
-    case 'howto':
-      return 'howtos'
+    case 'library':
+      return 'library'
     case 'researchUpdate':
       return 'research'
     default:

@@ -2,7 +2,7 @@ import { Button } from 'oa-components'
 
 import { buttons } from '../../labels'
 
-export const HowtoButtonPublish = (props) => {
+export const LibraryButtonPublish = (props) => {
   const { form, formId, submitting } = props
 
   return (

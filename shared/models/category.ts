@@ -1,16 +1,12 @@
 // New models for Supabase
 
+import { IDBDoc, IDoc } from './document'
+
 import type { ContentTypes } from './common'
 
-export class Category {
-  id: number
-  created_at: Date
+export class Category extends IDoc {
   name: string
   type: ContentTypes
-
-  constructor(obj: Category) {
-    Object.assign(this, obj)
-  }
 
   static fromDB(category: DBCategory) {
     const { created_at, id, name, type } = category
@@ -23,15 +19,9 @@ export class Category {
   }
 }
 
-export class DBCategory {
-  readonly id: number
-  readonly created_at: Date
+export class DBCategory extends IDBDoc {
   name: string
   type: ContentTypes
-
-  constructor(obj: Omit<DBCategory, 'id' | 'created_at'>) {
-    Object.assign(this, obj)
-  }
 
   static fromDB(category: DBCategory) {
     return new DBCategory(category)

@@ -1,12 +1,12 @@
 // New models for Supabase
 
-export type CategorizableContentTypes = 'questions' | 'projects' | 'research'
+import type { ContentTypes } from './common'
 
 export class Category {
   id: number
   created_at: Date
   name: string
-  type: CategorizableContentTypes
+  type: ContentTypes
 
   constructor(obj: Category) {
     Object.assign(this, obj)
@@ -27,7 +27,7 @@ export class DBCategory {
   readonly id: number
   readonly created_at: Date
   name: string
-  type: CategorizableContentTypes
+  type: ContentTypes
 
   constructor(obj: Omit<DBCategory, 'id' | 'created_at'>) {
     Object.assign(this, obj)

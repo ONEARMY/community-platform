@@ -32,7 +32,7 @@ export const FactoryQuestionItem = (
     username: faker.internet.userName(),
   },
   category: {
-    created_at: new Date(),
+    createdAt: new Date(),
     id: faker.number.int(),
     name: faker.lorem.words(1),
     type: 'questions',

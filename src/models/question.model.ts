@@ -1,6 +1,6 @@
-import { DBCategory } from 'oa-shared'
+import { Category } from 'oa-shared'
 
-import type { IConvertedFileMeta } from 'oa-shared'
+import type { DBCategory, IConvertedFileMeta } from 'oa-shared'
 import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
 import type { DBImage, Image } from './image.model'
 import type { Tag } from './tag.model'
@@ -78,7 +78,7 @@ export class Question {
   usefulCount: number
   subscriberCount: number
   commentCount: number
-  category: DBCategory | null
+  category: Category | null
   totalViews: number
   tags: Tag[]
   tagIds?: number[]
@@ -101,7 +101,7 @@ export class Question {
       usefulCount: obj.useful_count || 0,
       subscriberCount: obj.subscriber_count || 0,
       commentCount: obj.comment_count || 0,
-      category: obj.category ? DBCategory.fromDB(obj.category) : null,
+      category: obj.category ? Category.fromDB(obj.category) : null,
       totalViews: obj.total_views || 0,
       tagIds: obj.tags,
       tags: tags,

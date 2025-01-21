@@ -14,11 +14,11 @@ import { ListHeader } from '../common/Layout/ListHeader'
 import { headings, listing } from './labels'
 import { QuestionSortOptions } from './QuestionSortOptions'
 
-import type { DBCategory } from 'oa-shared'
+import type { Category } from 'oa-shared'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 export const QuestionListHeader = () => {
-  const [categories, setCategories] = useState<DBCategory[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [searchString, setSearchString] = useState<string>('')
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -95,7 +95,7 @@ export const QuestionListHeader = () => {
       setActiveCategory={(updatedCategory) =>
         updateFilter(
           QuestionSearchParams.category,
-          updatedCategory ? (updatedCategory as DBCategory).id.toString() : '',
+          updatedCategory ? (updatedCategory as Category).id.toString() : '',
         )
       }
     />

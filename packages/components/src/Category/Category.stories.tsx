@@ -1,7 +1,7 @@
 import { Category } from './Category'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { DBCategory } from 'oa-shared'
+import type { Category as CategoryType } from 'oa-shared'
 
 export default {
   title: 'Components/Category',
@@ -13,7 +13,7 @@ export const Default: StoryFn<typeof Category> = () => (
     category={
       {
         name: 'Label',
-      } as DBCategory
+      } as CategoryType
     }
   />
 )

@@ -1,17 +1,17 @@
-export class IDoc {
+export abstract class Doc {
   id: number
-  created_at: Date
+  createdAt: Date
 
-  constructor(obj) {
+  constructor(obj: any) {
     Object.assign(this, obj)
   }
 }
 
-export class IDBDoc {
+export abstract class DBDocSB {
   readonly id: number
   readonly created_at: Date
 
-  constructor(obj) {
+  constructor(obj: any) {
     Object.assign(this, obj)
   }
 }

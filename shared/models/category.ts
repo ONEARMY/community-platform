@@ -1,10 +1,10 @@
 // New models for Supabase
 
-import { IDBDoc, IDoc } from './document'
+import { DBDocSB, Doc } from './document'
 
 import type { ContentTypes } from './common'
 
-export class Category extends IDoc {
+export class Category extends Doc {
   name: string
   type: ContentTypes
 
@@ -12,14 +12,14 @@ export class Category extends IDoc {
     const { created_at, id, name, type } = category
     return new Category({
       id,
-      created_at: new Date(created_at),
+      createdAt: new Date(created_at),
       name,
       type,
     })
   }
 }
 
-export class DBCategory extends IDBDoc {
+export class DBCategory extends DBDocSB {
   name: string
   type: ContentTypes
 

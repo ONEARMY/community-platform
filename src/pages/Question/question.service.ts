@@ -1,6 +1,6 @@
 import { logger } from 'src/logger'
 
-import type { DBCategory } from 'oa-shared'
+import type { Category } from 'oa-shared'
 import type { Question } from 'src/models/question.model'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
@@ -40,7 +40,7 @@ const search = async (
 const getQuestionCategories = async () => {
   try {
     const response = await fetch('/api/categories/questions')
-    return (await response.json()) as DBCategory[]
+    return (await response.json()) as Category[]
   } catch (error) {
     logger.error('Failed to fetch questions', { error })
     return []

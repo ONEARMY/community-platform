@@ -67,7 +67,7 @@ describe('Questions', () => {
       mockQuestionItem.title =
         'Do you prefer camping near a lake or in a forest?'
       mockQuestionItem.category = {
-        created_at: new Date(),
+        createdAt: new Date(),
         name: 'Preference',
         id: faker.number.int(),
         type: 'questions',

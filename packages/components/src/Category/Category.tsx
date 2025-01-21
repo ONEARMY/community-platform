@@ -1,18 +1,19 @@
 import { Flex, Text } from 'theme-ui'
 
-import type { DBCategory } from 'oa-shared'
+import type { Category as CategoryType } from 'oa-shared'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
 type OldICategory = { label: string }
 export interface Props {
-  category: DBCategory | OldICategory
+  category: CategoryType | OldICategory
   sx?: ThemeUIStyleObject | undefined
 }
 
 export const Category = (props: Props) => {
   const { category, sx } = props
 
-  const name = (category as DBCategory).name || (category as OldICategory).label
+  const name =
+    (category as CategoryType).name || (category as OldICategory).label
 
   return (
     <Flex sx={{ alignItems: 'start' }}>

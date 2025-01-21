@@ -4,13 +4,13 @@ import { CardButton } from '../CardButton/CardButton'
 import { getGlyph, Icon } from '../Icon/Icon'
 import { VerticalList } from '../VerticalList/VerticalList.client'
 
-import type { DBCategory, ICategory } from 'oa-shared'
+import type { Category, ICategory } from 'oa-shared'
 import type { availableGlyphs } from '../Icon/types'
 
 export interface IProps {
-  activeCategory: DBCategory | ICategory | null
-  allCategories: (DBCategory | ICategory)[]
-  setActiveCategory: (category: DBCategory | ICategory | null) => void
+  activeCategory: Category | ICategory | null
+  allCategories: (Category | ICategory)[]
+  setActiveCategory: (category: Category | ICategory | null) => void
 }
 
 export const CategoryVerticalList = (props: IProps) => {
@@ -21,8 +21,8 @@ export const CategoryVerticalList = (props: IProps) => {
   }
 
   const orderedCategories = allCategories.toSorted((a, b) =>
-    (a as DBCategory).created_at
-      ? (a as DBCategory).created_at > (b as DBCategory).created_at
+    (a as Category).createdAt
+      ? (a as Category).createdAt > (b as Category).createdAt
         ? 1
         : -1
       : (a as ICategory)._created > (b as ICategory)._created
@@ -30,9 +30,9 @@ export const CategoryVerticalList = (props: IProps) => {
         : -1,
   )
 
-  const isCategorySelected = (category: DBCategory | ICategory) => {
-    if ((category as DBCategory).id) {
-      return (category as DBCategory).id === (activeCategory as DBCategory)?.id
+  const isCategorySelected = (category: Category | ICategory) => {
+    if ((category as Category).id) {
+      return (category as Category).id === (activeCategory as Category)?.id
     }
     if ((category as ICategory)._id) {
       return (category as ICategory)._id === (activeCategory as ICategory)?._id
@@ -44,7 +44,7 @@ export const CategoryVerticalList = (props: IProps) => {
       {orderedCategories.map((category, index) => {
         const isSelected = isCategorySelected(category)
         const name =
-          (category as DBCategory).name || (category as ICategory).label
+          (category as Category).name || (category as ICategory).label
         const glyph = name.toLowerCase() as availableGlyphs
         const hasGlyph = getGlyph(glyph)
 

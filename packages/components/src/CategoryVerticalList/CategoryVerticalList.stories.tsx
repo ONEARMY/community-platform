@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { CategoryVerticalList } from './CategoryVerticalList'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { ContentTypes, DBCategory, ICategory } from 'oa-shared'
+import type { Category, ContentTypes, ICategory } from 'oa-shared'
 
 export default {
   title: 'Components/CategoryVerticalList',
@@ -12,43 +12,43 @@ export default {
 
 const allCategoriesForPreciousPlastic = [
   {
-    created_at: new Date('2024-12-03T18:03:51.313Z'),
+    createdAt: new Date('2024-12-03T18:03:51.313Z'),
     id: 1,
     name: 'Guides',
     type: 'questions' as ContentTypes,
   },
   {
-    created_at: new Date('2022-12-01T18:03:51.313Z'),
+    createdAt: new Date('2022-12-01T18:03:51.313Z'),
     id: 2,
     name: 'Machines',
     type: 'questions' as ContentTypes,
   },
   {
-    created_at: new Date('2022-12-03T18:03:51.313Z'),
+    createdAt: new Date('2022-12-03T18:03:51.313Z'),
     id: 3,
     name: 'Moulds',
     type: 'questions' as ContentTypes,
   },
   {
-    created_at: new Date('2022-12-03T18:03:51.313Z'),
+    createdAt: new Date('2022-12-03T18:03:51.313Z'),
     id: 4,
     name: 'Products',
     type: 'questions' as ContentTypes,
   },
   {
-    created_at: new Date('2022-12-03T18:03:51.313Z'),
+    createdAt: new Date('2022-12-03T18:03:51.313Z'),
     id: 5,
     name: 'Starter Kits',
     type: 'questions' as ContentTypes,
   },
   {
-    created_at: new Date('2022-12-04T18:03:51.313Z'),
+    createdAt: new Date('2022-12-04T18:03:51.313Z'),
     id: 6,
     name: 'Recycling',
     type: 'questions' as ContentTypes,
   },
   {
-    created_at: new Date('2022-12-05T18:03:51.313Z'),
+    createdAt: new Date('2022-12-05T18:03:51.313Z'),
     id: 7,
     _modified: '2022-12-03T18:03:51.313Z',
     name: 'From the Team',
@@ -58,31 +58,31 @@ const allCategoriesForPreciousPlastic = [
 
 const allCategoriesForProjectKamp = [
   {
-    created_at: new Date('2022-12-03T18:03:51.313Z'),
+    createdAt: new Date('2022-12-03T18:03:51.313Z'),
     id: 8,
     name: 'Construction',
     type: 'questions' as ContentTypes,
   },
   {
-    created_at: new Date('2022-12-03T18:03:51.313Z'),
+    createdAt: new Date('2022-12-03T18:03:51.313Z'),
     id: 9,
     name: 'Food',
     type: 'questions' as ContentTypes,
   },
   {
-    created_at: new Date('2022-12-03T18:03:51.313Z'),
+    createdAt: new Date('2022-12-03T18:03:51.313Z'),
     id: 10,
     name: 'Landscape',
     type: 'questions' as ContentTypes,
   },
   {
-    created_at: new Date('2022-12-03T18:03:51.313Z'),
+    createdAt: new Date('2022-12-03T18:03:51.313Z'),
     id: 11,
     name: 'Other',
     type: 'questions' as ContentTypes,
   },
   {
-    created_at: new Date('2022-12-03T18:03:51.313Z'),
+    createdAt: new Date('2022-12-03T18:03:51.313Z'),
     id: 12,
     name: 'Utilities',
     type: 'questions' as ContentTypes,
@@ -91,7 +91,7 @@ const allCategoriesForProjectKamp = [
 
 export const Basic: StoryFn<typeof CategoryVerticalList> = () => {
   const [activeCategory, setActiveCategory] = useState<
-    DBCategory | ICategory | null
+    Category | ICategory | null
   >(null)
   const allCategories = [
     ...allCategoriesForPreciousPlastic,
@@ -111,23 +111,23 @@ export const Basic: StoryFn<typeof CategoryVerticalList> = () => {
 
 export const WhenGlyphNotPresent: StoryFn<typeof CategoryVerticalList> = () => {
   const [activeCategory, setActiveCategory] = useState<
-    DBCategory | ICategory | null
+    Category | ICategory | null
   >(null)
   const noGlyphCategories = [
     {
-      created_at: new Date('2022-12-03T18:03:51.313Z'),
+      createdAt: new Date('2022-12-03T18:03:51.313Z'),
       id: 13,
       name: 'No Glphy A',
       type: 'questions' as ContentTypes,
     },
     {
-      created_at: new Date('2022-12-03T18:03:51.313Z'),
+      createdAt: new Date('2022-12-03T18:03:51.313Z'),
       id: 14,
       name: 'No Glphy B',
       type: 'questions' as ContentTypes,
     },
     {
-      created_at: new Date('2022-12-03T18:03:51.313Z'),
+      createdAt: new Date('2022-12-03T18:03:51.313Z'),
       id: 15,
       name: 'No Glphy C',
       type: 'questions' as ContentTypes,
@@ -147,7 +147,7 @@ export const WhenGlyphNotPresent: StoryFn<typeof CategoryVerticalList> = () => {
 
 export const OnlyOne: StoryFn<typeof CategoryVerticalList> = () => {
   const [activeCategory, setActiveCategory] = useState<
-    DBCategory | ICategory | null
+    Category | ICategory | null
   >(null)
 
   const twoCategories = [

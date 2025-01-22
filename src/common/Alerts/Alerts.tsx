@@ -1,19 +1,17 @@
-import { observer } from 'mobx-react-lite'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
-
+import { UserAction } from '../UserAction'
 import { AlertIncompleteProfile } from './AlertIncompleteProfile'
 import { AlertProfileVerification } from './AlertProfileVerification'
 
-export const Alerts = observer(() => {
-  const { userStore } = useCommonStores().stores
-  const authUser = userStore.authUser
-
-  if (!authUser) return null
-
+export const Alerts = () => {
   return (
-    <>
-      <AlertProfileVerification />
-      <AlertIncompleteProfile />
-    </>
+    <UserAction
+      loggedIn={
+        <>
+          <AlertProfileVerification />
+          <AlertIncompleteProfile />
+        </>
+      }
+      loggedOut={null}
+    />
   )
-})
+}

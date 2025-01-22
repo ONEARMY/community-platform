@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { Button, MemberBadge } from 'oa-components'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { UserAction } from 'src/common/UserAction'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { Box, Flex, Text, Textarea } from 'theme-ui'
 
@@ -24,8 +24,6 @@ export const CreateCommentV2 = observer((props: Props) => {
   const buttonLabel = props.buttonLabel ?? 'Leave a comment'
 
   const [comment, setComment] = useState<string>('')
-  const { userStore } = useCommonStores().stores
-  const isLoggedIn = !!userStore.activeUser
   const [isFocused, setIsFocused] = useState<boolean>(false)
 
   const commentIsActive = comment.length > 0 || isFocused
@@ -77,36 +75,37 @@ export const CreateCommentV2 = observer((props: Props) => {
               },
             }}
           >
-            {!isLoggedIn ? (
-              <LoginPrompt />
-            ) : (
-              <Flex sx={{ flexDirection: 'column' }}>
-                <Box
-                  className={`grow-wrap ${commentIsActive ? 'value-set' : ''}`}
-                >
-                  <Textarea
-                    value={comment}
-                    maxLength={MAX_COMMENT_LENGTH}
-                    onChange={(event) => onChange(event)}
-                    aria-label="Comment"
-                    placeholder={placeholder}
-                    rows={1}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
-                  />
-                </Box>
-                <Text
-                  sx={{
-                    fontSize: 1,
-                    display: commentIsActive ? 'flex' : 'none',
-                    alignSelf: 'flex-end',
-                    padding: 2,
-                  }}
-                >
-                  {comment.length}/{MAX_COMMENT_LENGTH}
-                </Text>
-              </Flex>
-            )}
+            <UserAction
+              loggedIn={
+                <Flex sx={{ flexDirection: 'column' }}>
+                  <Box
+                    className={`grow-wrap ${commentIsActive ? 'value-set' : ''}`}
+                  >
+                    <Textarea
+                      value={comment}
+                      maxLength={MAX_COMMENT_LENGTH}
+                      onChange={(event) => onChange(event)}
+                      aria-label="Comment"
+                      placeholder={placeholder}
+                      rows={1}
+                      onFocus={() => setIsFocused(true)}
+                      onBlur={() => setIsFocused(false)}
+                    />
+                  </Box>
+                  <Text
+                    sx={{
+                      fontSize: 1,
+                      display: commentIsActive ? 'flex' : 'none',
+                      alignSelf: 'flex-end',
+                      padding: 2,
+                    }}
+                  >
+                    {comment.length}/{MAX_COMMENT_LENGTH}
+                  </Text>
+                </Flex>
+              }
+              loggedOut={<LoginPrompt />}
+            />
           </Box>
 
           <Flex
@@ -117,7 +116,7 @@ export const CreateCommentV2 = observer((props: Props) => {
             }}
           >
             <Button
-              disabled={!comment.trim() || !isLoggedIn || isLoading}
+              disabled={!comment.trim() || isLoading}
               variant="primary"
               icon={isLoading ? undefined : 'contact'}
               onClick={() => {

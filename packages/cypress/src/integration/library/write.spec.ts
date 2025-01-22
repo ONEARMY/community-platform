@@ -178,6 +178,7 @@ describe('[Library]', () => {
       const categoryGuidanceMain =
         'Cover image should show the fully built mould'
 
+      cy.get('[data-cy="sign-up"]')
       cy.signUpNewUser(creator)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy="MemberBadge-member"]').should('be.visible')
@@ -185,7 +186,7 @@ describe('[Library]', () => {
 
       cy.step('Access the create project page')
       cy.get('a[href="/library/create"]').should('be.visible')
-      cy.get('[data-cy=create]').click()
+      cy.get('[data-cy=create-project]').click()
       cy.contains('Add your project').should('be.visible')
 
       cy.step('Warn if title is identical with the existing ones')
@@ -322,7 +323,7 @@ describe('[Library]', () => {
       cy.get('[data-cy=loader]').should('not.exist')
       cy.step('Access the create project')
       cy.get('a[href="/library/create"]').should('be.visible')
-      cy.get('[data-cy=create]').click()
+      cy.get('[data-cy=create-project]').click()
       cy.fillIntroTitle(expected.title)
       cy.get('[data-cy=page-link][href*="/library"]').click()
       cy.get('[data-cy="Confirm.modal: Cancel"]').click()

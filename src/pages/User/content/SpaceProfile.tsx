@@ -14,6 +14,7 @@ import { ExternalLinkLabel, UserRole } from 'oa-shared'
 import { ClientOnly } from 'remix-utils/client-only'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { ProfileTags } from 'src/common/ProfileTags'
+import { UserAction } from 'src/common/UserAction'
 import { isPreciousPlastic } from 'src/config/config'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
@@ -29,6 +30,7 @@ import {
 } from 'theme-ui'
 
 import { UserContactForm } from '../contact/UserContactForm'
+import { UserContactNotLoggedIn } from '../contact/UserContactNotLoggedIn'
 import { Impact } from '../impact/Impact'
 import { heading } from '../impact/labels'
 import UserContactAndLinks from './UserContactAndLinks'
@@ -249,7 +251,16 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <TabPanel value="contact">
               <Box>
                 <ClientOnly fallback={<></>}>
-                  {() => <UserContactForm user={user} />}
+                  {() => (
+                    <UserAction
+                      loggedIn={<UserContactForm user={user} />}
+                      loggedOut={
+                        <UserContactNotLoggedIn
+                          displayName={user.displayName}
+                        />
+                      }
+                    />
+                  )}
                 </ClientOnly>
                 <UserContactAndLinks links={userLinks} />
               </Box>

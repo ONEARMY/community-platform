@@ -2,12 +2,10 @@ import { useState } from 'react'
 import { Form } from 'react-final-form'
 import { observer } from 'mobx-react'
 import { Button } from 'oa-components'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import {
   UserContactError,
   UserContactFieldMessage,
   UserContactFieldName,
-  UserContactNotLoggedIn,
 } from 'src/pages/User/contact'
 import { contact } from 'src/pages/User/labels'
 import { messageService } from 'src/services/messageService'
@@ -23,16 +21,11 @@ interface Props {
 type SubmitResults = { type: 'success' | 'error'; message: string }
 
 export const UserContactForm = observer(({ user }: Props) => {
-  const { userStore } = useCommonStores().stores
-  const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
-
   if (!isUserContactable(user)) {
     return null
   }
 
-  if (!userStore.activeUser) {
-    return <UserContactNotLoggedIn displayName={user.displayName} />
-  }
+  const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
 
   const { button, title, successMessage } = contact
   const buttonName = 'contact-submit'

@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Flex, Text } from 'theme-ui'
 
 import { DownloadButton } from '../DownloadButton/DownloadButton'
@@ -14,6 +13,7 @@ export interface IProps {
     size: number
     downloadUrl?: string | undefined
   }
+  fileDownloadCount?: number
   forDonationRequest?: boolean
   isLoggedIn?: boolean
   allowDownload?: boolean
@@ -21,14 +21,14 @@ export interface IProps {
   redirectToSignIn?: () => Promise<void>
 }
 
-const FileDetails = (props: {
-  file: {
-    name: string
-  }
+interface IPropFileDetails {
+  file: { name: string }
   glyph: availableGlyphs
   size: string
   redirectToSignIn?: () => Promise<void>
-}) => {
+}
+
+const FileDetails = (props: IPropFileDetails) => {
   const { file, glyph, size, redirectToSignIn } = props
 
   return (
@@ -71,14 +71,15 @@ const FileDetails = (props: {
   )
 }
 
-export const DownloadStaticFile = ({
-  file,
-  allowDownload,
-  handleClick,
-  redirectToSignIn,
-  forDonationRequest,
-  isLoggedIn,
-}: IProps) => {
+export const DownloadStaticFile = (props: IProps) => {
+  const {
+    file,
+    fileDownloadCount,
+    allowDownload,
+    handleClick,
+    redirectToSignIn,
+    isLoggedIn,
+  } = props
   const size = bytesToSize(file.size || 0)
 
   if (!file) {
@@ -101,23 +102,13 @@ export const DownloadStaticFile = ({
         </ExternalLink>
       )}
 
-      {forDonationRequest && (
-        <DownloadButton
-          onClick={() => handleClick && handleClick()}
-          isLoggedIn={isLoggedIn}
-          label={`${file.name} (${size})`}
-          glyph="download-cloud"
-        />
-      )}
-
-      {!forDownload && !forDonationRequest && (
-        <FileDetails
-          file={file}
-          glyph="download-cloud"
-          size={size}
-          redirectToSignIn={redirectToSignIn}
-        />
-      )}
+      <DownloadButton
+        fileDownloadCount={fileDownloadCount}
+        glyph="download-cloud"
+        isLoggedIn={isLoggedIn}
+        label={`${file.name} (${size})`}
+        onClick={() => handleClick && handleClick()}
+      />
     </>
   )
 }

@@ -21,9 +21,5 @@ const downloadProps = {
 }
 
 export const Default: StoryFn<typeof DownloadWithDonationAsk> = () => (
-  <DownloadWithDonationAsk isLoggedIn {...downloadProps} />
-)
-
-export const LoggedOut: StoryFn<typeof DownloadWithDonationAsk> = () => (
-  <DownloadWithDonationAsk isLoggedIn={false} {...downloadProps} />
+  <DownloadWithDonationAsk {...downloadProps} />
 )

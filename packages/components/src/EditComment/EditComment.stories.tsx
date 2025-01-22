@@ -3,7 +3,7 @@ import { EditComment } from './EditComment'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Discussions/EditComment',
+  title: 'Commenting/EditComment',
   component: EditComment,
 } as Meta<typeof EditComment>
 

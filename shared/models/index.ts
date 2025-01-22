@@ -1,5 +1,6 @@
 export * from './categories'
 export * from './category'
+export * from './comment'
 export * from './common'
 export * from './config'
 export * from './db'

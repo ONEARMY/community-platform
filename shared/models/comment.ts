@@ -1,3 +1,7 @@
+import { DBDocSB, Doc } from './document'
+
+import type { ContentTypes } from './common'
+
 export class DBCommentAuthor {
   readonly id: number
   readonly firebase_auth_id: string
@@ -38,27 +42,21 @@ export class CommentAuthor {
   }
 }
 
-export class DBComment {
-  readonly id: number
-  readonly created_at: string
+export class DBComment extends DBDocSB {
   readonly profile?: DBCommentAuthor
   created_by: number | null
   modified_at: string | null
   comment: string
   source_id: number | null
-  source_type: string
+  source_type: ContentTypes
   source_id_legacy: string | null
   parent_id: number | null
   deleted: boolean | null
 
-  constructor(obj: DBComment) {
-    Object.assign(this, obj)
-  }
-
   static toDB(obj: Comment) {
     return new DBComment({
       id: obj.id,
-      created_at: obj.createdAt.toUTCString(),
+      created_at: new Date(obj.createdAt),
       created_by: obj.createdBy?.id || null,
       modified_at: obj.modifiedAt ? obj.modifiedAt.toUTCString() : null,
       comment: obj.comment,
@@ -71,22 +69,16 @@ export class DBComment {
   }
 }
 
-export class Comment {
-  id: number
-  createdAt: Date
+export class Comment extends Doc {
   modifiedAt: Date | null
   createdBy: CommentAuthor | null
   comment: string
   sourceId: number | string
-  sourceType: string
+  sourceType: ContentTypes
   parentId: number | null
   deleted: boolean | null
   highlighted?: boolean
   replies?: Reply[]
-
-  constructor(obj: Comment) {
-    Object.assign(this, obj)
-  }
 
   static fromDB(obj: DBComment, replies?: Reply[]) {
     return new Comment({

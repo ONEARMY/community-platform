@@ -8,7 +8,7 @@ import { Box, Flex, Text, Textarea } from 'theme-ui'
 
 import type { ChangeEvent } from 'react'
 
-import './CreateCommentV2.css'
+import './CreateCommentSupabase.css'
 
 export interface Props {
   onSubmit: (value: string) => void
@@ -17,7 +17,7 @@ export interface Props {
   placeholder?: string
 }
 
-export const CreateCommentV2 = observer((props: Props) => {
+export const CreateCommentSupabase = observer((props: Props) => {
   const { onSubmit, isLoading } = props
   const userProfileType = 'member'
   const placeholder = props.placeholder || 'Leave your questions or feedback...'

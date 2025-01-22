@@ -1,11 +1,11 @@
+import { Comment, DBComment } from 'oa-shared'
 import { verifyFirebaseToken } from 'src/firestore/firestoreAdmin.server'
-import { Comment, DBComment } from 'src/models/comment.model'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { notificationsService } from 'src/services/notificationsService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
-import type { DBCommentAuthor, Reply } from 'src/models/comment.model'
+import type { DBCommentAuthor, Reply } from 'oa-shared'
 import type { DBProfile } from 'src/models/profile.model'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {

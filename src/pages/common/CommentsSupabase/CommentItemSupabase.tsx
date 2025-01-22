@@ -1,0 +1,136 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { observer } from 'mobx-react'
+import {
+  ButtonShowReplies,
+  CommentDisplay,
+  ConfirmModal,
+  EditComment,
+  Modal,
+} from 'oa-components'
+import { UserRole } from 'oa-shared'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { Flex } from 'theme-ui'
+
+import { CommentReply } from './CommentReplySupabase'
+import { CreateCommentSupabase } from './CreateCommentSupabase'
+
+import type { Comment } from 'oa-shared'
+
+export interface ICommentItemProps {
+  comment: Comment
+  onEdit: (id: number, comment: string) => void
+  onDelete: (id: number) => void
+  onReply: (reply: string) => void
+  onEditReply: (id: number, reply: string) => void
+  onDeleteReply: (id: number) => void
+}
+
+export const CommentItemSupabase = observer((props: ICommentItemProps) => {
+  const { comment, onEdit, onDelete, onReply, onEditReply, onDeleteReply } =
+    props
+  const commentRef = useRef<HTMLDivElement>()
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showReplies, setShowReplies] = useState(
+    () => !!comment.replies?.some((x) => x.highlighted),
+  )
+  const { userStore } = useCommonStores().stores
+  const { activeUser } = userStore
+
+  const isEditable = useMemo(() => {
+    if (!userStore.activeUser?._authID) {
+      return false
+    }
+
+    return (
+      activeUser?._authID === comment.createdBy?.firebaseAuthId ||
+      activeUser?.userRoles?.includes(UserRole.ADMIN) ||
+      activeUser?.userRoles?.includes(UserRole.SUPER_ADMIN)
+    )
+  }, [activeUser?._authID, comment.createdBy?.firebaseAuthId])
+
+  const item = 'CommentItem'
+
+  useEffect(() => {
+    if (comment.highlighted) {
+      commentRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+    }
+  }, [comment.highlighted])
+
+  return (
+    <Flex
+      id={`comment:${comment.id}`}
+      data-cy={isEditable ? `Own${item}` : item}
+      sx={{ flexDirection: 'column' }}
+    >
+      <Flex sx={{ gap: 2, flexDirection: 'column' }} ref={commentRef as any}>
+        <CommentDisplay
+          isEditable={isEditable}
+          itemType={item}
+          comment={comment}
+          setShowDeleteModal={setShowDeleteModal}
+          setShowEditModal={setShowEditModal}
+        />
+
+        <Flex
+          sx={{
+            alignItems: 'stretch',
+            flexDirection: 'column',
+            flex: 1,
+          }}
+        >
+          {showReplies && (
+            <>
+              {comment.replies?.map((x) => (
+                <CommentReply
+                  key={x.id}
+                  comment={x}
+                  onEdit={(id: number, comment: string) =>
+                    onEditReply(id, comment)
+                  }
+                  onDelete={(id: number) => onDeleteReply(id)}
+                />
+              ))}
+
+              <CreateCommentSupabase
+                onSubmit={(comment) => onReply(comment)}
+                buttonLabel="Leave a reply"
+              />
+            </>
+          )}
+          <ButtonShowReplies
+            isShowReplies={showReplies}
+            replies={(comment.replies || []) as any}
+            setIsShowReplies={() => setShowReplies(!showReplies)}
+          />
+        </Flex>
+      </Flex>
+
+      <Modal width={600} isOpen={showEditModal}>
+        <EditComment
+          comment={comment.comment}
+          handleSubmit={async (commentText) => {
+            onEdit(comment.id, commentText)
+            setShowEditModal(false)
+          }}
+          handleCancel={() => setShowEditModal(false)}
+          isReply={false}
+        />
+      </Modal>
+
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        message="Are you sure you want to delete this comment?"
+        confirmButtonText="Delete"
+        handleCancel={() => setShowDeleteModal(false)}
+        handleConfirm={async () => {
+          onDelete(comment.id)
+          setShowDeleteModal(false)
+        }}
+      />
+    </Flex>
+  )
+})

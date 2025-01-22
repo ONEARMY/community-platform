@@ -4,7 +4,7 @@ import type { Meta, StoryFn } from '@storybook/react'
 import type { IComment } from '../CommentItem/types'
 
 export default {
-  title: 'Discussions/DiscussionTitle',
+  title: 'Commenting/DiscussionTitle',
   component: DiscussionTitle,
 } as Meta<typeof DiscussionTitle>
 

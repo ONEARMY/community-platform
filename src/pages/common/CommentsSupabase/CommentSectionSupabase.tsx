@@ -1,19 +1,20 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Comment } from 'src/models/comment.model'
+import { CommentsTitle } from 'oa-components'
+import { Comment } from 'oa-shared'
 import { commentService } from 'src/services/commentService'
-import { Box, Button, Flex, Heading } from 'theme-ui'
+import { Box, Button, Flex } from 'theme-ui'
 
-import { CommentItemV2 } from './CommentItemV2'
-import { CreateCommentV2 } from './CreateCommentV2'
+import { CommentItemSupabase } from './CommentItemSupabase'
+import { CreateCommentSupabase } from './CreateCommentSupabase'
 
-import type { Reply } from 'src/models/comment.model'
+import type { Reply } from 'oa-shared'
 
-type CommentsV2Props = {
+type CommentsSupabaseProps = {
   sourceId: number | string
 }
 const commentPageSize = 10
 
-const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
+export const CommentSectionSupabase = ({ sourceId }: CommentsSupabaseProps) => {
   const [comments, setComments] = useState<Comment[]>([])
   const [newCommentIds, setNewCommentIds] = useState<number[]>([])
   const [commentLimit, setCommentLimit] = useState<number>(commentPageSize)
@@ -28,12 +29,6 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
   const displayShowMore = useMemo(
     () => comments.length - newCommentIds.length > commentLimit,
     [comments, commentLimit, newCommentIds],
-  )
-  const commentCount = useMemo(
-    () =>
-      comments.filter((x) => !x.deleted).length +
-      comments.flatMap((x) => x.replies).filter((x) => !!x).length,
-    [comments],
   )
 
   useEffect(() => {
@@ -139,19 +134,6 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
     }
   }
 
-  const setTitle = () => {
-    if (commentCount === 0) {
-      return 'Start the discussion'
-    }
-    if (commentCount === 1) {
-      return '1 Comment'
-    }
-
-    return `${commentCount} Comments`
-  }
-
-  const title = setTitle()
-
   const postReply = async (id: number, reply: string) => {
     try {
       const result = await commentService.postComment(sourceId, reply, id)
@@ -229,12 +211,11 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-      <Heading as="h3" data-cy="DiscussionTitle">
-        {title}
-      </Heading>
+      <CommentsTitle comments={comments} />
+
       {displayedComments.map((comment) => (
         <Box key={comment.id}>
-          <CommentItemV2
+          <CommentItemSupabase
             comment={comment}
             onEdit={editComment}
             onDelete={deleteComment}
@@ -261,7 +242,7 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
 
       {newComments.map((comment) => (
         <Box key={comment.id}>
-          <CommentItemV2
+          <CommentItemSupabase
             comment={comment}
             onEdit={editComment}
             onDelete={deleteComment}
@@ -272,9 +253,7 @@ const CommentSectionV2 = ({ sourceId }: CommentsV2Props) => {
         </Box>
       ))}
 
-      <CreateCommentV2 onSubmit={postComment} />
+      <CreateCommentSupabase onSubmit={postComment} />
     </Flex>
   )
 }
-
-export default CommentSectionV2

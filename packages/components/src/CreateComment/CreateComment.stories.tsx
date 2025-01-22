@@ -5,7 +5,7 @@ import { CreateComment } from './CreateComment'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Discussions/CreateComment',
+  title: 'Commenting/CreateComment',
   component: CreateComment,
 } as Meta<typeof CreateComment>
 

@@ -32,8 +32,10 @@ export const FactoryQuestionItem = (
     username: faker.internet.userName(),
   },
   category: {
+    createdAt: new Date(),
     id: faker.number.int(),
     name: faker.lorem.words(1),
+    type: 'questions',
   },
   images: [],
   subscriberCount: faker.number.int(),

@@ -14,9 +14,10 @@ const ResearchFieldCategory = () => {
     const getCategories = async () => {
       const categories = await researchService.getResearchCategories()
       setOptions(
-        categories
-          .filter((x) => !x._deleted)
-          .map((x) => ({ label: x.label, value: x._id })),
+        categories.map(({ _id, label }) => ({
+          label,
+          value: _id,
+        })),
       )
     }
 

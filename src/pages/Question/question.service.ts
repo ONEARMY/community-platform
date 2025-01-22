@@ -1,6 +1,6 @@
 import { logger } from 'src/logger'
 
-import type { Category } from 'src/models/category.model'
+import type { Category } from 'oa-shared'
 import type { Question } from 'src/models/question.model'
 import type { QuestionSortOption } from './QuestionSortOptions'
 

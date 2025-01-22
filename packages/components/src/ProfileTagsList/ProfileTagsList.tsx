@@ -2,7 +2,7 @@ import { Flex } from 'theme-ui'
 
 import { Category } from '../Category/Category'
 
-import type { IProfileTag } from 'oa-shared'
+import type { Category as CategoryType, IProfileTag } from 'oa-shared'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface IProps {
@@ -20,7 +20,7 @@ export const ProfileTagsList = ({ sx, tags }: IProps) => {
           label && (
             <Category
               key={index}
-              category={{ label }}
+              category={{ name: label } as CategoryType}
               sx={{
                 borderRadius: 99,
                 border: '1px solid',

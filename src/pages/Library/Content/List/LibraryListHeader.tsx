@@ -95,7 +95,7 @@ export const LibraryListHeader = (props: IProps) => {
       setActiveCategory={(updatedCategory) =>
         updateFilter(
           LibrarySearchParams.category,
-          updatedCategory ? updatedCategory._id : '',
+          updatedCategory ? (updatedCategory as ICategory)._id : '',
         )
       }
     />

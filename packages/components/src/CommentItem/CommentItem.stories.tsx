@@ -4,7 +4,7 @@ import { CommentItem } from './CommentItem'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Discussions/CommentItem',
+  title: 'Commenting/CommentItem',
   component: CommentItem,
 } as Meta<typeof CommentItem>
 

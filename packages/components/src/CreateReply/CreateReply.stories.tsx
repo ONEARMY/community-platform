@@ -3,7 +3,7 @@ import { CreateReply } from './CreateReply'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Discussions/CreateReply',
+  title: 'Commenting/CreateReply',
   component: CreateReply,
 } as Meta<typeof CreateReply>
 

@@ -4,7 +4,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
-import type { DBComment } from 'src/models/comment.model'
+import type { DBComment } from 'oa-shared'
 import type { DBProfile } from 'src/models/profile.model'
 
 export async function action({ params, request }: LoaderFunctionArgs) {

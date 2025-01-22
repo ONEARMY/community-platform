@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker'
 
+import type { Comment } from 'oa-shared'
 import type { IComment } from './CommentItem/types'
 
 export const fakeComment = (commentOverloads: Partial<IComment> = {}) => ({
@@ -25,3 +26,20 @@ export const createFakeComments = (
       ...commentOverloads,
     }),
   )
+
+export const fakeCommentSB = (
+  commentOverloads: Partial<Comment> = {},
+): Comment => ({
+  id: 0,
+  createdAt: new Date(),
+  modifiedAt: new Date(),
+  createdBy: null,
+  comment: faker.lorem.text(),
+  sourceId: 0,
+  sourceType: 'questions',
+  parentId: 0,
+  deleted: false,
+  highlighted: false,
+  replies: [],
+  ...commentOverloads,
+})

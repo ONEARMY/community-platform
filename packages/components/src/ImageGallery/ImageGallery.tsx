@@ -177,11 +177,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
                 )
               }
             >
-              <Icon
-                glyph="chevron-right"
-                color="white"
-                size={45}
-              />
+              <Icon glyph="chevron-right" color="white" size={45} />
             </NavButton>
             <NavButton
               aria-label={'Previous image'}
@@ -196,11 +192,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
                 )
               }
             >
-              <Icon
-                glyph="chevron-left"
-                color="white"
-                size={45}
-              />
+              <Icon glyph="chevron-left" color="white" size={45} />
             </NavButton>
           </>
         ) : null}

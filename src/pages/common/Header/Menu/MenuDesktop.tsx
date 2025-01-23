@@ -29,7 +29,8 @@ const MenuLink = styled(NavLink)`
       display: block;
       position: absolute;
       bottom: -6px;
-      background-color: ${(props) => props.theme?.colors?.accent?.base || 'blue'};
+      background-color: ${(props) =>
+        props.theme?.colors?.accent?.base || 'blue'};
       mask-size: contain;
       mask-image: url(\"${MenuCurrent}\");
 
@@ -41,7 +42,6 @@ const MenuLink = styled(NavLink)`
     }
   }
 `
-
 
 export const MenuDesktop = () => {
   const env = useContext(EnvironmentContext)

@@ -14,12 +14,10 @@
   right: 0;
   z-index: 1;
   height: 100%;
-
 }
 
-
 /* Set red background for PhotoSwipe navigation buttons */
-.pswp__button--arrow--prev{
+.pswp__button--arrow--prev {
   background: white !important;
   border: 3px solid black !important;
   position: absolute !important;
@@ -33,8 +31,7 @@
   position: relative;
 }
 
-
-.pswp__button--arrow--next{
+.pswp__button--arrow--next {
   background: white !important;
   border: 3px solid black !important;
   position: absolute !important;
@@ -49,22 +46,25 @@
 }
 
 /* Optional: Change the arrow color */
-.pswp__button--arrow--prev svg{
-  fill: black; /* Arrow color */
-  width: 45px !important; /* Arrow size */
+.pswp__button--arrow--prev svg {
+  fill: black;
+  /* Arrow color */
+  width: 45px !important;
+  /* Arrow size */
   height: 45px !important;
   position: absolute !important;
   left: 65% !important;
   top: 112% !important;
-  transform: translate(-50%,-50%) !important;
+  transform: translate(-50%, -50%) !important;
 }
 
 .pswp__button--arrow--next svg {
-  fill: black; /* Arrow color */
-  width: 45px !important; /* Arrow size */
+  fill: black;
+  /* Arrow color */
+  width: 45px !important;
+  /* Arrow size */
   height: 45px !important;
   position: absolute !important;
   left: -8% !important;
   top: 65% !important;
 }
-

@@ -1,20 +1,20 @@
-import styled from '@emotion/styled';
-import { Flex, Text } from 'theme-ui';
+import styled from '@emotion/styled'
+import { Flex, Text } from 'theme-ui'
 
-import { ExternalLink } from '../ExternalLink/ExternalLink';
-import { Icon } from '../Icon/Icon';
+import { ExternalLink } from '../ExternalLink/ExternalLink'
+import { Icon } from '../Icon/Icon'
 
 type SiteFooterProps = {
-  siteName: string;
-};
+  siteName: string
+}
 
 export const SiteFooter = ({ siteName }: SiteFooterProps) => {
-  const discordButtonWidth = 310;
+  const discordButtonWidth = 310
 
   const Anchor = styled(ExternalLink)`
     color: #fff;
     text-decoration: underline;
-  `;
+  `
 
   const FooterContainer = styled(Flex)`
     color: #fff;
@@ -43,7 +43,7 @@ export const SiteFooter = ({ siteName }: SiteFooterProps) => {
       padding-right: ${discordButtonWidth}px;
       text-align: left;
     }
-  `;
+  `
 
   const OneArmyIcon = styled(Icon)`
     @media only screen and (min-width: ${(props) =>
@@ -53,7 +53,7 @@ export const SiteFooter = ({ siteName }: SiteFooterProps) => {
       top: 45px;
       left: 30px;
     }
-  `;
+  `
 
   return (
     <FooterContainer
@@ -81,5 +81,5 @@ export const SiteFooter = ({ siteName }: SiteFooterProps) => {
         .
       </Text>
     </FooterContainer>
-  );
-};
+  )
+}

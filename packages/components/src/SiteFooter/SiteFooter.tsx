@@ -21,14 +21,14 @@ export const SiteFooter = ({ siteName }: SiteFooterProps) => {
     display: flex;
     flex-direction: column;
     margin-top: 45px;
-    line-height: 1.5;
-    padding: 45px ${(props) => props.theme?.space?.[4] || 16}px; // Fallback to 16px
+    line-heigh: 1.5;
+    padding: 45px ${(props) => (props.theme as any).space[4]}px;
     position: relative;
     text-align: center;
 
     @media only screen and (min-width: ${(props) =>
-        props.theme?.breakpoints?.[1] || '52em'}) and (max-width: ${(props) =>
-        props.theme?.breakpoints?.[2] || '64em'}) {
+        (props.theme as any).breakpoints[1]}) and (max-width: ${(props) =>
+        (props.theme as any).breakpoints[2]}) {
       align-items: flex-start;
       padding-top: 35px;
       padding-bottom: 35px;
@@ -38,7 +38,7 @@ export const SiteFooter = ({ siteName }: SiteFooterProps) => {
     }
 
     @media only screen and (min-width: ${(props) =>
-        props.theme?.breakpoints?.[2] || '64em'}) {
+        (props.theme as any).breakpoints[2]}) {
       flex-direction: row;
       padding-right: ${discordButtonWidth}px;
       text-align: left;
@@ -47,8 +47,8 @@ export const SiteFooter = ({ siteName }: SiteFooterProps) => {
 
   const OneArmyIcon = styled(Icon)`
     @media only screen and (min-width: ${(props) =>
-        props.theme?.breakpoints?.[1] || '52em'}) and (max-width: ${(props) =>
-        props.theme?.breakpoints?.[2] || '64em'}) {
+        (props.theme as any).breakpoints[1]}) and (max-width: ${(props) =>
+        (props.theme as any).breakpoints[2]}) {
       position: absolute;
       top: 45px;
       left: 30px;

@@ -40,13 +40,18 @@ interface IState {
 }
 
 const NavButton = styled('button')`
-  background: transparent;
-  border: 0;
+  background: white;
+  border: 3px solid black;
   position: absolute;
-  top: 0;
-  bottom: 0;
-  height: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 55px;
+  width: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  border-radius: 15px;
 `
 
 export const ImageGallery = (props: ImageGalleryProps) => {
@@ -164,7 +169,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
             <NavButton
               aria-label={'Next image'}
               style={{
-                right: 0,
+                right: 10,
               }}
               onClick={() =>
                 setActive(
@@ -175,14 +180,13 @@ export const ImageGallery = (props: ImageGalleryProps) => {
               <Icon
                 glyph="chevron-right"
                 color="white"
-                size={60}
-                marginRight="4px"
+                size={45}
               />
             </NavButton>
             <NavButton
               aria-label={'Previous image'}
               style={{
-                left: 0,
+                left: 10,
               }}
               onClick={() =>
                 setActive(
@@ -195,8 +199,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
               <Icon
                 glyph="chevron-left"
                 color="white"
-                size={60}
-                marginRight="4px"
+                size={45}
               />
             </NavButton>
           </>

@@ -23,6 +23,8 @@
 //     const updatedQuestionDescription = `${initialQuestionDescription} and super awesome goggles`
 
 //     it('[By Authenticated]', () => {
+//      cy.visit('/questions')
+//      cy.get('[data-cy="sign-up"]')
 //       cy.signUpNewUser()
 
 //       cy.step('Go to create page')

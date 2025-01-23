@@ -3,7 +3,7 @@ import { Link, useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
 import { CategoryVerticalList, SearchField, Select } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { UserAction } from 'src/common/UserAction'
 import {
   QuestionSearchParams,
   questionService,
@@ -14,8 +14,7 @@ import { ListHeader } from '../common/Layout/ListHeader'
 import { headings, listing } from './labels'
 import { QuestionSortOptions } from './QuestionSortOptions'
 
-import type { ICategory } from 'oa-shared'
-import type { Category } from 'src/models/category.model'
+import type { Category } from 'oa-shared'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 export const QuestionListHeader = () => {
@@ -77,34 +76,33 @@ export const QuestionListHeader = () => {
     setSearchParams(params)
   }
 
-  const { userStore } = useCommonStores().stores
-
-  const allCategories = categories.map(
-    (x) => ({ _id: x.id, label: x.name }) as unknown as ICategory,
-  )
-
-  const activeCategory = category
-    ? ({ _id: category.id, label: category.name } as unknown as ICategory)
-    : null
-
   const actionComponents = (
-    <Flex>
-      <Link to={userStore.user ? '/questions/create' : '/sign-up'}>
-        <Button type="button" data-cy="create" variant="primary">
-          {listing.create}
-        </Button>
-      </Link>
-    </Flex>
+    <UserAction
+      loggedIn={
+        <Link to="/questions/create">
+          <Button type="button" data-cy="create-question" variant="primary">
+            {listing.create}
+          </Button>
+        </Link>
+      }
+      loggedOut={
+        <Link to="/sign-up">
+          <Button type="button" data-cy="sign-up" variant="primary">
+            {listing.join}
+          </Button>
+        </Link>
+      }
+    />
   )
 
   const categoryComponent = (
     <CategoryVerticalList
-      allCategories={allCategories}
-      activeCategory={activeCategory}
+      allCategories={categories}
+      activeCategory={category !== '' ? category : null}
       setActiveCategory={(updatedCategory) =>
         updateFilter(
           QuestionSearchParams.category,
-          updatedCategory ? updatedCategory._id : '',
+          updatedCategory ? (updatedCategory as Category).id.toString() : '',
         )
       }
     />

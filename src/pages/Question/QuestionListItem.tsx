@@ -89,10 +89,7 @@ export const QuestionListItem = ({ question, query }: IProps) => {
             </Heading>
 
             {question.category && (
-              <Category
-                category={{ label: question.category.name }}
-                sx={{ fontSize: 2 }}
-              />
+              <Category category={question.category} sx={{ fontSize: 2 }} />
             )}
           </Flex>
 

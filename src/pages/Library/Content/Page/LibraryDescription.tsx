@@ -261,7 +261,7 @@ export const LibraryDescription = (props: IProps) => {
             {() => (
               <>
                 <TagList tags={tags} />
-                <LibraryDownloads item={item} loggedInUser={loggedInUser} />
+                <LibraryDownloads item={item} />
               </>
             )}
           </ClientOnly>

@@ -13,7 +13,6 @@ import {
 import { ClientOnly } from 'remix-utils/client-only'
 import { DownloadWrapper } from 'src/common/DownloadWrapper'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
@@ -50,7 +49,6 @@ const ResearchUpdate = (props: IProps) => {
     videoUrl,
   } = update
   const researchStore = useResearchStore()
-  const loggedInUser = useCommonStores().stores.userStore.activeUser
 
   const contributors = useContributorsData(collaborators || [])
 
@@ -214,7 +212,6 @@ const ResearchUpdate = (props: IProps) => {
               <DownloadWrapper
                 handleClick={handleDownloadClick}
                 fileLink={fileLink}
-                isLoggedIn={!!loggedInUser}
                 files={files}
                 fileDownloadCount={downloadCount}
               />

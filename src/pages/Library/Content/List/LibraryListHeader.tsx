@@ -3,7 +3,7 @@ import { Link, useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
 import { CategoryVerticalList, SearchField, Select } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { UserAction } from 'src/common/UserAction'
 import DraftButton from 'src/pages/common/Drafts/DraftButton'
 import { ListHeader } from 'src/pages/common/Layout/ListHeader'
 import { Button, Flex } from 'theme-ui'
@@ -33,7 +33,6 @@ export const LibraryListHeader = (props: IProps) => {
   const sort = searchParams.get(LibrarySearchParams.sort) as LibrarySortOption
 
   const headingTitle = import.meta.env.VITE_HOWTOS_HEADING
-  const isUserLoggedIn = useCommonStores().stores.userStore?.user
 
   useEffect(() => {
     if (q && q.length > 0) {
@@ -95,7 +94,7 @@ export const LibraryListHeader = (props: IProps) => {
       setActiveCategory={(updatedCategory) =>
         updateFilter(
           LibrarySearchParams.category,
-          updatedCategory ? updatedCategory._id : '',
+          updatedCategory ? (updatedCategory as ICategory)._id : '',
         )
       }
     />
@@ -138,25 +137,39 @@ export const LibraryListHeader = (props: IProps) => {
   )
 
   const actionComponents = (
-    <>
-      {isUserLoggedIn && (
-        <DraftButton
-          showDrafts={showDrafts}
-          draftCount={draftCount}
-          handleShowDrafts={handleShowDrafts}
-        />
-      )}
-      <Link to={isUserLoggedIn ? '/library/create' : '/sign-up'}>
-        <Button
-          type="button"
-          sx={{ width: '100%' }}
-          variant="primary"
-          data-cy="create"
-        >
-          {listing.create}
-        </Button>
-      </Link>
-    </>
+    <UserAction
+      loggedIn={
+        <>
+          <DraftButton
+            showDrafts={showDrafts}
+            draftCount={draftCount}
+            handleShowDrafts={handleShowDrafts}
+          />
+          <Link to="/library/create">
+            <Button
+              type="button"
+              sx={{ width: '100%' }}
+              variant="primary"
+              data-cy="create-project"
+            >
+              {listing.create}
+            </Button>
+          </Link>
+        </>
+      }
+      loggedOut={
+        <Link to="/sign-up">
+          <Button
+            type="button"
+            sx={{ width: '100%' }}
+            variant="primary"
+            data-cy="sign-up"
+          >
+            {listing.join}
+          </Button>
+        </Link>
+      }
+    />
   )
 
   return (

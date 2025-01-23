@@ -36,6 +36,7 @@ export const fields: ILabels = {
 
 export const listing = {
   create: 'Ask a question',
+  join: 'Sign up to ask your question',
   noQuestions: 'No questions have been asked yet',
   usefulness: 'How useful it is',
   totalComments: 'Total comments',

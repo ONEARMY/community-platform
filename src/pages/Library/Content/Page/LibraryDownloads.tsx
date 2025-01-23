@@ -10,14 +10,13 @@ import {
   updateLibraryDownloadCooldown,
 } from '../utils/downloadCooldown'
 
-import type { ILibrary, IUser } from 'oa-shared'
+import type { ILibrary } from 'oa-shared'
 
 interface IProps {
   item: ILibrary.DB
-  loggedInUser: IUser | undefined
 }
 
-export const LibraryDownloads = ({ item, loggedInUser }: IProps) => {
+export const LibraryDownloads = ({ item }: IProps) => {
   const { _id, files, fileLink, total_downloads } = item
   const [fileDownloadCount, setFileDownloadCount] = useState(total_downloads)
 
@@ -51,7 +50,6 @@ export const LibraryDownloads = ({ item, loggedInUser }: IProps) => {
         handleClick={handleDownloadClick}
         fileLink={fileLink}
         files={files}
-        isLoggedIn={!!loggedInUser}
         fileDownloadCount={fileDownloadCount || 0}
       />
     </Flex>

@@ -81,7 +81,7 @@ describe('[User sign-up]', () => {
 
       cy.step('Update Email')
       cy.get('[data-cy="accordionContainer"]').click({ multiple: true })
-      cy.get('[data-cy="changeEmailForm"]')
+      cy.get('[data-cy="changeEmailContainer"]')
         .contains(`Current email address: ${email}`)
         .should('be.visible')
       cy.get('[data-cy="newEmail"]').clear().type(newEmail)

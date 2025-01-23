@@ -52,7 +52,6 @@ export const ChangeEmailForm = () => {
     >
       <UserContactError submitResults={submitResults} />
       <Accordion
-        data-cy="changeEmailAccordion"
         title="Change Email"
         subtitle={`${fields.email.title}: ${currentEmail}`}
       >

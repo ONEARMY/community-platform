@@ -20,6 +20,11 @@ export const Accordion = (props: IProps) => {
     <Flex
       data-cy="accordionContainer"
       sx={{ flexDirection: 'column', gap: 2, cursor: 'pointer', ...sx }}
+      onClick={() => {
+        if (!isExpanded) {
+          setIsExpanded(true)
+        }
+      }}
     >
       <Flex
         sx={{

@@ -7,7 +7,6 @@ import { ClientOnly } from 'remix-utils/client-only'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Flex } from 'theme-ui'
 
-import { MemberProfile } from './MemberProfile'
 import { SpaceProfile } from './SpaceProfile'
 
 import type { IUserDB } from 'oa-shared'
@@ -62,19 +61,11 @@ export const UserProfile = observer(
         <ClientOnly fallback={<></>}>
           {() => (
             <>
-              {showMemberProfile ? (
-                <MemberProfile
-                  data-cy="memberProfile"
-                  user={profile}
-                  docs={userCreatedDocs}
-                />
-              ) : (
-                <SpaceProfile
-                  data-cy="spaceProfile"
-                  user={profile}
-                  docs={userCreatedDocs}
-                />
-              )}
+              <SpaceProfile
+                user={profile}
+                docs={userCreatedDocs}
+                type={profile.profileType}
+              />
             </>
           )}
         </ClientOnly>

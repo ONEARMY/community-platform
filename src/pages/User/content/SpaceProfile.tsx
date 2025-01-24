@@ -9,9 +9,10 @@ import {
   Username,
   UserStatistics,
 } from 'oa-components'
-import { ExternalLinkLabel, UserRole } from 'oa-shared'
+import { ExternalLinkLabel, ProfileTypeList, UserRole } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
+import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { ProfileTags } from 'src/common/ProfileTags'
 import { UserAction } from 'src/common/UserAction'
@@ -36,12 +37,13 @@ import { heading } from '../impact/labels'
 import UserContactAndLinks from './UserContactAndLinks'
 import UserCreatedDocuments from './UserCreatedDocuments'
 
-import type { IUser } from 'oa-shared'
+import type { IUser, ProfileTypeName } from 'oa-shared'
 import type { UserCreatedDocs } from '../types'
 
 interface IProps {
   user: IUser
   docs: UserCreatedDocs
+  type: ProfileTypeName
 }
 
 const getCoverImages = (user: IUser) => {
@@ -52,7 +54,7 @@ const getCoverImages = (user: IUser) => {
   return []
 }
 
-export const SpaceProfile = ({ user, docs }: IProps) => {
+export const SpaceProfile = ({ user, docs, type }: IProps) => {
   const {
     about,
     displayName,
@@ -81,64 +83,90 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
 
   const defaultValue = useLocationHook?.hash?.slice(1) || 'profile'
 
+  const profileImageSrc = userImage?.downloadUrl
+    ? cdnImageUrl(userImage.downloadUrl)
+    : DefaultMemberImage
+
   return (
-    <Flex>
-      <Card data-cy="SpaceProfile">
-        <Box>
-          {coverImage.length ? (
-            <ImageGallery
-              images={formatImagesForGallery(coverImage) as any}
-              hideThumbnails={true}
-              showNextPrevButton={true}
-            />
-          ) : (
-            <AspectRatio ratio={24 / 3}>
-              <Flex
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  background: '#ddd',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                No images available.
-              </Flex>
-            </AspectRatio>
-          )}
-        </Box>
+    <Flex
+      data-cy="profileWrapper"
+      sx={{ width: '100%', height: '100%', flexDirection: 'column' }}
+    >
+      {type === ProfileTypeList.MEMBER && (
+        <MemberBadge
+          profileType={ProfileTypeList.MEMBER}
+          size={50}
+          sx={{
+            alignSelf: 'center',
+            transform: 'translateY(25px)',
+          }}
+          useLowDetailVersion
+        />
+      )}
+      <Card
+        data-cy={`${type === ProfileTypeList.MEMBER ? 'member' : 'space'}Profile`}
+        sx={{
+          width: '100%',
+        }}
+      >
+        {type === ProfileTypeList.SPACE && (
+          <Box>
+            {coverImage.length ? (
+              <ImageGallery
+                images={formatImagesForGallery(coverImage) as any}
+                hideThumbnails={true}
+                showNextPrevButton={true}
+              />
+            ) : (
+              <AspectRatio ratio={24 / 3}>
+                <Flex
+                  sx={{
+                    width: '100%',
+                    height: '100%',
+                    background: '#ddd',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  No images available.
+                </Flex>
+              </AspectRatio>
+            )}
+          </Box>
+        )}
         <Flex
           sx={{
             padding: [2, 4],
-            borderTop: '2px solid',
+            borderTop: type === ProfileTypeList.SPACE ? '2px solid' : '',
           }}
         >
           <Box sx={{ width: '100%' }}>
             <Box sx={{ position: 'relative' }}>
-              <Box
-                sx={{
-                  display: 'block',
-                  position: 'absolute',
-                  top: 0,
-                  right: 0,
-                  transform: 'translateY(-50%)',
-                }}
-              >
-                <Box sx={{ display: ['none', 'none', 'block'] }}>
-                  <MemberBadge size={150} profileType={profileType} />
+              {type === ProfileTypeList.SPACE && (
+                <Box
+                  sx={{
+                    display: 'block',
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    transform: 'translateY(-50%)',
+                  }}
+                >
+                  <Box sx={{ display: ['none', 'none', 'block'] }}>
+                    <MemberBadge size={150} profileType={profileType} />
+                  </Box>
+                  <Box sx={{ display: ['none', 'block', 'none'] }}>
+                    <MemberBadge size={100} profileType={profileType} />
+                  </Box>
+                  <Box sx={{ display: ['block', 'none', 'none'] }}>
+                    <MemberBadge size={75} profileType={profileType} />
+                  </Box>
                 </Box>
-                <Box sx={{ display: ['none', 'block', 'none'] }}>
-                  <MemberBadge size={100} profileType={profileType} />
-                </Box>
-                <Box sx={{ display: ['block', 'none', 'none'] }}>
-                  <MemberBadge size={75} profileType={profileType} />
-                </Box>
-              </Box>
-
+              )}
               <Flex
                 sx={{ gap: 2, alignItems: 'center', paddingBottom: [2, 4] }}
               >
-                {userImage?.downloadUrl && (
+                {userImage?.downloadUrl && type === ProfileTypeList.SPACE && (
                   <Avatar
                     data-cy="userImage"
                     src={cdnImageUrl(userImage.downloadUrl, { width: 50 })}
@@ -146,6 +174,19 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                       objectFit: 'cover',
                       width: '50px',
                       height: '50px',
+                    }}
+                  />
+                )}
+
+                {type === ProfileTypeList.MEMBER && (
+                  <Avatar
+                    data-cy="profile-avatar"
+                    loading="lazy"
+                    src={profileImageSrc}
+                    sx={{
+                      objectFit: 'cover',
+                      width: '120px',
+                      height: '120px',
                     }}
                   />
                 )}

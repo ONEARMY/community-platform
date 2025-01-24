@@ -63,17 +63,9 @@ export const UserProfile = observer(
           {() => (
             <>
               {showMemberProfile ? (
-                <MemberProfile
-                  data-cy="memberProfile"
-                  user={profile}
-                  docs={userCreatedDocs}
-                />
+                <MemberProfile user={profile} docs={userCreatedDocs} />
               ) : (
-                <SpaceProfile
-                  data-cy="spaceProfile"
-                  user={profile}
-                  docs={userCreatedDocs}
-                />
+                <SpaceProfile user={profile} docs={userCreatedDocs} />
               )}
             </>
           )}

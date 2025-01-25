@@ -37,7 +37,7 @@ import { heading } from '../impact/labels'
 import UserContactAndLinks from './UserContactAndLinks'
 import UserCreatedDocuments from './UserCreatedDocuments'
 
-import type { IUser, ProfileTypeName } from 'oa-shared'
+import type { IUser } from 'oa-shared'
 import type { UserCreatedDocs } from '../types'
 
 interface IProps {

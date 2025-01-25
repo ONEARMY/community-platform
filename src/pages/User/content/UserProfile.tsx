@@ -61,11 +61,7 @@ export const UserProfile = observer(
         <ClientOnly fallback={<></>}>
           {() => (
             <>
-              <SpaceProfile
-                user={profile}
-                docs={userCreatedDocs}
-                type={profile.profileType}
-              />
+              <SpaceProfile user={profile} docs={userCreatedDocs} />
             </>
           )}
         </ClientOnly>

@@ -43,7 +43,6 @@ import type { UserCreatedDocs } from '../types'
 interface IProps {
   user: IUser
   docs: UserCreatedDocs
-  type: ProfileTypeName
 }
 
 const getCoverImages = (user: IUser) => {
@@ -54,7 +53,7 @@ const getCoverImages = (user: IUser) => {
   return []
 }
 
-export const SpaceProfile = ({ user, docs, type }: IProps) => {
+export const SpaceProfile = ({ user, docs }: IProps) => {
   const {
     about,
     displayName,
@@ -89,10 +88,10 @@ export const SpaceProfile = ({ user, docs, type }: IProps) => {
 
   return (
     <Flex
-      data-cy={`${type === ProfileTypeList.MEMBER ? 'Member' : 'Space'}Profile`}
+      data-cy={`${profileType === ProfileTypeList.MEMBER ? 'Member' : 'Space'}Profile`}
       sx={{ width: '100%', height: '100%', flexDirection: 'column' }}
     >
-      {type === ProfileTypeList.MEMBER && (
+      {profileType === ProfileTypeList.MEMBER && (
         <MemberBadge
           profileType={ProfileTypeList.MEMBER}
           size={50}
@@ -108,7 +107,7 @@ export const SpaceProfile = ({ user, docs, type }: IProps) => {
           width: '100%',
         }}
       >
-        {type !== ProfileTypeList.MEMBER && (
+        {profileType !== ProfileTypeList.MEMBER && (
           <Box>
             {coverImage.length ? (
               <ImageGallery
@@ -136,12 +135,13 @@ export const SpaceProfile = ({ user, docs, type }: IProps) => {
         <Flex
           sx={{
             padding: [2, 4],
-            borderTop: type !== ProfileTypeList.MEMBER ? '2px solid' : '',
+            borderTop:
+              profileType !== ProfileTypeList.MEMBER ? '2px solid' : '',
           }}
         >
           <Box sx={{ width: '100%' }}>
             <Box sx={{ position: 'relative' }}>
-              {type !== ProfileTypeList.MEMBER && (
+              {profileType !== ProfileTypeList.MEMBER && (
                 <Box
                   sx={{
                     display: 'block',
@@ -165,19 +165,20 @@ export const SpaceProfile = ({ user, docs, type }: IProps) => {
               <Flex
                 sx={{ gap: 2, alignItems: 'center', paddingBottom: [2, 4] }}
               >
-                {userImage?.downloadUrl && type !== ProfileTypeList.MEMBER && (
-                  <Avatar
-                    data-cy="userImage"
-                    src={cdnImageUrl(userImage.downloadUrl, { width: 50 })}
-                    sx={{
-                      objectFit: 'cover',
-                      width: '50px',
-                      height: '50px',
-                    }}
-                  />
-                )}
+                {userImage?.downloadUrl &&
+                  profileType !== ProfileTypeList.MEMBER && (
+                    <Avatar
+                      data-cy="userImage"
+                      src={cdnImageUrl(userImage.downloadUrl, { width: 50 })}
+                      sx={{
+                        objectFit: 'cover',
+                        width: '50px',
+                        height: '50px',
+                      }}
+                    />
+                  )}
 
-                {type === ProfileTypeList.MEMBER && (
+                {profileType === ProfileTypeList.MEMBER && (
                   <Avatar
                     data-cy="profile-avatar"
                     loading="lazy"

@@ -89,7 +89,7 @@ export const SpaceProfile = ({ user, docs, type }: IProps) => {
 
   return (
     <Flex
-      data-cy="profileWrapper"
+      data-cy={`${type === ProfileTypeList.MEMBER ? 'Member' : 'Space'}Profile`}
       sx={{ width: '100%', height: '100%', flexDirection: 'column' }}
     >
       {type === ProfileTypeList.MEMBER && (
@@ -104,7 +104,6 @@ export const SpaceProfile = ({ user, docs, type }: IProps) => {
         />
       )}
       <Card
-        data-cy={`${type === ProfileTypeList.MEMBER ? 'member' : 'space'}Profile`}
         sx={{
           width: '100%',
         }}

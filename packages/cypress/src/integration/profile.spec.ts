@@ -55,7 +55,7 @@ describe('[Profile]', () => {
       cy.clickMenuItem(UserMenuItem.Profile)
       cy.wait(5000)
       cy.url().should('include', `/u/${subscriber.userName}`)
-      cy.get('[data-cy=spaceProfile]').should('not.exist')
+      cy.get('[data-cy=SpaceProfile]').should('not.exist')
       cy.get('[data-cy=MemberProfile]').should('be.visible')
       cy.get('.beta-tester-feature').should('not.exist')
     })

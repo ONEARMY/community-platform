@@ -140,6 +140,7 @@ describe('[Settings]', () => {
       cy.get('[data-cy="profile-avatar"]')
         .should('have.attr', 'src')
         .and('include', userImage)
+      cy.get('[data-cy="contact-tab"]').click()
       cy.get('[data-cy="profile-link"]').should('have.attr', 'href', url)
 
       cy.step('Can add map pin')

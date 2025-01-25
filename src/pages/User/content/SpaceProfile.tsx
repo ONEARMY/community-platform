@@ -109,7 +109,7 @@ export const SpaceProfile = ({ user, docs, type }: IProps) => {
           width: '100%',
         }}
       >
-        {type === ProfileTypeList.SPACE && (
+        {type !== ProfileTypeList.MEMBER && (
           <Box>
             {coverImage.length ? (
               <ImageGallery
@@ -137,12 +137,12 @@ export const SpaceProfile = ({ user, docs, type }: IProps) => {
         <Flex
           sx={{
             padding: [2, 4],
-            borderTop: type === ProfileTypeList.SPACE ? '2px solid' : '',
+            borderTop: type !== ProfileTypeList.MEMBER ? '2px solid' : '',
           }}
         >
           <Box sx={{ width: '100%' }}>
             <Box sx={{ position: 'relative' }}>
-              {type === ProfileTypeList.SPACE && (
+              {type !== ProfileTypeList.MEMBER && (
                 <Box
                   sx={{
                     display: 'block',
@@ -166,7 +166,7 @@ export const SpaceProfile = ({ user, docs, type }: IProps) => {
               <Flex
                 sx={{ gap: 2, alignItems: 'center', paddingBottom: [2, 4] }}
               >
-                {userImage?.downloadUrl && type === ProfileTypeList.SPACE && (
+                {userImage?.downloadUrl && type !== ProfileTypeList.MEMBER && (
                   <Avatar
                     data-cy="userImage"
                     src={cdnImageUrl(userImage.downloadUrl, { width: 50 })}

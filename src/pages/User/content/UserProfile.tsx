@@ -64,7 +64,11 @@ export const UserProfile = observer(
               <SpaceProfile
                 user={profile}
                 docs={userCreatedDocs}
-                type={profile.profileType}
+                type={
+                  showMemberProfile
+                    ? ProfileTypeList.MEMBER
+                    : ProfileTypeList.SPACE
+                }
               />
             </>
           )}

@@ -7,6 +7,8 @@ import { UserContactError } from 'src/pages/User/contact/UserContactError'
 import { buttons, fields } from 'src/pages/UserSettings/labels'
 import { Flex } from 'theme-ui'
 
+import { accountService } from '../../services/account.service'
+
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
 
 interface IFormValues {
@@ -24,8 +26,26 @@ export const ChangePasswordForm = () => {
     const { oldPassword, newPassword } = values
 
     try {
-      // TODO
-      // await userStore.changeUserPassword(oldPassword, newPassword)
+      const result = await accountService.changePassword(
+        oldPassword,
+        newPassword,
+      )
+
+      if (!result.ok) {
+        const data = await result.json()
+
+        if (data.error) {
+          setSubmitResults({ type: 'error', message: data.error })
+        } else {
+          setSubmitResults({
+            type: 'error',
+            message: 'Oops, something went wrong!',
+          })
+        }
+
+        return
+      }
+
       setSubmitResults({
         type: 'success',
         message: `Password changed.`,

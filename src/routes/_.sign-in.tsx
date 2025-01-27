@@ -5,6 +5,7 @@ import { Button, FieldInput, HeroBanner } from 'oa-components'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import Main from 'src/pages/common/Layout/Main'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { authServiceServer } from 'src/services/authService.server'
 import { getReturnUrl } from 'src/utils/redirect.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 import { required } from 'src/utils/validators'
@@ -27,7 +28,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
   const formData = await request.formData()
 
-  const { error } = await client.auth.signInWithPassword({
+  const { data, error } = await client.auth.signInWithPassword({
     email: formData.get('email') as string,
     password: formData.get('password') as string,
   })
@@ -35,8 +36,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (error) {
     return Response.json(
       { error: 'Invalid username or password.' },
-      { headers },
+      { headers, status: 400 },
     )
+  }
+
+  if (!data.user.user_metadata.username) {
+    // temporary fix for when the username isn't set
+    await authServiceServer.fixUsername(data.user.id, client)
   }
 
   return redirect(getReturnUrl(request), { headers })

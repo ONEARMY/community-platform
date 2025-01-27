@@ -8,24 +8,12 @@ export const UserStoreWrapper = (props: { children: React.ReactNode }) => {
   const { userStore } = useCommonStores().stores
 
   useEffect(() => {
-    const syncProfile = async () => {
-      try {
-        const response = await fetch('/api/profile')
-        if (response.ok) {
-          const { profile } = await response.json()
-
-          // TODO: actually use the profile from supabase?
-          userStore.refreshActiveUserDetailsById(profile.username)
-          return
-        }
-      } catch (error) {
-        console.error(error)
-      }
-
+    if (!user?.id) {
       userStore._updateActiveUser(null)
+      return
     }
 
-    syncProfile()
+    userStore.refreshActiveUserDetailsById(user.user_metadata.username)
   }, [user?.id])
 
   return props.children

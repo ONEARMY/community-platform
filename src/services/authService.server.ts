@@ -32,7 +32,22 @@ const isUsernameAvailable = async (
   return !result.data?.at(0)
 }
 
+const fixUsername = async (id: string, client: SupabaseClient) => {
+  const result = await client
+    .from('profiles')
+    .select('username')
+    .eq('auth_id', id)
+    .limit(1)
+
+  const username = result.data?.at(0)?.username
+
+  if (username) {
+    await client.auth.updateUser({ data: { username } })
+  }
+}
+
 export const authServiceServer = {
   createUserProfile,
   isUsernameAvailable,
+  fixUsername,
 }

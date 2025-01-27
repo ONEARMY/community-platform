@@ -7,6 +7,7 @@ import { PasswordField } from 'src/common/Form/PasswordField'
 import Main from 'src/pages/common/Layout/Main'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { authServiceServer } from 'src/services/authService.server'
+import { userService } from 'src/services/userService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 import {
   composeValidators,
@@ -52,8 +53,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const { data, error } = await client.auth.signUp({
     email: formData.get('email') as string,
-    password: 'test',
+    password: formData.get('password') as string,
     options: {
+      data: { username },
       emailRedirectTo: emailRedirectUrl,
     },
   })
@@ -71,6 +73,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       { user: data.user, username },
       client,
     )
+
+    await userService.createFirebaseProfile(data.user)
   }
 
   return redirect('/', { headers })
@@ -143,10 +147,7 @@ export default function Index() {
                         <Heading>Create an account</Heading>
                         <Text color={'grey'} sx={{ fontSize: 1 }}>
                           <Link
-                            to={
-                              '/sign-in?returnUrl=' +
-                              encodeURIComponent(location.pathname)
-                            }
+                            to="/sign-in"
                             style={{
                               textDecoration: 'underline',
                             }}

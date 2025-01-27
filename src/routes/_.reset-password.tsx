@@ -79,13 +79,7 @@ export default function Index() {
                       <Flex sx={{ gap: 2, flexDirection: 'column' }}>
                         <Heading>Reset Password</Heading>
                         <Text sx={{ fontSize: 1 }} color="grey">
-                          <Link
-                            to={
-                              '/sign-in?returnUrl=' +
-                              encodeURIComponent(location.pathname)
-                            }
-                            data-cy="no-account"
-                          >
+                          <Link to="/sign-in" data-cy="no-account">
                             Go back to Login
                           </Link>
                         </Text>

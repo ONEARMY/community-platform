@@ -54,7 +54,7 @@ const ProfileButtons = (props: IProps) => {
                 />
                 <ProfileButtonItem
                   link={
-                    '/sign-in?returnUrl=' +
+                    '/sign-up?returnUrl=' +
                     encodeURIComponent(location.pathname)
                   }
                   text="Join"
@@ -87,7 +87,7 @@ const ProfileButtons = (props: IProps) => {
             }}
           />
           <ProfileButtonItem
-            link={'/sign-in?returnUrl=' + encodeURIComponent(location.pathname)}
+            link={'/sign-up?returnUrl=' + encodeURIComponent(location.pathname)}
             text="Join"
             variant="outline"
             sx={{ fontSize: 2 }}

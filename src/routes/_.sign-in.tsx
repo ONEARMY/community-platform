@@ -1,11 +1,15 @@
 import { Field, Form } from 'react-final-form'
 import { redirect } from '@remix-run/node'
 import { Link, useActionData } from '@remix-run/react'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { collection, getDocs, query, where } from 'firebase/firestore'
 import { Button, FieldInput, HeroBanner } from 'oa-components'
+import { DB_ENDPOINTS } from 'oa-shared'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import Main from 'src/pages/common/Layout/Main'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { authServiceServer } from 'src/services/authService.server'
+import { auth, firestore } from 'src/utils/firebase'
 import { getReturnUrl } from 'src/utils/redirect.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 import { required } from 'src/utils/validators'
@@ -28,21 +32,52 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
   const formData = await request.formData()
 
-  const { data, error } = await client.auth.signInWithPassword({
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
+
+  const { error } = await client.auth.signInWithPassword({
+    email,
+    password,
   })
 
   if (error) {
-    return Response.json(
-      { error: 'Invalid username or password.' },
-      { headers, status: 400 },
-    )
-  }
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password)
 
-  if (!data.user.user_metadata.username) {
-    // temporary fix for when the username isn't set
-    await authServiceServer.fixUsername(data.user.id, client)
+      const _authID = result.user.uid
+      const profileDoc = await getDocs(
+        query(
+          collection(firestore, DB_ENDPOINTS.users),
+          where('_authID', '==', _authID),
+        ),
+      )
+
+      const profile = profileDoc.docs[0].data()
+      const { data, error } = await client.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            username: profile.userName,
+          },
+        },
+      })
+
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      await authServiceServer.createUserProfile(
+        { user: data.user!, username: profile.username },
+        client,
+      )
+    } catch (error) {
+      console.error(error)
+      return Response.json(
+        { error: 'Invalid username or password.' },
+        { headers, status: 400 },
+      )
+    }
   }
 
   return redirect(getReturnUrl(request), { headers })

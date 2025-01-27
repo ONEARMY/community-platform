@@ -44,7 +44,6 @@ export default function Index() {
     <EnvironmentContext.Provider value={environment}>
       <SessionContext.Provider value={user}>
         <UserStoreWrapper>
-          {JSON.stringify(user)}
           <Flex
             sx={{ height: '100vh', flexDirection: 'column' }}
             data-cy="page-container"

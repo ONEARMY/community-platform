@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { Link, useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
 import { CategoryVerticalList, SearchField, Select } from 'oa-components'
@@ -11,6 +11,7 @@ import {
 import { Button, Flex } from 'theme-ui'
 
 import { ListHeader } from '../common/Layout/ListHeader'
+import { SessionContext } from '../common/SessionContext'
 import { headings, listing } from './labels'
 import { QuestionSortOptions } from './QuestionSortOptions'
 
@@ -18,6 +19,7 @@ import type { Category } from 'oa-shared'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 export const QuestionListHeader = () => {
+  const session = useContext(SessionContext)
   const [categories, setCategories] = useState<Category[]>([])
   const [searchString, setSearchString] = useState<string>('')
 
@@ -79,22 +81,26 @@ export const QuestionListHeader = () => {
   const actionComponents = (
     <UserAction
       loggedIn={
-              <Link to={
-                  userStore.user
-                      ? '/questions/create'
-                      : '/sign-in?returnUrl=' + encodeURIComponent(location.pathname)
-              }>
+        <Link
+          to={
+            session?.id
+              ? '/questions/create'
+              : '/sign-in?returnUrl=' + encodeURIComponent(location.pathname)
+          }
+        >
           <Button type="button" data-cy="create-question" variant="primary">
             {listing.create}
           </Button>
         </Link>
       }
       loggedOut={
-          <Link to={
-              userStore.user
-                  ? '/questions/create'
-                  : '/sign-up?returnUrl=' + encodeURIComponent(location.pathname)
-          }>
+        <Link
+          to={
+            session?.id
+              ? '/questions/create'
+              : '/sign-up?returnUrl=' + encodeURIComponent(location.pathname)
+          }
+        >
           <Button type="button" data-cy="sign-up" variant="primary">
             {listing.join}
           </Button>

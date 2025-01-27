@@ -146,12 +146,12 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       .eq('auth_id', user!.id)
       .limit(1)
 
-    if (profileRequest.error || !profileRequest.data) {
+    if (profileRequest.error || !profileRequest.data?.at(0)) {
       console.error(profileRequest.error)
       return Response.json({}, { status: 400, statusText: 'User not found' })
     }
 
-    const profile = profileRequest.data
+    const profile = profileRequest.data[0]
 
     const questionResult = await client
       .from('questions')

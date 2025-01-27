@@ -225,11 +225,11 @@ async function validateRequest(
     .eq('auth_id', user.id)
     .limit(1)
 
-  if (profileRequest.error || !profileRequest.data) {
+  if (profileRequest.error || !profileRequest.data?.at(0)) {
     return { status: 400, statusText: 'User not found' }
   }
 
-  const profile = profileRequest.data as DBProfile
+  const profile = profileRequest.data[0] as DBProfile
 
   if (
     existingQuestion.created_by !== profile.id &&

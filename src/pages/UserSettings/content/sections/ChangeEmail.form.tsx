@@ -2,11 +2,13 @@ import { useContext, useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { Accordion, Button, FieldInput } from 'oa-components'
 import { PasswordField } from 'src/common/Form/PasswordField'
+import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { SessionContext } from 'src/pages/common/SessionContext'
-import { FormFieldWrapper } from 'src/pages/Library/Content/Common'
 import { UserContactError } from 'src/pages/User/contact/UserContactError'
 import { buttons, fields } from 'src/pages/UserSettings/labels'
 import { Flex } from 'theme-ui'
+
+import { accountService } from '../../services/account.service'
 
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
 
@@ -22,23 +24,33 @@ export const ChangeEmailForm = () => {
   const formId = 'changeEmail'
 
   const onSubmit = async (values: IFormValues) => {
-    const { password, newEmail } = values
+    const { newEmail, password } = values
     try {
-      // TODO
-      // await userStore.changeUserEmail(password, newEmail)
+      const result = await accountService.changeEmail(newEmail, password)
+
+      if (!result.ok) {
+        const data = await result.json()
+
+        if (data.error) {
+          setSubmitResults({ type: 'error', message: data.error })
+        } else {
+          setSubmitResults({
+            type: 'error',
+            message: 'Oops, something went wrong!',
+          })
+        }
+
+        return
+      }
+
       setSubmitResults({
         type: 'success',
-        message: `Email changed to ${newEmail}. You've been sent two emails now(!) One to your old email address to check this was you and the other to your new address to verify it.`,
+        message:
+          "We've sent you two emails, one to the old address and another to the new one. Please confirm both to proceed with the email change!",
       })
-      getUserEmail()
     } catch (error) {
       setSubmitResults({ type: 'error', message: error.message })
     }
-  }
-
-  const getUserEmail = async () => {
-    // TODO
-    // const email = await userStore.getUserEmail()
   }
 
   return (
@@ -49,7 +61,7 @@ export const ChangeEmailForm = () => {
       <UserContactError submitResults={submitResults} />
       <Accordion
         title="Change Email"
-        subtitle={`${fields.email.title}: ${currentEmail}`}
+        subtitle={`${fields.email.title}: ${user?.email}`}
       >
         <Form
           onSubmit={onSubmit}
@@ -64,14 +76,6 @@ export const ChangeEmailForm = () => {
                 data-cy="changeEmailForm"
                 sx={{ flexDirection: 'column', gap: 2 }}
               >
-                <Heading as="h3" variant="small">
-                  {headings.changeEmail}
-                </Heading>
-
-                <Text sx={{ fontSize: 1 }}>
-                  {fields.email.title}: <strong>{currentEmail}</strong>
-                </Text>
-
                 <FormFieldWrapper
                   text={fields.newEmail.title}
                   htmlFor="newEmail"

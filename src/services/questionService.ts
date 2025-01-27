@@ -3,7 +3,6 @@ import {
   Question,
   type QuestionFormData,
 } from 'src/models/question.model'
-import { auth } from 'src/utils/firebase'
 
 const upsert = async (id: number | null, question: QuestionFormData) => {
   const data = new FormData()

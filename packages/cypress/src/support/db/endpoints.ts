@@ -5,7 +5,7 @@ import { generateDBEndpoints } from 'oa-shared'
  * current implementation
  * @example
  * ```
- * const allHowtos = await db.get(DB_ENDPOINTS.howtos)
+ * const allLibraryProjects = await db.get(DB_ENDPOINTS.library)
  * ```
  */
 export const DB_ENDPOINTS = generateDBEndpoints()

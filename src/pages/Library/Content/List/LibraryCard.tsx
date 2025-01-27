@@ -14,24 +14,33 @@ import { Box, Card, Flex, Heading, Image } from 'theme-ui'
 import type { ILibrary } from 'oa-shared'
 
 interface IProps {
-  howto: ILibrary.Item
+  item: ILibrary.Item
 }
 
-export const HowToCard = ({ howto }: IProps) => {
+export const LibraryCard = ({ item }: IProps) => {
+  const {
+    _createdBy,
+    _id,
+    category,
+    cover_image,
+    cover_image_alt,
+    creatorCountry,
+    moderation,
+    slug,
+    title,
+    totalComments,
+    totalUsefulVotes,
+  } = item
   const { aggregationsStore } = useCommonStores().stores
 
-  const isVerified = aggregationsStore.isVerified(howto._createdBy)
+  const isVerified = aggregationsStore.isVerified(_createdBy)
 
   return (
     <Card
       data-cy="card"
-      data-cy-howto-slug={howto.slug}
       sx={{ borderRadius: 2, display: 'flex', flexDirection: 'column' }}
     >
-      <RouterLink
-        key={howto._id}
-        to={`/library/${encodeURIComponent(howto.slug)}`}
-      >
+      <RouterLink key={_id} to={`/library/${encodeURIComponent(slug)}`}>
         <Image
           style={{
             width: '100%',
@@ -39,11 +48,11 @@ export const HowToCard = ({ howto }: IProps) => {
             objectFit: 'cover',
           }}
           loading="lazy"
-          src={cdnImageUrl(howto.cover_image?.downloadUrl || '', {
+          src={cdnImageUrl(cover_image?.downloadUrl || '', {
             width: 500,
           })}
           crossOrigin=""
-          alt={howto.cover_image_alt ?? `Cover image of ${howto.title}`}
+          alt={cover_image_alt ?? `Cover image of ${title}`}
         />
       </RouterLink>
 
@@ -58,27 +67,27 @@ export const HowToCard = ({ howto }: IProps) => {
           padding: 2,
         }}
       >
-        {howto.moderation !== IModerationStatus.ACCEPTED && (
+        {moderation !== IModerationStatus.ACCEPTED && (
           <Flex sx={{ alignSelf: 'flex-end', marginTop: -10, marginBottom: 2 }}>
-            <ModerationStatus status={howto.moderation} contentType="howto" />
+            <ModerationStatus status={moderation} contentType="library" />
           </Flex>
         )}
         <Flex sx={{ gap: 1, flexDirection: 'column' }}>
           <Heading as="h2" variant="small" color={'black'}>
             <RouterLink
-              key={howto._id}
-              to={`/library/${encodeURIComponent(howto.slug)}`}
+              key={_id}
+              to={`/library/${encodeURIComponent(slug)}`}
               style={{ width: '100%', color: 'black' }}
             >
-              {capitalizeFirstLetter(howto.title || '')}
+              {capitalizeFirstLetter(title || '')}
             </RouterLink>
           </Heading>
 
           <Box>
             <Username
               user={{
-                userName: howto._createdBy,
-                countryCode: howto.creatorCountry,
+                userName: _createdBy,
+                countryCode: creatorCountry,
                 isVerified,
               }}
             />
@@ -86,16 +95,16 @@ export const HowToCard = ({ howto }: IProps) => {
         </Flex>
 
         <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-          <Box>{howto.category && <Category category={howto.category} />}</Box>
+          <Box>{category && <Category category={category} />}</Box>
 
           <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
             <IconCountWithTooltip
-              count={howto.totalComments || 0}
+              count={totalComments || 0}
               icon="comment"
               text="Comments"
             />
             <IconCountWithTooltip
-              count={howto.totalUsefulVotes || 0}
+              count={totalUsefulVotes || 0}
               icon="star-active"
               text="How useful is it"
             />
@@ -105,5 +114,3 @@ export const HowToCard = ({ howto }: IProps) => {
     </Card>
   )
 }
-
-export default HowToCard

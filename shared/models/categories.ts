@@ -1,3 +1,5 @@
+// Old models for firebase - being dropped asap
+
 import type { DBDoc } from './db'
 
 export interface ISelectedCategories {

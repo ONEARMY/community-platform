@@ -1,6 +1,6 @@
 import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
 
-import { transformHowtoErrors } from '../utils'
+import { transformLibraryErrors } from '../utils'
 
 import type { IErrorsListSet, ITopLevelErrorsList } from 'src/common/Form/types'
 
@@ -9,8 +9,8 @@ interface IProps {
   isVisible: boolean
 }
 
-export const HowtoErrors = ({ errors, isVisible }: IProps) => {
-  const errorsListSet = errors ? transformHowtoErrors(errors) : []
+export const LibraryErrors = ({ errors, isVisible }: IProps) => {
+  const errorsListSet = errors ? transformLibraryErrors(errors) : []
 
   if (
     !isVisible ||

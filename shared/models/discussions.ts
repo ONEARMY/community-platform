@@ -1,3 +1,5 @@
+// This is an older type - moving over to Comment as supabase migration progresses
+
 import type { DBDoc } from './db'
 import type { IQuestion } from './questions'
 

@@ -20,7 +20,7 @@ class MockDB extends DatabaseV2 {
 
 const rootStoreMock = vi.mocked(new RootStore())
 rootStoreMock.dbV2 = new MockDB()
-const store = new ModuleStore(rootStoreMock, 'howtos')
+const store = new ModuleStore(rootStoreMock, 'library')
 
 const givenMatches = (matches: { _id: string }[]) => {
   collectionMock.mockReturnValue({

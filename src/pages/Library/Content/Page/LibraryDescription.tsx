@@ -28,41 +28,72 @@ import {
 import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
-import { HowtoDownloads } from './LibraryDownloads'
+import { LibraryDownloads } from './LibraryDownloads'
 
 import type { ILibrary, ITag, IUser } from 'oa-shared'
 
 const DELETION_LABEL = 'Project marked for deletion'
 
 interface IProps {
-  howto: ILibrary.DB & { tagList?: ITag[] }
-  loggedInUser: IUser | undefined
   commentsCount: number
+  item: ILibrary.DB & { tagList?: ITag[] }
+  loggedInUser: IUser | undefined
   votedUsefulCount?: number
   verified?: boolean
   hasUserVotedUseful: boolean
   onUsefulClick: () => Promise<void>
 }
 
-const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const navigate = useNavigate()
+export const LibraryDescription = (props: IProps) => {
+  const {
+    commentsCount,
+    hasUserVotedUseful,
+    item,
+    loggedInUser,
+    onUsefulClick,
+    votedUsefulCount,
+  } = props
+  const {
+    _contentModifiedTimestamp,
+    _created,
+    _createdBy,
+    _deleted,
+    _id,
+    _modified,
+    category,
+    cover_image,
+    cover_image_alt,
+    creatorCountry,
+    description,
+    difficulty_level,
+    moderation,
+    moderatorFeedback,
+    slug,
+    steps,
+    tags,
+    time,
+    title,
+    total_views,
+  } = item
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+
+  const navigate = useNavigate()
   const { stores } = useCommonStores()
 
   const handleDelete = async (_id: string) => {
     try {
-      await stores.howtoStore.deleteHowTo(_id)
+      await stores.LibraryStore.delete(_id)
       trackEvent({
-        category: 'How-To',
+        category: 'Library',
         action: 'Deleted',
-        label: howto.title,
+        label: title,
       })
       logger.debug(
         {
-          category: 'How-To',
+          category: 'Library',
           action: 'Deleted',
-          label: howto.title,
+          label: title,
         },
         DELETION_LABEL,
       )
@@ -77,9 +108,8 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   return (
     <Card>
       <Flex
-        data-cy="how-to-basis"
-        data-id={howto._id}
-        className="howto-description-container"
+        data-cy="library-basis"
+        data-id={_id}
         sx={{
           overflow: 'hidden',
           flexDirection: ['column-reverse', 'column-reverse', 'row'],
@@ -93,7 +123,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             width: ['100%', '100%', `${(1 / 2) * 100}%`],
           }}
         >
-          {howto._deleted && (
+          {_deleted && (
             <Text color="red" pl={2} mb={2} data-cy="how-to-deleted">
               * Marked for deletion
             </Text>
@@ -102,52 +132,51 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             <ClientOnly fallback={<></>}>
               {() => (
                 <>
-                  {howto.moderation === IModerationStatus.ACCEPTED && (
+                  {moderation === IModerationStatus.ACCEPTED && (
                     <UsefulStatsButton
-                      votedUsefulCount={props.votedUsefulCount}
-                      hasUserVotedUseful={props.hasUserVotedUseful}
+                      votedUsefulCount={votedUsefulCount}
+                      hasUserVotedUseful={hasUserVotedUseful}
                       isLoggedIn={loggedInUser ? true : false}
-                      onUsefulClick={props.onUsefulClick}
+                      onUsefulClick={onUsefulClick}
                     />
                   )}
                 </>
               )}
             </ClientOnly>
             {/* Check if logged in user is the creator of the project OR a super-admin */}
-            {loggedInUser && isAllowedToEditContent(howto, loggedInUser) && (
-              <Link to={'/library/' + howto.slug + '/edit'}>
+            {loggedInUser && isAllowedToEditContent(item, loggedInUser) && (
+              <Link to={'/library/' + slug + '/edit'}>
                 <Button type="button" variant="primary" data-cy="edit">
                   Edit
                 </Button>
               </Link>
             )}
 
-            {loggedInUser && isAllowedToDeleteContent(howto, loggedInUser) && (
+            {loggedInUser && isAllowedToDeleteContent(item, loggedInUser) && (
               <Fragment key={'how-to-delete-action'}>
                 <Button
                   type="button"
-                  data-cy="How-To: delete button"
+                  data-cy="Library: delete button"
                   variant={'secondary'}
                   icon="delete"
-                  disabled={howto._deleted}
+                  disabled={_deleted}
                   onClick={() => setShowDeleteModal(true)}
                 >
                   Delete
                 </Button>
 
                 <ConfirmModal
-                  key={howto._id}
+                  key={_id}
                   isOpen={showDeleteModal}
                   message="Are you sure you want to delete this project?"
                   confirmButtonText="Delete"
                   handleCancel={() => setShowDeleteModal(false)}
-                  handleConfirm={() => handleDelete && handleDelete(howto._id)}
+                  handleConfirm={() => handleDelete && handleDelete(_id)}
                 />
               </Fragment>
             )}
           </Flex>
-          {howto.moderatorFeedback &&
-          howto.moderation !== IModerationStatus.ACCEPTED ? (
+          {moderatorFeedback && moderation !== IModerationStatus.ACCEPTED ? (
             <Alert
               variant="info"
               sx={{
@@ -162,7 +191,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 <Heading as="p" variant="small" mb={2}>
                   Moderator Feedback
                 </Heading>
-                <Text sx={{ fontSize: 2 }}>{howto.moderatorFeedback}</Text>
+                <Text sx={{ fontSize: 2 }}>{moderatorFeedback}</Text>
               </Box>
             </Alert>
           ) : null}
@@ -170,33 +199,30 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <Flex sx={{ flexDirection: 'column' }}>
                 <ContentAuthorTimestamp
-                  userName={howto._createdBy}
-                  countryCode={howto.creatorCountry}
-                  created={howto._created}
-                  modified={howto._contentModifiedTimestamp || howto._modified}
+                  userName={_createdBy}
+                  countryCode={creatorCountry}
+                  created={_created}
+                  modified={_contentModifiedTimestamp || _modified}
                   action="Published"
                 />
-                {howto.category && (
-                  <Category
-                    category={howto.category}
-                    sx={{ fontSize: 2, mt: 2 }}
-                  />
+                {category && (
+                  <Category category={category} sx={{ fontSize: 2, mt: 2 }} />
                 )}
                 <Heading
                   as="h1"
-                  mt={howto.category ? 1 : 2}
+                  mt={category ? 1 : 2}
                   mb={1}
                   data-cy="how-to-title"
                 >
                   {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
-                  {capitalizeFirstLetter(howto.title)}
+                  {capitalizeFirstLetter(title)}
                 </Heading>
                 <Text
                   variant="paragraph"
                   sx={{ whiteSpace: 'pre-line' }}
                   data-cy="how-to-description"
                 >
-                  <LinkifyText>{howto.description}</LinkifyText>
+                  <LinkifyText>{description}</LinkifyText>
                 </Text>
               </Flex>
             </Flex>
@@ -212,7 +238,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 mr="2"
                 mb="2"
               />
-              {howto.time}
+              {time}
             </Flex>
             <Flex
               mr="4"
@@ -227,15 +253,15 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 mr="2"
                 mb="2"
               />
-              {howto.difficulty_level}
+              {difficulty_level}
             </Flex>
           </Flex>
           <ClientOnly fallback={<></>}>
             {/* TODO: remove ClientOnly when we have a Tags API which we can on the loader - need it now because tags only load client-side which causes a html mismatch error */}
             {() => (
               <>
-                <TagList tags={howto.tags} />
-                <HowtoDownloads howto={howto} loggedInUser={loggedInUser} />
+                <TagList tags={tags} />
+                <LibraryDownloads item={item} />
               </>
             )}
           </ClientOnly>
@@ -267,28 +293,28 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 right: '0',
               }}
             >
-              {howto.cover_image && (
+              {cover_image && (
                 // 3407 - AspectImage creates divs that can mess up page layout,
                 // so using Image here instead and recreating the div layout
                 // that was created by AspectImage
                 <Image
                   loading="lazy"
-                  src={cdnImageUrl(howto.cover_image.downloadUrl)}
+                  src={cdnImageUrl(cover_image.downloadUrl)}
                   sx={{
                     objectFit: 'cover',
                     height: '100%',
                     width: '100%',
                   }}
                   crossOrigin=""
-                  alt={howto.cover_image_alt ?? 'project cover image'}
+                  alt={cover_image_alt ?? 'project cover image'}
                 />
               )}
             </Box>
           </Box>
-          {howto.moderation !== IModerationStatus.ACCEPTED && (
+          {moderation !== IModerationStatus.ACCEPTED && (
             <ModerationStatus
-              status={howto.moderation}
-              contentType="howto"
+              status={moderation}
+              contentType="library"
               sx={{ top: 0, position: 'absolute', right: 0 }}
             />
           )}
@@ -305,7 +331,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           {
             icon: 'view',
             label: buildStatisticsLabel({
-              stat: howto.total_views,
+              stat: total_views,
               statUnit: 'view',
               usePlural: true,
             }),
@@ -313,7 +339,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           {
             icon: 'star',
             label: buildStatisticsLabel({
-              stat: props.votedUsefulCount || 0,
+              stat: votedUsefulCount || 0,
               statUnit: 'useful',
               usePlural: false,
             }),
@@ -321,7 +347,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           {
             icon: 'comment',
             label: buildStatisticsLabel({
-              stat: props.commentsCount || 0,
+              stat: commentsCount || 0,
               statUnit: 'comment',
               usePlural: true,
             }),
@@ -329,7 +355,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           {
             icon: 'update',
             label: buildStatisticsLabel({
-              stat: howto.steps.length,
+              stat: steps.length,
               statUnit: 'step',
               usePlural: true,
             }),
@@ -339,5 +365,3 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
     </Card>
   )
 }
-
-export default HowtoDescription

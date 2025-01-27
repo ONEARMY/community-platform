@@ -3,17 +3,17 @@ import { Link, useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
 import { CategoryVerticalList, SearchField, Select } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { UserAction } from 'src/common/UserAction'
 import DraftButton from 'src/pages/common/Drafts/DraftButton'
 import { ListHeader } from 'src/pages/common/Layout/ListHeader'
 import { Button, Flex } from 'theme-ui'
 
 import { listing } from '../../labels'
-import { howtoService, HowtosSearchParams } from '../../library.service'
-import { HowtoSortOptions } from './LibrarySortOptions'
+import { LibrarySearchParams, libraryService } from '../../library.service'
+import { LibrarySortOptions } from './LibrarySortOptions'
 
 import type { ICategory } from 'shared/lib'
-import type { HowtoSortOption } from './LibrarySortOptions'
+import type { LibrarySortOption } from './LibrarySortOptions'
 
 interface IProps {
   draftCount: number
@@ -21,19 +21,18 @@ interface IProps {
   showDrafts: boolean
 }
 
-export const HowtoHeader = (props: IProps) => {
+export const LibraryListHeader = (props: IProps) => {
   const { draftCount, handleShowDrafts, showDrafts } = props
   const [categories, setCategories] = useState<ICategory[]>([])
   const [searchString, setSearchString] = useState<string>('')
 
   const [searchParams, setSearchParams] = useSearchParams()
-  const categoryParam = searchParams.get(HowtosSearchParams.category)
+  const categoryParam = searchParams.get(LibrarySearchParams.category)
   const category = categories?.find((cat) => cat._id === categoryParam) ?? null
-  const q = searchParams.get(HowtosSearchParams.q)
-  const sort = searchParams.get(HowtosSearchParams.sort) as HowtoSortOption
+  const q = searchParams.get(LibrarySearchParams.q)
+  const sort = searchParams.get(LibrarySearchParams.sort) as LibrarySortOption
 
   const headingTitle = import.meta.env.VITE_HOWTOS_HEADING
-  const isUserLoggedIn = useCommonStores().stores.userStore?.user
 
   useEffect(() => {
     if (q && q.length > 0) {
@@ -43,7 +42,7 @@ export const HowtoHeader = (props: IProps) => {
 
   useEffect(() => {
     const initCategories = async () => {
-      const categories = (await howtoService.getHowtoCategories()) || []
+      const categories = (await libraryService.getLibraryCategories()) || []
       const notDeletedCategories = categories.filter(
         ({ _deleted }) => _deleted === false,
       )
@@ -54,7 +53,7 @@ export const HowtoHeader = (props: IProps) => {
   }, [])
 
   const updateFilter = useCallback(
-    (key: HowtosSearchParams, value: string) => {
+    (key: LibrarySearchParams, value: string) => {
       const params = new URLSearchParams(searchParams.toString())
       if (value) {
         params.set(key, value)
@@ -75,14 +74,14 @@ export const HowtoHeader = (props: IProps) => {
 
   const searchValue = (value: string) => {
     const params = new URLSearchParams(searchParams.toString())
-    params.set(HowtosSearchParams.q, value)
+    params.set(LibrarySearchParams.q, value)
 
     if (value.length > 0 && sort !== 'MostRelevant') {
-      params.set(HowtosSearchParams.sort, 'MostRelevant')
+      params.set(LibrarySearchParams.sort, 'MostRelevant')
     }
 
     if (value.length === 0 || !value) {
-      params.set(HowtosSearchParams.sort, 'Newest')
+      params.set(LibrarySearchParams.sort, 'Newest')
     }
 
     setSearchParams(params)
@@ -94,8 +93,8 @@ export const HowtoHeader = (props: IProps) => {
       activeCategory={category}
       setActiveCategory={(updatedCategory) =>
         updateFilter(
-          HowtosSearchParams.category,
-          updatedCategory ? updatedCategory._id : '',
+          LibrarySearchParams.category,
+          updatedCategory ? (updatedCategory as ICategory)._id : '',
         )
       }
     />
@@ -106,21 +105,21 @@ export const HowtoHeader = (props: IProps) => {
       <Flex sx={{ width: ['100%', '100%', '220px'] }}>
         <FieldContainer>
           <Select
-            options={HowtoSortOptions.toArray(!!q)}
+            options={LibrarySortOptions.toArray(!!q)}
             placeholder={listing.sort}
             value={{
-              label: HowtoSortOptions.get(sort),
+              label: LibrarySortOptions.get(sort),
               value: sort,
             }}
             onChange={(sortBy) =>
-              updateFilter(HowtosSearchParams.sort, sortBy.value)
+              updateFilter(LibrarySearchParams.sort, sortBy.value)
             }
           />
         </FieldContainer>
       </Flex>
       <Flex sx={{ width: ['100%', '100%', '270px'] }}>
         <SearchField
-          dataCy="howtos-search-box"
+          dataCy="library-search-box"
           placeHolder={listing.search}
           value={searchString}
           onChange={(value) => {
@@ -138,25 +137,39 @@ export const HowtoHeader = (props: IProps) => {
   )
 
   const actionComponents = (
-    <>
-      {isUserLoggedIn && (
-        <DraftButton
-          showDrafts={showDrafts}
-          draftCount={draftCount}
-          handleShowDrafts={handleShowDrafts}
-        />
-      )}
-      <Link to={isUserLoggedIn ? '/library/create' : '/sign-in'}>
-        <Button
-          type="button"
-          sx={{ width: '100%' }}
-          variant="primary"
-          data-cy="create"
-        >
-          {listing.create}
-        </Button>
-      </Link>
-    </>
+    <UserAction
+      loggedIn={
+        <>
+          <DraftButton
+            showDrafts={showDrafts}
+            draftCount={draftCount}
+            handleShowDrafts={handleShowDrafts}
+          />
+          <Link to="/library/create">
+            <Button
+              type="button"
+              sx={{ width: '100%' }}
+              variant="primary"
+              data-cy="create-project"
+            >
+              {listing.create}
+            </Button>
+          </Link>
+        </>
+      }
+      loggedOut={
+        <Link to="/sign-up">
+          <Button
+            type="button"
+            sx={{ width: '100%' }}
+            variant="primary"
+            data-cy="sign-up"
+          >
+            {listing.join}
+          </Button>
+        </Link>
+      }
+    />
   )
 
   return (

@@ -80,7 +80,7 @@ How?
 
 ### Comment Counts
 
-Currently we can sort questions/research/howtos by the number of comments.
+Currently we can sort questions/research/library by the number of comments.
 With supabase there are a few ways we can do this:
 
 1. A comment count view
@@ -96,4 +96,17 @@ How?
 
 - Whenever a comment is created or deleted, it triggers the update_comment_count function.
 - The function checks the Operation kind (Insert/Delete), the source_type and source_id.
-- Fron the source_type it will update the according content total (howtos, research, questions) that matches the source_id
+- Fron the source_type it will update the according content total (library, research, questions) that matches the source_id
+
+# Local firebase sync testing/debugging
+
+_This is temporary until we fully migrate to supabase!_
+We can create and deploy the sync function to the firebase dev environment.
+Then, using ngrok, expose our local supabase url to the internet, and point the firebase function to it.
+(ngrok http http://127.0.0.1:54321)
+
+To authenticate, we need to create these 3 secrets, for each firebase project:
+firebase functions:secrets:set SUPABASE_API_URL
+firebase functions:secrets:set SUPABASE_API_KEY
+firebase functions:secrets:set TENANT_ID
+(Check values with firebase functions:secrets:access SECRET_NAME)

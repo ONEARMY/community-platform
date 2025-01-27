@@ -1,1 +1,1 @@
-export { transformHowtoErrors } from './transformLibraryErrors'
+export { transformLibraryErrors } from './transformLibraryErrors'

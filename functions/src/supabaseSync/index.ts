@@ -65,9 +65,9 @@ async function insertOrUpdateProfile(
     .from('profiles')
     .select()
     .eq('firebase_auth_id', user._authID)
-    .single()
+    .limit(1)
 
-  if (profileRequest.data) {
+  if (profileRequest.data?.at(0)) {
     // Update
     const { error } = await client
       .from('profiles')

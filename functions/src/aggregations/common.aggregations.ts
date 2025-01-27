@@ -1,11 +1,14 @@
-import { firestore } from 'firebase-admin'
-import { Change, logger } from 'firebase-functions'
-import { DB_ENDPOINTS } from '../models'
-import { db } from '../Firebase/firestoreDB'
-import { compareObjectDiffs, splitArrayToChunks } from '../Utils/data.utils'
 import { FieldValue } from 'firebase-admin/firestore'
+import { logger } from 'firebase-functions'
 import { IModerationStatus } from 'oa-shared/models/moderation'
-import { DBEndpoint } from 'oa-shared/models/db'
+
+import { db } from '../Firebase/firestoreDB'
+import { DB_ENDPOINTS } from '../models'
+import { compareObjectDiffs, splitArrayToChunks } from '../Utils/data.utils'
+
+import type { firestore } from 'firebase-admin'
+import type { Change } from 'firebase-functions'
+import type { DBEndpoint } from 'oa-shared/models/db'
 
 type IDocumentRef = FirebaseFirestore.DocumentReference
 type ICollectionRef = FirebaseFirestore.CollectionReference
@@ -130,17 +133,17 @@ export class AggregationHandler {
 
     // Seed total useful aggregation
     if (this.aggregation.targetDocId === 'users_totalUseful') {
-      const howtos = await db
-        .collection(DB_ENDPOINTS.howtos)
+      const library = await db
+        .collection(DB_ENDPOINTS.library)
         .where('votedUsefulBy', '!=', [])
         .where('moderation', '==', IModerationStatus.ACCEPTED)
         .get()
 
-      logger.info(`${targetAggregation} Howtos - ${howtos.docs.length}`)
+      logger.info(`${targetAggregation} Library - ${library.docs.length}`)
       const userUseful = {}
-      if (!howtos.empty) {
-        for (let i = 0; i < howtos.docs.length; i++) {
-          const data = howtos.docs[i].data()
+      if (!library.empty) {
+        for (let i = 0; i < library.docs.length; i++) {
+          const data = library.docs[i].data()
           userUseful[data._createdBy] =
             (userUseful[data._createdBy] || 0) + data.votedUsefulBy.length
         }
@@ -242,8 +245,8 @@ export class AggregationHandler {
   private async calculateTotalUseful(id: string) {
     const userTotalUseful = {}
 
-    const howtos = await db
-      .collection(DB_ENDPOINTS.howtos)
+    const library = await db
+      .collection(DB_ENDPOINTS.library)
       .where('_createdBy', '==', id)
       .where('votedUsefulBy', '!=', [])
       .where('moderation', '==', IModerationStatus.ACCEPTED)
@@ -251,9 +254,9 @@ export class AggregationHandler {
 
     let totalUseful = 0
 
-    if (!howtos.empty) {
-      for (let i = 0; i < howtos.docs.length; i++) {
-        const data = howtos.docs[i].data()
+    if (!library.empty) {
+      for (let i = 0; i < library.docs.length; i++) {
+        const data = library.docs[i].data()
         totalUseful += data.votedUsefulBy.length
       }
     }

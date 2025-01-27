@@ -1,6 +1,6 @@
 import { ExternalLink, Guidelines } from 'oa-components'
 
-export const HowtoPostingGuidelines = () => (
+export const LibraryPostingGuidelines = () => (
   <Guidelines
     title="How does it work?"
     steps={[

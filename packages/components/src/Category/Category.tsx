@@ -1,16 +1,20 @@
 import { Flex, Text } from 'theme-ui'
 
+import type { Category as CategoryType } from 'oa-shared'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
+type OldICategory = { label: string }
 export interface Props {
-  category: {
-    label: string
-  }
+  category: CategoryType | OldICategory
   sx?: ThemeUIStyleObject | undefined
 }
 
 export const Category = (props: Props) => {
   const { category, sx } = props
+
+  const name =
+    (category as CategoryType).name || (category as OldICategory).label
+
   return (
     <Flex sx={{ alignItems: 'start' }}>
       <Text
@@ -25,7 +29,7 @@ export const Category = (props: Props) => {
           ...sx,
         }}
       >
-        {category.label}
+        {name}
       </Text>
     </Flex>
   )

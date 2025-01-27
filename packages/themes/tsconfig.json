@@ -24,6 +24,7 @@
 
     /* Type Checking */
     "strict": true /* Enable all strict type-checking options. */,
+    "strictPropertyInitialization": false,
 
     /* Completeness */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */

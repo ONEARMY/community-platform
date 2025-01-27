@@ -223,7 +223,7 @@ async function validateRequest(
     .from('profiles')
     .select('id,roles')
     .eq('auth_id', user.id)
-    .single()
+    .limit(1)
 
   if (profileRequest.error || !profileRequest.data) {
     return { status: 400, statusText: 'User not found' }

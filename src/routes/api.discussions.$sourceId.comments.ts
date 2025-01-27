@@ -1,11 +1,11 @@
-import { Comment, DBComment } from 'src/models/comment.model'
+import { Comment, DBComment } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { notificationsService } from 'src/services/notificationsService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
+import type { DBCommentAuthor, Reply } from 'oa-shared'
 import type { User } from '@supabase/supabase-js'
-import type { DBCommentAuthor, Reply } from 'src/models/comment.model'
 import type { DBProfile } from 'src/models/profile.model'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
@@ -109,9 +109,9 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     .from('profiles')
     .select()
     .eq('auth_id', user!.id)
-    .single()
+    .limit(1)
 
-  if (currentUser.error || !currentUser.data) {
+  if (currentUser.error || !currentUser.data?.at(0)) {
     return Response.json(
       {},
       { status: 400, statusText: 'profile not found ' + user!.id },
@@ -123,7 +123,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     source_id_legacy: isNaN(+params.sourceId!) ? params.sourceId : null,
     source_id: isNaN(+params.sourceId!) ? null : +params.sourceId!,
     source_type: data.sourceType,
-    created_by: currentUser.data.id,
+    created_by: currentUser.data[0].id,
     parent_id: data.parentId ?? null,
     tenant_id: process.env.TENANT_ID,
   } as Partial<DBComment>
@@ -153,7 +153,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     notificationsService.sendCommentNotification(
       client,
       commentResult.data as DBComment,
-      currentUser.data as DBProfile,
+      currentUser.data[0] as DBProfile,
     )
   }
 

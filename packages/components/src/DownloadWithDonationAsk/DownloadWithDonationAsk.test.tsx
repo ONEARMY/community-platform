@@ -25,25 +25,7 @@ const downloadProps = {
 }
 
 describe('DownloadWithDonationAsk', () => {
-  it('when logged out, requires users to login', () => {
-    const { getAllByTestId } = render(
-      <DownloadWithDonationAsk
-        {...downloadProps}
-        handleClick={vi.fn()}
-        isLoggedIn={false}
-        fileDownloadCount={0}
-        fileLink="http://youtube.com/"
-        files={[]}
-      />,
-    )
-
-    const downloadButton = getAllByTestId('downloadButton')[0]
-    fireEvent.click(downloadButton)
-
-    expect(mockedUsedNavigate).toHaveBeenCalledWith('/sign-in')
-  })
-
-  it('when logged in, opens the donation modal for fileLink', () => {
+  it('opens the donation modal for fileLink', () => {
     const handleClick = vi.fn()
     const fileLink = 'http://youtube.com/'
 
@@ -51,7 +33,6 @@ describe('DownloadWithDonationAsk', () => {
       <DownloadWithDonationAsk
         {...downloadProps}
         handleClick={handleClick}
-        isLoggedIn={true}
         fileDownloadCount={0}
         fileLink={fileLink}
         files={[]}
@@ -69,7 +50,7 @@ describe('DownloadWithDonationAsk', () => {
     expect(handleClick).not.toHaveBeenCalled()
   })
 
-  it('when logged in, opens the donation modal for files', () => {
+  it('opens the donation modal for files', () => {
     const downloadUrl = 'http://great-url.com/'
     const handleClick = vi.fn()
 
@@ -77,7 +58,6 @@ describe('DownloadWithDonationAsk', () => {
       <DownloadWithDonationAsk
         {...downloadProps}
         handleClick={handleClick}
-        isLoggedIn={true}
         fileDownloadCount={0}
         fileLink={undefined}
         files={[

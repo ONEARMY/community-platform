@@ -6,7 +6,7 @@ export async function loader() {
   return null
 }
 
-// This is a Layout file, it will render for all howto routes
+// This is a Layout file, it will render for all library routes
 export default function Index() {
   return (
     <Main sx={{ flex: 1 }}>

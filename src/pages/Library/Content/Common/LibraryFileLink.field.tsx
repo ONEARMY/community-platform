@@ -1,16 +1,16 @@
 import { Field } from 'react-final-form'
 import { FieldInput } from 'oa-components'
-import { FormFieldWrapper } from 'src/pages/Library/Content/Common/FormFieldWrapper'
+import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
   draftValidationWrapper,
   validateUrlAcceptEmpty,
 } from 'src/utils/validators'
 
-import { MAX_LINK_LENGTH } from '../../constants'
+import { MAX_LINK_LENGTH } from '../../../constants'
 import { intro } from '../../labels'
 
-export const HowtoFieldFileLink = () => {
+export const LibraryFileLinkField = () => {
   const { description, title } = intro.fileLink
   const name = 'fileLink'
 

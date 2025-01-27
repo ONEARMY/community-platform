@@ -178,6 +178,7 @@ describe('[Library]', () => {
       const categoryGuidanceMain =
         'Cover image should show the fully built mould'
 
+      cy.get('[data-cy="sign-up"]')
       cy.signUpNewUser(creator)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy="MemberBadge-member"]').should('be.visible')
@@ -185,7 +186,7 @@ describe('[Library]', () => {
 
       cy.step('Access the create project page')
       cy.get('a[href="/library/create"]').should('be.visible')
-      cy.get('[data-cy=create]').click()
+      cy.get('[data-cy=create-project]').click()
       cy.contains('Add your project').should('be.visible')
 
       cy.step('Warn if title is identical with the existing ones')
@@ -216,7 +217,7 @@ describe('[Library]', () => {
       cy.fillIntroTitle(`qwerty ${randomId}`)
       cy.get('[data-cy=draft]').click()
       const firstSlug = `/library/qwerty-${randomId}`
-      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
+      cy.get('[data-cy=view-project]:enabled', { timeout: 20000 })
         .click()
         .url()
         .should('include', firstSlug)
@@ -275,18 +276,18 @@ describe('[Library]', () => {
 
       cy.step('A full draft was saved')
       cy.get('[data-cy=draft]').click()
-      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 }).click()
+      cy.get('[data-cy=view-project]:enabled', { timeout: 20000 }).click()
 
       cy.step('A full draft can be submitted for review')
       cy.get('[data-cy=edit]').click()
 
       cy.get('[data-cy=submit]').click()
-      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
+      cy.get('[data-cy=view-project]:enabled', { timeout: 20000 })
         .click()
         .url()
         .should('include', `/library/${slug}`)
 
-      cy.step('Howto was created correctly')
+      cy.step('Project was created correctly')
       cy.get('[data-cy=file-download-counter]')
         .contains(total_downloads)
         .should('be.visible')
@@ -322,7 +323,7 @@ describe('[Library]', () => {
       cy.get('[data-cy=loader]').should('not.exist')
       cy.step('Access the create project')
       cy.get('a[href="/library/create"]').should('be.visible')
-      cy.get('[data-cy=create]').click()
+      cy.get('[data-cy=create-project]').click()
       cy.fillIntroTitle(expected.title)
       cy.get('[data-cy=page-link][href*="/library"]').click()
       cy.get('[data-cy="Confirm.modal: Cancel"]').click()

@@ -4,7 +4,7 @@ import { Category } from '../Category/Category'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
 import { Username } from '../Username/Username'
 
-import type { IMapPin } from 'oa-shared'
+import type { Category as CategoryType, IMapPin } from 'oa-shared'
 
 interface IProps {
   item: IMapPin
@@ -26,7 +26,7 @@ export const CardDetailsFallback = ({ item, isLink }: IProps) => {
         />
         {subType && (
           <Category
-            category={{ label: subType }}
+            category={{ name: subType } as CategoryType}
             sx={{
               border: '1px solid #0087B6',
               backgroundColor: '#ECFAFF',
@@ -36,7 +36,7 @@ export const CardDetailsFallback = ({ item, isLink }: IProps) => {
         )}
         {type === 'member' && (
           <Category
-            category={{ label: 'Wants to get started' }}
+            category={{ name: 'Wants to get started' } as CategoryType}
             sx={{
               border: '1px solid #A72E5A',
               backgroundColor: '#F7C7D9',

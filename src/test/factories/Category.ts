@@ -1,10 +1,8 @@
-import type { ICategory } from 'oa-shared'
+import type { Category } from 'oa-shared'
 
-export const FactoryCategory: ICategory = {
-  label: 'Moulds',
-  _contentModifiedTimestamp: '2019-04-15T18:51:56.479Z',
-  _deleted: false,
-  _modified: '2019-04-15T18:51:56.479Z',
-  _created: '2018-11-29T12:56:47.901Z',
-  _id: 'categoryNtr9asrGucgt7JKdRpc',
+export const FactoryCategory: Category = {
+  createdAt: new Date('2018-11-29T12:56:47.901Z'),
+  id: 3465,
+  name: 'Moulds',
+  type: 'questions',
 }

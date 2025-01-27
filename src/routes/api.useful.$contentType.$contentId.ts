@@ -20,7 +20,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
     .from('profiles')
     .select()
     .eq('auth_id', user.id)
-    .single()
+      .limit(1)
 
   if (!profileResult.data || profileResult.error) {
     console.error(profileResult.error + ' auth_id:' + user.id)
@@ -32,7 +32,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
     result = await client.from('useful_votes').insert({
       content_type: params.contentType,
       content_id: Number(params.contentId),
-      user_id: profileResult.data.id,
+      user_id: profileResult.data[0].id,
       tenant_id: process.env.TENANT_ID!,
     })
   } else {
@@ -41,7 +41,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
       .delete()
       .eq('content_type', params.contentType)
       .eq('content_id', Number(params.contentId))
-      .eq('user_id', profileResult.data.id)
+      .eq('user_id', profileResult.data[0].id)
       .eq('tenant_id', process.env.TENANT_ID!)
   }
 

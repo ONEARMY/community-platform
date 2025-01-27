@@ -32,7 +32,7 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
       aggregationsStore: {
         updateVerifiedUsers: vi.fn(),
         users_verified: {
-          HowtoAuthor: true,
+          LibraryAuthor: true,
         },
       },
       mapsStore: {
@@ -42,6 +42,17 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
     },
   }),
 }))
+
+vi.mock('src/services/messageService', () => {
+  return {
+    messageService: {
+      sendMessage: () =>
+        vi.fn().mockImplementation(() => {
+          return Promise.resolve()
+        }),
+    },
+  }
+})
 
 describe('User', () => {
   beforeEach(() => {

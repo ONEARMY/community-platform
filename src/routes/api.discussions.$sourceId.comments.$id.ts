@@ -4,7 +4,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBComment } from 'src/models/comment.model'
+import type { DBComment } from 'oa-shared'
 import type { DBProfile } from 'src/models/profile.model'
 
 type Supabase = {
@@ -132,13 +132,13 @@ async function getProfileByAuthId(request: Request, authId: string) {
     .from('profiles')
     .select()
     .eq('auth_id', authId)
-    .single()
+    .limit(1)
 
-  if (error || !data) {
+  if (error || !data?.at(0)) {
     return null
   }
 
-  return data as DBProfile
+  return data[0] as DBProfile
 }
 
 function isUserAdmin(user: DBProfile) {

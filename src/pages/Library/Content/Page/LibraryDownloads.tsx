@@ -4,46 +4,45 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Flex } from 'theme-ui'
 
 import {
-  addHowtoDownloadCooldown,
-  isHowtoDownloadCooldownExpired,
-  retrieveHowtoDownloadCooldown,
-  updateHowtoDownloadCooldown,
+  addLibraryDownloadCooldown,
+  isLibraryDownloadCooldownExpired,
+  retrieveLibraryDownloadCooldown,
+  updateLibraryDownloadCooldown,
 } from '../utils/downloadCooldown'
 
-import type { ILibrary, IUser } from 'oa-shared'
+import type { ILibrary } from 'oa-shared'
 
 interface IProps {
-  howto: ILibrary.DB
-  loggedInUser: IUser | undefined
+  item: ILibrary.DB
 }
 
-export const HowtoDownloads = ({ howto, loggedInUser }: IProps) => {
-  const { _id, files, fileLink, total_downloads } = howto
+export const LibraryDownloads = ({ item }: IProps) => {
+  const { _id, files, fileLink, total_downloads } = item
   const [fileDownloadCount, setFileDownloadCount] = useState(total_downloads)
 
-  const { howtoStore } = useCommonStores().stores
+  const { LibraryStore } = useCommonStores().stores
 
   const incrementDownloadCount = async () => {
-    const updatedDownloadCount = await howtoStore.incrementDownloadCount(_id)
+    const updatedDownloadCount = await LibraryStore.incrementDownloadCount(_id)
     setFileDownloadCount(updatedDownloadCount!)
   }
 
   const handleDownloadClick = async () => {
-    const howtoDownloadCooldown = retrieveHowtoDownloadCooldown(_id)
+    const howtoDownloadCooldown = retrieveLibraryDownloadCooldown(_id)
 
     if (
       howtoDownloadCooldown &&
-      isHowtoDownloadCooldownExpired(howtoDownloadCooldown)
+      isLibraryDownloadCooldownExpired(howtoDownloadCooldown)
     ) {
-      updateHowtoDownloadCooldown(_id)
+      updateLibraryDownloadCooldown(_id)
       incrementDownloadCount()
     } else if (!howtoDownloadCooldown) {
-      addHowtoDownloadCooldown(_id)
+      addLibraryDownloadCooldown(_id)
       incrementDownloadCount()
     }
   }
 
-  if (howto.files && howto.files.length > 0 && howto.fileLink) return null
+  if (files && files.length > 0 && fileLink) return null
 
   return (
     <Flex className="file-container" sx={{ mt: 3, flexDirection: 'column' }}>
@@ -51,7 +50,6 @@ export const HowtoDownloads = ({ howto, loggedInUser }: IProps) => {
         handleClick={handleDownloadClick}
         fileLink={fileLink}
         files={files}
-        isLoggedIn={!!loggedInUser}
         fileDownloadCount={fileDownloadCount || 0}
       />
     </Flex>

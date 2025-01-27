@@ -1,8 +1,7 @@
-import { Category } from './category.model'
+import { Category } from 'oa-shared'
 
-import type { IConvertedFileMeta } from 'oa-shared'
+import type { DBCategory, IConvertedFileMeta } from 'oa-shared'
 import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
-import type { DBCategory } from './category.model'
 import type { DBImage, Image } from './image.model'
 import type { Tag } from './tag.model'
 

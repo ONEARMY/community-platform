@@ -21,7 +21,7 @@ import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
-import CommentSectionV2 from '../common/CommentsV2/CommentSectionV2'
+import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 
 import type { IUser } from 'oa-shared'
@@ -169,9 +169,7 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
           />
 
           <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-            {question.category && (
-              <Category category={{ label: question.category.name }} />
-            )}
+            {question.category && <Category category={question.category} />}
             <Heading
               as="h1"
               data-cy="question-title"
@@ -248,7 +246,7 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
               padding: 4,
             }}
           >
-            <CommentSectionV2 sourceId={question.id} />
+            <CommentSectionSupabase sourceId={question.id} />
           </Card>
         )}
       </ClientOnly>

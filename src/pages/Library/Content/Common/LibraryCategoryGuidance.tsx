@@ -9,7 +9,7 @@ interface IProps {
   type: 'main' | 'files'
 }
 
-export const HowtoCategoryGuidance = ({ category, type }: IProps) => {
+export const LibraryCategoryGuidance = ({ category, type }: IProps) => {
   if (!category) {
     return null
   }

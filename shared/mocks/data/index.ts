@@ -1,6 +1,6 @@
 export { categories, categoriesSupabase } from './categories'
 export { discussions } from './discussions'
-export { howtos } from './library'
+export { library } from './library'
 export { mappins } from './mappins'
 export { questionCategories } from './questionCategories'
 export { questions } from './questions'

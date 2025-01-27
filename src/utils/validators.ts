@@ -2,6 +2,7 @@ import { getSpecialCharacters, stripSpecialCharacters } from './helpers'
 import { isUrl } from './urlHelper'
 
 import type { Mutator } from 'final-form'
+
 /****************************************************************************
  *            General Validation Methods
  * **************************************************************************/

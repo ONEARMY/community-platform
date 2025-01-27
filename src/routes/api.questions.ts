@@ -144,7 +144,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       .from('profiles')
       .select('id')
       .eq('auth_id', user!.id)
-      .single()
+      .limit(1)
 
     if (profileRequest.error || !profileRequest.data) {
       console.error(profileRequest.error)

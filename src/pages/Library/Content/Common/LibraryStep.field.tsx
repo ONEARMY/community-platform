@@ -13,11 +13,11 @@ import {
 import { Card, Flex, Heading, Label, Text } from 'theme-ui'
 
 import {
-  HOWTO_MIN_REQUIRED_STEPS,
-  HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
-  HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
-  HOWTO_TITLE_MAX_LENGTH,
-  HOWTO_TITLE_MIN_LENGTH,
+  LIBRARY_MIN_REQUIRED_STEPS,
+  LIBRARY_TITLE_MAX_LENGTH,
+  LIBRARY_TITLE_MIN_LENGTH,
+  STEP_DESCRIPTION_MAX_LENGTH,
+  STEP_DESCRIPTION_MIN_LENGTH,
 } from '../../constants'
 import { buttons, errors, steps } from '../../labels'
 
@@ -53,7 +53,7 @@ interface IState {
  * - minimum character length of 100 characters
  * - maximum character length of 1000 characters
  */
-export const HowtoFieldStep = (props: IProps) => {
+export const LibraryStepField = (props: IProps) => {
   const { step, index } = props
   const [state, setState] = useState<IState>({
     showDeleteModal: false,
@@ -93,10 +93,10 @@ export const HowtoFieldStep = (props: IProps) => {
     marginBottom: 2,
   }
 
-  const isAboveMinimumStep = index >= HOWTO_MIN_REQUIRED_STEPS
+  const isAboveMinimumStep = index >= LIBRARY_MIN_REQUIRED_STEPS
 
   return (
-    // NOTE - animation parent container in CreateHowTo
+    // NOTE - animation parent container in CreateLibrary
     <Card data-cy={`step_${index}`} mt={5} key={index}>
       <Flex p={3} sx={{ flexDirection: 'column' }}>
         <Flex p={0}>
@@ -174,13 +174,13 @@ export const HowtoFieldStep = (props: IProps) => {
             modifiers={{ capitalize: true, trim: true }}
             component={FieldInput}
             placeholder={title.placeholder}
-            maxLength={HOWTO_TITLE_MAX_LENGTH}
-            minLength={HOWTO_TITLE_MIN_LENGTH}
+            maxLength={LIBRARY_TITLE_MAX_LENGTH}
+            minLength={LIBRARY_TITLE_MIN_LENGTH}
             validate={(value, allValues) =>
               draftValidationWrapper(
                 value,
                 allValues,
-                composeValidators(required, minValue(HOWTO_TITLE_MIN_LENGTH)),
+                composeValidators(required, minValue(LIBRARY_TITLE_MIN_LENGTH)),
               )
             }
             validateFields={[]}
@@ -195,8 +195,8 @@ export const HowtoFieldStep = (props: IProps) => {
           <Field
             name={`${step}.text`}
             placeholder={text.placeholder}
-            minLength={HOWTO_STEP_DESCRIPTION_MIN_LENGTH}
-            maxLength={HOWTO_STEP_DESCRIPTION_MAX_LENGTH}
+            minLength={STEP_DESCRIPTION_MIN_LENGTH}
+            maxLength={STEP_DESCRIPTION_MAX_LENGTH}
             data-cy="step-description"
             data-testid="step-description"
             modifiers={{ capitalize: true, trim: true }}
@@ -208,7 +208,7 @@ export const HowtoFieldStep = (props: IProps) => {
                 allValues,
                 composeValidators(
                   required,
-                  minValue(HOWTO_STEP_DESCRIPTION_MIN_LENGTH),
+                  minValue(STEP_DESCRIPTION_MIN_LENGTH),
                 ),
               )
             }

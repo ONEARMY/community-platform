@@ -11,9 +11,9 @@ interface IProps {
 const UserCreatedDocuments = ({ docs }: IProps) => {
   return (
     <>
-      {(docs.howtos.length > 0 || docs.research.length > 0) && (
+      {(docs.library.length > 0 || docs.research.length > 0) && (
         <Flex pt={2} sx={{ justifyContent: 'space-between', gap: 4 }}>
-          {docs?.howtos.length > 0 && (
+          {docs?.library.length > 0 && (
             <Flex
               mt={2}
               mb={6}
@@ -22,7 +22,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
               <Heading as="h3" variant="small" mb={1}>
                 Library
               </Heading>
-              {docs?.howtos.map((item) => {
+              {docs?.library.map((item) => {
                 return (
                   <UserCreatedDocumentsItem
                     key={item._id}

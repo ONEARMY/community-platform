@@ -37,7 +37,10 @@ declare global {
         opStr: any,
         value: string,
       ): Chainable<any[]>
-      addHowto(howto: ILibrary.DB, user: IUserSignUpDetails): Chainable<void>
+      addProject(
+        project: ILibrary.DB,
+        user: IUserSignUpDetails,
+      ): Chainable<void>
       addQuestion(
         question: IQuestionDB,
         user: IUserSignUpDetails,
@@ -174,11 +177,11 @@ Cypress.Commands.add(
   },
 )
 
-Cypress.Commands.add('addHowto', (howto, user) => {
-  const slug = `${howto.slug}-${user.username}`
+Cypress.Commands.add('addProject', (project, user) => {
+  const slug = `${project.slug}-${user.username}`
 
-  return firestore.addDocument('howtos', {
-    ...howto,
+  return firestore.addDocument('library', {
+    ...project,
     slug,
   })
 })

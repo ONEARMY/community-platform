@@ -32,7 +32,6 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
           logo: 'string',
           badge: 'string',
           avatar: 'string',
-          howtoHeading: 'string',
           academyResource: 'string',
           styles: {
             communityProgramURL: '',

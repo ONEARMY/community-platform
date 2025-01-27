@@ -1,9 +1,9 @@
 import {
-  HOWTO_MAX_LENGTH,
-  HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
-  HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
-  HOWTO_TITLE_MAX_LENGTH,
-  HOWTO_TITLE_MIN_LENGTH,
+  LIBRARY_DESCRIPTION_MAX_LENGTH,
+  LIBRARY_TITLE_MAX_LENGTH,
+  LIBRARY_TITLE_MIN_LENGTH,
+  STEP_DESCRIPTION_MAX_LENGTH,
+  STEP_DESCRIPTION_MIN_LENGTH,
 } from './constants'
 
 import type { ILabels } from 'src/common/Form/types'
@@ -58,7 +58,7 @@ export const intro: ILabels = {
     title: 'Cover image alt text',
   },
   description: {
-    description: `Provide a short introduction (max ${HOWTO_MAX_LENGTH} characters)`,
+    description: `Provide a short introduction (max ${LIBRARY_DESCRIPTION_MAX_LENGTH} characters)`,
     title: 'Short description',
   },
   difficulty_level: {
@@ -85,7 +85,7 @@ export const intro: ILabels = {
     title: 'How long does it take?',
   },
   title: {
-    placeholder: `Make a chair from... (${HOWTO_TITLE_MIN_LENGTH} - ${HOWTO_TITLE_MAX_LENGTH} characters)`,
+    placeholder: `Make a chair from... (${LIBRARY_TITLE_MIN_LENGTH} - ${LIBRARY_TITLE_MAX_LENGTH} characters)`,
     title: 'Title of your project',
   },
 }
@@ -145,11 +145,11 @@ export const steps: ILabels = {
   },
   title: {
     title: 'Title of this step',
-    placeholder: `Provide a title (max ${HOWTO_TITLE_MAX_LENGTH} characters)`,
+    placeholder: `Provide a title (max ${LIBRARY_TITLE_MAX_LENGTH} characters)`,
   },
   text: {
     title: 'Step Description',
-    placeholder: `Explain what you are doing. If it gets too long, consider breaking it into multiple steps (${HOWTO_STEP_DESCRIPTION_MIN_LENGTH}-${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters)`,
+    placeholder: `Explain what you are doing. If it gets too long, consider breaking it into multiple steps (${STEP_DESCRIPTION_MIN_LENGTH}-${STEP_DESCRIPTION_MAX_LENGTH} characters)`,
   },
   images: {
     title: 'Upload image(s) or a video',
@@ -162,6 +162,7 @@ export const steps: ILabels = {
 
 export const listing = {
   create: 'Add your project',
+  join: 'Sign up to add your project',
   empty: 'No projects to show!',
   usefulness: 'How useful it is',
   totalComments: 'Total comments',

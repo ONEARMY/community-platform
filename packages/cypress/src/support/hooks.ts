@@ -1,5 +1,5 @@
 import { clearDatabase } from './commands'
-import { seedQuestions } from './seedQuestions'
+import { seedCategories, seedQuestions } from './seedQuestions'
 
 /**
  * Before all tests begin seed the database. CY runs this before all specs.
@@ -20,6 +20,7 @@ before(() => {
     throw error
   })
   cy.then(async () => {
+    await seedCategories()
     await seedQuestions()
   })
   localStorage.clear()

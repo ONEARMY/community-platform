@@ -9,7 +9,7 @@ import {
 } from 'oa-components'
 import { UserRole } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { Flex } from 'theme-ui'
+import { Card, Flex } from 'theme-ui'
 
 import { CommentReply } from './CommentReplySupabase'
 import { CreateCommentSupabase } from './CreateCommentSupabase'
@@ -66,7 +66,11 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
       data-cy={isEditable ? `Own${item}` : item}
       sx={{ flexDirection: 'column' }}
     >
-      <Flex sx={{ gap: 2, flexDirection: 'column' }} ref={commentRef as any}>
+      <Card
+        sx={{ flexDirection: 'column', padding: 3 }}
+        ref={commentRef as any}
+        variant="borderless"
+      >
         <CommentDisplay
           isEditable={isEditable}
           itemType={item}
@@ -80,6 +84,8 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
             alignItems: 'stretch',
             flexDirection: 'column',
             flex: 1,
+            gap: 2,
+            marginTop: 3,
           }}
         >
           {showReplies && (
@@ -107,7 +113,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
             setIsShowReplies={() => setShowReplies(!showReplies)}
           />
         </Flex>
-      </Flex>
+      </Card>
 
       <Modal width={600} isOpen={showEditModal}>
         <EditComment

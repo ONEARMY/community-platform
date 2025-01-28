@@ -32,13 +32,13 @@ import ResearchUpdate from './ResearchUpdate'
 
 import type { IResearch, IResearchDB, IUser } from 'oa-shared'
 
-type ResearchArticleProps = {
+interface IProps {
   research: IResearchDB
   publicUpdates: IResearch.UpdateDB[]
 }
 
-const ResearchArticle = observer(
-  ({ research, publicUpdates }: ResearchArticleProps) => {
+export const ResearchArticlePage = observer(
+  ({ research, publicUpdates }: IProps) => {
     const location = useLocation()
     const researchStore = useResearchStore()
     const { aggregationsStore } = useCommonStores().stores
@@ -176,7 +176,7 @@ const ResearchArticle = observer(
         <Flex
           sx={{
             flexDirection: 'column',
-            marginTop: 8,
+            marginTop: [2, 4],
             marginBottom: 4,
             gap: [4, 6],
           }}
@@ -250,5 +250,3 @@ const ResearchArticle = observer(
     )
   },
 )
-
-export default ResearchArticle

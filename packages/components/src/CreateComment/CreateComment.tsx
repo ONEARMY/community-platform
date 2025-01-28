@@ -41,105 +41,101 @@ export const CreateComment = (props: Props) => {
   }
 
   return (
-    <Flex sx={{ flexDirection: 'column' }}>
-      <Flex data-target="create-comment-container" sx={{ gap: 2 }}>
-        <Box
-          sx={{
-            lineHeight: 0,
+    <Flex data-target="create-comment-container" sx={{ gap: 2 }}>
+      <Box
+        sx={{
+          lineHeight: 0,
+          display: ['none', 'block'],
+          flexShrink: 0,
+        }}
+      >
+        <MemberBadge profileType={userProfileType} useLowDetailVersion />
+      </Box>
+      <Box
+        sx={{
+          display: 'block',
+          background: 'white',
+          flex: 1,
+          marginLeft: [0, 3],
+          borderRadius: 1,
+          position: 'relative',
+          width: 'min-content',
+          '&:before': {
             display: ['none', 'block'],
-            flexShrink: 0,
-          }}
-        >
-          <MemberBadge profileType={userProfileType} useLowDetailVersion />
-        </Box>
-        <Box
-          sx={{
-            display: 'block',
-            background: 'white',
-            flex: 1,
-            marginLeft: [0, 3],
-            borderRadius: 1,
-            position: 'relative',
-            width: 'min-content',
-            '&:before': {
-              display: ['none', 'block'],
-              content: '""',
-              position: 'absolute',
-              borderWidth: '1em 1em',
-              borderStyle: 'solid',
-              borderColor: 'transparent white transparent transparent',
-              margin: '.5em -2em',
-            },
-          }}
-        >
-          {!isLoggedIn && <LoginPrompt />}
-          {isLoggedIn && (
-            <Flex sx={{ flexDirection: 'column' }}>
-              <Box
-                className={`grow-wrap ${commentIsActive ? 'value-set' : ''}`}
-              >
-                <Textarea
-                  value={comment}
-                  maxLength={maxLength}
-                  onChange={(event) => {
-                    onChange && onChange(event.target)
-                  }}
-                  aria-label="Comment"
-                  data-cy={isReply ? 'reply-form' : 'comments-form'}
-                  placeholder={placeholder}
-                  rows={1}
-                  onFocus={() => setTextareaIsFocussed(true)}
-                  onBlur={() => setTextareaIsFocussed(false)}
-                />
-              </Box>
-              <Text
-                sx={{
-                  fontSize: 1,
-                  display: commentIsActive ? 'flex' : 'none',
-                  alignSelf: 'flex-end',
-                  padding: 2,
+            content: '""',
+            position: 'absolute',
+            borderWidth: '1em 1em',
+            borderStyle: 'solid',
+            borderColor: 'transparent white transparent transparent',
+            margin: '.5em -2em',
+          },
+        }}
+      >
+        {!isLoggedIn && <LoginPrompt />}
+        {isLoggedIn && (
+          <Flex sx={{ flexDirection: 'column' }}>
+            <Box className={`grow-wrap ${commentIsActive ? 'value-set' : ''}`}>
+              <Textarea
+                value={comment}
+                maxLength={maxLength}
+                onChange={(event) => {
+                  onChange && onChange(event.target)
                 }}
-              >
-                {comment.length}/{maxLength}
-              </Text>
-            </Flex>
-          )}
-        </Box>
-        <Flex
+                aria-label="Comment"
+                data-cy={isReply ? 'reply-form' : 'comments-form'}
+                placeholder={placeholder}
+                rows={1}
+                onFocus={() => setTextareaIsFocussed(true)}
+                onBlur={() => setTextareaIsFocussed(false)}
+              />
+            </Box>
+            <Text
+              sx={{
+                fontSize: 1,
+                display: commentIsActive ? 'flex' : 'none',
+                alignSelf: 'flex-end',
+                padding: 2,
+              }}
+            >
+              {comment.length}/{maxLength}
+            </Text>
+          </Flex>
+        )}
+      </Box>
+      <Flex
+        sx={{
+          alignSelf: 'flex-end',
+          height: ['40px', '52px'],
+          width: ['40px', 'auto'],
+        }}
+      >
+        <Button
+          data-cy={isReply ? 'reply-submit' : 'comment-submit'}
+          data-testid="send-comment-button"
+          disabled={!comment.trim() || !isLoggedIn || isLoading}
+          variant="primary"
+          onClick={onClick}
           sx={{
-            alignSelf: 'flex-end',
-            height: ['40px', '52px'],
+            height: ['40px', '100%'],
             width: ['40px', 'auto'],
+            padding: [0, 1],
           }}
         >
-          <Button
-            data-cy={isReply ? 'reply-submit' : 'comment-submit'}
-            data-testid="send-comment-button"
-            disabled={!comment.trim() || !isLoggedIn || isLoading}
-            variant="primary"
-            onClick={onClick}
-            sx={{
-              height: ['40px', '100%'],
-              width: ['40px', 'auto'],
-              padding: [0, 1],
-            }}
-          >
-            {isLoading && 'Loading...'}
-            {!isLoading && (
-              <>
-                <Text sx={{ display: ['none', 'block'] }}>{buttonLabel}</Text>
-                <Image
-                  src={sendMobile}
-                  sx={{
-                    display: ['block', 'none'],
-                    width: '22px',
-                    margin: 'auto',
-                  }}
-                />
-              </>
-            )}
-          </Button>
-        </Flex>
+          {isLoading && 'Loading...'}
+          {!isLoading && (
+            <>
+              <Text sx={{ display: ['none', 'block'] }}>{buttonLabel}</Text>
+              <Image
+                src={sendMobile}
+                sx={{
+                  display: ['block', 'none'],
+                  width: '22px',
+                  margin: 'auto',
+                }}
+              />
+            </>
+          )}
+        </Button>
       </Flex>
     </Flex>
   )

@@ -128,9 +128,9 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
       <Breadcrumbs content={question} variant="question" />
-      <Card sx={{ position: 'relative' }}>
-        <Flex sx={{ flexDirection: 'column', padding: 4, gap: 2 }}>
-          <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>
+      <Card sx={{ position: 'relative' }} variant="responsive">
+        <Flex sx={{ flexDirection: 'column', padding: [3, 4], gap: 3 }}>
+          <Flex sx={{ flexWrap: 'wrap', gap: 3 }}>
             <ClientOnly fallback={<></>}>
               {() => (
                 <>
@@ -240,9 +240,12 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
       <ClientOnly fallback={<></>}>
         {() => (
           <Card
+            variant="responsive"
             sx={{
-              marginTop: 5,
-              padding: 4,
+              background: 'softblue',
+              borderTop: 0,
+              padding: [3, 4],
+              marginTop: [0, 2, 4],
             }}
           >
             <CommentSectionSupabase sourceId={question.id} />

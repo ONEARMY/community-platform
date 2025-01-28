@@ -106,7 +106,7 @@ const ResearchUpdate = (props: IProps) => {
             gap: [2, 4],
           }}
         >
-          <Card sx={{ padding: [3, 4] }}>
+          <Card sx={{ padding: [2, 3, 4], marginLeft: [2, 0] }}>
             <Heading sx={{ textAlign: 'center' }}>{displayNumber}</Heading>
           </Card>
 
@@ -121,8 +121,8 @@ const ResearchUpdate = (props: IProps) => {
             overflow: 'hidden',
           }}
         >
-          <Card>
-            <Flex sx={{ flexDirection: 'column' }} py={4} px={4}>
+          <Card variant="responsive">
+            <Flex sx={{ flexDirection: 'column', padding: [2, 3, 4] }}>
               <Flex sx={{ flexDirection: ['column', 'row', 'row'] }}>
                 <Box sx={{ width: ['100%', '75%', '75%'] }}>
                   {contributors.length > 0 && (

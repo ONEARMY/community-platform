@@ -1,11 +1,10 @@
-import { createRef, useEffect, useState } from 'react'
 import { compareDesc } from 'date-fns'
 import { Box, Flex, Text } from 'theme-ui'
 
 import { Button } from '../Button/Button'
 import { CommentAvatar } from '../CommentAvatar/CommentAvatar'
+import { CommentBody } from '../CommentBody/CommentBody'
 import { DisplayDate } from '../DisplayDate/DisplayDate'
-import { LinkifyText } from '../LinkifyText/LinkifyText'
 import { Username } from '../Username/Username'
 
 import type { Comment } from 'oa-shared'
@@ -19,7 +18,6 @@ export interface IProps {
 }
 
 const DELETED_COMMENT = 'The original comment got deleted'
-const SHORT_COMMENT = 129
 
 export const CommentDisplay = (props: IProps) => {
   const {
@@ -29,22 +27,6 @@ export const CommentDisplay = (props: IProps) => {
     setShowDeleteModal,
     setShowEditModal,
   } = props
-  const textRef = createRef<any>()
-
-  const [textHeight, setTextHeight] = useState(0)
-  const [isShowMore, setShowMore] = useState(false)
-
-  const maxHeight = isShowMore ? 'max-content' : '128px'
-
-  const showMore = () => {
-    setShowMore((prev) => !prev)
-  }
-
-  useEffect(() => {
-    if (textRef.current) {
-      setTextHeight(textRef.current.scrollHeight)
-    }
-  }, [textRef])
 
   if (comment.deleted) {
     return (
@@ -118,7 +100,6 @@ export const CommentDisplay = (props: IProps) => {
                 sx={{
                   alignItems: 'flex-end',
                   gap: 2,
-                  paddingBottom: 2,
                 }}
               >
                 <Button
@@ -143,35 +124,8 @@ export const CommentDisplay = (props: IProps) => {
                 </Button>
               </Flex>
             )}
+            <CommentBody body={comment.comment} />
           </Flex>
-          <Text
-            data-cy="comment-text"
-            data-testid="commentText"
-            sx={{
-              fontFamily: 'body',
-              lineHeight: 1.3,
-              maxHeight,
-              overflow: 'hidden',
-              whiteSpace: 'pre-wrap',
-              wordBreak: 'break-word',
-              marginTop: 1,
-              marginBottom: 2,
-            }}
-            ref={textRef}
-          >
-            <LinkifyText>{comment.comment}</LinkifyText>
-          </Text>
-          {textHeight > SHORT_COMMENT && (
-            <a
-              onClick={showMore}
-              style={{
-                color: 'gray',
-                cursor: 'pointer',
-              }}
-            >
-              {isShowMore ? 'Show less' : 'Show more'}
-            </a>
-          )}
         </Flex>
       </Flex>
     )

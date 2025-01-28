@@ -18,7 +18,7 @@ import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { describe, expect, it, vi } from 'vitest'
 
-import ResearchArticle from './ResearchArticle'
+import { ResearchArticlePage } from './ResearchArticlePage'
 
 import type { IResearchDB } from 'oa-shared'
 import type { Mock } from 'vitest'
@@ -59,7 +59,7 @@ vi.mock('src/stores/Research/research.store')
 
 describe('Research Article', () => {
   const mockResearchStore = {
-    addSubscriberToResearchArticle: vi.fn(),
+    addSubscriberToResearchArticlePage: vi.fn(),
     formatResearchCommentList: vi.fn(),
   }
 
@@ -445,7 +445,7 @@ const getWrapper = (research: IResearchDB) => {
         path="/research/:slug"
         key={1}
         element={
-          <ResearchArticle
+          <ResearchArticlePage
             research={research}
             publicUpdates={research.updates.filter(
               (x) =>

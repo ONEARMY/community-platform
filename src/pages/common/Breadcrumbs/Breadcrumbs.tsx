@@ -1,4 +1,5 @@
 import { Breadcrumbs as BreadcrumbsComponent } from 'oa-components'
+import { Box } from 'theme-ui'
 
 import type { ILibrary, IResearch } from 'oa-shared'
 import type { Question } from 'src/models/question.model'
@@ -57,5 +58,9 @@ const generateSteps = (content: Content, variant: Variant) => {
 
 export const Breadcrumbs = ({ steps, content, variant }: BreadcrumbsProps) => {
   const breadcrumbsSteps = steps ?? generateSteps(content, variant)
-  return <BreadcrumbsComponent steps={breadcrumbsSteps} />
+  return (
+    <Box sx={{ paddingLeft: [2, 0, 0] }}>
+      <BreadcrumbsComponent steps={breadcrumbsSteps} />
+    </Box>
+  )
 }

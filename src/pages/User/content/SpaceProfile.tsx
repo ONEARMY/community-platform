@@ -221,9 +221,11 @@ export const SpaceProfile = ({ user, docs, type }: IProps) => {
                     {heading}
                   </Tab>
                 )}
-                <Tab data-cy="contact-tab" value="contact">
-                  Contact
-                </Tab>
+                {type !== ProfileTypeList.MEMBER && (
+                  <Tab data-cy="contact-tab" value="contact">
+                    Contact
+                  </Tab>
+                )}
               </TabsList>
               <TabPanel value="profile">
                 <Box sx={{ mt: 1 }}>

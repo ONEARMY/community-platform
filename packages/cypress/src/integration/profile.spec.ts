@@ -58,6 +58,7 @@ describe('[Profile]', () => {
       cy.get('[data-cy=SpaceProfile]').should('not.exist')
       cy.get('[data-cy=MemberProfile]').should('be.visible')
       cy.get('.beta-tester-feature').should('not.exist')
+      cy.get('[data-cy=contact-tab]').should('not.exist')
     })
 
     it('[Cannot edit another user profile]', () => {

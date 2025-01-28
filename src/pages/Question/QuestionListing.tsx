@@ -3,7 +3,7 @@ import { useSearchParams } from '@remix-run/react'
 import { Button, Loader } from 'oa-components'
 import { logger } from 'src/logger'
 import { questionService } from 'src/pages/Question/question.service'
-import { Flex, Heading } from 'theme-ui'
+import { Card, Flex, Heading } from 'theme-ui'
 
 import { listing } from './labels'
 import { QuestionListHeader } from './QuestionListHeader'
@@ -76,24 +76,24 @@ export const QuestionListing = () => {
       )}
 
       {questions && questions.length > 0 && (
-        <ul
-          style={{
+        <Card
+          as="ul"
+          sx={{
             listStyle: 'none',
             padding: 0,
             margin: 0,
-            marginBottom: 5,
-            border: '2px solid black',
-            borderRadius: 5,
+            marginBottom: 2,
             background: 'lightGrey',
             display: 'flex',
             flexDirection: 'column',
             gap: '2px',
           }}
+          variant="responsive"
         >
           {questions.map((question, index) => (
             <QuestionListItem key={index} question={question} query={q} />
           ))}
-        </ul>
+        </Card>
       )}
 
       {showLoadMore && (

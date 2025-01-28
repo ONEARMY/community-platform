@@ -46,6 +46,7 @@ export const ListHeader = (props: IProps) => {
           justifyContent: 'space-between',
           flexDirection: ['column', 'column', 'row'],
           gap: 2,
+          paddingX: [2, 0],
         }}
       >
         {!showDrafts ? filteringComponents : <div></div>}

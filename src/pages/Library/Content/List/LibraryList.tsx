@@ -107,7 +107,7 @@ export const LibraryList = observer(() => {
       <Grid
         columns={[1, 2, 2, 3]}
         data-cy="howtolist-flex-container"
-        gap={4}
+        gap={[2, 3, 4]}
         sx={{ paddingTop: 1, marginBottom: 3 }}
       >
         {showDrafts ? (

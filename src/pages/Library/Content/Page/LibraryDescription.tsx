@@ -106,7 +106,7 @@ export const LibraryDescription = (props: IProps) => {
   }
 
   return (
-    <Card>
+    <Card variant="responsive">
       <Flex
         data-cy="library-basis"
         data-id={_id}
@@ -117,8 +117,8 @@ export const LibraryDescription = (props: IProps) => {
       >
         <Flex
           sx={{
-            px: 4,
-            py: 4,
+            padding: 3,
+            gap: 3,
             flexDirection: 'column',
             width: ['100%', '100%', `${(1 / 2) * 100}%`],
           }}
@@ -128,7 +128,7 @@ export const LibraryDescription = (props: IProps) => {
               * Marked for deletion
             </Text>
           )}
-          <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
+          <Flex sx={{ flexWrap: 'wrap', gap: 3 }}>
             <ClientOnly fallback={<></>}>
               {() => (
                 <>
@@ -195,9 +195,9 @@ export const LibraryDescription = (props: IProps) => {
               </Box>
             </Alert>
           ) : null}
-          <Box mt={3} mb={2}>
+          <Box>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
-              <Flex sx={{ flexDirection: 'column' }}>
+              <Flex sx={{ flexDirection: 'column', gap: 2 }}>
                 <ContentAuthorTimestamp
                   userName={_createdBy}
                   countryCode={creatorCountry}
@@ -228,8 +228,8 @@ export const LibraryDescription = (props: IProps) => {
             </Flex>
           </Box>
 
-          <Flex mt="4">
-            <Flex mr="4" sx={{ flexDirection: ['column', 'row', 'row'] }}>
+          <Flex sx={{ gap: 3, fontSize: 2 }}>
+            <Flex sx={{ flexDirection: ['column', 'row', 'row'] }}>
               <Image
                 loading="lazy"
                 src={TimeNeeded}
@@ -241,7 +241,6 @@ export const LibraryDescription = (props: IProps) => {
               {time}
             </Flex>
             <Flex
-              mr="4"
               sx={{ flexDirection: ['column', 'row', 'row'] }}
               data-cy="difficulty-level"
             >

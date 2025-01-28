@@ -4,8 +4,8 @@ import { notificationsService } from 'src/services/notificationsService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
-import type { DBCommentAuthor, Reply } from 'oa-shared'
 import type { User } from '@supabase/supabase-js'
+import type { DBCommentAuthor, Reply } from 'oa-shared'
 import type { DBProfile } from 'src/models/profile.model'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {

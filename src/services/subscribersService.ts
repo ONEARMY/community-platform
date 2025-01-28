@@ -1,5 +1,3 @@
-import { auth } from 'src/utils/firebase'
-
 import type { ContentType } from 'src/models/contentType.model'
 
 const add = async (contentType: ContentType, id: number) => {

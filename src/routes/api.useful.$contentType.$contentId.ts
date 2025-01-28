@@ -20,7 +20,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
     .from('profiles')
     .select()
     .eq('auth_id', user.id)
-      .limit(1)
+    .limit(1)
 
   if (!profileResult.data || profileResult.error) {
     console.error(profileResult.error + ' auth_id:' + user.id)

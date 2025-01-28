@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Link } from '@remix-run/react'
 import { observer } from 'mobx-react'
-import { Button, MemberBadge } from 'oa-components'
+import { Button, MemberBadge, ReturnPathLink } from 'oa-components'
 import { UserAction } from 'src/common/UserAction'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { Box, Flex, Text, Textarea } from 'theme-ui'
@@ -148,16 +147,15 @@ const LoginPrompt = () => {
     <Box sx={{ padding: [3, 4] }}>
       <Text data-cy="comments-login-prompt">
         Hi there!{' '}
-        <Link
-          to={'/sign-in?returnUrl=' + encodeURIComponent(location.pathname)}
+        <ReturnPathLink
+          to="/sign-in"
           style={{
             textDecoration: 'underline',
             color: 'inherit',
           }}
         >
-          Login
-        </Link>{' '}
-        to leave a comment
+          Login to leave a comment
+        </ReturnPathLink>
       </Text>
     </Box>
   )

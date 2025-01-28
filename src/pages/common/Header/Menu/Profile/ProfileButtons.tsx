@@ -2,7 +2,7 @@
 import { ClientOnly } from 'remix-utils/client-only'
 import { Box, Flex } from 'theme-ui'
 
-import ProfileButtonItem from './ProfileButtonItem'
+import { ProfileButtonItem } from './ProfileButtonItem'
 
 import './profile.css'
 
@@ -38,10 +38,7 @@ const ProfileButtons = (props: IProps) => {
             {() => (
               <>
                 <ProfileButtonItem
-                  link={
-                    '/sign-in?returnUrl=' +
-                    encodeURIComponent(location.pathname)
-                  }
+                  link="/sign-in"
                   text="Login"
                   variant="secondary"
                   sx={{
@@ -53,10 +50,7 @@ const ProfileButtons = (props: IProps) => {
                   isMobile={true}
                 />
                 <ProfileButtonItem
-                  link={
-                    '/sign-up?returnUrl=' +
-                    encodeURIComponent(location.pathname)
-                  }
+                  link="/sign-up"
                   text="Join"
                   variant="outline"
                   isMobile={true}
@@ -77,7 +71,7 @@ const ProfileButtons = (props: IProps) => {
       {() => (
         <>
           <ProfileButtonItem
-            link={'/sign-in?returnUrl=' + encodeURIComponent(location.pathname)}
+            link="/sign-in"
             text="Login"
             variant="secondary"
             sx={{
@@ -87,7 +81,7 @@ const ProfileButtons = (props: IProps) => {
             }}
           />
           <ProfileButtonItem
-            link={'/sign-up?returnUrl=' + encodeURIComponent(location.pathname)}
+            link="/sign-up"
             text="Join"
             variant="outline"
             sx={{ fontSize: 2 }}

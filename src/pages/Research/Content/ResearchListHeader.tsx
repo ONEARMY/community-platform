@@ -1,7 +1,12 @@
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link, useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
-import { CategoryVerticalList, SearchField, Select } from 'oa-components'
+import {
+  CategoryVerticalList,
+  ReturnPathLink,
+  SearchField,
+  Select,
+} from 'oa-components'
 import { ResearchStatus } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
@@ -9,7 +14,6 @@ import { UserAction } from 'src/common/UserAction'
 import { isPreciousPlastic } from 'src/config/config'
 import DraftButton from 'src/pages/common/Drafts/DraftButton'
 import { ListHeader } from 'src/pages/common/Layout/ListHeader'
-import { SessionContext } from 'src/pages/common/SessionContext'
 import { Button, Flex } from 'theme-ui'
 
 import { RESEARCH_EDITOR_ROLES } from '../constants'
@@ -36,7 +40,6 @@ const researchStatusOptions = [
 ]
 
 export const ResearchFilterHeader = (props: IProps) => {
-  const session = useContext(SessionContext)
   const { draftCount, handleShowDrafts, showDrafts } = props
 
   const [categories, setCategories] = useState<ICategory[]>([])
@@ -108,7 +111,7 @@ export const ResearchFilterHeader = (props: IProps) => {
             draftCount={draftCount}
             handleShowDrafts={handleShowDrafts}
           />
-          <Link to={session?.id ? '/research/create' : '/sign-in'}>
+          <Link to="/research/create">
             <Button type="button" variant="primary" data-cy="create">
               {listing.create}
             </Button>
@@ -117,11 +120,11 @@ export const ResearchFilterHeader = (props: IProps) => {
       }
       loggedOut={
         isPreciousPlastic() && (
-          <Link to="/sign-up">
+          <ReturnPathLink to="/sign-up">
             <Button type="button" variant="primary" data-cy="sign-up">
               {listing.join}
             </Button>
-          </Link>
+          </ReturnPathLink>
         )
       }
     />

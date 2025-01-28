@@ -1,7 +1,12 @@
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link, useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
-import { CategoryVerticalList, SearchField, Select } from 'oa-components'
+import {
+  CategoryVerticalList,
+  ReturnPathLink,
+  SearchField,
+  Select,
+} from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { UserAction } from 'src/common/UserAction'
 import {
@@ -11,7 +16,6 @@ import {
 import { Button, Flex } from 'theme-ui'
 
 import { ListHeader } from '../common/Layout/ListHeader'
-import { SessionContext } from '../common/SessionContext'
 import { headings, listing } from './labels'
 import { QuestionSortOptions } from './QuestionSortOptions'
 
@@ -19,7 +23,6 @@ import type { Category } from 'oa-shared'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 export const QuestionListHeader = () => {
-  const session = useContext(SessionContext)
   const [categories, setCategories] = useState<Category[]>([])
   const [searchString, setSearchString] = useState<string>('')
 
@@ -81,30 +84,18 @@ export const QuestionListHeader = () => {
   const actionComponents = (
     <UserAction
       loggedIn={
-        <Link
-          to={
-            session?.id
-              ? '/questions/create'
-              : '/sign-in?returnUrl=' + encodeURIComponent(location.pathname)
-          }
-        >
+        <Link to="/questions/create">
           <Button type="button" data-cy="create-question" variant="primary">
             {listing.create}
           </Button>
         </Link>
       }
       loggedOut={
-        <Link
-          to={
-            session?.id
-              ? '/questions/create'
-              : '/sign-up?returnUrl=' + encodeURIComponent(location.pathname)
-          }
-        >
+        <ReturnPathLink to="/sign-up">
           <Button type="button" data-cy="sign-up" variant="primary">
             {listing.join}
           </Button>
-        </Link>
+        </ReturnPathLink>
       }
     />
   )

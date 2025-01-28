@@ -12,5 +12,10 @@ export const loader = async ({ request }: ActionFunctionArgs) => {
     return Response.json({ success: false }, { headers })
   }
 
-  return redirect('/')
+  const url = new URL(request.url)
+  const returnUrl = url.searchParams.get('returnUrl')
+
+  const location = returnUrl || '/'
+
+  return redirect(location)
 }

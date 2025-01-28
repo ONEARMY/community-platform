@@ -98,16 +98,13 @@ export const SpaceProfile = ({ user, docs, type }: IProps) => {
           size={50}
           sx={{
             alignSelf: 'center',
-            transform: 'translateY(25px)',
+            position: 'absolute',
+            transform: 'translateY(-25px)',
           }}
           useLowDetailVersion
         />
       )}
-      <Card
-        sx={{
-          width: '100%',
-        }}
-      >
+      <Card>
         {type !== ProfileTypeList.MEMBER && (
           <Box>
             {coverImage.length ? (

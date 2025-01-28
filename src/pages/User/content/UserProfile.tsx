@@ -40,14 +40,13 @@ export const UserProfile = observer(
           flexDirection: 'column',
           width: '100%',
           marginTop: isViewingOwnProfile ? 4 : [6, 8],
-          gap: 4,
         }}
       >
         {isViewingOwnProfile && (
           <InternalLink
             sx={{
               alignSelf: ['center', 'flex-end'],
-              marginBottom: showMemberProfile ? [2, 0] : 0,
+              marginBottom: 6,
               zIndex: 2,
             }}
             to="/settings"

@@ -59,7 +59,18 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
         )}
       </Flex>
 
-      <Text sx={{ color: 'black' }}>{userName}</Text>
+      <Text
+        sx={{
+          color: 'black',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          maxWidth: '100%',
+        }}
+        title={userName}
+      >
+        {userName}
+      </Text>
       {isVerified && <UserBadge badgeName="verified" />}
       {isSupporter && <UserBadge badgeName="supporter" />}
     </Flex>

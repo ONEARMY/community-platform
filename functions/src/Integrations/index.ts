@@ -7,7 +7,6 @@ exports.notifyHowtoAwaitingModeration = Slack.notifyHowtoAwaitingModeration
 
 exports.notifyPinPublished = Discord.notifyPinPublished
 exports.notifyLibraryItemPublished = Discord.notifyLibraryItemPublished
-exports.notifyQuestionPublished = Discord.notifyQuestionPublished
 exports.notifyResearchUpdatePublished = Discord.notifyResearchUpdatePublished
 
 exports.patreonAuth = Patreon.patreonAuth

@@ -25,7 +25,7 @@ yarn test
 ### Components
 
 ```
-yarn test
+yarn test:components
 ```
 
 ### Functions

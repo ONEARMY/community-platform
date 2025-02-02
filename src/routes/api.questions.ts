@@ -5,11 +5,13 @@ import { verifyFirebaseToken } from 'src/firestore/firestoreAdmin.server'
 import { Question } from 'src/models/question.model'
 import { ITEMS_PER_PAGE } from 'src/pages/Question/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { discordServiceServer } from 'src/services/discordService.server'
 import { convertToSlug } from 'src/utils/slug'
 import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient } from '@supabase/supabase-js'
+import type { DBProfile } from 'src/models/profile.model'
 import type { DBQuestion } from 'src/models/question.model'
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions'
 
@@ -141,23 +143,23 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         },
       )
     }
-    const userRequest = await client
+    const profileRequest = await client
       .from('profiles')
       .select()
       .eq('firebase_auth_id', tokenValidation.user_id)
       .limit(1)
 
-    if (userRequest.error || !userRequest.data?.at(0)) {
-      console.log(userRequest.error)
+    if (profileRequest.error || !profileRequest.data?.at(0)) {
+      console.log(profileRequest.error)
       return Response.json({}, { status: 400, statusText: 'User not found' })
     }
 
-    const user = userRequest.data[0]
+    const profile = profileRequest.data[0] as DBProfile
 
     const questionResult = await client
       .from('questions')
       .insert({
-        created_by: user.id,
+        created_by: profile.id,
         title: data.title,
         description: data.description,
         moderation: IModerationStatus.ACCEPTED,
@@ -192,6 +194,8 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       }
     }
 
+    notifyDiscord(question, profile, new URL(request.url).origin)
+
     return Response.json({ question }, { headers, status: 201 })
   } catch (error) {
     console.log(error)
@@ -200,6 +204,19 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       { status: 500, statusText: 'Error creating question' },
     )
   }
+}
+
+function notifyDiscord(
+  question: Question,
+  profile: DBProfile,
+  siteUrl: string,
+) {
+  const title = question.title
+  const slug = question.slug
+
+  discordServiceServer.postWebhookRequest(
+    `❓ ${profile.username} has a new question: ${title}\nHelp them out and answer here: <${siteUrl}/questions/${slug}>`,
+  )
 }
 
 async function isDuplicateSlug(slug: string, client: SupabaseClient) {

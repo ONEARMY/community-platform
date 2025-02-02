@@ -24,7 +24,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbQuestion = result.data as unknown as DBQuestion
 
   if (dbQuestion.id) {
-    client
+    await client
       .from('questions')
       .update({ total_views: (dbQuestion.total_views || 0) + 1 })
       .eq('id', dbQuestion.id)

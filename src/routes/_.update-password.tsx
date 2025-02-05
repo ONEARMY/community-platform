@@ -73,10 +73,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return redirect('/')
 }
 
-export function shouldRevalidate() {
-  return false
-}
-
 export default function Index() {
   const navigate = useNavigate()
   const data = useLoaderData<typeof loader>()

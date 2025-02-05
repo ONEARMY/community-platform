@@ -42,6 +42,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (error) {
     try {
+      // edge case: the user might have input an old password which was valid on firebase, but not anymore.
+      // since we can't query the auth table easily, we try to login with firebase anyway.
+      // when it succeeds, we try to sign up the user, but it will fail because the email is already take.
+      // So, we want to throw a generic error "Invalid username or password." and not "Email already in use."
+
       const result = await signInWithEmailAndPassword(auth, email, password)
 
       const _authID = result.user.uid
@@ -64,7 +69,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       })
 
       if (error) {
-        throw new Error(error.message)
+        console.error(error)
+        throw new Error('Invalid username or password.')
       }
 
       await authServiceServer.createUserProfile(

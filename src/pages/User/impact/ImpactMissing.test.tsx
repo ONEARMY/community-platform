@@ -1,3 +1,9 @@
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router'
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -78,19 +84,25 @@ describe('ImpactMissing', () => {
   describe('[page owner]', () => {
     it('renders right message for impact owner', async () => {
       const user = FactoryUser({ userName: 'activeUser' })
-
-      render(
-        <Provider {...useCommonStores().stores}>
-          <ImpactMissing
-            fields={undefined}
-            owner={user}
-            year={2023}
-            visibleFields={undefined}
-          />
-        </Provider>,
+      const router = createMemoryRouter(
+        createRoutesFromElements(
+          <Route
+            index
+            element={
+              <ImpactMissing
+                fields={undefined}
+                owner={user}
+                year={2023}
+                visibleFields={undefined}
+              />
+            }
+          ></Route>,
+        ),
       )
 
-      await screen.findByText(missing.owner.label)
+      const container = render(<RouterProvider router={router} />)
+
+      await container.findByText(missing.owner.label)
     })
   })
 })

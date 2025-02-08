@@ -55,7 +55,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       const firebaseAuthId = result.user.uid
 
       if (!firebaseAuthId) {
-        throw new Error('Invalid email or password.')
+        throw new Error()
       }
 
       const userAuthResult = await authServiceServer.getUserByFirebaseId(
@@ -69,7 +69,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
       if (userAuthResult.data?.at(0)?.auth_id) {
         // If the user profile already has a auth_id value, it means the user already authenticated with supabase, thus the passwor is wrong.
-        throw new Error('Invalid email or password.')
+        throw new Error()
       }
 
       const userIdResult = await client.rpc('get_user_id_by_email', {
@@ -79,7 +79,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
       if (!userAuthId) {
         // User doesn't exist. need to sign up.
-        throw new Error('Invalid email or password.')
+        throw new Error()
       } else {
         const adminClient = createSupabaseAdminServerClient()
         const updatePassword = await adminClient.auth.admin.updateUserById(
@@ -94,7 +94,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
         if (updatePassword.error) {
           console.error(error)
-          throw new Error('Invalid email or password.')
+          throw new Error()
         }
 
         // Update profile to map with the supabase user
@@ -110,7 +110,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         })
       }
     } catch (error) {
-      console.error(error)
       return Response.json(
         { error: 'Invalid email or password.' },
         { headers, status: 400 },

@@ -94,7 +94,7 @@ enabled = true
 # in emails.
 site_url = "https://community.preciousplastic.com"
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
-additional_redirect_urls = ["http://127.0.0.1:3000/update-password","http://localhost:3000/update-password","https://community.preciousplastic.com/update-password","https://community.fixing.fashion/update-password","https://community.projectkamp.com/update-password"]
+additional_redirect_urls = ["http://127.0.0.1:3000/update-password","http://localhost:3000/update-password","https://community-platform-pr-*.fly.dev/update-password","https://community.preciousplastic.com/update-password","https://community.fixing.fashion/update-password","https://community.projectkamp.com/update-password"]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).
 jwt_expiry = 3600
 # If disabled, the refresh token will never expire.

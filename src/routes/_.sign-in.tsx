@@ -104,10 +104,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         )
 
         // Sign in
-        await client.auth.signInWithPassword({
+        const signInResult = await client.auth.signInWithPassword({
           email,
           password,
         })
+
+        if (signInResult.error) {
+          console.error(error)
+          throw new Error()
+        }
       }
     } catch (error) {
       return Response.json(

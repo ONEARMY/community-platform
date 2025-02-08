@@ -43,7 +43,6 @@ export default function Index() {
   return (
     <EnvironmentContext.Provider value={environment}>
       <SessionContext.Provider value={user}>
-        {JSON.stringify(user)}
         <UserStoreWrapper>
           <Flex
             sx={{ height: '100vh', flexDirection: 'column' }}

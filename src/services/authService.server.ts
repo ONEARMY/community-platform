@@ -5,6 +5,11 @@ type CreateProfileArgs = {
   username: string
 }
 
+type UpdateProfileArgs = {
+  supabaseAuthId: string
+  firebaseAuthId: string
+}
+
 const createUserProfile = async (
   args: CreateProfileArgs,
   client: SupabaseClient,
@@ -17,6 +22,26 @@ const createUserProfile = async (
     firebase_auth_id: '',
     tenant_id: process.env.TENANT_ID,
   })
+}
+
+const updateUserProfile = async (
+  args: UpdateProfileArgs,
+  client: SupabaseClient,
+) => {
+  return await client
+    .from('profiles')
+    .update({ auth_id: args.supabaseAuthId })
+    .eq('firebase_auth_id', args.firebaseAuthId)
+}
+
+const getUserByFirebaseId = async (
+  firebaseAuthId: string,
+  client: SupabaseClient,
+) => {
+  return await client
+    .from('profiles')
+    .select('auth_id,username')
+    .eq('firebase_auth_id', firebaseAuthId)
 }
 
 const isUsernameAvailable = async (
@@ -35,4 +60,6 @@ const isUsernameAvailable = async (
 export const authServiceServer = {
   createUserProfile,
   isUsernameAvailable,
+  updateUserProfile,
+  getUserByFirebaseId,
 }

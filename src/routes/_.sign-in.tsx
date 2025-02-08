@@ -2,14 +2,13 @@ import { Field, Form } from 'react-final-form'
 import { redirect } from '@remix-run/node'
 import { Link, useActionData } from '@remix-run/react'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { collection, getDocs, query, where } from 'firebase/firestore'
 import { Button, FieldInput, HeroBanner } from 'oa-components'
-import { DB_ENDPOINTS } from 'oa-shared'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import Main from 'src/pages/common/Layout/Main'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server'
 import { authServiceServer } from 'src/services/authService.server'
-import { auth, firestore } from 'src/utils/firebase'
+import { auth } from 'src/utils/firebase'
 import { getReturnUrl } from 'src/utils/redirect.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 import { required } from 'src/utils/validators'
@@ -28,6 +27,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return null
 }
 
+/**
+ * 1. Try to sign in with supabase.
+ * 2. If fail, try to sign in with firebase.
+ * 3. If succeeds, confirm it's the first firebase login for this account by checking the auth_id profile value. (this prevents rolling back a password)
+ * 4. If it's the first time, update the auth.user password and username (metadata), and it's profile auth_id.
+ * 5. Sign in with supabase.
+ */
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
   const formData = await request.formData()
@@ -41,46 +47,72 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   })
 
   if (error) {
-    try {
-      // edge case: the user might have input an old password which was valid on firebase, but not anymore.
-      // since we can't query the auth table easily, we try to login with firebase anyway.
-      // when it succeeds, we try to sign up the user, but it will fail because the email is already take.
-      // So, we want to throw a generic error "Invalid username or password." and not "Email already in use."
+    console.error(error)
 
+    try {
       const result = await signInWithEmailAndPassword(auth, email, password)
 
-      const _authID = result.user.uid
-      const profileDoc = await getDocs(
-        query(
-          collection(firestore, DB_ENDPOINTS.users),
-          where('_authID', '==', _authID),
-        ),
-      )
+      const firebaseAuthId = result.user.uid
 
-      const profile = profileDoc.docs[0].data()
-      const { data, error } = await client.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            username: profile.userName,
-          },
-        },
-      })
-
-      if (error) {
-        console.error(error)
-        throw new Error('Invalid username or password.')
+      if (!firebaseAuthId) {
+        throw new Error('Invalid email or password.')
       }
 
-      await authServiceServer.createUserProfile(
-        { user: data.user!, username: profile.username },
+      const userAuthResult = await authServiceServer.getUserByFirebaseId(
+        firebaseAuthId,
         client,
       )
+
+      if (userAuthResult.error) {
+        console.log(userAuthResult.error)
+      }
+
+      if (userAuthResult.data?.at(0)?.auth_id) {
+        // If the user profile already has a auth_id value, it means the user already authenticated with supabase, thus the passwor is wrong.
+        throw new Error('Invalid email or password.')
+      }
+
+      const userIdResult = await client.rpc('get_user_id_by_email', {
+        email: result.user.email,
+      })
+      const userAuthId = userIdResult.data[0]?.id
+
+      if (!userAuthId) {
+        // User doesn't exist. need to sign up.
+        throw new Error('Invalid email or password.')
+      } else {
+        const adminClient = createSupabaseAdminServerClient()
+        const updatePassword = await adminClient.auth.admin.updateUserById(
+          userAuthId,
+          {
+            password,
+            user_metadata: {
+              username: userAuthResult.data![0].username,
+            },
+          },
+        )
+
+        if (updatePassword.error) {
+          console.error(error)
+          throw new Error('Invalid email or password.')
+        }
+
+        // Update profile to map with the supabase user
+        await authServiceServer.updateUserProfile(
+          { supabaseAuthId: userAuthId, firebaseAuthId },
+          client,
+        )
+
+        // Sign in
+        await client.auth.signInWithPassword({
+          email,
+          password,
+        })
+      }
     } catch (error) {
       console.error(error)
       return Response.json(
-        { error: 'Invalid username or password.' },
+        { error: 'Invalid email or password.' },
         { headers, status: 400 },
       )
     }

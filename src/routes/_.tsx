@@ -43,7 +43,6 @@ export default function Index() {
   return (
     <EnvironmentContext.Provider value={environment}>
       <SessionContext.Provider value={user}>
-        <span>user: {JSON.stringify(user)}</span>
         <UserStoreWrapper>
           <Flex
             sx={{ height: '100vh', flexDirection: 'column' }}
@@ -51,7 +50,7 @@ export default function Index() {
           >
             <Analytics />
             <ScrollToTop />
-            {/* <ClientOnly fallback={<></>}>{() => <DevSiteHeader />}</ClientOnly> */}
+            <ClientOnly fallback={<></>}>{() => <DevSiteHeader />}</ClientOnly>
             <Alerts />
             <Header />
 

@@ -16,7 +16,7 @@ describe('[Research]', () => {
   describe('[By Authenticated]', () => {
     it('[Follow button]', () => {
       cy.step('Should exist')
-      cy.login('demo_beta_tester@example.com', 'demo_beta_tester')
+      cy.signIn('demo_beta_tester@example.com', 'demo_beta_tester')
       cy.get('[data-cy="follow-redirect"]').should('not.exist')
       cy.get('[data-cy="follow-button"]')
         .should('be.visible')

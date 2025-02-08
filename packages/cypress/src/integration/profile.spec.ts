@@ -48,7 +48,7 @@ describe('[Profile]', () => {
 
   describe('[By User]', () => {
     it('[User directed to own profile]', () => {
-      cy.login(subscriber.email, subscriber.password)
+      cy.signIn(subscriber.email, subscriber.password)
       cy.visit('/')
 
       cy.step('Go to Profile')
@@ -60,7 +60,7 @@ describe('[Profile]', () => {
     })
 
     it('[Cannot edit another user profile]', () => {
-      cy.login(subscriber.email, subscriber.password)
+      cy.signIn(subscriber.email, subscriber.password)
 
       cy.visit(`/u/${admin.userName}`)
       cy.get('[data-cy="Username"]').should('contain.text', admin.userName)
@@ -75,7 +75,7 @@ describe('[Profile]', () => {
         .slice(0, MESSAGE_MAX_CHARACTERS)
         .trim()
 
-      cy.login(subscriber.email, subscriber.password)
+      cy.signIn(subscriber.email, subscriber.password)
 
       cy.step('Go to Profile')
       cy.visit(`/u/${machine.userName}`)
@@ -101,7 +101,7 @@ describe('[Profile]', () => {
     it('[Can see impact data for workspaces]', () => {
       setIsPreciousPlastic()
 
-      cy.login(subscriber.email, subscriber.password)
+      cy.signIn(subscriber.email, subscriber.password)
 
       cy.step('Can go to impact data')
       cy.visit(`/u/${userProfiletype.userName}`)
@@ -115,7 +115,7 @@ describe('[Profile]', () => {
     it('[Can see contribution data for workspaces]', () => {
       setIsPreciousPlastic()
 
-      cy.login(subscriber.email, subscriber.password)
+      cy.signIn(subscriber.email, subscriber.password)
 
       cy.step('Can go to contribution data')
       cy.visit(`/u/${userProfiletype.userName}`)
@@ -125,7 +125,7 @@ describe('[Profile]', () => {
     it('[Tabs hidden without contributions]', () => {
       setIsPreciousPlastic()
 
-      cy.login(subscriber.email, subscriber.password)
+      cy.signIn(subscriber.email, subscriber.password)
 
       cy.step('Ensure hidden with no contributions')
       cy.visit(`/u/${workspaceEmpty.userName}`)
@@ -135,7 +135,7 @@ describe('[Profile]', () => {
     })
 
     it('[Cannot see profile views]', () => {
-      cy.login(subscriber.email, subscriber.password)
+      cy.signIn(subscriber.email, subscriber.password)
       cy.visit(`/u/${profile_views.userName}`)
       cy.get('[data-testid=profile-views-stat]').should('not.exist')
     })
@@ -143,7 +143,7 @@ describe('[Profile]', () => {
 
   describe('[By User with workspace profile]', () => {
     it('[User directed to own profile]', () => {
-      cy.login(userProfiletype.email, userProfiletype.password)
+      cy.signIn(userProfiletype.email, userProfiletype.password)
       cy.visit('/')
 
       cy.step('Go to Profile')
@@ -157,7 +157,7 @@ describe('[Profile]', () => {
 
 describe('[By Beta Tester]', () => {
   it('[Displays view count for profile with views]', () => {
-    cy.login(betaTester.email, betaTester.password)
+    cy.signIn(betaTester.email, betaTester.password)
     cy.visit(`/u/${profile_views.userName}`)
     cy.get('[data-testid=profile-views-stat]').contains(/Views: \d+/)
   })

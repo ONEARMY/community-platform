@@ -43,7 +43,7 @@ describe('[Questions.Discussions]', () => {
   // const secondReply = `Quick reply. ${visitor.username}`
   // cy.step('First commentor can respond')
   // cy.logout()
-  // cy.login(visitor.email, visitor.password)
+  // cy.signIn(visitor.email, visitor.password)
   // cy.visit(questionPath)
   // cy.addReply(secondReply)
   // cy.step('Can delete their comment')

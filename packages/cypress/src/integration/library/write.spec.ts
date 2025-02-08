@@ -319,7 +319,7 @@ describe('[Library]', () => {
     })
 
     it('[Warning on leaving page]', () => {
-      cy.login(creator.email, creator.password)
+      cy.signIn(creator.email, creator.password)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.step('Access the create project')
       cy.get('a[href="/library/create"]').should('be.visible')

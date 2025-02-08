@@ -1,14 +1,12 @@
 import 'cypress-file-upload'
 
 import { createClient } from '@supabase/supabase-js'
-import { signInWithEmailAndPassword } from 'firebase/auth'
 import { deleteDB } from 'idb'
 
 import { Auth, TestDB } from './db/firebase'
 
 import type { ILibrary, IQuestionDB, IResearchDB } from 'oa-shared'
 import type { IUserSignUpDetails } from '../utils/TestUtils'
-import type { firebase } from './db/firebase'
 
 type SeedData = {
   [tableName: string]: Array<Record<string, any>>
@@ -24,13 +22,6 @@ declare global {
       deleteIDB(name: string): Promise<boolean>
       interceptAddressSearchFetch(addressResponse): Chainable<void>
       interceptAddressReverseFetch(addressResponse): Chainable<void>
-      /** login with firebase credentials, optionally check ui login element updated*/
-      login(
-        username: string,
-        password: string,
-      ): Promise<firebase.auth.UserCredential>
-      /** logout of firebase, optionally check ui login element updated*/
-      logout(checkUI?: boolean): Chainable<void>
       queryDocuments(
         collectionName: string,
         fieldPath: string,
@@ -106,45 +97,6 @@ Cypress.Commands.add('clearServiceWorkers', () => {
         }
       })
     })
-  })
-
-  Cypress.Commands.add('logout', (checkUI = true) => {
-    cy.wrap('logging out').then(() => {
-      return new Cypress.Promise((resolve) => {
-        Auth.signOut().then(() => resolve())
-      })
-    })
-    cy.wait(2000)
-    cy.wrap(checkUI ? 'check logout ui' : 'skip ui check').then(() => {
-      if (checkUI) {
-        cy.get('[data-cy=login]')
-      }
-    })
-  })
-})
-
-/**
- * Login and logout commands use the sytem interface to log a user in or out
- */
-Cypress.Commands.add('login', async (email: string, password: string) => {
-  const signin = signInWithEmailAndPassword(Auth, email, password).catch(
-    (e) => {
-      cy.log(`User could not sign in programmatically!`)
-      console.error(e)
-    },
-  )
-
-  return signin as any
-})
-
-Cypress.Commands.add('logout', (checkUI = true) => {
-  cy.wrap('logging out').then(async () => {
-    return await Auth.signOut()
-  })
-  cy.wrap(checkUI ? 'check logout ui' : 'skip ui check').then(() => {
-    if (checkUI) {
-      cy.get('[data-cy=login]')
-    }
   })
 })
 
@@ -274,4 +226,23 @@ export const clearDatabase = async (tables: string[], tenantId: string) => {
   for (const table of tables) {
     await supabase.from(table).delete().eq('tenant_id', tenantId)
   }
+}
+
+export const signUp = async (
+  email: string,
+  username: string,
+  password: string,
+) => {
+  const tenantId = Cypress.env('TENANT_ID')
+  const supabase = supabaseClient(tenantId)
+
+  return await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        username,
+      },
+    },
+  })
 }

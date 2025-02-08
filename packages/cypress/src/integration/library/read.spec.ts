@@ -181,8 +181,8 @@ describe('[How To]', () => {
 
     describe('[By Owner]', () => {
       beforeEach(() => {
+        cy.signIn('howto_creator@test.com', 'test1234')
         cy.visit(itemUrl)
-        cy.login('howto_creator@test.com', 'test1234')
       })
 
       it('[Delete button is visible]', () => {
@@ -202,7 +202,7 @@ describe('[How To]', () => {
 
     describe('[By Admin]', () => {
       beforeEach(() => {
-        cy.login('demo_admin@example.com', 'demo_admin')
+        cy.signIn('demo_admin@example.com', 'demo_admin')
         cy.visit(itemUrl)
       })
 
@@ -233,7 +233,7 @@ describe('[How To]', () => {
 
     describe('[By Owner]', () => {
       beforeEach(() => {
-        cy.login('demo_user@example.com', 'demo_user')
+        cy.signIn('demo_user@example.com', 'demo_user')
         cy.visit(deletedUrl)
       })
 
@@ -246,7 +246,7 @@ describe('[How To]', () => {
 
     describe('[By Admin]', () => {
       beforeEach(() => {
-        cy.login('demo_user@example.com', 'demo_user')
+        cy.signIn('demo_user@example.com', 'demo_user')
         cy.visit(deletedUrl)
       })
 

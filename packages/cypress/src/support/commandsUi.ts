@@ -34,6 +34,8 @@ declare global {
         oldComment: string,
         updatedNewComment: string,
       ): Chainable<void>
+      signIn(email: string, password: string): Chainable<void>
+      logout(): Chainable<void>
       fillSignupForm(
         username: string,
         email: string,
@@ -160,6 +162,7 @@ Cypress.Commands.add(
   (username: string, email: string, password: string) => {
     cy.log('Fill in sign-up form')
     cy.visit('/sign-up')
+    cy.wait(2000)
     cy.get('[data-cy=username]').clear().type(username)
     cy.get('[data-cy=email]').clear().type(email)
     cy.get('[data-cy=password]').clear().type(password)
@@ -167,6 +170,19 @@ Cypress.Commands.add(
     cy.get('[data-cy=consent]').check()
   },
 )
+
+Cypress.Commands.add('signIn', (email: string, password: string) => {
+  cy.log('Fill in sign in form')
+  cy.visit('/sign-in')
+  cy.wait(2000)
+  cy.get('[data-cy=email]').clear().type(email)
+  cy.get('[data-cy=password]').clear().type(password)
+  cy.get('[data-cy=submit]').click()
+})
+
+Cypress.Commands.add('logout', () => {
+  cy.visit('/logout')
+})
 
 Cypress.Commands.add('fillIntroTitle', (intro: string) => {
   cy.log('Fill in intro title')
@@ -179,34 +195,7 @@ Cypress.Commands.add('signUpNewUser', (user?) => {
 
   cy.fillSignupForm(username, email, password)
   cy.get('[data-cy=submit]').click()
-  cy.url().should('include', 'sign-up-message')
-  // .then(() => {
-  //   if (addToSupabase) {
-  //     console.log(username)
-  //     firestore
-  //       .queryDocument('users', '_id', '==', username)
-  //       .then((users) => {
-  //         console.log(users.docs)
-  //         const user = users.docs[0].data()
-  //         const tenantId = Cypress.env('TENANT_ID')
-  //         seedDatabase(
-  //           {
-  //             profiles: [
-  //               {
-  //                 firebase_auth_id: user._authID,
-  //                 username: username,
-  //                 tenant_id: tenantId,
-  //                 created_at: new Date().toUTCString(),
-  //                 display_name: username,
-  //                 is_verified: false,
-  //               },
-  //             ],
-  //           },
-  //           tenantId,
-  //         )
-  //       })
-  //   }
-  // })
+  // cy.url().should('include', 'sign-up-message')
 })
 
 Cypress.Commands.add('toggleUserMenuOn', () => {

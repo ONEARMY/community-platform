@@ -88,7 +88,7 @@ describe('[Research.Discussions]', () => {
     const secondReply = `Quick reply. ${visitor.username}`
 
     cy.logout()
-    cy.login(visitor.email, visitor.password)
+    cy.signIn(visitor.email, visitor.password)
     cy.visit(researchPath)
     cy.get(
       '[data-cy="HideDiscussionContainer: button open-comments has-comments"]',

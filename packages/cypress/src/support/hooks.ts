@@ -1,4 +1,5 @@
-import { clearDatabase } from './commands'
+import { MOCK_DATA } from '../data'
+import { clearDatabase, signUp } from './commands'
 import { seedCategories, seedQuestions } from './seedQuestions'
 
 /**
@@ -22,6 +23,18 @@ before(() => {
   cy.then(async () => {
     await seedCategories()
     await seedQuestions()
+
+    const accounts = Object.values(MOCK_DATA.users)
+      .filter((x) => !!x['password'] && !!x['email'] && !!x.userName)
+      .map((user) => ({
+        email: user['email'],
+        username: user.userName,
+        password: user['password'],
+      }))
+
+    await Promise.all(
+      accounts.map((user) => signUp(user.email, user.username, user.password)),
+    )
   })
   localStorage.clear()
   cy.clearServiceWorkers()

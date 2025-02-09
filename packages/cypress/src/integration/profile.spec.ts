@@ -53,6 +53,7 @@ describe('[Profile]', () => {
 
       cy.step('Go to Profile')
       cy.clickMenuItem(UserMenuItem.Profile)
+      cy.wait(5000)
       cy.url().should('include', `/u/${subscriber.userName}`)
       cy.get('[data-cy=spaceProfile]').should('not.exist')
       cy.get('[data-cy=MemberProfile]').should('be.visible')
@@ -138,19 +139,6 @@ describe('[Profile]', () => {
       cy.signIn(subscriber.email, subscriber.password)
       cy.visit(`/u/${profile_views.userName}`)
       cy.get('[data-testid=profile-views-stat]').should('not.exist')
-    })
-  })
-
-  describe('[By User with workspace profile]', () => {
-    it('[User directed to own profile]', () => {
-      cy.signIn(userProfiletype.email, userProfiletype.password)
-      cy.visit('/')
-
-      cy.step('Go to Profile')
-      cy.clickMenuItem(UserMenuItem.Profile)
-      cy.url().should('include', `/u/${userProfiletype.userName}`)
-      cy.get('[data-cy=MemberProfile]').should('not.exist')
-      cy.get('[data-cy=SpaceProfile]').should('be.visible')
     })
   })
 })

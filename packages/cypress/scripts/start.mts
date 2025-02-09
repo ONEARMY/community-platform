@@ -57,6 +57,7 @@ fs.writeFileSync(
     TENANT_ID: tenantId,
     SUPABASE_API_URL: process.env.SUPABASE_API_URL,
     SUPABASE_KEY: process.env.SUPABASE_KEY,
+    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
   }),
 )
 

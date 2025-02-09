@@ -120,10 +120,6 @@ Cypress.Commands.add('setSettingImage', (image, selector) => {
     .attachFile(`images/${image}.jpg`)
 })
 
-Cypress.Commands.add('setFile', (filePath, selector) => {
-  cy.get(`[data-cy=${selector}]`).find(':file').attachFile(filePath)
-})
-
 Cypress.Commands.add('setSettingImpactData', (year: number, fields) => {
   cy.step('Save impact data')
   cy.get('[data-cy="tab-Impact"]').click()

@@ -161,7 +161,9 @@ describe('[How To]', () => {
 
     describe('[By Authenticated]', () => {
       it('[Allows opening of attachments]', () => {
-        cy.signUpNewUser()
+        const visitor = MOCK_DATA.users.subscriber
+
+        cy.signIn(visitor.email, visitor.password)
         cy.visit(itemUrl)
         cy.step('[Presents the donation request before opening of attachments]')
         cy.step('Shows modal')

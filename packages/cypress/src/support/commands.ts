@@ -28,18 +28,12 @@ declare global {
         opStr: any,
         value: string,
       ): Chainable<any[]>
-      addProject(
-        project: ILibrary.DB,
-        user: IUserSignUpDetails,
-      ): Chainable<void>
+      addProject(project: ILibrary.DB, username: string): Chainable<void>
       addQuestion(
         question: IQuestionDB,
         user: IUserSignUpDetails,
       ): Chainable<void>
-      addResearch(
-        research: IResearchDB,
-        user: IUserSignUpDetails,
-      ): Chainable<void>
+      addResearch(research: IResearchDB, username: string): Chainable<void>
       step(message: string)
       setSessionStorage(key: string, value: string): Promise<void>
     }
@@ -129,8 +123,8 @@ Cypress.Commands.add(
   },
 )
 
-Cypress.Commands.add('addProject', (project, user) => {
-  const slug = `${project.slug}-${user.username}`
+Cypress.Commands.add('addProject', (project, username) => {
+  const slug = `${project.slug}-${username}`
 
   return firestore.addDocument('library', {
     ...project,
@@ -147,8 +141,8 @@ Cypress.Commands.add('addQuestion', (question, user) => {
   })
 })
 
-Cypress.Commands.add('addResearch', (research, user) => {
-  const slug = `${user.username}-in-${research.slug}`
+Cypress.Commands.add('addResearch', (research, username) => {
+  const slug = `${username}-in-${research.slug}`
 
   return firestore.addDocument('research', {
     ...research,
@@ -226,23 +220,4 @@ export const clearDatabase = async (tables: string[], tenantId: string) => {
   for (const table of tables) {
     await supabase.from(table).delete().eq('tenant_id', tenantId)
   }
-}
-
-export const signUp = async (
-  email: string,
-  username: string,
-  password: string,
-) => {
-  const tenantId = Cypress.env('TENANT_ID')
-  const supabase = supabaseClient(tenantId)
-
-  return await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        username,
-      },
-    },
-  })
 }

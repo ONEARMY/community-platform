@@ -77,7 +77,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     await userService.createFirebaseProfile(data.user)
   }
 
-  return redirect('/', { headers })
+  return redirect('/sign-up-message', { headers })
 }
 
 const rowWidth = ['100%', '100%', `100%`]

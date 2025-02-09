@@ -1,11 +1,8 @@
 // This is basically an identical set of steps to the discussion tests for
 // questions and projects. Any changes here should be replicated there.
 
-import { ExternalLinkLabel } from 'oa-shared'
-
 import { MOCK_DATA } from '../../data'
 import { research } from '../../fixtures/research'
-import { generateNewUserDetails } from '../../utils/TestUtils'
 
 const item = Object.values(MOCK_DATA.research)[0]
 
@@ -24,14 +21,15 @@ describe('[Research.Discussions]', () => {
   })
 
   it('allows authenticated users to contribute to discussions', () => {
-    const visitor = generateNewUserDetails()
-    cy.addResearch(research, visitor)
-    cy.signUpNewUser(visitor)
+    const visitor = MOCK_DATA.users.subscriber
+    const secondCommentor = MOCK_DATA.users.profile_views
+    cy.addResearch(research, visitor.userName)
+    cy.signIn(visitor.email, visitor.password)
 
-    const newComment = `An example comment from ${visitor.username}`
-    const updatedNewComment = `I've updated my comment now. Love ${visitor.username}`
+    const newComment = `An example comment from ${visitor.userName}`
+    const updatedNewComment = `I've updated my comment now. Love ${visitor.userName}`
 
-    const researchPath = `/research/${visitor.username}-in-discussion-research`
+    const researchPath = `/research/${visitor.userName}-in-discussion-research`
 
     cy.step('Can add comment')
 
@@ -49,13 +47,12 @@ describe('[Research.Discussions]', () => {
     cy.editDiscussionItem('CommentItem', newComment, updatedNewComment)
 
     cy.step('Another user can add reply')
-    const secondCommentor = generateNewUserDetails()
-    const newReply = `An interesting point, I hadn't thought about that. All the best ${secondCommentor.username}`
-    const updatedNewReply = `I hadn't thought about that. Really good point. ${secondCommentor.username}`
+    const newReply = `An interesting point, I hadn't thought about that. All the best ${secondCommentor.userName}`
+    const updatedNewReply = `I hadn't thought about that. Really good point. ${secondCommentor.userName}`
 
     cy.logout()
 
-    cy.signUpNewUser(secondCommentor)
+    cy.signIn(secondCommentor.email, secondCommentor.password)
     cy.visit(researchPath)
     cy.get(
       '[data-cy="HideDiscussionContainer: button open-comments has-comments"]',
@@ -68,24 +65,8 @@ describe('[Research.Discussions]', () => {
     cy.step('Can edit their reply')
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
 
-    cy.step('Updating user settings shows on comments')
-    cy.visit('/settings')
-    cy.get('[data-cy=loader]').should('not.exist')
-    cy.setSettingBasicUserInfo({
-      country: 'Saint Lucia',
-      description: "I'm a commenter",
-      displayName: secondCommentor.username,
-    })
-    cy.setSettingImage('avatar', 'userImage')
-    cy.setSettingAddContactLink({
-      index: 0,
-      label: ExternalLinkLabel.SOCIAL_MEDIA,
-      url: 'http://something.to.delete/',
-    })
-    cy.saveSettingsForm()
-
     cy.step('First commentor can respond')
-    const secondReply = `Quick reply. ${visitor.username}`
+    const secondReply = `Quick reply. ${visitor.userName}`
 
     cy.logout()
     cy.signIn(visitor.email, visitor.password)

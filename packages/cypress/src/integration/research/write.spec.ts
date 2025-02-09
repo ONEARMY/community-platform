@@ -4,7 +4,6 @@ import { RESEARCH_TITLE_MIN_LENGTH } from '../../../../../src/pages/Research/con
 import { MOCK_DATA } from '../../data'
 import {
   generateAlphaNumeric,
-  generateNewUserDetails,
   setIsPreciousPlastic,
 } from '../../utils/TestUtils'
 
@@ -40,10 +39,7 @@ describe('[Research]', () => {
       const updateTitle = faker.lorem.words(5)
       const updateDescription = 'This is the description for the update.'
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
-
-      const newCollaborator = generateNewUserDetails()
-      cy.signUpNewUser(newCollaborator)
-
+      const newCollaborator = MOCK_DATA.users.subscriber
       cy.step('Create the research article')
       cy.signIn(researcherEmail, researcherPassword)
       cy.visit('/research')
@@ -85,7 +81,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-description]').type(expected.description).blur()
 
       cy.step('New collaborators can be assigned to research')
-      cy.selectTag(newCollaborator.username, '[data-cy=UserNameSelect]')
+      cy.selectTag(newCollaborator.userName, '[data-cy=UserNameSelect]')
 
       cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=submit]').click()
@@ -98,7 +94,7 @@ describe('[Research]', () => {
       cy.step('Research article displays correctly')
       cy.contains(expected.title)
       cy.contains(expected.description)
-      cy.contains(newCollaborator.username)
+      cy.contains(newCollaborator.userName)
 
       cy.step('New collaborators can add update')
       cy.clickMenuItem('Logout' as UserMenuItem)
@@ -215,11 +211,14 @@ describe('[Research]', () => {
         'Update. One. Ready to start with the observations.'
       const updateVideoUrl = 'https://www.youtube.com/watch?v=U3mrj84p3cM'
 
+      cy.signIn(
+        MOCK_DATA.users.research_reader.email,
+        MOCK_DATA.users.research_reader.password,
+      )
       setIsPreciousPlastic()
-      cy.signUpNewUser()
-
       cy.step('Can access create form')
       cy.visit('/research')
+      cy.wait(2000)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy=create]').should('be.visible')
       cy.get('a[href="/research/create"]').should('be.visible')
@@ -275,6 +274,7 @@ describe('[Research]', () => {
 
     it('[Warning on leaving page]', () => {
       cy.signIn(researcherEmail, researcherPassword)
+      cy.visit('/research')
       cy.step('Access the create research article')
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('a[href="/research/create"]').should('be.visible')

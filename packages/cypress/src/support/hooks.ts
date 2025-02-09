@@ -1,5 +1,5 @@
-import { MOCK_DATA } from '../data'
-import { clearDatabase, signUp } from './commands'
+import { clearDatabase } from './commands'
+import { deleteAccounts, seedAccounts } from './seedAccounts'
 import { seedCategories, seedQuestions } from './seedQuestions'
 
 /**
@@ -21,20 +21,13 @@ before(() => {
     throw error
   })
   cy.then(async () => {
-    await seedCategories()
-    await seedQuestions()
-
-    const accounts = Object.values(MOCK_DATA.users)
-      .filter((x) => !!x['password'] && !!x['email'] && !!x.userName)
-      .map((user) => ({
-        email: user['email'],
-        username: user.userName,
-        password: user['password'],
-      }))
-
-    await Promise.all(
-      accounts.map((user) => signUp(user.email, user.username, user.password)),
+    clearDatabase(
+      ['profiles', 'questions', 'comments', 'categories', 'tags'],
+      Cypress.env('TENANT_ID'),
     )
+    const profiles = await seedAccounts()
+    await seedCategories()
+    await seedQuestions(profiles)
   })
   localStorage.clear()
   cy.clearServiceWorkers()
@@ -43,17 +36,17 @@ before(() => {
 
 afterEach(() => {
   // ensure all tests are also logged out (skip ui check in case page not loaded)
-  cy.logout(false)
+  cy.logout()
 })
 
 after(() => {
-  const tenantId = Cypress.env('TENANT_ID')
   Cypress.log({
     displayName: 'Clearing database for tenant',
-    message: tenantId,
+    message: Cypress.env('TENANT_ID'),
   })
+  deleteAccounts()
   clearDatabase(
     ['profiles', 'questions', 'comments', 'categories', 'tags'],
-    tenantId,
+    Cypress.env('TENANT_ID'),
   )
 })

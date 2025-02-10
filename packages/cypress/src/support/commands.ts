@@ -207,7 +207,7 @@ export const seedDatabase = async (
 
   // Convert to Promise.All
   for (const [table, rows] of Object.entries(data)) {
-    results[table] = await supabase.from(table).insert(rows).select()
+    results[table] = await supabase.from(table).upsert(rows).select()
   }
 
   return results

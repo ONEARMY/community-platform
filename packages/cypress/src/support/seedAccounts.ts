@@ -3,8 +3,12 @@ import { createClient } from '@supabase/supabase-js'
 import { MOCK_DATA } from '../data'
 import { seedDatabase } from './commands'
 
+import type { SupabaseClient } from '@supabase/supabase-js'
+
 // Creates user accounts and respective profiles
 export const seedAccounts = async () => {
+  const supabase = supabaseAdminClient()
+
   const accounts = Object.values(MOCK_DATA.users)
     .filter((x) => !!x['password'] && !!x['email'] && !!x.userName)
     .map((user) => ({
@@ -15,7 +19,9 @@ export const seedAccounts = async () => {
     }))
 
   const userIds = await Promise.all(
-    accounts.map((user) => signUp(user.email, user.username, user.password)),
+    accounts.map((user) =>
+      signUp(supabase, user.email, user.username, user.password),
+    ),
   )
   for (let i = 0; i < accounts.length; i++) {
     accounts[i].id = userIds[i]
@@ -33,9 +39,12 @@ export const seedAccounts = async () => {
   return await seedDatabase({ profiles }, Cypress.env('TENANT_ID'))
 }
 
-const signUp = async (email: string, username: string, password: string) => {
-  const supabase = supabaseAdminClient()
-
+const signUp = async (
+  supabase: SupabaseClient,
+  email: string,
+  username: string,
+  password: string,
+) => {
   const result = await supabase.auth.admin.createUser({
     email,
     password,

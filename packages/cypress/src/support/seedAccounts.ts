@@ -23,9 +23,11 @@ export const seedAccounts = async () => {
       signUp(supabase, user.email, user.username, user.password),
     ),
   )
+
   for (let i = 0; i < accounts.length; i++) {
     accounts[i].id = userIds[i]
   }
+
   const profiles = accounts
     .filter((x) => x.id)
     .map((x) => ({
@@ -36,6 +38,7 @@ export const seedAccounts = async () => {
       display_name: x.username,
       is_verified: true,
     }))
+
   return await seedDatabase({ profiles }, Cypress.env('TENANT_ID'))
 }
 

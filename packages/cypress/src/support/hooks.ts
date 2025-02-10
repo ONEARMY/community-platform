@@ -21,10 +21,6 @@ before(() => {
     throw error
   })
   cy.then(async () => {
-    clearDatabase(
-      ['profiles', 'questions', 'comments', 'categories', 'tags'],
-      Cypress.env('TENANT_ID'),
-    )
     const profiles = await seedAccounts()
     await seedCategories()
     await seedQuestions(profiles)

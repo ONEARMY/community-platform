@@ -161,7 +161,7 @@ function runTests() {
   const { CY_BIN, CROSSENV_BIN } = PATHS
 
   const testCMD = isCi
-    ? `${CY_BIN} run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
+    ? `${CY_BIN} run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
     : `${CY_BIN} open --browser chrome --env ${CYPRESS_ENV}`
 
   console.log(`Running cypress with cmd: ${testCMD}`)

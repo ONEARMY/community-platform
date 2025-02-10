@@ -206,13 +206,14 @@ export const seedDatabase = async (
   const results = {}
 
   for (const [table, rows] of Object.entries(data)) {
-    try {
-      results[table] = await supabase.from(table).insert(rows).select()
-    } catch (err) {
-      console.error(err)
-      // this is to ensure parallel execution works
-      results[table] = await supabase.from(table).select()
+    const result = await supabase.from(table).insert(rows).select()
+
+    if (!result.error) {
+      results[table] = result
+      continue
     }
+
+    results[table] = await supabase.from(table).select()
   }
 
   return results

@@ -205,9 +205,14 @@ export const seedDatabase = async (
   const supabase = supabaseClient(tenantId)
   const results = {}
 
-  // Convert to Promise.All
   for (const [table, rows] of Object.entries(data)) {
-    results[table] = await supabase.from(table).upsert(rows).select()
+    try {
+      results[table] = await supabase.from(table).insert(rows).select()
+    } catch (err) {
+      console.error(err)
+      // this is to ensure parallel execution works
+      results[table] = await supabase.from(table).select()
+    }
   }
 
   return results

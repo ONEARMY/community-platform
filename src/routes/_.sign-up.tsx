@@ -40,7 +40,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
   const formData = await request.formData()
   const url = new URL(request.url)
-  const emailRedirectUrl = `${url.protocol}//${url.host}/email-confirmation/`
+  const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:'
+  const emailRedirectUrl = `${protocol}//${url.host}/email-confirmation/`
 
   const username = formData.get('username') as string
 

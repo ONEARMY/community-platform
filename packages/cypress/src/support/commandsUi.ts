@@ -1,5 +1,4 @@
 import { form } from '../../../../src/pages/UserSettings/labels'
-import { generateNewUserDetails } from '../utils/TestUtils'
 
 import type { IUser } from 'oa-shared'
 
@@ -185,15 +184,6 @@ Cypress.Commands.add('fillIntroTitle', (intro: string) => {
   cy.get('[data-cy=intro-title]').clear().type(intro).blur({ force: true })
 })
 
-Cypress.Commands.add('signUpNewUser', (user?) => {
-  cy.log('Generate new user details')
-  const { username, email, password } = user || generateNewUserDetails()
-
-  cy.fillSignupForm(username, email, password)
-  cy.get('[data-cy=submit]').click()
-  // cy.url().should('include', 'sign-up-message')
-})
-
 Cypress.Commands.add('toggleUserMenuOn', () => {
   Cypress.log({ displayName: 'OPEN_USER_MENU' })
   cy.get('[data-cy=user-menu]').should('be.visible')
@@ -213,7 +203,7 @@ Cypress.Commands.add('clickMenuItem', (menuItem: UserMenuItem) => {
     },
   })
   cy.toggleUserMenuOn()
-  cy.get(`[data-cy=menu-${menuItem}]`).click()
+  cy.get(`[data-cy=menu-${menuItem}]`).should('be.visible').click()
 })
 
 Cypress.Commands.add('screenClick', () => {

@@ -94,7 +94,7 @@ enabled = true
 # in emails.
 site_url = "https://community.preciousplastic.com"
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
-additional_redirect_urls = ["http://127.0.0.1:3000/update-password","http://localhost:3000/update-password","https://community-platform-pr-*.fly.dev/update-password","https://community.preciousplastic.com/update-password","https://community.fixing.fashion/update-password","https://community.projectkamp.com/update-password"]
+additional_redirect_urls = ["http://127.0.0.1:3000/**","http://localhost:3000/**","https://community-platform-pr-*.fly.dev/**","https://community.preciousplastic.com/**","https://community.fixing.fashion/**","https://community.projectkamp.com/**"]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).
 jwt_expiry = 3600
 # If disabled, the refresh token will never expire.
@@ -116,7 +116,7 @@ enable_signup = true
 # addresses. If disabled, only the new email is required to confirm.
 double_confirm_changes = true
 # If enabled, users need to confirm their email address before signing in.
-enable_confirmations = false
+enable_confirmations = true
 # If enabled, users will need to reauthenticate or have logged in recently to change their password.
 secure_password_change = false
 # Controls the minimum amount of time that must pass before sending another signup confirmation or password reset email.

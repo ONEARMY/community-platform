@@ -1,5 +1,4 @@
-import { Link } from '@remix-run/react'
-import { Button, HeroBanner } from 'oa-components'
+import { HeroBanner } from 'oa-components'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 
 const SignUpMessagePage = () => (
@@ -24,16 +23,6 @@ const SignUpMessagePage = () => (
             We've sent you an email. Please find a confirmation link in your
             mailbox.
           </Text>
-          <Link to="/settings" data-cy="complete-profile-button">
-            <Button
-              type="button"
-              variant="primary"
-              data-cy="home"
-              sx={{ borderRadius: 3 }}
-            >
-              Complete your profile
-            </Button>
-          </Link>
         </Flex>
       </Card>
       <Flex mt={3} sx={{ justifyContent: 'flex-start' }}></Flex>

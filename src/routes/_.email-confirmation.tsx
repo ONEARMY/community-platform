@@ -2,7 +2,7 @@ import { Link, redirect } from '@remix-run/react'
 import { Button, HeroBanner } from 'oa-components'
 import Main from 'src/pages/common/Layout/Main'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { Card, Flex, Heading } from 'theme-ui'
+import { Card, Flex, Heading, Text } from 'theme-ui'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 
@@ -53,12 +53,19 @@ export default function Index() {
         mb={3}
       >
         <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-          <HeroBanner type="email" />
+          <HeroBanner type="celebration" />
           <Card sx={{ borderRadius: 3 }}>
             <Flex sx={{ padding: 4, gap: 4, flexDirection: 'column' }}>
               <Flex sx={{ gap: 2, flexDirection: 'column' }}>
                 <Heading>Your email is confirmed!</Heading>
+                <Heading variant="small">Nice one</Heading>
               </Flex>
+
+              <Text sx={{ color: 'grey' }}>
+                Before contributing, we'd love it if you could let everyone know
+                who you are.
+              </Text>
+
               <Flex sx={{ gap: 2 }}>
                 <Link to="/settings" data-cy="complete-profile-button">
                   <Button
@@ -67,16 +74,6 @@ export default function Index() {
                     sx={{ borderRadius: 3 }}
                   >
                     Complete your profile
-                  </Button>
-                </Link>
-                <Link to="/" data-cy="complete-profile-button">
-                  <Button
-                    type="button"
-                    variant="subtle"
-                    data-cy="home"
-                    sx={{ borderRadius: 3 }}
-                  >
-                    Go to homepage
                   </Button>
                 </Link>
               </Flex>

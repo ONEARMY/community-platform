@@ -2,7 +2,7 @@ import { Field, Form } from 'react-final-form'
 import { redirect } from '@remix-run/node'
 import { Link, useActionData } from '@remix-run/react'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { Button, FieldInput, HeroBanner } from 'oa-components'
+import { Button, FieldInput, HeroBanner, TextNotification } from 'oa-components'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import Main from 'src/pages/common/Layout/Main'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
@@ -118,7 +118,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       }
     } catch (error) {
       return Response.json(
-        { error: 'Invalid email or password.' },
+        {
+          error:
+            "Invalid email or password. Or you haven't confirmed your account yet.",
+        },
         { headers, status: 400 },
       )
     }
@@ -176,7 +179,9 @@ export default function Index() {
                       </Flex>
 
                       {actionResponse?.error && (
-                        <Text color="red">{actionResponse?.error}</Text>
+                        <TextNotification isVisible={true} variant={'failure'}>
+                          <Text>{actionResponse?.error}</Text>
+                        </TextNotification>
                       )}
 
                       <Flex sx={{ flexDirection: 'column' }}>

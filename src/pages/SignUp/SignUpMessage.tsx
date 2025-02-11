@@ -20,8 +20,8 @@ const SignUpMessagePage = () => (
             <Heading variant="small">...Now please verify your account</Heading>
           </Flex>
           <Text sx={{ color: 'grey' }}>
-            We've sent you an email. Please find a confirmation link in your
-            mailbox.
+            We've sent you an email to confirm your account.{' '}
+            <strong>After you've done that, you can login.</strong>
           </Text>
         </Flex>
       </Card>

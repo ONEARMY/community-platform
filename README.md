@@ -182,6 +182,9 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Bilogweb3"><img src="https://avatars.githubusercontent.com/u/155262265?v=4?s=60" width="60px;" alt="Bilog WEB3"/><br /><sub><b>Bilog WEB3</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Bilogweb3" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ebradbury"><img src="https://avatars.githubusercontent.com/u/253679?v=4?s=60" width="60px;" alt="Elliot Bradbury"/><br /><sub><b>Elliot Bradbury</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=ebradbury" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://www.linkedin.com/in/joseh29"><img src="https://avatars.githubusercontent.com/u/70706814?v=4?s=60" width="60px;" alt="José"/><br /><sub><b>José</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=joseh29" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 

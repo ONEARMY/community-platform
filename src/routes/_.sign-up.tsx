@@ -44,7 +44,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const emailRedirectUrl = `${protocol}//${url.host}/email-confirmation/`
 
   const username = formData.get('username') as string
-
   if (!(await authServiceServer.isUsernameAvailable(username, client))) {
     return Response.json(
       { error: 'That username is already taken!' },

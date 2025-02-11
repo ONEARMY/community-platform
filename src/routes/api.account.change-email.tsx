@@ -25,7 +25,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     )
   }
 
-  const result = await client.auth.updateUser({ email: newEmail })
+  const url = new URL(request.url)
+  const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:'
+  const emailRedirectUrl = `${protocol}//${url.host}/settings/account`
+
+  const result = await client.auth.updateUser(
+    { email: newEmail },
+    {
+      emailRedirectTo: emailRedirectUrl,
+    },
+  )
 
   if (result.error) {
     return Response.json(

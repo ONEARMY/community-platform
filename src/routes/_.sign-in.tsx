@@ -47,6 +47,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   })
 
   if (error) {
+    // TODO: resend confirmation email flow
+
     console.error(error)
 
     try {

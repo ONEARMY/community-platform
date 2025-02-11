@@ -21,6 +21,7 @@ Ideally this would be automated.
 Create a .env.local file at the packages/cypress folder
 SUPABASE_API_URL=your_api_key (probably http://127.0.0.1:54321)
 SUPABASE_KEY=your_key
+SUPABASE_SERVICE_ROLE_KEY=your service key
 
 All done! Tests will use your local database. More info about how it works below.
 

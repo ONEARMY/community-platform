@@ -47,7 +47,26 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   })
 
   if (error) {
-    // TODO: resend confirmation email flow
+    if (error.code === 'email_not_confirmed') {
+      const url = new URL(request.url)
+      const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:'
+      const emailRedirectUrl = `${protocol}//${url.host}/email-confirmation`
+      await client.auth.resend({
+        type: 'signup',
+        email,
+        options: {
+          emailRedirectTo: emailRedirectUrl,
+        },
+      })
+
+      return Response.json(
+        {
+          error:
+            'We need to confirm your email before logging in. Please check your inbox :)',
+        },
+        { headers },
+      )
+    }
 
     console.error(error)
 
@@ -119,8 +138,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     } catch (error) {
       return Response.json(
         {
-          error:
-            "Invalid email or password. Or you haven't confirmed your account yet.",
+          error: 'Invalid email or password.',
         },
         { headers, status: 400 },
       )

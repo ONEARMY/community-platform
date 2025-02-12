@@ -25,19 +25,20 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const code = url.searchParams.get('code')
+
   if (code) {
     const result = await client.auth.exchangeCodeForSession(
       url.searchParams.get('code') as string,
     )
 
     if (!result.error) {
-      return Response.json({}, { headers })
+      return redirect('/', { headers })
     }
 
     console.error(error)
   }
 
-  return redirect('/', { headers })
+  return redirect('/sign-in', { headers })
 }
 
 export default function Index() {

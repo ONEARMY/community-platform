@@ -1,5 +1,5 @@
 import { clearDatabase } from './commands'
-import { deleteAccounts, seedAccounts } from './seedAccounts'
+import { seedAccounts } from './seedAccounts'
 import { seedCategories, seedQuestions } from './seedQuestions'
 
 /**

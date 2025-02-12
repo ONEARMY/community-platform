@@ -44,7 +44,6 @@ after(() => {
     displayName: 'Clearing database for tenant',
     message: Cypress.env('TENANT_ID'),
   })
-  deleteAccounts()
   clearDatabase(
     ['profiles', 'questions', 'comments', 'categories', 'tags'],
     Cypress.env('TENANT_ID'),

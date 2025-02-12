@@ -64,8 +64,7 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
   const isEditable = useMemo(() => {
     return (
       hasAdminRights(activeUser as IUser) ||
-      (question.author?.firebaseAuthId &&
-        question.author?.firebaseAuthId === activeUser?._authID)
+      question.author?.username === activeUser?.userName
     )
   }, [activeUser, question.author])
 

@@ -1,13 +1,15 @@
-import { getFunctions, httpsCallable } from 'firebase/functions'
-
 import type { SendMessage } from 'oa-shared'
 
-const functions = getFunctions()
-
-const sendMessageFunction = httpsCallable(functions, 'sendMessage')
-
 const sendMessage = async (data: SendMessage) => {
-  await sendMessageFunction(data)
+  const formData = new FormData()
+
+  formData.append('to', data.to)
+  formData.append('message', data.message)
+
+  return fetch('/api/messages', {
+    method: 'POST',
+    body: formData,
+  })
 }
 
 export const messageService = {

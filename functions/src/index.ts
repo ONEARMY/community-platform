@@ -5,7 +5,6 @@ import * as UserUpdates from './userUpdates'
 import * as DiscussionUpdates from './discussionUpdates'
 import * as QuestionUpdates from './questionUpdates'
 import * as SupabaseSync from './supabaseSync'
-import * as Messages from './messages/messages'
 
 // the following endpoints are exposed for use by various triggers
 // see individual files for more information
@@ -31,7 +30,6 @@ exports.supabaseProfileUpdate = SupabaseSync.supabaseProfileUpdate
 // folder-based naming conventions should be encourage from now on
 exports.adminGetUserEmail = Admin.getUserEmail
 
-exports.sendMessage = Messages.sendMessage
 exports.emailNotifications = require('./emailNotifications')
 
 // Only export development api when working locally (with functions emulator)

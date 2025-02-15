@@ -65,7 +65,7 @@ export const MapView = (props: IProps) => {
       zoom={mapZoom}
       setZoom={setZoom}
       maxZoom={18}
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: '#AAD3DF' }}
       zoomControl={isViewportGreaterThanTablet}
       onclick={onBlur}
       ondragend={handleLocationChange}

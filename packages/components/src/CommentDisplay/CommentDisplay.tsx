@@ -1,3 +1,4 @@
+import { useContext } from 'react'
 import { compareDesc } from 'date-fns'
 import { Box, Flex, Text } from 'theme-ui'
 
@@ -5,6 +6,7 @@ import { Button } from '../Button/Button'
 import { CommentAvatar } from '../CommentAvatar/CommentAvatar'
 import { CommentBody } from '../CommentBody/CommentBody'
 import { DisplayDate } from '../DisplayDate/DisplayDate'
+import { AuthorsContext } from '../providers/AuthorsContext'
 import { Username } from '../Username/Username'
 
 import type { Comment } from 'oa-shared'
@@ -27,6 +29,8 @@ export const CommentDisplay = (props: IProps) => {
     setShowDeleteModal,
     setShowEditModal,
   } = props
+
+  const { authors } = useContext(AuthorsContext)
 
   if (comment.deleted) {
     return (
@@ -51,10 +55,23 @@ export const CommentDisplay = (props: IProps) => {
           border: `${comment.highlighted ? '2px dashed black' : 'none'}`,
         }}
       >
-        <Box data-cy="commentAvatar" data-testid="commentAvatar">
+        <Box
+          data-cy="commentAvatar"
+          data-testid="commentAvatar"
+          sx={{
+            flexDirection: 'column',
+            position: 'relative',
+            display: 'inline-block',
+          }}
+        >
           <CommentAvatar
             name={comment.createdBy?.name}
             photoUrl={comment.createdBy?.photoUrl}
+            isCommentAuthor={
+              comment.createdBy?.id
+                ? authors.includes(comment.createdBy?.id)
+                : false
+            }
           />
         </Box>
 

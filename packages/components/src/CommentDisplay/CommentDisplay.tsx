@@ -69,10 +69,19 @@ export const CommentDisplay = (props: IProps) => {
           border: `${comment.highlighted ? '2px dashed black' : 'none'}`,
         }}
       >
-        <Box data-cy="commentAvatar" data-testid="commentAvatar">
+        <Box
+          data-cy="commentAvatar"
+          data-testid="commentAvatar"
+          sx={{
+            flexDirection: 'column',
+            position: 'relative',
+            display: 'inline-block',
+          }}
+        >
           <CommentAvatar
             name={comment.createdBy?.name}
             photoUrl={comment.createdBy?.photoUrl}
+            isAuthor={true}
           />
         </Box>
 

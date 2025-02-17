@@ -27,7 +27,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData()
 
   const url = new URL(request.url)
-  const emailRedirectUrl = url.protocol + '//' + url.host + '/update-password'
+  const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:'
+  const emailRedirectUrl = `${protocol}//${url.host}/update-password`
 
   await client.auth.resetPasswordForEmail(formData.get('email') as string, {
     redirectTo: emailRedirectUrl,

@@ -32,7 +32,7 @@ const Arrow = ({ disabled, glyph, onClick }: IProps) => {
       }}
     >
       {disabled ? null : (
-        <Icon glyph={glyph} size={40} onClick={onClick} className="arrow-" />
+        <Icon glyph={glyph}  size={40} onClick={onClick} className="arrow-" />
       )}
     </Flex>
   )

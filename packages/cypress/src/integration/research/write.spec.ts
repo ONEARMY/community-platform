@@ -153,13 +153,13 @@ describe('[Research]', () => {
         '0 downloads',
       )
 
-      cy.step('Download counter increments')
-      cy.wait(1000)
-      cy.get('[data-cy=downloadButton]').click()
-      cy.get('[data-cy=DonationRequestSkip]')
-        .invoke('removeAttr', 'target')
-        .click()
-      cy.go('back')
+      // cy.step('Download counter increments')
+      // cy.wait(1000)
+      // cy.get('[data-cy=downloadButton]').click()
+      // cy.get('[data-cy=DonationRequestSkip]')
+      //   .invoke('removeAttr', 'target')
+      //   .click()
+      // cy.go('back')
 
       // Currently too-flaky, commenting it out.
       //

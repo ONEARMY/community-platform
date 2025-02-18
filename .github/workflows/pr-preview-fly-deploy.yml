@@ -28,6 +28,7 @@ env:
   FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
   FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
   FLY_APP_NAME: community-platform-pr-${{ github.event.number }}
+  RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
 
 jobs:
   preview_app:

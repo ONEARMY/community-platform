@@ -84,7 +84,7 @@ export const DiscussionContainer = (props: IProps) => {
           background: 'softblue',
           borderRadius: 2,
           flexDirection: 'column',
-          padding: 3,
+          paddingY: 3,
         }}
       >
         <CreateComment

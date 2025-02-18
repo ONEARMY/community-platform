@@ -1,4 +1,5 @@
 import { MOCK_DATA } from '../data'
+import { UserMenuItem } from '../support/commandsUi'
 
 describe('[Common]', () => {
   it('[Default Page]', () => {
@@ -95,6 +96,22 @@ describe('[Common]', () => {
       cy.get('[data-cy=user-menu-list]').should('be.visible')
       cy.toggleUserMenuOff()
       cy.get('[data-cy=user-menu-list]').should('not.exist')
+
+      cy.step('Go to Profile')
+      cy.clickMenuItem(UserMenuItem.Profile)
+      cy.url().should('include', `/u/${MOCK_DATA.users.subscriber._id}`)
+
+      cy.step('Go to Settings')
+      cy.toggleUserMenuOn()
+      cy.clickMenuItem(UserMenuItem.Settings)
+      cy.url().should('include', 'settings')
+
+      cy.step('Logout the session')
+      cy.toggleUserMenuOn()
+      cy.clickMenuItem(UserMenuItem.LogOut)
+      cy.wait(2000)
+      cy.get('[data-cy=login]', { timeout: 20000 }).should('be.visible')
+      cy.get('[data-cy=join]').should('be.visible')
     })
   })
 })

@@ -130,7 +130,9 @@ describe('[Profile]', () => {
 
       cy.step('Ensure hidden with no contributions')
       cy.visit(`/u/${workspaceEmpty.userName}`)
+      cy.get('[data-cy=MemberProfile]').should('not.exist')
       cy.get('[data-cy=SpaceProfile]').should('be.visible')
+
       cy.get('[data-cy=ContribTab]').should('not.exist')
       cy.get('[data-cy=ImpactTab]').should('not.exist')
     })

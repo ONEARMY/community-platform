@@ -176,7 +176,7 @@ Cypress.Commands.add('signIn', (email: string, password: string) => {
 })
 
 Cypress.Commands.add('logout', () => {
-  cy.visit('/logout')
+  cy.request('/logout')
 })
 
 Cypress.Commands.add('fillIntroTitle', (intro: string) => {

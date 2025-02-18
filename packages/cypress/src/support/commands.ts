@@ -28,12 +28,20 @@ declare global {
         opStr: any,
         value: string,
       ): Chainable<any[]>
-      addProject(project: ILibrary.DB, username: string): Chainable<void>
+      addProject(
+        project: ILibrary.DB,
+        username: string,
+        random: string,
+      ): Chainable<void>
       addQuestion(
         question: IQuestionDB,
         user: IUserSignUpDetails,
       ): Chainable<void>
-      addResearch(research: IResearchDB, username: string): Chainable<void>
+      addResearch(
+        research: IResearchDB,
+        username: string,
+        random: string,
+      ): Chainable<void>
       step(message: string)
       setSessionStorage(key: string, value: string): Promise<void>
     }
@@ -123,8 +131,8 @@ Cypress.Commands.add(
   },
 )
 
-Cypress.Commands.add('addProject', (project, username) => {
-  const slug = `${project.slug}-${username}`
+Cypress.Commands.add('addProject', (project, username, random) => {
+  const slug = `${project.slug}-${username}-${random}`
 
   return firestore.addDocument('library', {
     ...project,
@@ -141,8 +149,8 @@ Cypress.Commands.add('addQuestion', (question, user) => {
   })
 })
 
-Cypress.Commands.add('addResearch', (research, username) => {
-  const slug = `${username}-in-${research.slug}`
+Cypress.Commands.add('addResearch', (research, username, random) => {
+  const slug = `${username}-in-${research.slug}-${random}`
 
   return firestore.addDocument('research', {
     ...research,

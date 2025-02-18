@@ -1,8 +1,11 @@
 // This is basically an identical set of steps to the discussion tests for
 // questions and research. Any changes here should be replicated there.
 
+import { ExternalLinkLabel } from 'oa-shared'
+
 import { MOCK_DATA } from '../../data'
 import { library } from '../../fixtures/library'
+import { generateAlphaNumeric } from '../../utils/TestUtils'
 
 const item = Object.values(MOCK_DATA.library)[0]
 const libraryDiscussion = Object.values(MOCK_DATA.discussions).find(
@@ -21,14 +24,16 @@ describe('[Library.Discussions]', () => {
   })
 
   it('allows authenticated users to contribute to discussions', () => {
-    cy.addProject(library, visitor.userName)
+    const random = generateAlphaNumeric(8)
+
+    cy.addProject(library, visitor.userName, random)
     cy.signIn(visitor.email, visitor.password)
 
     const newComment = `An interesting project. ${visitor.userName}`
     const updatedNewComment = `An interesting project. The answer must be that when the sky is red, the apocalypse _might_ be on the way. Yours, ${visitor.userName}`
     const newReply = `Thanks Dave and Ben. What does everyone else think? - ${visitor.userName}`
     const updatedNewReply = `Anyone else? All the best, ${visitor.userName}`
-    const projectPath = `/library/howto-for-discussion-${visitor.userName}`
+    const projectPath = `/library/howto-for-discussion-${visitor.userName}-${random}`
 
     cy.step('Can add comment')
     cy.visit(projectPath)
@@ -50,6 +55,22 @@ describe('[Library.Discussions]', () => {
 
     cy.step('Can edit their reply')
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
+
+    cy.step('Updating user settings shows on comments')
+    cy.visit('/settings')
+    cy.get('[data-cy=loader]').should('not.exist')
+    cy.setSettingBasicUserInfo({
+      country: 'Saint Lucia',
+      description: "I'm a commenter",
+      displayName: secondCommentor.displayName,
+    })
+    cy.setSettingImage('avatar', 'userImage')
+    cy.setSettingAddContactLink({
+      index: 0,
+      label: ExternalLinkLabel.SOCIAL_MEDIA,
+      url: 'http://something.to.delete/',
+    })
+    cy.saveSettingsForm()
 
     cy.step('Another user can leave a reply')
     const secondReply = `Quick reply. ${visitor.userName}`

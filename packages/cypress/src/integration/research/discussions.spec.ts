@@ -1,8 +1,11 @@
 // This is basically an identical set of steps to the discussion tests for
 // questions and projects. Any changes here should be replicated there.
 
+import { ExternalLinkLabel } from 'oa-shared'
+
 import { MOCK_DATA } from '../../data'
 import { research } from '../../fixtures/research'
+import { generateAlphaNumeric } from '../../utils/TestUtils'
 
 const item = Object.values(MOCK_DATA.research)[0]
 
@@ -21,15 +24,17 @@ describe('[Research.Discussions]', () => {
   })
 
   it('allows authenticated users to contribute to discussions', () => {
+    const random = generateAlphaNumeric(8)
     const visitor = MOCK_DATA.users.subscriber
     const secondCommentor = MOCK_DATA.users.profile_views
-    cy.addResearch(research, visitor.userName)
+
+    cy.addResearch(research, visitor.userName, random)
     cy.signIn(visitor.email, visitor.password)
 
     const newComment = `An example comment from ${visitor.userName}`
     const updatedNewComment = `I've updated my comment now. Love ${visitor.userName}`
 
-    const researchPath = `/research/${visitor.userName}-in-discussion-research`
+    const researchPath = `/research/${visitor.userName}-in-discussion-research-${random}`
 
     cy.step('Can add comment')
 
@@ -64,6 +69,22 @@ describe('[Research.Discussions]', () => {
 
     cy.step('Can edit their reply')
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
+
+    cy.step('Updating user settings shows on comments')
+    cy.visit('/settings')
+    cy.get('[data-cy=loader]').should('not.exist')
+    cy.setSettingBasicUserInfo({
+      country: 'Saint Lucia',
+      description: "I'm a commenter",
+      displayName: secondCommentor.userName,
+    })
+    cy.setSettingImage('avatar', 'userImage')
+    cy.setSettingAddContactLink({
+      index: 0,
+      label: ExternalLinkLabel.SOCIAL_MEDIA,
+      url: 'http://something.to.delete/',
+    })
+    cy.saveSettingsForm()
 
     cy.step('First commentor can respond')
     const secondReply = `Quick reply. ${visitor.userName}`

@@ -1,7 +1,6 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
 import { IModerationStatus } from 'oa-shared'
-import { verifyFirebaseToken } from 'src/firestore/firestoreAdmin.server'
 import { Question } from 'src/models/question.model'
 import { ITEMS_PER_PAGE } from 'src/pages/Question/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
@@ -10,7 +9,7 @@ import { convertToSlug } from 'src/utils/slug'
 import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { DBProfile } from 'src/models/profile.model'
 import type { DBQuestion } from 'src/models/question.model'
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions'
@@ -103,15 +102,15 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         : null,
     }
 
-    const tokenValidation = await verifyFirebaseToken(
-      request.headers.get('firebaseToken')!,
-    )
     const { client, headers } = createSupabaseServerClient(request)
+
+    const {
+      data: { user },
+    } = await client.auth.getUser()
 
     const { valid, status, statusText } = await validateRequest(
       request,
-      tokenValidation.valid,
-      tokenValidation.user_id,
+      user,
       data,
     )
 
@@ -145,8 +144,8 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     }
     const profileRequest = await client
       .from('profiles')
-      .select()
-      .eq('firebase_auth_id', tokenValidation.user_id)
+      .select('id')
+      .eq('auth_id', user!.id)
       .limit(1)
 
     if (profileRequest.error || !profileRequest.data?.at(0)) {
@@ -271,18 +270,9 @@ function validateImages(images: File[]) {
   return { valid: errors.length === 0, errors }
 }
 
-async function validateRequest(
-  request: Request,
-  isTokenValid: boolean,
-  userId: string,
-  data: any,
-) {
-  if (!isTokenValid) {
+async function validateRequest(request: Request, user: User | null, data: any) {
+  if (!user) {
     return { status: 401, statusText: 'unauthorized' }
-  }
-
-  if (!userId) {
-    return { status: 400, statusText: 'user not found' }
   }
 
   if (request.method !== 'POST') {

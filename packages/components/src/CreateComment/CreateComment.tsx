@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Link } from '@remix-run/react'
 import { Box, Button, Flex, Image, Text, Textarea } from 'theme-ui'
 
 import sendMobile from '../../assets/icons/contact.svg'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
+import { ReturnPathLink } from '../ReturnPathLink/ReturnPathLink'
 
 import type { ProfileTypeName } from 'oa-shared'
 
@@ -149,7 +149,7 @@ const LoginPrompt = () => {
   return (
     <Box sx={{ padding: [3, 4] }}>
       <Text data-cy="comments-login-prompt">
-        <Link
+        <ReturnPathLink
           to="/sign-in"
           style={{
             textDecoration: 'underline',
@@ -157,7 +157,7 @@ const LoginPrompt = () => {
           }}
         >
           Hi there! Login to leave a comment
-        </Link>
+        </ReturnPathLink>
       </Text>
     </Box>
   )

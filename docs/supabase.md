@@ -11,6 +11,11 @@ Install Docker Desktop.
 Make sure you have the docker app open.
 
 Run `supabase start` (Ensure you run it on the project folder root.)
+Run `supabase status`
+Create a .env.local file at the project root (same level as .env) and fill in the keys with values from the command above:
+SUPABASE_API_URL={API URL}
+SUPABASE_KEY={anon key}
+SUPABASE_SERVICE_ROLE_KEY={service_role key}
 
 Create a `public` bucket named `precious-plastic` for local dev.
 Add the policy named `tenant_isolation` for all operations: `(bucket_id = ((current_setting('request.headers'::text, true))::json ->> 'x-tenant-id'::text))`

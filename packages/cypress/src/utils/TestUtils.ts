@@ -26,15 +26,6 @@ export enum DbCollectionName {
   howtos = 'howtos',
 }
 
-export const generateNewUserDetails = (): IUserSignUpDetails => {
-  const username = `CI_${generateAlphaNumeric(7)}`.toLocaleLowerCase()
-  return {
-    username,
-    email: `${username}@test.com`.toLocaleLowerCase(),
-    password: 'test1234',
-  }
-}
-
 export const setIsPreciousPlastic = () => {
   return localStorage.setItem('platformTheme', 'precious-plastic')
 }

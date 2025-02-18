@@ -3,7 +3,6 @@ import {
   Question,
   type QuestionFormData,
 } from 'src/models/question.model'
-import { auth } from 'src/utils/firebase'
 
 const upsert = async (id: number | null, question: QuestionFormData) => {
   const data = new FormData()
@@ -37,16 +36,10 @@ const upsert = async (id: number | null, question: QuestionFormData) => {
       ? await fetch(`/api/questions`, {
           method: 'POST',
           body: data,
-          headers: {
-            firebaseToken: await auth.currentUser!.getIdToken(),
-          },
         })
       : await fetch(`/api/questions/${id}`, {
           method: 'PUT',
           body: data,
-          headers: {
-            firebaseToken: await auth.currentUser!.getIdToken(),
-          },
         })
 
   if (response.status !== 200 && response.status !== 201) {

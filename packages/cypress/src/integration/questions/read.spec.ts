@@ -84,7 +84,7 @@ describe('[Questions]', () => {
       cy.get('[data-cy=breadcrumbsItem]').eq(2).should('contain', title)
 
       cy.step('Logged in users can complete actions')
-      cy.login('howto_creator@test.com', 'test1234')
+      cy.signIn('howto_creator@test.com', 'test1234')
       cy.visit(`/questions/${slug}`) // Page doesn't reload after login
 
       // cy.get('[data-cy=follow-button]').click()

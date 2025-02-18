@@ -161,7 +161,9 @@ describe('[How To]', () => {
 
     describe('[By Authenticated]', () => {
       it('[Allows opening of attachments]', () => {
-        cy.signUpNewUser()
+        const visitor = MOCK_DATA.users.subscriber
+
+        cy.signIn(visitor.email, visitor.password)
         cy.visit(itemUrl)
         cy.step('[Presents the donation request before opening of attachments]')
         cy.step('Shows modal')
@@ -181,8 +183,8 @@ describe('[How To]', () => {
 
     describe('[By Owner]', () => {
       beforeEach(() => {
+        cy.signIn('howto_creator@test.com', 'test1234')
         cy.visit(itemUrl)
-        cy.login('howto_creator@test.com', 'test1234')
       })
 
       it('[Delete button is visible]', () => {
@@ -202,7 +204,7 @@ describe('[How To]', () => {
 
     describe('[By Admin]', () => {
       beforeEach(() => {
-        cy.login('demo_admin@example.com', 'demo_admin')
+        cy.signIn('demo_admin@example.com', 'demo_admin')
         cy.visit(itemUrl)
       })
 
@@ -233,7 +235,7 @@ describe('[How To]', () => {
 
     describe('[By Owner]', () => {
       beforeEach(() => {
-        cy.login('demo_user@example.com', 'demo_user')
+        cy.signIn('demo_user@example.com', 'demo_user')
         cy.visit(deletedUrl)
       })
 
@@ -246,7 +248,7 @@ describe('[How To]', () => {
 
     describe('[By Admin]', () => {
       beforeEach(() => {
-        cy.login('demo_user@example.com', 'demo_user')
+        cy.signIn('demo_user@example.com', 'demo_user')
         cy.visit(deletedUrl)
       })
 

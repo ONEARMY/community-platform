@@ -1,14 +1,12 @@
 import 'cypress-file-upload'
 
 import { createClient } from '@supabase/supabase-js'
-import { signInWithEmailAndPassword } from 'firebase/auth'
 import { deleteDB } from 'idb'
 
 import { Auth, TestDB } from './db/firebase'
 
 import type { ILibrary, IQuestionDB, IResearchDB } from 'oa-shared'
 import type { IUserSignUpDetails } from '../utils/TestUtils'
-import type { firebase } from './db/firebase'
 
 type SeedData = {
   [tableName: string]: Array<Record<string, any>>
@@ -24,13 +22,6 @@ declare global {
       deleteIDB(name: string): Promise<boolean>
       interceptAddressSearchFetch(addressResponse): Chainable<void>
       interceptAddressReverseFetch(addressResponse): Chainable<void>
-      /** login with firebase credentials, optionally check ui login element updated*/
-      login(
-        username: string,
-        password: string,
-      ): Promise<firebase.auth.UserCredential>
-      /** logout of firebase, optionally check ui login element updated*/
-      logout(checkUI?: boolean): Chainable<void>
       queryDocuments(
         collectionName: string,
         fieldPath: string,
@@ -39,7 +30,8 @@ declare global {
       ): Chainable<any[]>
       addProject(
         project: ILibrary.DB,
-        user: IUserSignUpDetails,
+        username: string,
+        random: string,
       ): Chainable<void>
       addQuestion(
         question: IQuestionDB,
@@ -47,7 +39,8 @@ declare global {
       ): Chainable<void>
       addResearch(
         research: IResearchDB,
-        user: IUserSignUpDetails,
+        username: string,
+        random: string,
       ): Chainable<void>
       step(message: string)
       setSessionStorage(key: string, value: string): Promise<void>
@@ -107,45 +100,6 @@ Cypress.Commands.add('clearServiceWorkers', () => {
       })
     })
   })
-
-  Cypress.Commands.add('logout', (checkUI = true) => {
-    cy.wrap('logging out').then(() => {
-      return new Cypress.Promise((resolve) => {
-        Auth.signOut().then(() => resolve())
-      })
-    })
-    cy.wait(2000)
-    cy.wrap(checkUI ? 'check logout ui' : 'skip ui check').then(() => {
-      if (checkUI) {
-        cy.get('[data-cy=login]')
-      }
-    })
-  })
-})
-
-/**
- * Login and logout commands use the sytem interface to log a user in or out
- */
-Cypress.Commands.add('login', async (email: string, password: string) => {
-  const signin = signInWithEmailAndPassword(Auth, email, password).catch(
-    (e) => {
-      cy.log(`User could not sign in programmatically!`)
-      console.error(e)
-    },
-  )
-
-  return signin as any
-})
-
-Cypress.Commands.add('logout', (checkUI = true) => {
-  cy.wrap('logging out').then(async () => {
-    return await Auth.signOut()
-  })
-  cy.wrap(checkUI ? 'check logout ui' : 'skip ui check').then(() => {
-    if (checkUI) {
-      cy.get('[data-cy=login]')
-    }
-  })
 })
 
 Cypress.Commands.add('deleteCurrentUser', () => {
@@ -177,8 +131,8 @@ Cypress.Commands.add(
   },
 )
 
-Cypress.Commands.add('addProject', (project, user) => {
-  const slug = `${project.slug}-${user.username}`
+Cypress.Commands.add('addProject', (project, username, random) => {
+  const slug = `${project.slug}-${username}-${random}`
 
   return firestore.addDocument('library', {
     ...project,
@@ -195,8 +149,8 @@ Cypress.Commands.add('addQuestion', (question, user) => {
   })
 })
 
-Cypress.Commands.add('addResearch', (research, user) => {
-  const slug = `${user.username}-in-${research.slug}`
+Cypress.Commands.add('addResearch', (research, username, random) => {
+  const slug = `${username}-in-${research.slug}-${random}`
 
   return firestore.addDocument('research', {
     ...research,
@@ -259,9 +213,15 @@ export const seedDatabase = async (
   const supabase = supabaseClient(tenantId)
   const results = {}
 
-  // Convert to Promise.All
   for (const [table, rows] of Object.entries(data)) {
-    results[table] = await supabase.from(table).insert(rows).select()
+    const result = await supabase.from(table).insert(rows).select()
+
+    if (!result.error) {
+      results[table] = result
+      continue
+    }
+
+    results[table] = await supabase.from(table).select()
   }
 
   return results

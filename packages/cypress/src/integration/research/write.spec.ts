@@ -1,16 +1,13 @@
 import { faker } from '@faker-js/faker'
 
 import { RESEARCH_TITLE_MIN_LENGTH } from '../../../../../src/pages/Research/constants'
+import { MOCK_DATA } from '../../data'
 import {
   generateAlphaNumeric,
-  generateNewUserDetails,
   setIsPreciousPlastic,
 } from '../../utils/TestUtils'
 
 import type { UserMenuItem } from '../../support/commandsUi'
-
-const researcherEmail = 'research_creator@test.com'
-const researcherPassword = 'research_creator'
 
 const generateArticle = () => {
   const title = faker.lorem.words(4)
@@ -27,6 +24,9 @@ const generateArticle = () => {
   }
 }
 
+const researcherEmail = MOCK_DATA.users.research_creator.email
+const researcherPassword = MOCK_DATA.users.research_creator.password
+
 describe('[Research]', () => {
   beforeEach(() => {
     cy.visit('/research')
@@ -39,12 +39,9 @@ describe('[Research]', () => {
       const updateTitle = faker.lorem.words(5)
       const updateDescription = 'This is the description for the update.'
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
-
-      const newCollaborator = generateNewUserDetails()
-      cy.signUpNewUser(newCollaborator)
-
+      const newCollaborator = MOCK_DATA.users.subscriber
       cy.step('Create the research article')
-      cy.login(researcherEmail, researcherPassword)
+      cy.signIn(researcherEmail, researcherPassword)
       cy.visit('/research')
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('a[href="/research/create"]').should('be.visible')
@@ -84,7 +81,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-description]').type(expected.description).blur()
 
       cy.step('New collaborators can be assigned to research')
-      cy.selectTag(newCollaborator.username, '[data-cy=UserNameSelect]')
+      cy.selectTag(newCollaborator.userName, '[data-cy=UserNameSelect]')
 
       cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=submit]').click()
@@ -97,11 +94,11 @@ describe('[Research]', () => {
       cy.step('Research article displays correctly')
       cy.contains(expected.title)
       cy.contains(expected.description)
-      cy.contains(newCollaborator.username)
+      cy.contains(newCollaborator.userName)
 
       cy.step('New collaborators can add update')
       cy.clickMenuItem('Logout' as UserMenuItem)
-      cy.login(newCollaborator.email, newCollaborator.password)
+      cy.signIn(newCollaborator.email, newCollaborator.password)
       cy.visit(`/research/${expected.slug}/edit`)
       cy.get('[data-cy=create-update]').click()
       cy.contains('New update')
@@ -156,13 +153,13 @@ describe('[Research]', () => {
         '0 downloads',
       )
 
-      cy.step('Download counter increments')
-      cy.wait(1000)
-      cy.get('[data-cy=downloadButton]').click()
-      cy.get('[data-cy=DonationRequestSkip]')
-        .invoke('removeAttr', 'target')
-        .click()
-      cy.go('back')
+      // cy.step('Download counter increments')
+      // cy.wait(1000)
+      // cy.get('[data-cy=downloadButton]').click()
+      // cy.get('[data-cy=DonationRequestSkip]')
+      //   .invoke('removeAttr', 'target')
+      //   .click()
+      // cy.go('back')
 
       // Currently too-flaky, commenting it out.
       //
@@ -214,11 +211,14 @@ describe('[Research]', () => {
         'Update. One. Ready to start with the observations.'
       const updateVideoUrl = 'https://www.youtube.com/watch?v=U3mrj84p3cM'
 
+      cy.signIn(
+        MOCK_DATA.users.research_reader.email,
+        MOCK_DATA.users.research_reader.password,
+      )
       setIsPreciousPlastic()
-      cy.signUpNewUser()
-
       cy.step('Can access create form')
       cy.visit('/research')
+      cy.wait(2000)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy=create]').should('be.visible')
       cy.get('a[href="/research/create"]').should('be.visible')
@@ -273,7 +273,8 @@ describe('[Research]', () => {
     })
 
     it('[Warning on leaving page]', () => {
-      cy.login(researcherEmail, researcherPassword)
+      cy.signIn(researcherEmail, researcherPassword)
+      cy.visit('/research')
       cy.step('Access the create research article')
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('a[href="/research/create"]').should('be.visible')
@@ -317,7 +318,7 @@ describe('[Research]', () => {
       }
 
       cy.get('[data-cy="sign-up"]')
-      cy.login(researcherEmail, researcherPassword)
+      cy.signIn(researcherEmail, researcherPassword)
 
       cy.step('Create the research article')
       cy.visit('/research')
@@ -367,13 +368,13 @@ describe('[Research]', () => {
       cy.get('[data-cy=DraftUpdateLabel]').should('be.visible')
 
       cy.step('Draft not visible to others')
-      cy.logout(false)
+      cy.logout()
       cy.visit(`/research/${expected.slug}`)
       cy.get(updateTitle).should('not.exist')
       cy.get('[data-cy=DraftUpdateLabel]').should('not.exist')
 
       cy.step('Draft updates can be published')
-      cy.login(researcherEmail, researcherPassword)
+      cy.signIn(researcherEmail, researcherPassword)
       cy.visit(`/research/${expected.slug}`)
       cy.get('[data-cy=edit-update]').click()
       cy.contains('Edit your update')

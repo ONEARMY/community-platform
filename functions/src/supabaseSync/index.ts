@@ -10,16 +10,6 @@ import { IUser } from 'oa-shared'
  * Side-effects to be carried out on various question updates, namely:
  * - update the _createdBy user stats with the question id
  *********************************************************************/
-export const supabaseProfileCreate = functions
-  .runWith({
-    memory: '512MB',
-    secrets: ['SUPABASE_API_URL', 'SUPABASE_API_KEY', 'TENANT_ID'],
-  })
-  .firestore.document(`${DB_ENDPOINTS.users}/{id}`)
-  .onCreate(async (docSnapshot, _) => {
-    await insertOrUpdateProfile(docSnapshot)
-  })
-
 export const supabaseProfileUpdate = functions
   .runWith({
     memory: '512MB',
@@ -45,16 +35,6 @@ export const supabaseProfileUpdate = functions
     }
   })
 
-export const supabaseProfileDelete = functions
-  .runWith({
-    memory: '512MB',
-    secrets: ['SUPABASE_API_URL', 'SUPABASE_API_KEY', 'TENANT_ID'],
-  })
-  .firestore.document(`${DB_ENDPOINTS.users}/{id}`)
-  .onDelete(async (docSnapshot, _) => {
-    await deleteProfile(docSnapshot)
-  })
-
 async function insertOrUpdateProfile(
   docSnapshot: firestore.QueryDocumentSnapshot,
 ) {
@@ -64,7 +44,7 @@ async function insertOrUpdateProfile(
   const profileRequest = await client
     .from('profiles')
     .select()
-    .eq('firebase_auth_id', user._authID)
+    .eq('username', user.userName)
     .limit(1)
 
   if (profileRequest.data?.at(0)) {
@@ -78,7 +58,7 @@ async function insertOrUpdateProfile(
         country: user.location?.countryCode || null,
         roles: user.userRoles,
       })
-      .eq('firebase_auth_id', user._authID)
+      .eq('username', user.userName)
 
     if (error) {
       functions.logger.log({ ...error })
@@ -88,7 +68,6 @@ async function insertOrUpdateProfile(
     const { error } = await client
       .from('profiles')
       .insert({
-        firebase_auth_id: user._authID,
         display_name: user.displayName,
         is_verified: user.verified,
         photo_url: user.userImage?.downloadUrl || null,
@@ -97,20 +76,12 @@ async function insertOrUpdateProfile(
         username: user.userName,
         roles: user.userRoles,
       })
-      .eq('firebase_auth_id', user._authID)
+      .eq('username', user.userName)
 
     if (error) {
       functions.logger.log({ ...error })
     }
   }
-}
-
-async function deleteProfile(docSnapshot: firestore.QueryDocumentSnapshot) {
-  const { client } = createSupabaseServerClient()
-
-  const user = docSnapshot.data() as IUser
-
-  await client.from('profiles').delete().eq('firebase_auth_id', user._authID)
 }
 
 function arraysAreEqual(arr1: string[], arr2: string[]) {

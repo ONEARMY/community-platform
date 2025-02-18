@@ -399,7 +399,7 @@ describe('Create map pin moderation emails', () => {
       )
       // Check that the email contains the correct guidelines link
       expect(html).toContain(
-        `https://drive.google.com/file/d/1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd/view`,
+        `https://community.preciousplastic.com/academy/guides/platform`,
       )
       // Check that the email contains the correct PP signoff
       expect(html).toContain(PP_SIGNOFF)
@@ -416,7 +416,7 @@ describe('Create map pin moderation emails', () => {
     const mapPinNeedsImprovements = {
       _id: 'user_1',
       moderation: IModerationStatus.IMPROVEMENTS_NEEDED,
-      moderatorFeedback: MOCK_MAP_PIN_MODERATION_COMMENT,
+      comments: MOCK_MAP_PIN_MODERATION_COMMENT,
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
       mapPinAwaitingModeration,
@@ -445,7 +445,7 @@ describe('Create map pin moderation emails', () => {
       )
       // Check that the email contains the correct guidelines link
       expect(html).toContain(
-        `https://drive.google.com/file/d/1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd/view`,
+        `https://community.preciousplastic.com/academy/guides/platform`,
       )
       expect(html).toContain(MOCK_MAP_PIN_MODERATION_COMMENT)
       // Check that the email contains the correct PP signoff

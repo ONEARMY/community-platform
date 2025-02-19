@@ -18,7 +18,7 @@ export const discussions = {
         creatorImage:
           'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/784.jpg',
         parentCommentId: null,
-        text: "@@{a0dFrGVJTlQUA9BqH0QmnQM6flX2:demo_user} - I like your logo but I couldn't be conected for a while and I CANNOT tell you that anymore.",
+        text: "@@{a0dFrGVJTlQUA9BqH0QmnQM6flX2:demo_user} - I like your logo but I couldn't be connected for a while and I CANNOT tell you that anymore.",
       },
       {
         _created: '2023-02-10T20:22:15.500Z',

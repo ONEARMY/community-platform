@@ -65,7 +65,7 @@ export class UserStore extends ModuleStore {
   }
 
   public async getUsersStartingWith(prefix: string, limit?: number) {
-    // getWhere with the '>=' operator will return every userName that is lexicographically greater than prefix, so adding filter to avoid getting not relvant userNames
+    // getWhere with the '>=' operator will return every userName that is lexicographically greater than prefix, so adding filter to avoid getting not relevant userNames
     const users: IUser[] = await this.db
       .collection<IUser>(COLLECTION_NAME)
       .getWhere('userName', '>=', prefix, limit)

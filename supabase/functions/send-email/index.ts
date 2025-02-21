@@ -83,7 +83,7 @@ Deno.serve(async (req) => {
         break
       }
       case 'email_change': {
-        const newEmail = user['new_email']
+        const newEmail = user['new_email']!
         subject = "You're changing your email"
         html = await renderAsync(
           React.createElement(EmailChangeOldEmail, { ...details, newEmail }),
@@ -116,7 +116,7 @@ Deno.serve(async (req) => {
       subject,
       html,
     })
-  } catch (error) {
+  } catch (error: any) {
     console.log(error)
     return new Response(
       JSON.stringify({

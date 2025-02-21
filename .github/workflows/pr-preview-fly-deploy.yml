@@ -54,16 +54,19 @@ jobs:
 
       # Commented out so there are no schema conflicts between preview branches.
       # A better solution would be to use Supabase Branching: https://supabase.com/docs/guides/deployment/branching
-      # - name: Install supabase CLI
-      #   uses: supabase/setup-cli@v1
-      #   with:
-      #     version: 2.6.8
+      - name: Install supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: 2.6.8
 
-      # - name: Link Supabase project
-      #   run: supabase link --project-ref $SUPABASE_PROJECT_ID
+      - name: Link Supabase project
+        run: supabase link --project-ref $SUPABASE_PROJECT_ID
 
       # - name: Push Supabase DB
       #   run: supabase db push
+
+      - name: Deploy Edge Functions
+        run: supabase functions deploy --no-verify-jwt
 
       - name: Install Fly CLI
         run: |

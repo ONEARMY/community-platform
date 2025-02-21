@@ -35,6 +35,13 @@ All done! Tests will use your local database. More info about how it works below
 After making schema changes, use the this command to create a migration file:
 `supabase db diff --file [migration_name]`
 
+## Supabase Edge Functions
+
+Currently used for customizing Auth Emails.
+Supabase Auth Hooks have a timeout of 5 seconds which can easily be exceeded. To reduce the risk, the `resend` call is not awaited.
+If it is exceeded, the user gets an error on the UI, but still receives the email and can continue his flow.
+Haven't managed to run the functions locally yet (contributions welcome!).
+
 ### Cypress with Supabase
 
 Running cypress tests locally will use the local database, while running on CI will use the QA database.

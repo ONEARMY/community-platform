@@ -31,12 +31,12 @@ jobs:
   preview_app:
     if: contains(github.event.pull_request.labels.*.name, 'Review allow-preview ✅')
     runs-on: ubuntu-latest
-    continue-on-error: true
+    continue-on-error: false
     outputs:
       url: ${{ steps.deploy.outputs.url }}
     # Only run one deployment at a time per PR.
     concurrency:
-      group: pr-${{ github.event.number }}
+      group: pr-${{ github.event.number }}-${{ github.sha }}
 
     # Deploying apps with this "review" environment allows the URL for the app to be displayed in the PR UI.
     # Feel free to change the name of this environment.

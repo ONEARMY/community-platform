@@ -7,9 +7,8 @@ const copy = {
   h1: (username: string) => `Hey ${username}!`,
   click: `Confirm email address change`,
   change: (newEmail: string) => `You're changing to use ${newEmail}`,
-  intro: "So you've got a fancy new email address for us to you?",
+  intro: "So you've got a fancy new email address?",
   preview: "You've got a new email address!?",
-  remember: '(Remember to click the link in the other email too._',
 }
 
 const h1 = {
@@ -69,7 +68,6 @@ export const EmailChangeNewEmail = (props: SignUpEmailProps) => {
       <Heading style={h1}>{copy.h1(username)}</Heading>
       <Text style={heroText}>{copy.intro}</Text>
       <Text style={text}>{copy.change(newEmail)}</Text>
-      <Text style={text}>{copy.remember}</Text>
 
       <Button style={button} href={href} target="_blank">
         {copy.click}

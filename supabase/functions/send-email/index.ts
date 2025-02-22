@@ -4,7 +4,6 @@ import { Resend } from 'npm:resend@4.0.0'
 import { renderAsync } from 'npm:@react-email/components@0.0.22'
 
 import { EmailChangeNewEmail } from './_templates/email-change-new.tsx'
-import { EmailChangeOldEmail } from './_templates/email-change-old.tsx'
 import { MagicLinkEmail } from './_templates/magic-link.tsx'
 import { ResetPasswordEmail } from './_templates/reset-password.tsx'
 import { SignUpEmail } from './_templates/sign-up.tsx'
@@ -85,24 +84,14 @@ Deno.serve(async (req) => {
       case 'email_change': {
         const newEmail = user['new_email']!
         subject = "You're changing your email"
-        html = await renderAsync(
-          React.createElement(EmailChangeOldEmail, { ...details, newEmail }),
-        )
 
-        const newEmailDetails = {
-          ...details,
-          newEmail,
-          token_hash: token_hash_new,
-        }
-        const newHtml = await renderAsync(
-          React.createElement(EmailChangeNewEmail, newEmailDetails),
+        html = await renderAsync(
+          React.createElement(EmailChangeNewEmail, {
+            ...details,
+            newEmail,
+            token_hash: token_hash_new,
+          }),
         )
-        resend.emails.send({
-          from: 'Community Platform <community@onearmy.earth>',
-          to: [newEmail],
-          subject,
-          html: newHtml,
-        })
         break
       }
       default: {

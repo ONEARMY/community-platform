@@ -14,6 +14,7 @@ export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   large?: boolean
   showIconOnly?: boolean
   iconColor?: string
+  iconFilter?: string
 }
 
 type ToArray<Type> = [Type] extends [any] ? Type[] : never
@@ -95,6 +96,7 @@ export const Button = (props: BtnProps) => {
         'large',
         'showIconOnly',
         'iconColor',
+        'iconFilter',
       ])}
       sx={{
         ...getSizeProps(size, !!props.icon),
@@ -122,7 +124,11 @@ export const Button = (props: BtnProps) => {
             pointerEvents: 'none',
           }}
         >
-          <Icon glyph={props.icon} color={props.iconColor} />
+          <Icon
+            glyph={props.icon}
+            color={props.iconColor}
+            filter={props.iconFilter}
+          />
         </Flex>
       )}
       <Text

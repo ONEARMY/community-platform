@@ -56,7 +56,8 @@ export const UsefulStatsButton = (props: IProps) => {
           },
           ...props.sx,
         }}
-        icon={props.hasUserVotedUseful ? 'star' : 'star-active'}
+        icon={'star-active'}
+        iconFilter={props.hasUserVotedUseful ? 'unset' : 'grayscale(1)'}
       >
         <Text
           pr={2}

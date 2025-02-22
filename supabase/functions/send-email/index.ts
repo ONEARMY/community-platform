@@ -54,6 +54,7 @@ Deno.serve(async (req) => {
 
     let html: string = ''
     let subject: string = ''
+    let to = user.email
 
     const details = {
       username: user['user_metadata'].username,
@@ -84,7 +85,7 @@ Deno.serve(async (req) => {
       case 'email_change': {
         const newEmail = user['new_email']!
         subject = "You're changing your email"
-
+        to = newEmail
         html = await renderAsync(
           React.createElement(EmailChangeNewEmail, {
             ...details,
@@ -101,7 +102,7 @@ Deno.serve(async (req) => {
 
     resend.emails.send({
       from: 'Community Platform <community@onearmy.earth>',
-      to: [user.email],
+      to,
       subject,
       html,
     })

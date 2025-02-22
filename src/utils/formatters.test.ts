@@ -14,7 +14,7 @@ describe('formatLink', () => {
     [ExternalLinkLabel.SOCIAL_MEDIA, 'https://example.com'],
     [ExternalLinkLabel.BAZAR, 'https://example.com'],
     [undefined, 'example.com'],
-  ])('adds protocal to an external link', (scene, expectation) => {
+  ])('adds protocol to an external link', (scene, expectation) => {
     it(`${scene}`, () => {
       expect(formatLink('example.com', scene)).toBe(expectation)
     })

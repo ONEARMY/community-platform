@@ -46,7 +46,7 @@ export const ChangeEmailForm = () => {
       setSubmitResults({
         type: 'success',
         message:
-          "We've sent you two emails, one to the old address and another to the new one. Please confirm both to proceed with the email change!",
+          "We've sent you an email. Please click the confirmation link to proceed with the change!",
       })
     } catch (error) {
       setSubmitResults({ type: 'error', message: error.message })

@@ -41,12 +41,7 @@ Deno.serve(async (req) => {
   try {
     const {
       user,
-      email_data: {
-        token_hash,
-        token_hash_new,
-        redirect_to,
-        email_action_type,
-      },
+      email_data: { token_hash, redirect_to, email_action_type },
     } = wh.verify(payload, headers) as {
       user: User
       email_data: EmailData
@@ -90,7 +85,7 @@ Deno.serve(async (req) => {
           React.createElement(EmailChangeNewEmail, {
             ...details,
             newEmail,
-            token_hash: token_hash_new,
+            token_hash,
           }),
         )
         break

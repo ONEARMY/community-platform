@@ -26,15 +26,14 @@ export const FollowButton = (props: IProps) => {
         data-cy={isLoggedIn ? 'follow-button' : 'follow-redirect'}
         data-tooltip-id={uuid}
         data-tooltip-content={isLoggedIn ? '' : 'Login to follow'}
-        icon="thunderbolt"
         variant="outline"
-        iconColor={hasUserSubscribed ? 'subscribed' : 'notSubscribed'}
         sx={{
           fontSize: 2,
           py: 0,
           ...sx,
         }}
         onClick={() => (isLoggedIn ? onFollowClick() : navigate('/sign-in'))}
+        icon={hasUserSubscribed ? 'thunderbolt-grey' : 'thunderbolt'}
       >
         {hasUserSubscribed ? 'Following' : 'Follow'}
       </Button>

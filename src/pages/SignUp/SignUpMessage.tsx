@@ -1,15 +1,17 @@
 import { HeroBanner } from 'oa-components'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 
-const SignUpMessagePage = () => (
+const SignUpMessagePage = ({ email }) => (
   <Flex
-    bg="inherit"
-    px={2}
-    sx={{ width: '100%' }}
-    css={{ maxWidth: '620px' }}
-    mx={'auto'}
-    mt={[5, 10]}
-    mb={3}
+    sx={{
+      bg: 'inherit',
+      px: 2,
+      width: '100%',
+      maxWidth: '620px',
+      mx: 'auto',
+      mt: [5, 10],
+      mb: 3,
+    }}
   >
     <Flex sx={{ flexDirection: 'column', width: '100%' }}>
       <HeroBanner type="email" />
@@ -20,12 +22,15 @@ const SignUpMessagePage = () => (
             <Heading variant="small">...Now please verify your account</Heading>
           </Flex>
           <Text sx={{ color: 'grey' }}>
-            We've sent you an email to confirm your account.{' '}
-            <strong>After you've done that, you can login.</strong>
+            <p>
+              We've sent a link to <strong>{email}</strong>. Please click it to
+              confirm your account.
+            </p>
+            <p>After you've done that, you can login.</p>
           </Text>
         </Flex>
       </Card>
-      <Flex mt={3} sx={{ justifyContent: 'flex-start' }}></Flex>
+      <Flex sx={{ mt: 3, justifyContent: 'flex-start' }}></Flex>
     </Flex>
   </Flex>
 )

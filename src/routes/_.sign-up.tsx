@@ -51,9 +51,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     )
   }
 
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
+
   const { data, error } = await client.auth.signUp({
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
+    email,
+    password,
     options: {
       data: { username },
       emailRedirectTo: emailRedirectUrl,
@@ -77,7 +80,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     await userService.createFirebaseProfile(data.user)
   }
 
-  return redirect('/sign-up-message', { headers })
+  return redirect(`/sign-up-message?email=${email}`, { headers })
 }
 
 const rowWidth = ['100%', '100%', `100%`]

@@ -27,13 +27,6 @@ const card = {
   margin: '0 auto',
 }
 
-const footer = {
-  color: '#333',
-  margin: '0 auto',
-  padding: '10px 30px',
-  textAlign: 'center',
-}
-
 const wrapper = {
   maxWidth: '600px',
 }
@@ -71,21 +64,6 @@ export const Layout = ({ children, preview }: LayoutArgs) => {
               </p>
             </Section>
           </Container>
-          <Text style={footer}>
-            You got this because you're part of One Army. The{' '}
-            <a href="https://www.fixing.fashion/" target="_blank">
-              Fixing Fashion
-            </a>
-            ,{' '}
-            <a href="https://www.preciousplastic.com/" target="_blank">
-              Precious Plastic
-            </a>{' '}
-            and{' '}
-            <a href="https://www.projectkamp.com/" target="_blank">
-              Project Kamp
-            </a>{' '}
-            communities.
-          </Text>
         </Container>
       </Body>
     </Html>

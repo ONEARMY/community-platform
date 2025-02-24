@@ -36,7 +36,7 @@ describe('[Common]', () => {
     cy.url().should('include', '/map')
   })
 
-  describe('[User feeback button]', () => {
+  describe('[User feedback button]', () => {
     it('[Desktop]', () => {
       cy.visit('/library')
       cy.wait(2000)

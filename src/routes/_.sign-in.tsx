@@ -89,7 +89,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       }
 
       if (userAuthResult.data?.at(0)?.auth_id) {
-        // If the user profile already has a auth_id value, it means the user already authenticated with supabase, thus the passwor is wrong.
+        // If the user profile already has a auth_id value, it means the user already authenticated with supabase, thus the password is wrong.
         throw new Error()
       }
 

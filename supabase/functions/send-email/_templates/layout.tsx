@@ -30,7 +30,7 @@ const card = {
 const footer = {
   color: '#333',
   margin: '0 auto',
-  padding: '0 30px',
+  padding: '10px 30px',
   textAlign: 'center',
 }
 

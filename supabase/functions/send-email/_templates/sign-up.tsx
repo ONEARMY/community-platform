@@ -7,8 +7,7 @@ import { Hero } from './components/hero.tsx'
 import { PlainText } from './components/plain-text.tsx'
 
 const copy = {
-  h1: (username: string) =>
-    `Hey ${username}! Thanks for joining the community Platform`,
+  h1: (username: string) => `Hey ${username}! We're excited you're joining us`,
   emailConfirmationBody:
     'Please complete the email confirmation for full access.',
   clickHere: 'Confirm your email address',

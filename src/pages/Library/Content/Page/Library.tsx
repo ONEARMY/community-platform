@@ -12,7 +12,7 @@ import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
-import { Box } from 'theme-ui'
+import { Flex } from 'theme-ui'
 
 import { LibraryDescription } from './LibraryDescription'
 import { LibraryDiscussion } from './LibraryDiscussion'
@@ -91,11 +91,11 @@ export const Library = observer(({ item }: IProps) => {
           onUsefulClick(voted ? 'delete' : 'add', 'LibraryDescription')
         }
       />
-      <Box sx={{ mt: 9 }}>
+      <Flex sx={{ flexDirection: 'column', marginTop: [3, 4], gap: 4 }}>
         {steps.map((step: ILibrary.StepInput, index: number) => (
           <Step step={step as ILibrary.Step} key={index} stepindex={index} />
         ))}
-      </Box>
+      </Flex>
       <ClientOnly fallback={<></>}>
         {() => (
           <UserEngagementWrapper>

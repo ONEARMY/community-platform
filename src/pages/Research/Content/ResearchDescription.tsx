@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from '@remix-run/react'
 import {
   Button,
@@ -82,11 +82,7 @@ const ResearchDescription = ({
   }
 
   return (
-    <Card
-      sx={{
-        mt: 4,
-      }}
-    >
+    <Card variant="responsive">
       <Flex
         data-cy="research-basis"
         data-id={research._id}
@@ -96,16 +92,14 @@ const ResearchDescription = ({
           flexDirection: ['column-reverse', 'column-reverse', 'row'],
         }}
       >
-        <Flex px={4} py={4} sx={{ flexDirection: 'column', width: '100%' }}>
+        <Flex sx={{ flexDirection: 'column', width: '100%', padding: [2, 4] }}>
           {research._deleted && (
-            <Fragment>
-              <Text color="red" pl={2} mb={2} data-cy="research-deleted">
-                * Marked for deletion
-              </Text>
-            </Fragment>
+            <Text color="red" pl={2} mb={2} data-cy="research-deleted">
+              * Marked for deletion
+            </Text>
           )}
           <Flex sx={{ justifyContent: 'space-between' }}>
-            <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
+            <Flex sx={{ flexWrap: 'wrap', gap: 3 }}>
               <ClientOnly fallback={<></>}>
                 {() => (
                   <>
@@ -135,7 +129,7 @@ const ResearchDescription = ({
               )}
 
               {isDeletable && (
-                <Fragment>
+                <>
                   <Button
                     type="button"
                     data-cy="Research: delete button"
@@ -155,7 +149,7 @@ const ResearchDescription = ({
                     handleCancel={() => setShowDeleteModal(false)}
                     handleConfirm={() => handleDelete && handleDelete(research)}
                   />
-                </Fragment>
+                </>
               )}
             </Flex>
             <Flex
@@ -182,7 +176,7 @@ const ResearchDescription = ({
               </Text>
             </Flex>
           </Flex>
-          <Box mt={3} mb={2}>
+          <Box sx={{ marginX: 2 }}>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <ContentAuthorTimestamp
                 userName={research._createdBy}
@@ -196,11 +190,11 @@ const ResearchDescription = ({
 
               {props.contributors && props?.contributors.length ? (
                 <Flex
-                  mt={1}
                   sx={{
-                    flexDirection: 'row',
                     alignItems: 'flex-start',
+                    flexDirection: 'row',
                     flexWrap: 'wrap',
+                    marginTop: 1,
                   }}
                 >
                   <Flex sx={{ alignItems: 'center' }}>

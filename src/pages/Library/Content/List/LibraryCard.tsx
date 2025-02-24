@@ -36,10 +36,7 @@ export const LibraryCard = ({ item }: IProps) => {
   const isVerified = aggregationsStore.isVerified(_createdBy)
 
   return (
-    <Card
-      data-cy="card"
-      sx={{ borderRadius: 2, display: 'flex', flexDirection: 'column' }}
-    >
+    <Card data-cy="card" sx={{ marginX: [2, 0] }}>
       <RouterLink key={_id} to={`/library/${encodeURIComponent(slug)}`}>
         <Image
           style={{

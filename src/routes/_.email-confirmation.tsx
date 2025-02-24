@@ -32,7 +32,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     )
 
     if (!result.error) {
-      return
+      return redirect('/email-confirmation', { headers })
     }
 
     console.error(error)

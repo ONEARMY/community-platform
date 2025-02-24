@@ -29,11 +29,12 @@ const card = {
 
 const footer = {
   color: '#333',
-  padding: '0 15px',
+  margin: '0 auto',
+  padding: '0 30px',
+  textAlign: 'center',
 }
 
 const wrapper = {
-  width: '100%',
   maxWidth: '600px',
 }
 

@@ -99,8 +99,20 @@ const SignUpMessagePage = ({ email }) => {
                     email address
                   </strong>
                   .<br />
-                  We've sent a link to <strong>{email}</strong>. Please click it
-                  to confirm your account.
+                  We've sent a link to{' '}
+                  <Text
+                    sx={{
+                      background:
+                        'linear-gradient(0deg, #FFE2E1 60%, #FFF 40%)',
+                      paddingX: 1,
+                    }}
+                  >
+                    {email}
+                  </Text>
+                  . <br />
+                </p>
+                <p>
+                  Please click it to confirm your account.
                   <br />
                   After you've done that, you can login.
                 </p>

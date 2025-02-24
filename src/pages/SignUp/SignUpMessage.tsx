@@ -1,14 +1,7 @@
-import { ExternalLink, HeroBanner, Icon } from 'oa-components'
+import { HeroBanner, Icon } from 'oa-components'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
 const SignUpMessagePage = ({ email }) => {
-  const linkStyle = {
-    color: 'grey',
-    textDecoration: 'underline',
-    ':hover': {
-      textDecoration: 'none',
-    },
-  }
   return (
     <Flex
       sx={{
@@ -66,31 +59,6 @@ const SignUpMessagePage = ({ email }) => {
                 }}
               >
                 <Heading>Yay! Welcome to One Army!</Heading>
-
-                <Heading variant="small">
-                  (This means you've joined the{' '}
-                  <ExternalLink
-                    href="https://www.fixing.fashion/"
-                    sx={linkStyle}
-                  >
-                    Fixing Fashion
-                  </ExternalLink>
-                  ,{' '}
-                  <ExternalLink
-                    href="https://www.preciousplastic.com/"
-                    sx={linkStyle}
-                  >
-                    Precious Plastic
-                  </ExternalLink>{' '}
-                  and{' '}
-                  <ExternalLink
-                    href="https://www.projectkamp.com/"
-                    sx={linkStyle}
-                  >
-                    Project Kamp
-                  </ExternalLink>{' '}
-                  communities)
-                </Heading>
               </Flex>
               <Text sx={{ textAlign: 'center', color: 'grey' }}>
                 <p>

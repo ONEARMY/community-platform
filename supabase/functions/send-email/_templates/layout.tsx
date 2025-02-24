@@ -34,6 +34,7 @@ const footer = {
 const wrapper = {
   width: '100%',
   maxWidth: '600px',
+  padding: '0 15px',
 }
 
 const settings = {
@@ -57,7 +58,8 @@ export const Layout = ({ children, preview }: LayoutArgs) => {
             <Section>
               <Img
                 alt="One Army"
-                height={125}
+                height={85}
+                width={85}
                 src="https://community-platform-pr-4112.fly.dev/assets/img/one-army-logo.png"
               />
               {children}

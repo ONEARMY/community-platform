@@ -32,7 +32,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     )
 
     if (!result.error) {
-      return redirect('/', { headers })
+      return
     }
 
     console.error(error)

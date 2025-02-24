@@ -21,7 +21,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   } = await client.auth.getUser()
 
   if (user) {
-    return redirect('/email-confirmation', { headers })
+    return Response.json({}, { headers })
   }
 
   const code = url.searchParams.get('code')
@@ -32,7 +32,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     )
 
     if (!result.error) {
-      return redirect('/email-confirmation', { headers })
+      return Response.json({}, { headers })
     }
 
     console.error(error)

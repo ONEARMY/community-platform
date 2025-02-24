@@ -41,7 +41,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
-  const { error } = await client.auth.signInWithPassword({
+  const { error, data } = await client.auth.signInWithPassword({
     email,
     password,
   })
@@ -145,7 +145,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
   }
 
-  return redirect(getReturnUrl(request), { headers })
+  const fallbackPath = data.user?.user_metadata.username
+    ? `/u/${data.user?.user_metadata.username}`
+    : '/'
+  const path = getReturnUrl(request, fallbackPath)
+
+  return redirect(path, { headers })
 }
 
 export const meta = mergeMeta<typeof loader>(() => {

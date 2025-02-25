@@ -49,17 +49,6 @@ config({ path: '.env.local' })
 
 const isCi = process.argv.includes('ci')
 // const isProduction = process.argv.includes('prod')
-const tenantId = generateAlphaNumeric(8)
-
-fs.writeFileSync(
-  'cypress.env.json',
-  JSON.stringify({
-    TENANT_ID: tenantId,
-    SUPABASE_API_URL: process.env.SUPABASE_API_URL,
-    SUPABASE_KEY: process.env.SUPABASE_KEY,
-    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-  }),
-)
 
 // Prevent unhandled errors being silently ignored
 process.on('unhandledRejection', (err) => {
@@ -90,7 +79,20 @@ main()
 async function main() {
   // copy endpoints for use in testing
   fs.copyFile(PATHS.SRC_DB_ENDPOINTS, PATHS.WORKSPACE_DB_ENDPOINTS)
-  await startAppServer()
+
+  const tenantId = generateAlphaNumeric(8)
+
+fs.writeFileSync(
+  'cypress.env.json',
+  JSON.stringify({
+    TENANT_ID: tenantId,
+    SUPABASE_API_URL: process.env.SUPABASE_API_URL,
+    SUPABASE_KEY: process.env.SUPABASE_KEY,
+    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  }),
+)
+
+  await startAppServer(tenantId)
   runTests()
 }
 
@@ -99,7 +101,7 @@ async function main() {
  * performance in some environments (https://github.com/bahmutov/start-server-and-test/issues/250).
  * Instead manually track via child spawns
  */
-async function startAppServer() {
+async function startAppServer(tenantId: string) {
   const { CROSSENV_BIN } = PATHS
   // by default spawns will not respect colours used in stdio, so try to force
   const crossEnvArgs = `VITE_SITE_VARIANT=test-ci`

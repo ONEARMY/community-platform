@@ -1,4 +1,5 @@
 import { form } from '../../../../src/pages/UserSettings/labels'
+import { generateNewUserDetails } from '../utils/TestUtils'
 
 import type { IUser } from 'oa-shared'
 
@@ -255,4 +256,13 @@ Cypress.Commands.add('addReply', (reply: string) => {
   cy.get('[data-cy=reply-submit]').first().click()
 
   cy.get('[data-cy=OwnReplyItem]').contains(reply)
+})
+
+Cypress.Commands.add('signUpNewUser', (user?) => {
+  cy.log('Generate new user details')
+  const { username, email, password } = user || generateNewUserDetails()
+
+  cy.fillSignupForm(username, email, password)
+  cy.get('[data-cy=submit]').click()
+  cy.url().should('include', 'sign-up-message')
 })

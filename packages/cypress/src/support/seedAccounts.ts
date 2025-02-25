@@ -1,12 +1,11 @@
-import { createClient } from '@supabase/supabase-js'
-
 import { MOCK_DATA } from '../data'
-import { seedDatabase } from './commands'
+import { seedDatabase, supabaseAdminClient } from '../utils/TestUtils'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 // Creates user accounts and respective profiles
 export const seedAccounts = async () => {
+  const tenantId = Cypress.env('TENANT_ID')
   const supabase = supabaseAdminClient()
 
   const accounts = Object.values(MOCK_DATA.users)
@@ -33,13 +32,13 @@ export const seedAccounts = async () => {
     .map((x) => ({
       auth_id: x.id,
       username: x.username,
-      tenant_id: Cypress.env('TENANT_ID'),
+      tenant_id: tenantId,
       created_at: new Date().toUTCString(),
       display_name: x.username,
       is_verified: true,
     }))
 
-  return await seedDatabase({ profiles }, Cypress.env('TENANT_ID'))
+  return await seedDatabase({ profiles }, tenantId)
 }
 
 const signUp = async (
@@ -85,15 +84,3 @@ export const deleteAccounts = async () => {
     }
   }
 }
-
-const supabaseAdminClient = () =>
-  createClient(
-    Cypress.env('SUPABASE_API_URL'),
-    Cypress.env('SUPABASE_SERVICE_ROLE_KEY'),
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    },
-  )

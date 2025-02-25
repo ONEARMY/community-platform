@@ -1,4 +1,4 @@
-import { clearDatabase } from './commands'
+import { clearDatabase } from '../utils/TestUtils'
 import { seedAccounts } from './seedAccounts'
 import { seedCategories, seedQuestions } from './seedQuestions'
 
@@ -23,8 +23,12 @@ before(() => {
   cy.then(async () => {
     // clearDatabase(
     //   ['profiles', 'questions', 'comments', 'categories', 'tags'],
-    //   Cypress.env('TENANT_ID'),
     // )
+
+    Cypress.log({
+      displayName: 'Start. The tenant is...',
+      message: Cypress.env('TENANT_ID'),
+    })
     const profiles = await seedAccounts()
     await seedCategories()
     await seedQuestions(profiles)

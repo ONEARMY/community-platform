@@ -1,10 +1,10 @@
 import * as functions from 'firebase-functions'
 
 import { DB_ENDPOINTS } from '../models'
+import { createSupabaseServerClient } from './supabase-server-client'
 
 import type { firestore } from 'firebase-admin'
-import { createSupabaseServerClient } from './supabase-server-client'
-import { IUser } from 'oa-shared'
+import type { IUser } from 'oa-shared'
 
 /*********************************************************************
  * Side-effects to be carried out on various question updates, namely:

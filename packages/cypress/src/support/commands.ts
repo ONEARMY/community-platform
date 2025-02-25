@@ -1,16 +1,11 @@
 import 'cypress-file-upload'
 
-import { createClient } from '@supabase/supabase-js'
 import { deleteDB } from 'idb'
 
 import { Auth, TestDB } from './db/firebase'
 
 import type { ILibrary, IQuestionDB, IResearchDB } from 'oa-shared'
 import type { IUserSignUpDetails } from '../utils/TestUtils'
-
-type SeedData = {
-  [tableName: string]: Array<Record<string, any>>
-}
 
 declare global {
   namespace Cypress {
@@ -44,6 +39,7 @@ declare global {
       ): Chainable<void>
       step(message: string)
       setSessionStorage(key: string, value: string): Promise<void>
+      getUserConfirmationToken(username: string): Promise<void>
     }
   }
 }
@@ -196,42 +192,3 @@ Cypress.Commands.add('checkCommentItem', (comment: string, length: number) => {
   cy.checkCommentInViewport()
   cy.contains(comment)
 })
-
-const supabaseClient = (tenantId: string) =>
-  createClient(Cypress.env('SUPABASE_API_URL'), Cypress.env('SUPABASE_KEY'), {
-    global: {
-      headers: {
-        'x-tenant-id': tenantId,
-      },
-    },
-  })
-
-export const seedDatabase = async (
-  data: SeedData,
-  tenantId: string,
-): Promise<any> => {
-  const supabase = supabaseClient(tenantId)
-  const results = {}
-
-  for (const [table, rows] of Object.entries(data)) {
-    const result = await supabase.from(table).insert(rows).select()
-
-    if (!result.error) {
-      results[table] = result
-      continue
-    }
-
-    results[table] = await supabase.from(table).select()
-  }
-
-  return results
-}
-
-export const clearDatabase = async (tables: string[], tenantId: string) => {
-  const supabase = supabaseClient(tenantId)
-
-  // sequential so there are no constraint issues
-  for (const table of tables) {
-    await supabase.from(table).delete().eq('tenant_id', tenantId)
-  }
-}

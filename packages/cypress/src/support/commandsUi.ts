@@ -283,7 +283,7 @@ Cypress.Commands.add('confirmUser', (username) => {
       adminClient.auth.admin
         .getUserById(result.data.auth_id)
         .then((result: any) => {
-          if (result.confirmation_token) {
+          if (result.data.confirmation_token) {
             cy.visit(
               `${apiUrl}/auth/v1/verify?token=${result.confirmation_token}&type=signup&redirect_to=${cy.location('origin')}/email-confirmation/`,
             )

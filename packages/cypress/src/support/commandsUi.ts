@@ -273,12 +273,18 @@ Cypress.Commands.add('signUpNewUser', (user?) => {
     .eq('username', username)
     .single()
     .then((result: any) => {
-      console.log({ result })
+      console.log('user:')
+      console.log(result)
       // For CI test run - confirm user password
-      if (result.confirmation_token) {
-        cy.visit(
-          `https://zvjtecyvegifckhkcwfa.supabase.co/auth/v1/verify?token=${result.confirmation_token}&type=signup`,
-        )
-      }
+
+      client.auth.admin.getUserById(result.auth_id).then((result: any) => {
+        console.log('auth user:')
+        console.log(result)
+        if (result.confirmation_token) {
+          cy.visit(
+            `https://zvjtecyvegifckhkcwfa.supabase.co/auth/v1/verify?token=${result.confirmation_token}&type=signup`,
+          )
+        }
+      })
     })
 })

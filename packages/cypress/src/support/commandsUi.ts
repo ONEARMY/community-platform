@@ -268,9 +268,12 @@ Cypress.Commands.add('signUpNewUser', (user?) => {
 
   const client = supabaseAdminClient()
   client
-    .rpc('get_user_id_by_email', { email })
+    .from('profiles')
+    .select()
+    .eq('username', username)
     .single()
     .then((result: any) => {
+      console.log({ result })
       // For CI test run - confirm user password
       if (result.confirmation_token) {
         cy.visit(

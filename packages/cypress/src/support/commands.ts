@@ -2,7 +2,7 @@ import 'cypress-file-upload'
 
 import { deleteDB } from 'idb'
 
-import { Auth, TestDB } from './db/firebase'
+import { TestDB } from './db/firebase'
 
 import type { ILibrary, IQuestionDB, IResearchDB } from 'oa-shared'
 import type { IUserSignUpDetails } from '../utils/TestUtils'
@@ -13,7 +13,6 @@ declare global {
       checkCommentInViewport()
       checkCommentItem(comment: string, length: number): Chainable<void>
       clearServiceWorkers(): Promise<void>
-      deleteCurrentUser(): Promise<void>
       deleteIDB(name: string): Promise<boolean>
       interceptAddressSearchFetch(addressResponse): Chainable<void>
       interceptAddressReverseFetch(addressResponse): Chainable<void>
@@ -38,8 +37,6 @@ declare global {
         random: string,
       ): Chainable<void>
       step(message: string)
-      setSessionStorage(key: string, value: string): Promise<void>
-      getUserConfirmationToken(username: string): Promise<void>
     }
   }
 }
@@ -71,13 +68,6 @@ Cypress.Commands.add('deleteIDB', (name: string) => {
     .then((deleted) => cy.log('deleted?', deleted))
 })
 
-Cypress.Commands.add('setSessionStorage', (key: string, value: string) => {
-  cy.wrap(`setSessionStorage - ${key}:${value}`).then(() => {
-    cy.window().its('sessionStorage').invoke('setItem', key, value)
-    cy.window().its('sessionStorage').invoke('getItem', key).should('eq', value)
-  })
-})
-
 Cypress.Commands.add('clearServiceWorkers', () => {
   cy.window().then((w) => {
     cy.wrap('Clearing service workers').then(() => {
@@ -95,22 +85,6 @@ Cypress.Commands.add('clearServiceWorkers', () => {
         }
       })
     })
-  })
-})
-
-Cypress.Commands.add('deleteCurrentUser', () => {
-  return new Cypress.Promise((resolve, reject) => {
-    if (Auth.currentUser) {
-      Auth.currentUser
-        .delete()
-        .then(() => resolve(null))
-        .catch((err) => {
-          console.error(err)
-          reject(err)
-        })
-    } else {
-      resolve(null)
-    }
   })
 })
 
@@ -132,15 +106,6 @@ Cypress.Commands.add('addProject', (project, username, random) => {
 
   return firestore.addDocument('library', {
     ...project,
-    slug,
-  })
-})
-
-Cypress.Commands.add('addQuestion', (question, user) => {
-  const slug = `${question.slug}-for-${user.username}`
-
-  return firestore.addDocument('questions', {
-    ...question,
     slug,
   })
 })

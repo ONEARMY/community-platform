@@ -399,18 +399,4 @@ export const users = {
     about: 'Hi! I have no views',
     location: 'nl',
   },
-  change_auth_details: {
-    _id: 'change_auth_details',
-    _created: '2022-01-30T18:51:57.719Z',
-    _modified: '2022-01-30T18:51:57.719Z',
-    displayName: 'change_auth_details',
-    userName: 'change_auth_details',
-    email: 'change_auth_details@test.com',
-    password: 'test1234',
-    userRoles: [],
-    coverImages: [],
-    links: [],
-    about: 'Hi! I want to change my auth details',
-    location: 'nl',
-  },
 }

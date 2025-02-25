@@ -82,15 +82,15 @@ async function main() {
 
   const tenantId = generateAlphaNumeric(8)
 
-fs.writeFileSync(
-  'cypress.env.json',
-  JSON.stringify({
-    TENANT_ID: tenantId,
-    SUPABASE_API_URL: process.env.SUPABASE_API_URL,
-    SUPABASE_KEY: process.env.SUPABASE_KEY,
-    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-  }),
-)
+  fs.writeFileSync(
+    'cypress.env.json',
+    JSON.stringify({
+      TENANT_ID: tenantId,
+      SUPABASE_API_URL: process.env.SUPABASE_API_URL,
+      SUPABASE_KEY: process.env.SUPABASE_KEY,
+      SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    }),
+  )
 
   await startAppServer(tenantId)
   runTests()

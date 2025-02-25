@@ -48,13 +48,8 @@ const isUsernameAvailable = async (
   username: string,
   client: SupabaseClient,
 ) => {
-  const result = await client
-    .from('profiles')
-    .select('id')
-    .eq('username', username)
-    .limit(1)
-
-  return !result.data?.at(0)
+  const result = await client.rpc('is_username_available', { username })
+  return result.data
 }
 
 export const authServiceServer = {

@@ -259,10 +259,20 @@ export class UserStore extends ModuleStore {
   }
 
   public async refreshActiveUserDetailsById(id: string) {
-    const user = await this.db
+    let user = await this.db
       .collection<IUser>(COLLECTION_NAME)
       .doc(id)
       .get('server')
+
+    // TODO: remove this once profiles are migrated to supabase
+    if (!user) {
+      await this._createUserProfile(id)
+
+      user = await this.db
+        .collection<IUser>(COLLECTION_NAME)
+        .doc(id)
+        .get('server')
+    }
 
     this._updateActiveUser(user)
   }
@@ -272,42 +282,31 @@ export class UserStore extends ModuleStore {
     return this.authUser.emailVerified
   }
 
-  // private async _createUserProfile(trigger: string) {
-  //   const authUser = auth.currentUser as firebase.default.User
-  //   const displayName = authUser.displayName as string
-  //   const userName = formatLowerNoSpecial(displayName)
-  //   const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
+  private async _createUserProfile(userName: string) {
+    const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
 
-  //   if (userName === authUser.uid) {
-  //     logger.error(
-  //       'attempted to create duplicate user record with authId',
-  //       userName,
-  //     )
-  //     throw new Error('attempted to create duplicate user')
-  //   }
-
-  //   logger.debug('creating user profile', userName)
-  //   if (!userName) {
-  //     throw new Error('No Username Provided')
-  //   }
-  //   const user: IUser = {
-  //     coverImages: [],
-  //     links: [],
-  //     verified: false,
-  //     _authID: authUser.uid,
-  //     displayName,
-  //     userName,
-  //     notifications: [],
-  //     profileCreated: new Date().toISOString(),
-  //     profileCreationTrigger: trigger,
-  //     profileType: 'member',
-  //     notification_settings: {
-  //       emailFrequency: EmailNotificationFrequency.WEEKLY,
-  //     },
-  //   }
-  //   // update db
-  //   await dbRef.set(user)
-  // }
+    logger.debug('creating user profile', userName)
+    if (!userName) {
+      throw new Error('No Username Provided')
+    }
+    const user: IUser = {
+      coverImages: [],
+      links: [],
+      verified: false,
+      _authID: '',
+      displayName: userName,
+      userName,
+      notifications: [],
+      profileCreated: new Date().toISOString(),
+      profileCreationTrigger: 'supabase',
+      profileType: 'member',
+      notification_settings: {
+        emailFrequency: EmailNotificationFrequency.WEEKLY,
+      },
+    }
+    // update db
+    await dbRef.set(user)
+  }
 
   private async _updateUserRequest(userId: string, updateFields: PartialUser) {
     const _lastActive = new Date().toISOString()

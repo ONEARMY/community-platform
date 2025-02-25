@@ -11,6 +11,11 @@ Install Docker Desktop.
 Make sure you have the docker app open.
 
 Run `supabase start` (Ensure you run it on the project folder root.)
+Run `supabase status`
+Create a .env.local file at the project root (same level as .env) and fill in the keys with values from the command above:
+SUPABASE_API_URL={API URL}
+SUPABASE_KEY={anon key}
+SUPABASE_SERVICE_ROLE_KEY={service_role key}
 
 Create a `public` bucket named `precious-plastic` for local dev.
 Add the policy named `tenant_isolation` for all operations: `(bucket_id = ((current_setting('request.headers'::text, true))::json ->> 'x-tenant-id'::text))`
@@ -29,6 +34,13 @@ All done! Tests will use your local database. More info about how it works below
 
 After making schema changes, use the this command to create a migration file:
 `supabase db diff --file [migration_name]`
+
+## Supabase Edge Functions
+
+Currently used for customizing Auth Emails.
+Supabase Auth Hooks have a timeout of 5 seconds which can easily be exceeded. To reduce the risk, the `resend` call is not awaited.
+If it is exceeded, the user gets an error on the UI, but still receives the email and can continue his flow.
+Haven't managed to run the functions locally yet (contributions welcome!).
 
 ### Cypress with Supabase
 

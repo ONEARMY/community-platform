@@ -1,0 +1,1 @@
+alter table "public"."profiles" alter column "firebase_auth_id" drop not null;

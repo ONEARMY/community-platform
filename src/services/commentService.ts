@@ -1,11 +1,6 @@
-import { auth } from 'src/utils/firebase'
-
 const deleteComment = async (sourceId: string | number, id: number) => {
   return await fetch(`/api/discussions/${sourceId}/comments/${id}`, {
     method: 'DELETE',
-    headers: {
-      firebaseToken: await auth.currentUser!.getIdToken(),
-    },
   })
 }
 
@@ -19,9 +14,6 @@ const editcomment = async (
     body: JSON.stringify({
       comment,
     }),
-    headers: {
-      firebaseToken: await auth.currentUser!.getIdToken(),
-    },
   })
 }
 
@@ -37,9 +29,6 @@ const postComment = async (
       sourceType: 'questions',
       parentId,
     }),
-    headers: {
-      firebaseToken: await auth.currentUser!.getIdToken(),
-    },
   })
 }
 

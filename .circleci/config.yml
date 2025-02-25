@@ -364,7 +364,7 @@ jobs:
               --build-secret VITE_HIDE_MEMBER_PINS_BY_DEFAULT="$VITE_HIDE_MEMBER_PINS_BY_DEFAULT"
       - run:
           name: Set Supabase Secrets
-          command: flyctl -a << parameters.FLY_APP_NAME >> secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID FIREBASE_PRIVATE_KEY="$FIREBASE_PRIVATE_KEY" FIREBASE_CLIENT_EMAIL=$FIREBASE_CLIENT_EMAIL RESEND_API_KEY=$RESEND_API_KEY
+          command: flyctl -a << parameters.FLY_APP_NAME >> secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL RESEND_API_KEY=$RESEND_API_KEY
   deploy-supabase:
     docker:
       - image: cimg/node:20.7.0
@@ -374,6 +374,7 @@ jobs:
           at: '.'
       - run: npx supabase@2.6.8 login --token $SUPABASE_ACCESS_TOKEN
       - run: (yes || true) | npx supabase@2.6.8 db push --db-url $SUPABASE_DB_URL --debug
+      - run: npx supabase@2.6.8 functions deploy --no-verify-jwt
   # Run cypress e2e tests on chrome
   test_e2e:
     docker: *docker

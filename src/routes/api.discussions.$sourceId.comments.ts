@@ -1,10 +1,10 @@
 import { Comment, DBComment } from 'oa-shared'
-import { verifyFirebaseToken } from 'src/firestore/firestoreAdmin.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { notificationsService } from 'src/services/notificationsService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
+import type { User } from '@supabase/supabase-js'
 import type { DBCommentAuthor, Reply } from 'oa-shared'
 import type { DBProfile } from 'src/models/profile.model'
 
@@ -86,18 +86,18 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 }
 
 export async function action({ params, request }: LoaderFunctionArgs) {
-  const tokenValidation = await verifyFirebaseToken(
-    request.headers.get('firebaseToken')!,
-  )
-
-  const userId = tokenValidation.user_id
   const data = await request.json()
+
+  const { client, headers } = createSupabaseServerClient(request)
+
+  const {
+    data: { user },
+  } = await client.auth.getUser()
 
   const { valid, status, statusText } = await validateRequest(
     params,
     request,
-    tokenValidation.valid,
-    userId,
+    user,
     data,
   )
 
@@ -105,18 +105,16 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     return Response.json({}, { status, statusText })
   }
 
-  const { client, headers } = createSupabaseServerClient(request)
-
   const currentUser = await client
     .from('profiles')
     .select()
-    .eq('firebase_auth_id', userId)
+    .eq('auth_id', user!.id)
     .limit(1)
 
   if (currentUser.error || !currentUser.data?.at(0)) {
     return Response.json(
       {},
-      { status: 400, statusText: 'profile not found ' + userId },
+      { status: 400, statusText: 'profile not found ' + user!.id },
     )
   }
 
@@ -174,16 +172,11 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 async function validateRequest(
   params: Params<string>,
   request: Request,
-  isTokenValid: boolean,
-  userId: string,
+  user: User | null,
   data: any,
 ) {
-  if (!isTokenValid) {
+  if (!user) {
     return { status: 401, statusText: 'unauthorized' }
-  }
-
-  if (!userId) {
-    return { status: 400, statusText: 'user not found' }
   }
 
   if (!params.sourceId) {

@@ -271,6 +271,8 @@ Cypress.Commands.add('signUpNewUser', (user?) => {
 
 Cypress.Commands.add('confirmUser', (username) => {
   const adminClient = supabaseAdminClient()
+  const apiUrl = Cypress.env('TENANT_ID')
+
   adminClient
     .from('profiles')
     .select()
@@ -283,7 +285,7 @@ Cypress.Commands.add('confirmUser', (username) => {
         .then((result: any) => {
           if (result.confirmation_token) {
             cy.visit(
-              `https://zvjtecyvegifckhkcwfa.supabase.co/auth/v1/verify?token=${result.confirmation_token}&type=signup`,
+              `${apiUrl}/auth/v1/verify?token=${result.confirmation_token}&type=signup&redirect_to=${cy.location('origin')}/email-confirmation/`,
             )
           }
         })

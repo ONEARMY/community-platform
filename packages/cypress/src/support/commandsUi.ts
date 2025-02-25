@@ -283,9 +283,9 @@ Cypress.Commands.add('confirmUser', (username) => {
       adminClient.auth.admin
         .getUserById(result.data.auth_id)
         .then((result: any) => {
-          console.log(result.data)
-          console.log(`Token: ${result.data.confirmation_token}`)
-          if (result.data.confirmation_token) {
+          console.log(result.data.user)
+          console.log(`Token: ${result.data.user.confirmation_token}`)
+          if (result.data.user.confirmation_token) {
             const path = `${apiUrl}/auth/v1/verify?token=${result.confirmation_token}&type=signup&redirect_to=${cy.location('origin')}/email-confirmation/`
             console.log(`Path: ${path}`)
             cy.visit(path)

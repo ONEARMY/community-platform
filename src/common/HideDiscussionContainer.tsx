@@ -21,9 +21,9 @@ export const HideDiscussionContainer = ({
         case 0:
           return 'Start a discussion'
         case 1:
-          return 'View 1 Comment'
+          return 'View 1 comment'
         default:
-          return `View ${commentCount} Comments`
+          return `View ${commentCount} comments`
       }
     }
 

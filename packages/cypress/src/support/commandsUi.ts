@@ -1,5 +1,5 @@
 import { form } from '../../../../src/pages/UserSettings/labels'
-import { generateNewUserDetails } from '../utils/TestUtils'
+import { generateNewUserDetails, supabaseAdminClient } from '../utils/TestUtils'
 
 import type { IUser } from 'oa-shared'
 
@@ -265,4 +265,17 @@ Cypress.Commands.add('signUpNewUser', (user?) => {
   cy.fillSignupForm(username, email, password)
   cy.get('[data-cy=submit]').click()
   cy.url().should('include', 'sign-up-message')
+
+  const client = supabaseAdminClient()
+  client
+    .rpc('get_user_id_by_email', { email })
+    .single()
+    .then((result: any) => {
+      // For CI test run - confirm user password
+      if (result.confirmation_token) {
+        cy.visit(
+          `https://zvjtecyvegifckhkcwfa.supabase.co/auth/v1/verify?token=${result.confirmation_token}&type=signup`,
+        )
+      }
+    })
 })

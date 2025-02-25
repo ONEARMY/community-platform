@@ -64,7 +64,8 @@ declare global {
       setSettingImpactData(year: number, fields)
       setSettingPublicContact()
 
-      signUpNewUser(user?)
+      signUpNewUser(user?): Chainable<void>
+      confirmUser(username: string): Chainable<void>
 
       toggleUserMenuOn(): Chainable<void>
       toggleUserMenuOff(): Chainable<void>
@@ -265,26 +266,26 @@ Cypress.Commands.add('signUpNewUser', (user?) => {
   cy.fillSignupForm(username, email, password)
   cy.get('[data-cy=submit]').click()
   cy.url().should('include', 'sign-up-message')
+  cy.confirmUser(username)
+})
 
-  const client = supabaseAdminClient()
-  client
+Cypress.Commands.add('confirmUser', (username) => {
+  const adminClient = supabaseAdminClient()
+  adminClient
     .from('profiles')
     .select()
     .eq('username', username)
     .single()
     .then((result: any) => {
-      console.log('user:')
-      console.log(result)
       // For CI test run - confirm user password
-
-      client.auth.admin.getUserById(result.auth_id).then((result: any) => {
-        console.log('auth user:')
-        console.log(result)
-        if (result.confirmation_token) {
-          cy.visit(
-            `https://zvjtecyvegifckhkcwfa.supabase.co/auth/v1/verify?token=${result.confirmation_token}&type=signup`,
-          )
-        }
-      })
+      adminClient.auth.admin
+        .getUserById(result.data.auth_id)
+        .then((result: any) => {
+          if (result.confirmation_token) {
+            cy.visit(
+              `https://zvjtecyvegifckhkcwfa.supabase.co/auth/v1/verify?token=${result.confirmation_token}&type=signup`,
+            )
+          }
+        })
     })
 })

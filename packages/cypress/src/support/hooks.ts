@@ -25,10 +25,6 @@ before(() => {
     //   ['profiles', 'questions', 'comments', 'categories', 'tags'],
     // )
 
-    Cypress.log({
-      displayName: 'Start. The tenant is...',
-      message: Cypress.env('TENANT_ID'),
-    })
     const profiles = await seedAccounts()
     await seedCategories()
     await seedQuestions(profiles)

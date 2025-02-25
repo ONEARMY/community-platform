@@ -98,6 +98,11 @@ export const supabaseAdminClient = () =>
     Cypress.env('SUPABASE_API_URL'),
     Cypress.env('SUPABASE_SERVICE_ROLE_KEY'),
     {
+      global: {
+        headers: {
+          'x-tenant-id': Cypress.env('TENANT_ID'),
+        },
+      },
       auth: {
         autoRefreshToken: false,
         persistSession: false,

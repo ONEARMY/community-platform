@@ -1,5 +1,5 @@
+import { MOCK_DATA } from '../data'
 import { UserMenuItem } from '../support/commandsUi'
-import { generateNewUserDetails } from '../utils/TestUtils'
 
 describe('[Common]', () => {
   it('[Default Page]', () => {
@@ -81,11 +81,12 @@ describe('[Common]', () => {
     })
 
     it('[By Authenticated]', () => {
-      cy.visit('/library')
-
       cy.step('Login and Join buttons are unavailable to logged-in users')
-      const user = generateNewUserDetails()
-      cy.signUpNewUser(user)
+      cy.signIn(
+        MOCK_DATA.users.subscriber.email,
+        MOCK_DATA.users.subscriber.password,
+      )
+      cy.visit('/library')
       cy.wait(2000)
       cy.get('[data-cy=login]', { timeout: 20000 }).should('not.exist')
       cy.get('[data-cy=join]').should('not.exist')
@@ -98,7 +99,7 @@ describe('[Common]', () => {
 
       cy.step('Go to Profile')
       cy.clickMenuItem(UserMenuItem.Profile)
-      cy.url().should('include', `/u/${user.username}`)
+      cy.url().should('include', `/u/${MOCK_DATA.users.subscriber._id}`)
 
       cy.step('Go to Settings')
       cy.toggleUserMenuOn()

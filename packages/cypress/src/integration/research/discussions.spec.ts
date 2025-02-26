@@ -5,7 +5,7 @@ import { ExternalLinkLabel } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
 import { research } from '../../fixtures/research'
-import { generateNewUserDetails } from '../../utils/TestUtils'
+import { generateAlphaNumeric } from '../../utils/TestUtils'
 
 const item = Object.values(MOCK_DATA.research)[0]
 
@@ -24,14 +24,17 @@ describe('[Research.Discussions]', () => {
   })
 
   it('allows authenticated users to contribute to discussions', () => {
-    const visitor = generateNewUserDetails()
-    cy.addResearch(research, visitor)
-    cy.signUpNewUser(visitor)
+    const random = generateAlphaNumeric(8)
+    const visitor = MOCK_DATA.users.subscriber
+    const secondCommentor = MOCK_DATA.users.profile_views
 
-    const newComment = `An example comment from ${visitor.username}`
-    const updatedNewComment = `I've updated my comment now. Love ${visitor.username}`
+    cy.addResearch(research, visitor.userName, random)
+    cy.signIn(visitor.email, visitor.password)
 
-    const researchPath = `/research/${visitor.username}-in-discussion-research`
+    const newComment = `An example comment from ${visitor.userName}`
+    const updatedNewComment = `I've updated my comment now. Love ${visitor.userName}`
+
+    const researchPath = `/research/${visitor.userName}-in-discussion-research-${random}`
 
     cy.step('Can add comment')
 
@@ -49,13 +52,12 @@ describe('[Research.Discussions]', () => {
     cy.editDiscussionItem('CommentItem', newComment, updatedNewComment)
 
     cy.step('Another user can add reply')
-    const secondCommentor = generateNewUserDetails()
-    const newReply = `An interesting point, I hadn't thought about that. All the best ${secondCommentor.username}`
-    const updatedNewReply = `I hadn't thought about that. Really good point. ${secondCommentor.username}`
+    const newReply = `An interesting point, I hadn't thought about that. All the best ${secondCommentor.userName}`
+    const updatedNewReply = `I hadn't thought about that. Really good point. ${secondCommentor.userName}`
 
     cy.logout()
 
-    cy.signUpNewUser(secondCommentor)
+    cy.signIn(secondCommentor.email, secondCommentor.password)
     cy.visit(researchPath)
     cy.get(
       '[data-cy="HideDiscussionContainer: button open-comments has-comments"]',
@@ -74,7 +76,7 @@ describe('[Research.Discussions]', () => {
     cy.setSettingBasicUserInfo({
       country: 'Saint Lucia',
       description: "I'm a commenter",
-      displayName: secondCommentor.username,
+      displayName: secondCommentor.userName,
     })
     cy.setSettingImage('avatar', 'userImage')
     cy.setSettingAddContactLink({
@@ -85,10 +87,10 @@ describe('[Research.Discussions]', () => {
     cy.saveSettingsForm()
 
     cy.step('First commentor can respond')
-    const secondReply = `Quick reply. ${visitor.username}`
+    const secondReply = `Quick reply. ${visitor.userName}`
 
     cy.logout()
-    cy.login(visitor.email, visitor.password)
+    cy.signIn(visitor.email, visitor.password)
     cy.visit(researchPath)
     cy.get(
       '[data-cy="HideDiscussionContainer: button open-comments has-comments"]',

@@ -165,7 +165,7 @@ describe('[Research]', () => {
 
     describe('[By Author]', () => {
       beforeEach(() => {
-        cy.login('demo_user@example.com', 'demo_user')
+        cy.signIn('demo_user@example.com', 'demo_user')
         cy.visit(authoredResearchArticleUrl)
       })
 
@@ -180,7 +180,7 @@ describe('[Research]', () => {
       beforeEach(() => {})
 
       it('[Delete button is visible]', () => {
-        cy.login('demo_admin@example.com', 'demo_admin')
+        cy.signIn('demo_admin@example.com', 'demo_admin')
         cy.visit(researchArticleUrl)
 
         cy.step('Delete button should be visible to the author of the article')
@@ -205,7 +205,7 @@ describe('[Research]', () => {
 
     describe('[By Owner]', () => {
       beforeEach(() => {
-        cy.login('demo_user@example.com', 'demo_user')
+        cy.signIn('demo_user@example.com', 'demo_user')
         cy.visit(deletedResearchUrl)
       })
 
@@ -218,7 +218,7 @@ describe('[Research]', () => {
 
     describe('[By Admin]', () => {
       beforeEach(() => {
-        cy.login('demo_admin@example.com', 'demo_admin')
+        cy.signIn('demo_admin@example.com', 'demo_admin')
         cy.visit(deletedResearchUrl)
       })
 

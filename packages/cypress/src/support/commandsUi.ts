@@ -1,5 +1,5 @@
 import { form } from '../../../../src/pages/UserSettings/labels'
-import { generateNewUserDetails } from '../utils/TestUtils'
+import { generateNewUserDetails, supabaseAdminClient } from '../utils/TestUtils'
 
 import type { IUser } from 'oa-shared'
 
@@ -34,6 +34,8 @@ declare global {
         oldComment: string,
         updatedNewComment: string,
       ): Chainable<void>
+      signIn(email: string, password: string): Chainable<void>
+      logout(): Chainable<void>
       fillSignupForm(
         username: string,
         email: string,
@@ -62,7 +64,8 @@ declare global {
       setSettingImpactData(year: number, fields)
       setSettingPublicContact()
 
-      signUpNewUser(user?)
+      signUpNewUser(user?): Chainable<void>
+      confirmUser(username: string): Chainable<void>
 
       toggleUserMenuOn(): Chainable<void>
       toggleUserMenuOff(): Chainable<void>
@@ -118,10 +121,6 @@ Cypress.Commands.add('setSettingImage', (image, selector) => {
     .attachFile(`images/${image}.jpg`)
 })
 
-Cypress.Commands.add('setFile', (filePath, selector) => {
-  cy.get(`[data-cy=${selector}]`).find(':file').attachFile(filePath)
-})
-
 Cypress.Commands.add('setSettingImpactData', (year: number, fields) => {
   cy.step('Save impact data')
   cy.get('[data-cy="tab-Impact"]').click()
@@ -160,6 +159,7 @@ Cypress.Commands.add(
   (username: string, email: string, password: string) => {
     cy.log('Fill in sign-up form')
     cy.visit('/sign-up')
+    cy.wait(2000)
     cy.get('[data-cy=username]').clear().type(username)
     cy.get('[data-cy=email]').clear().type(email)
     cy.get('[data-cy=password]').clear().type(password)
@@ -168,45 +168,22 @@ Cypress.Commands.add(
   },
 )
 
+Cypress.Commands.add('signIn', (email: string, password: string) => {
+  cy.log('Fill in sign in form')
+  cy.visit('/sign-in')
+  cy.wait(2000)
+  cy.get('[data-cy=email]').clear().type(email)
+  cy.get('[data-cy=password]').clear().type(password)
+  cy.get('[data-cy=submit]').click()
+})
+
+Cypress.Commands.add('logout', () => {
+  cy.request('/logout')
+})
+
 Cypress.Commands.add('fillIntroTitle', (intro: string) => {
   cy.log('Fill in intro title')
   cy.get('[data-cy=intro-title]').clear().type(intro).blur({ force: true })
-})
-
-Cypress.Commands.add('signUpNewUser', (user?) => {
-  cy.log('Generate new user details')
-  const { username, email, password } = user || generateNewUserDetails()
-
-  cy.fillSignupForm(username, email, password)
-  cy.get('[data-cy=submit]').click()
-  cy.url().should('include', 'sign-up-message')
-  // .then(() => {
-  //   if (addToSupabase) {
-  //     console.log(username)
-  //     firestore
-  //       .queryDocument('users', '_id', '==', username)
-  //       .then((users) => {
-  //         console.log(users.docs)
-  //         const user = users.docs[0].data()
-  //         const tenantId = Cypress.env('TENANT_ID')
-  //         seedDatabase(
-  //           {
-  //             profiles: [
-  //               {
-  //                 firebase_auth_id: user._authID,
-  //                 username: username,
-  //                 tenant_id: tenantId,
-  //                 created_at: new Date().toUTCString(),
-  //                 display_name: username,
-  //                 is_verified: false,
-  //               },
-  //             ],
-  //           },
-  //           tenantId,
-  //         )
-  //       })
-  //   }
-  // })
 })
 
 Cypress.Commands.add('toggleUserMenuOn', () => {
@@ -228,7 +205,7 @@ Cypress.Commands.add('clickMenuItem', (menuItem: UserMenuItem) => {
     },
   })
   cy.toggleUserMenuOn()
-  cy.get(`[data-cy=menu-${menuItem}]`).click()
+  cy.get(`[data-cy=menu-${menuItem}]`).should('be.visible').click()
 })
 
 Cypress.Commands.add('screenClick', () => {
@@ -280,4 +257,39 @@ Cypress.Commands.add('addReply', (reply: string) => {
   cy.get('[data-cy=reply-submit]').first().click()
 
   cy.get('[data-cy=OwnReplyItem]').contains(reply)
+})
+
+Cypress.Commands.add('signUpNewUser', (user?) => {
+  cy.log('Generate new user details')
+  const { username, email, password } = user || generateNewUserDetails()
+
+  cy.fillSignupForm(username, email, password)
+  cy.get('[data-cy=submit]').click()
+  cy.url().should('include', 'sign-up-message')
+  cy.confirmUser(username)
+})
+
+Cypress.Commands.add('confirmUser', (username) => {
+  const adminClient = supabaseAdminClient()
+  const apiUrl = Cypress.env('TENANT_ID')
+
+  adminClient
+    .from('profiles')
+    .select()
+    .eq('username', username)
+    .single()
+    .then((result: any) => {
+      // For CI test run - confirm user password
+      adminClient.auth.admin
+        .getUserById(result.data.auth_id)
+        .then((result: any) => {
+          console.log(result.data.user)
+          console.log(`Token: ${result.data.user.confirmation_token}`)
+          if (result.data.user.confirmation_token) {
+            const path = `${apiUrl}/auth/v1/verify?token=${result.confirmation_token}&type=signup&redirect_to=${cy.location('origin')}/email-confirmation/`
+            console.log(`Path: ${path}`)
+            cy.visit(path)
+          }
+        })
+    })
 })

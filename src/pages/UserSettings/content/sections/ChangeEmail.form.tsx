@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { Accordion, Button, FieldInput } from 'oa-components'
 import { PasswordField } from 'src/common/Form/PasswordField'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
+import { SessionContext } from 'src/pages/common/SessionContext'
 import { UserContactError } from 'src/pages/User/contact/UserContactError'
 import { buttons, fields } from 'src/pages/UserSettings/labels'
 import { Flex } from 'theme-ui'
+
+import { accountService } from '../../services/account.service'
 
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
 
@@ -16,33 +18,39 @@ interface IFormValues {
 }
 
 export const ChangeEmailForm = () => {
+  const user = useContext(SessionContext)
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
-  const [currentEmail, setCurrentEmail] = useState<string | null>(null)
 
-  const { userStore } = useCommonStores().stores
   const formId = 'changeEmail'
 
-  useEffect(() => {
-    getUserEmail()
-  }, [])
-
   const onSubmit = async (values: IFormValues) => {
-    const { password, newEmail } = values
+    const { newEmail, password } = values
     try {
-      await userStore.changeUserEmail(password, newEmail)
+      const result = await accountService.changeEmail(newEmail, password)
+
+      if (!result.ok) {
+        const data = await result.json()
+
+        if (data.error) {
+          setSubmitResults({ type: 'error', message: data.error })
+        } else {
+          setSubmitResults({
+            type: 'error',
+            message: 'Oops, something went wrong!',
+          })
+        }
+
+        return
+      }
+
       setSubmitResults({
         type: 'success',
-        message: `Email changed to ${newEmail}. You've been sent two emails now(!) One to your old email address to check this was you and the other to your new address to verify it.`,
+        message:
+          "We've sent you an email. Please click the confirmation link to proceed with the change!",
       })
-      getUserEmail()
     } catch (error) {
       setSubmitResults({ type: 'error', message: error.message })
     }
-  }
-
-  const getUserEmail = async () => {
-    const email = await userStore.getUserEmail()
-    setCurrentEmail(email)
   }
 
   return (
@@ -53,7 +61,7 @@ export const ChangeEmailForm = () => {
       <UserContactError submitResults={submitResults} />
       <Accordion
         title="Change Email"
-        subtitle={`${fields.email.title}: ${currentEmail}`}
+        subtitle={`${fields.email.title}: ${user?.email}`}
       >
         <Form
           onSubmit={onSubmit}
@@ -61,7 +69,7 @@ export const ChangeEmailForm = () => {
           render={({ handleSubmit, submitting, values }) => {
             const { password, newEmail } = values
             const disabled =
-              submitting || !password || !newEmail || newEmail === currentEmail
+              submitting || !password || !newEmail || newEmail === user?.email
 
             return (
               <Flex

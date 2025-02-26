@@ -1,20 +1,15 @@
-import React from 'react'
 import styled from '@emotion/styled'
 import { NavLink } from '@remix-run/react'
 import { observer } from 'mobx-react'
+import { ReturnPathLink } from 'oa-components'
 import { preciousPlasticTheme } from 'oa-themes'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { Box, Flex } from 'theme-ui'
 
-import { AuthWrapper } from '../../../../../common/AuthWrapper'
-
 // TODO: Remove direct usage of Theme
 const theme = preciousPlasticTheme.styles
-
-interface IProps {
-  username: string
-}
 
 const ModalContainer = styled(Box)`
   max-width: 100%;
@@ -24,14 +19,6 @@ const ModalContainer = styled(Box)`
   top: 60px;
   z-index: ${theme.zIndex.modalProfile};
   height: 100%;
-`
-const ModalContainerInner = styled(Box)`
-  z-index: ${theme.zIndex.modalProfile};
-  position: relative;
-  background: white;
-  border: 2px solid black;
-  border-radius: 5px;
-  overflow: hidden;
 `
 
 const ModalLink = styled(NavLink)`
@@ -53,61 +40,54 @@ const ModalLink = styled(NavLink)`
   }
 `
 
-const LogoutButton = styled.button`
-  font-family: inherit;
-  font-size: inherit;
-  color: inherit;
-  text-align: inherit;
-  padding: 10px 30px 10px 30px;
-  width: 100%;
-  background: inherit;
-  border: none;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${theme.colors.background};
-  }
-`
-
-export const ProfileModal = observer((props: IProps) => {
+export const ProfileModal = observer(() => {
   const { userStore } = useCommonStores().stores
-
-  const logout = () => {
-    userStore.logout()
-  }
-
-  const { username } = props
   return (
     <ModalContainer data-cy="user-menu-list">
-      <ModalContainerInner>
-        <Flex>
-          <ModalLink
-            to={'/u/' + username}
-            data-cy="menu-Profile"
-            className={({ isActive }) => (isActive ? 'current' : '')}
-          >
-            Profile
-          </ModalLink>
-        </Flex>
+      <Flex
+        sx={{
+          zIndex: theme.zIndex.modalProfile,
+          position: 'relative',
+          background: 'white',
+          border: '2px solid black',
+          borderRadius: 1,
+          overflow: 'hidden',
+          flexDirection: 'column',
+        }}
+      >
+        <ModalLink
+          to={'/u/' + userStore.activeUser?.userName}
+          data-cy="menu-Profile"
+          className={({ isActive }) => (isActive ? 'current' : '')}
+        >
+          Profile
+        </ModalLink>
         {COMMUNITY_PAGES_PROFILE.map((page) => (
           <AuthWrapper key={page.path}>
-            <Flex>
-              <ModalLink
-                to={page.path}
-                data-cy={`menu-${page.title}`}
-                className={({ isActive }) => (isActive ? 'current' : '')}
-              >
-                {page.title}
-              </ModalLink>
-            </Flex>
+            <ModalLink
+              to={page.path}
+              data-cy={`menu-${page.title}`}
+              className={({ isActive }) => (isActive ? 'current' : '')}
+            >
+              {page.title}
+            </ModalLink>
           </AuthWrapper>
         ))}
-        <Flex>
-          <LogoutButton onClick={() => logout()} data-cy="menu-Logout">
+        <Box
+          sx={{
+            padding: '10px 30px 10px 30px',
+            '&:hover': { background: 'background' },
+          }}
+        >
+          <ReturnPathLink
+            data-cy="menu-Logout"
+            to="/logout"
+            style={{ color: 'black' }}
+          >
             Log out
-          </LogoutButton>
-        </Flex>
-      </ModalContainerInner>
+          </ReturnPathLink>
+        </Box>
+      </Flex>
     </ModalContainer>
   )
 })

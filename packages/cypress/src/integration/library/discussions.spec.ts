@@ -5,12 +5,15 @@ import { ExternalLinkLabel } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
 import { library } from '../../fixtures/library'
-import { generateNewUserDetails } from '../../utils/TestUtils'
+import { generateAlphaNumeric } from '../../utils/TestUtils'
 
 const item = Object.values(MOCK_DATA.library)[0]
 const libraryDiscussion = Object.values(MOCK_DATA.discussions).find(
   ({ sourceId }) => sourceId === item._id,
 )
+
+const visitor = MOCK_DATA.users.subscriber
+const secondCommentor = MOCK_DATA.users.profile_views
 
 describe('[Library.Discussions]', () => {
   it('can open using deep links', () => {
@@ -21,16 +24,16 @@ describe('[Library.Discussions]', () => {
   })
 
   it('allows authenticated users to contribute to discussions', () => {
-    const visitor = generateNewUserDetails()
-    cy.addProject(library, visitor)
-    cy.signUpNewUser(visitor)
+    const random = generateAlphaNumeric(8)
 
-    const newComment = `An interesting project. ${visitor.username}`
-    const updatedNewComment = `An interesting project. The answer must be that when the sky is red, the apocalypse _might_ be on the way. Yours, ${visitor.username}`
-    const newReply = `Thanks Dave and Ben. What does everyone else think? - ${visitor.username}`
-    const updatedNewReply = `Anyone else? All the best, ${visitor.username}`
+    cy.addProject(library, visitor.userName, random)
+    cy.signIn(visitor.email, visitor.password)
 
-    const projectPath = `/library/howto-for-discussion-${visitor.username}`
+    const newComment = `An interesting project. ${visitor.userName}`
+    const updatedNewComment = `An interesting project. The answer must be that when the sky is red, the apocalypse _might_ be on the way. Yours, ${visitor.userName}`
+    const newReply = `Thanks Dave and Ben. What does everyone else think? - ${visitor.userName}`
+    const updatedNewReply = `Anyone else? All the best, ${visitor.userName}`
+    const projectPath = `/library/howto-for-discussion-${visitor.userName}-${random}`
 
     cy.step('Can add comment')
     cy.visit(projectPath)
@@ -43,9 +46,8 @@ describe('[Library.Discussions]', () => {
     cy.editDiscussionItem('CommentItem', newComment, updatedNewComment)
 
     cy.step('Another user can add reply')
-    const secondCommentor = generateNewUserDetails()
     cy.logout()
-    cy.signUpNewUser(secondCommentor)
+    cy.signIn(secondCommentor.email, secondCommentor.password)
     cy.visit(projectPath)
     cy.addReply(newReply)
     cy.wait(1000)
@@ -60,7 +62,7 @@ describe('[Library.Discussions]', () => {
     cy.setSettingBasicUserInfo({
       country: 'Saint Lucia',
       description: "I'm a commenter",
-      displayName: secondCommentor.username,
+      displayName: secondCommentor.displayName,
     })
     cy.setSettingImage('avatar', 'userImage')
     cy.setSettingAddContactLink({
@@ -71,11 +73,11 @@ describe('[Library.Discussions]', () => {
     cy.saveSettingsForm()
 
     cy.step('Another user can leave a reply')
-    const secondReply = `Quick reply. ${visitor.username}`
+    const secondReply = `Quick reply. ${visitor.userName}`
 
     cy.step('First commentor can respond')
     cy.logout()
-    cy.login(visitor.email, visitor.password)
+    cy.signIn(visitor.email, visitor.password)
     cy.visit(projectPath)
 
     cy.addReply(secondReply)

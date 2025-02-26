@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Route, Routes, useParams } from '@remix-run/react'
 import { observer } from 'mobx-react'
+import { ReturnPathLink } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
 import { Card, Flex, Heading, Text } from 'theme-ui'
@@ -13,8 +14,8 @@ enum Status {
 
 const StatusMessage = ({ status }: { status: Status }) => {
   const loginLink = (
-    <a
-      href="/sign-in"
+    <ReturnPathLink
+      to="/sign-in"
       style={{
         textDecoration: 'underline',
         color: 'inherit',
@@ -22,7 +23,7 @@ const StatusMessage = ({ status }: { status: Status }) => {
       }}
     >
       login
-    </a>
+    </ReturnPathLink>
   )
 
   switch (status) {

@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
-import { CategoryVerticalList, SearchField, Select } from 'oa-components'
+import {
+  CategoryVerticalList,
+  ReturnPathLink,
+  SearchField,
+  Select,
+} from 'oa-components'
 import { ResearchStatus } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
@@ -115,11 +120,11 @@ export const ResearchFilterHeader = (props: IProps) => {
       }
       loggedOut={
         isPreciousPlastic() && (
-          <Link to="/sign-up">
+          <ReturnPathLink to="/sign-up">
             <Button type="button" variant="primary" data-cy="sign-up">
               {listing.join}
             </Button>
-          </Link>
+          </ReturnPathLink>
         )
       }
     />

@@ -1,3 +1,4 @@
+import { Link } from '@remix-run/react'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import { Button, ExternalLink } from 'oa-components'
@@ -60,9 +61,9 @@ export const ImpactMissing = observer((props: Props) => {
         </>
       )}
       {isPageOwner && (
-        <a href={`/settings/impact/#year_${year}`}>
+        <Link to={`/settings/impact/#year_${year}`}>
           <Button type="button">{labelSet.owner.link}</Button>
-        </a>
+        </Link>
       )}
     </Flex>
   )

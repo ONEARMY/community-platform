@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { DifficultyLevel, IModerationStatus } from 'oa-shared'
 
-import { generateNewUserDetails } from '../../utils/TestUtils'
+import { MOCK_DATA } from '../../data'
 
 describe('[Library]', () => {
   beforeEach(() => {
@@ -98,10 +98,10 @@ describe('[Library]', () => {
 
   describe('[Create a project]', () => {
     const randomId = faker.random.alphaNumeric(8)
-    const creator = generateNewUserDetails()
+    const creator = MOCK_DATA.users.howto_creator
 
     const expected = {
-      _createdBy: creator.username,
+      _createdBy: creator.userName,
       _deleted: false,
       category: 'Moulds',
       description: 'After creating, the project will be deleted',
@@ -179,7 +179,7 @@ describe('[Library]', () => {
         'Cover image should show the fully built mould'
 
       cy.get('[data-cy="sign-up"]')
-      cy.signUpNewUser(creator)
+      cy.signIn(creator.email, creator.password)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy="MemberBadge-member"]').should('be.visible')
       cy.visit('/library')
@@ -319,7 +319,8 @@ describe('[Library]', () => {
     })
 
     it('[Warning on leaving page]', () => {
-      cy.login(creator.email, creator.password)
+      cy.signIn(creator.email, creator.password)
+      cy.visit('/library')
       cy.get('[data-cy=loader]').should('not.exist')
       cy.step('Access the create project')
       cy.get('a[href="/library/create"]').should('be.visible')

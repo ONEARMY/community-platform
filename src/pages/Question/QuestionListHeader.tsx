@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
-import { CategoryVerticalList, SearchField, Select } from 'oa-components'
+import {
+  CategoryVerticalList,
+  ReturnPathLink,
+  SearchField,
+  Select,
+} from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { UserAction } from 'src/common/UserAction'
 import {
@@ -86,11 +91,11 @@ export const QuestionListHeader = () => {
         </Link>
       }
       loggedOut={
-        <Link to="/sign-up">
+        <ReturnPathLink to="/sign-up">
           <Button type="button" data-cy="sign-up" variant="primary">
             {listing.join}
           </Button>
-        </Link>
+        </ReturnPathLink>
       }
     />
   )

@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { Form } from 'react-final-form'
 import { Accordion, Button, FieldInput } from 'oa-components'
 import { PasswordField } from 'src/common/Form/PasswordField'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { UserContactError } from 'src/pages/User/contact/UserContactError'
 import { buttons, fields } from 'src/pages/UserSettings/labels'
 import { Flex } from 'theme-ui'
+
+import { accountService } from '../../services/account.service'
 
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
 
@@ -19,14 +20,32 @@ interface IFormValues {
 export const ChangePasswordForm = () => {
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
 
-  const { userStore } = useCommonStores().stores
   const formId = 'changePassword'
 
   const onSubmit = async (values: IFormValues) => {
     const { oldPassword, newPassword } = values
 
     try {
-      await userStore.changeUserPassword(oldPassword, newPassword)
+      const result = await accountService.changePassword(
+        oldPassword,
+        newPassword,
+      )
+
+      if (!result.ok) {
+        const data = await result.json()
+
+        if (data.error) {
+          setSubmitResults({ type: 'error', message: data.error })
+        } else {
+          setSubmitResults({
+            type: 'error',
+            message: 'Oops, something went wrong!',
+          })
+        }
+
+        return
+      }
+
       setSubmitResults({
         type: 'success',
         message: `Password changed.`,

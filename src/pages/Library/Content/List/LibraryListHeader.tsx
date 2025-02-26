@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
-import { CategoryVerticalList, SearchField, Select } from 'oa-components'
+import {
+  CategoryVerticalList,
+  ReturnPathLink,
+  SearchField,
+  Select,
+} from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { UserAction } from 'src/common/UserAction'
 import DraftButton from 'src/pages/common/Drafts/DraftButton'
@@ -158,7 +163,7 @@ export const LibraryListHeader = (props: IProps) => {
         </>
       }
       loggedOut={
-        <Link to="/sign-up">
+        <ReturnPathLink to="/sign-up">
           <Button
             type="button"
             sx={{ width: '100%' }}
@@ -167,7 +172,7 @@ export const LibraryListHeader = (props: IProps) => {
           >
             {listing.join}
           </Button>
-        </Link>
+        </ReturnPathLink>
       }
     />
   )

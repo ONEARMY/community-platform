@@ -1,5 +1,4 @@
-import { Link } from '@remix-run/react'
-import { Button } from 'oa-components'
+import { Button, ReturnPathLink } from 'oa-components'
 import { Alert, Flex, Text } from 'theme-ui'
 
 interface Props {
@@ -17,7 +16,7 @@ export const UserContactNotLoggedIn = ({ displayName }: Props) => {
           If you were you'd able to send them a message...
         </Text>
         <Flex sx={{ alignItems: 'center', flexDirection: 'row', gap: 2 }}>
-          <Link
+          <ReturnPathLink
             to="/sign-in"
             style={{
               textDecoration: 'underline',
@@ -25,12 +24,12 @@ export const UserContactNotLoggedIn = ({ displayName }: Props) => {
             }}
           >
             Login
-          </Link>
-          <Link to="/sign-up">
+          </ReturnPathLink>
+          <ReturnPathLink to="/sign-up">
             <Button type="button" icon="star">
               Sign-up now
             </Button>
-          </Link>
+          </ReturnPathLink>
         </Flex>
       </Flex>
     </Alert>

@@ -1,4 +1,4 @@
-import { HeroBanner, Icon } from 'oa-components'
+import { HeroBanner, Icon, InternalLink } from 'oa-components'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
 const SignUpMessagePage = ({ email }) => {
@@ -66,8 +66,11 @@ const SignUpMessagePage = ({ email }) => {
                     Before you get stuck in we just need you to verify your
                     email address
                   </strong>
-                  .<br />
-                  We've sent a link to{' '}
+                  .
+                </p>
+                <p>
+                  If we don't have your email address already we're sending a
+                  link to{' '}
                   <Text
                     sx={{
                       background:
@@ -76,13 +79,22 @@ const SignUpMessagePage = ({ email }) => {
                     }}
                   >
                     {email}
-                  </Text>
-                  . <br />
+                  </Text>{' '}
+                  now. <br />
                 </p>
+                <p>Please click it to confirm your account.</p>
                 <p>
-                  Please click it to confirm your account.
-                  <br />
-                  After you've done that, you can login.
+                  <em>
+                    If you don't get that email it might be because you already
+                    have an account,{' '}
+                    <InternalLink
+                      to={'/reset-password'}
+                      sx={{ textDecoration: 'underline', color: 'oneArmyRed' }}
+                    >
+                      try the password reset
+                    </InternalLink>
+                    .
+                  </em>
                 </p>
               </Text>
             </Flex>

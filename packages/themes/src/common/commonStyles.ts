@@ -32,6 +32,7 @@ export const commonStyles = {
     subscribed: 'orange',
     notSubscribed: '#1b1b1b',
     betaGreen: '#98cc98',
+    oneArmyRed: '#e9475a',
   },
   alert: {
     borderRadius: 1,

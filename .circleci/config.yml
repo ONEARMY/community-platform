@@ -366,15 +366,29 @@ jobs:
           name: Set Supabase Secrets
           command: flyctl -a << parameters.FLY_APP_NAME >> secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL RESEND_API_KEY=$RESEND_API_KEY
   deploy-supabase:
-    docker:
-      - image: cimg/node:20.7.0
+    machine:
+      image: ubuntu-2004:2023.07.1 # Or a more recent Ubuntu image
     steps:
       - checkout
       - attach_workspace:
           at: '.'
-      - run: npx supabase@2.6.8 login --token $SUPABASE_ACCESS_TOKEN
-      - run: (yes || true) | npx supabase@2.6.8 db push --db-url $SUPABASE_DB_URL --debug
-      - run: npx supabase@2.6.8 functions deploy --no-verify-jwt
+      - run:
+          name: Install Node.js
+          command: |
+            curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+      - run:
+          name: Install Supabase CLI
+          command: npm install -g supabase@2.6.8
+      - run:
+          name: Supabase Login
+          command: npx supabase@2.6.8 login --token $SUPABASE_ACCESS_TOKEN
+      - run:
+          name: Supabase DB Push
+          command: (yes || true) | npx supabase@2.6.8 db push --db-url $SUPABASE_DB_URL --debug
+      - run:
+          name: Deploy Supabase Functions
+          command: npx supabase@2.6.8 functions deploy --no-verify-jwt
   # Run cypress e2e tests on chrome
   test_e2e:
     docker: *docker

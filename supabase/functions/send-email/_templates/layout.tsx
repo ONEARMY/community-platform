@@ -54,7 +54,7 @@ export const Layout = ({ children, preview }: LayoutArgs) => {
                 alt="One Army"
                 height={85}
                 width={85}
-                src="https://community-platform-pr-4112.fly.dev/assets/img/one-army-logo.png"
+                src="https://community.preciousplastic.com/assets/img/one-army-logo.png"
               />
               {children}
               <p>

@@ -26,19 +26,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({ error })
   }
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
-
-  if (user) {
-    return Response.json({}, { headers })
-  }
-
   const code = url.searchParams.get('code')
   if (code) {
-    const result = await client.auth.exchangeCodeForSession(
-      url.searchParams.get('code') as string,
-    )
+    const result = await client.auth.exchangeCodeForSession(code)
 
     if (result.error) {
       return Response.json(

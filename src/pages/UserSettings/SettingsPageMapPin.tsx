@@ -1,19 +1,27 @@
 import { useEffect, useRef, useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { useNavigate } from 'react-router'
+import { Link } from '@remix-run/react'
 import { toJS } from 'mobx'
 import {
   Button,
   ConfirmModal,
   ExternalLink,
   FlagIconEvents,
+  Icon,
   Loader,
   MapWithPin,
 } from 'oa-components'
 import { IModerationStatus, ProfileTypeList } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { buttons, headings, mapForm } from 'src/pages/UserSettings/labels'
+import {
+  buttons,
+  headings,
+  inCompleteProfile,
+  mapForm,
+} from 'src/pages/UserSettings/labels'
 import { randomIntFromInterval } from 'src/utils/helpers'
+import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Alert, Box, Flex, Heading, Text } from 'theme-ui'
 
 import { createMarkerIcon } from '../Maps/Content/MapView/Sprites'
@@ -272,70 +280,109 @@ export const SettingsPageMapPin = () => {
       </Flex>
 
       <MapPinModerationComments mapPin={mapPin} />
+      {isProfileComplete(user) ? (
+        <Form
+          id={formId}
+          onSubmit={onSubmit}
+          initialValues={initialValues}
+          render={({ errors, submitFailed, submitting, handleSubmit }) => {
+            if (isLoading)
+              return (
+                <Loader label={mapForm.loading} sx={{ alignSelf: 'center' }} />
+              )
 
-      <Form
-        id={formId}
-        onSubmit={onSubmit}
-        initialValues={initialValues}
-        render={({ errors, submitFailed, submitting, handleSubmit }) => {
-          if (isLoading)
             return (
-              <Loader label={mapForm.loading} sx={{ alignSelf: 'center' }} />
+              <>
+                <SettingsFormNotifications
+                  errors={errors}
+                  notification={notification}
+                  submitFailed={submitFailed}
+                />
+
+                <LocationDataTextDisplay user={user} />
+
+                <Field
+                  name="location"
+                  render={({ input }) => {
+                    const { onChange, value } = input
+                    const location: ILocation =
+                      value && value.latlng ? value : defaultLocation
+
+                    return (
+                      <MapWithPin
+                        mapRef={newMapRef}
+                        position={location.latlng}
+                        updatePosition={(newPosition: ILatLng) => {
+                          onChange({ latlng: newPosition })
+                        }}
+                        markerIcon={markerIcon}
+                        zoom={2}
+                        center={[0, 0]}
+                      />
+                    )
+                  }}
+                />
+
+                <Button
+                  type="submit"
+                  form={formId}
+                  data-cy="save-map-pin"
+                  variant="primary"
+                  onClick={handleSubmit}
+                  disabled={submitting}
+                  sx={{ alignSelf: 'flex-start' }}
+                >
+                  {buttons.editPin}
+                </Button>
+
+                <DeleteMapPin
+                  setIsLoading={setIsLoading}
+                  setNotification={setNotification}
+                  user={user}
+                />
+              </>
             )
-
-          return (
-            <>
-              <SettingsFormNotifications
-                errors={errors}
-                notification={notification}
-                submitFailed={submitFailed}
-              />
-
-              <LocationDataTextDisplay user={user} />
-
-              <Field
-                name="location"
-                render={({ input }) => {
-                  const { onChange, value } = input
-                  const location: ILocation =
-                    value && value.latlng ? value : defaultLocation
-
-                  return (
-                    <MapWithPin
-                      mapRef={newMapRef}
-                      position={location.latlng}
-                      updatePosition={(newPosition: ILatLng) => {
-                        onChange({ latlng: newPosition })
-                      }}
-                      markerIcon={markerIcon}
-                      zoom={2}
-                      center={[0, 0]}
-                    />
-                  )
-                }}
-              />
-
-              <Button
-                type="submit"
-                form={formId}
-                data-cy="save-map-pin"
-                variant="primary"
-                onClick={handleSubmit}
-                disabled={submitting}
-                sx={{ alignSelf: 'flex-start' }}
-              >
-                {buttons.editPin}
-              </Button>
-
-              <DeleteMapPin
-                setIsLoading={setIsLoading}
-                setNotification={setNotification}
-                user={user}
-              />
-            </>
-          )
-        }}
-      />
+          }}
+        />
+      ) : (
+        <Alert
+          variant="info"
+          sx={{
+            marginTop: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+            alignItems: 'flex-start',
+          }}
+        >
+          <Text
+            variant="paragraph"
+            data-cy="IncompleteProfileTextDisplay"
+            data-testid="IncompleteProfileTextDisplay"
+            sx={{ fontSize: 1 }}
+          >
+            {inCompleteProfile}
+          </Text>
+          <Link
+            to="/settings"
+            data-testid="complete-profile-button"
+            data-cy="complete-profile-button"
+          >
+            <Button
+              type="button"
+              variant="secondary"
+              data-cy="mapPinPage"
+              backgroundColor="white"
+              sx={{ borderRadius: 3 }}
+            >
+              <Flex sx={{ gap: 2 }}>
+                <Icon glyph={'profile'} size={20} />
+                <Text variant="paragraph">Complete your profile</Text>
+              </Flex>
+            </Button>
+          </Link>
+        </Alert>
+      )}
     </Flex>
   )
 }

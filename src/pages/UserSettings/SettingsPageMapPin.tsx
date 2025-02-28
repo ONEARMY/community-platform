@@ -12,11 +12,7 @@ import {
 } from 'oa-components'
 import { IModerationStatus, ProfileTypeList } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import {
-  buttons,
-  headings,
-  mapForm,
-} from 'src/pages/UserSettings/labels'
+import { buttons, headings, mapForm } from 'src/pages/UserSettings/labels'
 import { randomIntFromInterval } from 'src/utils/helpers'
 import { Alert, Box, Flex, Heading, Text } from 'theme-ui'
 

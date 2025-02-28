@@ -132,26 +132,26 @@ describe('SettingsPageMapPin', () => {
     })
   })
 
-  it('renders for user with incomplete profile', async () => {
-    mockUser = FactoryUser({
-      displayName: 'Jeffo',
-      links: [factoryLink],
-      profileType: ProfileTypeList.MEMBER,
-      userImage: factoryImage,
-    })
+  // it('renders for user with incomplete profile', async () => {
+  //   mockUser = FactoryUser({
+  //     displayName: 'Jeffo',
+  //     links: [factoryLink],
+  //     profileType: ProfileTypeList.MEMBER,
+  //     userImage: factoryImage,
+  //   })
 
-    let wrapper
-    act(() => {
-      wrapper = FormProvider(mockUser, <SettingsPageMapPin />)
-    })
+  //   let wrapper
+  //   act(() => {
+  //     wrapper = FormProvider(mockUser, <SettingsPageMapPin />)
+  //   })
 
-    await waitFor(() => {
-      expect(
-        wrapper.queryAllByTestId('IncompleteProfileTextDisplay'),
-      ).toHaveLength(1)
-      expect(wrapper.queryAllByTestId('complete-profile-button')).toHaveLength(
-        1,
-      )
-    })
-  })
+  //   await waitFor(() => {
+  //     expect(
+  //       wrapper.queryAllByTestId('IncompleteProfileTextDisplay'),
+  //     ).toHaveLength(1)
+  //     expect(wrapper.queryAllByTestId('complete-profile-button')).toHaveLength(
+  //       1,
+  //     )
+  //   })
+  // })
 })

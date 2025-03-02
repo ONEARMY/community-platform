@@ -1,18 +1,11 @@
 import 'cypress-file-upload'
 
-import { createClient } from '@supabase/supabase-js'
-import { signInWithEmailAndPassword } from 'firebase/auth'
 import { deleteDB } from 'idb'
 
-import { Auth, TestDB } from './db/firebase'
+import { TestDB } from './db/firebase'
 
 import type { ILibrary, IQuestionDB, IResearchDB } from 'oa-shared'
 import type { IUserSignUpDetails } from '../utils/TestUtils'
-import type { firebase } from './db/firebase'
-
-type SeedData = {
-  [tableName: string]: Array<Record<string, any>>
-}
 
 declare global {
   namespace Cypress {
@@ -20,17 +13,9 @@ declare global {
       checkCommentInViewport()
       checkCommentItem(comment: string, length: number): Chainable<void>
       clearServiceWorkers(): Promise<void>
-      deleteCurrentUser(): Promise<void>
       deleteIDB(name: string): Promise<boolean>
       interceptAddressSearchFetch(addressResponse): Chainable<void>
       interceptAddressReverseFetch(addressResponse): Chainable<void>
-      /** login with firebase credentials, optionally check ui login element updated*/
-      login(
-        username: string,
-        password: string,
-      ): Promise<firebase.auth.UserCredential>
-      /** logout of firebase, optionally check ui login element updated*/
-      logout(checkUI?: boolean): Chainable<void>
       queryDocuments(
         collectionName: string,
         fieldPath: string,
@@ -39,7 +24,8 @@ declare global {
       ): Chainable<any[]>
       addProject(
         project: ILibrary.DB,
-        user: IUserSignUpDetails,
+        username: string,
+        random: string,
       ): Chainable<void>
       addQuestion(
         question: IQuestionDB,
@@ -47,10 +33,10 @@ declare global {
       ): Chainable<void>
       addResearch(
         research: IResearchDB,
-        user: IUserSignUpDetails,
+        username: string,
+        random: string,
       ): Chainable<void>
       step(message: string)
-      setSessionStorage(key: string, value: string): Promise<void>
     }
   }
 }
@@ -82,13 +68,6 @@ Cypress.Commands.add('deleteIDB', (name: string) => {
     .then((deleted) => cy.log('deleted?', deleted))
 })
 
-Cypress.Commands.add('setSessionStorage', (key: string, value: string) => {
-  cy.wrap(`setSessionStorage - ${key}:${value}`).then(() => {
-    cy.window().its('sessionStorage').invoke('setItem', key, value)
-    cy.window().its('sessionStorage').invoke('getItem', key).should('eq', value)
-  })
-})
-
 Cypress.Commands.add('clearServiceWorkers', () => {
   cy.window().then((w) => {
     cy.wrap('Clearing service workers').then(() => {
@@ -107,61 +86,6 @@ Cypress.Commands.add('clearServiceWorkers', () => {
       })
     })
   })
-
-  Cypress.Commands.add('logout', (checkUI = true) => {
-    cy.wrap('logging out').then(() => {
-      return new Cypress.Promise((resolve) => {
-        Auth.signOut().then(() => resolve())
-      })
-    })
-    cy.wait(2000)
-    cy.wrap(checkUI ? 'check logout ui' : 'skip ui check').then(() => {
-      if (checkUI) {
-        cy.get('[data-cy=login]')
-      }
-    })
-  })
-})
-
-/**
- * Login and logout commands use the sytem interface to log a user in or out
- */
-Cypress.Commands.add('login', async (email: string, password: string) => {
-  const signin = signInWithEmailAndPassword(Auth, email, password).catch(
-    (e) => {
-      cy.log(`User could not sign in programmatically!`)
-      console.error(e)
-    },
-  )
-
-  return signin as any
-})
-
-Cypress.Commands.add('logout', (checkUI = true) => {
-  cy.wrap('logging out').then(async () => {
-    return await Auth.signOut()
-  })
-  cy.wrap(checkUI ? 'check logout ui' : 'skip ui check').then(() => {
-    if (checkUI) {
-      cy.get('[data-cy=login]')
-    }
-  })
-})
-
-Cypress.Commands.add('deleteCurrentUser', () => {
-  return new Cypress.Promise((resolve, reject) => {
-    if (Auth.currentUser) {
-      Auth.currentUser
-        .delete()
-        .then(() => resolve(null))
-        .catch((err) => {
-          console.error(err)
-          reject(err)
-        })
-    } else {
-      resolve(null)
-    }
-  })
 })
 
 Cypress.Commands.add(
@@ -177,8 +101,8 @@ Cypress.Commands.add(
   },
 )
 
-Cypress.Commands.add('addProject', (project, user) => {
-  const slug = `${project.slug}-${user.username}`
+Cypress.Commands.add('addProject', (project, username, random) => {
+  const slug = `${project.slug}-${username}-${random}`
 
   return firestore.addDocument('library', {
     ...project,
@@ -186,17 +110,8 @@ Cypress.Commands.add('addProject', (project, user) => {
   })
 })
 
-Cypress.Commands.add('addQuestion', (question, user) => {
-  const slug = `${question.slug}-for-${user.username}`
-
-  return firestore.addDocument('questions', {
-    ...question,
-    slug,
-  })
-})
-
-Cypress.Commands.add('addResearch', (research, user) => {
-  const slug = `${user.username}-in-${research.slug}`
+Cypress.Commands.add('addResearch', (research, username, random) => {
+  const slug = `${username}-in-${research.slug}-${random}`
 
   return firestore.addDocument('research', {
     ...research,
@@ -242,36 +157,3 @@ Cypress.Commands.add('checkCommentItem', (comment: string, length: number) => {
   cy.checkCommentInViewport()
   cy.contains(comment)
 })
-
-const supabaseClient = (tenantId: string) =>
-  createClient(Cypress.env('SUPABASE_API_URL'), Cypress.env('SUPABASE_KEY'), {
-    global: {
-      headers: {
-        'x-tenant-id': tenantId,
-      },
-    },
-  })
-
-export const seedDatabase = async (
-  data: SeedData,
-  tenantId: string,
-): Promise<any> => {
-  const supabase = supabaseClient(tenantId)
-  const results = {}
-
-  // Convert to Promise.All
-  for (const [table, rows] of Object.entries(data)) {
-    results[table] = await supabase.from(table).insert(rows).select()
-  }
-
-  return results
-}
-
-export const clearDatabase = async (tables: string[], tenantId: string) => {
-  const supabase = supabaseClient(tenantId)
-
-  // sequential so there are no constraint issues
-  for (const table of tables) {
-    await supabase.from(table).delete().eq('tenant_id', tenantId)
-  }
-}

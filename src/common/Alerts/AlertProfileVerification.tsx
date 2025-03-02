@@ -33,7 +33,8 @@ export const AlertProfileVerification = () => {
 
     if (!isVerificationSuccessful) {
       try {
-        await userStore.sendEmailVerification()
+        // TODO
+        // await userStore.sendEmailVerification()
         setVerificationState('sent')
       } catch (error) {
         setVerificationState('error')

@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker'
-import { signInWithEmailAndPassword } from 'firebase/auth'
 import { EmailNotificationFrequency } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -11,45 +10,11 @@ import type { ILocation } from 'oa-shared'
 vi.mock('../common/module.store')
 vi.mock('../Aggragations/aggregations.store')
 
-vi.mock('firebase/auth', async () => {
-  const auth = await vi.importActual('firebase/auth')
-  return {
-    ...auth,
-    getAuth: () => ({
-      ...auth,
-      currentUser: {
-        displayName: 'testDisplayName',
-        uid: 'testUid',
-      },
-    }),
-    createUserWithEmailAndPassword: vi.fn(),
-    signInWithEmailAndPassword: vi.fn(),
-    onAuthStateChanged: vi.fn(),
-    signOut: vi.fn(),
-    updateProfile: vi.fn(),
-  }
-})
-
 describe('userStore', () => {
   let store
 
   beforeEach(() => {
     store = new UserStore({} as any)
-  })
-
-  describe('login', () => {
-    it('hands off to firebase auth', async () => {
-      const userName = faker.internet.userName()
-      const password = faker.internet.password()
-
-      await store.login(userName, password)
-
-      expect(signInWithEmailAndPassword).toHaveBeenCalledWith(
-        expect.anything(),
-        userName,
-        password,
-      )
-    })
   })
 
   describe('getUserByUsername', () => {
@@ -196,20 +161,6 @@ describe('userStore', () => {
           badges: { badge1: true, badge2: false },
         }),
       )
-    })
-  })
-
-  describe('getUserEmail', () => {
-    it('fetches correct property off authUser', async () => {
-      // Act
-      const email = faker.internet.email()
-      store.authUser = {
-        email,
-      }
-      const res = await store.getUserEmail()
-
-      // Assert
-      expect(res).toBe(email)
     })
   })
 
@@ -445,35 +396,6 @@ describe('userStore', () => {
       expect(async () => {
         await store.deleteUserLocation(values)
       }).rejects.toThrow('User not found')
-    })
-  })
-
-  describe('registerNewUser', () => {
-    it('registers a new user', async () => {
-      store.loadUserAggregations = vi.fn()
-      store.authUnsubscribe = vi.fn()
-
-      await store.registerNewUser(
-        'newuser@example.com',
-        'password',
-        'testDisplayName',
-      )
-
-      expect(store.db.set).toHaveBeenCalledWith({
-        coverImages: [],
-        links: [],
-        verified: false,
-        _authID: 'testUid',
-        displayName: 'testDisplayName',
-        userName: 'testdisplayname',
-        notifications: [],
-        profileType: 'member',
-        profileCreated: expect.any(String),
-        profileCreationTrigger: 'registration',
-        notification_settings: {
-          emailFrequency: EmailNotificationFrequency.WEEKLY,
-        },
-      })
     })
   })
 })

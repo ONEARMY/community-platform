@@ -43,6 +43,8 @@ Please make sure to read the [Contributing Guide](/CONTRIBUTING.md) before makin
 
 It also covers lots of handy additional information such as setting up a local server, or finding [good first issues](https://github.com/ONEARMY/community-platform/issues?q=is%3Aissue+is%3Aopen+label%3A%22Good+first+issue%22) to work on.
 
+To startup the project locally use `yarn start`, but before that, follow [Getting Started](/docs/supabase.md)
+
 If needed you can [drop us a line here](mailto:platform@onearmy.earth?subject=contact%20from%20github) 👋
 Or join our [Discord channel](https://discord.gg/gJ7Yyk4)
 
@@ -185,6 +187,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="http://www.linkedin.com/in/joseh29"><img src="https://avatars.githubusercontent.com/u/70706814?v=4?s=60" width="60px;" alt="José"/><br /><sub><b>José</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=joseh29" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/maximevtush"><img src="https://avatars.githubusercontent.com/u/154841002?v=4?s=60" width="60px;" alt="Maxim Evtush"/><br /><sub><b>Maxim Evtush</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=maximevtush" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/kilavvy"><img src="https://avatars.githubusercontent.com/u/140459108?v=4?s=60" width="60px;" alt="kilavvy"/><br /><sub><b>kilavvy</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=kilavvy" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
@@ -197,4 +200,3 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
 
 This project adopted the [all-contributors](https://allcontributors.org) specification in June 2022.
 Contributions of any kind are welcome!
-

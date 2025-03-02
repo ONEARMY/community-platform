@@ -1,6 +1,5 @@
-import { observer } from 'mobx-react-lite'
-
-import { useCommonStores } from './hooks/useCommonStores'
+import { useContext } from 'react'
+import { SessionContext } from 'src/pages/common/SessionContext'
 
 interface IProps {
   loggedIn: React.ReactNode
@@ -9,13 +8,11 @@ interface IProps {
 
 type IUserVerificationConditions = 'loggedIn' | 'loggedOut'
 
-export const UserAction = observer((props: IProps) => {
+export const UserAction = (props: IProps) => {
+  const session = useContext(SessionContext)
   const { loggedIn, loggedOut } = props
 
-  const { userStore } = useCommonStores().stores
-  const authUser = userStore.authUser
-
-  const userCondition: IUserVerificationConditions = authUser
+  const userCondition: IUserVerificationConditions = session?.id
     ? 'loggedIn'
     : 'loggedOut'
 
@@ -25,4 +22,4 @@ export const UserAction = observer((props: IProps) => {
     default:
       return loggedOut
   }
-})
+}

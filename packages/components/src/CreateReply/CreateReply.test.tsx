@@ -53,7 +53,7 @@ describe('CreateReply', () => {
       exact: false,
     })
     fireEvent.change(emptyTextArea, {
-      target: { value: 'A commment for this field' },
+      target: { value: 'A comment for this field' },
     })
 
     const submitButton = screen.getByText('Leave a reply')

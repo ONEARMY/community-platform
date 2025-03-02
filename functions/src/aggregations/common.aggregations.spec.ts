@@ -41,7 +41,7 @@ describe('Common Aggregations', () => {
   })
 
   it('runs aggregation with initial seed', async () => {
-    // Create 2 intial documents
+    // Create 2 initial documents
     const ref1 = db.collection('test_source').doc('doc_1')
     const ref2 = db.collection('test_source').doc('doc_2')
     await ref1.set({ test_field: 'before' })

@@ -1,4 +1,5 @@
-import { clearDatabase } from './commands'
+import { clearDatabase } from '../utils/TestUtils'
+import { seedAccounts } from './seedAccounts'
 import { seedCategories, seedQuestions } from './seedQuestions'
 
 /**
@@ -20,8 +21,13 @@ before(() => {
     throw error
   })
   cy.then(async () => {
+    // clearDatabase(
+    //   ['profiles', 'questions', 'comments', 'categories', 'tags'],
+    // )
+
+    const profiles = await seedAccounts()
     await seedCategories()
-    await seedQuestions()
+    await seedQuestions(profiles)
   })
   localStorage.clear()
   cy.clearServiceWorkers()
@@ -30,17 +36,16 @@ before(() => {
 
 afterEach(() => {
   // ensure all tests are also logged out (skip ui check in case page not loaded)
-  cy.logout(false)
+  cy.logout()
 })
 
 after(() => {
-  const tenantId = Cypress.env('TENANT_ID')
   Cypress.log({
     displayName: 'Clearing database for tenant',
-    message: tenantId,
+    message: Cypress.env('TENANT_ID'),
   })
   clearDatabase(
     ['profiles', 'questions', 'comments', 'categories', 'tags'],
-    tenantId,
+    Cypress.env('TENANT_ID'),
   )
 })

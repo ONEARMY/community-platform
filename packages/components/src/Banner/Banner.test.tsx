@@ -5,7 +5,7 @@ import { render } from '../test/utils'
 import { Banner } from './Banner'
 
 describe('Banner', () => {
-  it('sets the default varient if none is provided', () => {
+  it('sets the default variant if none is provided', () => {
     const onClick = vi.fn()
     const { getByText } = render(<Banner onClick={onClick}>Some words</Banner>)
 

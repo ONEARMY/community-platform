@@ -97,7 +97,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
 
               <CreateCommentSupabase
                 onSubmit={(comment) => onReply(comment)}
-                buttonLabel="Leave a reply"
+                isReply
               />
             </>
           )}

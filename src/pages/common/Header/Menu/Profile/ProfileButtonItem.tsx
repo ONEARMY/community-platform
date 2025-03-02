@@ -1,6 +1,5 @@
 import React from 'react'
-import { Link } from '@remix-run/react'
-import { Button } from 'oa-components'
+import { Button, ReturnPathLink } from 'oa-components'
 
 import { MobileMenuContext } from '../../MobileMenuContext'
 
@@ -16,11 +15,11 @@ interface IProps {
   sx?: any
 }
 
-const ProfileButtonItem = (props: IProps) => {
+export const ProfileButtonItem = (props: IProps) => {
   const mobileMenuContext = React.useContext(MobileMenuContext)
 
   return (
-    <Link to={props.link} style={{ minWidth: 'auto' }}>
+    <ReturnPathLink to={props.link} style={{ minWidth: 'auto' }}>
       <Button
         type="button"
         onClick={() => props.isMobile && mobileMenuContext.setIsVisible(false)}
@@ -36,8 +35,6 @@ const ProfileButtonItem = (props: IProps) => {
       >
         {props.text}
       </Button>
-    </Link>
+    </ReturnPathLink>
   )
 }
-
-export default ProfileButtonItem

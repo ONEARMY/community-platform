@@ -1,3 +1,9 @@
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router'
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -96,11 +102,20 @@ describe('Impact', () => {
       }
       const user = FactoryUser({ impact, userName: 'activeUser' })
 
-      render(
-        <Provider {...useCommonStores().stores}>
-          <Impact impact={impact} user={user} />
-        </Provider>,
+      const router = createMemoryRouter(
+        createRoutesFromElements(
+          <Route
+            index
+            element={
+              <Provider {...useCommonStores().stores}>
+                <Impact impact={impact} user={user} />
+              </Provider>
+            }
+          ></Route>,
+        ),
       )
+
+      const screen = render(<RouterProvider router={router} />)
 
       await screen.findAllByText(missing.owner.label)
       await screen.findAllByText(invisible.owner.label)

@@ -11,10 +11,25 @@ Install Docker Desktop.
 Make sure you have the docker app open.
 
 Run `supabase start` (Ensure you run it on the project folder root.)
+Run `supabase status`
+Create a .env.local file at the project root (same level as .env) and fill in the keys with values from the command above:
+SUPABASE_API_URL={API URL}
+SUPABASE_KEY={anon key}
+SUPABASE_SERVICE_ROLE_KEY={service_role key}
+
+Run `supabase db push` to run the DB migration scripts and update your local database schema. (you will have to run this again whenever there are DB schema changes)
 
 Create a `public` bucket named `precious-plastic` for local dev.
 Add the policy named `tenant_isolation` for all operations: `(bucket_id = ((current_setting('request.headers'::text, true))::json ->> 'x-tenant-id'::text))`
 Ideally this would be automated.
+
+Now you can start the project with `yarn start`.
+To sign-up locally, you can get the email confirmation link at http://localhost:54324/monitor
+
+## Migrations
+
+After making schema changes, use the this command to create a migration file:
+`supabase db diff --file [migration_name]`
 
 ## Running Cypress Tests
 
@@ -25,10 +40,12 @@ SUPABASE_SERVICE_ROLE_KEY=your service key
 
 All done! Tests will use your local database. More info about how it works below.
 
-## Migrations
+## Supabase Edge Functions
 
-After making schema changes, use the this command to create a migration file:
-`supabase db diff --file [migration_name]`
+Currently used for customizing Auth Emails.
+Supabase Auth Hooks have a timeout of 5 seconds which can easily be exceeded. To reduce the risk, the `resend` call is not awaited.
+If it is exceeded, the user gets an error on the UI, but still receives the email and can continue his flow.
+Haven't managed to run the functions locally yet (contributions welcome!).
 
 ### Cypress with Supabase
 

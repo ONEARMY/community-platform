@@ -125,11 +125,11 @@ const ResearchUpdate = (props: IProps) => {
             <Flex sx={{ flexDirection: 'column' }} py={4} px={4}>
               <Flex sx={{ flexDirection: ['column', 'row', 'row'] }}>
                 <Box sx={{ width: ['100%', '75%', '75%'] }}>
-                  {contributors.length > 0 ? (
+                  {contributors.length > 0 && (
                     <Box sx={{ mb: 2 }} data-testid="collaborator/creator">
                       <Username user={contributors[0]} />
                     </Box>
-                  ) : null}
+                  )}
 
                   <Heading as="h2" sx={{ mb: 2 }}>
                     {title}

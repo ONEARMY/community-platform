@@ -925,6 +925,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "kilavvy",
+      "name": "kilavvy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/140459108?v=4",
+      "profile": "https://github.com/kilavvy",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "projectName": "community-platform",

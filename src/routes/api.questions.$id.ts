@@ -1,5 +1,4 @@
 import { UserRole } from 'oa-shared'
-import { verifyFirebaseToken } from 'src/firestore/firestoreAdmin.server'
 import { Question } from 'src/models/question.model'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { convertToSlug } from 'src/utils/slug'
@@ -7,7 +6,7 @@ import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { DBImage } from 'src/models/image.model'
 import type { DBProfile } from 'src/models/profile.model'
 import type { DBQuestion } from 'src/models/question.model'
@@ -28,16 +27,16 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         : null,
     }
 
-    const tokenValidation = await verifyFirebaseToken(
-      request.headers.get('firebaseToken')!,
-    )
     const { client, headers } = createSupabaseServerClient(request)
+
+    const {
+      data: { user },
+    } = await client.auth.getUser()
 
     const { valid, status, statusText } = await validateRequest(
       params,
       request,
-      tokenValidation.valid,
-      tokenValidation.user_id,
+      user,
       data,
       client,
     )
@@ -174,17 +173,12 @@ function validateImages(images: File[]) {
 async function validateRequest(
   params: Params<string>,
   request: Request,
-  isTokenValid: boolean,
-  userId: string,
+  user: User | null,
   data: any,
   client: SupabaseClient,
 ) {
-  if (!isTokenValid) {
+  if (!user) {
     return { status: 401, statusText: 'unauthorized' }
-  }
-
-  if (!userId) {
-    return { status: 400, statusText: 'user not found' }
   }
 
   if (request.method !== 'PUT') {
@@ -225,22 +219,22 @@ async function validateRequest(
 
   const existingQuestion = existingQuestionResult.data as DBQuestion
 
-  const userRequest = await client
+  const profileRequest = await client
     .from('profiles')
-    .select()
-    .eq('firebase_auth_id', userId)
+    .select('id,roles')
+    .eq('auth_id', user.id)
     .limit(1)
 
-  if (userRequest.error || !userRequest.data?.at(0)) {
+  if (profileRequest.error || !profileRequest.data?.at(0)) {
     return { status: 400, statusText: 'User not found' }
   }
 
-  const user = userRequest.data[0] as DBProfile
+  const profile = profileRequest.data[0] as DBProfile
 
   if (
-    existingQuestion.created_by !== user.id &&
-    !user.roles?.includes(UserRole.ADMIN) &&
-    !user.roles?.includes(UserRole.SUPER_ADMIN)
+    existingQuestion.created_by !== profile.id &&
+    !profile.roles?.includes(UserRole.ADMIN) &&
+    !profile.roles?.includes(UserRole.SUPER_ADMIN)
   ) {
     return { status: 403, statusText: 'Unauthorized' }
   }

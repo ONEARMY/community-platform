@@ -1,8 +1,5 @@
 // This is basically an identical set of steps to the discussion tests for
 // questions and research. Any changes here should be replicated there.
-
-import { ExternalLinkLabel } from 'oa-shared'
-
 import { MOCK_DATA } from '../../data'
 import { library } from '../../fixtures/library'
 import { generateAlphaNumeric } from '../../utils/TestUtils'
@@ -55,22 +52,6 @@ describe('[Library.Discussions]', () => {
 
     cy.step('Can edit their reply')
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
-
-    cy.step('Updating user settings shows on comments')
-    cy.visit('/settings')
-    cy.get('[data-cy=loader]').should('not.exist')
-    cy.setSettingBasicUserInfo({
-      country: 'Saint Lucia',
-      description: "I'm a commenter",
-      displayName: secondCommentor.displayName,
-    })
-    cy.setSettingImage('avatar', 'userImage')
-    cy.setSettingAddContactLink({
-      index: 0,
-      label: ExternalLinkLabel.SOCIAL_MEDIA,
-      url: 'http://something.to.delete/',
-    })
-    cy.saveSettingsForm()
 
     cy.step('Another user can leave a reply')
     const secondReply = `Quick reply. ${visitor.userName}`

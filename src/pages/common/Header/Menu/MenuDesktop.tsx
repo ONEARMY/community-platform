@@ -9,16 +9,18 @@ import { Flex } from 'theme-ui'
 import { EnvironmentContext } from '../../EnvironmentContext'
 
 const MenuLink = styled(NavLink)`
-  padding: 0px ${(props) => props.theme.space[4]}px;
+  padding: 0px ${(props) => props.theme?.space?.[4] || 16}px;
   color: ${'black'};
   position: relative;
+
   > div {
-    z-index: ${(props) => props.theme.zIndex.default};
+    z-index: ${(props) => props.theme?.zIndex?.default || 1};
     position: relative;
     &:hover {
       opacity: 0.7;
     }
   }
+
   &.active {
     &:after {
       content: '';
@@ -27,11 +29,13 @@ const MenuLink = styled(NavLink)`
       display: block;
       position: absolute;
       bottom: -6px;
-      background-color: ${(props) => props.theme.colors.accent.base};
+      background-color: ${(props) =>
+        props.theme?.colors?.accent?.base || 'blue'};
       mask-size: contain;
       mask-image: url(\"${MenuCurrent}\");
+
       mask-repeat: no-repeat;
-      z-index: ${(props) => props.theme.zIndex.level};
+      z-index: ${(props) => props.theme?.zIndex?.level || 10};
       left: 50%;
       transform: translateX(-50%);
       pointer-events: none;

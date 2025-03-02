@@ -1,4 +1,4 @@
-import { createRef, useEffect, useState } from 'react'
+import { createRef, useContext, useEffect, useState } from 'react'
 import { compareDesc } from 'date-fns'
 import { Box, Flex, Text } from 'theme-ui'
 
@@ -6,6 +6,7 @@ import { Button } from '../Button/Button'
 import { CommentAvatar } from '../CommentAvatar/CommentAvatar'
 import { DisplayDate } from '../DisplayDate/DisplayDate'
 import { LinkifyText } from '../LinkifyText/LinkifyText'
+import { AuthorsContext } from '../providers/AuthorsContext'
 import { Username } from '../Username/Username'
 
 import type { Comment } from 'oa-shared'
@@ -30,6 +31,7 @@ export const CommentDisplay = (props: IProps) => {
     setShowEditModal,
   } = props
   const textRef = createRef<any>()
+  const { authors } = useContext(AuthorsContext)
 
   const [textHeight, setTextHeight] = useState(0)
   const [isShowMore, setShowMore] = useState(false)
@@ -69,10 +71,23 @@ export const CommentDisplay = (props: IProps) => {
           border: `${comment.highlighted ? '2px dashed black' : 'none'}`,
         }}
       >
-        <Box data-cy="commentAvatar" data-testid="commentAvatar">
+        <Box
+          data-cy="commentAvatar"
+          data-testid="commentAvatar"
+          sx={{
+            flexDirection: 'column',
+            position: 'relative',
+            display: 'inline-block',
+          }}
+        >
           <CommentAvatar
             name={comment.createdBy?.name}
             photoUrl={comment.createdBy?.photoUrl}
+            isCommentAuthor={
+              comment.createdBy?.id
+                ? authors.includes(comment.createdBy?.id)
+                : false
+            }
           />
         </Box>
 

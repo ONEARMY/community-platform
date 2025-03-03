@@ -1,3 +1,4 @@
+import { FRIENDLY_MESSAGES } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
@@ -41,8 +42,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       {
         error:
           result.error.code === 'email_exists'
-            ? 'That email is already taken!'
-            : 'Oops, something went wrong!',
+            ? FRIENDLY_MESSAGES['auth/email-already-in-use']
+            : FRIENDLY_MESSAGES['generic'],
       },
       { headers, status: 400 },
     )

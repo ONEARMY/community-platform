@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Form } from 'react-final-form'
 import { Accordion, Button, FieldInput } from 'oa-components'
+import { FRIENDLY_MESSAGES } from 'oa-shared'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { UserContactError } from 'src/pages/User/contact/UserContactError'
@@ -48,7 +49,7 @@ export const ChangePasswordForm = () => {
 
       setSubmitResults({
         type: 'success',
-        message: `Password changed.`,
+        message: FRIENDLY_MESSAGES['auth/password-changed'],
       })
     } catch (error) {
       setSubmitResults({ type: 'error', message: error.message })

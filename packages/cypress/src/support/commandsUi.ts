@@ -1,5 +1,5 @@
 import { form } from '../../../../src/pages/UserSettings/labels'
-import { generateNewUserDetails, supabaseAdminClient } from '../utils/TestUtils'
+import { generateNewUserDetails } from '../utils/TestUtils'
 
 import type { IUser } from 'oa-shared'
 
@@ -266,30 +266,4 @@ Cypress.Commands.add('signUpNewUser', (user?) => {
   cy.fillSignupForm(username, email, password)
   cy.get('[data-cy=submit]').click()
   cy.url().should('include', 'sign-up-message')
-  cy.confirmUser(username)
-})
-
-Cypress.Commands.add('confirmUser', (username) => {
-  const adminClient = supabaseAdminClient()
-  const apiUrl = Cypress.env('TENANT_ID')
-
-  adminClient
-    .from('profiles')
-    .select()
-    .eq('username', username)
-    .single()
-    .then((result: any) => {
-      // For CI test run - confirm user password
-      adminClient.auth.admin
-        .getUserById(result.data.auth_id)
-        .then((result: any) => {
-          console.log(result.data.user)
-          console.log(`Token: ${result.data.user.confirmation_token}`)
-          if (result.data.user.confirmation_token) {
-            const path = `${apiUrl}/auth/v1/verify?token=${result.confirmation_token}&type=signup&redirect_to=${cy.location('origin')}/email-confirmation/`
-            console.log(`Path: ${path}`)
-            cy.visit(path)
-          }
-        })
-    })
 })

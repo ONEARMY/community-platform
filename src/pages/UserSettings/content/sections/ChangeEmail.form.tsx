@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { Accordion, Button, FieldInput } from 'oa-components'
+import { FRIENDLY_MESSAGES } from 'oa-shared'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { SessionContext } from 'src/pages/common/SessionContext'
@@ -45,8 +46,7 @@ export const ChangeEmailForm = () => {
 
       setSubmitResults({
         type: 'success',
-        message:
-          "We've sent you an email. Please click the confirmation link to proceed with the change!",
+        message: FRIENDLY_MESSAGES['auth/email-changed'],
       })
     } catch (error) {
       setSubmitResults({ type: 'error', message: error.message })

@@ -46,7 +46,10 @@ export const CreateCommentSupabase = observer((props: Props) => {
       }}
     >
       <Flex sx={{ flexDirection: 'column' }}>
-        <Flex data-target="create-comment-container" sx={{ gap: 2 }}>
+        <Flex
+          data-target="create-comment-container"
+          sx={{ gap: 2, padding: isReply ? 2 : 0 }}
+        >
           <Box
             sx={{
               lineHeight: 0,

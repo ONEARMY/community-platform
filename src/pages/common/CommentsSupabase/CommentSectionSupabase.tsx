@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CommentsTitle } from 'oa-components'
+import { AuthorsContext, CommentsTitle } from 'oa-components'
 import { Comment } from 'oa-shared'
 import { commentService } from 'src/services/commentService'
 import { Box, Button, Flex } from 'theme-ui'
@@ -11,10 +11,14 @@ import type { Reply } from 'oa-shared'
 
 type CommentsSupabaseProps = {
   sourceId: number | string
+  authors: Array<number>
 }
 const commentPageSize = 10
 
-export const CommentSectionSupabase = ({ sourceId }: CommentsSupabaseProps) => {
+export const CommentSectionSupabase = ({
+  sourceId,
+  authors,
+}: CommentsSupabaseProps) => {
   const [comments, setComments] = useState<Comment[]>([])
   const [newCommentIds, setNewCommentIds] = useState<number[]>([])
   const [commentLimit, setCommentLimit] = useState<number>(commentPageSize)
@@ -210,50 +214,52 @@ export const CommentSectionSupabase = ({ sourceId }: CommentsSupabaseProps) => {
   }
 
   return (
-    <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-      <CommentsTitle comments={comments} />
+    <AuthorsContext.Provider value={{ authors }}>
+      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+        <CommentsTitle comments={comments} />
 
-      {displayedComments.map((comment) => (
-        <Box key={comment.id}>
-          <CommentItemSupabase
-            comment={comment}
-            onEdit={editComment}
-            onDelete={deleteComment}
-            onReply={(reply) => postReply(comment.id, reply)}
-            onEditReply={(id, reply) => editReply(id, reply, comment.id)}
-            onDeleteReply={(id) => deleteReply(id, comment.id)}
-          />
-        </Box>
-      ))}
+        {displayedComments.map((comment) => (
+          <Box key={comment.id}>
+            <CommentItemSupabase
+              comment={comment}
+              onEdit={editComment}
+              onDelete={deleteComment}
+              onReply={(reply) => postReply(comment.id, reply)}
+              onEditReply={(id, reply) => editReply(id, reply, comment.id)}
+              onDeleteReply={(id) => deleteReply(id, comment.id)}
+            />
+          </Box>
+        ))}
 
-      {displayShowMore && (
-        <Flex>
-          <Button
-            type="button"
-            sx={{ margin: '0 auto' }}
-            variant="outline"
-            data-cy="show-more-comments"
-            onClick={() => setCommentLimit((prev) => prev + commentPageSize)}
-          >
-            show more comments
-          </Button>
-        </Flex>
-      )}
+        {displayShowMore && (
+          <Flex>
+            <Button
+              type="button"
+              sx={{ margin: '0 auto' }}
+              variant="outline"
+              data-cy="show-more-comments"
+              onClick={() => setCommentLimit((prev) => prev + commentPageSize)}
+            >
+              show more comments
+            </Button>
+          </Flex>
+        )}
 
-      {newComments.map((comment) => (
-        <Box key={comment.id}>
-          <CommentItemSupabase
-            comment={comment}
-            onEdit={editComment}
-            onDelete={deleteComment}
-            onReply={(reply) => postReply(comment.id, reply)}
-            onEditReply={(id, reply) => editReply(id, reply, comment.id)}
-            onDeleteReply={(id) => deleteReply(id, comment.id)}
-          />
-        </Box>
-      ))}
+        {newComments.map((comment) => (
+          <Box key={comment.id}>
+            <CommentItemSupabase
+              comment={comment}
+              onEdit={editComment}
+              onDelete={deleteComment}
+              onReply={(reply) => postReply(comment.id, reply)}
+              onEditReply={(id, reply) => editReply(id, reply, comment.id)}
+              onDeleteReply={(id) => deleteReply(id, comment.id)}
+            />
+          </Box>
+        ))}
 
-      <CreateCommentSupabase onSubmit={postComment} />
-    </Flex>
+        <CreateCommentSupabase onSubmit={postComment} />
+      </Flex>
+    </AuthorsContext.Provider>
   )
 }

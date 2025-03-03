@@ -95,12 +95,14 @@ export const CommentSectionSupabase = ({ sourceId }: CommentsSupabaseProps) => {
   const editComment = async (id: number, comment: string) => {
     try {
       const result = await commentService.editcomment(sourceId, id, comment)
+      const now = new Date()
 
       if (result.status === 204) {
         setComments((comments) =>
           comments.map((x) => {
             if (x.id === id) {
               x.comment = comment
+              x.modifiedAt = now
             }
             return x
           }),
@@ -160,6 +162,7 @@ export const CommentSectionSupabase = ({ sourceId }: CommentsSupabaseProps) => {
   const editReply = async (id: number, replyText: string, parentId: number) => {
     try {
       const result = await commentService.editcomment(sourceId, id, replyText)
+      const now = new Date()
 
       if (result.status === 204) {
         setComments((comments) =>
@@ -168,6 +171,7 @@ export const CommentSectionSupabase = ({ sourceId }: CommentsSupabaseProps) => {
               comment.replies = comment.replies?.map((reply) => {
                 if (reply.id === id) {
                   reply.comment = replyText
+                  reply.modifiedAt = now
                 }
                 return reply
               })

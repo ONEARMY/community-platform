@@ -58,72 +58,69 @@ export const CommentDisplay = (props: IProps) => {
           />
         </Box>
 
-        <Flex
-          sx={{
-            flexDirection: 'column',
-            flex: 1,
-          }}
-        >
+        <Flex sx={{ flexDirection: 'column', flex: 1 }}>
           <Flex
             sx={{
-              flexWrap: 'wrap',
               justifyContent: 'space-between',
-              flexDirection: ['column', 'row'],
+              flexDirection: 'column',
               gap: 2,
             }}
           >
             <Flex
               sx={{
-                alignItems: 'baseline',
                 gap: 2,
                 flexDirection: 'row',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
               }}
             >
-              <Username
-                user={{
-                  userName: comment.createdBy?.username || '',
-                  countryCode: comment.createdBy?.country,
-                  isVerified: comment.createdBy?.isVerified,
-                  // TODO: isSupporter
-                }}
-              />
-              <Text sx={{ fontSize: 1, color: 'darkGrey' }}>
-                {comment.modifiedAt &&
-                  compareDesc(comment.createdAt, comment.modifiedAt) > 0 &&
-                  'Edited '}
-                <DisplayDate date={comment.modifiedAt || comment.createdAt} />
-              </Text>
-            </Flex>
-
-            {isEditable && (
-              <Flex
-                sx={{
-                  alignItems: 'flex-end',
-                  gap: 2,
-                }}
-              >
-                <Button
-                  type="button"
-                  data-cy={`${itemType}: edit button`}
-                  variant="subtle"
-                  small={true}
-                  icon="edit"
-                  onClick={() => setShowEditModal(true)}
-                >
-                  edit
-                </Button>
-                <Button
-                  type="button"
-                  data-cy={`${itemType}: delete button`}
-                  variant="subtle"
-                  small={true}
-                  icon="delete"
-                  onClick={() => setShowDeleteModal(true)}
-                >
-                  delete
-                </Button>
+              <Flex sx={{ alignItems: 'center', gap: 2 }}>
+                <Username
+                  user={{
+                    userName: comment.createdBy?.username || '',
+                    countryCode: comment.createdBy?.country,
+                    isVerified: comment.createdBy?.isVerified,
+                    // TODO: isSupporter
+                  }}
+                />
+                <Text sx={{ fontSize: 1, color: 'darkGrey' }}>
+                  {comment.modifiedAt &&
+                    compareDesc(comment.createdAt, comment.modifiedAt) > 0 &&
+                    'Edited '}
+                  <DisplayDate date={comment.modifiedAt || comment.createdAt} />
+                </Text>
               </Flex>
-            )}
+
+              {isEditable && (
+                <Flex
+                  sx={{
+                    alignItems: 'flex-end',
+                    gap: 2,
+                  }}
+                >
+                  <Button
+                    type="button"
+                    data-cy={`${itemType}: edit button`}
+                    variant="subtle"
+                    small={true}
+                    icon="edit"
+                    onClick={() => setShowEditModal(true)}
+                  >
+                    edit
+                  </Button>
+                  <Button
+                    type="button"
+                    data-cy={`${itemType}: delete button`}
+                    variant="subtle"
+                    small={true}
+                    icon="delete"
+                    onClick={() => setShowDeleteModal(true)}
+                  >
+                    delete
+                  </Button>
+                </Flex>
+              )}
+            </Flex>
             <CommentBody body={comment.comment} />
           </Flex>
         </Flex>

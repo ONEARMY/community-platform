@@ -38,12 +38,9 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
   const { activeUser } = userStore
 
   const isEditable = useMemo(() => {
-    if (!userStore.activeUser?._authID) {
-      return false
-    }
-
     return (
       activeUser?._authID === comment.createdBy?.firebaseAuthId ||
+      activeUser?._id === comment.createdBy?.username ||
       activeUser?.userRoles?.includes(UserRole.ADMIN) ||
       activeUser?.userRoles?.includes(UserRole.SUPER_ADMIN)
     )

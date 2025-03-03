@@ -31,16 +31,13 @@ export const CommentReply = observer(
     const { activeUser } = userStore
 
     const isEditable = useMemo(() => {
-      if (!activeUser?._authID) {
-        return false
-      }
-
       return (
         activeUser?._authID === comment.createdBy?.firebaseAuthId ||
-        activeUser.userRoles?.includes(UserRole.ADMIN) ||
-        activeUser.userRoles?.includes(UserRole.SUPER_ADMIN)
+        activeUser?._id === comment.createdBy?.username ||
+        activeUser?.userRoles?.includes(UserRole.ADMIN) ||
+        activeUser?.userRoles?.includes(UserRole.SUPER_ADMIN)
       )
-    }, [activeUser?._authID, comment.createdBy?.firebaseAuthId])
+    }, [activeUser, comment])
 
     useEffect(() => {
       if (comment.highlighted) {

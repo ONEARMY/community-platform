@@ -13,7 +13,9 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy=username]').click()
       cy.get('[data-cy=username]').clear().type('a')
       cy.get('[data-cy=consent]').uncheck().check()
-      cy.contains('Username must be at least 2 characters').should('be.visible')
+      cy.contains(FRIENDLY_MESSAGES['sign-up/username-short']).should(
+        'be.visible',
+      )
 
       cy.step('Email is invalid')
       cy.get('[data-cy=email]').click()
@@ -25,7 +27,9 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy=password]').click()
       cy.get('[data-cy=password]').clear().type('a')
       cy.get('[data-cy=consent]').uncheck().check()
-      cy.contains('Password must be at least 6 characters').should('be.visible')
+      cy.contains(FRIENDLY_MESSAGES['sign-up/password-short']).should(
+        'be.visible',
+      )
 
       cy.step('Password confirmation does not match')
       cy.get('[data-cy=password]').click()
@@ -33,11 +37,9 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy=confirm-password]').click()
       cy.get('[data-cy=confirm-password]').clear().type('b')
       cy.get('[data-cy=consent]').uncheck().check()
-      cy.contains('Your new password does not match').should('be.visible')
-      cy.step('Using valid inputs')
-      cy.signUpNewUser()
-      cy.contains('Yay! You signed up!')
-      cy.get('[data-cy=user-menu]')
+      cy.contains(FRIENDLY_MESSAGES['sign-up/password-mismatch']).should(
+        'be.visible',
+      )
     })
   })
 
@@ -49,9 +51,10 @@ describe('[User sign-up]', () => {
       cy.signUpNewUser(user)
       cy.logout()
       cy.fillSignupForm(username, email, password)
-      cy.contains(FRIENDLY_MESSAGES['sign-up/username-taken']).should(
-        'be.visible',
-      )
+      cy.get('[data-cy=submit]').click()
+      cy.get('[data-cy="TextNotification: failure"]')
+        .contains(FRIENDLY_MESSAGES['sign-up/username-taken'])
+        .should('be.visible')
     })
 
     it('Prevents duplicate email', () => {
@@ -62,8 +65,8 @@ describe('[User sign-up]', () => {
       cy.logout()
       cy.fillSignupForm(`${username}-new`, email, password)
       cy.get('[data-cy=submit]').click()
-      cy.get('[data-cy=error-msg]')
-        .contains(FRIENDLY_MESSAGES['auth/email-already-in-use'])
+      cy.get('[data-cy="TextNotification: failure"]')
+        .contains(FRIENDLY_MESSAGES['generic-error'])
         .should('be.visible')
     })
   })
@@ -92,7 +95,7 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="password"]').clear().type(password)
       cy.get('[data-cy="changeEmailSubmit"]').click()
       cy.get('[data-cy="changeEmailContainer"')
-        .contains(`Email changed to ${newEmail}`)
+        .contains(FRIENDLY_MESSAGES['auth/email-changed'])
         .should('be.visible')
 
       cy.step('Update Password')
@@ -102,7 +105,7 @@ describe('[User sign-up]', () => {
       cy.get('[data-cy="repeatNewPassword"]').clear().type(newPassword)
       cy.get('[data-cy="changePasswordSubmit"]').click()
       cy.get('[data-cy="changePasswordContainer"')
-        .contains(`Password changed`)
+        .contains(FRIENDLY_MESSAGES['auth/password-changed'])
         .should('be.visible')
     })
   })

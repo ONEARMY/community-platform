@@ -4,7 +4,6 @@ import { MessageSettings } from '../models/messageSettings'
 type RecieverMessageArgs = {
   email: string
   fromUser: string
-  preview: string
   settings: MessageSettings
   text: string
   toUserName: string
@@ -12,14 +11,17 @@ type RecieverMessageArgs = {
 }
 
 export default function RecieverMessage(props: RecieverMessageArgs) {
-  const { email, fromUser, preview, settings, text, name, toUserName } = props
+  const { email, fromUser, settings, text, toUserName } = props
+
+  const name = props.name !== 'undefined' ? props.name : fromUser
+  const preview = `${name} wants to chat to you!`
 
   return (
     <Layout preview={preview} settings={settings}>
       <p>Hey {toUserName},</p>
       <p>
-        <a href={`${settings.siteUrl}/u/${fromUser}`}>{name || fromUser}</a> has
-        sent you a message through{' '}
+        <a href={`${settings.siteUrl}/u/${fromUser}`}>{name}</a> has sent you a
+        message through{' '}
         <a href={settings.siteUrl} target="_blank">
           {settings.siteName}
         </a>

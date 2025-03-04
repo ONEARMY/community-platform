@@ -13,7 +13,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const data = {
       to: formData.get('to') as string,
       message: formData.get('message') as string,
-      name: (formData.get('name') as string) || undefined,
+      name: formData.has('name') ? (formData.get('name') as string) : undefined,
     }
 
     const { client, headers } = createSupabaseServerClient(request)
@@ -91,7 +91,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         email={receiverEmail}
         fromUser={fromUsername}
         name={data.name}
-        preview={`${fromUsername} wants to chat to you!`}
         text={data.message}
         toUserName={data.to}
         settings={{

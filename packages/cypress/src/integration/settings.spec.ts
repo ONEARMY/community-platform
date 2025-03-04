@@ -1,8 +1,8 @@
 import { ExternalLinkLabel } from 'oa-shared'
 
-// import { MOCK_DATA } from '../data'
+import { MOCK_DATA } from '../data'
 import { SingaporeStubResponse } from '../fixtures/searchResults'
-// import { UserMenuItem } from '../support/commandsUi'
+import { UserMenuItem } from '../support/commandsUi'
 import { generateNewUserDetails } from '../utils/TestUtils'
 
 const locationStub = {
@@ -19,25 +19,25 @@ const mapDetails = {
   locationName: locationStub.value,
 }
 
-// const settings_member_new = MOCK_DATA.users.settings_member_new
+const settings_member_new = MOCK_DATA.users.settings_member_new
 
 describe('[Settings]', () => {
   beforeEach(() => {
     cy.interceptAddressSearchFetch(SingaporeStubResponse)
   })
 
-  //   it('[Cancel edit profile and get confirmation]', () => {
-  //     cy.signIn(settings_member_new.email, settings_member_new.password)
+  it('[Cancel edit profile and get confirmation]', () => {
+    cy.signIn(settings_member_new.email, settings_member_new.password)
 
-  //     cy.step('Go to User Settings')
-  //     cy.clickMenuItem(UserMenuItem.Settings)
-  //     cy.wait(5000)
-  //     cy.get('[data-cy=displayName').clear().type('Wrong user')
+    cy.step('Go to User Settings')
+    cy.clickMenuItem(UserMenuItem.Settings)
+    cy.wait(5000)
+    cy.get('[data-cy=displayName').clear().type('Wrong user')
 
-  //     cy.step('Confirm shown when attempting to go to another page')
-  //     cy.get('[data-cy=page-link]').contains('Library').click()
-  //     cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible')
-  //   })
+    cy.step('Confirm shown when attempting to go to another page')
+    cy.get('[data-cy=page-link]').contains('Library').click()
+    cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible')
+  })
 
   describe('[Fixing Fashion]', () => {
     beforeEach(() => {

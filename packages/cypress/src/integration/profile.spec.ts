@@ -1,11 +1,15 @@
 import { faker } from '@faker-js/faker'
+import { ExternalLinkLabel } from 'oa-shared'
 
 import { MESSAGE_MAX_CHARACTERS } from '../../../../src/pages/User/constants'
 import { missing } from '../../../../src/pages/User/impact/labels'
 import { contact } from '../../../../src/pages/User/labels'
 import { MOCK_DATA } from '../data'
 import { UserMenuItem } from '../support/commandsUi'
-import { setIsPreciousPlastic } from '../utils/TestUtils'
+import {
+  generateNewUserDetails,
+  setIsPreciousPlastic,
+} from '../utils/TestUtils'
 
 const { admin, profile_views, subscriber } = MOCK_DATA.users
 const eventReader = MOCK_DATA.users.event_reader
@@ -18,10 +22,6 @@ const betaTester = MOCK_DATA.users['beta-tester']
 describe('[Profile]', () => {
   beforeEach(() => {
     cy.visit('/')
-    cy.intercept('POST', '/sendMessage', {
-      body: { result: null },
-      statusCode: 200,
-    }).as('sendMessage')
   })
 
   describe('[By Anonymous]', () => {
@@ -75,28 +75,54 @@ describe('[Profile]', () => {
         .sentences(50)
         .slice(0, MESSAGE_MAX_CHARACTERS)
         .trim()
+      const user = generateNewUserDetails()
 
-      cy.signIn(subscriber.email, subscriber.password)
-
+      cy.step('Can sign-up as a space which will have a contact form')
+      cy.signUpNewUser(user)
+      cy.visit('/settings')
+      cy.setSettingFocus('workspace')
+      cy.setSettingBasicUserInfo({
+        displayName: user.username,
+        country: 'Bolivia',
+        description: 'New profile to test the contact form',
+      })
+      cy.setSettingImage('profile-cover-1-edited', 'coverImages-0')
+      cy.selectTag('Mixed', '[data-cy=tag-select]')
+      cy.setSettingAddContactLink({
+        index: 0,
+        label: ExternalLinkLabel.EMAIL,
+        url: 'something@test.com',
+      })
+      cy.saveSettingsForm()
       cy.step('Go to Profile')
-      cy.visit(`/u/${machine.userName}`)
+      cy.visit(`/u/${user.username}`)
 
       cy.step('Go to contact tab')
       cy.get('[data-cy=contact-tab]').click()
-      cy.contains(`${contact.title} ${machine.userName}`).should('be.visible')
+      cy.get('[data-cy="UserContactForm"]').should('be.visible')
+      cy.contains(`${contact.title} ${user.username}`).should('be.visible')
 
-      cy.step('fill in contact form')
+      cy.step('Form errors without a message')
+      cy.get('[data-cy=contact-submit]').click()
+      cy.contains('Make sure this field is filled correctly').should(
+        'be.visible',
+      )
+
+      cy.step('Can send contact form')
       cy.get('[data-cy=name]').type('Bob')
-
       cy.get('[data-cy=message]').invoke('val', message).blur({ force: true })
-
-      cy.step('Submit form')
       cy.get('[data-cy=contact-submit]').click()
       cy.contains(contact.successMessage)
 
-      cy.step("Can't contact pages who opt-out")
-      cy.visit(`/u/${userProfiletype.userName}`)
-      cy.contains('[data-cy=contact-tab]').should('not.exist')
+      cy.step("Can't contact pages when users opts out")
+      cy.visit('/settings')
+      cy.get('[data-cy=isContactableByPublic-true]').click({ force: true })
+      cy.saveSettingsForm()
+      cy.get('[data-cy=isContactableByPublic-false]')
+
+      cy.visit(`/u/${user.username}`)
+      cy.get('[data-cy=contact-tab]').click()
+      cy.contains('[dat-cy=UserContactForm]').should('not.exist')
     })
 
     it('[Can see impact data for workspaces]', () => {

@@ -5,6 +5,7 @@ const sendMessage = async (data: SendMessage) => {
 
   formData.append('to', data.to)
   formData.append('message', data.message)
+  formData.append('name', data.name)
 
   return fetch('/api/messages', {
     method: 'POST',

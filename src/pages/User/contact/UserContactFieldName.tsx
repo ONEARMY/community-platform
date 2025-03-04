@@ -8,7 +8,7 @@ export const UserContactFieldName = () => {
   const name = 'name'
 
   return (
-    <Box mb={3}>
+    <Box>
       <Label htmlFor={name}>{title}</Label>
       <Field
         component={FieldInput}

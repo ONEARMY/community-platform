@@ -7,7 +7,6 @@ import { ClientOnly } from 'remix-utils/client-only'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Flex } from 'theme-ui'
 
-import { MemberProfile } from './MemberProfile'
 import { SpaceProfile } from './SpaceProfile'
 
 import type { IUserDB } from 'oa-shared'
@@ -41,14 +40,13 @@ export const UserProfile = observer(
           flexDirection: 'column',
           width: '100%',
           marginTop: isViewingOwnProfile ? 4 : [6, 8],
-          gap: 4,
         }}
       >
         {isViewingOwnProfile && (
           <InternalLink
             sx={{
               alignSelf: ['center', 'flex-end'],
-              marginBottom: showMemberProfile ? [2, 0] : 0,
+              marginBottom: 6,
               zIndex: 2,
             }}
             to="/settings"
@@ -62,19 +60,15 @@ export const UserProfile = observer(
         <ClientOnly fallback={<></>}>
           {() => (
             <>
-              {showMemberProfile ? (
-                <MemberProfile
-                  data-cy="memberProfile"
-                  user={profile}
-                  docs={userCreatedDocs}
-                />
-              ) : (
-                <SpaceProfile
-                  data-cy="spaceProfile"
-                  user={profile}
-                  docs={userCreatedDocs}
-                />
-              )}
+              <SpaceProfile
+                user={profile}
+                docs={userCreatedDocs}
+                type={
+                  showMemberProfile
+                    ? ProfileTypeList.MEMBER
+                    : ProfileTypeList.SPACE
+                }
+              />
             </>
           )}
         </ClientOnly>

@@ -16,3 +16,64 @@
   height: 100%;
 
 }
+
+.pswp__button--arrow--next {
+  --arrow-bg: white;
+  --arrow-border: 3px solid black;
+  background: var(--arrow-bg);
+  border: var(--arrow-border);
+  position: absolute;
+  top: 54%;
+  right: 15px;
+  height: 55px;
+  width: 55px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  --arrow-color: black;
+  --arrow-left: 10%;
+  --arrow-bottom: 50%;
+  --arrow-translate-x: 20%;
+  --arrow-translate-y: 0%;
+}
+
+.pswp__button--arrow--next svg {
+  fill: var(--arrow-color);
+  position: absolute;
+  right: var(--arrow-left) !important;
+  bottom: var(--arrow-bottom) !important;
+  transform: translateX(var(--arrow-translate-x)) translateY(var(--arrow-translate-y));
+}
+
+
+.pswp__button--arrow--prev {
+  --arrow-bg: white;
+  --arrow-border: 3px solid black;
+  background: var(--arrow-bg);
+  border: var(--arrow-border);
+  position: absolute;
+  top: 54%;
+  left: 15px;
+  height: 55px;
+  width: 55px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  --arrow-color: black;
+  --arrow-left: 30%;
+  --arrow-bottom: 50%;
+  --arrow-translate-x: -20%; 
+  --arrow-translate-y: 0%;
+}
+
+.pswp__button--arrow--prev svg {
+  fill: var(--arrow-color);
+  position: absolute;
+  left: var(--arrow-left) !important;
+  bottom: var(--arrow-bottom) !important;
+  transform: translateX(var(--arrow-translate-x)) translateY(var(--arrow-translate-y));
+}

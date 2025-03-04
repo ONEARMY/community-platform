@@ -33,17 +33,21 @@ export const UserContactForm = observer(({ user }: Props) => {
 
   const onSubmit = async (formValues, form) => {
     setSubmitResults(null)
-    try {
-      await messageService.sendMessage({
-        to: user.userName,
-        message: formValues.message,
-        name: formValues.name,
-      })
-      setSubmitResults({ type: 'success', message: successMessage })
+    const response = await messageService.sendMessage({
+      to: user.userName,
+      message: formValues.message,
+      name: formValues.name,
+    })
+
+    if (response.ok) {
       form.restart()
-    } catch (error) {
-      setSubmitResults({ type: 'error', message: error.message })
+      return setSubmitResults({ type: 'success', message: successMessage })
     }
+
+    return setSubmitResults({
+      type: 'error',
+      message: `${response.statusText}. Please try again or report the problem.`,
+    })
   }
 
   return (
@@ -58,26 +62,27 @@ export const UserContactForm = observer(({ user }: Props) => {
         render={({ handleSubmit, submitting }) => {
           return (
             <form>
-              <UserContactError submitResults={submitResults} />
+              <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+                <UserContactError submitResults={submitResults} />
 
-              <UserContactFieldName />
-              <UserContactFieldMessage />
+                <UserContactFieldName />
+                <UserContactFieldMessage />
 
-              <Box>
-                <Button
-                  large
-                  onClick={handleSubmit}
-                  data-cy={buttonName}
-                  data-testid={buttonName}
-                  mt={3}
-                  variant="primary"
-                  type="submit"
-                  disabled={submitting}
-                  form={formId}
-                >
-                  {button}
-                </Button>
-              </Box>
+                <Box sx={{ flexSelf: 'flex-start' }}>
+                  <Button
+                    large
+                    onClick={handleSubmit}
+                    data-cy={buttonName}
+                    data-testid={buttonName}
+                    variant="primary"
+                    type="submit"
+                    disabled={submitting}
+                    form={formId}
+                  >
+                    {button}
+                  </Button>
+                </Box>
+              </Flex>
             </form>
           )
         }}

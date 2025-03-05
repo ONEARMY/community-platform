@@ -13,6 +13,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const data = {
       to: formData.get('to') as string,
       message: formData.get('message') as string,
+      name: formData.has('name') ? (formData.get('name') as string) : undefined,
     }
 
     const { client, headers } = createSupabaseServerClient(request)
@@ -35,6 +36,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       .from('profiles')
       .select('id,username')
       .eq('username', user!.user_metadata.username)
+
     const recipientProfile = await client
       .from('profiles')
       .select('id,auth_id')
@@ -57,10 +59,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     if (countResult.count! >= 20) {
       return Response.json(
-        { error: 'You have reached your daily message limit' },
-        { status: 429, statusText: 'Too Many Requests' },
+        { error: 'Too many requests' },
+        {
+          status: 429,
+          statusText:
+            "You've contacted a lot of people today! So to protect the platform from spam we haven't sent this message.",
+        },
       )
     }
+
+    const settings = await getTenantSettings(client)
 
     const messageResult = await client.from('messages').insert({
       sender_id: from,
@@ -77,52 +85,63 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       id: recipientProfile.data![0].auth_id,
     })
     const receiverEmail = emailResult.data[0].email
-
-    // TODO: create notification and send email
     const fromUsername = userProfile.data![0].username
-    const settings = await getTenantSettings(client)
+    const emailTemplate = (
+      <RecieverMessage
+        email={receiverEmail}
+        fromUser={fromUsername}
+        name={data.name}
+        text={data.message}
+        toUserName={data.to}
+        settings={{
+          siteName: settings.siteName,
+          messageSignOff: settings.messageSignOff,
+          siteImage: settings.siteImage,
+          siteUrl: settings.siteUrl,
+        }}
+      />
+    )
 
     const sendResult = await sendEmail({
-      from: settings?.email_from,
+      from: settings.emailFrom,
       to: receiverEmail,
-      subject: `${fromUsername} sent you a message via ${settings?.site_name}!`,
-      emailTemplate: (
-        <RecieverMessage
-          email={receiverEmail}
-          fromUser={fromUsername}
-          text={data.message}
-          toUserName={data.to}
-          settings={{
-            siteName: settings?.site_name,
-            messageSignOff: settings?.message_sign_off,
-            siteImage: settings?.site_image,
-            siteUrl: settings?.site_url,
-          }}
-        />
-      ),
+      subject: `${fromUsername} sent you a message via ${settings.siteName}!`,
+      emailTemplate,
     })
 
     if (sendResult.error) {
-      throw sendResult.error
+      return Response.json(
+        { error: sendResult.error },
+        { status: 429, statusText: sendResult.error },
+      )
     }
 
     return Response.json(null, { headers, status: 201 })
   } catch (error) {
     console.log(error)
+
     return Response.json(
-      {},
+      { error },
       { status: 500, statusText: 'Error sending message' },
     )
   }
 }
 
 async function getTenantSettings(client: SupabaseClient) {
-  return (
-    await client
-      .from('tenant_settings')
-      .select('site_name,site_url,message_sign_off,email_from,site_image')
-      .single()
-  ).data
+  const { data } = await client
+    .from('tenant_settings')
+    .select('site_name,site_url,message_sign_off,email_from,site_image')
+    .single()
+
+  return {
+    siteName: data?.site_name || 'The Community Platform',
+    siteUrl: data?.site_url || 'https://community.preciousplastic.com',
+    messageSignOff: data?.message_sign_off || 'One Army',
+    emailFrom: data?.email_from || 'hello@onearmy.earth',
+    siteImage:
+      data?.site_image ||
+      'https://community.preciousplastic.com/assets/img/one-army-logo.png',
+  }
 }
 
 async function validateRequest(request: Request, user: User | null, data: any) {

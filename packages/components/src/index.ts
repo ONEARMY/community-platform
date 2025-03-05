@@ -1,5 +1,6 @@
 export { Accordion } from './Accordion/Accordion'
 export { ArticleCallToAction } from './ArticleCallToAction/ArticleCallToAction'
+export { AuthorsContext } from './providers/AuthorsContext'
 export { Banner } from './Banner/Banner'
 export { BlockedRoute } from './BlockedRoute/BlockedRoute'
 export { Breadcrumbs } from './Breadcrumbs/Breadcrumbs'

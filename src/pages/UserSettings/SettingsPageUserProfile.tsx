@@ -8,6 +8,7 @@ import { ProfileTypeList } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
+import { isContactable } from 'src/utils/helpers'
 import { Flex } from 'theme-ui'
 import { v4 as uuid } from 'uuid'
 
@@ -16,7 +17,6 @@ import { PublicContactSection } from './content/sections/PublicContact.section'
 import { UserImagesSection } from './content/sections/UserImages.section'
 import { UserInfosSection } from './content/sections/UserInfos.section'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
-import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from './constants'
 import { buttons } from './labels'
 
 import type { IUser } from 'oa-shared'
@@ -99,8 +99,7 @@ export const SettingsPageUserProfile = () => {
     links,
     location: user.location || null,
     about: user.about || null,
-    isContactableByPublic:
-      user.isContactableByPublic || DEFAULT_PUBLIC_CONTACT_PREFERENCE,
+    isContactableByPublic: isContactable(user.isContactableByPublic),
     userImage: user.userImage || null,
     coverImages,
     tags: user.tags || {},

@@ -19,7 +19,7 @@ export const UserContactFieldMessage = () => {
   }
 
   return (
-    <Box mb={3}>
+    <Box>
       <Label htmlFor={name}>{`${title} *`}</Label>
       <Field
         name={name}

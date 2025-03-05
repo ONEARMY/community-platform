@@ -1,7 +1,6 @@
 import { Field } from 'react-final-form'
 import { observer } from 'mobx-react'
 import { fields } from 'src/pages/UserSettings/labels'
-import { isContactable } from 'src/utils/helpers'
 import { Flex, Heading, Switch, Text } from 'theme-ui'
 
 import type { IUser } from 'oa-shared'
@@ -13,7 +12,6 @@ interface Props {
 export const PublicContactSection = observer((props: Props) => {
   const { isContactableByPublic } = props
   const { description, placeholder, title } = fields.publicContentPreference
-  const isChecked = isContactable(isContactableByPublic)
   const name = 'isContactableByPublic'
 
   return (
@@ -32,11 +30,11 @@ export const PublicContactSection = observer((props: Props) => {
         {({ input }) => {
           return (
             <Switch
-              checked={isChecked}
-              data-cy={name}
+              checked={isContactableByPublic}
+              data-cy={`${name}-${isContactableByPublic}`}
               data-testid={name}
               label={placeholder}
-              onChange={() => input.onChange(!isChecked)}
+              onChange={() => input.onChange(!isContactableByPublic)}
               sx={{
                 'input:checked ~ &': {
                   backgroundColor: 'green',

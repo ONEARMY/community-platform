@@ -1,18 +1,18 @@
-export class DBImage {
+export class DBMedia {
   id: string
   path: string
   fullPath: string
 
-  constructor(obj: DBImage) {
+  constructor(obj: DBMedia) {
     Object.assign(this, obj)
   }
 }
 
-export class Image {
+export class Media {
   id: string
   publicUrl: string
 
-  constructor(obj: Image) {
+  constructor(obj: Media) {
     Object.assign(this, obj)
   }
 }

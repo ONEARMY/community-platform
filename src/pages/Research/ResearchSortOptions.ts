@@ -2,6 +2,7 @@ export type ResearchSortOption =
   | 'MostRelevant'
   | 'Newest'
   | 'MostComments'
+  | 'LeastComments'
   | 'LatestUpdated'
   | 'MostUseful'
   | 'MostUpdates'
@@ -9,6 +10,7 @@ export type ResearchSortOption =
 const BaseOptions = new Map<ResearchSortOption, string>()
 BaseOptions.set('Newest', 'Newest')
 BaseOptions.set('MostComments', 'Most Comments')
+BaseOptions.set('LeastComments', 'Least Comments')
 BaseOptions.set('LatestUpdated', 'Latest Updated')
 BaseOptions.set('MostUseful', 'Most Useful')
 BaseOptions.set('MostUpdates', 'Most Updates')

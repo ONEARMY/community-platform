@@ -13,23 +13,21 @@ import {
   ResearchStatus,
   ResearchUpdateStatus,
 } from 'oa-shared'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
 import { researchStatusColour } from '../researchHelpers'
 
-import type { IResearch, IUploadedFileMeta } from 'oa-shared'
+import type { ResearchItem } from 'src/models/research.model'
 
 interface IProps {
-  item: IResearch.Item
+  item: ResearchItem
 }
 
 const ResearchListItem = ({ item }: IProps) => {
-  const { aggregationsStore } = useCommonStores().stores
   const collaborators = item['collaborators'] || []
-  const usefulDisplayCount = item.totalUsefulVotes ?? 0
+  const usefulDisplayCount = item.usefulCount ?? 0
 
   const _commonStatisticStyle = {
     display: 'flex',
@@ -37,15 +35,14 @@ const ResearchListItem = ({ item }: IProps) => {
     fontSize: [1, 2, 2],
   }
 
-  const isVerified = aggregationsStore.isVerified(item._createdBy)
-  const status = item.researchStatus || ResearchStatus.IN_PROGRESS
+  const status = item.status || ResearchStatus.IN_PROGRESS
   const modifiedDate = useMemo(() => getItemDate(item, 'long'), [item])
 
   return (
     <Card
       as={'li'}
       data-cy="ResearchListItem"
-      data-id={item._id}
+      data-id={item.id}
       mb={3}
       style={{ position: 'relative' }}
     >
@@ -102,7 +99,6 @@ const ResearchListItem = ({ item }: IProps) => {
                 >
                   <InternalLink
                     to={`/research/${encodeURIComponent(item.slug)}`}
-                    key={item._id}
                     sx={{
                       textDecoration: 'none',
                       color: 'inherit',
@@ -123,9 +119,9 @@ const ResearchListItem = ({ item }: IProps) => {
                     {item.title}
                   </InternalLink>
                 </Heading>
-                {item.researchCategory && (
+                {item.category && (
                   <Category
-                    category={item.researchCategory}
+                    category={item.category}
                     sx={{ fontSize: 2, mt: [0, '3px'] }}
                   />
                 )}
@@ -157,14 +153,14 @@ const ResearchListItem = ({ item }: IProps) => {
               }}
             >
               <Flex sx={{ alignItems: 'center' }}>
-                <Username
+                {/* <Username
                   user={{
-                    userName: item._createdBy,
-                    countryCode: item.creatorCountry,
-                    isVerified,
+                    userName: item.author.displayName,
+                    countryCode: item.author.country,
+                    isVerified: item.author.isVerified,
                   }}
                   sx={{ position: 'relative' }}
-                />
+                /> */}
                 {Boolean(collaborators.length) && (
                   <Text
                     ml={4}
@@ -224,7 +220,7 @@ const ResearchListItem = ({ item }: IProps) => {
                   <Icon glyph="star-active" ml={1} />
                 </Text>
                 <Text color="black" ml={3} sx={_commonStatisticStyle}>
-                  {item.totalCommentCount}
+                  {item.commentCount}
                   <Icon glyph="comment" ml={1} />
                 </Text>
                 <Text
@@ -254,7 +250,7 @@ const ResearchListItem = ({ item }: IProps) => {
               text="How useful is it"
             />
             <IconCountWithTooltip
-              count={item.totalCommentCount || 0}
+              count={item.commentCount || 0}
               icon="comment"
               text="Total comments"
             />
@@ -283,7 +279,7 @@ const ResearchListItem = ({ item }: IProps) => {
   )
 }
 
-const getItemThumbnail = (researchItem: IResearch.Item): string => {
+const getItemThumbnail = (researchItem: ResearchItem): string => {
   const publishedUpdates = researchItem.updates?.filter(
     (update) =>
       !update._deleted &&
@@ -296,19 +292,16 @@ const getItemThumbnail = (researchItem: IResearch.Item): string => {
   )?.[0]
 
   return (
-    (latestPublishedUpdate?.images[0] as IUploadedFileMeta)?.downloadUrl ||
-    defaultResearchThumbnail
+    latestPublishedUpdate?.images[0]?.downloadUrl || defaultResearchThumbnail
   )
 }
 
-const getItemDate = (item: IResearch.Item, variant: string) => {
+const getItemDate = (item: ResearchItem, variant: string) => {
   try {
-    const contentModifiedDate = (
-      <DisplayDate date={item._contentModifiedTimestamp} />
-    )
-    const creationDate = <DisplayDate date={item._created} />
+    const contentModifiedDate = <DisplayDate date={item.modifiedAt!} />
+    const creationDate = <DisplayDate date={item.createdAt} />
 
-    if (item._contentModifiedTimestamp !== item._created) {
+    if (item.modifiedAt !== item.createdAt) {
       return variant === 'long' ? (
         <>Updated {contentModifiedDate}</>
       ) : (
@@ -322,11 +315,10 @@ const getItemDate = (item: IResearch.Item, variant: string) => {
   }
 }
 
-const getUpdateCount = (item: IResearch.Item) => {
+const getUpdateCount = (item: ResearchItem) => {
   return item.updates?.length
     ? item.updates.filter(
-        (update) =>
-          update.status !== ResearchUpdateStatus.DRAFT && !update._deleted,
+        (update) => update.status !== ResearchUpdateStatus.DRAFT,
       ).length
     : 0
 }

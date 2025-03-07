@@ -1,170 +1,93 @@
-import {
-  and,
-  collection,
-  doc,
-  getCountFromServer,
-  getDoc,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  startAfter,
-  where,
-} from 'firebase/firestore'
 import { IModerationStatus } from 'oa-shared'
-import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
 import { ResearchItem } from 'src/models/research.model'
 import { ITEMS_PER_PAGE } from 'src/pages/Research/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { discordServiceServer } from 'src/services/discordService.server'
-import { firestore } from 'src/utils/firebase'
 import { convertToSlug } from 'src/utils/slug'
 import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type {
-  QueryFilterConstraint,
-  QueryNonFilterConstraint,
-} from 'firebase/firestore'
-import type { IResearch, ResearchStatus } from 'oa-shared'
+import type { ResearchStatus } from 'oa-shared'
 import type { DBProfile } from 'src/models/profile.model'
 import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts'
 
 // runs on the server
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
-  const searchParams = url.searchParams
-  const words: string[] =
-    searchParams.get('words') != ''
-      ? searchParams.get('words')?.split(',') ?? []
-      : []
-  const category: string | null = searchParams.get('category')
-  const sort: ResearchSortOption = (searchParams.get('sort') ??
-    'LatestUpdated') as ResearchSortOption
+  const searchParams = new URLSearchParams(url.search)
+  const q = searchParams.get('q')
+  const category = Number(searchParams.get('category')) || undefined
+  const sort = searchParams.get('sort') as ResearchSortOption
+  const skip = Number(searchParams.get('skip')) || 0
   const status: ResearchStatus | null = searchParams.get(
     'status',
   ) as ResearchStatus
-  const lastDocId: string | null = searchParams.get('lastDocId')
   const drafts: boolean = searchParams.get('drafts') != undefined
-  const userId: string | null = searchParams.get('userId')
 
-  const { itemsQuery, countQuery } = await createSearchQuery(
-    words,
-    category,
-    sort,
-    status,
-    lastDocId,
-    ITEMS_PER_PAGE,
-    drafts,
-    userId,
-  )
+  const { client, headers } = createSupabaseServerClient(request)
 
-  const documentSnapshots = await getDocs(itemsQuery)
-  const items = documentSnapshots.docs
-    ? documentSnapshots.docs.map((x) => x.data() as IResearch.Item)
-    : []
+  // if (drafts) {
+  //   const {
+  //     data: { user },
+  //   } = await client.auth.getUser()
 
-  let total: number | undefined = undefined
-  // get total only if not requesting drafts
-  if (!drafts || !userId)
-    total = (await getCountFromServer(countQuery)).data().count
+  //   if (!user) {
+  //     return Response.json({}, { headers, status: 401 })
+  //   }
 
-  return Response.json({ items, total })
-}
+  //   const userProfile = await client
+  //     .from('profiles')
+  //     .select('id')
+  //     .eq('auth_id', user.id)
+  //     .limit(1)
+  //   const profileId = userProfile.data?.at(0)?.id
 
-const createSearchQuery = async (
-  words: string[],
-  category: string | null,
-  sort: ResearchSortOption,
-  status: ResearchStatus | null,
-  lastDocId: string | null,
-  page_size: number,
-  drafts: boolean,
-  userId: string | null,
-) => {
-  let filters: QueryFilterConstraint[] = []
-  if (drafts && userId) {
-    filters = [
-      and(
-        where('_createdBy', '==', userId),
-        where('moderation', 'in', [
-          IModerationStatus.AWAITING_MODERATION,
-          IModerationStatus.DRAFT,
-          IModerationStatus.IMPROVEMENTS_NEEDED,
-          IModerationStatus.REJECTED,
-        ]),
-        where('_deleted', '!=', true),
-      ),
-    ]
-  } else {
-    filters = [
-      and(
-        where('_deleted', '!=', true),
-        where('moderation', '==', IModerationStatus.ACCEPTED),
-      ),
-    ]
+  //   if (!profileId) {
+  //     return Response.json({ items: [], total: 0 }, { headers })
+  //   }
+
+  //   query = query.eq('is_draft', true).eq('created_by', profileId)
+  // }
+
+  const { data, count, error } = await client.rpc('get_research', {
+    search_query: q,
+    category_id: category,
+    research_status: status || null,
+    sort_by: sort,
+    offset_val: skip,
+    limit_val: ITEMS_PER_PAGE,
+  })
+
+  if (error) {
+    console.error(error)
+    return Response.json({}, { status: 500, headers })
   }
 
-  let constraints: QueryNonFilterConstraint[] = []
+  const items = data.map((x) => ResearchItem.fromDB(x, [], []))
 
-  const sortByField = getSortByField(sort)
-  constraints = [orderBy(sortByField, 'desc')] // TODO - add sort by _id to act as a tie breaker
+  if (items && items.length > 0) {
+    // Populate useful votes
+    const votes = await client.rpc('get_useful_votes_count_by_content_id', {
+      p_content_type: 'research',
+      p_content_ids: items.map((x) => x.id),
+    })
 
-  if (words?.length > 0) {
-    filters = [...filters, and(where('keywords', 'array-contains-any', words))]
-  }
+    if (votes.data) {
+      const votesByContentId = votes.data.reduce((acc, current) => {
+        acc.set(current.content_id, current.count)
+        return acc
+      }, new Map())
 
-  if (category) {
-    filters = [...filters, where('researchCategory._id', '==', category)]
-  }
-
-  if (status) {
-    filters = [...filters, where('researchStatus', '==', status)]
-  }
-
-  const collectionRef = collection(firestore, DB_ENDPOINTS.research)
-  const countQuery = query(collectionRef, and(...filters), ...constraints)
-
-  // add pagination only to itemsQuery, not countQuery
-  if (lastDocId) {
-    const lastDocSnapshot = await getDoc(
-      doc(collection(firestore, DB_ENDPOINTS.research), lastDocId),
-    )
-
-    if (!lastDocSnapshot.exists) {
-      throw new Error('Document with the provided ID does not exist.')
+      for (const item of items) {
+        if (votesByContentId.has(item.id)) {
+          item.usefulCount = votesByContentId.get(item.id)!
+        }
+      }
     }
-    const lastDocData = lastDocSnapshot.data() as IResearch.Item
-
-    constraints.push(startAfter(lastDocData[sortByField])) // TODO - add startAfter by _id to act as a tie breaker
   }
 
-  const itemsQuery = query(
-    collectionRef,
-    and(...filters),
-    ...constraints,
-    limit(page_size),
-  )
-
-  return { countQuery, itemsQuery }
-}
-
-const getSortByField = (sort: ResearchSortOption) => {
-  switch (sort) {
-    case 'MostComments':
-      return 'totalCommentCount'
-    case 'MostUpdates':
-      return 'totalUpdates'
-    case 'MostUseful':
-      return 'totalUsefulVotes'
-    case 'Newest':
-      return '_created'
-    case 'LatestUpdated':
-      return '_contentModifiedTimestamp'
-    default:
-      return '_contentModifiedTimestamp'
-  }
+  return Response.json({ items, total: count }, { headers })
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {

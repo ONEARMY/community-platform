@@ -1,15 +1,7 @@
-import { collection, getDocs, query, where } from 'firebase/firestore'
 import { logger } from 'src/logger'
-import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
-import { firestore } from 'src/utils/firebase'
-import { changeUserReferenceToPlainText } from 'src/utils/mentions.utils'
 
-import type {
-  ICategory,
-  IResearch,
-  IResearchDB,
-  ResearchStatus,
-} from 'oa-shared'
+import type { ICategory, ResearchStatus } from 'oa-shared'
+import type { ResearchItem } from 'src/models/research.model'
 import type { ResearchSortOption } from './ResearchSortOptions'
 
 const search = async (
@@ -17,7 +9,7 @@ const search = async (
   category: string,
   sort: ResearchSortOption,
   status: ResearchStatus | null,
-  lastDocId?: string,
+  skip: number = 0,
 ) => {
   try {
     const url = new URL('/api/research', window.location.origin)
@@ -25,11 +17,11 @@ const search = async (
     url.searchParams.append('category', category)
     url.searchParams.append('sort', sort)
     url.searchParams.append('status', status ?? '')
-    url.searchParams.append('lastDocId', lastDocId ?? '')
+    url.searchParams.append('skip', skip.toString())
 
     const response = await fetch(url)
     const { items, total } = (await response.json()) as {
-      items: IResearch.Item[]
+      items: ResearchItem[]
       total: number
     }
 
@@ -69,7 +61,7 @@ const getDraftCount = async (userId: string) => {
 const getDrafts = async (userId: string) => {
   try {
     const response = await fetch(`/api/research?drafts=true&userId=${userId}`)
-    const { items } = (await response.json()) as { items: IResearch.Item[] }
+    const { items } = (await response.json()) as { items: ResearchItem[] }
 
     return items
   } catch (error) {
@@ -78,55 +70,9 @@ const getDrafts = async (userId: string) => {
   }
 }
 
-const getBySlug = async (slug: string) => {
-  // Get all that match the slug, to avoid creating an index (blocker for cypress tests)
-  let snapshot = await getDocs(
-    query(
-      collection(firestore, DB_ENDPOINTS.research),
-      where('slug', '==', slug),
-    ),
-  )
-
-  if (snapshot.size === 0) {
-    // try previous slugs if slug is not recognized as primary
-    snapshot = await getDocs(
-      query(
-        collection(firestore, DB_ENDPOINTS.research),
-        where('previousSlugs', 'array-contains', slug),
-      ),
-    )
-  }
-
-  if (snapshot.size === 0) {
-    return null
-  }
-
-  const research = snapshot.docs[0].data() as IResearchDB
-
-  if (!research) {
-    return null
-  }
-
-  // Change all UserReferences to mentions
-  if (research.description) {
-    research.description = changeUserReferenceToPlainText(research.description)
-  }
-
-  for (const update of research.updates) {
-    if (!update.description) {
-      continue
-    }
-
-    update.description = changeUserReferenceToPlainText(update.description)
-  }
-
-  return research
-}
-
 export const researchService = {
   search,
   getResearchCategories,
   getDrafts,
   getDraftCount,
-  getBySlug,
 }

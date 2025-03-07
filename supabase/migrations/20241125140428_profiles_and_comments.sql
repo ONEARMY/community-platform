@@ -126,11 +126,11 @@ AS $function$BEGIN
       IF NEW.source_type = 'questions' THEN
         UPDATE questions SET comment_count = comment_count + 1
         WHERE id = NEW.source_id;
-      ELSIF NEW.source_type = 'research' THEN
-        UPDATE research SET comment_count = comment_count + 1
+      ELSIF NEW.source_type = 'research_updates' THEN
+        UPDATE research_updates SET comment_count = comment_count + 1
         WHERE id = NEW.source_id;
-      ELSIF NEW.source_type = 'howtos' THEN
-        UPDATE howtos SET comment_count = comment_count + 1
+      ELSIF NEW.source_type = 'library' THEN
+        UPDATE library SET comment_count = comment_count + 1
         WHERE id = NEW.source_id;
       END IF;
     ELSE
@@ -142,11 +142,11 @@ AS $function$BEGIN
       IF OLD.source_type = 'questions' THEN
         UPDATE questions SET comment_count = comment_count - 1
         WHERE id = OLD.source_id;
-      ELSIF OLD.source_type = 'research' THEN
-        UPDATE research SET comment_count = comment_count - 1
+      ELSIF OLD.source_type = 'research_updates' THEN
+        UPDATE research_updates SET comment_count = comment_count - 1
         WHERE id = OLD.source_id;
-      ELSIF OLD.source_type = 'howtos' THEN
-        UPDATE howtos SET comment_count = comment_count - 1
+      ELSIF OLD.source_type = 'projects' THEN
+        UPDATE projects SET comment_count = comment_count - 1
         WHERE id = OLD.source_id;
       END IF;
     ELSE

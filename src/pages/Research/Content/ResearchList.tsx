@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from '@remix-run/react'
-import { observer } from 'mobx-react'
 import { Button, Loader } from 'oa-components'
 import { logger } from 'src/logger'
 import useDrafts from 'src/pages/common/Drafts/useDrafts'
@@ -12,19 +11,19 @@ import { ResearchFilterHeader } from './ResearchListHeader'
 import ResearchListItem from './ResearchListItem'
 import { ResearchSearchParams } from './ResearchSearchParams'
 
-import type { IResearch, ResearchStatus } from 'oa-shared'
+import type { ResearchStatus } from 'oa-shared'
+import type { ResearchItem } from 'src/models/research.model'
 import type { ResearchSortOption } from '../ResearchSortOptions'
 
-const ResearchList = observer(() => {
+const ResearchList = () => {
   const [isFetching, setIsFetching] = useState<boolean>(true)
-  const [researchItems, setResearchItems] = useState<IResearch.Item[]>([])
+  const [researchItems, setResearchItems] = useState<ResearchItem[]>([])
   const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } =
-    useDrafts<IResearch.Item>({
+    useDrafts<ResearchItem>({
       getDraftCount: researchService.getDraftCount,
       getDrafts: researchService.getDrafts,
     })
   const [total, setTotal] = useState<number>(0)
-  const [lastId, setLastId] = useState<string | undefined>(undefined)
 
   const [searchParams, setSearchParams] = useSearchParams()
   const q = searchParams.get(ResearchSearchParams.q) || ''
@@ -51,7 +50,7 @@ const ResearchList = observer(() => {
     }
   }, [q, category, status, sort])
 
-  const fetchResearchItems = async (lastDocId?: string) => {
+  const fetchResearchItems = async (skip: number = 0) => {
     setIsFetching(true)
 
     try {
@@ -62,19 +61,19 @@ const ResearchList = observer(() => {
         category,
         sort,
         status,
-        lastDocId,
+        skip,
       )
 
-      if (lastDocId) {
-        // if skipFrom is set, means we are requesting another page that should be appended
-        setResearchItems((items) => [...items, ...result.items])
-      } else {
-        setResearchItems(result.items)
+      if (result) {
+        if (skip) {
+          // if skipFrom is set, means we are requesting another page that should be appended
+          setResearchItems((questions) => [...questions, ...result.items])
+        } else {
+          setResearchItems(result.items)
+        }
+
+        setTotal(result.total)
       }
-
-      setLastId(result.items[result.items.length - 1]._id)
-
-      setTotal(result.total)
     } catch (error) {
       logger.error('error fetching research items', error)
     }
@@ -96,7 +95,7 @@ const ResearchList = observer(() => {
           data-cy="ResearchList"
         >
           {drafts.map((item) => {
-            return <ResearchListItem key={item._id} item={item} />
+            return <ResearchListItem key={item.id} item={item} />
           })}
         </ul>
       ) : (
@@ -107,7 +106,7 @@ const ResearchList = observer(() => {
               data-cy="ResearchList"
             >
               {researchItems.map((item) => (
-                <ResearchListItem key={item._id} item={item} />
+                <ResearchListItem key={item.id} item={item} />
               ))}
             </ul>
           )}
@@ -128,7 +127,7 @@ const ResearchList = observer(() => {
                 <Button
                   type="button"
                   data-cy="loadMoreButton"
-                  onClick={() => fetchResearchItems(lastId)}
+                  onClick={() => fetchResearchItems(researchItems.length)}
                 >
                   {listing.loadMore}
                 </Button>
@@ -140,5 +139,6 @@ const ResearchList = observer(() => {
       {(isFetching || isFetchingDrafts) && <Loader />}
     </Flex>
   )
-})
+}
+
 export default ResearchList

@@ -9,7 +9,7 @@ import { fields } from 'src/pages/Question/labels'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { Image as ImageComponent } from 'theme-ui'
 
-import type { Image } from 'src/models/image.model'
+import type { Media } from 'src/models/image.model'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -20,7 +20,7 @@ const ImageInputFieldWrapper = styled.div`
 
 interface IProps {
   inputsAvailable: number
-  existingImages: Image[] | null
+  existingImages: Media[] | null
   removeExistingImage: (index: number) => void
 }
 

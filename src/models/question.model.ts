@@ -2,7 +2,7 @@ import { Category } from 'oa-shared'
 
 import type { DBCategory, IConvertedFileMeta } from 'oa-shared'
 import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
-import type { DBImage, Image } from './image.model'
+import type { DBMedia, Media } from './image.model'
 import type { Tag } from './tag.model'
 
 export class DBQuestionAuthor {
@@ -56,7 +56,7 @@ export class DBQuestion {
   title: string
   slug: string
   description: string
-  images: DBImage[] | null
+  images: DBMedia[] | null
   category_id?: number
   tags: number[]
 
@@ -73,7 +73,7 @@ export class Question {
   title: string
   slug: string
   description: string
-  images: Image[] | null
+  images: Media[] | null
   deleted: boolean
   usefulCount: number
   subscriberCount: number
@@ -87,7 +87,7 @@ export class Question {
     Object.assign(this, obj)
   }
 
-  static fromDB(obj: DBQuestion, tags: Tag[], images?: Image[]) {
+  static fromDB(obj: DBQuestion, tags: Tag[], images?: Media[]) {
     return new Question({
       id: obj.id,
       createdAt: new Date(obj.created_at),
@@ -117,5 +117,5 @@ export type QuestionFormData = {
   category: SelectValue | null
   tags?: number[]
   images: IConvertedFileMeta[] | null
-  existingImages: Image[] | null
+  existingImages: Media[] | null
 }

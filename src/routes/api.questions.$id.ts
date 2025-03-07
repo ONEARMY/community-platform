@@ -7,7 +7,7 @@ import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBImage } from 'src/models/image.model'
+import type { DBMedia } from 'src/models/image.model'
 import type { DBProfile } from 'src/models/profile.model'
 import type { DBQuestion } from 'src/models/question.model'
 
@@ -60,7 +60,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const questionId = Number(params.id)
 
-    let images: DBImage[] = []
+    let images: DBMedia[] = []
 
     if (imagesToKeepIds.length > 0) {
       const questionImages = await client
@@ -140,7 +140,7 @@ async function uploadImages(
   // const files = await Promise.all(uploadedImages.map(image => image.arrayBuffer()))
 
   const errors: string[] = []
-  const images: DBImage[] = []
+  const images: DBMedia[] = []
 
   for (const image of uploadedImages) {
     const result = await client.storage

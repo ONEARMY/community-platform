@@ -1,12 +1,12 @@
-import { Image } from 'src/models/image.model'
+import { Media } from 'src/models/image.model'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { ImageSize } from 'src/config/imageTransforms'
-import type { DBImage } from 'src/models/image.model'
+import type { DBMedia } from 'src/models/image.model'
 
 const getImagesPublicUrls = (
   client: SupabaseClient,
-  images: DBImage[],
+  images: DBMedia[],
   size?: ImageSize,
 ) => {
   return images?.map((x) => {
@@ -20,7 +20,7 @@ const getImagesPublicUrls = (
             }
           : undefined,
       )
-    return new Image({ id: x.id, publicUrl: data.publicUrl })
+    return new Media({ id: x.id, publicUrl: data.publicUrl })
   })
 }
 

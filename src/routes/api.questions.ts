@@ -144,7 +144,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     }
     const profileRequest = await client
       .from('profiles')
-      .select('id')
+      .select('id,username')
       .eq('auth_id', user!.id)
       .limit(1)
 

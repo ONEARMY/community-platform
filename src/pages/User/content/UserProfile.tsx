@@ -30,8 +30,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
   const isMember = profileType === ProfileTypeList.MEMBER
 
   const hasContactOption =
-    (!isMember && isUserContactable(user)) ||
-    (links && Object.keys(links).length !== 0)
+    isUserContactable(user) || (links && Object.keys(links).length !== 0)
   const hasContributed = docs?.library.length + docs?.research.length > 0
   const hasImpacted = !!impact
   const hasProfile =

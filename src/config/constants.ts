@@ -29,6 +29,7 @@ export const _supportedConfigurationOptions = [
   'VITE_API_URL',
   'VITE_SITE_NAME',
   'VITE_HIDE_MEMBER_PINS_BY_DEFAULT',
+  'VITE_NO_MESSAGING',
 ] as const
 
 export type ConfigurationOption =

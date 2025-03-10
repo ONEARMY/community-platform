@@ -1,8 +1,9 @@
-import * as React from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Icon } from 'oa-components'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { PATREON_CLIENT_ID } from 'src/config/config'
 import { Flex, Heading, Image, Text } from 'theme-ui'
+
+import type { IPatreonUser } from 'src/models/profile.model'
 
 export const HEADING = 'Patreon'
 export const SUCCESS_MESSAGE = 'Successfully linked Patreon account!'
@@ -13,30 +14,40 @@ export const CONNECT_BUTTON_TEXT = 'Connect'
 export const UPDATE_BUTTON_TEXT = 'Update'
 export const REMOVE_BUTTON_TEXT = 'Disconnect'
 
-export const PatreonIntegration = ({ user }) => {
-  const { userStore } = useCommonStores().stores
+export const PatreonIntegration = () => {
+  const [patreon, setPatreon] = useState<IPatreonUser>()
 
-  const removePatreonConnection = () => {
-    if (!user) {
-      return
+  useEffect(() => {
+    const fetchPatreonData = async () => {
+      const patreonData = await fetch('/api/patreon')
+
+      if (patreonData.ok) {
+        const patreonUser = (await patreonData.json()) as IPatreonUser
+
+        if (patreonUser) {
+          setPatreon(patreonUser)
+        }
+      }
     }
-    userStore.removePatreonConnection(user.userName)
+
+    fetchPatreonData()
+  }, [])
+
+  const removePatreonConnection = async () => {
+    const result = await fetch('/api/patreon', { method: 'DELETE' })
+
+    if (result.ok) {
+      setPatreon(undefined)
+    }
   }
 
   const patreonRedirect = () => {
-    // TODO: if user has patreon property already set, send request directly to backend, where we
-    // can lookup the existing access code.
-
-    // Otherwise, redirect to patreon to get access code.
+    // Redirect to patreon to get access code.
     const redirectUri = `${window.location.protocol}//${window.location.host}/patreon`
 
     window.location.assign(
       `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${PATREON_CLIENT_ID}&redirect_uri=${redirectUri}`,
     )
-  }
-
-  if (!user) {
-    return null
   }
 
   return (
@@ -57,19 +68,19 @@ export const PatreonIntegration = ({ user }) => {
           <Heading as="h2" variant="small">
             {HEADING}
           </Heading>
-          {user.patreon ? (
+          {patreon ? (
             <>
               <Text>{SUCCESS_MESSAGE}</Text>
-              {user.badges?.supporter && user.patreon.membership && (
+              {patreon.membership && (
                 <Flex sx={{ flexDirection: 'column' }}>
                   <Text mt={4}>{SUPPORTER_MESSAGE}</Text>
-                  {user.patreon.membership.tiers.map(({ id, attributes }) => (
+                  {patreon.membership.tiers.map(({ id, attributes }) => (
                     <Flex
                       key={id}
-                      style={{
+                      sx={{
                         alignItems: 'center',
+                        mt: 4,
                       }}
-                      mt={4}
                     >
                       <div
                         style={{
@@ -107,9 +118,9 @@ export const PatreonIntegration = ({ user }) => {
 
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
         <Button type="button" onClick={patreonRedirect} variant="primary">
-          {user.patreon ? UPDATE_BUTTON_TEXT : CONNECT_BUTTON_TEXT}
+          {patreon ? UPDATE_BUTTON_TEXT : CONNECT_BUTTON_TEXT}
         </Button>
-        {user.patreon && (
+        {patreon && (
           <Button
             type="button"
             onClick={removePatreonConnection}

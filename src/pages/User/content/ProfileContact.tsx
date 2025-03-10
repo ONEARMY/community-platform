@@ -1,4 +1,4 @@
-import { ExternalLinkLabel, ProfileTypeList } from 'oa-shared'
+import { ExternalLinkLabel } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { UserAction } from 'src/common/UserAction'
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 export const ProfileContact = ({ user }: IProps) => {
-  const { links, profileType } = user
+  const { links } = user
 
   const userLinks =
     links?.filter(
@@ -27,18 +27,16 @@ export const ProfileContact = ({ user }: IProps) => {
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-      {profileType !== ProfileTypeList.MEMBER && (
-        <ClientOnly fallback={<></>}>
-          {() => (
-            <UserAction
-              loggedIn={<UserContactForm user={user} />}
-              loggedOut={
-                <UserContactNotLoggedIn displayName={user.displayName} />
-              }
-            />
-          )}
-        </ClientOnly>
-      )}
+      <ClientOnly fallback={<></>}>
+        {() => (
+          <UserAction
+            loggedIn={<UserContactForm user={user} />}
+            loggedOut={
+              <UserContactNotLoggedIn displayName={user.displayName} />
+            }
+          />
+        )}
+      </ClientOnly>
       <UserContactAndLinks links={userLinks} />
     </Flex>
   )

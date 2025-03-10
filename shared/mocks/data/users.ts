@@ -31,6 +31,7 @@ export const users = {
     about: "Hi! I'm a robot 🤖 Beep boop",
     email: 'demo_user@example.com',
     password: 'demo_user',
+    profileType: 'member',
   },
   'beta-tester': {
     _id: 'demo_beta_tester',

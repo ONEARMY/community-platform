@@ -13,7 +13,6 @@ import {
 
 const { admin, profile_views, subscriber } = MOCK_DATA.users
 const eventReader = MOCK_DATA.users.event_reader
-const machine = MOCK_DATA.users.settings_machine_new
 const userProfiletype = MOCK_DATA.users.settings_workplace_new
 const workspaceEmpty = MOCK_DATA.users.settings_workplace_empty
 
@@ -40,24 +39,24 @@ describe('[Profile]', () => {
       cy.step('Cannot see profile views')
       cy.get('[data-testid=profile-views-stat]').should('not.exist')
 
-      cy.step('Cannot see contact tab for workspaces')
-      cy.visit(`/u/${machine.userName}`)
-      cy.contains('[data-cy=contact-tab]').should('not.exist')
+      cy.get('[data-cy=emptyProfileMessage]').should('not.exist')
     })
   })
 
   describe('[By User]', () => {
     it('[User directed to own profile]', () => {
-      cy.signIn(subscriber.email, subscriber.password)
+      const user = generateNewUserDetails()
+      cy.signUpNewUser(user)
       cy.visit('/')
 
       cy.step('Go to Profile')
       cy.clickMenuItem(UserMenuItem.Profile)
       cy.wait(5000)
-      cy.url().should('include', `/u/${subscriber.userName}`)
-      cy.get('[data-cy=spaceProfile]').should('not.exist')
+      cy.url().should('include', `/u/${user.username}`)
+      cy.get('[data-cy=SpaceProfile]').should('not.exist')
       cy.get('[data-cy=MemberProfile]').should('be.visible')
       cy.get('.beta-tester-feature').should('not.exist')
+      cy.get('[data-cy=emptyProfileMessage]').should('be.visible')
     })
 
     it('[Cannot edit another user profile]', () => {

@@ -1,7 +1,5 @@
-import React from 'react'
 import { observer } from 'mobx-react'
 import { ExternalLink } from 'oa-components'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { DISCORD_INVITE_URL } from 'src/constants'
 import { fields, headings } from 'src/pages/UserSettings/labels'
 import { Flex, Heading, Text } from 'theme-ui'
@@ -12,8 +10,6 @@ import { ChangePasswordForm } from './content/sections/ChangePassword.form'
 
 export const SettingsPageAccount = observer(() => {
   const { description, title } = fields.deleteAccount
-
-  const { userStore } = useCommonStores().stores
 
   return (
     <Flex
@@ -30,7 +26,7 @@ export const SettingsPageAccount = observer(() => {
         </Text>
       </Flex>
 
-      <PatreonIntegration user={userStore.activeUser} />
+      <PatreonIntegration />
       <ChangePasswordForm />
       <ChangeEmailForm />
 

@@ -35,7 +35,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       source_type,
       parent_id,
       created_by,
-      profiles(id, firebase_auth_id, display_name, username, is_verified, photo_url, country)
+      profiles(id, firebase_auth_id, display_name, username, is_verified, is_supporter, photo_url, country)
     `,
     )
     .eq(sourceParam, sourceId)

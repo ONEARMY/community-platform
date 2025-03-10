@@ -30,15 +30,13 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
   const isMember = profileType === ProfileTypeList.MEMBER
 
   const hasContactOption =
-    (!isMember && isUserContactable(user)) ||
-    (links && Object.keys(links).length !== 0)
+    isUserContactable(user) || (links && Object.keys(links).length !== 0)
   const hasContributed = docs?.library.length + docs?.research.length > 0
   const hasImpacted = !!impact
   const hasProfile =
     about || (tags && Object.keys(tags).length !== 0) || hasContributed
 
-  const showEmptyProfileAlert =
-    isViewingOwnProfile && !hasProfile && !hasContactOption
+  const showEmptyProfileAlert = isViewingOwnProfile && !hasProfile
 
   const defaultValue =
     useLocationHook?.hash?.slice(1) || (hasProfile ? 'profile' : 'contact')

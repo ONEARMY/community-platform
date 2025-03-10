@@ -25,7 +25,7 @@ const _c = (property: ConfigurationOption, fallbackValue?: string): string => {
   return import.meta.env?.[property] || fallbackValue || ''
 }
 
-const getFromLocalStorage = (property: ConfigurationOption): string => {
+const getFromLocalStorageFirst = (property: ConfigurationOption): string => {
   return typeof localStorage !== 'undefined' && localStorage[property]
     ? (localStorage.getItem(property) as string)
     : _c(property, '')
@@ -166,20 +166,23 @@ export const API_URL = _c(
   'VITE_API_URL',
   'https://platform-api-voymtdup6a-uc.a.run.app',
 )
-export const VITE_THEME = getFromLocalStorage('VITE_THEME')
 
-export const VITE_PLATFORM_PROFILES = getFromLocalStorage(
+export const VITE_THEME = getFromLocalStorageFirst('VITE_THEME')
+
+export const VITE_PLATFORM_PROFILES = getFromLocalStorageFirst(
   'VITE_PLATFORM_PROFILES',
 )
 
-export const VITE_HIDE_MEMBER_PINS_BY_DEFAULT = getFromLocalStorage(
+export const VITE_HIDE_MEMBER_PINS_BY_DEFAULT = getFromLocalStorageFirst(
   'VITE_HIDE_MEMBER_PINS_BY_DEFAULT',
 )
 
 export const isPreciousPlastic = (): boolean => {
-  return getFromLocalStorage('VITE_THEME') === 'precious-plastic'
+  return getFromLocalStorageFirst('VITE_THEME') === 'precious-plastic'
 }
 
 export const MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT = isPreciousPlastic()
   ? 'member'
   : undefined
+
+export const NO_MESSAGING = getFromLocalStorageFirst('VITE_NO_MESSAGING')

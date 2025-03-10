@@ -8,7 +8,7 @@ import { ProfileTypeList } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
-import { isContactable } from 'src/utils/helpers'
+import { isContactable, isMessagingBlocked } from 'src/utils/helpers'
 import { Flex } from 'theme-ui'
 import { v4 as uuid } from 'uuid'
 
@@ -147,7 +147,7 @@ export const SettingsPageUserProfile = () => {
 
                 <UserImagesSection isMemberProfile={isMember} values={values} />
 
-                {!isMember && (
+                {!isMessagingBlocked() && (
                   <PublicContactSection
                     isContactableByPublic={values.isContactableByPublic}
                   />

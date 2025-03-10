@@ -183,3 +183,5 @@ export const isPreciousPlastic = (): boolean => {
 export const MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT = isPreciousPlastic()
   ? 'member'
   : undefined
+
+export const NO_MESSAGING = getFromLocalStorage('VITE_NO_MESSAGING')

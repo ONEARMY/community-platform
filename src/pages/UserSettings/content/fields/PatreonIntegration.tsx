@@ -68,7 +68,7 @@ export const PatreonIntegration = () => {
           <Heading as="h2" variant="small">
             {HEADING}
           </Heading>
-          {patreonUser ? (
+          {patreonUser?.patreon ? (
             <>
               <Text>{SUCCESS_MESSAGE}</Text>
               {patreonUser?.isSupporter && patreonUser.patreon.membership && (
@@ -119,10 +119,15 @@ export const PatreonIntegration = () => {
       </Flex>
 
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-        <Button type="button" onClick={patreonRedirect} variant="primary">
-          {patreonUser ? UPDATE_BUTTON_TEXT : CONNECT_BUTTON_TEXT}
+        <Button
+          type="button"
+          onClick={patreonRedirect}
+          variant="primary"
+          sx={{ width: 'fit-content' }}
+        >
+          {patreonUser?.patreon ? UPDATE_BUTTON_TEXT : CONNECT_BUTTON_TEXT}
         </Button>
-        {patreonUser && (
+        {patreonUser?.patreon && (
           <Button
             type="button"
             onClick={removePatreonConnection}

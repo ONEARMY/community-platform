@@ -13,11 +13,14 @@ export const loader = async ({ request }) => {
 
   const { data } = await client
     .from('profiles')
-    .select('patreon')
+    .select('patreon,is_supporter')
     .eq('auth_id', user.id)
     .single()
 
-  return Response.json(data?.patreon, { headers, status: 200 })
+  return Response.json(
+    { isSupporter: data?.is_supporter, patreon: data?.patreon },
+    { headers, status: 200 },
+  )
 }
 
 export const action = async ({ request }) => {

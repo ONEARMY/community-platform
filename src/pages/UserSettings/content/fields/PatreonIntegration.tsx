@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Button, Icon } from 'oa-components'
 import { PATREON_CLIENT_ID } from 'src/config/config'
+import { patreonService } from 'src/services/patreonService'
 import { Flex, Heading, Image, Text } from 'theme-ui'
 
 import type { IPatreonUser } from 'src/models/profile.model'
@@ -15,18 +16,17 @@ export const UPDATE_BUTTON_TEXT = 'Update'
 export const REMOVE_BUTTON_TEXT = 'Disconnect'
 
 export const PatreonIntegration = () => {
-  const [patreon, setPatreon] = useState<IPatreonUser>()
+  const [patreonUser, setPatreon] = useState<{
+    patreon: IPatreonUser
+    isSupporter: boolean
+  }>()
 
   useEffect(() => {
     const fetchPatreonData = async () => {
-      const patreonData = await fetch('/api/patreon')
+      const patreonUser = await patreonService.getCurrentUserPatreon()
 
-      if (patreonData.ok) {
-        const patreonUser = (await patreonData.json()) as IPatreonUser
-
-        if (patreonUser) {
-          setPatreon(patreonUser)
-        }
+      if (patreonUser) {
+        setPatreon(patreonUser)
       }
     }
 
@@ -34,9 +34,9 @@ export const PatreonIntegration = () => {
   }, [])
 
   const removePatreonConnection = async () => {
-    const result = await fetch('/api/patreon', { method: 'DELETE' })
+    const result = await patreonService.disconnectUserPatreon()
 
-    if (result.ok) {
+    if (result) {
       setPatreon(undefined)
     }
   }
@@ -68,42 +68,44 @@ export const PatreonIntegration = () => {
           <Heading as="h2" variant="small">
             {HEADING}
           </Heading>
-          {patreon ? (
+          {patreonUser ? (
             <>
               <Text>{SUCCESS_MESSAGE}</Text>
-              {patreon.membership && (
+              {patreonUser?.isSupporter && patreonUser.patreon.membership && (
                 <Flex sx={{ flexDirection: 'column' }}>
                   <Text mt={4}>{SUPPORTER_MESSAGE}</Text>
-                  {patreon.membership.tiers.map(({ id, attributes }) => (
-                    <Flex
-                      key={id}
-                      sx={{
-                        alignItems: 'center',
-                        mt: 4,
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: '40px',
-                          height: '40px',
-                          overflow: 'hidden',
-                          marginRight: '10px',
+                  {patreonUser.patreon.membership.tiers.map(
+                    ({ id, attributes }) => (
+                      <Flex
+                        key={id}
+                        sx={{
+                          alignItems: 'center',
+                          mt: 4,
                         }}
                       >
-                        <Image
-                          src={attributes.image_url}
-                          sx={{
-                            borderRadius: '50%',
-                            width: 'auto',
+                        <div
+                          style={{
+                            width: '40px',
                             height: '40px',
-                            objectFit: 'cover',
-                            objectPosition: 'center',
+                            overflow: 'hidden',
+                            marginRight: '10px',
                           }}
-                        />
-                      </div>
-                      <Text>{attributes.title}</Text>
-                    </Flex>
-                  ))}
+                        >
+                          <Image
+                            src={attributes.image_url}
+                            sx={{
+                              borderRadius: '50%',
+                              width: 'auto',
+                              height: '40px',
+                              objectFit: 'cover',
+                              objectPosition: 'center',
+                            }}
+                          />
+                        </div>
+                        <Text>{attributes.title}</Text>
+                      </Flex>
+                    ),
+                  )}
                 </Flex>
               )}
             </>
@@ -118,9 +120,9 @@ export const PatreonIntegration = () => {
 
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
         <Button type="button" onClick={patreonRedirect} variant="primary">
-          {patreon ? UPDATE_BUTTON_TEXT : CONNECT_BUTTON_TEXT}
+          {patreonUser ? UPDATE_BUTTON_TEXT : CONNECT_BUTTON_TEXT}
         </Button>
-        {patreon && (
+        {patreonUser && (
           <Button
             type="button"
             onClick={removePatreonConnection}

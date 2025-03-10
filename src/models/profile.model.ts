@@ -59,7 +59,7 @@ interface IPatreonTier {
   attributes: IPatreonTierAttributes
 }
 
-interface IPatreonMembership {
+export interface IPatreonMembership {
   id: string
   attributes: IPatreonMembershipAttributes
   tiers: IPatreonTier[]

@@ -147,7 +147,7 @@ export interface IUser {
   // images will be in different formats if they are pending upload vs pulled from db
   coverImages: IUploadedFileMeta[]
   userImage?: IUploadedFileMeta
-  links: IExternalLink[]
+  links?: IExternalLink[]
   userRoles?: UserRole[]
   about?: string | null
   country?: string | null

@@ -25,7 +25,7 @@ import { FlexSectionContainer } from '../elements'
 import { ProfileLinkField } from '../fields/ProfileLink.field'
 import { ProfileTags } from './ProfileTags.section'
 
-import type { IUser } from 'oa-shared'
+import type { IExternalLink, IUser } from 'oa-shared'
 
 interface IProps {
   formValues: Partial<IUser>
@@ -154,27 +154,27 @@ export const UserInfosSection = ({ formValues }: IProps) => {
             gap: [4, 4, 2],
           }}
         >
-          <Text>{`${fields.links.title} *`}</Text>
-          <FieldArray name="links" initialValue={links}>
+          <Text>{fields.links.title}</Text>
+          <FieldArray name="links" initialValue={links as IExternalLink[]}>
             {({ fields }) => (
               <>
                 {fields
                   ? fields.map((name, i: number) => (
                       <ProfileLinkField
-                        key={fields.value[i].key}
+                        key={i}
                         name={name}
                         onDelete={() => {
                           fields.remove(i)
                         }}
                         index={i}
-                        isDeleteEnabled={i > 0 || (fields as any).length > 1}
+                        isDeleteEnabled={true}
                       />
                     ))
                   : null}
                 <Button
                   type="button"
                   data-cy="add-link"
-                  variant="quiet"
+                  variant="secondary"
                   onClick={() => {
                     fields.push({} as any)
                   }}

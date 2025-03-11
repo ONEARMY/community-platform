@@ -7,9 +7,9 @@ const nonMemberProfileTypes = Object.values(ProfileTypeList).filter(
 )
 
 export const isProfileComplete = (user: IUserDB): boolean => {
-  const { about, coverImages, displayName, links, userImage } = user
+  const { about, coverImages, displayName, userImage } = user
 
-  const isBasicInfoFilled = !!(about && displayName && links?.length !== 0)
+  const isBasicInfoFilled = !!(about && displayName)
 
   const isMember = user.profileType === ProfileTypeList.MEMBER
   const isSpace = !!nonMemberProfileTypes.find(

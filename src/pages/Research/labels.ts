@@ -91,6 +91,7 @@ export const update: ILabels = {
 export const listing = {
   create: 'Add Research',
   join: 'Sign up to add your research',
+  incompleteProfile: 'Complete your profile to add your research',
   noItems: 'No research to show',
   heading: 'Help out with Research & Development',
   filterCategory: 'Filter by category',

@@ -81,9 +81,10 @@ export const SettingsPageUserProfile = () => {
     return errors
   }
 
-  const coverImages = new Array(4)
-    .fill(null)
-    .map((v, i) => (user.coverImages[i] ? user.coverImages[i] : v))
+  const emptyArray = new Array(4).fill(null)
+  const coverImages = user.coverImages
+    ? emptyArray.map((v, i) => (user.coverImages[i] ? user.coverImages[i] : v))
+    : emptyArray
 
   const initialValues = {
     profileType: user.profileType || ProfileTypeList.MEMBER,

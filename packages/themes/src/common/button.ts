@@ -30,6 +30,15 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
       backgroundColor: colors.accent.base,
     },
   },
+  disabled: {
+    ...BASE_BUTTON,
+    color: colors.black,
+    backgroundColor: colors.accent.base,
+    opacity: 0.5,
+    '&:hover': {
+      backgroundColor: colors.accent.hover,
+    },
+  },
   secondary: {
     ...BASE_BUTTON,
     border: '2px solid ' + colors.black,

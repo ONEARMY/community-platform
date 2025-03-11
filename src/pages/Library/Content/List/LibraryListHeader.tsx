@@ -6,6 +6,7 @@ import {
   ReturnPathLink,
   SearchField,
   Select,
+  Tooltip,
 } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { UserAction } from 'src/common/UserAction'
@@ -143,6 +144,24 @@ export const LibraryListHeader = (props: IProps) => {
 
   const actionComponents = (
     <UserAction
+      incompleteProfile={
+        <>
+          <Link
+            to="/settings"
+            data-tooltip-id="tooltip"
+            data-tooltip-content={listing.incompleteProfile}
+          >
+            <Button
+              type="button"
+              data-cy="complete-profile-project"
+              variant="disabled"
+            >
+              {listing.create}
+            </Button>
+          </Link>
+          <Tooltip id="tooltip" />
+        </>
+      }
       loggedIn={
         <>
           <DraftButton

@@ -25,9 +25,16 @@ describe('[Questions.Discussions]', () => {
 
     cy.signUpNewUser(visitor)
 
-    cy.step('Can add comment')
+    cy.step("Can't add comment with an incomplete profile")
+    cy.visit(questionPath)
+    cy.get('[data-cy=comments-form]').should('not.exist')
+    cy.get('[data-cy=comments-incomplete-profile-prompt]').should('be.visible')
+
+    cy.step('Can add comment when profile is complete')
+    cy.completeUserProfile(visitor.username)
     cy.visit(questionPath)
     cy.contains('Start the discussion')
+    cy.get('[data-cy=comments-incomplete-profile-prompt]').should('not.exist')
     cy.addComment(newComment)
     cy.contains('1 Comment')
 
@@ -37,7 +44,7 @@ describe('[Questions.Discussions]', () => {
     cy.step('Another user can add reply')
     const secondCommentor = generateNewUserDetails()
     cy.logout()
-    cy.signUpNewUser(secondCommentor)
+    cy.signUpCompletedUser(secondCommentor)
     cy.visit(questionPath)
     cy.addReply(newReply)
     cy.wait(1000)

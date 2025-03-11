@@ -10,7 +10,7 @@ export enum UserMenuItem {
 }
 
 interface IInfo {
-  displayName: string
+  displayName?: string
   country?: string
   description: string
 }
@@ -65,6 +65,8 @@ declare global {
       setSettingPublicContact()
 
       signUpNewUser(user?): Chainable<void>
+      signUpCompletedUser(user?): Chainable<void>
+      completeUserProfile(username: string): Chainable<void>
       confirmUser(username: string): Chainable<void>
 
       toggleUserMenuOn(): Chainable<void>
@@ -100,7 +102,7 @@ Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
   const { country, description, displayName } = info
 
   cy.step('Update Info section')
-  cy.get('[data-cy=displayName').clear().type(displayName)
+  displayName && cy.get('[data-cy=displayName').clear().type(displayName)
   cy.get('[data-cy=info-description').clear().type(description)
   country && cy.selectTag(country, '[data-cy=location-dropdown]')
 })
@@ -169,6 +171,7 @@ Cypress.Commands.add('signIn', (email: string, password: string) => {
   cy.get('[data-cy=email]').clear().type(email)
   cy.get('[data-cy=password]').clear().type(password)
   cy.get('[data-cy=submit]').click()
+  cy.get('[data-cy=loader]').should('not.exist')
 })
 
 Cypress.Commands.add('logout', () => {
@@ -260,4 +263,23 @@ Cypress.Commands.add('signUpNewUser', (user?) => {
   cy.fillSignupForm(username, email, password)
   cy.get('[data-cy=submit]').click()
   cy.url().should('include', 'sign-up-message')
+})
+
+Cypress.Commands.add('completeUserProfile', (username) => {
+  const userImage = 'avatar'
+
+  cy.log('Complete user profile')
+  cy.visit('/settings')
+  cy.setSettingImage(userImage, 'userImage')
+  cy.wait(1500)
+  cy.setSettingBasicUserInfo({
+    description: `${username} profile description.`,
+  })
+  cy.saveSettingsForm()
+})
+
+Cypress.Commands.add('signUpCompletedUser', (user?) => {
+  const { username } = user || generateNewUserDetails()
+  cy.signUpNewUser(user)
+  cy.completeUserProfile(username)
 })

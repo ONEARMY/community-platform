@@ -29,8 +29,6 @@ const { countries } = pkg
 type PartialUser = Partial<IUserDB>
 
 export class UserStore extends ModuleStore {
-  private authUnsubscribe: firebase.default.Unsubscribe
-
   public user: IUserDB | null | undefined = null
   public authUser: User | null = null // TODO: Fix type
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
@@ -317,10 +315,6 @@ export class UserStore extends ModuleStore {
         _lastActive,
         ...updateFields,
       })
-  }
-
-  private _unsubscribeFromAuthStateChanges() {
-    this.authUnsubscribe()
   }
 
   public _updateActiveUser(user?: IUserDB | null) {

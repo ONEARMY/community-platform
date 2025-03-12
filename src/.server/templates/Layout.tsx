@@ -63,10 +63,7 @@ export default function Layout({ children, settings, preview }: LayoutArgs) {
             <p style={{ textAlign: 'center' }}>
               You've recieved this because you're opted in to be contacted by
               other community members. If you want to opt out,{' '}
-              <a href={settings.siteUrl + '/settings'}>
-                you can change your that here
-              </a>
-              .
+              <a href={settings.siteUrl + '/settings'}>change that here</a>.
             </p>
           </Container>
         </Container>

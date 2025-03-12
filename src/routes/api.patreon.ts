@@ -41,7 +41,7 @@ export const action = async ({ request }) => {
   }
 
   try {
-    await patreonServiceServer.disconnectUser(user, client);
+    await patreonServiceServer.disconnectUser(user, client)
 
     return Response.json({}, { headers, status: 200 })
   } catch (err) {

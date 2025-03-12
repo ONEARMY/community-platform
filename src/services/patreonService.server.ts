@@ -21,11 +21,9 @@ const isSupporter = async (
   const result = await client.from('patreon_settings').select('tiers').limit(1)
   const patreonSettings = result.data?.[0] as PatreonSettings
 
-  const validIds = patreonSettings.tiers.map(x => x.id);
+  const validIds = patreonSettings.tiers.map((x) => x.id)
 
-  return patreonUser.membership?.tiers.some(({ id }) =>
-    validIds.includes(id),
-  )
+  return patreonUser.membership?.tiers.some(({ id }) => validIds.includes(id))
 }
 
 const parsePatreonUser = (patreonUser: any): PatreonUser => {
@@ -189,5 +187,5 @@ const disconnectUser = async (user: User, client: SupabaseClient) => {
 
 export const patreonServiceServer = {
   verifyAndUpdatePatreonUser,
-  disconnectUser
+  disconnectUser,
 }

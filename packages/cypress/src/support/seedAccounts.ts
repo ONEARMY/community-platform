@@ -79,7 +79,7 @@ export const deleteAccounts = async () => {
 
   for (const user of result.data.users) {
     // only delete mock users and test users
-    if (mockUsers.has(user.email) || user.email.endsWith('@test.com')) {
+    if (mockUsers.has(user.email) || user.email.endsWith('@resend.dev')) {
       await adminClient.auth.admin.deleteUser(user.id)
     }
   }

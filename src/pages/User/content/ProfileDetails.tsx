@@ -19,28 +19,23 @@ export const ProfileDetails = ({ docs, user }: IProps) => {
     <Box>
       <Flex
         sx={{
-          flexDirection: ['column', 'column', 'row'],
-          justifyContent: 'space-between',
           alignItems: 'flex-start',
+          flexDirection: ['column', 'column', 'row'],
           gap: [0, 0, 6],
+          justifyContent: 'space-between',
         }}
       >
         <Flex
           sx={{
             flexDirection: 'column',
-            width: ['100%', '100%', '80%'],
+            flex: 1,
             gap: 2,
           }}
         >
           {tags && <ProfileTags tagIds={tags} />}
           {about && <Paragraph>{about}</Paragraph>}
         </Flex>
-        <Box
-          sx={{
-            width: ['auto', 'auto', '20%'],
-            mt: [3, 3, 0],
-          }}
-        >
+        <Box sx={{ marginTop: [3, 3, 0] }}>
           <AuthWrapper
             roleRequired={UserRole.BETA_TESTER}
             fallback={

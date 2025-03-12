@@ -58,7 +58,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
           useLowDetailVersion
         />
       )}
-      <Card>
+      <Card variant="responsive">
         <ProfileImage user={user} />
         <Flex
           sx={{

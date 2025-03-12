@@ -84,10 +84,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   if (data.user) {
-    await authServiceServer.createUserProfile(
+    const { error } = await authServiceServer.createUserProfile(
       { user: data.user, username },
       client,
     )
+
+    // This will error if there is already a profile with this auth_id + tenant_id
+    if (error) {
+      return Response.json(
+        { error: FRIENDLY_MESSAGES['generic-error'] },
+        { headers },
+      )
+    }
 
     await userService.createFirebaseProfile(data.user)
   }

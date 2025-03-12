@@ -122,7 +122,6 @@ export const SettingsPageUserProfile = () => {
         if (isLoading) return <Loader sx={{ alignSelf: 'center' }} />
 
         const isMember = values.profileType === ProfileTypeList.MEMBER
-        console.log(values.links)
 
         return (
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>

@@ -143,7 +143,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
       parent_id,
       source_type,
       created_by,
-      profiles(id, firebase_auth_id, display_name, username, is_verified, photo_url, country)
+      profiles(id, firebase_auth_id, display_name, username, is_verified, is_supporter, photo_url, country)
     `,
     )
     .single()

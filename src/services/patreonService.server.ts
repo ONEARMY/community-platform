@@ -18,20 +18,14 @@ const isSupporter = async (
     return false
   }
 
-  const result = await client.from('patreon_settings').select('*').limit(1)
+  const result = await client.from('patreon_settings').select('tiers').limit(1)
   const patreonSettings = result.data?.[0] as PatreonSettings
-  const validIds = [
-    patreonSettings.oa_basic_tier_id,
-    patreonSettings.oa_plus_tier_id,
-    patreonSettings.oa_magic_tier_id,
-    patreonSettings.tenant_tier_id,
-  ].filter(Boolean)
 
-  const supportsValidTier = patreonUser.membership?.tiers.some(({ id }) =>
+  const validIds = patreonSettings.tiers.map(x => x.id);
+
+  return patreonUser.membership?.tiers.some(({ id }) =>
     validIds.includes(id),
   )
-
-  return supportsValidTier
 }
 
 const parsePatreonUser = (patreonUser: any): PatreonUser => {
@@ -176,6 +170,24 @@ const verifyAndUpdatePatreonUser = async (
     })
 }
 
+const disconnectUser = async (user: User, client: SupabaseClient) => {
+  await client
+    .from('profiles')
+    .update({ patreon: null, is_supporter: false })
+    .eq('auth_id', user.id)
+
+  // Update in firebase - need this until we fully migrate profile and map
+  await firestore
+    .doc(DB_ENDPOINTS.users + '/' + user.user_metadata['username'])
+    .update({
+      patreon: null,
+      badges: {
+        supporter: false,
+      },
+    })
+}
+
 export const patreonServiceServer = {
   verifyAndUpdatePatreonUser,
+  disconnectUser
 }

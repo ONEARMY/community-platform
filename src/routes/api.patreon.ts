@@ -1,5 +1,7 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
+import { patreonServiceServer } from '../services/patreonService.server'
+
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request)
 
@@ -38,10 +40,11 @@ export const action = async ({ request }) => {
     return Response.json({}, { headers, status: 401 })
   }
 
-  await client
-    .from('profiles')
-    .update({ patreon: null, is_supporter: false })
-    .eq('auth_id', user.id)
+  try {
+    await patreonServiceServer.disconnectUser(user, client);
 
-  return Response.json({}, { headers, status: 200 })
+    return Response.json({}, { headers, status: 200 })
+  } catch (err) {
+    return Response.json({}, { headers, status: 500 })
+  }
 }

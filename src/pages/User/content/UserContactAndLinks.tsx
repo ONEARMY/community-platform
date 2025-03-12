@@ -4,7 +4,7 @@ import { Box } from 'theme-ui'
 
 export const UserContactAndLinks = ({ links }) =>
   links.length ? (
-    <Box sx={{ mt: 6 }}>
+    <Box>
       <span>Links</span>
       {links.map((link, i) => (
         <ProfileLink

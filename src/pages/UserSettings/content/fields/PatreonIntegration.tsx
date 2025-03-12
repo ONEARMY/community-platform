@@ -118,13 +118,8 @@ export const PatreonIntegration = () => {
         </Flex>
       </Flex>
 
-      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-        <Button
-          type="button"
-          onClick={patreonRedirect}
-          variant="primary"
-          sx={{ width: 'fit-content' }}
-        >
+      <Flex sx={{ gap: 2 }}>
+        <Button type="button" onClick={patreonRedirect} variant="primary">
           {patreonUser?.patreon ? UPDATE_BUTTON_TEXT : CONNECT_BUTTON_TEXT}
         </Button>
         {patreonUser?.patreon && (

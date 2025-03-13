@@ -118,6 +118,13 @@ const getCurrentPatreonUser = async (accessToken: string) => {
       Authorization: `Bearer ${accessToken}`,
     },
   })
+
+  if (!response.ok) {
+    const { error } = await response.json()
+    console.error(error)
+    throw new Error('Error getting patreon user')
+  }
+
   return await response.json()
 }
 
@@ -143,6 +150,13 @@ const verifyAndUpdatePatreonUser = async (
       },
     },
   )
+
+  if (!response.ok) {
+    const { error } = await response.json()
+    console.error(error)
+    throw new Error('Error getting patreon access token')
+  }
+
   const { access_token } = await response.json()
   const patreonUser = await getCurrentPatreonUser(access_token)
   const patreonUserParsed = parsePatreonUser(patreonUser)

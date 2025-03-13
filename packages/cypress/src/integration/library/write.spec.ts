@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker'
 import { DifficultyLevel, IModerationStatus } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
+import { generateNewUserDetails } from '../../utils/TestUtils'
 
 describe('[Library]', () => {
   beforeEach(() => {
@@ -180,7 +181,6 @@ describe('[Library]', () => {
 
       cy.get('[data-cy="sign-up"]')
       cy.signIn(creator.email, creator.password)
-      cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy="MemberBadge-member"]').should('be.visible')
       cy.visit('/library')
 
@@ -334,6 +334,23 @@ describe('[Library]', () => {
       cy.get('[data-cy=intro-title]').clear().blur({ force: true })
       cy.get('[data-cy=page-link][href*="/library"]').click()
       cy.url().should('match', /\/library?/)
+    })
+
+    it('[Incomplete Users]', () => {
+      const user = generateNewUserDetails()
+      cy.signUpNewUser(user)
+
+      cy.step("Can't add a library project with an incomplete profile")
+      cy.visit('/library')
+      cy.get('[data-cy=create-project]').should('not.exist')
+      cy.get('[data-cy=complete-profile-project]').should('be.visible')
+
+      cy.completeUserProfile(user.username)
+
+      cy.step('Can add a library project now profile is complete')
+      cy.visit('/library')
+      cy.get('[data-cy=create-project]').should('be.visible')
+      cy.get('[data-cy=complete-profile-project]').should('not.exist')
     })
   })
 })

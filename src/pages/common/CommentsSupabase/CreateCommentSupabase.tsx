@@ -80,6 +80,7 @@ export const CreateCommentSupabase = observer((props: Props) => {
             }}
           >
             <UserAction
+              incompleteProfile={<IncompleteProfilePrompt />}
               loggedIn={
                 <Flex sx={{ flexDirection: 'column' }}>
                   <Box
@@ -162,6 +163,25 @@ const LoginPrompt = () => {
           }}
         >
           Login to leave a comment
+        </ReturnPathLink>
+      </Text>
+    </Box>
+  )
+}
+
+const IncompleteProfilePrompt = () => {
+  return (
+    <Box sx={{ padding: [3, 4] }}>
+      <Text data-cy="comments-incomplete-profile-prompt">
+        Hi there!{' '}
+        <ReturnPathLink
+          to="/settings"
+          style={{
+            textDecoration: 'underline',
+            color: 'inherit',
+          }}
+        >
+          Complete your profile leave a comment
         </ReturnPathLink>
       </Text>
     </Box>

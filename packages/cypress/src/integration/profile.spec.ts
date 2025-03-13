@@ -13,7 +13,6 @@ import {
 
 const { admin, profile_views, subscriber } = MOCK_DATA.users
 const eventReader = MOCK_DATA.users.event_reader
-const machine = MOCK_DATA.users.settings_machine_new
 const userProfiletype = MOCK_DATA.users.settings_workplace_new
 const workspaceEmpty = MOCK_DATA.users.settings_workplace_empty
 
@@ -40,24 +39,24 @@ describe('[Profile]', () => {
       cy.step('Cannot see profile views')
       cy.get('[data-testid=profile-views-stat]').should('not.exist')
 
-      cy.step('Cannot see contact tab for workspaces')
-      cy.visit(`/u/${machine.userName}`)
-      cy.contains('[data-cy=contact-tab]').should('not.exist')
+      cy.get('[data-cy=emptyProfileMessage]').should('not.exist')
     })
   })
 
   describe('[By User]', () => {
     it('[User directed to own profile]', () => {
-      cy.signIn(subscriber.email, subscriber.password)
+      const user = generateNewUserDetails()
+      cy.signUpNewUser(user)
       cy.visit('/')
 
       cy.step('Go to Profile')
       cy.clickMenuItem(UserMenuItem.Profile)
       cy.wait(5000)
-      cy.url().should('include', `/u/${subscriber.userName}`)
-      cy.get('[data-cy=spaceProfile]').should('not.exist')
+      cy.url().should('include', `/u/${user.username}`)
+      cy.get('[data-cy=SpaceProfile]').should('not.exist')
       cy.get('[data-cy=MemberProfile]').should('be.visible')
       cy.get('.beta-tester-feature').should('not.exist')
+      cy.get('[data-cy=emptyProfileMessage]').should('be.visible')
     })
 
     it('[Cannot edit another user profile]', () => {
@@ -70,30 +69,17 @@ describe('[Profile]', () => {
       cy.get('[data-cy=BlockedRoute]').should('be.visible')
     })
 
-    it('[Can contact profiles by default]', () => {
+    it('[Can message users]', () => {
+      localStorage.setItem('VITE_NO_MESSAGING', 'false')
+
       const message = faker.lorem
         .sentences(50)
         .slice(0, MESSAGE_MAX_CHARACTERS)
         .trim()
       const user = generateNewUserDetails()
 
-      cy.step('Can sign-up as a space which will have a contact form')
+      cy.step('Can sign-up and have a contact form')
       cy.signUpNewUser(user)
-      cy.visit('/settings')
-      cy.setSettingFocus('workspace')
-      cy.setSettingBasicUserInfo({
-        displayName: user.username,
-        country: 'Bolivia',
-        description: 'New profile to test the contact form',
-      })
-      cy.setSettingImage('profile-cover-1-edited', 'coverImages-0')
-      cy.selectTag('Mixed', '[data-cy=tag-select]')
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.EMAIL,
-        url: 'something@test.com',
-      })
-      cy.saveSettingsForm()
       cy.step('Go to Profile')
       cy.visit(`/u/${user.username}`)
 
@@ -114,15 +100,46 @@ describe('[Profile]', () => {
       cy.get('[data-cy=contact-submit]').click()
       cy.contains(contact.successMessage)
 
-      cy.step("Can't contact pages when users opts out")
+      cy.step("Can't contact pages when user opts out")
       cy.visit('/settings')
+      cy.setSettingFocus('workspace')
+      cy.setSettingBasicUserInfo({
+        displayName: user.username,
+        country: 'Bolivia',
+        description: 'New profile to test the contact form',
+      })
+      cy.setSettingImage('profile-cover-1-edited', 'coverImages-0')
+      cy.selectTag('Mixed', '[data-cy=tag-select]')
+      cy.setSettingAddContactLink({
+        index: 0,
+        label: ExternalLinkLabel.EMAIL,
+        url: 'something@test.com',
+      })
+      cy.get('[data-cy=PublicContactSection]').should('be.visible')
       cy.get('[data-cy=isContactableByPublic-true]').click({ force: true })
       cy.saveSettingsForm()
       cy.get('[data-cy=isContactableByPublic-false]')
 
       cy.visit(`/u/${user.username}`)
-      cy.get('[data-cy=contact-tab]').click()
-      cy.contains('[dat-cy=UserContactForm]').should('not.exist')
+      cy.get('[data-cy=contact-tab]').should('not.exist')
+    })
+
+    it("[Can't message users when config set]", () => {
+      localStorage.setItem('VITE_NO_MESSAGING', 'true')
+
+      const user = generateNewUserDetails()
+
+      cy.step("Can sign-up and won't have a contact form")
+      cy.signUpNewUser(user)
+      cy.step('Go to Profile')
+      cy.visit(`/u/${user.username}`)
+
+      cy.step('No contact tab')
+      cy.get('[data-cy=contact-tab]').should('not.exist')
+
+      cy.step('No setting to turn it on')
+      cy.visit('/settings')
+      cy.get('[data-cy=PublicContactSection]').should('not.exist')
     })
 
     it('[Can see impact data for workspaces]', () => {

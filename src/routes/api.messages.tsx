@@ -44,6 +44,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const from = userProfile.data!.at(0)!.id
     const to = recipientProfile.data!.at(0)!.id
+    const toAuthId = recipientProfile.data!.at(0)!.auth_id
 
     const today = new Date()
     const yesterday = new Date(today.getTime() - 1000 * 60 * 60 * 24)
@@ -81,9 +82,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw messageResult.error
     }
 
-    const emailResult = await client.rpc('get_user_email_by_id', {
-      id: recipientProfile.data![0].auth_id,
-    })
+    // TODO: use get_user_email_by_id only after removing firebase completely and all profiles have an auth_id
+    const emailResult = toAuthId
+      ? await client.rpc('get_user_email_by_id', { id: toAuthId })
+      : await client.rpc('get_user_email_by_username', {
+          username: data.to,
+        })
     const receiverEmail = emailResult.data[0].email
     const fromUsername = userProfile.data![0].username
     const emailTemplate = (

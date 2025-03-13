@@ -36,6 +36,7 @@ export const seedAccounts = async () => {
       created_at: new Date().toUTCString(),
       display_name: x.username,
       is_verified: true,
+      is_supporter: false,
     }))
 
   return await seedDatabase({ profiles }, tenantId)

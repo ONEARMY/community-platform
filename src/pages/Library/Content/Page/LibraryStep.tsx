@@ -38,12 +38,12 @@ const Step = (props: IProps) => {
 
       <Flex
         sx={{
-          flex: 9,
+          flex: 1,
           flexDirection: ['column', 'column', 'row'],
           overflow: 'hidden',
         }}
       >
-        <Card>
+        <Card sx={{ flex: 1 }}>
           <Flex
             sx={{
               flexDirection: ['column-reverse', 'column-reverse', 'row'],

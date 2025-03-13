@@ -16,7 +16,7 @@ export const buttons = {
   },
   guidelines: 'Check out our guidelines',
   link: {
-    add: 'Add another link',
+    add: 'Add link',
     type: 'type',
   },
   map: 'Add a map pin',

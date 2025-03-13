@@ -28,13 +28,8 @@ export const Impact = (props: Props) => {
     )
   })
 
-  const sx = {
-    flexFlow: 'row wrap',
-    my: 2,
-  }
-
   return (
-    <Flex sx={sx} data-cy="ImpactPanel">
+    <Flex sx={{ flexFlow: 'row wrap' }} data-cy="ImpactPanel">
       {renderByYear.map((year) => {
         return year
       })}

@@ -26,11 +26,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
       return redirect('/sign-in', { headers })
     }
 
+    const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:'
+    const origin = `${protocol}//${url.host}`
+
     await patreonServiceServer.verifyAndUpdatePatreonUser(
       patreonCode,
       user,
       client,
-      url.origin,
+      origin,
     )
 
     return redirect('/settings/account', { headers })

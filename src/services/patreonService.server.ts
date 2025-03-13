@@ -152,8 +152,8 @@ const verifyAndUpdatePatreonUser = async (
   )
 
   if (!response.ok) {
-    const { error } = await response.json()
-    console.error({ error, PATREON_CLIENT_ID, PATREON_CLIENT_SECRET })
+    const result = await response.json()
+    console.error({ result })
     throw new Error('Error getting patreon access token')
   }
 

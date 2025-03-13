@@ -1,6 +1,6 @@
 import { isObservableObject, toJS } from 'mobx'
 import { IModerationStatus, UserRole } from 'oa-shared'
-import { getConfigurationOption } from 'src/config/config'
+import { getConfigurationOption, NO_MESSAGING } from 'src/config/config'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 
 import type { DBDoc, IMapPin, IModerable, IUser } from 'oa-shared'
@@ -190,11 +190,19 @@ export const isUserBlockedFromMessaging = (user: IUser | null | undefined) => {
   return user.isBlockedFromMessaging
 }
 
+export const isMessagingBlocked = () => {
+  return NO_MESSAGING === 'true'
+}
+
 export const isUserContactable = (user: IUser) => {
   return isContactable(user.isContactableByPublic)
 }
 
 export const isContactable = (preference: boolean | undefined) => {
+  if (isMessagingBlocked()) {
+    return false
+  }
+
   return typeof preference === 'boolean'
     ? preference
     : DEFAULT_PUBLIC_CONTACT_PREFERENCE

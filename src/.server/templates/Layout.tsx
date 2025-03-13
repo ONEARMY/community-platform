@@ -1,85 +1,73 @@
-import React from 'react'
-
-import styled from '@emotion/styled'
+import {
+  Body,
+  Container,
+  Head,
+  Html,
+  Img,
+  Preview,
+  Section,
+} from '@react-email/components'
 import { MessageSettings } from '../models/messageSettings'
 
-const EmailContainer = styled.table`
-  width: 100%;
-  border: 0;
-`
+import type { ReactNode } from 'react'
 
-const Border = styled.div`
-  border: 3px solid black;
-  border-radius: 10px;
-  padding: 4% 0;
-  margin: 4% 0;
-  width: 550px;
-`
-
-const SettingsTableContainer = styled.table`
-  margin-bottom: 8%;
-`
-
-const ProjectImageTableContainer = styled.table`
-  margin-bottom: 8%;
-`
-
-const GreetingContainer = styled.div`
-  margin-left: 8%;
-  margin-right: 8%;
-`
-
-type LayoutArgs = {
-  children: React.ReactNode
-  settings: MessageSettings
+const body = {
+  backgroundColor: '#f4f6f7',
+  fontFamily: 'Varela Round", Arial, sans-serif',
+  fontSize: '14px',
+  color: '#000000',
 }
 
-export default function Layout({ children, settings }: LayoutArgs) {
+const card = {
+  background: '#fff',
+  border: '2px solid black',
+  borderRadius: '15px',
+  padding: '15px',
+  margin: '0 auto',
+}
+
+const wrapper = {
+  maxWidth: '600px',
+}
+
+type LayoutArgs = {
+  children: ReactNode
+  settings: MessageSettings
+  preview: string
+}
+
+export default function Layout({ children, settings, preview }: LayoutArgs) {
   return (
-    <EmailContainer className="email-table-container">
-      <tbody>
-        <tr>
-          <td align="center">
-            <Border className="border">
-              <ProjectImageTableContainer className="project-image-table-container">
-                <tbody>
-                  <tr>
-                    <td align="center">
-                      <img
-                        width="144"
-                        alt={settings.siteName}
-                        src={settings.siteImage}
-                      />
-                    </td>
-                  </tr>
-                </tbody>
-              </ProjectImageTableContainer>
-              <GreetingContainer className="greeting-container">
-                {children}
-                <p>
-                  Cheers,
-                  <br />
-                  {settings.messageSignOff}
-                </p>
-              </GreetingContainer>
-            </Border>
-            <SettingsTableContainer className="settings-table-container">
-              <tbody>
-                <tr>
-                  <td align="center">
-                    <div>
-                      Manage your notifications
-                      <a href={settings.siteUrl + '/settings/notifications'}>
-                        here
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </SettingsTableContainer>
-          </td>
-        </tr>
-      </tbody>
-    </EmailContainer>
+    <Html>
+      <Head />
+      <Preview>{preview}</Preview>
+      <Body style={body}>
+        <Container style={wrapper}>
+          <Container style={card}>
+            <Section>
+              <Img
+                width="85"
+                alt={settings.siteName}
+                src={settings.siteImage}
+              />
+
+              {children}
+              <p>
+                Cheers,
+                <br />
+                {settings.messageSignOff}
+              </p>
+            </Section>
+          </Container>
+          <Container style={wrapper}>
+            <p style={{ textAlign: 'center' }}>
+              You've recieved this because you're opted in to be contacted by
+              other community members. If you want to opt out,{' '}
+              <a href={settings.siteUrl + '/settings'}>change that here</a>.
+            </p>
+          </Container>
+        </Container>
+      </Body>
+    </Html>
   )
 }

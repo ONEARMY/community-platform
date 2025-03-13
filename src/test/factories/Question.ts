@@ -27,6 +27,7 @@ export const FactoryQuestionItem = (
     name: faker.internet.userName(),
     country: faker.location.countryCode(),
     isVerified: faker.datatype.boolean(),
+    isSupporter: faker.datatype.boolean(),
     firebaseAuthId: faker.string.uuid(),
     photoUrl: faker.image.avatar(),
     username: faker.internet.userName(),

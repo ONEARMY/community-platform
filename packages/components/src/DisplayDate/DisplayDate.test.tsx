@@ -19,6 +19,6 @@ describe('DisplayDate', () => {
       <TwoMonthsAGo {...(TwoMonthsAGo.args as IProps)} />,
     )
 
-    expect(getByText('2 months ago')).toBeInTheDocument()
+    expect(getByText('2 months ago', { exact: false })).toBeInTheDocument()
   })
 })

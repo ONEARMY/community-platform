@@ -2,7 +2,7 @@ import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { ResearchUpdateStatus } from 'oa-shared'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
-import ResearchArticle from 'src/pages/Research/Content/ResearchArticle'
+import { ResearchArticlePage } from 'src/pages/Research/Content/ResearchArticlePage'
 import { researchService } from 'src/pages/Research/research.service'
 import { pageViewService } from 'src/services/pageViewService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
@@ -57,5 +57,7 @@ export default function Index() {
     return <NotFoundPage />
   }
 
-  return <ResearchArticle research={research} publicUpdates={publicUpdates} />
+  return (
+    <ResearchArticlePage research={research} publicUpdates={publicUpdates} />
+  )
 }

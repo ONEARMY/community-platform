@@ -8,15 +8,14 @@ import { ProfileTypeList } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
+import { isContactable, isMessagingBlocked } from 'src/utils/helpers'
 import { Flex } from 'theme-ui'
-import { v4 as uuid } from 'uuid'
 
 import { FocusSection } from './content/sections/Focus.section'
 import { PublicContactSection } from './content/sections/PublicContact.section'
 import { UserImagesSection } from './content/sections/UserImages.section'
 import { UserInfosSection } from './content/sections/UserInfos.section'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
-import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from './constants'
 import { buttons } from './labels'
 
 import type { IUser } from 'oa-shared'
@@ -44,6 +43,8 @@ export const SettingsPageUserProfile = () => {
     toUpdate.coverImages = (toUpdate.coverImages as any[]).filter((cover) =>
       cover ? true : false,
     )
+
+    toUpdate.links = toUpdate.links || []
 
     try {
       logger.debug({ profile: toUpdate }, 'SettingsPage.saveProfile')
@@ -77,10 +78,6 @@ export const SettingsPageUserProfile = () => {
       errors.coverImages = []
       errors.coverImages[ARRAY_ERROR] = 'Must have at least one cover image'
     }
-    if (!v.links[0]) {
-      errors.links = []
-      errors.links[ARRAY_ERROR] = 'Must have at least one valid link'
-    }
     return errors
   }
 
@@ -88,19 +85,14 @@ export const SettingsPageUserProfile = () => {
     .fill(null)
     .map((v, i) => (user.coverImages[i] ? user.coverImages[i] : v))
 
-  const links = (user && user.links?.length > 0 ? user.links : [{} as any]).map(
-    (i) => ({ ...i, key: uuid() }),
-  )
-
   const initialValues = {
     profileType: user.profileType || ProfileTypeList.MEMBER,
     displayName: user.displayName || null,
     userName: user.userName,
-    links,
+    links: user.links || [],
     location: user.location || null,
     about: user.about || null,
-    isContactableByPublic:
-      user.isContactableByPublic || DEFAULT_PUBLIC_CONTACT_PREFERENCE,
+    isContactableByPublic: isContactable(user.isContactableByPublic),
     userImage: user.userImage || null,
     coverImages,
     tags: user.tags || {},
@@ -129,6 +121,7 @@ export const SettingsPageUserProfile = () => {
         if (isLoading) return <Loader sx={{ alignSelf: 'center' }} />
 
         const isMember = values.profileType === ProfileTypeList.MEMBER
+        console.log(values.links)
 
         return (
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
@@ -148,7 +141,7 @@ export const SettingsPageUserProfile = () => {
 
                 <UserImagesSection isMemberProfile={isMember} values={values} />
 
-                {!isMember && (
+                {!isMessagingBlocked() && (
                   <PublicContactSection
                     isContactableByPublic={values.isContactableByPublic}
                   />

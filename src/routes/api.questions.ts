@@ -37,7 +37,7 @@ export const loader = async ({ request }) => {
       tags,
       title,
       total_views,
-      author:profiles(id, display_name, username, is_verified, country)`,
+      author:profiles(id, display_name, username, is_verified, is_supporter, country)`,
     { count: 'exact' },
   )
 
@@ -144,7 +144,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     }
     const profileRequest = await client
       .from('profiles')
-      .select('id')
+      .select('id,username')
       .eq('auth_id', user!.id)
       .limit(1)
 

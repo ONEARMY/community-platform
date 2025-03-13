@@ -12,7 +12,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
   return (
     <>
       {(docs.library.length > 0 || docs.research.length > 0) && (
-        <Flex pt={2} sx={{ justifyContent: 'space-between', gap: 4 }}>
+        <Flex sx={{ justifyContent: 'space-between', gap: 4 }}>
           {docs?.library.length > 0 && (
             <Flex
               mt={2}

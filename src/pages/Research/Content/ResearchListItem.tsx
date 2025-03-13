@@ -48,14 +48,16 @@ const ResearchListItem = ({ item }: IProps) => {
       data-id={item._id}
       mb={3}
       style={{ position: 'relative' }}
+      variant="responsive"
     >
       <Flex sx={{ width: '100%', position: 'relative' }}>
         <Grid
-          px={3}
-          py={3}
           columns={[1, '60px 2fr 1fr']}
           gap="40px"
-          style={{ width: '100%' }}
+          sx={{
+            width: '100%',
+            padding: 3,
+          }}
         >
           <Box
             sx={{

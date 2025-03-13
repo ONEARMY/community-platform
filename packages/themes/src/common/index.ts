@@ -96,12 +96,26 @@ export const baseTheme = {
   },
   regular: 400,
   bold: 600,
-  fontSizes: [10, 12, 14, 18, 22, 30, 38, 42, 46, 50, 58, 66, 74],
+  fontSizes: [10, 12, 14, 16, 18, 22, 30, 38, 42, 46, 50, 58, 66, 74],
   cards: {
     primary: {
       background: 'white',
       border: `2px solid ${commonStyles.colors.black}`,
       borderRadius: 1,
+      overflow: 'hidden',
+    },
+    responsive: {
+      background: 'white',
+      border: ['none', `2px solid ${commonStyles.colors.black}`],
+      borderTop: `2px solid ${commonStyles.colors.black}`,
+      borderBottom: `2px solid ${commonStyles.colors.black}`,
+      borderRadius: [0, 2],
+      overflow: 'hidden',
+    },
+    borderless: {
+      background: 'white',
+      border: 'none',
+      borderRadius: 2,
       overflow: 'hidden',
     },
   },

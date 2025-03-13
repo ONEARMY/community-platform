@@ -41,6 +41,7 @@ ARG VITE_DONATIONS_IMAGE_URL
 ARG VITE_HOWTOS_HEADING
 ARG VITE_COMMUNITY_PROGRAM_URL
 ARG VITE_QUESTIONS_GUIDELINES_URL
+ARG VITE_NO_MESSAGING
 ARG VITE_HIDE_MEMBER_PINS_BY_DEFAULT
 
 # Throw-away build stage to reduce size of final image
@@ -81,6 +82,7 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     --mount=type=secret,id=VITE_HOWTOS_HEADING \
     --mount=type=secret,id=VITE_COMMUNITY_PROGRAM_URL \
     --mount=type=secret,id=VITE_QUESTIONS_GUIDELINES_URL \
+    --mount=type=secret,id=VITE_NO_MESSAGING \
     --mount=type=secret,id=VITE_HIDE_MEMBER_PINS_BY_DEFAULT \
     VITE_CDN_URL="$(cat /run/secrets/VITE_CDN_URL)" && \
     VITE_BRANCH="$(cat /run/secrets/VITE_BRANCH)" && \
@@ -107,6 +109,7 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     VITE_HOWTOS_HEADING="$(cat /run/secrets/VITE_HOWTOS_HEADING)" && \
     VITE_COMMUNITY_PROGRAM_URL="$(cat /run/secrets/VITE_COMMUNITY_PROGRAM_URL)" && \
     VITE_QUESTIONS_GUIDELINES_URL="$(cat /run/secrets/VITE_QUESTIONS_GUIDELINES_URL)" && \
+    VITE_NO_MESSAGING="$(cat /run/secrets/VITE_NO_MESSAGING)" && \
     VITE_HIDE_MEMBER_PINS_BY_DEFAULT="$(cat /run/secrets/VITE_HIDE_MEMBER_PINS_BY_DEFAULT)" && \
     echo "VITE_CDN_URL=\"${VITE_CDN_URL}\"" >> .env && \
     echo "VITE_BRANCH=\"${VITE_BRANCH}\"" >> .env && \
@@ -133,6 +136,7 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     echo "VITE_HOWTOS_HEADING=\"${VITE_HOWTOS_HEADING}\"" >> .env && \
     echo "VITE_COMMUNITY_PROGRAM_URL=\"${VITE_COMMUNITY_PROGRAM_URL}\"" >> .env && \
     echo "VITE_QUESTIONS_GUIDELINES_URL=\"${VITE_QUESTIONS_GUIDELINES_URL}\"" >> .env && \
+    echo "VITE_NO_MESSAGING=\"${VITE_NO_MESSAGING}\"" >> .env && \
     echo "VITE_HIDE_MEMBER_PINS_BY_DEFAULT=\"${VITE_HIDE_MEMBER_PINS_BY_DEFAULT}\"" >> .env
 
 # Build application

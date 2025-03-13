@@ -41,7 +41,7 @@ export const BreadcrumbItem = ({ text, link, isLast }: BreadcrumbItemProps) => (
         sx={{
           display: 'block',
           color: 'black',
-          fontSize: 15,
+          fontSize: [2, 3],
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
           overflow: 'hidden',

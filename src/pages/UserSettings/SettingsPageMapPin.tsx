@@ -345,12 +345,12 @@ export const SettingsPageMapPin = () => {
           }}
         />
       ) : (
-        <Card variant="borderless" bg="#e3edf6" sx={{borderRadius:"5px"}}>
+        <Card variant="borderless" bg="#e3edf6" sx={{ borderRadius: '5px' }}>
           <Flex
             sx={{
               flexDirection: 'column',
-              gap:'2',
-              padding:"20px"
+              gap: '2',
+              padding: '20px',
             }}
           >
             <Text

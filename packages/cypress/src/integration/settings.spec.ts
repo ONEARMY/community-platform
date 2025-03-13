@@ -66,6 +66,13 @@ describe('[Settings]', () => {
       cy.step('Incomplete profile banner visible')
       cy.get('[data-cy=incompleteProfileBanner]').click()
 
+      cy.step('Cannot add map pin')
+      cy.get('[data-cy="tab-Map"]').click()
+      cy.get('[data-cy=descriptionMember').should('be.visible')
+      cy.contains('No map pin currently saved')
+      cy.get('IncompleteProfileTextDisplay').should('be.visible')
+      cy.get('complete-profile-button').should('be.visible')
+
       cy.step('Member profile badge shown in header by default')
       cy.get(`[data-cy=MemberBadge-${profileType}]`)
 
@@ -146,6 +153,8 @@ describe('[Settings]', () => {
       cy.get('[data-cy="tab-Map"]').click()
       cy.get('[data-cy=descriptionMember').should('be.visible')
       cy.contains('No map pin currently saved')
+      cy.get('IncompleteProfileTextDisplay').should('not.be.visible')
+      cy.get('complete-profile-button').should('not.be.visible')
       cy.fillSettingMapPin(mapDetails)
       cy.get('[data-cy=save-map-pin]').click()
       cy.contains('Map pin saved successfully')

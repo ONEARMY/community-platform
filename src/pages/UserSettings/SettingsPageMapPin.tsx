@@ -22,7 +22,7 @@ import {
 } from 'src/pages/UserSettings/labels'
 import { randomIntFromInterval } from 'src/utils/helpers'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
-import { Alert, Box, Flex, Heading, Text } from 'theme-ui'
+import { Alert, Box, Card, Flex, Heading, Text } from 'theme-ui'
 
 import { createMarkerIcon } from '../Maps/Content/MapView/Sprites'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
@@ -345,43 +345,42 @@ export const SettingsPageMapPin = () => {
           }}
         />
       ) : (
-        <Alert
-          variant="info"
-          sx={{
-            marginTop: 2,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 2,
-            alignItems: 'flex-start',
-          }}
-        >
-          <Text
-            variant="paragraph"
-            data-cy="IncompleteProfileTextDisplay"
-            data-testid="IncompleteProfileTextDisplay"
-            sx={{ fontSize: 1 }}
+        <Card variant="borderless" bg="#e3edf6" sx={{borderRadius:"5px"}}>
+          <Flex
+            sx={{
+              flexDirection: 'column',
+              gap:'2',
+              padding:"20px"
+            }}
           >
-            {inCompleteProfile}
-          </Text>
-          <Link
-            to="/settings"
-            data-testid="complete-profile-button"
-            data-cy="complete-profile-button"
-          >
-            <Button
-              type="button"
-              variant="secondary"
-              data-cy="mapPinPage"
-              backgroundColor="white"
-              sx={{ borderRadius: 3 }}
+            <Text
+              variant="paragraph"
+              data-cy="IncompleteProfileTextDisplay"
+              data-testid="IncompleteProfileTextDisplay"
+              sx={{ fontSize: 1 }}
             >
-              <Flex sx={{ gap: 2 }}>
-                <Icon glyph={'profile'} size={20} />
-                <Text variant="paragraph">Complete your profile</Text>
-              </Flex>
-            </Button>
-          </Link>
-        </Alert>
+              {inCompleteProfile}
+            </Text>
+            <Link
+              to="/settings"
+              data-testid="complete-profile-button"
+              data-cy="complete-profile-button"
+            >
+              <Button
+                type="button"
+                variant="secondary"
+                data-cy="mapPinPage"
+                backgroundColor="white"
+                sx={{ borderRadius: 3 }}
+              >
+                <Flex sx={{ gap: 2 }}>
+                  <Icon glyph={'profile'} size={20} />
+                  <Text variant="paragraph">Complete your profile</Text>
+                </Flex>
+              </Button>
+            </Link>
+          </Flex>
+        </Card>
       )}
     </Flex>
   )

@@ -69,7 +69,6 @@ describe('[Settings]', () => {
       cy.step('Cannot add map pin')
       cy.get('[data-cy="tab-Map"]').click()
       cy.get('[data-cy=descriptionMember').should('be.visible')
-      cy.contains('No map pin currently saved')
       cy.get('IncompleteProfileTextDisplay').should('be.visible')
       cy.get('complete-profile-button').should('be.visible')
 

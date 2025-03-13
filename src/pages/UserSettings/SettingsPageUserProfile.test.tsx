@@ -40,7 +40,7 @@ describe('UserSettings', () => {
 
     await waitFor(() => {
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
-      expect(wrapper.queryByTestId('PublicContactSection')).toBeNull()
+      expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
       expect(wrapper.queryByTestId('cover-image')).toBeNull()
     })

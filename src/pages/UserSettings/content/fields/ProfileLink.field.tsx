@@ -127,7 +127,6 @@ export const ProfileLinkField = (props: IProps) => {
         component={FieldInput}
         placeholder={fields.links.placeholder}
         format={(v) => formatLink(v, state.linkType)}
-        formatOnBlur={true}
       />
       {isDeleteEnabled ? <DeleteButton /> : null}
       {

@@ -88,14 +88,8 @@ Cypress.Commands.add('saveSettingsForm', () => {
 
 Cypress.Commands.add('setSettingAddContactLink', (link: ILink) => {
   cy.step('Set Contact Link')
-
-  if (link.index > 0) {
-    // click the button to add another set of input fields
-    cy.get('[data-cy=add-link]').click()
-  }
-  // specifies the contact type, such as website or discord
+  cy.get('[data-cy=add-link]').click()
   cy.selectTag(link.label, `[data-cy=select-link-${link.index}]`)
-  // input the corresponding value
   cy.get(`[data-cy=input-link-${link.index}]`)
     .clear()
     .type(link.url)

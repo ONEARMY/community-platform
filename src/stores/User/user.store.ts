@@ -283,7 +283,6 @@ export class UserStore extends ModuleStore {
     }
     const user: IUser = {
       coverImages: [],
-      links: [],
       verified: false,
       _authID: '',
       displayName: userName,

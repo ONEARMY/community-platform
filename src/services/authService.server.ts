@@ -19,6 +19,7 @@ const createUserProfile = async (
     username: args.username,
     display_name: args.username,
     is_verified: false,
+    is_supporter: false,
     firebase_auth_id: '',
     tenant_id: process.env.TENANT_ID,
   })

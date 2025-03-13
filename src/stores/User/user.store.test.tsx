@@ -241,21 +241,6 @@ describe('userStore', () => {
     })
   })
 
-  describe('removePatreonConnection', () => {
-    it('clears patreon/badges', async () => {
-      // Act
-      await store.removePatreonConnection('testUserId')
-
-      // Assert
-      expect(store.db.update).toHaveBeenCalledWith(
-        expect.objectContaining({
-          badges: { supporter: false },
-          patreon: null,
-        }),
-      )
-    })
-  })
-
   describe('updateUserProfile', () => {
     it('sends update only for fields provided', async () => {
       const userProfile = FactoryUser({

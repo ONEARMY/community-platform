@@ -105,14 +105,6 @@ export class UserStore extends ModuleStore {
     await this._updateUserRequest(userId, { badges })
   }
 
-  public async removePatreonConnection(userId: string) {
-    await this._updateUserRequest(userId, {
-      badges: { supporter: false },
-      patreon: null,
-    })
-    await this.refreshActiveUserDetails()
-  }
-
   public async updateUserProfile(values: PartialUser, trigger: string) {
     const { _id, coverImages, location, userImage } = values
 
@@ -317,10 +309,6 @@ export class UserStore extends ModuleStore {
         _lastActive,
         ...updateFields,
       })
-  }
-
-  private _unsubscribeFromAuthStateChanges() {
-    this.authUnsubscribe()
   }
 
   public _updateActiveUser(user?: IUserDB | null) {

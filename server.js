@@ -43,6 +43,7 @@ const imgSrc = [
   'onearmy.github.io',
   'cdn.jsdelivr.net',
   '*.google-analytics.com',
+  '*.patreonusercontent.com',
   process.env.SUPABASE_API_URL,
 ]
 

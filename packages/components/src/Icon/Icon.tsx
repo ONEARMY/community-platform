@@ -44,6 +44,7 @@ import type { IGlyphs } from './types'
 export interface IProps extends React.ButtonHTMLAttributes<HTMLElement> {
   glyph: keyof IGlyphs
   color?: string
+  filter?: string
   size?: number | string
   marginRight?: string
   opacity?: string
@@ -199,6 +200,7 @@ export const Icon = (props: Props) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        filter: props.filter ?? 'unset',
         ...sx,
       }}
       size={definedSize}

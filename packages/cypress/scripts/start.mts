@@ -86,6 +86,7 @@ async function main() {
     'cypress.env.json',
     JSON.stringify({
       TENANT_ID: tenantId,
+      RESEND_API_KEY: process.env.RESEND_API_KEY,
       SUPABASE_API_URL: process.env.SUPABASE_API_URL,
       SUPABASE_KEY: process.env.SUPABASE_KEY,
       SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,

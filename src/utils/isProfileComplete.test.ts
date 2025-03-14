@@ -43,18 +43,6 @@ describe('isProfileComplete', () => {
 
         expect(isProfileComplete(user)).toBe(false)
       })
-      it('no links', () => {
-        const missingLinks = {
-          about: 'A member',
-          displayName: 'Jeffo',
-          links: [],
-          profileType: ProfileTypeList.MEMBER,
-          userImage: factoryImage,
-        }
-        const user = FactoryUser(missingLinks)
-
-        expect(isProfileComplete(user)).toBe(false)
-      })
       it('no userImage', () => {
         const missingUserImage = {
           about: 'A member',
@@ -105,18 +93,6 @@ describe('isProfileComplete', () => {
           coverImages: [factoryImage],
         }
         const user = FactoryUser(missingDisplayName)
-
-        expect(isProfileComplete(user)).toBe(false)
-      })
-      it('no links', () => {
-        const missingLinks = {
-          about: 'An important space',
-          displayName: 'Jeffo',
-          links: [],
-          profileType: ProfileTypeList.WORKSPACE,
-          coverImages: [factoryImage],
-        }
-        const user = FactoryUser(missingLinks)
 
         expect(isProfileComplete(user)).toBe(false)
       })

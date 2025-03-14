@@ -6,6 +6,7 @@ import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { Box, Flex, Text, Textarea } from 'theme-ui'
 
 import type { ChangeEvent } from 'react'
+import type { ThemeUIStyleObject } from 'theme-ui'
 
 import './CreateCommentSupabase.css'
 
@@ -14,10 +15,11 @@ export interface Props {
   isLoading?: boolean
   isReply?: boolean
   placeholder?: string
+  sx?: ThemeUIStyleObject | undefined
 }
 
 export const CreateCommentSupabase = observer((props: Props) => {
-  const { onSubmit, isLoading, isReply } = props
+  const { onSubmit, isLoading, isReply, sx } = props
   const userProfileType = 'member'
   const placeholder = props.placeholder || 'Leave your questions or feedback...'
   const buttonLabel = isReply ? 'Leave a reply' : 'Leave a comment'
@@ -40,11 +42,14 @@ export const CreateCommentSupabase = observer((props: Props) => {
         background: 'softblue',
         borderRadius: 2,
         flexDirection: 'column',
-        padding: 3,
+        ...sx,
       }}
     >
       <Flex sx={{ flexDirection: 'column' }}>
-        <Flex data-target="create-comment-container" sx={{ gap: 2 }}>
+        <Flex
+          data-target="create-comment-container"
+          sx={{ gap: 2, padding: isReply ? 2 : 0 }}
+        >
           <Box
             sx={{
               lineHeight: 0,

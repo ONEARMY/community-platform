@@ -1,7 +1,13 @@
 /* eslint-disable unicorn/filename-case */
 import { Field, Form } from 'react-final-form'
 import { Link, redirect, useActionData } from '@remix-run/react'
-import { Button, ExternalLink, FieldInput, HeroBanner } from 'oa-components'
+import {
+  Button,
+  ExternalLink,
+  FieldInput,
+  HeroBanner,
+  TextNotification,
+} from 'oa-components'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import Main from 'src/pages/common/Layout/Main'
@@ -46,7 +52,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const username = formData.get('username') as string
   if (!(await authServiceServer.isUsernameAvailable(username, client))) {
     return Response.json(
-      { error: 'That username is already taken!' },
+      { error: FRIENDLY_MESSAGES['sign-up/username-taken'] },
       { headers },
     )
   }
@@ -65,17 +71,31 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (error) {
     if (error.code === 'weak_password') {
-      return Response.json({ error: error.message }, { headers })
+      return Response.json(
+        { error: FRIENDLY_MESSAGES['password-weak'] },
+        { headers },
+      )
     }
 
-    return Response.json({ error: 'Oops, something went wrong!' }, { headers })
+    return Response.json(
+      { error: FRIENDLY_MESSAGES['generic-error'] },
+      { headers },
+    )
   }
 
   if (data.user) {
-    await authServiceServer.createUserProfile(
+    const { error } = await authServiceServer.createUserProfile(
       { user: data.user, username },
       client,
     )
+
+    // This will error if there is already a profile with this auth_id + tenant_id
+    if (error) {
+      return Response.json(
+        { error: FRIENDLY_MESSAGES['generic-error'] },
+        { headers },
+      )
+    }
 
     await userService.createFirebaseProfile(data.user)
   }
@@ -90,18 +110,21 @@ export default function Index() {
 
   const validationSchema = object({
     username: string()
-      .min(2, 'Username must be at least 2 characters')
+      .min(2, FRIENDLY_MESSAGES['sign-up/username-short'])
       .required('Required'),
     email: string()
       .email(FRIENDLY_MESSAGES['auth/invalid-email'])
       .required('Required'),
     password: string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required'),
+      .min(6, FRIENDLY_MESSAGES['sign-up/password-short'])
+      .required(FRIENDLY_MESSAGES['sign-up/password-required']),
     'confirm-password': string()
-      .oneOf([ref('password'), ''], 'Your new password does not match')
-      .required('Password confirm is required'),
-    consent: bool().oneOf([true], 'Consent is required'),
+      .oneOf(
+        [ref('password'), ''],
+        FRIENDLY_MESSAGES['sign-up/password-mismatch'],
+      )
+      .required(FRIENDLY_MESSAGES['sign-up/email-required']),
+    consent: bool().oneOf([true], FRIENDLY_MESSAGES['sign-up/terms']),
   })
 
   return (
@@ -161,7 +184,9 @@ export default function Index() {
                       </Flex>
 
                       {actionResponse?.error && pristine && (
-                        <Text color="red">{actionResponse?.error}</Text>
+                        <TextNotification variant="failure" isVisible>
+                          {actionResponse?.error}
+                        </TextNotification>
                       )}
 
                       <Flex

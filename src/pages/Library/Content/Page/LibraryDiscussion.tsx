@@ -23,7 +23,10 @@ export const LibraryDiscussion = (props: IProps) => {
           width: ['100%', '100%', `90%`, `${(2 / 3) * 100}%`],
         }}
       >
-        <Card sx={{ gap: 2, padding: 3 }}>
+        <Card
+          variant="responsive"
+          sx={{ background: 'softblue', gap: 2, padding: 3 }}
+        >
           <DiscussionWrapper
             sourceType="howto"
             sourceId={docId}

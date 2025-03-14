@@ -13,6 +13,7 @@ export class DBQuestionAuthor {
   readonly photo_url: string
   readonly country: string
   readonly is_verified: boolean
+  readonly is_supporter: boolean
 }
 
 export class QuestionAuthor {
@@ -23,6 +24,7 @@ export class QuestionAuthor {
   photoUrl: string
   country: string
   isVerified: boolean
+  isSupporter: boolean
 
   constructor(obj: QuestionAuthor) {
     Object.assign(this, obj)
@@ -36,6 +38,7 @@ export class QuestionAuthor {
       firebaseAuthId: obj.firebase_auth_id,
       photoUrl: obj.photo_url,
       isVerified: obj.is_verified,
+      isSupporter: obj.is_supporter,
       country: obj.country,
     })
   }

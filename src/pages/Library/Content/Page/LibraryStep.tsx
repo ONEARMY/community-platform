@@ -1,4 +1,3 @@
-import styled from '@emotion/styled'
 import { ImageGallery, LinkifyText, VideoPlayer } from 'oa-components'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
@@ -12,36 +11,39 @@ interface IProps {
   stepindex: number
 }
 
-const FlexStepNumber = styled(Flex)`
-  height: fit-content;
-`
-
 const Step = (props: IProps) => {
   const { stepindex, step } = props
 
+  const displayNumber = stepindex + 1
+
   return (
     <Flex
-      data-cy={`step_${stepindex + 1}`}
-      sx={{ mx: [0, 0, -2], mt: 9, flexDirection: ['column', 'column', 'row'] }}
+      data-cy={`step_${displayNumber}`}
+      sx={{
+        flexDirection: ['column', 'column', 'row'],
+        gap: 2,
+        paddingX: [2, 0],
+      }}
     >
-      <Flex mx={[0, 0, 2]} sx={{ flex: 1, width: '100%' }} mb={[3, 3, 0]}>
-        <FlexStepNumber sx={{ justifyContent: 'center', width: '100%' }}>
-          <Card sx={{ width: '100%', textAlign: 'center' }} py={3} px={4}>
-            <Heading as="p" mb={0}>
-              {stepindex + 1}
-            </Heading>
-          </Card>
-        </FlexStepNumber>
-      </Flex>
       <Flex
         sx={{
-          mx: [0, 0, 2],
-          flex: 9,
+          alignItems: 'center',
+          flexDirection: ['row', 'row', 'column'],
+        }}
+      >
+        <Card sx={{ padding: [2, 3, 4] }}>
+          <Heading sx={{ textAlign: 'center' }}>{displayNumber}</Heading>
+        </Card>
+      </Flex>
+
+      <Flex
+        sx={{
+          flex: 1,
           flexDirection: ['column', 'column', 'row'],
           overflow: 'hidden',
         }}
       >
-        <Card sx={{ width: '100%' }}>
+        <Card sx={{ flex: 1 }}>
           <Flex
             sx={{
               flexDirection: ['column-reverse', 'column-reverse', 'row'],
@@ -49,8 +51,7 @@ const Step = (props: IProps) => {
           >
             <Flex
               sx={{
-                py: 4,
-                px: 4,
+                padding: 4,
                 width: ['100%', '100%', `${(1 / 2) * 100}%`],
                 flexDirection: 'column',
               }}
@@ -83,7 +84,7 @@ const Step = (props: IProps) => {
                   images={
                     formatImagesForGallery(
                       step.images,
-                      `Step ${stepindex + 1}`,
+                      `Step ${displayNumber}`,
                     ) as any
                   }
                 />

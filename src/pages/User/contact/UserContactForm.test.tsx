@@ -25,9 +25,7 @@ vi.mock('src/services/messageService', () => {
   return {
     messageService: {
       sendMessage: () =>
-        vi.fn().mockImplementation(() => {
-          return Promise.resolve()
-        }),
+        new Response(null, { status: 200, statusText: 'ALLL good!' }),
     },
   }
 })

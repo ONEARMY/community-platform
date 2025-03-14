@@ -1,27 +1,27 @@
-import React from 'react'
 import Layout from './Layout'
 import { MessageSettings } from '../models/messageSettings'
 
 type RecieverMessageArgs = {
+  email: string
+  fromUser: string
   settings: MessageSettings
   text: string
   toUserName: string
-  fromUser: string
-  email: string
+  name: string | undefined
 }
-// TODO: base settings object to pass to layout
-export default function RecieverMessage({
-  settings,
-  text,
-  toUserName,
-  fromUser,
-  email,
-}: RecieverMessageArgs) {
+
+export default function RecieverMessage(props: RecieverMessageArgs) {
+  const { email, fromUser, settings, text, toUserName } = props
+
+  const name = props.name !== 'undefined' ? props.name : fromUser
+  const preview = `${name} wants to chat to you!`
+
   return (
-    <Layout settings={settings}>
-      <p>Hey {toUserName}</p>
+    <Layout preview={preview} settings={settings}>
+      <p>Hey {toUserName},</p>
       <p>
-        {fromUser} has sent you a message through{' '}
+        <a href={`${settings.siteUrl}/u/${fromUser}`}>{name}</a> has sent you a
+        message through{' '}
         <a href={settings.siteUrl} target="_blank">
           {settings.siteName}
         </a>

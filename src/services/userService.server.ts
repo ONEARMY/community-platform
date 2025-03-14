@@ -86,7 +86,6 @@ const createFirebaseProfile = async (authUser: User) => {
   const user: IUser & { _id: string } = {
     _id: username,
     coverImages: [],
-    links: [],
     verified: false,
     _authID: '',
     displayName: username,

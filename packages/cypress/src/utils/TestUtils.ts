@@ -45,7 +45,7 @@ export const generateNewUserDetails = (): IUserSignUpDetails => {
   const username = `CI_${generateAlphaNumeric(9)}`.toLocaleLowerCase()
   return {
     username,
-    email: `${username}@test.com`.toLocaleLowerCase(),
+    email: `delivered+${username}@resend.dev`.toLocaleLowerCase(),
     password: 'test1234',
   }
 }

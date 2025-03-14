@@ -73,6 +73,7 @@ describe('[Settings]', () => {
       cy.get('[data-cy=complete-profile-button]').should('be.visible')
 
       cy.step('Member profile badge shown in header by default')
+      cy.get('[data-cy="tab-Profile"]').click()
       cy.get(`[data-cy=MemberBadge-${profileType}]`)
 
       cy.setSettingFocus(profileType)

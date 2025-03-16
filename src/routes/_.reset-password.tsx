@@ -1,6 +1,6 @@
 import { Field, Form } from 'react-final-form'
 import { redirect } from '@remix-run/node'
-import { Link, useActionData } from '@remix-run/react'
+import { Link, useActionData, useNavigate } from '@remix-run/react'
 import { Button, FieldInput, HeroBanner } from 'oa-components'
 import Main from 'src/pages/common/Layout/Main'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
@@ -35,7 +35,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   })
 
   // Always return success and display a generic message, even when the user doesn't exist, for security reasons.
-  return Response.json({ success: true }, { headers })
+  return Response.json(
+    { success: true, email: formData.get('email') },
+    { headers },
+  )
 }
 
 export const meta = mergeMeta<typeof loader>(() => {
@@ -46,6 +49,7 @@ export const meta = mergeMeta<typeof loader>(() => {
 
 export default function Index() {
   const actionResponse = useActionData<typeof action>()
+  const navigate = useNavigate()
 
   return (
     <Main style={{ flex: 1 }}>
@@ -79,11 +83,23 @@ export default function Index() {
                     >
                       <Flex sx={{ gap: 2, flexDirection: 'column' }}>
                         <Heading>Reset Password</Heading>
-                        <Text sx={{ fontSize: 1 }} color="grey">
-                          <Link to="/sign-in" data-cy="no-account">
-                            Go back to Login
-                          </Link>
-                        </Text>
+                        {actionResponse?.success ? (
+                          <Text sx={{ fontSize: 3 }} color="black">
+                            We've sent a message to{' '}
+                            {actionResponse?.email || 'your email address'}. If
+                            it's a registered account you will receive an email
+                            with instructions.
+                            <br />
+                            <br />
+                            Please check you inbox (and spam folder).
+                          </Text>
+                        ) : (
+                          <Text sx={{ fontSize: 1 }} color="grey">
+                            <Link to="/sign-in" data-cy="no-account">
+                              Go back to Login
+                            </Link>
+                          </Text>
+                        )}
                       </Flex>
 
                       {actionResponse?.error && (
@@ -91,10 +107,18 @@ export default function Index() {
                       )}
 
                       {actionResponse?.success ? (
-                        <Text color="green">
-                          Please check your inbox (and your spam folder) for
-                          further instructions.
-                        </Text>
+                        <Button
+                          small
+                          data-cy="go-back"
+                          variant="secondary"
+                          sx={{
+                            width: 'fit-content',
+                          }}
+                          type="button"
+                          onClick={() => navigate('.')}
+                        >
+                          Go back to reset form
+                        </Button>
                       ) : (
                         <>
                           <Flex sx={{ flexDirection: 'column' }}>

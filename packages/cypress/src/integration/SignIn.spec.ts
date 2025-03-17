@@ -24,7 +24,6 @@ describe('[Reset password]', () => {
     cy.step('Reset Password should go back')
     cy.get('[data-cy=go-back]').should('be.visible')
     cy.wait(1000)
-    cy.pause()
     cy.get('[data-cy=go-back]').click({ force: true })
     cy.get('[data-cy=email]').should('be.visible')
   })

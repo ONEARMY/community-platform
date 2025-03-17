@@ -134,5 +134,9 @@ describe('[Question]', () => {
       cy.visit('/questions/create')
       cy.get('[data-cy=logged-out-message]').should('be.visible')
     })
+
+    // it('[Admin]', () => {
+    // Should check an admin can edit other's content
+    // })
   })
 })

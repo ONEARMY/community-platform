@@ -371,5 +371,9 @@ describe('[Library]', () => {
       cy.get('[data-cy=create-project]').should('be.visible')
       cy.get('[data-cy=complete-profile-project]').should('not.exist')
     })
+
+    // it('[Admin]', () => {
+    // Should check an admin can edit other's content
+    // })
   })
 })

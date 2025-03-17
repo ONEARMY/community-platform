@@ -58,10 +58,11 @@ describe('[Question]', () => {
       cy.get('[data-cy=field-description]').type(initialQuestionDescription, {
         delay: 0,
       })
-
       cy.step('Add category')
       cy.selectTag(category, '[data-cy=category-select]')
 
+      // Bug: Tags missing in test suite setup
+      //
       // cy.step('Add tags')
       // cy.selectTag(tag1, '[data-cy="tag-select"]')
       // cy.selectTag(tag2, '[data-cy="tag-select"]')
@@ -112,16 +113,16 @@ describe('[Question]', () => {
         .should('include', `/questions/${updatedExpectedSlug}`)
       cy.contains(updatedTitle)
 
-      cy.step('Can access the question with the previous slug')
-      cy.visit(`/questions/${initialExpectedSlug}`)
-      cy.contains(updatedTitle)
-
-      // Commented out until test indexes issue solved
+      // Bug: Missing previous slug functionality
       //
-      // cy.step('All updated fields visiable on list')
-      // cy.visit('/questions')
+      // cy.step('Can access the question with the previous slug')
+      // cy.visit(`/questions/${initialExpectedSlug}`)
       // cy.contains(updatedTitle)
-      // cy.contains(category)
+
+      cy.step('All updated fields visiable on list')
+      cy.visit('/questions')
+      cy.contains(updatedTitle)
+      cy.contains(category)
     })
   })
 })

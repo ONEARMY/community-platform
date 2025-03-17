@@ -9,11 +9,17 @@ export async function clientLoader() {
 }
 
 export default function Index() {
+  const { incompleteProfile, loggedOut } = listing
+  const sx = {
+    alignSelf: 'center',
+    paddingTop: 5,
+  }
+
   return (
     <UserAction
       incompleteProfile={
-        <Box data-cy="incomplete-profile-message">
-          Seriously though. {listing.incompleteProfile}
+        <Box data-cy="incomplete-profile-message" sx={sx}>
+          {incompleteProfile}
         </Box>
       }
       loggedIn={
@@ -21,7 +27,11 @@ export default function Index() {
           <QuestionCreate />
         </AuthRoute>
       }
-      loggedOut={<>Dude. Gotta login please</>}
+      loggedOut={
+        <Box data-cy="logged-out-message" sx={sx}>
+          {loggedOut}
+        </Box>
+      }
     />
   )
 }

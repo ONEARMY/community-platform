@@ -36,13 +36,14 @@ export const fields: ILabels = {
 
 export const listing = {
   create: 'Ask a question',
-  join: 'Sign up to ask your question',
-  incompleteProfile: 'Complete your profile to ask your question',
-  noQuestions: 'No questions have been asked yet',
-  usefulness: 'How useful it is',
-  totalComments: 'Total comments',
   filterCategory: 'Filter by category',
+  incompleteProfile: 'Complete your profile to ask your question',
+  join: 'Sign up to ask your question',
+  loadMore: 'Load More',
+  loggedOut: 'Gotta log in please for that sweet sweet question asking...',
+  noQuestions: 'No questions have been asked yet',
   search: 'Search for questions',
   sort: 'Sort by',
-  loadMore: 'Load More',
+  totalComments: 'Total comments',
+  usefulness: 'How useful it is',
 }

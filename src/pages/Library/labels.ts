@@ -162,13 +162,15 @@ export const steps: ILabels = {
 
 export const listing = {
   create: 'Add your project',
-  join: 'Sign up to add your project',
-  incompleteProfile: 'Complete your profile to add your project',
   empty: 'No projects to show!',
-  usefulness: 'How useful it is',
-  totalComments: 'Total comments',
   filterCategory: 'Filter by category',
+  incompleteProfile: 'Complete your profile to add your project',
+  join: 'Sign up to add your project',
+  loadMore: 'Load More',
+  loggedOut:
+    'We need that password of yours before learning about your awesome project...',
+  totalComments: 'Total comments',
   search: 'Search the library',
   sort: 'Sort by category',
-  loadMore: 'Load More',
+  usefulness: 'How useful it is',
 }

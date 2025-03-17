@@ -124,5 +124,16 @@ describe('[Question]', () => {
       cy.contains(updatedTitle)
       cy.contains(category)
     })
+
+    it('[By Anonymous]', () => {
+      cy.step('Ask users to login before creating a question')
+      cy.visit('/questions')
+      cy.get('[data-cy=create-question]').should('not.exist')
+      cy.get('[data-cy=sign-up]').should('be.visible')
+
+      cy.visit('/questions/create')
+      cy.pause()
+      cy.get('[data-cy=logged-out-message]').should('be.visible')
+    })
   })
 })

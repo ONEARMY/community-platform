@@ -89,15 +89,17 @@ export const update: ILabels = {
 }
 
 export const listing = {
-  create: 'Add Research',
-  join: 'Sign up to add your research',
-  incompleteProfile: 'Complete your profile to add your research',
-  noItems: 'No research to show',
-  heading: 'Help out with Research & Development',
-  filterCategory: 'Filter by category',
   author: 'Filter by author',
-  status: 'Filter by status',
+  create: 'Add Research',
+  filterCategory: 'Filter by category',
+  heading: 'Help out with Research & Development',
+  incompleteProfile: 'Complete your profile to add your research',
+  join: 'Sign up to add your research',
+  loadMore: 'Load More',
+  loggedOut:
+    'Oh we really want your research knowledge. Trust us. But a login is needed first.',
+  noItems: 'No research to show',
   search: 'Search for a research',
   sort: 'Sort by',
-  loadMore: 'Load More',
+  status: 'Filter by status',
 }

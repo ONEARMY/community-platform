@@ -314,8 +314,27 @@ describe('[Library]', () => {
 
     it('[By Anonymous]', () => {
       cy.step('Ask users to login before creating a project')
+      cy.visit('/library')
+      cy.get('[data-cy=create-project]').should('not.exist')
+      cy.get('[data-cy=sign-up]').should('be.visible')
+
       cy.visit('/library/create')
-      cy.get('div').contains('Please login to access this page')
+      cy.get('[data-cy=logged-out-message]').should('be.visible')
+      cy.get('[data-cy=intro-title]').should('not.exist')
+    })
+
+    it('[By Incomplete Profile User]', () => {
+      const user = generateNewUserDetails()
+      cy.signUpNewUser(user)
+
+      cy.step("Can't add to library")
+      cy.visit('/library')
+      cy.get('[data-cy=create-project]').should('not.exist')
+      cy.get('[data-cy=complete-profile-project]').should('be.visible')
+
+      cy.visit('/library/create')
+      cy.get('[data-cy=incomplete-profile-message]').should('be.visible')
+      cy.get('[data-cy=intro-title]').should('not.exist')
     })
 
     it('[Warning on leaving page]', () => {

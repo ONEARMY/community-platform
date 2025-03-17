@@ -4,6 +4,7 @@ import { RESEARCH_TITLE_MIN_LENGTH } from '../../../../../src/pages/Research/con
 import { MOCK_DATA } from '../../data'
 import {
   generateAlphaNumeric,
+  generateNewUserDetails,
   setIsPreciousPlastic,
 } from '../../utils/TestUtils'
 
@@ -59,8 +60,21 @@ describe('[Research]', () => {
       const updateDescription = 'This is the description for the update.'
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
       const newCollaborator = MOCK_DATA.users.subscriber
+
+      const user = generateNewUserDetails()
+      cy.signUpNewUser(user)
+
+      cy.step("Can't add research with an incomplete profile")
+      cy.visit('/research')
+      cy.get('[data-cy=create-research]').should('not.exist')
+      cy.get('[data-cy=complete-profile-research]').should('be.visible')
+      cy.visit('/research/create')
+      cy.get('[data-cy=incomplete-profile-message]').should('be.visible')
+      cy.get('[data-cy=intro-title]').should('not.exist')
+      cy.completeUserProfile(user.username)
+
       cy.step('Create the research article')
-      cy.signUpCompletedUser()
+      cy.completeUserProfile(user.username)
       setIsPreciousPlastic()
       cy.visit('/research')
       cy.get('[data-cy=loader]').should('not.exist')
@@ -215,8 +229,12 @@ describe('[Research]', () => {
 
     it('[By Anonymous]', () => {
       cy.step('Ask users to login before creating a research item')
+      cy.visit('/research')
+      cy.get('[data-cy=create]').should('not.exist')
+      cy.get('[data-cy=sign-up]').should('be.visible')
+
       cy.visit('/research/create')
-      cy.get('div').contains('role required to access this page')
+      cy.get('[data-cy=logged-out-message]').should('be.visible')
     })
 
     it('[New PK user]', () => {

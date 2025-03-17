@@ -230,12 +230,10 @@ async function validateRequest(
   }
 
   const profile = profileRequest.data[0] as DBProfile
+  const isCreator = existingQuestion.created_by === profile.id
+  const hasAdminRights = hasAdminRightsSupabase(profile)
 
-  if (
-    existingQuestion.created_by !== profile.id &&
-    !profile.roles?.includes(UserRole.ADMIN) &&
-    !profile.roles?.includes(UserRole.SUPER_ADMIN)
-  ) {
+  if (!isCreator && !hasAdminRights) {
     return { status: 403, statusText: 'Unauthorized' }
   }
 

@@ -88,28 +88,29 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       : await client.rpc('get_user_email_by_username', {
           username: data.to,
         })
-    const receiverEmail = emailResult.data[0].email
-    const fromUsername = userProfile.data![0].username
+    const receiver = emailResult.data[0]
+    const messenger = userProfile.data![0]
+
     const emailTemplate = (
       <RecieverMessage
-        email={receiverEmail}
-        fromUser={fromUsername}
-        name={data.name}
-        text={data.message}
-        toUserName={data.to}
         settings={{
           siteName: settings.siteName,
           messageSignOff: settings.messageSignOff,
           siteImage: settings.siteImage,
           siteUrl: settings.siteUrl,
         }}
+        text={data.message}
+        receiverName={data.to}
+        messengerEmailAddress={user?.email as string}
+        messengerName={data.name}
+        messengerUsername={messenger.username}
       />
     )
 
     const sendResult = await sendEmail({
       from: settings.emailFrom,
-      to: receiverEmail,
-      subject: `${fromUsername} sent you a message via ${settings.siteName}!`,
+      to: receiver.email,
+      subject: `${messenger.username} sent you a message via ${settings.siteName}!`,
       emailTemplate,
     })
 
@@ -163,6 +164,10 @@ async function validateRequest(request: Request, user: User | null, data: any) {
 
   if (!data.message) {
     return { status: 400, statusText: 'message is required' }
+  }
+
+  if (!user.email) {
+    return { status: 400, statusText: 'Unable to get messenger email address' }
   }
 
   return { valid: true }

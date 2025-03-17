@@ -63,6 +63,8 @@ describe('[Settings]', () => {
       const user = generateNewUserDetails()
       cy.signUpNewUser(user)
 
+      cy.clickMenuItem(UserMenuItem.Profile)
+
       cy.step('Incomplete profile banner visible')
       cy.get('[data-cy=incompleteProfileBanner]').click()
 
@@ -273,6 +275,7 @@ describe('[Settings]', () => {
 
       const user = generateNewUserDetails()
       cy.signUpNewUser(user)
+
       cy.visit('/settings')
 
       cy.step('Can set the required fields')
@@ -315,7 +318,6 @@ describe('[Settings]', () => {
 
       cy.step('Go to User Settings')
       cy.visit('/settings')
-
       cy.setSettingFocus(profileType)
 
       cy.step("Can't save without required fields being populated")

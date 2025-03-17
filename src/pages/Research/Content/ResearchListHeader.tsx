@@ -6,6 +6,7 @@ import {
   ReturnPathLink,
   SearchField,
   Select,
+  Tooltip,
 } from 'oa-components'
 import { ResearchStatus } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
@@ -99,13 +100,27 @@ export const ResearchFilterHeader = (props: IProps) => {
 
     setSearchParams(params)
   }
-
+  const roleRequired = isPreciousPlastic() ? undefined : RESEARCH_EDITOR_ROLES
   const actionComponents = (
     <UserAction
+      incompleteProfile={
+        <AuthWrapper roleRequired={roleRequired}>
+          <Link to="/settings">
+            <Button
+              type="button"
+              variant="disabled"
+              data-cy="complete-profile-research"
+              data-tooltip-id="tooltip"
+              data-tooltip-content={listing.incompleteProfile}
+            >
+              {listing.create}
+            </Button>
+          </Link>
+          <Tooltip id="tooltip" />
+        </AuthWrapper>
+      }
       loggedIn={
-        <AuthWrapper
-          roleRequired={isPreciousPlastic() ? undefined : RESEARCH_EDITOR_ROLES}
-        >
+        <AuthWrapper roleRequired={roleRequired}>
           <DraftButton
             showDrafts={showDrafts}
             draftCount={draftCount}

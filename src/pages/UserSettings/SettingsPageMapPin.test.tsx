@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest'
 import { act, waitFor } from '@testing-library/react'
 import { IModerationStatus, ProfileTypeList } from 'oa-shared'
 import { FactoryMapPin } from 'src/test/factories/MapPin'
-import { FactoryUser } from 'src/test/factories/User'
+import { factoryImage, factoryLink, FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
 
 import { FormProvider } from './__mocks__/FormProvider'
@@ -11,6 +11,13 @@ import { SettingsPageMapPin } from './SettingsPageMapPin'
 
 import type { ILocation } from 'oa-shared'
 
+const completeProfile = {
+  about: 'A member',
+  displayName: 'Jeffo',
+  links: [factoryLink],
+  profileType: ProfileTypeList.MEMBER,
+  userImage: factoryImage,
+}
 let mockUser = FactoryUser()
 let mockPin = FactoryMapPin()
 
@@ -44,7 +51,7 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
 
 describe('SettingsPageMapPin', () => {
   it('renders for no pin', async () => {
-    mockUser = FactoryUser()
+    mockUser = FactoryUser(completeProfile)
     // Act
     let wrapper
     act(() => {
@@ -64,6 +71,7 @@ describe('SettingsPageMapPin', () => {
   it('renders for member', async () => {
     const name = 'Super cool place'
     mockUser = FactoryUser({
+      ...completeProfile,
       profileType: ProfileTypeList.MEMBER,
       location: {
         name,
@@ -95,7 +103,11 @@ describe('SettingsPageMapPin', () => {
     })
 
     mockUser = FactoryUser({
-      profileType: ProfileTypeList.COLLECTION_POINT,
+      about: 'An important space',
+      displayName: 'Jeffo',
+      links: [factoryLink],
+      profileType: ProfileTypeList.COMMUNITY_BUILDER,
+      coverImages: [factoryImage],
       location: {
         name,
         countryCode: 'br',
@@ -117,6 +129,29 @@ describe('SettingsPageMapPin', () => {
       expect(wrapper.getAllByTestId('LocationDataTextDisplay')).toHaveLength(1)
       expect(wrapper.getAllByText(name, { exact: false })).toHaveLength(1)
       expect(wrapper.getAllByText(comments, { exact: false })).toHaveLength(1)
+    })
+  })
+
+  it('renders for user with incomplete profile', async () => {
+    mockUser = FactoryUser({
+      displayName: 'Jeffo',
+      links: [factoryLink],
+      profileType: ProfileTypeList.MEMBER,
+      userImage: factoryImage,
+    })
+
+    let wrapper
+    act(() => {
+      wrapper = FormProvider(mockUser, <SettingsPageMapPin />)
+    })
+
+    await waitFor(() => {
+      expect(
+        wrapper.queryAllByTestId('IncompleteProfileTextDisplay'),
+      ).toHaveLength(1)
+      expect(wrapper.queryAllByTestId('complete-profile-button')).toHaveLength(
+        1,
+      )
     })
   })
 })

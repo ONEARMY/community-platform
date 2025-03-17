@@ -173,3 +173,6 @@ export const mapForm = {
 }
 
 export const missingData = 'Do you have impact data for this year?'
+
+export const inCompleteProfile =
+  'In order to add yourself to the map, you need to complete your profile'

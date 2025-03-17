@@ -5,7 +5,7 @@ import { notificationsService } from 'src/services/notificationsService.server'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { User } from '@supabase/supabase-js'
-import type { DBCommentAuthor, DBProfile,Reply  } from 'oa-shared'
+import type { DBCommentAuthor, DBProfile, Reply } from 'oa-shared'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   if (!params.sourceId) {

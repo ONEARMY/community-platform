@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBProfile } from 'src/models/profile.model'
+import type { DBProfile } from 'oa-shared'
 
 const getByAuthId = async (
   id: string,

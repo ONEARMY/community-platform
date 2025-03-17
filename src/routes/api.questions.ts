@@ -10,7 +10,7 @@ import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBProfile } from 'src/models/profile.model'
+import type { DBProfile } from 'oa-shared'
 import type { DBQuestion } from 'src/models/question.model'
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions'
 

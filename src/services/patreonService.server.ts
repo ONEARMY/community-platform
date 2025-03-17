@@ -3,15 +3,15 @@ import { firestore } from 'src/utils/firebase'
 
 import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type {
-  PatreonMembershipAttributes,
+  IPatreonMembershipAttributes,
+  IPatreonTierAttributes,
+  IPatreonUser,
+  IPatreonUserAttributes,
   PatreonSettings,
-  PatreonTierAttributes,
-  PatreonUser,
-  PatreonUserAttributes,
 } from 'oa-shared'
 
 const isSupporter = async (
-  patreonUser: PatreonUser,
+  patreonUser: IPatreonUser,
   client: SupabaseClient,
 ) => {
   if (patreonUser.membership?.attributes.patron_status !== 'active_patron') {
@@ -26,7 +26,7 @@ const isSupporter = async (
   return patreonUser.membership?.tiers.some(({ id }) => validIds.includes(id))
 }
 
-const parsePatreonUser = (patreonUser: any): PatreonUser => {
+const parsePatreonUser = (patreonUser: any): IPatreonUser => {
   // As we do not request the identity.membership scope, we only receive the user's membership to the
   // One Army Patreon page, not other campaigns they may be part of.
   const membership =
@@ -64,7 +64,7 @@ const parsePatreonUser = (patreonUser: any): PatreonUser => {
  * to fetch more user attributes, add them to the include and fields query params
  **/
 const getCurrentPatreonUser = async (accessToken: string) => {
-  const userFields: Array<keyof PatreonUserAttributes> = [
+  const userFields: Array<keyof IPatreonUserAttributes> = [
     'about',
     'created',
     'email',
@@ -76,7 +76,7 @@ const getCurrentPatreonUser = async (accessToken: string) => {
     'url',
   ]
 
-  const membershipFields: Array<keyof PatreonMembershipAttributes> = [
+  const membershipFields: Array<keyof IPatreonMembershipAttributes> = [
     'campaign_lifetime_support_cents',
     'currently_entitled_amount_cents',
     'is_follower',
@@ -91,7 +91,7 @@ const getCurrentPatreonUser = async (accessToken: string) => {
     'will_pay_amount_cents',
   ]
 
-  const tierFields: Array<keyof PatreonTierAttributes> = [
+  const tierFields: Array<keyof IPatreonTierAttributes> = [
     'amount_cents',
     'created_at',
     'description',

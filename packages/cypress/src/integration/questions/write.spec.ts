@@ -132,7 +132,6 @@ describe('[Question]', () => {
       cy.get('[data-cy=sign-up]').should('be.visible')
 
       cy.visit('/questions/create')
-      cy.pause()
       cy.get('[data-cy=logged-out-message]').should('be.visible')
     })
   })

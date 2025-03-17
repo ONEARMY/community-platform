@@ -86,9 +86,17 @@ export default function Index() {
                         {actionResponse?.success ? (
                           <Text sx={{ fontSize: 3 }} color="black">
                             We've sent a message to{' '}
-                            {actionResponse?.email || 'your email address'}. If
-                            it's a registered account you will receive an email
-                            with instructions.
+                            <Text
+                              sx={{
+                                background:
+                                  'linear-gradient(0deg, #FFE2E1 60%, #FFF 40%)',
+                                paddingX: 1,
+                              }}
+                            >
+                              {actionResponse?.email || 'your email address'}
+                            </Text>
+                            . If it's a registered account you will receive an
+                            email with instructions.
                             <br />
                             <br />
                             Please check you inbox (and spam folder).
@@ -108,14 +116,12 @@ export default function Index() {
 
                       {actionResponse?.success ? (
                         <Button
-                          small
                           data-cy="go-back"
                           variant="secondary"
-                          sx={{
-                            width: 'fit-content',
-                          }}
+                          sx={{ width: 'fit-content' }}
                           type="button"
                           onClick={() => navigate('.')}
+                          icon="arrow-back"
                         >
                           Go back to reset form
                         </Button>

@@ -18,8 +18,11 @@ export const AlertIncompleteProfile = observer(() => {
   return (
     <Link to="/settings">
       <Flex data-cy="incompleteProfileBanner">
-        <Banner variant="failure">
-          Please fill in your profile details before posting
+        <Banner
+          variant="failure"
+          sx={{ backgroundColor: 'softblue', color: 'black' }}
+        >
+          Hey there!👋 Please verify your email before posting
         </Banner>
       </Flex>
     </Link>

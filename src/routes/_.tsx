@@ -51,8 +51,8 @@ export default function Index() {
             <Analytics />
             <ScrollToTop />
             <ClientOnly fallback={<></>}>{() => <DevSiteHeader />}</ClientOnly>
-            <Alerts />
             <Header />
+            <Alerts />
 
             <Outlet />
 

@@ -1,11 +1,12 @@
 import { Breadcrumbs as BreadcrumbsComponent } from 'oa-components'
 import { Box } from 'theme-ui'
 
-import type { ILibrary, IResearch } from 'oa-shared'
+import type { ILibrary } from 'oa-shared'
 import type { Question } from 'src/models/question.model'
+import type { ResearchItem } from 'src/models/research.model'
 
 type Step = { text: string; link?: string }
-type Content = IResearch.ItemDB | Question | ILibrary.Item
+type Content = ResearchItem | Question | ILibrary.Item
 type Variant = 'research' | 'question' | 'library'
 
 interface BreadcrumbsProps {
@@ -17,13 +18,13 @@ interface BreadcrumbsProps {
 const generateSteps = (content: Content, variant: Variant) => {
   const steps: Step[] = []
   if (variant == 'research') {
-    const item = content as IResearch.ItemDB
+    const item = content as ResearchItem
     steps.push({ text: 'Research', link: '/research' })
 
-    if (item.researchCategory) {
+    if (item.category) {
       steps.push({
-        text: item.researchCategory.label,
-        link: `/research?category=${item.researchCategory._id}`,
+        text: item.category.name,
+        link: `/research?category=${item.category.id}`,
       })
     }
 

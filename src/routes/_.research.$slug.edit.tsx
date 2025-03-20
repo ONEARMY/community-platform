@@ -1,27 +1,47 @@
-import { json, type LoaderFunctionArgs } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
-import { isPreciousPlastic } from 'src/config/config'
-import { AuthRoute } from 'src/pages/common/AuthRoute'
-import { RESEARCH_EDITOR_ROLES } from 'src/pages/Research/constants'
-import EditResearch from 'src/pages/Research/Content/EditResearch'
-import { researchService } from 'src/pages/Research/research.service'
+import { redirect, useLoaderData } from '@remix-run/react'
+import { ResearchItem } from 'src/models/research.model'
+import ResearchForm from 'src/pages/Research/Content/Common/ResearchForm'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { isAllowedToEditResearch } from 'src/services/researchPermissions.server'
+import { researchServiceServer } from 'src/services/researchService.server'
 
-import type { IResearchDB } from 'oa-shared'
+import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { DBResearchItem } from 'src/models/research.model'
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  const research = await researchService.getBySlug(params.slug as string)
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  const { client, headers } = createSupabaseServerClient(request)
 
-  return json({ research })
+  const {
+    data: { user },
+  } = await client.auth.getUser()
+
+  if (!user) {
+    return redirect('/research')
+  }
+
+  const result = await researchServiceServer.getBySlug(
+    client,
+    params.slug as string,
+  )
+
+  if (result.error || !result.data) {
+    return Response.json({ research: null }, { headers })
+  }
+
+  const username = user.user_metadata.username
+  const researchDb = result.data as unknown as DBResearchItem
+  const research = ResearchItem.fromDB(researchDb, [])
+
+  if (!(await isAllowedToEditResearch(client, research, username))) {
+    return redirect('/research')
+  }
+
+  return Response.json({ research }, { headers })
 }
 
 export default function Index() {
   const data = useLoaderData<typeof loader>()
-  const research = data.research as IResearchDB
-  const roles = isPreciousPlastic() ? [] : RESEARCH_EDITOR_ROLES
+  const research = data.research as ResearchItem
 
-  return (
-    <AuthRoute roleRequired={roles}>
-      <EditResearch research={research} />
-    </AuthRoute>
-  )
+  return <ResearchForm research={research} />
 }

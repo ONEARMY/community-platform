@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Field } from 'react-final-form'
 import { Button, DownloadStaticFile, FieldInput } from 'oa-components'
 import { UserRole } from 'oa-shared'
@@ -30,26 +29,23 @@ const WarningMessages = ({ show }) => {
   )
 }
 
-const AlreadyAddedFiles = ({ formValues, setFileEditMode }) => {
-  const deleteFile = () => {
-    formValues.files = []
-    setFileEditMode(true)
-  }
-
+const AlreadyAddedFiles = ({ files }) => {
   return (
-    <Flex sx={{ flexDirection: 'column', alignItems: 'center' }} mb={3}>
-      {formValues.files.map((file) => (
-        <DownloadStaticFile allowDownload file={file} key={file.name} />
+    <Flex sx={{ flexDirection: 'column', alignItems: 'center', mb: 3 }}>
+      {files.map((file) => (
+        <>
+          <DownloadStaticFile allowDownload file={file} key={file.name} />
+          <Button
+            type="button"
+            variant="outline"
+            icon="delete"
+            data-cy="delete-file"
+            onClick={deleteFile(file)}
+          >
+            {buttons.files}
+          </Button>
+        </>
       ))}
-      <Button
-        type="button"
-        variant="outline"
-        icon="delete"
-        data-cy="delete-file"
-        onClick={deleteFile}
-      >
-        {buttons.files}
-      </Button>
     </Flex>
   )
 }
@@ -114,31 +110,20 @@ const UploadNewFiles = () => {
   )
 }
 
-export const FilesFields = ({
-  showInvalidFileWarning,
-  formValues,
-  parentType,
-}) => {
-  const [fileEditMode, setFileEditMode] = React.useState(false)
-  const isEditMode =
-    formValues.files?.length > 0 && parentType === 'edit' && !fileEditMode
-
+export const FilesFields = ({ formValues }) => {
   const { title } = updateLabels.files
 
   return (
     <>
-      <WarningMessages show={showInvalidFileWarning} />
+      {/* <WarningMessages show={showInvalidFileWarning} />
       <Label htmlFor="files" mb={2}>
         {title}
       </Label>
       {isEditMode ? (
-        <AlreadyAddedFiles
-          formValues={formValues}
-          setFileEditMode={setFileEditMode}
-        />
+        <AlreadyAddedFiles formValues={formValues} />
       ) : (
         <UploadNewFiles />
-      )}
+      )} */}
     </>
   )
 }

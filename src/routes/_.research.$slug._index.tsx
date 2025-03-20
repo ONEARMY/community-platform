@@ -1,28 +1,94 @@
-import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import { ResearchUpdateStatus } from 'oa-shared'
+import { IMAGE_SIZES } from 'src/config/imageTransforms'
+import {
+  type DBResearchItem,
+  ResearchItem,
+  type ResearchUpdate,
+} from 'src/models/research.model'
+import { Tag } from 'src/models/tag.model'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { ResearchArticlePage } from 'src/pages/Research/Content/ResearchArticlePage'
-import { researchService } from 'src/pages/Research/research.service'
-import { pageViewService } from 'src/services/pageViewService.server'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { researchServiceServer } from 'src/services/researchService.server'
+import { storageServiceServer } from 'src/services/storageService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { IResearch, IResearchDB } from 'oa-shared'
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  const research = await researchService.getBySlug(params.slug as string)
-  const publicUpdates =
-    research?.updates.filter(
-      (x) => x.status !== ResearchUpdateStatus.DRAFT && x._deleted !== true,
-    ) || []
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  const { client, headers } = createSupabaseServerClient(request)
 
-  if (research?._id) {
-    // not awaited to not block the render
-    pageViewService.incrementViewCount('research', research._id)
+  const result = await researchServiceServer.getBySlug(
+    client,
+    params.slug as string,
+  )
+
+  if (result.error || !result.data) {
+    return Response.json({ research: null }, { headers })
   }
 
-  return json({ research, publicUpdates })
+  const {
+    data: { user },
+  } = await client.auth.getUser()
+  let currentUserId: number | undefined
+
+  if (user) {
+    const result = await client
+      .from('profiles')
+      .select('id')
+      .eq('auth_id', user.id)
+      .limit(1)
+    currentUserId = result.data?.at(0)?.id
+  }
+
+  const dbResearch = result.data as unknown as DBResearchItem
+
+  if (dbResearch.id) {
+    await client
+      .from('research')
+      .update({ total_views: (dbResearch.total_views || 0) + 1 })
+      .eq('id', dbResearch.id)
+  }
+
+  const tagIds = dbResearch.tags
+  let tags: Tag[] = []
+  if (tagIds?.length > 0) {
+    const tagsResult = await client
+      .from('tags')
+      .select('id,name')
+      .in('id', tagIds)
+
+    if (tagsResult.data) {
+      tags = tagsResult.data.map((x) => Tag.fromDB(x))
+    }
+  }
+
+  const [usefulVotes, subscribers] = await Promise.all([
+    client
+      .from('useful_votes')
+      .select('*', { count: 'exact' })
+      .eq('content_id', dbResearch.id)
+      .eq('content_type', 'research'),
+    client
+      .from('subscribers')
+      .select('user_id', { count: 'exact' })
+      .eq('content_id', dbResearch.id)
+      .eq('content_type', 'research'),
+  ])
+
+  const images = dbResearch.images
+    ? storageServiceServer.getImagesPublicUrls(
+        client,
+        dbResearch.images,
+        IMAGE_SIZES.GALLERY,
+      )
+    : []
+
+  const research = ResearchItem.fromDB(dbResearch, tags, images, currentUserId)
+  research.usefulCount = usefulVotes.count || 0
+  research.subscriberCount = subscribers.count || 0
+
+  return Response.json({ research }, { headers })
 }
 
 export function HydrateFallback() {
@@ -32,8 +98,8 @@ export function HydrateFallback() {
 }
 
 export const meta = mergeMeta<typeof loader>(({ data }) => {
-  const research = data?.research as IResearchDB
-  const publicUpdates = data?.publicUpdates as IResearch.UpdateDB[]
+  const research = data?.research as ResearchItem
+  const publicUpdates = data?.publicUpdates as ResearchUpdate[]
 
   if (!research) {
     return []
@@ -50,14 +116,11 @@ export const meta = mergeMeta<typeof loader>(({ data }) => {
 
 export default function Index() {
   const data = useLoaderData<typeof loader>()
-  const research = data.research as IResearchDB
-  const publicUpdates = data.publicUpdates as IResearch.UpdateDB[]
+  const research = data.research as ResearchItem
 
   if (!research) {
     return <NotFoundPage />
   }
 
-  return (
-    <ResearchArticlePage research={research} publicUpdates={publicUpdates} />
-  )
+  return <ResearchArticlePage research={research} />
 }

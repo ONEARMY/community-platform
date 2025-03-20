@@ -2,7 +2,7 @@ import { UserRole } from 'oa-shared'
 import { Question } from 'src/models/question.model'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { convertToSlug } from 'src/utils/slug'
-import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
+import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
@@ -161,7 +161,7 @@ async function uploadImages(
 function validateImages(images: File[]) {
   const errors: string[] = []
   for (const image of images) {
-    if (!SUPPORTED_IMAGE_EXTENSIONS.includes(image.type)) {
+    if (!SUPPORTED_IMAGE_TYPES.includes(image.type)) {
       errors.push(`Unsupported image extension: ${image.type}`)
       continue
     }

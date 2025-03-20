@@ -1,54 +1,15 @@
-import { Category } from 'oa-shared'
+import { Author, Category } from 'oa-shared'
 
-import type { DBCategory, IConvertedFileMeta } from 'oa-shared'
+import type { DBAuthor, DBCategory, IConvertedFileMeta } from 'oa-shared'
 import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
 import type { DBMedia, Media } from './image.model'
 import type { Tag } from './tag.model'
-
-export class DBQuestionAuthor {
-  readonly id: number
-  readonly firebase_auth_id: string
-  readonly display_name: string
-  readonly username: string
-  readonly photo_url: string
-  readonly country: string
-  readonly is_verified: boolean
-  readonly is_supporter: boolean
-}
-
-export class QuestionAuthor {
-  id: number
-  name: string
-  username: string
-  firebaseAuthId: string
-  photoUrl: string
-  country: string
-  isVerified: boolean
-  isSupporter: boolean
-
-  constructor(obj: QuestionAuthor) {
-    Object.assign(this, obj)
-  }
-
-  static fromDB(obj: DBQuestionAuthor) {
-    return new QuestionAuthor({
-      id: obj.id,
-      name: obj.display_name,
-      username: obj.username,
-      firebaseAuthId: obj.firebase_auth_id,
-      photoUrl: obj.photo_url,
-      isVerified: obj.is_verified,
-      isSupporter: obj.is_supporter,
-      country: obj.country,
-    })
-  }
-}
 
 export class DBQuestion {
   readonly id: number
   readonly created_at: string
   readonly deleted: boolean | null
-  readonly author?: DBQuestionAuthor
+  readonly author?: DBAuthor
   readonly useful_count?: number
   readonly subscriber_count?: number
   readonly comment_count?: number
@@ -71,7 +32,7 @@ export class DBQuestion {
 export class Question {
   id: number
   createdAt: Date
-  author: QuestionAuthor | null
+  author: Author | null
   modifiedAt: Date | null
   title: string
   slug: string
@@ -94,7 +55,7 @@ export class Question {
     return new Question({
       id: obj.id,
       createdAt: new Date(obj.created_at),
-      author: obj.author ? QuestionAuthor.fromDB(obj.author) : null,
+      author: obj.author ? Author.fromDB(obj.author) : null,
       modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
       title: obj.title,
       slug: obj.slug,

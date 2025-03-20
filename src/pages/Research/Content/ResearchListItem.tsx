@@ -5,14 +5,8 @@ import {
   Icon,
   IconCountWithTooltip,
   InternalLink,
-  ModerationStatus,
-  Username,
 } from 'oa-components'
-import {
-  IModerationStatus,
-  ResearchStatus,
-  ResearchUpdateStatus,
-} from 'oa-shared'
+import { ResearchStatus, ResearchUpdateStatus } from 'oa-shared'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
 
@@ -265,17 +259,6 @@ const ResearchListItem = ({ item }: IProps) => {
             />
           </Box>
         </Grid>
-        {item.moderation !== IModerationStatus.ACCEPTED && (
-          <ModerationStatus
-            status={item.moderation}
-            contentType="research"
-            sx={{
-              position: 'absolute',
-              bottom: 0,
-              right: 0,
-            }}
-          />
-        )}
       </Flex>
     </Card>
   )
@@ -284,17 +267,17 @@ const ResearchListItem = ({ item }: IProps) => {
 const getItemThumbnail = (researchItem: ResearchItem): string => {
   const publishedUpdates = researchItem.updates?.filter(
     (update) =>
-      !update._deleted &&
+      !update.deleted &&
       update.status === ResearchUpdateStatus.PUBLISHED &&
-      update.images.length > 0,
+      (update.images?.length || 0) > 0,
   )
 
   const latestPublishedUpdate = publishedUpdates?.sort(
-    (a, b) => new Date(b._created).getTime() - new Date(a._created).getTime(),
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   )?.[0]
 
   return (
-    latestPublishedUpdate?.images[0]?.downloadUrl || defaultResearchThumbnail
+    latestPublishedUpdate?.images?.at(0)?.publicUrl || defaultResearchThumbnail
   )
 }
 

@@ -3,10 +3,7 @@ import { RESEARCH_MAX_LENGTH, RESEARCH_TITLE_MAX_LENGTH } from './constants'
 import type { ILabels } from 'src/common/Form/types'
 
 export const buttons = {
-  draft: {
-    create: 'Save as draft',
-    update: 'Save to draft',
-  },
+  draft: 'Save as draft',
   deletion: {
     text: 'Delete this update',
     confirm: 'Delete',
@@ -38,7 +35,7 @@ export const errors = {
 export const overview: ILabels = {
   categories: {
     placeholder: 'Select category',
-    title: 'Which categories fit your research?',
+    title: 'Which category fit your research?',
   },
   collaborators: {
     placeholder: 'Select collaborators or start typing to find them',

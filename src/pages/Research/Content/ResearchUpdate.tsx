@@ -1,68 +1,60 @@
 import { useMemo } from 'react'
-import { Link, useLocation } from '@remix-run/react'
+import { Link } from '@remix-run/react'
 import {
   Button,
   DisplayDate,
   ImageGallery,
   LinkifyText,
   Tooltip,
-  Username,
   VideoPlayer,
 } from 'oa-components'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { DownloadWrapper } from 'src/common/DownloadWrapper'
-import { useContributorsData } from 'src/common/hooks/contributorsData'
-import { useResearchStore } from 'src/stores/Research/research.store'
-import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
+import { CommentSectionSupabase } from 'src/pages/common/CommentsSupabase/CommentSectionSupabase'
+import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
+import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
-import { getResearchUpdateId } from './helper'
 import { ResearchLinkToUpdate } from './ResearchLinkToUpdate'
-import { ResearchUpdateDiscussion } from './ResearchUpdateDiscussion'
 
-import type { IResearch, IResearchDB } from 'oa-shared'
+import type {
+  ResearchItem,
+  ResearchUpdate as ResearchUpdateModel,
+} from 'src/models/research.model'
 
 interface IProps {
-  research: IResearchDB
-  update: IResearch.Update
+  research: ResearchItem
+  update: ResearchUpdateModel
   updateIndex: number
   isEditable: boolean
   slug: string
 }
 
 const ResearchUpdate = (props: IProps) => {
-  const location = useLocation()
-  const { update, updateIndex, isEditable, slug } = props
-  const {
-    _id,
-    _created,
-    _modified,
-    collaborators,
-    description,
-    downloadCount,
-    files,
-    fileLink,
-    images,
-    status,
-    title,
-    videoUrl,
-  } = update
-  const researchStore = useResearchStore()
-
-  const contributors = useContributorsData(collaborators || [])
+  const { research, update, updateIndex, isEditable, slug } = props
 
   const handleDownloadClick = async () => {
-    researchStore.incrementDownloadCount(props.research, _id)
+    // researchStore.incrementDownloadCount(props.research, _id)
   }
 
   const displayNumber = updateIndex + 1
-  const isDraft = status == 'draft'
+  const isDraft = update.status == 'draft'
 
-  const showComments = useMemo(
-    () => update._id === getResearchUpdateId(location.hash),
-    [location.hash],
-  )
+  const authorIds = useMemo(() => {
+    const ids: number[] = []
+
+    if (research.author) {
+      ids.push(research.author.id)
+    }
+
+    for (const collaborator of research.collaborators) {
+      if (collaborator) {
+        ids.push(collaborator.id)
+      }
+    }
+    return ids
+  }, [research.author, research.collaborators])
 
   return (
     <Flex
@@ -91,9 +83,9 @@ const ResearchUpdate = (props: IProps) => {
       )}
 
       <Flex
-        data-testid={`ResearchUpdate: ${_id}`}
-        data-cy={`ResearchUpdate: ${_id}`}
-        id={`update_${_id}`}
+        data-testid={`ResearchUpdate: ${update.id}`}
+        data-cy={`ResearchUpdate: ${update.id}`}
+        id={`update_${update.id}`}
         sx={{
           flexDirection: ['column', 'column', 'row'],
           gap: [2, 4],
@@ -110,7 +102,7 @@ const ResearchUpdate = (props: IProps) => {
             <Heading sx={{ textAlign: 'center' }}>{displayNumber}</Heading>
           </Card>
 
-          <ResearchLinkToUpdate research={props.research} update={update} />
+          <ResearchLinkToUpdate research={research} update={update} />
         </Flex>
 
         <Flex
@@ -125,14 +117,18 @@ const ResearchUpdate = (props: IProps) => {
             <Flex sx={{ flexDirection: 'column', padding: [2, 3, 4] }}>
               <Flex sx={{ flexDirection: ['column', 'row', 'row'] }}>
                 <Box sx={{ width: ['100%', '75%', '75%'] }}>
-                  {contributors.length > 0 && (
+                  {research.collaborators.length > 0 && (
                     <Box sx={{ mb: 2 }} data-testid="collaborator/creator">
-                      <Username user={contributors[0]} />
+                      <UserNameTag
+                        userName={update.author?.username || ''}
+                        countryCode={update.author?.country}
+                        created={update.createdAt}
+                      />
                     </Box>
                   )}
 
                   <Heading as="h2" sx={{ mb: 2 }}>
-                    {title}
+                    {update.title}
                   </Heading>
                 </Box>
 
@@ -151,23 +147,26 @@ const ResearchUpdate = (props: IProps) => {
                         textAlign: ['left', 'right', 'right'],
                       }}
                     >
-                      created <DisplayDate date={_created} />
+                      created <DisplayDate date={update.createdAt} />
                     </Text>
 
-                    {_created !== _modified && (
-                      <Text
-                        variant="auxiliary"
-                        sx={{
-                          textAlign: ['left', 'right', 'right'],
-                        }}
-                      >
-                        edited <DisplayDate date={_modified} />
-                      </Text>
-                    )}
+                    {update.createdAt !== update.modifiedAt &&
+                      update.modifiedAt && (
+                        <Text
+                          variant="auxiliary"
+                          sx={{
+                            textAlign: ['left', 'right', 'right'],
+                          }}
+                        >
+                          edited <DisplayDate date={update.modifiedAt} />
+                        </Text>
+                      )}
                   </Flex>
                   {/* Show edit button for the creator of the research OR a super-admin */}
                   {isEditable && (
-                    <Link to={'/research/' + slug + '/edit-update/' + _id}>
+                    <Link
+                      to={'/research/' + slug + '/edit-update/' + update.id}
+                    >
                       <Button
                         type="button"
                         variant="primary"
@@ -188,40 +187,39 @@ const ResearchUpdate = (props: IProps) => {
                   color={'grey'}
                   sx={{ whiteSpace: 'pre-line' }}
                 >
-                  <LinkifyText>{description}</LinkifyText>
+                  <LinkifyText>{update.description}</LinkifyText>
                 </Text>
               </Box>
             </Flex>
             <Box sx={{ width: '100%' }}>
-              {videoUrl ? (
+              {update.videoUrl && (
                 <ClientOnly fallback={<></>}>
-                  {() => <VideoPlayer videoUrl={videoUrl} />}
+                  {() => <VideoPlayer videoUrl={update.videoUrl!} />}
                 </ClientOnly>
-              ) : (
+              )}
+              {update.images && (
                 <ImageGallery
-                  images={formatImagesForGallery(images) as any}
+                  images={formatImagesForGalleryV2(update.images) as any}
                   allowPortrait={true}
                 />
               )}
             </Box>
             <Flex
               className="file-container"
-              mt={3}
-              sx={{ flexDirection: 'column', px: 4 }}
+              sx={{ flexDirection: 'column', px: 4, mt: 3 }}
             >
-              <DownloadWrapper
+              {/* <DownloadWrapper
                 handleClick={handleDownloadClick}
-                fileLink={fileLink}
-                files={files}
+                fileLink={update.fileLink || undefined}
+                files={update.files?.map((x) => ({ downloadUrl: x.publicUrl }))}
                 fileDownloadCount={downloadCount}
-              />
+              /> */}
             </Flex>
             <ClientOnly fallback={<></>}>
               {() => (
-                <ResearchUpdateDiscussion
-                  update={update}
-                  research={props.research}
-                  showComments={showComments}
+                <CommentSectionSupabase
+                  sourceId={update.id}
+                  authors={authorIds}
                 />
               )}
             </ClientOnly>

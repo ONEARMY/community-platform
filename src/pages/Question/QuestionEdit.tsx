@@ -17,7 +17,7 @@ export const QuestionEdit = ({ question }: QuestionEdit) => {
 
   useEffect(() => {
     if (
-      question.author?.firebaseAuthId !== userStore.activeUser?._authID &&
+      question.author?.username !== userStore.activeUser?.userName &&
       !userStore.activeUser?.userRoles?.includes(UserRole.ADMIN)
     ) {
       navigate(`/questions/${slug}`)

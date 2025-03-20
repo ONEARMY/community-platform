@@ -1,75 +1,66 @@
 import { faker } from '@faker-js/faker'
-import { IModerationStatus } from 'oa-shared'
+import { ResearchStatus, ResearchUpdateStatus } from 'oa-shared'
 
-import type { IResearch, IResearchDB } from 'oa-shared'
-
-type ResearchCalculatedFields = {
-  userHasSubscribed: boolean
-}
+import type {
+  ResearchFormData,
+  ResearchItem,
+  ResearchUpdate,
+} from 'src/models/research.model'
 
 export const FactoryResearchItemUpdate = (
-  researchItemUpdateOverloads: Partial<IResearch.UpdateDB> = {},
-): IResearch.UpdateDB => ({
+  researchItemUpdateOverloads: Partial<ResearchUpdate> = {},
+): ResearchUpdate => ({
   title: faker.lorem.words(),
   commentCount: 0,
   description: faker.lorem.sentences(2),
   images: [],
   files: [],
-  fileLink: faker.internet.url(),
-  downloadCount: 0,
-  _id: faker.string.uuid(),
-  _modified: faker.date.past().toString(),
-  _created: faker.date.past().toString(),
-  _deleted: false,
-  _contentModifiedTimestamp: faker.date.past().toString(),
+  id: faker.number.int(),
+  modifiedAt: faker.date.past(),
+  createdAt: faker.date.past(),
+  deleted: false,
+  author: null,
+  videoUrl: null,
+  fileLink: null,
+  status: ResearchUpdateStatus.PUBLISHED,
   ...researchItemUpdateOverloads,
 })
 
 export const FactoryResearchItem = (
-  researchItemOverloads: Partial<IResearchDB & ResearchCalculatedFields> = {},
-): IResearchDB & ResearchCalculatedFields => ({
-  _id: faker.string.uuid(),
-  _createdBy: faker.internet.userName(),
-  _modified: faker.date.past().toString(),
-  _created: faker.date.past().toString(),
-  _deleted: faker.datatype.boolean(),
-  _contentModifiedTimestamp: faker.date.past().toString(),
+  researchItemOverloads: Partial<ResearchItem> = {},
+): ResearchItem => ({
+  id: faker.number.int(),
+  author: {
+    id: faker.number.int(),
+    name: faker.name.firstName(),
+    username: faker.internet.userName(),
+    isSupporter: false,
+    isVerified: false,
+  },
+  modifiedAt: faker.date.past(),
+  createdAt: faker.date.past(),
+  deleted: faker.datatype.boolean(),
   description: faker.lorem.paragraphs(),
   title: faker.lorem.words(),
   slug: faker.lorem.slug(),
   updates: [FactoryResearchItemUpdate()],
-  tags: {},
-  moderation: faker.helpers.arrayElement([
-    IModerationStatus.DRAFT,
-    IModerationStatus.AWAITING_MODERATION,
-    IModerationStatus.REJECTED,
-    IModerationStatus.ACCEPTED,
-  ]),
-  mentions: [],
-  previousSlugs: [],
-  total_views: faker.number.int(),
+  tags: [],
+  totalViews: faker.number.int(),
   collaborators: [],
-  subscribers: [],
-  userHasSubscribed: faker.datatype.boolean(),
-  totalCommentCount: 0,
+  subscriberCount: faker.number.int(),
+  commentCount: 0,
+  category: null,
+  images: [],
+  status: ResearchStatus.IN_PROGRESS,
+  usefulCount: 2,
   ...researchItemOverloads,
 })
 
 export const FactoryResearchItemFormInput = (
-  researchItemOverloads: Partial<IResearch.FormInput> = {},
-): IResearch.FormInput => ({
-  _id: faker.string.uuid(),
-  _createdBy: faker.internet.userName(),
-  description: faker.lorem.paragraphs(),
+  researchItemOverloads: Partial<ResearchFormData> = {},
+): ResearchFormData => ({
   title: faker.lorem.words(),
-  slug: faker.lorem.slug(),
-  tags: {},
-  moderation: faker.helpers.arrayElement([
-    IModerationStatus.DRAFT,
-    IModerationStatus.AWAITING_MODERATION,
-    IModerationStatus.REJECTED,
-    IModerationStatus.ACCEPTED,
-  ]),
-  collaborators: '',
+  description: faker.lorem.paragraphs(),
+  status: ResearchStatus.IN_PROGRESS,
   ...researchItemOverloads,
 })

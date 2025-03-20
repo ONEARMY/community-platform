@@ -3,7 +3,7 @@ import { IModerationStatus, UserRole } from 'oa-shared'
 import { getConfigurationOption, NO_MESSAGING } from 'src/config/config'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 
-import type { DBDoc, IMapPin, IModerable, IUser } from 'oa-shared'
+import type { DBDoc, DBProfile, IMapPin, IModerable, IUser } from 'oa-shared'
 
 const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi
 
@@ -105,6 +105,18 @@ export const hasAdminRights = (user?: IUser) => {
 
   const roles =
     user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
+
+  return roles.includes(UserRole.ADMIN) || roles.includes(UserRole.SUPER_ADMIN)
+}
+
+export const hasAdminRightsSupabase = (user?: DBProfile) => {
+  if (!user) {
+    return false
+  }
+
+  user = toJS(user)
+
+  const roles = user.roles && Array.isArray(user.roles) ? user.roles : []
 
   return roles.includes(UserRole.ADMIN) || roles.includes(UserRole.SUPER_ADMIN)
 }

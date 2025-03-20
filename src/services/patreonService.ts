@@ -1,4 +1,4 @@
-import type { IPatreonUser } from 'src/models/profile.model'
+import type { IPatreonUser } from 'oa-shared'
 
 const getCurrentUserPatreon = async () => {
   try {

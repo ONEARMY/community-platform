@@ -2,6 +2,7 @@ import { ExternalLinkLabel } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { UserAction } from 'src/common/UserAction'
+import { isUserContactable } from 'src/utils/helpers'
 import { Flex } from 'theme-ui'
 
 import { UserContactNotLoggedIn } from '../contact'
@@ -25,6 +26,8 @@ export const ProfileContact = ({ user }: IProps) => {
         ),
     ) || []
 
+  const isUserProfileContactable = !isUserContactable(user)
+
   return (
     <Flex sx={{ flexDirection: 'column', gap: 2 }}>
       <ClientOnly fallback={<></>}>
@@ -32,7 +35,11 @@ export const ProfileContact = ({ user }: IProps) => {
           <UserAction
             loggedIn={<UserContactForm user={user} />}
             loggedOut={
-              <UserContactNotLoggedIn displayName={user.displayName} />
+              isUserProfileContactable ? (
+                <UserContactNotLoggedIn displayName={user.displayName} />
+              ) : (
+                <></>
+              )
             }
           />
         )}

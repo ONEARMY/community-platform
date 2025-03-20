@@ -4,8 +4,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBComment } from 'oa-shared'
-import type { DBProfile } from 'src/models/profile.model'
+import type { DBComment, DBProfile } from 'oa-shared'
 
 type Supabase = {
   headers: Headers

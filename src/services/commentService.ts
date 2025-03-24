@@ -1,3 +1,5 @@
+import type { Comment } from 'oa-shared'
+
 const deleteComment = async (sourceId: string | number, id: number) => {
   return await fetch(`/api/discussions/${sourceId}/comments/${id}`, {
     method: 'DELETE',
@@ -32,7 +34,22 @@ const postComment = async (
   })
 }
 
+const getComments = async (sourceId: string | number) => {
+  const result = await fetch(`/api/discussions/${sourceId}/comments`)
+  const { comments } = (await result.json()) as { comments: Comment[] }
+  return comments
+}
+
+const getCommentSourceId = async (commentId: number) => {
+  const result = await fetch(`/api/comments/${commentId}/source`)
+  const { sourceId } = (await result.json()) as { sourceId: number }
+
+  return sourceId
+}
+
 export const commentService = {
+  getComments,
+  getCommentSourceId,
   postComment,
   editcomment,
   deleteComment,

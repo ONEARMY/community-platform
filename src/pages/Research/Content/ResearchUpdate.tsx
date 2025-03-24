@@ -10,8 +10,7 @@ import {
 } from 'oa-components'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
-import { DownloadWrapper } from 'src/common/DownloadWrapper'
-import { CommentSectionSupabase } from 'src/pages/common/CommentsSupabase/CommentSectionSupabase'
+import CollapsableCommentSection from 'src/pages/common/CommentsSupabase/CollapsableCommentSection'
 import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
 import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
@@ -217,9 +216,11 @@ const ResearchUpdate = (props: IProps) => {
             </Flex>
             <ClientOnly fallback={<></>}>
               {() => (
-                <CommentSectionSupabase
+                <CollapsableCommentSection
                   sourceId={update.id}
                   authors={authorIds}
+                  open={false}
+                  total={update.commentCount}
                 />
               )}
             </ClientOnly>

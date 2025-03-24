@@ -1,4 +1,4 @@
-import { Arrow } from "./ArrowIcon"
+import { Arrow } from './ArrowIcon'
 
 import type { Meta, StoryFn } from '@storybook/react'
 

@@ -8,12 +8,13 @@ import './styles.css'
 
 interface IProps {
   disabled?: boolean
-  direction: "left" | "right"
+  direction: 'left' | 'right'
   onClick?: () => void
 }
 
 export const Arrow = ({ disabled, direction, onClick }: IProps) => {
-  const glyph: availableGlyphs = direction === 'left' ? 'chevron-left' : 'chevron-right'
+  const glyph: availableGlyphs =
+    direction === 'left' ? 'chevron-left' : 'chevron-right'
   return (
     <Flex
       sx={{

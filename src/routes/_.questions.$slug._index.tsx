@@ -1,7 +1,6 @@
 import { useLoaderData } from '@remix-run/react'
+import { Question, Tag } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
-import { Question } from 'src/models/question.model'
-import { Tag } from 'src/models/tag.model'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { QuestionPage } from 'src/pages/Question/QuestionPage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
@@ -10,7 +9,7 @@ import { storageServiceServer } from 'src/services/storageService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { DBQuestion } from 'src/models/question.model'
+import type { DBQuestion } from 'oa-shared'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)

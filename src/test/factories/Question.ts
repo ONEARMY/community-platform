@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import type { Question } from 'src/models/question.model'
+import type { Question } from 'oa-shared'
 
 export const FactoryQuestionItem = (
   questionOverloads: Partial<Question> = {},

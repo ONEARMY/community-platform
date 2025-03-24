@@ -9,11 +9,11 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
   DBComment,
   DBProfile,
+  DBQuestion,
   INotification,
   IUserDB,
   NotificationType,
 } from 'oa-shared'
-import type { DBQuestion } from 'src/models/question.model'
 
 const sendCommentNotification = async (
   client: SupabaseClient,

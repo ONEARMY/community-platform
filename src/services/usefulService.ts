@@ -1,4 +1,4 @@
-import type { ContentType } from 'src/models/contentType.model'
+import type { ContentType } from 'oa-shared'
 
 const add = async (contentType: ContentType, id: number) => {
   return await fetch(`/api/useful/${contentType}/${id}`, {

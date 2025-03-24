@@ -8,17 +8,17 @@ import './styles.css'
 
 interface IProps {
   disabled?: boolean
-  glyph: availableGlyphs
+  direction: "left" | "right"
   onClick?: () => void
 }
 
-export const Arrow = ({ disabled, glyph, onClick }: IProps) => {
+export const Arrow = ({ disabled, direction, onClick }: IProps) => {
+  const glyph: availableGlyphs = direction === 'left' ? 'chevron-left' : 'chevron-right'
   return (
     <Flex
       sx={{
         overflow: 'hidden',
         alignItems: 'center',
-        justifyContent: glyph === 'chevron-right' ? 'flex-start' : 'flex-end',
       }}
     >
       {disabled ? null : (
@@ -26,8 +26,6 @@ export const Arrow = ({ disabled, glyph, onClick }: IProps) => {
           sx={{
             width: '45px',
             height: '45px',
-            marginRight: glyph === 'chevron-right' ? '10px' : '0px',
-            marginLeft: glyph === 'chevron-right' ? '0px' : '10px',
             border: '3px solid #000',
             borderRadius: 3,
             alignItems: 'center',
@@ -38,7 +36,8 @@ export const Arrow = ({ disabled, glyph, onClick }: IProps) => {
           <Icon
             sx={{
               position: 'relative',
-              left: glyph === 'chevron-right' ? '1px' : '-1px',
+              // Properly center the icon for arrows as they can look offset
+              left: direction === 'right' ? '1px' : '-1px',
             }}
             glyph={glyph}
             size={35}

@@ -23,7 +23,7 @@ export const LeftArrow = () => {
   const onClick = () =>
     visibility.scrollToItem(visibility.getPrevElement(), 'smooth', 'start')
 
-  return <Arrow disabled={disabled} glyph="chevron-left" onClick={onClick} />
+  return <Arrow disabled={disabled} direction='left' onClick={onClick} />
 }
 
 export const RightArrow = () => {
@@ -32,7 +32,7 @@ export const RightArrow = () => {
   const onClick = () =>
     visibility.scrollToItem(visibility.getNextElement(), 'smooth', 'end')
 
-  return <Arrow disabled={disabled} glyph="chevron-right" onClick={onClick} />
+  return <Arrow disabled={disabled} direction='right' onClick={onClick} />
 }
 
 export const VerticalList = ({ children, dataCy }: IProps) => {

@@ -4,8 +4,8 @@ import { tagsService } from 'src/services/tagsService'
 
 import { FieldContainer } from '../Form/FieldContainer'
 
+import type { Tag } from 'oa-shared'
 import type { FieldRenderProps } from 'react-final-form'
-import type { Tag } from 'src/models/tag.model'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 export interface IProps extends Partial<FieldRenderProps<any, any>> {

@@ -5,7 +5,7 @@ import { notificationsService } from 'src/services/notificationsService.server'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { User } from '@supabase/supabase-js'
-import type { DBCommentAuthor, DBProfile, Reply } from 'oa-shared'
+import type { DBAuthor, DBProfile, Reply } from 'oa-shared'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   if (!params.sourceId) {
@@ -50,7 +50,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     (x) =>
       new DBComment({
         ...x,
-        profile: x.profiles as unknown as DBCommentAuthor,
+        profile: x.profiles as unknown as DBAuthor,
       }),
   )
 
@@ -159,7 +159,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   return Response.json(
     new DBComment({
       ...(commentResult.data as DBComment),
-      profile: (commentResult.data as any).profiles as DBCommentAuthor,
+      profile: (commentResult.data as any).profiles as DBAuthor,
     }),
     {
       headers,

@@ -6,8 +6,7 @@ import {
   query,
   where,
 } from 'firebase/firestore'
-import { IModerationStatus } from 'oa-shared'
-import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
+import { DB_ENDPOINTS, IModerationStatus } from 'oa-shared'
 import { firestore } from 'src/utils/firebase'
 
 // runs on the server

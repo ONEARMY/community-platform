@@ -9,7 +9,7 @@ import { listing } from './labels'
 import { QuestionListHeader } from './QuestionListHeader'
 import { QuestionListItem } from './QuestionListItem'
 
-import type { Question } from 'src/models/question.model'
+import type { Question } from 'oa-shared'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 export const QuestionListing = () => {

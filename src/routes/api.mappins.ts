@@ -1,8 +1,8 @@
 import { json } from '@remix-run/node'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import Keyv from 'keyv'
+import { DB_ENDPOINTS } from 'oa-shared'
 import { isProductionEnvironment } from 'src/config/config'
-import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { firestore } from 'src/utils/firebase'
 

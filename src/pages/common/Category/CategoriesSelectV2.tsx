@@ -2,7 +2,7 @@ import { Select } from 'oa-components'
 
 import { FieldContainer } from '../../../common/Form/FieldContainer'
 
-export type SelectValue = { label: string; value: string }
+import type { SelectValue } from 'oa-shared'
 
 export type CategoriesSelectProps = {
   value: SelectValue | null

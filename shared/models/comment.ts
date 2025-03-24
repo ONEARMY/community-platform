@@ -1,52 +1,11 @@
+import { Author } from './author'
 import { DBDocSB, Doc } from './document'
 
+import type { DBAuthor } from './author'
 import type { ContentTypes } from './common'
 
-export class DBCommentAuthor {
-  readonly id: number
-  readonly firebase_auth_id: string
-  readonly display_name: string
-  readonly username: string
-  readonly photo_url: string
-  readonly country: string
-  readonly is_verified: boolean
-  readonly is_supporter: boolean
-
-  constructor(obj: DBCommentAuthor) {
-    Object.assign(this, obj)
-  }
-}
-
-export class CommentAuthor {
-  id: number
-  name: string
-  username: string
-  firebaseAuthId: string
-  photoUrl: string
-  country: string
-  isVerified: boolean
-  isSupporter: boolean
-
-  constructor(obj: CommentAuthor) {
-    Object.assign(this, obj)
-  }
-
-  static fromDB(obj: DBCommentAuthor) {
-    return new CommentAuthor({
-      id: obj.id,
-      name: obj.display_name,
-      username: obj.username,
-      firebaseAuthId: obj.firebase_auth_id,
-      photoUrl: obj.photo_url,
-      isVerified: obj.is_verified,
-      isSupporter: obj.is_supporter,
-      country: obj.country,
-    })
-  }
-}
-
 export class DBComment extends DBDocSB {
-  readonly profile?: DBCommentAuthor
+  readonly profile?: DBAuthor
   created_by: number | null
   modified_at: string | null
   comment: string
@@ -74,7 +33,7 @@ export class DBComment extends DBDocSB {
 
 export class Comment extends Doc {
   modifiedAt: Date | null
-  createdBy: CommentAuthor | null
+  createdBy: Author | null
   comment: string
   sourceId: number | string
   sourceType: ContentTypes
@@ -87,7 +46,7 @@ export class Comment extends Doc {
     return new Comment({
       id: obj.id,
       createdAt: new Date(obj.created_at),
-      createdBy: obj.profile ? CommentAuthor.fromDB(obj.profile) : null,
+      createdBy: obj.profile ? Author.fromDB(obj.profile) : null,
       modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
       comment: obj.comment,
       sourceId: obj.source_id || obj.source_id_legacy || 0,

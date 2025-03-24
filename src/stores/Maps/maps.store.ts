@@ -9,6 +9,7 @@ import { ModuleStore } from '../common/module.store'
 import { getUserAvatar } from '../User/user.store'
 
 import type {
+  DBEndpoint,
   IMapGrouping,
   IMapPin,
   IMapPinDetail,
@@ -17,10 +18,9 @@ import type {
   IUser,
   IUserDB,
 } from 'oa-shared'
-import type { IDBEndpoint } from 'src/models/dbEndpoints'
 import type { IRootStore } from '../RootStore'
 
-const COLLECTION_NAME: IDBEndpoint = 'mappins'
+const COLLECTION_NAME: DBEndpoint = 'mappins'
 export class MapsStore extends ModuleStore {
   public activePinFilters: Array<IMapGrouping> = []
   public activePin: IMapPin | IMapPinWithDetail | undefined = undefined

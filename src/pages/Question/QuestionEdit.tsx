@@ -4,7 +4,7 @@ import { UserRole } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm'
 
-import type { Question } from 'src/models/question.model'
+import type { Question } from 'oa-shared'
 
 type QuestionEdit = {
   question: Question

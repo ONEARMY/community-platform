@@ -1,8 +1,8 @@
-import { Image } from 'src/models/image.model'
+import { Image } from 'oa-shared'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
+import type { DBImage } from 'oa-shared'
 import type { ImageSize } from 'src/config/imageTransforms'
-import type { DBImage } from 'src/models/image.model'
 
 const getImagesPublicUrls = (
   client: SupabaseClient,

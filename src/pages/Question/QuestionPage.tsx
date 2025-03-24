@@ -24,8 +24,7 @@ import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 
-import type { IUser } from 'oa-shared'
-import type { Question } from 'src/models/question.model'
+import type { IUser, Question } from 'oa-shared'
 
 type QuestionPageProps = {
   question: Question

@@ -1,4 +1,4 @@
-import { Question } from 'src/models/question.model'
+import { Question } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { hasAdminRightsSupabase } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
@@ -7,9 +7,7 @@ import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBProfile } from 'oa-shared'
-import type { DBImage } from 'src/models/image.model'
-import type { DBQuestion } from 'src/models/question.model'
+import type { DBImage, DBProfile, DBQuestion } from 'oa-shared'
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   try {

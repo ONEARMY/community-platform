@@ -23,9 +23,8 @@ import { logger } from 'src/logger'
 import { getQueryOptions } from '../utils/getQueryOptions'
 
 import type { Firestore } from 'firebase/firestore'
-import type { DBDoc } from 'oa-shared'
+import type { DBDoc, DBEndpoint } from 'oa-shared'
 import type { Observer } from 'rxjs'
-import type { IDBEndpoint } from 'src/models/dbEndpoints'
 import type { AbstractDatabaseClient } from '../types'
 import type { DBQueryOptions } from '../types/dbDoc'
 
@@ -48,23 +47,23 @@ export class FirestoreClient implements AbstractDatabaseClient {
   /************************************************************************
    *  Main Methods - taken from abstract class
    ***********************************************************************/
-  async getDoc<T>(endpoint: IDBEndpoint, docId: string) {
+  async getDoc<T>(endpoint: DBEndpoint, docId: string) {
     logger.debug('FirestoreClient.getDoc', docId)
     const document = await getDoc(doc(this._db, endpoint, docId))
     return document.exists() ? (document.data() as T & DBDoc) : undefined
   }
 
-  async setDoc(endpoint: IDBEndpoint, documentObj: DBDoc) {
+  async setDoc(endpoint: DBEndpoint, documentObj: DBDoc) {
     return setDoc(doc(this._db, endpoint, documentObj._id), documentObj)
   }
 
-  async updateDoc(endpoint: IDBEndpoint, documentObj: DBDoc) {
+  async updateDoc(endpoint: DBEndpoint, documentObj: DBDoc) {
     const { _id, ...updateValues } = documentObj
 
     return updateDoc(doc(this._db, endpoint, _id), updateValues)
   }
 
-  async setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {
+  async setBulkDocs(endpoint: DBEndpoint, docs: DBDoc[]) {
     const batch = writeBatch(this._db)
     docs.forEach((d) => {
       const ref = doc(this._db, endpoint, d._id)
@@ -73,13 +72,13 @@ export class FirestoreClient implements AbstractDatabaseClient {
   }
 
   // get a collection with optional value to query _modified field
-  async getCollection<T>(endpoint: IDBEndpoint) {
+  async getCollection<T>(endpoint: DBEndpoint) {
     logger.debug(`FirestoreClient.getCollection`, endpoint)
     const snapshot = await getDocs(collection(this._db, endpoint))
     return snapshot.empty ? [] : snapshot.docs.map((d) => d.data() as T & DBDoc)
   }
 
-  async queryCollection<T>(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
+  async queryCollection<T>(endpoint: DBEndpoint, queryOpts: DBQueryOptions) {
     logger.debug(`FirestoreClient.queryCollection`, endpoint, queryOpts)
     const queryRef = this._generateQueryRef(endpoint, queryOpts)
     const data = await getDocs(queryRef)
@@ -90,7 +89,7 @@ export class FirestoreClient implements AbstractDatabaseClient {
     return data.empty ? [] : data.docs.map((doc) => doc.data() as T)
   }
 
-  deleteDoc(endpoint: IDBEndpoint, docId: string) {
+  deleteDoc(endpoint: DBEndpoint, docId: string) {
     return deleteDoc(doc(this._db, endpoint, docId))
   }
 
@@ -98,7 +97,7 @@ export class FirestoreClient implements AbstractDatabaseClient {
    *  Additional Methods - specific only to firestore
    ***********************************************************************/
 
-  streamCollection<T>(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
+  streamCollection<T>(endpoint: DBEndpoint, queryOpts: DBQueryOptions) {
     const queryRef = this._generateQueryRef(endpoint, queryOpts)
     logger.debug(`FirestoreClient.streamCollection`, endpoint, {
       queryOpts,
@@ -117,7 +116,7 @@ export class FirestoreClient implements AbstractDatabaseClient {
     })
     return observer
   }
-  streamDoc<T>(endpoint: IDBEndpoint) {
+  streamDoc<T>(endpoint: DBEndpoint) {
     logger.debug(`FirestoreClient.streamDoc`, endpoint)
     const ref = doc(this._db, endpoint)
     const observer = new Observable<T>((obs: Observer<T>) => {
@@ -129,7 +128,7 @@ export class FirestoreClient implements AbstractDatabaseClient {
   }
 
   // mapping to generate firebase query from standard db queryOpts
-  private _generateQueryRef(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
+  private _generateQueryRef(endpoint: DBEndpoint, queryOpts: DBQueryOptions) {
     const queryOptions = getQueryOptions(queryOpts)
     const collectionRef = collection(this._db, endpoint)
 

@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node'
 import { collection, getDocs, query, where } from 'firebase/firestore'
-import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
+import { DB_ENDPOINTS } from 'oa-shared'
 import { firestore } from 'src/utils/firebase'
 
 import type { IMapPin } from 'oa-shared'

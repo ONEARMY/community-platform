@@ -10,7 +10,7 @@ import './styles.css'
 interface IProps {
   disabled?: boolean
   direction: 'left' | 'right'
-  sx: ThemeUIStyleObject | undefined
+  sx?: ThemeUIStyleObject
   onClick?: () => void
 }
 

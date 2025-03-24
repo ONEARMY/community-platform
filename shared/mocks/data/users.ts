@@ -160,18 +160,6 @@ export const users = {
     _id: 'research_creator',
     userRoles: [UserRole.RESEARCH_CREATOR],
   },
-  research_editor: {
-    _id: 'research_editor',
-    _deleted: false,
-    userName: 'research_editor',
-    moderation: 'awaiting-moderation',
-    verified: false,
-    _modified: '2020-01-07T12:12:41.566Z',
-    _authID: 'cNksr9jiL8cGvwU88gHFNvfz4SK2',
-    displayName: 'research_editor',
-    _created: '2020-01-07T12:12:41.566Z',
-    userRoles: [UserRole.RESEARCH_EDITOR],
-  },
   research_reader: {
     verified: false,
     _modified: '2020-01-07T19:54:49.860Z',

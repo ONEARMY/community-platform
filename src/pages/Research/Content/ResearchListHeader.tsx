@@ -8,7 +8,7 @@ import {
   Select,
   Tooltip,
 } from 'oa-components'
-import { ResearchStatus } from 'oa-shared'
+import { ResearchStatus, UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { UserAction } from 'src/common/UserAction'
@@ -17,7 +17,6 @@ import DraftButton from 'src/pages/common/Drafts/DraftButton'
 import { ListHeader } from 'src/pages/common/Layout/ListHeader'
 import { Button, Flex } from 'theme-ui'
 
-import { RESEARCH_EDITOR_ROLES } from '../constants'
 import { listing } from '../labels'
 import { researchService } from '../research.service'
 import { ResearchSortOptions } from '../ResearchSortOptions'
@@ -100,7 +99,9 @@ export const ResearchFilterHeader = (props: IProps) => {
 
     setSearchParams(params)
   }
-  const roleRequired = isPreciousPlastic() ? undefined : RESEARCH_EDITOR_ROLES
+  const roleRequired = isPreciousPlastic()
+    ? undefined
+    : [UserRole.ADMIN, UserRole.RESEARCH_CREATOR]
   const actionComponents = (
     <UserAction
       incompleteProfile={

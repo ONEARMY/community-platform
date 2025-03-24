@@ -47,11 +47,4 @@ export const MOCK_AUTH_USERS: IMockUsers = {
     password: 'research_creator',
     roles: [UserRole.RESEARCH_CREATOR],
   },
-  research_editor: {
-    uid: 'research_editor',
-    label: 'Research-Editor',
-    email: 'research_editor@test.com',
-    password: 'research_editor',
-    roles: [UserRole.RESEARCH_EDITOR],
-  },
 }

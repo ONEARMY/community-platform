@@ -11,7 +11,6 @@ export enum UserRole {
   SUBSCRIBER = 'subscriber',
   ADMIN = 'admin',
   BETA_TESTER = 'beta-tester',
-  RESEARCH_EDITOR = 'research_editor',
   RESEARCH_CREATOR = 'research_creator',
 }
 

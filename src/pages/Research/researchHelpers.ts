@@ -1,7 +1,6 @@
 import { ResearchStatus, ResearchUpdateStatus, UserRole } from 'oa-shared'
 
-import type { Author } from 'oa-shared'
-import type { DBProfile } from 'src/models/profile.model'
+import type { Author, DBProfile } from 'oa-shared'
 import type { ResearchItem, ResearchUpdate } from 'src/models/research.model'
 
 export const researchUpdateStatusFilter = (

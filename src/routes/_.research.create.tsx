@@ -1,10 +1,8 @@
 import { redirect } from '@remix-run/react'
+import { UserRole } from 'oa-shared'
 import { isPreciousPlastic } from 'src/config/config.server'
-import { RESEARCH_EDITOR_ROLES } from 'src/pages/Research/constants'
 import ResearchForm from 'src/pages/Research/Content/Common/ResearchForm'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-
-import type { UserRole } from 'oa-shared'
 
 export async function loader({ request }) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -26,7 +24,13 @@ export async function loader({ request }) {
 
   if (
     !isPreciousPlastic() &&
-    !roles?.some((role) => RESEARCH_EDITOR_ROLES.includes(role as UserRole))
+    !roles?.some((role) =>
+      [
+        UserRole.RESEARCH_CREATOR,
+        UserRole.ADMIN,
+        UserRole.SUPER_ADMIN,
+      ].includes(role as UserRole),
+    )
   ) {
     return redirect('/research')
   }

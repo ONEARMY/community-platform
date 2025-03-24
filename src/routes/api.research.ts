@@ -8,8 +8,7 @@ import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { ResearchStatus } from 'oa-shared'
-import type { DBProfile } from 'src/models/profile.model'
+import type { DBProfile, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts'
 
 // runs on the server

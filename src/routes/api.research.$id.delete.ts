@@ -3,7 +3,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
-import type { DBProfile } from 'src/models/profile.model'
+import type { DBProfile } from 'oa-shared'
 import type { DBResearchItem } from 'src/models/research.model'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {

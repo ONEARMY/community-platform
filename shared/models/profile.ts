@@ -1,3 +1,4 @@
+import type { DBNotification } from './notification'
 import type { IPatreonUser } from './patreon'
 
 export class DBProfile {
@@ -10,6 +11,7 @@ export class DBProfile {
   country: string
   patreon?: IPatreonUser
   roles: string[] | null
+  notifications: DBNotification[]
 
   constructor(obj: DBProfile) {
     Object.assign(this, obj)

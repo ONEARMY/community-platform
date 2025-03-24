@@ -2,6 +2,7 @@ import { Flex } from 'theme-ui'
 
 import { Icon } from '../Icon/Icon'
 
+import type { ThemeUIStyleObject } from 'theme-ui'
 import type { availableGlyphs } from '../Icon/types'
 
 import './styles.css'
@@ -9,17 +10,20 @@ import './styles.css'
 interface IProps {
   disabled?: boolean
   direction: 'left' | 'right'
+  sx: ThemeUIStyleObject | undefined
   onClick?: () => void
 }
 
-export const Arrow = ({ disabled, direction, onClick }: IProps) => {
+export const Arrow = ({ disabled, direction, onClick, sx }: IProps) => {
   const glyph: availableGlyphs =
     direction === 'left' ? 'chevron-left' : 'chevron-right'
+
   return (
     <Flex
       sx={{
         overflow: 'hidden',
         alignItems: 'center',
+        ...sx,
       }}
     >
       {disabled ? null : (

@@ -172,7 +172,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
                 )
               }
             >
-              <Arrow direction="right" />
+              <Arrow direction="right" sx={{ marginRight: '10px' }} />
             </NavButton>
             <NavButton
               aria-label={'Previous image'}
@@ -187,7 +187,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
                 )
               }
             >
-              <Arrow direction="left" />
+              <Arrow direction="left" sx={{ marginLeft: '10px' }} />
             </NavButton>
           </>
         ) : null}

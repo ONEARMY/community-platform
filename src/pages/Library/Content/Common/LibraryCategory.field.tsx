@@ -7,8 +7,7 @@ import { intro } from 'src/pages/Library/labels'
 
 import { libraryService } from '../../library.service'
 
-import type { ICategory } from 'oa-shared'
-import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
+import type { ICategory, SelectValue } from 'oa-shared'
 
 export const LibraryCategoryField = () => {
   const { placeholder, title } = intro.category

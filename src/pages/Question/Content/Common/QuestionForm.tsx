@@ -19,8 +19,8 @@ import {
   QuestionTitleField,
 } from './FormFields'
 
+import type { Question, QuestionFormData } from 'oa-shared'
 import type { MainFormAction } from 'src/common/Form/types'
-import type { Question, QuestionFormData } from 'src/models/question.model'
 
 interface IProps {
   'data-testid'?: string

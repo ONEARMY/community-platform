@@ -18,7 +18,7 @@ import { listing } from '../../labels'
 import { LibrarySearchParams, libraryService } from '../../library.service'
 import { LibrarySortOptions } from './LibrarySortOptions'
 
-import type { ICategory } from 'shared/lib'
+import type { ICategory } from 'oa-shared'
 import type { LibrarySortOption } from './LibrarySortOptions'
 
 interface IProps {

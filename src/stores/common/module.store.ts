@@ -6,12 +6,12 @@ import { formatLowerNoSpecial, randomID } from 'src/utils/helpers'
 import { Storage } from '../storage'
 
 import type {
+  DBEndpoint,
   IConvertedFileMeta,
   ILocation,
   ISelectedTags,
   IUploadedFileMeta,
 } from 'oa-shared'
-import type { IDBEndpoint } from 'src/models/dbEndpoints'
 import type { IRootStore } from '../RootStore'
 
 /**
@@ -95,7 +95,7 @@ export class ModuleStore {
   // this can be subscribed to in individual stores
   constructor(
     private rootStore: IRootStore,
-    private basePath?: IDBEndpoint,
+    private basePath?: DBEndpoint,
   ) {
     this.rootStore = rootStore
 
@@ -208,7 +208,7 @@ export class ModuleStore {
     return Promise.all(promises)
   }
   /** Sync all server docs locally and stream output changes */
-  private syncAndEmitDocs(endpoint: IDBEndpoint) {
+  private syncAndEmitDocs(endpoint: DBEndpoint) {
     this.allDocs$.next([])
     this.activeCollectionSubscription.unsubscribe()
     this.activeCollectionSubscription = this.db

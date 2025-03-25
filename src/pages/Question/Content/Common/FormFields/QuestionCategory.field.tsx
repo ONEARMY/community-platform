@@ -5,7 +5,7 @@ import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { fields } from 'src/pages/Question/labels'
 import { questionService } from 'src/pages/Question/question.service'
 
-import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
+import type { SelectValue } from 'oa-shared'
 
 export const QuestionCategoryField = () => {
   const [categories, setCategories] = useState<SelectValue[]>([])

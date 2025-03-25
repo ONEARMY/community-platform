@@ -9,7 +9,7 @@ import { fields } from 'src/pages/Question/labels'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { Image as ImageComponent } from 'theme-ui'
 
-import type { Image } from 'src/models/image.model'
+import type { Image } from 'oa-shared'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;

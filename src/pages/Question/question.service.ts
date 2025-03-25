@@ -1,7 +1,6 @@
 import { logger } from 'src/logger'
 
-import type { Category } from 'oa-shared'
-import type { Question } from 'src/models/question.model'
+import type { Category, Question } from 'oa-shared'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 export enum QuestionSearchParams {

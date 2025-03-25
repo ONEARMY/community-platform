@@ -54,10 +54,8 @@ const ResearchList = () => {
     setIsFetching(true)
 
     try {
-      const searchWords = q ? q.toLocaleLowerCase().split(' ') : []
-
       const result = await researchService.search(
-        searchWords,
+        q?.toLocaleLowerCase(),
         category,
         sort,
         status,

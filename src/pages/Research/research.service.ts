@@ -9,7 +9,7 @@ import type {
 import type { ResearchSortOption } from './ResearchSortOptions'
 
 const search = async (
-  words: string[],
+  q: string,
   category: string,
   sort: ResearchSortOption,
   status: ResearchStatus | null,
@@ -17,7 +17,7 @@ const search = async (
 ) => {
   try {
     const url = new URL('/api/research', window.location.origin)
-    url.searchParams.append('words', words.join(','))
+    url.searchParams.append('q', q)
     url.searchParams.append('category', category)
     url.searchParams.append('sort', sort)
     url.searchParams.append('status', status ?? '')

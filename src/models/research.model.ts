@@ -16,6 +16,7 @@ export class DBResearchItem {
   readonly created_at: string
   readonly deleted: boolean | null
   readonly author?: DBAuthor
+  readonly update_count?: number
   readonly useful_count?: number
   readonly subscriber_count?: number
   readonly comment_count?: number
@@ -53,6 +54,7 @@ export class ResearchItem {
   usefulCount: number
   subscriberCount: number
   commentCount: number
+  updateCount: number
   category: Category | null
   totalViews: number
   tags: Tag[]
@@ -86,8 +88,9 @@ export class ResearchItem {
       tagIds: obj.tags,
       tags: tags,
       status: obj.status,
+      updateCount: obj.update_count || 0,
       subscriberCount: obj.subscriber_count || 0,
-      commentCount: obj.comment_count || 0,
+      commentCount: ResearchItem.updateComments(obj),
       usefulCount: obj.useful_count || 0,
       collaborators:
         obj.collaboratorsMapped?.map((x) => Author.fromDB(x)) || [],
@@ -104,6 +107,16 @@ export class ResearchItem {
           )
           ?.map((x) => ResearchUpdate.fromDB(x)) || [],
     })
+  }
+
+  static updateComments(research: DBResearchItem): number {
+    if (research.comment_count) {
+      return research.comment_count
+    }
+
+    return research.updates
+      ?.filter((x) => x.deleted !== true && x.is_draft !== true)
+      .reduce((acc, x) => acc + (x.comment_count || 0), 0)
   }
 }
 
@@ -134,6 +147,7 @@ export class DBResearchUpdate {
   readonly research_id: number
   readonly created_at: string
   readonly deleted: boolean | null
+  readonly is_draft: boolean | null
   readonly comment_count?: number
   readonly author?: DBAuthor
   created_by: number | null

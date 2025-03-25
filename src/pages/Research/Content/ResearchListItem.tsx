@@ -27,6 +27,7 @@ const ResearchListItem = ({ item }: IProps) => {
     display: 'flex',
     alignItems: 'center',
     fontSize: [1, 2, 2],
+    ml: 3,
   }
 
   const status = item.status || ResearchStatus.IN_PROGRESS
@@ -34,11 +35,10 @@ const ResearchListItem = ({ item }: IProps) => {
 
   return (
     <Card
-      as={'li'}
+      as="li"
       data-cy="ResearchListItem"
       data-id={item.id}
-      mb={3}
-      style={{ position: 'relative' }}
+      sx={{ position: 'relative', mb: 3 }}
       variant="responsive"
     >
       <Flex sx={{ width: '100%', position: 'relative' }}>
@@ -56,7 +56,7 @@ const ResearchListItem = ({ item }: IProps) => {
             }}
           >
             <Image
-              style={{
+              sx={{
                 width: `calc(100% + 32px)`,
                 aspectRatio: '1 / 1',
                 objectFit: 'cover',
@@ -159,8 +159,8 @@ const ResearchListItem = ({ item }: IProps) => {
                 /> */}
                 {Boolean(collaborators.length) && (
                   <Text
-                    ml={4}
                     sx={{
+                      ml: 4,
                       display: ['none', 'block'],
                       fontSize: 1,
                       color: 'darkGrey',
@@ -176,8 +176,8 @@ const ResearchListItem = ({ item }: IProps) => {
                 {/* Hide this on mobile, show on tablet & above. */}
                 {modifiedDate !== '' && (
                   <Text
-                    ml={4}
                     sx={{
+                      ml: 4,
                       display: ['none', 'block'],
                       fontSize: 1,
                       color: 'darkGrey',
@@ -211,17 +211,17 @@ const ResearchListItem = ({ item }: IProps) => {
                   alignItems: 'center',
                 }}
               >
-                <Text color="black" ml={3} sx={_commonStatisticStyle}>
+                <Text color="black" sx={_commonStatisticStyle}>
                   {usefulDisplayCount}
                   <Icon glyph="star-active" ml={1} />
                 </Text>
-                <Text color="black" ml={3} sx={_commonStatisticStyle}>
+                <Text color="black" sx={_commonStatisticStyle}>
                   {item.commentCount}
                   <Icon glyph="comment" ml={1} />
                 </Text>
                 <Text
-                  ml={3}
                   sx={{
+                    ml: 3,
                     display: ['block', 'none'],
                     fontSize: 1,
                     color: 'darkGrey',
@@ -252,7 +252,7 @@ const ResearchListItem = ({ item }: IProps) => {
             />
 
             <IconCountWithTooltip
-              count={getUpdateCount(item)}
+              count={item.updateCount}
               dataCy="ItemUpdateText"
               icon="update"
               text="Amount of updates"
@@ -298,14 +298,6 @@ const getItemDate = (item: ResearchItem, variant: string) => {
   } catch (err) {
     return ''
   }
-}
-
-const getUpdateCount = (item: ResearchItem) => {
-  return item.updates?.length
-    ? item.updates.filter(
-        (update) => update.status !== ResearchUpdateStatus.DRAFT,
-      ).length
-    : 0
 }
 
 export default ResearchListItem

@@ -270,7 +270,7 @@ const ResearchDescription = ({
             icon: 'update',
             label: buildStatisticsLabel({
               stat: updatesCount || 0,
-              statUnit: 'step',
+              statUnit: 'update',
               usePlural: true,
             }),
           },

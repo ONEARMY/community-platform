@@ -15,14 +15,14 @@ import { UserAction } from 'src/common/UserAction'
 import { isPreciousPlastic } from 'src/config/config'
 import DraftButton from 'src/pages/common/Drafts/DraftButton'
 import { ListHeader } from 'src/pages/common/Layout/ListHeader'
+import { categoryService } from 'src/services/categoryService'
 import { Button, Flex } from 'theme-ui'
 
 import { listing } from '../labels'
-import { researchService } from '../research.service'
 import { ResearchSortOptions } from '../ResearchSortOptions'
 import { ResearchSearchParams } from './ResearchSearchParams'
 
-import type { ICategory } from 'oa-shared'
+import type { Category } from 'oa-shared'
 import type { ResearchSortOption } from '../ResearchSortOptions'
 
 interface IProps {
@@ -42,12 +42,12 @@ const researchStatusOptions = [
 export const ResearchFilterHeader = (props: IProps) => {
   const { draftCount, handleShowDrafts, showDrafts } = props
 
-  const [categories, setCategories] = useState<ICategory[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [searchString, setSearchString] = useState<string>('')
 
   const [searchParams, setSearchParams] = useSearchParams()
-  const categoryParam = searchParams.get(ResearchSearchParams.category)
-  const category = categories?.find((x) => x._id === categoryParam) ?? null
+  const categoryParam = Number(searchParams.get(ResearchSearchParams.category))
+  const category = categories?.find((x) => x.id === categoryParam) ?? null
   const q = searchParams.get(ResearchSearchParams.q)
   const sort = searchParams.get(ResearchSearchParams.sort) as ResearchSortOption
   const status =
@@ -55,11 +55,8 @@ export const ResearchFilterHeader = (props: IProps) => {
 
   useEffect(() => {
     const initCategories = async () => {
-      const categories = (await researchService.getResearchCategories()) || []
-      const notDeletedCategories = categories.filter(
-        ({ _deleted }) => _deleted === false,
-      )
-      setCategories(notDeletedCategories)
+      const categories = (await categoryService.getCategories('research')) || []
+      setCategories(categories)
     }
 
     initCategories()
@@ -153,7 +150,7 @@ export const ResearchFilterHeader = (props: IProps) => {
       setActiveCategory={(updatedCategory) =>
         updateFilter(
           ResearchSearchParams.category,
-          updatedCategory ? (updatedCategory as ICategory)._id : '',
+          updatedCategory ? (updatedCategory as Category).id.toString() : '',
         )
       }
     />

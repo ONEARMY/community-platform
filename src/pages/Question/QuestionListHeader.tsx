@@ -10,10 +10,8 @@ import {
 } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { UserAction } from 'src/common/UserAction'
-import {
-  QuestionSearchParams,
-  questionService,
-} from 'src/pages/Question/question.service'
+import { QuestionSearchParams } from 'src/pages/Question/question.service'
+import { categoryService } from 'src/services/categoryService'
 import { Button, Flex } from 'theme-ui'
 
 import { ListHeader } from '../common/Layout/ListHeader'
@@ -36,7 +34,8 @@ export const QuestionListHeader = () => {
 
   useEffect(() => {
     const initCategories = async () => {
-      const categories = (await questionService.getQuestionCategories()) || []
+      const categories =
+        (await categoryService.getCategories('questions')) || []
       setCategories(categories)
     }
 

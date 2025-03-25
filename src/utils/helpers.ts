@@ -106,7 +106,7 @@ export const hasAdminRights = (user?: IUser) => {
   const roles =
     user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
 
-  return roles.includes(UserRole.ADMIN) || roles.includes(UserRole.SUPER_ADMIN)
+  return roles.includes(UserRole.ADMIN)
 }
 
 export const hasAdminRightsSupabase = (user?: DBProfile) => {
@@ -114,11 +114,9 @@ export const hasAdminRightsSupabase = (user?: DBProfile) => {
     return false
   }
 
-  user = toJS(user)
-
   const roles = user.roles && Array.isArray(user.roles) ? user.roles : []
 
-  return roles.includes(UserRole.ADMIN) || roles.includes(UserRole.SUPER_ADMIN)
+  return roles.includes(UserRole.ADMIN)
 }
 
 export const needsModeration = (doc: IModerable, user?: IUser) => {

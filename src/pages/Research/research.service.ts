@@ -1,7 +1,7 @@
 import { logger } from 'src/logger'
 import { DBResearchItem, ResearchItem } from 'src/models/research.model'
 
-import type { ICategory, ResearchStatus } from 'oa-shared'
+import type { ResearchStatus } from 'oa-shared'
 import type {
   ResearchFormData,
   ResearchUpdateFormData,
@@ -33,20 +33,6 @@ const search = async (
   } catch (error) {
     logger.error('Failed to fetch research articles', { error })
     return { items: [], total: 0 }
-  }
-}
-
-const getResearchCategories = async () => {
-  try {
-    const response = await fetch('/api/research/categories')
-    const { categories } = (await response.json()) as {
-      categories: ICategory[]
-    }
-
-    return categories
-  } catch (error) {
-    logger.error('Failed to fetch draft count', { error })
-    return []
   }
 }
 
@@ -192,7 +178,6 @@ const deleteUpdate = async (id: number, updateId: number | null) => {
 
 export const researchService = {
   search,
-  getResearchCategories,
   getDrafts,
   getDraftCount,
   upsert,

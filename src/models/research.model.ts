@@ -90,7 +90,7 @@ export class ResearchItem {
       status: obj.status,
       updateCount: obj.update_count || 0,
       subscriberCount: obj.subscriber_count || 0,
-      commentCount: ResearchItem.updateComments(obj),
+      commentCount: calculateUpdateCommentCount(obj),
       usefulCount: obj.useful_count || 0,
       collaborators:
         obj.collaboratorsMapped?.map((x) => Author.fromDB(x)) || [],
@@ -107,16 +107,6 @@ export class ResearchItem {
           )
           ?.map((x) => ResearchUpdate.fromDB(x)) || [],
     })
-  }
-
-  static updateComments(research: DBResearchItem): number {
-    if (research.comment_count) {
-      return research.comment_count
-    }
-
-    return research.updates
-      ?.filter((x) => x.deleted !== true && x.is_draft !== true)
-      .reduce((acc, x) => acc + (x.comment_count || 0), 0)
   }
 }
 
@@ -201,4 +191,14 @@ export class ResearchUpdate {
       status: obj.status,
     })
   }
+}
+
+function calculateUpdateCommentCount(research: DBResearchItem): number {
+  if (research.comment_count) {
+    return research.comment_count
+  }
+
+  return research.updates
+    ?.filter((x) => x.deleted !== true && x.is_draft !== true)
+    .reduce((acc, x) => acc + (x.comment_count || 0), 0)
 }

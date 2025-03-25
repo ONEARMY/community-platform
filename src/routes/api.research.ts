@@ -50,7 +50,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   // }
 
   const { data, count, error } = await client.rpc('get_research', {
-    search_query: q,
+    search_query: q || null,
     category_id: category,
     research_status: status || null,
     sort_by: sort,

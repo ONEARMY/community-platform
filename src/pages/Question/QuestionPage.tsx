@@ -4,7 +4,6 @@ import { observer } from 'mobx-react'
 import {
   Category,
   ContentStatistics,
-  FollowButton,
   ImageGallery,
   LinkifyText,
   TagList,
@@ -13,9 +12,9 @@ import {
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
+import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
-import { subscribersService } from 'src/services/subscribersService'
 import { usefulService } from 'src/services/usefulService'
 import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
@@ -26,36 +25,26 @@ import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 
 import type { IUser, Question } from 'oa-shared'
 
-type QuestionPageProps = {
+interface IProps {
   question: Question
 }
 
-export const QuestionPage = observer(({ question }: QuestionPageProps) => {
+export const QuestionPage = observer(({ question }: IProps) => {
   const { userStore } = useCommonStores().stores
   const activeUser = userStore.activeUser
   const [voted, setVoted] = useState<boolean>(false)
-  const [subscribed, setSubscribed] = useState<boolean>(false)
   const [usefulCount, setUsefulCount] = useState<number>(question.usefulCount)
   const [subscribersCount, setSubscribersCount] = useState<number>(
     question.subscriberCount,
   )
 
   useEffect(() => {
-    const getSubscribed = async () => {
-      const subscribed = await subscribersService.isSubscribed(
-        'questions',
-        question.id,
-      )
-      setSubscribed(subscribed)
-    }
-
     const getVoted = async () => {
       const voted = await usefulService.hasVoted('questions', question.id)
       setVoted(voted)
     }
 
     if (activeUser) {
-      getSubscribed()
       getVoted()
     }
   }, [activeUser, question])
@@ -95,35 +84,6 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
     })
   }
 
-  const onFollowClick = async () => {
-    if (!activeUser?._id) {
-      return
-    }
-
-    if (!subscribed) {
-      const response = await subscribersService.add('questions', question.id)
-
-      if (response.ok) {
-        setSubscribed(true)
-        setSubscribersCount((prev) => prev + 1 || 1)
-      }
-    } else {
-      const response = await subscribersService.remove('questions', question.id)
-
-      if (response.ok) {
-        setSubscribed(false)
-        setSubscribersCount((prev) => prev - 1 || 0)
-      }
-    }
-    const action = subscribed ? 'Unsubscribed' : 'Subscribed'
-
-    trackEvent({
-      category: 'Question',
-      action: action,
-      label: question.slug,
-    })
-  }
-
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
       <Breadcrumbs content={question} variant="question" />
@@ -141,10 +101,10 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
                       onUsefulClick(voted ? 'delete' : 'add')
                     }
                   />
-                  <FollowButton
-                    hasUserSubscribed={subscribed}
-                    isLoggedIn={!!activeUser}
-                    onFollowClick={onFollowClick}
+                  <FollowButtonAction
+                    contentType="questions"
+                    item={question}
+                    setSubscribersCount={setSubscribersCount}
                   />
                   {isEditable && (
                     <Link to={'/questions/' + question.slug + '/edit'}>

@@ -6,6 +6,7 @@ type DateType = string | number | Date
 export interface IProps {
   createdAt: DateType
   action?: string
+  showLabel?: boolean
   modifiedAt?: DateType | null
 }
 
@@ -18,7 +19,12 @@ const relativeDateFormat = (date: DateType): string => {
 }
 
 export const DisplayDate = (props: IProps) => {
-  const { createdAt, modifiedAt, action = 'Published' } = props
+  const {
+    createdAt,
+    modifiedAt,
+    action = 'Published',
+    showLabel = true,
+  } = props
 
   const formattedDate = formatDateTime(modifiedAt || createdAt)
   const relativeDate = relativeDateFormat(modifiedAt || createdAt)
@@ -26,7 +32,7 @@ export const DisplayDate = (props: IProps) => {
 
   return (
     <Text title={formattedDate}>
-      {label} {relativeDate}
+      {showLabel && label} {relativeDate}
     </Text>
   )
 }

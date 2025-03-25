@@ -47,7 +47,13 @@
     "import/no-unresolved": [
       "error",
       {
-        "ignore": ["^src/", "^oa-([a-z]+)/", "^oa-components", "^oa-themes"]
+        "ignore": [
+          "^src/",
+          "^oa-([a-z]+)/",
+          "^oa-components",
+          "^oa-themes",
+          "^oa-shared"
+        ]
       }
     ],
     "import/newline-after-import": "error",

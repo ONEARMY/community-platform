@@ -50,6 +50,8 @@ describe('[Questions.Discussions]', () => {
     cy.wait(1000)
     cy.contains('2 Comments')
 
+    // Add notifications spec somewhere
+
     cy.step('Can edit their reply')
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
     cy.step('Another user can leave a reply')

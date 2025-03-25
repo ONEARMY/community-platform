@@ -75,6 +75,7 @@ describe('[News.Write]', () => {
       cy.contains(category)
       cy.contains(tag1)
       cy.contains(tag2)
+      // Follow button should show you're subscribed
       // contains images
 
       cy.step('Edit fields')

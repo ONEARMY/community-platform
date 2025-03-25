@@ -34,6 +34,7 @@ export class DBResearchItem {
   category_id?: number
   tags: number[]
   status: ResearchStatus
+  is_draft?: boolean
   collaborators: number[] | null
 
   constructor(obj: Omit<DBResearchItem, 'id'>) {
@@ -62,6 +63,7 @@ export class ResearchItem {
   status: ResearchStatus
   collaborators: Author[]
   updates: ResearchUpdate[]
+  isDraft?: boolean
 
   constructor(obj: ResearchItem) {
     Object.assign(this, obj)
@@ -92,6 +94,7 @@ export class ResearchItem {
       subscriberCount: obj.subscriber_count || 0,
       commentCount: calculateUpdateCommentCount(obj),
       usefulCount: obj.useful_count || 0,
+      isDraft: obj.is_draft || false,
       collaborators:
         obj.collaboratorsMapped?.map((x) => Author.fromDB(x)) || [],
       // never show deleted updates; only show draft updates if current user is the author or collaborator

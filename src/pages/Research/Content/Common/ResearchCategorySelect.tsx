@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Field } from 'react-final-form'
 import { CategoriesSelectV2 } from 'src/pages/common/Category/CategoriesSelectV2'
+import { categoryService } from 'src/services/categoryService'
 
 import { overview } from '../../labels'
-import { researchService } from '../../research.service'
 
 import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
 
@@ -12,11 +12,11 @@ const ResearchFieldCategory = () => {
 
   useEffect(() => {
     const getCategories = async () => {
-      const categories = await researchService.getResearchCategories()
+      const categories = await categoryService.getCategories('research')
       setOptions(
-        categories.map(({ _id, label }) => ({
-          label,
-          value: _id,
+        categories.map(({ id, name }) => ({
+          value: id.toString(),
+          label: name,
         })),
       )
     }

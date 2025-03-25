@@ -215,7 +215,7 @@ async function validateRequest(request: Request, user: User | null, data: any) {
     return { status: 401, statusText: 'unauthorized' }
   }
 
-  if (request.method !== 'POST') {
+  if (request.method !== 'PUT') {
     return { status: 405, statusText: 'method not allowed' }
   }
 

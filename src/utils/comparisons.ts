@@ -1,4 +1,6 @@
-import * as _ from 'lodash'
+import pkg from 'lodash'
+
+const { isEqual } = pkg
 
 import type { ISelectedTags } from 'oa-shared'
 import type { Tag } from 'src/models/tag.model'
@@ -14,7 +16,7 @@ export const COMPARISONS = {
     return a === b
   },
   tags: (a: ISelectedTags, b: ISelectedTags): boolean => {
-    return _.isEqual(a, b)
+    return isEqual(a, b)
   },
   tagsSupabase: (a: Tag, b: Tag): boolean => {
     return !!a && a?.id === b?.id

@@ -45,7 +45,7 @@ export const overview: ILabels = {
     placeholder: `Introduction to your research question. Mention what you want to do, whats the goal and what challenges you see etc (max ${RESEARCH_MAX_LENGTH} characters)`,
     title: 'What are you trying to find out?',
   },
-  researchStatus: {
+  status: {
     placeholder: 'Select status',
     title: 'What is the status of your research?',
   },

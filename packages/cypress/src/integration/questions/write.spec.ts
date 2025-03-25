@@ -77,6 +77,8 @@ describe('[Question]', () => {
       cy.contains(initialTitle)
       cy.contains(initialQuestionDescription)
       cy.contains(category)
+      // Follow button should show you're subscribed
+
       // cy.contains(tag1)
       // cy.contains(tag2)
       // contains images

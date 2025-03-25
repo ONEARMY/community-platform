@@ -1,1 +1,1 @@
-export type ContentType = 'questions' | 'projects' | 'research'
+export type ContentType = 'questions' | 'projects' | 'research' | 'news'

@@ -1,57 +1,19 @@
 import { Author } from './author'
-import { Category } from './category'
+import { Category, ContentDoc, DBContentDoc } from './document'
 
-import type { DBAuthor } from './author'
-import type { DBCategory } from './category'
 import type { IConvertedFileMeta } from './common'
 import type { DBImage, Image } from './image'
+import type { SelectValue } from './other'
 import type { Tag } from './tag'
 
-export class DBQuestion {
-  readonly id: number
-  readonly created_at: string
-  readonly deleted: boolean | null
-  readonly author?: DBAuthor
-  readonly useful_count?: number
-  readonly subscriber_count?: number
-  readonly comment_count?: number
-  readonly total_views?: number
-  readonly category: DBCategory | null
-  created_by: number | null
-  modified_at: string | null
-  title: string
-  slug: string
-  description: string
-  images: DBImage[] | null
-  category_id?: number
-  tags: number[]
-
-  constructor(obj: Omit<DBQuestion, 'id'>) {
-    Object.assign(this, obj)
-  }
+export class DBQuestion extends DBContentDoc {
+  readonly description: string
+  readonly images: DBImage[] | null
 }
 
-export class Question {
-  id: number
-  createdAt: Date
-  author: Author | null
-  modifiedAt: Date | null
-  title: string
-  slug: string
+export class Question extends ContentDoc {
   description: string
   images: Image[] | null
-  deleted: boolean
-  usefulCount: number
-  subscriberCount: number
-  commentCount: number
-  category: Category | null
-  totalViews: number
-  tags: Tag[]
-  tagIds?: number[]
-
-  constructor(obj: Question) {
-    Object.assign(this, obj)
-  }
 
   static fromDB(obj: DBQuestion, tags: Tag[], images?: Image[]) {
     return new Question({
@@ -83,5 +45,3 @@ export type QuestionFormData = {
   images: IConvertedFileMeta[] | null
   existingImages: Image[] | null
 }
-
-export type SelectValue = { label: string; value: string }

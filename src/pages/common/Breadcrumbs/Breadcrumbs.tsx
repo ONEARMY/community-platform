@@ -1,11 +1,12 @@
+/* eslint-disable no-case-declarations */
 import { Breadcrumbs as BreadcrumbsComponent } from 'oa-components'
 import { Box } from 'theme-ui'
 
-import type { ILibrary, IResearch, Question } from 'oa-shared'
+import type { ILibrary, IResearch, News, Question } from 'oa-shared'
 
 type Step = { text: string; link?: string }
-type Content = IResearch.ItemDB | Question | ILibrary.Item
-type Variant = 'research' | 'question' | 'library'
+type Content = IResearch.ItemDB | Question | ILibrary.Item | News
+type Variant = 'research' | 'question' | 'library' | 'news'
 
 interface BreadcrumbsProps {
   steps?: Step[]
@@ -15,43 +16,62 @@ interface BreadcrumbsProps {
 
 const generateSteps = (content: Content, variant: Variant) => {
   const steps: Step[] = []
-  if (variant == 'research') {
-    const item = content as IResearch.ItemDB
-    steps.push({ text: 'Research', link: '/research' })
 
-    if (item.researchCategory) {
-      steps.push({
-        text: item.researchCategory.label,
-        link: `/research?category=${item.researchCategory._id}`,
-      })
-    }
+  switch (variant) {
+    case 'research':
+      const research = content as IResearch.ItemDB
+      steps.push({ text: 'Research', link: '/research' })
 
-    steps.push({ text: item.title })
-  } else if (variant == 'question') {
-    const item = content as Question
-    steps.push({ text: 'Question', link: '/questions' })
+      if (research.researchCategory) {
+        steps.push({
+          text: research.researchCategory.label,
+          link: `/research?category=${research.researchCategory._id}`,
+        })
+      }
 
-    if (item.category) {
-      steps.push({
-        text: item.category.name,
-        link: `/questions?category=${item.category.id}`,
-      })
-    }
+      steps.push({ text: research.title })
+      break
+    case 'question':
+      const question = content as Question
+      steps.push({ text: 'Question', link: '/questions' })
 
-    steps.push({ text: item.title })
-  } else if (variant == 'library') {
-    const item = content as ILibrary.Item
-    steps.push({ text: 'Library', link: '/library' })
+      if (question.category) {
+        steps.push({
+          text: question.category.name,
+          link: `/questions?category=${question.category.id}`,
+        })
+      }
 
-    if (item.category) {
-      steps.push({
-        text: item.category.label,
-        link: `/library?category=${item.category._id}`,
-      })
-    }
+      steps.push({ text: question.title })
+      break
+    case 'library':
+      const project = content as ILibrary.Item
+      steps.push({ text: 'Library', link: '/library' })
 
-    steps.push({ text: item.title })
+      if (project.category) {
+        steps.push({
+          text: project.category.label,
+          link: `/library?category=${project.category._id}`,
+        })
+      }
+
+      steps.push({ text: project.title })
+      break
+    case 'news':
+      const news = content as News
+      steps.push({ text: 'News', link: '/news' })
+
+      if (news.category) {
+        steps.push({
+          text: news.category.name,
+          link: `/news?category=${news.category.id}`,
+        })
+      }
+
+      steps.push({ text: news.title })
+      break
   }
+
   return steps
 }
 

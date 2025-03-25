@@ -4,20 +4,29 @@ import { useNavigate } from '@remix-run/react'
 import { Button, ElWithBeforeIcon } from 'oa-components'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { logger } from 'src/logger'
+import {
+  CategoryField,
+  TagsField,
+  TitleField,
+} from 'src/pages/common/FormFields'
 import { QuestionPostingGuidelines } from 'src/pages/Question/Content/Common'
+import {
+  QuestionDescriptionField,
+  QuestionImagesField,
+} from 'src/pages/Question/Content/Common/FormFields'
 import * as LABELS from 'src/pages/Question/labels'
 import { questionService } from 'src/services/questionService'
-import { setAllowDraftSaveFalse } from 'src/utils/validators'
+import {
+  composeValidators,
+  endsWithQuestionMark,
+  minValue,
+  required,
+  setAllowDraftSaveFalse,
+} from 'src/utils/validators'
 import { Alert, Box, Card, Flex, Heading } from 'theme-ui'
 
-import { QUESTION_MAX_IMAGES } from '../../constants'
-import { QuestionImagesField } from './FormFields/QuestionImage.field'
-import {
-  QuestionCategoryField,
-  QuestionDescriptionField,
-  QuestionTagsField,
-  QuestionTitleField,
-} from './FormFields'
+import { QUESTION_MAX_IMAGES, QUESTION_MIN_TITLE_LENGTH } from '../../constants'
+import { questionContentService } from '../../questionContent.service'
 
 import type { Question, QuestionFormData } from 'oa-shared'
 import type { MainFormAction } from 'src/common/Form/types'
@@ -109,6 +118,11 @@ export const QuestionForm = (props: IProps) => {
               QUESTION_MAX_IMAGES,
             )
           : 1
+        const validate = composeValidators(
+          required,
+          minValue(QUESTION_MIN_TITLE_LENGTH),
+          endsWithQuestionMark(),
+        )
 
         return (
           <Flex sx={{ flexWrap: 'wrap', backgroundColor: 'inherit', mx: -2 }}>
@@ -141,15 +155,17 @@ export const QuestionForm = (props: IProps) => {
                   <QuestionPostingGuidelines />
                 </Box>
                 <Card sx={{ marginTop: 4, padding: 4, overflow: 'visible' }}>
-                  <QuestionTitleField />
+                  <TitleField validate={validate} />
                   <QuestionDescriptionField />
                   <QuestionImagesField
                     inputsAvailable={numberOfImageInputsAvailable}
                     existingImages={initialValues.existingImages}
                     removeExistingImage={removeExistingImage}
                   />
-                  <QuestionCategoryField />
-                  <QuestionTagsField />
+                  <CategoryField
+                    getCategories={questionContentService.getCategories}
+                  />
+                  <TagsField />
                 </Card>
               </Box>
             </Flex>

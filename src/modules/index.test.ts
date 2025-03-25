@@ -20,6 +20,7 @@ describe('getSupportedModules', () => {
       MODULE.ACADEMY,
       MODULE.USER,
       MODULE.QUESTION,
+      MODULE.NEWS,
     ])
   })
 

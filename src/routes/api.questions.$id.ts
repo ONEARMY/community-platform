@@ -2,7 +2,9 @@ import { Question } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { hasAdminRightsSupabase } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
-import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
+
+import { uploadImages, validateImages } from './api.questions'
+import { isDuplicateExistingSlug } from './utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
@@ -112,20 +114,6 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
   }
 }
 
-async function isDuplicateSlug(
-  slug: string,
-  id: number,
-  client: SupabaseClient,
-) {
-  const { data } = await client
-    .from('questions')
-    .select('id,slug')
-    .eq('slug', slug)
-    .single()
-
-  return !!data?.id && data.id !== id
-}
-
 async function uploadImages(
   questionId: number,
   uploadedImages: File[],
@@ -198,7 +186,7 @@ async function validateRequest(
   const slug = convertToSlug(data.title)
   const questionId = Number(params.id!)
 
-  if (await isDuplicateSlug(slug, questionId, client)) {
+  if (await isDuplicateExistingSlug(slug, questionId, client, 'questions')) {
     return {
       status: 409,
       statusText: 'This question already exists',

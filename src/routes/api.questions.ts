@@ -7,6 +7,8 @@ import { discordServiceServer } from 'src/services/discordService.server'
 import { convertToSlug } from 'src/utils/slug'
 import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
 
+import { isDuplicateNewSlug } from './utils'
+
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { DBProfile, DBQuestion } from 'oa-shared'
@@ -118,7 +120,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const slug = convertToSlug(data.title)
 
-    if (await isDuplicateSlug(slug, client)) {
+    if (await isDuplicateNewSlug(slug, client, 'questions')) {
       return Response.json(
         {},
         {
@@ -214,16 +216,6 @@ function notifyDiscord(
   discordServiceServer.postWebhookRequest(
     `❓ ${profile.username} has a new question: ${title}\nHelp them out and answer here: <${siteUrl}/questions/${slug}>`,
   )
-}
-
-async function isDuplicateSlug(slug: string, client: SupabaseClient) {
-  const { data } = await client
-    .from('questions')
-    .select('slug')
-    .eq('slug', slug)
-    .single()
-
-  return !!data
 }
 
 async function uploadImages(

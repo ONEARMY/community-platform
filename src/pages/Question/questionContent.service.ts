@@ -36,7 +36,7 @@ const search = async (
   }
 }
 
-const getQuestionCategories = async () => {
+const getCategories = async () => {
   try {
     const response = await fetch('/api/categories/questions')
     return (await response.json()) as Category[]
@@ -46,7 +46,7 @@ const getQuestionCategories = async () => {
   }
 }
 
-export const questionService = {
+export const questionContentService = {
   search,
-  getQuestionCategories,
+  getCategories,
 }

@@ -11,9 +11,9 @@ import {
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { UserAction } from 'src/common/UserAction'
 import {
+  questionContentService,
   QuestionSearchParams,
-  questionService,
-} from 'src/pages/Question/question.service'
+} from 'src/pages/Question/questionContent.service'
 import { Button, Flex } from 'theme-ui'
 
 import { ListHeader } from '../common/Layout/ListHeader'
@@ -36,7 +36,7 @@ export const QuestionListHeader = () => {
 
   useEffect(() => {
     const initCategories = async () => {
-      const categories = (await questionService.getQuestionCategories()) || []
+      const categories = (await questionContentService.getCategories()) || []
       setCategories(categories)
     }
 

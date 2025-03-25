@@ -49,6 +49,8 @@ export type availableGlyphs =
   | 'machines'
   | 'mail-outline'
   | 'map'
+  | 'megaphone-active'
+  | 'megaphone-inactive'
   | 'menu'
   | 'more-vert'
   | 'moulds'

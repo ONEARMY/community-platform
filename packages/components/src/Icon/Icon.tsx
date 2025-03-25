@@ -105,6 +105,8 @@ export const glyphs: IGlyphs = {
   machines: iconMap.machines,
   'mail-outline': <MdMailOutline />,
   map: iconMap.map,
+  'megaphone-active': iconMap.megaphoneActive,
+  'megaphone-inactive': iconMap.megaphoneInactive,
   menu: <MdMenu />,
   moulds: iconMap.moulds,
   'more-vert': <MdMoreVert />,

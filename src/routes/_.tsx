@@ -11,10 +11,12 @@ import {
 } from 'src/pages/common/EnvironmentContext'
 import GlobalSiteFooter from 'src/pages/common/GlobalSiteFooter/GlobalSiteFooter'
 import Header from 'src/pages/common/Header/Header'
+import { NotificationsContext } from 'src/pages/common/NotificationsContext'
 import { SessionContext } from 'src/pages/common/SessionContext'
 import { StickyButton } from 'src/pages/common/StickyButton'
 import { UserStoreWrapper } from 'src/pages/common/UserStoreWrapper'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { notificationsService } from 'src/services/notificationsService'
 import { Flex } from 'theme-ui'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -27,7 +29,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     data: { user },
   } = await client.auth.getUser()
 
-  return Response.json({ environment, user })
+  const notifications = await notificationsService.getNotifications()
+
+  return Response.json({ environment, notifications, user })
 }
 
 export function HydrateFallback() {
@@ -38,7 +42,7 @@ export function HydrateFallback() {
 
 // This is a Layout file, it will render for all routes that have _. prefix.
 export default function Index() {
-  const { environment, user } = useLoaderData<typeof loader>()
+  const { environment, notifications, user } = useLoaderData<typeof loader>()
 
   return (
     <EnvironmentContext.Provider value={environment}>
@@ -51,7 +55,9 @@ export default function Index() {
             <Analytics />
             <ScrollToTop />
             <ClientOnly fallback={<></>}>{() => <DevSiteHeader />}</ClientOnly>
-            <Header />
+            <NotificationsContext.Provider value={notifications}>
+              <Header />
+            </NotificationsContext.Provider>
             <Alerts />
 
             <Outlet />

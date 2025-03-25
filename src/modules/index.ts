@@ -6,11 +6,12 @@ export enum MODULE {
   ACADEMY = 'academy',
   USER = 'user',
   QUESTION = 'question',
+  NEWS = 'news',
 }
 
 export const getSupportedModules = (supportedModules: string): MODULE[] => {
   const envModules: string[] =
-    (supportedModules || 'howto,map,research,academy,user,question')
+    (supportedModules || 'howto,map,research,academy,user,question,news')
       .split(',')
       .map((s) => s.trim()) || []
   return [MODULE.CORE].concat(

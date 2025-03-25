@@ -1,10 +1,7 @@
-export class Tag {
-  id: number
-  name: string
+import { DBDocSB, Doc } from './document'
 
-  constructor(obj: Tag) {
-    Object.assign(this, obj)
-  }
+export class Tag extends Doc {
+  name: string
 
   static fromDB(obj: DBTag) {
     return new Tag({
@@ -14,13 +11,8 @@ export class Tag {
   }
 }
 
-export class DBTag {
-  readonly id: number
+export class DBTag extends DBDocSB {
   name: string
-
-  constructor(obj: Omit<Tag, 'id'>) {
-    Object.assign(this, obj)
-  }
 
   static toDB(obj: Tag) {
     return new DBTag({

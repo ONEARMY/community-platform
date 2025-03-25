@@ -1,0 +1,240 @@
+// TODO: split this in separate files once we update remix to NOT use file-based routing
+
+import { IModerationStatus, News } from 'oa-shared'
+import { ITEMS_PER_PAGE } from 'src/pages/News/constants'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { discordServiceServer } from 'src/services/discordService.server'
+import { newsServiceServer } from 'src/services/newsService.server'
+import { convertToSlug } from 'src/utils/slug'
+
+import { isDuplicateNewSlug, uploadImage, validateImage } from './utils'
+
+import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { User } from '@supabase/supabase-js'
+import type { DBNews, DBProfile } from 'oa-shared'
+import type { NewsSortOption } from 'src/pages/News/NewsSortOptions'
+
+export const loader = async ({ request }) => {
+  const url = new URL(request.url)
+  const params = new URLSearchParams(url.search)
+  const q = params.get('q')
+  const sort = params.get('sort') as NewsSortOption
+  const skip = Number(params.get('skip')) || 0
+
+  const { client, headers } = createSupabaseServerClient(request)
+
+  let query = client.from('news').select(
+    `
+      id,
+      created_at,
+      created_by,
+      modified_at,
+      comment_count,
+      body,
+      slug,
+      category:category(id,name),
+      tags,
+      title,
+      total_views,
+      hero_image,
+      author:profiles(id, display_name, username, is_verified, is_supporter, country)`,
+    { count: 'exact' },
+  )
+
+  if (q) {
+    query = query.textSearch('news_search_fields', q)
+  }
+
+  if (sort === 'Newest') {
+    query = query.order('created_at', { ascending: false })
+  } else if (sort === 'Comments') {
+    query = query.order('comment_count', { ascending: false })
+  } else if (sort === 'LeastComments') {
+    query = query.order('comment_count', { ascending: true })
+  }
+
+  const queryResult = await query.range(skip, skip + ITEMS_PER_PAGE) // 0 based
+
+  const total = queryResult.count
+  const data = queryResult.data as unknown as DBNews[]
+
+  const items = data.map((dbNews) => News.fromDB(dbNews, []))
+
+  if (items && items.length > 0) {
+    // Populate useful votes
+    const votes = await client.rpc('get_useful_votes_count_by_content_id', {
+      p_content_type: 'news',
+      p_content_ids: items.map((x) => x.id),
+    })
+
+    if (votes.data) {
+      const votesByContentId = votes.data.reduce((acc, current) => {
+        acc.set(current.content_id, current.count)
+        return acc
+      }, new Map())
+
+      for (const item of items) {
+        if (votesByContentId.has(item.id)) {
+          item.usefulCount = votesByContentId.get(item.id)!
+        }
+        item.heroImage = await newsServiceServer.getHeroImage(
+          client,
+          data.find((x) => x.id === item.id)?.hero_image || null,
+        )
+      }
+    }
+  }
+
+  return Response.json({ items, total }, { headers })
+}
+
+export const action = async ({ request }: LoaderFunctionArgs) => {
+  try {
+    const formData = await request.formData()
+    const data = {
+      title: formData.get('title') as string,
+      body: formData.get('body') as string,
+      category: formData.has('category')
+        ? (formData.get('category') as string)
+        : null,
+      tags: formData.has('tags')
+        ? formData.getAll('tags').map((x) => Number(x))
+        : null,
+    }
+
+    const { client, headers } = createSupabaseServerClient(request)
+
+    const {
+      data: { user },
+    } = await client.auth.getUser()
+
+    const { valid, status, statusText } = await validateRequest(
+      request,
+      user,
+      data,
+    )
+
+    if (!valid) {
+      return Response.json({}, { status, statusText })
+    }
+
+    const slug = convertToSlug(data.title)
+
+    if (await isDuplicateNewSlug(slug, client, 'news')) {
+      return Response.json(
+        {},
+        {
+          status: 409,
+          statusText: 'This news already exists',
+        },
+      )
+    }
+
+    const uploadedHeroImageFile = formData.get('heroImage') as File
+    const imageValidation = validateImage(uploadedHeroImageFile)
+
+    if (!imageValidation.valid && imageValidation.error) {
+      return Response.json(
+        {},
+        {
+          status: 400,
+          statusText: imageValidation.error.message,
+        },
+      )
+    }
+    const profileRequest = await client
+      .from('profiles')
+      .select('id,username')
+      .eq('auth_id', user!.id)
+      .limit(1)
+
+    if (profileRequest.error || !profileRequest.data?.at(0)) {
+      console.log(profileRequest.error)
+      return Response.json({}, { status: 400, statusText: 'User not found' })
+    }
+
+    const profile = profileRequest.data[0] as DBProfile
+
+    const newsResult = await client
+      .from('news')
+      .insert({
+        created_by: profile.id,
+        title: data.title,
+        body: data.body,
+        moderation: IModerationStatus.ACCEPTED,
+        slug,
+        category: data.category,
+        tags: data.tags,
+        tenant_id: process.env.TENANT_ID,
+      })
+      .select()
+
+    if (newsResult.error || !newsResult.data) {
+      throw newsResult.error
+    }
+
+    const news = News.fromDB(newsResult.data[0], [])
+
+    if (uploadedHeroImageFile) {
+      const newsId = Number(newsResult.data[0].id)
+      const uploadedImage = await uploadImage(
+        newsId,
+        uploadedHeroImageFile,
+        client,
+        'news',
+      )
+      const hero_image =
+        uploadedImage?.image && !uploadedImage.error
+          ? uploadedImage.image
+          : null
+
+      if (hero_image) {
+        const updateResult = await client
+          .from('news')
+          .update({ hero_image })
+          .eq('id', newsId)
+          .select()
+
+        if (updateResult.data) {
+          news.heroImage = updateResult.data[0].hero_image
+        }
+      }
+    }
+
+    notifyDiscord(news, profile, new URL(request.url).origin)
+
+    return Response.json({ news }, { headers, status: 201 })
+  } catch (error) {
+    console.log(error)
+    return Response.json({}, { status: 500, statusText: 'Error creating news' })
+  }
+}
+
+function notifyDiscord(news: News, profile: DBProfile, siteUrl: string) {
+  const title = news.title
+  const slug = news.slug
+
+  discordServiceServer.postWebhookRequest(
+    `📰 ${profile.username} has news: ${title}\n<${siteUrl}/news/${slug}>`,
+  )
+}
+
+async function validateRequest(request: Request, user: User | null, data: any) {
+  if (!user) {
+    return { status: 401, statusText: 'unauthorized' }
+  }
+
+  if (request.method !== 'POST') {
+    return { status: 405, statusText: 'method not allowed' }
+  }
+
+  if (!data.title) {
+    return { status: 400, statusText: 'title is required' }
+  }
+
+  if (!data.body) {
+    return { status: 400, statusText: 'body is required' }
+  }
+
+  return { valid: true }
+}

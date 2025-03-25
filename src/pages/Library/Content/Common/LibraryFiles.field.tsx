@@ -1,5 +1,5 @@
 import { Button, DownloadStaticFile } from 'oa-components'
-import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
+import { FormFieldWrapper } from 'src/pages/common/FormFields'
 import {
   LibraryFileLinkField,
   LibraryFileUploadField,

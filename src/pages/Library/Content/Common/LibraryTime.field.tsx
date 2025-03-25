@@ -1,6 +1,6 @@
 import { Field } from 'react-final-form'
 import { SelectField } from 'src/common/Form/Select.field'
-import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
+import { FormFieldWrapper } from 'src/pages/common/FormFields'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { draftValidationWrapper, required } from 'src/utils/validators'
 

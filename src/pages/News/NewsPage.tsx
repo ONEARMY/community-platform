@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import {
@@ -9,6 +9,7 @@ import {
 } from 'oa-components'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
+import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
@@ -24,6 +25,10 @@ interface IProps {
 }
 
 export const NewsPage = observer(({ news }: IProps) => {
+  const [subscribersCount, setSubscribersCount] = useState<number>(
+    news.subscriberCount,
+  )
+
   const { userStore } = useCommonStores().stores
   const activeUser = userStore.activeUser
 
@@ -115,6 +120,14 @@ export const NewsPage = observer(({ news }: IProps) => {
                   }),
                 },
                 {
+                  icon: 'thunderbolt-grey',
+                  label: buildStatisticsLabel({
+                    stat: subscribersCount,
+                    statUnit: 'following',
+                    usePlural: false,
+                  }),
+                },
+                {
                   icon: 'comment',
                   label: buildStatisticsLabel({
                     stat: news.commentCount,
@@ -142,6 +155,13 @@ export const NewsPage = observer(({ news }: IProps) => {
               authors={news.author?.id ? [news.author?.id] : []}
               sourceId={news.id}
               sourceType="news"
+              followButton={
+                <FollowButtonAction
+                  contentType="news"
+                  item={news}
+                  setSubscribersCount={setSubscribersCount}
+                />
+              }
             />
           </Card>
         )}

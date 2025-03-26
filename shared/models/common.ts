@@ -33,4 +33,4 @@ export type Collaborator = {
   isVerified: boolean
 }
 
-export type ContentTypes = 'questions' | 'projects' | 'research'
+export type ContentType = 'questions' | 'projects' | 'research' | 'news'

@@ -6,19 +6,23 @@ import type { ImageSize } from 'src/config/imageTransforms'
 
 const getImagesPublicUrls = async (
   client: SupabaseClient,
-  images: DBImage[],
+  images: DBImage[] | null,
   size?: ImageSize,
 ) => {
+  if (!images || images.length === 0) {
+    return []
+  }
+
   const imageList: Image[] = []
 
-  images?.forEach(async (image) => {
+  for await (const image of images) {
     const response = await client.storage
       .from(process.env.TENANT_ID as string)
       .getPublicUrl(image.path, size ? { transform: size } : undefined)
     imageList.push(
       new Image({ id: image.id, publicUrl: response.data.publicUrl }),
     )
-  })
+  }
 
   return imageList
 }

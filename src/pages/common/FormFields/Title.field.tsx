@@ -5,14 +5,14 @@ import {
   NEWS_MAX_TITLE_LENGTH,
   NEWS_MIN_TITLE_LENGTH,
 } from 'src/pages/News/constants'
-import { fields } from 'src/pages/News/labels'
 
 interface IProps {
+  placeholder?: string
   validate: (value: any) => Promise<any>
+  title: string
 }
 
-export const TitleField = ({ validate }: IProps) => {
-  const { placeholder, title } = fields.title
+export const TitleField = ({ placeholder, title, validate }: IProps) => {
   const name = 'title'
 
   return (

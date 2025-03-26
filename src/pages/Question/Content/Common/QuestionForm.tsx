@@ -155,7 +155,11 @@ export const QuestionForm = (props: IProps) => {
                   <QuestionPostingGuidelines />
                 </Box>
                 <Card sx={{ marginTop: 4, padding: 4, overflow: 'visible' }}>
-                  <TitleField validate={validate} />
+                  <TitleField
+                    placeholder={LABELS.fields.title.placeholder}
+                    validate={validate}
+                    title={LABELS.fields.title.title}
+                  />
                   <QuestionDescriptionField />
                   <QuestionImagesField
                     inputsAvailable={numberOfImageInputsAvailable}
@@ -165,7 +169,7 @@ export const QuestionForm = (props: IProps) => {
                   <CategoryField
                     getCategories={questionContentService.getCategories}
                   />
-                  <TagsField />
+                  <TagsField title={LABELS.fields.tags.title} />
                 </Card>
               </Box>
             </Flex>

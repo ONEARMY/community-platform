@@ -99,7 +99,6 @@ export const NewsForm = (props: IProps) => {
       onSubmit={onSubmit}
       initialValues={initialValues}
       render={({ submitting, handleSubmit, valid }) => {
-        console.log(initialValues)
         return (
           <Flex sx={{ flexWrap: 'wrap', backgroundColor: 'inherit', mx: -2 }}>
             <Flex
@@ -132,10 +131,12 @@ export const NewsForm = (props: IProps) => {
                 </Box>
                 <Card sx={{ marginTop: 4, padding: 4, overflow: 'visible' }}>
                   <TitleField
+                    placeholder={LABELS.fields.title.placeholder}
                     validate={composeValidators(
                       required,
                       minValue(NEWS_MIN_TITLE_LENGTH),
                     )}
+                    title={LABELS.fields.title.title}
                   />
                   <NewsBodyField />
                   <NewsImageField
@@ -145,7 +146,7 @@ export const NewsForm = (props: IProps) => {
                   <CategoryField
                     getCategories={newsContentService.getCategories}
                   />
-                  <TagsField />
+                  <TagsField title={LABELS.fields.tags.title} />
                 </Card>
               </Box>
             </Flex>

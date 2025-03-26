@@ -1722,7 +1722,137 @@
         }
       ]
     },
-    "messages": {
+    "public_messages": {
+      "id": "public.messages",
+      "schemaName": "public",
+      "tableName": "messages",
+      "fields": [
+        {
+          "id": "public.messages.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"messages_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.messages.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.messages.message",
+          "name": "message",
+          "columnName": "message",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.messages.sender_id",
+          "name": "sender_id",
+          "columnName": "sender_id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.messages.receiver_id",
+          "name": "receiver_id",
+          "columnName": "receiver_id",
+          "type": "int8",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.messages.tenant_id",
+          "name": "tenant_id",
+          "columnName": "tenant_id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "profiles_public_messages_sender_idToprofiles",
+          "type": "profiles",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "public_messages_sender_idToprofiles",
+          "relationFromFields": ["sender_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "profiles_public_messages_sender_idToprofiles",
+          "type": "profiles",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "public_messages_sender_idToprofiles",
+          "relationFromFields": ["sender_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "messages_pkey",
+          "fields": ["id"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "realtime_messages": {
       "id": "realtime.messages",
       "schemaName": "realtime",
       "tableName": "messages",
@@ -2751,6 +2881,80 @@
         }
       ]
     },
+    "patreon_settings": {
+      "id": "public.patreon_settings",
+      "schemaName": "public",
+      "tableName": "patreon_settings",
+      "fields": [
+        {
+          "id": "public.patreon_settings.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"patreon_settings_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.patreon_settings.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.patreon_settings.tiers",
+          "name": "tiers",
+          "columnName": "tiers",
+          "type": "json",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.patreon_settings.tenant_id",
+          "name": "tenant_id",
+          "columnName": "tenant_id",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "patreon_settings_pkey",
+          "fields": ["id"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
     "profiles": {
       "id": "public.profiles",
       "schemaName": "public",
@@ -2793,7 +2997,7 @@
           "name": "firebase_auth_id",
           "columnName": "firebase_auth_id",
           "type": "text",
-          "isRequired": true,
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -3083,11 +3287,81 @@
           "maxLength": null
         },
         {
+          "id": "public.profiles.auth_id",
+          "name": "auth_id",
+          "columnName": "auth_id",
+          "type": "uuid",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.profiles.legacy_id",
+          "name": "legacy_id",
+          "columnName": "legacy_id",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "users",
+          "type": "users",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "profilesTousers",
+          "relationFromFields": ["auth_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "comments",
           "type": "comments",
           "isRequired": false,
           "kind": "object",
           "relationName": "commentsToprofiles",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "public_messages_public_messages_sender_idToprofiles",
+          "type": "public_messages",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "public_messages_sender_idToprofiles",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "public_messages_public_messages_sender_idToprofiles",
+          "type": "public_messages",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "public_messages_sender_idToprofiles",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -3140,6 +3414,11 @@
         }
       ],
       "uniqueConstraints": [
+        {
+          "name": "profiles_auth_id_tenant_id_key",
+          "fields": ["auth_id", "tenant_id"],
+          "nullNotDistinct": false
+        },
         {
           "name": "profiles_pkey",
           "fields": ["id"],
@@ -4572,6 +4851,48 @@
         }
       ]
     },
+    "seed_files": {
+      "id": "supabase_migrations.seed_files",
+      "schemaName": "supabase_migrations",
+      "tableName": "seed_files",
+      "fields": [
+        {
+          "id": "supabase_migrations.seed_files.path",
+          "name": "path",
+          "columnName": "path",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "supabase_migrations.seed_files.hash",
+          "name": "hash",
+          "columnName": "hash",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "seed_files_pkey",
+          "fields": ["path"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
     "sessions": {
       "id": "auth.sessions",
       "schemaName": "auth",
@@ -5307,6 +5628,136 @@
       "uniqueConstraints": [
         {
           "name": "tags_pkey",
+          "fields": ["id"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "tenant_settings": {
+      "id": "public.tenant_settings",
+      "schemaName": "public",
+      "tableName": "tenant_settings",
+      "fields": [
+        {
+          "id": "public.tenant_settings.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"tenant_settings_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.tenant_settings.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.tenant_settings.site_name",
+          "name": "site_name",
+          "columnName": "site_name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.tenant_settings.site_url",
+          "name": "site_url",
+          "columnName": "site_url",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.tenant_settings.message_sign_off",
+          "name": "message_sign_off",
+          "columnName": "message_sign_off",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.tenant_settings.tenant_id",
+          "name": "tenant_id",
+          "columnName": "tenant_id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.tenant_settings.email_from",
+          "name": "email_from",
+          "columnName": "email_from",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.tenant_settings.site_image",
+          "name": "site_image",
+          "columnName": "site_image",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "tenant_settings_pkey",
           "fields": ["id"],
           "nullNotDistinct": false
         }
@@ -6223,6 +6674,20 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "sessionsTousers",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "profiles",
+          "type": "profiles",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "profilesTousers",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,

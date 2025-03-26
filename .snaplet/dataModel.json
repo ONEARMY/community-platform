@@ -499,6 +499,20 @@
           "maxLength": null
         },
         {
+          "name": "news",
+          "type": "news",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "newsTocategories",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "questions",
           "type": "questions",
           "isRequired": false,
@@ -3651,6 +3665,20 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "public_messages_sender_idToprofiles",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "news",
+          "type": "news",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "newsToprofiles",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -7176,6 +7204,9 @@
     "content_types": {
       "schemaName": "public",
       "values": [
+        {
+          "name": "news"
+        },
         {
           "name": "projects"
         },

@@ -8,6 +8,7 @@ import questionsJson from './questions.json'
 import type {
   categoriesChildInputs,
   categoriesScalars,
+  newsScalars,
   profilesChildInputs,
   profilesInputs,
   profilesScalars,
@@ -235,6 +236,7 @@ const seedCategories = (): categoriesChildInputs => [
   { ..._CATEGORIES_BASE, name: 'Questions', type: 'questions' },
   { ..._CATEGORIES_BASE, name: 'Research', type: 'research' },
   { ..._CATEGORIES_BASE, name: 'Projects', type: 'projects' },
+  { ..._CATEGORIES_BASE, name: 'Important Updates', type: 'news' },
 ]
 
 // const seedComments = (
@@ -276,6 +278,24 @@ const seedUsefulVotes = (
     content_id: question.id,
   }))
 
+const base_news: Partial<newsScalars> = {
+  comment_count: 0,
+  hero_image: null,
+  moderation: null,
+  previous_slugs: [],
+  tenant_id,
+  total_views: 0,
+}
+
+const seedNews: Partial<newsScalars>[] = [
+  {
+    ...base_news,
+    title: 'First news article!',
+    body: "Yes! That's right we've got news now",
+    slug: 'first-news-article',
+  },
+]
+
 const main = async () => {
   const seed = await createSeedClient()
 
@@ -289,13 +309,9 @@ const main = async () => {
     })),
   )
 
-  await seed.tags(seedTags())
+  const { tags } = await seed.tags(seedTags())
+  const { categories } = await seed.categories(seedCategories())
 
-  await seed.categories(seedCategories())
-
-  /**
-   * This should be interpreted as "What this user has related to them?" - what are their questions, comments, subscribers, etc.".
-   */
   const questionsAcc: questionsScalars[] = []
 
   for (const profile of profiles) {
@@ -323,6 +339,15 @@ const main = async () => {
       connect: { profiles: [profile] },
     })
   }
+
+  await seed.news(
+    seedNews.map((item) => ({
+      ...item,
+      category: categories.find((cat) => cat.type === 'news')?.id,
+      created_by: profiles[0].id,
+      tags: [tags[0].id],
+    })),
+  )
 
   process.exit()
 }

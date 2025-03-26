@@ -31,7 +31,9 @@ export const NewsImageField = (props: IProps) => {
       flexWrap="wrap"
       required
     >
-      <Text variant='quiet' sx={{fontSize: 2}}>{fields.heroImage.description}</Text>
+      <Text variant="quiet" sx={{ fontSize: 2 }}>
+        {fields.heroImage.description}
+      </Text>
       {!existingHeroImage && (
         <ImageInputFieldWrapper data-cy={'heroImage-upload'}>
           <Field

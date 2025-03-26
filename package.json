@@ -46,6 +46,7 @@
     "build-storybook": "yarn build:themes && yarn workspace oa-components chromatic",
     "storybook:build": "yarn build:shared && yarn build:themes && yarn workspace oa-components build:sb",
     "docs": "yarn workspace oa-docs start",
+    "db:seed": "npx @snaplet/seed sync && npx tsx seed.ts > seed.sql && yarn format",
     "install:clean": "yarn workspace oa-scripts install:clean",
     "postinstall": "husky install",
     "commit": "git-cz"

@@ -17,11 +17,5 @@ To sync snaplet (essentially generate snaplet models and docs from `seed.config.
 > Note: every time the config file is changed, this command has to be ran.
 
 ```sh
-npx @snaplet/seed sync
-```
-
-To run the seed script:
-
-```sh
-npx tsx seed.ts > seed.sql
+yarn db:seed
 ```

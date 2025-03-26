@@ -1,5 +1,5 @@
 import type { Author, DBAuthor } from './author'
-import type { ContentTypes } from './common'
+import type { ContentType } from './common'
 import type { Tag } from './tag'
 
 export abstract class DBDocSB {
@@ -55,7 +55,7 @@ export class ContentDoc extends Doc {
 
 export class Category extends Doc {
   name: string
-  type: ContentTypes
+  type: ContentType
 
   static fromDB(category: DBCategory) {
     const { created_at, id, name, type } = category
@@ -70,7 +70,7 @@ export class Category extends Doc {
 
 export class DBCategory extends DBDocSB {
   name: string
-  type: ContentTypes
+  type: ContentType
 
   static fromDB(category: DBCategory) {
     return new DBCategory(category)

@@ -2,15 +2,14 @@ import { Author } from './author'
 import { DBDocSB, Doc } from './document'
 
 import type { DBAuthor } from './author'
-import type { ContentTypes } from './common'
+import type { ContentType } from './common'
 
 export class DBComment extends DBDocSB {
   readonly profile?: DBAuthor
   created_by: number | null
-  modified_at: string | null
   comment: string
   source_id: number | null
-  source_type: ContentTypes
+  source_type: ContentType
   source_id_legacy: string | null
   parent_id: number | null
   deleted: boolean | null
@@ -32,11 +31,10 @@ export class DBComment extends DBDocSB {
 }
 
 export class Comment extends Doc {
-  modifiedAt: Date | null
   createdBy: Author | null
   comment: string
   sourceId: number | string
-  sourceType: ContentTypes
+  sourceType: ContentType
   parentId: number | null
   deleted: boolean | null
   highlighted?: boolean

@@ -67,6 +67,7 @@ describe('News', () => {
       mockNewsItem.title = 'Do you prefer camping near a lake or in a forest?'
       mockNewsItem.category = {
         createdAt: new Date(),
+        modifiedAt: null,
         name: 'Preference',
         id: faker.number.int(),
         type: 'news',

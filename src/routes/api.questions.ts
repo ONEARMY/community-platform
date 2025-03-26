@@ -218,7 +218,7 @@ function notifyDiscord(
   )
 }
 
-async function uploadImages(
+export async function uploadImages(
   questionId: number,
   uploadedImages: File[],
   client: SupabaseClient,
@@ -248,7 +248,7 @@ async function uploadImages(
   return { images, errors }
 }
 
-function validateImages(images: File[]) {
+export function validateImages(images: File[]) {
   const errors: string[] = []
   for (const image of images) {
     if (!SUPPORTED_IMAGE_EXTENSIONS.includes(image.type)) {

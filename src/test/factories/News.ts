@@ -1,16 +1,14 @@
 import { faker } from '@faker-js/faker'
 
-import type { Question } from 'oa-shared'
+import type { News } from 'oa-shared'
 
-export const FactoryQuestionItem = (
-  questionOverloads: Partial<Question> = {},
-): Question => ({
+export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   id: faker.number.int(),
   createdAt: faker.date.past(),
   deleted: faker.datatype.boolean(),
   modifiedAt: faker.date.past(),
   title: faker.lorem.sentence(),
-  description: faker.lorem.paragraph(),
+  body: faker.lorem.paragraph(),
   slug: faker.lorem.slug(),
   previousSlugs: [],
   tags: [
@@ -38,12 +36,12 @@ export const FactoryQuestionItem = (
     modifiedAt: null,
     id: faker.number.int(),
     name: faker.lorem.words(1),
-    type: 'questions',
+    type: 'news',
   },
-  images: [],
+  heroImage: { id: '2349-23480-34', publicUrl: '' },
   subscriberCount: faker.number.int(),
   commentCount: faker.number.int(),
   totalViews: faker.number.int(),
   usefulCount: faker.number.int(),
-  ...questionOverloads,
+  ...newsOverloads,
 })

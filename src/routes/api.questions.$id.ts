@@ -114,48 +114,6 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
   }
 }
 
-async function uploadImages(
-  questionId: number,
-  uploadedImages: File[],
-  client: SupabaseClient,
-) {
-  if (!uploadedImages || uploadedImages.length === 0) {
-    return null
-  }
-
-  // const files = await Promise.all(uploadedImages.map(image => image.arrayBuffer()))
-
-  const errors: string[] = []
-  const images: DBImage[] = []
-
-  for (const image of uploadedImages) {
-    const result = await client.storage
-      .from(process.env.TENANT_ID as string)
-      .upload(`questions/${questionId}/${image.name}`, image)
-
-    if (result.data === null) {
-      errors.push(`Error uploading image: ${image.name}`)
-      continue
-    }
-
-    images.push(result.data)
-  }
-
-  return { images, errors }
-}
-
-function validateImages(images: File[]) {
-  const errors: string[] = []
-  for (const image of images) {
-    if (!SUPPORTED_IMAGE_EXTENSIONS.includes(image.type)) {
-      errors.push(`Unsupported image extension: ${image.type}`)
-      continue
-    }
-  }
-
-  return { valid: errors.length === 0, errors }
-}
-
 async function validateRequest(
   params: Params<string>,
   request: Request,

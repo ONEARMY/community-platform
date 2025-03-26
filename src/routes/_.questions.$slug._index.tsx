@@ -56,7 +56,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   ])
 
   const images = dbQuestion.images
-    ? storageServiceServer.getImagesPublicUrls(
+    ? await storageServiceServer.getImagesPublicUrls(
         client,
         dbQuestion.images,
         IMAGE_SIZES.GALLERY,

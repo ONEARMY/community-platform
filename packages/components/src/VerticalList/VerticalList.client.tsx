@@ -1,12 +1,12 @@
 // As much as possible taken directly from https://asmyshlyaev177.github.io/react-horizontal-scrolling-menu/?path=/story/examples-simple--simple
 // Generally only edited for readability
 
-import React from 'react'
-import { ScrollMenu } from 'react-horizontal-scrolling-menu'
+import React, { useContext } from 'react'
+import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu'
 import styled from '@emotion/styled'
 import { Box } from 'theme-ui'
 
-import { LeftArrow, RightArrow } from './Arrows'
+import { Arrow } from '../ArrowIcon/ArrowIcon'
 
 import type { publicApiType } from 'react-horizontal-scrolling-menu'
 
@@ -15,6 +15,38 @@ import 'react-horizontal-scrolling-menu/dist/styles.css'
 export interface IProps {
   children: React.ReactElement[]
   dataCy?: string
+}
+
+export const LeftArrow = () => {
+  const visibility = useContext<publicApiType>(VisibilityContext)
+  const disabled = visibility.useLeftArrowVisible()
+  const onClick = () =>
+    visibility.scrollToItem(visibility.getPrevElement(), 'smooth', 'start')
+
+  return (
+    <Arrow
+      disabled={disabled}
+      direction="left"
+      sx={{ marginLeft: '10px' }}
+      onClick={onClick}
+    />
+  )
+}
+
+export const RightArrow = () => {
+  const visibility = useContext<publicApiType>(VisibilityContext)
+  const disabled = visibility.useRightArrowVisible()
+  const onClick = () =>
+    visibility.scrollToItem(visibility.getNextElement(), 'smooth', 'end')
+
+  return (
+    <Arrow
+      disabled={disabled}
+      direction="right"
+      sx={{ marginRight: '10px' }}
+      onClick={onClick}
+    />
+  )
 }
 
 export const VerticalList = ({ children, dataCy }: IProps) => {

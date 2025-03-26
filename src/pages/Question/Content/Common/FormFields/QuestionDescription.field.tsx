@@ -1,6 +1,6 @@
 import { Field } from 'react-final-form'
 import { FieldTextarea } from 'oa-components'
-import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
+import { FormFieldWrapper } from 'src/pages/common/FormFields'
 import { QUESTION_MAX_DESCRIPTION_LENGTH } from 'src/pages/Question/constants'
 import { fields } from 'src/pages/Question/labels'
 import { composeValidators, required } from 'src/utils/validators'

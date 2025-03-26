@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { CategoryVerticalList } from './CategoryVerticalList'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { Category, ContentTypes, ICategory } from 'oa-shared'
+import type { Category, ContentType, ICategory } from 'oa-shared'
 
 export default {
   title: 'Components/CategoryVerticalList',
@@ -14,45 +14,51 @@ const allCategoriesForPreciousPlastic = [
   {
     createdAt: new Date('2024-12-03T18:03:51.313Z'),
     id: 1,
+    modifiedAt: null,
     name: 'Guides',
-    type: 'questions' as ContentTypes,
+    type: 'questions' as ContentType,
   },
   {
     createdAt: new Date('2022-12-01T18:03:51.313Z'),
     id: 2,
+    modifiedAt: null,
     name: 'Machines',
-    type: 'questions' as ContentTypes,
+    type: 'questions' as ContentType,
   },
   {
     createdAt: new Date('2022-12-03T18:03:51.313Z'),
     id: 3,
+    modifiedAt: null,
     name: 'Moulds',
-    type: 'questions' as ContentTypes,
+    type: 'questions' as ContentType,
   },
   {
     createdAt: new Date('2022-12-03T18:03:51.313Z'),
     id: 4,
+    modifiedAt: null,
     name: 'Products',
-    type: 'questions' as ContentTypes,
+    type: 'questions' as ContentType,
   },
   {
     createdAt: new Date('2022-12-03T18:03:51.313Z'),
     id: 5,
+    modifiedAt: null,
     name: 'Starter Kits',
-    type: 'questions' as ContentTypes,
+    type: 'questions' as ContentType,
   },
   {
     createdAt: new Date('2022-12-04T18:03:51.313Z'),
     id: 6,
+    modifiedAt: null,
     name: 'Recycling',
-    type: 'questions' as ContentTypes,
+    type: 'questions' as ContentType,
   },
   {
     createdAt: new Date('2022-12-05T18:03:51.313Z'),
     id: 7,
-    _modified: '2022-12-03T18:03:51.313Z',
+    modifiedAt: null,
     name: 'From the Team',
-    type: 'questions' as ContentTypes,
+    type: 'questions' as ContentType,
   },
 ]
 
@@ -60,32 +66,37 @@ const allCategoriesForProjectKamp = [
   {
     createdAt: new Date('2022-12-03T18:03:51.313Z'),
     id: 8,
+    modifiedAt: null,
     name: 'Construction',
-    type: 'questions' as ContentTypes,
+    type: 'questions' as ContentType,
   },
   {
     createdAt: new Date('2022-12-03T18:03:51.313Z'),
     id: 9,
+    modifiedAt: null,
     name: 'Food',
-    type: 'questions' as ContentTypes,
+    type: 'questions' as ContentType,
   },
   {
     createdAt: new Date('2022-12-03T18:03:51.313Z'),
     id: 10,
+    modifiedAt: null,
     name: 'Landscape',
-    type: 'questions' as ContentTypes,
+    type: 'questions' as ContentType,
   },
   {
     createdAt: new Date('2022-12-03T18:03:51.313Z'),
     id: 11,
+    modifiedAt: null,
     name: 'Other',
-    type: 'questions' as ContentTypes,
+    type: 'questions' as ContentType,
   },
   {
     createdAt: new Date('2022-12-03T18:03:51.313Z'),
     id: 12,
+    modifiedAt: null,
     name: 'Utilities',
-    type: 'questions' as ContentTypes,
+    type: 'questions' as ContentType,
   },
 ]
 
@@ -117,20 +128,23 @@ export const WhenGlyphNotPresent: StoryFn<typeof CategoryVerticalList> = () => {
     {
       createdAt: new Date('2022-12-03T18:03:51.313Z'),
       id: 13,
+      modifiedAt: null,
       name: 'No Glphy A',
-      type: 'questions' as ContentTypes,
+      type: 'questions' as ContentType,
     },
     {
       createdAt: new Date('2022-12-03T18:03:51.313Z'),
       id: 14,
+      modifiedAt: null,
       name: 'No Glphy B',
-      type: 'questions' as ContentTypes,
+      type: 'questions' as ContentType,
     },
     {
       createdAt: new Date('2022-12-03T18:03:51.313Z'),
       id: 15,
+      modifiedAt: null,
       name: 'No Glphy C',
-      type: 'questions' as ContentTypes,
+      type: 'questions' as ContentType,
     },
   ]
 

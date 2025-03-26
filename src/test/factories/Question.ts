@@ -12,6 +12,7 @@ export const FactoryQuestionItem = (
   title: faker.lorem.sentence(),
   description: faker.lorem.paragraph(),
   slug: faker.lorem.slug(),
+  previousSlugs: [],
   tags: [
     {
       id: faker.number.int(),
@@ -34,6 +35,7 @@ export const FactoryQuestionItem = (
   },
   category: {
     createdAt: new Date(),
+    modifiedAt: null,
     id: faker.number.int(),
     name: faker.lorem.words(1),
     type: 'questions',

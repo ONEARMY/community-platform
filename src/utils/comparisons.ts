@@ -1,6 +1,8 @@
-import * as _ from 'lodash'
+import pkg from 'lodash'
 
 import type { ISelectedTags, Tag } from 'oa-shared'
+
+const { isEqual } = pkg
 
 /** Functions used to give as callback to the isEqual prop of form fields.
  *  The isEqual callback is used to determine if a field is dirty.
@@ -13,7 +15,7 @@ export const COMPARISONS = {
     return a === b
   },
   tags: (a: ISelectedTags, b: ISelectedTags): boolean => {
-    return _.isEqual(a, b)
+    return isEqual(a, b)
   },
   tagsSupabase: (a: Tag, b: Tag): boolean => {
     return !!a && a?.id === b?.id

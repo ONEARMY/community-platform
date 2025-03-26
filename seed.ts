@@ -8,13 +8,10 @@ import questionsJson from './questions.json'
 import type {
   categoriesChildInputs,
   categoriesScalars,
-  commentsChildInputs,
-  commentsScalars,
   profilesChildInputs,
   profilesInputs,
   profilesScalars,
   questionsChildInputs,
-  questionsInputs,
   questionsScalars,
   subscribersChildInputs,
   subscribersScalars,
@@ -82,18 +79,6 @@ const _QUESTIONS_BASE: questionsScalars = {
   deleted: false,
   /* int4 or int8 */
   tags: [],
-}
-
-//@ts-expect-error: Common properties (not default) + intellisense
-const _COMMENTS_BASE: commentsScalars = {
-  /* text or text[] */
-  tenant_id: 'precious-plastic',
-  legacy_id: null,
-  source_id_legacy: null,
-  /* int4 or int8 */
-  parent_id: null,
-  /* bool */
-  deleted: false,
 }
 
 //@ts-expect-error: Common properties (not default) + intellisense

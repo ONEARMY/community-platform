@@ -348,5 +348,9 @@ describe('[Research]', () => {
       cy.contains(updateTitle)
       cy.get('[data-cy=DraftUpdateLabel]').should('not.exist')
     })
+
+    // it('[By Admin]', () => {
+    // Should check an admin can edit other's content
+    // })
   })
 })

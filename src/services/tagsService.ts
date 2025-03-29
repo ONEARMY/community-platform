@@ -1,4 +1,4 @@
-import type { Tag } from 'src/models/tag.model'
+import type { Tag } from 'oa-shared'
 
 const getTags = async () => {
   try {

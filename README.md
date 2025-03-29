@@ -189,6 +189,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/maximevtush"><img src="https://avatars.githubusercontent.com/u/154841002?v=4?s=60" width="60px;" alt="Maxim Evtush"/><br /><sub><b>Maxim Evtush</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=maximevtush" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/kilavvy"><img src="https://avatars.githubusercontent.com/u/140459108?v=4?s=60" width="60px;" alt="kilavvy"/><br /><sub><b>kilavvy</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=kilavvy" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mohitsharma23"><img src="https://avatars.githubusercontent.com/u/32203733?v=4?s=60" width="60px;" alt="Mohit Sharma"/><br /><sub><b>Mohit Sharma</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=mohitsharma23" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/paulaFenner"><img src="https://avatars.githubusercontent.com/u/18422622?v=4?s=60" width="60px;" alt="Paula Fenner"/><br /><sub><b>Paula Fenner</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=paulaFenner" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

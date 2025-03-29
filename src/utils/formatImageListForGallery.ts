@@ -1,7 +1,6 @@
 import { cdnImageUrl } from './cdnImageUrl'
 
-import type { IConvertedFileMeta, IUploadedFileMeta } from 'oa-shared'
-import type { Image } from 'src/models/image.model'
+import type { IConvertedFileMeta, Image, IUploadedFileMeta } from 'oa-shared'
 
 export const formatImagesForGallery = (
   imageList: (IUploadedFileMeta | File | IConvertedFileMeta | null)[],

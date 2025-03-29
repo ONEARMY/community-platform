@@ -943,6 +943,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "paulaFenner",
+      "name": "Paula Fenner",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18422622?v=4",
+      "profile": "https://github.com/paulaFenner",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

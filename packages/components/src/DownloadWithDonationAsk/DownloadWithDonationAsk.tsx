@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { DonationRequestModal } from '../DonationRequestModal/DonationRequestModal'
 import { DownloadButton } from '../DownloadButton/DownloadButton'
@@ -14,6 +14,7 @@ export interface IProps {
   fileDownloadCount: number
   fileLink?: string
   files?: (IUploadedFileMeta | File | null)[]
+  openModel?: boolean
 }
 
 export const DownloadWithDonationAsk = (props: IProps) => {
@@ -25,8 +26,9 @@ export const DownloadWithDonationAsk = (props: IProps) => {
     fileDownloadCount,
     fileLink,
     files,
+    openModel = false,
   } = props
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(openModel)
   const [link, setLink] = useState<string>('')
 
   const toggleIsModalOpen = () => setIsModalOpen(!isModalOpen)
@@ -35,6 +37,13 @@ export const DownloadWithDonationAsk = (props: IProps) => {
     handleClick()
     toggleIsModalOpen()
   }
+
+  // Add effect to set initial link when modal opens automatically
+  useEffect(() => {
+    if (openModel && fileLink) {
+      setLink(fileLink)
+    }
+  }, [openModel])
 
   const filteredFiles: IUploadedFileMeta[] | undefined = files?.filter(
     (file): file is IUploadedFileMeta => file !== null && 'downloadUrl' in file,

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { DownloadButton, DownloadWithDonationAsk } from 'oa-components'
 
@@ -15,11 +16,28 @@ interface IProps {
 export const DownloadWrapper = (props: IProps) => {
   const { handleClick, fileLink, files, fileDownloadCount } = props
   const hasFiles = files && files.length > 0
+  const [openModel, setOpenModel] = useState<boolean>(false)
 
   const navigate = useNavigate()
 
   if (!fileLink && !hasFiles) {
     return null
+  }
+
+  useEffect(() => {
+    if (sessionStorage.getItem('loginRedirect') && (fileLink || hasFiles)) {
+      sessionStorage.removeItem('loginRedirect')
+      if (files && files?.length === 1) {
+        setOpenModel(true)
+      }
+    }
+  }, [fileLink, hasFiles])
+
+  const handleLoggedOutDownloadClick = () => {
+    sessionStorage.setItem('loginRedirect', 'true')
+    navigate(
+      `/sign-in?returnUrl=${encodeURIComponent(`${location?.pathname}`)}`,
+    )
   }
 
   const body = import.meta.env.VITE_DONATIONS_BODY
@@ -37,13 +55,14 @@ export const DownloadWrapper = (props: IProps) => {
           imageURL={imageURL}
           files={files}
           fileDownloadCount={fileDownloadCount}
+          openModel={openModel}
         />
       }
       loggedOut={
         <DownloadButton
           isLoggedIn={false}
           fileDownloadCount={fileDownloadCount}
-          onClick={() => navigate('/sign-in')}
+          onClick={handleLoggedOutDownloadClick}
         />
       }
     />

@@ -1,7 +1,6 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
-import { IModerationStatus } from 'oa-shared'
-import { Question } from 'src/models/question.model'
+import { IModerationStatus, Question } from 'oa-shared'
 import { ITEMS_PER_PAGE } from 'src/pages/Question/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { discordServiceServer } from 'src/services/discordService.server'
@@ -10,8 +9,7 @@ import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBProfile } from 'src/models/profile.model'
-import type { DBQuestion } from 'src/models/question.model'
+import type { DBProfile, DBQuestion } from 'oa-shared'
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions'
 
 export const loader = async ({ request }) => {

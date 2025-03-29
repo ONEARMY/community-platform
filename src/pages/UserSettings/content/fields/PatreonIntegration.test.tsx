@@ -13,7 +13,7 @@ import {
   UPDATE_BUTTON_TEXT,
 } from './PatreonIntegration'
 
-import type { IPatreonUser } from 'src/models/profile.model'
+import type { IPatreonUser } from 'oa-shared'
 import type { Mock } from 'vitest'
 
 // Mock setup first (hoisted to the top by Vitest)

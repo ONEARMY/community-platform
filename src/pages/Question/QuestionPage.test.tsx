@@ -15,7 +15,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { QuestionPage } from './QuestionPage'
 
-import type { Question } from 'src/models/question.model'
+import type { Question } from 'oa-shared'
 
 const Theme = testingThemeStyles
 

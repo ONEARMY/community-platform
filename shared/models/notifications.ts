@@ -1,3 +1,6 @@
+// Do not use
+// Old firebase database type
+
 export enum EmailNotificationFrequency {
   NEVER = 'never',
   DAILY = 'daily',

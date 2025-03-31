@@ -45,7 +45,7 @@ export const MenuDesktop = () => {
   return (
     <Flex sx={{ alignItems: 'center', width: '100%' }}>
       {getAvailablePageList(
-        getSupportedModules(env.VITE_SUPPORTED_MODULES || ''),
+        getSupportedModules(env?.VITE_SUPPORTED_MODULES || ''),
       ).map((page) => (
         <Flex key={page.path}>
           <MenuLink to={page.path} data-cy="page-link">

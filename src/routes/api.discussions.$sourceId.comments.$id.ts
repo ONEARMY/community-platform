@@ -141,11 +141,7 @@ async function getProfileByAuthId(request: Request, authId: string) {
 }
 
 function isUserAdmin(user: DBProfile) {
-  return (
-    user.roles &&
-    user.roles.includes(UserRole.ADMIN) &&
-    user.roles.includes(UserRole.SUPER_ADMIN)
-  )
+  return user.roles && user.roles.includes(UserRole.ADMIN)
 }
 
 async function validateRequest(

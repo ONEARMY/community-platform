@@ -49,16 +49,4 @@ describe('AuthWrapper', () => {
     )
     expect(getByText('Test Content')).toBeTruthy()
   })
-
-  it('renders fallback when user is not authorized', () => {
-    const { getByText } = render(
-      <AuthWrapper
-        roleRequired={UserRole.SUPER_ADMIN}
-        fallback={<div>Fallback Content</div>}
-      >
-        <div>Test Content</div>
-      </AuthWrapper>,
-    )
-    expect(getByText('Fallback Content')).toBeTruthy()
-  })
 })

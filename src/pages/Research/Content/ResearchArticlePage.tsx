@@ -106,12 +106,6 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
     })
   }
 
-  // const collaborators = Array.isArray(research?.collaborators)
-  //   ? research?.collaborators
-  //   : (
-  //       (research?.collaborators as string | undefined)?.split(',') || []
-  //     ).filter(Boolean)
-
   const isEditable = useMemo(() => {
     return (
       !!loggedInUser &&

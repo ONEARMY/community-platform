@@ -5,9 +5,9 @@ import {
   Icon,
   IconCountWithTooltip,
   InternalLink,
+  Username,
 } from 'oa-components'
-import { ResearchStatus, ResearchUpdateStatus } from 'oa-shared'
-import { cdnImageUrl } from 'src/utils/cdnImageUrl'
+import { ResearchStatus } from 'oa-shared'
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
@@ -65,9 +65,7 @@ const ResearchListItem = ({ item }: IProps) => {
                 maxWidth: 'none',
               }}
               loading="lazy"
-              src={cdnImageUrl(getItemThumbnail(item), {
-                width: 125,
-              })}
+              src={item.image?.publicUrl || defaultResearchThumbnail}
               alt={`Thumbnail of ${item.title}`}
               crossOrigin=""
             />
@@ -87,9 +85,9 @@ const ResearchListItem = ({ item }: IProps) => {
             >
               <Flex sx={{ flexDirection: ['column', 'row'], gap: [0, 3] }}>
                 <Heading
-                  color={'black'}
-                  mb={1}
                   sx={{
+                    color: 'black',
+                    mb: 1,
                     fontSize: [3, 3, 4],
                   }}
                 >
@@ -149,14 +147,14 @@ const ResearchListItem = ({ item }: IProps) => {
               }}
             >
               <Flex sx={{ alignItems: 'center' }}>
-                {/* <Username
+                <Username
                   user={{
-                    userName: item.author.displayName,
-                    countryCode: item.author.country,
-                    isVerified: item.author.isVerified,
+                    userName: item.author?.name || '',
+                    countryCode: item.author?.country,
+                    isVerified: item.author?.isVerified,
                   }}
                   sx={{ position: 'relative' }}
-                /> */}
+                />
                 {Boolean(collaborators.length) && (
                   <Text
                     sx={{
@@ -261,23 +259,6 @@ const ResearchListItem = ({ item }: IProps) => {
         </Grid>
       </Flex>
     </Card>
-  )
-}
-
-const getItemThumbnail = (researchItem: ResearchItem): string => {
-  const publishedUpdates = researchItem.updates?.filter(
-    (update) =>
-      !update.deleted &&
-      update.status === ResearchUpdateStatus.PUBLISHED &&
-      (update.images?.length || 0) > 0,
-  )
-
-  const latestPublishedUpdate = publishedUpdates?.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-  )?.[0]
-
-  return (
-    latestPublishedUpdate?.images?.at(0)?.publicUrl || defaultResearchThumbnail
   )
 }
 

@@ -6,6 +6,7 @@ import {
   ConfirmModal,
   ContentStatistics,
   FollowButton,
+  ImageGallery,
   LinkifyText,
   TagList,
   UsefulStatsButton,
@@ -15,6 +16,7 @@ import {
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
+import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel } from 'src/utils/helpers'
 import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
@@ -139,28 +141,55 @@ const ResearchDescription = ({
                 </>
               )}
             </Flex>
-            <Flex
-              sx={{
-                marginBottom: 'auto',
-                minWidth: '100px',
-                borderRadius: 1,
-                height: '44px',
-                background: researchStatusColour(research.status),
-              }}
-            >
-              <Text
+            <Flex sx={{ justifyContent: 'flex-end', gap: 3 }}>
+              {research.isDraft && (
+                <Flex
+                  sx={{
+                    marginBottom: 'auto',
+                    minWidth: '100px',
+                    borderRadius: 1,
+                    height: '44px',
+                    background: 'lightgrey',
+                  }}
+                >
+                  <Text
+                    sx={{
+                      display: 'inline-block',
+                      verticalAlign: 'middle',
+                      color: 'black',
+                      fontSize: [2, 2, 3],
+                      padding: 2,
+                      margin: 'auto',
+                    }}
+                    data-cy="research-draft"
+                  >
+                    Draft
+                  </Text>
+                </Flex>
+              )}
+              <Flex
                 sx={{
-                  display: 'inline-block',
-                  verticalAlign: 'middle',
-                  color: 'black',
-                  fontSize: [2, 2, 3],
-                  padding: 2,
-                  margin: 'auto',
+                  marginBottom: 'auto',
+                  minWidth: '100px',
+                  borderRadius: 1,
+                  height: '44px',
+                  background: researchStatusColour(research.status),
                 }}
-                data-cy="research-status"
               >
-                {research.status || 'In progress'}
-              </Text>
+                <Text
+                  sx={{
+                    display: 'inline-block',
+                    verticalAlign: 'middle',
+                    color: 'black',
+                    fontSize: [2, 2, 3],
+                    padding: 2,
+                    margin: 'auto',
+                  }}
+                  data-cy="research-status"
+                >
+                  {research.status || 'In progress'}
+                </Text>
+              </Flex>
             </Flex>
           </Flex>
           <Box sx={{ marginX: 2 }}>
@@ -220,6 +249,12 @@ const ResearchDescription = ({
             <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
               <LinkifyText>{research.description}</LinkifyText>
             </Text>
+            {research.image && (
+              <ImageGallery
+                images={formatImagesForGalleryV2([research.image]) as any}
+                allowPortrait={true}
+              />
+            )}
             <Flex sx={{ mt: 4 }}>
               <TagList tags={research.tags.map((t) => ({ label: t.name }))} />
             </Flex>

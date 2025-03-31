@@ -29,9 +29,26 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return Response.json({ research: null }, { headers })
   }
 
+  const profileResult = await client
+    .from('profiles')
+    .select('id')
+    .eq('auth_id', user.id)
+    .limit(1)
+  const currentUserId = profileResult.data?.at(0)?.id
+
   const username = user.user_metadata.username
   const researchDb = result.data as unknown as DBResearchItem
-  const research = ResearchItem.fromDB(researchDb, [])
+  const { images, files } = researchServiceServer.getResearchPublicMedia(
+    researchDb,
+    client,
+  )
+  const research = ResearchItem.fromDB(
+    researchDb,
+    [],
+    images,
+    files,
+    currentUserId,
+  )
   const update = research.updates.find((x) => x.id === Number(params.updateId))
 
   if (!update) {

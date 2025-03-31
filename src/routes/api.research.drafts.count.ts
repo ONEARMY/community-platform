@@ -1,35 +1,37 @@
-import { json } from '@remix-run/node'
-import {
-  and,
-  collection,
-  getCountFromServer,
-  query,
-  where,
-} from 'firebase/firestore'
-import { IModerationStatus } from 'oa-shared'
-import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
-import { firestore } from 'src/utils/firebase'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
-// runs on the server
-export const loader = async ({ request }) => {
-  const url = new URL(request.url)
-  const searchParams = url.searchParams
-  const userId: string | null = searchParams.get('userId')
+import type { LoaderFunctionArgs } from '@remix-run/node'
 
-  const collectionRef = collection(firestore, DB_ENDPOINTS.research)
-  const filters = and(
-    where('_createdBy', '==', userId),
-    where('moderation', 'in', [
-      IModerationStatus.AWAITING_MODERATION,
-      IModerationStatus.DRAFT,
-      IModerationStatus.IMPROVEMENTS_NEEDED,
-      IModerationStatus.REJECTED,
-    ]),
-    where('_deleted', '!=', true),
-  )
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
 
-  const countQuery = query(collectionRef, filters)
-  const total = (await getCountFromServer(countQuery)).data().count
+  const {
+    data: { user },
+  } = await client.auth.getUser()
 
-  return json({ total })
+  if (!user) {
+    return Response.json({}, { headers, status: 401 })
+  }
+
+  const userProfile = await client
+    .from('profiles')
+    .select('id')
+    .eq('auth_id', user.id)
+    .limit(1)
+  const profileId = userProfile.data?.at(0)?.id
+
+  if (!profileId) {
+    return Response.json(
+      {},
+      { headers, status: 400, statusText: 'invalid user' },
+    )
+  }
+
+  const { count } = await client
+    .from('research')
+    .select('id', { count: 'exact' })
+    .eq('is_draft', true)
+    .eq('created_by', profileId)
+
+  return Response.json({ total: count }, { headers })
 }

@@ -16,7 +16,7 @@ describe('research.service', () => {
 
       // Call search with mock parameters
       const result = await researchService.search(
-        ['sample'],
+        'sample',
         'science',
         'Newest',
         null,
@@ -33,34 +33,13 @@ describe('research.service', () => {
       global.fetch = vi.fn().mockRejectedValue('error')
 
       const result = await researchService.search(
-        ['sample'],
+        'sample',
         'science',
         'Newest',
         null,
       )
 
       expect(result).toEqual({ items: [], total: 0 })
-    })
-  })
-
-  describe('getResearchCategories', () => {
-    it('fetches research categories', async () => {
-      global.fetch = vi.fn().mockResolvedValue({
-        json: () =>
-          Promise.resolve({ categories: [{ id: 'cat1', name: 'Science' }] }),
-      })
-
-      const result = await researchService.getResearchCategories()
-
-      expect(result).toEqual([{ id: 'cat1', name: 'Science' }])
-    })
-
-    it('handles errors in fetching research categories', async () => {
-      global.fetch = vi.fn().mockRejectedValue('error')
-
-      const result = await researchService.getResearchCategories()
-
-      expect(result).toEqual([])
     })
   })
 

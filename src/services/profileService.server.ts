@@ -18,6 +18,23 @@ const getByAuthId = async (
   return data as DBProfile
 }
 
+const getUsersByUsername = async (
+  usernames: string[],
+  client: SupabaseClient,
+): Promise<DBProfile[] | null> => {
+  const { data } = await client
+    .from('profiles')
+    .select('id,username,display_name')
+    .in('username', usernames)
+
+  if (!data) {
+    return null
+  }
+
+  return data as DBProfile[]
+}
+
 export const profileServiceServer = {
   getByAuthId,
+  getUsersByUsername,
 }

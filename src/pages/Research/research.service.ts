@@ -1,9 +1,9 @@
 import { logger } from 'src/logger'
-import { DBResearchItem, ResearchItem } from 'src/models/research.model'
 
 import type { ResearchStatus } from 'oa-shared'
 import type {
   ResearchFormData,
+  ResearchItem,
   ResearchUpdateFormData,
 } from 'src/models/research.model'
 import type { ResearchSortOption } from './ResearchSortOptions'
@@ -36,9 +36,9 @@ const search = async (
   }
 }
 
-const getDraftCount = async (userId: string) => {
+const getDraftCount = async () => {
   try {
-    const response = await fetch(`/api/research/drafts/count?userId=${userId}`)
+    const response = await fetch('/api/research/drafts/count')
     const { total } = (await response.json()) as { total: number }
 
     return total
@@ -48,9 +48,9 @@ const getDraftCount = async (userId: string) => {
   }
 }
 
-const getDrafts = async (userId: string) => {
+const getDrafts = async () => {
   try {
-    const response = await fetch(`/api/research?drafts=true&userId=${userId}`)
+    const response = await fetch('/api/research/drafts')
     const { items } = (await response.json()) as { items: ResearchItem[] }
 
     return items
@@ -80,11 +80,21 @@ const upsert = async (
   }
 
   if (research.collaborators) {
-    data.append('collaborators', research.collaborators.join(','))
+    for (const collaborator of research.collaborators) {
+      data.append('collaborators', collaborator.toString())
+    }
   }
 
   if (isDraft) {
     data.append('draft', 'true')
+  }
+
+  if (research.image) {
+    data.append('image', research.image.photoData, research.image.name)
+  }
+
+  if (research.existingImage) {
+    data.append('existingImage', research.existingImage.id)
   }
 
   const response =
@@ -106,15 +116,14 @@ const upsert = async (
     throw new Error('Error saving research', { cause: 500 })
   }
 
-  const result = await response.json()
-
-  return ResearchItem.fromDB(new DBResearchItem(result.research), [])
+  return (await response.json()) as ResearchItem
 }
 
 const upsertUpdate = async (
   id: number,
   updateId: number | null,
   update: ResearchUpdateFormData,
+  isDraft = false,
 ) => {
   const data = new FormData()
   data.append('title', update.title)
@@ -130,6 +139,10 @@ const upsertUpdate = async (
     for (const image of update.existingImages) {
       data.append('existingImages', image.id)
     }
+  }
+
+  if (isDraft) {
+    data.append('isDraft', 'true')
   }
 
   const response =
@@ -151,9 +164,7 @@ const upsertUpdate = async (
     throw new Error('Error saving research update', { cause: 500 })
   }
 
-  const result = await response.json()
-
-  return ResearchItem.fromDB(new DBResearchItem(result.research), [])
+  return (await response.json()) as ResearchItem
 }
 
 const deleteResearch = async (id: number) => {

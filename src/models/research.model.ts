@@ -22,7 +22,6 @@ export class DBResearchItem {
   readonly comment_count?: number
   readonly total_views?: number
   readonly category: DBCategory | null
-  readonly collaboratorsMapped: DBAuthor[]
   readonly updates: DBResearchUpdate[]
   created_by: number | null
   modified_at: string | null
@@ -30,12 +29,12 @@ export class DBResearchItem {
   slug: string
   previous_slugs: string[] | null
   description: string
-  images: DBMedia[] | null
+  image: DBMedia | null
   category_id?: number
   tags: number[]
   status: ResearchStatus
   is_draft?: boolean
-  collaborators: number[] | null
+  collaborators: string[] | null
 
   constructor(obj: Omit<DBResearchItem, 'id'>) {
     Object.assign(this, obj)
@@ -50,7 +49,7 @@ export class ResearchItem {
   title: string
   slug: string
   description: string
-  images: Media[] | null
+  image: Media | null
   deleted: boolean
   usefulCount: number
   subscriberCount: number
@@ -62,6 +61,7 @@ export class ResearchItem {
   tagIds?: number[]
   status: ResearchStatus
   collaborators: Author[]
+  collaboratorsUsernames: string[] | null
   updates: ResearchUpdate[]
   isDraft?: boolean
 
@@ -72,7 +72,9 @@ export class ResearchItem {
   static fromDB(
     obj: DBResearchItem,
     tags: Tag[],
-    images?: Media[],
+    images: Media[] = [],
+    files: Media[] = [],
+    collaborators: Author[] = [],
     currentUserId?: number,
   ) {
     return new ResearchItem({
@@ -83,20 +85,20 @@ export class ResearchItem {
       title: obj.title,
       slug: obj.slug,
       description: obj.description,
-      images: images || [],
+      image: images?.find((x) => x.id === obj.image?.id) || null,
       deleted: obj.deleted || false,
       category: obj.category ? Category.fromDB(obj.category) : null,
       totalViews: obj.total_views || 0,
-      tagIds: obj.tags,
+      tagIds: obj.tags?.map((x) => Number(x)),
       tags: tags,
       status: obj.status,
-      updateCount: obj.update_count || 0,
+      updateCount: obj.update_count || obj.updates?.length || 0,
       subscriberCount: obj.subscriber_count || 0,
       commentCount: calculateUpdateCommentCount(obj),
       usefulCount: obj.useful_count || 0,
       isDraft: obj.is_draft || false,
-      collaborators:
-        obj.collaboratorsMapped?.map((x) => Author.fromDB(x)) || [],
+      collaboratorsUsernames: obj.collaborators,
+      collaborators: collaborators || [],
       // never show deleted updates; only show draft updates if current user is the author or collaborator
       updates:
         obj.updates
@@ -106,9 +108,11 @@ export class ResearchItem {
               (x.status !== ResearchUpdateStatus.DRAFT ||
                 (!!currentUserId &&
                   (obj.author?.id === currentUserId ||
-                    obj.collaborators?.includes(currentUserId)))),
+                    (collaborators || [])
+                      .map((x) => x.id)
+                      ?.includes(currentUserId)))),
           )
-          ?.map((x) => ResearchUpdate.fromDB(x)) || [],
+          ?.map((x) => ResearchUpdate.fromDB(x, images, files)) || [],
     })
   }
 }
@@ -120,17 +124,19 @@ export type ResearchFormData = {
   description: string
   category?: SelectValue
   tags?: number[]
-  collaborators?: number[]
+  collaborators?: string[]
   status: ResearchStatus
+  image?: IConvertedFileMeta
+  existingImage: Media | null
 }
 
 export type ResearchUpdateFormData = {
   title: string
   description: string
   images?: IConvertedFileMeta[]
-  existingImages?: Media[]
+  existingImages: Media[] | null
   files?: IConvertedFileMeta[]
-  existingFiles?: Media[]
+  existingFiles?: Media[] | null
   fileLink?: string
   videoUrl?: string
 }
@@ -185,8 +191,11 @@ export class ResearchUpdate {
       author: obj.author ? Author.fromDB(obj.author) : null,
       title: obj.title,
       description: obj.description,
-      images: images || [],
-      files: files || [],
+      images:
+        images?.filter((x) => obj.images?.map((x) => x.id)?.includes(x.id)) ||
+        [],
+      files:
+        files?.filter((x) => obj.files?.map((x) => x.id)?.includes(x.id)) || [],
       fileLink: obj.file_link,
       videoUrl: obj.video_url,
       deleted: obj.deleted || false,

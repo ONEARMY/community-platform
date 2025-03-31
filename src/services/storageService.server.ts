@@ -4,7 +4,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type { ImageSize } from 'src/config/imageTransforms'
 import type { DBMedia } from 'src/models/image.model'
 
-const getImagesPublicUrls = (
+const getPublicUrls = (
   client: SupabaseClient,
   images: DBMedia[],
   size?: ImageSize,
@@ -25,5 +25,5 @@ const getImagesPublicUrls = (
 }
 
 export const storageServiceServer = {
-  getImagesPublicUrls,
+  getPublicUrls,
 }

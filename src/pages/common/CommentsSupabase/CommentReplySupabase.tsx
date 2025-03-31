@@ -34,8 +34,7 @@ export const CommentReply = observer(
       return (
         activeUser?._authID === comment.createdBy?.firebaseAuthId ||
         activeUser?._id === comment.createdBy?.username ||
-        activeUser?.userRoles?.includes(UserRole.ADMIN) ||
-        activeUser?.userRoles?.includes(UserRole.SUPER_ADMIN)
+        activeUser?.userRoles?.includes(UserRole.ADMIN)
       )
     }, [activeUser, comment])
 

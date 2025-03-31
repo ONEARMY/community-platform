@@ -25,11 +25,7 @@ export async function loader({ request }) {
   if (
     !isPreciousPlastic() &&
     !roles?.some((role) =>
-      [
-        UserRole.RESEARCH_CREATOR,
-        UserRole.ADMIN,
-        UserRole.SUPER_ADMIN,
-      ].includes(role as UserRole),
+      [UserRole.RESEARCH_CREATOR, UserRole.ADMIN].includes(role as UserRole),
     )
   ) {
     return redirect('/research')

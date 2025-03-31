@@ -178,11 +178,7 @@ export const isAllowedToDeleteContent = (doc: IEditableDoc, user?: IUser) => {
   const roles =
     user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
 
-  return (
-    roles.includes(UserRole.ADMIN) ||
-    roles.includes(UserRole.SUPER_ADMIN) ||
-    doc._createdBy! === user.userName
-  )
+  return roles.includes(UserRole.ADMIN) || doc._createdBy! === user.userName
 }
 
 export const isAllowedToPin = (pin: IMapPin, user?: IUser) => {

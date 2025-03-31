@@ -3,8 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import { researchUpdateStatusFilter } from './researchHelpers'
 
-import type { Author } from 'oa-shared'
-import type { DBProfile } from 'src/models/profile.model'
+import type { Author, DBProfile } from 'oa-shared'
 import type { ResearchUpdate } from 'src/models/research.model'
 
 describe('Research Helpers', () => {

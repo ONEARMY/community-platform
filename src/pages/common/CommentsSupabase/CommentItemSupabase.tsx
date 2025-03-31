@@ -41,8 +41,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
     return (
       activeUser?._authID === comment.createdBy?.firebaseAuthId ||
       activeUser?._id === comment.createdBy?.username ||
-      activeUser?.userRoles?.includes(UserRole.ADMIN) ||
-      activeUser?.userRoles?.includes(UserRole.SUPER_ADMIN)
+      activeUser?.userRoles?.includes(UserRole.ADMIN)
     )
   }, [activeUser?._authID, comment.createdBy?.firebaseAuthId])
 

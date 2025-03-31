@@ -1,5 +1,9 @@
+import { IMAGE_SIZES } from 'src/config/imageTransforms'
+
+import { storageServiceServer } from './storageService.server'
+
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { ResearchItem } from 'src/models/research.model'
+import type { DBResearchItem, ResearchItem } from 'src/models/research.model'
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
   return client
@@ -10,20 +14,19 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
        created_at,
        created_by,
        modified_at,
+       title,
        description,
-       moderation,
        slug,
+       image,
        category:category(id,name),
        tags,
-       title,
        total_views,
-       images,
        total_views,
        total_useful,
        status,
        is_draft,
+       collaborators,
        author:profiles(id, display_name, username, is_verified, is_supporter, country),
-       collaborators:profiles(id, display_name, username, is_verified, is_supporter, country),
        updates:research_updates(id, created_at, title, description, images, files, file_link, video_url, is_draft, comment_count, modified_at, deleted)
      `,
     )
@@ -69,8 +72,32 @@ const getUserResearch = async (
   }))
 }
 
+const getResearchPublicMedia = (
+  researchDb: DBResearchItem,
+  client: SupabaseClient,
+) => {
+  const allImages =
+    researchDb.updates?.flatMap((x) => x.images)?.filter((x) => !!x) || []
+  if (researchDb.image) {
+    allImages.push(researchDb.image)
+  }
+
+  const updateFiles =
+    researchDb.updates?.flatMap((x) => x.files)?.filter((x) => !!x) || []
+
+  const images = allImages
+    ? storageServiceServer.getPublicUrls(client, allImages, IMAGE_SIZES.GALLERY)
+    : []
+  const files = updateFiles
+    ? storageServiceServer.getPublicUrls(client, updateFiles) || []
+    : []
+
+  return { images, files }
+}
+
 export const researchServiceServer = {
   getBySlug,
   getUserResearch,
   getUpdate,
+  getResearchPublicMedia,
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from '@remix-run/react'
 import { Button, Loader } from 'oa-components'
 import { logger } from 'src/logger'
-import useDrafts from 'src/pages/common/Drafts/useDrafts'
+import useDrafts from 'src/pages/common/Drafts/useDraftsSupabase'
 import { Box, Flex } from 'theme-ui'
 
 import { listing } from '../labels'

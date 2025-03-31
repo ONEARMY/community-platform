@@ -22,8 +22,4 @@ export class Category extends Doc {
 export class DBCategory extends DBDocSB {
   name: string
   type: ContentTypes
-
-  static fromDB(category: DBCategory) {
-    return new DBCategory(category)
-  }
 }

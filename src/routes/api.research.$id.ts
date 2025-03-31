@@ -1,10 +1,13 @@
+import { UserRole } from 'oa-shared'
 import { ResearchItem } from 'src/models/research.model'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { mediaServiceServer } from 'src/services/mediaService.server'
+import { profileServiceServer } from 'src/services/profileService.server'
 import { convertToSlug } from 'src/utils/slug'
-import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { DBProfile } from 'oa-shared'
 import type { DBResearchItem } from 'src/models/research.model'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -15,12 +18,18 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
       category: formData.has('category')
-        ? (formData.get('category') as string)
+        ? Number(formData.get('category'))
         : null,
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
         : null,
+      collaborators: formData.has('collaborators')
+        ? (formData.getAll('collaborators') as string[])
+        : null,
+      isDraft: formData.get('draft') === 'true',
     }
+    const uploadedImage = formData.get('image') as File
+    const existingImage = formData.get('existingImage') as string | null
 
     const { client, headers } = createSupabaseServerClient(request)
 
@@ -28,22 +37,24 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       data: { user },
     } = await client.auth.getUser()
 
+    const currentUserProfile = await profileServiceServer.getByAuthId(
+      user?.id || '',
+      client,
+    )
+    const currentResearch = await getResearch(id, client)
+
     const { valid, status, statusText } = await validateRequest(
       request,
       user,
       data,
+      currentUserProfile,
+      currentResearch,
     )
 
     if (!valid) {
       return Response.json({}, { status, statusText })
     }
 
-    const currentResearchResult = await client
-      .from('research')
-      .select()
-      .eq('id', id)
-      .limit(1)
-    const currentResearch = currentResearchResult.data?.at(0) as DBResearchItem
     const newSlug = convertToSlug(data.title)
 
     if (
@@ -55,21 +66,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         {
           status: 409,
           statusText: 'This research already exists',
-        },
-      )
-    }
-
-    const uploadedImages = formData.getAll('images') as File[]
-    const uploadedFiles = formData.getAll('files') as File[]
-    const imageValidation = validateImages(uploadedImages)
-    const fileValidation = validateFiles(uploadedFiles)
-
-    if (!imageValidation.valid) {
-      return Response.json(
-        {},
-        {
-          status: 400,
-          statusText: imageValidation.errors.join(', '),
         },
       )
     }
@@ -90,6 +86,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         category: data.category,
         tags: data.tags,
         previous_slugs: previousSlugs,
+        is_draft: data.isDraft,
+        collaborators: data.collaborators,
+        ...(!existingImage && { image: null }),
       })
       .eq('id', id)
       .select()
@@ -100,38 +99,26 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const research = ResearchItem.fromDB(researchResult.data[0], [])
 
-    if (uploadedImages.length > 0) {
-      const researchId = Number(researchResult.data[0].id)
+    if (uploadedImage) {
+      const mediaResult = await mediaServiceServer.uploadMedia(
+        [uploadedImage],
+        `research/${research.id}`,
+        client,
+      )
 
-      const imageResult = await uploadImages(researchId, uploadedImages, client)
-
-      if (imageResult?.images && imageResult.images.length > 0) {
-        const updateResult = await client
-          .from('research')
-          .update({ images: imageResult.images })
-          .eq('id', researchId)
-          .select()
-
-        if (updateResult.data) {
-          research.images = updateResult.data[0].images
-        }
+      if (mediaResult?.errors) {
+        console.error(mediaResult.errors)
       }
-    }
 
-    if (uploadedImages.length > 0) {
-      const researchId = Number(researchResult.data[0].id)
-
-      const imageResult = await uploadImages(researchId, uploadedImages, client)
-
-      if (imageResult?.images && imageResult.images.length > 0) {
-        const updateResult = await client
+      if (mediaResult?.media && mediaResult.media.length > 0) {
+        const result = await client
           .from('research')
-          .update({ images: imageResult.images })
-          .eq('id', researchId)
+          .update({ image: mediaResult.media[0] })
+          .eq('id', research.id)
           .select()
 
-        if (updateResult.data) {
-          research.images = updateResult.data[0].images
+        if (result.data) {
+          research.image = result.data[0].image
         }
       }
     }
@@ -146,6 +133,15 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 }
 
+async function getResearch(id: number, client: SupabaseClient) {
+  const currentResearchResult = await client
+    .from('research')
+    .select()
+    .eq('id', id)
+    .limit(1)
+  return currentResearchResult.data?.at(0) as DBResearchItem
+}
+
 async function isDuplicateSlug(slug: string, client: SupabaseClient) {
   const { data } = await client
     .from('research')
@@ -156,61 +152,13 @@ async function isDuplicateSlug(slug: string, client: SupabaseClient) {
   return !!data
 }
 
-async function uploadImages(
-  researchId: number,
-  uploadedImages: File[],
-  client: SupabaseClient,
+async function validateRequest(
+  request: Request,
+  user: User | null,
+  data: any,
+  profile: DBProfile | null,
+  research: DBResearchItem,
 ) {
-  if (!uploadedImages || uploadedImages.length === 0) {
-    return null
-  }
-
-  // const files = await Promise.all(uploadedImages.map(image => image.arrayBuffer()))
-
-  const errors: string[] = []
-  const images: { id: string; path: string; fullPath: string }[] = []
-
-  for (const image of uploadedImages) {
-    const result = await client.storage
-      .from(process.env.TENANT_ID as string)
-      .upload(`research/${researchId}/${image.name}`, image)
-
-    if (result.data === null) {
-      errors.push(`Error uploading image: ${image.name}`)
-      continue
-    }
-
-    images.push(result.data)
-  }
-
-  return { images, errors }
-}
-
-function validateImages(images: File[]) {
-  const errors: string[] = []
-  for (const image of images) {
-    if (!SUPPORTED_IMAGE_TYPES.includes(image.type)) {
-      errors.push(`Unsupported image extension: ${image.type}`)
-      continue
-    }
-  }
-
-  return { valid: errors.length === 0, errors }
-}
-
-function validateFiles(images: File[]) {
-  const errors: string[] = []
-  for (const image of images) {
-    if (!SUPPORTED_IMAGE_TYPES.includes(image.type)) {
-      errors.push(`Unsupported image extension: ${image.type}`)
-      continue
-    }
-  }
-
-  return { valid: errors.length === 0, errors }
-}
-
-async function validateRequest(request: Request, user: User | null, data: any) {
   if (!user) {
     return { status: 401, statusText: 'unauthorized' }
   }
@@ -225,6 +173,21 @@ async function validateRequest(request: Request, user: User | null, data: any) {
 
   if (!data.description) {
     return { status: 400, statusText: 'description is required' }
+  }
+
+  if (!profile) {
+    return { status: 400, statusText: 'invalid user' }
+  }
+
+  if (profile.roles?.includes(UserRole.ADMIN)) {
+    return { valid: true }
+  }
+
+  if (
+    research.author?.id !== profile.id &&
+    !research.collaborators?.includes(profile.username)
+  ) {
+    return { status: 403, statusText: 'forbidden' }
   }
 
   return { valid: true }

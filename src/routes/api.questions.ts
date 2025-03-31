@@ -149,7 +149,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       .limit(1)
 
     if (profileRequest.error || !profileRequest.data?.at(0)) {
-      console.log(profileRequest.error)
+      console.error(profileRequest.error)
       return Response.json({}, { status: 400, statusText: 'User not found' })
     }
 
@@ -197,7 +197,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     return Response.json({ question }, { headers, status: 201 })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return Response.json(
       {},
       { status: 500, statusText: 'Error creating question' },
@@ -236,8 +236,6 @@ async function uploadImages(
   if (!uploadedImages || uploadedImages.length === 0) {
     return null
   }
-
-  // const files = await Promise.all(uploadedImages.map(image => image.arrayBuffer()))
 
   const errors: string[] = []
   const images: { id: string; path: string; fullPath: string }[] = []

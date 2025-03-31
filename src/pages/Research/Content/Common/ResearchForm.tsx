@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import {
@@ -11,7 +11,7 @@ import {
 import { researchStatusOptions } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { SelectField } from 'src/common/Form/Select.field'
-import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
+import { TagsSelectFieldV2 } from 'src/common/Form/TagsSelectFieldV2'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import {
   ResearchErrors,
@@ -35,6 +35,7 @@ import {
 } from '../../constants'
 import { buttons, headings, overview } from '../../labels'
 import { researchService } from '../../research.service'
+import { ResearchImageField } from '../CreateResearch/Form/ResearchImageField'
 import ResearchFieldCategory from './ResearchCategorySelect'
 
 import type { ResearchFormData, ResearchItem } from 'src/models/research.model'
@@ -50,15 +51,27 @@ const ResearchFormLabel = ({ children, ...props }) => (
 )
 
 const ResearchForm = ({ research }: IProps) => {
-  const initialValues = useMemo(() => {
-    return {
-      title: research?.title,
-      description: research?.description,
-      status: research?.status || 'In progress',
-      category: research?.category?.id,
-      collaborators: research?.collaborators?.map((x) => x.id),
-      tags: research?.tagIds,
-    } as ResearchFormData
+  const [initialValues, setInitialValues] = useState<ResearchFormData>()
+
+  useEffect(() => {
+    if (research) {
+      setInitialValues({
+        title: research?.title,
+        description: research?.description,
+        status: research?.status || 'In progress',
+        category: research?.category
+          ? {
+              value: research.category.id?.toString(),
+              label: research.category.name,
+            }
+          : undefined,
+        collaborators: Array.isArray(research?.collaboratorsUsernames)
+          ? research.collaboratorsUsernames
+          : [],
+        tags: research?.tagIds,
+        existingImage: research?.image,
+      })
+    }
   }, [research])
 
   const { categories, collaborators, description, tags, title, status } =
@@ -70,6 +83,13 @@ const ResearchForm = ({ research }: IProps) => {
     // if (updatedResearh) {
     //   setSlug(updatedResearh.slug)
     // }
+  }
+
+  const removeImage = () => {
+    setInitialValues({
+      ...initialValues!,
+      existingImage: null,
+    })
   }
 
   const pageTitle = research ? headings.overview.edit : headings.overview.create
@@ -213,8 +233,8 @@ const ResearchForm = ({ research }: IProps) => {
                               </ResearchFormLabel>
                               <Field
                                 name="tags"
-                                component={TagsSelectField}
-                                isEqual={COMPARISONS.tags}
+                                component={TagsSelectFieldV2}
+                                isEqual={COMPARISONS.tagsSupabase}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
@@ -241,6 +261,13 @@ const ResearchForm = ({ research }: IProps) => {
                                 options={researchStatusOptions}
                               />
                             </Flex>
+                            <ResearchImageField
+                              label="Cover Image"
+                              existingImage={
+                                initialValues?.existingImage || null
+                              }
+                              remove={removeImage}
+                            />
                           </Flex>
                         </Flex>
                       </Flex>
@@ -271,9 +298,7 @@ const ResearchForm = ({ research }: IProps) => {
 
                   <Button
                     data-cy="draft"
-                    onClick={() => {
-                      onSubmit(values, true)
-                    }}
+                    onClick={() => onSubmit(values, true)}
                     mt={[0, 0, 3]}
                     variant="secondary"
                     type="submit"

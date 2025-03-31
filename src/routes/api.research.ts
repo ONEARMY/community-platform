@@ -1,14 +1,17 @@
 import { IModerationStatus } from 'oa-shared'
+import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { ResearchItem } from 'src/models/research.model'
 import { ITEMS_PER_PAGE } from 'src/pages/Research/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { discordServiceServer } from 'src/services/discordService.server'
+import { mediaServiceServer } from 'src/services/mediaService.server'
+import { storageServiceServer } from 'src/services/storageService.server'
 import { convertToSlug } from 'src/utils/slug'
-import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { DBProfile, ResearchStatus } from 'oa-shared'
+import type { DBResearchItem } from 'src/models/research.model'
 import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts'
 
 // runs on the server
@@ -22,32 +25,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const status: ResearchStatus | null = searchParams.get(
     'status',
   ) as ResearchStatus
-  const drafts: boolean = searchParams.get('drafts') != undefined
 
   const { client, headers } = createSupabaseServerClient(request)
-
-  // if (drafts) {
-  //   const {
-  //     data: { user },
-  //   } = await client.auth.getUser()
-
-  //   if (!user) {
-  //     return Response.json({}, { headers, status: 401 })
-  //   }
-
-  //   const userProfile = await client
-  //     .from('profiles')
-  //     .select('id')
-  //     .eq('auth_id', user.id)
-  //     .limit(1)
-  //   const profileId = userProfile.data?.at(0)?.id
-
-  //   if (!profileId) {
-  //     return Response.json({ items: [], total: 0 }, { headers })
-  //   }
-
-  //   query = query.eq('is_draft', true).eq('created_by', profileId)
-  // }
 
   const { data, count, error } = await client.rpc('get_research', {
     search_query: q || null,
@@ -63,7 +42,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({}, { status: 500, headers })
   }
 
-  const items = data.map((x) => ResearchItem.fromDB(x, [], []))
+  const dbItems = data as DBResearchItem[]
+  const items = dbItems.map((x) => {
+    const images = x.image
+      ? storageServiceServer.getPublicUrls(client, [x.image], IMAGE_SIZES.LIST)
+      : []
+    return ResearchItem.fromDB(x, [], images)
+  })
 
   if (items && items.length > 0) {
     // Populate useful votes
@@ -101,7 +86,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
         : null,
+      collaborators: formData.has('collaborators')
+        ? (formData.getAll('collaborators') as string[])
+        : null,
     }
+    const uploadedImage = formData.get('image') as File
 
     const { client, headers } = createSupabaseServerClient(request)
 
@@ -131,18 +120,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       )
     }
 
-    const uploadedImages = formData.getAll('images') as File[]
-    const imageValidation = validateImages(uploadedImages)
-
-    if (!imageValidation.valid) {
-      return Response.json(
-        {},
-        {
-          status: 400,
-          statusText: imageValidation.errors.join(', '),
-        },
-      )
-    }
     const profileRequest = await client
       .from('profiles')
       .select('id')
@@ -150,7 +127,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       .limit(1)
 
     if (profileRequest.error || !profileRequest.data?.at(0)) {
-      console.log(profileRequest.error)
+      console.error(profileRequest.error)
       return Response.json({}, { status: 400, statusText: 'User not found' })
     }
 
@@ -166,6 +143,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         slug,
         category: data.category,
         tags: data.tags,
+        collaborators: data.collaborators,
         tenant_id: process.env.TENANT_ID,
       })
       .select()
@@ -176,20 +154,26 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const research = ResearchItem.fromDB(researchResult.data[0], [])
 
-    if (uploadedImages.length > 0) {
-      const researchId = Number(researchResult.data[0].id)
+    if (uploadedImage) {
+      const mediaResult = await mediaServiceServer.uploadMedia(
+        [uploadedImage],
+        `research/${research.id}`,
+        client,
+      )
 
-      const imageResult = await uploadImages(researchId, uploadedImages, client)
+      if (mediaResult?.errors) {
+        console.error(mediaResult.errors)
+      }
 
-      if (imageResult?.images && imageResult.images.length > 0) {
-        const updateResult = await client
+      if (mediaResult?.media && mediaResult.media.length > 0) {
+        const result = await client
           .from('research')
-          .update({ images: imageResult.images })
-          .eq('id', researchId)
+          .update({ image: mediaResult.media[0] })
+          .eq('id', research.id)
           .select()
 
-        if (updateResult.data) {
-          research.images = updateResult.data[0].images
+        if (result.data) {
+          research.image = result.data[0].image
         }
       }
     }
@@ -198,7 +182,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     return Response.json({ research }, { headers, status: 201 })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return Response.json(
       {},
       { status: 500, statusText: 'Error creating research' },
@@ -227,48 +211,6 @@ async function isDuplicateSlug(slug: string, client: SupabaseClient) {
     .single()
 
   return !!data
-}
-
-async function uploadImages(
-  researchId: number,
-  uploadedImages: File[],
-  client: SupabaseClient,
-) {
-  if (!uploadedImages || uploadedImages.length === 0) {
-    return null
-  }
-
-  // const files = await Promise.all(uploadedImages.map(image => image.arrayBuffer()))
-
-  const errors: string[] = []
-  const images: { id: string; path: string; fullPath: string }[] = []
-
-  for (const image of uploadedImages) {
-    const result = await client.storage
-      .from(process.env.TENANT_ID as string)
-      .upload(`research/${researchId}/${image.name}`, image)
-
-    if (result.data === null) {
-      errors.push(`Error uploading image: ${image.name}`)
-      continue
-    }
-
-    images.push(result.data)
-  }
-
-  return { images, errors }
-}
-
-function validateImages(images: File[]) {
-  const errors: string[] = []
-  for (const image of images) {
-    if (!SUPPORTED_IMAGE_TYPES.includes(image.type)) {
-      errors.push(`Unsupported image extension: ${image.type}`)
-      continue
-    }
-  }
-
-  return { valid: errors.length === 0, errors }
 }
 
 async function validateRequest(request: Request, user: User | null, data: any) {

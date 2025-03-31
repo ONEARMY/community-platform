@@ -1,5 +1,4 @@
 import { useLoaderData } from '@remix-run/react'
-import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import {
   type DBResearchItem,
   ResearchItem,
@@ -10,7 +9,6 @@ import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { ResearchArticlePage } from 'src/pages/Research/Content/ResearchArticlePage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { researchServiceServer } from 'src/services/researchService.server'
-import { storageServiceServer } from 'src/services/storageService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -76,15 +74,19 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       .eq('content_type', 'research'),
   ])
 
-  const images = dbResearch.images
-    ? storageServiceServer.getImagesPublicUrls(
-        client,
-        dbResearch.images,
-        IMAGE_SIZES.GALLERY,
-      )
-    : []
+  const { images, files } = researchServiceServer.getResearchPublicMedia(
+    dbResearch,
+    client,
+  )
 
-  const research = ResearchItem.fromDB(dbResearch, tags, images, currentUserId)
+  const research = ResearchItem.fromDB(
+    dbResearch,
+    tags,
+    images,
+    files,
+    [], // TODO
+    currentUserId,
+  )
   research.usefulCount = usefulVotes.count || 0
   research.subscriberCount = subscribers.count || 0
 

@@ -26,7 +26,7 @@ const ResearchFieldCategory = () => {
 
   return (
     <Field
-      name="researchCategory"
+      name="category"
       render={({ input }) => (
         <CategoriesSelectV2
           isForm={true}

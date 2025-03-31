@@ -63,9 +63,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 async function canDelete(research: DBResearchItem, profile: DBProfile) {
   return (
     profile.roles?.includes(UserRole.ADMIN) ||
-    profile.roles?.includes(UserRole.SUPER_ADMIN) ||
     research.created_by === profile.id ||
-    research.collaborators?.includes(profile.id)
+    research.collaborators?.includes(profile.username)
   )
 }
 

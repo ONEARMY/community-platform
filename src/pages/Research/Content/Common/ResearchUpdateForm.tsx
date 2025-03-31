@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import {
   Button,
@@ -14,9 +14,10 @@ import { Box, Card, Flex, Heading } from 'theme-ui'
 import { buttons, headings, update } from '../../labels'
 import { researchService } from '../../research.service'
 import { DescriptionField } from '../CreateResearch/Form/DescriptionField'
+import { ResearchImagesField } from '../CreateResearch/Form/ResearchImagesField'
 // import { FilesFields } from '../CreateResearch/Form/FilesFields'
-import { MediaFields } from '../CreateResearch/Form/MediaFields'
 import { TitleField } from '../CreateResearch/Form/TitleField'
+import VideoUrlField from '../CreateResearch/Form/VideoUrlField'
 import { ResearchErrors } from './ResearchErrors'
 import { SubmitStatus } from './SubmitStatus'
 
@@ -40,20 +41,36 @@ export const ResearchUpdateForm = (props: IProps) => {
   const [showSubmitModal, setShowSubmitModal] = useState(false)
   const [complete, setComplete] = useState(false)
   const id = props.researchUpdate?.id || null
-  const formData: ResearchUpdateFormData = useMemo(() => {
-    return {
-      title: researchUpdate?.title,
-      description: researchUpdate?.description,
-      existingImages: researchUpdate?.images || [],
-      existingFiles: researchUpdate?.files || [],
-      fileLink: researchUpdate?.fileLink,
-      videoUrl: researchUpdate?.videoUrl,
-      files: [],
-      images: [],
-    } as ResearchUpdateFormData
+  const [initialValues, setInitialValues] = useState<ResearchUpdateFormData>({
+    title: '',
+    description: '',
+    existingImages: [],
+    existingFiles: [],
+    fileLink: '',
+    videoUrl: '',
+    files: [],
+    images: [],
+  })
+
+  useEffect(() => {
+    if (researchUpdate) {
+      setInitialValues({
+        title: researchUpdate?.title,
+        description: researchUpdate?.description,
+        existingImages: researchUpdate?.images || [],
+        existingFiles: researchUpdate?.files || [],
+        fileLink: researchUpdate?.fileLink || '',
+        videoUrl: researchUpdate?.videoUrl || '',
+        files: [],
+        images: [],
+      })
+    }
   }, [researchUpdate])
 
-  const onSubmit = async (formData: ResearchUpdateFormData) => {
+  const onSubmit = async (
+    formData: ResearchUpdateFormData,
+    isDraft = false,
+  ) => {
     setShowSubmitModal(true)
 
     // if (formData.fileLink && formData.files && formData.files.length > 0) {
@@ -63,7 +80,7 @@ export const ResearchUpdateForm = (props: IProps) => {
     // setInvalidFileWarning(false)
 
     try {
-      await researchService.upsertUpdate(research.id, id, formData)
+      await researchService.upsertUpdate(research.id, id, formData, isDraft)
     } catch (err) {
       console.error(err)
     }
@@ -84,6 +101,26 @@ export const ResearchUpdateForm = (props: IProps) => {
   const publishButtonText = isEdit ? 'Save' : 'Add update'
   const pageTitle = isEdit ? headings.update.edit : headings.update.create
 
+  const removeExistingImage = (index: number) => {
+    setInitialValues((prevState: ResearchUpdateFormData) => {
+      return {
+        ...prevState,
+        existingImages:
+          prevState.existingImages?.filter((_, i) => i !== index) ?? null,
+      }
+    })
+  }
+
+  const removeExistingFile = (index: number) => {
+    setInitialValues((prevState: ResearchUpdateFormData) => {
+      return {
+        ...prevState,
+        existingFiles:
+          prevState.existingFiles?.filter((_, i) => i !== index) ?? null,
+      }
+    })
+  }
+
   return (
     <>
       <SubmitStatus
@@ -98,7 +135,7 @@ export const ResearchUpdateForm = (props: IProps) => {
       />
       <Form<ResearchUpdateFormData>
         onSubmit={(v) => onSubmit(v)}
-        initialValues={formData}
+        initialValues={initialValues}
         validateOnBlur
         render={({
           dirty,
@@ -114,6 +151,10 @@ export const ResearchUpdateForm = (props: IProps) => {
             setFormState({ dirty })
           }
 
+          const numberOfImageInputsAvailable = (values as any)?.images
+            ? Math.min((values as any).images.filter((x) => !!x).length + 1, 10)
+            : 1
+
           return (
             <Flex
               sx={{
@@ -124,6 +165,12 @@ export const ResearchUpdateForm = (props: IProps) => {
               }}
               data-testid="EditResearchUpdate"
             >
+              {JSON.stringify({
+                hasValidationErrors,
+                values,
+                errors,
+                submitting,
+              })}
               <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
               <Flex
                 sx={{
@@ -169,7 +216,12 @@ export const ResearchUpdateForm = (props: IProps) => {
                           >
                             <TitleField />
                             <DescriptionField />
-                            <MediaFields values={values} />
+                            <ResearchImagesField
+                              inputsAvailable={numberOfImageInputsAvailable}
+                              existingImages={initialValues.existingImages}
+                              removeExistingImage={removeExistingImage}
+                            />
+                            <VideoUrlField />
                             {/* <FilesFields
                               files={formData?.files || []}
                               existingFiles={formData?.existingFiles || []}
@@ -207,6 +259,7 @@ export const ResearchUpdateForm = (props: IProps) => {
                     variant="primary"
                     type="submit"
                     disabled={submitting}
+                    onClick={() => onSubmit(values)}
                     sx={{
                       alignSelf: 'stretch',
                       justifyContent: 'center',
@@ -219,11 +272,12 @@ export const ResearchUpdateForm = (props: IProps) => {
                     data-cy="draft"
                     variant="secondary"
                     type="submit"
+                    disabled={submitting}
+                    onClick={() => onSubmit(values, true)}
                     sx={{
                       alignSelf: 'stretch',
                       justifyContent: 'center',
                     }}
-                    disabled={submitting}
                   >
                     {buttons.draft}
                   </Button>

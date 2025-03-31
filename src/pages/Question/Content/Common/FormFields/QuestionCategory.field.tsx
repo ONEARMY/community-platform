@@ -3,7 +3,7 @@ import { Field } from 'react-final-form'
 import { CategoriesSelectV2 } from 'src/pages/common/Category/CategoriesSelectV2'
 import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { fields } from 'src/pages/Question/labels'
-import { questionService } from 'src/pages/Question/question.service'
+import { categoryService } from 'src/services/categoryService'
 
 import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
 
@@ -14,7 +14,7 @@ export const QuestionCategoryField = () => {
 
   useEffect(() => {
     const initCategories = async () => {
-      const categories = await questionService.getQuestionCategories()
+      const categories = await categoryService.getCategories('questions')
       if (!categories) {
         return
       }

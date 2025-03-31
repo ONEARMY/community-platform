@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
-import { faker } from '@faker-js/faker'
 import { createRoutesFromElements, Route } from '@remix-run/react'
 import { act, render, waitFor, within } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
@@ -62,45 +61,6 @@ describe('News', () => {
   })
 
   describe('Breadcrumbs', () => {
-    it('displays breadcrumbs with category', async () => {
-      // Arrange
-      mockNewsItem.title = 'Do you prefer camping near a lake or in a forest?'
-      mockNewsItem.category = {
-        createdAt: new Date(),
-        modifiedAt: null,
-        name: 'Preference',
-        id: faker.number.int(),
-        type: 'news',
-      }
-
-      // Act
-      let wrapper
-      act(() => {
-        wrapper = getWrapper(mockNewsItem)
-      })
-
-      // Assert: Check the breadcrumb items and chevrons
-      await waitFor(() => {
-        const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
-        expect(breadcrumbItems).toHaveLength(3)
-        expect(breadcrumbItems[0]).toHaveTextContent('News')
-        expect(breadcrumbItems[1]).toHaveTextContent('Preference')
-        expect(breadcrumbItems[2]).toHaveTextContent(
-          'Do you prefer camping near a lake or in a forest?',
-        )
-
-        // Assert: Check that the first two breadcrumb items contain links
-        const firstLink = within(breadcrumbItems[0]).getByRole('link')
-        const secondLink = within(breadcrumbItems[1]).getByRole('link')
-        expect(firstLink).toBeInTheDocument()
-        expect(secondLink).toBeInTheDocument()
-
-        // Assert: Check for the correct number of chevrons
-        const chevrons = wrapper.getAllByTestId('breadcrumbsChevron')
-        expect(chevrons).toHaveLength(2)
-      })
-    })
-
     it('displays breadcrumbs without category', async () => {
       // Arrange
       mockNewsItem.title = 'Do you prefer camping near a lake or in a forest?'

@@ -2,9 +2,9 @@ import { Author } from './author'
 import { Category, ContentDoc, DBContentDoc } from './document'
 
 import type { IConvertedFileMeta } from './common'
+import type { Tag } from './document'
 import type { DBImage, Image } from './image'
 import type { SelectValue } from './other'
-import type { Tag } from './tag'
 
 export class DBNews extends DBContentDoc {
   readonly body: string

@@ -4,6 +4,7 @@ import { AuthRoute } from 'src/pages/common/AuthRoute'
 import { NewsEdit } from 'src/pages/News/NewsEdit'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { newsServiceServer } from 'src/services/newsService.server'
+import { tagsServiceServer } from 'src/services/tagsService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { DBNews } from 'oa-shared'
@@ -22,7 +23,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const dbNews = result.data as unknown as DBNews
-  const tags = await newsServiceServer.getTags(client, dbNews.tags)
+  const tags = await tagsServiceServer.getTags(client, dbNews.tags)
   const heroImage = await newsServiceServer.getHeroImage(
     client,
     dbNews.hero_image,

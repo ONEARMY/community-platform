@@ -67,3 +67,49 @@ export function validateImage(image: File | null) {
 
   return { valid, error }
 }
+
+export function validateImages(images: File[]) {
+  const errors: Error[] = []
+  for (const image of images) {
+    const { error } = validateImage(image)
+    if (error) {
+      errors.push(error)
+    }
+    continue
+  }
+
+  return { valid: errors.length === 0, errors }
+}
+
+export async function uploadImageCheck(
+  id: string | undefined,
+  uploadedFile: File | null,
+  client: SupabaseClient,
+  table: Table,
+) {
+  if (!uploadedFile || id) {
+    return undefined
+  }
+
+  if (uploadedFile) {
+    const imageValidation = validateImage(uploadedFile)
+
+    if (!imageValidation.valid && imageValidation.error) {
+      return Response.json(
+        {},
+        {
+          status: 400,
+          statusText: imageValidation.error.message,
+        },
+      )
+    }
+
+    const newsId = Number(id)
+    const uploadedImage = uploadedFile
+      ? await uploadImage(newsId, uploadedFile, client, table)
+      : null
+    if (uploadedImage?.image && !uploadedImage.error) {
+      return uploadedImage.image
+    }
+  }
+}

@@ -3,8 +3,8 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { hasAdminRightsSupabase } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
-import { uploadImages, validateImages } from './api.questions'
-import { isDuplicateExistingSlug } from './utils'
+import { uploadImages } from './api.questions'
+import { isDuplicateExistingSlug, validateImages } from './utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'

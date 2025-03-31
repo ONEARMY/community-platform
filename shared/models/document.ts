@@ -1,6 +1,5 @@
 import type { Author, DBAuthor } from './author'
 import type { ContentType } from './common'
-import type { Tag } from './tag'
 
 export abstract class DBDocSB {
   readonly id: number
@@ -74,5 +73,31 @@ export class DBCategory extends DBDocSB {
 
   static fromDB(category: DBCategory) {
     return new DBCategory(category)
+  }
+}
+
+export class DBTag extends DBDocSB {
+  name: string
+
+  static toDB(tag: Tag) {
+    const { createdAt, id, name } = tag
+    return new DBTag({
+      id,
+      name,
+      created_at: new Date(createdAt),
+    })
+  }
+}
+
+export class Tag extends Doc {
+  name: string
+
+  static fromDB(tag: DBTag) {
+    const { created_at, id, name } = tag
+    return new Tag({
+      id,
+      name,
+      createdAt: new Date(created_at),
+    })
   }
 }

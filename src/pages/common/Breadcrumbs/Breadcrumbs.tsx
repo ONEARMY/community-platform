@@ -61,12 +61,12 @@ const generateSteps = (content: Content, variant: Variant) => {
       const news = content as News
       steps.push({ text: 'News', link: '/news' })
 
-      if (news.category) {
-        steps.push({
-          text: news.category.name,
-          link: `/news?category=${news.category.id}`,
-        })
-      }
+      // if (news.category) {
+      //   steps.push({
+      //     text: news.category.name,
+      //     link: `/news?category=${news.category.id}`,
+      //   })
+      // }
 
       steps.push({ text: news.title })
       break

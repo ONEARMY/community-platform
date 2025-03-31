@@ -1,6 +1,7 @@
 import { clearDatabase } from '../utils/TestUtils'
 import { seedAccounts } from './seedAccounts'
-import { seedCategories, seedQuestions } from './seedQuestions'
+import { seedNews } from './seedNews'
+import { seedQuestions, seedTags } from './seedQuestions'
 
 /**
  * Before all tests begin seed the database. CY runs this before all specs.
@@ -21,13 +22,16 @@ before(() => {
     throw error
   })
   cy.then(async () => {
-    // clearDatabase(
-    //   ['profiles', 'questions', 'comments', 'categories', 'tags'],
-    // )
+    await clearDatabase(
+      ['categories', 'comments', 'news', 'profiles', 'questions', 'tags'],
+      Cypress.env('TENANT_ID'),
+    )
 
-    const profiles = await seedAccounts()
-    await seedCategories()
+    const { profiles } = await seedAccounts()
+    const { tags } = await seedTags()
+
     await seedQuestions(profiles)
+    await seedNews(profiles, tags)
   })
   localStorage.clear()
   cy.clearServiceWorkers()
@@ -39,13 +43,13 @@ afterEach(() => {
   cy.logout()
 })
 
-after(() => {
+after(async () => {
   Cypress.log({
     displayName: 'Clearing database for tenant',
     message: Cypress.env('TENANT_ID'),
   })
-  clearDatabase(
-    ['profiles', 'questions', 'comments', 'categories', 'tags'],
+  await clearDatabase(
+    ['categories', 'comments', 'news', 'profiles', 'questions', 'tags'],
     Cypress.env('TENANT_ID'),
   )
 })

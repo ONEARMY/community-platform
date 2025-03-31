@@ -15,11 +15,15 @@ export const FactoryQuestionItem = (
   previousSlugs: [],
   tags: [
     {
+      createdAt: new Date(),
       id: faker.number.int(),
+      modifiedAt: null,
       name: faker.lorem.words(1),
     },
     {
+      createdAt: new Date(),
       id: faker.number.int(),
+      modifiedAt: null,
       name: faker.lorem.words(1),
     },
   ],

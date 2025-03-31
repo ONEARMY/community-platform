@@ -3,7 +3,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { hasAdminRightsSupabase } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
-import { isDuplicateExistingSlug, uploadImage, validateImage } from './utils'
+import { isDuplicateExistingSlug, uploadImageCheck } from './utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
@@ -47,6 +47,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       params.id,
       formData.get('heroImage') as File,
       client,
+      'news',
     )
     const slug = convertToSlug(data.title)
 
@@ -72,38 +73,6 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
   } catch (error) {
     console.log(error)
     return Response.json({}, { status: 500, statusText: 'Error creating news' })
-  }
-}
-
-async function uploadImageCheck(
-  id: string | undefined,
-  uploadedHeroImageFile: File | null,
-  client: SupabaseClient,
-) {
-  if (!uploadedHeroImageFile || id) {
-    return undefined
-  }
-
-  if (uploadedHeroImageFile) {
-    const imageValidation = validateImage(uploadedHeroImageFile)
-
-    if (!imageValidation.valid && imageValidation.error) {
-      return Response.json(
-        {},
-        {
-          status: 400,
-          statusText: imageValidation.error.message,
-        },
-      )
-    }
-
-    const newsId = Number(id)
-    const uploadedImage = uploadedHeroImageFile
-      ? await uploadImage(newsId, uploadedHeroImageFile, client, 'news')
-      : null
-    if (uploadedImage?.image && !uploadedImage.error) {
-      return uploadedImage.image
-    }
   }
 }
 

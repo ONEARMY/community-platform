@@ -13,12 +13,16 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   previousSlugs: [],
   tags: [
     {
+      createdAt: new Date(),
       id: faker.number.int(),
       name: faker.lorem.words(1),
+      modifiedAt: null,
     },
     {
+      createdAt: new Date(),
       id: faker.number.int(),
       name: faker.lorem.words(1),
+      modifiedAt: null,
     },
   ],
   author: {

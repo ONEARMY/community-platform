@@ -1,11 +1,12 @@
 import { useLoaderData } from '@remix-run/react'
-import { Question, Tag } from 'oa-shared'
+import { Question } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { QuestionPage } from 'src/pages/Question/QuestionPage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { questionServiceServer } from 'src/services/questionService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
+import { tagsServiceServer } from 'src/services/tagsService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -30,17 +31,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const tagIds = dbQuestion.tags
-  let tags: Tag[] = []
-  if (tagIds?.length > 0) {
-    const tagsResult = await client
-      .from('tags')
-      .select('id,name')
-      .in('id', tagIds)
-
-    if (tagsResult.data) {
-      tags = tagsResult.data.map((x) => Tag.fromDB(x))
-    }
-  }
+  const tags = await tagsServiceServer.getTags(client, tagIds)
 
   const [usefulVotes, subscribers] = await Promise.all([
     client

@@ -4,6 +4,7 @@ import { NewsPage } from 'src/pages/News/NewsPage'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { newsServiceServer } from 'src/services/newsService.server'
+import { tagsServiceServer } from 'src/services/tagsService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -27,7 +28,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       .eq('id', dbNews.id)
   }
 
-  const tags = await newsServiceServer.getTags(client, dbNews.tags)
+  const tags = await tagsServiceServer.getTags(client, dbNews.tags)
 
   const [usefulVotes, subscribers] = await Promise.all([
     client

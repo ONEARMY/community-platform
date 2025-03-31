@@ -5,9 +5,8 @@ import { ITEMS_PER_PAGE } from 'src/pages/Question/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { discordServiceServer } from 'src/services/discordService.server'
 import { convertToSlug } from 'src/utils/slug'
-import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
 
-import { isDuplicateNewSlug } from './utils'
+import { isDuplicateNewSlug, validateImages } from './utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
@@ -246,18 +245,6 @@ export async function uploadImages(
   }
 
   return { images, errors }
-}
-
-export function validateImages(images: File[]) {
-  const errors: string[] = []
-  for (const image of images) {
-    if (!SUPPORTED_IMAGE_EXTENSIONS.includes(image.type)) {
-      errors.push(`Unsupported image extension: ${image.type}`)
-      continue
-    }
-  }
-
-  return { valid: errors.length === 0, errors }
 }
 
 async function validateRequest(request: Request, user: User | null, data: any) {

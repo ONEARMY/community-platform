@@ -3,7 +3,6 @@ import { News } from 'oa-shared'
 import type { DBNews, NewsFormData } from 'oa-shared'
 
 const upsert = async (id: number | null, form: NewsFormData) => {
-  console.log({ form })
   const { category, tags, title } = form
   const body = new FormData()
   body.append('title', title)

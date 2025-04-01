@@ -47,15 +47,15 @@ export const NewsForm = (props: IProps) => {
     setInitialValues({
       title: news.title,
       body: news.body,
-      existingHeroImage: news.heroImage,
       category: news.category
         ? {
             value: news.category.id?.toString(),
             label: news.category.name,
           }
         : null,
-      tags: news.tagIds,
+      existingHeroImage: news.heroImage,
       heroImage: null,
+      tags: news.tagIds,
     })
   }, [news])
 
@@ -88,6 +88,7 @@ export const NewsForm = (props: IProps) => {
       return {
         ...prevState,
         existingHeroImage: null,
+        heroImage: null,
       }
     })
   }

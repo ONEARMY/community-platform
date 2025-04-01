@@ -19,7 +19,6 @@ SUPABASE_SERVICE_ROLE_KEY={service_role key}
 
 Run `supabase db push` to run the DB migration scripts and update your local database schema. (you will have to run this again whenever there are DB schema changes)
 
-Create a `public` bucket named `precious-plastic` for local dev.
 Add the policy named `tenant_isolation` for all operations: `(bucket_id = ((current_setting('request.headers'::text, true))::json ->> 'x-tenant-id'::text))`
 Ideally this would be automated.
 

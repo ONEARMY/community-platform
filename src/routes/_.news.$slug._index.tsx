@@ -4,8 +4,9 @@ import { NewsPage } from 'src/pages/News/NewsPage'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { newsServiceServer } from 'src/services/newsService.server'
-import { tagsServiceServer } from 'src/services/tagsService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
+
+import { getMetaFields, incrementViewCount } from './utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { DBNews } from 'oa-shared'
@@ -22,26 +23,14 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbNews = result.data as unknown as DBNews
 
   if (dbNews.id) {
-    await client
-      .from('news')
-      .update({ total_views: (dbNews.total_views || 0) + 1 })
-      .eq('id', dbNews.id)
+    await incrementViewCount(client, 'news', dbNews.total_views, dbNews.id)
   }
 
-  const tags = await tagsServiceServer.getTags(client, dbNews.tags)
-
-  const [usefulVotes, subscribers] = await Promise.all([
-    client
-      .from('useful_votes')
-      .select('*', { count: 'exact' })
-      .eq('content_id', dbNews.id)
-      .eq('content_type', 'news'),
-    client
-      .from('subscribers')
-      .select('user_id', { count: 'exact' })
-      .eq('content_id', dbNews.id)
-      .eq('content_type', 'news'),
-  ])
+  const [usefulVotes, subscribers, tags] = await getMetaFields(
+    client,
+    dbNews.id,
+    dbNews.tags,
+  )
 
   const heroImage = await newsServiceServer.getHeroImage(
     client,

@@ -1,3 +1,4 @@
+import { tagsService } from 'src/services/tagsService'
 import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -6,6 +7,38 @@ type Slug = string
 type Id = number
 type Client = SupabaseClient
 type Table = 'questions' | 'news'
+
+export const getMetaFields = async (
+  client: Client,
+  id: Id,
+  tagIds: number[],
+) => {
+  return await Promise.all([
+    client
+      .from('useful_votes')
+      .select('*', { count: 'exact' })
+      .eq('content_id', id)
+      .eq('content_type', 'news'),
+    client
+      .from('subscribers')
+      .select('user_id', { count: 'exact' })
+      .eq('content_id', id)
+      .eq('content_type', 'news'),
+    await tagsService.getTags(client, tagIds),
+  ])
+}
+
+export const incrementViewCount = async (
+  client: Client,
+  table: Table,
+  totalViews: number | undefined,
+  id: Id,
+) => {
+  return await client
+    .from(table)
+    .update({ total_views: (totalViews || 0) + 1 })
+    .eq('id', id)
+}
 
 export async function isDuplicateExistingSlug(
   slug: Slug,
@@ -79,37 +112,4 @@ export function validateImages(images: File[]) {
   }
 
   return { valid: errors.length === 0, errors }
-}
-
-export async function uploadImageCheck(
-  id: string | undefined,
-  uploadedFile: File | null,
-  client: SupabaseClient,
-  table: Table,
-) {
-  if (!uploadedFile || id) {
-    return undefined
-  }
-
-  if (uploadedFile) {
-    const imageValidation = validateImage(uploadedFile)
-
-    if (!imageValidation.valid && imageValidation.error) {
-      return Response.json(
-        {},
-        {
-          status: 400,
-          statusText: imageValidation.error.message,
-        },
-      )
-    }
-
-    const newsId = Number(id)
-    const uploadedImage = uploadedFile
-      ? await uploadImage(newsId, uploadedFile, client, table)
-      : null
-    if (uploadedImage?.image && !uploadedImage.error) {
-      return uploadedImage.image
-    }
-  }
 }

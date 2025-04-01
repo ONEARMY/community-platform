@@ -6,8 +6,9 @@ import { QuestionPage } from 'src/pages/Question/QuestionPage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { questionServiceServer } from 'src/services/questionService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
-import { tagsServiceServer } from 'src/services/tagsService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
+
+import { getMetaFields, incrementViewCount } from './utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { DBQuestion } from 'oa-shared'
@@ -24,27 +25,19 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbQuestion = result.data as unknown as DBQuestion
 
   if (dbQuestion.id) {
-    await client
-      .from('questions')
-      .update({ total_views: (dbQuestion.total_views || 0) + 1 })
-      .eq('id', dbQuestion.id)
+    await incrementViewCount(
+      client,
+      'questions',
+      dbQuestion.total_views,
+      dbQuestion.id,
+    )
   }
 
-  const tagIds = dbQuestion.tags
-  const tags = await tagsServiceServer.getTags(client, tagIds)
-
-  const [usefulVotes, subscribers] = await Promise.all([
-    client
-      .from('useful_votes')
-      .select('*', { count: 'exact' })
-      .eq('content_id', dbQuestion.id)
-      .eq('content_type', 'questions'),
-    client
-      .from('subscribers')
-      .select('user_id', { count: 'exact' })
-      .eq('content_id', dbQuestion.id)
-      .eq('content_type', 'questions'),
-  ])
+  const [usefulVotes, subscribers, tags] = await getMetaFields(
+    client,
+    dbQuestion.id,
+    dbQuestion.tags,
+  )
 
   const images = dbQuestion.images
     ? await storageServiceServer.getImagesPublicUrls(

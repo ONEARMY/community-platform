@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import PhotoSwipeLightbox from 'photoswipe/lightbox'
 import { Flex, Image as ThemeImage } from 'theme-ui'
 
-import { Icon } from '../Icon/Icon'
+import { Arrow } from '../ArrowIcon/ArrowIcon'
 import { ImageGalleryThumbnail } from '../ImageGalleryThumbnail/ImageGalleryThumbnail'
 import { Loader } from '../Loader/Loader'
 
@@ -172,12 +172,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
                 )
               }
             >
-              <Icon
-                glyph="chevron-right"
-                color="white"
-                size={60}
-                marginRight="4px"
-              />
+              <Arrow direction="right" sx={{ marginRight: '10px' }} />
             </NavButton>
             <NavButton
               aria-label={'Previous image'}
@@ -192,12 +187,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
                 )
               }
             >
-              <Icon
-                glyph="chevron-left"
-                color="white"
-                size={60}
-                marginRight="4px"
-              />
+              <Arrow direction="left" sx={{ marginLeft: '10px' }} />
             </NavButton>
           </>
         ) : null}

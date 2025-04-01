@@ -78,17 +78,17 @@ export async function uploadImage(
   if (!uploadedImage) {
     return null
   }
-
-  const { data } = await client.storage
+  const response = await client.storage
     .from(process.env.TENANT_ID as string)
     .upload(`${table}/${id}/${uploadedImage.name}`, uploadedImage)
 
+  const image = response.data
   const error =
-    data === null
-      ? new Error(`Error uploading image: ${uploadedImage.name}`)
+    image === null
+      ? new Error(`Uploading image: ${response.error.message}`)
       : null
 
-  return { image: data, error }
+  return { image, error }
 }
 
 export function validateImage(image: File | null) {

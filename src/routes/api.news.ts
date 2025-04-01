@@ -225,7 +225,7 @@ export const setUploadImage = async (
   uploadedImageFile,
   existingImageFile?,
 ) => {
-  if (!uploadedImageFile && existingImageFile) {
+  if (!uploadedImageFile && !!existingImageFile) {
     return existingImageFile
   }
 
@@ -241,8 +241,8 @@ export const setUploadImage = async (
   const image =
     uploadedImage?.image && !uploadedImage.error ? uploadedImage.image : null
 
-  if (!image) {
-    return null
+  if (uploadedImage?.error) {
+    throw uploadedImage?.error.message
   }
 
   const updateResult = await client

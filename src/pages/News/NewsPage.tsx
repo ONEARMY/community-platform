@@ -131,7 +131,7 @@ export const NewsPage = observer(({ news }: IProps) => {
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
       <Breadcrumbs content={news} variant="news" />
-      <Flex sx={{ flexDirection: 'column', gap: 3 }}>
+      <Flex sx={{ flexDirection: 'column', gap: 4 }}>
         {news.heroImage && (
           <AspectRatio ratio={2 / 1}>
             <Image
@@ -141,8 +141,20 @@ export const NewsPage = observer(({ news }: IProps) => {
           </AspectRatio>
         )}
 
-        <Flex sx={{ flexDirection: 'column', gap: 2, alignItems: 'center' }}>
-          <Heading as="h1" data-cy="news-title" data-testid="news-title">
+        <Flex
+          sx={{
+            alignItems: 'center',
+            flexDirection: 'column',
+            gap: 2,
+            padding: [2, 0],
+          }}
+        >
+          <Heading
+            as="h1"
+            data-cy="news-title"
+            data-testid="news-title"
+            sx={{ textAlign: 'center' }}
+          >
             {news.title}
           </Heading>
 
@@ -171,63 +183,72 @@ export const NewsPage = observer(({ news }: IProps) => {
           >
             <LinkifyText>{news.body}</LinkifyText>
           </Text>
-        </Flex>
-        <Flex
-          sx={{ flexWrap: 'wrap', gap: 3, justifyContent: 'space-between' }}
-        >
-          <ClientOnly fallback={<></>}>
-            {() => (
-              <Flex sx={{ gap: 3 }}>
-                <UsefulStatsButton
-                  votedUsefulCount={usefulCount}
-                  hasUserVotedUseful={voted}
-                  isLoggedIn={!!activeUser}
-                  onUsefulClick={() => onUsefulClick(voted ? 'delete' : 'add')}
-                />
-                <FollowButton
-                  hasUserSubscribed={subscribed}
-                  isLoggedIn={!!activeUser}
-                  onFollowClick={onFollowClick}
-                />
-                {isEditable && (
-                  <Link to={'/news/' + news.slug + '/edit'}>
-                    <Button type="button" variant="primary" data-cy="edit">
-                      Edit
-                    </Button>
-                  </Link>
-                )}
-              </Flex>
-            )}
-          </ClientOnly>
+          <Flex
+            sx={{
+              flexWrap: 'wrap',
+              gap: 3,
+              justifyContent: 'space-between',
+              paddingY: 2,
+              alignSelf: 'stretch',
+            }}
+          >
+            <ClientOnly fallback={<></>}>
+              {() => (
+                <Flex sx={{ gap: 3 }}>
+                  <UsefulStatsButton
+                    votedUsefulCount={usefulCount}
+                    hasUserVotedUseful={voted}
+                    isLoggedIn={!!activeUser}
+                    onUsefulClick={() =>
+                      onUsefulClick(voted ? 'delete' : 'add')
+                    }
+                  />
+                  <FollowButton
+                    hasUserSubscribed={subscribed}
+                    isLoggedIn={!!activeUser}
+                    onFollowClick={onFollowClick}
+                  />
+                  {isEditable && (
+                    <Link to={'/news/' + news.slug + '/edit'}>
+                      <Button type="button" variant="primary" data-cy="edit">
+                        Edit
+                      </Button>
+                    </Link>
+                  )}
+                </Flex>
+              )}
+            </ClientOnly>
 
-          <ContentStatistics
-            statistics={[
-              {
-                icon: 'view',
-                label: buildStatisticsLabel({
-                  stat: news.totalViews,
-                  statUnit: 'view',
-                  usePlural: true,
-                }),
-              },
-              {
-                icon: 'thunderbolt-grey',
-                label: buildStatisticsLabel({
-                  stat: subscribersCount,
-                  statUnit: 'following',
-                  usePlural: false,
-                }),
-              },
-              {
-                icon: 'star',
-                label: buildStatisticsLabel({
-                  stat: usefulCount,
-                  statUnit: 'useful',
-                  usePlural: false,
-                }),
-              },
-            ]}
-          />
+            <ContentStatistics
+              statistics={[
+                {
+                  icon: 'view',
+                  label: buildStatisticsLabel({
+                    stat: news.totalViews,
+                    statUnit: 'view',
+                    usePlural: true,
+                  }),
+                },
+                {
+                  icon: 'thunderbolt-grey',
+                  label: buildStatisticsLabel({
+                    stat: subscribersCount,
+                    statUnit: 'following',
+                    usePlural: false,
+                  }),
+                },
+                {
+                  icon: 'star',
+                  label: buildStatisticsLabel({
+                    stat: usefulCount,
+                    statUnit: 'useful',
+                    usePlural: false,
+                  }),
+                },
+              ]}
+              alwaysShow
+            />
+          </Flex>
         </Flex>
       </Flex>
       <ClientOnly fallback={<></>}>
@@ -242,8 +263,9 @@ export const NewsPage = observer(({ news }: IProps) => {
             }}
           >
             <CommentSectionSupabase
-              sourceId={news.id}
               authors={news.author?.id ? [news.author?.id] : []}
+              sourceId={news.id}
+              sourceType="news"
             />
           </Card>
         )}

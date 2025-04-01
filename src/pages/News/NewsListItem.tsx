@@ -1,11 +1,12 @@
 import {
   Category,
+  Icon,
   IconCountWithTooltip,
   InternalLink,
   // ModerationStatus,
 } from 'oa-components'
 import { Highlighter } from 'src/common/Highlighter'
-import { AspectRatio, Box, Button, Card, Flex, Heading, Image } from 'theme-ui'
+import { AspectRatio, Button, Card, Flex, Heading, Image, Text } from 'theme-ui'
 
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 import { listing } from './labels'
@@ -19,8 +20,10 @@ interface IProps {
 
 export const NewsListItem = ({ news, query }: IProps) => {
   const { body, id, heroImage } = news
+
   const url = `/news/${encodeURIComponent(news.slug)}`
   const searchWords = [query || '']
+  const bodySummary = body.length > 180 ? body.slice(0, 178) + '...' : body
 
   return (
     <Card
@@ -30,6 +33,7 @@ export const NewsListItem = ({ news, query }: IProps) => {
       sx={{
         position: 'relative',
         overflow: 'hidden',
+        borderRadius: 4,
       }}
     >
       <Flex
@@ -50,12 +54,10 @@ export const NewsListItem = ({ news, query }: IProps) => {
         <Flex
           sx={{
             flexDirection: 'column',
-            gap: 1,
-            paddingX: 3,
-            paddingY: 2,
+            padding: 4,
           }}
         >
-          <Flex sx={{ gap: 2, flexWrap: 'wrap' }}>
+          <Flex sx={{ gap: 1, flexWrap: 'wrap' }}>
             <Heading
               data-cy="news-list-item-title"
               as="h2"
@@ -83,39 +85,41 @@ export const NewsListItem = ({ news, query }: IProps) => {
               created={news.createdAt}
             />
           </Flex>
-        </Flex>
 
-        <Flex
-          sx={{
-            display: ['none', 'flex', 'flex'],
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            flex: 1,
-            gap: 12,
-            paddingX: 12,
-          }}
-        >
-          <IconCountWithTooltip
-            count={news.usefulCount}
-            icon="star-active"
-            text={listing.usefulness}
-          />
-          <IconCountWithTooltip
-            count={(news as any).commentCount || 0}
-            icon="comment"
-            text={listing.totalComments}
-          />
+          <Text sx={{ paddingY: 2, fontSize: 2 }}>
+            <Highlighter
+              searchWords={searchWords}
+              textToHighlight={query ? body : bodySummary}
+            />
+          </Text>
+
+          <Flex
+            sx={{
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <InternalLink to={url}>
+              <Button variant="subtle" sx={{ gap: 2 }}>
+                Read more <Icon glyph="arrow-forward" />
+              </Button>
+            </InternalLink>
+
+            <Flex sx={{ gap: [2, 8] }}>
+              <IconCountWithTooltip
+                count={news.usefulCount}
+                icon="star-active"
+                text={listing.usefulness}
+              />
+              <IconCountWithTooltip
+                count={(news as any).commentCount || 0}
+                icon="comment"
+                text={listing.totalComments}
+              />
+            </Flex>
+          </Flex>
         </Flex>
-        <InternalLink to={url} sx={{ margin: 2 }}>
-          <Button>Read more</Button>
-        </InternalLink>
       </Flex>
-
-      {query && (
-        <Box sx={{ padding: 3, paddingTop: 0 }}>
-          <Highlighter searchWords={searchWords} textToHighlight={body} />
-        </Box>
-      )}
     </Card>
   )
 }

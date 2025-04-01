@@ -248,8 +248,9 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
             }}
           >
             <CommentSectionSupabase
-              sourceId={question.id}
               authors={question.author?.id ? [question.author?.id] : []}
+              sourceId={question.id}
+              sourceType="questions"
             />
           </Card>
         )}

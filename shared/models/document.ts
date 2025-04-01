@@ -1,17 +1,21 @@
 import type { Author, DBAuthor } from './author'
 import type { ContentType } from './common'
 
-export abstract class DBDocSB {
+// Base level for all content on supabase
+export interface DBDocSB {
   readonly id: number
   readonly created_at: Date
-  readonly modified_at: string | null
-
-  constructor(obj: any) {
-    Object.assign(this, obj)
-  }
+  readonly modified_at: Date | null
 }
 
-export abstract class DBContentDoc extends DBDocSB {
+export interface Doc {
+  id: number
+  createdAt: Date
+  modifiedAt: Date | null
+}
+
+// Second level for main content on supabase
+export interface DBContentDoc extends DBDocSB {
   readonly author?: DBAuthor
   readonly comment_count?: number
   readonly category: DBCategory | null
@@ -27,17 +31,7 @@ export abstract class DBContentDoc extends DBDocSB {
   readonly useful_count?: number
 }
 
-export abstract class Doc {
-  id: number
-  createdAt: Date
-  modifiedAt: Date | null
-
-  constructor(obj: any) {
-    Object.assign(this, obj)
-  }
-}
-
-export class ContentDoc extends Doc {
+export interface ContentDoc extends Doc {
   author: Author | null
   category: Category | null
   commentCount: number
@@ -52,52 +46,97 @@ export class ContentDoc extends Doc {
   usefulCount: number
 }
 
-export class Category extends Doc {
+// All main content types can have a category
+export class DBCategory implements DBDocSB {
+  id: number
+  created_at: Date
+  modified_at: Date | null
+
   name: string
   type: ContentType
 
-  static fromDB(category: DBCategory) {
-    const { created_at, id, name, type } = category
-    return new Category({
+  constructor(obj: any) {
+    Object.assign(this, obj)
+  }
+
+  static toDB(category: Category) {
+    const { createdAt, id, modifiedAt, name, type } = category
+    return new DBCategory({
       id,
-      createdAt: new Date(created_at),
+      created_at: new Date(createdAt),
+      modified_at: new Date(modifiedAt) || null,
       name,
       type,
     })
   }
 }
 
-export class DBCategory extends DBDocSB {
+export class Category implements Doc {
+  id: number
+  createdAt: Date
+  modifiedAt: Date | null
+
   name: string
   type: ContentType
 
-  static fromDB(category: DBCategory) {
-    return new DBCategory(category)
+  constructor(obj: any) {
+    Object.assign(this, obj)
   }
-}
 
-export class DBTag extends DBDocSB {
-  name: string
-
-  static toDB(tag: Tag) {
-    const { createdAt, id, name } = tag
-    return new DBTag({
+  static fromDB(category: DBCategory) {
+    const { created_at, id, modified_at, name, type } = category
+    return new Category({
       id,
+      createdAt: new Date(created_at),
+      modifiedAt: new Date(modified_at) || null,
       name,
-      created_at: new Date(createdAt),
+      type,
     })
   }
 }
 
-export class Tag extends Doc {
+// All main content types can have tags
+// Should be the same as Category minus the type field
+export class DBTag implements DBDocSB {
+  id: number
+  created_at: Date
+  modified_at: Date | null
+
   name: string
 
+  constructor(obj: any) {
+    Object.assign(this, obj)
+  }
+
+  static toDB(tag: Tag) {
+    const { createdAt, id, modifiedAt, name } = tag
+    return new DBTag({
+      id,
+      created_at: new Date(createdAt),
+      modified_at: new Date(modifiedAt) || null,
+      name,
+    })
+  }
+}
+
+export class Tag implements Doc {
+  id: number
+  createdAt: Date
+  modifiedAt: Date | null
+
+  name: string
+
+  constructor(obj: any) {
+    Object.assign(this, obj)
+  }
+
   static fromDB(tag: DBTag) {
-    const { created_at, id, name } = tag
+    const { created_at, id, modified_at, name } = tag
     return new Tag({
       id,
-      name,
       createdAt: new Date(created_at),
+      modified_at: new Date(modified_at) || null,
+      name,
     })
   }
 }

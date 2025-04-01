@@ -142,6 +142,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         },
       )
     }
+
     const profileRequest = await client
       .from('profiles')
       .select('id,username')
@@ -174,34 +175,13 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const news = News.fromDB(newsResult.data[0], [])
-
-    if (uploadedHeroImageFile) {
-      const newsId = Number(newsResult.data[0].id)
-      const uploadedImage = await uploadImage(
-        newsId,
-        uploadedHeroImageFile,
-        client,
-        'news',
-      )
-      const hero_image =
-        uploadedImage?.image && !uploadedImage.error
-          ? uploadedImage.image
-          : null
-
-      if (hero_image) {
-        const updateResult = await client
-          .from('news')
-          .update({ hero_image })
-          .eq('id', newsId)
-          .select()
-
-        if (updateResult.data) {
-          news.heroImage = updateResult.data[0].hero_image
-        }
-      }
-    }
-
     notifyDiscord(news, profile, new URL(request.url).origin)
+
+    news.heroImage = await setUploadImage(
+      client,
+      news.id,
+      uploadedHeroImageFile,
+    )
 
     return Response.json({ news }, { headers, status: 201 })
   } catch (error) {
@@ -237,4 +217,43 @@ async function validateRequest(request: Request, user: User | null, data: any) {
   }
 
   return { valid: true }
+}
+
+export const setUploadImage = async (
+  client,
+  id,
+  uploadedImageFile,
+  existingImageFile?,
+) => {
+  if (!uploadedImageFile && existingImageFile) {
+    return existingImageFile
+  }
+
+  if (!uploadedImageFile) {
+    return await client
+      .from('news')
+      .update({ hero_image: null })
+      .eq('id', id)
+      .select()
+  }
+
+  const uploadedImage = await uploadImage(id, uploadedImageFile, client, 'news')
+  const image =
+    uploadedImage?.image && !uploadedImage.error ? uploadedImage.image : null
+
+  if (!image) {
+    return null
+  }
+
+  const updateResult = await client
+    .from('news')
+    .update({ hero_image: image })
+    .eq('id', id)
+    .select()
+
+  if (!updateResult.data) {
+    return null
+  }
+
+  return updateResult.data[0].image
 }

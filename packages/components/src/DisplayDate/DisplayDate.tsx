@@ -1,7 +1,7 @@
 import { format, formatDistanceToNow } from 'date-fns'
 import { Text } from 'theme-ui'
 
-type DateType = string | number | Date
+type DateType = string | number | Date | null
 
 export interface IProps {
   date?: DateType
@@ -23,6 +23,9 @@ const relativeDateFormat = (d: DateType | undefined): string => {
 }
 
 export const DisplayDate = ({ date }: IProps) => {
+  if (!date) {
+    return <></>
+  }
   const formattedDate = formatDateTime(date)
   const relativeDate = relativeDateFormat(date)
 

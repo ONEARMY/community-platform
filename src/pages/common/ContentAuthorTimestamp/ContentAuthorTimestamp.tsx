@@ -7,7 +7,7 @@ interface ContentAuthorTimestampProps {
   userName: string
   countryCode: string | undefined
   created: string | number | Date
-  modified?: string | number | Date
+  modified?: string | number | Date | null
   action?: string
 }
 

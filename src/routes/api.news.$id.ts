@@ -3,7 +3,8 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { hasAdminRightsSupabase } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
-import { isDuplicateExistingSlug, uploadImageCheck } from './utils'
+import { setUploadImage } from './api.news'
+import { isDuplicateExistingSlug, validateImage } from './utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
@@ -13,7 +14,6 @@ import type { DBNews, DBProfile } from 'oa-shared'
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   try {
     const formData = await request.formData()
-
     const data = {
       title: formData.get('title') as string,
       body: formData.get('body') as string,
@@ -43,13 +43,20 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       return Response.json({}, { status, statusText })
     }
 
-    const hero_image = await uploadImageCheck(
-      params.id,
-      formData.get('heroImage') as File,
-      client,
-      'news',
-    )
     const slug = convertToSlug(data.title)
+    const existingHeroImage = formData.get('existingHeroImage') as File | null
+    const newHeroImage = formData.get('heroImage') as File | null
+    const imageValidation = validateImage(newHeroImage)
+
+    if (!imageValidation.valid && imageValidation.error) {
+      return Response.json(
+        {},
+        {
+          status: 400,
+          statusText: imageValidation.error.message,
+        },
+      )
+    }
 
     const newsResult = await client
       .from('news')
@@ -59,7 +66,6 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         slug,
         category: data.category,
         tags: data.tags,
-        ...(hero_image ? { hero_image } : {}),
       })
       .eq('id', params.id)
       .select()
@@ -69,6 +75,13 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     }
 
     const news = News.fromDB(newsResult.data[0], [])
+    news.heroImage = await setUploadImage(
+      client,
+      news.id,
+      newHeroImage,
+      existingHeroImage,
+    )
+
     return Response.json({ news }, { headers, status: 200 })
   } catch (error) {
     console.log(error)

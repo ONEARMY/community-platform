@@ -5,7 +5,7 @@ import { Flex, Text } from 'theme-ui'
 interface UserNameTagProps {
   userName: string
   countryCode: string | undefined
-  created: string | number | Date
+  created: string | number | Date | null
   action?: string
 }
 

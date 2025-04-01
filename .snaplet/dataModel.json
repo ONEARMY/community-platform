@@ -5940,6 +5940,20 @@
           "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
+        },
+        {
+          "id": "public.tags.modified_at",
+          "name": "modified_at",
+          "columnName": "modified_at",
+          "type": "date",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
         }
       ],
       "uniqueConstraints": [

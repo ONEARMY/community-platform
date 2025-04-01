@@ -141,10 +141,43 @@ export const NewsPage = observer(({ news }: IProps) => {
           </AspectRatio>
         )}
 
-        <Flex sx={{ flexWrap: 'wrap', gap: 3 }}>
+        <Flex sx={{ flexDirection: 'column', gap: 2, alignItems: 'center' }}>
+          <Heading as="h1" data-cy="news-title" data-testid="news-title">
+            {news.title}
+          </Heading>
+
+          <ContentAuthorTimestamp
+            userName={news.author?.username || ''}
+            countryCode={news.author?.country || ''}
+            created={news.createdAt}
+            modified={news.modifiedAt || undefined}
+            action="Published"
+          />
+
+          <Flex sx={{ alignItems: 'center', gap: 2 }}>
+            {news.category && <Category category={news.category} />}
+            {news.tags && (
+              <TagList
+                data-cy="news-tags"
+                tags={news.tags.map((t) => ({ label: t.name }))}
+              />
+            )}
+          </Flex>
+
+          <Text
+            variant="paragraph"
+            data-cy="news-description"
+            sx={{ whiteSpace: 'pre-line', alignSelf: 'stretch' }}
+          >
+            <LinkifyText>{news.body}</LinkifyText>
+          </Text>
+        </Flex>
+        <Flex
+          sx={{ flexWrap: 'wrap', gap: 3, justifyContent: 'space-between' }}
+        >
           <ClientOnly fallback={<></>}>
             {() => (
-              <>
+              <Flex sx={{ gap: 3 }}>
                 <UsefulStatsButton
                   votedUsefulCount={usefulCount}
                   hasUserVotedUseful={voted}
@@ -163,70 +196,40 @@ export const NewsPage = observer(({ news }: IProps) => {
                     </Button>
                   </Link>
                 )}
-              </>
+              </Flex>
             )}
           </ClientOnly>
-        </Flex>
 
-        <ContentAuthorTimestamp
-          userName={news.author?.username || ''}
-          countryCode={news.author?.country || ''}
-          created={news.createdAt}
-          modified={news.modifiedAt || undefined}
-          action="Asked"
-        />
-
-        <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-          {news.category && <Category category={news.category} />}
-          <Heading as="h1" data-cy="news-title" data-testid="news-title">
-            {news.title}
-          </Heading>
-
-          <Text
-            variant="paragraph"
-            data-cy="news-description"
-            sx={{ whiteSpace: 'pre-line' }}
-          >
-            <LinkifyText>{news.body}</LinkifyText>
-          </Text>
-
-          {news.tags && (
-            <TagList
-              data-cy="news-tags"
-              tags={news.tags.map((t) => ({ label: t.name }))}
-            />
-          )}
+          <ContentStatistics
+            statistics={[
+              {
+                icon: 'view',
+                label: buildStatisticsLabel({
+                  stat: news.totalViews,
+                  statUnit: 'view',
+                  usePlural: true,
+                }),
+              },
+              {
+                icon: 'thunderbolt-grey',
+                label: buildStatisticsLabel({
+                  stat: subscribersCount,
+                  statUnit: 'following',
+                  usePlural: false,
+                }),
+              },
+              {
+                icon: 'star',
+                label: buildStatisticsLabel({
+                  stat: usefulCount,
+                  statUnit: 'useful',
+                  usePlural: false,
+                }),
+              },
+            ]}
+          />
         </Flex>
       </Flex>
-
-      <ContentStatistics
-        statistics={[
-          {
-            icon: 'view',
-            label: buildStatisticsLabel({
-              stat: news.totalViews,
-              statUnit: 'view',
-              usePlural: true,
-            }),
-          },
-          {
-            icon: 'thunderbolt-grey',
-            label: buildStatisticsLabel({
-              stat: subscribersCount,
-              statUnit: 'following',
-              usePlural: false,
-            }),
-          },
-          {
-            icon: 'star',
-            label: buildStatisticsLabel({
-              stat: usefulCount,
-              statUnit: 'useful',
-              usePlural: false,
-            }),
-          },
-        ]}
-      />
       <ClientOnly fallback={<></>}>
         {() => (
           <Card

@@ -5,20 +5,22 @@ import { UserAction } from 'src/common/UserAction'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { Box, Flex, Text, Textarea } from 'theme-ui'
 
+import type { ContentType } from 'oa-shared'
 import type { ChangeEvent } from 'react'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
 import './CreateCommentSupabase.css'
 
-export interface Props {
+interface IProps {
   onSubmit: (value: string) => void
+  sourceType: ContentType
   isLoading?: boolean
   isReply?: boolean
   placeholder?: string
   sx?: ThemeUIStyleObject | undefined
 }
 
-export const CreateCommentSupabase = observer((props: Props) => {
+export const CreateCommentSupabase = observer((props: IProps) => {
   const { onSubmit, isLoading, isReply, sx } = props
   const userProfileType = 'member'
   const placeholder = props.placeholder || 'Leave your questions or feedback...'

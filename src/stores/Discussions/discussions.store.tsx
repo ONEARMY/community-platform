@@ -358,27 +358,6 @@ export class DiscussionStore extends ModuleStore {
     return updatedDiscussion ? updatedDiscussion : null
   }
 
-  private async _validatePrimaryContentId(
-    discussion: IDiscussion,
-    primaryContentId: string | undefined,
-  ): Promise<IDiscussion | null> {
-    if (
-      !primaryContentId ||
-      discussion.primaryContentId === primaryContentId ||
-      discussion.sourceType !== 'researchUpdate'
-    )
-      return discussion
-
-    const dbRef = this.db
-      .collection<IDiscussion>(DISCUSSIONS_COLLECTION)
-      .doc(discussion._id)
-
-    return await this._updateDiscussion(dbRef, {
-      ...discussion,
-      primaryContentId,
-    })
-  }
-
   private _addContributorId(contributorIds: string[], comment: IComment) {
     if (contributorIds.length === 0) {
       return [comment._creatorId]

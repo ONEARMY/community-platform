@@ -1,12 +1,14 @@
 import { Field } from 'react-final-form'
 import { Button, DownloadStaticFile, FieldInput } from 'oa-components'
 import { UserRole } from 'oa-shared'
+// eslint-disable-next-line import/no-unresolved
+import { ClientOnly } from 'remix-utils/client-only'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FileInputField } from 'src/common/Form/FileInput.field'
 import { MAX_LINK_LENGTH } from 'src/pages/constants'
 import { buttons, update as updateLabels } from 'src/pages/Research/labels'
 import { COMPARISONS } from 'src/utils/comparisons'
-import { Flex, Label, Text } from 'theme-ui'
+import { Box, Flex, Label, Text } from 'theme-ui'
 
 const WarningMessages = ({ show }) => {
   const { error } = updateLabels.files
@@ -29,22 +31,22 @@ const WarningMessages = ({ show }) => {
   )
 }
 
-const AlreadyAddedFiles = ({ files }) => {
+const AlreadyAddedFiles = ({ files, deleteFile }) => {
   return (
     <Flex sx={{ flexDirection: 'column', alignItems: 'center', mb: 3 }}>
-      {files.map((file) => (
-        <>
+      {files.map((file, index) => (
+        <Box key={file.id}>
           <DownloadStaticFile allowDownload file={file} key={file.name} />
           <Button
             type="button"
             variant="outline"
             icon="delete"
             data-cy="delete-file"
-            onClick={deleteFile(file)}
+            onClick={deleteFile(index)}
           >
             {buttons.files}
           </Button>
-        </>
+        </Box>
       ))}
     </Flex>
   )
@@ -52,12 +54,12 @@ const AlreadyAddedFiles = ({ files }) => {
 
 const UploadNewFiles = () => {
   const { fileLink, files } = updateLabels
-
   const identity = 'file-download-link'
+
   return (
     <>
-      <Flex sx={{ flexDirection: 'column' }} mb={3}>
-        <Label mb={2} htmlFor={identity} style={{ fontSize: '12px' }}>
+      <Flex sx={{ flexDirection: 'column', mb: 3 }}>
+        <Label htmlFor={identity} sx={{ fontSize: '12px', mb: 2 }}>
           {fileLink.title}
         </Label>
         <Field
@@ -72,58 +74,58 @@ const UploadNewFiles = () => {
           mb={2}
         />
       </Flex>
-      <Flex sx={{ flexDirection: 'column' }} mb={3}>
-        <Label mb={2} htmlFor={identity} style={{ fontSize: '12px' }}>
+      <Flex sx={{ flexDirection: 'column', mb: 3 }}>
+        <Label htmlFor={identity} sx={{ fontSize: '12px', mb: 2 }}>
           {files.title}
         </Label>
+
         <AuthWrapper
           roleRequired={UserRole.ADMIN}
           fallback={
             <>
               <Field
                 hasText={false}
-                name={'files'}
+                name="files"
                 data-cy="file-input-field"
                 component={FileInputField}
               />
-              <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
+              <Text sx={{ fontSize: 1, color: 'grey', mt: 4 }}>
                 {files.description}
               </Text>
             </>
           }
         >
-          <>
-            <Field
-              hasText={false}
-              name={'files'}
-              data-cy="file-input-field"
-              admin={true}
-              component={FileInputField}
-            />
-            <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
-              {'Maximum file size 300MB'}
-            </Text>
-          </>
+          <Field
+            hasText={false}
+            name="files"
+            data-cy="file-input-field"
+            admin={true}
+            component={FileInputField}
+          />
+          <Text sx={{ fontSize: 1, color: 'grey', mt: 4 }}>
+            Maximum file size 300MB
+          </Text>
         </AuthWrapper>
       </Flex>
     </>
   )
 }
 
-export const FilesFields = ({ formValues }) => {
+export const FilesFields = ({ files, deleteFile, showInvalidFileWarning }) => {
   const { title } = updateLabels.files
 
   return (
-    <>
-      {/* <WarningMessages show={showInvalidFileWarning} />
-      <Label htmlFor="files" mb={2}>
-        {title}
-      </Label>
-      {isEditMode ? (
-        <AlreadyAddedFiles formValues={formValues} />
-      ) : (
-        <UploadNewFiles />
-      )} */}
-    </>
+    <ClientOnly fallback={<></>}>
+      {() => (
+        <>
+          <WarningMessages show={showInvalidFileWarning} />
+          <Label htmlFor="files" sx={{ mb: 2 }}>
+            {title}
+          </Label>
+          <AlreadyAddedFiles files={files} deleteFile={deleteFile} />
+          <UploadNewFiles />
+        </>
+      )}
+    </ClientOnly>
   )
 }

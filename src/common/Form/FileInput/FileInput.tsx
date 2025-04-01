@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useEffect, useState } from 'react'
 import Uppy from '@uppy/core'
 import { DashboardModal } from '@uppy/react'

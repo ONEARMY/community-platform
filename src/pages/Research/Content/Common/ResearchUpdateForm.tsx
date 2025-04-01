@@ -14,6 +14,7 @@ import { Box, Card, Flex, Heading } from 'theme-ui'
 import { buttons, headings, update } from '../../labels'
 import { researchService } from '../../research.service'
 import { DescriptionField } from '../CreateResearch/Form/DescriptionField'
+import { FilesFields } from '../CreateResearch/Form/FilesFields'
 import { ResearchImagesField } from '../CreateResearch/Form/ResearchImagesField'
 // import { FilesFields } from '../CreateResearch/Form/FilesFields'
 import { TitleField } from '../CreateResearch/Form/TitleField'
@@ -165,12 +166,6 @@ export const ResearchUpdateForm = (props: IProps) => {
               }}
               data-testid="EditResearchUpdate"
             >
-              {JSON.stringify({
-                hasValidationErrors,
-                values,
-                errors,
-                submitting,
-              })}
               <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
               <Flex
                 sx={{
@@ -222,10 +217,11 @@ export const ResearchUpdateForm = (props: IProps) => {
                               removeExistingImage={removeExistingImage}
                             />
                             <VideoUrlField />
-                            {/* <FilesFields
-                              files={formData?.files || []}
-                              existingFiles={formData?.existingFiles || []}
-                            /> */}
+                            <FilesFields
+                              files={initialValues?.files || []}
+                              deleteFile={removeExistingFile}
+                              showInvalidFileWarning={false}
+                            />
                           </Flex>
                         </Flex>
                       </Flex>

@@ -17,7 +17,6 @@ export const TagsField = ({ title }: IProps) => {
         name={name}
         id={name}
         component={TagsSelectFieldV2}
-        category="news"
         isEqual={COMPARISONS.tagsSupabase}
       />
     </FormFieldWrapper>

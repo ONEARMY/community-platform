@@ -4,7 +4,7 @@ import { listing } from 'src/pages/News/labels'
 import { NewsCreate } from 'src/pages/News/NewsCreate'
 import { Box } from 'theme-ui'
 
-export async function clientLoader() {
+export async function loader() {
   return null
 }
 

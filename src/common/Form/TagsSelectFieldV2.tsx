@@ -6,7 +6,6 @@ export const TagsSelectFieldV2 = ({ input, ...rest }) => (
     placeholder="Select tags (max 4)"
     isForm={true}
     onChange={(tags) => input.onChange(tags)}
-    category={rest.category}
     value={input.value}
     {...rest}
   />

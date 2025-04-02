@@ -5,9 +5,11 @@ import { ITEMS_PER_PAGE } from 'src/pages/News/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { discordServiceServer } from 'src/services/discordService.server'
 import { newsServiceServer } from 'src/services/newsService.server'
+import { storageServiceServer } from 'src/services/storageService.server'
+import { validateImage } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
-import { isDuplicateNewSlug, uploadImage, validateImage } from './utils'
+import { utilsServiceServer } from '../services/utilsService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
@@ -120,7 +122,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const slug = convertToSlug(data.title)
 
-    if (await isDuplicateNewSlug(slug, client, 'news')) {
+    if (await utilsServiceServer.isDuplicateNewSlug(slug, client, 'news')) {
       return Response.json(
         {},
         {
@@ -150,7 +152,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       .limit(1)
 
     if (profileRequest.error || !profileRequest.data?.at(0)) {
-      console.log(profileRequest.error)
+      console.error(profileRequest.error)
       return Response.json({}, { status: 400, statusText: 'User not found' })
     }
 
@@ -177,7 +179,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const news = News.fromDB(newsResult.data[0], [])
     notifyDiscord(news, profile, new URL(request.url).origin)
 
-    news.heroImage = await setUploadImage(
+    news.heroImage = await storageServiceServer.setUploadImage(
       client,
       news.id,
       uploadedHeroImageFile,
@@ -217,44 +219,4 @@ async function validateRequest(request: Request, user: User | null, data: any) {
   }
 
   return { valid: true }
-}
-
-export const setUploadImage = async (
-  client,
-  id,
-  uploadedImageFile,
-  existingImageFile?,
-) => {
-  if (!uploadedImageFile && !!existingImageFile) {
-    return existingImageFile
-  }
-
-  if (!uploadedImageFile) {
-    return await client
-      .from('news')
-      .update({ hero_image: null })
-      .eq('id', id)
-      .select()
-  }
-
-  const uploadedImage = await uploadImage(id, uploadedImageFile, client, 'news')
-  const image =
-    uploadedImage?.image && !uploadedImage.error ? uploadedImage.image : null
-
-  if (uploadedImage?.error) {
-    console.error(uploadedImage?.error.message)
-    return null
-  }
-
-  const updateResult = await client
-    .from('news')
-    .update({ hero_image: image })
-    .eq('id', id)
-    .select()
-
-  if (!updateResult.data) {
-    return null
-  }
-
-  return updateResult.data[0].image
 }

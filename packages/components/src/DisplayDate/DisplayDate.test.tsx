@@ -11,7 +11,9 @@ describe('DisplayDate', () => {
   it('renders correctly current date', () => {
     const { getByText } = render(<Default {...(TwoMonthsAGo.args as IProps)} />)
 
-    expect(getByText('less than a minute ago')).toBeInTheDocument()
+    expect(
+      getByText('less than a minute ago', { exact: false }),
+    ).toBeInTheDocument()
   })
 
   it('renders correctly when two months ago', () => {

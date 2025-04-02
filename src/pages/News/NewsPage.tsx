@@ -29,7 +29,7 @@ import {
 } from 'theme-ui'
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
-import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
+import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 
 import type { IUser, News } from 'oa-shared'
 
@@ -158,11 +158,11 @@ export const NewsPage = observer(({ news }: IProps) => {
             {news.title}
           </Heading>
 
-          <ContentAuthorTimestamp
+          <UserNameTag
             userName={news.author?.username || ''}
             countryCode={news.author?.country || ''}
-            created={news.createdAt}
-            modified={news.modifiedAt || undefined}
+            createdAt={news.createdAt}
+            modifiedAt={news.modifiedAt}
             action="Published"
           />
 

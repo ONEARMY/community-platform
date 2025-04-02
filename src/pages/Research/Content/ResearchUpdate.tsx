@@ -122,49 +122,43 @@ const ResearchUpdate = (props: IProps) => {
           }}
         >
           <Card variant="responsive">
-            <Flex sx={{ flexDirection: 'column', padding: [2, 3, 4] }}>
-              <Flex sx={{ flexDirection: ['column', 'row', 'row'] }}>
-                <Box sx={{ width: ['100%', '75%', '75%'] }}>
+            <Flex sx={{ flexDirection: 'column', padding: [2, 3, 4], gap: 2 }}>
+              <Flex
+                sx={{
+                  flexDirection: ['column', 'row', 'row'],
+                  gap: 2,
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Box>
                   {contributors.length > 0 && (
                     <Box sx={{ mb: 2 }} data-testid="collaborator/creator">
                       <Username user={contributors[0]} />
                     </Box>
                   )}
 
-                  <Heading as="h2" sx={{ mb: 2 }}>
-                    {title}
-                  </Heading>
+                  <Heading as="h2">{title}</Heading>
                 </Box>
 
                 <Flex
                   sx={{
-                    flexDirection: ['row', 'column', 'column'],
-                    width: ['100%', '25%', '25%'],
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-end',
+                    flexDirection: 'column',
+                    alignItems: ['flex-start', 'flex-end'],
+                    gap: 1,
                   }}
                 >
-                  <Flex sx={{ flexDirection: ['column'] }}>
-                    <Text
-                      variant="auxiliary"
-                      sx={{
-                        textAlign: ['left', 'right', 'right'],
-                      }}
-                    >
-                      created <DisplayDate date={_created} />
+                  <Text variant="auxiliary">
+                    <DisplayDate action="Created" createdAt={_created} />
+                  </Text>
+                  {_modified && (
+                    <Text variant="auxiliary">
+                      <DisplayDate
+                        createdAt={_created}
+                        modifiedAt={_modified}
+                      />
                     </Text>
+                  )}
 
-                    {_created !== _modified && (
-                      <Text
-                        variant="auxiliary"
-                        sx={{
-                          textAlign: ['left', 'right', 'right'],
-                        }}
-                      >
-                        edited <DisplayDate date={_modified} />
-                      </Text>
-                    )}
-                  </Flex>
                   {/* Show edit button for the creator of the research OR a super-admin */}
                   {isEditable && (
                     <Link to={'/research/' + slug + '/edit-update/' + _id}>

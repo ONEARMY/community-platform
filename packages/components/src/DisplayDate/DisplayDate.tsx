@@ -1,33 +1,32 @@
 import { format, formatDistanceToNow } from 'date-fns'
 import { Text } from 'theme-ui'
 
-type DateType = string | number | Date | null
+type DateType = string | number | Date
 
 export interface IProps {
-  date?: DateType
+  createdAt: DateType
+  action?: string
+  modifiedAt?: DateType | null
 }
 
-const formatDateTime = (date: DateType | undefined) => {
-  if (!date) {
-    return ''
-  }
-
+const formatDateTime = (date: DateType) => {
   return format(new Date(date), 'dd-MM-yyyy HH:mm')
 }
 
-const relativeDateFormat = (d: DateType | undefined): string => {
-  if (!d) {
-    return ''
-  }
-  return formatDistanceToNow(new Date(d), { addSuffix: true })
+const relativeDateFormat = (date: DateType): string => {
+  return formatDistanceToNow(new Date(date), { addSuffix: true })
 }
 
-export const DisplayDate = ({ date }: IProps) => {
-  if (!date) {
-    return <></>
-  }
-  const formattedDate = formatDateTime(date)
-  const relativeDate = relativeDateFormat(date)
+export const DisplayDate = (props: IProps) => {
+  const { createdAt, modifiedAt, action = 'Published' } = props
 
-  return <Text title={formattedDate}>{relativeDate}</Text>
+  const formattedDate = formatDateTime(modifiedAt || createdAt)
+  const relativeDate = relativeDateFormat(modifiedAt || createdAt)
+  const label = modifiedAt && createdAt !== modifiedAt ? 'Updated ' : action
+
+  return (
+    <Text title={formattedDate}>
+      {label} {relativeDate}
+    </Text>
+  )
 }

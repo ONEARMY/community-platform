@@ -64,7 +64,7 @@ export class DBCategory implements DBDocSB {
     return new DBCategory({
       id,
       created_at: new Date(createdAt),
-      modified_at: new Date(modifiedAt) || null,
+      modified_at: modifiedAt ? new Date(modifiedAt) : null,
       name,
       type,
     })
@@ -88,7 +88,7 @@ export class Category implements Doc {
     return new Category({
       id,
       createdAt: new Date(created_at),
-      modifiedAt: new Date(modified_at) || null,
+      modifiedAt: modified_at ? new Date(modified_at) : null,
       name,
       type,
     })
@@ -113,7 +113,7 @@ export class DBTag implements DBDocSB {
     return new DBTag({
       id,
       created_at: new Date(createdAt),
-      modified_at: new Date(modifiedAt) || null,
+      modified_at: modifiedAt ? new Date(modifiedAt) : null,
       name,
     })
   }
@@ -135,7 +135,7 @@ export class Tag implements Doc {
     return new Tag({
       id,
       createdAt: new Date(created_at),
-      modified_at: new Date(modified_at) || null,
+      modified_at: modified_at ? new Date(modified_at) : null,
       name,
     })
   }

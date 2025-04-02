@@ -9,7 +9,7 @@ export interface IProps {
   modifiedAt?: DateType | null
 }
 
-const formatDateTime = (date: DateType) => {
+const formatDateTime = (date: DateType): string => {
   return format(new Date(date), 'dd-MM-yyyy HH:mm')
 }
 

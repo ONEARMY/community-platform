@@ -1,2 +1,2 @@
-export { NewsBodyField } from './NewsBody.field'
-export { NewsImageField } from './NewsImage.field'
+export { NewsBodyField } from './NewsBodyField'
+export { NewsImageField } from './NewsImageField'

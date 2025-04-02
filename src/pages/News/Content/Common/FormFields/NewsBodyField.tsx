@@ -5,17 +5,16 @@ import { fields } from 'src/pages/News/labels'
 import { composeValidators, required } from 'src/utils/validators'
 
 export const NewsBodyField = () => {
-  const { placeholder, title } = fields.body
   const name = 'body'
 
   return (
-    <FormFieldWrapper htmlFor={name} text={title} required>
+    <FormFieldWrapper htmlFor={name} text={fields.body.title} required>
       <Field
         data-cy={`field-${name}`}
         component={FieldTextarea}
         id={name}
         name={name}
-        placeholder={placeholder}
+        placeholder={fields.body.placeholder}
         validate={composeValidators(required)}
         showCharacterCount
       />

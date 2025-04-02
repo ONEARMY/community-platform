@@ -22,7 +22,8 @@ interface IProps {
 }
 
 export const NewsImageField = (props: IProps) => {
-  const { existingHeroImage } = props
+  const { existingHeroImage, removeExistingImage } = props
+
   return (
     <FormFieldWrapper
       htmlFor="images"
@@ -59,7 +60,7 @@ export const NewsImageField = (props: IProps) => {
           >
             <ImageInputWrapper hasUploadedImg={true}>
               <ImageComponent src={existingHeroImage.publicUrl} />
-              <DeleteImage onClick={() => props.removeExistingImage()} />
+              <DeleteImage onClick={() => removeExistingImage()} />
             </ImageInputWrapper>
           </FieldContainer>
         </ImageInputFieldWrapper>

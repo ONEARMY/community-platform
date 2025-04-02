@@ -19,34 +19,32 @@ interface IProps {
 }
 
 export const NewsListItem = ({ news, query }: IProps) => {
-  const { body, id, heroImage } = news
-
   const url = `/news/${encodeURIComponent(news.slug)}`
   const searchWords = [query || '']
-  const bodySummary = body.length > 180 ? body.slice(0, 178) + '...' : body
+  const bodySummary =
+    news.body.length > 180 ? news.body.slice(0, 178) + '...' : news.body
 
   return (
     <Card
       as="li"
       data-cy="news-list-item"
-      data-id={id}
+      data-id={news.id}
       sx={{
-        position: 'relative',
-        overflow: 'hidden',
         borderRadius: 4,
+        overflow: 'hidden',
+        position: 'relative',
       }}
     >
       <Flex
         sx={{
-          flex: 1,
-          justifyContent: 'space-between',
           flexDirection: 'column',
+          justifyContent: 'space-between',
         }}
       >
-        {heroImage && (
+        {news.heroImage && (
           <InternalLink to={url}>
             <AspectRatio ratio={2 / 1}>
-              <Image src={heroImage.publicUrl} sx={{ width: '100%' }} />{' '}
+              <Image src={news.heroImage.publicUrl} sx={{ width: '100%' }} />{' '}
             </AspectRatio>
           </InternalLink>
         )}
@@ -59,8 +57,8 @@ export const NewsListItem = ({ news, query }: IProps) => {
         >
           <Flex sx={{ gap: 1, flexWrap: 'wrap' }}>
             <Heading
-              data-cy="news-list-item-title"
               as="h2"
+              data-cy="news-list-item-title"
               sx={{
                 color: 'black',
                 fontSize: [3, 3, 4],
@@ -78,45 +76,32 @@ export const NewsListItem = ({ news, query }: IProps) => {
             )}
           </Flex>
 
-          <Flex>
-            <UserNameTag
-              userName={news.author?.username || ''}
-              countryCode={news.author?.country || ''}
-              created={news.createdAt}
-            />
-          </Flex>
+          <UserNameTag
+            countryCode={news.author?.country || ''}
+            createdAt={news.createdAt}
+            modifiedAt={news.modifiedAt}
+            userName={news.author?.username || ''}
+          />
 
           <Text sx={{ paddingY: 2, fontSize: 2 }}>
             <Highlighter
               searchWords={searchWords}
-              textToHighlight={query ? body : bodySummary}
+              textToHighlight={query ? news.body : bodySummary}
             />
           </Text>
 
-          <Flex
-            sx={{
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
+          <Flex sx={{ justifyContent: 'space-between' }}>
             <InternalLink to={url}>
               <Button variant="subtle" sx={{ gap: 2 }}>
                 Read more <Icon glyph="arrow-forward" />
               </Button>
             </InternalLink>
 
-            <Flex sx={{ gap: [2, 8] }}>
-              <IconCountWithTooltip
-                count={news.usefulCount}
-                icon="star-active"
-                text={listing.usefulness}
-              />
-              <IconCountWithTooltip
-                count={(news as any).commentCount || 0}
-                icon="comment"
-                text={listing.totalComments}
-              />
-            </Flex>
+            <IconCountWithTooltip
+              count={(news as any).commentCount || 0}
+              icon="comment"
+              text={listing.totalComments}
+            />
           </Flex>
         </Flex>
       </Flex>

@@ -242,7 +242,8 @@ export const setUploadImage = async (
     uploadedImage?.image && !uploadedImage.error ? uploadedImage.image : null
 
   if (uploadedImage?.error) {
-    throw uploadedImage?.error.message
+    console.error(uploadedImage?.error.message)
+    return null
   }
 
   const updateResult = await client

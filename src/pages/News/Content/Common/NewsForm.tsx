@@ -111,23 +111,21 @@ export const NewsForm = (props: IProps) => {
             submitting={submitting}
             valid={valid}
           >
-            <>
-              <TitleField
-                placeholder={LABELS.fields.title.placeholder}
-                validate={composeValidators(
-                  required,
-                  minValue(NEWS_MIN_TITLE_LENGTH),
-                )}
-                title={LABELS.fields.title.title}
-              />
-              <NewsBodyField />
-              <NewsImageField
-                existingHeroImage={initialValues.existingHeroImage}
-                removeExistingImage={removeExistingImage}
-              />
-              <CategoryField getCategories={newsContentService.getCategories} />
-              <TagsField title={LABELS.fields.tags.title} />
-            </>
+            <TitleField
+              placeholder={LABELS.fields.title.placeholder}
+              validate={composeValidators(
+                required,
+                minValue(NEWS_MIN_TITLE_LENGTH),
+              )}
+              title={LABELS.fields.title.title}
+            />
+            <NewsBodyField />
+            <NewsImageField
+              existingHeroImage={initialValues.existingHeroImage}
+              removeExistingImage={removeExistingImage}
+            />
+            <CategoryField getCategories={newsContentService.getCategories} />
+            <TagsField title={LABELS.fields.tags.title} />
           </FormWrapper>
         )
       }}

@@ -1,21 +1,16 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { Link } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import {
   Category,
   ContentStatistics,
-  FollowButton,
   LinkifyText,
   TagList,
-  UsefulStatsButton,
 } from 'oa-components'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
-import { trackEvent } from 'src/common/Analytics'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
-import { subscribersService } from 'src/services/subscribersService'
-import { usefulService } from 'src/services/usefulService'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
 import {
   AspectRatio,
@@ -40,29 +35,6 @@ interface IProps {
 export const NewsPage = observer(({ news }: IProps) => {
   const { userStore } = useCommonStores().stores
   const activeUser = userStore.activeUser
-  const [voted, setVoted] = useState<boolean>(false)
-  const [subscribed, setSubscribed] = useState<boolean>(false)
-  const [usefulCount, setUsefulCount] = useState<number>(news.usefulCount)
-  const [subscribersCount, setSubscribersCount] = useState<number>(
-    news.subscriberCount,
-  )
-
-  useEffect(() => {
-    const getSubscribed = async () => {
-      const subscribed = await subscribersService.isSubscribed('news', news.id)
-      setSubscribed(subscribed)
-    }
-
-    const getVoted = async () => {
-      const voted = await usefulService.hasVoted('news', news.id)
-      setVoted(voted)
-    }
-
-    if (activeUser) {
-      getSubscribed()
-      getVoted()
-    }
-  }, [activeUser, news])
 
   const isEditable = useMemo(() => {
     return (
@@ -71,67 +43,10 @@ export const NewsPage = observer(({ news }: IProps) => {
     )
   }, [activeUser, news.author])
 
-  const onUsefulClick = async (vote: 'add' | 'delete') => {
-    if (!activeUser) {
-      return
-    }
-
-    if (vote === 'add') {
-      const response = await usefulService.add('news', news.id)
-
-      if (response.ok) {
-        setVoted(true)
-        setUsefulCount((prev) => prev + 1 || 1)
-      }
-    } else {
-      const response = await usefulService.remove('news', news.id)
-
-      if (response.ok) {
-        setVoted(false)
-        setUsefulCount((prev) => prev - 1 || 0)
-      }
-    }
-
-    trackEvent({
-      category: 'NewsPage',
-      action: vote === 'add' ? 'NewsUseful' : 'NewsUsefulRemoved',
-      label: news.slug,
-    })
-  }
-
-  const onFollowClick = async () => {
-    if (!activeUser?._id) {
-      return
-    }
-
-    if (!subscribed) {
-      const response = await subscribersService.add('news', news.id)
-
-      if (response.ok) {
-        setSubscribed(true)
-        setSubscribersCount((prev) => prev + 1 || 1)
-      }
-    } else {
-      const response = await subscribersService.remove('news', news.id)
-
-      if (response.ok) {
-        setSubscribed(false)
-        setSubscribersCount((prev) => prev - 1 || 0)
-      }
-    }
-    const action = subscribed ? 'Unsubscribed' : 'Subscribed'
-
-    trackEvent({
-      category: 'News',
-      action: action,
-      label: news.slug,
-    })
-  }
-
   return (
-    <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
+    <Box sx={{ width: '100%', maxWidth: '620px', alignSelf: 'center' }}>
       <Breadcrumbs content={news} variant="news" />
-      <Flex sx={{ flexDirection: 'column', gap: 4 }}>
+      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
         {news.heroImage && (
           <AspectRatio ratio={2 / 1}>
             <Image
@@ -149,6 +64,16 @@ export const NewsPage = observer(({ news }: IProps) => {
             padding: [2, 0],
           }}
         >
+          <Flex sx={{ alignItems: 'center', gap: 2 }}>
+            {news.category && <Category category={news.category} />}
+            {news.tags && (
+              <TagList
+                data-cy="news-tags"
+                tags={news.tags.map((t) => ({ label: t.name }))}
+              />
+            )}
+          </Flex>
+
           <Heading
             as="h1"
             data-cy="news-title"
@@ -166,15 +91,17 @@ export const NewsPage = observer(({ news }: IProps) => {
             action="Published"
           />
 
-          <Flex sx={{ alignItems: 'center', gap: 2 }}>
-            {news.category && <Category category={news.category} />}
-            {news.tags && (
-              <TagList
-                data-cy="news-tags"
-                tags={news.tags.map((t) => ({ label: t.name }))}
-              />
-            )}
-          </Flex>
+          {isEditable && (
+            <ClientOnly fallback={<></>}>
+              {() => (
+                <Link to={'/news/' + news.slug + '/edit'}>
+                  <Button type="button" variant="primary" data-cy="edit">
+                    Edit
+                  </Button>
+                </Link>
+              )}
+            </ClientOnly>
+          )}
 
           <Text
             variant="paragraph"
@@ -186,39 +113,11 @@ export const NewsPage = observer(({ news }: IProps) => {
           <Flex
             sx={{
               flexWrap: 'wrap',
-              gap: 3,
+              gap: 2,
               justifyContent: 'space-between',
               paddingY: 2,
-              alignSelf: 'stretch',
             }}
           >
-            <ClientOnly fallback={<></>}>
-              {() => (
-                <Flex sx={{ gap: 3 }}>
-                  <UsefulStatsButton
-                    votedUsefulCount={usefulCount}
-                    hasUserVotedUseful={voted}
-                    isLoggedIn={!!activeUser}
-                    onUsefulClick={() =>
-                      onUsefulClick(voted ? 'delete' : 'add')
-                    }
-                  />
-                  <FollowButton
-                    hasUserSubscribed={subscribed}
-                    isLoggedIn={!!activeUser}
-                    onFollowClick={onFollowClick}
-                  />
-                  {isEditable && (
-                    <Link to={'/news/' + news.slug + '/edit'}>
-                      <Button type="button" variant="primary" data-cy="edit">
-                        Edit
-                      </Button>
-                    </Link>
-                  )}
-                </Flex>
-              )}
-            </ClientOnly>
-
             <ContentStatistics
               statistics={[
                 {
@@ -230,19 +129,11 @@ export const NewsPage = observer(({ news }: IProps) => {
                   }),
                 },
                 {
-                  icon: 'thunderbolt-grey',
+                  icon: 'comment',
                   label: buildStatisticsLabel({
-                    stat: subscribersCount,
-                    statUnit: 'following',
-                    usePlural: false,
-                  }),
-                },
-                {
-                  icon: 'star',
-                  label: buildStatisticsLabel({
-                    stat: usefulCount,
-                    statUnit: 'useful',
-                    usePlural: false,
+                    stat: news.commentCount,
+                    statUnit: 'comment',
+                    usePlural: true,
                   }),
                 },
               ]}
@@ -259,7 +150,6 @@ export const NewsPage = observer(({ news }: IProps) => {
               background: 'softblue',
               borderTop: 0,
               padding: [3, 4],
-              marginTop: [0, 2, 4],
             }}
           >
             <CommentSectionSupabase

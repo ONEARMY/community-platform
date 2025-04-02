@@ -17,7 +17,7 @@ const GlobalSiteFooter = () => {
   }, [location?.pathname])
 
   return showFooter ? (
-    <SiteFooter siteName={env.VITE_SITE_NAME || 'Community Platform'} />
+    <SiteFooter siteName={env?.VITE_SITE_NAME || 'Community Platform'} />
   ) : null
 }
 

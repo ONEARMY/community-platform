@@ -8,6 +8,7 @@ import questionsJson from './questions.json'
 import type {
   categoriesChildInputs,
   categoriesScalars,
+  newsScalars,
   profilesChildInputs,
   profilesInputs,
   profilesScalars,
@@ -21,31 +22,9 @@ import type {
   useful_votesScalars,
 } from '@snaplet/seed'
 
-/**
- * This script assumes the following database configuration.
- *
- * Totals:
- * - 10 users, 25 questions, 50 comments
- *
- * Distributions:
- * | Username         | Q? | Comments | Categories | Tags | Subscribers | Notes
- * | ------------------------------------------------------------------ | --------------------------------
- * | jereerickson92   | 10 | 10       | 0          | 0    | 9           | Has commented in every question
- * | aldaplaskett48   | 5  | 10       | 0          | 0    | 9           | Has commented a single question
- * | sampathpini67    | 4  | 5        | 0          | 0    | 9           | Has commented two questions
- * | galenagiugovaz15 | 3  | 5        | 0          | 0    | 9           | Has commented in response (only)
- * | veniaminjewell33 | 2  | 5        | 0          | 0    | 9           | Has commented in response of response
- * | cortneybrown81   | 1  | 5        | 0          | 0    | 9           |
- * | melisavang56     | 0  | 5        | 0          | 0    | 9           |
- * | lianabegam24     | 0  | 5        | 0          | 0    | 9           |
- * | akromstarkova72  | 0  | 0        | 0          | 0    | 9           |
- * | mirzoblazkova19  | 0  | 0        | 0          | 0    | 9           |
- */
-
 const tenant_id = 'precious-plastic'
 
-//@ts-expect-error: Common properties (not default) + intellisense
-const _PROFILES_BASE: profilesScalars = {
+const _PROFILES_BASE: Partial<profilesScalars> = {
   tenant_id,
   type: ProfileTypeList.MEMBER,
   roles: [],
@@ -64,8 +43,7 @@ const _PROFILES_BASE: profilesScalars = {
   total_views: 0,
 }
 
-//@ts-expect-error: Common properties (not default) + intellisense
-const _QUESTIONS_BASE: questionsScalars = {
+const _QUESTIONS_BASE: Partial<questionsScalars> = {
   tenant_id,
   moderation: 'accepted',
   legacy_id: null,
@@ -75,35 +53,27 @@ const _QUESTIONS_BASE: questionsScalars = {
   tags: [],
 }
 
-//@ts-expect-error: Common properties (not default) + intellisense
-const _CATEGORIES_BASE: categoriesScalars = {
+const _CATEGORIES_BASE: Partial<categoriesScalars> = {
   tenant_id,
   legacy_id: null,
 }
 
-//@ts-expect-error: Common properties (not default) + intellisense
-const _TAGS_BASE: tagsScalars = {
+const _TAGS_BASE: Partial<tagsScalars> = {
   tenant_id,
   legacy_id: null,
 }
 
-//@ts-expect-error: Common properties (not default) + intellisense
-const _SUBSCRIBERS_BASE: subscribersScalars = {
+const _SUBSCRIBERS_BASE: Partial<subscribersScalars> = {
   tenant_id,
   content_type: 'questions',
 }
 
-//@ts-expect-error: Common properties (not default) + intellisense
-const _USEFUL_VOTES_BASE: useful_votesScalars = {
+const _USEFUL_VOTES_BASE: Partial<useful_votesScalars> = {
   tenant_id,
   content_type: 'questions',
 }
 
-/* prettier-ignore */
-// TBD: What are tags for?
-const seedTags = (): tagsChildInputs => [
-  { ..._TAGS_BASE, name: 'tag 1' },
-]
+const seedTags = (): tagsChildInputs => [{ ..._TAGS_BASE, name: 'tag 1' }]
 
 const seedUsers = () => [
   {
@@ -235,6 +205,7 @@ const seedCategories = (): categoriesChildInputs => [
   { ..._CATEGORIES_BASE, name: 'Questions', type: 'questions' },
   { ..._CATEGORIES_BASE, name: 'Research', type: 'research' },
   { ..._CATEGORIES_BASE, name: 'Projects', type: 'projects' },
+  { ..._CATEGORIES_BASE, name: 'Important Updates', type: 'news' },
 ]
 
 // const seedComments = (
@@ -256,7 +227,6 @@ const seedQuestions = (profile: profilesInputs): questionsChildInputs =>
     slug: convertToSlug(q.title),
     title: q.title,
     description: q.description,
-    // TBD: Do replies also count to comment length?
     comment_count: q.comments?.length || 0,
   })) || []
 
@@ -276,12 +246,36 @@ const seedUsefulVotes = (
     content_id: question.id,
   }))
 
+const base_news: Partial<newsScalars> = {
+  comment_count: 0,
+  hero_image: null,
+  moderation: null,
+  previous_slugs: [],
+  tenant_id,
+  total_views: 0,
+}
+
+const seedNews: Partial<newsScalars>[] = [
+  {
+    ...base_news,
+    title: 'First news article!',
+    body: "Yes! That's right we've got news now",
+    slug: 'first-news-article',
+  },
+]
+
 const main = async () => {
   const seed = await createSeedClient()
 
   await seed.$resetDatabase()
-  const { users } = await seed.users(seedUsers())
 
+  await seed.buckets([
+    {
+      name: tenant_id,
+      public: true,
+    },
+  ])
+  const { users } = await seed.users(seedUsers())
   const { profiles } = await seed.profiles(
     (seedProfiles() as Array<any>).map((profile: profilesInputs, index) => ({
       ...profile,
@@ -289,13 +283,9 @@ const main = async () => {
     })),
   )
 
-  await seed.tags(seedTags())
+  const { tags } = await seed.tags(seedTags())
+  const { categories } = await seed.categories(seedCategories())
 
-  await seed.categories(seedCategories())
-
-  /**
-   * This should be interpreted as "What this user has related to them?" - what are their questions, comments, subscribers, etc.".
-   */
   const questionsAcc: questionsScalars[] = []
 
   for (const profile of profiles) {
@@ -323,6 +313,15 @@ const main = async () => {
       connect: { profiles: [profile] },
     })
   }
+
+  await seed.news(
+    seedNews.map((item) => ({
+      ...item,
+      category: categories.find((cat) => cat.type === 'news')?.id,
+      created_by: profiles[0].id,
+      tags: [tags[0].id],
+    })),
+  )
 
   process.exit()
 }

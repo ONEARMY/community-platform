@@ -23,7 +23,7 @@ const TagsSelectV2 = (props: IProps) => {
 
   useEffect(() => {
     const initTags = async () => {
-      const tags = await tagsService.getTags()
+      const tags = await tagsService.getAllTags()
       if (!tags) {
         return
       }

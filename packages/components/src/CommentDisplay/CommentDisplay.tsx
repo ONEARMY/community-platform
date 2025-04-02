@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import { compareDesc } from 'date-fns'
 import { Box, Flex, Text } from 'theme-ui'
 
 import { Button } from '../Button/Button'
@@ -101,10 +100,10 @@ export const CommentDisplay = (props: IProps) => {
                   }}
                 />
                 <Text sx={{ fontSize: 1, color: 'darkGrey' }}>
-                  {comment.modifiedAt &&
-                    compareDesc(comment.createdAt, comment.modifiedAt) > 0 &&
-                    'Edited '}
-                  <DisplayDate date={comment.modifiedAt || comment.createdAt} />
+                  <DisplayDate
+                    createdAt={comment.createdAt}
+                    modifiedAt={comment.modifiedAt}
+                  />
                 </Text>
               </Flex>
 

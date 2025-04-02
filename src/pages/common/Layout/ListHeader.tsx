@@ -2,6 +2,7 @@ import { Flex, Heading } from 'theme-ui'
 
 interface IProps {
   actionComponents: React.ReactNode
+  actionComponentsMaxWidth?: string
   headingTitle: string
   categoryComponent: React.ReactNode
   filteringComponents: React.ReactNode
@@ -11,6 +12,7 @@ interface IProps {
 export const ListHeader = (props: IProps) => {
   const {
     actionComponents,
+    actionComponentsMaxWidth,
     headingTitle,
     showDrafts,
     categoryComponent,
@@ -47,6 +49,7 @@ export const ListHeader = (props: IProps) => {
           flexDirection: ['column', 'column', 'row'],
           gap: 2,
           paddingX: [2, 0],
+          maxWidth: actionComponentsMaxWidth || '100%',
         }}
       >
         {!showDrafts ? filteringComponents : <div></div>}

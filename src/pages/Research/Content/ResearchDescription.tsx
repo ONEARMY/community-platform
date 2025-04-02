@@ -17,11 +17,11 @@ import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
 import { TagList } from 'src/common/Tags/TagsList'
 import { logger } from 'src/logger'
+import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { buildStatisticsLabel } from 'src/utils/helpers'
 import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
-import { ContentAuthorTimestamp } from '../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import { researchStatusColour } from '../researchHelpers'
 
 import type { IResearch, IResearchDB, ITag, IUser } from 'oa-shared'
@@ -178,11 +178,11 @@ const ResearchDescription = ({
           </Flex>
           <Box sx={{ marginX: 2 }}>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
-              <ContentAuthorTimestamp
+              <UserNameTag
                 userName={research._createdBy}
                 countryCode={research.creatorCountry}
-                created={research._created}
-                modified={
+                createdAt={research._created}
+                modifiedAt={
                   research._contentModifiedTimestamp || research._modified
                 }
                 action="Started"

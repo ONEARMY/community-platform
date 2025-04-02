@@ -4,51 +4,52 @@ import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { DeleteImage } from 'src/common/Form/ImageInput/DeleteImage'
 import { ImageInputWrapper } from 'src/common/Form/ImageInput/ImageInputWrapper'
-import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
-import { fields } from 'src/pages/Question/labels'
+import { FormFieldWrapper } from 'src/pages/common/FormFields'
+import { fields } from 'src/pages/News/labels'
 import { COMPARISONS } from 'src/utils/comparisons'
-import { Image as ImageComponent } from 'theme-ui'
+import { Image as ImageComponent, Text } from 'theme-ui'
 
 import type { Image } from 'oa-shared'
 
 const ImageInputFieldWrapper = styled.div`
-  width: 150px;
-  height: 100px;
-  margin-right: 10px;
-  margin-bottom: 6px;
+  width: 900px;
+  height: 450px;
 `
 
 interface IProps {
-  inputsAvailable: number
-  existingImages: Image[] | null
-  removeExistingImage: (index: number) => void
+  existingHeroImage: Image | null
+  removeExistingImage: () => void
 }
 
-export const QuestionImagesField = (props: IProps) => {
+export const NewsImageField = (props: IProps) => {
+  const { existingHeroImage, removeExistingImage } = props
+
   return (
     <FormFieldWrapper
       htmlFor="images"
-      text={fields.images.title}
+      text={fields.heroImage.title}
       flexDirection="row"
       flexWrap="wrap"
+      required
     >
-      {[...Array(props.inputsAvailable)].map((_, i) => (
-        <ImageInputFieldWrapper
-          key={`image-upload-${i}`}
-          data-cy={`image-upload-${i}`}
-        >
+      <Text variant="quiet" sx={{ fontSize: 2 }}>
+        {fields.heroImage.description}
+      </Text>
+      {!existingHeroImage && (
+        <ImageInputFieldWrapper data-cy={'heroImage-upload'}>
           <Field
             hasText={false}
-            name={`images[${i}]`}
+            name={'heroImage'}
             component={ImageInputField}
             isEqual={COMPARISONS.image}
+            required
           />
         </ImageInputFieldWrapper>
-      ))}
-      {props.existingImages?.map((image, i) => (
+      )}
+      {existingHeroImage && (
         <ImageInputFieldWrapper
-          key={`existing-image-${i}`}
-          data-cy={`existing-image-${i}`}
+          key={`existingHeroImage`}
+          data-cy={`existingHeroImage`}
         >
           <FieldContainer
             style={{
@@ -58,12 +59,12 @@ export const QuestionImagesField = (props: IProps) => {
             }}
           >
             <ImageInputWrapper hasUploadedImg={true}>
-              <ImageComponent src={image.publicUrl} />
-              <DeleteImage onClick={() => props.removeExistingImage(i)} />
+              <ImageComponent src={existingHeroImage.publicUrl} />
+              <DeleteImage onClick={() => removeExistingImage()} />
             </ImageInputWrapper>
           </FieldContainer>
         </ImageInputFieldWrapper>
-      ))}
+      )}
     </FormFieldWrapper>
   )
 }

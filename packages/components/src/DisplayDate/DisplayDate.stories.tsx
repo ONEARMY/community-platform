@@ -14,10 +14,10 @@ export default {
 } as Meta<typeof DisplayDate>
 
 export const Default: StoryFn<typeof DisplayDate> = () => {
-  return <DisplayDate date={new Date()}></DisplayDate>
+  return <DisplayDate createdAt={new Date()}></DisplayDate>
 }
 
 export const TwoMonthsAGo: StoryFn<typeof DisplayDate> = () => {
   const twoMonthsAGo = subMonths(new Date(), 2)
-  return <DisplayDate date={twoMonthsAGo}></DisplayDate>
+  return <DisplayDate createdAt={twoMonthsAGo}></DisplayDate>
 }

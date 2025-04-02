@@ -1,13 +1,15 @@
 import { MOCK_DATA } from '../data'
 import { seedDatabase } from '../utils/TestUtils'
+import { seedComment, seedReply } from './seedDiscussions'
 
-export const seedCategories = async () => {
+export const seedCategories = async (type: string) => {
   const tenantId = Cypress.env('TENANT_ID')
 
   return await seedDatabase(
     {
       categories: MOCK_DATA.categoriesSupabase.map((category) => ({
         ...category,
+        type,
         tenant_id: tenantId,
       })),
     },
@@ -29,56 +31,26 @@ export const seedTags = async () => {
   )
 }
 
-export const seedQuestions = async (profileData) => {
+export const seedQuestions = async (profiles) => {
   const tenantId = Cypress.env('TENANT_ID')
   Cypress.log({
     displayName: 'Seeding database questions for tenant',
     message: tenantId,
   })
+  const { categories } = await seedCategories('questions')
 
-  const categoryData = await seedCategories()
-  const questionData = await seedDatabase(
+  const { questions } = await seedDatabase(
     {
       questions: MOCK_DATA.questions.map((question) => ({
         ...question,
         tenant_id: tenantId,
-        created_by: profileData.profiles.data[0].id,
-        category: categoryData.categories.data[0].id,
+        created_by: profiles.data[0].id,
+        category: categories.data[0].id,
       })),
     },
     tenantId,
   )
 
-  const commentData = await seedDatabase(
-    {
-      comments: [
-        {
-          tenant_id: tenantId,
-          created_at: new Date().toUTCString(),
-          comment: 'First comment',
-          created_by: profileData.profiles.data[0].id,
-          source_type: 'question',
-          source_id: questionData.questions.data[0].id,
-        },
-      ],
-    },
-    tenantId,
-  )
-
-  await seedDatabase(
-    {
-      comments: [
-        {
-          tenant_id: tenantId,
-          created_at: new Date().toUTCString(),
-          comment: 'First Reply',
-          created_by: profileData.profiles.data[0].id,
-          source_type: 'question',
-          source_id: questionData.questions.data[0].id,
-          parent_id: commentData.comments.data[0].id,
-        },
-      ],
-    },
-    tenantId,
-  )
+  const { comments } = await seedComment(profiles, questions)
+  await seedReply(profiles, comments, questions)
 }

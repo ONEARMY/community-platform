@@ -1,7 +1,6 @@
 import { useLoaderData } from '@remix-run/react'
 import { Question } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
-import { AuthRoute } from 'src/pages/common/AuthRoute'
 import { QuestionEdit } from 'src/pages/Question/QuestionEdit'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { questionServiceServer } from 'src/services/questionService.server'
@@ -25,13 +24,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const dbQuestion = result.data as unknown as DBQuestion
 
-  const images = dbQuestion.images
-    ? storageServiceServer.getImagesPublicUrls(
-        client,
-        dbQuestion.images,
-        IMAGE_SIZES.GALLERY,
-      )
-    : []
+  const images = storageServiceServer.getImagesPublicUrls(
+    client,
+    dbQuestion.images,
+    IMAGE_SIZES.GALLERY,
+  )
 
   const question = Question.fromDB(dbQuestion, [], images)
 
@@ -42,9 +39,5 @@ export default function Index() {
   const data = useLoaderData<typeof loader>()
   const question = data.question as Question
 
-  return (
-    <AuthRoute>
-      <QuestionEdit question={question} />
-    </AuthRoute>
-  )
+  return <QuestionEdit question={question} />
 }

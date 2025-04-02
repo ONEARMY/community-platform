@@ -1,26 +1,33 @@
 import { Author } from './author'
-import { DBDocSB, Doc } from './document'
 
 import type { DBAuthor } from './author'
-import type { ContentTypes } from './common'
+import type { ContentType } from './common'
+import type { DBDocSB, Doc } from './document'
 
-export class DBComment extends DBDocSB {
+export class DBComment implements DBDocSB {
+  readonly id: number
+  readonly created_at: Date
+  readonly modified_at: Date | null
+  readonly created_by: number | null
+  readonly deleted: boolean
+
   readonly profile?: DBAuthor
-  created_by: number | null
-  modified_at: string | null
-  comment: string
-  source_id: number | null
-  source_type: ContentTypes
-  source_id_legacy: string | null
-  parent_id: number | null
-  deleted: boolean | null
+  readonly comment: string
+  readonly source_id: number | null
+  readonly source_type: ContentType
+  readonly source_id_legacy: string | null
+  readonly parent_id: number | null
+
+  constructor(comment: DBComment) {
+    Object.assign(this, comment)
+  }
 
   static toDB(obj: Comment) {
     return new DBComment({
       id: obj.id,
       created_at: new Date(obj.createdAt),
       created_by: obj.createdBy?.id || null,
-      modified_at: obj.modifiedAt ? obj.modifiedAt.toUTCString() : null,
+      modified_at: obj.modifiedAt ? new Date(obj.modifiedAt) : null,
       comment: obj.comment,
       source_id: typeof obj.sourceId === 'number' ? obj.sourceId : null,
       source_id_legacy: typeof obj.sourceId === 'string' ? obj.sourceId : null,
@@ -31,16 +38,23 @@ export class DBComment extends DBDocSB {
   }
 }
 
-export class Comment extends Doc {
+export class Comment implements Doc {
+  id: number
+  createdAt: Date
   modifiedAt: Date | null
+  deleted: boolean
+
   createdBy: Author | null
   comment: string
   sourceId: number | string
-  sourceType: ContentTypes
+  sourceType: ContentType
   parentId: number | null
-  deleted: boolean | null
   highlighted?: boolean
   replies?: Reply[]
+
+  constructor(comment: Comment) {
+    Object.assign(this, comment)
+  }
 
   static fromDB(obj: DBComment, replies?: Reply[]) {
     return new Comment({

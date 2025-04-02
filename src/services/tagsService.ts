@@ -1,6 +1,6 @@
 import type { Tag } from 'oa-shared'
 
-const getTags = async () => {
+const getAllTags = async () => {
   try {
     const response = await fetch('/api/tags')
     return (await response.json()) as Tag[]
@@ -9,6 +9,7 @@ const getTags = async () => {
     return []
   }
 }
+
 export const tagsService = {
-  getTags,
+  getAllTags,
 }

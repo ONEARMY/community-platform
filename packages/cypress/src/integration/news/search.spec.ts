@@ -1,4 +1,4 @@
-describe('[How To]', () => {
+describe('[Library]', () => {
   beforeEach(() => {
     cy.visit('/news')
   })

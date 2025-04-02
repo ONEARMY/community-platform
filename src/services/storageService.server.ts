@@ -4,7 +4,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type { ContentType, DBImage } from 'oa-shared'
 import type { ImageSize } from 'src/config/imageTransforms'
 
-const getImagesPublicUrls = async (
+const getImagesPublicUrls = (
   client: SupabaseClient,
   images: DBImage[] | null,
   size?: ImageSize,
@@ -15,7 +15,7 @@ const getImagesPublicUrls = async (
 
   const imageList: Image[] = []
 
-  for await (const image of images) {
+  for (const image of images) {
     const response = client.storage
       .from(process.env.TENANT_ID as string)
       .getPublicUrl(image.path, size ? { transform: size } : undefined)

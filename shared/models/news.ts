@@ -53,7 +53,7 @@ export class News implements ContentDoc {
     Object.assign(this, obj)
   }
 
-  static fromDB(obj: DBNews, tags: Tag[], heroImage?: Image) {
+  static fromDB(obj: DBNews, tags: Tag[], heroImage?: Image | null) {
     return new News({
       author: obj.author ? Author.fromDB(obj.author) : null,
       body: obj.body,

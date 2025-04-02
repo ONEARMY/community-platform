@@ -29,7 +29,7 @@ describe('[Question]', () => {
       cy.get('[data-cy=complete-profile-question]').should('be.visible')
       cy.visit('/questions/create')
       cy.get('[data-cy=incomplete-profile-message]').should('be.visible')
-      cy.get('[data-cy=question-create-title]').should('not.exist')
+      cy.get('[data-cy=field-title]').should('not.exist')
 
       cy.completeUserProfile(user.username)
 
@@ -38,7 +38,7 @@ describe('[Question]', () => {
       cy.get('[data-cy=complete-profile-question]').should('not.exist')
       cy.get('[data-cy=create-question]').click()
 
-      cy.get('[data-cy=question-create-title]', { timeout: 20000 })
+      cy.get('[data-cy=field-title]', { timeout: 20000 })
 
       // cy.step('Add images')
       // cy.get('[data-cy=image-upload-0]')

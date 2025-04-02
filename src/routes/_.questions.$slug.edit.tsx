@@ -24,13 +24,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const dbQuestion = result.data as unknown as DBQuestion
 
-  const images = dbQuestion.images
-    ? await storageServiceServer.getImagesPublicUrls(
-        client,
-        dbQuestion.images,
-        IMAGE_SIZES.GALLERY,
-      )
-    : []
+  const images = storageServiceServer.getImagesPublicUrls(
+    client,
+    dbQuestion.images,
+    IMAGE_SIZES.GALLERY,
+  )
 
   const question = Question.fromDB(dbQuestion, [], images)
 

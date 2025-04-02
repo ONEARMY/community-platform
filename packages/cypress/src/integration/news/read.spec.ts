@@ -31,8 +31,8 @@ describe('[News]', () => {
       cy.visit(`/news/${slug}`)
 
       cy.step('All metadata visible')
-      cy.contains(/\d+ following/)
-      cy.contains(/\d+ useful/)
+      cy.contains(/\d+ view/)
+      cy.contains(/\d+ comment/)
 
       cy.step('[Populates title, SEO and social tags]')
       cy.title().should('eq', pageTitle)
@@ -72,9 +72,7 @@ describe('[News]', () => {
         .should('have.attr', 'href')
         .and('equal', `/news`)
 
-      cy.get('[data-cy=breadcrumbsItem]').eq(1).should('contain', 'Machines')
-
-      cy.get('[data-cy=breadcrumbsItem]').eq(2).should('contain', title)
+      cy.get('[data-cy=breadcrumbsItem]').eq(1).should('contain', title)
 
       cy.step('Logged in users can complete actions')
       cy.signIn('howto_creator@test.com', 'test1234')

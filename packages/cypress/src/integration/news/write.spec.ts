@@ -24,7 +24,7 @@ describe('[News]', () => {
       cy.get('[data-cy=complete-profile-news]').should('be.visible')
       cy.visit('/news/create')
       cy.get('[data-cy=incomplete-profile-message]').should('be.visible')
-      cy.get('[data-cy=news-create-title]').should('not.exist')
+      cy.get('[data-cy=field-title]').should('not.exist')
 
       cy.completeUserProfile(user.username)
 
@@ -33,7 +33,7 @@ describe('[News]', () => {
       cy.get('[data-cy=complete-profile-news]').should('not.exist')
       cy.get('[data-cy=create-news]').click()
 
-      cy.get('[data-cy=news-create-title]', { timeout: 20000 })
+      cy.get('[data-cy=field-title]', { timeout: 20000 })
 
       // cy.step('Add images')
       // cy.get('[data-cy=image-upload-0]')

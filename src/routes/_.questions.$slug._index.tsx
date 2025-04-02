@@ -40,13 +40,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       dbQuestion.tags,
     )
 
-  const images = dbQuestion.images
-    ? await storageServiceServer.getImagesPublicUrls(
-        client,
-        dbQuestion.images,
-        IMAGE_SIZES.GALLERY,
-      )
-    : []
+  const images = storageServiceServer.getImagesPublicUrls(
+    client,
+    dbQuestion.images,
+    IMAGE_SIZES.GALLERY,
+  )
 
   const question = Question.fromDB(dbQuestion, tags, images)
   question.usefulCount = usefulVotes.count || 0

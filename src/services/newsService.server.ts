@@ -34,14 +34,18 @@ const getHeroImage = async (
   client: SupabaseClient,
   dbImage: DBImage | null,
 ) => {
-  const images = dbImage
-    ? await storageServiceServer.getImagesPublicUrls(client, [dbImage], {
-        width: 600,
-        height: 300,
-      })
-    : []
+  if (!dbImage) {
+    return null
+  }
 
-  return images[0] || null
+  const size = { width: 620, height: 310 }
+  const images = storageServiceServer.getImagesPublicUrls(
+    client,
+    [dbImage],
+    size,
+  )
+
+  return images[0]
 }
 
 export const newsServiceServer = {

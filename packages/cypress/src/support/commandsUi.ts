@@ -236,7 +236,7 @@ Cypress.Commands.add(
 
     cy.get('[data-cy=edit-comment]').should('not.exist')
     cy.get(`[data-cy=Own${element}]`).contains(updatedNewComment)
-    cy.get(`[data-cy=Own${element}]`).contains('Edited less than a minute ago')
+    cy.get(`[data-cy=Own${element}]`).contains('Updated less than a minute ago')
     cy.get(`[data-cy=Own${element}]`).contains(oldComment).should('not.exist')
   },
 )

@@ -17,12 +17,19 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
         marginBottom: 2,
         padding: 0,
         alignItems: 'center',
+        width: '100%',
       }}
     >
       {steps.map((step, index) => {
         const isLast = index === steps.length - 1
         return (
-          <Flex key={index} sx={{ alignItems: 'center' }}>
+          <Flex
+            key={index}
+            sx={{
+              alignItems: 'center',
+              ...(isLast && { flex: '1', minWidth: 0 }),
+            }}
+          >
             <BreadcrumbItem text={step.text} link={step.link} isLast={isLast} />
             {!isLast && (
               <Icon

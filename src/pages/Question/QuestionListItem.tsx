@@ -95,10 +95,11 @@ export const QuestionListItem = ({ question, query }: IProps) => {
 
           <Flex>
             <UserNameTag
+              action="Asked"
               userName={question.author?.username || ''}
               countryCode={question.author?.country || ''}
-              created={question.createdAt}
-              action="Asked"
+              createdAt={question.createdAt}
+              modifiedAt={question.modifiedAt}
             />
           </Flex>
         </Flex>

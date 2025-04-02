@@ -88,12 +88,13 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const questionResult = await client
       .from('questions')
       .update({
-        title: data.title,
-        description: data.description,
-        slug,
         category: data.category,
-        tags: data.tags,
+        description: data.description,
         images,
+        title: data.title,
+        slug,
+        tags: data.tags,
+        modified_at: new Date(),
       })
       .eq('id', params.id)
       .select()

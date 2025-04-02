@@ -18,6 +18,7 @@ import { trackEvent } from 'src/common/Analytics'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { TagList } from 'src/common/Tags/TagsList'
 import { logger } from 'src/logger'
+import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import {
   buildStatisticsLabel,
@@ -27,7 +28,6 @@ import {
 } from 'src/utils/helpers'
 import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui'
 
-import { ContentAuthorTimestamp } from '../../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import { LibraryDownloads } from './LibraryDownloads'
 
 import type { ILibrary, ITag, IUser } from 'oa-shared'
@@ -198,11 +198,11 @@ export const LibraryDescription = (props: IProps) => {
           <Box>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-                <ContentAuthorTimestamp
+                <UserNameTag
                   userName={_createdBy}
                   countryCode={creatorCountry}
-                  created={_created}
-                  modified={_contentModifiedTimestamp || _modified}
+                  createdAt={_created}
+                  modifiedAt={_contentModifiedTimestamp || _modified}
                   action="Published"
                 />
                 {category && (

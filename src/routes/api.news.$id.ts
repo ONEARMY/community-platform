@@ -61,11 +61,12 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const newsResult = await client
       .from('news')
       .update({
-        title: data.title,
         body: data.body,
-        slug,
         category: data.category,
+        modified_at: new Date(),
+        slug,
         tags: data.tags,
+        title: data.title,
       })
       .eq('id', params.id)
       .select()

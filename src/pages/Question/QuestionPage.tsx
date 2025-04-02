@@ -22,7 +22,7 @@ import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
-import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
+import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 
 import type { IUser, Question } from 'oa-shared'
 
@@ -158,11 +158,11 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
             </ClientOnly>
           </Flex>
 
-          <ContentAuthorTimestamp
+          <UserNameTag
             userName={question.author?.username || ''}
             countryCode={question.author?.country || ''}
-            created={question.createdAt}
-            modified={question.modifiedAt || undefined}
+            createdAt={question.createdAt}
+            modifiedAt={question.modifiedAt}
             action="Asked"
           />
 

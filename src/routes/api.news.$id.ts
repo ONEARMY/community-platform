@@ -1,10 +1,9 @@
 import { News } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { hasAdminRightsSupabase } from 'src/utils/helpers'
+import { storageServiceServer } from 'src/services/storageService.server'
+import { utilsServiceServer } from 'src/services/utilsService.server'
+import { hasAdminRightsSupabase, validateImage } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
-
-import { setUploadImage } from './api.news'
-import { isDuplicateExistingSlug, validateImage } from './utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
@@ -76,7 +75,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     }
 
     const news = News.fromDB(newsResult.data[0], [])
-    news.heroImage = await setUploadImage(
+    news.heroImage = await storageServiceServer.setUploadImage(
       client,
       news.id,
       newHeroImage,
@@ -120,7 +119,14 @@ async function validateRequest(
   const slug = convertToSlug(data.title)
   const newsId = Number(params.id!)
 
-  if (await isDuplicateExistingSlug(slug, newsId, client, 'news')) {
+  if (
+    await utilsServiceServer.isDuplicateExistingSlug(
+      slug,
+      newsId,
+      client,
+      'news',
+    )
+  ) {
     return {
       status: 409,
       statusText: 'This news already exists',

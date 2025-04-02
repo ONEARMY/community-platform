@@ -3,6 +3,8 @@ import { IModerationStatus, UserRole } from 'oa-shared'
 import { getConfigurationOption, NO_MESSAGING } from 'src/config/config'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 
+import { SUPPORTED_IMAGE_EXTENSIONS } from './storage'
+
 import type { DBDoc, DBProfile, IMapPin, IModerable, IUser } from 'oa-shared'
 
 const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi
@@ -247,4 +249,27 @@ export const buildStatisticsLabel = ({
   }
 
   return `${typeof stat === 'number' ? stat : 0} ${statUnit}s`
+}
+
+export function validateImage(image: File | null) {
+  const error =
+    image?.type && !SUPPORTED_IMAGE_EXTENSIONS.includes(image.type)
+      ? new Error(`Unsupported image extension: ${image.type}`)
+      : null
+  const valid: boolean = !error
+
+  return { valid, error }
+}
+
+export function validateImages(images: File[]) {
+  const errors: Error[] = []
+  for (const image of images) {
+    const { error } = validateImage(image)
+    if (error) {
+      errors.push(error)
+    }
+    continue
+  }
+
+  return { valid: errors.length === 0, errors }
 }

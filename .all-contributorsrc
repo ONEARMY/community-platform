@@ -961,6 +961,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "NickTheWilder",
+      "name": "Nick Wilder",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38483425?v=4",
+      "profile": "https://nickthewilder.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

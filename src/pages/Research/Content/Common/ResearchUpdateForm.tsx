@@ -74,12 +74,6 @@ export const ResearchUpdateForm = (props: IProps) => {
   ) => {
     setShowSubmitModal(true)
 
-    // if (formData.fileLink && formData.files && formData.files.length > 0) {
-    //   return setInvalidFileWarning(true)
-    // }
-
-    // setInvalidFileWarning(false)
-
     try {
       await researchService.upsertUpdate(research.id, id, formData, isDraft)
     } catch (err) {
@@ -112,12 +106,12 @@ export const ResearchUpdateForm = (props: IProps) => {
     })
   }
 
-  const removeExistingFile = (index: number) => {
+  const removeExistingFile = (id: string) => {
     setInitialValues((prevState: ResearchUpdateFormData) => {
       return {
         ...prevState,
         existingFiles:
-          prevState.existingFiles?.filter((_, i) => i !== index) ?? null,
+          prevState.existingFiles?.filter((file) => file.id !== id) ?? null,
       }
     })
   }
@@ -180,7 +174,6 @@ export const ResearchUpdateForm = (props: IProps) => {
                   onSubmit={handleSubmit}
                   style={{ width: '100%' }}
                 >
-                  {/* Update Info */}
                   <Flex sx={{ flexDirection: 'column' }}>
                     <Card sx={{ bg: 'softblue' }}>
                       <Flex sx={{ px: 3, py: 2, alignItems: 'center' }}>
@@ -218,9 +211,8 @@ export const ResearchUpdateForm = (props: IProps) => {
                             />
                             <VideoUrlField />
                             <FilesFields
-                              files={initialValues?.files || []}
+                              files={initialValues?.existingFiles || []}
                               deleteFile={removeExistingFile}
-                              showInvalidFileWarning={false}
                             />
                           </Flex>
                         </Flex>

@@ -34,8 +34,6 @@ const FileDetails = (props: IPropFileDetails) => {
   return (
     <>
       <Flex
-        p={2}
-        mb={1}
         sx={{
           borderRadius: 1,
           border: '2px solid black',
@@ -46,6 +44,8 @@ const FileDetails = (props: IPropFileDetails) => {
           flexDirection: 'row',
           width: '300px',
           cursor: 'pointer',
+          p: 2,
+          mb: 1,
         }}
         onClick={() => redirectToSignIn && redirectToSignIn()}
         data-tooltip-id="login-download"
@@ -59,8 +59,8 @@ const FileDetails = (props: IPropFileDetails) => {
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
             overflow: 'hidden',
+            mr: 3,
           }}
-          mr={3}
         >
           {file.name}
         </Text>
@@ -92,11 +92,10 @@ export const DownloadStaticFile = (props: IProps) => {
     <>
       {forDownload && (
         <ExternalLink
-          m={1}
           onClick={() => handleClick && handleClick()}
           href={file.downloadUrl}
           download={file.name}
-          style={{ width: '300px', marginLeft: 0 }}
+          sx={{ width: '300px', ml: 0, mr: 1 }}
         >
           <FileDetails file={file} glyph="download-cloud" size={size} />
         </ExternalLink>

@@ -98,7 +98,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const researchUpdate = ResearchUpdate.fromDB(updateResult.data[0], [])
 
-    return Response.json({ research: researchUpdate }, { headers, status: 201 })
+    return Response.json({ researchUpdate }, { headers, status: 201 })
   } catch (error) {
     console.log(error)
     return Response.json(

@@ -133,9 +133,9 @@ export type ResearchFormData = {
 export type ResearchUpdateFormData = {
   title: string
   description: string
-  images?: IConvertedFileMeta[]
+  images?: File[]
   existingImages: Media[] | null
-  files?: IConvertedFileMeta[]
+  files?: File[]
   existingFiles?: Media[] | null
   fileLink?: string
   videoUrl?: string

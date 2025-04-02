@@ -128,16 +128,30 @@ const upsertUpdate = async (
   const data = new FormData()
   data.append('title', update.title)
   data.append('description', update.description)
+  data.append('fileLink', update.fileLink || '')
+  data.append('videoUrl', update.videoUrl || '')
 
   if (update.images && update.images.length > 0) {
     for (const image of update.images) {
-      data.append('images', image.photoData, image.name)
+      data.append('images', image, image.name)
     }
   }
 
   if (update.existingImages && update.existingImages.length > 0) {
     for (const image of update.existingImages) {
       data.append('existingImages', image.id)
+    }
+  }
+
+  if (update.files && update.files.length > 0) {
+    for (const file of update.files) {
+      data.append('files', file, file.name)
+    }
+  }
+
+  if (update.existingFiles && update.existingFiles.length > 0) {
+    for (const file of update.existingFiles) {
+      data.append('existingFiles', file.id)
     }
   }
 

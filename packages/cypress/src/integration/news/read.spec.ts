@@ -9,12 +9,12 @@ describe('[News]', () => {
       cy.step('Has expected page title')
       cy.title().should('include', `News`)
 
-      cy.step('News display')
-
+      cy.step('News displays expected fields')
       cy.get('[data-cy=news-list-item]')
         .first()
         .within(() => {
           cy.get('[data-cy=news-list-item-title]')
+          cy.get('[data-cy=news-list-item-summary]')
           cy.get('[data-cy=category]')
           cy.get('[data-cy=Username]')
         })
@@ -62,7 +62,11 @@ describe('[News]', () => {
         body,
       )
       cy.step('Links in description are clickable')
-      cy.contains('a', 'https://www.onearmy.earth/')
+      cy.contains('a', 'OneArmy').should(
+        'have.attr',
+        'href',
+        'https://www.onearmy.earth/',
+      )
 
       cy.step('Breadcrumbs work')
       cy.get('[data-cy=breadcrumbsItem]').first().should('contain', 'News')
@@ -74,9 +78,9 @@ describe('[News]', () => {
 
       cy.get('[data-cy=breadcrumbsItem]').eq(1).should('contain', title)
 
-      cy.step('Logged in users can complete actions')
-      cy.signIn('howto_creator@test.com', 'test1234')
-      cy.visit(`/news/${slug}`) // Page doesn't reload after login
+      // cy.step('Logged in users can complete actions')
+      // cy.signIn('howto_creator@test.com', 'test1234')
+      // cy.visit(`/news/${slug}`) // Page doesn't reload after login
 
       // cy.get('[data-cy=follow-button]').click()
       // cy.contains(`1 following`)

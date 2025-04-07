@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import { useNavigate } from '@remix-run/react'
+import { setIn } from 'final-form'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { logger } from 'src/logger'
@@ -14,7 +15,7 @@ import { composeValidators, minValue, required } from 'src/utils/validators'
 
 import { NEWS_MIN_TITLE_LENGTH } from '../../constants'
 import { newsContentService } from '../../newsContent.service'
-import { NewsBodyField, NewsImageField } from './FormFields'
+import { NewsBodyField, NewsImageField, NewsSummaryField } from './FormFields'
 
 import type { News, NewsFormData } from 'oa-shared'
 import type { MainFormAction } from 'src/common/Form/types'
@@ -33,6 +34,7 @@ export const NewsForm = (props: IProps) => {
     category: null,
     existingHeroImage: null,
     heroImage: null,
+    summary: null,
     tags: [],
     title: '',
   })
@@ -45,7 +47,6 @@ export const NewsForm = (props: IProps) => {
     }
 
     setInitialValues({
-      title: news.title,
       body: news.body,
       category: news.category
         ? {
@@ -55,7 +56,9 @@ export const NewsForm = (props: IProps) => {
         : null,
       existingHeroImage: news.heroImage,
       heroImage: null,
+      summary: news.summary,
       tags: news.tagIds,
+      title: news.title,
     })
   }, [news])
 
@@ -64,12 +67,13 @@ export const NewsForm = (props: IProps) => {
 
     try {
       const result = await newsService.upsert(id, {
-        title: formValues.title!,
         body: formValues.body!,
-        tags: formValues.tags,
         category: formValues.category || null,
         heroImage: formValues.heroImage || null,
         existingHeroImage: initialValues.existingHeroImage || null,
+        summary: formValues.summary || null,
+        tags: formValues.tags,
+        title: formValues.title!,
       })
 
       if (result) {
@@ -98,6 +102,17 @@ export const NewsForm = (props: IProps) => {
       data-testid={props['data-testid']}
       onSubmit={onSubmit}
       initialValues={initialValues}
+      validate={(values) => {
+        let errors = {}
+        if (!values.body?.length) {
+          errors = setIn(
+            errors,
+            'body',
+            'Body field required. Gotta have something to say...',
+          )
+        }
+        return errors
+      }}
       render={({ submitting, handleSubmit, valid }) => {
         return (
           <FormWrapper
@@ -119,7 +134,8 @@ export const NewsForm = (props: IProps) => {
               )}
               title={LABELS.fields.title.title}
             />
-            <NewsBodyField />
+            <NewsSummaryField />
+            <NewsBodyField diffMarkdown={initialValues.body} />
             <NewsImageField
               existingHeroImage={initialValues.existingHeroImage}
               removeExistingImage={removeExistingImage}

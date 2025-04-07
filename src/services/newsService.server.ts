@@ -16,6 +16,7 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
        body,
        moderation,
        slug,
+       summary,
        category:category(id,name),
        tags,
        title,

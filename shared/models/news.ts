@@ -22,6 +22,7 @@ export class DBNews implements DBContentDoc {
   readonly total_views?: number
   readonly previous_slugs: string[]
   readonly slug: string
+  readonly summary: string | null
   readonly tags: number[]
   readonly useful_count?: number
 
@@ -41,6 +42,7 @@ export class News implements ContentDoc {
   previousSlugs: string[]
   slug: string
   subscriberCount: number
+  summary: string | null
   tags: Tag[]
   tagIds?: number[]
   totalViews: number
@@ -67,6 +69,7 @@ export class News implements ContentDoc {
       previousSlugs: obj.previous_slugs,
       slug: obj.slug,
       subscriberCount: obj.subscriber_count || 0,
+      summary: obj.summary || null,
       tagIds: obj.tags,
       tags,
       title: obj.title,
@@ -80,6 +83,7 @@ export type NewsFormData = {
   title: string
   body: string
   category: SelectValue | null
+  summary: string | null
   tags?: number[]
   heroImage: IConvertedFileMeta | null
   existingHeroImage: Image | null

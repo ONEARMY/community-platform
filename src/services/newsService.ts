@@ -3,10 +3,14 @@ import { News } from 'oa-shared'
 import type { DBNews, NewsFormData } from 'oa-shared'
 
 const upsert = async (id: number | null, form: NewsFormData) => {
-  const { category, tags, title } = form
+  const { category, summary, tags, title } = form
   const body = new FormData()
   body.append('title', title)
   body.append('body', form.body)
+
+  if (summary) {
+    body.append('summary', summary)
+  }
 
   if (tags && tags.length > 0) {
     for (const tag of tags) {

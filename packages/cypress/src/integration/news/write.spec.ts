@@ -3,6 +3,7 @@ import { generateNewUserDetails } from '../../utils/TestUtils'
 describe('[News]', () => {
   describe('[Create a news item]', () => {
     const initialTitle = 'Amazing new thing'
+    const initialSummary = 'The tip of the most top new thing'
     const initialExpectedSlug = 'amazing-new-thing'
     const initialNewsBody =
       "We've done something so fantastic you wouldn't believe. But you can buy it soon."
@@ -10,6 +11,7 @@ describe('[News]', () => {
     const tag1 = 'product'
     const tag2 = 'workshop'
     const updatedTitle = 'Still an amazing thing'
+    const updatedSummary = 'The very top'
     const updatedExpectedSlug = 'still-an-amazing-thing'
     const updatedNewsBody = `${initialNewsBody} PLUS sparkles!`
 
@@ -43,20 +45,22 @@ describe('[News]', () => {
       //   .find(':file')
       //   .attachFile('images/howto-step-pic2.jpg')
 
-      cy.step('Add title field')
+      cy.step('Add fields')
       cy.get('[data-cy=field-title]')
         .clear()
         .type(initialTitle)
         .blur({ force: true })
 
-      cy.step('Add body')
+      cy.get('[data-cy=field-summary]')
+        .clear()
+        .type(initialSummary)
+        .blur({ force: true })
+
       cy.get('[data-cy=field-body]').type(initialNewsBody, {
         delay: 0,
       })
-      cy.step('Add category')
       cy.selectTag(category, '[data-cy=category-select]')
 
-      cy.step('Add tags')
       cy.selectTag(tag1, '[data-cy="tag-select"]')
       cy.selectTag(tag2, '[data-cy="tag-select"]')
 
@@ -66,7 +70,10 @@ describe('[News]', () => {
         .url()
         .should('include', `/news/${initialExpectedSlug}`)
 
-      cy.step('All news fields visible')
+      cy.step('All news fields shown')
+      cy.visit('/news')
+      cy.get('[data-cy=news-list-item]').first().contains(initialSummary)
+      cy.visit(`/news/${initialExpectedSlug}`)
       cy.contains(initialTitle)
       cy.contains(initialNewsBody)
       cy.contains(category)
@@ -74,13 +81,15 @@ describe('[News]', () => {
       cy.contains(tag2)
       // contains images
 
-      cy.step('Edit news')
+      cy.step('Edit fields')
       cy.get('[data-cy=edit]')
         .click()
         .url()
         .should('include', `/news/${initialExpectedSlug}/edit`)
 
-      cy.step('Edit body')
+      cy.get('[data-cy=field-summary]')
+        .clear()
+        .type(updatedSummary, { delay: 0 })
       cy.get('[data-cy=field-body]').clear().type(updatedNewsBody, { delay: 0 })
 
       // cy.step('Update images by removing one')
@@ -94,6 +103,9 @@ describe('[News]', () => {
         .url()
         .should('include', `/news/${initialExpectedSlug}`)
       cy.contains(updatedNewsBody)
+
+      cy.visit('/news')
+      cy.get('[data-cy=news-list-item]').first().contains(updatedSummary)
 
       cy.step('Updating the title changes the slug')
       cy.get('[data-cy=edit]').click()

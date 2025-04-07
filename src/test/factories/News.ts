@@ -3,14 +3,15 @@ import { faker } from '@faker-js/faker'
 import type { News } from 'oa-shared'
 
 export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
-  id: faker.number.int(),
+  body: faker.lorem.paragraph(),
   createdAt: faker.date.past(),
   deleted: faker.datatype.boolean(),
+  id: faker.number.int(),
   modifiedAt: faker.date.past(),
-  title: faker.lorem.sentence(),
-  body: faker.lorem.paragraph(),
-  slug: faker.lorem.slug(),
   previousSlugs: [],
+  summary: null,
+  slug: faker.lorem.slug(),
+  title: faker.lorem.sentence(),
   tags: [
     {
       createdAt: new Date(),

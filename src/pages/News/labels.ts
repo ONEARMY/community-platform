@@ -22,6 +22,11 @@ export const fields: ILabels = {
       'Write and structure the body of your article. Markdown is also supported.',
     title: 'Body',
   },
+  summary: {
+    title: 'Summary',
+    description: 'What will show on the main page',
+    placeholder: '180 characters max',
+  },
   tags: {
     title: 'Select tags',
   },

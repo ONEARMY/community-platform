@@ -259,8 +259,9 @@ const seedNews: Partial<newsScalars>[] = [
   {
     ...base_news,
     title: 'First news article!',
-    body: "Yes! That's right we've got news now",
+    body: "Yes! That's right we've got news now. # And.. ",
     slug: 'first-news-article',
+    summary: 'The first',
   },
 ]
 

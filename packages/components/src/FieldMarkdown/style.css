@@ -1,0 +1,11 @@
+.mdxeditor {
+  border-radius: 8px;
+  border: 2px solid #f0f0f3;
+}
+
+
+.mdxeditor { 
+  &.mdxeditor-error {
+    border: 2px solid red;
+  }
+}

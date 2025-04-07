@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 import {
   Category,
   ContentStatistics,
-  LinkifyText,
+  DisplayMarkdown,
   TagList,
 } from 'oa-components'
 // eslint-disable-next-line import/no-unresolved
@@ -12,16 +12,7 @@ import { ClientOnly } from 'remix-utils/client-only'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
-import {
-  AspectRatio,
-  Box,
-  Button,
-  Card,
-  Flex,
-  Heading,
-  Image,
-  Text,
-} from 'theme-ui'
+import { AspectRatio, Box, Button, Card, Flex, Heading, Image } from 'theme-ui'
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
@@ -103,18 +94,15 @@ export const NewsPage = observer(({ news }: IProps) => {
             </ClientOnly>
           )}
 
-          <Text
-            variant="paragraph"
-            data-cy="news-description"
-            sx={{ whiteSpace: 'pre-line', alignSelf: 'stretch' }}
-          >
-            <LinkifyText>{news.body}</LinkifyText>
-          </Text>
+          <Box sx={{ alignSelf: 'flex-start' }}>
+            <DisplayMarkdown body={news.body} />
+          </Box>
+
           <Flex
             sx={{
               flexWrap: 'wrap',
               gap: 2,
-              justifyContent: 'space-between',
+              justifyContent: 'stretch',
               paddingY: 2,
             }}
           >

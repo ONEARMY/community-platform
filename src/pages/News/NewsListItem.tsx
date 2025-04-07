@@ -21,8 +21,6 @@ interface IProps {
 export const NewsListItem = ({ news, query }: IProps) => {
   const url = `/news/${encodeURIComponent(news.slug)}`
   const searchWords = [query || '']
-  const bodySummary =
-    news.body.length > 180 ? news.body.slice(0, 178) + '...' : news.body
 
   return (
     <Card
@@ -83,12 +81,17 @@ export const NewsListItem = ({ news, query }: IProps) => {
             userName={news.author?.username || ''}
           />
 
-          <Text sx={{ paddingY: 2, fontSize: 2 }}>
-            <Highlighter
-              searchWords={searchWords}
-              textToHighlight={query ? news.body : bodySummary}
-            />
-          </Text>
+          {news.summary && (
+            <Text
+              data-cy="news-list-item-summary"
+              sx={{ paddingY: 2, fontSize: 2 }}
+            >
+              <Highlighter
+                searchWords={searchWords}
+                textToHighlight={news.summary}
+              />
+            </Text>
+          )}
 
           <Flex sx={{ justifyContent: 'space-between' }}>
             <InternalLink to={url}>

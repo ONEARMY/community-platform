@@ -14,14 +14,17 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
   try {
     const formData = await request.formData()
     const data = {
-      title: formData.get('title') as string,
       body: formData.get('body') as string,
       category: formData.has('category')
         ? Number(formData.get('category'))
         : null,
+      summary: formData.has('summary')
+        ? (formData.get('summary') as string)
+        : null,
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
         : null,
+      title: formData.get('title') as string,
     }
 
     const { client, headers } = createSupabaseServerClient(request)
@@ -64,6 +67,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         category: data.category,
         modified_at: new Date(),
         slug,
+        summary: data.summary,
         tags: data.tags,
         title: data.title,
       })

@@ -2,7 +2,7 @@ import type { DBNews } from '../../models/news'
 
 export const news: Partial<DBNews>[] = [
   {
-    body: 'test info with a link to https://www.onearmy.earth/',
+    body: 'Test info with a link to [OneArmy](https://www.onearmy.earth/).',
     category: null,
     comment_count: 2,
     created_at: new Date(),
@@ -15,6 +15,7 @@ export const news: Partial<DBNews>[] = [
     modified_at: null,
     previous_slugs: [],
     slug: 'the-first-test-news',
+    summary: 'So first, the very first.',
     title: 'The First Test News',
     total_views: 3,
   },
@@ -31,6 +32,7 @@ export const news: Partial<DBNews>[] = [
     // },
     modified_at: null,
     previous_slugs: [],
+    summary: 'Annother summary.',
     slug: 'filtering-question',
     title: 'The Filtering Question',
     total_views: 12,

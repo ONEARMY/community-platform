@@ -34,6 +34,7 @@ export const loader = async ({ request }) => {
       comment_count,
       body,
       slug,
+      summary,
       category:category(id,name),
       tags,
       title,
@@ -94,14 +95,17 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   try {
     const formData = await request.formData()
     const data = {
-      title: formData.get('title') as string,
       body: formData.get('body') as string,
       category: formData.has('category')
+        ? (formData.get('category') as string)
+        : null,
+      summary: formData.has('summary')
         ? (formData.get('category') as string)
         : null,
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
         : null,
+      title: formData.get('title') as string,
     }
 
     const { client, headers } = createSupabaseServerClient(request)
@@ -166,6 +170,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         body: data.body,
         moderation: IModerationStatus.ACCEPTED,
         slug,
+        summary: data.summary,
         category: data.category,
         tags: data.tags,
         tenant_id: process.env.TENANT_ID,

@@ -246,6 +246,90 @@ const seedUsefulVotes = (
     content_id: question.id,
   }))
 
+const bigBlockOfMarkdown = `# h1 Heading 8-)
+
+## h2 Heading
+
+### h3 Heading
+
+#### h4 Heading
+
+##### h5 Heading
+
+###### h6 Heading
+
+## Horizontal Rule
+
+***
+
+
+## Typographic replacements
+
+Enable typographer option to see result.
+
+(c) (C) (r) (R) (tm) (TM) (p) (P) +-
+
+test.. test... test..... test?..... test!....
+
+!!!!!! ???? ,,  -- ---
+
+"Smartypants, double quotes" and 'single quotes'
+
+![Image](https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2Fusers%2Fbenfurber%2F_DSC4756-19271d67d1f-19610bd3504.jpg?alt=media&token=27751401-8000-4592-9f7e-800497463dce)
+
+## Emphasis
+
+**This is bold text**
+
+**This is bold text**
+
+*This is italic text*
+
+*This is italic text*
+
+~~Strikethrough~~
+
+## Blockquotes
+
+> Blockquotes can also be nested...> ...by using additional greater-than signs right next to each other...> ...or with spaces between arrows.
+
+## Lists
+
+Unordered
+
+* Sub-lists are made by indenting 2 spaces:
+  * Marker character change forces new list start:
+    * Ac tristique libero volutpat at
+    - Facilisis in pretium nisl aliquet
+    * Nulla volutpat aliquam velit
+* Very easy!
+
+Ordered
+
+1. Lorem ipsum dolor sit amet
+2. Consectetur adipiscing elit
+3. Integer molestie lorem at massa
+4. You can use sequential numbers...
+
+Start numbering with offset:
+
+1. foo
+2. bar
+
+| ddd  | ddd | 333 |
+| ---- | --- | --- |
+| rthd | dfb | rr  |
+| fbnv | gf  | r   |
+
+## Links
+
+[link text](http://dev.nodeca.com)
+
+[link with title](http://nodeca.github.io/pica/demo/ "title text!")
+
+Autoconverted link [https://github.com/nodeca/pica](https://github.com/nodeca/pica) (enable linkify to see)
+`
+
 const base_news: Partial<newsScalars> = {
   comment_count: 0,
   hero_image: null,
@@ -259,7 +343,7 @@ const seedNews: Partial<newsScalars>[] = [
   {
     ...base_news,
     title: 'First news article!',
-    body: "Yes! That's right we've got news now. # And.. ",
+    body: bigBlockOfMarkdown,
     slug: 'first-news-article',
     summary: 'The first',
   },

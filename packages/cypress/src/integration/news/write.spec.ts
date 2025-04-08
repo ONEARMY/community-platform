@@ -1,6 +1,6 @@
 import { generateNewUserDetails } from '../../utils/TestUtils'
 
-describe('[News]', () => {
+describe('[News.Write]', () => {
   describe('[Create a news item]', () => {
     const initialTitle = 'Amazing new thing'
     const initialSummary = 'The tip of the most top new thing'
@@ -30,7 +30,7 @@ describe('[News]', () => {
 
       cy.completeUserProfile(user.username)
 
-      cy.step('Can add a library project now profile is complete')
+      cy.step('Can add news now profile is complete')
       cy.visit('/news')
       cy.get('[data-cy=complete-profile-news]').should('not.exist')
       cy.get('[data-cy=create-news]').click()
@@ -56,7 +56,7 @@ describe('[News]', () => {
         .type(initialSummary)
         .blur({ force: true })
 
-      cy.get('[data-cy=field-body]').type(initialNewsBody, {
+      cy.get('.mdxeditor-root-contenteditable').type(initialNewsBody, {
         delay: 0,
       })
       cy.selectTag(category, '[data-cy=category-select]')
@@ -72,7 +72,9 @@ describe('[News]', () => {
 
       cy.step('All news fields shown')
       cy.visit('/news')
-      cy.get('[data-cy=news-list-item]').first().contains(initialSummary)
+      cy.get('[data-cy=news-list-item-summary]')
+        .first()
+        .contains(initialSummary)
       cy.visit(`/news/${initialExpectedSlug}`)
       cy.contains(initialTitle)
       cy.contains(initialNewsBody)
@@ -90,7 +92,9 @@ describe('[News]', () => {
       cy.get('[data-cy=field-summary]')
         .clear()
         .type(updatedSummary, { delay: 0 })
-      cy.get('[data-cy=field-body]').clear().type(updatedNewsBody, { delay: 0 })
+      cy.get('.mdxeditor-root-contenteditable')
+        .clear()
+        .type(updatedNewsBody, { delay: 0 })
 
       // cy.step('Update images by removing one')
       // cy.get('[data-cy=image-upload-0]')
@@ -105,9 +109,12 @@ describe('[News]', () => {
       cy.contains(updatedNewsBody)
 
       cy.visit('/news')
-      cy.get('[data-cy=news-list-item]').first().contains(updatedSummary)
+      cy.get('[data-cy=news-list-item-summary]')
+        .first()
+        .contains(updatedSummary)
 
       cy.step('Updating the title changes the slug')
+      cy.get('[data-cy=news-list-item-button]').first().click()
       cy.get('[data-cy=edit]').click()
       cy.get('[data-cy=field-title]').clear().type(updatedTitle).blur()
       cy.get('[data-cy=submit]')

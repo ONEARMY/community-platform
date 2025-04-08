@@ -42,7 +42,7 @@ export const NewsListItem = ({ news, query }: IProps) => {
         {news.heroImage && (
           <InternalLink to={url}>
             <AspectRatio ratio={2 / 1}>
-              <Image src={news.heroImage.publicUrl} sx={{ width: '100%' }} />{' '}
+              <Image src={news.heroImage.publicUrl} sx={{ width: '100%' }} />
             </AspectRatio>
           </InternalLink>
         )}
@@ -53,7 +53,7 @@ export const NewsListItem = ({ news, query }: IProps) => {
             padding: 4,
           }}
         >
-          <Flex sx={{ gap: 1, flexWrap: 'wrap' }}>
+          <Flex sx={{ gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
             <Heading
               as="h2"
               data-cy="news-list-item-title"
@@ -95,7 +95,7 @@ export const NewsListItem = ({ news, query }: IProps) => {
 
           <Flex sx={{ justifyContent: 'space-between' }}>
             <InternalLink to={url}>
-              <Button variant="subtle" sx={{ gap: 2 }}>
+              <Button data-cy="news-list-item-button" variant="subtle">
                 Read more <Icon glyph="arrow-forward" />
               </Button>
             </InternalLink>

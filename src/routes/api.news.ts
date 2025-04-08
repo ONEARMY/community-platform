@@ -100,7 +100,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         ? (formData.get('category') as string)
         : null,
       summary: formData.has('summary')
-        ? (formData.get('category') as string)
+        ? (formData.get('summary') as string)
         : null,
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))

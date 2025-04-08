@@ -2,7 +2,7 @@ import { MOCK_DATA } from '../../data'
 
 const news = MOCK_DATA.news[0]
 
-describe('[News]', () => {
+describe('[News.Read]', () => {
   describe('[List news]', () => {
     it('[By Everyone]', () => {
       cy.visit(`/news/`)

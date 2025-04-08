@@ -7,6 +7,7 @@ import {
   DiffSourceToggleWrapper,
   headingsPlugin,
   imagePlugin,
+  InsertImage,
   InsertTable,
   linkDialogPlugin,
   linkPlugin,
@@ -68,6 +69,7 @@ export const FieldMarkdown = (props: IProps) => {
         <ListsToggle />
         <CreateLink />
         <InsertTable />
+        <InsertImage />
         <BlockTypeSelect />
       </DiffSourceToggleWrapper>
     ),

@@ -45,6 +45,7 @@
     "react-router-dom": "^6.26.0",
     "react-select": "^5.8.1",
     "react-tooltip": "^5.28.0",
+    "remark-gfm": "^4.0.1",
     "storybook": "^7.6.0",
     "styled-system": "^5.1.5",
     "theme-ui": "^0.16.2",

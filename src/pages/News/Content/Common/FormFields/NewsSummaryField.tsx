@@ -21,6 +21,7 @@ export const NewsSummaryField = ({ diffMarkdown }: IProps) => {
         component={FieldTextarea}
         diffMarkdown={diffMarkdown}
         id={name}
+        maxLength={180}
         name={name}
         placeholder={fields.summary.placeholder}
         showCharacterCount

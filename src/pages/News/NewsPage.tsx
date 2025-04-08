@@ -94,9 +94,7 @@ export const NewsPage = observer(({ news }: IProps) => {
             </ClientOnly>
           )}
 
-          <Box sx={{ alignSelf: 'flex-start' }}>
-            <DisplayMarkdown body={news.body} />
-          </Box>
+          <DisplayMarkdown body={news.body} />
 
           <Flex
             sx={{

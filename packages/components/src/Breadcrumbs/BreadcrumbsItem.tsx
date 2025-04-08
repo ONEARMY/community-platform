@@ -30,7 +30,15 @@ const BreadcrumbButton = ({ text, link }: BreadcrumbButtonProps) => {
 
 export const BreadcrumbItem = ({ text, link, isLast }: BreadcrumbItemProps) => (
   <Box
-    style={{ display: 'inline-flex', marginRight: '3px' }}
+    style={{
+      display: 'inline-flex',
+      marginRight: '3px',
+      ...(isLast && {
+        flex: '1',
+        minWidth: 0,
+        maxWidth: '100%',
+      }),
+    }}
     data-testid="breadcrumbsItem"
     data-cy="breadcrumbsItem"
   >
@@ -45,7 +53,7 @@ export const BreadcrumbItem = ({ text, link, isLast }: BreadcrumbItemProps) => (
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
           overflow: 'hidden',
-          width: [100, '100%'],
+          width: '100%',
         }}
       >
         {text}

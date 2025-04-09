@@ -137,6 +137,7 @@ AS $function$BEGIN
         WHERE id = OLD.source_id;
       ELSIF OLD.source_type = 'research' THEN
         UPDATE research SET comment_count = comment_count - 1
+        WHERE id = OLD.source_id;
       ELSIF OLD.source_type = 'news' THEN
         UPDATE news SET comment_count = comment_count - 1
         WHERE id = OLD.source_id;

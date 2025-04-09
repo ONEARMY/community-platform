@@ -1,3 +1,4 @@
+import { UserRole } from 'oa-shared'
 import { UserAction } from 'src/common/UserAction'
 import { AuthRoute } from 'src/pages/common/AuthRoute'
 import { listing } from 'src/pages/News/labels'
@@ -23,7 +24,7 @@ export default function Index() {
         </Box>
       }
       loggedIn={
-        <AuthRoute>
+        <AuthRoute roleRequired={UserRole.ADMIN}>
           <NewsCreate />
         </AuthRoute>
       }

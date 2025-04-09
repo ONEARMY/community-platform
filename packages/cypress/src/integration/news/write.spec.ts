@@ -22,6 +22,7 @@ describe('[News.Write]', () => {
     const updatedSummary = `${updatedNewsBody} ${initialNewsBodyOne} ${initialNewsBodyTwo}`
 
     it('[By Authenticated]', () => {
+      localStorage.setItem('devSiteRole', 'admin')
       cy.visit('/news')
       const user = generateNewUserDetails()
       cy.signUpNewUser(user)
@@ -29,7 +30,7 @@ describe('[News.Write]', () => {
       cy.step("Can't add news with an incomplete profile")
       cy.visit('/news')
       cy.get('[data-cy=create-news]').should('not.exist')
-      cy.get('[data-cy=complete-profile-news]').should('be.visible')
+      // cy.get('[data-cy=complete-profile-news]').should('be.visible')
       cy.visit('/news/create')
       cy.get('[data-cy=incomplete-profile-message]').should('be.visible')
       cy.get('[data-cy=field-title]').should('not.exist')
@@ -39,8 +40,7 @@ describe('[News.Write]', () => {
       cy.step('Can add news now profile is complete')
       cy.visit('/news')
       cy.get('[data-cy=complete-profile-news]').should('not.exist')
-      cy.get('[data-cy=create-news]').click()
-
+      cy.visit('/news/create')
       cy.get('[data-cy=field-title]', { timeout: 20000 })
 
       // cy.step('Add images')
@@ -136,7 +136,6 @@ describe('[News.Write]', () => {
       cy.step('Ask users to login before creating a news')
       cy.visit('/news')
       cy.get('[data-cy=create-news]').should('not.exist')
-      cy.get('[data-cy=sign-up]').should('be.visible')
 
       cy.visit('/news/create')
       cy.get('[data-cy=logged-out-message]').should('be.visible')

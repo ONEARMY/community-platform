@@ -512,18 +512,18 @@ workflows:
             - test_e2e
           <<: *filter_only_default_branch
       #---------------------- Deploy ----------------------
-      - deploy-supabase:
-          name: 'Deploy to Supabase'
-          requires:
-            - 'Approve Production deployment'
-          <<: *filter_only_default_branch
-          context:
-            - supabase-deploy
+      # - deploy-supabase:
+      #     name: 'Deploy to Supabase'
+      #     requires:
+      #       - 'Approve Production deployment'
+      #     <<: *filter_only_default_branch
+      #     context:
+      #       - supabase-deploy
       - deploy:
           name: 'Deploy: community.fixing.fashion'
-          requires:
-            - 'Deploy to Supabase'
-          <<: *filter_only_default_branch
+          # requires:
+          #   - 'Deploy to Supabase'
+          # <<: *filter_only_default_branch
           DEPLOY_ALIAS: fixing-fashion-prod
           FLY_APP_NAME: community-platform-ff
           FLY_TOML: fly-ff.toml
@@ -534,9 +534,9 @@ workflows:
             - supabase-deploy
       - deploy:
           name: 'Deploy: community.preciousplastic.com'
-          requires:
-            - 'Deploy to Supabase'
-          <<: *filter_only_default_branch
+          # requires:
+          #   - 'Deploy to Supabase'
+          # <<: *filter_only_default_branch
           DEPLOY_ALIAS: 'production'
           FLY_APP_NAME: community-platform-pp
           FLY_TOML: fly-pp.toml
@@ -547,9 +547,9 @@ workflows:
             - supabase-deploy
       - deploy:
           name: 'Deploy: community.projectkamp.com'
-          requires:
-            - 'Deploy to Supabase'
-          <<: *filter_only_default_branch
+          # requires:
+          #   - 'Deploy to Supabase'
+          # <<: *filter_only_default_branch
           DEPLOY_ALIAS: project-kamp-production
           FLY_APP_NAME: community-platform-pk
           FLY_TOML: fly-pk.toml

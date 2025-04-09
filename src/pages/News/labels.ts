@@ -36,7 +36,7 @@ export const fields: ILabels = {
   heroImage: {
     title: 'Cover image',
     description:
-      'This image should be landscape with 2:1 aspect ratio. We advise 960x480px',
+      'This image should be landscape with 2:1 aspect ratio. We advise 1240x620px',
   },
 }
 

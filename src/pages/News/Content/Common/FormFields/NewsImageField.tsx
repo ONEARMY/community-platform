@@ -12,8 +12,8 @@ import { Image as ImageComponent } from 'theme-ui'
 import type { Image } from 'oa-shared'
 
 const ImageInputFieldWrapper = styled.div`
-  width: 900px;
-  height: 450px;
+  width: 620px;
+  height: 310px;
 `
 
 interface IProps {

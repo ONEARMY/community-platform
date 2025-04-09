@@ -95,7 +95,7 @@ export const NewsListItem = ({ news, query }: IProps) => {
 
           <Flex sx={{ justifyContent: 'space-between' }}>
             <InternalLink to={url}>
-              <Button data-cy="news-list-item-button" variant="subtle">
+              <Button data-cy="news-list-item-button" variant="outline">
                 Read more <Icon glyph="arrow-forward" />
               </Button>
             </InternalLink>

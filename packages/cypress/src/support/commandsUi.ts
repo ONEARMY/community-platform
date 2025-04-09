@@ -27,6 +27,7 @@ declare global {
     interface Chainable {
       addComment(newComment: string): Chainable<void>
       addReply(reply: string): Chainable<void>
+      addToMarkdownField(text: string): Chainable<void>
       clickMenuItem(menuItem: UserMenuItem): Chainable<void>
       deleteDiscussionItem(element: string, item: string)
       editDiscussionItem(
@@ -81,6 +82,16 @@ declare global {
  * @remark - async code should be wrapped in a Cypress.promise block to allow the resolved promise to be
  * used in chained results
  */
+
+Cypress.Commands.add('addToMarkdownField', (text: string) => {
+  cy.get('.mdxeditor-root-contenteditable')
+    .click()
+    .type('{moveToEnd}')
+    .type('{enter}')
+    .type('{enter}')
+    .type(text)
+    .blur({ force: true })
+})
 
 Cypress.Commands.add('saveSettingsForm', () => {
   cy.get('[data-cy=save]').click()

@@ -1,19 +1,25 @@
-import { generateNewUserDetails } from '../../utils/TestUtils'
+import {
+  generateAlphaNumeric,
+  generateNewUserDetails,
+} from '../../utils/TestUtils'
 
 describe('[News.Write]', () => {
   describe('[Create a news item]', () => {
-    const initialTitle = 'Amazing new thing'
-    const initialSummary = 'The tip of the most top new thing'
-    const initialExpectedSlug = 'amazing-new-thing'
-    const initialNewsBody =
-      "We've done something so fantastic you wouldn't believe. But you can buy it soon."
+    const initialRandomId = generateAlphaNumeric(8).toLowerCase()
+
+    const initialTitle = `${initialRandomId} Amazing new thing`
+    const initialExpectedSlug = `${initialRandomId}-amazing-new-thing`
+    const initialNewsBodyOne = 'Yo.'
+    const initialNewsBodyTwo = "We've done something."
+    const initialNewsBodyThree = 'We saved so much plastic.'
+    const initialSummary = `${initialNewsBodyOne} ${initialNewsBodyTwo} ${initialNewsBodyThree}`
     const category = 'Moulds'
     const tag1 = 'product'
     const tag2 = 'workshop'
-    const updatedTitle = 'Still an amazing thing'
-    const updatedSummary = 'The very top'
-    const updatedExpectedSlug = 'still-an-amazing-thing'
-    const updatedNewsBody = `${initialNewsBody} PLUS sparkles!`
+    const updatedTitle = `Still an amazing thing ${initialRandomId}`
+    const updatedExpectedSlug = `still-an-amazing-thing-${initialRandomId}`
+    const updatedNewsBody = 'PLUS sparkles!'
+    const updatedSummary = `${updatedNewsBody} ${initialNewsBodyOne} ${initialNewsBodyTwo}`
 
     it('[By Authenticated]', () => {
       cy.visit('/news')
@@ -51,14 +57,10 @@ describe('[News.Write]', () => {
         .type(initialTitle)
         .blur({ force: true })
 
-      cy.get('[data-cy=field-summary]')
-        .clear()
-        .type(initialSummary)
-        .blur({ force: true })
+      cy.addToMarkdownField(initialNewsBodyOne)
+      cy.addToMarkdownField(initialNewsBodyTwo)
+      cy.addToMarkdownField(initialNewsBodyThree)
 
-      cy.get('.mdxeditor-root-contenteditable').type(initialNewsBody, {
-        delay: 0,
-      })
       cy.selectTag(category, '[data-cy=category-select]')
 
       cy.selectTag(tag1, '[data-cy="tag-select"]')
@@ -77,7 +79,9 @@ describe('[News.Write]', () => {
         .contains(initialSummary)
       cy.visit(`/news/${initialExpectedSlug}`)
       cy.contains(initialTitle)
-      cy.contains(initialNewsBody)
+      cy.contains(initialNewsBodyOne)
+      cy.contains(initialNewsBodyTwo)
+      cy.contains(initialNewsBodyThree)
       cy.contains(category)
       cy.contains(tag1)
       cy.contains(tag2)
@@ -89,12 +93,13 @@ describe('[News.Write]', () => {
         .url()
         .should('include', `/news/${initialExpectedSlug}/edit`)
 
-      cy.get('[data-cy=field-summary]')
-        .clear()
-        .type(updatedSummary, { delay: 0 })
-      cy.get('.mdxeditor-root-contenteditable')
-        .clear()
-        .type(updatedNewsBody, { delay: 0 })
+      cy.get('[data-cy=field-title]').clear().type(updatedTitle).blur()
+      cy.get('.mdxeditor-root-contenteditable').type('{selectAll}{del}')
+
+      cy.addToMarkdownField(updatedNewsBody)
+      cy.addToMarkdownField(initialNewsBodyOne)
+      cy.addToMarkdownField(initialNewsBodyTwo)
+      cy.addToMarkdownField(initialNewsBodyThree)
 
       // cy.step('Update images by removing one')
       // cy.get('[data-cy=image-upload-0]')
@@ -105,23 +110,14 @@ describe('[News.Write]', () => {
       cy.get('[data-cy=submit]')
         .click()
         .url()
-        .should('include', `/news/${initialExpectedSlug}`)
+        .should('include', `/news/${updatedExpectedSlug}`)
       cy.contains(updatedNewsBody)
 
-      cy.visit('/news')
-      cy.get('[data-cy=news-list-item-summary]')
-        .first()
-        .contains(updatedSummary)
-
-      cy.step('Updating the title changes the slug')
-      cy.get('[data-cy=news-list-item-button]').first().click()
-      cy.get('[data-cy=edit]').click()
-      cy.get('[data-cy=field-title]').clear().type(updatedTitle).blur()
-      cy.get('[data-cy=submit]')
-        .click()
-        .url()
-        .should('include', `/news/${updatedExpectedSlug}`)
       cy.contains(updatedTitle)
+      cy.contains(updatedNewsBody)
+      cy.contains(initialNewsBodyOne)
+      cy.contains(initialNewsBodyTwo)
+      cy.contains(initialNewsBodyThree)
 
       // Bug: Missing previous slug functionality
       //
@@ -131,6 +127,7 @@ describe('[News.Write]', () => {
 
       cy.step('All updated fields visiable on list')
       cy.visit('/news')
+      cy.contains(updatedSummary)
       cy.contains(updatedTitle)
       cy.contains(category)
     })

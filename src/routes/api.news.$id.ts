@@ -2,7 +2,11 @@ import { News } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { utilsServiceServer } from 'src/services/utilsService.server'
-import { hasAdminRightsSupabase, validateImage } from 'src/utils/helpers'
+import {
+  getSummaryFromMarkdown,
+  hasAdminRightsSupabase,
+  validateImage,
+} from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -17,9 +21,6 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       body: formData.get('body') as string,
       category: formData.has('category')
         ? Number(formData.get('category'))
-        : null,
-      summary: formData.has('summary')
-        ? (formData.get('summary') as string)
         : null,
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
@@ -67,7 +68,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         category: data.category,
         modified_at: new Date(),
         slug,
-        summary: data.summary,
+        summary: getSummaryFromMarkdown(data.body),
         tags: data.tags,
         title: data.title,
       })

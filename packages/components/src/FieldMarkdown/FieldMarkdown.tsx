@@ -22,6 +22,8 @@ import {
 } from '@mdxeditor/editor'
 import { Flex, Text } from 'theme-ui'
 
+import { DisplayMarkdownStylingWrapper } from '../DisplayMarkdown/DisplayMarkdownStylingWrapper'
+
 import type { MDXEditorMethods } from '@mdxeditor/editor'
 import type { FieldRenderProps } from 'react-final-form'
 
@@ -31,6 +33,7 @@ import './style.css'
 type FieldProps = FieldRenderProps<any, any> & { children?: React.ReactNode }
 
 export interface IProps extends FieldProps {
+  imageUploadHandler: (image: File) => Promise<string>
   disabled?: boolean
   children?: React.ReactNode
   'data-cy'?: string
@@ -39,7 +42,7 @@ export interface IProps extends FieldProps {
 
 export const FieldMarkdown = (props: IProps) => {
   const ref = useRef<MDXEditorMethods>(null)
-  const { input, meta, diffMarkdown, ...rest } = props
+  const { imageUploadHandler, input, meta, diffMarkdown, ...rest } = props
 
   useEffect(() => {
     ref.current?.getMarkdown()
@@ -50,11 +53,11 @@ export const FieldMarkdown = (props: IProps) => {
   }, [input.value])
 
   const mainPluginList = [
-    headingsPlugin(),
+    headingsPlugin({ allowedHeadingLevels: [1, 2] }),
     listsPlugin(),
     quotePlugin(),
     tablePlugin(),
-    imagePlugin(),
+    imagePlugin({ imageUploadHandler }),
     thematicBreakPlugin(),
     linkPlugin(),
     linkDialogPlugin(),
@@ -82,20 +85,24 @@ export const FieldMarkdown = (props: IProps) => {
       {showError && (
         <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>
       )}
-
-      <MDXEditor
-        ref={ref}
-        className={showError ? 'mdxeditor-error' : ''}
-        markdown={''}
-        plugins={[toolbar, ...mainPluginList]}
-        onBlur={() => {
-          input.onBlur()
+      <DisplayMarkdownStylingWrapper
+        sx={{
+          img: {
+            borderRadius: 2,
+            maxWidth: '100%',
+          },
         }}
-        onChange={(ev) => {
-          input.onChange(ev)
-        }}
-        {...rest}
-      />
+      >
+        <MDXEditor
+          ref={ref}
+          className={showError ? 'mdxeditor-error' : ''}
+          markdown={''}
+          plugins={[toolbar, ...mainPluginList]}
+          onBlur={() => input.onBlur()}
+          onChange={(ev) => input.onChange(ev)}
+          {...rest}
+        />
+      </DisplayMarkdownStylingWrapper>
     </Flex>
   )
 }

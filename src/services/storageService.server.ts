@@ -4,6 +4,22 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type { ContentType, DBImage } from 'oa-shared'
 import type { ImageSize } from 'src/config/imageTransforms'
 
+const getImagePublicUrl = (
+  client: SupabaseClient,
+  image: DBImage | null,
+  size?: ImageSize,
+) => {
+  if (!image) {
+    return null
+  }
+
+  const response = client.storage
+    .from(process.env.TENANT_ID as string)
+    .getPublicUrl(image.path, size ? { transform: size } : undefined)
+
+  return new Image({ id: image.id, publicUrl: response.data.publicUrl })
+}
+
 const getImagesPublicUrls = (
   client: SupabaseClient,
   images: DBImage[] | null,
@@ -16,12 +32,8 @@ const getImagesPublicUrls = (
   const imageList: Image[] = []
 
   for (const image of images) {
-    const response = client.storage
-      .from(process.env.TENANT_ID as string)
-      .getPublicUrl(image.path, size ? { transform: size } : undefined)
-    imageList.push(
-      new Image({ id: image.id, publicUrl: response.data.publicUrl }),
-    )
+    const response = getImagePublicUrl(client, image, size)
+    response && imageList.push(response)
   }
 
   return imageList
@@ -73,19 +85,22 @@ const setUploadImage = async (
 }
 
 const uploadImage = async (
-  id: number,
+  folder: number | string,
   uploadedImage: File,
   client: SupabaseClient,
-  table: ContentType,
+  table: ContentType | 'users',
 ) => {
   if (!uploadedImage) {
     return null
   }
+
   const response = await client.storage
     .from(process.env.TENANT_ID as string)
-    .upload(`${table}/${id}/${uploadedImage.name}`, uploadedImage)
+    .upload(`${table}/${folder}/${uploadedImage.name}`, uploadedImage, {
+      upsert: true,
+    })
 
-  const image = response.data
+  const image = response?.data
   const error =
     image === null
       ? new Error(`Uploading image: ${response.error.message}`)
@@ -95,6 +110,7 @@ const uploadImage = async (
 }
 
 export const storageServiceServer = {
+  getImagePublicUrl,
   getImagesPublicUrls,
   setUploadImage,
   uploadImage,

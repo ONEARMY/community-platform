@@ -11,11 +11,12 @@ import { TitleField } from 'src/pages/common/FormFields/Title.field'
 import { NewsPostingGuidelines } from 'src/pages/News/Content/Common'
 import * as LABELS from 'src/pages/News/labels'
 import { newsService } from 'src/services/newsService'
+import { storageService } from 'src/services/storageService'
 import { composeValidators, minValue, required } from 'src/utils/validators'
 
 import { NEWS_MIN_TITLE_LENGTH } from '../../constants'
 import { newsContentService } from '../../newsContent.service'
-import { NewsBodyField, NewsImageField, NewsSummaryField } from './FormFields'
+import { NewsBodyField, NewsImageField } from './FormFields'
 
 import type { News, NewsFormData } from 'oa-shared'
 import type { MainFormAction } from 'src/common/Form/types'
@@ -34,7 +35,6 @@ export const NewsForm = (props: IProps) => {
     category: null,
     existingHeroImage: null,
     heroImage: null,
-    summary: null,
     tags: [],
     title: '',
   })
@@ -56,7 +56,6 @@ export const NewsForm = (props: IProps) => {
         : null,
       existingHeroImage: news.heroImage,
       heroImage: null,
-      summary: news.summary,
       tags: news.tagIds,
       title: news.title,
     })
@@ -71,7 +70,6 @@ export const NewsForm = (props: IProps) => {
         category: formValues.category || null,
         heroImage: formValues.heroImage || null,
         existingHeroImage: initialValues.existingHeroImage || null,
-        summary: formValues.summary || null,
         tags: formValues.tags,
         title: formValues.title!,
       })
@@ -79,6 +77,18 @@ export const NewsForm = (props: IProps) => {
       if (result) {
         navigate('/news/' + result.slug)
       }
+    } catch (e) {
+      if (e.cause && e.message) {
+        setSaveError(e.message)
+      }
+      logger.error(e)
+    }
+  }
+
+  const imageUpload = async (imageFile) => {
+    try {
+      const response = await storageService.imageUpload(id, 'news', imageFile)
+      return response.publicUrl
     } catch (e) {
       if (e.cause && e.message) {
         setSaveError(e.message)
@@ -134,8 +144,10 @@ export const NewsForm = (props: IProps) => {
               )}
               title={LABELS.fields.title.title}
             />
-            <NewsSummaryField />
-            <NewsBodyField diffMarkdown={initialValues.body} />
+            <NewsBodyField
+              diffMarkdown={initialValues.body}
+              imageUpload={imageUpload}
+            />
             <NewsImageField
               existingHeroImage={initialValues.existingHeroImage}
               removeExistingImage={removeExistingImage}

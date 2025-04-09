@@ -39,7 +39,7 @@ const getHeroImage = async (
     return null
   }
 
-  const size = { width: 620, height: 310 }
+  const size = { width: 1240, height: 620 }
   const images = storageServiceServer.getImagesPublicUrls(
     client,
     [dbImage],

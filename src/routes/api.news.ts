@@ -6,6 +6,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { discordServiceServer } from 'src/services/discordService.server'
 import { newsServiceServer } from 'src/services/newsService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
+import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown'
 import { validateImage } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
@@ -99,9 +100,6 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       category: formData.has('category')
         ? (formData.get('category') as string)
         : null,
-      summary: formData.has('summary')
-        ? (formData.get('summary') as string)
-        : null,
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
         : null,
@@ -170,7 +168,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         body: data.body,
         moderation: IModerationStatus.ACCEPTED,
         slug,
-        summary: data.summary,
+        summary: getSummaryFromMarkdown(data.body),
         category: data.category,
         tags: data.tags,
         tenant_id: process.env.TENANT_ID,

@@ -7,12 +7,20 @@ export default {
   component: FieldMarkdown,
 } as Meta<typeof FieldMarkdown>
 
+const imageUpload = () => Promise.resolve('')
+
 export const Default: StoryFn<typeof FieldMarkdown> = () => (
-  <FieldMarkdown input={{} as any} placeholder="Text area input" meta={{}} />
+  <FieldMarkdown
+    imageUploadHandler={imageUpload}
+    input={{} as any}
+    placeholder="Text area input"
+    meta={{}}
+  />
 )
 
 export const WithError: StoryFn<typeof FieldMarkdown> = () => (
   <FieldMarkdown
+    imageUploadHandler={imageUpload}
     input={{} as any}
     placeholder="Text area input"
     meta={{ error: 'What an error', touched: true }}

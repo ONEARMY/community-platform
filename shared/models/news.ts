@@ -83,7 +83,6 @@ export type NewsFormData = {
   title: string
   body: string
   category: SelectValue | null
-  summary: string | null
   tags?: number[]
   heroImage: IConvertedFileMeta | null
   existingHeroImage: Image | null

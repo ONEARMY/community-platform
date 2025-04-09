@@ -2,11 +2,8 @@ import { News } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { utilsServiceServer } from 'src/services/utilsService.server'
-import {
-  getSummaryFromMarkdown,
-  hasAdminRightsSupabase,
-  validateImage,
-} from 'src/utils/helpers'
+import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown'
+import { hasAdminRightsSupabase, validateImage } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'

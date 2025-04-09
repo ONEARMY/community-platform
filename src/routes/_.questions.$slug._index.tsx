@@ -1,5 +1,5 @@
 import { useLoaderData } from '@remix-run/react'
-import { Question, Tag } from 'oa-shared'
+import { Question } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { QuestionPage } from 'src/pages/Question/QuestionPage'
@@ -7,6 +7,8 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { questionServiceServer } from 'src/services/questionService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
+
+import { utilsServiceServer } from '../services/utilsService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { DBQuestion } from 'oa-shared'
@@ -23,45 +25,26 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbQuestion = result.data as unknown as DBQuestion
 
   if (dbQuestion.id) {
-    await client
-      .from('questions')
-      .update({ total_views: (dbQuestion.total_views || 0) + 1 })
-      .eq('id', dbQuestion.id)
+    await utilsServiceServer.incrementViewCount(
+      client,
+      'questions',
+      dbQuestion.total_views,
+      dbQuestion.id,
+    )
   }
 
-  const tagIds = dbQuestion.tags
-  let tags: Tag[] = []
-  if (tagIds?.length > 0) {
-    const tagsResult = await client
-      .from('tags')
-      .select('id,name')
-      .in('id', tagIds)
+  const [usefulVotes, subscribers, tags] =
+    await utilsServiceServer.getMetaFields(
+      client,
+      dbQuestion.id,
+      dbQuestion.tags,
+    )
 
-    if (tagsResult.data) {
-      tags = tagsResult.data.map((x) => Tag.fromDB(x))
-    }
-  }
-
-  const [usefulVotes, subscribers] = await Promise.all([
-    client
-      .from('useful_votes')
-      .select('*', { count: 'exact' })
-      .eq('content_id', dbQuestion.id)
-      .eq('content_type', 'questions'),
-    client
-      .from('subscribers')
-      .select('user_id', { count: 'exact' })
-      .eq('content_id', dbQuestion.id)
-      .eq('content_type', 'questions'),
-  ])
-
-  const images = dbQuestion.images
-    ? storageServiceServer.getImagesPublicUrls(
-        client,
-        dbQuestion.images,
-        IMAGE_SIZES.GALLERY,
-      )
-    : []
+  const images = storageServiceServer.getImagesPublicUrls(
+    client,
+    dbQuestion.images,
+    IMAGE_SIZES.GALLERY,
+  )
 
   const question = Question.fromDB(dbQuestion, tags, images)
   question.usefulCount = usefulVotes.count || 0

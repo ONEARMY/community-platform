@@ -1,4 +1,4 @@
-import { Flex, Label } from 'theme-ui'
+import { Flex, Label, Text } from 'theme-ui'
 
 const _labelStyle = {
   fontSize: 2,
@@ -8,6 +8,7 @@ const _labelStyle = {
 
 interface IProps {
   children: React.ReactNode
+  description?: string
   htmlFor?: string
   required?: boolean
   flexDirection?: 'column' | 'row' | 'row-reverse' | 'column-reverse'
@@ -18,6 +19,7 @@ interface IProps {
 export const FormFieldWrapper = (props: IProps) => {
   const {
     children,
+    description,
     htmlFor,
     required,
     text,
@@ -28,10 +30,17 @@ export const FormFieldWrapper = (props: IProps) => {
   const heading = required ? `${text} *` : text
 
   return (
-    <Flex sx={{ flexDirection, flexWrap }} mb={3}>
+    <Flex sx={{ flexDirection, flexWrap, marginBottom: 2 }}>
       <Label sx={_labelStyle} htmlFor={htmlFor}>
         {heading}
       </Label>
+
+      {description && (
+        <Text variant="quiet" sx={{ fontSize: 2, marginBottom: 2 }}>
+          {description}
+        </Text>
+      )}
+
       {children}
     </Flex>
   )

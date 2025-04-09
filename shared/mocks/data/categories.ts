@@ -32,14 +32,11 @@ export const categories = {
 export const categoriesSupabase = [
   {
     name: 'Machines',
-    type: 'questions',
   },
   {
     name: 'Moulds',
-    type: 'questions',
   },
   {
     name: 'Other',
-    type: 'questions',
   },
 ]

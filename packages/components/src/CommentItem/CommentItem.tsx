@@ -127,8 +127,10 @@ export const CommentItem = (props: IProps) => {
                 >
                   <Username user={user} />
                   <Text sx={{ fontSize: 1, color: 'darkGrey' }}>
-                    {_edited && 'Edited '}
-                    <DisplayDate date={_edited || _created} />
+                    <DisplayDate
+                      createdAt={_created || ''}
+                      modifiedAt={_edited}
+                    />
                   </Text>
                 </Flex>
 

@@ -4,7 +4,7 @@ import { MOCK_DATA } from '../../data'
 
 const library = Object.values(MOCK_DATA.library)
 
-describe('[How To]', () => {
+describe('[Library]', () => {
   beforeEach(() => {
     cy.visit('/library')
   })
@@ -67,7 +67,7 @@ describe('[How To]', () => {
         cy.title().should('eq', `${item.title} - Library - Precious Plastic`)
         cy.get('[data-cy=library-basis]').then(($summary) => {
           expect($summary).to.contain('howto_creator', 'Author')
-          expect($summary).to.contain('Last update', 'Edit')
+          expect($summary).to.contain('Updated', 'Edit')
           expect($summary).to.contain('Make an interlocking brick', 'Title')
           expect($summary).to.contain(
             'show you how to make a brick using the injection machine',

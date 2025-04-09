@@ -5,7 +5,9 @@ import type { LoaderFunctionArgs } from '@remix-run/node'
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const tagsResult = await client.from('tags').select('id,name')
+  const tagsResult = await client
+    .from('tags')
+    .select('id,name,created_at,modified_at')
 
   const tags = tagsResult.data || []
 

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
+import { LibraryFormProvider } from 'src/pages/Library/Content/Common/LibraryFormProvider'
 import { describe, it } from 'vitest'
 
-import { LibraryFormProvider } from '../Library/Content/Common/LibraryFormProvider'
 import { FormFieldWrapper } from './FormFieldWrapper'
 
 describe('FormFieldWrapper', () => {

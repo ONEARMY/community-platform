@@ -1,6 +1,6 @@
 import { Field } from 'react-final-form'
 import { FieldInput } from 'oa-components'
-import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
+import { FormFieldWrapper } from 'src/pages/common/FormFields'
 import { Box, Text } from 'theme-ui'
 
 import { intro } from '../../labels'

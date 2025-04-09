@@ -40,6 +40,12 @@ const maps: IPageNavigation = {
   title: 'Map',
 }
 
+const news: IPageNavigation = {
+  module: MODULE.NEWS,
+  path: '/news',
+  title: 'News',
+}
+
 export const getAvailablePageList = (
   supportedModules: MODULE[],
 ): IPageNavigation[] => {
@@ -49,6 +55,7 @@ export const getAvailablePageList = (
 }
 
 export const COMMUNITY_PAGES: IPageNavigation[] = [
+  news,
   library,
   maps,
   academy,

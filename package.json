@@ -108,6 +108,7 @@
     "keyv": "^5.1.2",
     "leaflet": "^1.5.1",
     "leaflet.markercluster": "^1.4.1",
+    "marked": "^15.0.8",
     "mobx": "6.9.0",
     "mobx-react": "7.6.0",
     "oa-components": "workspace:*",

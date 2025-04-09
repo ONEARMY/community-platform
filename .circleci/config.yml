@@ -369,15 +369,15 @@ jobs:
       - run:
           name: Set Supabase Secrets
           command: flyctl -a << parameters.FLY_APP_NAME >> secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL RESEND_API_KEY=$RESEND_API_KEY TENANT_ID=$TENANT_ID PATREON_CLIENT_ID=$PATREON_CLIENT_ID PATREON_CLIENT_SECRET=$PATREON_CLIENT_SECRET
-  deploy-supabase:
-    docker:
-      - image: cimg/node:20.7.0
-    steps:
-      - checkout
-      - attach_workspace:
-          at: '.'
-      - run: npx supabase@2.6.8 login --token $SUPABASE_ACCESS_TOKEN
-      - run: (yes || true) | npx supabase@2.6.8 db push --db-url $SUPABASE_DB_URL --debug --password $SUPABASE_DB_PASSWORD
+  # deploy-supabase:
+  #   docker:
+  #     - image: cimg/node:20.7.0
+  #   steps:
+  #     - checkout
+  #     - attach_workspace:
+  #         at: '.'
+  #     - run: npx supabase@2.6.8 login --token $SUPABASE_ACCESS_TOKEN
+  #     - run: (yes || true) | npx supabase@2.6.8 db push --db-url $SUPABASE_DB_URL --debug --password $SUPABASE_DB_PASSWORD
       # - run: npx supabase@2.6.8 functions deploy --no-verify-jwt
   # Run cypress e2e tests on chrome
   test_e2e:

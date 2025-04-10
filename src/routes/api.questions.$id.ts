@@ -2,7 +2,6 @@ import { Image, Question } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { hasAdminRightsSupabase, validateImages } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
-import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
 import { utilsServiceServer } from '../services/utilsService.server'
 import { uploadImages } from './api.questions'
@@ -10,8 +9,7 @@ import { uploadImages } from './api.questions'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBMedia, DBProfile } from 'oa-shared'
-import type { DBQuestion } from 'src/models/question.model'
+import type { DBProfile, DBQuestion } from 'oa-shared'
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   try {

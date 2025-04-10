@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { DonationRequestModal } from '../DonationRequestModal/DonationRequestModal'
 import { DownloadButton } from '../DownloadButton/DownloadButton'
@@ -65,9 +65,9 @@ export const DownloadWithDonationAsk = (props: IProps) => {
           files.map((file, index) => (
             <DownloadStaticFile
               file={file}
-              key={file ? file.publicUrl : `file-${index}`}
+              key={file ? file.url : `file-${index}`}
               handleClick={() => {
-                setLink(file.publicUrl)
+                setLink(file.url!)
                 toggleIsModalOpen()
               }}
               fileDownloadCount={fileDownloadCount}

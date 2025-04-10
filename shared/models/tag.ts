@@ -1,30 +1,45 @@
-export class Tag {
+import type { DBDocSB, Doc } from './document'
+
+export class DBTag implements DBDocSB {
   id: number
+  created_at: Date
+  modified_at: Date | null
+
   name: string
 
-  constructor(obj: Tag) {
+  constructor(obj: any) {
     Object.assign(this, obj)
   }
 
-  static fromDB(obj: DBTag) {
-    return new Tag({
-      id: obj.id,
-      name: obj.name,
+  static toDB(tag: Tag) {
+    const { createdAt, id, modifiedAt, name } = tag
+    return new DBTag({
+      id,
+      created_at: new Date(createdAt),
+      modified_at: modifiedAt ? new Date(modifiedAt) : null,
+      name,
     })
   }
 }
 
-export class DBTag {
-  readonly id: number
+export class Tag implements Doc {
+  id: number
+  createdAt: Date
+  modifiedAt: Date | null
+
   name: string
 
-  constructor(obj: Omit<Tag, 'id'>) {
+  constructor(obj: any) {
     Object.assign(this, obj)
   }
 
-  static toDB(obj: Tag) {
-    return new DBTag({
-      name: obj.name,
+  static fromDB(tag: DBTag) {
+    const { created_at, id, modified_at, name } = tag
+    return new Tag({
+      id,
+      createdAt: new Date(created_at),
+      modified_at: modified_at ? new Date(modified_at) : null,
+      name,
     })
   }
 }

@@ -25,14 +25,13 @@ import {
 } from 'src/utils/validators'
 
 import { QUESTION_MAX_IMAGES, QUESTION_MIN_TITLE_LENGTH } from '../../constants'
-import { questionContentService } from '../../questionContent.service'
 
 import type { Question, QuestionFormData } from 'oa-shared'
 import type { MainFormAction } from 'src/common/Form/types'
 
 interface IProps {
   'data-testid'?: string
-  question: Question
+  question: Question | null
   parentType: MainFormAction
 }
 
@@ -147,9 +146,7 @@ export const QuestionForm = (props: IProps) => {
                 existingImages={initialValues.existingImages}
                 removeExistingImage={removeExistingImage}
               />
-              <CategoryField
-                getCategories={questionContentService.getCategories}
-              />
+              <CategoryField type="questions" />
               <TagsField title={LABELS.fields.tags.title} />
             </>
           </FormWrapper>

@@ -32,11 +32,14 @@ export const research: ResearchItem = {
     {
       id: 123,
       name: 'hi',
+      createdAt: new Date(),
+      modifiedAt: null,
     },
   ],
   commentCount: 0,
   category: {
     createdAt: new Date(),
+    modifiedAt: null,
     id: 1,
     name: 'Landscape',
     type: 'research',

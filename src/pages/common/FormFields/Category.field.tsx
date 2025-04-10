@@ -1,24 +1,24 @@
 import { useEffect, useState } from 'react'
 import { Field } from 'react-final-form'
 import { CategoriesSelectV2 } from 'src/pages/common/Category/CategoriesSelectV2'
-import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { fields } from 'src/pages/Question/labels'
 import { categoryService } from 'src/services/categoryService'
+
+import { FormFieldWrapper } from './FormFieldWrapper'
 
 import type { SelectValue } from 'oa-shared'
 
 interface IProps {
-  getCategories: () => Promise<Category[]>
+  type: 'questions' | 'research' | 'library' | 'news'
 }
 
-export const CategoryField = ({ getCategories }: IProps) => {
+export const CategoryField = ({ type }: IProps) => {
   const [categories, setCategories] = useState<SelectValue[]>([])
-
   const name = 'category'
 
   useEffect(() => {
     const initCategories = async () => {
-      const categories = await getCategories()
+      const categories = await categoryService.getCategories(type)
       if (!categories) {
         return
       }

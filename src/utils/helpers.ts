@@ -3,7 +3,7 @@ import { IModerationStatus, UserRole } from 'oa-shared'
 import { getConfigurationOption, NO_MESSAGING } from 'src/config/config'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 
-import { SUPPORTED_IMAGE_EXTENSIONS } from './storage'
+import { SUPPORTED_IMAGE_TYPES } from './storage'
 
 import type { DBDoc, DBProfile, IMapPin, IModerable, IUser } from 'oa-shared'
 
@@ -247,7 +247,7 @@ export const buildStatisticsLabel = ({
 
 export function validateImage(image: File | null) {
   const error =
-    image?.type && !SUPPORTED_IMAGE_EXTENSIONS.includes(image.type)
+    image?.type && !SUPPORTED_IMAGE_TYPES.includes(image.type)
       ? new Error(`Unsupported image extension: ${image.type}`)
       : null
   const valid: boolean = !error

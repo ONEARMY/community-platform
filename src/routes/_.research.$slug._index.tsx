@@ -47,10 +47,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const tagIds = dbResearch.tags
   let tags: Tag[] = []
   if (tagIds?.length > 0) {
-    const tagsResult = await client
-      .from('tags')
-      .select('id,name')
-      .in('id', tagIds)
+    const tagsResult = await client.from('tags').select('*').in('id', tagIds)
 
     if (tagsResult.data) {
       tags = tagsResult.data.map((x) => Tag.fromDB(x))

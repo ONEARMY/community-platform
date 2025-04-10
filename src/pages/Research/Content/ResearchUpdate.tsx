@@ -123,7 +123,7 @@ const ResearchUpdate = (props: IProps) => {
                       <UserNameTag
                         userName={update.author?.username || ''}
                         countryCode={update.author?.country}
-                        created={update.createdAt}
+                        createdAt={update.createdAt}
                       />
                     </Box>
                   )}
@@ -142,26 +142,12 @@ const ResearchUpdate = (props: IProps) => {
                   }}
                 >
                   <Flex sx={{ flexDirection: ['column'] }}>
-                    <Text
-                      variant="auxiliary"
-                      sx={{
-                        textAlign: ['left', 'right', 'right'],
-                      }}
-                    >
-                      created <DisplayDate date={update.createdAt} />
+                    <Text variant="auxiliary">
+                      <DisplayDate
+                        createdAt={update.createdAt}
+                        modifiedAt={update.modifiedAt}
+                      />
                     </Text>
-
-                    {update.createdAt !== update.modifiedAt &&
-                      update.modifiedAt && (
-                        <Text
-                          variant="auxiliary"
-                          sx={{
-                            textAlign: ['left', 'right', 'right'],
-                          }}
-                        >
-                          edited <DisplayDate date={update.modifiedAt} />
-                        </Text>
-                      )}
                   </Flex>
                   {/* Show edit button for the creator of the research OR a super-admin */}
                   {isEditable && (
@@ -220,6 +206,7 @@ const ResearchUpdate = (props: IProps) => {
               {() => (
                 <CollapsableCommentSection
                   sourceId={update.id}
+                  sourceType="research"
                   authors={authorIds}
                   open={false}
                   total={update.commentCount}

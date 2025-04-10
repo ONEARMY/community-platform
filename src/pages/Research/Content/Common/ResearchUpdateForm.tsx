@@ -22,7 +22,7 @@ import { ResearchErrors } from './ResearchErrors'
 import { SubmitStatus } from './SubmitStatus'
 
 import type { MediaFile, ResearchItem, ResearchUpdate } from 'oa-shared'
-import type { ResearchUpdateFormData } from 'src/models/research.model'
+import type { ResearchUpdateFormData } from '../../research.model'
 
 interface IProps {
   research: ResearchItem

@@ -42,16 +42,16 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
   const [showReplies, setShowReplies] = useState(
     () => !!comment.replies?.some((x) => x.highlighted),
   )
-  const { userStore } = useCommonStores().stores
-  const { activeUser } = userStore
+  const {
+    userStore: { activeUser },
+  } = useCommonStores().stores
 
   const isEditable = useMemo(() => {
     return (
-      activeUser?._authID === comment.createdBy?.firebaseAuthId ||
       activeUser?._id === comment.createdBy?.username ||
       activeUser?.userRoles?.includes(UserRole.ADMIN)
     )
-  }, [activeUser?._authID, comment.createdBy?.firebaseAuthId])
+  }, [activeUser])
 
   const item = 'CommentItem'
 

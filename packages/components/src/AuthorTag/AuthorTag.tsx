@@ -35,7 +35,7 @@ export const AuthorTag = ({
               marginBottom: 2,
             }}
           >
-            | {action} <DisplayDate date={created} />
+            | {action} <DisplayDate createdAt={created} />
           </Text>
         </Flex>
       </Flex>

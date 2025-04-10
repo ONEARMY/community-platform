@@ -30,7 +30,6 @@ const ResearchListItem = ({ item }: IProps) => {
   }
 
   const status = item.status || ResearchStatus.IN_PROGRESS
-  const modifiedDate = useMemo(() => getItemDate(item, 'long'), [item])
 
   return (
     <Card
@@ -170,20 +169,6 @@ const ResearchListItem = ({ item }: IProps) => {
                         : ' contributors')}
                   </Text>
                 )}
-                {/* Hide this on mobile, show on tablet & above. */}
-                {modifiedDate !== '' && (
-                  <Text
-                    sx={{
-                      ml: 4,
-                      display: ['none', 'block'],
-                      fontSize: 1,
-                      color: 'darkGrey',
-                      transform: 'translateY(2px)',
-                    }}
-                  >
-                    {modifiedDate}
-                  </Text>
-                )}
                 <Text
                   sx={{
                     display: ['none', 'inline-block', 'inline-block'],
@@ -225,8 +210,8 @@ const ResearchListItem = ({ item }: IProps) => {
                   }}
                 >
                   <DisplayDate
-                    createdAt={item._created}
-                    modifiedAt={item._contentModifiedTimestamp}
+                    createdAt={item.createdAt}
+                    modifiedAt={item.modifiedAt}
                   />
                 </Text>
               </Box>
@@ -262,25 +247,6 @@ const ResearchListItem = ({ item }: IProps) => {
       </Flex>
     </Card>
   )
-}
-
-const getItemDate = (item: ResearchItem, variant: string) => {
-  try {
-    const contentModifiedDate = <DisplayDate date={item.modifiedAt!} />
-    const creationDate = <DisplayDate date={item.createdAt} />
-
-    if (item.modifiedAt !== item.createdAt) {
-      return variant === 'long' ? (
-        <>Updated {contentModifiedDate}</>
-      ) : (
-        contentModifiedDate
-      )
-    } else {
-      return variant === 'long' ? <>Created {creationDate}</> : creationDate
-    }
-  } catch (err) {
-    return ''
-  }
 }
 
 export default ResearchListItem

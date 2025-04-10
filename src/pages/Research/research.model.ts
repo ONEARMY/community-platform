@@ -3,8 +3,8 @@ import type {
   Image,
   MediaFile,
   ResearchStatus,
+  SelectValue,
 } from 'oa-shared'
-import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
 
 export type ResearchFormData = {
   title: string

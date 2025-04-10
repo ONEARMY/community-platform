@@ -2,7 +2,9 @@ import { logger } from 'src/logger'
 
 import type { Category } from 'oa-shared'
 
-const getCategories = async (type: 'questions' | 'research' | 'library') => {
+const getCategories = async (
+  type: 'questions' | 'research' | 'library' | 'news',
+) => {
   try {
     const response = await fetch(`/api/categories/${type}`)
     return (await response.json()) as Category[]

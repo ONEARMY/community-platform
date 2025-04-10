@@ -5,7 +5,7 @@ import { notificationsService } from 'src/services/notificationsService.server'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { User } from '@supabase/supabase-js'
-import type { DBAuthor, DBProfile, Reply } from 'oa-shared'
+import type { ContentType, DBAuthor, DBProfile, Reply } from 'oa-shared'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   if (!params.sourceId) {
@@ -121,7 +121,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     comment: data.comment,
     source_id_legacy: isNaN(+params.sourceId!) ? params.sourceId : null,
     source_id: isNaN(+params.sourceId!) ? null : +params.sourceId!,
-    source_type: data.sourceType,
+    source_type: mapSourceType(data.sourceType),
     created_by: currentUser.data[0].id,
     parent_id: data.parentId ?? null,
     tenant_id: process.env.TENANT_ID,
@@ -194,5 +194,26 @@ async function validateRequest(
     return { status: 400, statusText: 'sourceType is required' }
   }
 
+  if (
+    !['questions', 'projects', 'research', 'news'].includes(data.sourceType)
+  ) {
+    return { status: 400, statusText: 'invalid sourceType' }
+  }
+
   return { valid: true }
+}
+
+const mapSourceType = (sourceType: ContentType) => {
+  switch (sourceType) {
+    case 'research':
+      return 'research_update'
+    case 'news':
+      return 'news'
+    case 'projects':
+      return 'project'
+    case 'questions':
+      return 'question'
+    default:
+      throw new Error('Invalid sourceType')
+  }
 }

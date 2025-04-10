@@ -59,7 +59,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   )
   const fileLink = updateDb?.file_link
   const files = updateDb?.file_ids?.at(0)
-    ? await storageServiceServer.getFilesInfo('research', updateDb.id, client)
+    ? await storageServiceServer.getContentTypeFiles(
+        'research',
+        updateDb.id,
+        client,
+      )
     : []
 
   return Response.json({ research, update, fileLink, files }, { headers })

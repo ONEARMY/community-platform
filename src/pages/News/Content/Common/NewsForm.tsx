@@ -15,7 +15,6 @@ import { storageService } from 'src/services/storageService'
 import { composeValidators, minValue, required } from 'src/utils/validators'
 
 import { NEWS_MIN_TITLE_LENGTH } from '../../constants'
-import { newsContentService } from '../../newsContent.service'
 import { NewsBodyField, NewsImageField } from './FormFields'
 
 import type { News, NewsFormData } from 'oa-shared'
@@ -23,7 +22,7 @@ import type { MainFormAction } from 'src/common/Form/types'
 
 interface IProps {
   'data-testid'?: string
-  news: News
+  news: News | null
   parentType: MainFormAction
 }
 
@@ -152,7 +151,7 @@ export const NewsForm = (props: IProps) => {
               existingHeroImage={initialValues.existingHeroImage}
               removeExistingImage={removeExistingImage}
             />
-            <CategoryField getCategories={newsContentService.getCategories} />
+            <CategoryField type="news" />
             <TagsField title={LABELS.fields.tags.title} />
           </FormWrapper>
         )

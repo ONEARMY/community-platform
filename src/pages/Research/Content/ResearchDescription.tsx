@@ -16,6 +16,7 @@ import {
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
+import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
 import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel } from 'src/utils/helpers'
 import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
@@ -192,11 +193,11 @@ const ResearchDescription = ({
           </Flex>
           <Box sx={{ marginX: 2 }}>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
-              <ContentAuthorTimestamp
+              <UserNameTag
                 userName={research.author?.username || ''}
+                createdAt={research.createdAt}
+                modifiedAt={research.modifiedAt}
                 countryCode={research.author?.country}
-                created={research.createdAt}
-                modified={research.modifiedAt || undefined}
                 action="Started"
               />
 

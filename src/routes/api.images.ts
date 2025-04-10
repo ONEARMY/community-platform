@@ -29,20 +29,20 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json({}, { status, statusText })
     }
 
-    const uploadedImage = await storageServiceServer.uploadImage(
-      id || user?.id || 0,
-      imageFile,
+    const uploadedImage = await storageServiceServer.uploadMedia(
+      [imageFile],
+      `${id ? contentType : 'users'}/${id ?? user!.id}`,
       client,
-      id ? contentType : 'users',
     )
 
-    const image =
-      uploadedImage?.image &&
-      storageServiceServer.getImagePublicUrl(client, uploadedImage.image)
-
-    if (uploadedImage?.error) {
-      throw uploadedImage?.error.message
+    if (uploadedImage?.errors) {
+      throw uploadedImage?.errors
     }
+
+    const [image] = storageServiceServer.getPublicUrls(
+      client,
+      uploadedImage!.media,
+    )
 
     return Response.json({ image }, { headers })
   } catch (error) {

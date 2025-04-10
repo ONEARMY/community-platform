@@ -282,6 +282,7 @@ describe('Research Article', () => {
               name: 'Science',
               id: faker.number.int(),
               createdAt: faker.date.past(),
+              modifiedAt: null,
               type: 'research',
             },
           }),

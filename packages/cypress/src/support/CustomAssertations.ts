@@ -1,6 +1,6 @@
 import chaiSubset from 'chai-subset'
 
-import type { ILibrary, IResearchDB, IUserDB, ProfileTypeName } from 'oa-shared'
+import type { ILibrary, IUserDB, ProfileTypeName } from 'oa-shared'
 
 declare global {
   namespace Chai {
@@ -100,23 +100,6 @@ const eqProjectStep = (chaiObj) => {
   chaiObj.Assertion.addMethod('eqProjectStep', compare)
 }
 
-const eqResearch = (chaiObj) => {
-  function compare(this: any, expected: any) {
-    const subject: IResearchDB = this._obj
-    const { _createdBy, _deleted, description, title, slug, previousSlugs } =
-      expected
-    expect(subject, 'Basic info').to.containSubset({
-      _createdBy,
-      _deleted,
-      description,
-      title,
-      slug,
-      previousSlugs,
-    })
-  }
-  chaiObj.Assertion.addMethod('eqResearch', compare)
-}
-
 const eqSettings = (chaiObj) => {
   type Assert<S, E> = (subject: S, expected: E) => void
   class ChainAssert<S, E> {
@@ -210,6 +193,5 @@ const eqSettings = (chaiObj) => {
 }
 chai.use(eqProject)
 chai.use(eqProjectStep)
-chai.use(eqResearch)
 chai.use(eqSettings)
 chai.use(chaiSubset)

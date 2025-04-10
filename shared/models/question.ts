@@ -1,11 +1,13 @@
 import { Author } from './author'
-import { Category } from './document'
+import { Category } from './category'
 
 import type { DBAuthor } from './author'
+import type { DBCategory } from './category'
 import type { IConvertedFileMeta } from './common'
-import type { ContentDoc, DBCategory, DBContentDoc, Tag } from './document'
-import type { DBImage, Image } from './image'
+import type { ContentDoc, DBContentDoc } from './content'
+import type { DBMedia, Image } from './media'
 import type { SelectValue } from './other'
+import type { Tag } from './tag'
 
 export class DBQuestion implements DBContentDoc {
   readonly id: number
@@ -26,7 +28,7 @@ export class DBQuestion implements DBContentDoc {
   readonly useful_count?: number
 
   readonly description: string
-  readonly images: DBImage[] | null
+  readonly images: DBMedia[] | null
 
   constructor(question: DBQuestion) {
     Object.assign(this, question)

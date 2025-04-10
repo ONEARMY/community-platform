@@ -1,7 +1,7 @@
 import { storageServiceServer } from './storageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBImage } from 'oa-shared'
+import type { DBMedia } from 'oa-shared'
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
   return client
@@ -33,18 +33,14 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
 
 const getHeroImage = async (
   client: SupabaseClient,
-  dbImage: DBImage | null,
+  dbImage: DBMedia | null,
 ) => {
   if (!dbImage) {
     return null
   }
 
   const size = { width: 1240, height: 620 }
-  const images = storageServiceServer.getImagesPublicUrls(
-    client,
-    [dbImage],
-    size,
-  )
+  const images = storageServiceServer.getPublicUrls(client, [dbImage], size)
 
   return images[0]
 }

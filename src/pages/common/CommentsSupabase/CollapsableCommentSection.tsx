@@ -4,8 +4,11 @@ import { Box, Button } from 'theme-ui'
 import { CommentSectionSupabase } from './CommentSectionSupabase'
 import { MultipleCommentSectionContext } from './MultipleCommentSectionWrapper'
 
+import type { ContentType } from 'oa-shared'
+
 type Props = {
   sourceId: number | string
+  sourceType: ContentType
   authors: number[]
   open: boolean
   total: number
@@ -13,6 +16,7 @@ type Props = {
 
 const CollapsableCommentSection = ({
   sourceId,
+  sourceType,
   authors,
   open,
   total,
@@ -69,7 +73,11 @@ const CollapsableCommentSection = ({
         {buttonText}
       </Button>
       {isOpen && (
-        <CommentSectionSupabase sourceId={sourceId} authors={authors} />
+        <CommentSectionSupabase
+          sourceId={sourceId}
+          sourceType={sourceType}
+          authors={authors}
+        />
       )}
     </Box>
   )

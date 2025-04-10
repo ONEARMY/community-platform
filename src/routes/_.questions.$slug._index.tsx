@@ -1,5 +1,5 @@
 import { useLoaderData } from '@remix-run/react'
-import { Question, Tag } from 'oa-shared'
+import { Question } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { QuestionPage } from 'src/pages/Question/QuestionPage'
@@ -40,9 +40,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       dbQuestion.tags,
     )
 
-  const images = storageServiceServer.getImagesPublicUrls(
+  const images = storageServiceServer.getPublicUrls(
     client,
-    dbQuestion.images,
+    dbQuestion.images!,
     IMAGE_SIZES.GALLERY,
   )
 

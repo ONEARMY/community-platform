@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from '@remix-run/react'
 import { Button, Loader } from 'oa-components'
 import { logger } from 'src/logger'
-import { questionContentService } from 'src/pages/Question/questionContent.service'
 import { Card, Flex, Heading } from 'theme-ui'
 
 import { listing } from './labels'
+import { questionService } from './questionContent.service'
 import { QuestionListHeader } from './QuestionListHeader'
 import { QuestionListItem } from './QuestionListItem'
 
@@ -43,12 +43,7 @@ export const QuestionListing = () => {
     setIsFetching(true)
 
     try {
-      const result = await questionContentService.search(
-        q,
-        category,
-        sort,
-        skip,
-      )
+      const result = await questionService.search(q, category, sort, skip)
 
       if (result) {
         if (skip) {

@@ -12,7 +12,7 @@ export const Default: StoryFn<typeof DownloadStaticFile> = () => (
     file={{
       name: 'example',
       size: 1200000,
-      publicUrl: 'https://example.com',
+      url: 'https://example.com',
       id: '',
     }}
     fileDownloadCount={346}
@@ -23,7 +23,7 @@ export const LoggedOut: StoryFn<typeof DownloadStaticFile> = () => (
     file={{
       name: 'example',
       size: 1200000,
-      publicUrl: 'https://example.com',
+      url: 'https://example.com',
       id: '',
     }}
     redirectToSignIn={async () => {

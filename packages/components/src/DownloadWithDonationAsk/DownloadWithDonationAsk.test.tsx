@@ -62,7 +62,7 @@ describe('DownloadWithDonationAsk', () => {
         fileLink={undefined}
         files={[
           {
-            publicUrl,
+            url: publicUrl,
             name: 'first-file',
             size: 435435,
           } as MediaFile,

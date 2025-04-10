@@ -83,14 +83,14 @@ export const DownloadStaticFile = (props: IProps) => {
     return null
   }
 
-  const forDownload = allowDownload && file.publicUrl && !redirectToSignIn
+  const forDownload = allowDownload && file.url && !redirectToSignIn
 
   return (
     <>
       {forDownload && (
         <ExternalLink
           onClick={() => handleClick && handleClick()}
-          href={file.publicUrl}
+          href={file.url}
           download={file.name}
           sx={{ width: '300px', ml: 0, mr: 1 }}
         >

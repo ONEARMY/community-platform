@@ -116,7 +116,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
           .select()
 
         if (result.data) {
-          research.image = result.data[0].image
+          const [image] = storageServiceServer.getPublicUrls(
+            client,
+            result.data,
+          )
+
+          research.image = image
         }
       }
     }

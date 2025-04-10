@@ -10,12 +10,12 @@ import {
 } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { UserAction } from 'src/common/UserAction'
-import { QuestionSearchParams } from 'src/pages/Question/question.service'
 import { categoryService } from 'src/services/categoryService'
 import { Button, Flex } from 'theme-ui'
 
 import { ListHeader } from '../common/Layout/ListHeader'
 import { headings, listing } from './labels'
+import { QuestionSearchParams } from './questionContent.service'
 import { QuestionSortOptions } from './QuestionSortOptions'
 
 import type { Category } from 'oa-shared'

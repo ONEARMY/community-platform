@@ -19,9 +19,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { ResearchArticlePage } from './ResearchArticlePage'
 
-import type { Author } from 'oa-shared'
-import type { ResearchItem } from 'src/models/research.model'
-import type { Mock } from 'vitest'
+import type { Author, ResearchItem } from 'oa-shared'
 
 const Theme = testingThemeStyles
 
@@ -58,11 +56,6 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
 vi.mock('src/stores/Research/research.store')
 
 describe('Research Article', () => {
-  const mockResearchStore = {
-    addSubscriberToResearchArticlePage: vi.fn(),
-    formatResearchCommentList: vi.fn(),
-  }
-
   it('displays content statistics', async () => {
     // Arrange
     const activeResearchItem = FactoryResearchItem({
@@ -74,8 +67,6 @@ describe('Research Article', () => {
         }),
       ],
     })
-
-    ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
 
     // Act
     let wrapper
@@ -96,9 +87,6 @@ describe('Research Article', () => {
   })
 
   it('does not display contributors when undefined', async () => {
-    // Arrange
-    ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
-
     // Act
     let wrapper
     await act(async () => {
@@ -140,9 +128,6 @@ describe('Research Article', () => {
 
   describe('Research Update', () => {
     it('displays contributors', async () => {
-      // Arrange
-      ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
-
       // wait for Promise to resolve and state to update
       let wrapper
       act(() => {
@@ -237,12 +222,6 @@ describe('Research Article', () => {
         description: 'A description',
         deleted: false,
       })
-      ;(useResearchStore as Mock).mockReturnValue({
-        ...mockResearchStore,
-        formatResearchCommentList: vi.fn().mockImplementation((c) => {
-          return c
-        }),
-      })
 
       // Act
       const wrapper = getWrapper(
@@ -273,9 +252,6 @@ describe('Research Article', () => {
   })
 
   it('shows only published updates', async () => {
-    // Arrange
-    ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
-
     // Act
     let wrapper
     act(() => {
@@ -310,9 +286,6 @@ describe('Research Article', () => {
 
   describe('Breadcrumbs', () => {
     it('displays breadcrumbs with category', async () => {
-      // Arrange
-      ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
-
       // Act
       let wrapper
       act(() => {
@@ -350,9 +323,6 @@ describe('Research Article', () => {
     })
 
     it('displays breadcrumbs without category', async () => {
-      // Arrange
-      ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
-
       // Act
       let wrapper
       act(() => {

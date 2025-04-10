@@ -11,10 +11,10 @@ import { update as updateLabels } from 'src/pages/Research/labels'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { Flex, Label, Text } from 'theme-ui'
 
-import type { Media } from 'src/models/image.model'
+import type { MediaFile } from 'oa-shared'
 
 export const FilesFields = (props: {
-  files: Media[]
+  files: MediaFile[]
   deleteFile: (id: string) => void
 }) => {
   const { title } = updateLabels.files
@@ -63,7 +63,7 @@ const AlreadyAddedFiles = ({
   files,
   deleteFile,
 }: {
-  files: Media[]
+  files: MediaFile[]
   deleteFile: (id: string) => void
 }) => {
   return (
@@ -71,10 +71,8 @@ const AlreadyAddedFiles = ({
       {files.map((file) => (
         <FileDisplay
           key={file.id}
-          id={file.id}
-          name={file.publicUrl.split('/').at(-1) || ''}
-          url={file.publicUrl}
-          onRemove={deleteFile}
+          file={file}
+          onRemove={() => deleteFile(file.id)}
         />
       ))}
     </Flex>

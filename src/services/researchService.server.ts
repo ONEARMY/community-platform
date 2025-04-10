@@ -3,7 +3,7 @@ import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { storageServiceServer } from './storageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBResearchItem, ResearchItem } from 'src/models/research.model'
+import type { DBResearchItem, ResearchItem } from 'oa-shared'
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
   return client
@@ -27,7 +27,7 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
        is_draft,
        collaborators,
        author:profiles(id, display_name, username, is_verified, is_supporter, country),
-       updates:research_updates(id, created_at, title, description, images, files, file_link, video_url, is_draft, comment_count, modified_at, deleted)
+       updates:research_updates(id, created_at, title, description, images, file_ids, file_link, video_url, is_draft, comment_count, modified_at, deleted)
      `,
     )
     .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
@@ -43,7 +43,7 @@ const getUpdate = async (
   return client
     .from('research_updates')
     .select(
-      'id, research_id, created_at, title, description, images, files, file_link, video_url, is_draft, comment_count, modified_at, deleted',
+      'id, research_id, created_at, title, description, images, file_ids, file_link, video_url, is_draft, comment_count, modified_at, deleted',
     )
     .eq('id', updateId)
     .eq('research_id', researchId)
@@ -82,17 +82,9 @@ const getResearchPublicMedia = (
     allImages.push(researchDb.image)
   }
 
-  const updateFiles =
-    researchDb.updates?.flatMap((x) => x.files)?.filter((x) => !!x) || []
-
-  const images = allImages
+  return allImages
     ? storageServiceServer.getPublicUrls(client, allImages, IMAGE_SIZES.GALLERY)
     : []
-  const files = updateFiles
-    ? storageServiceServer.getPublicUrls(client, updateFiles) || []
-    : []
-
-  return { images, files }
 }
 
 export const researchServiceServer = {

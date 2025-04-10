@@ -13,7 +13,7 @@ import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
 import { researchStatusColour } from '../researchHelpers'
 
-import type { ResearchItem } from 'src/models/research.model'
+import type { ResearchItem } from 'oa-shared'
 
 interface IProps {
   item: ResearchItem

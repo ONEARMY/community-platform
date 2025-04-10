@@ -1,9 +1,8 @@
 import { logger } from 'src/logger'
 
-import type { ResearchStatus } from 'oa-shared'
+import type { ResearchItem, ResearchStatus } from 'oa-shared'
 import type {
   ResearchFormData,
-  ResearchItem,
   ResearchUpdateFormData,
 } from 'src/models/research.model'
 import type { ResearchSortOption } from './ResearchSortOptions'

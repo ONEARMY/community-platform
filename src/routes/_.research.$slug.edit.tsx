@@ -1,12 +1,12 @@
 import { redirect, useLoaderData } from '@remix-run/react'
-import { ResearchItem } from 'src/models/research.model'
+import { ResearchItem } from 'oa-shared'
 import ResearchForm from 'src/pages/Research/Content/Common/ResearchForm'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { isAllowedToEditResearch } from 'src/services/researchPermissions.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { DBResearchItem } from 'src/models/research.model'
+import type { DBResearchItem } from 'oa-shared'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -37,18 +37,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const username = user.user_metadata.username
   const researchDb = result.data as unknown as DBResearchItem
-  const { images, files } = researchServiceServer.getResearchPublicMedia(
+  const images = researchServiceServer.getResearchPublicMedia(
     researchDb,
     client,
   )
 
-  const research = ResearchItem.fromDB(
-    researchDb,
-    [],
-    images,
-    files,
-    currentUserId,
-  )
+  const research = ResearchItem.fromDB(researchDb, [], images, currentUserId)
 
   if (!(await isAllowedToEditResearch(client, research, username))) {
     return redirect('/research')

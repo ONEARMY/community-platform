@@ -1,12 +1,11 @@
-import { ResearchUpdate } from 'src/models/research.model'
+import { ResearchUpdate } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { mediaServiceServer } from 'src/services/mediaService.server'
+import { storageServiceServer } from 'src/services/storageService.server'
 import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBMedia } from 'src/models/image.model'
-import type { DBResearchUpdate } from 'src/models/research.model'
+import type { DBMedia, DBResearchUpdate } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   try {
@@ -131,7 +130,7 @@ async function updateOrReplaceMedia(
   }
 
   if (newUploads.length > 0) {
-    const result = await mediaServiceServer.uploadMedia(
+    const result = await storageServiceServer.uploadMedia(
       newUploads,
       path,
       client,

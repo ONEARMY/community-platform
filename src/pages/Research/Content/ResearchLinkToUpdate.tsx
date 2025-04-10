@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Icon, InternalLink, Tooltip } from 'oa-components'
 
-import type { ResearchItem, ResearchUpdate } from 'src/models/research.model'
+import type { ResearchItem, ResearchUpdate } from 'oa-shared'
 
 interface IProps {
   research: ResearchItem

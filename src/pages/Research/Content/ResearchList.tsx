@@ -11,8 +11,7 @@ import { ResearchFilterHeader } from './ResearchListHeader'
 import ResearchListItem from './ResearchListItem'
 import { ResearchSearchParams } from './ResearchSearchParams'
 
-import type { ResearchStatus } from 'oa-shared'
-import type { ResearchItem } from 'src/models/research.model'
+import type { ResearchItem, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from '../ResearchSortOptions'
 
 const ResearchList = () => {

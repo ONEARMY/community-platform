@@ -1,7 +1,7 @@
 import { useLoaderData } from '@remix-run/react'
+import { Tag } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { Question } from 'src/models/question.model'
-import { Tag } from 'src/models/tag.model'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { QuestionPage } from 'src/pages/Question/QuestionPage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'

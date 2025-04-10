@@ -99,10 +99,12 @@ export const FileInput = (props: IProps) => {
       {files.map((file) => (
         <FileDisplay
           key={file.id}
-          id={file.id}
-          name={file.name}
-          size={file.size}
-          onRemove={remove}
+          file={{
+            id: file.id,
+            name: file.name,
+            size: file.size,
+          }}
+          onRemove={() => remove(file.id)}
         />
       ))}
 

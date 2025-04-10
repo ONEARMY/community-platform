@@ -1,17 +1,14 @@
-import { IModerationStatus } from 'oa-shared'
+import { IModerationStatus, ResearchItem } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
-import { ResearchItem } from 'src/models/research.model'
 import { ITEMS_PER_PAGE } from 'src/pages/Research/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { discordServiceServer } from 'src/services/discordService.server'
-import { mediaServiceServer } from 'src/services/mediaService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBProfile, ResearchStatus } from 'oa-shared'
-import type { DBResearchItem } from 'src/models/research.model'
+import type { DBProfile, DBResearchItem, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts'
 
 // runs on the server
@@ -155,7 +152,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const research = ResearchItem.fromDB(researchResult.data[0], [])
 
     if (uploadedImage) {
-      const mediaResult = await mediaServiceServer.uploadMedia(
+      const mediaResult = await storageServiceServer.uploadMedia(
         [uploadedImage],
         `research/${research.id}`,
         client,

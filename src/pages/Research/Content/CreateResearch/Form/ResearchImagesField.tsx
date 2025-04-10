@@ -8,7 +8,7 @@ import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { Image as ImageComponent } from 'theme-ui'
 
-import type { Media } from 'src/models/image.model'
+import type { Image } from 'oa-shared'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -19,7 +19,7 @@ const ImageInputFieldWrapper = styled.div`
 
 interface IProps {
   inputsAvailable: number
-  existingImages: Media[] | null
+  existingImages: Image[] | null
   removeExistingImage: (index: number) => void
 }
 

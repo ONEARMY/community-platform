@@ -1,6 +1,6 @@
-import { ResearchUpdate } from 'src/models/research.model'
+import { ResearchUpdate } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { mediaServiceServer } from 'src/services/mediaService.server'
+import { storageServiceServer } from 'src/services/storageService.server'
 import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
@@ -99,7 +99,7 @@ async function uploadAndUpdateMedia(
   client: SupabaseClient,
 ) {
   if (files.length > 0) {
-    const mediaResult = await mediaServiceServer.uploadMedia(
+    const mediaResult = await storageServiceServer.uploadMedia(
       files,
       path,
       client,

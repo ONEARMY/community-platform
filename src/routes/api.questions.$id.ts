@@ -1,3 +1,4 @@
+import { Image } from 'oa-shared'
 import { Question } from 'src/models/question.model'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { hasAdminRightsSupabase } from 'src/utils/helpers'
@@ -7,8 +8,7 @@ import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBProfile } from 'oa-shared'
-import type { DBMedia } from 'src/models/image.model'
+import type { DBMedia, DBProfile } from 'oa-shared'
 import type { DBQuestion } from 'src/models/question.model'
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
@@ -60,7 +60,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const questionId = Number(params.id)
 
-    let images: DBMedia[] = []
+    let images: Image[] = []
 
     if (imagesToKeepIds.length > 0) {
       const questionImages = await client
@@ -80,7 +80,16 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       const imageResult = await uploadImages(questionId, uploadedImages, client)
 
       if (imageResult) {
-        images = [...images, ...imageResult.images]
+        images = [
+          ...images,
+          ...imageResult.images.map(
+            (x) =>
+              new Image({
+                id: x.id,
+                publicUrl: x.fullPath,
+              }),
+          ),
+        ]
       }
     }
 

@@ -1,14 +1,12 @@
-import { UserRole } from 'oa-shared'
-import { ResearchItem } from 'src/models/research.model'
+import { ResearchItem, UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { mediaServiceServer } from 'src/services/mediaService.server'
 import { profileServiceServer } from 'src/services/profileService.server'
+import { storageServiceServer } from 'src/services/storageService.server'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBProfile } from 'oa-shared'
-import type { DBResearchItem } from 'src/models/research.model'
+import type { DBProfile, DBResearchItem } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   try {
@@ -100,7 +98,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const research = ResearchItem.fromDB(researchResult.data[0], [])
 
     if (uploadedImage) {
-      const mediaResult = await mediaServiceServer.uploadMedia(
+      const mediaResult = await storageServiceServer.uploadMedia(
         [uploadedImage],
         `research/${research.id}`,
         client,

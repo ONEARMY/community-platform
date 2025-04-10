@@ -1,7 +1,7 @@
 import { UserRole } from 'oa-shared'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { ResearchItem } from 'src/models/research.model'
+import type { ResearchItem } from 'oa-shared'
 
 export const isAllowedToEditResearch = async (
   client: SupabaseClient,

@@ -5,14 +5,11 @@ import { ExternalLink } from '../ExternalLink/ExternalLink'
 import { Icon } from '../Icon/Icon'
 import { Tooltip } from '../Tooltip/Tooltip'
 
+import type { MediaFile } from 'oa-shared'
 import type { availableGlyphs } from '../Icon/types'
 
 export interface IProps {
-  file: {
-    name: string
-    size: number
-    downloadUrl?: string | undefined
-  }
+  file: MediaFile
   fileDownloadCount?: number
   forDonationRequest?: boolean
   isLoggedIn?: boolean
@@ -22,14 +19,14 @@ export interface IProps {
 }
 
 interface IPropFileDetails {
-  file: { name: string }
+  name: string
   glyph: availableGlyphs
   size: string
   redirectToSignIn?: () => Promise<void>
 }
 
 const FileDetails = (props: IPropFileDetails) => {
-  const { file, glyph, size, redirectToSignIn } = props
+  const { name, glyph, size, redirectToSignIn } = props
 
   return (
     <>
@@ -62,7 +59,7 @@ const FileDetails = (props: IPropFileDetails) => {
             mr: 3,
           }}
         >
-          {file.name}
+          {name}
         </Text>
         <Text sx={{ fontSize: 1 }}>{size}</Text>
       </Flex>
@@ -86,18 +83,18 @@ export const DownloadStaticFile = (props: IProps) => {
     return null
   }
 
-  const forDownload = allowDownload && file.downloadUrl && !redirectToSignIn
+  const forDownload = allowDownload && file.publicUrl && !redirectToSignIn
 
   return (
     <>
       {forDownload && (
         <ExternalLink
           onClick={() => handleClick && handleClick()}
-          href={file.downloadUrl}
+          href={file.publicUrl}
           download={file.name}
           sx={{ width: '300px', ml: 0, mr: 1 }}
         >
-          <FileDetails file={file} glyph="download-cloud" size={size} />
+          <FileDetails name={file.name} glyph="download-cloud" size={size} />
         </ExternalLink>
       )}
 

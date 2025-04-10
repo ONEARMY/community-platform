@@ -49,7 +49,7 @@ describe('research.service', () => {
         json: () => Promise.resolve({ total: 5 }),
       })
 
-      const result = await researchService.getDraftCount('user123')
+      const result = await researchService.getDraftCount()
 
       expect(result).toBe(5)
     })
@@ -57,7 +57,7 @@ describe('research.service', () => {
     it('handles errors in fetching draft count', async () => {
       global.fetch = vi.fn().mockRejectedValue('error')
 
-      const result = await researchService.getDraftCount('user123')
+      const result = await researchService.getDraftCount()
 
       expect(result).toBe(0)
     })
@@ -72,7 +72,7 @@ describe('research.service', () => {
           }),
       })
 
-      const result = await researchService.getDrafts('user123')
+      const result = await researchService.getDrafts()
 
       expect(result).toEqual([{ id: 'draft1', title: 'Draft Research' }])
     })
@@ -80,7 +80,7 @@ describe('research.service', () => {
     it('handles errors in fetching drafts', async () => {
       global.fetch = vi.fn().mockRejectedValue('error')
 
-      const result = await researchService.getDrafts('user123')
+      const result = await researchService.getDrafts()
 
       expect(result).toEqual([])
     })

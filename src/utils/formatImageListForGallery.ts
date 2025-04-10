@@ -1,7 +1,6 @@
 import { cdnImageUrl } from './cdnImageUrl'
 
-import type { IConvertedFileMeta, IUploadedFileMeta } from 'oa-shared'
-import type { Media } from 'src/models/image.model'
+import type { IConvertedFileMeta, Image, IUploadedFileMeta } from 'oa-shared'
 
 export const formatImagesForGallery = (
   imageList: (IUploadedFileMeta | File | IConvertedFileMeta | null)[],
@@ -24,7 +23,7 @@ export const formatImagesForGallery = (
 }
 
 export const formatImagesForGalleryV2 = (
-  imageList: Media[],
+  imageList: Image[],
   altPrefix?: string,
 ) => {
   if (!imageList) {
@@ -33,8 +32,8 @@ export const formatImagesForGalleryV2 = (
 
   return imageList
     .filter(Boolean)
-    .filter((i: Media) => !!i?.publicUrl)
-    .map((image: Media, index: number) => ({
+    .filter((i: Image) => !!i?.publicUrl)
+    .map((image: Image, index: number) => ({
       downloadUrl: image.publicUrl.split('?')[0],
       thumbnailUrl: image.publicUrl,
       alt: `${altPrefix ? altPrefix + ' ' : ''}Gallery image ${index + 1}`,

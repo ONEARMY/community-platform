@@ -1,9 +1,8 @@
 import { Breadcrumbs as BreadcrumbsComponent } from 'oa-components'
 import { Box } from 'theme-ui'
 
-import type { ILibrary } from 'oa-shared'
+import type { ILibrary, ResearchItem } from 'oa-shared'
 import type { Question } from 'src/models/question.model'
-import type { ResearchItem } from 'src/models/research.model'
 
 type Step = { text: string; link?: string }
 type Content = ResearchItem | Question | ILibrary.Item

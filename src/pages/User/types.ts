@@ -1,5 +1,4 @@
-import type { ILibrary } from 'oa-shared'
-import type { ResearchItem } from 'src/models/research.model'
+import type { ILibrary, ResearchItem } from 'oa-shared'
 
 export interface UserCreatedDocs {
   projects: ILibrary.DB[]

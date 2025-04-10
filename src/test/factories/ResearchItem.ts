@@ -1,11 +1,8 @@
 import { faker } from '@faker-js/faker'
 import { ResearchStatus, ResearchUpdateStatus } from 'oa-shared'
 
-import type {
-  ResearchFormData,
-  ResearchItem,
-  ResearchUpdate,
-} from 'src/models/research.model'
+import type { ResearchItem, ResearchUpdate } from 'oa-shared'
+import type { ResearchFormData } from 'src/models/research.model'
 
 export const FactoryResearchItemUpdate = (
   researchItemUpdateOverloads: Partial<ResearchUpdate> = {},
@@ -14,14 +11,14 @@ export const FactoryResearchItemUpdate = (
   commentCount: 0,
   description: faker.lorem.sentences(2),
   images: [],
-  files: [],
+  fileIds: [],
+  fileDownloadCount: faker.number.int(),
   id: faker.number.int(),
   modifiedAt: faker.date.past(),
   createdAt: faker.date.past(),
   deleted: false,
   author: null,
   videoUrl: null,
-  fileLink: null,
   status: ResearchUpdateStatus.PUBLISHED,
   ...researchItemUpdateOverloads,
 })
@@ -43,6 +40,8 @@ export const FactoryResearchItem = (
   description: faker.lorem.paragraphs(),
   title: faker.lorem.words(),
   slug: faker.lorem.slug(),
+  previousSlugs: [],
+  collaboratorsUsernames: [],
   updates: [FactoryResearchItemUpdate()],
   tags: [],
   totalViews: faker.number.int(),
@@ -63,5 +62,6 @@ export const FactoryResearchItemFormInput = (
   title: faker.lorem.words(),
   description: faker.lorem.paragraphs(),
   status: ResearchStatus.IN_PROGRESS,
+  existingImage: null,
   ...researchItemOverloads,
 })

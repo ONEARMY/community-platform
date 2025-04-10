@@ -16,25 +16,23 @@ import { researchService } from '../../research.service'
 import { DescriptionField } from '../CreateResearch/Form/DescriptionField'
 import { FilesFields } from '../CreateResearch/Form/FilesFields'
 import { ResearchImagesField } from '../CreateResearch/Form/ResearchImagesField'
-// import { FilesFields } from '../CreateResearch/Form/FilesFields'
 import { TitleField } from '../CreateResearch/Form/TitleField'
 import VideoUrlField from '../CreateResearch/Form/VideoUrlField'
 import { ResearchErrors } from './ResearchErrors'
 import { SubmitStatus } from './SubmitStatus'
 
-import type {
-  ResearchItem,
-  ResearchUpdate,
-  ResearchUpdateFormData,
-} from 'src/models/research.model'
+import type { MediaFile, ResearchItem, ResearchUpdate } from 'oa-shared'
+import type { ResearchUpdateFormData } from 'src/models/research.model'
 
 interface IProps {
   research: ResearchItem
-  researchUpdate: ResearchUpdate | null
+  researchUpdate?: ResearchUpdate
+  files?: MediaFile[]
+  fileLink?: string
 }
 
 export const ResearchUpdateForm = (props: IProps) => {
-  const { research, researchUpdate } = props
+  const { research, researchUpdate, files, fileLink } = props
   const [formState, setFormState] = useState<{ dirty: boolean }>({
     dirty: false,
   })
@@ -59,8 +57,8 @@ export const ResearchUpdateForm = (props: IProps) => {
         title: researchUpdate?.title,
         description: researchUpdate?.description,
         existingImages: researchUpdate?.images || [],
-        existingFiles: researchUpdate?.files || [],
-        fileLink: researchUpdate?.fileLink || '',
+        existingFiles: files,
+        fileLink: fileLink,
         videoUrl: researchUpdate?.videoUrl || '',
         files: [],
         images: [],

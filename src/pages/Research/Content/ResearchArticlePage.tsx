@@ -26,8 +26,7 @@ import { Box, Flex } from 'theme-ui'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 
-import type { IUser } from 'oa-shared'
-import type { ResearchItem } from 'src/models/research.model'
+import type { IUser, ResearchItem } from 'oa-shared'
 
 interface IProps {
   research: ResearchItem

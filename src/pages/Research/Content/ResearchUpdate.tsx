@@ -10,8 +10,10 @@ import {
 } from 'oa-components'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
+import { DownloadWrapper } from 'src/common/DownloadWrapper'
 import CollapsableCommentSection from 'src/pages/common/CommentsSupabase/CollapsableCommentSection'
 import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
+import { downloadsService } from 'src/services/files.service'
 import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
@@ -20,7 +22,7 @@ import { ResearchLinkToUpdate } from './ResearchLinkToUpdate'
 import type {
   ResearchItem,
   ResearchUpdate as ResearchUpdateModel,
-} from 'src/models/research.model'
+} from 'oa-shared'
 
 interface IProps {
   research: ResearchItem
@@ -32,10 +34,6 @@ interface IProps {
 
 const ResearchUpdate = (props: IProps) => {
   const { research, update, updateIndex, isEditable, slug } = props
-
-  const handleDownloadClick = async () => {
-    // researchStore.incrementDownloadCount(props.research, _id)
-  }
 
   const displayNumber = updateIndex + 1
   const isDraft = update.status == 'draft'
@@ -54,6 +52,10 @@ const ResearchUpdate = (props: IProps) => {
     }
     return ids
   }, [research.author, research.collaborators])
+
+  const incrementDownloadCount = async () => {
+    await downloadsService.incrementDownloadCount('research_update', update.id)
+  }
 
   return (
     <Flex
@@ -207,12 +209,12 @@ const ResearchUpdate = (props: IProps) => {
               className="file-container"
               sx={{ flexDirection: 'column', px: 4, mt: 3 }}
             >
-              {/* <DownloadWrapper
-                handleClick={handleDownloadClick}
-                fileLink={update.fileLink || undefined}
-                files={update.files?.map((x) => ({ downloadUrl: x.publicUrl }))}
-                fileDownloadCount={downloadCount}
-              /> */}
+              <DownloadWrapper
+                handleClick={incrementDownloadCount}
+                fileDownloadCount={update.fileDownloadCount}
+                // fileLink={update.fileLink || undefined}
+                // files={update.files || undefined}
+              />
             </Flex>
             <ClientOnly fallback={<></>}>
               {() => (

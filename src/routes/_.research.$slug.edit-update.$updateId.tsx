@@ -1,13 +1,14 @@
 import { redirect } from 'react-router'
 import { useLoaderData } from '@remix-run/react'
-import { ResearchItem } from 'src/models/research.model'
+import { ResearchItem } from 'oa-shared'
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common/ResearchUpdateForm'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { isAllowedToEditResearch } from 'src/services/researchPermissions.server'
 import { researchServiceServer } from 'src/services/researchService.server'
+import { storageServiceServer } from 'src/services/storageService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { DBResearchItem, ResearchUpdate } from 'src/models/research.model'
+import type { DBResearchItem, ResearchUpdate } from 'oa-shared'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -38,17 +39,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const username = user.user_metadata.username
   const researchDb = result.data as unknown as DBResearchItem
-  const { images, files } = researchServiceServer.getResearchPublicMedia(
+  const images = researchServiceServer.getResearchPublicMedia(
     researchDb,
     client,
   )
-  const research = ResearchItem.fromDB(
-    researchDb,
-    [],
-    images,
-    files,
-    currentUserId,
-  )
+  const research = ResearchItem.fromDB(researchDb, [], images, currentUserId)
   const update = research.updates.find((x) => x.id === Number(params.updateId))
 
   if (!update) {
@@ -59,7 +54,15 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirect('/research')
   }
 
-  return Response.json({ research, update }, { headers })
+  const updateDb = researchDb.updates.find(
+    (x) => x.id === Number(params.updateId),
+  )
+  const fileLink = updateDb?.file_link
+  const files = updateDb?.file_ids?.at(0)
+    ? await storageServiceServer.getFilesInfo('research', updateDb.id, client)
+    : []
+
+  return Response.json({ research, update, fileLink, files }, { headers })
 }
 
 export default function Index() {
@@ -67,5 +70,12 @@ export default function Index() {
   const research = data.research as ResearchItem
   const update = data.update as ResearchUpdate
 
-  return <ResearchUpdateForm research={research} researchUpdate={update} />
+  return (
+    <ResearchUpdateForm
+      research={research}
+      researchUpdate={update}
+      fileLink={data.fileLink}
+      files={data.files}
+    />
+  )
 }

@@ -23,8 +23,7 @@ import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 import { ContentAuthorTimestamp } from '../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import { researchStatusColour } from '../researchHelpers'
 
-import type { IUser } from 'oa-shared'
-import type { ResearchItem } from 'src/models/research.model'
+import type { IUser, ResearchItem } from 'oa-shared'
 
 interface IProps {
   research: ResearchItem

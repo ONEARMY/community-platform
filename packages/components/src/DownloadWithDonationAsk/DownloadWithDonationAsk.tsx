@@ -4,7 +4,7 @@ import { DonationRequestModal } from '../DonationRequestModal/DonationRequestMod
 import { DownloadButton } from '../DownloadButton/DownloadButton'
 import { DownloadStaticFile } from '../DownloadStaticFile/DownloadStaticFile'
 
-import type { IUploadedFileMeta } from 'oa-shared'
+import type { MediaFile } from 'oa-shared'
 
 export interface IProps {
   body: string
@@ -13,7 +13,7 @@ export interface IProps {
   imageURL: string
   fileDownloadCount: number
   fileLink?: string
-  files?: (IUploadedFileMeta | File | null)[]
+  files?: MediaFile[]
 }
 
 export const DownloadWithDonationAsk = (props: IProps) => {
@@ -35,10 +35,6 @@ export const DownloadWithDonationAsk = (props: IProps) => {
     handleClick()
     toggleIsModalOpen()
   }
-
-  const filteredFiles: IUploadedFileMeta[] | undefined = files?.filter(
-    (file): file is IUploadedFileMeta => file !== null && 'downloadUrl' in file,
-  )
 
   return (
     <>
@@ -63,13 +59,13 @@ export const DownloadWithDonationAsk = (props: IProps) => {
             }}
           />
         )}
-        {filteredFiles &&
-          filteredFiles.map((file, index) => (
+        {files &&
+          files.map((file, index) => (
             <DownloadStaticFile
               file={file}
-              key={file ? file.name : `file-${index}`}
+              key={file ? file.publicUrl : `file-${index}`}
               handleClick={() => {
-                setLink(file.downloadUrl)
+                setLink(file.publicUrl)
                 toggleIsModalOpen()
               }}
               fileDownloadCount={fileDownloadCount}

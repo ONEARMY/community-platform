@@ -1,10 +1,5 @@
 import { useLoaderData } from '@remix-run/react'
-import {
-  type DBResearchItem,
-  ResearchItem,
-  type ResearchUpdate,
-} from 'src/models/research.model'
-import { Tag } from 'src/models/tag.model'
+import { ResearchItem, Tag } from 'oa-shared'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { ResearchArticlePage } from 'src/pages/Research/Content/ResearchArticlePage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
@@ -12,6 +7,7 @@ import { researchServiceServer } from 'src/services/researchService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { DBResearchItem, ResearchUpdate } from 'oa-shared'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -74,7 +70,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       .eq('content_type', 'research'),
   ])
 
-  const { images, files } = researchServiceServer.getResearchPublicMedia(
+  const images = researchServiceServer.getResearchPublicMedia(
     dbResearch,
     client,
   )
@@ -83,7 +79,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     dbResearch,
     tags,
     images,
-    files,
     [], // TODO
     currentUserId,
   )

@@ -38,7 +38,8 @@ import { researchService } from '../../research.service'
 import { ResearchImageField } from '../CreateResearch/Form/ResearchImageField'
 import ResearchFieldCategory from './ResearchCategorySelect'
 
-import type { ResearchFormData, ResearchItem } from 'src/models/research.model'
+import type { ResearchItem } from 'oa-shared'
+import type { ResearchFormData } from 'src/models/research.model'
 
 interface IProps {
   research?: ResearchItem

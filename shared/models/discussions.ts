@@ -25,7 +25,7 @@ export type IDiscussion = {
   contributorIds?: string[]
   primaryContentId?: string | undefined
   sourceId: string
-  sourceType: 'howto' | 'question' | 'researchUpdate'
+  sourceType: 'howto' | 'question' | 'researchUpdate' | 'news'
 }
 
 export type IDiscussionDB = IDiscussion & DBDoc

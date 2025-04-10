@@ -10,7 +10,7 @@ import { Box, Card, Flex, Heading } from 'theme-ui'
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 import { listing } from './labels'
 
-import type { Question } from 'src/models/question.model'
+import type { Question } from 'oa-shared'
 
 interface IProps {
   question: Question
@@ -95,10 +95,11 @@ export const QuestionListItem = ({ question, query }: IProps) => {
 
           <Flex>
             <UserNameTag
+              action="Asked"
               userName={question.author?.username || ''}
               countryCode={question.author?.country || ''}
-              created={question.createdAt}
-              action="Asked"
+              createdAt={question.createdAt}
+              modifiedAt={question.modifiedAt}
             />
           </Flex>
         </Flex>

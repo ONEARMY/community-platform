@@ -6,6 +6,10 @@ export class DBAuthor {
   readonly country?: string
   readonly is_verified: boolean
   readonly is_supporter: boolean
+
+  constructor(obj: DBAuthor) {
+    Object.assign(this, obj)
+  }
 }
 
 export class Author {
@@ -16,6 +20,7 @@ export class Author {
   country?: string
   isVerified: boolean
   isSupporter: boolean
+
   constructor(obj: Author) {
     Object.assign(this, obj)
   }

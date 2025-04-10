@@ -1,17 +1,17 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
-import { IModerationStatus } from 'oa-shared'
-import { Question } from 'src/models/question.model'
+import { IModerationStatus, Question } from 'oa-shared'
 import { ITEMS_PER_PAGE } from 'src/pages/Question/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { discordServiceServer } from 'src/services/discordService.server'
+import { utilsServiceServer } from 'src/services/utilsService.server'
+import { validateImages } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBProfile } from 'oa-shared'
-import type { DBQuestion } from 'src/models/question.model'
+import type { DBProfile, DBQuestion } from 'oa-shared'
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions'
 
 export const loader = async ({ request }) => {
@@ -120,7 +120,9 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const slug = convertToSlug(data.title)
 
-    if (await isDuplicateSlug(slug, client)) {
+    if (
+      await utilsServiceServer.isDuplicateNewSlug(slug, client, 'questions')
+    ) {
       return Response.json(
         {},
         {
@@ -218,17 +220,7 @@ function notifyDiscord(
   )
 }
 
-async function isDuplicateSlug(slug: string, client: SupabaseClient) {
-  const { data } = await client
-    .from('questions')
-    .select('slug')
-    .eq('slug', slug)
-    .single()
-
-  return !!data
-}
-
-async function uploadImages(
+export async function uploadImages(
   questionId: number,
   uploadedImages: File[],
   client: SupabaseClient,
@@ -254,18 +246,6 @@ async function uploadImages(
   }
 
   return { images, errors }
-}
-
-function validateImages(images: File[]) {
-  const errors: string[] = []
-  for (const image of images) {
-    if (!SUPPORTED_IMAGE_TYPES.includes(image.type)) {
-      errors.push(`Unsupported image extension: ${image.type}`)
-      continue
-    }
-  }
-
-  return { valid: errors.length === 0, errors }
 }
 
 async function validateRequest(request: Request, user: User | null, data: any) {

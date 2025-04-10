@@ -1,7 +1,7 @@
 import { MediaFile } from 'oa-shared'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBMedia, Image } from 'oa-shared'
+import type { ContentType, DBImage } from 'oa-shared'
 import type { ImageSize } from 'src/config/imageTransforms'
 
 const getPublicUrls = (
@@ -80,5 +80,5 @@ const getContentTypeFiles = async (
 export const storageServiceServer = {
   getPublicUrls,
   uploadMedia,
-  getFilesInfo: getContentTypeFiles,
+  getContentTypeFiles,
 }

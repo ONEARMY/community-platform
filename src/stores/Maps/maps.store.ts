@@ -6,21 +6,18 @@ import { getValidTags } from 'src/utils/getValidTags'
 import { hasAdminRights, needsModeration } from 'src/utils/helpers'
 
 import { ModuleStore } from '../common/module.store'
-import { getUserAvatar } from '../User/user.store'
 
 import type {
+  DBEndpoint,
   IMapGrouping,
   IMapPin,
-  IMapPinDetail,
   IMapPinWithDetail,
-  IUploadedFileMeta,
   IUser,
   IUserDB,
 } from 'oa-shared'
-import type { IDBEndpoint } from 'src/models/dbEndpoints'
 import type { IRootStore } from '../RootStore'
 
-const COLLECTION_NAME: IDBEndpoint = 'mappins'
+const COLLECTION_NAME: DBEndpoint = 'mappins'
 export class MapsStore extends ModuleStore {
   public activePinFilters: Array<IMapGrouping> = []
   public activePin: IMapPin | IMapPinWithDetail | undefined = undefined
@@ -168,38 +165,5 @@ export class MapsStore extends ModuleStore {
     await this.db.collection<IMapPin>(COLLECTION_NAME).doc(pin._id).update({
       _deleted: true,
     })
-  }
-
-  // return subset of profile info used when displaying map pins
-  private async getUserProfilePin(username: string): Promise<IMapPinDetail> {
-    const u = await this.userStore.getUserProfile(username)
-    if (!u) {
-      return {
-        heroImageUrl: '',
-        profilePicUrl: '',
-        shortDescription: '',
-        name: username,
-        displayName: username,
-        profileUrl: `${window.location.origin}/u/${username}`,
-        verifiedBadge: false,
-        country: null,
-      }
-    }
-    const avatar = getUserAvatar(username)
-    let heroImageUrl = ''
-    if (u.coverImages && u.coverImages.length > 0) {
-      heroImageUrl = (u.coverImages[0] as IUploadedFileMeta).downloadUrl
-    }
-
-    return {
-      heroImageUrl,
-      profilePicUrl: avatar,
-      shortDescription: u.mapPinDescription ? u.mapPinDescription : '',
-      name: u.userName,
-      displayName: u.displayName,
-      profileUrl: `${window.location.origin}/u/${u.userName}`,
-      verifiedBadge: !!u.badges?.verified,
-      country: u.location?.countryCode || u.country?.toLowerCase() || null,
-    }
   }
 }

@@ -15,7 +15,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { QuestionPage } from './QuestionPage'
 
-import type { Question } from 'src/models/question.model'
+import type { Question } from 'oa-shared'
 
 const Theme = testingThemeStyles
 
@@ -68,6 +68,7 @@ describe('Questions', () => {
         'Do you prefer camping near a lake or in a forest?'
       mockQuestionItem.category = {
         createdAt: new Date(),
+        modifiedAt: null,
         name: 'Preference',
         id: faker.number.int(),
         type: 'questions',

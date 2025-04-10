@@ -5,7 +5,6 @@ import { faker } from '@faker-js/faker'
 import { createRoutesFromElements, Route } from '@remix-run/react'
 import { act, render, waitFor, within } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
-import { formatDistanceToNow } from 'date-fns'
 import { Provider } from 'mobx-react'
 import { ResearchUpdateStatus, UserRole } from 'oa-shared'
 import { FactoryDiscussion } from 'src/test/factories/Discussion'
@@ -199,14 +198,11 @@ describe('Research Article', () => {
 
       // Assert
       await waitFor(() => {
-        const lastUpdate = wrapper.getByTestId('last-update')
-        expect(lastUpdate).not.toBeVisible()
-
         expect(() =>
-          wrapper.getAllByText((content) => content.includes('edited')),
+          wrapper.getAllByText((content) => content.includes('Updated')),
         ).toThrow()
         expect(() =>
-          wrapper.getAllByText((content) => content.includes('created')),
+          wrapper.getAllByText((content) => content.includes('Created')),
         ).not.toThrow()
       })
     })
@@ -232,20 +228,10 @@ describe('Research Article', () => {
       // Assert
       await waitFor(() => {
         expect(() =>
-          wrapper.getAllByText((content) => content.includes('created')),
+          wrapper.getAllByText((content) => content.includes('Created')),
         ).not.toThrow()
         expect(() =>
-          wrapper.getAllByText(
-            `${formatDistanceToNow(createdAt, { addSuffix: true })}`,
-          ),
-        ).not.toThrow()
-        expect(() =>
-          wrapper.getAllByText((content) => content.includes('edited')),
-        ).not.toThrow()
-        expect(() =>
-          wrapper.getAllByText(
-            `${formatDistanceToNow(modifiedAt, { addSuffix: true })}`,
-          ),
+          wrapper.getAllByText((content) => content.includes('Updated')),
         ).not.toThrow()
       })
     })

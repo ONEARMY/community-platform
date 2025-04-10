@@ -10,8 +10,7 @@ import {
   startAfter,
   where,
 } from 'firebase/firestore'
-import { IModerationStatus } from 'oa-shared'
-import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
+import { DB_ENDPOINTS, IModerationStatus } from 'oa-shared'
 import { hasAdminRights } from 'src/utils/helpers'
 import { changeUserReferenceToPlainText } from 'src/utils/mentions.utils'
 

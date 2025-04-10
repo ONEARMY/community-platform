@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import {
   Category,
   DisplayDate,
@@ -225,7 +224,10 @@ const ResearchListItem = ({ item }: IProps) => {
                     color: 'darkGrey',
                   }}
                 >
-                  {getItemDate(item, 'short')}
+                  <DisplayDate
+                    createdAt={item._created}
+                    modifiedAt={item._contentModifiedTimestamp}
+                  />
                 </Text>
               </Box>
             </Flex>

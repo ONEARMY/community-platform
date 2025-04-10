@@ -1,0 +1,17 @@
+.react-horizontal-scrolling-menu--inner-wrapper {
+  position: relative;
+}
+
+.react-horizontal-scrolling-menu--arrow-left {
+  position: absolute;
+  left: 0;
+  z-index: 1;
+  height: 100%;
+}
+
+.react-horizontal-scrolling-menu--arrow-right {
+  position: absolute;
+  right: 0;
+  z-index: 1;
+  height: 100%;
+}

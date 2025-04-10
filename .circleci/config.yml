@@ -369,15 +369,15 @@ jobs:
       - run:
           name: Set Supabase Secrets
           command: flyctl -a << parameters.FLY_APP_NAME >> secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL RESEND_API_KEY=$RESEND_API_KEY TENANT_ID=$TENANT_ID PATREON_CLIENT_ID=$PATREON_CLIENT_ID PATREON_CLIENT_SECRET=$PATREON_CLIENT_SECRET
-  deploy-supabase:
-    docker:
-      - image: cimg/node:20.7.0
-    steps:
-      - checkout
-      - attach_workspace:
-          at: '.'
-      - run: npx supabase@2.6.8 login --token $SUPABASE_ACCESS_TOKEN
-      - run: (yes || true) | npx supabase@2.6.8 db push --db-url $SUPABASE_DB_URL --debug
+  # deploy-supabase:
+  #   docker:
+  #     - image: cimg/node:20.7.0
+  #   steps:
+  #     - checkout
+  #     - attach_workspace:
+  #         at: '.'
+  #     - run: npx supabase@2.6.8 login --token $SUPABASE_ACCESS_TOKEN
+  #     - run: (yes || true) | npx supabase@2.6.8 db push --db-url $SUPABASE_DB_URL --debug --password $SUPABASE_DB_PASSWORD
       # - run: npx supabase@2.6.8 functions deploy --no-verify-jwt
   # Run cypress e2e tests on chrome
   test_e2e:
@@ -512,17 +512,17 @@ workflows:
             - test_e2e
           <<: *filter_only_default_branch
       #---------------------- Deploy ----------------------
-      - deploy-supabase:
-          name: 'Deploy to Supabase'
-          requires:
-            - 'Approve Production deployment'
-          <<: *filter_only_default_branch
-          context:
-            - supabase-deploy
+      # - deploy-supabase:
+      #     name: 'Deploy to Supabase'
+      #     requires:
+      #       - 'Approve Production deployment'
+      #     <<: *filter_only_default_branch
+      #     context:
+      #       - supabase-deploy
       - deploy:
           name: 'Deploy: community.fixing.fashion'
           requires:
-            - 'Deploy to Supabase'
+            - 'Approve Production deployment'
           <<: *filter_only_default_branch
           DEPLOY_ALIAS: fixing-fashion-prod
           FLY_APP_NAME: community-platform-ff
@@ -535,7 +535,7 @@ workflows:
       - deploy:
           name: 'Deploy: community.preciousplastic.com'
           requires:
-            - 'Deploy to Supabase'
+            - 'Approve Production deployment'
           <<: *filter_only_default_branch
           DEPLOY_ALIAS: 'production'
           FLY_APP_NAME: community-platform-pp
@@ -548,7 +548,7 @@ workflows:
       - deploy:
           name: 'Deploy: community.projectkamp.com'
           requires:
-            - 'Deploy to Supabase'
+            - 'Approve Production deployment'
           <<: *filter_only_default_branch
           DEPLOY_ALIAS: project-kamp-production
           FLY_APP_NAME: community-platform-pk

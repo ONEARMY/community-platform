@@ -1,8 +1,6 @@
-import {
-  DBQuestion,
-  Question,
-  type QuestionFormData,
-} from 'src/models/question.model'
+import { DBQuestion, Question } from 'oa-shared'
+
+import type { QuestionFormData } from 'oa-shared'
 
 const upsert = async (id: number | null, question: QuestionFormData) => {
   const data = new FormData()

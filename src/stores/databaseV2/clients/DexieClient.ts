@@ -5,8 +5,7 @@ import { DB_ENDPOINTS } from '../endpoints'
 import { getQueryOptions } from '../utils/getQueryOptions'
 
 import type { IndexableType } from 'dexie'
-import type { DBDoc } from 'oa-shared'
-import type { IDBEndpoint } from 'src/models/dbEndpoints'
+import type { DBDoc, DBEndpoint } from 'oa-shared'
 import type { AbstractDatabaseClient } from '../types'
 import type { DBQueryOptions, DBQueryWhereOptions } from '../types/dbDoc'
 
@@ -29,33 +28,33 @@ export class DexieClient implements AbstractDatabaseClient {
   /************************************************************************
    *  Main Methods - taken from abstract class
    ***********************************************************************/
-  getDoc<T>(endpoint: IDBEndpoint, docId: string) {
+  getDoc<T>(endpoint: DBEndpoint, docId: string) {
     logger.debug('dexie.getDoc', { endpoint, docId })
     return this._db.table<T & DBDoc>(endpoint).get(docId)
   }
-  setDoc(endpoint: IDBEndpoint, doc: DBDoc) {
+  setDoc(endpoint: DBEndpoint, doc: DBDoc) {
     logger.debug('dexie.setDoc', { endpoint, doc })
     return this._db.table(endpoint).put(doc)
   }
-  updateDoc(endpoint: IDBEndpoint, doc: DBDoc) {
+  updateDoc(endpoint: DBEndpoint, doc: DBDoc) {
     const { _id, ...updateValues } = doc
     logger.debug('dexie.updateValues', updateValues)
     return this._db.table(endpoint).update(_id, updateValues)
   }
-  setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {
+  setBulkDocs(endpoint: DBEndpoint, docs: DBDoc[]) {
     logger.debug('dexie.setBulkDocs', { endpoint, docs })
     return this._db.table(endpoint).bulkPut(docs)
   }
-  getCollection<T>(endpoint: IDBEndpoint) {
+  getCollection<T>(endpoint: DBEndpoint) {
     logger.debug('dexie.getCollection', { endpoint })
     return this._db.table<T & DBDoc>(endpoint).toArray()
   }
-  queryCollection<T>(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
+  queryCollection<T>(endpoint: DBEndpoint, queryOpts: DBQueryOptions) {
     logger.debug('dexie.queryCollection', { endpoint, queryOpts })
     return this._processQuery<T>(endpoint, queryOpts)
   }
 
-  deleteDoc(endpoint: IDBEndpoint, docId: string) {
+  deleteDoc(endpoint: DBEndpoint, docId: string) {
     logger.debug('dexie.deleteDoc', { endpoint, docId })
     return this._db.table(endpoint).delete(docId)
   }
@@ -63,13 +62,13 @@ export class DexieClient implements AbstractDatabaseClient {
   /************************************************************************
    *  Additional Methods - specific only to dexie
    ***********************************************************************/
-  getLatestDoc<T>(endpoint: IDBEndpoint) {
+  getLatestDoc<T>(endpoint: DBEndpoint) {
     return this._db.table<T & DBDoc>(endpoint).orderBy('_modified').last()
   }
 
   // mapping to generate firebase query from standard db queryOpts
   private _processQuery<T>(
-    endpoint: IDBEndpoint,
+    endpoint: DBEndpoint,
     queryOpts: DBQueryOptions,
   ): Promise<(T & DBDoc)[]> {
     return new Promise((resolve, reject) => {
@@ -168,7 +167,7 @@ export class DexieClient implements AbstractDatabaseClient {
  ***********************************************************************/
 // Frontend code does not access all database endpoints, exclude here
 type IFrontendEndpoints = Exclude<
-  IDBEndpoint,
+  DBEndpoint,
   'user_notifications' | 'user_integrations'
 >
 
@@ -199,7 +198,7 @@ const SCHEMA_BASE: IDexieSchema = {
 const MAPPED_SCHEMA = {} as IDexieSchema
 Object.keys(SCHEMA_BASE).forEach(
   (endpoint) =>
-    (MAPPED_SCHEMA[DB_ENDPOINTS[endpoint] as IDBEndpoint] =
+    (MAPPED_SCHEMA[DB_ENDPOINTS[endpoint] as DBEndpoint] =
       SCHEMA_BASE[endpoint]),
 )
 const DEXIE_SCHEMA = MAPPED_SCHEMA

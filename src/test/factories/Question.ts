@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import type { Question } from 'src/models/question.model'
+import type { Question } from 'oa-shared'
 
 export const FactoryQuestionItem = (
   questionOverloads: Partial<Question> = {},
@@ -12,13 +12,18 @@ export const FactoryQuestionItem = (
   title: faker.lorem.sentence(),
   description: faker.lorem.paragraph(),
   slug: faker.lorem.slug(),
+  previousSlugs: [],
   tags: [
     {
+      createdAt: new Date(),
       id: faker.number.int(),
+      modifiedAt: null,
       name: faker.lorem.words(1),
     },
     {
+      createdAt: new Date(),
       id: faker.number.int(),
+      modifiedAt: null,
       name: faker.lorem.words(1),
     },
   ],
@@ -33,6 +38,7 @@ export const FactoryQuestionItem = (
   },
   category: {
     createdAt: new Date(),
+    modifiedAt: null,
     id: faker.number.int(),
     name: faker.lorem.words(1),
     type: 'questions',

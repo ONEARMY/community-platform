@@ -7,18 +7,17 @@ import { Box, Button, Flex } from 'theme-ui'
 import { CommentItemSupabase } from './CommentItemSupabase'
 import { CreateCommentSupabase } from './CreateCommentSupabase'
 
-import type { Reply } from 'oa-shared'
+import type { ContentType, Reply } from 'oa-shared'
 
-type CommentsSupabaseProps = {
-  sourceId: number | string
+interface IProps {
   authors: Array<number>
+  sourceId: number | string
+  sourceType: ContentType
 }
 const commentPageSize = 10
 
-export const CommentSectionSupabase = ({
-  sourceId,
-  authors,
-}: CommentsSupabaseProps) => {
+export const CommentSectionSupabase = (props: IProps) => {
+  const { authors, sourceId, sourceType } = props
   const [comments, setComments] = useState<Comment[]>([])
   const [newCommentIds, setNewCommentIds] = useState<number[]>([])
   const [commentLimit, setCommentLimit] = useState<number>(commentPageSize)
@@ -79,7 +78,11 @@ export const CommentSectionSupabase = ({
 
   const postComment = async (comment: string) => {
     try {
-      const result = await commentService.postComment(sourceId, comment)
+      const result = await commentService.postComment(
+        sourceId,
+        comment,
+        sourceType,
+      )
 
       if (result.status === 201) {
         const newComment = Comment.fromDB(await result.json())
@@ -140,7 +143,12 @@ export const CommentSectionSupabase = ({
 
   const postReply = async (id: number, reply: string) => {
     try {
-      const result = await commentService.postComment(sourceId, reply, id)
+      const result = await commentService.postComment(
+        sourceId,
+        reply,
+        sourceType,
+        id,
+      )
 
       if (result.status === 201) {
         const newReply = Comment.fromDB(await result.json()) as Reply
@@ -229,6 +237,7 @@ export const CommentSectionSupabase = ({
               onReply={(reply) => postReply(comment.id, reply)}
               onEditReply={(id, reply) => editReply(id, reply, comment.id)}
               onDeleteReply={(id) => deleteReply(id, comment.id)}
+              sourceType={sourceType}
             />
           </Box>
         ))}
@@ -256,11 +265,12 @@ export const CommentSectionSupabase = ({
               onReply={(reply) => postReply(comment.id, reply)}
               onEditReply={(id, reply) => editReply(id, reply, comment.id)}
               onDeleteReply={(id) => deleteReply(id, comment.id)}
+              sourceType={sourceType}
             />
           </Box>
         ))}
 
-        <CreateCommentSupabase onSubmit={postComment} />
+        <CreateCommentSupabase onSubmit={postComment} sourceType={sourceType} />
       </Flex>
     </AuthorsContext.Provider>
   )

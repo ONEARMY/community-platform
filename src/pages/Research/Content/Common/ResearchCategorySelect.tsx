@@ -5,7 +5,7 @@ import { categoryService } from 'src/services/categoryService'
 
 import { overview } from '../../labels'
 
-import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
+import type { SelectValue } from 'oa-shared'
 
 const ResearchFieldCategory = () => {
   const [options, setOptions] = useState<SelectValue[]>([])

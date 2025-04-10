@@ -1,6 +1,5 @@
-import { Link } from '@remix-run/react'
 import { observer } from 'mobx-react-lite'
-import { Banner } from 'oa-components'
+import { Banner, InternalLink } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Flex } from 'theme-ui'
@@ -16,12 +15,15 @@ export const AlertIncompleteProfile = observer(() => {
   if (!activeUser || isProfileComplete(activeUser)) return null
 
   return (
-    <Link to="/settings">
+    <InternalLink to="/settings">
       <Flex data-cy="incompleteProfileBanner">
-        <Banner variant="failure">
-          Please fill in your profile details before posting
+        <Banner
+          variant="failure"
+          sx={{ backgroundColor: 'softblue', color: 'black', cursor: 'cursor' }}
+        >
+          Hey there! 👋 Please complete your profile before posting!
         </Banner>
       </Flex>
-    </Link>
+    </InternalLink>
   )
 })

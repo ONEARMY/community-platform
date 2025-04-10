@@ -166,9 +166,10 @@ const Header = observer(() => {
               }
             />
           )}
-          {isModuleSupported(env.VITE_SUPPORTED_MODULES || '', MODULE.USER) && (
-            <Profile isMobile={false} />
-          )}
+          {isModuleSupported(
+            env?.VITE_SUPPORTED_MODULES || '',
+            MODULE.USER,
+          ) && <Profile isMobile={false} />}
         </Flex>
         <ClientOnly fallback={<></>}>
           {() => (

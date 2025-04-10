@@ -20,7 +20,6 @@ import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel } from 'src/utils/helpers'
 import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
-import { ContentAuthorTimestamp } from '../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import { researchStatusColour } from '../researchHelpers'
 
 import type { IUser, ResearchItem } from 'oa-shared'

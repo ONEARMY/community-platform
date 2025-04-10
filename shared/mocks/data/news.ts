@@ -1,0 +1,57 @@
+import type { DBNews } from '../../models/news'
+
+export const news: Partial<DBNews>[] = [
+  {
+    body: 'Test info with a link to [OneArmy](https://www.onearmy.earth/).',
+    category: null,
+    comment_count: 2,
+    created_at: new Date(),
+    deleted: false,
+    // hero_image: {
+    //   id: '30',
+    //   path: '',
+    //   fullPath: '',
+    // },
+    modified_at: null,
+    previous_slugs: [],
+    slug: 'the-first-test-news',
+    summary: 'So first, the very first.',
+    title: 'The First Test News',
+    total_views: 3,
+  },
+  {
+    body: 'This is a test mock for the filtering question.',
+    category: null,
+    comment_count: 2,
+    created_at: new Date(),
+    deleted: false,
+    // hero_image: {
+    //   id: '31',
+    //   path: '',
+    //   fullPath: '',
+    // },
+    modified_at: null,
+    previous_slugs: [],
+    slug: 'filtering-question',
+    title: 'The Filtering Question',
+    total_views: 12,
+  },
+  {
+    body: "What's the deal with screenings?",
+    category: null,
+    comment_count: 2,
+    created_at: new Date(),
+    deleted: false,
+    // hero_image: {
+    //   id: '32',
+    //   path: '',
+    //   fullPath: '',
+    // },
+    modified_at: null,
+    previous_slugs: ['whats-the-deal-with-screenings'],
+    slug: 'intro-screenings-update',
+    summary: 'Important deal info.',
+    title: 'Intro screenings Update',
+    total_views: 4,
+  },
+]

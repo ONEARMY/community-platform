@@ -1,3 +1,5 @@
+import type { DBTag } from '../../models/document'
+
 export const tags = {
   g36hWyk3OckrLSH1ehdIE: {
     _createdBy: 'tag_creator',
@@ -91,45 +93,45 @@ export const tags = {
   },
 }
 
-export const tagsSupabase = [
+export const tagsSupabase: Partial<DBTag>[] = [
   {
-    created_at: '2012-08-02T07:27:04.609Z',
+    created_at: new Date(),
     name: 'product',
   },
   {
-    created_at: '2017-11-20T05:58:20.458Z',
+    created_at: new Date(),
     name: 'exhibition',
   },
   {
-    created_at: '2015-05-06T23:21:18.386Z',
+    created_at: new Date(),
     name: 'howto_testing',
   },
   {
-    created_at: '2014-01-30T01:24:05.344Z',
+    created_at: new Date(),
     name: 'brainstorm',
   },
   {
-    created_at: '2018-05-19T04:57:18.471Z',
+    created_at: new Date(),
     name: 'compression',
   },
   {
-    created_at: '2018-11-29T12:56:47.901Z',
+    created_at: new Date(),
     name: 'mould',
   },
   {
-    created_at: '2013-02-19T08:22:56.462Z',
+    created_at: new Date(),
     name: 'injection',
   },
   {
-    created_at: '2012-05-17T17:08:03.110Z',
+    created_at: new Date(),
     name: 'workshop',
   },
   {
-    created_at: '2016-03-26T21:06:51.974Z',
+    created_at: new Date(),
     name: 'extrusion',
   },
   {
-    created_at: '2015-02-23T23:04:03.609Z',
+    created_at: new Date(),
     name: 'screening',
   },
 ]

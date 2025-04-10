@@ -14,7 +14,7 @@ import { Card, Flex } from 'theme-ui'
 import { CommentReply } from './CommentReplySupabase'
 import { CreateCommentSupabase } from './CreateCommentSupabase'
 
-import type { Comment } from 'oa-shared'
+import type { Comment, ContentType } from 'oa-shared'
 
 export interface ICommentItemProps {
   comment: Comment
@@ -23,11 +23,19 @@ export interface ICommentItemProps {
   onReply: (reply: string) => void
   onEditReply: (id: number, reply: string) => void
   onDeleteReply: (id: number) => void
+  sourceType: ContentType
 }
 
 export const CommentItemSupabase = observer((props: ICommentItemProps) => {
-  const { comment, onEdit, onDelete, onReply, onEditReply, onDeleteReply } =
-    props
+  const {
+    comment,
+    onEdit,
+    onDelete,
+    onReply,
+    onEditReply,
+    onDeleteReply,
+    sourceType,
+  } = props
   const commentRef = useRef<HTMLDivElement>()
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -99,6 +107,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
 
               <CreateCommentSupabase
                 onSubmit={(comment) => onReply(comment)}
+                sourceType={sourceType}
                 isReply
               />
             </>

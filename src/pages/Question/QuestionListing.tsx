@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from '@remix-run/react'
 import { Button, Loader } from 'oa-components'
 import { logger } from 'src/logger'
-import { questionService } from 'src/pages/Question/question.service'
+import { questionContentService } from 'src/pages/Question/questionContent.service'
 import { Card, Flex, Heading } from 'theme-ui'
 
 import { listing } from './labels'
 import { QuestionListHeader } from './QuestionListHeader'
 import { QuestionListItem } from './QuestionListItem'
 
-import type { Question } from 'src/models/question.model'
+import type { Question } from 'oa-shared'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 export const QuestionListing = () => {
@@ -43,7 +43,12 @@ export const QuestionListing = () => {
     setIsFetching(true)
 
     try {
-      const result = await questionService.search(q, category, sort, skip)
+      const result = await questionContentService.search(
+        q,
+        category,
+        sort,
+        skip,
+      )
 
       if (result) {
         if (skip) {

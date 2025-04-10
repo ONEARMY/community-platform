@@ -943,6 +943,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "paulaFenner",
+      "name": "Paula Fenner",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18422622?v=4",
+      "profile": "https://github.com/paulaFenner",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ismaelabujadur",
+      "name": "Ismael Abu-jadur Garcia",
+      "avatar_url": "https://avatars.githubusercontent.com/u/112013216?v=4",
+      "profile": "http://ismaelabujadur.github.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "NickTheWilder",
+      "name": "Nick Wilder",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38483425?v=4",
+      "profile": "https://nickthewilder.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

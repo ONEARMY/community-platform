@@ -34,6 +34,7 @@ describe('[Questions]', () => {
       cy.visit(`/questions/${slug}`)
 
       cy.step('All metadata visible')
+      cy.contains(/\d+ view/)
       cy.contains(/\d+ following/)
       cy.contains(/\d+ useful/)
 

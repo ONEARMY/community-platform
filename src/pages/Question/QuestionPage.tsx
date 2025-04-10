@@ -22,10 +22,9 @@ import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
-import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
+import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 
-import type { IUser } from 'oa-shared'
-import type { Question } from 'src/models/question.model'
+import type { IUser, Question } from 'oa-shared'
 
 type QuestionPageProps = {
   question: Question
@@ -159,11 +158,11 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
             </ClientOnly>
           </Flex>
 
-          <ContentAuthorTimestamp
+          <UserNameTag
             userName={question.author?.username || ''}
             countryCode={question.author?.country || ''}
-            created={question.createdAt}
-            modified={question.modifiedAt || undefined}
+            createdAt={question.createdAt}
+            modifiedAt={question.modifiedAt}
             action="Asked"
           />
 
@@ -249,8 +248,9 @@ export const QuestionPage = observer(({ question }: QuestionPageProps) => {
             }}
           >
             <CommentSectionSupabase
-              sourceId={question.id}
               authors={question.author?.id ? [question.author?.id] : []}
+              sourceId={question.id}
+              sourceType="questions"
             />
           </Card>
         )}

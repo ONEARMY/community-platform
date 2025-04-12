@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Field } from 'react-final-form'
 import { FieldInput } from 'oa-components'
-import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
+import { FormFieldWrapper } from 'src/pages/common/FormFields'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { composeValidators, minValue, required } from 'src/utils/validators'
 import { Card, Text } from 'theme-ui'

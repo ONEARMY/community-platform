@@ -11,9 +11,11 @@ export interface IProps {
     icon: availableGlyphs
     label: string
   }[]
+  alwaysShow?: boolean
 }
 
 export const ContentStatistics = (props: IProps) => {
+  const { alwaysShow, statistics } = props
   const [showStats, setShowStats] = useState(false)
 
   const handleShowStats = () => {
@@ -28,8 +30,8 @@ export const ContentStatistics = (props: IProps) => {
         alignItems: ['flex-start', 'center', 'center'],
         justifyContent: 'center',
         gap: 2,
-        flexDirection: ['column', 'row', 'row'],
-        pl: [2, 0, 0],
+        flexDirection: alwaysShow ? 'row' : ['column', 'row', 'row'],
+        pl: alwaysShow ? 0 : [2, 0, 0],
       }}
     >
       <Flex
@@ -37,10 +39,8 @@ export const ContentStatistics = (props: IProps) => {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-          display: ['flex', 'none', 'none'],
+          display: alwaysShow ? 'none' : ['flex', 'none', 'none'],
           width: '100%',
-          pr: 2,
-          pl: 2,
         }}
         onClick={handleShowStats}
       >
@@ -58,7 +58,6 @@ export const ContentStatistics = (props: IProps) => {
           icon={showStats ? 'chevron-up' : 'chevron-down'}
           small={true}
           sx={{
-            bg: 'white',
             borderWidth: '0px',
             '&:hover': {
               bg: 'white',
@@ -69,7 +68,7 @@ export const ContentStatistics = (props: IProps) => {
           }}
         />
       </Flex>
-      {props.statistics.map((statistic, idx) => (
+      {statistics.map((statistic, idx) => (
         <Flex
           key={idx}
           px={2}
@@ -78,7 +77,11 @@ export const ContentStatistics = (props: IProps) => {
           sx={{
             alignItems: 'center',
             fontSize: '1',
-            display: [showStats ? 'flex' : 'none', 'flex', 'flex'],
+            display: [
+              showStats || alwaysShow ? 'flex' : 'none',
+              'flex',
+              'flex',
+            ],
           }}
         >
           <Icon glyph={statistic.icon} mr={1} size={'sm'} opacity={'0.5'} />

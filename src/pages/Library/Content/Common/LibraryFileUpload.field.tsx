@@ -2,7 +2,7 @@ import { Field } from 'react-final-form'
 import { UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FileInputField } from 'src/common/Form/FileInput.field'
-import { FormFieldWrapper } from 'src/pages/common/FormFieldWrapper'
+import { FormFieldWrapper } from 'src/pages/common/FormFields'
 import { Text } from 'theme-ui'
 
 import { intro } from '../../labels'

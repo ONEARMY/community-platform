@@ -6,7 +6,7 @@ import CreateResearch from 'src/pages/Research/Content/CreateResearch'
 import { listing } from 'src/pages/Research/labels'
 import { Box } from 'theme-ui'
 
-export async function clientLoader() {
+export async function loader() {
   return null
 }
 

@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import {
   Category,
   DisplayDate,
@@ -39,7 +38,6 @@ const ResearchListItem = ({ item }: IProps) => {
 
   const isVerified = aggregationsStore.isVerified(item._createdBy)
   const status = item.researchStatus || ResearchStatus.IN_PROGRESS
-  const modifiedDate = useMemo(() => getItemDate(item, 'long'), [item])
 
   return (
     <Card
@@ -184,19 +182,6 @@ const ResearchListItem = ({ item }: IProps) => {
                   </Text>
                 )}
                 {/* Hide this on mobile, show on tablet & above. */}
-                {modifiedDate !== '' && (
-                  <Text
-                    ml={4}
-                    sx={{
-                      display: ['none', 'block'],
-                      fontSize: 1,
-                      color: 'darkGrey',
-                      transform: 'translateY(2px)',
-                    }}
-                  >
-                    {modifiedDate}
-                  </Text>
-                )}
                 <Text
                   sx={{
                     display: ['none', 'inline-block', 'inline-block'],
@@ -237,7 +222,10 @@ const ResearchListItem = ({ item }: IProps) => {
                     color: 'darkGrey',
                   }}
                 >
-                  {getItemDate(item, 'short')}
+                  <DisplayDate
+                    createdAt={item._created}
+                    modifiedAt={item._contentModifiedTimestamp}
+                  />
                 </Text>
               </Box>
             </Flex>
@@ -301,27 +289,6 @@ const getItemThumbnail = (researchItem: IResearch.Item): string => {
     (latestPublishedUpdate?.images[0] as IUploadedFileMeta)?.downloadUrl ||
     defaultResearchThumbnail
   )
-}
-
-const getItemDate = (item: IResearch.Item, variant: string) => {
-  try {
-    const contentModifiedDate = (
-      <DisplayDate date={item._contentModifiedTimestamp} />
-    )
-    const creationDate = <DisplayDate date={item._created} />
-
-    if (item._contentModifiedTimestamp !== item._created) {
-      return variant === 'long' ? (
-        <>Updated {contentModifiedDate}</>
-      ) : (
-        contentModifiedDate
-      )
-    } else {
-      return variant === 'long' ? <>Created {creationDate}</> : creationDate
-    }
-  } catch (err) {
-    return ''
-  }
 }
 
 const getUpdateCount = (item: IResearch.Item) => {

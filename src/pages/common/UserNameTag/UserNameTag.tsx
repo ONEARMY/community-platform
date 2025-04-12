@@ -2,19 +2,22 @@ import { DisplayDate, Username } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Flex, Text } from 'theme-ui'
 
-interface UserNameTagProps {
+interface IProps {
   userName: string
   countryCode: string | undefined
-  created: string | number | Date
+  createdAt: string | number | Date
   action?: string
+  modifiedAt?: string | number | Date | null
 }
 
-export const UserNameTag = ({
-  userName,
-  countryCode,
-  created,
-  action = 'Published',
-}: UserNameTagProps) => {
+export const UserNameTag = (props: IProps) => {
+  const {
+    userName,
+    countryCode,
+    createdAt,
+    action = 'Published',
+    modifiedAt,
+  } = props
   const { aggregationsStore } = useCommonStores().stores
 
   const isVerified = aggregationsStore.isVerified(userName)
@@ -25,8 +28,8 @@ export const UserNameTag = ({
         <Flex sx={{ alignItems: 'center' }}>
           <Username
             user={{
-              userName: userName,
-              countryCode: countryCode,
+              userName,
+              countryCode,
               isVerified,
             }}
             sx={{ position: 'relative' }}
@@ -38,7 +41,12 @@ export const UserNameTag = ({
               marginBottom: 2,
             }}
           >
-            | {action} <DisplayDate date={created}></DisplayDate>
+            |{' '}
+            <DisplayDate
+              action={action}
+              createdAt={createdAt}
+              modifiedAt={modifiedAt}
+            ></DisplayDate>
           </Text>
         </Flex>
       </Flex>

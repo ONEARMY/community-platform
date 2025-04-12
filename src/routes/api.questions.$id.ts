@@ -1,8 +1,10 @@
 import { Question } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { hasAdminRightsSupabase } from 'src/utils/helpers'
+import { hasAdminRightsSupabase, validateImages } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
-import { SUPPORTED_IMAGE_EXTENSIONS } from 'src/utils/storage'
+
+import { utilsServiceServer } from '../services/utilsService.server'
+import { uploadImages } from './api.questions'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
@@ -86,12 +88,13 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const questionResult = await client
       .from('questions')
       .update({
-        title: data.title,
-        description: data.description,
-        slug,
         category: data.category,
-        tags: data.tags,
+        description: data.description,
         images,
+        title: data.title,
+        slug,
+        tags: data.tags,
+        modified_at: new Date(),
       })
       .eq('id', params.id)
       .select()
@@ -110,62 +113,6 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       { status: 500, statusText: 'Error creating question' },
     )
   }
-}
-
-async function isDuplicateSlug(
-  slug: string,
-  id: number,
-  client: SupabaseClient,
-) {
-  const { data } = await client
-    .from('questions')
-    .select('id,slug')
-    .eq('slug', slug)
-    .single()
-
-  return !!data?.id && data.id !== id
-}
-
-async function uploadImages(
-  questionId: number,
-  uploadedImages: File[],
-  client: SupabaseClient,
-) {
-  if (!uploadedImages || uploadedImages.length === 0) {
-    return null
-  }
-
-  // const files = await Promise.all(uploadedImages.map(image => image.arrayBuffer()))
-
-  const errors: string[] = []
-  const images: DBImage[] = []
-
-  for (const image of uploadedImages) {
-    const result = await client.storage
-      .from(process.env.TENANT_ID as string)
-      .upload(`questions/${questionId}/${image.name}`, image)
-
-    if (result.data === null) {
-      errors.push(`Error uploading image: ${image.name}`)
-      continue
-    }
-
-    images.push(result.data)
-  }
-
-  return { images, errors }
-}
-
-function validateImages(images: File[]) {
-  const errors: string[] = []
-  for (const image of images) {
-    if (!SUPPORTED_IMAGE_EXTENSIONS.includes(image.type)) {
-      errors.push(`Unsupported image extension: ${image.type}`)
-      continue
-    }
-  }
-
-  return { valid: errors.length === 0, errors }
 }
 
 async function validateRequest(
@@ -198,7 +145,14 @@ async function validateRequest(
   const slug = convertToSlug(data.title)
   const questionId = Number(params.id!)
 
-  if (await isDuplicateSlug(slug, questionId, client)) {
+  if (
+    await utilsServiceServer.isDuplicateExistingSlug(
+      slug,
+      questionId,
+      client,
+      'questions',
+    )
+  ) {
     return {
       status: 409,
       statusText: 'This question already exists',

@@ -261,11 +261,11 @@ describe('[Library]', () => {
       cy.step('Add extra step')
       cy.get('[data-cy=add-step]').click()
       /*
-        Sometimes clicking on add-step trigger the Uploading How To modal
+        Sometimes clicking on add-step trigger the Uploading library modal
         when it happens cypress will close it with the code below
       */
       cy.get('body').then(($body) => {
-        if ($body.text().includes('Uploading How To')) {
+        if ($body.text().includes('Uploading Library')) {
           cy.get('[data-cy=close-upload-status]').click()
         }
       })

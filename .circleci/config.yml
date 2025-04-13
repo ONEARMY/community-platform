@@ -153,20 +153,6 @@ jobs:
     steps:
       - setup_repo
 
-  test_security_rules:
-    docker: *docker
-    resource_class: medium+
-    environment:
-      GCLOUD_PROJECT: onearmy-test-ci
-      CYPRESS_INSTALL_BINARY: 0
-    steps:
-      - setup_repo
-      - attach_workspace:
-          at: '.'
-      - run:
-          name: Test Security Rules
-          command: yarn workspace security-rules test
-
   test_functions:
     docker:
       # use base image published by platform to ensure compatibility
@@ -378,7 +364,7 @@ jobs:
   #         at: '.'
   #     - run: npx supabase@2.6.8 login --token $SUPABASE_ACCESS_TOKEN
   #     - run: (yes || true) | npx supabase@2.6.8 db push --db-url $SUPABASE_DB_URL --debug --password $SUPABASE_DB_PASSWORD
-      # - run: npx supabase@2.6.8 functions deploy --no-verify-jwt
+  # - run: npx supabase@2.6.8 functions deploy --no-verify-jwt
   # Run cypress e2e tests on chrome
   test_e2e:
     docker: *docker
@@ -468,10 +454,6 @@ workflows:
             - 'Lint code'
       - storybook:
           name: Build Storybook
-          requires:
-            - 'Lint code'
-      - test_security_rules:
-          name: Test Security Rules
           requires:
             - 'Lint code'
       - test_functions:

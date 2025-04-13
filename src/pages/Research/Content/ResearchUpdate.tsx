@@ -13,7 +13,6 @@ import { ClientOnly } from 'remix-utils/client-only'
 import { DownloadWrapper } from 'src/common/DownloadWrapper'
 import CollapsableCommentSection from 'src/pages/common/CommentsSupabase/CollapsableCommentSection'
 import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
-import { downloadsService } from 'src/services/files.service'
 import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
@@ -52,10 +51,6 @@ const ResearchUpdate = (props: IProps) => {
     }
     return ids
   }, [research.author, research.collaborators])
-
-  const incrementDownloadCount = async () => {
-    await downloadsService.incrementDownloadCount('research_update', update.id)
-  }
 
   return (
     <Flex
@@ -196,10 +191,18 @@ const ResearchUpdate = (props: IProps) => {
               sx={{ flexDirection: 'column', px: 4, mt: 3 }}
             >
               <DownloadWrapper
-                handleClick={incrementDownloadCount}
                 fileDownloadCount={update.fileDownloadCount}
-                // fileLink={update.fileLink || undefined}
-                // files={update.files || undefined}
+                fileLink={
+                  update.hasFileLink
+                    ? `/api/documents/research_update/${update.id}/link`
+                    : undefined
+                }
+                files={update.files?.map((x) => ({
+                  id: x.id,
+                  name: x.name,
+                  size: x.size,
+                  url: `/api/documents/research_update/${update.id}/${x.id}`,
+                }))}
               />
             </Flex>
             <ClientOnly fallback={<></>}>

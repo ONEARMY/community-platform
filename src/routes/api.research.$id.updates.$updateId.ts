@@ -5,7 +5,7 @@ import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBMedia, DBResearchUpdate } from 'oa-shared'
+import type { DBMedia, DBResearchUpdate, MediaFile } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   try {
@@ -60,21 +60,19 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       )
     }
 
-    const uploadPath = `research/${researchId}`
-    const images = await updateOrReplaceMedia(
+    const uploadPath = `research/${researchId}/updates/${update.id}`
+    const images = await updateOrReplaceImage(
       imagesToKeepIds as string[],
       uploadedImages,
       updateId,
-      'images',
       uploadPath,
       client,
     )
 
-    const files = await updateOrReplaceMedia(
+    const files = await updateOrReplaceFile(
       filesToKeepIds as string[],
       uploadedFiles,
       updateId,
-      'files',
       uploadPath,
       client,
     )
@@ -86,7 +84,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         description: data.description,
         is_draft: data.isDraft,
         images,
-        files,
+        files: files.map((x) => ({ id: x.id, name: x.name, size: x.size })),
       })
       .eq('id', update.id)
       .select()
@@ -107,11 +105,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 }
 
-async function updateOrReplaceMedia(
+async function updateOrReplaceImage(
   idsToKeep: string[],
   newUploads: File[],
   updateId: number,
-  type: 'images' | 'files',
   path: string,
   client: SupabaseClient,
 ) {
@@ -120,17 +117,53 @@ async function updateOrReplaceMedia(
   if (idsToKeep.length > 0) {
     const existingMedia = await client
       .from('research_updates')
-      .select(type)
+      .select('images')
       .eq('id', updateId)
       .single()
 
-    if (existingMedia.data && existingMedia.data[type]?.length > 0) {
-      media = existingMedia.data[type].filter((x) => idsToKeep.includes(x.id))
+    if (existingMedia.data && existingMedia.data.images?.length > 0) {
+      media = existingMedia.data.images.filter((x) => idsToKeep.includes(x.id))
     }
   }
 
   if (newUploads.length > 0) {
-    const result = await storageServiceServer.uploadMedia(
+    const result = await storageServiceServer.uploadImage(
+      newUploads,
+      path,
+      client,
+    )
+
+    if (result) {
+      media = [...media, ...result.media]
+    }
+  }
+
+  return media
+}
+
+async function updateOrReplaceFile(
+  idsToKeep: string[],
+  newUploads: File[],
+  updateId: number,
+  path: string,
+  client: SupabaseClient,
+) {
+  let media: MediaFile[] = []
+
+  if (idsToKeep.length > 0) {
+    const existingMedia = await client
+      .from('research_updates')
+      .select('files')
+      .eq('id', updateId)
+      .single()
+
+    if (existingMedia.data && existingMedia.data.files?.length > 0) {
+      media = existingMedia.data.files.filter((x) => idsToKeep.includes(x.id))
+    }
+  }
+
+  if (newUploads.length > 0) {
+    const result = await storageServiceServer.uploadFile(
       newUploads,
       path,
       client,

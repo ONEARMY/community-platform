@@ -3,6 +3,8 @@ import { Category } from './category'
 
 import type { DBAuthor } from './author'
 import type { DBCategory } from './category'
+import type { IContentDoc, IDBContentDoc } from './content'
+import type { IDBDocSB, IDBDownloadable, IDoc, IDownloadable } from './document'
 import type { DBMedia, Image } from './media'
 import type { Tag } from './tag'
 
@@ -26,9 +28,9 @@ export const researchStatusOptions = (
   }
 })
 
-export class DBResearchItem {
+export class DBResearchItem implements IDBContentDoc {
   readonly id: number
-  readonly created_at: string
+  readonly created_at: Date
   readonly deleted: boolean | null
   readonly author?: DBAuthor
   readonly update_count?: number
@@ -39,7 +41,7 @@ export class DBResearchItem {
   readonly category: DBCategory | null
   readonly updates: DBResearchUpdate[]
   created_by: number | null
-  modified_at: string | null
+  modified_at: Date | null
   title: string
   slug: string
   previous_slugs: string[] | null
@@ -56,14 +58,14 @@ export class DBResearchItem {
   }
 }
 
-export class ResearchItem {
+export class ResearchItem implements IContentDoc {
   id: number
   createdAt: Date
   author: Author | null
   modifiedAt: Date | null
   title: string
   slug: string
-  previousSlugs: string[] | null
+  previousSlugs: string[]
   description: string
   image: Image | null
   deleted: boolean
@@ -99,7 +101,7 @@ export class ResearchItem {
       modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
       title: obj.title,
       slug: obj.slug,
-      previousSlugs: obj.previous_slugs,
+      previousSlugs: obj.previous_slugs || [],
       description: obj.description,
       image: images?.find((x) => x.id === obj.image?.id) || null,
       deleted: obj.deleted || false,
@@ -133,22 +135,22 @@ export class ResearchItem {
   }
 }
 
-export class DBResearchUpdate {
+export class DBResearchUpdate implements IDBDocSB, IDBDownloadable {
   readonly id: number
   readonly research_id: number
-  readonly created_at: string
+  readonly created_at: Date
   readonly deleted: boolean | null
   readonly is_draft: boolean | null
   readonly comment_count?: number
   readonly file_download_count?: number
   readonly author?: DBAuthor
   created_by: number | null
-  modified_at: string | null
+  modified_at: Date | null
   title: string
   description: string
   images: DBMedia[] | null
-  file_ids: string[] | null
   file_link: string | null
+  files: { id: string; name: string; size: number }[] | null
   video_url: string | null
   status: ResearchUpdateStatus
 
@@ -157,7 +159,7 @@ export class DBResearchUpdate {
   }
 }
 
-export class ResearchUpdate {
+export class ResearchUpdate implements IDoc, IDownloadable {
   id: number
   createdAt: Date
   author: Author | null
@@ -165,7 +167,8 @@ export class ResearchUpdate {
   title: string
   description: string
   images: Image[] | null
-  fileIds: string[] | null
+  files: { id: string; name: string; size: number }[] | null
+  hasFileLink: boolean
   videoUrl: string | null
   deleted: boolean
   commentCount: number
@@ -187,8 +190,9 @@ export class ResearchUpdate {
       images:
         images?.filter((x) => obj.images?.map((x) => x.id)?.includes(x.id)) ||
         [],
-      fileIds: obj.file_ids,
+      files: obj.files,
       // no fileLink as it must be shown only for authenticated users
+      hasFileLink: !!obj.file_link,
       videoUrl: obj.video_url,
       deleted: obj.deleted || false,
       commentCount: obj.comment_count || 0,

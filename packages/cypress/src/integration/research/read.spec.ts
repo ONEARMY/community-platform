@@ -3,7 +3,7 @@ import { MOCK_DATA } from '../../data'
 const article = Object.values(MOCK_DATA.research)[0]
 
 describe('[Research]', () => {
-  const { description, updates, researchCategory, slug, title } = article
+  const { description, updates, category, slug, title } = article
 
   const authoredResearchArticleUrl = '/research/a-test-research'
   const image = updates[0].images[0].downloadUrl
@@ -136,12 +136,12 @@ describe('[Research]', () => {
 
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(1)
-          .should('contain', researchCategory.label)
+          .should('contain', category.name)
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(1)
           .children()
           .should('have.attr', 'href')
-          .and('equal', `/research?category=${researchCategory._id}`)
+          .and('equal', `/research?category=${category.id}`)
 
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(2)

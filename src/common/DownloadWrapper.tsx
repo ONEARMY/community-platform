@@ -7,7 +7,7 @@ import { UserAction } from './UserAction'
 import type { MediaFile } from 'oa-shared'
 
 interface IProps {
-  handleClick: () => Promise<void>
+  handleClick?: () => Promise<void>
   fileDownloadCount: number
   fileLink?: string
   files?: MediaFile[]

@@ -1,9 +1,9 @@
 import type { Author, DBAuthor } from './author'
 import type { Category, DBCategory } from './category'
-import type { DBDocSB, Doc } from './document'
+import type { IDBDocSB, IDoc } from './document'
 import type { Tag } from './tag'
 
-export interface DBContentDoc extends DBDocSB {
+export interface IDBContentDoc extends IDBDocSB {
   readonly author?: DBAuthor
   readonly comment_count?: number
   readonly category: DBCategory | null
@@ -13,13 +13,13 @@ export interface DBContentDoc extends DBDocSB {
   readonly subscriber_count?: number
   readonly title: string
   readonly total_views?: number
-  readonly previous_slugs: string[]
+  readonly previous_slugs: string[] | null
   readonly slug: string
   readonly tags: number[]
   readonly useful_count?: number
 }
 
-export interface ContentDoc extends Doc {
+export interface IContentDoc extends IDoc {
   author: Author | null
   category: Category | null
   commentCount: number

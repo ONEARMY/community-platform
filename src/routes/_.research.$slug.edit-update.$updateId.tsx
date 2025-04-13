@@ -58,10 +58,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     (x) => x.id === Number(params.updateId),
   )
   const fileLink = updateDb?.file_link
-  const files = updateDb?.file_ids?.at(0)
-    ? await storageServiceServer.getContentTypeFiles(
-        'research',
-        updateDb.id,
+  const files = updateDb?.files?.at(0)
+    ? await storageServiceServer.getPathDocuments(
+        `research/${research.id}/updates/${update.id}`,
+        `/api/documents/research_update/${update.id}`,
         client,
       )
     : []

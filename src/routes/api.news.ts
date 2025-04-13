@@ -182,7 +182,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const news = News.fromDB(newsResult.data[0], [])
     notifyDiscord(news, profile, new URL(request.url).origin)
 
-    const mediaFiles = await storageServiceServer.uploadMedia(
+    const mediaFiles = await storageServiceServer.uploadImage(
       [uploadedHeroImageFile],
       `news/${news.id}`,
       client,

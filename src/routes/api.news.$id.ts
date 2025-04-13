@@ -80,7 +80,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const news = News.fromDB(newsResult.data[0], [])
 
     if (newHeroImage) {
-      const mediaFiles = await storageServiceServer.uploadMedia(
+      const mediaFiles = await storageServiceServer.uploadImage(
         [newHeroImage],
         `news/${news.id}`,
         client,

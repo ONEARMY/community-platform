@@ -4,7 +4,7 @@ import { deleteDB } from 'idb'
 
 import { TestDB } from './db/firebase'
 
-import type { ILibrary, IQuestionDB, IResearchDB } from 'oa-shared'
+import type { DBResearchItem, ILibrary, IQuestionDB } from 'oa-shared'
 import type { IUserSignUpDetails } from '../utils/TestUtils'
 
 declare global {
@@ -32,7 +32,7 @@ declare global {
         user: IUserSignUpDetails,
       ): Chainable<void>
       addResearch(
-        research: IResearchDB,
+        research: DBResearchItem,
         username: string,
         random: string,
       ): Chainable<void>

@@ -24,7 +24,7 @@ const getPublicUrls = (
   })
 }
 
-const uploadMedia = async (
+const uploadImage = async (
   files: File[],
   path: string,
   client: SupabaseClient,
@@ -52,15 +52,46 @@ const uploadMedia = async (
   return { media, errors }
 }
 
-const getContentTypeFiles = async (
-  contentType: 'research' | 'library',
-  contentId: number,
+const uploadFile = async (
+  files: File[],
+  path: string,
+  client: SupabaseClient,
+) => {
+  if (!files || files.length === 0) {
+    return null
+  }
+
+  const errors: string[] = []
+  const media: MediaFile[] = []
+
+  for (const file of files) {
+    const result = await client.storage
+      .from(process.env.TENANT_ID + '-documents')
+      .upload(`${path}/${file.name}`, file)
+
+    if (result.data === null) {
+      errors.push(`Error uploading file: ${file.name}`)
+      continue
+    }
+
+    media.push({
+      id: result.data.id,
+      name: result.data.path.split('/').at(-1)!,
+      size: file.size,
+    })
+  }
+
+  return { media, errors }
+}
+
+const getPathDocuments = async (
+  path: string,
+  mapUrlPrefix: string,
   client: SupabaseClient,
 ) => {
   const documentsBucket = process.env.TENANT_ID + '-documents'
-  const { data, error } = await client.storage
-    .from(documentsBucket)
-    .list(`${contentType}/${contentId}`)
+
+  const { data, error } = await client.storage.from(documentsBucket).list(path)
 
   if (!data || error) {
     return []
@@ -72,13 +103,14 @@ const getContentTypeFiles = async (
         id: x.id,
         name: x.name,
         size: x.metadata.size,
-        url: `/api/documents/${contentType}/${contentId}/${x.id}`,
+        url: `${mapUrlPrefix}/${x.id}`,
       }),
   )
 }
 
 export const storageServiceServer = {
   getPublicUrls,
-  uploadMedia,
-  getContentTypeFiles,
+  uploadImage,
+  uploadFile,
+  getPathDocuments,
 }

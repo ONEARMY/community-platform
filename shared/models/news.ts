@@ -4,12 +4,12 @@ import { Category } from './category'
 import type { DBAuthor } from './author'
 import type { DBCategory } from './category'
 import type { IConvertedFileMeta } from './common'
-import type { ContentDoc, DBContentDoc } from './content'
+import type { IContentDoc, IDBContentDoc } from './content'
 import type { DBMedia, Image } from './media'
 import type { SelectValue } from './other'
 import type { Tag } from './tag'
 
-export class DBNews implements DBContentDoc {
+export class DBNews implements IDBContentDoc {
   readonly id: number
   readonly created_at: Date
   readonly modified_at: Date | null
@@ -31,7 +31,7 @@ export class DBNews implements DBContentDoc {
   readonly hero_image: DBMedia | null
 }
 
-export class News implements ContentDoc {
+export class News implements IContentDoc {
   id: number
   createdAt: Date
   modifiedAt: Date | null

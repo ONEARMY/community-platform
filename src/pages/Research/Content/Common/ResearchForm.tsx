@@ -341,7 +341,7 @@ const ResearchForm = ({ research }: IProps) => {
                         isActive: false,
                         status: u.status,
                         title: u.title,
-                        slug: research.slug,
+                        id: u.id,
                       }))}
                     researchSlug={research?.slug}
                     showCreateUpdateButton={true}

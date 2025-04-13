@@ -1,6 +1,6 @@
-import type { DBDocSB, Doc } from './document'
+import type { IDBDocSB, IDoc } from './document'
 
-export class DBTag implements DBDocSB {
+export class DBTag implements IDBDocSB {
   id: number
   created_at: Date
   modified_at: Date | null
@@ -22,7 +22,7 @@ export class DBTag implements DBDocSB {
   }
 }
 
-export class Tag implements Doc {
+export class Tag implements IDoc {
   id: number
   createdAt: Date
   modifiedAt: Date | null

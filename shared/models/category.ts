@@ -1,7 +1,7 @@
 import type { ContentType } from './common'
-import type { DBDocSB, Doc } from './document'
+import type { IDBDocSB, IDoc } from './document'
 
-export class DBCategory implements DBDocSB {
+export class DBCategory implements IDBDocSB {
   id: number
   created_at: Date
   modified_at: Date | null
@@ -25,7 +25,7 @@ export class DBCategory implements DBDocSB {
   }
 }
 
-export class Category implements Doc {
+export class Category implements IDoc {
   id: number
   createdAt: Date
   modifiedAt: Date | null

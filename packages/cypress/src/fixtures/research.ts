@@ -64,7 +64,8 @@ export const research: ResearchItem = {
       status: ResearchUpdateStatus.PUBLISHED,
       videoUrl: '',
       fileDownloadCount: 0,
-      fileIds: [],
+      files: [],
+      hasFileLink: false,
     },
   ],
 }

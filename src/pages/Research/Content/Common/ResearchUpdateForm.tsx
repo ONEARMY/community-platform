@@ -332,6 +332,7 @@ const getResearchUpdates = (
         title: u.title,
         status: u.status,
         slug: u.id,
+        id: u.id,
       })),
     isCreating
       ? {

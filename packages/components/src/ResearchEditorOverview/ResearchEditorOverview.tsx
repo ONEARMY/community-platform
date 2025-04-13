@@ -10,7 +10,7 @@ export type ResearchEditorOverviewUpdate = {
   isActive: boolean
   title: string
   status: 'draft' | 'published'
-  slug: string | null
+  id: number | null
 }
 
 export interface ResearchEditorOverviewProps {
@@ -74,9 +74,9 @@ export const ResearchEditorOverview = (props: ResearchEditorOverviewProps) => {
                   ) : (
                     <>
                       {update.title}
-                      {update.slug ? (
+                      {update.id ? (
                         <InternalLink
-                          to={`/research/${researchSlug}/edit-update/${update.slug}`}
+                          to={`/research/${researchSlug}/edit-update/${update.id}`}
                           sx={{ display: 'inline-block', ml: 1 }}
                         >
                           Edit

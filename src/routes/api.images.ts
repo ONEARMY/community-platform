@@ -29,7 +29,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json({}, { status, statusText })
     }
 
-    const uploadedImage = await storageServiceServer.uploadMedia(
+    const uploadedImage = await storageServiceServer.uploadImage(
       [imageFile],
       `${id ? contentType : 'users'}/${id ?? user!.id}`,
       client,

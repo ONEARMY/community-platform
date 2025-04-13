@@ -65,18 +65,16 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const researchUpdate = ResearchUpdate.fromDB(updateResult.data[0], [])
 
-    await uploadAndUpdateMedia(
+    await uploadAndUpdateImages(
       uploadedImages,
-      'images',
-      `research/${researchId}`,
+      `research/${researchId}/updates/${researchUpdate.id}`,
       researchUpdate,
       client,
     )
 
-    await uploadAndUpdateMedia(
+    await uploadAndUpdateFiles(
       uploadedFiles,
-      'files',
-      `research/${researchId}`,
+      `research/${researchId}/updates/${researchUpdate.id}`,
       researchUpdate,
       client,
     )
@@ -91,15 +89,14 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 }
 
-async function uploadAndUpdateMedia(
+async function uploadAndUpdateImages(
   files: File[],
-  type: 'files' | 'images',
   path: string,
   researchUpdate: ResearchUpdate,
   client: SupabaseClient,
 ) {
   if (files.length > 0) {
-    const mediaResult = await storageServiceServer.uploadMedia(
+    const mediaResult = await storageServiceServer.uploadImage(
       files,
       path,
       client,
@@ -108,12 +105,43 @@ async function uploadAndUpdateMedia(
     if (mediaResult?.media && mediaResult.media.length > 0) {
       const result = await client
         .from('research_updates')
-        .update({ [type]: mediaResult.media })
+        .update({
+          images: mediaResult.media,
+        })
         .eq('id', researchUpdate.id)
         .select()
 
       if (result.data) {
-        researchUpdate[type] = result.data[0][type]
+        researchUpdate.images = result.data[0].images
+      }
+    }
+  }
+}
+
+async function uploadAndUpdateFiles(
+  files: File[],
+  path: string,
+  researchUpdate: ResearchUpdate,
+  client: SupabaseClient,
+) {
+  if (files.length > 0) {
+    const mediaResult = await storageServiceServer.uploadFile(
+      files,
+      path,
+      client,
+    )
+
+    if (mediaResult?.media && mediaResult.media.length > 0) {
+      const result = await client
+        .from('research_updates')
+        .update({
+          files: mediaResult.media,
+        })
+        .eq('id', researchUpdate.id)
+        .select()
+
+      if (result.data) {
+        researchUpdate.files = result.data[0].files
       }
     }
   }

@@ -152,7 +152,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const research = ResearchItem.fromDB(researchResult.data[0], [])
 
     if (uploadedImage) {
-      const mediaResult = await storageServiceServer.uploadMedia(
+      const mediaResult = await storageServiceServer.uploadImage(
         [uploadedImage],
         `research/${research.id}`,
         client,

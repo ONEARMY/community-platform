@@ -5,7 +5,7 @@ import { MOCK_DATA } from '../../data'
 import { generateNewUserDetails } from '../../utils/TestUtils'
 
 describe('[Questions.Discussions]', () => {
-  it('can open using deep links', () => {
+  it('shows existing comments', () => {
     const question = MOCK_DATA.questions[0]
     cy.visit(`/questions/${question.slug}`)
     cy.get(`[data-cy=comment-text]`).contains('First comment')

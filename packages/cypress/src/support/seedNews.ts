@@ -25,6 +25,6 @@ export const seedNews = async (profiles, tagsData) => {
     tenantId,
   )
 
-  const { comments } = await seedComment(profiles, news)
+  const { comments } = await seedComment(profiles, news, 'news')
   await seedReply(profiles, comments, news)
 }

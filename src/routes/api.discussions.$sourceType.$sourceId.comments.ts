@@ -19,6 +19,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   const sourceParam = isNaN(+params.sourceId) ? 'source_id_legacy' : 'source_id'
   const sourceId = isNaN(+params.sourceId) ? params.sourceId : +params.sourceId
+  const sourceType = params.sourceType!
 
   const result = await client
     .from('comments')
@@ -37,6 +38,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       profiles(id, firebase_auth_id, display_name, username, is_verified, is_supporter, photo_url, country)
     `,
     )
+    .eq('source_type', sourceType)
     .eq(sourceParam, sourceId)
     .order('created_at', { ascending: false })
 
@@ -121,7 +123,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     comment: data.comment,
     source_id_legacy: isNaN(+params.sourceId!) ? params.sourceId : null,
     source_id: isNaN(+params.sourceId!) ? null : +params.sourceId!,
-    source_type: data.sourceType,
+    source_type: params.sourceType,
     created_by: currentUser.data[0].id,
     parent_id: data.parentId ?? null,
     tenant_id: process.env.TENANT_ID,
@@ -182,16 +184,16 @@ async function validateRequest(
     return { status: 400, statusText: 'sourceId is required' }
   }
 
+  if (!params.sourceType) {
+    return { status: 400, statusText: 'sourceType is required' }
+  }
+  
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'method not allowed' }
   }
 
   if (!data.comment) {
     return { status: 400, statusText: 'comment is required' }
-  }
-
-  if (!data.sourceType) {
-    return { status: 400, statusText: 'sourceType is required' }
   }
 
   return { valid: true }

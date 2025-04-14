@@ -25,11 +25,10 @@ const postComment = async (
   sourceType: ContentType,
   parentId?: number,
 ) => {
-  return await fetch(`/api/discussions/${sourceId}/comments`, {
+  return await fetch(`/api/discussions/${sourceType}/${sourceId}/comments`, {
     method: 'POST',
     body: JSON.stringify({
       comment,
-      sourceType,
       parentId,
     }),
   })

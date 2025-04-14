@@ -144,16 +144,16 @@ export const NewsForm = (props: IProps) => {
               )}
               title={LABELS.fields.title.title}
             />
-            <NewsBodyField
-              diffMarkdown={initialValues.body}
-              imageUpload={imageUpload}
-            />
             <NewsImageField
               existingHeroImage={initialValues.existingHeroImage}
               removeExistingImage={removeExistingImage}
             />
             <CategoryField getCategories={newsContentService.getCategories} />
             <TagsField title={LABELS.fields.tags.title} />
+            <NewsBodyField
+              diffMarkdown={initialValues.body}
+              imageUpload={imageUpload}
+            />
           </FormWrapper>
         )
       }}

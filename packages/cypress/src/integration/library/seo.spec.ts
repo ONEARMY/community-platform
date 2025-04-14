@@ -31,7 +31,7 @@ describe('[Library]', () => {
       cy.get('meta[property="og:image"]').should(
         'have.attr',
         'content',
-        cover_image.downloadUrl,
+        cover_image!.downloadUrl,
       )
 
       // Twitter
@@ -48,7 +48,7 @@ describe('[Library]', () => {
       cy.get('meta[name="twitter:image"]').should(
         'have.attr',
         'content',
-        cover_image.downloadUrl,
+        cover_image!.downloadUrl,
       )
     })
   })

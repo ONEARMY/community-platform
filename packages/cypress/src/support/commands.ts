@@ -4,8 +4,7 @@ import { deleteDB } from 'idb'
 
 import { TestDB } from './db/firebase'
 
-import type { DBResearchItem, ILibrary, IQuestionDB } from 'oa-shared'
-import type { IUserSignUpDetails } from '../utils/TestUtils'
+import type { ILibrary } from 'oa-shared'
 
 declare global {
   namespace Cypress {
@@ -24,15 +23,6 @@ declare global {
       ): Chainable<any[]>
       addProject(
         project: ILibrary.DB,
-        username: string,
-        random: string,
-      ): Chainable<void>
-      addQuestion(
-        question: IQuestionDB,
-        user: IUserSignUpDetails,
-      ): Chainable<void>
-      addResearch(
-        research: DBResearchItem,
         username: string,
         random: string,
       ): Chainable<void>
@@ -106,15 +96,6 @@ Cypress.Commands.add('addProject', (project, username, random) => {
 
   return firestore.addDocument('library', {
     ...project,
-    slug,
-  })
-})
-
-Cypress.Commands.add('addResearch', (research, username, random) => {
-  const slug = `${username}-in-${research.slug}-${random}`
-
-  return firestore.addDocument('research', {
-    ...research,
     slug,
   })
 })

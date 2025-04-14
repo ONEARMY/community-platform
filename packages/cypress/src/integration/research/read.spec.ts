@@ -6,7 +6,7 @@ describe('[Research]', () => {
   const { description, updates, category, slug, title } = article
 
   const authoredResearchArticleUrl = '/research/a-test-research'
-  const image = updates[0].images[0].downloadUrl
+  const image = updates[0].images[0].publicUrl
   const pageTitle = `${title} - Research - Precious Plastic`
   const researchArticleUrl = `/research/${slug}`
 
@@ -73,7 +73,7 @@ describe('[Research]', () => {
       it('[Visible to everyone]', () => {
         cy.step('Can visit research')
         cy.visit(researchArticleUrl)
-        const updateId = updates[2]._id
+        const updateId = updates[2].id
 
         cy.title().should(
           'eq',
@@ -136,12 +136,12 @@ describe('[Research]', () => {
 
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(1)
-          .should('contain', category.name)
+          .should('contain', category!.name)
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(1)
           .children()
           .should('have.attr', 'href')
-          .and('equal', `/research?category=${category.id}`)
+          .and('equal', `/research?category=${category!.id}`)
 
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(2)

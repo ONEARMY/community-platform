@@ -472,7 +472,6 @@ workflows:
             - 'Circular dependency test'
             - 'Cloud Function tests'
             - 'Build Storybook'
-            - 'Test Security Rules'
           context:
             - e2e-tests
           matrix:

@@ -1,6 +1,6 @@
 import { seedDatabase } from '../utils/TestUtils'
 
-export const seedComment = async (profiles, sourceData) => {
+export const seedComment = async (profiles, sourceData, sourceType) => {
   const tenantId = Cypress.env('TENANT_ID')
   const commentData = await seedDatabase(
     {
@@ -10,7 +10,7 @@ export const seedComment = async (profiles, sourceData) => {
           created_at: new Date().toUTCString(),
           comment: 'First comment',
           created_by: profiles.data[0].id,
-          source_type: 'question',
+          source_type: sourceType,
           source_id: sourceData.data[0].id,
         },
       ],
@@ -22,7 +22,6 @@ export const seedComment = async (profiles, sourceData) => {
 
 export const seedReply = async (profiles, comments, source) => {
   const tenantId = Cypress.env('TENANT_ID')
-
   await seedDatabase(
     {
       comments: [
@@ -31,7 +30,7 @@ export const seedReply = async (profiles, comments, source) => {
           created_at: new Date().toUTCString(),
           comment: 'First Reply',
           created_by: profiles.data[0].id,
-          source_type: 'question',
+          source_type: comments.data[0].source_type,
           source_id: source.data[0].id,
           parent_id: comments.data[0].id,
         },

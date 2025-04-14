@@ -51,6 +51,6 @@ export const seedQuestions = async (profiles) => {
     tenantId,
   )
 
-  const { comments } = await seedComment(profiles, questions)
+  const { comments } = await seedComment(profiles, questions, 'questions')
   await seedReply(profiles, comments, questions)
 }

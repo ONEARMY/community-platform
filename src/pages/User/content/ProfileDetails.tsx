@@ -22,7 +22,7 @@ export const ProfileDetails = ({ docs, user }: IProps) => {
           alignItems: 'stretch',
           flexDirection: ['column', 'column', 'row'],
           gap: [2, 2, 4],
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
         }}
       >
         <Flex

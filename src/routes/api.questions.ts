@@ -7,7 +7,6 @@ import { discordServiceServer } from 'src/services/discordService.server'
 import { utilsServiceServer } from 'src/services/utilsService.server'
 import { validateImages } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
-import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'

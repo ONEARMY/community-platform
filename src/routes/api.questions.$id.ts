@@ -80,16 +80,15 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       const imageResult = await uploadImages(questionId, uploadedImages, client)
 
       if (imageResult) {
-        images = [
-          ...images,
-          ...imageResult.images.map(
-            (x) =>
-              new Image({
-                id: x.id,
-                publicUrl: x.fullPath,
-              }),
-          ),
-        ]
+        const newImages = imageResult.images.map(
+          (x) =>
+            new Image({
+              id: x.id,
+              publicUrl: x.fullPath,
+            }),
+        )
+
+        images = [...images, ...newImages]
       }
     }
 

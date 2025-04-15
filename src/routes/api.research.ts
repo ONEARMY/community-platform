@@ -4,10 +4,11 @@ import { ITEMS_PER_PAGE } from 'src/pages/Research/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { discordServiceServer } from 'src/services/discordService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
+import { utilsServiceServer } from 'src/services/utilsService.server'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { User } from '@supabase/supabase-js'
 import type { DBProfile, DBResearchItem, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts'
 
@@ -107,7 +108,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const slug = convertToSlug(data.title)
 
-    if (await isDuplicateSlug(slug, client)) {
+    if (await utilsServiceServer.isDuplicateNewSlug(slug, client, 'research')) {
       return Response.json(
         {},
         {
@@ -196,18 +197,8 @@ function notifyDiscord(
   const slug = research.slug
 
   discordServiceServer.postWebhookRequest(
-    `❓ ${profile.username} posted a new research: ${title}\nCheck it out here: <${siteUrl}/research/${slug}>`,
+    `🧪 ${profile.username} posted a new research: ${title}\nCheck it out here: <${siteUrl}/research/${slug}>`,
   )
-}
-
-async function isDuplicateSlug(slug: string, client: SupabaseClient) {
-  const { data } = await client
-    .from('research')
-    .select('slug')
-    .eq('slug', slug)
-    .single()
-
-  return !!data
 }
 
 async function validateRequest(request: Request, user: User | null, data: any) {

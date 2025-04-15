@@ -1,7 +1,11 @@
 import { logger } from 'src/logger'
 
-import type { ResearchItem, ResearchStatus } from 'oa-shared'
-import type { ResearchFormData, ResearchUpdateFormData } from './research.model'
+import type {
+  ResearchFormData,
+  ResearchItem,
+  ResearchStatus,
+  ResearchUpdateFormData,
+} from 'oa-shared'
 import type { ResearchSortOption } from './ResearchSortOptions'
 
 const search = async (

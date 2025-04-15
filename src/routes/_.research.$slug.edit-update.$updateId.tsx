@@ -3,7 +3,6 @@ import { useLoaderData } from '@remix-run/react'
 import { ResearchItem } from 'oa-shared'
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common/ResearchUpdateForm'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { isAllowedToEditResearch } from 'src/services/researchPermissions.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 
@@ -50,7 +49,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirect('/research')
   }
 
-  if (!(await isAllowedToEditResearch(client, research, username))) {
+  if (
+    !(await researchServiceServer.isAllowedToEditResearch(
+      client,
+      research,
+      username,
+    ))
+  ) {
     return redirect('/research')
   }
 

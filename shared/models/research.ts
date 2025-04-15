@@ -3,9 +3,11 @@ import { Category } from './category'
 
 import type { DBAuthor } from './author'
 import type { DBCategory } from './category'
+import type { IConvertedFileMeta } from './common'
 import type { IContentDoc, IDBContentDoc } from './content'
 import type { IDBDocSB, IDBDownloadable, IDoc, IDownloadable } from './document'
-import type { DBMedia, Image } from './media'
+import type { DBMedia, Image, IMediaFile, MediaFile } from './media'
+import type { SelectValue } from './other'
 import type { Tag } from './tag'
 
 export enum ResearchStatus {
@@ -94,6 +96,27 @@ export class ResearchItem implements IContentDoc {
     collaborators: Author[] = [],
     currentUserId?: number,
   ) {
+    const filteredUpdates = obj.updates?.filter((update) => {
+      if (update.deleted || !currentUserId) {
+        return false
+      }
+
+      if (update.status !== ResearchUpdateStatus.DRAFT) {
+        return true
+      }
+
+      const isAuthor = obj.author?.id === currentUserId
+      const isCollaborator = (collaborators || [])
+        .map((collaborator) => collaborator.id)
+        .includes(currentUserId)
+
+      return isAuthor || isCollaborator
+    })
+
+    const processedUpdates =
+      filteredUpdates?.map((update) => ResearchUpdate.fromDB(update, images)) ||
+      []
+
     return new ResearchItem({
       id: obj.id,
       createdAt: new Date(obj.created_at),
@@ -118,19 +141,7 @@ export class ResearchItem implements IContentDoc {
       collaboratorsUsernames: obj.collaborators,
       collaborators: collaborators || [],
       // never show deleted updates; only show draft updates if current user is the author or collaborator
-      updates:
-        obj.updates
-          ?.filter(
-            (x) =>
-              x.deleted !== true &&
-              (x.status !== ResearchUpdateStatus.DRAFT ||
-                (!!currentUserId &&
-                  (obj.author?.id === currentUserId ||
-                    (collaborators || [])
-                      .map((x) => x.id)
-                      ?.includes(currentUserId)))),
-          )
-          ?.map((x) => ResearchUpdate.fromDB(x, images)) || [],
+      updates: processedUpdates,
     })
   }
 }
@@ -150,7 +161,7 @@ export class DBResearchUpdate implements IDBDocSB, IDBDownloadable {
   description: string
   images: DBMedia[] | null
   file_link: string | null
-  files: { id: string; name: string; size: number }[] | null
+  files: IMediaFile[] | null
   video_url: string | null
   status: ResearchUpdateStatus
 
@@ -167,7 +178,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
   title: string
   description: string
   images: Image[] | null
-  files: { id: string; name: string; size: number }[] | null
+  files: IMediaFile[] | null
   hasFileLink: boolean
   videoUrl: string | null
   deleted: boolean
@@ -210,4 +221,26 @@ function calculateUpdateCommentCount(research: DBResearchItem): number {
   return research.updates
     ?.filter((x) => x.deleted !== true && x.is_draft !== true)
     .reduce((acc, x) => acc + (x.comment_count || 0), 0)
+}
+
+export type ResearchFormData = {
+  title: string
+  description: string
+  category?: SelectValue
+  tags?: number[]
+  collaborators?: string[]
+  status: ResearchStatus
+  image?: IConvertedFileMeta
+  existingImage: Image | null
+}
+
+export type ResearchUpdateFormData = {
+  title: string
+  description: string
+  images?: File[]
+  existingImages: Image[] | null
+  files?: File[]
+  existingFiles?: MediaFile[] | null
+  fileLink?: string
+  videoUrl?: string
 }

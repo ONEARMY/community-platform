@@ -2,6 +2,7 @@ import { ResearchItem, UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { profileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
+import { utilsServiceServer } from 'src/services/utilsService.server'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
@@ -57,7 +58,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     if (
       currentResearch.slug !== newSlug &&
-      (await isDuplicateSlug(newSlug, client))
+      (await utilsServiceServer.isDuplicateExistingSlug(
+        newSlug,
+        currentResearch.id,
+        client,
+        'research',
+      ))
     ) {
       return Response.json(
         {},
@@ -143,16 +149,6 @@ async function getResearch(id: number, client: SupabaseClient) {
     .eq('id', id)
     .limit(1)
   return currentResearchResult.data?.at(0) as DBResearchItem
-}
-
-async function isDuplicateSlug(slug: string, client: SupabaseClient) {
-  const { data } = await client
-    .from('research')
-    .select('slug')
-    .eq('slug', slug)
-    .single()
-
-  return !!data
 }
 
 async function validateRequest(

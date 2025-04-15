@@ -13,7 +13,7 @@ interface IMedia {
   publicUrl: string
 }
 
-interface IMediaFile {
+export interface IMediaFile {
   id: string
   name: string
   size: number

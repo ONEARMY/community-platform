@@ -1,6 +1,6 @@
 import { redirect, useLoaderData } from '@remix-run/react'
 import { News, UserRole } from 'oa-shared'
-import { NewsForm } from 'src/pages/News/Content/Common'
+import { NewsForm } from 'src/pages/News/Content/Common/NewsForm'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { newsServiceServer } from 'src/services/newsService.server'
 import { tagsServiceServer } from 'src/services/tagsService.server'

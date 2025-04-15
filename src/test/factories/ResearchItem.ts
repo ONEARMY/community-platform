@@ -1,8 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { ResearchStatus, ResearchUpdateStatus } from 'oa-shared'
 
-import type { ResearchItem, ResearchUpdate } from 'oa-shared'
-import type { ResearchFormData } from 'src/pages/Research/research.model'
+import type { ResearchFormData, ResearchItem, ResearchUpdate } from 'oa-shared'
 
 export const FactoryResearchItemUpdate = (
   researchItemUpdateOverloads: Partial<ResearchUpdate> = {},

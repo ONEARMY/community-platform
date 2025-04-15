@@ -214,8 +214,8 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
               type="button"
               large
               sx={{
-                ml: 2,
-                mb: [3, 3, 0],
+                marginLeft: 2,
+                marginBottom: [3, 3, 0],
               }}
               data-cy="addResearchUpdateButton"
             >

@@ -15,7 +15,7 @@ import { Button, Flex } from 'theme-ui'
 
 import { ListHeader } from '../common/Layout/ListHeader'
 import { headings, listing } from './labels'
-import { QuestionSearchParams } from './questionContent.service'
+import { QuestionSearchParams } from './question.service'
 import { QuestionSortOptions } from './QuestionSortOptions'
 
 import type { Category } from 'oa-shared'

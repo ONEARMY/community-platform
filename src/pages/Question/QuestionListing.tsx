@@ -5,7 +5,7 @@ import { logger } from 'src/logger'
 import { Card, Flex, Heading } from 'theme-ui'
 
 import { listing } from './labels'
-import { questionService } from './questionContent.service'
+import { questionService } from './question.service'
 import { QuestionListHeader } from './QuestionListHeader'
 import { QuestionListItem } from './QuestionListItem'
 

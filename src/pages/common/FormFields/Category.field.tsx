@@ -6,10 +6,10 @@ import { categoryService } from 'src/services/categoryService'
 
 import { FormFieldWrapper } from './FormFieldWrapper'
 
-import type { SelectValue } from 'oa-shared'
+import type { ContentType, SelectValue } from 'oa-shared'
 
 interface IProps {
-  type: 'questions' | 'research' | 'library' | 'news'
+  type: ContentType
 }
 
 export const CategoryField = ({ type }: IProps) => {

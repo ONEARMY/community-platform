@@ -20,8 +20,8 @@ export const DownloadButton = (props: IProps) => {
     <>
       <Flex
         sx={{
-          p: 2,
-          mb: 1,
+          padding: 2,
+          marginBottom: 1,
           background: 'accent.base',
           border: '2px solid black',
           justifyContent: 'space-between',

@@ -1,7 +1,7 @@
 import { redirect } from '@remix-run/node'
 import { UserRole } from 'oa-shared'
 import { UserAction } from 'src/common/UserAction'
-import { NewsForm } from 'src/pages/News/Content/Common'
+import { NewsForm } from 'src/pages/News/Content/Common/NewsForm'
 import { listing } from 'src/pages/News/labels'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { Box } from 'theme-ui'

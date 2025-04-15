@@ -53,7 +53,7 @@ export const SelectField = ({
   ...rest
 }: ISelectFieldProps) => (
   // note, we first use a div container so that default styles can be applied
-  <Flex sx={{ p: 0, flexDirection: 'column' }}>
+  <Flex sx={{ padding: 0, flexDirection: 'column' }}>
     {showError && meta.error && meta.touched && (
       <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>
     )}

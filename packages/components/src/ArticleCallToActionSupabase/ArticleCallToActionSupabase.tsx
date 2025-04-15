@@ -1,4 +1,4 @@
-import { Flex, Heading, Text, useThemeUI } from 'theme-ui'
+import { Flex, Heading, Text } from 'theme-ui'
 
 import { Username } from '../Username/Username'
 
@@ -12,7 +12,6 @@ export interface IProps {
 
 export const ArticleCallToActionSupabase = (props: IProps) => {
   const { author, children, contributors } = props
-  const { theme } = useThemeUI() as any
 
   return (
     <Flex
@@ -53,9 +52,7 @@ export const ArticleCallToActionSupabase = (props: IProps) => {
       <Flex
         sx={{
           gap: 2,
-          [`@media screen and (max-width: ${theme.breakpoints[0]})`]: {
-            flexDirection: 'column',
-          },
+          flexDirection: ['column', 'row'],
         }}
       >
         {children}

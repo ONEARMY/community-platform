@@ -20,6 +20,7 @@ export const Tab = styled(MuiTab)`
   padding: ${(p) => (p.theme as Theme)?.space?.[2]}px
     ${(p) => (p.theme as Theme)?.space?.[3]}px;
   margin-right: ${(p) => (p.theme as Theme)?.space?.[3]}px;
+  color: ${(p) => (p.theme as Theme)?.colors?.grey};
 
   &:hover {
     text-decoration: underline;
@@ -42,6 +43,7 @@ export const Tab = styled(MuiTab)`
     background-color: ${(p) => (p.theme as Theme)?.colors.background};
     text-decoration: none;
     border: none;
+    color: ${(p) => (p.theme as Theme)?.colors?.black};
 
     &:after {
       content: '';

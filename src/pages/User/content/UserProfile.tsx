@@ -44,7 +44,11 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
   return (
     <Flex
       data-cy={isMember ? 'MemberProfile' : 'SpaceProfile'}
-      sx={{ width: '100%', height: '100%', flexDirection: 'column' }}
+      sx={{
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
+      }}
     >
       {isMember && (
         <MemberBadge
@@ -58,7 +62,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
           useLowDetailVersion
         />
       )}
-      <Card variant="responsive">
+      <Card variant="responsive" sx={{ borderRadius: [3, 3, 3] }}>
         <ProfileImage user={user} />
         <Flex
           sx={{

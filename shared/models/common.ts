@@ -4,7 +4,7 @@
 export type ISODateString = string
 
 export interface IConvertedFileMeta {
-  photoData: Blob
+  photoData: File
   objectUrl: string
   name: string
   type: string

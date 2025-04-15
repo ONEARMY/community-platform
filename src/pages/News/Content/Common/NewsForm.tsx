@@ -86,6 +86,9 @@ export const NewsForm = (props: IProps) => {
   }
 
   const imageUpload = async (imageFile) => {
+    if (!imageFile) {
+      return
+    }
     try {
       const response = await storageService.imageUpload(id, 'news', imageFile)
       return response.publicUrl

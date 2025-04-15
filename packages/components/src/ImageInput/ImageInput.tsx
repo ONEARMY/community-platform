@@ -1,22 +1,25 @@
 import { useEffect, useRef, useState } from 'react'
 import Dropzone from 'react-dropzone-esm'
-import { Button, Modal } from 'oa-components'
-import { logger } from 'src/logger'
 import { Box, Flex, Image, Text } from 'theme-ui'
 
+import { Button } from '../Button/Button'
+import { Modal } from '../Modal/Modal'
 import { compressImage } from './compressImage'
-import { DeleteImage } from './DeleteImage'
 import { getPresentFiles } from './getPresentFiles'
 import { ImageConverterList } from './ImageConverterList'
+import { ImageInputDeleteImage } from './ImageInputDeleteImage'
 import { ImageInputWrapper } from './ImageInputWrapper'
 import { imageValid } from './imageValid'
 import { setSrc } from './setSrc'
 
 import type { IConvertedFileMeta } from 'oa-shared'
 import type { ThemeUIStyleObject } from 'theme-ui'
-import type { IInputValue, IMultipleInputValue, IValue } from './types'
-
-type IFileMeta = IConvertedFileMeta[] | IConvertedFileMeta | null
+import type {
+  IFileMeta,
+  IInputValue,
+  IMultipleInputValue,
+  IValue,
+} from './types'
 
 interface IProps {
   onFilesChange: (fileMeta: IFileMeta) => void
@@ -40,7 +43,7 @@ export const ImageInput = (props: IProps) => {
   const [isImageCorrupt, setIsImageCorrupt] = useState(false)
   const [showErrorModal, setShowErrorModal] = useState(false)
 
-  const onDrop = async (selectedImage) => {
+  const onDrop = async (selectedImage: File[]) => {
     try {
       await imageValid(selectedImage[0])
       setIsImageCorrupt(false)
@@ -49,7 +52,7 @@ export const ImageInput = (props: IProps) => {
         const compressedImage = await compressImage(selectedImage[0])
         selectedImage[0] = compressedImage
       } catch (compressionError) {
-        logger.error(
+        console.error(
           'Image compression failed, using original image: ',
           compressionError,
         )
@@ -62,7 +65,10 @@ export const ImageInput = (props: IProps) => {
     }
   }
 
-  const handleConvertedFileChange = (newFile: IConvertedFileMeta, index) => {
+  const handleConvertedFileChange = (
+    newFile: IConvertedFileMeta,
+    index: number,
+  ) => {
     const nextFiles = convertedFiles
     nextFiles[index] = newFile
     setConvertedFiles(convertedFiles)
@@ -126,7 +132,9 @@ export const ImageInput = (props: IProps) => {
               </Button>
             )}
             {hasImages && (
-              <DeleteImage onClick={(event) => handleImageDelete(event)} />
+              <ImageInputDeleteImage
+                onClick={(event) => handleImageDelete(event)}
+              />
             )}
           </ImageInputWrapper>
         )}

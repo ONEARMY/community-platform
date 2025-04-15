@@ -1,8 +1,10 @@
 import { ImageConverter } from './ImageConverter'
 
+import type { IConvertedFileMeta } from 'oa-shared'
+
 interface IProps {
   inputFiles: File[]
-  handleConvertedFileChange: (string, index) => void
+  handleConvertedFileChange: (meta: IConvertedFileMeta, index: number) => void
 }
 
 export const ImageConverterList = (props: IProps) => {

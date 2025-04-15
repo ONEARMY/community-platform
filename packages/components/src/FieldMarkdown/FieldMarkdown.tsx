@@ -7,7 +7,6 @@ import {
   DiffSourceToggleWrapper,
   headingsPlugin,
   imagePlugin,
-  InsertImage,
   InsertTable,
   linkDialogPlugin,
   linkPlugin,
@@ -23,6 +22,7 @@ import {
 import { Flex, Text } from 'theme-ui'
 
 import { DisplayMarkdownStylingWrapper } from '../DisplayMarkdown/DisplayMarkdownStylingWrapper'
+import { AddImage } from './AddImage'
 
 import type { MDXEditorMethods } from '@mdxeditor/editor'
 import type { FieldRenderProps } from 'react-final-form'
@@ -47,17 +47,17 @@ export const FieldMarkdown = (props: IProps) => {
   useEffect(() => {
     ref.current?.getMarkdown()
   }, [])
-
-  useEffect(() => {
-    ref.current?.setMarkdown(input.value)
-  }, [input.value])
+  useEffect(() => ref.current?.setMarkdown(input.value), [input.value])
 
   const mainPluginList = [
     headingsPlugin({ allowedHeadingLevels: [1, 2] }),
     listsPlugin(),
     quotePlugin(),
     tablePlugin(),
-    imagePlugin({ imageUploadHandler }),
+    imagePlugin({
+      disableImageSettingsButton: true,
+      disableImageResize: true,
+    }),
     thematicBreakPlugin(),
     linkPlugin(),
     linkDialogPlugin(),
@@ -72,7 +72,7 @@ export const FieldMarkdown = (props: IProps) => {
         <ListsToggle />
         <CreateLink />
         <InsertTable />
-        <InsertImage />
+        <AddImage imageUploadHandler={imageUploadHandler} />
         <BlockTypeSelect />
       </DiffSourceToggleWrapper>
     ),

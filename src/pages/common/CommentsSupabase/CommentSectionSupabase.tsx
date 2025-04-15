@@ -37,7 +37,9 @@ export const CommentSectionSupabase = (props: IProps) => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const result = await fetch(`/api/discussions/${sourceType}/${sourceId}/comments`)
+        const result = await fetch(
+          `/api/discussions/${sourceType}/${sourceId}/comments`,
+        )
         const { comments } = (await result.json()) as { comments: Comment[] }
 
         const highlightedCommentId = location.hash.replace('#comment:', '')

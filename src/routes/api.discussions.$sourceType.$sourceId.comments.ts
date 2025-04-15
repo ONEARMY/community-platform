@@ -187,7 +187,7 @@ async function validateRequest(
   if (!params.sourceType) {
     return { status: 400, statusText: 'sourceType is required' }
   }
-  
+
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'method not allowed' }
   }

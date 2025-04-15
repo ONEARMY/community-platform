@@ -8,7 +8,7 @@ import { questionServiceServer } from 'src/services/questionService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
-import { utilsServiceServer } from '../services/utilsService.server'
+import { contentServiceServer } from '../services/contentService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { DBQuestion } from 'oa-shared'
@@ -25,7 +25,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbQuestion = result.data as unknown as DBQuestion
 
   if (dbQuestion.id) {
-    await utilsServiceServer.incrementViewCount(
+    await contentServiceServer.incrementViewCount(
       client,
       'questions',
       dbQuestion.total_views,
@@ -34,7 +34,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const [usefulVotes, subscribers, tags] =
-    await utilsServiceServer.getMetaFields(
+    await contentServiceServer.getMetaFields(
       client,
       dbQuestion.id,
       dbQuestion.tags,

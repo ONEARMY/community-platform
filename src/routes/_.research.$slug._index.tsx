@@ -3,8 +3,8 @@ import { ResearchItem } from 'oa-shared'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { ResearchArticlePage } from 'src/pages/Research/Content/ResearchArticlePage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { contentServiceServer } from 'src/services/contentService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
-import { utilsServiceServer } from 'src/services/utilsService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -39,7 +39,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbResearch = result.data as unknown as DBResearchItem
 
   if (dbResearch.id) {
-    await utilsServiceServer.incrementViewCount(
+    await contentServiceServer.incrementViewCount(
       client,
       'research',
       (dbResearch.total_views || 0) + 1,
@@ -48,7 +48,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const [usefulVotes, subscribers, tags] =
-    await utilsServiceServer.getMetaFields(
+    await contentServiceServer.getMetaFields(
       client,
       dbResearch.id,
       dbResearch.tags,

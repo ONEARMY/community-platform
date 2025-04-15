@@ -2,9 +2,9 @@ import { IModerationStatus, ResearchItem } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { ITEMS_PER_PAGE } from 'src/pages/Research/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { contentServiceServer } from 'src/services/contentService.server'
 import { discordServiceServer } from 'src/services/discordService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
-import { utilsServiceServer } from 'src/services/utilsService.server'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
@@ -108,7 +108,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const slug = convertToSlug(data.title)
 
-    if (await utilsServiceServer.isDuplicateNewSlug(slug, client, 'research')) {
+    if (
+      await contentServiceServer.isDuplicateNewSlug(slug, client, 'research')
+    ) {
       return Response.json(
         {},
         {

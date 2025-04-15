@@ -1,8 +1,8 @@
-import { redirect } from '@remix-run/node'
 import { UserAction } from 'src/common/UserAction'
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm'
 import { listing } from 'src/pages/Question/labels'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { redirectServiceServer } from 'src/services/redirectService.server'
 import { Box } from 'theme-ui'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -14,7 +14,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   } = await client.auth.getUser()
 
   if (!user) {
-    return redirect('/questions', { headers })
+    return redirectServiceServer.redirectSignIn('/questions/create', headers)
   }
 
   return null

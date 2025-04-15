@@ -3,8 +3,8 @@
 import { IModerationStatus, Question } from 'oa-shared'
 import { ITEMS_PER_PAGE } from 'src/pages/Question/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { contentServiceServer } from 'src/services/contentService.server'
 import { discordServiceServer } from 'src/services/discordService.server'
-import { utilsServiceServer } from 'src/services/utilsService.server'
 import { validateImages } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
@@ -120,7 +120,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const slug = convertToSlug(data.title)
 
     if (
-      await utilsServiceServer.isDuplicateNewSlug(slug, client, 'questions')
+      await contentServiceServer.isDuplicateNewSlug(slug, client, 'questions')
     ) {
       return Response.json(
         {},

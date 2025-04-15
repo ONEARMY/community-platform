@@ -60,7 +60,7 @@ async function isDuplicateNewSlug(slug: Slug, client: Client, table: Table) {
   return !!data
 }
 
-export const utilsServiceServer = {
+export const contentServiceServer = {
   getMetaFields,
   incrementViewCount,
   isDuplicateExistingSlug,

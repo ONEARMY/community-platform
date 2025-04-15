@@ -4,6 +4,7 @@ import { UserAction } from 'src/common/UserAction'
 import { NewsForm } from 'src/pages/News/Content/Common/NewsForm'
 import { listing } from 'src/pages/News/labels'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { redirectServiceServer } from 'src/services/redirectService.server'
 import { Box } from 'theme-ui'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -15,7 +16,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   } = await client.auth.getUser()
 
   if (!user) {
-    return redirect('/news', { headers })
+    return redirectServiceServer.redirectSignIn('/news/create', headers)
   }
 
   const { data } = await client
@@ -25,7 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .single()
 
   if (!data?.roles?.includes(UserRole.ADMIN)) {
-    return redirect('/news', { headers })
+    return redirect('/forbidden', { headers })
   }
 
   return null

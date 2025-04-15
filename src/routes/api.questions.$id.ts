@@ -3,7 +3,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { hasAdminRightsSupabase, validateImages } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
-import { utilsServiceServer } from '../services/utilsService.server'
+import { contentServiceServer } from '../services/contentService.server'
 import { uploadImages } from './api.questions'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -154,7 +154,7 @@ async function validateRequest(
   const questionId = Number(params.id!)
 
   if (
-    await utilsServiceServer.isDuplicateExistingSlug(
+    await contentServiceServer.isDuplicateExistingSlug(
       slug,
       questionId,
       client,

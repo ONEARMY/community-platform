@@ -1,8 +1,8 @@
 import { ResearchItem, UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { contentServiceServer } from 'src/services/contentService.server'
 import { profileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
-import { utilsServiceServer } from 'src/services/utilsService.server'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
@@ -58,7 +58,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     if (
       currentResearch.slug !== newSlug &&
-      (await utilsServiceServer.isDuplicateExistingSlug(
+      (await contentServiceServer.isDuplicateExistingSlug(
         newSlug,
         currentResearch.id,
         client,

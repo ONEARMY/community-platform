@@ -3,6 +3,7 @@ import { News, UserRole } from 'oa-shared'
 import { NewsForm } from 'src/pages/News/Content/Common/NewsForm'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { newsServiceServer } from 'src/services/newsService.server'
+import { redirectServiceServer } from 'src/services/redirectService.server'
 import { tagsServiceServer } from 'src/services/tagsService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -16,8 +17,15 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     data: { user },
   } = await client.auth.getUser()
 
+  if (!user) {
+    return redirectServiceServer.redirectSignIn(
+      `/news/${params.slug}/edit`,
+      headers,
+    )
+  }
+
   if (!(await isAllowedToEdit(user, client))) {
-    return redirect('/news', { headers })
+    return redirect('/forbidden', { headers })
   }
 
   if (!params.slug) {
@@ -41,11 +49,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return Response.json({ news }, { headers })
 }
 
-async function isAllowedToEdit(user: User | null, client: SupabaseClient) {
-  if (!user) {
-    return false
-  }
-
+async function isAllowedToEdit(user: User, client: SupabaseClient) {
   const { data } = await client
     .from('profiles')
     .select('id,roles')

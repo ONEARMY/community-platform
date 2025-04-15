@@ -3,6 +3,7 @@ import { useLoaderData } from '@remix-run/react'
 import { ResearchItem } from 'oa-shared'
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common/ResearchUpdateForm'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { redirectServiceServer } from 'src/services/redirectService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 
@@ -17,7 +18,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   } = await client.auth.getUser()
 
   if (!user) {
-    return redirect('/research')
+    return redirectServiceServer.redirectSignIn(
+      `/research/${params.slug}/edit-update/${params.updateId}`,
+      headers,
+    )
   }
 
   const result = await researchServiceServer.getBySlug(
@@ -56,7 +60,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       username,
     ))
   ) {
-    return redirect('/research')
+    return redirect('/forbidden', { headers })
   }
 
   const updateDb = researchDb.updates.find(

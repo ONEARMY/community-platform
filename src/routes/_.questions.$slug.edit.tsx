@@ -4,6 +4,7 @@ import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { questionServiceServer } from 'src/services/questionService.server'
+import { redirectServiceServer } from 'src/services/redirectService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -18,7 +19,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   } = await client.auth.getUser()
 
   if (!user) {
-    return redirect('/questions', { headers })
+    return redirectServiceServer.redirectSignIn(
+      `/questions/${params.slug}/edit`,
+      headers,
+    )
   }
 
   if (!params.slug) {
@@ -34,7 +38,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbQuestion = result.data as unknown as DBQuestion
 
   if (!(await isUserAllowedToEdit(dbQuestion, user, client))) {
-    return redirect('/questions', { headers })
+    return redirect('/forbidden', { headers })
   }
 
   let images: Image[] = []

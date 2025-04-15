@@ -1,7 +1,7 @@
 import { News } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { contentServiceServer } from 'src/services/contentService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
-import { utilsServiceServer } from 'src/services/utilsService.server'
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown'
 import { hasAdminRightsSupabase, validateImage } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
@@ -141,7 +141,7 @@ async function validateRequest(
   const newsId = Number(params.id!)
 
   if (
-    await utilsServiceServer.isDuplicateExistingSlug(
+    await contentServiceServer.isDuplicateExistingSlug(
       slug,
       newsId,
       client,

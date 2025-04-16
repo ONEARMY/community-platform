@@ -1,5 +1,6 @@
 import { ResearchUpdate } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { profileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
@@ -48,6 +49,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       )
     }
 
+    const profile = await profileServiceServer.getByAuthId(user!.id, client)
+
+    if (!profile) {
+      return Response.json({}, { status: 400, statusText: 'User not found' })
+    }
+
     const updateResult = await client
       .from('research_updates')
       .insert({
@@ -55,6 +62,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         description: data.description,
         is_draft: data.isDraft,
         research_id: researchId,
+        created_by: profile.id,
         tenant_id: process.env.TENANT_ID,
       })
       .select()

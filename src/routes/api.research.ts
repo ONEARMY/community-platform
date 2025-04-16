@@ -4,6 +4,7 @@ import { ITEMS_PER_PAGE } from 'src/pages/Research/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
 import { discordServiceServer } from 'src/services/discordService.server'
+import { profileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { convertToSlug } from 'src/utils/slug'
 
@@ -120,18 +121,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       )
     }
 
-    const profileRequest = await client
-      .from('profiles')
-      .select('id')
-      .eq('auth_id', user!.id)
-      .limit(1)
+    const profile = await profileServiceServer.getByAuthId(user!.id, client)
 
-    if (profileRequest.error || !profileRequest.data?.at(0)) {
-      console.error(profileRequest.error)
+    if (!profile) {
       return Response.json({}, { status: 400, statusText: 'User not found' })
     }
-
-    const profile = profileRequest.data[0] as DBProfile
 
     const researchResult = await client
       .from('research')

@@ -24,7 +24,9 @@ const getUsersByUsername = async (
 ): Promise<DBProfile[] | null> => {
   const { data } = await client
     .from('profiles')
-    .select('id,username,display_name')
+    .select(
+      'id,username,display_name,is_verified,is_supporter,photo_url,country',
+    )
     .in('username', usernames)
 
   if (!data) {

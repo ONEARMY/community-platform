@@ -28,7 +28,22 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
        is_draft,
        collaborators,
        author:profiles(id, display_name, username, is_verified, is_supporter, country),
-       updates:research_updates(id, created_at, title, description, images, files, file_link, file_download_count, video_url, is_draft, comment_count, modified_at, deleted)
+       updates:research_updates(
+        id, 
+        created_at, 
+        title, 
+        description, 
+        images, 
+        files, 
+        file_link, 
+        file_download_count, 
+        video_url, 
+        is_draft, 
+        comment_count, 
+        modified_at, 
+        deleted,
+        update_author:profiles(id, display_name, username, is_verified, is_supporter, country)
+      )
      `,
     )
     .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)

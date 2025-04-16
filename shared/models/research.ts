@@ -154,7 +154,7 @@ export class DBResearchUpdate implements IDBDocSB, IDBDownloadable {
   readonly is_draft: boolean | null
   readonly comment_count?: number
   readonly file_download_count?: number
-  readonly author?: DBAuthor
+  readonly update_author?: DBAuthor
   created_by: number | null
   modified_at: Date | null
   title: string
@@ -195,7 +195,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
       id: obj.id,
       createdAt: new Date(obj.created_at),
       modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
-      author: obj.author ? Author.fromDB(obj.author) : null,
+      author: obj.update_author ? Author.fromDB(obj.update_author) : null,
       title: obj.title,
       description: obj.description,
       images:

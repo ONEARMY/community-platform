@@ -1,13 +1,15 @@
 import { useLoaderData } from '@remix-run/react'
-import { ResearchItem } from 'oa-shared'
+import { Author, ResearchItem } from 'oa-shared'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { ResearchArticlePage } from 'src/pages/Research/Content/ResearchArticlePage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
+import { profileServiceServer } from 'src/services/profileService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBResearchItem, ResearchUpdate } from 'oa-shared'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -54,6 +56,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       dbResearch.tags,
     )
 
+  const collaborators = await getCollaborators(dbResearch.collaborators, client)
+
   const images = researchServiceServer.getResearchPublicMedia(
     dbResearch,
     client,
@@ -63,13 +67,40 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     dbResearch,
     tags,
     images,
-    [], // TODO
+    collaborators,
     currentUserId,
   )
   research.usefulCount = usefulVotes.count || 0
   research.subscriberCount = subscribers.count || 0
 
   return Response.json({ research }, { headers })
+}
+
+const getCollaborators = async (
+  collaboratorIds: string[] | null,
+  client: SupabaseClient,
+) => {
+  if (collaboratorIds === null || collaboratorIds.length === 0) {
+    return []
+  }
+
+  const users = await profileServiceServer.getUsersByUsername(
+    collaboratorIds,
+    client,
+  )
+
+  return users?.map(
+    (x) =>
+      new Author({
+        id: x.id,
+        name: x.display_name,
+        isSupporter: x.is_supporter,
+        isVerified: x.is_verified,
+        username: x.username,
+        photoUrl: x.photo_url,
+        country: x.country,
+      }),
+  )
 }
 
 export function HydrateFallback() {

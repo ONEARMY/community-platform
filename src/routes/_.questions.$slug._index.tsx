@@ -37,6 +37,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     await contentServiceServer.getMetaFields(
       client,
       dbQuestion.id,
+      'questions',
       dbQuestion.tags,
     )
 

@@ -32,7 +32,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const [usefulVotes, subscribers, tags] =
-    await contentServiceServer.getMetaFields(client, dbNews.id, dbNews.tags)
+    await contentServiceServer.getMetaFields(
+      client,
+      dbNews.id,
+      'news',
+      dbNews.tags,
+    )
 
   const heroImage = await newsServiceServer.getHeroImage(
     client,

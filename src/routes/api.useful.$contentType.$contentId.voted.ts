@@ -13,14 +13,14 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return Response.json({}, { status: 401, statusText: 'unauthorized' })
   }
 
-  const subcribedResult = await client
+  const useful = await client
     .from('useful_votes')
     .select('id, profiles!inner(id)', { count: 'exact' })
     .eq('content_id', params.contentId)
     .eq('content_type', params.contentType)
     .eq('profiles.auth_id', user.id)
 
-  const voted = subcribedResult.count === 1
+  const voted = useful.count === 1
 
   return Response.json({ voted }, { headers, status: 200 })
 }

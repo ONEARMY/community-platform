@@ -71,6 +71,26 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
     })
   }
 
+  useEffect(() => {
+    const getSubscribed = async () => {
+      const subscribed = await subscribersService.isSubscribed(
+        'research',
+        research.id,
+      )
+      setSubscribed(subscribed)
+    }
+
+    const getVoted = async () => {
+      const voted = await usefulService.hasVoted('research', research.id)
+      setVoted(voted)
+    }
+
+    if (loggedInUser) {
+      getSubscribed()
+      getVoted()
+    }
+  }, [loggedInUser, research])
+
   const scrollIntoRelevantSection = () => {
     if (getResearchCommentId(location.hash) === '') return
     const section = document.getElementById(

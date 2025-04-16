@@ -7,18 +7,23 @@ type Id = number
 type Client = SupabaseClient
 type Table = 'questions' | 'news' | 'research'
 
-const getMetaFields = async (client: Client, id: Id, tagIds: number[]) => {
+const getMetaFields = async (
+  client: Client,
+  id: Id,
+  table: Table,
+  tagIds: number[],
+) => {
   return await Promise.all([
     client
       .from('useful_votes')
       .select('*', { count: 'exact' })
       .eq('content_id', id)
-      .eq('content_type', 'news'),
+      .eq('content_type', table),
     client
       .from('subscribers')
       .select('user_id', { count: 'exact' })
       .eq('content_id', id)
-      .eq('content_type', 'news'),
+      .eq('content_type', table),
     tagsServiceServer.getTags(client, tagIds),
   ])
 }

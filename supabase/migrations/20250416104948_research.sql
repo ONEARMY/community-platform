@@ -40,7 +40,8 @@ create table "public"."research_updates" (
     "modified_at" timestamp with time zone default (now() AT TIME ZONE 'utc'::text),
     "deleted" boolean,
     "file_link" text,
-    "file_download_count" integer
+    "file_download_count" integer,
+    "created_by" bigint
 );
 
 
@@ -67,6 +68,10 @@ alter table "public"."research" validate constraint "research_created_by_fkey";
 alter table "public"."research_updates" add constraint "research_update_research_id_fkey" FOREIGN KEY (research_id) REFERENCES research(id) ON UPDATE CASCADE ON DELETE CASCADE not valid;
 
 alter table "public"."research_updates" validate constraint "research_update_research_id_fkey";
+
+alter table "public"."research_updates" add constraint "research_updates_created_by_fkey" FOREIGN KEY (created_by) REFERENCES profiles(id) ON UPDATE CASCADE ON DELETE SET NULL not valid;
+
+alter table "public"."research_updates" validate constraint "research_updates_created_by_fkey";
 
 set check_function_bodies = off;
 
@@ -272,7 +277,6 @@ AS $function$BEGIN
       RAISE NOTICE 'Warning: OLD.source_type or OLD.source_id is NULL';
     END IF;
   END IF;
-
   -- Explicit return for the trigger function
   RETURN NULL;
 END;$function$

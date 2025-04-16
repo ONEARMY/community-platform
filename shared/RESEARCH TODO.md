@@ -2,43 +2,40 @@
 
 ## Main Item
 
-- [ ] create
-- [ ] edit
+- [x] create
+- [x] edit
 - [ ] delete
 
 ## Updates
 
-- [ ] create update
-- [ ] edit update
+- [x] create update
+- [x] edit update
 - [ ] delete update
 
 ## Comments
 
-- [ ] use new comments component
+- [x] use new comments component
 - [ ] migration
 
 ## Collaborators
 
-- [ ] create research_collaborators table
-- [ ] add/remove collaborators
-- [ ] display collaborators
-- [ ] update collaborator roles??
+- [x] add/remove collaborators
+- [x] display collaborators
 
 ## Media
 
-- [ ] upload images
-- [ ] update images
-- [ ] upload files
-- [ ] update files
-- [ ] file display
-- [ ] file download
-- [ ] file type restriction
-- [ ] increment file download count
+- [x] upload images
+- [x] update images
+- [x] upload files
+- [x] update files
+- [x] file display
+- [x] file download
+- [x] increment file download count
 
 ## Notification
 
-- [ ] should send message when there is a new published update
-- [ ] should not send message when there is a new draft update
+- [x] should send message when there is a new published update
+- [x] should not send message when there is a new draft update
 - [ ] should send message an update changes from draft to published
 
 ## Profile

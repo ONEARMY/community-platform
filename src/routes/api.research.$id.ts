@@ -12,6 +12,11 @@ import type { DBProfile, DBResearchItem } from 'oa-shared'
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   try {
     const id = Number(params.id)
+
+    if (request.method === 'DELETE') {
+      return await deleteResearch(request, id)
+    }
+
     const formData = await request.formData()
     const data = {
       title: formData.get('title') as string,
@@ -140,6 +145,36 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       { status: 500, statusText: 'Error creating research' },
     )
   }
+}
+
+async function deleteResearch(request, id: number) {
+  const { client, headers } = createSupabaseServerClient(request)
+
+  const {
+    data: { user },
+  } = await client.auth.getUser()
+
+  const profile = await profileServiceServer.getByAuthId(user?.id || '', client)
+  const research = await getResearch(id, client)
+
+  if (
+    profile &&
+    (profile.id === research.author?.id ||
+      research.collaborators?.includes(profile.username) ||
+      profile?.roles?.includes(UserRole.ADMIN))
+  ) {
+    // can delete
+    await client
+      .from('research')
+      .update({
+        deleted: true,
+      })
+      .eq('id', research.id)
+
+    return Response.json({}, { status: 200, headers })
+  }
+
+  return Response.json({}, { status: 500, headers })
 }
 
 async function getResearch(id: number, client: SupabaseClient) {

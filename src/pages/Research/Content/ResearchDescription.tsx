@@ -21,6 +21,7 @@ import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel } from 'src/utils/helpers'
 import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
+import { researchService } from '../research.service'
 import { researchStatusColour } from '../researchHelpers'
 
 import type { IUser, ResearchItem } from 'oa-shared'
@@ -56,8 +57,7 @@ const ResearchDescription = ({
 
   const handleDelete = async (research: ResearchItem) => {
     try {
-      // TODO
-      // await store.deleteResearch(research.id)
+      await researchService.deleteResearch(research.id)
       trackEvent({
         category: 'Research',
         action: 'Deleted',

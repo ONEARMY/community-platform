@@ -4,7 +4,12 @@ import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { storageServiceServer } from './storageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBResearchItem, ResearchItem } from 'oa-shared'
+import type {
+  DBProfile,
+  DBResearchItem,
+  DBResearchUpdate,
+  ResearchItem,
+} from 'oa-shared'
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
   return client
@@ -132,10 +137,51 @@ const isAllowedToEditResearch = async (
   return data?.at(0)?.roles?.includes(UserRole.ADMIN)
 }
 
+async function getById(id: number, client: SupabaseClient) {
+  const result = await client.from('research').select().eq('id', id).single()
+  return result.data as DBResearchItem
+}
+
+async function getUpdateById(id: number, client: SupabaseClient) {
+  const result = await client
+    .from('research_updates')
+    .select()
+    .eq('id', id)
+    .single()
+  return result.data as DBResearchUpdate
+}
+
+async function isAllowedToEditUpdate(
+  profile: DBProfile | null,
+  researchId: number,
+  updateId: number,
+  client: SupabaseClient,
+) {
+  const research = await researchServiceServer.getById(researchId, client)
+  const researchUpdate = await researchServiceServer.getUpdateById(
+    updateId,
+    client,
+  )
+
+  if (research.id !== researchUpdate.research_id) {
+    return false
+  }
+
+  return (
+    profile &&
+    (profile.id === research.author?.id ||
+      research.collaborators?.includes(profile.username) ||
+      profile?.roles?.includes(UserRole.ADMIN))
+  )
+}
+
 export const researchServiceServer = {
   getBySlug,
+  getById,
+  getUpdateById,
   getUserResearch,
   getUpdate,
   getResearchPublicMedia,
   isAllowedToEditResearch,
+  isAllowedToEditUpdate,
 }

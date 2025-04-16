@@ -2,11 +2,12 @@ import { ResearchItem, UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
 import { profileServiceServer } from 'src/services/profileService.server'
+import { researchServiceServer } from 'src/services/researchService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { User } from '@supabase/supabase-js'
 import type { DBProfile, DBResearchItem } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -45,7 +46,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       user?.id || '',
       client,
     )
-    const currentResearch = await getResearch(id, client)
+    const currentResearch = await researchServiceServer.getById(id, client)
 
     const { valid, status, statusText } = await validateRequest(
       request,
@@ -155,7 +156,7 @@ async function deleteResearch(request, id: number) {
   } = await client.auth.getUser()
 
   const profile = await profileServiceServer.getByAuthId(user?.id || '', client)
-  const research = await getResearch(id, client)
+  const research = await researchServiceServer.getById(id, client)
 
   if (
     profile &&
@@ -175,15 +176,6 @@ async function deleteResearch(request, id: number) {
   }
 
   return Response.json({}, { status: 500, headers })
-}
-
-async function getResearch(id: number, client: SupabaseClient) {
-  const currentResearchResult = await client
-    .from('research')
-    .select()
-    .eq('id', id)
-    .limit(1)
-  return currentResearchResult.data?.at(0) as DBResearchItem
 }
 
 async function validateRequest(

@@ -1,5 +1,7 @@
 import { ResearchUpdate } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { profileServiceServer } from 'src/services/profileService.server'
+import { researchServiceServer } from 'src/services/researchService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
@@ -11,6 +13,11 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   try {
     const researchId = Number(params.id)
     const updateId = Number(params.updateId)
+
+    if (request.method === 'DELETE') {
+      return await deleteResearchUpdate(request, researchId, updateId)
+    }
+
     const formData = await request.formData()
     const imagesToKeepIds = formData.getAll('existingImages')
     const filesToKeepIds = formData.getAll('existingFiles')
@@ -39,12 +46,28 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { status, statusText })
     }
 
+    const profile = await profileServiceServer.getByAuthId(
+      user?.id || '',
+      client,
+    )
+
+    if (
+      !researchServiceServer.isAllowedToEditUpdate(
+        profile,
+        researchId,
+        updateId,
+        client,
+      )
+    ) {
+      return Response.json({}, { status: 403, headers })
+    }
+
     const researchUpdateResult = await client
       .from('research_updates')
       .select()
       .eq('id', updateId)
-      .limit(1)
-    const update = researchUpdateResult.data?.at(0) as DBResearchUpdate
+      .single()
+    const update = researchUpdateResult.data as DBResearchUpdate
 
     const uploadedImages = formData.getAll('images') as File[]
     const uploadedFiles = formData.getAll('files') as File[]
@@ -175,6 +198,31 @@ async function updateOrReplaceFile(
   }
 
   return media
+}
+
+async function deleteResearchUpdate(request, id: number, updateId: number) {
+  const { client, headers } = createSupabaseServerClient(request)
+
+  const {
+    data: { user },
+  } = await client.auth.getUser()
+
+  const profile = await profileServiceServer.getByAuthId(user?.id || '', client)
+
+  if (
+    !researchServiceServer.isAllowedToEditUpdate(profile, id, updateId, client)
+  ) {
+    return Response.json({}, { status: 403, headers })
+  }
+
+  await client
+    .from('research_updates')
+    .update({
+      deleted: true,
+    })
+    .eq('id', updateId)
+
+  return Response.json({}, { status: 200, headers })
 }
 
 function validateImages(images: File[]) {

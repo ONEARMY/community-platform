@@ -4,13 +4,13 @@
 
 - [x] create
 - [x] edit
-- [ ] delete
+- [x] delete
 
 ## Updates
 
 - [x] create update
 - [x] edit update
-- [ ] delete update
+- [x] delete update
 
 ## Comments
 

@@ -156,16 +156,22 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
         }}
       >
         <MultipleCommentSectionWrapper>
-          {research?.updates.map((update, index) => (
-            <ResearchUpdate
-              research={research}
-              update={update}
-              key={update.id}
-              updateIndex={index}
-              isEditable={isEditable}
-              slug={research.slug}
-            />
-          ))}
+          {research?.updates
+            ?.toSorted(
+              (a, b) =>
+                new Date(a.createdAt).getTime() -
+                new Date(b.createdAt).getTime(),
+            )
+            ?.map((update, index) => (
+              <ResearchUpdate
+                research={research}
+                update={update}
+                key={update.id}
+                updateIndex={index}
+                isEditable={isEditable}
+                slug={research.slug}
+              />
+            ))}
         </MultipleCommentSectionWrapper>
       </Flex>
 

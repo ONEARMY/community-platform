@@ -109,8 +109,12 @@ export class ResearchItem implements IContentDoc {
     })
 
     const processedUpdates =
-      filteredUpdates?.map((update) => ResearchUpdate.fromDB(update, images)) ||
-      []
+      filteredUpdates
+        ?.map((update) => ResearchUpdate.fromDB(update, images))
+        .sort(
+          (a, b) =>
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        ) || []
 
     return new ResearchItem({
       id: obj.id,

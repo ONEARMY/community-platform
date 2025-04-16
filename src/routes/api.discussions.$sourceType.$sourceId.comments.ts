@@ -5,7 +5,12 @@ import { notificationsService } from 'src/services/notificationsService.server'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { User } from '@supabase/supabase-js'
-import type { ContentType, DBAuthor, DBProfile, Reply } from 'oa-shared'
+import type {
+  DBAuthor,
+  DBProfile,
+  DiscussionContentTypes,
+  Reply,
+} from 'oa-shared'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   if (!params.sourceId) {
@@ -19,6 +24,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   const sourceParam = isNaN(+params.sourceId) ? 'source_id_legacy' : 'source_id'
   const sourceId = isNaN(+params.sourceId) ? params.sourceId : +params.sourceId
+  const sourceType = mapSourceType(params.sourceType! as DiscussionContentTypes)
 
   const result = await client
     .from('comments')
@@ -37,6 +43,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       profiles(id, firebase_auth_id, display_name, username, is_verified, is_supporter, photo_url, country)
     `,
     )
+    .eq('source_type', sourceType)
     .eq(sourceParam, sourceId)
     .order('created_at', { ascending: false })
 
@@ -121,7 +128,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     comment: data.comment,
     source_id_legacy: isNaN(+params.sourceId!) ? params.sourceId : null,
     source_id: isNaN(+params.sourceId!) ? null : +params.sourceId!,
-    source_type: mapSourceType(data.sourceType),
+    source_type: mapSourceType(params.sourceType as DiscussionContentTypes),
     created_by: currentUser.data[0].id,
     parent_id: data.parentId ?? null,
     tenant_id: process.env.TENANT_ID,
@@ -182,6 +189,10 @@ async function validateRequest(
     return { status: 400, statusText: 'sourceId is required' }
   }
 
+  if (!params.sourceType) {
+    return { status: 400, statusText: 'sourceType is required' }
+  }
+
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'method not allowed' }
   }
@@ -190,12 +201,8 @@ async function validateRequest(
     return { status: 400, statusText: 'comment is required' }
   }
 
-  if (!data.sourceType) {
-    return { status: 400, statusText: 'sourceType is required' }
-  }
-
   if (
-    !['questions', 'projects', 'research', 'news'].includes(data.sourceType)
+    !['questions', 'projects', 'research', 'news'].includes(params.sourceType)
   ) {
     return { status: 400, statusText: 'invalid sourceType' }
   }
@@ -203,9 +210,9 @@ async function validateRequest(
   return { valid: true }
 }
 
-const mapSourceType = (sourceType: ContentType) => {
+const mapSourceType = (sourceType: DiscussionContentTypes) => {
   switch (sourceType) {
-    case 'research':
+    case 'research_updates':
       return 'research_update'
     case 'news':
       return 'news'

@@ -85,6 +85,9 @@ export const NewsForm = (props: IProps) => {
   }
 
   const imageUpload = async (imageFile) => {
+    if (!imageFile) {
+      return
+    }
     try {
       const response = await storageService.imageUpload(id, 'news', imageFile)
       return response.publicUrl
@@ -143,16 +146,16 @@ export const NewsForm = (props: IProps) => {
               )}
               title={LABELS.fields.title.title}
             />
-            <NewsBodyField
-              diffMarkdown={initialValues.body}
-              imageUpload={imageUpload}
-            />
             <NewsImageField
               existingHeroImage={initialValues.existingHeroImage}
               removeExistingImage={removeExistingImage}
             />
             <CategoryField type="news" />
             <TagsField title={LABELS.fields.tags.title} />
+            <NewsBodyField
+              diffMarkdown={initialValues.body}
+              imageUpload={imageUpload}
+            />
           </FormWrapper>
         )
       }}

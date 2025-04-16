@@ -205,17 +205,19 @@ const ResearchUpdate = (props: IProps) => {
                 }))}
               />
             </Flex>
-            <ClientOnly fallback={<></>}>
-              {() => (
-                <CollapsableCommentSection
-                  sourceId={update.id}
-                  sourceType="research"
-                  authors={authorIds}
-                  open={false}
-                  total={update.commentCount}
-                />
-              )}
-            </ClientOnly>
+            {!update.isDraft && (
+              <ClientOnly fallback={<></>}>
+                {() => (
+                  <CollapsableCommentSection
+                    sourceId={update.id}
+                    sourceType="research_updates"
+                    authors={authorIds}
+                    open={false}
+                    total={update.commentCount}
+                  />
+                )}
+              </ClientOnly>
+            )}
           </Card>
         </Flex>
       </Flex>

@@ -1,6 +1,6 @@
+import { ImageInput } from 'oa-components'
 import { Text } from 'theme-ui'
 
-import { ImageInput } from './ImageInput/ImageInput'
 import { FieldContainer } from './FieldContainer'
 
 import type { FieldProps } from './types'

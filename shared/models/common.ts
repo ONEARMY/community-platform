@@ -4,7 +4,7 @@
 export type ISODateString = string
 
 export interface IConvertedFileMeta {
-  photoData: Blob
+  photoData: File
   objectUrl: string
   name: string
   type: string
@@ -34,3 +34,8 @@ export type Collaborator = {
 }
 
 export type ContentType = 'questions' | 'projects' | 'research' | 'news'
+export type DiscussionContentTypes =
+  | 'questions'
+  | 'projects'
+  | 'research_updates'
+  | 'news'

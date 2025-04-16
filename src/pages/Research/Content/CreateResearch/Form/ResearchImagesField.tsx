@@ -1,9 +1,8 @@
 import { Field } from 'react-final-form'
 import styled from '@emotion/styled'
+import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
-import { DeleteImage } from 'src/common/Form/ImageInput/DeleteImage'
-import { ImageInputWrapper } from 'src/common/Form/ImageInput/ImageInputWrapper'
 import { FormFieldWrapper } from 'src/pages/common/FormFields'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { Image as ImageComponent } from 'theme-ui'
@@ -58,7 +57,9 @@ export const ResearchImagesField = (props: IProps) => {
           >
             <ImageInputWrapper hasUploadedImg={true}>
               <ImageComponent src={image.publicUrl} />
-              <DeleteImage onClick={() => props.removeExistingImage(i)} />
+              <ImageInputDeleteImage
+                onClick={() => props.removeExistingImage(i)}
+              />
             </ImageInputWrapper>
           </FieldContainer>
         </ImageInputFieldWrapper>

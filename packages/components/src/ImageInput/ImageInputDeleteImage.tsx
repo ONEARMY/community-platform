@@ -1,5 +1,6 @@
-import { Button } from 'oa-components'
 import { Flex } from 'theme-ui'
+
+import { Button } from '../Button/Button'
 
 import type { BoxProps, ThemeUIStyleObject } from 'theme-ui'
 
@@ -38,7 +39,7 @@ interface IProps {
   onClick: (event: Event) => void
 }
 
-export const DeleteImage = ({ onClick }: IProps) => {
+export const ImageInputDeleteImage = ({ onClick }: IProps) => {
   return (
     <UploadImageOverlay>
       <Button
@@ -48,7 +49,7 @@ export const DeleteImage = ({ onClick }: IProps) => {
         variant="secondary"
         icon="delete"
         type="button"
-        onClick={(event) => onClick(event)}
+        onClick={(event: any) => onClick(event)}
       >
         Delete
       </Button>

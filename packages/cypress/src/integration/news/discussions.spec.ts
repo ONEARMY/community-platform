@@ -5,7 +5,7 @@ import { MOCK_DATA } from '../../data'
 import { generateNewUserDetails } from '../../utils/TestUtils'
 
 describe('[News.Discussions]', () => {
-  it('can open using deep links', () => {
+  it('shows existing comments', () => {
     const news = MOCK_DATA.news[0]
     cy.visit(`/news/${news.slug}`)
     cy.get(`[data-cy=comment-text]`).contains('First comment')

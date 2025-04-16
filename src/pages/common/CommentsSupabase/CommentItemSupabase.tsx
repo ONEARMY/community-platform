@@ -14,7 +14,7 @@ import { Card, Flex } from 'theme-ui'
 import { CommentReply } from './CommentReplySupabase'
 import { CreateCommentSupabase } from './CreateCommentSupabase'
 
-import type { Comment, ContentType } from 'oa-shared'
+import type { Comment, DiscussionContentTypes } from 'oa-shared'
 
 export interface ICommentItemProps {
   comment: Comment
@@ -23,7 +23,7 @@ export interface ICommentItemProps {
   onReply: (reply: string) => void
   onEditReply: (id: number, reply: string) => void
   onDeleteReply: (id: number) => void
-  sourceType: ContentType
+  sourceType: DiscussionContentTypes
 }
 
 export const CommentItemSupabase = observer((props: ICommentItemProps) => {

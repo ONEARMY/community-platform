@@ -4,11 +4,11 @@ import { Box, Button } from 'theme-ui'
 import { CommentSectionSupabase } from './CommentSectionSupabase'
 import { MultipleCommentSectionContext } from './MultipleCommentSectionWrapper'
 
-import type { ContentType } from 'oa-shared'
+import type { DiscussionContentTypes } from 'oa-shared'
 
 type Props = {
   sourceId: number | string
-  sourceType: ContentType
+  sourceType: DiscussionContentTypes
   authors: number[]
   open: boolean
   total: number

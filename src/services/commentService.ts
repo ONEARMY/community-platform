@@ -1,4 +1,4 @@
-import type { Comment, ContentType } from 'oa-shared'
+import type { Comment, DiscussionContentTypes } from 'oa-shared'
 
 const deleteComment = async (sourceId: string | number, id: number) => {
   return await fetch(`/api/discussions/${sourceId}/comments/${id}`, {
@@ -22,21 +22,25 @@ const editcomment = async (
 const postComment = async (
   sourceId: string | number,
   comment: string,
-  sourceType: ContentType,
+  sourceType: DiscussionContentTypes,
   parentId?: number,
 ) => {
-  return await fetch(`/api/discussions/${sourceId}/comments`, {
+  return await fetch(`/api/discussions/${sourceType}/${sourceId}/comments`, {
     method: 'POST',
     body: JSON.stringify({
       comment,
-      sourceType,
       parentId,
     }),
   })
 }
 
-const getComments = async (sourceId: string | number) => {
-  const result = await fetch(`/api/discussions/${sourceId}/comments`)
+const getComments = async (
+  sourceType: DiscussionContentTypes,
+  sourceId: string | number,
+) => {
+  const result = await fetch(
+    `/api/discussions/${sourceType}/${sourceId}/comments`,
+  )
   const { comments } = (await result.json()) as { comments: Comment[] }
   return comments
 }

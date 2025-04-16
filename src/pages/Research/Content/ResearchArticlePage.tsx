@@ -139,7 +139,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
           onUsefulClick(voted ? 'delete' : 'add', 'ResearchDescription')
         }
         onFollowClick={() => onFollowClick(subscribed ? 'remove' : 'add')}
-        contributors={research.collaborators.map((x) => ({
+        contributors={research.collaborators?.map((x) => ({
           userName: x.username,
           isVerified: x.isVerified,
         }))}

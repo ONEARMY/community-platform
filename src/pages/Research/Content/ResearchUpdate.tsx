@@ -113,12 +113,11 @@ const ResearchUpdate = (props: IProps) => {
             <Flex sx={{ flexDirection: 'column', padding: [2, 3, 4] }}>
               <Flex sx={{ flexDirection: ['column', 'row', 'row'] }}>
                 <Box sx={{ width: ['100%', '75%', '75%'] }}>
-                  {research.collaborators.length > 0 && (
+                  {update.author && (
                     <Box sx={{ mb: 2 }} data-testid="collaborator/creator">
                       <UserNameTag
                         userName={update.author?.username || ''}
                         countryCode={update.author?.country}
-                        createdAt={update.createdAt}
                       />
                     </Box>
                   )}
@@ -140,9 +139,18 @@ const ResearchUpdate = (props: IProps) => {
                     <Text variant="auxiliary">
                       <DisplayDate
                         createdAt={update.createdAt}
-                        modifiedAt={update.modifiedAt}
+                        action="Created"
                       />
                     </Text>
+                    {update.modifiedAt !== update.createdAt && (
+                      <Text variant="auxiliary">
+                        <DisplayDate
+                          createdAt={update.createdAt}
+                          modifiedAt={update.modifiedAt}
+                          action="Updated"
+                        />
+                      </Text>
+                    )}
                   </Flex>
                   {/* Show edit button for the creator of the research OR a super-admin */}
                   {isEditable && (

@@ -107,6 +107,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         description: data.description,
         is_draft: data.isDraft,
         images,
+        modified_at: new Date(),
         files: files.map((x) => ({ id: x.id, name: x.name, size: x.size })),
       })
       .eq('id', update.id)

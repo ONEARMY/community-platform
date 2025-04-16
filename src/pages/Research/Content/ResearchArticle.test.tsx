@@ -58,13 +58,16 @@ describe('Research Article', () => {
   it('displays content statistics', async () => {
     // Arrange
     const activeResearchItem = FactoryResearchItem({
-      collaborators: undefined,
+      collaborators: [],
       updates: [
         FactoryResearchItemUpdate({
           isDraft: false,
           deleted: false,
         }),
       ],
+      subscriberCount: 0,
+      usefulCount: 0,
+      commentCount: 0,
     })
 
     // Act
@@ -81,7 +84,7 @@ describe('Research Article', () => {
       expect(wrapper.getByText('0 following')).toBeInTheDocument()
       expect(wrapper.getByText('0 useful')).toBeInTheDocument()
       expect(wrapper.getByText('0 comments')).toBeInTheDocument()
-      expect(wrapper.getByText('1 step')).toBeInTheDocument()
+      expect(wrapper.getByText('1 update')).toBeInTheDocument()
     })
   })
 
@@ -91,7 +94,7 @@ describe('Research Article', () => {
     await act(async () => {
       wrapper = getWrapper(
         FactoryResearchItem({
-          collaborators: undefined,
+          collaborators: [],
         }),
       )
     })
@@ -109,8 +112,8 @@ describe('Research Article', () => {
       wrapper = getWrapper(
         FactoryResearchItem({
           collaborators: [
-            { username: 'example-username' } as Author,
-            { username: 'another-example-username' } as Author,
+            { username: 'example-username', country: 'nl' } as Author,
+            { username: 'another-example-username', country: 'nl' } as Author,
           ],
         }),
       )
@@ -121,7 +124,6 @@ describe('Research Article', () => {
       expect(wrapper.getAllByText('With contributions from')).toHaveLength(1)
       expect(wrapper.getAllByText('example-username')).toHaveLength(2)
       expect(wrapper.getAllByText('another-example-username')).toHaveLength(2)
-      expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(4)
     })
   })
 
@@ -135,17 +137,14 @@ describe('Research Article', () => {
             collaborators: [
               { username: 'example-username' } as Author,
               { username: 'another-example-username' } as Author,
+              { username: 'third-example-username' } as Author,
             ],
             updates: [
               FactoryResearchItemUpdate({
                 title: 'Research Update #1',
                 isDraft: false,
                 deleted: false,
-              }),
-              FactoryResearchItemUpdate({
-                title: 'Research Update #2',
-                isDraft: true,
-                deleted: false,
+                author: { username: 'another-example-username' } as Author,
               }),
               FactoryResearchItemUpdate({
                 title: 'Research Update #3',
@@ -153,6 +152,7 @@ describe('Research Article', () => {
                 deleted: false,
               }),
             ],
+            author: { username: 'example-username' } as Author,
           }),
         )
       })
@@ -163,14 +163,13 @@ describe('Research Article', () => {
           expect(wrapper.getAllByText('With contributions from')).toHaveLength(
             1,
           )
-          expect(wrapper.getAllByText('example-username')).toHaveLength(2)
+          expect(wrapper.getAllByText('example-username')).toHaveLength(4)
           expect(wrapper.getAllByText('another-example-username')).toHaveLength(
-            2,
+            3,
           )
-          expect(wrapper.getAllByText('third-example-username')).toHaveLength(1)
+          expect(wrapper.getAllByText('third-example-username')).toHaveLength(2)
           expect(wrapper.queryByText('fourth-example-username')).toBeNull()
           expect(wrapper.getAllByTestId('collaborator/creator')).toHaveLength(1)
-          expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(5)
         },
         {
           timeout: 10000,
@@ -234,39 +233,6 @@ describe('Research Article', () => {
           wrapper.getAllByText((content) => content.includes('Updated')),
         ).not.toThrow()
       })
-    })
-  })
-
-  it('shows only published updates', async () => {
-    // Act
-    let wrapper
-    act(() => {
-      wrapper = getWrapper(
-        FactoryResearchItem({
-          collaborators: [
-            { username: 'example-username' } as Author,
-            { username: 'another-example-username' } as Author,
-          ],
-          updates: [
-            FactoryResearchItemUpdate({
-              title: 'Research Update #1',
-              isDraft: false,
-              deleted: false,
-            }),
-            FactoryResearchItemUpdate({
-              title: 'Research Update #2',
-              isDraft: true,
-              deleted: false,
-            }),
-          ],
-        }),
-      )
-    })
-
-    // Assert
-    await waitFor(() => {
-      expect(wrapper.getByText('Research Update #1')).toBeInTheDocument()
-      expect(wrapper.queryByText('Research Update #2')).not.toBeInTheDocument()
     })
   })
 

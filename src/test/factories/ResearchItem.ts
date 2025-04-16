@@ -29,7 +29,7 @@ export const FactoryResearchItem = (
   id: faker.number.int(),
   author: {
     id: faker.number.int(),
-    name: faker.name.firstName(),
+    name: faker.person.firstName(),
     username: faker.internet.userName(),
     isSupporter: false,
     isVerified: false,

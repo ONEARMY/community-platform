@@ -35,7 +35,6 @@ const ResearchUpdate = (props: IProps) => {
   const { research, update, updateIndex, isEditable, slug } = props
 
   const displayNumber = updateIndex + 1
-  const isDraft = update.status == 'draft'
 
   const authorIds = useMemo(() => {
     const ids: number[] = []
@@ -56,13 +55,13 @@ const ResearchUpdate = (props: IProps) => {
     <Flex
       sx={{
         flexDirection: 'column',
-        border: isDraft ? '2px dashed grey' : '',
+        border: update.isDraft ? '2px dashed grey' : '',
         borderRadius: 2,
-        padding: isDraft ? 2 : 0,
+        padding: update.isDraft ? 2 : 0,
         gap: 2,
       }}
     >
-      {isDraft && (
+      {update.isDraft && (
         <>
           <Button
             data-cy="DraftUpdateLabel"
@@ -85,6 +84,7 @@ const ResearchUpdate = (props: IProps) => {
         sx={{
           flexDirection: ['column', 'column', 'row'],
           gap: [2, 4],
+          scrollMarginTop: 4,
         }}
       >
         <Flex

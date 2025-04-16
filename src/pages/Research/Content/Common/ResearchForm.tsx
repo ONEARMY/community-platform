@@ -54,6 +54,7 @@ const ResearchFormLabel = ({ children, ...props }) => (
 const ResearchForm = ({ research }: IProps) => {
   const [initialValues, setInitialValues] = useState<ResearchFormData>()
   const navigate = useNavigate()
+  const [intentionalNavigation, setIntentionalNavigation] = useState(false)
 
   useEffect(() => {
     if (research) {
@@ -85,7 +86,12 @@ const ResearchForm = ({ research }: IProps) => {
       values,
       isDraft,
     )
-    navigate(`/research/${result.slug}`)
+
+    setIntentionalNavigation(true)
+
+    setTimeout(() => {
+      navigate(`/research/${result.research.slug}`)
+    }, 100)
   }
 
   const removeImage = () => {
@@ -99,7 +105,7 @@ const ResearchForm = ({ research }: IProps) => {
 
   return (
     <Form<ResearchFormData>
-      onSubmit={async (v) => await onSubmit(v)}
+      onSubmit={async (values) => await onSubmit(values)}
       initialValues={initialValues}
       mutators={{
         ...arrayMutators,
@@ -116,8 +122,12 @@ const ResearchForm = ({ research }: IProps) => {
         submitSucceeded,
       }) => {
         return (
-          <Flex mx={-2} bg="inherit" sx={{ flexWrap: 'wrap' }}>
-            <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
+          <Flex
+            sx={{ flexWrap: 'wrap', marginX: -2, backgroundColor: 'inherit' }}
+          >
+            <UnsavedChangesDialog
+              hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
+            />
 
             <Flex
               bg="inherit"
@@ -267,15 +277,16 @@ const ResearchForm = ({ research }: IProps) => {
                 flexDirection: 'column',
                 width: ['100%', '100%', `${100 / 3}%`],
                 height: '100%',
+                paddingX: 2,
+                marginTop: [0, 0, 4],
+                backgroundColor: 'inherit',
               }}
-              bg="inherit"
-              px={2}
-              mt={[0, 0, 4]}
             >
-              <Box
+              <Flex
                 sx={{
-                  top: 3,
+                  flexDirection: 'column',
                   maxWidth: ['inherit', 'inherit', '400px'],
+                  gap: 3,
                 }}
               >
                 <Box sx={{ display: ['none', 'none', 'block'] }}>
@@ -285,11 +296,13 @@ const ResearchForm = ({ research }: IProps) => {
                 <Button
                   data-cy="draft"
                   onClick={() => onSubmit(values, true)}
-                  mt={[0, 0, 3]}
                   variant="secondary"
                   type="submit"
                   disabled={submitting}
-                  sx={{ width: '100%', display: 'block' }}
+                  sx={{
+                    width: '100%',
+                    display: 'block',
+                  }}
                 >
                   <span>{buttons.draft}</span>
                 </Button>
@@ -302,9 +315,7 @@ const ResearchForm = ({ research }: IProps) => {
                   type="submit"
                   disabled={submitting}
                   sx={{
-                    marginTop: 3,
                     width: '100%',
-                    marginBlock: ['40px', '40px', 0],
                     display: 'block',
                   }}
                 >
@@ -316,7 +327,7 @@ const ResearchForm = ({ research }: IProps) => {
                   isVisible={submitFailed && hasValidationErrors}
                   labels={overview}
                 />
-              </Box>
+              </Flex>
               {research?.updates ? (
                 <ResearchEditorOverview
                   sx={{ marginTop: 4 }}
@@ -324,7 +335,7 @@ const ResearchForm = ({ research }: IProps) => {
                     .filter((u) => !u.deleted)
                     .map((u) => ({
                       isActive: false,
-                      status: u.status,
+                      isDraft: u.isDraft,
                       title: u.title,
                       id: u.id,
                     }))}

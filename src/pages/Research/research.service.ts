@@ -116,7 +116,7 @@ const upsert = async (
     throw new Error('Error saving research', { cause: 500 })
   }
 
-  return (await response.json()) as ResearchItem
+  return (await response.json()) as { research: ResearchItem }
 }
 
 const upsertUpdate = async (
@@ -156,7 +156,7 @@ const upsertUpdate = async (
   }
 
   if (isDraft) {
-    data.append('isDraft', 'true')
+    data.append('draft', 'true')
   }
 
   const response =
@@ -178,7 +178,7 @@ const upsertUpdate = async (
     throw new Error('Error saving research update', { cause: 500 })
   }
 
-  return (await response.json()) as ResearchItem
+  return (await response.json()) as { researchUpdate: ResearchItem }
 }
 
 const deleteResearch = async (id: number) => {

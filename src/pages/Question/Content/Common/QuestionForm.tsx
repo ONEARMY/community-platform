@@ -134,21 +134,19 @@ export const QuestionForm = (props: IProps) => {
             submitting={submitting}
             valid={valid}
           >
-            <>
-              <TitleField
-                placeholder={LABELS.fields.title.placeholder}
-                validate={validate}
-                title={LABELS.fields.title.title}
-              />
-              <QuestionDescriptionField />
-              <QuestionImagesField
-                inputsAvailable={numberOfImageInputsAvailable}
-                existingImages={initialValues.existingImages}
-                removeExistingImage={removeExistingImage}
-              />
-              <CategoryField type="questions" />
-              <TagsField title={LABELS.fields.tags.title} />
-            </>
+            <TitleField
+              placeholder={LABELS.fields.title.placeholder}
+              validate={validate}
+              title={LABELS.fields.title.title}
+            />
+            <QuestionDescriptionField />
+            <QuestionImagesField
+              inputsAvailable={numberOfImageInputsAvailable}
+              existingImages={initialValues.existingImages}
+              removeExistingImage={removeExistingImage}
+            />
+            <CategoryField type="questions" />
+            <TagsField title={LABELS.fields.tags.title} />
           </FormWrapper>
         )
       }}

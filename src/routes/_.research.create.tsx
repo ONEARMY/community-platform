@@ -3,6 +3,7 @@ import { UserRole } from 'oa-shared'
 import { isPreciousPlastic } from 'src/config/config.server'
 import ResearchForm from 'src/pages/Research/Content/Common/ResearchForm'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { profileServiceServer } from 'src/services/profileService.server'
 import { redirectServiceServer } from 'src/services/redirectService.server'
 
 export async function loader({ request }) {
@@ -16,13 +17,8 @@ export async function loader({ request }) {
     return redirectServiceServer.redirectSignIn('/research/create', headers)
   }
 
-  const profileResult = await client
-    .from('profiles')
-    .select('roles')
-    .eq('auth_id', user.id)
-    .limit(1)
-
-  const roles = profileResult.data?.at(0)?.roles as string[]
+  const profile = await profileServiceServer.getByAuthId(user.id, client)
+  const roles = profile?.roles as string[]
 
   if (
     !isPreciousPlastic() &&

@@ -1,11 +1,13 @@
-import { ResearchUpdate } from 'oa-shared'
+import { ResearchUpdate, UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { discordServiceServer } from 'src/services/discordService.server'
 import { profileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { DBProfile, DBResearchItem } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   try {
@@ -25,10 +27,20 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       data: { user },
     } = await client.auth.getUser()
 
-    const { valid, status, statusText } = await validateRequest(
+    const researchResult = await client
+      .from('research')
+      .select('id,title,slug,collaborators,author:profiles(id, username)')
+      .eq('id', researchId)
+      .single()
+    const research = researchResult.data as unknown as DBResearchItem
+    const profile = await profileServiceServer.getByAuthId(user!.id, client)
+
+    const { valid, status, statusText } = validateRequest(
       request,
       user,
       data,
+      research,
+      profile,
     )
 
     if (!valid) {
@@ -49,12 +61,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       )
     }
 
-    const profile = await profileServiceServer.getByAuthId(user!.id, client)
-
-    if (!profile) {
-      return Response.json({}, { status: 400, statusText: 'User not found' })
-    }
-
     const updateResult = await client
       .from('research_updates')
       .insert({
@@ -62,7 +68,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         description: data.description,
         is_draft: data.isDraft,
         research_id: researchId,
-        created_by: profile.id,
+        created_by: profile!.id,
         tenant_id: process.env.TENANT_ID,
       })
       .select()
@@ -86,6 +92,16 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       researchUpdate,
       client,
     )
+
+    // Send discord notification
+    if (!research.is_draft && !researchUpdate.isDraft) {
+      notifyDiscord(
+        research,
+        researchUpdate,
+        profile!,
+        new URL(request.url).origin,
+      )
+    }
 
     return Response.json({ researchUpdate }, { headers, status: 201 })
   } catch (error) {
@@ -167,7 +183,24 @@ function validateImages(images: File[]) {
   return { valid: errors.length === 0, errors }
 }
 
-async function validateRequest(request: Request, user: User | null, data: any) {
+async function notifyDiscord(
+  research: DBResearchItem,
+  update: ResearchUpdate,
+  profile: DBProfile,
+  siteUrl: string,
+) {
+  discordServiceServer.postWebhookRequest(
+    `🧪 ${profile.username} posted a new research update: ${update.title}\nCheck it out here: <${siteUrl}/research/${research.slug}?update=${update.id}>`,
+  )
+}
+
+function validateRequest(
+  request: Request,
+  user: User | null,
+  data: any,
+  research: DBResearchItem | null,
+  profile: DBProfile | null,
+) {
   if (!user) {
     return { status: 401, statusText: 'unauthorized' }
   }
@@ -182,6 +215,22 @@ async function validateRequest(request: Request, user: User | null, data: any) {
 
   if (!data.description) {
     return { status: 400, statusText: 'description is required' }
+  }
+
+  if (!research) {
+    return { status: 400, statusText: 'Research not found' }
+  }
+
+  if (!profile) {
+    return { status: 400, statusText: 'User not found' }
+  }
+
+  if (
+    profile.id !== research.author?.id &&
+    !research.collaborators?.includes(profile.username) &&
+    !profile.roles?.includes(UserRole.ADMIN)
+  ) {
+    return { status: 403, statusText: 'Forbidden' }
   }
 
   return { valid: true }

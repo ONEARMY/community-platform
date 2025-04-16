@@ -42,6 +42,7 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
         comment_count, 
         modified_at, 
         deleted,
+        is_draft,
         update_author:profiles(id, display_name, username, is_verified, is_supporter, country)
       )
      `,

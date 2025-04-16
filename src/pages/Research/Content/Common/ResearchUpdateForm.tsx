@@ -7,7 +7,6 @@ import {
   ElWithBeforeIcon,
   ResearchEditorOverview,
 } from 'oa-components'
-import { ResearchUpdateStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { Box, Card, Flex, Heading } from 'theme-ui'
@@ -42,6 +41,7 @@ export const ResearchUpdateForm = (props: IProps) => {
     dirty: false,
   })
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [intentionalNavigation, setIntentionalNavigation] = useState(false)
   const id = props.researchUpdate?.id || null
   const [initialValues, setInitialValues] = useState<ResearchUpdateFormData>({
     title: '',
@@ -74,8 +74,21 @@ export const ResearchUpdateForm = (props: IProps) => {
     isDraft = false,
   ) => {
     try {
-      await researchService.upsertUpdate(research.id, id, formData, isDraft)
-      navigate(`/research/${research.slug}`)
+      const result = await researchService.upsertUpdate(
+        research.id,
+        id,
+        formData,
+        isDraft,
+      )
+      setIntentionalNavigation(true)
+
+      setTimeout(
+        () =>
+          navigate(
+            `/research/${research.slug}#update_${result.researchUpdate.id}`,
+          ),
+        100,
+      )
     } catch (err) {
       console.error(err)
     }
@@ -147,7 +160,9 @@ export const ResearchUpdateForm = (props: IProps) => {
             }}
             data-testid="EditResearchUpdate"
           >
-            <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
+            <UnsavedChangesDialog
+              hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
+            />
             <Flex
               sx={{
                 backgroundColor: 'inherit',
@@ -324,14 +339,14 @@ const getResearchUpdates = (
       .filter((u) => !u.deleted)
       .map((u) => ({
         title: u.title,
-        status: u.status,
+        isDraft: u.isDraft,
         slug: u.id,
         id: u.id,
       })),
     isCreating
       ? {
           title: researchTitle,
-          status: ResearchUpdateStatus.DRAFT,
+          isDraft: true,
           slug: null,
         }
       : null,

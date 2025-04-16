@@ -1,4 +1,4 @@
-import { ResearchUpdateStatus, UserRole } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 import { describe, expect, it } from 'vitest'
 
 import { researchUpdateStatusFilter } from './researchHelpers'
@@ -24,7 +24,7 @@ describe('Research Helpers', () => {
       const user = { id: 1 } as DBProfile
       const update = {
         deleted: true,
-        status: ResearchUpdateStatus.DRAFT,
+        isDraft: true,
       } as ResearchUpdate
 
       // act
@@ -38,7 +38,7 @@ describe('Research Helpers', () => {
       // prepare
       const user = { id: 1 } as DBProfile
       const author = { id: 2 } as Author
-      const update = { status: ResearchUpdateStatus.DRAFT } as ResearchUpdate
+      const update = { isDraft: true } as ResearchUpdate
 
       // act
       const show = researchUpdateStatusFilter(author, null, update, user)
@@ -49,7 +49,7 @@ describe('Research Helpers', () => {
 
     it('should not show when draft and not authenticated', () => {
       // prepare
-      const update = { status: ResearchUpdateStatus.DRAFT } as ResearchUpdate
+      const update = { isDraft: true } as ResearchUpdate
 
       // act
       const show = researchUpdateStatusFilter(null, null, update, undefined)
@@ -61,7 +61,7 @@ describe('Research Helpers', () => {
     it('should show when not draft and not deleted', () => {
       // prepare
       const update = {
-        status: ResearchUpdateStatus.PUBLISHED,
+        isDraft: false,
       } as ResearchUpdate
 
       // act
@@ -75,7 +75,7 @@ describe('Research Helpers', () => {
       // prepare
       const author = { id: 1 } as Author
       const user = { id: 1 } as DBProfile
-      const update = { status: ResearchUpdateStatus.DRAFT } as ResearchUpdate
+      const update = { isDraft: true } as ResearchUpdate
 
       // act
       const show = researchUpdateStatusFilter(author, null, update, user)
@@ -88,7 +88,7 @@ describe('Research Helpers', () => {
       // prepare
       const collaborators = [{ id: 1 }] as Author[]
       const user = { id: 1 } as DBProfile
-      const update = { status: ResearchUpdateStatus.DRAFT } as ResearchUpdate
+      const update = { isDraft: true } as ResearchUpdate
 
       // act
       const show = researchUpdateStatusFilter(null, collaborators, update, user)
@@ -100,7 +100,7 @@ describe('Research Helpers', () => {
     it('should show when draft and current user is an Admin', () => {
       // prepare
       const user = { id: 1, roles: [UserRole.ADMIN] } as DBProfile
-      const update = { status: ResearchUpdateStatus.DRAFT } as ResearchUpdate
+      const update = { isDraft: true } as ResearchUpdate
 
       // act
       const show = researchUpdateStatusFilter(null, null, update, user)

@@ -1,4 +1,4 @@
-import { ResearchStatus, ResearchUpdateStatus, UserRole } from 'oa-shared'
+import { ResearchStatus, UserRole } from 'oa-shared'
 
 import type { Author, DBProfile, ResearchItem, ResearchUpdate } from 'oa-shared'
 
@@ -15,12 +15,10 @@ export const researchUpdateStatusFilter = (
 
   const isAuthor = author?.id && author?.id === currentUser?.id
   const isAdmin = currentUser?.roles?.includes(UserRole.ADMIN)
-  const isUpdateDraft = update.status === ResearchUpdateStatus.DRAFT
-  const isUpdateDeleted = update.deleted
 
   return (
-    (isAdmin || isAuthor || isCollaborator || !isUpdateDraft) &&
-    !isUpdateDeleted
+    (isAdmin || isAuthor || isCollaborator || !update.isDraft) &&
+    !update.deleted
   )
 }
 

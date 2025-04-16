@@ -1,16 +1,15 @@
-import { IModerationStatus, ResearchItem } from 'oa-shared'
+import { ResearchItem } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { ITEMS_PER_PAGE } from 'src/pages/Research/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
-import { discordServiceServer } from 'src/services/discordService.server'
 import { profileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
-import type { DBProfile, DBResearchItem, ResearchStatus } from 'oa-shared'
+import type { DBResearchItem, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts'
 
 // runs on the server
@@ -79,6 +78,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
+      isDraft: formData.get('draft') === 'true',
       category: formData.has('category')
         ? (formData.get('category') as string)
         : null,
@@ -133,11 +133,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         created_by: profile.id,
         title: data.title,
         description: data.description,
-        moderation: IModerationStatus.ACCEPTED,
         slug,
         category: data.category,
         tags: data.tags,
         collaborators: data.collaborators,
+        is_draft: data.isDraft,
         tenant_id: process.env.TENANT_ID,
       })
       .select()
@@ -172,8 +172,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       }
     }
 
-    notifyDiscord(research, profile, new URL(request.url).origin)
-
     return Response.json({ research }, { headers, status: 201 })
   } catch (error) {
     console.error(error)
@@ -182,19 +180,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       { status: 500, statusText: 'Error creating research' },
     )
   }
-}
-
-function notifyDiscord(
-  research: ResearchItem,
-  profile: DBProfile,
-  siteUrl: string,
-) {
-  const title = research.title
-  const slug = research.slug
-
-  discordServiceServer.postWebhookRequest(
-    `🧪 ${profile.username} posted a new research: ${title}\nCheck it out here: <${siteUrl}/research/${slug}>`,
-  )
 }
 
 async function validateRequest(request: Request, user: User | null, data: any) {

@@ -16,11 +16,6 @@ export enum ResearchStatus {
   ARCHIVED = 'Archived',
 }
 
-export enum ResearchUpdateStatus {
-  DRAFT = 'draft',
-  PUBLISHED = 'published',
-}
-
 export const researchStatusOptions = (
   Object.keys(ResearchStatus) as (keyof typeof ResearchStatus)[]
 ).map((status) => {
@@ -97,11 +92,11 @@ export class ResearchItem implements IContentDoc {
     currentUserId?: number,
   ) {
     const filteredUpdates = obj.updates?.filter((update) => {
-      if (update.deleted || !currentUserId) {
+      if (update.deleted) {
         return false
       }
 
-      if (update.status !== ResearchUpdateStatus.DRAFT) {
+      if (!update.is_draft) {
         return true
       }
 
@@ -163,7 +158,6 @@ export class DBResearchUpdate implements IDBDocSB, IDBDownloadable {
   file_link: string | null
   files: IMediaFile[] | null
   video_url: string | null
-  status: ResearchUpdateStatus
 
   constructor(obj: Omit<DBResearchItem, 'id'>) {
     Object.assign(this, obj)
@@ -184,7 +178,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
   deleted: boolean
   commentCount: number
   fileDownloadCount: number
-  status: ResearchUpdateStatus
+  isDraft: boolean
 
   constructor(obj: ResearchUpdate) {
     Object.assign(this, obj)
@@ -208,7 +202,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
       deleted: obj.deleted || false,
       commentCount: obj.comment_count || 0,
       fileDownloadCount: obj.file_download_count || 0,
-      status: obj.status,
+      isDraft: !!obj.is_draft,
     })
   }
 }

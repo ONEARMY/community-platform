@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { ResearchStatus, ResearchUpdateStatus } from 'oa-shared'
+import { ResearchStatus } from 'oa-shared'
 
 import type { ResearchFormData, ResearchItem, ResearchUpdate } from 'oa-shared'
 
@@ -19,7 +19,7 @@ export const FactoryResearchItemUpdate = (
   deleted: false,
   author: null,
   videoUrl: null,
-  status: ResearchUpdateStatus.PUBLISHED,
+  isDraft: false,
   ...researchItemUpdateOverloads,
 })
 

@@ -1,6 +1,7 @@
 import { ResearchItem } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { profileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -17,14 +18,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return Response.json({}, { headers, status: 401 })
   }
 
-  const userProfile = await client
-    .from('profiles')
-    .select('id')
-    .eq('auth_id', user.id)
-    .limit(1)
-  const profileId = userProfile.data?.at(0)?.id
+  const profile = await profileServiceServer.getByAuthId(user.id, client)
 
-  if (!profileId) {
+  if (!profile) {
     return Response.json({ items: [], total: 0 }, { headers })
   }
 
@@ -33,27 +29,44 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .select(
       `       
         id,
-        created_at,
-        created_by,
-        modified_at,
-        description,
-        moderation,
-        slug,
-        category:category(id,created_at,name,type),
-        tags,
-        title,
-        total_views,
-        image,
-        total_views,
-        total_useful,
-        status,
+       created_at,
+       created_by,
+       modified_at,
+       title,
+       description,
+       slug,
+       image,
+       category:category(id,name),
+       tags,
+       total_views,
+       total_views,
+       total_useful,
+       status,
+       is_draft,
+       collaborators,
+       author:profiles(id, display_name, username, is_verified, is_supporter, country),
+       updates:research_updates(
+        id, 
+        created_at, 
+        title, 
+        description, 
+        images, 
+        files, 
+        file_link, 
+        file_download_count, 
+        video_url, 
+        is_draft, 
+        comment_count, 
+        modified_at, 
+        deleted,
         is_draft,
-        updates:research_updates(id, created_at, title, description, images, files, file_link, video_url, is_draft, comment_count, modified_at, deleted)
+        update_author:profiles(id, display_name, username, is_verified, is_supporter, country)
+      )
       `,
     )
     .or('deleted.eq.false,deleted.is.null')
     .eq('is_draft', true)
-    .eq('created_by', profileId)
+    .or(`created_by.eq.${profile.id},collaborators.cs.{${profile.username}}`)
 
   if (result.error) {
     console.error(result.error)

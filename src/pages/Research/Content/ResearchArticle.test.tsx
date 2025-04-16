@@ -6,7 +6,7 @@ import { createRoutesFromElements, Route } from '@remix-run/react'
 import { act, render, waitFor, within } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
-import { ResearchUpdateStatus, UserRole } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 import { FactoryDiscussion } from 'src/test/factories/Discussion'
 import {
   FactoryResearchItem,
@@ -61,7 +61,7 @@ describe('Research Article', () => {
       collaborators: undefined,
       updates: [
         FactoryResearchItemUpdate({
-          status: ResearchUpdateStatus.PUBLISHED,
+          isDraft: false,
           deleted: false,
         }),
       ],
@@ -139,17 +139,17 @@ describe('Research Article', () => {
             updates: [
               FactoryResearchItemUpdate({
                 title: 'Research Update #1',
-                status: ResearchUpdateStatus.PUBLISHED,
+                isDraft: false,
                 deleted: false,
               }),
               FactoryResearchItemUpdate({
                 title: 'Research Update #2',
-                status: ResearchUpdateStatus.DRAFT,
+                isDraft: true,
                 deleted: false,
               }),
               FactoryResearchItemUpdate({
                 title: 'Research Update #3',
-                status: ResearchUpdateStatus.PUBLISHED,
+                isDraft: false,
                 deleted: false,
               }),
             ],
@@ -185,7 +185,7 @@ describe('Research Article', () => {
         modifiedAt: createdAt,
         title: 'A title',
         description: 'A description',
-        status: ResearchUpdateStatus.PUBLISHED,
+        isDraft: false,
       })
 
       // Act
@@ -212,7 +212,7 @@ describe('Research Article', () => {
       const modifiedAt = faker.date.past({ years: 1 })
       const update = FactoryResearchItemUpdate({
         createdAt,
-        status: ResearchUpdateStatus.PUBLISHED,
+        isDraft: false,
         modifiedAt,
         title: 'A title',
         description: 'A description',
@@ -250,12 +250,12 @@ describe('Research Article', () => {
           updates: [
             FactoryResearchItemUpdate({
               title: 'Research Update #1',
-              status: ResearchUpdateStatus.PUBLISHED,
+              isDraft: false,
               deleted: false,
             }),
             FactoryResearchItemUpdate({
               title: 'Research Update #2',
-              status: ResearchUpdateStatus.DRAFT,
+              isDraft: true,
               deleted: false,
             }),
           ],

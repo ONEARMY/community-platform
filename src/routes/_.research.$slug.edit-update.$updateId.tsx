@@ -3,6 +3,7 @@ import { useLoaderData } from '@remix-run/react'
 import { ResearchItem } from 'oa-shared'
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common/ResearchUpdateForm'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { profileServiceServer } from 'src/services/profileService.server'
 import { redirectServiceServer } from 'src/services/redirectService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
@@ -33,20 +34,22 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return Response.json({ research: null }, { headers })
   }
 
-  const profileResult = await client
-    .from('profiles')
-    .select('id')
-    .eq('auth_id', user.id)
-    .limit(1)
-  const currentUserId = profileResult.data?.at(0)?.id
+  const profile = await profileServiceServer.getByAuthId(user.id, client)
 
+  const currentUserId = profile!.id
   const username = user.user_metadata.username
   const researchDb = result.data as unknown as DBResearchItem
   const images = researchServiceServer.getResearchPublicMedia(
     researchDb,
     client,
   )
-  const research = ResearchItem.fromDB(researchDb, [], images, currentUserId)
+  const research = ResearchItem.fromDB(
+    researchDb,
+    [],
+    images,
+    [],
+    currentUserId,
+  )
   const update = research.updates.find((x) => x.id === Number(params.updateId))
 
   if (!update) {

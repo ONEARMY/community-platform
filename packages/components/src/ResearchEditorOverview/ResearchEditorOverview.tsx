@@ -9,7 +9,7 @@ import type { ThemeUIStyleObject } from 'theme-ui'
 export type ResearchEditorOverviewUpdate = {
   isActive: boolean
   title: string
-  status: 'draft' | 'published'
+  isDraft: boolean
   id: number | null
 }
 
@@ -49,7 +49,7 @@ export const ResearchEditorOverview = (props: ResearchEditorOverviewProps) => {
             .map((update, index) => (
               <Box as={'li'} key={index} sx={{ mb: 1 }}>
                 <Text variant={'quiet'}>
-                  {update.status === 'draft' ? (
+                  {update.isDraft ? (
                     <Text
                       sx={{
                         display: 'inline-block',

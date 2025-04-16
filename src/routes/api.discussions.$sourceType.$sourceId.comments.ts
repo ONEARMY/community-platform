@@ -100,11 +100,14 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     data: { user },
   } = await client.auth.getUser()
 
+  const sourceType = mapSourceType(params.sourceType! as DiscussionContentTypes)
+
   const { valid, status, statusText } = await validateRequest(
     params,
     request,
     user,
     data,
+    sourceType,
   )
 
   if (!valid) {
@@ -128,7 +131,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     comment: data.comment,
     source_id_legacy: isNaN(+params.sourceId!) ? params.sourceId : null,
     source_id: isNaN(+params.sourceId!) ? null : +params.sourceId!,
-    source_type: mapSourceType(params.sourceType as DiscussionContentTypes),
+    source_type: sourceType,
     created_by: currentUser.data[0].id,
     parent_id: data.parentId ?? null,
     tenant_id: process.env.TENANT_ID,
@@ -180,6 +183,7 @@ async function validateRequest(
   request: Request,
   user: User | null,
   data: any,
+  sourceType: 'news' | 'research_update' | 'project' | 'question' | null,
 ) {
   if (!user) {
     return { status: 401, statusText: 'unauthorized' }
@@ -201,9 +205,7 @@ async function validateRequest(
     return { status: 400, statusText: 'comment is required' }
   }
 
-  if (
-    !['questions', 'projects', 'research', 'news'].includes(params.sourceType)
-  ) {
+  if (!sourceType) {
     return { status: 400, statusText: 'invalid sourceType' }
   }
 

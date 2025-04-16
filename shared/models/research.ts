@@ -100,6 +100,10 @@ export class ResearchItem implements IContentDoc {
         return true
       }
 
+      if (!currentUserId) {
+        return false
+      }
+
       const isAuthor = obj.author?.id === currentUserId
       const isCollaborator = (collaborators || [])
         .map((collaborator) => collaborator.id)

@@ -5,12 +5,14 @@
 - [x] create
 - [x] edit
 - [x] delete
+- [ ] Admin CRUD?
 
 ## Updates
 
 - [x] create update
 - [x] edit update
 - [x] delete update
+- [ ] Admin CRUD?
 
 ## Comments
 
@@ -21,6 +23,7 @@
 
 - [x] add/remove collaborators
 - [x] display collaborators
+- [x] Collaborator CRUD?
 
 ## Media
 
@@ -41,3 +44,7 @@
 ## Profile
 
 - [ ] display profile research
+
+## Chores
+
+- [ ] Add research to data seed

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import { useNavigate } from '@remix-run/react'
-import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import {
   CategoryField,
@@ -23,6 +23,7 @@ import {
   required,
   setAllowDraftSaveFalse,
 } from 'src/utils/validators'
+import { Alert } from 'theme-ui'
 
 import { QUESTION_MAX_IMAGES, QUESTION_MIN_TITLE_LENGTH } from '../../constants'
 
@@ -46,7 +47,7 @@ export const QuestionForm = (props: IProps) => {
     tags: [],
     images: [],
   })
-  const [saveError, setSaveError] = useState<string | null>(null)
+  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
   const id = question?.id || null
 
   useEffect(() => {
@@ -70,7 +71,7 @@ export const QuestionForm = (props: IProps) => {
   }, [question])
 
   const onSubmit = async (formValues: Partial<QuestionFormData>) => {
-    setSaveError(null)
+    setSaveErrorMessage(null)
 
     try {
       const result = await questionService.upsert(id, {
@@ -87,7 +88,7 @@ export const QuestionForm = (props: IProps) => {
       }
     } catch (e) {
       if (e.cause && e.message) {
-        setSaveError(e.message)
+        setSaveErrorMessage(e.message)
       }
       logger.error(e)
     }
@@ -109,29 +110,46 @@ export const QuestionForm = (props: IProps) => {
       onSubmit={onSubmit}
       mutators={{ setAllowDraftSaveFalse }}
       initialValues={initialValues}
-      render={({ submitting, handleSubmit, valid, values }) => {
+      render={({
+        dirty,
+        submitting,
+        submitSucceeded,
+        handleSubmit,
+        valid,
+        values,
+      }) => {
         const numberOfImageInputsAvailable = (values as any)?.images
           ? Math.min(
               (values as any).images.filter((x) => !!x).length + 1,
               QUESTION_MAX_IMAGES,
             )
           : 1
+
         const validate = composeValidators(
           required,
           minValue(QUESTION_MIN_TITLE_LENGTH),
           endsWithQuestionMark(),
         )
 
+        const saveError = saveErrorMessage && (
+          <Alert variant="failure" sx={{ mt: 3 }}>
+            {saveErrorMessage}
+          </Alert>
+        )
+        const unsavedChangesDialog = (
+          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
+        )
+
         return (
           <FormWrapper
             buttonLabel={LABELS.buttons[parentType]}
+            contentType="questions"
             guidelines={<QuestionPostingGuidelines />}
             handleSubmit={handleSubmit}
             heading={LABELS.headings[parentType]}
-            icon={IconHeaderHowto}
-            parentType={parentType}
             saveError={saveError}
             submitting={submitting}
+            unsavedChangesDialog={unsavedChangesDialog}
             valid={valid}
           >
             <TitleField

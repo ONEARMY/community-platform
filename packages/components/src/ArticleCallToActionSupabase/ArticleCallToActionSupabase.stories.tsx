@@ -8,11 +8,11 @@ import type { Meta, StoryFn } from '@storybook/react'
 import type { Author } from 'oa-shared'
 
 export default {
-  title: 'Layout/ArticleCallToAction',
+  title: 'Layout/ArticleCallToActionSupabase',
   component: ArticleCallToActionSupabase,
 } as Meta<typeof ArticleCallToActionSupabase>
 
-export const ArticleCallToActionCommentAndUseful: StoryFn<
+export const ArticleCallToActionSupabaseCommentAndUseful: StoryFn<
   typeof ArticleCallToActionSupabase
 > = () => (
   <ArticleCallToActionSupabase author={makeFakeUser()}>
@@ -28,7 +28,7 @@ export const ArticleCallToActionCommentAndUseful: StoryFn<
   </ArticleCallToActionSupabase>
 )
 
-export const ArticleCallToActionUseful: StoryFn<
+export const ArticleCallToActionSupabaseUseful: StoryFn<
   typeof ArticleCallToActionSupabase
 > = () => (
   <ArticleCallToActionSupabase author={makeFakeUser()}>
@@ -43,7 +43,7 @@ export const ArticleCallToActionUseful: StoryFn<
   </ArticleCallToActionSupabase>
 )
 
-export const ArticleCallToActionSingleContributor: StoryFn<
+export const ArticleCallToActionSupabaseSingleContributor: StoryFn<
   typeof ArticleCallToActionSupabase
 > = () => (
   <ArticleCallToActionSupabase
@@ -74,7 +74,7 @@ const makeFakeUser = (): Author => ({
   isSupporter: faker.datatype.boolean(),
 })
 
-export const ArticleCallToActionMultipleContributors: StoryFn<
+export const ArticleCallToActionSupabaseMultipleContributors: StoryFn<
   typeof ArticleCallToActionSupabase
 > = () => (
   <ArticleCallToActionSupabase

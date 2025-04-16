@@ -39,6 +39,8 @@ import machinesSVG from '../../assets/icons/machines.svg'
 import mapSVG from '../../assets/icons/map.svg'
 import globe from '../../assets/icons/map-globe.svg'
 import gpsLocation from '../../assets/icons/map-gpsLocation.svg'
+import megaphoneActiveSVG from '../../assets/icons/megaphone-active.svg'
+import megaphoneInactiveSVG from '../../assets/icons/megaphone-inactive.svg'
 import mouldsSVG from '../../assets/icons/moulds.svg'
 import otherSVG from '../../assets/icons/other.svg'
 import patreonSVG from '../../assets/icons/patreon.svg'
@@ -99,6 +101,8 @@ export const iconMap = {
   machine: <ImageIcon src={machineSVG} />,
   machines: <ImageIcon src={machinesSVG} />,
   map: <ImageIcon src={mapSVG} />,
+  megaphoneActive: <ImageIcon src={megaphoneActiveSVG} />,
+  megaphoneInactive: <ImageIcon src={megaphoneInactiveSVG} />,
   moulds: <ImageIcon src={mouldsSVG} />,
   other: <ImageIcon src={otherSVG} />,
   patreon: <ImageIcon src={patreonSVG} />,

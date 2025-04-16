@@ -1,6 +1,7 @@
 import { Comment, DBComment } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { notificationsService } from 'src/services/notificationsService.server'
+import { notificationsServiceSupabaseServer } from 'src/services/notificationsServiceSupabase.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
@@ -155,6 +156,10 @@ export async function action({ params, request }: LoaderFunctionArgs) {
       client,
       commentResult.data as DBComment,
       currentUser.data[0] as DBProfile,
+    )
+    notificationsServiceSupabaseServer.createNotificationNewComment(
+      commentResult.data,
+      client,
     )
   }
 

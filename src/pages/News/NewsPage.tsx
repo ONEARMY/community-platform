@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import {
@@ -9,8 +9,10 @@ import {
 } from 'oa-components'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
+import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
+import { subscribersService } from 'src/services/subscribersService'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
 import { AspectRatio, Box, Button, Card, Flex, Heading, Image } from 'theme-ui'
 
@@ -24,8 +26,24 @@ interface IProps {
 }
 
 export const NewsPage = observer(({ news }: IProps) => {
+  const [subscribed, setSubscribed] = useState<boolean>(false)
+  const [subscribersCount, setSubscribersCount] = useState<number>(
+    news.subscriberCount,
+  )
+
   const { userStore } = useCommonStores().stores
   const activeUser = userStore.activeUser
+
+  useEffect(() => {
+    const getSubscribed = async () => {
+      const subscribed = await subscribersService.isSubscribed('news', news.id)
+      setSubscribed(subscribed)
+    }
+
+    if (activeUser) {
+      getSubscribed()
+    }
+  }, [activeUser, news])
 
   const isEditable = useMemo(() => {
     return (
@@ -115,6 +133,14 @@ export const NewsPage = observer(({ news }: IProps) => {
                   }),
                 },
                 {
+                  icon: 'thunderbolt-grey',
+                  label: buildStatisticsLabel({
+                    stat: subscribersCount,
+                    statUnit: 'following',
+                    usePlural: false,
+                  }),
+                },
+                {
                   icon: 'comment',
                   label: buildStatisticsLabel({
                     stat: news.commentCount,
@@ -138,6 +164,15 @@ export const NewsPage = observer(({ news }: IProps) => {
               padding: [3, 4],
             }}
           >
+            <FollowButtonAction
+              activeUser={activeUser}
+              contentType="news"
+              item={news}
+              setSubscribed={setSubscribed}
+              setSubscribersCount={setSubscribersCount}
+              subscribed={subscribed}
+            />
+
             <CommentSectionSupabase
               authors={news.author?.id ? [news.author?.id] : []}
               sourceId={news.id}

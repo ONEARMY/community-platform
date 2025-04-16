@@ -18,6 +18,7 @@ import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import { Flex, Text, useThemeUI } from 'theme-ui'
 
 import { EnvironmentContext } from '../EnvironmentContext'
+import { NotificationsSupabase } from './Menu/Notifications/NotificationsSupabase'
 import { getFormattedNotifications } from './getFormattedNotifications'
 import { MobileMenuContext } from './MobileMenuContext'
 
@@ -30,6 +31,8 @@ const MobileNotificationsWrapper = ({ children }) => {
   return (
     <Flex
       sx={{
+        alignItems: 'center',
+        gap: 2,
         position: 'relative',
         [`@media only screen and (max-width: ${theme.breakpoints![1]})`]: {
           display: 'flex',
@@ -144,27 +147,32 @@ const Header = observer(() => {
               isMobileMenuActive={showMobileNotifications}
               areThereNotifications={areThereNotifications}
             />
+            <NotificationsSupabase />
           </MobileNotificationsWrapper>
         )}
         <Flex
           className="menu-desktop"
           sx={{
-            px: 2,
+            alignItems: 'center',
+            paddingX: 2,
             position: 'relative',
             display: ['none', 'none', 'flex'],
           }}
         >
           <MenuDesktop />
           {isLoggedInUser && (
-            <NotificationsDesktop
-              notifications={notifications}
-              markAllRead={() =>
-                userNotificationsStore.markAllNotificationsRead()
-              }
-              markAllNotified={() =>
-                userNotificationsStore.markAllNotificationsNotified()
-              }
-            />
+            <>
+              <NotificationsDesktop
+                notifications={notifications}
+                markAllRead={() =>
+                  userNotificationsStore.markAllNotificationsRead()
+                }
+                markAllNotified={() =>
+                  userNotificationsStore.markAllNotificationsNotified()
+                }
+              />
+              <NotificationsSupabase />
+            </>
           )}
           {isModuleSupported(
             env?.VITE_SUPPORTED_MODULES || '',
@@ -217,6 +225,7 @@ const Header = observer(() => {
                 userNotificationsStore.markAllNotificationsNotified()
               }
             />
+            <NotificationsSupabase />
           </MobileMenuWrapper>
         </AnimationContainer>
       )}

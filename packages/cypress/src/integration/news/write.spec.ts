@@ -138,7 +138,7 @@ describe('[News.Write]', () => {
       cy.get('[data-cy=create-news]').should('not.exist')
 
       cy.visit('/news/create')
-      cy.get('[data-cy=logged-out-message]').should('be.visible')
+      cy.url().should('contain', '/sign-in?returnUrl=%2Fnews%2Fcreate')
     })
 
     // it('[Admin]', () => {

@@ -1,3 +1,4 @@
+import { ClientOnly } from 'remix-utils/client-only'
 import Main from 'src/pages/common/Layout/Main'
 import { SettingsPage } from 'src/pages/UserSettings/SettingsPage.client'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
@@ -21,11 +22,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Index() {
   return (
     <Main style={{ flex: 1 }}>
-      <Settings />
+      <ClientOnly fallback={<></>}>{() => <SettingsPage />}</ClientOnly>
     </Main>
   )
-}
-
-const Settings = () => {
-  return <SettingsPage />
 }

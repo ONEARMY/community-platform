@@ -15,6 +15,7 @@ export const seedAccounts = async () => {
       email: user['email'],
       username: user.userName,
       password: user['password'],
+      roles: user.userRoles,
     }))
 
   const userIds = await Promise.all(
@@ -37,6 +38,7 @@ export const seedAccounts = async () => {
       display_name: x.username,
       is_verified: true,
       is_supporter: false,
+      roles: x.roles,
     }))
 
   return await seedDatabase({ profiles }, tenantId)

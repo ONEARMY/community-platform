@@ -1,7 +1,6 @@
-import {
-  generateAlphaNumeric,
-  generateNewUserDetails,
-} from '../../utils/TestUtils'
+import { users } from 'oa-shared/mocks/data'
+
+import { generateAlphaNumeric } from '../../utils/TestUtils'
 
 describe('[News.Write]', () => {
   describe('[Create a news item]', () => {
@@ -24,18 +23,18 @@ describe('[News.Write]', () => {
     it('[By Authenticated]', () => {
       localStorage.setItem('devSiteRole', 'admin')
       cy.visit('/news')
-      const user = generateNewUserDetails()
-      cy.signUpNewUser(user)
+      const user = users.admin
+      cy.signIn(user.email, user.password)
 
       cy.step("Can't add news with an incomplete profile")
       cy.visit('/news')
       cy.get('[data-cy=create-news]').should('not.exist')
-      // cy.get('[data-cy=complete-profile-news]').should('be.visible')
+
       cy.visit('/news/create')
       cy.get('[data-cy=incomplete-profile-message]').should('be.visible')
       cy.get('[data-cy=field-title]').should('not.exist')
 
-      cy.completeUserProfile(user.username)
+      cy.completeUserProfile(user.userName)
 
       cy.step('Can add news now profile is complete')
       cy.visit('/news')

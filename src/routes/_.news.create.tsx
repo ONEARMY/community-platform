@@ -23,9 +23,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .from('profiles')
     .select('id,roles')
     .eq('auth_id', user.id)
-    .single()
+    .limit(1)
 
-  if (!data?.roles?.includes(UserRole.ADMIN)) {
+  if (!data?.at(0)?.roles?.includes(UserRole.ADMIN)) {
     return redirect('/forbidden', { headers })
   }
 

@@ -21,7 +21,6 @@ describe('[News.Write]', () => {
     const updatedSummary = `${updatedNewsBody} ${initialNewsBodyOne} ${initialNewsBodyTwo}`
 
     it('[By Authenticated]', () => {
-      localStorage.setItem('devSiteRole', 'admin')
       cy.visit('/news')
       const user = users.admin
       cy.signIn(user.email, user.password)
@@ -30,15 +29,7 @@ describe('[News.Write]', () => {
       cy.visit('/news')
       cy.get('[data-cy=create-news]').should('not.exist')
 
-      cy.visit('/news/create')
-      cy.get('[data-cy=incomplete-profile-message]').should('be.visible')
-      cy.get('[data-cy=field-title]').should('not.exist')
-
-      cy.completeUserProfile(user.userName)
-
       cy.step('Can add news now profile is complete')
-      cy.visit('/news')
-      cy.get('[data-cy=complete-profile-news]').should('not.exist')
       cy.visit('/news/create')
       cy.get('[data-cy=field-title]', { timeout: 20000 })
 

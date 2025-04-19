@@ -134,7 +134,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       )
     }
 
-    const uploadedHeroImageFile = formData.get('heroImage') as File
+    const uploadedHeroImageFile = formData.get('heroImage') as File | null
     const imageValidation = validateImage(uploadedHeroImageFile)
 
     if (!imageValidation.valid && imageValidation.error) {
@@ -180,28 +180,31 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const news = News.fromDB(newsResult.data[0], [])
+
     notifyDiscord(news, profile, new URL(request.url).origin)
 
-    const mediaFiles = await storageServiceServer.uploadImage(
-      [uploadedHeroImageFile],
-      `news/${news.id}`,
-      client,
-    )
-
-    if (mediaFiles?.media?.length) {
-      await client
-        .from('news')
-        .update({
-          hero_image: mediaFiles.media.at(0),
-        })
-        .eq('id', news.id)
-
-      const [image] = storageServiceServer.getPublicUrls(
+    if (uploadedHeroImageFile) {
+      const mediaFiles = await storageServiceServer.uploadImage(
+        [uploadedHeroImageFile],
+        `news/${news.id}`,
         client,
-        mediaFiles.media,
       )
 
-      news.heroImage = image
+      if (mediaFiles?.media?.length) {
+        await client
+          .from('news')
+          .update({
+            hero_image: mediaFiles.media.at(0),
+          })
+          .eq('id', news.id)
+
+        const [image] = storageServiceServer.getPublicUrls(
+          client,
+          mediaFiles.media,
+        )
+
+        news.heroImage = image
+      }
     }
 
     return Response.json({ news }, { headers, status: 201 })

@@ -89,7 +89,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         ? (formData.getAll('collaborators') as string[])
         : null,
     }
-    const uploadedImage = formData.get('image') as File
+    const uploadedImage = formData.get('image') as File | null
 
     const { client, headers } = createSupabaseServerClient(request)
 

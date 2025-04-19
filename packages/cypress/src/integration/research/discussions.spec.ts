@@ -1,20 +1,19 @@
 // This is basically an identical set of steps to the discussion tests for
 // questions and projects. Any changes here should be replicated there.
 import { MOCK_DATA } from '../../data'
-import { research } from '../../fixtures/research'
 import { generateAlphaNumeric } from '../../utils/TestUtils'
 
 const item = Object.values(MOCK_DATA.research)[0]
 
 const discussion = Object.values(MOCK_DATA.discussions).find(
-  ({ sourceId }) => sourceId === item.updates[0]._id,
+  ({ sourceId }) => sourceId === item.updates[0].id,
 )
 
 describe('[Research.Discussions]', () => {
-  const firstComment = discussion.comments[0]
+  const firstComment = discussion!.comments[0]
 
   it('can open using deep links', () => {
-    const commentUrl = `/research/${item.slug}#update_${item.updates[0]._id}-comment:${firstComment._id}`
+    const commentUrl = `/research/${item.slug}#update_${item.updates[0].id}-comment:${firstComment._id}`
     cy.visit(commentUrl)
     cy.wait(2000)
     cy.checkCommentItem(firstComment.text, 1)
@@ -25,7 +24,6 @@ describe('[Research.Discussions]', () => {
     const visitor = MOCK_DATA.users.subscriber
     const secondCommentor = MOCK_DATA.users.profile_views
 
-    cy.addResearch(research, visitor.userName, random)
     cy.signIn(visitor.email, visitor.password)
 
     const newComment = `An example comment from ${visitor.userName}`

@@ -1,16 +1,19 @@
-import * as React from 'react'
 import { Link } from '@remix-run/react'
 import { Icon } from 'oa-components'
 import { Flex, Heading, Text } from 'theme-ui'
 
 interface IProps {
   type: 'library' | 'research'
-  item: Record<string, any>
+  item: {
+    id: string | number
+    title: string
+    slug: string
+    usefulVotes: number
+  }
 }
 
 const UserDocumentItem = ({ type, item }: IProps) => {
-  const { id, title, slug } = item
-  const totalUseful = (item.votedUsefulBy || []).length
+  const { id, title, slug, usefulVotes } = item
   const url = `/${type}/${encodeURIComponent(slug)}?utm_source=user-profile`
 
   return (
@@ -52,7 +55,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
               justifyContent: 'flex-end',
             }}
           >
-            {totalUseful > 0 && (
+            {usefulVotes > 0 && (
               <Text
                 color="black"
                 ml={3}
@@ -64,7 +67,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
                   justifyContent: 'flex-end',
                 }}
               >
-                {totalUseful}
+                {usefulVotes}
                 <Icon glyph="star-active" ml={1} />
               </Text>
             )}

@@ -1,6 +1,6 @@
 import chaiSubset from 'chai-subset'
 
-import type { ILibrary, IResearchDB, IUserDB, ProfileTypeName } from 'oa-shared'
+import type { ILibrary, IUserDB, ProfileTypeName } from 'oa-shared'
 
 declare global {
   namespace Chai {
@@ -15,8 +15,8 @@ chai.use((chaiObj) => {
     const subject = this._obj
 
     cy.window().then((win) => {
-      const bottom = Cypress.$(win).height() + tolerance
-      const width = Cypress.$(win).width() + tolerance
+      const bottom = Cypress.$(win).height()! + tolerance
+      const width = Cypress.$(win).width()! + tolerance
       const rect = subject[0].getBoundingClientRect()
 
       expect(
@@ -56,7 +56,7 @@ const eqProject = (chaiObj) => {
       tags,
       previousSlugs,
     })
-    expect(subject.category.label, 'Category').to.eq(category)
+    expect(subject.category!.label, 'Category').to.eq(category)
 
     expect(subject.moderation).to.equal(moderation)
 
@@ -66,9 +66,9 @@ const eqProject = (chaiObj) => {
     // Rather than using a RegExp to validate as our fixture specifies the filename
     // using a plain, we can break filename into chunks and validate each of those are present.
     // note, full cover image meta won't match as uploaded image meta changes
-    expect(subject.cover_image.name, 'Cover images').to.satisfy((str) =>
-      expected.cover_image.name
-        .split('.')
+    expect(subject.cover_image!.name, 'Cover images').to.satisfy((str) =>
+      expected
+        .cover_image!.name.split('.')
         .filter(Boolean)
         .every((chunk) => str.includes(chunk)),
     )
@@ -92,29 +92,12 @@ const eqProjectStep = (chaiObj) => {
       title,
     })
     // note, image meta won't match as uploaded image meta changes
-    expect(subject.images.length, `Step ${index} with images`).to.eq(
-      expected.images.length,
+    expect(subject!.images.length, `Step ${index} with images`).to.eq(
+      expected!.images.length,
     )
   }
 
   chaiObj.Assertion.addMethod('eqProjectStep', compare)
-}
-
-const eqResearch = (chaiObj) => {
-  function compare(this: any, expected: any) {
-    const subject: IResearchDB = this._obj
-    const { _createdBy, _deleted, description, title, slug, previousSlugs } =
-      expected
-    expect(subject, 'Basic info').to.containSubset({
-      _createdBy,
-      _deleted,
-      description,
-      title,
-      slug,
-      previousSlugs,
-    })
-  }
-  chaiObj.Assertion.addMethod('eqResearch', compare)
 }
 
 const eqSettings = (chaiObj) => {
@@ -149,7 +132,7 @@ const eqSettings = (chaiObj) => {
     })
   }
   const linkAssert: Assert<IUserDB, any> = (subject, expected) =>
-    expect(subject.links.length, 'Links').to.eq(expected.links.length)
+    expect(subject!.links.length, 'Links').to.eq(expected.links.length)
   const coverImageAssert: Assert<IUserDB, any> = (subject, expected) =>
     // only test length as uploaded images get new url and meta
     expect(subject.coverImages, 'CoverImages').to.have.same.length(
@@ -210,6 +193,5 @@ const eqSettings = (chaiObj) => {
 }
 chai.use(eqProject)
 chai.use(eqProjectStep)
-chai.use(eqResearch)
 chai.use(eqSettings)
 chai.use(chaiSubset)

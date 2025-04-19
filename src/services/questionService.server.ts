@@ -17,9 +17,8 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
        tags,
        title,
        total_views,
-       tenant_id,
        images,
-       author:profiles(id, firebase_auth_id, display_name, username, is_verified, is_supporter, country)
+       author:profiles(id, display_name, username, is_verified, is_supporter, country)
      `,
     )
     .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)

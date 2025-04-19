@@ -4,6 +4,7 @@ import type { Category as CategoryType } from 'oa-shared'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
 type OldICategory = { label: string }
+
 export interface Props {
   category: CategoryType | OldICategory
   sx?: ThemeUIStyleObject | undefined

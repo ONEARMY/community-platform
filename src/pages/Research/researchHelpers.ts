@@ -1,35 +1,39 @@
-import { ResearchStatus, ResearchUpdateStatus, UserRole } from 'oa-shared'
+import { ResearchStatus, UserRole } from 'oa-shared'
 
-import type { IResearch, IUserDB } from 'oa-shared'
+import type { Author, DBProfile, ResearchItem, ResearchUpdate } from 'oa-shared'
 
 export const researchUpdateStatusFilter = (
-  item: IResearch.Item,
-  update: IResearch.Update,
-  currentUser?: IUserDB | null,
+  author: Author | null,
+  collaborators: Author[] | null,
+  update: ResearchUpdate,
+  currentUser?: DBProfile,
 ) => {
   const isCollaborator =
-    currentUser?._id &&
-    item.collaborators &&
-    item.collaborators.includes(currentUser?._id)
+    currentUser?.id &&
+    collaborators &&
+    collaborators.map((x) => x.id).includes(currentUser.id)
 
-  const isAuthor = item._createdBy === currentUser?._id
-  const isAdmin = currentUser?.userRoles?.includes(UserRole.ADMIN)
-  const isUpdateDraft = update.status === ResearchUpdateStatus.DRAFT
-  const isUpdateDeleted = update._deleted
+  const isAuthor = author?.id && author?.id === currentUser?.id
+  const isAdmin = currentUser?.roles?.includes(UserRole.ADMIN)
 
   return (
-    (isAdmin || isAuthor || isCollaborator || !isUpdateDraft) &&
-    !isUpdateDeleted
+    (isAdmin || isAuthor || isCollaborator || !update.isDraft) &&
+    !update.deleted
   )
 }
 
 export const getPublicUpdates = (
-  item: IResearch.Item,
-  currentUser?: IUserDB | null,
+  item: ResearchItem,
+  currentUser?: DBProfile,
 ) => {
   if (item.updates) {
     return item.updates.filter((update) =>
-      researchUpdateStatusFilter(item, update, currentUser),
+      researchUpdateStatusFilter(
+        item.author,
+        item.collaborators,
+        update,
+        currentUser,
+      ),
     )
   } else {
     return []

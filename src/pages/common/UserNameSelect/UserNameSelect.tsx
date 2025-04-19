@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
-import { observer } from 'mobx-react'
 import { Select } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
-
-import { loadUserNameOptions } from './LoadUserNameOptions'
+import { profilesService } from 'src/pages/Research/profiles.service'
+import { useDebouncedCallback } from 'use-debounce'
 
 import type { IOption } from './LoadUserNameOptions'
 
@@ -13,29 +11,34 @@ interface IProps {
     value: string[]
     onChange: (v: string[]) => void
   }
-  defaultOptions?: string[]
   placeholder?: string
   isForm?: boolean
 }
 
-export const UserNameSelect = observer((props: IProps) => {
-  const { defaultOptions, input, isForm, placeholder } = props
-  const { userStore } = useCommonStores().stores
+export const UserNameSelect = (props: IProps) => {
+  const { input, isForm, placeholder } = props
   const [inputValue, setInputValue] = useState('')
   const [options, setOptions] = useState<IOption[]>([])
 
   const loadOptions = async (inputVal: string) => {
-    const selectOptions = await loadUserNameOptions(
-      userStore,
-      defaultOptions,
-      inputVal,
-    )
-    setOptions(selectOptions)
+    if (!inputVal) {
+      setOptions([])
+      return
+    }
+
+    const profiles = await profilesService.search(inputVal)
+    const options = profiles.map((x) => ({
+      label: x.displayName,
+      value: x.username,
+    }))
+
+    setOptions(options)
   }
 
-  // Effect to load options whenever the input value changes
+  const debounceLoad = useDebouncedCallback((q: string) => loadOptions(q), 500)
+
   useEffect(() => {
-    loadOptions(inputValue)
+    debounceLoad(inputValue)
   }, [inputValue])
 
   const value = input.value?.length
@@ -59,4 +62,4 @@ export const UserNameSelect = observer((props: IProps) => {
       />
     </FieldContainer>
   )
-})
+}

@@ -2,9 +2,9 @@ import { Author } from './author'
 
 import type { DBAuthor } from './author'
 import type { ContentType } from './common'
-import type { DBDocSB, Doc } from './document'
+import type { IDBDocSB, IDoc } from './document'
 
-export class DBComment implements DBDocSB {
+export class DBComment implements IDBDocSB {
   readonly id: number
   readonly created_at: Date
   readonly modified_at: Date | null
@@ -38,7 +38,7 @@ export class DBComment implements DBDocSB {
   }
 }
 
-export class Comment implements Doc {
+export class Comment implements IDoc {
   id: number
   createdAt: Date
   modifiedAt: Date | null

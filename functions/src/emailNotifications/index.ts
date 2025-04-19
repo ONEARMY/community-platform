@@ -62,11 +62,7 @@ exports.sendOnce = functions
 
     if (user) {
       const { userRoles } = user.docs[0].data() as IUserDB
-      if (
-        userRoles?.some((role) =>
-          [UserRole.ADMIN, UserRole.SUPER_ADMIN].includes(role),
-        )
-      ) {
+      if (userRoles?.some((role) => [UserRole.ADMIN].includes(role))) {
         try {
           await createNotificationEmails()
           return 'OK'

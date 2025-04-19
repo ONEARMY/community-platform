@@ -94,11 +94,6 @@ describe('src/utils/helpers', () => {
       const user = FactoryUser({ userRoles: [UserRole.ADMIN] })
       expect(hasAdminRights(user)).toBe(true)
     })
-
-    it('should return true when user has super-admin role', () => {
-      const user = FactoryUser({ userRoles: [UserRole.SUPER_ADMIN] })
-      expect(hasAdminRights(user)).toBe(true)
-    })
   })
 
   describe('needsModeration', () => {
@@ -151,15 +146,6 @@ describe('src/utils/helpers', () => {
       const user = FactoryUser({
         userName: 'testUser',
         userRoles: [UserRole.ADMIN],
-      })
-      const doc = { _createdBy: 'anotherUser', collaborators: [] } as any
-      expect(isAllowedToEditContent(doc, user)).toBe(true)
-    })
-
-    it('should return true when user has super-admin role', () => {
-      const user = FactoryUser({
-        userName: 'testUser',
-        userRoles: [UserRole.SUPER_ADMIN],
       })
       const doc = { _createdBy: 'anotherUser', collaborators: [] } as any
       expect(isAllowedToEditContent(doc, user)).toBe(true)

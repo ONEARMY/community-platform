@@ -5,7 +5,7 @@ import { Flex, Text } from 'theme-ui'
 interface IProps {
   userName: string
   countryCode: string | undefined
-  createdAt: string | number | Date
+  createdAt?: string | number | Date
   action?: string
   modifiedAt?: string | number | Date | null
 }
@@ -34,20 +34,22 @@ export const UserNameTag = (props: IProps) => {
             }}
             sx={{ position: 'relative' }}
           />
-          <Text
-            variant="auxiliary"
-            sx={{
-              marginTop: 2,
-              marginBottom: 2,
-            }}
-          >
-            |{' '}
-            <DisplayDate
-              action={action}
-              createdAt={createdAt}
-              modifiedAt={modifiedAt}
-            ></DisplayDate>
-          </Text>
+          {createdAt && (
+            <Text
+              variant="auxiliary"
+              sx={{
+                marginTop: 2,
+                marginBottom: 2,
+              }}
+            >
+              |{' '}
+              <DisplayDate
+                action={action}
+                createdAt={createdAt}
+                modifiedAt={modifiedAt}
+              />
+            </Text>
+          )}
         </Flex>
       </Flex>
     </Flex>

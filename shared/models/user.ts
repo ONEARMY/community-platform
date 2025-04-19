@@ -7,11 +7,9 @@ import type { IUploadedFileMeta } from './storage'
 
 /* eslint-disable @typescript-eslint/naming-convention */
 export enum UserRole {
-  SUPER_ADMIN = 'super-admin',
   SUBSCRIBER = 'subscriber',
   ADMIN = 'admin',
   BETA_TESTER = 'beta-tester',
-  RESEARCH_EDITOR = 'research_editor',
   RESEARCH_CREATOR = 'research_creator',
 }
 

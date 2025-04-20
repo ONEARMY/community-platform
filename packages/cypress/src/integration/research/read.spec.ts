@@ -25,7 +25,8 @@ describe('[Research]', () => {
         cy.step('All basic info displayed on each card')
         const researchTitle = 'Qwerty'
         const researchUrl = '/research/qwerty'
-        const coverImageFileName = '1426018318_414579695-17fcd6de5f7'
+        const coverImageFileName =
+          '/assets/default-research-thumbnail-DPRkaJe1.jpg'
 
         cy.get('[data-cy=ResearchListItem]').within(() => {
           cy.contains(researchTitle).should('be.visible')

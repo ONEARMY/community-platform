@@ -124,7 +124,7 @@ const ResearchForm = ({ research }: IProps) => {
               onClick={() => onSubmit(values, true)}
               variant="secondary"
               type="submit"
-              disabled={submitting}
+              disabled={submitting || !valid}
               sx={{
                 width: '100%',
                 display: 'block',

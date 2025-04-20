@@ -67,7 +67,10 @@ const upsert = async (
 ) => {
   const data = new FormData()
   data.append('title', research.title)
-  data.append('description', research.description)
+
+  if (research.description) {
+    data.append('description', research.description)
+  }
 
   if (research.tags && research.tags.length > 0) {
     for (const tag of research.tags) {

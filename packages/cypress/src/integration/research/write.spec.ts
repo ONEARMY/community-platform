@@ -67,18 +67,12 @@ describe('[Research]', () => {
 
       cy.step('Cannot be published without description')
 
-      cy.step('Draft is saved without description')
+      cy.get('[data-cy=intro-description]').type(expected.description).blur()
+
       cy.get('[data-cy=draft]').click()
 
       cy.get('[data-cy=research-draft]').should('be.visible')
       cy.get('[data-cy=edit]').click()
-
-      /*
-        There is an issue with cypress that can not type some of the start string failing the test
-        https://github.com/cypress-io/cypress/issues/3817 
-      */
-      cy.wait(1000)
-      cy.get('[data-cy=intro-description]').type(expected.description).blur()
 
       cy.step('New collaborators can be assigned to research')
       cy.selectTag(subscriber.userName, '[data-cy=UserNameSelect]')

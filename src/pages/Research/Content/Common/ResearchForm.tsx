@@ -3,6 +3,11 @@ import { Form } from 'react-final-form'
 import { useNavigate } from 'react-router'
 import arrayMutators from 'final-form-arrays'
 import { Button, ResearchEditorOverview } from 'oa-components'
+import {
+  type ResearchFormData,
+  type ResearchItem,
+  ResearchStatus,
+} from 'oa-shared'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
@@ -21,14 +26,16 @@ import { ResearchStatusField } from './FormFields/ResearchStatusField'
 import { ResearchTitleField } from './FormFields/ResearchTitleField'
 import ResearchFieldCategory from './ResearchCategorySelect'
 
-import type { ResearchFormData, ResearchItem } from 'oa-shared'
-
 interface IProps {
   research?: ResearchItem
 }
 
 const ResearchForm = ({ research }: IProps) => {
-  const [initialValues, setInitialValues] = useState<ResearchFormData>()
+  const [initialValues, setInitialValues] = useState<Partial<ResearchFormData>>(
+    {
+      status: ResearchStatus.IN_PROGRESS,
+    },
+  )
   const navigate = useNavigate()
   const [intentionalNavigation, setIntentionalNavigation] = useState(false)
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
@@ -38,7 +45,7 @@ const ResearchForm = ({ research }: IProps) => {
       setInitialValues({
         title: research?.title,
         description: research?.description,
-        status: research?.status || 'In progress',
+        status: research?.status || ResearchStatus.IN_PROGRESS,
         category: research?.category
           ? {
               value: research.category.id?.toString(),

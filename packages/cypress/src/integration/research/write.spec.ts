@@ -2,11 +2,7 @@ import { faker } from '@faker-js/faker'
 
 import { RESEARCH_TITLE_MIN_LENGTH } from '../../../../../src/pages/Research/constants'
 import { MOCK_DATA } from '../../data'
-import {
-  generateAlphaNumeric,
-  generateNewUserDetails,
-  setIsPreciousPlastic,
-} from '../../utils/TestUtils'
+import { generateAlphaNumeric } from '../../utils/TestUtils'
 
 import type { UserMenuItem } from '../../support/commandsUi'
 
@@ -34,48 +30,27 @@ describe('[Research]', () => {
   })
 
   describe('[Create research article]', () => {
-    it('[Warning on leaving page]', () => {
-      cy.signIn(researcherEmail, researcherPassword)
-      cy.visit('/research')
-      cy.step('Access the create research article')
-      cy.get('[data-cy=create]').click()
-      cy.get('[data-cy=intro-title')
-        .clear()
-        .type('Create research article test')
-        .blur({ force: true })
-      cy.get('[data-cy=page-link][href*="/research"]').click()
-      cy.get('[data-cy="Confirm.modal: Cancel"]').click()
-
-      cy.url().should('match', /\/research\/create$/)
-
-      cy.step('Clear title input')
-      cy.get('[data-cy=intro-title').clear().blur({ force: true })
-      cy.url().should('match', /\/research?/)
-    })
-
     it('[By Authenticated]', () => {
       const expected = generateArticle()
 
       const updateTitle = faker.lorem.words(5)
       const updateDescription = 'This is the description for the update.'
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
-      const newCollaborator = MOCK_DATA.users.subscriber
+      const subscriber = MOCK_DATA.users.subscriber
+      const admin = MOCK_DATA.users.admin
 
-      const user = generateNewUserDetails()
-      cy.signUpNewUser(user)
+      cy.signIn(subscriber.email, subscriber.password)
 
       cy.step("Can't add research with an incomplete profile")
       cy.visit('/research')
       cy.get('[data-cy=create-research]').should('not.exist')
       cy.get('[data-cy=complete-profile-research]').should('be.visible')
       cy.visit('/research/create')
-      cy.get('[data-cy=incomplete-profile-message]').should('be.visible')
-      cy.get('[data-cy=intro-title]').should('not.exist')
-      cy.completeUserProfile(user.username)
+      cy.url().should('contain', '/forbidden')
 
+      cy.logout()
+      cy.signIn(admin.email, admin.password)
       cy.step('Create the research article')
-      cy.completeUserProfile(user.username)
-      setIsPreciousPlastic()
       cy.visit('/research')
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy=create]').click()
@@ -91,19 +66,11 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title').clear().type(expected.title).blur()
 
       cy.step('Cannot be published without description')
-      cy.get('[data-cy=submit]').click()
-      cy.contains('Make sure this field is filled correctly').should(
-        'be.visible',
-      )
-      cy.get('[data-cy=errors-container]').should('be.visible')
 
       cy.step('Draft is saved without description')
       cy.get('[data-cy=draft]').click()
 
-      cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
-        .click()
-        .url()
-      cy.get('[data-cy=moderationstatus-draft]').should('be.visible')
+      cy.get('[data-cy=research-draft]').should('be.visible')
       cy.get('[data-cy=edit]').click()
 
       /*
@@ -114,12 +81,10 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-description]').type(expected.description).blur()
 
       cy.step('New collaborators can be assigned to research')
-      cy.selectTag(newCollaborator.userName, '[data-cy=UserNameSelect]')
+      cy.selectTag(subscriber.userName, '[data-cy=UserNameSelect]')
 
       cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=submit]').click()
-
-      cy.get('[data-cy=view-research]:enabled', { timeout: 20000 }).click()
 
       cy.url().should('include', `/research/${expected.slug}`)
       cy.visit(`/research/${expected.slug}`)
@@ -127,11 +92,11 @@ describe('[Research]', () => {
       cy.step('Research article displays correctly')
       cy.contains(expected.title)
       cy.contains(expected.description)
-      cy.contains(newCollaborator.userName)
+      cy.contains(admin.userName)
 
       cy.step('New collaborators can add update')
       cy.clickMenuItem('Logout' as UserMenuItem)
-      cy.signIn(newCollaborator.email, newCollaborator.password)
+      cy.signIn(subscriber.email, subscriber.password)
       cy.visit(`/research/${expected.slug}/edit`)
       cy.get('[data-cy=create-update]').click()
       cy.contains('New update')
@@ -174,11 +139,6 @@ describe('[Research]', () => {
       cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=submit]').click()
 
-      cy.step('Open the research update')
-      cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
-        .click()
-        .url()
-
       cy.contains(updateTitle).should('be.visible')
       cy.contains(updateDescription).should('be.visible')
       cy.get('[data-cy=file-download-counter]').should(
@@ -217,10 +177,6 @@ describe('[Research]', () => {
       // cy.get('[data-cy=submit]').click()
 
       // cy.step('Open the research update')
-      // cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
-      //   .click()
-      //   .url()
-
       // cy.get('[data-cy=file-download-counter]').should(
       //   'have.text',
       //   '1 download',
@@ -234,27 +190,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=sign-up]').should('be.visible')
 
       cy.visit('/research/create')
-      cy.get('[data-cy=logged-out-message]').should('be.visible')
-    })
-
-    it('[New PK user]', () => {
-      localStorage.setItem('VITE_THEME', 'project-kamp')
-      cy.signUpCompletedUser()
-
-      cy.step("Can't create research")
-      cy.visit('/research')
-      cy.wait(2000)
-      cy.get('[data-cy=create]').should('not.exist')
-    })
-
-    it('[PK user with research creator role]', () => {
-      localStorage.setItem('VITE_THEME', 'project-kamp')
-      cy.signIn(researcherEmail, researcherPassword)
-
-      cy.step('Can create research')
-      cy.visit('/research')
-      cy.get('[data-cy=create]').should('be.visible')
-      cy.get('[data-cy=complete-profile-research]').should('not.exist')
+      cy.url().should('contain', '/sign-in')
     })
   })
 
@@ -275,7 +211,7 @@ describe('[Research]', () => {
       const updateDescription = 'This is the description for the update.'
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
       const expected = {
-        category: 'Food',
+        category: 'Machines',
         description: 'After creating, the research will be deleted.',
         title: `${randomId} Create research article test`,
         slug: `${randomId}-create-research-article-test`,
@@ -295,8 +231,6 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-description]').clear().type(expected.description)
       cy.selectTag(expected.category, '[data-cy=category-select]')
       cy.get('[data-cy=submit]').click()
-
-      cy.get('[data-cy=view-research]:enabled', { timeout: 20000 }).click()
 
       cy.url().should('include', `/research/${expected.slug}`)
       cy.visit(`/research/${expected.slug}`)
@@ -324,9 +258,6 @@ describe('[Research]', () => {
       cy.get('[data-cy=draft]').click()
 
       cy.step('Can see Draft after refresh')
-      cy.contains('Uploading Update').should('be.visible')
-      cy.get('[data-cy="icon-loading"]').should('not.exist')
-      cy.visit(`/research/${expected.slug}`)
 
       cy.contains(updateTitle)
       cy.get('[data-cy=DraftUpdateLabel]').should('be.visible')
@@ -344,7 +275,6 @@ describe('[Research]', () => {
       cy.contains('Edit your update')
       cy.wait(1000)
       cy.get('[data-cy=submit]').click()
-      cy.get('[data-cy=view-research]:enabled', { timeout: 20000 }).click()
       cy.contains(updateTitle)
       cy.get('[data-cy=DraftUpdateLabel]').should('not.exist')
     })

@@ -123,8 +123,8 @@ const isAllowedToEditResearch = async (
   }
 
   if (
-    Array.isArray(research?.collaborators) &&
-    research.collaborators.map((x) => x.username).includes(currentUsername)
+    Array.isArray(research.collaboratorsUsernames) &&
+    research.collaboratorsUsernames.includes(currentUsername)
   ) {
     return true
   }

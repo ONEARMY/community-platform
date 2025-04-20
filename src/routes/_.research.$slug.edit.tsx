@@ -36,7 +36,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     .select('id')
     .eq('auth_id', user.id)
     .limit(1)
-  const currentUserId = profileResult.data?.at(0)?.id
+  const currentUserId = profileResult.data?.at(0)?.id as number
 
   const username = user.user_metadata.username
   const researchDb = result.data as unknown as DBResearchItem
@@ -45,7 +45,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     client,
   )
 
-  const research = ResearchItem.fromDB(researchDb, [], images, currentUserId)
+  const research = ResearchItem.fromDB(
+    researchDb,
+    [],
+    images,
+    [],
+    currentUserId,
+  )
 
   if (
     !(await researchServiceServer.isAllowedToEditResearch(

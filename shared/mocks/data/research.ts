@@ -137,10 +137,48 @@ export const research = [
     modifiedAt: '2023-03-01T19:12:11.271Z',
     description: 'A test!',
     slug: 'a-test-research',
-    previousSlugs: ['a-test-research'],
+    previousSlugs: [],
     tags: ['test'],
     title: 'A test research',
-    updates: [],
+    updates: [
+      {
+        createdAt: '2022-03-27T22:10:11.271Z',
+        deleted: false,
+        modifiedAt: '2022-03-27T22:10:11.271Z',
+        description: 'qwerty',
+        collaborators: ['demo_user'],
+        commentCount: 0,
+        images: [
+          {
+            contentType: 'image/jpeg',
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2Fresearch%2F0up6oJCPP3M9bDYx34Et%2F1426018318_414579695-17fcd6de5f7.jpg?alt=media&token=9f18315b-a1ad-410b-b31c-2161fb1d7142',
+            fullPath:
+              'uploads/research/0up6oJCPP3M9bDYx34Et/1426018318_414579695-17fcd6de5f7.jpg',
+            name: '1426018318_414579695-17fcd6de5f7.jpg',
+            size: 109985,
+            timeCreated: '2022-03-27T22:10:10.106Z',
+            type: 'image/jpeg',
+            updated: '2022-03-27T22:10:10.106Z',
+          },
+        ],
+        title: 'qwerty',
+        files: [
+          {
+            timeCreated: '2019-05-10T20:49:42.878Z',
+            name: 'art final 2.skp',
+            fullPath: 'uploads/howtosV1/me5Bq0wq5FdoJUY8gELN/art final 2.skp',
+            type: '',
+            updated: '2019-05-10T20:49:42.878Z',
+            size: 647225,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2FhowtosV1%2Fme5Bq0wq5FdoJUY8gELN%2Fart%20final%202.skp?alt=media&token=f4ebe379-2038-4ac0-9e6f-68c379174908',
+            contentType: 'application/octet-stream',
+          },
+        ],
+        downloadCount: 2555,
+      },
+    ],
   },
   {
     createdAt: '2023-02-27T22:08:25.999Z',

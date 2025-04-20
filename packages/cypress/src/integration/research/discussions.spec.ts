@@ -1,7 +1,6 @@
 // This is basically an identical set of steps to the discussion tests for
 // questions and projects. Any changes here should be replicated there.
 import { MOCK_DATA } from '../../data'
-import { generateAlphaNumeric } from '../../utils/TestUtils'
 
 describe('[Research.Discussions]', () => {
   it('can open using deep links', () => {
@@ -9,7 +8,6 @@ describe('[Research.Discussions]', () => {
   })
 
   it('allows authenticated users to contribute to discussions', () => {
-    const random = generateAlphaNumeric(8)
     const visitor = MOCK_DATA.users.subscriber
     const secondCommentor = MOCK_DATA.users.profile_views
 
@@ -18,7 +16,7 @@ describe('[Research.Discussions]', () => {
     const newComment = `An example comment from ${visitor.userName}`
     const updatedNewComment = `I've updated my comment now. Love ${visitor.userName}`
 
-    const researchPath = `/research/${visitor.userName}-in-discussion-research-${random}`
+    const researchPath = `/research/${MOCK_DATA.research[1].slug}`
 
     cy.step('Can add comment')
 

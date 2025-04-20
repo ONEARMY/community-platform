@@ -194,7 +194,7 @@ describe('[Research]', () => {
     it('[By Anonymous]', () => {
       cy.step('Prevent anonymous access to edit research article')
       cy.visit(editResearchUrl)
-      cy.get('[data-cy=BlockedRoute]').should('be.visible')
+      cy.url().should('contain', '/sign-in')
     })
   })
 

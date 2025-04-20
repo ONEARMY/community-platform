@@ -57,10 +57,9 @@ describe('[News.Write]', () => {
       cy.selectTag(tag2, '[data-cy="tag-select"]')
 
       cy.step('Submit news')
-      cy.get('[data-cy=submit]')
-        .click()
-        .url()
-        .should('include', `/news/${initialExpectedSlug}`)
+      cy.get('[data-cy=submit]').click()
+
+      cy.url().should('include', `/news/${initialExpectedSlug}`)
 
       cy.step('All news fields shown')
       cy.visit('/news')

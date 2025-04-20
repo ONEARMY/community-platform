@@ -26,7 +26,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const { client, headers } = createSupabaseServerClient(request)
 
-  const { data, count, error } = await client.rpc('get_research', {
+  const { data, error } = await client.rpc('get_research', {
     search_query: q || null,
     category_id: category,
     research_status: status || null,
@@ -34,6 +34,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     offset_val: skip,
     limit_val: ITEMS_PER_PAGE,
   })
+
+  const countRersult = await client.rpc('get_research_count', {
+    search_query: q || null,
+    category_id: category,
+    research_status: status || null,
+  })
+  const count = countRersult.data || 0
 
   if (error) {
     console.error(error)

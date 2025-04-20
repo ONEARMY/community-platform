@@ -141,7 +141,6 @@ export const research = [
     tags: ['test'],
     title: 'A test research',
     updates: [],
-    researchCategory: {},
   },
   {
     createdAt: '2023-02-27T22:08:25.999Z',

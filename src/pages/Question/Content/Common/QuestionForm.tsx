@@ -48,6 +48,7 @@ export const QuestionForm = (props: IProps) => {
     images: [],
   })
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
+  const [intentionalNavigation, setIntentionalNavigation] = useState(false)
   const id = question?.id || null
 
   useEffect(() => {
@@ -84,7 +85,8 @@ export const QuestionForm = (props: IProps) => {
       })
 
       if (result) {
-        navigate('/questions/' + result.slug)
+        setIntentionalNavigation(true)
+        setTimeout(() => navigate('/questions/' + result.slug), 100)
       }
     } catch (e) {
       if (e.cause && e.message) {
@@ -137,7 +139,9 @@ export const QuestionForm = (props: IProps) => {
           </Alert>
         )
         const unsavedChangesDialog = (
-          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
+          <UnsavedChangesDialog
+            hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
+          />
         )
 
         return (

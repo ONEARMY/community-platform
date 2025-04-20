@@ -21,6 +21,7 @@ export const seedResearch = async (profiles, tagsData) => {
         created_by: profiles.data[0].id,
         tags: [tagsData.data[0].id, tagsData.data[1].id],
         category: categories.data[0].id,
+        deleted: item.deleted,
         tenant_id: tenantId,
       })),
     },

@@ -19,6 +19,7 @@ export const DisplayMarkdownStylingWrapper = ({ children, sx }: IProps) => {
           paddingLeft: 2,
           margin: 0,
         },
+        lineHeight: 1.5,
         a: {
           color: 'primary',
           textDecoration: 'underline',

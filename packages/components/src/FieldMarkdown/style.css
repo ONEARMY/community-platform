@@ -6,3 +6,8 @@
     border: 2px solid red;
   }
 }
+
+/* hacky way to hide the markdown diff part of https://mdxeditor.dev/editor/docs/diff-source */
+[aria-label='Diff mode'] {
+  display: none
+}

@@ -1,9 +1,8 @@
-import InterMedium_ttf from '../../assets/fonts/Inter-Medium.ttf'
-import InterMedium_woff from '../../assets/fonts/Inter-Medium.woff'
-import InterMedium_woff2 from '../../assets/fonts/Inter-Medium.woff2'
 import InterRegular_ttf from '../../assets/fonts/Inter-Regular.ttf'
 import InterRegular_woff from '../../assets/fonts/Inter-Regular.woff'
 import InterRegular_woff2 from '../../assets/fonts/Inter-Regular.woff2'
+import InterSemiBold_ttf from '../../assets/fonts/Inter-SemiBold.ttf'
+import InterSemiBold_woff2 from '../../assets/fonts/Inter-SemiBold.woff2'
 import VarelaRound_ttf from '../../assets/fonts/VarelaRound-Regular.ttf'
 import VarelaRound_woff from '../../assets/fonts/VarelaRound-Regular.woff'
 
@@ -32,9 +31,8 @@ export const GlobalFonts = `
   @font-face {
     font-family: 'Inter';
     font-display: auto;
-    src:  url("${InterMedium_woff2}") format('woff2'),
-          url("${InterMedium_woff}") format('woff'),
-          url("${InterMedium_ttf}") format('truetype');
+    src:  url("${InterSemiBold_woff2}") format('woff2'),
+          url("${InterSemiBold_ttf}") format('truetype');
     font-weight: bold;
     font-style: normal;
   }

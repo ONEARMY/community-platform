@@ -28,28 +28,34 @@ export const seedResearch = async (profiles, tagsData) => {
     tenantId,
   )
 
-  const researchItem = MOCK_DATA.research[0]
+  // seeding
+  for (let i = 0; i < MOCK_DATA.research.length; i++) {
+    const researchItem = MOCK_DATA.research[i]
 
-  if (researchItem.updates && researchItem.updates.length) {
-    const { research_updates } = await seedDatabase(
-      {
-        research_updates: researchItem.updates.map((item) => ({
-          title: item.title,
-          research_id: research.data[0].id,
-          description: item.description,
-          created_by: profiles.data[0].id,
-          tenant_id: tenantId,
-        })),
-      },
-      tenantId,
-    )
+    if (researchItem.updates && researchItem.updates.length) {
+      const { research_updates } = await seedDatabase(
+        {
+          research_updates: researchItem.updates.map((item) => ({
+            title: item.title,
+            research_id: research.data[i].id,
+            description: item.description,
+            created_by: profiles.data[0].id,
+            tenant_id: tenantId,
+          })),
+        },
+        tenantId,
+      )
 
-    const { comments } = await seedComment(
-      profiles,
-      research_updates,
-      'research_update',
-    )
+      // Only seed comments for first research
+      if (i === 0) {
+        const { comments } = await seedComment(
+          profiles,
+          research_updates,
+          'research_update',
+        )
 
-    await seedReply(profiles, comments, research)
+        await seedReply(profiles, comments, research)
+      }
+    }
   }
 }

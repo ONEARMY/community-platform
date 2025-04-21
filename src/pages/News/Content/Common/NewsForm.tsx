@@ -39,6 +39,8 @@ export const NewsForm = (props: IProps) => {
     title: '',
   })
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
+  const [intentionalNavigation, setIntentionalNavigation] = useState(false)
+
   const id = news?.id || null
 
   useEffect(() => {
@@ -75,7 +77,8 @@ export const NewsForm = (props: IProps) => {
       })
 
       if (result) {
-        navigate('/news/' + result.slug)
+        setIntentionalNavigation(true)
+        setTimeout(() => navigate('/news/' + result.slug), 100)
       }
     } catch (e) {
       if (e.cause && e.message) {
@@ -133,7 +136,9 @@ export const NewsForm = (props: IProps) => {
           </Alert>
         )
         const unsavedChangesDialog = (
-          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
+          <UnsavedChangesDialog
+            hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
+          />
         )
         const validate = composeValidators(
           required,

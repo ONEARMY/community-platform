@@ -405,4 +405,15 @@ CREATE TRIGGER research_text_trigger AFTER INSERT OR UPDATE OF title, descriptio
 
 CREATE TRIGGER research_update_trigger AFTER INSERT OR DELETE OR UPDATE OF title, description ON public.research_updates FOR EACH ROW EXECUTE FUNCTION update_research_tsvector();
 
+drop policy if exists "tenant_isolation" on storage.objects;
 
+create policy "tenant_isolation"
+on "storage"."objects"
+as permissive
+for all
+to public
+using (
+  (bucket_id = ((current_setting('request.headers'::text, true))::json ->> 'x-tenant-id'::text))
+  OR
+  (bucket_id = (((current_setting('request.headers'::text, true))::json ->> 'x-tenant-id'::text) || '-documents'))
+);

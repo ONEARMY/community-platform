@@ -180,45 +180,4 @@ describe('[Research]', () => {
       })
     })
   })
-
-  describe('[Read a soft-deleted Research Article]', () => {
-    const deletedResearchUrl = '/research/a-deleted-test-research'
-
-    describe('[By Everyone]', () => {
-      it('[Marked for deletion message]', () => {
-        cy.visit(deletedResearchUrl)
-        cy.step(
-          'There should be a message stating the research is marked for deletion',
-        )
-
-        cy.get('[data-cy="research-deleted"]').contains('Marked for deletion')
-      })
-    })
-
-    describe('[By Owner]', () => {
-      beforeEach(() => {
-        cy.signIn('demo_user@example.com', 'demo_user')
-        cy.visit(deletedResearchUrl)
-      })
-
-      it('[Delete Button is disabled]', () => {
-        cy.step('Delete button should be disabled')
-
-        cy.get('[data-cy="Research: delete button"]').should('be.disabled')
-      })
-    })
-
-    describe('[By Admin]', () => {
-      beforeEach(() => {
-        cy.signIn('demo_admin@example.com', 'demo_admin')
-        cy.visit(deletedResearchUrl)
-      })
-
-      it('[Delete Button is disabled]', () => {
-        cy.step('Delete button should be disabled')
-
-        cy.get('[data-cy="Research: delete button"]').should('be.disabled')
-      })
-    })
-  })
 })

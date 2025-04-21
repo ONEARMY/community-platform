@@ -1,6 +1,7 @@
 import { logger } from 'src/logger'
 
 import type {
+  IConvertedFileMeta,
   ResearchFormData,
   ResearchItem,
   ResearchStatus,
@@ -135,8 +136,8 @@ const upsertUpdate = async (
   data.append('videoUrl', update.videoUrl || '')
 
   if (update.images && update.images.length > 0) {
-    for (const image of update.images) {
-      data.append('images', image, image.name)
+    for (const image of update.images as unknown as IConvertedFileMeta[]) {
+      data.append('images', image.photoData, image.name)
     }
   }
 

@@ -55,7 +55,7 @@ const ResearchForm = ({ research }: IProps) => {
         collaborators: Array.isArray(research?.collaboratorsUsernames)
           ? research.collaboratorsUsernames
           : [],
-        tags: research?.tagIds,
+        tags: research?.tagIds || [],
         existingImage: research?.image,
       })
     }

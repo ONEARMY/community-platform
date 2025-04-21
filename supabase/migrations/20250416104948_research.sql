@@ -282,6 +282,25 @@ AS $function$BEGIN
 END;$function$
 ;
 
+CREATE OR REPLACE FUNCTION public.get_research_count(search_query text DEFAULT NULL::text, category_id integer DEFAULT NULL::integer, research_status research_status DEFAULT NULL::research_status)
+ RETURNS integer
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+  RETURN (
+    SELECT COUNT(*)
+    FROM research r
+    WHERE
+      (search_query IS NULL OR r.fts @@ to_tsquery('english', search_query)) AND
+      (category_id IS NULL OR r.category = category_id) AND
+      (research_status IS NULL OR r.status = research_status) AND
+      (r.is_draft IS NULL OR r.is_draft = FALSE) AND
+      (r.deleted IS NULL OR r.deleted = FALSE)
+  );
+END;
+$function$
+;
+
 grant delete on table "public"."research" to "anon";
 
 grant insert on table "public"."research" to "anon";

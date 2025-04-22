@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker'
-import { ResearchStatus } from 'oa-shared'
 
 import type { ResearchFormData, ResearchItem, ResearchUpdate } from 'oa-shared'
 
@@ -51,7 +50,7 @@ export const FactoryResearchItem = (
   category: null,
   image: null,
   updateCount: 0,
-  status: ResearchStatus.IN_PROGRESS,
+  status: 'in-progress',
   usefulCount: 2,
   ...researchItemOverloads,
 })
@@ -61,7 +60,6 @@ export const FactoryResearchItemFormInput = (
 ): ResearchFormData => ({
   title: faker.lorem.words(),
   description: faker.lorem.paragraphs(),
-  status: ResearchStatus.IN_PROGRESS,
   existingImage: null,
   ...researchItemOverloads,
 })

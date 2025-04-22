@@ -187,11 +187,25 @@ const upsertUpdate = async (
 
 const deleteResearch = async (id: number) => {
   const response = await fetch(`/api/research/${id}`, {
-    method: 'DELETE',
+    method: 'PATCH',
   })
 
   if (response.status !== 200 && response.status !== 201) {
     throw new Error('Error deleting research', { cause: 500 })
+  }
+}
+
+const updateResearchStatus = async (id: number, status: ResearchStatus) => {
+  const data = new FormData()
+  data.append('status', status)
+
+  const response = await fetch(`/api/research/${id}/status`, {
+    method: 'PATCH',
+    body: data,
+  })
+
+  if (response.status !== 200 && response.status !== 201) {
+    throw new Error('Error updating research status', { cause: 500 })
   }
 }
 
@@ -211,6 +225,7 @@ export const researchService = {
   getDraftCount,
   upsert,
   upsertUpdate,
+  updateResearchStatus,
   deleteResearch,
   deleteUpdate,
 }

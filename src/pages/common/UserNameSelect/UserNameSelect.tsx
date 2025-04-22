@@ -16,7 +16,7 @@ interface IProps {
 }
 
 export const UserNameSelect = (props: IProps) => {
-  const { input, isForm, placeholder } = props
+  const { input, placeholder } = props
   const [inputValue, setInputValue] = useState('')
   const [options, setOptions] = useState<IOption[]>([])
 
@@ -51,7 +51,7 @@ export const UserNameSelect = (props: IProps) => {
   return (
     <FieldContainer data-cy="UserNameSelect">
       <Select
-        variant={isForm ? 'form' : undefined}
+        variant="form"
         options={options}
         placeholder={placeholder}
         value={value}
@@ -59,6 +59,7 @@ export const UserNameSelect = (props: IProps) => {
         onInputChange={setInputValue}
         isClearable={true}
         isMulti={true}
+        noOptionsMessage={(i) => (i.inputValue ? 'Not found' : 'Search users')}
       />
     </FieldContainer>
   )

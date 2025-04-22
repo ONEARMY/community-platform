@@ -12,6 +12,7 @@ import {
   UsefulStatsButton,
   Username,
 } from 'oa-components'
+import { type IUser, type ResearchItem, ResearchStatusRecord } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
@@ -23,8 +24,6 @@ import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { researchService } from '../research.service'
 import { researchStatusColour } from '../researchHelpers'
-
-import type { IUser, ResearchItem } from 'oa-shared'
 
 interface IProps {
   research: ResearchItem
@@ -185,7 +184,9 @@ const ResearchDescription = ({
                     margin: 'auto',
                   }}
                 >
-                  {research.status || 'In progress'}
+                  {research.status
+                    ? ResearchStatusRecord[research.status]
+                    : 'In progress'}
                 </Text>
               </Flex>
             </Flex>

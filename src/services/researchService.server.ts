@@ -1,15 +1,10 @@
-import { UserRole } from 'oa-shared'
+import { ResearchItem, UserRole } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 
 import { storageServiceServer } from './storageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type {
-  DBProfile,
-  DBResearchItem,
-  DBResearchUpdate,
-  ResearchItem,
-} from 'oa-shared'
+import type { DBProfile, DBResearchItem, DBResearchUpdate } from 'oa-shared'
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
   return client
@@ -137,6 +132,24 @@ const isAllowedToEditResearch = async (
   return data?.at(0)?.roles?.includes(UserRole.ADMIN)
 }
 
+const isAllowedToEditResearchById = async (
+  client: SupabaseClient,
+  id: number,
+  currentUsername: string,
+) => {
+  const researchResult = await client
+    .from('research')
+    .select('id,created_by,collaborators')
+    .eq('id', id)
+    .single()
+
+  const research = researchResult.data as unknown as DBResearchItem
+
+  const item = ResearchItem.fromDB(research, [])
+
+  return isAllowedToEditResearch(client, item, currentUsername)
+}
+
 async function getById(id: number, client: SupabaseClient) {
   const result = await client.from('research').select().eq('id', id).single()
   return result.data as DBResearchItem
@@ -183,5 +196,6 @@ export const researchServiceServer = {
   getUpdate,
   getResearchPublicMedia,
   isAllowedToEditResearch,
+  isAllowedToEditResearchById,
   isAllowedToEditUpdate,
 }

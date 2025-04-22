@@ -44,7 +44,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     await contentServiceServer.incrementViewCount(
       client,
       'research',
-      (dbResearch.total_views || 0) + 1,
+      dbResearch.total_views,
       dbResearch.id,
     )
   }

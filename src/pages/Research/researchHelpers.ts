@@ -1,6 +1,12 @@
-import { ResearchStatus, UserRole } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 
-import type { Author, DBProfile, ResearchItem, ResearchUpdate } from 'oa-shared'
+import type {
+  Author,
+  DBProfile,
+  ResearchItem,
+  ResearchStatus,
+  ResearchUpdate,
+} from 'oa-shared'
 
 export const researchUpdateStatusFilter = (
   author: Author | null,
@@ -44,11 +50,9 @@ export const researchStatusColour = (
   researchStatus?: ResearchStatus,
 ): string => {
   switch (researchStatus) {
-    case ResearchStatus.ARCHIVED:
-      return 'lightgrey'
-    case ResearchStatus.COMPLETED:
+    case 'complete':
       return 'betaGreen'
     default:
-      return 'accent.base'
+      return 'blue'
   }
 }

@@ -225,6 +225,7 @@ export const Select = (props: Props) => {
       value={props.value}
       onInputChange={props.onInputChange}
       isOptionDisabled={props.isOptionDisabled}
+      noOptionsMessage={props.noOptionsMessage}
     />
   )
 }

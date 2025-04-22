@@ -6,13 +6,11 @@ import {
   InternalLink,
   Username,
 } from 'oa-components'
-import { ResearchStatus } from 'oa-shared'
+import { type ResearchItem, ResearchStatusRecord } from 'oa-shared'
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
 import { researchStatusColour } from '../researchHelpers'
-
-import type { ResearchItem } from 'oa-shared'
 
 interface IProps {
   item: ResearchItem
@@ -29,7 +27,7 @@ const ResearchListItem = ({ item }: IProps) => {
     ml: 3,
   }
 
-  const status = item.status || ResearchStatus.IN_PROGRESS
+  const status = item.status || 'in-progress'
 
   return (
     <Card
@@ -134,7 +132,7 @@ const ResearchListItem = ({ item }: IProps) => {
                 }}
                 data-cy="ItemResearchStatus"
               >
-                {status}
+                {ResearchStatusRecord[status]}
               </Text>
             </Flex>
             <Flex
@@ -183,7 +181,7 @@ const ResearchListItem = ({ item }: IProps) => {
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  {status}
+                  {ResearchStatusRecord[status]}
                 </Text>
               </Flex>
               {/* Show these on mobile, hide on tablet & above. */}

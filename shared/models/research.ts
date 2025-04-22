@@ -10,20 +10,11 @@ import type { DBMedia, Image, IMediaFile, MediaFile } from './media'
 import type { SelectValue } from './other'
 import type { Tag } from './tag'
 
-export enum ResearchStatus {
-  IN_PROGRESS = 'In progress',
-  COMPLETED = 'Completed',
-  ARCHIVED = 'Archived',
+export type ResearchStatus = 'in-progress' | 'complete'
+export const ResearchStatusRecord: Record<ResearchStatus, string> = {
+  'in-progress': 'In Progress',
+  complete: 'Completed',
 }
-
-export const researchStatusOptions = (
-  Object.keys(ResearchStatus) as (keyof typeof ResearchStatus)[]
-).map((status) => {
-  return {
-    label: ResearchStatus[status],
-    value: ResearchStatus[status],
-  }
-})
 
 export class DBResearchItem implements IDBContentDoc {
   readonly id: number
@@ -231,7 +222,6 @@ export type ResearchFormData = {
   category?: SelectValue
   tags?: number[]
   collaborators?: string[]
-  status: ResearchStatus
   image?: IConvertedFileMeta
   existingImage: Image | null
 }

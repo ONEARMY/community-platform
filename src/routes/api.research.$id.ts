@@ -155,22 +155,19 @@ async function deleteResearch(request, id: number) {
     data: { user },
   } = await client.auth.getUser()
 
-  const profile = await profileServiceServer.getByAuthId(user?.id || '', client)
-  const research = await researchServiceServer.getById(id, client)
+  const canEdit = await researchServiceServer.isAllowedToEditResearchById(
+    client,
+    id,
+    user?.user_metadata.username,
+  )
 
-  if (
-    profile &&
-    (profile.id === research.author?.id ||
-      research.collaborators?.includes(profile.username) ||
-      profile?.roles?.includes(UserRole.ADMIN))
-  ) {
-    // can delete
+  if (canEdit) {
     await client
       .from('research')
       .update({
         deleted: true,
       })
-      .eq('id', research.id)
+      .eq('id', id)
 
     return Response.json({}, { status: 200, headers })
   }

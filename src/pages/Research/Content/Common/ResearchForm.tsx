@@ -3,11 +3,6 @@ import { Form } from 'react-final-form'
 import { useNavigate } from 'react-router'
 import arrayMutators from 'final-form-arrays'
 import { Button, ResearchEditorOverview } from 'oa-components'
-import {
-  type ResearchFormData,
-  type ResearchItem,
-  ResearchStatus,
-} from 'oa-shared'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
@@ -22,20 +17,18 @@ import { researchService } from '../../research.service'
 import { ResearchImageField } from '../CreateResearch/Form/ResearchImageField'
 import { ResearchCollaboratorsField } from './FormFields/ResearchCollaboratorsField'
 import { ResearchDescriptionField } from './FormFields/ResearchDescriptionField'
-import { ResearchStatusField } from './FormFields/ResearchStatusField'
 import { ResearchTitleField } from './FormFields/ResearchTitleField'
 import ResearchFieldCategory from './ResearchCategorySelect'
+
+import type { ResearchFormData, ResearchItem, ResearchStatus } from 'oa-shared'
 
 interface IProps {
   research?: ResearchItem
 }
 
 const ResearchForm = ({ research }: IProps) => {
-  const [initialValues, setInitialValues] = useState<Partial<ResearchFormData>>(
-    {
-      status: ResearchStatus.IN_PROGRESS,
-    },
-  )
+  const [initialValues, setInitialValues] =
+    useState<Partial<ResearchFormData>>()
   const navigate = useNavigate()
   const [intentionalNavigation, setIntentionalNavigation] = useState(false)
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
@@ -45,7 +38,6 @@ const ResearchForm = ({ research }: IProps) => {
       setInitialValues({
         title: research?.title,
         description: research?.description,
-        status: research?.status || ResearchStatus.IN_PROGRESS,
         category: research?.category
           ? {
               value: research.category.id?.toString(),
@@ -60,6 +52,15 @@ const ResearchForm = ({ research }: IProps) => {
       })
     }
   }, [research])
+
+  const updateStatus = async (status: ResearchStatus) => {
+    try {
+      await researchService.updateResearchStatus(research!.id, status)
+      navigate(`/research/${research!.slug}`)
+    } catch (err) {
+      setSaveErrorMessage('Error updating research status')
+    }
+  }
 
   const onSubmit = async (values: ResearchFormData, isDraft = false) => {
     setIntentionalNavigation(true)
@@ -133,6 +134,31 @@ const ResearchForm = ({ research }: IProps) => {
               <span>{buttons.draft}</span>
             </Button>
 
+            {research?.id && (
+              <Button
+                data-cy="draft"
+                onClick={() =>
+                  updateStatus(
+                    research?.status === 'complete'
+                      ? 'in-progress'
+                      : 'complete',
+                  )
+                }
+                variant={research?.status === 'complete' ? 'info' : 'success'}
+                type="submit"
+                disabled={!research?.id}
+                sx={{
+                  width: '100%',
+                  display: 'block',
+                }}
+              >
+                <span>
+                  {research?.status === 'complete'
+                    ? buttons.markInProgress
+                    : buttons.markCompleted}
+                </span>
+              </Button>
+            )}
             {research?.updates && (
               <ResearchEditorOverview
                 sx={{ marginTop: 4 }}
@@ -174,7 +200,6 @@ const ResearchForm = ({ research }: IProps) => {
             <ResearchFieldCategory />
             <TagsField title={overview.tags.title} />
             <ResearchCollaboratorsField />
-            <ResearchStatusField />
             <ResearchImageField
               label="Cover Image"
               existingImage={initialValues?.existingImage || null}

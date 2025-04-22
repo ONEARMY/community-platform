@@ -134,6 +134,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { status: 400, statusText: 'User not found' })
     }
 
+    const researchStatus: ResearchStatus = 'in-progress'
     const researchResult = await client
       .from('research')
       .insert({
@@ -144,6 +145,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         category: data.category,
         tags: data.tags,
         collaborators: data.collaborators,
+        status: researchStatus,
         is_draft: data.isDraft,
         tenant_id: process.env.TENANT_ID,
       })

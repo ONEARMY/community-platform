@@ -101,6 +101,7 @@ BEGIN
     r.description,
     r.slug,
     r.image,
+    r.status,
     (SELECT json_build_object('id', c.id, 'name', c.name) FROM categories c WHERE c.id = r.category) AS category,
     r.tags,
     r.title,

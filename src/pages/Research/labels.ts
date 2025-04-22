@@ -4,6 +4,8 @@ import type { ILabels } from 'src/common/Form/types'
 
 export const buttons = {
   draft: 'Save as draft',
+  markCompleted: 'Mark as Completed',
+  markInProgress: 'Mark as In Progress',
   deletion: {
     text: 'Delete this update',
     confirm: 'Delete',
@@ -39,7 +41,7 @@ export const overview: ILabels = {
   },
   collaborators: {
     placeholder: 'Select collaborators or start typing to find them',
-    title: 'Who have you been collaborating on this Research with?',
+    title: 'Who is collaborating with you on this research?',
   },
   description: {
     placeholder: `Introduction to your research question. Mention what you want to do, whats the goal and what challenges you see etc (max ${RESEARCH_MAX_LENGTH} characters)`,

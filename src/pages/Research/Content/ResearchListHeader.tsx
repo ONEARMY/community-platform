@@ -8,7 +8,7 @@ import {
   Select,
   Tooltip,
 } from 'oa-components'
-import { ResearchStatus, UserRole } from 'oa-shared'
+import { ResearchStatusRecord, UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { UserAction } from 'src/common/UserAction'
@@ -22,7 +22,7 @@ import { listing } from '../labels'
 import { ResearchSortOptions } from '../ResearchSortOptions'
 import { ResearchSearchParams } from './ResearchSearchParams'
 
-import type { Category } from 'oa-shared'
+import type { Category, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from '../ResearchSortOptions'
 
 interface IProps {
@@ -31,12 +31,10 @@ interface IProps {
   showDrafts: boolean
 }
 
-const researchStatusOptions = [
+const researchStatusOptions: { label: string; value: ResearchStatus | '' }[] = [
   { label: 'All', value: '' },
-  ...Object.values(ResearchStatus).map((x) => ({
-    label: x.toString(),
-    value: x.toString(),
-  })),
+  { label: 'In Progress', value: 'in-progress' },
+  { label: 'Completed', value: 'complete' },
 ]
 
 export const ResearchFilterHeader = (props: IProps) => {
@@ -182,7 +180,11 @@ export const ResearchFilterHeader = (props: IProps) => {
           <Select
             options={researchStatusOptions}
             placeholder={listing.status}
-            value={status ? { label: status, value: status } : undefined}
+            value={
+              status
+                ? { label: ResearchStatusRecord[status], value: status }
+                : undefined
+            }
             onChange={(status) =>
               updateFilter(ResearchSearchParams.status, status.value)
             }

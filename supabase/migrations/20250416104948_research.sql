@@ -88,7 +88,7 @@ $function$
 ;
 
 CREATE OR REPLACE FUNCTION public.get_research(search_query text DEFAULT NULL::text, category_id bigint DEFAULT NULL::bigint, research_status research_status DEFAULT NULL::research_status, sort_by text DEFAULT 'Newest'::text, limit_val integer DEFAULT 10, offset_val integer DEFAULT 0)
- RETURNS TABLE(id bigint, created_at timestamp with time zone, created_by bigint, modified_at timestamp with time zone, description text, slug text, image json, category json, tags text[], title text, total_views integer, author json, update_count bigint, comment_count bigint)
+ RETURNS TABLE(id bigint, created_at timestamp with time zone, created_by bigint, modified_at timestamp with time zone, description text, slug text, image json, status research_status, category json, tags text[], title text, total_views integer, author json, update_count bigint, comment_count bigint)
  LANGUAGE plpgsql
 AS $function$
 BEGIN

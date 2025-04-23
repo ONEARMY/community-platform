@@ -193,6 +193,9 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="http://ismaelabujadur.github.io"><img src="https://avatars.githubusercontent.com/u/112013216?v=4?s=60" width="60px;" alt="Ismael Abu-jadur Garcia"/><br /><sub><b>Ismael Abu-jadur Garcia</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=ismaelabujadur" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://nickthewilder.com"><img src="https://avatars.githubusercontent.com/u/38483425?v=4?s=60" width="60px;" alt="Nick Wilder"/><br /><sub><b>Nick Wilder</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=NickTheWilder" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/dizer-ti"><img src="https://avatars.githubusercontent.com/u/155266991?v=4?s=60" width="60px;" alt="James Niken"/><br /><sub><b>James Niken</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=dizer-ti" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 

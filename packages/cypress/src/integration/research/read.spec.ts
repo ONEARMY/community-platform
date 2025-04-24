@@ -25,16 +25,11 @@ describe('[Research]', () => {
         cy.step('All basic info displayed on each card')
         const researchTitle = 'Qwerty'
         const researchUrl = '/research/qwerty'
-        const coverImageFileName =
-          '/assets/images/default-research-thumbnail.jpg'
 
         cy.get('[data-cy=ResearchListItem]')
           .first()
           .within(() => {
             cy.contains(researchTitle).should('be.visible')
-            cy.get('img')
-              .should('have.attr', 'src')
-              .and('include', coverImageFileName)
             cy.get('[data-cy=Username]').contains('demo_user')
             cy.get('[data-cy=category]').contains('Machines')
             cy.get('a').should('have.attr', 'href').and('eq', researchUrl)

@@ -183,7 +183,7 @@ async function validateRequest(
   request: Request,
   user: User | null,
   data: any,
-  sourceType: 'news' | 'research_update' | 'project' | 'question' | null,
+  sourceType: 'news' | 'research_update' | 'project' | 'questions' | null,
 ) {
   if (!user) {
     return { status: 401, statusText: 'unauthorized' }
@@ -221,7 +221,7 @@ const mapSourceType = (sourceType: DiscussionContentTypes) => {
     case 'projects':
       return 'project'
     case 'questions':
-      return 'question'
+      return 'questions'
     default:
       throw new Error('Invalid sourceType')
   }

@@ -108,6 +108,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         is_draft: data.isDraft,
         images,
         modified_at: new Date(),
+        video_url: data.videoUrl,
         files: files.map((x) => ({ id: x.id, name: x.name, size: x.size })),
       })
       .eq('id', update.id)

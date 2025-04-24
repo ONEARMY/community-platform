@@ -66,6 +66,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       .insert({
         title: data.title,
         description: data.description,
+        video_url: data.videoUrl,
         is_draft: data.isDraft,
         research_id: researchId,
         created_by: profile!.id,

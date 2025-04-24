@@ -12,18 +12,28 @@ export const seedResearch = async (profiles, tagsData) => {
 
   const { categories } = await seedCategories('research')
 
+  const researchData = []
+
+  for (let i = 0; i < MOCK_DATA.research.length; i++) {
+    const item = MOCK_DATA.research[i]
+
+    researchData.push({
+      title: item.title,
+      description: item.description,
+      slug: item.slug,
+      created_by:
+        profiles.data.find((x) => x.username === item.createdBy)?.id || null,
+      tags: [tagsData.data[0].id, tagsData.data[1].id],
+      category: categories.data[i % 2].id,
+      deleted: item.deleted,
+      status: item.status,
+      tenant_id: tenantId,
+    })
+  }
+
   const { research } = await seedDatabase(
     {
-      research: MOCK_DATA.research.map((item) => ({
-        title: item.title,
-        description: item.description,
-        slug: item.slug,
-        created_by: profiles.data[0].id,
-        tags: [tagsData.data[0].id, tagsData.data[1].id],
-        category: categories.data[0].id,
-        deleted: item.deleted,
-        tenant_id: tenantId,
-      })),
+      research: researchData,
     },
     tenantId,
   )
@@ -40,6 +50,7 @@ export const seedResearch = async (profiles, tagsData) => {
             research_id: research.data[i].id,
             description: item.description,
             created_by: profiles.data[0].id,
+            is_draft: item.draft || false,
             tenant_id: tenantId,
           })),
         },

@@ -137,6 +137,7 @@ export const ResearchUpdateForm = (props: IProps) => {
         handleSubmit,
         hasValidationErrors,
         errors,
+        valid,
         submitSucceeded,
         submitting,
         submitFailed,
@@ -254,7 +255,7 @@ export const ResearchUpdateForm = (props: IProps) => {
                   data-cy="submit"
                   variant="primary"
                   type="submit"
-                  disabled={submitting}
+                  disabled={submitting || !valid}
                   onClick={() => onSubmit(values)}
                   sx={{
                     alignSelf: 'stretch',
@@ -268,7 +269,7 @@ export const ResearchUpdateForm = (props: IProps) => {
                   data-cy="draft"
                   variant="secondary"
                   type="submit"
-                  disabled={submitting}
+                  disabled={submitting || !valid}
                   onClick={() => onSubmit(values, true)}
                   sx={{
                     alignSelf: 'stretch',

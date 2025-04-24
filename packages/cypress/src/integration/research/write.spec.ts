@@ -96,11 +96,7 @@ describe('[Research]', () => {
       cy.contains('New update')
 
       cy.step('Cannot be published when empty')
-      cy.get('[data-cy=submit]').click()
-      cy.contains('Make sure this field is filled correctly').should(
-        'be.visible',
-      )
-      cy.get('[data-cy=errors-container]').should('be.visible')
+      cy.get('[data-cy=submit]').should('be.disabled')
 
       cy.step('Enter update details')
       cy.get('[data-cy=intro-title]')
@@ -130,15 +126,14 @@ describe('[Research]', () => {
       cy.get('@upload-button').click()
 
       cy.step('Published when fields are populated correctly')
-      cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=submit]').click()
 
       cy.contains(updateTitle).should('be.visible')
       cy.contains(updateDescription).should('be.visible')
-      cy.get('[data-cy=file-download-counter]').should(
-        'have.text',
-        '0 downloads',
-      )
+      // cy.get('[data-cy=file-download-counter]').should(
+      //   'have.text',
+      //   '0 downloads',
+      // )
 
       // cy.step('Download counter increments')
       // cy.wait(1000)

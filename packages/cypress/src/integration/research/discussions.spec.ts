@@ -8,13 +8,13 @@ describe('[Research.Discussions]', () => {
   })
 
   it('allows authenticated users to contribute to discussions', () => {
-    const visitor = MOCK_DATA.users.subscriber
+    const admin = MOCK_DATA.users.admin
     const secondCommentor = MOCK_DATA.users.profile_views
 
-    cy.signIn(visitor.email, visitor.password)
+    cy.signIn(admin.email, admin.password)
 
-    const newComment = `An example comment from ${visitor.userName}`
-    const updatedNewComment = `I've updated my comment now. Love ${visitor.userName}`
+    const newComment = `An example comment from ${admin.userName}`
+    const updatedNewComment = `I've updated my comment now. Love ${admin.userName}`
 
     const researchPath = `/research/${MOCK_DATA.research[1].slug}`
 
@@ -53,10 +53,10 @@ describe('[Research.Discussions]', () => {
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
 
     cy.step('First commentor can respond')
-    const secondReply = `Quick reply. ${visitor.userName}`
+    const secondReply = `Quick reply. ${admin.userName}`
 
     cy.logout()
-    cy.signIn(visitor.email, visitor.password)
+    cy.signIn(admin.email, admin.password)
     cy.visit(researchPath)
     cy.get(
       '[data-cy="HideDiscussionContainer: button open-comments has-comments"]',

@@ -970,6 +970,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "dizer-ti",
+      "name": "James Niken",
+      "avatar_url": "https://avatars.githubusercontent.com/u/155266991?v=4",
+      "profile": "https://github.com/dizer-ti",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

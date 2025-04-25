@@ -59,6 +59,7 @@ describe('[News.Write]', () => {
       cy.step('Submit news')
       cy.get('[data-cy=submit]').click()
 
+      cy.wait(2000)
       cy.url().should('include', `/news/${initialExpectedSlug}`)
 
       cy.step('All news fields shown')

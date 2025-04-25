@@ -89,8 +89,7 @@ describe('[Research]', () => {
       cy.step('New collaborators can add update')
       cy.logout()
       cy.signIn(subscriber.email, subscriber.password)
-      cy.visit(`/research/${expected.slug}/edit`)
-      cy.get('[data-cy=create-update]').click()
+      cy.visit(`/research/${expected.slug}/new-update`)
       cy.contains('New update')
 
       cy.step('Cannot be published when empty')

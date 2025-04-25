@@ -16,7 +16,7 @@ interface IProps {
 }
 
 export const ProfileDetails = ({ docs, user }: IProps) => {
-  const { about, location, tags, userName } = user
+  const { about, location, tags, openToVisitors, userName } = user
 
   const env = useContext(EnvironmentContext)
   const isMapModule = isModuleSupported(
@@ -43,7 +43,7 @@ export const ProfileDetails = ({ docs, user }: IProps) => {
             gap: 2,
           }}
         >
-          {tags && <ProfileTags tagIds={tags} />}
+          {(tags || openToVisitors) && <ProfileTags tagIds={tags} openToVisitors={openToVisitors}/>}
           {about && <Paragraph>{about}</Paragraph>}
         </Flex>
         <Divider

@@ -1,7 +1,7 @@
 import type { ILatLng } from './common'
 import type { IModerationStatus } from './moderation'
 import type { IProfileTag } from './tags'
-import type { IUserBadges, ProfileTypeName, WorkspaceType } from './user'
+import type { IUserBadges, ProfileTypeName, UserVisitorPreference, WorkspaceType } from './user'
 
 /**
  * Map pins have a `type` which correspond to icon
@@ -68,6 +68,7 @@ export interface IProfileCreator {
   coverImage?: string
   displayName: string
   isContactableByPublic?: boolean
+  openToVisitors?: UserVisitorPreference
   profileType: ProfileTypeName
   tags?: IProfileTag[]
   workspaceType?: string

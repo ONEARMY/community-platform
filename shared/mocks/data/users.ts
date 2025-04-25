@@ -287,7 +287,12 @@ export const users = {
     workspaceType: null,
     country: null,
     userName: 'settings_workplace_new',
-    links: [],
+    links: [
+      {
+        label: 'website',
+        url: 'http://settings_workplace_new.example.com',
+      },
+    ],
     mapPinDescription: null,
     machineBuilderXp: null,
     about: null,

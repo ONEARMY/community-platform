@@ -30,7 +30,7 @@ describe('[Research]', () => {
           .first()
           .within(() => {
             cy.contains(researchTitle).should('be.visible')
-            cy.get('[data-cy=Username]').contains('demo_user')
+            cy.get('[data-cy=Username]').contains('event_reader')
             cy.get('[data-cy=category]').contains('Machines')
             cy.get('a').should('have.attr', 'href').and('eq', researchUrl)
             cy.get('[data-cy=ItemResearchStatus]').contains('In Progress')

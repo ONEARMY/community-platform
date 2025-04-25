@@ -7,14 +7,13 @@ import {
   DiffSourceToggleWrapper,
   headingsPlugin,
   imagePlugin,
-  InsertTable,
   linkDialogPlugin,
   linkPlugin,
   listsPlugin,
   ListsToggle,
+  markdownShortcutPlugin,
   MDXEditor,
   quotePlugin,
-  tablePlugin,
   thematicBreakPlugin,
   toolbarPlugin,
   UndoRedo,
@@ -37,12 +36,11 @@ export interface IProps extends FieldProps {
   disabled?: boolean
   children?: React.ReactNode
   'data-cy'?: string
-  diffMarkdown?: string
 }
 
 export const FieldMarkdown = (props: IProps) => {
   const ref = useRef<MDXEditorMethods>(null)
-  const { imageUploadHandler, input, meta, diffMarkdown, ...rest } = props
+  const { imageUploadHandler, input, meta, ...rest } = props
 
   useEffect(() => {
     ref.current?.getMarkdown()
@@ -53,7 +51,6 @@ export const FieldMarkdown = (props: IProps) => {
     headingsPlugin({ allowedHeadingLevels: [1, 2] }),
     listsPlugin(),
     quotePlugin(),
-    tablePlugin(),
     imagePlugin({
       disableImageSettingsButton: true,
       disableImageResize: true,
@@ -61,7 +58,8 @@ export const FieldMarkdown = (props: IProps) => {
     thematicBreakPlugin(),
     linkPlugin(),
     linkDialogPlugin(),
-    diffSourcePlugin({ diffMarkdown, viewMode: 'rich-text' }),
+    diffSourcePlugin({ readOnlyDiff: true }),
+    markdownShortcutPlugin(),
   ]
 
   const toolbar = toolbarPlugin({
@@ -71,7 +69,6 @@ export const FieldMarkdown = (props: IProps) => {
         <BoldItalicUnderlineToggles />
         <ListsToggle />
         <CreateLink />
-        <InsertTable />
         <AddImage imageUploadHandler={imageUploadHandler} />
         <BlockTypeSelect />
       </DiffSourceToggleWrapper>

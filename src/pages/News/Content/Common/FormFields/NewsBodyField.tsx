@@ -5,10 +5,9 @@ import { fields } from 'src/pages/News/labels'
 
 interface IProps {
   imageUpload: (image: File) => Promise<string>
-  diffMarkdown?: string
 }
 
-export const NewsBodyField = ({ diffMarkdown, imageUpload }: IProps) => {
+export const NewsBodyField = ({ imageUpload }: IProps) => {
   const name = 'body'
 
   return (
@@ -16,7 +15,6 @@ export const NewsBodyField = ({ diffMarkdown, imageUpload }: IProps) => {
       <Field
         data-cy={`field-${name}`}
         component={FieldMarkdown}
-        diffMarkdown={diffMarkdown}
         id={name}
         name={name}
         placeholder={fields.body.placeholder}

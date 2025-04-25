@@ -20,6 +20,7 @@ import { buttons } from './labels'
 
 import type { IUser } from 'oa-shared'
 import type { IFormNotification } from './content/SettingsFormNotifications'
+import { VisitorSection } from './content/sections/VisitorSection'
 
 export const SettingsPageUserProfile = () => {
   const [notification, setNotification] = useState<
@@ -29,6 +30,8 @@ export const SettingsPageUserProfile = () => {
 
   const { userStore } = useCommonStores().stores
   const user = toJS(userStore.activeUser)
+
+  console.log(user)
 
   if (!user) return null
 
@@ -40,9 +43,7 @@ export const SettingsPageUserProfile = () => {
       ...values,
     }
 
-    toUpdate.coverImages = (toUpdate.coverImages as any[]).filter((cover) =>
-      cover ? true : false,
-    )
+    toUpdate.coverImages = toUpdate.coverImages.filter((cover) => !!cover)
 
     toUpdate.links = toUpdate.links || []
 
@@ -73,7 +74,7 @@ export const SettingsPageUserProfile = () => {
 
   const validateForm = (v: IUser) => {
     const errors: any = {}
-    // must have at least 1 cover (awkard react final form array format)
+    // must have at least 1 cover (awkward react final form array format)
     if (!v.coverImages[0] && v.profileType !== ProfileTypeList.MEMBER) {
       errors.coverImages = []
       errors.coverImages[ARRAY_ERROR] = 'Must have at least one cover image'
@@ -97,6 +98,7 @@ export const SettingsPageUserProfile = () => {
     userImage: user.userImage || null,
     coverImages,
     tags: user.tags || {},
+    openToVisitors: user.openToVisitors,
   }
 
   const formId = 'userProfileForm'
@@ -140,6 +142,8 @@ export const SettingsPageUserProfile = () => {
                 <UserInfosSection formValues={values} />
 
                 <UserImagesSection isMemberProfile={isMember} values={values} />
+
+                <VisitorSection openToVisitors={values.openToVisitors}/>
 
                 {!isMessagingBlocked() && (
                   <PublicContactSection

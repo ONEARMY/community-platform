@@ -68,6 +68,13 @@ export type UserMention = {
   location: string
 }
 
+export type UserVisitorPreferenceStatus =  'open' | 'appointment' | 'closed'
+
+export type UserVisitorPreference = {
+  status: UserVisitorPreferenceStatus,
+  details: string
+}
+
 // IUser retains most of the fields from legacy users (omitting passwords),
 // and has a few additional fields. Note 'email' is excluded
 // _uid is unique/fixed identifier
@@ -104,6 +111,7 @@ export interface IUser {
   patreon?: IPatreonUser | null
   totalUseful?: number
   total_views?: number
+  openToVisitors?: UserVisitorPreferenceStatus | null
 
   // New generic profile field for all profile types
   tags?: { [key: string]: boolean }

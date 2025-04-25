@@ -120,6 +120,18 @@ export const fields: ILabels = {
     description: 'What are your main activities? (choose max five)',
     title: 'Tags',
   },
+  visitorDetails: {
+    title: '',
+    placeholder: '',
+  },
+  visitorPolicy: {
+    title: '',
+  },
+  visitorPreference: {
+    title: 'Visitors',
+    description: 'This will be visible in your public profile. You can specify the opening hours, conditions or other details in the field below',
+    placeholder: 'Show my visitor policy',
+  },
 }
 
 export const form = {
@@ -153,7 +165,7 @@ export const headings = {
 
 export const notificationForm = {
   loading: 'Loading your notification setting',
-  succesfulSave: 'Notification setting saved successfully - whoop',
+  successfulSave: 'Notification setting saved successfully - whoop',
 }
 
 export const mapForm = {
@@ -168,11 +180,17 @@ export const mapForm = {
   needsChanges:
     'This map pin has been marked as requiring further changes. Specifically the moderator comments are:',
   noLocationLabel: 'No map pin currently saved',
-  succesfulSave: 'Map pin saved successfully - whoop',
-  sucessfulDelete: 'Location data removed',
+  successfulSave: 'Map pin saved successfully - whoop',
+  successfulDelete: 'Location data removed',
 }
 
 export const missingData = 'Do you have impact data for this year?'
 
 export const inCompleteProfile =
   'In order to add yourself to the map, you need to complete your profile'
+
+export const visitorPolicyLabels = {
+  open: 'Open to visitors',
+  appointment: 'Visitors after appointment',
+  closed: 'Visits currently not possible'
+}

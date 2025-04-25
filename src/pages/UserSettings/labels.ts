@@ -121,16 +121,15 @@ export const fields: ILabels = {
     title: 'Tags',
   },
   visitorDetails: {
-    title: '',
-    placeholder: '',
+    title: 'Specify your visitor status',
+    placeholder: 'Optionally describe details that help people understand your visitor policy.  For example when or how to reach you, or when you expect to change your status.',
   },
   visitorPolicy: {
-    title: '',
+    title: 'Visitor policy',
   },
   visitorPreference: {
-    title: 'Visitors',
+    title: 'Show my visitor policy',
     description: 'This will be visible in your public profile. You can specify the opening hours, conditions or other details in the field below',
-    placeholder: 'Show my visitor policy',
   },
 }
 
@@ -156,6 +155,7 @@ export const headings = {
     existingPinLabel:
       'The map pin you registered has the following description:',
   },
+  visitors: 'Visitors',
   workspace: {
     description:
       'In order to have your pin accepted on our map you have to collect at least 6 stars in the Ally Checklist. Learn more about the Community Program and how you can join.',

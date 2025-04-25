@@ -15,12 +15,12 @@ import { FocusSection } from './content/sections/Focus.section'
 import { PublicContactSection } from './content/sections/PublicContact.section'
 import { UserImagesSection } from './content/sections/UserImages.section'
 import { UserInfosSection } from './content/sections/UserInfos.section'
+import { VisitorSection } from './content/sections/VisitorSection'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 import { buttons } from './labels'
 
 import type { IUser } from 'oa-shared'
 import type { IFormNotification } from './content/SettingsFormNotifications'
-import { VisitorSection } from './content/sections/VisitorSection'
 
 export const SettingsPageUserProfile = () => {
   const [notification, setNotification] = useState<
@@ -30,8 +30,6 @@ export const SettingsPageUserProfile = () => {
 
   const { userStore } = useCommonStores().stores
   const user = toJS(userStore.activeUser)
-
-  console.log(user)
 
   if (!user) return null
 
@@ -143,7 +141,7 @@ export const SettingsPageUserProfile = () => {
 
                 <UserImagesSection isMemberProfile={isMember} values={values} />
 
-                <VisitorSection openToVisitors={values.openToVisitors}/>
+                <VisitorSection openToVisitors={values.openToVisitors} />
 
                 {!isMessagingBlocked() && (
                   <PublicContactSection

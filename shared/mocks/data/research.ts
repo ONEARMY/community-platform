@@ -206,7 +206,7 @@ export const research = [
   },
   {
     createdAt: '2023-02-27T22:08:25.999Z',
-    createdBy: 'demo_user',
+    createdBy: 'settings_workplace_new',
     deleted: false,
     modifiedAt: '2023-03-01T19:12:11.271Z',
     description: 'Workspace contribution tab test!',

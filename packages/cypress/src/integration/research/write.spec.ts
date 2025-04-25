@@ -4,8 +4,6 @@ import { RESEARCH_TITLE_MIN_LENGTH } from '../../../../../src/pages/Research/con
 import { MOCK_DATA } from '../../data'
 import { generateAlphaNumeric } from '../../utils/TestUtils'
 
-import type { UserMenuItem } from '../../support/commandsUi'
-
 const generateArticle = () => {
   const title = faker.lorem.words(4)
   const slug = title.toLowerCase().split(' ').join('-')
@@ -89,7 +87,7 @@ describe('[Research]', () => {
       cy.contains(admin.userName)
 
       cy.step('New collaborators can add update')
-      cy.clickMenuItem('Logout' as UserMenuItem)
+      cy.logout()
       cy.signIn(subscriber.email, subscriber.password)
       cy.visit(`/research/${expected.slug}/edit`)
       cy.get('[data-cy=create-update]').click()

@@ -75,6 +75,12 @@ export type UserVisitorPreference = {
   details?: string
 }
 
+export const visitorPolicyLabels = {
+  open: 'Open to visitors',
+  appointment: 'Visitors after appointment',
+  closed: 'Visits currently not possible'
+}
+
 // IUser retains most of the fields from legacy users (omitting passwords),
 // and has a few additional fields. Note 'email' is excluded
 // _uid is unique/fixed identifier

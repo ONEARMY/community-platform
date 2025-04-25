@@ -1,18 +1,15 @@
-import { ProfileTagsList } from 'oa-components'
+import { ExtendedTagsList } from 'oa-components'
 import { getValidTags } from 'src/utils/getValidTags'
 
-import type { ISelectedTags } from 'oa-shared'
+import type { ISelectedTags, UserVisitorPreference } from 'oa-shared'
 
 interface IProps {
-  tagIds: ISelectedTags
+  tagIds?: ISelectedTags
+  openToVisitors?: UserVisitorPreference
 }
 
-export const ProfileTags = ({ tagIds }: IProps) => {
-  const tags = getValidTags(tagIds)
+export const ProfileTags = ({ tagIds, openToVisitors }: IProps) => {
+  const tags = getValidTags(tagIds || {})
 
-  if (tags.length === 0) {
-    return null
-  }
-
-  return <ProfileTagsList tags={tags} />
+  return <ExtendedTagsList tags={tags} openToVisitors={openToVisitors}/>
 }

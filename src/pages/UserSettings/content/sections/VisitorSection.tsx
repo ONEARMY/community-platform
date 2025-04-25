@@ -2,14 +2,11 @@ import * as React from 'react'
 import { Field } from 'react-final-form'
 import { observer } from 'mobx-react'
 import { FieldTextarea, Select } from 'oa-components'
-import {
-  fields,
-  headings,
-  visitorPolicyLabels,
-} from 'src/pages/UserSettings/labels'
+import { visitorPolicyLabels } from 'oa-shared'
+import { fields, headings } from '../../labels'
 import { Flex, Heading, Switch, Text } from 'theme-ui'
 
-import type { IUser, UserVisitorPreferencePolicy } from 'oa-shared'
+import type { IUser, UserVisitorPreferencePolicy} from 'oa-shared';
 
 interface Props {
   openToVisitors: IUser['openToVisitors']

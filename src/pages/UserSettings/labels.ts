@@ -122,14 +122,16 @@ export const fields: ILabels = {
   },
   visitorDetails: {
     title: 'Specify your visitor status',
-    placeholder: 'Optionally describe details that help people understand your visitor policy.  For example when or how to reach you, or when you expect to change your status.',
+    placeholder:
+      'Optionally describe details that help people understand your visitor policy.  For example when or how to reach you, or when you expect to change your status.',
   },
   visitorPolicy: {
     title: 'Visitor policy',
   },
   visitorPreference: {
     title: 'Show my visitor policy',
-    description: 'This will be visible in your public profile. You can specify the opening hours, conditions or other details in the field below',
+    description:
+      'This will be visible in your public profile. You can specify the opening hours, conditions or other details in the field below',
   },
 }
 

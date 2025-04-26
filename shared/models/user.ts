@@ -68,18 +68,20 @@ export type UserMention = {
   location: string
 }
 
-export type UserVisitorPreferencePolicy =  'open' | 'appointment' | 'closed'
+export const userVisitorPreferencePolicies = ['open', 'appointment', 'closed'] as const
+
+export type UserVisitorPreferencePolicy = typeof userVisitorPreferencePolicies[number]
 
 export type UserVisitorPreference = {
   policy: UserVisitorPreferencePolicy,
   details?: string
 }
 
-export const visitorPolicyLabels = {
-  open: 'Open to visitors',
-  appointment: 'Visitors after appointment',
-  closed: 'Visits currently not possible'
-}
+export const visitorPolicyLabels = new Map<UserVisitorPreferencePolicy, string>([
+  ['open', 'Open to visitors'],
+  ['appointment', 'Visitors after appointment'],
+  ['closed', 'Visits currently not possible']
+])
 
 // IUser retains most of the fields from legacy users (omitting passwords),
 // and has a few additional fields. Note 'email' is excluded

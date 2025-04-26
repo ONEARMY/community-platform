@@ -9,6 +9,8 @@ import { Box, Divider, Flex, Paragraph } from 'theme-ui'
 
 import type { IUser } from 'oa-shared'
 import type { UserCreatedDocs } from '../types'
+import { useState } from 'react'
+import { VisitorModal } from './VisitorModal'
 
 interface IProps {
   docs: UserCreatedDocs
@@ -17,6 +19,13 @@ interface IProps {
 
 export const ProfileDetails = ({ docs, user }: IProps) => {
   const { about, location, tags, openToVisitors, userName } = user
+  const [showVisitorModal, setShowVisitorModal] = useState<boolean>(false)
+
+  const showVisitorDetails = () => {
+    console.log('yes!')
+
+    setShowVisitorModal(true)
+  }
 
   const env = useContext(EnvironmentContext)
   const isMapModule = isModuleSupported(
@@ -44,9 +53,21 @@ export const ProfileDetails = ({ docs, user }: IProps) => {
           }}
         >
           {(tags || openToVisitors) && (
-            <ProfileTags tagIds={tags} openToVisitors={openToVisitors} />
+            <ProfileTags
+              tagIds={tags}
+              showVisitorModal={showVisitorDetails}
+              openToVisitors={openToVisitors}
+            />
           )}
           {about && <Paragraph>{about}</Paragraph>}
+
+          {openToVisitors && (
+            <VisitorModal
+              show={showVisitorModal}
+              hide={() => setShowVisitorModal(false)}
+              openToVisitors={openToVisitors}
+            />
+          )}
         </Flex>
         <Divider
           sx={{

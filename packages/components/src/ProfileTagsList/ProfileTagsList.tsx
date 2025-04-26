@@ -1,35 +1,68 @@
-import { Flex } from 'theme-ui'
+import { visitorPolicyLabels } from 'oa-shared'
+import { Flex, Text } from 'theme-ui'
 
+import type { IProfileTag, UserVisitorPreference} from 'oa-shared';
+import type { ComponentProps } from 'react'
+import type { ThemeUIStyleObject } from 'theme-ui'
 import { Category } from '../Category/Category'
 
-import type { Category as CategoryType, IProfileTag } from 'oa-shared'
-import type { ThemeUIStyleObject } from 'theme-ui'
-
-export interface IProps {
-  tags: IProfileTag[]
-  sx?: ThemeUIStyleObject | undefined
+type Sizing = {
+  large?: boolean
 }
+
+export type IProps =  {
+  tags: IProfileTag[] | null
+  openToVisitors?: UserVisitorPreference
+  sx?: ThemeUIStyleObject
+} & Sizing
 
 const DEFAULT_COLOR = '#999999'
 
-export const ProfileTagsList = ({ sx, tags }: IProps) => {
+type TagProps = ComponentProps<typeof Text> & Sizing & {
+  label: string,
+  color?: string
+}
+
+const Tag = ({ label, color, large }: TagProps) => {
+  const sizing = large ? {
+    fontSize: '14px',
+    paddingX: '15px',
+    paddingY: '10px',
+  } : {}
+  return <Category
+    sx={{
+      borderRadius: 99,
+      border: '1px solid',
+      borderColor: color,
+      backgroundColor: `${color}20`,
+      color: color,
+      ...sizing,
+    }}
+    category={{ label }}
+  />
+}
+
+const policyColors = new Map(Object.entries({
+  open: '#116503',
+  appointment: '#005471',
+  closed: DEFAULT_COLOR
+}))
+
+export const ProfileTagsList = (props: IProps) => {
+  const { tags, openToVisitors, sx, large } = props
+  const tagList = tags || []
+
   return (
     <Flex data-cy="ProfileTagsList" sx={{ gap: 1, flexWrap: 'wrap', ...sx }}>
-      {tags.map(
-        ({ color, label }, index) =>
-          <Category
-            key={index}
-            category={{ name: label } as CategoryType}
-            sx={{
-              borderRadius: 99,
-              border: '1px solid',
-              borderColor: color || DEFAULT_COLOR,
-              backgroundColor: color ? `${color}20` : `${DEFAULT_COLOR}20`,
-              color: color || DEFAULT_COLOR,
-              fontSize: '11px',
-            }}
-          />
+      {tagList.map(
+        ({ label, color }, index) =>
+          <Tag key={index} color={color || DEFAULT_COLOR} label={label} large={large}/>
       )}
+      {openToVisitors && <Tag
+        color={policyColors.get(openToVisitors.policy)}
+        label={`${visitorPolicyLabels.get(openToVisitors.policy)} \u24D8`}
+        large={true}
+      />}
     </Flex>
   )
 }

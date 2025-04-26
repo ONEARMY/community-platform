@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Field } from 'react-final-form'
 import { observer } from 'mobx-react'
 import { FieldTextarea, Select } from 'oa-components'
-import { visitorPolicyLabels } from 'oa-shared'
+import { userVisitorPreferencePolicies, visitorPolicyLabels } from 'oa-shared'
 import { fields, headings } from '../../labels'
 import { Flex, Heading, Switch, Text } from 'theme-ui'
 
@@ -12,25 +12,23 @@ interface Props {
   openToVisitors: IUser['openToVisitors']
 }
 
-const visitorPolicyOptions: {
-  value: UserVisitorPreferencePolicy
-  label: string
-}[] = [
-  { value: 'open', label: visitorPolicyLabels.open },
-  { value: 'appointment', label: visitorPolicyLabels.appointment },
-  { value: 'closed', label: visitorPolicyLabels.closed },
-]
+const visitorPolicyOptions = userVisitorPreferencePolicies.map((policy) => ({
+  value: policy,
+  label: visitorPolicyLabels[policy]
+}))
 
 function findPolicy(policyValue: UserVisitorPreferencePolicy) {
   return visitorPolicyOptions.find(({ value }) => value === policyValue)
 }
 
+const { title: preferenceTitle, description: preferenceDescription } = fields.visitorPreference
+const { title: policyTitle } = fields.visitorPolicy
+const { title: policyDetailsTitle, placeholder: policyDetailsPlaceholder } = fields.visitorDetails
+const { visitors } = headings
+
 export const VisitorSection = observer((props: Props) => {
   const { openToVisitors } = props
-  const { title: preferenceTitle, description: preferenceDescription } = fields.visitorPreference
-  const { title: policyTitle } = fields.visitorPolicy
-  const { title: policyDetailsTitle, placeholder: policyDetailsPlaceholder } = fields.visitorDetails
-  const { visitors } = headings
+
   const name = 'openToVisitors'
 
   return (
@@ -43,9 +41,7 @@ export const VisitorSection = observer((props: Props) => {
       }}
     >
       <Heading as="h2">{visitors}</Heading>
-      <Text variant="quiet" sx={{ fontSize: 2 }}>
-        {preferenceDescription}
-      </Text>
+      <Text variant="quiet" sx={{ fontSize: 2 }}>{preferenceDescription}</Text>
       <Field name={name}>
         {({ input }) => {
           return <Switch

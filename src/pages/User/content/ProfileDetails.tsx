@@ -43,7 +43,9 @@ export const ProfileDetails = ({ docs, user }: IProps) => {
             gap: 2,
           }}
         >
-          {(tags || openToVisitors) && <ProfileTags tagIds={tags} openToVisitors={openToVisitors}/>}
+          {(tags || openToVisitors) && (
+            <ProfileTags tagIds={tags} openToVisitors={openToVisitors} />
+          )}
           {about && <Paragraph>{about}</Paragraph>}
         </Flex>
         <Divider

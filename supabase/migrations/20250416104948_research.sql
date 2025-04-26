@@ -19,7 +19,8 @@ create table "public"."research" (
     "tenant_id" text not null,
     "fts" tsvector,
     "collaborators" text[],
-    "image" json
+    "image" json,
+    "legacy_id" text
 );
 
 

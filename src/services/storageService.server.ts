@@ -1,7 +1,7 @@
-import { MediaFile } from 'oa-shared'
+import { Image, MediaFile } from 'oa-shared'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBMedia, Image } from 'oa-shared'
+import type { DBMedia } from 'oa-shared'
 import type { ImageSize } from 'src/config/imageTransforms'
 
 const getPublicUrls = (
@@ -20,7 +20,7 @@ const getPublicUrls = (
             }
           : undefined,
       )
-    return data as Image
+    return new Image({ id: x.id, publicUrl: data.publicUrl })
   })
 }
 

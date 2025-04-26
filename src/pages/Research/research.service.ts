@@ -187,7 +187,7 @@ const upsertUpdate = async (
 
 const deleteResearch = async (id: number) => {
   const response = await fetch(`/api/research/${id}`, {
-    method: 'PATCH',
+    method: 'DELETE',
   })
 
   if (response.status !== 200 && response.status !== 201) {

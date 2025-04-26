@@ -42,7 +42,8 @@ create table "public"."research_updates" (
     "deleted" boolean,
     "file_link" text,
     "file_download_count" integer,
-    "created_by" bigint
+    "created_by" bigint,
+    "legacy_id" text
 );
 
 

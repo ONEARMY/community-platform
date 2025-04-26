@@ -11,6 +11,7 @@ import {
   ResearchErrors,
   ResearchPostingGuidelines,
 } from 'src/pages/Research/Content/Common'
+import { Text } from 'theme-ui'
 
 import { buttons, headings, overview } from '../../labels'
 import { researchService } from '../../research.service'
@@ -159,6 +160,9 @@ const ResearchForm = ({ research }: IProps) => {
                 </span>
               </Button>
             )}
+
+            {submitting && <Text>Submitting...</Text>}
+
             {research?.updates && (
               <ResearchEditorOverview
                 sx={{ marginTop: 4 }}

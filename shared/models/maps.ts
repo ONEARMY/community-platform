@@ -1,7 +1,12 @@
 import type { ILatLng } from './common'
 import type { IModerationStatus } from './moderation'
 import type { IProfileTag } from './tags'
-import type { IUserBadges, ProfileTypeName, UserVisitorPreference, WorkspaceType } from './user'
+import type {
+  IUserBadges,
+  ProfileTypeName,
+  UserVisitorPreference,
+  WorkspaceType,
+} from './user'
 
 /**
  * Map pins have a `type` which correspond to icon

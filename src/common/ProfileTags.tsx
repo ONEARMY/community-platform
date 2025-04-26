@@ -11,5 +11,7 @@ interface IProps {
 export const ProfileTags = ({ tagIds, openToVisitors }: IProps) => {
   const tags = getValidTags(tagIds || {})
 
-  return <ProfileTagsList tags={tags} openToVisitors={openToVisitors} large={true}/>
+  return (
+    <ProfileTagsList tags={tags} openToVisitors={openToVisitors} large={true} />
+  )
 }

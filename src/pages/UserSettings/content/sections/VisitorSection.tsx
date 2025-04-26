@@ -6,7 +6,7 @@ import { userVisitorPreferencePolicies, visitorPolicyLabels } from 'oa-shared'
 import { fields, headings } from '../../labels'
 import { Flex, Heading, Switch, Text } from 'theme-ui'
 
-import type { IUser, UserVisitorPreferencePolicy} from 'oa-shared';
+import type { IUser, UserVisitorPreferencePolicy } from 'oa-shared'
 
 interface Props {
   openToVisitors: IUser['openToVisitors']
@@ -14,16 +14,18 @@ interface Props {
 
 const visitorPolicyOptions = userVisitorPreferencePolicies.map((policy) => ({
   value: policy,
-  label: visitorPolicyLabels[policy]
+  label: visitorPolicyLabels.get(policy) || policy,
 }))
 
 function findPolicy(policyValue: UserVisitorPreferencePolicy) {
   return visitorPolicyOptions.find(({ value }) => value === policyValue)
 }
 
-const { title: preferenceTitle, description: preferenceDescription } = fields.visitorPreference
+const { title: preferenceTitle, description: preferenceDescription } =
+  fields.visitorPreference
 const { title: policyTitle } = fields.visitorPolicy
-const { title: policyDetailsTitle, placeholder: policyDetailsPlaceholder } = fields.visitorDetails
+const { title: policyDetailsTitle, placeholder: policyDetailsPlaceholder } =
+  fields.visitorDetails
 const { visitors } = headings
 
 export const VisitorSection = observer((props: Props) => {
@@ -41,49 +43,58 @@ export const VisitorSection = observer((props: Props) => {
       }}
     >
       <Heading as="h2">{visitors}</Heading>
-      <Text variant="quiet" sx={{ fontSize: 2 }}>{preferenceDescription}</Text>
+      <Text variant="quiet" sx={{ fontSize: 2 }}>
+        {preferenceDescription}
+      </Text>
       <Field name={name}>
         {({ input }) => {
-          return <Switch
-            checked={!!openToVisitors}
-            data-cy={`${name}-${openToVisitors?.policy || 'not-shown'}`}
-            data-testid={`${name}-switch`}
-            label={preferenceTitle}
-            onChange={() => input.onChange(openToVisitors ? null : { policy: 'open' })}
-            sx={{
-              'input:checked ~ &': {
-                backgroundColor: 'green',
-              },
-            }}
-          />
+          return (
+            <Switch
+              checked={!!openToVisitors}
+              data-cy={`${name}-${openToVisitors?.policy || 'not-shown'}`}
+              data-testid={`${name}-switch`}
+              label={preferenceTitle}
+              onChange={() =>
+                input.onChange(openToVisitors ? null : { policy: 'open' })
+              }
+              sx={{
+                'input:checked ~ &': {
+                  backgroundColor: 'green',
+                },
+              }}
+            />
+          )
         }}
       </Field>
-      {openToVisitors && <>
-        <Text>{policyTitle} *</Text>
-        <Field name="openToVisitors.policy">
-          {({ input }) => {
-            return <Select
-                options={visitorPolicyOptions}
-                defaultValue={findPolicy(openToVisitors.policy || 'open')}
-                onChange={({ value }) => input.onChange(value)}
-              />
-          }}
-        </Field>
-        <Text>{policyDetailsTitle}</Text>
-        <Field name="openToVisitors.details">
-          {({ input }) => {
-            return (
-              <FieldTextarea
-                input={input}
-                meta={''}
-                value={openToVisitors.details}
-                placeholder={policyDetailsPlaceholder}
-              />
-            )
-          }}
-        </Field>
-      </>
-      }
+      {openToVisitors && (
+        <>
+          <Text>{policyTitle} *</Text>
+          <Field name="openToVisitors.policy">
+            {({ input }) => {
+              return (
+                <Select
+                  options={visitorPolicyOptions}
+                  defaultValue={findPolicy(openToVisitors.policy || 'open')}
+                  onChange={({ value }) => input.onChange(value)}
+                />
+              )
+            }}
+          </Field>
+          <Text>{policyDetailsTitle}</Text>
+          <Field name="openToVisitors.details">
+            {({ input }) => {
+              return (
+                <FieldTextarea
+                  input={input}
+                  meta={''}
+                  value={openToVisitors.details}
+                  placeholder={policyDetailsPlaceholder}
+                />
+              )
+            }}
+          </Field>
+        </>
+      )}
     </Flex>
   )
 })

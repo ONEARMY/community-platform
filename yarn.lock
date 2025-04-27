@@ -25988,6 +25988,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mdast-util-newline-to-break@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "mdast-util-newline-to-break@npm:2.0.0"
+  dependencies:
+    "@types/mdast": "npm:^4.0.0"
+    mdast-util-find-and-replace: "npm:^3.0.0"
+  checksum: 10/2300312c02501458854129e776cbbf6daafa6b7675a54a634f9a3c76055b0466081ad9eebde6bc655030e868fd7c183352acd856bcd265b3ea96f214c4f7fd7b
+  languageName: node
+  linkType: hard
+
 "mdast-util-phrasing@npm:^3.0.0":
   version: 3.0.1
   resolution: "mdast-util-phrasing@npm:3.0.1"
@@ -28167,7 +28177,9 @@ __metadata:
     react-router-dom: "npm:^6.26.0"
     react-select: "npm:^5.8.1"
     react-tooltip: "npm:^5.28.0"
+    remark-breaks: "npm:^4.0.0"
     remark-gfm: "npm:^4.0.1"
+    remark-youtube: "npm:^1.3.2"
     storybook: "npm:^7.6.0"
     styled-system: "npm:^5.1.5"
     theme-ui: "npm:^0.16.2"
@@ -31888,6 +31900,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"remark-breaks@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "remark-breaks@npm:4.0.0"
+  dependencies:
+    "@types/mdast": "npm:^4.0.0"
+    mdast-util-newline-to-break: "npm:^2.0.0"
+    unified: "npm:^11.0.0"
+  checksum: 10/6841b88ea4995ec9d469bb10f8272ce264466ffd706a85a931fd6d451dc81440916bd62118d62f10b7c61704b740e7eda4c0c8bee62dc27e8a02ee2766af1bf2
+  languageName: node
+  linkType: hard
+
 "remark-directive@npm:^3.0.0":
   version: 3.0.0
   resolution: "remark-directive@npm:3.0.0"
@@ -32089,6 +32112,17 @@ __metadata:
     mdast-util-to-markdown: "npm:^2.0.0"
     unified: "npm:^11.0.0"
   checksum: 10/32b2f6093ba08e713183629b37e633e0999b6981560eec41f04fe957f76fc6f56dcc14c87c6b45419863be844c6f1130eb2dc055085fc0adc0775b1df7340348
+  languageName: node
+  linkType: hard
+
+"remark-youtube@npm:^1.3.2":
+  version: 1.3.2
+  resolution: "remark-youtube@npm:1.3.2"
+  dependencies:
+    unist-util-visit: "npm:^5.0.0"
+  peerDependencies:
+    remark-rehype: ^11.1.0
+  checksum: 10/20f9d3666a6c94c0dda58d6e3e64807417fe3b7d643655aab1e0a4d265dc3051e3c2b8b713d5e64bc46ffe9c6dd355cf9b0a163a00b4c4696e7b522c0fcd1b85
   languageName: node
   linkType: hard
 

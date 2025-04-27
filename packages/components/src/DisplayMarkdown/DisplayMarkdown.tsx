@@ -1,5 +1,7 @@
 import Markdown from 'react-markdown'
+import remarkBreaks from 'remark-breaks'
 import remarkGfm from 'remark-gfm'
+import remarkYoutube from 'remark-youtube'
 
 import { DisplayMarkdownStylingWrapper } from './DisplayMarkdownStylingWrapper'
 
@@ -16,9 +18,21 @@ export const DisplayMarkdown = ({ body }: IProps) => {
           maxWidth: ['105%', '105%', '120%'],
           marginLeft: ['-2.5%', '-2.5%', '-10%'],
         },
+        iframe: {
+          maxWidth: ['105%', '105%', '120%'],
+          maxHeight: ['300px', '370px', '420px'],
+          marginLeft: ['-2.5%', '-2.5%', '-10%'],
+        },
       }}
     >
-      <Markdown remarkPlugins={[remarkGfm]} skipHtml={true}>
+      <Markdown
+        remarkPlugins={[
+          remarkBreaks,
+          remarkGfm,
+          [remarkYoutube, { width: 760, height: 420 }],
+        ]}
+        skipHtml={true}
+      >
         {body}
       </Markdown>
     </DisplayMarkdownStylingWrapper>

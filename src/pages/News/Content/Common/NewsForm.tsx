@@ -153,10 +153,7 @@ export const NewsForm = (props: IProps) => {
             />
             <CategoryField getCategories={newsContentService.getCategories} />
             <TagsField title={LABELS.fields.tags.title} />
-            <NewsBodyField
-              diffMarkdown={initialValues.body}
-              imageUpload={imageUpload}
-            />
+            <NewsBodyField imageUpload={imageUpload} />
           </FormWrapper>
         )
       }}

@@ -8,6 +8,7 @@ import { Alert, Box, Card, Flex } from 'theme-ui'
 
 import { Impact } from '../impact/Impact'
 import { heading } from '../impact/labels'
+import { MemberHistory } from './MemberHistory'
 import { ProfileContact } from './ProfileContact'
 import { ProfileDetails } from './ProfileDetails'
 import { ProfileHeader } from './ProfileHeader'
@@ -136,6 +137,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
               )}
             </Tabs>
           </Box>
+          <MemberHistory memberSince={user.profileCreated} lastActive={user._lastActive} />
         </Flex>
       </Card>
     </Flex>

@@ -1,44 +1,36 @@
 import accountSVG from '../../assets/icons/account.svg'
 import arrowCurvedBottomRightSVG from '../../assets/icons/arrow-curved-bottom-right.svg'
+import arrowFullDownSVG from '../../assets/icons/icon-arrow-down.svg'
+import arrowFullUpSVG from '../../assets/icons/icon-arrow-up.svg'
+import bazarSVG from '../../assets/icons/icon-bazar.svg'
 import categorySVG from '../../assets/icons/category.svg'
 import chevronDownSVG from '../../assets/icons/chevron-down.svg'
 import chevronLeftSVG from '../../assets/icons/chevron-left.svg'
 import chevronRightSVG from '../../assets/icons/chevron-right.svg'
 import chevronUpSVG from '../../assets/icons/chevron-up.svg'
+import commentSVG from '../../assets/icons/icon-comment.svg'
 import constructionSVG from '../../assets/icons/construction.svg'
 import contactSVG from '../../assets/icons/contact.svg'
 import closeSVG from '../../assets/icons/cross-close.svg'
 import deleteSVG from '../../assets/icons/delete.svg'
+import discordSVG from '../../assets/icons/icon-discord.svg'
+import emailOutlineSVG from '../../assets/icons/icon-email.svg'
 import employeeSVG from '../../assets/icons/employee.svg'
 import eyeSVG from '../../assets/icons/eye.svg'
 import eyeCrossedSVG from '../../assets/icons/eye-crossed.svg'
 import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
 import foodSVG from '../../assets/icons/food.svg'
 import fromTheTeamSVG from '../../assets/icons/from-the-team.svg'
+import globe from '../../assets/icons/map-globe.svg'
+import gpsLocation from '../../assets/icons/map-gpsLocation.svg'
 import guidesSVG from '../../assets/icons/guides.svg'
 import hyperlinkSVG from '../../assets/icons/hyperlink.svg'
-import arrowFullDownSVG from '../../assets/icons/icon-arrow-down.svg'
-import arrowFullUpSVG from '../../assets/icons/icon-arrow-up.svg'
-import bazarSVG from '../../assets/icons/icon-bazar.svg'
-import commentSVG from '../../assets/icons/icon-comment.svg'
-import discordSVG from '../../assets/icons/icon-discord.svg'
-import emailOutlineSVG from '../../assets/icons/icon-email.svg'
-import searchSVG from '../../assets/icons/icon-search.svg'
-import socialMediaSVG from '../../assets/icons/icon-social-media.svg'
-import starActiveSVG from '../../assets/icons/icon-star-active.svg'
-import starSVG from '../../assets/icons/icon-star-default.svg'
-import updateSVG from '../../assets/icons/icon-update.svg'
-import usefulSVG from '../../assets/icons/icon-useful.svg'
-import verifiedSVG from '../../assets/icons/icon-verified-badge.svg'
-import viewSVG from '../../assets/icons/icon-views.svg'
-import websiteSVG from '../../assets/icons/icon-website.svg'
 import impactSVG from '../../assets/icons/impact.svg'
 import landscapeSVG from '../../assets/icons/landscape.svg'
+import loadingSVG from '../../assets/images/loading.svg'
 import machineSVG from '../../assets/icons/machine.svg'
 import machinesSVG from '../../assets/icons/machines.svg'
 import mapSVG from '../../assets/icons/map.svg'
-import globe from '../../assets/icons/map-globe.svg'
-import gpsLocation from '../../assets/icons/map-gpsLocation.svg'
 import mouldsSVG from '../../assets/icons/moulds.svg'
 import otherSVG from '../../assets/icons/other.svg'
 import patreonSVG from '../../assets/icons/patreon.svg'
@@ -47,15 +39,26 @@ import productsSVG from '../../assets/icons/products.svg'
 import profileSVG from '../../assets/icons/profile.svg'
 import recyclingSVG from '../../assets/icons/recycling.svg'
 import revenueSVG from '../../assets/icons/revenue.svg'
+import searchSVG from '../../assets/icons/icon-search.svg'
 import slidersSVG from '../../assets/icons/sliders.svg'
+import socialMediaSVG from '../../assets/icons/icon-social-media.svg'
+import starActiveSVG from '../../assets/icons/icon-star-active.svg'
+import starSVG from '../../assets/icons/icon-star-default.svg'
 import starterKitsSVG from '../../assets/icons/starter-kits.svg'
 import stepSVG from '../../assets/icons/step.svg'
 import supporterSVG from '../../assets/icons/supporter.svg'
-import thunderboltSVG from '../../assets/icons/thunderbolt.svg'
 import thunderboltGreySVG from '../../assets/icons/thunderbolt-grey.svg'
+import thunderboltSVG from '../../assets/icons/thunderbolt.svg'
+import updateSVG from '../../assets/icons/icon-update.svg'
+import usefulSVG from '../../assets/icons/icon-useful.svg'
 import utilitiesSVG from '../../assets/icons/utilities.svg'
+import verifiedSVG from '../../assets/icons/icon-verified-badge.svg'
+import viewSVG from '../../assets/icons/icon-views.svg'
+import visitorsAppointmentSVG from '../../assets/icons/visitors-appointment.svg'
+import visitorsClosedSVG from '../../assets/icons/visitors-closed.svg'
+import visitorsOpenSVG from '../../assets/icons/visitors-open.svg'
 import volunteerSVG from '../../assets/icons/volunteer.svg'
-import loadingSVG from '../../assets/images/loading.svg'
+import websiteSVG from '../../assets/icons/icon-website.svg'
 
 const imgStyle = {
   maxWidth: '100%',
@@ -90,6 +93,8 @@ export const iconMap = {
   flagUnknown: <ImageIcon src={flagUnknownSVG} />,
   food: <ImageIcon src={foodSVG} />,
   fromTheTeam: <ImageIcon src={fromTheTeamSVG} />,
+  globe: <ImageIcon src={globe} />,
+  gpsLocation: <ImageIcon src={gpsLocation} />,
   guides: <ImageIcon src={guidesSVG} />,
   hide: <ImageIcon src={eyeCrossedSVG} />,
   hyperlink: <ImageIcon src={hyperlinkSVG} />,
@@ -107,6 +112,7 @@ export const iconMap = {
   products: <ImageIcon src={productsSVG} />,
   recycling: <ImageIcon src={recyclingSVG} />,
   revenue: <ImageIcon src={revenueSVG} />,
+  search: <ImageIcon src={searchSVG} />,
   show: <ImageIcon src={eyeSVG} />,
   sliders: <ImageIcon src={slidersSVG} />,
   socialMedia: <ImageIcon src={socialMediaSVG} />,
@@ -123,8 +129,8 @@ export const iconMap = {
   verified: <ImageIcon src={verifiedSVG} />,
   view: <ImageIcon src={viewSVG} />,
   volunteer: <ImageIcon src={volunteerSVG} />,
+  visitorsAppointment: <ImageIcon src={visitorsAppointmentSVG} />,
+  visitorsClosed: <ImageIcon src={visitorsClosedSVG} />,
+  visitorsOpen: <ImageIcon src={visitorsOpenSVG} />,
   website: <ImageIcon src={websiteSVG} />,
-  search: <ImageIcon src={searchSVG} />,
-  globe: <ImageIcon src={globe}></ImageIcon>,
-  gpsLocation: <ImageIcon src={gpsLocation}></ImageIcon>,
 }

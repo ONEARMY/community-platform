@@ -3,14 +3,14 @@ import { Divider, Flex, Text } from 'theme-ui'
 
 export interface MemberHistoryProps {
   memberSince: string | undefined
-  lastActive: string | undefined,
+  lastActive: string | undefined
 }
 
 export const MemberHistory = (props: MemberHistoryProps) => {
-
   const memberSince = new Date(props?.memberSince || '0').getFullYear()
-  const lastActive = formatDistanceToNow(new Date(props?.lastActive || 0), { addSuffix: true })
-
+  const lastActive = formatDistanceToNow(new Date(props?.lastActive || 0), {
+    addSuffix: true,
+  })
 
   return (
     <Flex
@@ -21,7 +21,9 @@ export const MemberHistory = (props: MemberHistoryProps) => {
         justifyContent: 'flex-start',
       }}
     >
-      <Text variant="quiet" sx={{ fontSize: 1 }}>Member since {memberSince}</Text>
+      <Text variant="quiet" sx={{ fontSize: 1 }}>
+        Member since {memberSince}
+      </Text>
       <Divider
         sx={{
           display: ['none', 'none', 'block'],
@@ -32,7 +34,9 @@ export const MemberHistory = (props: MemberHistoryProps) => {
           m: 0,
         }}
       />
-      <Text variant="quiet" sx={{ fontSize: 1 }}>Last active {lastActive}</Text>
+      <Text variant="quiet" sx={{ fontSize: 1 }}>
+        Last active {lastActive}
+      </Text>
     </Flex>
   )
 }

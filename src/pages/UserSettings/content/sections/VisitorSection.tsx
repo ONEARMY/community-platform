@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Field } from 'react-final-form'
 import { observer } from 'mobx-react'
-import { FieldTextarea, Select } from 'oa-components'
-import { userVisitorPreferencePolicies, visitorPolicyLabels } from 'oa-shared'
+import { FieldTextarea, Select, visitorDisplayData } from 'oa-components'
+import { userVisitorPreferencePolicies } from 'oa-shared'
 import { fields, headings } from '../../labels'
 import { Flex, Heading, Switch, Text } from 'theme-ui'
 
@@ -14,7 +14,7 @@ interface Props {
 
 const visitorPolicyOptions = userVisitorPreferencePolicies.map((policy) => ({
   value: policy,
-  label: visitorPolicyLabels.get(policy) || policy,
+  label: visitorDisplayData.get(policy)?.label || policy,
 }))
 
 function findPolicy(policyValue: UserVisitorPreferencePolicy) {

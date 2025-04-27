@@ -1,4 +1,4 @@
-import { visitorPolicyLabels } from 'oa-shared'
+import { visitorDisplayData } from 'oa-components'
 import { Flex, Text } from 'theme-ui'
 
 import type { IProfileTag, UserVisitorPreference } from 'oa-shared'
@@ -45,7 +45,8 @@ const Tag = ({ label, color, large, onClick }: TagProps) => {
         backgroundColor: `${color}20`,
         color: color,
         ...sizing,
-        ...(onClick ? {} : { paddingTop: '12px' }),
+        // Correction for misalignment due to \u24D8
+        ...(large && !onClick ? { paddingTop: '12px' } : {}),
         ':hover': onClick
           ? {
               cursor: 'pointer',
@@ -88,7 +89,7 @@ export const ProfileTagsList = (props: IProps) => {
       {openToVisitors && (
         <Tag
           color={policyColors.get(openToVisitors.policy)}
-          label={`${visitorPolicyLabels.get(openToVisitors.policy)} \u24D8`}
+          label={`${visitorDisplayData.get(openToVisitors.policy)?.label} \u24D8`}
           onClick={showVisitorDetails}
           large={true}
         />

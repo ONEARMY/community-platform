@@ -1,5 +1,5 @@
-import { useContext } from 'react'
-import { UserStatistics } from 'oa-components'
+import { useState, useContext } from 'react'
+import { UserStatistics, VisitorModal } from 'oa-components'
 import { UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { ProfileTags } from 'src/common/ProfileTags'
@@ -9,22 +9,26 @@ import { Box, Divider, Flex, Paragraph } from 'theme-ui'
 
 import type { IUser } from 'oa-shared'
 import type { UserCreatedDocs } from '../types'
-import { useState } from 'react'
-import { VisitorModal } from './VisitorModal'
 
 interface IProps {
   docs: UserCreatedDocs
   user: IUser
+  selectTab: (target: string) => void
 }
 
-export const ProfileDetails = ({ docs, user }: IProps) => {
+export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
   const { about, location, tags, openToVisitors, userName } = user
   const [showVisitorModal, setShowVisitorModal] = useState<boolean>(false)
 
   const showVisitorDetails = () => {
-    console.log('yes!')
-
     setShowVisitorModal(true)
+  }
+
+  const hideVisitorDetails = (target?: string) => {
+    setShowVisitorModal(false)
+    if (target) {
+      selectTab(target)
+    }
   }
 
   const env = useContext(EnvironmentContext)
@@ -64,8 +68,8 @@ export const ProfileDetails = ({ docs, user }: IProps) => {
           {openToVisitors && (
             <VisitorModal
               show={showVisitorModal}
-              hide={() => setShowVisitorModal(false)}
-              openToVisitors={openToVisitors}
+              hide={hideVisitorDetails}
+              user={user}
             />
           )}
         </Flex>

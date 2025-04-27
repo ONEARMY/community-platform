@@ -15,6 +15,7 @@ import UserCreatedDocuments from './UserCreatedDocuments'
 
 import type { IUser } from 'oa-shared'
 import type { UserCreatedDocs } from '../types'
+import { useState } from 'react'
 
 interface IProps {
   docs: UserCreatedDocs
@@ -40,6 +41,8 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
 
   const defaultValue =
     useLocationHook?.hash?.slice(1) || (hasProfile ? 'profile' : 'contact')
+
+  const [selectedTab, setSelectedTab] = useState(defaultValue)
 
   return (
     <Flex
@@ -81,7 +84,12 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
           <Box sx={{ width: '100%' }}>
             <ProfileHeader user={user} />
 
-            <Tabs defaultValue={defaultValue}>
+            <Tabs
+              value={selectedTab}
+              onChange={(_: Event, value: string) => {
+                setSelectedTab(value)
+              }}
+            >
               <TabsList>
                 {hasProfile && <Tab value="profile">Profile</Tab>}
                 {hasContributed && (
@@ -101,7 +109,11 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
                 )}
               </TabsList>
               <TabPanel value="profile">
-                <ProfileDetails docs={docs} user={user} />
+                <ProfileDetails
+                  docs={docs}
+                  user={user}
+                  selectTab={setSelectedTab}
+                />
               </TabPanel>
               {hasContributed && (
                 <TabPanel value="contributions">

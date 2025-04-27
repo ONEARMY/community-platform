@@ -137,7 +137,10 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
               )}
             </Tabs>
           </Box>
-          <MemberHistory memberSince={user.profileCreated} lastActive={user._lastActive} />
+          <MemberHistory
+            memberSince={user.profileCreated}
+            lastActive={user._lastActive}
+          />
         </Flex>
       </Card>
     </Flex>

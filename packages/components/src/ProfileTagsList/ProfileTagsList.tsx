@@ -1,4 +1,4 @@
-import { visitorDisplayData } from 'oa-components'
+import { visitorDisplayData } from '..'
 import { Flex, Text } from 'theme-ui'
 
 import type { IProfileTag, UserVisitorPreference } from 'oa-shared'
@@ -70,14 +70,12 @@ export const ProfileTagsList = (props: IProps) => {
   const { tags, openToVisitors, showVisitorModal, sx, large } = props
   const tagList = tags || []
 
-  const showVisitorDetails = () => {
-    if (showVisitorModal) {
-      showVisitorModal()
-    }
-  }
-
   return (
-    <Flex data-cy="ProfileTagsList" sx={{ gap: 1, flexWrap: 'wrap', ...sx }}>
+    <Flex
+      data-cy="ProfileTagsList"
+      data-testid="ProfileTagsList"
+      sx={{ gap: 1, flexWrap: 'wrap', ...sx }}
+    >
       {tagList.map(({ label, color }, index) => (
         <Tag
           key={index}
@@ -90,7 +88,9 @@ export const ProfileTagsList = (props: IProps) => {
         <Tag
           color={policyColors.get(openToVisitors.policy)}
           label={`${visitorDisplayData.get(openToVisitors.policy)?.label} \u24D8`}
-          onClick={showVisitorDetails}
+          onClick={() => {
+            showVisitorModal && showVisitorModal()
+          }}
           large={true}
         />
       )}

@@ -1,13 +1,9 @@
-import { ButtonIcon, Modal } from 'oa-components'
+import { ButtonIcon, Modal } from '..'
 import { Flex, Text } from 'theme-ui'
 
 import { iconMap } from '../Icon/svgs'
 
-import type {
-  IUser,
-  UserVisitorPreference,
-  UserVisitorPreferencePolicy,
-} from 'oa-shared'
+import type { IUser, UserVisitorPreferencePolicy } from 'oa-shared'
 import type { JSX } from 'react'
 import { Button } from '../Button/Button'
 import { Icon } from '../Icon/Icon'
@@ -49,14 +45,13 @@ export const visitorDisplayData = new Map<
   ],
 ])
 
-export interface IProps {
+export interface VisitorModalProps {
   show: boolean
   hide: (target?: string) => void
-  openToVisitors: UserVisitorPreference
   user: IUser
 }
 
-export const VisitorModal = (props: IProps) => {
+export const VisitorModal = (props: VisitorModalProps) => {
   const { show, hide, user } = props
   const { displayName, openToVisitors } = user
 
@@ -71,7 +66,7 @@ export const VisitorModal = (props: IProps) => {
     <Modal
       isOpen={show}
       onDidDismiss={hide}
-      width="450px"
+      width={450}
       sx={{ padding: '0 !important' }}
     >
       <Flex

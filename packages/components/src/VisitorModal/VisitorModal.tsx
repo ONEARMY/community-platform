@@ -1,4 +1,4 @@
-import { ButtonIcon, Modal } from '..'
+import { ButtonIcon, Modal } from 'oa-components'
 import { Flex, Text } from 'theme-ui'
 
 import { iconMap } from '../Icon/svgs'

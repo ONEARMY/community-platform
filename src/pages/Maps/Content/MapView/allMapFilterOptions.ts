@@ -48,5 +48,10 @@ export const allMapFilterOptions: MapFilterOptionsList = [
     filterType: 'badge',
     label: 'Supporter',
   },
+  {
+    _id: 'visitors',
+    filterType: 'setting',
+    label: 'Open to visitors',
+  },
   ...profileTags,
 ]

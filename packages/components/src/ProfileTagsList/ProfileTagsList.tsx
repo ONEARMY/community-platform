@@ -1,4 +1,4 @@
-import { visitorDisplayData } from '..'
+import { visitorDisplayData } from 'oa-components'
 import { Flex, Text } from 'theme-ui'
 
 import type { IProfileTag, UserVisitorPreference } from 'oa-shared'

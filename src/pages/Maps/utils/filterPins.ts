@@ -7,47 +7,54 @@ export const filterPins = (
   if (activePinFilters.length === 0) {
     return pins
   }
-  const typeFilters = activePinFilters
-    .filter(({ filterType }) => filterType === 'profileType')
-    .map(({ _id }) => _id)
+  const activeFilterIdsForType = (type: string) =>
+    activePinFilters
+      .filter(({ filterType }) => filterType === type)
+      .map(({ _id }) => _id)
 
-  let filteredPins: IMapPin[] = []
+  const typeFilters = activeFilterIdsForType('profileType')
+
+  let filteredPins: IMapPin[] = [...pins]
 
   if (typeFilters.length > 0) {
     const profileTypeFilteredList = pins.filter(
       ({ creator }) =>
         creator?.profileType && typeFilters.includes(creator?.profileType),
     )
-    filteredPins.push(...profileTypeFilteredList)
+    filteredPins = profileTypeFilteredList
   }
 
-  const tagFilters = activePinFilters
-    .filter(({ filterType }) => filterType === 'profileTag')
-    .map(({ _id }) => _id)
+  const tagFilters = activeFilterIdsForType('profileTag')
 
   if (tagFilters.length > 0) {
-    const listToFilter = filteredPins.length > 0 ? filteredPins : pins
-    const tagFilteredList = listToFilter.filter(({ creator }) => {
+    const tagFilteredList = filteredPins.filter(({ creator }) => {
       const tagIds = creator?.tags?.map(({ _id }) => _id)
       return tagFilters.some((tagId) => tagIds?.includes(tagId))
     })
     filteredPins = tagFilteredList
   }
 
-  const badgeFilters = activePinFilters
-    .filter(({ filterType }) => filterType === 'badge')
-    .map(({ _id }) => _id)
+  const badgeFilters = activeFilterIdsForType('badge')
 
   if (badgeFilters.length > 0) {
-    const listToFilter = filteredPins.length > 0 ? filteredPins : pins
-    const badgeFilteredList = listToFilter.filter(({ creator }) => {
-      if (!creator?.badges) return
+    const badgeFilteredList = filteredPins.filter(({ creator }) => {
+      if (!creator?.badges) return false
       const badges = Object.keys(creator?.badges).filter(
         (key) => creator?.badges && creator.badges[key],
       )
       return badgeFilters.filter((badge) => badges.includes(badge)).length > 0
     })
     filteredPins = badgeFilteredList
+  }
+
+  const settingFilters = activeFilterIdsForType('setting')
+
+  if (settingFilters.length > 0) {
+    // Right now visitor filter is only setting filter. If N>1 this should be smarter.
+    filteredPins = filteredPins.filter(
+      ({ creator }) =>
+        creator?.openToVisitors && creator.openToVisitors.policy !== 'closed',
+    )
   }
 
   return filteredPins

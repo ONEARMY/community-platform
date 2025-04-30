@@ -46,14 +46,56 @@ export const visitorDisplayData = new Map<
   ],
 ])
 
-export interface VisitorModalProps {
-  show: boolean
+interface HideProp {
   hide: (target?: string) => void
+}
+
+type HeaderProps = HideProp & { data: DisplayData }
+
+const VisitorModalHeader = ({ hide, data }: HeaderProps) => (
+  <Flex
+    sx={{
+      borderBottom: '1px solid',
+      borderColor: '#999999',
+      gap: 2,
+      justifyContent: 'space-between',
+      padding: 0,
+      alignItems: 'anchor-center',
+      paddingLeft: '16px',
+    }}
+  >
+    <Flex sx={{ alignItems: 'center', columnGap: '5px' }}>
+      {data.icon}
+      {data.label}
+    </Flex>
+    <ButtonIcon
+      data-cy="VisitorModal-CloseButton"
+      icon="close"
+      onClick={() => hide()}
+      sx={{ border: 'none', paddingLeft: 2, paddingRight: 3 }}
+    />
+  </Flex>
+)
+
+const ContactSpaceButton = ({ hide }: HideProp) => (
+  <Button
+    sx={{ margin: 1, width: '100%', justifyContent: 'center' }}
+    onClick={() => hide('contact')}
+  >
+    {/* Not using native button icon to allow centralization together with text */}
+    <Flex sx={{ gap: '10px', alignItems: 'center' }}>
+      <Icon glyph="contact" />
+      Contact the space
+    </Flex>
+  </Button>
+)
+
+export type VisitorModalProps = HideProp & {
+  show: boolean
   user: IUser
 }
 
-export const VisitorModal = (props: VisitorModalProps) => {
-  const { show, hide, user } = props
+export const VisitorModal = ({ show, hide, user }: VisitorModalProps) => {
   const { displayName, openToVisitors } = user
 
   const displayData =
@@ -70,28 +112,7 @@ export const VisitorModal = (props: VisitorModalProps) => {
       width={450}
       sx={{ padding: '0 !important' }}
     >
-      <Flex
-        sx={{
-          borderBottom: '1px solid',
-          borderColor: '#999999',
-          gap: 2,
-          justifyContent: 'space-between',
-          padding: 0,
-          alignItems: 'anchor-center',
-          paddingLeft: '16px',
-        }}
-      >
-        <Flex sx={{ alignItems: 'center', columnGap: '5px' }}>
-          {displayData.icon}
-          {displayData.label}
-        </Flex>
-        <ButtonIcon
-          data-cy="VisitorModal-CloseButton"
-          icon="close"
-          onClick={() => hide()}
-          sx={{ border: 'none', paddingLeft: 2, paddingRight: 3 }}
-        />
-      </Flex>
+      <VisitorModalHeader data={displayData} hide={hide} />
       <Flex sx={{ flexDirection: 'column', padding: '16px' }}>
         {openToVisitors.details && <>Details from {displayName}:</>}
         <Text variant="quiet">
@@ -106,16 +127,7 @@ export const VisitorModal = (props: VisitorModalProps) => {
             borderColor: '#999999',
           }}
         >
-          <Button
-            sx={{ margin: 1, width: '100%', justifyContent: 'center' }}
-            onClick={() => hide('contact')}
-          >
-            {/* Not using native button icon to allow centralization together with text */}
-            <Flex sx={{ gap: '10px', alignItems: 'center' }}>
-              <Icon glyph="contact" />
-              Contact the space
-            </Flex>
-          </Button>
+          <ContactSpaceButton hide={hide} />
         </Flex>
       )}
     </Modal>

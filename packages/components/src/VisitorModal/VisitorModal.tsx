@@ -1,12 +1,12 @@
 import { ButtonIcon, Modal } from 'oa-components'
 import { Flex, Text } from 'theme-ui'
 
+import { Button } from '../Button/Button'
+import { Icon } from '../Icon/Icon'
 import { iconMap } from '../Icon/svgs'
 
 import type { IUser, UserVisitorPreferencePolicy } from 'oa-shared'
 import type { JSX } from 'react'
-import { Button } from '../Button/Button'
-import { Icon } from '../Icon/Icon'
 
 interface DisplayData {
   icon: JSX.Element

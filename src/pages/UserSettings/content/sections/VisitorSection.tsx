@@ -3,8 +3,9 @@ import { Field } from 'react-final-form'
 import { observer } from 'mobx-react'
 import { FieldTextarea, Select, visitorDisplayData } from 'oa-components'
 import { userVisitorPreferencePolicies } from 'oa-shared'
-import { fields, headings } from '../../labels'
 import { Flex, Heading, Switch, Text } from 'theme-ui'
+
+import { fields, headings } from '../../labels'
 
 import type { IUser, UserVisitorPreferencePolicy } from 'oa-shared'
 

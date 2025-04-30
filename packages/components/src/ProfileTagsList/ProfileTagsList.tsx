@@ -1,5 +1,6 @@
-import { visitorDisplayData } from 'oa-components'
 import { Flex, Text } from 'theme-ui'
+
+import { visitorDisplayData } from '../VisitorModal/VisitorModal'
 
 import type { IProfileTag, UserVisitorPreference } from 'oa-shared'
 import type { ComponentProps } from 'react'

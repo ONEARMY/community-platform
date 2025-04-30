@@ -1,7 +1,7 @@
+import { ProfileTagsList } from 'oa-components'
 import { getValidTags } from 'src/utils/getValidTags'
 
 import type { ISelectedTags, UserVisitorPreference } from 'oa-shared'
-import { ProfileTagsList } from 'oa-components'
 
 export type ShowVisitorModal = () => void
 

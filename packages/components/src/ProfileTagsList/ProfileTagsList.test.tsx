@@ -3,10 +3,10 @@ import '@testing-library/jest-dom/vitest'
 import { describe, expect, it, vi } from 'vitest'
 
 import { render } from '../test/utils'
+import { ProfileTagsList } from './ProfileTagsList'
 import { Default } from './ProfileTagsList.stories'
 
 import type { IProps } from './ProfileTagsList'
-import { ProfileTagsList } from './ProfileTagsList'
 
 describe('ProfileTagsList', () => {
   it('shows the electronics tag from default arguments', () => {

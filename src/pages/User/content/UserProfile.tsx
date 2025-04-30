@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { MemberBadge, Tab, TabPanel, Tabs, TabsList } from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
@@ -15,7 +16,6 @@ import UserCreatedDocuments from './UserCreatedDocuments'
 
 import type { IUser } from 'oa-shared'
 import type { UserCreatedDocs } from '../types'
-import { useState } from 'react'
 
 interface IProps {
   docs: UserCreatedDocs

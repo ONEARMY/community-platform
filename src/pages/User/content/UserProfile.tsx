@@ -94,7 +94,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
                     {heading}
                   </Tab>
                 )}
-                {hasContactOption && (
+                {(hasContactOption && !isViewingOwnProfile) && (
                   <Tab data-cy="contact-tab" value="contact">
                     Contact
                   </Tab>
@@ -113,7 +113,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
                   <Impact impact={impact} user={user} />
                 </TabPanel>
               )}
-              {hasContactOption && (
+              {(hasContactOption && !isViewingOwnProfile) && (
                 <TabPanel value="contact">
                   <ProfileContact user={user} />
                 </TabPanel>

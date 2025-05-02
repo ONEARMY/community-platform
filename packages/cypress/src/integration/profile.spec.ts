@@ -76,7 +76,9 @@ describe('[Profile]', () => {
       cy.step('Go to contact tab')
       cy.get('[data-cy=contact-tab]').click()
       cy.get('[data-cy="UserContactForm"]').should('be.visible')
-      cy.contains(`${contact.title} ${user.username}`).should('be.visible')
+      cy.contains(`${contact.title} ${subscriber.userName}`).should(
+        'be.visible',
+      )
 
       cy.step('Form errors without a message')
       cy.get('[data-cy=contact-submit]').click()

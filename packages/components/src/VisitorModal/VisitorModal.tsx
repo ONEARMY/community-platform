@@ -1,19 +1,12 @@
 import { Flex, Text } from 'theme-ui'
 
-import { Button } from '../Button/Button'
-import { ButtonIcon } from '../ButtonIcon/ButtonIcon'
-import { Icon } from '../Icon/Icon'
 import { iconMap } from '../Icon/svgs'
 import { Modal } from '../Modal/Modal'
+import { VisitorModalFooter } from './VisitorModalFooter'
+import { VisitorModalHeader } from './VisitorModalHeader'
 
 import type { IUser, UserVisitorPreferencePolicy } from 'oa-shared'
-import type { ReactElement } from 'react'
-
-interface DisplayData {
-  icon: ReactElement
-  label: string
-  default: string
-}
+import type { DisplayData, HideProp } from './props'
 
 export const visitorDisplayData = new Map<
   UserVisitorPreferencePolicy,
@@ -46,57 +39,13 @@ export const visitorDisplayData = new Map<
   ],
 ])
 
-interface HideProp {
-  hide: (target?: string) => void
-}
-
-type HeaderProps = HideProp & { data: DisplayData }
-
-const VisitorModalHeader = ({ hide, data }: HeaderProps) => (
-  <Flex
-    sx={{
-      borderBottom: '1px solid',
-      borderColor: '#999999',
-      gap: 2,
-      justifyContent: 'space-between',
-      padding: 0,
-      alignItems: 'anchor-center',
-      paddingLeft: '16px',
-    }}
-  >
-    <Flex sx={{ alignItems: 'center', columnGap: '5px' }}>
-      {data.icon}
-      {data.label}
-    </Flex>
-    <ButtonIcon
-      data-cy="VisitorModal-CloseButton"
-      icon="close"
-      onClick={() => hide()}
-      sx={{ border: 'none', paddingLeft: 2, paddingRight: 3 }}
-    />
-  </Flex>
-)
-
-const ContactSpaceButton = ({ hide }: HideProp) => (
-  <Button
-    sx={{ margin: 1, width: '100%', justifyContent: 'center' }}
-    onClick={() => hide('contact')}
-  >
-    {/* Not using native button icon to allow centralization together with text */}
-    <Flex sx={{ gap: '10px', alignItems: 'center' }}>
-      <Icon glyph="contact" />
-      Contact the space
-    </Flex>
-  </Button>
-)
-
 export type VisitorModalProps = HideProp & {
   show: boolean
   user: IUser
 }
 
 export const VisitorModal = ({ show, hide, user }: VisitorModalProps) => {
-  const { displayName, openToVisitors } = user
+  const { displayName, openToVisitors, isContactableByPublic } = user
 
   const displayData =
     openToVisitors && visitorDisplayData.get(openToVisitors.policy)
@@ -119,16 +68,8 @@ export const VisitorModal = ({ show, hide, user }: VisitorModalProps) => {
           {openToVisitors.details || displayData.default}
         </Text>
       </Flex>
-      {openToVisitors.policy !== 'closed' && (
-        <Flex
-          sx={{
-            padding: '16px',
-            borderTop: '1px solid',
-            borderColor: '#999999',
-          }}
-        >
-          <ContactSpaceButton hide={hide} />
-        </Flex>
+      {openToVisitors.policy !== 'closed' && isContactableByPublic && (
+        <VisitorModalFooter hide={hide} />
       )}
     </Modal>
   )

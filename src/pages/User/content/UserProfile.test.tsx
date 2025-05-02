@@ -1,14 +1,16 @@
-import { render, screen } from '@testing-library/react'
+import { BrowserRouter } from 'react-router-dom'
 import { useLocation } from '@remix-run/react'
+import { render } from '@testing-library/react'
+import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryUser } from 'src/test/factories/User'
-import { describe, expect, it, Mock, vi } from 'vitest'
-
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { describe, expect, it, vi } from 'vitest'
+
 import { UserProfile } from './UserProfile'
-import { BrowserRouter } from 'react-router-dom'
-import { ThemeProvider } from '@theme-ui/core'
+
+import type { Mock } from 'vitest'
 
 const Theme = testingThemeStyles
 

@@ -229,8 +229,8 @@ describe('[Settings]', () => {
       cy.saveSettingsForm()
 
       cy.step('Updated settings display on profile')
-      cy.visit(`u/${user.username}`)
-      cy.contains(user.username)
+      cy.visit(`u/${settings_member_new.userName}`)
+      cy.contains(settings_member_new.userName)
       cy.contains(displayName)
       cy.contains(description)
       cy.contains(tag)
@@ -359,7 +359,7 @@ describe('[Settings]', () => {
 
       cy.step('Updated settings display on contact tab')
       cy.get('[data-cy="contact-tab"]').click()
-      cy.contains(`Send a message to ${displayName}`)
+      cy.contains(`Send a message to ${settings_member_new.userName}`)
       cy.get('[data-cy="profile-link"]').should(
         'have.attr',
         'href',

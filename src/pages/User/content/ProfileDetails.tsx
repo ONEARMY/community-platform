@@ -1,7 +1,10 @@
+import { useContext } from 'react'
 import { UserStatistics } from 'oa-components'
 import { UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { ProfileTags } from 'src/common/ProfileTags'
+import { isModuleSupported, MODULE } from 'src/modules'
+import { EnvironmentContext } from 'src/pages/common/EnvironmentContext'
 import { Box, Divider, Flex, Paragraph } from 'theme-ui'
 
 import type { IUser } from 'oa-shared'
@@ -14,6 +17,14 @@ interface IProps {
 
 export const ProfileDetails = ({ docs, user }: IProps) => {
   const { about, location, tags, userName } = user
+
+  const env = useContext(EnvironmentContext)
+  const isMapModule = isModuleSupported(
+    env?.VITE_SUPPORTED_MODULES || '',
+    MODULE.MAP,
+  )
+
+  const country = isMapModule ? location?.country : undefined
 
   return (
     <Box style={{ height: '100%' }}>
@@ -50,7 +61,7 @@ export const ProfileDetails = ({ docs, user }: IProps) => {
             fallback={
               <UserStatistics
                 userName={userName}
-                country={location?.country}
+                country={country}
                 isVerified={user.verified}
                 isSupporter={!!user.badges?.supporter}
                 libraryCount={docs?.library.length || 0}
@@ -62,7 +73,7 @@ export const ProfileDetails = ({ docs, user }: IProps) => {
           >
             <UserStatistics
               userName={userName}
-              country={location?.country}
+              country={country}
               isVerified={user.verified}
               isSupporter={!!user.badges?.supporter}
               libraryCount={docs?.library.length || 0}

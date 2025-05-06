@@ -1,3 +1,4 @@
+import { commonStyles } from 'oa-themes'
 import { Flex } from 'theme-ui'
 
 import { Button } from '../Button/Button'
@@ -11,7 +12,7 @@ const ContactSpaceButton = ({ hide }: HideProp) => (
     onClick={() => hide('contact')}
   >
     {/* Not using native button icon to allow centralization together with text */}
-    <Flex sx={{ gap: '10px', alignItems: 'center' }}>
+    <Flex sx={{ gap: 1, alignItems: 'center' }}>
       <Icon glyph="contact" />
       Contact the space
     </Flex>
@@ -21,9 +22,9 @@ const ContactSpaceButton = ({ hide }: HideProp) => (
 export const VisitorModalFooter = ({ hide }: HideProp) => (
   <Flex
     sx={{
-      padding: '16px',
+      padding: 2,
       borderTop: '1px solid',
-      borderColor: '#999999',
+      borderColor: commonStyles.colors.darkGrey,
     }}
   >
     <ContactSpaceButton hide={hide} />

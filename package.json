@@ -32,7 +32,6 @@
     "build": "yarn build:shared && yarn build:themes && yarn build:components && yarn build:vite",
     "lint": "yarn lint:style && yarn lint:code",
     "lint:code": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
-    "lint:fix": "yarn lint:style --write && yarn lint:code --fix",
     "lint:style": "prettier --check '**/*.{json,js,tsx,ts}'",
     "format": "yarn format:code && yarn format:style",
     "format:code": "eslint . --ext .js,.jsx,.ts,.tsx src --color --fix",

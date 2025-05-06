@@ -6,6 +6,7 @@ import { Button } from 'oa-components'
 import { UserRole } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isModuleSupported, MODULE } from 'src/modules'
 import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
@@ -161,7 +162,9 @@ const Header = observer(() => {
                 isMobileMenuActive={showMobileNotifications}
                 areThereNotifications={areThereNotifications}
               />
-              <NotificationsSupabase device="mobile" />
+              <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+                <NotificationsSupabase device="mobile" />
+              </AuthWrapper>
             </MobileNotificationsWrapper>
           )}
           <Flex
@@ -186,7 +189,9 @@ const Header = observer(() => {
                     userNotificationsStore.markAllNotificationsNotified()
                   }
                 />
-                <NotificationsSupabase device="desktop" />
+                <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+                  <NotificationsSupabase device="desktop" />
+                </AuthWrapper>
               </>
             )}
             {isModuleSupported(
@@ -240,7 +245,9 @@ const Header = observer(() => {
                   userNotificationsStore.markAllNotificationsNotified()
                 }
               />
-              <NotificationsSupabase device="mobile" />
+              <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+                <NotificationsSupabase device="mobile" />
+              </AuthWrapper>
             </MobileMenuWrapper>
           </AnimationContainer>
         )}

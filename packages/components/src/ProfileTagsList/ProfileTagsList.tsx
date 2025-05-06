@@ -6,30 +6,27 @@ import type { IProfileTag, UserVisitorPreference } from 'oa-shared'
 import type { ComponentProps } from 'react'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
-type Sizing = {
-  large?: boolean
-}
-
-export type IProps = {
+export interface IProps {
   tags: IProfileTag[] | null
   openToVisitors?: UserVisitorPreference
   showVisitorModal?: () => void
   sx?: ThemeUIStyleObject
-} & Sizing
+  large?: boolean
+}
 
 const DEFAULT_COLOR = '#999999'
 
-type TagProps = ComponentProps<typeof Text> &
-  Sizing & {
-    label: string
-    color?: string
-  }
+type TagProps = ComponentProps<typeof Text> & {
+  label: string
+  color?: string
+  large: IProps['large']
+}
 
 const Tag = ({ label, color, large, onClick }: TagProps) => {
   const sizing = large
     ? {
-        fontSize: '14px',
-        paddingX: '15px',
+        fontSize: 2,
+        paddingX: 2,
         paddingY: '10px',
       }
     : {

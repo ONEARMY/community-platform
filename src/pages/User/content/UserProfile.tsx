@@ -86,8 +86,8 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
 
             <Tabs
               value={selectedTab}
-              onChange={(_: any, value: string | null) => {
-                value && setSelectedTab(value)
+              onChange={(_: any, value: string | number | null) => {
+                typeof value === 'string' && setSelectedTab(value)
               }}
             >
               <TabsList>

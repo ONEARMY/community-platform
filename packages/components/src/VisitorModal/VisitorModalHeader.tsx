@@ -1,3 +1,4 @@
+import { commonStyles } from 'oa-themes'
 import { Flex } from 'theme-ui'
 
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon'
@@ -10,15 +11,15 @@ export const VisitorModalHeader = ({ hide, data }: HeaderProps) => (
   <Flex
     sx={{
       borderBottom: '1px solid',
-      borderColor: '#999999',
+      borderColor: commonStyles.colors.darkGrey,
       gap: 2,
       justifyContent: 'space-between',
       padding: 0,
       alignItems: 'anchor-center',
-      paddingLeft: '16px',
+      paddingLeft: 2,
     }}
   >
-    <Flex sx={{ alignItems: 'center', columnGap: '5px' }}>
+    <Flex sx={{ alignItems: 'center', columnGap: 1 }}>
       {data.icon}
       {data.label}
     </Flex>

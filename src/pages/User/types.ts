@@ -1,6 +1,6 @@
-import type { ILibrary, IResearchDB } from 'oa-shared'
+import type { ILibrary, ResearchItem } from 'oa-shared'
 
 export interface UserCreatedDocs {
-  library: ILibrary.DB[]
-  research: IResearchDB[]
+  projects: ILibrary.DB[]
+  research: Partial<ResearchItem>[]
 }

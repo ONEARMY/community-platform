@@ -16,7 +16,7 @@ describe('research.service', () => {
 
       // Call search with mock parameters
       const result = await researchService.search(
-        ['sample'],
+        'sample',
         'science',
         'Newest',
         null,
@@ -33,7 +33,7 @@ describe('research.service', () => {
       global.fetch = vi.fn().mockRejectedValue('error')
 
       const result = await researchService.search(
-        ['sample'],
+        'sample',
         'science',
         'Newest',
         null,
@@ -43,34 +43,13 @@ describe('research.service', () => {
     })
   })
 
-  describe('getResearchCategories', () => {
-    it('fetches research categories', async () => {
-      global.fetch = vi.fn().mockResolvedValue({
-        json: () =>
-          Promise.resolve({ categories: [{ id: 'cat1', name: 'Science' }] }),
-      })
-
-      const result = await researchService.getResearchCategories()
-
-      expect(result).toEqual([{ id: 'cat1', name: 'Science' }])
-    })
-
-    it('handles errors in fetching research categories', async () => {
-      global.fetch = vi.fn().mockRejectedValue('error')
-
-      const result = await researchService.getResearchCategories()
-
-      expect(result).toEqual([])
-    })
-  })
-
   describe('getDraftCount', () => {
     it('fetches draft count for a user', async () => {
       global.fetch = vi.fn().mockResolvedValue({
         json: () => Promise.resolve({ total: 5 }),
       })
 
-      const result = await researchService.getDraftCount('user123')
+      const result = await researchService.getDraftCount()
 
       expect(result).toBe(5)
     })
@@ -78,7 +57,7 @@ describe('research.service', () => {
     it('handles errors in fetching draft count', async () => {
       global.fetch = vi.fn().mockRejectedValue('error')
 
-      const result = await researchService.getDraftCount('user123')
+      const result = await researchService.getDraftCount()
 
       expect(result).toBe(0)
     })
@@ -93,7 +72,7 @@ describe('research.service', () => {
           }),
       })
 
-      const result = await researchService.getDrafts('user123')
+      const result = await researchService.getDrafts()
 
       expect(result).toEqual([{ id: 'draft1', title: 'Draft Research' }])
     })
@@ -101,7 +80,7 @@ describe('research.service', () => {
     it('handles errors in fetching drafts', async () => {
       global.fetch = vi.fn().mockRejectedValue('error')
 
-      const result = await researchService.getDrafts('user123')
+      const result = await researchService.getDrafts()
 
       expect(result).toEqual([])
     })

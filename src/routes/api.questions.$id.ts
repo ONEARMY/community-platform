@@ -1,15 +1,15 @@
-import { Question } from 'oa-shared'
+import { Image, Question } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { hasAdminRightsSupabase, validateImages } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
-import { utilsServiceServer } from '../services/utilsService.server'
+import { contentServiceServer } from '../services/contentService.server'
 import { uploadImages } from './api.questions'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBImage, DBProfile, DBQuestion } from 'oa-shared'
+import type { DBProfile, DBQuestion } from 'oa-shared'
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   try {
@@ -60,7 +60,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const questionId = Number(params.id)
 
-    let images: DBImage[] = []
+    let images: Image[] = []
 
     if (imagesToKeepIds.length > 0) {
       const questionImages = await client
@@ -80,7 +80,15 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       const imageResult = await uploadImages(questionId, uploadedImages, client)
 
       if (imageResult) {
-        images = [...images, ...imageResult.images]
+        const newImages = imageResult.images.map(
+          (x) =>
+            new Image({
+              id: x.id,
+              publicUrl: x.fullPath,
+            }),
+        )
+
+        images = [...images, ...newImages]
       }
     }
 
@@ -107,7 +115,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     return Response.json({ question }, { headers, status: 200 })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return Response.json(
       {},
       { status: 500, statusText: 'Error creating question' },
@@ -146,7 +154,7 @@ async function validateRequest(
   const questionId = Number(params.id!)
 
   if (
-    await utilsServiceServer.isDuplicateExistingSlug(
+    await contentServiceServer.isDuplicateExistingSlug(
       slug,
       questionId,
       client,

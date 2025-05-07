@@ -1,10 +1,8 @@
 /* eslint-disable no-case-declarations */
-import { toJS } from 'mobx'
-import { ResearchUpdateStatus } from 'oa-shared'
 import { logger } from 'src/logger'
 import { filterNonDeletedComments } from 'src/utils/filterNonDeletedComments'
 
-import type { IDiscussion, IResearch } from 'oa-shared'
+import type { IDiscussion } from 'oa-shared'
 import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 
@@ -23,29 +21,12 @@ const calculateLastestCommentDate = (comments): string => {
   ).toISOString()
 }
 
-export const liveResearchUpdatesCommentCounts = (
-  updates: IResearch.Update[],
-) => {
-  if (!updates) return 0
-
-  const publishedUpdates = updates.filter(
-    ({ status, _deleted }) =>
-      _deleted === false && !(status === ResearchUpdateStatus.DRAFT),
-  )
-
-  const updatesCommentCount = publishedUpdates.map(
-    ({ commentCount }) => commentCount || 0,
-  )
-
-  return updatesCommentCount.reduce((sum, current) => sum + current, 0)
-}
-
 export const updateDiscussionMetadata = async (
   db: DatabaseV2,
   discussion: IDiscussion,
 ) => {
-  const { comments, primaryContentId, sourceId, sourceType } = discussion
-  const collectionName = getCollectionName(sourceType)
+  const { comments, sourceId, sourceType } = discussion
+  const collectionName = 'library'
 
   if (!collectionName) {
     return logger.trace(
@@ -61,43 +42,13 @@ export const updateDiscussionMetadata = async (
       ? calculateLastestCommentDate(nonDeletedComments)
       : undefined
 
-  switch (collectionName) {
-    case 'library':
-      return await db
-        .collection(collectionName)
-        .doc(sourceId)
-        .update({
-          totalComments: commentCount,
-          ...(latestCommentDate ? { latestCommentDate } : {}),
-        })
-    case 'research':
-      const researchRef = db.collection('research').doc(primaryContentId)
-      const research = toJS(await researchRef.get('server')) as IResearch.Item
-
-      if (!research || !research.updates || research.updates.length === 0) {
-        return
-      }
-
-      const updates = research.updates.map((update) => {
-        return update._id === sourceId ? { ...update, commentCount } : update
-      })
-
-      const totalCommentCount = liveResearchUpdatesCommentCounts(updates)
-
-      return await researchRef.update({
-        totalCommentCount,
-        updates,
-        ...(latestCommentDate ? { latestCommentDate } : {}),
-      })
-    default:
-      return await db
-        .collection(collectionName)
-        .doc(sourceId)
-        .update({
-          commentCount,
-          ...(latestCommentDate ? { latestCommentDate } : {}),
-        })
-  }
+  return await db
+    .collection(collectionName)
+    .doc(sourceId)
+    .update({
+      totalComments: commentCount,
+      ...(latestCommentDate ? { latestCommentDate } : {}),
+    })
 }
 
 export const getCollectionName = (

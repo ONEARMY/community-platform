@@ -6,28 +6,27 @@ import {
   ConfirmModal,
   ContentStatistics,
   FollowButton,
+  ImageGallery,
   LinkifyText,
-  ModerationStatus,
+  TagList,
   UsefulStatsButton,
   Username,
 } from 'oa-components'
-import { IModerationStatus } from 'oa-shared'
+import { type IUser, type ResearchItem, ResearchStatusRecord } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
-import { TagList } from 'src/common/Tags/TagsList'
 import { logger } from 'src/logger'
 import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
-import { useResearchStore } from 'src/stores/Research/research.store'
+import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel } from 'src/utils/helpers'
 import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
+import { researchService } from '../research.service'
 import { researchStatusColour } from '../researchHelpers'
 
-import type { IResearch, IResearchDB, ITag, IUser } from 'oa-shared'
-
 interface IProps {
-  research: IResearch.ItemDB & { tagList?: ITag[] }
+  research: ResearchItem
   isEditable: boolean
   isDeletable: boolean
   loggedInUser: IUser | undefined
@@ -55,24 +54,14 @@ const ResearchDescription = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const navigate = useNavigate()
 
-  const store = useResearchStore()
-
-  const handleDelete = async (research: IResearchDB) => {
+  const handleDelete = async (research: ResearchItem) => {
     try {
-      await store.deleteResearch(research._id)
+      await researchService.deleteResearch(research.id)
       trackEvent({
         category: 'Research',
         action: 'Deleted',
         label: research.title,
       })
-      logger.debug(
-        {
-          category: 'Research',
-          action: 'Deleted',
-          label: research.title,
-        },
-        'Research marked for deletion',
-      )
 
       navigate('/research')
     } catch (err) {
@@ -85,7 +74,7 @@ const ResearchDescription = ({
     <Card variant="responsive">
       <Flex
         data-cy="research-basis"
-        data-id={research._id}
+        data-id={research.id}
         sx={{
           position: 'relative',
           overflow: 'hidden',
@@ -93,7 +82,7 @@ const ResearchDescription = ({
         }}
       >
         <Flex sx={{ flexDirection: 'column', width: '100%', padding: [2, 4] }}>
-          {research._deleted && (
+          {research.deleted && (
             <Text color="red" pl={2} mb={2} data-cy="research-deleted">
               * Marked for deletion
             </Text>
@@ -103,14 +92,12 @@ const ResearchDescription = ({
               <ClientOnly fallback={<></>}>
                 {() => (
                   <>
-                    {research.moderation === IModerationStatus.ACCEPTED && (
-                      <UsefulStatsButton
-                        votedUsefulCount={votedUsefulCount}
-                        hasUserVotedUseful={props.hasUserVotedUseful}
-                        isLoggedIn={!!props.loggedInUser}
-                        onUsefulClick={props.onUsefulClick}
-                      />
-                    )}
+                    <UsefulStatsButton
+                      votedUsefulCount={votedUsefulCount}
+                      hasUserVotedUseful={props.hasUserVotedUseful}
+                      isLoggedIn={!!props.loggedInUser}
+                      onUsefulClick={props.onUsefulClick}
+                    />
                     <FollowButton
                       hasUserSubscribed={props.hasUserSubscribed}
                       isLoggedIn={!!props.loggedInUser}
@@ -135,14 +122,14 @@ const ResearchDescription = ({
                     data-cy="Research: delete button"
                     variant="secondary"
                     icon="delete"
-                    disabled={research._deleted}
+                    disabled={research.deleted}
                     onClick={() => setShowDeleteModal(true)}
                   >
                     Delete
                   </Button>
 
                   <ConfirmModal
-                    key={research._id}
+                    key={research.id}
                     isOpen={showDeleteModal}
                     message="Are you sure you want to delete this Research?"
                     confirmButtonText="Delete"
@@ -152,39 +139,65 @@ const ResearchDescription = ({
                 </>
               )}
             </Flex>
-            <Flex
-              sx={{
-                marginBottom: 'auto',
-                minWidth: '100px',
-                borderRadius: 1,
-                height: '44px',
-                background: researchStatusColour(research.researchStatus),
-              }}
-            >
-              <Text
+            <Flex sx={{ justifyContent: 'flex-end', gap: 3 }}>
+              {research.isDraft && (
+                <Flex
+                  sx={{
+                    marginBottom: 'auto',
+                    minWidth: '100px',
+                    borderRadius: 1,
+                    height: '44px',
+                    background: 'lightgrey',
+                  }}
+                >
+                  <Text
+                    sx={{
+                      display: 'inline-block',
+                      verticalAlign: 'middle',
+                      color: 'black',
+                      fontSize: [2, 2, 3],
+                      padding: 2,
+                      margin: 'auto',
+                    }}
+                    data-cy="research-draft"
+                  >
+                    Draft
+                  </Text>
+                </Flex>
+              )}
+              <Flex
                 sx={{
-                  display: 'inline-block',
-                  verticalAlign: 'middle',
-                  color: 'black',
-                  fontSize: [2, 2, 3],
-                  padding: 2,
-                  margin: 'auto',
+                  marginBottom: 'auto',
+                  minWidth: '100px',
+                  borderRadius: 1,
+                  height: '44px',
+                  background: researchStatusColour(research.status),
                 }}
-                data-cy="research-status"
               >
-                {research.researchStatus || 'In progress'}
-              </Text>
+                <Text
+                  sx={{
+                    display: 'inline-block',
+                    verticalAlign: 'middle',
+                    color: 'black',
+                    fontSize: [2, 2, 3],
+                    padding: 2,
+                    margin: 'auto',
+                  }}
+                >
+                  {research.status
+                    ? ResearchStatusRecord[research.status]
+                    : 'In progress'}
+                </Text>
+              </Flex>
             </Flex>
           </Flex>
           <Box sx={{ marginX: 2 }}>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <UserNameTag
-                userName={research._createdBy}
-                countryCode={research.creatorCountry}
-                createdAt={research._created}
-                modifiedAt={
-                  research._contentModifiedTimestamp || research._modified
-                }
+                userName={research.author?.username || ''}
+                createdAt={research.createdAt}
+                modifiedAt={research.modifiedAt}
+                countryCode={research.author?.country}
                 action="Started"
               />
 
@@ -200,9 +213,9 @@ const ResearchDescription = ({
                   <Flex sx={{ alignItems: 'center' }}>
                     <Text
                       variant="auxiliary"
-                      mt={1}
-                      mr={1}
                       sx={{
+                        mt: 1,
+                        mr: 1,
                         color: 'lightgrey',
                       }}
                     >
@@ -216,16 +229,18 @@ const ResearchDescription = ({
               ) : null}
             </Flex>
 
-            {research.researchCategory && (
+            {research.category && (
               <Category
-                category={research.researchCategory}
+                category={research.category}
                 sx={{ fontSize: 2, mt: 2 }}
               />
             )}
             <Heading
               as="h1"
-              mt={research.researchCategory ? 1 : 2}
-              mb={1}
+              sx={{
+                mt: research.category ? 1 : 2,
+                mb: 1,
+              }}
               data-testid="research-title"
             >
               {research.title}
@@ -233,22 +248,17 @@ const ResearchDescription = ({
             <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
               <LinkifyText>{research.description}</LinkifyText>
             </Text>
-            <Flex mt={4}>
-              <TagList tags={research.tags} />
+            {research.image && (
+              <ImageGallery
+                images={formatImagesForGalleryV2([research.image]) as any}
+                allowPortrait={true}
+              />
+            )}
+            <Flex sx={{ mt: 4 }}>
+              <TagList tags={research.tags.map((t) => ({ label: t.name }))} />
             </Flex>
           </Box>
         </Flex>
-        {research.moderation !== IModerationStatus.ACCEPTED && (
-          <ModerationStatus
-            status={research.moderation}
-            contentType="research"
-            sx={{
-              position: 'absolute',
-              bottom: 0,
-              right: 0,
-            }}
-          />
-        )}
       </Flex>
       <Divider
         sx={{
@@ -261,7 +271,7 @@ const ResearchDescription = ({
           {
             icon: 'view',
             label: buildStatisticsLabel({
-              stat: research.total_views,
+              stat: research.totalViews || 0,
               statUnit: 'view',
               usePlural: true,
             }),
@@ -294,7 +304,7 @@ const ResearchDescription = ({
             icon: 'update',
             label: buildStatisticsLabel({
               stat: updatesCount || 0,
-              statUnit: 'step',
+              statUnit: 'update',
               usePlural: true,
             }),
           },

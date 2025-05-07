@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { Icon, InternalLink, Tooltip } from 'oa-components'
 
-import type { IResearch } from 'oa-shared'
+import type { ResearchItem, ResearchUpdate } from 'oa-shared'
 
 interface IProps {
-  research: IResearch.ItemDB
-  update: IResearch.UpdateDB
+  research: ResearchItem
+  update: ResearchUpdate
 }
 
 const COPY_TO_CLIPBOARD = 'Copy link to update'
@@ -14,14 +14,12 @@ const SUCCESS = 'Nice. All done. Now share away...!'
 
 export const ResearchLinkToUpdate = ({ research, update }: IProps) => {
   const [label, setLabel] = useState<string>(COPY_TO_CLIPBOARD)
-  const { slug } = research
-  const { _id } = update
 
-  const copyURLtoClipboard = async (slug, _id) => {
+  const copyURLtoClipboard = async (slug: string, id: number) => {
     setLabel(IN_PROGRESS)
     try {
       await navigator.clipboard.writeText(
-        `${location.origin}/research/${slug}#update_${_id}`,
+        `${location.origin}/research/${slug}#update_${id}`,
       )
       setLabel(SUCCESS)
     } catch (error) {
@@ -31,8 +29,8 @@ export const ResearchLinkToUpdate = ({ research, update }: IProps) => {
 
   return (
     <InternalLink
-      to={`/research/${slug}#update_${_id}`}
-      onClick={async () => copyURLtoClipboard(slug, _id)}
+      to={`/research/${research.slug}#update_${update.id}`}
+      onClick={async () => copyURLtoClipboard(research.slug, update.id)}
       data-cy="ResearchLinkToUpdate"
     >
       <Icon

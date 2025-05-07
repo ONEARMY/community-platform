@@ -10,7 +10,7 @@ import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown'
 import { validateImage } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
-import { utilsServiceServer } from '../services/utilsService.server'
+import { contentServiceServer } from '../services/contentService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
@@ -124,7 +124,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const slug = convertToSlug(data.title)
 
-    if (await utilsServiceServer.isDuplicateNewSlug(slug, client, 'news')) {
+    if (await contentServiceServer.isDuplicateNewSlug(slug, client, 'news')) {
       return Response.json(
         {},
         {
@@ -134,7 +134,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       )
     }
 
-    const uploadedHeroImageFile = formData.get('heroImage') as File
+    const uploadedHeroImageFile = formData.get('heroImage') as File | null
     const imageValidation = validateImage(uploadedHeroImageFile)
 
     if (!imageValidation.valid && imageValidation.error) {
@@ -180,13 +180,32 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const news = News.fromDB(newsResult.data[0], [])
+
     notifyDiscord(news, profile, new URL(request.url).origin)
 
-    news.heroImage = await storageServiceServer.setUploadImage(
-      client,
-      news.id,
-      uploadedHeroImageFile,
-    )
+    if (uploadedHeroImageFile) {
+      const mediaFiles = await storageServiceServer.uploadImage(
+        [uploadedHeroImageFile],
+        `news/${news.id}`,
+        client,
+      )
+
+      if (mediaFiles?.media?.length) {
+        await client
+          .from('news')
+          .update({
+            hero_image: mediaFiles.media.at(0),
+          })
+          .eq('id', news.id)
+
+        const [image] = storageServiceServer.getPublicUrls(
+          client,
+          mediaFiles.media,
+        )
+
+        news.heroImage = image
+      }
+    }
 
     return Response.json({ news }, { headers, status: 201 })
   } catch (error) {

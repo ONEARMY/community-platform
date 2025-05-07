@@ -1,10 +1,8 @@
 import { Card, Flex, Heading, Text } from 'theme-ui'
 
-import type { ReactElement } from 'react'
-
 export interface IProps {
   title: string
-  steps: ReactElement[]
+  steps: React.ReactElement[]
 }
 
 export const Guidelines = ({ title, steps }: IProps) => {

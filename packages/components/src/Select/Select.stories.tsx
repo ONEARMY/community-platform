@@ -83,7 +83,6 @@ export const FormSelect: StoryFn<typeof Select> = () => {
   const [value, setValue] = useState()
   return (
     <Select
-      variant="form"
       value={value}
       onChange={setValue}
       isMulti={true}

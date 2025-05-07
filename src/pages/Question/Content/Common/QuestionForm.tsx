@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import { useNavigate } from '@remix-run/react'
-import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import {
   CategoryField,
@@ -23,16 +23,16 @@ import {
   required,
   setAllowDraftSaveFalse,
 } from 'src/utils/validators'
+import { Alert } from 'theme-ui'
 
 import { QUESTION_MAX_IMAGES, QUESTION_MIN_TITLE_LENGTH } from '../../constants'
-import { questionContentService } from '../../questionContent.service'
 
 import type { Question, QuestionFormData } from 'oa-shared'
 import type { MainFormAction } from 'src/common/Form/types'
 
 interface IProps {
   'data-testid'?: string
-  question: Question
+  question: Question | null
   parentType: MainFormAction
 }
 
@@ -47,7 +47,8 @@ export const QuestionForm = (props: IProps) => {
     tags: [],
     images: [],
   })
-  const [saveError, setSaveError] = useState<string | null>(null)
+  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
+  const [intentionalNavigation, setIntentionalNavigation] = useState(false)
   const id = question?.id || null
 
   useEffect(() => {
@@ -71,7 +72,7 @@ export const QuestionForm = (props: IProps) => {
   }, [question])
 
   const onSubmit = async (formValues: Partial<QuestionFormData>) => {
-    setSaveError(null)
+    setSaveErrorMessage(null)
 
     try {
       const result = await questionService.upsert(id, {
@@ -84,11 +85,12 @@ export const QuestionForm = (props: IProps) => {
       })
 
       if (result) {
-        navigate('/questions/' + result.slug)
+        setIntentionalNavigation(true)
+        setTimeout(() => navigate('/questions/' + result.slug), 100)
       }
     } catch (e) {
       if (e.cause && e.message) {
-        setSaveError(e.message)
+        setSaveErrorMessage(e.message)
       }
       logger.error(e)
     }
@@ -110,48 +112,63 @@ export const QuestionForm = (props: IProps) => {
       onSubmit={onSubmit}
       mutators={{ setAllowDraftSaveFalse }}
       initialValues={initialValues}
-      render={({ submitting, handleSubmit, valid, values }) => {
+      render={({
+        dirty,
+        submitting,
+        submitSucceeded,
+        handleSubmit,
+        valid,
+        values,
+      }) => {
         const numberOfImageInputsAvailable = (values as any)?.images
           ? Math.min(
               (values as any).images.filter((x) => !!x).length + 1,
               QUESTION_MAX_IMAGES,
             )
           : 1
+
         const validate = composeValidators(
           required,
           minValue(QUESTION_MIN_TITLE_LENGTH),
           endsWithQuestionMark(),
         )
 
+        const saveError = saveErrorMessage && (
+          <Alert variant="failure" sx={{ mt: 3 }}>
+            {saveErrorMessage}
+          </Alert>
+        )
+        const unsavedChangesDialog = (
+          <UnsavedChangesDialog
+            hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
+          />
+        )
+
         return (
           <FormWrapper
             buttonLabel={LABELS.buttons[parentType]}
+            contentType="questions"
             guidelines={<QuestionPostingGuidelines />}
             handleSubmit={handleSubmit}
             heading={LABELS.headings[parentType]}
-            icon={IconHeaderHowto}
-            parentType={parentType}
             saveError={saveError}
             submitting={submitting}
+            unsavedChangesDialog={unsavedChangesDialog}
             valid={valid}
           >
-            <>
-              <TitleField
-                placeholder={LABELS.fields.title.placeholder}
-                validate={validate}
-                title={LABELS.fields.title.title}
-              />
-              <QuestionDescriptionField />
-              <QuestionImagesField
-                inputsAvailable={numberOfImageInputsAvailable}
-                existingImages={initialValues.existingImages}
-                removeExistingImage={removeExistingImage}
-              />
-              <CategoryField
-                getCategories={questionContentService.getCategories}
-              />
-              <TagsField title={LABELS.fields.tags.title} />
-            </>
+            <TitleField
+              placeholder={LABELS.fields.title.placeholder}
+              validate={validate}
+              title={LABELS.fields.title.title}
+            />
+            <QuestionDescriptionField />
+            <QuestionImagesField
+              inputsAvailable={numberOfImageInputsAvailable}
+              existingImages={initialValues.existingImages}
+              removeExistingImage={removeExistingImage}
+            />
+            <CategoryField type="questions" />
+            <TagsField title={LABELS.fields.tags.title} />
           </FormWrapper>
         )
       }}

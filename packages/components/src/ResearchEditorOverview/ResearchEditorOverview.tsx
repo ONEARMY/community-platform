@@ -1,5 +1,4 @@
 import { Box, Card, Heading, Text } from 'theme-ui'
-import { boolean, object, string } from 'yup'
 
 import { Button } from '../Button/Button'
 import { InternalLink } from '../InternalLink/InternalLink'
@@ -9,8 +8,8 @@ import type { ThemeUIStyleObject } from 'theme-ui'
 export type ResearchEditorOverviewUpdate = {
   isActive: boolean
   title: string
-  status: 'draft' | 'published'
-  slug: string | null
+  isDraft: boolean
+  id: number | null
 }
 
 export interface ResearchEditorOverviewProps {
@@ -22,13 +21,6 @@ export interface ResearchEditorOverviewProps {
   sx?: ThemeUIStyleObject
 }
 
-const updateSchema = object({
-  isActive: boolean().required(),
-  title: string().required(),
-  status: string().optional(),
-  slug: string().nullable(),
-})
-
 export const ResearchEditorOverview = (props: ResearchEditorOverviewProps) => {
   const {
     updates,
@@ -38,55 +30,56 @@ export const ResearchEditorOverview = (props: ResearchEditorOverviewProps) => {
     showBackToResearchButton,
   } = props
   return (
-    <Card sx={{ p: 4, ...sx }}>
+    <Card sx={{ padding: 4, ...sx }}>
       <Heading as="h2" mb={3} variant="small">
         Research overview
       </Heading>
       {updates?.length ? (
-        <Box as={'ul'} sx={{ margin: 0, mb: 4, p: 0, pl: 3 }}>
-          {updates
-            .filter((update) => updateSchema.isValidSync(update))
-            .map((update, index) => (
-              <Box as={'li'} key={index} sx={{ mb: 1 }}>
-                <Text variant={'quiet'}>
-                  {update.status === 'draft' ? (
-                    <Text
-                      sx={{
-                        display: 'inline-block',
-                        verticalAlign: 'middle',
-                        color: 'black',
-                        fontSize: 1,
-                        whiteSpace: 'nowrap',
-                        textOverflow: 'ellipsis',
-                        overflow: 'hidden',
-                        background: 'accent.base',
-                        padding: 1,
-                        borderRadius: 1,
-                        borderBottomRightRadius: 1,
-                        mr: 1,
-                      }}
-                    >
-                      Draft
-                    </Text>
-                  ) : null}
-                  {update.isActive ? (
-                    <strong>{update.title}</strong>
-                  ) : (
-                    <>
-                      {update.title}
-                      {update.slug ? (
-                        <InternalLink
-                          to={`/research/${researchSlug}/edit-update/${update.slug}`}
-                          sx={{ display: 'inline-block', ml: 1 }}
-                        >
-                          Edit
-                        </InternalLink>
-                      ) : null}
-                    </>
-                  )}
-                </Text>
-              </Box>
-            ))}
+        <Box
+          as="ul"
+          sx={{ margin: 0, marginBottom: 4, padding: 0, paddingLeft: 3 }}
+        >
+          {updates.map((update, index) => (
+            <Box as="li" key={index} sx={{ marginBottom: 1 }}>
+              <Text variant={'quiet'}>
+                {update.isDraft ? (
+                  <Text
+                    sx={{
+                      display: 'inline-block',
+                      verticalAlign: 'middle',
+                      color: 'black',
+                      fontSize: 1,
+                      whiteSpace: 'nowrap',
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      background: 'accent.base',
+                      padding: 1,
+                      borderRadius: 1,
+                      borderBottomRightRadius: 1,
+                      mr: 1,
+                    }}
+                  >
+                    Draft
+                  </Text>
+                ) : null}
+                {update.isActive ? (
+                  <strong>{update.title}</strong>
+                ) : (
+                  <>
+                    {update.title}
+                    {update.id ? (
+                      <InternalLink
+                        to={`/research/${researchSlug}/edit-update/${update.id}`}
+                        sx={{ display: 'inline-block', ml: 1 }}
+                      >
+                        Edit
+                      </InternalLink>
+                    ) : null}
+                  </>
+                )}
+              </Text>
+            </Box>
+          ))}
         </Box>
       ) : null}
       {showCreateUpdateButton ? (

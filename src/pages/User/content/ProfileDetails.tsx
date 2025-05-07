@@ -64,7 +64,7 @@ export const ProfileDetails = ({ docs, user }: IProps) => {
                 country={country}
                 isVerified={user.verified}
                 isSupporter={!!user.badges?.supporter}
-                libraryCount={docs?.library.length || 0}
+                libraryCount={docs?.projects.length || 0}
                 usefulCount={user.totalUseful || 0}
                 researchCount={docs?.research.length || 0}
                 totalViews={0}
@@ -76,7 +76,7 @@ export const ProfileDetails = ({ docs, user }: IProps) => {
               country={country}
               isVerified={user.verified}
               isSupporter={!!user.badges?.supporter}
-              libraryCount={docs?.library.length || 0}
+              libraryCount={docs?.projects.length || 0}
               usefulCount={user.totalUseful || 0}
               researchCount={docs?.research.length || 0}
               totalViews={user.total_views || 0}

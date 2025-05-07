@@ -17,20 +17,20 @@ Default.args = {
     {
       isActive: true,
       title: 'Update 1',
-      slug: 'update-1',
-      status: 'published',
+      id: 1,
+      isDraft: false,
     },
     {
       isActive: false,
       title: 'Update 2',
-      slug: 'update-2',
-      status: 'published',
+      id: 2,
+      isDraft: false,
     },
     {
       isActive: false,
       title: 'Update 3',
-      slug: 'update-3',
-      status: 'published',
+      id: 3,
+      isDraft: false,
     },
   ],
   researchSlug: 'abc',
@@ -57,8 +57,8 @@ DraftItem.args = {
     {
       isActive: false,
       title: 'Update 1',
-      slug: 'update-1',
-      status: 'draft',
+      id: 1,
+      isDraft: true,
     },
   ],
 }

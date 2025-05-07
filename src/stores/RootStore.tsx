@@ -3,7 +3,6 @@ import { DatabaseV2 } from './databaseV2/DatabaseV2'
 import { DiscussionStore } from './Discussions/discussions.store'
 import { LibraryStore } from './Library/library.store'
 import { MapsStore } from './Maps/maps.store'
-import { ResearchStore } from './Research/research.store'
 import { TagsStore } from './Tags/tags.store'
 import { UserNotificationsStore } from './User/notifications.store'
 import { UserStore } from './User/user.store'
@@ -17,7 +16,6 @@ export interface IStores {
   LibraryStore: LibraryStore
   userStore: UserStore
   tagsStore: TagsStore
-  researchStore: ResearchStore
   mapsStore: MapsStore
   aggregationsStore: AggregationsStore
   userNotificationsStore: UserNotificationsStore
@@ -44,7 +42,6 @@ const stores = (rootStore: IRootStore) => {
     LibraryStore: new LibraryStore(rootStore),
     userStore: new UserStore(rootStore),
     tagsStore: new TagsStore(rootStore),
-    researchStore: new ResearchStore(rootStore),
     mapsStore: new MapsStore(rootStore),
     userNotificationsStore: new UserNotificationsStore(rootStore),
     discussionStore: new DiscussionStore(rootStore),

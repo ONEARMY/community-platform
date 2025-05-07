@@ -2,20 +2,20 @@ import { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import { useNavigate } from '@remix-run/react'
 import { setIn } from 'final-form'
-import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { CategoryField } from 'src/pages/common/FormFields/Category.field'
 import { TagsField } from 'src/pages/common/FormFields/Tags.field'
 import { TitleField } from 'src/pages/common/FormFields/Title.field'
-import { NewsPostingGuidelines } from 'src/pages/News/Content/Common'
+import { NewsPostingGuidelines } from 'src/pages/News/Content/Common/NewsPostingGuidelines'
 import * as LABELS from 'src/pages/News/labels'
 import { newsService } from 'src/services/newsService'
 import { storageService } from 'src/services/storageService'
 import { composeValidators, minValue, required } from 'src/utils/validators'
+import { Alert } from 'theme-ui'
 
 import { NEWS_MIN_TITLE_LENGTH } from '../../constants'
-import { newsContentService } from '../../newsContent.service'
 import { NewsBodyField, NewsImageField } from './FormFields'
 
 import type { News, NewsFormData } from 'oa-shared'
@@ -23,7 +23,7 @@ import type { MainFormAction } from 'src/common/Form/types'
 
 interface IProps {
   'data-testid'?: string
-  news: News
+  news: News | null
   parentType: MainFormAction
 }
 
@@ -38,7 +38,9 @@ export const NewsForm = (props: IProps) => {
     tags: [],
     title: '',
   })
-  const [saveError, setSaveError] = useState<string | null>(null)
+  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
+  const [intentionalNavigation, setIntentionalNavigation] = useState(false)
+
   const id = news?.id || null
 
   useEffect(() => {
@@ -62,7 +64,7 @@ export const NewsForm = (props: IProps) => {
   }, [news])
 
   const onSubmit = async (formValues: Partial<NewsFormData>) => {
-    setSaveError(null)
+    setSaveErrorMessage(null)
 
     try {
       const result = await newsService.upsert(id, {
@@ -75,11 +77,12 @@ export const NewsForm = (props: IProps) => {
       })
 
       if (result) {
-        navigate('/news/' + result.slug)
+        setIntentionalNavigation(true)
+        setTimeout(() => navigate('/news/' + result.slug), 100)
       }
     } catch (e) {
       if (e.cause && e.message) {
-        setSaveError(e.message)
+        setSaveErrorMessage(e.message)
       }
       logger.error(e)
     }
@@ -94,7 +97,7 @@ export const NewsForm = (props: IProps) => {
       return response.publicUrl
     } catch (e) {
       if (e.cause && e.message) {
-        setSaveError(e.message)
+        setSaveErrorMessage(e.message)
       }
       logger.error(e)
     }
@@ -126,32 +129,44 @@ export const NewsForm = (props: IProps) => {
         }
         return errors
       }}
-      render={({ submitting, handleSubmit, valid }) => {
+      render={({ dirty, submitting, submitSucceeded, handleSubmit, valid }) => {
+        const saveError = saveErrorMessage && (
+          <Alert variant="failure" sx={{ mt: 3 }}>
+            {saveErrorMessage}
+          </Alert>
+        )
+        const unsavedChangesDialog = (
+          <UnsavedChangesDialog
+            hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
+          />
+        )
+        const validate = composeValidators(
+          required,
+          minValue(NEWS_MIN_TITLE_LENGTH),
+        )
+
         return (
           <FormWrapper
             buttonLabel={LABELS.buttons[parentType]}
+            contentType="news"
             guidelines={<NewsPostingGuidelines />}
             handleSubmit={handleSubmit}
             heading={LABELS.headings[parentType]}
-            icon={IconHeaderHowto}
-            parentType={parentType}
             saveError={saveError}
             submitting={submitting}
+            unsavedChangesDialog={unsavedChangesDialog}
             valid={valid}
           >
             <TitleField
               placeholder={LABELS.fields.title.placeholder}
-              validate={composeValidators(
-                required,
-                minValue(NEWS_MIN_TITLE_LENGTH),
-              )}
+              validate={validate}
               title={LABELS.fields.title.title}
             />
             <NewsImageField
               existingHeroImage={initialValues.existingHeroImage}
               removeExistingImage={removeExistingImage}
             />
-            <CategoryField getCategories={newsContentService.getCategories} />
+            <CategoryField type="news" />
             <TagsField title={LABELS.fields.tags.title} />
             <NewsBodyField imageUpload={imageUpload} />
           </FormWrapper>

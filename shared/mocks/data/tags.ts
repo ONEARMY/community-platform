@@ -1,4 +1,4 @@
-import type { DBTag } from '../../models/document'
+import type { DBTag } from '../../models/tag'
 
 export const tags = {
   g36hWyk3OckrLSH1ehdIE: {

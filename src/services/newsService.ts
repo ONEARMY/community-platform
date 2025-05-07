@@ -18,10 +18,13 @@ const upsert = async (id: number | null, form: NewsFormData) => {
     body.append('category', category?.value.toString())
   }
 
-  form.heroImage &&
+  if (form.heroImage) {
     body.append('heroImage', form.heroImage.photoData, form.heroImage.name)
-  form.existingHeroImage &&
-    body.append('existingHeroImage', form.existingHeroImage.publicUrl)
+  }
+
+  if (form.existingHeroImage) {
+    body.append('existingHeroImage', form.existingHeroImage.id)
+  }
 
   const response =
     id === null

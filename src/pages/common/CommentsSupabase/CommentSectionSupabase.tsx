@@ -7,12 +7,12 @@ import { Box, Button, Flex } from 'theme-ui'
 import { CommentItemSupabase } from './CommentItemSupabase'
 import { CreateCommentSupabase } from './CreateCommentSupabase'
 
-import type { ContentType, Reply } from 'oa-shared'
+import type { DiscussionContentTypes, Reply } from 'oa-shared'
 
 interface IProps {
   authors: Array<number>
   sourceId: number | string
-  sourceType: ContentType
+  sourceType: DiscussionContentTypes
 }
 const commentPageSize = 10
 
@@ -37,11 +37,7 @@ export const CommentSectionSupabase = (props: IProps) => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const result = await fetch(
-          `/api/discussions/${sourceType}/${sourceId}/comments`,
-        )
-        const { comments } = (await result.json()) as { comments: Comment[] }
-
+        const comments = await commentService.getComments(sourceType, sourceId)
         const highlightedCommentId = location.hash.replace('#comment:', '')
 
         if (highlightedCommentId) {

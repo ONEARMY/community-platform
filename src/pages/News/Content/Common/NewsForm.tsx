@@ -65,6 +65,7 @@ export const NewsForm = (props: IProps) => {
   }, [news])
 
   const onSubmit = async (formValues: Partial<NewsFormData>) => {
+    setIntentionalNavigation(true)
     setSaveErrorMessage(null)
 
     try {
@@ -78,7 +79,6 @@ export const NewsForm = (props: IProps) => {
       })
 
       if (result) {
-        setIntentionalNavigation(true)
         !id && (await subscribersService.add('news', result.id))
         navigate('/news/' + result.slug)
       }

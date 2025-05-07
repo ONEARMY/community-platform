@@ -70,14 +70,15 @@ In this case:
 
 #### Emulator based backend
 
-This option is slightly more complicated but allows you to run the frontend and backend system locally (except for sending emails.) This option is experimental.
+This option is slightly more complicated but allows you to run the frontend and backend system locally (except for sending emails.)
+This option is experimental. It requires you set up supabase locally, a PostgreSQL-based open source firebase alternative.
 
 This setup is:
 
 - Good for frontend development
 - Good for backend development
 
-See the details at [here](https://docs.platform.onearmy.earth/Backend%20Development/firebase-emulators-docker/).
+See the details for [setting up supabase locally here](https://github.com/ONEARMY/community-platform/blob/master/docs/supabase.md).
 
 ### Learn more
 

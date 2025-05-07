@@ -173,18 +173,27 @@ async function updateOrReplaceFile(
   path: string,
   client: SupabaseClient,
 ) {
+  const existingMedia = await client
+    .from('research_updates')
+    .select('files')
+    .eq('id', updateId)
+    .single()
+
   let media: MediaFile[] = []
+  let mediaToRemove: MediaFile[] = []
 
-  if (idsToKeep.length > 0) {
-    const existingMedia = await client
-      .from('research_updates')
-      .select('files')
-      .eq('id', updateId)
-      .single()
+  if (existingMedia.data && existingMedia.data.files?.length > 0) {
+    media = existingMedia.data.files.filter((x) => idsToKeep.includes(x.id))
+    mediaToRemove = existingMedia.data.files.filter(
+      (x) => !idsToKeep.includes(x.id),
+    )
+  }
 
-    if (existingMedia.data && existingMedia.data.files?.length > 0) {
-      media = existingMedia.data.files.filter((x) => idsToKeep.includes(x.id))
-    }
+  if (mediaToRemove.length > 0) {
+    await storageServiceServer.removeFiles(
+      mediaToRemove.map((x) => `${path}/${x.name}`),
+      client,
+    )
   }
 
   if (newUploads.length > 0) {

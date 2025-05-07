@@ -84,6 +84,10 @@ const uploadFile = async (
   return { media, errors }
 }
 
+const removeFiles = async (paths: string[], client: SupabaseClient) => {
+  await client.storage.from(process.env.TENANT_ID + '-documents').remove(paths)
+}
+
 const getPathDocuments = async (
   path: string,
   mapUrlPrefix: string,
@@ -112,5 +116,6 @@ export const storageServiceServer = {
   getPublicUrls,
   uploadImage,
   uploadFile,
+  removeFiles,
   getPathDocuments,
 }

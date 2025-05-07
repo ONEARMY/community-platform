@@ -2,13 +2,13 @@ import { Flex, Text } from 'theme-ui'
 
 import { visitorDisplayData } from '../VisitorModal/VisitorModal'
 
-import type { IProfileTag, UserVisitorPreference } from 'oa-shared'
+import type { IProfileTag, IUser } from 'oa-shared'
 import type { ComponentProps } from 'react'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface IProps {
   tags: IProfileTag[] | null
-  openToVisitors?: UserVisitorPreference
+  openToVisitors?: IUser['openToVisitors']
   showVisitorModal?: () => void
   sx?: ThemeUIStyleObject
   large?: boolean

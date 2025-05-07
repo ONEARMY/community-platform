@@ -51,12 +51,12 @@ export const ArticleCallToActionSupabaseSingleContributor: StoryFn<
     contributors={[
       {
         id: faker.datatype.number(),
-        name: faker.name.firstName(),
-        photoUrl: faker.image.imageUrl(),
         country: faker.address.countryCode(),
-        username: faker.internet.userName(),
+        displayName: faker.name.firstName(),
         isVerified: faker.datatype.boolean(),
         isSupporter: faker.datatype.boolean(),
+        photoUrl: faker.image.imageUrl(),
+        username: faker.internet.userName(),
       },
     ]}
   >
@@ -66,12 +66,12 @@ export const ArticleCallToActionSupabaseSingleContributor: StoryFn<
 
 const makeFakeUser = (): Author => ({
   id: faker.datatype.number(),
-  name: faker.name.firstName(),
-  photoUrl: faker.image.imageUrl(),
   country: faker.address.countryCode(),
-  username: faker.internet.userName(),
+  displayName: faker.name.firstName(),
   isVerified: faker.datatype.boolean(),
   isSupporter: faker.datatype.boolean(),
+  photoUrl: faker.image.imageUrl(),
+  username: faker.internet.userName(),
 })
 
 export const ArticleCallToActionSupabaseMultipleContributors: StoryFn<

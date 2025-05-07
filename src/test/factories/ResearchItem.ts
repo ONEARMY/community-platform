@@ -28,10 +28,11 @@ export const FactoryResearchItem = (
   id: faker.number.int(),
   author: {
     id: faker.number.int(),
-    name: faker.person.firstName(),
-    username: faker.internet.userName(),
+    displayName: faker.internet.userName(),
     isSupporter: false,
     isVerified: false,
+    photoUrl: faker.image.avatar(),
+    username: faker.internet.userName(),
   },
   modifiedAt: faker.date.past(),
   createdAt: faker.date.past(),

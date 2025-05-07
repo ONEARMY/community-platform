@@ -73,6 +73,7 @@ export const QuestionForm = (props: IProps) => {
   }, [question])
 
   const onSubmit = async (formValues: Partial<QuestionFormData>) => {
+    setIntentionalNavigation(true)
     setSaveErrorMessage(null)
 
     try {
@@ -86,7 +87,6 @@ export const QuestionForm = (props: IProps) => {
       })
 
       if (result) {
-        setIntentionalNavigation(true)
         !id && (await subscribersService.add('questions', result.id))
         navigate('/questions/' + result.slug)
       }

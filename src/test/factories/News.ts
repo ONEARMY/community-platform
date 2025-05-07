@@ -28,8 +28,8 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   ],
   author: {
     id: faker.number.int(),
-    name: faker.internet.userName(),
     country: faker.location.countryCode(),
+    displayName: faker.internet.userName(),
     isVerified: faker.datatype.boolean(),
     isSupporter: faker.datatype.boolean(),
     photoUrl: faker.image.avatar(),

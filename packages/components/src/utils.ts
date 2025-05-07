@@ -7,11 +7,10 @@ export const fakeAuthorSB = (
   authorOverloads: Partial<Author> = {},
 ): Author => ({
   id: faker.datatype.number(),
-  name: 'name',
+  country: faker.random.locale(),
+  displayName: faker.name.firstName(),
   username: faker.internet.userName(),
-  firebaseAuthId: faker.datatype.uuid(),
   photoUrl: faker.internet.avatar(),
-  country: '',
   isVerified: faker.datatype.boolean(),
   isSupporter: faker.datatype.boolean(),
   ...authorOverloads,

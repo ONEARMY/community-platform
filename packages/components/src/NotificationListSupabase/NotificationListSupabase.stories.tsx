@@ -57,8 +57,22 @@ const notifications: Notification[] = [
 
 export const Default: StoryFn<typeof NotificationListSupabase> = () => (
   <NotificationListSupabase
-    markRead={() => console.log('hi')}
-    modalDismiss={() => console.log('hi')}
+    isUpdatingNotifications={false}
+    markAllRead={() => console.log('markAllRead')}
+    markRead={() => console.log('markRead')}
+    modalDismiss={() => console.log('modalDismiss')}
     notifications={notifications}
+  />
+)
+
+export const NoNewNotifications: StoryFn<
+  typeof NotificationListSupabase
+> = () => (
+  <NotificationListSupabase
+    isUpdatingNotifications={false}
+    markAllRead={() => console.log('markAllRead')}
+    markRead={() => console.log('markRead')}
+    modalDismiss={() => console.log('modalDismiss')}
+    notifications={[notifications[1], notifications[1]]}
   />
 )

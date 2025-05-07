@@ -9,14 +9,22 @@ interface IProps {
 
 export const NotificationsSupabase = ({ device }: IProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const notifications = useContext(NotificationsContext)
+  const { notifications, isUpdatingNotifications, updateNotifications } =
+    useContext(NotificationsContext)
 
   if (!notifications?.length) {
     return <></>
   }
 
-  const markRead = (id: number) =>
-    fetch(`/api/notifications/${id}/read`, { method: 'POST' })
+  const markAllRead = async () => {
+    await fetch(`/api/notifications/all/read`, { method: 'POST' })
+    updateNotifications && (await updateNotifications())
+  }
+
+  const markRead = async (id: number) => {
+    await fetch(`/api/notifications/${id}/read`, { method: 'POST' })
+    updateNotifications && (await updateNotifications())
+  }
 
   const isNoNewNotifications =
     notifications.length === 0 ||
@@ -53,6 +61,8 @@ export const NotificationsSupabase = ({ device }: IProps) => {
       )}
       <Modal isOpen={isOpen} onDidDismiss={onClick} width={800}>
         <NotificationListSupabase
+          isUpdatingNotifications={isUpdatingNotifications}
+          markAllRead={markAllRead}
           markRead={markRead}
           modalDismiss={onClick}
           notifications={notifications}

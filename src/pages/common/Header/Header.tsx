@@ -95,23 +95,36 @@ const Header = observer(() => {
     userNotificationsStore.getUnreadNotifications(),
   )
   const [showMobileNotifications, setShowMobileNotifications] = useState(false)
-  const [notificationsSupabase, setNotificationsSupabase] = useState<
-    Notification[] | null
-  >(null)
   const areThereNotifications = Boolean(notifications.length)
   const isLoggedInUser = !!user
   const [isVisible, setIsVisible] = useState(false)
 
+  // New notifications states
+  const [notificationsSupabase, setNotificationsSupabase] = useState<
+    Notification[] | null
+  >(null)
+  const [isUpdatingNotifications, setIsUpdatingNotifications] =
+    useState<boolean>(true)
+
+  const updateNotifications = async () => {
+    setIsUpdatingNotifications(true)
+    const notifications = await notificationSupabaseService.getNotifications()
+    setNotificationsSupabase(notifications)
+    setIsUpdatingNotifications(false)
+  }
+
   useEffect(() => {
-    const getNotifications = async () => {
-      const notifications = await notificationSupabaseService.getNotifications()
-      setNotificationsSupabase(notifications)
-    }
-    getNotifications()
+    updateNotifications()
   }, [])
 
   return (
-    <NotificationsContext.Provider value={notificationsSupabase}>
+    <NotificationsContext.Provider
+      value={{
+        notifications: notificationsSupabase,
+        isUpdatingNotifications,
+        updateNotifications,
+      }}
+    >
       <MobileMenuContext.Provider
         value={{
           isVisible,
@@ -132,8 +145,8 @@ const Header = observer(() => {
         >
           <Flex>
             <Logo />
-            {isLoggedInUser &&
-              (user.userRoles || []).includes(UserRole.BETA_TESTER) && (
+            {isLoggedInUser && (
+              <AuthWrapper roleRequired={UserRole.BETA_TESTER} borderLess>
                 <Flex
                   className="user-beta-icon"
                   sx={{ alignItems: 'center', marginLeft: 4 }}
@@ -151,7 +164,8 @@ const Header = observer(() => {
                     BETA
                   </Text>
                 </Flex>
-              )}
+              </AuthWrapper>
+            )}
           </Flex>
           {isLoggedInUser && (
             <MobileNotificationsWrapper>

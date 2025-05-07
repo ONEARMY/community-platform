@@ -22,8 +22,8 @@ export const NotificationListItemSupabase = (props: IProps) => {
     notification.contentType !== 'news' ? 'discussion' : 'thunderbolt'
 
   const borderStyle = {
-    background: notification.isRead ? '#f3f3f3' : '#fff0b4',
-    borderColor: notification.isRead ? '#f3f3f3' : '#fee77b',
+    background: notification.isRead ? 'background' : '#fff0b4',
+    borderColor: notification.isRead ? 'background' : 'activeYellow',
     borderRadius: 3,
     borderStyle: 'solid',
     borderWidth: 2,
@@ -32,7 +32,11 @@ export const NotificationListItemSupabase = (props: IProps) => {
   }
 
   return (
-    <Flex data-cy="NotificationListItemSupabase" sx={{ gap: 2 }}>
+    <Flex
+      data-cy="NotificationListItemSupabase"
+      data-testid="NotificationListItemSupabase"
+      sx={{ gap: 2 }}
+    >
       <Flex
         sx={{
           ...borderStyle,

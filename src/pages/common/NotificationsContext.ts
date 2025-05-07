@@ -2,6 +2,13 @@ import { createContext } from 'react'
 
 import type { Notification } from 'oa-shared'
 
-type INotificationsContext = Notification[] | null
+type INotificationsContext = {
+  notifications: Notification[] | null
+  isUpdatingNotifications: boolean
+  updateNotifications?: () => void
+}
 
-export const NotificationsContext = createContext<INotificationsContext>(null)
+export const NotificationsContext = createContext<INotificationsContext>({
+  notifications: null,
+  isUpdatingNotifications: false,
+})

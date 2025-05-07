@@ -1,18 +1,26 @@
 import { ProfileTagsList } from 'oa-components'
 import { getValidTags } from 'src/utils/getValidTags'
 
-import type { ISelectedTags } from 'oa-shared'
+import type { ISelectedTags, IUser } from 'oa-shared'
+
+export type ShowVisitorModal = () => void
 
 interface IProps {
-  tagIds: ISelectedTags
+  tagIds?: ISelectedTags
+  openToVisitors?: IUser['openToVisitors']
+  showVisitorModal: ShowVisitorModal
 }
 
-export const ProfileTags = ({ tagIds }: IProps) => {
-  const tags = getValidTags(tagIds)
+export const ProfileTags = (props: IProps) => {
+  const { tagIds, openToVisitors, showVisitorModal } = props
+  const tags = getValidTags(tagIds || {})
 
-  if (tags.length === 0) {
-    return null
-  }
-
-  return <ProfileTagsList tags={tags} />
+  return (
+    <ProfileTagsList
+      tags={tags}
+      openToVisitors={openToVisitors}
+      showVisitorModal={showVisitorModal}
+      large={true}
+    />
+  )
 }

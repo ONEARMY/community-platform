@@ -120,6 +120,19 @@ export const fields: ILabels = {
     description: 'What are your main activities? (choose max five)',
     title: 'Tags',
   },
+  visitorDetails: {
+    title: 'Specify your visitor status',
+    placeholder:
+      'Optionally describe details that help people understand your visitor policy.  For example when or how to reach you, or when you expect to change your status.',
+  },
+  visitorPolicy: {
+    title: 'Visitor policy',
+  },
+  visitorPreference: {
+    title: 'Show my visitor policy',
+    description:
+      'This will be visible in your public profile. You can specify the opening hours, conditions or other details in the field below',
+  },
 }
 
 export const form = {
@@ -144,6 +157,7 @@ export const headings = {
     existingPinLabel:
       'The map pin you registered has the following description:',
   },
+  visitors: 'Visitors',
   workspace: {
     description:
       'In order to have your pin accepted on our map you have to collect at least 6 stars in the Ally Checklist. Learn more about the Community Program and how you can join.',
@@ -153,7 +167,7 @@ export const headings = {
 
 export const notificationForm = {
   loading: 'Loading your notification setting',
-  succesfulSave: 'Notification setting saved successfully - whoop',
+  successfulSave: 'Notification setting saved successfully - whoop',
 }
 
 export const mapForm = {
@@ -168,8 +182,8 @@ export const mapForm = {
   needsChanges:
     'This map pin has been marked as requiring further changes. Specifically the moderator comments are:',
   noLocationLabel: 'No map pin currently saved',
-  succesfulSave: 'Map pin saved successfully - whoop',
-  sucessfulDelete: 'Location data removed',
+  successfulSave: 'Map pin saved successfully - whoop',
+  successfulDelete: 'Location data removed',
 }
 
 export const missingData = 'Do you have impact data for this year?'

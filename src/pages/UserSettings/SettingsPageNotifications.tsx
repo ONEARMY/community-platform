@@ -38,7 +38,7 @@ export const SettingsPageNotifications = () => {
         await userStore.updateUserNotificationSettings(updatingUser)
 
       setNotification({
-        message: notificationForm.succesfulSave,
+        message: notificationForm.successfulSave,
         icon: 'check',
         show: true,
         variant: 'success',

@@ -113,6 +113,7 @@ export class UserStore extends ModuleStore {
 
     const updatedUserProfile = toJS(values)
     updatedUserProfile.profileCreationTrigger = trigger
+    updatedUserProfile.openToVisitors = values.openToVisitors || null
 
     if (coverImages) {
       updatedUserProfile.coverImages = await this.uploadCollectionBatch(

@@ -79,7 +79,7 @@ export type UserVisitorPreferencePolicy =
 
 export type UserVisitorPreference = {
   policy: UserVisitorPreferencePolicy
-  details?: string
+  details?: string | null
 }
 
 // IUser retains most of the fields from legacy users (omitting passwords),
@@ -118,7 +118,7 @@ export interface IUser {
   patreon?: IPatreonUser | null
   totalUseful?: number
   total_views?: number
-  openToVisitors?: UserVisitorPreference
+  openToVisitors?: UserVisitorPreference | null
 
   // New generic profile field for all profile types
   tags?: { [key: string]: boolean }

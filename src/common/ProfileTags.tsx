@@ -1,13 +1,13 @@
 import { ProfileTagsList } from 'oa-components'
 import { getValidTags } from 'src/utils/getValidTags'
 
-import type { ISelectedTags, UserVisitorPreference } from 'oa-shared'
+import type { ISelectedTags, IUser } from 'oa-shared'
 
 export type ShowVisitorModal = () => void
 
 interface IProps {
   tagIds?: ISelectedTags
-  openToVisitors?: UserVisitorPreference
+  openToVisitors?: IUser['openToVisitors']
   showVisitorModal: ShowVisitorModal
 }
 

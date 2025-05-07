@@ -56,7 +56,7 @@ export const VisitorSection = observer((props: Props) => {
               data-testid={`${name}-switch`}
               label={preferenceTitle}
               onChange={() =>
-                input.onChange(openToVisitors ? null : { policy: 'open' })
+                input.onChange(openToVisitors || { policy: 'open' })
               }
               sx={{
                 'input:checked ~ &': {

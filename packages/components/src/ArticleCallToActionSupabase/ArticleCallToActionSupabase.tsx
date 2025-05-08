@@ -23,7 +23,11 @@ export const ArticleCallToActionSupabase = (props: IProps) => {
       <Text variant="body" sx={{ fontSize: 2 }}>
         Made by
         <Username
-          user={{ userName: author.username, isVerified: author.isVerified }}
+          user={{
+            userName: author.username,
+            isVerified: author.isVerified,
+            countryCode: author.country,
+          }}
           sx={{ ml: 1 }}
         />
       </Text>
@@ -40,6 +44,7 @@ export const ArticleCallToActionSupabase = (props: IProps) => {
               user={{
                 userName: contributor.username,
                 isVerified: contributor.isVerified,
+                countryCode: contributor.country,
               }}
               sx={{
                 mr: 1,

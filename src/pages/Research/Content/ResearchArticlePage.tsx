@@ -162,6 +162,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
         contributors={research.collaborators?.map((x) => ({
           userName: x.username,
           isVerified: x.isVerified,
+          countryCode: x.country,
         }))}
         subscribersCount={subscribersCount}
         commentsCount={research.commentCount}

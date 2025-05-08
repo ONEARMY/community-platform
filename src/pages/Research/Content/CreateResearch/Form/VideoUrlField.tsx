@@ -29,16 +29,19 @@ const VideoUrlField = () => {
 const validateMedia = (videoUrl: string, values: any) => {
   const { both, empty, invalidUrl } = errorsLabel.videoUrl
   const images = values.images
+  const existingImages = values.existingImages
 
   if (videoUrl) {
-    if (images && images[0]) {
+    if ((images && images[0]) || (existingImages && existingImages[0])) {
       return both
     }
     const youtubeRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
     const urlValid = youtubeRegex.test(videoUrl)
     return urlValid ? null : invalidUrl
   }
-  return images && images[0] ? null : empty
+  return (images && images[0]) || (existingImages && existingImages[0])
+    ? null
+    : empty
 }
 
 export default VideoUrlField

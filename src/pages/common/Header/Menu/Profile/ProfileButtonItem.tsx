@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Button, ReturnPathLink } from 'oa-components'
 
 import { MobileMenuContext } from '../../MobileMenuContext'
@@ -16,7 +16,7 @@ interface IProps {
 }
 
 export const ProfileButtonItem = (props: IProps) => {
-  const mobileMenuContext = React.useContext(MobileMenuContext)
+  const mobileMenuContext = useContext(MobileMenuContext)
 
   return (
     <ReturnPathLink to={props.link} style={{ minWidth: 'auto' }}>

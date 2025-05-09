@@ -16,6 +16,7 @@ import {
 } from 'src/pages/Question/Content/Common/FormFields'
 import * as LABELS from 'src/pages/Question/labels'
 import { questionService } from 'src/services/questionService'
+import { subscribersService } from 'src/services/subscribersService'
 import {
   composeValidators,
   endsWithQuestionMark,
@@ -72,6 +73,7 @@ export const QuestionForm = (props: IProps) => {
   }, [question])
 
   const onSubmit = async (formValues: Partial<QuestionFormData>) => {
+    setIntentionalNavigation(true)
     setSaveErrorMessage(null)
 
     try {
@@ -85,8 +87,8 @@ export const QuestionForm = (props: IProps) => {
       })
 
       if (result) {
-        setIntentionalNavigation(true)
-        setTimeout(() => navigate('/questions/' + result.slug), 100)
+        !id && (await subscribersService.add('questions', result.id))
+        navigate('/questions/' + result.slug)
       }
     } catch (e) {
       if (e.cause && e.message) {

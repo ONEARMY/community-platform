@@ -19,7 +19,6 @@ export const NotificationsIcon = ({
   <>
     <IconWrapper
       data-cy="toggle-notifications-modal"
-      sx={{ marginLeft: 1 }}
       onClick={onCLick}
       style={
         isMobileMenuActive

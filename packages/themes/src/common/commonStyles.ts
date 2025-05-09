@@ -12,6 +12,7 @@ export const commonStyles = {
     },
   },
   colors: {
+    activeYellow: '#fee77b',
     white: 'white',
     offWhite: '#ececec',
     black: '#1b1b1b',

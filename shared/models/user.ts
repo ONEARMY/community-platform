@@ -80,7 +80,6 @@ export interface IUser {
   // firebase auth displayName property
   userName: string
   displayName: string
-  verified: boolean
   badges?: IUserBadges
   // images will be in different formats if they are pending upload vs pulled from db
   coverImages: IUploadedFileMeta[]

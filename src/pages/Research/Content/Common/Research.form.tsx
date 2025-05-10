@@ -21,6 +21,7 @@ import {
 } from 'src/pages/Research/Content/Common'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
+import { fireConfetti } from 'src/utils/fireConfetti'
 import {
   composeValidators,
   draftValidationWrapper,
@@ -100,6 +101,10 @@ const ResearchForm = observer((props: IProps) => {
 
     if (updatedResearh) {
       setSlug(updatedResearh.slug)
+    }
+
+    if (submissionHandler.draft === false) {
+      fireConfetti()
     }
   }
 

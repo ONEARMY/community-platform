@@ -1,7 +1,9 @@
+import { useEffect } from 'react'
 import { Link, redirect } from '@remix-run/react'
 import { Button, HeroBanner } from 'oa-components'
 import Main from 'src/pages/common/Layout/Main'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { fireConfetti } from 'src/utils/fireConfetti'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -42,6 +44,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
+  useEffect(() => {
+    fireConfetti()
+  }, [])
   return (
     <Main style={{ flex: 1 }}>
       <Flex

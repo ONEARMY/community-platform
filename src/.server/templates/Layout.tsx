@@ -61,7 +61,7 @@ export default function Layout({ children, settings, preview }: LayoutArgs) {
           </Container>
           <Container style={wrapper}>
             <p style={{ textAlign: 'center' }}>
-              You've recieved this because you're opted in to be contacted by
+              You've received this because you're opted in to be contacted by
               other community members. If you want to opt out,{' '}
               <a href={settings.siteUrl + '/settings'}>change that here</a>.
             </p>

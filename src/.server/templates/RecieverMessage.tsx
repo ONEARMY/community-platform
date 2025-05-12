@@ -1,7 +1,7 @@
 import Layout from './Layout'
 import { MessageSettings } from '../models/messageSettings'
 
-type RecieverMessageArgs = {
+type ReceiverMessageArgs = {
   messengerEmailAddress: string
   messengerName: string | undefined
   messengerUsername: string
@@ -10,7 +10,7 @@ type RecieverMessageArgs = {
   text: string
 }
 
-export default function RecieverMessage(props: RecieverMessageArgs) {
+export default function ReceiverMessage(props: ReceiverMessageArgs) {
   const {
     receiverName,
     settings,

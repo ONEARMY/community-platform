@@ -1,7 +1,7 @@
 ####################################################################
 #
 # COMMANDS:
-# This commands are ran from `packages/simulated-webhook-reciever/`.
+# This commands are ran from `packages/simulated-webhook-receiver/`.
 #
 #   BUILD
 #   docker build -t simulated-webook-receiver .

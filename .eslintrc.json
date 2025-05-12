@@ -86,7 +86,7 @@
             "^\\.(?!/?$)",
             "^\\./?$"
           ],
-          // Type imports seperated out.
+          // Type imports separated out.
           [
             "^node:.*\\u0000$",
             "^@?\\w.*\\u0000$",

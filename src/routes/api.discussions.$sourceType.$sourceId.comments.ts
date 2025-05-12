@@ -46,7 +46,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     )
     .eq('source_type', sourceType)
     .eq(sourceParam, sourceId)
-    .order('created_at', { ascending: false })
+    .order('created_at', { ascending: true })
 
   if (result.error) {
     console.error(result.error)

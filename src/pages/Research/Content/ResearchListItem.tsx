@@ -1,6 +1,5 @@
 import {
   Category,
-  DisplayDate,
   Icon,
   IconCountWithTooltip,
   InternalLink,
@@ -70,23 +69,23 @@ const ResearchListItem = ({ item }: IProps) => {
             sx={{
               flexDirection: 'column',
               alignItems: 'flex-start',
+              gap: 1,
             }}
           >
             <Flex
               sx={{
                 justifyContent: 'space-between',
                 width: '100%',
-                mb: [1, 0],
+                gap: 2,
               }}
             >
-              <Flex sx={{ flexDirection: ['column', 'row'], gap: [0, 3] }}>
-                <Heading
-                  sx={{
-                    color: 'black',
-                    mb: 1,
-                    fontSize: [3, 3, 4],
-                  }}
-                >
+              <Flex
+                sx={{
+                  flexDirection: ['column', 'row'],
+                  gap: [0, 2],
+                }}
+              >
+                <Heading sx={{ fontSize: [3, 3, 4] }}>
                   <InternalLink
                     to={`/research/${encodeURIComponent(item.slug)}`}
                     sx={{
@@ -110,10 +109,7 @@ const ResearchListItem = ({ item }: IProps) => {
                   </InternalLink>
                 </Heading>
                 {item.category && (
-                  <Category
-                    category={item.category}
-                    sx={{ fontSize: 2, mt: [0, '3px'] }}
-                  />
+                  <Category category={item.category} sx={{ fontSize: 2 }} />
                 )}
               </Flex>
               <Text
@@ -142,7 +138,7 @@ const ResearchListItem = ({ item }: IProps) => {
                 justifyContent: 'space-between',
               }}
             >
-              <Flex sx={{ alignItems: 'center' }}>
+              <Flex sx={{ alignItems: 'center', gap: 2 }}>
                 <Username
                   user={{
                     userName: item.author?.username || '',
@@ -177,7 +173,6 @@ const ResearchListItem = ({ item }: IProps) => {
                     padding: 1,
                     borderRadius: 1,
                     borderBottomRightRadius: 1,
-                    marginLeft: 4,
                     whiteSpace: 'nowrap',
                   }}
                 >
@@ -196,21 +191,8 @@ const ResearchListItem = ({ item }: IProps) => {
                   <Icon glyph="star-active" ml={1} />
                 </Text>
                 <Text color="black" sx={_commonStatisticStyle}>
-                  {item.commentCount}
+                  {item.commentCount || 0}
                   <Icon glyph="comment" ml={1} />
-                </Text>
-                <Text
-                  sx={{
-                    ml: 3,
-                    display: ['block', 'none'],
-                    fontSize: 1,
-                    color: 'darkGrey',
-                  }}
-                >
-                  <DisplayDate
-                    createdAt={item.createdAt}
-                    modifiedAt={item.modifiedAt}
-                  />
                 </Text>
               </Box>
             </Flex>

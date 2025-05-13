@@ -9,6 +9,11 @@ export function createSupabaseAdminServerClient() {
         autoRefreshToken: false,
         persistSession: false,
       },
+      global: {
+        headers: {
+          'x-tenant-id': process.env.TENANT_ID!,
+        },
+      },
     },
   )
 }

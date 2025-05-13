@@ -31,6 +31,11 @@ export const NotificationListItemSupabase = (props: IProps) => {
     gap: 2,
   }
 
+  const onClick = () => {
+    markRead(notification.id)
+    modalDismiss()
+  }
+
   return (
     <Flex
       data-cy="NotificationListItemSupabase"
@@ -70,7 +75,7 @@ export const NotificationListItemSupabase = (props: IProps) => {
                   color: 'grey',
                   '&:hover': { textDecoration: 'underline' },
                 }}
-                onClick={modalDismiss}
+                onClick={onClick}
               >
                 {notification.triggeredBy?.username}
               </InternalLink>{' '}
@@ -85,7 +90,7 @@ export const NotificationListItemSupabase = (props: IProps) => {
                       fontWeight: 'bold',
                       '&:hover': { textDecoration: 'underline' },
                     }}
-                    onClick={modalDismiss}
+                    onClick={onClick}
                   >
                     {(notification.sourceContent as News).title}
                   </InternalLink>
@@ -103,7 +108,7 @@ export const NotificationListItemSupabase = (props: IProps) => {
           <InternalLink
             to={`${sourceContentLink}#comment:${notification.content?.id}`}
             sx={{ color: 'black' }}
-            onClick={modalDismiss}
+            onClick={onClick}
           >
             <Flex
               sx={{

@@ -68,7 +68,7 @@ const CollapsableCommentSection = ({
         onClick={() => seIstOpen((prev) => !prev)}
         backgroundColor={isOpen ? '#c2daf0' : '#e2edf7'}
         className={isOpen ? 'viewComments' : ''}
-        data-cy={`HideDiscussionContainer: button ${isOpen ? 'close-comments' : 'open-comments'} ${total !== 0 ? 'has-comments' : 'no-comments'}`}
+        data-cy="HideDiscussionContainer:button"
       >
         {buttonText}
       </Button>

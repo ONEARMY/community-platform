@@ -28,6 +28,7 @@ export const LibraryDownloads = ({ item }: IProps) => {
   }
 
   const handleDownloadClick = async () => {
+    console.log(files)
     const howtoDownloadCooldown = retrieveLibraryDownloadCooldown(_id)
 
     if (
@@ -51,7 +52,7 @@ export const LibraryDownloads = ({ item }: IProps) => {
         fileLink={fileLink}
         files={(files as IUploadedFileMeta[])?.map((x) => ({
           id: x?.name,
-          publicUrl: x.downloadUrl,
+          url: x.downloadUrl,
           size: x.size,
           name: x.name,
         }))}

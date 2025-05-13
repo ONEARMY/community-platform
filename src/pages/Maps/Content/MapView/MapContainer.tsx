@@ -10,6 +10,7 @@ import { MapView } from './MapView'
 
 import type { ILatLng, IMapPin, MapFilterOptionsList } from 'oa-shared'
 import type { Map as MapType } from 'react-leaflet'
+import type { ClustersRef } from './Cluster.client'
 
 interface IProps {
   allPins: IMapPin[] | null
@@ -19,6 +20,7 @@ interface IProps {
 
 export const INITIAL_CENTER = { lat: 30.0, lng: 19.0 }
 export const INITIAL_ZOOM = 2
+export const INTERACTED_ZOOM = 6
 
 export const MapContainer = (props: IProps) => {
   const { allPins, allToggleFilters, notification } = props
@@ -35,6 +37,7 @@ export const MapContainer = (props: IProps) => {
   const navigate = useNavigate()
   const location = useLocation()
   const mapRef = useRef<MapType>(null)
+  const clustersRef = useRef<ClustersRef>(null)
 
   useEffect(() => {
     if (allPins) {
@@ -64,16 +67,76 @@ export const MapContainer = (props: IProps) => {
     selectPinByUserId(pinId.length > 0 ? pinId : undefined)
   }, [location.hash, allPins])
 
+  const findMarkerById = (markerId: string) => {
+    if (!clustersRef.current?.markerClusterGroup) return null
+
+    let targetMarker = null
+    clustersRef.current.markerClusterGroup.eachLayer((layer) => {
+      if (layer.options?.properties?.pinId === markerId) {
+        targetMarker = layer
+      }
+    })
+
+    return targetMarker
+  }
+
+  // Check if a marker is currently visible (not part of a cluster)
+  const isMarkerVisible = (marker) => {
+    if (!marker || !clustersRef.current?.markerClusterGroup) return false
+
+    const visibleParent =
+      clustersRef.current.markerClusterGroup.getVisibleParent(marker)
+    return visibleParent === marker
+  }
+
+  const zoomToClusteredMarker = (marker) => {
+    if (!marker || !clustersRef.current?.markerClusterGroup) return
+
+    clustersRef.current.markerClusterGroup.zoomToShowLayer(marker)
+  }
+
+  const zoomToVisibleMarker = (location: ILatLng) => {
+    setCenter(location)
+    if (zoom < INTERACTED_ZOOM) setZoom(INTERACTED_ZOOM)
+  }
+
   const selectPinByUserId = async (userId: string | undefined) => {
-    if (allPins) {
-      const foundPin = allPins.find((pin) => pin._id === userId)
-      foundPin && setCenter(foundPin.location)
-      setSelectedPin(foundPin)
+    if (!allPins || !userId) {
+      setSelectedPin(undefined)
+      return
     }
+
+    const foundPin = allPins.find((pin) => pin._id === userId)
+    if (!foundPin) {
+      setSelectedPin(undefined)
+      return
+    }
+
+    setCenter(foundPin.location)
+
+    const targetMarker = findMarkerById(userId)
+
+    if (targetMarker) {
+      if (isMarkerVisible(targetMarker)) {
+        // Zoom to some minimum level
+        zoomToVisibleMarker(foundPin.location)
+      } else {
+        zoomToClusteredMarker(targetMarker)
+      }
+    } else {
+      // Initial page load will end up here.
+      // Since we need clusterRef to zoom the correct amount
+      // and the Clusters component has not rendered yet,
+      // we cannot zoom to a marker-specific level.
+      setZoom(14)
+    }
+
+    setSelectedPin(foundPin)
   }
 
   const onBlur = () => {
     navigate(`/map`, { replace: true })
+    setZoom(INTERACTED_ZOOM)
   }
 
   const onPinClick = (pin) => {
@@ -108,6 +171,7 @@ export const MapContainer = (props: IProps) => {
         allPins={filteredPins}
         center={center}
         mapRef={mapRef}
+        clustersRef={clustersRef}
         setBoundaries={setBoundaries}
         setZoom={setZoom}
         onBlur={onBlur}

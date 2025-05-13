@@ -28,7 +28,6 @@ export const LibraryDownloads = ({ item }: IProps) => {
   }
 
   const handleDownloadClick = async () => {
-    console.log(files)
     const howtoDownloadCooldown = retrieveLibraryDownloadCooldown(_id)
 
     if (

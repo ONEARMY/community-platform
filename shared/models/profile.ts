@@ -4,6 +4,7 @@ import type { IDBDocSB, IDoc } from './document'
 import type { News } from './news'
 import type { IPatreonUser } from './patreon'
 import type { Question } from './question'
+import type { ResearchUpdate } from './research'
 
 export class DBProfile {
   id: number
@@ -56,18 +57,18 @@ export type NotificationActionType = 'newContent' | 'newComment'
 type NotificationContentType = 'news' | 'comment' | 'reply'
 // type NotificationContentType = 'news' | 'research' | 'researchUpdate' | 'project' | 'question' | 'comment' | 'reply'
 
+type NotificationContent = News | Comment | Question | ResearchUpdate
 type NotificationSourceContentType = ContentType
 // type NotificationSourceContentType = 'news' | 'research' | 'researchUpdate' | 'project' | 'question' // What page on the platform should be linked to
-type NotificationSourceContent = News | Comment | Question
+type NotificationSourceContent = News | Question | ResearchUpdate
 
-type TriggeredBy = Pick<Profile, 'id' | 'username' | 'photoUrl'>
+type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photoUrl'>
 
 export class DBNotification implements IDBDocSB {
   readonly id: number
   readonly action_type: NotificationActionType
   readonly content_type: NotificationContentType
   readonly content_id: number
-  readonly content: NotificationSourceContent
 
   readonly created_at: Date
   modified_at: Date | null
@@ -78,6 +79,7 @@ export class DBNotification implements IDBDocSB {
   source_content_id: number
   triggered_by: DBProfile
   triggered_by_id: number
+  parent_content_id: number | null
 
   constructor(obj: any) {
     Object.assign(this, obj)
@@ -89,15 +91,18 @@ export class Notification implements IDoc {
   actionType: NotificationActionType
   contentType: NotificationContentType
   contentId: number
-  content?: NotificationSourceContent
+  content?: NotificationContent
   createdAt: Date
   modifiedAt: Date | null
   ownedById: number
+  ownedBy?: BasicAuthorDetails
   isRead: boolean
+  parentContentId: number | null
+  parentContent?: Comment
   sourceContentType: NotificationSourceContentType
   sourceContentId: number
   sourceContent?: NotificationSourceContent
-  triggeredBy: TriggeredBy
+  triggeredBy?: BasicAuthorDetails
 
   constructor(obj: Notification) {
     Object.assign(this, obj)
@@ -115,9 +120,15 @@ export class Notification implements IDoc {
         : null,
       ownedById: dbNotification.owned_by_id,
       isRead: dbNotification.is_read,
+      parentContentId: dbNotification.parent_content_id,
       sourceContentType: dbNotification.source_content_type,
       sourceContentId: dbNotification.source_content_id,
-      triggeredBy: Profile.fromDB(dbNotification.triggered_by),
+      triggeredBy: dbNotification.triggered_by
+        ? Profile.fromDB(dbNotification.triggered_by)
+        : undefined,
+      ownedBy: dbNotification.owned_by
+        ? Profile.fromDB(dbNotification.owned_by)
+        : undefined,
     })
   }
 }
@@ -128,6 +139,7 @@ export type NewNotificationData = {
   triggeredById: number
   contentType: NotificationContentType
   contentId: number
+  parentContentId?: number
   sourceContentType: NotificationSourceContentType
   sourceContentId: number
 }

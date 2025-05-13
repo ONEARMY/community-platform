@@ -1,3 +1,5 @@
+import { notificationEmailService } from './notificationEmailService.server'
+
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
   DBComment,
@@ -31,9 +33,10 @@ const createNotificationNewComment = async (
         sourceContentId: comment.source_id!,
         triggeredById: comment.created_by!,
         contentType: isReply ? 'reply' : 'comment',
+        ...(comment.parent_id ? { parentContentId: comment.parent_id } : {}),
       }
 
-      createNotification(client, notification)
+      createNotification(client, notification, subscriber.user_id!)
     })
   }
 }
@@ -41,6 +44,7 @@ const createNotificationNewComment = async (
 const createNotification = async (
   client: SupabaseClient,
   notification: NewNotificationData,
+  userId: number,
 ) => {
   try {
     const data = {
@@ -53,15 +57,25 @@ const createNotification = async (
       triggered_by_id: notification.triggeredById,
       is_read: false,
       tenant_id: process.env.TENANT_ID!,
+      ...(notification.parentContentId
+        ? { parent_content_id: notification.parentContentId }
+        : {}),
     }
 
-    const response = await client.from('notifications').insert(data).select()
+    const response = await client.from('notifications').insert(data).select(`
+      *,
+      triggered_by:profiles!notifications_triggered_by_id_fkey(id,username)
+    `)
 
     if (response.error || !response.data) {
       throw response.error || 'No data returned'
     }
 
-    return
+    await notificationEmailService.createInstantNotificationEmail(
+      client,
+      response.data[0],
+      userId,
+    )
   } catch (error) {
     console.log(error)
 

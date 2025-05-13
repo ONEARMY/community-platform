@@ -1,7 +1,8 @@
-import { Button as ButtonComp } from 'npm:@react-email/components@0.0.22'
-import React from 'npm:react@18.3.1'
+import React from 'react'
+import { Button as ButtonComp } from '@react-email/components'
 
 const button = {
+  alignText: 'center',
   backgroundColor: '#e9475a',
   borderRadius: '15px',
   border: '2px solid #27272c',
@@ -10,7 +11,6 @@ const button = {
   fontWeight: 'bold',
   padding: '19px 30px',
   textDecoration: 'none',
-  textAlign: 'center',
   display: 'block',
 }
 

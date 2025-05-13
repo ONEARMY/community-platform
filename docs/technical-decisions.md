@@ -17,12 +17,12 @@ Decision: 3. Why?
 
 - A single project is easier to manage and deploy
 - Same for a single common schema... and multiple schemas wouldn't give any security benefits
-- With RLS, we can ensure, based on a Environment Variable, only the respective rows of that tenant are queried.
+- With RLS, we can ensure, based on an Environment Variable, only the respective rows of that tenant are queried.
 
 How?
 
 - Each table has a tenant_id column
-- On each request, to supabase (via it's sdk) we pass a header 'x-tenant-id' with the process.env.TENANT_ID variable, which is set for each app, via Fly.io secret.
+- On each request, to supabase (via its sdk) we pass a header 'x-tenant-id' with the process.env.TENANT_ID variable, which is set for each app, via Fly.io secret.
 
 ## Comment Counts
 

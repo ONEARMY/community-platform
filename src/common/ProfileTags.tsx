@@ -8,17 +8,19 @@ export type ShowVisitorModal = () => void
 interface IProps {
   tagIds?: ISelectedTags
   openToVisitors?: IUser['openToVisitors']
+  isSpace: boolean
   showVisitorModal: ShowVisitorModal
 }
 
 export const ProfileTags = (props: IProps) => {
-  const { tagIds, openToVisitors, showVisitorModal } = props
+  const { tagIds, openToVisitors, isSpace, showVisitorModal } = props
   const tags = getValidTags(tagIds || {})
 
   return (
     <ProfileTagsList
       tags={tags}
       openToVisitors={openToVisitors}
+      isMember={isSpace}
       showVisitorModal={showVisitorModal}
       large={true}
     />

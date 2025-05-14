@@ -24,7 +24,7 @@ export const VisitorModalHeader = ({ hide, data }: HeaderProps) => (
       {data.label}
     </Flex>
     <ButtonIcon
-      data-cy="VisitorModal-CloseButton"
+      data-testid="VisitorModal-CloseButton"
       icon="close"
       onClick={() => hide()}
       sx={{ border: 'none', paddingLeft: 2, paddingRight: 3 }}

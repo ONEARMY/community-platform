@@ -142,7 +142,7 @@ async function startAppServer(tenantId: string) {
     }
   })
   // do not end function until server responsive on port 3456
-  // give up if not reponsive after 5 minutes (assume uncaught error somewhere)
+  // give up if not responsive after 5 minutes (assume uncaught error somewhere)
   const timeout = 5 * 60 * 1000
   await waitOn({ resources: ['http-get://localhost:3456'], timeout })
 }

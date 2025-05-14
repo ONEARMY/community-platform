@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
 import { UserStatistics, VisitorModal } from 'oa-components'
-import { UserRole } from 'oa-shared'
+import { ProfileTypeList, UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { ProfileTags } from 'src/common/ProfileTags'
 import { isModuleSupported, MODULE } from 'src/modules'
@@ -57,6 +57,7 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
               tagIds={tags}
               showVisitorModal={() => setShowVisitorModal(true)}
               openToVisitors={openToVisitors}
+              isSpace={user.profileType !== ProfileTypeList.MEMBER}
             />
           )}
           {about && <Paragraph>{about}</Paragraph>}

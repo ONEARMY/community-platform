@@ -10,6 +10,7 @@ import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
+import { fireConfetti } from 'src/utils/fireConfetti'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import {
   setAllowDraftSaveFalse,
@@ -93,6 +94,7 @@ export const LibraryForm = observer((props: IProps) => {
     }
   }
   const onSubmit = async (formValues: ILibrary.FormInput, form: FormApi) => {
+    console.log('formValues =>', formValues)
     if (!checkFilesValid(formValues)) {
       return
     }
@@ -105,6 +107,12 @@ export const LibraryForm = observer((props: IProps) => {
     logger.debug('submitting form', formValues)
     const howto = await LibraryStore.upload(formValues)
     howto && setItemSlug(howto.slug)
+
+    // Show the confetti once everything has been submitted to publish
+    if (formValues.allowDraftSave === false) {
+      fireConfetti()
+    }
+
     form.reset(formValues)
   }
   // automatically generate the slug when the title changes

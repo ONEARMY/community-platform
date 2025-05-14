@@ -16,7 +16,7 @@ const transformNotificationList = async (
   )
 }
 
-const transformNotification = async (
+export const transformNotification = async (
   dbNotification: DBNotification,
   client: SupabaseClient,
 ) => {
@@ -24,6 +24,7 @@ const transformNotification = async (
     comment: 'comments',
     reply: 'comments',
   }
+
   const notification = Notification.fromDB(dbNotification)
   const contentType = contentTypes[notification.contentType]
 
@@ -72,7 +73,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     .select(
       `
       *,
-      triggered_by:profiles!notifications_triggered_by_id_fkey(*)
+      triggered_by:profiles!notifications_triggered_by_id_fkey(id,username)
     `,
     )
     .eq('owned_by_id', profile?.data?.id)

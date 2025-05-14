@@ -1,10 +1,12 @@
-import React from 'npm:react@18.3.1'
+import React from 'react'
 
 import { Layout } from './layout.tsx'
 import { Button } from './components/button.tsx'
 import { Heading } from './components/heading.tsx'
 import { Hero } from './components/hero.tsx'
 import { PlainText } from './components/plain-text.tsx'
+
+import type { TenantSettings } from 'oa-shared'
 
 const copy = {
   h1: (username: string) => `Hey ${username}!`,
@@ -15,28 +17,30 @@ const copy = {
 }
 
 interface SignUpEmailProps {
-  username: string
-  newEmail: string
-  supabase_url: string
   email_action_type: string
+  newEmail: string
+  supabaseUrl: string
   redirect_to: string
+  settings: TenantSettings
   token_hash: string
+  username: string
 }
 
 export const EmailChangeNewEmail = (props: SignUpEmailProps) => {
   const {
     username,
     newEmail,
-    supabase_url,
+    supabaseUrl,
     email_action_type,
     redirect_to,
+    settings,
     token_hash,
   } = props
 
-  const href = `${supabase_url}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${redirect_to}`
+  const href = `${supabaseUrl}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${redirect_to}`
 
   return (
-    <Layout preview={copy.preview}>
+    <Layout preview={copy.preview} settings={settings}>
       <Heading>{copy.h1(username)}</Heading>
       <Hero>{copy.intro}</Hero>
       <PlainText>{copy.change(newEmail)}</PlainText>

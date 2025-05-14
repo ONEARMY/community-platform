@@ -120,7 +120,7 @@ export const QuestionListItem = ({ question, query }: IProps) => {
             text={listing.usefulness}
           />
           <IconCountWithTooltip
-            count={(question as any).commentCount || 0}
+            count={question.commentCount || 0}
             icon="comment"
             text={listing.totalComments}
           />

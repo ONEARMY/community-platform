@@ -1,37 +1,28 @@
-import { observer } from 'mobx-react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { ClientOnly } from 'remix-utils/client-only'
 import Main from 'src/pages/common/Layout/Main'
 import { SettingsPage } from 'src/pages/UserSettings/SettingsPage.client'
-import { Flex, Text } from 'theme-ui'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { redirectServiceServer } from 'src/services/redirectService.server'
 
-import type { IUser, IUserDB } from 'oa-shared'
+import type { LoaderFunctionArgs } from '@remix-run/node'
 
-import '../styles/leaflet.css'
+export async function loader({ request }: LoaderFunctionArgs) {
+  const { client, headers } = createSupabaseServerClient(request)
+  const {
+    data: { user },
+  } = await client.auth.getUser()
 
-export async function clientLoader() {
+  if (!user) {
+    return redirectServiceServer.redirectSignIn('/settings', headers)
+  }
+
   return null
 }
 
 export default function Index() {
   return (
     <Main style={{ flex: 1 }}>
-      <Settings />
+      <ClientOnly fallback={<></>}>{() => <SettingsPage />}</ClientOnly>
     </Main>
   )
 }
-
-const Settings = observer(() => {
-  const { userStore } = useCommonStores().stores
-
-  const currentUser = userStore.user as IUser
-
-  if (!currentUser) {
-    return (
-      <Flex sx={{ justifyContent: 'center' }} mt="40px">
-        <Text> You can only access the settings page if you are logged in</Text>
-      </Flex>
-    )
-  }
-
-  return <SettingsPage profile={currentUser as IUserDB} />
-})

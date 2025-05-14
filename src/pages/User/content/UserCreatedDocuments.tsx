@@ -11,23 +11,26 @@ interface IProps {
 const UserCreatedDocuments = ({ docs }: IProps) => {
   return (
     <>
-      {(docs.library.length > 0 || docs.research.length > 0) && (
+      {(docs.projects.length > 0 || docs.research.length > 0) && (
         <Flex sx={{ justifyContent: 'space-between', gap: 4 }}>
-          {docs?.library.length > 0 && (
+          {docs?.projects.length > 0 && (
             <Flex
-              mt={2}
-              mb={6}
-              sx={{ flexDirection: 'column', flexBasis: '50%' }}
+              sx={{ flexDirection: 'column', flexBasis: '50%', mt: 2, mb: 6 }}
             >
               <Heading as="h3" variant="small" mb={1}>
                 Library
               </Heading>
-              {docs?.library.map((item) => {
+              {docs?.projects.map((item) => {
                 return (
                   <UserCreatedDocumentsItem
                     key={item._id}
                     type="library"
-                    item={item}
+                    item={{
+                      id: item._id!,
+                      slug: item.slug!,
+                      title: item.title!,
+                      usefulVotes: item.totalUsefulVotes!,
+                    }}
                   />
                 )
               })}
@@ -41,9 +44,14 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
               {docs?.research.map((item) => {
                 return (
                   <UserCreatedDocumentsItem
-                    key={item._id}
+                    key={item.id}
                     type="research"
-                    item={item}
+                    item={{
+                      id: item.id!,
+                      slug: item.slug!,
+                      title: item.title!,
+                      usefulVotes: item.usefulCount!,
+                    }}
                   />
                 )
               })}

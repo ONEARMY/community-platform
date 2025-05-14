@@ -1,13 +1,42 @@
-import * as React from 'react'
 import { Field } from 'react-final-form'
-import { Button, DownloadStaticFile, FieldInput } from 'oa-components'
+import { FieldInput } from 'oa-components'
 import { UserRole } from 'oa-shared'
+// eslint-disable-next-line import/no-unresolved
+import { ClientOnly } from 'remix-utils/client-only'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FileInputField } from 'src/common/Form/FileInput.field'
+import { FileDisplay } from 'src/common/Form/FileInput/FileDisplay'
 import { MAX_LINK_LENGTH } from 'src/pages/constants'
-import { buttons, update as updateLabels } from 'src/pages/Research/labels'
+import { update as updateLabels } from 'src/pages/Research/labels'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { Flex, Label, Text } from 'theme-ui'
+
+import type { MediaFile } from 'oa-shared'
+
+export const FilesFields = (props: {
+  files: MediaFile[]
+  deleteFile: (id: string) => void
+}) => {
+  const { title } = updateLabels.files
+
+  return (
+    <ClientOnly fallback={<></>}>
+      {() => (
+        <>
+          <WarningMessages show={false} />
+          <Label htmlFor="files" sx={{ mb: 2 }}>
+            {title}
+          </Label>
+          <AlreadyAddedFiles
+            files={props.files}
+            deleteFile={props.deleteFile}
+          />
+          <UploadNewFiles />
+        </>
+      )}
+    </ClientOnly>
+  )
+}
 
 const WarningMessages = ({ show }) => {
   const { error } = updateLabels.files
@@ -30,38 +59,63 @@ const WarningMessages = ({ show }) => {
   )
 }
 
-const AlreadyAddedFiles = ({ formValues, setFileEditMode }) => {
-  const deleteFile = () => {
-    formValues.files = []
-    setFileEditMode(true)
-  }
-
+const AlreadyAddedFiles = ({
+  files,
+  deleteFile,
+}: {
+  files: MediaFile[]
+  deleteFile: (id: string) => void
+}) => {
   return (
-    <Flex sx={{ flexDirection: 'column', alignItems: 'center' }} mb={3}>
-      {formValues.files.map((file) => (
-        <DownloadStaticFile allowDownload file={file} key={file.name} />
+    <Flex sx={{ flexDirection: 'column', mb: 3 }}>
+      {files.map((file) => (
+        <FileDisplay
+          key={file.id}
+          file={file}
+          onRemove={() => deleteFile(file.id)}
+        />
       ))}
-      <Button
-        type="button"
-        variant="outline"
-        icon="delete"
-        data-cy="delete-file"
-        onClick={deleteFile}
-      >
-        {buttons.files}
-      </Button>
     </Flex>
   )
 }
 
 const UploadNewFiles = () => {
   const { fileLink, files } = updateLabels
-
   const identity = 'file-download-link'
+
   return (
     <>
-      <Flex sx={{ flexDirection: 'column' }} mb={3}>
-        <Label mb={2} htmlFor={identity} style={{ fontSize: '12px' }}>
+      <Flex sx={{ flexDirection: 'column', mb: 3 }}>
+        <AuthWrapper
+          roleRequired={UserRole.ADMIN}
+          fallback={
+            <>
+              <Field
+                hasText={false}
+                name="files"
+                data-cy="file-input-field"
+                component={FileInputField}
+              />
+              <Text sx={{ fontSize: 1, color: 'grey', mt: 1 }}>
+                {files.description}
+              </Text>
+            </>
+          }
+        >
+          <Field
+            hasText={false}
+            name="files"
+            data-cy="file-input-field"
+            admin={true}
+            component={FileInputField}
+          />
+          <Text sx={{ fontSize: 1, color: 'grey', mt: 1 }}>
+            Maximum file size 300MB
+          </Text>
+        </AuthWrapper>
+      </Flex>
+      <Flex sx={{ flexDirection: 'column' }}>
+        <Label htmlFor={identity} sx={{ fontSize: 1, mb: 2 }}>
           {fileLink.title}
         </Label>
         <Field
@@ -73,72 +127,8 @@ const UploadNewFiles = () => {
           isEqual={COMPARISONS.textInput}
           maxLength={MAX_LINK_LENGTH}
           validateFields={[]}
-          mb={2}
         />
       </Flex>
-      <Flex sx={{ flexDirection: 'column' }} mb={3}>
-        <Label mb={2} htmlFor={identity} style={{ fontSize: '12px' }}>
-          {files.title}
-        </Label>
-        <AuthWrapper
-          roleRequired={UserRole.ADMIN}
-          fallback={
-            <>
-              <Field
-                hasText={false}
-                name={'files'}
-                data-cy="file-input-field"
-                component={FileInputField}
-              />
-              <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
-                {files.description}
-              </Text>
-            </>
-          }
-        >
-          <>
-            <Field
-              hasText={false}
-              name={'files'}
-              data-cy="file-input-field"
-              admin={true}
-              component={FileInputField}
-            />
-            <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
-              {'Maximum file size 300MB'}
-            </Text>
-          </>
-        </AuthWrapper>
-      </Flex>
-    </>
-  )
-}
-
-export const FilesFields = ({
-  showInvalidFileWarning,
-  formValues,
-  parentType,
-}) => {
-  const [fileEditMode, setFileEditMode] = React.useState(false)
-  const isEditMode =
-    formValues.files?.length > 0 && parentType === 'edit' && !fileEditMode
-
-  const { title } = updateLabels.files
-
-  return (
-    <>
-      <WarningMessages show={showInvalidFileWarning} />
-      <Label htmlFor="files" mb={2}>
-        {title}
-      </Label>
-      {isEditMode ? (
-        <AlreadyAddedFiles
-          formValues={formValues}
-          setFileEditMode={setFileEditMode}
-        />
-      ) : (
-        <UploadNewFiles />
-      )}
     </>
   )
 }

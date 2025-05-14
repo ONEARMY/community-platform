@@ -1,7 +1,7 @@
 import { News } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { contentServiceServer } from 'src/services/contentService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
-import { utilsServiceServer } from 'src/services/utilsService.server'
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown'
 import { hasAdminRightsSupabase, validateImage } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
@@ -44,7 +44,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     }
 
     const slug = convertToSlug(data.title)
-    const existingHeroImage = formData.get('existingHeroImage') as File | null
+    const existingHeroImage = formData.get('existingHeroImage') as string | null
     const newHeroImage = formData.get('heroImage') as File | null
     const imageValidation = validateImage(newHeroImage)
 
@@ -68,6 +68,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         summary: getSummaryFromMarkdown(data.body),
         tags: data.tags,
         title: data.title,
+        ...(!existingHeroImage && { hero_image: null }),
       })
       .eq('id', params.id)
       .select()
@@ -77,12 +78,30 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     }
 
     const news = News.fromDB(newsResult.data[0], [])
-    news.heroImage = await storageServiceServer.setUploadImage(
-      client,
-      news.id,
-      newHeroImage,
-      existingHeroImage,
-    )
+
+    if (newHeroImage) {
+      const mediaFiles = await storageServiceServer.uploadImage(
+        [newHeroImage],
+        `news/${news.id}`,
+        client,
+      )
+
+      if (mediaFiles?.media?.length) {
+        await client
+          .from('news')
+          .update({
+            hero_image: mediaFiles.media.at(0),
+          })
+          .eq('id', news.id)
+
+        const [image] = storageServiceServer.getPublicUrls(
+          client,
+          mediaFiles.media,
+        )
+
+        news.heroImage = image
+      }
+    }
 
     return Response.json({ news }, { headers, status: 200 })
   } catch (error) {
@@ -122,7 +141,7 @@ async function validateRequest(
   const newsId = Number(params.id!)
 
   if (
-    await utilsServiceServer.isDuplicateExistingSlug(
+    await contentServiceServer.isDuplicateExistingSlug(
       slug,
       newsId,
       client,

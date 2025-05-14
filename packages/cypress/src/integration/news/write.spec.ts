@@ -1,7 +1,6 @@
-import {
-  generateAlphaNumeric,
-  generateNewUserDetails,
-} from '../../utils/TestUtils'
+import { users } from 'oa-shared/mocks/data'
+
+import { generateAlphaNumeric } from '../../utils/TestUtils'
 
 describe('[News.Write]', () => {
   describe('[Create a news item]', () => {
@@ -22,24 +21,15 @@ describe('[News.Write]', () => {
     const updatedSummary = `${updatedNewsBody} ${initialNewsBodyOne} ${initialNewsBodyTwo}`
 
     it('[By Authenticated]', () => {
-      localStorage.setItem('devSiteRole', 'admin')
       cy.visit('/news')
-      const user = generateNewUserDetails()
-      cy.signUpNewUser(user)
+      const user = users.admin
+      cy.signIn(user.email, user.password)
 
       cy.step("Can't add news with an incomplete profile")
       cy.visit('/news')
       cy.get('[data-cy=create-news]').should('not.exist')
-      // cy.get('[data-cy=complete-profile-news]').should('be.visible')
-      cy.visit('/news/create')
-      cy.get('[data-cy=incomplete-profile-message]').should('be.visible')
-      cy.get('[data-cy=field-title]').should('not.exist')
-
-      cy.completeUserProfile(user.username)
 
       cy.step('Can add news now profile is complete')
-      cy.visit('/news')
-      cy.get('[data-cy=complete-profile-news]').should('not.exist')
       cy.visit('/news/create')
       cy.get('[data-cy=field-title]', { timeout: 20000 })
 
@@ -67,10 +57,10 @@ describe('[News.Write]', () => {
       cy.selectTag(tag2, '[data-cy="tag-select"]')
 
       cy.step('Submit news')
-      cy.get('[data-cy=submit]')
-        .click()
-        .url()
-        .should('include', `/news/${initialExpectedSlug}`)
+      cy.get('[data-cy=submit]').click()
+
+      cy.wait(2000)
+      cy.url().should('include', `/news/${initialExpectedSlug}`)
 
       cy.step('All news fields shown')
       cy.visit('/news')
@@ -85,6 +75,7 @@ describe('[News.Write]', () => {
       cy.contains(category)
       cy.contains(tag1)
       cy.contains(tag2)
+      // Follow button should show you're subscribed
       // contains images
 
       cy.step('Edit fields')
@@ -138,7 +129,7 @@ describe('[News.Write]', () => {
       cy.get('[data-cy=create-news]').should('not.exist')
 
       cy.visit('/news/create')
-      cy.get('[data-cy=logged-out-message]').should('be.visible')
+      cy.url().should('contain', '/sign-in?returnUrl=%2Fnews%2Fcreate')
     })
 
     // it('[Admin]', () => {

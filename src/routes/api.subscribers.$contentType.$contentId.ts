@@ -30,6 +30,17 @@ export async function action({ request, params }: LoaderFunctionArgs) {
 
   let result
   if (request.method === 'POST') {
+    const response = await client
+      .from('subscribers')
+      .select('*')
+      .eq('content_type', params.contentType)
+      .eq('content_id', Number(params.contentId))
+      .eq('user_id', profileResult.data[0].id)
+
+    if (response.data && response.data.length > 0) {
+      return (result = response.data[0])
+    }
+
     result = await client.from('subscribers').insert({
       content_type: params.contentType,
       content_id: Number(params.contentId),

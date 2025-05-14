@@ -2,22 +2,25 @@ import { useEffect, useMemo, useState } from 'react'
 import { AuthorsContext, CommentsTitle } from 'oa-components'
 import { Comment } from 'oa-shared'
 import { commentService } from 'src/services/commentService'
+import { subscribersService } from 'src/services/subscribersService'
 import { Box, Button, Flex } from 'theme-ui'
 
 import { CommentItemSupabase } from './CommentItemSupabase'
 import { CreateCommentSupabase } from './CreateCommentSupabase'
 
-import type { ContentType, Reply } from 'oa-shared'
+import type { DiscussionContentTypes, Reply } from 'oa-shared'
+import type { ReactNode } from 'react'
 
 interface IProps {
   authors: Array<number>
   sourceId: number | string
-  sourceType: ContentType
+  sourceType: DiscussionContentTypes
+  followButton?: ReactNode
 }
 const commentPageSize = 10
 
 export const CommentSectionSupabase = (props: IProps) => {
-  const { authors, sourceId, sourceType } = props
+  const { authors, followButton, sourceId, sourceType } = props
   const [comments, setComments] = useState<Comment[]>([])
   const [newCommentIds, setNewCommentIds] = useState<number[]>([])
   const [commentLimit, setCommentLimit] = useState<number>(commentPageSize)
@@ -37,11 +40,7 @@ export const CommentSectionSupabase = (props: IProps) => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const result = await fetch(
-          `/api/discussions/${sourceType}/${sourceId}/comments`,
-        )
-        const { comments } = (await result.json()) as { comments: Comment[] }
-
+        const comments = await commentService.getComments(sourceType, sourceId)
         const highlightedCommentId = location.hash.replace('#comment:', '')
 
         if (highlightedCommentId) {
@@ -90,6 +89,10 @@ export const CommentSectionSupabase = (props: IProps) => {
 
       if (result.status === 201) {
         const newComment = Comment.fromDB(await result.json())
+        subscribersService.add(
+          newComment.sourceType,
+          Number(newComment.sourceId),
+        )
 
         setComments((comments) => [...comments, newComment])
         setNewCommentIds([...newCommentIds, newComment.id])
@@ -230,8 +233,10 @@ export const CommentSectionSupabase = (props: IProps) => {
   return (
     <AuthorsContext.Provider value={{ authors }}>
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-        <CommentsTitle comments={comments} />
-
+        <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+          <CommentsTitle comments={comments} />
+          {followButton && followButton}
+        </Flex>
         {displayedComments.map((comment) => (
           <Box key={comment.id}>
             <CommentItemSupabase

@@ -1,42 +1,39 @@
 export class DBAuthor {
   readonly id: number
-  readonly firebase_auth_id: string
+  readonly country?: string
   readonly display_name: string
-  readonly username: string
-  readonly photo_url: string
-  readonly country: string
-  readonly is_verified: boolean
   readonly is_supporter: boolean
+  readonly is_verified: boolean
+  readonly photo_url: string | null
+  readonly username: string
 
-  constructor(obj: DBAuthor) {
-    Object.assign(this, obj)
+  constructor(dbAuthor: DBAuthor) {
+    Object.assign(this, dbAuthor)
   }
 }
 
 export class Author {
   id: number
-  name: string
-  username: string
-  firebaseAuthId: string
-  photoUrl: string
-  country: string
+  country?: string
+  displayName: string
   isVerified: boolean
   isSupporter: boolean
+  photoUrl: string | null
+  username: string
 
-  constructor(obj: Author) {
-    Object.assign(this, obj)
+  constructor(author: Author) {
+    Object.assign(this, author)
   }
 
-  static fromDB(obj: DBAuthor) {
+  static fromDB(dbAuthor: DBAuthor) {
     return new Author({
-      id: obj.id,
-      name: obj.display_name,
-      username: obj.username,
-      firebaseAuthId: obj.firebase_auth_id,
-      photoUrl: obj.photo_url,
-      isVerified: obj.is_verified,
-      isSupporter: obj.is_supporter,
-      country: obj.country,
+      id: dbAuthor.id,
+      country: dbAuthor.country,
+      isSupporter: dbAuthor.is_supporter,
+      isVerified: dbAuthor.is_verified,
+      displayName: dbAuthor.display_name,
+      photoUrl: dbAuthor.photo_url,
+      username: dbAuthor.username,
     })
   }
 }

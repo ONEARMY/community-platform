@@ -33,25 +33,11 @@ export const MOCK_AUTH_USERS: IMockUsers = {
     password: 'demo_admin',
     roles: [UserRole.ADMIN],
   },
-  'super-admin': {
-    uid: 'demo_super_admin',
-    label: 'Super-Admin',
-    email: 'demo_super_admin@example.com',
-    password: 'demo_super_admin',
-    roles: [UserRole.SUPER_ADMIN],
-  },
   research_creator: {
     uid: 'research_creator',
     label: 'Research-Creator',
     email: 'research_creator@test.com',
     password: 'research_creator',
     roles: [UserRole.RESEARCH_CREATOR],
-  },
-  research_editor: {
-    uid: 'research_editor',
-    label: 'Research-Editor',
-    email: 'research_editor@test.com',
-    password: 'research_editor',
-    roles: [UserRole.RESEARCH_EDITOR],
   },
 }

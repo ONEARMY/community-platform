@@ -7,8 +7,7 @@ import {
 import { firestore } from 'src/utils/firebase'
 
 import type { User } from '@supabase/supabase-js'
-import type { ILibrary, IResearchDB, IUser, IUserDB } from 'oa-shared'
-import type { UserCreatedDocs } from 'src/pages/User/types'
+import type { ILibrary, IUser, IUserDB } from 'oa-shared'
 
 const getById = async (id: string): Promise<IUserDB | null> => {
   // Get all that match the slug, to avoid creating an index (blocker for cypress tests)
@@ -23,49 +22,12 @@ const getById = async (id: string): Promise<IUserDB | null> => {
   return snapshot.docs[0].data() as IUserDB
 }
 
-const getUserCreatedDocs = async (userId: string): Promise<UserCreatedDocs> => {
-  const [library, research, researchCollaborated] = await Promise.all([
-    getLibraryByAuthor(userId),
-    getResearchByAuthor(userId),
-    getResearchByCollaborator(userId),
-  ])
+const getUserCreatedProjects = async (
+  userId: string,
+): Promise<ILibrary.DB[]> => {
+  const projects = await getLibraryByAuthor(userId)
 
-  const researchCombined = [...research, ...researchCollaborated].filter(
-    (item, index, self) => index === self.findIndex((t) => t._id === item._id),
-  )
-  const libraryFiltered = library.filter(
-    (doc) => doc.moderation === IModerationStatus.ACCEPTED,
-  )
-  const researchFiltered = researchCombined.filter(
-    (doc) => doc.moderation === IModerationStatus.ACCEPTED,
-  )
-
-  return {
-    library: libraryFiltered,
-    research: researchFiltered,
-  }
-}
-
-const getResearchByAuthor = async (userId: string) => {
-  return (
-    await getDocs(
-      query(
-        collection(firestore, DB_ENDPOINTS.research),
-        where('_createdBy', '==', userId),
-      ),
-    )
-  ).docs.map((doc) => doc.data() as IResearchDB)
-}
-
-const getResearchByCollaborator = async (userId: string) => {
-  return (
-    await getDocs(
-      query(
-        collection(firestore, DB_ENDPOINTS.research),
-        where('collaborators', 'array-contains', userId),
-      ),
-    )
-  ).docs.map((doc) => doc.data() as IResearchDB)
+  return projects.filter((doc) => doc.moderation === IModerationStatus.ACCEPTED)
 }
 
 const getLibraryByAuthor = async (userId: string) => {
@@ -103,6 +65,6 @@ const createFirebaseProfile = async (authUser: User) => {
 
 export const userService = {
   getById,
-  getUserCreatedDocs,
+  getUserCreatedProjects,
   createFirebaseProfile,
 }

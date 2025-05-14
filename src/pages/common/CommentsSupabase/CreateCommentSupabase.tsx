@@ -5,7 +5,7 @@ import { UserAction } from 'src/common/UserAction'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { Box, Flex, Text, Textarea } from 'theme-ui'
 
-import type { ContentType } from 'oa-shared'
+import type { DiscussionContentTypes } from 'oa-shared'
 import type { ChangeEvent } from 'react'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
@@ -13,7 +13,7 @@ import './CreateCommentSupabase.css'
 
 interface IProps {
   onSubmit: (value: string) => void
-  sourceType: ContentType
+  sourceType: DiscussionContentTypes
   isLoading?: boolean
   isReply?: boolean
   placeholder?: string

@@ -20,7 +20,7 @@ To sync snaplet (essentially generate snaplet models and docs from `seed.config.
 yarn db:reset
 ```
 
-Or if you need to run the commands seperately:
+Or if you need to run the commands separately:
 
 ```sh
 npx supabase db reset

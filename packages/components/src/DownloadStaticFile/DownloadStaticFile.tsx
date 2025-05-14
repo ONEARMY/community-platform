@@ -5,14 +5,11 @@ import { ExternalLink } from '../ExternalLink/ExternalLink'
 import { Icon } from '../Icon/Icon'
 import { Tooltip } from '../Tooltip/Tooltip'
 
+import type { MediaFile } from 'oa-shared'
 import type { availableGlyphs } from '../Icon/types'
 
 export interface IProps {
-  file: {
-    name: string
-    size: number
-    downloadUrl?: string | undefined
-  }
+  file: MediaFile
   fileDownloadCount?: number
   forDonationRequest?: boolean
   isLoggedIn?: boolean
@@ -22,20 +19,18 @@ export interface IProps {
 }
 
 interface IPropFileDetails {
-  file: { name: string }
+  name: string
   glyph: availableGlyphs
   size: string
   redirectToSignIn?: () => Promise<void>
 }
 
 const FileDetails = (props: IPropFileDetails) => {
-  const { file, glyph, size, redirectToSignIn } = props
+  const { name, glyph, size, redirectToSignIn } = props
 
   return (
     <>
       <Flex
-        p={2}
-        mb={1}
         sx={{
           borderRadius: 1,
           border: '2px solid black',
@@ -46,6 +41,8 @@ const FileDetails = (props: IPropFileDetails) => {
           flexDirection: 'row',
           width: '300px',
           cursor: 'pointer',
+          padding: 2,
+          marginBottom: 1,
         }}
         onClick={() => redirectToSignIn && redirectToSignIn()}
         data-tooltip-id="login-download"
@@ -59,10 +56,10 @@ const FileDetails = (props: IPropFileDetails) => {
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
             overflow: 'hidden',
+            marginRight: 3,
           }}
-          mr={3}
         >
-          {file.name}
+          {name}
         </Text>
         <Text sx={{ fontSize: 1 }}>{size}</Text>
       </Flex>
@@ -86,19 +83,18 @@ export const DownloadStaticFile = (props: IProps) => {
     return null
   }
 
-  const forDownload = allowDownload && file.downloadUrl && !redirectToSignIn
+  const forDownload = allowDownload && file.url && !redirectToSignIn
 
   return (
     <>
       {forDownload && (
         <ExternalLink
-          m={1}
           onClick={() => handleClick && handleClick()}
-          href={file.downloadUrl}
+          href={file.url}
           download={file.name}
-          style={{ width: '300px', marginLeft: 0 }}
+          sx={{ width: '300px', marginLeft: 0, marginRight: 1 }}
         >
-          <FileDetails file={file} glyph="download-cloud" size={size} />
+          <FileDetails name={file.name} glyph="download-cloud" size={size} />
         </ExternalLink>
       )}
 

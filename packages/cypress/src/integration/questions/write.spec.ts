@@ -77,6 +77,8 @@ describe('[Question]', () => {
       cy.contains(initialTitle)
       cy.contains(initialQuestionDescription)
       cy.contains(category)
+      // Follow button should show you're subscribed
+
       // cy.contains(tag1)
       // cy.contains(tag2)
       // contains images
@@ -132,7 +134,7 @@ describe('[Question]', () => {
       cy.get('[data-cy=sign-up]').should('be.visible')
 
       cy.visit('/questions/create')
-      cy.get('[data-cy=logged-out-message]').should('be.visible')
+      cy.url().should('contain', '/sign-in?returnUrl=%2Fquestions%2Fcreate')
     })
 
     // it('[Admin]', () => {

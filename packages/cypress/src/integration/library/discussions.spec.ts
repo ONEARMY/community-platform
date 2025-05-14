@@ -14,7 +14,7 @@ const secondCommentor = MOCK_DATA.users.profile_views
 
 describe('[Library.Discussions]', () => {
   it('can open using deep links', () => {
-    const firstComment = libraryDiscussion.comments[0]
+    const firstComment = libraryDiscussion!.comments[0]
     cy.visit(`/library/${item.slug}#comment:${firstComment._id}`)
     cy.wait(2000)
     cy.checkCommentItem(firstComment.text, 2)

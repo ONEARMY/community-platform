@@ -1,20 +1,19 @@
-import { ResearchUpdateStatus, UserRole } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 import { describe, expect, it } from 'vitest'
 
 import { researchUpdateStatusFilter } from './researchHelpers'
 
-import type { IResearch, IUserDB } from 'oa-shared'
+import type { Author, DBProfile, ResearchUpdate } from 'oa-shared'
 
 describe('Research Helpers', () => {
   describe('Research Update Status Filter', () => {
     it('should not show item when deleted', () => {
       // prepare
-      const user = { _id: 'author' } as IUserDB
-      const item = { _createdBy: user._id } as IResearch.Item
-      const update = { _deleted: true } as IResearch.Update
+      const user = { id: 1 } as DBProfile
+      const update = { deleted: true } as ResearchUpdate
 
       // act
-      const show = researchUpdateStatusFilter(item, update, user)
+      const show = researchUpdateStatusFilter(null, null, update, user)
 
       // assert
       expect(show).toEqual(false)
@@ -22,15 +21,14 @@ describe('Research Helpers', () => {
 
     it('should not show item when deleted and draft', () => {
       // prepare
-      const user = { _id: 'author' } as IUserDB
-      const item = { _createdBy: user._id } as IResearch.Item
+      const user = { id: 1 } as DBProfile
       const update = {
-        _deleted: true,
-        status: ResearchUpdateStatus.DRAFT,
-      } as IResearch.Update
+        deleted: true,
+        isDraft: true,
+      } as ResearchUpdate
 
       // act
-      const show = researchUpdateStatusFilter(item, update, user)
+      const show = researchUpdateStatusFilter(null, null, update, user)
 
       // assert
       expect(show).toEqual(false)
@@ -38,12 +36,12 @@ describe('Research Helpers', () => {
 
     it('should not show when draft and not author', () => {
       // prepare
-      const user = { _id: 'non-author' } as IUserDB
-      const item = { _createdBy: 'author' } as IResearch.Item
-      const update = { status: ResearchUpdateStatus.DRAFT } as IResearch.Update
+      const user = { id: 1 } as DBProfile
+      const author = { id: 2 } as Author
+      const update = { isDraft: true } as ResearchUpdate
 
       // act
-      const show = researchUpdateStatusFilter(item, update, user)
+      const show = researchUpdateStatusFilter(author, null, update, user)
 
       // assert
       expect(show).toEqual(false)
@@ -51,12 +49,10 @@ describe('Research Helpers', () => {
 
     it('should not show when draft and not authenticated', () => {
       // prepare
-      const user = { _id: 'author' } as IUserDB
-      const item = { _createdBy: user._id } as IResearch.Item
-      const update = { status: ResearchUpdateStatus.DRAFT } as IResearch.Update
+      const update = { isDraft: true } as ResearchUpdate
 
       // act
-      const show = researchUpdateStatusFilter(item, update)
+      const show = researchUpdateStatusFilter(null, null, update, undefined)
 
       // assert
       expect(show).toEqual(false)
@@ -64,14 +60,12 @@ describe('Research Helpers', () => {
 
     it('should show when not draft and not deleted', () => {
       // prepare
-      const user = { _id: 'author' } as IUserDB
-      const item = { _createdBy: user._id } as IResearch.Item
       const update = {
-        status: ResearchUpdateStatus.PUBLISHED,
-      } as IResearch.Update
+        isDraft: false,
+      } as ResearchUpdate
 
       // act
-      const show = researchUpdateStatusFilter(item, update)
+      const show = researchUpdateStatusFilter(null, null, update, undefined)
 
       // assert
       expect(show).toEqual(true)
@@ -79,12 +73,12 @@ describe('Research Helpers', () => {
 
     it('should show when draft and current user is the author', () => {
       // prepare
-      const user = { _id: 'author' } as IUserDB
-      const item = { _createdBy: user._id } as IResearch.Item
-      const update = { status: ResearchUpdateStatus.DRAFT } as IResearch.Update
+      const author = { id: 1 } as Author
+      const user = { id: 1 } as DBProfile
+      const update = { isDraft: true } as ResearchUpdate
 
       // act
-      const show = researchUpdateStatusFilter(item, update, user)
+      const show = researchUpdateStatusFilter(author, null, update, user)
 
       // assert
       expect(show).toEqual(true)
@@ -92,12 +86,12 @@ describe('Research Helpers', () => {
 
     it('should show when draft and current user is a collaborator', () => {
       // prepare
-      const user = { _id: 'author' } as IUserDB
-      const item = { collaborators: [user._id] } as IResearch.Item
-      const update = { status: ResearchUpdateStatus.DRAFT } as IResearch.Update
+      const collaborators = [{ id: 1 }] as Author[]
+      const user = { id: 1 } as DBProfile
+      const update = { isDraft: true } as ResearchUpdate
 
       // act
-      const show = researchUpdateStatusFilter(item, update, user)
+      const show = researchUpdateStatusFilter(null, collaborators, update, user)
 
       // assert
       expect(show).toEqual(true)
@@ -105,12 +99,11 @@ describe('Research Helpers', () => {
 
     it('should show when draft and current user is an Admin', () => {
       // prepare
-      const user = { _id: 'admin', userRoles: [UserRole.ADMIN] } as IUserDB
-      const item = {} as IResearch.Item
-      const update = { status: ResearchUpdateStatus.DRAFT } as IResearch.Update
+      const user = { id: 1, roles: [UserRole.ADMIN] } as DBProfile
+      const update = { isDraft: true } as ResearchUpdate
 
       // act
-      const show = researchUpdateStatusFilter(item, update, user)
+      const show = researchUpdateStatusFilter(null, null, update, user)
 
       // assert
       expect(show).toEqual(true)

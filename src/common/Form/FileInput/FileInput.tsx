@@ -1,10 +1,10 @@
-import * as React from 'react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Uppy from '@uppy/core'
 import { DashboardModal } from '@uppy/react'
-import { Button, DownloadStaticFile } from 'oa-components'
+import { Button } from 'oa-components'
 import { Flex } from 'theme-ui'
 
+import { FileDisplay } from './FileDisplay'
 import { UPPY_CONFIG } from './UppyConfig'
 import { UPPY_CONFIG_ADMIN } from './UppyConfigAdmin'
 
@@ -13,101 +13,111 @@ import type { UppyFile } from '@uppy/core'
 import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
 
-interface IUppyFiles {
-  [key: string]: UppyFile
-}
 interface IProps {
   onFilesChange?: (files: (Blob | File)[]) => void
   'data-cy'?: string
   admin: boolean
 }
-interface IState {
-  open: boolean
-}
-export const FileInput = (props: IProps) => {
-  const [state, setState] = useState<IState>({ open: false })
-  const uploadConfig = props.admin ? UPPY_CONFIG_ADMIN : UPPY_CONFIG
-  const [uppy] = useState(
-    () =>
-      new Uppy({
-        ...uploadConfig,
-        onBeforeUpload: () => uploadTriggered(),
-      }),
-  )
 
+export const FileInput = (props: IProps) => {
+  const [open, setOpen] = useState(false)
+  const [fileState, setFileState] = useState<Record<string, UppyFile>>({}) // Add this state
+  const uploadConfig = props.admin ? UPPY_CONFIG_ADMIN : UPPY_CONFIG
+
+  const uppyRef = useRef<Uppy | null>(null)
+
+  if (!uppyRef.current) {
+    uppyRef.current = new Uppy({
+      ...uploadConfig,
+      onBeforeUpload: () => uploadTriggered(),
+    })
+
+    // Add event listener for file removal
+    uppyRef.current.on('file-removed', () => {
+      const newState = uppyRef.current!.getState().files
+      setFileState(newState)
+      // Trigger callback when files are removed
+      props.onFilesChange?.(
+        Object.values(newState).map((file) => file.data) as File[],
+      )
+    })
+    uppyRef.current.on('file-added', () => {
+      const newState = uppyRef.current!.getState().files
+      setFileState(newState)
+      // Trigger callback when a file is added
+      props.onFilesChange?.(
+        Object.values(newState).map((file) => file.data) as File[],
+      )
+    })
+    uppyRef.current.on('files-added', () => {
+      const newState = uppyRef.current!.getState().files
+      setFileState(newState)
+      // Trigger callback when multiple files are added
+      props.onFilesChange?.(
+        Object.values(newState).map((file) => file.data) as File[],
+      )
+    })
+  }
   useEffect(() => {
     return () => {
-      uppy.close()
+      uppyRef.current?.close()
     }
   }, [])
 
-  const files = () => {
-    const files = uppy.getState().files as IUppyFiles
-    return files
-  }
-  const filesArray = () => {
-    return Object.values(files()).map((meta) => meta.data) as File[]
+  const remove = (id: string) => {
+    uppyRef.current!.removeFile(id)
   }
 
-  // when upload button clicked just want to clise modal and reflect files
+  const files = useMemo(() => {
+    return Object.values(fileState) as UppyFile[]
+  }, [fileState])
+
+  // Memoize callback trigger function
+  const triggerCallback = useCallback(() => {
+    // Ensure we're passing the actual File objects from the data property
+    const fileObjects = files.map((meta) => meta.data) as File[]
+    props.onFilesChange?.(fileObjects)
+  }, [props.onFilesChange, files])
+
   const uploadTriggered = () => {
-    toggleModal()
-    return files()
+    setOpen(false)
+    return uppyRef.current!.getState().files
   }
-
-  const toggleModal = () => {
-    setState((state) => ({ open: !state.open }))
-    triggerCallback()
-  }
-  // reflect changes to current files whenever modal open or closed
-  const triggerCallback = () => {
-    if (props.onFilesChange) {
-      props.onFilesChange(filesArray())
-    }
-  }
-
-  const showFileList = filesArray().length > 0
 
   return (
-    <Flex sx={{ flexDirection: 'column', justifyContent: 'center' }}>
-      {showFileList ? (
-        <>
-          <Button
-            type="button"
-            onClick={() => toggleModal()}
-            icon="upload"
-            variant="outline"
-            mb={1}
-            data-cy={props['data-cy']}
-          >
-            Add Files
-          </Button>
-          {filesArray().map((file) => (
-            <DownloadStaticFile
-              key={file.name}
-              file={file}
-              allowDownload={false}
-            />
-          ))}
-        </>
-      ) : (
-        <Button
-          icon="upload"
-          onClick={() => toggleModal()}
-          type="button"
-          variant="outline"
-          data-cy={props['data-cy']}
-        >
-          Upload Files
-        </Button>
-      )}
+    <Flex sx={{ flexDirection: 'column', justifyContent: 'center', gap: 1 }}>
+      <Button
+        type="button"
+        onClick={() => setOpen(true)}
+        icon="upload"
+        variant="outline"
+        sx={{ mb: 1, width: 'fit-content ' }}
+        data-cy={props['data-cy']}
+      >
+        Add Files
+      </Button>
+      {files.map((file) => (
+        <FileDisplay
+          key={file.id}
+          file={{
+            id: file.id,
+            name: file.name,
+            size: file.size,
+          }}
+          onRemove={() => remove(file.id)}
+        />
+      ))}
+
       <DashboardModal
         proudlyDisplayPoweredByUppy={false}
-        uppy={uppy}
-        open={state.open}
+        uppy={uppyRef.current}
+        open={open}
         data-cy="uppy-dashboard"
         closeModalOnClickOutside
-        onRequestClose={() => toggleModal()}
+        onRequestClose={() => {
+          setOpen(false)
+          triggerCallback()
+        }}
       />
     </Flex>
   )

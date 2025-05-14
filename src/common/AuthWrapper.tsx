@@ -11,17 +11,21 @@ import type { IUserDB, UserRole } from 'oa-shared'
     Optionally provide a fallback component to render if not satisfied
 */
 interface IProps {
-  roleRequired?: UserRole | UserRole[]
-  fallback?: React.ReactNode
   children: React.ReactNode
+  borderLess?: boolean
+  fallback?: React.ReactNode
+  roleRequired?: UserRole | UserRole[]
 }
 
 export const AuthWrapper = observer((props: IProps) => {
+  const { borderLess, children, roleRequired } = props
   const { userStore } = useCommonStores().stores
-  const isAuthorized = isUserAuthorized(userStore?.user, props.roleRequired)
+
+  const isAuthorized = isUserAuthorized(userStore?.user, roleRequired)
+
   const childElements =
-    props.roleRequired === 'beta-tester' ? (
-      <div className="beta-tester-feature">{props.children}</div>
+    roleRequired === 'beta-tester' && !borderLess ? (
+      <div className="beta-tester-feature">{children}</div>
     ) : (
       props.children
     )

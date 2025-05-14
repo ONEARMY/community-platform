@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { observer } from 'mobx-react'
 import { SettingsFormWrapper } from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -15,17 +16,15 @@ import { SettingsPageNotifications } from './SettingsPageNotifications'
 import { SettingsPageUserProfile } from './SettingsPageUserProfile'
 
 import type { availableGlyphs, ITab } from 'oa-components'
-import type { IUserDB } from 'oa-shared'
 
-type SettingsPageProps = {
-  profile: IUserDB
-}
+import '../../styles/leaflet.css'
 
-export const SettingsPage = ({ profile }: SettingsPageProps) => {
+export const SettingsPage = observer(() => {
   const env = useContext(EnvironmentContext)
   const { userStore } = useCommonStores().stores
+  const profile = userStore.activeUser
 
-  if (userStore.activeUser?._id !== profile._id) {
+  if (!profile?._id) {
     return null
   }
 
@@ -99,4 +98,4 @@ export const SettingsPage = ({ profile }: SettingsPageProps) => {
       <SettingsFormWrapper tabs={tabs} />
     </Box>
   )
-}
+})

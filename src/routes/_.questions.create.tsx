@@ -1,37 +1,44 @@
 import { UserAction } from 'src/common/UserAction'
-import { AuthRoute } from 'src/pages/common/AuthRoute'
+import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm'
 import { listing } from 'src/pages/Question/labels'
-import { QuestionCreate } from 'src/pages/Question/QuestionCreate'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { redirectServiceServer } from 'src/services/redirectService.server'
 import { Box } from 'theme-ui'
 
-export async function clientLoader() {
+import type { LoaderFunctionArgs } from '@remix-run/node'
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const { client, headers } = createSupabaseServerClient(request)
+  const {
+    data: { user },
+  } = await client.auth.getUser()
+
+  if (!user) {
+    return redirectServiceServer.redirectSignIn('/questions/create', headers)
+  }
+
   return null
 }
 
 export default function Index() {
-  const { incompleteProfile, loggedOut } = listing
-  const sx = {
-    alignSelf: 'center',
-    paddingTop: 5,
-  }
-
   return (
     <UserAction
       incompleteProfile={
-        <Box data-cy="incomplete-profile-message" sx={sx}>
-          {incompleteProfile}
+        <Box
+          data-cy="incomplete-profile-message"
+          sx={{ alignSelf: 'center', paddingTop: 5 }}
+        >
+          {listing.incompleteProfile}
         </Box>
       }
       loggedIn={
-        <AuthRoute>
-          <QuestionCreate />
-        </AuthRoute>
+        <QuestionForm
+          data-testid="question-create-form"
+          parentType="create"
+          question={null}
+        />
       }
-      loggedOut={
-        <Box data-cy="logged-out-message" sx={sx}>
-          {loggedOut}
-        </Box>
-      }
+      loggedOut={<></>}
     />
   )
 }

@@ -10,7 +10,6 @@ export const transformToUserComments = (
       ...c,
       isEditable:
         c._creatorId === loggedInUser?._id ||
-        loggedInUser?.userRoles?.includes(UserRole.SUPER_ADMIN) ||
         loggedInUser?.userRoles?.includes(UserRole.ADMIN),
     })) || []
   )

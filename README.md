@@ -28,7 +28,7 @@ This platform aims to tackle these problems by creating a strong unified communi
 
 ## ⚡️ &nbsp; What is this platform?
 
-Our community platform helps people to grow communities and make it easier to collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally and more. It aims to provide the tools to connect both online and offline. Amongst other features we have a library of projects, research, questions, commenting and a map.
+Our community platform helps people to grow communities and makes it easier to collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally and more. It aims to provide the tools to connect both online and offline. Amongst other features we have a library of projects, research, questions, commenting and a map.
 
 ### Have a look on our [website](https://platform.onearmy.earth) to have a clear overview
 
@@ -195,6 +195,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/dizer-ti"><img src="https://avatars.githubusercontent.com/u/155266991?v=4?s=60" width="60px;" alt="James Niken"/><br /><sub><b>James Niken</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=dizer-ti" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/omahs"><img src="https://avatars.githubusercontent.com/u/73983677?v=4?s=60" width="60px;" alt="omahs"/><br /><sub><b>omahs</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=omahs" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>

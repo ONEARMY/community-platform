@@ -6,7 +6,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { newsServiceServer } from 'src/services/newsService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
-import { utilsServiceServer } from '../services/utilsService.server'
+import { contentServiceServer } from '../services/contentService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { DBNews } from 'oa-shared'
@@ -23,7 +23,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbNews = result.data as unknown as DBNews
 
   if (dbNews.id) {
-    await utilsServiceServer.incrementViewCount(
+    await contentServiceServer.incrementViewCount(
       client,
       'news',
       dbNews.total_views,
@@ -32,7 +32,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const [usefulVotes, subscribers, tags] =
-    await utilsServiceServer.getMetaFields(client, dbNews.id, dbNews.tags)
+    await contentServiceServer.getMetaFields(
+      client,
+      dbNews.id,
+      'news',
+      dbNews.tags,
+    )
 
   const heroImage = await newsServiceServer.getHeroImage(
     client,

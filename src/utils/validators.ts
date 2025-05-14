@@ -7,8 +7,9 @@ import type { Mutator } from 'final-form'
  *            General Validation Methods
  * **************************************************************************/
 
-const required = (value: any) =>
-  value ? undefined : 'Make sure this field is filled correctly'
+const required = (value: any) => {
+  return value ? undefined : 'Make sure this field is filled correctly'
+}
 
 const noSpecialCharacters = (value: string) => {
   const specialCharacters = value ? getSpecialCharacters(value) : ''

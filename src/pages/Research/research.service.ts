@@ -1,35 +1,32 @@
-import { collection, getDocs, query, where } from 'firebase/firestore'
-import { DB_ENDPOINTS } from 'oa-shared'
 import { logger } from 'src/logger'
-import { firestore } from 'src/utils/firebase'
-import { changeUserReferenceToPlainText } from 'src/utils/mentions.utils'
 
 import type {
-  ICategory,
-  IResearch,
-  IResearchDB,
+  IConvertedFileMeta,
+  ResearchFormData,
+  ResearchItem,
   ResearchStatus,
+  ResearchUpdateFormData,
 } from 'oa-shared'
 import type { ResearchSortOption } from './ResearchSortOptions'
 
 const search = async (
-  words: string[],
+  q: string,
   category: string,
   sort: ResearchSortOption,
   status: ResearchStatus | null,
-  lastDocId?: string,
+  skip: number = 0,
 ) => {
   try {
     const url = new URL('/api/research', window.location.origin)
-    url.searchParams.append('words', words.join(','))
+    url.searchParams.append('q', q)
     url.searchParams.append('category', category)
     url.searchParams.append('sort', sort)
     url.searchParams.append('status', status ?? '')
-    url.searchParams.append('lastDocId', lastDocId ?? '')
+    url.searchParams.append('skip', skip.toString())
 
     const response = await fetch(url)
     const { items, total } = (await response.json()) as {
-      items: IResearch.Item[]
+      items: ResearchItem[]
       total: number
     }
 
@@ -40,23 +37,9 @@ const search = async (
   }
 }
 
-const getResearchCategories = async () => {
+const getDraftCount = async () => {
   try {
-    const response = await fetch('/api/research/categories')
-    const { categories } = (await response.json()) as {
-      categories: ICategory[]
-    }
-
-    return categories
-  } catch (error) {
-    logger.error('Failed to fetch draft count', { error })
-    return []
-  }
-}
-
-const getDraftCount = async (userId: string) => {
-  try {
-    const response = await fetch(`/api/research/drafts/count?userId=${userId}`)
+    const response = await fetch('/api/research/drafts/count')
     const { total } = (await response.json()) as { total: number }
 
     return total
@@ -66,10 +49,10 @@ const getDraftCount = async (userId: string) => {
   }
 }
 
-const getDrafts = async (userId: string) => {
+const getDrafts = async () => {
   try {
-    const response = await fetch(`/api/research?drafts=true&userId=${userId}`)
-    const { items } = (await response.json()) as { items: IResearch.Item[] }
+    const response = await fetch('/api/research/drafts')
+    const { items } = (await response.json()) as { items: ResearchItem[] }
 
     return items
   } catch (error) {
@@ -78,55 +61,171 @@ const getDrafts = async (userId: string) => {
   }
 }
 
-const getBySlug = async (slug: string) => {
-  // Get all that match the slug, to avoid creating an index (blocker for cypress tests)
-  let snapshot = await getDocs(
-    query(
-      collection(firestore, DB_ENDPOINTS.research),
-      where('slug', '==', slug),
-    ),
-  )
+const upsert = async (
+  id: number | null,
+  research: ResearchFormData,
+  isDraft = false,
+) => {
+  const data = new FormData()
+  data.append('title', research.title)
 
-  if (snapshot.size === 0) {
-    // try previous slugs if slug is not recognized as primary
-    snapshot = await getDocs(
-      query(
-        collection(firestore, DB_ENDPOINTS.research),
-        where('previousSlugs', 'array-contains', slug),
-      ),
-    )
-  }
-
-  if (snapshot.size === 0) {
-    return null
-  }
-
-  const research = snapshot.docs[0].data() as IResearchDB
-
-  if (!research) {
-    return null
-  }
-
-  // Change all UserReferences to mentions
   if (research.description) {
-    research.description = changeUserReferenceToPlainText(research.description)
+    data.append('description', research.description)
   }
 
-  for (const update of research.updates) {
-    if (!update.description) {
-      continue
+  if (research.tags && research.tags.length > 0) {
+    for (const tag of research.tags) {
+      data.append('tags', tag.toString())
+    }
+  }
+
+  if (research.category) {
+    data.append('category', research.category?.value.toString())
+  }
+
+  if (research.collaborators) {
+    for (const collaborator of research.collaborators) {
+      data.append('collaborators', collaborator.toString())
+    }
+  }
+
+  if (isDraft) {
+    data.append('draft', 'true')
+  }
+
+  if (research.image) {
+    data.append('image', research.image.photoData, research.image.name)
+  }
+
+  if (research.existingImage) {
+    data.append('existingImage', research.existingImage.id)
+  }
+
+  const response =
+    id === null
+      ? await fetch(`/api/research`, {
+          method: 'POST',
+          body: data,
+        })
+      : await fetch(`/api/research/${id}`, {
+          method: 'PUT',
+          body: data,
+        })
+
+  if (response.status !== 200 && response.status !== 201) {
+    if (response.status === 409) {
+      throw new Error('Duplicate research item', { cause: 409 })
     }
 
-    update.description = changeUserReferenceToPlainText(update.description)
+    throw new Error('Error saving research', { cause: 500 })
   }
 
-  return research
+  return (await response.json()) as { research: ResearchItem }
+}
+
+const upsertUpdate = async (
+  id: number,
+  updateId: number | null,
+  update: ResearchUpdateFormData,
+  isDraft = false,
+) => {
+  const data = new FormData()
+  data.append('title', update.title)
+  data.append('description', update.description)
+  data.append('fileLink', update.fileLink || '')
+  data.append('videoUrl', update.videoUrl || '')
+
+  if (update.images && update.images.length > 0) {
+    for (const image of update.images as unknown as IConvertedFileMeta[]) {
+      data.append('images', image.photoData, image.name)
+    }
+  }
+
+  if (update.existingImages && update.existingImages.length > 0) {
+    for (const image of update.existingImages) {
+      data.append('existingImages', image.id)
+    }
+  }
+
+  if (update.files && update.files.length > 0) {
+    for (const file of update.files) {
+      data.append('files', file, file.name)
+    }
+  }
+
+  if (update.existingFiles && update.existingFiles.length > 0) {
+    for (const file of update.existingFiles) {
+      data.append('existingFiles', file.id)
+    }
+  }
+
+  if (isDraft) {
+    data.append('draft', 'true')
+  }
+
+  const response =
+    updateId === null
+      ? await fetch(`/api/research/${id}/updates`, {
+          method: 'POST',
+          body: data,
+        })
+      : await fetch(`/api/research/${id}/updates/${updateId}`, {
+          method: 'PUT',
+          body: data,
+        })
+
+  if (response.status !== 200 && response.status !== 201) {
+    if (response.status === 409) {
+      throw new Error('Duplicate research update', { cause: 409 })
+    }
+
+    throw new Error('Error saving research update', { cause: 500 })
+  }
+
+  return (await response.json()) as { researchUpdate: ResearchItem }
+}
+
+const deleteResearch = async (id: number) => {
+  const response = await fetch(`/api/research/${id}`, {
+    method: 'DELETE',
+  })
+
+  if (response.status !== 200 && response.status !== 201) {
+    throw new Error('Error deleting research', { cause: 500 })
+  }
+}
+
+const updateResearchStatus = async (id: number, status: ResearchStatus) => {
+  const data = new FormData()
+  data.append('status', status)
+
+  const response = await fetch(`/api/research/${id}/status`, {
+    method: 'PATCH',
+    body: data,
+  })
+
+  if (response.status !== 200 && response.status !== 201) {
+    throw new Error('Error updating research status', { cause: 500 })
+  }
+}
+
+const deleteUpdate = async (id: number, updateId: number | null) => {
+  const response = await fetch(`/api/research/${id}/updates/${updateId}`, {
+    method: 'DELETE',
+  })
+
+  if (response.status !== 200 && response.status !== 201) {
+    throw new Error('Error deleting research update', { cause: 500 })
+  }
 }
 
 export const researchService = {
   search,
-  getResearchCategories,
   getDrafts,
   getDraftCount,
-  getBySlug,
+  upsert,
+  upsertUpdate,
+  updateResearchStatus,
+  deleteResearch,
+  deleteUpdate,
 }

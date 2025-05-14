@@ -15,6 +15,7 @@ export const seedAccounts = async () => {
       email: user['email'],
       username: user.userName,
       password: user['password'],
+      roles: user.userRoles,
     }))
 
   const userIds = await Promise.all(
@@ -37,6 +38,7 @@ export const seedAccounts = async () => {
       display_name: x.username,
       is_verified: true,
       is_supporter: false,
+      roles: x.roles,
     }))
 
   return await seedDatabase({ profiles }, tenantId)
@@ -80,7 +82,7 @@ export const deleteAccounts = async () => {
 
   for (const user of result.data.users) {
     // only delete mock users and test users
-    if (mockUsers.has(user.email) || user.email.endsWith('@resend.dev')) {
+    if (mockUsers.has(user.email) || user.email!.endsWith('@resend.dev')) {
       await adminClient.auth.admin.deleteUser(user.id)
     }
   }

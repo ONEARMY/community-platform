@@ -36,16 +36,19 @@ const MapsPage = () => {
       return []
     }
 
-    const pinDetails = allPins.map(({ creator }) => [
-      creator?.profileType,
-      // Hiding member tags for the moment
-      ...(creator?.tags && creator?.profileType !== 'member'
-        ? creator.tags.map(({ _id }) => _id)
-        : []),
-      ...(creator?.badges
-        ? Object.keys(creator?.badges).filter((key) => key)
-        : []),
-    ])
+    const pinDetails = allPins.map(({ creator }) => {
+      return [
+        creator?.profileType,
+        // Hiding member tags for the moment
+        ...(creator?.tags && creator?.profileType !== 'member'
+          ? creator.tags.map(({ _id }) => _id)
+          : []),
+        ...(creator?.badges
+          ? Object.keys(creator?.badges).filter((key) => key)
+          : []),
+        ...(creator?.openToVisitors ? ['visitors'] : []),
+      ]
+    })
 
     const filtersNeeded = [...new Set(pinDetails.flat())]
 

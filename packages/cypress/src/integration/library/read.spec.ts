@@ -99,12 +99,12 @@ describe('[Library]', () => {
 
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(1)
-          .should('contain', item.category.label)
+          .should('contain', item.category!.label)
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(1)
           .children()
           .should('have.attr', 'href')
-          .and('equal', `/library?category=${item.category._id}`)
+          .and('equal', `/library?category=${item.category!._id}`)
 
         cy.get('[data-cy=breadcrumbsItem]').eq(2).should('contain', item.title)
 

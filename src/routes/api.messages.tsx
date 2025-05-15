@@ -1,7 +1,7 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
 import { sendEmail } from '../.server/resend'
-import RecieverMessage from '../.server/templates/RecieverMessage'
+import ReceiverMessage from '../.server/templates/ReceiverMessage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
@@ -92,7 +92,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const messenger = userProfile.data![0]
 
     const emailTemplate = (
-      <RecieverMessage
+      <ReceiverMessage
         settings={{
           siteName: settings.siteName,
           messageSignOff: settings.messageSignOff,

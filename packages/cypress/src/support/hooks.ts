@@ -2,6 +2,7 @@ import { clearDatabase } from '../utils/TestUtils'
 import { seedAccounts } from './seedAccounts'
 import { seedNews } from './seedNews'
 import { seedQuestions, seedTags } from './seedQuestions'
+import { seedResearch } from './seedResearch'
 
 /**
  * Before all tests begin seed the database. CY runs this before all specs.
@@ -32,6 +33,7 @@ before(() => {
 
     await seedQuestions(profiles)
     await seedNews(profiles, tags)
+    await seedResearch(profiles, tags)
   })
   localStorage.clear()
   cy.clearServiceWorkers()
@@ -49,7 +51,16 @@ after(async () => {
     message: Cypress.env('TENANT_ID'),
   })
   await clearDatabase(
-    ['categories', 'comments', 'news', 'profiles', 'questions', 'tags'],
+    [
+      'categories',
+      'comments',
+      'news',
+      'research',
+      'research_updates',
+      'profiles',
+      'questions',
+      'tags',
+    ],
     Cypress.env('TENANT_ID'),
   )
 })

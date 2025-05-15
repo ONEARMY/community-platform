@@ -3,10 +3,9 @@ import { RESEARCH_MAX_LENGTH, RESEARCH_TITLE_MAX_LENGTH } from './constants'
 import type { ILabels } from 'src/common/Form/types'
 
 export const buttons = {
-  draft: {
-    create: 'Save as draft',
-    update: 'Save to draft',
-  },
+  draft: 'Save as draft',
+  markCompleted: 'Mark as Completed',
+  markInProgress: 'Mark as In Progress',
   deletion: {
     text: 'Delete this update',
     confirm: 'Delete',
@@ -38,17 +37,17 @@ export const errors = {
 export const overview: ILabels = {
   categories: {
     placeholder: 'Select category',
-    title: 'Which categories fit your research?',
+    title: 'Which category fit your research?',
   },
   collaborators: {
     placeholder: 'Select collaborators or start typing to find them',
-    title: 'Who have you been collaborating on this Research with?',
+    title: 'Who is collaborating with you on this research?',
   },
   description: {
     placeholder: `Introduction to your research question. Mention what you want to do, whats the goal and what challenges you see etc (max ${RESEARCH_MAX_LENGTH} characters)`,
     title: 'What are you trying to find out?',
   },
-  researchStatus: {
+  status: {
     placeholder: 'Select status',
     title: 'What is the status of your research?',
   },

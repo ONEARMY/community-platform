@@ -1,5 +1,3 @@
 export { ResearchPostingGuidelines } from './ResearchPostingGuidelines'
-export * as ResearchForm from './Research.form'
 export { ResearchErrors } from './ResearchErrors'
-export { ResearchUpdateForm } from './ResearchUpdate.form'
-export { ResearchSubmitStatus, UpdateSubmitStatus } from './SubmitStatus'
+export { ResearchUpdateForm } from './ResearchUpdateForm'

@@ -1,177 +1,212 @@
-import { json } from '@remix-run/node'
-import {
-  and,
-  collection,
-  doc,
-  getCountFromServer,
-  getDoc,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  startAfter,
-  where,
-} from 'firebase/firestore'
-import { DB_ENDPOINTS, IModerationStatus } from 'oa-shared'
+import { ResearchItem } from 'oa-shared'
+import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { ITEMS_PER_PAGE } from 'src/pages/Research/constants'
-import { firestore } from 'src/utils/firebase'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { contentServiceServer } from 'src/services/contentService.server'
+import { profileServiceServer } from 'src/services/profileService.server'
+import { storageServiceServer } from 'src/services/storageService.server'
+import { convertToSlug } from 'src/utils/slug'
 
-import type {
-  QueryFilterConstraint,
-  QueryNonFilterConstraint,
-} from 'firebase/firestore'
-import type { IResearch, ResearchStatus } from 'oa-shared'
+import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
+import type { User } from '@supabase/supabase-js'
+import type { DBResearchItem, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts'
 
 // runs on the server
-export const loader = async ({ request }) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
-  const searchParams = url.searchParams
-  const words: string[] =
-    searchParams.get('words') != ''
-      ? searchParams.get('words')?.split(',') ?? []
-      : []
-  const category: string | null = searchParams.get('category')
-  const sort: ResearchSortOption = (searchParams.get('sort') ??
-    'LatestUpdated') as ResearchSortOption
+  const searchParams = new URLSearchParams(url.search)
+  const q = searchParams.get('q')
+  const category = Number(searchParams.get('category')) || undefined
+  const sort = searchParams.get('sort') as ResearchSortOption
+  const skip = Number(searchParams.get('skip')) || 0
   const status: ResearchStatus | null = searchParams.get(
     'status',
   ) as ResearchStatus
-  const lastDocId: string | null = searchParams.get('lastDocId')
-  const drafts: boolean = searchParams.get('drafts') != undefined
-  const userId: string | null = searchParams.get('userId')
 
-  const { itemsQuery, countQuery } = await createSearchQuery(
-    words,
-    category,
-    sort,
-    status,
-    lastDocId,
-    ITEMS_PER_PAGE,
-    drafts,
-    userId,
-  )
+  const { client, headers } = createSupabaseServerClient(request)
 
-  const documentSnapshots = await getDocs(itemsQuery)
-  const items = documentSnapshots.docs
-    ? documentSnapshots.docs.map((x) => x.data() as IResearch.Item)
-    : []
+  const { data, error } = await client.rpc('get_research', {
+    search_query: q || null,
+    category_id: category,
+    research_status: status || null,
+    sort_by: sort,
+    offset_val: skip,
+    limit_val: ITEMS_PER_PAGE,
+  })
 
-  let total: number | undefined = undefined
-  // get total only if not requesting drafts
-  if (!drafts || !userId)
-    total = (await getCountFromServer(countQuery)).data().count
+  const countRersult = await client.rpc('get_research_count', {
+    search_query: q || null,
+    category_id: category,
+    research_status: status || null,
+  })
+  const count = countRersult.data || 0
 
-  return json({ items, total })
+  if (error) {
+    console.error(error)
+    return Response.json({}, { status: 500, headers })
+  }
+
+  const dbItems = data as DBResearchItem[]
+  const items = dbItems.map((x) => {
+    const images = x.image
+      ? storageServiceServer.getPublicUrls(client, [x.image], IMAGE_SIZES.LIST)
+      : []
+    return ResearchItem.fromDB(x, [], images)
+  })
+
+  if (items && items.length > 0) {
+    // Populate useful votes
+    const votes = await client.rpc('get_useful_votes_count_by_content_id', {
+      p_content_type: 'research',
+      p_content_ids: items.map((x) => x.id),
+    })
+
+    if (votes.data) {
+      const votesByContentId = votes.data.reduce((acc, current) => {
+        acc.set(current.content_id, current.count)
+        return acc
+      }, new Map())
+
+      for (const item of items) {
+        if (votesByContentId.has(item.id)) {
+          item.usefulCount = votesByContentId.get(item.id)!
+        }
+      }
+    }
+  }
+
+  return Response.json({ items, total: count }, { headers })
 }
 
-export const action = async ({ request }) => {
-  const method = request.method
-  switch (method) {
-    case 'POST':
-      // Create new research
-      return json({ message: 'Created a research' })
-    case 'PUT':
-      // Edit existing research
-      return json({ message: 'Updated a research' })
-    case 'DELETE':
-      // Delete a research
-      return json({ message: 'Deleted a research' })
-    default:
-      return json({ message: 'Method Not Allowed' }, { status: 405 })
-  }
-}
+export const action = async ({ request }: ActionFunctionArgs) => {
+  try {
+    const formData = await request.formData()
+    const data = {
+      title: formData.get('title') as string,
+      description: formData.get('description') as string,
+      isDraft: formData.get('draft') === 'true',
+      category: formData.has('category')
+        ? (formData.get('category') as string)
+        : null,
+      tags: formData.has('tags')
+        ? formData.getAll('tags').map((x) => Number(x))
+        : null,
+      collaborators: formData.has('collaborators')
+        ? (formData.getAll('collaborators') as string[])
+        : null,
+    }
+    const uploadedImage = formData.get('image') as File | null
 
-const createSearchQuery = async (
-  words: string[],
-  category: string | null,
-  sort: ResearchSortOption,
-  status: ResearchStatus | null,
-  lastDocId: string | null,
-  page_size: number,
-  drafts: boolean,
-  userId: string | null,
-) => {
-  let filters: QueryFilterConstraint[] = []
-  if (drafts && userId) {
-    filters = [
-      and(
-        where('_createdBy', '==', userId),
-        where('moderation', 'in', [
-          IModerationStatus.AWAITING_MODERATION,
-          IModerationStatus.DRAFT,
-          IModerationStatus.IMPROVEMENTS_NEEDED,
-          IModerationStatus.REJECTED,
-        ]),
-        where('_deleted', '!=', true),
-      ),
-    ]
-  } else {
-    filters = [
-      and(
-        where('_deleted', '!=', true),
-        where('moderation', '==', IModerationStatus.ACCEPTED),
-      ),
-    ]
-  }
+    const { client, headers } = createSupabaseServerClient(request)
 
-  let constraints: QueryNonFilterConstraint[] = []
+    const {
+      data: { user },
+    } = await client.auth.getUser()
 
-  const sortByField = getSortByField(sort)
-  constraints = [orderBy(sortByField, 'desc')] // TODO - add sort by _id to act as a tie breaker
-
-  if (words?.length > 0) {
-    filters = [...filters, and(where('keywords', 'array-contains-any', words))]
-  }
-
-  if (category) {
-    filters = [...filters, where('researchCategory._id', '==', category)]
-  }
-
-  if (status) {
-    filters = [...filters, where('researchStatus', '==', status)]
-  }
-
-  const collectionRef = collection(firestore, DB_ENDPOINTS.research)
-  const countQuery = query(collectionRef, and(...filters), ...constraints)
-
-  // add pagination only to itemsQuery, not countQuery
-  if (lastDocId) {
-    const lastDocSnapshot = await getDoc(
-      doc(collection(firestore, DB_ENDPOINTS.research), lastDocId),
+    const { valid, status, statusText } = await validateRequest(
+      request,
+      user,
+      data,
     )
 
-    if (!lastDocSnapshot.exists) {
-      throw new Error('Document with the provided ID does not exist.')
+    if (!valid) {
+      return Response.json({}, { status, statusText })
     }
-    const lastDocData = lastDocSnapshot.data() as IResearch.Item
 
-    constraints.push(startAfter(lastDocData[sortByField])) // TODO - add startAfter by _id to act as a tie breaker
+    const slug = convertToSlug(data.title)
+
+    if (
+      await contentServiceServer.isDuplicateNewSlug(slug, client, 'research')
+    ) {
+      return Response.json(
+        {},
+        {
+          status: 409,
+          statusText: 'This research already exists',
+        },
+      )
+    }
+
+    const profile = await profileServiceServer.getByAuthId(user!.id, client)
+
+    if (!profile) {
+      return Response.json({}, { status: 400, statusText: 'User not found' })
+    }
+
+    const researchStatus: ResearchStatus = 'in-progress'
+    const researchResult = await client
+      .from('research')
+      .insert({
+        created_by: profile.id,
+        title: data.title,
+        description: data.description,
+        slug,
+        category: data.category,
+        tags: data.tags,
+        collaborators: data.collaborators,
+        status: researchStatus,
+        is_draft: data.isDraft,
+        tenant_id: process.env.TENANT_ID,
+      })
+      .select()
+
+    if (researchResult.error || !researchResult.data) {
+      throw researchResult.error
+    }
+
+    const research = ResearchItem.fromDB(researchResult.data[0], [])
+
+    if (uploadedImage) {
+      const mediaResult = await storageServiceServer.uploadImage(
+        [uploadedImage],
+        `research/${research.id}`,
+        client,
+      )
+
+      if (mediaResult?.errors) {
+        console.error(mediaResult.errors)
+      }
+
+      if (mediaResult?.media && mediaResult.media.length > 0) {
+        const result = await client
+          .from('research')
+          .update({ image: mediaResult.media[0] })
+          .eq('id', research.id)
+          .select()
+
+        if (result.data) {
+          research.image = result.data[0].image
+        }
+      }
+    }
+
+    return Response.json({ research }, { headers, status: 201 })
+  } catch (error) {
+    console.error(error)
+    return Response.json(
+      {},
+      { status: 500, statusText: 'Error creating research' },
+    )
   }
-
-  const itemsQuery = query(
-    collectionRef,
-    and(...filters),
-    ...constraints,
-    limit(page_size),
-  )
-
-  return { countQuery, itemsQuery }
 }
 
-const getSortByField = (sort: ResearchSortOption) => {
-  switch (sort) {
-    case 'MostComments':
-      return 'totalCommentCount'
-    case 'MostUpdates':
-      return 'totalUpdates'
-    case 'MostUseful':
-      return 'totalUsefulVotes'
-    case 'Newest':
-      return '_created'
-    case 'LatestUpdated':
-      return '_contentModifiedTimestamp'
-    default:
-      return '_contentModifiedTimestamp'
+async function validateRequest(request: Request, user: User | null, data: any) {
+  if (!user) {
+    return { status: 401, statusText: 'unauthorized' }
   }
+
+  if (request.method !== 'POST') {
+    return { status: 405, statusText: 'method not allowed' }
+  }
+
+  if (!data.title) {
+    return { status: 400, statusText: 'title is required' }
+  }
+
+  if (!data.description) {
+    return { status: 400, statusText: 'description is required' }
+  }
+
+  return { valid: true }
 }

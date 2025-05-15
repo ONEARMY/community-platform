@@ -69,6 +69,7 @@ export const users = {
     userName: 'notification_howto_author',
     moderation: 'awaiting-moderation',
     notifications: [],
+    userRoles: [],
   },
   notification_triggerer: {
     verified: false,
@@ -80,6 +81,7 @@ export const users = {
     userName: 'notification_triggerer',
     moderation: 'awaiting-moderation',
     notifications: [],
+    userRoles: [],
   },
   event_creator: {
     verified: false,
@@ -90,6 +92,7 @@ export const users = {
     _deleted: false,
     userName: 'event_creator',
     moderation: 'awaiting-moderation',
+    userRoles: [],
   },
   event_editor: {
     _deleted: false,
@@ -99,6 +102,7 @@ export const users = {
     displayName: 'event_editor',
     _created: '2019-12-30T11:39:42.784Z',
     _id: 'event_editor',
+    userRoles: [],
   },
   event_reader: {
     _id: 'event_reader',
@@ -125,6 +129,7 @@ export const users = {
     _created: '2020-01-07T15:46:00.297Z',
     displayName: 'howto_creator',
     _id: 'howto_creator',
+    userRoles: [],
   },
   howto_editor: {
     _id: 'howto_editor',
@@ -136,6 +141,7 @@ export const users = {
     _authID: 'dU5sofScHpV09c8NWA834YCQq0S2',
     displayName: 'howto_editor',
     _created: '2020-01-07T12:12:41.566Z',
+    userRoles: [],
   },
   howto_reader: {
     verified: false,
@@ -146,6 +152,7 @@ export const users = {
     _deleted: false,
     userName: 'howto_reader',
     moderation: 'awaiting-moderation',
+    userRoles: [],
   },
   research_creator: {
     _deleted: false,
@@ -159,18 +166,6 @@ export const users = {
     displayName: 'research_creator',
     _id: 'research_creator',
     userRoles: [UserRole.RESEARCH_CREATOR],
-  },
-  research_editor: {
-    _id: 'research_editor',
-    _deleted: false,
-    userName: 'research_editor',
-    moderation: 'awaiting-moderation',
-    verified: false,
-    _modified: '2020-01-07T12:12:41.566Z',
-    _authID: 'cNksr9jiL8cGvwU88gHFNvfz4SK2',
-    displayName: 'research_editor',
-    _created: '2020-01-07T12:12:41.566Z',
-    userRoles: [UserRole.RESEARCH_EDITOR],
   },
   research_reader: {
     verified: false,
@@ -202,6 +197,7 @@ export const users = {
     mapPinDescription: null,
     machineBuilderXp: null,
     about: null,
+    userRoles: [],
   },
   settings_machine_new: {
     location: null,
@@ -220,6 +216,7 @@ export const users = {
     _id: 'settings_machine_new',
     profileType: null,
     coverImages: [],
+    userRoles: [],
   },
   settings_member_new: {
     _deleted: false,
@@ -240,6 +237,7 @@ export const users = {
     _modified: '2020-01-07T12:14:30.030Z',
     _created: '2020-01-07T12:14:30.030Z',
     displayName: 'settings_member_new',
+    userRoles: [],
   },
   settings_plastic_new: {
     location: null,
@@ -258,6 +256,7 @@ export const users = {
     _id: 'settings_plastic_new',
     profileType: null,
     coverImages: [],
+    userRoles: [],
   },
   settings_workplace_empty: {
     location: null,
@@ -276,6 +275,7 @@ export const users = {
     _id: 'settings_workplace_empty',
     profileType: 'workspace',
     coverImages: [],
+    userRoles: [],
   },
   settings_workplace_new: {
     location: null,
@@ -287,7 +287,12 @@ export const users = {
     workspaceType: null,
     country: null,
     userName: 'settings_workplace_new',
-    links: [],
+    links: [
+      {
+        label: 'website',
+        url: 'http://settings_workplace_new.example.com',
+      },
+    ],
     mapPinDescription: null,
     machineBuilderXp: null,
     about: null,
@@ -347,6 +352,7 @@ export const users = {
     coverImages: [],
     email: 'mapview_testing_rejected@test.com',
     password: 'mapview_testing_rejected@test.com',
+    userRoles: [],
   },
   profile_views: {
     _id: 'profile_views',

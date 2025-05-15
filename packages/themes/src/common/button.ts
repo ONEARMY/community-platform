@@ -64,6 +64,24 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
       backgroundColor: colors.white,
     },
   },
+  success: {
+    ...BASE_BUTTON,
+    border: '2px solid ' + colors.black,
+    backgroundColor: colors.betaGreen,
+    color: colors.black,
+    '&:hover': {
+      filter: 'brightness(90%)',
+    },
+  },
+  info: {
+    ...BASE_BUTTON,
+    border: '2px solid ' + colors.black,
+    backgroundColor: colors.blue,
+    color: colors.black,
+    '&:hover': {
+      filter: 'brightness(90%)',
+    },
+  },
   outline: {
     ...BASE_BUTTON,
     border: '2px solid ' + colors.black,

@@ -1,51 +1,39 @@
 import {
   Category,
-  DisplayDate,
   Icon,
   IconCountWithTooltip,
   InternalLink,
-  ModerationStatus,
   Username,
 } from 'oa-components'
-import {
-  IModerationStatus,
-  ResearchStatus,
-  ResearchUpdateStatus,
-} from 'oa-shared'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { cdnImageUrl } from 'src/utils/cdnImageUrl'
+import { type ResearchItem, ResearchStatusRecord } from 'oa-shared'
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
 import { researchStatusColour } from '../researchHelpers'
 
-import type { IResearch, IUploadedFileMeta } from 'oa-shared'
-
 interface IProps {
-  item: IResearch.Item
+  item: ResearchItem
 }
 
 const ResearchListItem = ({ item }: IProps) => {
-  const { aggregationsStore } = useCommonStores().stores
   const collaborators = item['collaborators'] || []
-  const usefulDisplayCount = item.totalUsefulVotes ?? 0
+  const usefulDisplayCount = item.usefulCount ?? 0
 
   const _commonStatisticStyle = {
     display: 'flex',
     alignItems: 'center',
     fontSize: [1, 2, 2],
+    ml: 3,
   }
 
-  const isVerified = aggregationsStore.isVerified(item._createdBy)
-  const status = item.researchStatus || ResearchStatus.IN_PROGRESS
+  const status = item.status || 'in-progress'
 
   return (
     <Card
-      as={'li'}
+      as="li"
       data-cy="ResearchListItem"
-      data-id={item._id}
-      mb={3}
-      style={{ position: 'relative' }}
+      data-id={item.id}
+      sx={{ position: 'relative', mb: 3 }}
       variant="responsive"
     >
       <Flex sx={{ width: '100%', position: 'relative' }}>
@@ -63,7 +51,7 @@ const ResearchListItem = ({ item }: IProps) => {
             }}
           >
             <Image
-              style={{
+              sx={{
                 width: `calc(100% + 32px)`,
                 aspectRatio: '1 / 1',
                 objectFit: 'cover',
@@ -72,9 +60,7 @@ const ResearchListItem = ({ item }: IProps) => {
                 maxWidth: 'none',
               }}
               loading="lazy"
-              src={cdnImageUrl(getItemThumbnail(item), {
-                width: 125,
-              })}
+              src={item.image?.publicUrl || defaultResearchThumbnail}
               alt={`Thumbnail of ${item.title}`}
               crossOrigin=""
             />
@@ -83,26 +69,25 @@ const ResearchListItem = ({ item }: IProps) => {
             sx={{
               flexDirection: 'column',
               alignItems: 'flex-start',
+              gap: 1,
             }}
           >
             <Flex
               sx={{
                 justifyContent: 'space-between',
                 width: '100%',
-                mb: [1, 0],
+                gap: 2,
               }}
             >
-              <Flex sx={{ flexDirection: ['column', 'row'], gap: [0, 3] }}>
-                <Heading
-                  color={'black'}
-                  mb={1}
-                  sx={{
-                    fontSize: [3, 3, 4],
-                  }}
-                >
+              <Flex
+                sx={{
+                  flexDirection: ['column', 'row'],
+                  gap: [0, 2],
+                }}
+              >
+                <Heading sx={{ fontSize: [3, 3, 4] }}>
                   <InternalLink
                     to={`/research/${encodeURIComponent(item.slug)}`}
-                    key={item._id}
                     sx={{
                       textDecoration: 'none',
                       color: 'inherit',
@@ -123,11 +108,8 @@ const ResearchListItem = ({ item }: IProps) => {
                     {item.title}
                   </InternalLink>
                 </Heading>
-                {item.researchCategory && (
-                  <Category
-                    category={item.researchCategory}
-                    sx={{ fontSize: 2, mt: [0, '3px'] }}
-                  />
+                {item.category && (
+                  <Category category={item.category} sx={{ fontSize: 2 }} />
                 )}
               </Flex>
               <Text
@@ -146,7 +128,7 @@ const ResearchListItem = ({ item }: IProps) => {
                 }}
                 data-cy="ItemResearchStatus"
               >
-                {status}
+                {ResearchStatusRecord[status]}
               </Text>
             </Flex>
             <Flex
@@ -156,19 +138,19 @@ const ResearchListItem = ({ item }: IProps) => {
                 justifyContent: 'space-between',
               }}
             >
-              <Flex sx={{ alignItems: 'center' }}>
+              <Flex sx={{ alignItems: 'center', gap: 2 }}>
                 <Username
                   user={{
-                    userName: item._createdBy,
-                    countryCode: item.creatorCountry,
-                    isVerified,
+                    userName: item.author?.username || '',
+                    countryCode: item.author?.country,
+                    isVerified: item.author?.isVerified,
                   }}
                   sx={{ position: 'relative' }}
                 />
                 {Boolean(collaborators.length) && (
                   <Text
-                    ml={4}
                     sx={{
+                      ml: 4,
                       display: ['none', 'block'],
                       fontSize: 1,
                       color: 'darkGrey',
@@ -181,7 +163,6 @@ const ResearchListItem = ({ item }: IProps) => {
                         : ' contributors')}
                   </Text>
                 )}
-                {/* Hide this on mobile, show on tablet & above. */}
                 <Text
                   sx={{
                     display: ['none', 'inline-block', 'inline-block'],
@@ -192,11 +173,10 @@ const ResearchListItem = ({ item }: IProps) => {
                     padding: 1,
                     borderRadius: 1,
                     borderBottomRightRadius: 1,
-                    marginLeft: 4,
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  {status}
+                  {ResearchStatusRecord[status]}
                 </Text>
               </Flex>
               {/* Show these on mobile, hide on tablet & above. */}
@@ -206,26 +186,13 @@ const ResearchListItem = ({ item }: IProps) => {
                   alignItems: 'center',
                 }}
               >
-                <Text color="black" ml={3} sx={_commonStatisticStyle}>
+                <Text color="black" sx={_commonStatisticStyle}>
                   {usefulDisplayCount}
                   <Icon glyph="star-active" ml={1} />
                 </Text>
-                <Text color="black" ml={3} sx={_commonStatisticStyle}>
-                  {item.totalCommentCount}
+                <Text color="black" sx={_commonStatisticStyle}>
+                  {item.commentCount || 0}
                   <Icon glyph="comment" ml={1} />
-                </Text>
-                <Text
-                  ml={3}
-                  sx={{
-                    display: ['block', 'none'],
-                    fontSize: 1,
-                    color: 'darkGrey',
-                  }}
-                >
-                  <DisplayDate
-                    createdAt={item._created}
-                    modifiedAt={item._contentModifiedTimestamp}
-                  />
                 </Text>
               </Box>
             </Flex>
@@ -244,60 +211,22 @@ const ResearchListItem = ({ item }: IProps) => {
               text="How useful is it"
             />
             <IconCountWithTooltip
-              count={item.totalCommentCount || 0}
+              count={item.commentCount || 0}
               icon="comment"
               text="Total comments"
             />
 
             <IconCountWithTooltip
-              count={getUpdateCount(item)}
+              count={item.updateCount}
               dataCy="ItemUpdateText"
               icon="update"
               text="Amount of updates"
             />
           </Box>
         </Grid>
-        {item.moderation !== IModerationStatus.ACCEPTED && (
-          <ModerationStatus
-            status={item.moderation}
-            contentType="research"
-            sx={{
-              position: 'absolute',
-              bottom: 0,
-              right: 0,
-            }}
-          />
-        )}
       </Flex>
     </Card>
   )
-}
-
-const getItemThumbnail = (researchItem: IResearch.Item): string => {
-  const publishedUpdates = researchItem.updates?.filter(
-    (update) =>
-      !update._deleted &&
-      update.status === ResearchUpdateStatus.PUBLISHED &&
-      update.images.length > 0,
-  )
-
-  const latestPublishedUpdate = publishedUpdates?.sort(
-    (a, b) => new Date(b._created).getTime() - new Date(a._created).getTime(),
-  )?.[0]
-
-  return (
-    (latestPublishedUpdate?.images[0] as IUploadedFileMeta)?.downloadUrl ||
-    defaultResearchThumbnail
-  )
-}
-
-const getUpdateCount = (item: IResearch.Item) => {
-  return item.updates?.length
-    ? item.updates.filter(
-        (update) =>
-          update.status !== ResearchUpdateStatus.DRAFT && !update._deleted,
-      ).length
-    : 0
 }
 
 export default ResearchListItem

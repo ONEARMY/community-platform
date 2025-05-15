@@ -1,11 +1,17 @@
 import { Comment, DBComment } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { notificationsService } from 'src/services/notificationsService.server'
+import { notificationsSupabaseServiceServer } from 'src/services/notificationSupabaseService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { User } from '@supabase/supabase-js'
-import type { DBAuthor, DBProfile, Reply } from 'oa-shared'
+import type {
+  DBAuthor,
+  DBProfile,
+  DiscussionContentTypes,
+  Reply,
+} from 'oa-shared'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   if (!params.sourceId) {
@@ -19,7 +25,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   const sourceParam = isNaN(+params.sourceId) ? 'source_id_legacy' : 'source_id'
   const sourceId = isNaN(+params.sourceId) ? params.sourceId : +params.sourceId
-  const sourceType = params.sourceType!
+  const sourceType = mapSourceType(params.sourceType! as DiscussionContentTypes)
 
   const result = await client
     .from('comments')
@@ -40,7 +46,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     )
     .eq('source_type', sourceType)
     .eq(sourceParam, sourceId)
-    .order('created_at', { ascending: false })
+    .order('created_at', { ascending: true })
 
   if (result.error) {
     console.error(result.error)
@@ -95,11 +101,14 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     data: { user },
   } = await client.auth.getUser()
 
+  const sourceType = mapSourceType(params.sourceType! as DiscussionContentTypes)
+
   const { valid, status, statusText } = await validateRequest(
     params,
     request,
     user,
     data,
+    sourceType,
   )
 
   if (!valid) {
@@ -123,7 +132,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     comment: data.comment,
     source_id_legacy: isNaN(+params.sourceId!) ? params.sourceId : null,
     source_id: isNaN(+params.sourceId!) ? null : +params.sourceId!,
-    source_type: params.sourceType,
+    source_type: sourceType,
     created_by: currentUser.data[0].id,
     parent_id: data.parentId ?? null,
     tenant_id: process.env.TENANT_ID,
@@ -156,6 +165,10 @@ export async function action({ params, request }: LoaderFunctionArgs) {
       commentResult.data as DBComment,
       currentUser.data[0] as DBProfile,
     )
+    notificationsSupabaseServiceServer.createNotificationNewComment(
+      commentResult.data,
+      client,
+    )
   }
 
   return Response.json(
@@ -175,6 +188,7 @@ async function validateRequest(
   request: Request,
   user: User | null,
   data: any,
+  sourceType: 'news' | 'research_update' | 'project' | 'questions' | null,
 ) {
   if (!user) {
     return { status: 401, statusText: 'unauthorized' }
@@ -196,5 +210,24 @@ async function validateRequest(
     return { status: 400, statusText: 'comment is required' }
   }
 
+  if (!sourceType) {
+    return { status: 400, statusText: 'invalid sourceType' }
+  }
+
   return { valid: true }
+}
+
+const mapSourceType = (sourceType: DiscussionContentTypes) => {
+  switch (sourceType) {
+    case 'research_updates':
+      return 'research_update'
+    case 'news':
+      return 'news'
+    case 'projects':
+      return 'project'
+    case 'questions':
+      return 'questions'
+    default:
+      throw new Error('Invalid sourceType')
+  }
 }

@@ -1,7 +1,8 @@
-import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { ProfilePage } from 'src/pages/User/content/ProfilePage'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { pageViewService } from 'src/services/pageViewService.server'
+import { researchServiceServer } from 'src/services/researchService.server'
 import { userService } from 'src/services/userService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 import { Text } from 'theme-ui'
@@ -10,19 +11,33 @@ import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { IUserDB } from 'oa-shared'
 import type { UserCreatedDocs } from 'src/pages/User/types'
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  const userId = params.id as string
-  const [profile, userCreatedDocs] = await Promise.all([
-    userService.getById(userId),
-    userService.getUserCreatedDocs(userId),
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  const { client, headers } = createSupabaseServerClient(request)
+
+  const username = params.id as string
+  const [profile, projects, research] = await Promise.all([
+    userService.getById(username),
+    userService.getUserCreatedProjects(username),
+    researchServiceServer.getUserResearch(client, username),
   ])
+
+  const userCreatedDocs = {
+    projects,
+    research,
+  } as UserCreatedDocs
 
   if (profile?._id) {
     // not awaited to not block the render
     pageViewService.incrementViewCount('users', profile._id)
   }
 
-  return json({ profile, userCreatedDocs: userCreatedDocs || [] })
+  return Response.json(
+    {
+      profile,
+      userCreatedDocs,
+    },
+    { headers },
+  )
 }
 
 export function HydrateFallback() {

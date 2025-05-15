@@ -16,7 +16,7 @@ We currently have 3 bounty levels
 
 ## How do I find bounty issues?
 
-Simply go to the `Issues` page on github and look for issues with labelled with [Bounty](https://github.com/ONEARMY/community-platform/labels/bounty).
+Simply go to the `Issues` page on github and look for issues labelled with [Bounty](https://github.com/ONEARMY/community-platform/labels/bounty).
 
 _Note_ - the exact bounty level is not included as knowing in advance how much work will be involved is hard! Instead we assign levels collectively in our monthly maintainer's call.
 

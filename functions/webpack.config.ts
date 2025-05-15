@@ -7,7 +7,7 @@
  *
  * As the main platform code needs to be compiled in a custom way (e.g. so 'src/' is recognised),
  * this is compiled to output typings to a lib folder before webpack is run.
- * Webpack accesses these files through it's own node_modules installation which has a symlink
+ * Webpack accesses these files through its own node_modules installation which has a symlink
  * to the rest of the platform code
  *
  * Useful Refs:

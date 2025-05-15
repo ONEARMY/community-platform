@@ -14,7 +14,7 @@ import { Card, Flex } from 'theme-ui'
 import { CommentReply } from './CommentReplySupabase'
 import { CreateCommentSupabase } from './CreateCommentSupabase'
 
-import type { Comment, ContentType } from 'oa-shared'
+import type { Comment, DiscussionContentTypes } from 'oa-shared'
 
 export interface ICommentItemProps {
   comment: Comment
@@ -23,7 +23,7 @@ export interface ICommentItemProps {
   onReply: (reply: string) => void
   onEditReply: (id: number, reply: string) => void
   onDeleteReply: (id: number) => void
-  sourceType: ContentType
+  sourceType: DiscussionContentTypes
 }
 
 export const CommentItemSupabase = observer((props: ICommentItemProps) => {
@@ -42,17 +42,16 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
   const [showReplies, setShowReplies] = useState(
     () => !!comment.replies?.some((x) => x.highlighted),
   )
-  const { userStore } = useCommonStores().stores
-  const { activeUser } = userStore
+  const {
+    userStore: { activeUser },
+  } = useCommonStores().stores
 
   const isEditable = useMemo(() => {
     return (
-      activeUser?._authID === comment.createdBy?.firebaseAuthId ||
       activeUser?._id === comment.createdBy?.username ||
-      activeUser?.userRoles?.includes(UserRole.ADMIN) ||
-      activeUser?.userRoles?.includes(UserRole.SUPER_ADMIN)
+      activeUser?.userRoles?.includes(UserRole.ADMIN)
     )
-  }, [activeUser?._authID, comment.createdBy?.firebaseAuthId])
+  }, [activeUser])
 
   const item = 'CommentItem'
 

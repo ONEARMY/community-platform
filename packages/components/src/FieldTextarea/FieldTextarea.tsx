@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { Flex, Text, Textarea } from 'theme-ui'
 
 import { CharacterCount } from '../CharacterCount/CharacterCount'
@@ -47,8 +47,10 @@ export const FieldTextarea = ({
   rows,
   ...rest
 }: Props) => {
-  const [curLength, setLength] = useState<number>(input?.value?.length ?? 0)
-
+  const curLength = useMemo<number>(
+    () => input?.value?.length ?? 0,
+    [input?.value],
+  )
   return (
     <Flex sx={{ flexDirection: 'column', gap: 1 }}>
       {meta.error && meta.touched && (
@@ -76,10 +78,7 @@ export const FieldTextarea = ({
           }
           input.onBlur()
         }}
-        onChange={(ev) => {
-          showCharacterCount && setLength(ev.target.value.length)
-          input.onChange(ev)
-        }}
+        onChange={(ev) => input.onChange(ev)}
       />
 
       {showCharacterCount && maxLength && (

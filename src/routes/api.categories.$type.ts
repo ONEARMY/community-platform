@@ -25,7 +25,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const cachedCategories = await cache.get('categories')
 
-  if (cachedCategories && isProductionEnvironment()) {
+  if (
+    cachedCategories &&
+    Array.isArray(cachedCategories) &&
+    cachedCategories.length &&
+    isProductionEnvironment()
+  ) {
     const categoriesForType = filterByType(cachedCategories, type)
     return Response.json(categoriesForType, { headers, status: 200 })
   }

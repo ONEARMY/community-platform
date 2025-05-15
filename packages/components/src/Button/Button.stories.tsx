@@ -79,6 +79,20 @@ export const Destructive: StoryFn<typeof Button> = () => (
   </>
 )
 
+export const Success: StoryFn<typeof Button> = () => (
+  <>
+    <Button variant="success">Success</Button>
+    <Button icon="delete" variant="success">
+      Success
+    </Button>
+    {sizeOptions.map((v, k) => (
+      <Button key={k} variant="success" {...v}>
+        {v.label}
+      </Button>
+    ))}
+  </>
+)
+
 export const Subtle: StoryFn<typeof Button> = () => (
   <>
     <Button variant={'subtle'}>Subtle</Button>

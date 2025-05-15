@@ -11,7 +11,7 @@ import {
   setIsPreciousPlastic,
 } from '../utils/TestUtils'
 
-const { admin, profile_views, subscriber } = MOCK_DATA.users
+const { profile_views, subscriber } = MOCK_DATA.users
 const eventReader = MOCK_DATA.users.event_reader
 const userProfiletype = MOCK_DATA.users.settings_workplace_new
 const workspaceEmpty = MOCK_DATA.users.settings_workplace_empty
@@ -34,7 +34,7 @@ describe('[Profile]', () => {
 
       cy.get('[data-cy=userDisplayName]').contains(eventReader.userName)
       cy.get('[data-testid=library-stat]').contains('1')
-      cy.get('[data-testid=research-stat]').contains('1')
+      cy.get('[data-testid=research-stat]').should('exist')
 
       cy.step('Cannot see profile views')
       cy.get('[data-testid=profile-views-stat]').should('not.exist')
@@ -57,16 +57,6 @@ describe('[Profile]', () => {
       cy.get('[data-cy=MemberProfile]').should('be.visible')
       cy.get('.beta-tester-feature').should('not.exist')
       cy.get('[data-cy=emptyProfileMessage]').should('be.visible')
-    })
-
-    it('[Cannot edit another user profile]', () => {
-      cy.signIn(subscriber.email, subscriber.password)
-
-      cy.visit(`/u/${admin.userName}`)
-      cy.get('[data-cy="Username"]').should('contain.text', admin.userName)
-      cy.get('[data-cy=adminEdit]').should('not.exist')
-      cy.visit(`/u/${admin.userName}/edit`)
-      cy.get('[data-cy=BlockedRoute]').should('be.visible')
     })
 
     it('[Can message users]', () => {

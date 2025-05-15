@@ -13,9 +13,10 @@ import type { IUser } from 'oa-shared'
 
 interface IProps {
   user: IUser
+  isViewingOwnProfile: boolean
 }
 
-export const ProfileContact = ({ user }: IProps) => {
+export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
   const { links } = user
 
   const userLinks =
@@ -33,7 +34,7 @@ export const ProfileContact = ({ user }: IProps) => {
       <ClientOnly fallback={<></>}>
         {() => (
           <UserAction
-            loggedIn={<UserContactForm user={user} />}
+            loggedIn={!isViewingOwnProfile && (<UserContactForm user={user} />)}
             loggedOut={
               isUserProfileContactable ? (
                 <UserContactNotLoggedIn displayName={user.displayName} />

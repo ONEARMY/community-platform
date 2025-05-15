@@ -64,7 +64,7 @@ export const CommentDisplay = (props: IProps) => {
           }}
         >
           <CommentAvatar
-            name={comment.createdBy?.name}
+            displayName={comment.createdBy?.displayName}
             photoUrl={comment.createdBy?.photoUrl}
             isCommentAuthor={
               comment.createdBy?.id

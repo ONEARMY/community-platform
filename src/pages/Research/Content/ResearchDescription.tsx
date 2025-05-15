@@ -6,7 +6,6 @@ import {
   ConfirmModal,
   ContentStatistics,
   FollowButton,
-  ImageGallery,
   LinkifyText,
   TagList,
   UsefulStatsButton,
@@ -18,7 +17,6 @@ import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
 import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
-import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel } from 'src/utils/helpers'
 import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
@@ -248,12 +246,6 @@ const ResearchDescription = ({
             <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
               <LinkifyText>{research.description}</LinkifyText>
             </Text>
-            {research.image && (
-              <ImageGallery
-                images={formatImagesForGalleryV2([research.image]) as any}
-                allowPortrait={true}
-              />
-            )}
             <Flex sx={{ mt: 4 }}>
               <TagList tags={research.tags.map((t) => ({ label: t.name }))} />
             </Flex>

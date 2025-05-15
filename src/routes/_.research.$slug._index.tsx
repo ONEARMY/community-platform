@@ -90,18 +90,7 @@ const getCollaborators = async (
     client,
   )
 
-  return users?.map(
-    (x) =>
-      new Author({
-        id: x.id,
-        name: x.display_name,
-        isSupporter: x.is_supporter,
-        isVerified: x.is_verified,
-        username: x.username,
-        photoUrl: x.photo_url,
-        country: x.country,
-      }),
-  )
+  return users?.map((user) => Author.fromDB(user))
 }
 
 export function HydrateFallback() {

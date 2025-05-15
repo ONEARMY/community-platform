@@ -191,7 +191,7 @@ async function notifyDiscord(
   siteUrl: string,
 ) {
   discordServiceServer.postWebhookRequest(
-    `🧪 ${profile.username} posted a new research update: ${update.title}\nCheck it out here: <${siteUrl}/research/${research.slug}?update=${update.id}>`,
+    `🧪 ${profile.username} posted a new research update: ${update.title}\nCheck it out here: <${siteUrl}/research/${research.slug}#update=${update.id}>`,
   )
 }
 

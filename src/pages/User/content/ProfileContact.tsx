@@ -34,7 +34,15 @@ export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
       <ClientOnly fallback={<></>}>
         {() => (
           <UserAction
-            loggedIn={isViewingOwnProfile ? (<UserContactFormAvailable isUserProfileContactable={!isUserProfileContactable} />) : (<UserContactForm user={user} />)}
+            loggedIn={
+              isViewingOwnProfile ? (
+                <UserContactFormAvailable
+                  isUserProfileContactable={!isUserProfileContactable}
+                />
+              ) : (
+                <UserContactForm user={user} />
+              )
+            }
             loggedOut={
               isUserProfileContactable ? (
                 <UserContactNotLoggedIn displayName={user.displayName} />

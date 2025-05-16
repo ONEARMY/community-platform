@@ -59,7 +59,7 @@ describe('[Profile]', () => {
       cy.get('[data-cy=emptyProfileMessage]').should('be.visible')
     })
 
-    it('[Can message users]', () => {
+    it('[Can send a contact message]', () => {
       localStorage.setItem('VITE_NO_MESSAGING', 'false')
 
       const message = faker.lorem
@@ -70,6 +70,8 @@ describe('[Profile]', () => {
 
       cy.step('Can sign-up and have a contact form')
       cy.signUpNewUser(user)
+      cy.logout()
+      cy.signIn(subscriber.email, subscriber.password)
       cy.step('Go to Profile')
       cy.visit(`/u/${user.username}`)
 
@@ -89,8 +91,17 @@ describe('[Profile]', () => {
       cy.get('[data-cy=message]').invoke('val', message).blur({ force: true })
       cy.get('[data-cy=contact-submit]').click()
       cy.contains(contact.successMessage)
+    })
 
-      cy.step("Can't contact pages when user opts out")
+    it('[Can edit public contact section]', () => {
+      localStorage.setItem('VITE_NO_MESSAGING', 'false')
+
+      const user = generateNewUserDetails()
+
+      cy.step('Can sign-up')
+      cy.signUpNewUser(user)
+      
+      cy.step('Set up public contact section')
       cy.visit('/settings')
       cy.setSettingFocus('workspace')
       cy.setSettingBasicUserInfo({
@@ -106,10 +117,27 @@ describe('[Profile]', () => {
         url: 'something@test.com',
       })
       cy.get('[data-cy=PublicContactSection]').should('be.visible')
+    })
+
+    it('[Cannot contact when public contact is disabled]', () => {
+      localStorage.setItem('VITE_NO_MESSAGING', 'false')
+
+      const user = generateNewUserDetails()
+
+      cy.step('Can sign-up')
+      cy.signUpNewUser(user)
+      
+      cy.step('Disable public contact')
+      cy.visit('/settings')
+      cy.setSettingFocus('workspace')
+      cy.get('[data-cy=PublicContactSection]').should('be.visible')
       cy.get('[data-cy=isContactableByPublic-true]').click({ force: true })
       cy.saveSettingsForm()
       cy.get('[data-cy=isContactableByPublic-false]')
 
+      cy.step('Cannot see contact tab')
+      cy.logout()
+      cy.signIn(subscriber.email, subscriber.password)
       cy.visit(`/u/${user.username}`)
       cy.get('[data-cy=contact-tab]').should('not.exist')
     })

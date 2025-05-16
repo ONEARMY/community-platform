@@ -100,7 +100,7 @@ describe('[Profile]', () => {
 
       cy.step('Can sign-up')
       cy.signUpNewUser(user)
-      
+
       cy.step('Set up public contact section')
       cy.visit('/settings')
       cy.setSettingFocus('workspace')
@@ -126,7 +126,7 @@ describe('[Profile]', () => {
 
       cy.step('Can sign-up')
       cy.signUpNewUser(user)
-      
+
       cy.step('Disable public contact')
       cy.visit('/settings')
       cy.setSettingFocus('workspace')

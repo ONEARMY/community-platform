@@ -115,7 +115,10 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
               )}
               {hasContactOption && (
                 <TabPanel value="contact">
-                  <ProfileContact user={user} />
+                  <ProfileContact
+                    user={user}
+                    isViewingOwnProfile={isViewingOwnProfile}
+                  />
                 </TabPanel>
               )}
             </Tabs>

@@ -130,6 +130,12 @@ describe('[Profile]', () => {
       cy.step('Disable public contact')
       cy.visit('/settings')
       cy.setSettingFocus('workspace')
+      cy.setSettingBasicUserInfo({
+        displayName: user.username,
+        country: 'Bolivia',
+        description: 'New profile to test the contact form',
+      })
+      cy.setSettingImage('profile-cover-1-edited', 'coverImages-0')
       cy.get('[data-cy=PublicContactSection]').should('be.visible')
       cy.get('[data-cy=isContactableByPublic-true]').click({ force: true })
       cy.saveSettingsForm()

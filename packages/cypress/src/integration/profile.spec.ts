@@ -71,12 +71,12 @@ describe('[Profile]', () => {
       cy.step('Can sign-up and have a contact form')
       cy.signUpNewUser(user)
       cy.step('Go to Profile')
-      cy.visit(`/u/${subscriber.userName}`)
+      cy.visit(`/u/${user.username}`)
 
       cy.step('Go to contact tab')
       cy.get('[data-cy=contact-tab]').click()
       cy.get('[data-cy="UserContactForm"]').should('be.visible')
-      cy.contains(`${contact.title} ${subscriber.userName}`).should(
+      cy.contains(`${contact.title} ${user.username}`).should(
         'be.visible',
       )
 

@@ -244,7 +244,7 @@ describe('[Settings]', () => {
 
       cy.step('Updated settings display on contact tab')
       cy.get('[data-cy="contact-tab"]').click()
-      cy.contains(`Send a message to ${displayName}`)
+      cy.contains(`Other users are able to contact you`)
       cy.get('[data-cy="profile-link"]').should(
         'have.attr',
         'href',

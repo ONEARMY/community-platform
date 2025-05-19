@@ -209,6 +209,18 @@ describe('[Profile]', () => {
       cy.visit(`/u/${profile_views.userName}`)
       cy.get('[data-testid=profile-views-stat]').should('not.exist')
     })
+
+    it('[Should see questions in Contributions tab]', () => {
+      setIsPreciousPlastic()
+
+      cy.signIn(subscriber.email, subscriber.password)
+
+      cy.step('Can go to contribution data')
+      cy.visit(`/u/${subscriber.userName}`)
+      cy.get('[data-cy=ContribTab]').click()
+      cy.step('Can see Questions')
+      cy.get('[data-cy=QuestionsContributions]').should('be.visible')
+    })
   })
 })
 

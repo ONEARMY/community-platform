@@ -8,4 +8,8 @@ export const IMAGE_SIZES: { [key: string]: ImageSize } = {
     height: 450,
     width: 956,
   },
+  LIST: {
+    height: 225,
+    width: 478,
+  },
 }

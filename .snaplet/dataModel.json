@@ -364,6 +364,20 @@
           "hasDefaultValue": false
         },
         {
+          "name": "prefixes",
+          "type": "prefixes",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "prefixesTobuckets",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "s3_multipart_uploads",
           "type": "s3_multipart_uploads",
           "isRequired": false,
@@ -518,6 +532,20 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "questionsTocategories",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "research",
+          "type": "research",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "researchTocategories",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -2866,6 +2894,220 @@
         }
       ]
     },
+    "notifications": {
+      "id": "public.notifications",
+      "schemaName": "public",
+      "tableName": "notifications",
+      "fields": [
+        {
+          "id": "public.notifications.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"notifications_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications.modified_at",
+          "name": "modified_at",
+          "columnName": "modified_at",
+          "type": "timestamptz",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications.owned_by_id",
+          "name": "owned_by_id",
+          "columnName": "owned_by_id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications.triggered_by_id",
+          "name": "triggered_by_id",
+          "columnName": "triggered_by_id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications.content_type",
+          "name": "content_type",
+          "columnName": "content_type",
+          "type": "notification_content_types",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications.content_id",
+          "name": "content_id",
+          "columnName": "content_id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications.is_read",
+          "name": "is_read",
+          "columnName": "is_read",
+          "type": "bool",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications.action_type",
+          "name": "action_type",
+          "columnName": "action_type",
+          "type": "notification_action_types",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications.tenant_id",
+          "name": "tenant_id",
+          "columnName": "tenant_id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications.source_content_type",
+          "name": "source_content_type",
+          "columnName": "source_content_type",
+          "type": "notification_source_content_type",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications.source_content_id",
+          "name": "source_content_id",
+          "columnName": "source_content_id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "profiles_notifications_owned_by_idToprofiles",
+          "type": "profiles",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "notifications_owned_by_idToprofiles",
+          "relationFromFields": ["owned_by_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "profiles_notifications_triggered_by_idToprofiles",
+          "type": "profiles",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "notifications_triggered_by_idToprofiles",
+          "relationFromFields": ["triggered_by_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "notifications_pkey",
+          "fields": ["id"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
     "objects": {
       "id": "storage.objects",
       "schemaName": "storage",
@@ -3040,6 +3282,20 @@
           "maxLength": null
         },
         {
+          "id": "storage.objects.level",
+          "name": "level",
+          "columnName": "level",
+          "type": "int4",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "buckets",
           "type": "buckets",
           "isRequired": false,
@@ -3063,6 +3319,16 @@
         {
           "name": "bucketid_objname",
           "fields": ["bucket_id", "name"],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "idx_name_bucket_level_unique",
+          "fields": ["bucket_id", "level", "name"],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "objects_bucket_id_level_idx",
+          "fields": ["bucket_id", "level", "name"],
           "nullNotDistinct": false
         }
       ]
@@ -3268,6 +3534,104 @@
         {
           "name": "patreon_settings_pkey",
           "fields": ["id"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "prefixes": {
+      "id": "storage.prefixes",
+      "schemaName": "storage",
+      "tableName": "prefixes",
+      "fields": [
+        {
+          "id": "storage.prefixes.bucket_id",
+          "name": "bucket_id",
+          "columnName": "bucket_id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "storage.prefixes.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "storage.prefixes.level",
+          "name": "level",
+          "columnName": "level",
+          "type": "int4",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": true,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "storage.prefixes.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "timestamptz",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "storage.prefixes.updated_at",
+          "name": "updated_at",
+          "columnName": "updated_at",
+          "type": "timestamptz",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "buckets",
+          "type": "buckets",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "prefixesTobuckets",
+          "relationFromFields": ["bucket_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "prefixes_pkey",
+          "fields": ["bucket_id", "level", "name"],
           "nullNotDistinct": false
         }
       ]
@@ -3632,6 +3996,20 @@
           "maxLength": null
         },
         {
+          "id": "public.profiles.notifications",
+          "name": "notifications",
+          "columnName": "notifications",
+          "type": "uuid[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "users",
           "type": "users",
           "isRequired": false,
@@ -3702,11 +4080,67 @@
           "hasDefaultValue": false
         },
         {
+          "name": "notifications_notifications_owned_by_idToprofiles",
+          "type": "notifications",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "notifications_owned_by_idToprofiles",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "notifications_notifications_triggered_by_idToprofiles",
+          "type": "notifications",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "notifications_triggered_by_idToprofiles",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "questions",
           "type": "questions",
           "isRequired": false,
           "kind": "object",
           "relationName": "questionsToprofiles",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "research",
+          "type": "research",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "researchToprofiles",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "research_updates",
+          "type": "research_updates",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "research_updatesToprofiles",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -4219,6 +4653,630 @@
         {
           "name": "refresh_tokens_token_unique",
           "fields": ["token"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "research": {
+      "id": "public.research",
+      "schemaName": "public",
+      "tableName": "research",
+      "fields": [
+        {
+          "id": "public.research.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"research_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.modified_at",
+          "name": "modified_at",
+          "columnName": "modified_at",
+          "type": "timestamptz",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.title",
+          "name": "title",
+          "columnName": "title",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.slug",
+          "name": "slug",
+          "columnName": "slug",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.description",
+          "name": "description",
+          "columnName": "description",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.category",
+          "name": "category",
+          "columnName": "category",
+          "type": "int8",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.created_by",
+          "name": "created_by",
+          "columnName": "created_by",
+          "type": "int8",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.tags",
+          "name": "tags",
+          "columnName": "tags",
+          "type": "text[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.deleted",
+          "name": "deleted",
+          "columnName": "deleted",
+          "type": "bool",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.total_views",
+          "name": "total_views",
+          "columnName": "total_views",
+          "type": "int4",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.total_useful",
+          "name": "total_useful",
+          "columnName": "total_useful",
+          "type": "int4",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.previous_slugs",
+          "name": "previous_slugs",
+          "columnName": "previous_slugs",
+          "type": "text[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.status",
+          "name": "status",
+          "columnName": "status",
+          "type": "research_status",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.is_draft",
+          "name": "is_draft",
+          "columnName": "is_draft",
+          "type": "bool",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.tenant_id",
+          "name": "tenant_id",
+          "columnName": "tenant_id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.fts",
+          "name": "fts",
+          "columnName": "fts",
+          "type": "tsvector",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.collaborators",
+          "name": "collaborators",
+          "columnName": "collaborators",
+          "type": "text[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.image",
+          "name": "image",
+          "columnName": "image",
+          "type": "json",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.legacy_id",
+          "name": "legacy_id",
+          "columnName": "legacy_id",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "categories",
+          "type": "categories",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "researchTocategories",
+          "relationFromFields": ["category"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "profiles",
+          "type": "profiles",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "researchToprofiles",
+          "relationFromFields": ["created_by"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "research_updates",
+          "type": "research_updates",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "research_updatesToresearch",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "research_pkey",
+          "fields": ["id"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "research_updates": {
+      "id": "public.research_updates",
+      "schemaName": "public",
+      "tableName": "research_updates",
+      "fields": [
+        {
+          "id": "public.research_updates.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"research_updates_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.research_id",
+          "name": "research_id",
+          "columnName": "research_id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.title",
+          "name": "title",
+          "columnName": "title",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.description",
+          "name": "description",
+          "columnName": "description",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.images",
+          "name": "images",
+          "columnName": "images",
+          "type": "json[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.files",
+          "name": "files",
+          "columnName": "files",
+          "type": "json[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.video_url",
+          "name": "video_url",
+          "columnName": "video_url",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.is_draft",
+          "name": "is_draft",
+          "columnName": "is_draft",
+          "type": "bool",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.comment_count",
+          "name": "comment_count",
+          "columnName": "comment_count",
+          "type": "int4",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.tenant_id",
+          "name": "tenant_id",
+          "columnName": "tenant_id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.modified_at",
+          "name": "modified_at",
+          "columnName": "modified_at",
+          "type": "timestamptz",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.deleted",
+          "name": "deleted",
+          "columnName": "deleted",
+          "type": "bool",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.file_link",
+          "name": "file_link",
+          "columnName": "file_link",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.file_download_count",
+          "name": "file_download_count",
+          "columnName": "file_download_count",
+          "type": "int4",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.created_by",
+          "name": "created_by",
+          "columnName": "created_by",
+          "type": "int8",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.legacy_id",
+          "name": "legacy_id",
+          "columnName": "legacy_id",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "profiles",
+          "type": "profiles",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "research_updatesToprofiles",
+          "relationFromFields": ["created_by"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "research",
+          "type": "research",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "research_updatesToresearch",
+          "relationFromFields": ["research_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "research_update_pkey",
+          "fields": ["id"],
           "nullNotDistinct": false
         }
       ]
@@ -7243,6 +8301,77 @@
         },
         {
           "name": "research"
+        }
+      ]
+    },
+    "notification_action_types": {
+      "schemaName": "public",
+      "values": [
+        {
+          "name": "newComment"
+        },
+        {
+          "name": "newContent"
+        }
+      ]
+    },
+    "notification_content_types": {
+      "schemaName": "public",
+      "values": [
+        {
+          "name": "comment"
+        },
+        {
+          "name": "library"
+        },
+        {
+          "name": "news"
+        },
+        {
+          "name": "questions"
+        },
+        {
+          "name": "reply"
+        },
+        {
+          "name": "research"
+        },
+        {
+          "name": "researchUpdate"
+        }
+      ]
+    },
+    "notification_source_content_type": {
+      "schemaName": "public",
+      "values": [
+        {
+          "name": "library"
+        },
+        {
+          "name": "news"
+        },
+        {
+          "name": "questions"
+        },
+        {
+          "name": "research"
+        },
+        {
+          "name": "researchUpdate"
+        }
+      ]
+    },
+    "research_status": {
+      "schemaName": "public",
+      "values": [
+        {
+          "name": "archived"
+        },
+        {
+          "name": "complete"
+        },
+        {
+          "name": "in-progress"
         }
       ]
     },

@@ -69,7 +69,6 @@ describe('ResearchEditorOverview', () => {
         {...(Default.args as ResearchEditorOverviewProps)}
         updates={
           [
-            null,
             {
               isActive: true,
               title: 'Update title',

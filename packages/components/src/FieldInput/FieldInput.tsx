@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { Box, Flex, Input, Text } from 'theme-ui'
 
 import { CharacterCount } from '../CharacterCount/CharacterCount'
@@ -48,7 +48,10 @@ export const FieldInput = ({
   endAdornment,
   ...rest
 }: Props) => {
-  const [curLength, setLength] = useState<number>(input?.value?.length ?? 0)
+  const curLength = useMemo<number>(
+    () => input?.value?.length ?? 0,
+    [input?.value],
+  )
 
   const InputElement = (
     <Input
@@ -69,7 +72,6 @@ export const FieldInput = ({
         input.onBlur()
       }}
       onChange={(ev) => {
-        showCharacterCount && setLength(ev.target.value.length)
         input.onChange(ev)
       }}
     />

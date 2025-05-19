@@ -3,7 +3,7 @@ import { IModerationStatus, UserRole } from 'oa-shared'
 import { getConfigurationOption, NO_MESSAGING } from 'src/config/config'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 
-import { SUPPORTED_IMAGE_EXTENSIONS } from './storage'
+import { SUPPORTED_IMAGE_TYPES } from './storage'
 
 import type { DBDoc, DBProfile, IMapPin, IModerable, IUser } from 'oa-shared'
 
@@ -108,7 +108,7 @@ export const hasAdminRights = (user?: IUser) => {
   const roles =
     user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
 
-  return roles.includes(UserRole.ADMIN) || roles.includes(UserRole.SUPER_ADMIN)
+  return roles.includes(UserRole.ADMIN)
 }
 
 export const hasAdminRightsSupabase = (user?: DBProfile) => {
@@ -116,11 +116,9 @@ export const hasAdminRightsSupabase = (user?: DBProfile) => {
     return false
   }
 
-  user = toJS(user)
-
   const roles = user.roles && Array.isArray(user.roles) ? user.roles : []
 
-  return roles.includes(UserRole.ADMIN) || roles.includes(UserRole.SUPER_ADMIN)
+  return roles.includes(UserRole.ADMIN)
 }
 
 export const needsModeration = (doc: IModerable, user?: IUser) => {
@@ -182,11 +180,7 @@ export const isAllowedToDeleteContent = (doc: IEditableDoc, user?: IUser) => {
   const roles =
     user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
 
-  return (
-    roles.includes(UserRole.ADMIN) ||
-    roles.includes(UserRole.SUPER_ADMIN) ||
-    doc._createdBy! === user.userName
-  )
+  return roles.includes(UserRole.ADMIN) || doc._createdBy! === user.userName
 }
 
 export const isAllowedToPin = (pin: IMapPin, user?: IUser) => {
@@ -253,7 +247,7 @@ export const buildStatisticsLabel = ({
 
 export function validateImage(image: File | null) {
   const error =
-    image?.type && !SUPPORTED_IMAGE_EXTENSIONS.includes(image.type)
+    image?.type && !SUPPORTED_IMAGE_TYPES.includes(image.type)
       ? new Error(`Unsupported image extension: ${image.type}`)
       : null
   const valid: boolean = !error

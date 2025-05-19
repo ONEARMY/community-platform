@@ -10,11 +10,12 @@ export interface IProps {
   hasUserSubscribed: boolean
   isLoggedIn: boolean
   onFollowClick: () => void
+  label?: string
   sx?: ThemeUIStyleObject
 }
 
 export const FollowButton = (props: IProps) => {
-  const { hasUserSubscribed, isLoggedIn, onFollowClick, sx } = props
+  const { hasUserSubscribed, isLoggedIn, label, onFollowClick, sx } = props
   const navigate = useNavigate()
   const uuid = useMemo(() => (Math.random() * 16).toString(), [])
 
@@ -41,7 +42,7 @@ export const FollowButton = (props: IProps) => {
         }
         icon={hasUserSubscribed ? 'thunderbolt' : 'thunderbolt-grey'}
       >
-        {hasUserSubscribed ? 'Following' : 'Follow'}
+        {hasUserSubscribed ? 'Following' : label || 'Follow'}
       </Button>
       <Tooltip id={uuid} />
     </>

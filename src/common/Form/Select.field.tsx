@@ -53,7 +53,7 @@ export const SelectField = ({
   ...rest
 }: ISelectFieldProps) => (
   // note, we first use a div container so that default styles can be applied
-  <Flex p={0} sx={{ flexDirection: 'column' }}>
+  <Flex sx={{ padding: 0, flexDirection: 'column' }}>
     {showError && meta.error && meta.touched && (
       <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>
     )}
@@ -65,13 +65,14 @@ export const SelectField = ({
     >
       <Select
         onChange={(v) => {
-          input.onChange(getValueFromSelect(v as any))
+          const value = getValueFromSelect(v)
+          input.onChange(value)
           if (onCustomChange) {
-            onCustomChange(getValueFromSelect(v as any))
+            onCustomChange(value)
           }
         }}
-        onBlur={input.onBlur as any}
-        onFocus={input.onFocus as any}
+        onBlur={input.onBlur}
+        onFocus={input.onFocus}
         value={getValueForSelect(rest.options, input.value)}
         variant={meta?.error && meta?.touched ? 'formError' : 'form'}
         {...defaultProps}

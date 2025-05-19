@@ -10,7 +10,7 @@ import {
   updateLibraryDownloadCooldown,
 } from '../utils/downloadCooldown'
 
-import type { ILibrary } from 'oa-shared'
+import type { ILibrary, IUploadedFileMeta } from 'oa-shared'
 
 interface IProps {
   item: ILibrary.DB
@@ -49,7 +49,12 @@ export const LibraryDownloads = ({ item }: IProps) => {
       <DownloadWrapper
         handleClick={handleDownloadClick}
         fileLink={fileLink}
-        files={files}
+        files={(files as IUploadedFileMeta[])?.map((x) => ({
+          id: x?.name,
+          url: x.downloadUrl,
+          size: x.size,
+          name: x.name,
+        }))}
         fileDownloadCount={fileDownloadCount || 0}
       />
     </Flex>

@@ -6,8 +6,7 @@ import { createRoutesFromElements, Route } from '@remix-run/react'
 import { act, render, waitFor, within } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
-import { ResearchUpdateStatus, UserRole } from 'oa-shared'
-import { useResearchStore } from 'src/stores/Research/research.store'
+import { UserRole } from 'oa-shared'
 import { FactoryDiscussion } from 'src/test/factories/Discussion'
 import {
   FactoryResearchItem,
@@ -19,8 +18,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { ResearchArticlePage } from './ResearchArticlePage'
 
-import type { IResearchDB } from 'oa-shared'
-import type { Mock } from 'vitest'
+import type { Author, ResearchItem } from 'oa-shared'
 
 const Theme = testingThemeStyles
 
@@ -57,24 +55,20 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
 vi.mock('src/stores/Research/research.store')
 
 describe('Research Article', () => {
-  const mockResearchStore = {
-    addSubscriberToResearchArticlePage: vi.fn(),
-    formatResearchCommentList: vi.fn(),
-  }
-
   it('displays content statistics', async () => {
     // Arrange
     const activeResearchItem = FactoryResearchItem({
-      collaborators: undefined,
+      collaborators: [],
       updates: [
         FactoryResearchItemUpdate({
-          status: ResearchUpdateStatus.PUBLISHED,
-          _deleted: false,
+          isDraft: false,
+          deleted: false,
         }),
       ],
+      subscriberCount: 0,
+      usefulCount: 0,
+      commentCount: 0,
     })
-
-    ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
 
     // Act
     let wrapper
@@ -85,45 +79,42 @@ describe('Research Article', () => {
     // Assert
     await waitFor(() => {
       expect(
-        wrapper.getByText(`${activeResearchItem.total_views} views`),
+        wrapper.getByText(`${activeResearchItem.totalViews} views`),
       ).toBeInTheDocument()
       expect(wrapper.getByText('0 following')).toBeInTheDocument()
       expect(wrapper.getByText('0 useful')).toBeInTheDocument()
       expect(wrapper.getByText('0 comments')).toBeInTheDocument()
-      expect(wrapper.getByText('1 step')).toBeInTheDocument()
+      expect(wrapper.getByText('1 update')).toBeInTheDocument()
     })
   })
 
   it('does not display contributors when undefined', async () => {
-    // Arrange
-    ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
-
     // Act
     let wrapper
     await act(async () => {
       wrapper = getWrapper(
         FactoryResearchItem({
-          collaborators: undefined,
+          collaborators: [],
         }),
       )
     })
 
     // Assert
     expect(() => {
-      wrapper.getAllByTestId('ArticleCallToAction: contributors')
+      wrapper.getAllByTestId('ArticleCallToAction: collaborators')
     }).toThrow()
   })
 
-  it('displays contributors', async () => {
-    // Arrange
-    ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
-
+  it('displays collaborators', async () => {
     // Act
     let wrapper
     act(() => {
       wrapper = getWrapper(
         FactoryResearchItem({
-          collaborators: ['example-username', 'another-example-username'],
+          collaborators: [
+            { username: 'example-username', country: 'nl' } as Author,
+            { username: 'another-example-username', country: 'nl' } as Author,
+          ],
         }),
       )
     })
@@ -133,96 +124,35 @@ describe('Research Article', () => {
       expect(wrapper.getAllByText('With contributions from')).toHaveLength(1)
       expect(wrapper.getAllByText('example-username')).toHaveLength(2)
       expect(wrapper.getAllByText('another-example-username')).toHaveLength(2)
-      expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(4)
     })
   })
-
-  it('displays "Follow" button for non-subscriber', async () => {
-    // Arrange
-    ;(useResearchStore as Mock).mockReturnValue({
-      ...mockResearchStore,
-      activeUser,
-    })
-
-    // Act
-    let wrapper
-    act(() => {
-      wrapper = getWrapper(
-        FactoryResearchItem({
-          userHasSubscribed: false,
-        }),
-      )
-    })
-
-    await waitFor(() => {
-      const followButton = wrapper.getAllByTestId('follow-button')[0]
-
-      // Assert
-      expect(followButton).toBeInTheDocument()
-      expect(followButton).toHaveTextContent('Follow')
-      expect(followButton).not.toHaveTextContent('Following')
-    })
-  })
-
-  it.todo('displays "Following" button for subscriber')
-
-  // TODO: Work out how to simulate store subscribe functionality
-  // it('displays "Following" button for subscriber',  () => {
-  //   // Arrange
-  //   ;(useResearchStore as Mock).mockReturnValue({
-  //     ...mockResearchStore,
-  //     activeResearchItem: FactoryResearchItem({
-  //       subscribers: [activeUser._id],
-  //       userHasSubscribed: true,
-  //     }),
-  //     activeUser,
-  //   })
-
-  //   // Act
-  //   let wrapper
-  //    act( () => {
-  //     wrapper = getWrapper()
-  //   })
-  //   const followButton = wrapper.getAllByTestId('follow-button')[0]
-
-  //   // Assert
-  //   expect(followButton).toBeInTheDocument()
-  // })
 
   describe('Research Update', () => {
     it('displays contributors', async () => {
-      // Arrange
-      ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
-
       // wait for Promise to resolve and state to update
       let wrapper
       act(() => {
         wrapper = getWrapper(
           FactoryResearchItem({
-            collaborators: ['example-username', 'another-example-username'],
+            collaborators: [
+              { username: 'example-username' } as Author,
+              { username: 'another-example-username' } as Author,
+              { username: 'third-example-username' } as Author,
+            ],
             updates: [
               FactoryResearchItemUpdate({
                 title: 'Research Update #1',
-                collaborators: [
-                  'third-example-username',
-                  'fourth-example-username',
-                ],
-                status: ResearchUpdateStatus.PUBLISHED,
-                _deleted: false,
-              }),
-              FactoryResearchItemUpdate({
-                title: 'Research Update #2',
-                collaborators: null!,
-                status: ResearchUpdateStatus.DRAFT,
-                _deleted: false,
+                isDraft: false,
+                deleted: false,
+                author: { username: 'another-example-username' } as Author,
               }),
               FactoryResearchItemUpdate({
                 title: 'Research Update #3',
-                collaborators: undefined,
-                status: ResearchUpdateStatus.PUBLISHED,
-                _deleted: false,
+                isDraft: false,
+                deleted: false,
               }),
             ],
+            author: { username: 'example-username' } as Author,
           }),
         )
       })
@@ -233,14 +163,13 @@ describe('Research Article', () => {
           expect(wrapper.getAllByText('With contributions from')).toHaveLength(
             1,
           )
-          expect(wrapper.getAllByText('example-username')).toHaveLength(2)
+          expect(wrapper.getAllByText('example-username')).toHaveLength(4)
           expect(wrapper.getAllByText('another-example-username')).toHaveLength(
-            2,
+            3,
           )
-          expect(wrapper.getAllByText('third-example-username')).toHaveLength(1)
+          expect(wrapper.getAllByText('third-example-username')).toHaveLength(2)
           expect(wrapper.queryByText('fourth-example-username')).toBeNull()
           expect(wrapper.getAllByTestId('collaborator/creator')).toHaveLength(1)
-          expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(5)
         },
         {
           timeout: 10000,
@@ -249,20 +178,19 @@ describe('Research Article', () => {
     })
 
     it('does not show edit timestamp, when create displays the same value', async () => {
-      const _created = faker.date.past().toString()
+      const createdAt = faker.date.past()
       const update = FactoryResearchItemUpdate({
-        _created,
-        _modified: _created,
+        createdAt,
+        modifiedAt: createdAt,
         title: 'A title',
         description: 'A description',
-        status: ResearchUpdateStatus.PUBLISHED,
+        isDraft: false,
       })
-      ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
+
       // Act
       const item = FactoryResearchItem({
-        _created,
-        _modified: _created,
-        _contentModifiedTimestamp: _created,
+        createdAt,
+        modifiedAt: createdAt,
         updates: [update],
       })
       const wrapper = getWrapper(item)
@@ -279,21 +207,15 @@ describe('Research Article', () => {
     })
 
     it('does show both created and edit timestamp, when different', async () => {
-      const modified = faker.date.past({ years: 1 })
-      const created = faker.date.past({ years: 2 })
+      const createdAt = faker.date.past({ years: 2 })
+      const modifiedAt = faker.date.past({ years: 1 })
       const update = FactoryResearchItemUpdate({
-        _created: created.toString(),
-        status: ResearchUpdateStatus.PUBLISHED,
-        _modified: modified.toString(),
+        createdAt,
+        isDraft: false,
+        modifiedAt,
         title: 'A title',
         description: 'A description',
-        _deleted: false,
-      })
-      ;(useResearchStore as Mock).mockReturnValue({
-        ...mockResearchStore,
-        formatResearchCommentList: vi.fn().mockImplementation((c) => {
-          return c
-        }),
+        deleted: false,
       })
 
       // Act
@@ -314,57 +236,20 @@ describe('Research Article', () => {
     })
   })
 
-  it('shows only published updates', async () => {
-    // Arrange
-    ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
-
-    // Act
-    let wrapper
-    act(() => {
-      wrapper = getWrapper(
-        FactoryResearchItem({
-          collaborators: ['example-username', 'another-example-username'],
-          updates: [
-            FactoryResearchItemUpdate({
-              title: 'Research Update #1',
-              status: ResearchUpdateStatus.PUBLISHED,
-              _deleted: false,
-            }),
-            FactoryResearchItemUpdate({
-              title: 'Research Update #2',
-              status: ResearchUpdateStatus.DRAFT,
-              _deleted: false,
-            }),
-          ],
-        }),
-      )
-    })
-
-    // Assert
-    await waitFor(() => {
-      expect(wrapper.getByText('Research Update #1')).toBeInTheDocument()
-      expect(wrapper.queryByText('Research Update #2')).not.toBeInTheDocument()
-    })
-  })
-
   describe('Breadcrumbs', () => {
     it('displays breadcrumbs with category', async () => {
-      // Arrange
-      ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
-
       // Act
       let wrapper
       act(() => {
         wrapper = getWrapper(
           FactoryResearchItem({
             title: 'Innovative Study',
-            researchCategory: {
-              label: 'Science',
-              _id: faker.string.uuid(),
-              _modified: faker.date.past().toString(),
-              _created: faker.date.past().toString(),
-              _deleted: faker.datatype.boolean(),
-              _contentModifiedTimestamp: faker.date.past().toString(),
+            category: {
+              name: 'Science',
+              id: faker.number.int(),
+              createdAt: faker.date.past(),
+              modifiedAt: null,
+              type: 'research',
             },
           }),
         )
@@ -391,16 +276,13 @@ describe('Research Article', () => {
     })
 
     it('displays breadcrumbs without category', async () => {
-      // Arrange
-      ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
-
       // Act
       let wrapper
       act(() => {
         wrapper = getWrapper(
           FactoryResearchItem({
             title: 'Innovative Study',
-            researchCategory: undefined, // No category provided
+            category: undefined, // No category provided
           }),
         )
       })
@@ -424,22 +306,13 @@ describe('Research Article', () => {
   })
 })
 
-const getWrapper = (research: IResearchDB) => {
+const getWrapper = (research: ResearchItem) => {
   const router = createMemoryRouter(
     createRoutesFromElements(
       <Route
         path="/research/:slug"
         key={1}
-        element={
-          <ResearchArticlePage
-            research={research}
-            publicUpdates={research.updates.filter(
-              (x) =>
-                x._deleted !== true &&
-                x.status === ResearchUpdateStatus.PUBLISHED,
-            )}
-          />
-        }
+        element={<ResearchArticlePage research={research} />}
       />,
     ),
     {

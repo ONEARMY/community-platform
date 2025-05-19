@@ -9,6 +9,7 @@ import constructionSVG from '../../assets/icons/construction.svg'
 import contactSVG from '../../assets/icons/contact.svg'
 import closeSVG from '../../assets/icons/cross-close.svg'
 import deleteSVG from '../../assets/icons/delete.svg'
+import discussionSVG from '../../assets/icons/discussion.svg'
 import employeeSVG from '../../assets/icons/employee.svg'
 import eyeSVG from '../../assets/icons/eye.svg'
 import eyeCrossedSVG from '../../assets/icons/eye-crossed.svg'
@@ -39,6 +40,8 @@ import machinesSVG from '../../assets/icons/machines.svg'
 import mapSVG from '../../assets/icons/map.svg'
 import globe from '../../assets/icons/map-globe.svg'
 import gpsLocation from '../../assets/icons/map-gpsLocation.svg'
+import megaphoneActiveSVG from '../../assets/icons/megaphone-active.svg'
+import megaphoneInactiveSVG from '../../assets/icons/megaphone-inactive.svg'
 import mouldsSVG from '../../assets/icons/moulds.svg'
 import otherSVG from '../../assets/icons/other.svg'
 import patreonSVG from '../../assets/icons/patreon.svg'
@@ -85,6 +88,7 @@ export const iconMap = {
   contact: <ImageIcon src={contactSVG} />,
   delete: <ImageIcon src={deleteSVG} />,
   discord: <ImageIcon src={discordSVG} />,
+  discussion: <ImageIcon src={discussionSVG} />,
   emailOutline: <ImageIcon src={emailOutlineSVG} />,
   employee: <ImageIcon src={employeeSVG} />,
   flagUnknown: <ImageIcon src={flagUnknownSVG} />,
@@ -99,6 +103,8 @@ export const iconMap = {
   machine: <ImageIcon src={machineSVG} />,
   machines: <ImageIcon src={machinesSVG} />,
   map: <ImageIcon src={mapSVG} />,
+  megaphoneActive: <ImageIcon src={megaphoneActiveSVG} />,
+  megaphoneInactive: <ImageIcon src={megaphoneInactiveSVG} />,
   moulds: <ImageIcon src={mouldsSVG} />,
   other: <ImageIcon src={otherSVG} />,
   patreon: <ImageIcon src={patreonSVG} />,

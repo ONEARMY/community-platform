@@ -18,7 +18,6 @@ import type {
   IDiscussion,
   IDiscussionDB,
   IDiscussionSourceModelOptions,
-  IResearch,
   IUserDB,
 } from 'oa-shared'
 import type { DocReference } from '../databaseV2/DocReference'
@@ -245,68 +244,28 @@ export class DiscussionStore extends ModuleStore {
     )
     const commentId = parentComment ? parentComment._id : comment._id
 
-    switch (collectionName) {
-      case 'research':
-        const researchRef = this.db
-          .collection<IResearch.Item>(collectionName)
-          .doc(discussion.primaryContentId)
+    const dbRef = this.db
+      .collection<IDiscussionSourceModelOptions>(collectionName)
+      .doc(discussion.sourceId)
+    const parentContent = toJS(await dbRef.get('server'))
 
-        const research = toJS(await researchRef.get('server'))
+    if (parentContent) {
+      const recipientsToNotify = getDiscussionContributorsToNotify(
+        discussion,
+        parentContent,
+        comment,
+      )
 
-        if (research) {
-          const update = research.updates.find(
-            ({ _id }) => _id == discussion.sourceId,
+      return await Promise.all(
+        recipientsToNotify.map((recipient) => {
+          this.userNotificationsStore.triggerNotification(
+            'new_comment_discussion',
+            recipient,
+            `/${collectionName}/${parentContent.slug}#comment:${commentId}`,
+            parentContent.title,
           )
-
-          if (!update)
-            return logger.trace(
-              `Unable to find research update. Discussion notification not sent. sourceId: ${discussion.sourceId}`,
-            )
-
-          const recipientsToNotify = getDiscussionContributorsToNotify(
-            discussion,
-            research,
-            comment,
-            update.collaborators,
-          )
-          const url = `/research/${research.slug}#update_${update._id}-comment:${commentId}`
-
-          await Promise.all(
-            recipientsToNotify.map((recipient) => {
-              this.userNotificationsStore.triggerNotification(
-                'new_comment_discussion',
-                recipient,
-                url,
-                research.title,
-              )
-            }),
-          )
-        }
-        return
-      default:
-        const dbRef = this.db
-          .collection<IDiscussionSourceModelOptions>(collectionName)
-          .doc(discussion.sourceId)
-        const parentContent = toJS(await dbRef.get('server'))
-
-        if (parentContent) {
-          const recipientsToNotify = getDiscussionContributorsToNotify(
-            discussion,
-            parentContent,
-            comment,
-          )
-
-          return await Promise.all(
-            recipientsToNotify.map((recipient) => {
-              this.userNotificationsStore.triggerNotification(
-                'new_comment_discussion',
-                recipient,
-                `/${collectionName}/${parentContent.slug}#comment:${commentId}`,
-                parentContent.title,
-              )
-            }),
-          )
-        }
+        }),
+      )
     }
   }
 

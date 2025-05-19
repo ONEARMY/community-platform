@@ -6,4 +6,3 @@ exports.notifyHowtoAwaitingModeration = Slack.notifyHowtoAwaitingModeration
 
 exports.notifyPinPublished = Discord.notifyPinPublished
 exports.notifyLibraryItemPublished = Discord.notifyLibraryItemPublished
-exports.notifyResearchUpdatePublished = Discord.notifyResearchUpdatePublished

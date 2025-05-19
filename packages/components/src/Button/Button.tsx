@@ -44,18 +44,18 @@ const buttonSizeProps: { [key: string]: any } = {
 export type BtnProps = IBtnProps & ThemeUiButtonProps
 
 function getSizeProps(size: string, hasIcon: boolean) {
-  if (!buttonSizeProps[`${size}`] && !hasIcon) {
+  if (!buttonSizeProps[size] && !hasIcon) {
     return {}
   }
 
-  if (!buttonSizeProps[`${size}`] && hasIcon) {
+  if (!buttonSizeProps[size] && hasIcon) {
     return {
       px: 3,
       pl: 9,
     }
   }
 
-  const sizeProps = { ...buttonSizeProps[`${size}`] }
+  const sizeProps = { ...buttonSizeProps[size] }
 
   if (!hasIcon) {
     delete sizeProps.pl

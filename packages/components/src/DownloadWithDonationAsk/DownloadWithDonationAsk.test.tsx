@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { DownloadWithDonationAsk } from './DownloadWithDonationAsk'
 
-import type { IUploadedFileMeta } from 'oa-shared'
+import type { MediaFile } from 'oa-shared'
 
 const mockedUsedNavigate = vi.fn()
 vi.mock('react-router-dom', () => ({
@@ -51,7 +51,7 @@ describe('DownloadWithDonationAsk', () => {
   })
 
   it('opens the donation modal for files', () => {
-    const downloadUrl = 'http://great-url.com/'
+    const publicUrl = 'http://great-url.com/'
     const handleClick = vi.fn()
 
     const { getAllByTestId } = render(
@@ -62,10 +62,10 @@ describe('DownloadWithDonationAsk', () => {
         fileLink={undefined}
         files={[
           {
-            downloadUrl,
+            url: publicUrl,
             name: 'first-file',
             size: 435435,
-          } as IUploadedFileMeta,
+          } as MediaFile,
         ]}
       />,
     )
@@ -75,7 +75,7 @@ describe('DownloadWithDonationAsk', () => {
 
     expect(getAllByTestId('DonationRequestSkip')[0]).toHaveAttribute(
       'href',
-      downloadUrl,
+      publicUrl,
     )
     expect(getAllByTestId('DonationRequest')[0]).toBeInTheDocument()
     expect(handleClick).not.toHaveBeenCalled()

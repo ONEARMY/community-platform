@@ -29,11 +29,10 @@ export const FactoryQuestionItem = (
   ],
   author: {
     id: faker.number.int(),
-    name: faker.internet.userName(),
     country: faker.location.countryCode(),
+    displayName: faker.internet.userName(),
     isVerified: faker.datatype.boolean(),
     isSupporter: faker.datatype.boolean(),
-    firebaseAuthId: faker.string.uuid(),
     photoUrl: faker.image.avatar(),
     username: faker.internet.userName(),
   },

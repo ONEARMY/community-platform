@@ -128,7 +128,7 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
           <a
             class="css-1rer3n2"
             data-discover="true"
-            href="/research/abc/edit-update/update-2"
+            href="/research/abc/edit-update/2"
           >
             Edit
           </a>
@@ -144,7 +144,7 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
           <a
             class="css-1rer3n2"
             data-discover="true"
-            href="/research/abc/edit-update/update-3"
+            href="/research/abc/edit-update/3"
           >
             Edit
           </a>

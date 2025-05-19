@@ -20,6 +20,7 @@ export interface UserStatisticsProps {
   usefulCount: number
   researchCount: number
   totalViews: number
+  hasLocation?: boolean
   sx?: ThemeUIStyleObject | undefined
 }
 
@@ -27,7 +28,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
   const hasLocation =
     props.country !== undefined && props.userName !== undefined
 
-  if (isEmpty(props) && !hasLocation) {
+  if (isEmpty({ hasLocation, ...props })) {
     return null
   }
 
@@ -138,8 +139,10 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 }
 
 const isEmpty = (props: UserStatisticsProps) =>
+  !props.hasLocation &&
   !props.isVerified &&
   !props.isSupporter &&
-  !props.usefulCount &&
   !props.libraryCount &&
-  !props.totalViews
+  !props.researchCount &&
+  !props.totalViews &&
+  !props.usefulCount

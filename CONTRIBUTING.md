@@ -93,7 +93,7 @@ Some issues are collated to form modules which are the parent of each section of
 Additionally if you have identified a bug, please try to write a test to make reproducible (and less likely to arise in the future). You can find more information to do this in the [Testing Overview](https://onearmy.github.io/community-platform/Testing/overview)
 
 We've also labelled some of the issues with _[Good first issue](https://github.com/ONEARMY/community-platform/issues?q=is%3Aissue+is%3Aopen+label%3A%22Good+first+issue%22)_ to help you get started quickly.
-When you start working on an issue, comment on it or if your are a registered contributor assign yourself to let us know so we avoid working on something twice. The comment should include a mention to [@ONEARMY/maintainers](https://github.com/orgs/ONEARMY/teams/maintainers).
+When you start working on an issue, comment on it or if you are a registered contributor assign yourself to let us know so we avoid working on something twice. The comment should include a mention to [@ONEARMY/maintainers](https://github.com/orgs/ONEARMY/teams/maintainers).
 
 It is expected that the developer will have done thorough testing themselves first, this helps make sure most pull requests get merged quickly.
 
@@ -202,5 +202,5 @@ As an open-source project most of our decisions up till now have been guided by 
 
 1. Start with an observation - instead of asking 'do you use redux' take a look at the `package.json` and see for yourself.
 2. See if this is something we've already talked about - we tracked some initial discussions here [PPv4 - Web Platform Discussions](https://docs.google.com/document/d/1spUOUXvisHoTvvH8UDgFo1-pOi8PBsb1F8H2GRaH4IM/edit?usp=sharing), otherwise discussions take place across GitHub.
-3. State what you believe the benefits to the project would be - _'because I've used it before and like it'_ isn't good enough! Do your research, evaluate common alternatives (in the very least google '[my awesome thought] vs X' and read the first few articles. Try to present a balanced argument for why we might want to/not want to use something.
+3. State what you believe the benefits to the project would be - _'because I've used it before and like it'_ isn't good enough! Do your research, evaluate common alternatives (at the very least google '[my awesome thought] vs X' and read the first few articles. Try to present a balanced argument for why we might want to/not want to use something.
 4. Be willing to support implementation - any great idea or suggestion will have direct impact on others contributing to the project. If there is something you feel strongly about you should first create a clean, clear demo of how it would work in practice, and be willing to provide additional guidance if called upon.

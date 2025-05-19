@@ -1,40 +1,36 @@
-import { UserAction } from 'src/common/UserAction'
-import { isPreciousPlastic } from 'src/config/config'
-import { AuthRoute } from 'src/pages/common/AuthRoute'
-import { RESEARCH_EDITOR_ROLES } from 'src/pages/Research/constants'
-import CreateResearch from 'src/pages/Research/Content/CreateResearch'
-import { listing } from 'src/pages/Research/labels'
-import { Box } from 'theme-ui'
+import { redirect } from '@remix-run/react'
+import { UserRole } from 'oa-shared'
+import ResearchForm from 'src/pages/Research/Content/Common/ResearchForm'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { profileServiceServer } from 'src/services/profileService.server'
+import { redirectServiceServer } from 'src/services/redirectService.server'
 
-export async function loader() {
-  return null
+export async function loader({ request }) {
+  const { client, headers } = createSupabaseServerClient(request)
+
+  const {
+    data: { user },
+  } = await client.auth.getUser()
+
+  if (!user) {
+    return redirectServiceServer.redirectSignIn('/research/create', headers)
+  }
+
+  const profile = await profileServiceServer.getByAuthId(user.id, client)
+  const roles = (profile?.roles || []) as string[]
+
+  // Check if user has required permissions
+  const isAdmin = roles?.includes(UserRole.ADMIN) ?? false
+  const isResearchCreator = roles?.includes(UserRole.RESEARCH_CREATOR) ?? false
+  const canCreate = isAdmin || isResearchCreator
+
+  if (!canCreate) {
+    return redirect('/forbidden', { headers })
+  }
+
+  return Response.json({}, { headers })
 }
 
 export default function Index() {
-  const { incompleteProfile, loggedOut } = listing
-  const roles = isPreciousPlastic() ? [] : RESEARCH_EDITOR_ROLES
-  const sx = {
-    alignSelf: 'center',
-    paddingTop: 5,
-  }
-
-  return (
-    <UserAction
-      incompleteProfile={
-        <Box data-cy="incomplete-profile-message" sx={sx}>
-          {incompleteProfile}
-        </Box>
-      }
-      loggedIn={
-        <AuthRoute roleRequired={roles}>
-          <CreateResearch />
-        </AuthRoute>
-      }
-      loggedOut={
-        <Box data-cy="logged-out-message" sx={sx}>
-          {loggedOut}
-        </Box>
-      }
-    />
-  )
+  return <ResearchForm />
 }

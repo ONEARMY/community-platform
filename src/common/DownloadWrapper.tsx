@@ -4,13 +4,13 @@ import { DownloadButton, DownloadWithDonationAsk } from 'oa-components'
 
 import { UserAction } from './UserAction'
 
-import type { IUploadedFileMeta } from 'oa-shared'
+import type { MediaFile } from 'oa-shared'
 
 interface IProps {
-  handleClick: () => Promise<void>
+  handleClick?: () => Promise<void>
   fileDownloadCount: number
   fileLink?: string
-  files?: (IUploadedFileMeta | File | null)[]
+  files?: MediaFile[]
 }
 
 export const DownloadWrapper = (props: IProps) => {

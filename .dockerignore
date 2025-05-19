@@ -11,6 +11,5 @@ extensions
 docs
 packages/cypress
 packages/documentation
-packages/security-rules
 packages/simulated-webhook-receiver
 scripts

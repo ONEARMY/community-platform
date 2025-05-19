@@ -1,6 +1,13 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { MemberBadge, MemberHistory, Tab, TabPanel, Tabs, TabsList } from 'oa-components'
+import {
+  MemberBadge,
+  MemberHistory,
+  Tab,
+  TabPanel,
+  Tabs,
+  TabsList,
+} from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
 import { isPreciousPlastic } from 'src/config/config'
 import { isUserContactable } from 'src/utils/helpers'

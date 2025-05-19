@@ -75,7 +75,8 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
             width: ['100%', '1px', '1px'],
             height: ['1px', 'auto', 'auto'],
             alignSelf: 'stretch',
-            border: '2px solid #0000001A',
+            border: ['none', '2px solid #0000001A', '2px solid #0000001A'],
+            borderTop: '2px solid #0000001A',
             m: 0,
           }}
         />

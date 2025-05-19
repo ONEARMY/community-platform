@@ -2,6 +2,7 @@ import { useLoaderData } from '@remix-run/react'
 import { ProfilePage } from 'src/pages/User/content/ProfilePage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { pageViewService } from 'src/services/pageViewService.server'
+import { questionServiceServer } from 'src/services/questionService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { userService } from 'src/services/userService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
@@ -15,15 +16,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
 
   const username = params.id as string
-  const [profile, projects, research] = await Promise.all([
+  const [profile, projects, research, questions] = await Promise.all([
     userService.getById(username),
     userService.getUserCreatedProjects(username),
     researchServiceServer.getUserResearch(client, username),
+    questionServiceServer.getQuestionsByUser(client, username),
   ])
 
   const userCreatedDocs = {
     projects,
     research,
+    questions,
   } as UserCreatedDocs
 
   if (profile?._id) {

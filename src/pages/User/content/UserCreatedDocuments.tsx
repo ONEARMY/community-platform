@@ -57,6 +57,29 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
               })}
             </Flex>
           )}
+          {docs?.questions.length > 0 && (
+            <Flex
+              sx={{ flexDirection: 'column', flexBasis: '50%', mt: 2, mb: 6 }}
+            >
+              <Heading as="h3" variant="small" mb={1}>
+                Questions
+              </Heading>
+              {docs?.questions.map((item) => {
+                return (
+                  <UserCreatedDocumentsItem
+                    key={item.id}
+                    type="question"
+                    item={{
+                      id: item.id!,
+                      slug: item.slug!,
+                      title: item.title!,
+                      usefulVotes: item.usefulCount!,
+                    }}
+                  />
+                )
+              })}
+            </Flex>
+          )}
         </Flex>
       )}
     </>

@@ -11,7 +11,9 @@ interface IProps {
 const UserCreatedDocuments = ({ docs }: IProps) => {
   return (
     <>
-      {(docs.projects.length > 0 || docs.research.length > 0) && (
+      {(docs.projects.length > 0 ||
+        docs.research.length > 0 ||
+        docs.questions.length > 0) && (
         <Flex sx={{ justifyContent: 'space-between', gap: 4 }}>
           {docs?.projects.length > 0 && (
             <Flex

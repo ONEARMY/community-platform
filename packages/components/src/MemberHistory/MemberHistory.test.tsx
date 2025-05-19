@@ -17,5 +17,4 @@ describe('MemberHistory', () => {
     expect(getByText('Member since 2020')).toBeInTheDocument()
     expect(getByText('Last active over 2 years ago')).toBeInTheDocument()
   })
-
 })

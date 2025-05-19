@@ -59,6 +59,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
           )}
           {docs?.questions.length > 0 && (
             <Flex
+              data-cy="QuestionsContributions"
               sx={{ flexDirection: 'column', flexBasis: '50%', mt: 2, mb: 6 }}
             >
               <Heading as="h3" variant="small" mb={1}>

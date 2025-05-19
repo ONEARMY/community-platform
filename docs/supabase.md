@@ -4,6 +4,8 @@ Supabase is an open source Firebase alternative, based on Postgres.
 
 ## Getting Started
 
+### Local supabase instance
+
 To install the supabase locally, follow https://supabase.com/docs/guides/local-development/cli/getting-started?queryGroups=platform&platform=windows
 Installing as a dev dependency doesn't always work well, so it is recommended to install for your OS.
 
@@ -21,6 +23,26 @@ Run `yarn db:seed` to run the DB migration scripts and update your local databas
 
 Now you can start the project with `yarn start`.
 To sign-up locally, you can get the email confirmation link at http://localhost:54324/monitor
+
+### Using online Supabase free version
+
+#### Create your Supabase instance
+You can also use the online Supabase free version.
+For this, create your Supabase account at https://supabase.com and create a new project.
+Install the Supabase CLI : https://supabase.com/docs/guides/local-development/cli/getting-started
+
+#### Link your Supabase instance and push the db schema
+First, connect to the Supabase CLI using `supabase login`.
+Get your project-id from your Supabase project, you can find it in the project settings general section.
+Now from the project root, run `supabase link --project-ref your-project-id`.
+Finally, push your schema using `supabase db push`.
+
+To finish you should fill the .env.local file with the values from the "Data API" section of your project settings:
+SUPABASE_API_URL={URL}
+SUPABASE_KEY={anon key}
+SUPABASE_SERVICE_ROLE_KEY={service_role key}
+
+
 
 ## Migrations
 

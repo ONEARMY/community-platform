@@ -5,7 +5,7 @@ import { UserAction } from 'src/common/UserAction'
 import { isUserContactable } from 'src/utils/helpers'
 import { Flex } from 'theme-ui'
 
-import { UserContactNotLoggedIn } from '../contact'
+import { UserContactFormAvailable, UserContactNotLoggedIn } from '../contact'
 import { UserContactForm } from '../contact/UserContactForm'
 import UserContactAndLinks from './UserContactAndLinks'
 
@@ -13,9 +13,10 @@ import type { IUser } from 'oa-shared'
 
 interface IProps {
   user: IUser
+  isViewingOwnProfile: boolean
 }
 
-export const ProfileContact = ({ user }: IProps) => {
+export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
   const { links } = user
 
   const userLinks =
@@ -33,7 +34,15 @@ export const ProfileContact = ({ user }: IProps) => {
       <ClientOnly fallback={<></>}>
         {() => (
           <UserAction
-            loggedIn={<UserContactForm user={user} />}
+            loggedIn={
+              isViewingOwnProfile ? (
+                <UserContactFormAvailable
+                  isUserProfileContactable={!isUserProfileContactable}
+                />
+              ) : (
+                <UserContactForm user={user} />
+              )
+            }
             loggedOut={
               isUserProfileContactable ? (
                 <UserContactNotLoggedIn displayName={user.displayName} />

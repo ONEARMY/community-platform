@@ -322,6 +322,7 @@ jobs:
               --app << parameters.FLY_APP_NAME >> \
               --config << parameters.FLY_TOML >> \
               --debug --verbose \
+              --build-secret NODE_ENV="production" \
               --build-secret VITE_BRANCH="$VITE_BRANCH" \
               --build-secret VITE_CDN_URL="$VITE_CDN_URL" \
               --build-secret VITE_FIREBASE_API_KEY="$VITE_FIREBASE_API_KEY" \

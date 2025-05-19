@@ -115,10 +115,15 @@ app.use(
   }),
 )
 // Enforce HTTPS only on production
-process.env.NODE_ENV === 'production' ??
+if (process.env.NODE_ENV === 'production') {
   app.use(
-    helmet.hsts({ maxAge: 31536000, preload: true, includeSubDomains: false }),
+    helmet.hsts({
+      maxAge: 31536000,
+      preload: true,
+      includeSubDomains: false,
+    }),
   )
+}
 app.use(helmet.dnsPrefetchControl({ allow: true }))
 app.use(helmet.hidePoweredBy())
 app.use(helmet.noSniff())

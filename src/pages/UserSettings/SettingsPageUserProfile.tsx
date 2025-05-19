@@ -141,7 +141,9 @@ export const SettingsPageUserProfile = () => {
 
                 <UserImagesSection isMemberProfile={isMember} values={values} />
 
-                {!isMember && <VisitorSection openToVisitors={values.openToVisitors} />}
+                {!isMember && (
+                  <VisitorSection openToVisitors={values.openToVisitors} />
+                )}
 
                 {!isMessagingBlocked() && (
                   <PublicContactSection

@@ -3,6 +3,7 @@ import { Field } from 'react-final-form'
 import { observer } from 'mobx-react'
 import { FieldTextarea, Select, visitorDisplayData } from 'oa-components'
 import { userVisitorPreferencePolicies } from 'oa-shared'
+import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { Flex, Heading, Switch, Text } from 'theme-ui'
 
 import { fields, headings } from '../../labels'
@@ -67,22 +68,23 @@ export const VisitorSection = observer((props: Props) => {
       {openToVisitors && (
         <>
           <Text>{policyTitle} *</Text>
-          <Field name="openToVisitors.policy">
-            {({ input }) => {
-              return (
-                <Select
-                  data-testid="openToVisitors-policy"
-                  options={visitorPolicyOptions}
-                  defaultValue={findPolicy(openToVisitors.policy || 'open')}
-                  onChange={({ value }) => input.onChange(value)}
-                />
-              )
-            }}
-          </Field>
+          <FieldContainer data-cy="openToVisitors-policy">
+            <Field name="openToVisitors.policy">
+              {({ input }) => {
+                return (
+                  <Select
+                    options={visitorPolicyOptions}
+                    defaultValue={findPolicy(openToVisitors.policy || 'open')}
+                    onChange={({ value }) => input.onChange(value)}
+                  />
+                )
+              }}
+            </Field>
+          </FieldContainer>
           <Text>{policyDetailsTitle}</Text>
           <Field
             name="openToVisitors.details"
-            data-testid="openToVisitors-details"
+            data-cy="openToVisitors-details"
             component={FieldTextarea}
             placeholder={policyDetailsPlaceholder}
             value={openToVisitors.details}

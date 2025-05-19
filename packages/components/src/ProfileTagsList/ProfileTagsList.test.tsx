@@ -16,25 +16,31 @@ describe('ProfileTagsList', () => {
   })
 
   it('shows nothing when no tags or visitor info present', () => {
-    const { getByTestId } = render(<ProfileTagsList tags={[]} />)
+    const { getByTestId } = render(<ProfileTagsList tags={[]} isSpace />)
 
     expect(getByTestId('ProfileTagsList')).toBeEmptyDOMElement()
   })
 
   it('shows open when open for visitors', () => {
     const { getByText } = render(
-      <ProfileTagsList tags={[]} openToVisitors={{ policy: 'open' }} />,
+      <ProfileTagsList tags={[]} openToVisitors={{ policy: 'open' }} isSpace />,
     )
 
-    expect(getByText('Open to visitors ⓘ')).toBeInTheDocument()
+    expect(getByText('Open to visitors', { exact: false })).toBeInTheDocument()
   })
 
   it('shows appointment when visits by appointment', () => {
     const { getByText } = render(
-      <ProfileTagsList tags={[]} openToVisitors={{ policy: 'appointment' }} />,
+      <ProfileTagsList
+        tags={[]}
+        openToVisitors={{ policy: 'appointment' }}
+        isSpace
+      />,
     )
 
-    expect(getByText('Visitors after appointment ⓘ')).toBeInTheDocument()
+    expect(
+      getByText('Visitors after appointment', { exact: false }),
+    ).toBeInTheDocument()
   })
 
   it('triggers callback when clicking closed visitor tag', () => {
@@ -44,10 +50,13 @@ describe('ProfileTagsList', () => {
         tags={[]}
         openToVisitors={{ policy: 'closed' }}
         showVisitorModal={callback}
+        isSpace
       />,
     )
 
-    const visitorTag = getByText('Visits currently not possible ⓘ')
+    const visitorTag = getByText('Visits currently not possible', {
+      exact: false,
+    })
     expect(visitorTag).toBeInTheDocument()
     visitorTag.click()
 

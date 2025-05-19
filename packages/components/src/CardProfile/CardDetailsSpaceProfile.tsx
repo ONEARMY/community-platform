@@ -75,7 +75,7 @@ export const CardDetailsSpaceProfile = ({ creator, isLink }: IProps) => {
           />
         </Flex>
 
-        {tags && <ProfileTagsList tags={tags} isSpace={true}/>}
+        {tags && <ProfileTagsList tags={tags} isSpace={true} />}
 
         {about && (
           <Text variant="quiet" sx={{ fontSize: 2 }}>

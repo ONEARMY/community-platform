@@ -20,7 +20,7 @@ export const ProfileTags = (props: IProps) => {
     <ProfileTagsList
       tags={tags}
       openToVisitors={openToVisitors}
-      isMember={isSpace}
+      isSpace={isSpace}
       showVisitorModal={showVisitorModal}
       large={true}
     />

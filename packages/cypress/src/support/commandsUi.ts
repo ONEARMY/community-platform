@@ -1,7 +1,7 @@
 import { form } from '../../../../src/pages/UserSettings/labels'
 import { generateNewUserDetails } from '../utils/TestUtils'
 
-import type { IUser, UserVisitorPreferencePolicy } from 'oa-shared'
+import type { IUser } from 'oa-shared'
 // import { visitorDisplayData } from 'oa-components'
 
 export enum UserMenuItem {
@@ -60,10 +60,7 @@ declare global {
        **/
       selectTag(tagName: string, selector?: string): Chainable<void>
       setSettingAddContactLink(link: ILink)
-      setSettingVisitorPolicy(
-        policyText: string,
-        details?: string,
-      )
+      setSettingVisitorPolicy(policyText: string, details?: string)
       setSettingBasicUserInfo(info: IInfo)
       setSettingFocus(focus: string)
       setSettingImage(image: string, selector: string)
@@ -119,9 +116,9 @@ Cypress.Commands.add(
   (policyText: string, details?: string) => {
     cy.step('Set Visitor policy')
     cy.get('[data-testid="openToVisitors-switch"]').click({ force: true })
-    cy.selectTag(policyText, '[data-testid="openToVisitors-policy"]')
+    cy.selectTag(policyText, '[data-cy="openToVisitors-policy"]')
     if (details) {
-      cy.get('[data-testid="openToVisitors-details"] input')
+      cy.get('[data-cy="openToVisitors-details"]')
         .clear()
         .type(details)
         .blur({ force: true })

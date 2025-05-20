@@ -4,7 +4,7 @@ import { DisplayDate } from '../DisplayDate/DisplayDate'
 import { Icon } from '../Icon/Icon'
 import { InternalLink } from '../InternalLink/InternalLink'
 
-import type { Comment, News, Notification } from 'oa-shared'
+import type { Comment, Notification } from 'oa-shared'
 
 interface IProps {
   markRead: (id: number) => void
@@ -12,12 +12,28 @@ interface IProps {
   notification: Notification
 }
 
+const setSourceContentLink = (notification: Notification) => {
+  let path = `/${notification.sourceContentType}/${notification.sourceContent?.slug}`
+  if (notification.sourceContentType == 'research') {
+    path = path + `#update_${notification.parentContentId}`
+  }
+
+  return path
+}
+
+const setDeepLink = (notification: Notification, link: string) => {
+  if (notification.sourceContentType == 'research') {
+    // Have to rebuild the path as there's a weirdness to how deep linking into research update discussions works
+    return `/research/${notification.sourceContent?.slug}?update_${notification.parentContentId}#comment:${notification.content?.id}`
+  }
+  return `${link}#comment:${notification.content?.id}`
+}
+
 export const NotificationListItemSupabase = (props: IProps) => {
   const { markRead, modalDismiss, notification } = props
 
-  const sourceContentLink = `/${notification.sourceContentType}/${
-    (notification.sourceContent as News).slug
-  }`
+  const sourceContentLink = setSourceContentLink(notification)
+  const deepLink = setDeepLink(notification, sourceContentLink)
   const notificationIcon =
     notification.contentType !== 'news' ? 'discussion' : 'thunderbolt'
 
@@ -80,7 +96,7 @@ export const NotificationListItemSupabase = (props: IProps) => {
                 {notification.triggeredBy?.username}
               </InternalLink>{' '}
               has left a new {notification.contentType}
-              {(notification.sourceContent as News).title && (
+              {notification.sourceContent?.title && (
                 <>
                   {' on '}{' '}
                   <InternalLink
@@ -92,7 +108,9 @@ export const NotificationListItemSupabase = (props: IProps) => {
                     }}
                     onClick={onClick}
                   >
-                    {(notification.sourceContent as News).title}
+                    {notification.sourceContent.title}
+                    {notification.parentContent?.title &&
+                      `: ${notification.parentContent?.title}`}
                   </InternalLink>
                 </>
               )}
@@ -105,11 +123,7 @@ export const NotificationListItemSupabase = (props: IProps) => {
               />
             </Text>
           </Flex>
-          <InternalLink
-            to={`${sourceContentLink}#comment:${notification.content?.id}`}
-            sx={{ color: 'black' }}
-            onClick={onClick}
-          >
+          <InternalLink to={deepLink} sx={{ color: 'black' }} onClick={onClick}>
             <Flex
               sx={{
                 background: '#E2EDF7',

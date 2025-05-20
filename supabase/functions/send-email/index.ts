@@ -66,6 +66,9 @@ Deno.serve(async (req) => {
     switch (email_data.email_action_type) {
       case 'instant_notification': {
         subject = `A new ${email_data.notification?.contentType} on ${email_data.notification?.sourceContent?.title}`
+        subject = email_data.notification?.parentContent
+          ? `${subject}: ${email_data.notification?.parentContent.title}`
+          : subject
         html = await render(
           React.createElement(InstantNotificationEmail, details),
         )

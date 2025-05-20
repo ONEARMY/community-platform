@@ -1,4 +1,3 @@
-import { Comment } from 'oa-shared'
 import { transformNotification } from 'src/routes/api.notifications'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -28,20 +27,6 @@ const createInstantNotificationEmail = async (
     })
 
     const fullNotification = await transformNotification(dbNotification, client)
-
-    if (fullNotification.parentContentId) {
-      const parentContentType = 'comments'
-      const parentContentResponse = await client
-        .from(parentContentType)
-        .select('*') // Added all for ease of typing - only really need the actual comment body
-        .eq('id', fullNotification.parentContentId)
-        .single()
-
-      if (parentContentResponse.data) {
-        const comment = Comment.fromDB(parentContentResponse.data)
-        fullNotification.parentContent = comment
-      }
-    }
 
     await client.functions.invoke('send-email', {
       body: {

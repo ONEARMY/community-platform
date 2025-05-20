@@ -4,7 +4,7 @@ import type { IDBDocSB, IDoc } from './document'
 import type { News } from './news'
 import type { IPatreonUser } from './patreon'
 import type { Question } from './question'
-import type { ResearchUpdate } from './research'
+import type { ResearchItem, ResearchUpdate } from './research'
 
 export class DBProfile {
   id: number
@@ -58,28 +58,28 @@ type NotificationContentType = 'news' | 'comment' | 'reply'
 // type NotificationContentType = 'news' | 'research' | 'researchUpdate' | 'project' | 'question' | 'comment' | 'reply'
 
 type NotificationContent = News | Comment | Question | ResearchUpdate
-type NotificationSourceContentType = ContentType
+export type NotificationSourceContentType = ContentType
 // type NotificationSourceContentType = 'news' | 'research' | 'researchUpdate' | 'project' | 'question' // What page on the platform should be linked to
-type NotificationSourceContent = News | Question | ResearchUpdate
+type NotificationSourceContent = News | Question | ResearchItem
 
 type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photoUrl'>
 
 export class DBNotification implements IDBDocSB {
   readonly id: number
   readonly action_type: NotificationActionType
-  readonly content_type: NotificationContentType
   readonly content_id: number
-
+  readonly content_type: NotificationContentType
   readonly created_at: Date
+  is_read: boolean
   modified_at: Date | null
   readonly owned_by: DBProfile
-  owned_by_id: number
-  is_read: boolean
-  source_content_type: NotificationSourceContentType
-  source_content_id: number
-  triggered_by: DBProfile
-  triggered_by_id: number
-  parent_content_id: number | null
+  readonly owned_by_id: number
+  readonly parent_comment_id: number | null
+  readonly parent_content_id: number | null
+  readonly source_content_type: NotificationSourceContentType
+  readonly source_content_id: number
+  readonly triggered_by: DBProfile
+  readonly triggered_by_id: number
 
   constructor(obj: any) {
     Object.assign(this, obj)
@@ -89,20 +89,23 @@ export class DBNotification implements IDBDocSB {
 export class Notification implements IDoc {
   id: number
   actionType: NotificationActionType
-  contentType: NotificationContentType
   contentId: number
-  content?: NotificationContent
+  contentType: NotificationContentType
   createdAt: Date
   modifiedAt: Date | null
   ownedById: number
   ownedBy?: BasicAuthorDetails
   isRead: boolean
+  parentCommentId: number | null
   parentContentId: number | null
-  parentContent?: Comment
   sourceContentType: NotificationSourceContentType
   sourceContentId: number
-  sourceContent?: NotificationSourceContent
   triggeredBy?: BasicAuthorDetails
+
+  content?: NotificationContent
+  parentComment?: Comment
+  parentContent?: ResearchItem
+  sourceContent?: NotificationSourceContent
 
   constructor(obj: Notification) {
     Object.assign(this, obj)
@@ -121,6 +124,7 @@ export class Notification implements IDoc {
       ownedById: dbNotification.owned_by_id,
       isRead: dbNotification.is_read,
       parentContentId: dbNotification.parent_content_id,
+      parentCommentId: dbNotification.parent_comment_id,
       sourceContentType: dbNotification.source_content_type,
       sourceContentId: dbNotification.source_content_id,
       triggeredBy: dbNotification.triggered_by
@@ -135,11 +139,12 @@ export class Notification implements IDoc {
 
 export type NewNotificationData = {
   actionType: NotificationActionType
-  ownedById: number
-  triggeredById: number
-  contentType: NotificationContentType
   contentId: number
-  parentContentId?: number
+  contentType: NotificationContentType
+  ownedById: number
+  parentCommentId: number | null
+  parentContentId: number | null
   sourceContentType: NotificationSourceContentType
   sourceContentId: number
+  triggeredById: number
 }

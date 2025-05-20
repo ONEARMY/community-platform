@@ -11,6 +11,7 @@ import {
   ResearchErrors,
   ResearchPostingGuidelines,
 } from 'src/pages/Research/Content/Common'
+import { fireConfetti } from 'src/utils/fireConfetti'
 import { Text } from 'theme-ui'
 
 import { buttons, headings, overview } from '../../labels'
@@ -41,9 +42,9 @@ const ResearchForm = ({ research }: IProps) => {
         description: research?.description,
         category: research?.category
           ? {
-              value: research.category.id?.toString(),
-              label: research.category.name,
-            }
+            value: research.category.id?.toString(),
+            label: research.category.name,
+          }
           : undefined,
         collaborators: Array.isArray(research?.collaboratorsUsernames)
           ? research.collaboratorsUsernames
@@ -73,6 +74,10 @@ const ResearchForm = ({ research }: IProps) => {
         values,
         isDraft,
       )
+
+      if (!isDraft) {
+        fireConfetti()
+      }
 
       setTimeout(() => {
         navigate(`/research/${result.research.slug}`)

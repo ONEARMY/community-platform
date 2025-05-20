@@ -94,7 +94,6 @@ export const LibraryForm = observer((props: IProps) => {
     }
   }
   const onSubmit = async (formValues: ILibrary.FormInput, form: FormApi) => {
-    console.log('formValues =>', formValues)
     if (!checkFilesValid(formValues)) {
       return
     }
@@ -108,7 +107,6 @@ export const LibraryForm = observer((props: IProps) => {
     const howto = await LibraryStore.upload(formValues)
     howto && setItemSlug(howto.slug)
 
-    // Show the confetti once everything has been submitted to publish
     if (formValues.allowDraftSave === false) {
       fireConfetti()
     }

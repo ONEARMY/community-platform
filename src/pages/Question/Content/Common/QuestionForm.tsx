@@ -30,6 +30,7 @@ import { QUESTION_MAX_IMAGES, QUESTION_MIN_TITLE_LENGTH } from '../../constants'
 
 import type { Question, QuestionFormData } from 'oa-shared'
 import type { MainFormAction } from 'src/common/Form/types'
+import { fireConfetti } from 'src/utils/fireConfetti'
 
 interface IProps {
   'data-testid'?: string
@@ -88,6 +89,7 @@ export const QuestionForm = (props: IProps) => {
 
       if (result) {
         !id && (await subscribersService.add('questions', result.id))
+        fireConfetti()
         navigate('/questions/' + result.slug)
       }
     } catch (e) {

@@ -164,7 +164,9 @@ const LoginPrompt = ({ isReply }: { isReply?: boolean }) => {
             color: 'inherit',
           }}
         >
-          {isReply ? 'But first you need to login' : 'Log in to leave a comment'}
+          {isReply
+            ? 'But first you need to login'
+            : 'Log in to leave a comment'}
         </ReturnPathLink>
       </Text>
     </Box>
@@ -175,7 +177,7 @@ const IncompleteProfilePrompt = ({ isReply }: { isReply?: boolean }) => {
   return (
     <Box sx={{ padding: [3, 4] }}>
       <Text data-cy="comments-incomplete-profile-prompt">
-      {isReply ? 'Before replying' : 'Hi there!'}{' '}
+        {isReply ? 'Before replying' : 'Hi there!'}{' '}
         <ReturnPathLink
           to="/settings"
           style={{
@@ -183,7 +185,9 @@ const IncompleteProfilePrompt = ({ isReply }: { isReply?: boolean }) => {
             color: 'inherit',
           }}
         >
-          {isReply ? 'complete your profile' : 'Complete your profile to leave a comment'}
+          {isReply
+            ? 'complete your profile'
+            : 'Complete your profile to leave a comment'}
         </ReturnPathLink>
       </Text>
     </Box>

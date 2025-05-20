@@ -218,7 +218,7 @@ const ResearchUpdate = (props: IProps) => {
                 {() => (
                   <CollapsableCommentSection
                     sourceId={update.id}
-                    sourceType="research_updates"
+                    sourceType="research_update"
                     authors={authorIds}
                     open={false}
                     total={update.commentCount}

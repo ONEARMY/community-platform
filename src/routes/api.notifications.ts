@@ -1,5 +1,6 @@
 import { Notification } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { resolveType } from 'src/utils/contentType.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -38,14 +39,31 @@ export const transformNotification = async (
     notification.content = content.data
   }
 
+  const sourceContentType = resolveType(notification.sourceContentType)
   const sourceContent = await client
-    .from(notification.sourceContentType)
+    .from(sourceContentType)
     .select('*')
     .eq('id', notification.sourceContentId)
     .single()
 
-  if (sourceContent.data) {
-    notification.sourceContent = sourceContent.data
+  notification.sourceContent = sourceContent.data
+
+  if (notification.parentCommentId) {
+    const parentComment = await client
+      .from('comments')
+      .select('*')
+      .eq('id', notification.parentCommentId)
+      .single()
+    notification.parentComment = parentComment.data
+  }
+
+  if (notification.parentContentId) {
+    const parentContent = await client
+      .from('research_updates')
+      .select('*')
+      .eq('id', notification.parentContentId)
+      .single()
+    notification.parentContent = parentContent.data
   }
 
   return notification

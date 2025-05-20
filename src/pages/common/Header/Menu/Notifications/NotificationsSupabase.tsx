@@ -1,5 +1,9 @@
 import { useContext, useState } from 'react'
-import { Icon, Modal, NotificationListSupabase } from 'oa-components'
+import {
+  Icon,
+  NotificationListSupabase,
+  NotificationsModal,
+} from 'oa-components'
 import { NotificationsContext } from 'src/pages/common/NotificationsContext'
 import { Box } from 'theme-ui'
 
@@ -59,7 +63,7 @@ export const NotificationsSupabase = ({ device }: IProps) => {
           {...iconProps}
         />
       )}
-      <Modal isOpen={isOpen} onDidDismiss={onClick} width={800}>
+      <NotificationsModal isOpen={isOpen}>
         <NotificationListSupabase
           isUpdatingNotifications={isUpdatingNotifications}
           markAllRead={markAllRead}
@@ -67,7 +71,7 @@ export const NotificationsSupabase = ({ device }: IProps) => {
           modalDismiss={onClick}
           notifications={notifications}
         />
-      </Modal>
+      </NotificationsModal>
     </Box>
   )
 }

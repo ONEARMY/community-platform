@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { MemberBadge, Tab, TabPanel, Tabs, TabsList } from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
@@ -41,6 +42,8 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
   const defaultValue =
     useLocationHook?.hash?.slice(1) || (hasProfile ? 'profile' : 'contact')
 
+  const [selectedTab, setSelectedTab] = useState(defaultValue)
+
   return (
     <Flex
       data-cy={isMember ? 'MemberProfile' : 'SpaceProfile'}
@@ -81,7 +84,12 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
           <Box sx={{ width: '100%' }}>
             <ProfileHeader user={user} />
 
-            <Tabs defaultValue={defaultValue}>
+            <Tabs
+              value={selectedTab}
+              onChange={(_: any, value: string | number | null) => {
+                typeof value === 'string' && setSelectedTab(value)
+              }}
+            >
               <TabsList>
                 {hasProfile && <Tab value="profile">Profile</Tab>}
                 {hasContributed && (
@@ -101,7 +109,11 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
                 )}
               </TabsList>
               <TabPanel value="profile">
-                <ProfileDetails docs={docs} user={user} />
+                <ProfileDetails
+                  docs={docs}
+                  user={user}
+                  selectTab={setSelectedTab}
+                />
               </TabPanel>
               {hasContributed && (
                 <TabPanel value="contributions">

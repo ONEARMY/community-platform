@@ -1,6 +1,6 @@
-import { useContext } from 'react'
-import { UserStatistics } from 'oa-components'
-import { UserRole } from 'oa-shared'
+import { useContext, useState } from 'react'
+import { UserStatistics, VisitorModal } from 'oa-components'
+import { ProfileTypeList, UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { ProfileTags } from 'src/common/ProfileTags'
 import { isModuleSupported, MODULE } from 'src/modules'
@@ -13,10 +13,19 @@ import type { UserCreatedDocs } from '../types'
 interface IProps {
   docs: UserCreatedDocs
   user: IUser
+  selectTab: (target: string) => void
 }
 
-export const ProfileDetails = ({ docs, user }: IProps) => {
-  const { about, location, tags, userName } = user
+export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
+  const { about, location, tags, openToVisitors, userName } = user
+  const [showVisitorModal, setShowVisitorModal] = useState(false)
+
+  const hideVisitorDetails = (target?: string) => {
+    setShowVisitorModal(false)
+    if (target) {
+      selectTab(target)
+    }
+  }
 
   const env = useContext(EnvironmentContext)
   const isMapModule = isModuleSupported(
@@ -43,8 +52,23 @@ export const ProfileDetails = ({ docs, user }: IProps) => {
             gap: 2,
           }}
         >
-          {tags && <ProfileTags tagIds={tags} />}
+          {(tags || openToVisitors) && (
+            <ProfileTags
+              tagIds={tags}
+              showVisitorModal={() => setShowVisitorModal(true)}
+              openToVisitors={openToVisitors}
+              isSpace={user.profileType !== ProfileTypeList.MEMBER}
+            />
+          )}
           {about && <Paragraph>{about}</Paragraph>}
+
+          {openToVisitors && (
+            <VisitorModal
+              show={showVisitorModal}
+              hide={hideVisitorDetails}
+              user={user}
+            />
+          )}
         </Flex>
         <Divider
           sx={{

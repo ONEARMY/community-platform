@@ -25,12 +25,12 @@ export const MapFilterList = (props: IProps) => {
   const { activeFilters, availableFilters, onClose, onFilterChange, pinCount } =
     props
 
-  const badgeFilters = availableFilters.filter(
-    ({ filterType }) => filterType === 'badge',
-  )
-  const profileFilters = availableFilters.filter(
-    ({ filterType }) => filterType === 'profileType',
-  )
+  const typedFilters = (type: string) =>
+    availableFilters.filter(({ filterType }) => filterType === type)
+
+  const badgeFilters = typedFilters('badge')
+  const profileFilters = typedFilters('profileType')
+  const settingFilters = typedFilters('setting')
 
   const tagFilters = availableFilters
     .slice(0)
@@ -39,6 +39,34 @@ export const MapFilterList = (props: IProps) => {
 
   const isActive = (checkingFilter: string) =>
     !!activeFilters.find((filter) => filter.label === checkingFilter)
+
+  const checkBoxFilters = (
+    title: string,
+    filters: MapFilterOptionsList,
+    badge: boolean = false,
+  ) => (
+    <>
+      {filters.length > 0 && (
+        <Flex sx={{ gap: 1, flexDirection: 'column' }}>
+          <Text>{title}</Text>
+          <MapFilterListWrapper>
+            {filters.map((typeFilter, index) => {
+              return (
+                <Label key={index} sx={{ alignItems: 'center', gap: 0 }}>
+                  <Checkbox
+                    onClick={() => onFilterChange(typeFilter)}
+                    defaultChecked={isActive(typeFilter.label)}
+                  />
+                  {typeFilter.label}
+                  {badge && <UserBadge badgeName={typeFilter._id} />}
+                </Label>
+              )
+            })}
+          </MapFilterListWrapper>
+        </Flex>
+      )}
+    </>
+  )
 
   const buttonLabel = `${pinCount} result${
     pinCount === 1 ? '' : 's'
@@ -143,27 +171,8 @@ export const MapFilterList = (props: IProps) => {
           </Flex>
         )}
 
-        {badgeFilters.length > 0 && (
-          <Flex sx={{ gap: 1, flexDirection: 'column' }}>
-            <Text>Badges</Text>
-            <MapFilterListWrapper>
-              {badgeFilters.map((typeFilter, index) => {
-                const onClick = () => onFilterChange(typeFilter)
-
-                return (
-                  <Label key={index} sx={{ alignItems: 'center', gap: 0 }}>
-                    <Checkbox
-                      onClick={onClick}
-                      defaultChecked={isActive(typeFilter.label)}
-                    />
-                    {typeFilter.label}
-                    <UserBadge badgeName={typeFilter._id} />
-                  </Label>
-                )
-              })}
-            </MapFilterListWrapper>
-          </Flex>
-        )}
+        {checkBoxFilters('Badges', badgeFilters, true)}
+        {checkBoxFilters('Profile Specifications', settingFilters)}
       </Flex>
 
       <Flex sx={{ borderTop: '1px solid', padding: 2 }}>

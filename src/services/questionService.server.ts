@@ -33,24 +33,25 @@ const getQuestionsByUser = async (
   client: SupabaseClient,
   username: string,
 ): Promise<Partial<Question>[]> => {
-  //gets foreign key for username
-  const id = await client
-    .from('profiles')
-    .select('id')
-    .eq('username', username)
-    .single()
-
-  if (id.error) {
-    return []
-  }
-
-  //gets all quests, filters by created_by using above foreign key
   const queryResult = await client
     .from('questions')
     .select(
-      'id, created_at, created_by, modified_at, comment_count, description, moderation, slug, category:category(id,name), tags, title, total_views, images',
+      `id, 
+      created_at, 
+      created_by, 
+      modified_at, 
+      comment_count, 
+      description, 
+      moderation, 
+      slug, 
+      category:category(id,name), 
+      tags, 
+      title, 
+      total_views, 
+      images, 
+      author:profiles(id, display_name, username, is_verified, is_supporter, country)`,
     )
-    .eq('created_by', id.data.id)
+    .eq('author.username', username)
 
   if (queryResult.error) {
     return []

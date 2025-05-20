@@ -1,5 +1,5 @@
 import type { Comment } from './comment'
-import type { ContentType } from './common'
+import type { SubscribableContentTypes } from './common'
 import type { IDBDocSB, IDoc } from './document'
 import type { News } from './news'
 import type { IPatreonUser } from './patreon'
@@ -58,7 +58,7 @@ type NotificationContentType = 'news' | 'comment' | 'reply'
 // type NotificationContentType = 'news' | 'research' | 'researchUpdate' | 'project' | 'question' | 'comment' | 'reply'
 
 type NotificationContent = News | Comment | Question | ResearchUpdate
-export type NotificationSourceContentType = ContentType
+type NotificationSourceContentType = SubscribableContentTypes
 // type NotificationSourceContentType = 'news' | 'research' | 'researchUpdate' | 'project' | 'question' // What page on the platform should be linked to
 type NotificationSourceContent = News | Question | ResearchItem
 

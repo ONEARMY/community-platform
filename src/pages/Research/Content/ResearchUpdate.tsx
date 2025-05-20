@@ -217,11 +217,10 @@ const ResearchUpdate = (props: IProps) => {
               <ClientOnly fallback={<></>}>
                 {() => (
                   <CollapsableCommentSection
-                    sourceId={update.id}
-                    sourceType="research_update"
                     authors={authorIds}
                     open={false}
                     total={update.commentCount}
+                    researchUpdate={update}
                   />
                 )}
               </ClientOnly>

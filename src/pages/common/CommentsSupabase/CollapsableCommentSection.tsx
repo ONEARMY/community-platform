@@ -1,26 +1,22 @@
 import { useContext, useEffect, useMemo, useState } from 'react'
+import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { Box, Button } from 'theme-ui'
 
 import { CommentSectionSupabase } from './CommentSectionSupabase'
 import { MultipleCommentSectionContext } from './MultipleCommentSectionWrapper'
 
-import type { DiscussionContentTypes } from 'oa-shared'
+import type { ResearchUpdate } from 'oa-shared'
 
 type Props = {
-  sourceId: number | string
-  sourceType: DiscussionContentTypes
   authors: number[]
   open: boolean
   total: number
+  researchUpdate: ResearchUpdate
 }
 
-const CollapsableCommentSection = ({
-  sourceId,
-  sourceType,
-  authors,
-  open,
-  total,
-}: Props) => {
+const CollapsableCommentSection = (props: Props) => {
+  const { authors, open, total, researchUpdate } = props
+
   const multipleSectionsContext = useContext(MultipleCommentSectionContext)
   const [isOpen, seIstOpen] = useState(() => open || false)
 
@@ -40,7 +36,7 @@ const CollapsableCommentSection = ({
   }, [isOpen])
 
   useEffect(() => {
-    if (multipleSectionsContext?.expandId === sourceId) {
+    if (multipleSectionsContext?.expandId === researchUpdate.id) {
       seIstOpen(true)
     }
   }, [multipleSectionsContext])
@@ -74,9 +70,15 @@ const CollapsableCommentSection = ({
       </Button>
       {isOpen && (
         <CommentSectionSupabase
-          sourceId={sourceId}
-          sourceType={sourceType}
+          sourceId={researchUpdate.id}
+          sourceType="research_update"
           authors={authors}
+          followButton={
+            <FollowButtonAction
+              contentType="research_update"
+              item={researchUpdate}
+            />
+          }
         />
       )}
     </Box>

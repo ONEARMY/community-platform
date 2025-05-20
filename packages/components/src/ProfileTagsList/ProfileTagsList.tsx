@@ -1,36 +1,97 @@
-import { Flex } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 
-import { Category } from '../Category/Category'
+import { visitorDisplayData } from '../VisitorModal/VisitorModal'
 
-import type { Category as CategoryType, IProfileTag } from 'oa-shared'
+import type { IProfileTag, IUser } from 'oa-shared'
+import type { ComponentProps } from 'react'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface IProps {
-  tags: IProfileTag[]
-  sx?: ThemeUIStyleObject | undefined
+  tags: IProfileTag[] | null
+  openToVisitors?: IUser['openToVisitors']
+  isSpace: boolean
+  showVisitorModal?: () => void
+  sx?: ThemeUIStyleObject
+  large?: boolean
 }
 
 const DEFAULT_COLOR = '#999999'
 
-export const ProfileTagsList = ({ sx, tags }: IProps) => {
+type TagProps = ComponentProps<typeof Text> & {
+  label: string
+  color?: string
+  large: IProps['large']
+}
+
+const Tag = ({ label, color, large, onClick }: TagProps) => {
+  const sizing = large
+    ? {
+        fontSize: 2,
+        paddingX: 2,
+        paddingY: '10px',
+      }
+    : {
+        fontSize: 1,
+        paddingX: '7.5px',
+        paddingY: '5px',
+      }
   return (
-    <Flex data-cy="ProfileTagsList" sx={{ gap: 1, flexWrap: 'wrap', ...sx }}>
-      {tags.map(
-        ({ color, label }, index) =>
-          label && (
-            <Category
-              key={index}
-              category={{ name: label } as CategoryType}
-              sx={{
-                borderRadius: 99,
-                border: '1px solid',
-                borderColor: color || DEFAULT_COLOR,
-                backgroundColor: color ? `${color}20` : `${DEFAULT_COLOR}20`,
-                color: color || DEFAULT_COLOR,
-                fontSize: '11px',
-              }}
-            />
-          ),
+    <Text
+      sx={{
+        borderRadius: 99,
+        border: '1px solid',
+        borderColor: color,
+        backgroundColor: `${color}20`,
+        color: color,
+        ...sizing,
+        // Correction for misalignment due to \u24D8
+        ...(large && !onClick ? { paddingTop: '12px' } : {}),
+        ':hover': onClick
+          ? {
+              cursor: 'pointer',
+            }
+          : {},
+      }}
+      onClick={onClick}
+    >
+      {label}
+    </Text>
+  )
+}
+
+const policyColors = new Map([
+  ['open', '#116503'],
+  ['appointment', '#005471'],
+  ['closed', DEFAULT_COLOR],
+])
+
+export const ProfileTagsList = (props: IProps) => {
+  const { tags, openToVisitors, isSpace, showVisitorModal, sx, large } = props
+  const tagList = tags || []
+
+  return (
+    <Flex
+      data-cy="ProfileTagsList"
+      data-testid="ProfileTagsList"
+      sx={{ gap: 1, flexWrap: 'wrap', ...sx }}
+    >
+      {tagList.map(({ label, color }, index) => (
+        <Tag
+          key={index}
+          color={color || DEFAULT_COLOR}
+          label={label}
+          large={large}
+        />
+      ))}
+      {openToVisitors && isSpace && (
+        <Tag
+          color={policyColors.get(openToVisitors.policy)}
+          label={`${visitorDisplayData.get(openToVisitors.policy)?.label} \u24D8`}
+          onClick={() => {
+            showVisitorModal && showVisitorModal()
+          }}
+          large={true}
+        />
       )}
     </Flex>
   )

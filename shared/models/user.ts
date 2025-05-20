@@ -68,6 +68,20 @@ export type UserMention = {
   location: string
 }
 
+export const userVisitorPreferencePolicies = [
+  'open',
+  'appointment',
+  'closed',
+] as const
+
+export type UserVisitorPreferencePolicy =
+  (typeof userVisitorPreferencePolicies)[number]
+
+export type UserVisitorPreference = {
+  policy: UserVisitorPreferencePolicy
+  details?: string | null
+}
+
 // IUser retains most of the fields from legacy users (omitting passwords),
 // and has a few additional fields. Note 'email' is excluded
 // _uid is unique/fixed identifier
@@ -104,6 +118,7 @@ export interface IUser {
   patreon?: IPatreonUser | null
   totalUseful?: number
   total_views?: number
+  openToVisitors?: UserVisitorPreference | null
 
   // New generic profile field for all profile types
   tags?: { [key: string]: boolean }

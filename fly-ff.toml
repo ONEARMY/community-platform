@@ -12,6 +12,7 @@ processes = ['app']
 
 [env]
 VITE_BRANCH = "production"
+NODE_ENV = "production"
 
 [[vm]]
 memory = '2gb'

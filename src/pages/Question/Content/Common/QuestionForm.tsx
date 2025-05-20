@@ -17,6 +17,7 @@ import {
 import * as LABELS from 'src/pages/Question/labels'
 import { questionService } from 'src/services/questionService'
 import { subscribersService } from 'src/services/subscribersService'
+import { fireConfetti } from 'src/utils/fireConfetti'
 import {
   composeValidators,
   endsWithQuestionMark,
@@ -30,7 +31,6 @@ import { QUESTION_MAX_IMAGES, QUESTION_MIN_TITLE_LENGTH } from '../../constants'
 
 import type { Question, QuestionFormData } from 'oa-shared'
 import type { MainFormAction } from 'src/common/Form/types'
-import { fireConfetti } from 'src/utils/fireConfetti'
 
 interface IProps {
   'data-testid'?: string

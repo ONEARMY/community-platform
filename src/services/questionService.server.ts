@@ -1,6 +1,7 @@
-import { DBQuestion, Question } from 'oa-shared'
+import { Question } from 'oa-shared'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
+import type { DBQuestion } from 'oa-shared'
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
   return client

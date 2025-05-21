@@ -1,6 +1,13 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { MemberBadge, Tab, TabPanel, Tabs, TabsList } from 'oa-components'
+import {
+  MemberBadge,
+  MemberHistory,
+  Tab,
+  TabPanel,
+  Tabs,
+  TabsList,
+} from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
 import { isPreciousPlastic } from 'src/config/config'
 import { isUserContactable } from 'src/utils/helpers'
@@ -71,7 +78,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
           sx={{
             borderTop: isMember ? '' : '2px solid',
             flexDirection: 'column',
-            gap: 2,
+            gap: 4,
             padding: [2, 4],
           }}
         >
@@ -135,6 +142,10 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
               )}
             </Tabs>
           </Box>
+          <MemberHistory
+            memberSince={user.profileCreated}
+            lastActive={user._lastActive}
+          />
         </Flex>
       </Card>
     </Flex>

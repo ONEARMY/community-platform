@@ -5,7 +5,7 @@ import { Button } from '../Button/Button'
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon'
 import { InternalLink } from '../InternalLink/InternalLink'
 import { Loader } from '../Loader/Loader'
-import { NotificationListItemSupabase } from './NotificationListItemSupabase'
+import { NotificationListItemSupabase } from '../NotificationListItemSupabase/NotificationListItemSupabase'
 
 import type { Notification } from 'oa-shared'
 

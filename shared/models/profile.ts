@@ -94,18 +94,18 @@ export class Notification implements IDoc {
   createdAt: Date
   modifiedAt: Date | null
   ownedById: number
-  ownedBy?: BasicAuthorDetails
   isRead: boolean
   parentCommentId: number | null
   parentContentId: number | null
   sourceContentType: NotificationSourceContentType
   sourceContentId: number
-  triggeredBy?: BasicAuthorDetails
 
   content?: NotificationContent
+  ownedBy?: BasicAuthorDetails
   parentComment?: Comment
-  parentContent?: ResearchItem
+  parentContent?: ResearchUpdate
   sourceContent?: NotificationSourceContent
+  triggeredBy?: BasicAuthorDetails
 
   constructor(obj: Notification) {
     Object.assign(this, obj)

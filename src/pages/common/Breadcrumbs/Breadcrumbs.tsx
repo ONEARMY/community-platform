@@ -2,10 +2,11 @@
 import { Breadcrumbs as BreadcrumbsComponent } from 'oa-components'
 import { Box } from 'theme-ui'
 
-import type { ILibrary, News, Question, ResearchItem } from 'oa-shared'
+import type { News, Project, Question, ResearchItem } from 'oa-shared'
 
+// TODO: Refactor this component to not be coupled with Content items
 type Step = { text: string; link?: string }
-type Content = ResearchItem | Question | ILibrary.Item | News
+type Content = ResearchItem | Question | Project | News
 type Variant = 'research' | 'question' | 'library' | 'news'
 
 interface BreadcrumbsProps {
@@ -45,13 +46,13 @@ const generateSteps = (content: Content, variant: Variant) => {
       steps.push({ text: question.title })
       break
     case 'library':
-      const project = content as ILibrary.Item
+      const project = content as Project
       steps.push({ text: 'Library', link: '/library' })
 
       if (project.category) {
         steps.push({
-          text: project.category.label,
-          link: `/library?category=${project.category._id}`,
+          text: project.category.name,
+          link: `/library?category=${project.category.id}`,
         })
       }
 

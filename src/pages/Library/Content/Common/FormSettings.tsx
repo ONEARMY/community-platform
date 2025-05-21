@@ -1,19 +1,22 @@
-import { DifficultyLevel } from 'oa-shared'
+import type { DifficultyLevel } from 'oa-shared'
 
-const makeEntry = (value: string, label?: string) => {
+const makeEntry = <T,>(value: T, label?: string) => {
   return { value, label: label || value }
 }
 
 export const TIME_OPTIONS = [
-  makeEntry('< 1 hour'),
-  makeEntry('< 5 hours'),
-  makeEntry('< 1 day'),
-  makeEntry('< 1 week'),
-  makeEntry('1-2 weeks'),
-  makeEntry('3-4 weeks'),
-  makeEntry('1+ months'),
+  makeEntry<string>('< 1 hour'),
+  makeEntry<string>('< 5 hours'),
+  makeEntry<string>('< 1 day'),
+  makeEntry<string>('< 1 week'),
+  makeEntry<string>('1-2 weeks'),
+  makeEntry<string>('3-4 weeks'),
+  makeEntry<string>('1+ months'),
 ]
 
-export const DIFFICULTY_OPTIONS = Object.values(DifficultyLevel).map((d) => {
-  return makeEntry(d)
-})
+export const DIFFICULTY_OPTIONS = [
+  makeEntry<DifficultyLevel>('easy'),
+  makeEntry<DifficultyLevel>('medium'),
+  makeEntry<DifficultyLevel>('hard'),
+  makeEntry<DifficultyLevel>('very-hard'),
+]

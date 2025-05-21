@@ -6,38 +6,20 @@ import {
   Username,
 } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Box, Card, Flex, Heading, Image } from 'theme-ui'
 
-import type { ILibrary } from 'oa-shared'
+import type { Project } from 'oa-shared'
 
-interface IProps {
-  item: ILibrary.Item
+type LibraryCardProps = {
+  item: Project
 }
 
-export const LibraryCard = ({ item }: IProps) => {
-  const {
-    _createdBy,
-    _id,
-    category,
-    cover_image,
-    cover_image_alt,
-    creatorCountry,
-    moderation,
-    slug,
-    title,
-    totalComments,
-    totalUsefulVotes,
-  } = item
-  const { aggregationsStore } = useCommonStores().stores
-
-  const isVerified = aggregationsStore.isVerified(_createdBy)
-
+export const LibraryCard = ({ item }: LibraryCardProps) => {
   return (
     <Card data-cy="card" sx={{ marginX: [2, 0] }}>
-      <RouterLink key={_id} to={`/library/${encodeURIComponent(slug)}`}>
+      <RouterLink to={`/library/${encodeURIComponent(item.slug)}`}>
         <Image
           style={{
             width: '100%',
@@ -45,11 +27,11 @@ export const LibraryCard = ({ item }: IProps) => {
             objectFit: 'cover',
           }}
           loading="lazy"
-          src={cdnImageUrl(cover_image?.downloadUrl || '', {
+          src={cdnImageUrl(item.coverImage?.publicUrl || '', {
             width: 500,
           })}
           crossOrigin=""
-          alt={cover_image_alt ?? `Cover image of ${title}`}
+          // alt={cover_image_alt ?? `Cover image of ${title}`}
         />
       </RouterLink>
 
@@ -64,44 +46,44 @@ export const LibraryCard = ({ item }: IProps) => {
           padding: 2,
         }}
       >
-        {moderation !== IModerationStatus.ACCEPTED && (
+        {item.moderation !== IModerationStatus.ACCEPTED && (
           <Flex sx={{ alignSelf: 'flex-end', marginTop: -10, marginBottom: 2 }}>
-            <ModerationStatus status={moderation} contentType="library" />
+            <ModerationStatus status={item.moderation} />
           </Flex>
         )}
         <Flex sx={{ gap: 1, flexDirection: 'column' }}>
           <Heading as="h2" variant="small" color={'black'}>
             <RouterLink
-              key={_id}
-              to={`/library/${encodeURIComponent(slug)}`}
+              to={`/library/${encodeURIComponent(item.slug)}`}
               style={{ width: '100%', color: 'black' }}
             >
-              {capitalizeFirstLetter(title || '')}
+              {capitalizeFirstLetter(item.title || '')}
             </RouterLink>
           </Heading>
 
           <Box>
             <Username
               user={{
-                userName: _createdBy,
-                countryCode: creatorCountry,
-                isVerified,
+                userName: item.author?.username || '',
+                countryCode: item.author?.country,
+                isVerified: item.author?.isVerified,
               }}
+              sx={{ position: 'relative' }}
             />
           </Box>
         </Flex>
 
         <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-          <Box>{category && <Category category={category} />}</Box>
+          {item.category && <Category category={item.category} />}
 
           <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
             <IconCountWithTooltip
-              count={totalComments || 0}
+              count={item.commentCount || 0}
               icon="comment"
               text="Comments"
             />
             <IconCountWithTooltip
-              count={totalUsefulVotes || 0}
+              count={item.usefulCount || 0}
               icon="star-active"
               text="How useful is it"
             />

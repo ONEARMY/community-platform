@@ -21,7 +21,7 @@ import {
 } from '../../constants'
 import { buttons, errors, steps } from '../../labels'
 
-import type { ILibrary, IUploadedFileMeta } from 'oa-shared'
+import type { IUploadedFileMeta } from 'oa-shared'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -30,7 +30,7 @@ const ImageInputFieldWrapper = styled.div`
 `
 
 interface IProps {
-  step: any | ILibrary.Step
+  step: string
   index: number
   images: IUploadedFileMeta[]
   onDelete: (index: number) => void
@@ -40,12 +40,6 @@ interface IState {
   showDeleteModal: boolean
   _toDocsList: boolean
 }
-// font-size: ${theme.fontSizes[2] + 'px'};
-
-// const Label = styled.label`
-//   font-size: ${theme.fontSizes[2] + 'px'};
-//   margin-bottom: ${theme.space[2] + 'px'};
-// `
 
 /**
  * Ensure that the project description meets the following criteria:
@@ -53,8 +47,13 @@ interface IState {
  * - minimum character length of 100 characters
  * - maximum character length of 1000 characters
  */
-export const LibraryStepField = (props: IProps) => {
-  const { step, index } = props
+export const LibraryStepField = ({
+  step,
+  index,
+  images,
+  onDelete,
+  moveStep,
+}: IProps) => {
   const [state, setState] = useState<IState>({
     showDeleteModal: false,
     _toDocsList: false,
@@ -65,14 +64,13 @@ export const LibraryStepField = (props: IProps) => {
   }
   const confirmDelete = () => {
     toggleDeleteModal()
-    props.onDelete(props.index)
+    onDelete(index)
   }
 
   /**
    * Ensure either url or images included (not both), and any url formatted correctly
    */
   const validateMedia = (videoUrl: string) => {
-    const { images } = { ...props }
     const { both, empty, invalidUrl } = errors.videoUrl
 
     if (videoUrl) {
@@ -86,7 +84,6 @@ export const LibraryStepField = (props: IProps) => {
     return images[0] ? null : empty
   }
 
-  const { heading, images, text, title, videoUrl } = steps
   const { deleteButton } = buttons.steps
   const _labelStyle = {
     fontSize: 2,
@@ -101,7 +98,7 @@ export const LibraryStepField = (props: IProps) => {
       <Flex p={3} sx={{ flexDirection: 'column' }}>
         <Flex p={0}>
           <Heading as="h3" variant="small" sx={{ flex: 1 }} mb={3}>
-            {heading.title} {index + 1} {!isAboveMinimumStep && '*'}
+            {steps.heading.title} {index + 1} {!isAboveMinimumStep && '*'}
           </Heading>
           {index >= 1 && (
             <Button
@@ -112,7 +109,7 @@ export const LibraryStepField = (props: IProps) => {
               showIconOnly={true}
               sx={{ mx: '5px' }}
               type="button"
-              onClick={() => props.moveStep(index, index - 1)}
+              onClick={() => moveStep(index, index - 1)}
             />
           )}
           <Button
@@ -123,7 +120,7 @@ export const LibraryStepField = (props: IProps) => {
             sx={{ mx: '5px' }}
             showIconOnly={true}
             type="button"
-            onClick={() => props.moveStep(index, index + 1)}
+            onClick={() => moveStep(index, index + 1)}
           />
           {isAboveMinimumStep && (
             <Button
@@ -165,7 +162,7 @@ export const LibraryStepField = (props: IProps) => {
 
         <Flex sx={{ flexDirection: 'column' }} mb={3}>
           <Label sx={_labelStyle} htmlFor={`${step}.title`}>
-            {`${title.title} *`}
+            {`${steps.title.title} *`}
           </Label>
           <Field
             name={`${step}.title`}
@@ -173,7 +170,7 @@ export const LibraryStepField = (props: IProps) => {
             data-testid="step-title"
             modifiers={{ capitalize: true, trim: true }}
             component={FieldInput}
-            placeholder={title.placeholder}
+            placeholder={steps.title.placeholder}
             maxLength={LIBRARY_TITLE_MAX_LENGTH}
             minLength={LIBRARY_TITLE_MIN_LENGTH}
             validate={(value, allValues) =>
@@ -190,11 +187,11 @@ export const LibraryStepField = (props: IProps) => {
         </Flex>
         <Flex sx={{ flexDirection: 'column' }} mb={3}>
           <Label sx={_labelStyle} htmlFor={`${step}.text`}>
-            {`${text.title} *`}
+            {`${steps.text.title} *`}
           </Label>
           <Field
             name={`${step}.text`}
-            placeholder={text.placeholder}
+            placeholder={steps.text.placeholder}
             minLength={STEP_DESCRIPTION_MIN_LENGTH}
             maxLength={STEP_DESCRIPTION_MAX_LENGTH}
             data-cy="step-description"
@@ -218,7 +215,7 @@ export const LibraryStepField = (props: IProps) => {
           />
         </Flex>
         <Label sx={_labelStyle} htmlFor={`${step}.text`}>
-          {`${images.title} *`}
+          {`${steps.images.title} *`}
         </Label>
         <Flex
           sx={{ flexDirection: ['column', 'row'], alignItems: 'center' }}
@@ -258,7 +255,7 @@ export const LibraryStepField = (props: IProps) => {
             data-cy="step-videoUrl"
             data-testid="step-videoUrl"
             component={FieldInput}
-            placeholder={videoUrl.placeholder}
+            placeholder={steps.videoUrl.placeholder}
             validate={(value, allValues) =>
               draftValidationWrapper(value, allValues, validateMedia.bind(this))
             }

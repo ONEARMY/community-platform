@@ -1,13 +1,13 @@
 import { ImageGallery, LinkifyText, VideoPlayer } from 'oa-components'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
-import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
+import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
-import type { ILibrary } from 'oa-shared'
+import type { ProjectStep } from 'oa-shared'
 
 interface IProps {
-  step: ILibrary.Step
+  step: ProjectStep
   stepindex: number
 }
 
@@ -70,7 +70,7 @@ const Step = (props: IProps) => {
                   }}
                   data-cy="step-text"
                 >
-                  <LinkifyText>{step.text}</LinkifyText>
+                  <LinkifyText>{step.description}</LinkifyText>
                 </Text>
               </Box>
             </Flex>
@@ -82,7 +82,7 @@ const Step = (props: IProps) => {
               ) : step.images ? (
                 <ImageGallery
                   images={
-                    formatImagesForGallery(
+                    formatImagesForGalleryV2(
                       step.images,
                       `Step ${displayNumber}`,
                     ) as any

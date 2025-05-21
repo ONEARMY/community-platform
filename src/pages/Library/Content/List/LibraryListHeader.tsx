@@ -12,13 +12,14 @@ import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { UserAction } from 'src/common/UserAction'
 import DraftButton from 'src/pages/common/Drafts/DraftButton'
 import { ListHeader } from 'src/pages/common/Layout/ListHeader'
+import { categoryService } from 'src/services/categoryService'
 import { Button, Flex } from 'theme-ui'
 
 import { listing } from '../../labels'
-import { LibrarySearchParams, libraryService } from '../../library.service'
+import { LibrarySearchParams } from '../../library.service'
 import { LibrarySortOptions } from './LibrarySortOptions'
 
-import type { ICategory } from 'oa-shared'
+import type { Category } from 'oa-shared'
 import type { LibrarySortOption } from './LibrarySortOptions'
 
 interface IProps {
@@ -29,12 +30,12 @@ interface IProps {
 
 export const LibraryListHeader = (props: IProps) => {
   const { draftCount, handleShowDrafts, showDrafts } = props
-  const [categories, setCategories] = useState<ICategory[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [searchString, setSearchString] = useState<string>('')
 
   const [searchParams, setSearchParams] = useSearchParams()
-  const categoryParam = searchParams.get(LibrarySearchParams.category)
-  const category = categories?.find((cat) => cat._id === categoryParam) ?? null
+  const categoryParam = Number(searchParams.get(LibrarySearchParams.category))
+  const category = categories?.find((x) => x.id === categoryParam) ?? null
   const q = searchParams.get(LibrarySearchParams.q)
   const sort = searchParams.get(LibrarySearchParams.sort) as LibrarySortOption
 
@@ -48,11 +49,8 @@ export const LibraryListHeader = (props: IProps) => {
 
   useEffect(() => {
     const initCategories = async () => {
-      const categories = (await libraryService.getLibraryCategories()) || []
-      const notDeletedCategories = categories.filter(
-        ({ _deleted }) => _deleted === false,
-      )
-      setCategories(notDeletedCategories)
+      const categories = (await categoryService.getCategories('projects')) || []
+      setCategories(categories)
     }
 
     initCategories()
@@ -100,7 +98,7 @@ export const LibraryListHeader = (props: IProps) => {
       setActiveCategory={(updatedCategory) =>
         updateFilter(
           LibrarySearchParams.category,
-          updatedCategory ? (updatedCategory as ICategory)._id : '',
+          (updatedCategory?.id || '').toString(),
         )
       }
     />

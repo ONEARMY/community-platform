@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react'
 import {
-  ArticleCallToAction,
+  ArticleCallToActionSupabase,
   Button,
   UsefulStatsButton,
   UserEngagementWrapper,
@@ -12,58 +12,51 @@ import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
+import { CommentSectionSupabase } from 'src/pages/common/CommentsSupabase/CommentSectionSupabase'
+import { usefulService } from 'src/services/usefulService'
 import { Flex } from 'theme-ui'
 
 import { LibraryDescription } from './LibraryDescription'
-import { LibraryDiscussion } from './LibraryDiscussion'
 import Step from './LibraryStep'
 
-import type { ILibrary, IUser } from 'oa-shared'
+import type { IUser, Project, ProjectStep } from 'oa-shared'
 
-interface IProps {
-  item: ILibrary.DB
+type LibraryProps = {
+  item: Project
 }
 
-export const Library = observer(({ item }: IProps) => {
-  const {
-    _createdBy,
-    _id,
-    creatorCountry,
-    moderation,
-    slug,
-    steps,
-    votedUsefulBy,
-  } = item
-  const { LibraryStore, userStore, aggregationsStore } =
-    useCommonStores().stores
-  const [totalCommentsCount, setTotalCommentsCount] = useState<number>(0)
+export const Library = observer(({ item }: LibraryProps) => {
+  const { userStore } = useCommonStores().stores
   const [voted, setVoted] = useState<boolean>(false)
-  const [usefulCount, setUsefulCount] = useState<number>(
-    votedUsefulBy?.length || 0,
-  )
+  const [usefulCount, setUsefulCount] = useState<number>(item.usefulCount)
   const loggedInUser = userStore.activeUser
-  const isVerified = aggregationsStore.isVerified(_createdBy)
 
   useEffect(() => {
-    // This could be improved if we can load the user profile server-side
-    if (
-      LibraryStore?.activeUser &&
-      votedUsefulBy?.includes(LibraryStore.activeUser._id)
-    ) {
-      setVoted(true)
+    const getVoted = async () => {
+      const voted = await usefulService.hasVoted('projects', item.id)
+      setVoted(voted)
     }
-  }, [LibraryStore?.activeUser])
+
+    if (loggedInUser) {
+      getVoted()
+    }
+  }, [loggedInUser, item])
 
   const onUsefulClick = async (
     vote: 'add' | 'delete',
-    eventCategory: string,
+    eventCategory = 'Library',
   ) => {
-    const loggedInUser = LibraryStore.activeUser
     if (!loggedInUser?.userName) {
       return
     }
 
-    await LibraryStore.toggleUsefulByUser(item, loggedInUser?.userName)
+    // Trigger update without waiting
+    if (vote === 'add') {
+      await usefulService.add('projects', item.id)
+    } else {
+      await usefulService.remove('projects', item.id)
+    }
+
     setVoted((prev) => !prev)
 
     setUsefulCount((prev) => {
@@ -72,8 +65,8 @@ export const Library = observer(({ item }: IProps) => {
 
     trackEvent({
       category: eventCategory,
-      action: vote === 'add' ? 'LibraryUseful' : 'LibraryUsefulRemoved',
-      label: slug,
+      action: vote === 'add' ? 'ProjectUseful' : 'ProjectUsefulRemoved',
+      label: item.slug,
     })
   }
 
@@ -82,9 +75,8 @@ export const Library = observer(({ item }: IProps) => {
       <Breadcrumbs content={item} variant="library" />
       <LibraryDescription
         item={item}
-        key={_id}
         loggedInUser={loggedInUser as IUser}
-        commentsCount={totalCommentsCount}
+        commentsCount={item.commentCount}
         votedUsefulCount={usefulCount}
         hasUserVotedUseful={voted}
         onUsefulClick={() =>
@@ -92,20 +84,14 @@ export const Library = observer(({ item }: IProps) => {
         }
       />
       <Flex sx={{ flexDirection: 'column', marginTop: [3, 4], gap: 4 }}>
-        {steps.map((step: ILibrary.StepInput, index: number) => (
-          <Step step={step as ILibrary.Step} key={index} stepindex={index} />
+        {item.steps.map((step: ProjectStep, index: number) => (
+          <Step step={step} key={index} stepindex={index} />
         ))}
       </Flex>
       <ClientOnly fallback={<></>}>
         {() => (
           <UserEngagementWrapper>
-            <ArticleCallToAction
-              author={{
-                userName: _createdBy,
-                countryCode: creatorCountry,
-                isVerified,
-              }}
-            >
+            <ArticleCallToActionSupabase author={item.author!}>
               <Button
                 type="button"
                 sx={{ fontSize: 2 }}
@@ -113,7 +99,7 @@ export const Library = observer(({ item }: IProps) => {
                   trackEvent({
                     category: 'ArticleCallToAction',
                     action: 'ScrollLibraryComment',
-                    label: slug,
+                    label: item.slug,
                   })
                   document
                     .querySelector('[data-target="create-comment-container"]')
@@ -131,7 +117,7 @@ export const Library = observer(({ item }: IProps) => {
               >
                 Leave a comment
               </Button>
-              {moderation === IModerationStatus.ACCEPTED && (
+              {item.moderation === IModerationStatus.ACCEPTED && (
                 <UsefulStatsButton
                   votedUsefulCount={usefulCount}
                   hasUserVotedUseful={voted}
@@ -144,10 +130,11 @@ export const Library = observer(({ item }: IProps) => {
                   }
                 />
               )}
-            </ArticleCallToAction>
-            <LibraryDiscussion
-              docId={_id}
-              setTotalCommentsCount={setTotalCommentsCount}
+            </ArticleCallToActionSupabase>
+            <CommentSectionSupabase
+              sourceId={item.id}
+              sourceType="projects"
+              authors={item.author?.id ? [item.author?.id] : []}
             />
           </UserEngagementWrapper>
         )}

@@ -1,12 +1,10 @@
-import { Button, DownloadStaticFile } from 'oa-components'
+import { DownloadStaticFile } from 'oa-components'
 import { FormFieldWrapper } from 'src/pages/common/FormFields'
-import {
-  LibraryFileLinkField,
-  LibraryFileUploadField,
-} from 'src/pages/Library/Content/Common'
 import { Flex, Text } from 'theme-ui'
 
-import { buttons, headings, intro } from '../../labels'
+import { headings, intro } from '../../labels'
+import { LibraryFileLinkField } from './LibraryFileLink.field'
+import { LibraryFileUploadField } from './LibraryFileUpload.field'
 
 interface IProps {
   fileEditMode: boolean | undefined
@@ -34,20 +32,6 @@ export const LibraryFilesField = (props: IProps) => {
         </Flex>
       </FormFieldWrapper>
     </>
-  )
-}
-
-const DeleteButton = ({ onClick }) => {
-  return (
-    <Button
-      data-testid="re-upload-files"
-      variant={'outline'}
-      icon="delete"
-      type="button"
-      onClick={() => onClick()}
-    >
-      {buttons.files}
-    </Button>
   )
 }
 
@@ -85,7 +69,6 @@ const FilesWrapper = ({ files, onClick }) => {
       }}
     >
       <FilesList files={files} />
-      <DeleteButton onClick={() => onClick()} />
     </Flex>
   )
 }

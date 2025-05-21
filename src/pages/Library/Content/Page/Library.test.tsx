@@ -17,14 +17,10 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { Library } from './Library'
 
-import type { ILibrary } from 'oa-shared'
-import type { LibraryStore } from 'src/stores/Library/library.store'
+import type { Project } from 'oa-shared'
 
 const Theme = preciousPlasticTheme.styles
-
 const item = FactoryLibraryItem()
-
-const mockLibraryStore = () => ({})
 
 vi.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -32,22 +28,11 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
   useCommonStores: () => ({
     stores: {
       userStore: {},
-      aggregationsStore: {
-        isVerified: vi.fn((userId) => userId === 'LibraryAuthor'),
-        users_verified: {
-          LibraryAuthor: true,
-        },
-      },
-      LibraryStore: mockLibraryStore(),
-      tagsStore: {},
     },
   }),
 }))
 
-const factory = (
-  LibraryStore?: Partial<LibraryStore>,
-  overrideHowto?: ILibrary.DB,
-) => {
+const factory = (override?: Project) => {
   const ReactStub = createRemixStub([
     {
       index: true,
@@ -55,8 +40,8 @@ const factory = (
         <>
           <Global styles={GlobalStyles} />
           <ThemeProvider theme={Theme}>
-            <Provider LibraryStore={LibraryStore}>
-              <Library item={overrideHowto ?? item} />
+            <Provider>
+              <Library item={override ?? item} />
             </Provider>
           </ThemeProvider>
         </>
@@ -97,11 +82,18 @@ describe('Library', () => {
 
   it('displays content statistics', async () => {
     let wrapper
-    item._id = 'testid'
-    item._createdBy = 'LibraryAuthor'
+    item.id = 1
+    item.author = {
+      id: faker.number.int(),
+      displayName: 'LibraryAuthor',
+      isVerified: true,
+      isSupporter: false,
+      photoUrl: faker.image.avatar(),
+      username: faker.internet.userName(),
+    }
     item.steps = [FactoryLibraryItemStep({})]
     item.moderation = IModerationStatus.ACCEPTED
-    item.total_views = 0
+    item.totalViews = 0
 
     act(() => {
       wrapper = factory()
@@ -118,7 +110,14 @@ describe('Library', () => {
   it('shows verified badge', async () => {
     let wrapper
 
-    item._createdBy = 'LibraryAuthor'
+    item.author = {
+      id: faker.number.int(),
+      displayName: 'LibraryAuthor',
+      isVerified: true,
+      isSupporter: false,
+      photoUrl: faker.image.avatar(),
+      username: faker.internet.userName(),
+    }
 
     act(() => {
       wrapper = factory()
@@ -131,8 +130,14 @@ describe('Library', () => {
 
   it('does not show verified badge', async () => {
     let wrapper
-    item._createdBy = 'NotLibraryAuthor'
-
+    item.author = {
+      id: faker.number.int(),
+      displayName: 'NotLibraryAuthor',
+      isVerified: false,
+      isSupporter: false,
+      photoUrl: faker.image.avatar(),
+      username: faker.internet.userName(),
+    }
     await act(async () => {
       wrapper = factory()
     })
@@ -147,11 +152,15 @@ describe('Library', () => {
       let wrapper
       act(() => {
         wrapper = factory(
-          {
-            ...(mockLibraryStore() as any),
-          },
           FactoryLibraryItem({
-            _createdBy: 'LibraryAuthor',
+            author: {
+              id: faker.number.int(),
+              displayName: 'LibraryAuthor',
+              isVerified: true,
+              isSupporter: false,
+              photoUrl: faker.image.avatar(),
+              username: faker.internet.userName(),
+            },
             steps: [FactoryLibraryItemStep()],
           }),
         )
@@ -181,12 +190,11 @@ describe('Library', () => {
       act(() => {
         item.title = 'DIY Recycling Machine'
         item.category = {
-          label: 'DIY',
-          _id: faker.string.uuid(),
-          _modified: faker.date.past().toString(),
-          _created: faker.date.past().toString(),
-          _deleted: faker.datatype.boolean(),
-          _contentModifiedTimestamp: faker.date.past().toString(),
+          name: 'DIY',
+          id: faker.number.int(),
+          modifiedAt: faker.date.past(),
+          createdAt: faker.date.past(),
+          type: 'projects',
         }
         wrapper = factory()
       })
@@ -214,7 +222,7 @@ describe('Library', () => {
       let wrapper
       act(() => {
         item.title = 'DIY Recycling Machine'
-        item.category = undefined
+        item.category = null
         wrapper = factory()
       })
 

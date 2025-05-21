@@ -7,7 +7,7 @@ import { LibraryStepField } from './LibraryStep.field'
 describe('LibraryStepField', () => {
   it('renders', async () => {
     const props = {
-      step: [],
+      step: '',
       index: 0,
       images: [],
       onDelete: vi.fn(() => null),

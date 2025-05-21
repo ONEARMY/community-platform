@@ -5,6 +5,7 @@ import type {
   ResearchFormData,
   ResearchItem,
   ResearchStatus,
+  ResearchUpdate,
   ResearchUpdateFormData,
 } from 'oa-shared'
 import type { ResearchSortOption } from './ResearchSortOptions'
@@ -182,7 +183,7 @@ const upsertUpdate = async (
     throw new Error('Error saving research update', { cause: 500 })
   }
 
-  return (await response.json()) as { researchUpdate: ResearchItem }
+  return (await response.json()) as { researchUpdate: ResearchUpdate }
 }
 
 const deleteResearch = async (id: number) => {

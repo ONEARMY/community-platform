@@ -5,7 +5,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 type Slug = string
 type Id = number
 type Client = SupabaseClient
-type Table = 'questions' | 'news' | 'research'
+type Table = 'questions' | 'news' | 'research' | 'projects'
 
 const getMetaFields = async (
   client: Client,

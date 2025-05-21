@@ -20,7 +20,6 @@ export const generateDBEndpoints = () => ({
   mappins: `v3_mappins`,
   messages: `messages_rev20231022`,
   research: `research_rev20201020`,
-  aggregations: `aggregations_rev20220126`,
   emails: `emails`,
   questions: `questions_rev20230926`,
   questionCategories: `question_categories_rev20231130`,

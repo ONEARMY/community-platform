@@ -4,26 +4,22 @@ import { CategoriesSelectV2 } from 'src/pages/common/Category/CategoriesSelectV2
 import { FormFieldWrapper } from 'src/pages/common/FormFields'
 import { LibraryCategoryGuidance } from 'src/pages/Library/Content/Common'
 import { intro } from 'src/pages/Library/labels'
+import { categoryService } from 'src/services/categoryService'
 
-import { libraryService } from '../../library.service'
-
-import type { ICategory, SelectValue } from 'oa-shared'
+import type { Category, SelectValue } from 'oa-shared'
 
 export const LibraryCategoryField = () => {
   const { placeholder, title } = intro.category
 
-  const [categories, setCategories] = useState<ICategory[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const options = useMemo<SelectValue[]>(
-    () =>
-      categories
-        .filter((x) => !x._deleted)
-        .map((x) => ({ label: x.label, value: x._id })),
+    () => categories.map((x) => ({ label: x.name, value: x.id.toString() })),
     [categories],
   )
 
   useEffect(() => {
     const getCategories = async () => {
-      const categories = await libraryService.getLibraryCategories()
+      const categories = await categoryService.getCategories('projects')
 
       if (categories) {
         setCategories(categories)
@@ -48,7 +44,7 @@ export const LibraryCategoryField = () => {
             />
             {input?.value?.value && (
               <LibraryCategoryGuidance
-                category={categories.find((x) => x._id === input.value.value)}
+                category={categories.find((x) => x.id === input.value.value)}
                 type="main"
               />
             )}

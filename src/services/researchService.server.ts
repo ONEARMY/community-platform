@@ -22,7 +22,6 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
        category:category(id,name),
        tags,
        total_views,
-       total_views,
        total_useful,
        status,
        is_draft,
@@ -42,7 +41,6 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
         comment_count, 
         modified_at, 
         deleted,
-        is_draft,
         update_author:profiles(id, display_name, username, is_verified, is_supporter, country)
       )
      `,

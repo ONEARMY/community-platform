@@ -1,5 +1,4 @@
 export { Accordion } from './Accordion/Accordion'
-export { ArticleCallToAction } from './ArticleCallToAction/ArticleCallToAction'
 export { ArticleCallToActionSupabase } from './ArticleCallToActionSupabase/ArticleCallToActionSupabase'
 export { AuthorsContext } from './providers/AuthorsContext'
 export { Banner } from './Banner/Banner'

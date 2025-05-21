@@ -3,57 +3,25 @@ import '@testing-library/jest-dom/vitest'
 import { createRemixStub } from '@remix-run/testing'
 import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
-import { Provider } from 'mobx-react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryLibraryItem } from 'src/test/factories/Library'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 import { LibraryForm } from './Library.form'
 
-import type { ILibrary } from 'oa-shared'
-import type { ParentType } from './Library.form'
+import type { MediaFile, Project } from 'oa-shared'
 
 const Theme = testingThemeStyles
 
-vi.mock('src/common/hooks/useCommonStores', () => {
-  return {
-    useCommonStores: () => ({
-      stores: {
-        LibraryStore: {
-          uploadStatus: {
-            Start: false,
-            Cover: false,
-            'Step Images': false,
-            Files: false,
-            Database: false,
-            Complete: false,
-          },
-          validateTitleForSlug: vi.fn(),
-          upload: vi.fn(),
-        },
-        tagsStore: {
-          allTags: [
-            {
-              label: 'test tag 1',
-              image: 'test img',
-            },
-          ],
-        },
-      },
-    }),
-  }
-})
-
-describe('Howto form', () => {
+describe('Library form', () => {
   describe('Provides user information', () => {
     it('shows maximum file size', () => {
       // Arrange
-      const formValues = FactoryLibraryItem()
+      const project = FactoryLibraryItem()
       // Act
       let wrapper
       act(() => {
-        wrapper = Wrapper(formValues, 'edit', {})
+        wrapper = Wrapper(project)
       })
 
       // Assert
@@ -64,11 +32,11 @@ describe('Howto form', () => {
   describe('Invalid file warning', () => {
     it('Does not appear when submitting only fileLink', () => {
       // Arrange
-      const formValues = FactoryLibraryItem({ fileLink: 'www.test.com' })
+      const project = FactoryLibraryItem()
       // Act
       let wrapper
       act(() => {
-        wrapper = Wrapper(formValues, 'edit', {})
+        wrapper = Wrapper(project, [], 'www.test.com')
       })
 
       // Assert
@@ -79,18 +47,18 @@ describe('Howto form', () => {
 
     it('Does not appear when submitting only files', () => {
       // Arrange
-      const formValues = FactoryLibraryItem({
-        files: [
-          new File(['test file content'], 'test-file.pdf', {
-            type: 'application/pdf',
-          }),
-        ],
-      })
+      const project = FactoryLibraryItem()
 
       // Act
       let wrapper
       act(() => {
-        wrapper = Wrapper(formValues, 'edit', {})
+        wrapper = Wrapper(project, [
+          {
+            id: '123',
+            name: 'test-file.pdf',
+            size: 12345,
+          },
+        ])
       })
 
       // Assert
@@ -101,19 +69,22 @@ describe('Howto form', () => {
 
     it('Appears when submitting 2 file types', () => {
       // Arrange
-      const formValues = FactoryLibraryItem({
-        files: [
-          new File(['test file content'], 'test-file.pdf', {
-            type: 'application/pdf',
-          }),
-        ],
-        fileLink: 'www.test.com',
-      })
+      const project = FactoryLibraryItem()
 
       // Act
       let wrapper
       act(() => {
-        wrapper = Wrapper(formValues, 'edit', {})
+        wrapper = Wrapper(
+          project,
+          [
+            {
+              id: '123',
+              name: 'test-file.pdf',
+              size: 12345,
+            },
+          ],
+          'www.test.com',
+        )
       })
 
       // Assert
@@ -122,18 +93,18 @@ describe('Howto form', () => {
 
     it('Does not appear when files are removed and filelink added', async () => {
       // Arrange
-      const formValues = FactoryLibraryItem({
-        files: [
-          new File(['test file content'], 'test-file.pdf', {
-            type: 'application/pdf',
-          }),
-        ],
-      })
+      const project = FactoryLibraryItem()
 
       // Act
       let wrapper
       act(() => {
-        wrapper = Wrapper(formValues, 'edit', {})
+        wrapper = Wrapper(project, [
+          {
+            id: '123',
+            name: 'test-file.pdf',
+            size: 12345,
+          },
+        ])
       })
 
       await waitFor(() => {
@@ -161,21 +132,15 @@ describe('Howto form', () => {
   })
 })
 
-const Wrapper = (formValues: ILibrary.DB, parentType: ParentType, navProps) => {
+const Wrapper = (project: Project, files?: MediaFile[], fileLink?: string) => {
   const ReactStub = createRemixStub(
     [
       {
         index: true,
         Component: () => (
-          <Provider {...useCommonStores().stores}>
-            <ThemeProvider theme={Theme}>
-              <LibraryForm
-                formValues={formValues}
-                parentType={parentType}
-                {...navProps}
-              />
-            </ThemeProvider>
-          </Provider>
+          <ThemeProvider theme={Theme}>
+            <LibraryForm project={project} files={files} fileLink={fileLink} />
+          </ThemeProvider>
         ),
       },
     ],

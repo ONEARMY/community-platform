@@ -187,7 +187,6 @@ const SCHEMA_BASE: IDexieSchema = {
   researchCategories: DEFAULT_SCHEMA,
   users: `${DEFAULT_SCHEMA},_authID`,
   research: `${DEFAULT_SCHEMA},_createdBy,slug,previousSlugs,*collaborators`,
-  aggregations: `${DEFAULT_SCHEMA}`,
   emails: `${DEFAULT_SCHEMA}`,
   questions: `${DEFAULT_SCHEMA},slug,previousSlugs`,
   questionCategories: `${DEFAULT_SCHEMA}`,

@@ -7,7 +7,6 @@ import { act, render, waitFor, within } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
 import { UserRole } from 'oa-shared'
-import { FactoryDiscussion } from 'src/test/factories/Discussion'
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
@@ -27,7 +26,6 @@ const mockUser = FactoryUser()
 const mockQuestionItem = FactoryQuestionItem({
   slug: 'testSlug',
 })
-const mockDiscussionItem = FactoryDiscussion()
 
 vi.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -36,17 +34,6 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
     stores: {
       userStore: {
         getUserByUsername: vi.fn().mockResolvedValue(mockUser),
-      },
-      aggregationsStore: {
-        isVerified: vi.fn(),
-        users_verified: {},
-      },
-      tagsStore: {},
-      discussionStore: {
-        fetchOrCreateDiscussionBySource: vi.fn().mockResolvedValue({
-          mockDiscussionItem,
-        }),
-        activeUser: mockUser,
       },
     },
   }),

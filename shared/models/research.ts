@@ -158,7 +158,7 @@ export class DBResearchUpdate implements IDBDocSB, IDBDownloadable {
   files: IMediaFile[] | null
   video_url: string | null
 
-  constructor(obj: Omit<DBResearchItem, 'id'>) {
+  constructor(obj: Omit<DBResearchUpdate, 'id'>) {
     Object.assign(this, obj)
   }
 }

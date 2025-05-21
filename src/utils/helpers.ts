@@ -50,24 +50,6 @@ export const capitalizeFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
-/** Show only items which are either accepted, the user has created, or an admin can see
- * HACK - ARH - 2019/12/11 filter unaccepted projects, should be done serverside
- */
-export const filterModerableItems = <T>(
-  items: (IModerable & T)[],
-  user?: IUser,
-): T[] =>
-  items.filter((item) => {
-    const isItemAccepted = item.moderation === IModerationStatus.ACCEPTED
-    const wasCreatedByUser = user && item._createdBy === user.userName
-    const isAdminAndAccepted =
-      hasAdminRights(user) &&
-      item.moderation !== IModerationStatus.DRAFT &&
-      item.moderation !== IModerationStatus.REJECTED
-
-    return isItemAccepted || wasCreatedByUser || isAdminAndAccepted
-  })
-
 /**
  *  Function used to generate random ID in same manner as firestore
  */
@@ -126,61 +108,6 @@ export const needsModeration = (doc: IModerable, user?: IUser) => {
     return false
   }
   return doc.moderation !== IModerationStatus.ACCEPTED
-}
-
-/**
- * Checks if the user is allowed to edit the content.
- *
- * @param {IEditableDoc & { collaborators?: string[] }} doc - The document to be edited.
- * @param {IUser} [user] - The user attempting to edit the document.
- *
- * @returns {boolean}
- */
-export const isAllowedToEditContent = (
-  doc: IEditableDoc & { collaborators?: string[] },
-  user?: IUser | null | undefined,
-) => {
-  if (!user) {
-    return false
-  }
-  if (isObservableObject(user)) {
-    user = toJS(user)
-  }
-
-  if (doc.collaborators?.includes(user.userName)) {
-    return true
-  }
-
-  if (
-    hasAdminRights(user) ||
-    (doc._createdBy && doc._createdBy === user.userName)
-  ) {
-    return true
-  } else {
-    return false
-  }
-}
-
-/**
- * Checks if the user is allowed to delete the content.
- *
- * @param {IEditableDoc} doc - The document to be deleted.
- * @param {IUser} [user] - The user attempting to delete the document.
- * @returns {boolean} True if the user is allowed to delete, false otherwise.
- */
-export const isAllowedToDeleteContent = (doc: IEditableDoc, user?: IUser) => {
-  if (!user) {
-    return false
-  }
-
-  if (isObservableObject(user)) {
-    user = toJS(user)
-  }
-
-  const roles =
-    user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
-
-  return roles.includes(UserRole.ADMIN) || doc._createdBy! === user.userName
 }
 
 export const isAllowedToPin = (pin: IMapPin, user?: IUser) => {

@@ -55,7 +55,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
               justifyContent: 'flex-end',
             }}
           >
-            {usefulVotes > 0 && (
+            {(
               <Text
                 color="black"
                 ml={3}

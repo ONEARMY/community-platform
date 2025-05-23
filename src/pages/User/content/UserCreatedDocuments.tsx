@@ -71,7 +71,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
                 return (
                   <UserCreatedDocumentsItem
                     key={item.id}
-                    type="question"
+                    type="questions"
                     item={{
                       id: item.id!,
                       slug: item.slug!,

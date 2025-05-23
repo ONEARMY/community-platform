@@ -3,7 +3,7 @@ import { Icon } from 'oa-components'
 import { Flex, Heading, Text } from 'theme-ui'
 
 interface IProps {
-  type: 'library' | 'research' | 'question'
+  type: 'library' | 'research' | 'questions'
   item: {
     id: string | number
     title: string

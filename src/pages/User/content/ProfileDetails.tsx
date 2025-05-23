@@ -92,6 +92,7 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
                 usefulCount={user.totalUseful || 0}
                 researchCount={docs?.research.length || 0}
                 totalViews={0}
+                questionCount={docs?.questions.length || 0}
               />
             }
           >
@@ -104,6 +105,7 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
               usefulCount={user.totalUseful || 0}
               researchCount={docs?.research.length || 0}
               totalViews={user.total_views || 0}
+              questionCount={docs?.questions.length || 0}
             />
           </AuthWrapper>
         </Box>

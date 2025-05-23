@@ -30,6 +30,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
         key={id}
         style={{ width: '100%' }}
         data-testid={`${type}-link`}
+        data-cy={`${item.slug}-link`}
       >
         <Flex
           pb={1}

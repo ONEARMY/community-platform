@@ -1,5 +1,6 @@
 import { Notification } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { resolveType } from 'src/utils/contentType.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -16,7 +17,7 @@ const transformNotificationList = async (
   )
 }
 
-const transformNotification = async (
+export const transformNotification = async (
   dbNotification: DBNotification,
   client: SupabaseClient,
 ) => {
@@ -24,6 +25,7 @@ const transformNotification = async (
     comment: 'comments',
     reply: 'comments',
   }
+
   const notification = Notification.fromDB(dbNotification)
   const contentType = contentTypes[notification.contentType]
 
@@ -37,14 +39,31 @@ const transformNotification = async (
     notification.content = content.data
   }
 
+  const sourceContentType = resolveType(notification.sourceContentType)
   const sourceContent = await client
-    .from(notification.sourceContentType)
+    .from(sourceContentType)
     .select('*')
     .eq('id', notification.sourceContentId)
     .single()
 
-  if (sourceContent.data) {
-    notification.sourceContent = sourceContent.data
+  notification.sourceContent = sourceContent.data
+
+  if (notification.parentCommentId) {
+    const parentComment = await client
+      .from('comments')
+      .select('*')
+      .eq('id', notification.parentCommentId)
+      .single()
+    notification.parentComment = parentComment.data
+  }
+
+  if (notification.parentContentId) {
+    const parentContent = await client
+      .from('research_updates')
+      .select('*')
+      .eq('id', notification.parentContentId)
+      .single()
+    notification.parentContent = parentContent.data
   }
 
   return notification
@@ -72,7 +91,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     .select(
       `
       *,
-      triggered_by:profiles!notifications_triggered_by_id_fkey(*)
+      triggered_by:profiles!notifications_triggered_by_id_fkey(id,username)
     `,
     )
     .eq('owned_by_id', profile?.data?.id)

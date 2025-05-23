@@ -1,6 +1,6 @@
 import { redirect } from '@remix-run/node'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { resolveType } from 'src/utils/contentType.utils.server'
+import { resolveType } from 'src/utils/contentType.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'

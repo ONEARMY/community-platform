@@ -25,7 +25,6 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   const sourceParam = isNaN(+params.sourceId) ? 'source_id_legacy' : 'source_id'
   const sourceId = isNaN(+params.sourceId) ? params.sourceId : +params.sourceId
-  const sourceType = mapSourceType(params.sourceType! as DiscussionContentTypes)
 
   const result = await client
     .from('comments')
@@ -44,7 +43,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       profiles(id, firebase_auth_id, display_name, username, is_verified, is_supporter, photo_url, country)
     `,
     )
-    .eq('source_type', sourceType)
+    .eq('source_type', params.sourceType)
     .eq(sourceParam, sourceId)
     .order('created_at', { ascending: true })
 
@@ -219,7 +218,7 @@ async function validateRequest(
 
 const mapSourceType = (sourceType: DiscussionContentTypes) => {
   switch (sourceType) {
-    case 'research_updates':
+    case 'research_update':
       return 'research_update'
     case 'news':
       return 'news'

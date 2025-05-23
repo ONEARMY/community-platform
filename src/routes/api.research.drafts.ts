@@ -39,8 +39,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
        category:category(id,name),
        tags,
        total_views,
-       total_views,
-       total_useful,
        status,
        is_draft,
        collaborators,

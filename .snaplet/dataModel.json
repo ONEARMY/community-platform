@@ -4821,20 +4821,6 @@
           "maxLength": null
         },
         {
-          "id": "public.research.total_useful",
-          "name": "total_useful",
-          "columnName": "total_useful",
-          "type": "int4",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.research.previous_slugs",
           "name": "previous_slugs",
           "columnName": "previous_slugs",

@@ -58,7 +58,7 @@ export const CardDetailsMemberProfile = ({ creator, isLink }: IProps) => {
           isLink={isLink}
           target="_blank"
         />
-        {tags && <ProfileTagsList tags={tags} />}
+        {tags && <ProfileTagsList tags={tags} isSpace={false} />}
       </Flex>
     </Flex>
   )

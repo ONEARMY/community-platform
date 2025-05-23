@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
-import countriesList from 'countries-list'
+import { countries } from 'countries-list'
 import {
   Button,
   FieldInput,
@@ -34,7 +34,6 @@ interface IProps {
 export const UserInfosSection = ({ formValues }: IProps) => {
   const env = useContext(EnvironmentContext)
 
-  const { countries } = countriesList
   const { profileType, links, location } = formValues
   const isMemberProfile = profileType === ProfileTypeList.MEMBER
   const { about, country, displayName, userName } = fields
@@ -52,7 +51,7 @@ export const UserInfosSection = ({ formValues }: IProps) => {
       >
         <Heading as="h2">{headings.infos}</Heading>
         <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-          <Text>{`${userName.title} *`}</Text>
+          <Text>{userName.title} *</Text>
           <Text variant="quiet" sx={{ fontSize: 2 }}>
             {userName.description}
           </Text>
@@ -67,7 +66,7 @@ export const UserInfosSection = ({ formValues }: IProps) => {
         </Flex>
 
         <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-          <Text>{`${displayName.title} *`}</Text>
+          <Text>{displayName.title} *</Text>
           <Text variant="quiet" sx={{ fontSize: 2 }}>
             {displayName.description}
           </Text>
@@ -84,7 +83,7 @@ export const UserInfosSection = ({ formValues }: IProps) => {
         <ProfileTags isMemberProfile={isMemberProfile} />
 
         <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-          <Text>{`${about.title} *`}</Text>
+          <Text>{about.title} *</Text>
           <Field
             data-cy="info-description"
             name="about"

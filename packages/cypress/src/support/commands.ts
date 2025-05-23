@@ -1,18 +1,31 @@
 import 'cypress-file-upload'
 
 import { deleteDB } from 'idb'
+import { type ILibrary, UserRole } from 'oa-shared'
 
 import { TestDB } from './db/firebase'
 
-import type { ILibrary } from 'oa-shared'
+interface ExpectedNewNotification {
+  content: string
+  path: string
+  title: string
+  username: string
+}
 
 declare global {
   namespace Cypress {
     interface Chainable {
+      addProject(
+        project: ILibrary.DB,
+        username: string,
+        random: string,
+      ): Chainable<void>
       checkCommentInViewport()
       checkCommentItem(comment: string, length: number): Chainable<void>
       clearServiceWorkers(): Promise<void>
       deleteIDB(name: string): Promise<boolean>
+      expectNewNotification(ExpectedNewNotification): Chainable<void>
+      expectNoNewNotifications(): Chainable<void>
       interceptAddressSearchFetch(addressResponse): Chainable<void>
       interceptAddressReverseFetch(addressResponse): Chainable<void>
       queryDocuments(
@@ -21,11 +34,6 @@ declare global {
         opStr: any,
         value: string,
       ): Chainable<any[]>
-      addProject(
-        project: ILibrary.DB,
-        username: string,
-        random: string,
-      ): Chainable<void>
       step(message: string)
     }
   }
@@ -137,4 +145,31 @@ Cypress.Commands.add('checkCommentItem', (comment: string, length: number) => {
   cy.get('[data-cy="CommentItem"]').should('have.length.gte', length)
   cy.checkCommentInViewport()
   cy.contains(comment)
+})
+
+Cypress.Commands.add(
+  'expectNewNotification',
+  (props: ExpectedNewNotification) => {
+    const { content, path, title, username } = props
+
+    localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
+    cy.wait(1000)
+
+    cy.get('[data-cy=NotificationsSupabase-desktop]').within(() => {
+      cy.get('[data-cy=notifications-new-messages]').click()
+    })
+    cy.get('[data-cy=NotificationListSupabase]')
+    cy.get('[data-cy=NotificationListItemSupabase]')
+      .first()
+      .within(() => {
+        cy.contains(username)
+        cy.contains(title)
+        cy.contains(content).click()
+      })
+    cy.url().should('include', path)
+  },
+)
+
+Cypress.Commands.add('expectNoNewNotifications', () => {
+  cy.get('[data-cy=notifications-no-new-messages]')
 })

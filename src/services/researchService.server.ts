@@ -22,8 +22,6 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
        category:category(id,name),
        tags,
        total_views,
-       total_views,
-       total_useful,
        status,
        is_draft,
        collaborators,
@@ -71,17 +69,16 @@ const getUserResearch = async (
   client: SupabaseClient,
   username: string,
 ): Promise<Partial<ResearchItem>[]> => {
-  const result = await client
-    .from('research')
-    .select('id, title, slug, total_useful, profiles!inner(username)')
-    .eq('profiles.username', username)
-    .or('deleted.eq.false, deleted.is.null')
+  const { data, error } = await client.rpc('get_user_research', {
+    username_param: username,
+  })
 
-  if (result.error) {
+  if (error) {
+    console.error('Error fetching user research:', error)
     return []
   }
 
-  return result.data?.map((x) => ({
+  return data?.map((x) => ({
     id: x.id,
     title: x.title,
     slug: x.slug,

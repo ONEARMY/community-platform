@@ -5,12 +5,17 @@ import { subscribersService } from 'src/services/subscribersService'
 import { useCommonStores } from './hooks/useCommonStores'
 import { trackEvent } from './Analytics'
 
-import type { ContentType, News, Question } from 'oa-shared'
+import type {
+  News,
+  Question,
+  ResearchUpdate,
+  SubscribableContentTypes,
+} from 'oa-shared'
 
 interface IProps {
-  contentType: ContentType
-  item: News | Question
-  setSubscribersCount: Dispatch<SetStateAction<number>>
+  contentType: SubscribableContentTypes
+  item: News | Question | ResearchUpdate
+  setSubscribersCount?: Dispatch<SetStateAction<number>>
 }
 
 export const FollowButtonAction = (props: IProps) => {
@@ -44,14 +49,15 @@ export const FollowButtonAction = (props: IProps) => {
 
       if (response.ok) {
         setSubscribed(true)
-        setSubscribersCount((prev: number) => prev + 1 || 1)
+        setSubscribersCount &&
+          setSubscribersCount((prev: number) => prev + 1 || 1)
       }
     } else {
       const response = await subscribersService.remove(contentType, item.id)
 
       if (response.ok) {
         setSubscribed(false)
-        setSubscribersCount((prev) => prev - 1 || 0)
+        setSubscribersCount && setSubscribersCount((prev) => prev - 1 || 0)
       }
     }
     const action = subscribed ? 'Unsubscribed' : 'Subscribed'
@@ -59,7 +65,7 @@ export const FollowButtonAction = (props: IProps) => {
     trackEvent({
       category: contentType,
       action,
-      label: item.slug,
+      label: `${item.id}`,
     })
   }
 

@@ -82,7 +82,7 @@ export const CreateCommentSupabase = observer((props: IProps) => {
             }}
           >
             <UserAction
-              incompleteProfile={<IncompleteProfilePrompt />}
+              incompleteProfile={<IncompleteProfilePrompt isReply={isReply} />}
               loggedIn={
                 <Flex sx={{ flexDirection: 'column' }}>
                   <Box
@@ -112,7 +112,7 @@ export const CreateCommentSupabase = observer((props: IProps) => {
                   </Text>
                 </Flex>
               }
-              loggedOut={<LoginPrompt />}
+              loggedOut={<LoginPrompt isReply={isReply} />}
             />
           </Box>
 
@@ -152,11 +152,11 @@ export const CreateCommentSupabase = observer((props: IProps) => {
   )
 })
 
-const LoginPrompt = () => {
+const LoginPrompt = ({ isReply }: { isReply?: boolean }) => {
   return (
     <Box sx={{ padding: [3, 4] }}>
       <Text data-cy="comments-login-prompt">
-        Hi there!{' '}
+        {isReply ? 'You could reply here.' : 'Hi there!'}{' '}
         <ReturnPathLink
           to="/sign-in"
           style={{
@@ -164,18 +164,20 @@ const LoginPrompt = () => {
             color: 'inherit',
           }}
         >
-          Login to leave a comment
+          {isReply
+            ? 'But first you need to login'
+            : 'Log in to leave a comment'}
         </ReturnPathLink>
       </Text>
     </Box>
   )
 }
 
-const IncompleteProfilePrompt = () => {
+const IncompleteProfilePrompt = ({ isReply }: { isReply?: boolean }) => {
   return (
     <Box sx={{ padding: [3, 4] }}>
       <Text data-cy="comments-incomplete-profile-prompt">
-        Hi there!{' '}
+        {isReply ? 'Before replying' : 'Hi there!'}{' '}
         <ReturnPathLink
           to="/settings"
           style={{
@@ -183,7 +185,9 @@ const IncompleteProfilePrompt = () => {
             color: 'inherit',
           }}
         >
-          Complete your profile leave a comment
+          {isReply
+            ? 'complete your profile'
+            : 'Complete your profile to leave a comment'}
         </ReturnPathLink>
       </Text>
     </Box>

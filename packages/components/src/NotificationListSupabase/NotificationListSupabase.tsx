@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { Box, Flex, Heading } from 'theme-ui'
 
 import { Button } from '../Button/Button'
+import { ButtonIcon } from '../ButtonIcon/ButtonIcon'
 import { InternalLink } from '../InternalLink/InternalLink'
 import { Loader } from '../Loader/Loader'
-import { NotificationListItemSupabase } from './NotificationListItemSupabase'
+import { NotificationListItemSupabase } from '../NotificationListItemSupabase/NotificationListItemSupabase'
 
 import type { Notification } from 'oa-shared'
 
@@ -34,9 +35,17 @@ export const NotificationListSupabase = (props: IProps) => {
   return (
     <Flex
       data-cy="NotificationListSupabase"
-      sx={{ flexDirection: 'column', gap: 2 }}
+      sx={{ flexDirection: 'column', gap: 4 }}
     >
-      <Heading>Notifications</Heading>
+      <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+        <Heading sx={{ fontSize: 6 }}>Notifications</Heading>
+        <ButtonIcon
+          data-cy="MapFilterList-CloseButton"
+          icon="close"
+          onClick={modalDismiss}
+          sx={{ border: 'none', paddingLeft: 2, paddingRight: 3 }}
+        />
+      </Flex>
       <Flex
         sx={{
           justifyContent: 'space-between',

@@ -101,11 +101,6 @@ export const QuestionPage = observer(({ question }: IProps) => {
                       onUsefulClick(voted ? 'delete' : 'add')
                     }
                   />
-                  <FollowButtonAction
-                    contentType="questions"
-                    item={question}
-                    setSubscribersCount={setSubscribersCount}
-                  />
                   {isEditable && (
                     <Link to={'/questions/' + question.slug + '/edit'}>
                       <Button type="button" variant="primary" data-cy="edit">
@@ -193,6 +188,14 @@ export const QuestionPage = observer(({ question }: IProps) => {
                 usePlural: false,
               }),
             },
+            {
+              icon: 'comment',
+              label: buildStatisticsLabel({
+                stat: question.commentCount,
+                statUnit: 'comment',
+                usePlural: true,
+              }),
+            },
           ]}
         />
       </Card>
@@ -211,6 +214,13 @@ export const QuestionPage = observer(({ question }: IProps) => {
               authors={question.author?.id ? [question.author?.id] : []}
               sourceId={question.id}
               sourceType="questions"
+              followButton={
+                <FollowButtonAction
+                  contentType="questions"
+                  item={question}
+                  setSubscribersCount={setSubscribersCount}
+                />
+              }
             />
           </Card>
         )}

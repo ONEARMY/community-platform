@@ -27,5 +27,6 @@ export const Default: StoryFn<typeof ProfileTagsList> = () => (
         profileType: 'space',
       },
     ]}
+    isSpace={false}
   />
 )

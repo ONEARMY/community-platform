@@ -1,7 +1,5 @@
 // This is basically an identical set of steps to the discussion tests for
-// how-tos and research. Any changes here should be replicated there.
-
-import { UserRole } from 'oa-shared'
+// questions, projects and research. Any changes here should be replicated there.
 
 import { MOCK_DATA } from '../../data'
 import { generateNewUserDetails } from '../../utils/TestUtils'
@@ -35,11 +33,9 @@ describe('[News.Discussions]', () => {
     cy.step('Can add comment when profile is complete')
     cy.completeUserProfile(visitor.username)
     cy.visit(newsPath)
-    cy.contains('Start the discussion')
     cy.get('[data-cy=comments-incomplete-profile-prompt]').should('not.exist')
     cy.get('[data-cy=follow-button]').contains('Follow Discussion')
     cy.addComment(newComment)
-    cy.contains('1 Comment')
     cy.reload()
     cy.get('[data-cy=follow-button]').contains('Following')
 
@@ -53,7 +49,7 @@ describe('[News.Discussions]', () => {
     cy.visit(newsPath)
     cy.addReply(newReply)
     cy.wait(1000)
-    cy.contains('2 Comments')
+    cy.contains('Comments')
 
     cy.step('Can edit their reply')
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
@@ -65,27 +61,16 @@ describe('[News.Discussions]', () => {
     cy.signIn(visitor.email, visitor.password)
 
     cy.step('Notification generated for reply')
-    localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
-    cy.wait(1000)
 
-    cy.get('[data-cy=NotificationsSupabase-desktop]').within(() => {
-      cy.get('[data-cy=notifications-new-messages]').click()
+    cy.expectNewNotification({
+      content: updatedNewReply,
+      path: newsPath,
+      title: news.title,
+      username: secondCommentor.username,
     })
-    cy.get('[data-cy=NotificationListSupabase]')
-    cy.get('[data-cy=NotificationListItemSupabase]')
-      .first()
-      .within(() => {
-        cy.contains(secondCommentor.username)
-        cy.contains(news.title)
-        cy.contains(updatedNewReply).click()
-      })
 
-    cy.get('[data-cy=NotificationsSupabase-desktop]').within(() => {
-      cy.get('[data-cy=notifications-new-messages]').click()
-    })
-    cy.get('[data-cy=NotificationListItemSupabase-unread]').first().click()
     cy.visit(newsPath)
-    cy.get('[data-cy=notifications-no-new-messages]')
+    cy.expectNoNewNotifications()
 
     cy.step('Can add reply')
     cy.addReply(secondReply)

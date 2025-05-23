@@ -15,6 +15,7 @@ import { FocusSection } from './content/sections/Focus.section'
 import { PublicContactSection } from './content/sections/PublicContact.section'
 import { UserImagesSection } from './content/sections/UserImages.section'
 import { UserInfosSection } from './content/sections/UserInfos.section'
+import { VisitorSection } from './content/sections/VisitorSection'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 import { buttons } from './labels'
 
@@ -40,9 +41,7 @@ export const SettingsPageUserProfile = () => {
       ...values,
     }
 
-    toUpdate.coverImages = (toUpdate.coverImages as any[]).filter((cover) =>
-      cover ? true : false,
-    )
+    toUpdate.coverImages = toUpdate.coverImages.filter((cover) => !!cover)
 
     toUpdate.links = toUpdate.links || []
 
@@ -73,7 +72,7 @@ export const SettingsPageUserProfile = () => {
 
   const validateForm = (v: IUser) => {
     const errors: any = {}
-    // must have at least 1 cover (awkard react final form array format)
+    // must have at least 1 cover (awkward react final form array format)
     if (!v.coverImages[0] && v.profileType !== ProfileTypeList.MEMBER) {
       errors.coverImages = []
       errors.coverImages[ARRAY_ERROR] = 'Must have at least one cover image'
@@ -97,6 +96,7 @@ export const SettingsPageUserProfile = () => {
     userImage: user.userImage || null,
     coverImages,
     tags: user.tags || {},
+    openToVisitors: user.openToVisitors,
   }
 
   const formId = 'userProfileForm'
@@ -140,6 +140,10 @@ export const SettingsPageUserProfile = () => {
                 <UserInfosSection formValues={values} />
 
                 <UserImagesSection isMemberProfile={isMember} values={values} />
+
+                {!isMember && (
+                  <VisitorSection openToVisitors={values.openToVisitors} />
+                )}
 
                 {!isMessagingBlocked() && (
                   <PublicContactSection

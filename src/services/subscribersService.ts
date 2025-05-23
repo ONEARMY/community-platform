@@ -1,19 +1,22 @@
-import type { ContentType } from 'oa-shared'
+import type { SubscribableContentTypes } from 'oa-shared'
 
-const add = async (contentType: ContentType, id: number) => {
+const add = async (contentType: SubscribableContentTypes, id: number) => {
   return await fetch(`/api/subscribers/${contentType}/${id}`, {
     method: 'POST',
     body: JSON.stringify({}),
   })
 }
 
-const remove = async (contentType: ContentType, id: number) => {
+const remove = async (contentType: SubscribableContentTypes, id: number) => {
   return await fetch(`/api/subscribers/${contentType}/${id}`, {
     method: 'DELETE',
   })
 }
 
-const isSubscribed = async (contentType: ContentType, id: number) => {
+const isSubscribed = async (
+  contentType: SubscribableContentTypes,
+  id: number,
+) => {
   try {
     const response = await fetch(
       `/api/subscribers/${contentType}/${id}/subscribed`,

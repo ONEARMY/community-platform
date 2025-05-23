@@ -1,6 +1,14 @@
 import { faker } from '@faker-js/faker'
 
-import type { Author, Comment, News, Question } from 'oa-shared'
+import type {
+  Author,
+  Comment,
+  News,
+  Notification,
+  Question,
+  ResearchItem,
+  ResearchUpdate,
+} from 'oa-shared'
 import type { IComment } from './CommentItem/types'
 
 export const fakeAuthorSB = (
@@ -43,14 +51,14 @@ export const createFakeComments = (
 export const fakeCommentSB = (
   commentOverloads: Partial<Comment> = {},
 ): Comment => ({
-  id: 0,
+  id: faker.datatype.number(100),
   createdAt: new Date(),
   modifiedAt: new Date(),
   createdBy: null,
   comment: faker.lorem.text(),
-  sourceId: 0,
+  sourceId: faker.datatype.number(100),
   sourceType: 'questions',
-  parentId: 0,
+  parentId: faker.datatype.number(100),
   deleted: false,
   highlighted: false,
   replies: [],
@@ -78,6 +86,26 @@ export const fakeNewsSB = (newsOverloads: Partial<News> = {}): News => ({
   ...newsOverloads,
 })
 
+export const fakeNotification = (
+  notificationOverloads: Partial<Notification> = {},
+): Notification => ({
+  id: faker.datatype.number(),
+  actionType: 'newComment',
+  contentId: faker.datatype.number(100),
+  contentType: 'comment',
+  createdAt: faker.date.past(),
+  modifiedAt: null,
+  ownedById: faker.datatype.number(100),
+  isRead: faker.datatype.boolean(),
+  parentCommentId: null,
+  parentContentId: null,
+  sourceContentType: 'news',
+  sourceContentId: faker.datatype.number(100),
+  triggeredBy: fakeAuthorSB(),
+  ownedBy: fakeAuthorSB(),
+  ...notificationOverloads,
+})
+
 export const fakeQuestionSB = (
   questionOverloads: Partial<Question> = {},
 ): Question => ({
@@ -98,4 +126,51 @@ export const fakeQuestionSB = (
   totalViews: faker.datatype.number(100),
   usefulCount: faker.datatype.number(20),
   ...questionOverloads,
+})
+
+export const fakeResearchItem = (
+  researchItemOverloads: Partial<ResearchItem> = {},
+): ResearchItem => ({
+  id: faker.datatype.number(),
+  createdAt: faker.date.past(),
+  modifiedAt: null,
+  author: fakeAuthorSB(),
+  category: null,
+  collaborators: [],
+  collaboratorsUsernames: [],
+  commentCount: faker.datatype.number(100),
+  deleted: false,
+  description: faker.random.words(12),
+  image: null,
+  usefulCount: faker.datatype.number(20),
+  title: faker.random.words(8),
+  previousSlugs: [],
+  slug: 'random-slug',
+  subscriberCount: faker.datatype.number(20),
+  status: 'in-progress',
+  updateCount: 0,
+  updates: [],
+  tags: [],
+  totalViews: faker.datatype.number(100),
+  ...researchItemOverloads,
+})
+
+export const fakeResearchUpdate = (
+  researchItemOverloads: Partial<ResearchUpdate> = {},
+): ResearchUpdate => ({
+  id: faker.datatype.number(),
+  createdAt: faker.date.past(),
+  modifiedAt: null,
+  author: fakeAuthorSB(),
+  commentCount: faker.datatype.number(100),
+  deleted: false,
+  description: faker.random.words(12),
+  images: [],
+  files: null,
+  fileDownloadCount: faker.datatype.number(100),
+  isDraft: false,
+  hasFileLink: false,
+  videoUrl: null,
+  title: faker.random.words(8),
+  ...researchItemOverloads,
 })

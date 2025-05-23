@@ -1,4 +1,3 @@
-import { Question } from 'shared/lib'
 import { questionServiceServer } from 'src/services/questionService.server'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 

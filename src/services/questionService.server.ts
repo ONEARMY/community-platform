@@ -1,7 +1,5 @@
-import { Question } from 'oa-shared'
-
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBQuestion } from 'oa-shared'
+import type { Question } from 'oa-shared'
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
   return client
@@ -33,53 +31,22 @@ const getQuestionsByUser = async (
   client: SupabaseClient,
   username: string,
 ): Promise<Partial<Question>[]> => {
-  const queryResult = await client
-    .from('questions')
-    .select(
-      `id, 
-      created_at, 
-      created_by, 
-      modified_at, 
-      comment_count, 
-      description, 
-      moderation, 
-      slug, 
-      category:category(id,name), 
-      tags, 
-      title, 
-      total_views, 
-      images, 
-      author:profiles(id, display_name, username, is_verified, is_supporter, country)`,
-    )
-    .eq('author.username', username)
+  const functionResult = await client.rpc('get_user_questions', {
+    username_param: username,
+  })
 
-  if (queryResult.error) {
+  if (functionResult.error || functionResult.count === 0) {
     return []
   }
 
-  const data = queryResult.data as unknown as DBQuestion[]
-  const items = data.map((x) => Question.fromDB(x, [], []))
-
-  //populates useful votes
-  if (items && items.length > 0) {
-    const votes = await client.rpc('get_useful_votes_count_by_content_id', {
-      p_content_type: 'questions',
-      p_content_ids: items.map((x) => x.id),
-    })
-
-    if (votes.data) {
-      const votesByContentId = votes.data.reduce((acc, current) => {
-        acc.set(current.content_id, current.count)
-        return acc
-      }, new Map())
-
-      for (const item of items) {
-        if (votesByContentId.has(item.id)) {
-          item.usefulCount = votesByContentId.get(item.id)!
-        }
-      }
+  const items = functionResult.data.map((x) => {
+    return {
+      id: x.id,
+      title: x.title,
+      slug: x.slug,
+      usefulCount: x.total_useful,
     }
-  }
+  })
 
   return items
 }

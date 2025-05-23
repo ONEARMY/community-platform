@@ -100,7 +100,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         research,
         researchUpdate,
         profile!,
-        new URL(request.url).origin,
+        new URL(request.url).origin.replace('http:', 'https:'),
       )
     }
 

@@ -17,6 +17,7 @@ import {
 import * as LABELS from 'src/pages/Question/labels'
 import { questionService } from 'src/services/questionService'
 import { subscribersService } from 'src/services/subscribersService'
+import { fireConfetti } from 'src/utils/fireConfetti'
 import {
   composeValidators,
   endsWithQuestionMark,
@@ -88,6 +89,7 @@ export const QuestionForm = (props: IProps) => {
 
       if (result) {
         !id && (await subscribersService.add('questions', result.id))
+        fireConfetti()
         navigate('/questions/' + result.slug)
       }
     } catch (e) {

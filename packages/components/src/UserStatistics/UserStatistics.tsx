@@ -1,8 +1,8 @@
 import { Box, Card, Flex } from 'theme-ui'
 
+import ForumIcon from '../../assets/icons/icon-forum.svg'
 import HowToCountIcon from '../../assets/icons/icon-library.svg'
 import ResearchIcon from '../../assets/icons/icon-research.svg'
-import ForumIcon from '../../assets/icons/icon-forum.svg'
 import starActiveSVG from '../../assets/icons/icon-star-active.svg'
 import { CardButton } from '../CardButton/CardButton'
 import { ElWithBeforeIcon } from '../ElWithBeforeIcon/ElWithBeforeIcon'

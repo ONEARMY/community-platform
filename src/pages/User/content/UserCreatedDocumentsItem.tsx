@@ -55,7 +55,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
               justifyContent: 'flex-end',
             }}
           >
-            {(
+            {
               <Text
                 color="black"
                 ml={3}
@@ -70,7 +70,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
                 {usefulVotes}
                 <Icon glyph="star-active" ml={1} />
               </Text>
-            )}
+            }
           </Flex>
         </Flex>
       </Link>

@@ -1,11 +1,11 @@
 import { useContext, useEffect, useMemo, useState } from 'react'
+import { type ResearchUpdate, UserRole } from 'oa-shared'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { Box, Button } from 'theme-ui'
 
 import { CommentSectionSupabase } from './CommentSectionSupabase'
 import { MultipleCommentSectionContext } from './MultipleCommentSectionWrapper'
-
-import type { ResearchUpdate } from 'oa-shared'
 
 type Props = {
   authors: number[]
@@ -74,10 +74,12 @@ const CollapsableCommentSection = (props: Props) => {
           sourceType="research_update"
           authors={authors}
           followButton={
-            <FollowButtonAction
-              contentType="research_update"
-              item={researchUpdate}
-            />
+            <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+              <FollowButtonAction
+                contentType="research_update"
+                item={researchUpdate}
+              />
+            </AuthWrapper>
           }
         />
       )}

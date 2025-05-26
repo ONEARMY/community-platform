@@ -171,5 +171,8 @@ Cypress.Commands.add(
 )
 
 Cypress.Commands.add('expectNoNewNotifications', () => {
+  localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
+  cy.wait(1000)
+
   cy.get('[data-cy=notifications-no-new-messages]')
 })

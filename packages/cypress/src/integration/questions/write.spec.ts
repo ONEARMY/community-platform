@@ -84,7 +84,9 @@ describe('[Question]', () => {
       cy.step('All ready for a discussion')
       cy.contains('0 comments')
       cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion')
-      cy.get('[data-cy=follow-button]').contains('Following')
+
+      // Currently beta testers only:
+      // cy.get('[data-cy=follow-button]').contains('Following')
 
       cy.step('Edit question')
       cy.get('[data-cy=edit]')

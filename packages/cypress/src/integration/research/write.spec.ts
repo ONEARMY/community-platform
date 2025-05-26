@@ -268,7 +268,8 @@ describe('[Research]', () => {
       cy.contains('0 comments')
       cy.get('[data-cy="HideDiscussionContainer:button"]').click()
       cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion')
-      cy.get('[data-cy=follow-button]').contains('Following')
+      // Currently beta testers only:
+      // cy.get('[data-cy=follow-button]').contains('Following')
       cy.contains('0 comments')
     })
 

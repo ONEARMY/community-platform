@@ -10,6 +10,8 @@ import type {
   DBComment,
   DBProfile,
   DBQuestion,
+  DBResearchItem,
+  DBResearchUpdate,
   INotification,
   IUserDB,
   NotificationType,
@@ -49,6 +51,43 @@ const sendCommentNotification = async (
       )
     }),
   )
+}
+
+const sendResearchUpdateNotification = async (
+  client: SupabaseClient,
+  research: DBResearchItem,
+  researchUpdate: DBResearchUpdate,
+  triggeredBy: DBProfile,
+) => {
+  // The join creates an incorrect type, so going to any
+  const { data }: { data: any[] | null } = await client
+    .from('subscribers')
+    .select('id, user:profiles(username)')
+    .eq('content_id', researchUpdate.research_id)
+    .eq('content_type', 'research')
+
+  const profileIds = data?.map((subscriber) => subscriber.user.username).flat()
+
+  const recipientsToNotify = new Set<string>(profileIds)
+  if (researchUpdate.created_by) {
+    recipientsToNotify.add(researchUpdate.created_by.toString())
+  }
+
+  const url = `/research/${research.slug}/#update_${researchUpdate.id}`
+
+  Promise.all(
+    Array.from(recipientsToNotify).map((recipient) => {
+      _triggerNotification(
+        recipient,
+        'research_update',
+        researchUpdate.title,
+        triggeredBy,
+        url,
+      )
+    }),
+  )
+
+  return
 }
 
 const _getSourceData = async (
@@ -101,7 +140,6 @@ const _triggerNotification = async (
     const notifications = user.notifications
       ? [...user.notifications, newNotification]
       : [newNotification]
-
     await _updateUserNotifications(user, notifications)
   } catch (err) {
     console.error(err)
@@ -116,11 +154,12 @@ const _updateUserNotifications = async (
   const dbRef = doc(firestore, DB_ENDPOINTS.users, user._id)
 
   await updateDoc(dbRef, {
-    _id: user.userName,
+    ...user,
     notifications,
   })
 }
 
 export const notificationsService = {
   sendCommentNotification,
+  sendResearchUpdateNotification,
 }

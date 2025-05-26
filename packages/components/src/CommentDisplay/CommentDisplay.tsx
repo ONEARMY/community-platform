@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { Box, Flex, Text } from 'theme-ui'
 
+import { ActionSet } from '../ActionSet/ActionSet'
 import { Button } from '../Button/Button'
 import { CommentAvatar } from '../CommentAvatar/CommentAvatar'
 import { CommentBody } from '../CommentBody/CommentBody'
@@ -107,13 +108,8 @@ export const CommentDisplay = (props: IProps) => {
                 </Text>
               </Flex>
 
-              {isEditable && (
-                <Flex
-                  sx={{
-                    alignItems: 'flex-end',
-                    gap: 2,
-                  }}
-                >
+              <ActionSet>
+                {isEditable && (
                   <Button
                     type="button"
                     data-cy={`${itemType}: edit button`}
@@ -122,8 +118,10 @@ export const CommentDisplay = (props: IProps) => {
                     icon="edit"
                     onClick={() => setShowEditModal(true)}
                   >
-                    edit
+                    Edit
                   </Button>
+                )}
+                {isEditable && (
                   <Button
                     type="button"
                     data-cy={`${itemType}: delete button`}
@@ -132,10 +130,10 @@ export const CommentDisplay = (props: IProps) => {
                     icon="delete"
                     onClick={() => setShowDeleteModal(true)}
                   >
-                    delete
+                    Delete
                   </Button>
-                </Flex>
-              )}
+                )}
+              </ActionSet>
             </Flex>
             <CommentBody body={comment.comment} />
           </Flex>

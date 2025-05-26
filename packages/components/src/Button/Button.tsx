@@ -89,6 +89,8 @@ export const Button = (props: BtnProps) => {
     Object.prototype.hasOwnProperty.call(buttonSizeProps, prop),
   )
 
+  const isSubtle = props.variant === 'subtle'
+
   return (
     <ThemeUiButton
       {...sanitizedProps(props, [
@@ -122,6 +124,7 @@ export const Button = (props: BtnProps) => {
             lineHeight: 0,
             transform: `translateY(-1px) scale(${getScaleTransform(size)})`,
             pointerEvents: 'none',
+            opacity: isSubtle ? 0.8 : 1,
           }}
         >
           <Icon

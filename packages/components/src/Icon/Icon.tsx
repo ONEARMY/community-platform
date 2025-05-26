@@ -199,6 +199,7 @@ export const Icon = (props: Props) => {
         opacity: props.opacity ?? '1',
         '& svg': {
           fontSize: definedSize,
+          fill: props.color,
         },
         display: 'flex',
         alignItems: 'center',

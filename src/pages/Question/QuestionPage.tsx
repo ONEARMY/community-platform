@@ -9,9 +9,11 @@ import {
   TagList,
   UsefulStatsButton,
 } from 'oa-components'
+import { type IUser, type Question, UserRole } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
@@ -22,8 +24,6 @@ import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
-
-import type { IUser, Question } from 'oa-shared'
 
 interface IProps {
   question: Question
@@ -215,11 +215,13 @@ export const QuestionPage = observer(({ question }: IProps) => {
               sourceId={question.id}
               sourceType="questions"
               followButton={
-                <FollowButtonAction
-                  contentType="questions"
-                  item={question}
-                  setSubscribersCount={setSubscribersCount}
-                />
+                <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+                  <FollowButtonAction
+                    contentType="questions"
+                    item={question}
+                    setSubscribersCount={setSubscribersCount}
+                  />
+                </AuthWrapper>
               }
             />
           </Card>

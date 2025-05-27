@@ -15,6 +15,8 @@ import type { UserCreatedDocs } from 'src/pages/User/types'
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
 
+  //REMOVE ME
+
   const username = params.id as string
   const [profile, projects, research, questions] = await Promise.all([
     userService.getById(username),

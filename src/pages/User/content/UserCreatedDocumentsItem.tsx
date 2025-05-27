@@ -3,7 +3,7 @@ import { Icon } from 'oa-components'
 import { Flex, Heading, Text } from 'theme-ui'
 
 interface IProps {
-  type: 'library' | 'research'
+  type: 'library' | 'research' | 'questions'
   item: {
     id: string | number
     title: string
@@ -30,6 +30,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
         key={id}
         style={{ width: '100%' }}
         data-testid={`${type}-link`}
+        data-cy={`${item.slug}-link`}
       >
         <Flex
           pb={1}
@@ -55,7 +56,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
               justifyContent: 'flex-end',
             }}
           >
-            {usefulVotes > 0 && (
+            {
               <Text
                 color="black"
                 ml={3}
@@ -70,7 +71,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
                 {usefulVotes}
                 <Icon glyph="star-active" ml={1} />
               </Text>
-            )}
+            }
           </Flex>
         </Flex>
       </Link>

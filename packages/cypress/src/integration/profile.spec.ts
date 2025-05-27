@@ -209,6 +209,59 @@ describe('[Profile]', () => {
       cy.visit(`/u/${profile_views.userName}`)
       cy.get('[data-testid=profile-views-stat]').should('not.exist')
     })
+
+    it('should display questions count on profile tab', () => {
+      setIsPreciousPlastic()
+      cy.signIn(subscriber.email, subscriber.password)
+
+      cy.visit(`/u/${subscriber.userName}`)
+
+      cy.get('[data-testid=questions-link]').should('be.visible')
+      cy.get('[data-testid=questions-stat]')
+        .should('be.visible')
+        .invoke('text')
+        .and('match', /^Questions: \d+$/)
+    })
+
+    it('should navigate to questions page when clicking questions count on profile tab', () => {
+      setIsPreciousPlastic()
+      cy.signIn(subscriber.email, subscriber.password)
+
+      cy.visit(`/u/${subscriber.userName}`)
+
+      cy.get('[data-testid=questions-link]').click()
+      cy.url().should('include', `questions`)
+    })
+
+    it('should show questions in contributions tab', () => {
+      setIsPreciousPlastic()
+      cy.signIn(subscriber.email, subscriber.password)
+
+      cy.visit(`/u/${subscriber.userName}`)
+
+      cy.get('[data-cy=ContribTab]').click()
+      cy.get('[data-testid="question-contributions"]').should('be.visible')
+      cy.get('[data-testid="question-contributions"]')
+        .contains('The first test question?')
+        .should('be.visible')
+    })
+
+    it('should link to question page when question in clicked in contributions tab', () => {
+      setIsPreciousPlastic()
+      cy.signIn(subscriber.email, subscriber.password)
+
+      cy.visit(`/u/${subscriber.userName}`)
+      cy.get('[data-cy=ContribTab]').click()
+
+      cy.get('[data-cy="the-first-test-question-link"]').click()
+      cy.url().should(
+        'include',
+        `/questions/the-first-test-question?utm_source=user-profile`,
+      )
+      cy.get('[data-cy="question-title"]')
+        .should('be.visible')
+        .contains('The first test question?')
+    })
   })
 })
 

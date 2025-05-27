@@ -32,7 +32,8 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
 
   const hasContactOption =
     isUserContactable(user) || (links && Object.keys(links).length !== 0)
-  const hasContributed = docs?.projects.length + docs?.research.length > 0
+  const hasContributed =
+    docs?.projects.length + docs?.research.length + docs?.questions.length > 0
   const hasImpacted = !!impact
   const hasProfile =
     about || (tags && Object.keys(tags).length !== 0) || hasContributed

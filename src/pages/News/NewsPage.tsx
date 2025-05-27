@@ -7,8 +7,10 @@ import {
   DisplayMarkdown,
   TagList,
 } from 'oa-components'
+import { type IUser, type News, UserRole } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
@@ -17,8 +19,6 @@ import { AspectRatio, Box, Button, Card, Flex, Heading, Image } from 'theme-ui'
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
-
-import type { IUser, News } from 'oa-shared'
 
 interface IProps {
   news: News
@@ -156,11 +156,15 @@ export const NewsPage = observer(({ news }: IProps) => {
               sourceId={news.id}
               sourceType="news"
               followButton={
-                <FollowButtonAction
-                  contentType="news"
-                  item={news}
-                  setSubscribersCount={setSubscribersCount}
-                />
+                <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+                  <FollowButtonAction
+                    labelFollow="Follow Comments"
+                    labelUnfollow="Following Comments"
+                    contentType="news"
+                    item={news}
+                    setSubscribersCount={setSubscribersCount}
+                  />
+                </AuthWrapper>
               }
             />
           </Card>

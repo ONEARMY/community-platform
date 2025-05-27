@@ -76,6 +76,8 @@ const CollapsableCommentSection = (props: Props) => {
           followButton={
             <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
               <FollowButtonAction
+                labelFollow="Follow Comments"
+                labelUnfollow="Following Comments"
                 contentType="research_update"
                 item={researchUpdate}
               />

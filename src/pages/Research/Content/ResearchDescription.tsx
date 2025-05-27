@@ -100,6 +100,8 @@ const ResearchDescription = ({
                       hasUserSubscribed={props.hasUserSubscribed}
                       isLoggedIn={!!props.loggedInUser}
                       onFollowClick={props.onFollowClick}
+                      tooltipFollow="Follow to be notified about new updates"
+                      tooltipUnfollow="Unfollow to stop be notified about new updates"
                     />
                   </>
                 )}

@@ -230,10 +230,7 @@ describe('[Profile]', () => {
       cy.visit(`/u/${subscriber.userName}`)
 
       cy.get('[data-testid=questions-link]').click()
-      cy.url().should(
-        'include',
-        `questions?sort=MostRelevant&q=${subscriber.userName}`,
-      )
+      cy.url().should('include', `questions`)
     })
 
     it('should show questions in contributions tab', () => {

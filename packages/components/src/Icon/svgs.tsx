@@ -10,6 +10,9 @@ import contactSVG from '../../assets/icons/contact.svg'
 import closeSVG from '../../assets/icons/cross-close.svg'
 import deleteSVG from '../../assets/icons/delete.svg'
 import discussionSVG from '../../assets/icons/discussion.svg'
+import discussionFollowSVG from '../../assets/icons/discussion-follow.svg'
+import discussionUnfollowSVG from '../../assets/icons/discussion-unfollow.svg'
+import editSVG from '../../assets/icons/edit.svg'
 import employeeSVG from '../../assets/icons/employee.svg'
 import eyeSVG from '../../assets/icons/eye.svg'
 import eyeCrossedSVG from '../../assets/icons/eye-crossed.svg'
@@ -49,6 +52,7 @@ import plasticSVG from '../../assets/icons/plastic.svg'
 import productsSVG from '../../assets/icons/products.svg'
 import profileSVG from '../../assets/icons/profile.svg'
 import recyclingSVG from '../../assets/icons/recycling.svg'
+import reportSVG from '../../assets/icons/report.svg'
 import revenueSVG from '../../assets/icons/revenue.svg'
 import slidersSVG from '../../assets/icons/sliders.svg'
 import starterKitsSVG from '../../assets/icons/starter-kits.svg'
@@ -92,6 +96,9 @@ export const iconMap = {
   delete: <ImageIcon src={deleteSVG} />,
   discord: <ImageIcon src={discordSVG} />,
   discussion: <ImageIcon src={discussionSVG} />,
+  discussionFollow: <ImageIcon src={discussionFollowSVG} />,
+  discussionUnfollow: <ImageIcon src={discussionUnfollowSVG} />,
+  edit: <ImageIcon src={editSVG} />,
   emailOutline: <ImageIcon src={emailOutlineSVG} />,
   employee: <ImageIcon src={employeeSVG} />,
   flagUnknown: <ImageIcon src={flagUnknownSVG} />,
@@ -117,6 +124,7 @@ export const iconMap = {
   profile: <ImageIcon src={profileSVG} />,
   products: <ImageIcon src={productsSVG} />,
   recycling: <ImageIcon src={recyclingSVG} />,
+  report: <ImageIcon src={reportSVG} />,
   revenue: <ImageIcon src={revenueSVG} />,
   search: <ImageIcon src={searchSVG} />,
   show: <ImageIcon src={eyeSVG} />,

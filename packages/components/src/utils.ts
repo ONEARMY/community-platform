@@ -162,6 +162,7 @@ export const fakeResearchUpdate = (
   createdAt: faker.date.past(),
   modifiedAt: null,
   author: fakeAuthorSB(),
+  researchId: faker.datatype.number(100),
   commentCount: faker.datatype.number(100),
   deleted: false,
   description: faker.random.words(12),

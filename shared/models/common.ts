@@ -42,6 +42,7 @@ export type DiscussionContentTypes =
   | 'news'
 
 export type SubscribableContentTypes =
+  | 'comments'
   | 'questions'
   | 'projects'
   | 'research'

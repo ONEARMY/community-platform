@@ -142,7 +142,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         {},
         {
           status: 400,
-          statusText: imageValidation.error.message,
+          statusText: imageValidation.error.message || 'Error uploading image',
         },
       )
     }

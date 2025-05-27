@@ -130,7 +130,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 
           {props.questionCount > 0 && (
             <InternalLink
-              to={'/questions?sort=MostRelevant&q=' + props.userName}
+              to={'/questions'}
               sx={{ color: 'black' }}
               data-testid="questions-link"
             >

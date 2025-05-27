@@ -4,23 +4,23 @@ import { generateAlphaNumeric } from '../../utils/TestUtils'
 
 describe('[News.Write]', () => {
   describe('[Create a news item]', () => {
-    const initialRandomId = generateAlphaNumeric(8).toLowerCase()
-
-    const initialTitle = `${initialRandomId} Amazing new thing`
-    const initialExpectedSlug = `${initialRandomId}-amazing-new-thing`
-    const initialNewsBodyOne = 'Yo.'
-    const initialNewsBodyTwo = "We've done something."
-    const initialNewsBodyThree = 'We saved so much plastic.'
-    const initialSummary = `${initialNewsBodyOne} ${initialNewsBodyTwo} ${initialNewsBodyThree}`
-    const category = 'Moulds'
-    const tag1 = 'product'
-    const tag2 = 'workshop'
-    const updatedTitle = `Still an amazing thing ${initialRandomId}`
-    const updatedExpectedSlug = `still-an-amazing-thing-${initialRandomId}`
-    const updatedNewsBody = 'PLUS sparkles!'
-    const updatedSummary = `${updatedNewsBody} ${initialNewsBodyOne} ${initialNewsBodyTwo}`
-
     it('[By Authenticated]', () => {
+      const initialRandomId = generateAlphaNumeric(8).toLowerCase()
+
+      const initialTitle = `${initialRandomId} Amazing new thing`
+      const initialExpectedSlug = `${initialRandomId}-amazing-new-thing`
+      const initialNewsBodyOne = 'Yo.'
+      const initialNewsBodyTwo = "We've done something."
+      const initialNewsBodyThree = 'We saved so much plastic.'
+      const initialSummary = `${initialNewsBodyOne} ${initialNewsBodyTwo} ${initialNewsBodyThree}`
+      const category = 'Moulds'
+      const tag1 = 'product'
+      const tag2 = 'workshop'
+      const updatedTitle = `Still an amazing thing ${initialRandomId}`
+      const updatedExpectedSlug = `still-an-amazing-thing-${initialRandomId}`
+      const updatedNewsBody = 'PLUS sparkles!'
+      const updatedSummary = `${updatedNewsBody} ${initialNewsBodyOne} ${initialNewsBodyTwo}`
+
       cy.visit('/news')
       const user = users.admin
       cy.signIn(user.email, user.password)

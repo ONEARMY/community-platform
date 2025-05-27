@@ -8,6 +8,8 @@ import {
   Modal,
 } from 'oa-components'
 import { UserRole } from 'oa-shared'
+import { AuthWrapper } from 'src/common/AuthWrapper'
+import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Card, Flex } from 'theme-ui'
 
@@ -67,11 +69,11 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
   return (
     <Flex
       id={`comment:${comment.id}`}
-      data-cy={isEditable ? `Own${item}` : item}
+      data-cy={isEditable ? `OwnCommentItem` : 'CommentItem'}
       sx={{ flexDirection: 'column' }}
     >
       <Card
-        sx={{ flexDirection: 'column', padding: 3 }}
+        sx={{ flexDirection: 'column', padding: 3, overflow: 'inherit' }}
         ref={commentRef as any}
         variant="borderless"
       >
@@ -81,6 +83,34 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
           comment={comment}
           setShowDeleteModal={setShowDeleteModal}
           setShowEditModal={setShowEditModal}
+          followButton={
+            <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+              <FollowButtonAction
+                contentType="comments"
+                iconFollow="discussionFollow"
+                iconUnfollow="discussionUnfollow"
+                item={comment}
+                labelFollow="Follow replies"
+                labelUnfollow="Unfollow replies"
+                sx={{ fontSize: 1 }}
+                variant="subtle"
+              />
+            </AuthWrapper>
+          }
+          followButtonIcon={
+            <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+              <FollowButtonAction
+                contentType="comments"
+                item={comment}
+                labelFollow="Follow replies"
+                labelUnfollow="Unfollow replies"
+                showIconOnly
+                tooltipFollow="Follow new replies"
+                tooltipUnfollow="Unfollow new replies"
+                variant="subtle"
+              />
+            </AuthWrapper>
+          }
         />
 
         <Flex

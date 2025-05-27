@@ -6,9 +6,13 @@ import type {
   DBSubscriber,
   NewNotificationData,
   NotificationActionType,
+  SubscribableContentTypes,
 } from 'oa-shared'
 
-const setSourceContentType = async (comment, client) => {
+const setSourceContentType = async (
+  comment: DBComment,
+  client: SupabaseClient,
+) => {
   if (!(comment.source_type === 'research_update')) {
     return comment.source_id
   }
@@ -18,7 +22,7 @@ const setSourceContentType = async (comment, client) => {
     .eq('id', comment.source_id)
     .single()
 
-  return researchUpdate.data.research_id
+  return researchUpdate.data?.research_id
 }
 
 const createNotificationNewComment = async (
@@ -29,36 +33,49 @@ const createNotificationNewComment = async (
     return
   }
 
-  const subscribedUsers = await client
-    .from('subscribers')
-    .select('user_id')
-    .eq('content_id', comment.source_id)
-    .eq('content_type', comment.source_type)
-
-  if (!subscribedUsers.data) {
-    return
-  }
-
-  subscribedUsers.data.map(async (subscriber: Partial<DBSubscriber>) => {
+  try {
     const isReply = !!comment.parent_id
-    const isResearchUpdate = comment.source_type === 'research_update'
+    const contentId = isReply ? comment.parent_id : comment.source_id
+    const contentType: SubscribableContentTypes = isReply
+      ? 'comments'
+      : comment.source_type
 
-    const sourceContentId = await setSourceContentType(comment, client)
+    const subscribedUsers = await client
+      .from('subscribers')
+      .select('user_id')
+      .eq('content_id', contentId)
+      .eq('content_type', contentType)
 
-    const notification: NewNotificationData = {
-      actionType: 'newComment' as NotificationActionType,
-      ownedById: subscriber.user_id!,
-      contentId: comment.id!,
-      sourceContentType: isResearchUpdate ? 'research' : comment.source_type!,
-      sourceContentId: sourceContentId,
-      parentContentId: isResearchUpdate ? comment.source_id! : null,
-      triggeredById: comment.created_by!,
-      contentType: isReply ? 'reply' : 'comment',
-      parentCommentId: isReply ? comment.parent_id : null,
+    if (!subscribedUsers.data) {
+      return
     }
 
-    createNotification(client, notification, subscriber.user_id!)
-  })
+    subscribedUsers.data.map(async (subscriber: Partial<DBSubscriber>) => {
+      const isResearchUpdate = comment.source_type === 'research_update'
+      const sourceContentId = await setSourceContentType(comment, client)
+
+      const notification: NewNotificationData = {
+        actionType: 'newComment' as NotificationActionType,
+        ownedById: subscriber.user_id!,
+        contentId: comment.id!,
+        sourceContentType: isResearchUpdate ? 'research' : comment.source_type!,
+        sourceContentId: sourceContentId,
+        parentContentId: isResearchUpdate ? comment.source_id! : null,
+        triggeredById: comment.created_by!,
+        contentType: isReply ? 'reply' : 'comment',
+        parentCommentId: isReply ? comment.parent_id : null,
+      }
+
+      createNotification(client, notification, subscriber.user_id!)
+    })
+  } catch (error) {
+    console.log(error)
+
+    return Response.json(
+      { error },
+      { status: 500, statusText: 'Error creating notification' },
+    )
+  }
 }
 
 const createNotification = async (
@@ -106,6 +123,5 @@ const createNotification = async (
 }
 
 export const notificationsSupabaseServiceServer = {
-  createNotification,
   createNotificationNewComment,
 }

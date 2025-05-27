@@ -258,13 +258,14 @@ Cypress.Commands.add('addComment', (newComment: string) => {
 Cypress.Commands.add(
   'editDiscussionItem',
   (element, oldComment, updatedNewComment) => {
-    cy.get(`[data-cy="${element}: edit button"]`).last().click()
+    cy.get('[data-cy="ActionSetButton"]').last().click()
+    cy.get(`[data-cy="${element}: edit button"]`).click()
     cy.get('[data-cy=edit-comment]').clear().type(updatedNewComment)
     cy.get('[data-cy=edit-comment-submit]').click()
 
     cy.get('[data-cy=edit-comment]').should('not.exist')
     cy.get(`[data-cy=Own${element}]`).contains(updatedNewComment)
-    cy.get(`[data-cy=Own${element}]`).contains('Updated less than a minute ago')
+    cy.get(`[data-cy=Own${element}]`).contains('less than a minute ago')
     cy.get(`[data-cy=Own${element}]`).contains(oldComment).should('not.exist')
   },
 )

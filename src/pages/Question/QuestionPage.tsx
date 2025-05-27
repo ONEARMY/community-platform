@@ -217,6 +217,8 @@ export const QuestionPage = observer(({ question }: IProps) => {
               followButton={
                 <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
                   <FollowButtonAction
+                    labelFollow="Follow Comments"
+                    labelUnfollow="Following Comments"
                     contentType="questions"
                     item={question}
                     setSubscribersCount={setSubscribersCount}

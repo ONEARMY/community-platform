@@ -1,6 +1,8 @@
 // This is basically an identical set of steps to the discussion tests for
 // questions, projects and research. Any changes here should be replicated there.
 
+import { UserRole } from 'oa-shared'
+
 import { MOCK_DATA } from '../../data'
 import { generateNewUserDetails } from '../../utils/TestUtils'
 
@@ -14,38 +16,42 @@ describe('[News.Discussions]', () => {
   })
 
   it('allows authenticated users to contribute to discussions', () => {
-    const visitor = generateNewUserDetails()
+    localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
+
+    const commenter = generateNewUserDetails()
     const news = MOCK_DATA.news[2]
 
-    const newComment = `An interesting new. The answer must be... ${visitor.username}`
-    const updatedNewComment = `An interesting new. The answer must be that when the sky is red, the apocalypse _might_ be on the way. Love, ${visitor.username}`
-    const newReply = `Thanks Dave and Ben. What does everyone else think? - ${visitor.username}`
-    const updatedNewReply = `Anyone else? Yours truly ${visitor.username}`
+    const newComment = `An interesting new. The answer must be... ${commenter.username}`
+    const updatedNewComment = `An interesting new. The answer must be that when the sky is red, the apocalypse _might_ be on the way. Love, ${commenter.username}`
+    const newReply = `Thanks Dave and Ben. What does everyone else think? - ${commenter.username}`
+    const updatedNewReply = `Anyone else? Yours truly ${commenter.username}`
     const newsPath = `/news/${news.slug}`
 
-    cy.signUpNewUser(visitor)
+    cy.signUpNewUser(commenter)
 
     cy.step("Can't add comment with an incomplete profile")
     cy.visit(newsPath)
+
     cy.get('[data-cy=comments-form]').should('not.exist')
     cy.get('[data-cy=comments-incomplete-profile-prompt]').should('be.visible')
 
     cy.step('Can add comment when profile is complete')
-    cy.completeUserProfile(visitor.username)
+    cy.completeUserProfile(commenter.username)
     cy.visit(newsPath)
     cy.get('[data-cy=comments-incomplete-profile-prompt]').should('not.exist')
-    cy.get('[data-cy=follow-button]').contains('Follow Discussion')
+
+    cy.get('[data-cy=follow-button]').contains('Follow Comments')
     cy.addComment(newComment)
     cy.reload()
-    cy.get('[data-cy=follow-button]').contains('Following')
+    cy.get('[data-cy=follow-button]').contains('Following Comments')
 
     cy.step('Can edit their comment')
     cy.editDiscussionItem('CommentItem', newComment, updatedNewComment)
 
     cy.step('Another user can add reply')
-    const secondCommentor = generateNewUserDetails()
+    const replier = generateNewUserDetails()
     cy.logout()
-    cy.signUpCompletedUser(secondCommentor)
+    cy.signUpCompletedUser(replier)
     cy.visit(newsPath)
     cy.addReply(newReply)
     cy.wait(1000)
@@ -54,21 +60,21 @@ describe('[News.Discussions]', () => {
     cy.step('Can edit their reply')
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
     cy.step('Another user can leave a reply')
-    const secondReply = `Quick reply. ${visitor.username}`
+    const secondReply = `Quick reply. ${commenter.username}`
 
-    cy.step('First commentor can respond')
+    cy.step('First commenter can respond')
     cy.logout()
-    cy.signIn(visitor.email, visitor.password)
+    cy.signIn(commenter.email, commenter.password)
 
-    cy.step('Notification generated for reply')
+    cy.step('Notification generated for reply from replier')
 
     cy.expectNewNotification({
       content: updatedNewReply,
       path: newsPath,
       title: news.title,
-      username: secondCommentor.username,
+      username: replier.username,
     })
-
+    cy.pause()
     cy.visit(newsPath)
     cy.expectNoNewNotifications()
 

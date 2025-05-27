@@ -29,6 +29,7 @@ export const ActionSet = ({ children }: IProps) => {
         }}
       >
         <Button
+          data-cy="ActionSetButton"
           icon="more-vert"
           onClick={onClick}
           variant="subtle"
@@ -43,13 +44,20 @@ export const ActionSet = ({ children }: IProps) => {
               position: 'absolute',
               right: 0,
               zIndex: 1,
-              alignItems: 'stretch',
-              flexDirection: 'column',
               padding: 2,
               gap: 2,
+              minWidth: '190px',
             }}
           >
-            {...children}
+            <Flex
+              sx={{
+                alignItems: 'stretch',
+                justifyItems: 'stretch',
+                flexDirection: 'column',
+              }}
+            >
+              {...children}
+            </Flex>
           </Card>
         )}
       </Flex>

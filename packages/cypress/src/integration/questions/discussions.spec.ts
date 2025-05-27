@@ -1,6 +1,8 @@
 // This is basically an identical set of steps to the discussion tests for
 // projects, research and news. Any changes here should be replicated there.
 
+import { UserRole } from 'oa-shared'
+
 import { MOCK_DATA } from '../../data'
 import { generateNewUserDetails } from '../../utils/TestUtils'
 
@@ -14,6 +16,8 @@ describe('[Questions.Discussions]', () => {
   })
 
   it('allows authenticated users to contribute to discussions', () => {
+    localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
+
     const visitor = generateNewUserDetails()
     const question = MOCK_DATA.questions[2]
 

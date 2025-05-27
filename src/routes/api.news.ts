@@ -13,7 +13,7 @@ import { convertToSlug } from 'src/utils/slug'
 import { contentServiceServer } from '../services/contentService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { User } from '@supabase/supabase-js'
+import type { AuthError, User } from '@supabase/supabase-js'
 import type { DBNews, DBProfile } from 'oa-shared'
 import type { NewsSortOption } from 'src/pages/News/NewsSortOptions'
 
@@ -110,12 +110,14 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const {
       data: { user },
+      error,
     } = await client.auth.getUser()
 
     const { valid, status, statusText } = await validateRequest(
       request,
       user,
       data,
+      error,
     )
 
     if (!valid) {
@@ -227,9 +229,21 @@ function notifyDiscord(news: News, profile: DBProfile, siteUrl: string) {
   )
 }
 
-async function validateRequest(request: Request, user: User | null, data: any) {
+async function validateRequest(
+  request: Request,
+  user: User | null,
+  data: any,
+  authError: AuthError | null,
+) {
+  if (authError) {
+    return {
+      status: authError?.status,
+      statusText: authError?.message || 'Unknown authentication error',
+    }
+  }
+
   if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
+    return { status: 401, statusText: 'Unauthorized: No user found' }
   }
 
   if (request.method !== 'POST') {

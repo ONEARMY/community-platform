@@ -2,11 +2,14 @@ import { users } from 'oa-shared/mocks/data'
 
 import { generateAlphaNumeric } from '../../utils/TestUtils'
 
+let initialRandomId
+
 describe('[News.Write]', () => {
   describe('[Create a news item]', () => {
+    beforeEach(() => {
+      initialRandomId = generateAlphaNumeric(8).toLowerCase()
+    })
     it('[By Authenticated]', () => {
-      const initialRandomId = generateAlphaNumeric(8).toLowerCase()
-
       const initialTitle = `${initialRandomId} Amazing new thing`
       const initialExpectedSlug = `${initialRandomId}-amazing-new-thing`
       const initialNewsBodyOne = 'Yo.'

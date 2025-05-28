@@ -17,50 +17,60 @@ import { Card, Flex, Heading, Label, Text } from 'theme-ui'
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { client, headers } = createSupabaseServerClient(request)
   const url = new URL(request.url)
-
   const error = url.searchParams.get('error_description')
+  const code = url.searchParams.get('code')
 
   if (error) {
     return Response.json({ error })
   }
 
-  const code = url.searchParams.get('code')
+  // If there's a code, show the form - no need to pass the code
   if (code) {
-    const result = await client.auth.exchangeCodeForSession(code)
-
-    if (result.error) {
-      return Response.json(
-        { error: 'Your reset link has expired' },
-        { headers },
-      )
-    }
-
-    return Response.json({}, { headers })
+    return Response.json({})
   }
 
   return redirect('/')
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const { client } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request)
+  const url = new URL(request.url)
 
   const formData = await request.formData()
   const password = formData.get('password') as string
   const passwordRepeat = formData.get('passwordRepeat') as string
 
+  // Get the code from URL params (it should still be there)
+  const code = url.searchParams.get('code')
+
+  if (!code) {
+    return Response.json({ error: 'Reset code is missing' }, { status: 400 })
+  }
+
   if (password !== passwordRepeat) {
     return Response.json({ error: 'Passwords do not match' }, { status: 400 })
   }
 
+  // Exchange the code for a session first
+  const sessionResult = await client.auth.exchangeCodeForSession(code)
+
+  if (sessionResult.error) {
+    return Response.json(
+      { error: 'Your reset link has expired or is invalid' },
+      { status: 400 },
+    )
+  }
+
+  // Now update the password
   const result = await client.auth.updateUser({ password })
 
   if (result.error) {
     return Response.json({ error: result.error.message }, { status: 500 })
   }
 
-  return redirect('/')
+  // Redirect with the session headers to automatically log in the user
+  return redirect('/', { headers })
 }
 
 export default function Index() {

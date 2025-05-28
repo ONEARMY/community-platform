@@ -2,11 +2,14 @@ import { users } from 'oa-shared/mocks/data'
 
 import { generateAlphaNumeric } from '../../utils/TestUtils'
 
+let initialRandomId
+
 describe('[News.Write]', () => {
   describe('[Create a news item]', () => {
+    beforeEach(() => {
+      initialRandomId = generateAlphaNumeric(8).toLowerCase()
+    })
     it('[By Authenticated]', () => {
-      const initialRandomId = generateAlphaNumeric(8).toLowerCase()
-
       const initialTitle = `${initialRandomId} Amazing new thing`
       const initialExpectedSlug = `${initialRandomId}-amazing-new-thing`
       const initialNewsBodyOne = 'Yo.'
@@ -80,7 +83,8 @@ describe('[News.Write]', () => {
       cy.step('All ready for a discussion')
       cy.contains('0 comments')
       cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion')
-      cy.get('[data-cy=follow-button]').contains('Following')
+      // Currently beta testers only:
+      // cy.get('[data-cy=follow-button]').contains('Following Comments')
 
       cy.step('Edit fields')
       cy.get('[data-cy=edit]')

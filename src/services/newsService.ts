@@ -38,11 +38,7 @@ const upsert = async (id: number | null, form: NewsFormData) => {
         })
 
   if (response.status !== 200 && response.status !== 201) {
-    if (response.status === 409) {
-      throw new Error('This news has already been published', { cause: 409 })
-    }
-
-    throw new Error('Error saving news', { cause: 500 })
+    throw new Error(`Error saving news: ${response.statusText}`, { cause: 500 })
   }
 
   const data: { news: DBNews } = await response.json()

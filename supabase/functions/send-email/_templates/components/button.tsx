@@ -1,17 +1,14 @@
 import React from 'react'
-import { Button as ButtonComp } from '@react-email/components'
+import { Button as ButtonComp, Section } from '@react-email/components'
 
 const button = {
-  alignText: 'center',
-  backgroundColor: '#e9475a',
+  backgroundColor: '#E2EDF7',
   borderRadius: '15px',
   border: '2px solid #27272c',
-  color: '#fff',
+  color: '#27272c',
   fontSize: '16px',
-  fontWeight: 'bold',
   padding: '19px 30px',
   textDecoration: 'none',
-  display: 'block',
 }
 
 interface IProps {
@@ -20,7 +17,9 @@ interface IProps {
 }
 
 export const Button = ({ children, href }: IProps) => (
-  <ButtonComp style={button} href={href} target="_blank">
-    {children}
-  </ButtonComp>
+  <Section style={{ textAlign: 'center' }}>
+    <ButtonComp style={button} href={href} target="_blank">
+      {children}
+    </ButtonComp>
+  </Section>
 )

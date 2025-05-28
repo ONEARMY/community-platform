@@ -1,4 +1,4 @@
-import { type DBProject, Project } from 'oa-shared'
+import { Project, ProjectStep } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { ITEMS_PER_PAGE } from 'src/pages/Library/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
@@ -8,7 +8,8 @@ import { storageServiceServer } from 'src/services/storageService.server'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
-import type { User } from '@supabase/supabase-js'
+import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { DBProfile, DBProject, DBProjectStep } from 'oa-shared'
 import type { LibrarySortOption } from 'src/pages/Library/Content/List/LibrarySortOptions'
 
 // runs on the server
@@ -91,8 +92,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
         : null,
+      fileLink: formData.has('fileLink')
+        ? (formData.get('fileLink') as string)
+        : null,
     }
-    const uploadedImage = formData.get('coverImage') as File | null
+    const uploadedCoverImage = formData.get('coverImage') as File | null
+    const uploadedFiles = formData.get('files') as File[] | null
 
     const { client, headers } = createSupabaseServerClient(request)
 
@@ -130,50 +135,52 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { status: 400, statusText: 'User not found' })
     }
 
-    const projectResult = await client
-      .from('projects')
-      .insert({
-        created_by: profile.id,
-        title: data.title,
-        description: data.description,
-        slug,
-        category: data.category,
-        tags: data.tags,
-        is_draft: data.isDraft,
-        steps: data.steps,
-        file_link: data.fileLink,
-        tenant_id: process.env.TENANT_ID,
-      })
-      .select()
+    // 1. Create Project
+    const projectDb = await createProject(client, data, profile, slug)
+    const project = Project.fromDB(projectDb, [])
 
-    if (projectResult.error || !projectResult.data) {
-      throw projectResult.error
+    // 2. Upload and set project files and cover image
+    if (uploadedCoverImage) {
+      await uploadAndUpdateCoverImage(
+        uploadedCoverImage,
+        `library/${project.id}`,
+        project,
+        client,
+      )
     }
 
-    const project = Project.fromDB(projectResult.data[0], [])
+    if (uploadedFiles) {
+      await uploadAndUpdateFiles(
+        uploadedFiles,
+        `library/${project.id}`,
+        project,
+        client,
+      )
+    }
 
-    if (uploadedImage) {
-      const mediaResult = await storageServiceServer.uploadImage(
-        [uploadedImage],
-        `projects/${project.id}`,
+    // 3. Create Steps
+    const stepCount = parseInt(formData.get('stepCount') as string)
+
+    for (let i = 0; i < stepCount; i++) {
+      const images = formData.getAll(`steps[${i}].images`) as File[]
+
+      const stepDb = await createStep(client, {
+        title: formData.get(`steps[${i}].title`) as string,
+        description: formData.get(`steps[${i}].description`) as string,
+        videoUrl: (formData.get(`steps[${i}].videoUrl`) as string) || null,
+        projectId: projectDb.id,
+      })
+      const step = ProjectStep.fromDB(stepDb)
+
+      // 4. Upload and set images of each Step
+      await uploadAndUpdateStepImage(
+        images,
+        `library/${project.id}`,
+        step,
         client,
       )
 
-      if (mediaResult?.errors) {
-        console.error(mediaResult.errors)
-      }
-
-      if (mediaResult?.media && mediaResult.media.length > 0) {
-        const result = await client
-          .from('projects')
-          .update({ image: mediaResult.media[0] })
-          .eq('id', project.id)
-          .select()
-
-        if (result.data) {
-          project.coverImage = result.data[0].image
-        }
-      }
+      project.steps.push(step)
     }
 
     return Response.json({ project }, { headers, status: 201 })
@@ -204,4 +211,143 @@ async function validateRequest(request: Request, user: User | null, data: any) {
   }
 
   return { valid: true }
+}
+
+async function createProject(
+  client: SupabaseClient,
+  data: {
+    title: string
+    description: string
+    isDraft: boolean
+    category: string | null
+    tags: number[] | null
+    fileLink: string | null
+  },
+  profile: DBProfile,
+  slug: string,
+) {
+  const projectResult = await client
+    .from('projects')
+    .insert({
+      created_by: profile.id,
+      title: data.title,
+      description: data.description,
+      slug,
+      category: data.category,
+      tags: data.tags,
+      is_draft: data.isDraft,
+      file_link: data.fileLink,
+      tenant_id: process.env.TENANT_ID,
+    })
+    .select()
+
+  if (projectResult.error || !projectResult.data) {
+    throw projectResult.error
+  }
+
+  return projectResult.data as unknown as DBProject
+}
+
+async function createStep(
+  client: SupabaseClient,
+  values: {
+    title: string
+    description: string
+    projectId: number
+    videoUrl: string | null
+  },
+) {
+  const { data, error } = await client
+    .from('project_steps')
+    .insert({
+      title: values.title,
+      description: values.description,
+      project_id: values.projectId,
+      video_url: values.videoUrl,
+      tenant_id: process.env.TENANT_ID,
+    })
+    .select()
+
+  if (error || !data) {
+    throw error
+  }
+
+  return data as unknown as DBProjectStep
+}
+
+async function uploadAndUpdateStepImage(
+  files: File[],
+  path: string,
+  step: ProjectStep,
+  client: SupabaseClient,
+) {
+  const mediaResult = await storageServiceServer.uploadImage(
+    files,
+    path,
+    client,
+  )
+
+  if (mediaResult?.media && mediaResult.media.length > 0) {
+    const result = await client
+      .from('project_steps')
+      .update({
+        images: mediaResult.media,
+      })
+      .eq('id', step.id)
+      .select()
+
+    if (result.data) {
+      step.images = result.data[0].images
+    }
+  }
+}
+
+async function uploadAndUpdateCoverImage(
+  file: File,
+  path: string,
+  project: Project,
+  client: SupabaseClient,
+) {
+  const mediaResult = await storageServiceServer.uploadImage(
+    [file],
+    path,
+    client,
+  )
+
+  if (mediaResult?.media && mediaResult.media.length > 0) {
+    const result = await client
+      .from('projects')
+      .update({
+        cover_image: mediaResult.media[0],
+      })
+      .eq('id', project.id)
+      .select()
+
+    if (result.data) {
+      project.coverImage = result.data[0].cover_image
+    }
+  }
+}
+
+async function uploadAndUpdateFiles(
+  files: File[],
+  path: string,
+  project: Project,
+  client: SupabaseClient,
+) {
+  const mediaResult = await storageServiceServer.uploadFile(files, path, client)
+
+  if (mediaResult?.media && mediaResult.media.length > 0) {
+    const result = await client
+      .from('projects')
+      .update({
+        files: mediaResult.media,
+      })
+      .eq('id', project.id)
+      .select()
+
+    if (result.data) {
+      project.files = result.data[0].files
+    }
+  }
 }

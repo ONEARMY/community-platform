@@ -2,9 +2,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { Field } from 'react-final-form'
 import { CategoriesSelectV2 } from 'src/pages/common/Category/CategoriesSelectV2'
 import { FormFieldWrapper } from 'src/pages/common/FormFields'
-import { LibraryCategoryGuidance } from 'src/pages/Library/Content/Common'
 import { intro } from 'src/pages/Library/labels'
 import { categoryService } from 'src/services/categoryService'
+
+import { LibraryCategoryGuidance } from './LibraryCategoryGuidance'
 
 import type { Category, SelectValue } from 'oa-shared'
 

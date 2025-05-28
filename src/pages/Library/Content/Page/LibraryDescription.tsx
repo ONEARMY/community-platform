@@ -18,6 +18,7 @@ import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import { trackEvent } from 'src/common/Analytics'
 import { DownloadWrapper } from 'src/common/DownloadWrapper'
 import { logger } from 'src/logger'
+import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import {
   buildStatisticsLabel,

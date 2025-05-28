@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import type { Comment, ContentType } from 'oa-shared'
+import type { Comment, DiscussionContentTypes } from 'oa-shared'
 
 export const FactoryComment = (
   commentOverloads: Partial<Comment> = {},
@@ -21,11 +21,11 @@ export const FactoryComment = (
   comment: faker.lorem.paragraph(),
   deleted: faker.datatype.boolean(),
   sourceId: faker.number.int(),
-  sourceType: faker.helpers.arrayElement<ContentType>([
+  sourceType: faker.helpers.arrayElement<DiscussionContentTypes>([
     'news',
     'projects',
     'questions',
-    'research',
+    'research_update',
   ]),
   ...commentOverloads,
 })

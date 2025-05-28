@@ -87,11 +87,15 @@ const upsert = async (
   }
 
   if (project.coverImage) {
-    data.append('image', project.coverImage.photoData, project.coverImage.name)
+    data.append(
+      'coverImage',
+      project.coverImage.photoData,
+      project.coverImage.name,
+    )
   }
 
   if (project.existingCoverImage) {
-    data.append('existingImage', project.existingCoverImage.id)
+    data.append('existingCoverImage', project.existingCoverImage.id)
   }
 
   if (project.files && project.files.length > 0) {
@@ -103,6 +107,21 @@ const upsert = async (
   if (project.existingFiles && project.existingFiles.length > 0) {
     for (const file of project.existingFiles) {
       data.append('existingFiles', file.id)
+    }
+  }
+
+  for (let i = 0; i < project.steps.length; i++) {
+    const step = project.steps[i]
+    data.append(`step.[${i}].title`, step.title)
+    data.append(`step.[${i}].description`, step.description)
+
+    if (step.existingImages) {
+      for (const image of step.existingImages) {
+        data.append(`step.[${i}].existingImages`, image.id)
+      }
+    }
+    if (step.videoUrl) {
+      data.append(`step.[${i}].videoUrl`, step.videoUrl)
     }
   }
 

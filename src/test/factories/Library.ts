@@ -56,6 +56,8 @@ export const FactoryLibraryItem = (
 export const FactoryLibraryItemStep = (
   itemOverloads: Partial<ProjectStep> = {},
 ): ProjectStep => ({
+  id: faker.number.int(),
+  projectId: faker.number.int(),
   images: [
     {
       publicUrl: faker.internet.url(),

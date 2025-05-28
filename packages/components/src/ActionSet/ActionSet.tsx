@@ -7,9 +7,10 @@ import type { ReactNode } from 'react'
 
 interface IProps {
   children: ReactNode[]
+  itemType: 'ReplyItem' | 'CommentItem'
 }
 
-export const ActionSet = ({ children }: IProps) => {
+export const ActionSet = ({ children, itemType }: IProps) => {
   const [show, setShow] = useState<boolean>(false)
 
   const toDisplay = children.filter((child) => !!child)
@@ -29,7 +30,7 @@ export const ActionSet = ({ children }: IProps) => {
         }}
       >
         <Button
-          data-cy="ActionSetButton"
+          data-cy={`${itemType}: ActionSetButton`}
           icon="more-vert"
           onClick={onClick}
           variant="subtle"

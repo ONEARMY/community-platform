@@ -26,11 +26,12 @@ const add = async (
       user_id: profileId,
       tenant_id: process.env.TENANT_ID!,
     })
-
     return Response.json({}, { status: 200 })
   } catch (error) {
-    console.error(error)
-    return Response.json({}, { status: 500, statusText: 'error' })
+    if (error) {
+      console.error(error)
+      return Response.json({}, { status: 500, statusText: 'error' })
+    }
   }
 }
 

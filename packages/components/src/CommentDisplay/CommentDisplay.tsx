@@ -116,7 +116,7 @@ export const CommentDisplay = (props: IProps) => {
               <Flex>
                 {followButtonIcon}
 
-                <ActionSet>
+                <ActionSet itemType={itemType}>
                   {followButton}
                   {isEditable && (
                     <Button

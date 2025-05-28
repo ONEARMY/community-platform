@@ -27,7 +27,7 @@ const card = {
   background: '#fff',
   border: '2px solid black',
   borderRadius: '15px',
-  padding: '15px',
+  padding: '20px',
   margin: '0 auto',
 }
 
@@ -66,7 +66,7 @@ export const Layout = ({ children, preview, settings }: LayoutArgs) => {
               height={85}
               width={85}
               src={settings.siteImage}
-              style={{ margin: '15px auto' }}
+              style={{ margin: '30px auto' }}
             />
             <Container style={card}>
               <Section>{children}</Section>

@@ -202,6 +202,7 @@ describe('[Research]', () => {
         title: `${randomId} Create research article test`,
         slug: `${randomId}-create-research-article-test`,
       }
+      const finalUpdateTitle = `Publish title: ${randomId}`
 
       cy.get('[data-cy="sign-up"]')
       cy.signIn(researcherEmail, researcherPassword)
@@ -220,6 +221,7 @@ describe('[Research]', () => {
 
       cy.url().should('include', `/research/${expected.slug}`)
       cy.visit(`/research/${expected.slug}`)
+      cy.get('[data-cy=follow-button]').contains('Following')
 
       cy.step('Research article displays correctly')
       cy.contains(expected.title)
@@ -244,7 +246,6 @@ describe('[Research]', () => {
       cy.get('[data-cy=draft]').click()
 
       cy.step('Can see Draft after refresh')
-
       cy.contains(updateTitle)
       cy.get('[data-cy=DraftUpdateLabel]').should('be.visible')
 
@@ -260,9 +261,25 @@ describe('[Research]', () => {
       cy.get('[data-cy=edit-update]').click()
       cy.contains('Edit your update')
       cy.wait(1000)
+      cy.fillIntroTitle(finalUpdateTitle)
       cy.get('[data-cy=submit]').click()
-      cy.contains(updateTitle)
+      cy.contains(finalUpdateTitle)
       cy.get('[data-cy=DraftUpdateLabel]').should('not.exist')
+
+      cy.step('Notification about update published')
+      cy.visit(`/research/`)
+      cy.get('[data-cy="toggle-notifications-modal"]')
+        .last()
+        .click({ force: true })
+      cy.get('[data-cy="notification"]').contains(finalUpdateTitle).click()
+
+      cy.step('All ready for a discussion')
+      cy.contains('0 comments')
+      cy.get('[data-cy="HideDiscussionContainer:button"]').click()
+      cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion')
+      // Currently beta testers only:
+      // cy.get('[data-cy=follow-button]').contains('Following')
+      cy.contains('0 comments')
     })
 
     // it('[By Admin]', () => {

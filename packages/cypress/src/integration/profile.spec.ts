@@ -59,7 +59,7 @@ describe('[Profile]', () => {
       cy.get('[data-cy=emptyProfileMessage]').should('be.visible')
     })
 
-    it('[Can message users]', () => {
+    it('[Can send a contact message]', () => {
       localStorage.setItem('VITE_NO_MESSAGING', 'false')
 
       const message = faker.lorem
@@ -70,6 +70,8 @@ describe('[Profile]', () => {
 
       cy.step('Can sign-up and have a contact form')
       cy.signUpNewUser(user)
+      cy.logout()
+      cy.signIn(subscriber.email, subscriber.password)
       cy.step('Go to Profile')
       cy.visit(`/u/${user.username}`)
 
@@ -89,8 +91,17 @@ describe('[Profile]', () => {
       cy.get('[data-cy=message]').invoke('val', message).blur({ force: true })
       cy.get('[data-cy=contact-submit]').click()
       cy.contains(contact.successMessage)
+    })
 
-      cy.step("Can't contact pages when user opts out")
+    it('[Can edit public contact section]', () => {
+      localStorage.setItem('VITE_NO_MESSAGING', 'false')
+
+      const user = generateNewUserDetails()
+
+      cy.step('Can sign-up')
+      cy.signUpNewUser(user)
+
+      cy.step('Set up public contact section')
       cy.visit('/settings')
       cy.setSettingFocus('workspace')
       cy.setSettingBasicUserInfo({
@@ -106,10 +117,33 @@ describe('[Profile]', () => {
         url: 'something@test.com',
       })
       cy.get('[data-cy=PublicContactSection]').should('be.visible')
+    })
+
+    it('[Cannot contact when public contact is disabled]', () => {
+      localStorage.setItem('VITE_NO_MESSAGING', 'false')
+
+      const user = generateNewUserDetails()
+
+      cy.step('Can sign-up')
+      cy.signUpNewUser(user)
+
+      cy.step('Disable public contact')
+      cy.visit('/settings')
+      cy.setSettingFocus('workspace')
+      cy.setSettingBasicUserInfo({
+        displayName: user.username,
+        country: 'Bolivia',
+        description: 'New profile to test the contact form',
+      })
+      cy.setSettingImage('profile-cover-1-edited', 'coverImages-0')
+      cy.get('[data-cy=PublicContactSection]').should('be.visible')
       cy.get('[data-cy=isContactableByPublic-true]').click({ force: true })
       cy.saveSettingsForm()
       cy.get('[data-cy=isContactableByPublic-false]')
 
+      cy.step('Cannot see contact tab')
+      cy.logout()
+      cy.signIn(subscriber.email, subscriber.password)
       cy.visit(`/u/${user.username}`)
       cy.get('[data-cy=contact-tab]').should('not.exist')
     })
@@ -174,6 +208,59 @@ describe('[Profile]', () => {
       cy.signIn(subscriber.email, subscriber.password)
       cy.visit(`/u/${profile_views.userName}`)
       cy.get('[data-testid=profile-views-stat]').should('not.exist')
+    })
+
+    it('should display questions count on profile tab', () => {
+      setIsPreciousPlastic()
+      cy.signIn(subscriber.email, subscriber.password)
+
+      cy.visit(`/u/${subscriber.userName}`)
+
+      cy.get('[data-testid=questions-link]').should('be.visible')
+      cy.get('[data-testid=questions-stat]')
+        .should('be.visible')
+        .invoke('text')
+        .and('match', /^Questions: \d+$/)
+    })
+
+    it('should navigate to questions page when clicking questions count on profile tab', () => {
+      setIsPreciousPlastic()
+      cy.signIn(subscriber.email, subscriber.password)
+
+      cy.visit(`/u/${subscriber.userName}`)
+
+      cy.get('[data-testid=questions-link]').click()
+      cy.url().should('include', `questions`)
+    })
+
+    it('should show questions in contributions tab', () => {
+      setIsPreciousPlastic()
+      cy.signIn(subscriber.email, subscriber.password)
+
+      cy.visit(`/u/${subscriber.userName}`)
+
+      cy.get('[data-cy=ContribTab]').click()
+      cy.get('[data-testid="question-contributions"]').should('be.visible')
+      cy.get('[data-testid="question-contributions"]')
+        .contains('The first test question?')
+        .should('be.visible')
+    })
+
+    it('should link to question page when question in clicked in contributions tab', () => {
+      setIsPreciousPlastic()
+      cy.signIn(subscriber.email, subscriber.password)
+
+      cy.visit(`/u/${subscriber.userName}`)
+      cy.get('[data-cy=ContribTab]').click()
+
+      cy.get('[data-cy="the-first-test-question-link"]').click()
+      cy.url().should(
+        'include',
+        `/questions/the-first-test-question?utm_source=user-profile`,
+      )
+      cy.get('[data-cy="question-title"]')
+        .should('be.visible')
+        .contains('The first test question?')
     })
   })
 })

@@ -1,3 +1,15 @@
 {
-  "imports": {}
+  "imports": {
+    "@react-email/components": "npm:@react-email/components@0.0.22",
+    "oa-shared": "../../../shared/",
+    "react": "npm:react@18.3.1",
+    "resend": "npm:resend@4.1.2",
+    "standardwebhooks": "npm:standardwebhooks@1.0.0"
+  },
+  "nodeModulesDir": "auto",
+  "compilerOptions": {
+    "checkJs": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  }
 }

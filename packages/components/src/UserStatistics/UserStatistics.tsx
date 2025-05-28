@@ -1,5 +1,6 @@
 import { Box, Card, Flex } from 'theme-ui'
 
+import ForumIcon from '../../assets/icons/icon-forum.svg'
 import HowToCountIcon from '../../assets/icons/icon-library.svg'
 import ResearchIcon from '../../assets/icons/icon-research.svg'
 import starActiveSVG from '../../assets/icons/icon-star-active.svg'
@@ -22,6 +23,7 @@ export interface UserStatisticsProps {
   totalViews: number
   hasLocation?: boolean
   sx?: ThemeUIStyleObject | undefined
+  questionCount: number
 }
 
 export const UserStatistics = (props: UserStatisticsProps) => {
@@ -122,6 +124,19 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               <Flex data-testid="research-stat">
                 <ElWithBeforeIcon icon={ResearchIcon} />
                 {`Research: ${props.researchCount}`}
+              </Flex>
+            </InternalLink>
+          )}
+
+          {props.questionCount > 0 && (
+            <InternalLink
+              to={'/questions'}
+              sx={{ color: 'black' }}
+              data-testid="questions-link"
+            >
+              <Flex data-testid="questions-stat">
+                <ElWithBeforeIcon icon={ForumIcon} />
+                {`Questions: ${props.questionCount}`}
               </Flex>
             </InternalLink>
           )}

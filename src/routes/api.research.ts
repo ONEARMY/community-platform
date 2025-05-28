@@ -5,6 +5,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
 import { profileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
+import { subscribersServiceServer } from 'src/services/subscribersService.server'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
@@ -12,7 +13,6 @@ import type { User } from '@supabase/supabase-js'
 import type { DBResearchItem, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts'
 
-// runs on the server
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
   const searchParams = new URLSearchParams(url.search)
@@ -157,6 +157,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const research = ResearchItem.fromDB(researchResult.data[0], [])
 
+    addSubscribers(research, profile, client)
+
     if (uploadedImage) {
       const mediaResult = await storageServiceServer.uploadImage(
         [uploadedImage],
@@ -189,6 +191,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       { status: 500, statusText: 'Error creating research' },
     )
   }
+}
+
+const addSubscribers = async (research, profile, client) => {
+  subscribersServiceServer.add('research', research.id, profile.id, client)
+  // To do: Subscribe collaborators too
+  return
 }
 
 async function validateRequest(request: Request, user: User | null, data: any) {

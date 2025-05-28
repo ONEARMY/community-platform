@@ -18,7 +18,7 @@ exports.userUpdates = UserUpdates.handleUserUpdates
 exports.supabaseProfileUpdate = SupabaseSync.supabaseProfileUpdate
 
 // CC Note, 2020-04-40
-// folder-based naming conventions should be encourage from now on
+// folder-based naming conventions should be encouraged from now on
 exports.adminGetUserEmail = Admin.getUserEmail
 
 exports.emailNotifications = require('./emailNotifications')

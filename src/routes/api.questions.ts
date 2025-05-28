@@ -194,7 +194,11 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       }
     }
 
-    notifyDiscord(question, profile, new URL(request.url).origin)
+    notifyDiscord(
+      question,
+      profile,
+      new URL(request.url).origin.replace('http:', 'https:'),
+    )
 
     return Response.json({ question }, { headers, status: 201 })
   } catch (error) {

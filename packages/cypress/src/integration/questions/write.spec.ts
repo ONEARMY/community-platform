@@ -77,11 +77,16 @@ describe('[Question]', () => {
       cy.contains(initialTitle)
       cy.contains(initialQuestionDescription)
       cy.contains(category)
-      // Follow button should show you're subscribed
-
       // cy.contains(tag1)
       // cy.contains(tag2)
       // contains images
+
+      cy.step('All ready for a discussion')
+      cy.contains('0 comments')
+      cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion')
+
+      // Currently beta testers only:
+      // cy.get('[data-cy=follow-button]').contains('Following')
 
       cy.step('Edit question')
       cy.get('[data-cy=edit]')

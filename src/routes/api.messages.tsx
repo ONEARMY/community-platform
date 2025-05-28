@@ -5,6 +5,7 @@ import ReceiverMessage from '../.server/templates/ReceiverMessage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { TenantSettings } from 'oa-shared'
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   try {
@@ -132,7 +133,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 }
 
-async function getTenantSettings(client: SupabaseClient) {
+export async function getTenantSettings(
+  client: SupabaseClient,
+): Promise<TenantSettings> {
   const { data } = await client
     .from('tenant_settings')
     .select('site_name,site_url,message_sign_off,email_from,site_image')

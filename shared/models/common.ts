@@ -34,8 +34,16 @@ export type Collaborator = {
 }
 
 export type ContentType = 'questions' | 'projects' | 'research' | 'news'
+
 export type DiscussionContentTypes =
   | 'questions'
   | 'projects'
-  | 'research_updates'
+  | 'research_update'
+  | 'news'
+
+export type SubscribableContentTypes =
+  | 'questions'
+  | 'projects'
+  | 'research'
+  | 'research_update'
   | 'news'

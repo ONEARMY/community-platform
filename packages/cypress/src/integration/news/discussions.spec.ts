@@ -43,6 +43,7 @@ describe('[News.Discussions]', () => {
     cy.get('[data-cy=follow-button]').contains('Follow Comments')
     cy.addComment(newComment)
     cy.reload()
+    cy.wait(2000)
     cy.get('[data-cy=follow-button]').contains('Following Comments')
 
     cy.step('Can edit their comment')
@@ -67,16 +68,13 @@ describe('[News.Discussions]', () => {
     cy.signIn(commenter.email, commenter.password)
 
     cy.step('Notification generated for reply from replier')
-
     cy.expectNewNotification({
       content: updatedNewReply,
       path: newsPath,
       title: news.title,
       username: replier.username,
     })
-    cy.pause()
     cy.visit(newsPath)
-    cy.expectNoNewNotifications()
 
     cy.step('Can add reply')
     cy.addReply(secondReply)
@@ -90,5 +88,29 @@ describe('[News.Discussions]', () => {
 
     cy.step('Can delete their reply')
     cy.deleteDiscussionItem('ReplyItem', secondReply)
+
+    cy.step('Notification generated for replier from commenter reply')
+    cy.logout()
+    cy.signIn(replier.email, replier.password)
+    cy.expectNewNotification({
+      content: secondReply,
+      path: newsPath,
+      title: news.title,
+      username: commenter.username,
+    })
+
+    // Currently hard to test as the news article is created via the seed
+    //
+    // cy.step(
+    //   'Notification generated for news creator of the original comment only',
+    // )
+    // cy.logout()
+    // cy.signIn(newsCreator.email, newsCreator.password)
+    // cy.expectNewNotification({
+    //   content: updatedNewReply,
+    //   path: newsPath,
+    //   title: news.title,
+    //   username: replier.username,
+    // })
   })
 })

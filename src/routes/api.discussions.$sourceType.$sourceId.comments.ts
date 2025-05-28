@@ -2,10 +2,11 @@ import { Comment, DBComment } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { notificationsService } from 'src/services/notificationsService.server'
 import { notificationsSupabaseServiceServer } from 'src/services/notificationSupabaseService.server'
+import { subscribersServiceServer } from 'src/services/subscribersService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
-import type { User } from '@supabase/supabase-js'
+import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type {
   DBAuthor,
   DBProfile,
@@ -158,14 +159,14 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     .single()
 
   if (!commentResult.error) {
-    // Do not await
-    notificationsService.sendCommentNotification(
-      client,
-      commentResult.data as DBComment,
-      currentUser.data[0] as DBProfile,
-    )
+    const comment = commentResult.data as DBComment
+    const profile = currentUser.data[0] as DBProfile
+
+    addSubscriptions(comment, profile, client)
+
+    notificationsService.sendCommentNotification(client, comment, profile)
     notificationsSupabaseServiceServer.createNotificationNewComment(
-      commentResult.data,
+      comment,
       client,
     )
   }
@@ -180,6 +181,34 @@ export async function action({ params, request }: LoaderFunctionArgs) {
       status: commentResult.error ? 500 : 201,
     },
   )
+}
+
+function addSubscriptions(
+  comment: DBComment,
+  profile: DBProfile,
+  client: SupabaseClient,
+) {
+  if (comment.source_id && !comment.parent_id) {
+    // Subscribe to peer comments...
+    subscribersServiceServer.add(
+      comment.source_type,
+      comment.source_id,
+      profile.id,
+      client,
+    )
+    // ...add replies to this comment
+    subscribersServiceServer.add('comments', comment.id, profile.id, client)
+  }
+
+  if (comment.source_id && comment.parent_id) {
+    // Subscribe to the parent of this reply
+    subscribersServiceServer.add(
+      'comments',
+      comment.parent_id,
+      profile.id,
+      client,
+    )
+  }
 }
 
 async function validateRequest(

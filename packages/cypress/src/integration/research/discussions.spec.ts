@@ -24,7 +24,6 @@ describe('[Research.Discussions]', () => {
     const researchPath = `/research/${research.slug}`
 
     cy.step('Can add comment')
-
     cy.visit(researchPath)
     cy.get('[data-cy="HideDiscussionContainer:button"]').click()
     cy.addComment(newComment)
@@ -56,6 +55,7 @@ describe('[Research.Discussions]', () => {
     cy.signIn(admin.email, admin.password)
     cy.visit(researchPath)
 
+    cy.step('Notification generated for reply from replier')
     cy.expectNewNotification({
       content: updatedNewReply,
       path: researchPath,
@@ -66,8 +66,8 @@ describe('[Research.Discussions]', () => {
     cy.visit(researchPath)
     cy.expectNoNewNotifications()
 
+    cy.step('Can add reply')
     cy.get('[data-cy="HideDiscussionContainer:button"]').click()
-
     cy.addReply(secondReply)
 
     cy.step('Can delete their comment')
@@ -79,5 +79,31 @@ describe('[Research.Discussions]', () => {
 
     cy.step('Can delete their reply')
     cy.deleteDiscussionItem('ReplyItem', secondReply)
+
+    cy.step('Notification generated for secondCommentor from admin reply')
+    cy.logout()
+    cy.signIn(secondCommentor.email, secondCommentor.password)
+    cy.expectNewNotification({
+      content: secondReply,
+      path: researchPath,
+      title: research.title,
+      username: admin.userName,
+    })
+    cy.expectNoNewNotifications()
+
+    // Currently hard to test as the article is created via the seed
+    //
+    // cy.step(
+    //   'Notification generated for research creator of the original comment only',
+    // )
+    // cy.logout()
+    // cy.signIn(questionCreator.email, questionCreator.password)
+    // cy.expectNewNotification({
+    //   content: updatedNewReply,
+    //   path: questionPath,
+    //   title: question.title,
+    //   username: replier.username,
+    // })
+    // cy.expectNoNewNotifications()
   })
 })

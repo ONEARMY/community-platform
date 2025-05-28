@@ -7,9 +7,10 @@ import type { ReactNode } from 'react'
 
 interface IProps {
   children: ReactNode[]
+  itemType: 'ReplyItem' | 'CommentItem'
 }
 
-export const ActionSet = ({ children }: IProps) => {
+export const ActionSet = ({ children, itemType }: IProps) => {
   const [show, setShow] = useState<boolean>(false)
 
   const toDisplay = children.filter((child) => !!child)
@@ -20,47 +21,45 @@ export const ActionSet = ({ children }: IProps) => {
   const onClick = () => setShow((show) => !show)
 
   return (
-    <>
-      <Flex
-        sx={{
-          display: 'inline-block',
-          position: 'relative',
-          gap: 2,
-        }}
+    <Flex
+      sx={{
+        display: 'inline-block',
+        position: 'relative',
+        gap: 2,
+      }}
+    >
+      <Button
+        data-cy={`${itemType}: ActionSetButton`}
+        icon="more-vert"
+        onClick={onClick}
+        variant="subtle"
+        showIconOnly
       >
-        <Button
-          data-cy="ActionSetButton"
-          icon="more-vert"
-          onClick={onClick}
-          variant="subtle"
-          showIconOnly
-        >
-          Show Actions
-        </Button>
+        Show Actions
+      </Button>
 
-        {show && (
-          <Card
+      {show && (
+        <Card
+          sx={{
+            position: 'absolute',
+            right: 0,
+            zIndex: 1,
+            padding: 2,
+            gap: 2,
+            minWidth: '190px',
+          }}
+        >
+          <Flex
             sx={{
-              position: 'absolute',
-              right: 0,
-              zIndex: 1,
-              padding: 2,
-              gap: 2,
-              minWidth: '190px',
+              alignItems: 'stretch',
+              justifyItems: 'stretch',
+              flexDirection: 'column',
             }}
           >
-            <Flex
-              sx={{
-                alignItems: 'stretch',
-                justifyItems: 'stretch',
-                flexDirection: 'column',
-              }}
-            >
-              {...children}
-            </Flex>
-          </Card>
-        )}
-      </Flex>
-    </>
+            {...children}
+          </Flex>
+        </Card>
+      )}
+    </Flex>
   )
 }

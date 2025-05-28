@@ -6,7 +6,12 @@ import type { LoaderFunctionArgs } from '@remix-run/node'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url)
-  return url.searchParams.get('email')
+
+  // Get the raw search string and manually parse the email parameter, otherwise characters like '+' are ignored.
+  const emailMatch = url.search.match(/[?&]email=([^&]*)/)
+  const email = emailMatch ? decodeURIComponent(emailMatch[1]) : null
+
+  return email
 }
 
 export default function Index() {

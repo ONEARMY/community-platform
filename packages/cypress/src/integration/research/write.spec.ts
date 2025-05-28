@@ -202,6 +202,7 @@ describe('[Research]', () => {
         title: `${randomId} Create research article test`,
         slug: `${randomId}-create-research-article-test`,
       }
+      const finalUpdateTitle = `Publish title: ${randomId}`
 
       cy.get('[data-cy="sign-up"]')
       cy.signIn(researcherEmail, researcherPassword)
@@ -260,15 +261,17 @@ describe('[Research]', () => {
       cy.get('[data-cy=edit-update]').click()
       cy.contains('Edit your update')
       cy.wait(1000)
+      cy.fillIntroTitle(finalUpdateTitle)
       cy.get('[data-cy=submit]').click()
-      cy.contains(updateTitle)
+      cy.contains(finalUpdateTitle)
       cy.get('[data-cy=DraftUpdateLabel]').should('not.exist')
-      cy.step('Notified about update being published')
+
+      cy.step('Notification about update published')
       cy.visit(`/research/`)
       cy.get('[data-cy="toggle-notifications-modal"]')
         .last()
         .click({ force: true })
-      cy.get('[data-cy="notification"]').contains(updateTitle).click()
+      cy.get('[data-cy="notification"]').contains(finalUpdateTitle).click()
 
       cy.step('All ready for a discussion')
       cy.contains('0 comments')

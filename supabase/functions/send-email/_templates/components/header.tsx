@@ -2,17 +2,13 @@ import React from 'react'
 import { Section } from '@react-email/components'
 
 const section = {
-  backgroundColor: '#f4f4f4',
-  borderRadius: '10px',
-  lineHeight: 1.66,
-  marginBottom: '15px',
-  padding: '20px',
+  padding: '10px',
 }
 
 interface IProps {
   children: React.ReactNode
 }
 
-export const BoxText = ({ children }: IProps) => (
+export const Header = ({ children }: IProps) => (
   <Section style={section}>{children}</Section>
 )

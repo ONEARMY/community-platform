@@ -7,7 +7,7 @@ import { Layout } from './layout.tsx'
 import { Heading } from './components/heading.tsx'
 
 import type { Comment, News, Notification, TenantSettings } from 'oa-shared'
-import { ParentBox } from './components/parent-box.tsx'
+import { Header } from './components/header.tsx'
 
 const text = {
   color: '#686868',
@@ -55,22 +55,20 @@ export const InstantNotificationEmail = (props: IProps) => {
   const deepLink = setDeepLink(notification, sourceContentLink, settings)
   const preview = `New ${notification.contentType} notification on ${settings.siteName}`
 
-  const parentComment =
-    notification.parentComment?.comment.substring(0, 50) + '...'
-
   return (
     <Layout preview={preview} settings={settings}>
-      <Link href={deepLink}>
-        <Heading>
-          New {notification.contentType} from{' '}
-          <strong>{notification.triggeredBy?.username}</strong>{' '}
-          {notification.sourceContent &&
-            `on ${notification.sourceContent?.title}`}
-          {notification.parentContent?.title &&
-            `: ${notification.parentContent?.title}`}
-        </Heading>
-      </Link>
-      {notification.parentComment && <ParentBox>{parentComment}</ParentBox>}
+      <Header>
+        <Link href={deepLink}>
+          <Heading>
+            New {notification.contentType} from{' '}
+            <strong>{notification.triggeredBy?.username}</strong>{' '}
+            {notification.sourceContent &&
+              `on ${notification.sourceContent?.title}`}
+            {notification.parentContent?.title &&
+              `: ${notification.parentContent?.title}`}
+          </Heading>
+        </Link>
+      </Header>
 
       <BoxText>
         <Heading>They wrote:</Heading>

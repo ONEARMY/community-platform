@@ -3,8 +3,7 @@ import { Heading as HeadingComp } from '@react-email/components'
 
 const h1 = {
   color: '#2e2e2e',
-  lineHeight: '30px',
-  fontSize: '24px',
+  lineHeight: 1.2,
   fontWeight: 'normal',
   fontFamily: '"Helvetica", serif',
   marginBottom: '12px',
@@ -16,5 +15,7 @@ interface IProps {
 }
 
 export const Heading = ({ children }: IProps) => (
-  <HeadingComp style={h1}>{children}</HeadingComp>
+  <HeadingComp style={h1} as="h1">
+    {children}
+  </HeadingComp>
 )

@@ -20,6 +20,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
   const error = url.searchParams.get('error_description')
   const code = url.searchParams.get('code')
+  const redirectUrl = url.searchParams.get('url')
 
   if (error) {
     return Response.json({ error })
@@ -28,6 +29,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   // If there's a code, show the form - no need to pass the code
   if (code) {
     return Response.json({})
+  }
+
+  if (redirectUrl) {
+    return Response.json({ url: decodeURIComponent(redirectUrl) })
   }
 
   return redirect('/')
@@ -84,6 +89,10 @@ export default function Index() {
     }
   }, [actionData?.success])
 
+  const redirectReset = () => {
+    location.href = data.url
+  }
+
   return (
     <Main style={{ flex: 1 }}>
       <Form
@@ -130,46 +139,57 @@ export default function Index() {
                           {actionData?.error && (
                             <Text color="red">{actionData?.error}</Text>
                           )}
-                          <Flex sx={{ flexDirection: 'column' }}>
-                            <Label htmlFor="password">Your new password</Label>
-                            <PasswordField
-                              name="password"
-                              type="password"
-                              data-cy="password"
-                              component={FieldInput}
-                              validate={required}
-                            />
-                          </Flex>
 
-                          <Flex sx={{ flexDirection: 'column' }}>
-                            <Label htmlFor="passwordRepeat">
-                              Repeat your new password
-                            </Label>
-                            <PasswordField
-                              name="passwordRepeat"
-                              type="password"
-                              data-cy="passwordRepeat"
-                              component={FieldInput}
-                              validate={required}
-                            />
-                          </Flex>
-
-                          <Flex>
-                            <Button
-                              large
-                              data-cy="submit"
-                              sx={{
-                                borderRadius: 3,
-                                width: '100%',
-                                justifyContent: 'center',
-                              }}
-                              variant="primary"
-                              disabled={submitting || invalid}
-                              type="submit"
-                            >
-                              Update password
+                          {data.url ? (
+                            <Button type="button" onClick={redirectReset}>
+                              Reset password
                             </Button>
-                          </Flex>
+                          ) : (
+                            <>
+                              <Flex sx={{ flexDirection: 'column' }}>
+                                <Label htmlFor="password">
+                                  Your new password
+                                </Label>
+                                <PasswordField
+                                  name="password"
+                                  type="password"
+                                  data-cy="password"
+                                  component={FieldInput}
+                                  validate={required}
+                                />
+                              </Flex>
+
+                              <Flex sx={{ flexDirection: 'column' }}>
+                                <Label htmlFor="passwordRepeat">
+                                  Repeat your new password
+                                </Label>
+                                <PasswordField
+                                  name="passwordRepeat"
+                                  type="password"
+                                  data-cy="passwordRepeat"
+                                  component={FieldInput}
+                                  validate={required}
+                                />
+                              </Flex>
+
+                              <Flex>
+                                <Button
+                                  large
+                                  data-cy="submit"
+                                  sx={{
+                                    borderRadius: 3,
+                                    width: '100%',
+                                    justifyContent: 'center',
+                                  }}
+                                  variant="primary"
+                                  disabled={submitting || invalid}
+                                  type="submit"
+                                >
+                                  Update password
+                                </Button>
+                              </Flex>
+                            </>
+                          )}
                         </>
                       )}
                     </Flex>

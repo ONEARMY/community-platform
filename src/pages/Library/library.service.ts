@@ -110,18 +110,28 @@ const upsert = async (
     }
   }
 
-  for (let i = 0; i < project.steps.length; i++) {
-    const step = project.steps[i]
-    data.append(`step.[${i}].title`, step.title)
-    data.append(`step.[${i}].description`, step.description)
+  if (project.steps?.length) {
+    data.append('stepCount', project.steps.length.toString())
 
-    if (step.existingImages) {
-      for (const image of step.existingImages) {
-        data.append(`step.[${i}].existingImages`, image.id)
+    for (let i = 0; i < project.steps.length; i++) {
+      const step = project.steps[i]
+      data.append(`step.[${i}].title`, step.title)
+      data.append(`step.[${i}].description`, step.description)
+
+      if (step.images && step.images.length) {
+        for (const image of step.images) {
+          data.append(`step.[${i}].images`, image.photoData, image.name)
+        }
       }
-    }
-    if (step.videoUrl) {
-      data.append(`step.[${i}].videoUrl`, step.videoUrl)
+
+      if (step.existingImages) {
+        for (const image of step.existingImages) {
+          data.append(`step.[${i}].existingImages`, image.id)
+        }
+      }
+      if (step.videoUrl) {
+        data.append(`step.[${i}].videoUrl`, step.videoUrl)
+      }
     }
   }
 

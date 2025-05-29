@@ -9,7 +9,7 @@ import { intro } from '../../labels'
 
 export const LibraryCoverImageField = () => {
   const { description, title } = intro.cover_image
-  const name = 'cover_image'
+  const name = 'coverImage'
 
   return (
     <FormFieldWrapper htmlFor={name} text={title} required>
@@ -25,7 +25,7 @@ export const LibraryCoverImageField = () => {
         />
       </Box>
 
-      <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
+      <Text sx={{ color: 'grey', marginTop: 4, fontSize: 1 }}>
         {description}
       </Text>
     </FormFieldWrapper>

@@ -23,7 +23,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const { client, headers } = createSupabaseServerClient(request)
 
-  const { data, error } = await client.rpc('get_research', {
+  const { data, error } = await client.rpc('get_projects', {
     search_query: q || null,
     category_id: category,
     sort_by: sort,
@@ -31,10 +31,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     limit_val: ITEMS_PER_PAGE,
   })
 
-  const countRersult = await client.rpc('get_research_count', {
+  const countRersult = await client.rpc('get_projects_count', {
     search_query: q || null,
     category_id: category,
-    research_status: status || null,
   })
   const count = countRersult.data || 0
 
@@ -233,7 +232,7 @@ async function createProject(
       title: data.title,
       description: data.description,
       slug,
-      category: data.category,
+      category_id: data.category,
       tags: data.tags,
       is_draft: data.isDraft,
       file_link: data.fileLink,
@@ -245,7 +244,7 @@ async function createProject(
     throw projectResult.error
   }
 
-  return projectResult.data as unknown as DBProject
+  return projectResult.data[0] as unknown as DBProject
 }
 
 async function createStep(

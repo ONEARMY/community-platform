@@ -8,8 +8,8 @@ import { intro } from '../../labels'
 import { DIFFICULTY_OPTIONS } from './FormSettings'
 
 export const LibraryDifficultyField = () => {
-  const { placeholder, title } = intro.difficulty_level
-  const name = 'difficulty_level'
+  const { placeholder, title } = intro.difficultyLevel
+  const name = 'difficultyLevel'
 
   return (
     <FormFieldWrapper htmlFor={name} text={title} required>

@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/filename-case */
+import { ClientOnly } from 'remix-utils/client-only'
 import { LibraryForm } from 'src/pages/Library/Content/Common/Library.form'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { redirectServiceServer } from 'src/services/redirectService.server'
@@ -18,5 +18,5 @@ export async function loader({ request }) {
 }
 
 export default function Index() {
-  return <LibraryForm />
+  return <ClientOnly>{() => <LibraryForm />}</ClientOnly>
 }

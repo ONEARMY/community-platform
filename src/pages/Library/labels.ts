@@ -61,7 +61,7 @@ export const intro: ILabels = {
     description: `Provide a short introduction (max ${LIBRARY_DESCRIPTION_MAX_LENGTH} characters)`,
     title: 'Short description',
   },
-  difficulty_level: {
+  difficultyLevel: {
     placeholder: 'How hard is it?',
     title: 'Difficulty level?',
   },

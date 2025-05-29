@@ -50,7 +50,6 @@ interface IState {
 export const LibraryStepField = ({
   step,
   index,
-  images,
   onDelete,
   moveStep,
 }: IProps) => {
@@ -70,18 +69,23 @@ export const LibraryStepField = ({
   /**
    * Ensure either url or images included (not both), and any url formatted correctly
    */
-  const validateMedia = (videoUrl: string) => {
+  const validateStepMedia = (allValues: any) => {
     const { both, empty, invalidUrl } = errors.videoUrl
 
-    if (videoUrl) {
-      if (images[0]) {
+    if (!allValues?.steps || !allValues?.steps.length) {
+      return null
+    }
+    const stepValues = allValues.steps[index]
+
+    if (stepValues.videoUrl) {
+      if (stepValues.images?.at(0)) {
         return both
       }
       const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
-      const urlValid = ytRegex.test(videoUrl)
+      const urlValid = ytRegex.test(stepValues.videoUrl)
       return urlValid ? null : invalidUrl
     }
-    return images[0] ? null : empty
+    return stepValues.images?.at(0) ? null : empty
   }
 
   const { deleteButton } = buttons.steps
@@ -218,8 +222,11 @@ export const LibraryStepField = ({
           {`${steps.images.title} *`}
         </Label>
         <Flex
-          sx={{ flexDirection: ['column', 'row'], alignItems: 'center' }}
-          mb={3}
+          sx={{
+            flexDirection: ['column', 'row'],
+            alignItems: 'center',
+            marginBottom: 3,
+          }}
         >
           <ImageInputFieldWrapper data-cy="step-image-0">
             <Field
@@ -228,6 +235,7 @@ export const LibraryStepField = ({
               name={`${step}.images[0]`}
               component={ImageInputField}
               isEqual={COMPARISONS.image}
+              validate={(_, allvalues) => validateStepMedia(allvalues)}
             />
           </ImageInputFieldWrapper>
           <ImageInputFieldWrapper data-cy="step-image-1">
@@ -237,6 +245,7 @@ export const LibraryStepField = ({
               name={`${step}.images[1]`}
               component={ImageInputField}
               isEqual={COMPARISONS.image}
+              validate={(_, allvalues) => validateStepMedia(allvalues)}
             />
           </ImageInputFieldWrapper>
           <ImageInputFieldWrapper data-cy="step-image-2">
@@ -246,6 +255,7 @@ export const LibraryStepField = ({
               name={`${step}.images[2]`}
               component={ImageInputField}
               isEqual={COMPARISONS.image}
+              validate={(_, allvalues) => validateStepMedia(allvalues)}
             />
           </ImageInputFieldWrapper>
         </Flex>
@@ -256,9 +266,7 @@ export const LibraryStepField = ({
             data-testid="step-videoUrl"
             component={FieldInput}
             placeholder={steps.videoUrl.placeholder}
-            validate={(value, allValues) =>
-              draftValidationWrapper(value, allValues, validateMedia.bind(this))
-            }
+            validate={(_, allValues) => validateStepMedia(allValues)}
             validateFields={[]}
             isEqual={COMPARISONS.textInput}
           />

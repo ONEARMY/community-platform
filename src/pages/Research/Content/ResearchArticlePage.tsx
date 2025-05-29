@@ -226,6 +226,8 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
                     onFollowClick={() =>
                       onFollowClick(subscribed ? 'remove' : 'add')
                     }
+                    tooltipFollow="Follow to be notified about new updates"
+                    tooltipUnfollow="Unfollow to stop be notified about new updates"
                   />
                 </ArticleCallToActionSupabase>
               )}

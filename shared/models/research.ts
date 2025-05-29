@@ -165,19 +165,20 @@ export class DBResearchUpdate implements IDBDocSB, IDBDownloadable {
 
 export class ResearchUpdate implements IDoc, IDownloadable {
   id: number
-  createdAt: Date
   author: Author | null
-  modifiedAt: Date | null
-  title: string
-  description: string
-  images: Image[] | null
-  files: IMediaFile[] | null
-  hasFileLink: boolean
-  videoUrl: string | null
-  deleted: boolean
   commentCount: number
+  createdAt: Date
+  deleted: boolean
+  description: string
   fileDownloadCount: number
+  files: IMediaFile[] | null
+  images: Image[] | null
   isDraft: boolean
+  hasFileLink: boolean
+  modifiedAt: Date | null
+  researchId: number
+  title: string
+  videoUrl: string | null
 
   constructor(obj: ResearchUpdate) {
     Object.assign(this, obj)
@@ -202,6 +203,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
       commentCount: obj.comment_count || 0,
       fileDownloadCount: obj.file_download_count || 0,
       isDraft: !!obj.is_draft,
+      researchId: obj.research_id,
     })
   }
 }

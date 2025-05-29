@@ -5,17 +5,20 @@ import { subscribersService } from 'src/services/subscribersService'
 import { useCommonStores } from './hooks/useCommonStores'
 import { trackEvent } from './Analytics'
 
+import type { OptionalFollowButtonProps } from 'oa-components'
 import type {
+  Comment,
   News,
   Question,
   ResearchUpdate,
   SubscribableContentTypes,
 } from 'oa-shared'
 
-interface IProps {
+interface IProps extends OptionalFollowButtonProps {
   contentType: SubscribableContentTypes
-  item: News | Question | ResearchUpdate
+  item: Comment | News | Question | ResearchUpdate
   setSubscribersCount?: Dispatch<SetStateAction<number>>
+  tooltipContent?: string
 }
 
 export const FollowButtonAction = (props: IProps) => {
@@ -71,10 +74,10 @@ export const FollowButtonAction = (props: IProps) => {
 
   return (
     <FollowButton
+      {...props}
       hasUserSubscribed={subscribed}
       isLoggedIn={!!activeUser}
       onFollowClick={onFollowClick}
-      label="Follow Discussion"
     />
   )
 }

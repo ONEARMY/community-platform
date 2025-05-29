@@ -5,19 +5,45 @@ import { Button } from '../Button/Button'
 import { Tooltip } from '../Tooltip/Tooltip'
 
 import type { ThemeUIStyleObject } from 'theme-ui'
+import type { availableGlyphs } from '../Icon/types'
 
-export interface IProps {
+export interface OptionalFollowButtonProps {
+  iconFollow?: availableGlyphs
+  iconUnfollow?: availableGlyphs
+  labelFollow?: string
+  labelUnfollow?: string
+  showIconOnly?: boolean
+  small?: boolean
+  sx?: ThemeUIStyleObject
+  tooltipFollow?: string
+  tooltipUnfollow?: string
+  variant?: string
+}
+export interface FollowButtonProps extends OptionalFollowButtonProps {
   hasUserSubscribed: boolean
   isLoggedIn: boolean
   onFollowClick: () => void
-  label?: string
-  sx?: ThemeUIStyleObject
 }
 
-export const FollowButton = (props: IProps) => {
-  const { hasUserSubscribed, isLoggedIn, label, onFollowClick, sx } = props
+export const FollowButton = (props: FollowButtonProps) => {
+  const {
+    hasUserSubscribed,
+    isLoggedIn,
+    iconFollow = 'thunderbolt',
+    iconUnfollow = 'thunderbolt-grey',
+    labelFollow = 'Follow',
+    labelUnfollow = 'Following',
+    onFollowClick,
+    showIconOnly = false,
+    sx,
+    tooltipFollow = '',
+    tooltipUnfollow = '',
+    variant = 'outline',
+  } = props
   const navigate = useNavigate()
   const uuid = useMemo(() => (Math.random() * 16).toString(), [])
+
+  const tooltipContent = hasUserSubscribed ? tooltipUnfollow : tooltipFollow
 
   return (
     <>
@@ -26,13 +52,9 @@ export const FollowButton = (props: IProps) => {
         data-testid={isLoggedIn ? 'follow-button' : 'follow-redirect'}
         data-cy={isLoggedIn ? 'follow-button' : 'follow-redirect'}
         data-tooltip-id={uuid}
-        data-tooltip-content={isLoggedIn ? '' : 'Login to follow'}
-        variant="outline"
-        sx={{
-          fontSize: 2,
-          py: 0,
-          ...sx,
-        }}
+        data-tooltip-content={isLoggedIn ? tooltipContent : 'Login to follow'}
+        variant={variant}
+        sx={sx}
         onClick={() =>
           isLoggedIn
             ? onFollowClick()
@@ -40,9 +62,10 @@ export const FollowButton = (props: IProps) => {
                 '/sign-in?returnUrl=' + encodeURIComponent(location.pathname),
               )
         }
-        icon={hasUserSubscribed ? 'thunderbolt' : 'thunderbolt-grey'}
+        icon={hasUserSubscribed ? iconFollow : iconUnfollow}
+        showIconOnly={showIconOnly}
       >
-        {hasUserSubscribed ? 'Following' : label || 'Follow'}
+        {hasUserSubscribed ? labelUnfollow : labelFollow}
       </Button>
       <Tooltip id={uuid} />
     </>

@@ -15,7 +15,7 @@ import {
 } from 'src/test/factories/Library'
 import { describe, expect, it, vi } from 'vitest'
 
-import { Library } from './Library'
+import { Library } from './ProjectPage'
 
 import type { Project } from 'oa-shared'
 

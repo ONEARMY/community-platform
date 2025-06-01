@@ -88,7 +88,7 @@ export const LibraryStepsContainerField = () => {
               onClick={() => {
                 fields.push({
                   title: '',
-                  text: '',
+                  description: '',
                   images: [],
                   // HACK - need unique key, this is a rough method to generate form random numbers
                   _animationKey: `unique${Math.random()

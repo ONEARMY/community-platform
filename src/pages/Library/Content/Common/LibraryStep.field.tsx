@@ -191,11 +191,11 @@ export const LibraryStepField = ({
         </Flex>
         <Flex sx={{ flexDirection: 'column' }} mb={3}>
           <Label sx={_labelStyle} htmlFor={`${step}.text`}>
-            {`${steps.text.title} *`}
+            {`${steps.description.title} *`}
           </Label>
           <Field
-            name={`${step}.text`}
-            placeholder={steps.text.placeholder}
+            name={`${step}.description`}
+            placeholder={steps.description.placeholder}
             minLength={STEP_DESCRIPTION_MIN_LENGTH}
             maxLength={STEP_DESCRIPTION_MAX_LENGTH}
             data-cy="step-description"
@@ -218,7 +218,7 @@ export const LibraryStepField = ({
             showCharacterCount
           />
         </Flex>
-        <Label sx={_labelStyle} htmlFor={`${step}.text`}>
+        <Label sx={_labelStyle} htmlFor={`${step}.description`}>
           {`${steps.images.title} *`}
         </Label>
         <Flex

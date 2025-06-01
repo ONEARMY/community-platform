@@ -19,18 +19,25 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
         description,
         slug,
         cover_image,
-        category:category(id,name),
+        category:categories(id,name),
         tags,
         total_views,
-        total_useful,
-        status,
         is_draft,
         files, 
         file_link, 
         file_download_count,
-        steps,
+        time,
+        difficulty_level,
         moderation,
-        author:profiles(id, display_name, username, is_verified, is_supporter, country)
+        author:profiles(id, display_name, username, is_verified, is_supporter, country),
+        steps:project_steps(
+          id, 
+          created_at, 
+          title, 
+          description, 
+          images, 
+          video_url
+        )
      `,
     )
     .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)

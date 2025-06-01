@@ -147,7 +147,7 @@ export const steps: ILabels = {
     title: 'Title of this step',
     placeholder: `Provide a title (max ${LIBRARY_TITLE_MAX_LENGTH} characters)`,
   },
-  text: {
+  description: {
     title: 'Step Description',
     placeholder: `Explain what you are doing. If it gets too long, consider breaking it into multiple steps (${STEP_DESCRIPTION_MIN_LENGTH}-${STEP_DESCRIPTION_MAX_LENGTH} characters)`,
   },

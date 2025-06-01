@@ -1,4 +1,4 @@
-import { Project, ProjectStep } from 'oa-shared'
+import { Project, ProjectStep, UserRole } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { ITEMS_PER_PAGE } from 'src/pages/Library/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
@@ -9,7 +9,7 @@ import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBProfile, DBProject, DBProjectStep } from 'oa-shared'
+import type { DBProfile, DBProject, DBProjectStep, Moderation } from 'oa-shared'
 import type { LibrarySortOption } from 'src/pages/Library/Content/List/LibrarySortOptions'
 
 // runs on the server
@@ -57,7 +57,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   if (items && items.length > 0) {
     // Populate useful votes
     const votes = await client.rpc('get_useful_votes_count_by_content_id', {
-      p_content_type: 'project',
+      p_content_type: 'projects',
       p_content_ids: items.map((x) => x.id),
     })
 
@@ -81,10 +81,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     const formData = await request.formData()
+    const uploadedCoverImage = formData.get('coverImage') as File | null
+    const uploadedFiles = formData.getAll('files') as File[] | null
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
       isDraft: formData.get('draft') === 'true',
+      time: formData.get('time') as string,
       category: formData.has('category')
         ? (formData.get('category') as string)
         : null,
@@ -94,12 +97,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       fileLink: formData.has('fileLink')
         ? (formData.get('fileLink') as string)
         : null,
+      difficultyLevel: formData.has('difficultyLevel')
+        ? (formData.get('difficultyLevel') as string)
+        : null,
+      moderation: 'awaiting-moderation' as Moderation,
     }
-    const uploadedCoverImage = formData.get('coverImage') as File | null
-    const uploadedFiles = formData.get('files') as File[] | null
 
     const { client, headers } = createSupabaseServerClient(request)
-
     const {
       data: { user },
     } = await client.auth.getUser()
@@ -112,6 +116,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     if (!valid) {
       return Response.json({}, { status, statusText })
+    }
+
+    const profile = await profileServiceServer.getByAuthId(user!.id, client)
+
+    if (profile?.roles?.includes(UserRole.ADMIN)) {
+      data.moderation = 'accepted'
     }
 
     const slug = convertToSlug(data.title)
@@ -128,8 +138,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       )
     }
 
-    const profile = await profileServiceServer.getByAuthId(user!.id, client)
-
     if (!profile) {
       return Response.json({}, { status: 400, statusText: 'User not found' })
     }
@@ -142,7 +150,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     if (uploadedCoverImage) {
       await uploadAndUpdateCoverImage(
         uploadedCoverImage,
-        `library/${project.id}`,
+        `projects/${project.id}`,
         project,
         client,
       )
@@ -151,7 +159,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     if (uploadedFiles) {
       await uploadAndUpdateFiles(
         uploadedFiles,
-        `library/${project.id}`,
+        `projects/${project.id}`,
         project,
         client,
       )
@@ -161,12 +169,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const stepCount = parseInt(formData.get('stepCount') as string)
 
     for (let i = 0; i < stepCount; i++) {
-      const images = formData.getAll(`steps[${i}].images`) as File[]
+      const images = formData.getAll(`steps.[${i}].images`) as File[]
 
       const stepDb = await createStep(client, {
-        title: formData.get(`steps[${i}].title`) as string,
-        description: formData.get(`steps[${i}].description`) as string,
-        videoUrl: (formData.get(`steps[${i}].videoUrl`) as string) || null,
+        title: formData.get(`steps.[${i}].title`) as string,
+        description: formData.get(`steps.[${i}].description`) as string,
+        videoUrl: (formData.get(`steps.[${i}].videoUrl`) as string) || null,
         projectId: projectDb.id,
       })
       const step = ProjectStep.fromDB(stepDb)
@@ -174,7 +182,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       // 4. Upload and set images of each Step
       await uploadAndUpdateStepImage(
         images,
-        `library/${project.id}`,
+        `projects/${project.id}`,
         step,
         client,
       )
@@ -221,6 +229,9 @@ async function createProject(
     category: string | null
     tags: number[] | null
     fileLink: string | null
+    difficultyLevel: string | null
+    time: string | null
+    moderation: Moderation
   },
   profile: DBProfile,
   slug: string,
@@ -232,10 +243,13 @@ async function createProject(
       title: data.title,
       description: data.description,
       slug,
-      category_id: data.category,
+      category: data.category,
       tags: data.tags,
       is_draft: data.isDraft,
       file_link: data.fileLink,
+      difficulty_level: data.difficultyLevel,
+      time: data.time,
+      moderation: data.moderation || 'awaiting-moderation',
       tenant_id: process.env.TENANT_ID,
     })
     .select()
@@ -271,7 +285,7 @@ async function createStep(
     throw error
   }
 
-  return data as unknown as DBProjectStep
+  return data[0] as unknown as DBProjectStep
 }
 
 async function uploadAndUpdateStepImage(

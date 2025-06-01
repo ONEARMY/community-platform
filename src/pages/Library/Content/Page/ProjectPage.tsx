@@ -21,11 +21,11 @@ import Step from './LibraryStep'
 
 import type { IUser, Project, ProjectStep } from 'oa-shared'
 
-type LibraryProps = {
+type ProjectPageProps = {
   item: Project
 }
 
-export const Library = observer(({ item }: LibraryProps) => {
+export const ProjectPage = observer(({ item }: ProjectPageProps) => {
   const { userStore } = useCommonStores().stores
   const [voted, setVoted] = useState<boolean>(false)
   const [usefulCount, setUsefulCount] = useState<number>(item.usefulCount)

@@ -21,6 +21,7 @@ const betaTester = MOCK_DATA.users['beta-tester']
 describe('[Profile]', () => {
   beforeEach(() => {
     cy.visit('/')
+    localStorage.setItem('VITE_NO_MESSAGING', 'false')
   })
 
   describe('[By Anonymous]', () => {
@@ -59,26 +60,25 @@ describe('[Profile]', () => {
       cy.get('[data-cy=emptyProfileMessage]').should('be.visible')
     })
 
-    it('[Can send a contact message]', () => {
-      localStorage.setItem('VITE_NO_MESSAGING', 'false')
-
-      const message = faker.lorem
-        .sentences(50)
-        .slice(0, MESSAGE_MAX_CHARACTERS)
-        .trim()
-      const user = generateNewUserDetails()
+    it('[Contact form]', () => {
+      const contactee = generateNewUserDetails()
 
       cy.step('Can sign-up and have a contact form')
-      cy.signUpNewUser(user)
-      cy.logout()
-      cy.signIn(subscriber.email, subscriber.password)
-      cy.step('Go to Profile')
-      cy.visit(`/u/${user.username}`)
+      cy.signUpNewUser(contactee)
+      cy.visit(`/u/${contactee.username}`)
+      cy.get('[data-cy="UserContactForm-Available"]')
 
-      cy.step('Go to contact tab')
-      cy.get('[data-cy=contact-tab]').click()
+      cy.step("Logged out people can see that they're contactable")
+      cy.logout()
+      cy.visit(`/u/${contactee.username}`)
+      cy.get('[data-cy="UserContactNotLoggedIn"]')
+
+      cy.step('Other users can contact people')
+      const contacter = generateNewUserDetails()
+      cy.signUpNewUser(contacter)
+      cy.visit(`/u/${contactee.username}`)
       cy.get('[data-cy="UserContactForm"]').should('be.visible')
-      cy.contains(`${contact.title} ${user.username}`).should('be.visible')
+      cy.contains(`${contact.title} ${contactee.username}`).should('be.visible')
 
       cy.step('Form errors without a message')
       cy.get('[data-cy=contact-submit]').click()
@@ -86,66 +86,68 @@ describe('[Profile]', () => {
         'be.visible',
       )
 
-      cy.step('Can send contact form')
+      cy.step('Contact form will send')
+      const message = faker.lorem
+        .sentences(50)
+        .slice(0, MESSAGE_MAX_CHARACTERS)
+        .trim()
+
       cy.get('[data-cy=name]').type('Bob')
       cy.get('[data-cy=message]').invoke('val', message).blur({ force: true })
       cy.get('[data-cy=contact-submit]').click()
       cy.contains(contact.successMessage)
-    })
 
-    it('[Can edit public contact section]', () => {
-      localStorage.setItem('VITE_NO_MESSAGING', 'false')
-
-      const user = generateNewUserDetails()
-
-      cy.step('Can sign-up')
-      cy.signUpNewUser(user)
-
-      cy.step('Set up public contact section')
+      cy.step('Can opt-out of being contacted')
+      cy.logout()
+      cy.signIn(contactee.email, contactee.password)
       cy.visit('/settings')
-      cy.setSettingFocus('workspace')
-      cy.setSettingBasicUserInfo({
-        displayName: user.username,
-        country: 'Bolivia',
-        description: 'New profile to test the contact form',
-      })
-      cy.setSettingImage('profile-cover-1-edited', 'coverImages-0')
-      cy.selectTag('Mixed', '[data-cy=tag-select]')
+      cy.get('[data-cy=PublicContactSection]').should('be.visible')
+      cy.get('[data-cy=info-description')
+        .clear()
+        .type('Here for the contact testing')
+      cy.get('[data-cy=isContactableByPublic-true]').click({ force: true })
+      cy.saveSettingsForm()
+      cy.get('[data-cy=isContactableByPublic-false]')
+
+      cy.step('No contact tab visible for contactee')
+      cy.visit(`/u/${contactee.username}`)
+      cy.get('[data-cy=contact-tab]').should('not.exist')
+
+      cy.step('No contact tab visible for logged out users')
+      cy.logout()
+      cy.visit(`/u/${contactee.username}`)
+      cy.get('[data-cy=contact-tab]').should('not.exist')
+
+      cy.step('No contact tab visible for other users')
+      cy.signIn(contacter.email, contacter.password)
+      cy.visit(`/u/${contactee.username}`)
+      cy.get('[data-cy=contact-tab]').should('not.exist')
+
+      cy.step('Contact tab shows when links are present')
+      cy.logout()
+      cy.signIn(contactee.email, contactee.password)
+      cy.visit('/settings')
       cy.setSettingAddContactLink({
         index: 0,
         label: ExternalLinkLabel.EMAIL,
         url: 'something@test.com',
       })
-      cy.get('[data-cy=PublicContactSection]').should('be.visible')
-    })
-
-    it('[Cannot contact when public contact is disabled]', () => {
-      localStorage.setItem('VITE_NO_MESSAGING', 'false')
-
-      const user = generateNewUserDetails()
-
-      cy.step('Can sign-up')
-      cy.signUpNewUser(user)
-
-      cy.step('Disable public contact')
-      cy.visit('/settings')
-      cy.setSettingFocus('workspace')
-      cy.setSettingBasicUserInfo({
-        displayName: user.username,
-        country: 'Bolivia',
-        description: 'New profile to test the contact form',
-      })
-      cy.setSettingImage('profile-cover-1-edited', 'coverImages-0')
-      cy.get('[data-cy=PublicContactSection]').should('be.visible')
-      cy.get('[data-cy=isContactableByPublic-true]').click({ force: true })
       cy.saveSettingsForm()
-      cy.get('[data-cy=isContactableByPublic-false]')
 
-      cy.step('Cannot see contact tab')
+      cy.visit(`/u/${contactee.username}`)
+      cy.get('[data-cy=contact-tab]').click()
+      cy.get('[data-cy="UserContactForm-NotAvailable"]')
+      cy.get('[data-cy="UserContactForm"]').should('not.exist')
+      cy.get('[data-cy="profile-link"]').should(
+        'have.attr',
+        'href',
+        `mailto:something@test.com`,
+      )
+
+      cy.step('Contact tab links shows for everyone else')
       cy.logout()
-      cy.signIn(subscriber.email, subscriber.password)
-      cy.visit(`/u/${user.username}`)
-      cy.get('[data-cy=contact-tab]').should('not.exist')
+      cy.visit(`/u/${contactee.username}`)
+      cy.get('[data-cy="UserContactForm-NotAvailable"]').should('not.exist')
     })
 
     it("[Can't message users when config set]", () => {

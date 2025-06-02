@@ -11,11 +11,14 @@ export const UserContactFormAvailable = ({
     <Alert variant="info">
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
         {isUserProfileContactable ? (
-          <Text sx={{ textAlign: 'left' }}>
+          <Text sx={{ textAlign: 'left' }} data-cy="UserContactForm-Available">
             Other users are able to contact you
           </Text>
         ) : (
-          <Text sx={{ textAlign: 'left' }}>
+          <Text
+            sx={{ textAlign: 'left' }}
+            data-cy="UserContactForm-NotAvailable"
+          >
             Other users are not able to contact you
           </Text>
         )}

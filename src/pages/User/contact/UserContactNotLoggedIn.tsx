@@ -7,7 +7,7 @@ interface Props {
 
 export const UserContactNotLoggedIn = ({ displayName }: Props) => {
   return (
-    <Alert variant="info">
+    <Alert variant="info" data-cy="UserContactNotLoggedIn">
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
         <Text sx={{ textAlign: 'left' }}>
           {`${displayName} would love to hear from you...but you're not logged in!`}

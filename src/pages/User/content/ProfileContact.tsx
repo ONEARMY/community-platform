@@ -47,7 +47,7 @@ export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
               isUserProfileContactable ? (
                 <UserContactNotLoggedIn displayName={user.displayName} />
               ) : (
-                <></>
+                <UserContactNotLoggedIn displayName={user.displayName} />
               )
             }
           />

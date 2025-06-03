@@ -12,14 +12,15 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return Response.json({}, { status: 401, statusText: 'unauthorized' })
   }
 
-  const subscribedResult = await client
+  const { data } = await client
     .from('subscribers')
     .select('id, profiles!inner(id)', { count: 'exact' })
     .eq('content_id', params.contentId)
     .eq('content_type', params.contentType)
     .eq('profiles.auth_id', user.id)
+    .single()
 
-  const subscribed = subscribedResult.count === 1
+  const subscribed = !!data
 
   return Response.json({ subscribed }, { headers, status: 200 })
 }

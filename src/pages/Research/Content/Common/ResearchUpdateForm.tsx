@@ -9,6 +9,7 @@ import {
 } from 'oa-components'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
+import { subscribersService } from 'src/services/subscribersService'
 import { Box, Card, Flex, Heading } from 'theme-ui'
 
 import { buttons, headings, update } from '../../labels'
@@ -80,15 +81,22 @@ export const ResearchUpdateForm = (props: IProps) => {
         formData,
         isDraft,
       )
-      setIntentionalNavigation(true)
+      if (result) {
+        setIntentionalNavigation(true)
+        !id &&
+          (await subscribersService.add(
+            'research_update',
+            result.researchUpdate.id,
+          ))
 
-      setTimeout(
-        () =>
-          navigate(
-            `/research/${research.slug}#update_${result.researchUpdate.id}`,
-          ),
-        100,
-      )
+        setTimeout(
+          () =>
+            navigate(
+              `/research/${research.slug}#update_${result.researchUpdate.id}`,
+            ),
+          100,
+        )
+      }
     } catch (err) {
       console.error(err)
     }

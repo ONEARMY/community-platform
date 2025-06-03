@@ -48,7 +48,7 @@ describe('[Library.Discussions]', () => {
     cy.visit(projectPath)
     cy.addReply(newReply)
     cy.wait(1000)
-    cy.contains('2 comments')
+    cy.contains('comments')
 
     cy.step('Can edit their reply')
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)

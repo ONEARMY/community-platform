@@ -1,26 +1,22 @@
 import { useContext, useEffect, useMemo, useState } from 'react'
+import { type ResearchUpdate, UserRole } from 'oa-shared'
+import { AuthWrapper } from 'src/common/AuthWrapper'
+import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { Box, Button } from 'theme-ui'
 
 import { CommentSectionSupabase } from './CommentSectionSupabase'
 import { MultipleCommentSectionContext } from './MultipleCommentSectionWrapper'
 
-import type { DiscussionContentTypes } from 'oa-shared'
-
 type Props = {
-  sourceId: number | string
-  sourceType: DiscussionContentTypes
   authors: number[]
   open: boolean
   total: number
+  researchUpdate: ResearchUpdate
 }
 
-const CollapsableCommentSection = ({
-  sourceId,
-  sourceType,
-  authors,
-  open,
-  total,
-}: Props) => {
+const CollapsableCommentSection = (props: Props) => {
+  const { authors, open, total, researchUpdate } = props
+
   const multipleSectionsContext = useContext(MultipleCommentSectionContext)
   const [isOpen, seIstOpen] = useState(() => open || false)
 
@@ -40,7 +36,7 @@ const CollapsableCommentSection = ({
   }, [isOpen])
 
   useEffect(() => {
-    if (multipleSectionsContext?.expandId === sourceId) {
+    if (multipleSectionsContext?.expandId === researchUpdate.id) {
       seIstOpen(true)
     }
   }, [multipleSectionsContext])
@@ -68,15 +64,23 @@ const CollapsableCommentSection = ({
         onClick={() => seIstOpen((prev) => !prev)}
         backgroundColor={isOpen ? '#c2daf0' : '#e2edf7'}
         className={isOpen ? 'viewComments' : ''}
-        data-cy={`HideDiscussionContainer: button ${isOpen ? 'close-comments' : 'open-comments'} ${total !== 0 ? 'has-comments' : 'no-comments'}`}
+        data-cy="HideDiscussionContainer:button"
       >
         {buttonText}
       </Button>
       {isOpen && (
         <CommentSectionSupabase
-          sourceId={sourceId}
-          sourceType={sourceType}
+          sourceId={researchUpdate.id}
+          sourceType="research_update"
           authors={authors}
+          followButton={
+            <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+              <FollowButtonAction
+                contentType="research_update"
+                item={researchUpdate}
+              />
+            </AuthWrapper>
+          }
         />
       )}
     </Box>

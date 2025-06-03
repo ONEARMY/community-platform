@@ -1,8 +1,10 @@
 import { ResearchUpdate, UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { discordServiceServer } from 'src/services/discordService.server'
+import { notificationsService } from 'src/services/notificationsService.server'
 import { profileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
+import { subscribersServiceServer } from 'src/services/subscribersService.server'
 import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
@@ -94,13 +96,20 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       client,
     )
 
-    // Send discord notification
+    await addSubscribers(research, profile?.id, client)
+
     if (!research.is_draft && !researchUpdate.isDraft) {
+      notificationsService.sendResearchUpdateNotification(
+        client,
+        research,
+        updateResult.data[0],
+        profile as DBProfile,
+      )
       notifyDiscord(
         research,
         researchUpdate,
         profile!,
-        new URL(request.url).origin,
+        new URL(request.url).origin.replace('http:', 'https:'),
       )
     }
 
@@ -112,6 +121,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       { status: 500, statusText: 'Error creating research' },
     )
   }
+}
+
+const addSubscribers = async (update, profile, client) => {
+  subscribersServiceServer.add('research_update', update.id, profile.id, client)
+  // To do: Subscribe collaborators too
+  return
 }
 
 async function uploadAndUpdateImages(

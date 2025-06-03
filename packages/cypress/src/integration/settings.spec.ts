@@ -306,6 +306,8 @@ describe('[Settings]', () => {
       const profileType = 'workspace'
       const tag = 'Shredder'
       const url = 'something@test.com'
+      const visitorDetails =
+        'Visitors are welcome between 13:00 and 15:00 every day'
       const impactFields = [
         { name: 'plastic', value: 5 },
         { name: 'revenue', value: 10003 },
@@ -335,11 +337,13 @@ describe('[Settings]', () => {
       cy.setSettingImage(userImage, 'userImage')
       cy.setSettingImage(coverImage, 'coverImages-0')
 
+      cy.step('Can add contact link and visitor details')
       cy.setSettingAddContactLink({
         index: 0,
         label: ExternalLinkLabel.EMAIL,
         url,
       })
+      cy.setSettingVisitorPolicy('Open to visitors', visitorDetails)
       cy.saveSettingsForm()
 
       cy.step('Updated settings display on profile')

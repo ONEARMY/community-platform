@@ -117,7 +117,7 @@ const DeleteMapPin = (props: IPropsDeletePin) => {
         await mapsStore.deleteUserPin(toJS(updatedUser))
       }
       setNotification({
-        message: mapForm.sucessfulDelete,
+        message: mapForm.successfulDelete,
         icon: 'check',
         show: true,
         variant: 'success',
@@ -216,7 +216,7 @@ export const SettingsPageMapPin = () => {
         await mapsStore.setUserPin(pin)
       }
       setNotification({
-        message: mapForm.succesfulSave,
+        message: mapForm.successfulSave,
         icon: 'check',
         show: true,
         variant: 'success',

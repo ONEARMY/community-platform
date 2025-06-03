@@ -1,10 +1,12 @@
-import React from 'npm:react@18.3.1'
+import React from 'react'
 
 import { Layout } from './layout.tsx'
 import { Button } from './components/button.tsx'
 import { Heading } from './components/heading.tsx'
 import { Hero } from './components/hero.tsx'
 import { PlainText } from './components/plain-text.tsx'
+
+import type { TenantSettings } from 'oa-shared'
 
 const copy = {
   h1: (username: string) => `Hey ${username}!`,
@@ -18,20 +20,31 @@ const copy = {
 
 interface SignUpEmailProps {
   username: string
-  supabase_url: string
+  supabaseUrl: string
   email_action_type: string
   redirect_to: string
   token_hash: string
+  settings: TenantSettings
 }
 
 export const ResetPasswordEmail = (props: SignUpEmailProps) => {
-  const { username, supabase_url, email_action_type, redirect_to, token_hash } =
-    props
+  const {
+    username,
+    supabaseUrl,
+    email_action_type,
+    redirect_to,
+    settings,
+    token_hash,
+  } = props
 
-  const href = `${supabase_url}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${redirect_to}`
+  const href =
+    `${redirect_to}?url=` +
+    encodeURIComponent(
+      `${supabaseUrl}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${redirect_to}`,
+    )
 
   return (
-    <Layout preview={copy.preview}>
+    <Layout preview={copy.preview} settings={settings}>
       <Heading>{copy.h1(username)}</Heading>
       <Hero>{copy.intro}</Hero>
 

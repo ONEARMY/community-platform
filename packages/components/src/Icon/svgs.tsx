@@ -57,6 +57,9 @@ import supporterSVG from '../../assets/icons/supporter.svg'
 import thunderboltSVG from '../../assets/icons/thunderbolt.svg'
 import thunderboltGreySVG from '../../assets/icons/thunderbolt-grey.svg'
 import utilitiesSVG from '../../assets/icons/utilities.svg'
+import visitorsAppointmentSVG from '../../assets/icons/visitors-appointment.svg'
+import visitorsClosedSVG from '../../assets/icons/visitors-closed.svg'
+import visitorsOpenSVG from '../../assets/icons/visitors-open.svg'
 import volunteerSVG from '../../assets/icons/volunteer.svg'
 import loadingSVG from '../../assets/images/loading.svg'
 
@@ -94,6 +97,8 @@ export const iconMap = {
   flagUnknown: <ImageIcon src={flagUnknownSVG} />,
   food: <ImageIcon src={foodSVG} />,
   fromTheTeam: <ImageIcon src={fromTheTeamSVG} />,
+  globe: <ImageIcon src={globe} />,
+  gpsLocation: <ImageIcon src={gpsLocation} />,
   guides: <ImageIcon src={guidesSVG} />,
   hide: <ImageIcon src={eyeCrossedSVG} />,
   hyperlink: <ImageIcon src={hyperlinkSVG} />,
@@ -113,6 +118,7 @@ export const iconMap = {
   products: <ImageIcon src={productsSVG} />,
   recycling: <ImageIcon src={recyclingSVG} />,
   revenue: <ImageIcon src={revenueSVG} />,
+  search: <ImageIcon src={searchSVG} />,
   show: <ImageIcon src={eyeSVG} />,
   sliders: <ImageIcon src={slidersSVG} />,
   socialMedia: <ImageIcon src={socialMediaSVG} />,
@@ -129,8 +135,8 @@ export const iconMap = {
   verified: <ImageIcon src={verifiedSVG} />,
   view: <ImageIcon src={viewSVG} />,
   volunteer: <ImageIcon src={volunteerSVG} />,
+  visitorsAppointment: <ImageIcon src={visitorsAppointmentSVG} />,
+  visitorsClosed: <ImageIcon src={visitorsClosedSVG} />,
+  visitorsOpen: <ImageIcon src={visitorsOpenSVG} />,
   website: <ImageIcon src={websiteSVG} />,
-  search: <ImageIcon src={searchSVG} />,
-  globe: <ImageIcon src={globe}></ImageIcon>,
-  gpsLocation: <ImageIcon src={gpsLocation}></ImageIcon>,
 }

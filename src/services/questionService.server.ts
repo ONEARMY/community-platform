@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
+import type { Question } from 'oa-shared'
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
   return client
@@ -26,6 +27,31 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
     .single()
 }
 
+const getQuestionsByUser = async (
+  client: SupabaseClient,
+  username: string,
+): Promise<Partial<Question>[]> => {
+  const functionResult = await client.rpc('get_user_questions', {
+    username_param: username,
+  })
+
+  if (functionResult.error || functionResult.count === 0) {
+    return []
+  }
+
+  const items = functionResult.data.map((x) => {
+    return {
+      id: x.id,
+      title: x.title,
+      slug: x.slug,
+      usefulCount: x.total_useful,
+    }
+  })
+
+  return items
+}
+
 export const questionServiceServer = {
   getBySlug,
+  getQuestionsByUser,
 }

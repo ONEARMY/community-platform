@@ -998,6 +998,24 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "cajohn2757",
+      "name": "Corey Johnson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/71300075?v=4",
+      "profile": "https://github.com/cajohn2757",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "devianweb",
+      "name": "Ian Webster",
+      "avatar_url": "https://avatars.githubusercontent.com/u/87659522?v=4",
+      "profile": "https://github.com/devianweb",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

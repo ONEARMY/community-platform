@@ -2,25 +2,28 @@ import { users } from 'oa-shared/mocks/data'
 
 import { generateAlphaNumeric } from '../../utils/TestUtils'
 
+let initialRandomId
+
 describe('[News.Write]', () => {
   describe('[Create a news item]', () => {
-    const initialRandomId = generateAlphaNumeric(8).toLowerCase()
-
-    const initialTitle = `${initialRandomId} Amazing new thing`
-    const initialExpectedSlug = `${initialRandomId}-amazing-new-thing`
-    const initialNewsBodyOne = 'Yo.'
-    const initialNewsBodyTwo = "We've done something."
-    const initialNewsBodyThree = 'We saved so much plastic.'
-    const initialSummary = `${initialNewsBodyOne} ${initialNewsBodyTwo} ${initialNewsBodyThree}`
-    const category = 'Moulds'
-    const tag1 = 'product'
-    const tag2 = 'workshop'
-    const updatedTitle = `Still an amazing thing ${initialRandomId}`
-    const updatedExpectedSlug = `still-an-amazing-thing-${initialRandomId}`
-    const updatedNewsBody = 'PLUS sparkles!'
-    const updatedSummary = `${updatedNewsBody} ${initialNewsBodyOne} ${initialNewsBodyTwo}`
-
+    beforeEach(() => {
+      initialRandomId = generateAlphaNumeric(8).toLowerCase()
+    })
     it('[By Authenticated]', () => {
+      const initialTitle = `${initialRandomId} Amazing new thing`
+      const initialExpectedSlug = `${initialRandomId}-amazing-new-thing`
+      const initialNewsBodyOne = 'Yo.'
+      const initialNewsBodyTwo = "We've done something."
+      const initialNewsBodyThree = 'We saved so much plastic.'
+      const initialSummary = `${initialNewsBodyOne} ${initialNewsBodyTwo} ${initialNewsBodyThree}`
+      const category = 'Moulds'
+      const tag1 = 'product'
+      const tag2 = 'workshop'
+      const updatedTitle = `Still an amazing thing ${initialRandomId}`
+      const updatedExpectedSlug = `still-an-amazing-thing-${initialRandomId}`
+      const updatedNewsBody = 'PLUS sparkles!'
+      const updatedSummary = `${updatedNewsBody} ${initialNewsBodyOne} ${initialNewsBodyTwo}`
+
       cy.visit('/news')
       const user = users.admin
       cy.signIn(user.email, user.password)
@@ -75,8 +78,13 @@ describe('[News.Write]', () => {
       cy.contains(category)
       cy.contains(tag1)
       cy.contains(tag2)
-      // Follow button should show you're subscribed
       // contains images
+
+      cy.step('All ready for a discussion')
+      cy.contains('0 comments')
+      cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion')
+      // Currently beta testers only:
+      // cy.get('[data-cy=follow-button]').contains('Following Comments')
 
       cy.step('Edit fields')
       cy.get('[data-cy=edit]')

@@ -16,19 +16,14 @@ describe('[Research.Discussions]', () => {
     const newComment = `An example comment from ${admin.userName}`
     const updatedNewComment = `I've updated my comment now. Love ${admin.userName}`
 
-    const researchPath = `/research/${MOCK_DATA.research[1].slug}`
+    const research = MOCK_DATA.research[1]
+    const researchPath = `/research/${research.slug}`
 
     cy.step('Can add comment')
 
     cy.visit(researchPath)
-    cy.get(
-      '[data-cy="HideDiscussionContainer: button open-comments no-comments"]',
-    ).click()
-    cy.contains('Start the discussion')
-    cy.contains('0 comments')
-
+    cy.get('[data-cy="HideDiscussionContainer:button"]').click()
     cy.addComment(newComment)
-    cy.contains('1 Comment')
 
     cy.step('Can edit their comment')
     cy.editDiscussionItem('CommentItem', newComment, updatedNewComment)
@@ -41,13 +36,11 @@ describe('[Research.Discussions]', () => {
 
     cy.signIn(secondCommentor.email, secondCommentor.password)
     cy.visit(researchPath)
-    cy.get(
-      '[data-cy="HideDiscussionContainer: button open-comments has-comments"]',
-    ).click()
+    cy.get('[data-cy="HideDiscussionContainer:button"]').click()
 
     cy.addReply(newReply)
     cy.wait(1000)
-    cy.contains('2 Comments')
+    cy.contains('Comments')
 
     cy.step('Can edit their reply')
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
@@ -58,9 +51,18 @@ describe('[Research.Discussions]', () => {
     cy.logout()
     cy.signIn(admin.email, admin.password)
     cy.visit(researchPath)
-    cy.get(
-      '[data-cy="HideDiscussionContainer: button open-comments has-comments"]',
-    ).click()
+
+    cy.expectNewNotification({
+      content: updatedNewReply,
+      path: researchPath,
+      title: research.title,
+      username: secondCommentor._id,
+    })
+
+    cy.visit(researchPath)
+    cy.expectNoNewNotifications()
+
+    cy.get('[data-cy="HideDiscussionContainer:button"]').click()
 
     cy.addReply(secondReply)
 

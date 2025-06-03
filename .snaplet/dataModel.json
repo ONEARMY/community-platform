@@ -3047,8 +3047,8 @@
           "id": "public.notifications.source_content_type",
           "name": "source_content_type",
           "columnName": "source_content_type",
-          "type": "notification_source_content_type",
-          "isRequired": true,
+          "type": "text",
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -3062,7 +3062,35 @@
           "name": "source_content_id",
           "columnName": "source_content_id",
           "type": "int8",
-          "isRequired": true,
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications.parent_comment_id",
+          "name": "parent_comment_id",
+          "columnName": "parent_comment_id",
+          "type": "int8",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications.parent_content_id",
+          "name": "parent_content_id",
+          "columnName": "parent_content_id",
+          "type": "int8",
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -3103,6 +3131,108 @@
       "uniqueConstraints": [
         {
           "name": "notifications_pkey",
+          "fields": ["id"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "notifications_preferences": {
+      "id": "public.notifications_preferences",
+      "schemaName": "public",
+      "tableName": "notifications_preferences",
+      "fields": [
+        {
+          "id": "public.notifications_preferences.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"notifications_preferences_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications_preferences.user_id",
+          "name": "user_id",
+          "columnName": "user_id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications_preferences.comments",
+          "name": "comments",
+          "columnName": "comments",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications_preferences.replies",
+          "name": "replies",
+          "columnName": "replies",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.notifications_preferences.tenant_id",
+          "name": "tenant_id",
+          "columnName": "tenant_id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "profiles",
+          "type": "profiles",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "notifications_preferencesToprofiles",
+          "relationFromFields": ["user_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "notifications_preferences_pkey",
           "fields": ["id"],
           "nullNotDistinct": false
         }
@@ -4108,6 +4238,20 @@
           "hasDefaultValue": false
         },
         {
+          "name": "notifications_preferences",
+          "type": "notifications_preferences",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "notifications_preferencesToprofiles",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "questions",
           "type": "questions",
           "isRequired": false,
@@ -4810,6 +4954,20 @@
           "id": "public.research.total_views",
           "name": "total_views",
           "columnName": "total_views",
+          "type": "int4",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research.total_useful",
+          "name": "total_useful",
+          "columnName": "total_useful",
           "type": "int4",
           "isRequired": false,
           "kind": "scalar",
@@ -6757,7 +6915,7 @@
           "id": "public.subscribers.content_type",
           "name": "content_type",
           "columnName": "content_type",
-          "type": "content_types",
+          "type": "text",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,

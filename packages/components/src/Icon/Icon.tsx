@@ -96,6 +96,7 @@ export const glyphs: IGlyphs = {
   guides: iconMap.guides,
   hide: iconMap.hide,
   hyperlink: iconMap.hyperlink,
+  information: iconMap.information,
   image: <MdImage />,
   impact: iconMap.impact,
   instagram: <FaInstagram />,
@@ -146,9 +147,9 @@ export const glyphs: IGlyphs = {
   website: iconMap.website,
 }
 
-export type Props = IProps & VerticalAlignProps & SpaceProps
+export type IconProps = IProps & VerticalAlignProps & SpaceProps
 
-const IconWrapper = styled.div<Props>`
+const IconWrapper = styled.div<IconProps>`
   display: inline-block;
   flex: 0 0 ${(props) => (props.size ? `${props.size}px` : '32px')};
   width: ${(props) => (props.size ? `${props.size}px` : '32px')};
@@ -176,7 +177,7 @@ export const getGlyph = (glyph: string) => {
   return glyph in glyphs ? glyphs[glyph as keyof IGlyphs] : null
 }
 
-export const Icon = (props: Props) => {
+export const Icon = (props: IconProps) => {
   const { glyph, size, sx } = props
 
   if (!getGlyph(glyph)) {

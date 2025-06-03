@@ -43,6 +43,7 @@ export type availableGlyphs =
   | 'hyperlink'
   | 'image'
   | 'impact'
+  | 'information'
   | 'instagram'
   | 'landscape'
   | 'loading'

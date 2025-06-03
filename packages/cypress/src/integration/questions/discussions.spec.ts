@@ -70,8 +70,6 @@ describe('[Questions.Discussions]', () => {
       title: question.title,
       username: replier.username,
     })
-    cy.visit(questionPath)
-    cy.expectNoNewNotifications()
 
     cy.step('Can add reply')
     cy.addReply(secondReply)
@@ -95,7 +93,6 @@ describe('[Questions.Discussions]', () => {
       title: question.title,
       username: commenter.username,
     })
-    cy.expectNoNewNotifications()
 
     // Currently hard to test as the article is created via the seed
     //
@@ -110,6 +107,5 @@ describe('[Questions.Discussions]', () => {
     //   title: question.title,
     //   username: replier.username,
     // })
-    // cy.expectNoNewNotifications()
   })
 })

@@ -63,6 +63,8 @@ describe('[Research.Discussions]', () => {
       username: secondCommentor._id,
     })
 
+    cy.visit(researchPath)
+
     cy.step('Can add reply')
     cy.get('[data-cy="HideDiscussionContainer:button"]').click()
     cy.addReply(secondReply)

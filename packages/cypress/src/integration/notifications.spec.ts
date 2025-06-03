@@ -1,11 +1,54 @@
-/**
- * Time to wait before checking database for updates to try ensure writes
- * TODO - CC 2022-04-25 - Likely some of these waits can be replaced by search for UI elements
- * that should respond to change
- */
-// const DB_WAIT_TIME = 5000
+import { UserRole } from 'oa-shared'
 
 describe('[Notifications]', () => {
+  it('email preferences can be set', () => {
+    localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
+
+    cy.signUpNewUser()
+    cy.visit('/settings')
+
+    cy.step('All ticked be default')
+    cy.get('[data-cy=tab-Notifications]').click()
+    cy.get('[data-cy=SupabaseNotifications-field-comments]').invoke(
+      'prop',
+      'indeterminate',
+      true,
+    )
+    cy.get('[data-cy=SupabaseNotifications-field-comments]').click()
+    cy.get('[data-cy=SupabaseNotifications-field-replies]').invoke(
+      'prop',
+      'indeterminate',
+      true,
+    )
+    cy.get('[data-cy=SupabaseNotifications-field-replies]').click()
+
+    cy.get('[data-cy=save-notifications-preferences]').click()
+
+    cy.contains('Preferences updated')
+    cy.get('[data-cy=SupabaseNotifications-field-comments]').invoke(
+      'prop',
+      'indeterminate',
+      false,
+    )
+    cy.get('[data-cy=SupabaseNotifications-field-replies]').invoke(
+      'prop',
+      'indeterminate',
+      false,
+    )
+
+    cy.step('Changing messaging updates preferences form')
+    cy.get('[data-cy=messages-link]')
+      .contains('Stop receiving messages')
+      .click()
+
+    cy.get('[data-cy=info-description').clear().type('Quick preferences test')
+    cy.get('[data-cy=isContactableByPublic-true]').click({ force: true })
+    cy.saveSettingsForm()
+
+    cy.get('[data-cy=tab-Notifications]').click()
+    cy.get('[data-cy=messages-link]').contains('Start receiving messages')
+  })
+
   // Can't test like this now because we are now using the same users collection for all tests.
   // it('[are not generated when the howTo author is triggering notification]', () => {
   //   cy.visit('library')

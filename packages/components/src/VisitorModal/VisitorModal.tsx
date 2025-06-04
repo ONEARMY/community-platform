@@ -62,7 +62,10 @@ export const VisitorModal = ({ show, hide, user }: VisitorModalProps) => {
       sx={{ padding: '0 !important' }}
     >
       <VisitorModalHeader data={displayData} hide={hide} />
-      <Flex sx={{ flexDirection: 'column', padding: '16px' }}>
+      <Flex
+        data-cy="VisitorModal"
+        sx={{ flexDirection: 'column', padding: '16px' }}
+      >
         {openToVisitors.details && <>Details from {displayName}:</>}
         <Text variant="quiet">
           {openToVisitors.details || displayData.default}

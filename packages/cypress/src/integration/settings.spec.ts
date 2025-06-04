@@ -306,6 +306,7 @@ describe('[Settings]', () => {
       const profileType = 'workspace'
       const tag = 'Shredder'
       const url = 'something@test.com'
+      const visitorType = 'Open to visitors'
       const visitorDetails =
         'Visitors are welcome between 13:00 and 15:00 every day'
       const impactFields = [
@@ -343,7 +344,7 @@ describe('[Settings]', () => {
         label: ExternalLinkLabel.EMAIL,
         url,
       })
-      cy.setSettingVisitorPolicy('Open to visitors', visitorDetails)
+      cy.setSettingVisitorPolicy(visitorType, visitorDetails)
       cy.saveSettingsForm()
 
       cy.step('Updated settings display on profile')
@@ -360,6 +361,11 @@ describe('[Settings]', () => {
       cy.get('[data-cy="active-image"]')
         .should('have.attr', 'src')
         .and('include', coverImage)
+
+      cy.step('Can see visitor policy')
+      cy.get('[data-cy=tag-openToVisitors]').contains(visitorType).click()
+      cy.get('[data-cy=VisitorModal]').contains(visitorDetails)
+      cy.get('[data-cy="close"]').click()
 
       cy.step('Updated settings display on contact tab')
       cy.get('[data-cy="contact-tab"]').click()
@@ -413,6 +419,13 @@ describe('[Settings]', () => {
       cy.visit(`u/${user.username}`)
       cy.get(`[data-cy="MemberBadge-collection-point"]`)
       cy.contains(collectionXp)
+
+      cy.step('Can remove visitor policy')
+      cy.visit('/settings')
+      cy.clearSettingVisitorPolicy()
+      cy.saveSettingsForm()
+      cy.visit(`u/${user.username}`)
+      cy.get('[data-cy=tag-openToVisitors]').should('not.exist')
     })
   })
 

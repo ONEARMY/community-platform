@@ -61,6 +61,7 @@ declare global {
       selectTag(tagName: string, selector?: string): Chainable<void>
       setSettingAddContactLink(link: ILink)
       setSettingVisitorPolicy(policyText: string, details?: string)
+      clearSettingVisitorPolicy()
       setSettingBasicUserInfo(info: IInfo)
       setSettingFocus(focus: string)
       setSettingImage(image: string, selector: string)
@@ -125,6 +126,11 @@ Cypress.Commands.add(
     }
   },
 )
+
+Cypress.Commands.add('clearSettingVisitorPolicy', () => {
+  cy.step('Clear visitor policy')
+  cy.get('[data-testid="openToVisitors-switch"]').click({ force: true })
+})
 
 Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
   const { country, description, displayName } = info

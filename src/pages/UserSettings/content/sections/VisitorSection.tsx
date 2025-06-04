@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useEffect, useState } from 'react'
 import { Field } from 'react-final-form'
 import { observer } from 'mobx-react'
 import { FieldTextarea, Select, visitorDisplayData } from 'oa-components'
@@ -31,7 +32,12 @@ const { title: policyDetailsTitle, placeholder: policyDetailsPlaceholder } =
 const { visitors } = headings
 
 export const VisitorSection = observer((props: Props) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const { openToVisitors } = props
+
+  useEffect(() => {
+    setIsOpen(!!openToVisitors)
+  }, [openToVisitors])
 
   return (
     <Flex
@@ -50,12 +56,14 @@ export const VisitorSection = observer((props: Props) => {
         {({ input }) => {
           return (
             <Switch
-              checked={!!openToVisitors}
+              checked={isOpen}
               data-testid="openToVisitors-switch"
               label={preferenceTitle}
-              onChange={() =>
-                input.onChange(openToVisitors || { policy: 'open' })
-              }
+              onChange={() => {
+                input.onChange(
+                  isOpen ? null : openToVisitors || { policy: 'open' },
+                )
+              }}
               sx={{
                 'input:checked ~ &': {
                   backgroundColor: 'green',

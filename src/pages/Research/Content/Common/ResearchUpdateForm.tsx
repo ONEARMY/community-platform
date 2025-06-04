@@ -1,18 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import { useNavigate } from 'react-router'
-import {
-  Button,
-  ConfirmModal,
-  ElWithBeforeIcon,
-  ResearchEditorOverview,
-} from 'oa-components'
-import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
+import { Button, ConfirmModal, ResearchEditorOverview } from 'oa-components'
+import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
-import { subscribersService } from 'src/services/subscribersService'
-import { Box, Card, Flex, Heading } from 'theme-ui'
+import { logger } from 'src/logger'
+import { fireConfetti } from 'src/utils/fireConfetti'
 
-import { buttons, headings, update } from '../../labels'
+import { buttons, headings, overview, update } from '../../labels'
 import { researchService } from '../../research.service'
 import { DescriptionField } from '../CreateResearch/Form/DescriptionField'
 import { FilesFields } from '../CreateResearch/Form/FilesFields'
@@ -38,12 +33,11 @@ interface IProps {
 export const ResearchUpdateForm = (props: IProps) => {
   const { research, researchUpdate, files, fileLink } = props
   const navigate = useNavigate()
-  const [formState, setFormState] = useState<{ dirty: boolean }>({
-    dirty: false,
-  })
+  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
+  const [isSaving, setIsSaving] = useState<boolean>(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [intentionalNavigation, setIntentionalNavigation] = useState(false)
-  const id = props.researchUpdate?.id || null
+  const id = researchUpdate?.id || null
   const [initialValues, setInitialValues] = useState<ResearchUpdateFormData>({
     title: '',
     description: '',
@@ -74,6 +68,13 @@ export const ResearchUpdateForm = (props: IProps) => {
     formData: ResearchUpdateFormData,
     isDraft = false,
   ) => {
+    if (isSaving) {
+      return
+    }
+    setIsSaving(true)
+    setIntentionalNavigation(true)
+    setSaveErrorMessage(null)
+
     try {
       const result = await researchService.upsertUpdate(
         research.id,
@@ -81,24 +82,22 @@ export const ResearchUpdateForm = (props: IProps) => {
         formData,
         isDraft,
       )
-      if (result) {
-        setIntentionalNavigation(true)
-        !id &&
-          (await subscribersService.add(
-            'research_update',
-            result.researchUpdate.id,
-          ))
 
-        setTimeout(
-          () =>
-            navigate(
-              `/research/${research.slug}#update_${result.researchUpdate.id}`,
-            ),
-          100,
-        )
+      if (!isDraft) {
+        fireConfetti()
       }
-    } catch (err) {
-      console.error(err)
+
+      if (result) {
+        setTimeout(() => {
+          navigate(
+            `/research/${research.slug}#update_${result.researchUpdate.id}`,
+          )
+        }, 100)
+      }
+    } catch (error) {
+      setSaveErrorMessage(error.message)
+      logger.error(error)
+      setIsSaving(false)
     }
   }
 
@@ -112,8 +111,7 @@ export const ResearchUpdateForm = (props: IProps) => {
   }
 
   const isEdit = !!researchUpdate
-  const publishButtonText = isEdit ? 'Save' : 'Add update'
-  const pageTitle = isEdit ? headings.update.edit : headings.update.create
+  const heading = isEdit ? headings.update.edit : headings.update.create
 
   const removeExistingImage = (index: number) => {
     setInitialValues((prevState: ResearchUpdateFormData) => {
@@ -136,205 +134,129 @@ export const ResearchUpdateForm = (props: IProps) => {
   }
 
   return (
-    <Form<ResearchUpdateFormData>
-      onSubmit={(v) => onSubmit(v)}
-      initialValues={initialValues}
-      validateOnBlur
-      render={({
-        dirty,
-        handleSubmit,
-        hasValidationErrors,
-        errors,
-        valid,
-        submitSucceeded,
-        submitting,
-        submitFailed,
-        values,
-      }) => {
-        if (formState.dirty !== dirty) {
-          setFormState({ dirty })
-        }
+    <>
+      <Form<ResearchUpdateFormData>
+        onSubmit={async (values) => await onSubmit(values)}
+        initialValues={initialValues}
+        validateOnBlur
+        render={({
+          dirty,
+          handleSubmit,
+          hasValidationErrors,
+          errors,
+          valid,
+          submitSucceeded,
+          submitting,
+          submitFailed,
+          values,
+        }) => {
+          const saveError = saveErrorMessage && (
+            <ResearchErrors
+              errors={errors}
+              isVisible={!!saveErrorMessage}
+              labels={overview}
+            />
+          )
 
-        const numberOfImageInputsAvailable = (values as any)?.images
-          ? Math.min((values as any).images.filter((x) => !!x).length + 1, 10)
-          : 1
+          const numberOfImageInputsAvailable = (values as any)?.images
+            ? Math.min((values as any).images.filter((x) => !!x).length + 1, 10)
+            : 1
 
-        return (
-          <Flex
-            sx={{
-              mx: -2,
-              mb: 4,
-              bg: 'inherit',
-              flexWrap: 'wrap',
-            }}
-            data-testid="EditResearchUpdate"
-          >
+          const unsavedChangesDialog = (
             <UnsavedChangesDialog
               hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
             />
-            <Flex
-              sx={{
-                backgroundColor: 'inherit',
-                paddingX: 2,
-                width: ['100%', '100%', `${(2 / 3) * 100}%`],
-                marginTop: 4,
-              }}
-            >
-              <form
-                id="updateForm"
-                onSubmit={handleSubmit}
-                style={{ width: '100%' }}
-              >
-                <Flex sx={{ flexDirection: 'column' }}>
-                  <Card sx={{ backgroundColor: 'softblue' }}>
-                    <Flex
-                      sx={{ paddingX: 3, paddingY: 2, alignItems: 'center' }}
-                    >
-                      <Heading>
-                        <span>{pageTitle}</span>{' '}
-                      </Heading>
-                      <Box sx={{ marginLeft: '15px' }}>
-                        <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
-                      </Box>
-                    </Flex>
-                  </Card>
-                  <Card sx={{ marginTop: 3 }}>
-                    <Flex
-                      sx={{
-                        flexWrap: 'wrap',
-                        flexDirection: 'column',
-                        padding: 4,
-                      }}
-                    >
-                      <Flex
-                        sx={{
-                          flexDirection: ['column', 'column', 'row'],
-                          marginX: -2,
-                        }}
-                      >
-                        <Flex
-                          sx={{
-                            flexDirection: 'column',
-                            flex: [1, 1, 4],
-                            paddingX: 2,
-                          }}
-                        >
-                          <TitleField />
-                          <DescriptionField />
-                          <ResearchImagesField
-                            inputsAvailable={numberOfImageInputsAvailable}
-                            existingImages={initialValues.existingImages}
-                            removeExistingImage={removeExistingImage}
-                          />
-                          <VideoUrlField />
-                          <FilesFields
-                            files={initialValues?.existingFiles || []}
-                            deleteFile={removeExistingFile}
-                          />
-                        </Flex>
-                      </Flex>
-                    </Flex>
-                  </Card>
-                </Flex>
-              </form>
-            </Flex>
-            <Flex
-              sx={{
-                flexDirection: 'column',
-                width: ['100%', '100%', `${100 / 3}%`],
-                height: '100%',
-                backgroundColor: 'inherit',
-                paddingX: 2,
-                marginTop: [0, 0, 4],
-              }}
-            >
-              <Flex
+          )
+
+          const sidebar = (
+            <>
+              <Button
+                data-cy="draft"
+                variant="secondary"
+                type="submit"
+                disabled={isSaving}
+                onClick={() => onSubmit(values, true)}
                 sx={{
-                  flexDirection: 'column',
-                  position: ['relative', 'relative', 'sticky'],
-                  gap: 3,
-                  maxWidth: ['inherit', 'inherit', '400px'],
+                  alignSelf: 'stretch',
+                  justifyContent: 'center',
                 }}
               >
+                {buttons.draft}
+              </Button>
+
+              {isEdit ? (
                 <Button
-                  large
-                  id="submit-form"
-                  data-testid="submit-form"
-                  data-cy="submit"
-                  variant="primary"
-                  type="submit"
-                  disabled={submitting || !valid}
-                  onClick={() => onSubmit(values)}
-                  sx={{
-                    alignSelf: 'stretch',
-                    justifyContent: 'center',
+                  data-cy="delete"
+                  onClick={(evt) => {
+                    setShowDeleteModal(true)
+                    evt.preventDefault()
                   }}
-                >
-                  {publishButtonText}
-                </Button>
-
-                <Button
-                  data-cy="draft"
-                  variant="secondary"
+                  variant="destructive"
                   type="submit"
-                  disabled={submitting || !valid}
-                  onClick={() => onSubmit(values, true)}
-                  sx={{
-                    alignSelf: 'stretch',
-                    justifyContent: 'center',
-                  }}
+                  disabled={isSaving || submitting}
+                  sx={{ alignSelf: 'stretch', justifyContent: 'center' }}
                 >
-                  {buttons.draft}
+                  {buttons.deletion.text}
                 </Button>
+              ) : null}
 
-                {isEdit ? (
-                  <Button
-                    data-cy="delete"
-                    onClick={(evt) => {
-                      setShowDeleteModal(true)
-                      evt.preventDefault()
-                    }}
-                    variant="destructive"
-                    type="submit"
-                    disabled={submitting}
-                    sx={{ alignSelf: 'stretch', justifyContent: 'center' }}
-                  >
-                    {buttons.deletion.text}
-                  </Button>
-                ) : null}
+              <ResearchErrors
+                errors={errors}
+                isVisible={submitFailed && hasValidationErrors}
+                labels={update}
+              />
 
-                <ResearchErrors
-                  errors={errors}
-                  isVisible={submitFailed && hasValidationErrors}
-                  labels={update}
+              {props.research && (
+                <ResearchEditorOverview
+                  updates={getResearchUpdates(
+                    props.research.updates || [],
+                    !isEdit,
+                    values.title,
+                  )}
+                  researchSlug={props.research?.slug}
+                  showCreateUpdateButton={isEdit}
+                  showBackToResearchButton={true}
                 />
+              )}
+            </>
+          )
 
-                {props.research ? (
-                  <ResearchEditorOverview
-                    sx={{ mt: 2 }}
-                    updates={getResearchUpdates(
-                      props.research.updates || [],
-                      !isEdit,
-                      values.title,
-                    )}
-                    researchSlug={props.research?.slug}
-                    showCreateUpdateButton={isEdit}
-                    showBackToResearchButton={true}
-                  />
-                ) : null}
-              </Flex>
-            </Flex>
-            <ConfirmModal
-              isOpen={showDeleteModal}
-              message={buttons.deletion.message}
-              confirmButtonText={buttons.deletion.confirm}
-              handleCancel={() => setShowDeleteModal(false)}
-              handleConfirm={handleDelete}
-            />
-          </Flex>
-        )
-      }}
-    />
+          return (
+            <FormWrapper
+              buttonLabel={buttons.publish}
+              contentType="researchUpdate"
+              handleSubmit={handleSubmit}
+              heading={heading}
+              saveError={saveError}
+              sidebar={sidebar}
+              submitting={submitting}
+              unsavedChangesDialog={unsavedChangesDialog}
+              valid={valid}
+            >
+              <TitleField />
+              <DescriptionField />
+              <ResearchImagesField
+                inputsAvailable={numberOfImageInputsAvailable}
+                existingImages={initialValues.existingImages}
+                removeExistingImage={removeExistingImage}
+              />
+              <VideoUrlField />
+              <FilesFields
+                files={initialValues?.existingFiles || []}
+                deleteFile={removeExistingFile}
+              />
+            </FormWrapper>
+          )
+        }}
+      />
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        message={buttons.deletion.message}
+        confirmButtonText={buttons.deletion.confirm}
+        handleCancel={() => setShowDeleteModal(false)}
+        handleConfirm={handleDelete}
+      />
+    </>
   )
 }
 

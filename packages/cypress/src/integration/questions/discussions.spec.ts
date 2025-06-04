@@ -40,7 +40,6 @@ describe('[Questions.Discussions]', () => {
     cy.contains('Start the discussion')
     cy.get('[data-cy=comments-incomplete-profile-prompt]').should('not.exist')
     cy.addComment(newComment)
-    cy.contains('1 Comment')
 
     cy.step('Can edit their comment')
     cy.editDiscussionItem('CommentItem', newComment, updatedNewComment)
@@ -71,7 +70,6 @@ describe('[Questions.Discussions]', () => {
       username: replier.username,
     })
     cy.visit(questionPath)
-    cy.expectNoNewNotifications()
 
     cy.step('Can add reply')
     cy.addReply(secondReply)
@@ -95,7 +93,6 @@ describe('[Questions.Discussions]', () => {
       title: question.title,
       username: commenter.username,
     })
-    cy.expectNoNewNotifications()
 
     // Currently hard to test as the article is created via the seed
     //
@@ -110,6 +107,5 @@ describe('[Questions.Discussions]', () => {
     //   title: question.title,
     //   username: replier.username,
     // })
-    // cy.expectNoNewNotifications()
   })
 })

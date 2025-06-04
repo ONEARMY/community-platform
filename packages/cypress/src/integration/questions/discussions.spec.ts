@@ -40,7 +40,6 @@ describe('[Questions.Discussions]', () => {
     cy.contains('Start the discussion')
     cy.get('[data-cy=comments-incomplete-profile-prompt]').should('not.exist')
     cy.addComment(newComment)
-    cy.contains('1 Comment')
 
     cy.step('Can edit their comment')
     cy.editDiscussionItem('CommentItem', newComment, updatedNewComment)

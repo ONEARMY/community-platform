@@ -54,12 +54,10 @@ export class Profile {
 // Notifications here to avoid circular dependencies
 
 export type NotificationActionType = 'newContent' | 'newComment'
-type NotificationContentType = 'news' | 'comment' | 'reply'
-// type NotificationContentType = 'news' | 'research' | 'researchUpdate' | 'project' | 'question' | 'comment' | 'reply'
+export type NotificationContentType = 'news' | 'comment' | 'reply'
 
 type NotificationContent = News | Comment | Question | ResearchUpdate
 type NotificationSourceContentType = SubscribableContentTypes
-// type NotificationSourceContentType = 'news' | 'research' | 'researchUpdate' | 'project' | 'question' // What page on the platform should be linked to
 type NotificationSourceContent = News | Question | ResearchItem
 
 type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photoUrl'>

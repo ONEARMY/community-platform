@@ -64,7 +64,6 @@ describe('[Research.Discussions]', () => {
     })
 
     cy.visit(researchPath)
-    cy.expectNoNewNotifications()
 
     cy.step('Can add reply')
     cy.get('[data-cy="HideDiscussionContainer:button"]').click()
@@ -89,7 +88,6 @@ describe('[Research.Discussions]', () => {
       title: research.title,
       username: admin.userName,
     })
-    cy.expectNoNewNotifications()
 
     // Currently hard to test as the article is created via the seed
     //
@@ -104,6 +102,5 @@ describe('[Research.Discussions]', () => {
     //   title: question.title,
     //   username: replier.username,
     // })
-    // cy.expectNoNewNotifications()
   })
 })

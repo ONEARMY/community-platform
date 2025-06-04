@@ -69,7 +69,7 @@ const createNotificationNewComment = async (
       createNotification(client, notification, subscriber.user_id!)
     })
   } catch (error) {
-    console.log(error)
+    console.error(error)
 
     return Response.json(
       { error },
@@ -81,7 +81,7 @@ const createNotificationNewComment = async (
 const createNotification = async (
   client: SupabaseClient,
   notification: NewNotificationData,
-  userId: number,
+  profileId: number,
 ) => {
   try {
     const data = {
@@ -110,7 +110,7 @@ const createNotification = async (
     await notificationEmailService.createInstantNotificationEmail(
       client,
       response.data[0],
-      userId,
+      profileId,
     )
   } catch (error) {
     console.log(error)

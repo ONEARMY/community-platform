@@ -12,7 +12,6 @@ import { NewsPostingGuidelines } from 'src/pages/News/Content/Common/NewsPosting
 import * as LABELS from 'src/pages/News/labels'
 import { newsService } from 'src/services/newsService'
 import { storageService } from 'src/services/storageService'
-import { subscribersService } from 'src/services/subscribersService'
 import { composeValidators, minValue, required } from 'src/utils/validators'
 import { Alert } from 'theme-ui'
 
@@ -79,7 +78,6 @@ export const NewsForm = (props: IProps) => {
       })
 
       if (result) {
-        !id && (await subscribersService.add('news', result.id))
         navigate('/news/' + result.slug)
       }
     } catch (e) {

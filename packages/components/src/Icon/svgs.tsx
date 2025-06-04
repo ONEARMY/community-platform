@@ -37,6 +37,7 @@ import verifiedSVG from '../../assets/icons/icon-verified-badge.svg'
 import viewSVG from '../../assets/icons/icon-views.svg'
 import websiteSVG from '../../assets/icons/icon-website.svg'
 import impactSVG from '../../assets/icons/impact.svg'
+import informationSVG from '../../assets/icons/information.svg'
 import landscapeSVG from '../../assets/icons/landscape.svg'
 import machineSVG from '../../assets/icons/machine.svg'
 import machinesSVG from '../../assets/icons/machines.svg'
@@ -110,6 +111,7 @@ export const iconMap = {
   hide: <ImageIcon src={eyeCrossedSVG} />,
   hyperlink: <ImageIcon src={hyperlinkSVG} />,
   impact: <ImageIcon src={impactSVG} />,
+  information: <ImageIcon src={informationSVG} />,
   landscape: <ImageIcon src={landscapeSVG} />,
   loading: <ImageIcon src={loadingSVG} data-cy="icon-loading" />,
   machine: <ImageIcon src={machineSVG} />,

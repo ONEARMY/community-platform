@@ -6,6 +6,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { discordServiceServer } from 'src/services/discordService.server'
 import { newsServiceServer } from 'src/services/newsService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
+import { subscribersServiceServer } from 'src/services/subscribersService.server'
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown'
 import { validateImage } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
@@ -183,6 +184,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const news = News.fromDB(newsResult.data[0], [])
 
+    subscribersServiceServer.add('news', news.id, profile.id, client)
     notifyDiscord(
       news,
       profile,

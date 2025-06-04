@@ -5,6 +5,7 @@ import { ITEMS_PER_PAGE } from 'src/pages/Question/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
 import { discordServiceServer } from 'src/services/discordService.server'
+import { subscribersServiceServer } from 'src/services/subscribersService.server'
 import { validateImages } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
@@ -194,6 +195,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       }
     }
 
+    subscribersServiceServer.add('questions', question.id, profile.id, client)
     notifyDiscord(
       question,
       profile,

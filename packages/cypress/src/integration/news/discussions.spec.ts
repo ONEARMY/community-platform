@@ -42,8 +42,8 @@ describe('[News.Discussions]', () => {
 
     cy.get('[data-cy=follow-button]').contains('Follow Comments')
     cy.addComment(newComment)
-    cy.reload()
     cy.wait(2000)
+    cy.reload()
     cy.get('[data-cy=follow-button]').contains('Following Comments')
 
     cy.step('Can edit their comment')

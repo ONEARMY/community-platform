@@ -26,18 +26,16 @@ describe('[Research]', () => {
         const researchTitle = 'Qwerty'
         const researchUrl = '/research/qwerty'
 
-        cy.get('[data-cy=ResearchListItem]')
-          .first()
-          .within(() => {
-            cy.contains(researchTitle).should('be.visible')
-            cy.get('[data-cy=Username]').contains('event_reader')
-            cy.get('[data-cy=category]').contains('Machines')
-            cy.get('a').should('have.attr', 'href').and('eq', researchUrl)
-            cy.get('[data-cy=ItemResearchStatus]').contains('In Progress')
-            cy.get('[data-tooltip-content="How useful is it"]')
-            cy.get('[data-tooltip-content="Total comments"]')
-            cy.get('[data-tooltip-content="Amount of updates"]')
-          })
+        cy.get('[data-cy=ResearchList]').within(() => {
+          cy.contains(researchTitle).should('be.visible')
+          cy.get('[data-cy=Username]').contains('event_reader')
+          cy.get('[data-cy=category]').contains('Machines')
+          cy.get('a').should('have.attr', 'href').and('eq', researchUrl)
+          cy.get('[data-cy=ItemResearchStatus]').contains('In Progress')
+          cy.get('[data-tooltip-content="How useful is it"]')
+          cy.get('[data-tooltip-content="Total comments"]')
+          cy.get('[data-tooltip-content="Amount of updates"]')
+        })
 
         cy.step('Can clear search')
         cy.get('[data-cy=close]').click()

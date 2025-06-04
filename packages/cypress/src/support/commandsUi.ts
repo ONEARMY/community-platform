@@ -285,7 +285,7 @@ Cypress.Commands.add('deleteDiscussionItem', (element, item) => {
 })
 
 Cypress.Commands.add('addReply', (reply: string) => {
-  cy.get('[data-cy=show-replies]').first().click()
+  cy.get('[data-cy=show-replies]').first().click({ force: true })
   cy.get('[data-cy=reply-form]').first().type(reply)
   cy.get('[data-cy=reply-submit]').first().click()
 

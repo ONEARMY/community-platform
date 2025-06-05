@@ -129,7 +129,7 @@ export const research = [
       {
         createdAt: '2022-03-27T22:10:11.271Z',
         deleted: false,
-        modifiedAt: '2022-03-27T22:10:11.271Z',
+        modifiedAt: '2025-03-27T22:10:11.271Z',
         description: 'qwerty',
         collaborators: ['demo_user'],
         commentCount: 0,

@@ -21,6 +21,12 @@ describe('[Research - List Articles]', () => {
     cy.get('[data-cy=ResearchListItem]').should('have.length.at.least', 1)
   })
 
+  it('[Search Functionality - Sorts by Latest Updated]', () => {
+    cy.visit(researchPageUrl + '?sort=LatestUpdated')
+    cy.step('Verify sorted results are displayed')
+    cy.get('[data-cy=ResearchListItem]').first().contains('A test research')
+  })
+
   it('[Pagination - Displays additional articles]', () => {
     cy.step('Verify pagination is visible')
     let itemCount

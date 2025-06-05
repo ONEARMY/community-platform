@@ -35,7 +35,6 @@ export interface ImageGalleryProps {
 interface IState {
   activeImageIndex: number
   showLightbox: boolean
-  images: Array<IImageGalleryItem>
   showActiveImgLoading: boolean
 }
 
@@ -49,26 +48,50 @@ const NavButton = styled('button')`
   cursor: pointer;
 `
 
+// Container that reserves space to prevent layout shift
+const ImageContainer = styled('div')`
+  width: 100%;
+  position: relative;
+  /* Reserve space for the image before it loads */
+  min-height: 300px;
+
+  @media (min-width: 768px) {
+    min-height: 450px;
+  }
+
+  /* Ensure consistent aspect ratio */
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5; /* Optional: subtle background while loading */
+`
+
 export const ImageGallery = (props: ImageGalleryProps) => {
+  // Initialize with actual images from props, not empty array
+  const filteredImages = (props.images || []).filter((img) => img !== null)
+
   const [state, setState] = useState<IState>({
     activeImageIndex: 0,
     showLightbox: false,
-    images: [],
     showActiveImgLoading: true,
   })
-  const lightbox = useRef<PhotoSwipeLightbox>()
 
+  const lightbox = useRef<PhotoSwipeLightbox>()
+  const activeImageIndex = state.activeImageIndex
+  const activeImage = filteredImages[activeImageIndex]
+  const imageNumber = filteredImages.length
+  const showThumbnails = !props.hideThumbnails && filteredImages.length > 1
+  const showNextPrevButton =
+    !!props.showNextPrevButton && filteredImages.length > 1
+
+  // Only initialize PhotoSwipe on client-side
   useEffect(() => {
-    const images = (props.images || []).filter((img) => img !== null)
-    setState((state) => ({
-      ...state,
-      activeImageIndex: 0,
-      images: images,
-    }))
+    if (typeof window === 'undefined' || !filteredImages.length) return
 
     // Initializes the Photoswipe lightbox to use the provided images
     lightbox.current = new PhotoSwipeLightbox({
-      dataSource: images.map((image) => ({
+      dataSource: filteredImages.map((image) => ({
         src: image.downloadUrl,
       })),
       pswpModule: () => import('photoswipe'),
@@ -102,11 +125,58 @@ export const ImageGallery = (props: ImageGalleryProps) => {
     }
   }, [props.images, props.photoSwipeOptions])
 
+  // Prevent native hash scrolling and handle it ourselves
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    let originalHash = ''
+
+    const preventNativeHashScroll = () => {
+      if (window.location.hash) {
+        originalHash = window.location.hash
+        // Remove hash completely to prevent any native scrolling
+        window.history.replaceState(
+          null,
+          '',
+          window.location.pathname + window.location.search,
+        )
+
+        // Prevent any scroll restoration
+        if ('scrollRestoration' in window.history) {
+          window.history.scrollRestoration = 'manual'
+        }
+      }
+    }
+
+    // Restore hash after component mounts
+    const restoreHash = () => {
+      if (originalHash) {
+        setTimeout(() => {
+          window.history.replaceState(
+            null,
+            '',
+            window.location.pathname + window.location.search + originalHash,
+          )
+        }, 50)
+      }
+    }
+
+    preventNativeHashScroll()
+    restoreHash()
+
+    return () => {
+      // Restore scroll restoration on cleanup
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'auto'
+      }
+    }
+  }, [])
+
   const setActive = (imageIndex: number) => {
     setState({
       ...state,
       activeImageIndex: imageIndex,
-      showActiveImgLoading: imageIndex !== activeImageIndex,
+      showActiveImgLoading: imageIndex !== state.activeImageIndex,
     })
   }
 
@@ -117,45 +187,70 @@ export const ImageGallery = (props: ImageGalleryProps) => {
     })
   }
 
+  const handleImageLoad = () => {
+    setActiveImgLoaded()
+  }
+
+  const handleImageError = () => {
+    // Also clear loading state on error
+    setActiveImgLoaded()
+  }
+
+  // Check if image is already loaded (cached)
+  useEffect(() => {
+    if (activeImage) {
+      const img = new Image()
+      img.onload = () => {
+        if (img.complete) {
+          setActiveImgLoaded()
+        }
+      }
+      img.src = activeImage.downloadUrl
+
+      // If image is already complete, clear loading immediately
+      if (img.complete) {
+        setActiveImgLoaded()
+      }
+    }
+  }, [activeImage?.downloadUrl])
+
   const triggerLightbox = (): void => {
+    if (typeof window === 'undefined') return
+
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore: Looks like a bug on their side, already a bug for it is open,
     // it should allow only one argument, as mentioned in their docs
     lightbox.current?.loadAndOpen(state.activeImageIndex)
   }
 
-  const images = state.images
-  const activeImageIndex = state.activeImageIndex
-  const activeImage = images[activeImageIndex]
-  const imageNumber = images.length
-  const showThumbnails = !props.hideThumbnails && images.length > 1
-  const showNextPrevButton = !!props.showNextPrevButton && images.length > 1
+  // Early return if no images - but this should rarely happen now
+  if (!filteredImages.length) {
+    return null
+  }
 
-  return activeImage ? (
+  return (
     <Flex sx={{ flexDirection: 'column' }}>
-      {state.showActiveImgLoading && (
-        <Loader sx={{ position: 'absolute', alignSelf: 'center' }} />
-      )}
-      <Flex
-        sx={{
-          width: '100%',
-          position: 'relative',
-          opacity: `${state.showActiveImgLoading ? 0 : 1}`,
-        }}
-      >
+      <ImageContainer>
+        {state.showActiveImgLoading && (
+          <Loader
+            sx={{ position: 'absolute', alignSelf: 'center', zIndex: 1 }}
+          />
+        )}
         <ThemeImage
-          loading="lazy"
           data-cy="active-image"
           data-testid="active-image"
           sx={{
             width: '100%',
+            height: '100%',
             cursor: 'pointer',
             objectFit: props.allowPortrait ? 'contain' : 'cover',
-            height: [300, 450],
+            opacity: state.showActiveImgLoading ? 0.3 : 1,
+            transition: 'opacity 0.2s ease-in-out',
           }}
           src={activeImage.downloadUrl}
           onClick={triggerLightbox}
-          onLoad={setActiveImgLoaded}
+          onLoad={handleImageLoad}
+          onError={handleImageError}
           alt={activeImage.alt ?? activeImage.name}
           crossOrigin=""
         />
@@ -165,6 +260,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
               aria-label={'Next image'}
               style={{
                 right: 0,
+                zIndex: 2,
               }}
               onClick={() =>
                 setActive(
@@ -178,6 +274,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
               aria-label={'Previous image'}
               style={{
                 left: 0,
+                zIndex: 2,
               }}
               onClick={() =>
                 setActive(
@@ -191,10 +288,10 @@ export const ImageGallery = (props: ImageGalleryProps) => {
             </NavButton>
           </>
         ) : null}
-      </Flex>
+      </ImageContainer>
       {showThumbnails && (
         <Flex sx={{ width: '100%', flexWrap: 'wrap' }} mx={[2, 2, '-5px']}>
-          {images.map((image, index: number) => (
+          {filteredImages.map((image, index: number) => (
             <ImageGalleryThumbnail
               activeImageIndex={activeImageIndex}
               allowPortrait={props.allowPortrait ?? false}
@@ -209,5 +306,5 @@ export const ImageGallery = (props: ImageGalleryProps) => {
         </Flex>
       )}
     </Flex>
-  ) : null
+  )
 }

@@ -1,8 +1,7 @@
-import { VITE_HIDE_MEMBER_PINS_BY_DEFAULT } from 'src/config/config'
-
 import type { MapFilterOptionsList } from 'oa-shared'
 
-const hideMembersDefault = VITE_HIDE_MEMBER_PINS_BY_DEFAULT === 'true'
+const hideMembersDefault =
+  import.meta.env.VITE_HIDE_MEMBER_PINS_BY_DEFAULT === 'true'
 
 export const setDefaultPinFilters = (
   filterOptions: MapFilterOptionsList,

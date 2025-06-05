@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { Global, withEmotionCache } from '@emotion/react'
 import {
   Links,
@@ -15,7 +15,6 @@ import {
   projectKampTheme,
 } from 'oa-themes'
 
-import { VITE_THEME } from './config/config'
 import { ClientStyleContext, ServerStyleContext } from './styles/context'
 import { generateTags } from './utils/seo.utils'
 
@@ -58,7 +57,10 @@ const Document = withEmotionCache(
       <html lang="en">
         <head>
           <meta charSet="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+          />
           <link
             rel="preconnect"
             href="https://storage.googleapis.com"
@@ -85,7 +87,7 @@ const Document = withEmotionCache(
 )
 
 const getEnvironmentTheme = () => {
-  switch (VITE_THEME) {
+  switch (import.meta.env.VITE_THEME) {
     case 'project-kamp':
       return projectKampTheme
     case 'fixing-fashion':
@@ -122,11 +124,27 @@ export const meta: MetaFunction = () => {
   return tags
 }
 
+function SafeHydrate({ children }: { children: React.ReactNode }) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return <div style={{ visibility: 'hidden' }}>{children}</div>
+  }
+
+  return <>{children}</>
+}
+
 export default function Root() {
   return (
     <Document>
       <ThemeProvider theme={getEnvironmentTheme().styles}>
-        <Outlet />
+        <SafeHydrate>
+          <Outlet />
+        </SafeHydrate>
         <Global styles={GlobalStyles} />
       </ThemeProvider>
     </Document>

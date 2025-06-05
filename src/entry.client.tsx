@@ -1,4 +1,4 @@
-import { startTransition, useCallback, useState } from 'react'
+import { startTransition, useMemo, useState } from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import { CacheProvider } from '@emotion/react'
 import { RemixBrowser } from '@remix-run/react'
@@ -13,10 +13,17 @@ Sentry.init({ ...SENTRY_CONFIG, autoInstrumentRemix: true })
 const ClientCacheProvider = ({ children }) => {
   const [cache, setCache] = useState(createEmotionCache())
 
-  const reset = useCallback(() => setCache(createEmotionCache()), [])
+  const clientStyleContextValue = useMemo(
+    () => ({
+      reset() {
+        setCache(createEmotionCache())
+      },
+    }),
+    [],
+  )
 
   return (
-    <ClientStyleContext.Provider value={{ reset }}>
+    <ClientStyleContext.Provider value={clientStyleContextValue}>
       <CacheProvider value={cache}>{children}</CacheProvider>
     </ClientStyleContext.Provider>
   )

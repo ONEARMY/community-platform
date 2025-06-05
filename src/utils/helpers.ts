@@ -1,6 +1,6 @@
 import { isObservableObject, toJS } from 'mobx'
 import { IModerationStatus, UserRole } from 'oa-shared'
-import { getConfigurationOption, NO_MESSAGING } from 'src/config/config'
+import { getConfigurationOption } from 'src/config/config'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 
 import { SUPPORTED_IMAGE_TYPES } from './storage'
@@ -199,7 +199,7 @@ export const isUserBlockedFromMessaging = (user: IUser | null | undefined) => {
 }
 
 export const isMessagingBlocked = () => {
-  return NO_MESSAGING === 'true'
+  return import.meta.env.NO_MESSAGING === 'true'
 }
 
 export const isUserContactable = (user: IUser) => {

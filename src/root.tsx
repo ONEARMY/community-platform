@@ -15,6 +15,7 @@ import {
   projectKampTheme,
 } from 'oa-themes'
 
+import { VITE_THEME } from './config/config'
 import { ClientStyleContext, ServerStyleContext } from './styles/context'
 import { generateTags } from './utils/seo.utils'
 

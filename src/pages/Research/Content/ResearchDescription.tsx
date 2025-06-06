@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link, useNavigate } from '@remix-run/react'
+import { max } from 'date-fns'
 import {
   Button,
   Category,
@@ -67,6 +68,15 @@ const ResearchDescription = ({
       // at least log the error
     }
   }
+
+  const lastUpdated = useMemo(() => {
+    const dates = [
+      research?.modifiedAt,
+      ...(research?.updates?.map((update) => update?.modifiedAt) || []),
+    ].filter((date): date is Date => date !== null)
+
+    return dates.length > 0 ? max(dates) : new Date()
+  }, [research])
 
   return (
     <Card variant="responsive">
@@ -196,7 +206,7 @@ const ResearchDescription = ({
               <UserNameTag
                 userName={research.author?.username || ''}
                 createdAt={research.createdAt}
-                modifiedAt={research.modifiedAt}
+                modifiedAt={lastUpdated.toISOString()}
                 countryCode={research.author?.country}
                 action="Started"
               />

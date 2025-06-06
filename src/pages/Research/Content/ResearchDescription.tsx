@@ -206,7 +206,7 @@ const ResearchDescription = ({
               <UserNameTag
                 userName={research.author?.username || ''}
                 createdAt={research.createdAt}
-                modifiedAt={lastUpdated}
+                modifiedAt={lastUpdated.toISOString()}
                 countryCode={research.author?.country}
                 action="Started"
               />

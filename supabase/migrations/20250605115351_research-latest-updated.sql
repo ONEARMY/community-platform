@@ -8,7 +8,16 @@ BEGIN
     r.id,
     r.created_at,
     r.created_by,
-    r.modified_at,
+    GREATEST(
+      r.modified_at,
+      COALESCE(
+        (SELECT MAX(ru.modified_at) FROM research_updates ru
+         WHERE ru.research_id = r.id
+           AND (ru.is_draft IS NULL OR ru.is_draft = FALSE)
+           AND (ru.deleted IS NULL OR ru.deleted = FALSE)),
+        r.modified_at
+      )
+    ) AS modified_at,
     r.description,
     r.slug,
     r.image,

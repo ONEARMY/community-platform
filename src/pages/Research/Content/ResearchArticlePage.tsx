@@ -135,6 +135,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
           .includes(loggedInUser.userName))
     )
   }, [loggedInUser, research.author])
+
   const isDeletable = useMemo(() => {
     return (
       !!loggedInUser &&
@@ -142,6 +143,13 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
         research.author?.username === loggedInUser.userName)
     )
   }, [loggedInUser, research.author])
+
+  const sortedUpdates = useMemo(() => {
+    return research?.updates?.toSorted(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    )
+  }, [research?.updates])
 
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
@@ -177,7 +185,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
         }}
       >
         <MultipleCommentSectionWrapper>
-          {research?.updates?.map((update, index) => (
+          {sortedUpdates?.map((update, index) => (
             <ResearchUpdate
               research={research}
               update={update}

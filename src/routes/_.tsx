@@ -3,7 +3,6 @@ import { Outlet, useLoaderData } from '@remix-run/react'
 import { ClientOnly } from 'remix-utils/client-only'
 import { Alerts } from 'src/common/Alerts/Alerts'
 import { Analytics } from 'src/common/Analytics'
-import { ScrollToTop } from 'src/common/ScrollToTop'
 import DevSiteHeader from 'src/pages/common/DevSiteHeader/DevSiteHeader'
 import {
   EnvironmentContext,
@@ -49,7 +48,6 @@ export default function Index() {
             data-cy="page-container"
           >
             <Analytics />
-            <ScrollToTop />
             <ClientOnly fallback={<></>}>{() => <DevSiteHeader />}</ClientOnly>
             <Header />
             <Alerts />

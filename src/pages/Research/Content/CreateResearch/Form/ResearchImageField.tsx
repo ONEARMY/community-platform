@@ -29,6 +29,7 @@ export const ResearchImageField = (props: IProps) => {
       text={props.label}
       flexDirection="row"
       flexWrap="wrap"
+      required
     >
       {!props.existingImage && (
         <ImageInputFieldWrapper key="image-upload" data-cy="image-upload">

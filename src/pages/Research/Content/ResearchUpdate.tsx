@@ -84,7 +84,7 @@ const ResearchUpdate = (props: IProps) => {
         sx={{
           flexDirection: ['column', 'column', 'row'],
           gap: [2, 4],
-          scrollMarginTop: 4,
+          scrollMarginTop: 2,
         }}
       >
         <Flex

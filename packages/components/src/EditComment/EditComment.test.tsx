@@ -59,7 +59,7 @@ describe('EditComment', () => {
     )
     expect(screen.getByTestId('edit-comment-submit')).toBeDisabled()
   })
-  it('should dispaly error message when the comment is empty', () => {
+  it('should display error message when the comment is empty', () => {
     const screen = render(
       <EditComment
         isReply={false}

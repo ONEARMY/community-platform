@@ -27,7 +27,7 @@ describe('CreateReply', () => {
     expect(textarea).toBeInTheDocument()
   })
 
-  it('clears the field after sucessful submission', () => {
+  it('clears the field after successful submission', () => {
     const screen = render(<LoggedIn {...(LoggedIn.args as Props)} />)
 
     const emptyTextArea = screen.getByPlaceholderText('Leave your question', {

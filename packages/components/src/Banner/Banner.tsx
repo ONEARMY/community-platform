@@ -2,7 +2,7 @@ import { Alert } from 'theme-ui'
 
 import type { ThemeUIStyleObject } from 'theme-ui'
 
-// Types of alert currently specificed in the theme
+// Types of alert currently specified in the theme
 type AlertVariants = 'accent' | 'failure' | 'info' | 'success'
 
 export interface IProps {

@@ -11,10 +11,6 @@ const numberWithCommas = (number: number) => {
 }
 
 export const DownloadCounter = ({ total }: IProps) => {
-  if (!total) {
-    return null
-  }
-
   return (
     <Text
       data-cy="file-download-counter"

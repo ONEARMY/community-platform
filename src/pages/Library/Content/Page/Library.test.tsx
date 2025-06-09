@@ -15,7 +15,7 @@ import {
 } from 'src/test/factories/Library'
 import { describe, expect, it, vi } from 'vitest'
 
-import { Library } from './ProjectPage'
+import { ProjectPage } from './ProjectPage'
 
 import type { Project } from 'oa-shared'
 
@@ -41,7 +41,7 @@ const factory = (override?: Project) => {
           <Global styles={GlobalStyles} />
           <ThemeProvider theme={Theme}>
             <Provider>
-              <Library item={override ?? item} />
+              <ProjectPage item={override ?? item} />
             </Provider>
           </ThemeProvider>
         </>

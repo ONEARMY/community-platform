@@ -45,7 +45,9 @@ export const LibraryCategoryField = () => {
             />
             {input?.value?.value && (
               <LibraryCategoryGuidance
-                category={categories.find((x) => x.id === input.value.value)}
+                category={categories.find(
+                  (x) => x.id === Number(input.value.value),
+                )}
                 type="main"
               />
             )}

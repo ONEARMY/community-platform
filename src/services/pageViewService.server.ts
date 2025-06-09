@@ -2,10 +2,7 @@ import { doc, increment, updateDoc } from 'firebase/firestore'
 import { DB_ENDPOINTS } from 'oa-shared'
 import { firestore } from 'src/utils/firebase'
 
-type PageViewCollections = Pick<
-  typeof DB_ENDPOINTS,
-  'users' | 'questions' | 'research' | 'library'
->
+type PageViewCollections = Pick<typeof DB_ENDPOINTS, 'users'>
 
 const incrementViewCount = async (
   collectionName: keyof PageViewCollections,

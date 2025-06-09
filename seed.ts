@@ -204,7 +204,10 @@ const seedProfiles = (): profilesChildInputs => [
 const seedCategories = (): categoriesChildInputs => [
   { ..._CATEGORIES_BASE, name: 'Questions', type: 'questions' },
   { ..._CATEGORIES_BASE, name: 'Research', type: 'research' },
-  { ..._CATEGORIES_BASE, name: 'Projects', type: 'projects' },
+  { ..._CATEGORIES_BASE, name: 'Guides', type: 'projects' },
+  { ..._CATEGORIES_BASE, name: 'Machines', type: 'projects' },
+  { ..._CATEGORIES_BASE, name: 'Moulds', type: 'projects' },
+  { ..._CATEGORIES_BASE, name: 'Products', type: 'projects' },
   { ..._CATEGORIES_BASE, name: 'Important Updates', type: 'news' },
 ]
 

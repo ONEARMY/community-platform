@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest'
 import { LibraryCategoryGuidance } from './LibraryCategoryGuidance'
 import { LibraryFormProvider } from './LibraryFormProvider'
 
-describe('HowtoCategoryGuidance', () => {
+describe('LibraryCategoryGuidance', () => {
   it('renders expected main content when a category that exists is present', async () => {
     render(
       <LibraryFormProvider>
@@ -15,7 +15,7 @@ describe('HowtoCategoryGuidance', () => {
             id: 1,
             createdAt: faker.date.past(),
             modifiedAt: faker.date.past(),
-            name: faker.lorem.word(),
+            name: 'Moulds',
             type: 'projects',
           }}
           type="main"

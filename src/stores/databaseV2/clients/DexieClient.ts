@@ -179,18 +179,9 @@ type IDexieSchema = { [key in IFrontendEndpoints]: string }
 const DEFAULT_SCHEMA = '_id,_modified'
 
 const SCHEMA_BASE: IDexieSchema = {
-  library: `${DEFAULT_SCHEMA},_createdBy,slug,previousSlugs`,
   mappins: DEFAULT_SCHEMA,
-  messages: `${DEFAULT_SCHEMA}`,
-  tags: DEFAULT_SCHEMA,
-  categories: DEFAULT_SCHEMA,
-  researchCategories: DEFAULT_SCHEMA,
   users: `${DEFAULT_SCHEMA},_authID`,
-  research: `${DEFAULT_SCHEMA},_createdBy,slug,previousSlugs,*collaborators`,
   emails: `${DEFAULT_SCHEMA}`,
-  questions: `${DEFAULT_SCHEMA},slug,previousSlugs`,
-  questionCategories: `${DEFAULT_SCHEMA}`,
-  discussions: `${DEFAULT_SCHEMA},sourceId`,
 }
 
 // Ensure dexie also handles any prefixed database schema

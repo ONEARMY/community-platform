@@ -5,6 +5,7 @@ import { useNavigate } from '@remix-run/react'
 import arrayMutators from 'final-form-arrays'
 import { Button, ElWithBeforeIcon } from 'oa-components'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
+import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
@@ -15,7 +16,6 @@ import { LibraryCategoryField } from './LibraryCategory.field'
 import { LibraryCoverImageField } from './LibraryCoverImage.field'
 import { LibraryDescriptionField } from './LibraryDescription.field'
 import { LibraryDifficultyField } from './LibraryDifficulty.field'
-import { LibraryErrors } from './LibraryErrors'
 import { LibraryFilesField } from './LibraryFiles.field'
 import { LibraryPostingGuidelines } from './LibraryPostingGuidelines'
 import { LibraryStepsContainerField } from './LibraryStepsContainer.field'
@@ -111,7 +111,6 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       validateOnBlur
       render={({
         dirty,
-        errors,
         valid,
         values,
         form,
@@ -134,8 +133,6 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
             >
               <FormContainer id={formId} onSubmit={handleSubmit}>
                 {/* Project Info */}
-                {JSON.stringify(errors)}
-
                 <Flex sx={{ flexDirection: 'column' }}>
                   <Card sx={{ bg: 'softblue' }}>
                     <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
@@ -225,7 +222,6 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                 <Box sx={{ display: ['none', 'none', 'block'] }}>
                   <LibraryPostingGuidelines />
                 </Box>
-
                 <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
                   <Button
                     data-cy="draft"
@@ -242,7 +238,6 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                     {buttons.draft.description}
                   </Text>
                 </Flex>
-
                 <Button
                   large
                   data-cy="submit"
@@ -261,8 +256,9 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                 >
                   {buttons.publish}
                 </Button>
-
-                <LibraryErrors errors={errors} isVisible={!!saveErrorMessage} />
+                {saveErrorMessage && (
+                  <ErrorsContainer errors={[saveErrorMessage]} />
+                )}
               </Box>
             </Flex>
           </Flex>

@@ -2,19 +2,19 @@ import { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import { useNavigate } from 'react-router'
 import { Button, ConfirmModal, ResearchEditorOverview } from 'oa-components'
+import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { fireConfetti } from 'src/utils/fireConfetti'
 
-import { buttons, headings, overview, update } from '../../labels'
+import { buttons, headings } from '../../labels'
 import { researchService } from '../../research.service'
 import { DescriptionField } from '../CreateResearch/Form/DescriptionField'
 import { FilesFields } from '../CreateResearch/Form/FilesFields'
 import { ResearchImagesField } from '../CreateResearch/Form/ResearchImagesField'
 import { TitleField } from '../CreateResearch/Form/TitleField'
 import VideoUrlField from '../CreateResearch/Form/VideoUrlField'
-import { ResearchErrors } from './ResearchErrors'
 
 import type {
   MediaFile,
@@ -147,15 +147,10 @@ export const ResearchUpdateForm = (props: IProps) => {
           valid,
           submitSucceeded,
           submitting,
-          submitFailed,
           values,
         }) => {
           const saveError = saveErrorMessage && (
-            <ResearchErrors
-              errors={errors}
-              isVisible={!!saveErrorMessage}
-              labels={overview}
-            />
+            <ErrorsContainer errors={[saveErrorMessage]} />
           )
 
           const numberOfImageInputsAvailable = (values as any)?.images
@@ -200,11 +195,11 @@ export const ResearchUpdateForm = (props: IProps) => {
                 </Button>
               ) : null}
 
-              <ResearchErrors
-                errors={errors}
-                isVisible={submitFailed && hasValidationErrors}
-                labels={update}
-              />
+              {hasValidationErrors && errors && (
+                <ErrorsContainer
+                  errors={Object.values(errors).map((value) => String(value))}
+                />
+              )}
 
               {props.research && (
                 <ResearchEditorOverview

@@ -7,9 +7,10 @@ import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FileInputField } from 'src/common/Form/FileInput.field'
 import { FileDisplay } from 'src/common/Form/FileInput/FileDisplay'
 import { MAX_LINK_LENGTH } from 'src/pages/constants'
-import { update as updateLabels } from 'src/pages/Research/labels'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { Flex, Label, Text } from 'theme-ui'
+
+import { fileLabels } from './labels'
 
 import type { MediaFile } from 'oa-shared'
 
@@ -17,7 +18,7 @@ export const FilesFields = (props: {
   files: MediaFile[]
   deleteFile: (id: string) => void
 }) => {
-  const { title } = updateLabels.files
+  const { title } = fileLabels.files
 
   return (
     <ClientOnly fallback={<></>}>
@@ -39,7 +40,7 @@ export const FilesFields = (props: {
 }
 
 const WarningMessages = ({ show }) => {
-  const { error } = updateLabels.files
+  const { error } = fileLabels.files
 
   return (
     <Flex sx={{ mb: 2 }}>
@@ -80,7 +81,7 @@ const AlreadyAddedFiles = ({
 }
 
 const UploadNewFiles = () => {
-  const { fileLink, files } = updateLabels
+  const { fileLink, files } = fileLabels
   const identity = 'file-download-link'
 
   return (
@@ -123,7 +124,6 @@ const UploadNewFiles = () => {
           name="fileLink"
           data-cy="fileLink"
           component={FieldInput}
-          placeholder={fileLink.placeholder}
           isEqual={COMPARISONS.textInput}
           maxLength={MAX_LINK_LENGTH}
           validateFields={[]}

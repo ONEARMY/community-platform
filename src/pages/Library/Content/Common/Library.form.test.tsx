@@ -109,8 +109,8 @@ describe('Library form', () => {
 
       await waitFor(() => {
         // clear files
-        const reuploadFilesButton = wrapper.getByTestId('re-upload-files')
-        fireEvent.click(reuploadFilesButton)
+        const removeFileButton = wrapper.getByTestId('remove-file')
+        fireEvent.click(removeFileButton)
 
         // add fileLink
         const fileLink = wrapper.getByPlaceholderText(

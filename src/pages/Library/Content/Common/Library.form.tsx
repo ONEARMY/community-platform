@@ -8,6 +8,7 @@ import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.
 import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
+import { FilesFields } from 'src/pages/common/FormFields/FilesFields'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
 import { buttons, headings, intro } from '../../labels'
@@ -16,7 +17,6 @@ import { LibraryCategoryField } from './LibraryCategory.field'
 import { LibraryCoverImageField } from './LibraryCoverImage.field'
 import { LibraryDescriptionField } from './LibraryDescription.field'
 import { LibraryDifficultyField } from './LibraryDifficulty.field'
-import { LibraryFilesField } from './LibraryFiles.field'
 import { LibraryPostingGuidelines } from './LibraryPostingGuidelines'
 import { LibraryStepsContainerField } from './LibraryStepsContainer.field'
 import { LibraryTagsField } from './LibraryTags.field'
@@ -25,13 +25,6 @@ import { LibraryTitleField } from './LibraryTitle.field'
 
 import type { MediaFile, Project, ProjectFormData } from 'oa-shared'
 
-interface IState {
-  formSaved: boolean
-  _toDocsList: boolean
-  editCoverImg?: boolean
-  fileEditMode?: boolean
-  showInvalidFileWarning: boolean
-}
 interface LibraryFormProps {
   project?: Project
   files?: MediaFile[]
@@ -59,21 +52,14 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
             }
           : undefined,
         tags: project?.tagIds || [],
+        time: project?.time,
+        difficultyLevel: project.difficultyLevel,
         existingCoverImage: project?.coverImage,
         existingFiles: files,
         fileLink: fileLink,
       })
     }
   }, [project])
-  const [state, setState] = useState<IState>({
-    formSaved: false,
-    _toDocsList: false,
-    editCoverImg: false,
-    fileEditMode: false,
-    showInvalidFileWarning: !project?.files?.length && !project?.hasFileLink,
-  })
-
-  const { fileEditMode, showInvalidFileWarning } = state
 
   const formId = 'libraryForm'
   const headingText = project ? headings.edit : headings.create
@@ -101,6 +87,23 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
     }
   }
 
+  const removeExistingFile = (id: string) => {
+    setInitialValues((prevState: Partial<ProjectFormData> | undefined) => {
+      return {
+        ...prevState,
+        existingFiles:
+          prevState?.existingFiles?.filter((file) => file.id !== id) ?? null,
+      }
+    })
+  }
+
+  const removeCoverImage = () => {
+    setInitialValues({
+      ...initialValues!,
+      existingCoverImage: null,
+    })
+  }
+
   return (
     <Form<ProjectFormData>
       onSubmit={() => {}}
@@ -113,7 +116,6 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
         dirty,
         valid,
         values,
-        form,
         handleSubmit,
         submitSucceeded,
         submitting,
@@ -126,16 +128,20 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
               hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
             />
             <Flex
-              bg="inherit"
-              px={2}
-              sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
-              mt={4}
+              sx={{
+                backgroundColor: 'inherit',
+                paddingX: 2,
+                marginTop: 4,
+                width: ['100%', '100%', `${(2 / 3) * 100}%`],
+              }}
             >
               <FormContainer id={formId} onSubmit={handleSubmit}>
                 {/* Project Info */}
                 <Flex sx={{ flexDirection: 'column' }}>
-                  <Card sx={{ bg: 'softblue' }}>
-                    <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
+                  <Card sx={{ backgroundColor: 'softblue' }}>
+                    <Flex
+                      sx={{ paddingX: 3, paddingY: 2, alignItems: 'center' }}
+                    >
                       <Heading
                         as="h1"
                         dangerouslySetInnerHTML={{ __html: headingText }}
@@ -145,25 +151,38 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                       </Box>
                     </Flex>
                   </Card>
-                  <Box sx={{ mt: '20px', display: ['block', 'block', 'none'] }}>
+                  <Box
+                    sx={{
+                      marginTop: '20px',
+                      display: ['block', 'block', 'none'],
+                    }}
+                  >
                     <LibraryPostingGuidelines />
                   </Box>
-                  <Card mt={3}>
+                  <Card sx={{ marginTop: 3 }}>
                     <Flex
-                      p={4}
-                      sx={{ flexWrap: 'wrap', flexDirection: 'column' }}
+                      sx={{
+                        flexWrap: 'wrap',
+                        flexDirection: 'column',
+                        padding: 4,
+                      }}
                     >
                       {/* Left Side */}
                       <Heading as="h2" variant="small" mb={3}>
                         {intro.heading.title}
                       </Heading>
                       <Flex
-                        mx={-2}
-                        sx={{ flexDirection: ['column', 'column', 'row'] }}
+                        sx={{
+                          marginX: -2,
+                          flexDirection: ['column', 'column', 'row'],
+                        }}
                       >
                         <Flex
-                          px={2}
-                          sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
+                          sx={{
+                            flexDirection: 'column',
+                            flex: [1, 1, 4],
+                            paddingX: 2,
+                          }}
                         >
                           <LibraryTitleField />
                           <LibraryCategoryField />
@@ -171,26 +190,27 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                           <LibraryTimeField />
                           <LibraryDifficultyField />
                           <LibraryDescriptionField />
-                          <LibraryFilesField
-                            fileEditMode={fileEditMode}
-                            files={files}
-                            onClick={() => {
-                              setState((state) => ({
-                                ...state,
-                                fileEditMode: !state.fileEditMode,
-                              }))
-                              form.change('files', [])
-                            }}
-                            showInvalidFileWarning={showInvalidFileWarning}
+                          <FilesFields
+                            files={initialValues?.existingFiles || []}
+                            deleteFile={removeExistingFile}
                           />
                         </Flex>
                         {/* Right side */}
                         <Flex
-                          px={2}
-                          sx={{ flexDirection: 'column', flex: [1, 1, 3] }}
-                          data-cy={'intro-cover'}
+                          sx={{
+                            flexDirection: 'column',
+                            flex: [1, 1, 3],
+                            paddingX: 2,
+                          }}
+                          data-cy="intro-cover"
                         >
-                          <LibraryCoverImageField />
+                          <LibraryCoverImageField
+                            existingImage={
+                              initialValues?.existingCoverImage || null
+                            }
+                            label="Cover Image"
+                            remove={removeCoverImage}
+                          />
                         </Flex>
                       </Flex>
                     </Flex>
@@ -209,10 +229,10 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                 position: ['relative', 'relative', 'sticky'],
                 top: 3,
                 alignSelf: 'flex-start',
+                backgroundColor: 'inherit',
+                paddingX: 2,
+                marginTop: [0, 0, 4],
               }}
-              bg="inherit"
-              px={2}
-              mt={[0, 0, 4]}
             >
               <Box
                 sx={{

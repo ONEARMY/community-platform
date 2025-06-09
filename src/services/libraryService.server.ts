@@ -84,14 +84,14 @@ const getProjectPublicMedia = (
 
 const isAllowedToEditProject = async (
   client: SupabaseClient,
-  project: Project,
+  authorUsername: string,
   currentUsername: string,
 ) => {
   if (!currentUsername) {
     return false
   }
 
-  if (currentUsername === project.author?.username) {
+  if (currentUsername === authorUsername) {
     return true
   }
 
@@ -118,7 +118,11 @@ const isAllowedToEditProjectById = async (
 
   const item = Project.fromDB(project, [])
 
-  return isAllowedToEditProject(client, item, currentUsername)
+  return isAllowedToEditProject(
+    client,
+    item.author?.username || '',
+    currentUsername,
+  )
 }
 
 async function getById(id: number, client: SupabaseClient) {

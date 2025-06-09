@@ -2,6 +2,7 @@ import { createRef, useEffect, useState } from 'react'
 import { Avatar, Box, Flex, Text } from 'theme-ui'
 
 import defaultProfileImage from '../../assets/images/default_member.svg'
+import { ActionSet } from '../ActionSet/ActionSet'
 import { Button } from '../Button/Button'
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal'
 import { DisplayDate } from '../DisplayDate/DisplayDate'
@@ -130,6 +131,7 @@ export const CommentItem = (props: IProps) => {
                     <DisplayDate
                       createdAt={_created || ''}
                       modifiedAt={_edited}
+                      showLabel={false}
                     />
                   </Text>
                 </Flex>
@@ -142,26 +144,28 @@ export const CommentItem = (props: IProps) => {
                       paddingBottom: 2,
                     }}
                   >
-                    <Button
-                      type="button"
-                      data-cy={`${item}: edit button`}
-                      variant="subtle"
-                      small={true}
-                      icon="edit"
-                      onClick={() => onEditRequest(_id)}
-                    >
-                      edit
-                    </Button>
-                    <Button
-                      type="button"
-                      data-cy={`${item}: delete button`}
-                      variant="subtle"
-                      small={true}
-                      icon="delete"
-                      onClick={() => setShowDeleteModal(true)}
-                    >
-                      delete
-                    </Button>
+                    <ActionSet itemType={item}>
+                      <Button
+                        type="button"
+                        data-cy={`${item}: edit button`}
+                        variant="subtle"
+                        small={true}
+                        icon="edit"
+                        onClick={() => onEditRequest(_id)}
+                      >
+                        edit
+                      </Button>
+                      <Button
+                        type="button"
+                        data-cy={`${item}: delete button`}
+                        variant="subtle"
+                        small={true}
+                        icon="delete"
+                        onClick={() => setShowDeleteModal(true)}
+                      >
+                        delete
+                      </Button>
+                    </ActionSet>
                   </Flex>
                 )}
               </Flex>

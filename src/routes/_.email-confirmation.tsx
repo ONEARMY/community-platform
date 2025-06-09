@@ -1,7 +1,9 @@
+import { useEffect } from 'react'
 import { Link, redirect } from '@remix-run/react'
 import { Button, HeroBanner } from 'oa-components'
 import Main from 'src/pages/common/Layout/Main'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { fireConfetti } from 'src/utils/fireConfetti'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -11,37 +13,43 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
 
   const error = url.searchParams.get('error_description')
-
   if (error) {
-    console.error(error)
+    console.error('Email confirmation error:', error)
+    return redirect('/sign-in?error=email-confirmation-failed', { headers })
   }
 
+  // Check if user is already authenticated
   const {
     data: { user },
   } = await client.auth.getUser()
 
   if (user) {
-    return Response.json({}, { headers })
+    // User is already logged in, redirect to profile completion
+    return redirect('/settings', { headers })
   }
 
   const code = url.searchParams.get('code')
-
-  if (code) {
-    const result = await client.auth.exchangeCodeForSession(
-      url.searchParams.get('code') as string,
-    )
-
-    if (!result.error) {
-      return Response.json({}, { headers })
-    }
-
-    console.error(error)
+  if (!code) {
+    // No code provided, redirect to sign in
+    return redirect('/sign-in', { headers })
   }
 
-  return redirect('/sign-in', { headers })
+  // Exchange code for session to log the user in
+  const result = await client.auth.exchangeCodeForSession(code)
+
+  if (result.error) {
+    console.error('Email confirmation exchange error:', result.error)
+    return redirect('/sign-in?error=email-confirmation-expired', { headers })
+  }
+
+  // Successfully confirmed and logged in - show success page
+  return Response.json({}, { headers })
 }
 
 export default function Index() {
+  useEffect(() => {
+    fireConfetti()
+  }, [])
   return (
     <Main style={{ flex: 1 }}>
       <Flex
@@ -80,7 +88,6 @@ export default function Index() {
               </Flex>
             </Flex>
           </Card>
-          <Flex mt={3} sx={{ justifyContent: 'flex-start' }}></Flex>
         </Flex>
       </Flex>
     </Main>

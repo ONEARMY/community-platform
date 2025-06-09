@@ -38,7 +38,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
   const hasProfile =
     about || (tags && Object.keys(tags).length !== 0) || hasContributed
 
-  const showEmptyProfileAlert = isViewingOwnProfile && !hasProfile
+  const showEmptyProfileAlert = isViewingOwnProfile
 
   const defaultValue =
     useLocationHook?.hash?.slice(1) || (hasProfile ? 'profile' : 'contact')

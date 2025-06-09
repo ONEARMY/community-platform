@@ -2,13 +2,13 @@ import { Button, ElWithBeforeIcon } from 'oa-components'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { Box, Card, Flex, Heading } from 'theme-ui'
 
-import type { ContentType } from 'oa-shared'
+import type { ContentFormType } from 'oa-shared'
 
 interface IProps {
   buttonLabel: string
-  contentType: ContentType
+  contentType: ContentFormType
   children: React.ReactNode
-  guidelines: React.ReactNode
+  guidelines?: React.ReactNode
   handleSubmit: () => void
   heading: string
   saveError: React.ReactNode | null
@@ -59,9 +59,11 @@ export const FormWrapper = (props: IProps) => {
               </Box>
             </Flex>
           </Card>
-          <Box sx={{ mt: '20px', display: ['block', 'block', 'none'] }}>
-            {guidelines}
-          </Box>
+          {guidelines && (
+            <Box sx={{ marginX: '20px', display: ['block', 'block', 'none'] }}>
+              {guidelines}
+            </Box>
+          )}
           <Card sx={{ marginTop: 4, padding: 4, overflow: 'visible' }}>
             {children}
           </Card>
@@ -75,10 +77,12 @@ export const FormWrapper = (props: IProps) => {
           backgroundColor: 'inherit',
           maxWidth: ['inherit', 'inherit', '400px'],
           width: ['100%', '100%', `${100 / 3}%`],
-          gap: 2,
+          gap: 3,
         }}
       >
-        <Box sx={{ display: ['none', 'none', 'block'] }}>{guidelines}</Box>
+        {guidelines && (
+          <Box sx={{ display: ['none', 'none', 'block'] }}>{guidelines}</Box>
+        )}
         <Button
           large
           data-cy="submit"
@@ -87,7 +91,6 @@ export const FormWrapper = (props: IProps) => {
           disabled={submitting || !valid}
           onClick={handleSubmit}
           sx={{
-            mt: 3,
             width: '100%',
             mb: ['40px', '40px', 0],
             display: 'block',

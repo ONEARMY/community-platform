@@ -135,6 +135,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
           .includes(loggedInUser.userName))
     )
   }, [loggedInUser, research.author])
+
   const isDeletable = useMemo(() => {
     return (
       !!loggedInUser &&
@@ -142,6 +143,13 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
         research.author?.username === loggedInUser.userName)
     )
   }, [loggedInUser, research.author])
+
+  const sortedUpdates = useMemo(() => {
+    return research?.updates?.toSorted(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    )
+  }, [research?.updates])
 
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
@@ -177,22 +185,16 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
         }}
       >
         <MultipleCommentSectionWrapper>
-          {research?.updates
-            ?.toSorted(
-              (a, b) =>
-                new Date(a.createdAt).getTime() -
-                new Date(b.createdAt).getTime(),
-            )
-            ?.map((update, index) => (
-              <ResearchUpdate
-                research={research}
-                update={update}
-                key={update.id}
-                updateIndex={index}
-                isEditable={isEditable}
-                slug={research.slug}
-              />
-            ))}
+          {sortedUpdates?.map((update, index) => (
+            <ResearchUpdate
+              research={research}
+              update={update}
+              key={update.id}
+              updateIndex={index}
+              isEditable={isEditable}
+              slug={research.slug}
+            />
+          ))}
         </MultipleCommentSectionWrapper>
       </Flex>
 
@@ -226,6 +228,8 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
                     onFollowClick={() =>
                       onFollowClick(subscribed ? 'remove' : 'add')
                     }
+                    tooltipFollow="Follow to be notified about new updates"
+                    tooltipUnfollow="Unfollow to stop be notified about new updates"
                   />
                 </ArticleCallToActionSupabase>
               )}

@@ -11573,6 +11573,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/canvas-confetti@npm:^1":
+  version: 1.9.0
+  resolution: "@types/canvas-confetti@npm:1.9.0"
+  checksum: 10/7c7423972465d21fc70a7842091735c51875bb7b4466bb623f11462de247272497c5e4a668aad6033e4bf5be3aaf0b57b059c9b26ac02592f4e02df423b86982
+  languageName: node
+  linkType: hard
+
 "@types/caseless@npm:*":
   version: 0.12.5
   resolution: "@types/caseless@npm:0.12.5"
@@ -15333,9 +15340,16 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001646, caniuse-lite@npm:^1.0.30001669":
-  version: 1.0.30001684
-  resolution: "caniuse-lite@npm:1.0.30001684"
-  checksum: 10/35dd0941dd32319c87409441e8400faea32114c4a74938c29262a613160d2890a4f57902e24c770f076dbd0b85c4442aa135f9f641d4a74a9246fe624e6f780a
+  version: 1.0.30001718
+  resolution: "caniuse-lite@npm:1.0.30001718"
+  checksum: 10/e172a4c156f743cc947e659f353ad9edb045725cc109a02cc792dcbf98569356ebfa4bb4356e3febf87427aab0951c34c1ee5630629334f25ae6f76de7d86fd0
+  languageName: node
+  linkType: hard
+
+"canvas-confetti@npm:^1.9.3":
+  version: 1.9.3
+  resolution: "canvas-confetti@npm:1.9.3"
+  checksum: 10/50378c45a10030f0e6c5d2e93972d6e01170dd197b74ef150dcc2ef0166c8e3eb600ea0e930cf923143be6ae4c7ff15ccf74fb6c347a177e6aa4de966afcb610
   languageName: node
   linkType: hard
 
@@ -28332,6 +28346,7 @@ __metadata:
     "@testing-library/jest-dom": "npm:^6.4.6"
     "@testing-library/react": "npm:^16.0.0"
     "@testing-library/user-event": "npm:^14.4.3"
+    "@types/canvas-confetti": "npm:^1"
     "@types/flux-standard-action": "npm:1.1.0"
     "@types/node": "npm:^20.8.0"
     "@types/pg": "npm:^8.11.11"
@@ -28353,6 +28368,7 @@ __metadata:
     "@vitejs/plugin-react": "npm:^4.3.0"
     "@vitest/coverage-v8": "npm:^1.6.0"
     all-contributors-cli: "npm:^6.20.0"
+    canvas-confetti: "npm:^1.9.3"
     chai-subset: "npm:^1.6.0"
     compression: "npm:^1.7.4"
     compressorjs: "npm:^1.2.1"

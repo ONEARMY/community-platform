@@ -61,6 +61,7 @@ declare global {
       selectTag(tagName: string, selector?: string): Chainable<void>
       setSettingAddContactLink(link: ILink)
       setSettingVisitorPolicy(policyText: string, details?: string)
+      clearSettingVisitorPolicy()
       setSettingBasicUserInfo(info: IInfo)
       setSettingFocus(focus: string)
       setSettingImage(image: string, selector: string)
@@ -125,6 +126,11 @@ Cypress.Commands.add(
     }
   },
 )
+
+Cypress.Commands.add('clearSettingVisitorPolicy', () => {
+  cy.step('Clear visitor policy')
+  cy.get('[data-testid="openToVisitors-switch"]').click({ force: true })
+})
 
 Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
   const { country, description, displayName } = info
@@ -258,26 +264,28 @@ Cypress.Commands.add('addComment', (newComment: string) => {
 Cypress.Commands.add(
   'editDiscussionItem',
   (element, oldComment, updatedNewComment) => {
-    cy.get(`[data-cy="${element}: edit button"]`).last().click()
+    cy.get(`[data-cy="${element}: ActionSetButton"]`).last().click()
+    cy.get(`[data-cy="${element}: edit button"]`).click()
     cy.get('[data-cy=edit-comment]').clear().type(updatedNewComment)
     cy.get('[data-cy=edit-comment-submit]').click()
 
     cy.get('[data-cy=edit-comment]').should('not.exist')
     cy.get(`[data-cy=Own${element}]`).contains(updatedNewComment)
-    cy.get(`[data-cy=Own${element}]`).contains('Updated less than a minute ago')
+    cy.get(`[data-cy=Own${element}]`).contains('less than a minute ago')
     cy.get(`[data-cy=Own${element}]`).contains(oldComment).should('not.exist')
   },
 )
 
 Cypress.Commands.add('deleteDiscussionItem', (element, item) => {
-  cy.get(`[data-cy="${element}: delete button"]`).last().click()
+  cy.get(`[data-cy="${element}: ActionSetButton"]`).last().click()
+  cy.get(`[data-cy="${element}: delete button"]`).click()
   cy.get('[data-cy="Confirm.modal: Confirm"]').last().click()
 
   cy.contains(item).should('not.exist')
 })
 
 Cypress.Commands.add('addReply', (reply: string) => {
-  cy.get('[data-cy=show-replies]').first().click()
+  cy.get('[data-cy=show-replies]').first().click({ force: true })
   cy.get('[data-cy=reply-form]').first().type(reply)
   cy.get('[data-cy=reply-submit]').first().click()
 

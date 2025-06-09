@@ -97,6 +97,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
         setSaveErrorMessage(e.message)
       }
       logger.error(e)
+      return
     }
   }
 

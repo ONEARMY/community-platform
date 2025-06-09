@@ -19,11 +19,12 @@ const DEFAULT_COLOR = '#999999'
 
 type TagProps = ComponentProps<typeof Text> & {
   label: string
-  color?: string
   large: IProps['large']
+  color?: string
+  dataCy?: string
 }
 
-const Tag = ({ label, color, large, onClick }: TagProps) => {
+const Tag = ({ color, dataCy, label, large, onClick }: TagProps) => {
   const sizing = large
     ? {
         fontSize: 2,
@@ -37,6 +38,7 @@ const Tag = ({ label, color, large, onClick }: TagProps) => {
       }
   return (
     <Text
+      data-cy={dataCy}
       sx={{
         borderRadius: 99,
         border: '1px solid',
@@ -85,8 +87,11 @@ export const ProfileTagsList = (props: IProps) => {
       ))}
       {openToVisitors && isSpace && (
         <Tag
+          dataCy="tag-openToVisitors"
           color={policyColors.get(openToVisitors.policy)}
-          label={`${visitorDisplayData.get(openToVisitors.policy)?.label} \u24D8`}
+          label={`${
+            visitorDisplayData.get(openToVisitors.policy)?.label
+          } \u24D8`}
           onClick={() => {
             showVisitorModal && showVisitorModal()
           }}

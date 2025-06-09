@@ -55,7 +55,7 @@ async function insertOrUpdateProfile(
         display_name: user.displayName,
         is_verified: user.verified,
         photo_url: user.userImage?.downloadUrl || null,
-        country: user.location?.countryCode || null,
+        country: user.location?.countryCode || user.country || null,
         roles: user.userRoles,
       })
       .eq('username', user.userName)
@@ -71,7 +71,7 @@ async function insertOrUpdateProfile(
         display_name: user.displayName,
         is_verified: user.verified,
         photo_url: user.userImage?.downloadUrl || null,
-        country: user.location?.countryCode || null,
+        country: user.location?.countryCode || user.country || null,
         tenant_id: process.env.TENANT_ID,
         username: user.userName,
         roles: user.userRoles,

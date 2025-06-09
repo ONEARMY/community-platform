@@ -13,7 +13,7 @@ import { DB_ENDPOINTS, DBEndpoint } from 'oa-shared/models/db'
  * References
  * https://firebase.google.com/docs/functions/unit-testing
  * https://github.com/firebase/firebase-functions-test
- * https://github.com/firebase/functions-samples/tree/main/2nd-gen/test-functions-jest-ts
+ * https://github.com/firebase/functions-samples/tree/main/Node/test-functions-jest-ts
  */
 class FirebaseEmulatedTestClass {
   /** Access to mocking features, such as firestore document snapshot mocks */

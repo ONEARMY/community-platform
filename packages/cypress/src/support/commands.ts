@@ -25,7 +25,6 @@ declare global {
       clearServiceWorkers(): Promise<void>
       deleteIDB(name: string): Promise<boolean>
       expectNewNotification(ExpectedNewNotification): Chainable<void>
-      expectNoNewNotifications(): Chainable<void>
       interceptAddressSearchFetch(addressResponse): Chainable<void>
       interceptAddressReverseFetch(addressResponse): Chainable<void>
       queryDocuments(
@@ -153,26 +152,15 @@ Cypress.Commands.add(
     const { content, path, title, username } = props
 
     localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
-    cy.wait(1000)
+    cy.wait(3000)
 
     cy.get('[data-cy=NotificationsSupabase-desktop]').within(() => {
       cy.get('[data-cy=notifications-new-messages]').click()
     })
-    cy.get('[data-cy=NotificationListSupabase]')
-    cy.get('[data-cy=NotificationListItemSupabase]')
-      .first()
-      .within(() => {
-        cy.contains(username)
-        cy.contains(title)
-        cy.contains(content).click()
-      })
+    cy.get('[data-cy=NotificationListSupabase]').contains(username)
+    cy.get('[data-cy=NotificationListSupabase]').contains(title)
+    cy.get('[data-cy=NotificationListSupabase]').contains(content).click()
+
     cy.url().should('include', path)
   },
 )
-
-Cypress.Commands.add('expectNoNewNotifications', () => {
-  localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
-  cy.wait(1000)
-
-  cy.get('[data-cy=notifications-no-new-messages]')
-})

@@ -164,35 +164,6 @@ describe('Research Article', () => {
       )
     })
 
-    it('does not show edit timestamp, when create displays the same value', async () => {
-      const createdAt = faker.date.past()
-      const update = FactoryResearchItemUpdate({
-        createdAt,
-        modifiedAt: createdAt,
-        title: 'A title',
-        description: 'A description',
-        isDraft: false,
-      })
-
-      // Act
-      const item = FactoryResearchItem({
-        createdAt,
-        modifiedAt: createdAt,
-        updates: [update],
-      })
-      const wrapper = getWrapper(item)
-
-      // Assert
-      await waitFor(() => {
-        expect(() =>
-          wrapper.getAllByText((content) => content.includes('Updated')),
-        ).toThrow()
-        expect(() =>
-          wrapper.getAllByText((content) => content.includes('Created')),
-        ).not.toThrow()
-      })
-    })
-
     it('does show both created and edit timestamp, when different', async () => {
       const createdAt = faker.date.past({ years: 2 })
       const modifiedAt = faker.date.past({ years: 1 })

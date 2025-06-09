@@ -37,7 +37,11 @@ export const ResetPasswordEmail = (props: SignUpEmailProps) => {
     token_hash,
   } = props
 
-  const href = `${supabaseUrl}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${redirect_to}`
+  const href =
+    `${redirect_to}?url=` +
+    encodeURIComponent(
+      `${supabaseUrl}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${redirect_to}`,
+    )
 
   return (
     <Layout preview={copy.preview} settings={settings}>

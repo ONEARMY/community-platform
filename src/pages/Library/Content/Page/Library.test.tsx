@@ -55,6 +55,14 @@ describe('Library', () => {
   describe('moderator feedback', () => {
     it('displays feedback for items which are not accepted', async () => {
       let wrapper
+      item.author = {
+        id: faker.number.int(),
+        displayName: 'LibraryAuthor',
+        isVerified: true,
+        isSupporter: false,
+        photoUrl: faker.image.avatar(),
+        username: faker.internet.userName(),
+      }
       item.moderation = IModerationStatus.AWAITING_MODERATION
       item.moderatorFeedback = 'Moderation comments'
 
@@ -94,17 +102,17 @@ describe('Library', () => {
     item.steps = [FactoryLibraryItemStep({})]
     item.moderation = IModerationStatus.ACCEPTED
     item.totalViews = 0
+    item.usefulCount = 0
+    item.commentCount = 0
 
     act(() => {
       wrapper = factory()
     })
 
-    await waitFor(() => {
-      expect(wrapper.getByText('0 views')).toBeInTheDocument()
-      expect(wrapper.getByText('0 useful')).toBeInTheDocument()
-      expect(wrapper.getByText('0 comments')).toBeInTheDocument()
-      expect(wrapper.getByText('1 step')).toBeInTheDocument()
-    })
+    expect(wrapper.getByText('0 views')).toBeInTheDocument()
+    expect(wrapper.getByText('0 useful')).toBeInTheDocument()
+    expect(wrapper.getByText('0 comments')).toBeInTheDocument()
+    expect(wrapper.getByText('1 step')).toBeInTheDocument()
   })
 
   it('shows verified badge', async () => {
@@ -190,56 +198,30 @@ describe('Library', () => {
       act(() => {
         item.title = 'DIY Recycling Machine'
         item.category = {
-          name: 'DIY',
+          name: 'Machines',
           id: faker.number.int(),
           modifiedAt: faker.date.past(),
           createdAt: faker.date.past(),
           type: 'projects',
         }
-        wrapper = factory()
+        wrapper = factory(item)
       })
 
-      await waitFor(() => {
-        const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
-        expect(breadcrumbItems).toHaveLength(3)
-        expect(breadcrumbItems[0]).toHaveTextContent('Library')
-        expect(breadcrumbItems[1]).toHaveTextContent('DIY')
-        expect(breadcrumbItems[2]).toHaveTextContent('DIY Recycling Machine')
+      const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
+      expect(breadcrumbItems).toHaveLength(3)
+      expect(breadcrumbItems[0]).toHaveTextContent('Library')
+      expect(breadcrumbItems[1]).toHaveTextContent('Machines')
+      expect(breadcrumbItems[2]).toHaveTextContent('DIY Recycling Machine')
 
-        // Assert: Check that the first two breadcrumb items contain links
-        const firstLink = within(breadcrumbItems[0]).getByRole('link')
-        const secondLink = within(breadcrumbItems[1]).getByRole('link')
-        expect(firstLink).toBeInTheDocument()
-        expect(secondLink).toBeInTheDocument()
+      // Assert: Check that the first two breadcrumb items contain links
+      const firstLink = within(breadcrumbItems[0]).getByRole('link')
+      const secondLink = within(breadcrumbItems[1]).getByRole('link')
+      expect(firstLink).toBeInTheDocument()
+      expect(secondLink).toBeInTheDocument()
 
-        // Assert: Check for the correct number of chevrons
-        const chevrons = wrapper.getAllByTestId('breadcrumbsChevron')
-        expect(chevrons).toHaveLength(2)
-      })
-    })
-
-    it('displays breadcrumbs without category', async () => {
-      let wrapper
-      act(() => {
-        item.title = 'DIY Recycling Machine'
-        item.category = null
-        wrapper = factory()
-      })
-
-      await waitFor(() => {
-        const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
-        expect(breadcrumbItems).toHaveLength(2)
-        expect(breadcrumbItems[0]).toHaveTextContent('Library')
-        expect(breadcrumbItems[1]).toHaveTextContent('DIY Recycling Machine')
-
-        // Assert: Check that the first breadcrumb item contains a link
-        const firstLink = within(breadcrumbItems[0]).getByRole('link')
-        expect(firstLink).toBeInTheDocument()
-
-        // Assert: Check for the correct number of chevrons
-        const chevrons = wrapper.getAllByTestId('breadcrumbsChevron')
-        expect(chevrons).toHaveLength(1)
-      })
+      // Assert: Check for the correct number of chevrons
+      const chevrons = wrapper.getAllByTestId('breadcrumbsChevron')
+      expect(chevrons).toHaveLength(2)
     })
   })
 })

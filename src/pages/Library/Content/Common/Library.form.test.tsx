@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 
 import { createRemixStub } from '@remix-run/testing'
-import { act, fireEvent, render, waitFor } from '@testing-library/react'
+import { act, fireEvent, render } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { FactoryLibraryItem } from 'src/test/factories/Library'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
@@ -71,20 +71,18 @@ describe('Library form', () => {
       // Arrange
       const project = FactoryLibraryItem()
 
+      const files = [
+        {
+          id: '123',
+          name: 'test-file.pdf',
+          size: 12345,
+        },
+      ]
+
       // Act
       let wrapper
       act(() => {
-        wrapper = Wrapper(
-          project,
-          [
-            {
-              id: '123',
-              name: 'test-file.pdf',
-              size: 12345,
-            },
-          ],
-          'www.test.com',
-        )
+        wrapper = Wrapper(project, files, 'www.test.com')
       })
 
       // Assert
@@ -94,35 +92,36 @@ describe('Library form', () => {
     it('Does not appear when files are removed and filelink added', async () => {
       // Arrange
       const project = FactoryLibraryItem()
+      const files = [
+        {
+          id: '123',
+          name: 'test-file.pdf',
+          size: 12345,
+        },
+      ]
 
       // Act
       let wrapper
       act(() => {
-        wrapper = Wrapper(project, [
-          {
-            id: '123',
-            name: 'test-file.pdf',
-            size: 12345,
-          },
-        ])
+        wrapper = Wrapper(project, files)
       })
 
-      await waitFor(() => {
-        // clear files
-        const removeFileButton = wrapper.getByTestId('remove-file')
-        fireEvent.click(removeFileButton)
+      // clear files
+      expect(wrapper.queryByTestId('remove-file')).toBeInTheDocument()
 
-        // add fileLink
-        const fileLink = wrapper.getByPlaceholderText(
-          'Link to Google Drive, Dropbox, Grabcad etc',
-        )
-        fireEvent.change(fileLink, {
-          target: { value: '<http://www.test.com>' },
-        })
+      const removeFileButton = wrapper.getByTestId('remove-file')
+      fireEvent.click(removeFileButton)
 
-        // submit form
-        fireEvent.click(wrapper.getByTestId('submit-form'))
+      // add fileLink
+      const fileLink = wrapper.getByPlaceholderText(
+        'Link to Google Drive, Dropbox, Grabcad etc',
+      )
+      fireEvent.change(fileLink, {
+        target: { value: '<http://www.test.com>' },
       })
+
+      // submit form
+      fireEvent.click(wrapper.getByTestId('submit-form'))
 
       // Assert
       expect(

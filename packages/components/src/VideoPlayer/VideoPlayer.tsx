@@ -8,7 +8,7 @@ export interface Props {
 export const VideoPlayer = ({ videoUrl }: Props) => {
   return (
     <Box data-testid="VideoPlayer">
-      <ReactPlayer width="auto" controls url={videoUrl} />
+      <ReactPlayer width="auto" controls src={videoUrl} />
     </Box>
   )
 }

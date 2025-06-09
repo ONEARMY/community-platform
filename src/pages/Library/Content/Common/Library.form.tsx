@@ -193,6 +193,13 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                           <FilesFields
                             files={initialValues?.existingFiles || []}
                             deleteFile={removeExistingFile}
+                            hasBothError={
+                              !!(
+                                (initialValues?.existingFiles?.length ||
+                                  initialValues?.files?.length) &&
+                                initialValues.fileLink
+                              )
+                            }
                           />
                         </Flex>
                         {/* Right side */}

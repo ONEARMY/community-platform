@@ -239,6 +239,13 @@ export const ResearchUpdateForm = (props: IProps) => {
               <FilesFields
                 files={initialValues?.existingFiles || []}
                 deleteFile={removeExistingFile}
+                hasBothError={
+                  !!(
+                    (initialValues?.existingFiles?.length ||
+                      initialValues?.files?.length) &&
+                    initialValues.fileLink
+                  )
+                }
               />
             </FormWrapper>
           )

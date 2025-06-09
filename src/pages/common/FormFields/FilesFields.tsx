@@ -17,6 +17,7 @@ import type { MediaFile } from 'oa-shared'
 export const FilesFields = (props: {
   files: MediaFile[]
   deleteFile: (id: string) => void
+  hasBothError: boolean
 }) => {
   const { title } = fileLabels.files
 
@@ -24,7 +25,7 @@ export const FilesFields = (props: {
     <ClientOnly fallback={<></>}>
       {() => (
         <>
-          <WarningMessages show={false} />
+          <WarningMessages show={props.hasBothError} />
           <Label htmlFor="files" sx={{ mb: 2 }}>
             {title}
           </Label>
@@ -126,6 +127,7 @@ const UploadNewFiles = () => {
           component={FieldInput}
           isEqual={COMPARISONS.textInput}
           maxLength={MAX_LINK_LENGTH}
+          placeholder={fileLink.placeholder}
           validateFields={[]}
         />
       </Flex>

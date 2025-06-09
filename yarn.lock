@@ -28067,7 +28067,7 @@ __metadata:
     react-icons: "npm:^5.3.0"
     react-image-crop: "npm:^11.0.5"
     react-markdown: "npm:^10.1.0"
-    react-player: "npm:^2.16.0"
+    react-player: "npm:3.0.0-canary.4"
     react-portal: "npm:^4.2.2"
     react-responsive-masonry: "npm:2.1.7"
     react-router: "npm:6.24.1"
@@ -31127,9 +31127,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-player@npm:^2.16.0":
-  version: 2.16.0
-  resolution: "react-player@npm:2.16.0"
+"react-player@npm:3.0.0-canary.4":
+  version: 3.0.0-canary.4
+  resolution: "react-player@npm:3.0.0-canary.4"
   dependencies:
     deepmerge: "npm:^4.0.0"
     load-script: "npm:^1.0.0"
@@ -31137,8 +31137,10 @@ __metadata:
     prop-types: "npm:^15.7.2"
     react-fast-compare: "npm:^3.0.1"
   peerDependencies:
-    react: ">=16.6.0"
-  checksum: 10/d7e2824f9cb52afc71e5661e341360153087fc4fe231ee4b6c0b968fcae1efecc208416cd69bfa24a024265fdca65aee3f74a290a86ccf1e5c0452102b82cb0d
+    "@types/react": ^17.0.0 || ^18
+    react: ^17.0.2 || ^18
+    react-dom: ^17.0.2 || ^18
+  checksum: 10/0bccc64af554c7c41dad3c4521843ae23e177dda388846f84d886ccd8b3c3619e8159124902f4117011a2e9c059366e9ae617bcc20042d69466035f83b38e158
   languageName: node
   linkType: hard
 

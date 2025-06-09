@@ -1,8 +1,14 @@
-import { ModerationRecord } from 'oa-shared'
 import { Text } from 'theme-ui'
 
 import type { Moderation } from 'oa-shared'
 import type { ThemeUIStyleObject } from 'theme-ui'
+
+export const ModerationRecord: Record<Moderation, string> = {
+  'awaiting-moderation': 'Awaiting Moderation',
+  'improvements-needed': 'Improvements Needed',
+  accepted: 'Accepted',
+  rejected: 'Rejected',
+}
 
 export interface Props {
   status: Moderation

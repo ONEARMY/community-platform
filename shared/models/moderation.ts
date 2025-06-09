@@ -26,10 +26,3 @@ export type Moderation =
   | 'improvements-needed'
   | 'rejected'
   | 'accepted'
-
-export const ModerationRecord: Record<Moderation, string> = {
-  'awaiting-moderation': 'Awaiting Moderation',
-  'improvements-needed': 'Improvements Needed',
-  accepted: 'Accepted',
-  rejected: 'Rejected',
-}

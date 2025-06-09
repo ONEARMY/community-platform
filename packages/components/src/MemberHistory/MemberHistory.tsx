@@ -14,6 +14,7 @@ export const MemberHistory = (props: MemberHistoryProps) => {
 
   return (
     <Flex
+      data-cy="MemberHistory"
       sx={{
         gap: 2,
         flexDirection: ['column', 'column', 'row'],

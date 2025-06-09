@@ -8,7 +8,8 @@ import {
   Tabs,
   TabsList,
 } from 'oa-components'
-import { ProfileTypeList } from 'oa-shared'
+import { ProfileTypeList, UserRole } from 'oa-shared'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isPreciousPlastic } from 'src/config/config'
 import { isUserContactable } from 'src/utils/helpers'
 import { Alert, Box, Card, Flex } from 'theme-ui'
@@ -143,10 +144,12 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
               )}
             </Tabs>
           </Box>
-          <MemberHistory
-            memberSince={user.profileCreated}
-            lastActive={user._lastActive}
-          />
+          <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+            <MemberHistory
+              memberSince={user.profileCreated}
+              lastActive={user._lastActive}
+            />
+          </AuthWrapper>
         </Flex>
       </Card>
     </Flex>

@@ -268,9 +268,14 @@ describe('[Profile]', () => {
 })
 
 describe('[By Beta Tester]', () => {
-  it('[Displays view count for profile with views]', () => {
+  it('[Displays other information]', () => {
     cy.signIn(betaTester.email, betaTester.password)
     cy.visit(`/u/${profile_views.userName}`)
+
+    cy.step('Displays view count for profile with views')
     cy.get('[data-testid=profile-views-stat]').contains(/Views: \d+/)
+
+    cy.step('Displays member history info')
+    cy.get('[data-cy=MemberHistory]').contains('Member since')
   })
 })

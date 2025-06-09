@@ -81,21 +81,12 @@ exports.sendOnce = functions
     )
   })
 
-/** Watch changes to all howto docs and trigger emails on moderation changes */
-exports.sendHowToModerationEmail = moderationEmails.handleHowToModerationUpdate
-
 /** Watch changes to all map pin docs and trigger emails on moderation changes */
 exports.sendMapPinModerationEmail =
   moderationEmails.handleMapPinModerationUpdate
 
-/** Watch new howto docs and trigger emails on creation */
-exports.sendHowToSubmissionEmail = submissionEmails.handleHowToSubmission
-
 /** Watch new map pin docs and trigger emails on creation */
 exports.sendMapPinSubmissionEmail = submissionEmails.handleMapPinSubmission
-
-/** Watch new message docs and trigger emails on creation */
-exports.sendMessageEmail = submissionEmails.handleMessageSubmission
 
 /** Watch new user docs and trigger emails on supporter */
 exports.sendSupporterEmail = (

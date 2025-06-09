@@ -11,8 +11,6 @@ exports.dailyTasks = dailyTasks
 // export all integration functions as a single group
 exports.integrations = require('./Integrations')
 
-exports.database = require('./database')
-
 exports.userUpdates = UserUpdates.handleUserUpdates
 
 exports.supabaseProfileUpdate = SupabaseSync.supabaseProfileUpdate

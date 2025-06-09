@@ -4,7 +4,7 @@ describe('[Notifications]', () => {
   it('email preferences can be set', () => {
     localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
 
-    cy.signUpNewUser()
+    cy.signUpCompletedUser()
     cy.visit('/settings')
 
     cy.step('All ticked be default')
@@ -41,7 +41,6 @@ describe('[Notifications]', () => {
       .contains('Stop receiving messages')
       .click()
 
-    cy.get('[data-cy=info-description').clear().type('Quick preferences test')
     cy.get('[data-cy=isContactableByPublic-true]').click({ force: true })
     cy.saveSettingsForm()
 

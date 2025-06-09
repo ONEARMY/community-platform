@@ -100,6 +100,8 @@ describe('[Profile]', () => {
       cy.step('Can opt-out of being contacted')
       cy.logout()
       cy.signIn(contactee.email, contactee.password)
+      cy.completeUserProfile(contactee.username)
+
       cy.visit('/settings')
       cy.completeUserProfile(contactee.username)
       cy.get('[data-cy=PublicContactSection]').should('be.visible')

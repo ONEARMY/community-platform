@@ -1,3 +1,5 @@
+import { Flex } from 'theme-ui'
+
 import { glyphs, Icon } from './Icon'
 
 import type { Meta, StoryFn } from '@storybook/react'
@@ -18,13 +20,13 @@ export const Sizes: StoryFn<typeof Icon> = () => (
 )
 
 export const Available: StoryFn<typeof Icon> = () => (
-  <>
+  <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>
     {Object.keys(glyphs).map((glyph: any, key) => (
       <a key={key} title={glyph}>
-        <Icon glyph={glyph} />
+        <Icon glyph={glyph} size={30} />
       </a>
     ))}
-  </>
+  </Flex>
 )
 
 export const Colours: StoryFn<typeof Icon> = () => (

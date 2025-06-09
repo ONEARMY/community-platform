@@ -242,21 +242,24 @@ export const LibraryDescription = (props: IProps) => {
               </Flex>
             )}
           </Flex>
-          <TagList tags={item.tags.map((t) => ({ label: t.name }))} />
-          <DownloadWrapper
-            fileDownloadCount={item.fileDownloadCount}
-            fileLink={
-              item.hasFileLink
-                ? `/api/documents/project/${item.id}/link`
-                : undefined
-            }
-            files={item.files?.map((x) => ({
-              id: x.id,
-              name: x.name,
-              size: x.size,
-              url: `/api/documents/project/${item.id}/${x.id}`,
-            }))}
-          />
+
+          <Flex sx={{ marginTop: 'auto', flexDirection: 'column', gap: 1 }}>
+            <TagList tags={item.tags.map((t) => ({ label: t.name }))} />
+            <DownloadWrapper
+              fileDownloadCount={item.fileDownloadCount}
+              fileLink={
+                item.hasFileLink
+                  ? `/api/documents/project/${item.id}/link`
+                  : undefined
+              }
+              files={item.files?.map((x) => ({
+                id: x.id,
+                name: x.name,
+                size: x.size,
+                url: `/api/documents/project/${item.id}/${x.id}`,
+              }))}
+            />
+          </Flex>
         </Flex>
         <Box
           sx={{

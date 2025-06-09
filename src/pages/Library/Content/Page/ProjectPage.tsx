@@ -14,7 +14,7 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { CommentSectionSupabase } from 'src/pages/common/CommentsSupabase/CommentSectionSupabase'
 import { usefulService } from 'src/services/usefulService'
-import { Flex } from 'theme-ui'
+import { Card, Flex } from 'theme-ui'
 
 import { LibraryDescription } from './LibraryDescription'
 import Step from './LibraryStep'
@@ -131,11 +131,22 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 />
               )}
             </ArticleCallToActionSupabase>
-            <CommentSectionSupabase
-              sourceId={item.id}
-              sourceType="projects"
-              authors={item.author?.id ? [item.author?.id] : []}
-            />
+            <Card
+              sx={{
+                background: 'softblue',
+                gap: 2,
+                padding: 3,
+                width: ['100%', '100%', `90%`, `${(2 / 3) * 100}%`],
+                margin: '0 auto',
+                mt: 5,
+              }}
+            >
+              <CommentSectionSupabase
+                sourceId={item.id}
+                sourceType="projects"
+                authors={item.author?.id ? [item.author?.id] : []}
+              />
+            </Card>
           </UserEngagementWrapper>
         )}
       </ClientOnly>

@@ -12,6 +12,7 @@ import { ProfileTypeList, UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isPreciousPlastic } from 'src/config/config'
 import { isUserContactable } from 'src/utils/helpers'
+import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Alert, Box, Card, Flex } from 'theme-ui'
 
 import { Impact } from '../impact/Impact'
@@ -22,7 +23,7 @@ import { ProfileHeader } from './ProfileHeader'
 import { ProfileImage } from './ProfileImage'
 import UserCreatedDocuments from './UserCreatedDocuments'
 
-import type { IUser } from 'oa-shared'
+import type { IUser, IUserDB } from 'oa-shared'
 import type { UserCreatedDocs } from '../types'
 
 interface IProps {
@@ -46,7 +47,8 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
   const hasProfile =
     about || (tags && Object.keys(tags).length !== 0) || hasContributed
 
-  const showEmptyProfileAlert = isViewingOwnProfile
+  const showEmptyProfileAlert =
+    isViewingOwnProfile && !isProfileComplete(user as IUserDB)
 
   const defaultValue =
     useLocationHook?.hash?.slice(1) || (hasProfile ? 'profile' : 'contact')

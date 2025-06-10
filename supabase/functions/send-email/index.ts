@@ -12,7 +12,11 @@ import { InstantNotificationEmail } from './_templates/instant-notification-emai
 import { signWebhookHeader } from './signWebhookHeader.ts'
 import { getTenantSettings } from './getTenantSettings.ts'
 
-import type { Notification, TenantSettings } from 'oa-shared'
+import type {
+  Notification,
+  NotificationDisplay,
+  TenantSettings,
+} from 'oa-shared'
 
 const hookSecret = Deno.env.get('SEND_EMAIL_HOOK_SECRET') as string
 const resend = new Resend(Deno.env.get('RESEND_API_KEY') as string)
@@ -28,7 +32,7 @@ type User = {
 
 type EmailData = {
   email_action_type: string
-  notification?: Notification
+  notification?: NotificationDisplay
   redirect_to?: string
   token?: string
   token_hash?: string
@@ -65,13 +69,12 @@ Deno.serve(async (req) => {
 
     switch (email_data.email_action_type) {
       case 'instant_notification': {
-        subject = `A new ${email_data.notification?.contentType} on ${email_data.notification?.sourceContent?.title}`
-        subject = email_data.notification?.parentContent
-          ? `${subject}: ${email_data.notification?.parentContent.title}`
-          : subject
-        html = await render(
-          React.createElement(InstantNotificationEmail, details),
-        )
+        if (email_data.notification) {
+          subject = `A new ${email_data.notification.contentType} on ${email_data.notification.title.parentTitle}`
+          html = await render(
+            React.createElement(InstantNotificationEmail, details),
+          )
+        }
         break
       }
       case 'signup': {

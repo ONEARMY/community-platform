@@ -1,4 +1,4 @@
-import { DifficultyLevel } from 'oa-shared'
+import { DifficultyLevelRecord } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
 
@@ -54,7 +54,7 @@ describe('[Library]', () => {
       it('[See all info]', () => {
         const item = library[0]
         // Hack to avoid flaky test as the tags are not being loaded on time
-        cy.queryDocuments('library', '_id', '==', item._id)
+        cy.queryDocuments('library', '_id', '==', item.id)
 
         cy.step('Old url pattern redirects to the new location')
         cy.visit('/library/make-an-interlocking-brick')
@@ -74,7 +74,7 @@ describe('[Library]', () => {
             'Description',
           )
           expect($summary).to.contain('3-4 weeks', 'Duration')
-          expect($summary).to.contain(DifficultyLevel.HARD, 'Difficulty')
+          expect($summary).to.contain(DifficultyLevelRecord.hard, 'Difficulty')
           expect($summary.find('img[alt="project cover image"]'))
             .to.have.attr('src')
             .match(coverFileRegex)

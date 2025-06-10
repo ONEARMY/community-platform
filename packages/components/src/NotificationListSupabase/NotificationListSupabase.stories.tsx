@@ -1,8 +1,14 @@
-import { fakeCommentSB, fakeNewsSB, fakeQuestionSB } from '../utils'
+import { NotificationDisplay } from 'oa-shared'
+
+import {
+  fakeCommentSB,
+  fakeNewsSB,
+  fakeNotification,
+  fakeQuestionSB,
+} from '../utils'
 import { NotificationListSupabase } from './NotificationListSupabase'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { Notification } from 'oa-shared'
 
 export default {
   title: 'Components/NotificationListSupabase',
@@ -14,50 +20,24 @@ const reply = fakeCommentSB()
 const news = fakeNewsSB()
 const question = fakeQuestionSB()
 
-const notifications: Notification[] = [
-  {
-    id: 1,
-    actionType: 'newComment',
-    contentType: 'comment',
-    contentId: comment.id,
-    content: comment,
-    createdAt: new Date(),
-    isRead: false,
-    modifiedAt: null,
-    ownedById: 3,
-    parentContentId: null,
-    parentCommentId: null,
-    sourceContentType: 'news',
-    sourceContentId: 4,
-    sourceContent: news,
-    triggeredBy: {
-      id: 5,
-      username: 'anna123',
-      photoUrl: null,
-    },
-  },
-  {
-    id: 2,
-    actionType: 'newComment',
+const newsReplyNotification = NotificationDisplay.fromNotification(
+  fakeNotification({
     contentType: 'reply',
-    contentId: reply.id,
+    parentCommentId: comment.id,
+    parentComment: comment,
+    sourceContent: news,
     content: reply,
-    createdAt: new Date(),
-    isRead: true,
-    modifiedAt: null,
-    ownedById: 3,
-    parentContentId: null,
-    parentCommentId: 2,
+  }),
+)
+
+const questionCommentNotification = NotificationDisplay.fromNotification(
+  fakeNotification({
     sourceContentType: 'questions',
-    sourceContentId: 4,
     sourceContent: question,
-    triggeredBy: {
-      id: 6,
-      username: 'tommo',
-      photoUrl: null,
-    },
-  },
-]
+    content: comment,
+    isRead: true,
+  }),
+)
 
 export const Default: StoryFn<typeof NotificationListSupabase> = () => (
   <NotificationListSupabase
@@ -65,7 +45,7 @@ export const Default: StoryFn<typeof NotificationListSupabase> = () => (
     markAllRead={() => console.log('markAllRead')}
     markRead={() => console.log('markRead')}
     modalDismiss={() => console.log('modalDismiss')}
-    notifications={notifications}
+    notifications={[newsReplyNotification, questionCommentNotification]}
   />
 )
 
@@ -77,6 +57,6 @@ export const NoNewNotifications: StoryFn<
     markAllRead={() => console.log('markAllRead')}
     markRead={() => console.log('markRead')}
     modalDismiss={() => console.log('modalDismiss')}
-    notifications={[notifications[1], notifications[1]]}
+    notifications={[questionCommentNotification]}
   />
 )

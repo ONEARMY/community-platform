@@ -1,16 +1,19 @@
-import { formatDistanceToNow } from 'date-fns'
+import { formatDistanceToNow, isValid } from 'date-fns'
 import { Divider, Flex, Text } from 'theme-ui'
 
-export interface MemberHistoryProps {
+export interface IProps {
   memberSince: string | undefined
   lastActive: string | undefined
 }
 
-export const MemberHistory = (props: MemberHistoryProps) => {
+export const MemberHistory = (props: IProps) => {
   const memberSince = new Date(props?.memberSince || '0').getFullYear()
-  const lastActive = formatDistanceToNow(new Date(props?.lastActive || 0), {
-    addSuffix: true,
-  })
+  const isDateFormat = isValid(new Date(props?.lastActive || 0))
+  const lastActive = isDateFormat
+    ? formatDistanceToNow(new Date(props?.lastActive || 0), {
+        addSuffix: true,
+      })
+    : 0
 
   return (
     <Flex
@@ -25,19 +28,23 @@ export const MemberHistory = (props: MemberHistoryProps) => {
       <Text variant="quiet" sx={{ fontSize: 1 }}>
         Member since {memberSince}
       </Text>
-      <Divider
-        sx={{
-          display: ['none', 'none', 'block'],
-          width: '1px',
-          height: 'auto',
-          alignSelf: 'stretch',
-          border: '2px solid #0000001A',
-          m: 0,
-        }}
-      />
-      <Text variant="quiet" sx={{ fontSize: 1 }}>
-        Last active {lastActive}
-      </Text>
+      {isDateFormat && (
+        <>
+          <Divider
+            sx={{
+              display: ['none', 'none', 'block'],
+              width: '1px',
+              height: 'auto',
+              alignSelf: 'stretch',
+              border: '2px solid #0000001A',
+              m: 0,
+            }}
+          />
+          <Text variant="quiet" sx={{ fontSize: 1 }}>
+            Last active {lastActive}
+          </Text>
+        </>
+      )}
     </Flex>
   )
 }

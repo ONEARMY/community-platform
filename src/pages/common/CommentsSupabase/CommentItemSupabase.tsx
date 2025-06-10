@@ -8,7 +8,7 @@ import {
   Modal,
 } from 'oa-components'
 import { UserRole } from 'oa-shared'
-import { AuthWrapper } from 'src/common/AuthWrapper'
+import { AuthWrapper, isUserAuthorized } from 'src/common/AuthWrapper'
 import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Card, Flex } from 'theme-ui'
@@ -56,6 +56,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
   }, [activeUser])
 
   const item = 'CommentItem'
+  const isBetaTester = isUserAuthorized(activeUser, UserRole.BETA_TESTER)
 
   useEffect(() => {
     if (comment.highlighted) {
@@ -84,18 +85,20 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
           setShowDeleteModal={setShowDeleteModal}
           setShowEditModal={setShowEditModal}
           followButton={
-            <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
-              <FollowButtonAction
-                contentType="comments"
-                iconFollow="discussionFollow"
-                iconUnfollow="discussionUnfollow"
-                item={comment}
-                labelFollow="Follow replies"
-                labelUnfollow="Unfollow replies"
-                sx={{ fontSize: 1 }}
-                variant="subtle"
-              />
-            </AuthWrapper>
+            isBetaTester && (
+              <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+                <FollowButtonAction
+                  contentType="comments"
+                  iconFollow="discussionFollow"
+                  iconUnfollow="discussionUnfollow"
+                  item={comment}
+                  labelFollow="Follow replies"
+                  labelUnfollow="Unfollow replies"
+                  sx={{ fontSize: 1 }}
+                  variant="subtle"
+                />
+              </AuthWrapper>
+            )
           }
           followButtonIcon={
             <AuthWrapper roleRequired={UserRole.BETA_TESTER}>

@@ -74,6 +74,10 @@ describe('[News.Discussions]', () => {
       title: news.title,
       username: replier.username,
     })
+    cy.get('[data-cy=highlighted-comment]')
+      .contains(updatedNewReply)
+      .should('be.inViewport', 10)
+
     cy.visit(newsPath)
 
     cy.step('Can add reply')

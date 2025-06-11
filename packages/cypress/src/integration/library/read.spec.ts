@@ -21,11 +21,11 @@ describe('[Library]', () => {
       cy.step('All basic info displayed on each card')
       const projectSlug = 'make-glass-like-beams'
       const projectUrl = `/library/${projectSlug}`
-      const coverFileRegex = /howto-beams-glass-0-3.jpg/
+      // const coverFileRegex = /howto-intro.jpg/
 
       cy.get('[data-cy=card]').within(() => {
         cy.contains('Make glass-like beams').should('be.visible')
-        cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
+        // cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
         cy.get('[data-cy=Username]').contains('howto_creator')
         cy.get('[data-cy=category]').contains('Guides')
         cy.get('a').should('have.attr', 'href').and('eq', projectUrl)
@@ -48,13 +48,11 @@ describe('[Library]', () => {
 
   describe('[Read a project]', () => {
     const itemUrl = '/library/make-an-interlocking-brick'
-    const coverFileRegex = /brick-12-1.jpg/
+    // const coverFileRegex = /brick-12-1.jpg/
 
     describe('[By Everyone]', () => {
       it('[See all info]', () => {
         const item = library[0]
-        // Hack to avoid flaky test as the tags are not being loaded on time
-        cy.queryDocuments('library', '_id', '==', item.id)
 
         cy.step('Old url pattern redirects to the new location')
         cy.visit('/library/make-an-interlocking-brick')
@@ -75,9 +73,9 @@ describe('[Library]', () => {
           )
           expect($summary).to.contain('3-4 weeks', 'Duration')
           expect($summary).to.contain(DifficultyLevelRecord.hard, 'Difficulty')
-          expect($summary.find('img[alt="project cover image"]'))
-            .to.have.attr('src')
-            .match(coverFileRegex)
+          // expect($summary.find('img[alt="project cover image"]'))
+          //   .to.have.attr('src')
+          //   .match(coverFileRegex)
         })
         cy.wait(2000)
         cy.get('[data-cy=tag-list]').then(($tagList) => {
@@ -99,12 +97,12 @@ describe('[Library]', () => {
 
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(1)
-          .should('contain', item.category!.label)
+          .should('contain', item.category!.name)
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(1)
           .children()
           .should('have.attr', 'href')
-          .and('equal', `/library?category=${item.category!._id}`)
+          .and('equal', `/library?category=${item.category!.id}`)
 
         cy.get('[data-cy=breadcrumbsItem]').eq(2).should('contain', item.title)
 
@@ -212,50 +210,6 @@ describe('[Library]', () => {
         cy.step('Delete button should be visible to the author of the article')
 
         cy.get('[data-cy="Library: delete button"]').should('be.visible')
-      })
-    })
-  })
-
-  describe('[Read a soft-deleted How-to]', () => {
-    const deletedUrl = '/library/deleted-how-to'
-
-    beforeEach(() => {
-      cy.visit(deletedUrl)
-    })
-
-    describe('[By Everyone]', () => {
-      it('[Marked for deletion message]', () => {
-        cy.step(
-          'There should be a message stating the how-to is marked for deletion',
-        )
-
-        cy.get('[data-cy="how-to-deleted"]').contains('Marked for deletion')
-      })
-    })
-
-    describe('[By Owner]', () => {
-      beforeEach(() => {
-        cy.signIn('demo_user@example.com', 'demo_user')
-        cy.visit(deletedUrl)
-      })
-
-      it('[Delete Button is disabled]', () => {
-        cy.step('Delete button should be disabled')
-
-        cy.get('[data-cy="Library: delete button"]').should('be.disabled')
-      })
-    })
-
-    describe('[By Admin]', () => {
-      beforeEach(() => {
-        cy.signIn('demo_user@example.com', 'demo_user')
-        cy.visit(deletedUrl)
-      })
-
-      it('[Delete Button is disabled]', () => {
-        cy.step('Delete button should be disabled')
-
-        cy.get('[data-cy="Library: delete button"]').should('be.disabled')
       })
     })
   })

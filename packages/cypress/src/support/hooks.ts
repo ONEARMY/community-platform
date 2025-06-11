@@ -1,5 +1,6 @@
 import { clearDatabase } from '../utils/TestUtils'
 import { seedAccounts } from './seedAccounts'
+import { seedLibrary } from './seedLibrary'
 import { seedNews } from './seedNews'
 import { seedQuestions, seedTags } from './seedQuestions'
 import { seedResearch } from './seedResearch'
@@ -34,6 +35,7 @@ before(() => {
     await seedQuestions(profiles)
     await seedNews(profiles, tags)
     await seedResearch(profiles, tags)
+    await seedLibrary(profiles, tags)
   })
   localStorage.clear()
   cy.clearServiceWorkers()
@@ -59,6 +61,8 @@ after(async () => {
       'research_updates',
       'profiles',
       'questions',
+      'projects',
+      'project_steps',
       'tags',
     ],
     Cypress.env('TENANT_ID'),

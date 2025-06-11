@@ -26,11 +26,12 @@ export const seedLibrary = async (profiles, tagsData) => {
       tags: [tagsData.data[0].id, tagsData.data[1].id],
       category: categories.data[i % 2].id,
       deleted: item.deleted,
-      status: item.status,
+      moderation: item.moderation,
       tenant_id: tenantId,
     })
   }
 
+  // seed projects
   const { projects } = await seedDatabase(
     {
       projects: projectsData,
@@ -38,31 +39,26 @@ export const seedLibrary = async (profiles, tagsData) => {
     tenantId,
   )
 
-  // seeding
+  // seed steps
   for (let i = 0; i < MOCK_DATA.projects.length; i++) {
     const project = MOCK_DATA.projects[i]
 
-    if (project.updates && project.updates.length) {
+    if (project.steps && project.steps.length) {
       await seedDatabase(
         {
-          project_steps: project.updates.map((item) => ({
+          project_steps: project.steps.map((item) => ({
             title: item.title,
             project_id: projects.data[i].id,
             description: item.description,
-            created_by: profiles.data[0].id,
-            is_draft: item.draft || false,
             tenant_id: tenantId,
           })),
         },
         tenantId,
       )
-
-      // Only seed comments for first project
-      if (i === 0) {
-        const { comments } = await seedComment(profiles, projects, 'project')
-
-        await seedReply(profiles, comments, project)
-      }
     }
   }
+
+  // seed comments
+  const { comments } = await seedComment(profiles, projects, 'project')
+  await seedReply(profiles, comments, projects)
 }

@@ -1,11 +1,10 @@
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { type ResearchUpdate, UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { Box, Button } from 'theme-ui'
 
 import { CommentSectionSupabase } from './CommentSectionSupabase'
-import { MultipleCommentSectionContext } from './MultipleCommentSectionWrapper'
 
 type Props = {
   authors: number[]
@@ -17,8 +16,7 @@ type Props = {
 const CollapsableCommentSection = (props: Props) => {
   const { authors, open, total, researchUpdate } = props
 
-  const multipleSectionsContext = useContext(MultipleCommentSectionContext)
-  const [isOpen, seIstOpen] = useState(() => open || false)
+  const [isOpen, setIsOpen] = useState(() => open || false)
 
   const buttonText = useMemo(() => {
     if (!isOpen) {
@@ -36,10 +34,23 @@ const CollapsableCommentSection = (props: Props) => {
   }, [isOpen])
 
   useEffect(() => {
-    if (multipleSectionsContext?.expandId === researchUpdate.id) {
-      seIstOpen(true)
+    const searchParams = new URLSearchParams(location.search)
+    const hash = location.hash
+
+    // Check if there's an update_N parameter and extract the ID after the underscore
+    const updateParam = Array.from(searchParams.keys()).find((key) =>
+      key.startsWith('update_'),
+    )
+    const hasMatchingUpdate =
+      updateParam && updateParam.split('_')[1] === researchUpdate.id.toString()
+
+    // Check if there's a #comment:N hash
+    const hasCommentHash = hash.startsWith('#comment:')
+
+    if (hasMatchingUpdate && hasCommentHash) {
+      setIsOpen(true)
     }
-  }, [multipleSectionsContext])
+  }, [location?.search, location?.hash, researchUpdate.id])
 
   return (
     <Box
@@ -61,7 +72,7 @@ const CollapsableCommentSection = (props: Props) => {
           marginBottom: isOpen ? 2 : 0,
           '&:hover': { bg: '#ececec' },
         }}
-        onClick={() => seIstOpen((prev) => !prev)}
+        onClick={() => setIsOpen((prev) => !prev)}
         backgroundColor={isOpen ? '#c2daf0' : '#e2edf7'}
         className={isOpen ? 'viewComments' : ''}
         data-cy="HideDiscussionContainer:button"

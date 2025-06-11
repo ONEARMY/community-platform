@@ -124,7 +124,7 @@ describe('[News.Write]', () => {
       // cy.visit(`/news/${initialExpectedSlug}`)
       // cy.contains(updatedTitle)
 
-      cy.step('All updated fields visiable on list')
+      cy.step('All updated fields visible on list')
       cy.visit('/news')
       cy.contains(updatedSummary)
       cy.contains(updatedTitle)

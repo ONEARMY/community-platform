@@ -126,7 +126,7 @@ describe('[Question]', () => {
       // cy.visit(`/questions/${initialExpectedSlug}`)
       // cy.contains(updatedTitle)
 
-      cy.step('All updated fields visiable on list')
+      cy.step('All updated fields visible on list')
       cy.visit('/questions')
       cy.contains(updatedTitle)
       cy.contains(category)

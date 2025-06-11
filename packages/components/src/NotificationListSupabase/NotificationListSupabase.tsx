@@ -30,7 +30,7 @@ export const NotificationListSupabase = (props: IProps) => {
   const anyUnread = notifications.filter(({ isRead }) => !isRead).length > 0
   const notificationList = notifications
     .filter(({ isRead }) => (isUnreadOnly ? !isRead : !isRead || isRead))
-    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : 0))
+    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
 
   return (
     <Flex

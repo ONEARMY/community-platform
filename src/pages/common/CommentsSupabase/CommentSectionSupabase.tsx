@@ -77,7 +77,7 @@ export const CommentSectionSupabase = (props: IProps) => {
     }
 
     fetchComments()
-  }, [sourceId])
+  }, [sourceId, location?.hash])
 
   const postComment = async (comment: string) => {
     try {

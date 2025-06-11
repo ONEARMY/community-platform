@@ -9,7 +9,7 @@ import { subscribersServiceServer } from 'src/services/subscribersService.server
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
-import type { User } from '@supabase/supabase-js'
+import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { DBResearchItem, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts'
 
@@ -157,7 +157,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const research = ResearchItem.fromDB(researchResult.data[0], [])
 
-    addSubscribers(research, profile, client)
+    await addSubscribers(research.id, profile.id, client)
 
     if (uploadedImage) {
       const mediaResult = await storageServiceServer.uploadImage(
@@ -193,8 +193,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 }
 
-const addSubscribers = async (research, profile, client) => {
-  subscribersServiceServer.add('research', research.id, profile.id, client)
+const addSubscribers = async (
+  researchId: number,
+  profileId: number,
+  client: SupabaseClient,
+) => {
+  await subscribersServiceServer.add('research', researchId, profileId, client)
   // To do: Subscribe collaborators too
   return
 }

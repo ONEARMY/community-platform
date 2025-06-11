@@ -19,7 +19,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     .eq('content_type', params.contentType)
     .eq('profiles.auth_id', user.id)
 
-  const subscribed = !!data && data.length > 0
+  const subscribed = !!data && !(data.length === 0)
 
   return Response.json({ subscribed }, { headers, status: 200 })
 }

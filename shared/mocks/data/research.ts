@@ -4,7 +4,8 @@ export const research = [
     createdBy: 'event_reader',
     deleted: false,
     modifiedAt: '2022-03-27T22:10:11.271Z',
-    description: 'qwertyefew',
+    description:
+      'qwertyefew. Super qwerty. Gotta keep saying qwerty. qwerty qwerty. Qwerty!',
     slug: 'qwerty',
     previousSlugs: ['qwerty'],
     tags: ['test'],

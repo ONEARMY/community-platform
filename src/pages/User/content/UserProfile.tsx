@@ -1,9 +1,18 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { MemberBadge, Tab, TabPanel, Tabs, TabsList } from 'oa-components'
-import { ProfileTypeList } from 'oa-shared'
+import {
+  MemberBadge,
+  MemberHistory,
+  Tab,
+  TabPanel,
+  Tabs,
+  TabsList,
+} from 'oa-components'
+import { ProfileTypeList, UserRole } from 'oa-shared'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isPreciousPlastic } from 'src/config/config'
 import { isUserContactable } from 'src/utils/helpers'
+import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Alert, Box, Card, Flex } from 'theme-ui'
 
 import { Impact } from '../impact/Impact'
@@ -14,7 +23,7 @@ import { ProfileHeader } from './ProfileHeader'
 import { ProfileImage } from './ProfileImage'
 import UserCreatedDocuments from './UserCreatedDocuments'
 
-import type { IUser } from 'oa-shared'
+import type { IUser, IUserDB } from 'oa-shared'
 import type { UserCreatedDocs } from '../types'
 
 interface IProps {
@@ -38,7 +47,8 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
   const hasProfile =
     about || (tags && Object.keys(tags).length !== 0) || hasContributed
 
-  const showEmptyProfileAlert = isViewingOwnProfile
+  const showEmptyProfileAlert =
+    isViewingOwnProfile && !isProfileComplete(user as IUserDB)
 
   const defaultValue =
     useLocationHook?.hash?.slice(1) || (hasProfile ? 'profile' : 'contact')
@@ -72,7 +82,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
           sx={{
             borderTop: isMember ? '' : '2px solid',
             flexDirection: 'column',
-            gap: 2,
+            gap: 4,
             padding: [2, 4],
           }}
         >
@@ -136,6 +146,12 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
               )}
             </Tabs>
           </Box>
+          <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+            <MemberHistory
+              memberSince={user.profileCreated}
+              lastActive={user._lastActive}
+            />
+          </AuthWrapper>
         </Flex>
       </Card>
     </Flex>

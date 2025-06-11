@@ -100,11 +100,11 @@ describe('[Profile]', () => {
       cy.step('Can opt-out of being contacted')
       cy.logout()
       cy.signIn(contactee.email, contactee.password)
+      cy.completeUserProfile(contactee.username)
+
       cy.visit('/settings')
+      cy.completeUserProfile(contactee.username)
       cy.get('[data-cy=PublicContactSection]').should('be.visible')
-      cy.get('[data-cy=info-description')
-        .clear()
-        .type('Here for the contact testing')
       cy.get('[data-cy=isContactableByPublic-true]').click({ force: true })
       cy.saveSettingsForm()
       cy.get('[data-cy=isContactableByPublic-false]')
@@ -268,9 +268,14 @@ describe('[Profile]', () => {
 })
 
 describe('[By Beta Tester]', () => {
-  it('[Displays view count for profile with views]', () => {
+  it('[Displays other information]', () => {
     cy.signIn(betaTester.email, betaTester.password)
     cy.visit(`/u/${profile_views.userName}`)
+
+    cy.step('Displays view count for profile with views')
     cy.get('[data-testid=profile-views-stat]').contains(/Views: \d+/)
+
+    cy.step('Displays member history info')
+    cy.get('[data-cy=MemberHistory]').contains('Member since')
   })
 })

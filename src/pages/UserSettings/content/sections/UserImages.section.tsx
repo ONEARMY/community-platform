@@ -2,6 +2,7 @@ import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { fields, headings } from 'src/pages/UserSettings/labels'
+import { required } from 'src/utils/validators'
 import { Box, Flex, Heading, Text } from 'theme-ui'
 
 import type { IUploadedFileMeta, IUser } from 'oa-shared'
@@ -13,11 +14,12 @@ interface IProps {
 
 export const UserImagesSection = ({ isMemberProfile, values }: IProps) => {
   const { coverImages, userImage } = values
+  const isRequired = { validate: required }
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: 3 }}>
       <Heading as="h2">
-        {isMemberProfile ? fields.userImage.title : headings.images}
+        {isMemberProfile ? fields.userImage.title : headings.images} {' *'}
       </Heading>
 
       <Flex sx={{ flexDirection: 'column', alignContent: 'stretch', gap: 1 }}>
@@ -46,6 +48,7 @@ export const UserImagesSection = ({ isMemberProfile, values }: IProps) => {
               width: '120px',
               height: '120px',
             }}
+            {...(isMemberProfile && isRequired)}
           />
         </Box>
       </Flex>

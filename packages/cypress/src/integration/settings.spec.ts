@@ -66,6 +66,7 @@ describe('[Settings]', () => {
       cy.clickMenuItem(UserMenuItem.Profile)
 
       cy.step('Incomplete profile banner visible')
+      cy.get('[data-cy=emptyProfileMessage]').should('be.visible')
       cy.get('[data-cy=incompleteProfileBanner]').click()
 
       cy.step('Cannot add map pin')
@@ -138,6 +139,7 @@ describe('[Settings]', () => {
 
       cy.step('Updated settings display on profile')
       cy.visit(`u/${user.username}`)
+      cy.get('[data-cy=emptyProfileMessage]').should('not.exist')
       cy.contains(user.username)
       cy.contains(displayName)
       cy.contains(description)
@@ -285,6 +287,7 @@ describe('[Settings]', () => {
         country,
         description,
       })
+      cy.setSettingImage('avatar', 'userImage')
       cy.selectTag(tag, '[data-cy=tag-select]')
       cy.setSettingAddContactLink({
         index: 0,
@@ -457,6 +460,7 @@ describe('[Settings]', () => {
         country,
         description,
       })
+      cy.setSettingImage('avatar', 'userImage')
       cy.selectTag(tag, '[data-cy=tag-select]')
       cy.setSettingAddContactLink({
         index: 0,

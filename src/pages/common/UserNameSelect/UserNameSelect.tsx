@@ -28,7 +28,7 @@ export const UserNameSelect = (props: IProps) => {
 
     const profiles = await profilesService.search(inputVal)
     const options = profiles.map((x) => ({
-      label: x.displayName,
+      label: x.username,
       value: x.username,
     }))
 

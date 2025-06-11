@@ -135,6 +135,102 @@ export class Notification implements IDoc {
   }
 }
 
+export class NotificationDisplay {
+  id: number
+  isRead: boolean
+  contentType: NotificationContentType
+
+  sidebar: {
+    icon?: string
+    image?: string
+  }
+  title: {
+    triggeredBy?: string
+    middle: string
+    parentTitle: string
+    parentSlug: string
+  }
+  date: Date
+  body: string
+  slug: string
+
+  context?: string
+  actionLabel?: string
+
+  constructor(obj: NotificationDisplay) {
+    Object.assign(this, obj)
+  }
+
+  static setBody(notification: Notification): string {
+    return (notification.content as any).comment
+  }
+
+  static setDate(notification: Notification) {
+    return notification.modifiedAt
+      ? new Date(notification.modifiedAt)
+      : new Date(notification.createdAt)
+  }
+
+  static setParentTitle(notification: Notification) {
+    let title = notification.sourceContent?.title || ''
+
+    if (notification.parentContent?.title) {
+      title = title + `: ${notification.parentContent.title}`
+    }
+    return title
+  }
+
+  static setParentSlug(notification: Notification) {
+    let path = `${notification.sourceContentType}/${notification.sourceContent?.slug || ''}`
+    if (notification.sourceContentType == 'research') {
+      path = path + `#update_${notification.parentContentId}`
+    }
+
+    return path
+  }
+
+  static setSidebarIcon(contentType: NotificationContentType): string {
+    const options: { [option in NotificationContentType]: string } = {
+      comment: 'discussion',
+      reply: 'discussion',
+      news: 'news',
+    }
+    return options[contentType]
+  }
+
+  static setSidebarImage(author: BasicAuthorDetails | undefined): string {
+    return author?.photoUrl || ''
+  }
+
+  static setSlug(notification: Notification) {
+    if (notification.sourceContentType == 'research') {
+      return `research/${notification.sourceContent?.slug}?update_${notification.parentContentId}#comment:${notification.content?.id}`
+    }
+    return `${notification.sourceContentType}/${notification.sourceContent?.slug}#comment:${notification.content?.id}`
+  }
+
+  static fromNotification(notification: Notification): NotificationDisplay {
+    return new NotificationDisplay({
+      id: notification.id,
+      isRead: notification.isRead,
+      contentType: notification.contentType,
+      sidebar: {
+        icon: this.setSidebarIcon(notification.contentType),
+        image: this.setSidebarImage(notification.triggeredBy),
+      },
+      title: {
+        triggeredBy: notification.triggeredBy?.username || '',
+        middle: `left a ${notification.contentType}`,
+        parentTitle: this.setParentTitle(notification),
+        parentSlug: this.setParentSlug(notification),
+      },
+      date: this.setDate(notification),
+      body: this.setBody(notification),
+      slug: this.setSlug(notification),
+    })
+  }
+}
+
 export type NewNotificationData = {
   actionType: NotificationActionType
   contentId: number

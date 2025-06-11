@@ -1,4 +1,4 @@
-import { Notification } from 'oa-shared'
+import { Notification, NotificationDisplay } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { resolveType } from 'src/utils/contentType.utils'
 
@@ -66,7 +66,7 @@ export const transformNotification = async (
     notification.parentContent = parentContent.data
   }
 
-  return notification
+  return NotificationDisplay.fromNotification(notification)
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

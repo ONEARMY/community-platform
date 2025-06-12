@@ -36,7 +36,8 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
           title, 
           description, 
           images, 
-          video_url
+          video_url,
+          order
         )
      `,
     )
@@ -126,7 +127,7 @@ const isAllowedToEditProjectById = async (
 }
 
 async function getById(id: number, client: SupabaseClient) {
-  const result = await client.from('project').select().eq('id', id).single()
+  const result = await client.from('projects').select().eq('id', id).single()
   return result.data as DBProject
 }
 

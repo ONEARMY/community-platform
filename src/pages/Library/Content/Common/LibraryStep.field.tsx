@@ -1,7 +1,15 @@
 import { useState } from 'react'
 import { Field } from 'react-final-form'
 import styled from '@emotion/styled'
-import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components'
+import {
+  Button,
+  FieldInput,
+  FieldTextarea,
+  ImageInputDeleteImage,
+  ImageInputWrapper,
+  Modal,
+} from 'oa-components'
+import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
@@ -10,7 +18,14 @@ import {
   minValue,
   required,
 } from 'src/utils/validators'
-import { Card, Flex, Heading, Label, Text } from 'theme-ui'
+import {
+  Card,
+  Flex,
+  Heading,
+  Image as ImageComponent,
+  Label,
+  Text,
+} from 'theme-ui'
 
 import {
   LIBRARY_MIN_REQUIRED_STEPS,
@@ -21,7 +36,7 @@ import {
 } from '../../constants'
 import { buttons, errors, steps } from '../../labels'
 
-import type { IUploadedFileMeta } from 'oa-shared'
+import type { IUploadedFileMeta, ProjectStepFormData } from 'oa-shared'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -30,11 +45,13 @@ const ImageInputFieldWrapper = styled.div`
 `
 
 interface IProps {
-  step: string
+  step?: ProjectStepFormData
+  name: string
   index: number
   images: IUploadedFileMeta[]
   onDelete: (index: number) => void
   moveStep: (indexfrom: number, indexTo: number) => void
+  removeExistingImage: (index: number) => void
 }
 interface IState {
   showDeleteModal: boolean
@@ -49,9 +66,11 @@ interface IState {
  */
 export const LibraryStepField = ({
   step,
+  name,
   index,
   onDelete,
   moveStep,
+  removeExistingImage,
 }: IProps) => {
   const [state, setState] = useState<IState>({
     showDeleteModal: false,
@@ -73,19 +92,33 @@ export const LibraryStepField = ({
     if (!allValues?.steps || !allValues?.steps.length) {
       return null
     }
+
     const stepValues = allValues.steps[index]
+    if (!stepValues) {
+      return null
+    }
+
+    // Check if any images exist (new uploads or existing)
+    const hasNewImages = stepValues.images?.length > 0
+    const hasExistingImages = stepValues.existingImages?.length > 0
+    const hasAnyImages = hasNewImages || hasExistingImages
 
     if (stepValues.videoUrl) {
-      if (stepValues.images?.at(0)) {
+      // Video URL is provided - check for conflicts with images
+      if (hasAnyImages) {
         return errors.videoUrl.both
       }
+
+      // Validate YouTube URL format
       const ytRegex = new RegExp(
         /(youtu\.be\/|youtube\.com\/(watch\?v=|embed\/|v\/))/gi,
       )
       const urlValid = ytRegex.test(stepValues.videoUrl)
       return urlValid ? null : errors.videoUrl.invalidUrl
     }
-    return stepValues.images?.at(0) ? null : errors.videoUrl.empty
+
+    // No video URL - check if any images exist
+    return hasAnyImages ? null : errors.videoUrl.empty
   }
 
   const { deleteButton } = buttons.steps
@@ -95,6 +128,10 @@ export const LibraryStepField = ({
   }
 
   const isAboveMinimumStep = index >= LIBRARY_MIN_REQUIRED_STEPS
+
+  const availableImages = step?.images
+    ? Math.min(step.images.filter((x) => !!x).length + 1, 10)
+    : 1
 
   return (
     // NOTE - animation parent container in CreateLibrary
@@ -165,11 +202,11 @@ export const LibraryStepField = ({
         </Flex>
 
         <Flex sx={{ flexDirection: 'column' }} mb={3}>
-          <Label sx={_labelStyle} htmlFor={`${step}.title`}>
+          <Label sx={_labelStyle} htmlFor={`${name}.title`}>
             {`${steps.title.title} *`}
           </Label>
           <Field
-            name={`${step}.title`}
+            name={`${name}.title`}
             data-cy="step-title"
             data-testid="step-title"
             modifiers={{ capitalize: true, trim: true }}
@@ -190,11 +227,11 @@ export const LibraryStepField = ({
           />
         </Flex>
         <Flex sx={{ flexDirection: 'column' }} mb={3}>
-          <Label sx={_labelStyle} htmlFor={`${step}.text`}>
+          <Label sx={_labelStyle} htmlFor={`${name}.text`}>
             {`${steps.description.title} *`}
           </Label>
           <Field
-            name={`${step}.description`}
+            name={`${name}.description`}
             placeholder={steps.description.placeholder}
             minLength={STEP_DESCRIPTION_MIN_LENGTH}
             maxLength={STEP_DESCRIPTION_MAX_LENGTH}
@@ -218,7 +255,7 @@ export const LibraryStepField = ({
             showCharacterCount
           />
         </Flex>
-        <Label sx={_labelStyle} htmlFor={`${step}.description`}>
+        <Label sx={_labelStyle} htmlFor={`${name}.description`}>
           {`${steps.images.title} *`}
         </Label>
         <Flex
@@ -228,37 +265,45 @@ export const LibraryStepField = ({
             marginBottom: 3,
           }}
         >
-          <ImageInputFieldWrapper data-cy="step-image-0">
-            <Field
-              dataTestId="step-image-0"
-              hasText={false}
-              name={`${step}.images[0]`}
-              component={ImageInputField}
-              isEqual={COMPARISONS.image}
-            />
-          </ImageInputFieldWrapper>
-          <ImageInputFieldWrapper data-cy="step-image-1">
-            <Field
-              dataTestId="step-image-1"
-              hasText={false}
-              name={`${step}.images[1]`}
-              component={ImageInputField}
-              isEqual={COMPARISONS.image}
-            />
-          </ImageInputFieldWrapper>
-          <ImageInputFieldWrapper data-cy="step-image-2">
-            <Field
-              dataTestId="step-image-2"
-              hasText={false}
-              name={`${step}.images[2]`}
-              component={ImageInputField}
-              isEqual={COMPARISONS.image}
-            />
-          </ImageInputFieldWrapper>
+          {[...Array(availableImages)].map((_, i) => (
+            <ImageInputFieldWrapper
+              data-cy="step-image-0"
+              key={`step_image_${i}`}
+            >
+              <Field
+                dataTestId={`step-image-${i}`}
+                hasText={false}
+                name={`${name}.images[${i}]`}
+                component={ImageInputField}
+                isEqual={COMPARISONS.image}
+              />
+            </ImageInputFieldWrapper>
+          ))}
+          {step?.existingImages?.map((image, i) => (
+            <ImageInputFieldWrapper
+              key={`existing-image-${i}`}
+              data-cy={`existing-image-${i}`}
+            >
+              <FieldContainer
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  overflow: 'hidden',
+                }}
+              >
+                <ImageInputWrapper hasUploadedImg={true}>
+                  <ImageComponent src={image.publicUrl} />
+                  <ImageInputDeleteImage
+                    onClick={() => removeExistingImage(i)}
+                  />
+                </ImageInputWrapper>
+              </FieldContainer>
+            </ImageInputFieldWrapper>
+          ))}
         </Flex>
         <Flex sx={{ flexDirection: 'column' }} mb={3}>
           <Field
-            name={`${step}.videoUrl`}
+            name={`${name}.videoUrl`}
             data-cy="step-videoUrl"
             data-testid="step-videoUrl"
             component={FieldInput}

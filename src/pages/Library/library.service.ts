@@ -82,7 +82,9 @@ const upsert = async (
 
   if (project.tags && project.tags.length > 0) {
     for (const tag of project.tags) {
-      data.append('tags', tag.toString())
+      if (tag) {
+        data.append('tags', tag.toString())
+      }
     }
   }
 
@@ -108,13 +110,17 @@ const upsert = async (
 
   if (project.files && project.files.length > 0) {
     for (const file of project.files) {
-      data.append('files', file, file.name)
+      if (file) {
+        data.append('files', file, file.name)
+      }
     }
   }
 
   if (project.existingFiles && project.existingFiles.length > 0) {
     for (const file of project.existingFiles) {
-      data.append('existingFiles', file.id)
+      if (file) {
+        data.append('existingFiles', file.id)
+      }
     }
   }
 
@@ -123,18 +129,25 @@ const upsert = async (
 
     for (let i = 0; i < project.steps.length; i++) {
       const step = project.steps[i]
+      if (step.id) {
+        data.append(`steps.[${i}].id`, step.id.toString())
+      }
       data.append(`steps.[${i}].title`, step.title)
       data.append(`steps.[${i}].description`, step.description)
 
       if (step.images && step.images.length) {
         for (const image of step.images) {
-          data.append(`steps.[${i}].images`, image.photoData, image.name)
+          if (image) {
+            data.append(`steps.[${i}].images`, image.photoData, image.name)
+          }
         }
       }
 
       if (step.existingImages) {
         for (const image of step.existingImages) {
-          data.append(`steps.[${i}].existingImages`, image.id)
+          if (image) {
+            data.append(`steps.[${i}].existingImages`, image.id)
+          }
         }
       }
       if (step.videoUrl) {

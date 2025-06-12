@@ -163,6 +163,7 @@ async function updateOrReplaceImage(
   }
 
   if (newUploads.length > 0) {
+    // TODO:remove unused images from storage
     const result = await storageServiceServer.uploadImage(
       newUploads,
       path,

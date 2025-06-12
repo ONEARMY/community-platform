@@ -5,7 +5,9 @@ import { LibraryStepField } from 'src/pages/Library/Content/Common/LibraryStep.f
 import { COMPARISONS } from 'src/utils/comparisons'
 import { Box, Flex, Heading, Text } from 'theme-ui'
 
-import { buttons, steps } from '../../labels'
+import { buttons as buttonsLabel, steps as stepsLabel } from '../../labels'
+
+import type { ProjectStepFormData } from 'oa-shared'
 
 interface IPropsAnimation {
   children: React.ReactNode
@@ -40,17 +42,23 @@ const AnimationContainer = ({ children }: IPropsAnimation) => {
   )
 }
 
-export const LibraryStepsContainerField = () => {
+export const LibraryStepsContainerField = ({
+  steps,
+  removeStepImage,
+}: {
+  steps: ProjectStepFormData[]
+  removeStepImage: (stepIndex: number, imageIndex: number) => void
+}) => {
   return (
     <FieldArray name="steps" isEqual={COMPARISONS.step}>
       {({ fields }) => (
         <>
           <Box paddingTop={5}>
-            <Heading as="h2">{steps.heading.title}</Heading>
+            <Heading as="h2">{stepsLabel.heading.title}</Heading>
             <Text
               sx={{ fontSize: 2 }}
               dangerouslySetInnerHTML={{
-                __html: steps.heading.description as string,
+                __html: stepsLabel.heading.description as string,
               }}
             />
           </Box>
@@ -61,7 +69,8 @@ export const LibraryStepsContainerField = () => {
               >
                 <LibraryStepField
                   key={`${fields.value[index]._animationKey}-2`}
-                  step={name}
+                  step={steps?.at(index)}
+                  name={name}
                   index={index}
                   moveStep={(from, to) => {
                     if (to !== fields.length) {
@@ -72,6 +81,7 @@ export const LibraryStepsContainerField = () => {
                   onDelete={(fieldIndex: number) => {
                     fields.remove(fieldIndex)
                   }}
+                  removeExistingImage={(i) => removeStepImage(index, i)}
                 />
               </AnimationContainer>
             ))}
@@ -97,7 +107,7 @@ export const LibraryStepsContainerField = () => {
                 })
               }}
             >
-              {buttons.steps.add}
+              {buttonsLabel.steps.add}
             </Button>
           </Flex>
         </>

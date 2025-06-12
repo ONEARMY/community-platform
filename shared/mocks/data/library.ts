@@ -30,6 +30,7 @@ export const library: Project[] = [
         description: 'description',
         videoUrl: null,
         images: null,
+        order: 1,
       },
       {
         id: 2,
@@ -39,6 +40,7 @@ export const library: Project[] = [
         videoUrl: 'https://www.youtube.com/watch?v=Os7dREQ00l4&t=5s',
         description:
           'We wanted to develop a product that can have many functions. So we decided to figure out a shape that can be adapted or compliment one another to get a variety of uses. Finally we decided to draw a curved shape. The idea of this shape is to be attached to each other like a Lego. You can use this design as a plant pot or connect it as a partition and build a wall. Why not check out this super cool video?',
+        order: 2,
       },
       {
         id: 3,
@@ -48,6 +50,7 @@ export const library: Project[] = [
         images: [],
         description:
           'First of all, we would like to tell you that our mould design is highly detailed and takes a lot of time to craft. The mould should be made from aluminum with CNC machine. To be easy for you all, please download our mould design above.',
+        order: 3,
       },
       {
         id: 4,
@@ -57,6 +60,7 @@ export const library: Project[] = [
         images: [],
         description:
           'Using the Sketchup file above to make the mould. We used the CNC Machine from a local manufacturer in Chiangmai. ',
+        order: 4,
       },
       {
         id: 5,
@@ -66,6 +70,7 @@ export const library: Project[] = [
           'Tools you need for injecting:\nWrench\nBolt x 8 pieces\nNut x 8 pieces\nBolt & Nut for locking x 1 set\nElectric drill\nCutter\n',
         videoUrl: null,
         title: 'Prepare for injecting',
+        order: 5,
       },
       {
         id: 6,
@@ -86,6 +91,7 @@ export const library: Project[] = [
         ],
         description:
           'Prepare your shredded plastic. For this product we use PP. For one brick you will need around 300 gram.',
+        order: 6,
       },
       {
         id: 7,
@@ -95,6 +101,7 @@ export const library: Project[] = [
         images: [],
         description:
           'Turn on the Injection machine (180°C) and wait for it to heat up.\nWhen the temperature is ready, you can put the shredded PP into the Machine.',
+        order: 7,
       },
       {
         id: 8,
@@ -104,6 +111,7 @@ export const library: Project[] = [
         description:
           'While waiting for the plastic to melt, you can assemble the mould.',
         title: 'Prepare the mould',
+        order: 8,
       },
       {
         id: 9,
@@ -113,6 +121,7 @@ export const library: Project[] = [
         description:
           'When both your machine and the mould are ready, connect the mould to the injection machine. Then press it!',
         videoUrl: null,
+        order: 9,
       },
       {
         id: 10,
@@ -133,6 +142,7 @@ export const library: Project[] = [
         ],
         description:
           'Wait for the moudl to cool down. Then detach and carefully open the mould to take  out your freshly baked recycled plastic brick!\nRemove the injection channel with a little scissor or knife',
+        order: 10,
       },
       {
         id: 11,
@@ -141,6 +151,7 @@ export const library: Project[] = [
         title: 'Finish the product',
         images: [],
         videoUrl: null,
+        order: 11,
       },
       {
         id: 12,
@@ -166,6 +177,7 @@ export const library: Project[] = [
         ],
         description:
           'You can use  this for Flower Pots. Or You can make more & more for a partition or the wall. ',
+        order: 12,
       },
     ],
     createdAt: new Date('2018-11-29T12:56:47.901Z'),
@@ -225,6 +237,7 @@ export const library: Project[] = [
         videoUrl: null,
         description:
           'First step go to Github, and download or clone our code. I’d recommend to install the Github app to add pull request in a later stage.\n',
+        order: 1,
       },
       {
         id: 14,
@@ -234,6 +247,7 @@ export const library: Project[] = [
         videoUrl: null,
         description:
           'Pretty straight forward, download the files on their website and install. https://nodejs.org/en/#download\n',
+        order: 2,
       },
       {
         id: 15,
@@ -259,6 +273,7 @@ export const library: Project[] = [
         description:
           'Open up the terminal and install Yarn in the root directory.  \n1: Running the command “sudo npm i -g yarn”.\n2: Run the command “yarn” to install. \nTo make sure its installed in the root  type “cd” in terminal, drag the root folder on the terminal press enter. and then run “yarn”',
         videoUrl: null,
+        order: 3,
       },
       {
         id: 16,
@@ -268,6 +283,7 @@ export const library: Project[] = [
           'In Terminal run command “yarn start” to run. Like above make sure it runs in the root folder\n',
         videoUrl: 'uniquei4zsc',
         title: 'Step Deploy local network',
+        order: 4,
       },
       {
         id: 17,
@@ -277,6 +293,7 @@ export const library: Project[] = [
           "As you can see we currently in V0.4. Lot's of work to do and things to fix! Start coding and add your pull requests to Github, on Tuesday we review code :) \n*",
         videoUrl: 'uniquewrzq8q',
         title: 'Have fun 🤙',
+        order: 5,
       },
     ],
     moderation: 'accepted',
@@ -340,6 +357,7 @@ export const library: Project[] = [
         description:
           'In order to make a jacket from plastic foils, you will first need to gather your tools and materials. These are:\n\nMaterials\n- plastic foils (see step 3), enough to make four large sheets (70cm x 170cm)\n- natural fabric such as cotton for the lining\n- a heat resistant sheet material such as teflon fabric as a base for ironing/pressing\n- baking paper which will also be used for ironing/pressing\n- optionally: fastening of some sort for the raincoat (buttons, zip etc)\n\nTools\n- iron or thermo press\n- sewing machine, thread and scissors\n\nSafety recommendations\n- respirator mask to prevent the inhalation of plastic fumes!',
         videoUrl: 'unique1',
+        order: 1,
       },
       {
         id: 19,
@@ -349,6 +367,7 @@ export const library: Project[] = [
         videoUrl: 'unique2',
         title: 'Choose your measurements ',
         images: [],
+        order: 2,
       },
       {
         id: 20,
@@ -369,6 +388,7 @@ export const library: Project[] = [
         description:
           'This part will be a combination of your own design choice, as well as what plastic material is available around you. Collect your waste foils, which can include plastic bags and any small plastic foils, wrappers, and packaging. Try to make sure that you are using the same type of material (LDPE, HDPE, PP etc.). \n\nNow, use some artistic flair! From what you have, select a colour palette that you will work with. Your raincoat will have a much nicer finish if you ensure that any colours/patterns work well together. If you’re happy to use any combination of colours, then the coat will still be functional. ',
         videoUrl: 'unique3',
+        order: 3,
       },
       {
         id: 21,
@@ -394,6 +414,7 @@ export const library: Project[] = [
               'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
           },
         ],
+        order: 4,
       },
       {
         id: 22,
@@ -403,6 +424,7 @@ export const library: Project[] = [
         description:
           'Using your plastic bags and films, create a collage on top of your base sheet. This can be created however you like; from a methodical design of strips and shapes, to a more random spread of the films. This will create the design for the material that will form your finished raincoat. Reserve a little of the plastic to form a test piece (see step 6). ',
         videoUrl: 'uniquerlopr',
+        order: 5,
       },
       {
         id: 23,
@@ -423,6 +445,7 @@ export const library: Project[] = [
               'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
           },
         ],
+        order: 6,
       },
       {
         id: 24,
@@ -453,6 +476,7 @@ export const library: Project[] = [
         description:
           'Once you are comfortable with your tests, go ahead and fuse together your big sheets, remembering to use teflon fabric below, and your baking parchment paper as an ironing surface above. You will need to make at least four big sheets, around 70cm x 170cm. \n\n💡 Fix holes: Once complete, look over your fused plastic sheets and find any holes or parts which are not fully melted or secure. You can fix these now with your iron/press and any scraps of plastic that you have left, but be very careful not to deconstruct the material when heating the sheets again. ',
         videoUrl: 'uniquefwi0xa',
+        order: 7,
       },
       {
         id: 25,
@@ -462,6 +486,7 @@ export const library: Project[] = [
         videoUrl: 'uniquewtxz8t',
         title: 'Finalise your measurements',
         images: [],
+        order: 8,
       },
       {
         id: 26,
@@ -502,6 +527,7 @@ export const library: Project[] = [
         description:
           'From your fused sheets you will now need to cut the template pieces (see step 8) for the construction of your raincoat. 1 back piece, 2 front pieces, 2x sleeves, and 3 parts for the hood. Add 2cm on the sides of each piece to allow room for sewing. If you are lacking material to cut the template, you may need to extend one or more of your sheets.\n\nAfter doing this, cut the same template again from your cotton (again allowing 2cm on every side). This will form the lining of the raincoat.  ',
         videoUrl: 'uniquedgh47',
+        order: 9,
       },
       {
         id: 27,
@@ -511,6 +537,7 @@ export const library: Project[] = [
           'Using your cut plastic sheets, and the matching cotton pieces, sew the two templates together so that the outer and lining are attached to one another. This will help the process of further working with the material, and make it easier to create your raincoat. ',
         videoUrl: 'unique9s770y',
         title: 'Sew the outer and lining together',
+        order: 10,
       },
       {
         id: 28,
@@ -520,6 +547,7 @@ export const library: Project[] = [
           'The construction of the jacket should start with the shoulders. Sew together your back and two front pieces (see step 8), as shown in the image below. Make sure to leave enough space for the attachment of the hood! This is where we will use the 2cm that we added for sewing. The join of the fabric should match the template exactly and the excess material from the join should only be visible from the interior of the jacket. We will trim this later. ',
         videoUrl: 'uniqueclwhcg',
         title: 'Construct the shoulders',
+        order: 11,
       },
     ],
     moderation: 'accepted',
@@ -592,6 +620,7 @@ export const library: Project[] = [
         images: null,
         videoUrl:
           'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
+        order: 1,
       },
     ],
     tags: [
@@ -654,6 +683,7 @@ export const library: Project[] = [
         videoUrl:
           'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
         images: null,
+        order: 1,
       },
     ],
     tags: [

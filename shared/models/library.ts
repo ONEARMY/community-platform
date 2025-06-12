@@ -131,6 +131,7 @@ export class DBProjectStep {
   description: string
   images: DBMedia[] | null
   video_url: string | null
+  order: number
 
   constructor(obj: Omit<DBProjectStep, 'id'>) {
     Object.assign(this, obj)
@@ -144,6 +145,7 @@ export class ProjectStep {
   description: string
   images: Image[] | null
   videoUrl: string | null
+  order: number
 
   constructor(obj: ProjectStep) {
     Object.assign(this, obj)
@@ -159,6 +161,7 @@ export class ProjectStep {
         images?.filter((x) => obj.images?.map((x) => x.id)?.includes(x.id)) ||
         [],
       videoUrl: obj.video_url,
+      order: obj.order,
     })
   }
 }
@@ -179,6 +182,7 @@ export type ProjectFormData = {
 }
 
 export type ProjectStepFormData = {
+  id?: number
   title: string
   description: string
   images?: IConvertedFileMeta[]

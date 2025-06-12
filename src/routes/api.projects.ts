@@ -101,6 +101,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         ? (formData.get('difficultyLevel') as string)
         : null,
       moderation: 'awaiting-moderation' as Moderation,
+      stepCount: parseInt(formData.get('stepCount') as string),
     }
 
     const { client, headers } = createSupabaseServerClient(request)
@@ -148,12 +149,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     // 2. Upload and set project files and cover image
     if (uploadedCoverImage) {
-      await uploadAndUpdateCoverImage(
-        uploadedCoverImage,
+      const images = await uploadAndUpdateImage(
+        [uploadedCoverImage],
         `projects/${project.id}`,
-        project,
+        'projects',
+        'cover_image',
+        project.id,
         client,
       )
+      project.coverImage = images[0]
     }
 
     if (uploadedFiles) {
@@ -166,9 +170,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     // 3. Create Steps
-    const stepCount = parseInt(formData.get('stepCount') as string)
-
-    for (let i = 0; i < stepCount; i++) {
+    for (let i = 0; i < data.stepCount; i++) {
       const images = formData.getAll(`steps.[${i}].images`) as File[]
 
       const stepDb = await createStep(client, {
@@ -180,10 +182,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       const step = ProjectStep.fromDB(stepDb)
 
       // 4. Upload and set images of each Step
-      await uploadAndUpdateStepImage(
+      step.images = await uploadAndUpdateImage(
         images,
         `projects/${project.id}`,
-        step,
+        'project_steps',
+        'images',
+        step.id,
         client,
       )
 
@@ -215,6 +219,10 @@ async function validateRequest(request: Request, user: User | null, data: any) {
 
   if (!data.description) {
     return { status: 400, statusText: 'description is required' }
+  }
+
+  if (!data.isDraft && (!data.stepCount || data.stepCount < 3)) {
+    return { status: 400, statusText: '3 steps are required' }
   }
 
   return { valid: true }
@@ -288,10 +296,12 @@ async function createStep(
   return data[0] as unknown as DBProjectStep
 }
 
-async function uploadAndUpdateStepImage(
+async function uploadAndUpdateImage(
   files: File[],
   path: string,
-  step: ProjectStep,
+  tableName: 'projects' | 'project_steps',
+  fieldName: string,
+  id: number,
   client: SupabaseClient,
 ) {
   const mediaResult = await storageServiceServer.uploadImage(
@@ -302,42 +312,15 @@ async function uploadAndUpdateStepImage(
 
   if (mediaResult?.media && mediaResult.media.length > 0) {
     const result = await client
-      .from('project_steps')
+      .from(tableName)
       .update({
-        images: mediaResult.media,
+        [fieldName]: mediaResult.media,
       })
-      .eq('id', step.id)
+      .eq('id', id)
       .select()
 
     if (result.data) {
-      step.images = result.data[0].images
-    }
-  }
-}
-
-async function uploadAndUpdateCoverImage(
-  file: File,
-  path: string,
-  project: Project,
-  client: SupabaseClient,
-) {
-  const mediaResult = await storageServiceServer.uploadImage(
-    [file],
-    path,
-    client,
-  )
-
-  if (mediaResult?.media && mediaResult.media.length > 0) {
-    const result = await client
-      .from('projects')
-      .update({
-        cover_image: mediaResult.media[0],
-      })
-      .eq('id', project.id)
-      .select()
-
-    if (result.data) {
-      project.coverImage = result.data[0].cover_image
+      return result.data[0].images
     }
   }
 }

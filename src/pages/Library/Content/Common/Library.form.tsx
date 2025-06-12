@@ -57,6 +57,14 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
         existingCoverImage: project?.coverImage,
         existingFiles: files,
         fileLink: fileLink,
+        steps:
+          project?.steps?.map((x) => ({
+            id: x.id,
+            title: x.title,
+            description: x.description,
+            videoUrl: x.videoUrl || undefined,
+            existingImages: x.images,
+          })) || [],
       })
     }
   }, [project])
@@ -104,6 +112,34 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
     })
   }
 
+  const removeStepImage = (stepIndex: number, imageIndex: number) => {
+    setInitialValues((prevState: Partial<ProjectFormData> | undefined) => {
+      if (!prevState?.steps || !prevState.steps[stepIndex]) {
+        return prevState
+      }
+
+      const updatedSteps = prevState.steps.map((step, index) => {
+        if (index === stepIndex) {
+          // Remove the image at the specified imageIndex
+          const updatedImages =
+            step.existingImages?.filter(
+              (_, imgIndex) => imgIndex !== imageIndex,
+            ) || []
+          return {
+            ...step,
+            existingImages: updatedImages,
+          }
+        }
+        return step
+      })
+
+      return {
+        ...prevState,
+        steps: updatedSteps,
+      }
+    })
+  }
+
   return (
     <Form<ProjectFormData>
       onSubmit={() => {}}
@@ -116,7 +152,6 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
         dirty,
         valid,
         values,
-        errors,
         handleSubmit,
         submitSucceeded,
         submitting,
@@ -224,7 +259,10 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                     </Flex>
                   </Card>
 
-                  <LibraryStepsContainerField />
+                  <LibraryStepsContainerField
+                    steps={initialValues?.steps || []}
+                    removeStepImage={removeStepImage}
+                  />
                 </Flex>
               </FormContainer>
             </Flex>

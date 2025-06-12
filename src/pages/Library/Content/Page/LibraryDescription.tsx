@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link, useNavigate } from '@remix-run/react'
 import {
   Button,
@@ -26,6 +26,8 @@ import {
   hasAdminRights,
 } from 'src/utils/helpers'
 import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui'
+
+import { libraryService } from '../../library.service'
 
 const DELETION_LABEL = 'Project marked for deletion'
 
@@ -55,8 +57,7 @@ export const LibraryDescription = (props: IProps) => {
 
   const handleDelete = async () => {
     try {
-      // TODO: Call API to delete
-      // await stores.LibraryStore.delete(item.id)
+      await libraryService.deleteProject(item.id)
       trackEvent({
         category: 'Library',
         action: 'Deleted',

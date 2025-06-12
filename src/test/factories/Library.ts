@@ -67,6 +67,7 @@ export const FactoryLibraryItemStep = (
   title: faker.lorem.text(),
   description: faker.lorem.paragraphs(2),
   videoUrl: faker.internet.url(),
+  order: faker.number.int(),
   ...itemOverloads,
 })
 

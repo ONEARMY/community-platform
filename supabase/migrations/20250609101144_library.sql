@@ -6,6 +6,7 @@ create table "public"."project_steps" (
     "description" text not null,
     "images" json,
     "video_url" text,
+    "order" smallint null,
     "tenant_id" text not null
 );
 

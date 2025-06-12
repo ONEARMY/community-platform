@@ -116,6 +116,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
         dirty,
         valid,
         values,
+        errors,
         handleSubmit,
         submitSucceeded,
         submitting,

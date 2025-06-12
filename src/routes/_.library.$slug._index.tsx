@@ -63,7 +63,7 @@ export const meta = mergeMeta<typeof loader>(({ data }) => {
     return []
   }
 
-  const title = `${project.title} - Project - ${import.meta.env.VITE_SITE_NAME}`
+  const title = `${project.title} - Library - ${import.meta.env.VITE_SITE_NAME}`
 
   return generateTags(title, project.description, project.coverImage?.publicUrl)
 })

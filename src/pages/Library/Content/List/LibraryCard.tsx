@@ -18,8 +18,8 @@ type LibraryCardProps = {
 
 export const LibraryCard = ({ item }: LibraryCardProps) => {
   return (
-    <RouterLink to={`/library/${encodeURIComponent(item.slug)}`}>
-      <Card data-cy="card" sx={{ marginX: [2, 0] }}>
+    <Card data-cy="card" sx={{ marginX: [2, 0] }}>
+      <RouterLink to={`/library/${encodeURIComponent(item.slug)}`}>
         {item.coverImage && (
           <Image
             style={{
@@ -89,7 +89,7 @@ export const LibraryCard = ({ item }: LibraryCardProps) => {
             </Box>
           </Flex>
         </Flex>
-      </Card>
-    </RouterLink>
+      </RouterLink>
+    </Card>
   )
 }

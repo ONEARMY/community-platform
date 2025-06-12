@@ -29,13 +29,7 @@ export const library: Project[] = [
         title: 'step',
         description: 'description',
         videoUrl: null,
-        images: [
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-        ],
+        images: null,
       },
       {
         id: 2,
@@ -51,13 +45,7 @@ export const library: Project[] = [
         projectId: 1,
         title: 'Make the 3D drawing',
         videoUrl: null,
-        images: [
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-        ],
+        images: [],
         description:
           'First of all, we would like to tell you that our mould design is highly detailed and takes a lot of time to craft. The mould should be made from aluminum with CNC machine. To be easy for you all, please download our mould design above.',
       },
@@ -66,26 +54,14 @@ export const library: Project[] = [
         projectId: 1,
         title: 'Machining the mould',
         videoUrl: null,
-        images: [
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-        ],
+        images: [],
         description:
           'Using the Sketchup file above to make the mould. We used the CNC Machine from a local manufacturer in Chiangmai. ',
       },
       {
         id: 5,
         projectId: 1,
-        images: [
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-        ],
+        images: [],
         description:
           'Tools you need for injecting:\nWrench\nBolt x 8 pieces\nNut x 8 pieces\nBolt & Nut for locking x 1 set\nElectric drill\nCutter\n',
         videoUrl: null,
@@ -116,13 +92,7 @@ export const library: Project[] = [
         projectId: 1,
         videoUrl: null,
         title: 'Injection time!',
-        images: [
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-        ],
+        images: [],
         description:
           'Turn on the Injection machine (180°C) and wait for it to heat up.\nWhen the temperature is ready, you can put the shredded PP into the Machine.',
       },
@@ -130,18 +100,7 @@ export const library: Project[] = [
         id: 8,
         projectId: 1,
         videoUrl: null,
-        images: [
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-        ],
+        images: [],
         description:
           'While waiting for the plastic to melt, you can assemble the mould.',
         title: 'Prepare the mould',
@@ -150,13 +109,7 @@ export const library: Project[] = [
         id: 9,
         projectId: 1,
         title: 'Press',
-        images: [
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-        ],
+        images: [],
         description:
           'When both your machine and the mould are ready, connect the mould to the injection machine. Then press it!',
         videoUrl: null,
@@ -186,13 +139,7 @@ export const library: Project[] = [
         projectId: 1,
         description: 'Last finishes.',
         title: 'Finish the product',
-        images: [
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-        ],
+        images: [],
         videoUrl: null,
       },
       {
@@ -229,11 +176,7 @@ export const library: Project[] = [
     time: '3-4 weeks',
     description:
       "Here we'll show you how to make a brick using the injection machine and the mould we designed in Chiangmai, Thailand. A beautiful, functional model. \n(BOPE)",
-    coverImage: {
-      id: '',
-      publicUrl:
-        'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-    },
+    coverImage: null,
     difficultyLevel: 'hard',
     files: [
       {
@@ -249,7 +192,7 @@ export const library: Project[] = [
     ],
     fileDownloadCount: 1234,
     category: {
-      name: 'product',
+      name: 'Machines',
       createdAt: new Date('2018-11-29T12:56:47.901Z'),
       modifiedAt: new Date('2018-11-29T12:56:47.901Z'),
       id: 1,
@@ -267,11 +210,7 @@ export const library: Project[] = [
     time: '< 1 week',
     description:
       'Hello Coder! This is what we want to make https://build.onearmy.world/ The code of our platform can be found open-source on Github. There is still a lot of work to do and things to improve, we need a community of developers to help out improve it and fix issues. In this how-to i’ll show you how to download it and run it on your local computer so you can play around with the code, add modifications and share back to us.',
-    coverImage: {
-      id: '',
-      publicUrl:
-        'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-    },
+    coverImage: null,
     id: 59,
     difficultyLevel: 'easy',
     files: [],
@@ -282,13 +221,7 @@ export const library: Project[] = [
         id: 13,
         projectId: 59,
         title: 'Get the code',
-        images: [
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-        ],
+        images: [],
         videoUrl: null,
         description:
           'First step go to Github, and download or clone our code. I’d recommend to install the Github app to add pull request in a later stage.\n',
@@ -297,13 +230,7 @@ export const library: Project[] = [
         id: 14,
         projectId: 59,
         title: 'Install install node js',
-        images: [
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-        ],
+        images: [],
         videoUrl: null,
         description:
           'Pretty straight forward, download the files on their website and install. https://nodejs.org/en/#download\n',
@@ -345,13 +272,7 @@ export const library: Project[] = [
       {
         id: 17,
         projectId: 59,
-        images: [
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-        ],
+        images: [],
         description:
           "As you can see we currently in V0.4. Lot's of work to do and things to fix! Start coding and add your pull requests to Github, on Tuesday we review code :) \n*",
         videoUrl: 'uniquewrzq8q',
@@ -376,7 +297,7 @@ export const library: Project[] = [
       },
     ],
     category: {
-      name: 'product',
+      name: 'Machines',
       createdAt: new Date('2018-11-29T12:56:47.901Z'),
       modifiedAt: new Date('2018-11-29T12:56:47.901Z'),
       id: 1,
@@ -427,13 +348,7 @@ export const library: Project[] = [
           'You will need to work out the required measurements for the jacket. The template below will provide you with a plan for taking and recording these measurements. \n(A) length of the arm\n(B) length from shoulder to shoulder\n(C) length from shoulder to the neck centre\n(D) body width\n(E) desired length of the raincoat',
         videoUrl: 'unique2',
         title: 'Choose your measurements ',
-        images: [
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-        ],
+        images: [],
       },
       {
         id: 20,
@@ -484,13 +399,7 @@ export const library: Project[] = [
         id: 22,
         projectId: 2,
         title: 'Create a collage with your material',
-        images: [
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-        ],
+        images: [],
         description:
           'Using your plastic bags and films, create a collage on top of your base sheet. This can be created however you like; from a methodical design of strips and shapes, to a more random spread of the films. This will create the design for the material that will form your finished raincoat. Reserve a little of the plastic to form a test piece (see step 6). ',
         videoUrl: 'uniquerlopr',
@@ -552,13 +461,7 @@ export const library: Project[] = [
           'Come back to the template that we used in step 2. Apply your measurements to the following template, and decide on a size for measurement (F), the diameters of the hood. You can decide on this by drawing and cutting the hood construction pieces first with paper, and finding a desired size. ',
         videoUrl: 'uniquewtxz8t',
         title: 'Finalise your measurements',
-        images: [
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-        ],
+        images: [],
       },
       {
         id: 26,
@@ -603,13 +506,7 @@ export const library: Project[] = [
       {
         id: 27,
         projectId: 2,
-        images: [
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-        ],
+        images: [],
         description:
           'Using your cut plastic sheets, and the matching cotton pieces, sew the two templates together so that the outer and lining are attached to one another. This will help the process of further working with the material, and make it easier to create your raincoat. ',
         videoUrl: 'unique9s770y',
@@ -618,13 +515,7 @@ export const library: Project[] = [
       {
         id: 28,
         projectId: 2,
-        images: [
-          {
-            id: '',
-            publicUrl:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-          },
-        ],
+        images: [],
         description:
           'The construction of the jacket should start with the shoulders. Sew together your back and two front pieces (see step 8), as shown in the image below. Make sure to leave enough space for the attachment of the hood! This is where we will use the 2cm that we added for sewing. The join of the fabric should match the template exactly and the excess material from the join should only be visible from the interior of the jacket. We will trim this later. ',
         videoUrl: 'uniqueclwhcg',
@@ -649,7 +540,7 @@ export const library: Project[] = [
       },
     ],
     category: {
-      name: 'product',
+      name: 'Machines',
       createdAt: new Date('2018-11-29T12:56:47.901Z'),
       modifiedAt: new Date('2018-11-29T12:56:47.901Z'),
       id: 1,
@@ -661,11 +552,7 @@ export const library: Project[] = [
     slug: 'make-glass-like-beams',
     previousSlugs: ['make-glass-like-beams', 'make-glassy-beams'],
     deleted: false,
-    coverImage: {
-      id: '',
-      publicUrl:
-        'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-    },
+    coverImage: null,
     description: '',
     id: 2,
     time: '< 1 week',
@@ -689,11 +576,7 @@ export const library: Project[] = [
     deleted: false,
     id: 12,
     commentCount: 0,
-    coverImage: {
-      id: '',
-      publicUrl:
-        'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-    },
+    coverImage: null,
     description: 'Test1',
     difficultyLevel: 'medium',
     files: [],
@@ -722,7 +605,7 @@ export const library: Project[] = [
     time: '< 1 hour',
     title: 'Testing-testing',
     category: {
-      name: 'product',
+      name: 'Machines',
       createdAt: new Date('2018-11-29T12:56:47.901Z'),
       modifiedAt: new Date('2018-11-29T12:56:47.901Z'),
       id: 1,
@@ -736,7 +619,7 @@ export const library: Project[] = [
   },
   {
     category: {
-      name: 'product',
+      name: 'Machines',
       createdAt: new Date('2018-11-29T12:56:47.901Z'),
       modifiedAt: new Date('2018-11-29T12:56:47.901Z'),
       id: 1,
@@ -756,11 +639,7 @@ export const library: Project[] = [
     id: 10,
     modifiedAt: new Date('2022-01-06T14:50:38.830Z'),
     previousSlugs: ['deleted-how-to'],
-    coverImage: {
-      id: '',
-      publicUrl:
-        'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-    },
+    coverImage: null,
     description: 'deleted how to',
     difficultyLevel: 'medium',
     files: [],

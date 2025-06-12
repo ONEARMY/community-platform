@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Field } from 'react-final-form'
 import styled from '@emotion/styled'
 import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components'
@@ -70,8 +70,6 @@ export const LibraryStepField = ({
    * Ensure either url or images included (not both), and any url formatted correctly
    */
   const validateStepMedia = (allValues: any) => {
-    const { both, empty, invalidUrl } = errors.videoUrl
-
     if (!allValues?.steps || !allValues?.steps.length) {
       return null
     }
@@ -79,13 +77,15 @@ export const LibraryStepField = ({
 
     if (stepValues.videoUrl) {
       if (stepValues.images?.at(0)) {
-        return both
+        return errors.videoUrl.both
       }
-      const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
+      const ytRegex = new RegExp(
+        /(youtu\.be\/|youtube\.com\/(watch\?v=|embed\/|v\/))/gi,
+      )
       const urlValid = ytRegex.test(stepValues.videoUrl)
-      return urlValid ? null : invalidUrl
+      return urlValid ? null : errors.videoUrl.invalidUrl
     }
-    return stepValues.images?.at(0) ? null : empty
+    return stepValues.images?.at(0) ? null : errors.videoUrl.empty
   }
 
   const { deleteButton } = buttons.steps
@@ -235,7 +235,6 @@ export const LibraryStepField = ({
               name={`${step}.images[0]`}
               component={ImageInputField}
               isEqual={COMPARISONS.image}
-              validate={(_, allvalues) => validateStepMedia(allvalues)}
             />
           </ImageInputFieldWrapper>
           <ImageInputFieldWrapper data-cy="step-image-1">
@@ -245,7 +244,6 @@ export const LibraryStepField = ({
               name={`${step}.images[1]`}
               component={ImageInputField}
               isEqual={COMPARISONS.image}
-              validate={(_, allvalues) => validateStepMedia(allvalues)}
             />
           </ImageInputFieldWrapper>
           <ImageInputFieldWrapper data-cy="step-image-2">
@@ -255,7 +253,6 @@ export const LibraryStepField = ({
               name={`${step}.images[2]`}
               component={ImageInputField}
               isEqual={COMPARISONS.image}
-              validate={(_, allvalues) => validateStepMedia(allvalues)}
             />
           </ImageInputFieldWrapper>
         </Flex>

@@ -18,9 +18,13 @@ export const seedLibrary = async (profiles, tagsData) => {
     const item = MOCK_DATA.projects[i]
 
     projectsData.push({
+      created_at: item.createdAt,
+      modified_at: item.modifiedAt,
       title: item.title,
       description: item.description,
       slug: item.slug,
+      time: item.time,
+      difficulty_level: item.difficultyLevel,
       created_by:
         profiles.data.find((x) => x.username === item.createdBy)?.id || null,
       tags: [tagsData.data[0].id, tagsData.data[1].id],
@@ -50,6 +54,7 @@ export const seedLibrary = async (profiles, tagsData) => {
             title: item.title,
             project_id: projects.data[i].id,
             description: item.description,
+            video_url: item.video_url,
             tenant_id: tenantId,
           })),
         },

@@ -1,66 +1,77 @@
 // This is basically an identical set of steps to the discussion tests for
-// questions and research. Any changes here should be replicated there.
+// projects, research and news. Any changes here should be replicated there.
+
+import { UserRole } from 'oa-shared'
+
 import { MOCK_DATA } from '../../data'
-import { library } from '../../fixtures/library'
-import { generateAlphaNumeric } from '../../utils/TestUtils'
-
-const item = Object.values(MOCK_DATA.library)[0]
-const libraryDiscussion = Object.values(MOCK_DATA.discussions).find(
-  ({ sourceId }) => sourceId === item._id,
-)
-
-const visitor = MOCK_DATA.users.subscriber
-const secondCommentor = MOCK_DATA.users.profile_views
+import { generateNewUserDetails } from '../../utils/TestUtils'
 
 describe('[Library.Discussions]', () => {
-  it('can open using deep links', () => {
-    const firstComment = libraryDiscussion!.comments[0]
-    cy.visit(`/library/${item.slug}#comment:${firstComment._id}`)
-    cy.wait(2000)
-    cy.checkCommentItem(firstComment.text, 2)
+  it('shows existing comments', () => {
+    const project = MOCK_DATA.library[0]
+    cy.visit(`/library/${project.slug}`)
+    cy.get(`[data-cy=comment-text]`).contains('First comment')
+    cy.get('[data-cy=show-replies]').click()
+    cy.get(`[data-cy="ReplyItem"]`).contains('First Reply')
   })
 
   it('allows authenticated users to contribute to discussions', () => {
-    const random = generateAlphaNumeric(8)
+    localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
 
-    cy.addProject(library, visitor.userName, random)
-    cy.signIn(visitor.email, visitor.password)
+    const commenter = generateNewUserDetails()
+    const question = MOCK_DATA.library[2]
 
-    const newComment = `An interesting project. ${visitor.userName}`
-    const updatedNewComment = `An interesting project. The answer must be that when the sky is red, the apocalypse _might_ be on the way. Yours, ${visitor.userName}`
-    const newReply = `Thanks Dave and Ben. What does everyone else think? - ${visitor.userName}`
-    const updatedNewReply = `Anyone else? All the best, ${visitor.userName}`
-    const projectPath = `/library/howto-for-discussion-${visitor.userName}-${random}`
+    const newComment = `An interesting question. The answer must be... ${commenter.username}`
+    const updatedNewComment = `An interesting question. The answer must be that when the sky is red, the apocalypse _might_ be on the way. Love, ${commenter.username}`
+    const newReply = `Thanks Dave and Ben. What does everyone else think? - ${commenter.username}`
+    const updatedNewReply = `Anyone else? Your truly ${commenter.username}`
+    const questionPath = `/library/${question.slug}`
 
-    cy.step('Can add comment')
-    cy.visit(projectPath)
+    cy.signUpNewUser(commenter)
+
+    cy.step("Can't add comment with an incomplete profile")
+    cy.visit(questionPath)
+    cy.get('[data-cy=comments-form]').should('not.exist')
+    cy.get('[data-cy=comments-incomplete-profile-prompt]').should('be.visible')
+
+    cy.step('Can add comment when profile is complete')
+    cy.completeUserProfile(commenter.username)
+    cy.visit(questionPath)
     cy.contains('Start the discussion')
-    cy.contains('0 comments')
+    cy.get('[data-cy=comments-incomplete-profile-prompt]').should('not.exist')
     cy.addComment(newComment)
-    cy.contains('1 comment')
 
     cy.step('Can edit their comment')
     cy.editDiscussionItem('CommentItem', newComment, updatedNewComment)
 
     cy.step('Another user can add reply')
+    const replier = generateNewUserDetails()
     cy.logout()
-    cy.signIn(secondCommentor.email, secondCommentor.password)
-    cy.visit(projectPath)
+    cy.signUpCompletedUser(replier)
+    cy.visit(questionPath)
     cy.addReply(newReply)
     cy.wait(1000)
-    cy.contains('comments')
+    cy.contains('Comments')
 
     cy.step('Can edit their reply')
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
-
     cy.step('Another user can leave a reply')
-    const secondReply = `Quick reply. ${visitor.userName}`
+    const secondReply = `Quick reply. ${commenter.username}`
 
     cy.step('First commentor can respond')
     cy.logout()
-    cy.signIn(visitor.email, visitor.password)
-    cy.visit(projectPath)
+    cy.signIn(commenter.email, commenter.password)
 
+    cy.step('Notification generated for reply from replier')
+    cy.expectNewNotification({
+      content: updatedNewReply,
+      path: questionPath,
+      title: question.title,
+      username: replier.username,
+    })
+    cy.visit(questionPath)
+
+    cy.step('Can add reply')
     cy.addReply(secondReply)
 
     cy.step('Can delete their comment')
@@ -72,5 +83,15 @@ describe('[Library.Discussions]', () => {
 
     cy.step('Can delete their reply')
     cy.deleteDiscussionItem('ReplyItem', secondReply)
+
+    cy.step('Notification generated for replier from commenter reply')
+    cy.logout()
+    cy.signIn(replier.email, replier.password)
+    cy.expectNewNotification({
+      content: secondReply,
+      path: questionPath,
+      title: question.title,
+      username: commenter.username,
+    })
   })
 })

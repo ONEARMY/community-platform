@@ -112,6 +112,20 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
     })
   }
 
+  const addStep = () => {
+    setInitialValues({
+      ...initialValues,
+      steps: [
+        ...initialValues!.steps!,
+        {
+          title: '',
+          description: '',
+          existingImages: [],
+        },
+      ],
+    })
+  }
+
   const removeStepImage = (stepIndex: number, imageIndex: number) => {
     setInitialValues((prevState: Partial<ProjectFormData> | undefined) => {
       if (!prevState?.steps || !prevState.steps[stepIndex]) {
@@ -136,6 +150,33 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       return {
         ...prevState,
         steps: updatedSteps,
+      }
+    })
+  }
+
+  const moveStep = (from: number, to: number) => {
+    setInitialValues((prevState: Partial<ProjectFormData> | undefined) => {
+      if (
+        !prevState?.steps ||
+        from < 0 ||
+        to < 0 ||
+        from >= prevState.steps.length
+      ) {
+        return prevState
+      }
+
+      // Clamp 'to' index to valid range
+      const clampedTo = Math.min(to, prevState.steps.length - 1)
+
+      const newSteps = [...prevState.steps]
+      // Remove the step from the 'from' position
+      const [movedStep] = newSteps.splice(from, 1)
+      // Insert it at the 'to' position
+      newSteps.splice(clampedTo, 0, movedStep)
+
+      return {
+        ...prevState,
+        steps: newSteps,
       }
     })
   }
@@ -261,7 +302,9 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
 
                   <LibraryStepsContainerField
                     steps={initialValues?.steps || []}
+                    addStep={addStep}
                     removeStepImage={removeStepImage}
+                    moveStep={moveStep}
                   />
                 </Flex>
               </FormContainer>

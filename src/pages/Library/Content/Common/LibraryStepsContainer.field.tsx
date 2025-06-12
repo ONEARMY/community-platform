@@ -44,10 +44,14 @@ const AnimationContainer = ({ children }: IPropsAnimation) => {
 
 export const LibraryStepsContainerField = ({
   steps,
+  addStep,
   removeStepImage,
+  moveStep,
 }: {
   steps: ProjectStepFormData[]
+  addStep: () => void
   removeStepImage: (stepIndex: number, imageIndex: number) => void
+  moveStep: (from: number, to: number) => void
 }) => {
   return (
     <FieldArray name="steps" isEqual={COMPARISONS.step}>
@@ -65,16 +69,19 @@ export const LibraryStepsContainerField = ({
           <AnimatePresence>
             {fields.map((name, index: number) => (
               <AnimationContainer
-                key={`${fields.value[index]._animationKey}-1`}
+                key={`${fields.value[index]._animationKey}-${index}`}
               >
                 <LibraryStepField
-                  key={`${fields.value[index]._animationKey}-2`}
+                  key={`${fields.value[index]._animationKey}-${index}2`}
                   step={steps?.at(index)}
                   name={name}
                   index={index}
                   moveStep={(from, to) => {
-                    if (to !== fields.length) {
+                    if (to !== fields.length && to >= 0) {
+                      // Move form fields
                       fields.move(from, to)
+                      // Also move the state data
+                      moveStep(from, to)
                     }
                   }}
                   images={fields.value[index].images}
@@ -95,17 +102,7 @@ export const LibraryStepsContainerField = ({
               mt={[10, 10, 20]}
               mb={[5, 5, 20]}
               variant="secondary"
-              onClick={() => {
-                fields.push({
-                  title: '',
-                  description: '',
-                  images: [],
-                  // HACK - need unique key, this is a rough method to generate form random numbers
-                  _animationKey: `unique${Math.random()
-                    .toString(36)
-                    .substring(7)}`,
-                })
-              }}
+              onClick={addStep}
             >
               {buttonsLabel.steps.add}
             </Button>

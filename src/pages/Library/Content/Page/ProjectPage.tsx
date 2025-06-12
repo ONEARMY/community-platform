@@ -84,9 +84,11 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
         }
       />
       <Flex sx={{ flexDirection: 'column', marginTop: [3, 4], gap: 4 }}>
-        {item.steps.map((step: ProjectStep, index: number) => (
-          <Step step={step} key={index} stepindex={index} />
-        ))}
+        {item.steps
+          .sort((a, b) => a.order - b.order)
+          .map((step: ProjectStep, index: number) => (
+            <Step step={step} key={index} stepindex={index} />
+          ))}
       </Flex>
       <ClientOnly fallback={<></>}>
         {() => (

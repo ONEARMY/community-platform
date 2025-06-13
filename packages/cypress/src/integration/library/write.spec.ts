@@ -31,7 +31,6 @@ describe('[Library]', () => {
     videoUrl?: string,
   ) => {
     cy.step(`Filling step ${stepNumber}`)
-    cy.get('[data-cy=add-step]').click()
     cy.get(`[data-cy=step_${stepNumber}]`).should('be.visible')
     cy.get(`[data-cy=step_${stepNumber}]`).within(($step) => {
       checkWhitespaceTrim('step-title')

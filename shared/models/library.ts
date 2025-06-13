@@ -186,6 +186,6 @@ export type ProjectStepFormData = {
   title: string
   description: string
   images?: IConvertedFileMeta[]
-  existingImages: Image[] | null
+  existingImages?: Image[] | null
   videoUrl?: string
 }

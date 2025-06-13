@@ -64,6 +64,6 @@ export const seedLibrary = async (profiles, tagsData) => {
   }
 
   // seed comments
-  const { comments } = await seedComment(profiles, projects, 'project')
+  const { comments } = await seedComment(profiles, projects, 'projects')
   await seedReply(profiles, comments, projects)
 }

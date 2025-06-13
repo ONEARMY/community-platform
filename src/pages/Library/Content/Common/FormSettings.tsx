@@ -15,8 +15,8 @@ export const TIME_OPTIONS = [
 ]
 
 export const DIFFICULTY_OPTIONS = [
-  makeEntry<DifficultyLevel>('easy'),
-  makeEntry<DifficultyLevel>('medium'),
-  makeEntry<DifficultyLevel>('hard'),
-  makeEntry<DifficultyLevel>('very-hard'),
+  makeEntry<DifficultyLevel>('easy', 'Easy'),
+  makeEntry<DifficultyLevel>('medium', 'Medium'),
+  makeEntry<DifficultyLevel>('hard', 'Hard'),
+  makeEntry<DifficultyLevel>('very-hard', 'Very Hard'),
 ]

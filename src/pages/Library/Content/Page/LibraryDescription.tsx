@@ -156,6 +156,32 @@ export const LibraryDescription = (props: IProps) => {
                 />
               </>
             )}
+
+            {item.isDraft && (
+              <Flex
+                sx={{
+                  marginBottom: 'auto',
+                  minWidth: '100px',
+                  borderRadius: 1,
+                  height: '44px',
+                  background: 'lightgrey',
+                }}
+              >
+                <Text
+                  sx={{
+                    display: 'inline-block',
+                    verticalAlign: 'middle',
+                    color: 'black',
+                    fontSize: [2, 2, 3],
+                    padding: 2,
+                    margin: 'auto',
+                  }}
+                  data-cy="status-draft"
+                >
+                  Draft
+                </Text>
+              </Flex>
+            )}
           </Flex>
           {item.moderatorFeedback && item.moderation !== 'accepted' ? (
             <Alert
@@ -307,7 +333,8 @@ export const LibraryDescription = (props: IProps) => {
               )}
             </Box>
           </Box>
-          {item.moderation !== 'accepted' && (
+
+          {!item.isDraft && item.moderation !== 'accepted' && (
             <ModerationStatus
               status={item.moderation}
               sx={{ top: 0, position: 'absolute', right: 0 }}

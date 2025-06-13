@@ -215,6 +215,8 @@ async function validateRequest(request: Request, user: User | null, data: any) {
 
   if (!data.title) {
     return { status: 400, statusText: 'title is required' }
+  } else if (data.title.length < 5) {
+    return { status: 400, statusText: 'title is too short' }
   }
 
   if (!data.description) {

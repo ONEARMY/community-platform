@@ -41,32 +41,44 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
 
   useEffect(() => {
-    if (project) {
-      setInitialValues({
-        title: project?.title,
-        description: project?.description,
-        category: project?.category
-          ? {
-              value: project.category.id?.toString(),
-              label: project.category.name,
-            }
-          : undefined,
-        tags: project?.tagIds || [],
-        time: project?.time,
-        difficultyLevel: project.difficultyLevel,
-        existingCoverImage: project?.coverImage,
-        existingFiles: files,
-        fileLink: fileLink,
-        steps:
-          project?.steps?.map((x) => ({
+    setInitialValues({
+      title: project?.title || '',
+      description: project?.description || '',
+      category: project?.category
+        ? {
+            value: project.category.id?.toString(),
+            label: project.category.name,
+          }
+        : undefined,
+      tags: project?.tagIds || [],
+      time: project?.time,
+      difficultyLevel: project?.difficultyLevel,
+      existingCoverImage: project?.coverImage,
+      existingFiles: files,
+      fileLink: fileLink,
+      steps: project?.steps?.length
+        ? project?.steps?.map((x) => ({
             id: x.id,
             title: x.title,
             description: x.description,
             videoUrl: x.videoUrl || undefined,
             existingImages: x.images,
-          })) || [],
-      })
-    }
+          }))
+        : [
+            {
+              title: '',
+              description: '',
+            },
+            {
+              title: '',
+              description: '',
+            },
+            {
+              title: '',
+              description: '',
+            },
+          ],
+    })
   }, [project])
 
   const formId = 'libraryForm'
@@ -116,7 +128,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
     setInitialValues({
       ...initialValues,
       steps: [
-        ...initialValues!.steps!,
+        ...(initialValues?.steps ?? []),
         {
           title: '',
           description: '',
@@ -262,11 +274,11 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                           }}
                         >
                           <LibraryTitleField />
+                          <LibraryDescriptionField />
                           <LibraryCategoryField />
                           <LibraryTagsField />
                           <LibraryTimeField />
                           <LibraryDifficultyField />
-                          <LibraryDescriptionField />
                           <FilesFields
                             files={initialValues?.existingFiles || []}
                             deleteFile={removeExistingFile}
@@ -343,7 +355,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                   >
                     <span>{buttons.draft.create}</span>
                   </Button>
-                  <Text sx={{ fontSize: 1, textAlign: 'center' }}>
+                  <Text sx={{ fontSize: 1, textAlign: 'center', marginTop: 1 }}>
                     {buttons.draft.description}
                   </Text>
                 </Flex>

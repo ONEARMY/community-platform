@@ -1,8 +1,10 @@
 import { faker } from '@faker-js/faker'
-import { DifficultyLevel, IModerationStatus } from 'oa-shared'
+import { DifficultyLevelRecord, IModerationStatus } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
 import { generateNewUserDetails } from '../../utils/TestUtils'
+
+import type { DifficultyLevel } from 'oa-shared'
 
 describe('[Library]', () => {
   beforeEach(() => {
@@ -28,10 +30,10 @@ describe('[Library]', () => {
     images: string[],
     videoUrl?: string,
   ) => {
-    const stepIndex = stepNumber - 1
-
     cy.step(`Filling step ${stepNumber}`)
-    cy.get(`[data-cy=step_${stepIndex}]:visible`).within(($step) => {
+    cy.get('[data-cy=add-step]').click()
+    cy.get(`[data-cy=step_${stepNumber}]`).should('be.visible')
+    cy.get(`[data-cy=step_${stepNumber}]`).within(($step) => {
       checkWhitespaceTrim('step-title')
 
       cy.get('[data-cy=step-title]')
@@ -107,7 +109,7 @@ describe('[Library]', () => {
       category: 'Moulds',
       description: 'After creating, the project will be deleted',
       moderation: IModerationStatus.AWAITING_MODERATION,
-      difficulty_level: DifficultyLevel.MEDIUM,
+      difficulty_level: DifficultyLevelRecord.medium,
       time: '1-2 weeks',
       title: `Create a project test ${randomId}`,
       slug: `create-a-project-test-${randomId}`,
@@ -189,39 +191,32 @@ describe('[Library]', () => {
       cy.get('[data-cy=create-project]').click()
       cy.contains('Add your project').should('be.visible')
 
-      cy.step('Warn if title is identical with the existing ones')
-      cy.fillIntroTitle('Make glass-like beams')
-      cy.contains(
-        "Did you know there is an existing project with the title 'Make glass-like beams'?",
-      ).should('be.visible')
-
-      cy.step('Warn if title is identical with a previously existing one')
-      cy.fillIntroTitle('Make glassy beams')
-      cy.contains(
-        "Did you know there is an existing project with the title 'Make glassy beams'?",
-      ).should('be.visible')
-
       cy.step('Warn if title has less than minimum required characters')
       cy.fillIntroTitle('qwer')
       cy.contains(`Should be more than ${5} characters`).should('be.visible')
 
       cy.step('Cannot be published yet')
-      cy.get('[data-cy=submit]').click()
-      cy.get('[data-cy=errors-container]').should('be.visible')
-      cy.contains("Ouch, something's wrong").should('be.visible')
-      cy.contains('Make sure this field is filled correctly').should(
-        'be.visible',
-      )
+      cy.get('[data-cy=submit]').should('be.disabled')
 
-      cy.step('A basic draft was created')
-      cy.fillIntroTitle(`qwerty ${randomId}`)
+      cy.step('Warn if title is identical with the existing ones')
+      cy.fillIntroTitle('Make glass-like beams')
+
+      checkWhitespaceTrim('intro-description')
+      cy.get('[data-cy=intro-description]').type(description)
+
       cy.get('[data-cy=draft]').click()
+
+      cy.get('[data-cy=errors-container]').should('be.visible')
+      cy.contains('Duplicate project').should('be.visible')
+
+      cy.step('A basic draft is created')
+      cy.fillIntroTitle(`qwerty ${randomId}`)
+
+      cy.get('[data-cy=draft]').click()
+
       const firstSlug = `/library/qwerty-${randomId}`
-      cy.get('[data-cy=view-project]:enabled', { timeout: 20000 })
-        .click()
-        .url()
-        .should('include', firstSlug)
-      cy.get('[data-cy=moderationstatus-draft]').should('be.visible')
+      cy.url().should('include', firstSlug)
+      cy.get('[data-cy=status-draft]').should('be.visible')
 
       cy.step('Back to completing the project')
       cy.get('[data-cy=edit]').click()
@@ -238,11 +233,8 @@ describe('[Library]', () => {
       cy.contains(categoryGuidanceMain).should('be.visible')
 
       selectTimeDuration(time as Duration)
-      selectDifficultLevel(difficulty_level)
+      selectDifficultLevel(difficulty_level as DifficultyLevel)
 
-      checkWhitespaceTrim('intro-description')
-
-      cy.get('[data-cy=intro-description]').type(description)
       cy.get('[data-cy=fileLink]').type(fileLink)
       cy.step('Upload a cover for the intro')
       cy.get('[data-cy=intro-cover]')
@@ -319,7 +311,6 @@ describe('[Library]', () => {
       cy.get('[data-cy=sign-up]').should('be.visible')
 
       cy.visit('/library/create')
-      cy.get('[data-cy=logged-out-message]').should('be.visible')
       cy.get('[data-cy=intro-title]').should('not.exist')
     })
 

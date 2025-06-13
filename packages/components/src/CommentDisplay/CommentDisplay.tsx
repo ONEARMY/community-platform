@@ -36,13 +36,14 @@ export const CommentDisplay = (props: IProps) => {
   } = props
 
   const { authors } = useContext(AuthorsContext)
+  const border = `${comment.highlighted ? '2px dashed black' : 'none'}`
 
   if (comment.deleted) {
     return (
       <Box
         sx={{
           marginBottom: 2,
-          border: `${comment.highlighted ? '2px dashed black' : 'none'}`,
+          border,
         }}
         data-cy="deletedComment"
       >
@@ -57,8 +58,9 @@ export const CommentDisplay = (props: IProps) => {
         sx={{
           gap: 2,
           flexGrow: 1,
-          border: `${comment.highlighted ? '2px dashed black' : 'none'}`,
+          border,
         }}
+        data-cy={comment.highlighted ? 'highlighted-comment' : ''}
       >
         <Box
           data-cy="commentAvatar"

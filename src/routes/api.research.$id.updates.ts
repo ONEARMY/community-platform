@@ -37,6 +37,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const research = researchResult.data as unknown as DBResearchItem
     const profile = await profileServiceServer.getByAuthId(user!.id, client)
 
+    if (!profile) {
+      return Response.json({}, { status: 400, statusText: 'User not found' })
+    }
+
     const { valid, status, statusText } = validateRequest(
       request,
       user,
@@ -71,7 +75,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         video_url: data.videoUrl,
         is_draft: data.isDraft,
         research_id: researchId,
-        created_by: profile!.id,
+        created_by: profile.id,
         tenant_id: process.env.TENANT_ID,
       })
       .select()
@@ -96,19 +100,19 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       client,
     )
 
-    await addSubscribers(research, profile?.id, client)
+    await addSubscribers(researchUpdate.id, profile.id, client)
 
     if (!research.is_draft && !researchUpdate.isDraft) {
       notificationsService.sendResearchUpdateNotification(
         client,
         research,
         updateResult.data[0],
-        profile as DBProfile,
+        profile,
       )
       notifyDiscord(
         research,
         researchUpdate,
-        profile!,
+        profile,
         new URL(request.url).origin.replace('http:', 'https:'),
       )
     }
@@ -123,8 +127,17 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 }
 
-const addSubscribers = async (update, profile, client) => {
-  subscribersServiceServer.add('research_update', update.id, profile.id, client)
+const addSubscribers = async (
+  updateId: number,
+  profileId: number,
+  client: SupabaseClient,
+) => {
+  await subscribersServiceServer.add(
+    'research_update',
+    updateId,
+    profileId,
+    client,
+  )
   // To do: Subscribe collaborators too
   return
 }

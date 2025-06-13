@@ -3,7 +3,6 @@ import { notificationEmailService } from './notificationEmailService.server'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
   DBComment,
-  DBSubscriber,
   NewNotificationData,
   NotificationActionType,
   SubscribableContentTypes,
@@ -42,7 +41,7 @@ const createNotificationNewComment = async (
 
     const subscribedUsers = await client
       .from('subscribers')
-      .select('user_id')
+      .select('user_id', { count: 'exact' })
       .eq('content_id', contentId)
       .eq('content_type', contentType)
 
@@ -50,13 +49,17 @@ const createNotificationNewComment = async (
       return
     }
 
-    subscribedUsers.data.map(async (subscriber: Partial<DBSubscriber>) => {
+    const uniqueUsers = [
+      ...new Set(subscribedUsers.data.map((user) => user.user_id)),
+    ]
+
+    uniqueUsers.map(async (subscriberId: number) => {
       const isResearchUpdate = comment.source_type === 'research_update'
       const sourceContentId = await setSourceContentType(comment, client)
 
       const notification: NewNotificationData = {
         actionType: 'newComment' as NotificationActionType,
-        ownedById: subscriber.user_id!,
+        ownedById: subscriberId!,
         contentId: comment.id!,
         sourceContentType: isResearchUpdate ? 'research' : comment.source_type!,
         sourceContentId: sourceContentId,
@@ -66,7 +69,7 @@ const createNotificationNewComment = async (
         parentCommentId: isReply ? comment.parent_id : null,
       }
 
-      createNotification(client, notification, subscriber.user_id!)
+      createNotification(client, notification, subscriberId!)
     })
   } catch (error) {
     console.error(error)

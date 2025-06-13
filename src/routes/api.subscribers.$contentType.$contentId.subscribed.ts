@@ -14,13 +14,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const { data } = await client
     .from('subscribers')
-    .select('id, profiles!inner(id)', { count: 'exact' })
+    .select('id, profiles!inner(id)')
     .eq('content_id', params.contentId)
     .eq('content_type', params.contentType)
     .eq('profiles.auth_id', user.id)
-    .single()
 
-  const subscribed = !!data
+  const subscribed = !!data && !(data.length === 0)
 
   return Response.json({ subscribed }, { headers, status: 200 })
 }

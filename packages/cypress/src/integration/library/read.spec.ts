@@ -171,8 +171,7 @@ describe('[Library]', () => {
 
       it('[Edit button is visible]', () => {
         cy.step('Edit button is available to the owner')
-        cy.get('[data-cy=edit]').click()
-        cy.url().should('include', `${itemUrl}/edit`)
+        cy.get('[data-cy=edit]').should('have.attr', 'href', `${itemUrl}/edit`)
       })
     })
 

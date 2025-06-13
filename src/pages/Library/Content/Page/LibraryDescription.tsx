@@ -127,8 +127,8 @@ export const LibraryDescription = (props: IProps) => {
             </ClientOnly>
             {/* Check if logged in user is the creator of the project OR a super-admin */}
             {isEditable && (
-              <Link to={'/library/' + item.slug + '/edit'}>
-                <Button type="button" variant="primary" data-cy="edit">
+              <Link to={'/library/' + item.slug + '/edit'} data-cy="edit">
+                <Button type="button" variant="primary">
                   Edit
                 </Button>
               </Link>

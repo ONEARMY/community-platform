@@ -19,7 +19,7 @@ export const projects = [
       {
         title: 'Explore the possibilities!',
         description: 'more for a partition or the wall',
-        video_url: 'https://youtube.com/',
+        video_url: 'https://www.youtube.com/embed/dP1s7viFZHY',
       },
     ],
   },

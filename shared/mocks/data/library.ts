@@ -37,7 +37,7 @@ export const library: Project[] = [
         projectId: 1,
         title: 'Idea and first drawing',
         images: [],
-        videoUrl: 'https://www.youtube.com/watch?v=Os7dREQ00l4&t=5s',
+        videoUrl: 'https://www.youtube.com/embed/dP1s7viFZHY',
         description:
           'We wanted to develop a product that can have many functions. So we decided to figure out a shape that can be adapted or compliment one another to get a variety of uses. Finally we decided to draw a curved shape. The idea of this shape is to be attached to each other like a Lego. You can use this design as a plant pot or connect it as a partition and build a wall. Why not check out this super cool video?',
         order: 2,
@@ -186,8 +186,7 @@ export const library: Project[] = [
     previousSlugs: ['make-an-interlocking-brick'],
     deleted: false,
     time: '3-4 weeks',
-    description:
-      "Here we'll show you how to make a brick using the injection machine and the mould we designed in Chiangmai, Thailand. A beautiful, functional model. \n(BOPE)",
+    description: 'show you how to make a brick using the injection machine',
     coverImage: null,
     difficultyLevel: 'hard',
     files: [
@@ -618,8 +617,7 @@ export const library: Project[] = [
         description: 'Test',
         title: 'Test',
         images: null,
-        videoUrl:
-          'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
+        videoUrl: 'https://www.youtube.com/embed/dP1s7viFZHY',
         order: 1,
       },
     ],
@@ -680,8 +678,7 @@ export const library: Project[] = [
         projectId: 10,
         description: 'Test',
         title: 'Test',
-        videoUrl:
-          'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
+        videoUrl: 'https://www.youtube.com/embed/dP1s7viFZHY',
         images: null,
         order: 1,
       },

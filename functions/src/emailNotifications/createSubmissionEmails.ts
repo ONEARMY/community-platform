@@ -4,49 +4,10 @@ import { IModerationStatus } from 'oa-shared'
 import { withErrorAlerting } from '../alerting/errorAlerting'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
-import {
-  getHowToSubmissionEmail,
-  getMapPinSubmissionEmail,
-  getReceiverMessageEmail,
-  getSenderMessageEmail,
-} from './templateHelpers'
-import { getUserAndEmail, isValidMessageRequest } from './utils'
+import { getMapPinSubmissionEmail } from './templateHelpers'
+import { getUserAndEmail } from './utils'
 
-import type { ILibrary, IMapPin, IMessageDB } from 'oa-shared'
-
-export async function createMessageEmails(message: IMessageDB) {
-  const isValid = await isValidMessageRequest(message)
-  if (!isValid) {
-    return
-  }
-
-  const { _id, isSent, email, toUserName } = message
-
-  if (!isSent) {
-    const { toUserEmail } = await getUserAndEmail(toUserName)
-    await db.collection(DB_ENDPOINTS.emails).add({
-      to: toUserEmail,
-      replyTo: email,
-      message: getReceiverMessageEmail(message),
-    })
-    await db.collection(DB_ENDPOINTS.emails).add({
-      to: email,
-      message: getSenderMessageEmail(message),
-    })
-    await db.collection(DB_ENDPOINTS.messages).doc(_id).update({ isSent: true })
-  }
-}
-
-export async function createHowtoSubmissionEmail(howto: ILibrary.DB) {
-  const { toUser, toUserEmail } = await getUserAndEmail(howto._createdBy)
-
-  if (howto.moderation === IModerationStatus.AWAITING_MODERATION) {
-    await db.collection(DB_ENDPOINTS.emails).add({
-      to: toUserEmail,
-      message: getHowToSubmissionEmail(toUser, howto),
-    })
-  }
-}
+import type { IMapPin } from 'oa-shared'
 
 export async function createMapPinSubmissionEmail(mapPin: IMapPin) {
   const { toUser, toUserEmail } = await getUserAndEmail(mapPin._id)
@@ -58,20 +19,6 @@ export async function createMapPinSubmissionEmail(mapPin: IMapPin) {
     })
   }
 }
-
-export const handleMessageSubmission = functions
-  .runWith({ memory: '512MB' })
-  .firestore.document(`${DB_ENDPOINTS.messages}/{id}`)
-  .onCreate((snapshot, context) =>
-    withErrorAlerting(context, createMessageEmails, [snapshot.data()]),
-  )
-
-export const handleHowToSubmission = functions
-  .runWith({ memory: '512MB' })
-  .firestore.document(`${DB_ENDPOINTS.library}/{id}`)
-  .onCreate((snapshot, context) =>
-    withErrorAlerting(context, createHowtoSubmissionEmail, [snapshot.data()]),
-  )
 
 export const handleMapPinSubmission = functions
   .runWith({ memory: '512MB' })

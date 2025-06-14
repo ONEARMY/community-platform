@@ -8,13 +8,7 @@ import {
   SITE_URL,
 } from './utils'
 
-import type {
-  ILibrary,
-  IMapPin,
-  IMessageDB,
-  INotification,
-  IUserDB,
-} from 'oa-shared'
+import type { IMapPin, IMessageDB, INotification, IUserDB } from 'oa-shared'
 
 export interface Email {
   html: string
@@ -137,21 +131,6 @@ export const getNotificationEmail = (
   }
 }
 
-export const HOW_TO_APPROVAL_SUBJECT = 'Your project has been approved!'
-export const getHowToApprovalEmail = (
-  user: IUserDB,
-  howto: ILibrary.DB,
-): Email => {
-  return {
-    html: getEmailHtml('how-to-approval', {
-      user,
-      howto,
-      site,
-    }),
-    subject: HOW_TO_APPROVAL_SUBJECT,
-  }
-}
-
 export const MAP_PIN_APPROVAL_SUBJECT = 'Your map pin has been approved!'
 export const getMapPinApprovalEmail = (
   user: IUserDB,
@@ -183,21 +162,6 @@ export const getSenderMessageEmail = ({
   return {
     html: getEmailHtml('sender-message', { site, text, toUserName }),
     subject: SENDER_MESSAGE_SUBJECT,
-  }
-}
-
-export const HOW_TO_SUBMISSION_SUBJECT = 'Your project has been submitted'
-export const getHowToSubmissionEmail = (
-  user: IUserDB,
-  howto: ILibrary.DB,
-): Email => {
-  return {
-    html: getEmailHtml('how-to-submission', {
-      user,
-      howto,
-      site,
-    }),
-    subject: HOW_TO_SUBMISSION_SUBJECT,
   }
 }
 
@@ -237,38 +201,11 @@ export const getUserVerifiedBadgeAddedEmail = (user: IUserDB): Email => ({
   html: getEmailHtml('verified-badge-added', { user, site }),
 })
 
-export const HOW_TO_REJECTED_SUBJECT = 'Your project has been rejected'
-export const getHowToRejectedEmail = (
-  user: IUserDB,
-  howto: ILibrary.DB,
-): Email => ({
-  subject: HOW_TO_REJECTED_SUBJECT,
-  html: getEmailHtml('how-to-rejected', {
-    user,
-    howto,
-    site,
-  }),
-})
-
 export const MAP_PIN_REJECTED_SUBJECT = 'Your map pin has been rejected'
 export const getMapPinRejectedEmail = (user: IUserDB): Email => ({
   subject: MAP_PIN_REJECTED_SUBJECT,
   html: getEmailHtml('map-pin-rejected', {
     user,
-    site,
-  }),
-})
-
-export const HOW_TO_NEEDS_IMPROVEMENTS_SUBJECT =
-  'Your project needs improvements'
-export const getHowToNeedsImprovementsEmail = (
-  user: IUserDB,
-  howto: ILibrary.DB,
-): Email => ({
-  subject: HOW_TO_NEEDS_IMPROVEMENTS_SUBJECT,
-  html: getEmailHtml('how-to-needs-improvements', {
-    user,
-    howto,
     site,
   }),
 })

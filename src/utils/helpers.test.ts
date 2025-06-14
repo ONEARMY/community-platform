@@ -1,25 +1,20 @@
-import { IModerationStatus, UserRole } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it } from 'vitest'
 
 import {
   arrayToJson,
   capitalizeFirstLetter,
-  filterModerableItems,
   formatLowerNoSpecial,
   getProjectEmail,
   hasAdminRights,
-  isAllowedToEditContent,
   isAllowedToPin,
   isContactable,
   isUserBlockedFromMessaging,
   isUserContactable,
-  needsModeration,
   numberWithCommas,
   stripSpecialCharacters,
 } from './helpers'
-
-import type { IModerable } from 'oa-shared'
 
 describe('src/utils/helpers', () => {
   it('stripSpecialCharacters should remove special characters and replace spaces with dashes', () => {
@@ -40,41 +35,6 @@ describe('src/utils/helpers', () => {
     expect(capitalizeFirstLetter('hello world')).toBe('Hello world')
   })
 
-  describe('filterModerableItems Function', () => {
-    const items = [
-      { moderation: IModerationStatus.ACCEPTED, _createdBy: 'user1' },
-      { moderation: IModerationStatus.DRAFT, _createdBy: 'user2' },
-      { moderation: IModerationStatus.REJECTED, _createdBy: 'user3' },
-    ] as IModerable[]
-
-    it('should filter out items that are accepted', () => {
-      const result = filterModerableItems(items)
-      expect(result).toHaveLength(1)
-      expect((result[0] as any).moderation).toBe(IModerationStatus.ACCEPTED)
-    })
-
-    it('should include items created by the user', () => {
-      const result = filterModerableItems(
-        items,
-        FactoryUser({ _id: 'user1', userRoles: [UserRole.ADMIN] }),
-      )
-      expect(result).toHaveLength(1)
-      expect((result[0] as any).moderation).toBe(IModerationStatus.ACCEPTED)
-    })
-
-    it('should only include non-draft and non-rejected items for admin user', () => {
-      const result = filterModerableItems(
-        items,
-        FactoryUser({
-          userName: 'admin',
-          userRoles: [UserRole.ADMIN],
-        }),
-      )
-      expect(result).toHaveLength(1)
-      expect((result[0] as any).moderation).toBe(IModerationStatus.ACCEPTED)
-    })
-  })
-
   describe('hasAdminRights', () => {
     it('should return false when user is not provided', () => {
       expect(hasAdminRights()).toBe(false)
@@ -93,68 +53,6 @@ describe('src/utils/helpers', () => {
     it('should return true when user has admin role', () => {
       const user = FactoryUser({ userRoles: [UserRole.ADMIN] })
       expect(hasAdminRights(user)).toBe(true)
-    })
-  })
-
-  describe('needsModeration', () => {
-    it('should return false when user does not have admin rights', () => {
-      const doc = {
-        moderation: IModerationStatus.AWAITING_MODERATION,
-      } as IModerable
-      expect(needsModeration(doc, FactoryUser({ userRoles: [] }))).toBe(false)
-    })
-
-    it('should return false when doc is already accepted', () => {
-      const doc = { moderation: IModerationStatus.ACCEPTED } as IModerable
-      expect(
-        needsModeration(doc, FactoryUser({ userRoles: [UserRole.ADMIN] })),
-      ).toBe(false)
-    })
-
-    it('should return true when doc is not accepted and user has admin rights', () => {
-      const doc = {
-        moderation: IModerationStatus.AWAITING_MODERATION,
-      } as IModerable
-      expect(
-        needsModeration(doc, FactoryUser({ userRoles: [UserRole.ADMIN] })),
-      ).toBe(true)
-    })
-  })
-
-  describe('isAllowedToEditContent', () => {
-    it('should return false when user is not provided', () => {
-      const doc = { _createdBy: 'anotherUser', collaborators: [] } as any
-      expect(isAllowedToEditContent(doc)).toBe(false)
-    })
-
-    it('should return true when user is a collaborator', () => {
-      const user = FactoryUser({ userName: 'testUser', userRoles: [] })
-      const doc = {
-        _createdBy: 'anotherUser',
-        collaborators: ['testUser'],
-      } as any
-      expect(isAllowedToEditContent(doc, user)).toBe(true)
-    })
-
-    it('should return true when user has created the content', () => {
-      const user = FactoryUser({ userName: 'testUser', userRoles: [] })
-      const doc = { _createdBy: 'testUser', collaborators: [] } as any
-      expect(isAllowedToEditContent(doc, user)).toBe(true)
-    })
-
-    it('should return true when user has admin role', () => {
-      const user = FactoryUser({
-        userName: 'testUser',
-        userRoles: [UserRole.ADMIN],
-      })
-      const doc = { _createdBy: 'anotherUser', collaborators: [] } as any
-      expect(isAllowedToEditContent(doc, user)).toBe(true)
-    })
-
-    it('should return false when user is neither a collaborator, nor the creator, nor an admin', () => {
-      const user = FactoryUser({ userName: 'testUser', userRoles: [] })
-      const doc = { _createdBy: 'anotherUser', collaborators: [] } as any
-      expect(isAllowedToEditContent(doc, user)).toBe(false)
     })
   })
 

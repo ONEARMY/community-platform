@@ -1,13 +1,10 @@
 import * as utils from './utils'
 
-import { firebaseAuth } from '../Firebase/auth'
 import {
   errors,
-  isBelowMessageLimit,
   isReceiverContactable,
   isSameEmail,
   isUserAllowedToMessage,
-  isValidMessageRequest,
 } from './utils'
 
 import type { UserRecord } from 'firebase-admin/auth'
@@ -47,22 +44,6 @@ jest.mock('../config/config', () => ({
     },
   },
 }))
-
-describe('isBelowMessageLimit', () => {
-  it("returns true if user hasn't reached message cap", async () => {
-    messageDocs.length = 99
-
-    await expect(isBelowMessageLimit('jeff@email.com')).resolves.toEqual(true)
-  })
-
-  it('errors when user has reached message cap', async () => {
-    messageDocs.length = 100
-
-    await expect(isBelowMessageLimit('jeff@email.com')).rejects.toThrowError(
-      errors.MESSAGE_LIMIT,
-    )
-  })
-})
 
 describe('isReceiverContactable', () => {
   it('returns true when user is contactable', async () => {
@@ -124,29 +105,5 @@ describe('isUserAllowedToMessage', () => {
     await expect(isUserAllowedToMessage('userName')).rejects.toThrowError(
       errors.USER_BLOCKED,
     )
-  })
-})
-
-describe('isValidMessageRequest', () => {
-  it('returns true when all checks pass', async () => {
-    const messageInput = {
-      _id: '234dfsb',
-      email: 'jeffery@gmail.com',
-      text: 'Hi, can we be friends please?',
-      toUserName: 'user_1',
-      isSent: false,
-    } as IMessageDB
-
-    jest.spyOn(firebaseAuth, 'getUserByEmail').mockResolvedValue({
-      email: 'jeffery@gmail.com',
-      uid: 'asndyq',
-    } as UserRecord)
-
-    jest.spyOn(utils, 'isSameEmail').mockReturnValue(true)
-    jest.spyOn(utils, 'isUserAllowedToMessage').mockResolvedValue(true)
-    jest.spyOn(utils, 'isBelowMessageLimit').mockResolvedValue(true)
-    jest.spyOn(utils, 'isReceiverContactable').mockResolvedValue(true)
-
-    await expect(isValidMessageRequest(messageInput)).resolves.toEqual(true)
   })
 })

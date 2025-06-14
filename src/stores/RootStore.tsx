@@ -1,9 +1,5 @@
-import { AggregationsStore } from './Aggregations/aggregations.store'
 import { DatabaseV2 } from './databaseV2/DatabaseV2'
-import { DiscussionStore } from './Discussions/discussions.store'
-import { LibraryStore } from './Library/library.store'
 import { MapsStore } from './Maps/maps.store'
-import { TagsStore } from './Tags/tags.store'
 import { UserNotificationsStore } from './User/notifications.store'
 import { UserStore } from './User/user.store'
 
@@ -13,13 +9,9 @@ export interface IRootStore {
 }
 
 export interface IStores {
-  LibraryStore: LibraryStore
   userStore: UserStore
-  tagsStore: TagsStore
   mapsStore: MapsStore
-  aggregationsStore: AggregationsStore
   userNotificationsStore: UserNotificationsStore
-  discussionStore: DiscussionStore
 }
 
 export class RootStore implements IRootStore {
@@ -38,13 +30,9 @@ export class RootStore implements IRootStore {
 // from a page (see common/module store for example)
 const stores = (rootStore: IRootStore) => {
   const stores: IStores = {
-    aggregationsStore: new AggregationsStore(rootStore),
-    LibraryStore: new LibraryStore(rootStore),
     userStore: new UserStore(rootStore),
-    tagsStore: new TagsStore(rootStore),
     mapsStore: new MapsStore(rootStore),
     userNotificationsStore: new UserNotificationsStore(rootStore),
-    discussionStore: new DiscussionStore(rootStore),
   }
   return stores
 }

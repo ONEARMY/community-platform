@@ -1,45 +1,22 @@
 import { Text } from 'theme-ui'
 
+import type { Moderation } from 'oa-shared'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
+export const ModerationRecord: Record<Moderation, string> = {
+  'awaiting-moderation': 'Awaiting Moderation',
+  'improvements-needed': 'Improvements Needed',
+  accepted: 'Accepted',
+  rejected: 'Rejected',
+}
+
 export interface Props {
-  status: string
-  contentType: 'event' | 'library' | 'research' | 'question'
+  status: Moderation
   sx?: ThemeUIStyleObject
 }
 
 export const ModerationStatus = (props: Props) => {
-  const { contentType, sx } = props
-  let { status } = props
-
-  if (status === 'accepted') {
-    // If the content has been accepted we should bail out
-    // early and not render the `ModerationStatus` component.
-    return null
-  }
-
-  if (contentType === 'event') {
-    status = 'draft' !== status ? status : 'awaiting-moderation'
-  }
-
-  let moderationMessage = ''
-  switch (status) {
-    case 'rejected':
-      moderationMessage =
-        'library' === contentType
-          ? 'Needs to improve to be accepted'
-          : 'Rejected'
-      break
-    case 'draft':
-      moderationMessage = 'Draft'
-      break
-    case 'awaiting-moderation':
-      moderationMessage = 'Awaiting moderation'
-      break
-    default:
-      moderationMessage = 'Awaiting moderation'
-      break
-  }
+  const { status, sx } = props
 
   return (
     <Text
@@ -58,7 +35,7 @@ export const ModerationStatus = (props: Props) => {
       }}
       data-cy={`moderationstatus-${status}`}
     >
-      {moderationMessage}
+      {ModerationRecord[status]}
     </Text>
   )
 }

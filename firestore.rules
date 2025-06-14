@@ -23,11 +23,6 @@ service cloud.firestore {
       return false;
     }
 
-    match /aggregations_rev20220126/{document=**} {
-      allow read: if isPublicReadable();
-      allow write: if isPublicWritable();
-    }
-
     match /discussions_rev20231022/{document=**} {
       allow read: if isPublicReadable();
       allow write: if isPublicWritable();

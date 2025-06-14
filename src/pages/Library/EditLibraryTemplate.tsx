@@ -1,45 +1,43 @@
-import { DifficultyLevel } from 'oa-shared'
-
-import type { ILibrary } from 'oa-shared'
+import type { ProjectFormData } from 'oa-shared'
 
 // initialise fields which contain nested objects (and steps to have 3 placeholders)
-const INITIAL_VALUES: Partial<ILibrary.FormInput> = {
+const INITIAL_VALUES: Partial<ProjectFormData> = {
   steps: [
     {
       title: 'EDITABLE',
-      text: '',
+      description: '',
       images: [],
-      _animationKey: 'unique1',
+      existingImages: [],
     },
     {
       title: 'EDITABLE',
-      text: '',
+      description: '',
       images: [],
-      _animationKey: 'unique2',
+      existingImages: [],
     },
     {
       title: 'EDITABLE',
-      text: '',
+      description: '',
       images: [],
-      _animationKey: 'unique3',
+      existingImages: [],
     },
   ],
-  tags: {},
+  tags: [],
   files: [],
 }
 
-const TESTING_VALUES: Partial<ILibrary.FormInput> = {
+const TESTING_VALUES: Partial<ProjectFormData> = {
   title: `Test-${new Date().toString()}`,
   description: 'example description',
   time: '1-2 weeks',
-  difficulty_level: DifficultyLevel.HARD,
+  difficultyLevel: 'hard',
   files: [],
   steps: [
     {
       title: 'Step 1',
-      text: 'Example step text',
+      description: 'Example step text',
       images: [],
-      _animationKey: 'unique1',
+      existingImages: [],
     },
   ],
 }

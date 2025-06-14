@@ -3,14 +3,12 @@ import { Form } from 'react-final-form'
 import { useNavigate } from 'react-router'
 import arrayMutators from 'final-form-arrays'
 import { Button, ResearchEditorOverview } from 'oa-components'
+import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { TagsField } from 'src/pages/common/FormFields'
-import {
-  ResearchErrors,
-  ResearchPostingGuidelines,
-} from 'src/pages/Research/Content/Common'
+import { ResearchPostingGuidelines } from 'src/pages/Research/Content/Common'
 import { fireConfetti } from 'src/utils/fireConfetti'
 import { Text } from 'theme-ui'
 
@@ -109,7 +107,6 @@ const ResearchForm = ({ research }: IProps) => {
       validateOnBlur
       render={({
         dirty,
-        errors,
         values,
         valid,
         handleSubmit,
@@ -117,11 +114,7 @@ const ResearchForm = ({ research }: IProps) => {
         submitSucceeded,
       }) => {
         const saveError = saveErrorMessage && (
-          <ResearchErrors
-            errors={errors}
-            isVisible={!!saveErrorMessage}
-            labels={overview}
-          />
+          <ErrorsContainer errors={[saveErrorMessage]} />
         )
 
         const sidebar = (

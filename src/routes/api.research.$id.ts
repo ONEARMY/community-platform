@@ -110,6 +110,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const research = ResearchItem.fromDB(researchResult.data[0], [])
 
     if (uploadedImage) {
+      // TODO:remove unused images from storage
       const mediaResult = await storageServiceServer.uploadImage(
         [uploadedImage],
         `research/${research.id}`,

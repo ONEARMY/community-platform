@@ -1,6 +1,7 @@
 import { useLoaderData } from '@remix-run/react'
 import { ProfilePage } from 'src/pages/User/content/ProfilePage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { libraryServiceServer } from 'src/services/libraryService.server'
 import { pageViewService } from 'src/services/pageViewService.server'
 import { questionServiceServer } from 'src/services/questionService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
@@ -18,7 +19,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const username = params.id as string
   const [profile, projects, research, questions] = await Promise.all([
     userService.getById(username),
-    userService.getUserCreatedProjects(username),
+    libraryServiceServer.getUserProjects(client, username),
     researchServiceServer.getUserResearch(client, username),
     questionServiceServer.getQuestionsByUser(client, username),
   ])

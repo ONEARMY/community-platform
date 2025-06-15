@@ -36,7 +36,7 @@ import {
 } from '../../constants'
 import { buttons, errors, steps } from '../../labels'
 
-import type { IUploadedFileMeta, ProjectStepFormData } from 'oa-shared'
+import type { Image, IUploadedFileMeta } from 'oa-shared'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -45,13 +45,13 @@ const ImageInputFieldWrapper = styled.div`
 `
 
 interface IProps {
-  step?: ProjectStepFormData
   name: string
   index: number
   images: IUploadedFileMeta[]
+  existingImages: Image[]
   onDelete: (index: number) => void
   moveStep: (indexfrom: number, indexTo: number) => void
-  removeExistingImage: (index: number) => void
+  removeExistingImage: (imageIndex: number) => void
 }
 interface IState {
   showDeleteModal: boolean
@@ -65,9 +65,10 @@ interface IState {
  * - maximum character length of 1000 characters
  */
 export const LibraryStepField = ({
-  step,
   name,
   index,
+  images,
+  existingImages,
   onDelete,
   moveStep,
   removeExistingImage,
@@ -80,14 +81,12 @@ export const LibraryStepField = ({
   const toggleDeleteModal = () => {
     setState((state) => ({ ...state, showDeleteModal: !state.showDeleteModal }))
   }
+
   const confirmDelete = () => {
     toggleDeleteModal()
     onDelete(index)
   }
 
-  /**
-   * Ensure either url or images included (not both), and any url formatted correctly
-   */
   const validateStepMedia = (allValues: any) => {
     if (!allValues?.steps || !allValues?.steps.length) {
       return null
@@ -98,18 +97,15 @@ export const LibraryStepField = ({
       return null
     }
 
-    // Check if any images exist (new uploads or existing)
     const hasNewImages = stepValues.images?.length > 0
     const hasExistingImages = stepValues.existingImages?.length > 0
     const hasAnyImages = hasNewImages || hasExistingImages
 
     if (stepValues.videoUrl) {
-      // Video URL is provided - check for conflicts with images
       if (hasAnyImages) {
         return errors.videoUrl.both
       }
 
-      // Validate YouTube URL format
       const ytRegex = new RegExp(
         /(youtu\.be\/|youtube\.com\/(watch\?v=|embed\/|v\/))/gi,
       )
@@ -117,7 +113,6 @@ export const LibraryStepField = ({
       return urlValid ? null : errors.videoUrl.invalidUrl
     }
 
-    // No video URL - check if any images exist
     return hasAnyImages ? null : errors.videoUrl.empty
   }
 
@@ -129,12 +124,11 @@ export const LibraryStepField = ({
 
   const isAboveMinimumStep = index >= LIBRARY_MIN_REQUIRED_STEPS
 
-  const availableImages = step?.images
-    ? Math.min(step.images.filter((x) => !!x).length + 1, 10)
+  const numberOfImageInputsAvailable = images
+    ? Math.min(images.filter((x) => !!x).length + 1, 10)
     : 1
 
   return (
-    // NOTE - animation parent container in CreateLibrary
     <Card data-cy={`step_${index}`} mt={5} key={index}>
       <Flex p={3} sx={{ flexDirection: 'column' }}>
         <Flex p={0}>
@@ -226,6 +220,7 @@ export const LibraryStepField = ({
             showCharacterCount
           />
         </Flex>
+
         <Flex sx={{ flexDirection: 'column' }} mb={3}>
           <Label sx={_labelStyle} htmlFor={`${name}.text`}>
             {`${steps.description.title} *`}
@@ -255,6 +250,7 @@ export const LibraryStepField = ({
             showCharacterCount
           />
         </Flex>
+
         <Label sx={_labelStyle} htmlFor={`${name}.description`}>
           {`${steps.images.title} *`}
         </Label>
@@ -265,21 +261,8 @@ export const LibraryStepField = ({
             marginBottom: 3,
           }}
         >
-          {[...Array(availableImages)].map((_, i) => (
-            <ImageInputFieldWrapper
-              data-cy="step-image-0"
-              key={`step_image_${i}`}
-            >
-              <Field
-                dataTestId={`step-image-${i}`}
-                hasText={false}
-                name={`${name}.images[${i}]`}
-                component={ImageInputField}
-                isEqual={COMPARISONS.image}
-              />
-            </ImageInputFieldWrapper>
-          ))}
-          {step?.existingImages?.map((image, i) => (
+          {/* Display existing images */}
+          {existingImages?.map((image, i) => (
             <ImageInputFieldWrapper
               key={`existing-image-${i}`}
               data-cy={`existing-image-${i}`}
@@ -300,7 +283,22 @@ export const LibraryStepField = ({
               </FieldContainer>
             </ImageInputFieldWrapper>
           ))}
+
+          {[...Array(numberOfImageInputsAvailable)].map((_, i) => (
+            <ImageInputFieldWrapper
+              key={`image-upload-${i}`}
+              data-cy={`image-upload-${i}`}
+            >
+              <Field
+                hasText={false}
+                name={`steps[${index}].images[${i}]`}
+                component={ImageInputField}
+                isEqual={COMPARISONS.image}
+              />
+            </ImageInputFieldWrapper>
+          ))}
         </Flex>
+
         <Flex sx={{ flexDirection: 'column' }} mb={3}>
           <Field
             name={`${name}.videoUrl`}

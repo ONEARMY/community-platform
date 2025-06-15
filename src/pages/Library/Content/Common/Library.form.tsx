@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Form } from 'react-final-form'
 import styled from '@emotion/styled'
 import { useNavigate } from '@remix-run/react'
@@ -35,7 +35,8 @@ const FormContainer = styled.form`
   width: 100%;
 `
 export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
-  const [initialValues, setInitialValues] = useState<Partial<ProjectFormData>>()
+  const [initialValues, setInitialValues] =
+    useState<Partial<ProjectFormData> | null>(null)
   const navigate = useNavigate()
   const [intentionalNavigation, setIntentionalNavigation] = useState(false)
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
@@ -56,30 +57,48 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       existingCoverImage: project?.coverImage,
       existingFiles: files,
       fileLink: fileLink,
-      steps: project?.steps?.length
-        ? project?.steps?.map((x) => ({
-            id: x.id,
-            title: x.title,
-            description: x.description,
-            videoUrl: x.videoUrl || undefined,
-            existingImages: x.images,
-          }))
-        : [
-            {
-              title: '',
-              description: '',
-            },
-            {
-              title: '',
-              description: '',
-            },
-            {
-              title: '',
-              description: '',
-            },
-          ],
+      steps: project?.steps?.map((x) => ({
+        id: x.id,
+        title: x.title,
+        description: x.description,
+        videoUrl: x.videoUrl || undefined,
+        images: [],
+        existingImages: x.images,
+      })),
     })
   }, [project])
+
+  const formValues = useMemo(
+    () => ({
+      title: project?.title || '',
+      description: project?.description || '',
+      category: project?.category
+        ? {
+            value: project.category.id?.toString(),
+            label: project.category.name,
+          }
+        : undefined,
+      tags: project?.tagIds || [],
+      time: project?.time,
+      difficultyLevel: project?.difficultyLevel,
+      existingCoverImage: project?.coverImage,
+      existingFiles: files,
+      fileLink: fileLink,
+      steps: project?.steps?.map((x) => ({
+        id: x.id,
+        title: x.title,
+        description: x.description,
+        videoUrl: x.videoUrl || undefined,
+        images: [],
+        existingImages: x.images,
+      })) ?? [
+        { title: '', description: '', images: [], existingImages: [] },
+        { title: '', description: '', images: [], existingImages: [] },
+        { title: '', description: '', images: [], existingImages: [] },
+      ],
+    }),
+    [project],
+  )
 
   const formId = 'libraryForm'
   const headingText = project ? headings.edit : headings.create
@@ -108,7 +127,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
   }
 
   const removeExistingFile = (id: string) => {
-    setInitialValues((prevState: Partial<ProjectFormData> | undefined) => {
+    setInitialValues((prevState: Partial<ProjectFormData> | null) => {
       return {
         ...prevState,
         existingFiles:
@@ -124,83 +143,15 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
     })
   }
 
-  const addStep = () => {
-    setInitialValues({
-      ...initialValues,
-      steps: [
-        ...(initialValues?.steps ?? []),
-        {
-          title: '',
-          description: '',
-          existingImages: [],
-        },
-      ],
-    })
-  }
-
-  const removeStepImage = (stepIndex: number, imageIndex: number) => {
-    setInitialValues((prevState: Partial<ProjectFormData> | undefined) => {
-      if (!prevState?.steps || !prevState.steps[stepIndex]) {
-        return prevState
-      }
-
-      const updatedSteps = prevState.steps.map((step, index) => {
-        if (index === stepIndex) {
-          // Remove the image at the specified imageIndex
-          const updatedImages =
-            step.existingImages?.filter(
-              (_, imgIndex) => imgIndex !== imageIndex,
-            ) || []
-          return {
-            ...step,
-            existingImages: updatedImages,
-          }
-        }
-        return step
-      })
-
-      return {
-        ...prevState,
-        steps: updatedSteps,
-      }
-    })
-  }
-
-  const moveStep = (from: number, to: number) => {
-    setInitialValues((prevState: Partial<ProjectFormData> | undefined) => {
-      if (
-        !prevState?.steps ||
-        from < 0 ||
-        to < 0 ||
-        from >= prevState.steps.length
-      ) {
-        return prevState
-      }
-
-      // Clamp 'to' index to valid range
-      const clampedTo = Math.min(to, prevState.steps.length - 1)
-
-      const newSteps = [...prevState.steps]
-      // Remove the step from the 'from' position
-      const [movedStep] = newSteps.splice(from, 1)
-      // Insert it at the 'to' position
-      newSteps.splice(clampedTo, 0, movedStep)
-
-      return {
-        ...prevState,
-        steps: newSteps,
-      }
-    })
-  }
-
   return (
     <Form<ProjectFormData>
       onSubmit={() => {}}
-      initialValues={initialValues}
+      initialValues={formValues}
       mutators={{
         ...arrayMutators,
       }}
       validateOnBlur
+      enableReinitialize={true}
       render={({
         dirty,
         valid,
@@ -313,10 +264,9 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                   </Card>
 
                   <LibraryStepsContainerField
-                    steps={initialValues?.steps || []}
-                    addStep={addStep}
-                    removeStepImage={removeStepImage}
-                    moveStep={moveStep}
+                  // steps={initialValues?.steps || []}
+                  // removeStepImage={removeStepImage}
+                  // moveStep={moveStep}
                   />
                 </Flex>
               </FormContainer>

@@ -7,8 +7,6 @@ import { Box, Flex, Heading, Text } from 'theme-ui'
 
 import { buttons as buttonsLabel, steps as stepsLabel } from '../../labels'
 
-import type { ProjectStepFormData } from 'oa-shared'
-
 interface IPropsAnimation {
   children: React.ReactNode
 }
@@ -42,17 +40,7 @@ const AnimationContainer = ({ children }: IPropsAnimation) => {
   )
 }
 
-export const LibraryStepsContainerField = ({
-  steps,
-  addStep,
-  removeStepImage,
-  moveStep,
-}: {
-  steps: ProjectStepFormData[]
-  addStep: () => void
-  removeStepImage: (stepIndex: number, imageIndex: number) => void
-  moveStep: (from: number, to: number) => void
-}) => {
+export const LibraryStepsContainerField = () => {
   return (
     <FieldArray name="steps" isEqual={COMPARISONS.step}>
       {({ fields }) => (
@@ -73,22 +61,31 @@ export const LibraryStepsContainerField = ({
               >
                 <LibraryStepField
                   key={`${fields.value[index]._animationKey}-${index}2`}
-                  step={steps?.at(index)}
                   name={name}
                   index={index}
                   moveStep={(from, to) => {
                     if (to !== fields.length && to >= 0) {
                       // Move form fields
                       fields.move(from, to)
-                      // Also move the state data
-                      moveStep(from, to)
                     }
                   }}
-                  images={fields.value[index].images}
+                  images={fields.value[index].images || []}
+                  existingImages={fields.value[index].existingImages || []}
                   onDelete={(fieldIndex: number) => {
                     fields.remove(fieldIndex)
                   }}
-                  removeExistingImage={(i) => removeStepImage(index, i)}
+                  removeExistingImage={(imageIndex: number) => {
+                    // Remove existing image at imageIndex for this step
+                    const currentStep = fields.value[index]
+                    const updatedExistingImages =
+                      currentStep.existingImages.filter(
+                        (_, i) => i !== imageIndex,
+                      )
+                    fields.update(index, {
+                      ...currentStep,
+                      existingImages: updatedExistingImages,
+                    })
+                  }}
                 />
               </AnimationContainer>
             ))}
@@ -102,7 +99,14 @@ export const LibraryStepsContainerField = ({
               mt={[10, 10, 20]}
               mb={[5, 5, 20]}
               variant="secondary"
-              onClick={addStep}
+              onClick={() => {
+                fields.push({
+                  title: '',
+                  description: '',
+                  images: [],
+                  existingImages: [],
+                })
+              }}
             >
               {buttonsLabel.steps.add}
             </Button>

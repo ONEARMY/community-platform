@@ -7,8 +7,7 @@ import { isModuleSupported, MODULE } from 'src/modules'
 import { EnvironmentContext } from 'src/pages/common/EnvironmentContext'
 import { Box, Divider, Flex, Paragraph } from 'theme-ui'
 
-import type { IUser } from 'oa-shared'
-import type { UserCreatedDocs } from '../types'
+import type { IUser, UserCreatedDocs } from 'oa-shared'
 
 interface IProps {
   docs: UserCreatedDocs

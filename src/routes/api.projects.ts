@@ -102,6 +102,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         : null,
       moderation: 'awaiting-moderation' as Moderation,
       stepCount: parseInt(formData.get('stepCount') as string),
+      slug: convertToSlug((formData.get('title') as string) || ''),
     }
 
     const { client, headers } = createSupabaseServerClient(request)
@@ -113,6 +114,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       request,
       user,
       data,
+      client,
     )
 
     if (!valid) {
@@ -125,26 +127,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       data.moderation = 'accepted'
     }
 
-    const slug = convertToSlug(data.title)
-
-    if (
-      await contentServiceServer.isDuplicateNewSlug(slug, client, 'projects')
-    ) {
-      return Response.json(
-        {},
-        {
-          status: 409,
-          statusText: 'This project already exists',
-        },
-      )
-    }
-
     if (!profile) {
       return Response.json({}, { status: 400, statusText: 'User not found' })
     }
 
     // 1. Create Project
-    const projectDb = await createProject(client, data, profile, slug)
+    const projectDb = await createProject(client, data, profile)
     const project = Project.fromDB(projectDb, [])
 
     // 2. Upload and set project files and cover image
@@ -205,7 +193,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 }
 
-async function validateRequest(request: Request, user: User | null, data: any) {
+async function validateRequest(
+  request: Request,
+  user: User | null,
+  data: any,
+  client: SupabaseClient,
+) {
   if (!user) {
     return { status: 401, statusText: 'unauthorized' }
   }
@@ -228,6 +221,12 @@ async function validateRequest(request: Request, user: User | null, data: any) {
     return { status: 400, statusText: '3 steps are required' }
   }
 
+  if (
+    await contentServiceServer.isDuplicateNewSlug(data.slug, client, 'projects')
+  ) {
+    return { status: 409, statusText: 'This project already exists' }
+  }
+
   return { valid: true }
 }
 
@@ -243,9 +242,9 @@ async function createProject(
     difficultyLevel: string | null
     time: string | null
     moderation: Moderation
+    slug: string
   },
   profile: DBProfile,
-  slug: string,
 ) {
   const projectResult = await client
     .from('projects')
@@ -253,7 +252,7 @@ async function createProject(
       created_by: profile.id,
       title: data.title,
       description: data.description,
-      slug,
+      slug: data.slug,
       category: data.category,
       tags: data.tags,
       is_draft: data.isDraft,

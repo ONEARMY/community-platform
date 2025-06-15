@@ -10,8 +10,7 @@ import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 import { Text } from 'theme-ui'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { IUserDB } from 'oa-shared'
-import type { UserCreatedDocs } from 'src/pages/User/types'
+import type { IUserDB, UserCreatedDocs } from 'oa-shared'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)

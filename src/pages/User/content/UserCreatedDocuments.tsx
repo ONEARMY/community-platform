@@ -2,7 +2,7 @@ import { Flex, Heading } from 'theme-ui'
 
 import UserCreatedDocumentsItem from './UserCreatedDocumentsItem'
 
-import type { UserCreatedDocs } from '../types'
+import type { UserCreatedDocs } from 'oa-shared'
 
 interface IProps {
   docs: UserCreatedDocs

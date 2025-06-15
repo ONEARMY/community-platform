@@ -10,7 +10,7 @@ import { getUserAndEmail } from './utils'
 
 import type { QueryDocumentSnapshot } from 'firebase-admin/firestore'
 import type { Change } from 'firebase-functions/v1'
-import type { ILibrary, IModerable } from 'oa-shared'
+import type { IModerable } from 'oa-shared'
 import type { IMapPin } from 'oa-shared/models/maps'
 
 export async function handleModerationUpdate<T extends IModerable>(
@@ -23,33 +23,6 @@ export async function handleModerationUpdate<T extends IModerable>(
   const currModeration = curr?.moderation
   if (currModeration && prevModeration !== currModeration) {
     await createModerationEmail(curr)
-  }
-}
-
-export async function createHowtoModerationEmail(howto: ILibrary.DB) {
-  const { toUser, toUserEmail } = await getUserAndEmail(howto._createdBy)
-
-  if (howto.moderation === IModerationStatus.ACCEPTED) {
-    await db.collection(DB_ENDPOINTS.emails).add({
-      to: toUserEmail,
-      message: templates.getHowToApprovalEmail(toUser, howto),
-    })
-  } else if (howto.moderation === IModerationStatus.AWAITING_MODERATION) {
-    // If a library project is resumbitted, send another submission confirmation email.
-    await db.collection(DB_ENDPOINTS.emails).add({
-      to: toUserEmail,
-      message: templates.getHowToSubmissionEmail(toUser, howto),
-    })
-  } else if (howto.moderation === IModerationStatus.REJECTED) {
-    await db.collection(DB_ENDPOINTS.emails).add({
-      to: toUserEmail,
-      message: templates.getHowToRejectedEmail(toUser, howto),
-    })
-  } else if (howto.moderation === IModerationStatus.IMPROVEMENTS_NEEDED) {
-    await db.collection(DB_ENDPOINTS.emails).add({
-      to: toUserEmail,
-      message: templates.getHowToNeedsImprovementsEmail(toUser, howto),
-    })
   }
 }
 
@@ -79,16 +52,6 @@ export async function createMapPinModerationEmail(mapPin: IMapPin) {
     })
   }
 }
-
-export const handleHowToModerationUpdate = functions
-  .runWith({ memory: MEMORY_LIMIT_512_MB })
-  .firestore.document(`${DB_ENDPOINTS.library}/{id}`)
-  .onUpdate((change, context) =>
-    withErrorAlerting(context, handleModerationUpdate, [
-      change,
-      createHowtoModerationEmail,
-    ]),
-  )
 
 export const handleMapPinModerationUpdate = functions
   .runWith({ memory: MEMORY_LIMIT_512_MB })

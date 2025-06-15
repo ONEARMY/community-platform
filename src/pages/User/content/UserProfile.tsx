@@ -23,8 +23,7 @@ import { ProfileHeader } from './ProfileHeader'
 import { ProfileImage } from './ProfileImage'
 import UserCreatedDocuments from './UserCreatedDocuments'
 
-import type { IUser, IUserDB } from 'oa-shared'
-import type { UserCreatedDocs } from '../types'
+import type { IUser, IUserDB, UserCreatedDocs } from 'oa-shared'
 
 interface IProps {
   docs: UserCreatedDocs

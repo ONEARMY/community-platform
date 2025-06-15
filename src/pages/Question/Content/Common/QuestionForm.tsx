@@ -22,7 +22,6 @@ import {
   endsWithQuestionMark,
   minValue,
   required,
-  setAllowDraftSaveFalse,
 } from 'src/utils/validators'
 import { Alert } from 'theme-ui'
 
@@ -112,7 +111,6 @@ export const QuestionForm = (props: IProps) => {
     <Form
       data-testid={props['data-testid']}
       onSubmit={onSubmit}
-      mutators={{ setAllowDraftSaveFalse }}
       initialValues={initialValues}
       render={({
         dirty,

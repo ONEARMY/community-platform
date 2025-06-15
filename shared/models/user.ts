@@ -1,6 +1,5 @@
 import type { ILocation, ISODateString } from './common'
 import type { DBDoc } from './db'
-import type { IModerationStatus } from './moderation'
 import type { INotification, INotificationSettings } from './notifications'
 import type { IPatreonUser } from './patreon'
 import type { IUploadedFileMeta } from './storage'
@@ -105,7 +104,6 @@ export interface IUser {
   country?: string | null
   location?: ILocation | null
   year?: ISODateString
-  stats?: IUserStats
   notification_settings?: INotificationSettings
   notifications?: INotification[]
   profileCreated?: ISODateString
@@ -138,16 +136,6 @@ export interface IExternalLink {
   key: string
   url: string
   label: ExternalLinkLabel
-}
-
-/**
- * Track the ids and moderation status as summary for user stats
- */
-interface IUserStats {
-  userCreatedHowtos: { [id: string]: IModerationStatus }
-  userCreatedResearch: { [id: string]: IModerationStatus }
-  userCreatedQuestions: { [id: string]: IModerationStatus }
-  userCreatedComments: { [id: string]: string | null }
 }
 
 export interface IUserImpact {

@@ -1,13 +1,9 @@
 import { collection, getDocs, query, where } from 'firebase/firestore'
-import {
-  DB_ENDPOINTS,
-  EmailNotificationFrequency,
-  IModerationStatus,
-} from 'oa-shared'
+import { DB_ENDPOINTS, EmailNotificationFrequency } from 'oa-shared'
 import { firestore } from 'src/utils/firebase'
 
 import type { User } from '@supabase/supabase-js'
-import type { ILibrary, IUser, IUserDB } from 'oa-shared'
+import type { IUser, IUserDB } from 'oa-shared'
 
 const getById = async (id: string): Promise<IUserDB | null> => {
   // Get all that match the slug, to avoid creating an index (blocker for cypress tests)
@@ -20,25 +16,6 @@ const getById = async (id: string): Promise<IUserDB | null> => {
   }
 
   return snapshot.docs[0].data() as IUserDB
-}
-
-const getUserCreatedProjects = async (
-  userId: string,
-): Promise<ILibrary.DB[]> => {
-  const projects = await getLibraryByAuthor(userId)
-
-  return projects.filter((doc) => doc.moderation === IModerationStatus.ACCEPTED)
-}
-
-const getLibraryByAuthor = async (userId: string) => {
-  return (
-    await getDocs(
-      query(
-        collection(firestore, DB_ENDPOINTS.library),
-        where('_createdBy', '==', userId),
-      ),
-    )
-  ).docs.map((doc) => doc.data() as ILibrary.DB)
 }
 
 const createFirebaseProfile = async (authUser: User) => {
@@ -65,6 +42,5 @@ const createFirebaseProfile = async (authUser: User) => {
 
 export const userService = {
   getById,
-  getUserCreatedProjects,
   createFirebaseProfile,
 }

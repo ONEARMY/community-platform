@@ -1,8 +1,6 @@
 import { getSpecialCharacters, stripSpecialCharacters } from './helpers'
 import { isUrl } from './urlHelper'
 
-import type { Mutator } from 'final-form'
-
 /****************************************************************************
  *            General Validation Methods
  * **************************************************************************/
@@ -113,21 +111,12 @@ const addProtocolMutator = ([name], state, { changeValue }) => {
 const ensureExternalUrl = (url: string) =>
   typeof url === 'string' && url.indexOf('://') === -1 ? `https://${url}` : url
 
-const setAllowDraftSaveFalse: Mutator = (_, state, utils) =>
-  utils.changeValue(state, 'allowDraftSave', () => false)
-
-const setAllowDraftSaveTrue: Mutator = (_, state, utils) => {
-  utils.changeValue(state, 'allowDraftSave', () => true)
-}
-
 export {
   validateUrl,
   validateUrlAcceptEmpty,
   validateEmail,
   draftValidationWrapper,
   required,
-  setAllowDraftSaveFalse,
-  setAllowDraftSaveTrue,
   addProtocolMutator,
   ensureExternalUrl,
   maxValue,

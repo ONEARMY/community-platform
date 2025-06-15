@@ -5,7 +5,7 @@ import { LibraryStepField } from 'src/pages/Library/Content/Common/LibraryStep.f
 import { COMPARISONS } from 'src/utils/comparisons'
 import { Box, Flex, Heading, Text } from 'theme-ui'
 
-import { buttons, steps } from '../../labels'
+import { buttons as buttonsLabel, steps as stepsLabel } from '../../labels'
 
 interface IPropsAnimation {
   children: React.ReactNode
@@ -46,31 +46,45 @@ export const LibraryStepsContainerField = () => {
       {({ fields }) => (
         <>
           <Box paddingTop={5}>
-            <Heading as="h2">{steps.heading.title}</Heading>
+            <Heading as="h2">{stepsLabel.heading.title}</Heading>
             <Text
               sx={{ fontSize: 2 }}
               dangerouslySetInnerHTML={{
-                __html: steps.heading.description as string,
+                __html: stepsLabel.heading.description as string,
               }}
             />
           </Box>
           <AnimatePresence>
             {fields.map((name, index: number) => (
               <AnimationContainer
-                key={`${fields.value[index]._animationKey}-1`}
+                key={`${fields.value[index]._animationKey}-${index}`}
               >
                 <LibraryStepField
-                  key={`${fields.value[index]._animationKey}-2`}
-                  step={name}
+                  key={`${fields.value[index]._animationKey}-${index}2`}
+                  name={name}
                   index={index}
                   moveStep={(from, to) => {
-                    if (to !== fields.length) {
+                    if (to !== fields.length && to >= 0) {
+                      // Move form fields
                       fields.move(from, to)
                     }
                   }}
-                  images={fields.value[index].images}
+                  images={fields.value[index].images || []}
+                  existingImages={fields.value[index].existingImages || []}
                   onDelete={(fieldIndex: number) => {
                     fields.remove(fieldIndex)
+                  }}
+                  removeExistingImage={(imageIndex: number) => {
+                    // Remove existing image at imageIndex for this step
+                    const currentStep = fields.value[index]
+                    const updatedExistingImages =
+                      currentStep.existingImages.filter(
+                        (_, i) => i !== imageIndex,
+                      )
+                    fields.update(index, {
+                      ...currentStep,
+                      existingImages: updatedExistingImages,
+                    })
                   }}
                 />
               </AnimationContainer>
@@ -88,16 +102,13 @@ export const LibraryStepsContainerField = () => {
               onClick={() => {
                 fields.push({
                   title: '',
-                  text: '',
+                  description: '',
                   images: [],
-                  // HACK - need unique key, this is a rough method to generate form random numbers
-                  _animationKey: `unique${Math.random()
-                    .toString(36)
-                    .substring(7)}`,
+                  existingImages: [],
                 })
               }}
             >
-              {buttons.steps.add}
+              {buttonsLabel.steps.add}
             </Button>
           </Flex>
         </>

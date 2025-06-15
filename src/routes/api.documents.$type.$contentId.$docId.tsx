@@ -120,7 +120,7 @@ async function resolvePath(
   contentId: number,
   client: SupabaseClient,
 ): Promise<string | null> {
-  if (tableName === 'library' || tableName === 'research') {
+  if (tableName === 'projects' || tableName === 'research') {
     return `${tableName}/${contentId}`
   }
 

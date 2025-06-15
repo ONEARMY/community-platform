@@ -15,7 +15,7 @@ export const LibraryFileLinkField = () => {
   const name = 'fileLink'
 
   return (
-    <FormFieldWrapper htmlFor={'file-download-link'} text={title}>
+    <FormFieldWrapper htmlFor="file-download-link" text={title}>
       <Field
         id={name}
         name={name}

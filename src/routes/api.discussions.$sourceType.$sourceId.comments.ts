@@ -216,7 +216,7 @@ async function validateRequest(
   request: Request,
   user: User | null,
   data: any,
-  sourceType: 'news' | 'research_update' | 'project' | 'questions' | null,
+  sourceType: 'news' | 'research_update' | 'projects' | 'questions' | null,
 ) {
   if (!user) {
     return { status: 401, statusText: 'unauthorized' }
@@ -252,7 +252,7 @@ const mapSourceType = (sourceType: DiscussionContentTypes) => {
     case 'news':
       return 'news'
     case 'projects':
-      return 'project'
+      return 'projects'
     case 'questions':
       return 'questions'
     default:

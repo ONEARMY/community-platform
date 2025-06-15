@@ -2,8 +2,7 @@ import { MOCK_DATA } from '../../data'
 
 describe('[Library]', () => {
   describe('[SEO Metadata]', () => {
-    const { slug, title, description, cover_image } =
-      MOCK_DATA.library.cmMzzlQP00fCckYIeL2e
+    const { slug, title, description } = MOCK_DATA.library[0]
 
     const pageTitle = `${title} - Library - Precious Plastic`
 
@@ -28,11 +27,6 @@ describe('[Library]', () => {
         'content',
         description,
       )
-      cy.get('meta[property="og:image"]').should(
-        'have.attr',
-        'content',
-        cover_image!.downloadUrl,
-      )
 
       // Twitter
       cy.get('meta[name="twitter:title"]').should(
@@ -44,11 +38,6 @@ describe('[Library]', () => {
         'have.attr',
         'content',
         description,
-      )
-      cy.get('meta[name="twitter:image"]').should(
-        'have.attr',
-        'content',
-        cover_image!.downloadUrl,
       )
     })
   })

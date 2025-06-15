@@ -39,6 +39,7 @@ export const FileDisplay = ({ file, onRemove }: FileDisplayProps) => {
 
       <IconButton
         onClick={onRemove}
+        data-testid="remove-file"
         type="button"
         sx={{ ':hover': { cursor: 'pointer' } }}
       >

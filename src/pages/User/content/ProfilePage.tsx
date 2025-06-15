@@ -9,8 +9,7 @@ import { Flex } from 'theme-ui'
 
 import { UserProfile } from './UserProfile'
 
-import type { IUserDB } from 'oa-shared'
-import type { UserCreatedDocs } from '../types'
+import type { IUserDB, UserCreatedDocs } from 'oa-shared'
 
 interface IProps {
   profile: IUserDB

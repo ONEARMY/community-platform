@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { CategoryVerticalList } from './CategoryVerticalList'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { Category, ContentType, ICategory } from 'oa-shared'
+import type { Category, ContentType } from 'oa-shared'
 
 export default {
   title: 'Components/CategoryVerticalList',
@@ -101,9 +101,7 @@ const allCategoriesForProjectKamp = [
 ]
 
 export const Basic: StoryFn<typeof CategoryVerticalList> = () => {
-  const [activeCategory, setActiveCategory] = useState<
-    Category | ICategory | null
-  >(null)
+  const [activeCategory, setActiveCategory] = useState<Category | null>(null)
   const allCategories = [
     ...allCategoriesForPreciousPlastic,
     ...allCategoriesForProjectKamp,
@@ -121,9 +119,7 @@ export const Basic: StoryFn<typeof CategoryVerticalList> = () => {
 }
 
 export const WhenGlyphNotPresent: StoryFn<typeof CategoryVerticalList> = () => {
-  const [activeCategory, setActiveCategory] = useState<
-    Category | ICategory | null
-  >(null)
+  const [activeCategory, setActiveCategory] = useState<Category | null>(null)
   const noGlyphCategories = [
     {
       createdAt: new Date('2022-12-03T18:03:51.313Z'),
@@ -160,9 +156,7 @@ export const WhenGlyphNotPresent: StoryFn<typeof CategoryVerticalList> = () => {
 }
 
 export const OnlyOne: StoryFn<typeof CategoryVerticalList> = () => {
-  const [activeCategory, setActiveCategory] = useState<
-    Category | ICategory | null
-  >(null)
+  const [activeCategory, setActiveCategory] = useState<Category | null>(null)
 
   const twoCategories = [
     allCategoriesForPreciousPlastic[0],

@@ -9,12 +9,12 @@ import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { FilesFields } from 'src/pages/common/FormFields/FilesFields'
+import { ImageField } from 'src/pages/common/FormFields/ImageField'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
 import { buttons, headings, intro } from '../../labels'
 import { libraryService } from '../../library.service'
 import { LibraryCategoryField } from './LibraryCategory.field'
-import { LibraryCoverImageField } from './LibraryCoverImage.field'
 import { LibraryDescriptionField } from './LibraryDescription.field'
 import { LibraryDifficultyField } from './LibraryDifficulty.field'
 import { LibraryPostingGuidelines } from './LibraryPostingGuidelines'
@@ -39,7 +39,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
   const [intentionalNavigation, setIntentionalNavigation] = useState(false)
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
 
-  const formValues = useMemo(
+  const formValues = useMemo<ProjectFormData>(
     () => ({
       title: project?.title || '',
       description: project?.description || '',
@@ -52,7 +52,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       tags: project?.tagIds || [],
       time: project?.time,
       difficultyLevel: project?.difficultyLevel,
-      existingCoverImage: project?.coverImage,
+      existingImage: project?.coverImage || null,
       existingFiles: files,
       fileLink: fileLink,
       steps: project?.steps
@@ -197,7 +197,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                           }}
                           data-cy="intro-cover"
                         >
-                          <LibraryCoverImageField />
+                          <ImageField title="Cover Image" />
                         </Flex>
                       </Flex>
                     </Flex>

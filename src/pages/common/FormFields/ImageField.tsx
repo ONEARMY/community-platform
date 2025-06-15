@@ -7,9 +7,7 @@ import { FormFieldWrapper } from 'src/pages/common/FormFields'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { Image as ImageComponent } from 'theme-ui'
 
-import { intro } from '../../labels'
-
-import type { ProjectFormData } from 'oa-shared'
+import type { IImageForm } from 'oa-shared'
 
 const ImageInputFieldWrapper = styled.div`
   height: 200px;
@@ -17,18 +15,21 @@ const ImageInputFieldWrapper = styled.div`
   margin-bottom: 6px;
 `
 
-export const LibraryCoverImageField = () => {
-  const name = 'existingCoverImage'
-  const state = useFormState<ProjectFormData>()
-  const form = useForm<ProjectFormData>()
+type ImageFieldProps = {
+  title: string
+}
+
+export const ImageField = (props: ImageFieldProps) => {
+  const state = useFormState<IImageForm>()
+  const form = useForm<IImageForm>()
 
   return (
-    <FormFieldWrapper htmlFor={name} text={intro.cover_image.title} required>
-      {!state.values.existingCoverImage ? (
+    <FormFieldWrapper htmlFor="existingImage" text={props.title} required>
+      {!state.values.existingImage ? (
         <ImageInputFieldWrapper key="image-upload" data-cy="image-upload">
           <Field
             hasText={false}
-            name="coverImage"
+            name="image"
             component={ImageInputField}
             isEqual={COMPARISONS.image}
           />
@@ -43,10 +44,10 @@ export const LibraryCoverImageField = () => {
             }}
           >
             <ImageInputWrapper hasUploadedImg={true}>
-              <ImageComponent src={state.values.existingCoverImage.publicUrl} />
+              <ImageComponent src={state.values.existingImage?.publicUrl} />
               <ImageInputDeleteImage
                 onClick={() => {
-                  form.change('existingCoverImage', null)
+                  form.change('existingImage', null)
                 }}
               />
             </ImageInputWrapper>

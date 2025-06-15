@@ -6,6 +6,7 @@ import type { DBCategory } from './category'
 import type { IConvertedFileMeta } from './common'
 import type { IContentDoc, IDBContentDoc } from './content'
 import type { IDBDocSB, IDBDownloadable, IDoc, IDownloadable } from './document'
+import type { IFilesForm } from './filesForm'
 import type { DBMedia, Image, IMediaFile, MediaFile } from './media'
 import type { SelectValue } from './other'
 import type { Tag } from './tag'
@@ -228,7 +229,7 @@ export type ResearchFormData = {
   existingImage: Image | null
 }
 
-export type ResearchUpdateFormData = {
+export interface ResearchUpdateFormData extends IFilesForm {
   title: string
   description: string
   images?: File[]

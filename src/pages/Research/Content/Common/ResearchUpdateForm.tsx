@@ -123,16 +123,6 @@ export const ResearchUpdateForm = (props: IProps) => {
     })
   }
 
-  const removeExistingFile = (id: string) => {
-    setInitialValues((prevState: ResearchUpdateFormData) => {
-      return {
-        ...prevState,
-        existingFiles:
-          prevState.existingFiles?.filter((file) => file.id !== id) ?? null,
-      }
-    })
-  }
-
   return (
     <>
       <Form<ResearchUpdateFormData>
@@ -236,17 +226,7 @@ export const ResearchUpdateForm = (props: IProps) => {
                 removeExistingImage={removeExistingImage}
               />
               <VideoUrlField />
-              <FilesFields
-                files={initialValues?.existingFiles || []}
-                deleteFile={removeExistingFile}
-                hasBothError={
-                  !!(
-                    (initialValues?.existingFiles?.length ||
-                      initialValues?.files?.length) &&
-                    initialValues.fileLink
-                  )
-                }
-              />
+              <FilesFields />
             </FormWrapper>
           )
         }}

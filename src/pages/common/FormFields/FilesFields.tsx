@@ -12,10 +12,10 @@ import { Flex, Label, Text } from 'theme-ui'
 
 import { fileLabels } from './labels'
 
-import type { MediaFile, ProjectFormData } from 'oa-shared'
+import type { IFilesForm, MediaFile, ProjectFormData } from 'oa-shared'
 
 export const FilesFields = () => {
-  const state = useFormState<ProjectFormData>()
+  const state = useFormState<IFilesForm>()
   const form = useForm<ProjectFormData>()
   const hasBothError = !!(
     (state.values?.existingFiles?.length || state.values?.files?.length) &&

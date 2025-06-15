@@ -6,7 +6,9 @@ import type { DBCategory } from './category'
 import type { IConvertedFileMeta } from './common'
 import type { IContentDoc, IDBContentDoc } from './content'
 import type { IDBDownloadable, IDownloadable } from './document'
-import type { DBMedia, Image, IMediaFile, MediaFile } from './media'
+import type { IFilesForm } from './filesForm'
+import type { IImageForm } from './imageForm'
+import type { DBMedia, Image, IMediaFile } from './media'
 import type { IDBModeration, IModeration, Moderation } from './moderation'
 import type { SelectValue } from './other'
 import type { Tag } from './tag'
@@ -166,18 +168,13 @@ export class ProjectStep {
   }
 }
 
-export type ProjectFormData = {
+export interface ProjectFormData extends IFilesForm, IImageForm {
   title: string
   description: string
   category?: SelectValue
   tags?: number[]
-  coverImage?: IConvertedFileMeta
-  existingCoverImage: Image | null
-  difficultyLevel: DifficultyLevel
-  time: string
-  files?: File[]
-  fileLink?: string
-  existingFiles?: MediaFile[] | null
+  difficultyLevel?: DifficultyLevel
+  time?: string
   steps: ProjectStepFormData[]
 }
 

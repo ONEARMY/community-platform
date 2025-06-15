@@ -8,13 +8,13 @@ import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { TagsField } from 'src/pages/common/FormFields'
+import { ImageField } from 'src/pages/common/FormFields/ImageField'
 import { ResearchPostingGuidelines } from 'src/pages/Research/Content/Common'
 import { fireConfetti } from 'src/utils/fireConfetti'
 import { Text } from 'theme-ui'
 
 import { buttons, headings, overview } from '../../labels'
 import { researchService } from '../../research.service'
-import { ResearchImageField } from '../CreateResearch/Form/ResearchImageField'
 import { ResearchCollaboratorsField } from './FormFields/ResearchCollaboratorsField'
 import { ResearchDescriptionField } from './FormFields/ResearchDescriptionField'
 import { ResearchTitleField } from './FormFields/ResearchTitleField'
@@ -86,13 +86,6 @@ const ResearchForm = ({ research }: IProps) => {
       }
       logger.error(e)
     }
-  }
-
-  const removeImage = () => {
-    setInitialValues({
-      ...initialValues!,
-      existingImage: null,
-    })
   }
 
   const heading = research ? headings.overview.edit : headings.overview.create
@@ -202,11 +195,7 @@ const ResearchForm = ({ research }: IProps) => {
             <ResearchFieldCategory />
             <TagsField title={overview.tags.title} />
             <ResearchCollaboratorsField />
-            <ResearchImageField
-              label="Cover Image"
-              existingImage={initialValues?.existingImage || null}
-              remove={removeImage}
-            />
+            <ImageField title="Cover Image" />
           </FormWrapper>
         )
       }}

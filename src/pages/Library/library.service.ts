@@ -61,74 +61,70 @@ const getDrafts = async () => {
 
 const upsert = async (
   id: number | null,
-  project: ProjectFormData,
+  formData: ProjectFormData,
   isDraft = false,
 ) => {
   const data = new FormData()
-  data.append('title', project.title)
-  data.append('fileLink', project.fileLink || '')
+  data.append('title', formData.title)
+  data.append('fileLink', formData.fileLink || '')
 
-  if (project.time) {
-    data.append('time', project.time)
+  if (formData.time) {
+    data.append('time', formData.time)
   }
 
-  if (project.difficultyLevel) {
-    data.append('difficultyLevel', project.difficultyLevel)
+  if (formData.difficultyLevel) {
+    data.append('difficultyLevel', formData.difficultyLevel)
   }
 
-  if (project.description) {
-    data.append('description', project.description)
+  if (formData.description) {
+    data.append('description', formData.description)
   }
 
-  if (project.tags && project.tags.length > 0) {
-    for (const tag of project.tags) {
+  if (formData.tags && formData.tags.length > 0) {
+    for (const tag of formData.tags) {
       if (tag) {
         data.append('tags', tag.toString())
       }
     }
   }
 
-  if (project.category) {
-    data.append('category', project.category?.value.toString())
+  if (formData.category) {
+    data.append('category', formData.category?.value.toString())
   }
 
   if (isDraft) {
     data.append('draft', 'true')
   }
 
-  if (project.coverImage) {
-    data.append(
-      'coverImage',
-      project.coverImage.photoData,
-      project.coverImage.name,
-    )
+  if (formData.image) {
+    data.append('coverImage', formData.image.photoData, formData.image.name)
   }
 
-  if (project.existingCoverImage) {
-    data.append('existingCoverImage', project.existingCoverImage.id)
+  if (formData.existingImage) {
+    data.append('existingCoverImage', formData.existingImage.id)
   }
 
-  if (project.files && project.files.length > 0) {
-    for (const file of project.files) {
+  if (formData.files && formData.files.length > 0) {
+    for (const file of formData.files) {
       if (file) {
         data.append('files', file, file.name)
       }
     }
   }
 
-  if (project.existingFiles && project.existingFiles.length > 0) {
-    for (const file of project.existingFiles) {
+  if (formData.existingFiles && formData.existingFiles.length > 0) {
+    for (const file of formData.existingFiles) {
       if (file) {
         data.append('existingFiles', file.id)
       }
     }
   }
 
-  if (project.steps?.length) {
-    data.append('stepCount', project.steps.length.toString())
+  if (formData.steps?.length) {
+    data.append('stepCount', formData.steps.length.toString())
 
-    for (let i = 0; i < project.steps.length; i++) {
-      const step = project.steps[i]
+    for (let i = 0; i < formData.steps.length; i++) {
+      const step = formData.steps[i]
       if (step.id) {
         data.append(`steps.[${i}].id`, step.id.toString())
       }

@@ -373,7 +373,6 @@ const seedNews: Partial<newsScalars>[] = [
   },
 ]
 
-// Fixed: Corrected the arrow function syntax
 const seedLibrary = (): Partial<projectsScalars>[] => [
   ...libraryJson.map((p: any) => ({
     ..._PROJECT_BASE,
@@ -388,13 +387,11 @@ const seedLibrary = (): Partial<projectsScalars>[] => [
   })),
 ]
 
-// Added: Function to seed project steps
 const seedProjectSteps = (
   projects: projectsScalars[],
 ): project_stepsChildInputs => {
   const steps: any[] = []
 
-  // If libraryJson has steps data, use it
   libraryJson.forEach((p: any, index: number) => {
     if (p.steps && Array.isArray(p.steps)) {
       p.steps.forEach((step: any) => {
@@ -445,7 +442,6 @@ const main = async () => {
     questionsAcc.push(...questions)
   }
 
-  // Assumption: all users are subscribed and voted to/in every category id (except their own categories)
   for (const profile of profiles) {
     const questionsExceptMine = questionsAcc.filter(
       (q) => q.created_by !== profile.id,
@@ -473,7 +469,6 @@ const main = async () => {
     })),
   )
 
-  // Fixed: Seed projects with proper category connection
   const { projects } = await seed.projects(
     seedLibrary().map((item) => ({
       ...item,
@@ -483,7 +478,6 @@ const main = async () => {
     })),
   )
 
-  // Added: Seed project steps
   await seed.project_steps(seedProjectSteps(projects))
 
   process.exit()

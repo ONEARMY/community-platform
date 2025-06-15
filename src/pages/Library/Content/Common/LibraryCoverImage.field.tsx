@@ -32,7 +32,7 @@ export const LibraryCoverImageField = (props: IProps) => {
         <ImageInputFieldWrapper key="image-upload" data-cy="image-upload">
           <Field
             hasText={false}
-            name="image"
+            name="coverImage"
             component={ImageInputField}
             isEqual={COMPARISONS.image}
           />

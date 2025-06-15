@@ -67,7 +67,7 @@ describe('[Library]', () => {
         }
 
         images.forEach((image, index) => {
-          cy.get(`[data-cy=step-image-${index}]`)
+          cy.get(`[data-cy=image-upload-${index}]`)
             .find(':file')
             .attachFile(image)
         })
@@ -251,15 +251,6 @@ describe('[Library]', () => {
 
       cy.step('Add extra step')
       cy.get('[data-cy=add-step]').click()
-      /*
-        Sometimes clicking on add-step trigger the Uploading library modal
-        when it happens cypress will close it with the code below
-      */
-      cy.get('body').then(($body) => {
-        if ($body.text().includes('Uploading Library')) {
-          cy.get('[data-cy=close-upload-status]').click()
-        }
-      })
 
       cy.step('Can remove extra steps')
       deleteStep(4)
@@ -267,16 +258,12 @@ describe('[Library]', () => {
 
       cy.step('A full draft was saved')
       cy.get('[data-cy=draft]').click()
-      cy.get('[data-cy=view-project]:enabled', { timeout: 20000 }).click()
 
       cy.step('A full draft can be submitted for review')
       cy.get('[data-cy=edit]').click()
 
       cy.get('[data-cy=submit]').click()
-      cy.get('[data-cy=view-project]:enabled', { timeout: 20000 })
-        .click()
-        .url()
-        .should('include', `/library/${slug}`)
+      cy.url().should('include', `/library/${slug}`)
 
       cy.step('Project was created correctly')
       cy.get('[data-cy=file-download-counter]')

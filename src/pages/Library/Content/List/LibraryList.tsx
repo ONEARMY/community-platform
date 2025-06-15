@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from '@remix-run/react'
 import { Button, Loader, MoreContainer } from 'oa-components'
 import { logger } from 'src/logger'
-import useDrafts from 'src/pages/common/Drafts/useDrafts'
+import useDrafts from 'src/pages/common/Drafts/useDraftsSupabase'
 import { Flex, Grid, Heading } from 'theme-ui'
 
 import { listing } from '../../labels'
@@ -13,9 +13,9 @@ import { LibraryListHeader } from './LibraryListHeader'
 import type { Project } from 'oa-shared'
 import type { LibrarySortOption } from './LibrarySortOptions'
 
-export const LibraryList = () => {
-  const siteName = import.meta.env.VITE_SITE_NAME
+const siteName = import.meta.env.VITE_SITE_NAME
 
+export const LibraryList = () => {
   const [isFetching, setIsFetching] = useState<boolean>(true)
   const [projects, setProjects] = useState<Project[]>([])
   const [total, setTotal] = useState<number>(0)

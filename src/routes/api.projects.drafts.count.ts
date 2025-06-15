@@ -28,7 +28,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const { count } = await client
-    .from('research')
+    .from('projects')
     .select('id', { count: 'exact' })
     .eq('is_draft', true)
     .eq('created_by', profileId)

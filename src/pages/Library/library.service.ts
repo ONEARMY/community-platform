@@ -172,7 +172,15 @@ const upsert = async (
       throw new Error('Duplicate project', { cause: 409 })
     }
 
-    throw new Error('Error saving project', { cause: 500 })
+    if (response.statusText) {
+      throw new Error(response.statusText, {
+        cause: 400,
+      })
+    }
+
+    throw new Error(response.statusText || 'Error deleting project', {
+      cause: 500,
+    })
   }
 
   return (await response.json()) as { project: Project }

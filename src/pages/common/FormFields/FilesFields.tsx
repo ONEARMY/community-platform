@@ -35,7 +35,7 @@ export const FilesFields = () => {
             deleteFile={(id) => {
               form.change(
                 'existingFiles',
-                state.values.existingFiles?.filter((x) => x.id === id),
+                state.values.existingFiles?.filter((x) => x.id !== id),
               )
             }}
           />

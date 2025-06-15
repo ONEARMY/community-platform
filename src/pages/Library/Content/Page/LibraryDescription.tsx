@@ -328,7 +328,7 @@ export const LibraryDescription = (props: IProps) => {
                     width: '100%',
                   }}
                   crossOrigin=""
-                  // alt={cover_image_alt ?? 'project cover image'}
+                  alt="project cover image"
                 />
               )}
             </Box>

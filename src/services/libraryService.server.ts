@@ -50,17 +50,16 @@ const getUserProjects = async (
   client: SupabaseClient,
   username: string,
 ): Promise<Partial<Project>[]> => {
-  const result = await client
-    .from('projects')
-    .select('id, title, slug, total_useful, profiles!inner(username)')
-    .eq('profiles.username', username)
-    .or('deleted.eq.false, deleted.is.null')
+  const { data, error } = await client.rpc('get_user_projects', {
+    username_param: username,
+  })
 
-  if (result.error) {
+  if (error) {
+    console.error('Error fetching user projects:', error)
     return []
   }
 
-  return result.data?.map((x) => ({
+  return data?.map((x) => ({
     id: x.id,
     title: x.title,
     slug: x.slug,

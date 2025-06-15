@@ -25,7 +25,7 @@ export const projects = [
   },
   {
     createdAt: '2022-03-27T22:08:25.999Z',
-    createdBy: 'event_reader',
+    createdBy: 'settings_workplace_new',
     deleted: false,
     modifiedAt: '2022-03-27T22:10:11.271Z',
     description: 'qwertyefew',

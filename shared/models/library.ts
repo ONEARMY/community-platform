@@ -59,9 +59,9 @@ export class DBProject
 }
 
 export class Project implements IContentDoc, IDownloadable, IModeration {
-  readonly id: number
-  readonly createdAt: Date
-  readonly author: Author | null
+  id: number
+  createdAt: Date
+  author: Author | null
   modifiedAt: Date | null
   title: string
   slug: string
@@ -141,8 +141,8 @@ export class DBProjectStep {
 }
 
 export class ProjectStep {
-  readonly id: number
-  readonly projectId: number
+  id: number
+  projectId: number
   title: string
   description: string
   images: Image[] | null

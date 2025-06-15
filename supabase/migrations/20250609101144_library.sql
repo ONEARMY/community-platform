@@ -48,9 +48,9 @@ CREATE UNIQUE INDEX project_steps_pkey ON public.project_steps USING btree (id);
 
 CREATE UNIQUE INDEX projects_pkey ON public.projects USING btree (id);
 
-CREATE UNIQUE INDEX projects_slug_key ON public.projects USING btree (slug);
+CREATE UNIQUE INDEX projects_slug_key ON public.projects USING btree (slug, tenant_id);
 
-CREATE UNIQUE INDEX projects_title_key ON public.projects USING btree (title);
+CREATE UNIQUE INDEX projects_title_key ON public.projects USING btree (title, tenant_id);
 
 alter table "public"."project_steps" add constraint "project_steps_pkey" PRIMARY KEY using index "project_steps_pkey";
 

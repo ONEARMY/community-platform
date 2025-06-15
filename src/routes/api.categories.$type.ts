@@ -38,7 +38,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { data } = await client
     .from('categories')
     .select('id,name,created_at,type')
-    .or('deleted.eq.false,deleted.is.null')
 
   const categories = data?.map((category) =>
     Category.fromDB(category as DBCategory),

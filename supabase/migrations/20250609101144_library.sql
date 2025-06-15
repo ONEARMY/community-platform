@@ -114,25 +114,27 @@ BEGIN
         p.title,
         p.moderation,
         p.total_views,
-        (SELECT json_build_object(
+        json_build_object(
             'id', prof.id,
             'display_name', prof.display_name,
             'username', prof.username,
             'is_verified', prof.is_verified,
             'country', prof.country
-        )
-         FROM profiles prof
-         WHERE prof.id = p.created_by) AS author,
+        ) AS author,
         p.comment_count
     FROM projects p
+    INNER JOIN profiles prof ON prof.id = p.created_by
     WHERE
-        (search_query IS NULL OR p.fts @@ ts_query) AND
+        (search_query IS NULL OR 
+         p.fts @@ ts_query OR 
+         prof.username ILIKE '%' || search_query || '%'
+        ) AND
         (category_id IS NULL OR p.category = category_id) AND
         (p.is_draft IS NULL OR p.is_draft = FALSE) AND
         (p.deleted IS NULL OR p.deleted = FALSE)
     ORDER BY
         -- Add relevance ranking when search query is provided
-        CASE WHEN search_query IS NOT NULL THEN ts_rank_cd(r.fts, ts_query) END DESC NULLS LAST,
+        CASE WHEN search_query IS NOT NULL THEN ts_rank_cd(p.fts, ts_query) END DESC NULLS LAST,
         CASE
             WHEN sort_by = 'Newest' THEN extract(epoch from p.created_at)
             WHEN sort_by = 'LatestUpdated' THEN extract(epoch from p.modified_at)
@@ -150,8 +152,7 @@ BEGIN
         p.created_at DESC
     LIMIT limit_val OFFSET offset_val;
 END;
-$function$
-;
+$function$;
 
 CREATE OR REPLACE FUNCTION public.get_projects_count(search_query text DEFAULT NULL::text, category_id integer DEFAULT NULL::integer)
  RETURNS integer

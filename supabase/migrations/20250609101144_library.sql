@@ -37,7 +37,8 @@ create table "public"."projects" (
     "tenant_id" text not null,
     "fts" tsvector,
     "total_views" bigint,
-    "comment_count" integer
+    "comment_count" integer,
+    "legacy_id" text
 );
 
 

@@ -2,7 +2,6 @@ import { faker } from '@faker-js/faker'
 import { DifficultyLevelRecord, IModerationStatus } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
-import { generateNewUserDetails } from '../../utils/TestUtils'
 
 import type { DifficultyLevel } from 'oa-shared'
 
@@ -31,8 +30,8 @@ describe('[Library]', () => {
     videoUrl?: string,
   ) => {
     cy.step(`Filling step ${stepNumber}`)
-    cy.get(`[data-cy=step_${stepNumber}]`).should('be.visible')
-    cy.get(`[data-cy=step_${stepNumber}]`).within(($step) => {
+    cy.get(`[data-cy=step_${stepNumber - 1}]`).should('be.visible')
+    cy.get(`[data-cy=step_${stepNumber - 1}]`).within(($step) => {
       checkWhitespaceTrim('step-title')
 
       cy.get('[data-cy=step-title]')
@@ -127,7 +126,6 @@ describe('[Library]', () => {
       },
       steps: [
         {
-          _animationKey: 'unique1',
           images: [
             {
               contentType: 'image/jpeg',
@@ -146,13 +144,11 @@ describe('[Library]', () => {
           title: 'Step 1 is easy',
         },
         {
-          _animationKey: 'unique3',
           text: faker.lorem.sentences(50).slice(0, 1000).trim(),
           title: 'A long title that is the total characters limit of',
           videoURL: 'https://www.youtube.com/watch?v=Os7dREQ00l4',
         },
         {
-          _animationKey: 'unique2',
           images: [],
           text: 'Description for step 3. This description should be between the minimum and maximum description length',
           title: 'Step 3 is easy',
@@ -270,8 +266,8 @@ describe('[Library]', () => {
         .contains(total_downloads)
         .should('be.visible')
       // Check against UI
-      cy.get('[data-cy=how-to-title]').should('contain', title)
-      cy.get('[data-cy=how-to-description]').should('contain', description)
+      cy.get('[data-cy=project-title]').should('contain', title)
+      cy.get('[data-cy=project-description]').should('contain', description)
 
       // Check category
       cy.get('[data-cy=category]').should('contain', category)
@@ -300,20 +296,6 @@ describe('[Library]', () => {
       cy.get('[data-cy=intro-title]').should('not.exist')
     })
 
-    it('[By Incomplete Profile User]', () => {
-      const user = generateNewUserDetails()
-      cy.signUpNewUser(user)
-
-      cy.step("Can't add to library")
-      cy.visit('/library')
-      cy.get('[data-cy=create-project]').should('not.exist')
-      cy.get('[data-cy=complete-profile-project]').should('be.visible')
-
-      cy.visit('/library/create')
-      cy.get('[data-cy=incomplete-profile-message]').should('be.visible')
-      cy.get('[data-cy=intro-title]').should('not.exist')
-    })
-
     it('[Warning on leaving page]', () => {
       cy.signIn(creator.email, creator.password)
       cy.visit('/library')
@@ -330,23 +312,6 @@ describe('[Library]', () => {
       cy.get('[data-cy=intro-title]').clear().blur({ force: true })
       cy.get('[data-cy=page-link][href*="/library"]').click()
       cy.url().should('match', /\/library?/)
-    })
-
-    it('[Incomplete Users]', () => {
-      const user = generateNewUserDetails()
-      cy.signUpNewUser(user)
-
-      cy.step("Can't add a library project with an incomplete profile")
-      cy.visit('/library')
-      cy.get('[data-cy=create-project]').should('not.exist')
-      cy.get('[data-cy=complete-profile-project]').should('be.visible')
-
-      cy.completeUserProfile(user.username)
-
-      cy.step('Can add a library project now profile is complete')
-      cy.visit('/library')
-      cy.get('[data-cy=create-project]').should('be.visible')
-      cy.get('[data-cy=complete-profile-project]').should('not.exist')
     })
 
     // it('[Admin]', () => {

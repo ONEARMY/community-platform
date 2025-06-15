@@ -178,6 +178,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         description: formData.get(`steps.[${i}].description`) as string,
         videoUrl: (formData.get(`steps.[${i}].videoUrl`) as string) || null,
         projectId: projectDb.id,
+        order: i + 1,
       })
       const step = ProjectStep.fromDB(stepDb)
 
@@ -278,6 +279,7 @@ async function createStep(
     description: string
     projectId: number
     videoUrl: string | null
+    order: number
   },
 ) {
   const { data, error } = await client
@@ -287,6 +289,7 @@ async function createStep(
       description: values.description,
       project_id: values.projectId,
       video_url: values.videoUrl,
+      order: values.order,
       tenant_id: process.env.TENANT_ID,
     })
     .select()
@@ -322,7 +325,7 @@ async function uploadAndUpdateImage(
       .select()
 
     if (result.data) {
-      return result.data[0].images
+      return result.data[0][fieldName]
     }
   }
 }

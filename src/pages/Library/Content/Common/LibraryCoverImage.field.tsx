@@ -1,4 +1,4 @@
-import { Field } from 'react-final-form'
+import { Field, useForm, useFormState } from 'react-final-form'
 import styled from '@emotion/styled'
 import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
@@ -9,13 +9,7 @@ import { Image as ImageComponent } from 'theme-ui'
 
 import { intro } from '../../labels'
 
-import type { Image } from 'oa-shared'
-
-interface IProps {
-  label: string
-  existingImage: Image | null
-  remove: () => void
-}
+import type { ProjectFormData } from 'oa-shared'
 
 const ImageInputFieldWrapper = styled.div`
   height: 200px;
@@ -23,12 +17,14 @@ const ImageInputFieldWrapper = styled.div`
   margin-bottom: 6px;
 `
 
-export const LibraryCoverImageField = (props: IProps) => {
+export const LibraryCoverImageField = () => {
   const name = 'existingCoverImage'
+  const state = useFormState<ProjectFormData>()
+  const form = useForm<ProjectFormData>()
 
   return (
     <FormFieldWrapper htmlFor={name} text={intro.cover_image.title} required>
-      {!props.existingImage && (
+      {!state.values.existingCoverImage ? (
         <ImageInputFieldWrapper key="image-upload" data-cy="image-upload">
           <Field
             hasText={false}
@@ -37,8 +33,7 @@ export const LibraryCoverImageField = (props: IProps) => {
             isEqual={COMPARISONS.image}
           />
         </ImageInputFieldWrapper>
-      )}
-      {props.existingImage && (
+      ) : (
         <ImageInputFieldWrapper key="existing-image" data-cy="existing-image">
           <FieldContainer
             style={{
@@ -48,8 +43,12 @@ export const LibraryCoverImageField = (props: IProps) => {
             }}
           >
             <ImageInputWrapper hasUploadedImg={true}>
-              <ImageComponent src={props.existingImage.publicUrl} />
-              <ImageInputDeleteImage onClick={() => props.remove()} />
+              <ImageComponent src={state.values.existingCoverImage.publicUrl} />
+              <ImageInputDeleteImage
+                onClick={() => {
+                  form.change('existingCoverImage', null)
+                }}
+              />
             </ImageInputWrapper>
           </FieldContainer>
         </ImageInputFieldWrapper>

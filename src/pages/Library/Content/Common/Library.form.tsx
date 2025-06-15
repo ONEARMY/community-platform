@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Form } from 'react-final-form'
 import styled from '@emotion/styled'
 import { useNavigate } from '@remix-run/react'
@@ -35,38 +35,9 @@ const FormContainer = styled.form`
   width: 100%;
 `
 export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
-  const [initialValues, setInitialValues] =
-    useState<Partial<ProjectFormData> | null>(null)
   const navigate = useNavigate()
   const [intentionalNavigation, setIntentionalNavigation] = useState(false)
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
-
-  useEffect(() => {
-    setInitialValues({
-      title: project?.title || '',
-      description: project?.description || '',
-      category: project?.category
-        ? {
-            value: project.category.id?.toString(),
-            label: project.category.name,
-          }
-        : undefined,
-      tags: project?.tagIds || [],
-      time: project?.time,
-      difficultyLevel: project?.difficultyLevel,
-      existingCoverImage: project?.coverImage,
-      existingFiles: files,
-      fileLink: fileLink,
-      steps: project?.steps?.map((x) => ({
-        id: x.id,
-        title: x.title,
-        description: x.description,
-        videoUrl: x.videoUrl || undefined,
-        images: [],
-        existingImages: x.images,
-      })),
-    })
-  }, [project])
 
   const formValues = useMemo(
     () => ({
@@ -84,14 +55,16 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       existingCoverImage: project?.coverImage,
       existingFiles: files,
       fileLink: fileLink,
-      steps: project?.steps?.map((x) => ({
-        id: x.id,
-        title: x.title,
-        description: x.description,
-        videoUrl: x.videoUrl || undefined,
-        images: [],
-        existingImages: x.images,
-      })) ?? [
+      steps: project?.steps
+        ?.toSorted((a, b) => a.order - b.order)
+        .map((x) => ({
+          id: x.id,
+          title: x.title,
+          description: x.description,
+          videoUrl: x.videoUrl || undefined,
+          images: [],
+          existingImages: x.images,
+        })) ?? [
         { title: '', description: '', images: [], existingImages: [] },
         { title: '', description: '', images: [], existingImages: [] },
         { title: '', description: '', images: [], existingImages: [] },
@@ -124,23 +97,6 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       logger.error(e)
       return
     }
-  }
-
-  const removeExistingFile = (id: string) => {
-    setInitialValues((prevState: Partial<ProjectFormData> | null) => {
-      return {
-        ...prevState,
-        existingFiles:
-          prevState?.existingFiles?.filter((file) => file.id !== id) ?? null,
-      }
-    })
-  }
-
-  const removeCoverImage = () => {
-    setInitialValues({
-      ...initialValues!,
-      existingCoverImage: null,
-    })
   }
 
   return (
@@ -230,17 +186,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                           <LibraryTagsField />
                           <LibraryTimeField />
                           <LibraryDifficultyField />
-                          <FilesFields
-                            files={initialValues?.existingFiles || []}
-                            deleteFile={removeExistingFile}
-                            hasBothError={
-                              !!(
-                                (initialValues?.existingFiles?.length ||
-                                  initialValues?.files?.length) &&
-                                initialValues.fileLink
-                              )
-                            }
-                          />
+                          <FilesFields />
                         </Flex>
                         {/* Right side */}
                         <Flex
@@ -251,23 +197,13 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                           }}
                           data-cy="intro-cover"
                         >
-                          <LibraryCoverImageField
-                            existingImage={
-                              initialValues?.existingCoverImage || null
-                            }
-                            label="Cover Image"
-                            remove={removeCoverImage}
-                          />
+                          <LibraryCoverImageField />
                         </Flex>
                       </Flex>
                     </Flex>
                   </Card>
 
-                  <LibraryStepsContainerField
-                  // steps={initialValues?.steps || []}
-                  // removeStepImage={removeStepImage}
-                  // moveStep={moveStep}
-                  />
+                  <LibraryStepsContainerField />
                 </Flex>
               </FormContainer>
             </Flex>

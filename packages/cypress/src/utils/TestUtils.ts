@@ -1,5 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
+import type { SupabaseClient } from '@supabase/supabase-js'
+
 type SeedData = {
   [tableName: string]: Array<Record<string, any>>
 }
@@ -38,8 +40,25 @@ export const createStorage = async (tenantId: string) => {
 export const clearStorage = async (tenantId: string) => {
   const supabase = supabaseAdminClient()
 
+  await emptyBucket(supabase, tenantId)
   await supabase.storage.deleteBucket(tenantId)
+
+  await emptyBucket(supabase, tenantId + '-documents')
   await supabase.storage.deleteBucket(tenantId + '-documents')
+}
+
+const emptyBucket = async (
+  supabaseAdmin: SupabaseClient,
+  bucketName: string,
+) => {
+  const { data: files } = await supabaseAdmin.storage
+    .from(bucketName)
+    .list('', { limit: 1000 })
+
+  if (files && files.length > 0) {
+    const filePaths = files.map((file) => file.name)
+    await supabaseAdmin.storage.from(bucketName).remove(filePaths)
+  }
 }
 
 export const generateAlphaNumeric = (length: number) => {

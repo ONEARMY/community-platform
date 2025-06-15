@@ -1,4 +1,4 @@
-import { Field } from 'react-final-form'
+import { Field, useForm, useFormState } from 'react-final-form'
 import { FieldInput } from 'oa-components'
 import { UserRole } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
@@ -12,26 +12,32 @@ import { Flex, Label, Text } from 'theme-ui'
 
 import { fileLabels } from './labels'
 
-import type { MediaFile } from 'oa-shared'
+import type { MediaFile, ProjectFormData } from 'oa-shared'
 
-export const FilesFields = (props: {
-  files: MediaFile[]
-  deleteFile: (id: string) => void
-  hasBothError: boolean
-}) => {
-  const { title } = fileLabels.files
+export const FilesFields = () => {
+  const state = useFormState<ProjectFormData>()
+  const form = useForm<ProjectFormData>()
+  const hasBothError = !!(
+    (state.values?.existingFiles?.length || state.values?.files?.length) &&
+    state.values.fileLink
+  )
 
   return (
     <ClientOnly fallback={<></>}>
       {() => (
         <>
-          <WarningMessages show={props.hasBothError} />
+          <WarningMessages show={hasBothError} />
           <Label htmlFor="files" sx={{ mb: 2 }}>
-            {title}
+            {fileLabels.files.title}
           </Label>
           <AlreadyAddedFiles
-            files={props.files}
-            deleteFile={props.deleteFile}
+            files={state.values.existingFiles || []}
+            deleteFile={(id) => {
+              form.change(
+                'existingFiles',
+                state.values.existingFiles?.filter((x) => x.id === id),
+              )
+            }}
           />
           <UploadNewFiles />
         </>

@@ -1,9 +1,0 @@
-import{j as a}from"./jsx-runtime-CexXSJP5.js";import{r as l}from"./index-BP8_t0zE.js";import{n as d}from"./emotion-styled.browser.esm-Dz2BNYeh.js";import{L as o}from"./Loader-9qVr4XEI.js";import{a as m,I as u}from"./theme-ui-components.esm-D81fpbIc.js";const t=d(m)`
-  cursor: pointer;
-  padding: 5px;
-  overflow: hidden;
-  transition: 0.2s ease-in-out;
-  &:hover {
-    transform: translateY(-5px);
-  }
-`,i=e=>{const[i,n]=l.useState(!1);return a.jsxs(a.Fragment,{children:[!i&&a.jsx(o,{sx:{mb:3,mt:4,width:100,height:67}}),a.jsx(t,{"data-cy":"thumbnail","data-testid":"thumbnail",mb:3,mt:4,opacity:e.index===e.activeImageIndex?1:.5,onClick:()=>e.setActiveIndex(e.index),children:a.jsx(u,{loading:"lazy",src:e.thumbnailUrl,alt:e.alt??e.name,onLoad:()=>n(!0),onError:()=>n(!0),sx:{width:i?100:0,height:67,objectFit:e.allowPortrait?"contain":"cover",borderRadius:1,border:"1px solid offWhite"},crossOrigin:""})})]})};try{t.displayName="ThumbCard",t.__docgenInfo={description:"",displayName:"ThumbCard",props:{}}}catch{}try{i.displayName="ImageGalleryThumbnail",i.__docgenInfo={description:"",displayName:"ImageGalleryThumbnail",props:{setActiveIndex:{defaultValue:null,description:"",name:"setActiveIndex",required:!0,type:{name:"(index: number) => void"}},allowPortrait:{defaultValue:null,description:"",name:"allowPortrait",required:!0,type:{name:"boolean"}},activeImageIndex:{defaultValue:null,description:"",name:"activeImageIndex",required:!0,type:{name:"number"}},thumbnailUrl:{defaultValue:null,description:"",name:"thumbnailUrl",required:!0,type:{name:"string"}},index:{defaultValue:null,description:"",name:"index",required:!0,type:{name:"number"}},alt:{defaultValue:null,description:"",name:"alt",required:!1,type:{name:"string"}},name:{defaultValue:null,description:"",name:"name",required:!1,type:{name:"string"}}}}}catch{}export{i as I};

@@ -27,13 +27,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     params.slug as string,
   )
 
-  if (result.error || !result.data) {
+  if (result.error || !result.item) {
     return Response.json({ research: null }, { headers })
   }
 
   const username = user.user_metadata.username
-  const researchDb = result.data as unknown as DBResearchItem
-  const research = ResearchItem.fromDB(researchDb, [])
+  const researchDb = result.item as unknown as DBResearchItem
+  const research = ResearchItem.fromDB(researchDb, [], [], result.collaborators)
 
   if (
     !(await researchServiceServer.isAllowedToEditResearch(

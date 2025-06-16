@@ -80,7 +80,7 @@ export class ResearchItem implements IContentDoc {
     tags: Tag[],
     images: Image[] = [],
     collaborators: Author[] = [],
-    currentUserId?: number,
+    currentUsername?: string,
   ) {
     const filteredUpdates = obj.updates?.filter((update) => {
       if (update.deleted) {
@@ -91,14 +91,12 @@ export class ResearchItem implements IContentDoc {
         return true
       }
 
-      if (!currentUserId) {
+      if (!currentUsername) {
         return false
       }
 
-      const isAuthor = obj.author?.id === currentUserId
-      const isCollaborator = (collaborators || [])
-        .map((collaborator) => collaborator.id)
-        .includes(currentUserId)
+      const isAuthor = obj.author?.username === currentUsername
+      const isCollaborator = (obj.collaborators || []).includes(currentUsername)
 
       return isAuthor || isCollaborator
     })

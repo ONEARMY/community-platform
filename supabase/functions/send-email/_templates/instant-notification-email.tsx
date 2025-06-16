@@ -27,14 +27,14 @@ interface IProps {
 export const InstantNotificationEmail = (props: IProps) => {
   const { notification, settings } = props
 
-  const link = `${settings.siteUrl}/${notification.slug}`
-  const parentLink = `${settings.siteUrl}/${notification.title.parentSlug}`
+  const headerLink = `${settings.siteUrl}/${notification.slug}`
+  const buttonLink = `${settings.siteUrl}/${notification.title.parentSlug}`
   const preview = `New ${notification.contentType} notification on ${settings.siteName}`
 
   return (
     <Layout preview={preview} settings={settings}>
       <Header>
-        <Link href={link}>
+        <Link href={headerLink}>
           <Heading>
             <strong>{notification.title.triggeredBy}</strong>{' '}
             {notification.title.middle} {' on '}
@@ -47,7 +47,7 @@ export const InstantNotificationEmail = (props: IProps) => {
         <Heading>They wrote:</Heading>
         <Text style={text}>{notification.body}</Text>
       </BoxText>
-      <Button href={parentLink}>See the full discussion →</Button>
+      <Button href={buttonLink}>See the full discussion →</Button>
     </Layout>
   )
 }

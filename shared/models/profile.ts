@@ -151,7 +151,7 @@ export class NotificationDisplay {
     parentSlug: string
   }
   date: Date
-  body: string
+  body?: string
   slug: string
 
   context?: string
@@ -161,8 +161,10 @@ export class NotificationDisplay {
     Object.assign(this, obj)
   }
 
-  static setBody(notification: Notification): string {
-    return (notification.content as any).comment
+  static setBody(notification: Notification): string | undefined {
+    return notification.content
+      ? (notification.content as any).comment
+      : undefined
   }
 
   static setDate(notification: Notification) {

@@ -12,11 +12,8 @@ import { InstantNotificationEmail } from './_templates/instant-notification-emai
 import { signWebhookHeader } from './signWebhookHeader.ts'
 import { getTenantSettings } from './getTenantSettings.ts'
 
-import type {
-  Notification,
-  NotificationDisplay,
-  TenantSettings,
-} from 'oa-shared'
+import type { NotificationDisplay } from 'oa-shared'
+import { ModerationEmail } from './_templates/moderation-email.tsx'
 
 const hookSecret = Deno.env.get('SEND_EMAIL_HOOK_SECRET') as string
 const resend = new Resend(Deno.env.get('RESEND_API_KEY') as string)
@@ -74,6 +71,13 @@ Deno.serve(async (req) => {
           html = await render(
             React.createElement(InstantNotificationEmail, details),
           )
+        }
+        break
+      }
+      case 'moderation_notification': {
+        if (email_data.notification) {
+          subject = `Moderation update for: ${email_data.notification.title.parentTitle}`
+          html = await render(React.createElement(ModerationEmail, details))
         }
         break
       }

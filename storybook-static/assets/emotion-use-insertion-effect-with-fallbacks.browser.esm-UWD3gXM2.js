@@ -1,0 +1,1 @@
+import{r as s,R as a}from"./index-BP8_t0zE.js";var r=function(e){return e()},e=!!a.useInsertionEffect&&a.useInsertionEffect,f=e||r,o=e||s.useLayoutEffect;export{f as a,o as u};

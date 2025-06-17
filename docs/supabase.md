@@ -27,11 +27,13 @@ To sign-up locally, you can get the email confirmation link at http://localhost:
 ### Using online Supabase free version
 
 #### Create your Supabase instance
+
 You can also use the online Supabase free version.
 For this, create your Supabase account at https://supabase.com and create a new project.
 Install the Supabase CLI : https://supabase.com/docs/guides/local-development/cli/getting-started
 
 #### Link your Supabase instance and push the db schema
+
 First, connect to the Supabase CLI using `supabase login`.
 Get your project-id from your Supabase project, you can find it in the project settings general section.
 Now from the project root, run `supabase link --project-ref your-project-id`.
@@ -41,8 +43,6 @@ To finish you should fill the .env.local file with the values from the "Data API
 SUPABASE_API_URL={URL}
 SUPABASE_KEY={anon key}
 SUPABASE_SERVICE_ROLE_KEY={service_role key}
-
-
 
 ## Migrations
 

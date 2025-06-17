@@ -104,6 +104,20 @@ export const SupabaseNotifications = () => {
                 },
                 {
                   component: (
+                    <Field
+                      component="input"
+                      data-cy={`${formId}-field-research_updates`}
+                      initialValue={initialValues?.research_updates}
+                      name="research_updates"
+                      type="checkbox"
+                    />
+                  ),
+                  description: 'Updates for the research that you follow.',
+                  glyph: 'thunderbolt',
+                  name: 'Research Updates',
+                },
+                {
+                  component: (
                     <InternalLink
                       data-cy="messages-link"
                       to="/settings/profile/#public-contact"

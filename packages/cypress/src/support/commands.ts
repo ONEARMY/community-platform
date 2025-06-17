@@ -1,7 +1,7 @@
 import 'cypress-file-upload'
 
 import { deleteDB } from 'idb'
-import { type ILibrary, UserRole } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 
 import { TestDB } from './db/firebase'
 
@@ -15,13 +15,7 @@ interface ExpectedNewNotification {
 declare global {
   namespace Cypress {
     interface Chainable {
-      addProject(
-        project: ILibrary.DB,
-        username: string,
-        random: string,
-      ): Chainable<void>
       checkCommentInViewport()
-      checkCommentItem(comment: string, length: number): Chainable<void>
       clearServiceWorkers(): Promise<void>
       deleteIDB(name: string): Promise<boolean>
       expectNewNotification(ExpectedNewNotification): Chainable<void>
@@ -98,15 +92,6 @@ Cypress.Commands.add(
   },
 )
 
-Cypress.Commands.add('addProject', (project, username, random) => {
-  const slug = `${project.slug}-${username}-${random}`
-
-  return firestore.addDocument('library', {
-    ...project,
-    slug,
-  })
-})
-
 Cypress.Commands.add('step', (message: string) => {
   Cypress.log({
     displayName: 'step',
@@ -137,13 +122,6 @@ Cypress.Commands.add('checkCommentInViewport', () => {
     .first()
     .scrollIntoView()
     .should('be.inViewport', 10)
-})
-
-Cypress.Commands.add('checkCommentItem', (comment: string, length: number) => {
-  cy.step('Comment mentions are formatted correctly')
-  cy.get('[data-cy="CommentItem"]').should('have.length.gte', length)
-  cy.checkCommentInViewport()
-  cy.contains(comment)
 })
 
 Cypress.Commands.add(

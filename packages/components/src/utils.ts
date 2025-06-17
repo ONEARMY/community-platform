@@ -92,6 +92,12 @@ export const fakeDisplayNotification = (
   id: faker.datatype.number(),
   isRead: faker.datatype.boolean(),
   contentType: 'comment',
+  email: {
+    body: undefined,
+    buttonLabel: 'See the full discussion',
+    preview: 'Jeff has left a new comment',
+    subject: 'A new comment on something',
+  },
   sidebar: {
     icon: 'discussion',
     image: faker.image.avatar(),

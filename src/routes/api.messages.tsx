@@ -124,7 +124,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     return Response.json(null, { headers, status: 201 })
   } catch (error) {
-    console.log(error)
+    console.error(error)
 
     return Response.json(
       { error },

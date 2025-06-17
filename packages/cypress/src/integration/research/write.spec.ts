@@ -36,6 +36,7 @@ describe('[Research]', () => {
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
       const subscriber = MOCK_DATA.users.subscriber
       const admin = MOCK_DATA.users.admin
+      const researchURL = `/research/${expected.slug}`
 
       cy.signIn(subscriber.email, subscriber.password)
 
@@ -78,8 +79,8 @@ describe('[Research]', () => {
       cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=submit]').click()
 
-      cy.url().should('include', `/research/${expected.slug}`)
-      cy.visit(`/research/${expected.slug}`)
+      cy.url().should('include', researchURL)
+      cy.visit(researchURL)
 
       cy.step('Research article displays correctly')
       cy.contains(expected.title)
@@ -125,8 +126,20 @@ describe('[Research]', () => {
       cy.step('Published when fields are populated correctly')
       cy.get('[data-cy=submit]').click()
 
+      cy.url().should('contain', `${researchURL}#update_`)
       cy.contains(updateTitle).should('be.visible')
       cy.contains(updateDescription).should('be.visible')
+
+      cy.step('Notification generated for update')
+      cy.logout()
+      cy.signIn(admin.email, admin.password)
+      cy.expectNewNotification({
+        content: updateTitle,
+        path: `${researchURL}#update_`,
+        title: expected.title,
+        username: subscriber.userName,
+      })
+
       // cy.get('[data-cy=file-download-counter]').should(
       //   'have.text',
       //   '0 downloads',

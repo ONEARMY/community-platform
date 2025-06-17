@@ -3230,6 +3230,20 @@
           "maxLength": null
         },
         {
+          "id": "public.notifications_preferences.research_updates",
+          "name": "research_updates",
+          "columnName": "research_updates",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "profiles",
           "type": "profiles",
           "isRequired": true,

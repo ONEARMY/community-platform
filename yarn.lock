@@ -29158,7 +29158,6 @@ __metadata:
     linkify-react: "npm:^4.0.2"
     linkifyjs: "npm:^4.0.2"
     mustache: "npm:^4.2.0"
-    oa-shared: "workspace:^"
     oa-themes: "workspace:^"
     photoswipe: "npm:^5.4.1"
     prettier: "npm:2.5.1"
@@ -29248,7 +29247,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"oa-shared@workspace:*, oa-shared@workspace:^, oa-shared@workspace:shared":
+"oa-shared@workspace:*, oa-shared@workspace:shared":
   version: 0.0.0-use.local
   resolution: "oa-shared@workspace:shared"
   dependencies:

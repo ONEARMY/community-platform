@@ -10,11 +10,13 @@ import type { LatLngExpression } from 'leaflet'
 import type { ILatLng, IMapPin } from 'oa-shared'
 import type { RefObject } from 'react'
 import type { Map as MapType, MapProps } from 'react-leaflet'
+import type { ClustersRef } from './Cluster.client'
 
 interface IProps {
   allPins: IMapPin[] | null
   center: ILatLng
   mapRef: RefObject<MapType<MapProps, any>>
+  clustersRef?: RefObject<ClustersRef>
   onBlur: () => void
   onPinClick: (IMapPin) => void
   selectedPin: IMapPin | undefined
@@ -30,6 +32,7 @@ export const MapView = (props: IProps) => {
     allPins,
     center,
     mapRef,
+    clustersRef,
     onBlur,
     onPinClick,
     selectedPin,
@@ -107,7 +110,12 @@ export const MapView = (props: IProps) => {
         </Button>
       </Flex>
       {allPins && (
-        <Clusters pins={allPins} onPinClick={onPinClick} prefix="new" />
+        <Clusters
+          ref={clustersRef}
+          pins={allPins}
+          onPinClick={onPinClick}
+          prefix="new"
+        />
       )}
       {selectedPin && (
         <Popup activePin={selectedPin} mapRef={mapRef} onClose={onBlur} />

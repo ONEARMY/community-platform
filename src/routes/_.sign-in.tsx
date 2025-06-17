@@ -85,7 +85,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       )
 
       if (userAuthResult.error) {
-        console.log(userAuthResult.error)
+        console.error(userAuthResult.error)
       }
 
       if (userAuthResult.data?.at(0)?.auth_id) {

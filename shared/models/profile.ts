@@ -54,7 +54,7 @@ export class Profile {
 // Notifications here to avoid circular dependencies
 
 export type NotificationActionType = 'newContent' | 'newComment'
-export type NotificationContentType = 'news' | 'comment' | 'reply'
+export type NotificationContentType = 'researchUpdate' | 'comment' | 'reply'
 
 type NotificationContent = News | Comment | Question | ResearchUpdate
 type NotificationSourceContentType = SubscribableContentTypes
@@ -140,6 +140,12 @@ export class NotificationDisplay {
   isRead: boolean
   contentType: NotificationContentType
 
+  email: {
+    body: string | undefined
+    buttonLabel: string
+    preview: string
+    subject: string
+  }
   sidebar: {
     icon?: string
     image?: string
@@ -151,20 +157,91 @@ export class NotificationDisplay {
     parentSlug: string
   }
   date: Date
-  body?: string
   slug: string
 
-  context?: string
-  actionLabel?: string
+  body?: string
 
   constructor(obj: NotificationDisplay) {
     Object.assign(this, obj)
   }
 
+  static setEmailBody(notification: Notification): string | undefined {
+    switch (notification.contentType) {
+      case 'researchUpdate': {
+        return `${notification.parentContent?.title}:\n\n${notification.parentContent?.description}`
+      }
+      default: {
+        return undefined
+      }
+    }
+  }
+
+  static setEmailButtonLabel(notification: Notification) {
+    switch (notification.contentType) {
+      case 'researchUpdate': {
+        return 'Join the discussion'
+      }
+      case 'comment': {
+        return 'See the full discussion'
+      }
+      case 'reply': {
+        return 'See the full discussion'
+      }
+      default: {
+        return 'View now'
+      }
+    }
+  }
+
+  static setEmailPreview(notification: Notification, parentTitle: string) {
+    switch (notification.contentType) {
+      case 'researchUpdate': {
+        return `New research update on ${parentTitle}`
+      }
+      case 'comment': {
+        return `${notification.triggeredBy} has left a new comment`
+      }
+      case 'reply': {
+        return `${notification.triggeredBy} has left a new reply`
+      }
+      default: {
+        return 'A new notification'
+      }
+    }
+  }
+
+  static setEmailSubject(notification: Notification, parentTitle: string) {
+    switch (notification.contentType) {
+      case 'researchUpdate': {
+        return `New update on ${parentTitle}`
+      }
+      case 'comment': {
+        return `A new comment on ${parentTitle}`
+      }
+      case 'reply': {
+        return `A new reply on ${parentTitle}`
+      }
+      default: {
+        return 'A new notification'
+      }
+    }
+  }
+
   static setBody(notification: Notification): string | undefined {
-    return notification.content
-      ? (notification.content as any).comment
-      : undefined
+    switch (notification.contentType) {
+      case 'researchUpdate': {
+        return notification.parentContent?.title
+      }
+      case 'comment': {
+        return (notification.content as Comment).comment
+      }
+      case 'reply': {
+        return (notification.content as Comment).comment
+      }
+      default: {
+        return ''
+      }
+    }
   }
 
   static setDate(notification: Notification) {
@@ -173,10 +250,30 @@ export class NotificationDisplay {
       : new Date(notification.createdAt)
   }
 
+  static setParentMiddle(notification: Notification) {
+    switch (notification.contentType) {
+      case 'researchUpdate': {
+        return 'published a new update'
+      }
+      case 'comment': {
+        return 'left a comment'
+      }
+      case 'reply': {
+        return 'left a reply'
+      }
+      default: {
+        return ''
+      }
+    }
+  }
+
   static setParentTitle(notification: Notification) {
     let title = notification.sourceContent?.title || ''
 
-    if (notification.parentContent?.title) {
+    if (
+      notification.contentType != 'researchUpdate' &&
+      notification.parentContent?.title
+    ) {
       title = title + `: ${notification.parentContent.title}`
     }
     return title
@@ -192,12 +289,17 @@ export class NotificationDisplay {
   }
 
   static setSidebarIcon(contentType: NotificationContentType): string {
-    const options: { [option in NotificationContentType]: string } = {
-      comment: 'discussion',
-      reply: 'discussion',
-      news: 'news',
+    switch (contentType) {
+      case 'comment': {
+        return 'discussion'
+      }
+      case 'reply': {
+        return 'discussion'
+      }
+      default: {
+        return 'thunderbolt'
+      }
     }
-    return options[contentType]
   }
 
   static setSidebarImage(author: BasicAuthorDetails | undefined): string {
@@ -205,6 +307,23 @@ export class NotificationDisplay {
   }
 
   static setSlug(notification: Notification) {
+    switch (notification.contentType) {
+      case 'researchUpdate': {
+        return `${notification.sourceContentType}/${notification.sourceContent?.slug}#update_${notification.parentContent?.id}`
+      }
+      case 'comment': {
+        return this.setSlugDiscussion(notification)
+      }
+      case 'reply': {
+        return this.setSlugDiscussion(notification)
+      }
+      default: {
+        return `${notification.sourceContentType}/${notification.sourceContent?.slug}`
+      }
+    }
+  }
+
+  static setSlugDiscussion(notification: Notification) {
     if (notification.sourceContentType == 'research') {
       return `research/${notification.sourceContent?.slug}?update_${notification.parentContentId}#comment:${notification.content?.id}`
     }
@@ -212,18 +331,26 @@ export class NotificationDisplay {
   }
 
   static fromNotification(notification: Notification): NotificationDisplay {
+    const parentTitle = this.setParentTitle(notification)
+
     return new NotificationDisplay({
       id: notification.id,
       isRead: notification.isRead,
       contentType: notification.contentType,
+      email: {
+        body: this.setEmailBody(notification),
+        buttonLabel: this.setEmailButtonLabel(notification),
+        preview: this.setEmailPreview(notification, parentTitle),
+        subject: this.setEmailSubject(notification, parentTitle),
+      },
       sidebar: {
         icon: this.setSidebarIcon(notification.contentType),
         image: this.setSidebarImage(notification.triggeredBy),
       },
       title: {
         triggeredBy: notification.triggeredBy?.username || '',
-        middle: `left a ${notification.contentType}`,
-        parentTitle: this.setParentTitle(notification),
+        middle: this.setParentMiddle(notification),
+        parentTitle,
         parentSlug: this.setParentSlug(notification),
       },
       date: this.setDate(notification),
@@ -238,7 +365,7 @@ export type NewNotificationData = {
   contentId: number
   contentType: NotificationContentType
   ownedById: number
-  parentCommentId: number | null
+  parentCommentId?: number | null
   parentContentId: number | null
   sourceContentType: NotificationSourceContentType
   sourceContentId: number

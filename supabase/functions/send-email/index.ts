@@ -67,7 +67,7 @@ Deno.serve(async (req) => {
     switch (email_data.email_action_type) {
       case 'instant_notification': {
         if (email_data.notification) {
-          subject = `A new ${email_data.notification.contentType} on ${email_data.notification.title.parentTitle}`
+          subject = email_data.notification.email.subject
           html = await render(
             React.createElement(InstantNotificationEmail, details),
           )
@@ -130,7 +130,7 @@ Deno.serve(async (req) => {
       html,
     })
   } catch (error: any) {
-    console.log(error)
+    console.error(error)
     return new Response(
       JSON.stringify({
         error: {

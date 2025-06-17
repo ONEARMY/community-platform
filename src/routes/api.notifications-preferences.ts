@@ -1,10 +1,12 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
+import type { ActionFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
 
 export const DEFAULT_NOTIFICATION_PREFERENCES = {
   comments: true,
   replies: true,
+  research_updates: true,
 }
 
 export const loader = async ({ request }) => {
@@ -28,7 +30,7 @@ export const loader = async ({ request }) => {
   return Response.json({ preferences }, { headers, status: 200 })
 }
 
-export const action = async ({ request }) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
 
   try {
@@ -36,6 +38,7 @@ export const action = async ({ request }) => {
     const id = formData.has('id') ? Number(formData.get('id') as string) : null
     const comments = formData.get('comments') === 'true'
     const replies = formData.get('replies') === 'true'
+    const researchUpdates = formData.get('research_updates') === 'true'
 
     const {
       data: { user },
@@ -53,6 +56,7 @@ export const action = async ({ request }) => {
         .update({
           comments,
           replies,
+          research_updates: researchUpdates,
         })
         .eq('id', id)
         .select()
@@ -71,14 +75,13 @@ export const action = async ({ request }) => {
       return Response.json({}, { status: 401, statusText: 'User not found' })
     }
 
-    await client
-      .from('notifications_preferences')
-      .insert({
-        user_id: data.id,
-        comments,
-        replies,
-      })
-      .select()
+    await client.from('notifications_preferences').insert({
+      user_id: data.id,
+      comments,
+      replies,
+      research_updates: researchUpdates,
+      tenant_id: process.env.TENANT_ID!,
+    })
 
     return Response.json({}, { headers, status: 200 })
   } catch (error) {

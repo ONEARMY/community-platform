@@ -21,6 +21,7 @@ const setPreferences = async (data: NotificationsPreferencesFormData) => {
   data.id && formData.append('id', data.id.toString())
   formData.append('comments', data.comments.toString())
   formData.append('replies', data.replies.toString())
+  formData.append('research_updates', data.replies.toString())
 
   return fetch('/api/notifications-preferences', {
     method: 'POST',

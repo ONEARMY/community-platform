@@ -165,7 +165,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     addSubscriptions(comment, profile, client)
 
     notificationsService.sendCommentNotification(client, comment, profile)
-    notificationsSupabaseServiceServer.createNotificationNewComment(
+    notificationsSupabaseServiceServer.createNotificationsNewComment(
       comment,
       client,
     )

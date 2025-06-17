@@ -51,7 +51,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     return Response.json(null, { headers, status: 200 })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return Response.json(
       {},
       { status: 500, statusText: 'Error creating research' },

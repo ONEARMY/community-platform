@@ -2,6 +2,7 @@ import { ResearchUpdate, UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { discordServiceServer } from 'src/services/discordService.server'
 import { notificationsService } from 'src/services/notificationsService.server'
+import { notificationsSupabaseServiceServer } from 'src/services/notificationSupabaseService.server'
 import { profileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
@@ -84,7 +85,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       throw updateResult.error
     }
 
-    const researchUpdate = ResearchUpdate.fromDB(updateResult.data[0], [])
+    const dbResearchUpdate = updateResult.data[0]
+    const researchUpdate = ResearchUpdate.fromDB(dbResearchUpdate, [])
 
     await uploadAndUpdateImages(
       uploadedImages,
@@ -106,8 +108,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       notificationsService.sendResearchUpdateNotification(
         client,
         research,
-        updateResult.data[0],
+        dbResearchUpdate,
         profile,
+      )
+      notificationsSupabaseServiceServer.createNotificationsResearchUpdate(
+        research,
+        dbResearchUpdate,
+        client,
       )
       notifyDiscord(
         research,

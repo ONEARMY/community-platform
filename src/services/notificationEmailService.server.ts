@@ -14,7 +14,7 @@ import type {
 const preferenceTypes: PreferenceTypes = {
   comment: 'comments',
   reply: 'replies',
-  news: 'news', // Not needed yet
+  researchUpdate: 'research_updates',
 }
 
 type PreferenceTypes = {

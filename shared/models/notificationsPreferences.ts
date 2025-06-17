@@ -3,6 +3,7 @@ export class NotificationsPreferences {
   user_id?: number
   comments: boolean
   replies: boolean
+  research_updates: boolean
 }
 
 export class DBNotificationsPreferences {
@@ -10,12 +11,17 @@ export class DBNotificationsPreferences {
   user_id: number
   comments: boolean
   replies: boolean
+  research_updates: boolean
 }
 
-export type NotificationsPreferenceTypes = 'comments' | 'replies' | 'news'
+export type NotificationsPreferenceTypes =
+  | 'comments'
+  | 'replies'
+  | 'research_updates'
 
 export interface NotificationsPreferencesFormData {
   comments: boolean
   replies: boolean
+  research_updates: boolean
   id?: number
 }

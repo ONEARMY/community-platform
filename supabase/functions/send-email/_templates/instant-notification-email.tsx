@@ -6,7 +6,7 @@ import { Button } from './components/button.tsx'
 import { Layout } from './layout.tsx'
 import { Heading } from './components/heading.tsx'
 
-import type { NotificationDisplay, TenantSettings } from 'oa-shared'
+import type { Comment, News, Notification, TenantSettings } from 'oa-shared'
 import { Header } from './components/header.tsx'
 
 const text = {
@@ -17,37 +17,66 @@ const text = {
 }
 
 interface IProps {
-  notification: NotificationDisplay
+  notification: Notification
   settings: TenantSettings
 }
 
 // Some unavoidable duplication of approaches here to:
 // packages/components/src/NotificationListSupabase
 
+const setSourceContentLink = (
+  notification: Notification,
+  settings: TenantSettings,
+) => {
+  let path = `${settings.siteUrl}/${notification.sourceContentType}/${notification.sourceContent?.slug}`
+  if (notification.sourceContentType == 'research') {
+    path = path + `#update_${notification.parentContentId}`
+  }
+
+  return path
+}
+
+const setDeepLink = (
+  notification: Notification,
+  link: string,
+  settings: TenantSettings,
+) => {
+  if (notification.sourceContentType == 'research') {
+    // Have to rebuild the path as there's a weirdness to how deep linking into research update discussions works
+    return `${settings.siteUrl}/research/${notification.sourceContent?.slug}?update_${notification.parentContentId}#comment:${notification.content?.id}`
+  }
+  return `${link}#comment:${notification.content?.id}`
+}
+
 export const InstantNotificationEmail = (props: IProps) => {
   const { notification, settings } = props
 
-  const link = `${settings.siteUrl}/${notification.slug}`
-  const parentLink = `${settings.siteUrl}/${notification.title.parentSlug}`
+  const sourceContentLink = setSourceContentLink(notification, settings)
+  const deepLink = setDeepLink(notification, sourceContentLink, settings)
   const preview = `New ${notification.contentType} notification on ${settings.siteName}`
 
   return (
     <Layout preview={preview} settings={settings}>
       <Header>
-        <Link href={link}>
+        <Link href={deepLink}>
           <Heading>
-            <strong>{notification.title.triggeredBy}</strong>{' '}
-            {notification.title.middle} {' on '}
-            {notification.title.parentTitle}
+            New {notification.contentType} from{' '}
+            <strong>{notification.triggeredBy?.username}</strong>{' '}
+            {notification.sourceContent &&
+              `on ${notification.sourceContent?.title}`}
+            {notification.parentContent?.title &&
+              `: ${notification.parentContent?.title}`}
           </Heading>
         </Link>
       </Header>
 
       <BoxText>
         <Heading>They wrote:</Heading>
-        <Text style={text}>{notification.body}</Text>
+        <Text style={text}>
+          {(notification.content as unknown as Comment)?.comment}
+        </Text>
       </BoxText>
-      <Button href={parentLink}>See the full discussion →</Button>
+      <Button href={sourceContentLink}>See the full discussion →</Button>
     </Layout>
   )
 }

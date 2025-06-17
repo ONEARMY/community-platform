@@ -4,7 +4,7 @@ import type {
   Author,
   Comment,
   News,
-  NotificationDisplay,
+  Notification,
   Question,
   ResearchItem,
   ResearchUpdate,
@@ -86,25 +86,23 @@ export const fakeNewsSB = (newsOverloads: Partial<News> = {}): News => ({
   ...newsOverloads,
 })
 
-export const fakeDisplayNotification = (
-  notificationOverloads: Partial<NotificationDisplay> = {},
-): NotificationDisplay => ({
+export const fakeNotification = (
+  notificationOverloads: Partial<Notification> = {},
+): Notification => ({
   id: faker.datatype.number(),
-  isRead: faker.datatype.boolean(),
+  actionType: 'newComment',
+  contentId: faker.datatype.number(100),
   contentType: 'comment',
-  sidebar: {
-    icon: 'discussion',
-    image: faker.image.avatar(),
-  },
-  title: {
-    triggeredBy: faker.internet.userName(),
-    middle: `left a comment`,
-    parentTitle: 'Title',
-    parentSlug: 'research-title',
-  },
-  date: faker.date.past(),
-  body: faker.lorem.text(),
-  slug: 'comment',
+  createdAt: faker.date.past(),
+  modifiedAt: null,
+  ownedById: faker.datatype.number(100),
+  isRead: faker.datatype.boolean(),
+  parentCommentId: null,
+  parentContentId: null,
+  sourceContentType: 'news',
+  sourceContentId: faker.datatype.number(100),
+  triggeredBy: fakeAuthorSB(),
+  ownedBy: fakeAuthorSB(),
   ...notificationOverloads,
 })
 

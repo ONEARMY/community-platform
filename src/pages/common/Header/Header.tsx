@@ -25,7 +25,7 @@ import { NotificationsSupabase } from './Menu/Notifications/NotificationsSupabas
 import { getFormattedNotifications } from './getFormattedNotifications'
 import { MobileMenuContext } from './MobileMenuContext'
 
-import type { NotificationDisplay } from 'oa-shared'
+import type { Notification } from 'oa-shared'
 import type { ThemeWithName } from 'oa-themes'
 
 const MobileNotificationsWrapper = ({ children }) => {
@@ -101,7 +101,7 @@ const Header = observer(() => {
 
   // New notifications states
   const [notificationsSupabase, setNotificationsSupabase] = useState<
-    NotificationDisplay[] | null
+    Notification[] | null
   >(null)
   const [isUpdatingNotifications, setIsUpdatingNotifications] =
     useState<boolean>(true)

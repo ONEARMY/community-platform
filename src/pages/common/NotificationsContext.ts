@@ -1,9 +1,9 @@
 import { createContext } from 'react'
 
-import type { NotificationDisplay } from 'oa-shared'
+import type { Notification } from 'oa-shared'
 
 type INotificationsContext = {
-  notifications: NotificationDisplay[] | null
+  notifications: Notification[] | null
   isUpdatingNotifications: boolean
   updateNotifications?: () => void
 }

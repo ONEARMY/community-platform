@@ -22,6 +22,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const skip = Number(searchParams.get('skip')) || 0
 
   const { client, headers } = createSupabaseServerClient(request)
+  const {
+    data: { user },
+  } = await client.auth.getUser()
+
+  const username = user?.user_metadata?.username || null
 
   const { data, error } = await client.rpc('get_projects', {
     search_query: q || null,
@@ -29,11 +34,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     sort_by: sort,
     offset_val: skip,
     limit_val: ITEMS_PER_PAGE,
+    current_username: username,
   })
 
   const countRersult = await client.rpc('get_projects_count', {
     search_query: q || null,
     category_id: category,
+    current_username: username,
   })
   const count = countRersult.data || 0
 

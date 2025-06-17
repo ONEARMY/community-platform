@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBNotificationsPreferences } from 'shared/lib'
+import type { DBNotificationsPreferences } from 'oa-shared'
 
 const getPreferences = async (client: SupabaseClient, profileId: number) => {
   try {

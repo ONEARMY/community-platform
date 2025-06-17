@@ -1,13 +1,14 @@
-import { ResearchItem, UserRole } from 'oa-shared'
+import { Author, ResearchItem, UserRole } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 
+import { profileServiceServer } from './profileService.server'
 import { storageServiceServer } from './storageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBProfile, DBResearchItem, DBResearchUpdate } from 'oa-shared'
 
-const getBySlug = (client: SupabaseClient, slug: string) => {
-  return client
+const getBySlug = async (client: SupabaseClient, slug: string) => {
+  const { data, error } = await client
     .from('research')
     .select(
       `
@@ -47,6 +48,36 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
     .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
     .or('deleted.eq.false,deleted.is.null')
     .single()
+
+  if (!data || error) {
+    return { error }
+  }
+
+  const item = data as unknown as DBResearchItem
+  let collaborators: Author[] | undefined = []
+
+  if (item?.collaborators?.length) {
+    // potential improvement: could make an rpc query for the whole research + collaborators instead of 2 queries
+    collaborators = await getCollaborators(item.collaborators, client)
+  }
+
+  return { item, collaborators, error }
+}
+
+const getCollaborators = async (
+  collaboratorIds: string[] | null,
+  client: SupabaseClient,
+) => {
+  if (collaboratorIds === null || collaboratorIds.length === 0) {
+    return []
+  }
+
+  const users = await profileServiceServer.getUsersByUsername(
+    collaboratorIds,
+    client,
+  )
+
+  return users?.map((user) => Author.fromDB(user))
 }
 
 const getUpdate = async (

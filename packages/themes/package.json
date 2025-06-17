@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.js",
   "scripts": {
-    "build": "tsc --build --force --verbose",
+    "build": "tsc --build --verbose",
     "dev": "tsc --watch"
   },
   "devDependencies": {

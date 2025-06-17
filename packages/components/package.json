@@ -32,7 +32,6 @@
     "linkify-plugin-mention": "^4.0.2",
     "linkify-react": "^4.0.2",
     "linkifyjs": "^4.0.2",
-    "oa-shared": "workspace:^",
     "oa-themes": "workspace:^",
     "photoswipe": "^5.4.1",
     "react-country-flag": "^3.1.0",

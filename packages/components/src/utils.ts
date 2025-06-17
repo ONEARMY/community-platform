@@ -80,7 +80,7 @@ export const fakeNewsSB = (newsOverloads: Partial<News> = {}): News => ({
   summary: null,
   tags: [],
   totalViews: faker.datatype.number(100),
-  usefulCount: faker.datatype.number(20),
+  usefulCount: faker.datatype.number({ min: 20, max: 1000 }),
   body: faker.random.words(50),
   heroImage: null,
   ...newsOverloads,

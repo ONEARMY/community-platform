@@ -11,7 +11,7 @@ import type { IImageForm } from 'oa-shared'
 
 const ImageInputFieldWrapper = styled.div`
   height: 200px;
-  margin-right: 10px;
+  width: 370px;
   margin-bottom: 6px;
 `
 

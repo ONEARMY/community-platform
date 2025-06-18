@@ -30,15 +30,17 @@ export const FilesFields = () => {
           <Label htmlFor="files" sx={{ mb: 2 }}>
             {fileLabels.files.title}
           </Label>
-          <AlreadyAddedFiles
-            files={state.values.existingFiles || []}
-            deleteFile={(id) => {
-              form.change(
-                'existingFiles',
-                state.values.existingFiles?.filter((x) => x.id !== id),
-              )
-            }}
-          />
+          {!!state.values.existingFiles?.length && (
+            <AlreadyAddedFiles
+              files={state.values.existingFiles || []}
+              deleteFile={(id) => {
+                form.change(
+                  'existingFiles',
+                  state.values.existingFiles?.filter((x) => x.id !== id),
+                )
+              }}
+            />
+          )}
           <UploadNewFiles />
         </>
       )}

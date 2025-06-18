@@ -1,18 +1,17 @@
 import { useMemo, useState } from 'react'
 import { Form } from 'react-final-form'
-import styled from '@emotion/styled'
 import { useNavigate } from '@remix-run/react'
 import arrayMutators from 'final-form-arrays'
-import { Button, ElWithBeforeIcon } from 'oa-components'
-import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
+import { Button } from 'oa-components'
 import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
+import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { FilesFields } from 'src/pages/common/FormFields/FilesFields'
 import { ImageField } from 'src/pages/common/FormFields/ImageField'
-import { Box, Card, Flex, Heading, Text } from 'theme-ui'
+import { Flex } from 'theme-ui'
 
-import { buttons, headings, intro } from '../../labels'
+import { buttons, headings } from '../../labels'
 import { libraryService } from '../../library.service'
 import { LibraryCategoryField } from './LibraryCategory.field'
 import { LibraryDescriptionField } from './LibraryDescription.field'
@@ -31,9 +30,6 @@ interface LibraryFormProps {
   fileLink?: string
 }
 
-const FormContainer = styled.form`
-  width: 100%;
-`
 export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
   const navigate = useNavigate()
   const [intentionalNavigation, setIntentionalNavigation] = useState(false)
@@ -116,159 +112,73 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
         submitSucceeded,
         submitting,
       }) => {
-        return (
-          <Flex
-            sx={{ backgroundColor: 'inherit', marginx: -2, flexWrap: 'wrap' }}
-          >
-            <UnsavedChangesDialog
-              hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
-            />
-            <Flex
-              sx={{
-                backgroundColor: 'inherit',
-                paddingX: 2,
-                marginTop: 4,
-                width: ['100%', '100%', `${(2 / 3) * 100}%`],
-              }}
-            >
-              <FormContainer id={formId} onSubmit={handleSubmit}>
-                {/* Project Info */}
-                <Flex sx={{ flexDirection: 'column' }}>
-                  <Card sx={{ backgroundColor: 'softblue' }}>
-                    <Flex
-                      sx={{ paddingX: 3, paddingY: 2, alignItems: 'center' }}
-                    >
-                      <Heading
-                        as="h1"
-                        dangerouslySetInnerHTML={{ __html: headingText }}
-                      />
-                      <Box ml="15px">
-                        <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
-                      </Box>
-                    </Flex>
-                  </Card>
-                  <Box
-                    sx={{
-                      marginTop: '20px',
-                      display: ['block', 'block', 'none'],
-                    }}
-                  >
-                    <LibraryPostingGuidelines />
-                  </Box>
-                  <Card sx={{ marginTop: 3 }}>
-                    <Flex
-                      sx={{
-                        flexWrap: 'wrap',
-                        flexDirection: 'column',
-                        padding: 4,
-                      }}
-                    >
-                      {/* Left Side */}
-                      <Heading as="h2" variant="small" mb={3}>
-                        {intro.heading.title}
-                      </Heading>
-                      <Flex
-                        sx={{
-                          marginX: -2,
-                          flexDirection: ['column', 'column', 'row'],
-                        }}
-                      >
-                        <Flex
-                          sx={{
-                            flexDirection: 'column',
-                            flex: [1, 1, 4],
-                            paddingX: 2,
-                          }}
-                        >
-                          <LibraryTitleField />
-                          <LibraryDescriptionField />
-                          <LibraryCategoryField />
-                          <LibraryTagsField />
-                          <LibraryTimeField />
-                          <LibraryDifficultyField />
-                          <FilesFields />
-                        </Flex>
-                        {/* Right side */}
-                        <Flex
-                          sx={{
-                            flexDirection: 'column',
-                            flex: [1, 1, 3],
-                            paddingX: 2,
-                          }}
-                          data-cy="intro-cover"
-                        >
-                          <ImageField title="Cover Image" />
-                        </Flex>
-                      </Flex>
-                    </Flex>
-                  </Card>
+        const saveError = saveErrorMessage && (
+          <ErrorsContainer errors={[saveErrorMessage]} />
+        )
 
+        const sidebar = (
+          <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
+            <Button
+              data-cy="draft"
+              variant="secondary"
+              type="submit"
+              disabled={submitting}
+              sx={{ width: '100%', display: 'block' }}
+              onClick={() => onSubmit(values, true)}
+              form={formId}
+            >
+              <span>{buttons.draft.create}</span>
+            </Button>
+          </Flex>
+        )
+
+        const unsavedChangesDialog = (
+          <UnsavedChangesDialog
+            hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
+          />
+        )
+
+        return (
+          <>
+            <FormWrapper
+              buttonLabel={buttons.publish}
+              contentType="research"
+              guidelines={<LibraryPostingGuidelines />}
+              handleSubmit={handleSubmit}
+              heading={headingText}
+              saveError={saveError}
+              sidebar={sidebar}
+              belowBody={
+                <Flex sx={{ flexDirection: 'column' }}>
                   <LibraryStepsContainerField />
                 </Flex>
-              </FormContainer>
-            </Flex>
-            {/* post guidelines container */}
-            <Flex
-              sx={{
-                flexDirection: 'column',
-                width: ['100%', '100%', `${100 / 3}%`],
-                height: 'auto',
-                position: ['relative', 'relative', 'sticky'],
-                top: 3,
-                alignSelf: 'flex-start',
-                backgroundColor: 'inherit',
-                paddingX: 2,
-                marginTop: [0, 0, 4],
-              }}
+              }
+              submitting={submitting}
+              unsavedChangesDialog={unsavedChangesDialog}
+              valid={valid}
             >
-              <Box
+              <Flex
                 sx={{
-                  maxWidth: ['inherit', 'inherit', '400px'],
+                  gap: 4,
+                  flexDirection: ['column', 'row'],
                 }}
               >
-                <Box sx={{ display: ['none', 'none', 'block'] }}>
-                  <LibraryPostingGuidelines />
-                </Box>
-                <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
-                  <Button
-                    data-cy="draft"
-                    variant="secondary"
-                    type="submit"
-                    disabled={submitting}
-                    sx={{ width: '100%', display: 'block', mt: [0, 0, 3] }}
-                    onClick={() => onSubmit(values, true)}
-                    form={formId}
-                  >
-                    <span>{buttons.draft.create}</span>
-                  </Button>
-                  <Text sx={{ fontSize: 1, textAlign: 'center', marginTop: 1 }}>
-                    {buttons.draft.description}
-                  </Text>
+                <Flex sx={{ flexDirection: 'column', gap: 2, flex: 1 }}>
+                  <LibraryTitleField />
+                  <LibraryDescriptionField />
+                  <LibraryCategoryField />
+                  <LibraryTagsField />
+                  <LibraryTimeField />
+                  <LibraryDifficultyField />
+                  <FilesFields />
                 </Flex>
-                <Button
-                  large
-                  data-cy="submit"
-                  data-testid="submit-form"
-                  variant="primary"
-                  type="submit"
-                  disabled={submitting || !valid}
-                  form={formId}
-                  onClick={() => onSubmit(values)}
-                  sx={{
-                    width: '100%',
-                    display: 'block',
-                    marginBottom: ['40px', '40px', 0],
-                    marginTop: 3,
-                  }}
-                >
-                  {buttons.publish}
-                </Button>
-                {saveErrorMessage && (
-                  <ErrorsContainer errors={[saveErrorMessage]} />
-                )}
-              </Box>
-            </Flex>
-          </Flex>
+                {/* Right side */}
+                <Flex data-cy="intro-cover" sx={{ flex: 1, width: '100%' }}>
+                  <ImageField title="Cover Image" />
+                </Flex>
+              </Flex>
+            </FormWrapper>
+          </>
         )
       }}
     />

@@ -13,6 +13,7 @@ interface IProps {
   heading: string
   saveError: React.ReactNode | null
   sidebar?: React.ReactNode
+  belowBody?: React.ReactNode
   submitting: boolean
   unsavedChangesDialog?: React.ReactNode
   valid: boolean
@@ -28,6 +29,7 @@ export const FormWrapper = (props: IProps) => {
     heading,
     saveError,
     sidebar,
+    belowBody,
     submitting,
     unsavedChangesDialog,
     valid,
@@ -67,6 +69,7 @@ export const FormWrapper = (props: IProps) => {
           <Card sx={{ marginTop: 4, padding: 4, overflow: 'visible' }}>
             {children}
           </Card>
+          {belowBody}
         </Box>
       </Flex>
       <Flex

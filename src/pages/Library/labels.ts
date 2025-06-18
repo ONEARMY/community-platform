@@ -9,8 +9,8 @@ import {
 import type { ILabels } from 'src/common/Form/types'
 
 export const headings = {
-  create: '<span>Add</span> your project',
-  edit: '<span>Edit</span> your project',
+  create: 'Add your project',
+  edit: 'Edit your project',
   errors: "Ouch, something's wrong",
   files: 'Do you have supporting files to help others replicate your project?',
   uploading: 'Uploading project',
@@ -19,7 +19,6 @@ export const headings = {
 export const buttons = {
   draft: {
     create: 'Save draft',
-    description: 'A draft can be saved any time',
   },
   files: 'Re-upload files (this will delete the existing ones)',
   publish: 'Publish',

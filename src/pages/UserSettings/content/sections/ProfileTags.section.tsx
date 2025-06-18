@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Field } from 'react-final-form'
-import TagsSelectV2 from 'src/common/Tags/TagsSelectV2'
+import TagsSelect from 'src/common/Form/TagsSelect'
 import { fields } from 'src/pages/UserSettings/labels'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { getProfileTagsForTheme } from 'src/utils/getProfileTagsForTheme'
@@ -21,7 +21,7 @@ export const ProfileTags = ({ isMemberProfile }: IProps) => {
     )
 
     return (
-      <TagsSelectV2
+      <TagsSelect
         value={input.value}
         onChange={(tags) => input.onChange(tags)}
         tagsSource={profileTags}

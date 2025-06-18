@@ -15,6 +15,7 @@ export const generateDBEndpoints = () => ({
   user_notifications: `user_notifications_rev20221209`,
   mappins: `v3_mappins`,
   emails: `emails`,
+  tags: `v3_tags`,
   user_integrations: `user_integrations`,
 })
 

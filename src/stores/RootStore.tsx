@@ -1,5 +1,6 @@
 import { DatabaseV2 } from './databaseV2/DatabaseV2'
 import { MapsStore } from './Maps/maps.store'
+import { TagsStore } from './Tags/tags.store'
 import { UserNotificationsStore } from './User/notifications.store'
 import { UserStore } from './User/user.store'
 
@@ -11,6 +12,7 @@ export interface IRootStore {
 export interface IStores {
   userStore: UserStore
   mapsStore: MapsStore
+  tagsStore: TagsStore
   userNotificationsStore: UserNotificationsStore
 }
 
@@ -32,6 +34,7 @@ const stores = (rootStore: IRootStore) => {
   const stores: IStores = {
     userStore: new UserStore(rootStore),
     mapsStore: new MapsStore(rootStore),
+    tagsStore: new TagsStore(rootStore),
     userNotificationsStore: new UserNotificationsStore(rootStore),
   }
   return stores

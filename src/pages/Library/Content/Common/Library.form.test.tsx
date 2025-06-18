@@ -5,13 +5,30 @@ import { act, fireEvent, render } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { FactoryLibraryItem } from 'src/test/factories/Library'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { LibraryForm } from './Library.form'
 
 import type { MediaFile, Project } from 'oa-shared'
 
 const Theme = testingThemeStyles
+
+vi.mock('src/common/hooks/useCommonStores', () => {
+  return {
+    useCommonStores: () => ({
+      stores: {
+        tagsStore: {
+          allTags: [
+            {
+              label: 'test tag 1',
+              image: 'test img',
+            },
+          ],
+        },
+      },
+    }),
+  }
+})
 
 describe('Library form', () => {
   describe('Provides user information', () => {

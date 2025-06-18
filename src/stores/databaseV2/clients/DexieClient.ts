@@ -181,7 +181,8 @@ const DEFAULT_SCHEMA = '_id,_modified'
 const SCHEMA_BASE: IDexieSchema = {
   mappins: DEFAULT_SCHEMA,
   users: `${DEFAULT_SCHEMA},_authID`,
-  emails: `${DEFAULT_SCHEMA}`,
+  emails: DEFAULT_SCHEMA,
+  tags: DEFAULT_SCHEMA,
 }
 
 // Ensure dexie also handles any prefixed database schema

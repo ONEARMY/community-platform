@@ -61,6 +61,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const sessionResult = await client.auth.exchangeCodeForSession(code)
 
   if (sessionResult.error) {
+    console.error(sessionResult.error)
     return Response.json(
       { error: 'Your reset link has expired or is invalid' },
       { status: 400 },

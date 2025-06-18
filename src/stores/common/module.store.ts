@@ -131,6 +131,9 @@ export class ModuleStore {
   get mapsStore() {
     return this.rootStore!.stores.mapsStore
   }
+  get tagsStore() {
+    return this.rootStore!.stores.tagsStore
+  }
   get userNotificationsStore() {
     return this.rootStore!.stores.userNotificationsStore
   }

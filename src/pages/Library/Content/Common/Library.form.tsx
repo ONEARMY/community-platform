@@ -77,6 +77,16 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
     setSaveErrorMessage(null)
 
     try {
+      if (!isDraft) {
+        if (!values.category?.value) {
+          setSaveErrorMessage('Category is required')
+          return
+        } else if (!values.image && !values.existingImage?.id) {
+          setSaveErrorMessage('An image is required')
+          return
+        }
+      }
+
       const result = await libraryService.upsert(
         project?.id || null,
         values,
@@ -97,13 +107,28 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
 
   return (
     <Form<ProjectFormData>
-      onSubmit={() => {}}
+      onSubmit={(values) => onSubmit(values, false)}
       initialValues={formValues}
       mutators={{
         ...arrayMutators,
       }}
       validateOnBlur
       enableReinitialize={true}
+      validate={(values) => {
+        const errors = {}
+
+        if (!values.category) {
+          errors['category'] = 'Category is required.'
+        }
+
+        if (!values.image && !values.existingImage) {
+          errors['existingImage'] =
+            'An image is required (either new or existing).'
+          errors['image'] = 'An image is required (either new or existing).'
+        }
+
+        return errors
+      }}
       render={({
         dirty,
         valid,

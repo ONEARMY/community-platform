@@ -47,7 +47,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         : null,
       stepCount: parseInt(formData.get('stepCount') as string),
     }
-    const existingCoverImageId = formData.getAll('existingCoverImage') as File[]
+    const existingCoverImageId = formData.get('existingCoverImage') as string
     const filesToKeepIds = formData.getAll('existingFiles') as string[]
 
     const { client, headers } = createSupabaseServerClient(request)
@@ -124,6 +124,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       slug,
       files,
       newCoverImage,
+      existingCoverImageId,
     )
     const project = Project.fromDB(projectDb, [])
 
@@ -215,6 +216,7 @@ async function updateProject(
   slug: string,
   files: MediaFile[] | null,
   coverImage?: DBMedia,
+  existingCoverImageId?: string,
 ) {
   const previousSlugs = currentProject.previous_slugs || []
 
@@ -236,7 +238,8 @@ async function updateProject(
       difficulty_level: data.difficultyLevel,
       time: data.time,
       files,
-      cover_image: coverImage ?? currentProject.cover_image,
+      cover_image:
+        coverImage ?? existingCoverImageId ? currentProject.cover_image : null,
     })
     .eq('id', currentProject.id)
     .select()

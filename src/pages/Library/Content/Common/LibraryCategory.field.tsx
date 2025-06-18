@@ -4,6 +4,7 @@ import { CategoriesSelectV2 } from 'src/pages/common/Category/CategoriesSelectV2
 import { FormFieldWrapper } from 'src/pages/common/FormFields'
 import { intro } from 'src/pages/Library/labels'
 import { categoryService } from 'src/services/categoryService'
+import { required } from 'src/utils/validators'
 
 import { LibraryCategoryGuidance } from './LibraryCategoryGuidance'
 
@@ -34,6 +35,8 @@ export const LibraryCategoryField = () => {
     <FormFieldWrapper text={title} required>
       <Field
         name="category"
+        validate={required}
+        validateFields={[]}
         render={({ input }) => (
           <>
             <CategoriesSelectV2

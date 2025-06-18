@@ -77,6 +77,8 @@ describe('[Library]', () => {
           )
           expect($summary).to.contain('3-4 weeks', 'Duration')
           expect($summary).to.contain(DifficultyLevelRecord.hard, 'Difficulty')
+
+          // TODO: add proper image and file download testing. We could probably do it now that the buckets are being created on for tests.
           // expect($summary.find('img[alt="project cover image"]'))
           //   .to.have.attr('src')
           //   .match(coverFileRegex)

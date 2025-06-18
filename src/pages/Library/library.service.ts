@@ -174,7 +174,7 @@ const upsert = async (
       })
     }
 
-    throw new Error(response.statusText || 'Error deleting project', {
+    throw new Error(response.statusText || 'Error saving the project', {
       cause: 500,
     })
   }

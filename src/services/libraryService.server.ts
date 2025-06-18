@@ -30,6 +30,7 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
         difficulty_level,
         comment_count,
         moderation,
+        moderation_feedback,
         author:profiles(id, display_name, username, is_verified, is_supporter, country),
         steps:project_steps(
           id, 

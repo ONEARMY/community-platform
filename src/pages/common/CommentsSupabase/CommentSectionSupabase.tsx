@@ -100,7 +100,7 @@ export const CommentSectionSupabase = (props: IProps) => {
         // show error
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 
@@ -123,7 +123,7 @@ export const CommentSectionSupabase = (props: IProps) => {
         // TODO: show error
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 
@@ -144,7 +144,7 @@ export const CommentSectionSupabase = (props: IProps) => {
         // show error
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 
@@ -172,7 +172,7 @@ export const CommentSectionSupabase = (props: IProps) => {
         // show error
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 
@@ -200,7 +200,7 @@ export const CommentSectionSupabase = (props: IProps) => {
         // show error
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 
@@ -226,7 +226,7 @@ export const CommentSectionSupabase = (props: IProps) => {
         // show error
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 

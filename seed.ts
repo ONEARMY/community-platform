@@ -14,6 +14,7 @@ import type {
   profilesScalars,
   questionsChildInputs,
   questionsScalars,
+  researchScalars,
   subscribersChildInputs,
   subscribersScalars,
   tagsChildInputs,
@@ -349,6 +350,23 @@ const seedNews: Partial<newsScalars>[] = [
   },
 ]
 
+const baseResearch: Partial<researchScalars> = {
+  status: 'in-progress',
+  previous_slugs: [],
+  tenant_id,
+  total_views: 0,
+  collaborators: [],
+}
+
+const seedResearch: Partial<researchScalars>[] = [
+  {
+    ...baseResearch,
+    title: 'The First Big Old Research Topic',
+    description: 'This is a super important area to investigate.',
+    slug: 'the-first-big-old-research-topic',
+  },
+]
+
 const main = async () => {
   const seed = await createSeedClient()
 
@@ -405,6 +423,15 @@ const main = async () => {
       category: categories.find((cat) => cat.type === 'news')?.id,
       created_by: profiles[0].id,
       tags: [tags[0].id],
+    })),
+  )
+
+  await seed.research(
+    seedResearch.map((item) => ({
+      ...item,
+      category: categories.find((cat) => cat.type === 'research')?.id,
+      created_by: profiles[0].id,
+      tags: [tags[0].id.toString()],
     })),
   )
 

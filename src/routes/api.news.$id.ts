@@ -105,7 +105,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     return Response.json({ news }, { headers, status: 200 })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return Response.json({}, { status: 500, statusText: 'Error creating news' })
   }
 }

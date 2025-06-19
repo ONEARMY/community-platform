@@ -2,7 +2,6 @@ import { useState } from 'react'
 
 import { DonationRequestModal } from '../DonationRequestModal/DonationRequestModal'
 import { DownloadButton } from '../DownloadButton/DownloadButton'
-import { DownloadCounter } from '../DownloadCounter/DownloadCounter'
 import { DownloadStaticFile } from '../DownloadStaticFile/DownloadStaticFile'
 
 import type { MediaFile } from 'oa-shared'
@@ -24,7 +23,6 @@ export const DownloadWithDonationAsk = (props: IProps) => {
     iframeSrc,
     imageURL,
     handleClick,
-    fileDownloadCount,
     fileLink,
     files,
     openModel = false,
@@ -57,6 +55,7 @@ export const DownloadWithDonationAsk = (props: IProps) => {
         {fileLink && (
           <DownloadButton
             isLoggedIn
+            fileDownloadCount={props.fileDownloadCount}
             onClick={() => {
               setLink(fileLink)
               toggleIsModalOpen()
@@ -68,6 +67,7 @@ export const DownloadWithDonationAsk = (props: IProps) => {
             <DownloadStaticFile
               file={file}
               key={file ? file.url : `file-${index}`}
+              fileDownloadCount={props.fileDownloadCount}
               handleClick={() => {
                 setLink(file.url!)
                 toggleIsModalOpen()
@@ -75,8 +75,6 @@ export const DownloadWithDonationAsk = (props: IProps) => {
               isLoggedIn
             />
           ))}
-
-        <DownloadCounter total={fileDownloadCount} />
       </>
     </>
   )

@@ -9,8 +9,8 @@ import {
 import type { ILabels } from 'src/common/Form/types'
 
 export const headings = {
-  create: '<span>Add</span> your project',
-  edit: '<span>Edit</span> your project',
+  create: 'Add your project',
+  edit: 'Edit your project',
   errors: "Ouch, something's wrong",
   files: 'Do you have supporting files to help others replicate your project?',
   uploading: 'Uploading project',
@@ -19,7 +19,6 @@ export const headings = {
 export const buttons = {
   draft: {
     create: 'Save draft',
-    description: 'A draft can be saved any time',
   },
   files: 'Re-upload files (this will delete the existing ones)',
   publish: 'Publish',
@@ -61,7 +60,7 @@ export const intro: ILabels = {
     description: `Provide a short introduction (max ${LIBRARY_DESCRIPTION_MAX_LENGTH} characters)`,
     title: 'Short description',
   },
-  difficulty_level: {
+  difficultyLevel: {
     placeholder: 'How hard is it?',
     title: 'Difficulty level?',
   },
@@ -147,7 +146,7 @@ export const steps: ILabels = {
     title: 'Title of this step',
     placeholder: `Provide a title (max ${LIBRARY_TITLE_MAX_LENGTH} characters)`,
   },
-  text: {
+  description: {
     title: 'Step Description',
     placeholder: `Explain what you are doing. If it gets too long, consider breaking it into multiple steps (${STEP_DESCRIPTION_MIN_LENGTH}-${STEP_DESCRIPTION_MAX_LENGTH} characters)`,
   },

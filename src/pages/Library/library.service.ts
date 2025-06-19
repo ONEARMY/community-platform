@@ -1,28 +1,6 @@
-import {
-  and,
-  collection,
-  getCountFromServer,
-  getDocs,
-  limit,
-  or,
-  orderBy,
-  query,
-  startAfter,
-  where,
-} from 'firebase/firestore'
-import { DB_ENDPOINTS, IModerationStatus } from 'oa-shared'
-import { hasAdminRights } from 'src/utils/helpers'
-import { changeUserReferenceToPlainText } from 'src/utils/mentions.utils'
+import { logger } from 'src/logger'
 
-import { firestore } from '../../utils/firebase'
-
-import type {
-  DocumentData,
-  QueryDocumentSnapshot,
-  QueryFilterConstraint,
-  QueryNonFilterConstraint,
-} from 'firebase/firestore'
-import type { ICategory, ILibrary, IUserDB } from 'oa-shared'
+import type { Project, ProjectFormData } from 'oa-shared'
 import type { LibrarySortOption } from './Content/List/LibrarySortOptions'
 
 export enum LibrarySearchParams {
@@ -32,207 +10,192 @@ export enum LibrarySearchParams {
 }
 
 const search = async (
-  words: string[],
+  q: string,
   category: string,
   sort: LibrarySortOption,
-  currentUser?: IUserDB,
-  snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
-  take: number = 10,
+  skip: number = 0,
 ) => {
-  const { itemsQuery, countQuery } = createQueries(
-    words,
-    category,
-    sort,
-    currentUser,
-    snapshot,
-    take,
-  )
+  try {
+    const url = new URL('/api/projects', window.location.origin)
+    url.searchParams.append('q', q)
+    url.searchParams.append('category', category)
+    url.searchParams.append('sort', sort)
+    url.searchParams.append('skip', skip.toString())
 
-  const documentSnapshots = await getDocs(itemsQuery)
-  const lastVisible = documentSnapshots.docs
-    ? documentSnapshots.docs[documentSnapshots.docs.length - 1]
-    : undefined
+    const response = await fetch(url)
+    const { items, total } = (await response.json()) as {
+      items: Project[]
+      total: number
+    }
 
-  const items = documentSnapshots.docs
-    ? documentSnapshots.docs.map((x) => x.data() as ILibrary.Item)
-    : []
-  const total = (await getCountFromServer(countQuery)).data().count
-
-  return { items, total, lastVisible }
+    return { items, total }
+  } catch (error) {
+    logger.error('Failed to fetch projects', { error })
+    return { items: [], total: 0 }
+  }
 }
 
-const moderationFilters = (currentUser?: IUserDB) => {
-  const filters = [where('moderation', '==', IModerationStatus.ACCEPTED)]
+const getDraftCount = async () => {
+  try {
+    const response = await fetch('/api/projects/drafts/count')
+    const { total } = (await response.json()) as { total: number }
 
-  if (currentUser) {
-    if (hasAdminRights(currentUser)) {
-      filters.push(
-        where('moderation', '==', IModerationStatus.AWAITING_MODERATION),
-      )
-      filters.push(
-        where('moderation', '==', IModerationStatus.IMPROVEMENTS_NEEDED),
-      )
+    return total
+  } catch (error) {
+    logger.error('Failed to fetch draft count', { error })
+    return 0
+  }
+}
+
+const getDrafts = async () => {
+  try {
+    const response = await fetch('/api/projects/drafts')
+    const { items } = (await response.json()) as { items: Project[] }
+
+    return items
+  } catch (error) {
+    logger.error('Failed to fetch project draft articles', { error })
+    return []
+  }
+}
+
+const upsert = async (
+  id: number | null,
+  formData: ProjectFormData,
+  isDraft = false,
+) => {
+  const data = new FormData()
+  data.append('title', formData.title)
+  data.append('fileLink', formData.fileLink || '')
+
+  if (formData.time) {
+    data.append('time', formData.time)
+  }
+
+  if (formData.difficultyLevel) {
+    data.append('difficultyLevel', formData.difficultyLevel)
+  }
+
+  if (formData.description) {
+    data.append('description', formData.description)
+  }
+
+  if (formData.tags && formData.tags.length > 0) {
+    for (const tag of formData.tags) {
+      if (tag) {
+        data.append('tags', tag.toString())
+      }
     }
   }
 
-  return or(...filters)
-}
-
-const createQueries = (
-  words: string[],
-  category: string,
-  sort: LibrarySortOption,
-  currentUser?: IUserDB,
-  snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
-  take: number = 10,
-) => {
-  const collectionRef = collection(firestore, DB_ENDPOINTS.library)
-  let filters: QueryFilterConstraint[] = [
-    and(where('_deleted', '!=', true), moderationFilters(currentUser)),
-  ]
-  let constraints: QueryNonFilterConstraint[] = []
-
-  if (words?.length > 0) {
-    filters = [...filters, and(where('keywords', 'array-contains-any', words))]
+  if (formData.category) {
+    data.append('category', formData.category?.value.toString())
   }
 
-  if (category) {
-    filters = [...filters, and(where('category._id', '==', category))]
+  if (isDraft) {
+    data.append('draft', 'true')
   }
 
-  if (sort) {
-    const sortConstraint = getSort(sort)
+  if (formData.image) {
+    data.append('coverImage', formData.image.photoData, formData.image.name)
+  }
 
-    if (sortConstraint) {
-      constraints = [...constraints, sortConstraint]
+  if (formData.existingImage) {
+    data.append('existingCoverImage', formData.existingImage.id)
+  }
+
+  if (formData.files && formData.files.length > 0) {
+    for (const file of formData.files) {
+      if (file) {
+        data.append('files', file, file.name)
+      }
     }
   }
 
-  const countQuery = query(collectionRef, and(...filters), ...constraints)
-
-  if (snapshot) {
-    constraints = [...constraints, startAfter(snapshot)]
+  if (formData.existingFiles && formData.existingFiles.length > 0) {
+    for (const file of formData.existingFiles) {
+      if (file) {
+        data.append('existingFiles', file.id)
+      }
+    }
   }
 
-  const itemsQuery = query(
-    collectionRef,
-    and(...filters),
-    ...constraints,
-    limit(take),
-  )
+  if (formData.steps?.length) {
+    data.append('stepCount', formData.steps.length.toString())
 
-  return { countQuery, itemsQuery }
-}
+    for (let i = 0; i < formData.steps.length; i++) {
+      const step = formData.steps[i]
+      if (step.id) {
+        data.append(`steps.[${i}].id`, step.id.toString())
+      }
+      data.append(`steps.[${i}].title`, step.title)
+      data.append(`steps.[${i}].description`, step.description)
 
-const getLibraryCategories = async () => {
-  const collectionRef = collection(firestore, DB_ENDPOINTS.categories)
+      if (step.images && step.images.length) {
+        for (const image of step.images) {
+          if (image) {
+            data.append(`steps.[${i}].images`, image.photoData, image.name)
+          }
+        }
+      }
 
-  return (await getDocs(query(collectionRef))).docs.map(
-    (x) => x.data() as ICategory,
-  )
-}
-
-const createDraftQuery = (userId: string) => {
-  const collectionRef = collection(firestore, DB_ENDPOINTS.library)
-  const filters = and(
-    where('_createdBy', '==', userId),
-    where('moderation', 'in', [
-      IModerationStatus.AWAITING_MODERATION,
-      IModerationStatus.DRAFT,
-      IModerationStatus.IMPROVEMENTS_NEEDED,
-      IModerationStatus.REJECTED,
-    ]),
-    where('_deleted', '!=', true),
-  )
-
-  const countQuery = query(collectionRef, filters)
-  const itemsQuery = query(
-    collectionRef,
-    filters,
-    orderBy('_contentModifiedTimestamp', 'desc'),
-  )
-
-  return { countQuery, itemsQuery }
-}
-
-const getDraftCount = async (userId: string) => {
-  const { countQuery } = createDraftQuery(userId)
-
-  return (await getCountFromServer(countQuery)).data().count
-}
-
-const getDrafts = async (userId: string) => {
-  const { itemsQuery } = createDraftQuery(userId)
-  const docs = await getDocs(itemsQuery)
-
-  return docs.docs ? docs.docs.map((x) => x.data() as ILibrary.Item) : []
-}
-
-const getSort = (sort: LibrarySortOption) => {
-  switch (sort) {
-    case 'MostComments':
-      return orderBy('totalComments', 'desc')
-    case 'MostUseful':
-      return orderBy('totalUsefulVotes', 'desc')
-    case 'Newest':
-      return orderBy('_created', 'desc')
-    case 'MostDownloads':
-      return orderBy('total_downloads', 'desc')
-    case 'LatestUpdated':
-      return orderBy('_contentModifiedTimestamp', 'desc')
-  }
-}
-
-const getBySlug = async (slug: string) => {
-  // Get all that match the slug, to avoid creating an index (blocker for cypress tests)
-  let snapshot = await getDocs(
-    query(
-      collection(firestore, DB_ENDPOINTS.library),
-      where('slug', '==', slug),
-    ),
-  )
-
-  if (snapshot.size === 0) {
-    // try previous slugs if slug is not recognized as primary
-    snapshot = await getDocs(
-      query(
-        collection(firestore, DB_ENDPOINTS.library),
-        where('previousSlugs', 'array-contains', slug),
-      ),
-    )
+      if (step.existingImages) {
+        for (const image of step.existingImages) {
+          if (image) {
+            data.append(`steps.[${i}].existingImages`, image.id)
+          }
+        }
+      }
+      if (step.videoUrl) {
+        data.append(`steps.[${i}].videoUrl`, step.videoUrl)
+      }
+    }
   }
 
-  if (snapshot.size === 0) {
-    return null
+  const response =
+    id === null
+      ? await fetch(`/api/projects`, {
+          method: 'POST',
+          body: data,
+        })
+      : await fetch(`/api/projects/${id}`, {
+          method: 'PUT',
+          body: data,
+        })
+
+  if (response.status !== 200 && response.status !== 201) {
+    if (response.status === 409) {
+      throw new Error('Duplicate project', { cause: 409 })
+    }
+
+    if (response.statusText) {
+      throw new Error(response.statusText, {
+        cause: 400,
+      })
+    }
+
+    throw new Error(response.statusText || 'Error saving the project', {
+      cause: 500,
+    })
   }
 
-  const howto = snapshot.docs[0].data() as ILibrary.DB
+  return (await response.json()) as { project: Project }
+}
 
-  if (!howto) {
-    return null
-  }
-
-  // Change all UserReferences to mentions
-  if (howto.description) {
-    howto.description = changeUserReferenceToPlainText(howto.description)
-  }
-
-  howto.steps.forEach((step) => {
-    if (!step.text) return
-    step.text = changeUserReferenceToPlainText(step.text)
+const deleteProject = async (id: number) => {
+  const response = await fetch(`/api/projects/${id}`, {
+    method: 'DELETE',
   })
 
-  return howto
+  if (response.status !== 200 && response.status !== 201) {
+    throw new Error('Error deleting project', { cause: 500 })
+  }
 }
 
 export const libraryService = {
   search,
-  getLibraryCategories,
-  getDraftCount,
   getDrafts,
-  getBySlug,
-}
-
-export const exportedForTesting = {
-  createQueries,
+  getDraftCount,
+  upsert,
+  deleteProject,
 }

@@ -1,34 +1,26 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from '@remix-run/react'
-import { observer } from 'mobx-react'
 import { Button, Loader, MoreContainer } from 'oa-components'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
-import useDrafts from 'src/pages/common/Drafts/useDrafts'
+import useDrafts from 'src/pages/common/Drafts/useDraftsSupabase'
 import { Flex, Grid, Heading } from 'theme-ui'
 
-import { ITEMS_PER_PAGE } from '../../constants'
 import { listing } from '../../labels'
 import { LibrarySearchParams, libraryService } from '../../library.service'
-import { LibraryCard } from './LibraryCard'
 import { LibraryListHeader } from './LibraryListHeader'
+import { ProjectCard } from './ProjectCard'
 
-import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
-import type { ILibrary } from 'oa-shared'
+import type { Project } from 'oa-shared'
 import type { LibrarySortOption } from './LibrarySortOptions'
 
-export const LibraryList = observer(() => {
-  const siteName = import.meta.env.VITE_SITE_NAME
+const siteName = import.meta.env.VITE_SITE_NAME
 
-  const { userStore } = useCommonStores().stores
+export const LibraryList = () => {
   const [isFetching, setIsFetching] = useState<boolean>(true)
-  const [library, setLibrary] = useState<ILibrary.Item[]>([])
+  const [projects, setProjects] = useState<Project[]>([])
   const [total, setTotal] = useState<number>(0)
-  const [lastVisible, setLastVisible] = useState<
-    QueryDocumentSnapshot<DocumentData, DocumentData> | undefined
-  >(undefined)
   const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } =
-    useDrafts<ILibrary.Item>({
+    useDrafts<Project>({
       getDraftCount: libraryService.getDraftCount,
       getDrafts: libraryService.getDrafts,
     })
@@ -51,37 +43,31 @@ export const LibraryList = observer(() => {
       setSearchParams(params)
     } else {
       // search only when sort is set (avoids duplicate requests)
-      fetchLibrary()
+      fetchProjects()
     }
   }, [q, category, sort])
 
-  const fetchLibrary = async (
-    skipFrom?: QueryDocumentSnapshot<DocumentData, DocumentData>,
-  ) => {
+  const fetchProjects = async (skip: number = 0) => {
     setIsFetching(true)
 
     try {
-      const searchWords = q ? q.toLocaleLowerCase().split(' ') : []
-
       const result = await libraryService.search(
-        searchWords,
+        q?.toLocaleLowerCase(),
         category,
         sort,
-        userStore.activeUser || undefined,
-        skipFrom,
-        ITEMS_PER_PAGE,
+        skip,
       )
 
-      if (skipFrom) {
-        // if skipFrom is set, means we are requesting another page that should be appended
-        setLibrary((library) => [...library, ...result.items])
-      } else {
-        setLibrary(result.items)
+      if (result) {
+        if (skip) {
+          // if skipFrom is set, means we are requesting another page that should be appended
+          setProjects((items) => [...items, ...result.items])
+        } else {
+          setProjects(result.items)
+        }
+
+        setTotal(result.total)
       }
-
-      setLastVisible(result.lastVisible)
-
-      setTotal(result.total)
     } catch (error) {
       logger.error('error fetching library', error)
     }
@@ -92,9 +78,9 @@ export const LibraryList = observer(() => {
   const showLoadMore =
     !isFetching &&
     !showDrafts &&
-    library &&
-    library.length > 0 &&
-    library.length < total
+    projects &&
+    projects.length > 0 &&
+    projects.length < total
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
@@ -112,14 +98,14 @@ export const LibraryList = observer(() => {
       >
         {showDrafts ? (
           drafts.map((item) => {
-            return <LibraryCard key={item._id} item={item} />
+            return <ProjectCard key={item.id} item={item} />
           })
         ) : (
           <>
-            {library &&
-              library.length > 0 &&
-              library.map((item, index) => (
-                <LibraryCard key={index} item={item} />
+            {projects &&
+              projects.length > 0 &&
+              projects.map((item, index) => (
+                <ProjectCard key={index} item={item} />
               ))}
           </>
         )}
@@ -131,7 +117,7 @@ export const LibraryList = observer(() => {
             justifyContent: 'center',
           }}
         >
-          <Button type="button" onClick={() => fetchLibrary(lastVisible)}>
+          <Button type="button" onClick={() => fetchProjects(projects.length)}>
             {listing.loadMore}
           </Button>
         </Flex>
@@ -157,4 +143,4 @@ export const LibraryList = observer(() => {
       </MoreContainer>
     </Flex>
   )
-})
+}

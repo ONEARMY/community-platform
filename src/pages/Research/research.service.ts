@@ -5,6 +5,7 @@ import type {
   ResearchFormData,
   ResearchItem,
   ResearchStatus,
+  ResearchUpdate,
   ResearchUpdateFormData,
 } from 'oa-shared'
 import type { ResearchSortOption } from './ResearchSortOptions'
@@ -75,7 +76,9 @@ const upsert = async (
 
   if (research.tags && research.tags.length > 0) {
     for (const tag of research.tags) {
-      data.append('tags', tag.toString())
+      if (tag) {
+        data.append('tags', tag.toString())
+      }
     }
   }
 
@@ -85,7 +88,9 @@ const upsert = async (
 
   if (research.collaborators) {
     for (const collaborator of research.collaborators) {
-      data.append('collaborators', collaborator.toString())
+      if (collaborator) {
+        data.append('collaborators', collaborator.toString())
+      }
     }
   }
 
@@ -137,25 +142,33 @@ const upsertUpdate = async (
 
   if (update.images && update.images.length > 0) {
     for (const image of update.images as unknown as IConvertedFileMeta[]) {
-      data.append('images', image.photoData, image.name)
+      if (image) {
+        data.append('images', image.photoData, image.name)
+      }
     }
   }
 
   if (update.existingImages && update.existingImages.length > 0) {
     for (const image of update.existingImages) {
-      data.append('existingImages', image.id)
+      if (image) {
+        data.append('existingImages', image.id)
+      }
     }
   }
 
   if (update.files && update.files.length > 0) {
     for (const file of update.files) {
-      data.append('files', file, file.name)
+      if (file) {
+        data.append('files', file, file.name)
+      }
     }
   }
 
   if (update.existingFiles && update.existingFiles.length > 0) {
     for (const file of update.existingFiles) {
-      data.append('existingFiles', file.id)
+      if (file) {
+        data.append('existingFiles', file.id)
+      }
     }
   }
 
@@ -182,7 +195,7 @@ const upsertUpdate = async (
     throw new Error('Error saving research update', { cause: 500 })
   }
 
-  return (await response.json()) as { researchUpdate: ResearchItem }
+  return (await response.json()) as { researchUpdate: ResearchUpdate }
 }
 
 const deleteResearch = async (id: number) => {

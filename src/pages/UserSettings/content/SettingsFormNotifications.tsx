@@ -1,7 +1,6 @@
 import { TextNotification } from 'oa-components'
+import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
 import { Text } from 'theme-ui'
-
-import { SettingsErrors } from './SettingsErrors'
 
 export type IFormNotification = {
   message: string
@@ -10,11 +9,21 @@ export type IFormNotification = {
   variant: 'success' | 'failure'
 }
 
+type SettingsFormNotificationsProps = {
+  notification?: IFormNotification
+  submitFailed: boolean
+  errors:
+    | {
+        [key: string]: any
+      }
+    | undefined
+}
+
 export const SettingsFormNotifications = ({
   errors,
   notification,
   submitFailed,
-}) => {
+}: SettingsFormNotificationsProps) => {
   const showSuccessNotification =
     notification &&
     notification.show &&
@@ -32,9 +41,8 @@ export const SettingsFormNotifications = ({
         </TextNotification>
       )}
       {showErrorsNotification && (
-        <SettingsErrors
-          errors={errors}
-          isVisible={!!(errors && Object.keys(errors).length > 0)}
+        <ErrorsContainer
+          errors={Object.values(errors).map((value) => String(value))}
         />
       )}
     </>

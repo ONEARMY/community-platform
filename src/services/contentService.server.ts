@@ -1,16 +1,16 @@
 import { tagsServiceServer } from 'src/services/tagsService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
+import type { ContentType } from 'oa-shared'
 
 type Slug = string
 type Id = number
 type Client = SupabaseClient
-type Table = 'questions' | 'news' | 'research'
 
 const getMetaFields = async (
   client: Client,
   id: Id,
-  table: Table,
+  table: ContentType,
   tagIds: number[],
 ) => {
   return await Promise.all([
@@ -30,7 +30,7 @@ const getMetaFields = async (
 
 const incrementViewCount = async (
   client: Client,
-  table: Table,
+  table: ContentType,
   totalViews: number | undefined,
   id: Id,
 ) => {
@@ -44,7 +44,7 @@ async function isDuplicateExistingSlug(
   slug: Slug,
   id: Id,
   client: Client,
-  table: Table,
+  table: ContentType,
 ) {
   const { data } = await client
     .from(table)
@@ -55,7 +55,11 @@ async function isDuplicateExistingSlug(
   return !!data?.id && data.id !== id
 }
 
-async function isDuplicateNewSlug(slug: Slug, client: Client, table: Table) {
+async function isDuplicateNewSlug(
+  slug: Slug,
+  client: Client,
+  table: ContentType,
+) {
   const { data } = await client
     .from(table)
     .select('slug')

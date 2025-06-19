@@ -1,0 +1,158 @@
+[
+  {
+    "title": "Basic Shredder Machine",
+    "description": "Learn how to build a basic plastic shredder machine for breaking down plastic waste into small flakes.",
+    "difficulty_level": "beginner",
+    "time": "2-3 days",
+    "moderation": "accepted",
+    "file_link": "https://example.com/shredder-plans.pdf",
+    "comments": [
+      {
+        "aldaplaskett48": "This is a great starter project! I built one last month and it works perfectly for PET bottles."
+      },
+      {
+        "sampathpini67": "The motor specifications are really helpful. Make sure to get the right RPM for safety."
+      }
+    ],
+    "steps": [
+      {
+        "title": "Gather Materials",
+        "description": "Collect all the necessary materials including steel frame, motor, and cutting blades.",
+        "images": ["shredder-materials.jpg"],
+        "video_url": null
+      },
+      {
+        "title": "Build the Frame",
+        "description": "Construct the main frame structure using welding techniques.",
+        "images": ["frame-construction.jpg"],
+        "video_url": "https://example.com/frame-build.mp4"
+      }
+    ]
+  },
+  {
+    "title": "Injection Molding Machine",
+    "description": "Build an injection molding machine to create new products from recycled plastic flakes.",
+    "difficulty_level": "advanced",
+    "time": "1-2 weeks",
+    "moderation": "accepted",
+    "file_link": "https://example.com/injection-molder-plans.pdf",
+    "comments": [
+      {
+        "galenagiugovaz15": "This machine is a game changer! I've been making phone cases and small containers with it."
+      },
+      {
+        "veniaminjewell33": "The temperature control is crucial. Don't skip the calibration steps."
+      },
+      {
+        "cortneybrown81": "Amazing project! The documentation is very detailed and easy to follow."
+      }
+    ],
+    "steps": [
+      {
+        "title": "Prepare the Barrel",
+        "description": "Machine and prepare the injection barrel with proper heating elements.",
+        "images": ["barrel-prep.jpg", "heating-elements.jpg"],
+        "video_url": null
+      },
+      {
+        "title": "Install Control System",
+        "description": "Set up the temperature and pressure control systems.",
+        "images": ["control-panel.jpg"],
+        "video_url": "https://example.com/control-setup.mp4"
+      },
+      {
+        "title": "Test and Calibrate",
+        "description": "Run initial tests and calibrate the machine for optimal performance.",
+        "images": ["testing.jpg"],
+        "video_url": "https://example.com/calibration.mp4"
+      }
+    ]
+  },
+  {
+    "title": "Simple Extrusion Machine",
+    "description": "Create continuous shapes and filaments from recycled plastic using this extrusion machine design.",
+    "difficulty_level": "intermediate",
+    "time": "4-5 days",
+    "moderation": "accepted",
+    "file_link": "https://example.com/extruder-plans.pdf",
+    "comments": [
+      {
+        "melisavang56": "Perfect for making 3D printing filament! The output quality is surprisingly good."
+      },
+      {
+        "lianabegam24": "I modified the design slightly for my needs and it works great for making plastic sheets."
+      }
+    ],
+    "steps": [
+      {
+        "title": "Build the Screw Mechanism",
+        "description": "Construct the main screw that will push and heat the plastic material.",
+        "images": ["screw-assembly.jpg"],
+        "video_url": null
+      },
+      {
+        "title": "Create the Heating Chamber",
+        "description": "Build the heated chamber where plastic will be melted and formed.",
+        "images": ["heating-chamber.jpg"],
+        "video_url": "https://example.com/chamber-build.mp4"
+      }
+    ]
+  },
+  {
+    "title": "Compression Molding Press",
+    "description": "Build a compression molding press for creating flat products like plates and sheets.",
+    "difficulty_level": "beginner",
+    "time": "1-2 days",
+    "moderation": "accepted",
+    "file_link": "https://example.com/compression-press-plans.pdf",
+    "comments": [
+      {
+        "akromstarkova72": "Super simple build! Great for beginners who want to start with something achievable."
+      }
+    ],
+    "steps": [
+      {
+        "title": "Assemble the Press Frame",
+        "description": "Build the main frame structure for the compression press.",
+        "images": ["press-frame.jpg"],
+        "video_url": null
+      },
+      {
+        "title": "Install Hydraulic System",
+        "description": "Set up the hydraulic system for applying pressure during molding.",
+        "images": ["hydraulic-setup.jpg"],
+        "video_url": "https://example.com/hydraulic-install.mp4"
+      }
+    ]
+  },
+  {
+    "title": "Plastic Waste Sorting Guide",
+    "description": "A comprehensive guide on how to properly sort and prepare plastic waste for recycling.",
+    "difficulty_level": "beginner",
+    "time": "30 minutes",
+    "moderation": "accepted",
+    "file_link": "https://example.com/sorting-guide.pdf",
+    "comments": [
+      {
+        "mirzoblazkova19": "This guide saved me so much time! The identification charts are really helpful."
+      },
+      {
+        "jereerickson92": "Essential reading before starting any plastic recycling project."
+      }
+    ],
+    "steps": [
+      {
+        "title": "Learn Plastic Types",
+        "description": "Understand the different types of plastic and their recycling codes.",
+        "images": ["plastic-types-chart.jpg"],
+        "video_url": "https://example.com/plastic-identification.mp4"
+      },
+      {
+        "title": "Set Up Sorting System",
+        "description": "Create an efficient system for sorting plastic waste by type and color.",
+        "images": ["sorting-bins.jpg"],
+        "video_url": null
+      }
+    ]
+  }
+]

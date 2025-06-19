@@ -11,21 +11,12 @@ import type { ISODateString } from './common'
  * In the future all endpoints should try to just retain prefix-base-revision, e.g. oa_users_rev20201012
  **************************************************************************************/
 export const generateDBEndpoints = () => ({
-  library: `v3_howtos`,
   users: `v3_users`,
   user_notifications: `user_notifications_rev20221209`,
-  tags: `v3_tags`,
-  categories: `v3_categories`,
-  researchCategories: `research_categories_rev20221224`,
   mappins: `v3_mappins`,
-  messages: `messages_rev20231022`,
-  research: `research_rev20201020`,
-  aggregations: `aggregations_rev20220126`,
   emails: `emails`,
-  questions: `questions_rev20230926`,
-  questionCategories: `question_categories_rev20231130`,
+  tags: `v3_tags`,
   user_integrations: `user_integrations`,
-  discussions: `discussions_rev20231022`,
 })
 
 /**

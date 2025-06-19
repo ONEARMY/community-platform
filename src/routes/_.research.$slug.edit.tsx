@@ -27,37 +27,24 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     params.slug as string,
   )
 
-  if (result.error || !result.data) {
+  if (result.error || !result.item) {
     return Response.json({ research: null }, { headers })
   }
 
-  const profileResult = await client
-    .from('profiles')
-    .select('id')
-    .eq('auth_id', user.id)
-    .limit(1)
-  const currentUserId = profileResult.data?.at(0)?.id as number
-
-  const username = user.user_metadata.username
-  const researchDb = result.data as unknown as DBResearchItem
+  const currentUsername = user.user_metadata.username
+  const researchDb = result.item as unknown as DBResearchItem
   const images = researchServiceServer.getResearchPublicMedia(
     researchDb,
     client,
   )
 
-  const research = ResearchItem.fromDB(
-    researchDb,
-    [],
-    images,
-    [],
-    currentUserId,
-  )
+  const research = ResearchItem.fromDB(researchDb, [], images, currentUsername)
 
   if (
     !(await researchServiceServer.isAllowedToEditResearch(
       client,
       research,
-      username,
+      currentUsername,
     ))
   ) {
     return redirect('/forbidden', { headers })

@@ -5,16 +5,16 @@ import { Button } from '../Button/Button'
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon'
 import { InternalLink } from '../InternalLink/InternalLink'
 import { Loader } from '../Loader/Loader'
-import { NotificationListItemSupabase } from '../NotificationListItemSupabase/NotificationListItemSupabase'
+import { NotificationItemSupabase } from '../NotificationItemSupabase/NotificationItemSupabase'
 
-import type { Notification } from 'oa-shared'
+import type { NotificationDisplay } from 'oa-shared'
 
 export interface IProps {
   isUpdatingNotifications: boolean
   markAllRead: () => void
   markRead: (id: number) => void
   modalDismiss: () => void
-  notifications: Notification[]
+  notifications: NotificationDisplay[]
 }
 
 export const NotificationListSupabase = (props: IProps) => {
@@ -30,7 +30,7 @@ export const NotificationListSupabase = (props: IProps) => {
   const anyUnread = notifications.filter(({ isRead }) => !isRead).length > 0
   const notificationList = notifications
     .filter(({ isRead }) => (isUnreadOnly ? !isRead : !isRead || isRead))
-    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+    .sort((a, b) => (a.date < b.date ? 1 : -1))
 
   return (
     <Flex
@@ -122,7 +122,7 @@ export const NotificationListSupabase = (props: IProps) => {
       {!isUpdatingNotifications &&
         notificationList.map((notification, index) => {
           return (
-            <NotificationListItemSupabase
+            <NotificationItemSupabase
               key={index}
               markRead={markRead}
               modalDismiss={modalDismiss}

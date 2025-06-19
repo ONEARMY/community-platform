@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker'
 import { DifficultyLevelRecord, IModerationStatus } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
+import { generateNewUserDetails } from '../../utils/TestUtils'
 
 import type { DifficultyLevel } from 'oa-shared'
 
@@ -232,8 +233,8 @@ describe('[Library]', () => {
 
       cy.get('[data-cy=fileLink]').type(fileLink)
       cy.step('Upload a cover for the intro')
-      cy.get('[data-cy=intro-cover]')
-        .find(':file')
+      cy.get('[data-cy="intro-cover"]')
+        .find('input[type="file"]')
         .attachFile('images/howto-intro.jpg')
 
       fillStep(1, steps[0].title, steps[0].text, imagePaths)
@@ -293,6 +294,21 @@ describe('[Library]', () => {
       cy.get('[data-cy=sign-up]').should('be.visible')
 
       cy.visit('/library/create')
+      cy.get('[data-cy=intro-title]').should('not.exist')
+      cy.get('[data-cy=logged-out-message]').should('be.visible')
+    })
+
+    it('[By Incomplete Profile User]', () => {
+      const user = generateNewUserDetails()
+      cy.signUpNewUser(user)
+
+      cy.step("Can't add to library")
+      cy.visit('/library')
+      cy.get('[data-cy=create-project]').should('not.exist')
+      cy.get('[data-cy=complete-profile-project]').should('be.visible')
+
+      cy.visit('/library/create')
+      cy.get('[data-cy=incomplete-profile-message]').should('be.visible')
       cy.get('[data-cy=intro-title]').should('not.exist')
     })
 

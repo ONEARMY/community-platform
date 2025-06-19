@@ -224,6 +224,14 @@ async function updateProject(
     previousSlugs.push(currentProject.slug)
   }
 
+  let cover_image: DBMedia | null = null
+
+  if (coverImage) {
+    cover_image = coverImage
+  } else if (existingCoverImageId) {
+    cover_image = currentProject.cover_image
+  }
+
   const projectResult = await client
     .from('projects')
     .update({
@@ -238,8 +246,7 @@ async function updateProject(
       difficulty_level: data.difficultyLevel,
       time: data.time,
       files,
-      cover_image:
-        coverImage ?? existingCoverImageId ? currentProject.cover_image : null,
+      cover_image,
     })
     .eq('id', currentProject.id)
     .select()

@@ -294,8 +294,7 @@ describe('[Library]', () => {
       cy.get('[data-cy=sign-up]').should('be.visible')
 
       cy.visit('/library/create')
-      cy.get('[data-cy=intro-title]').should('not.exist')
-      cy.get('[data-cy=logged-out-message]').should('be.visible')
+      cy.url().should('contain', 'sign-in')
     })
 
     it('[By Incomplete Profile User]', () => {

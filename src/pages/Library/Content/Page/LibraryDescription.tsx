@@ -213,20 +213,9 @@ export const LibraryDescription = (props: IProps) => {
                   action="Published"
                 />
                 {item.category && (
-                  <Category
-                    category={item.category}
-                    sx={{ fontSize: 2, mt: 2 }}
-                  />
+                  <Category category={item.category} sx={{ fontSize: 2 }} />
                 )}
-                <Heading
-                  as="h1"
-                  sx={{
-                    marginTop: item.category ? 1 : 2,
-                    marginBottom: 1,
-                  }}
-                  data-cy="project-title"
-                >
-                  {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
+                <Heading as="h1" data-cy="project-title">
                   {capitalizeFirstLetter(item.title)}
                 </Heading>
                 <Text

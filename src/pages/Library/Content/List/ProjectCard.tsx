@@ -12,11 +12,11 @@ import { Box, Card, Flex, Heading, Image } from 'theme-ui'
 
 import type { Project } from 'oa-shared'
 
-type LibraryCardProps = {
+type ProjectCardProps = {
   item: Project
 }
 
-export const LibraryCard = ({ item }: LibraryCardProps) => {
+export const ProjectCard = ({ item }: ProjectCardProps) => {
   return (
     <Card data-cy="card" sx={{ marginX: [2, 0] }}>
       <RouterLink to={`/library/${encodeURIComponent(item.slug)}`}>

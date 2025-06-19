@@ -7,8 +7,8 @@ import { Flex, Grid, Heading } from 'theme-ui'
 
 import { listing } from '../../labels'
 import { LibrarySearchParams, libraryService } from '../../library.service'
-import { LibraryCard } from './LibraryCard'
 import { LibraryListHeader } from './LibraryListHeader'
+import { ProjectCard } from './ProjectCard'
 
 import type { Project } from 'oa-shared'
 import type { LibrarySortOption } from './LibrarySortOptions'
@@ -98,14 +98,14 @@ export const LibraryList = () => {
       >
         {showDrafts ? (
           drafts.map((item) => {
-            return <LibraryCard key={item.id} item={item} />
+            return <ProjectCard key={item.id} item={item} />
           })
         ) : (
           <>
             {projects &&
               projects.length > 0 &&
               projects.map((item, index) => (
-                <LibraryCard key={index} item={item} />
+                <ProjectCard key={index} item={item} />
               ))}
           </>
         )}

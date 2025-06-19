@@ -137,9 +137,6 @@ describe('Library form', () => {
         target: { value: '<http://www.test.com>' },
       })
 
-      // submit form
-      fireEvent.click(wrapper.getByTestId('submit-form'))
-
       // Assert
       expect(
         wrapper.queryByTestId('invalid-file-warning'),

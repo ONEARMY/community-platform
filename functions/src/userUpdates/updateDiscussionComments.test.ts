@@ -53,7 +53,7 @@ jest.mock('../Firebase/firestoreDB', () => ({
 }))
 
 describe('updateDiscussionComments', () => {
-  it('returns stright away if no user details have changed', () => {
+  it('returns straight away if no user details have changed', () => {
     const user = { ...prevUser } as IUserDB
 
     updateDiscussionComments(prevUser, user)

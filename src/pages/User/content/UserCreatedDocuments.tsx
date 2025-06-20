@@ -19,7 +19,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
             <Flex
               sx={{ flexDirection: 'column', flexBasis: '50%', mt: 2, mb: 6 }}
             >
-              <Heading as="h3" variant="small" mb={1}>
+              <Heading data-cy="library-contributions" as="h3" variant="small">
                 Library
               </Heading>
               {docs.projects.map((item) => {
@@ -39,8 +39,12 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
             </Flex>
           )}
           {docs?.research.length > 0 && (
-            <Flex my={2} sx={{ flexDirection: 'column', flexBasis: '50%' }}>
-              <Heading as="h3" variant="small" mb={1}>
+            <Flex
+              data-testid="research-contributions"
+              my={2}
+              sx={{ flexDirection: 'column', flexBasis: '50%' }}
+            >
+              <Heading as="h3" variant="small">
                 Research
               </Heading>
               {docs?.research.map((item) => {
@@ -62,9 +66,9 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
           {docs?.questions.length > 0 && (
             <Flex
               data-testid="question-contributions"
-              sx={{ flexDirection: 'column', flexBasis: '50%', mt: 2, mb: 6 }}
+              sx={{ flexDirection: 'column', flexBasis: '50%' }}
             >
-              <Heading as="h3" variant="small" mb={1}>
+              <Heading as="h3" variant="small">
                 Questions
               </Heading>
               {docs?.questions.map((item) => {

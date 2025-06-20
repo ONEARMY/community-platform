@@ -30,7 +30,7 @@ export const Alerts = () => {
                   cursor: 'cursor',
                 }}
               >
-                Announcement: We're making changes behindd the scenes to the
+                Announcement: We're making changes behind the scenes to the
                 Library, so things might be weird over there! If you notice
                 something, please report the problem.
               </Banner>

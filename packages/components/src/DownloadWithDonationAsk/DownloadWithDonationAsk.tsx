@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Flex } from 'theme-ui'
 
 import { DonationRequestModal } from '../DonationRequestModal/DonationRequestModal'
 import { DownloadButton } from '../DownloadButton/DownloadButton'
@@ -62,19 +63,22 @@ export const DownloadWithDonationAsk = (props: IProps) => {
             }}
           />
         )}
-        {files &&
-          files.map((file, index) => (
-            <DownloadStaticFile
-              file={file}
-              key={file ? file.url : `file-${index}`}
-              fileDownloadCount={props.fileDownloadCount}
-              handleClick={() => {
-                setLink(file.url!)
-                toggleIsModalOpen()
-              }}
-              isLoggedIn
-            />
-          ))}
+        {files && (
+          <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+            {files.map((file, index) => (
+              <DownloadStaticFile
+                file={file}
+                key={file ? file.url : `file-${index}`}
+                fileDownloadCount={props.fileDownloadCount}
+                handleClick={() => {
+                  setLink(file.url!)
+                  toggleIsModalOpen()
+                }}
+                isLoggedIn
+              />
+            ))}
+          </Flex>
+        )}
       </>
     </>
   )

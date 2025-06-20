@@ -37,12 +37,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     current_username: username,
   })
 
-  const countRersult = await client.rpc('get_projects_count', {
+  const countResult = await client.rpc('get_projects_count', {
     search_query: q || null,
     category_id: category,
     current_username: username,
   })
-  const count = countRersult.data || 0
+  const count = countResult.data || 0
 
   if (error) {
     console.error(error)
@@ -138,11 +138,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { status: 400, statusText: 'User not found' })
     }
 
-    // 1. Create Project
     const projectDb = await createProject(client, data, profile)
     const project = Project.fromDB(projectDb, [])
 
-    // 2. Upload and set project files and cover image
     if (uploadedCoverImage) {
       const images = await uploadAndUpdateImage(
         [uploadedCoverImage],
@@ -152,7 +150,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         project.id,
         client,
       )
-      project.coverImage = images[0]
+      if (images && images[0]) {
+        project.coverImage = images[0]
+      }
     }
 
     if (uploadedFiles) {
@@ -164,31 +164,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       )
     }
 
-    // 3. Create Steps
-    for (let i = 0; i < data.stepCount; i++) {
-      const images = formData.getAll(`steps.[${i}].images`) as File[]
-
-      const stepDb = await createStep(client, {
-        title: formData.get(`steps.[${i}].title`) as string,
-        description: formData.get(`steps.[${i}].description`) as string,
-        videoUrl: (formData.get(`steps.[${i}].videoUrl`) as string) || null,
-        projectId: projectDb.id,
-        order: i + 1,
-      })
-      const step = ProjectStep.fromDB(stepDb)
-
-      // 4. Upload and set images of each Step
-      step.images = await uploadAndUpdateImage(
-        images,
-        `projects/${project.id}`,
-        'project_steps',
-        'images',
-        step.id,
-        client,
-      )
-
-      project.steps.push(step)
-    }
+    project.steps = await uploadSteps(data, formData, projectDb, client)
 
     return Response.json({ project }, { headers, status: 201 })
   } catch (error) {
@@ -198,6 +174,35 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       { status: 500, statusText: 'Error creating project' },
     )
   }
+}
+
+async function uploadSteps(data, formData, projectDb, client) {
+  const steps: ProjectStep[] = []
+  for (let i = 0; i < data.stepCount; i++) {
+    const images = formData.getAll(`steps.[${i}].images`) as File[]
+
+    const stepDb = await createStep(client, {
+      title: formData.get(`steps.[${i}].title`) as string,
+      description: formData.get(`steps.[${i}].description`) as string,
+      videoUrl: (formData.get(`steps.[${i}].videoUrl`) as string) || null,
+      projectId: projectDb.id,
+      order: i + 1,
+    })
+    const step = ProjectStep.fromDB(stepDb)
+
+    step.images = await uploadAndUpdateImage(
+      images,
+      `projects/${projectDb.id}`,
+      'project_steps',
+      'images',
+      step.id,
+      client,
+    )
+
+    steps.push(step)
+  }
+
+  return steps
 }
 
 async function validateRequest(

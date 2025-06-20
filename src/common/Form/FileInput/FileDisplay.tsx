@@ -5,15 +5,6 @@ import { Flex, IconButton, Text } from 'theme-ui'
 
 import type { MediaFile } from 'oa-shared'
 
-const textStyle = {
-  flex: 1,
-  fontSize: 1,
-  whiteSpace: 'nowrap',
-  textOverflow: 'ellipsis',
-  overflow: 'hidden',
-  mr: 3,
-}
-
 type FileDisplayProps = {
   file: MediaFile
   onRemove: () => void
@@ -23,10 +14,23 @@ export const FileDisplay = ({ file, onRemove }: FileDisplayProps) => {
   return (
     <Flex
       key={file.id}
-      sx={{ width: 'fit-content', alignItems: 'center', gap: 1 }}
+      sx={{
+        alignItems: 'center',
+        gap: 2,
+        background: 'background',
+        borderRadius: 6,
+        padding: 1,
+      }}
     >
-      <Icon size={24} glyph="download-cloud" mr={3} />
-      <Text sx={textStyle}>
+      <Icon size={24} glyph="download-cloud" sx={{ marginLeft: 1 }} />
+      <Text
+        sx={{
+          flex: 1,
+          fontSize: 1,
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+        }}
+      >
         {file.url ? (
           <Link to={file.url} target="_blank">
             {file.name}
@@ -35,6 +39,7 @@ export const FileDisplay = ({ file, onRemove }: FileDisplayProps) => {
           file.name
         )}
       </Text>
+
       {file.size && <Text sx={{ fontSize: 1 }}>{bytesToSize(file.size)}</Text>}
 
       <IconButton

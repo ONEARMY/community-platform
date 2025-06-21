@@ -91,7 +91,7 @@ describe('[Research]', () => {
       cy.logout()
       cy.visit(`/research/${expected.slug}`)
       cy.get('[data-test="NotFound: Heading"').should('be.visible')
-      
+
       cy.step('New collaborators can add update')
       cy.logout()
       cy.signIn(subscriber.email, subscriber.password)

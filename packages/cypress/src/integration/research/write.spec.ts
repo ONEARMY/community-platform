@@ -69,7 +69,12 @@ describe('[Research]', () => {
 
       cy.get('[data-cy=draft]').click()
 
+      cy.step('Hide drafted research, if the user cannot edit it.')
+      cy.logout()
+      cy.get('[data-test="NotFound: Heading"').should('be.visible')
+      cy.signIn(admin.email, admin.password)
       cy.get('[data-cy=research-draft]').should('be.visible')
+
       cy.get('[data-cy=edit]').click()
 
       cy.step('New collaborators can be assigned to research')

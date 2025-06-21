@@ -70,6 +70,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=draft]').click()
 
       cy.get('[data-cy=research-draft]').should('be.visible')
+
       cy.get('[data-cy=edit]').click()
 
       cy.step('New collaborators can be assigned to research')
@@ -86,6 +87,11 @@ describe('[Research]', () => {
       cy.contains(expected.description)
       cy.contains(admin.userName)
 
+      cy.step('Hide drafted research, if the user cannot edit it.')
+      cy.logout()
+      cy.visit(`/research/${expected.slug}`)
+      cy.get('[data-test="NotFound: Heading"').should('be.visible')
+      
       cy.step('New collaborators can add update')
       cy.logout()
       cy.signIn(subscriber.email, subscriber.password)

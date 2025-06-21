@@ -29,6 +29,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const dbResearch = result.item
 
+  if (dbResearch.is_draft) {
+    const canEdit = await researchServiceServer.isAllowedToEditResearch(
+      client,
+      ResearchItem.fromDB(dbResearch, []),
+      currentUsername,
+    )
+    if (!canEdit) {
+      return Response.json({}, { status: 404, headers })
+    }
+  }
+
   if (dbResearch.id) {
     await contentServiceServer.incrementViewCount(
       client,

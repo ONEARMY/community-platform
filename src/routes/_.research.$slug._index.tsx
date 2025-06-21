@@ -9,7 +9,6 @@ import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { ResearchUpdate } from 'oa-shared'
-import { profileServiceServer } from 'src/services/profileService.server'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -30,15 +29,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const dbResearch = result.item
 
-  if(dbResearch.is_draft) {
-    if (!user) {
-      return Response.json({}, { status: 404, headers })
-    }
-
-    const profile = await profileServiceServer.getByAuthId(user.id, client)
-    const isAuthor = profile?.id === dbResearch.author?.id
-    
-    if (!isAuthor) {
+  if (dbResearch.is_draft) {
+    const canEdit = await researchServiceServer.isAllowedToEditResearch(
+      client,
+      ResearchItem.fromDB(dbResearch, []),
+      currentUsername,
+    )
+    if (!canEdit) {
       return Response.json({}, { status: 404, headers })
     }
   }

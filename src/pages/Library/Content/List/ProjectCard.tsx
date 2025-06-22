@@ -6,7 +6,6 @@ import {
   Username,
 } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
-import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Box, Card, Flex, Heading, Image } from 'theme-ui'
 
@@ -28,9 +27,7 @@ export const ProjectCard = ({ item }: ProjectCardProps) => {
               objectFit: 'cover',
             }}
             loading="lazy"
-            src={cdnImageUrl(item.coverImage?.publicUrl || '', {
-              width: 500,
-            })}
+            src={item.coverImage?.publicUrl || ''}
             crossOrigin=""
             alt={`Cover image of ${item.title}`}
           />

@@ -19,7 +19,6 @@ import { trackEvent } from 'src/common/Analytics'
 import { DownloadWrapper } from 'src/common/DownloadWrapper'
 import { logger } from 'src/logger'
 import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
-import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import {
   buildStatisticsLabel,
   capitalizeFirstLetter,
@@ -310,7 +309,7 @@ export const LibraryDescription = (props: IProps) => {
                 // that was created by AspectImage
                 <Image
                   loading="lazy"
-                  src={cdnImageUrl(item.coverImage.publicUrl)}
+                  src={item.coverImage.publicUrl}
                   sx={{
                     objectFit: 'cover',
                     height: '100%',

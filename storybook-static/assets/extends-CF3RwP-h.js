@@ -1,1 +1,0 @@
-function e(){return e=Object.assign?Object.assign.bind():function(n){for(var r=1;r<arguments.length;r++){var e=arguments[r];for(var a in e)({}).hasOwnProperty.call(e,a)&&(n[a]=e[a])}return n},e.apply(null,arguments)}export{e as _};

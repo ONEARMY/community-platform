@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/filename-case */
 import { LibraryList } from 'src/pages/Library/Content/List/LibraryList'
 import { SeoTagsUpdateComponent } from 'src/utils/seo'
 

@@ -1,9 +1,8 @@
-import { DifficultyLevel, IModerationStatus } from 'oa-shared'
 import { MOCK_AUTH_USERS } from 'oa-shared/mocks/auth'
 
-import { setDoc, updateDoc } from '../../Firebase/firestoreDB'
+import { updateDoc } from '../../Firebase/firestoreDB'
 
-import type { ILibrary, IUserDB } from 'oa-shared'
+import type { IUserDB } from 'oa-shared'
 import type { IMockAuthUser } from 'oa-shared/mocks/auth'
 
 /**
@@ -13,48 +12,9 @@ import type { IMockAuthUser } from 'oa-shared/mocks/auth'
 export async function seedContentGenerate() {
   // create mock library projects just for demo_beta_tester and demo_admin users
   for (const user of Object.values(MOCK_AUTH_USERS).slice(1, 3)) {
-    await setMockLibrary(user)
     await setMockNotifications(user)
   }
   return
-}
-
-export function getMockLibraryItem(
-  uid: string,
-  moderation: ILibrary.DB['moderation'] = IModerationStatus.ACCEPTED,
-) {
-  const _id = `00_${uid}_howto`
-  const loginInfo = `username : ${uid}@example.com\npassword : ${uid}`
-  const library: ILibrary.DB = {
-    _id,
-    _created: new Date().toISOString(),
-    _modified: new Date().toISOString(),
-    _contentModifiedTimestamp: new Date().toISOString(),
-    _deleted: false,
-    _createdBy: uid,
-    cover_image: {
-      downloadUrl: `https://platform.onearmy.earth/images/One-Army-Star-Logo.svg`,
-    } as any,
-    description: `You can edit this howto by logging in as:\n\n${loginInfo}`,
-    difficulty_level: DifficultyLevel.EASY,
-    files: [],
-    mentions: [],
-    slug: _id,
-    steps: [],
-    time: '',
-    title: 'Mock Howto',
-    moderation,
-    previousSlugs: [_id],
-    totalComments: 0,
-  }
-
-  return library
-}
-
-export async function setMockLibrary(user: Pick<IMockAuthUser, 'uid'>) {
-  const { uid } = user
-  const library = getMockLibraryItem(uid)
-  await setDoc('library', library._id, library)
 }
 
 async function setMockNotifications(user: IMockAuthUser) {

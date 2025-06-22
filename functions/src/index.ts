@@ -2,7 +2,6 @@ import { dailyTasks } from './scheduled/tasks'
 
 import * as Admin from './admin'
 import * as UserUpdates from './userUpdates'
-import * as DiscussionUpdates from './discussionUpdates'
 import * as SupabaseSync from './supabaseSync'
 
 // the following endpoints are exposed for use by various triggers
@@ -12,13 +11,8 @@ exports.dailyTasks = dailyTasks
 // export all integration functions as a single group
 exports.integrations = require('./Integrations')
 
-exports.aggregations = require('./aggregations')
-
-exports.database = require('./database')
-
 exports.userUpdates = UserUpdates.handleUserUpdates
 
-exports.discussionUpdates = DiscussionUpdates.handleDiscussionUpdate
 exports.supabaseProfileUpdate = SupabaseSync.supabaseProfileUpdate
 
 // CC Note, 2020-04-40

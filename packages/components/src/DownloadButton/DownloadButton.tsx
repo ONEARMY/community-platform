@@ -44,7 +44,7 @@ export const DownloadButton = (props: IProps) => {
       </Flex>
       <Tooltip id="download-files" />
 
-      {fileDownloadCount && <DownloadCounter total={fileDownloadCount} />}
+      <DownloadCounter total={fileDownloadCount} />
     </>
   )
 }

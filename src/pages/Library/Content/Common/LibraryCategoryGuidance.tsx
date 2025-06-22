@@ -2,10 +2,10 @@ import { Alert, Text } from 'theme-ui'
 
 import { guidance } from '../../labels'
 
-import type { ICategory } from 'oa-shared'
+import type { Category } from 'oa-shared'
 
 interface IProps {
-  category: ICategory | undefined
+  category?: Category
   type: 'main' | 'files'
 }
 
@@ -14,7 +14,7 @@ export const LibraryCategoryGuidance = ({ category, type }: IProps) => {
     return null
   }
 
-  const label = category.label.toLowerCase()
+  const label = category.name.toLowerCase()
   const labelExists = !!guidance[label] && !!guidance[label][type]
 
   if (!labelExists) {

@@ -3,20 +3,18 @@ import { Form } from 'react-final-form'
 import { useNavigate } from 'react-router'
 import arrayMutators from 'final-form-arrays'
 import { Button, ResearchEditorOverview } from 'oa-components'
+import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { TagsField } from 'src/pages/common/FormFields'
-import {
-  ResearchErrors,
-  ResearchPostingGuidelines,
-} from 'src/pages/Research/Content/Common'
+import { ImageField } from 'src/pages/common/FormFields/ImageField'
+import { ResearchPostingGuidelines } from 'src/pages/Research/Content/Common'
 import { fireConfetti } from 'src/utils/fireConfetti'
 import { Text } from 'theme-ui'
 
 import { buttons, headings, overview } from '../../labels'
 import { researchService } from '../../research.service'
-import { ResearchImageField } from '../CreateResearch/Form/ResearchImageField'
 import { ResearchCollaboratorsField } from './FormFields/ResearchCollaboratorsField'
 import { ResearchDescriptionField } from './FormFields/ResearchDescriptionField'
 import { ResearchTitleField } from './FormFields/ResearchTitleField'
@@ -90,13 +88,6 @@ const ResearchForm = ({ research }: IProps) => {
     }
   }
 
-  const removeImage = () => {
-    setInitialValues({
-      ...initialValues!,
-      existingImage: null,
-    })
-  }
-
   const heading = research ? headings.overview.edit : headings.overview.create
 
   return (
@@ -109,7 +100,6 @@ const ResearchForm = ({ research }: IProps) => {
       validateOnBlur
       render={({
         dirty,
-        errors,
         values,
         valid,
         handleSubmit,
@@ -117,11 +107,7 @@ const ResearchForm = ({ research }: IProps) => {
         submitSucceeded,
       }) => {
         const saveError = saveErrorMessage && (
-          <ResearchErrors
-            errors={errors}
-            isVisible={!!saveErrorMessage}
-            labels={overview}
-          />
+          <ErrorsContainer errors={[saveErrorMessage]} />
         )
 
         const sidebar = (
@@ -209,11 +195,7 @@ const ResearchForm = ({ research }: IProps) => {
             <ResearchFieldCategory />
             <TagsField title={overview.tags.title} />
             <ResearchCollaboratorsField />
-            <ResearchImageField
-              label="Cover Image"
-              existingImage={initialValues?.existingImage || null}
-              remove={removeImage}
-            />
+            <ImageField title="Cover Image" />
           </FormWrapper>
         )
       }}

@@ -8,7 +8,6 @@ import { UserStore } from './user.store'
 import type { ILocation } from 'oa-shared'
 
 vi.mock('../common/module.store')
-vi.mock('../Aggragations/aggregations.store')
 
 describe('userStore', () => {
   let store

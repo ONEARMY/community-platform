@@ -2,15 +2,14 @@ import { Box, Card, Text } from 'theme-ui'
 
 import { headings } from './labels'
 
-import type { IErrorsListSet } from './types'
-
 interface IProps {
-  errorsListSet: IErrorsListSet[]
-  isVisible: boolean
+  errors: string[]
 }
 
-export const ErrorsContainer = ({ errorsListSet, isVisible }: IProps) => {
-  if (!isVisible || errorsListSet.length === 0) return null
+export const ErrorsContainer = ({ errors }: IProps) => {
+  if (!errors || errors.length === 0) {
+    return null
+  }
 
   return (
     <Box paddingTop={2} data-cy="errors-container">
@@ -28,38 +27,12 @@ export const ErrorsContainer = ({ errorsListSet, isVisible }: IProps) => {
             {headings.errors}
           </Text>
         </Box>
-        <ErrorsListSet errorsListSet={errorsListSet} />
+        <ul style={{ padding: 0, margin: 0, listStylePosition: 'inside' }}>
+          {errors.map((x, i) => (
+            <li key={i}>{x}</li>
+          ))}
+        </ul>
       </Card>
-    </Box>
-  )
-}
-
-const ErrorsListSet = ({ errorsListSet }) => {
-  return errorsListSet.map((errorsList, index) => {
-    if (errorsList === undefined) return
-    return <ErrorsList key={index} errorsList={errorsList} />
-  })
-}
-
-const ErrorsList = ({ errorsList }) => {
-  const { errors, title, keys, labels } = errorsList
-
-  return (
-    <Box paddingBottom={2}>
-      {title && (
-        <Box paddingBottom={1}>
-          <Text>{title}</Text>
-        </Box>
-      )}
-      <ul style={{ padding: 0, margin: 0, listStylePosition: 'inside' }}>
-        {keys.map((key, index) => {
-          return (
-            <li key={index}>
-              <strong>{labels[key].title}</strong>: {errors[key]}
-            </li>
-          )
-        })}
-      </ul>
     </Box>
   )
 }

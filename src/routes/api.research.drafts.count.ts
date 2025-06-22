@@ -32,6 +32,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     .select('id', { count: 'exact' })
     .eq('is_draft', true)
     .eq('created_by', profileId)
+    .or('deleted.eq.false,deleted.is.null')
 
   return Response.json({ total: count }, { headers })
 }

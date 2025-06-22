@@ -2,7 +2,7 @@ import { Flex, Heading } from 'theme-ui'
 
 import UserCreatedDocumentsItem from './UserCreatedDocumentsItem'
 
-import type { UserCreatedDocs } from '../types'
+import type { UserCreatedDocs } from 'oa-shared'
 
 interface IProps {
   docs: UserCreatedDocs
@@ -22,16 +22,16 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
               <Heading as="h3" variant="small" mb={1}>
                 Library
               </Heading>
-              {docs?.projects.map((item) => {
+              {docs.projects.map((item) => {
                 return (
                   <UserCreatedDocumentsItem
-                    key={item._id}
+                    key={item.id}
                     type="library"
                     item={{
-                      id: item._id!,
+                      id: item.id!,
                       slug: item.slug!,
                       title: item.title!,
-                      usefulVotes: item.totalUsefulVotes!,
+                      usefulVotes: item.usefulCount || 0,
                     }}
                   />
                 )

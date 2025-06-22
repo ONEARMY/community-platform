@@ -65,15 +65,6 @@ export const update: ILabels = {
     placeholder: `Explain what is happening in your research (max ${RESEARCH_MAX_LENGTH} characters)`,
     title: 'Description of this update',
   },
-  fileLink: {
-    title: 'Add a download link',
-    description: 'Link to Google Drive, Dropbox, Grabcad etc',
-  },
-  files: {
-    title: 'Attach your file(s) for this update',
-    description: 'Maximum file size 50MB',
-    error: 'Please provide either a file link or upload a file, not both.',
-  },
   title: {
     placeholder: `Title of this update (max ${RESEARCH_TITLE_MAX_LENGTH} characters)`,
     title: 'Title of this update',

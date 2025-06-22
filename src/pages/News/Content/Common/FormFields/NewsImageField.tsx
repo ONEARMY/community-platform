@@ -33,10 +33,10 @@ export const NewsImageField = (props: IProps) => {
       required
     >
       {!existingHeroImage && (
-        <ImageInputFieldWrapper data-cy={'heroImage-upload'}>
+        <ImageInputFieldWrapper data-cy="heroImage-upload">
           <Field
             hasText={false}
-            name={'heroImage'}
+            name="heroImage"
             component={ImageInputField}
             isEqual={COMPARISONS.image}
             required
@@ -45,8 +45,8 @@ export const NewsImageField = (props: IProps) => {
       )}
       {existingHeroImage && (
         <ImageInputFieldWrapper
-          key={`existingHeroImage`}
-          data-cy={`existingHeroImage`}
+          key="existingHeroImage"
+          data-cy="existingHeroImage"
         >
           <FieldContainer
             style={{

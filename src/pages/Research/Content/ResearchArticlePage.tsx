@@ -35,8 +35,8 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
   const location = useLocation()
   const { userStore } = useCommonStores().stores
   const loggedInUser = userStore.activeUser
-  const [subscribed, setSubscribed] = useState<boolean>(false) // TODO
-  const [voted, setVoted] = useState<boolean>(false) // TODO
+  const [subscribed, setSubscribed] = useState<boolean>(false)
+  const [voted, setVoted] = useState<boolean>(false)
   const [subscribersCount, setSubscribersCount] = useState<number>(
     research.subscriberCount,
   )

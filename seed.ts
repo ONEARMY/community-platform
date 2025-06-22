@@ -2,8 +2,9 @@ import { copycat } from '@snaplet/copycat'
 import { createSeedClient } from '@snaplet/seed'
 import { ProfileTypeList } from 'oa-shared'
 
+import libraryJson from './.snaplet/library.json'
+import questionsJson from './.snaplet/questions.json'
 import { convertToSlug } from './src/utils/slug'
-import questionsJson from './questions.json'
 
 import type {
   categoriesChildInputs,
@@ -12,6 +13,8 @@ import type {
   profilesChildInputs,
   profilesInputs,
   profilesScalars,
+  project_stepsChildInputs,
+  projectsScalars,
   questionsChildInputs,
   questionsScalars,
   subscribersChildInputs,
@@ -51,6 +54,25 @@ const _QUESTIONS_BASE: Partial<questionsScalars> = {
   images: [],
   deleted: false,
   tags: [],
+}
+
+const _PROJECT_BASE: Partial<projectsScalars> = {
+  tenant_id,
+  moderation: 'accepted',
+  legacy_id: null,
+  previous_slugs: [],
+  deleted: false,
+  tags: [],
+  is_draft: false,
+  file_download_count: 0,
+  total_views: 0,
+  comment_count: 0,
+}
+
+const _PROJECT_STEP_BASE = {
+  tenant_id,
+  images: null,
+  video_url: null,
 }
 
 const _CATEGORIES_BASE: Partial<categoriesScalars> = {
@@ -204,7 +226,10 @@ const seedProfiles = (): profilesChildInputs => [
 const seedCategories = (): categoriesChildInputs => [
   { ..._CATEGORIES_BASE, name: 'Questions', type: 'questions' },
   { ..._CATEGORIES_BASE, name: 'Research', type: 'research' },
-  { ..._CATEGORIES_BASE, name: 'Projects', type: 'projects' },
+  { ..._CATEGORIES_BASE, name: 'Guides', type: 'projects' },
+  { ..._CATEGORIES_BASE, name: 'Machines', type: 'projects' },
+  { ..._CATEGORIES_BASE, name: 'Moulds', type: 'projects' },
+  { ..._CATEGORIES_BASE, name: 'Products', type: 'projects' },
   { ..._CATEGORIES_BASE, name: 'Important Updates', type: 'news' },
 ]
 
@@ -261,7 +286,6 @@ const bigBlockOfMarkdown = `# h1 Heading 8-)
 ## Horizontal Rule
 
 ***
-
 
 ## Typographic replacements
 
@@ -349,6 +373,43 @@ const seedNews: Partial<newsScalars>[] = [
   },
 ]
 
+const seedLibrary = (): Partial<projectsScalars>[] => [
+  ...libraryJson.map((p: any) => ({
+    ..._PROJECT_BASE,
+    slug: convertToSlug(p.title),
+    title: p.title,
+    description: p.description,
+    difficulty_level: p.difficulty_level,
+    time: p.time,
+    moderation: p.moderation,
+    file_link: p.file_link,
+    comment_count: p.comments?.length || 0,
+  })),
+]
+
+const seedProjectSteps = (
+  projects: projectsScalars[],
+): project_stepsChildInputs => {
+  const steps: any[] = []
+
+  libraryJson.forEach((p: any, index: number) => {
+    if (p.steps && Array.isArray(p.steps)) {
+      p.steps.forEach((step: any) => {
+        steps.push({
+          ..._PROJECT_STEP_BASE,
+          project_id: projects[index]?.id,
+          title: step.title,
+          description: step.description,
+          images: step.images || null,
+          video_url: step.video_url || null,
+        })
+      })
+    }
+  })
+
+  return steps
+}
+
 const main = async () => {
   const seed = await createSeedClient()
 
@@ -360,6 +421,7 @@ const main = async () => {
       public: true,
     },
   ])
+
   const { users } = await seed.users(seedUsers())
   const { profiles } = await seed.profiles(
     (seedProfiles() as Array<any>).map((profile: profilesInputs, index) => ({
@@ -380,7 +442,6 @@ const main = async () => {
     questionsAcc.push(...questions)
   }
 
-  // Assumption: all users are subscribed and voted to/in every category id (except their own categories)
   for (const profile of profiles) {
     const questionsExceptMine = questionsAcc.filter(
       (q) => q.created_by !== profile.id,
@@ -407,6 +468,17 @@ const main = async () => {
       tags: [tags[0].id],
     })),
   )
+
+  const { projects } = await seed.projects(
+    seedLibrary().map((item) => ({
+      ...item,
+      category: categories.find((cat) => cat.type === 'projects')?.id,
+      created_by: profiles[0].id,
+      tags: [tags[0].name],
+    })),
+  )
+
+  await seed.project_steps(seedProjectSteps(projects))
 
   process.exit()
 }

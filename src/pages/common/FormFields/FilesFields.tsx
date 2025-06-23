@@ -25,11 +25,9 @@ export const FilesFields = () => {
   return (
     <ClientOnly fallback={<></>}>
       {() => (
-        <>
+        <Flex sx={{ flexDirection: 'column', gap: 2 }}>
           <WarningMessages show={hasBothError} />
-          <Label htmlFor="files" sx={{ mb: 2 }}>
-            {fileLabels.files.title}
-          </Label>
+          <Label htmlFor="files">{fileLabels.files.title}</Label>
           {!!state.values.existingFiles?.length && (
             <AlreadyAddedFiles
               files={state.values.existingFiles || []}
@@ -42,7 +40,7 @@ export const FilesFields = () => {
             />
           )}
           <UploadNewFiles />
-        </>
+        </Flex>
       )}
     </ClientOnly>
   )
@@ -77,7 +75,7 @@ const AlreadyAddedFiles = ({
   deleteFile: (id: string) => void
 }) => {
   return (
-    <Flex sx={{ flexDirection: 'column', mb: 3 }}>
+    <Flex sx={{ flexDirection: 'column', gap: 2 }}>
       {files.map((file) => (
         <FileDisplay
           key={file.id}

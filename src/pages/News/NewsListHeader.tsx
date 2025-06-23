@@ -2,7 +2,7 @@
 // import { Link, useSearchParams } from '@remix-run/react'
 // import debounce from 'debounce'
 // import {
-//   CategoryVerticalList,
+//   CategoryHorizonalList,
 //   ReturnPathLink,
 //   SearchField,
 //   Select,
@@ -118,7 +118,7 @@ export const NewsListHeader = () => {
   // )
 
   // const categoryComponent = (
-  //   <CategoryVerticalList
+  //   <CategoryHorizonalList
   //     allCategories={categories}
   //     activeCategory={category !== '' ? category : null}
   //     setActiveCategory={(updatedCategory) =>

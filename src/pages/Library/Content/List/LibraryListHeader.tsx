@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link, useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
 import {
-  CategoryVerticalList,
+  CategoryHorizonalList,
   ReturnPathLink,
   SearchField,
   Select,
@@ -92,7 +92,7 @@ export const LibraryListHeader = (props: IProps) => {
   }
 
   const categoryComponent = (
-    <CategoryVerticalList
+    <CategoryHorizonalList
       allCategories={categories}
       activeCategory={category}
       setActiveCategory={(updatedCategory) =>

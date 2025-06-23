@@ -7,11 +7,11 @@ import {
   Basic,
   OnlyOne,
   WhenGlyphNotPresent,
-} from './CategoryVerticalList.stories'
+} from './CategoryHorizonalList.stories'
 
-import type { IProps } from './CategoryVerticalList'
+import type { IProps } from './CategoryHorizonalList'
 
-describe('CategoryVerticalList', () => {
+describe('CategoryHorizonalList', () => {
   // https://stackoverflow.com/a/62148101
   beforeEach(() => {
     const mockIntersectionObserver = vi.fn()
@@ -26,7 +26,7 @@ describe('CategoryVerticalList', () => {
   it('renders each member type given', async () => {
     const { findAllByTestId } = render(<Basic {...(Basic.args as IProps)} />)
 
-    const allItems = await findAllByTestId('CategoryVerticalList-Item')
+    const allItems = await findAllByTestId('CategoryHorizonalList-Item')
 
     expect(allItems).toHaveLength(12)
   })
@@ -34,7 +34,7 @@ describe('CategoryVerticalList', () => {
   it('orders by _created with oldest first', async () => {
     const { findAllByTestId } = render(<Basic {...(Basic.args as IProps)} />)
 
-    const allItems = await findAllByTestId('CategoryVerticalList-Item')
+    const allItems = await findAllByTestId('CategoryHorizonalList-Item')
 
     expect(allItems[0].title).toEqual('Machines')
     expect(allItems[11].title).toEqual('Guides')

@@ -84,9 +84,7 @@ export const Layout = ({ children, preview, settings }: LayoutArgs) => {
               or unsubscribe with ease. <br />
               Something is not right? Send us{' '}
               <Link
-                href={
-                  'https://onearmy.retool.com/form/c48a8f5a-4f53-4c58-adda-ef4f3cd8dee1#page=email'
-                }
+                href={`${settings.siteUrl}/feedback/#page=email`}
                 style={link}
               >
                 feedback

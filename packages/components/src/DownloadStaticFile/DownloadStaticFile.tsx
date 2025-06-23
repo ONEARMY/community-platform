@@ -86,7 +86,7 @@ export const DownloadStaticFile = (props: IProps) => {
   const forDownload = allowDownload && file.url && !redirectToSignIn
 
   return (
-    <>
+    <Flex sx={{ flexDirection: 'column', gap: 1 }}>
       {forDownload && (
         <ExternalLink
           onClick={() => handleClick && handleClick()}
@@ -105,7 +105,7 @@ export const DownloadStaticFile = (props: IProps) => {
         label={`${file.name} (${size})`}
         onClick={() => handleClick && handleClick()}
       />
-    </>
+    </Flex>
   )
 }
 

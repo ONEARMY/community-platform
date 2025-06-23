@@ -11,7 +11,8 @@ export const DeleteAccount = () => {
   const { description, title } = fields.deleteAccount
   const [deleteInputVal, setDeleteInputVal] = useState<string>('')
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
-  const [confirmButtonDisabled, setConfirmButtonDisabled] = useState<boolean>(true)
+  const [confirmButtonDisabled, setConfirmButtonDisabled] =
+    useState<boolean>(true)
   const navigate = useNavigate()
 
   const openModal = () => {
@@ -36,16 +37,14 @@ export const DeleteAccount = () => {
   }, [deleteInputVal])
 
   const deleteAccount = async () => {
-    // TODO - delete the user from the required places 
+    // TODO - delete the user from the required places
     const user = userStore.activeUser
 
     if (user) {
-
       const updatedUser = await userStore.deleteUserLocation(user)
       if (updatedUser) {
         await mapsStore.deleteUserPin(toJS(updatedUser))
       }
-
     }
 
     closeModal()

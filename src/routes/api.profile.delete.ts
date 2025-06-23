@@ -3,19 +3,14 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 const deleteProfile = async (client: SupabaseClient, userId: string) => {
-  return await client
-    .from('profiles')
-    .delete()
-    .eq('auth_id', userId)
+  return await client.from('profiles').delete().eq('auth_id', userId)
 }
 
 const updateUserContent = async (client: SupabaseClient, userId: string) => {
   const content = ['research', 'library', 'questions', 'news']
 
-  return content.forEach(contentType => {
-    client.from(contentType)
-      .update({ 'created_by': null })
-      .eq('auth_id', userId)
+  return content.forEach((contentType) => {
+    client.from(contentType).update({ created_by: null }).eq('auth_id', userId)
   })
 }
 

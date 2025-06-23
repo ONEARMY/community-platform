@@ -4,7 +4,6 @@ import { Flex, Heading, Text } from 'theme-ui'
 import { Button } from '../Button/Button'
 import { Modal } from '../Modal/Modal'
 
-
 export interface Props {
   title?: string
   message: string
@@ -49,7 +48,9 @@ export const ConfirmModal = (props: PropsWithChildren<Props>) => {
             {title}
           </Heading>
         )}
-        <Text sx={{ alignSelf: 'stretch', fontWeight: 'bold' }} variant='quiet'>{message}</Text>
+        <Text sx={{ alignSelf: 'stretch', fontWeight: 'bold' }} variant="quiet">
+          {message}
+        </Text>
 
         {props.children}
 

@@ -420,6 +420,7 @@ const main = async () => {
       name: tenant_id,
       public: true,
     },
+    { name: `${tenant_id}-documents` },
   ])
 
   const { users } = await seed.users(seedUsers())

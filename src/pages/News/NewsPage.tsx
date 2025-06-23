@@ -4,6 +4,7 @@ import { observer } from 'mobx-react'
 import {
   Category,
   ContentStatistics,
+  DisplayDate,
   DisplayMarkdown,
   TagList,
 } from 'oa-components'
@@ -15,10 +16,18 @@ import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
-import { AspectRatio, Box, Button, Card, Flex, Heading, Image } from 'theme-ui'
+import {
+  AspectRatio,
+  Box,
+  Button,
+  Card,
+  Flex,
+  Heading,
+  Image,
+  Text,
+} from 'theme-ui'
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
-import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 
 interface IProps {
   news: News
@@ -79,13 +88,9 @@ export const NewsPage = observer(({ news }: IProps) => {
             {news.title}
           </Heading>
 
-          <UserNameTag
-            userName={news.author?.username || ''}
-            countryCode={news.author?.country || ''}
-            createdAt={news.createdAt}
-            modifiedAt={news.modifiedAt}
-            action="Published"
-          />
+          <Text variant="auxiliary">
+            <DisplayDate action={'Published'} createdAt={news.createdAt} />
+          </Text>
 
           {isEditable && (
             <ClientOnly fallback={<></>}>

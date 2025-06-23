@@ -1,5 +1,6 @@
 import {
   Category,
+  DisplayDate,
   Icon,
   IconCountWithTooltip,
   InternalLink,
@@ -8,7 +9,6 @@ import {
 import { Highlighter } from 'src/common/Highlighter'
 import { AspectRatio, Button, Card, Flex, Heading, Image, Text } from 'theme-ui'
 
-import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 import { listing } from './labels'
 
 import type { News } from 'oa-shared'
@@ -74,12 +74,9 @@ export const NewsListItem = ({ news, query }: IProps) => {
             )}
           </Flex>
 
-          <UserNameTag
-            countryCode={news.author?.country || ''}
-            createdAt={news.createdAt}
-            modifiedAt={news.modifiedAt}
-            userName={news.author?.username || ''}
-          />
+          <Text variant="auxiliary">
+            <DisplayDate action={'Published'} createdAt={news.createdAt} />
+          </Text>
 
           {news.summary && (
             <Text

@@ -35,12 +35,10 @@ export const ProjectCard = ({ item }: ProjectCardProps) => {
 
         <Flex
           sx={{
-            alignContent: 'stretch',
             flexDirection: 'column',
             flexGrow: 1,
             gap: 2,
             justifyContent: 'space-between',
-            justifyItems: 'stretch',
             padding: 2,
           }}
         >
@@ -64,15 +62,30 @@ export const ProjectCard = ({ item }: ProjectCardProps) => {
                   countryCode: item.author?.country,
                   isVerified: item.author?.isVerified,
                 }}
-                sx={{ position: 'relative' }}
               />
             </Box>
           </Flex>
 
-          <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-            {item.category && <Category category={item.category} />}
+          <Flex
+            sx={{
+              justifyContent: 'flex-end',
+              alignItems: 'stretch',
+              alignContent: 'stretch',
+            }}
+          >
+            {item.category && (
+              <Flex sx={{ flex: 1 }}>
+                <Category category={item.category} />
+              </Flex>
+            )}
 
-            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+            <Flex
+              sx={{
+                gap: 2,
+                flex: 1,
+                justifyContent: 'flex-end',
+              }}
+            >
               <IconCountWithTooltip
                 count={item.commentCount || 0}
                 icon="comment"
@@ -83,7 +96,7 @@ export const ProjectCard = ({ item }: ProjectCardProps) => {
                 icon="star-active"
                 text="How useful is it"
               />
-            </Box>
+            </Flex>
           </Flex>
         </Flex>
       </RouterLink>

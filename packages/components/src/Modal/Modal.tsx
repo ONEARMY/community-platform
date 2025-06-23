@@ -25,6 +25,10 @@ export const Modal = (props: Props) => {
   useEffect(() => {
     setVh()
     window.addEventListener('resize', setVh)
+
+    return (
+      window.removeEventListener('resize', setVh)
+    )
   }, [])
 
   const dismiss = () => {

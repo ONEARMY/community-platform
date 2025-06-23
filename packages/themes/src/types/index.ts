@@ -62,6 +62,7 @@ export interface ThemeWithName {
     blue: string
     red: string
     red2: string
+    redCrayola: string
     softblue: string
     bluetag: string
     grey: string

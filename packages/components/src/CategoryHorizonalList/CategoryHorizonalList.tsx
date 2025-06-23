@@ -13,7 +13,7 @@ export interface IProps {
   setActiveCategory: (category: Category | null) => void
 }
 
-export const CategoryVerticalList = (props: IProps) => {
+export const CategoryHorizonalList = (props: IProps) => {
   const { activeCategory, allCategories, setActiveCategory } = props
 
   if (!allCategories || !allCategories.length || allCategories.length < 3) {
@@ -29,7 +29,7 @@ export const CategoryVerticalList = (props: IProps) => {
   }
 
   return (
-    <VerticalList dataCy="CategoryVerticalList">
+    <VerticalList dataCy="CategoryHorizonalList">
       {orderedCategories.map((category, index) => {
         const isSelected = isCategorySelected(category)
         const name = category.name
@@ -38,8 +38,8 @@ export const CategoryVerticalList = (props: IProps) => {
 
         return (
           <CardButton
-            data-cy={`CategoryVerticalList-Item${isSelected ? '-active' : ''}`}
-            data-testid="CategoryVerticalList-Item"
+            data-cy={`CategoryHorizonalList-Item${isSelected ? '-active' : ''}`}
+            data-testid="CategoryHorizonalList-Item"
             title={name}
             key={index}
             onClick={() => setActiveCategory(isSelected ? null : category)}
@@ -48,11 +48,11 @@ export const CategoryVerticalList = (props: IProps) => {
               background: 'none',
               flexDirection: 'column',
               justifyContent: 'center',
-              minWidth: '130px',
+              minWidth: ['80px', '100px', '130px'],
               marginX: 1,
               paddingY: 2,
               textAlign: 'center',
-              width: '130px',
+              width: ['80px', '100px', '130px'],
               ...(isSelected
                 ? {
                     borderColor: 'green',

@@ -29,8 +29,8 @@ export const Arrow = ({ disabled, direction, onClick, sx }: IProps) => {
       {disabled ? null : (
         <Flex
           sx={{
-            width: '45px',
-            height: '45px',
+            width: ['35px', '35px', '45px'],
+            height: ['35px', '35px', '45px'],
             border: '3px solid #000',
             borderRadius: 3,
             alignItems: 'center',

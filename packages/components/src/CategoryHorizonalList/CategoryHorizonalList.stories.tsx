@@ -1,14 +1,14 @@
 import { useState } from 'react'
 
-import { CategoryVerticalList } from './CategoryVerticalList'
+import { CategoryHorizonalList } from './CategoryHorizonalList'
 
 import type { Meta, StoryFn } from '@storybook/react'
 import type { Category, ContentType } from 'oa-shared'
 
 export default {
-  title: 'Components/CategoryVerticalList',
-  component: CategoryVerticalList,
-} as Meta<typeof CategoryVerticalList>
+  title: 'Components/CategoryHorizonalList',
+  component: CategoryHorizonalList,
+} as Meta<typeof CategoryHorizonalList>
 
 const allCategoriesForPreciousPlastic = [
   {
@@ -100,7 +100,7 @@ const allCategoriesForProjectKamp = [
   },
 ]
 
-export const Basic: StoryFn<typeof CategoryVerticalList> = () => {
+export const Basic: StoryFn<typeof CategoryHorizonalList> = () => {
   const [activeCategory, setActiveCategory] = useState<Category | null>(null)
   const allCategories = [
     ...allCategoriesForPreciousPlastic,
@@ -109,7 +109,7 @@ export const Basic: StoryFn<typeof CategoryVerticalList> = () => {
 
   return (
     <div style={{ maxWidth: '500px' }}>
-      <CategoryVerticalList
+      <CategoryHorizonalList
         activeCategory={activeCategory}
         allCategories={allCategories}
         setActiveCategory={setActiveCategory}
@@ -118,7 +118,9 @@ export const Basic: StoryFn<typeof CategoryVerticalList> = () => {
   )
 }
 
-export const WhenGlyphNotPresent: StoryFn<typeof CategoryVerticalList> = () => {
+export const WhenGlyphNotPresent: StoryFn<
+  typeof CategoryHorizonalList
+> = () => {
   const [activeCategory, setActiveCategory] = useState<Category | null>(null)
   const noGlyphCategories = [
     {
@@ -146,7 +148,7 @@ export const WhenGlyphNotPresent: StoryFn<typeof CategoryVerticalList> = () => {
 
   return (
     <div style={{ maxWidth: '500px' }}>
-      <CategoryVerticalList
+      <CategoryHorizonalList
         activeCategory={activeCategory}
         allCategories={noGlyphCategories}
         setActiveCategory={setActiveCategory}
@@ -155,7 +157,7 @@ export const WhenGlyphNotPresent: StoryFn<typeof CategoryVerticalList> = () => {
   )
 }
 
-export const OnlyOne: StoryFn<typeof CategoryVerticalList> = () => {
+export const OnlyOne: StoryFn<typeof CategoryHorizonalList> = () => {
   const [activeCategory, setActiveCategory] = useState<Category | null>(null)
 
   const twoCategories = [
@@ -165,7 +167,7 @@ export const OnlyOne: StoryFn<typeof CategoryVerticalList> = () => {
 
   return (
     <div style={{ maxWidth: '500px' }}>
-      <CategoryVerticalList
+      <CategoryHorizonalList
         activeCategory={activeCategory}
         allCategories={twoCategories}
         setActiveCategory={setActiveCategory}

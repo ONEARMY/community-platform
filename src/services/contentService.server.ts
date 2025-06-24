@@ -1,7 +1,7 @@
 import { tagsServiceServer } from 'src/services/tagsService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { ContentType } from 'oa-shared'
+import type { ContentType, IDBContentDoc } from 'oa-shared'
 
 type Slug = string
 type Id = number
@@ -48,8 +48,8 @@ async function isDuplicateExistingSlug(
 ) {
   const { data } = await client
     .from(table)
-    .select('id,slug')
-    .eq('slug', slug)
+    .select('id,slug,previous_slugs')
+    .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
     .single()
 
   return !!data?.id && data.id !== id
@@ -62,11 +62,21 @@ async function isDuplicateNewSlug(
 ) {
   const { data } = await client
     .from(table)
-    .select('slug')
-    .eq('slug', slug)
+    .select('slug,previous_slugs')
+    .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
     .single()
 
   return !!data
+}
+
+function updatePreviousSlugs(content: IDBContentDoc, newSlug: Slug) {
+  if (content.slug !== newSlug) {
+    return content.previous_slugs
+      ? [...content.previous_slugs, content.slug]
+      : [content.slug]
+  }
+
+  return content.previous_slugs
 }
 
 export const contentServiceServer = {
@@ -74,4 +84,5 @@ export const contentServiceServer = {
   incrementViewCount,
   isDuplicateExistingSlug,
   isDuplicateNewSlug,
+  updatePreviousSlugs,
 }

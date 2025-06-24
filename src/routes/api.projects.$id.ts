@@ -40,6 +40,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         ? (formData.get('difficultyLevel') as string)
         : null,
       stepCount: parseInt(formData.get('stepCount') as string),
+      slug: convertToSlug(formData.get('title') as string),
     }
     const existingCoverImageId = formData.get('existingCoverImage') as string
     const filesToKeepIds = formData.getAll('existingFiles') as string[]
@@ -49,36 +50,18 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       data: { user },
     } = await client.auth.getUser()
 
+    const currentProject = await libraryServiceServer.getById(id, client)
+
     const { valid, status, statusText } = await validateRequest(
       request,
       user,
       data,
+      currentProject,
+      client,
     )
 
     if (!valid) {
       return Response.json({}, { status, statusText })
-    }
-
-    const profile = await profileServiceServer.getByAuthId(user!.id, client)
-    const currentProject = await libraryServiceServer.getById(id, client)
-
-    const slug = convertToSlug(data.title)
-
-    if (
-      currentProject.slug !== slug &&
-      (await contentServiceServer.isDuplicateNewSlug(slug, client, 'projects'))
-    ) {
-      return Response.json(
-        {},
-        {
-          status: 409,
-          statusText: 'This project already exists',
-        },
-      )
-    }
-
-    if (!profile) {
-      return Response.json({}, { status: 400, statusText: 'User not found' })
     }
 
     // 1. Upload files
@@ -115,7 +98,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       client,
       currentProject,
       data,
-      slug,
       files,
       newCoverImage,
       existingCoverImageId,
@@ -188,7 +170,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 }
 
-async function validateRequest(request: Request, user: User | null, data: any) {
+async function validateRequest(
+  request: Request,
+  user: User | null,
+  data: any,
+  currentProject: DBProject,
+  client: SupabaseClient,
+) {
   if (!user) {
     return { status: 401, statusText: 'unauthorized' }
   }
@@ -209,6 +197,27 @@ async function validateRequest(request: Request, user: User | null, data: any) {
     return { status: 400, statusText: '3 steps are required' }
   }
 
+  if (
+    currentProject.slug !== data.slug &&
+    (await contentServiceServer.isDuplicateExistingSlug(
+      data.slug,
+      currentProject.id,
+      client,
+      'projects',
+    ))
+  ) {
+    return {
+      status: 409,
+      statusText: 'This project already exists',
+    }
+  }
+
+  const profile = await profileServiceServer.getByAuthId(user!.id, client)
+
+  if (!profile) {
+    return { status: 400, statusText: 'User not found' }
+  }
+
   return { valid: true }
 }
 
@@ -225,17 +234,16 @@ async function updateProject(
     difficultyLevel: string | null
     time: string | null
     moderation?: Moderation
+    slug: string
   },
-  slug: string,
   files: MediaFile[] | null,
   coverImage?: DBMedia,
   existingCoverImageId?: string,
 ) {
-  const previousSlugs = currentProject.previous_slugs || []
-
-  if (currentProject.slug !== slug) {
-    previousSlugs.push(currentProject.slug)
-  }
+  const previousSlugs = contentServiceServer.updatePreviousSlugs(
+    currentProject,
+    data.slug,
+  )
 
   let cover_image: DBMedia | null = null
 
@@ -250,7 +258,7 @@ async function updateProject(
     .update({
       title: data.title,
       description: data.description,
-      slug,
+      slug: data.slug,
       previous_slugs: previousSlugs,
       category: data.category,
       tags: data.tags,

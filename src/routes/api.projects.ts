@@ -37,12 +37,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     current_username: username,
   })
 
-  const countRersult = await client.rpc('get_projects_count', {
+  const countResult = await client.rpc('get_projects_count', {
     search_query: q || null,
     category_id: category,
     current_username: username,
   })
-  const count = countRersult.data || 0
+  const count = countResult.data || 0
 
   if (error) {
     console.error(error)

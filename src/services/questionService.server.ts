@@ -1,5 +1,10 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { Question } from 'oa-shared'
+import type { DBQuestion, Question } from 'oa-shared'
+
+const getById = async (id: number, client: SupabaseClient) => {
+  const result = await client.from('questions').select().eq('id', id).single()
+  return result.data as DBQuestion
+}
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
   return client
@@ -52,6 +57,7 @@ const getQuestionsByUser = async (
 }
 
 export const questionServiceServer = {
+  getById,
   getBySlug,
   getQuestionsByUser,
 }

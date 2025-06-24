@@ -7,8 +7,8 @@ import { storageServiceServer } from 'src/services/storageService.server'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
-import type { User } from '@supabase/supabase-js'
-import type { DBProfile, DBResearchItem } from 'oa-shared'
+import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { DBResearchItem } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   try {
@@ -32,6 +32,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         ? (formData.getAll('collaborators') as string[])
         : null,
       isDraft: formData.get('draft') === 'true',
+      slug: convertToSlug(formData.get('title') as string),
     }
     const uploadedImage = formData.get('image') as File
     const existingImage = formData.get('existingImage') as string | null
@@ -42,57 +43,31 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       data: { user },
     } = await client.auth.getUser()
 
-    const currentUserProfile = await profileServiceServer.getByAuthId(
-      user?.id || '',
-      client,
-    )
     const currentResearch = await researchServiceServer.getById(id, client)
 
     const { valid, status, statusText } = await validateRequest(
       request,
       user,
       data,
-      currentUserProfile,
       currentResearch,
+      client,
     )
 
     if (!valid) {
       return Response.json({}, { status, statusText })
     }
 
-    const newSlug = convertToSlug(data.title)
-
-    if (
-      currentResearch.slug !== newSlug &&
-      (await contentServiceServer.isDuplicateExistingSlug(
-        newSlug,
-        currentResearch.id,
-        client,
-        'research',
-      ))
-    ) {
-      return Response.json(
-        {},
-        {
-          status: 409,
-          statusText: 'This research already exists',
-        },
-      )
-    }
-
-    let previousSlugs = currentResearch.previous_slugs
-    if (currentResearch.slug !== newSlug) {
-      previousSlugs = previousSlugs
-        ? [...previousSlugs, currentResearch.slug]
-        : [currentResearch.slug]
-    }
+    const previousSlugs = contentServiceServer.updatePreviousSlugs(
+      currentResearch,
+      data.slug,
+    )
 
     const researchResult = await client
       .from('research')
       .update({
         title: data.title,
         description: data.description,
-        slug: newSlug,
+        slug: data.slug,
         category: data.category,
         tags: data.tags,
         previous_slugs: previousSlugs,
@@ -180,8 +155,8 @@ async function validateRequest(
   request: Request,
   user: User | null,
   data: any,
-  profile: DBProfile | null,
   research: DBResearchItem,
+  client: SupabaseClient,
 ) {
   if (!user) {
     return { status: 401, statusText: 'unauthorized' }
@@ -199,8 +174,25 @@ async function validateRequest(
     return { status: 400, statusText: 'description is required' }
   }
 
+  if (
+    research.slug !== data.slug &&
+    (await contentServiceServer.isDuplicateExistingSlug(
+      data.slug,
+      research.id,
+      client,
+      'research',
+    ))
+  ) {
+    return {
+      status: 409,
+      statusText: 'This research already exists',
+    }
+  }
+
+  const profile = await profileServiceServer.getByAuthId(user!.id, client)
+
   if (!profile) {
-    return { status: 400, statusText: 'invalid user' }
+    return { status: 400, statusText: 'User not found' }
   }
 
   if (profile.roles?.includes(UserRole.ADMIN)) {

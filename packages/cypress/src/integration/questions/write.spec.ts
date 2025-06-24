@@ -120,11 +120,9 @@ describe('[Question]', () => {
         .should('include', `/questions/${updatedExpectedSlug}`)
       cy.contains(updatedTitle)
 
-      // Bug: Missing previous slug functionality
-      //
-      // cy.step('Can access the question with the previous slug')
-      // cy.visit(`/questions/${initialExpectedSlug}`)
-      // cy.contains(updatedTitle)
+      cy.step('Can access the question with the previous slug')
+      cy.visit(`/questions/${initialExpectedSlug}`)
+      cy.contains(updatedTitle)
 
       cy.step('All updated fields visible on list')
       cy.visit('/questions')

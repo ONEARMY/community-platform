@@ -39,7 +39,11 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
             </Flex>
           )}
           {docs?.research.length > 0 && (
-            <Flex my={2} sx={{ flexDirection: 'column', flexBasis: '50%' }}>
+            <Flex
+              data-testid="research-contributions"
+              my={2}
+              sx={{ flexDirection: 'column', flexBasis: '50%' }}
+            >
               <Heading as="h3" variant="small">
                 Research
               </Heading>

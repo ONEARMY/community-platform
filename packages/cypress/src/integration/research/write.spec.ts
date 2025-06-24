@@ -70,6 +70,13 @@ describe('[Research]', () => {
       cy.get('[data-cy=draft]').click()
 
       cy.get('[data-cy=research-draft]').should('be.visible')
+
+      cy.step('Drafted Research should not appear on users profile')
+      cy.visit('/u/' + admin.displayName)
+      cy.get('[data-testid=research-stat]').should('not.exist')
+      cy.get('[data-cy=ContribTab]').should('not.exist')
+
+      cy.visit(`/research/${expected.slug}`)
       cy.get('[data-cy=edit]').click()
 
       cy.step('New collaborators can be assigned to research')
@@ -85,6 +92,12 @@ describe('[Research]', () => {
       cy.contains(expected.title)
       cy.contains(expected.description)
       cy.contains(admin.userName)
+
+      cy.step('Published Research should appear on users profile')
+      cy.visit('/u/' + admin.displayName)
+      cy.get('[data-testid=research-stat]').contains('1')
+      cy.get('[data-cy=ContribTab]').click()
+      cy.get('[data-testid="research-contributions"]').should('be.visible')
 
       cy.step('New collaborators can add update')
       cy.logout()

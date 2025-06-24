@@ -214,9 +214,14 @@ describe('[Library]', () => {
       cy.url().should('include', firstSlug)
       cy.get('[data-cy=status-draft]').should('be.visible')
 
-      cy.step('Back to completing the project')
-      cy.get('[data-cy=edit]').click()
+      cy.step("Drafted project should not appear on user's profile")
+      cy.visit('/u/' + creator.displayName)
+      cy.get('[data-testid=library-stat]').should('not.exist')
+      cy.get('[data-cy=ContribTab]').should('not.exist')
 
+      cy.step('Back to completing the project')
+      cy.visit(firstSlug)
+      cy.get('[data-cy=edit]').click()
       checkWhitespaceTrim('intro-title')
 
       cy.step('Fill up the intro')
@@ -258,7 +263,6 @@ describe('[Library]', () => {
 
       cy.step('A full draft can be submitted for review')
       cy.get('[data-cy=edit]').click()
-
       cy.get('[data-cy=submit]').click()
       cy.url().should('include', `/library/${slug}`)
 
@@ -266,17 +270,11 @@ describe('[Library]', () => {
       cy.get('[data-cy=file-download-counter]')
         .contains(total_downloads)
         .should('be.visible')
-      // Check against UI
       cy.get('[data-cy=project-title]').should('contain', title)
       cy.get('[data-cy=project-description]').should('contain', description)
-
-      // Check category
       cy.get('[data-cy=category]').should('contain', category)
-
-      // Check difficulty level
       cy.get('[data-cy=difficulty-level]').should('contain', difficulty_level)
 
-      // Check steps
       steps.forEach((step, index) => {
         cy.get(`[data-cy=step_${index + 1}]`)
           .find('[data-cy=step-title]')
@@ -285,6 +283,13 @@ describe('[Library]', () => {
           .find('[data-cy=step-text]')
           .should('contain', step.text)
       })
+
+      // Won't show on profile yet as project needs admin approval
+      // cy.step('Published project should appear on users profile')
+      // cy.visit('/u/' + creator.displayName)
+      // cy.get('[data-testid=library-stat]').contains('1')
+      // cy.get('[data-cy=ContribTab]').click()
+      // cy.get('[data-cy="library-contributions"]').should('be.visible')
     })
 
     it('[By Anonymous]', () => {

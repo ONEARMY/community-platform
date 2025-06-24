@@ -3466,8 +3466,8 @@
           "nullNotDistinct": false
         },
         {
-          "name": "idx_name_bucket_unique",
-          "fields": ["bucket_id", "name"],
+          "name": "idx_name_bucket_level_unique",
+          "fields": ["bucket_id", "level", "name"],
           "nullNotDistinct": false
         },
         {
@@ -4471,6 +4471,20 @@
           "maxLength": null
         },
         {
+          "id": "public.project_steps.order",
+          "name": "order",
+          "columnName": "order",
+          "type": "int2",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "id": "public.project_steps.tenant_id",
           "name": "tenant_id",
           "columnName": "tenant_id",
@@ -4917,12 +4931,12 @@
         },
         {
           "name": "projects_slug_key",
-          "fields": ["slug"],
+          "fields": ["slug", "tenant_id"],
           "nullNotDistinct": false
         },
         {
           "name": "projects_title_key",
-          "fields": ["title"],
+          "fields": ["tenant_id", "title"],
           "nullNotDistinct": false
         }
       ]

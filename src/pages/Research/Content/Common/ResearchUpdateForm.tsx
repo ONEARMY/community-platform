@@ -141,6 +141,8 @@ export const ResearchUpdateForm = (props: IProps) => {
         }) => {
           const errorsClientSide = [errorSet(errors, update)]
 
+          const handleSubmitDraft = () => onSubmit(values, true)
+
           const numberOfImageInputsAvailable = (values as any)?.images
             ? Math.min((values as any).images.filter((x) => !!x).length + 1, 10)
             : 1
@@ -153,20 +155,6 @@ export const ResearchUpdateForm = (props: IProps) => {
 
           const sidebar = (
             <>
-              <Button
-                data-cy="draft"
-                variant="secondary"
-                type="submit"
-                disabled={isSaving}
-                onClick={() => onSubmit(values, true)}
-                sx={{
-                  alignSelf: 'stretch',
-                  justifyContent: 'center',
-                }}
-              >
-                {buttons.draft}
-              </Button>
-
               {isEdit ? (
                 <Button
                   data-cy="delete"
@@ -205,6 +193,7 @@ export const ResearchUpdateForm = (props: IProps) => {
               errorsClientSide={errorsClientSide}
               errorSubmitting={saveErrorMessage}
               handleSubmit={handleSubmit}
+              handleSubmitDraft={handleSubmitDraft}
               hasValidationErrors={hasValidationErrors}
               heading={heading}
               sidebar={sidebar}

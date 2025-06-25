@@ -33,6 +33,7 @@ export const NewsForm = (props: IProps) => {
     body: '',
     category: null,
     existingHeroImage: null,
+    isDraft: null,
     heroImage: null,
     tags: [],
     title: '',
@@ -56,13 +57,17 @@ export const NewsForm = (props: IProps) => {
           }
         : null,
       existingHeroImage: news.heroImage,
+      isDraft: news.isDraft,
       heroImage: null,
       tags: news.tagIds,
       title: news.title,
     })
   }, [news])
 
-  const onSubmit = async (formValues: Partial<NewsFormData>) => {
+  const onSubmit = async (
+    formValues: Partial<NewsFormData>,
+    isDraft = false,
+  ) => {
     setIntentionalNavigation(true)
     setSaveErrorMessage(null)
 
@@ -71,6 +76,7 @@ export const NewsForm = (props: IProps) => {
         body: formValues.body!,
         category: formValues.category || null,
         heroImage: formValues.heroImage || null,
+        isDraft: isDraft,
         existingHeroImage: initialValues.existingHeroImage || null,
         tags: formValues.tags,
         title: formValues.title!,
@@ -115,7 +121,7 @@ export const NewsForm = (props: IProps) => {
   return (
     <Form
       data-testid={props['data-testid']}
-      onSubmit={onSubmit}
+      onSubmit={(values) => onSubmit(values, false)}
       initialValues={initialValues}
       validate={(values) => {
         const errors = {}
@@ -131,12 +137,15 @@ export const NewsForm = (props: IProps) => {
         dirty,
         errors,
         hasValidationErrors,
+        submitFailed,
         submitting,
         submitSucceeded,
         handleSubmit,
-        submitFailed,
+        values,
       }) => {
         const errorsClientSide = [errorSet(errors, LABELS.fields)]
+
+        const handleSubmitDraft = () => onSubmit(values, true)
 
         const unsavedChangesDialog = (
           <UnsavedChangesDialog
@@ -156,6 +165,7 @@ export const NewsForm = (props: IProps) => {
             errorSubmitting={saveErrorMessage}
             guidelines={<NewsPostingGuidelines />}
             handleSubmit={handleSubmit}
+            handleSubmitDraft={handleSubmitDraft}
             hasValidationErrors={hasValidationErrors}
             heading={LABELS.headings[parentType]}
             submitFailed={submitFailed}

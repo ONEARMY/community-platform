@@ -3,9 +3,14 @@ import {
   generateNewUserDetails,
 } from '../../utils/TestUtils'
 
+let initialRandomId
+
 describe('[Question]', () => {
-  describe('[Create a question]', () => {
-    const initialRandomId = generateAlphaNumeric(8).toLowerCase()
+  beforeEach(() => {
+    initialRandomId = generateAlphaNumeric(8).toLowerCase()
+  })
+
+  it('[Create a question]', () => {
     const initialTitle = initialRandomId + ' Health cost of plastic?'
     const initialExpectedSlug = initialRandomId + '-health-cost-of-plastic'
     const initialQuestionDescription =
@@ -59,6 +64,15 @@ describe('[Question]', () => {
       cy.get('[data-cy=field-description]').type(initialQuestionDescription, {
         delay: 0,
       })
+
+      cy.get('[data-cy=draft]').click()
+      cy.visit('/questions')
+      cy.contains(initialTitle).should('not.exist')
+
+      cy.visit(`/questions/${initialExpectedSlug}`)
+      cy.contains(initialTitle)
+      cy.get('[data-cy=edit]').click()
+
       cy.step('Add category')
       cy.selectTag(category, '[data-cy=category-select]')
 
@@ -69,10 +83,10 @@ describe('[Question]', () => {
       // cy.selectTag(tag2, '[data-cy="tag-select"]')
 
       cy.step('Submit question')
-      cy.get('[data-cy=submit]')
-        .click()
-        .url()
-        .should('include', `/questions/${initialExpectedSlug}`)
+      cy.get('[data-cy=submit]').click()
+
+      cy.pause()
+      cy.url().should('include', `/questions/${initialExpectedSlug}`)
 
       cy.step('All question fields visible')
       cy.contains(initialTitle)

@@ -27,12 +27,15 @@ export const loader = async ({ request }) => {
 
   const { client, headers } = createSupabaseServerClient(request)
 
-  let query = client.from('news').select(
-    `
+  let query = client
+    .from('news')
+    .select(
+      `
       id,
       created_at,
       created_by,
       modified_at,
+      is_draft,
       comment_count,
       body,
       slug,
@@ -43,8 +46,9 @@ export const loader = async ({ request }) => {
       total_views,
       hero_image,
       author:profiles(id, display_name, username, is_verified, is_supporter, country)`,
-    { count: 'exact' },
-  )
+      { count: 'exact' },
+    )
+    .eq('is_draft', false)
 
   if (q) {
     query = query.textSearch('news_search_fields', q)
@@ -101,6 +105,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       category: formData.has('category')
         ? (formData.get('category') as string)
         : null,
+      isDraft: formData.get('is_draft') === 'true',
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
         : null,
@@ -169,6 +174,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         created_by: profile.id,
         title: data.title,
         body: data.body,
+        is_draft: data.isDraft,
         moderation: IModerationStatus.ACCEPTED,
         slug,
         summary: getSummaryFromMarkdown(data.body),

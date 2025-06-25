@@ -19,20 +19,24 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
   const error = url.searchParams.get('error_description')
-  const code = url.searchParams.get('code')
-  const redirectUrl = url.searchParams.get('url')
+  const token = url.searchParams.get('token')
 
   if (error) {
     return Response.json({ error })
   }
 
-  // If there's a code, show the form - no need to pass the code
-  if (code) {
-    return Response.json({})
+  if (token) {
+    return Response.json({ token })
   }
 
-  if (redirectUrl) {
-    return Response.json({ url: decodeURIComponent(redirectUrl) })
+  const { client, headers } = createSupabaseServerClient(request)
+
+  const {
+    data: { user },
+  } = await client.auth.getUser()
+
+  if (user) {
+    return Response.json({}, { headers })
   }
 
   return redirect('/')
@@ -46,25 +50,32 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const password = formData.get('password') as string
   const passwordRepeat = formData.get('passwordRepeat') as string
 
-  // Get the code from URL params (it should still be there)
-  const code = url.searchParams.get('code')
+  // Get the token from URL params (it should still be there)
+  const token = url.searchParams.get('token')
 
-  if (!code) {
-    return Response.json({ error: 'Reset code is missing' }, { status: 400 })
+  if (!token) {
+    return Response.json(
+      { error: 'Your reset link is invalid' },
+      { status: 400, headers },
+    )
+  }
+
+  const tokenVerification = await client.auth.verifyOtp({
+    token_hash: token,
+    type: 'recovery',
+  })
+
+  if (!tokenVerification.data.user) {
+    return Response.json(
+      { error: 'Your reset link has expired or is invalid' },
+      { status: 400, headers },
+    )
   }
 
   if (password !== passwordRepeat) {
-    return Response.json({ error: 'Passwords do not match' }, { status: 400 })
-  }
-
-  // Exchange the code for a session first
-  const sessionResult = await client.auth.exchangeCodeForSession(code)
-
-  if (sessionResult.error) {
-    console.error(sessionResult.error)
     return Response.json(
-      { error: 'Your reset link has expired or is invalid' },
-      { status: 400 },
+      { error: 'Passwords do not match' },
+      { status: 400, headers },
     )
   }
 
@@ -72,7 +83,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await client.auth.updateUser({ password })
 
   if (result.error) {
-    return Response.json({ error: result.error.message }, { status: 500 })
+    return Response.json(
+      { error: result.error.message },
+      { status: 500, headers },
+    )
   }
 
   // Redirect with the session headers to automatically log in the user
@@ -89,10 +103,6 @@ export default function Index() {
       navigate('/')
     }
   }, [actionData?.success])
-
-  const redirectReset = () => {
-    location.href = data.url
-  }
 
   return (
     <Main style={{ flex: 1 }}>
@@ -141,56 +151,46 @@ export default function Index() {
                             <Text color="red">{actionData?.error}</Text>
                           )}
 
-                          {data.url ? (
-                            <Button type="button" onClick={redirectReset}>
-                              Reset password
+                          <Flex sx={{ flexDirection: 'column' }}>
+                            <Label htmlFor="password">Your new password</Label>
+                            <PasswordField
+                              name="password"
+                              type="password"
+                              data-cy="password"
+                              component={FieldInput}
+                              validate={required}
+                            />
+                          </Flex>
+
+                          <Flex sx={{ flexDirection: 'column' }}>
+                            <Label htmlFor="passwordRepeat">
+                              Repeat your new password
+                            </Label>
+                            <PasswordField
+                              name="passwordRepeat"
+                              type="password"
+                              data-cy="passwordRepeat"
+                              component={FieldInput}
+                              validate={required}
+                            />
+                          </Flex>
+
+                          <Flex>
+                            <Button
+                              large
+                              data-cy="submit"
+                              sx={{
+                                borderRadius: 3,
+                                width: '100%',
+                                justifyContent: 'center',
+                              }}
+                              variant="primary"
+                              disabled={submitting || invalid}
+                              type="submit"
+                            >
+                              Update password
                             </Button>
-                          ) : (
-                            <>
-                              <Flex sx={{ flexDirection: 'column' }}>
-                                <Label htmlFor="password">
-                                  Your new password
-                                </Label>
-                                <PasswordField
-                                  name="password"
-                                  type="password"
-                                  data-cy="password"
-                                  component={FieldInput}
-                                  validate={required}
-                                />
-                              </Flex>
-
-                              <Flex sx={{ flexDirection: 'column' }}>
-                                <Label htmlFor="passwordRepeat">
-                                  Repeat your new password
-                                </Label>
-                                <PasswordField
-                                  name="passwordRepeat"
-                                  type="password"
-                                  data-cy="passwordRepeat"
-                                  component={FieldInput}
-                                  validate={required}
-                                />
-                              </Flex>
-
-                              <Flex>
-                                <Button
-                                  large
-                                  data-cy="submit"
-                                  sx={{
-                                    borderRadius: 3,
-                                    width: '100%',
-                                    justifyContent: 'center',
-                                  }}
-                                  variant="primary"
-                                  disabled={submitting || invalid}
-                                  type="submit"
-                                >
-                                  Update password
-                                </Button>
-                              </Flex>
-                            </>
-                          )}
+                          </Flex>
                         </>
                       )}
                     </Flex>

@@ -111,6 +111,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
                 tooltipFollow="Follow new replies"
                 tooltipUnfollow="Unfollow new replies"
                 variant="subtle"
+                hideSubscribeIcon
               />
             </AuthWrapper>
           }

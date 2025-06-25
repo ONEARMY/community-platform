@@ -74,18 +74,6 @@ export const LibraryStepsContainerField = () => {
                   onDelete={(fieldIndex: number) => {
                     fields.remove(fieldIndex)
                   }}
-                  removeExistingImage={(imageIndex: number) => {
-                    // Remove existing image at imageIndex for this step
-                    const currentStep = fields.value[index]
-                    const updatedExistingImages =
-                      currentStep.existingImages.filter(
-                        (_, i) => i !== imageIndex,
-                      )
-                    fields.update(index, {
-                      ...currentStep,
-                      existingImages: updatedExistingImages,
-                    })
-                  }}
                 />
               </AnimationContainer>
             ))}

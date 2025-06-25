@@ -1,20 +1,6 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { userService } from 'src/services/userService.server'
 
-import type { SupabaseClient } from '@supabase/supabase-js'
-
-const deleteProfile = async (client: SupabaseClient, userId: string) => {
-  return await client.from('profiles').delete().eq('auth_id', userId)
-}
-
-const updateUserContent = async (client: SupabaseClient, userId: string) => {
-  const content = ['research', 'library', 'questions', 'news']
-
-  return content.forEach((contentType) => {
-    client.from(contentType).update({ created_by: null }).eq('auth_id', userId)
-  })
-}
-
-// TODO - this might not have to be an endpoint but a service
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request)
 
@@ -26,9 +12,14 @@ export const loader = async ({ request }) => {
     return Response.json({}, { headers, status: 401 })
   }
 
-  await updateUserContent(client, user.id)
+  const authId = user.id
+  const profileId = await userService.getProfileIdForAuthUser(client, authId)
 
-  await deleteProfile(client, user.id)
+  await userService.updateUserContent(client, profileId)
 
-  return Response.json({}, { headers, status: 200 })
+  await userService.deleteProfileData(client, authId)
+
+  await userService.deleteSupabaseUser(client, authId)
+
+  return await userService.logout(client, headers)
 }

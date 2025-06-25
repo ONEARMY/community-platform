@@ -49,8 +49,7 @@ export const DeleteAccount = () => {
 
     closeModal()
 
-    // Redirect user to logout
-    navigate('/logout')
+    navigate('/api/profile/delete')
   }
 
   return (

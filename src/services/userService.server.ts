@@ -6,7 +6,7 @@ import {
 } from 'oa-shared'
 import { firestore } from 'src/utils/firebase'
 
-import type { User } from '@supabase/supabase-js'
+import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { ILibrary, IUser, IUserDB } from 'oa-shared'
 
 const getById = async (id: string): Promise<IUserDB | null> => {
@@ -63,8 +63,76 @@ const createFirebaseProfile = async (authUser: User) => {
   await dbRef.set(user)
 }
 
+const getProfileIdForAuthUser = async (
+  client: SupabaseClient,
+  userId: string,
+) => {
+  const { data: profileData } = await client
+    .from('profiles')
+    .select('id')
+    .eq('auth_id', userId)
+    .single()
+
+  return profileData?.id
+}
+
+const deleteSupabaseUser = async (client: SupabaseClient, userId: string) => {
+  await client.auth.admin.deleteUser(userId)
+}
+
+const deleteProfileData = async (client: SupabaseClient, userId: string) => {
+  return await client.from('profiles').delete().eq('auth_id', userId)
+}
+
+const updateUserContent = async (client: SupabaseClient, profileId: string) => {
+  const content = ['research', 'library', 'questions', 'news']
+
+  content.forEach(async (contentType) => {
+    await client
+      .from(contentType)
+      .update({ created_by: null })
+      .eq('created_by', profileId)
+  })
+
+  // TODO - update research updates
+}
+
+const deleteUserContent = async (client: SupabaseClient, profileId: string) => {
+  const contentStructure = [
+    { contentType: 'subscribers', fieldNames: ['user_id'] },
+    { contentType: 'useful_votes', fieldNames: ['user_id'] },
+    { contentType: 'notifications', fieldNames: ['owned_by_id', 'triggered_by_id'] },
+    { contentType: 'comments', fieldNames: ['created_by'] },
+  ]
+
+  contentStructure.forEach(({ contentType, fieldNames }) => {
+    fieldNames.forEach(async (fieldName) => {
+      await client
+        .from(contentType)
+        .delete()
+        .eq(fieldName, profileId)
+    })
+  })
+}
+
+const logout = async (client: SupabaseClient, headers: Headers) => {
+  const { error } = await client.auth.signOut()
+
+  if (error) {
+    return Response.json({ success: false }, { headers })
+  }
+
+  return Response.json({}, { headers, status: 200 })
+}
+
 export const userService = {
   getById,
   getUserCreatedProjects,
   createFirebaseProfile,
+  getProfileIdForAuthUser,
+  deleteProfileData,
+  deleteSupabaseUser,
+  updateUserContent,
+  deleteUserContent,
+  logout,
 }

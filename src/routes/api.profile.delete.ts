@@ -16,10 +16,7 @@ export const loader = async ({ request }) => {
   const profileId = await userService.getProfileIdForAuthUser(client, authId)
 
   await userService.updateUserContent(client, profileId)
-
   await userService.deleteProfileData(client, authId)
-
   await userService.deleteSupabaseUser(client, authId)
-
   return await userService.logout(client, headers)
 }

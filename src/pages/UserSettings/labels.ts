@@ -19,6 +19,10 @@ export const buttons = {
     add: 'Add link',
     type: 'type',
   },
+  deleteAccount: {
+    cancel: 'Cancel',
+    confirm: 'Delete account'
+  },
   map: 'Add a map pin',
   notifications: 'Update notifications',
   editPin: 'Save map pin',
@@ -138,6 +142,9 @@ export const fields: ILabels = {
 export const form = {
   defaultError: 'Make sure this field is filled correctly',
   saveSuccess: 'Yay! Impact data saved.',
+  deleteAccountTitle: 'Permanently delete this account?',
+  deleteAccountMessage: 'Deleting your account will remove all your information from our database. This cannot be undone.',
+  deleteAccountLabel: 'Type “DELETE” to proceed'
 }
 
 export const headings = {

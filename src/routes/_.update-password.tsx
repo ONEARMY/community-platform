@@ -50,6 +50,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const password = formData.get('password') as string
   const passwordRepeat = formData.get('passwordRepeat') as string
 
+  if (password !== passwordRepeat) {
+    return Response.json(
+      { error: 'Passwords do not match' },
+      { status: 400, headers },
+    )
+  }
+
   // Get the token from URL params (it should still be there)
   const token = url.searchParams.get('token')
 
@@ -68,13 +75,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (!tokenVerification.data.user) {
     return Response.json(
       { error: 'Your reset link has expired or is invalid' },
-      { status: 400, headers },
-    )
-  }
-
-  if (password !== passwordRepeat) {
-    return Response.json(
-      { error: 'Passwords do not match' },
       { status: 400, headers },
     )
   }

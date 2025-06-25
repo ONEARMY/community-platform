@@ -18,11 +18,12 @@ interface IProps extends OptionalFollowButtonProps {
   contentType: SubscribableContentTypes
   item: Comment | News | Question | ResearchUpdate
   setSubscribersCount?: Dispatch<SetStateAction<number>>
+  hideSubscribeIcon?: boolean
   tooltipContent?: string
 }
 
 export const FollowButtonAction = (props: IProps) => {
-  const { contentType, item, setSubscribersCount } = props
+  const { contentType, hideSubscribeIcon, item, setSubscribersCount } = props
   const [subscribed, setSubscribed] = useState<boolean>(false)
 
   const { userStore } = useCommonStores().stores
@@ -70,6 +71,10 @@ export const FollowButtonAction = (props: IProps) => {
       action,
       label: `${item.id}`,
     })
+  }
+
+  if (!subscribed && hideSubscribeIcon) {
+    return
   }
 
   return (

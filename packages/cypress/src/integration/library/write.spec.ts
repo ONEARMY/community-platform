@@ -2,13 +2,19 @@ import { faker } from '@faker-js/faker'
 import { DifficultyLevelRecord, IModerationStatus } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
-import { generateNewUserDetails } from '../../utils/TestUtils'
+import {
+  generateAlphaNumeric,
+  generateNewUserDetails,
+} from '../../utils/TestUtils'
 
 import type { DifficultyLevel } from 'oa-shared'
+
+let randomId
 
 describe('[Library]', () => {
   beforeEach(() => {
     cy.visit('/library')
+    randomId = generateAlphaNumeric(8).toLowerCase()
   })
   type Category = 'brainstorm' | 'exhibition' | 'product'
   type Duration = '<1 week' | '1-2 weeks' | '3-4 weeks'
@@ -99,7 +105,6 @@ describe('[Library]', () => {
   }
 
   describe('[Create a project]', () => {
-    const randomId = faker.random.alphaNumeric(8)
     const creator = MOCK_DATA.users.howto_creator
 
     const expected = {

@@ -104,7 +104,7 @@ export const LibraryList = () => {
             {projects &&
               projects.length > 0 &&
               projects.map((item, index) => (
-                <ProjectCard key={index} item={item} />
+                <ProjectCard key={index} item={item} query={q} />
               ))}
           </>
         )}

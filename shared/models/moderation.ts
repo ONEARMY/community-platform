@@ -13,7 +13,7 @@ export interface IModerable {
 
 export interface IModeration {
   moderation: Moderation
-  moderatorFeedback?: string
+  moderatonFeedback?: string
 }
 
 export interface IDBModeration {

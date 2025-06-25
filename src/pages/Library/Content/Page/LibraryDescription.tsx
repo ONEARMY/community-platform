@@ -182,25 +182,16 @@ export const LibraryDescription = (props: IProps) => {
               </Flex>
             )}
           </Flex>
-          {item.moderatorFeedback && item.moderation !== 'accepted' ? (
-            <Alert
-              variant="info"
-              sx={{
-                my: 2,
-              }}
-            >
-              <Box
-                sx={{
-                  textAlign: 'left',
-                }}
-              >
-                <Heading as="p" variant="small" mb={2}>
+          {item.moderatonFeedback && item.moderation !== 'accepted' && (
+            <Alert variant="info">
+              <Box sx={{ textAlign: 'left' }}>
+                <Heading as="p" variant="small">
                   Moderator Feedback
                 </Heading>
-                <Text sx={{ fontSize: 2 }}>{item.moderatorFeedback}</Text>
+                <Text sx={{ fontSize: 2 }}>{item.moderatonFeedback}</Text>
               </Box>
             </Alert>
-          ) : null}
+          )}
           <Box>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <Flex sx={{ flexDirection: 'column', gap: 2 }}>
@@ -282,16 +273,12 @@ export const LibraryDescription = (props: IProps) => {
             position: 'relative',
           }}
         >
-          <Box
-            sx={{
-              overflow: 'hidden',
-            }}
-          >
+          <Box sx={{ overflow: 'hidden' }}>
             <Box
               sx={{
                 width: '100%',
                 height: '0',
-                pb: '75%',
+                paddingBottom: '75%',
               }}
             ></Box>
             <Box
@@ -325,7 +312,7 @@ export const LibraryDescription = (props: IProps) => {
           {!item.isDraft && item.moderation !== 'accepted' && (
             <ModerationStatus
               status={item.moderation}
-              sx={{ top: 0, position: 'absolute', right: 0 }}
+              sx={{ top: 3, position: 'absolute', right: 3, fontSize: 2 }}
             />
           )}
         </Box>

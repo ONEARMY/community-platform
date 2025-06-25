@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { Form } from 'react-final-form'
 import { useNavigate } from '@remix-run/react'
 import arrayMutators from 'final-form-arrays'
-import { Button } from 'oa-components'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
@@ -69,7 +68,6 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
     [project],
   )
 
-  const formId = 'libraryForm'
   const headingText = project ? headings.edit : headings.create
 
   const onSubmit = async (values: ProjectFormData, isDraft = false) => {
@@ -147,21 +145,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
 
         const errorsClientSide = transformLibraryErrors(errors)
 
-        const sidebar = (
-          <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
-            <Button
-              data-cy="draft"
-              variant="secondary"
-              type="submit"
-              disabled={submitting}
-              sx={{ width: '100%', display: 'block' }}
-              onClick={() => onSubmit(values, true)}
-              form={formId}
-            >
-              <span>{buttons.draft.create}</span>
-            </Button>
-          </Flex>
-        )
+        const handleSubmitDraft = () => onSubmit(values, true)
 
         const unsavedChangesDialog = (
           <UnsavedChangesDialog
@@ -179,9 +163,9 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
               errorSubmitting={saveErrorMessage}
               guidelines={<LibraryPostingGuidelines />}
               handleSubmit={handleSubmit}
+              handleSubmitDraft={handleSubmitDraft}
               hasValidationErrors={hasValidationErrors}
               heading={headingText}
-              sidebar={sidebar}
               submitFailed={submitFailed}
               submitting={submitting}
               unsavedChangesDialog={unsavedChangesDialog}

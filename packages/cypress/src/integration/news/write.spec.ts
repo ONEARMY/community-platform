@@ -9,6 +9,7 @@ describe('[News.Write]', () => {
     beforeEach(() => {
       initialRandomId = generateAlphaNumeric(8).toLowerCase()
     })
+
     it('[By Authenticated]', () => {
       const initialTitle = `${initialRandomId} Amazing new thing`
       const initialExpectedSlug = `${initialRandomId}-amazing-new-thing`
@@ -28,11 +29,11 @@ describe('[News.Write]', () => {
       const user = users.admin
       cy.signIn(user.email, user.password)
 
-      cy.step("Can't add news with an incomplete profile")
+      cy.step("Can't add news from main page")
       cy.visit('/news')
       cy.get('[data-cy=create-news]').should('not.exist')
 
-      cy.step('Can add news now profile is complete')
+      cy.step('Can go direct to url')
       cy.visit('/news/create')
       cy.get('[data-cy=field-title]', { timeout: 20000 })
 
@@ -45,7 +46,7 @@ describe('[News.Write]', () => {
         .find(':file')
         .attachFile('images/howto-step-pic1.jpg')
 
-      cy.step('Add fields')
+      cy.step('Can add draft news')
       cy.get('[data-cy=field-title]')
         .clear()
         .type(initialTitle)
@@ -54,6 +55,14 @@ describe('[News.Write]', () => {
       cy.addToMarkdownField(initialNewsBodyOne)
       cy.addToMarkdownField(initialNewsBodyTwo)
       cy.addToMarkdownField(initialNewsBodyThree)
+
+      cy.get('[data-cy=draft]').click()
+      cy.visit('/news')
+      cy.contains(initialTitle).should('not.exist')
+
+      cy.visit(`/news/${initialExpectedSlug}`)
+      cy.contains(initialTitle)
+      cy.get('[data-cy=edit]').click()
 
       cy.selectTag(category, '[data-cy=category-select]')
 

@@ -10,6 +10,7 @@ export interface IDBContentDoc extends IDBDocSB {
   readonly category_id?: number
   readonly created_by: number | null
   readonly deleted: boolean | null
+  is_draft: boolean | null
   readonly subscriber_count?: number
   readonly title: string
   readonly total_views?: number
@@ -24,6 +25,7 @@ export interface IContentDoc extends IDoc {
   category: Category | null
   commentCount: number
   deleted: boolean
+  isDraft: boolean
   title: string
   previousSlugs: string[]
   slug: string

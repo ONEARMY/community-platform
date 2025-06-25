@@ -6,6 +6,7 @@ import {
   Username,
 } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
+import { Highlighter } from 'src/common/Highlighter'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Box, Card, Flex, Heading, Image } from 'theme-ui'
 
@@ -13,46 +14,64 @@ import type { Project } from 'oa-shared'
 
 type ProjectCardProps = {
   item: Project
+  query?: string
 }
 
-export const ProjectCard = ({ item }: ProjectCardProps) => {
+export const ProjectCard = ({ item, query }: ProjectCardProps) => {
+  const searchWords = [query || '']
+
   return (
     <Card data-cy="card" sx={{ marginX: [2, 0] }}>
       <RouterLink to={`/library/${encodeURIComponent(item.slug)}`}>
-        {item.coverImage && (
-          <Image
-            style={{
-              width: '100%',
-              height: 'calc(((350px) / 3) * 2)',
-              objectFit: 'cover',
-            }}
-            loading="lazy"
-            src={item.coverImage?.publicUrl || ''}
-            crossOrigin=""
-            alt={`Cover image of ${item.title}`}
-          />
-        )}
-
+        <Flex
+          sx={{
+            background: 'background',
+            height: '60%',
+            overflow: 'hidden',
+            position: 'relative',
+          }}
+        >
+          {item.coverImage && (
+            <Image
+              style={{
+                width: '100%',
+                height: 'calc(((350px) / 3) * 2)',
+                objectFit: 'cover',
+              }}
+              loading="lazy"
+              src={item.coverImage?.publicUrl || ''}
+              crossOrigin=""
+              alt={`Cover image of ${item.title}`}
+            />
+          )}
+          {item.moderation &&
+            item.moderation !== IModerationStatus.ACCEPTED && (
+              <ModerationStatus
+                status={item.moderation}
+                sx={{
+                  top: 2,
+                  position: 'absolute',
+                  right: 2,
+                  alignSelf: 'self-start',
+                }}
+              />
+            )}
+        </Flex>
         <Flex
           sx={{
             flexDirection: 'column',
-            flexGrow: 1,
             gap: 2,
-            justifyContent: 'space-between',
             padding: 2,
+            height: '40%',
+            justifyContent: 'space-between',
           }}
         >
-          {item.moderation &&
-            item.moderation !== IModerationStatus.ACCEPTED && (
-              <Flex
-                sx={{ alignSelf: 'flex-end', marginTop: -10, marginBottom: 2 }}
-              >
-                <ModerationStatus status={item.moderation} />
-              </Flex>
-            )}
           <Flex sx={{ gap: 1, flexDirection: 'column' }}>
             <Heading as="h2" variant="small" color={'black'}>
-              {capitalizeFirstLetter(item.title || '')}
+              <Highlighter
+                searchWords={searchWords}
+                textToHighlight={capitalizeFirstLetter(item.title)}
+              />
             </Heading>
 
             <Box>
@@ -66,13 +85,7 @@ export const ProjectCard = ({ item }: ProjectCardProps) => {
             </Box>
           </Flex>
 
-          <Flex
-            sx={{
-              justifyContent: 'flex-end',
-              alignItems: 'stretch',
-              alignContent: 'stretch',
-            }}
-          >
+          <Flex sx={{ justifyContent: 'flex-end' }}>
             {item.category && (
               <Flex sx={{ flex: 1 }}>
                 <Category category={item.category} />
@@ -82,7 +95,6 @@ export const ProjectCard = ({ item }: ProjectCardProps) => {
             <Flex
               sx={{
                 gap: 2,
-                flex: 1,
                 justifyContent: 'flex-end',
               }}
             >

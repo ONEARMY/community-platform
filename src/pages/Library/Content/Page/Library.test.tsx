@@ -64,7 +64,7 @@ describe('Library', () => {
         username: faker.internet.userName(),
       }
       item.moderation = IModerationStatus.AWAITING_MODERATION
-      item.moderatorFeedback = 'Moderation comments'
+      item.moderatonFeedback = 'Moderation comments'
 
       act(() => {
         wrapper = factory()
@@ -78,7 +78,7 @@ describe('Library', () => {
     it('hides feedback when project is accepted', async () => {
       let wrapper
       item.moderation = IModerationStatus.ACCEPTED
-      item.moderatorFeedback = 'Moderation comments'
+      item.moderatonFeedback = 'Moderation comments'
 
       await act(async () => {
         wrapper = factory()

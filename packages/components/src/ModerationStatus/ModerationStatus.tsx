@@ -21,7 +21,6 @@ export const ModerationStatus = (props: Props) => {
   return (
     <Text
       sx={{
-        ...sx,
         display: 'inline-block',
         color: status === 'rejected' ? 'red' : 'black',
         fontSize: 1,
@@ -32,6 +31,7 @@ export const ModerationStatus = (props: Props) => {
         padding: 1,
         borderRadius: 1,
         borderBottomRightRadius: 1,
+        ...sx,
       }}
       data-cy={`moderationstatus-${status}`}
     >

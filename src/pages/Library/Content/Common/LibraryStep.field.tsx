@@ -282,14 +282,22 @@ export const LibraryStepField = ({
                     >
                       <ImageInputWrapper hasUploadedImg={true}>
                         <ImageComponent src={image.publicUrl} />
-                        <ImageInputDeleteImage
-                          onClick={() => {
-                            const currentImages = input.value || []
-                            const updatedImages = currentImages.filter(
-                              (_, i) => i !== index,
-                            )
-                            input.onChange(updatedImages)
-                          }}
+                        <Field
+                          name={`steps[${index}].existing-image[${index}]`}
+                          validate={(_, allValues) =>
+                            validateStepMedia(allValues)
+                          }
+                          render={() => (
+                            <ImageInputDeleteImage
+                              onClick={() => {
+                                const currentImages = input.value || []
+                                const updatedImages = currentImages.filter(
+                                  (_, i) => i !== index,
+                                )
+                                input.onChange(updatedImages)
+                              }}
+                            />
+                          )}
                         />
                       </ImageInputWrapper>
                     </FieldContainer>
@@ -314,7 +322,7 @@ export const LibraryStepField = ({
           ))}
         </Flex>
 
-        <Flex sx={{ flexDirection: 'column' }} mb={3}>
+        <Flex sx={{ flexDirection: 'column' }}>
           <Field
             name={`${name}.videoUrl`}
             data-cy="step-videoUrl"
@@ -322,7 +330,6 @@ export const LibraryStepField = ({
             component={FieldInput}
             placeholder={steps.videoUrl.placeholder}
             validate={(_, allValues) => validateStepMedia(allValues)}
-            validateFields={[]}
             isEqual={COMPARISONS.textInput}
           />
         </Flex>

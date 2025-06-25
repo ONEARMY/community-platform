@@ -18,30 +18,17 @@ const copy = {
   preview: 'I need to reset your password?',
 }
 
-interface SignUpEmailProps {
+interface ResetPasswordProps {
   username: string
-  supabaseUrl: string
-  email_action_type: string
   redirect_to: string
   token_hash: string
   settings: TenantSettings
 }
 
-export const ResetPasswordEmail = (props: SignUpEmailProps) => {
-  const {
-    username,
-    supabaseUrl,
-    email_action_type,
-    redirect_to,
-    settings,
-    token_hash,
-  } = props
+export const ResetPasswordEmail = (props: ResetPasswordProps) => {
+  const { username, redirect_to, settings, token_hash } = props
 
-  const href =
-    `${redirect_to}?url=` +
-    encodeURIComponent(
-      `${supabaseUrl}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${redirect_to}`,
-    )
+  const href = `${redirect_to}?token=${token_hash}`
 
   return (
     <Layout preview={copy.preview} settings={settings}>

@@ -40,12 +40,13 @@ export const QuestionForm = (props: IProps) => {
   const { question, parentType } = props
   const navigate = useNavigate()
   const [initialValues, setInitialValues] = useState<QuestionFormData>({
-    title: '',
+    category: null,
     description: '',
     existingImages: [],
-    category: null,
-    tags: [],
     images: [],
+    isDraft: false,
+    tags: [],
+    title: '',
   })
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
   const [intentionalNavigation, setIntentionalNavigation] = useState(false)
@@ -57,21 +58,25 @@ export const QuestionForm = (props: IProps) => {
     }
 
     setInitialValues({
-      title: question.title,
-      description: question.description,
-      existingImages: question.images,
       category: question.category
         ? {
             value: question.category.id?.toString(),
             label: question.category.name,
           }
         : null,
-      tags: question.tagIds,
+      description: question.description,
+      existingImages: question.images,
       images: null,
+      isDraft: question.isDraft,
+      tags: question.tagIds,
+      title: question.title,
     })
   }, [question])
 
-  const onSubmit = async (formValues: Partial<QuestionFormData>) => {
+  const onSubmit = async (
+    formValues: Partial<QuestionFormData>,
+    isDraft: boolean = false,
+  ) => {
     setIntentionalNavigation(true)
     setSaveErrorMessage(null)
 
@@ -82,6 +87,7 @@ export const QuestionForm = (props: IProps) => {
         tags: formValues.tags,
         category: formValues.category || null,
         images: formValues.images || null,
+        isDraft: isDraft,
         existingImages: initialValues.existingImages || null,
       })
 
@@ -110,7 +116,7 @@ export const QuestionForm = (props: IProps) => {
   return (
     <Form
       data-testid={props['data-testid']}
-      onSubmit={onSubmit}
+      onSubmit={(values) => onSubmit(values, false)}
       initialValues={initialValues}
       render={({
         dirty,
@@ -132,6 +138,7 @@ export const QuestionForm = (props: IProps) => {
           minValue(QUESTION_MIN_TITLE_LENGTH),
           endsWithQuestionMark(),
         )
+        const handleSubmitDraft = () => onSubmit(values, true)
 
         const saveError = saveErrorMessage && (
           <Alert variant="failure" sx={{ mt: 3 }}>
@@ -150,6 +157,7 @@ export const QuestionForm = (props: IProps) => {
             contentType="questions"
             guidelines={<QuestionPostingGuidelines />}
             handleSubmit={handleSubmit}
+            handleSubmitDraft={handleSubmitDraft}
             heading={LABELS.headings[parentType]}
             saveError={saveError}
             submitting={submitting}

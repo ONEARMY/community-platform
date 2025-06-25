@@ -110,22 +110,10 @@ const ResearchForm = ({ research }: IProps) => {
           <ErrorsContainer errors={[saveErrorMessage]} />
         )
 
+        const handleSubmitDraft = () => onSubmit(values, true)
+
         const sidebar = (
           <>
-            <Button
-              data-cy="draft"
-              onClick={() => onSubmit(values, true)}
-              variant="secondary"
-              type="submit"
-              disabled={submitting || !valid}
-              sx={{
-                width: '100%',
-                display: 'block',
-              }}
-            >
-              <span>{buttons.draft}</span>
-            </Button>
-
             {research?.id && (
               <Button
                 data-cy="draft"
@@ -183,6 +171,7 @@ const ResearchForm = ({ research }: IProps) => {
             contentType="research"
             guidelines={<ResearchPostingGuidelines />}
             handleSubmit={handleSubmit}
+            handleSubmitDraft={handleSubmitDraft}
             heading={heading}
             saveError={saveError}
             sidebar={sidebar}

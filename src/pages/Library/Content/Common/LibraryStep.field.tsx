@@ -51,7 +51,6 @@ interface IProps {
   existingImages: Image[]
   onDelete: (index: number) => void
   moveStep: (indexfrom: number, indexTo: number) => void
-  removeExistingImage: (imageIndex: number) => void
 }
 interface IState {
   showDeleteModal: boolean
@@ -71,7 +70,6 @@ export const LibraryStepField = ({
   existingImages,
   onDelete,
   moveStep,
-  removeExistingImage,
 }: IProps) => {
   const [state, setState] = useState<IState>({
     showDeleteModal: false,
@@ -97,8 +95,13 @@ export const LibraryStepField = ({
       return null
     }
 
-    const hasNewImages = stepValues.images?.length > 0
-    const hasExistingImages = stepValues.existingImages?.length > 0
+    // More robust checking for images - ensure array exists AND has items
+    const hasNewImages =
+      Array.isArray(stepValues.images) &&
+      stepValues.images?.filter((x) => !!x).length > 0
+    const hasExistingImages =
+      Array.isArray(stepValues.existingImages) &&
+      stepValues.existingImages.length > 0
     const hasAnyImages = hasNewImages || hasExistingImages
 
     if (stepValues.videoUrl) {
@@ -262,27 +265,39 @@ export const LibraryStepField = ({
           }}
         >
           {/* Display existing images */}
-          {existingImages?.map((image, i) => (
-            <ImageInputFieldWrapper
-              key={`existing-image-${i}`}
-              data-cy={`existing-image-${i}`}
-            >
-              <FieldContainer
-                style={{
-                  height: '100%',
-                  width: '100%',
-                  overflow: 'hidden',
-                }}
-              >
-                <ImageInputWrapper hasUploadedImg={true}>
-                  <ImageComponent src={image.publicUrl} />
-                  <ImageInputDeleteImage
-                    onClick={() => removeExistingImage(i)}
-                  />
-                </ImageInputWrapper>
-              </FieldContainer>
-            </ImageInputFieldWrapper>
-          ))}
+          <Field name={`${name}.existingImages`}>
+            {({ input }) => (
+              <>
+                {existingImages?.map((image, index) => (
+                  <ImageInputFieldWrapper
+                    key={`existing-image-${index}`}
+                    data-cy={`existing-image-${index}`}
+                  >
+                    <FieldContainer
+                      style={{
+                        height: '100%',
+                        width: '100%',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      <ImageInputWrapper hasUploadedImg={true}>
+                        <ImageComponent src={image.publicUrl} />
+                        <ImageInputDeleteImage
+                          onClick={() => {
+                            const currentImages = input.value || []
+                            const updatedImages = currentImages.filter(
+                              (_, i) => i !== index,
+                            )
+                            input.onChange(updatedImages)
+                          }}
+                        />
+                      </ImageInputWrapper>
+                    </FieldContainer>
+                  </ImageInputFieldWrapper>
+                ))}
+              </>
+            )}
+          </Field>
 
           {[...Array(numberOfImageInputsAvailable)].map((_, i) => (
             <ImageInputFieldWrapper

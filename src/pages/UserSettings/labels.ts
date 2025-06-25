@@ -57,8 +57,8 @@ export const fields: ILabels = {
     title: 'Add an avatar',
   },
   deleteAccount: {
-    description: 'Please reach out to support.',
-    title: 'Would you like to delete your account?',
+    description: 'All your data will be deleted permanently.',
+    title: 'Delete Account',
   },
   displayName: {
     title: 'Display Name',

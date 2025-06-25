@@ -3,7 +3,6 @@ import { RESEARCH_MAX_LENGTH, RESEARCH_TITLE_MAX_LENGTH } from './constants'
 import type { ILabels } from 'src/common/Form/types'
 
 export const buttons = {
-  draft: 'Save as draft',
   markCompleted: 'Mark as Completed',
   markInProgress: 'Mark as In Progress',
   deletion: {

@@ -19,6 +19,7 @@ export class DBNews implements IDBContentDoc {
   readonly category_id?: number
   readonly created_by: number | null
   readonly deleted: boolean | null
+  is_draft: boolean | null
   readonly subscriber_count?: number
   readonly title: string
   readonly total_views?: number
@@ -33,6 +34,7 @@ export class DBNews implements IDBContentDoc {
 
 export class News implements IContentDoc {
   id: number
+  isDraft: boolean
   createdAt: Date
   modifiedAt: Date | null
   author: Author | null
@@ -57,14 +59,15 @@ export class News implements IContentDoc {
 
   static fromDB(obj: DBNews, tags: Tag[], heroImage?: Image | null) {
     return new News({
+      id: obj.id,
       author: obj.author ? Author.fromDB(obj.author) : null,
       body: obj.body,
       category: obj.category ? Category.fromDB(obj.category) : null,
       commentCount: obj.comment_count || 0,
       createdAt: new Date(obj.created_at),
       deleted: obj.deleted || false,
+      isDraft: obj.is_draft || false,
       heroImage: heroImage || null,
-      id: obj.id,
       modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
       previousSlugs: obj.previous_slugs,
       slug: obj.slug,
@@ -80,10 +83,11 @@ export class News implements IContentDoc {
 }
 
 export type NewsFormData = {
-  title: string
   body: string
   category: SelectValue | null
-  tags?: number[]
-  heroImage: IConvertedFileMeta | null
   existingHeroImage: Image | null
+  heroImage: IConvertedFileMeta | null
+  isDraft: boolean | null
+  title: string
+  tags?: number[]
 }

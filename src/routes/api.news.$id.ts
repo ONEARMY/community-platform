@@ -19,6 +19,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       category: formData.has('category')
         ? Number(formData.get('category'))
         : null,
+      isDraft: formData.get('is_draft') === 'true',
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
         : null,
@@ -63,6 +64,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       .update({
         body: data.body,
         category: data.category,
+        is_draft: data.isDraft,
         modified_at: new Date(),
         slug,
         summary: getSummaryFromMarkdown(data.body),

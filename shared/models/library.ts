@@ -47,7 +47,7 @@ export class DBProject
   files: IMediaFile[] | null
   category_id?: number
   tags: number[]
-  is_draft?: boolean
+  is_draft: boolean | null
   time?: string
   file_download_count?: number
   moderation: Moderation
@@ -77,7 +77,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
   tagIds?: number[]
   difficultyLevel: DifficultyLevel
   steps: ProjectStep[]
-  isDraft?: boolean
+  isDraft: boolean
   usefulCount: number
   subscriberCount: number
   commentCount: number

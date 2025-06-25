@@ -58,6 +58,15 @@ describe('[Question]', () => {
       cy.get('[data-cy=field-description]').type(initialQuestionDescription, {
         delay: 0,
       })
+
+      cy.get('[data-cy=draft]').click()
+      cy.visit('/questopms')
+      cy.contains(initialTitle).should('not.exist')
+
+      cy.url().should('include', `/questions/${initialExpectedSlug}`)
+      cy.contains(initialTitle)
+      cy.get('[data-cy=edit]').click()
+
       cy.step('Add category')
       cy.selectTag(category, '[data-cy=category-select]')
 

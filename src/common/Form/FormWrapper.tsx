@@ -10,6 +10,7 @@ interface IProps {
   children: React.ReactNode
   guidelines?: React.ReactNode
   handleSubmit: () => void
+  handleSubmitDraft: () => void
   heading: string
   saveError: React.ReactNode | null
   sidebar?: React.ReactNode
@@ -19,6 +20,8 @@ interface IProps {
   valid: boolean
 }
 
+const DRAFT_LABEL = 'Save as draft'
+
 export const FormWrapper = (props: IProps) => {
   const {
     buttonLabel,
@@ -26,6 +29,7 @@ export const FormWrapper = (props: IProps) => {
     contentType,
     guidelines,
     handleSubmit,
+    handleSubmitDraft,
     heading,
     saveError,
     sidebar,
@@ -101,6 +105,21 @@ export const FormWrapper = (props: IProps) => {
         >
           {buttonLabel}
         </Button>
+
+        <Button
+          data-cy="draft"
+          onClick={handleSubmitDraft}
+          variant="secondary"
+          type="submit"
+          disabled={submitting || !valid}
+          sx={{
+            width: '100%',
+            display: 'block',
+          }}
+        >
+          <span>{DRAFT_LABEL}</span>
+        </Button>
+
         {sidebar && sidebar}
         {saveError && saveError}
       </Flex>

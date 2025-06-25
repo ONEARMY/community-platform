@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { Form } from 'react-final-form'
 import { useNavigate } from '@remix-run/react'
 import arrayMutators from 'final-form-arrays'
-import { Button } from 'oa-components'
 import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
@@ -69,7 +68,6 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
     [project],
   )
 
-  const formId = 'libraryForm'
   const headingText = project ? headings.edit : headings.create
 
   const onSubmit = async (values: ProjectFormData, isDraft = false) => {
@@ -137,24 +135,10 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
         submitSucceeded,
         submitting,
       }) => {
+        const handleSubmitDraft = () => onSubmit(values, true)
+
         const saveError = saveErrorMessage && (
           <ErrorsContainer errors={[saveErrorMessage]} />
-        )
-
-        const sidebar = (
-          <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
-            <Button
-              data-cy="draft"
-              variant="secondary"
-              type="submit"
-              disabled={submitting}
-              sx={{ width: '100%', display: 'block' }}
-              onClick={() => onSubmit(values, true)}
-              form={formId}
-            >
-              <span>{buttons.draft.create}</span>
-            </Button>
-          </Flex>
         )
 
         const unsavedChangesDialog = (
@@ -170,9 +154,9 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
               contentType="research"
               guidelines={<LibraryPostingGuidelines />}
               handleSubmit={handleSubmit}
+              handleSubmitDraft={handleSubmitDraft}
               heading={headingText}
               saveError={saveError}
-              sidebar={sidebar}
               belowBody={
                 <Flex sx={{ flexDirection: 'column' }}>
                   <LibraryStepsContainerField />

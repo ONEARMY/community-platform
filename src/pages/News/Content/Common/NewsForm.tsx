@@ -34,6 +34,7 @@ export const NewsForm = (props: IProps) => {
     body: '',
     category: null,
     existingHeroImage: null,
+    isDraft: null,
     heroImage: null,
     tags: [],
     title: '',
@@ -57,13 +58,17 @@ export const NewsForm = (props: IProps) => {
           }
         : null,
       existingHeroImage: news.heroImage,
+      isDraft: news.isDraft,
       heroImage: null,
       tags: news.tagIds,
       title: news.title,
     })
   }, [news])
 
-  const onSubmit = async (formValues: Partial<NewsFormData>) => {
+  const onSubmit = async (
+    formValues: Partial<NewsFormData>,
+    isDraft = false,
+  ) => {
     setIntentionalNavigation(true)
     setSaveErrorMessage(null)
 
@@ -72,6 +77,7 @@ export const NewsForm = (props: IProps) => {
         body: formValues.body!,
         category: formValues.category || null,
         heroImage: formValues.heroImage || null,
+        isDraft: isDraft,
         existingHeroImage: initialValues.existingHeroImage || null,
         tags: formValues.tags,
         title: formValues.title!,
@@ -116,7 +122,7 @@ export const NewsForm = (props: IProps) => {
   return (
     <Form
       data-testid={props['data-testid']}
-      onSubmit={onSubmit}
+      onSubmit={(values) => onSubmit(values, false)}
       initialValues={initialValues}
       validate={(values) => {
         let errors = {}
@@ -129,7 +135,15 @@ export const NewsForm = (props: IProps) => {
         }
         return errors
       }}
-      render={({ dirty, submitting, submitSucceeded, handleSubmit, valid }) => {
+      render={({
+        dirty,
+        submitting,
+        submitSucceeded,
+        handleSubmit,
+        valid,
+        values,
+      }) => {
+        const handleSubmitDraft = () => onSubmit(values, true)
         const saveError = saveErrorMessage && (
           <Alert variant="failure" sx={{ mt: 3 }}>
             {saveErrorMessage}
@@ -151,6 +165,7 @@ export const NewsForm = (props: IProps) => {
             contentType="news"
             guidelines={<NewsPostingGuidelines />}
             handleSubmit={handleSubmit}
+            handleSubmitDraft={handleSubmitDraft}
             heading={LABELS.headings[parentType]}
             saveError={saveError}
             submitting={submitting}

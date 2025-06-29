@@ -4,7 +4,7 @@ import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { storageServiceServer } from './storageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBProject } from 'oa-shared'
+import type { DBProject, DBProjectStep } from 'oa-shared'
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
   return client
@@ -132,6 +132,68 @@ async function getById(id: number, client: SupabaseClient) {
   return result.data as DBProject
 }
 
+async function getProjectStepIds(
+  id: number,
+  client: SupabaseClient,
+): Promise<number[]> {
+  const result = await client
+    .from('project_steps')
+    .select('id')
+    .eq('project_id', id)
+
+  return result.data?.map((x) => x.id) as number[]
+}
+
+async function upsertStep(
+  client: SupabaseClient,
+  stepId: number | null,
+  values: {
+    title: string
+    description: string
+    projectId: number
+    videoUrl: string | null
+    order: number
+  },
+) {
+  if (stepId) {
+    const { data, error } = await client
+      .from('project_steps')
+      .update({
+        title: values.title,
+        description: values.description,
+        project_id: values.projectId,
+        video_url: values.videoUrl,
+        order: values.order,
+      })
+      .eq('id', stepId)
+      .select()
+    if (error || !data) {
+      throw error
+    }
+    return data[0] as unknown as DBProjectStep
+  } else {
+    const { data, error } = await client
+      .from('project_steps')
+      .insert({
+        title: values.title,
+        description: values.description,
+        project_id: values.projectId,
+        video_url: values.videoUrl,
+        order: values.order,
+        tenant_id: process.env.TENANT_ID,
+      })
+      .select()
+    if (error || !data) {
+      throw error
+    }
+    return data[0] as unknown as DBProjectStep
+  }
+}
+
+async function deleteStepsById(ids: number[], client: SupabaseClient) {
+  await client.from('project_steps').delete().in('id', ids)
+}
+
 export const libraryServiceServer = {
   getBySlug,
   getById,
@@ -139,4 +201,7 @@ export const libraryServiceServer = {
   getProjectPublicMedia,
   isAllowedToEditProject,
   isAllowedToEditProjectById,
+  upsertStep,
+  getProjectStepIds,
+  deleteStepsById,
 }

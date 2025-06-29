@@ -8,13 +8,7 @@ import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type {
-  DBMedia,
-  DBProject,
-  DBProjectStep,
-  MediaFile,
-  Moderation,
-} from 'oa-shared'
+import type { DBMedia, DBProject, MediaFile, Moderation } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   try {
@@ -127,17 +121,28 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       existingCoverImageId,
     )
     const project = Project.fromDB(projectDb, [])
+    const existingStepIds = await libraryServiceServer.getProjectStepIds(
+      projectDb.id,
+      client,
+    )
 
     // 3. Upsert Steps
+    const stepsToKeepIds: number[] = []
+
     for (let i = 0; i < data.stepCount; i++) {
-      const stepId = formData.get(`steps.[${i}].id`) as number | null
+      const stepId = formData.has(`steps.[${i}].id`)
+        ? Number(formData.get(`steps.[${i}].id`))
+        : null
+      if (stepId) {
+        stepsToKeepIds.push(+stepId)
+      }
 
       const newImages = formData.getAll(`steps.[${i}].images`) as File[]
       const existingImagesIds = formData.getAll(
         `steps.[${i}].existingImages`,
       ) as string[]
 
-      const stepDb = await upsertStep(client, stepId, {
+      const stepDb = await libraryServiceServer.upsertStep(client, stepId, {
         title: formData.get(`steps.[${i}].title`) as string,
         description: formData.get(`steps.[${i}].description`) as string,
         videoUrl: (formData.get(`steps.[${i}].videoUrl`) as string) || null,
@@ -163,6 +168,14 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         .single()
       step.images = data?.images
       project.steps.push(step)
+    }
+
+    // delete steps
+    const stepsToDelete = existingStepIds.filter(
+      (id) => !stepsToKeepIds.includes(id),
+    )
+    if (stepsToDelete.length > 0) {
+      await libraryServiceServer.deleteStepsById([...stepsToDelete], client)
     }
 
     return Response.json({ project }, { headers, status: 201 })
@@ -256,52 +269,6 @@ async function updateProject(
   }
 
   return projectResult.data[0] as unknown as DBProject
-}
-
-async function upsertStep(
-  client: SupabaseClient,
-  stepId: number | null,
-  values: {
-    title: string
-    description: string
-    projectId: number
-    videoUrl: string | null
-    order: number
-  },
-) {
-  if (stepId) {
-    const { data, error } = await client
-      .from('project_steps')
-      .update({
-        title: values.title,
-        description: values.description,
-        project_id: values.projectId,
-        video_url: values.videoUrl,
-        order: values.order,
-      })
-      .eq('id', stepId)
-      .select()
-    if (error || !data) {
-      throw error
-    }
-    return data[0] as unknown as DBProjectStep
-  } else {
-    const { data, error } = await client
-      .from('project_steps')
-      .insert({
-        title: values.title,
-        description: values.description,
-        project_id: values.projectId,
-        video_url: values.videoUrl,
-        order: values.order,
-        tenant_id: process.env.TENANT_ID,
-      })
-      .select()
-    if (error || !data) {
-      throw error
-    }
-    return data[0] as unknown as DBProjectStep
-  }
 }
 
 async function updateOrReplaceImages(

@@ -1,5 +1,7 @@
 import { Image, Question } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { profileServiceServer } from 'src/services/profileService.server'
+import { questionServiceServer } from 'src/services/questionService.server'
 import { hasAdminRightsSupabase, validateImages } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
@@ -9,10 +11,12 @@ import { uploadImages } from './api.questions'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBProfile, DBQuestion } from 'oa-shared'
+import type { DBQuestion } from 'oa-shared'
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   try {
+    const id = Number(params.id)
+
     const formData = await request.formData()
     const imagesToKeepIds = formData.getAll('existingImages')
 
@@ -25,6 +29,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
         : null,
+      slug: convertToSlug(formData.get('title') as string),
     }
 
     const { client, headers } = createSupabaseServerClient(request)
@@ -33,11 +38,14 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       data: { user },
     } = await client.auth.getUser()
 
+    const currentQuestion = await questionServiceServer.getById(id, client)
+
     const { valid, status, statusText } = await validateRequest(
       params,
       request,
       user,
       data,
+      currentQuestion,
       client,
     )
 
@@ -58,8 +66,6 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       )
     }
 
-    const questionId = Number(params.id)
-
     let images: Image[] = []
 
     if (imagesToKeepIds.length > 0) {
@@ -77,7 +83,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     }
 
     if (uploadedImages.length > 0) {
-      const imageResult = await uploadImages(questionId, uploadedImages, client)
+      const imageResult = await uploadImages(id, uploadedImages, client)
 
       if (imageResult) {
         const newImages = imageResult.images.map(
@@ -92,7 +98,11 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       }
     }
 
-    const slug = convertToSlug(data.title)
+    const previousSlugs = contentServiceServer.updatePreviousSlugs(
+      currentQuestion,
+      data.slug,
+    )
+
     const questionResult = await client
       .from('questions')
       .update({
@@ -100,7 +110,8 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         description: data.description,
         images,
         title: data.title,
-        slug,
+        slug: data.slug,
+        previous_slugs: previousSlugs,
         tags: data.tags,
         modified_at: new Date(),
       })
@@ -128,6 +139,7 @@ async function validateRequest(
   request: Request,
   user: User | null,
   data: any,
+  currentQuestion: DBQuestion,
   client: SupabaseClient,
 ) {
   if (!user) {
@@ -150,16 +162,18 @@ async function validateRequest(
     return { status: 400, statusText: 'description is required' }
   }
 
-  const slug = convertToSlug(data.title)
-  const questionId = Number(params.id!)
+  if (!currentQuestion) {
+    return { status: 400, statusText: 'Question not found' }
+  }
 
   if (
-    await contentServiceServer.isDuplicateExistingSlug(
-      slug,
-      questionId,
+    currentQuestion.slug !== data.slug &&
+    (await contentServiceServer.isDuplicateExistingSlug(
+      data.slug,
+      currentQuestion.id,
       client,
       'questions',
-    )
+    ))
   ) {
     return {
       status: 409,
@@ -167,30 +181,13 @@ async function validateRequest(
     }
   }
 
-  const existingQuestionResult = await client
-    .from('questions')
-    .select()
-    .eq('id', questionId)
-    .single()
+  const profile = await profileServiceServer.getByAuthId(user!.id, client)
 
-  if (existingQuestionResult.error || !existingQuestionResult.data) {
-    return { status: 400, statusText: 'Question not found' }
-  }
-
-  const existingQuestion = existingQuestionResult.data as DBQuestion
-
-  const profileRequest = await client
-    .from('profiles')
-    .select('id,roles')
-    .eq('auth_id', user.id)
-    .limit(1)
-
-  if (profileRequest.error || !profileRequest.data?.at(0)) {
+  if (!profile) {
     return { status: 400, statusText: 'User not found' }
   }
 
-  const profile = profileRequest.data[0] as DBProfile
-  const isCreator = existingQuestion.created_by === profile.id
+  const isCreator = currentQuestion.created_by === profile.id
   const hasAdminRights = hasAdminRightsSupabase(profile)
 
   if (!isCreator && !hasAdminRights) {

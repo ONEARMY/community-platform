@@ -289,6 +289,10 @@ describe('[Library]', () => {
           .should('contain', step.text)
       })
 
+      cy.step('Can access the project with the previous slug')
+      cy.visit(firstSlug)
+      cy.contains(title)
+
       // Won't show on profile yet as project needs admin approval
       // cy.step('Published project should appear on users profile')
       // cy.visit('/u/' + creator.displayName)

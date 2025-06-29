@@ -29,6 +29,10 @@ describe('[Research]', () => {
 
   describe('[Create research article]', () => {
     it('[By Authenticated]', () => {
+      const initialRandomId = generateAlphaNumeric(4).toLowerCase()
+      const initialTitle = initialRandomId + ' Initial Title'
+      const initialExpectedSlug = initialRandomId + '-initial-title'
+
       const expected = generateArticle()
 
       const updateTitle = faker.lorem.words(5)
@@ -62,7 +66,7 @@ describe('[Research]', () => {
       cy.contains(`Should be more than ${RESEARCH_TITLE_MIN_LENGTH} characters`)
 
       cy.step('Enter research article details')
-      cy.get('[data-cy=intro-title').clear().type(expected.title).blur()
+      cy.get('[data-cy=intro-title').clear().type(initialTitle).blur()
 
       cy.step('Cannot be published without description')
 
@@ -77,8 +81,9 @@ describe('[Research]', () => {
       cy.get('[data-testid=research-stat]').should('not.exist')
       cy.get('[data-cy=ContribTab]').should('not.exist')
 
-      cy.visit(`/research/${expected.slug}`)
+      cy.visit(`/research/${initialExpectedSlug}`)
       cy.get('[data-cy=edit]').click()
+      cy.get('[data-cy=intro-title').clear().type(expected.title).blur()
 
       cy.step('New collaborators can be assigned to research')
       cy.selectTag(subscriber.userName, '[data-cy=UserNameSelect]')
@@ -93,6 +98,10 @@ describe('[Research]', () => {
       cy.contains(expected.title)
       cy.contains(expected.description)
       cy.contains(admin.userName)
+
+      cy.step('Can access the research with the previous slug')
+      cy.visit(`/research/${initialExpectedSlug}`)
+      cy.contains(expected.title)
 
       cy.step('Published Research should appear on users profile')
       cy.visit('/u/' + admin.displayName)

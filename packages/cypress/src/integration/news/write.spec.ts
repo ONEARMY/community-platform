@@ -118,11 +118,9 @@ describe('[News.Write]', () => {
       cy.contains(initialNewsBodyTwo)
       cy.contains(initialNewsBodyThree)
 
-      // Bug: Missing previous slug functionality
-      //
-      // cy.step('Can access the news with the previous slug')
-      // cy.visit(`/news/${initialExpectedSlug}`)
-      // cy.contains(updatedTitle)
+      cy.step('Can access the news with the previous slug')
+      cy.visit(`/news/${initialExpectedSlug}`)
+      cy.contains(updatedTitle)
 
       cy.step('All updated fields visible on list')
       cy.visit('/news')

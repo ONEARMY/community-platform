@@ -61,6 +61,10 @@ describe('[Research]', () => {
       cy.step('Warn if title is identical to an existing one')
       cy.contains('Start your Research')
 
+      cy.step('Cannot be published when empty')
+      cy.get('[data-cy=submit]').click()
+      cy.get('[data-cy=errors-container]')
+
       cy.step('Warn if title not long enough')
       cy.get('[data-cy=intro-title').clear().type('Q').blur({ force: true })
       cy.contains(`Should be more than ${RESEARCH_TITLE_MIN_LENGTH} characters`)
@@ -84,6 +88,11 @@ describe('[Research]', () => {
       cy.visit(`/research/${initialExpectedSlug}`)
       cy.get('[data-cy=edit]').click()
       cy.get('[data-cy=intro-title').clear().type(expected.title).blur()
+
+      cy.step('Add image')
+      cy.get('[data-cy=image-upload]')
+        .find(':file')
+        .attachFile('images/howto-step-pic1.jpg')
 
       cy.step('New collaborators can be assigned to research')
       cy.selectTag(subscriber.userName, '[data-cy=UserNameSelect]')
@@ -116,7 +125,8 @@ describe('[Research]', () => {
       cy.contains('New update')
 
       cy.step('Cannot be published when empty')
-      cy.get('[data-cy=submit]').should('be.disabled')
+      cy.get('[data-cy=submit]').click()
+      cy.get('[data-cy=errors-container]')
 
       cy.step('Enter update details')
       cy.get('[data-cy=intro-title]')

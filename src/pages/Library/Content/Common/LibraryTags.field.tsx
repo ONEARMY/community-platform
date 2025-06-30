@@ -7,7 +7,7 @@ import { intro } from '../../labels'
 
 export const LibraryTagsField = () => {
   return (
-    <FormFieldWrapper text={intro.tags.title} required>
+    <FormFieldWrapper text={intro.tags.title}>
       <Field
         name="tags"
         component={TagsSelectFieldV2}

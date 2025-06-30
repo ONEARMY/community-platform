@@ -2,38 +2,48 @@ import { Button, ElWithBeforeIcon } from 'oa-components'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { Box, Card, Flex, Heading } from 'theme-ui'
 
+import { ErrorsContainer } from './ErrorsContainer'
+
 import type { ContentFormType } from 'oa-shared'
+import type { IErrorsListSet } from './types'
 
 interface IProps {
   buttonLabel: string
   contentType: ContentFormType
   children: React.ReactNode
+  errorsClientSide: IErrorsListSet[] | undefined
+  errorSubmitting: string | undefined | null
   guidelines?: React.ReactNode
   handleSubmit: () => void
   heading: string
-  saveError: React.ReactNode | null
-  sidebar?: React.ReactNode
+  hasValidationErrors: boolean
   belowBody?: React.ReactNode
+  sidebar?: React.ReactNode
+  submitFailed: boolean
   submitting: boolean
   unsavedChangesDialog?: React.ReactNode
-  valid: boolean
 }
 
 export const FormWrapper = (props: IProps) => {
   const {
+    belowBody,
     buttonLabel,
     children,
     contentType,
+    errorsClientSide,
+    errorSubmitting,
     guidelines,
     handleSubmit,
     heading,
-    saveError,
+    hasValidationErrors,
     sidebar,
-    belowBody,
+    submitFailed,
     submitting,
     unsavedChangesDialog,
-    valid,
   } = props
+
+  const hasClientSideErrors = hasValidationErrors && submitFailed
+
   return (
     <Flex sx={{ flexWrap: 'wrap', backgroundColor: 'inherit', marginTop: 4 }}>
       <Flex
@@ -91,7 +101,7 @@ export const FormWrapper = (props: IProps) => {
           data-cy="submit"
           variant="primary"
           type="submit"
-          disabled={submitting || !valid}
+          disabled={submitting}
           onClick={handleSubmit}
           sx={{
             width: '100%',
@@ -102,7 +112,12 @@ export const FormWrapper = (props: IProps) => {
           {buttonLabel}
         </Button>
         {sidebar && sidebar}
-        {saveError && saveError}
+        {hasClientSideErrors && (
+          <ErrorsContainer
+            saving={[errorSubmitting]}
+            client={errorsClientSide}
+          />
+        )}
       </Flex>
     </Flex>
   )

@@ -197,7 +197,8 @@ describe('[Library]', () => {
       cy.contains(`Should be more than ${5} characters`).should('be.visible')
 
       cy.step('Cannot be published yet')
-      cy.get('[data-cy=submit]').should('be.disabled')
+      cy.get('[data-cy=submit]').click()
+      cy.get('[data-cy=errors-container]')
 
       cy.step('Warn if title is identical with the existing ones')
       cy.fillIntroTitle('Make glass-like beams')
@@ -243,7 +244,7 @@ describe('[Library]', () => {
 
       cy.get('[data-cy=fileLink]').type(fileLink)
       cy.step('Upload a cover for the intro')
-      cy.get('[data-cy="intro-cover"]')
+      cy.get('[data-cy="image-upload"]')
         .find('input[type="file"]')
         .attachFile('images/howto-intro.jpg')
 
@@ -268,6 +269,7 @@ describe('[Library]', () => {
 
       cy.step('A full draft can be submitted for review')
       cy.get('[data-cy=edit]').click()
+      cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=submit]').click()
       cy.url().should('include', `/library/${slug}`)
 

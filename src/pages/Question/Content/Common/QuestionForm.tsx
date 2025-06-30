@@ -9,6 +9,7 @@ import {
   TagsField,
   TitleField,
 } from 'src/pages/common/FormFields'
+import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors'
 import { QuestionPostingGuidelines } from 'src/pages/Question/Content/Common'
 import {
   QuestionDescriptionField,
@@ -23,7 +24,6 @@ import {
   minValue,
   required,
 } from 'src/utils/validators'
-import { Alert } from 'theme-ui'
 
 import { QUESTION_MAX_IMAGES, QUESTION_MIN_TITLE_LENGTH } from '../../constants'
 
@@ -113,13 +113,17 @@ export const QuestionForm = (props: IProps) => {
       onSubmit={onSubmit}
       initialValues={initialValues}
       render={({
+        errors,
         dirty,
+        handleSubmit,
+        hasValidationErrors,
+        submitFailed,
         submitting,
         submitSucceeded,
-        handleSubmit,
-        valid,
         values,
       }) => {
+        const errorsClientSide = [errorSet(errors, LABELS.fields)]
+
         const numberOfImageInputsAvailable = (values as any)?.images
           ? Math.min(
               (values as any).images.filter((x) => !!x).length + 1,
@@ -133,11 +137,6 @@ export const QuestionForm = (props: IProps) => {
           endsWithQuestionMark(),
         )
 
-        const saveError = saveErrorMessage && (
-          <Alert variant="failure" sx={{ mt: 3 }}>
-            {saveErrorMessage}
-          </Alert>
-        )
         const unsavedChangesDialog = (
           <UnsavedChangesDialog
             hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
@@ -148,13 +147,15 @@ export const QuestionForm = (props: IProps) => {
           <FormWrapper
             buttonLabel={LABELS.buttons[parentType]}
             contentType="questions"
+            errorsClientSide={errorsClientSide}
+            errorSubmitting={saveErrorMessage}
             guidelines={<QuestionPostingGuidelines />}
             handleSubmit={handleSubmit}
+            hasValidationErrors={hasValidationErrors}
             heading={LABELS.headings[parentType]}
-            saveError={saveError}
+            submitFailed={submitFailed}
             submitting={submitting}
             unsavedChangesDialog={unsavedChangesDialog}
-            valid={valid}
           >
             <TitleField
               placeholder={LABELS.fields.title.placeholder}

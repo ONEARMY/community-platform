@@ -3,12 +3,12 @@ import { Form } from 'react-final-form'
 import { useNavigate } from 'react-router'
 import arrayMutators from 'final-form-arrays'
 import { Button, ResearchEditorOverview } from 'oa-components'
-import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { TagsField } from 'src/pages/common/FormFields'
 import { ImageField } from 'src/pages/common/FormFields/ImageField'
+import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors'
 import { ResearchPostingGuidelines } from 'src/pages/Research/Content/Common'
 import { fireConfetti } from 'src/utils/fireConfetti'
 import { Text } from 'theme-ui'
@@ -27,8 +27,7 @@ interface IProps {
 }
 
 const ResearchForm = ({ research }: IProps) => {
-  const [initialValues, setInitialValues] =
-    useState<Partial<ResearchFormData>>()
+  const [initialValues, setInitialValues] = useState<ResearchFormData>()
   const navigate = useNavigate()
   const [intentionalNavigation, setIntentionalNavigation] = useState(false)
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
@@ -49,6 +48,7 @@ const ResearchForm = ({ research }: IProps) => {
           : [],
         tags: research?.tagIds || [],
         existingImage: research?.image,
+        image: undefined,
       })
     }
   }, [research])
@@ -97,18 +97,26 @@ const ResearchForm = ({ research }: IProps) => {
       mutators={{
         ...arrayMutators,
       }}
+      validate={(values) => {
+        const errors = {}
+        if (values.image == null && values.existingImage === null) {
+          errors['image'] = 'An image is required (either new or existing).'
+        }
+        return errors
+      }}
       validateOnBlur
       render={({
+        errors,
         dirty,
-        values,
-        valid,
         handleSubmit,
+        hasValidationErrors,
+        submitFailed,
         submitting,
         submitSucceeded,
+        values,
+        valid,
       }) => {
-        const saveError = saveErrorMessage && (
-          <ErrorsContainer errors={[saveErrorMessage]} />
-        )
+        const errorsClientSide = [errorSet(errors, overview)]
 
         const sidebar = (
           <>
@@ -181,14 +189,16 @@ const ResearchForm = ({ research }: IProps) => {
           <FormWrapper
             buttonLabel={buttons.publish}
             contentType="research"
+            errorsClientSide={errorsClientSide}
+            errorSubmitting={saveErrorMessage}
             guidelines={<ResearchPostingGuidelines />}
             handleSubmit={handleSubmit}
+            hasValidationErrors={hasValidationErrors}
             heading={heading}
-            saveError={saveError}
             sidebar={sidebar}
+            submitFailed={submitFailed}
             submitting={submitting}
             unsavedChangesDialog={unsavedChangesDialog}
-            valid={valid}
           >
             <ResearchTitleField />
             <ResearchDescriptionField />

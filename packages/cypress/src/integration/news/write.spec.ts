@@ -36,13 +36,14 @@ describe('[News.Write]', () => {
       cy.visit('/news/create')
       cy.get('[data-cy=field-title]', { timeout: 20000 })
 
-      // cy.step('Add images')
-      // cy.get('[data-cy=image-upload-0]')
-      //   .find(':file')
-      //   .attachFile('images/howto-step-pic1.jpg')
-      // cy.get('[data-cy=image-upload-1]')
-      //   .find(':file')
-      //   .attachFile('images/howto-step-pic2.jpg')
+      cy.step('Cannot be published when empty')
+      cy.get('[data-cy=submit]').click()
+      cy.get('[data-cy=errors-container]')
+
+      cy.step('Add image')
+      cy.get('[data-cy=heroImage-upload]')
+        .find(':file')
+        .attachFile('images/howto-step-pic1.jpg')
 
       cy.step('Add fields')
       cy.get('[data-cy=field-title]')
@@ -60,6 +61,7 @@ describe('[News.Write]', () => {
       cy.selectTag(tag2, '[data-cy="tag-select"]')
 
       cy.step('Submit news')
+      cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=submit]').click()
 
       cy.wait(2000)

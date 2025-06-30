@@ -1,15 +1,11 @@
-import { forwardRef } from 'react'
-import { Map as LeafletMap, TileLayer } from 'react-leaflet'
-
-import type { Ref, RefObject } from 'react'
-import type { MapProps, Viewport } from 'react-leaflet'
-
+import { forwardRef, Ref, RefObject } from 'react'
+import { Map as LeafletMap, TileLayer, MapProps, Viewport } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import './index.css'
 
 export interface IProps extends MapProps {
-  children?: React.ReactNode | React.ReactNode[]
   setZoom: (arg: number) => void
+  children?: React.ReactNode | React.ReactNode[]
   ref?: RefObject<LeafletMap> | undefined
 }
 

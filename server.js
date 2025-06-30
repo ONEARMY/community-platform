@@ -45,7 +45,7 @@ const imgSrc = [
   '*.google-analytics.com',
   '*.patreonusercontent.com',
   '*.basemaps.cartocdn.com',
-  'sentry.io',
+
   process.env.SUPABASE_API_URL,
 ]
 

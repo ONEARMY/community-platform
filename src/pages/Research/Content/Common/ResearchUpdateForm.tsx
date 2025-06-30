@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import { useNavigate } from 'react-router'
 import { Button, ConfirmModal, ResearchEditorOverview } from 'oa-components'
-import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
+import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors'
 import { fireConfetti } from 'src/utils/fireConfetti'
 
 import { FilesFields } from '../../../common/FormFields/FilesFields'
-import { buttons, headings } from '../../labels'
+import { buttons, headings, update } from '../../labels'
 import { researchService } from '../../research.service'
 import { DescriptionField } from '../CreateResearch/Form/DescriptionField'
 import { ResearchImagesField } from '../CreateResearch/Form/ResearchImagesField'
@@ -134,14 +134,12 @@ export const ResearchUpdateForm = (props: IProps) => {
           handleSubmit,
           hasValidationErrors,
           errors,
-          valid,
+          submitFailed,
           submitSucceeded,
           submitting,
           values,
         }) => {
-          const saveError = saveErrorMessage && (
-            <ErrorsContainer errors={[saveErrorMessage]} />
-          )
+          const errorsClientSide = [errorSet(errors, update)]
 
           const numberOfImageInputsAvailable = (values as any)?.images
             ? Math.min((values as any).images.filter((x) => !!x).length + 1, 10)
@@ -185,12 +183,6 @@ export const ResearchUpdateForm = (props: IProps) => {
                 </Button>
               ) : null}
 
-              {hasValidationErrors && errors && (
-                <ErrorsContainer
-                  errors={Object.values(errors).map((value) => String(value))}
-                />
-              )}
-
               {props.research && (
                 <ResearchEditorOverview
                   updates={getResearchUpdates(
@@ -210,13 +202,15 @@ export const ResearchUpdateForm = (props: IProps) => {
             <FormWrapper
               buttonLabel={buttons.publish}
               contentType="researchUpdate"
+              errorsClientSide={errorsClientSide}
+              errorSubmitting={saveErrorMessage}
               handleSubmit={handleSubmit}
+              hasValidationErrors={hasValidationErrors}
               heading={heading}
-              saveError={saveError}
               sidebar={sidebar}
+              submitFailed={submitFailed}
               submitting={submitting}
               unsavedChangesDialog={unsavedChangesDialog}
-              valid={valid}
             >
               <TitleField />
               <DescriptionField />

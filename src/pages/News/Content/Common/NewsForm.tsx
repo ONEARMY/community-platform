@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import { useNavigate } from '@remix-run/react'
-import { setIn } from 'final-form'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { CategoryField } from 'src/pages/common/FormFields/Category.field'
 import { TagsField } from 'src/pages/common/FormFields/Tags.field'
 import { TitleField } from 'src/pages/common/FormFields/Title.field'
+import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors'
 import { NewsPostingGuidelines } from 'src/pages/News/Content/Common/NewsPostingGuidelines'
 import * as LABELS from 'src/pages/News/labels'
 import { newsService } from 'src/services/newsService'
 import { storageService } from 'src/services/storageService'
 import { composeValidators, minValue, required } from 'src/utils/validators'
-import { Alert } from 'theme-ui'
 
 import { NEWS_MIN_TITLE_LENGTH } from '../../constants'
 import { NewsBodyField, NewsImageField } from './FormFields'
@@ -119,22 +118,26 @@ export const NewsForm = (props: IProps) => {
       onSubmit={onSubmit}
       initialValues={initialValues}
       validate={(values) => {
-        let errors = {}
+        const errors = {}
         if (!values.body?.length) {
-          errors = setIn(
-            errors,
-            'body',
-            'Body field required. Gotta have something to say...',
-          )
+          errors['body'] = 'Body field required. Gotta have something to say...'
+        }
+        if (values.heroImage == null && values.existingHeroImage === null) {
+          errors['heroImage'] = 'An image is required (either new or existing).'
         }
         return errors
       }}
-      render={({ dirty, submitting, submitSucceeded, handleSubmit, valid }) => {
-        const saveError = saveErrorMessage && (
-          <Alert variant="failure" sx={{ mt: 3 }}>
-            {saveErrorMessage}
-          </Alert>
-        )
+      render={({
+        dirty,
+        errors,
+        hasValidationErrors,
+        submitting,
+        submitSucceeded,
+        handleSubmit,
+        submitFailed,
+      }) => {
+        const errorsClientSide = [errorSet(errors, LABELS.fields)]
+
         const unsavedChangesDialog = (
           <UnsavedChangesDialog
             hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
@@ -149,13 +152,15 @@ export const NewsForm = (props: IProps) => {
           <FormWrapper
             buttonLabel={LABELS.buttons[parentType]}
             contentType="news"
+            errorsClientSide={errorsClientSide}
+            errorSubmitting={saveErrorMessage}
             guidelines={<NewsPostingGuidelines />}
             handleSubmit={handleSubmit}
+            hasValidationErrors={hasValidationErrors}
             heading={LABELS.headings[parentType]}
-            saveError={saveError}
+            submitFailed={submitFailed}
             submitting={submitting}
             unsavedChangesDialog={unsavedChangesDialog}
-            valid={valid}
           >
             <TitleField
               placeholder={LABELS.fields.title.placeholder}

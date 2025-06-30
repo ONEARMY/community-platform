@@ -40,13 +40,14 @@ describe('[Question]', () => {
 
       cy.get('[data-cy=field-title]', { timeout: 20000 })
 
-      // cy.step('Add images')
-      // cy.get('[data-cy=image-upload-0]')
-      //   .find(':file')
-      //   .attachFile('images/howto-step-pic1.jpg')
-      // cy.get('[data-cy=image-upload-1]')
-      //   .find(':file')
-      //   .attachFile('images/howto-step-pic2.jpg')
+      cy.step('Cannot be published when empty')
+      cy.get('[data-cy=submit]').click()
+      cy.get('[data-cy=errors-container]')
+
+      cy.step('Add image')
+      cy.get('[data-cy=image-upload-0]')
+        .find(':file')
+        .attachFile('images/howto-step-pic1.jpg')
 
       cy.step('Add title field')
       cy.get('[data-cy=field-title]')

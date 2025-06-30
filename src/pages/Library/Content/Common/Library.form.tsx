@@ -3,7 +3,6 @@ import { Form } from 'react-final-form'
 import { useNavigate } from '@remix-run/react'
 import arrayMutators from 'final-form-arrays'
 import { Button } from 'oa-components'
-import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
@@ -13,6 +12,7 @@ import { Flex } from 'theme-ui'
 
 import { buttons, headings } from '../../labels'
 import { libraryService } from '../../library.service'
+import { transformLibraryErrors } from '../utils'
 import { LibraryCategoryField } from './LibraryCategory.field'
 import { LibraryDescriptionField } from './LibraryDescription.field'
 import { LibraryDifficultyField } from './LibraryDifficulty.field'
@@ -130,16 +130,22 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
         return errors
       }}
       render={({
+        errors,
         dirty,
-        valid,
-        values,
         handleSubmit,
+        hasValidationErrors,
+        submitFailed,
         submitSucceeded,
         submitting,
+        values,
       }) => {
-        const saveError = saveErrorMessage && (
-          <ErrorsContainer errors={[saveErrorMessage]} />
+        const belowBody = (
+          <Flex sx={{ flexDirection: 'column' }}>
+            <LibraryStepsContainerField />
+          </Flex>
         )
+
+        const errorsClientSide = transformLibraryErrors(errors)
 
         const sidebar = (
           <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
@@ -166,21 +172,19 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
         return (
           <>
             <FormWrapper
+              belowBody={belowBody}
               buttonLabel={buttons.publish}
               contentType="research"
+              errorsClientSide={errorsClientSide}
+              errorSubmitting={saveErrorMessage}
               guidelines={<LibraryPostingGuidelines />}
               handleSubmit={handleSubmit}
+              hasValidationErrors={hasValidationErrors}
               heading={headingText}
-              saveError={saveError}
               sidebar={sidebar}
-              belowBody={
-                <Flex sx={{ flexDirection: 'column' }}>
-                  <LibraryStepsContainerField />
-                </Flex>
-              }
+              submitFailed={submitFailed}
               submitting={submitting}
               unsavedChangesDialog={unsavedChangesDialog}
-              valid={valid}
             >
               <Flex
                 sx={{
@@ -197,7 +201,6 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                   <LibraryDifficultyField />
                   <FilesFields />
                 </Flex>
-                {/* Right side */}
                 <Flex data-cy="intro-cover" sx={{ flex: 1, width: '100%' }}>
                   <ImageField title="Cover Image" />
                 </Flex>

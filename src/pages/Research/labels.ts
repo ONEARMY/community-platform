@@ -58,6 +58,9 @@ export const overview: ILabels = {
     placeholder: `Can we make a chair from... (max ${RESEARCH_TITLE_MAX_LENGTH} characters)`,
     title: 'Research Title',
   },
+  image: {
+    title: 'Cover image',
+  },
 }
 
 export const update: ILabels = {

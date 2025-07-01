@@ -112,12 +112,8 @@ export const FormWrapper = (props: IProps) => {
           {buttonLabel}
         </Button>
         {sidebar && sidebar}
-        {hasClientSideErrors && (
-          <ErrorsContainer
-            saving={[errorSubmitting]}
-            client={errorsClientSide}
-          />
-        )}
+        {errorSubmitting && <ErrorsContainer saving={[errorSubmitting]} />}
+        {hasClientSideErrors && <ErrorsContainer client={errorsClientSide} />}
       </Flex>
     </Flex>
   )

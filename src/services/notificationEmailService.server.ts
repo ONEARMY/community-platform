@@ -1,5 +1,6 @@
 import { transformNotification } from 'src/routes/api.notifications'
 import { DEFAULT_NOTIFICATION_PREFERENCES } from 'src/routes/api.notifications-preferences'
+import { tokens } from 'src/utils/tokens.server'
 
 import { notificationsPreferencesServiceServer } from './notificationsPreferencesService.server'
 
@@ -30,7 +31,7 @@ const createInstantNotificationEmail = async (
     // Temporarily only for beta-testers
     const profileResponse = await client
       .from('profiles')
-      .select('roles')
+      .select('created_at,roles')
       .eq('id', profileId)
       .single()
 
@@ -52,9 +53,12 @@ const createInstantNotificationEmail = async (
 
     const fullNotification = await transformNotification(dbNotification, client)
 
+    const code = tokens.generate(profileId, profileResponse.data?.created_at)
+
     await client.functions.invoke('send-email', {
       body: {
         user: {
+          code,
           email: rpcResponse.data[0].email,
         },
         email_data: {

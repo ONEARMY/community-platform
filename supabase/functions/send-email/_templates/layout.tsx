@@ -51,9 +51,14 @@ type LayoutArgs = {
   children: React.ReactNode
   preview: string
   settings: TenantSettings
+  code?: string
 }
 
-export const Layout = ({ children, preview, settings }: LayoutArgs) => {
+export const Layout = ({ children, code, preview, settings }: LayoutArgs) => {
+  const preferencesUpdatePath = code
+    ? `email-preferences?code=${code}`
+    : 'settings/notifications'
+
   return (
     <Html>
       <Head />
@@ -75,7 +80,7 @@ export const Layout = ({ children, preview, settings }: LayoutArgs) => {
               You are receiving important community updates by default. <br />
               You can update your{' '}
               <Link
-                href={`${settings.siteUrl}/settings/notifications`}
+                href={`${settings.siteUrl}/${preferencesUpdatePath}`}
                 style={link}
               >
                 {' '}

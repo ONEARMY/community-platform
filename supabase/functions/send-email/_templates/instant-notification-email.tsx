@@ -6,7 +6,11 @@ import { Button } from './components/button.tsx'
 import { Layout } from './layout.tsx'
 import { Heading } from './components/heading.tsx'
 
-import type { NotificationDisplay, TenantSettings } from 'oa-shared'
+import type {
+  NotificationDisplay,
+  TenantSettings,
+  UserEmailData,
+} from 'oa-shared'
 import { Header } from './components/header.tsx'
 
 const text = {
@@ -19,19 +23,24 @@ const text = {
 interface IProps {
   notification: NotificationDisplay
   settings: TenantSettings
+  user: UserEmailData
 }
 
 // Some unavoidable duplication of approaches here to:
 // packages/components/src/NotificationListSupabase
 
 export const InstantNotificationEmail = (props: IProps) => {
-  const { notification, settings } = props
+  const { notification, settings, user } = props
 
   const headerLink = `${settings.siteUrl}/${notification.slug}`
   const buttonLink = `${settings.siteUrl}/${notification.title.parentSlug}`
 
   return (
-    <Layout preview={notification.email.preview} settings={settings}>
+    <Layout
+      code={user.code}
+      preview={notification.email.preview}
+      settings={settings}
+    >
       <Header>
         <Link href={headerLink}>
           <Heading>

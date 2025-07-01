@@ -351,6 +351,7 @@ jobs:
               --build-secret VITE_NO_MESSAGING="$VITE_NO_MESSAGING" \
               --build-secret VITE_HIDE_MEMBER_PINS_BY_DEFAULT="$VITE_HIDE_MEMBER_PINS_BY_DEFAULT" \
               --build-secret TENANT_ID="$TENANT_ID" \
+              --build-secret TOKEN_SECRET="$TOKEN_SECRET" \
               --build-secret PATREON_CLIENT_ID="$PATREON_CLIENT_ID" \
               --build-secret PATREON_CLIENT_SECRET="$PATREON_CLIENT_SECRET"
       - run:

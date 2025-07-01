@@ -1,28 +1,28 @@
 import { useEffect, useState } from 'react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { form } from 'src/pages/UserSettings/labels'
-import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService'
+import { notificationsPreferencesViaEmailService } from 'src/services/notificationsPreferencesViaEmailService'
 
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm'
 
 import type { DBNotificationsPreferences } from 'oa-shared'
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
 
-export const SupabaseNotifications = () => {
+interface IProps {
+  userCode: string
+}
+
+export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
+  if (!userCode) return null
+
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [initialValues, setInitialValues] =
     useState<DBNotificationsPreferences | null>(null)
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
 
-  const { userStore } = useCommonStores().stores
-  const user = userStore.activeUser
-  const hasMessagingOn =
-    user?.isContactableByPublic === undefined
-      ? true
-      : user?.isContactableByPublic
-
   const getPreferences = async () => {
-    const preferences = await notificationsPreferencesService.getPreferences()
+    const preferences =
+      await notificationsPreferencesViaEmailService.getPreferences(userCode)
+
     setInitialValues(preferences)
     setIsLoading(false)
   }
@@ -36,7 +36,10 @@ export const SupabaseNotifications = () => {
     setSubmitResults(null)
 
     try {
-      await notificationsPreferencesService.setPreferences(values)
+      await notificationsPreferencesViaEmailService.setPreferences({
+        ...values,
+        userCode,
+      })
       await getPreferences()
       setSubmitResults({
         type: 'success',
@@ -47,13 +50,10 @@ export const SupabaseNotifications = () => {
     }
   }
 
-  if (!user) return null
-
   return (
     <SupabaseNotificationsForm
       initialValues={initialValues}
       isLoading={isLoading}
-      hasMessagingOn={hasMessagingOn}
       onSubmit={onSubmit}
       submitResults={submitResults}
     />

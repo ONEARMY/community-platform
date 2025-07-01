@@ -25,3 +25,10 @@ export interface NotificationsPreferencesFormData {
   research_updates: boolean
   id?: number
 }
+
+export interface NotificationsPreferencesViaEmailFormData {
+  comments: boolean
+  replies: boolean
+  research_updates: boolean
+  userCode: string
+}

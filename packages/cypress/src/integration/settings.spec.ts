@@ -3,7 +3,11 @@ import { ExternalLinkLabel } from 'oa-shared'
 import { MOCK_DATA } from '../data'
 import { SingaporeStubResponse } from '../fixtures/searchResults'
 import { UserMenuItem } from '../support/commandsUi'
-import { generateNewUserDetails } from '../utils/TestUtils'
+import {
+  generateAlphaNumeric,
+  generateNewUserDetails,
+  supabaseAdminClient,
+} from '../utils/TestUtils'
 
 const locationStub = {
   administrative: '',
@@ -470,4 +474,137 @@ describe('[Settings]', () => {
       cy.contains(tag)
     })
   })
+
+  describe('Delete account flow', () => {
+    const user = generateNewUserDetails()
+
+    beforeEach(() => {
+      cy.signUpCompletedUser(user)
+      cy.visit('/settings/account')
+    })
+
+    context('when I open the delete-account modal', () => {
+      beforeEach(() => {
+        cy.get('[data-cy=delete-account-modal-open-button]').click()
+      })
+
+      it('shows the confirmation dialog', () => {
+        cy.get('[data-cy=delete-account-modal-container]').should('be.visible')
+      })
+
+      it('closes the dialog when I click cancel', () => {
+        cy.get('[data-cy=delete-account-modal-cancel-button]').click()
+        cy.get('[data-cy=delete-account-modal-container]').should('not.exist')
+      })
+    })
+
+    context('when I type an incorrect confirmation', () => {
+      beforeEach(() => {
+        cy.get('[data-cy=delete-account-modal-open-button]').click()
+        cy.get('[data-cy=delete-account-modal-confirmation-input]').type('DELE')
+      })
+
+      it('keeps the confirm button disabled', () => {
+        cy.get('[data-cy=delete-account-modal-confirm-button]').should(
+          'be.disabled',
+        )
+      })
+
+      it('does not close the modal on click', () => {
+        cy.get('[data-cy=delete-account-modal-confirm-button]').click()
+        cy.get('[data-cy=delete-account-modal-container]').should('be.visible')
+      })
+    })
+
+    context('when I type the exact "DELETE" confirmation', () => {
+      beforeEach(() => {
+        cy.get('[data-cy=delete-account-modal-open-button]').click()
+        cy.get('[data-cy=delete-account-modal-confirmation-input]').type(
+          'DELETE',
+        )
+      })
+
+      it('enables and lets me delete my account', () => {
+        cy.get('[data-cy=delete-account-modal-confirm-button]')
+          .should('be.enabled')
+          .click()
+
+        cy.url().should('eq', Cypress.config('baseUrl') + '/')
+      })
+    })
+
+    context('when I’ve created a question before deleting', () => {
+      const id = generateAlphaNumeric(8).toLowerCase()
+      const slug = `${id}-health-cost-of-plastic`
+      const comment = 'An interesting question.'
+
+      beforeEach(() => {
+        cy.visit('/questions/create')
+        cy.get('[data-cy=field-title]')
+          .clear()
+          .type(`${id} Health cost of plastic?`)
+        cy.get('[data-cy=field-description]').type('A very long question.')
+        cy.get('[data-cy=submit]').click()
+
+        cy.addComment(comment)
+
+        deleteAccount()
+      })
+
+      it('removes the user assignment from the question', () => {
+        cy.visit(`/questions/${slug}`)
+        cy.get('[data-cy="Username"]').should('not.include.text', user.username)
+      })
+
+      it('removes the comment from the question', () => {
+        cy.visit(`/questions/${slug}`)
+        cy.get('[data-cy=comment-text]').should('not.exist')
+      })
+    })
+
+    context('when I’ve created a research before deleting', () => {
+      const randomId = generateAlphaNumeric(8).toLowerCase()
+      const slug = `${randomId}-create-research-article-test`
+
+      beforeEach(async () => {
+        // Add admin role to allow the creation of research
+        const adminClient = supabaseAdminClient()
+        await adminClient
+          .from('profiles')
+          .update({ roles: ['admin'] })
+          .eq('username', user.username)
+        cy.visit('/research/create')
+        cy.get('[data-cy=intro-title')
+          .clear()
+          .type(`${randomId} Create research article test`)
+        cy.get('[data-cy=intro-description]').type(
+          'After creating, the research will be deleted.',
+        )
+        cy.get('[data-cy=file-input-field]').click()
+        cy.get('.uppy-Dashboard-input:first').as('file-input')
+        cy.get('@file-input').selectFile('src/fixtures/files/Example.pdf', {
+          force: true,
+        })
+        cy.get('.uppy-StatusBar-actionBtn--upload').as('upload-button')
+        cy.get('@upload-button').click()
+        cy.get('[data-cy=submit]').click()
+
+        deleteAccount()
+      })
+
+      // TODO - check the user assignment is removed from the research
+      it('removes the user assignment from the research', () => {
+        cy.wait(5000)
+        cy.visit(`/research/${slug}`)
+      })
+    })
+  })
 })
+
+const deleteAccount = () => {
+  cy.visit('/settings/account')
+  cy.get('[data-cy=delete-account-modal-open-button]').click()
+  cy.get('[data-cy=delete-account-modal-confirmation-input]').type('DELETE')
+  cy.get('[data-cy=delete-account-modal-confirm-button]').click()
+  cy.wait(5000)
+}

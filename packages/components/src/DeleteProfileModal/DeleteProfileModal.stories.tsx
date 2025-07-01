@@ -9,7 +9,6 @@ export default {
 
 export const Default: StoryFn<typeof DeleteProfileModal> = () => (
   <DeleteProfileModal
-    message="Are you sure you want to delete this item?"
     isOpen={true}
     handleCancel={() => null}
     handleConfirm={() => null}

@@ -1,13 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from '@remix-run/react'
-import { toJS } from 'mobx'
 import { Button, DeleteProfileModal } from 'oa-components'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { fields } from 'src/pages/UserSettings/labels'
 import { Flex, Heading, Text } from 'theme-ui'
 
 export const DeleteAccount = () => {
-  const { mapsStore, userStore } = useCommonStores().stores
   const { description, title } = fields.deleteAccount
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
   const navigate = useNavigate()
@@ -22,15 +19,6 @@ export const DeleteAccount = () => {
 
   const deleteAccount = async () => {
     // TODO - delete the user from the required places
-    const user = userStore.activeUser
-
-    if (user) {
-      const updatedUser = await userStore.deleteUserLocation(user)
-      if (updatedUser) {
-        await mapsStore.deleteUserPin(toJS(updatedUser))
-      }
-    }
-
     closeModal()
 
     navigate('/api/profile/delete')
@@ -57,7 +45,12 @@ export const DeleteAccount = () => {
         </Flex>
       </Flex>
 
-      <Button type="button" onClick={openModal} variant="danger">
+      <Button
+        type="button"
+        onClick={openModal}
+        variant="danger"
+        data-cy="delete-account-modal-open-button"
+      >
         {title}
       </Button>
 

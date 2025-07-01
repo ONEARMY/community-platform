@@ -1,3 +1,4 @@
+import { redirect } from 'react-router'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import {
   DB_ENDPOINTS,
@@ -63,54 +64,160 @@ const createFirebaseProfile = async (authUser: User) => {
   await dbRef.set(user)
 }
 
-const getProfileIdForAuthUser = async (
+const getProfileForAuthUser = async (
   client: SupabaseClient,
   userId: string,
 ) => {
   const { data: profileData } = await client
     .from('profiles')
-    .select('id')
+    .select('*')
     .eq('auth_id', userId)
     .single()
 
-  return profileData?.id
+  return profileData
 }
 
 const deleteSupabaseUser = async (client: SupabaseClient, userId: string) => {
-  await client.auth.admin.deleteUser(userId)
+  const { error } = await client.auth.admin.deleteUser(userId)
+
+  if (error) {
+    console.log(`Delete auth user failed (id ${userId})`, error)
+  }
 }
 
 const deleteProfileData = async (client: SupabaseClient, userId: string) => {
-  return await client.from('profiles').delete().eq('auth_id', userId)
+  const { error } = await client.from('profiles').delete().eq('auth_id', userId)
+
+  if (error) {
+    console.log(`Delete profile failed (auth_id ${userId})`, error)
+  }
 }
 
-const updateUserContent = async (client: SupabaseClient, profileId: string) => {
-  const content = ['research', 'library', 'questions', 'news']
+const updateResearchUpdates = async (client, profileId) => {
+  const { data: userResearchUpdates, error: fetchUpdatesError } = await client
+    .from('research_updates')
+    .select()
+    .eq('created_by', profileId)
 
-  content.forEach(async (contentType) => {
-    await client
-      .from(contentType)
+  if (fetchUpdatesError) {
+    console.log(
+      `Fetch research updates failed (profile ${profileId}).`,
+      fetchUpdatesError,
+    )
+    return
+  }
+
+  for (const researchUpdate of userResearchUpdates || []) {
+    const parentResearchId = researchUpdate.research_id
+
+    const { data: parent, error: fetchParentError } = await client
+      .from('research')
+      .select('created_by')
+      .eq('id', parentResearchId)
+      .single()
+
+    if (fetchParentError) {
+      console.log(
+        `Fetch parent research failed (id ${parentResearchId}, update ${researchUpdate.id}).`,
+        fetchParentError,
+      )
+      continue
+    }
+
+    if (parent.created_by !== profileId) {
+      const { error: updateError } = await client
+        .from('research_updates')
+        .update({ created_by: parent.created_by })
+        .eq('id', researchUpdate.id)
+
+      if (updateError) {
+        console.log(
+          `Update research_update failed (id ${researchUpdate.id}).`,
+          updateError,
+        )
+      }
+    }
+  }
+}
+
+const updateUserContentTypes = async (
+  client: SupabaseClient,
+  profileId: string,
+  username: string,
+) => {
+  const contentTypes: string[] = ['research', 'library', 'questions', 'news']
+
+  for (const type of contentTypes) {
+    const { error: clearError } = await client
+      .from(type)
       .update({ created_by: null })
       .eq('created_by', profileId)
-  })
 
-  // TODO - update research updates
+    if (clearError) {
+      console.log(
+        `Clear created_by failed (table ${type}, profile ${profileId}).`,
+        clearError,
+      )
+    }
+  }
+
+  const { data: researchCollaboratorData, error: fetchCollaboratorError } =
+    await client
+      .from('research')
+      .select('*')
+      .contains('collaborators', [username])
+
+  if (fetchCollaboratorError) {
+    console.log(
+      `Fetch collaborators failed (username ${username}).`,
+      fetchCollaboratorError,
+    )
+  }
+
+  researchCollaboratorData?.forEach(async (research) => {
+    const newCollaborators = research.collaborators.filter(
+      (collaborator) => collaborator !== username,
+    )
+
+    const { error: clearCollaboratorError } = await client
+      .from('research')
+      .update({ collaborators: newCollaborators })
+      .eq('id', research.id)
+
+    if (clearCollaboratorError) {
+      console.log(
+        `Clear collaborators failed (username ${username}).`,
+        clearCollaboratorError,
+      )
+    }
+  })
 }
 
+// TODO - add delete map pin functionality for supabase
 const deleteUserContent = async (client: SupabaseClient, profileId: string) => {
   const contentStructure = [
     { contentType: 'subscribers', fieldNames: ['user_id'] },
     { contentType: 'useful_votes', fieldNames: ['user_id'] },
-    { contentType: 'notifications', fieldNames: ['owned_by_id', 'triggered_by_id'] },
+    {
+      contentType: 'notifications',
+      fieldNames: ['owned_by_id', 'triggered_by_id'],
+    },
     { contentType: 'comments', fieldNames: ['created_by'] },
   ]
 
   contentStructure.forEach(({ contentType, fieldNames }) => {
     fieldNames.forEach(async (fieldName) => {
-      await client
+      const { error } = await client
         .from(contentType)
         .delete()
         .eq(fieldName, profileId)
+
+      if (error) {
+        console.log(
+          `Delete failed (table=${contentType}, field=${fieldName}, profile=${profileId})`,
+          error,
+        )
+      }
     })
   })
 }
@@ -122,17 +229,18 @@ const logout = async (client: SupabaseClient, headers: Headers) => {
     return Response.json({ success: false }, { headers })
   }
 
-  return Response.json({}, { headers, status: 200 })
+  return redirect('/')
 }
 
 export const userService = {
-  getById,
-  getUserCreatedProjects,
   createFirebaseProfile,
-  getProfileIdForAuthUser,
   deleteProfileData,
   deleteSupabaseUser,
-  updateUserContent,
   deleteUserContent,
+  getById,
+  getProfileForAuthUser,
+  getUserCreatedProjects,
   logout,
+  updateResearchUpdates,
+  updateUserContentTypes,
 }

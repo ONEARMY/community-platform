@@ -1,8 +1,10 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server'
 import { userService } from 'src/services/userService.server'
 
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request)
+  const adminClient = createSupabaseAdminServerClient()
 
   const {
     data: { user },
@@ -13,10 +15,15 @@ export const loader = async ({ request }) => {
   }
 
   const authId = user.id
-  const profileId = await userService.getProfileIdForAuthUser(client, authId)
+  const { id: profileId, username } = await userService.getProfileForAuthUser(
+    client,
+    authId,
+  )
 
-  await userService.updateUserContent(client, profileId)
+  await userService.updateResearchUpdates(client, profileId)
+  await userService.updateUserContentTypes(client, profileId, username)
+  await userService.deleteUserContent(client, profileId)
   await userService.deleteProfileData(client, authId)
-  await userService.deleteSupabaseUser(client, authId)
+  await userService.deleteSupabaseUser(adminClient, authId)
   return await userService.logout(client, headers)
 }

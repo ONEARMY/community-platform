@@ -1,7 +1,6 @@
 import { Field, Form, FormSpy } from 'react-final-form'
 import { Flex, Heading, Label, Text } from 'theme-ui'
 
-import { buttons, form } from '../../../../src/pages/UserSettings/labels'
 import { Button } from '../Button/Button'
 import { FieldInput } from '../FieldInput/FieldInput'
 import { Modal } from '../Modal/Modal'
@@ -13,9 +12,6 @@ export interface IProps {
 }
 
 export const DeleteProfileModal = (props: IProps) => {
-  const { deleteAccountTitle, deleteAccountMessage, deleteAccountLabel } = form
-  const { confirm, cancel } = buttons.deleteAccount
-
   const handleFormSubmit = () => {
     props.handleConfirm()
   }
@@ -31,7 +27,7 @@ export const DeleteProfileModal = (props: IProps) => {
       width={512}
     >
       <Flex
-        data-cy="Confirm.modal: Modal"
+        data-cy="delete-account-modal-container"
         sx={{
           flexDirection: 'column',
           padding: 1,
@@ -39,7 +35,7 @@ export const DeleteProfileModal = (props: IProps) => {
           justifyContent: 'flex-start',
         }}
       >
-        <Heading as="h3">{deleteAccountTitle}</Heading>
+        <Heading as="h3">Permanently delete this account?</Heading>
 
         <Text
           sx={{
@@ -49,20 +45,22 @@ export const DeleteProfileModal = (props: IProps) => {
           }}
           variant="quiet"
         >
-          {deleteAccountMessage}
+          Deleting your account will remove all your information from our
+          database. This cannot be undone.
         </Text>
         <Form
-          onSubmit={handleFormSubmit}
+          onSubmit={() => {}}
           render={() => {
             return (
               <>
                 <Label htmlFor="deleteInput" sx={{ marginTop: '30px' }}>
-                  {deleteAccountLabel}
+                  Type “DELETE” to proceed
                 </Label>
                 <Field
                   id="deleteInput"
                   name="deleteInput"
                   type="text"
+                  data-cy="delete-account-modal-confirmation-input"
                   component={FieldInput}
                 />
                 <Flex
@@ -77,21 +75,22 @@ export const DeleteProfileModal = (props: IProps) => {
                   <Button
                     type="button"
                     variant="outline"
-                    data-cy="Confirm.modal: Cancel"
+                    data-cy="delete-account-modal-cancel-button"
                     onClick={handleFormCancel}
                   >
-                    {cancel}
+                    Cancel
                   </Button>
                   <FormSpy subscription={{ values: true }}>
                     {({ values }) => (
                       <Button
                         type="button"
                         aria-label={`Confirm Delete account action`}
-                        data-cy="Confirm.modal: Confirm"
+                        data-cy="delete-account-modal-confirm-button"
                         variant="danger"
                         disabled={values.deleteInput !== 'DELETE'}
+                        onClick={handleFormSubmit}
                       >
-                        {confirm}
+                        Delete account
                       </Button>
                     )}
                   </FormSpy>

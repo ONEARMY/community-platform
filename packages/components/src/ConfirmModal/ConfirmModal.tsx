@@ -1,31 +1,19 @@
-import { type PropsWithChildren } from 'react'
-import { Flex, Heading, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 
 import { Button } from '../Button/Button'
 import { Modal } from '../Modal/Modal'
 
 export interface Props {
-  title?: string
   message: string
   confirmButtonText: string
-  confirmButtonVariant?: string
   isOpen: boolean
   handleCancel: () => void
   handleConfirm: () => void
-  disableConfirm?: boolean
   width?: number
 }
 
-export const ConfirmModal = (props: PropsWithChildren<Props>) => {
-  const {
-    title,
-    message,
-    confirmButtonText,
-    confirmButtonVariant = 'outline',
-    disableConfirm = false,
-    isOpen,
-    width,
-  } = props
+export const ConfirmModal = (props: Props) => {
+  const { message, confirmButtonText, isOpen, width } = props
 
   return (
     <Modal
@@ -43,25 +31,8 @@ export const ConfirmModal = (props: PropsWithChildren<Props>) => {
           justifyContent: 'flex-start',
         }}
       >
-        {title && (
-          <Heading as="h3" sx={{}}>
-            {title}
-          </Heading>
-        )}
-        <Text sx={{ alignSelf: 'stretch', fontWeight: 'bold' }} variant="quiet">
-          {message}
-        </Text>
-
-        {props.children}
-
-        <Flex
-          sx={{
-            gap: 2,
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-            width: '100%',
-          }}
-        >
+        <Text sx={{ alignSelf: 'stretch', fontWeight: 'bold' }}>{message}</Text>
+        <Flex sx={{ gap: 2, flexWrap: 'wrap' }}>
           <Button
             type="button"
             variant="outline"
@@ -75,8 +46,7 @@ export const ConfirmModal = (props: PropsWithChildren<Props>) => {
             type="button"
             aria-label={`Confirm ${confirmButtonText} action`}
             data-cy="Confirm.modal: Confirm"
-            variant={confirmButtonVariant}
-            disabled={disableConfirm}
+            variant={'outline'}
             onClick={() => props?.handleConfirm()}
           >
             {confirmButtonText}

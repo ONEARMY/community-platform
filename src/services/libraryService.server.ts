@@ -4,7 +4,7 @@ import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { storageServiceServer } from './storageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBProject, DBProjectStep } from 'oa-shared'
+import type { DBProject, DBProjectStep, Image } from 'oa-shared'
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
   return client
@@ -73,15 +73,29 @@ const getProjectPublicMedia = (
   projectDb: DBProject,
   client: SupabaseClient,
 ) => {
-  const allImages =
-    projectDb.steps?.flatMap((x) => x.images)?.filter((x) => !!x) || []
+  const allImages: Image[] = []
   if (projectDb.cover_image) {
-    allImages.push(projectDb.cover_image)
+    const coverImage = storageServiceServer
+      .getPublicUrls(client, [projectDb.cover_image], IMAGE_SIZES.LANDSCAPE)
+      ?.at(0)
+
+    if (coverImage) {
+      allImages.push(coverImage)
+    }
   }
 
-  return allImages
-    ? storageServiceServer.getPublicUrls(client, allImages, IMAGE_SIZES.GALLERY)
+  const stepImages =
+    projectDb.steps?.flatMap((x) => x.images)?.filter((x) => !!x) || []
+
+  const publicStepImages = stepImages
+    ? storageServiceServer.getPublicUrls(
+        client,
+        stepImages,
+        IMAGE_SIZES.LANDSCAPE,
+      )
     : []
+
+  return [...allImages, ...publicStepImages.filter((x) => !!x)]
 }
 
 const isAllowedToEditProject = async (

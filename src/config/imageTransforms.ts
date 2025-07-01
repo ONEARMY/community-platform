@@ -4,12 +4,16 @@ export type ImageSize = {
 }
 
 export const IMAGE_SIZES: { [key: string]: ImageSize } = {
+  LANDSCAPE: {
+    width: 1280,
+    height: 960,
+  },
   GALLERY: {
-    height: 450,
     width: 956,
+    height: 450,
   },
   LIST: {
-    height: 225,
     width: 478,
+    height: 225,
   },
 }

@@ -32,12 +32,13 @@ interface IProps {
 export const InstantNotificationEmail = (props: IProps) => {
   const { notification, settings, user } = props
 
-  const headerLink = `${settings.siteUrl}/${notification.slug}`
   const buttonLink = `${settings.siteUrl}/${notification.title.parentSlug}`
+  const headerLink = `${settings.siteUrl}/${notification.slug}`
+  const preferencesUpdatePath = `${settings.siteUrl}/email-preferences?code=${user.code}`
 
   return (
     <Layout
-      code={user.code}
+      preferencesUpdatePath={preferencesUpdatePath}
       preview={notification.email.preview}
       settings={settings}
     >

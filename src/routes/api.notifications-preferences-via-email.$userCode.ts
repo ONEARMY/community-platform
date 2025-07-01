@@ -11,6 +11,7 @@ export const DEFAULT_NOTIFICATION_PREFERENCES = {
 
 export const loader = async ({ params, request }) => {
   const { client, headers } = createSupabaseServerClient(request)
+
   try {
     if (!params.userCode) {
       return Response.json({}, { status: 401, statusText: 'unauthorized' })
@@ -64,8 +65,10 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
     const userId = userData.data?.id
 
-    if (!userId) {
-      return Response.json({}, { status: 401, statusText: 'unauthorized' })
+    const { valid, status, statusText } = await validateRequest(request, userId)
+
+    if (!valid) {
+      return Response.json({}, { status, statusText })
     }
 
     const formData = await request.formData()
@@ -80,12 +83,6 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     const comments = formData.get('comments') === 'true'
     const replies = formData.get('replies') === 'true'
     const researchUpdates = formData.get('research_updates') === 'true'
-
-    const { valid, status, statusText } = await validateRequest(request)
-
-    if (!valid) {
-      return Response.json({}, { status, statusText })
-    }
 
     if (existingPreferencesId) {
       await client
@@ -115,7 +112,11 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   }
 }
 
-async function validateRequest(request: Request) {
+async function validateRequest(request: Request, userId: number) {
+  if (!userId) {
+    return { status: 400, statusText: 'unauthorized' }
+  }
+
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'Method not allowed' }
   }

@@ -12,8 +12,6 @@ interface IProps {
 }
 
 export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
-  if (!userCode) return null
-
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [initialValues, setInitialValues] =
     useState<DBNotificationsPreferences | null>(null)
@@ -49,6 +47,8 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
       setSubmitResults({ type: 'error', message: error.message })
     }
   }
+
+  if (!userCode) return null
 
   return (
     <SupabaseNotificationsForm

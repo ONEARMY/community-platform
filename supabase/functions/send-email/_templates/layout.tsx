@@ -49,15 +49,13 @@ const wrapper = {
 
 type LayoutArgs = {
   children: React.ReactNode
+  preferencesUpdatePath: string
   preview: string
   settings: TenantSettings
-  code?: string
 }
 
-export const Layout = ({ children, code, preview, settings }: LayoutArgs) => {
-  const preferencesUpdatePath = code
-    ? `email-preferences?code=${code}`
-    : 'settings/notifications'
+export const Layout = (props: LayoutArgs) => {
+  const { children, preferencesUpdatePath, preview, settings } = props
 
   return (
     <Html>
@@ -79,10 +77,7 @@ export const Layout = ({ children, code, preview, settings }: LayoutArgs) => {
             <Footer>
               You are receiving important community updates by default. <br />
               You can update your{' '}
-              <Link
-                href={`${settings.siteUrl}/${preferencesUpdatePath}`}
-                style={link}
-              >
+              <Link href={preferencesUpdatePath} style={link}>
                 {' '}
                 email preferences anytime
               </Link>{' '}

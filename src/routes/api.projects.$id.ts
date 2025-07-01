@@ -1,4 +1,4 @@
-import { Project, ProjectStep } from 'oa-shared'
+import { Project, ProjectStep, UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
 import { libraryServiceServer } from 'src/services/libraryService.server'
@@ -7,8 +7,8 @@ import { storageServiceServer } from 'src/services/storageService.server'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBMedia, DBProject, MediaFile, Moderation } from 'oa-shared'
+import type { SupabaseClient } from '@supabase/supabase-js'
+import type { DBMedia, DBProfile, DBProject, MediaFile } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   try {
@@ -50,11 +50,16 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       data: { user },
     } = await client.auth.getUser()
 
+    if (!user) {
+      return Response.json({}, { status: 401, statusText: 'unauthorized' })
+    }
+
     const currentProject = await libraryServiceServer.getById(id, client)
+    const profile = await profileServiceServer.getByAuthId(user!.id, client)
 
     const { valid, status, statusText } = await validateRequest(
       request,
-      user,
+      profile,
       data,
       currentProject,
       client,
@@ -96,6 +101,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     // 2. Update project
     const projectDb = await updateProject(
       client,
+      profile!,
       currentProject,
       data,
       files,
@@ -172,15 +178,14 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
 async function validateRequest(
   request: Request,
-  user: User | null,
+  profile: DBProfile | null,
   data: any,
   currentProject: DBProject,
   client: SupabaseClient,
 ) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
+  if (!profile) {
+    return { status: 400, statusText: 'User not found' }
   }
-
   if (request.method !== 'PUT') {
     return { status: 405, statusText: 'method not allowed' }
   }
@@ -212,17 +217,12 @@ async function validateRequest(
     }
   }
 
-  const profile = await profileServiceServer.getByAuthId(user!.id, client)
-
-  if (!profile) {
-    return { status: 400, statusText: 'User not found' }
-  }
-
   return { valid: true }
 }
 
 async function updateProject(
   client: SupabaseClient,
+  profile: DBProfile,
   currentProject: DBProject,
   data: {
     title: string
@@ -233,7 +233,6 @@ async function updateProject(
     fileLink: string | null
     difficultyLevel: string | null
     time: string | null
-    moderation?: Moderation
     slug: string
   },
   files: MediaFile[] | null,
@@ -253,6 +252,14 @@ async function updateProject(
     cover_image = currentProject.cover_image
   }
 
+  let moderation = currentProject.moderation
+
+  if (currentProject.is_draft && !data.isDraft) {
+    moderation = profile?.roles?.includes(UserRole.ADMIN)
+      ? 'accepted'
+      : 'awaiting-moderation'
+  }
+
   const projectResult = await client
     .from('projects')
     .update({
@@ -267,6 +274,7 @@ async function updateProject(
       difficulty_level: data.difficultyLevel,
       time: data.time,
       files,
+      moderation,
       cover_image,
     })
     .eq('id', currentProject.id)

@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import {
+  ConfirmModal,
   GridForm,
   InformationTooltip,
   InternalLink,
@@ -19,12 +21,20 @@ interface IProps {
   isLoading: boolean
   hasMessagingOn?: boolean
   onSubmit: (values: DBNotificationsPreferences) => Promise<void>
+  onUnsubscribe: () => Promise<void>
   submitResults: SubmitResults | null
 }
 
 export const SupabaseNotificationsForm = (props: IProps) => {
-  const { initialValues, isLoading, hasMessagingOn, onSubmit, submitResults } =
-    props
+  const {
+    initialValues,
+    isLoading,
+    hasMessagingOn,
+    onSubmit,
+    onUnsubscribe,
+    submitResults,
+  } = props
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
 
   const fields: GridFormFields[] = [
     {
@@ -119,17 +129,37 @@ export const SupabaseNotificationsForm = (props: IProps) => {
             <UserContactError submitResults={submitResults} />
 
             <GridForm fields={fields} heading="We should email you about..." />
-            <Button
-              type="submit"
-              form={formId}
-              data-cy="save-notifications-preferences"
-              variant="primary"
-              onClick={handleSubmit}
-              disabled={submitting}
-              sx={{ alignSelf: 'flex-start' }}
-            >
-              Update preferences
-            </Button>
+            <Flex sx={{ gap: 2 }}>
+              <Button
+                type="submit"
+                form={formId}
+                data-cy="save-notifications-preferences"
+                variant="primary"
+                onClick={handleSubmit}
+                disabled={submitting}
+              >
+                Update preferences
+              </Button>
+              <Button
+                data-cy="save-notifications-preferences-unsubscribe"
+                variant="subtle"
+                onClick={() => setShowDeleteModal(true)}
+                disabled={submitting}
+                sx={{ color: 'red' }}
+              >
+                Unsubscribe from all emails
+              </Button>
+              <ConfirmModal
+                isOpen={!!showDeleteModal}
+                message="Unsubscribe from all current email notification types and any others we might add in the future."
+                confirmButtonText="Confirm"
+                handleCancel={() => setShowDeleteModal(false)}
+                handleConfirm={() => {
+                  onUnsubscribe()
+                  setShowDeleteModal(false)
+                }}
+              />
+            </Flex>
           </Flex>
         )
       }}

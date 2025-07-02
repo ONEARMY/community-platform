@@ -3,7 +3,8 @@ export class NotificationsPreferences {
   user_id?: number
   comments: boolean
   replies: boolean
-  research_updates: boolean
+  researchUpdates: boolean
+  isUnsubscribed: boolean
 }
 
 export class DBNotificationsPreferences {
@@ -12,6 +13,7 @@ export class DBNotificationsPreferences {
   comments: boolean
   replies: boolean
   research_updates: boolean
+  is_unsubscribed: boolean
 }
 
 export type NotificationsPreferenceTypes =

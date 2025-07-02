@@ -4,9 +4,18 @@
 import { UserRole } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
-import { generateNewUserDetails } from '../../utils/TestUtils'
+import {
+  generateAlphaNumeric,
+  generateNewUserDetails,
+} from '../../utils/TestUtils'
+
+let randomId
 
 describe('[News.Discussions]', () => {
+  beforeEach(() => {
+    randomId = generateAlphaNumeric(8).toLowerCase()
+  })
+
   it('shows existing comments', () => {
     const news = MOCK_DATA.news[0]
     cy.visit(`/news/${news.slug}`)
@@ -20,12 +29,13 @@ describe('[News.Discussions]', () => {
 
     const commenter = generateNewUserDetails()
     const news = MOCK_DATA.news[2]
+    const newsPath = `/news/${news.slug}`
 
     const newComment = `An interesting new. The answer must be... ${commenter.username}`
-    const updatedNewComment = `An interesting new. The answer must be that when the sky is red, the apocalypse _might_ be on the way. Love, ${commenter.username}`
+    const updatedNewComment = `An interesting new. ${randomId}. The answer must be that when the sky is red, the apocalypse _might_ be on the way. Love, ${commenter.username}`
     const newReply = `Thanks Dave and Ben. What does everyone else think? - ${commenter.username}`
     const updatedNewReply = `Anyone else? Yours truly ${commenter.username}`
-    const newsPath = `/news/${news.slug}`
+    const secondReply = `Quick reply. ${commenter.username}. ${randomId}`
 
     cy.signUpNewUser(commenter)
 
@@ -61,7 +71,6 @@ describe('[News.Discussions]', () => {
     cy.step('Can edit their reply')
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
     cy.step('Another user can leave a reply')
-    const secondReply = `Quick reply. ${commenter.username}`
 
     cy.step('First commenter can respond')
     cy.logout()

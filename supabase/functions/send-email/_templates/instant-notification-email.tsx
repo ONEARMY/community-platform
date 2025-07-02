@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, Text } from '@react-email/components'
+import { Column, Link, Section, Text } from '@react-email/components'
 
 import { BoxText } from './components/box-text.tsx'
 import { Button } from './components/button.tsx'
@@ -17,7 +17,6 @@ const text = {
   color: '#686868',
   fontSize: '18px',
   lineHeight: '30px',
-  whiteSpace: 'pre',
 }
 
 interface IProps {

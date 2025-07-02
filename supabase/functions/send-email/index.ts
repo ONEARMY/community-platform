@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
 
     const settings = await getTenantSettings(req, email_data.redirect_to)
 
-    let html: string = ''
+    let html
     let subject: string = ''
     let to = user.email
 

@@ -199,10 +199,16 @@ export class NotificationDisplay {
         return `New research update on ${parentTitle}`
       }
       case 'comment': {
-        return `${notification.triggeredBy} has left a new comment`
+        if (notification.triggeredBy && notification.triggeredBy.username) {
+          return `${notification.triggeredBy.username} has left a new comment`
+        }
+        return 'A new comment notification'
       }
       case 'reply': {
-        return `${notification.triggeredBy} has left a new reply`
+        if (notification.triggeredBy && notification.triggeredBy.username) {
+          return `${notification.triggeredBy.username} has left a new reply`
+        }
+        return 'A new reply notification'
       }
       default: {
         return 'A new notification'

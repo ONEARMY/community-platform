@@ -1,15 +1,10 @@
 import React from 'react'
-import { Container, Section, Text } from '@react-email/components'
-
-const mainContainer = {
-  maxWidth: '600px',
-}
+import { Section, Text } from '@react-email/components'
 
 const text = {
   alignText: 'center',
   color: '#27272c',
   fontSize: '14px',
-  whiteSpace: 'pre-line',
 }
 
 interface IProps {
@@ -17,9 +12,7 @@ interface IProps {
 }
 
 export const Footer = ({ children }: IProps) => (
-  <Container style={mainContainer}>
-    <Section style={{ textAlign: 'center' }}>
-      <Text style={text}>{children}</Text>
-    </Section>
-  </Container>
+  <Section style={{ textAlign: 'center' }}>
+    <Text style={text}>{children}</Text>
+  </Section>
 )

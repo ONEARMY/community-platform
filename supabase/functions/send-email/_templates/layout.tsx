@@ -21,6 +21,7 @@ const body = {
   fontFamily: '"Varela Round", Arial, sans-serif',
   fontSize: '14px',
   color: '#000000',
+  maxWidth: '100%',
 }
 
 const card = {
@@ -38,13 +39,8 @@ const link = {
 }
 
 const mainContainer = {
-  maxWidth: '600px',
-}
-
-const wrapper = {
-  backgroundColor: '#f4f6f7',
-  maxWidth: 'none',
-  width: '100%',
+  maxWidth: '100%',
+  width: '600px',
 }
 
 type LayoutArgs = {
@@ -58,40 +54,36 @@ export const Layout = (props: LayoutArgs) => {
   const { children, preferencesUpdatePath, preview, settings } = props
 
   return (
-    <Html>
+    <Html lang="en">
       <Head />
       <Preview>{preview}</Preview>
       <Body style={body}>
-        <Container style={wrapper}>
-          <Container style={mainContainer}>
-            <Img
-              alt={settings.siteName}
-              height={85}
-              width={85}
-              src={settings.siteImage}
-              style={{ margin: '30px auto' }}
-            />
-            <Container style={card}>
-              <Section>{children}</Section>
-            </Container>
-            <Footer>
-              You are receiving important community updates by default. <br />
-              You can update your{' '}
-              <Link href={preferencesUpdatePath} style={link}>
-                {' '}
-                email preferences anytime
-              </Link>{' '}
-              or unsubscribe with ease. <br />
-              Something is not right? Send us{' '}
-              <Link
-                href={`${settings.siteUrl}/feedback/#page=email`}
-                style={link}
-              >
-                feedback
-              </Link>
-              .
-            </Footer>
-          </Container>
+        <Container style={mainContainer}>
+          <Img
+            alt={settings.siteName}
+            height="85px"
+            width="85px"
+            src={settings.siteImage}
+            style={{ margin: '30px auto' }}
+          />
+          <Section style={card}>{children}</Section>
+          <Footer>
+            You are receiving important community updates by default. <br />
+            You can update your{' '}
+            <Link href={preferencesUpdatePath} style={link}>
+              {' '}
+              email preferences anytime
+            </Link>{' '}
+            or unsubscribe with ease. <br />
+            Something is not right? Send us{' '}
+            <Link
+              href={`${settings.siteUrl}/feedback/#page=email`}
+              style={link}
+            >
+              feedback
+            </Link>
+            .
+          </Footer>
         </Container>
       </Body>
     </Html>

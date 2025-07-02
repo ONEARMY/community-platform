@@ -1,11 +1,15 @@
 import type {
   DBNotificationsPreferences,
-  NotificationsPreferencesFormData,
+  NotificationsPreferencesViaEmailFormData,
 } from 'oa-shared'
 
-const getPreferences = async (): Promise<DBNotificationsPreferences | null> => {
+const getPreferences = async (
+  userCode: string,
+): Promise<DBNotificationsPreferences | null> => {
   try {
-    const preferencesData = await fetch('/api/notifications-preferences')
+    const preferencesData = await fetch(
+      `/api/notifications-preferences-via-email/${userCode}`,
+    )
     const { preferences } = await preferencesData.json()
     return preferences
   } catch (err) {
@@ -15,21 +19,22 @@ const getPreferences = async (): Promise<DBNotificationsPreferences | null> => {
   return null
 }
 
-const setPreferences = async (data: NotificationsPreferencesFormData) => {
+const setPreferences = async (
+  data: NotificationsPreferencesViaEmailFormData,
+) => {
   const formData = new FormData()
 
-  data.id && formData.append('id', data.id.toString())
   formData.append('comments', data.comments.toString())
   formData.append('replies', data.replies.toString())
   formData.append('research_updates', data.research_updates.toString())
 
-  return fetch('/api/notifications-preferences', {
+  return fetch(`/api/notifications-preferences-via-email/${data.userCode}`, {
     method: 'POST',
     body: formData,
   })
 }
 
-export const notificationsPreferencesService = {
+export const notificationsPreferencesViaEmailService = {
   getPreferences,
   setPreferences,
 }

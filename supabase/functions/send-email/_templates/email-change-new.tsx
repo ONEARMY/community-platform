@@ -38,9 +38,14 @@ export const EmailChangeNewEmail = (props: SignUpEmailProps) => {
   } = props
 
   const href = `${supabaseUrl}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${redirect_to}`
+  const preferencesUpdatePath = `${settings.siteUrl}/settings/notifications`
 
   return (
-    <Layout preview={copy.preview} settings={settings}>
+    <Layout
+      preferencesUpdatePath={preferencesUpdatePath}
+      preview={copy.preview}
+      settings={settings}
+    >
       <Heading>{copy.h1(username)}</Heading>
       <Hero>{copy.intro}</Hero>
       <PlainText>{copy.change(newEmail)}</PlainText>

@@ -83,6 +83,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     const comments = formData.get('comments') === 'true'
     const replies = formData.get('replies') === 'true'
     const researchUpdates = formData.get('research_updates') === 'true'
+    const isUnsubscribed = formData.get('is_unsubscribed') === 'true'
 
     if (existingPreferencesId) {
       await client
@@ -91,6 +92,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
           comments,
           replies,
           research_updates: researchUpdates,
+          is_unsubscribed: isUnsubscribed,
         })
         .eq('id', existingPreferencesId)
         .select()
@@ -103,6 +105,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
       comments,
       replies,
       research_updates: researchUpdates,
+      is_unsubscribed: isUnsubscribed,
       tenant_id: process.env.TENANT_ID!,
     })
 

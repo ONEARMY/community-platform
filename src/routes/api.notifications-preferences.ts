@@ -39,6 +39,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const comments = formData.get('comments') === 'true'
     const replies = formData.get('replies') === 'true'
     const researchUpdates = formData.get('research_updates') === 'true'
+    const isUnsubscribed = formData.get('is_unsubscribed') === 'true'
 
     const {
       data: { user },
@@ -57,6 +58,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           comments,
           replies,
           research_updates: researchUpdates,
+          is_unsubscribed: isUnsubscribed,
         })
         .eq('id', id)
         .select()
@@ -80,6 +82,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       comments,
       replies,
       research_updates: researchUpdates,
+      is_unsubscribed: isUnsubscribed,
       tenant_id: process.env.TENANT_ID!,
     })
 

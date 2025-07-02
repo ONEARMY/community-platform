@@ -21,14 +21,14 @@ export const SupabaseNotifications = () => {
       ? true
       : user?.isContactableByPublic
 
-  const getPreferences = async () => {
+  const refreshPreferences = async () => {
     const preferences = await notificationsPreferencesService.getPreferences()
     setInitialValues(preferences)
     setIsLoading(false)
   }
 
   useEffect(() => {
-    getPreferences()
+    refreshPreferences()
   }, [])
 
   const onSubmit = async (values: DBNotificationsPreferences) => {
@@ -37,7 +37,23 @@ export const SupabaseNotifications = () => {
 
     try {
       await notificationsPreferencesService.setPreferences(values)
-      await getPreferences()
+      await refreshPreferences()
+      setSubmitResults({
+        type: 'success',
+        message: form.saveNotificationPreferences,
+      })
+    } catch (error) {
+      setSubmitResults({ type: 'error', message: error.message })
+    }
+  }
+
+  const onUnsubscribe = async () => {
+    setIsLoading(true)
+    setSubmitResults(null)
+
+    try {
+      await notificationsPreferencesService.setUnsubscribe(initialValues?.id)
+      await refreshPreferences()
       setSubmitResults({
         type: 'success',
         message: form.saveNotificationPreferences,
@@ -55,6 +71,7 @@ export const SupabaseNotifications = () => {
       isLoading={isLoading}
       hasMessagingOn={hasMessagingOn}
       onSubmit={onSubmit}
+      onUnsubscribe={onUnsubscribe}
       submitResults={submitResults}
     />
   )

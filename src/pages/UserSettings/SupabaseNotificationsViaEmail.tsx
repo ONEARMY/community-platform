@@ -17,7 +17,7 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
     useState<DBNotificationsPreferences | null>(null)
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
 
-  const getPreferences = async () => {
+  const refreshPreferences = async () => {
     const preferences =
       await notificationsPreferencesViaEmailService.getPreferences(userCode)
 
@@ -26,7 +26,7 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
   }
 
   useEffect(() => {
-    getPreferences()
+    refreshPreferences()
   }, [])
 
   const onSubmit = async (values: DBNotificationsPreferences) => {
@@ -38,7 +38,26 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
         ...values,
         userCode,
       })
-      await getPreferences()
+      await refreshPreferences()
+      setSubmitResults({
+        type: 'success',
+        message: form.saveNotificationPreferences,
+      })
+    } catch (error) {
+      setSubmitResults({ type: 'error', message: error.message })
+    }
+  }
+
+  const onUnsubscribe = async () => {
+    setIsLoading(true)
+    setSubmitResults(null)
+
+    try {
+      await notificationsPreferencesViaEmailService.setUnsubscribe(
+        userCode,
+        initialValues?.id,
+      )
+      await refreshPreferences()
       setSubmitResults({
         type: 'success',
         message: form.saveNotificationPreferences,
@@ -55,6 +74,7 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
       initialValues={initialValues}
       isLoading={isLoading}
       onSubmit={onSubmit}
+      onUnsubscribe={onUnsubscribe}
       submitResults={submitResults}
     />
   )

@@ -7,6 +7,7 @@ import { notificationsPreferencesServiceServer } from './notificationsPreference
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
   DBNotification,
+  DBNotificationsPreferences,
   NotificationContentType,
   NotificationsPreferenceTypes,
   Profile,
@@ -94,6 +95,10 @@ const shouldSendEmail = async (
       client,
       profileId,
     )
+
+  if ((preferences as DBNotificationsPreferences).is_unsubscribed) {
+    return false
+  }
 
   if (preferences) {
     return preferences[actionType]

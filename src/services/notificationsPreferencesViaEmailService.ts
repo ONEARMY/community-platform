@@ -27,8 +27,24 @@ const setPreferences = async (
   formData.append('comments', data.comments.toString())
   formData.append('replies', data.replies.toString())
   formData.append('research_updates', data.research_updates.toString())
+  formData.append('is_unsubscribed', 'false')
 
   return fetch(`/api/notifications-preferences-via-email/${data.userCode}`, {
+    method: 'POST',
+    body: formData,
+  })
+}
+
+const setUnsubscribe = async (userCode: string, id: number | undefined) => {
+  const formData = new FormData()
+
+  id && formData.append('id', id.toString())
+  formData.append('comments', 'false')
+  formData.append('replies', 'false')
+  formData.append('research_updates', 'false')
+  formData.append('is_unsubscribed', 'true')
+
+  return fetch(`/api/notifications-preferences-via-email/${userCode}`, {
     method: 'POST',
     body: formData,
   })
@@ -37,4 +53,5 @@ const setPreferences = async (
 export const notificationsPreferencesViaEmailService = {
   getPreferences,
   setPreferences,
+  setUnsubscribe,
 }

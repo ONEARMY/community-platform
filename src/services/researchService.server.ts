@@ -166,7 +166,7 @@ const isAllowedToEditResearchById = async (
 ) => {
   const researchResult = await client
     .from('research')
-    .select('id,created_by,collaborators')
+    .select('id,created_by,collaborators,author:profiles(id,username)')
     .eq('id', id)
     .single()
 

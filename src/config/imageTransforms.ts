@@ -1,19 +1,16 @@
-export type ImageSize = {
-  height: number
-  width: number
-}
+import type { TransformOptions } from '@supabase/storage-js'
 
-export const IMAGE_SIZES: { [key: string]: ImageSize } = {
+export const IMAGE_SIZES: { [key: string]: TransformOptions } = {
   LANDSCAPE: {
     width: 1280,
-    height: 960,
+    resize: 'contain',
   },
   GALLERY: {
     width: 956,
-    height: 450,
+    resize: 'contain',
   },
   LIST: {
     width: 478,
-    height: 225,
+    resize: 'contain',
   },
 }

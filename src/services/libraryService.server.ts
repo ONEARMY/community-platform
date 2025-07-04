@@ -91,7 +91,7 @@ const getProjectPublicMedia = (
     ? storageServiceServer.getPublicUrls(
         client,
         stepImages,
-        IMAGE_SIZES.LANDSCAPE,
+        IMAGE_SIZES.GALLERY,
       )
     : []
 

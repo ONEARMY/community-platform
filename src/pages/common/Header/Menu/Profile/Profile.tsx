@@ -1,12 +1,10 @@
 import { useState } from 'react'
 import Foco from 'react-foco'
-import { observer } from 'mobx-react'
 import { MemberBadge } from 'oa-components'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import { ProfileModal } from 'src/pages/common/Header/Menu/ProfileModal/ProfileModal'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
-import { cdnImageUrl } from 'src/utils/cdnImageUrl'
+import { profile } from 'src/stores/profile/profileStore'
 import { Avatar, Box, Flex } from 'theme-ui'
 
 import ProfileButtons from './ProfileButtons'
@@ -21,10 +19,7 @@ interface IProps {
   isMobile: boolean
 }
 
-const Profile = observer((props: IProps) => {
-  const { userStore } = useCommonStores().stores
-  const user = userStore.user
-
+const Profile = (props: IProps) => {
   const [state, setState] = useState<IState>({
     showProfileModal: false,
   })
@@ -36,7 +31,7 @@ const Profile = observer((props: IProps) => {
     }))
   }
 
-  if (!user) {
+  if (!profile.value) {
     return <ProfileButtons isMobile={props.isMobile} />
   }
 
@@ -50,7 +45,10 @@ const Profile = observer((props: IProps) => {
           mt: 1,
         }}
       >
-        <MenuMobileLink path={'/u/' + user.userName} content="Profile" />
+        <MenuMobileLink
+          path={'/u/' + profile.value.username}
+          content="Profile"
+        />
         {COMMUNITY_PAGES_PROFILE.map((page) => (
           <MenuMobileLink
             path={page.path}
@@ -71,11 +69,11 @@ const Profile = observer((props: IProps) => {
       }}
     >
       <Flex onClick={() => toggleProfileModal()} sx={{ ml: 1, height: '100%' }}>
-        {user.userImage?.downloadUrl ? (
+        {profile.value.photoUrl ? (
           <Avatar
             data-cy="header-avatar"
             loading="lazy"
-            src={cdnImageUrl(user.userImage?.downloadUrl, { width: 40 })}
+            src={profile.value.photoUrl}
             sx={{
               objectFit: 'cover',
               width: '40px',
@@ -84,7 +82,7 @@ const Profile = observer((props: IProps) => {
           />
         ) : (
           <MemberBadge
-            profileType={user.profileType}
+            profileType={'space'} // TODO
             sx={{ cursor: 'pointer' }}
           />
         )}
@@ -98,6 +96,6 @@ const Profile = observer((props: IProps) => {
       </Flex>
     </Box>
   )
-})
+}
 
 export default Profile

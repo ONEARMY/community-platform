@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Select } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { profilesService } from 'src/pages/Research/profiles.service'
+import { profilesService } from 'src/services/profilesService'
 import { useDebouncedCallback } from 'use-debounce'
 
 import type { IOption } from './LoadUserNameOptions'

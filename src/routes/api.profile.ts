@@ -1,3 +1,4 @@
+import { Profile } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
 export const loader = async ({ request }) => {
@@ -17,5 +18,7 @@ export const loader = async ({ request }) => {
     .eq('auth_id', user.id)
     .single()
 
-  return Response.json({ profile: data }, { headers, status: 200 })
+  const profile = Profile.fromDB(data)
+
+  return Response.json(profile, { headers, status: 200 })
 }

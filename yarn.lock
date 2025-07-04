@@ -8338,6 +8338,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@preact/signals-core@npm:^1.11.0":
+  version: 1.11.0
+  resolution: "@preact/signals-core@npm:1.11.0"
+  checksum: 10/aa47ba90492cc8d8c126a88513b1fac69fcd16f7455025e5431f5dc2ab4ff5b419e5b6e2be54c84b0c500d359fcc8d996272279d32e71d535c00715129721b43
+  languageName: node
+  linkType: hard
+
+"@preact/signals@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "@preact/signals@npm:2.2.1"
+  dependencies:
+    "@preact/signals-core": "npm:^1.11.0"
+  peerDependencies:
+    preact: ">= 10.25.0"
+  checksum: 10/82fed9aaf5f38699685885d4f7daf64a5675de19354b8f1d36472c74f93784d001a233a1dca87ae2f52b6f0afd11d6a729491e7ef35ce357f2831f508ea6a2f2
+  languageName: node
+  linkType: hard
+
 "@prisma/debug@npm:5.14.0-dev.34":
   version: 5.14.0-dev.34
   resolution: "@prisma/debug@npm:5.14.0-dev.34"
@@ -29245,6 +29263,7 @@ __metadata:
     "@emotion/styled": "npm:^11.11.5"
     "@esbuild-plugins/node-globals-polyfill": "npm:^0.2.3"
     "@faker-js/faker": "npm:^8.4.1"
+    "@preact/signals": "npm:^2.2.1"
     "@react-email/components": "npm:0.0.33"
     "@remix-run/dev": "npm:^2.12.1"
     "@remix-run/express": "npm:^2.12.1"

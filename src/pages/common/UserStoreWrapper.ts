@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { profileStore } from 'src/stores/profile/profileStore'
 
 import { SessionContext } from './SessionContext'
 
@@ -13,6 +14,7 @@ export const UserStoreWrapper = (props: { children: React.ReactNode }) => {
       return
     }
 
+    profileStore.refreshActiveUser()
     userStore.refreshActiveUserDetailsById(user.user_metadata.username)
   }, [user?.id])
 

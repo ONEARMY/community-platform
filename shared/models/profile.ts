@@ -5,6 +5,7 @@ import type { News } from './news'
 import type { IPatreonUser } from './patreon'
 import type { Question } from './question'
 import type { ResearchItem, ResearchUpdate } from './research'
+import type { ProfileTypeName } from './user'
 
 export class DBProfile {
   id: number
@@ -16,6 +17,10 @@ export class DBProfile {
   country: string
   patreon?: IPatreonUser
   roles: string[] | null
+  type: string | null
+  open_to_visitors: boolean | null
+  is_blocked_from_messaging: boolean | null
+  about: string | null
 
   constructor(obj: DBProfile) {
     Object.assign(this, obj)
@@ -32,6 +37,9 @@ export class Profile {
   country: string
   patreon?: IPatreonUser
   roles: string[] | null
+  type: ProfileTypeName
+  isBlockedFromMessaging: boolean
+  openToVisitors: boolean
 
   constructor(obj: Profile) {
     Object.assign(this, obj)
@@ -47,6 +55,9 @@ export class Profile {
       isVerified: dbProfile.is_verified,
       photoUrl: dbProfile.photo_url || null,
       roles: dbProfile.roles || null,
+      type: (dbProfile.type as ProfileTypeName) || 'member',
+      openToVisitors: !!dbProfile.open_to_visitors,
+      isBlockedFromMessaging: !!dbProfile.is_blocked_from_messaging,
     })
   }
 }

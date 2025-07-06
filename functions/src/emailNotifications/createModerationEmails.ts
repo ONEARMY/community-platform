@@ -6,7 +6,6 @@ import { MEMORY_LIMIT_512_MB } from '../consts'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
 import * as templates from './templateHelpers'
-import { getUserAndEmail } from './utils'
 
 import type { QueryDocumentSnapshot } from 'firebase-admin/firestore'
 import type { Change } from 'firebase-functions/v1'
@@ -26,31 +25,31 @@ export async function handleModerationUpdate<T extends IModerable>(
   }
 }
 
+// TODO migrate
 export async function createMapPinModerationEmail(mapPin: IMapPin) {
-  const { toUser, toUserEmail } = await getUserAndEmail(mapPin._id)
-
-  if (mapPin.moderation === IModerationStatus.ACCEPTED) {
-    await db.collection(DB_ENDPOINTS.emails).add({
-      to: toUserEmail,
-      message: templates.getMapPinApprovalEmail(toUser, mapPin),
-    })
-  } else if (mapPin.moderation === IModerationStatus.AWAITING_MODERATION) {
-    // If a pin is resumbitted, send another submission confirmation email.
-    await db.collection(DB_ENDPOINTS.emails).add({
-      to: toUserEmail,
-      message: templates.getMapPinSubmissionEmail(toUser, mapPin),
-    })
-  } else if (mapPin.moderation === IModerationStatus.REJECTED) {
-    await db.collection(DB_ENDPOINTS.emails).add({
-      to: toUserEmail,
-      message: templates.getMapPinRejectedEmail(toUser),
-    })
-  } else if (mapPin.moderation === IModerationStatus.IMPROVEMENTS_NEEDED) {
-    await db.collection(DB_ENDPOINTS.emails).add({
-      to: toUserEmail,
-      message: templates.getMapPinNeedsImprovementsEmail(toUser, mapPin),
-    })
-  }
+  // const { toUser, toUserEmail } = await getUserAndEmail(mapPin._id)
+  // if (mapPin.moderation === IModerationStatus.ACCEPTED) {
+  //   await db.collection(DB_ENDPOINTS.emails).add({
+  //     to: toUserEmail,
+  //     message: templates.getMapPinApprovalEmail(toUser, mapPin),
+  //   })
+  // } else if (mapPin.moderation === IModerationStatus.AWAITING_MODERATION) {
+  //   // If a pin is resumbitted, send another submission confirmation email.
+  //   await db.collection(DB_ENDPOINTS.emails).add({
+  //     to: toUserEmail,
+  //     message: templates.getMapPinSubmissionEmail(toUser, mapPin),
+  //   })
+  // } else if (mapPin.moderation === IModerationStatus.REJECTED) {
+  //   await db.collection(DB_ENDPOINTS.emails).add({
+  //     to: toUserEmail,
+  //     message: templates.getMapPinRejectedEmail(toUser),
+  //   })
+  // } else if (mapPin.moderation === IModerationStatus.IMPROVEMENTS_NEEDED) {
+  //   await db.collection(DB_ENDPOINTS.emails).add({
+  //     to: toUserEmail,
+  //     message: templates.getMapPinNeedsImprovementsEmail(toUser, mapPin),
+  //   })
+  // }
 }
 
 export const handleMapPinModerationUpdate = functions

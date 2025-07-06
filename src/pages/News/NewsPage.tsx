@@ -8,14 +8,14 @@ import {
   DisplayMarkdown,
   TagList,
 } from 'oa-components'
-import { type IUser, type News, UserRole } from 'oa-shared'
+import { type News, UserRole } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { FollowButtonAction } from 'src/common/FollowButtonAction'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
-import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
+import { useProfileStore } from 'src/stores/User/profile.store'
+import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpersNew'
 import {
   AspectRatio,
   Box,
@@ -38,15 +38,13 @@ export const NewsPage = observer(({ news }: IProps) => {
     news.subscriberCount,
   )
 
-  const { userStore } = useCommonStores().stores
-  const activeUser = userStore.activeUser
+  const { profile } = useProfileStore()
 
   const isEditable = useMemo(() => {
     return (
-      hasAdminRights(activeUser as IUser) ||
-      news.author?.username === activeUser?.userName
+      hasAdminRights(profile) || news.author?.username === profile?.username
     )
-  }, [activeUser, news.author])
+  }, [profile, news.author])
 
   return (
     <Box sx={{ width: '100%', maxWidth: '620px', alignSelf: 'center' }}>

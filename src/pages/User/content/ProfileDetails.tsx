@@ -55,7 +55,7 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
             <ProfileTags
               tagIds={tags}
               showVisitorModal={() => setShowVisitorModal(true)}
-              openToVisitors={openToVisitors}
+              openToVisitors={!!openToVisitors}
               isSpace={user.profileType !== ProfileTypeList.MEMBER}
             />
           )}

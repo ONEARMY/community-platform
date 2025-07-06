@@ -4,34 +4,22 @@ import { MemberBadge } from 'oa-components'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import { ProfileModal } from 'src/pages/common/Header/Menu/ProfileModal/ProfileModal'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
-import { profile } from 'src/stores/profile/profileStore'
+import { useProfileStore } from 'src/stores/User/profile.store'
 import { Avatar, Box, Flex } from 'theme-ui'
 
 import ProfileButtons from './ProfileButtons'
 
 import './profile.css'
 
-interface IState {
-  showProfileModal: boolean
-}
-
 interface IProps {
   isMobile: boolean
 }
 
 const Profile = (props: IProps) => {
-  const [state, setState] = useState<IState>({
-    showProfileModal: false,
-  })
+  const [showProfileModal, setShowProfileModal] = useState<boolean>(false)
+  const { profile: profile } = useProfileStore()
 
-  const toggleProfileModal = () => {
-    setState((state) => ({
-      ...state,
-      showProfileModal: !state.showProfileModal,
-    }))
-  }
-
-  if (!profile.value) {
+  if (!profile) {
     return <ProfileButtons isMobile={props.isMobile} />
   }
 
@@ -45,10 +33,7 @@ const Profile = (props: IProps) => {
           mt: 1,
         }}
       >
-        <MenuMobileLink
-          path={'/u/' + profile.value.username}
-          content="Profile"
-        />
+        <MenuMobileLink path={'/u/' + profile.username} content="Profile" />
         {COMMUNITY_PAGES_PROFILE.map((page) => (
           <MenuMobileLink
             path={page.path}
@@ -68,12 +53,15 @@ const Profile = (props: IProps) => {
         width: '93px',
       }}
     >
-      <Flex onClick={() => toggleProfileModal()} sx={{ ml: 1, height: '100%' }}>
-        {profile.value.photoUrl ? (
+      <Flex
+        onClick={() => setShowProfileModal((x) => !x)}
+        sx={{ ml: 1, height: '100%' }}
+      >
+        {profile.photoUrl ? (
           <Avatar
             data-cy="header-avatar"
             loading="lazy"
-            src={profile.value.photoUrl}
+            src={profile.photoUrl}
             sx={{
               objectFit: 'cover',
               width: '40px',
@@ -88,8 +76,8 @@ const Profile = (props: IProps) => {
         )}
       </Flex>
       <Flex>
-        {state.showProfileModal && (
-          <Foco onClickOutside={() => toggleProfileModal()}>
+        {showProfileModal && (
+          <Foco onClickOutside={() => setShowProfileModal(false)}>
             <ProfileModal />
           </Foco>
         )}

@@ -299,13 +299,10 @@ export class UserStore extends ModuleStore {
   }
 
   private async _updateUserRequest(userId: string, updateFields: PartialUser) {
-    const _lastActive = new Date().toISOString()
-
     return await this.db
       .collection<PartialUser>(COLLECTION_NAME)
       .doc(userId)
       .update({
-        _lastActive,
         ...updateFields,
       })
   }

@@ -7,6 +7,21 @@ type Slug = string
 type Id = number
 type Client = SupabaseClient
 
+const getDraftCount = async (
+  client: Client,
+  profileId: number,
+  table: ContentType,
+) => {
+  const { count } = await client
+    .from(table)
+    .select('id', { count: 'exact' })
+    .eq('is_draft', true)
+    .eq('created_by', profileId)
+    .or('deleted.eq.false,deleted.is.null')
+
+  return count
+}
+
 const getMetaFields = async (
   client: Client,
   id: Id,
@@ -80,6 +95,7 @@ function updatePreviousSlugs(content: IDBContentDoc, newSlug: Slug) {
 }
 
 export const contentServiceServer = {
+  getDraftCount,
   getMetaFields,
   incrementViewCount,
   isDuplicateExistingSlug,

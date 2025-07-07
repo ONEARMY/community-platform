@@ -78,7 +78,7 @@ describe('[Research]', () => {
 
       cy.get('[data-cy=draft]').click()
 
-      cy.get('[data-cy=research-draft]').should('be.visible')
+      cy.get('[data-cy=draft-tag]').should('be.visible')
 
       cy.step('Drafted Research should not appear on users profile')
       cy.visit('/u/' + admin.displayName)

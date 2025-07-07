@@ -10,7 +10,7 @@ describe('[Question]', () => {
     initialRandomId = generateAlphaNumeric(8).toLowerCase()
   })
 
-  it('[Create a question]', () => {
+  describe('[Create a question]', () => {
     const initialTitle = initialRandomId + ' Health cost of plastic?'
     const initialExpectedSlug = initialRandomId + '-health-cost-of-plastic'
     const initialQuestionDescription =
@@ -66,11 +66,16 @@ describe('[Question]', () => {
       })
 
       cy.get('[data-cy=draft]').click()
+
+      cy.step('Can get to drafts')
       cy.visit('/questions')
       cy.contains(initialTitle).should('not.exist')
+      cy.get('[data-cy=my-drafts').click()
+      cy.contains(initialTitle).click()
 
-      cy.visit(`/questions/${initialExpectedSlug}`)
-      cy.contains(initialTitle)
+      cy.step('Shows draft question')
+      cy.get('[data-cy=draft-tag]').should('be.visible')
+      cy.contains(initialQuestionDescription)
       cy.get('[data-cy=edit]').click()
 
       cy.step('Add category')
@@ -85,7 +90,6 @@ describe('[Question]', () => {
       cy.step('Submit question')
       cy.get('[data-cy=submit]').click()
 
-      cy.pause()
       cy.url().should('include', `/questions/${initialExpectedSlug}`)
 
       cy.step('All question fields visible')

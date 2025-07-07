@@ -5,6 +5,7 @@ import { logger } from 'src/logger'
 import { newsContentService } from 'src/pages/News/newsContent.service'
 import { Flex, Heading } from 'theme-ui'
 
+import useDrafts from '../common/Drafts/useDraftsSupabase'
 import { listing } from './labels'
 import { NewsListHeader } from './NewsListHeader'
 import { NewsListItem } from './NewsListItem'
@@ -15,6 +16,11 @@ import type { NewsSortOption } from './NewsSortOptions'
 export const NewsListing = () => {
   const [isFetching, setIsFetching] = useState<boolean>(true)
   const [news, setNews] = useState<News[]>([])
+  const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } =
+    useDrafts<News>({
+      getDraftCount: newsContentService.getDraftCount,
+      getDrafts: newsContentService.getDrafts,
+    })
   const [total, setTotal] = useState<number>(0)
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -63,9 +69,15 @@ export const NewsListing = () => {
   const showLoadMore =
     !isFetching && news && news.length > 0 && news.length < total
 
+  const newsList = showDrafts ? drafts : news
+
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 4], alignItems: 'center' }}>
-      <NewsListHeader />
+      <NewsListHeader
+        draftCount={draftCount}
+        handleShowDrafts={handleShowDrafts}
+        showDrafts={showDrafts}
+      />
 
       <Flex
         sx={{
@@ -81,7 +93,7 @@ export const NewsListing = () => {
           </Heading>
         )}
 
-        {news && news.length > 0 && (
+        {newsList && newsList.length > 0 && (
           <Flex
             as="ul"
             sx={{
@@ -93,7 +105,7 @@ export const NewsListing = () => {
             }}
             variant="responsive"
           >
-            {news.map((news, index) => (
+            {newsList.map((news, index) => (
               <NewsListItem key={index} news={news} query={q} />
             ))}
           </Flex>
@@ -111,7 +123,7 @@ export const NewsListing = () => {
           </Flex>
         )}
       </Flex>
-      {isFetching && <Loader />}
+      {(isFetching || isFetchingDrafts) && <Loader />}
     </Flex>
   )
 }

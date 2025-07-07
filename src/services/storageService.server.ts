@@ -39,7 +39,7 @@ const uploadImage = async (
   for (const file of files) {
     const result = await client.storage
       .from(process.env.TENANT_ID as string)
-      .upload(`${path}/${file.name}`, file)
+      .upload(`${path}/${file.name}`, file, { upsert: true })
 
     if (result.data === null) {
       errors.push(`Error uploading file: ${file.name}`)

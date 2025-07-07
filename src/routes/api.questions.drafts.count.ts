@@ -19,7 +19,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const count = await contentServiceServer.getDraftCount(
     client,
     profileId,
-    'research',
+    'questions',
   )
 
   return Response.json({ total: count }, { headers })

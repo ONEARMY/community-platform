@@ -25,6 +25,7 @@ import {
 } from 'theme-ui'
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
+import { DraftTag } from '../common/Drafts/DraftTag'
 
 import type { IUser, News } from 'oa-shared'
 
@@ -90,6 +91,8 @@ export const NewsPage = observer(({ news }: IProps) => {
           <Text variant="auxiliary">
             <DisplayDate action={'Published'} createdAt={news.createdAt} />
           </Text>
+
+          {news.isDraft && <DraftTag />}
 
           {isEditable && (
             <ClientOnly fallback={<></>}>

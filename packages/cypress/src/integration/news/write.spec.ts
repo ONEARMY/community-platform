@@ -57,19 +57,25 @@ describe('[News.Write]', () => {
       cy.addToMarkdownField(initialNewsBodyThree)
 
       cy.get('[data-cy=draft]').click()
+
+      cy.step('Can get to drafts')
       cy.visit('/news')
       cy.contains(initialTitle).should('not.exist')
-
-      cy.visit(`/news/${initialExpectedSlug}`)
+      cy.get('[data-cy=my-drafts').click()
       cy.contains(initialTitle)
+      cy.get('[data-cy="news-list-item-button"]').first().click()
+
+      cy.step('Shows draft news')
+      cy.get('[data-cy=draft-tag]').should('be.visible')
+      cy.contains(initialNewsBodyOne)
+
+      cy.step('Submit news')
       cy.get('[data-cy=edit]').click()
 
       cy.selectTag(category, '[data-cy=category-select]')
-
       cy.selectTag(tag1, '[data-cy="tag-select"]')
       cy.selectTag(tag2, '[data-cy="tag-select"]')
 
-      cy.step('Submit news')
       cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=submit]').click()
 

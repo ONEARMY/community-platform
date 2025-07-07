@@ -20,6 +20,7 @@ import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
+import { DraftTag } from '../common/Drafts/DraftTag'
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 
 import type { IUser, Question } from 'oa-shared'
@@ -100,6 +101,9 @@ export const QuestionPage = observer(({ question }: IProps) => {
                       onUsefulClick(voted ? 'delete' : 'add')
                     }
                   />
+
+                  {question.isDraft && <DraftTag />}
+
                   {isEditable && (
                     <Link to={'/questions/' + question.slug + '/edit'}>
                       <Button type="button" variant="primary" data-cy="edit">

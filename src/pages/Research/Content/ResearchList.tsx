@@ -78,6 +78,8 @@ const ResearchList = () => {
     setIsFetching(false)
   }
 
+  const researchItemList = showDrafts ? drafts : researchItems
+
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
       <ResearchFilterHeader
@@ -86,52 +88,39 @@ const ResearchList = () => {
         showDrafts={showDrafts}
       />
 
-      {showDrafts ? (
+      {((researchItems && researchItems.length !== 0) || showDrafts) && (
         <ul
           style={{ listStyle: 'none', padding: 0, margin: 0 }}
           data-cy="ResearchList"
         >
-          {drafts.map((item) => {
-            return <ResearchListItem key={item.id} item={item} />
-          })}
+          {researchItemList.map((item) => (
+            <ResearchListItem key={item.id} item={item} />
+          ))}
         </ul>
-      ) : (
-        <>
-          {researchItems && researchItems.length !== 0 && (
-            <ul
-              style={{ listStyle: 'none', padding: 0, margin: 0 }}
-              data-cy="ResearchList"
-            >
-              {researchItems.map((item) => (
-                <ResearchListItem key={item.id} item={item} />
-              ))}
-            </ul>
-          )}
-
-          {!isFetching && researchItems?.length === 0 && (
-            <Box sx={{ marginBottom: 5 }}>{listing.noItems}</Box>
-          )}
-
-          {!isFetching &&
-            researchItems &&
-            researchItems.length > 0 &&
-            researchItems.length < total && (
-              <Flex
-                sx={{
-                  justifyContent: 'center',
-                }}
-              >
-                <Button
-                  type="button"
-                  data-cy="loadMoreButton"
-                  onClick={() => fetchResearchItems(researchItems.length)}
-                >
-                  {listing.loadMore}
-                </Button>
-              </Flex>
-            )}
-        </>
       )}
+
+      {!isFetching && researchItems?.length === 0 && (
+        <Box sx={{ marginBottom: 5 }}>{listing.noItems}</Box>
+      )}
+
+      {!isFetching &&
+        researchItems &&
+        researchItems.length > 0 &&
+        researchItems.length < total && (
+          <Flex
+            sx={{
+              justifyContent: 'center',
+            }}
+          >
+            <Button
+              type="button"
+              data-cy="loadMoreButton"
+              onClick={() => fetchResearchItems(researchItems.length)}
+            >
+              {listing.loadMore}
+            </Button>
+          </Flex>
+        )}
 
       {(isFetching || isFetchingDrafts) && <Loader />}
     </Flex>

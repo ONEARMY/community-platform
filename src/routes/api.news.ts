@@ -189,13 +189,15 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const news = News.fromDB(newsResult.data[0], [])
-
     subscribersServiceServer.add('news', news.id, profile.id, client)
-    notifyDiscord(
-      news,
-      profile,
-      new URL(request.url).origin.replace('http:', 'https:'),
-    )
+
+    if (!news.isDraft) {
+      notifyDiscord(
+        news,
+        profile,
+        new URL(request.url).origin.replace('http:', 'https:'),
+      )
+    }
 
     if (uploadedHeroImageFile) {
       const mediaFiles = await storageServiceServer.uploadImage(

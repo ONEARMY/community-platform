@@ -8,7 +8,13 @@ import { contact } from 'src/pages/User/labels'
 import { required } from 'src/utils/validators'
 import { Box, Label } from 'theme-ui'
 
-export const UserContactFieldMessage = () => {
+interface UserContactFieldMessageProps {
+  isUserLoggedOut: boolean
+}
+
+export const UserContactFieldMessage = ({
+  isUserLoggedOut,
+}: UserContactFieldMessageProps) => {
   const { title, placeholder } = contact.message
   const name = 'message'
 
@@ -34,6 +40,7 @@ export const UserContactFieldMessage = () => {
         validate={required}
         validateFields={[]}
         showCharacterCount
+        disabled={isUserLoggedOut}
       />
     </Box>
   )

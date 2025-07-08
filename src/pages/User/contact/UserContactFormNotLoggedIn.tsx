@@ -66,7 +66,7 @@ export const UserContactFormNotLoggedIn = observer(({ user }: Props) => {
       </Box>
       <Flex
         sx={{ flexDirection: 'column', margin: 30, pointerEvents: 'none' }}
-        data-cy="UserContactForm"
+        data-cy="UserContactNotLoggedIn"
       >
         <Heading as="h3" variant="small" my={2}>
           {`${title} ${user.displayName}`}

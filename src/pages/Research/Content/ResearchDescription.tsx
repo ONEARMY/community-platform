@@ -250,7 +250,7 @@ const ResearchDescription = ({
       <ContentStatistics
         statistics={[
           {
-            icon: 'view',
+            icon: 'show',
             label: buildStatisticsLabel({
               stat: research.totalViews || 0,
               statUnit: 'view',

@@ -69,7 +69,7 @@ export const SettingsPage = observer(() => {
   const NotificationsTabs = {
     title: 'Notifications',
     body: <SettingsPageNotifications />,
-    glyph: 'thunderbolt' as availableGlyphs,
+    glyph: 'megaphone' as availableGlyphs,
   }
 
   const accountTab = {

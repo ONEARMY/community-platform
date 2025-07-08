@@ -143,7 +143,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 
           {props.totalViews > 0 && (
             <Flex data-testid="profile-views-stat">
-              <Icon glyph="view" size={22} />
+              <Icon glyph="show" size={22} />
               <Box ml={1}>{`Views: ${props.totalViews}`}</Box>
             </Flex>
           )}

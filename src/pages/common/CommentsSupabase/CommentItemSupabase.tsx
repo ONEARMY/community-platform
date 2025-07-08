@@ -91,7 +91,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
                   contentType="comments"
                   iconFollow="discussionFollow"
                   iconUnfollow="discussionUnfollow"
-                  item={comment}
+                  itemId={comment.id}
                   labelFollow="Follow replies"
                   labelUnfollow="Unfollow replies"
                   sx={{ fontSize: 1 }}
@@ -104,7 +104,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
             <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
               <FollowButtonAction
                 contentType="comments"
-                item={comment}
+                itemId={comment.id}
                 labelFollow="Follow replies"
                 labelUnfollow="Unfollow replies"
                 showIconOnly

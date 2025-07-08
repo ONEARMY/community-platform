@@ -281,7 +281,7 @@ const ResearchDescription = ({
             }),
           },
           {
-            icon: 'thunderbolt-grey',
+            icon: 'megaphone-inactive',
             label: buildStatisticsLabel({
               stat: subscribersCount || 0,
               statUnit: 'following',

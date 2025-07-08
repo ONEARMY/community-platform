@@ -8,11 +8,8 @@ import {
   DisplayMarkdown,
   TagList,
 } from 'oa-components'
-import { type IUser, type News, UserRole } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
-import { AuthWrapper } from 'src/common/AuthWrapper'
-import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
@@ -28,6 +25,8 @@ import {
 } from 'theme-ui'
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
+
+import type { IUser, News } from 'oa-shared'
 
 interface IProps {
   news: News
@@ -125,7 +124,7 @@ export const NewsPage = observer(({ news }: IProps) => {
                   }),
                 },
                 {
-                  icon: 'thunderbolt-grey',
+                  icon: 'megaphone-inactive',
                   label: buildStatisticsLabel({
                     stat: subscribersCount,
                     statUnit: 'following',
@@ -160,17 +159,7 @@ export const NewsPage = observer(({ news }: IProps) => {
               authors={news.author?.id ? [news.author?.id] : []}
               sourceId={news.id}
               sourceType="news"
-              followButton={
-                <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
-                  <FollowButtonAction
-                    labelFollow="Follow Comments"
-                    labelUnfollow="Following Comments"
-                    contentType="news"
-                    item={news}
-                    setSubscribersCount={setSubscribersCount}
-                  />
-                </AuthWrapper>
-              }
+              setSubscribersCount={setSubscribersCount}
             />
           </Card>
         )}

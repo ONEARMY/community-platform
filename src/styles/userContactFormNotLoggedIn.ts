@@ -1,0 +1,40 @@
+import type { ThemeUIStyleObject } from 'theme-ui'
+
+export const contactFormStyles: Record<string, ThemeUIStyleObject> = {
+  blurOverlay: {
+    position: 'absolute',
+    top: -1,
+    left: -1,
+    right: -1,
+    bottom: -1,
+    zIndex: 10,
+    backdropFilter: 'blur(6px)',
+    WebkitBackdropFilter: 'blur(6px)',
+    backgroundColor: 'rgba(160, 160, 160, 0.4)',
+    pointerEvents: 'auto',
+    borderRadius: 2,
+    border: '2px solid black',
+  },
+  overlayContent: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 20,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    pointerEvents: 'auto',
+  },
+  button: {
+    px: 4,
+    py: 2,
+    borderRadius: 2,
+    minWidth: '100px',
+    fontWeight: 'bold',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+}

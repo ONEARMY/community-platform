@@ -30,6 +30,7 @@ export const UserContactForm = observer(({ user }: Props) => {
   const { button, title, successMessage } = contact
   const buttonName = 'contact-submit'
   const formId = 'contact-form'
+  const isUserLoggedOut = false
 
   const onSubmit = async (formValues, form) => {
     setSubmitResults(null)
@@ -65,8 +66,8 @@ export const UserContactForm = observer(({ user }: Props) => {
               <Flex sx={{ flexDirection: 'column', gap: 2 }}>
                 <UserContactError submitResults={submitResults} />
 
-                <UserContactFieldName />
-                <UserContactFieldMessage />
+                <UserContactFieldName isUserLoggedOut={isUserLoggedOut} />
+                <UserContactFieldMessage isUserLoggedOut={isUserLoggedOut} />
 
                 <Box sx={{ flexSelf: 'flex-start' }}>
                   <Button

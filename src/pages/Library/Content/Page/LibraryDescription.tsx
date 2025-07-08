@@ -327,7 +327,7 @@ export const LibraryDescription = (props: IProps) => {
       <ContentStatistics
         statistics={[
           {
-            icon: 'view',
+            icon: 'show',
             label: buildStatisticsLabel({
               stat: item.totalViews,
               statUnit: 'view',

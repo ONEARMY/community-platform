@@ -27,6 +27,6 @@ export const Styled: StoryFn<typeof ExternalLink> = () => (
 export const WithIcon: StoryFn<typeof ExternalLink> = () => (
   <ExternalLink href="#">
     <Text>Link Text</Text>
-    <Icon glyph="external-link" ml={[1]}></Icon>
+    <Icon glyph="external-url" ml={[1]}></Icon>
   </ExternalLink>
 )

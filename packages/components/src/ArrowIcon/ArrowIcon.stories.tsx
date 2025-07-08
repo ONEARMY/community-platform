@@ -1,6 +1,6 @@
 import { Arrow } from './ArrowIcon'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   /* 👇 The title prop is optional.

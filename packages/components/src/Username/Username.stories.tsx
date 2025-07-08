@@ -1,6 +1,6 @@
 import { Username } from './Username'
 
-import type { Meta } from '@storybook/react'
+import type { Meta } from '@storybook/react-vite'
 
 export default {
   title: 'Components/Username',

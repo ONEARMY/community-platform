@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 
 import { ContentStatistics } from './ContentStatistics'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Layout/ContentStatistics',

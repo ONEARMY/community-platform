@@ -2,7 +2,7 @@ import { Alert, Text } from 'theme-ui'
 
 import { SettingsFormWrapper } from './SettingsFormWrapper'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Forms/SettingsFormWrapper',

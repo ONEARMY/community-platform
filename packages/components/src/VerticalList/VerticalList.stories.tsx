@@ -2,7 +2,7 @@ import { Box } from 'theme-ui'
 
 import { VerticalList } from './VerticalList.client'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Components/VerticalList',

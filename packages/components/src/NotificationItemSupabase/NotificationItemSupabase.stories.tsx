@@ -3,7 +3,7 @@ import { Flex, Heading } from 'theme-ui'
 import { fakeDisplayNotification } from '../utils'
 import { NotificationItemSupabase } from './NotificationItemSupabase'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Components/NotificationItemSupabase',

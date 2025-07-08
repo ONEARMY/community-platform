@@ -2,7 +2,7 @@ import { Card, Checkbox, Text } from 'theme-ui'
 
 import { GridForm } from './GridForm'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Components/GridForm',

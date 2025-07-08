@@ -1,7 +1,7 @@
 import { fakeCommentSB } from '../utils'
 import { CommentDisplay } from './CommentDisplay'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Commenting/CommentDisplay',

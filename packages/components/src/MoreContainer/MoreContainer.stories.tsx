@@ -2,7 +2,7 @@ import { Flex, Heading } from 'theme-ui'
 
 import { MoreContainer } from './MoreContainer'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Layout/MoreContainer',

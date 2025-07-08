@@ -1,7 +1,7 @@
 import { createFakeComments, fakeComment } from '../utils'
 import { CommentList } from './CommentList'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Commenting/CommentList',

@@ -1,6 +1,6 @@
 import { CreateReply } from './CreateReply'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Commenting/CreateReply',

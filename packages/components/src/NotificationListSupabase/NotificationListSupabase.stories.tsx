@@ -1,7 +1,7 @@
 import { fakeDisplayNotification } from '../utils'
 import { NotificationListSupabase } from './NotificationListSupabase'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Components/NotificationListSupabase',

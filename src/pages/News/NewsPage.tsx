@@ -119,7 +119,7 @@ export const NewsPage = observer(({ news }: IProps) => {
             <ContentStatistics
               statistics={[
                 {
-                  icon: 'view',
+                  icon: 'show',
                   label: buildStatisticsLabel({
                     stat: news.totalViews,
                     statUnit: 'view',

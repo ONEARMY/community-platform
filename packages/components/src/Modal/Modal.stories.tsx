@@ -1,6 +1,6 @@
 import { Modal } from './Modal'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Layout/Modal',

@@ -3,7 +3,7 @@ import { Box } from 'theme-ui'
 
 import { Tab, TabPanel, Tabs, TabsList } from './TabbedContent'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Components/TabbedContent',

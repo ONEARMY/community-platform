@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { createFakeComments } from '../utils'
 import { ButtonShowReplies } from './ButtonShowReplies'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Components/ButtonShowReplies',

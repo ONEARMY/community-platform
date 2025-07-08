@@ -2,7 +2,7 @@ import { subMonths } from 'date-fns'
 
 import { DisplayDate } from './DisplayDate'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   /* 👇 The title prop is optional.

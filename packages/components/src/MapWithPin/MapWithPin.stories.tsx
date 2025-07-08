@@ -2,7 +2,7 @@ import { useRef } from 'react'
 
 import { MapWithPin } from './MapWithPin.client'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 import type { Map } from 'react-leaflet'
 
 export default {

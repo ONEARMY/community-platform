@@ -1,6 +1,6 @@
 import { MapFilterList } from './MapFilterList'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 import type { MapFilterOptionsList } from 'oa-shared'
 
 export default {

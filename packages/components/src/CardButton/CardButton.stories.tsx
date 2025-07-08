@@ -1,6 +1,6 @@
 import { CardButton } from './CardButton'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Components/CardButton',

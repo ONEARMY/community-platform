@@ -1,6 +1,6 @@
 import { Alert } from 'theme-ui'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Layout/Alert',

@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@theme-ui/core'
-import type { Preview } from '@storybook/react'
+import type { Preview } from '@storybook/react-vite'
 import React from 'react'
 
 import { Global } from '@emotion/react'

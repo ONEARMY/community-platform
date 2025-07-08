@@ -7,7 +7,6 @@ import {
   UserContactFieldName,
 } from 'src/pages/User/contact'
 import { contact } from 'src/pages/User/labels'
-import { contactFormStyles } from 'src/styles/userContactFormNotLoggedIn'
 import { isUserContactable } from 'src/utils/helpers'
 import { Box, Flex, Heading } from 'theme-ui'
 
@@ -27,16 +26,46 @@ export const UserContactFormNotLoggedIn = observer(({ user }: Props) => {
   const { button, title } = contact
   const buttonName = 'contact-submit'
   const formId = 'contact-form'
-  const isUserLoggedOut = true
 
   return (
     <Box sx={{ position: 'relative' }}>
-      <Box sx={contactFormStyles.blurOverlay} />
-      <Box sx={contactFormStyles.overlayContent}>
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: -1,
+          zIndex: 10,
+          backdropFilter: 'blur(6px)',
+          WebkitBackdropFilter: 'blur(6px)',
+          backgroundColor: 'rgba(160, 160, 160, 0.4)',
+          pointerEvents: 'auto',
+          borderRadius: 2,
+          border: '2px solid black',
+        }}
+      />
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 20,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          pointerEvents: 'auto',
+        }}
+      >
         <Flex sx={{ gap: 4, alignItems: 'center' }}>
           <Button
             variant="primary"
-            sx={contactFormStyles.button}
+            sx={{
+              px: 4,
+              py: 2,
+              borderRadius: 2,
+              minWidth: '100px',
+              fontWeight: 'bold',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
             onClick={() => navigate('/sign-up')}
           >
             Register
@@ -44,7 +73,15 @@ export const UserContactFormNotLoggedIn = observer(({ user }: Props) => {
           or
           <Button
             variant="secondary"
-            sx={contactFormStyles.button}
+            sx={{
+              px: 4,
+              py: 2,
+              borderRadius: 2,
+              minWidth: '100px',
+              fontWeight: 'bold',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
             onClick={() => navigate('/sign-in')}
           >
             Log In
@@ -52,13 +89,12 @@ export const UserContactFormNotLoggedIn = observer(({ user }: Props) => {
         </Flex>
         <Heading
           as="h4"
-          mb={3}
-          mt={2}
           sx={{
             color: 'black',
             px: 3,
             py: 1,
             borderRadius: 4,
+            marginY: 3,
           }}
         >
           To send a message.
@@ -89,7 +125,6 @@ export const UserContactFormNotLoggedIn = observer(({ user }: Props) => {
                       data-testid={buttonName}
                       variant="primary"
                       type="submit"
-                      disabled={isUserLoggedOut}
                       form={formId}
                     >
                       {button}

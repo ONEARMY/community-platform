@@ -7,13 +7,16 @@ export class NotificationsPreferences {
   isUnsubscribed: boolean
 }
 
-export class DBNotificationsPreferences {
-  id: number
-  user_id: number
+export class DBNotificationsPreferencesFields {
   comments: boolean
   replies: boolean
   research_updates: boolean
   is_unsubscribed: boolean
+}
+
+export class DBNotificationsPreferences extends DBNotificationsPreferencesFields {
+  id: number
+  user_id: number
 }
 
 export type NotificationsPreferenceTypes =

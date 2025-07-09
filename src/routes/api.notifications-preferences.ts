@@ -1,16 +1,20 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
-import type { ActionFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
+import type { DBNotificationsPreferencesFields } from 'oa-shared'
 
-export const DEFAULT_NOTIFICATION_PREFERENCES = {
-  comments: true,
-  replies: true,
-  research_updates: true,
-}
+export const DEFAULT_NOTIFICATION_PREFERENCES: DBNotificationsPreferencesFields =
+  {
+    comments: true,
+    replies: true,
+    research_updates: true,
+    is_unsubscribed: false,
+  }
 
-export const loader = async ({ request }) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
+
   const {
     data: { user },
   } = await client.auth.getUser()
@@ -38,15 +42,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const id = formData.has('id') ? Number(formData.get('id') as string) : null
     const comments = formData.get('comments') === 'true'
     const replies = formData.get('replies') === 'true'
-    const researchUpdates = formData.get('research_updates') === 'true'
-    const isUnsubscribed = formData.get('is_unsubscribed') === 'true'
+    const research_updates = formData.get('research_updates') === 'true'
+    const is_unsubscribed = formData.get('is_unsubscribed') === 'true'
 
     const {
       data: { user },
     } = await client.auth.getUser()
 
     const { valid, status, statusText } = await validateRequest(request, user)
-
     if (!valid) {
       return Response.json({}, { status, statusText })
     }
@@ -57,8 +60,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         .update({
           comments,
           replies,
-          research_updates: researchUpdates,
-          is_unsubscribed: isUnsubscribed,
+          research_updates,
+          is_unsubscribed,
         })
         .eq('id', id)
         .select()
@@ -81,24 +84,25 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       user_id: data.id,
       comments,
       replies,
-      research_updates: researchUpdates,
-      is_unsubscribed: isUnsubscribed,
+      research_updates,
+      is_unsubscribed,
       tenant_id: process.env.TENANT_ID!,
     })
 
     return Response.json({}, { headers, status: 200 })
   } catch (error) {
+    console.error('Action error:', error)
     return Response.json({ error }, { headers, status: 500 })
   }
 }
 
 async function validateRequest(request: Request, user: User | null) {
   if (!user) {
-    return { status: 401, statusText: 'Unauthorized' }
+    return { valid: false, status: 401, statusText: 'Unauthorized' }
   }
 
   if (request.method !== 'POST') {
-    return { status: 405, statusText: 'Method not allowed' }
+    return { valid: false, status: 405, statusText: 'Method not allowed' }
   }
 
   return { valid: true }

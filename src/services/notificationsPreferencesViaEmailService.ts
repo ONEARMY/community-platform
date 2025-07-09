@@ -7,23 +7,27 @@ const getPreferences = async (
   userCode: string,
 ): Promise<DBNotificationsPreferences | null> => {
   try {
-    const preferencesData = await fetch(
+    const response = await fetch(
       `/api/notifications-preferences-via-email/${userCode}`,
     )
-    const { preferences } = await preferencesData.json()
+
+    if (!response.ok) {
+      console.error(`HTTP error! status: ${response.status}`)
+      return null
+    }
+
+    const { preferences } = await response.json()
     return preferences
   } catch (err) {
     console.error(err)
+    return null
   }
-
-  return null
 }
 
 const setPreferences = async (
   data: NotificationsPreferencesViaEmailFormData,
-) => {
+): Promise<Response> => {
   const formData = new FormData()
-
   formData.append('comments', data.comments.toString())
   formData.append('replies', data.replies.toString())
   formData.append('research_updates', data.research_updates.toString())
@@ -35,10 +39,14 @@ const setPreferences = async (
   })
 }
 
-const setUnsubscribe = async (userCode: string, id: number | undefined) => {
+const setUnsubscribe = async (
+  userCode: string,
+  id?: number,
+): Promise<Response> => {
   const formData = new FormData()
-
-  id && formData.append('id', id.toString())
+  if (id) {
+    formData.append('id', id.toString())
+  }
   formData.append('comments', 'false')
   formData.append('replies', 'false')
   formData.append('research_updates', 'false')

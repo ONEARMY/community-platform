@@ -10,9 +10,8 @@ const getPreferences = async (): Promise<DBNotificationsPreferences | null> => {
     return preferences
   } catch (err) {
     console.error(err)
+    return null
   }
-
-  return null
 }
 
 const setPreferences = async (data: NotificationsPreferencesFormData) => {

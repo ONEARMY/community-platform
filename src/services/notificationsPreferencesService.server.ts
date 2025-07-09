@@ -1,7 +1,10 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBNotificationsPreferences } from 'oa-shared'
 
-const getPreferences = async (client: SupabaseClient, profileId: number) => {
+const getPreferences = async (
+  client: SupabaseClient,
+  profileId: number,
+): Promise<DBNotificationsPreferences | null> => {
   try {
     const { data } = await client
       .from('notifications_preferences')
@@ -9,15 +12,11 @@ const getPreferences = async (client: SupabaseClient, profileId: number) => {
       .eq('user_id', profileId)
       .single()
 
-    if (data) {
-      return data as DBNotificationsPreferences
-    }
+    return data as DBNotificationsPreferences
   } catch (error) {
-    console.error(error)
-    return Response.json(error, { status: 500, statusText: error.statusText })
+    console.error('Failed to get notifications preferences:', error)
+    throw Response.json(error, { status: 500, statusText: error.statusText })
   }
-
-  return null
 }
 
 export const notificationsPreferencesServiceServer = {

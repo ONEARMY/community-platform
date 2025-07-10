@@ -1,8 +1,4 @@
-import {
-  action,
-  DEFAULT_NOTIFICATION_PREFERENCES,
-  loader,
-} from 'src/routes/api.notifications-preferences'
+import { action, loader } from 'src/routes/api.notifications-preferences'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { createMockSupabaseClient } from '../utils/supabaseClientMock'
@@ -76,6 +72,12 @@ describe('loader', () => {
 
   it('returns default preferences when no data found', async () => {
     const mockUser = { id: 'user123' }
+    const defaultPreferences = {
+      comments: true,
+      replies: true,
+      research_updates: true,
+      is_unsubscribed: false,
+    }
 
     mockClient.mocks.auth.getUser.mockResolvedValue({
       data: { user: mockUser },
@@ -86,7 +88,7 @@ describe('loader', () => {
     const result = await response.json()
 
     expect(response.status).toBe(200)
-    expect(result).toEqual({ preferences: DEFAULT_NOTIFICATION_PREFERENCES })
+    expect(result).toEqual({ preferences: defaultPreferences })
   })
 
   it('returns 401 when user is not authenticated', async () => {

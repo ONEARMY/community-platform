@@ -29,7 +29,7 @@ const createInstantNotificationEmail = async (
   profileId: number,
 ) => {
   try {
-    // Temporarily only for beta-testers
+    // Temporarily only for admins, beta-testers, research_creators
     const profileResponse = await client
       .from('profiles')
       .select('created_at,roles')
@@ -42,7 +42,12 @@ const createInstantNotificationEmail = async (
     }
 
     const roles = profileResponse.data.roles as Profile['roles']
-    if (!roles?.includes('beta-tester')) {
+    const approvedRoles = ['admin', 'beta-tester', 'research_creator']
+    const hasPlatformRole = !!roles?.every((role) =>
+      approvedRoles.includes(role),
+    )
+
+    if (!hasPlatformRole) {
       return
     }
 

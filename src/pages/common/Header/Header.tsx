@@ -176,7 +176,13 @@ const Header = observer(() => {
                 isMobileMenuActive={showMobileNotifications}
                 areThereNotifications={areThereNotifications}
               />
-              <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+              <AuthWrapper
+                roleRequired={[
+                  UserRole.BETA_TESTER,
+                  UserRole.RESEARCH_CREATOR,
+                  UserRole.ADMIN,
+                ]}
+              >
                 <NotificationsSupabase device="mobile" />
               </AuthWrapper>
             </MobileNotificationsWrapper>
@@ -203,7 +209,13 @@ const Header = observer(() => {
                     userNotificationsStore.markAllNotificationsNotified()
                   }
                 />
-                <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+                <AuthWrapper
+                  roleRequired={[
+                    UserRole.BETA_TESTER,
+                    UserRole.RESEARCH_CREATOR,
+                    UserRole.ADMIN,
+                  ]}
+                >
                   <NotificationsSupabase device="desktop" />
                 </AuthWrapper>
               </>
@@ -259,7 +271,13 @@ const Header = observer(() => {
                   userNotificationsStore.markAllNotificationsNotified()
                 }
               />
-              <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+              <AuthWrapper
+                roleRequired={[
+                  UserRole.BETA_TESTER,
+                  UserRole.RESEARCH_CREATOR,
+                  UserRole.ADMIN,
+                ]}
+              >
                 <NotificationsSupabase device="mobile" />
               </AuthWrapper>
             </MobileMenuWrapper>

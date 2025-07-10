@@ -238,7 +238,13 @@ export const CommentSectionSupabase = (props: IProps) => {
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
         <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
           <CommentsTitle comments={comments} />
-          <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+          <AuthWrapper
+            roleRequired={[
+              UserRole.BETA_TESTER,
+              UserRole.RESEARCH_CREATOR,
+              UserRole.ADMIN,
+            ]}
+          >
             <FollowButtonAction
               labelFollow="Follow Comments"
               labelUnfollow="Following Comments"

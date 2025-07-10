@@ -23,7 +23,13 @@ export const SettingsPageNotifications = () => {
       </Flex>
 
       <FirebaseNotifications />
-      <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+      <AuthWrapper
+        roleRequired={[
+          UserRole.BETA_TESTER,
+          UserRole.RESEARCH_CREATOR,
+          UserRole.ADMIN,
+        ]}
+      >
         <SupabaseNotifications />
       </AuthWrapper>
     </Flex>

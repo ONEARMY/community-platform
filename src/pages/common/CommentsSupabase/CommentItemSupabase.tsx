@@ -56,7 +56,11 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
   }, [activeUser])
 
   const item = 'CommentItem'
-  const isBetaTester = isUserAuthorized(activeUser, UserRole.BETA_TESTER)
+  const hasPlatformRole = isUserAuthorized(activeUser, [
+    UserRole.BETA_TESTER,
+    UserRole.RESEARCH_CREATOR,
+    UserRole.ADMIN,
+  ])
 
   useEffect(() => {
     if (comment.highlighted) {
@@ -85,8 +89,14 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
           setShowDeleteModal={setShowDeleteModal}
           setShowEditModal={setShowEditModal}
           followButton={
-            isBetaTester && (
-              <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+            hasPlatformRole && (
+              <AuthWrapper
+                roleRequired={[
+                  UserRole.BETA_TESTER,
+                  UserRole.RESEARCH_CREATOR,
+                  UserRole.ADMIN,
+                ]}
+              >
                 <FollowButtonAction
                   contentType="comments"
                   iconFollow="discussionFollow"
@@ -101,7 +111,13 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
             )
           }
           followButtonIcon={
-            <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+            <AuthWrapper
+              roleRequired={[
+                UserRole.BETA_TESTER,
+                UserRole.RESEARCH_CREATOR,
+                UserRole.ADMIN,
+              ]}
+            >
               <FollowButtonAction
                 contentType="comments"
                 itemId={comment.id}

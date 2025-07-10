@@ -55,46 +55,18 @@ export const UserContactFormNotLoggedIn = observer(({ user }: Props) => {
         }}
       >
         <Flex sx={{ gap: 4, alignItems: 'center' }}>
-          <Button
-            variant="primary"
-            sx={{
-              px: 4,
-              py: 2,
-              borderRadius: 2,
-              minWidth: '100px',
-              fontWeight: 'bold',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            onClick={() => navigate('/sign-up')}
-          >
+          <Button variant="primary" onClick={() => navigate('/sign-up')}>
             Register
           </Button>
           or
-          <Button
-            variant="secondary"
-            sx={{
-              px: 4,
-              py: 2,
-              borderRadius: 2,
-              minWidth: '100px',
-              fontWeight: 'bold',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            onClick={() => navigate('/sign-in')}
-          >
+          <Button variant="secondary" onClick={() => navigate('/sign-in')}>
             Log In
           </Button>
         </Flex>
         <Heading
           as="h4"
           sx={{
-            color: 'black',
-            px: 3,
-            py: 1,
-            borderRadius: 4,
-            marginY: 3,
+            padding: 3,
           }}
         >
           To send a message.
@@ -115,8 +87,8 @@ export const UserContactFormNotLoggedIn = observer(({ user }: Props) => {
             return (
               <form>
                 <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-                  <UserContactFieldName isUserLoggedOut />
-                  <UserContactFieldMessage isUserLoggedOut />
+                  <UserContactFieldName />
+                  <UserContactFieldMessage />
 
                   <Box sx={{ flexSelf: 'flex-start' }}>
                     <Button

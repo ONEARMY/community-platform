@@ -3,13 +3,7 @@ import { FieldInput } from 'oa-components'
 import { contact } from 'src/pages/User/labels'
 import { Box, Label } from 'theme-ui'
 
-interface UserContactFieldNameProps {
-  isUserLoggedOut: boolean
-}
-
-export const UserContactFieldName = ({
-  isUserLoggedOut,
-}: UserContactFieldNameProps) => {
+export const UserContactFieldName = () => {
   const { title, placeholder } = contact.name
   const name = 'name'
 
@@ -24,7 +18,6 @@ export const UserContactFieldName = ({
         placeholder={placeholder}
         sx={{ backgroundColor: 'white' }}
         validateFields={[]}
-        disabled={isUserLoggedOut}
       />
     </Box>
   )

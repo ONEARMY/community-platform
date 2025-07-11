@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { Map } from './Map.client'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Map/Map',

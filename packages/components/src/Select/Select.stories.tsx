@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { Select } from './Select'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Forms/Select',

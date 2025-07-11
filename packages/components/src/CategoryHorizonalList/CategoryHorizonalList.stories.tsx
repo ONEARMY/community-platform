@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { CategoryHorizonalList } from './CategoryHorizonalList'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 import type { Category, ContentType } from 'oa-shared'
 
 export default {

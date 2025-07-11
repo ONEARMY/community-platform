@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { DonationRequestModal } from './DonationRequestModal'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Components/DonationRequestModal',

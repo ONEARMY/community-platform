@@ -12,7 +12,7 @@ describe('ContentStatistics', () => {
     )
 
     const expectedIcons = [
-      '/assets/icons/icon-views.svg',
+      '/assets/icons/eye.svg',
       '/assets/icons/icon-star-default.svg',
       '/assets/icons/icon-comment.svg',
       '/assets/icons/icon-update.svg',

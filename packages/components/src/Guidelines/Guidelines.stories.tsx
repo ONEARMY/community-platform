@@ -1,7 +1,7 @@
 import { ExternalLink } from '../ExternalLink/ExternalLink'
 import { Guidelines } from './Guidelines'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Forms/Guidelines',

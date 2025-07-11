@@ -49,7 +49,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
       ),
       description:
         'Top-level comments on your contributions or contributions you follow',
-      glyph: 'discussion',
+      glyph: 'comment',
       name: 'New comments',
     },
     {
@@ -78,7 +78,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
         />
       ),
       description: 'Updates for the research that you follow.',
-      glyph: 'thunderbolt',
+      glyph: 'research',
       name: 'Research Updates',
     },
     {
@@ -91,7 +91,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
       ),
       description:
         'Password resets, email verifications and other service emails',
-      glyph: 'email-outline',
+      glyph: 'email',
       name: 'Service emails',
     },
   ]
@@ -111,7 +111,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
         </InternalLink>
       ),
       description: 'Through the contact form on your profile page',
-      glyph: 'comment',
+      glyph: 'discussion',
       name: 'Receiving messages',
     })
   }

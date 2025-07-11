@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 
 import { ContentStatistics } from './ContentStatistics'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Layout/ContentStatistics',
@@ -13,7 +13,7 @@ export const Default: StoryFn<typeof ContentStatistics> = () => (
   <ContentStatistics
     statistics={[
       {
-        icon: 'view',
+        icon: 'show',
         label: `${faker.datatype.number()} views`,
       },
       {
@@ -36,7 +36,7 @@ export const SingleCount: StoryFn<typeof ContentStatistics> = () => (
   <ContentStatistics
     statistics={[
       {
-        icon: 'view',
+        icon: 'show',
         label: '1 view',
       },
       {

@@ -1,6 +1,6 @@
 import { Textarea } from 'theme-ui'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Forms/Textarea',

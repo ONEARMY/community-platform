@@ -1,7 +1,7 @@
 import { fakeComment } from '../utils'
 import { CommentItem } from './CommentItem'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Commenting/CommentItem',

@@ -4,7 +4,7 @@ import { Button } from '../Button/Button'
 import { LoggedOutWithCount } from '../UsefulStatsButton/UsefulStatsButton.stories'
 import { ArticleCallToActionSupabase } from './ArticleCallToActionSupabase'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 import type { Author } from 'oa-shared'
 
 export default {

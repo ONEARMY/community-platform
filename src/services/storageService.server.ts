@@ -1,13 +1,13 @@
 import { Image, MediaFile } from 'oa-shared'
 
+import type { TransformOptions } from '@supabase/storage-js'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBMedia } from 'oa-shared'
-import type { ImageSize } from 'src/config/imageTransforms'
 
 const getPublicUrls = (
   client: SupabaseClient,
   images: DBMedia[],
-  size?: ImageSize,
+  size?: TransformOptions,
 ): Image[] => {
   return images?.map((x) => {
     const { data } = client.storage

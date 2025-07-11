@@ -127,7 +127,11 @@ const getResearchPublicMedia = (
   }
 
   return allImages
-    ? storageServiceServer.getPublicUrls(client, allImages, IMAGE_SIZES.GALLERY)
+    ? storageServiceServer.getPublicUrls(
+        client,
+        allImages,
+        IMAGE_SIZES.LANDSCAPE,
+      )
     : []
 }
 

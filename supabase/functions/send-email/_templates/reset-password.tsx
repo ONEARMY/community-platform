@@ -29,14 +29,9 @@ export const ResetPasswordEmail = (props: ResetPasswordProps) => {
   const { username, redirect_to, settings, token_hash } = props
 
   const href = `${redirect_to}?token=${token_hash}`
-  const preferencesUpdatePath = `${settings.siteUrl}/settings/notifications`
 
   return (
-    <Layout
-      preferencesUpdatePath={preferencesUpdatePath}
-      preview={copy.preview}
-      settings={settings}
-    >
+    <Layout emailType="service" preview={copy.preview} settings={settings}>
       <Heading>{copy.h1(username)}</Heading>
       <Hero>{copy.intro}</Hero>
 

@@ -10,18 +10,13 @@ import { SettingsPageImpact } from './SettingsPageImpact'
 
 let mockUser = FactoryUser()
 
-vi.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/stores/User/profile.store', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
-  useCommonStores: () => ({
-    stores: {
-      userStore: {
-        activeUser: mockUser,
-      },
-    },
+  useProfileStore: () => ({
+    profile: mockUser,
   }),
 }))
-
 describe('SettingsPageImpact', () => {
   it('renders existing and missing impact', async () => {
     mockUser = FactoryUser({

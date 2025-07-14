@@ -7,16 +7,16 @@ import { isModuleSupported, MODULE } from 'src/modules'
 import { EnvironmentContext } from 'src/pages/common/EnvironmentContext'
 import { Box, Divider, Flex, Paragraph } from 'theme-ui'
 
-import type { IUser, UserCreatedDocs } from 'oa-shared'
+import type { Profile, UserCreatedDocs } from 'oa-shared'
 
 interface IProps {
   docs: UserCreatedDocs
-  user: IUser
+  user: Profile
   selectTab: (target: string) => void
 }
 
 export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
-  const { about, location, tags, openToVisitors, userName } = user
+  const { about, location, tags, openToVisitors, username } = user
   const [showVisitorModal, setShowVisitorModal] = useState(false)
 
   const hideVisitorDetails = (target?: string) => {
@@ -56,7 +56,7 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
               tagIds={tags}
               showVisitorModal={() => setShowVisitorModal(true)}
               openToVisitors={!!openToVisitors}
-              isSpace={user.profileType !== ProfileTypeList.MEMBER}
+              isSpace={user.type !== ProfileTypeList.MEMBER}
             />
           )}
           {about && <Paragraph>{about}</Paragraph>}
@@ -84,10 +84,10 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
             roleRequired={UserRole.BETA_TESTER}
             fallback={
               <UserStatistics
-                userName={userName}
+                userName={username}
                 country={country}
-                isVerified={!!user.badges?.verified}
-                isSupporter={!!user.badges?.supporter}
+                isVerified={!!user.isVerified}
+                isSupporter={!!user.isSupporter}
                 libraryCount={docs?.projects.length || 0}
                 usefulCount={user.totalUseful || 0}
                 researchCount={docs?.research.length || 0}
@@ -97,14 +97,14 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
             }
           >
             <UserStatistics
-              userName={userName}
+              userName={username}
               country={country}
-              isVerified={!!user.badges?.verified}
-              isSupporter={!!user.badges?.supporter}
+              isVerified={!!user.isVerified}
+              isSupporter={!!user.isSupporter}
               libraryCount={docs?.projects.length || 0}
               usefulCount={user.totalUseful || 0}
               researchCount={docs?.research.length || 0}
-              totalViews={user.total_views || 0}
+              totalViews={user.totalViews || 0}
               questionCount={docs?.questions.length || 0}
             />
           </AuthWrapper>

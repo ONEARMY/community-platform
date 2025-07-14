@@ -1,23 +1,21 @@
 import { ProfileTypeList } from 'oa-shared'
 
-import type { IUserDB } from 'oa-shared'
+import type { Profile } from 'oa-shared'
 
 const nonMemberProfileTypes = Object.values(ProfileTypeList).filter(
   (type) => type !== 'member',
 )
 
-export const isProfileComplete = (user: IUserDB): boolean => {
-  const { about, coverImages, displayName, userImage } = user
+export const isProfileComplete = (user: Profile): boolean => {
+  const { about, coverImages, displayName, photo } = user
 
   const isBasicInfoFilled = !!(about && displayName)
 
-  const isMember = user.profileType === ProfileTypeList.MEMBER
-  const isSpace = !!nonMemberProfileTypes.find(
-    (type) => type === user.profileType,
-  )
+  const isMember = user.type === ProfileTypeList.MEMBER
+  const isSpace = !!nonMemberProfileTypes.find((type) => type === user.type)
 
-  const isMemberFilled = isMember && !!userImage?.downloadUrl
-  const isSpaceFilled = isSpace && coverImages && !!coverImages[0]?.downloadUrl
+  const isMemberFilled = isMember && !!photo?.id
+  const isSpaceFilled = isSpace && !!coverImages && !!coverImages[0]?.publicUrl
 
   return isBasicInfoFilled && (isMemberFilled || isSpaceFilled)
 }

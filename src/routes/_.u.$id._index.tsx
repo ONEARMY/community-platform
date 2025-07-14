@@ -1,23 +1,24 @@
 import { useLoaderData } from '@remix-run/react'
+import { AuthorVotes, Profile } from 'oa-shared'
 import { ProfilePage } from 'src/pages/User/content/ProfilePage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { libraryServiceServer } from 'src/services/libraryService.server'
-import { pageViewService } from 'src/services/pageViewService.server'
+import { profileServiceServer } from 'src/services/profileService.server'
 import { questionServiceServer } from 'src/services/questionService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
-import { userService } from 'src/services/userService.server'
+import { storageServiceServer } from 'src/services/storageService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 import { Text } from 'theme-ui'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { IUserDB, UserCreatedDocs } from 'oa-shared'
+import type { UserCreatedDocs } from 'oa-shared'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
 
   const username = params.id as string
-  const [profile, projects, research, questions] = await Promise.all([
-    userService.getById(username),
+  const [profileDb, projects, research, questions] = await Promise.all([
+    profileServiceServer.getByUsername(username, client),
     libraryServiceServer.getUserProjects(client, username),
     researchServiceServer.getUserResearch(client, username),
     questionServiceServer.getQuestionsByUser(client, username),
@@ -29,14 +30,36 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     questions,
   } as UserCreatedDocs
 
-  if (profile?._id) {
+  if (!profileDb) {
+    return Response.json({ profile: null, headers })
+  }
+
+  const authorVotesDb = await profileServiceServer.getAuthorUsefulVotes(
+    profileDb.id,
+    client,
+  )
+  const authorVotes = authorVotesDb
+    ? authorVotesDb.map((x) => AuthorVotes.fromDB(x))
+    : undefined
+  const [photo] = profileDb.photo
+    ? storageServiceServer.getPublicUrls(client, [profileDb.photo])
+    : []
+  const coverImages = profileDb.cover_images
+    ? storageServiceServer.getPublicUrls(client, profileDb.cover_images)
+    : undefined
+
+  if (profileDb?.id) {
     // not awaited to not block the render
-    pageViewService.incrementViewCount('users', profile._id)
+    profileServiceServer.incrementViewCount(
+      profileDb.id,
+      profileDb.total_views,
+      client,
+    )
   }
 
   return Response.json(
     {
-      profile,
+      profile: Profile.fromDB(profileDb, photo, coverImages, authorVotes),
       userCreatedDocs,
     },
     { headers },
@@ -50,7 +73,7 @@ export function HydrateFallback() {
 }
 
 export const meta = mergeMeta<typeof loader>(({ data }) => {
-  const profile = data?.profile as IUserDB
+  const profile = data?.profile as Profile
 
   if (!profile) {
     return []
@@ -63,7 +86,7 @@ export const meta = mergeMeta<typeof loader>(({ data }) => {
 
 export default function Index() {
   const data = useLoaderData<typeof loader>()
-  const profile = data.profile as IUserDB
+  const profile = data.profile as Profile
   const userCreatedDocs = data.userCreatedDocs as UserCreatedDocs
 
   if (!profile) {

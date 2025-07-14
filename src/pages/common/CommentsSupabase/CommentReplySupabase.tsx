@@ -8,7 +8,7 @@ import {
   Modal,
 } from 'oa-components'
 import { UserRole } from 'oa-shared'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { useProfileStore } from 'src/stores/User/profile.store'
 import { Box, Flex, Text } from 'theme-ui'
 
 import type { Reply } from 'oa-shared'
@@ -27,13 +27,12 @@ export const CommentReply = observer(
     const [showEditModal, setShowEditModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
 
-    const { userStore } = useCommonStores().stores
-    const { activeUser } = userStore
+    const { profile: activeUser } = useProfileStore()
 
     const isEditable = useMemo(() => {
       return (
-        activeUser?._id === comment.createdBy?.username ||
-        activeUser?.userRoles?.includes(UserRole.ADMIN)
+        activeUser?.username === comment.createdBy?.username ||
+        activeUser?.roles?.includes(UserRole.ADMIN)
       )
     }, [activeUser, comment])
 

@@ -12,7 +12,7 @@ import {
 import { ClientOnly } from 'remix-utils/client-only'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { useProfileStore } from 'src/stores/User/profile.store'
-import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpersNew'
+import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
 import {
   AspectRatio,
   Box,

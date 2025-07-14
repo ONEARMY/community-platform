@@ -1,8 +1,8 @@
 import { type Dispatch, type SetStateAction, useEffect, useState } from 'react'
 import { FollowButton } from 'oa-components'
 import { subscribersService } from 'src/services/subscribersService'
+import { useProfileStore } from 'src/stores/User/profile.store'
 
-import { useCommonStores } from './hooks/useCommonStores'
 import { trackEvent } from './Analytics'
 
 import type { OptionalFollowButtonProps } from 'oa-components'
@@ -19,9 +19,7 @@ interface IProps extends OptionalFollowButtonProps {
 export const FollowButtonAction = (props: IProps) => {
   const { contentType, hideSubscribeIcon, itemId, setSubscribersCount } = props
   const [subscribed, setSubscribed] = useState<boolean>(false)
-
-  const { userStore } = useCommonStores().stores
-  const activeUser = userStore.activeUser
+  const { profile } = useProfileStore()
 
   useEffect(() => {
     const getSubscribed = async () => {
@@ -32,13 +30,13 @@ export const FollowButtonAction = (props: IProps) => {
       setSubscribed(subscribed)
     }
 
-    if (activeUser) {
+    if (profile) {
       getSubscribed()
     }
-  }, [activeUser, itemId])
+  }, [profile, itemId])
 
   const onFollowClick = async () => {
-    if (!activeUser?._id) {
+    if (!profile) {
       return
     }
 
@@ -75,7 +73,7 @@ export const FollowButtonAction = (props: IProps) => {
     <FollowButton
       {...props}
       hasUserSubscribed={subscribed}
-      isLoggedIn={!!activeUser}
+      isLoggedIn={!!profile}
       onFollowClick={onFollowClick}
     />
   )

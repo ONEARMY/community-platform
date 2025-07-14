@@ -1,26 +1,47 @@
 import type { Comment } from './comment'
-import type { SubscribableContentTypes } from './common'
+import type {
+  IConvertedFileMeta,
+  ILocation,
+  SubscribableContentTypes,
+} from './common'
 import type { IDBDocSB, IDoc } from './document'
+import type { DBMedia, Image } from './media'
 import type { News } from './news'
 import type { IPatreonUser } from './patreon'
 import type { Question } from './question'
 import type { ResearchItem, ResearchUpdate } from './research'
-import type { ProfileTypeName } from './user'
+import type { Tag } from './tag'
+import type {
+  IExternalLink,
+  IUserImpact,
+  ProfileTypeName,
+  UserVisitorPreference,
+} from './user'
 
 export class DBProfile {
   id: number
+  created_at: Date
   username: string
   display_name: string
   is_verified: boolean
   is_supporter: boolean
-  photo_url: string | null
+  photo: DBMedia | null
+  cover_images: DBMedia[] | null
   country: string
   patreon?: IPatreonUser
   roles: string[] | null
   type: string | null
-  open_to_visitors: boolean | null
+  open_to_visitors: UserVisitorPreference | null
   is_blocked_from_messaging: boolean | null
   about: string | null
+  impact: IUserImpact
+  is_contactable: boolean
+  last_active: Date | null
+  links: IExternalLink[] | null
+  location: ILocation
+  map_pin_description: string | null
+  tags: number[]
+  total_views: number
 
   constructor(obj: DBProfile) {
     Object.assign(this, obj)
@@ -29,35 +50,64 @@ export class DBProfile {
 
 export class Profile {
   id: number
+  createdAt: Date
   username: string
   displayName: string
   isVerified: boolean
   isSupporter: boolean
-  photoUrl: string | null
   country: string
-  patreon?: IPatreonUser
-  roles: string[] | null
+  about: string | null
   type: ProfileTypeName
+  impact: IUserImpact
+  photo: Image | null
+  isContactable: boolean
   isBlockedFromMessaging: boolean
-  openToVisitors: boolean
+  openToVisitors: UserVisitorPreference | null
+  links: IExternalLink[] | null
+  location: ILocation
+  tags?: Tag[]
+  totalViews: number
+  roles: string[] | null
+  lastActive: Date | null
+  coverImages: Image[] | null
+  patreon: IPatreonUser | null
+  mapPinDescription: string
+  authorUsefulVotes?: AuthorVotes[]
 
   constructor(obj: Profile) {
     Object.assign(this, obj)
   }
 
-  static fromDB(dbProfile: DBProfile) {
+  static fromDB(
+    dbProfile: DBProfile,
+    photo: Image = null,
+    coverImages: Image[] = null,
+    authorVotes?: AuthorVotes[],
+  ) {
     return new Profile({
       id: dbProfile.id,
+      createdAt: dbProfile.created_at,
       country: dbProfile.country,
       displayName: dbProfile.display_name,
       username: dbProfile.username,
+      photo: photo,
       isSupporter: dbProfile.is_supporter,
       isVerified: dbProfile.is_verified,
-      photoUrl: dbProfile.photo_url || null,
       roles: dbProfile.roles || null,
       type: (dbProfile.type as ProfileTypeName) || 'member',
-      openToVisitors: !!dbProfile.open_to_visitors,
+      openToVisitors: dbProfile.open_to_visitors,
       isBlockedFromMessaging: !!dbProfile.is_blocked_from_messaging,
+      about: dbProfile.about,
+      coverImages: coverImages,
+      impact: dbProfile.impact,
+      isContactable: !!dbProfile.is_contactable,
+      lastActive: dbProfile.last_active,
+      links: dbProfile.links,
+      location: dbProfile.location,
+      mapPinDescription: dbProfile.map_pin_description,
+      patreon: dbProfile.patreon,
+      totalViews: dbProfile.total_views,
+      authorUsefulVotes: authorVotes,
     })
   }
 }
@@ -71,7 +121,7 @@ type NotificationContent = News | Comment | Question | ResearchUpdate
 type NotificationSourceContentType = SubscribableContentTypes
 type NotificationSourceContent = News | Question | ResearchItem
 
-type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photoUrl'>
+type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photo'>
 
 export class DBNotification implements IDBDocSB {
   readonly id: number
@@ -320,7 +370,7 @@ export class NotificationDisplay {
   }
 
   static setSidebarImage(author: BasicAuthorDetails | undefined): string {
-    return author?.photoUrl || ''
+    return author?.photo?.publicUrl || ''
   }
 
   static setSlug(notification: Notification) {
@@ -387,4 +437,89 @@ export type NewNotificationData = {
   sourceContentType: NotificationSourceContentType
   sourceContentId: number
   triggeredById: number
+}
+
+export type ProfileFormData = {
+  displayName: string
+  tagIds: number[]
+  about: string
+  country: string
+  links: IExternalLink[]
+  isContactable: boolean
+  type: ProfileTypeName
+  existingImageId?: string
+  image?: IConvertedFileMeta
+  existingCoverImageIds?: string[]
+  coverImages?: IConvertedFileMeta[]
+  showVisitorPolicy: boolean
+  visitorPolicy: UserVisitorPreference
+}
+
+export class DBMapPin {
+  readonly id: number
+  readonly profile: DBProfile
+  user_id: number
+  name: string
+  country: string
+  country_code: string
+  administrative: string
+  postcode: string
+  description: string
+  lat: number
+  lng: number
+}
+
+export class MapPin {
+  readonly id: number
+  readonly userId: number
+  readonly profile: Profile
+  name: string
+  country: string
+  countryCode: string
+  administrative: string
+  postcode: string
+  description: string
+  lat: number
+  lng: number
+
+  constructor(obj: MapPin) {
+    Object.assign(this, obj)
+  }
+
+  static fromDB(pin: DBMapPin) {
+    return new MapPin({
+      id: pin.id,
+      userId: pin.user_id,
+      profile: pin.profile ? Profile.fromDB(pin.profile) : undefined,
+      name: pin.name,
+      country: pin.country,
+      countryCode: pin.country_code,
+      administrative: pin.administrative,
+      postcode: pin.postcode,
+      description: pin.description,
+      lat: pin.lat,
+      lng: pin.lng,
+    })
+  }
+}
+
+export interface DBAuthorVotes {
+  content_type: string
+  vote_count: number
+}
+
+export class AuthorVotes {
+  contentType: string
+  voteCount: number
+
+  constructor(obj: AuthorVotes) {
+    Object.assign(this, obj)
+  }
+
+  static fromDB(dbVotes: DBAuthorVotes) {
+    return new AuthorVotes({
+      contentType: dbVotes.content_type,
+      voteCount: dbVotes.vote_count,
+    })
+  }
 }

@@ -7,22 +7,18 @@ import { UserRole } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { AuthWrapper } from 'src/common/AuthWrapper'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isModuleSupported, MODULE } from 'src/modules'
 import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
 import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
 import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
-import { NotificationsDesktop } from 'src/pages/common/Header/Menu/Notifications/NotificationsDesktop'
-import { NotificationsIcon } from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
-import { NotificationsMobile } from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import { notificationSupabaseService } from 'src/services/notificationSupabaseService'
+import { useProfileStore } from 'src/stores/User/profile.store'
 import { Flex, Text, useThemeUI } from 'theme-ui'
 
 import { EnvironmentContext } from '../EnvironmentContext'
 import { NotificationsContext } from '../NotificationsContext'
 import { NotificationsSupabase } from './Menu/Notifications/NotificationsSupabase'
-import { getFormattedNotifications } from './getFormattedNotifications'
 import { MobileMenuContext } from './MobileMenuContext'
 
 import type { NotificationDisplay } from 'oa-shared'
@@ -89,14 +85,8 @@ const AnimationContainer = (props: any) => {
 const Header = observer(() => {
   const { theme } = useThemeUI()
   const env = useContext(EnvironmentContext)
-  const { userNotificationsStore } = useCommonStores().stores
-  const user = userNotificationsStore.user
-  const notifications = getFormattedNotifications(
-    userNotificationsStore.getUnreadNotifications(),
-  )
-  const [showMobileNotifications, setShowMobileNotifications] = useState(false)
-  const areThereNotifications = Boolean(notifications.length)
-  const isLoggedInUser = !!user
+  const { profile } = useProfileStore()
+  const isLoggedIn = !!profile
   const [isVisible, setIsVisible] = useState(false)
 
   // New notifications states
@@ -145,7 +135,7 @@ const Header = observer(() => {
         >
           <Flex>
             <Logo />
-            {isLoggedInUser && (
+            {isLoggedIn && (
               <AuthWrapper roleRequired={UserRole.BETA_TESTER} borderLess>
                 <Flex
                   className="user-beta-icon"
@@ -167,15 +157,8 @@ const Header = observer(() => {
               </AuthWrapper>
             )}
           </Flex>
-          {isLoggedInUser && (
+          {isLoggedIn && (
             <MobileNotificationsWrapper>
-              <NotificationsIcon
-                onCLick={() =>
-                  setShowMobileNotifications(!showMobileNotifications)
-                }
-                isMobileMenuActive={showMobileNotifications}
-                areThereNotifications={areThereNotifications}
-              />
               <AuthWrapper
                 roleRequired={[
                   UserRole.BETA_TESTER,
@@ -198,27 +181,16 @@ const Header = observer(() => {
             }}
           >
             <MenuDesktop />
-            {isLoggedInUser && (
-              <>
-                <NotificationsDesktop
-                  notifications={notifications}
-                  markAllRead={() =>
-                    userNotificationsStore.markAllNotificationsRead()
-                  }
-                  markAllNotified={() =>
-                    userNotificationsStore.markAllNotificationsNotified()
-                  }
-                />
-                <AuthWrapper
-                  roleRequired={[
-                    UserRole.BETA_TESTER,
-                    UserRole.RESEARCH_CREATOR,
-                    UserRole.ADMIN,
-                  ]}
-                >
-                  <NotificationsSupabase device="desktop" />
-                </AuthWrapper>
-              </>
+            {isLoggedIn && (
+              <AuthWrapper
+                roleRequired={[
+                  UserRole.BETA_TESTER,
+                  UserRole.RESEARCH_CREATOR,
+                  UserRole.ADMIN,
+                ]}
+              >
+                <NotificationsSupabase device="desktop" />
+              </AuthWrapper>
             )}
             {isModuleSupported(
               env?.VITE_SUPPORTED_MODULES || '',
@@ -259,30 +231,19 @@ const Header = observer(() => {
             </MobileMenuWrapper>
           </AnimationContainer>
         )}
-        {showMobileNotifications && (
-          <AnimationContainer key={'mobileNotificationsContainer'}>
-            <MobileMenuWrapper>
-              <NotificationsMobile
-                notifications={notifications}
-                markAllRead={() =>
-                  userNotificationsStore.markAllNotificationsRead()
-                }
-                markAllNotified={() =>
-                  userNotificationsStore.markAllNotificationsNotified()
-                }
-              />
-              <AuthWrapper
-                roleRequired={[
-                  UserRole.BETA_TESTER,
-                  UserRole.RESEARCH_CREATOR,
-                  UserRole.ADMIN,
-                ]}
-              >
-                <NotificationsSupabase device="mobile" />
-              </AuthWrapper>
-            </MobileMenuWrapper>
-          </AnimationContainer>
-        )}
+        <AnimationContainer key={'mobileNotificationsContainer'}>
+          <MobileMenuWrapper>
+            <AuthWrapper
+              roleRequired={[
+                UserRole.BETA_TESTER,
+                UserRole.RESEARCH_CREATOR,
+                UserRole.ADMIN,
+              ]}
+            >
+              <NotificationsSupabase device="mobile" />
+            </AuthWrapper>
+          </MobileMenuWrapper>
+        </AnimationContainer>
       </MobileMenuContext.Provider>
     </NotificationsContext.Provider>
   )

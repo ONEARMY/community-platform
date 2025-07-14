@@ -5,15 +5,15 @@ import { fields, headings } from 'src/pages/UserSettings/labels'
 import { required } from 'src/utils/validators'
 import { Box, Flex, Heading, Text } from 'theme-ui'
 
-import type { IUploadedFileMeta, IUser } from 'oa-shared'
+import type { ProfileFormData } from 'oa-shared'
 
 interface IProps {
-  values: IUser
+  values: ProfileFormData
   isMemberProfile: boolean
 }
 
 export const UserImagesSection = ({ isMemberProfile, values }: IProps) => {
-  const { coverImages, userImage } = values
+  const { coverImages, image } = values
   const isRequired = { validate: required }
 
   return (
@@ -39,7 +39,7 @@ export const UserImagesSection = ({ isMemberProfile, values }: IProps) => {
             component={ImageInputField}
             data-cy="userImage"
             hasText={false}
-            initialValue={userImage}
+            initialValue={image}
             name="userImage"
             validateFields={[]}
             imageDisplaySx={{
@@ -58,10 +58,7 @@ export const UserImagesSection = ({ isMemberProfile, values }: IProps) => {
           <Heading variant="subHeading">{`${fields.coverImages.title} *`}</Heading>
           <Text variant="paragraph">{fields.coverImages.description}</Text>
 
-          <FieldArray
-            name="coverImages"
-            initialValue={coverImages as IUploadedFileMeta[]}
-          >
+          <FieldArray name="coverImages" initialValue={coverImages}>
             {({ fields, meta }) => {
               return (
                 <>

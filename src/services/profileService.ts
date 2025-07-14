@@ -1,6 +1,6 @@
 import { logger } from 'src/logger'
 
-import type { Profile } from 'oa-shared'
+import type { Profile, ProfileFormData } from 'oa-shared'
 
 const get = async () => {
   try {
@@ -14,7 +14,7 @@ const get = async () => {
   }
 }
 
-const update = async (value: Profile) => {
+const update = async (value: ProfileFormData) => {
   try {
     const url = new URL('/api/profile', window.location.origin)
     const data = new FormData()

@@ -27,7 +27,7 @@ export const loader = async ({ request }) => {
 
   const { data } = await client
     .from('profiles')
-    .select('id,username,display_name,photo_url,is_verified,country')
+    .select('id,username,display_name,photo,is_verified,country')
     .or(`username.ilike.%${q}%,display_name.ilike.%${q}%`)
     .limit(10)
 

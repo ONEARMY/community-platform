@@ -7,15 +7,11 @@ import { UserAction } from './UserAction'
 import type { ExternalLinkLabel, IUserDB } from 'oa-shared'
 
 let mockUser: IUserDB = FactoryUser()
-
-vi.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/stores/User/profile.store', () => ({
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
-  useCommonStores: () => ({
-    stores: {
-      userStore: {
-        activeUser: mockUser,
-      },
-    },
+  useProfileStore: () => ({
+    profile: mockUser,
   }),
 }))
 
@@ -42,7 +38,7 @@ describe('UserAction', () => {
   it('should render the loggedIn component when a user is logged in and profile complete', async () => {
     const completeUser = FactoryUser({
       about: 'about',
-      links: [{ key: '1', label: 'website' as ExternalLinkLabel, url: '' }],
+      links: [{ label: 'website' as ExternalLinkLabel, url: '' }],
       profileType: 'member',
       userImage: factoryImage,
     })

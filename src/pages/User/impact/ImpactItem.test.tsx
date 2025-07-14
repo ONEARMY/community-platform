@@ -6,17 +6,13 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { ImpactItem } from './ImpactItem'
 
-vi.mock('src/common/hooks/useCommonStores', () => {
-  return {
-    useCommonStores: () => ({
-      stores: {
-        userStore: {
-          activeUser: { userName: 'activeUser' },
-        },
-      },
-    }),
-  }
-})
+vi.mock('src/stores/User/profile.store', () => ({
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  __esModule: true,
+  useProfileStore: () => ({
+    profile: { userName: 'activeUser' },
+  }),
+}))
 
 describe('ImpactItem', () => {
   it('renders an impact item with visible fields for a specific year, with impact fields in order: plastic, revenue, employees, volunteers, machines ', async () => {

@@ -57,11 +57,11 @@ const Profile = (props: IProps) => {
         onClick={() => setShowProfileModal((x) => !x)}
         sx={{ ml: 1, height: '100%' }}
       >
-        {profile.photoUrl ? (
+        {profile.photo ? (
           <Avatar
             data-cy="header-avatar"
             loading="lazy"
-            src={profile.photoUrl}
+            src={profile.photo.publicUrl}
             sx={{
               objectFit: 'cover',
               width: '40px',

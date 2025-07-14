@@ -133,7 +133,6 @@ export interface IUserBadges {
 }
 
 export interface IExternalLink {
-  key: string
   url: string
   label: ExternalLinkLabel
 }

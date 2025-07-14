@@ -1,22 +1,20 @@
 import { ImageGallery } from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
-import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
+import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { AspectRatio, Box, Flex } from 'theme-ui'
 
-import type { IUser } from 'oa-shared'
+import type { Profile } from 'oa-shared'
 
 interface IProps {
-  user: IUser
+  user: Profile
 }
 
 export const ProfileImage = ({ user }: IProps) => {
-  const { profileType } = user
-
-  if (profileType === ProfileTypeList.MEMBER) {
+  if (user.type === ProfileTypeList.MEMBER) {
     return null
   }
 
-  const getCoverImages = (user: IUser) => {
+  const getCoverImages = (user: Profile) => {
     if (user.coverImages && user.coverImages.length) {
       return user.coverImages
     }
@@ -30,7 +28,7 @@ export const ProfileImage = ({ user }: IProps) => {
     <Box>
       {coverImage.length ? (
         <ImageGallery
-          images={formatImagesForGallery(coverImage) as any}
+          images={formatImagesForGalleryV2(coverImage) as any}
           hideThumbnails={true}
           showNextPrevButton={true}
         />

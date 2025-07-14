@@ -20,6 +20,8 @@ import {
   inCompleteProfile,
   mapForm,
 } from 'src/pages/UserSettings/labels'
+import { settingsService } from 'src/services/settingsService'
+import { useProfileStore } from 'src/stores/User/profile.store'
 import { randomIntFromInterval } from 'src/utils/helpers'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Alert, Box, Card, Flex, Heading, Text } from 'theme-ui'
@@ -28,7 +30,7 @@ import { createMarkerIcon } from '../Maps/Content/MapView/Sprites'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 
 import type { DivIcon } from 'leaflet'
-import type { ILatLng, ILocation, IMapPin, IUserDB } from 'oa-shared'
+import type { ILatLng, ILocation, IMapPin, Profile } from 'oa-shared'
 import type { Map } from 'react-leaflet'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
@@ -36,8 +38,8 @@ interface IPinProps {
   mapPin: IMapPin | undefined
 }
 
-const LocationDataTextDisplay = ({ user }: { user: IUserDB }) => {
-  const { _id, location } = user
+const LocationDataTextDisplay = ({ user }: { user: Profile }) => {
+  const { username, location } = user
   const navigate = useNavigate()
 
   if (!location?.latlng)
@@ -68,7 +70,7 @@ const LocationDataTextDisplay = ({ user }: { user: IUserDB }) => {
         <br />
       </Text>
       <Button
-        onClick={() => navigate(`/map#${_id}`)}
+        onClick={() => navigate(`/map#${username}`)}
         sx={{ alignSelf: 'flex-start' }}
         icon="map"
         variant="secondary"
@@ -101,21 +103,17 @@ const MapPinModerationComments = ({ mapPin }: IPinProps) => {
 interface IPropsDeletePin {
   setIsLoading: (arg: boolean) => void
   setNotification: (arg: IFormNotification) => void
-  user: IUserDB
+  user: Profile
 }
 
 const DeleteMapPin = (props: IPropsDeletePin) => {
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false)
-  const { setIsLoading, setNotification, user } = props
-  const { mapsStore, userStore } = useCommonStores().stores
+  const { setIsLoading, setNotification } = props
 
   const onSubmitDelete = async () => {
     setIsLoading(true)
     try {
-      const updatedUser = await userStore.deleteUserLocation(user)
-      if (updatedUser) {
-        await mapsStore.deleteUserPin(toJS(updatedUser))
-      }
+      await settingsService.deletePin()
       setNotification({
         message: mapForm.successfulDelete,
         icon: 'check',
@@ -170,22 +168,22 @@ export const SettingsPageMapPin = () => {
 
   const newMapRef = useRef<Map>(null)
 
-  const { mapsStore, userStore } = useCommonStores().stores
+  const { mapsStore } = useCommonStores().stores
+  const { profile } = useProfileStore()
 
-  const user = userStore.activeUser
-  if (!user) {
+  if (!profile) {
     return null
   }
 
-  const isMember = user?.profileType === ProfileTypeList.MEMBER
+  const isMember = profile?.type === ProfileTypeList.MEMBER
   const { addPinTitle, yourPinTitle } = headings.map
   const formId = 'MapSection'
 
   useEffect(() => {
     const init = async () => {
-      if (!user) return
+      if (!profile) return
 
-      const pin = await mapsStore.getPin(user.userName)
+      const pin = await mapsStore.getPin(profile.username)
 
       setMapPin(pin)
       pin && setMarkerIcon(createMarkerIcon(pin, true))
@@ -193,7 +191,7 @@ export const SettingsPageMapPin = () => {
     }
 
     init()
-  }, [user, notification])
+  }, [profile, notification])
 
   const defaultLocation = {
     latlng: {
@@ -202,15 +200,25 @@ export const SettingsPageMapPin = () => {
     },
   }
 
-  const onSubmit = async ({ location, mapPinDescription }) => {
+  const onSubmit = async ({
+    location,
+    description,
+  }: {
+    location: ILocation
+    description: string
+  }) => {
     setIsLoading(true)
     try {
-      const updatingUser = {
-        ...user,
-        location,
-        mapPinDescription,
-      }
-      const updatedUser = await userStore.updateUserLocation(updatingUser)
+      const updatedUser = await settingsService.upsertPin({
+        administrative: location.administrative,
+        country: location.country,
+        countryCode: location.countryCode,
+        description: description,
+        name: location.name,
+        postcode: location.postcode,
+        lat: location.latlng.lat,
+        lng: location.latlng.lng,
+      })
       if (updatedUser) {
         const pin = toJS(updatedUser)
         await mapsStore.setUserPin(pin)
@@ -233,8 +241,7 @@ export const SettingsPageMapPin = () => {
   }
 
   const initialValues = {
-    location: user?.location || {},
-    mapPinDescription: user.mapPinDescription || '',
+    location: profile?.location || {},
   }
 
   return (
@@ -280,7 +287,7 @@ export const SettingsPageMapPin = () => {
       </Flex>
 
       <MapPinModerationComments mapPin={mapPin} />
-      {isProfileComplete(user) ? (
+      {isProfileComplete(profile) ? (
         <Form
           id={formId}
           onSubmit={onSubmit}
@@ -299,7 +306,7 @@ export const SettingsPageMapPin = () => {
                   submitFailed={submitFailed}
                 />
 
-                <LocationDataTextDisplay user={user} />
+                <LocationDataTextDisplay user={profile} />
 
                 <Field
                   name="location"
@@ -338,7 +345,7 @@ export const SettingsPageMapPin = () => {
                 <DeleteMapPin
                   setIsLoading={setIsLoading}
                   setNotification={setNotification}
-                  user={user}
+                  user={profile}
                 />
               </>
             )

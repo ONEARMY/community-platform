@@ -4,7 +4,10 @@ import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { profilesService } from 'src/services/profilesService'
 import { useDebouncedCallback } from 'use-debounce'
 
-import type { IOption } from './LoadUserNameOptions'
+export interface IOption {
+  value: string
+  label: string
+}
 
 interface IProps {
   input: {

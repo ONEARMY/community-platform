@@ -1,16 +1,11 @@
 import { observer } from 'mobx-react-lite'
 import { Banner, InternalLink } from 'oa-components'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { useProfileStore } from 'src/stores/User/profile.store'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Flex } from 'theme-ui'
 
-/**
- * A simple notification banner component that reminds users to fill profile details
- */
 export const AlertIncompleteProfile = observer(() => {
-  const { userStore } = useCommonStores().stores
-
-  const activeUser = userStore.activeUser
+  const { profile: activeUser } = useProfileStore()
 
   if (!activeUser || isProfileComplete(activeUser)) return null
 

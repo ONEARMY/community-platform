@@ -14,6 +14,7 @@ import { SelectField } from 'src/common/Form/Select.field'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { EnvironmentContext } from 'src/pages/common/EnvironmentContext'
 import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
+import { useProfileStore } from 'src/stores/User/profile.store'
 import { required } from 'src/utils/validators'
 import { Flex, Heading, Text } from 'theme-ui'
 
@@ -25,23 +26,23 @@ import { FlexSectionContainer } from '../elements'
 import { ProfileLinkField } from '../fields/ProfileLink.field'
 import { ProfileTags } from './ProfileTags.section'
 
-import type { IExternalLink, IUser } from 'oa-shared'
+import type { IExternalLink, ProfileFormData } from 'oa-shared'
 
 interface IProps {
-  formValues: Partial<IUser>
+  formValues: Partial<ProfileFormData>
 }
 
 export const UserInfosSection = ({ formValues }: IProps) => {
   const env = useContext(EnvironmentContext)
+  const { profile } = useProfileStore()
 
-  const { profileType, links, location } = formValues
-  const isMemberProfile = profileType === ProfileTypeList.MEMBER
+  const isMemberProfile = profile?.type === ProfileTypeList.MEMBER
   const { about, country, displayName, userName } = fields
 
   const countryCode = Object.keys(countries).find(
-    (key) => countries[key].name === formValues.location?.country,
+    (key) => countries[key].name === formValues.country,
   )
-  const noMapPin = !location?.latlng
+  const noMapPin = !profile?.location?.latlng
 
   return (
     <FlexSectionContainer>
@@ -135,7 +136,7 @@ export const UserInfosSection = ({ formValues }: IProps) => {
               </Text>
               <Username
                 user={{
-                  userName: formValues.userName || '',
+                  userName: profile?.username || '',
                   countryCode,
                   isSupporter: false,
                   isVerified: false,
@@ -154,7 +155,10 @@ export const UserInfosSection = ({ formValues }: IProps) => {
           }}
         >
           <Text>{fields.links.title}</Text>
-          <FieldArray name="links" initialValue={links as IExternalLink[]}>
+          <FieldArray
+            name="links"
+            initialValue={formValues.links as IExternalLink[]}
+          >
             {({ fields }) => (
               <>
                 {fields

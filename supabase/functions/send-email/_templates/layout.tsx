@@ -64,6 +64,8 @@ export const Layout = (props: LayoutArgs) => {
     : `${settings.siteUrl}/settings/notifications`
   const preferencesUpdatePath = urlAppend(basePreferencesPath, emailType)
 
+  const isNotificationEmail = emailType === 'notification'
+
   return (
     <Html lang="en">
       <Head />
@@ -79,13 +81,15 @@ export const Layout = (props: LayoutArgs) => {
           />
           <Section style={card}>{children}</Section>
           <Footer>
-            You are receiving important community updates by default. <br />
-            You can update your{' '}
-            <Link href={preferencesUpdatePath} style={link}>
-              {' '}
-              email preferences anytime
-            </Link>{' '}
-            or unsubscribe with ease. <br />
+            You must receive important community messages. <br />
+            {isNotificationEmail && (
+              <>
+                <Link href={preferencesUpdatePath} style={link}>
+                  Unsubscribe or update your email preferences.
+                </Link>
+                <br />
+              </>
+            )}
             Something is not right? Send us{' '}
             <Link
               href={`${settings.siteUrl}/feedback/#page=email`}

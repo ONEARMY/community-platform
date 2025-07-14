@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { useNavigate } from 'react-router'
 import { Link } from '@remix-run/react'
-import { toJS } from 'mobx'
 import {
   Button,
   ConfirmModal,
@@ -13,7 +12,6 @@ import {
   MapWithPin,
 } from 'oa-components'
 import { IModerationStatus, ProfileTypeList } from 'oa-shared'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import {
   buttons,
   headings,
@@ -27,6 +25,7 @@ import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Alert, Box, Card, Flex, Heading, Text } from 'theme-ui'
 
 import { createMarkerIcon } from '../Maps/Content/MapView/Sprites'
+import { mapPinService } from '../Maps/map.service'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 
 import type { DivIcon } from 'leaflet'
@@ -168,7 +167,6 @@ export const SettingsPageMapPin = () => {
 
   const newMapRef = useRef<Map>(null)
 
-  const { mapsStore } = useCommonStores().stores
   const { profile } = useProfileStore()
 
   if (!profile) {
@@ -183,10 +181,12 @@ export const SettingsPageMapPin = () => {
     const init = async () => {
       if (!profile) return
 
-      const pin = await mapsStore.getPin(profile.username)
+      const pin = await mapPinService.getMapPinByUsername(profile.username)
 
-      setMapPin(pin)
-      pin && setMarkerIcon(createMarkerIcon(pin, true))
+      if (pin) {
+        setMapPin(pin)
+        setMarkerIcon(createMarkerIcon(pin, true))
+      }
       setIsLoading(false)
     }
 
@@ -209,7 +209,7 @@ export const SettingsPageMapPin = () => {
   }) => {
     setIsLoading(true)
     try {
-      const updatedUser = await settingsService.upsertPin({
+      await settingsService.upsertPin({
         administrative: location.administrative,
         country: location.country,
         countryCode: location.countryCode,
@@ -219,10 +219,6 @@ export const SettingsPageMapPin = () => {
         lat: location.latlng.lat,
         lng: location.latlng.lng,
       })
-      if (updatedUser) {
-        const pin = toJS(updatedUser)
-        await mapsStore.setUserPin(pin)
-      }
       setNotification({
         message: mapForm.successfulSave,
         icon: 'check',

@@ -1,4 +1,3 @@
-import { json } from '@remix-run/node'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import Keyv from 'keyv'
 import { DB_ENDPOINTS } from 'oa-shared'
@@ -16,7 +15,7 @@ export const loader = async () => {
 
   // check if cached map pins are available and a producation environment, if not - load from db and cache them
   if (cachedMappins && isProductionEnvironment()) {
-    return json({ mapPins: cachedMappins })
+    return Response.json({ mapPins: cachedMappins })
   }
 
   const collectionRef = collection(firestore, DB_ENDPOINTS.mappins)
@@ -35,7 +34,7 @@ export const loader = async () => {
   const mapPinsWithCDN = _transformCreatorImagesToCND(mapPins)
 
   cache.set('mappins', mapPinsWithCDN)
-  return json({ mapPins: mapPinsWithCDN })
+  return Response.json({ mapPins: mapPinsWithCDN })
 }
 
 export const action = async ({ request }) => {
@@ -44,17 +43,17 @@ export const action = async ({ request }) => {
     case 'POST':
       // Create new map pin
       cache.delete('mappins') // delete cache - forced to reload from db
-      return json({ message: 'Created a map pin' })
+      return Response.json({ message: 'Created a map pin' })
     case 'PUT':
       // Edit existing map pin
       cache.delete('mappins') // delete cache - forced to reload from db
-      return json({ message: 'Updated a map pin' })
+      return Response.json({ message: 'Updated a map pin' })
     case 'DELETE':
       // Delete a map pin
       cache.delete('mappins') // delete cache - forced to reload from db
-      return json({ message: 'Deleted a map pin' })
+      return Response.json({ message: 'Deleted a map pin' })
     default:
-      return json({ message: 'Method Not Allowed' }, { status: 405 })
+      return Response.json({ message: 'Method Not Allowed' }, { status: 405 })
   }
 }
 

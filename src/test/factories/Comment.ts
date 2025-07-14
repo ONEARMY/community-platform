@@ -14,7 +14,10 @@ export const FactoryComment = (
     isSupporter: faker.datatype.boolean(),
     isVerified: faker.datatype.boolean(),
     username: faker.internet.userName(),
-    photoUrl: faker.image.url(),
+    photo: {
+      id: faker.string.uuid(),
+      publicUrl: faker.image.avatar(),
+    },
     country: faker.location.countryCode(),
   },
   parentId: faker.number.int(),

@@ -27,7 +27,7 @@ export class Author {
     Object.assign(this, author)
   }
 
-  static fromDB(dbAuthor: DBAuthor, photo: Image) {
+  static fromDB(dbAuthor: DBAuthor, photo?: Image) {
     return new Author({
       id: dbAuthor.id,
       country: dbAuthor.country,

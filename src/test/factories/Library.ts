@@ -84,7 +84,10 @@ export const FactoryLibraryItemDraft = (
     displayName: faker.person.firstName(),
     isSupporter: faker.datatype.boolean(),
     isVerified: faker.datatype.boolean(),
-    photoUrl: faker.image.avatar(),
+    photo: {
+      id: faker.string.uuid(),
+      publicUrl: faker.image.avatar(),
+    },
     username: faker.internet.userName(),
   },
   deleted: false,

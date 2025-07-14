@@ -114,7 +114,7 @@ export const MapFilterList = (props: IProps) => {
           flexDirection: 'column',
           flex: 1,
           gap: 2,
-          overflow: 'scroll',
+          overflow: 'auto',
           padding: 2,
         }}
       >

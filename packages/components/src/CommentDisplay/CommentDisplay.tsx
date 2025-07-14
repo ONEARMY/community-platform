@@ -73,7 +73,7 @@ export const CommentDisplay = (props: IProps) => {
         >
           <CommentAvatar
             displayName={comment.createdBy?.displayName}
-            photoUrl={comment.createdBy?.photoUrl}
+            photoUrl={comment.createdBy?.photo?.publicUrl}
             isCommentAuthor={
               comment.createdBy?.id
                 ? authors.includes(comment.createdBy?.id)

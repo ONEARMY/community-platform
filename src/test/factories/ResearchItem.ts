@@ -33,7 +33,10 @@ export const FactoryResearchItem = (
     displayName: faker.internet.userName(),
     isSupporter: false,
     isVerified: false,
-    photoUrl: faker.image.avatar(),
+    photo: {
+      id: faker.string.uuid(),
+      publicUrl: faker.image.avatar(),
+    },
     username: faker.internet.userName(),
   },
   modifiedAt: faker.date.past(),

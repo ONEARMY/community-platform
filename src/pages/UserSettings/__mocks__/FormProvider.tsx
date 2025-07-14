@@ -7,16 +7,14 @@ import {
 import { render } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
-import { vi } from 'vitest'
 
-import type { IUserDB } from 'oa-shared'
+import type { Profile } from 'oa-shared'
 
 const Theme = testingThemeStyles
 
 export const FormProvider = (
-  user: IUserDB,
+  profile: Profile,
   element: React.ReactNode,
   routerInitialEntry?: string,
 ) => {
@@ -34,12 +32,8 @@ export const FormProvider = (
 
   return render(
     <Provider
-      {...useCommonStores().stores}
-      userStore={{
-        user,
-        updateStatus: { Complete: true },
-        getUserEmail: vi.fn(),
-        getUserProfile: vi.fn().mockResolvedValue(user),
+      profileStore={{
+        profile,
       }}
     >
       <ThemeProvider theme={Theme}>

@@ -21,7 +21,7 @@ export const Default: StoryFn<typeof UserEngagementWrapper> = () => (
             displayName: 'display name',
             isSupporter: true,
             id: 1,
-            photoUrl: null,
+            photo: null,
             isVerified: true,
           }}
         >

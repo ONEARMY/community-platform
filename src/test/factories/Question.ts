@@ -34,7 +34,10 @@ export const FactoryQuestionItem = (
     displayName: faker.internet.userName(),
     isVerified: faker.datatype.boolean(),
     isSupporter: faker.datatype.boolean(),
-    photoUrl: faker.image.avatar(),
+    photo: {
+      id: faker.string.uuid(),
+      publicUrl: faker.image.avatar(),
+    },
     username: faker.internet.userName(),
   },
   category: {

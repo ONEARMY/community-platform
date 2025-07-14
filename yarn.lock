@@ -28936,7 +28936,7 @@ __metadata:
     "@babel/preset-react": "npm:^7.27.1"
     "@emotion/react": "npm:^11.11.4"
     "@emotion/styled": "npm:^11.11.5"
-    "@faker-js/faker": "npm:^7.6.0"
+    "@faker-js/faker": "npm:^8.4.1"
     "@mdxeditor/editor": "npm:^3.29.2"
     "@mui/base": "npm:next"
     "@remix-run/dev": "npm:^2.12.1"

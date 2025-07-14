@@ -7,6 +7,7 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   createdAt: faker.date.past(),
   deleted: faker.datatype.boolean(),
   id: faker.number.int(),
+  isDraft: false,
   modifiedAt: faker.date.past(),
   previousSlugs: [],
   summary: null,

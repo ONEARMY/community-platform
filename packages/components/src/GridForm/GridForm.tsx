@@ -5,7 +5,7 @@ import { Icon } from '../Icon/Icon'
 import type { ReactNode } from 'react'
 import type { availableGlyphs } from '../Icon/types'
 
-interface Fields {
+export interface GridFormFields {
   glyph: availableGlyphs
   name: string
   description: string
@@ -13,7 +13,7 @@ interface Fields {
 }
 
 export interface IProps {
-  fields: Fields[]
+  fields: GridFormFields[]
   heading: string
 }
 

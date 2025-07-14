@@ -1,24 +1,13 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { contentServiceServer } from 'src/services/contentService.server'
+import { userService } from 'src/services/userService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
-
-  if (!user) {
-    return Response.json({}, { headers, status: 401 })
-  }
-
-  const userProfile = await client
-    .from('profiles')
-    .select('id')
-    .eq('auth_id', user.id)
-    .limit(1)
-  const profileId = userProfile.data?.at(0)?.id
+  const profileId = await userService.getIdByCurrentAuthUser(client, headers)
 
   if (!profileId) {
     return Response.json(
@@ -27,12 +16,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     )
   }
 
-  const { count } = await client
-    .from('projects')
-    .select('id', { count: 'exact' })
-    .eq('is_draft', true)
-    .eq('created_by', profileId)
-    .or('deleted.eq.false,deleted.is.null')
+  const count = await contentServiceServer.getDraftCount(
+    client,
+    profileId,
+    'projects',
+  )
 
   return Response.json({ total: count }, { headers })
 }

@@ -4,6 +4,7 @@ export const library: Project[] = [
   {
     moderation: 'accepted',
     id: 1,
+    isDraft: false,
     author: {
       id: 4,
       displayName: 'test',
@@ -218,6 +219,7 @@ export const library: Project[] = [
     slug: 'set-up-devsite-to-help-coding',
     previousSlugs: ['set-up-devsite-to-help-coding'],
     deleted: false,
+    isDraft: false,
     time: '< 1 week',
     description:
       'Hello Coder! This is what we want to make https://build.onearmy.world/ The code of our platform can be found open-source on Github. There is still a lot of work to do and things to improve, we need a community of developers to help out improve it and fix issues. In this how-to i’ll show you how to download it and run it on your local computer so you can play around with the code, add modifications and share back to us.',
@@ -330,6 +332,7 @@ export const library: Project[] = [
   {
     difficultyLevel: 'medium',
     files: [],
+    isDraft: false,
     commentCount: 2,
     steps: [
       {
@@ -601,6 +604,7 @@ export const library: Project[] = [
       username: 'test',
     },
     deleted: false,
+    isDraft: false,
     id: 12,
     commentCount: 0,
     coverImage: null,
@@ -663,6 +667,7 @@ export const library: Project[] = [
       username: 'test',
     },
     deleted: true,
+    isDraft: false,
     id: 10,
     modifiedAt: new Date('2022-01-06T14:50:38.830Z'),
     previousSlugs: ['deleted-how-to'],

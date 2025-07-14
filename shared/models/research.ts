@@ -39,7 +39,7 @@ export class DBResearchItem implements IDBContentDoc {
   category_id?: number
   tags: number[]
   status: ResearchStatus
-  is_draft?: boolean
+  is_draft: boolean
   collaborators: string[] | null
 
   constructor(obj: Omit<DBResearchItem, 'id'>) {
@@ -70,7 +70,7 @@ export class ResearchItem implements IContentDoc {
   collaborators: Author[]
   collaboratorsUsernames: string[] | null
   updates: ResearchUpdate[]
-  isDraft?: boolean
+  isDraft: boolean
 
   constructor(obj: ResearchItem) {
     Object.assign(this, obj)

@@ -37,6 +37,7 @@ export const FactoryLibraryItem = (
     type: 'projects',
   },
   id: faker.number.int(),
+  isDraft: false,
   modifiedAt: faker.date.past(),
   createdAt: faker.date.past(),
   deleted: faker.datatype.boolean(),
@@ -75,6 +76,7 @@ export const FactoryLibraryItemDraft = (
   itemOverloads: Partial<Project> = {},
 ): Project => ({
   id: faker.number.int(),
+  isDraft: false,
   modifiedAt: faker.date.past(),
   createdAt: faker.date.past(),
   author: {

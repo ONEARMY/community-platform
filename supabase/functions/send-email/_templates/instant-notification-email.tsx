@@ -1,37 +1,46 @@
 import React from 'react'
-import { Link, Text } from '@react-email/components'
+import { Column, Link, Section, Text } from '@react-email/components'
 
 import { BoxText } from './components/box-text.tsx'
 import { Button } from './components/button.tsx'
 import { Layout } from './layout.tsx'
 import { Heading } from './components/heading.tsx'
 
-import type { NotificationDisplay, TenantSettings } from 'oa-shared'
+import type {
+  NotificationDisplay,
+  TenantSettings,
+  UserEmailData,
+} from 'oa-shared'
 import { Header } from './components/header.tsx'
 
 const text = {
   color: '#686868',
   fontSize: '18px',
   lineHeight: '30px',
-  whiteSpace: 'pre',
 }
 
 interface IProps {
   notification: NotificationDisplay
   settings: TenantSettings
+  user: UserEmailData
 }
 
 // Some unavoidable duplication of approaches here to:
 // packages/components/src/NotificationListSupabase
 
 export const InstantNotificationEmail = (props: IProps) => {
-  const { notification, settings } = props
+  const { notification, settings, user } = props
 
-  const headerLink = `${settings.siteUrl}/${notification.slug}`
   const buttonLink = `${settings.siteUrl}/${notification.title.parentSlug}`
+  const headerLink = `${settings.siteUrl}/${notification.slug}`
+  const preferencesUpdatePath = `${settings.siteUrl}/email-preferences?code=${user.code}`
 
   return (
-    <Layout preview={notification.email.preview} settings={settings}>
+    <Layout
+      preferencesUpdatePath={preferencesUpdatePath}
+      preview={notification.email.preview}
+      settings={settings}
+    >
       <Header>
         <Link href={headerLink}>
           <Heading>

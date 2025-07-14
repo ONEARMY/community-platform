@@ -27,6 +27,7 @@ export const FactoryResearchItem = (
   researchItemOverloads: Partial<ResearchItem> = {},
 ): ResearchItem => ({
   id: faker.number.int(),
+  isDraft: false,
   author: {
     id: faker.number.int(),
     displayName: faker.internet.userName(),

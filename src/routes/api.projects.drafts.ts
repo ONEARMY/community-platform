@@ -29,24 +29,24 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .select(
       `       
         id,
-       created_at,
-       created_by,
-       modified_at,
-       title,
-       description,
-       slug,
-       cover_image,
-       category:category(id,name),
-       tags,
-       moderation,
-       is_draft,
-       author:profiles(id, display_name, username, is_verified, is_supporter, country),
-       steps:project_steps(
-        id, 
-        created_at, 
-        title, 
-        description
-      )
+        created_at,
+        created_by,
+        modified_at,
+        title,
+        description,
+        slug,
+        cover_image,
+        category:category(id,name),
+        tags,
+        moderation,
+        is_draft,
+        author:profiles(id, display_name, username, is_verified, is_supporter, country),
+        steps:project_steps(
+          id, 
+          created_at, 
+          title, 
+          description
+        )
       `,
     )
     .or('deleted.eq.false,deleted.is.null')

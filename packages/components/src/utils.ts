@@ -83,6 +83,7 @@ export const fakeNewsSB = (newsOverloads: Partial<News> = {}): News => ({
   usefulCount: faker.datatype.number(20),
   body: faker.random.words(50),
   heroImage: null,
+  isDraft: false,
   ...newsOverloads,
 })
 
@@ -133,6 +134,7 @@ export const fakeQuestionSB = (
   tags: [],
   totalViews: faker.datatype.number(100),
   usefulCount: faker.datatype.number(20),
+  isDraft: false,
   ...questionOverloads,
 })
 
@@ -160,6 +162,7 @@ export const fakeResearchItem = (
   updates: [],
   tags: [],
   totalViews: faker.datatype.number(100),
+  isDraft: false,
   ...researchItemOverloads,
 })
 

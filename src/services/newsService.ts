@@ -7,6 +7,7 @@ const upsert = async (id: number | null, form: NewsFormData) => {
   const body = new FormData()
   body.append('title', title)
   body.append('body', form.body)
+  body.append('is_draft', form.isDraft ? 'true' : 'false')
 
   if (tags && tags.length > 0) {
     for (const tag of tags) {

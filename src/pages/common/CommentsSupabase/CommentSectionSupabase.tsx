@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AuthorsContext, CommentsTitle } from 'oa-components'
-import { Comment } from 'oa-shared'
+import { Comment, UserRole } from 'oa-shared'
+import { AuthWrapper } from 'src/common/AuthWrapper'
+import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { commentService } from 'src/services/commentService'
 import { subscribersService } from 'src/services/subscribersService'
 import { Box, Button, Flex } from 'theme-ui'
@@ -9,21 +11,22 @@ import { CommentItemSupabase } from './CommentItemSupabase'
 import { CreateCommentSupabase } from './CreateCommentSupabase'
 
 import type { DiscussionContentTypes, Reply } from 'oa-shared'
-import type { ReactNode } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 interface IProps {
   authors: Array<number>
-  sourceId: number | string
+  sourceId: number
   sourceType: DiscussionContentTypes
-  followButton?: ReactNode
+  setSubscribersCount?: Dispatch<SetStateAction<number>>
 }
 const commentPageSize = 10
 
 export const CommentSectionSupabase = (props: IProps) => {
-  const { authors, followButton, sourceId, sourceType } = props
+  const { authors, setSubscribersCount, sourceId, sourceType } = props
   const [comments, setComments] = useState<Comment[]>([])
   const [newCommentIds, setNewCommentIds] = useState<number[]>([])
   const [commentLimit, setCommentLimit] = useState<number>(commentPageSize)
+
   const displayedComments = useMemo(() => {
     return comments
       .filter((x) => !newCommentIds.includes(x.id))
@@ -235,7 +238,21 @@ export const CommentSectionSupabase = (props: IProps) => {
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
         <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
           <CommentsTitle comments={comments} />
-          {followButton && followButton}
+          <AuthWrapper
+            roleRequired={[
+              UserRole.BETA_TESTER,
+              UserRole.RESEARCH_CREATOR,
+              UserRole.ADMIN,
+            ]}
+          >
+            <FollowButtonAction
+              labelFollow="Follow Comments"
+              labelUnfollow="Following Comments"
+              contentType={sourceType}
+              itemId={sourceId}
+              setSubscribersCount={setSubscribersCount}
+            />
+          </AuthWrapper>
         </Flex>
         {displayedComments.map((comment) => (
           <Box key={comment.id}>

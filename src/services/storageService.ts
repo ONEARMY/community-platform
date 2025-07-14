@@ -2,7 +2,7 @@ const imageUpload = async (id, contentType, imageFile) => {
   const body = new FormData()
   body.append('id', id)
   body.append('contentType', contentType)
-  body.append('imageFile', imageFile)
+  body.append('imageFile', imageFile, imageFile.name)
 
   const response = await fetch(`/api/images`, {
     method: 'POST',

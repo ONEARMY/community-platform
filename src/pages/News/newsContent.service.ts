@@ -41,7 +41,33 @@ const getCategories = async () => {
   }
 }
 
+const getDraftCount = async () => {
+  try {
+    const response = await fetch('/api/news/drafts/count')
+    const { total } = (await response.json()) as { total: number }
+
+    return total
+  } catch (error) {
+    logger.error('Failed to fetch draft count', { error })
+    return 0
+  }
+}
+
+const getDrafts = async () => {
+  try {
+    const response = await fetch('/api/news/drafts')
+    const { items } = (await response.json()) as { items: News[] }
+
+    return items
+  } catch (error) {
+    logger.error('Failed to fetch draft news', { error })
+    return []
+  }
+}
+
 export const newsContentService = {
   search,
   getCategories,
+  getDraftCount,
+  getDrafts,
 }

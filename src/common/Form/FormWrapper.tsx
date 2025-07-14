@@ -1,4 +1,4 @@
-import { Button, ElWithBeforeIcon } from 'oa-components'
+import { Button, ElWithBeforeIcon, Loader } from 'oa-components'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { Box, Card, Flex, Heading } from 'theme-ui'
 
@@ -105,13 +105,16 @@ export const FormWrapper = (props: IProps) => {
           onClick={handleSubmit}
           sx={{
             width: '100%',
-            mb: ['40px', '40px', 0],
             display: 'block',
+            marginBottom: ['40px', '40px', 0],
           }}
         >
           {buttonLabel}
         </Button>
         {sidebar && sidebar}
+        {submitting && (
+          <Loader label="Submitting, please do not close the page..." />
+        )}
         {hasClientSideErrors && (
           <ErrorsContainer
             saving={[errorSubmitting]}

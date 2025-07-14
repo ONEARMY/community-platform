@@ -29,21 +29,29 @@ const createInstantNotificationEmail = async (
   profileId: number,
 ) => {
   try {
-    // Temporarily only for beta-testers
+    // Temporarily only for admins, beta-testers, research_creators
     const profileResponse = await client
       .from('profiles')
       .select('created_at,roles')
       .eq('id', profileId)
       .single()
 
-    const roles = profileResponse.data?.roles as Profile['roles']
+    if (!profileResponse.data) {
+      console.error('Profile not found for ID:', profileId)
+      return
+    }
 
-    if (!roles?.includes('beta-tester')) {
+    const roles = profileResponse.data.roles as Profile['roles']
+    const approvedRoles = ['admin', 'beta-tester', 'research_creator']
+    const hasPlatformRole = !!roles?.every((role) =>
+      approvedRoles.includes(role),
+    )
+
+    if (!hasPlatformRole) {
       return
     }
 
     const shouldEmail = await shouldSendEmail(client, dbNotification, profileId)
-
     if (!shouldEmail) {
       return
     }
@@ -52,15 +60,26 @@ const createInstantNotificationEmail = async (
       id: profileId,
     })
 
+    if (!rpcResponse.data || rpcResponse.data.length === 0) {
+      console.error('No email found for profile ID:', profileId)
+      return
+    }
+
+    const userEmail = rpcResponse.data[0]?.email
+    if (!userEmail) {
+      console.error('Email is missing for profile ID:', profileId)
+      return
+    }
+
     const fullNotification = await transformNotification(dbNotification, client)
 
-    const code = tokens.generate(profileId, profileResponse.data?.created_at)
+    const code = tokens.generate(profileId, profileResponse.data.created_at)
 
     await client.functions.invoke('send-email', {
       body: {
         user: {
           code,
-          email: rpcResponse.data[0].email,
+          email: userEmail,
         },
         email_data: {
           email_action_type: 'instant_notification',
@@ -68,14 +87,11 @@ const createInstantNotificationEmail = async (
         },
       },
     })
+
     return
   } catch (error) {
-    console.error(error)
-
-    return Response.json(
-      { error },
-      { status: 500, statusText: 'Error creating email notification' },
-    )
+    console.error('Error creating email notification:', error)
+    return Response.json(error, { status: 500, statusText: error.statusText })
   }
 }
 
@@ -85,7 +101,6 @@ const shouldSendEmail = async (
   profileId: number,
 ): Promise<boolean> => {
   const actionType = preferenceTypes[dbNotification.content_type]
-
   if (!actionType) {
     return false
   }
@@ -96,15 +111,19 @@ const shouldSendEmail = async (
       profileId,
     )
 
-  if ((preferences as DBNotificationsPreferences).is_unsubscribed) {
+  if (!preferences) {
+    return DEFAULT_NOTIFICATION_PREFERENCES[actionType]
+  }
+
+  const userPreferences = preferences as DBNotificationsPreferences
+
+  if (userPreferences.is_unsubscribed) {
     return false
   }
 
-  if (preferences) {
-    return preferences[actionType]
-  }
-
-  return DEFAULT_NOTIFICATION_PREFERENCES[actionType]
+  return (
+    userPreferences[actionType] ?? DEFAULT_NOTIFICATION_PREFERENCES[actionType]
+  )
 }
 
 export const notificationEmailService = {

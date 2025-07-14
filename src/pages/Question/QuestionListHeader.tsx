@@ -13,6 +13,7 @@ import { UserAction } from 'src/common/UserAction'
 import { categoryService } from 'src/services/categoryService'
 import { Button, Flex } from 'theme-ui'
 
+import DraftButton from '../common/Drafts/DraftButton'
 import { ListHeader } from '../common/Layout/ListHeader'
 import { headings, listing } from './labels'
 import { QuestionSearchParams } from './question.service'
@@ -21,7 +22,15 @@ import { QuestionSortOptions } from './QuestionSortOptions'
 import type { Category } from 'oa-shared'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
-export const QuestionListHeader = () => {
+interface IProps {
+  draftCount: number
+  handleShowDrafts: () => void
+  showDrafts: boolean
+}
+
+export const QuestionListHeader = (props: IProps) => {
+  const { draftCount, handleShowDrafts, showDrafts } = props
+
   const [categories, setCategories] = useState<Category[]>([])
   const [searchString, setSearchString] = useState<string>('')
 
@@ -102,11 +111,18 @@ export const QuestionListHeader = () => {
         </>
       }
       loggedIn={
-        <Link to="/questions/create">
-          <Button type="button" data-cy="create-question" variant="primary">
-            {listing.create}
-          </Button>
-        </Link>
+        <>
+          <DraftButton
+            showDrafts={showDrafts}
+            draftCount={draftCount}
+            handleShowDrafts={handleShowDrafts}
+          />
+          <Link to="/questions/create">
+            <Button type="button" data-cy="create-question" variant="primary">
+              {listing.create}
+            </Button>
+          </Link>
+        </>
       }
       loggedOut={
         <ReturnPathLink to="/sign-up">

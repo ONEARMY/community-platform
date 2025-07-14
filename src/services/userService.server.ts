@@ -18,6 +18,24 @@ const getById = async (id: string): Promise<IUserDB | null> => {
   return snapshot.docs[0].data() as IUserDB
 }
 
+const getIdByCurrentAuthUser = async (client, headers) => {
+  const {
+    data: { user },
+  } = await client.auth.getUser()
+
+  if (!user) {
+    return Response.json({}, { headers, status: 401 })
+  }
+
+  const userProfile = await client
+    .from('profiles')
+    .select('id')
+    .eq('auth_id', user.id)
+    .limit(1)
+
+  return userProfile.data?.at(0)?.id
+}
+
 const createFirebaseProfile = async (authUser: User) => {
   const username = authUser.user_metadata.username
   const dbRef = firestore.doc(DB_ENDPOINTS.users + '/' + username)
@@ -42,5 +60,6 @@ const createFirebaseProfile = async (authUser: User) => {
 
 export const userService = {
   getById,
+  getIdByCurrentAuthUser,
   createFirebaseProfile,
 }

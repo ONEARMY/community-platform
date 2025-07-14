@@ -185,6 +185,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const question = Question.fromDB(questionResult.data[0], [])
+    subscribersServiceServer.add('questions', question.id, profile.id, client)
 
     if (uploadedImages.length > 0) {
       const questionId = Number(questionResult.data[0].id)
@@ -206,12 +207,13 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       }
     }
 
-    subscribersServiceServer.add('questions', question.id, profile.id, client)
-    notifyDiscord(
-      question,
-      profile,
-      new URL(request.url).origin.replace('http:', 'https:'),
-    )
+    if (!question.isDraft) {
+      notifyDiscord(
+        question,
+        profile,
+        new URL(request.url).origin.replace('http:', 'https:'),
+      )
+    }
 
     return Response.json({ question }, { headers, status: 201 })
   } catch (error) {

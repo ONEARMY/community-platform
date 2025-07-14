@@ -27,8 +27,13 @@ type ProjectPageProps = {
 
 export const ProjectPage = observer(({ item }: ProjectPageProps) => {
   const { userStore } = useCommonStores().stores
-  const [voted, setVoted] = useState<boolean>(false)
+
+  const [subscribersCount, setSubscribersCount] = useState<number>(
+    item.subscriberCount,
+  )
   const [usefulCount, setUsefulCount] = useState<number>(item.usefulCount)
+  const [voted, setVoted] = useState<boolean>(false)
+
   const loggedInUser = userStore.activeUser
 
   useEffect(() => {
@@ -82,6 +87,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
         onUsefulClick={() =>
           onUsefulClick(voted ? 'delete' : 'add', 'LibraryDescription')
         }
+        subscribersCount={subscribersCount}
       />
       <Flex sx={{ flexDirection: 'column', marginTop: [3, 4], gap: 4 }}>
         {item.steps
@@ -144,9 +150,10 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
               }}
             >
               <CommentSectionSupabase
+                authors={item.author?.id ? [item.author?.id] : []}
+                setSubscribersCount={setSubscribersCount}
                 sourceId={item.id}
                 sourceType="projects"
-                authors={item.author?.id ? [item.author?.id] : []}
               />
             </Card>
           </UserEngagementWrapper>

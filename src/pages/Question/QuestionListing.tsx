@@ -4,6 +4,7 @@ import { Button, Loader } from 'oa-components'
 import { logger } from 'src/logger'
 import { Card, Flex, Heading } from 'theme-ui'
 
+import useDrafts from '../common/Drafts/useDraftsSupabase'
 import { listing } from './labels'
 import { questionService } from './question.service'
 import { QuestionListHeader } from './QuestionListHeader'
@@ -15,6 +16,12 @@ import type { QuestionSortOption } from './QuestionSortOptions'
 export const QuestionListing = () => {
   const [isFetching, setIsFetching] = useState<boolean>(true)
   const [questions, setQuestions] = useState<Question[]>([])
+  const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } =
+    useDrafts<Question>({
+      getDraftCount: questionService.getDraftCount,
+      getDrafts: questionService.getDrafts,
+    })
+
   const [total, setTotal] = useState<number>(0)
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -65,9 +72,15 @@ export const QuestionListing = () => {
   const showLoadMore =
     !isFetching && questions && questions.length > 0 && questions.length < total
 
+  const questionsList = showDrafts ? drafts : questions
+
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
-      <QuestionListHeader />
+      <QuestionListHeader
+        draftCount={draftCount}
+        handleShowDrafts={handleShowDrafts}
+        showDrafts={showDrafts}
+      />
 
       {questions?.length === 0 && !isFetching && (
         <Heading as="h1" sx={{ marginTop: 4 }}>
@@ -75,7 +88,7 @@ export const QuestionListing = () => {
         </Heading>
       )}
 
-      {questions && questions.length > 0 && (
+      {questionsList && questionsList.length > 0 && (
         <Card
           as="ul"
           sx={{
@@ -90,7 +103,7 @@ export const QuestionListing = () => {
           }}
           variant="responsive"
         >
-          {questions.map((question, index) => (
+          {questionsList.map((question, index) => (
             <QuestionListItem key={index} question={question} query={q} />
           ))}
         </Card>
@@ -108,7 +121,7 @@ export const QuestionListing = () => {
         </Flex>
       )}
 
-      {isFetching && <Loader />}
+      {(isFetching || isFetchingDrafts) && <Loader />}
     </Flex>
   )
 }

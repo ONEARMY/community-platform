@@ -1,15 +1,16 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { tokens } from 'src/utils/tokens.server'
 
-import type { ActionFunctionArgs } from '@remix-run/node'
+import { DEFAULT_NOTIFICATION_PREFERENCES } from './api.notifications-preferences'
 
-export const DEFAULT_NOTIFICATION_PREFERENCES = {
-  comments: true,
-  replies: true,
-  research_updates: true,
+import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
+
+interface DecodedToken {
+  profileId: string
+  profileCreatedAt: string
 }
 
-export const loader = async ({ params, request }) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
 
   try {
@@ -17,17 +18,17 @@ export const loader = async ({ params, request }) => {
       return Response.json({}, { status: 401, statusText: 'unauthorized' })
     }
 
-    const decoded = tokens.verify(params.userCode)
+    const decoded = tokens.verify(params.userCode) as DecodedToken
+    const profileId = Number(decoded.profileId)
 
     const userData = await client
       .from('profiles')
       .select('id')
-      .eq('id', decoded['profileId'])
-      .eq('created_at', decoded['profileCreatedAt'])
-      .single()
+      .eq('id', profileId)
+      .eq('created_at', decoded.profileCreatedAt)
+      .maybeSingle()
 
-    const userId = userData.data?.id
-
+    const userId = userData.data?.id as number
     if (!userId) {
       return Response.json({}, { status: 401, statusText: 'unauthorized' })
     }
@@ -36,12 +37,12 @@ export const loader = async ({ params, request }) => {
       .from('notifications_preferences')
       .select('*')
       .eq('user_id', userId)
-      .single()
+      .maybeSingle()
 
     const preferences = preferencesData.data || DEFAULT_NOTIFICATION_PREFERENCES
-
     return Response.json({ preferences }, { headers, status: 200 })
   } catch (error) {
+    console.error(error)
     return Response.json({ error }, { headers, status: 500 })
   }
 }
@@ -54,30 +55,33 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
       return Response.json({}, { status: 401, statusText: 'unauthorized' })
     }
 
-    const decoded = tokens.verify(params.userCode)
+    const decoded = tokens.verify(params.userCode) as DecodedToken
+    const profileId = Number(decoded.profileId)
 
     const userData = await client
       .from('profiles')
       .select('id')
-      .eq('id', decoded['profileId'])
-      .eq('created_at', decoded['profileCreatedAt'])
-      .single()
+      .eq('id', profileId)
+      .eq('created_at', decoded.profileCreatedAt)
+      .maybeSingle()
 
-    const userId = userData.data?.id
+    const userId = userData.data?.id as number
+
+    if (!userId) {
+      return Response.json({}, { status: 401, statusText: 'unauthorized' })
+    }
 
     const { valid, status, statusText } = await validateRequest(request, userId)
 
     if (!valid) {
       return Response.json({}, { status, statusText })
     }
-
     const formData = await request.formData()
-
     const existingPreferences = await client
       .from('notifications_preferences')
       .select('id')
       .eq('user_id', userId)
-      .single()
+      .maybeSingle()
 
     const existingPreferencesId = existingPreferences.data?.id || null
     const comments = formData.get('comments') === 'true'
@@ -96,7 +100,6 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
         })
         .eq('id', existingPreferencesId)
         .select()
-
       return Response.json({}, { headers, status: 200 })
     }
 
@@ -111,17 +114,18 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
     return Response.json({}, { headers, status: 200 })
   } catch (error) {
+    console.error(error)
     return Response.json({ error }, { headers, status: 500 })
   }
 }
 
 async function validateRequest(request: Request, userId: number) {
   if (!userId) {
-    return { status: 400, statusText: 'unauthorized' }
+    return { valid: false, status: 401, statusText: 'unauthorized' }
   }
 
   if (request.method !== 'POST') {
-    return { status: 405, statusText: 'Method not allowed' }
+    return { valid: false, status: 405, statusText: 'Method not allowed' }
   }
 
   return { valid: true }

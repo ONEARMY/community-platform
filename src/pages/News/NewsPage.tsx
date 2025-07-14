@@ -8,11 +8,8 @@ import {
   DisplayMarkdown,
   TagList,
 } from 'oa-components'
-import { type News, UserRole } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
-import { AuthWrapper } from 'src/common/AuthWrapper'
-import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { useProfileStore } from 'src/stores/User/profile.store'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpersNew'
@@ -28,6 +25,9 @@ import {
 } from 'theme-ui'
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
+import { DraftTag } from '../common/Drafts/DraftTag'
+
+import type { News } from 'oa-shared'
 
 interface IProps {
   news: News
@@ -90,6 +90,8 @@ export const NewsPage = observer(({ news }: IProps) => {
             <DisplayDate action={'Published'} createdAt={news.createdAt} />
           </Text>
 
+          {news.isDraft && <DraftTag />}
+
           {isEditable && (
             <ClientOnly fallback={<></>}>
               {() => (
@@ -123,7 +125,7 @@ export const NewsPage = observer(({ news }: IProps) => {
                   }),
                 },
                 {
-                  icon: 'thunderbolt-grey',
+                  icon: 'megaphone-inactive',
                   label: buildStatisticsLabel({
                     stat: subscribersCount,
                     statUnit: 'following',
@@ -158,17 +160,7 @@ export const NewsPage = observer(({ news }: IProps) => {
               authors={news.author?.id ? [news.author?.id] : []}
               sourceId={news.id}
               sourceType="news"
-              followButton={
-                <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
-                  <FollowButtonAction
-                    labelFollow="Follow Comments"
-                    labelUnfollow="Following Comments"
-                    contentType="news"
-                    item={news}
-                    setSubscribersCount={setSubscribersCount}
-                  />
-                </AuthWrapper>
-              }
+              setSubscribersCount={setSubscribersCount}
             />
           </Card>
         )}

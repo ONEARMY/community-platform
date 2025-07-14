@@ -1034,6 +1034,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "matteobu",
+      "name": "Matteo Bucciol",
+      "avatar_url": "https://avatars.githubusercontent.com/u/62759388?v=4",
+      "profile": "http://matteo.codes",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

@@ -315,7 +315,7 @@ export class NotificationDisplay {
   static setSlug(notification: Notification) {
     switch (notification.contentType) {
       case 'researchUpdate': {
-        return `${notification.sourceContentType}/${notification.sourceContent?.slug}#update_${notification.parentContent?.id}`
+        return `research/${notification.sourceContent?.slug}#update_${notification.parentContent?.id}`
       }
       case 'comment': {
         return this.setSlugDiscussion(notification)

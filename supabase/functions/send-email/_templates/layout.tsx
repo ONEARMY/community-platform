@@ -43,15 +43,26 @@ const mainContainer = {
   width: '600px',
 }
 
+type EmailType = 'service' | 'moderation' | 'notification'
+
 type LayoutArgs = {
   children: React.ReactNode
-  preferencesUpdatePath: string
+  emailType: EmailType
   preview: string
   settings: TenantSettings
+  userCode?: string
 }
 
+export const urlAppend = (path: string, emailType: EmailType) =>
+  `${path}?utm_source=${emailType}&utm_medium=email`
+
 export const Layout = (props: LayoutArgs) => {
-  const { children, preferencesUpdatePath, preview, settings } = props
+  const { children, emailType, preview, settings, userCode } = props
+
+  const basePreferencesPath = userCode
+    ? `${settings.siteUrl}/email-preferences?code=${userCode}`
+    : `${settings.siteUrl}/settings/notifications`
+  const preferencesUpdatePath = urlAppend(basePreferencesPath, emailType)
 
   return (
     <Html lang="en">

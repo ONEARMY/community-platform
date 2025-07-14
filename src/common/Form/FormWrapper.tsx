@@ -15,6 +15,7 @@ interface IProps {
   errorSubmitting: string | undefined | null
   guidelines?: React.ReactNode
   handleSubmit: () => void
+  handleSubmitDraft: () => void
   heading: string
   hasValidationErrors: boolean
   belowBody?: React.ReactNode
@@ -23,6 +24,8 @@ interface IProps {
   submitting: boolean
   unsavedChangesDialog?: React.ReactNode
 }
+
+const DRAFT_LABEL = 'Save as draft'
 
 export const FormWrapper = (props: IProps) => {
   const {
@@ -34,6 +37,7 @@ export const FormWrapper = (props: IProps) => {
     errorSubmitting,
     guidelines,
     handleSubmit,
+    handleSubmitDraft,
     heading,
     hasValidationErrors,
     sidebar,
@@ -111,13 +115,24 @@ export const FormWrapper = (props: IProps) => {
         >
           {buttonLabel}
         </Button>
+
+        <Button
+          data-cy="draft"
+          onClick={handleSubmitDraft}
+          variant="secondary"
+          type="submit"
+          disabled={submitting}
+          sx={{
+            width: '100%',
+            display: 'block',
+          }}
+        >
+          <span>{DRAFT_LABEL}</span>
+        </Button>
+
         {sidebar && sidebar}
-        {hasClientSideErrors && (
-          <ErrorsContainer
-            saving={[errorSubmitting]}
-            client={errorsClientSide}
-          />
-        )}
+        {errorSubmitting && <ErrorsContainer saving={[errorSubmitting]} />}
+        {hasClientSideErrors && <ErrorsContainer client={errorsClientSide} />}
       </Flex>
     </Flex>
   )

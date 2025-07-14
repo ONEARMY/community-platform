@@ -9,6 +9,7 @@ describe('[News.Write]', () => {
     beforeEach(() => {
       initialRandomId = generateAlphaNumeric(8).toLowerCase()
     })
+
     it('[By Authenticated]', () => {
       const initialTitle = `${initialRandomId} Amazing new thing`
       const initialExpectedSlug = `${initialRandomId}-amazing-new-thing`
@@ -28,11 +29,11 @@ describe('[News.Write]', () => {
       const user = users.admin
       cy.signIn(user.email, user.password)
 
-      cy.step("Can't add news with an incomplete profile")
+      cy.step("Can't add news from main page")
       cy.visit('/news')
       cy.get('[data-cy=create-news]').should('not.exist')
 
-      cy.step('Can add news now profile is complete')
+      cy.step('Can go direct to url')
       cy.visit('/news/create')
       cy.get('[data-cy=field-title]', { timeout: 20000 })
 
@@ -45,7 +46,7 @@ describe('[News.Write]', () => {
         .find(':file')
         .attachFile('images/howto-step-pic1.jpg')
 
-      cy.step('Add fields')
+      cy.step('Can add draft news')
       cy.get('[data-cy=field-title]')
         .clear()
         .type(initialTitle)
@@ -55,12 +56,26 @@ describe('[News.Write]', () => {
       cy.addToMarkdownField(initialNewsBodyTwo)
       cy.addToMarkdownField(initialNewsBodyThree)
 
-      cy.selectTag(category, '[data-cy=category-select]')
+      cy.get('[data-cy=draft]').click()
 
+      cy.step('Can get to drafts')
+      cy.visit('/news')
+      cy.contains(initialTitle).should('not.exist')
+      cy.get('[data-cy=my-drafts').click()
+      cy.contains(initialTitle)
+      cy.get('[data-cy="news-list-item-button"]').first().click()
+
+      cy.step('Shows draft news')
+      cy.get('[data-cy=draft-tag]').should('be.visible')
+      cy.contains(initialNewsBodyOne)
+
+      cy.step('Submit news')
+      cy.get('[data-cy=edit]').click()
+
+      cy.selectTag(category, '[data-cy=category-select]')
       cy.selectTag(tag1, '[data-cy="tag-select"]')
       cy.selectTag(tag2, '[data-cy="tag-select"]')
 
-      cy.step('Submit news')
       cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=submit]').click()
 

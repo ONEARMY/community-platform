@@ -90,10 +90,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData()
     const uploadedCoverImage = formData.get('coverImage') as File | null
     const uploadedFiles = formData.getAll('files') as File[] | null
+    const isDraft = formData.get('draft') === 'true'
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
-      isDraft: formData.get('draft') === 'true',
+      isDraft,
       time: formData.get('time') as string,
       category: formData.has('category')
         ? (formData.get('category') as string)
@@ -107,7 +108,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       difficultyLevel: formData.has('difficultyLevel')
         ? (formData.get('difficultyLevel') as string)
         : null,
-      moderation: 'awaiting-moderation' as Moderation,
+      moderation: isDraft ? undefined : ('awaiting-moderation' as Moderation),
       stepCount: parseInt(formData.get('stepCount') as string),
       slug: convertToSlug((formData.get('title') as string) || ''),
     }
@@ -130,7 +131,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const profile = await profileServiceServer.getByAuthId(user!.id, client)
 
-    if (profile?.roles?.includes(UserRole.ADMIN)) {
+    if (!isDraft && profile?.roles?.includes(UserRole.ADMIN)) {
       data.moderation = 'accepted'
     }
 
@@ -253,7 +254,7 @@ async function createProject(
     fileLink: string | null
     difficultyLevel: string | null
     time: string | null
-    moderation: Moderation
+    moderation?: Moderation
     slug: string
   },
   profile: DBProfile,
@@ -271,7 +272,7 @@ async function createProject(
       file_link: data.fileLink,
       difficulty_level: data.difficultyLevel,
       time: data.time,
-      moderation: data.moderation || 'awaiting-moderation',
+      moderation: data.moderation,
       tenant_id: process.env.TENANT_ID,
     })
     .select()
@@ -330,7 +331,10 @@ async function uploadAndUpdateImage(
     const result = await client
       .from(tableName)
       .update({
-        [fieldName]: mediaResult.media,
+        [fieldName]:
+          fieldName === 'cover_image'
+            ? mediaResult.media[0]
+            : mediaResult.media,
       })
       .eq('id', id)
       .select()

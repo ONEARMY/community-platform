@@ -32,11 +32,16 @@ export const ModerationEmail = (props: IProps) => {
 
   const headingLink = `${settings.siteUrl}/${notification.title.parentSlug}`
   const buttonLink = `${settings.siteUrl}/${notification.slug}`
+  const preferencesUpdatePath = `${settings.siteUrl}/settings/notifications`
   const preview = `${notification.title.triggeredBy} ${notification.title.middle} your contribution`
   const buttonWording = notification.body ? 'Update it now' : 'See it live'
 
   return (
-    <Layout preview={preview} settings={settings}>
+    <Layout
+      preferencesUpdatePath={preferencesUpdatePath}
+      preview={preview}
+      settings={settings}
+    >
       <Header>
         <Link href={headingLink}>
           <Heading>

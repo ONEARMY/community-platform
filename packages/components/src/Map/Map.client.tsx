@@ -8,8 +8,8 @@ import 'leaflet/dist/leaflet.css'
 import './index.css'
 
 export interface IProps extends MapProps {
-  children?: React.ReactNode | React.ReactNode[]
   setZoom: (arg: number) => void
+  children?: React.ReactNode | React.ReactNode[]
   ref?: RefObject<LeafletMap> | undefined
 }
 
@@ -23,8 +23,8 @@ export const Map = forwardRef((props: IProps, ref: Ref<LeafletMap>) => {
   return (
     <LeafletMap ref={ref} onViewportChanged={onViewportChanged} {...props}>
       <TileLayer
-        attribution='&amp;copy <a href="http://osm.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
       />
 
       {children}

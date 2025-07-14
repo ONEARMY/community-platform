@@ -12,20 +12,12 @@ import { InstantNotificationEmail } from './_templates/instant-notification-emai
 import { signWebhookHeader } from './signWebhookHeader.ts'
 import { getTenantSettings } from './getTenantSettings.ts'
 
-import type { NotificationDisplay } from 'oa-shared'
+import type { NotificationDisplay, UserEmailData } from 'oa-shared'
 import { ModerationEmail } from './_templates/moderation-email.tsx'
 
 const hookSecret = Deno.env.get('SEND_EMAIL_HOOK_SECRET') as string
 const resend = new Resend(Deno.env.get('RESEND_API_KEY') as string)
 const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
-
-type User = {
-  email: string
-  new_email?: string
-  user_metadata: {
-    username: string
-  }
-}
 
 type EmailData = {
   email_action_type: string
@@ -49,18 +41,19 @@ Deno.serve(async (req) => {
   try {
     const { email_data, user } = webhook.verify(payload, headers) as {
       email_data: EmailData
-      user: User
+      user: UserEmailData
     }
 
     const settings = await getTenantSettings(req, email_data.redirect_to)
 
-    let html: string = ''
+    let html
     let subject: string = ''
     let to = user.email
 
     const details = {
       supabaseUrl,
       settings,
+      user,
       ...email_data,
     } as any
 

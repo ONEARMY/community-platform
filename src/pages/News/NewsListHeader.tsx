@@ -1,27 +1,32 @@
 // import { useCallback, useEffect, useState } from 'react'
-// import { Link, useSearchParams } from '@remix-run/react'
+import { Link } from '@remix-run/react'
 // import debounce from 'debounce'
-// import {
-//   CategoryHorizonalList,
-//   ReturnPathLink,
-//   SearchField,
-//   Select,
-//   Tooltip,
-// } from 'oa-components'
+import { Tooltip } from 'oa-components'
+import { UserRole } from 'oa-shared'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 // import { FieldContainer } from 'src/common/Form/FieldContainer'
-// import { UserAction } from 'src/common/UserAction'
+import { UserAction } from 'src/common/UserAction'
 // import {
 //   NewsSearchParams,
 // } from 'src/pages/News/newsContent.service'
-// import { Button, Flex } from 'theme-ui'
+import { Button } from 'theme-ui'
 
+import DraftButton from '../common/Drafts/DraftButton'
 import { ListHeader } from '../common/Layout/ListHeader'
-import { headings } from './labels'
+import { headings, listing } from './labels'
 // import { NewsSortOptions } from './NewsSortOptions'
 
 // import type { Category } from 'oa-shared'
 
-export const NewsListHeader = () => {
+interface IProps {
+  draftCount: number
+  handleShowDrafts: () => void
+  showDrafts: boolean
+}
+
+export const NewsListHeader = (props: IProps) => {
+  const { draftCount, handleShowDrafts, showDrafts } = props
+
   // const [categories, setCategories] = useState<Category[]>([])
   // const [searchString, setSearchString] = useState<string>('')
 
@@ -80,42 +85,43 @@ export const NewsListHeader = () => {
   //   setSearchParams(params)
   // }
 
-  // const actionComponents = (
-  //   <UserAction
-  //     incompleteProfile={
-  //       <>
-  //         <Link
-  //           to="/settings"
-  //           data-tooltip-id="tooltip"
-  //           data-tooltip-content={listing.incompleteProfile}
-  //         >
-  //           <Button
-  //             type="button"
-  //             data-cy="complete-profile-news"
-  //             variant="disabled"
-  //           >
-  //             {listing.create}
-  //           </Button>
-  //         </Link>
-  //         <Tooltip id="tooltip" />
-  //       </>
-  //     }
-  //     loggedIn={
-  //       <Link to="/news/create">
-  //         <Button type="button" data-cy="create-news" variant="primary">
-  //           {listing.create}
-  //         </Button>
-  //       </Link>
-  //     }
-  //     loggedOut={
-  //       <ReturnPathLink to="/sign-up">
-  //         <Button type="button" data-cy="sign-up" variant="primary">
-  //           {listing.join}
-  //         </Button>
-  //       </ReturnPathLink>
-  //     }
-  //   />
-  // )
+  const actionComponents = (
+    <UserAction
+      incompleteProfile={
+        <AuthWrapper roleRequired={UserRole.ADMIN}>
+          <Link
+            to="/settings"
+            data-tooltip-id="tooltip"
+            data-tooltip-content={listing.incompleteProfile}
+          >
+            <Button
+              type="button"
+              data-cy="complete-profile-news"
+              variant="disabled"
+            >
+              {listing.create}
+            </Button>
+          </Link>
+          <Tooltip id="tooltip" />
+        </AuthWrapper>
+      }
+      loggedIn={
+        <AuthWrapper roleRequired={UserRole.ADMIN}>
+          <DraftButton
+            showDrafts={showDrafts}
+            draftCount={draftCount}
+            handleShowDrafts={handleShowDrafts}
+          />
+          <Link to="/news/create">
+            <Button type="button" data-cy="create-news" variant="primary">
+              {listing.create}
+            </Button>
+          </Link>
+        </AuthWrapper>
+      }
+      loggedOut={<></>}
+    />
+  )
 
   // const categoryComponent = (
   //   <CategoryHorizonalList
@@ -171,9 +177,9 @@ export const NewsListHeader = () => {
 
   return (
     <ListHeader
-      actionComponents={<></>}
+      actionComponents={actionComponents}
       actionComponentsMaxWidth="650px"
-      showDrafts={false}
+      showDrafts={showDrafts}
       headingTitle={headings.list}
       categoryComponent={<></>}
       filteringComponents={<></>}

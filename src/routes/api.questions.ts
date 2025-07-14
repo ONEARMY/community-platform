@@ -24,22 +24,26 @@ export const loader = async ({ request }) => {
 
   const { client, headers } = createSupabaseServerClient(request)
 
-  let query = client.from('questions').select(
-    `
+  let query = client
+    .from('questions')
+    .select(
+      `
       id,
+      author:profiles(id, display_name, username, is_verified, is_supporter, country),
+      category:category(id,name),
       created_at,
       created_by,
       modified_at,
       comment_count,
       description,
+      is_draft,
       slug,
-      category:category(id,name),
       tags,
       title,
-      total_views,
-      author:profiles(id, display_name, username, is_verified, is_supporter, country)`,
-    { count: 'exact' },
-  )
+      total_views`,
+      { count: 'exact' },
+    )
+    .eq('is_draft', false)
 
   if (q) {
     query = query.textSearch('questions_search_fields', q)
@@ -94,6 +98,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
+      is_draft: formData.get('is_draft') === 'true',
       category: formData.has('category')
         ? (formData.get('category') as string)
         : null,
@@ -163,6 +168,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         created_by: profile.id,
         title: data.title,
         description: data.description,
+        is_draft: data.is_draft,
         moderation: IModerationStatus.ACCEPTED,
         slug,
         category: data.category,
@@ -172,10 +178,14 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       .select()
 
     if (questionResult.error || !questionResult.data) {
-      throw questionResult.error
+      return Response.json(
+        {},
+        { status: 400, statusText: questionResult.error.details },
+      )
     }
 
     const question = Question.fromDB(questionResult.data[0], [])
+    subscribersServiceServer.add('questions', question.id, profile.id, client)
 
     if (uploadedImages.length > 0) {
       const questionId = Number(questionResult.data[0].id)
@@ -189,18 +199,21 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
           .eq('id', questionId)
           .select()
 
+        console.log({ updateResult })
+
         if (updateResult.data) {
           question.images = updateResult.data[0].images
         }
       }
     }
 
-    subscribersServiceServer.add('questions', question.id, profile.id, client)
-    notifyDiscord(
-      question,
-      profile,
-      new URL(request.url).origin.replace('http:', 'https:'),
-    )
+    if (!question.isDraft) {
+      notifyDiscord(
+        question,
+        profile,
+        new URL(request.url).origin.replace('http:', 'https:'),
+      )
+    }
 
     return Response.json({ question }, { headers, status: 201 })
   } catch (error) {

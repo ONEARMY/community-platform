@@ -200,6 +200,10 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/cajohn2757"><img src="https://avatars.githubusercontent.com/u/71300075?v=4?s=60" width="60px;" alt="Corey Johnson"/><br /><sub><b>Corey Johnson</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=cajohn2757" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/devianweb"><img src="https://avatars.githubusercontent.com/u/87659522?v=4?s=60" width="60px;" alt="Ian Webster"/><br /><sub><b>Ian Webster</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=devianweb" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/JCSergent"><img src="https://avatars.githubusercontent.com/u/34434102?v=4?s=60" width="60px;" alt="JC Sergent"/><br /><sub><b>JC Sergent</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=JCSergent" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/fel4-dev"><img src="https://avatars.githubusercontent.com/u/94372355?v=4?s=60" width="60px;" alt="Fel4"/><br /><sub><b>Fel4</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=fel4-dev" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://matteo.codes"><img src="https://avatars.githubusercontent.com/u/62759388?v=4?s=60" width="60px;" alt="Matteo Bucciol"/><br /><sub><b>Matteo Bucciol</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=matteobu" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

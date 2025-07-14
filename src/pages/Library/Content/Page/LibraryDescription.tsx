@@ -35,9 +35,9 @@ interface IProps {
   item: Project
   loggedInUser: IUser | undefined
   votedUsefulCount?: number
-  verified?: boolean
   hasUserVotedUseful: boolean
   onUsefulClick: () => Promise<void>
+  subscribersCount: number
 }
 
 export const LibraryDescription = (props: IProps) => {
@@ -47,6 +47,7 @@ export const LibraryDescription = (props: IProps) => {
     item,
     loggedInUser,
     onUsefulClick,
+    subscribersCount,
     votedUsefulCount,
   } = props
 
@@ -338,6 +339,14 @@ export const LibraryDescription = (props: IProps) => {
             label: buildStatisticsLabel({
               stat: votedUsefulCount || 0,
               statUnit: 'useful',
+              usePlural: false,
+            }),
+          },
+          {
+            icon: 'megaphone-inactive',
+            label: buildStatisticsLabel({
+              stat: subscribersCount,
+              statUnit: 'following',
               usePlural: false,
             }),
           },

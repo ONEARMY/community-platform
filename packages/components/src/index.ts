@@ -93,5 +93,6 @@ export { VideoPlayer } from './VideoPlayer/VideoPlayer'
 export { VisitorModal, visitorDisplayData } from './VisitorModal/VisitorModal'
 
 export type { availableGlyphs } from './Icon/types'
-export type { OptionalFollowButtonProps } from './FollowButton/FollowButton'
+export type { GridFormFields } from './GridForm/GridForm'
 export type { ITab } from './SettingsFormWrapper/SettingsFormTab'
+export type { OptionalFollowButtonProps } from './FollowButton/FollowButton'

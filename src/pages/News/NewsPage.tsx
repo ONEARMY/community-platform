@@ -11,7 +11,7 @@ import {
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
-import { useProfileStore } from 'src/stores/User/profile.store'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
 import {
   AspectRatio,

@@ -3,7 +3,7 @@ import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { ITEMS_PER_PAGE } from 'src/pages/Library/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
-import { profileServiceServer } from 'src/services/profileService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { convertToSlug } from 'src/utils/slug'
 
@@ -129,7 +129,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { status, statusText })
     }
 
-    const profile = await profileServiceServer.getByAuthId(user!.id, client)
+    const profileService = new ProfileServiceServer(client)
+    const profile = await profileService.getByAuthId(user!.id)
 
     if (!isDraft && profile?.roles?.includes(UserRole.ADMIN)) {
       data.moderation = 'accepted'

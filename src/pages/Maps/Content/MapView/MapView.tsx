@@ -7,17 +7,17 @@ import { Clusters } from './Cluster.client'
 import { Popup } from './Popup.client'
 
 import type { LatLngExpression } from 'leaflet'
-import type { ILatLng, IMapPin } from 'oa-shared'
+import type { ILatLng, MapPin } from 'oa-shared'
 import type { RefObject } from 'react'
 import type { Map as MapType, MapProps } from 'react-leaflet'
 
 interface IProps {
-  allPins: IMapPin[] | null
+  allPins: MapPin[] | null
   center: ILatLng
   mapRef: RefObject<MapType<MapProps, any>>
   onBlur: () => void
   onPinClick: (IMapPin) => void
-  selectedPin: IMapPin | undefined
+  selectedPin: MapPin | undefined
   setBoundaries: (LatLngBounds) => void
   setCenter: (ILatLng) => void
   setShowMobileList: (boolean) => void

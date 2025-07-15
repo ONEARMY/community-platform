@@ -1,6 +1,6 @@
-import type { MapFilterOptionsList } from 'oa-shared'
+import type { MapFilterOption } from 'oa-shared'
 
-export const allMapFilterOptions: MapFilterOptionsList = [
+export const allMapFilterOptions: MapFilterOption[] = [
   {
     _id: 'workspace',
     filterType: 'profileType',

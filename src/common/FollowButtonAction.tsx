@@ -1,7 +1,7 @@
 import { type Dispatch, type SetStateAction, useEffect, useState } from 'react'
 import { FollowButton } from 'oa-components'
 import { subscribersService } from 'src/services/subscribersService'
-import { useProfileStore } from 'src/stores/User/profile.store'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 
 import { trackEvent } from './Analytics'
 

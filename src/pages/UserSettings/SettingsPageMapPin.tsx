@@ -11,7 +11,7 @@ import {
   Loader,
   MapWithPin,
 } from 'oa-components'
-import { IModerationStatus, ProfileTypeList } from 'oa-shared'
+import { ProfileTypeList } from 'oa-shared'
 import {
   buttons,
   headings,
@@ -19,7 +19,7 @@ import {
   mapForm,
 } from 'src/pages/UserSettings/labels'
 import { settingsService } from 'src/services/settingsService'
-import { useProfileStore } from 'src/stores/User/profile.store'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { randomIntFromInterval } from 'src/utils/helpers'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Alert, Box, Card, Flex, Heading, Text } from 'theme-ui'
@@ -29,12 +29,12 @@ import { mapPinService } from '../Maps/map.service'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 
 import type { DivIcon } from 'leaflet'
-import type { ILatLng, ILocation, IMapPin, Profile } from 'oa-shared'
+import type { ILatLng, ILocation, MapPin, Profile } from 'oa-shared'
 import type { Map } from 'react-leaflet'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
 interface IPinProps {
-  mapPin: IMapPin | undefined
+  mapPin?: MapPin
 }
 
 const LocationDataTextDisplay = ({ user }: { user: Profile }) => {
@@ -83,17 +83,18 @@ const LocationDataTextDisplay = ({ user }: { user: Profile }) => {
 const MapPinModerationComments = ({ mapPin }: IPinProps) => {
   if (
     !mapPin ||
-    !mapPin.comments ||
-    mapPin.moderation != IModerationStatus.IMPROVEMENTS_NEEDED
-  )
+    !mapPin.moderatonFeedback ||
+    mapPin.moderation !== 'improvements-needed'
+  ) {
     return null
+  }
 
   return (
     <Alert variant="info" sx={{ fontSize: 2, textAlign: 'left' }}>
       <Box>
         {mapForm.needsChanges}
         <br />
-        <em>{mapPin?.comments}</em>
+        <em>{mapPin?.moderatonFeedback}</em>
       </Box>
     </Alert>
   )
@@ -158,7 +159,7 @@ export const SettingsPageMapPin = () => {
   const communityProgramUrl =
     import.meta.env.VITE_COMMUNITY_PROGRAM_URL ||
     process.env.VITE_COMMUNITY_PROGRAM_URL
-  const [mapPin, setMapPin] = useState<IMapPin | undefined>()
+  const [mapPin, setMapPin] = useState<MapPin | undefined>()
   const [markerIcon, setMarkerIcon] = useState<DivIcon>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [notification, setNotification] = useState<

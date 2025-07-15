@@ -1,7 +1,7 @@
 import { CardList } from './CardList'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { IModerationStatus, ProfileTypeName } from 'oa-shared'
+import type { Moderation, ProfileTypeName } from 'oa-shared'
 
 export default {
   title: 'Map/CardList',
@@ -13,7 +13,7 @@ const list = [
     _deleted: false,
     _id: 'first-one',
     type: 'member' as ProfileTypeName,
-    moderation: 'accepted' as IModerationStatus,
+    moderation: 'accepted' as Moderation,
     verified: false,
     location: { lat: 0, lng: 0 },
   },

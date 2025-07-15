@@ -13,7 +13,7 @@ import Header from 'src/pages/common/Header/Header'
 import { SessionContext } from 'src/pages/common/SessionContext'
 import { StickyButton } from 'src/pages/common/StickyButton'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { ProfileStoreProvider } from 'src/stores/User/profile.store'
+import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'
 import { Flex } from 'theme-ui'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'

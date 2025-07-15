@@ -13,7 +13,6 @@ import { PasswordField } from 'src/common/Form/PasswordField'
 import Main from 'src/pages/common/Layout/Main'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { authServiceServer } from 'src/services/authService.server'
-import { userService } from 'src/services/userService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 import {
   composeValidators,
@@ -96,8 +95,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         { headers },
       )
     }
-
-    await userService.createFirebaseProfile(data.user)
   }
 
   return redirect(`/sign-up-message?email=${email}`, { headers })

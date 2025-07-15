@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react'
-import { useProfileStore } from 'src/stores/User/profile.store'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
 
 interface IProps {

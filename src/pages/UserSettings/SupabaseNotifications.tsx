@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { form } from 'src/pages/UserSettings/labels'
 import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService'
-import { useProfileStore } from 'src/stores/User/profile.store'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm'
 

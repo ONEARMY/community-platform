@@ -1,14 +1,13 @@
 import { ResearchUpdate } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { notificationsService } from 'src/services/notificationsService.server'
-import { profileServiceServer } from 'src/services/profileService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBMedia, DBProfile, DBResearchUpdate, MediaFile } from 'oa-shared'
+import type { DBMedia, DBResearchUpdate, MediaFile } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   try {
@@ -47,10 +46,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { status, statusText })
     }
 
-    const profile = await profileServiceServer.getByAuthId(
-      user?.id || '',
-      client,
-    )
+    const profileService = new ProfileServiceServer(client)
+    const profile = await profileService.getByAuthId(user?.id || '')
 
     if (
       !researchServiceServer.isAllowedToEditUpdate(
@@ -121,12 +118,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     }
 
     if (update.is_draft && !updateResult.data.is_draft) {
-      notificationsService.sendResearchUpdateNotification(
-        client,
-        updateResult.data.research,
-        updateResult.data,
-        profile as DBProfile,
-      )
+      // TODO
+      // notificationsService.sendResearchUpdateNotification(
+      //   client,
+      //   updateResult.data.research,
+      //   updateResult.data,
+      //   profile as DBProfile,
+      // )
     }
 
     const researchUpdate = ResearchUpdate.fromDB(updateResult.data, [])
@@ -230,7 +228,8 @@ async function deleteResearchUpdate(request, id: number, updateId: number) {
     data: { user },
   } = await client.auth.getUser()
 
-  const profile = await profileServiceServer.getByAuthId(user?.id || '', client)
+  const profileService = new ProfileServiceServer(client)
+  const profile = await profileService.getByAuthId(user?.id || '')
 
   if (
     !researchServiceServer.isAllowedToEditUpdate(profile, id, updateId, client)

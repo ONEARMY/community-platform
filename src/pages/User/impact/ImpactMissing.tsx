@@ -2,7 +2,7 @@ import { Link } from '@remix-run/react'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import { Button, ExternalLink } from 'oa-components'
-import { useProfileStore } from 'src/stores/User/profile.store'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Flex, Text } from 'theme-ui'
 
 import { IMPACT_REPORT_LINKS } from './constants'

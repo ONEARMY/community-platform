@@ -1,9 +1,8 @@
 import { ResearchUpdate, UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { discordServiceServer } from 'src/services/discordService.server'
-import { notificationsService } from 'src/services/notificationsService.server'
 import { notificationsSupabaseServiceServer } from 'src/services/notificationSupabaseService.server'
-import { profileServiceServer } from 'src/services/profileService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
 import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
@@ -36,7 +35,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       .eq('id', researchId)
       .single()
     const research = researchResult.data as unknown as DBResearchItem
-    const profile = await profileServiceServer.getByAuthId(user!.id, client)
+    const profileService = new ProfileServiceServer(client)
+    const profile = await profileService.getByAuthId(user!.id)
 
     if (!profile) {
       return Response.json({}, { status: 400, statusText: 'User not found' })
@@ -105,12 +105,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     await addSubscribers(researchUpdate.id, profile.id, client)
 
     if (!research.is_draft && !researchUpdate.isDraft) {
-      notificationsService.sendResearchUpdateNotification(
-        client,
-        research,
-        dbResearchUpdate,
-        profile,
-      )
       notificationsSupabaseServiceServer.createNotificationsResearchUpdate(
         research,
         dbResearchUpdate,

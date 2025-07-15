@@ -1,7 +1,7 @@
 import { Field } from 'react-final-form'
 import TagsSelectV2 from 'src/common/Tags/TagsSelectV2'
 import { fields } from 'src/pages/UserSettings/labels'
-import { useProfileStore } from 'src/stores/User/profile.store'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { Flex, Text } from 'theme-ui'
 

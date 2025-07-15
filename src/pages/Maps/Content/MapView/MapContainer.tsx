@@ -8,12 +8,12 @@ import { latLongFilter } from './latLongFilter'
 import { MapList } from './MapList'
 import { MapView } from './MapView'
 
-import type { ILatLng, IMapPin, MapFilterOptionsList } from 'oa-shared'
+import type { ILatLng, MapFilterOption, MapPin } from 'oa-shared'
 import type { Map as MapType } from 'react-leaflet'
 
 interface IProps {
-  allPins: IMapPin[] | null
-  allToggleFilters: MapFilterOptionsList
+  allPins: MapPin[] | null
+  allToggleFilters: MapFilterOption[]
   notification: string
 }
 
@@ -23,12 +23,13 @@ export const INITIAL_ZOOM = 2
 export const MapContainer = (props: IProps) => {
   const { allPins, allToggleFilters, notification } = props
 
-  const [selectedPin, setSelectedPin] = useState<IMapPin | undefined>()
-  const [activePinFilters, setActivePinFilters] =
-    useState<MapFilterOptionsList>([])
+  const [selectedPin, setSelectedPin] = useState<MapPin | undefined>()
+  const [activePinFilters, setActivePinFilters] = useState<MapFilterOption[]>(
+    [],
+  )
   const [boundaries, setBoundaries] = useState(null)
   const [center, setCenter] = useState<ILatLng>(INITIAL_CENTER)
-  const [filteredPins, setFilteredPins] = useState<IMapPin[] | null>(null)
+  const [filteredPins, setFilteredPins] = useState<MapPin[] | null>(null)
   const [showMobileList, setShowMobileList] = useState<boolean>(false)
   const [zoom, setZoom] = useState<number>(INITIAL_ZOOM)
 
@@ -64,10 +65,12 @@ export const MapContainer = (props: IProps) => {
     selectPinByUserId(pinId.length > 0 ? pinId : undefined)
   }, [location.hash, allPins])
 
-  const selectPinByUserId = async (userId: string | undefined) => {
+  const selectPinByUserId = async (username: string | undefined) => {
     if (allPins) {
-      const foundPin = allPins.find((pin) => pin._id === userId)
-      foundPin && setCenter(foundPin.location)
+      const foundPin = allPins.find((pin) => pin.profile.username === username)
+      if (foundPin) {
+        setCenter({ lat: foundPin.lat, lng: foundPin.lng })
+      }
       setSelectedPin(foundPin)
     }
   }

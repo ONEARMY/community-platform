@@ -1,11 +1,11 @@
 import { createContext } from 'react'
 import { logger } from 'src/logger'
 
-import type { IMapPin } from 'oa-shared'
+import type { MapPin } from 'oa-shared'
 
 export interface IMapPinService {
-  getMapPins: () => Promise<IMapPin[]>
-  getMapPinByUsername: (userName: string) => Promise<IMapPin | null>
+  getMapPins: () => Promise<MapPin[]>
+  getMapPinByUsername: (userName: string) => Promise<MapPin | null>
 }
 
 const getMapPins = async () => {

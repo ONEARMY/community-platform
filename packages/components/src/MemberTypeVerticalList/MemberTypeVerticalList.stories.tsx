@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { MemberTypeVerticalList } from './MemberTypeVerticalList.client'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { MapFilterOption, MapFilterOptionsList } from 'oa-shared'
+import type { MapFilterOption } from 'oa-shared'
 
 export default {
   title: 'Map/MemberTypeVerticalList',
@@ -44,7 +44,7 @@ const availableFilters: MapFilterOption[] = [
 ]
 
 export const Basic: StoryFn<typeof MemberTypeVerticalList> = () => {
-  const [activeFilters, setActiveFilters] = useState<MapFilterOptionsList>([])
+  const [activeFilters, setActiveFilters] = useState<MapFilterOption[]>([])
 
   const onFilterChange = (option: MapFilterOption) => {
     const isFilterPresent = !!availableFilters.find(
@@ -70,7 +70,7 @@ export const Basic: StoryFn<typeof MemberTypeVerticalList> = () => {
 }
 
 export const OnlyOne: StoryFn<typeof MemberTypeVerticalList> = () => {
-  const [activeFilters, setActiveFilters] = useState<MapFilterOptionsList>([])
+  const [activeFilters, setActiveFilters] = useState<MapFilterOption[]>([])
 
   const onFilterChange = (option: MapFilterOption) => {
     const isFilterPresent = !!availableFilters.find(

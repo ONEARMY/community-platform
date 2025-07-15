@@ -1,6 +1,6 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { mapServiceServer } from 'src/services/mapService.server'
-import { profileServiceServer } from 'src/services/profileService.server'
+import { MapServiceServer } from 'src/services/mapService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
@@ -18,7 +18,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return { status: 401, statusText: 'unauthorized' }
     }
 
-    const profile = await profileServiceServer.getByAuthId(user!.id, client)
+    const profileService = new ProfileServiceServer(client)
+    const profile = await profileService.getByAuthId(user!.id)
 
     if (!profile) {
       return { status: 404, statusText: 'profile not found' }
@@ -51,7 +52,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { status, statusText })
     }
 
-    const result = await mapServiceServer.upsert(client, data)
+    const mapService = new MapServiceServer(client)
+    const result = await mapService.upsert(data)
 
     if (result?.error) {
       console.error(result.error)

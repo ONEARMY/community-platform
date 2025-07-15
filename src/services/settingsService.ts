@@ -56,7 +56,12 @@ const update = async (profile: ProfileFormData) => {
   return await response.json()
 }
 
-const upsertPin = async (pin: Omit<MapPin, 'id' | 'userId' | 'profile'>) => {
+const upsertPin = async (
+  pin: Omit<
+    MapPin,
+    'id' | 'userId' | 'profile' | 'moderation' | 'moderation_feedback'
+  >,
+) => {
   const data = new FormData()
 
   data.append('name', pin.name)

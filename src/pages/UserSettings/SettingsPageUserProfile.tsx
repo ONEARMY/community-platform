@@ -7,7 +7,7 @@ import { ProfileTypeList } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { profileService } from 'src/services/profileService'
-import { useProfileStore } from 'src/stores/User/profile.store'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { isContactable, isMessagingBlocked } from 'src/utils/helpers'
 import { Flex } from 'theme-ui'
 
@@ -135,9 +135,7 @@ export const SettingsPageUserProfile = () => {
                 )}
 
                 {!isMessagingBlocked() && (
-                  <PublicContactSection
-                    isContactableByPublic={values.isContactable}
-                  />
+                  <PublicContactSection isContactable={values.isContactable} />
                 )}
               </Flex>
             </form>

@@ -1,14 +1,10 @@
 import { Field, Form } from 'react-final-form'
 import { redirect } from '@remix-run/node'
 import { Link, useActionData } from '@remix-run/react'
-import { signInWithEmailAndPassword } from 'firebase/auth'
 import { Button, FieldInput, HeroBanner, TextNotification } from 'oa-components'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import Main from 'src/pages/common/Layout/Main'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { createSupabaseAdminServerClient } from 'src/repository/supabaseAdmin.server'
-import { authServiceServer } from 'src/services/authService.server'
-import { auth } from 'src/utils/firebase'
 import { getReturnUrl } from 'src/utils/redirect.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 import { required } from 'src/utils/validators'
@@ -69,80 +65,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     console.error(error)
-
-    try {
-      const result = await signInWithEmailAndPassword(auth, email, password)
-
-      const firebaseAuthId = result.user.uid
-
-      if (!firebaseAuthId) {
-        throw new Error()
-      }
-
-      const userAuthResult = await authServiceServer.getUserByFirebaseId(
-        firebaseAuthId,
-        client,
-      )
-
-      if (userAuthResult.error) {
-        console.error(userAuthResult.error)
-      }
-
-      if (userAuthResult.data?.at(0)?.auth_id) {
-        // If the user profile already has a auth_id value, it means the user already authenticated with supabase, thus the password is wrong.
-        throw new Error()
-      }
-
-      const userIdResult = await client.rpc('get_user_id_by_email', {
-        email: result.user.email,
-      })
-      const userAuthId = userIdResult.data[0]?.id
-
-      if (!userAuthId) {
-        // User doesn't exist. need to sign up.
-        throw new Error()
-      } else {
-        const adminClient = createSupabaseAdminServerClient()
-        const updatePassword = await adminClient.auth.admin.updateUserById(
-          userAuthId,
-          {
-            password,
-            user_metadata: {
-              username: userAuthResult.data![0].username,
-            },
-          },
-        )
-
-        if (updatePassword.error) {
-          console.error(error)
-          throw new Error()
-        }
-
-        // Update profile to map with the supabase user
-        await authServiceServer.updateUserProfile(
-          { supabaseAuthId: userAuthId, firebaseAuthId },
-          client,
-        )
-
-        // Sign in
-        const signInResult = await client.auth.signInWithPassword({
-          email,
-          password,
-        })
-
-        if (signInResult.error) {
-          console.error(error)
-          throw new Error()
-        }
-      }
-    } catch (error) {
-      return Response.json(
-        {
-          error: 'Invalid email or password.',
-        },
-        { headers, status: 400 },
-      )
-    }
+    return Response.json(
+      {
+        error: 'Invalid email or password.',
+      },
+      { headers, status: 400 },
+    )
   }
 
   const fallbackPath = data.user?.user_metadata.username

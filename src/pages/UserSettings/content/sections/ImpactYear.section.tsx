@@ -4,7 +4,7 @@ import { useLocation } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { UserContactError } from 'src/pages/User/contact'
 import { form } from 'src/pages/UserSettings/labels'
-import { useProfileStore } from 'src/stores/User/profile.store'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Flex, Heading, Text } from 'theme-ui'
 
 import {

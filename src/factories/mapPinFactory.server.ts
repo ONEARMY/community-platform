@@ -1,0 +1,48 @@
+import { MapPin } from 'oa-shared'
+import { ImageServiceServer } from 'src/services/imageService.server'
+
+import type { SupabaseClient } from '@supabase/supabase-js'
+import type { DBMapPin, DBPinProfile, PinProfile } from 'oa-shared'
+
+export class MapPinFactory {
+  private imageService: ImageServiceServer
+  constructor(client: SupabaseClient) {
+    this.imageService = new ImageServiceServer(client)
+  }
+
+  async createMapPin(pin: DBMapPin): Promise<MapPin> {
+    const profile = await this.createPinProfile(pin.profile)
+
+    return new MapPin({
+      id: pin.id,
+      administrative: pin.administrative,
+      country: pin.country,
+      countryCode: pin.country_code,
+      lat: pin.lat,
+      lng: pin.lng,
+      moderation: pin.moderation,
+      postcode: pin.postcode,
+      profileId: pin.profile_id,
+      moderatonFeedback: pin.moderation_feedback,
+      profile,
+    })
+  }
+
+  private async createPinProfile(profile: DBPinProfile): Promise<PinProfile> {
+    const photo = profile.photo
+      ? this.imageService.getPublicUrl(profile.photo)
+      : null
+
+    return {
+      id: profile.id,
+      username: profile.username,
+      displayName: profile.display_name,
+      isSupporter: profile.is_supporter,
+      isVerified: profile.is_verified,
+      openToVisitors: profile.open_to_visitors,
+      type: profile.type,
+      photo: photo || null,
+      // tags: profile.tags || [],
+    } as PinProfile
+  }
+}

@@ -3,7 +3,7 @@ import { AuthorVotes, Profile } from 'oa-shared'
 import { ProfilePage } from 'src/pages/User/content/ProfilePage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { libraryServiceServer } from 'src/services/libraryService.server'
-import { profileServiceServer } from 'src/services/profileService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 import { questionServiceServer } from 'src/services/questionService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
@@ -15,10 +15,12 @@ import type { UserCreatedDocs } from 'oa-shared'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
+  const profileService = new ProfileServiceServer(client)
 
   const username = params.id as string
+
   const [profileDb, projects, research, questions] = await Promise.all([
-    profileServiceServer.getByUsername(username, client),
+    profileService.getByUsername(username),
     libraryServiceServer.getUserProjects(client, username),
     researchServiceServer.getUserResearch(client, username),
     questionServiceServer.getQuestionsByUser(client, username),
@@ -34,10 +36,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return Response.json({ profile: null, headers })
   }
 
-  const authorVotesDb = await profileServiceServer.getAuthorUsefulVotes(
-    profileDb.id,
-    client,
-  )
+  const authorVotesDb = await profileService.getAuthorUsefulVotes(profileDb.id)
   const authorVotes = authorVotesDb
     ? authorVotesDb.map((x) => AuthorVotes.fromDB(x))
     : undefined
@@ -50,11 +49,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   if (profileDb?.id) {
     // not awaited to not block the render
-    profileServiceServer.incrementViewCount(
-      profileDb.id,
-      profileDb.total_views,
-      client,
-    )
+    profileService.incrementViewCount(profileDb.id, profileDb.total_views)
   }
 
   return Response.json(

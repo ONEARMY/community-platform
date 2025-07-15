@@ -1,7 +1,7 @@
 import { MapFilterList } from './MapFilterList'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { MapFilterOptionsList } from 'oa-shared'
+import type { MapFilterOption } from 'oa-shared'
 
 export default {
   title: 'Map/MapFilterList',
@@ -9,7 +9,7 @@ export default {
 } as Meta<typeof MapFilterList>
 
 // Copied from src/pages/Maps/Content/MapView/allMapFilterOptions.ts
-const availableFilters: MapFilterOptionsList = [
+const availableFilters: MapFilterOption[] = [
   {
     _id: 'workspace',
     filterType: 'profileType',
@@ -83,7 +83,7 @@ const availableFilters: MapFilterOptionsList = [
 ]
 
 export const Default: StoryFn<typeof MapFilterList> = () => {
-  const activeFilters = [] as MapFilterOptionsList
+  const activeFilters = [] as MapFilterOption[]
   const onClose = () => {
     null
   }

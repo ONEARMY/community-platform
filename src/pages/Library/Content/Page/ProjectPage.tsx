@@ -6,14 +6,13 @@ import {
   UsefulStatsButton,
   UserEngagementWrapper,
 } from 'oa-components'
-import { IModerationStatus } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { CommentSectionSupabase } from 'src/pages/common/CommentsSupabase/CommentSectionSupabase'
 import { usefulService } from 'src/services/usefulService'
-import { useProfileStore } from 'src/stores/User/profile.store'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Card, Flex } from 'theme-ui'
 
 import { LibraryDescription } from './LibraryDescription'
@@ -122,7 +121,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
               >
                 Leave a comment
               </Button>
-              {item.moderation === IModerationStatus.ACCEPTED && (
+              {item.moderation === 'accepted' && (
                 <UsefulStatsButton
                   votedUsefulCount={usefulCount}
                   hasUserVotedUseful={voted}

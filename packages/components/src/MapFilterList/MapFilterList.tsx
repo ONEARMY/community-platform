@@ -7,15 +7,11 @@ import { UserBadge } from '../Username/UserBadge'
 import { MapFilterListItem } from './MapFilterListItem'
 import { MapFilterListWrapper } from './MapFilterListWrapper'
 
-import type {
-  MapFilterOption,
-  MapFilterOptionsList,
-  ProfileTypeName,
-} from 'oa-shared'
+import type { MapFilterOption, ProfileTypeName } from 'oa-shared'
 
 export interface IProps {
-  activeFilters: MapFilterOptionsList
-  availableFilters: MapFilterOptionsList
+  activeFilters: MapFilterOption[]
+  availableFilters: MapFilterOption[]
   onClose: () => void
   onFilterChange: (filter: MapFilterOption) => void
   pinCount: number
@@ -42,7 +38,7 @@ export const MapFilterList = (props: IProps) => {
 
   const checkBoxFilters = (
     title: string,
-    filters: MapFilterOptionsList,
+    filters: MapFilterOption[],
     badge: boolean = false,
   ) => (
     <>

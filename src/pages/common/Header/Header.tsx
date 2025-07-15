@@ -13,7 +13,7 @@ import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
 import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import { notificationSupabaseService } from 'src/services/notificationSupabaseService'
-import { useProfileStore } from 'src/stores/User/profile.store'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Flex, Text, useThemeUI } from 'theme-ui'
 
 import { EnvironmentContext } from '../EnvironmentContext'

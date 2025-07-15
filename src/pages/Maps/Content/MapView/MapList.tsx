@@ -3,17 +3,17 @@ import { Box, Flex } from 'theme-ui'
 
 import { MapWithListHeader } from './MapWithListHeader'
 
-import type { IMapPin, MapFilterOption, MapFilterOptionsList } from 'oa-shared'
+import type { MapFilterOption, MapPin } from 'oa-shared'
 
 interface IProps {
-  activePinFilters: MapFilterOptionsList
-  allToggleFilters: MapFilterOptionsList
+  activePinFilters: MapFilterOption[]
+  allToggleFilters: MapFilterOption[]
   notification: string
   onBlur: () => void
   onLocationChange: (ILatLng) => void
-  onPinClick: (pin: IMapPin) => void
-  pins: IMapPin[] | null
-  selectedPin: IMapPin | undefined
+  onPinClick: (pin: MapPin) => void
+  pins: MapPin[] | null
+  selectedPin: MapPin | undefined
   setActivePinFilters: (MapFilterOption) => void
   setShowMobileList: (boolean) => void
   showMobileList: boolean

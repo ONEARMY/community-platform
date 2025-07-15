@@ -2,7 +2,6 @@ import { DBComment } from 'oa-shared'
 import { CommentFactory } from 'src/factories/commentFactory.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { ImageServiceServer } from 'src/services/imageService.server'
-import { notificationsService } from 'src/services/notificationsService.server'
 import { notificationsSupabaseServiceServer } from 'src/services/notificationSupabaseService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
 
@@ -169,7 +168,6 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 
     addSubscriptions(comment, profile, client)
 
-    notificationsService.sendCommentNotification(client, comment, profile)
     notificationsSupabaseServiceServer.createNotificationsNewComment(
       comment,
       client,

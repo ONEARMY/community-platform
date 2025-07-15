@@ -18,7 +18,7 @@ import {
 } from 'src/pages/Research/Content/helper'
 import { subscribersService } from 'src/services/subscribersService'
 import { usefulService } from 'src/services/usefulService'
-import { useProfileStore } from 'src/stores/User/profile.store'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { hasAdminRights } from 'src/utils/helpers'
 import { Box, Flex } from 'theme-ui'
 

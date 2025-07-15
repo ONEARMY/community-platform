@@ -2,7 +2,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import { SITE } from 'src/config/config'
 import { getDevSiteRole } from 'src/config/devSiteConfig'
-import { useProfileStore } from 'src/stores/User/profile.store'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 
 import type { Profile, UserRole } from 'oa-shared'
 

@@ -1,13 +1,11 @@
-import type { IBoundingBox, IMapPin } from 'oa-shared'
+import type { IBoundingBox, MapPin } from 'oa-shared'
 
-export const latLongFilter = (boundaries: IBoundingBox, pinList: IMapPin[]) => {
-  const result = pinList.filter(({ location }) => {
+export const latLongFilter = (boundaries: IBoundingBox, pinList: MapPin[]) => {
+  const result = pinList.filter(({ lat, lng }) => {
     const inLat =
-      location.lat >= boundaries._southWest.lat &&
-      location.lat <= boundaries._northEast.lat
+      lat >= boundaries._southWest.lat && lat <= boundaries._northEast.lat
     const inLng =
-      location.lng >= boundaries._southWest.lng &&
-      location.lng <= boundaries._northEast.lng
+      lng >= boundaries._southWest.lng && lng <= boundaries._northEast.lng
     return inLat && inLng
   })
 

@@ -6,6 +6,7 @@ import type {
 } from './common'
 import type { IDBDocSB, IDoc } from './document'
 import type { DBMedia, Image } from './media'
+import type { IDBModeration, IModeration, Moderation } from './moderation'
 import type { News } from './news'
 import type { IPatreonUser } from './patreon'
 import type { Question } from './question'
@@ -455,51 +456,35 @@ export type ProfileFormData = {
   visitorPolicy: UserVisitorPreference
 }
 
-export class DBMapPin {
+export class DBMapPin implements IDBModeration {
   readonly id: number
-  readonly profile: DBProfile
-  user_id: number
-  name: string
-  country: string
+  readonly profile: DBPinProfile
+  profile_id: number
+  country: string // check if necessary
   country_code: string
   administrative: string
   postcode: string
-  description: string
   lat: number
   lng: number
+  moderation: Moderation
+  moderation_feedback: string
 }
 
-export class MapPin {
+export class MapPin implements IModeration {
   readonly id: number
-  readonly userId: number
-  readonly profile: Profile
-  name: string
+  readonly profileId: number
+  readonly profile: PinProfile
   country: string
   countryCode: string
   administrative: string
   postcode: string
-  description: string
   lat: number
   lng: number
+  moderation: Moderation
+  moderatonFeedback?: string
 
   constructor(obj: MapPin) {
     Object.assign(this, obj)
-  }
-
-  static fromDB(pin: DBMapPin) {
-    return new MapPin({
-      id: pin.id,
-      userId: pin.user_id,
-      profile: pin.profile ? Profile.fromDB(pin.profile) : undefined,
-      name: pin.name,
-      country: pin.country,
-      countryCode: pin.country_code,
-      administrative: pin.administrative,
-      postcode: pin.postcode,
-      description: pin.description,
-      lat: pin.lat,
-      lng: pin.lng,
-    })
   }
 }
 
@@ -523,3 +508,30 @@ export class AuthorVotes {
     })
   }
 }
+
+export type DBPinProfile = Pick<
+  DBProfile,
+  | 'id'
+  | 'display_name'
+  | 'username'
+  | 'is_verified'
+  | 'is_supporter'
+  | 'photo'
+  | 'tags'
+  | 'type'
+  | 'open_to_visitors'
+>
+
+export type PinProfile = Pick<
+  Profile,
+  | 'id'
+  | 'displayName'
+  | 'username'
+  | 'isVerified'
+  | 'isSupporter'
+  | 'photo'
+  | 'tags'
+  | 'type'
+  | 'openToVisitors'
+  | 'about'
+>

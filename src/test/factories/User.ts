@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { ExternalLinkLabel, ProfileTypeList } from 'oa-shared'
 
-import type { IExternalLink, IUploadedFileMeta, IUserDB } from 'oa-shared'
+import type { IExternalLink, IUploadedFileMeta, Profile } from 'oa-shared'
 
 export const factoryImage: IUploadedFileMeta = {
   timeCreated: '2019-09-27T14:58:41.378Z',
@@ -20,20 +20,18 @@ export const factoryLink: IExternalLink = {
   label: ExternalLinkLabel.WEBSITE,
 }
 
-export const FactoryUser = (userOverloads: Partial<IUserDB> = {}): IUserDB => ({
-  _id: faker.string.uuid(),
-  _created: faker.date.past().toString(),
-  _modified: faker.date.past().toString(),
-  _deleted: faker.datatype.boolean(),
-  _contentModifiedTimestamp: faker.date.past().toString(),
-  _authID: faker.string.uuid(),
-  profileType: faker.helpers.arrayElement(Object.values(ProfileTypeList)),
-  userName: faker.internet.userName(),
+export const FactoryUser = (
+  userOverloads: Partial<Profile> = {},
+): Partial<Profile> => ({
+  id: faker.number.int(),
+  createdAt: faker.date.past(),
+  type: faker.helpers.arrayElement(Object.values(ProfileTypeList)),
+  username: faker.internet.userName(),
   displayName: faker.person.fullName(),
-  verified: faker.datatype.boolean(),
+  isVerified: faker.datatype.boolean(),
+  isSupporter: faker.datatype.boolean(),
   links: [],
   country: faker.location.countryCode(),
-  notifications: [],
   coverImages: [] as any[],
   ...userOverloads,
 })

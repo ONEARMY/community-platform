@@ -1,10 +1,10 @@
-import { IModerationStatus, UserRole } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 import { getConfigurationOption, NO_MESSAGING } from 'src/config/config'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 
 import { SUPPORTED_IMAGE_TYPES } from './storage'
 
-import type { DBDoc, DBProfile, IMapPin, IModerable, Profile } from 'oa-shared'
+import type { DBProfile, IModeration, MapPin, Profile } from 'oa-shared'
 
 const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi
 
@@ -91,15 +91,15 @@ export const hasAdminRightsSupabase = (user?: DBProfile) => {
   return roles.includes(UserRole.ADMIN)
 }
 
-export const needsModeration = (doc: IModerable, user?: Profile) => {
+export const needsModeration = (doc: IModeration, user?: Profile) => {
   if (!hasAdminRights(user)) {
     return false
   }
-  return doc.moderation !== IModerationStatus.ACCEPTED
+  return doc.moderation !== 'accepted'
 }
 
-export const isAllowedToPin = (pin: IMapPin, user?: Profile) => {
-  if (hasAdminRights(user) || (pin._id && user && pin._id === user.username)) {
+export const isAllowedToPin = (pin: MapPin, user?: Profile) => {
+  if (hasAdminRights(user) || (pin.id && user && pin.userId === user.id)) {
     return true
   } else {
     return false
@@ -136,11 +136,6 @@ export const isContactable = (preference: boolean | undefined) => {
 export const getProjectEmail = (subject: string) => {
   const site = getConfigurationOption('VITE_THEME', 'precious-plastic')
   return `mailto:platform@onearmy.earth?subject=${subject}%20${site}`
-}
-
-// ensure docs passed to edit check contain _createdBy field
-export interface IEditableDoc extends DBDoc {
-  _createdBy: string
 }
 
 export const randomIntFromInterval = (min, max) =>

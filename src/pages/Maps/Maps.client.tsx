@@ -5,14 +5,14 @@ import { allMapFilterOptions } from './Content/MapView/allMapFilterOptions'
 import { MapContainer } from './Content/MapView/MapContainer'
 import { mapPinService } from './map.service'
 
-import type { IMapPin, MapFilterOptionsList } from 'oa-shared'
+import type { MapFilterOption, MapPin } from 'oa-shared'
 
 import './styles.css'
 
 const STARTING_NOTIFICATION = 'Loading...'
 
 const MapsPage = () => {
-  const [allPins, setAllPins] = useState<IMapPin[] | null>(null)
+  const [allPins, setAllPins] = useState<MapPin[] | null>(null)
   const [notification, setNotification] = useState<string>(
     STARTING_NOTIFICATION,
   )
@@ -31,22 +31,21 @@ const MapsPage = () => {
     fetchMapPins()
   }, [])
 
-  const allToggleFilters: MapFilterOptionsList = useMemo(() => {
+  const allToggleFilters = useMemo<MapFilterOption[]>(() => {
     if (!allPins) {
       return []
     }
 
-    const pinDetails = allPins.map(({ creator }) => {
+    const pinDetails = allPins.map(({ profile }) => {
       return [
-        creator?.profileType,
+        profile?.type,
         // Hiding member tags for the moment
-        ...(creator?.tags && creator?.profileType !== 'member'
-          ? creator.tags.map(({ _id }) => _id)
+        ...(profile?.type && profile?.type !== 'member'
+          ? profile.tags?.map(({ name }) => name) || []
           : []),
-        ...(creator?.badges
-          ? Object.keys(creator?.badges).filter((key) => key)
-          : []),
-        ...(creator?.openToVisitors ? ['visitors'] : []),
+        ...(profile?.isVerified ? ['verified'] : []),
+        ...(profile?.isSupporter ? ['supporter'] : []),
+        ...(profile?.openToVisitors ? ['visitors'] : []),
       ]
     })
 

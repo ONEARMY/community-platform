@@ -1,6 +1,6 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
-import { IModerationStatus, Question } from 'oa-shared'
+import { Question } from 'oa-shared'
 import { ITEMS_PER_PAGE } from 'src/pages/Question/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
@@ -11,7 +11,7 @@ import { convertToSlug } from 'src/utils/slug'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBProfile, DBQuestion } from 'oa-shared'
+import type { DBProfile, DBQuestion, Moderation } from 'oa-shared'
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions'
 
 export const loader = async ({ request }) => {
@@ -169,7 +169,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         title: data.title,
         description: data.description,
         is_draft: data.is_draft,
-        moderation: IModerationStatus.ACCEPTED,
+        moderation: 'accepted' as Moderation,
         slug,
         category: data.category,
         tags: data.tags,

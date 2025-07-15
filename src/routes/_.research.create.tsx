@@ -2,7 +2,7 @@ import { redirect } from '@remix-run/react'
 import { UserRole } from 'oa-shared'
 import ResearchForm from 'src/pages/Research/Content/Common/ResearchForm'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { profileServiceServer } from 'src/services/profileService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 import { redirectServiceServer } from 'src/services/redirectService.server'
 
 export async function loader({ request }) {
@@ -16,7 +16,8 @@ export async function loader({ request }) {
     return redirectServiceServer.redirectSignIn('/research/create', headers)
   }
 
-  const profile = await profileServiceServer.getByAuthId(user.id, client)
+  const profileService = new ProfileServiceServer(client)
+  const profile = await profileService.getByAuthId(user.id)
   const roles = (profile?.roles || []) as string[]
 
   // Check if user has required permissions

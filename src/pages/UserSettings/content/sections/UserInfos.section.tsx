@@ -14,7 +14,7 @@ import { SelectField } from 'src/common/Form/Select.field'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { EnvironmentContext } from 'src/pages/common/EnvironmentContext'
 import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
-import { useProfileStore } from 'src/stores/User/profile.store'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { required } from 'src/utils/validators'
 import { Flex, Heading, Text } from 'theme-ui'
 

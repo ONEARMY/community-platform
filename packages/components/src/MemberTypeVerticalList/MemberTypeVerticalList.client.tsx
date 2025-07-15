@@ -4,15 +4,11 @@ import { CardButton } from '../CardButton/CardButton'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
 import { VerticalList } from '../VerticalList/VerticalList.client'
 
-import type {
-  MapFilterOption,
-  MapFilterOptionsList,
-  ProfileTypeName,
-} from 'oa-shared'
+import type { MapFilterOption, ProfileTypeName } from 'oa-shared'
 
 export interface IProps {
-  activeFilters: MapFilterOptionsList
-  availableFilters: MapFilterOptionsList
+  activeFilters: MapFilterOption[]
+  availableFilters: MapFilterOption[]
   onFilterChange: (filter: MapFilterOption) => void
 }
 

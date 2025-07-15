@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from 'react'
 import { Popup as LeafletPopup } from 'react-leaflet'
-import L from 'leaflet'
+import { Point } from 'leaflet'
 import { PinProfile } from 'oa-components'
 
-import type { ILatLng, IMapPin, IMapPinWithDetail } from 'oa-shared'
+import type { ILatLng, MapPin } from 'oa-shared'
 import type { Map } from 'react-leaflet'
 
 import './popup.css'
 
 interface IProps {
-  activePin: IMapPin | IMapPinWithDetail
+  activePin: MapPin
   mapRef: React.RefObject<Map>
   onClose?: () => void
   customPosition?: ILatLng
@@ -17,7 +17,6 @@ interface IProps {
 
 export const Popup = (props: IProps) => {
   const leafletRef = useRef<LeafletPopup>(null)
-  const activePin = props.activePin as IMapPinWithDetail
   const { mapRef, onClose, customPosition } = props
 
   useEffect(() => {
@@ -32,25 +31,26 @@ export const Popup = (props: IProps) => {
     }
   }
 
+  if (!props.activePin?.lat) {
+    return null
+  }
+
   return (
-    activePin.location && (
-      <LeafletPopup
-        ref={leafletRef}
-        position={
-          customPosition
-            ? customPosition
-            : [activePin.location.lat, activePin.location.lng]
-        }
-        offset={new L.Point(2, -10)}
-        closeOnClick={false}
-        closeOnEscapeKey={false}
-        closeButton={false}
-        className={activePin !== undefined ? '' : 'closed'}
-        minWidth={250}
-        maxWidth={300}
-      >
-        {onClose && <PinProfile item={activePin} onClose={onClose} />}
-      </LeafletPopup>
-    )
+    <LeafletPopup
+      ref={leafletRef}
+      position={
+        customPosition
+          ? customPosition
+          : [props.activePin.lat, props.activePin.lng]
+      }
+      offset={new Point(2, -10)}
+      closeOnClick={false}
+      closeOnEscapeKey={false}
+      closeButton={false}
+      minWidth={250}
+      maxWidth={300}
+    >
+      {onClose && <PinProfile item={props.activePin} onClose={onClose} />}
+    </LeafletPopup>
   )
 }

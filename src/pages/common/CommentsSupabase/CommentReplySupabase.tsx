@@ -8,7 +8,7 @@ import {
   Modal,
 } from 'oa-components'
 import { UserRole } from 'oa-shared'
-import { useProfileStore } from 'src/stores/User/profile.store'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Box, Flex, Text } from 'theme-ui'
 
 import type { Reply } from 'oa-shared'

@@ -19,12 +19,13 @@ const update = async (value: ProfileFormData) => {
     const url = new URL('/api/profile', window.location.origin)
     const data = new FormData()
 
-    data.append('', value.displayName)
-    data.append('', value.about)
-    if (value.country) {
-      data.append('', value.country)
-    }
-    data.append('', value.type)
+    data.append('displayName', value.displayName)
+    data.append('about', value.about)
+    data.append('country', value.country)
+    data.append('type', value.type)
+    data.append('existingImageId', value.existingImageId || '')
+    data.append('isContactable', value.isContactable ? 'true' : 'false')
+    data.append('showVisitorPolicy', value.showVisitorPolicy.toString())
 
     if (
       value.existingCoverImageIds &&
@@ -37,11 +38,9 @@ const update = async (value: ProfileFormData) => {
       }
     }
 
-    data.append('', value.existingImageId || '')
-
-    data.append('', value.isContactable ? 'true' : 'false')
-
     if (value.links && value.links?.length > 0) {
+      data.append('linkCount', value.links.length.toString())
+
       for (let i = 0; i < value.links.length; i++) {
         const link = value.links[0]
         if (link) {
@@ -50,8 +49,6 @@ const update = async (value: ProfileFormData) => {
         }
       }
     }
-
-    data.append('showVisitorPolicy', value.showVisitorPolicy.toString())
 
     if (value.showVisitorPolicy) {
       if (value.visitorPolicy?.details) {

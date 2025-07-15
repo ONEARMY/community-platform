@@ -10,23 +10,18 @@ import {
 } from 'oa-components'
 import { Flex, Text } from 'theme-ui'
 
-import type {
-  ILatLng,
-  IMapPin,
-  MapFilterOption,
-  MapFilterOptionsList,
-} from 'oa-shared'
+import type { ILatLng, MapFilterOption, MapPin } from 'oa-shared'
 
 interface IProps {
-  pins: IMapPin[] | null
-  activePinFilters: MapFilterOptionsList
-  availableFilters: MapFilterOptionsList
+  pins: MapPin[] | null
+  activePinFilters: MapFilterOption[]
+  availableFilters: MapFilterOption[]
   notification: string
   onBlur: () => void
-  onPinClick: (pin: IMapPin) => void
+  onPinClick: (pin: MapPin) => void
   onFilterChange: (filter: MapFilterOption) => void
   onLocationChange: (latlng: ILatLng) => void
-  selectedPin: IMapPin | undefined
+  selectedPin: MapPin | undefined
   setShowMobileList?: (set: boolean) => void
   viewport: 'desktop' | 'mobile'
 }

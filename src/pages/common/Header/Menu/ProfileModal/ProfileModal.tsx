@@ -5,7 +5,7 @@ import { ReturnPathLink } from 'oa-components'
 import { preciousPlasticTheme } from 'oa-themes'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
-import { useProfileStore } from 'src/stores/User/profile.store'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Box, Flex } from 'theme-ui'
 
 // TODO: Remove direct usage of Theme

@@ -1,6 +1,6 @@
 import { Image, Question } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { profileServiceServer } from 'src/services/profileService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 import { questionServiceServer } from 'src/services/questionService.server'
 import { hasAdminRightsSupabase, validateImages } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
@@ -183,7 +183,8 @@ async function validateRequest(
     }
   }
 
-  const profile = await profileServiceServer.getByAuthId(user!.id, client)
+  const profileService = new ProfileServiceServer(client)
+  const profile = await profileService.getByAuthId(user!.id)
 
   if (!profile) {
     return { status: 400, statusText: 'User not found' }

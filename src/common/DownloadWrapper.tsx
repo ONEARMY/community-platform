@@ -61,7 +61,6 @@ export const DownloadWrapper = (props: IProps) => {
       loggedOut={
         <DownloadButton
           isLoggedIn={false}
-          fileDownloadCount={fileDownloadCount}
           onClick={handleLoggedOutDownloadClick}
         />
       }

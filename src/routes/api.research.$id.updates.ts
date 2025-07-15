@@ -1,8 +1,6 @@
 import { ResearchUpdate, UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { discordServiceServer } from 'src/services/discordService.server'
-import { notificationsService } from 'src/services/notificationsService.server'
-import { notificationsSupabaseServiceServer } from 'src/services/notificationSupabaseService.server'
+import { notificationsCoordinationServiceServer } from 'src/services/notificationsCoordinationService.server'
 import { profileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
@@ -79,14 +77,16 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         created_by: profile.id,
         tenant_id: process.env.TENANT_ID,
       })
-      .select()
+      .select('*,research:research(id,slug,is_draft)')
+      .single()
 
     if (updateResult.error || !updateResult.data) {
       throw updateResult.error
     }
 
-    const dbResearchUpdate = updateResult.data[0]
+    const dbResearchUpdate = updateResult.data
     const researchUpdate = ResearchUpdate.fromDB(dbResearchUpdate, [])
+    researchUpdate.research = updateResult.data.research
 
     await uploadAndUpdateImages(
       uploadedImages,
@@ -104,25 +104,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     await addSubscribers(researchUpdate.id, profile.id, client)
 
-    if (!research.is_draft && !researchUpdate.isDraft) {
-      notificationsService.sendResearchUpdateNotification(
-        client,
-        research,
-        dbResearchUpdate,
-        profile,
-      )
-      notificationsSupabaseServiceServer.createNotificationsResearchUpdate(
-        research,
-        dbResearchUpdate,
-        client,
-      )
-      notifyDiscord(
-        research,
-        researchUpdate,
-        profile,
-        new URL(request.url).origin.replace('http:', 'https:'),
-      )
-    }
+    notificationsCoordinationServiceServer.researchUpdate(
+      researchUpdate,
+      profile,
+      client,
+      request,
+    )
 
     return Response.json({ researchUpdate }, { headers, status: 201 })
   } catch (error) {
@@ -217,17 +204,6 @@ function validateImages(images: File[]) {
   }
 
   return { valid: errors.length === 0, errors }
-}
-
-async function notifyDiscord(
-  research: DBResearchItem,
-  update: ResearchUpdate,
-  profile: DBProfile,
-  siteUrl: string,
-) {
-  discordServiceServer.postWebhookRequest(
-    `🧪 ${profile.username} posted a new research update: ${update.title}\nCheck it out here: <${siteUrl}/research/${research.slug}#update_${update.id}>`,
-  )
 }
 
 function validateRequest(

@@ -178,6 +178,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
   researchId: number
   title: string
   videoUrl: string | null
+  research?: DBResearchItem
 
   constructor(obj: ResearchUpdate) {
     Object.assign(this, obj)

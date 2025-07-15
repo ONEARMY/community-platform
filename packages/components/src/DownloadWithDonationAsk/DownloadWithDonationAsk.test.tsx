@@ -82,7 +82,7 @@ describe('DownloadWithDonationAsk', () => {
   })
 
   it('renders the download counter with the correct total', () => {
-    const fileDownloadCount = 1234567 
+    const fileDownloadCount = 1234567
 
     const { container } = render(
       <DownloadWithDonationAsk

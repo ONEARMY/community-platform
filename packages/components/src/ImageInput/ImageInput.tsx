@@ -4,7 +4,6 @@ import { Box, Flex, Image as ImageComponent, Text } from 'theme-ui'
 
 import { Button } from '../Button/Button'
 import { Modal } from '../Modal/Modal'
-import { compressImage } from './compressImage'
 import { getPresentFiles } from './getPresentFiles'
 import { ImageConverterList } from './ImageConverterList'
 import { ImageInputDeleteImage } from './ImageInputDeleteImage'
@@ -95,16 +94,6 @@ export const ImageInput = (props: IProps) => {
       setIsImageCorrupt(false)
       setIsImageTooLarge(false)
       setIsImageDimensionsTooLarge(false)
-
-      try {
-        const compressedImage = await compressImage(selectedImage[0])
-        selectedImage[0] = compressedImage
-      } catch (compressionError) {
-        console.error(
-          'Image compression failed, using original image: ',
-          compressionError,
-        )
-      }
 
       setInputFiles(selectedImage)
     } catch (validationError) {
@@ -206,19 +195,15 @@ export const ImageInput = (props: IProps) => {
               gap: '20px',
             }}
           >
-            <Text>
-              The uploaded image dimensions are too large. Maximum width and
-              height is 2500px.
-            </Text>
-            <Text>
-              Please resize your image or choose one with smaller dimensions.
-            </Text>
+            <Text>The maximum width and height for images is 2500px.</Text>
+            <Text>Please optimize your image and try again.</Text>
+
             <Button
               data-cy="ImageUploadDimensionsError-Button"
               sx={{ marginTop: '20px', justifyContent: 'center' }}
               onClick={() => setShowErrorModal(false)}
             >
-              Try uploading something else
+              Close
             </Button>
           </Flex>
         )}
@@ -232,16 +217,14 @@ export const ImageInput = (props: IProps) => {
               gap: '20px',
             }}
           >
-            <Text>
-              The uploaded image is too large. Maximum file size is 5MB.
-            </Text>
-            <Text>Please compress your image or choose a smaller file.</Text>
+            <Text>The maximum image size is 5MB.</Text>
+            <Text>Please optimize your image and try again.</Text>
             <Button
               data-cy="ImageUploadSizeError-Button"
               sx={{ marginTop: '20px', justifyContent: 'center' }}
               onClick={() => setShowErrorModal(false)}
             >
-              Try uploading something else
+              Close
             </Button>
           </Flex>
         )}

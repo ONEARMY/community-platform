@@ -13915,21 +13915,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uppy/compressor@npm:^1.1.4":
-  version: 1.1.4
-  resolution: "@uppy/compressor@npm:1.1.4"
-  dependencies:
-    "@transloadit/prettier-bytes": "npm:^0.3.4"
-    "@uppy/utils": "npm:^5.9.0"
-    compressorjs: "npm:^1.2.1"
-    preact: "npm:^10.5.13"
-    promise-queue: "npm:^2.2.5"
-  peerDependencies:
-    "@uppy/core": ^3.11.2
-  checksum: 10/02130a149f88402da10fa2d55e86ec55e44265d92832943e11b0a3e5ef624e7cc2f59fb21a70a0c5e1465003a0a5d495a903aaf4b7366fd1baaa05b160d80fb9
-  languageName: node
-  linkType: hard
-
 "@uppy/core@npm:^3.11.3":
   version: 3.13.1
   resolution: "@uppy/core@npm:3.13.1"
@@ -15871,13 +15856,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"blueimp-canvas-to-blob@npm:^3.29.0":
-  version: 3.29.0
-  resolution: "blueimp-canvas-to-blob@npm:3.29.0"
-  checksum: 10/6a55b90fbe958b75f7c78ff9e7617c01254d29cc8567ea6c853cd26a52518b3dfce28635f6964130ac738ee8ff9fb9c0ca094db2ceeaa021ff0432c1985416eb
-  languageName: node
-  linkType: hard
-
 "body-parser@npm:1.20.3, body-parser@npm:^1.18.3, body-parser@npm:^1.19.0, body-parser@npm:^1.20.2":
   version: 1.20.3
   resolution: "body-parser@npm:1.20.3"
@@ -17167,16 +17145,6 @@ __metadata:
     safe-buffer: "npm:5.2.1"
     vary: "npm:~1.1.2"
   checksum: 10/c69cf6da151db6f9db2e242b6a0039ad41975ee886c385cff2920c5f8f7050678e0ee9a021437af033536c451791de529de376851b8d31fee42ca2d6adca03f0
-  languageName: node
-  linkType: hard
-
-"compressorjs@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "compressorjs@npm:1.2.1"
-  dependencies:
-    blueimp-canvas-to-blob: "npm:^3.29.0"
-    is-blob: "npm:^2.1.0"
-  checksum: 10/4c814e27f6c0f85eb131fccbf48df113bc71f2e61852fe1d070477c4a63ac3838897371bd48e9eec55a45243452e57eaa79a220b90193bdb9bea1721ed84131f
   languageName: node
   linkType: hard
 
@@ -23753,13 +23721,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-blob@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "is-blob@npm:2.1.0"
-  checksum: 10/ce24917bf50a52736e37702a14bc729a0e1eab6bf61ac0b8e6ee86caf33d73eba297131736f8e54615732d08168859493ba7ced4fc840bb5b7c2ae21a5de6861
-  languageName: node
-  linkType: hard
-
 "is-boolean-object@npm:^1.1.0":
   version: 1.1.2
   resolution: "is-boolean-object@npm:1.1.2"
@@ -29275,7 +29236,6 @@ __metadata:
     "@types/react-select": "npm:^2.0.17"
     "@typescript-eslint/eslint-plugin": "npm:^7.13.0"
     "@typescript-eslint/parser": "npm:^7.13.0"
-    "@uppy/compressor": "npm:^1.1.4"
     "@uppy/core": "npm:^3.11.3"
     "@uppy/dashboard": "npm:^3.8.3"
     "@uppy/drag-drop": "npm:^3.1.0"
@@ -29288,7 +29248,6 @@ __metadata:
     canvas-confetti: "npm:^1.9.3"
     chai-subset: "npm:^1.6.0"
     compression: "npm:^1.7.4"
-    compressorjs: "npm:^1.2.1"
     concurrently: "npm:^6.2.0"
     countries-list: "npm:^2.6.1"
     cross-env: "npm:^7.0.3"
@@ -31169,13 +31128,6 @@ __metadata:
   version: 1.0.1
   resolution: "promise-inflight@npm:1.0.1"
   checksum: 10/1560d413ea20c5a74f3631d39ba8cbd1972b9228072a755d01e1f5ca5110382d9af76a1582d889445adc6e75bb5ac4886b56dc4b6eae51b30145d7bb1ac7505b
-  languageName: node
-  linkType: hard
-
-"promise-queue@npm:^2.2.5":
-  version: 2.2.5
-  resolution: "promise-queue@npm:2.2.5"
-  checksum: 10/3e3c33d91c4f4afb59d50d18c4d22e820fbb82c912ba73691a2c1d28257dc1f5ca2cc0319a3d4035cf662579a9a020e2948cd375b500422d7c59581004e2dc1a
   languageName: node
   linkType: hard
 

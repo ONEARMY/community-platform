@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import Dropzone from 'react-dropzone-esm'
-import { Box, Flex, Image, Text } from 'theme-ui'
+import { Box, Flex, Image as ImageComponent, Text } from 'theme-ui'
 
 import { Button } from '../Button/Button'
 import { Modal } from '../Modal/Modal'
@@ -29,6 +29,9 @@ interface IProps {
   dataTestId?: string
 }
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB in bytes
+const MAX_IMAGE_DIMENSION = 2500 // 2500px max width/height
+
 export const ImageInput = (props: IProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const prevPropsValue = useRef<IInputValue | IMultipleInputValue>()
@@ -41,12 +44,57 @@ export const ImageInput = (props: IProps) => {
     getPresentFiles(value),
   )
   const [isImageCorrupt, setIsImageCorrupt] = useState(false)
+  const [isImageTooLarge, setIsImageTooLarge] = useState(false)
+  const [isImageDimensionsTooLarge, setIsImageDimensionsTooLarge] =
+    useState(false)
   const [showErrorModal, setShowErrorModal] = useState(false)
+
+  const checkImageDimensions = (file: File): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image()
+      img.onload = () => {
+        if (
+          img.width > MAX_IMAGE_DIMENSION ||
+          img.height > MAX_IMAGE_DIMENSION
+        ) {
+          reject(
+            new Error(`Image dimensions too large: ${img.width}x${img.height}`),
+          )
+        } else {
+          resolve()
+        }
+      }
+      img.onerror = () => reject(new Error('Failed to load image'))
+      img.src = URL.createObjectURL(file)
+    })
+  }
 
   const onDrop = async (selectedImage: File[]) => {
     try {
+      // Check file size first
+      if (selectedImage[0].size > MAX_FILE_SIZE) {
+        setIsImageTooLarge(true)
+        setIsImageCorrupt(false)
+        setIsImageDimensionsTooLarge(false)
+        setShowErrorModal(true)
+        return
+      }
+
+      // Check image dimensions
+      try {
+        await checkImageDimensions(selectedImage[0])
+      } catch (dimensionError) {
+        setIsImageDimensionsTooLarge(true)
+        setIsImageCorrupt(false)
+        setIsImageTooLarge(false)
+        setShowErrorModal(true)
+        return
+      }
+
       await imageValid(selectedImage[0])
       setIsImageCorrupt(false)
+      setIsImageTooLarge(false)
+      setIsImageDimensionsTooLarge(false)
 
       try {
         const compressedImage = await compressImage(selectedImage[0])
@@ -61,6 +109,8 @@ export const ImageInput = (props: IProps) => {
       setInputFiles(selectedImage)
     } catch (validationError) {
       setIsImageCorrupt(true)
+      setIsImageTooLarge(false)
+      setIsImageDimensionsTooLarge(false)
       setShowErrorModal(true)
     }
   }
@@ -118,7 +168,9 @@ export const ImageInput = (props: IProps) => {
               {...getInputProps()}
             />
 
-            {showUploadedImg && <Image src={src} sx={imageDisplaySx} />}
+            {showUploadedImg && (
+              <ImageComponent src={src} sx={imageDisplaySx} />
+            )}
 
             {!showUploadedImg && (
               <ImageConverterList
@@ -144,6 +196,55 @@ export const ImageInput = (props: IProps) => {
         isOpen={showErrorModal}
         onDidDismiss={() => setShowErrorModal(false)}
       >
+        {isImageDimensionsTooLarge && (
+          <Flex
+            data-cy="ImageUploadDimensionsError"
+            mt={[1, 1, 1]}
+            sx={{
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: '20px',
+            }}
+          >
+            <Text>
+              The uploaded image dimensions are too large. Maximum width and
+              height is 2500px.
+            </Text>
+            <Text>
+              Please resize your image or choose one with smaller dimensions.
+            </Text>
+            <Button
+              data-cy="ImageUploadDimensionsError-Button"
+              sx={{ marginTop: '20px', justifyContent: 'center' }}
+              onClick={() => setShowErrorModal(false)}
+            >
+              Try uploading something else
+            </Button>
+          </Flex>
+        )}
+        {isImageTooLarge && (
+          <Flex
+            data-cy="ImageUploadSizeError"
+            mt={[1, 1, 1]}
+            sx={{
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: '20px',
+            }}
+          >
+            <Text>
+              The uploaded image is too large. Maximum file size is 5MB.
+            </Text>
+            <Text>Please compress your image or choose a smaller file.</Text>
+            <Button
+              data-cy="ImageUploadSizeError-Button"
+              sx={{ marginTop: '20px', justifyContent: 'center' }}
+              onClick={() => setShowErrorModal(false)}
+            >
+              Try uploading something else
+            </Button>
+          </Flex>
+        )}
         {isImageCorrupt && (
           <Flex
             data-cy="ImageUploadError"

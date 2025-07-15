@@ -19,6 +19,7 @@ declare global {
       clearServiceWorkers(): Promise<void>
       deleteIDB(name: string): Promise<boolean>
       expectNewNotification(ExpectedNewNotification): Chainable<void>
+      expectNoNewNotification(): Chainable<void>
       interceptAddressSearchFetch(addressResponse): Chainable<void>
       interceptAddressReverseFetch(addressResponse): Chainable<void>
       queryDocuments(
@@ -142,3 +143,10 @@ Cypress.Commands.add(
     cy.url().should('include', path)
   },
 )
+
+Cypress.Commands.add('expectNoNewNotification', () => {
+  localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
+  cy.wait(3000)
+
+  cy.get('[data-cy=notifications-no-new-messages]').first()
+})

@@ -3,10 +3,11 @@ import { notificationEmailService } from './notificationEmailService.server'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
   DBComment,
+  DBProfile,
   DBResearchItem,
-  DBResearchUpdate,
   NewNotificationData,
   NotificationActionType,
+  ResearchUpdate,
   SubscribableContentTypes,
 } from 'oa-shared'
 
@@ -142,13 +143,10 @@ const createNotificationsNewComment = async (
 
 const createNotificationsResearchUpdate = async (
   research: DBResearchItem,
-  researchUpdate: DBResearchUpdate,
+  researchUpdate: ResearchUpdate,
+  profile: DBProfile,
   client: SupabaseClient,
 ) => {
-  if (!researchUpdate.created_by) {
-    return
-  }
-
   try {
     const contentType: SubscribableContentTypes = 'research'
 
@@ -166,8 +164,8 @@ const createNotificationsResearchUpdate = async (
         sourceContentType: 'research',
         sourceContentId: research.id,
         parentContentId: researchUpdate.id,
-        triggeredById: researchUpdate.created_by!,
         contentType: 'researchUpdate',
+        triggeredById: profile.id,
       }
 
       createNotification(client, notification, subscriberId!)

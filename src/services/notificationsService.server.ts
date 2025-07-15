@@ -11,10 +11,10 @@ import type {
   DBProfile,
   DBQuestion,
   DBResearchItem,
-  DBResearchUpdate,
   INotification,
   IUserDB,
   NotificationType,
+  ResearchUpdate,
 } from 'oa-shared'
 
 const sendCommentNotification = async (
@@ -56,21 +56,23 @@ const sendCommentNotification = async (
 const sendResearchUpdateNotification = async (
   client: SupabaseClient,
   research: DBResearchItem,
-  researchUpdate: DBResearchUpdate,
+  researchUpdate: ResearchUpdate,
   triggeredBy: DBProfile,
 ) => {
   // The join creates an incorrect type, so going to any
   const { data }: { data: any[] | null } = await client
     .from('subscribers')
     .select('id, user:profiles(username)')
-    .eq('content_id', researchUpdate.research_id)
+    .eq('content_id', research.id)
     .eq('content_type', 'research')
 
-  const profileIds = data?.map((subscriber) => subscriber.user.username).flat()
+  const profileUsernames = data
+    ?.map((subscriber) => subscriber.user.username)
+    .flat()
 
-  const recipientsToNotify = new Set<string>(profileIds)
-  if (researchUpdate.created_by) {
-    recipientsToNotify.add(researchUpdate.created_by.toString())
+  const recipientsToNotify = new Set<string>(profileUsernames)
+  if (researchUpdate.author) {
+    recipientsToNotify.add(researchUpdate.author.username.toString())
   }
 
   const url = `/research/${research.slug}/#update_${researchUpdate.id}`

@@ -1,3 +1,5 @@
+import { ProfileTag } from './profileTag'
+
 import type { Comment } from './comment'
 import type {
   IConvertedFileMeta,
@@ -9,9 +11,9 @@ import type { DBMedia, Image } from './media'
 import type { IDBModeration, IModeration, Moderation } from './moderation'
 import type { News } from './news'
 import type { IPatreonUser } from './patreon'
+import type { DBProfileTag } from './profileTag'
 import type { Question } from './question'
 import type { ResearchItem, ResearchUpdate } from './research'
-import type { Tag } from './tag'
 import type {
   IExternalLink,
   IUserImpact,
@@ -20,8 +22,9 @@ import type {
 } from './user'
 
 export class DBProfile {
-  id: number
-  created_at: Date
+  readonly id: number
+  readonly created_at: Date
+  readonly tags: DBProfileTag[]
   username: string
   display_name: string
   is_verified: boolean
@@ -41,7 +44,6 @@ export class DBProfile {
   links: IExternalLink[] | null
   location: ILocation
   map_pin_description: string | null
-  tags: number[]
   total_views: number
 
   constructor(obj: DBProfile) {
@@ -66,7 +68,7 @@ export class Profile {
   openToVisitors: UserVisitorPreference | null
   links: IExternalLink[] | null
   location: ILocation
-  tags?: Tag[]
+  tags?: ProfileTag[]
   totalViews: number
   roles: string[] | null
   lastActive: Date | null
@@ -109,6 +111,7 @@ export class Profile {
       patreon: dbProfile.patreon,
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
+      tags: dbProfile.tags?.map((x) => ProfileTag.fromDB(x)),
     })
   }
 }
@@ -514,12 +517,16 @@ export type DBPinProfile = Pick<
   | 'id'
   | 'display_name'
   | 'username'
+  | 'country'
   | 'is_verified'
   | 'is_supporter'
   | 'photo'
   | 'tags'
   | 'type'
   | 'open_to_visitors'
+  | 'about'
+  | 'is_contactable'
+  | 'last_active'
 >
 
 export type PinProfile = Pick<
@@ -527,6 +534,7 @@ export type PinProfile = Pick<
   | 'id'
   | 'displayName'
   | 'username'
+  | 'country'
   | 'isVerified'
   | 'isSupporter'
   | 'photo'
@@ -534,4 +542,11 @@ export type PinProfile = Pick<
   | 'type'
   | 'openToVisitors'
   | 'about'
+  | 'isContactable'
+  | 'lastActive'
+>
+
+export type UpsertPin = Omit<
+  DBMapPin,
+  'id' | 'profile' | 'moderation' | 'moderation_feedback'
 >

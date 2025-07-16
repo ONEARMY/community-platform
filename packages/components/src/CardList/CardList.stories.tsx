@@ -1,7 +1,7 @@
 import { CardList } from './CardList'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { Moderation, ProfileTypeName } from 'oa-shared'
+import type { MapPin, Moderation, ProfileTypeName } from 'oa-shared'
 
 export default {
   title: 'Map/CardList',
@@ -10,38 +10,46 @@ export default {
 
 const list = [
   {
-    _deleted: false,
-    _id: 'first-one',
-    type: 'member' as ProfileTypeName,
+    id: 1,
+    profile: {
+      type: 'member' as ProfileTypeName,
+      isVerified: false,
+    },
     moderation: 'accepted' as Moderation,
-    verified: false,
-    location: { lat: 0, lng: 0 },
+    lat: 0,
+    lng: 0,
   },
   {
-    _deleted: false,
-    _id: 'second-one',
-    type: 'collection-point' as ProfileTypeName,
-    moderation: 'accepted' as IModerationStatus,
-    verified: false,
-    location: { lat: 10, lng: -38 },
+    id: 2,
+    moderation: 'accepted' as Moderation,
+    profile: {
+      type: 'collection-point' as ProfileTypeName,
+      isVerified: false,
+    },
+    lat: 10,
+    lng: -38,
   },
   {
-    _deleted: false,
-    _id: 'third',
-    type: 'member' as ProfileTypeName,
-    moderation: 'accepted' as IModerationStatus,
-    verified: false,
-    location: { lat: 102, lng: 30 },
+    id: 3,
+    profile: {
+      type: 'member' as ProfileTypeName,
+      isVerified: false,
+    },
+    moderation: 'accepted' as Moderation,
+    lat: 102,
+    lng: 30,
   },
   {
-    _deleted: false,
-    _id: '4th',
-    type: 'member' as ProfileTypeName,
-    moderation: 'accepted' as IModerationStatus,
-    verified: false,
-    location: { lat: 0, lng: 73 },
+    id: 4,
+    profile: {
+      type: 'member' as ProfileTypeName,
+      isVerified: false,
+    },
+    moderation: 'accepted' as Moderation,
+    lat: 0,
+    lng: 73,
   },
-]
+] as MapPin[]
 
 const onPinClick = () => undefined
 

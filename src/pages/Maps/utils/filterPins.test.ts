@@ -1,4 +1,4 @@
-import { IModerationStatus, ProfileTypeList } from 'oa-shared'
+import { Moderation, ProfileTypeList } from 'oa-shared'
 import { describe, expect, it } from 'vitest'
 
 import { filterPins } from './filterPins'
@@ -25,7 +25,7 @@ describe('filterPins', () => {
   const workspacePin = {
     _deleted: false,
     _id: 'bob_the_builder',
-    moderation: IModerationStatus.ACCEPTED,
+    moderation: Moderation.ACCEPTED,
     type: ProfileTypeList.WORKSPACE,
     location: { lat: 0, lng: 0 },
     verified: true,
@@ -43,7 +43,7 @@ describe('filterPins', () => {
   const memberPin = {
     _deleted: false,
     _id: 'bob_the_member',
-    moderation: IModerationStatus.ACCEPTED,
+    moderation: Moderation.ACCEPTED,
     type: ProfileTypeList.WORKSPACE,
     location: { lat: 0, lng: 0 },
     verified: true,
@@ -61,7 +61,7 @@ describe('filterPins', () => {
   const taggedMemberPin = {
     _deleted: false,
     _id: 'bob_the_tagged',
-    moderation: IModerationStatus.ACCEPTED,
+    moderation: Moderation.ACCEPTED,
     type: ProfileTypeList.MEMBER,
     location: { lat: 0, lng: 0 },
     verified: true,

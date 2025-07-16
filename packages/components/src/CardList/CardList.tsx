@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react'
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
+import { compareDesc } from 'date-fns'
 import { Flex, Text } from 'theme-ui'
 
 import { Button } from '../Button/Button'
 import { CardListItem } from '../CardListItem/CardListItem'
 import { Icon } from '../Icon/Icon'
 
-import type { IMapPin } from 'oa-shared'
+import type { MapPin } from 'oa-shared'
 
 export interface IProps {
   columnsCountBreakPoints?: { [key: number]: number }
-  list: IMapPin[]
-  onPinClick: (arg: IMapPin) => void
-  selectedPin: IMapPin | undefined
+  list: MapPin[]
+  onPinClick: (arg: MapPin) => void
+  selectedPin: MapPin | undefined
   viewport: string
 }
 
@@ -31,19 +32,20 @@ export const CardList = (props: IProps) => {
 
   useEffect(() => {
     const toRender = list
-      .sort(
-        (a, b) =>
-          Date.parse(b.creator?._lastActive || '0') -
-          Date.parse(a.creator?._lastActive || '0'),
+      .sort((a, b) =>
+        compareDesc(
+          a.profile.lastActive || Date.parse('0'),
+          b.profile.lastActive || Date.parse('0'),
+        ),
       )
       .slice(0, renderCount)
       .map((item) => {
-        const isSelectedPin = item._id === selectedPin?._id
+        const isSelectedPin = item.id === selectedPin?.id
 
         return (
           <CardListItem
             item={item}
-            key={item._id}
+            key={item.id}
             isSelectedPin={isSelectedPin}
             onPinClick={onPinClick}
             viewport={viewport}

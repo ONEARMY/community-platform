@@ -1,6 +1,6 @@
 import axios from 'axios'
 import * as functions from 'firebase-functions'
-import { IModerationStatus } from 'oa-shared'
+import { Moderation } from 'oa-shared'
 
 import { CONFIG } from '../config/config'
 
@@ -18,10 +18,9 @@ export const notifyPinPublished = functions
   .onUpdate(async (change, context) => {
     const info = (change.after.data() as IMapPin) || null
     const prevInfo = (change.before.data() as IMapPin) || null
-    const previouslyAccepted =
-      prevInfo?.moderation === IModerationStatus.ACCEPTED
+    const previouslyAccepted = prevInfo?.moderation === Moderation.ACCEPTED
     const shouldNotify =
-      info.moderation === IModerationStatus.ACCEPTED && !previouslyAccepted
+      info.moderation === Moderation.ACCEPTED && !previouslyAccepted
     if (!shouldNotify) {
       return null
     }
@@ -40,10 +39,9 @@ export const notifyLibraryItemPublished = functions
   .onUpdate(async (change, context) => {
     const info = change.after.exists ? change.after.data() : null
     const prevInfo = change.before.exists ? change.before.data() : null
-    const previouslyAccepted =
-      prevInfo?.moderation === IModerationStatus.ACCEPTED
+    const previouslyAccepted = prevInfo?.moderation === Moderation.ACCEPTED
     const shouldNotify =
-      info.moderation === IModerationStatus.ACCEPTED && !previouslyAccepted
+      info.moderation === Moderation.ACCEPTED && !previouslyAccepted
     if (!shouldNotify) {
       return null
     }

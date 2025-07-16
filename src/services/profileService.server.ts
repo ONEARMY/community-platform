@@ -22,7 +22,18 @@ export class ProfileServiceServer {
     const { data } = await this.client
       .from('profiles')
       .select(
-        'id,username,display_name,is_verified,is_supporter,photo,cover_images,country',
+        `id,
+        username,
+        display_name,
+        is_verified,
+        is_supporter,
+        photo,
+        cover_images,
+        country,
+        tags:profile_tags(
+          id:profile_tags_relations(id),
+          name:profile_tags_relations(name)
+        )`,
       )
       .in('username', usernames)
 
@@ -30,13 +41,19 @@ export class ProfileServiceServer {
       return null
     }
 
-    return data as DBProfile[]
+    return data as unknown as DBProfile[]
   }
 
   async getByUsername(username: string): Promise<DBProfile | null> {
     const { data } = await this.client
       .from('profiles')
-      .select('*')
+      .select(
+        `*,
+        tags:profile_tags(
+          id:profile_tags_relations(id),
+          name:profile_tags_relations(name)
+        )`,
+      )
       .eq('username', username)
       .single()
 

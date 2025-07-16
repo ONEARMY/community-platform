@@ -99,7 +99,7 @@ export const needsModeration = (doc: IModeration, user?: Profile) => {
 }
 
 export const isAllowedToPin = (pin: MapPin, user?: Profile) => {
-  if (hasAdminRights(user) || (pin.id && user && pin.userId === user.id)) {
+  if (hasAdminRights(user) || (pin.id && user && pin.profileId === user.id)) {
     return true
   } else {
     return false

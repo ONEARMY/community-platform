@@ -36,11 +36,17 @@ export const filterPins = (
 
   if (badgeFilters.length > 0) {
     filteredPins = filteredPins.filter(({ profile }) => {
-      if (!profile?.badges) return false
-      const badges = Object.keys(creator?.badges).filter(
-        (key) => creator?.badges && creator.badges[key],
+      if (!profile?.isVerified && !profile.isSupporter) {
+        return false
+      }
+
+      return (
+        badgeFilters.filter(
+          (badge) =>
+            (badge === 'verified' && profile.isVerified) ||
+            (badge === 'supporter' && profile.isSupporter),
+        ).length > 0
       )
-      return badgeFilters.filter((badge) => badges.includes(badge)).length > 0
     })
   }
 

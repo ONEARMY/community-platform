@@ -4,27 +4,26 @@ import { MemberBadge } from '../MemberBadge/MemberBadge'
 import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList'
 import { Username } from '../Username/Username'
 
-import type { IProfileCreator } from 'oa-shared'
+import type { MapPin } from 'oa-shared'
 
 interface IProps {
-  creator: IProfileCreator
+  profile: MapPin['profile']
   isLink: boolean
 }
 
-export const CardDetailsSpaceProfile = ({ creator, isLink }: IProps) => {
-  const { _id, about, badges, countryCode, coverImage, profileType, tags } =
-    creator
-
-  const aboutTextStart =
-    about && about.length > 80 ? about.slice(0, 78) + '...' : false
+export const CardDetailsSpaceProfile = ({ profile, isLink }: IProps) => {
+  const aboutText =
+    profile.about && profile.about.length > 80
+      ? profile.about.slice(0, 78) + '...'
+      : profile.about
 
   return (
     <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-      {coverImage && (
+      {profile.photo?.publicUrl && (
         <>
           <Flex sx={{ aspectRatio: 16 / 6, overflow: 'hidden' }}>
             <Image
-              src={coverImage}
+              src={profile.photo.publicUrl}
               sx={{
                 aspectRatio: 16 / 6,
                 alignSelf: 'stretch',
@@ -42,7 +41,7 @@ export const CardDetailsSpaceProfile = ({ creator, isLink }: IProps) => {
             }}
           >
             <MemberBadge
-              profileType={profileType}
+              profileType={profile.type}
               size={40}
               sx={{
                 float: 'right',
@@ -61,13 +60,15 @@ export const CardDetailsSpaceProfile = ({ creator, isLink }: IProps) => {
         }}
       >
         <Flex sx={{ gap: 2 }}>
-          {!coverImage && <MemberBadge profileType={profileType} size={30} />}
+          {!profile.photo?.publicUrl && (
+            <MemberBadge profileType={profile.type} size={30} />
+          )}
           <Username
             user={{
-              userName: _id,
-              countryCode,
-              isVerified: badges?.verified || false,
-              isSupporter: badges?.supporter || false,
+              userName: profile.username,
+              countryCode: profile.country,
+              isVerified: profile.isVerified || false,
+              isSupporter: profile.isContactable || false,
             }}
             sx={{ alignSelf: 'flex-start' }}
             isLink={isLink}
@@ -75,11 +76,13 @@ export const CardDetailsSpaceProfile = ({ creator, isLink }: IProps) => {
           />
         </Flex>
 
-        {tags && <ProfileTagsList tags={tags} isSpace={true} />}
+        {profile.tags && profile.tags.length > 0 && (
+          <ProfileTagsList tags={profile.tags} isSpace={true} />
+        )}
 
-        {about && (
+        {profile.about && (
           <Text variant="quiet" sx={{ fontSize: 2 }}>
-            {aboutTextStart || about}
+            {aboutText}
           </Text>
         )}
       </Flex>

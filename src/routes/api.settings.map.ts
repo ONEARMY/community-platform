@@ -4,7 +4,7 @@ import { ProfileServiceServer } from 'src/services/profileService.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
-import type { DBProfile } from 'shared/lib'
+import type { DBProfile, UpsertPin } from 'shared/lib'
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   try {
@@ -39,8 +39,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       description: formData.get('description') as string,
       lat: Number(formData.get('lat')),
       lng: Number(formData.get('lng')),
-      user_id: profile.id,
-    }
+      profile_id: profile.id,
+    } as UpsertPin
 
     const { valid, status, statusText } = await validateRequest(
       request,
@@ -70,7 +70,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 }
 
-async function validateRequest(request: Request, user: User | null, data: any) {
+async function validateRequest(
+  request: Request,
+  user: User | null,
+  data: UpsertPin,
+) {
   if (!user) {
     return { status: 401, statusText: 'unauthorized' }
   }
@@ -78,14 +82,10 @@ async function validateRequest(request: Request, user: User | null, data: any) {
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'method not allowed' }
   }
-
-  if (!data.name) {
-    return { status: 400, statusText: 'name is required' }
-  }
   if (!data.country) {
     return { status: 400, statusText: 'country is required' }
   }
-  if (!data.countryCode) {
+  if (!data.country_code) {
     return { status: 400, statusText: 'countryCode is required' }
   }
   if (!data.lat) {

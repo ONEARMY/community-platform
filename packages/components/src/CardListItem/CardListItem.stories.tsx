@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker'
 import { CardListItem } from './CardListItem'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { IModerationStatus, ProfileTypeName } from 'oa-shared'
+import type { MapPin, Moderation, ProfileTypeName } from 'oa-shared'
 
 export default {
   title: 'Map/CardListItem',
@@ -15,22 +15,23 @@ const viewport = 'desktop'
 
 export const DefaultMember: StoryFn<typeof CardListItem> = () => {
   const item = {
-    _deleted: false,
-    _id: 'not-selected-onload',
-    type: 'member' as ProfileTypeName,
-    moderation: 'accepted' as IModerationStatus,
-    verified: false,
-    location: { lat: 0, lng: 0 },
-    creator: {
-      _id: 'member_no2',
-      _lastActive: 'string',
-      countryCode: 'br',
-      userImage: faker.image.avatar(),
+    id: 1,
+    lat: 0,
+    lng: 0,
+    administrative: '',
+    country: 'Brazil',
+    countryCode: 'BR',
+    moderation: 'accepted' as Moderation,
+    profile: {
+      id: 1,
+      photo: {
+        publicUrl: faker.image.avatar(),
+      },
       displayName: 'member_no1',
-      isContactableByPublic: false,
-      profileType: 'member' as ProfileTypeName,
+      isContactable: false,
+      type: 'member' as ProfileTypeName,
     },
-  }
+  } as MapPin
 
   return (
     <div style={{ width: '500px' }}>
@@ -46,50 +47,26 @@ export const DefaultMember: StoryFn<typeof CardListItem> = () => {
 
 export const DefaultSpace: StoryFn<typeof CardListItem> = () => {
   const item = {
-    _deleted: false,
-    _id: 'not-selected-onload',
-    location: { lat: 0, lng: 0 },
-    moderation: 'accepted' as IModerationStatus,
-    type: 'workspace' as ProfileTypeName,
-    verified: false,
-    creator: {
-      _id: 'string',
-      _lastActive: 'string',
+    id: 1,
+    lat: 0,
+    lng: 0,
+    administrative: '',
+    country: 'United Kingdom',
+    countryCode: 'UK',
+    moderation: 'accepted' as Moderation,
+    profile: {
+      id: 1,
+      photo: {
+        publicUrl: faker.image.avatar(),
+      },
       about:
         'Lorem ipsum odor amet, consectetuer adipiscing elit. Lorem ipsum odor amet, consectetuer adipiscing elit.',
-      badges: {
-        supporter: true,
-        verified: false,
-      },
-      countryCode: 'uk',
-      displayName: 'user',
-      isContactableByPublic: false,
-      profileType: 'workspace' as ProfileTypeName,
-      workspaceType: 'Sheetpress',
+      displayName: 'member_no1',
+      isContactable: false,
+      type: 'space' as ProfileTypeName,
+      tags: [{ id: 1, name: 'Sheetpress' }],
     },
-  }
-
-  return (
-    <div style={{ width: '500px' }}>
-      <CardListItem
-        item={item}
-        isSelectedPin={false}
-        onPinClick={onPinClick}
-        viewport={viewport}
-      />
-    </div>
-  )
-}
-
-export const DefaultFallback: StoryFn<typeof CardListItem> = () => {
-  const item = {
-    _deleted: false,
-    _id: 'not-selected-onload',
-    type: 'member' as ProfileTypeName,
-    location: { lat: 0, lng: 0 },
-    moderation: 'accepted' as IModerationStatus,
-    verified: false,
-  }
+  } as MapPin
 
   return (
     <div style={{ width: '500px' }}>

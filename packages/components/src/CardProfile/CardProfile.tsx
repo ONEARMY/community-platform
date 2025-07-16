@@ -4,26 +4,26 @@ import { CardDetailsFallback } from './CardDetailsFallback'
 import { CardDetailsMemberProfile } from './CardDetailsMemberProfile'
 import { CardDetailsSpaceProfile } from './CardDetailsSpaceProfile'
 
-import type { IMapPin } from 'oa-shared'
+import type { MapPin } from 'oa-shared'
 
 export interface IProps {
-  item: IMapPin
+  item: MapPin
   isLink?: boolean
 }
 
 export const CardProfile = ({ item, isLink = false }: IProps) => {
-  const { creator } = item
+  const { profile } = item
 
-  const isWorkspace = creator?.profileType && creator?.profileType !== 'member'
-  const isMember = !isWorkspace && creator
+  const isWorkspace = profile?.type === 'space'
+  const isMember = !isWorkspace && profile
 
   return (
     <Flex sx={{ alignItems: 'stretch', alignContent: 'stretch' }}>
       {isWorkspace && (
-        <CardDetailsSpaceProfile creator={creator} isLink={isLink} />
+        <CardDetailsSpaceProfile profile={profile} isLink={isLink} />
       )}
       {isMember && (
-        <CardDetailsMemberProfile creator={creator} isLink={isLink} />
+        <CardDetailsMemberProfile profile={profile} isLink={isLink} />
       )}
       {!isWorkspace && !isMember && (
         <CardDetailsFallback item={item} isLink={isLink} />

@@ -1,4 +1,4 @@
-import { MapPin } from 'oa-shared'
+import { MapPin, ProfileTag } from 'oa-shared'
 import { ImageServiceServer } from 'src/services/imageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -35,14 +35,17 @@ export class MapPinFactory {
 
     return {
       id: profile.id,
+      about: profile.about,
       username: profile.username,
+      country: profile.country,
       displayName: profile.display_name,
       isSupporter: profile.is_supporter,
       isVerified: profile.is_verified,
       openToVisitors: profile.open_to_visitors,
       type: profile.type,
       photo: photo || null,
-      // tags: profile.tags || [],
+      isContactable: profile.is_contactable,
+      tags: profile.tags?.map((x) => ProfileTag.fromDB(x)),
     } as PinProfile
   }
 }

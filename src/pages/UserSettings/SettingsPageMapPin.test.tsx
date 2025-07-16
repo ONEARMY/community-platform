@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 
 import { act, waitFor } from '@testing-library/react'
-import { IModerationStatus, ProfileTypeList } from 'oa-shared'
+import { Moderation, ProfileTypeList } from 'oa-shared'
 import { FactoryMapPin } from 'src/test/factories/MapPin'
 import { factoryImage, factoryLink, FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
@@ -91,7 +91,7 @@ describe('SettingsPageMapPin', () => {
 
     mockPin = FactoryMapPin({
       comments,
-      moderation: IModerationStatus.IMPROVEMENTS_NEEDED,
+      moderation: Moderation.IMPROVEMENTS_NEEDED,
     })
 
     mockUser = FactoryUser({

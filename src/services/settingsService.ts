@@ -59,17 +59,15 @@ const update = async (profile: ProfileFormData) => {
 const upsertPin = async (
   pin: Omit<
     MapPin,
-    'id' | 'userId' | 'profile' | 'moderation' | 'moderation_feedback'
+    'id' | 'profileId' | 'profile' | 'moderation' | 'moderation_feedback'
   >,
 ) => {
   const data = new FormData()
 
-  data.append('name', pin.name)
   data.append('country', pin.country)
   data.append('countryCode', pin.countryCode)
   data.append('administrative', pin.administrative)
   data.append('postcode', pin.postcode)
-  data.append('description', pin.description)
   data.append('lat', pin.lat.toString())
   data.append('lng', pin.lng.toString())
 

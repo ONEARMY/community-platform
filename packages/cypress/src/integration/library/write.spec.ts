@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { DifficultyLevelRecord, IModerationStatus } from 'oa-shared'
+import { DifficultyLevelRecord, Moderation } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
 import {
@@ -112,7 +112,7 @@ describe('[Library]', () => {
       _deleted: false,
       category: 'Moulds',
       description: 'After creating, the project will be deleted',
-      moderation: IModerationStatus.AWAITING_MODERATION,
+      moderation: Moderation.AWAITING_MODERATION,
       difficulty_level: DifficultyLevelRecord.medium,
       time: '1-2 weeks',
       title: `Create a project test ${randomId}`,

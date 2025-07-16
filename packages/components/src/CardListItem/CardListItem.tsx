@@ -4,12 +4,12 @@ import { CardButton } from '../CardButton/CardButton'
 import { CardProfile } from '../CardProfile/CardProfile'
 import { InternalLink } from '../InternalLink/InternalLink'
 
-import type { IMapPin } from 'oa-shared'
+import type { MapPin } from 'oa-shared'
 
 export interface IProps {
-  item: IMapPin
+  item: MapPin
   isSelectedPin: boolean
-  onPinClick: (arg: IMapPin) => void
+  onPinClick: (arg: MapPin) => void
   viewport: string
 }
 
@@ -34,7 +34,11 @@ export const CardListItem = (props: IProps) => {
 
   if (viewport === 'mobile') {
     return (
-      <InternalLink target="_blank" to={`/u/${item._id}`} {...wrapperProps}>
+      <InternalLink
+        target="_blank"
+        to={`/u/${item.profile.username}`}
+        {...wrapperProps}
+      >
         {Card}
       </InternalLink>
     )

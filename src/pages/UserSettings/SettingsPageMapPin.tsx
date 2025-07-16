@@ -201,21 +201,13 @@ export const SettingsPageMapPin = () => {
     },
   }
 
-  const onSubmit = async ({
-    location,
-    description,
-  }: {
-    location: ILocation
-    description: string
-  }) => {
+  const onSubmit = async ({ location }: { location: ILocation }) => {
     setIsLoading(true)
     try {
       await settingsService.upsertPin({
         administrative: location.administrative,
         country: location.country,
         countryCode: location.countryCode,
-        description: description,
-        name: location.name,
         postcode: location.postcode,
         lat: location.latlng.lat,
         lng: location.latlng.lng,

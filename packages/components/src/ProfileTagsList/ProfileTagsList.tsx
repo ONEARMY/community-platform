@@ -2,13 +2,13 @@ import { Flex, Text } from 'theme-ui'
 
 import { visitorDisplayData } from '../VisitorModal/VisitorModal'
 
-import type { IProfileTag, IUser } from 'oa-shared'
+import type { Profile, ProfileTag } from 'oa-shared'
 import type { ComponentProps } from 'react'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface IProps {
-  tags: IProfileTag[] | null
-  openToVisitors?: IUser['openToVisitors']
+  tags: ProfileTag[] | null
+  openToVisitors?: Profile['openToVisitors']
   isSpace: boolean
   showVisitorModal?: () => void
   sx?: ThemeUIStyleObject
@@ -77,13 +77,8 @@ export const ProfileTagsList = (props: IProps) => {
       data-testid="ProfileTagsList"
       sx={{ gap: 1, flexWrap: 'wrap', ...sx }}
     >
-      {tagList.map(({ label, color }, index) => (
-        <Tag
-          key={index}
-          color={color || DEFAULT_COLOR}
-          label={label}
-          large={large}
-        />
+      {tagList.map(({ name }, index) => (
+        <Tag key={index} color={DEFAULT_COLOR} label={name} large={large} />
       ))}
       {openToVisitors && isSpace && (
         <Tag

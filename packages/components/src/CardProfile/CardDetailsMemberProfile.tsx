@@ -5,16 +5,14 @@ import { MemberBadge } from '../MemberBadge/MemberBadge'
 import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList'
 import { Username } from '../Username/Username'
 
-import type { IProfileCreator } from 'oa-shared'
+import type { MapPin } from 'oa-shared'
 
 interface IProps {
-  creator: IProfileCreator
+  profile: MapPin['profile']
   isLink: boolean
 }
 
-export const CardDetailsMemberProfile = ({ creator, isLink }: IProps) => {
-  const { _id, badges, countryCode, profileType, tags, userImage } = creator
-
+export const CardDetailsMemberProfile = ({ profile, isLink }: IProps) => {
   return (
     <Flex
       sx={{
@@ -34,12 +32,12 @@ export const CardDetailsMemberProfile = ({ creator, isLink }: IProps) => {
           }}
         >
           <Avatar
-            src={userImage || defaultProfileImage}
+            src={profile.photo?.publicUrl || defaultProfileImage}
             sx={{ width: '60px', height: '60px', objectFit: 'cover' }}
             loading="lazy"
           />
           <MemberBadge
-            profileType={profileType}
+            profileType={profile.type}
             size={22}
             sx={{ transform: 'translateY(-22px)' }}
           />
@@ -49,16 +47,18 @@ export const CardDetailsMemberProfile = ({ creator, isLink }: IProps) => {
       <Flex sx={{ flexDirection: 'column', gap: 1, flex: 1 }}>
         <Username
           user={{
-            userName: _id,
-            countryCode,
-            isSupporter: badges?.supporter || false,
-            isVerified: badges?.verified || false,
+            userName: profile.username,
+            countryCode: profile.country,
+            isSupporter: profile.isSupporter || false,
+            isVerified: profile.isVerified || false,
           }}
           sx={{ alignSelf: 'flex-start' }}
           isLink={isLink}
           target="_blank"
         />
-        {tags && <ProfileTagsList tags={tags} isSpace={false} />}
+        {profile.tags && profile.tags.length > 0 && (
+          <ProfileTagsList tags={profile.tags} isSpace={false} />
+        )}
       </Flex>
     </Flex>
   )

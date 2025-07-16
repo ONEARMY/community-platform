@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker'
 import { PinProfile } from './PinProfile'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { IModerationStatus, ProfileTypeName } from 'oa-shared'
+import type { MapPin, Moderation, ProfileTypeName } from 'oa-shared'
 
 export default {
   title: 'Map/PinProfile',
@@ -12,22 +12,23 @@ export default {
 
 export const DefaultMember: StoryFn<typeof PinProfile> = () => {
   const item = {
-    _deleted: false,
-    _id: 'not-selected-onload',
-    location: { lat: 0, lng: 0 },
-    moderation: 'accepted' as IModerationStatus,
-    type: 'member' as ProfileTypeName,
-    verified: false,
-    creator: {
-      _id: 'member_no2',
-      _lastActive: 'string',
-      countryCode: 'br',
-      userImage: faker.image.avatar(),
+    id: 1,
+    lat: 0,
+    lng: 0,
+    administrative: '',
+    country: 'Brazil',
+    countryCode: 'BR',
+    moderation: 'accepted' as Moderation,
+    profile: {
+      id: 1,
+      photo: {
+        publicUrl: faker.image.avatar(),
+      },
       displayName: 'member_no1',
-      isContactableByPublic: false,
-      profileType: 'member' as ProfileTypeName,
+      isContactable: false,
+      type: 'member' as ProfileTypeName,
     },
-  }
+  } as MapPin
 
   return (
     <div style={{ width: '230px', position: 'fixed' }}>
@@ -38,28 +39,28 @@ export const DefaultMember: StoryFn<typeof PinProfile> = () => {
 
 export const DefaultSpace: StoryFn<typeof PinProfile> = () => {
   const item = {
-    _deleted: false,
-    _id: 'not-selected-onload',
-    location: { lat: 0, lng: 0 },
-    moderation: 'accepted' as IModerationStatus,
-    type: 'workspace' as ProfileTypeName,
-    verified: false,
-    creator: {
-      _id: 'string',
-      _lastActive: 'string',
+    id: 2,
+    lat: 0,
+    lng: 0,
+    moderation: 'accepted' as Moderation,
+    administrative: '',
+    country: 'United Kingdom',
+    countryCode: 'UK',
+    profile: {
+      id: 3,
+      photo: {
+        publicUrl: faker.image.avatar(),
+      },
       about:
         'Lorem ipsum odor amet, consectetuer adipiscing elit. Lorem ipsum odor amet, consectetuer adipiscing elit.',
-      badges: {
-        supporter: true,
-        verified: false,
-      },
-      countryCode: 'uk',
+      isVerified: false,
+      isSupporter: true,
       displayName: 'user',
-      isContactableByPublic: true,
-      profileType: 'workspace' as ProfileTypeName,
-      workspaceType: 'Sheetpress',
+      isContactable: true,
+      type: 'workspace' as ProfileTypeName,
+      tags: [{ name: 'Sheetpress', id: 1 }],
     },
-  }
+  } as MapPin
 
   return (
     <div style={{ width: '230px', position: 'fixed' }}>

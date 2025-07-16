@@ -36,7 +36,6 @@ export const SettingsPageUserProfile = () => {
     setIsLoading(true)
 
     values.coverImages = values.coverImages?.filter((cover) => !!cover) || []
-    values.links = values.links || []
 
     try {
       await profileService.update(values)
@@ -72,23 +71,27 @@ export const SettingsPageUserProfile = () => {
   const emptyArray = new Array(4).fill(null)
   const coverImages = profile.coverImages
     ? emptyArray.map((v, i) =>
-        profile.coverImages?.at(0) ? profile.coverImages[i] : v,
+        profile.coverImages?.at(i) ? profile.coverImages[i] : v,
       )
     : emptyArray
 
   const initialValues = {
-    profileType: profile.type || ProfileTypeList.MEMBER,
+    profileType: profile.type,
     displayName: profile.displayName || null,
     userName: profile.username,
-    links: profile.links || [],
     location: profile.location || null,
     about: profile.about || null,
     isContactableByPublic: isContactable(profile.isContactable),
     userImage: profile.photo || null,
     coverImages,
-    tags: profile.tags || {},
-    openToVisitors: profile.openToVisitors,
-  }
+    country: profile.country,
+    isContactable: profile.isContactable,
+    showVisitorPolicy: !!profile.openToVisitors,
+    type: profile.type,
+    visitorPolicy: profile.openToVisitors,
+    website: profile.website,
+    tagIds: profile.tags?.map((x) => x.id) || [],
+  } as ProfileFormData
 
   const formId = 'userProfileForm'
 
@@ -112,7 +115,7 @@ export const SettingsPageUserProfile = () => {
       }) => {
         if (isLoading) return <Loader sx={{ alignSelf: 'center' }} />
 
-        const isMember = values.type === ProfileTypeList.MEMBER
+        const isMember = values.type === 'member'
 
         return (
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>

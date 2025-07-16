@@ -15,7 +15,6 @@ import type { DBProfileTag } from './profileTag'
 import type { Question } from './question'
 import type { ResearchItem, ResearchUpdate } from './research'
 import type {
-  IExternalLink,
   IUserImpact,
   ProfileTypeName,
   UserVisitorPreference,
@@ -34,14 +33,14 @@ export class DBProfile {
   country: string
   patreon?: IPatreonUser
   roles: string[] | null
-  type: string | null
+  type: ProfileTypeName
   open_to_visitors: UserVisitorPreference | null
   is_blocked_from_messaging: boolean | null
   about: string | null
   impact: IUserImpact
   is_contactable: boolean
   last_active: Date | null
-  links: IExternalLink[] | null
+  website: string | null
   location: ILocation
   map_pin_description: string | null
   total_views: number
@@ -66,7 +65,7 @@ export class Profile {
   isContactable: boolean
   isBlockedFromMessaging: boolean
   openToVisitors: UserVisitorPreference | null
-  links: IExternalLink[] | null
+  website: string | null
   location: ILocation
   tags?: ProfileTag[]
   totalViews: number
@@ -74,7 +73,6 @@ export class Profile {
   lastActive: Date | null
   coverImages: Image[] | null
   patreon: IPatreonUser | null
-  mapPinDescription: string
   authorUsefulVotes?: AuthorVotes[]
 
   constructor(obj: Profile) {
@@ -97,7 +95,7 @@ export class Profile {
       isSupporter: dbProfile.is_supporter,
       isVerified: dbProfile.is_verified,
       roles: dbProfile.roles || null,
-      type: (dbProfile.type as ProfileTypeName) || 'member',
+      type: dbProfile.type,
       openToVisitors: dbProfile.open_to_visitors,
       isBlockedFromMessaging: !!dbProfile.is_blocked_from_messaging,
       about: dbProfile.about,
@@ -105,9 +103,8 @@ export class Profile {
       impact: dbProfile.impact,
       isContactable: !!dbProfile.is_contactable,
       lastActive: dbProfile.last_active,
-      links: dbProfile.links,
+      website: dbProfile.website,
       location: dbProfile.location,
-      mapPinDescription: dbProfile.map_pin_description,
       patreon: dbProfile.patreon,
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
@@ -448,7 +445,7 @@ export type ProfileFormData = {
   tagIds: number[]
   about: string
   country: string
-  links: IExternalLink[]
+  website: string
   isContactable: boolean
   type: ProfileTypeName
   existingImageId?: string

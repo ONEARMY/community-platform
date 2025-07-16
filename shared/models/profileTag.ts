@@ -1,10 +1,12 @@
 export class DBProfileTag {
-  id: number
-  created_at: Date
-  name: string
-  profile_type: string
+  profile_tags: {
+    id: number
+    created_at: Date
+    name: string
+    profile_type: string
+  }
 
-  constructor(obj: Partial<ProfileTag>) {
+  constructor(obj: Partial<DBProfileTag>) {
     Object.assign(this, obj)
   }
 }
@@ -20,11 +22,12 @@ export class ProfileTag {
   }
 
   static fromDB(tag: DBProfileTag) {
+    const value = tag.profile_tags
     return new ProfileTag({
-      id: tag.id,
-      createdAt: new Date(tag.created_at),
-      name: tag.name,
-      profileType: tag.profile_type,
+      id: value.id,
+      createdAt: new Date(value.created_at),
+      name: value.name,
+      profileType: value.profile_type,
     })
   }
 }

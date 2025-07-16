@@ -1,12 +1,10 @@
 import { render, screen } from '@testing-library/react'
-import { factoryImage, FactoryUser } from 'src/test/factories/User'
+import { factoryImage, FactoryUser } from 'src/test/factories/Profile'
 import { afterEach, describe, it, vi } from 'vitest'
 
 import { UserAction } from './UserAction'
 
-import type { ExternalLinkLabel, IUserDB } from 'oa-shared'
-
-let mockUser: IUserDB = FactoryUser()
+let mockUser = FactoryUser()
 vi.mock('src/stores/User/profile.store', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
@@ -38,7 +36,7 @@ describe('UserAction', () => {
   it('should render the loggedIn component when a user is logged in and profile complete', async () => {
     const completeUser = FactoryUser({
       about: 'about',
-      links: [{ label: 'website' as ExternalLinkLabel, url: '' }],
+      link: '',
       profileType: 'member',
       userImage: factoryImage,
     })

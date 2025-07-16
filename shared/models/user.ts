@@ -8,15 +8,6 @@ export enum UserRole {
   RESEARCH_CREATOR = 'research_creator',
 }
 
-export enum ExternalLinkLabel {
-  EMAIL = 'email',
-  WEBSITE = 'website',
-  DISCORD = 'discord',
-  BAZAR = 'bazar',
-  FORUM = 'forum',
-  SOCIAL_MEDIA = 'social media',
-}
-
 // Below are primarily used for PP
 
 export type WorkspaceType =
@@ -78,11 +69,6 @@ export type UserVisitorPreference = {
 export interface IUserBadges {
   verified?: boolean
   supporter?: boolean
-}
-
-export interface IExternalLink {
-  url: string
-  label: ExternalLinkLabel
 }
 
 export interface IUserImpact {

@@ -30,9 +30,9 @@ export const ProfileTags = () => {
           name="tags"
           component={(input) => (
             <TagsSelectV2
-              value={input.value}
+              value={input.value || []}
               onChange={(tags) => input.onChange(tags)}
-              tagsSource={profile?.tags}
+              tagsSource={profile?.tags || []}
               maxTotal={5}
               isForm
             />

@@ -103,7 +103,7 @@ export const CommentDisplay = (props: IProps) => {
                     userName: comment.createdBy?.username || '',
                     countryCode: comment.createdBy?.country,
                     isVerified: comment.createdBy?.isVerified,
-                    // TODO: isSupporter
+                    isSupporter: comment.createdBy?.isSupporter,
                   }}
                 />
                 <Text sx={{ fontSize: 1, color: 'darkGrey' }}>

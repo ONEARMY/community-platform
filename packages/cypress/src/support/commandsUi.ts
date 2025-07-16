@@ -1,7 +1,6 @@
 import { form } from '../../../../src/pages/UserSettings/labels'
 import { generateNewUserDetails } from '../utils/TestUtils'
 
-import type { IUser } from 'oa-shared'
 // import { visitorDisplayData } from 'oa-components'
 
 export enum UserMenuItem {
@@ -15,8 +14,6 @@ interface IInfo {
   country?: string
   description: string
 }
-
-type ILink = Omit<IUser['links'][0] & { index: number }, 'key'>
 
 interface IMapPin {
   searchKeyword: string
@@ -59,7 +56,6 @@ declare global {
        * @param selector Specify the selector of the react-select element
        **/
       selectTag(tagName: string, selector?: string): Chainable<void>
-      setSettingAddContactLink(link: ILink)
       setSettingVisitorPolicy(policyText: string, details?: string)
       clearSettingVisitorPolicy()
       setSettingBasicUserInfo(info: IInfo)
@@ -101,16 +97,6 @@ Cypress.Commands.add('saveSettingsForm', () => {
   cy.wait(500)
   cy.get('[data-cy=errors-container]').should('not.exist')
   cy.get('[data-cy=save]').should('not.be.disabled')
-})
-
-Cypress.Commands.add('setSettingAddContactLink', (link: ILink) => {
-  cy.step('Set Contact Link')
-  cy.get('[data-cy=add-link]').click()
-  cy.selectTag(link.label, `[data-cy=select-link-${link.index}]`)
-  cy.get(`[data-cy=input-link-${link.index}]`)
-    .clear()
-    .type(link.url)
-    .blur({ force: true })
 })
 
 Cypress.Commands.add(

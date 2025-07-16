@@ -30,9 +30,11 @@ export class ProfileServiceServer {
         photo,
         cover_images,
         country,
-        tags:profile_tags(
-          id:profile_tags_relations(id),
-          name:profile_tags_relations(name)
+        tags:profile_tags_relations(
+          profile_tags(
+            id,
+            name
+          )
         )`,
       )
       .in('username', usernames)
@@ -49,9 +51,11 @@ export class ProfileServiceServer {
       .from('profiles')
       .select(
         `*,
-        tags:profile_tags(
-          id:profile_tags_relations(id),
-          name:profile_tags_relations(name)
+        tags:profile_tags_relations(
+          profile_tags(
+            id,
+            name
+          )
         )`,
       )
       .eq('username', username)

@@ -1,9 +1,8 @@
-import { Profile } from 'oa-shared'
+import { ProfileFactory } from 'src/factories/profileFactory.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
-import type { ExternalLinkLabel, IExternalLink } from 'oa-shared'
 
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request)
@@ -22,10 +21,19 @@ export const loader = async ({ request }) => {
     .from('profiles')
     .update({ last_active: nowUtc })
     .eq('auth_id', user.id)
-    .select('*')
+    .select(
+      `*,
+      tags:profile_tags_relations(
+        profile_tags(
+          id,
+          name
+        )
+      )`,
+    )
     .single()
 
-  const profile = Profile.fromDB(data)
+  const profileFactory = new ProfileFactory(client)
+  const profile = profileFactory.createProfile(data)
 
   return Response.json(profile, { headers, status: 200 })
 }
@@ -46,7 +54,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     displayName: formData.get('displayName') as string,
     about: formData.get('about') as string,
     country: formData.get('country') as string,
-    type: formData.get('type') === 'true',
+    type: formData.get('type'),
     existingImageId: formData.get('existingImageId') as string,
     isContactable: formData.get('isContactable') === 'true',
     showVisitorPolicy: formData.get('showVisitorPolicy') === 'true',
@@ -59,14 +67,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     tags: formData.has('tags')
       ? formData.getAll('tags').map((x) => Number(x))
       : null,
-    links: [] as IExternalLink[],
-  }
-
-  for (let i = 0; i < data.linkCount; i++) {
-    data.links.push({
-      label: formData.get(`links.[${i}].label`) as ExternalLinkLabel,
-      url: formData.get(`links.[${i}].url`) as string,
-    })
+    link: formData.get('link'),
   }
 
   const profileService = new ProfileServiceServer(client)

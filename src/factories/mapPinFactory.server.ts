@@ -10,8 +10,8 @@ export class MapPinFactory {
     this.imageService = new ImageServiceServer(client)
   }
 
-  async createMapPin(pin: DBMapPin): Promise<MapPin> {
-    const profile = await this.createPinProfile(pin.profile)
+  createMapPin(pin: DBMapPin): MapPin {
+    const profile = this.createPinProfile(pin.profile)
 
     return new MapPin({
       id: pin.id,
@@ -28,7 +28,7 @@ export class MapPinFactory {
     })
   }
 
-  private async createPinProfile(profile: DBPinProfile): Promise<PinProfile> {
+  private createPinProfile(profile: DBPinProfile): PinProfile {
     const photo = profile.photo
       ? this.imageService.getPublicUrl(profile.photo)
       : null

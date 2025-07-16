@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker'
-import { ExternalLinkLabel } from 'oa-shared'
 
 import { MESSAGE_MAX_CHARACTERS } from '../../../../src/pages/User/constants'
 import { contact } from '../../../../src/pages/User/labels'
@@ -126,11 +125,6 @@ describe('[Profile]', () => {
       cy.logout()
       cy.signIn(contactee.email, contactee.password)
       cy.visit('/settings')
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.EMAIL,
-        url: 'something@test.com',
-      })
       cy.saveSettingsForm()
 
       cy.visit(`/u/${contactee.username}`)

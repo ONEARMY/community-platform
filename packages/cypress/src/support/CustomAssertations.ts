@@ -140,9 +140,6 @@ const eqSettings = (chaiObj) => {
     )
   const locationAssert: Assert<IUserDB, any> = (subject, expected) => {
     expect(subject.location, 'Location').to.containSubset(expected.location)
-    expect(subject.mapPinDescription, 'MapPinDescription').to.containSubset(
-      expected.mapPinDescription,
-    )
   }
   const workspaceAssert: Assert<IUserDB, any> = (subject, expected) =>
     expect(subject.workspaceType, 'workspaceType').to.containSubset(

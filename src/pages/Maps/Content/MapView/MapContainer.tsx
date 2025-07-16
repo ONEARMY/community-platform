@@ -79,8 +79,8 @@ export const MapContainer = (props: IProps) => {
     navigate(`/map`, { replace: true })
   }
 
-  const onPinClick = (pin) => {
-    navigate(`/map#${pin._id}`, { replace: true })
+  const onPinClick = (pin: MapPin) => {
+    navigate(`/map#${pin.profile.username}`, { replace: true })
   }
 
   const onLocationChange = (latlng) => setCenter(latlng)

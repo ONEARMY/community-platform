@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
-import { ExternalLinkLabel, ProfileTypeList } from 'oa-shared'
+import { ProfileTypeList } from 'oa-shared'
 
-import type { IExternalLink, IUploadedFileMeta, Profile } from 'oa-shared'
+import type { IUploadedFileMeta, Profile } from 'oa-shared'
 
 export const factoryImage: IUploadedFileMeta = {
   timeCreated: '2019-09-27T14:58:41.378Z',
@@ -15,11 +15,6 @@ export const factoryImage: IUploadedFileMeta = {
   contentType: 'image/jpeg',
 }
 
-export const factoryLink: IExternalLink = {
-  url: 'https://bbc.co.uk/',
-  label: ExternalLinkLabel.WEBSITE,
-}
-
 export const FactoryUser = (
   userOverloads: Partial<Profile> = {},
 ): Partial<Profile> => ({
@@ -30,7 +25,7 @@ export const FactoryUser = (
   displayName: faker.person.fullName(),
   isVerified: faker.datatype.boolean(),
   isSupporter: faker.datatype.boolean(),
-  links: [],
+  website: faker.internet.url(),
   country: faker.location.countryCode(),
   coverImages: [] as any[],
   ...userOverloads,

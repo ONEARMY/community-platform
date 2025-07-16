@@ -11,13 +11,7 @@ const update = async (profile: ProfileFormData) => {
   data.append('showVisitorPolicy', profile.showVisitorPolicy ? 'true' : 'false')
   data.append('visitorStatus', profile.visitorPolicy.policy || '')
   data.append('visitorPolicy', profile.visitorPolicy.details || '')
-
-  if (profile.links && profile.links.length > 0) {
-    for (let i = 0; i < profile.links.length; i++) {
-      data.append(`links[${i}].label`, profile.links[i].label)
-      data.append(`links[${i}].url`, profile.links[i].url)
-    }
-  }
+  data.append('website', profile.website || '')
 
   if (profile.tagIds && profile.tagIds.length > 0) {
     for (const tag of profile.tagIds) {

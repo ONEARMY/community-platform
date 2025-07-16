@@ -11,7 +11,6 @@ import {
 import { ProfileTypeList, UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isPreciousPlastic } from 'src/config/config'
-import { isUserContactable } from 'src/utils/helpers'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Alert, Box, Card, Flex } from 'theme-ui'
 
@@ -32,11 +31,10 @@ interface IProps {
 }
 
 export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
-  const { about, impact, links, type, tags } = user
+  const { about, impact, type, tags } = user
   const location = useLocation()
   const isMember = type === ProfileTypeList.MEMBER
-  const hasContactOption =
-    isUserContactable(user) || (links && Object.keys(links).length !== 0)
+  const hasContactOption = user.isContactable || !!user.website
   const hasContributed =
     docs?.projects.length + docs?.research.length + docs?.questions.length > 0
   const hasImpacted = !!impact

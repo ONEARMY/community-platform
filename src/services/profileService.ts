@@ -26,6 +26,7 @@ const update = async (value: ProfileFormData) => {
     data.append('existingImageId', value.existingImageId || '')
     data.append('isContactable', value.isContactable ? 'true' : 'false')
     data.append('showVisitorPolicy', value.showVisitorPolicy.toString())
+    data.append(`website`, value.website)
 
     if (
       value.existingCoverImageIds &&
@@ -34,18 +35,6 @@ const update = async (value: ProfileFormData) => {
       for (const image of value.existingCoverImageIds) {
         if (image) {
           data.append('existingCoverImageIds', image)
-        }
-      }
-    }
-
-    if (value.links && value.links?.length > 0) {
-      data.append('linkCount', value.links.length.toString())
-
-      for (let i = 0; i < value.links.length; i++) {
-        const link = value.links[0]
-        if (link) {
-          data.append(`links.[${i}].label`, link.label)
-          data.append(`links.[${i}].url`, link.url)
         }
       }
     }

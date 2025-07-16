@@ -69,10 +69,7 @@ const Profile = (props: IProps) => {
             }}
           />
         ) : (
-          <MemberBadge
-            profileType={'space'} // TODO
-            sx={{ cursor: 'pointer' }}
-          />
+          <MemberBadge profileType={profile.type} sx={{ cursor: 'pointer' }} />
         )}
       </Flex>
       <Flex>

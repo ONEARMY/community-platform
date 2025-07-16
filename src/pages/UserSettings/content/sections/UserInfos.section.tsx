@@ -1,9 +1,7 @@
 import { useContext } from 'react'
 import { Field } from 'react-final-form'
-import { FieldArray } from 'react-final-form-arrays'
 import { countries } from 'countries-list'
 import {
-  Button,
   FieldInput,
   FieldTextarea,
   InternalLink,
@@ -13,9 +11,9 @@ import { ProfileTypeList } from 'oa-shared'
 import { SelectField } from 'src/common/Form/Select.field'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { EnvironmentContext } from 'src/pages/common/EnvironmentContext'
-import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
+import { fields, headings } from 'src/pages/UserSettings/labels'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { required } from 'src/utils/validators'
+import { required, validateUrl } from 'src/utils/validators'
 import { Flex, Heading, Text } from 'theme-ui'
 
 import {
@@ -23,10 +21,9 @@ import {
   MEMBER_PROFILE_DESCRIPTION_MAX_LENGTH,
 } from '../../constants'
 import { FlexSectionContainer } from '../elements'
-import { ProfileLinkField } from '../fields/ProfileLink.field'
 import { ProfileTags } from './ProfileTags.section'
 
-import type { IExternalLink, ProfileFormData } from 'oa-shared'
+import type { ProfileFormData } from 'oa-shared'
 
 interface IProps {
   formValues: Partial<ProfileFormData>
@@ -37,7 +34,7 @@ export const UserInfosSection = ({ formValues }: IProps) => {
   const { profile } = useProfileStore()
 
   const isMemberProfile = profile?.type === ProfileTypeList.MEMBER
-  const { about, country, displayName, userName } = fields
+  const { about, country, displayName, userName, website } = fields
 
   const countryCode = Object.keys(countries).find(
     (key) => countries[key].name === formValues.country,
@@ -146,48 +143,15 @@ export const UserInfosSection = ({ formValues }: IProps) => {
           </Flex>
         )}
 
-        <Flex
-          data-cy="UserInfos: links"
-          sx={{
-            flexDirection: 'column',
-            justifyContent: 'stretch',
-            gap: [4, 4, 2],
-          }}
-        >
-          <Text>{fields.links.title}</Text>
-          <FieldArray
-            name="links"
-            initialValue={formValues.links as IExternalLink[]}
-          >
-            {({ fields }) => (
-              <>
-                {fields
-                  ? fields.map((name, i: number) => (
-                      <ProfileLinkField
-                        key={i}
-                        name={name}
-                        onDelete={() => {
-                          fields.remove(i)
-                        }}
-                        index={i}
-                        isDeleteEnabled={true}
-                      />
-                    ))
-                  : null}
-                <Button
-                  type="button"
-                  data-cy="add-link"
-                  variant="secondary"
-                  onClick={() => {
-                    fields.push({} as any)
-                  }}
-                  sx={{ alignSelf: 'flex-start' }}
-                >
-                  {buttons.link.add}
-                </Button>
-              </>
-            )}
-          </FieldArray>
+        <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+          <Text>{website.title}</Text>
+          <Field
+            data-cy="website"
+            name="website"
+            component={FieldInput}
+            validate={validateUrl}
+            validateFields={[]}
+          />
         </Flex>
       </Flex>
     </FlexSectionContainer>

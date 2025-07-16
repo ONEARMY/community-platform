@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
@@ -41,6 +42,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     if (!valid) {
       return Response.json({}, { status, statusText })
     }
+
+    const profileService = new ProfileServiceServer(client)
+    await profileService.updateProfile(data)
+
     return Response.json({}, { headers, status: 200 })
   } catch (error) {
     console.error(error)

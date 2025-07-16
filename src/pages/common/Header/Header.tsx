@@ -233,15 +233,17 @@ const Header = observer(() => {
         )}
         <AnimationContainer key={'mobileNotificationsContainer'}>
           <MobileMenuWrapper>
-            <AuthWrapper
-              roleRequired={[
-                UserRole.BETA_TESTER,
-                UserRole.RESEARCH_CREATOR,
-                UserRole.ADMIN,
-              ]}
-            >
-              <NotificationsSupabase device="mobile" />
-            </AuthWrapper>
+            {isLoggedIn && (
+              <AuthWrapper
+                roleRequired={[
+                  UserRole.BETA_TESTER,
+                  UserRole.RESEARCH_CREATOR,
+                  UserRole.ADMIN,
+                ]}
+              >
+                <NotificationsSupabase device="mobile" />
+              </AuthWrapper>
+            )}
           </MobileMenuWrapper>
         </AnimationContainer>
       </MobileMenuContext.Provider>

@@ -1,5 +1,3 @@
-import { ExternalLinkLabel } from 'oa-shared'
-
 import { MOCK_DATA } from '../data'
 import { SingaporeStubResponse } from '../fixtures/searchResults'
 import { UserMenuItem } from '../support/commandsUi'
@@ -55,7 +53,7 @@ describe('[Settings]', () => {
       const description = "I'm a very active member"
       const profileType = 'member'
       const tag = ['Sewing', 'Accounting']
-      const url = 'https://social.network'
+      const url = 'https://social.network' // TODO: set link
 
       cy.step('Incomplete profile banner visible when logged out')
       cy.get('[data-cy=notificationBanner]').should('not.exist')
@@ -108,18 +106,6 @@ describe('[Settings]', () => {
 
       cy.step("Can't add cover image")
       cy.get('[data-cy=coverImages]').should('not.exist')
-
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.SOCIAL_MEDIA,
-        url: 'http://something.to.delete/',
-      })
-
-      cy.setSettingAddContactLink({
-        index: 1,
-        label: ExternalLinkLabel.SOCIAL_MEDIA,
-        url,
-      })
 
       // Remove first item
       cy.get('[data-cy="delete-link-0"]').last().trigger('click')
@@ -223,11 +209,6 @@ describe('[Settings]', () => {
       cy.setSettingImage(userImage, 'userImage')
       cy.setSettingImage(coverImage, 'coverImages-0')
 
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.EMAIL,
-        url,
-      })
       cy.saveSettingsForm()
 
       cy.step('Updated settings display on profile')
@@ -289,11 +270,6 @@ describe('[Settings]', () => {
       })
       cy.setSettingImage('avatar', 'userImage')
       cy.selectTag(tag, '[data-cy=tag-select]')
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.SOCIAL_MEDIA,
-        url: 'http://something.to.delete/',
-      })
       cy.saveSettingsForm()
 
       cy.step('Updated settings display on profile')
@@ -342,11 +318,6 @@ describe('[Settings]', () => {
       cy.setSettingImage(coverImage, 'coverImages-0')
 
       cy.step('Can add contact link and visitor details')
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.EMAIL,
-        url,
-      })
       cy.setSettingVisitorPolicy(visitorType, visitorDetails)
       cy.saveSettingsForm()
 
@@ -462,11 +433,6 @@ describe('[Settings]', () => {
       })
       cy.setSettingImage('avatar', 'userImage')
       cy.selectTag(tag, '[data-cy=tag-select]')
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.SOCIAL_MEDIA,
-        url: 'http://something.to.delete/',
-      })
       cy.saveSettingsForm()
 
       cy.step('Updated settings display on profile')

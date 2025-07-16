@@ -77,7 +77,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         created_by: profile.id,
         tenant_id: process.env.TENANT_ID,
       })
-      .select('*,research:research(id,slug,is_draft)')
+      .select('*,research:research(id,collaborators,created_by,is_draft,slug)')
       .single()
 
     if (updateResult.error || !updateResult.data) {
@@ -102,7 +102,11 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       client,
     )
 
-    await addSubscribers(researchUpdate.id, profile.id, client)
+    await subscribersServiceServer.addResearchUpdateSubscribers(
+      researchUpdate,
+      profile.id,
+      client,
+    )
 
     broadcastCoordinationServiceServer.researchUpdate(
       researchUpdate,
@@ -119,21 +123,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       { status: 500, statusText: 'Error creating research' },
     )
   }
-}
-
-const addSubscribers = async (
-  updateId: number,
-  profileId: number,
-  client: SupabaseClient,
-) => {
-  await subscribersServiceServer.add(
-    'research_update',
-    updateId,
-    profileId,
-    client,
-  )
-  // To do: Subscribe collaborators too
-  return
 }
 
 async function uploadAndUpdateImages(

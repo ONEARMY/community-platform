@@ -120,6 +120,8 @@ describe('[Research]', () => {
       cy.step('New collaborators can add update')
       cy.logout()
       cy.signIn(subscriber.email, subscriber.password)
+      cy.visit(`/research/${expected.slug}`)
+      cy.get('[data-cy=follow-button]').first().contains('Following')
       cy.visit(`/research/${expected.slug}/new-update`)
       cy.contains('New update')
 
@@ -160,6 +162,16 @@ describe('[Research]', () => {
       cy.url().should('contain', `${researchURL}#update_`)
       cy.contains(updateTitle).should('be.visible')
       cy.contains(updateDescription).should('be.visible')
+
+      cy.step(
+        'Collaborator is subscribed to research and research update discussion',
+      )
+      cy.logout()
+      cy.signIn(subscriber.email, subscriber.password)
+      cy.visit(researchURL)
+      cy.get('[data-cy=follow-button]').first().contains('Following')
+      cy.get('[data-cy="HideDiscussionContainer:button"]').last().click()
+      cy.get('[data-cy=follow-button]').last().contains('Following')
 
       cy.step('Notification generated for update')
       cy.logout()

@@ -264,8 +264,8 @@ describe('[Research]', () => {
         .type(researchItem.description)
       cy.selectTag(researchItem.category, '[data-cy=category-select]')
       cy.get('[data-cy=submit]').click()
-
-      cy.visit(`/research/${researchItem.slug}`)
+      cy.get('[data-cy="loader"]')
+      cy.contains(researchItem.title)
       cy.get('[data-cy=follow-button]').contains('Following')
 
       cy.step('Users can follow for research updates (for later expectations)')

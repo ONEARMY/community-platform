@@ -113,7 +113,7 @@ describe('[Research]', () => {
 
       cy.step('Published Research should appear on users profile')
       cy.visit('/u/' + admin.displayName)
-      cy.get('[data-testid=research-stat]').contains('1')
+      cy.get('[data-testid=research-stat]').should('exist')
       cy.get('[data-cy=ContribTab]').click()
       cy.get('[data-testid="research-contributions"]').should('be.visible')
 

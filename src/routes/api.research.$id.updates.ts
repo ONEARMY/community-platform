@@ -1,6 +1,6 @@
 import { ResearchUpdate, UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { notificationsCoordinationServiceServer } from 'src/services/notificationsCoordinationService.server'
+import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server'
 import { profileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
@@ -104,7 +104,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     await addSubscribers(researchUpdate.id, profile.id, client)
 
-    notificationsCoordinationServiceServer.researchUpdate(
+    broadcastCoordinationServiceServer.researchUpdate(
       researchUpdate,
       profile,
       client,

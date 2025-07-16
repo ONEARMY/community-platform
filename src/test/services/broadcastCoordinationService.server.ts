@@ -1,5 +1,5 @@
+import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server'
 import { discordServiceServer } from 'src/services/discordService.server'
-import { notificationsCoordinationServiceServer } from 'src/services/notificationsCoordinationService.server'
 import { notificationsService } from 'src/services/notificationsService.server'
 import { notificationsSupabaseServiceServer } from 'src/services/notificationSupabaseService.server'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -15,7 +15,7 @@ vi.mock('src/services/notificationsService.server')
 vi.mock('src/services/notificationSupabaseService.server')
 vi.mock('src/services/discordService.server')
 
-describe('notificationsCoordinationServiceServer', () => {
+describe('broadcastCoordinationServiceServer', () => {
   describe('researchUpdate', () => {
     const mockProfile = FactoryDBProfile()
     const mockClient = {} as any
@@ -35,7 +35,7 @@ describe('notificationsCoordinationServiceServer', () => {
           research: { ...mockResearch, is_draft: true },
         })
 
-        notificationsCoordinationServiceServer.researchUpdate(
+        broadcastCoordinationServiceServer.researchUpdate(
           researchUpdate,
           mockProfile,
           mockClient,
@@ -59,7 +59,7 @@ describe('notificationsCoordinationServiceServer', () => {
           research: mockResearch,
         })
 
-        notificationsCoordinationServiceServer.researchUpdate(
+        broadcastCoordinationServiceServer.researchUpdate(
           researchUpdate,
           mockProfile,
           mockClient,
@@ -86,7 +86,7 @@ describe('notificationsCoordinationServiceServer', () => {
           is_draft: false,
         })
 
-        notificationsCoordinationServiceServer.researchUpdate(
+        broadcastCoordinationServiceServer.researchUpdate(
           researchUpdate,
           mockProfile,
           mockClient,
@@ -114,7 +114,7 @@ describe('notificationsCoordinationServiceServer', () => {
           is_draft: true,
         })
 
-        notificationsCoordinationServiceServer.researchUpdate(
+        broadcastCoordinationServiceServer.researchUpdate(
           researchUpdate,
           mockProfile,
           mockClient,
@@ -147,7 +147,7 @@ describe('notificationsCoordinationServiceServer', () => {
           research: mockResearch,
         })
 
-        notificationsCoordinationServiceServer.researchUpdate(
+        broadcastCoordinationServiceServer.researchUpdate(
           researchUpdate,
           mockProfile,
           mockClient,

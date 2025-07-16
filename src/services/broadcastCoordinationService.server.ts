@@ -39,6 +39,6 @@ function researchUpdate(
   }
 }
 
-export const notificationsCoordinationServiceServer = {
+export const broadcastCoordinationServiceServer = {
   researchUpdate,
 }

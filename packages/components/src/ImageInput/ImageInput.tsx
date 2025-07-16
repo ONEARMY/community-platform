@@ -28,8 +28,7 @@ interface IProps {
   dataTestId?: string
 }
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB in bytes
-const MAX_IMAGE_DIMENSION = 2500 // 2500px max width/height
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 5MB in bytes
 
 export const ImageInput = (props: IProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -44,29 +43,7 @@ export const ImageInput = (props: IProps) => {
   )
   const [isImageCorrupt, setIsImageCorrupt] = useState(false)
   const [isImageTooLarge, setIsImageTooLarge] = useState(false)
-  const [isImageDimensionsTooLarge, setIsImageDimensionsTooLarge] =
-    useState(false)
   const [showErrorModal, setShowErrorModal] = useState(false)
-
-  const checkImageDimensions = (file: File): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      const img = new Image()
-      img.onload = () => {
-        if (
-          img.width > MAX_IMAGE_DIMENSION ||
-          img.height > MAX_IMAGE_DIMENSION
-        ) {
-          reject(
-            new Error(`Image dimensions too large: ${img.width}x${img.height}`),
-          )
-        } else {
-          resolve()
-        }
-      }
-      img.onerror = () => reject(new Error('Failed to load image'))
-      img.src = URL.createObjectURL(file)
-    })
-  }
 
   const onDrop = async (selectedImage: File[]) => {
     try {
@@ -74,18 +51,6 @@ export const ImageInput = (props: IProps) => {
       if (selectedImage[0].size > MAX_FILE_SIZE) {
         setIsImageTooLarge(true)
         setIsImageCorrupt(false)
-        setIsImageDimensionsTooLarge(false)
-        setShowErrorModal(true)
-        return
-      }
-
-      // Check image dimensions
-      try {
-        await checkImageDimensions(selectedImage[0])
-      } catch (dimensionError) {
-        setIsImageDimensionsTooLarge(true)
-        setIsImageCorrupt(false)
-        setIsImageTooLarge(false)
         setShowErrorModal(true)
         return
       }
@@ -93,13 +58,11 @@ export const ImageInput = (props: IProps) => {
       await imageValid(selectedImage[0])
       setIsImageCorrupt(false)
       setIsImageTooLarge(false)
-      setIsImageDimensionsTooLarge(false)
 
       setInputFiles(selectedImage)
     } catch (validationError) {
       setIsImageCorrupt(true)
       setIsImageTooLarge(false)
-      setIsImageDimensionsTooLarge(false)
       setShowErrorModal(true)
     }
   }
@@ -185,28 +148,6 @@ export const ImageInput = (props: IProps) => {
         isOpen={showErrorModal}
         onDidDismiss={() => setShowErrorModal(false)}
       >
-        {isImageDimensionsTooLarge && (
-          <Flex
-            data-cy="ImageUploadDimensionsError"
-            mt={[1, 1, 1]}
-            sx={{
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              gap: '20px',
-            }}
-          >
-            <Text>The maximum width and height for images is 2500px.</Text>
-            <Text>Please optimize your image and try again.</Text>
-
-            <Button
-              data-cy="ImageUploadDimensionsError-Button"
-              sx={{ marginTop: '20px', justifyContent: 'center' }}
-              onClick={() => setShowErrorModal(false)}
-            >
-              Close
-            </Button>
-          </Flex>
-        )}
         {isImageTooLarge && (
           <Flex
             data-cy="ImageUploadSizeError"
@@ -217,7 +158,7 @@ export const ImageInput = (props: IProps) => {
               gap: '20px',
             }}
           >
-            <Text>The maximum image size is 5MB.</Text>
+            <Text>The maximum image size is 10MB.</Text>
             <Text>Please optimize your image and try again.</Text>
             <Button
               data-cy="ImageUploadSizeError-Button"

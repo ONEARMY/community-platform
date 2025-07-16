@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import Dropzone from 'react-dropzone-esm'
-import { Box, Flex, Image, Text } from 'theme-ui'
+import { Box, Flex, Image as ImageComponent, Text } from 'theme-ui'
 
 import { Button } from '../Button/Button'
 import { Modal } from '../Modal/Modal'
-import { compressImage } from './compressImage'
 import { getPresentFiles } from './getPresentFiles'
 import { ImageConverterList } from './ImageConverterList'
 import { ImageInputDeleteImage } from './ImageInputDeleteImage'
@@ -29,6 +28,8 @@ interface IProps {
   dataTestId?: string
 }
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 5MB in bytes
+
 export const ImageInput = (props: IProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const prevPropsValue = useRef<IInputValue | IMultipleInputValue>()
@@ -41,26 +42,27 @@ export const ImageInput = (props: IProps) => {
     getPresentFiles(value),
   )
   const [isImageCorrupt, setIsImageCorrupt] = useState(false)
+  const [isImageTooLarge, setIsImageTooLarge] = useState(false)
   const [showErrorModal, setShowErrorModal] = useState(false)
 
   const onDrop = async (selectedImage: File[]) => {
     try {
+      // Check file size first
+      if (selectedImage[0].size > MAX_FILE_SIZE) {
+        setIsImageTooLarge(true)
+        setIsImageCorrupt(false)
+        setShowErrorModal(true)
+        return
+      }
+
       await imageValid(selectedImage[0])
       setIsImageCorrupt(false)
-
-      try {
-        const compressedImage = await compressImage(selectedImage[0])
-        selectedImage[0] = compressedImage
-      } catch (compressionError) {
-        console.error(
-          'Image compression failed, using original image: ',
-          compressionError,
-        )
-      }
+      setIsImageTooLarge(false)
 
       setInputFiles(selectedImage)
     } catch (validationError) {
       setIsImageCorrupt(true)
+      setIsImageTooLarge(false)
       setShowErrorModal(true)
     }
   }
@@ -118,7 +120,9 @@ export const ImageInput = (props: IProps) => {
               {...getInputProps()}
             />
 
-            {showUploadedImg && <Image src={src} sx={imageDisplaySx} />}
+            {showUploadedImg && (
+              <ImageComponent src={src} sx={imageDisplaySx} />
+            )}
 
             {!showUploadedImg && (
               <ImageConverterList
@@ -144,6 +148,27 @@ export const ImageInput = (props: IProps) => {
         isOpen={showErrorModal}
         onDidDismiss={() => setShowErrorModal(false)}
       >
+        {isImageTooLarge && (
+          <Flex
+            data-cy="ImageUploadSizeError"
+            mt={[1, 1, 1]}
+            sx={{
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: '20px',
+            }}
+          >
+            <Text>The maximum image size is 10MB.</Text>
+            <Text>Please optimize your image and try again.</Text>
+            <Button
+              data-cy="ImageUploadSizeError-Button"
+              sx={{ marginTop: '20px', justifyContent: 'center' }}
+              onClick={() => setShowErrorModal(false)}
+            >
+              Close
+            </Button>
+          </Flex>
+        )}
         {isImageCorrupt && (
           <Flex
             data-cy="ImageUploadError"

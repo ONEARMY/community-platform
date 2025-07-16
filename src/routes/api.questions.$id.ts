@@ -1,17 +1,18 @@
-import { Image, Question } from 'oa-shared'
+import { Question } from 'oa-shared'
+import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { profileServiceServer } from 'src/services/profileService.server'
 import { questionServiceServer } from 'src/services/questionService.server'
+import { storageServiceServer } from 'src/services/storageService.server'
 import { hasAdminRightsSupabase, validateImages } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
 import { contentServiceServer } from '../services/contentService.server'
-import { uploadImages } from './api.questions'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBQuestion } from 'oa-shared'
+import type { DBMedia, DBQuestion } from 'oa-shared'
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   try {
@@ -67,7 +68,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       )
     }
 
-    let images: Image[] = []
+    let images: DBMedia[] = []
 
     if (imagesToKeepIds.length > 0) {
       const questionImages = await client
@@ -84,18 +85,14 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     }
 
     if (uploadedImages.length > 0) {
-      const imageResult = await uploadImages(id, uploadedImages, client)
+      const mediaResult = await storageServiceServer.uploadImage(
+        uploadedImages,
+        `questions/${id}`,
+        client,
+      )
 
-      if (imageResult) {
-        const newImages = imageResult.images.map(
-          (x) =>
-            new Image({
-              id: x.id,
-              publicUrl: x.fullPath,
-            }),
-        )
-
-        images = [...images, ...newImages]
+      if (mediaResult) {
+        images = [...images, ...mediaResult.media]
       }
     }
 
@@ -124,7 +121,13 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       throw questionResult.error
     }
 
-    const question = Question.fromDB(questionResult.data[0], [])
+    const newImages = storageServiceServer.getPublicUrls(
+      client,
+      questionResult.data[0].images,
+      IMAGE_SIZES.GALLERY,
+    )
+
+    const question = Question.fromDB(questionResult.data[0], [], newImages)
 
     return Response.json({ question }, { headers, status: 200 })
   } catch (error) {

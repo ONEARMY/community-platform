@@ -79,8 +79,8 @@ export const DownloadWithDonationAsk = (props: IProps) => {
             ))}
           </Flex>
         )}
+        <DownloadCounter total={props.fileDownloadCount} />
       </>
-      <DownloadCounter total={props.fileDownloadCount} />
     </>
   )
 }

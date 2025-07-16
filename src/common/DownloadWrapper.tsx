@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { DownloadButton, DownloadWithDonationAsk } from 'oa-components'
+import {
+  DownloadButton,
+  DownloadCounter,
+  DownloadWithDonationAsk,
+} from 'oa-components'
 
 import { UserAction } from './UserAction'
 
@@ -59,10 +63,13 @@ export const DownloadWrapper = (props: IProps) => {
         />
       }
       loggedOut={
-        <DownloadButton
-          isLoggedIn={false}
-          onClick={handleLoggedOutDownloadClick}
-        />
+        <>
+          <DownloadButton
+            isLoggedIn={false}
+            onClick={handleLoggedOutDownloadClick}
+          />
+          <DownloadCounter total={fileDownloadCount} />
+        </>
       }
     />
   )

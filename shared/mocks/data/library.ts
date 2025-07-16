@@ -10,7 +10,10 @@ export const library: Project[] = [
       displayName: 'test',
       isSupporter: false,
       isVerified: true,
-      photoUrl: '',
+      photo: {
+        id: '',
+        publicUrl: '',
+      },
       username: 'test',
     },
     tags: [
@@ -303,7 +306,10 @@ export const library: Project[] = [
       displayName: 'test',
       isSupporter: false,
       isVerified: true,
-      photoUrl: '',
+      photo: {
+        id: '',
+        publicUrl: '',
+      },
       username: 'test',
     },
     tags: [
@@ -558,7 +564,10 @@ export const library: Project[] = [
       displayName: 'test',
       isSupporter: false,
       isVerified: true,
-      photoUrl: '',
+      photo: {
+        id: '',
+        publicUrl: '',
+      },
       username: 'test',
     },
     tags: [
@@ -600,7 +609,10 @@ export const library: Project[] = [
       displayName: 'test',
       isSupporter: false,
       isVerified: true,
-      photoUrl: '',
+      photo: {
+        id: '',
+        publicUrl: '',
+      },
       username: 'test',
     },
     deleted: false,
@@ -663,7 +675,10 @@ export const library: Project[] = [
       displayName: 'test',
       isSupporter: false,
       isVerified: true,
-      photoUrl: '',
+      photo: {
+        id: '',
+        publicUrl: '',
+      },
       username: 'test',
     },
     deleted: true,

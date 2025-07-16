@@ -2,9 +2,9 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react'
 import { SettingsFormWrapper } from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isPreciousPlastic } from 'src/config/config'
 import { isModuleSupported, MODULE } from 'src/modules'
+import { useProfileStore } from 'src/stores/User/profile.store'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Box, Flex, Text } from 'theme-ui'
 
@@ -21,14 +21,13 @@ import '../../styles/leaflet.css'
 
 export const SettingsPage = observer(() => {
   const env = useContext(EnvironmentContext)
-  const { userStore } = useCommonStores().stores
-  const profile = userStore.activeUser
+  const { profile } = useProfileStore()
 
-  if (!profile?._id) {
+  if (!profile) {
     return null
   }
 
-  const isMember = profile.profileType === ProfileTypeList.MEMBER
+  const isMember = profile.type === ProfileTypeList.MEMBER
   const showImpactTab = !isMember && isPreciousPlastic()
   const showMapTab = isModuleSupported(
     env?.VITE_SUPPORTED_MODULES || '',

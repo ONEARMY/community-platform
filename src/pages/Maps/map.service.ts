@@ -5,7 +5,7 @@ import type { IMapPin } from 'oa-shared'
 
 export interface IMapPinService {
   getMapPins: () => Promise<IMapPin[]>
-  getMapPinByUserId: (userName: string) => Promise<IMapPin | null>
+  getMapPinByUsername: (userName: string) => Promise<IMapPin | null>
 }
 
 const getMapPins = async () => {
@@ -20,7 +20,7 @@ const getMapPins = async () => {
   }
 }
 
-const getMapPinByUserId = async (userName: string) => {
+const getMapPinByUsername = async (userName: string) => {
   try {
     const response = await fetch('/api/mappins/' + userName)
     const { mapPin } = await response.json()
@@ -36,5 +36,5 @@ export const MapPinServiceContext = createContext<IMapPinService | null>(null)
 
 export const mapPinService: IMapPinService = {
   getMapPins,
-  getMapPinByUserId,
+  getMapPinByUsername,
 }

@@ -4,12 +4,12 @@ import { Box, Flex, Heading } from 'theme-ui'
 import { ImpactField } from './ImpactField'
 import { ImpactMissing } from './ImpactMissing'
 
-import type { IImpactYear, IImpactYearFieldList, IUser } from 'oa-shared'
+import type { IImpactYear, IImpactYearFieldList, Profile } from 'oa-shared'
 
 interface Props {
   year: IImpactYear
   fields: IImpactYearFieldList | undefined
-  user: IUser | undefined
+  user: Profile | undefined
 }
 
 export const ImpactItem = ({ fields, user, year }: Props) => {

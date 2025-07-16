@@ -1,4 +1,3 @@
-import { IUserDB } from 'oa-shared/models/user'
 import { CONFIG } from '../config/config'
 import { firebaseAuth } from '../Firebase/auth'
 import { db } from '../Firebase/firestoreDB'
@@ -16,7 +15,6 @@ import type {
   INotification,
   NotificationType,
 } from 'oa-shared/models/notifications'
-import { IMessageDB } from 'oa-shared/models/messages'
 
 export const errors = {
   MESSAGE_LIMIT:
@@ -36,36 +34,6 @@ export const getUserEmail = async (uid: string): Promise<string | null> => {
   } catch (error) {
     return null
   }
-}
-
-export const getUserAndEmail = async (userName: string) => {
-  if (!userName) {
-    throw new Error('Cannot get email for empty user name')
-  }
-  const toUserDoc = (await db
-    .collection(DB_ENDPOINTS.users)
-    .doc(userName)
-    .get()) as FirebaseFirestore.DocumentSnapshot<IUserDB>
-
-  const toUser = toUserDoc.exists ? toUserDoc.data() : undefined
-  const toUserEmail = toUser ? await getUserEmail(toUser._authID) : undefined
-
-  if (!toUser || !toUserEmail) {
-    throw new Error(`Cannot get user ${userName}`)
-  }
-
-  return { toUser, toUserEmail }
-}
-
-export const isReceiverContactable = async (userName) => {
-  const { toUser } = await getUserAndEmail(userName)
-  if (
-    typeof toUser.isContactableByPublic === 'boolean' &&
-    !toUser.isContactableByPublic
-  ) {
-    throw new Error(errors.PROFILE_NOT_CONTACTABLE)
-  }
-  return true
 }
 
 export const isSameEmail = (userDoc, email) => {

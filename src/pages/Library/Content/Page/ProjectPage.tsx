@@ -10,31 +10,28 @@ import { IModerationStatus } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { CommentSectionSupabase } from 'src/pages/common/CommentsSupabase/CommentSectionSupabase'
 import { usefulService } from 'src/services/usefulService'
+import { useProfileStore } from 'src/stores/User/profile.store'
 import { Card, Flex } from 'theme-ui'
 
 import { LibraryDescription } from './LibraryDescription'
 import Step from './LibraryStep'
 
-import type { IUser, Project, ProjectStep } from 'oa-shared'
+import type { Project, ProjectStep } from 'oa-shared'
 
 type ProjectPageProps = {
   item: Project
 }
 
 export const ProjectPage = observer(({ item }: ProjectPageProps) => {
-  const { userStore } = useCommonStores().stores
-
   const [subscribersCount, setSubscribersCount] = useState<number>(
     item.subscriberCount,
   )
-  const [usefulCount, setUsefulCount] = useState<number>(item.usefulCount)
   const [voted, setVoted] = useState<boolean>(false)
-
-  const loggedInUser = userStore.activeUser
+  const [usefulCount, setUsefulCount] = useState<number>(item.usefulCount)
+  const { profile: activeUser } = useProfileStore()
 
   useEffect(() => {
     const getVoted = async () => {
@@ -42,16 +39,16 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
       setVoted(voted)
     }
 
-    if (loggedInUser) {
+    if (activeUser) {
       getVoted()
     }
-  }, [loggedInUser, item])
+  }, [activeUser, item])
 
   const onUsefulClick = async (
     vote: 'add' | 'delete',
     eventCategory = 'Library',
   ) => {
-    if (!loggedInUser?.userName) {
+    if (!activeUser) {
       return
     }
 
@@ -80,7 +77,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
       <Breadcrumbs content={item} variant="library" />
       <LibraryDescription
         item={item}
-        loggedInUser={loggedInUser as IUser}
+        loggedInUser={activeUser}
         commentsCount={item.commentCount}
         votedUsefulCount={usefulCount}
         hasUserVotedUseful={voted}
@@ -129,7 +126,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 <UsefulStatsButton
                   votedUsefulCount={usefulCount}
                   hasUserVotedUseful={voted}
-                  isLoggedIn={!!loggedInUser}
+                  isLoggedIn={!!activeUser}
                   onUsefulClick={() =>
                     onUsefulClick(
                       voted ? 'delete' : 'add',

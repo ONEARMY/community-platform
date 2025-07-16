@@ -13,17 +13,13 @@ import { describe, it, vi } from 'vitest'
 import { ImpactMissing } from './ImpactMissing'
 import { invisible, missing, reportYearLabel } from './labels'
 
-vi.mock('src/common/hooks/useCommonStores', () => {
-  return {
-    useCommonStores: () => ({
-      stores: {
-        userStore: {
-          activeUser: { userName: 'activeUser' },
-        },
-      },
-    }),
-  }
-})
+vi.mock('src/stores/User/profile.store', () => ({
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  __esModule: true,
+  useProfileStore: () => ({
+    profile: { userName: 'activeUser' },
+  }),
+}))
 
 describe('ImpactMissing', () => {
   describe('[public]', () => {

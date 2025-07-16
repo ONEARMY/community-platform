@@ -12,9 +12,9 @@ import {
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { usefulService } from 'src/services/usefulService'
+import { useProfileStore } from 'src/stores/User/profile.store'
 import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
@@ -23,15 +23,14 @@ import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectio
 import { DraftTag } from '../common/Drafts/DraftTag'
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 
-import type { IUser, Question } from 'oa-shared'
+import type { Question } from 'oa-shared'
 
 interface IProps {
   question: Question
 }
 
 export const QuestionPage = observer(({ question }: IProps) => {
-  const { userStore } = useCommonStores().stores
-  const activeUser = userStore.activeUser
+  const { profile: activeUser } = useProfileStore()
   const [voted, setVoted] = useState<boolean>(false)
   const [usefulCount, setUsefulCount] = useState<number>(question.usefulCount)
   const [subscribersCount, setSubscribersCount] = useState<number>(
@@ -51,8 +50,8 @@ export const QuestionPage = observer(({ question }: IProps) => {
 
   const isEditable = useMemo(() => {
     return (
-      hasAdminRights(activeUser as IUser) ||
-      question.author?.username === activeUser?.userName
+      hasAdminRights(activeUser) ||
+      question.author?.username === activeUser?.username
     )
   }, [activeUser, question.author])
 

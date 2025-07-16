@@ -23,6 +23,15 @@ export enum ExternalLinkLabel {
 
 export type IUserDB = IUser & DBDoc
 
+// Below are primarily used for PP
+
+export type WorkspaceType =
+  | 'shredder'
+  | 'sheetpress'
+  | 'extrusion'
+  | 'injection'
+  | 'mix'
+
 export const ProfileTypeList = {
   MEMBER: 'member',
   SPACE: 'space',
@@ -38,15 +47,6 @@ export type ProfileTypeName =
 export type MemberOrSpace =
   | (typeof ProfileTypeList)['MEMBER']
   | (typeof ProfileTypeList)['SPACE']
-
-// Below are primarily used for PP
-
-export type WorkspaceType =
-  | 'shredder'
-  | 'sheetpress'
-  | 'extrusion'
-  | 'injection'
-  | 'mix'
 
 export interface IProfileType {
   label: ProfileTypeName
@@ -133,7 +133,6 @@ export interface IUserBadges {
 }
 
 export interface IExternalLink {
-  key: string
   url: string
   label: ExternalLinkLabel
 }

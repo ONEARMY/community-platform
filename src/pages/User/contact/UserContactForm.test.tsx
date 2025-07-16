@@ -8,19 +8,6 @@ import { describe, expect, it, vi } from 'vitest'
 import { contact } from '../labels'
 import { UserContactForm } from './UserContactForm'
 
-vi.mock('src/common/hooks/useCommonStores', () => {
-  return {
-    useCommonStores: () => ({
-      stores: {
-        userStore: {
-          getUserEmail: () => vi.fn().mockReturnValue('Bob@email.com'),
-          activeUser: () => vi.fn().mockReturnValue(true),
-        },
-      },
-    }),
-  }
-})
-
 vi.mock('src/services/messageService', () => {
   return {
     messageService: {

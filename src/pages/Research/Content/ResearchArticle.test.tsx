@@ -27,15 +27,11 @@ const activeUser = FactoryUser({
 
 const mockUser = FactoryUser({ country: 'AF' })
 
-vi.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/stores/User/profile.store', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
-  useCommonStores: () => ({
-    stores: {
-      userStore: {
-        getUserByUsername: vi.fn().mockResolvedValue(mockUser),
-      },
-    },
+  useProfileStore: () => ({
+    profile: mockUser,
   }),
 }))
 

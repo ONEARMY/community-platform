@@ -25,10 +25,8 @@ const item = FactoryLibraryItem()
 vi.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
-  useCommonStores: () => ({
-    stores: {
-      userStore: {},
-    },
+  useProfileStore: () => ({
+    profile: {},
   }),
 }))
 

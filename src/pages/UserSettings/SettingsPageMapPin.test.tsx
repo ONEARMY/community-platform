@@ -26,26 +26,18 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
   __esModule: true,
   useCommonStores: () => ({
     stores: {
-      userStore: {
-        activeUser: mockUser,
-      },
       mapsStore: {
         getPin: vi.fn().mockResolvedValue(mockPin),
       },
-      themeStore: {
-        currentTheme: {
-          id: 'string',
-          siteName: 'string',
-          logo: 'string',
-          badge: 'string',
-          avatar: 'string',
-          academyResource: 'string',
-          styles: {
-            communityProgramURL: '',
-          },
-        },
-      },
     },
+  }),
+}))
+
+vi.mock('src/stores/User/profile.store', () => ({
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  __esModule: true,
+  useProfileStore: () => ({
+    profile: mockUser,
   }),
 }))
 

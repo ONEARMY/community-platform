@@ -47,7 +47,7 @@ describe('map.service', () => {
     })
   })
 
-  describe('getMapPinByUserId', () => {
+  describe('getMapPinByUsername', () => {
     it('fetches map pin by user id', async () => {
       // prepare
       global.fetch = vi.fn().mockResolvedValue({
@@ -55,7 +55,7 @@ describe('map.service', () => {
       })
 
       // act
-      const result = await mapPinService.getMapPinByUserId('1')
+      const result = await mapPinService.getMapPinByUsername('1')
 
       // assert
       expect(result).toEqual({ _id: '1' })
@@ -66,7 +66,7 @@ describe('map.service', () => {
       global.fetch = vi.fn().mockRejectedValue('error')
 
       // act
-      const result = await mapPinService.getMapPinByUserId('1')
+      const result = await mapPinService.getMapPinByUsername('1')
 
       // assert
       expect(result).toBeNull()

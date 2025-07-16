@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { Form } from 'react-final-form'
 import { ARRAY_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
-import { toJS } from 'mobx'
 import { Button, Loader } from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
+import { profileService } from 'src/services/profileService'
+import { useProfileStore } from 'src/stores/User/profile.store'
 import { isContactable, isMessagingBlocked } from 'src/utils/helpers'
 import { Flex } from 'theme-ui'
 
@@ -19,7 +19,7 @@ import { VisitorSection } from './content/sections/VisitorSection'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 import { buttons } from './labels'
 
-import type { IUser } from 'oa-shared'
+import type { ProfileFormData } from 'oa-shared'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
 export const SettingsPageUserProfile = () => {
@@ -28,26 +28,18 @@ export const SettingsPageUserProfile = () => {
   >(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const { userStore } = useCommonStores().stores
-  const user = toJS(userStore.activeUser)
+  const { profile } = useProfileStore()
 
-  if (!user) return null
+  if (!profile) return null
 
-  const saveProfile = async (values: IUser) => {
+  const saveProfile = async (values: ProfileFormData) => {
     setIsLoading(true)
 
-    const toUpdate = {
-      _id: user._id,
-      ...values,
-    }
-
-    toUpdate.coverImages = toUpdate.coverImages.filter((cover) => !!cover)
-
-    toUpdate.links = toUpdate.links || []
+    values.coverImages = values.coverImages?.filter((cover) => !!cover) || []
+    values.links = values.links || []
 
     try {
-      logger.debug({ profile: toUpdate }, 'SettingsPage.saveProfile')
-      await userStore.updateUserProfile(toUpdate, 'settings-save-profile')
+      await profileService.update(values)
 
       setNotification({
         message: 'Profile Saved',
@@ -56,10 +48,7 @@ export const SettingsPageUserProfile = () => {
         variant: 'success',
       })
     } catch (error) {
-      logger.warn(
-        { error, profile: toUpdate },
-        'SettingsPage.saveProfile.error',
-      )
+      logger.error(error, 'SettingsPage.saveProfile.error')
       setNotification({
         message: `Save Failed - ${error}`,
         icon: 'close',
@@ -70,10 +59,10 @@ export const SettingsPageUserProfile = () => {
     setIsLoading(false)
   }
 
-  const validateForm = (v: IUser) => {
+  const validateForm = (v: ProfileFormData) => {
     const errors: any = {}
     // must have at least 1 cover (awkward react final form array format)
-    if (!v.coverImages[0] && v.profileType !== ProfileTypeList.MEMBER) {
+    if (!v.coverImages?.at(0) && v.type !== ProfileTypeList.MEMBER) {
       errors.coverImages = []
       errors.coverImages[ARRAY_ERROR] = 'Must have at least one cover image'
     }
@@ -81,22 +70,24 @@ export const SettingsPageUserProfile = () => {
   }
 
   const emptyArray = new Array(4).fill(null)
-  const coverImages = user.coverImages
-    ? emptyArray.map((v, i) => (user.coverImages[i] ? user.coverImages[i] : v))
+  const coverImages = profile.coverImages
+    ? emptyArray.map((v, i) =>
+        profile.coverImages?.at(0) ? profile.coverImages[i] : v,
+      )
     : emptyArray
 
   const initialValues = {
-    profileType: user.profileType || ProfileTypeList.MEMBER,
-    displayName: user.displayName || null,
-    userName: user.userName,
-    links: user.links || [],
-    location: user.location || null,
-    about: user.about || null,
-    isContactableByPublic: isContactable(user.isContactableByPublic),
-    userImage: user.userImage || null,
+    profileType: profile.type || ProfileTypeList.MEMBER,
+    displayName: profile.displayName || null,
+    userName: profile.username,
+    links: profile.links || [],
+    location: profile.location || null,
+    about: profile.about || null,
+    isContactableByPublic: isContactable(profile.isContactable),
+    userImage: profile.photo || null,
     coverImages,
-    tags: user.tags || {},
-    openToVisitors: user.openToVisitors,
+    tags: profile.tags || {},
+    openToVisitors: profile.openToVisitors,
   }
 
   const formId = 'userProfileForm'
@@ -121,7 +112,7 @@ export const SettingsPageUserProfile = () => {
       }) => {
         if (isLoading) return <Loader sx={{ alignSelf: 'center' }} />
 
-        const isMember = values.profileType === ProfileTypeList.MEMBER
+        const isMember = values.type === ProfileTypeList.MEMBER
 
         return (
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
@@ -136,18 +127,16 @@ export const SettingsPageUserProfile = () => {
             <form id={formId} onSubmit={handleSubmit}>
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
                 <FocusSection />
-
                 <UserInfosSection formValues={values} />
-
                 <UserImagesSection isMemberProfile={isMember} values={values} />
 
                 {!isMember && (
-                  <VisitorSection openToVisitors={values.openToVisitors} />
+                  <VisitorSection openToVisitors={values.visitorPolicy} />
                 )}
 
                 {!isMessagingBlocked() && (
                   <PublicContactSection
-                    isContactableByPublic={values.isContactableByPublic}
+                    isContactableByPublic={values.isContactable}
                   />
                 )}
               </Flex>

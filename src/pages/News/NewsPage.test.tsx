@@ -26,18 +26,13 @@ const mockNewsItem = FactoryNewsItem({
   slug: 'testSlug',
 })
 
-vi.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/stores/User/profile.store', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
-  useCommonStores: () => ({
-    stores: {
-      userStore: {
-        getUserByUsername: vi.fn().mockResolvedValue(mockUser),
-      },
-    },
+  useProfileStore: () => ({
+    profile: mockUser,
   }),
 }))
-
 vi.mock('src/stores/News/news.store')
 vi.mock('src/stores/Discussions/discussions.store')
 
@@ -92,7 +87,7 @@ const getWrapper = (news: News) => {
 
   return render(
     <Provider
-      userStore={{
+      profileStore={{
         user: activeUser,
       }}
     >

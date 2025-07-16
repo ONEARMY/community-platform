@@ -14,17 +14,13 @@ import { IMPACT_YEARS } from './constants'
 import { Impact } from './Impact'
 import { invisible, missing } from './labels'
 
-vi.mock('src/common/hooks/useCommonStores', () => {
-  return {
-    useCommonStores: () => ({
-      stores: {
-        userStore: {
-          activeUser: { userName: 'activeUser' },
-        },
-      },
-    }),
-  }
-})
+vi.mock('src/stores/User/profile.store', () => ({
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  __esModule: true,
+  useProfileStore: () => ({
+    profile: { username: 'activeUser' },
+  }),
+}))
 
 describe('Impact', () => {
   describe('[public]', () => {

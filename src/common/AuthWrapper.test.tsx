@@ -5,20 +5,15 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { AuthWrapper } from './AuthWrapper' // adjust this import according to your file structure
 
-import type { UserStore } from 'src/stores/User/user.store'
-
 const mockUser = FactoryUser({
   userRoles: [UserRole.BETA_TESTER],
 })
 
-vi.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/stores/User/profile.store', () => ({
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
-  useCommonStores: () => ({
-    stores: {
-      userStore: {
-        user: mockUser,
-      } as UserStore,
-    },
+  useProfileStore: () => ({
+    profile: mockUser,
   }),
 }))
 

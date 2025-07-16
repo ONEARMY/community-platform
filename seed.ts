@@ -33,7 +33,7 @@ const _PROFILES_BASE: Partial<profilesScalars> = {
   type: ProfileTypeList.MEMBER,
   roles: [],
   tags: [],
-  photo_url: null,
+  photo: null,
   links: null,
   location: null,
   notification_settings: null,

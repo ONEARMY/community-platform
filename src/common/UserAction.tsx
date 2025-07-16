@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { useProfileStore } from 'src/stores/User/profile.store'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
 
 interface IProps {
@@ -15,9 +15,8 @@ type IUserVerificationConditions =
 
 export const UserAction = observer((props: IProps) => {
   const { incompleteProfile, loggedIn, loggedOut } = props
-  const { userStore } = useCommonStores().stores
+  const { profile: activeUser } = useProfileStore()
 
-  const activeUser = userStore.activeUser
   const isLoggedIn = !!activeUser
   const isUserProfileComplete = isLoggedIn && isProfileComplete(activeUser)
 

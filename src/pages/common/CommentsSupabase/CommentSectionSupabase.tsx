@@ -91,7 +91,7 @@ export const CommentSectionSupabase = (props: IProps) => {
       )
 
       if (result.status === 201) {
-        const newComment = Comment.fromDB(await result.json())
+        const newComment = new Comment(await result.json())
         subscribersService.add(
           newComment.sourceType,
           Number(newComment.sourceId),
@@ -161,7 +161,7 @@ export const CommentSectionSupabase = (props: IProps) => {
       )
 
       if (result.status === 201) {
-        const newReply = Comment.fromDB(await result.json()) as Reply
+        const newReply = new Comment(await result.json()) as Reply
 
         setComments((comments) =>
           comments.map((comment) => {

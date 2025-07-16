@@ -9,19 +9,11 @@ import { FormProvider } from './__mocks__/FormProvider'
 import { SettingsPageUserProfile } from './SettingsPageUserProfile'
 
 let mockUser = FactoryUser({})
-
-vi.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/stores/User/profile.store', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
-  useCommonStores: () => ({
-    stores: {
-      userStore: {
-        activeUser: mockUser,
-      },
-      tagsStore: {
-        allTags: [],
-      },
-    },
+  useProfileStore: () => ({
+    profile: mockUser,
   }),
 }))
 

@@ -1,11 +1,4 @@
-import { getProfileTagsForTheme } from 'src/utils/getProfileTagsForTheme'
-
 import type { MapFilterOptionsList } from 'oa-shared'
-
-const profileTags = getProfileTagsForTheme().map((tag) => ({
-  filterType: 'profileTag',
-  ...tag,
-}))
 
 export const allMapFilterOptions: MapFilterOptionsList = [
   {
@@ -53,5 +46,5 @@ export const allMapFilterOptions: MapFilterOptionsList = [
     filterType: 'setting',
     label: 'Open to visitors',
   },
-  ...profileTags,
+  // TODO figure out how to add profile tags.
 ]

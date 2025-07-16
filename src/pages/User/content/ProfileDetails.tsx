@@ -1,22 +1,21 @@
-import { useContext, useState } from 'react'
-import { UserStatistics, VisitorModal } from 'oa-components'
-import { ProfileTypeList, UserRole } from 'oa-shared'
+import { useContext, useMemo, useState } from 'react'
+import { TagList, UserStatistics, VisitorModal } from 'oa-components'
+import { UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
-import { ProfileTags } from 'src/common/ProfileTags'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { EnvironmentContext } from 'src/pages/common/EnvironmentContext'
 import { Box, Divider, Flex, Paragraph } from 'theme-ui'
 
-import type { IUser, UserCreatedDocs } from 'oa-shared'
+import type { Profile, UserCreatedDocs } from 'oa-shared'
 
 interface IProps {
   docs: UserCreatedDocs
-  user: IUser
+  user: Profile
   selectTab: (target: string) => void
 }
 
 export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
-  const { about, location, tags, openToVisitors, userName } = user
+  const { about, location, tags, openToVisitors, username } = user
   const [showVisitorModal, setShowVisitorModal] = useState(false)
 
   const hideVisitorDetails = (target?: string) => {
@@ -33,6 +32,14 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
   )
 
   const country = isMapModule ? location?.country : undefined
+
+  const userTotalUseful = useMemo(() => {
+    if (!user?.authorUsefulVotes) {
+      return 0
+    }
+
+    return user.authorUsefulVotes.reduce((sum, vote) => sum + vote.voteCount, 0)
+  }, [user.authorUsefulVotes])
 
   return (
     <Box style={{ height: '100%' }}>
@@ -51,14 +58,8 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
             gap: 2,
           }}
         >
-          {(tags || openToVisitors) && (
-            <ProfileTags
-              tagIds={tags}
-              showVisitorModal={() => setShowVisitorModal(true)}
-              openToVisitors={openToVisitors}
-              isSpace={user.profileType !== ProfileTypeList.MEMBER}
-            />
-          )}
+          {/* TODO: check tags functionality */}
+          {tags && <TagList tags={tags.map((t) => ({ label: t.name }))} />}
           {about && <Paragraph>{about}</Paragraph>}
 
           {openToVisitors && (
@@ -84,12 +85,12 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
             roleRequired={UserRole.BETA_TESTER}
             fallback={
               <UserStatistics
-                userName={userName}
+                userName={username}
                 country={country}
-                isVerified={!!user.badges?.verified}
-                isSupporter={!!user.badges?.supporter}
+                isVerified={!!user.isVerified}
+                isSupporter={!!user.isSupporter}
                 libraryCount={docs?.projects.length || 0}
-                usefulCount={user.totalUseful || 0}
+                usefulCount={userTotalUseful}
                 researchCount={docs?.research.length || 0}
                 totalViews={0}
                 questionCount={docs?.questions.length || 0}
@@ -97,14 +98,14 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
             }
           >
             <UserStatistics
-              userName={userName}
+              userName={username}
               country={country}
-              isVerified={!!user.badges?.verified}
-              isSupporter={!!user.badges?.supporter}
+              isVerified={!!user.isVerified}
+              isSupporter={!!user.isSupporter}
               libraryCount={docs?.projects.length || 0}
-              usefulCount={user.totalUseful || 0}
+              usefulCount={userTotalUseful}
               researchCount={docs?.research.length || 0}
-              totalViews={user.total_views || 0}
+              totalViews={user.totalViews || 0}
               questionCount={docs?.questions.length || 0}
             />
           </AuthWrapper>

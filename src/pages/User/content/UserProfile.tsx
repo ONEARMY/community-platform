@@ -23,21 +23,18 @@ import { ProfileHeader } from './ProfileHeader'
 import { ProfileImage } from './ProfileImage'
 import UserCreatedDocuments from './UserCreatedDocuments'
 
-import type { IUser, IUserDB, UserCreatedDocs } from 'oa-shared'
+import type { Profile, UserCreatedDocs } from 'oa-shared'
 
 interface IProps {
   docs: UserCreatedDocs
   isViewingOwnProfile: boolean
-  user: IUser
+  user: Profile
 }
 
 export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
-  const { about, impact, links, profileType, tags } = user
-
-  const useLocationHook = useLocation()
-
-  const isMember = profileType === ProfileTypeList.MEMBER
-
+  const { about, impact, links, type, tags } = user
+  const location = useLocation()
+  const isMember = type === ProfileTypeList.MEMBER
   const hasContactOption =
     isUserContactable(user) || (links && Object.keys(links).length !== 0)
   const hasContributed =
@@ -46,11 +43,10 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
   const hasProfile =
     about || (tags && Object.keys(tags).length !== 0) || hasContributed
 
-  const showEmptyProfileAlert =
-    isViewingOwnProfile && !isProfileComplete(user as IUserDB)
+  const showEmptyProfileAlert = isViewingOwnProfile && !isProfileComplete(user)
 
   const defaultValue =
-    useLocationHook?.hash?.slice(1) || (hasProfile ? 'profile' : 'contact')
+    location?.hash?.slice(1) || (hasProfile ? 'profile' : 'contact')
 
   const [selectedTab, setSelectedTab] = useState(defaultValue)
 
@@ -147,8 +143,8 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
           </Box>
           <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
             <MemberHistory
-              memberSince={user.profileCreated}
-              lastActive={user._lastActive}
+              memberSince={user.createdAt}
+              lastActive={user.lastActive}
             />
           </AuthWrapper>
         </Flex>

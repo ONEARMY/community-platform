@@ -16,7 +16,6 @@ export const factoryImage: IUploadedFileMeta = {
 }
 
 export const factoryLink: IExternalLink = {
-  key: '546sfg',
   url: 'https://bbc.co.uk/',
   label: ExternalLinkLabel.WEBSITE,
 }

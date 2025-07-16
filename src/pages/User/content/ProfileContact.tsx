@@ -10,10 +10,10 @@ import { UserContactForm } from '../contact/UserContactForm'
 import { UserContactFormNotLoggedIn } from '../contact/UserContactFormNotLoggedIn'
 import UserContactAndLinks from './UserContactAndLinks'
 
-import type { IUser } from 'oa-shared'
+import type { Profile } from 'oa-shared'
 
 interface IProps {
-  user: IUser
+  user: Profile
   isViewingOwnProfile: boolean
 }
 

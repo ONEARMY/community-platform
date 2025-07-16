@@ -9,10 +9,10 @@ import { Flex, Heading, Switch, Text } from 'theme-ui'
 
 import { fields, headings } from '../../labels'
 
-import type { IUser, UserVisitorPreferencePolicy } from 'oa-shared'
+import type { Profile, UserVisitorPreferencePolicy } from 'oa-shared'
 
 interface Props {
-  openToVisitors: IUser['openToVisitors']
+  openToVisitors: Profile['openToVisitors']
 }
 
 const visitorPolicyOptions = userVisitorPreferencePolicies.map((policy) => ({

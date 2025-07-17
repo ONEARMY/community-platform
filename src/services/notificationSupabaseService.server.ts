@@ -15,7 +15,7 @@ const setSourceContentType = async (
   comment: DBComment,
   client: SupabaseClient,
 ) => {
-  if (!(comment.source_type === 'research_update')) {
+  if (comment.source_type !== 'research_update') {
     return comment.source_id
   }
   const researchUpdate = await client
@@ -36,11 +36,11 @@ const getSubscribedUsers = async (
     console.log('In getSubscribedUsers')
     const subscribedUsers = await client
       .from('subscribers')
-      .select('user_id', { count: 'exact' })
+      .select('user_id')
       .eq('content_id', contentId)
       .eq('content_type', contentType)
     console.log({ subscribedUsers })
-    if (!subscribedUsers.data) {
+    if (!subscribedUsers.data || subscribedUsers.data.length === 0) {
       return []
     }
 
@@ -125,24 +125,28 @@ const createNotificationsNewComment = async (
     console.log({ contentType })
     const subscribers = await getSubscribedUsers(contentId, contentType, client)
     console.log({ subscribers })
-    subscribers.map(async (subscriberId: number) => {
-      const isResearchUpdate = comment.source_type === 'research_update'
-      const sourceContentId = await setSourceContentType(comment, client)
+    const isResearchUpdate = comment.source_type === 'research_update'
+    const sourceContentId = await setSourceContentType(comment, client)
 
-      const notification: NewNotificationData = {
-        actionType: 'newComment' as NotificationActionType,
-        ownedById: subscriberId!,
-        contentId: comment.id!,
-        sourceContentType: isResearchUpdate ? 'research' : comment.source_type!,
-        sourceContentId: sourceContentId,
-        parentContentId: isResearchUpdate ? comment.source_id! : null,
-        triggeredById: comment.created_by!,
-        contentType: isReply ? 'reply' : 'comment',
-        parentCommentId: isReply ? comment.parent_id : null,
-      }
+    await Promise.all(
+      subscribers.map((subscriberId: number) => {
+        const notification: NewNotificationData = {
+          actionType: 'newComment' as NotificationActionType,
+          ownedById: subscriberId!,
+          contentId: comment.id!,
+          sourceContentType: isResearchUpdate
+            ? 'research'
+            : comment.source_type!,
+          sourceContentId: sourceContentId,
+          parentContentId: isResearchUpdate ? comment.source_id! : null,
+          triggeredById: comment.created_by!,
+          contentType: isReply ? 'reply' : 'comment',
+          parentCommentId: isReply ? comment.parent_id : null,
+        }
 
-      createNotification(client, notification, subscriberId!)
-    })
+        return createNotification(client, notification, subscriberId!)
+      }),
+    )
   } catch (error) {
     console.error(error)
 
@@ -168,20 +172,22 @@ const createNotificationsResearchUpdate = async (
       client,
     )
 
-    subscribers.map(async (subscriberId: number) => {
-      const notification: NewNotificationData = {
-        actionType: 'newContent',
-        ownedById: subscriberId!,
-        contentId: researchUpdate.id!,
-        sourceContentType: 'research',
-        sourceContentId: research.id,
-        parentContentId: researchUpdate.id,
-        contentType: 'researchUpdate',
-        triggeredById: profile.id,
-      }
+    await Promise.all(
+      subscribers.map(async (subscriberId: number) => {
+        const notification: NewNotificationData = {
+          actionType: 'newContent',
+          ownedById: subscriberId!,
+          contentId: researchUpdate.id!,
+          sourceContentType: 'research',
+          sourceContentId: research.id,
+          parentContentId: researchUpdate.id,
+          contentType: 'researchUpdate',
+          triggeredById: profile.id,
+        }
 
-      createNotification(client, notification, subscriberId!)
-    })
+        return createNotification(client, notification, subscriberId!)
+      }),
+    )
   } catch (error) {
     console.error(error)
 

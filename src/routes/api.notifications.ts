@@ -11,9 +11,9 @@ const transformNotificationList = async (
   client: SupabaseClient,
 ) => {
   return Promise.all(
-    dbNotifications.map(async (dbNotification) => {
-      return await transformNotification(dbNotification, client)
-    }),
+    dbNotifications.map((dbNotification) =>
+      transformNotification(dbNotification, client),
+    ),
   )
 }
 

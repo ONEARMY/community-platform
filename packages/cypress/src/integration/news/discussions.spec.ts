@@ -31,9 +31,9 @@ describe('[News.Discussions]', () => {
     const news = MOCK_DATA.news[2]
     const newsPath = `/news/${news.slug}`
 
-    const newComment = `An interesting new. The answer must be... ${commenter.username}`
-    const updatedNewComment = `An interesting new. ${randomId}. The answer must be that when the sky is red, the apocalypse _might_ be on the way. Love, ${commenter.username}`
-    const newReply = `Thanks Dave and Ben. What does everyone else think? - ${commenter.username}`
+    const newComment = `An interesting post. Glad here the good news. ${commenter.username}`
+    const updatedNewComment = `An interesting post. ${randomId}. Glad here the good news. Love, ${commenter.username}`
+    const newReply = `Thanks Community. I agree! - ${commenter.username}`
     const updatedNewReply = `Anyone else? Yours truly ${commenter.username}`
     const secondReply = `Quick reply. ${commenter.username}. ${randomId}`
 

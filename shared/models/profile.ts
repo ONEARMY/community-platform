@@ -1,6 +1,7 @@
 import type { Comment } from './comment'
 import type { SubscribableContentTypes } from './common'
 import type { IDBDocSB, IDoc } from './document'
+import type { Project } from './library'
 import type { News } from './news'
 import type { IPatreonUser } from './patreon'
 import type { Question } from './question'
@@ -58,7 +59,7 @@ export type NotificationContentType = 'researchUpdate' | 'comment' | 'reply'
 
 type NotificationContent = News | Comment | Question | ResearchUpdate
 type NotificationSourceContentType = SubscribableContentTypes
-type NotificationSourceContent = News | Question | ResearchItem
+type NotificationSourceContent = News | Project | Question | ResearchItem
 
 type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photoUrl'>
 
@@ -165,13 +166,13 @@ export class NotificationDisplay {
     Object.assign(this, obj)
   }
 
-  static setEmailBody(notification: Notification): string | undefined {
+  static setEmailBody(notification: Notification): string {
     switch (notification.contentType) {
       case 'researchUpdate': {
-        return `${notification.parentContent?.title}:\n\n${notification.parentContent?.description}`
+        return `${(notification.content as ResearchUpdate)?.title}:\n\n${(notification.content as ResearchUpdate)?.description}`
       }
       default: {
-        return undefined
+        return this.setBody(notification) || ''
       }
     }
   }
@@ -236,7 +237,7 @@ export class NotificationDisplay {
   static setBody(notification: Notification): string | undefined {
     switch (notification.contentType) {
       case 'researchUpdate': {
-        return notification.parentContent?.title
+        return (notification.content as ResearchUpdate)?.title
       }
       case 'comment': {
         return (notification.content as Comment).comment
@@ -286,12 +287,18 @@ export class NotificationDisplay {
   }
 
   static setParentSlug(notification: Notification) {
-    let path = `${notification.sourceContentType}/${notification.sourceContent?.slug || ''}`
-    if (notification.sourceContentType == 'research') {
-      path = path + `#update_${notification.parentContentId}`
+    const slug = notification.sourceContent?.slug || ''
+    switch (notification.sourceContentType) {
+      case 'research_update': {
+        return `research/${slug}#update_${notification.parentContentId}`
+      }
+      case 'projects': {
+        return `library/${slug}`
+      }
+      default: {
+        return `${notification.sourceContentType}/${slug}`
+      }
     }
-
-    return path
   }
 
   static setSidebarIcon(contentType: NotificationContentType): string {
@@ -313,27 +320,31 @@ export class NotificationDisplay {
   }
 
   static setSlug(notification: Notification) {
+    const baseSlug = this.setParentSlug(notification)
     switch (notification.contentType) {
-      case 'researchUpdate': {
-        return `research/${notification.sourceContent?.slug}#update_${notification.parentContent?.id}`
-      }
       case 'comment': {
         return this.setSlugDiscussion(notification)
       }
       case 'reply': {
         return this.setSlugDiscussion(notification)
       }
-      default: {
-        return `${notification.sourceContentType}/${notification.sourceContent?.slug}`
+      case 'researchUpdate': {
+        return `${baseSlug}#update_${notification.contentId}`
       }
     }
   }
 
   static setSlugDiscussion(notification: Notification) {
-    if (notification.sourceContentType == 'research') {
-      return `research/${notification.sourceContent?.slug}?update_${notification.parentContentId}#comment:${notification.content?.id}`
+    const baseSlug = this.setParentSlug(notification)
+
+    switch (notification.sourceContentType) {
+      case 'research': {
+        return `research/${notification.sourceContent?.slug}?update_${notification.parentContentId}#comment:${notification.content?.id}`
+      }
+      default: {
+        return `${baseSlug}#comment:${notification.content?.id}`
+      }
     }
-    return `${notification.sourceContentType}/${notification.sourceContent?.slug}#comment:${notification.content?.id}`
   }
 
   static fromNotification(notification: Notification): NotificationDisplay {

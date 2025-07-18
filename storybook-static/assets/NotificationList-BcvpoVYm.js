@@ -1,0 +1,9 @@
+import{r as c,j as t}from"./iframe-B_Pp-Kwy.js";import{n as d}from"./emotion-styled.browser.esm-CyGTSkdK.js";import{B as l}from"./Button-Ccd5_aBy.js";import{N as m}from"./NotificationItem-DeMH4f_S.js";import{a as p,C as f,T as x}from"./theme-ui-components.esm-Bn3cp4D1.js";const u=d(p)`
+  display: flex;
+  flex-direction: column;
+  color: #000;
+  padding: 10px 30px 10px 30px;
+  text-align: center;
+  width: 100%;
+  }
+`,y=e=>{const{notifications:i,markAllRead:n,markAllNotified:o}=e,a=e.sx||{};return c.useEffect((()=>{i.length&&o()}),[]),t.jsx(f,{sx:{padding:2,maxHeight:310,overflowY:"auto",...a},children:i.length?t.jsxs(t.Fragment,{children:[t.jsx(u,{style:{textAlign:"center"},children:"Notifications"}),i.map(((e,i)=>t.jsx(m,{...e},i))),t.jsx(l,{type:"button",sx:{width:"100%",textAlign:"center",display:"flex",justifyContent:"center"},variant:"secondary","data-cy":"clear-notifications",onClick:()=>n&&n(),children:"Clear notifications"})]}):t.jsx(x,{sx:{display:"block",textAlign:"center"},"data-cy":"NotificationList: empty state",children:"Nada, no new notifications"})})};y.__docgenInfo={description:"",methods:[],displayName:"NotificationList",props:{notifications:{required:!0,tsType:{name:"Array",elements:[{name:"UserNotificationItem"}],raw:"UserNotificationItem[]"},description:""},markAllRead:{required:!0,tsType:{name:"signature",type:"function",raw:"() => void",signature:{arguments:[],return:{name:"void"}}},description:""},markAllNotified:{required:!0,tsType:{name:"signature",type:"function",raw:"() => void",signature:{arguments:[],return:{name:"void"}}},description:""},sx:{required:!1,tsType:{name:"ThemeUIStyleObject"},description:""}}};export{y as N};

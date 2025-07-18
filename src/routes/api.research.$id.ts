@@ -78,12 +78,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       })
       .eq('id', id)
       .select()
+      .single()
 
     if (researchResult.error || !researchResult.data) {
       throw researchResult.error
     }
 
-    const research = ResearchItem.fromDB(researchResult.data[0], [])
+    const research = ResearchItem.fromDB(researchResult.data, [])
 
     await subscribersServiceServer.updateResearchSubscribers(
       oldResearch,
@@ -207,7 +208,7 @@ async function validateRequest(
   }
 
   if (
-    research.author?.id !== profile.id &&
+    research.created_by !== profile.id &&
     !research.collaborators?.includes(profile.username)
   ) {
     return { status: 403, statusText: 'forbidden' }

@@ -15,7 +15,7 @@ interface IProps {
 }
 
 export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
-  const { about, location, tags, openToVisitors, username } = user
+  const { about, tags, pin, openToVisitors, username } = user
   const [showVisitorModal, setShowVisitorModal] = useState(false)
 
   const hideVisitorDetails = (target?: string) => {
@@ -31,7 +31,7 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
     MODULE.MAP,
   )
 
-  const country = isMapModule ? location?.country : undefined
+  const country = isMapModule ? pin?.country : undefined
 
   const userTotalUseful = useMemo(() => {
     if (!user?.authorUsefulVotes) {

@@ -21,7 +21,7 @@ export class MapPinFactory {
       lat: pin.lat,
       lng: pin.lng,
       moderation: pin.moderation,
-      postcode: pin.postcode,
+      postCode: pin.post_code,
       profileId: pin.profile_id,
       moderatonFeedback: pin.moderation_feedback,
       profile,

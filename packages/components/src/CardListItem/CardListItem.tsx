@@ -36,7 +36,7 @@ export const CardListItem = (props: IProps) => {
     return (
       <InternalLink
         target="_blank"
-        to={`/u/${item.profile.username}`}
+        to={`/u/${item.profile!.username}`}
         {...wrapperProps}
       >
         {Card}

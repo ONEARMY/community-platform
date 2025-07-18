@@ -37,7 +37,7 @@ export const ProfileLink = (props: Props) => {
       <ExternalLink
         marginLeft={2}
         color="black"
-        data-cy="profile-link"
+        data-cy="profile-website"
         href={rewriteUrl(props.url)}
       />
     </Flex>

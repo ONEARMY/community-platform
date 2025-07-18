@@ -28,7 +28,7 @@ export const SettingsPageUserProfile = () => {
   >(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const { profile } = useProfileStore()
+  const { profile, update } = useProfileStore()
 
   if (!profile) return null
 
@@ -38,7 +38,9 @@ export const SettingsPageUserProfile = () => {
     values.coverImages = values.coverImages?.filter((cover) => !!cover) || []
 
     try {
-      await profileService.update(values)
+      const updatedProfile = await profileService.update(values)
+
+      update(updatedProfile) // update local store
 
       setNotification({
         message: 'Profile Saved',
@@ -79,16 +81,15 @@ export const SettingsPageUserProfile = () => {
     profileType: profile.type,
     displayName: profile.displayName || null,
     userName: profile.username,
-    location: profile.location || null,
     about: profile.about || null,
-    isContactableByPublic: isContactable(profile.isContactable),
-    userImage: profile.photo || null,
+    isContactable: isContactable(profile.isContactable),
     coverImages,
+    existingPhoto: profile.photo,
     country: profile.country,
-    isContactable: profile.isContactable,
     showVisitorPolicy: !!profile.openToVisitors,
     type: profile.type,
-    visitorPolicy: profile.openToVisitors,
+    visitorPreferencePolicy: profile.openToVisitors?.policy,
+    visitorPreferenceDetails: profile.openToVisitors?.details,
     website: profile.website,
     tagIds: profile.tags?.map((x) => x.id) || [],
   } as ProfileFormData
@@ -112,8 +113,11 @@ export const SettingsPageUserProfile = () => {
         handleSubmit,
         invalid,
         errors,
+        form,
       }) => {
-        if (isLoading) return <Loader sx={{ alignSelf: 'center' }} />
+        if (isLoading) {
+          return <Loader sx={{ alignSelf: 'center' }} />
+        }
 
         const isMember = values.type === 'member'
 
@@ -131,10 +135,19 @@ export const SettingsPageUserProfile = () => {
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
                 <FocusSection />
                 <UserInfosSection formValues={values} />
-                <UserImagesSection isMemberProfile={isMember} values={values} />
+                <UserImagesSection
+                  isMemberProfile={isMember}
+                  values={values}
+                  form={form}
+                />
 
                 {!isMember && (
-                  <VisitorSection openToVisitors={values.visitorPolicy} />
+                  <VisitorSection
+                    openToVisitors={{
+                      policy: values.visitorPreferencePolicy,
+                      details: values.visitorPreferenceDetails,
+                    }}
+                  />
                 )}
 
                 {!isMessagingBlocked() && (

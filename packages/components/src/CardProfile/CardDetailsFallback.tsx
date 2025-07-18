@@ -14,15 +14,15 @@ interface IProps {
 export const CardDetailsFallback = ({ item, isLink }: IProps) => {
   return (
     <Flex sx={{ padding: 2, gap: 2 }}>
-      <MemberBadge profileType={item.profile.type} size={50} />
+      <MemberBadge profileType={item.profile!.type} size={50} />
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
         <Username
-          user={{ userName: item.profile.username }}
+          user={{ userName: item.profile!.username }}
           sx={{ alignSelf: 'flex-start' }}
           isLink={isLink}
           target="_blank"
         />
-        {item.profile.type === 'member' && (
+        {item.profile!.type === 'member' && (
           <Category
             category={{ name: 'Wants to get started' } as CategoryType}
             sx={{

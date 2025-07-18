@@ -308,6 +308,7 @@ async function updateOrReplaceImages(
     if (existingMedia.data && existingMedia.data.images?.length > 0) {
       media = existingMedia.data.images.filter((x) => idsToKeep.includes(x.id))
     }
+    // TODO: delete other images
   }
 
   if (newUploads.length > 0) {

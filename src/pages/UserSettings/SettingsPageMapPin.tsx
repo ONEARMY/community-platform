@@ -18,8 +18,9 @@ import {
   inCompleteProfile,
   mapForm,
 } from 'src/pages/UserSettings/labels'
-import { settingsService } from 'src/services/settingsService'
+import { profileService } from 'src/services/profileService'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
+import { getLocationData } from 'src/utils/getLocationData'
 import { randomIntFromInterval } from 'src/utils/helpers'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Alert, Box, Card, Flex, Heading, Text } from 'theme-ui'
@@ -29,7 +30,7 @@ import { mapPinService } from '../Maps/map.service'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 
 import type { DivIcon } from 'leaflet'
-import type { ILatLng, ILocation, MapPin, Profile } from 'oa-shared'
+import type { ILatLng, MapPin, Profile } from 'oa-shared'
 import type { Map } from 'react-leaflet'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
@@ -38,10 +39,9 @@ interface IPinProps {
 }
 
 const LocationDataTextDisplay = ({ user }: { user: Profile }) => {
-  const { username, location } = user
   const navigate = useNavigate()
 
-  if (!location?.latlng)
+  if (!user.pin)
     return (
       <Text
         variant="paragraph"
@@ -61,15 +61,15 @@ const LocationDataTextDisplay = ({ user }: { user: Profile }) => {
       >
         {mapForm.locationLabel}
         <br />
-        {location?.name}{' '}
+        {user?.displayName}{' '}
         <FlagIconEvents
-          countryCode={location.countryCode}
-          title={location.countryCode}
+          countryCode={user.pin.countryCode}
+          title={user.pin.countryCode}
         />
         <br />
       </Text>
       <Button
-        onClick={() => navigate(`/map#${username}`)}
+        onClick={() => navigate(`/map#${user.username}`)}
         sx={{ alignSelf: 'flex-start' }}
         icon="map"
         variant="secondary"
@@ -113,7 +113,7 @@ const DeleteMapPin = (props: IPropsDeletePin) => {
   const onSubmitDelete = async () => {
     setIsLoading(true)
     try {
-      await settingsService.deletePin()
+      await profileService.deletePin()
       setNotification({
         message: mapForm.successfulDelete,
         icon: 'check',
@@ -178,9 +178,16 @@ export const SettingsPageMapPin = () => {
   const { addPinTitle, yourPinTitle } = headings.map
   const formId = 'MapSection'
 
+  const initialValues: ILatLng = {
+    lat: profile.pin?.lat || randomIntFromInterval(-90, 90),
+    lng: profile.pin?.lng || randomIntFromInterval(-180, 180),
+  }
+
   useEffect(() => {
     const init = async () => {
-      if (!profile) return
+      if (!profile) {
+        return
+      }
 
       const pin = await mapPinService.getMapPinByUsername(profile.username)
 
@@ -194,24 +201,13 @@ export const SettingsPageMapPin = () => {
     init()
   }, [profile, notification])
 
-  const defaultLocation = {
-    latlng: {
-      lat: randomIntFromInterval(-90, 90),
-      lng: randomIntFromInterval(-180, 180),
-    },
-  }
-
-  const onSubmit = async ({ location }: { location: ILocation }) => {
+  const onSubmit = async ({ latLng }: { latLng: ILatLng }) => {
     setIsLoading(true)
+
     try {
-      await settingsService.upsertPin({
-        administrative: location.administrative,
-        country: location.country,
-        countryCode: location.countryCode,
-        postcode: location.postcode,
-        lat: location.latlng.lat,
-        lng: location.latlng.lng,
-      })
+      const pinData = await getLocationData(latLng)
+      await profileService.upsertPin(pinData)
+
       setNotification({
         message: mapForm.successfulSave,
         icon: 'check',
@@ -227,10 +223,6 @@ export const SettingsPageMapPin = () => {
       })
     }
     setIsLoading(false)
-  }
-
-  const initialValues = {
-    location: profile?.location || {},
   }
 
   return (
@@ -301,15 +293,14 @@ export const SettingsPageMapPin = () => {
                   name="location"
                   render={({ input }) => {
                     const { onChange, value } = input
-                    const location: ILocation =
-                      value && value.latlng ? value : defaultLocation
 
                     return (
                       <MapWithPin
                         mapRef={newMapRef}
-                        position={location.latlng}
+                        position={{ lat: value.lat, lng: value.lng }}
                         updatePosition={(newPosition: ILatLng) => {
-                          onChange({ latlng: newPosition })
+                          console.log(newPosition)
+                          onChange(newPosition)
                         }}
                         markerIcon={markerIcon}
                         zoom={2}

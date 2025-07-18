@@ -35,7 +35,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       country: formData.get('country') as string,
       country_code: formData.get('countryCode') as string,
       administrative: formData.get('administrative') as string,
-      postcode: formData.get('postcode') as string,
+      post_code: formData.get('postcode') as string,
       description: formData.get('description') as string,
       lat: Number(formData.get('lat')),
       lng: Number(formData.get('lng')),

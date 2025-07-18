@@ -1,4 +1,4 @@
-import { Profile, ProfileTag } from 'oa-shared'
+import { MapPin, Profile, ProfileTag } from 'oa-shared'
 import { ImageServiceServer } from 'src/services/imageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -10,7 +10,7 @@ export class ProfileFactory {
     this.imageService = new ImageServiceServer(client)
   }
 
-  createProfile(dbProfile: DBProfile, authorVotes?: AuthorVotes[]): Profile {
+  fromDB(dbProfile: DBProfile, authorVotes?: AuthorVotes[]): Profile {
     const photo = dbProfile.photo
       ? this.imageService.getPublicUrl(dbProfile.photo)
       : null
@@ -39,11 +39,24 @@ export class ProfileFactory {
       isContactable: !!dbProfile.is_contactable,
       lastActive: dbProfile.last_active,
       website: dbProfile.website,
-      location: dbProfile.location,
       patreon: dbProfile.patreon || null,
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
       tags: dbProfile.tags?.map((x) => ProfileTag.fromDB(x)),
+      pin: dbProfile.pin
+        ? new MapPin({
+            id: dbProfile.pin.id,
+            lat: dbProfile.pin.lat,
+            lng: dbProfile.pin.lng,
+            moderation: dbProfile.pin.moderation,
+            administrative: dbProfile.pin.administrative,
+            country: dbProfile.pin.country,
+            countryCode: dbProfile.pin.country_code,
+            postCode: dbProfile.pin.post_code,
+            profile: null,
+            profileId: dbProfile.pin.profile_id,
+          })
+        : undefined,
     })
   }
 }

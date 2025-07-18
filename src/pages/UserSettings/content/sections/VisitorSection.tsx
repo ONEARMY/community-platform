@@ -31,9 +31,8 @@ const { title: policyDetailsTitle, placeholder: policyDetailsPlaceholder } =
   fields.visitorDetails
 const { visitors } = headings
 
-export const VisitorSection = observer((props: Props) => {
+export const VisitorSection = observer(({ openToVisitors }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const { openToVisitors } = props
 
   useEffect(() => {
     setIsOpen(!!openToVisitors)

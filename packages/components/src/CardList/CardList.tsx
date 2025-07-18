@@ -34,8 +34,8 @@ export const CardList = (props: IProps) => {
     const toRender = list
       .sort((a, b) =>
         compareDesc(
-          a.profile.lastActive || Date.parse('0'),
-          b.profile.lastActive || Date.parse('0'),
+          a.profile!.lastActive || Date.parse('0'),
+          b.profile!.lastActive || Date.parse('0'),
         ),
       )
       .slice(0, renderCount)

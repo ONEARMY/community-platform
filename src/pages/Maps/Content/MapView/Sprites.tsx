@@ -75,13 +75,13 @@ export const createMarkerIcon = (pin: MapPin, draggable?: boolean) => {
   const icon =
     pin.moderation === 'accepted'
       ? Workspace.findWorkspaceBadge(
-          pin.profile.type,
+          pin.profile!.type,
           true,
-          pin.profile.isVerified,
+          pin.profile!.isVerified,
         )
       : AwaitingModerationHighlight
   return divIcon({
-    className: `icon-marker icon-${pin.profile.type}`,
+    className: `icon-marker icon-${pin.profile!.type}`,
     html: `<img data-cy="pin-${pin.id}" src="${icon}" style="${draggable ? 'cursor: grab' : ''}" />`,
     iconSize: point(38, 38, true),
   })

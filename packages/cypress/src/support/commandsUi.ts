@@ -167,8 +167,8 @@ Cypress.Commands.add('fillSettingMapPin', (mapPin: IMapPin) => {
 
 Cypress.Commands.add('setSettingPublicContact', () => {
   cy.step('Opts out of public contact')
-  cy.get('[data-cy=isContactableByPublic').should('be.checked')
-  cy.get('[data-cy=isContactableByPublic').click({ force: true })
+  cy.get('[data-cy=isContactable').should('be.checked')
+  cy.get('[data-cy=isContactable').click({ force: true })
 })
 
 Cypress.Commands.add(

@@ -36,15 +36,15 @@ export const filterPins = (
 
   if (badgeFilters.length > 0) {
     filteredPins = filteredPins.filter(({ profile }) => {
-      if (!profile?.isVerified && !profile.isSupporter) {
+      if (!profile?.isVerified && !profile!.isSupporter) {
         return false
       }
 
       return (
         badgeFilters.filter(
           (badge) =>
-            (badge === 'verified' && profile.isVerified) ||
-            (badge === 'supporter' && profile.isSupporter),
+            (badge === 'verified' && profile!.isVerified) ||
+            (badge === 'supporter' && profile!.isSupporter),
         ).length > 0
       )
     })

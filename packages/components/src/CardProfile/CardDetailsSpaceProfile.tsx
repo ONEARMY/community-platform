@@ -7,7 +7,7 @@ import { Username } from '../Username/Username'
 import type { MapPin } from 'oa-shared'
 
 interface IProps {
-  profile: MapPin['profile']
+  profile: NonNullable<MapPin['profile']>
   isLink: boolean
 }
 

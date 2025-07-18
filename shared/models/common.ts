@@ -17,16 +17,6 @@ export interface ILatLng {
   lng: number
 }
 
-export interface ILocation {
-  name: string
-  country: string
-  countryCode: string
-  administrative: string
-  latlng: ILatLng
-  postcode: string
-  value: string
-}
-
 export type Collaborator = {
   countryCode?: string | null
   userName: string

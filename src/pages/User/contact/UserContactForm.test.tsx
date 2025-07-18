@@ -18,7 +18,7 @@ vi.mock('src/services/messageService', () => {
 })
 
 describe('UserContactForm', () => {
-  const profileUser = FactoryUser({ isContactableByPublic: true })
+  const profileUser = FactoryUser({ isContactable: true })
 
   it('sends an message to the store', async () => {
     const user = userEvent.setup()
@@ -43,7 +43,7 @@ describe('UserContactForm', () => {
   })
 
   it('renders nothing if not profile is not contactable', () => {
-    const uncontactable = FactoryUser({ isContactableByPublic: false })
+    const uncontactable = FactoryUser({ isContactable: false })
 
     const { container } = render(
       <Provider {...useCommonStores().stores}>

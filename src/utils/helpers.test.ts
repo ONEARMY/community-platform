@@ -119,17 +119,17 @@ describe('src/utils/helpers', () => {
 
   describe('isUserContactable', () => {
     it('should default to true when field empty on user', () => {
-      const user = FactoryUser({ isContactableByPublic: undefined })
+      const user = FactoryUser({ isContactable: undefined })
       expect(isUserContactable(user)).toBe(true)
     })
 
     it('should return true when a user is contactable', () => {
-      const user = FactoryUser({ isContactableByPublic: true })
+      const user = FactoryUser({ isContactable: true })
       expect(isUserContactable(user)).toBe(true)
     })
 
     it("should return false when a user isn't contactable", () => {
-      const user = FactoryUser({ isContactableByPublic: false })
+      const user = FactoryUser({ isContactable: false })
       expect(isUserContactable(user)).toBe(false)
     })
   })
@@ -140,8 +140,8 @@ describe('src/utils/helpers', () => {
     })
 
     it('should return true when given true', () => {
-      const user = FactoryUser({ isContactableByPublic: true })
-      expect(isContactable(user.isContactableByPublic)).toBe(true)
+      const user = FactoryUser({ isContactable: true })
+      expect(isContactable(user.isContactable)).toBe(true)
     })
 
     it('should return false when given false', () => {

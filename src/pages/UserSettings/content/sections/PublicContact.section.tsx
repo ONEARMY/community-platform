@@ -10,7 +10,7 @@ export const PublicContactSection = ({
   isContactable,
 }: PublicContactSectionProps) => {
   const { description, placeholder, title } = fields.publicContentPreference
-  const name = 'isContactableByPublic'
+  const name = 'isContactable'
 
   return (
     <Flex

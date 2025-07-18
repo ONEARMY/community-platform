@@ -1,7 +1,9 @@
-import { Moderation, ProfileTypeList } from 'oa-shared'
+import { ProfileTypeList } from 'oa-shared'
 import { describe, expect, it } from 'vitest'
 
 import { filterPins } from './filterPins'
+
+import type { MapPin } from 'oa-shared'
 
 describe('filterPins', () => {
   const memberFilter = {
@@ -23,68 +25,111 @@ describe('filterPins', () => {
   }
 
   const workspacePin = {
-    _deleted: false,
-    _id: 'bob_the_builder',
-    moderation: Moderation.ACCEPTED,
-    type: ProfileTypeList.WORKSPACE,
-    location: { lat: 0, lng: 0 },
-    verified: true,
-    creator: {
-      _id: 'bob_the_builder',
-      _lastActive: 'now',
+    id: 1,
+    moderation: 'accepted',
+    lat: 0,
+    lng: 0,
+    administrative: '',
+    country: '',
+    countryCode: '',
+    postcode: '',
+    profileId: 1,
+    profile: {
+      id: 1,
+      username: 'bob_the_builder',
+      isVerified: true,
+      lastActive: new Date(),
       countryCode: 'uk',
       displayName: 'Bob the Builder',
-      isContactableByPublic: false,
-      profileType: ProfileTypeList.WORKSPACE,
-      tags: [],
-    },
-  }
-
-  const memberPin = {
-    _deleted: false,
-    _id: 'bob_the_member',
-    moderation: Moderation.ACCEPTED,
-    type: ProfileTypeList.WORKSPACE,
-    location: { lat: 0, lng: 0 },
-    verified: true,
-    creator: {
-      _id: 'bob_the_member',
-      _lastActive: 'now',
-      countryCode: 'uk',
-      displayName: 'Bob the Member',
-      isContactableByPublic: false,
-      profileType: ProfileTypeList.MEMBER,
-      tags: [],
-    },
-  }
-
-  const taggedMemberPin = {
-    _deleted: false,
-    _id: 'bob_the_tagged',
-    moderation: Moderation.ACCEPTED,
-    type: ProfileTypeList.MEMBER,
-    location: { lat: 0, lng: 0 },
-    verified: true,
-    creator: {
-      _id: 'bob_the_tagged',
-      _lastActive: 'now',
-      countryCode: 'uk',
-      displayName: 'Bob the Member',
-      isContactableByPublic: false,
-      profileType: ProfileTypeList.MEMBER,
+      isContactable: false,
+      isSupporter: false,
+      about: '',
+      country: '',
+      photo: null,
+      openToVisitors: null,
+      type: ProfileTypeList.WORKSPACE,
       tags: [
         {
-          _created: 'now',
-          _deleted: false,
-          _id: 'designer',
-          label: 'Designer',
-          profileType: ProfileTypeList.MEMBER,
+          id: 1,
+          name: 'Designer',
+          createdAt: new Date(),
+          profileType: 'workspace',
         },
       ],
     },
-  }
+  } as MapPin
 
-  const allPinsInView = [workspacePin, memberPin, taggedMemberPin]
+  const memberPin = {
+    id: 1,
+    moderation: 'accepted',
+    lat: 0,
+    lng: 0,
+    administrative: '',
+    country: '',
+    countryCode: '',
+    postcode: '',
+    profileId: 1,
+    profile: {
+      id: 1,
+      username: 'bob_the_member',
+      isVerified: true,
+      lastActive: new Date(),
+      countryCode: 'uk',
+      displayName: 'Bob the Member',
+      isContactable: false,
+      isSupporter: false,
+      about: '',
+      country: '',
+      photo: null,
+      openToVisitors: null,
+      type: ProfileTypeList.MEMBER,
+      tags: [
+        {
+          id: 1,
+          name: 'Designer',
+          createdAt: new Date(),
+          profileType: 'member',
+        },
+      ],
+    },
+  } as MapPin
+
+  const taggedMemberPin = {
+    id: 1,
+    moderation: 'accepted',
+    lat: 0,
+    lng: 0,
+    administrative: '',
+    country: '',
+    countryCode: '',
+    postcode: '',
+    profileId: 1,
+    profile: {
+      id: 1,
+      username: 'bob_the_tagged',
+      isVerified: true,
+      lastActive: new Date(),
+      countryCode: 'uk',
+      displayName: 'Bob the Tagged',
+      isContactable: false,
+      isSupporter: false,
+      about: '',
+      country: '',
+      photo: null,
+      openToVisitors: null,
+      type: ProfileTypeList.MEMBER,
+      tags: [
+        {
+          id: 1,
+          name: 'Designer',
+          createdAt: new Date(),
+          profileType: 'member',
+        },
+      ],
+    },
+  } as MapPin
+
+  const allPinsInView: MapPin[] = [workspacePin, memberPin, taggedMemberPin]
 
   it('returns all pins when no filters provided', () => {
     const activePinFilters = []

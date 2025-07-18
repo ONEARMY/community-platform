@@ -103,9 +103,9 @@ describe('[Profile]', () => {
       cy.visit('/settings')
       cy.completeUserProfile(contactee.username)
       cy.get('[data-cy=PublicContactSection]').should('be.visible')
-      cy.get('[data-cy=isContactableByPublic-true]').click({ force: true })
+      cy.get('[data-cy=isContactable-true]').click({ force: true })
       cy.saveSettingsForm()
-      cy.get('[data-cy=isContactableByPublic-false]')
+      cy.get('[data-cy=isContactable-false]')
 
       cy.step('No contact tab visible for contactee')
       cy.visit(`/u/${contactee.username}`)
@@ -131,7 +131,7 @@ describe('[Profile]', () => {
       cy.get('[data-cy=contact-tab]').click()
       cy.get('[data-cy="UserContactForm-NotAvailable"]')
       cy.get('[data-cy="UserContactForm"]').should('not.exist')
-      cy.get('[data-cy="profile-link"]').should(
+      cy.get('[data-cy="profile-website"]').should(
         'have.attr',
         'href',
         `mailto:something@test.com`,

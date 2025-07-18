@@ -39,7 +39,7 @@ export const UserInfosSection = ({ formValues }: IProps) => {
   const countryCode = Object.keys(countries).find(
     (key) => countries[key].name === formValues.country,
   )
-  const noMapPin = !profile?.location?.latlng
+  const noMapPin = !profile?.pin
 
   return (
     <FlexSectionContainer>
@@ -115,7 +115,7 @@ export const UserInfosSection = ({ formValues }: IProps) => {
                 </Text>
               </InternalLink>
             )}
-            <Field data-cy="location-dropdown" name="location.country">
+            <Field data-cy="location-dropdown" name="country">
               {(field) => (
                 <SelectField
                   options={Object.keys(countries).map((country) => ({

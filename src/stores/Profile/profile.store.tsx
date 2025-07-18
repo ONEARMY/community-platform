@@ -20,11 +20,16 @@ export class ProfileStore {
     this.profile = undefined
   }
 
+  update = (value: Profile) => {
+    this.profile = value
+  }
+
   constructor() {
     makeObservable(this, {
       profile: observable,
       refresh: action,
       clear: action,
+      update: action,
     })
   }
 }

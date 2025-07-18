@@ -1,11 +1,7 @@
 import { ProfileTag } from './profileTag'
 
 import type { Comment } from './comment'
-import type {
-  IConvertedFileMeta,
-  ILocation,
-  SubscribableContentTypes,
-} from './common'
+import type { IConvertedFileMeta, SubscribableContentTypes } from './common'
 import type { IDBDocSB, IDoc } from './document'
 import type { DBMedia, Image } from './media'
 import type { IDBModeration, IModeration, Moderation } from './moderation'
@@ -24,6 +20,7 @@ export class DBProfile {
   readonly id: number
   readonly created_at: Date
   readonly tags: DBProfileTag[]
+  readonly pin?: DBMapPin
   username: string
   display_name: string
   is_verified: boolean
@@ -41,9 +38,9 @@ export class DBProfile {
   is_contactable: boolean
   last_active: Date | null
   website: string | null
-  location: ILocation
-  map_pin_description: string | null
   total_views: number
+  auth_id: string
+  tag_ids: number[]
 
   constructor(obj: DBProfile) {
     Object.assign(this, obj)
@@ -66,7 +63,6 @@ export class Profile {
   isBlockedFromMessaging: boolean
   openToVisitors: UserVisitorPreference | null
   website: string | null
-  location: ILocation
   tags?: ProfileTag[]
   totalViews: number
   roles: string[] | null
@@ -74,6 +70,7 @@ export class Profile {
   coverImages: Image[] | null
   patreon: IPatreonUser | null
   authorUsefulVotes?: AuthorVotes[]
+  pin?: MapPin
 
   constructor(obj: Profile) {
     Object.assign(this, obj)
@@ -104,11 +101,24 @@ export class Profile {
       isContactable: !!dbProfile.is_contactable,
       lastActive: dbProfile.last_active,
       website: dbProfile.website,
-      location: dbProfile.location,
       patreon: dbProfile.patreon,
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
       tags: dbProfile.tags?.map((x) => ProfileTag.fromDB(x)),
+      pin: dbProfile.pin
+        ? new MapPin({
+            id: dbProfile.pin.id,
+            lat: dbProfile.pin.lat,
+            lng: dbProfile.pin.lng,
+            moderation: dbProfile.pin.moderation,
+            administrative: dbProfile.pin.administrative,
+            country: dbProfile.pin.country,
+            countryCode: dbProfile.pin.country_code,
+            postCode: dbProfile.pin.post_code,
+            profile: null,
+            profileId: dbProfile.pin.profile_id,
+          })
+        : undefined,
     })
   }
 }
@@ -448,12 +458,13 @@ export type ProfileFormData = {
   website: string
   isContactable: boolean
   type: ProfileTypeName
-  existingImageId?: string
-  image?: IConvertedFileMeta
+  photo?: IConvertedFileMeta
+  existingPhoto?: Image
   existingCoverImageIds?: string[]
   coverImages?: IConvertedFileMeta[]
   showVisitorPolicy: boolean
-  visitorPolicy: UserVisitorPreference
+  visitorPreferencePolicy: UserVisitorPreference['policy']
+  visitorPreferenceDetails: UserVisitorPreference['details']
 }
 
 export class DBMapPin implements IDBModeration {
@@ -462,8 +473,8 @@ export class DBMapPin implements IDBModeration {
   profile_id: number
   country: string // check if necessary
   country_code: string
-  administrative: string
-  postcode: string
+  administrative: string | null
+  post_code: string | null
   lat: number
   lng: number
   moderation: Moderation
@@ -473,11 +484,11 @@ export class DBMapPin implements IDBModeration {
 export class MapPin implements IModeration {
   readonly id: number
   readonly profileId: number
-  readonly profile: PinProfile
+  readonly profile: PinProfile | null
   country: string
   countryCode: string
-  administrative: string
-  postcode: string
+  administrative: string | null
+  postCode: string | null
   lat: number
   lng: number
   moderation: Moderation
@@ -486,6 +497,16 @@ export class MapPin implements IModeration {
   constructor(obj: MapPin) {
     Object.assign(this, obj)
   }
+}
+
+export type MapPinFormData = {
+  lat: number
+  lng: number
+  country: string
+  countryCode: string
+  administrative: string
+  postCode: string
+  name: string
 }
 
 export interface DBAuthorVotes {

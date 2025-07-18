@@ -3,6 +3,8 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
+import type { User } from '@supabase/supabase-js'
+import type { ProfileFormData } from 'oa-shared'
 
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request)
@@ -33,7 +35,7 @@ export const loader = async ({ request }) => {
     .single()
 
   const profileFactory = new ProfileFactory(client)
-  const profile = profileFactory.createProfile(data)
+  const profile = profileFactory.fromDB(data)
 
   return Response.json(profile, { headers, status: 200 })
 }
@@ -41,37 +43,113 @@ export const loader = async ({ request }) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  try {
+    const formData = await request.formData()
+    const data = {
+      displayName: formData.get('displayName') as string,
+      about: formData.get('about') as string,
+      country: formData.get('country') as string,
+      type: formData.get('type'),
+      existingImageId: formData.get('existingImageId') as string,
+      isContactable: formData.get('isContactable') === 'true',
+      showVisitorPolicy: formData.get('showVisitorPolicy') === 'true',
+      visitorPreferenceDetails: formData.get(
+        'visitorPreferenceDetails',
+      ) as string,
+      visitorPreferencePolicy: formData.get(
+        'visitorPreferencePolicy',
+      ) as string,
+      existingCoverImageIds: formData.has('existingCoverImageIds')
+        ? formData.getAll('existingCoverImageIds')
+        : null,
+      tagIds: formData.has('tagIds')
+        ? formData.getAll('tagIds').map((x) => Number(x))
+        : null,
+      website: formData.get('website'),
+    } as ProfileFormData
+
+    const {
+      data: { user },
+    } = await client.auth.getUser()
+
+    const { data: profileData } = await client
+      .from('profiles')
+      .select('id')
+      .eq('auth_id', user?.id)
+      .single()
+
+    const { valid, status, statusText } = await validateRequest(
+      request,
+      user,
+      data,
+      profileData,
+    )
+
+    if (!valid) {
+      return Response.json({}, { status, statusText })
+    }
+
+    if (!profileData?.id) {
+      throw new Error('profile not found')
+    }
+
+    const photo = formData.get('photo') as File
+    const coverImages = formData.getAll('coverImages') as File[]
+
+    const profileService = new ProfileServiceServer(client)
+    const profile = await profileService.updateProfile(
+      profileData?.id,
+      data,
+      photo,
+      coverImages,
+    )
+
+    return Response.json(profile, { headers, status: 200 })
+  } catch (error) {
+    console.error(error)
+    return Response.json({}, { headers, status: 500 })
+  }
+}
+
+async function validateRequest(
+  request: Request,
+  user: User | null,
+  data: ProfileFormData,
+  profile: { id: number } | null,
+) {
+  if (request.method !== 'POST') {
+    return { status: 405, statusText: 'method not allowed' }
+  }
 
   if (!user) {
-    return Response.json({}, { headers, status: 401 })
+    return { status: 401, statusText: 'unauthorized' }
   }
 
-  const formData = await request.formData()
-  const data = {
-    displayName: formData.get('displayName') as string,
-    about: formData.get('about') as string,
-    country: formData.get('country') as string,
-    type: formData.get('type'),
-    existingImageId: formData.get('existingImageId') as string,
-    isContactable: formData.get('isContactable') === 'true',
-    showVisitorPolicy: formData.get('showVisitorPolicy') === 'true',
-    visitorPolicyDetails: formData.get('visitorPolicyDetails') as string,
-    visitorPolicy: formData.get('visitorPolicy') as string,
-    linkCount: parseInt(formData.get('linkCount') as string),
-    existingCoverImageIds: formData.has('existingCoverImageIds')
-      ? formData.getAll('existingCoverImageIds')
-      : null,
-    tags: formData.has('tags')
-      ? formData.getAll('tags').map((x) => Number(x))
-      : null,
-    link: formData.get('link'),
+  if (!profile?.id) {
+    return { status: 400, statusText: 'profile not found' }
   }
 
-  const profileService = new ProfileServiceServer(client)
-  const profile = await profileService.updateProfile(data)
+  if (!data.displayName) {
+    return { status: 400, statusText: 'displayName is required' }
+  }
 
-  return Response.json({ profile }, { headers, status: 200 })
+  if (!data.type) {
+    return { status: 400, statusText: 'type is required' }
+  }
+
+  if (data.type !== 'member') {
+    if (
+      (!data.existingCoverImageIds ||
+        data.existingCoverImageIds.length === 0) &&
+      (!data.coverImages || data.coverImages.length === 0)
+    ) {
+      return { status: 400, statusText: 'cover images are required' }
+    }
+
+    if (data.showVisitorPolicy && !data.visitorPreferencePolicy) {
+      return { status: 400, statusText: 'visitor policy is required' }
+    }
+  }
+
+  return { valid: true }
 }

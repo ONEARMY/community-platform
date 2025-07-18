@@ -67,7 +67,7 @@ export const MapContainer = (props: IProps) => {
 
   const selectPinByUserId = async (username: string | undefined) => {
     if (allPins) {
-      const foundPin = allPins.find((pin) => pin.profile.username === username)
+      const foundPin = allPins.find((pin) => pin.profile!.username === username)
       if (foundPin) {
         setCenter({ lat: foundPin.lat, lng: foundPin.lng })
       }
@@ -80,7 +80,7 @@ export const MapContainer = (props: IProps) => {
   }
 
   const onPinClick = (pin: MapPin) => {
-    navigate(`/map#${pin.profile.username}`, { replace: true })
+    navigate(`/map#${pin.profile!.username}`, { replace: true })
   }
 
   const onLocationChange = (latlng) => setCenter(latlng)

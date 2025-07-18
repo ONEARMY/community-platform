@@ -228,7 +228,7 @@ describe('[Settings]', () => {
       cy.step('Updated settings display on contact tab')
       cy.get('[data-cy="contact-tab"]').click()
       cy.contains(`Other users are able to contact you`)
-      cy.get('[data-cy="profile-link"]').should(
+      cy.get('[data-cy="profile-website"]').should(
         'have.attr',
         'href',
         `mailto:${url}`,
@@ -344,7 +344,7 @@ describe('[Settings]', () => {
       cy.step('Updated settings display on contact tab')
       cy.get('[data-cy="contact-tab"]').click()
       cy.contains(`Other users are able to contact you`)
-      cy.get('[data-cy="profile-link"]').should(
+      cy.get('[data-cy="profile-website"]').should(
         'have.attr',
         'href',
         `mailto:${url}`,

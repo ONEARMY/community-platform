@@ -18,7 +18,7 @@ export class MapServiceServer {
           country: pin.country,
           country_code: pin.country_code,
           administrative: pin.administrative,
-          postcode: pin.postcode,
+          post_code: pin.post_code,
           lat: pin.lat,
           lng: pin.lng,
         })
@@ -33,7 +33,7 @@ export class MapServiceServer {
         country: pin.country,
         country_code: pin.country_code,
         administrative: pin.administrative,
-        postcode: pin.postcode,
+        post_code: pin.post_code,
         lat: pin.lat,
         lng: pin.lng,
       })

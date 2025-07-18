@@ -1,21 +1,24 @@
 import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
+import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { fields, headings } from 'src/pages/UserSettings/labels'
-import { required } from 'src/utils/validators'
-import { Box, Flex, Heading, Text } from 'theme-ui'
+import { Box, Flex, Heading, Image as ImageComponent, Text } from 'theme-ui'
 
+import type { FormApi } from 'final-form'
 import type { ProfileFormData } from 'oa-shared'
 
 interface IProps {
   values: ProfileFormData
   isMemberProfile: boolean
+  form: FormApi<ProfileFormData, Partial<ProfileFormData>>
 }
 
-export const UserImagesSection = ({ isMemberProfile, values }: IProps) => {
-  const { coverImages, image } = values
-  const isRequired = { validate: required }
-
+export const UserImagesSection = ({
+  isMemberProfile,
+  values,
+  form,
+}: IProps) => {
   return (
     <Flex sx={{ flexDirection: 'column', gap: 3 }}>
       <Heading as="h2">
@@ -29,27 +32,24 @@ export const UserImagesSection = ({ isMemberProfile, values }: IProps) => {
         <Text variant="paragraph">{fields.userImage.description}</Text>
 
         <Box
-          data-testid="userImage"
+          data-testid="photo"
           sx={{
             width: '120px',
             height: '120px',
           }}
         >
-          <Field
-            component={ImageInputField}
-            data-cy="userImage"
-            hasText={false}
-            initialValue={image}
-            name="userImage"
-            validateFields={[]}
-            imageDisplaySx={{
-              borderRadius: '100%',
-              objectFit: 'cover',
-              width: '120px',
-              height: '120px',
-            }}
-            {...(isMemberProfile && isRequired)}
-          />
+          {!values.existingPhoto ? (
+            <Field hasText={false} name="photo" component={ImageInputField} />
+          ) : (
+            <ImageInputWrapper hasUploadedImg={true}>
+              <ImageComponent src={values.existingPhoto?.publicUrl} />
+              <ImageInputDeleteImage
+                onClick={() => {
+                  form.change('existingPhoto', undefined)
+                }}
+              />
+            </ImageInputWrapper>
+          )}
         </Box>
       </Flex>
 
@@ -58,7 +58,7 @@ export const UserImagesSection = ({ isMemberProfile, values }: IProps) => {
           <Heading variant="subHeading">{`${fields.coverImages.title} *`}</Heading>
           <Text variant="paragraph">{fields.coverImages.description}</Text>
 
-          <FieldArray name="coverImages" initialValue={coverImages}>
+          <FieldArray name="coverImages" initialValue={values.coverImages}>
             {({ fields, meta }) => {
               return (
                 <>

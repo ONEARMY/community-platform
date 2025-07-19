@@ -2,14 +2,16 @@ import { News } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
 import { newsServiceServer } from 'src/services/newsService.server'
+import { profileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown'
-import { validateImage } from 'src/utils/helpers'
+import { hasAdminRightsSupabase, validateImage } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
-import type { AuthError, User } from '@supabase/supabase-js'
+import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { DBNews } from 'oa-shared'
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   try {
@@ -32,36 +34,21 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const {
       data: { user },
-      error,
     } = await client.auth.getUser()
 
+    const currentNews = await newsServiceServer.getById(id, client)
+
     const { valid, status, statusText } = await validateRequest(
-      error,
       params,
       request,
       user,
       data,
+      currentNews,
+      client,
     )
 
     if (!valid) {
       return Response.json({}, { status, statusText })
-    }
-
-    const currentNews = await newsServiceServer.getById(id, client)
-
-    if (
-      currentNews.slug !== data.slug &&
-      (await contentServiceServer.isDuplicateExistingSlug(
-        data.slug,
-        currentNews.id,
-        client,
-        'news',
-      ))
-    ) {
-      return {
-        status: 409,
-        statusText: 'News with this title already exists',
-      }
     }
 
     const existingHeroImage = formData.get('existingHeroImage') as string | null
@@ -138,19 +125,13 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 }
 
 async function validateRequest(
-  authError: AuthError | null,
   params: Params<string>,
   request: Request,
   user: User | null,
   data: any,
+  currentNews: DBNews,
+  client: SupabaseClient,
 ) {
-  if (authError) {
-    return {
-      status: authError?.status,
-      statusText: authError?.message || 'Unknown authentication error',
-    }
-  }
-
   if (!user) {
     return { status: 401, statusText: 'unauthorized' }
   }
@@ -171,15 +152,37 @@ async function validateRequest(
     return { status: 400, statusText: 'Body is required' }
   }
 
-  // Seems to be super flaky right now.
-  // const profile = await profileServiceServer.getByAuthId(user!.id, client)
+  if (!currentNews) {
+    return { status: 400, statusText: 'News not found' }
+  }
 
-  // const isCreator = currentNews.created_by === profile.id
-  // const hasAdminRights = hasAdminRightsSupabase(profile)
+  if (
+    currentNews.slug !== data.slug &&
+    (await contentServiceServer.isDuplicateExistingSlug(
+      data.slug,
+      currentNews.id,
+      client,
+      'news',
+    ))
+  ) {
+    return {
+      status: 409,
+      statusText: 'This news already exists',
+    }
+  }
 
-  // if (!isCreator && !hasAdminRights) {
-  //   return { status: 403, statusText: 'Unauthorized' }
-  // }
+  const profile = await profileServiceServer.getByAuthId(user!.id, client)
+
+  if (!profile) {
+    return { status: 400, statusText: 'User not found' }
+  }
+
+  const isCreator = currentNews.created_by === profile.id
+  const hasAdminRights = hasAdminRightsSupabase(profile)
+
+  if (!isCreator && !hasAdminRights) {
+    return { status: 403, statusText: 'Unauthorized' }
+  }
 
   return { valid: true }
 }

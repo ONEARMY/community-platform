@@ -441,6 +441,18 @@ const main = async () => {
     { name: `${tenant_id}-documents` },
   ])
 
+  await seed.tenant_settings([
+    {
+      site_name: 'Local Development Community',
+      site_url: 'http://localhost:3000',
+      message_sign_off: 'The Dev Team',
+      email_from: 'platform@onearmy.earth',
+      site_image:
+        'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/precious-plastic/pp-logo.png',
+      tenant_id,
+    },
+  ])
+
   const { users } = await seed.users(seedUsers())
   const { profiles } = await seed.profiles(
     (seedProfiles() as Array<any>).map((profile: profilesInputs, index) => ({

@@ -53,8 +53,12 @@ type LayoutArgs = {
   userCode?: string
 }
 
-export const urlAppend = (path: string, emailType: EmailType) =>
-  `${path}?utm_source=${emailType}&utm_medium=email`
+export const urlAppend = (path: string, emailType: EmailType) => {
+  const url = new URL(`${path}`)
+  url.searchParams.append('utm_source', emailType)
+  url.searchParams.append('utm_medium', 'email')
+  return url.toString()
+}
 
 export const Layout = (props: LayoutArgs) => {
   const { children, emailType, preview, settings, userCode } = props

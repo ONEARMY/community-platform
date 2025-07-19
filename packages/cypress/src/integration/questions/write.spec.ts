@@ -66,11 +66,12 @@ describe('[Question]', () => {
       })
 
       cy.get('[data-cy=draft]').click()
+      cy.url().should('include', `/questions/${initialExpectedSlug}`)
 
       cy.step('Can get to drafts')
       cy.visit('/questions')
       cy.contains(initialTitle).should('not.exist')
-      cy.get('[data-cy=my-drafts').click()
+      cy.get('[data-cy=my-drafts]').click()
       cy.contains(initialTitle).click()
 
       cy.step('Shows draft question')

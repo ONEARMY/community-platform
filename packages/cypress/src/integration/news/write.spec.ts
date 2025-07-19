@@ -57,13 +57,13 @@ describe('[News.Write]', () => {
       cy.addToMarkdownField(initialNewsBodyThree)
 
       cy.get('[data-cy=draft]').click()
+      cy.url().should('include', `/news/${initialExpectedSlug}`)
 
       cy.step('Can get to drafts')
       cy.visit('/news')
       cy.contains(initialTitle).should('not.exist')
-      cy.get('[data-cy=my-drafts').click()
-      cy.contains(initialTitle)
-      cy.get('[data-cy="news-list-item-button"]').first().click()
+      cy.get('[data-cy=my-drafts]').click()
+      cy.contains(initialTitle).click()
 
       cy.step('Shows draft news')
       cy.get('[data-cy=draft-tag]').should('be.visible')
@@ -77,6 +77,7 @@ describe('[News.Write]', () => {
       cy.selectTag(tag2, '[data-cy="tag-select"]')
 
       cy.get('[data-cy=errors-container]').should('not.exist')
+      cy.wait(2000)
       cy.get('[data-cy=submit]').click()
 
       cy.wait(2000)
@@ -87,7 +88,8 @@ describe('[News.Write]', () => {
       cy.get('[data-cy=news-list-item-summary]')
         .first()
         .contains(initialSummary)
-      cy.visit(`/news/${initialExpectedSlug}`)
+      cy.get('[data-cy=news-list-item]').contains(initialTitle).click()
+
       cy.contains(initialTitle)
       cy.contains(initialNewsBodyOne)
       cy.contains(initialNewsBodyTwo)
@@ -104,6 +106,7 @@ describe('[News.Write]', () => {
       // cy.get('[data-cy=follow-button]').contains('Following Comments')
 
       cy.step('Edit fields')
+      cy.wait(2000)
       cy.get('[data-cy=edit]')
         .click()
         .url()
@@ -123,6 +126,7 @@ describe('[News.Write]', () => {
       //   .click({ force: true })
 
       cy.step('Updated news details shown')
+      cy.wait(2000)
       cy.get('[data-cy=submit]')
         .click()
         .url()

@@ -135,6 +135,7 @@ describe('[Profile]', () => {
 
       cy.visit(`/u/${contactee.username}`)
       cy.get('[data-cy=contact-tab]').click()
+      cy.get('[data-cy=UserContactWrapper]')
       cy.get('[data-cy="UserContactForm-NotAvailable"]')
       cy.get('[data-cy="UserContactForm"]').should('not.exist')
       cy.get('[data-cy="profile-link"]').should(
@@ -165,6 +166,26 @@ describe('[Profile]', () => {
       cy.step('No setting to turn it on')
       cy.visit('/settings')
       cy.get('[data-cy=PublicContactSection]').should('not.exist')
+
+      cy.step('No contact form even when links are present')
+      cy.get('[data-cy=tab-Profile]').click()
+      cy.setSettingBasicUserInfo({
+        displayName: user.username,
+        country: 'Tokelau',
+        description: 'contact checking',
+      })
+      cy.setSettingAddContactLink({
+        index: 0,
+        label: ExternalLinkLabel.SOCIAL_MEDIA,
+        url: 'http://something.to.delete/',
+      })
+      cy.setSettingImage('avatar', 'userImage')
+
+      cy.saveSettingsForm()
+
+      cy.visit(`/u/${user.username}`)
+      cy.get('[data-cy=contact-tab]').click()
+      cy.get('[data-cy=UserContactWrapper]').should('not.exist')
     })
 
     it('[Can see contribution data for workspaces]', () => {

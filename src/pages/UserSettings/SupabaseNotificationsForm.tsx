@@ -8,6 +8,7 @@ import {
   Loader,
 } from 'oa-components'
 import { UserContactError } from 'src/pages/User/contact'
+import { isMessagingBlocked } from 'src/utils/helpers'
 import { Button, Flex } from 'theme-ui'
 
 import type { GridFormFields } from 'oa-components'
@@ -97,7 +98,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
   ]
 
   // Temp while firebase profiles are still active
-  if (hasMessagingOn !== undefined) {
+  if (hasMessagingOn !== undefined && !isMessagingBlocked()) {
     fields.push({
       component: (
         <InternalLink

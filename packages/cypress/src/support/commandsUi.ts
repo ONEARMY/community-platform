@@ -99,8 +99,9 @@ Cypress.Commands.add('addToMarkdownField', (text: string) => {
 Cypress.Commands.add('saveSettingsForm', () => {
   cy.get('[data-cy=save]').click()
   cy.wait(500)
-  cy.get('[data-cy=errors-container]').should('not.exist')
   cy.get('[data-cy=save]').should('not.be.disabled')
+  cy.get('[data-cy=errors-container]').should('not.exist')
+  cy.get('[data-cy="TextNotification: success"]').should('be.visible')
 })
 
 Cypress.Commands.add('setSettingAddContactLink', (link: ILink) => {

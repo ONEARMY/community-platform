@@ -127,6 +127,7 @@ describe('NotificationDisplay', () => {
           subject: 'A new comment on Where to start?',
         })
       })
+
       it('on research update', () => {
         const notification = factorySupabaseNotification({
           actionType: 'newComment',
@@ -159,7 +160,7 @@ describe('NotificationDisplay', () => {
           triggeredBy: 'Mario',
           middle: 'left a comment',
           parentTitle: 'New Buildings: Digging',
-          parentSlug: 'research/new-buildings',
+          parentSlug: 'research/new-buildings#update_777',
         })
         expect(notificationDisplay.email).toStrictEqual({
           body: "I'm not sure.",
@@ -314,7 +315,7 @@ describe('NotificationDisplay', () => {
           triggeredBy: 'Mario',
           middle: 'left a reply',
           parentTitle: 'New Buildings: Digging',
-          parentSlug: 'research/new-buildings',
+          parentSlug: 'research/new-buildings#update_777',
         })
         expect(notificationDisplay.email).toStrictEqual({
           body: "I'm not sure.",

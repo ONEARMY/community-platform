@@ -289,6 +289,12 @@ export class NotificationDisplay {
   static setParentSlug(notification: Notification) {
     const slug = notification.sourceContent?.slug || ''
     switch (notification.sourceContentType) {
+      case 'research': {
+        if (notification.actionType === 'newComment') {
+          return `research/${slug}#update_${notification.parentContentId}`
+        }
+        return `${notification.sourceContentType}/${slug}`
+      }
       case 'research_update': {
         return `research/${slug}#update_${notification.parentContentId}`
       }

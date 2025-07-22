@@ -51,7 +51,7 @@ export const NotificationItemSupabase = (props: IProps) => {
       >
         <Icon
           data-cy="NotificationListItemSupabase-unread"
-          glyph="chevron-right"
+          glyph="doubleTick"
         />
       </Flex>
       <Flex sx={{ ...borderStyle, flex: 1 }}>

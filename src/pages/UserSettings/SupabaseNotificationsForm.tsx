@@ -65,7 +65,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
       ),
       description:
         "Replies under your comment or a comment thread that you follow. Note that you can always choose to follow or unfollow a single reply thread in the comment's options.",
-      glyph: 'arrow-curved-bottom-right',
+      glyph: 'reply',
       name: 'New replies',
     },
     {
@@ -79,7 +79,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
         />
       ),
       description: 'Updates for the research that you follow.',
-      glyph: 'research',
+      glyph: 'update',
       name: 'Research Updates',
     },
     {

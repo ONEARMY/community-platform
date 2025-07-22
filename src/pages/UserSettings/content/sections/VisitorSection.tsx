@@ -1,7 +1,5 @@
-import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { Field } from 'react-final-form'
-import { observer } from 'mobx-react'
 import { FieldTextarea, Select, visitorDisplayData } from 'oa-components'
 import { userVisitorPreferencePolicies } from 'oa-shared'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
@@ -12,7 +10,7 @@ import { fields, headings } from '../../labels'
 import type { Profile, UserVisitorPreferencePolicy } from 'oa-shared'
 
 interface Props {
-  openToVisitors?: Partial<Profile['openToVisitors']>
+  visitorPolicy?: Partial<Profile['visitorPolicy']>
 }
 
 const visitorPolicyOptions = userVisitorPreferencePolicies.map((policy) => ({
@@ -31,12 +29,12 @@ const { title: policyDetailsTitle, placeholder: policyDetailsPlaceholder } =
   fields.visitorDetails
 const { visitors } = headings
 
-export const VisitorSection = observer(({ openToVisitors }: Props) => {
+export const VisitorSection = ({ visitorPolicy }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   useEffect(() => {
-    setIsOpen(!!openToVisitors)
-  }, [openToVisitors])
+    setIsOpen(!!visitorPolicy)
+  }, [visitorPolicy])
 
   return (
     <Flex
@@ -51,7 +49,7 @@ export const VisitorSection = observer(({ openToVisitors }: Props) => {
       <Text variant="quiet" sx={{ fontSize: 2 }}>
         {preferenceDescription}
       </Text>
-      <Field name="openToVisitors">
+      <Field name="showVisitorPolicy">
         {({ input }) => {
           return (
             <Switch
@@ -60,7 +58,7 @@ export const VisitorSection = observer(({ openToVisitors }: Props) => {
               label={preferenceTitle}
               onChange={() => {
                 input.onChange(
-                  isOpen ? null : openToVisitors || { policy: 'open' },
+                  isOpen ? null : visitorPolicy || { policy: 'open' },
                 )
               }}
               sx={{
@@ -72,16 +70,16 @@ export const VisitorSection = observer(({ openToVisitors }: Props) => {
           )
         }}
       </Field>
-      {openToVisitors && (
+      {visitorPolicy && (
         <>
           <Text>{policyTitle} *</Text>
           <FieldContainer data-cy="openToVisitors-policy">
-            <Field name="openToVisitors.policy">
+            <Field name="visitorPreferencePolicy">
               {({ input }) => {
                 return (
                   <Select
                     options={visitorPolicyOptions}
-                    defaultValue={findPolicy(openToVisitors.policy || 'open')}
+                    defaultValue={findPolicy(visitorPolicy.policy || 'open')}
                     onChange={({ value }) => input.onChange(value)}
                   />
                 )
@@ -90,14 +88,14 @@ export const VisitorSection = observer(({ openToVisitors }: Props) => {
           </FieldContainer>
           <Text>{policyDetailsTitle}</Text>
           <Field
-            name="openToVisitors.details"
+            name="visitorPreferenceDetails"
             data-cy="openToVisitors-details"
             component={FieldTextarea}
             placeholder={policyDetailsPlaceholder}
-            value={openToVisitors.details}
+            value={visitorPolicy.details}
           />
         </>
       )}
     </Flex>
   )
-})
+}

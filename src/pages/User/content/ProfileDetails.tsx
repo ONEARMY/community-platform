@@ -15,7 +15,7 @@ interface IProps {
 }
 
 export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
-  const { about, tags, openToVisitors, username } = profile
+  const { about, tags, visitorPolicy, username } = profile
   const [showVisitorModal, setShowVisitorModal] = useState(false)
 
   const hideVisitorDetails = (target?: string) => {
@@ -65,7 +65,7 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
           {tags && <TagList tags={tags.map((t) => ({ label: t.name }))} />}
           {about && <Paragraph>{about}</Paragraph>}
 
-          {openToVisitors && (
+          {visitorPolicy && (
             <VisitorModal
               show={showVisitorModal}
               hide={hideVisitorDetails}

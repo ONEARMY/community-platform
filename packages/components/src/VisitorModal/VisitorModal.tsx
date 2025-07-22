@@ -45,10 +45,10 @@ export type VisitorModalProps = HideProp & {
 }
 
 export const VisitorModal = ({ show, hide, user }: VisitorModalProps) => {
-  const { displayName, openToVisitors, isContactable } = user
+  const { displayName, visitorPolicy, isContactable } = user
 
   const displayData =
-    openToVisitors && visitorDisplayData.get(openToVisitors.policy)
+    visitorPolicy && visitorDisplayData.get(visitorPolicy.policy)
 
   if (!displayData) {
     return <></>
@@ -66,12 +66,12 @@ export const VisitorModal = ({ show, hide, user }: VisitorModalProps) => {
         data-cy="VisitorModal"
         sx={{ flexDirection: 'column', padding: '16px' }}
       >
-        {openToVisitors.details && <>Details from {displayName}:</>}
+        {visitorPolicy.details && <>Details from {displayName}:</>}
         <Text variant="quiet">
-          {openToVisitors.details || displayData.default}
+          {visitorPolicy.details || displayData.default}
         </Text>
       </Flex>
-      {openToVisitors.policy !== 'closed' && isContactable && (
+      {visitorPolicy.policy !== 'closed' && isContactable && (
         <VisitorModalFooter hide={hide} />
       )}
     </Modal>

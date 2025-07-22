@@ -71,10 +71,10 @@ export const SettingsPageUserProfile = () => {
       existingCoverImages: existingCoverImages,
       existingPhoto: profile.photo ? toJS(profile.photo) : undefined,
       country: profile.country,
-      showVisitorPolicy: !!profile.openToVisitors,
+      showVisitorPolicy: !!profile.visitorPolicy,
       type: profile.type,
-      visitorPreferencePolicy: profile.openToVisitors?.policy,
-      visitorPreferenceDetails: profile.openToVisitors?.details,
+      visitorPreferencePolicy: profile.visitorPolicy?.policy,
+      visitorPreferenceDetails: profile.visitorPolicy?.details,
       website: profile.website || '',
       tagIds: profile.tags?.map((x) => x.id) || [],
     }),
@@ -118,10 +118,14 @@ export const SettingsPageUserProfile = () => {
 
                 {!isMember && (
                   <VisitorSection
-                    openToVisitors={{
-                      policy: values.visitorPreferencePolicy,
-                      details: values.visitorPreferenceDetails,
-                    }}
+                    visitorPolicy={
+                      values.showVisitorPolicy
+                        ? {
+                            policy: values.visitorPreferencePolicy,
+                            details: values.visitorPreferenceDetails,
+                          }
+                        : undefined
+                    }
                   />
                 )}
 

@@ -45,7 +45,7 @@ const MapsPage = () => {
           : []),
         ...(profile?.isVerified ? ['verified'] : []),
         ...(profile?.isSupporter ? ['supporter'] : []),
-        ...(profile?.openToVisitors ? ['visitors'] : []),
+        ...(profile?.visitorPolicy ? ['visitors'] : []),
       ]
     })
 

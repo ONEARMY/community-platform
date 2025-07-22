@@ -31,7 +31,7 @@ export class DBProfile {
   patreon?: IPatreonUser
   roles: string[] | null
   type: ProfileTypeName
-  open_to_visitors: UserVisitorPreference | null
+  visitor_policy: string | null
   is_blocked_from_messaging: boolean | null
   about: string | null
   impact: IUserImpact
@@ -61,7 +61,7 @@ export class Profile {
   photo: Image | null
   isContactable: boolean
   isBlockedFromMessaging: boolean
-  openToVisitors: UserVisitorPreference | null
+  visitorPolicy: UserVisitorPreference | null
   website: string | null
   tags?: ProfileTag[]
   totalViews: number
@@ -92,7 +92,9 @@ export class Profile {
       isVerified: dbProfile.is_verified,
       roles: dbProfile.roles || null,
       type: dbProfile.type,
-      openToVisitors: dbProfile.open_to_visitors,
+      visitorPolicy: dbProfile.visitor_policy
+        ? (JSON.parse(dbProfile.visitor_policy) as UserVisitorPreference)
+        : null,
       isBlockedFromMessaging: !!dbProfile.is_blocked_from_messaging,
       about: dbProfile.about,
       coverImages: coverImages,
@@ -529,7 +531,7 @@ export type DBPinProfile = Pick<
   | 'photo'
   | 'tags'
   | 'type'
-  | 'open_to_visitors'
+  | 'visitor_policy'
   | 'about'
   | 'is_contactable'
   | 'last_active'
@@ -546,7 +548,7 @@ export type PinProfile = Pick<
   | 'photo'
   | 'tags'
   | 'type'
-  | 'openToVisitors'
+  | 'visitorPolicy'
   | 'about'
   | 'isContactable'
   | 'lastActive'

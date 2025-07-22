@@ -59,7 +59,7 @@ export class MapPinFactory {
       displayName: profile.display_name,
       isSupporter: profile.is_supporter,
       isVerified: profile.is_verified,
-      openToVisitors: profile.open_to_visitors,
+      visitorPolicy: profile.visitor_policy,
       type: profile.type,
       photo: photo || null,
       isContactable: profile.is_contactable,

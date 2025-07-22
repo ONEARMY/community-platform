@@ -31,7 +31,9 @@ export class ProfileFactory {
       isVerified: dbProfile.is_verified,
       roles: dbProfile.roles || null,
       type: dbProfile.type,
-      openToVisitors: dbProfile.open_to_visitors,
+      visitorPolicy: dbProfile.visitor_policy
+        ? JSON.parse(dbProfile.visitor_policy)
+        : null,
       isBlockedFromMessaging: !!dbProfile.is_blocked_from_messaging,
       about: dbProfile.about,
       coverImages: coverImages,

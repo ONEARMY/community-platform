@@ -8,7 +8,7 @@ import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface IProps {
   tags: ProfileTag[] | null
-  openToVisitors?: Profile['openToVisitors']
+  visitorPolicy?: Profile['visitorPolicy']
   isSpace: boolean
   showVisitorModal?: () => void
   sx?: ThemeUIStyleObject
@@ -68,7 +68,7 @@ const policyColors = new Map([
 ])
 
 export const ProfileTagsList = (props: IProps) => {
-  const { tags, openToVisitors, isSpace, showVisitorModal, sx, large } = props
+  const { tags, visitorPolicy, isSpace, showVisitorModal, sx, large } = props
   const tagList = tags || []
 
   return (
@@ -80,12 +80,12 @@ export const ProfileTagsList = (props: IProps) => {
       {tagList.map(({ name }, index) => (
         <Tag key={index} color={DEFAULT_COLOR} label={name} large={large} />
       ))}
-      {openToVisitors && isSpace && (
+      {visitorPolicy && isSpace && (
         <Tag
           dataCy="tag-openToVisitors"
-          color={policyColors.get(openToVisitors.policy)}
+          color={policyColors.get(visitorPolicy.policy)}
           label={`${
-            visitorDisplayData.get(openToVisitors.policy)?.label
+            visitorDisplayData.get(visitorPolicy.policy)?.label
           } \u24D8`}
           onClick={() => {
             showVisitorModal && showVisitorModal()

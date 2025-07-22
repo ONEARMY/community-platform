@@ -121,11 +121,11 @@ export class ProfileServiceServer {
       is_contactable: values.isContactable,
       tag_ids: values.tagIds,
       type: values.type,
-      open_to_visitors: values.visitorPreferencePolicy
-        ? {
+      visitor_policy: values.visitorPreferencePolicy
+        ? JSON.stringify({
             policy: values.visitorPreferencePolicy,
             details: values.visitorPreferenceDetails,
-          }
+          })
         : null,
     } as Partial<DBProfile>
 

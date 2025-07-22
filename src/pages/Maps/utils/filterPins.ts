@@ -56,7 +56,7 @@ export const filterPins = (
     // Right now visitor filter is only setting filter. If N>1 this should be smarter.
     filteredPins = filteredPins.filter(
       ({ profile }) =>
-        profile?.openToVisitors && profile.openToVisitors.policy !== 'closed',
+        profile?.visitorPolicy && profile.visitorPolicy.policy !== 'closed',
     )
   }
 

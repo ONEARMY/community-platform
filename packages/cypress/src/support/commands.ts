@@ -3,8 +3,6 @@ import 'cypress-file-upload'
 import { deleteDB } from 'idb'
 import { UserRole } from 'oa-shared'
 
-import { TestDB } from './db/firebase'
-
 interface ExpectedNewNotification {
   content: string
   path: string
@@ -21,12 +19,6 @@ declare global {
       expectNewNotification(ExpectedNewNotification): Chainable<void>
       interceptAddressSearchFetch(addressResponse): Chainable<void>
       interceptAddressReverseFetch(addressResponse): Chainable<void>
-      queryDocuments(
-        collectionName: string,
-        fieldPath: string,
-        opStr: any,
-        value: string,
-      ): Chainable<any[]>
       step(message: string)
     }
   }
@@ -38,7 +30,6 @@ declare global {
  * @remark - async code should be wrapped in a Cypress.promise block to allow the resolved promise to be
  * used in chained results
  */
-const firestore = TestDB
 /** Delete an indexeddb - resolving true on success and false if blocked (open connections) */
 Cypress.Commands.add('deleteIDB', (name: string) => {
   cy.wrap('Delete Firebase IDB: ' + name)
@@ -78,19 +69,6 @@ Cypress.Commands.add('clearServiceWorkers', () => {
     })
   })
 })
-
-Cypress.Commands.add(
-  'queryDocuments',
-  (collectionName: string, fieldPath: string, opStr: any, value: string) => {
-    Cypress.log({
-      displayName: 'queryDocuments',
-      consoleProps: () => {
-        return { collectionName, fieldPath, opStr, value }
-      },
-    })
-    return firestore.queryDocuments(collectionName, fieldPath, opStr, value)
-  },
-)
 
 Cypress.Commands.add('step', (message: string) => {
   Cypress.log({

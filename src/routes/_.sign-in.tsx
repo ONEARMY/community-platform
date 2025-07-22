@@ -23,13 +23,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return null
 }
 
-/**
- * 1. Try to sign in with supabase.
- * 2. If fail, try to sign in with firebase.
- * 3. If succeeds, confirm it's the first firebase login for this account by checking the auth_id profile value. (this prevents rolling back a password)
- * 4. If it's the first time, update the auth.user password and username (metadata), and it's profile auth_id.
- * 5. Sign in with supabase.
- */
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
   const formData = await request.formData()

@@ -1,12 +1,7 @@
 import { UserRole } from '../../models'
 
 import type { Profile } from '../../models'
-/**
- * If you want to be able to log with any of the users below
- * you will need to manually create them within
- * the `onearmy-test-ci` Firebase Project.
- * https://console.firebase.google.com/u/0/project/onearmy-test-ci/authentication/users
- */
+
 export const users = {
   subscriber: {
     id: 1,

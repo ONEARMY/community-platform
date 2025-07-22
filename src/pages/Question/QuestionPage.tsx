@@ -15,7 +15,7 @@ import { trackEvent } from 'src/common/Analytics'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { usefulService } from 'src/services/usefulService'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
+import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
@@ -143,7 +143,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
 
             {question.images && (
               <ImageGallery
-                images={formatImagesForGalleryV2(question.images) as any}
+                images={formatImagesForGallery(question.images) as any}
                 allowPortrait={true}
               />
             )}

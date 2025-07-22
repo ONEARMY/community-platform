@@ -1,6 +1,6 @@
 import { ImageGallery } from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
-import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
+import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { AspectRatio, Box, Flex } from 'theme-ui'
 
 import type { Profile } from 'oa-shared'
@@ -28,7 +28,7 @@ export const ProfileImage = ({ user }: IProps) => {
     <Box>
       {coverImage.length ? (
         <ImageGallery
-          images={formatImagesForGalleryV2(coverImage) as any}
+          images={formatImagesForGallery(coverImage) as any}
           hideThumbnails={true}
           showNextPrevButton={true}
         />

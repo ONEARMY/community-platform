@@ -13,7 +13,7 @@ import { ClientOnly } from 'remix-utils/client-only'
 import { DownloadWrapper } from 'src/common/DownloadWrapper'
 import CollapsableCommentSection from 'src/pages/common/CommentsSupabase/CollapsableCommentSection'
 import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
-import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
+import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
 import { ResearchLinkToUpdate } from './ResearchLinkToUpdate'
@@ -189,7 +189,7 @@ const ResearchUpdate = (props: IProps) => {
               )}
               {update.images && (
                 <ImageGallery
-                  images={formatImagesForGalleryV2(update.images) as any}
+                  images={formatImagesForGallery(update.images) as any}
                   allowPortrait={true}
                 />
               )}

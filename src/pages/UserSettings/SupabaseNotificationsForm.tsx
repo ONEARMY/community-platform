@@ -122,7 +122,9 @@ export const SupabaseNotificationsForm = (props: IProps) => {
       onSubmit={onSubmit}
       initialValues={initialValues}
       render={({ submitting, handleSubmit }) => {
-        if (isLoading) return <Loader />
+        if (isLoading) {
+          return <Loader />
+        }
 
         return (
           <Flex sx={{ flexDirection: 'column', gap: 2 }}>

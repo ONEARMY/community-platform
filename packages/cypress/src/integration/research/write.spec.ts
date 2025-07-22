@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { UserRole } from 'oa-shared'
 
 import { RESEARCH_TITLE_MIN_LENGTH } from '../../../../../src/pages/Research/constants'
 import { MOCK_DATA } from '../../data'
@@ -29,6 +30,9 @@ describe('[Research]', () => {
 
   describe('[Create research article]', () => {
     it('[By Authenticated]', () => {
+      // Needed for notifications as feature behind auth wrapper:
+      localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
+
       const initialRandomId = generateAlphaNumeric(4).toLowerCase()
       const initialTitle = initialRandomId + ' Initial Title'
       const initialExpectedSlug = initialRandomId + '-initial-title'
@@ -78,6 +82,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=draft]').click()
 
       cy.get('[data-cy=draft-tag]').should('be.visible')
+      cy.get('[data-cy=follow-button]').first().contains('Following')
 
       cy.step('Drafted Research should not appear on users profile')
       cy.visit('/u/' + admin.displayName)
@@ -162,6 +167,12 @@ describe('[Research]', () => {
       cy.url().should('contain', `${researchURL}#update_`)
       cy.contains(updateTitle).should('be.visible')
       cy.contains(updateDescription).should('be.visible')
+      cy.get('[data-cy="HideDiscussionContainer:button"]').last().click()
+      cy.get('[data-cy="CollapsableCommentSection"]')
+        .last()
+        .within(() => {
+          cy.get('[data-cy=follow-button]').contains('Following')
+        })
 
       cy.step(
         'Collaborator is subscribed to research and research update discussion',

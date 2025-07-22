@@ -5,6 +5,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
 import { profileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
+import { subscribersServiceServer } from 'src/services/subscribersService.server'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
@@ -12,7 +13,6 @@ import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { DBProfile, DBProject, DBProjectStep, Moderation } from 'oa-shared'
 import type { LibrarySortOption } from 'src/pages/Library/Content/List/LibrarySortOptions'
 
-// runs on the server
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
   const searchParams = new URLSearchParams(url.search)
@@ -166,6 +166,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     project.steps = await uploadSteps(data, formData, projectDb, client)
+    subscribersServiceServer.add('projects', project.id, profile.id, client)
 
     return Response.json({ project }, { headers, status: 201 })
   } catch (error) {

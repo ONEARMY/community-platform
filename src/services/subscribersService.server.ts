@@ -40,12 +40,11 @@ const addResearchSubscribers = async (
     research.collaboratorsUsernames || [],
     client,
   )
-
-  subscribers.forEach((subscriber) => {
-    addFunction('research', research.id, subscriber, client)
-  })
-
-  return
+  return Promise.all([
+    subscribers.forEach((subscriber) => {
+      addFunction('research', research.id, subscriber, client)
+    }),
+  ])
 }
 
 const addResearchUpdateSubscribers = async (
@@ -59,12 +58,11 @@ const addResearchUpdateSubscribers = async (
     update.research?.collaborators || [],
     client,
   )
-
-  subscribers.forEach((subscriber) => {
-    addFunction('research', update.id, subscriber, client)
-  })
-
-  return
+  return Promise.all([
+    subscribers.forEach((subscriber) => {
+      addFunction('research_update', update.id, subscriber, client)
+    }),
+  ])
 }
 
 const add = async (
@@ -123,10 +121,11 @@ const updateResearchSubscribers = async (
     newCollaboratorUsernames,
     client,
   )
-
-  subscribers.forEach((subscriber) => {
-    addFunction('research', newResearch.id, subscriber, client)
-  })
+  return Promise.all([
+    subscribers.forEach((subscriber) => {
+      addFunction('research', newResearch.id, subscriber, client)
+    }),
+  ])
 }
 
 export const subscribersServiceServer = {

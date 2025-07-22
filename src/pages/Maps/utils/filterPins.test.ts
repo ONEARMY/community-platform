@@ -29,6 +29,8 @@ describe('filterPins', () => {
     moderation: 'accepted',
     lat: 0,
     lng: 0,
+    name: '',
+    postCode: '',
     administrative: '',
     country: '',
     countryCode: '',
@@ -43,6 +45,7 @@ describe('filterPins', () => {
       displayName: 'Bob the Builder',
       isContactable: false,
       isSupporter: false,
+      visitorPolicy: null,
       about: '',
       country: '',
       photo: null,
@@ -60,17 +63,19 @@ describe('filterPins', () => {
   } as MapPin
 
   const memberPin = {
-    id: 1,
+    id: 2,
     moderation: 'accepted',
     lat: 0,
     lng: 0,
+    name: '',
+    postCode: '',
     administrative: '',
     country: '',
     countryCode: '',
     postcode: '',
-    profileId: 1,
+    profileId: 2,
     profile: {
-      id: 1,
+      id: 2,
       username: 'bob_the_member',
       isVerified: true,
       lastActive: new Date(),
@@ -80,32 +85,28 @@ describe('filterPins', () => {
       isSupporter: false,
       about: '',
       country: '',
+      visitorPolicy: null,
       photo: null,
       openToVisitors: null,
       type: ProfileTypeList.MEMBER,
-      tags: [
-        {
-          id: 1,
-          name: 'Designer',
-          createdAt: new Date(),
-          profileType: 'member',
-        },
-      ],
     },
   } as MapPin
 
   const taggedMemberPin = {
-    id: 1,
+    id: 3,
     moderation: 'accepted',
     lat: 0,
     lng: 0,
     administrative: '',
+    name: '',
+    postCode: '',
+    moderationFeedback: '',
     country: '',
     countryCode: '',
     postcode: '',
-    profileId: 1,
+    profileId: 3,
     profile: {
-      id: 1,
+      id: 3,
       username: 'bob_the_tagged',
       isVerified: true,
       lastActive: new Date(),
@@ -118,6 +119,7 @@ describe('filterPins', () => {
       photo: null,
       openToVisitors: null,
       type: ProfileTypeList.MEMBER,
+      visitorPolicy: null,
       tags: [
         {
           id: 1,
@@ -139,24 +141,22 @@ describe('filterPins', () => {
 
   it('returns only the correct profile type pins when filter is provided', () => {
     const activePinFilters = [memberFilter]
-
-    expect(filterPins(activePinFilters, allPinsInView)).toEqual([
-      memberPin,
-      taggedMemberPin,
+    const filtered = filterPins(activePinFilters, allPinsInView)
+    expect(filtered.map((x) => x.id)).toEqual([
+      memberPin.id,
+      taggedMemberPin.id,
     ])
   })
 
   it('returns only the pins when profile type and tag filters are provided', () => {
     const activePinFilters = [memberFilter, tagFilter]
-
-    expect(filterPins(activePinFilters, allPinsInView)).toEqual([
-      taggedMemberPin,
-    ])
+    const filtered = filterPins(activePinFilters, allPinsInView)
+    expect(filtered.map((x) => x.id)).toEqual([taggedMemberPin.id])
   })
 
   it('returns an empty arry when no pins meet the filter criteria', () => {
     const activePinFilters = [builderFilter]
-
-    expect(filterPins(activePinFilters, allPinsInView)).toEqual([])
+    const filtered = filterPins(activePinFilters, allPinsInView)
+    expect(filtered).toEqual([])
   })
 })

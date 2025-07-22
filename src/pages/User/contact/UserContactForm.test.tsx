@@ -1,12 +1,13 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Provider } from 'mobx-react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'
 import { FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
 
 import { contact } from '../labels'
 import { UserContactForm } from './UserContactForm'
+
+import type { Profile } from 'oa-shared'
 
 vi.mock('src/services/messageService', () => {
   return {
@@ -24,9 +25,9 @@ describe('UserContactForm', () => {
     const user = userEvent.setup()
 
     render(
-      <Provider {...useCommonStores().stores}>
-        <UserContactForm user={profileUser} />
-      </Provider>,
+      <ProfileStoreProvider>
+        <UserContactForm user={profileUser as Profile} />
+      </ProfileStoreProvider>,
     )
 
     await screen.findByText(`Send a message to ${profileUser.displayName}`)
@@ -46,9 +47,9 @@ describe('UserContactForm', () => {
     const uncontactable = FactoryUser({ isContactable: false })
 
     const { container } = render(
-      <Provider {...useCommonStores().stores}>
-        <UserContactForm user={uncontactable} />
-      </Provider>,
+      <ProfileStoreProvider>
+        <UserContactForm user={uncontactable as Profile} />
+      </ProfileStoreProvider>,
     )
 
     expect(container.innerHTML).toBe('')

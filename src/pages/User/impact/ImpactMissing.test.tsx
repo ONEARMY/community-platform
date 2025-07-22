@@ -5,34 +5,35 @@ import {
   RouterProvider,
 } from 'react-router'
 import { render, screen } from '@testing-library/react'
-import { Provider } from 'mobx-react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'
 import { FactoryUser } from 'src/test/factories/User'
 import { describe, it, vi } from 'vitest'
 
 import { ImpactMissing } from './ImpactMissing'
 import { invisible, missing, reportYearLabel } from './labels'
 
-vi.mock('src/stores/User/profile.store', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  __esModule: true,
-  useProfileStore: () => ({
-    profile: { userName: 'activeUser' },
-  }),
+import type { Profile } from 'oa-shared'
+
+vi.mock('src/stores/Profile/profile.store', () => ({
+  useProfileStore: vi.fn(() => ({
+    profile: FactoryUser({ username: 'activeUser' }),
+  })),
+  ProfileStoreProvider: ({ children }: { children: React.ReactNode }) =>
+    children,
 }))
 
 describe('ImpactMissing', () => {
   describe('[public]', () => {
     it('renders message that impact is missing', async () => {
       render(
-        <Provider {...useCommonStores().stores}>
+        <ProfileStoreProvider>
           <ImpactMissing
             fields={undefined}
             owner={undefined}
             year={2023}
             visibleFields={undefined}
           />
-        </Provider>,
+        </ProfileStoreProvider>,
       )
 
       await screen.findByText(missing.user.label)
@@ -40,14 +41,14 @@ describe('ImpactMissing', () => {
 
     it('renders right message and button for impact report year', async () => {
       render(
-        <Provider {...useCommonStores().stores}>
+        <ProfileStoreProvider>
           <ImpactMissing
             fields={undefined}
             owner={undefined}
             year={2022}
             visibleFields={undefined}
           />
-        </Provider>,
+        </ProfileStoreProvider>,
       )
 
       await screen.findByText(reportYearLabel)
@@ -64,14 +65,14 @@ describe('ImpactMissing', () => {
       ]
 
       render(
-        <Provider {...useCommonStores().stores}>
+        <ProfileStoreProvider>
           <ImpactMissing
             fields={fields}
             owner={undefined}
             year={2022}
             visibleFields={[]}
           />
-        </Provider>,
+        </ProfileStoreProvider>,
       )
       await screen.findByText(invisible.user.label)
     })
@@ -79,7 +80,7 @@ describe('ImpactMissing', () => {
 
   describe('[page owner]', () => {
     it('renders right message for impact owner', async () => {
-      const user = FactoryUser({ userName: 'activeUser' })
+      const user = FactoryUser({ username: 'activeUser' }) as Profile
       const router = createMemoryRouter(
         createRoutesFromElements(
           <Route
@@ -92,11 +93,15 @@ describe('ImpactMissing', () => {
                 visibleFields={undefined}
               />
             }
-          ></Route>,
+          />,
         ),
       )
 
-      const container = render(<RouterProvider router={router} />)
+      const container = render(
+        <ProfileStoreProvider>
+          <RouterProvider router={router} />
+        </ProfileStoreProvider>,
+      )
 
       await container.findByText(missing.owner.label)
     })

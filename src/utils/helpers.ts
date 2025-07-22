@@ -4,7 +4,7 @@ import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/consta
 
 import { SUPPORTED_IMAGE_TYPES } from './storage'
 
-import type { DBProfile, IModeration, MapPin, Profile } from 'oa-shared'
+import type { DBProfile, IModeration, Profile } from 'oa-shared'
 
 const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi
 
@@ -72,7 +72,7 @@ export const getDay = (d: Date) => {
   return `${d.getDate()}`
 }
 
-export const hasAdminRights = (user?: Profile) => {
+export const hasAdminRights = (user?: Partial<Profile>) => {
   if (!user) {
     return false
   }
@@ -98,16 +98,8 @@ export const needsModeration = (doc: IModeration, user?: Profile) => {
   return doc.moderation !== 'accepted'
 }
 
-export const isAllowedToPin = (pin: MapPin, user?: Profile) => {
-  if (hasAdminRights(user) || (pin.id && user && pin.profileId === user.id)) {
-    return true
-  } else {
-    return false
-  }
-}
-
 export const isUserBlockedFromMessaging = (
-  user: Profile | null | undefined,
+  user: Partial<Profile> | null | undefined,
 ) => {
   if (!user) {
     return null
@@ -119,7 +111,7 @@ export const isMessagingBlocked = () => {
   return NO_MESSAGING === 'true'
 }
 
-export const isUserContactable = (user: Profile) => {
+export const isUserContactable = (user: Partial<Profile>) => {
   return isContactable(user.isContactable)
 }
 

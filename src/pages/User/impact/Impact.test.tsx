@@ -5,8 +5,7 @@ import {
   RouterProvider,
 } from 'react-router'
 import { render, screen } from '@testing-library/react'
-import { Provider } from 'mobx-react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'
 import { FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -14,12 +13,16 @@ import { IMPACT_YEARS } from './constants'
 import { Impact } from './Impact'
 import { invisible, missing } from './labels'
 
-vi.mock('src/stores/User/profile.store', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  __esModule: true,
+import type { Profile } from 'oa-shared'
+
+vi.mock('src/stores/Profile/profile.store', () => ({
   useProfileStore: () => ({
-    profile: { username: 'activeUser' },
+    profile: FactoryUser({
+      username: 'activeUser',
+    }),
   }),
+  ProfileStoreProvider: ({ children }: { children: React.ReactNode }) =>
+    children,
 }))
 
 describe('Impact', () => {
@@ -58,9 +61,9 @@ describe('Impact', () => {
       }
 
       render(
-        <Provider {...useCommonStores().stores}>
+        <ProfileStoreProvider>
           <Impact impact={impact} user={undefined} />
-        </Provider>,
+        </ProfileStoreProvider>,
       )
 
       await screen.findByText('45 volunteers')
@@ -96,16 +99,16 @@ describe('Impact', () => {
           },
         ],
       }
-      const user = FactoryUser({ impact, userName: 'activeUser' })
+      const user = FactoryUser({ impact, username: 'activeUser' })
 
       const router = createMemoryRouter(
         createRoutesFromElements(
           <Route
             index
             element={
-              <Provider {...useCommonStores().stores}>
-                <Impact impact={impact} user={user} />
-              </Provider>
+              <ProfileStoreProvider>
+                <Impact impact={impact} user={user as Profile} />
+              </ProfileStoreProvider>
             }
           ></Route>,
         ),

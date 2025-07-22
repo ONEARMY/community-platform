@@ -6,15 +6,12 @@ import {
 } from 'react-router-dom'
 import { render } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
-import { Provider } from 'mobx-react'
+import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
-
-import type { Profile } from 'oa-shared'
 
 const Theme = testingThemeStyles
 
 export const FormProvider = (
-  profile: Profile,
   element: React.ReactNode,
   routerInitialEntry?: string,
 ) => {
@@ -31,14 +28,10 @@ export const FormProvider = (
   )
 
   return render(
-    <Provider
-      profileStore={{
-        profile,
-      }}
-    >
+    <ProfileStoreProvider>
       <ThemeProvider theme={Theme}>
         <RouterProvider router={router} />
       </ThemeProvider>
-    </Provider>,
+    </ProfileStoreProvider>,
   )
 }

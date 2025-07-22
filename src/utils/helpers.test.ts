@@ -8,7 +8,6 @@ import {
   formatLowerNoSpecial,
   getProjectEmail,
   hasAdminRights,
-  isAllowedToPin,
   isContactable,
   isUserBlockedFromMessaging,
   isUserContactable,
@@ -41,63 +40,18 @@ describe('src/utils/helpers', () => {
     })
 
     it('should return false when user does not have any roles', () => {
-      const user = FactoryUser({ userRoles: [] })
+      const user = FactoryUser({ roles: [] })
       expect(hasAdminRights(user)).toBe(false)
     })
 
     it('should return false when user does not have admin or super-admin roles', () => {
-      const user = FactoryUser({ userRoles: [UserRole.BETA_TESTER] })
+      const user = FactoryUser({ roles: [UserRole.BETA_TESTER] })
       expect(hasAdminRights(user)).toBe(false)
     })
 
     it('should return true when user has admin role', () => {
-      const user = FactoryUser({ userRoles: [UserRole.ADMIN] })
+      const user = FactoryUser({ roles: [UserRole.ADMIN] })
       expect(hasAdminRights(user)).toBe(true)
-    })
-  })
-
-  describe('isAllowedToPin Function', () => {
-    it('should return false when user is not provided', () => {
-      const pin = { _id: 'pinID' } as any
-      expect(isAllowedToPin(pin)).toBe(false)
-    })
-
-    it('should return true when user has admin rights', () => {
-      const pin = { _id: 'pinID' } as any
-      expect(
-        isAllowedToPin(
-          pin,
-          FactoryUser({
-            userName: 'testUser',
-            userRoles: [UserRole.ADMIN],
-          }),
-        ),
-      ).toBe(true)
-    })
-
-    it('should return true when pin _id matches user userName', () => {
-      const pin = { _id: 'testUser' } as any
-      expect(
-        isAllowedToPin(
-          pin,
-          FactoryUser({
-            userName: 'testUser',
-            userRoles: [],
-          }),
-        ),
-      ).toBe(true)
-    })
-
-    it('should return false when user has no admin rights and pin _id does not match user userName', () => {
-      const pin = { _id: 'pinID' } as any
-      expect(
-        isAllowedToPin(
-          pin,
-          FactoryUser({
-            userRoles: [],
-          }),
-        ),
-      ).toBe(false)
     })
   })
 

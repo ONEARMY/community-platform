@@ -86,6 +86,7 @@ export const UserImagesSection = ({
                       }}
                       key={`existing-image-${index}`}
                       data-cy={`existing-image-${index}`}
+                      data-testid="coverImage"
                     >
                       <FieldContainer
                         style={{

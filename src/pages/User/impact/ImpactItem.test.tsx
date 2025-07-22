@@ -1,22 +1,25 @@
 import { render, screen } from '@testing-library/react'
-import { Provider } from 'mobx-react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'
 import { FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
 
 import { ImpactItem } from './ImpactItem'
 
-vi.mock('src/stores/User/profile.store', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  __esModule: true,
+import type { Profile } from 'oa-shared'
+
+vi.mock('src/stores/Profile/profile.store', () => ({
   useProfileStore: () => ({
-    profile: { userName: 'activeUser' },
+    profile: FactoryUser({
+      username: 'activeUser',
+    }),
   }),
+  ProfileStoreProvider: ({ children }: { children: React.ReactNode }) =>
+    children,
 }))
 
 describe('ImpactItem', () => {
   it('renders an impact item with visible fields for a specific year, with impact fields in order: plastic, revenue, employees, volunteers, machines ', async () => {
-    const user = FactoryUser({ userName: 'activeUser' })
+    const user = FactoryUser({ username: 'activeUser' })
     const fields = [
       {
         id: 'machines',
@@ -31,9 +34,9 @@ describe('ImpactItem', () => {
       { id: 'plastic', value: 30000, isVisible: true },
     ]
     render(
-      <Provider {...useCommonStores().stores}>
-        <ImpactItem fields={fields} user={user} year={2022} />
-      </Provider>,
+      <ProfileStoreProvider>
+        <ImpactItem fields={fields} user={user as Profile} year={2022} />
+      </ProfileStoreProvider>,
     )
     const plasticItem = await screen.findByText('30,000 Kg of plastic recycled')
     const revenueItem = await screen.findByText('USD 54,000 revenue')

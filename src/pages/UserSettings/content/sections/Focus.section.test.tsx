@@ -3,10 +3,11 @@ import '@testing-library/jest-dom/vitest'
 import { render, screen } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { getSupportedProfileTypes } from 'src/modules/profile'
-import { FocusSection } from 'src/pages/UserSettings/content/sections/Focus.section'
-import { headings } from 'src/pages/UserSettings/labels'
 import { SettingsFormProvider } from 'src/test/components/SettingsFormProvider'
 import { describe, expect, it } from 'vitest'
+
+import { headings } from '../../labels'
+import { FocusSection } from './Focus.section'
 
 const supportedProfileTypes = getSupportedProfileTypes().map(
   ({ label }) => label,

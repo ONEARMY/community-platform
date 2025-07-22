@@ -13,6 +13,7 @@ interface IInfo {
   displayName?: string
   country?: string
   description: string
+  website?: string
 }
 
 interface IMapPin {
@@ -120,12 +121,13 @@ Cypress.Commands.add('clearSettingVisitorPolicy', () => {
 })
 
 Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
-  const { country, description, displayName } = info
+  const { country, description, displayName, website } = info
 
   cy.step('Update Info section')
   displayName && cy.get('[data-cy=displayName').clear().type(displayName)
   cy.get('[data-cy=info-description').clear().type(description)
   country && cy.selectTag(country, '[data-cy=location-dropdown]')
+  website && cy.get('[data-cy=website').clear().type(website)
 })
 
 Cypress.Commands.add('setSettingFocus', (focus: string) => {

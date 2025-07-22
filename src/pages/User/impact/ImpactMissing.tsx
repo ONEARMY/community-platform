@@ -1,5 +1,4 @@
 import { Link } from '@remix-run/react'
-import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import { Button, ExternalLink } from 'oa-components'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
@@ -30,10 +29,11 @@ const isAllInvisible = (fields, visibleFields) => {
   return false
 }
 
-const isPageOwnerCheck = (activeUser, owner) => {
+const isPageOwnerCheck = (activeUser?: Profile, owner?: Profile) => {
   const usersPresent = activeUser && owner
-  const usersTheSame = toJS(activeUser)?.userName === owner?.userName
+  const usersTheSame = activeUser?.username === owner?.username
 
+  console.log({ activeUser, owner })
   return usersPresent && usersTheSame ? true : false
 }
 

@@ -6,7 +6,7 @@ const nonMemberProfileTypes = Object.values(ProfileTypeList).filter(
   (type) => type !== 'member',
 )
 
-export const isProfileComplete = (user: Profile): boolean => {
+export const isProfileComplete = (user: Partial<Profile>): boolean => {
   const { about, coverImages, displayName, photo } = user
 
   const isBasicInfoFilled = !!(about && displayName)

@@ -46,8 +46,6 @@
     "src/setupProxy.js",
     "src/assets/userReportInit.js",
     "packages/components",
-    "packages/themes",
-    "**/*.test.*",
-    "**/*.spec.*"
+    "packages/themes"
   ]
 }

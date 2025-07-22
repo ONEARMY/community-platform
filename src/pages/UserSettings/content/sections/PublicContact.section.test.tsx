@@ -1,9 +1,10 @@
 import '@testing-library/jest-dom/vitest'
 
 import { render, screen } from '@testing-library/react'
-import { PublicContactSection } from 'src/pages/UserSettings/content/sections/PublicContact.section'
 import { SettingsFormProvider } from 'src/test/components/SettingsFormProvider'
 import { describe, expect, it } from 'vitest'
+
+import { PublicContactSection } from './PublicContact.section'
 
 describe('PublicContact', () => {
   it('renders unchecked when isContactable is false', async () => {

@@ -1,16 +1,15 @@
 import { render, screen } from '@testing-library/react'
-import { factoryImage, FactoryUser } from 'src/test/factories/Profile'
+import { factoryImage, FactoryUser } from 'src/test/factories/User'
 import { afterEach, describe, it, vi } from 'vitest'
 
 import { UserAction } from './UserAction'
 
-let mockUser = FactoryUser()
-vi.mock('src/stores/User/profile.store', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  __esModule: true,
-  useProfileStore: () => ({
-    profile: mockUser,
-  }),
+const mockUseProfileStore = vi.hoisted(() => vi.fn())
+
+vi.mock('src/stores/Profile/profile.store', () => ({
+  useProfileStore: mockUseProfileStore,
+  ProfileStoreProvider: ({ children }: { children: React.ReactNode }) =>
+    children,
 }))
 
 const incompleteProfile = <>incompleteProfile</>
@@ -23,6 +22,12 @@ describe('UserAction', () => {
   })
 
   it('should render the incompleteProfile component when a user is logged in but profile incomplete', async () => {
+    const mockUser = FactoryUser()
+    mockUseProfileStore.mockReturnValue({
+      profile: mockUser,
+      update: vi.fn(),
+    })
+
     render(
       <UserAction
         incompleteProfile={incompleteProfile}
@@ -36,11 +41,13 @@ describe('UserAction', () => {
   it('should render the loggedIn component when a user is logged in and profile complete', async () => {
     const completeUser = FactoryUser({
       about: 'about',
-      link: '',
-      profileType: 'member',
-      userImage: factoryImage,
+      type: 'member',
+      photo: factoryImage,
     })
-    mockUser = completeUser
+    mockUseProfileStore.mockReturnValue({
+      profile: completeUser,
+      update: vi.fn(),
+    })
 
     render(
       <UserAction
@@ -53,8 +60,10 @@ describe('UserAction', () => {
   })
 
   it('should render the loggedOut component when a user is not logged in', async () => {
-    mockUser = null as any
-
+    mockUseProfileStore.mockReturnValue({
+      profile: null,
+      update: vi.fn(),
+    })
     render(<UserAction loggedIn={loggedIn} loggedOut={loggedOut} />)
 
     await screen.findByText('loggedOut')

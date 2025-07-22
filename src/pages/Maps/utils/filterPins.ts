@@ -10,7 +10,7 @@ export const filterPins = (
   const activeFilterIdsForType = (type: string) =>
     activePinFilters
       .filter(({ filterType }) => filterType === type)
-      .map(({ _id }) => _id)
+      .map(({ label }) => label)
 
   const typeFilters = activeFilterIdsForType('profileType')
 

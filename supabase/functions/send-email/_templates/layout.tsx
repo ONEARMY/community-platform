@@ -85,15 +85,15 @@ export const Layout = (props: LayoutArgs) => {
           />
           <Section style={card}>{children}</Section>
           <Footer>
-            You must receive important community messages. <br />
+            {!isNotificationEmail && <>This is a service email.</>}
             {isNotificationEmail && (
               <>
                 <Link href={preferencesUpdatePath} style={link}>
                   Unsubscribe or update your email preferences.
                 </Link>
-                <br />
               </>
             )}
+            <br />
             Something is not right? Send us{' '}
             <Link
               href={`${settings.siteUrl}/feedback/#page=email`}

@@ -1,3 +1,5 @@
+import { UserRole } from 'oa-shared'
+
 import { MOCK_DATA } from '../data'
 import { SingaporeStubResponse } from '../fixtures/searchResults'
 import { UserMenuItem } from '../support/commandsUi'
@@ -440,5 +442,22 @@ describe('[Settings]', () => {
       cy.visit(`u/${user.username}`)
       cy.contains(tag)
     })
+  })
+
+  it('Notifications', () => {
+    localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
+    cy.signUpNewUser()
+
+    cy.step('Notification setting not shown when messaging off')
+    localStorage.setItem('VITE_NO_MESSAGING', 'true')
+    cy.visit('/settings')
+    cy.get('[data-cy=tab-Notifications]').click()
+    cy.get('[data-cy=messages-link]').should('not.exist')
+
+    cy.step('Notification setting present for contact feature ')
+    localStorage.setItem('VITE_NO_MESSAGING', 'false')
+    cy.visit('/settings')
+    cy.get('[data-cy=tab-Notifications]').click()
+    cy.get('[data-cy=messages-link]')
   })
 })

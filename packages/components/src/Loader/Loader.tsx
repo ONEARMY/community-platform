@@ -31,21 +31,19 @@ export const Loader = ({ label, sx }: Props) => {
   const logo = theme.logo || null
 
   return (
-    <>
-      <Flex sx={{ flexWrap: 'wrap', justifyContent: 'center', ...sx }}>
-        {logo && (
-          <RotatingLogo
-            loading="lazy"
-            data-cy="loader"
-            data-testid="loader"
-            src={logo}
-            sx={{ width: [75, 75, 100] }}
-          />
-        )}
-        <Text sx={{ width: '100%', textAlign: 'center' }}>
-          {label || 'Loading...'}
-        </Text>
-      </Flex>
-    </>
+    <Flex sx={{ flexWrap: 'wrap', justifyContent: 'center', ...sx }}>
+      {logo && (
+        <RotatingLogo
+          loading="lazy"
+          data-cy="loader"
+          data-testid="loader"
+          src={logo}
+          sx={{ width: [75, 75, 100] }}
+        />
+      )}
+      <Text sx={{ width: '100%', textAlign: 'center' }}>
+        {label || 'Loading...'}
+      </Text>
+    </Flex>
   )
 }

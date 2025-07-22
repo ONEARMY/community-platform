@@ -3,7 +3,7 @@ import { Link, Text } from '@react-email/components'
 
 import { BoxText } from './components/box-text.tsx'
 import { Button } from './components/button.tsx'
-import { Layout } from './layout.tsx'
+import { Layout, urlAppend } from './layout.tsx'
 import { Heading } from './components/heading.tsx'
 
 import type {
@@ -30,18 +30,19 @@ interface IProps {
 export const ModerationEmail = (props: IProps) => {
   const { notification, settings } = props
 
-  const headingLink = `${settings.siteUrl}/${notification.title.parentSlug}`
-  const buttonLink = `${settings.siteUrl}/${notification.slug}`
-  const preferencesUpdatePath = `${settings.siteUrl}/settings/notifications`
+  const headingLink = urlAppend(
+    `${settings.siteUrl}/${notification.title.parentSlug}`,
+    'moderation',
+  )
+  const buttonLink = urlAppend(
+    `${settings.siteUrl}/${notification.slug}`,
+    'moderation',
+  )
   const preview = `${notification.title.triggeredBy} ${notification.title.middle} your contribution`
   const buttonWording = notification.body ? 'Update it now' : 'See it live'
 
   return (
-    <Layout
-      preferencesUpdatePath={preferencesUpdatePath}
-      preview={preview}
-      settings={settings}
-    >
+    <Layout emailType="moderation" preview={preview} settings={settings}>
       <Header>
         <Link href={headingLink}>
           <Heading>

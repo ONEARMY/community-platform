@@ -11,9 +11,9 @@ const transformNotificationList = async (
   client: SupabaseClient,
 ) => {
   return Promise.all(
-    dbNotifications.map(async (dbNotification) => {
-      return await transformNotification(dbNotification, client)
-    }),
+    dbNotifications.map((dbNotification) =>
+      transformNotification(dbNotification, client),
+    ),
   )
 }
 
@@ -21,52 +21,58 @@ export const transformNotification = async (
   dbNotification: DBNotification,
   client: SupabaseClient,
 ) => {
-  const contentTypes = {
-    comment: 'comments',
-    reply: 'comments',
-  }
+  try {
+    const contentTypes = {
+      comment: 'comments',
+      reply: 'comments',
+      researchUpdate: 'research_updates',
+    }
 
-  const notification = Notification.fromDB(dbNotification)
-  const contentType = contentTypes[notification.contentType]
+    const notification = Notification.fromDB(dbNotification)
+    const contentType = contentTypes[notification.contentType]
 
-  const content = await client
-    .from(contentType)
-    .select('*')
-    .eq('id', notification.contentId)
-    .single()
-
-  if (content.data) {
-    notification.content = content.data
-  }
-
-  const sourceContentType = resolveType(notification.sourceContentType)
-  const sourceContent = await client
-    .from(sourceContentType)
-    .select('*')
-    .eq('id', notification.sourceContentId)
-    .single()
-
-  notification.sourceContent = sourceContent.data
-
-  if (notification.parentCommentId) {
-    const parentComment = await client
-      .from('comments')
+    const content = await client
+      .from(contentType)
       .select('*')
-      .eq('id', notification.parentCommentId)
+      .eq('id', notification.contentId)
       .single()
-    notification.parentComment = parentComment.data
-  }
 
-  if (notification.parentContentId) {
-    const parentContent = await client
-      .from('research_updates')
+    if (content.data) {
+      notification.content = content.data
+    }
+
+    const sourceContentType = resolveType(notification.sourceContentType)
+    const sourceContent = await client
+      .from(sourceContentType)
       .select('*')
-      .eq('id', notification.parentContentId)
+      .eq('id', notification.sourceContentId)
       .single()
-    notification.parentContent = parentContent.data
-  }
 
-  return NotificationDisplay.fromNotification(notification)
+    notification.sourceContent = sourceContent.data
+
+    if (notification.parentCommentId) {
+      const parentComment = await client
+        .from('comments')
+        .select('*')
+        .eq('id', notification.parentCommentId)
+        .single()
+      notification.parentComment = parentComment.data
+    }
+
+    if (notification.parentContentId) {
+      const parentContent = await client
+        .from('research_updates')
+        .select('*')
+        .eq('id', notification.parentContentId)
+        .single()
+      notification.parentContent = parentContent.data
+    }
+
+    return NotificationDisplay.fromNotification(notification)
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

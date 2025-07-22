@@ -1,6 +1,6 @@
 import { ImageCrop } from './ImageCrop'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Forms/ImageCrop',

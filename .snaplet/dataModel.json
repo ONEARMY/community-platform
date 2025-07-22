@@ -3258,6 +3258,20 @@
           "maxLength": null
         },
         {
+          "id": "public.notifications_preferences.is_unsubscribed",
+          "name": "is_unsubscribed",
+          "columnName": "is_unsubscribed",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "profiles",
           "type": "profiles",
           "isRequired": true,

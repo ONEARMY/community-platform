@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { createFakeComments } from '../utils'
 import { DiscussionContainer } from './DiscussionContainer'
 
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 export default {
   title: 'Commenting/DiscussionContainer',

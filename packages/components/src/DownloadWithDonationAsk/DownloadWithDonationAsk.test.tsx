@@ -80,4 +80,21 @@ describe('DownloadWithDonationAsk', () => {
     expect(getAllByTestId('DonationRequest')[0]).toBeInTheDocument()
     expect(handleClick).not.toHaveBeenCalled()
   })
+
+  it('renders the download counter with the correct total', () => {
+    const fileDownloadCount = 1234567
+
+    const { container } = render(
+      <DownloadWithDonationAsk
+        {...downloadProps}
+        fileDownloadCount={fileDownloadCount}
+        fileLink={undefined}
+        files={[]}
+      />,
+    )
+    const counter = container.querySelector('[data-cy="file-download-counter"]')
+    expect(counter).toBeInTheDocument()
+
+    expect(counter).toHaveTextContent('1,234,567 downloads')
+  })
 })

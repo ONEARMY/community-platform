@@ -2,7 +2,7 @@
 import { ProfileLink } from 'oa-components'
 import { ClientOnly } from 'remix-utils/client-only'
 import { UserAction } from 'src/common/UserAction'
-import { isUserContactable } from 'src/utils/helpers'
+import { isMessagingBlocked, isUserContactable } from 'src/utils/helpers'
 import { Box, Flex } from 'theme-ui'
 
 import { UserContactFormAvailable } from '../contact'
@@ -18,31 +18,37 @@ interface IProps {
 
 export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
   const isUserProfileContactable = !isUserContactable(user)
+  const shouldShowContactOutput = !isMessagingBlocked()
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-      <ClientOnly fallback={<></>}>
-        {() => (
-          <UserAction
-            loggedIn={
-              isViewingOwnProfile ? (
-                <UserContactFormAvailable
-                  isUserProfileContactable={!isUserProfileContactable}
-                />
-              ) : (
-                <UserContactForm user={user} />
-              )
-            }
-            loggedOut={
-              isUserProfileContactable ? (
-                <UserContactFormNotLoggedIn user={user} />
-              ) : (
-                <UserContactFormNotLoggedIn user={user} />
-              )
-            }
-          />
-        )}
-      </ClientOnly>
+      {shouldShowContactOutput && (
+        <Box data-cy="UserContactWrapper">
+          <ClientOnly fallback={<></>}>
+            {() => (
+              <UserAction
+                loggedIn={
+                  isViewingOwnProfile ? (
+                    <UserContactFormAvailable
+                      isUserProfileContactable={!isUserProfileContactable}
+                    />
+                  ) : (
+                    <UserContactForm user={user} />
+                  )
+                }
+                loggedOut={
+                  isUserProfileContactable ? (
+                    <UserContactFormNotLoggedIn user={user} />
+                  ) : (
+                    <UserContactFormNotLoggedIn user={user} />
+                  )
+                }
+              />
+            )}
+          </ClientOnly>
+        </Box>
+      )}
+
       {user.website && (
         <Box>
           <span>Website</span>

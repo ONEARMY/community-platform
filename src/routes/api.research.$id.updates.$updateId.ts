@@ -1,5 +1,6 @@
 import { ResearchUpdate } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
@@ -65,7 +66,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       .select()
       .eq('id', updateId)
       .single()
-    const update = researchUpdateResult.data as DBResearchUpdate
+
+    const oldResearchUpdate = researchUpdateResult.data as DBResearchUpdate
 
     const uploadedImages = formData.getAll('images') as File[]
     const uploadedFiles = formData.getAll('files') as File[]
@@ -81,7 +83,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       )
     }
 
-    const uploadPath = `research/${researchId}/updates/${update.id}`
+    const uploadPath = `research/${researchId}/updates/${oldResearchUpdate.id}`
     const images = await updateOrReplaceImage(
       imagesToKeepIds as string[],
       uploadedImages,
@@ -98,7 +100,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       client,
     )
 
-    const updateResult = await client
+    const researchUpdateAfterUpdating = await client
       .from('research_updates')
       .update({
         title: data.title,
@@ -109,25 +111,30 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         video_url: data.videoUrl,
         files: files.map((x) => ({ id: x.id, name: x.name, size: x.size })),
       })
-      .eq('id', update.id)
-      .select('*,research:research(slug)')
+      .eq('id', oldResearchUpdate.id)
+      .select('*,research:research(id,slug,is_draft)')
       .single()
 
-    if (updateResult.error || !updateResult.data) {
-      throw updateResult.error
+    if (
+      researchUpdateAfterUpdating.error ||
+      !researchUpdateAfterUpdating.data
+    ) {
+      throw researchUpdateAfterUpdating.error
     }
 
-    if (update.is_draft && !updateResult.data.is_draft) {
-      // TODO
-      // notificationsService.sendResearchUpdateNotification(
-      //   client,
-      //   updateResult.data.research,
-      //   updateResult.data,
-      //   profile as DBProfile,
-      // )
-    }
+    const researchUpdate = ResearchUpdate.fromDB(
+      researchUpdateAfterUpdating.data,
+      [],
+    )
+    researchUpdate.research = researchUpdateAfterUpdating.data.research
 
-    const researchUpdate = ResearchUpdate.fromDB(updateResult.data, [])
+    broadcastCoordinationServiceServer.researchUpdate(
+      researchUpdate,
+      profile,
+      client,
+      request,
+      oldResearchUpdate,
+    )
 
     return Response.json({ researchUpdate }, { headers, status: 201 })
   } catch (error) {

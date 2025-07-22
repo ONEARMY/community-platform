@@ -3,7 +3,7 @@ import { Text } from 'theme-ui'
 import { Icon } from '..'
 import { ExternalLink } from './ExternalLink'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   /* 👇 The title prop is optional.
@@ -27,6 +27,6 @@ export const Styled: StoryFn<typeof ExternalLink> = () => (
 export const WithIcon: StoryFn<typeof ExternalLink> = () => (
   <ExternalLink href="#">
     <Text>Link Text</Text>
-    <Icon glyph="external-link" ml={[1]}></Icon>
+    <Icon glyph="external-url" ml={[1]}></Icon>
   </ExternalLink>
 )

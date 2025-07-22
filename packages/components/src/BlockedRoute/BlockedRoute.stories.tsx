@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 
 import { BlockedRoute } from './BlockedRoute'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Layout/BlockedRoute',

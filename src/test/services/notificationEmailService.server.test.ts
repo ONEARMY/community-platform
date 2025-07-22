@@ -110,7 +110,7 @@ describe('notificationEmailService', () => {
       expect(mocks.functionsInvoke).not.toHaveBeenCalled()
     })
 
-    it('should return early when RPC response has no data', async () => {
+    it('should error when RPC response has no data', async () => {
       const { client, mocks } = createMockSupabaseClient()
       const notification = factoryDBNotification()
       const profileId = 123
@@ -128,50 +128,14 @@ describe('notificationEmailService', () => {
         data: null,
       })
 
-      const result =
-        await notificationEmailService.createInstantNotificationEmail(
-          client,
-          notification,
-          profileId,
-        )
-
-      expect(result).toBeUndefined()
-      expect(console.error).toHaveBeenCalledWith(
-        'No email found for profile ID:',
+      await notificationEmailService.createInstantNotificationEmail(
+        client,
+        notification,
         profileId,
       )
-      expect(mocks.functionsInvoke).not.toHaveBeenCalled()
-    })
 
-    it('should return early when RPC response has empty array', async () => {
-      const { client, mocks } = createMockSupabaseClient()
-      const notification = factoryDBNotification()
-      const profileId = 123
-
-      mocks.single.mockResolvedValue({
-        data: { created_at: '2024-01-01', roles: ['beta-tester'] },
-      })
-
-      mockGetPreferences.mockResolvedValue({
-        is_unsubscribed: false,
-        comments: true,
-      })
-
-      mocks.rpc.mockResolvedValue({
-        data: [],
-      })
-
-      const result =
-        await notificationEmailService.createInstantNotificationEmail(
-          client,
-          notification,
-          profileId,
-        )
-
-      expect(result).toBeUndefined()
       expect(console.error).toHaveBeenCalledWith(
-        'No email found for profile ID:',
-        profileId,
+        `No email found for profile ID: ${profileId}`,
       )
       expect(mocks.functionsInvoke).not.toHaveBeenCalled()
     })

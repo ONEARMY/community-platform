@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { UsefulStatsButton } from './UsefulStatsButton'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Components/UsefulStatsButton',

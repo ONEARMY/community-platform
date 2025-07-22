@@ -4,6 +4,7 @@ import { contentServiceServer } from 'src/services/contentService.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
+import { subscribersServiceServer } from 'src/services/subscribersService.server'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
@@ -43,13 +44,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       data: { user },
     } = await client.auth.getUser()
 
-    const currentResearch = await researchServiceServer.getById(id, client)
+    const oldResearch = await researchServiceServer.getById(id, client)
 
     const { valid, status, statusText } = await validateRequest(
       request,
       user,
       data,
-      currentResearch,
+      oldResearch,
       client,
     )
 
@@ -58,7 +59,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     }
 
     const previousSlugs = contentServiceServer.updatePreviousSlugs(
-      currentResearch,
+      oldResearch,
       data.slug,
     )
 
@@ -77,12 +78,19 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       })
       .eq('id', id)
       .select()
+      .single()
 
     if (researchResult.error || !researchResult.data) {
       throw researchResult.error
     }
 
-    const research = ResearchItem.fromDB(researchResult.data[0], [])
+    const research = ResearchItem.fromDB(researchResult.data, [])
+
+    await subscribersServiceServer.updateResearchSubscribers(
+      oldResearch,
+      research,
+      client,
+    )
 
     if (uploadedImage) {
       // TODO:remove unused images from storage
@@ -200,7 +208,7 @@ async function validateRequest(
   }
 
   if (
-    research.author?.id !== profile.id &&
+    research.created_by !== profile.id &&
     !research.collaborators?.includes(profile.username)
   ) {
     return { status: 403, statusText: 'forbidden' }

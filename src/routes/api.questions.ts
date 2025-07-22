@@ -5,12 +5,13 @@ import { ITEMS_PER_PAGE } from 'src/pages/Question/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
 import { discordServiceServer } from 'src/services/discordService.server'
+import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
 import { validateImages } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { User } from '@supabase/supabase-js'
 import type { DBProfile, DBQuestion, Moderation } from 'oa-shared'
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions'
 
@@ -190,12 +191,16 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     if (uploadedImages.length > 0) {
       const questionId = Number(questionResult.data[0].id)
 
-      const imageResult = await uploadImages(questionId, uploadedImages, client)
+      const imageResult = await storageServiceServer.uploadImage(
+        uploadedImages,
+        `questions/${questionId}`,
+        client,
+      )
 
-      if (imageResult?.images && imageResult.images.length > 0) {
+      if (imageResult?.media && imageResult.media.length > 0) {
         const updateResult = await client
           .from('questions')
-          .update({ images: imageResult.images })
+          .update({ images: imageResult.media })
           .eq('id', questionId)
           .select()
 
@@ -236,34 +241,6 @@ function notifyDiscord(
   discordServiceServer.postWebhookRequest(
     `❓ ${profile.username} has a new question: ${title}\nHelp them out and answer here: <${siteUrl}/questions/${slug}>`,
   )
-}
-
-export async function uploadImages(
-  questionId: number,
-  uploadedImages: File[],
-  client: SupabaseClient,
-) {
-  if (!uploadedImages || uploadedImages.length === 0) {
-    return null
-  }
-
-  const errors: string[] = []
-  const images: { id: string; path: string; fullPath: string }[] = []
-
-  for (const image of uploadedImages) {
-    const result = await client.storage
-      .from(process.env.TENANT_ID as string)
-      .upload(`questions/${questionId}/${image.name}`, image)
-
-    if (result.data === null) {
-      errors.push(`Error uploading image: ${image.name}`)
-      continue
-    }
-
-    images.push(result.data)
-  }
-
-  return { images, errors }
 }
 
 async function validateRequest(request: Request, user: User | null, data: any) {

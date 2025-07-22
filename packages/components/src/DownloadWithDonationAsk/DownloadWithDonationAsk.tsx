@@ -3,6 +3,7 @@ import { Flex } from 'theme-ui'
 
 import { DonationRequestModal } from '../DonationRequestModal/DonationRequestModal'
 import { DownloadButton } from '../DownloadButton/DownloadButton'
+import { DownloadCounter } from '../DownloadCounter/DownloadCounter'
 import { DownloadStaticFile } from '../DownloadStaticFile/DownloadStaticFile'
 
 import type { MediaFile } from 'oa-shared'
@@ -56,7 +57,6 @@ export const DownloadWithDonationAsk = (props: IProps) => {
         {fileLink && (
           <DownloadButton
             isLoggedIn
-            fileDownloadCount={props.fileDownloadCount}
             onClick={() => {
               setLink(fileLink)
               toggleIsModalOpen()
@@ -79,6 +79,7 @@ export const DownloadWithDonationAsk = (props: IProps) => {
             ))}
           </Flex>
         )}
+        <DownloadCounter total={props.fileDownloadCount} />
       </>
     </>
   )

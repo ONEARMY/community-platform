@@ -1,3 +1,5 @@
+import { UserRole } from 'oa-shared'
+
 import {
   generateAlphaNumeric,
   generateNewUserDetails,
@@ -24,6 +26,9 @@ describe('[Question]', () => {
     const updatedQuestionDescription = `${initialQuestionDescription} and super awesome goggles`
 
     it('[By Authenticated]', () => {
+      // Needed for notifications as feature behind auth wrapper:
+      localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
+
       cy.visit('/questions')
       const user = generateNewUserDetails()
       cy.signUpNewUser(user)
@@ -66,11 +71,12 @@ describe('[Question]', () => {
       })
 
       cy.get('[data-cy=draft]').click()
+      cy.url().should('include', `/questions/${initialExpectedSlug}`)
 
       cy.step('Can get to drafts')
       cy.visit('/questions')
       cy.contains(initialTitle).should('not.exist')
-      cy.get('[data-cy=my-drafts').click()
+      cy.get('[data-cy=my-drafts]').click()
       cy.contains(initialTitle).click()
 
       cy.step('Shows draft question')
@@ -103,9 +109,7 @@ describe('[Question]', () => {
       cy.step('All ready for a discussion')
       cy.contains('0 comments')
       cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion')
-
-      // Currently beta testers only:
-      // cy.get('[data-cy=follow-button]').contains('Following')
+      cy.get('[data-cy=follow-button]').contains('Following')
 
       cy.step('Edit question')
       cy.get('[data-cy=edit]')

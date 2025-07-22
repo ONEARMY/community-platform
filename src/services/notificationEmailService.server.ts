@@ -29,6 +29,7 @@ const createInstantNotificationEmail = async (
   profileId: number,
 ) => {
   try {
+    console.log('In createInstantNotificationEmail')
     // Temporarily only for admins, beta-testers, research_creators
     const profileResponse = await client
       .from('profiles')
@@ -42,6 +43,7 @@ const createInstantNotificationEmail = async (
     }
 
     const roles = profileResponse.data.roles as Profile['roles']
+    console.log({ roles })
     const approvedRoles = ['admin', 'beta-tester', 'research_creator']
     const hasPlatformRole = !!roles?.every((role) =>
       approvedRoles.includes(role),
@@ -59,10 +61,11 @@ const createInstantNotificationEmail = async (
     const rpcResponse = await client.rpc('get_user_email_by_profile_id', {
       id: profileId,
     })
-
+    console.log({ rpcResponse })
     if (!rpcResponse.data || rpcResponse.data.length === 0) {
-      console.error('No email found for profile ID:', profileId)
-      return
+      const error = `No email found for profile ID: ${profileId}`
+      console.error(error)
+      throw error
     }
 
     const userEmail = rpcResponse.data[0]?.email
@@ -72,10 +75,10 @@ const createInstantNotificationEmail = async (
     }
 
     const fullNotification = await transformNotification(dbNotification, client)
-
+    console.log({ fullNotification })
     const code = tokens.generate(profileId, profileResponse.data.created_at)
 
-    await client.functions.invoke('send-email', {
+    return await client.functions.invoke('send-email', {
       body: {
         user: {
           code,
@@ -87,8 +90,6 @@ const createInstantNotificationEmail = async (
         },
       },
     })
-
-    return
   } catch (error) {
     console.error('Error creating email notification:', error)
     return Response.json(error, { status: 500, statusText: error.statusText })

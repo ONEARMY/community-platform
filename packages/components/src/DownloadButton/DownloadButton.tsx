@@ -1,6 +1,5 @@
 import { Flex, Text } from 'theme-ui'
 
-import { DownloadCounter } from '../DownloadCounter/DownloadCounter'
 import { Icon } from '../Icon/Icon'
 import { Tooltip } from '../Tooltip/Tooltip'
 
@@ -8,14 +7,14 @@ import type { IGlyphs } from '../Icon/types'
 
 export interface IProps {
   onClick: () => void
-  fileDownloadCount?: number
+
   isLoggedIn?: boolean
   label?: string
   glyph?: keyof IGlyphs
 }
 
 export const DownloadButton = (props: IProps) => {
-  const { fileDownloadCount, glyph, isLoggedIn, label, onClick } = props
+  const { glyph, isLoggedIn, label, onClick } = props
   return (
     <>
       <Flex
@@ -49,8 +48,6 @@ export const DownloadButton = (props: IProps) => {
         </Text>
       </Flex>
       <Tooltip id="download-files" />
-
-      <DownloadCounter total={fileDownloadCount} />
     </>
   )
 }

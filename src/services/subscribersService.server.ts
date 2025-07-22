@@ -1,5 +1,69 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { SubscribableContentTypes } from 'oa-shared'
+import type {
+  DBResearchItem,
+  ResearchItem,
+  ResearchUpdate,
+  SubscribableContentTypes,
+} from 'oa-shared'
+
+const combineSubscribers = async (
+  ids: (number | null | undefined)[],
+  usernames: string[],
+  client: SupabaseClient,
+): Promise<Set<number>> => {
+  const profilesToSubscribe: number[] = ids.map((id) => Number(id))
+
+  for (const username of usernames) {
+    const { data } = await client
+      .from('profiles')
+      .select('id')
+      .eq('username', username)
+      .single()
+    if (data && !!Number(data.id)) {
+      profilesToSubscribe.push(Number(data.id))
+    }
+  }
+
+  const uniqueProfileIds = new Set([...profilesToSubscribe])
+
+  return uniqueProfileIds
+}
+
+const addResearchSubscribers = async (
+  research: ResearchItem,
+  profileId: number,
+  client: SupabaseClient,
+  addFunction = add,
+) => {
+  const subscribers = await combineSubscribers(
+    [profileId],
+    research.collaboratorsUsernames || [],
+    client,
+  )
+  return Promise.all([
+    subscribers.forEach((subscriber) => {
+      addFunction('research', research.id, subscriber, client)
+    }),
+  ])
+}
+
+const addResearchUpdateSubscribers = async (
+  update: ResearchUpdate,
+  profileId: number,
+  client: SupabaseClient,
+  addFunction = add,
+) => {
+  const subscribers = await combineSubscribers(
+    [profileId, update.research?.created_by],
+    update.research?.collaborators || [],
+    client,
+  )
+  return Promise.all([
+    subscribers.forEach((subscriber) => {
+      addFunction('research_update', update.id, subscriber, client)
+    }),
+  ])
+}
 
 const add = async (
   contentType: SubscribableContentTypes,
@@ -35,6 +99,38 @@ const add = async (
   }
 }
 
+const updateResearchSubscribers = async (
+  oldResearch: DBResearchItem,
+  newResearch: ResearchItem,
+  client: SupabaseClient,
+  addFunction = add,
+) => {
+  const oldCollaborators = oldResearch.collaborators || []
+  const newCollaborators = newResearch.collaboratorsUsernames || []
+
+  const newCollaboratorUsernames = newCollaborators.filter(
+    (username) => !oldCollaborators.includes(username),
+  )
+
+  if (newCollaboratorUsernames.length === 0) {
+    return
+  }
+
+  const subscribers = await combineSubscribers(
+    [],
+    newCollaboratorUsernames,
+    client,
+  )
+  return Promise.all([
+    subscribers.forEach((subscriber) => {
+      addFunction('research', newResearch.id, subscriber, client)
+    }),
+  ])
+}
+
 export const subscribersServiceServer = {
+  addResearchSubscribers,
+  addResearchUpdateSubscribers,
   add,
+  updateResearchSubscribers,
 }

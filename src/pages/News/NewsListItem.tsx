@@ -54,20 +54,22 @@ export const NewsListItem = ({ news, query }: IProps) => {
           }}
         >
           <Flex sx={{ gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
-            <Heading
-              as="h2"
-              data-cy="news-list-item-title"
-              sx={{
-                color: 'black',
-                fontSize: [3, 3, 4],
-                marginBottom: 0.5,
-              }}
-            >
-              <Highlighter
-                searchWords={searchWords}
-                textToHighlight={news.title}
-              />
-            </Heading>
+            <InternalLink to={url}>
+              <Heading
+                as="h2"
+                data-cy="news-list-item-title"
+                sx={{
+                  color: 'black',
+                  fontSize: [3, 3, 4],
+                  marginBottom: 0.5,
+                }}
+              >
+                <Highlighter
+                  searchWords={searchWords}
+                  textToHighlight={news.title}
+                />
+              </Heading>
+            </InternalLink>
 
             {news.category && (
               <Category category={news.category} sx={{ fontSize: 2 }} />

@@ -43,15 +43,32 @@ const mainContainer = {
   width: '600px',
 }
 
+type EmailType = 'service' | 'moderation' | 'notification'
+
 type LayoutArgs = {
   children: React.ReactNode
-  preferencesUpdatePath: string
+  emailType: EmailType
   preview: string
   settings: TenantSettings
+  userCode?: string
+}
+
+export const urlAppend = (path: string, emailType: EmailType) => {
+  const url = new URL(`${path}`)
+  url.searchParams.append('utm_source', emailType)
+  url.searchParams.append('utm_medium', 'email')
+  return url.toString()
 }
 
 export const Layout = (props: LayoutArgs) => {
-  const { children, preferencesUpdatePath, preview, settings } = props
+  const { children, emailType, preview, settings, userCode } = props
+
+  const basePreferencesPath = userCode
+    ? `${settings.siteUrl}/email-preferences?code=${userCode}`
+    : `${settings.siteUrl}/settings/notifications`
+  const preferencesUpdatePath = urlAppend(basePreferencesPath, emailType)
+
+  const isNotificationEmail = emailType === 'notification'
 
   return (
     <Html lang="en">
@@ -68,13 +85,15 @@ export const Layout = (props: LayoutArgs) => {
           />
           <Section style={card}>{children}</Section>
           <Footer>
-            You are receiving important community updates by default. <br />
-            You can update your{' '}
-            <Link href={preferencesUpdatePath} style={link}>
-              {' '}
-              email preferences anytime
-            </Link>{' '}
-            or unsubscribe with ease. <br />
+            You must receive important community messages. <br />
+            {isNotificationEmail && (
+              <>
+                <Link href={preferencesUpdatePath} style={link}>
+                  Unsubscribe or update your email preferences.
+                </Link>
+                <br />
+              </>
+            )}
             Something is not right? Send us{' '}
             <Link
               href={`${settings.siteUrl}/feedback/#page=email`}

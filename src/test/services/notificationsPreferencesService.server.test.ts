@@ -60,7 +60,7 @@ describe('notificationsPreferencesServiceServer', () => {
       )
     })
 
-    it('throws Response.json with 500 status when database query fails', async () => {
+    it('throws error when database query fails', async () => {
       const dbError = new Error('Database error')
       Object.defineProperty(dbError, 'statusText', {
         value: 'Internal Server Error',
@@ -73,8 +73,7 @@ describe('notificationsPreferencesServiceServer', () => {
           123,
         )
       } catch (error) {
-        expect(error).toBeInstanceOf(Response)
-        expect(error.status).toBe(500)
+        expect(error).toBe(dbError)
       }
     })
 

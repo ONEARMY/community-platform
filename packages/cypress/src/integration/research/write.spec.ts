@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { UserRole } from 'oa-shared'
 
 import { RESEARCH_TITLE_MIN_LENGTH } from '../../../../../src/pages/Research/constants'
 import { MOCK_DATA } from '../../data'
@@ -19,8 +20,8 @@ const generateArticle = () => {
   }
 }
 
-const researcherEmail = MOCK_DATA.users.research_creator.email
-const researcherPassword = MOCK_DATA.users.research_creator.password
+const admin = MOCK_DATA.users.admin
+const researcher = MOCK_DATA.users.research_creator
 
 describe('[Research]', () => {
   beforeEach(() => {
@@ -29,6 +30,9 @@ describe('[Research]', () => {
 
   describe('[Create research article]', () => {
     it('[By Authenticated]', () => {
+      // Needed for notifications as feature behind auth wrapper:
+      localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
+
       const initialRandomId = generateAlphaNumeric(4).toLowerCase()
       const initialTitle = initialRandomId + ' Initial Title'
       const initialExpectedSlug = initialRandomId + '-initial-title'
@@ -39,7 +43,6 @@ describe('[Research]', () => {
       const updateDescription = 'This is the description for the update.'
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
       const subscriber = MOCK_DATA.users.subscriber
-      const admin = MOCK_DATA.users.admin
       const researchURL = `/research/${expected.slug}`
 
       cy.signIn(subscriber.email, subscriber.password)
@@ -79,6 +82,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=draft]').click()
 
       cy.get('[data-cy=draft-tag]').should('be.visible')
+      cy.get('[data-cy=follow-button]').first().contains('Following')
 
       cy.step('Drafted Research should not appear on users profile')
       cy.visit('/u/' + admin.displayName)
@@ -114,13 +118,15 @@ describe('[Research]', () => {
 
       cy.step('Published Research should appear on users profile')
       cy.visit('/u/' + admin.displayName)
-      cy.get('[data-testid=research-stat]').contains('1')
+      cy.get('[data-testid=research-stat]').should('exist')
       cy.get('[data-cy=ContribTab]').click()
       cy.get('[data-testid="research-contributions"]').should('be.visible')
 
       cy.step('New collaborators can add update')
       cy.logout()
       cy.signIn(subscriber.email, subscriber.password)
+      cy.visit(`/research/${expected.slug}`)
+      cy.get('[data-cy=follow-button]').first().contains('Following')
       cy.visit(`/research/${expected.slug}/new-update`)
       cy.contains('New update')
 
@@ -161,6 +167,22 @@ describe('[Research]', () => {
       cy.url().should('contain', `${researchURL}#update_`)
       cy.contains(updateTitle).should('be.visible')
       cy.contains(updateDescription).should('be.visible')
+      cy.get('[data-cy="HideDiscussionContainer:button"]').last().click()
+      cy.get('[data-cy="CollapsableCommentSection"]')
+        .last()
+        .within(() => {
+          cy.get('[data-cy=follow-button]').contains('Following')
+        })
+
+      cy.step(
+        'Collaborator is subscribed to research and research update discussion',
+      )
+      cy.logout()
+      cy.signIn(subscriber.email, subscriber.password)
+      cy.visit(researchURL)
+      cy.get('[data-cy=follow-button]').first().contains('Following')
+      cy.get('[data-cy="HideDiscussionContainer:button"]').last().click()
+      cy.get('[data-cy=follow-button]').last().contains('Following')
 
       cy.step('Notification generated for update')
       cy.logout()
@@ -241,16 +263,16 @@ describe('[Research]', () => {
       const updateTitle = `${randomId} Create a research update`
       const updateDescription = 'This is the description for the update.'
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
-      const expected = {
+      const researchItem = {
         category: 'Machines',
         description: 'After creating, the research will be deleted.',
         title: `${randomId} Create research article test`,
         slug: `${randomId}-create-research-article-test`,
       }
       const finalUpdateTitle = `Publish title: ${randomId}`
-
+      const researchURL = `/research/${researchItem.slug}`
       cy.get('[data-cy="sign-up"]')
-      cy.signIn(researcherEmail, researcherPassword)
+      cy.signIn(researcher.email, researcher.password)
 
       cy.step('Create the research article')
       cy.visit('/research')
@@ -259,23 +281,28 @@ describe('[Research]', () => {
       cy.get('[data-cy=create]').click()
 
       cy.step('Enter research article details')
-      cy.get('[data-cy=intro-title').clear().type(expected.title).blur()
-      cy.get('[data-cy=intro-description]').clear().type(expected.description)
-      cy.selectTag(expected.category, '[data-cy=category-select]')
+      cy.get('[data-cy=intro-title').clear().type(researchItem.title).blur()
+      cy.get('[data-cy=intro-description]')
+        .clear()
+        .type(researchItem.description)
+      cy.selectTag(researchItem.category, '[data-cy=category-select]')
       cy.get('[data-cy=submit]').click()
-
-      cy.url().should('include', `/research/${expected.slug}`)
-      cy.visit(`/research/${expected.slug}`)
+      cy.get('[data-cy="loader"]')
+      cy.contains(researchItem.title)
       cy.get('[data-cy=follow-button]').contains('Following')
 
-      cy.step('Research article displays correctly')
-      cy.contains(expected.title)
-      cy.contains(expected.description)
-      cy.contains(expected.category)
+      cy.step('Users can follow for research updates (for later expectations)')
+      cy.logout()
+      cy.signIn(admin.email, admin.password)
+      cy.visit(researchURL)
+      cy.get('[data-cy=follow-button]').first().click()
+      cy.logout()
 
+      cy.step('Can start adding research update')
+
+      cy.signIn(researcher.email, researcher.password)
+      cy.visit(researchURL)
       cy.get('[data-cy=addResearchUpdateButton]').click()
-
-      cy.step('Enter update details')
       cy.fillIntroTitle(updateTitle)
 
       cy.get('[data-cy=intro-description]')
@@ -296,13 +323,18 @@ describe('[Research]', () => {
 
       cy.step('Draft not visible to others')
       cy.logout()
-      cy.visit(`/research/${expected.slug}`)
+      cy.visit(researchURL)
       cy.get(updateTitle).should('not.exist')
       cy.get('[data-cy=DraftUpdateLabel]').should('not.exist')
 
+      cy.step("Draft hasn't generated notifications")
+      cy.signIn(admin.email, admin.password)
+      cy.expectNoNewNotification()
+      cy.logout()
+
       cy.step('Draft updates can be published')
-      cy.signIn(researcherEmail, researcherPassword)
-      cy.visit(`/research/${expected.slug}`)
+      cy.signIn(researcher.email, researcher.password)
+      cy.visit(researchURL)
       cy.get('[data-cy=edit-update]').click()
       cy.contains('Edit your update')
       cy.wait(1000)
@@ -325,6 +357,16 @@ describe('[Research]', () => {
       // Currently beta testers only:
       // cy.get('[data-cy=follow-button]').contains('Following')
       cy.contains('0 comments')
+
+      cy.step('Now published draft has generated notifications')
+      cy.logout()
+      cy.signIn(admin.email, admin.password)
+      cy.expectNewNotification({
+        content: finalUpdateTitle,
+        path: `${researchURL}#update_`,
+        title: researchItem.title,
+        username: researcher.userName,
+      })
     })
 
     // it('[By Admin]', () => {

@@ -2,7 +2,7 @@ import { Flex } from 'theme-ui'
 
 import { glyphs, Icon } from './Icon'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Components/Icon',

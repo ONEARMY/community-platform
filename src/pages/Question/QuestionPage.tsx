@@ -167,7 +167,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
         <ContentStatistics
           statistics={[
             {
-              icon: 'view',
+              icon: 'show',
               label: buildStatisticsLabel({
                 stat: question.totalViews,
                 statUnit: 'view',

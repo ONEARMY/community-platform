@@ -69,14 +69,8 @@ const FileDetails = (props: IPropFileDetails) => {
 }
 
 export const DownloadStaticFile = (props: IProps) => {
-  const {
-    file,
-    fileDownloadCount,
-    allowDownload,
-    handleClick,
-    redirectToSignIn,
-    isLoggedIn,
-  } = props
+  const { file, allowDownload, handleClick, redirectToSignIn, isLoggedIn } =
+    props
   const size = bytesToSize(file.size || 0)
 
   if (!file) {
@@ -99,7 +93,6 @@ export const DownloadStaticFile = (props: IProps) => {
       )}
 
       <DownloadButton
-        fileDownloadCount={fileDownloadCount}
         glyph="download-cloud"
         isLoggedIn={isLoggedIn}
         label={`${file.name} (${size})`}

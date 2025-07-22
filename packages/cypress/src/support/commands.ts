@@ -13,10 +13,10 @@ interface ExpectedNewNotification {
 declare global {
   namespace Cypress {
     interface Chainable {
-      checkCommentInViewport()
       clearServiceWorkers(): Promise<void>
       deleteIDB(name: string): Promise<boolean>
       expectNewNotification(ExpectedNewNotification): Chainable<void>
+      expectNoNewNotification(): Chainable<void>
       interceptAddressSearchFetch(addressResponse): Chainable<void>
       interceptAddressReverseFetch(addressResponse): Chainable<void>
       step(message: string)
@@ -95,13 +95,6 @@ Cypress.Commands.add('interceptAddressReverseFetch', (addressResponse) => {
  */
 Cypress.Commands.overwrite('log', (subject, message) => cy.task('log', message))
 
-Cypress.Commands.add('checkCommentInViewport', () => {
-  cy.get('[data-cy="CommentItem"]')
-    .first()
-    .scrollIntoView()
-    .should('be.inViewport', 10)
-})
-
 Cypress.Commands.add(
   'expectNewNotification',
   (props: ExpectedNewNotification) => {
@@ -120,3 +113,10 @@ Cypress.Commands.add(
     cy.url().should('include', path)
   },
 )
+
+Cypress.Commands.add('expectNoNewNotification', () => {
+  localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
+  cy.wait(3000)
+
+  cy.get('[data-cy=notifications-no-new-messages]').first()
+})

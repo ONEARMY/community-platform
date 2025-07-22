@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { MemberTypeVerticalList } from './MemberTypeVerticalList.client'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 import type { MapFilterOption } from 'oa-shared'
 
 export default {

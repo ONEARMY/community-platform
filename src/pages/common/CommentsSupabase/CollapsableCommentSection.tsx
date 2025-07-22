@@ -53,6 +53,7 @@ const CollapsableCommentSection = (props: Props) => {
 
   return (
     <Box
+      data-cy="CollapsableCommentSection"
       sx={{
         backgroundColor: isOpen ? '#e2edf7' : 'inherit',
         borderTop: '2px solid #111',

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { DifficultyLevelRecord, IModerationStatus } from 'oa-shared'
+import { DifficultyLevelRecord, IModerationStatus, UserRole } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
 import {
@@ -164,6 +164,9 @@ describe('[Library]', () => {
     }
 
     it('[By Authenticated]', () => {
+      // Needed for notifications as feature behind auth wrapper:
+      localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
+
       const {
         category,
         description,
@@ -281,6 +284,8 @@ describe('[Library]', () => {
       cy.get('[data-cy=project-description]').should('contain', description)
       cy.get('[data-cy=category]').should('contain', category)
       cy.get('[data-cy=difficulty-level]').should('contain', difficulty_level)
+
+      cy.get('[data-cy=follow-button]').contains('Following')
 
       steps.forEach((step, index) => {
         cy.get(`[data-cy=step_${index + 1}]`)

@@ -1,6 +1,5 @@
 import accountSVG from '../../assets/icons/account.svg'
 import approvedSVG from '../../assets/icons/approved.svg'
-import arrowCurvedBottomRightSVG from '../../assets/icons/arrow-curved-bottom-right.svg'
 import attentionSVG from '../../assets/icons/attention.svg'
 import categorySVG from '../../assets/icons/category.svg'
 import chevronDownSVG from '../../assets/icons/chevron-down.svg'
@@ -8,6 +7,7 @@ import chevronLeftSVG from '../../assets/icons/chevron-left.svg'
 import chevronRightSVG from '../../assets/icons/chevron-right.svg'
 import chevronUpSVG from '../../assets/icons/chevron-up.svg'
 import collaboratorSVG from '../../assets/icons/collaborator.svg'
+import commentOutlineSVG from '../../assets/icons/comment-outline.svg'
 import constructionSVG from '../../assets/icons/construction.svg'
 import contactSVG from '../../assets/icons/contact.svg'
 import closeSVG from '../../assets/icons/cross-close.svg'
@@ -16,6 +16,7 @@ import deleteSVG from '../../assets/icons/delete.svg'
 import discussionSVG from '../../assets/icons/discussion.svg'
 import discussionFollowSVG from '../../assets/icons/discussion-follow.svg'
 import discussionUnfollowSVG from '../../assets/icons/discussion-unfollow.svg'
+import doubleTickSVG from '../../assets/icons/double-tick.svg'
 import editSVG from '../../assets/icons/edit.svg'
 import emailSVG from '../../assets/icons/email.svg'
 import employeeSVG from '../../assets/icons/employee.svg'
@@ -59,6 +60,8 @@ import plasticSVG from '../../assets/icons/plastic.svg'
 import productsSVG from '../../assets/icons/products.svg'
 import profileSVG from '../../assets/icons/profile.svg'
 import recyclingSVG from '../../assets/icons/recycling.svg'
+import replySVG from '../../assets/icons/reply.svg'
+import replyOutlineSVG from '../../assets/icons/reply-outline.svg'
 import reportSVG from '../../assets/icons/report.svg'
 import revenueSVG from '../../assets/icons/revenue.svg'
 import slidersSVG from '../../assets/icons/sliders.svg'
@@ -87,7 +90,6 @@ const ImageIcon = (props: IProps) => {
 
 export const iconMap = {
   approved: <ImageIcon src={approvedSVG} />,
-  arrowCurvedBottomRight: <ImageIcon src={arrowCurvedBottomRightSVG} />,
   arrowFullDown: <ImageIcon src={arrowFullDownSVG} />,
   arrowFullUp: <ImageIcon src={arrowFullUpSVG} />,
   attention: <ImageIcon src={attentionSVG} />,
@@ -101,6 +103,7 @@ export const iconMap = {
   collaborator: <ImageIcon src={collaboratorSVG} />,
   close: <ImageIcon src={closeSVG} data-cy="close" />,
   comment: <ImageIcon src={commentSVG} />,
+  commentOutline: <ImageIcon src={commentOutlineSVG} />,
   construction: <ImageIcon src={constructionSVG} />,
   contact: <ImageIcon src={contactSVG} />,
   declined: <ImageIcon src={declinedSVG} />,
@@ -109,6 +112,7 @@ export const iconMap = {
   discussion: <ImageIcon src={discussionSVG} />,
   discussionFollow: <ImageIcon src={discussionFollowSVG} />,
   discussionUnfollow: <ImageIcon src={discussionUnfollowSVG} />,
+  doubleTick: <ImageIcon src={doubleTickSVG} />,
   edit: <ImageIcon src={editSVG} />,
   email: <ImageIcon src={emailSVG} />,
   emailOutline: <ImageIcon src={emailOutlineSVG} />,
@@ -138,6 +142,8 @@ export const iconMap = {
   profile: <ImageIcon src={profileSVG} />,
   products: <ImageIcon src={productsSVG} />,
   recycling: <ImageIcon src={recyclingSVG} />,
+  reply: <ImageIcon src={replySVG} />,
+  replyOutline: <ImageIcon src={replyOutlineSVG} />,
   report: <ImageIcon src={reportSVG} />,
   research: <ImageIcon src={researchSVG} />,
   revenue: <ImageIcon src={revenueSVG} />,

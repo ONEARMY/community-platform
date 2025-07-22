@@ -10,7 +10,7 @@ const combineSubscribers = async (
   ids: (number | null | undefined)[],
   usernames: string[],
   client: SupabaseClient,
-): Promise<Set<number>> => {
+): Promise<number[]> => {
   const profilesToSubscribe: number[] = ids.map((id) => Number(id))
 
   for (const username of usernames) {
@@ -24,9 +24,9 @@ const combineSubscribers = async (
     }
   }
 
-  const uniqueProfileIds = new Set([...profilesToSubscribe])
+  const uniqueIdSet = new Set([...profilesToSubscribe])
 
-  return uniqueProfileIds
+  return [...uniqueIdSet]
 }
 
 const addResearchSubscribers = async (
@@ -41,7 +41,7 @@ const addResearchSubscribers = async (
     client,
   )
   return Promise.all([
-    subscribers.forEach((subscriber) => {
+    subscribers.map((subscriber) => {
       addFunction('research', research.id, subscriber, client)
     }),
   ])
@@ -59,7 +59,7 @@ const addResearchUpdateSubscribers = async (
     client,
   )
   return Promise.all([
-    subscribers.forEach((subscriber) => {
+    subscribers.map((subscriber) => {
       addFunction('research_update', update.id, subscriber, client)
     }),
   ])
@@ -122,7 +122,7 @@ const updateResearchSubscribers = async (
     client,
   )
   return Promise.all([
-    subscribers.forEach((subscriber) => {
+    subscribers.map((subscriber) => {
       addFunction('research', newResearch.id, subscriber, client)
     }),
   ])

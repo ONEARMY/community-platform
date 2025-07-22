@@ -343,7 +343,7 @@ export const LibraryDescription = (props: IProps) => {
             }),
           },
           {
-            icon: 'megaphone-inactive',
+            icon: 'thunderbolt-grey',
             label: buildStatisticsLabel({
               stat: subscribersCount,
               statUnit: 'following',
@@ -351,7 +351,7 @@ export const LibraryDescription = (props: IProps) => {
             }),
           },
           {
-            icon: 'comment',
+            icon: 'comment-outline',
             label: buildStatisticsLabel({
               stat: commentsCount || 0,
               statUnit: 'comment',

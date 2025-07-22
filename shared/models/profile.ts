@@ -310,10 +310,13 @@ export class NotificationDisplay {
   static setSidebarIcon(contentType: NotificationContentType): string {
     switch (contentType) {
       case 'comment': {
-        return 'discussion'
+        return 'comment'
       }
       case 'reply': {
-        return 'discussion'
+        return 'comment'
+      }
+      case 'researchUpdate': {
+        return 'update'
       }
       default: {
         return 'thunderbolt'

@@ -176,7 +176,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
               }),
             },
             {
-              icon: 'megaphone-inactive',
+              icon: 'thunderbolt-grey',
               label: buildStatisticsLabel({
                 stat: subscribersCount,
                 statUnit: 'following',
@@ -192,7 +192,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
               }),
             },
             {
-              icon: 'comment',
+              icon: 'comment-outline',
               label: buildStatisticsLabel({
                 stat: question.commentCount,
                 statUnit: 'comment',

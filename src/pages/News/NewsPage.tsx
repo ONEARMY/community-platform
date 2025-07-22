@@ -127,7 +127,7 @@ export const NewsPage = observer(({ news }: IProps) => {
                   }),
                 },
                 {
-                  icon: 'megaphone-inactive',
+                  icon: 'thunderbolt-grey',
                   label: buildStatisticsLabel({
                     stat: subscribersCount,
                     statUnit: 'following',
@@ -135,7 +135,7 @@ export const NewsPage = observer(({ news }: IProps) => {
                   }),
                 },
                 {
-                  icon: 'comment',
+                  icon: 'comment-outline',
                   label: buildStatisticsLabel({
                     stat: news.commentCount,
                     statUnit: 'comment',

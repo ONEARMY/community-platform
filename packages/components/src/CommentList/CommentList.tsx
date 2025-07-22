@@ -59,7 +59,7 @@ export const CommentContainer = (props: IPropsCommentContainer) => {
           paddingRight: 2,
         }}
       >
-        <Icon glyph="arrow-curved-bottom-right" />
+        <Icon glyph="reply-outline" />
       </Box>
     )
   }

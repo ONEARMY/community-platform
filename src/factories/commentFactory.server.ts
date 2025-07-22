@@ -6,7 +6,7 @@ import type { ImageServiceServer } from 'src/services/imageService.server'
 export class CommentFactory {
   constructor(private imageService: ImageServiceServer) {}
 
-  async createComment(
+  async fromDBWithAuthor(
     dbComment: DBComment,
     replies?: Reply[],
   ): Promise<Comment> {

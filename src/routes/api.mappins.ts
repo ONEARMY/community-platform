@@ -19,32 +19,38 @@ export const loader = async ({ request }) => {
 
   // get all profile tags
 
-  const { data, error } = await client.from('map_pins').select(`
-    id,
-    profile_id,
-    country,
-    country_code,
-    administrative,
-    postcode,
-    lat,
-    lng,
-    moderation,
-    moderation_feedback,
-    profile:profiles(
+  const { data, error } = await client
+    .from('map_pins')
+    .select(
+      `
       id,
-      display_name,
-      username,
-      is_verified,
-      is_supporter,
-      photo,
-      tags:profile_tags_relations(
-        profile_tags(
-          id,
-          name
+      profile_id,
+      country,
+      country_code,
+      name,
+      administrative,
+      post_code,
+      lat,
+      lng,
+      moderation,
+      profile:profiles(
+        id,
+        type,
+        display_name,
+        username,
+        is_verified,
+        is_supporter,
+        photo,
+        tags:profile_tags_relations(
+          profile_tags(
+            id,
+            name
+          )
         )
       )
+    `,
     )
-  `)
+    .eq('moderation', 'accepted')
 
   if (!data || error) {
     console.error(error)
@@ -57,7 +63,7 @@ export const loader = async ({ request }) => {
 
   const pinsDb = data as unknown as DBMapPin[]
   const pinFactory = new MapPinFactory(client)
-  const mapPins = pinsDb.map((x) => pinFactory.createMapPin(x))
+  const mapPins = pinsDb.map((x) => pinFactory.fromDBWithProfile(x))
 
   cache.set('mappins', mapPins)
   return Response.json({ mapPins }, { headers })

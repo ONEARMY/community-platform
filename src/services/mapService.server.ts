@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { UpsertPin } from 'oa-shared'
+import type { Moderation, UpsertPin } from 'oa-shared'
 
 export class MapServiceServer {
   constructor(private client: SupabaseClient) {}
@@ -7,40 +7,92 @@ export class MapServiceServer {
   async upsert(pin: UpsertPin) {
     const existingPin = await this.client
       .from('map_pins')
-      .select('id')
+      .select('id,moderation')
       .eq('profile_id', pin.profile_id)
     const existingPinId = existingPin.data?.at(0)?.id
 
     if (existingPinId) {
-      const { data, error } = await this.client
+      const moderation: Moderation =
+        existingPin.data![0].moderation === 'accepted'
+          ? 'accepted'
+          : 'awaiting-moderation'
+
+      return await this.client
         .from('map_pins')
         .update({
           country: pin.country,
           country_code: pin.country_code,
+          name: pin.name,
           administrative: pin.administrative,
           post_code: pin.post_code,
+          moderation,
           lat: pin.lat,
           lng: pin.lng,
         })
         .eq('id', existingPinId)
-
-      if (!data || error) {
-        return { error }
-      }
+        .select(
+          `
+          id,
+          profile_id,
+          country,
+          country_code,
+          name,
+          administrative,
+          post_code,
+          lat,
+          lng,
+          moderation,
+          profile:profiles(
+            id,
+            type,
+            display_name,
+            username,
+            is_verified,
+            is_supporter,
+            photo
+          )`,
+        )
+        .single()
     } else {
-      const { data, error } = await this.client.from('map_pins').insert({
-        profile_id: pin.profile_id,
-        country: pin.country,
-        country_code: pin.country_code,
-        administrative: pin.administrative,
-        post_code: pin.post_code,
-        lat: pin.lat,
-        lng: pin.lng,
-      })
+      const moderation: Moderation = 'awaiting-moderation'
 
-      if (!data || error) {
-        return { error }
-      }
+      return await this.client
+        .from('map_pins')
+        .insert({
+          profile_id: pin.profile_id,
+          country: pin.country,
+          country_code: pin.country_code,
+          name: pin.name,
+          administrative: pin.administrative,
+          post_code: pin.post_code,
+          lat: pin.lat,
+          lng: pin.lng,
+          moderation,
+          tenant_id: process.env.TENANT_ID,
+        })
+        .select(
+          `
+          id,
+          profile_id,
+          country,
+          country_code,
+          name,
+          administrative,
+          post_code,
+          lat,
+          lng,
+          moderation,
+          profile:profiles(
+            id,
+            type,
+            display_name,
+            username,
+            is_verified,
+            is_supporter,
+            photo
+          )`,
+        )
+        .single()
     }
   }
 }

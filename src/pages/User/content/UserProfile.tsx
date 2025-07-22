@@ -115,7 +115,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
               <TabPanel value="profile">
                 <ProfileDetails
                   docs={docs}
-                  user={user}
+                  profile={user}
                   selectTab={setSelectedTab}
                 />
               </TabPanel>

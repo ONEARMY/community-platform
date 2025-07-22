@@ -50,6 +50,7 @@ export { IconCountWithTooltip } from './IconCountWithTooltip/IconCountWithToolti
 export { ImageCrop } from './ImageCrop/ImageCrop'
 export { ImageGallery } from './ImageGallery/ImageGallery'
 export { ImageInput } from './ImageInput/ImageInput'
+export { ImageInputV2 } from './ImageInput/ImageInputV2'
 export { ImageInputDeleteImage } from './ImageInput/ImageInputDeleteImage'
 export { ImageInputWrapper } from './ImageInput/ImageInputWrapper'
 export { InformationTooltip } from './InformationTooltip/InformationTooltip'
@@ -63,7 +64,10 @@ export { MemberBadge } from './MemberBadge/MemberBadge'
 export { MemberHistory } from './MemberHistory/MemberHistory'
 export { MemberTypeVerticalList } from './MemberTypeVerticalList/MemberTypeVerticalList.client'
 export { Modal } from './Modal/Modal'
-export { ModerationStatus } from './ModerationStatus/ModerationStatus'
+export {
+  ModerationStatus,
+  ModerationRecord,
+} from './ModerationStatus/ModerationStatus'
 export { MoreContainer } from './MoreContainer/MoreContainer'
 export { NotificationItem } from './NotificationItem/NotificationItem'
 export { NotificationList } from './NotificationList/NotificationList'

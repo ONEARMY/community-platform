@@ -7,7 +7,6 @@ import { act, render, waitFor, within } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
 import { GlobalStyles } from 'oa-components'
-import { Moderation } from 'oa-shared'
 import { preciousPlasticTheme } from 'oa-themes'
 import {
   FactoryLibraryItem,
@@ -61,8 +60,8 @@ describe('Library', () => {
         photoUrl: faker.image.avatar(),
         username: faker.internet.userName(),
       }
-      item.moderation = Moderation.AWAITING_MODERATION
-      item.moderatonFeedback = 'Moderation comments'
+      item.moderation = 'awaiting-moderation'
+      item.moderationFeedback = 'Moderation comments'
 
       act(() => {
         wrapper = factory()
@@ -75,8 +74,8 @@ describe('Library', () => {
 
     it('hides feedback when project is accepted', async () => {
       let wrapper
-      item.moderation = Moderation.ACCEPTED
-      item.moderatonFeedback = 'Moderation comments'
+      item.moderation = 'accepted'
+      item.moderationFeedback = 'Moderation comments'
 
       await act(async () => {
         wrapper = factory()
@@ -98,7 +97,7 @@ describe('Library', () => {
       username: faker.internet.userName(),
     }
     item.steps = [FactoryLibraryItemStep({})]
-    item.moderation = Moderation.ACCEPTED
+    item.moderation = 'accepted'
     item.totalViews = 0
     item.usefulCount = 0
     item.commentCount = 0

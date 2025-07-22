@@ -78,9 +78,9 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const commentWithReplies = (commentsByParentId[0] ?? []).map(
     (mainComment: DBComment) => {
       const replies: Reply[] = (commentsByParentId[mainComment.id] ?? []).map(
-        (reply: DBComment) => commentFactory.createComment(reply, []),
+        (reply: DBComment) => commentFactory.fromDBWithAuthor(reply, []),
       )
-      return commentFactory.createComment(
+      return commentFactory.fromDBWithAuthor(
         mainComment,
         replies.filter((x) => !x.deleted).sort((a, b) => a.id - b.id),
       )
@@ -180,7 +180,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   })
 
   const commentFactory = new CommentFactory(new ImageServiceServer(client))
-  const comment = commentFactory.createComment(commentDb)
+  const comment = commentFactory.fromDBWithAuthor(commentDb)
 
   return Response.json(comment, {
     headers,

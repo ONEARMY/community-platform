@@ -1,7 +1,7 @@
 import { ProfileTag } from './profileTag'
 
 import type { Comment } from './comment'
-import type { IConvertedFileMeta, SubscribableContentTypes } from './common'
+import type { SubscribableContentTypes } from './common'
 import type { IDBDocSB, IDoc } from './document'
 import type { DBMedia, Image } from './media'
 import type { IDBModeration, IModeration, Moderation } from './moderation'
@@ -70,7 +70,6 @@ export class Profile {
   coverImages: Image[] | null
   patreon: IPatreonUser | null
   authorUsefulVotes?: AuthorVotes[]
-  pin?: MapPin
 
   constructor(obj: Profile) {
     Object.assign(this, obj)
@@ -105,20 +104,6 @@ export class Profile {
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
       tags: dbProfile.tags?.map((x) => ProfileTag.fromDB(x)),
-      pin: dbProfile.pin
-        ? new MapPin({
-            id: dbProfile.pin.id,
-            lat: dbProfile.pin.lat,
-            lng: dbProfile.pin.lng,
-            moderation: dbProfile.pin.moderation,
-            administrative: dbProfile.pin.administrative,
-            country: dbProfile.pin.country,
-            countryCode: dbProfile.pin.country_code,
-            postCode: dbProfile.pin.post_code,
-            profile: null,
-            profileId: dbProfile.pin.profile_id,
-          })
-        : undefined,
     })
   }
 }
@@ -458,13 +443,14 @@ export type ProfileFormData = {
   website: string
   isContactable: boolean
   type: ProfileTypeName
-  photo?: IConvertedFileMeta
+  photo?: File
   existingPhoto?: Image
+  existingCoverImages?: Image[]
   existingCoverImageIds?: string[]
-  coverImages?: IConvertedFileMeta[]
+  coverImages?: File[]
   showVisitorPolicy: boolean
-  visitorPreferencePolicy: UserVisitorPreference['policy']
-  visitorPreferenceDetails: UserVisitorPreference['details']
+  visitorPreferencePolicy?: UserVisitorPreference['policy']
+  visitorPreferenceDetails?: UserVisitorPreference['details']
 }
 
 export class DBMapPin implements IDBModeration {
@@ -473,6 +459,7 @@ export class DBMapPin implements IDBModeration {
   profile_id: number
   country: string // check if necessary
   country_code: string
+  name: string | null
   administrative: string | null
   post_code: string | null
   lat: number
@@ -487,12 +474,13 @@ export class MapPin implements IModeration {
   readonly profile: PinProfile | null
   country: string
   countryCode: string
+  name: string | null
   administrative: string | null
   postCode: string | null
   lat: number
   lng: number
   moderation: Moderation
-  moderatonFeedback?: string
+  moderationFeedback?: string
 
   constructor(obj: MapPin) {
     Object.assign(this, obj)

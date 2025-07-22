@@ -1,6 +1,6 @@
 export interface IModeration {
   moderation: Moderation
-  moderatonFeedback?: string
+  moderationFeedback?: string
 }
 
 export interface IDBModeration {

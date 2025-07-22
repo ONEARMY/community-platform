@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { useNavigate } from 'react-router'
 import { Link } from '@remix-run/react'
@@ -10,6 +10,7 @@ import {
   Icon,
   Loader,
   MapWithPin,
+  ModerationRecord,
 } from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
 import {
@@ -21,27 +22,22 @@ import {
 import { profileService } from 'src/services/profileService'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { getLocationData } from 'src/utils/getLocationData'
-import { randomIntFromInterval } from 'src/utils/helpers'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
-import { Alert, Box, Card, Flex, Heading, Text } from 'theme-ui'
+import { Alert, Card, Flex, Heading, Text } from 'theme-ui'
 
 import { createMarkerIcon } from '../Maps/Content/MapView/Sprites'
 import { mapPinService } from '../Maps/map.service'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 
 import type { DivIcon } from 'leaflet'
-import type { ILatLng, MapPin, Profile } from 'oa-shared'
+import type { ILatLng, MapPin } from 'oa-shared'
 import type { Map } from 'react-leaflet'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
-interface IPinProps {
-  mapPin?: MapPin
-}
-
-const LocationDataTextDisplay = ({ user }: { user: Profile }) => {
+const LocationDataTextDisplay = ({ pin }: { pin?: MapPin }) => {
   const navigate = useNavigate()
 
-  if (!user.pin)
+  if (!pin)
     return (
       <Text
         variant="paragraph"
@@ -60,60 +56,127 @@ const LocationDataTextDisplay = ({ user }: { user: Profile }) => {
         data-testid="LocationDataTextDisplay"
       >
         {mapForm.locationLabel}
-        <br />
-        {user?.displayName}{' '}
-        <FlagIconEvents
-          countryCode={user.pin.countryCode}
-          title={user.pin.countryCode}
-        />
-        <br />
+        <Flex sx={{ gap: 1 }}>
+          {pin.name}
+          <FlagIconEvents
+            countryCode={pin.countryCode}
+            title={pin.countryCode}
+          />
+        </Flex>
       </Text>
-      <Button
-        onClick={() => navigate(`/map#${user.username}`)}
-        sx={{ alignSelf: 'flex-start' }}
-        icon="map"
-        variant="secondary"
-      >
-        See your pin on the map
-      </Button>
+      {pin.moderation !== 'accepted' ? (
+        <>
+          <Alert variant="warning" sx={{ gap: 1 }}>
+            <Text sx={{ fontSize: 1 }}>
+              Your pin status is {ModerationRecord[pin.moderation]}
+            </Text>
+            {pin.moderationFeedback && (
+              <>
+                {' - '}
+                <Text sx={{ fontSize: 1 }}>
+                  Moderator feedback:{' '}
+                  <Text sx={{ fontWeight: 'bold' }}>
+                    {pin.moderationFeedback}
+                  </Text>
+                </Text>
+              </>
+            )}
+          </Alert>
+        </>
+      ) : (
+        <Button
+          onClick={() => navigate(`/map#${pin.profile!.username}`)}
+          sx={{ alignSelf: 'flex-start' }}
+          icon="map"
+          variant="secondary"
+        >
+          See your pin on the map
+        </Button>
+      )}
     </>
   )
 }
 
-const MapPinModerationComments = ({ mapPin }: IPinProps) => {
-  if (
-    !mapPin ||
-    !mapPin.moderatonFeedback ||
-    mapPin.moderation !== 'improvements-needed'
-  ) {
-    return null
+export const SettingsPageMapPin = () => {
+  const communityProgramUrl =
+    import.meta.env.VITE_COMMUNITY_PROGRAM_URL ||
+    process.env.VITE_COMMUNITY_PROGRAM_URL
+  const [mapPin, setMapPin] = useState<MapPin | undefined>()
+  const [markerIcon, setMarkerIcon] = useState<DivIcon>()
+  const [isLoading, setIsLoading] = useState(true)
+  const [notification, setNotification] = useState<
+    IFormNotification | undefined
+  >(undefined)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const newMapRef = useRef<Map>(null)
+
+  const { profile } = useProfileStore()
+
+  const isMember = profile?.type === ProfileTypeList.MEMBER
+  const { addPinTitle, yourPinTitle } = headings.map
+  const formId = 'MapSection'
+
+  const initialValues = useMemo<{ location: ILatLng | null }>(() => {
+    if (!mapPin) {
+      return { location: null }
+    }
+    return {
+      location: {
+        lat: mapPin?.lat,
+        lng: mapPin?.lng,
+      },
+    }
+  }, [mapPin])
+
+  useEffect(() => {
+    const init = async () => {
+      if (!profile) {
+        return
+      }
+
+      const pin = await mapPinService.getMapPinById(profile.id)
+
+      if (pin) {
+        setMapPin(pin)
+        setMarkerIcon(createMarkerIcon(pin, true))
+      }
+      setIsLoading(false)
+    }
+
+    init()
+  }, [profile, notification])
+
+  const onSubmit = async (obj: { location: ILatLng }) => {
+    setIsLoading(true)
+
+    try {
+      const pinData = await getLocationData(obj.location)
+      const newPin = await profileService.upsertPin(pinData)
+      setMapPin(newPin)
+
+      setNotification({
+        message: mapForm.successfulSave,
+        icon: 'check',
+        show: true,
+        variant: 'success',
+      })
+    } catch (error) {
+      setNotification({
+        message: `Save Failed - ${error.message} `,
+        icon: 'close',
+        show: true,
+        variant: 'failure',
+      })
+    }
+    setIsLoading(false)
   }
-
-  return (
-    <Alert variant="info" sx={{ fontSize: 2, textAlign: 'left' }}>
-      <Box>
-        {mapForm.needsChanges}
-        <br />
-        <em>{mapPin?.moderatonFeedback}</em>
-      </Box>
-    </Alert>
-  )
-}
-
-interface IPropsDeletePin {
-  setIsLoading: (arg: boolean) => void
-  setNotification: (arg: IFormNotification) => void
-  user: Profile
-}
-
-const DeleteMapPin = (props: IPropsDeletePin) => {
-  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false)
-  const { setIsLoading, setNotification } = props
 
   const onSubmitDelete = async () => {
     setIsLoading(true)
     try {
       await profileService.deletePin()
+      setMapPin(undefined)
+
       setNotification({
         message: mapForm.successfulDelete,
         icon: 'check',
@@ -131,98 +194,8 @@ const DeleteMapPin = (props: IPropsDeletePin) => {
     setIsLoading(false)
   }
 
-  return (
-    <>
-      <ConfirmModal
-        isOpen={showConfirmModal}
-        message={mapForm.confirmDeletePin}
-        confirmButtonText={buttons.removePin}
-        handleCancel={() => setShowConfirmModal(false)}
-        handleConfirm={onSubmitDelete}
-        width={450}
-      />
-      <Button
-        type="button"
-        onClick={() => setShowConfirmModal(true)}
-        data-cy="remove-map-pin"
-        variant="destructive"
-        sx={{ alignSelf: 'flex-start' }}
-        icon="delete"
-      >
-        {buttons.removePin}
-      </Button>
-    </>
-  )
-}
-
-export const SettingsPageMapPin = () => {
-  const communityProgramUrl =
-    import.meta.env.VITE_COMMUNITY_PROGRAM_URL ||
-    process.env.VITE_COMMUNITY_PROGRAM_URL
-  const [mapPin, setMapPin] = useState<MapPin | undefined>()
-  const [markerIcon, setMarkerIcon] = useState<DivIcon>()
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [notification, setNotification] = useState<
-    IFormNotification | undefined
-  >(undefined)
-
-  const newMapRef = useRef<Map>(null)
-
-  const { profile } = useProfileStore()
-
   if (!profile) {
     return null
-  }
-
-  const isMember = profile?.type === ProfileTypeList.MEMBER
-  const { addPinTitle, yourPinTitle } = headings.map
-  const formId = 'MapSection'
-
-  const initialValues: ILatLng = {
-    lat: profile.pin?.lat || randomIntFromInterval(-90, 90),
-    lng: profile.pin?.lng || randomIntFromInterval(-180, 180),
-  }
-
-  useEffect(() => {
-    const init = async () => {
-      if (!profile) {
-        return
-      }
-
-      const pin = await mapPinService.getMapPinByUsername(profile.username)
-
-      if (pin) {
-        setMapPin(pin)
-        setMarkerIcon(createMarkerIcon(pin, true))
-      }
-      setIsLoading(false)
-    }
-
-    init()
-  }, [profile, notification])
-
-  const onSubmit = async ({ latLng }: { latLng: ILatLng }) => {
-    setIsLoading(true)
-
-    try {
-      const pinData = await getLocationData(latLng)
-      await profileService.upsertPin(pinData)
-
-      setNotification({
-        message: mapForm.successfulSave,
-        icon: 'check',
-        show: true,
-        variant: 'success',
-      })
-    } catch (error) {
-      setNotification({
-        message: `Save Failed - ${error.message} `,
-        icon: 'close',
-        show: true,
-        variant: 'failure',
-      })
-    }
-    setIsLoading(false)
   }
 
   return (
@@ -247,7 +220,7 @@ export const SettingsPageMapPin = () => {
           </Text>
         )}
 
-        {!isMember && (
+        {!isMember && mapPin?.moderation !== 'accepted' && (
           <Text
             variant="quiet"
             data-cy="descriptionSpace"
@@ -267,13 +240,18 @@ export const SettingsPageMapPin = () => {
         )}
       </Flex>
 
-      <MapPinModerationComments mapPin={mapPin} />
       {isProfileComplete(profile) ? (
         <Form
           id={formId}
           onSubmit={onSubmit}
           initialValues={initialValues}
-          render={({ errors, submitFailed, submitting, handleSubmit }) => {
+          render={({
+            values,
+            errors,
+            submitFailed,
+            submitting,
+            handleSubmit,
+          }) => {
             if (isLoading)
               return (
                 <Loader label={mapForm.loading} sx={{ alignSelf: 'center' }} />
@@ -287,7 +265,7 @@ export const SettingsPageMapPin = () => {
                   submitFailed={submitFailed}
                 />
 
-                <LocationDataTextDisplay user={profile} />
+                <LocationDataTextDisplay pin={mapPin} />
 
                 <Field
                   name="location"
@@ -298,10 +276,9 @@ export const SettingsPageMapPin = () => {
                       <MapWithPin
                         mapRef={newMapRef}
                         position={{ lat: value.lat, lng: value.lng }}
-                        updatePosition={(newPosition: ILatLng) => {
-                          console.log(newPosition)
+                        updatePosition={(newPosition: ILatLng) =>
                           onChange(newPosition)
-                        }}
+                        }
                         markerIcon={markerIcon}
                         zoom={2}
                         center={[0, 0]}
@@ -310,23 +287,41 @@ export const SettingsPageMapPin = () => {
                   }}
                 />
 
-                <Button
-                  type="submit"
-                  form={formId}
-                  data-cy="save-map-pin"
-                  variant="primary"
-                  onClick={handleSubmit}
-                  disabled={submitting}
-                  sx={{ alignSelf: 'flex-start' }}
-                >
-                  {buttons.editPin}
-                </Button>
-
-                <DeleteMapPin
-                  setIsLoading={setIsLoading}
-                  setNotification={setNotification}
-                  user={profile}
-                />
+                {values.location && (
+                  <Button
+                    type="submit"
+                    form={formId}
+                    data-cy="save-map-pin"
+                    variant="primary"
+                    onClick={handleSubmit}
+                    disabled={submitting}
+                    sx={{ alignSelf: 'flex-start' }}
+                  >
+                    {buttons.editPin}
+                  </Button>
+                )}
+                {mapPin && (
+                  <>
+                    <ConfirmModal
+                      isOpen={showConfirmModal}
+                      message={mapForm.confirmDeletePin}
+                      confirmButtonText={buttons.removePin}
+                      handleCancel={() => setShowConfirmModal(false)}
+                      handleConfirm={onSubmitDelete}
+                      width={450}
+                    />
+                    <Button
+                      type="button"
+                      onClick={() => setShowConfirmModal(true)}
+                      data-cy="remove-map-pin"
+                      variant="destructive"
+                      sx={{ alignSelf: 'flex-start' }}
+                      icon="delete"
+                    >
+                      {buttons.removePin}
+                    </Button>
+                  </>
+                )}
               </>
             )
           }}

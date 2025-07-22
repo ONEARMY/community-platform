@@ -66,6 +66,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         ? formData.getAll('tagIds').map((x) => Number(x))
         : null,
       website: formData.get('website'),
+      photo: formData.get('photo') as File,
+      coverImages: formData.getAll('coverImages') as File[],
     } as ProfileFormData
 
     const {
@@ -93,16 +95,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw new Error('profile not found')
     }
 
-    const photo = formData.get('photo') as File
-    const coverImages = formData.getAll('coverImages') as File[]
-
     const profileService = new ProfileServiceServer(client)
-    const profile = await profileService.updateProfile(
-      profileData?.id,
-      data,
-      photo,
-      coverImages,
-    )
+    const profile = await profileService.updateProfile(profileData?.id, data)
 
     return Response.json(profile, { headers, status: 200 })
   } catch (error) {

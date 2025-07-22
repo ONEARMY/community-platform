@@ -3,6 +3,9 @@
 // This is more consistent than others and allows better querying
 export type ISODateString = string
 
+/**
+ * @deprecated Use the native File instead. See ImageInputV2. Should no longer "convert" images client side.
+ */
 export interface IConvertedFileMeta {
   photoData: File
   objectUrl: string

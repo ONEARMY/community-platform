@@ -1,15 +1,16 @@
+import { MapPinFactory } from 'src/factories/mapPinFactory.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { MapServiceServer } from 'src/services/mapService.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
-import type { DBProfile, UpsertPin } from 'shared/lib'
+import type { DBMapPin, DBProfile, UpsertPin } from 'shared/lib'
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  try {
-    const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request)
 
+  try {
     const {
       data: { user },
     } = await client.auth.getUser()
@@ -30,17 +31,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const formData = await request.formData()
-    const data = {
+    const data: UpsertPin = {
       name: formData.get('name') as string,
       country: formData.get('country') as string,
       country_code: formData.get('countryCode') as string,
       administrative: formData.get('administrative') as string,
-      post_code: formData.get('postcode') as string,
-      description: formData.get('description') as string,
+      post_code: formData.get('postCode') as string,
       lat: Number(formData.get('lat')),
       lng: Number(formData.get('lng')),
       profile_id: profile.id,
-    } as UpsertPin
+    }
 
     const { valid, status, statusText } = await validateRequest(
       request,
@@ -57,15 +57,23 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     if (result?.error) {
       console.error(result.error)
-      return Response.json({}, { headers, status: 500 })
+      return Response.json(
+        {},
+        { headers, status: 500, statusText: 'Error saving map pin' },
+      )
     }
 
-    return Response.json({}, { headers, status: 200 })
+    const pinFactory = new MapPinFactory(client)
+    const mapPin = pinFactory.fromDBWithProfile(
+      result.data as unknown as DBMapPin,
+    )
+
+    return Response.json({ mapPin }, { headers, status: 200 })
   } catch (error) {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error creating research' },
+      { status: 500, statusText: 'Error creatsavinging map pin', headers },
     )
   }
 }
@@ -104,7 +112,7 @@ async function deletePin(request: Request, profile: DBProfile) {
   const { error } = await client
     .from('map_pins')
     .delete()
-    .eq('user_id', profile.id)
+    .eq('profile_id', profile.id)
 
   if (error) {
     console.error(error)

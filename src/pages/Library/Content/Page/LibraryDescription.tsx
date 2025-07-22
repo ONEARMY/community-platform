@@ -185,13 +185,13 @@ export const LibraryDescription = (props: IProps) => {
               </Flex>
             )}
           </Flex>
-          {item.moderatonFeedback && item.moderation !== 'accepted' && (
+          {item.moderationFeedback && item.moderation !== 'accepted' && (
             <Alert variant="info">
               <Box sx={{ textAlign: 'left' }}>
                 <Heading as="p" variant="small">
                   Moderator Feedback
                 </Heading>
-                <Text sx={{ fontSize: 2 }}>{item.moderatonFeedback}</Text>
+                <Text sx={{ fontSize: 2 }}>{item.moderationFeedback}</Text>
               </Box>
             </Alert>
           )}

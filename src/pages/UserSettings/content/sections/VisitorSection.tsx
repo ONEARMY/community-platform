@@ -12,7 +12,7 @@ import { fields, headings } from '../../labels'
 import type { Profile, UserVisitorPreferencePolicy } from 'oa-shared'
 
 interface Props {
-  openToVisitors: Profile['openToVisitors']
+  openToVisitors?: Partial<Profile['openToVisitors']>
 }
 
 const visitorPolicyOptions = userVisitorPreferencePolicies.map((policy) => ({

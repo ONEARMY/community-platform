@@ -1,4 +1,4 @@
-import { MapPin, Profile, ProfileTag } from 'oa-shared'
+import { Profile, ProfileTag } from 'oa-shared'
 import { ImageServiceServer } from 'src/services/imageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -43,20 +43,6 @@ export class ProfileFactory {
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
       tags: dbProfile.tags?.map((x) => ProfileTag.fromDB(x)),
-      pin: dbProfile.pin
-        ? new MapPin({
-            id: dbProfile.pin.id,
-            lat: dbProfile.pin.lat,
-            lng: dbProfile.pin.lng,
-            moderation: dbProfile.pin.moderation,
-            administrative: dbProfile.pin.administrative,
-            country: dbProfile.pin.country,
-            countryCode: dbProfile.pin.country_code,
-            postCode: dbProfile.pin.post_code,
-            profile: null,
-            profileId: dbProfile.pin.profile_id,
-          })
-        : undefined,
     })
   }
 }

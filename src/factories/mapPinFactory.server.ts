@@ -10,12 +10,11 @@ export class MapPinFactory {
     this.imageService = new ImageServiceServer(client)
   }
 
-  createMapPin(pin: DBMapPin): MapPin {
-    const profile = this.createPinProfile(pin.profile)
-
+  fromDB(pin: DBMapPin): MapPin {
     return new MapPin({
       id: pin.id,
       administrative: pin.administrative,
+      name: pin.name,
       country: pin.country,
       countryCode: pin.country_code,
       lat: pin.lat,
@@ -23,7 +22,26 @@ export class MapPinFactory {
       moderation: pin.moderation,
       postCode: pin.post_code,
       profileId: pin.profile_id,
-      moderatonFeedback: pin.moderation_feedback,
+      moderationFeedback: pin.moderation_feedback,
+      profile: null,
+    })
+  }
+
+  fromDBWithProfile(pin: DBMapPin): MapPin {
+    const profile = this.createPinProfile(pin.profile)
+
+    return new MapPin({
+      id: pin.id,
+      administrative: pin.administrative,
+      name: pin.name,
+      country: pin.country,
+      countryCode: pin.country_code,
+      lat: pin.lat,
+      lng: pin.lng,
+      moderation: pin.moderation,
+      postCode: pin.post_code,
+      profileId: pin.profile_id,
+      moderationFeedback: pin.moderation_feedback,
       profile,
     })
   }

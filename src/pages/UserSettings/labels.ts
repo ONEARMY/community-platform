@@ -42,7 +42,7 @@ export const fields: ILabels = {
       "Describe in details what you do and who you are. Write in English otherwise your profile won't be approved.",
   },
   country: {
-    title: 'Your location',
+    title: 'Country',
     description:
       "Thought about adding yourself to our map? If you do, we'll automatically set this field.",
   },

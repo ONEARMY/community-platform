@@ -111,12 +111,7 @@ export class ProfileServiceServer {
     return data as DBAuthorVotes[]
   }
 
-  async updateProfile(
-    id: number,
-    values: ProfileFormData,
-    photo?: File,
-    coverImages?: File[],
-  ) {
+  async updateProfile(id: number, values: ProfileFormData) {
     const imageService = new ImageServiceServer(this.client)
     const valuesToUpdate = {
       about: values.about,
@@ -125,10 +120,17 @@ export class ProfileServiceServer {
       website: values.website,
       is_contactable: values.isContactable,
       tag_ids: values.tagIds,
+      type: values.type,
+      open_to_visitors: values.visitorPreferencePolicy
+        ? {
+            policy: values.visitorPreferencePolicy,
+            details: values.visitorPreferenceDetails,
+          }
+        : null,
     } as Partial<DBProfile>
 
     const existingProfile = await this.getById(id)
-    if (photo) {
+    if (values.photo) {
       const currentImagePath = existingProfile?.photo?.path
 
       // remove current photo first
@@ -136,7 +138,10 @@ export class ProfileServiceServer {
         await imageService.removeImages([currentImagePath])
       }
 
-      const newPhoto = await imageService.uploadImage([photo], `profiles/${id}`)
+      const newPhoto = await imageService.uploadImage(
+        [values.photo],
+        `profiles/${id}`,
+      )
 
       if (!newPhoto || newPhoto?.errors?.length) {
         console.error(newPhoto?.errors)
@@ -165,9 +170,9 @@ export class ProfileServiceServer {
 
     let updatedCoverImages = imagesToKeep || []
 
-    if (coverImages?.length) {
+    if (values.coverImages?.length) {
       const newCoverImages = await imageService.uploadImage(
-        coverImages,
+        values.coverImages,
         `profiles/${id}`,
       )
 

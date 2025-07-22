@@ -1,6 +1,11 @@
 import { logger } from 'src/logger'
 
-import type { MapPinFormData, Profile, ProfileFormData } from 'oa-shared'
+import type {
+  MapPin,
+  MapPinFormData,
+  Profile,
+  ProfileFormData,
+} from 'oa-shared'
 
 const get = async () => {
   try {
@@ -14,11 +19,7 @@ const get = async () => {
   }
 }
 
-const update = async (
-  value: ProfileFormData,
-  photo?: File,
-  coverImages?: File[],
-) => {
+const update = async (value: ProfileFormData) => {
   const url = new URL('/api/profile', window.location.origin)
   const data = new FormData()
 
@@ -30,10 +31,10 @@ const update = async (
   data.append('showVisitorPolicy', value.showVisitorPolicy.toString())
   data.append('website', value.website)
 
-  if (value.existingCoverImageIds && value.existingCoverImageIds?.length > 0) {
-    for (const image of value.existingCoverImageIds) {
+  if (value.existingCoverImages && value.existingCoverImages?.length > 0) {
+    for (const image of value.existingCoverImages) {
       if (image) {
-        data.append('existingCoverImageIds', image)
+        data.append('existingCoverImageIds', image.id)
       }
     }
   }
@@ -56,12 +57,12 @@ const update = async (
   }
 
   if (value.photo) {
-    data.append('photo', value.photo.photoData, value.photo.name)
+    data.append('photo', value.photo, value.photo.name)
   }
 
-  if (coverImages?.length) {
-    for (let i = 0; i < coverImages.length; i++) {
-      data.append('coverImages', coverImages[i])
+  if (value.coverImages?.length) {
+    for (let i = 0; i < value.coverImages.length; i++) {
+      data.append('coverImages', value.coverImages[i])
     }
   }
 
@@ -73,15 +74,16 @@ const update = async (
   const result = (await response.json()) as Profile | null
 
   if (!response.ok || !result) {
-    throw new Error('Failed to update profile')
+    throw new Error(response.statusText || 'Failed to update profile')
   }
 
   return result
 }
 
-const upsertPin = async (pin: MapPinFormData) => {
+const upsertPin = async (pin: MapPinFormData): Promise<MapPin> => {
   const data = new FormData()
 
+  data.append('name', pin.name)
   data.append('country', pin.country)
   data.append('countryCode', pin.countryCode)
   data.append('administrative', pin.administrative || '')
@@ -94,13 +96,23 @@ const upsertPin = async (pin: MapPinFormData) => {
     body: data,
   })
 
-  return await response.json()
+  if (!response.ok) {
+    throw new Error(response.statusText)
+  }
+
+  const { mapPin } = await response.json()
+
+  return mapPin as MapPin
 }
 
 const deletePin = async () => {
   const response = await fetch(`/api/settings/map`, {
     method: 'DELETE',
   })
+
+  if (!response.ok) {
+    throw new Error(response.statusText)
+  }
 
   return await response.json()
 }

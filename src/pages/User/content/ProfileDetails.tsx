@@ -10,12 +10,12 @@ import type { Profile, UserCreatedDocs } from 'oa-shared'
 
 interface IProps {
   docs: UserCreatedDocs
-  user: Profile
+  profile: Profile
   selectTab: (target: string) => void
 }
 
-export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
-  const { about, tags, pin, openToVisitors, username } = user
+export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
+  const { about, tags, openToVisitors, username } = profile
   const [showVisitorModal, setShowVisitorModal] = useState(false)
 
   const hideVisitorDetails = (target?: string) => {
@@ -31,15 +31,18 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
     MODULE.MAP,
   )
 
-  const country = isMapModule ? pin?.country : undefined
+  const country = isMapModule ? profile?.country : undefined
 
   const userTotalUseful = useMemo(() => {
-    if (!user?.authorUsefulVotes) {
+    if (!profile?.authorUsefulVotes) {
       return 0
     }
 
-    return user.authorUsefulVotes.reduce((sum, vote) => sum + vote.voteCount, 0)
-  }, [user.authorUsefulVotes])
+    return profile.authorUsefulVotes.reduce(
+      (sum, vote) => sum + vote.voteCount,
+      0,
+    )
+  }, [profile.authorUsefulVotes])
 
   return (
     <Box style={{ height: '100%' }}>
@@ -66,7 +69,7 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
             <VisitorModal
               show={showVisitorModal}
               hide={hideVisitorDetails}
-              user={user}
+              user={profile}
             />
           )}
         </Flex>
@@ -87,8 +90,8 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
               <UserStatistics
                 userName={username}
                 country={country}
-                isVerified={!!user.isVerified}
-                isSupporter={!!user.isSupporter}
+                isVerified={!!profile.isVerified}
+                isSupporter={!!profile.isSupporter}
                 libraryCount={docs?.projects.length || 0}
                 usefulCount={userTotalUseful}
                 researchCount={docs?.research.length || 0}
@@ -100,12 +103,12 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
             <UserStatistics
               userName={username}
               country={country}
-              isVerified={!!user.isVerified}
-              isSupporter={!!user.isSupporter}
+              isVerified={!!profile.isVerified}
+              isSupporter={!!profile.isSupporter}
               libraryCount={docs?.projects.length || 0}
               usefulCount={userTotalUseful}
               researchCount={docs?.research.length || 0}
-              totalViews={user.totalViews || 0}
+              totalViews={profile.totalViews || 0}
               questionCount={docs?.questions.length || 0}
             />
           </AuthWrapper>

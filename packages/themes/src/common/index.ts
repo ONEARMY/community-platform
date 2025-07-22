@@ -134,5 +134,10 @@ export const baseTheme = {
       backgroundColor: commonStyles.colors.softblue,
       color: commonStyles.colors.black,
     },
+    warning: {
+      ...commonStyles.alert,
+      backgroundColor: commonStyles.colors.activeYellow,
+      color: commonStyles.colors.black,
+    },
   },
 }

@@ -1,3 +1,4 @@
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { NavLink } from '@remix-run/react'
 import { observer } from 'mobx-react'
@@ -8,6 +9,8 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { Box, Flex } from 'theme-ui'
 
+import { MenusContext } from '../../MenusContext'
+
 // TODO: Remove direct usage of Theme
 const theme = preciousPlasticTheme.styles
 
@@ -16,7 +19,7 @@ const ModalContainer = styled(Box)`
   max-height: 100%;
   position: absolute;
   right: 10px;
-  top: 60px;
+  top: 70px;
   z-index: ${theme.zIndex.modalProfile};
   height: 100%;
 `
@@ -40,8 +43,19 @@ const ModalLink = styled(NavLink)`
   }
 `
 
-export const ProfileModal = observer(() => {
+interface IProps {
+  onClose: () => void
+}
+
+export const ProfileModal = observer(({ onClose }: IProps) => {
   const { userStore } = useCommonStores().stores
+  const menusContext = useContext(MenusContext)
+
+  const onClick = () => {
+    menusContext.closeAll()
+    onClose()
+  }
+
   return (
     <ModalContainer data-cy="user-menu-list">
       <Flex
@@ -56,6 +70,7 @@ export const ProfileModal = observer(() => {
         }}
       >
         <ModalLink
+          onClick={onClick}
           to={'/u/' + userStore.activeUser?.userName}
           data-cy="menu-Profile"
           className={({ isActive }) => (isActive ? 'current' : '')}
@@ -65,6 +80,7 @@ export const ProfileModal = observer(() => {
         {COMMUNITY_PAGES_PROFILE.map((page) => (
           <AuthWrapper key={page.path}>
             <ModalLink
+              onClick={onClick}
               to={page.path}
               data-cy={`menu-${page.title}`}
               className={({ isActive }) => (isActive ? 'current' : '')}
@@ -80,6 +96,7 @@ export const ProfileModal = observer(() => {
           }}
         >
           <ReturnPathLink
+            onClick={onClick}
             data-cy="menu-Logout"
             to="/logout"
             style={{ color: 'black' }}

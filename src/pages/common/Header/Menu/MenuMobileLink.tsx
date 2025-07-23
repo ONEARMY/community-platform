@@ -1,10 +1,10 @@
-import React from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { NavLink } from '@remix-run/react'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 import { Box } from 'theme-ui'
 
-import { MobileMenuContext } from '../../MobileMenuContext'
+import { MenusContext } from '../MenusContext'
 
 interface IProps {
   path: string
@@ -48,14 +48,14 @@ const MenuLink = styled(NavLink)`
 `
 
 const MenuMobileLink = (props: IProps) => {
-  const mobileMenuContext = React.useContext(MobileMenuContext)
+  const menusContext = useContext(MenusContext)
 
   return (
     <PanelItem data-cy="mobile-menu-item">
       <MenuLink
         to={props.path}
         onClick={() => {
-          mobileMenuContext.setIsVisible(false)
+          menusContext.closeAll()
           if (props.onClick) {
             props.onClick()
           }

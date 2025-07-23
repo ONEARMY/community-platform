@@ -48,12 +48,10 @@ export default function Index() {
             data-cy="page-container"
           >
             <Analytics />
-            <ClientOnly fallback={<></>}>{() => <DevSiteHeader />}</ClientOnly>
             <Header />
+            <ClientOnly fallback={<></>}>{() => <DevSiteHeader />}</ClientOnly>
             <Alerts />
-
             <Outlet />
-
             <GlobalSiteFooter />
             <ClientOnly fallback={<></>}>{() => <StickyButton />}</ClientOnly>
           </Flex>

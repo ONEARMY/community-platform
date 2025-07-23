@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import {
   Icon,
   NotificationListSupabase,
@@ -7,14 +7,19 @@ import {
 import { NotificationsContext } from 'src/pages/common/NotificationsContext'
 import { Box } from 'theme-ui'
 
+import { MenusContext } from './MenusContext'
+
 interface IProps {
-  device: 'desktop' | 'mobile'
+  isOpen: boolean
+  onOpen: () => void
 }
 
-export const NotificationsSupabase = ({ device }: IProps) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
+export const Notifications = (props: IProps) => {
   const { notifications, isUpdatingNotifications, updateNotifications } =
     useContext(NotificationsContext)
+  const menusContext = useContext(MenusContext)
+
+  const { isOpen, onOpen } = props
 
   if (!notifications?.length) {
     return <></>
@@ -34,7 +39,7 @@ export const NotificationsSupabase = ({ device }: IProps) => {
     notifications.length === 0 ||
     notifications?.filter(({ isRead }) => isRead === false).length === 0
 
-  const onClick = () => setIsOpen(!isOpen)
+  const onClick = () => (isOpen ? menusContext.closeAll() : onOpen())
 
   const iconProps = {
     onClick,
@@ -48,7 +53,7 @@ export const NotificationsSupabase = ({ device }: IProps) => {
   }
 
   return (
-    <Box data-cy={`NotificationsSupabase-${device}`}>
+    <Box data-cy="NotificationsSupabase">
       {isNoNewNotifications && (
         <Icon
           data-cy="notifications-no-new-messages"
@@ -68,7 +73,7 @@ export const NotificationsSupabase = ({ device }: IProps) => {
           isUpdatingNotifications={isUpdatingNotifications}
           markAllRead={markAllRead}
           markRead={markRead}
-          modalDismiss={onClick}
+          modalDismiss={menusContext.closeAll}
           notifications={notifications}
         />
       </NotificationsModal>

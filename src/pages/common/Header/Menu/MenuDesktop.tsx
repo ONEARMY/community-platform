@@ -43,7 +43,12 @@ export const MenuDesktop = () => {
   const env = useContext(EnvironmentContext)
 
   return (
-    <Flex sx={{ alignItems: 'center', width: '100%' }}>
+    <Flex
+      sx={{
+        display: ['none', 'none', 'flex'],
+        paddingLeft: '170px',
+      }}
+    >
       {getAvailablePageList(
         getSupportedModules(env?.VITE_SUPPORTED_MODULES || ''),
       ).map((page) => (

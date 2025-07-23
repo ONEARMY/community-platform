@@ -20,36 +20,34 @@ export const NotificationsModal = (props: Props) => {
           animate={visible}
           exit={hidden}
           style={{
+            backgroundColor: 'white',
             position: 'fixed',
-            top: 0,
+            bottom: 0,
             left: 0,
             display: 'fixed',
             width: '100%',
-            height: '100%',
-            background: 'white',
-            zIndex: 4000,
+            height: '92%',
+            zIndex: 5000,
           }}
         >
           <Flex
             sx={{
-              background: 'white',
               padding: 2,
               flexDirection: 'column',
               justifyContent: 'space-between',
               width: '800px',
               maxWidth: '100vw',
-              height: '100%',
+              height: '91%',
               maxHeight: '100%',
-              position: 'fixed',
               left: '50%',
               top: '50%',
-              transform: 'translate(-50%, -50%)',
-              zIndex: 4001,
+              zIndex: 2,
               overflow: 'scroll',
               scrollbarWidth: 'none',
+              margin: '0 auto',
             }}
           >
-            <Box sx={{ marginTop: 15 }}>{children}</Box>
+            <Box sx={{ background: 'white' }}>{children}</Box>
           </Flex>
         </motion.div>
       )}

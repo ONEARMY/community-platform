@@ -1,7 +1,10 @@
 import { Link } from '@remix-run/react'
 import { observer } from 'mobx-react'
+import { UserRole } from 'oa-shared'
+import { ClientOnly } from 'remix-utils/client-only'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { VERSION } from 'src/config/config'
-import { Box, Flex, Image, Text, useThemeUI } from 'theme-ui'
+import { Flex, Image, Text, useThemeUI } from 'theme-ui'
 
 import type { ThemeWithName } from 'oa-themes'
 
@@ -13,21 +16,21 @@ const Logo = observer(() => {
   const logo = theme.logo
 
   const nameAndVersion = `${name} logo ${VERSION}`
-  const logoSize = [50, 50, 100]
+  const logoSize = [60, 75, 75, 100]
 
   return (
-    <Box
+    <Flex
       sx={{
-        py: [2, 2, 0], // padding on y axes ( top & bottom )
-        marginBottom: [0, 0, '-50px'],
-        position: 'relative',
+        paddingY: 2,
+        paddingX: 3,
+        position: 'fixed',
+        zIndex: 6000,
+        alignItems: 'center',
       }}
     >
       <Link to="/">
         <Flex
-          ml={[0, 4]}
           sx={{
-            zIndex: 1000,
             display: 'flex',
             alignItems: 'center',
             width: logoSize,
@@ -48,14 +51,32 @@ const Logo = observer(() => {
         </Flex>
         <Text
           className="sr-only"
-          ml={2}
           sx={{ display: ['none', 'none', 'block'] }}
           color="black"
         >
           {name}
         </Text>
       </Link>
-    </Box>
+      <ClientOnly fallback={<></>}>
+        {() => (
+          <AuthWrapper roleRequired={UserRole.BETA_TESTER} borderLess>
+            <Text
+              sx={{
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: ['1rem', '1.4rem'],
+                borderRadius: '4px',
+                padding: '2px 6px',
+                backgroundColor: 'lightgrey',
+                marginLeft: [2, 4],
+              }}
+            >
+              BETA
+            </Text>
+          </AuthWrapper>
+        )}
+      </ClientOnly>
+    </Flex>
   )
 })
 

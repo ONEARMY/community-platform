@@ -125,7 +125,7 @@ Cypress.Commands.add(
     localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
     cy.wait(3000)
 
-    cy.get('[data-cy=NotificationsSupabase-desktop]').within(() => {
+    cy.get('[data-cy=Notifications]').within(() => {
       cy.get('[data-cy=notifications-new-messages]').click()
     })
     cy.get('[data-cy=NotificationListSupabase]').contains(username)

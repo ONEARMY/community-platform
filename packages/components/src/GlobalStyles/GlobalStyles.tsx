@@ -23,10 +23,6 @@ export const GlobalStyles = css`
     border: 4px dashed ${commonStyles.colors.betaGreen};
   }
 
-  body:has(.beta-tester-feature) .user-beta-icon > span {
-    background-color: ${commonStyles.colors.betaGreen};
-  }
-
   /***** Fix for Algolia search Icon *******/
   .ap-icon-pin {
     display: none;

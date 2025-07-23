@@ -87,7 +87,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
         <InformationTooltip
           glyph="information"
           size={22}
-          tooltip="Afriad we've got to send these to you, so you can't opt-out"
+          tooltip="Afriad we've got to send these to you,<br/>so you can't opt-out. "
         />
       ),
       description:

@@ -2,7 +2,7 @@
 import { ProfileLink } from 'oa-components'
 import { ClientOnly } from 'remix-utils/client-only'
 import { UserAction } from 'src/common/UserAction'
-import { isMessagingBlocked, isUserContactable } from 'src/utils/helpers'
+import { isMessagingModuleOff, isUserContactable } from 'src/utils/helpers'
 import { Box, Flex } from 'theme-ui'
 
 import { UserContactFormAvailable } from '../contact'
@@ -18,7 +18,7 @@ interface IProps {
 
 export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
   const isUserProfileContactable = !isUserContactable(user)
-  const shouldShowContactOutput = !isMessagingBlocked()
+  const shouldShowContactOutput = !isMessagingModuleOff()
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: 2 }}>

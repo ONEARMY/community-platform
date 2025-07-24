@@ -1,13 +1,20 @@
 import { Image, MediaFile } from 'oa-shared'
 
+import type { TransformOptions } from '@supabase/storage-js'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBMedia } from 'oa-shared'
-import type { ImageSize } from 'src/config/imageTransforms'
 
 export class ImageServiceServer {
   constructor(private client: SupabaseClient) {}
 
-  getPublicUrl(image: DBMedia, size?: ImageSize): Image | undefined {
+  getPublicUrl(
+    image: DBMedia | null,
+    size?: TransformOptions,
+  ): Image | undefined {
+    if (!image) {
+      return undefined
+    }
+
     const { data } = this.client.storage
       .from(process.env.TENANT_ID as string)
       .getPublicUrl(
@@ -18,6 +25,7 @@ export class ImageServiceServer {
             }
           : undefined,
       )
+
     if (!data) {
       return undefined
     }
@@ -25,7 +33,7 @@ export class ImageServiceServer {
     return new Image({ id: image.id, publicUrl: data.publicUrl })
   }
 
-  getPublicUrls(images: DBMedia[], size?: ImageSize): Image[] {
+  getPublicUrls(images: DBMedia[], size?: TransformOptions): Image[] {
     return images?.map((x) => {
       const { data } = this.client.storage
         .from(process.env.TENANT_ID as string)

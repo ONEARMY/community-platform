@@ -122,6 +122,7 @@ export const UserInfosSection = ({ formValues }: IProps) => {
             data-cy="website"
             name="website"
             component={FieldInput}
+            placeholder="https://"
             validate={validateUrl}
             validateFields={[]}
           />

@@ -8,7 +8,7 @@ import {
   Loader,
 } from 'oa-components'
 import { UserContactError } from 'src/pages/User/contact'
-import { isMessagingBlocked } from 'src/utils/helpers'
+import { isMessagingModuleOff } from 'src/utils/helpers'
 import { Button, Flex } from 'theme-ui'
 
 import type { GridFormFields } from 'oa-components'
@@ -20,9 +20,9 @@ const formId = 'SupabaseNotifications'
 interface IProps {
   initialValues: DBNotificationsPreferences | null
   isLoading: boolean
-  hasMessagingOn?: boolean
   onSubmit: (values: DBNotificationsPreferences) => Promise<void>
   onUnsubscribe: () => Promise<void>
+  profileIsContactable?: boolean
   submitResults: SubmitResults | null
 }
 
@@ -30,9 +30,9 @@ export const SupabaseNotificationsForm = (props: IProps) => {
   const {
     initialValues,
     isLoading,
-    hasMessagingOn,
     onSubmit,
     onUnsubscribe,
+    profileIsContactable,
     submitResults,
   } = props
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
@@ -97,8 +97,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
     },
   ]
 
-  // Temp while firebase profiles are still active
-  if (hasMessagingOn !== undefined && !isMessagingBlocked()) {
+  if (!isMessagingModuleOff()) {
     fields.push({
       component: (
         <InternalLink
@@ -106,7 +105,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
           to="/settings/profile/#public-contact"
           sx={{ textAlign: 'center' }}
         >
-          {hasMessagingOn
+          {profileIsContactable
             ? 'Stop receiving messages'
             : 'Start receiving messages'}
         </InternalLink>

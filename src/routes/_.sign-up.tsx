@@ -46,7 +46,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData()
   const url = new URL(request.url)
   const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:'
-  const emailRedirectUrl = `${protocol}//${url.host}/email-confirmation/`
+  const emailRedirectTo = `${protocol}//${url.host}/email-confirmation/`
 
   const username = formData.get('username') as string
   if (!(await authServiceServer.isUsernameAvailable(username, client))) {
@@ -64,7 +64,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     password,
     options: {
       data: { username },
-      emailRedirectTo: emailRedirectUrl,
+      emailRedirectTo,
     },
   })
 
@@ -83,13 +83,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   if (data.user) {
-    const { error } = await authServiceServer.createUserProfile(
+    const response = await authServiceServer.createUserProfile(
       { user: data.user, username },
       client,
     )
 
     // This will error if there is already a profile with this auth_id + tenant_id
-    if (error) {
+    if (response.error) {
       return Response.json(
         { error: FRIENDLY_MESSAGES['generic-error'] },
         { headers },

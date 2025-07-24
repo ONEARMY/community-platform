@@ -3,11 +3,12 @@ import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { toJS } from 'mobx'
 import { Button, Loader } from 'oa-components'
+import { type ProfileFormData, ProfileTypeList } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { profileService } from 'src/services/profileService'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { isContactable, isMessagingBlocked } from 'src/utils/helpers'
+import { isContactable, isMessagingModuleOff } from 'src/utils/helpers'
 import { Flex } from 'theme-ui'
 
 import { FocusSection } from './content/sections/Focus.section'
@@ -18,7 +19,6 @@ import { VisitorSection } from './content/sections/VisitorSection'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 import { buttons } from './labels'
 
-import type { ProfileFormData } from 'oa-shared'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
 export const SettingsPageUserProfile = () => {
@@ -100,11 +100,18 @@ export const SettingsPageUserProfile = () => {
         errors,
         form,
       }) => {
-        const isMember = values.type === 'member'
+        const isMember = values.type === ProfileTypeList.MEMBER
 
         return (
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
             <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
+
+            {submitting && <Loader sx={{ alignSelf: 'center' }} />}
+            <SettingsFormNotifications
+              errors={errors}
+              notification={notification}
+              submitFailed={submitFailed}
+            />
 
             <form id={formId} onSubmit={handleSubmit}>
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
@@ -129,7 +136,7 @@ export const SettingsPageUserProfile = () => {
                   />
                 )}
 
-                {!isMessagingBlocked() && (
+                {!isMessagingModuleOff() && (
                   <PublicContactSection isContactable={values.isContactable} />
                 )}
               </Flex>
@@ -142,6 +149,7 @@ export const SettingsPageUserProfile = () => {
               title={
                 invalid ? `Errors: ${Object.keys(errors || {})}` : 'Submit'
               }
+              onClick={() => window.scrollTo(0, 0)}
               variant="primary"
               type="submit"
               disabled={submitting}
@@ -149,12 +157,6 @@ export const SettingsPageUserProfile = () => {
             >
               {buttons.save}
             </Button>
-            {submitting && <Loader sx={{ alignSelf: 'center' }} />}
-            <SettingsFormNotifications
-              errors={errors}
-              notification={notification}
-              submitFailed={submitFailed}
-            />
           </Flex>
         )
       }}

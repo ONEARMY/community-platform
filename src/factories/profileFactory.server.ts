@@ -11,9 +11,7 @@ export class ProfileFactory {
   }
 
   fromDB(dbProfile: DBProfile, authorVotes?: AuthorVotes[]): Profile {
-    const photo = dbProfile.photo
-      ? this.imageService.getPublicUrl(dbProfile.photo)
-      : null
+    const photo = this.imageService.getPublicUrl(dbProfile.photo)
 
     const coverImages =
       dbProfile.cover_images && dbProfile.cover_images.length > 0

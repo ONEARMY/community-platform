@@ -32,18 +32,14 @@ const _PROFILES_BASE: Partial<profilesScalars> = {
   tenant_id,
   type: ProfileTypeList.MEMBER,
   roles: [],
-  tags: [],
   photo: null,
-  links: null,
   location: null,
-  notification_settings: null,
   patreon: null,
   impact: null,
   is_verified: true,
   is_blocked_from_messaging: false,
   is_contactable: true,
   is_supporter: true,
-  total_useful: 0,
   total_views: 0,
 }
 
@@ -437,6 +433,7 @@ const main = async () => {
     {
       name: tenant_id,
       public: true,
+      allowed_mime_types: [''],
     },
     { name: `${tenant_id}-documents` },
   ])

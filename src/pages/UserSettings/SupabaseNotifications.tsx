@@ -66,9 +66,9 @@ export const SupabaseNotifications = () => {
     <SupabaseNotificationsForm
       initialValues={initialValues}
       isLoading={isLoading}
-      hasMessagingOn={hasMessagingOn}
       onSubmit={onSubmit}
       onUnsubscribe={onUnsubscribe}
+      profileIsContactable={hasMessagingOn}
       submitResults={submitResults}
     />
   )

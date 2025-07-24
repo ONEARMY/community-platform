@@ -9,35 +9,44 @@ import type { ProfileFormData } from 'oa-shared'
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  try {
+    const {
+      data: { user },
+    } = await client.auth.getUser()
 
-  if (!user) {
-    return Response.json({}, { headers, status: 401 })
+    if (!user) {
+      return Response.json({}, { headers, status: 401 })
+    }
+
+    const nowUtc = new Date().toISOString()
+
+    const { data, error } = await client
+      .from('profiles')
+      .update({ last_active: nowUtc })
+      .eq('auth_id', user.id)
+      .select(
+        `*,
+        tags:profile_tags_relations(
+          profile_tags(
+            id,
+            name
+          )
+        )`,
+      )
+      .single()
+
+    if (error) {
+      throw error
+    }
+
+    const profileFactory = new ProfileFactory(client)
+    const profile = profileFactory.fromDB(data)
+
+    return Response.json(profile, { headers, status: 200 })
+  } catch (error) {
+    console.error(error)
+    return Response.json({ error }, { headers, status: 500 })
   }
-
-  const nowUtc = new Date().toISOString()
-
-  const { data } = await client
-    .from('profiles')
-    .update({ last_active: nowUtc })
-    .eq('auth_id', user.id)
-    .select(
-      `*,
-      tags:profile_tags_relations(
-        profile_tags(
-          id,
-          name
-        )
-      )`,
-    )
-    .single()
-
-  const profileFactory = new ProfileFactory(client)
-  const profile = profileFactory.fromDB(data)
-
-  return Response.json(profile, { headers, status: 200 })
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {

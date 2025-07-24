@@ -107,7 +107,7 @@ export const isUserBlockedFromMessaging = (
   return user.isBlockedFromMessaging
 }
 
-export const isMessagingBlocked = () => {
+export const isMessagingModuleOff = () => {
   return NO_MESSAGING === 'true'
 }
 
@@ -116,7 +116,7 @@ export const isUserContactable = (user: Partial<Profile>) => {
 }
 
 export const isContactable = (preference: boolean | undefined) => {
-  if (isMessagingBlocked()) {
+  if (isMessagingModuleOff()) {
     return false
   }
 

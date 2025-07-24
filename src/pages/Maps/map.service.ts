@@ -1,16 +1,16 @@
 import { createContext } from 'react'
 import { logger } from 'src/logger'
 
-import type { IMapPin } from 'oa-shared'
+import type { MapPin } from 'oa-shared'
 
 export interface IMapPinService {
-  getMapPins: () => Promise<IMapPin[]>
-  getMapPinByUserId: (userName: string) => Promise<IMapPin | null>
+  getMapPins: () => Promise<MapPin[]>
+  getMapPinById: (id: number) => Promise<MapPin | null>
 }
 
 const getMapPins = async () => {
   try {
-    const response = await fetch('/api/mappins/')
+    const response = await fetch('/api/mappins')
     const { mapPins } = await response.json()
 
     return mapPins
@@ -20,14 +20,14 @@ const getMapPins = async () => {
   }
 }
 
-const getMapPinByUserId = async (userName: string) => {
+const getMapPinById = async (id: number) => {
   try {
-    const response = await fetch('/api/mappins/' + userName)
+    const response = await fetch('/api/mappins/' + id)
     const { mapPin } = await response.json()
 
-    return mapPin
+    return mapPin as MapPin
   } catch (error) {
-    logger.error('Failed to fetch map pin by user id', { userName, error })
+    logger.error('Failed to fetch map pin by user id', { id, error })
     return null
   }
 }
@@ -36,5 +36,5 @@ export const MapPinServiceContext = createContext<IMapPinService | null>(null)
 
 export const mapPinService: IMapPinService = {
   getMapPins,
-  getMapPinByUserId,
+  getMapPinById,
 }

@@ -1,22 +1,47 @@
+import { ProfileTag } from './profileTag'
+
 import type { Comment } from './comment'
 import type { SubscribableContentTypes } from './common'
 import type { IDBDocSB, IDoc } from './document'
 import type { Project } from './library'
+import type { DBMedia, Image } from './media'
+import type { IDBModeration, IModeration, Moderation } from './moderation'
 import type { News } from './news'
 import type { IPatreonUser } from './patreon'
+import type { DBProfileTag } from './profileTag'
 import type { Question } from './question'
 import type { ResearchItem, ResearchUpdate } from './research'
+import type {
+  IUserImpact,
+  ProfileTypeName,
+  UserVisitorPreference,
+} from './user'
 
 export class DBProfile {
-  id: number
+  readonly id: number
+  readonly created_at: Date
+  readonly tags: DBProfileTag[]
+  readonly pin?: DBMapPin
   username: string
   display_name: string
   is_verified: boolean
   is_supporter: boolean
-  photo_url: string | null
+  photo: DBMedia | null
+  cover_images: DBMedia[] | null
   country: string
   patreon?: IPatreonUser
   roles: string[] | null
+  type: ProfileTypeName
+  visitor_policy: string | null
+  is_blocked_from_messaging: boolean | null
+  about: string | null
+  impact: IUserImpact
+  is_contactable: boolean
+  last_active: Date | null
+  website: string | null
+  total_views: number
+  auth_id: string
+  tag_ids: number[]
 
   constructor(obj: DBProfile) {
     Object.assign(this, obj)
@@ -25,29 +50,63 @@ export class DBProfile {
 
 export class Profile {
   id: number
+  createdAt: Date
   username: string
   displayName: string
   isVerified: boolean
   isSupporter: boolean
-  photoUrl: string | null
   country: string
-  patreon?: IPatreonUser
+  about: string | null
+  type: ProfileTypeName
+  impact: IUserImpact
+  photo: Image | null
+  isContactable: boolean
+  isBlockedFromMessaging: boolean
+  visitorPolicy: UserVisitorPreference | null
+  website: string | null
+  tags?: ProfileTag[]
+  totalViews: number
   roles: string[] | null
+  lastActive: Date | null
+  coverImages: Image[] | null
+  patreon: IPatreonUser | null
+  authorUsefulVotes?: AuthorVotes[]
 
   constructor(obj: Profile) {
     Object.assign(this, obj)
   }
 
-  static fromDB(dbProfile: DBProfile) {
+  static fromDB(
+    dbProfile: DBProfile,
+    photo: Image = null,
+    coverImages: Image[] = null,
+    authorVotes?: AuthorVotes[],
+  ) {
     return new Profile({
       id: dbProfile.id,
+      createdAt: dbProfile.created_at,
       country: dbProfile.country,
       displayName: dbProfile.display_name,
       username: dbProfile.username,
+      photo: photo,
       isSupporter: dbProfile.is_supporter,
       isVerified: dbProfile.is_verified,
-      photoUrl: dbProfile.photo_url || null,
       roles: dbProfile.roles || null,
+      type: dbProfile.type,
+      visitorPolicy: dbProfile.visitor_policy
+        ? (JSON.parse(dbProfile.visitor_policy) as UserVisitorPreference)
+        : null,
+      isBlockedFromMessaging: !!dbProfile.is_blocked_from_messaging,
+      about: dbProfile.about,
+      coverImages: coverImages,
+      impact: dbProfile.impact,
+      isContactable: !!dbProfile.is_contactable,
+      lastActive: dbProfile.last_active,
+      website: dbProfile.website,
+      patreon: dbProfile.patreon,
+      totalViews: dbProfile.total_views,
+      authorUsefulVotes: authorVotes,
+      tags: dbProfile.tags?.map((x) => ProfileTag.fromDB(x)),
     })
   }
 }
@@ -61,7 +120,7 @@ type NotificationContent = News | Comment | Question | ResearchUpdate
 type NotificationSourceContentType = SubscribableContentTypes
 type NotificationSourceContent = News | Project | Question | ResearchItem
 
-type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photoUrl'>
+type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photo'>
 
 export class DBNotification implements IDBDocSB {
   readonly id: number
@@ -322,7 +381,7 @@ export class NotificationDisplay {
   }
 
   static setSidebarImage(author: BasicAuthorDetails | undefined): string {
-    return author?.photoUrl || ''
+    return author?.photo?.publicUrl || ''
   }
 
   static setSlug(notification: Notification) {
@@ -394,3 +453,125 @@ export type NewNotificationData = {
   sourceContentId: number
   triggeredById: number
 }
+
+export type ProfileFormData = {
+  displayName: string
+  tagIds: number[]
+  about: string
+  country: string
+  website: string
+  isContactable: boolean
+  type: ProfileTypeName
+  photo?: File
+  existingPhoto?: Image
+  existingCoverImages?: Image[]
+  existingCoverImageIds?: string[]
+  coverImages?: File[]
+  showVisitorPolicy: boolean
+  visitorPreferencePolicy?: UserVisitorPreference['policy']
+  visitorPreferenceDetails?: UserVisitorPreference['details']
+}
+
+export class DBMapPin implements IDBModeration {
+  readonly id: number
+  readonly profile: DBPinProfile
+  profile_id: number
+  country: string // check if necessary
+  country_code: string
+  name: string | null
+  administrative: string | null
+  post_code: string | null
+  lat: number
+  lng: number
+  moderation: Moderation
+  moderation_feedback: string
+}
+
+export class MapPin implements IModeration {
+  readonly id: number
+  readonly profileId: number
+  readonly profile: PinProfile | null
+  country: string
+  countryCode: string
+  name: string | null
+  administrative: string | null
+  postCode: string | null
+  lat: number
+  lng: number
+  moderation: Moderation
+  moderationFeedback?: string
+
+  constructor(obj: MapPin) {
+    Object.assign(this, obj)
+  }
+}
+
+export type MapPinFormData = {
+  lat: number
+  lng: number
+  country: string
+  countryCode: string
+  administrative: string
+  postCode: string
+  name: string
+}
+
+export interface DBAuthorVotes {
+  content_type: string
+  vote_count: number
+}
+
+export class AuthorVotes {
+  contentType: string
+  voteCount: number
+
+  constructor(obj: AuthorVotes) {
+    Object.assign(this, obj)
+  }
+
+  static fromDB(dbVotes: DBAuthorVotes) {
+    return new AuthorVotes({
+      contentType: dbVotes.content_type,
+      voteCount: dbVotes.vote_count,
+    })
+  }
+}
+
+export type DBPinProfile = Pick<
+  DBProfile,
+  | 'id'
+  | 'display_name'
+  | 'username'
+  | 'country'
+  | 'is_verified'
+  | 'is_supporter'
+  | 'photo'
+  | 'tags'
+  | 'type'
+  | 'visitor_policy'
+  | 'about'
+  | 'is_contactable'
+  | 'last_active'
+>
+
+export type PinProfile = Pick<
+  Profile,
+  | 'id'
+  | 'displayName'
+  | 'username'
+  | 'country'
+  | 'isVerified'
+  | 'isSupporter'
+  | 'photo'
+  | 'tags'
+  | 'type'
+  | 'visitorPolicy'
+  | 'about'
+  | 'isContactable'
+  | 'lastActive'
+>
+
+export type UpsertPin = Omit<
+  DBMapPin,
+  'id' | 'profile' | 'moderation' | 'moderation_feedback'
+>

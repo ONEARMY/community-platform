@@ -73,7 +73,7 @@ export const CommentDisplay = (props: IProps) => {
         >
           <CommentAvatar
             displayName={comment.createdBy?.displayName}
-            photoUrl={comment.createdBy?.photoUrl}
+            photoUrl={comment.createdBy?.photo?.publicUrl}
             isCommentAuthor={
               comment.createdBy?.id
                 ? authors.includes(comment.createdBy?.id)
@@ -103,7 +103,7 @@ export const CommentDisplay = (props: IProps) => {
                     userName: comment.createdBy?.username || '',
                     countryCode: comment.createdBy?.country,
                     isVerified: comment.createdBy?.isVerified,
-                    // TODO: isSupporter
+                    isSupporter: comment.createdBy?.isSupporter,
                   }}
                 />
                 <Text sx={{ fontSize: 1, color: 'darkGrey' }}>

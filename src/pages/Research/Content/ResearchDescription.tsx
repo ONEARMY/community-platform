@@ -12,7 +12,11 @@ import {
   UsefulStatsButton,
   Username,
 } from 'oa-components'
-import { type IUser, type ResearchItem, ResearchStatusRecord } from 'oa-shared'
+import {
+  type Profile,
+  type ResearchItem,
+  ResearchStatusRecord,
+} from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
@@ -29,7 +33,7 @@ interface IProps {
   research: ResearchItem
   isEditable: boolean
   isDeletable: boolean
-  loggedInUser: IUser | undefined
+  activeUser: Profile | undefined
   votedUsefulCount?: number
   hasUserVotedUseful: boolean
   hasUserSubscribed: boolean
@@ -104,12 +108,12 @@ const ResearchDescription = ({
                     <UsefulStatsButton
                       votedUsefulCount={votedUsefulCount}
                       hasUserVotedUseful={props.hasUserVotedUseful}
-                      isLoggedIn={!!props.loggedInUser}
+                      isLoggedIn={!!props.activeUser}
                       onUsefulClick={props.onUsefulClick}
                     />
                     <FollowButton
                       hasUserSubscribed={props.hasUserSubscribed}
-                      isLoggedIn={!!props.loggedInUser}
+                      isLoggedIn={!!props.activeUser}
                       onFollowClick={props.onFollowClick}
                       tooltipFollow="Follow to be notified about new updates"
                       tooltipUnfollow="Unfollow to stop be notified about new updates"

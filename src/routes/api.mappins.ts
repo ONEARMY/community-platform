@@ -1,41 +1,72 @@
-import { json } from '@remix-run/node'
-import { collection, getDocs, query, where } from 'firebase/firestore'
 import Keyv from 'keyv'
-import { DB_ENDPOINTS } from 'oa-shared'
 import { isProductionEnvironment } from 'src/config/config'
-import { cdnImageUrl } from 'src/utils/cdnImageUrl'
-import { firestore } from 'src/utils/firebase'
+import { MapPinFactory } from 'src/factories/mapPinFactory.server'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
-import type { IMapPin } from 'oa-shared'
+import type { DBMapPin, MapPin } from 'oa-shared'
 
-const cache = new Keyv<IMapPin[]>({ ttl: 600000 }) // ttl: 10 minutes
+const cache = new Keyv<MapPin[]>({ ttl: 600000 }) // ttl: 10 minutes
 
 // runs on the server
-export const loader = async () => {
+export const loader = async ({ request }) => {
+  const { client, headers } = createSupabaseServerClient(request)
   const cachedMappins = await cache.get('mappins')
 
   // check if cached map pins are available and a producation environment, if not - load from db and cache them
   if (cachedMappins && isProductionEnvironment()) {
-    return json({ mapPins: cachedMappins })
+    return Response.json({ mapPins: cachedMappins }, { headers })
   }
 
-  const collectionRef = collection(firestore, DB_ENDPOINTS.mappins)
-  const userMapPinQuery = query(
-    collectionRef,
-    where('_deleted', '==', false),
-    where('moderation', '==', 'accepted'),
-  )
+  // get all profile tags
 
-  const queryResults = await getDocs(userMapPinQuery)
+  const { data, error } = await client
+    .from('map_pins')
+    .select(
+      `
+      id,
+      profile_id,
+      country,
+      country_code,
+      name,
+      administrative,
+      post_code,
+      lat,
+      lng,
+      moderation,
+      profile:profiles(
+        id,
+        type,
+        display_name,
+        username,
+        is_verified,
+        is_supporter,
+        photo,
+        tags:profile_tags_relations(
+          profile_tags(
+            id,
+            name
+          )
+        )
+      )
+    `,
+    )
+    .eq('moderation', 'accepted')
 
-  const mapPins: IMapPin[] = []
-  queryResults.forEach((doc) => {
-    mapPins.push(doc.data() as IMapPin)
-  })
-  const mapPinsWithCDN = _transformCreatorImagesToCND(mapPins)
+  if (!data || error) {
+    console.error(error)
 
-  cache.set('mappins', mapPinsWithCDN)
-  return json({ mapPins: mapPinsWithCDN })
+    return Response.json(
+      {},
+      { status: 500, statusText: 'Error fetching map-pins' },
+    )
+  }
+
+  const pinsDb = data as unknown as DBMapPin[]
+  const pinFactory = new MapPinFactory(client)
+  const mapPins = pinsDb.map((x) => pinFactory.fromDBWithProfile(x))
+
+  cache.set('mappins', mapPins)
+  return Response.json({ mapPins }, { headers })
 }
 
 export const action = async ({ request }) => {
@@ -44,36 +75,16 @@ export const action = async ({ request }) => {
     case 'POST':
       // Create new map pin
       cache.delete('mappins') // delete cache - forced to reload from db
-      return json({ message: 'Created a map pin' })
+      return Response.json({ message: 'Created a map pin' })
     case 'PUT':
       // Edit existing map pin
       cache.delete('mappins') // delete cache - forced to reload from db
-      return json({ message: 'Updated a map pin' })
+      return Response.json({ message: 'Updated a map pin' })
     case 'DELETE':
       // Delete a map pin
       cache.delete('mappins') // delete cache - forced to reload from db
-      return json({ message: 'Deleted a map pin' })
+      return Response.json({ message: 'Deleted a map pin' })
     default:
-      return json({ message: 'Method Not Allowed' }, { status: 405 })
+      return Response.json({ message: 'Method Not Allowed' }, { status: 405 })
   }
-}
-
-const _transformCreatorImagesToCND = (pins: IMapPin[]) => {
-  return pins.map((pin) => {
-    if (!pin.creator) {
-      return pin
-    }
-    return {
-      ...pin,
-      creator: {
-        ...pin.creator,
-        ...(pin.creator.coverImage
-          ? { coverImage: cdnImageUrl(pin.creator.coverImage, { width: 500 }) }
-          : {}),
-        ...(pin.creator.userImage
-          ? { userImage: cdnImageUrl(pin.creator.userImage, { width: 300 }) }
-          : {}),
-      },
-    }
-  })
 }

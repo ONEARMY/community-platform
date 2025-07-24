@@ -1,6 +1,6 @@
 import axios from 'axios'
 import * as functions from 'firebase-functions'
-import { IModerationStatus } from 'oa-shared'
+import { Moderation } from 'oa-shared'
 
 import { CONFIG } from '../config/config'
 
@@ -18,7 +18,7 @@ export const notifyPinAwaitingModeration = functions
     const type = info.type
     const moderation = info.moderation
 
-    if (moderation !== IModerationStatus.AWAITING_MODERATION) return
+    if (moderation !== Moderation.AWAITING_MODERATION) return
 
     return await axios
       .post(SLACK_WEBHOOK_URL, {

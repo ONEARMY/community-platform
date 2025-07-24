@@ -55,7 +55,10 @@ export const ArticleCallToActionSupabaseSingleContributor: StoryFn<
         displayName: faker.name.firstName(),
         isVerified: faker.datatype.boolean(),
         isSupporter: faker.datatype.boolean(),
-        photoUrl: faker.image.imageUrl(),
+        photo: {
+          id: faker.datatype.string(),
+          publicUrl: faker.image.imageUrl(),
+        },
         username: faker.internet.userName(),
       },
     ]}
@@ -70,7 +73,10 @@ const makeFakeUser = (): Author => ({
   displayName: faker.name.firstName(),
   isVerified: faker.datatype.boolean(),
   isSupporter: faker.datatype.boolean(),
-  photoUrl: faker.image.imageUrl(),
+  photo: {
+    id: faker.datatype.string(),
+    publicUrl: faker.image.imageUrl(),
+  },
   username: faker.internet.userName(),
 })
 

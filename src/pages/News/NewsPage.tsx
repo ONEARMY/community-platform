@@ -10,8 +10,8 @@ import {
 } from 'oa-components'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
 import {
   AspectRatio,
@@ -27,7 +27,7 @@ import {
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
 import { DraftTag } from '../common/Drafts/DraftTag'
 
-import type { IUser, News } from 'oa-shared'
+import type { News } from 'oa-shared'
 
 interface IProps {
   news: News
@@ -38,15 +38,13 @@ export const NewsPage = observer(({ news }: IProps) => {
     news.subscriberCount,
   )
 
-  const { userStore } = useCommonStores().stores
-  const activeUser = userStore.activeUser
+  const { profile } = useProfileStore()
 
   const isEditable = useMemo(() => {
     return (
-      hasAdminRights(activeUser as IUser) ||
-      news.author?.username === activeUser?.userName
+      hasAdminRights(profile) || news.author?.username === profile?.username
     )
-  }, [activeUser, news.author])
+  }, [profile, news.author])
 
   return (
     <Box sx={{ width: '100%', maxWidth: '620px', alignSelf: 'center' }}>

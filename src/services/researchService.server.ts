@@ -1,7 +1,7 @@
 import { Author, ResearchItem, UserRole } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 
-import { profileServiceServer } from './profileService.server'
+import { ProfileServiceServer } from './profileService.server'
 import { storageServiceServer } from './storageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -72,10 +72,8 @@ const getCollaborators = async (
     return []
   }
 
-  const users = await profileServiceServer.getUsersByUsername(
-    collaboratorIds,
-    client,
-  )
+  const profileService = new ProfileServiceServer(client)
+  const users = await profileService.getUsersByUsername(collaboratorIds)
 
   return users?.map((user) => Author.fromDB(user))
 }

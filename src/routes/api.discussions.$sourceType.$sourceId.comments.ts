@@ -1,6 +1,7 @@
-import { Comment, DBComment } from 'oa-shared'
+import { DBComment } from 'oa-shared'
+import { CommentFactory } from 'src/factories/commentFactory.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { notificationsService } from 'src/services/notificationsService.server'
+import { ImageServiceServer } from 'src/services/imageService.server'
 import { notificationsSupabaseServiceServer } from 'src/services/notificationSupabaseService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
 
@@ -8,6 +9,7 @@ import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type {
+  Comment,
   DBAuthor,
   DBProfile,
   DiscussionContentTypes,
@@ -71,12 +73,14 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     return acc
   }, {})
 
+  const commentFactory = new CommentFactory(new ImageServiceServer(client))
+
   const commentWithReplies = (commentsByParentId[0] ?? []).map(
     (mainComment: DBComment) => {
       const replies: Reply[] = (commentsByParentId[mainComment.id] ?? []).map(
-        (reply: DBComment) => Comment.fromDB(reply),
+        (reply: DBComment) => commentFactory.fromDBWithAuthor(reply, []),
       )
-      return Comment.fromDB(
+      return commentFactory.fromDBWithAuthor(
         mainComment,
         replies.filter((x) => !x.deleted).sort((a, b) => a.id - b.id),
       )
@@ -164,23 +168,24 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 
     addSubscriptions(comment, profile, client)
 
-    notificationsService.sendCommentNotification(client, comment, profile)
     notificationsSupabaseServiceServer.createNotificationsNewComment(
       comment,
       client,
     )
   }
 
-  return Response.json(
-    new DBComment({
-      ...(commentResult.data as DBComment),
-      profile: (commentResult.data as any).profiles as DBAuthor,
-    }),
-    {
-      headers,
-      status: commentResult.error ? 500 : 201,
-    },
-  )
+  const commentDb = new DBComment({
+    ...(commentResult.data as DBComment),
+    profile: (commentResult.data as any).profiles as DBAuthor,
+  })
+
+  const commentFactory = new CommentFactory(new ImageServiceServer(client))
+  const comment = commentFactory.fromDBWithAuthor(commentDb)
+
+  return Response.json(comment, {
+    headers,
+    status: commentResult.error ? 500 : 201,
+  })
 }
 
 function addSubscriptions(

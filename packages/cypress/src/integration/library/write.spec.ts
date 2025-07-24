@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { DifficultyLevelRecord, IModerationStatus, UserRole } from 'oa-shared'
+import { DifficultyLevelRecord, UserRole } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
 import {
@@ -7,7 +7,7 @@ import {
   generateNewUserDetails,
 } from '../../utils/TestUtils'
 
-import type { DifficultyLevel } from 'oa-shared'
+import type { DifficultyLevel, Moderation } from 'oa-shared'
 
 let randomId
 
@@ -108,11 +108,11 @@ describe('[Library]', () => {
     const creator = MOCK_DATA.users.howto_creator
 
     const expected = {
-      _createdBy: creator.userName,
+      _createdBy: creator.username,
       _deleted: false,
       category: 'Moulds',
       description: 'After creating, the project will be deleted',
-      moderation: IModerationStatus.AWAITING_MODERATION,
+      moderation: 'awaiting-moderation' as Moderation.AWAITING_MODERATION,
       difficulty_level: DifficultyLevelRecord.medium,
       time: '1-2 weeks',
       title: `Create a project test ${randomId}`,

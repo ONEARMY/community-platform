@@ -10,10 +10,10 @@ import { contact } from 'src/pages/User/labels'
 import { isUserContactable } from 'src/utils/helpers'
 import { Box, Flex, Heading } from 'theme-ui'
 
-import type { IUser } from 'oa-shared'
+import type { Profile } from 'oa-shared'
 
 interface Props {
-  user: IUser
+  user: Profile
 }
 
 export const UserContactFormNotLoggedIn = observer(({ user }: Props) => {

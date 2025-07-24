@@ -1,7 +1,7 @@
 import { ImageGallery, LinkifyText, VideoPlayer } from 'oa-components'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
-import { formatImagesForGalleryV2 } from 'src/utils/formatImageListForGallery'
+import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
 import type { ProjectStep } from 'oa-shared'
@@ -82,7 +82,7 @@ const Step = (props: IProps) => {
               ) : step.images ? (
                 <ImageGallery
                   images={
-                    formatImagesForGalleryV2(
+                    formatImagesForGallery(
                       step.images,
                       `Step ${displayNumber}`,
                     ) as any

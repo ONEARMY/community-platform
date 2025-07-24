@@ -10,7 +10,7 @@ import {
   TagList,
   UsefulStatsButton,
 } from 'oa-components'
-import { DifficultyLevelRecord, type IUser, type Project } from 'oa-shared'
+import { DifficultyLevelRecord } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
@@ -28,12 +28,14 @@ import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui'
 
 import { libraryService } from '../../library.service'
 
+import type { Profile, Project } from 'oa-shared'
+
 const DELETION_LABEL = 'Project marked for deletion'
 
 interface IProps {
   commentsCount: number
   item: Project
-  loggedInUser: IUser | undefined
+  loggedInUser: Profile | undefined
   votedUsefulCount?: number
   hasUserVotedUseful: boolean
   onUsefulClick: () => Promise<void>
@@ -82,8 +84,8 @@ export const LibraryDescription = (props: IProps) => {
   const isEditable = useMemo(() => {
     return (
       !!loggedInUser &&
-      (hasAdminRights(loggedInUser as IUser) ||
-        item.author?.username === loggedInUser.userName)
+      (hasAdminRights(loggedInUser) ||
+        item.author?.username === loggedInUser.username)
     )
   }, [loggedInUser, item.author])
 
@@ -183,13 +185,13 @@ export const LibraryDescription = (props: IProps) => {
               </Flex>
             )}
           </Flex>
-          {item.moderatonFeedback && item.moderation !== 'accepted' && (
+          {item.moderationFeedback && item.moderation !== 'accepted' && (
             <Alert variant="info">
               <Box sx={{ textAlign: 'left' }}>
                 <Heading as="p" variant="small">
                   Moderator Feedback
                 </Heading>
-                <Text sx={{ fontSize: 2 }}>{item.moderatonFeedback}</Text>
+                <Text sx={{ fontSize: 2 }}>{item.moderationFeedback}</Text>
               </Box>
             </Alert>
           )}

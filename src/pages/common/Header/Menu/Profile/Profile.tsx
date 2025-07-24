@@ -1,42 +1,25 @@
 import { useState } from 'react'
 import Foco from 'react-foco'
-import { observer } from 'mobx-react'
 import { MemberBadge } from 'oa-components'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import { ProfileModal } from 'src/pages/common/Header/Menu/ProfileModal/ProfileModal'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
-import { cdnImageUrl } from 'src/utils/cdnImageUrl'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Avatar, Box, Flex } from 'theme-ui'
 
 import ProfileButtons from './ProfileButtons'
 
 import './profile.css'
 
-interface IState {
-  showProfileModal: boolean
-}
-
 interface IProps {
   isMobile: boolean
 }
 
-const Profile = observer((props: IProps) => {
-  const { userStore } = useCommonStores().stores
-  const user = userStore.user
+const Profile = (props: IProps) => {
+  const [showProfileModal, setShowProfileModal] = useState<boolean>(false)
+  const { profile: profile } = useProfileStore()
 
-  const [state, setState] = useState<IState>({
-    showProfileModal: false,
-  })
-
-  const toggleProfileModal = () => {
-    setState((state) => ({
-      ...state,
-      showProfileModal: !state.showProfileModal,
-    }))
-  }
-
-  if (!user) {
+  if (!profile) {
     return <ProfileButtons isMobile={props.isMobile} />
   }
 
@@ -50,7 +33,7 @@ const Profile = observer((props: IProps) => {
           mt: 1,
         }}
       >
-        <MenuMobileLink path={'/u/' + user.userName} content="Profile" />
+        <MenuMobileLink path={'/u/' + profile.username} content="Profile" />
         {COMMUNITY_PAGES_PROFILE.map((page) => (
           <MenuMobileLink
             path={page.path}
@@ -70,12 +53,15 @@ const Profile = observer((props: IProps) => {
         width: '93px',
       }}
     >
-      <Flex onClick={() => toggleProfileModal()} sx={{ ml: 1, height: '100%' }}>
-        {user.userImage?.downloadUrl ? (
+      <Flex
+        onClick={() => setShowProfileModal((x) => !x)}
+        sx={{ ml: 1, height: '100%' }}
+      >
+        {profile.photo ? (
           <Avatar
             data-cy="header-avatar"
             loading="lazy"
-            src={cdnImageUrl(user.userImage?.downloadUrl, { width: 40 })}
+            src={profile.photo.publicUrl}
             sx={{
               objectFit: 'cover',
               width: '40px',
@@ -83,21 +69,18 @@ const Profile = observer((props: IProps) => {
             }}
           />
         ) : (
-          <MemberBadge
-            profileType={user.profileType}
-            sx={{ cursor: 'pointer' }}
-          />
+          <MemberBadge profileType={profile.type} sx={{ cursor: 'pointer' }} />
         )}
       </Flex>
       <Flex>
-        {state.showProfileModal && (
-          <Foco onClickOutside={() => toggleProfileModal()}>
+        {showProfileModal && (
+          <Foco onClickOutside={() => setShowProfileModal(false)}>
             <ProfileModal />
           </Foco>
         )}
       </Flex>
     </Box>
   )
-})
+}
 
 export default Profile

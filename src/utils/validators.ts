@@ -55,7 +55,6 @@ const validateUrl = (value: any) => {
   if (value) {
     return isUrl(value) ? undefined : 'Invalid url'
   }
-  return 'Required'
 }
 
 const validateUrlAcceptEmpty = (value: any) => {

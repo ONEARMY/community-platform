@@ -123,6 +123,7 @@ export const MapWithPin = (props: Props) => {
             )}
           </Flex>
         </Box>
+
         <Map
           ref={mapRef}
           className="markercluster-map settings-page"
@@ -140,7 +141,7 @@ export const MapWithPin = (props: Props) => {
           <ZoomControl position="topleft" />
           <>
             {popup}
-            {position && (
+            {position?.lat && position.lng && (
               <MapPin
                 position={position}
                 markerIcon={markerIcon}

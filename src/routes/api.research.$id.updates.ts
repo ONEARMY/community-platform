@@ -1,7 +1,7 @@
 import { ResearchUpdate, UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server'
-import { profileServiceServer } from 'src/services/profileService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
 import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
@@ -34,7 +34,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       .eq('id', researchId)
       .single()
     const research = researchResult.data as unknown as DBResearchItem
-    const profile = await profileServiceServer.getByAuthId(user!.id, client)
+    const profileService = new ProfileServiceServer(client)
+    const profile = await profileService.getByAuthId(user!.id)
 
     if (!profile) {
       return Response.json({}, { status: 400, statusText: 'User not found' })

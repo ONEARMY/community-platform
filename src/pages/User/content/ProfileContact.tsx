@@ -1,35 +1,24 @@
-import { ExternalLinkLabel } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
+import { ProfileLink } from 'oa-components'
 import { ClientOnly } from 'remix-utils/client-only'
 import { UserAction } from 'src/common/UserAction'
-import { isMessagingBlocked, isUserContactable } from 'src/utils/helpers'
+import { isMessagingModuleOff, isUserContactable } from 'src/utils/helpers'
 import { Box, Flex } from 'theme-ui'
 
 import { UserContactFormAvailable } from '../contact'
 import { UserContactForm } from '../contact/UserContactForm'
 import { UserContactFormNotLoggedIn } from '../contact/UserContactFormNotLoggedIn'
-import UserContactAndLinks from './UserContactAndLinks'
 
-import type { IUser } from 'oa-shared'
+import type { Profile } from 'oa-shared'
 
 interface IProps {
-  user: IUser
+  user: Profile
   isViewingOwnProfile: boolean
 }
 
 export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
-  const { links } = user
-
-  const userLinks =
-    links?.filter(
-      (linkItem) =>
-        ![ExternalLinkLabel.DISCORD, ExternalLinkLabel.FORUM].includes(
-          linkItem.label,
-        ),
-    ) || []
-
   const isUserProfileContactable = !isUserContactable(user)
-  const shouldShowContactOutput = !isMessagingBlocked()
+  const shouldShowContactOutput = !isMessagingModuleOff()
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: 2 }}>
@@ -59,7 +48,13 @@ export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
           </ClientOnly>
         </Box>
       )}
-      <UserContactAndLinks links={userLinks} />
+
+      {user.website && (
+        <Box>
+          <span>Website</span>
+          <ProfileLink url={user.website} />
+        </Box>
+      )}
     </Flex>
   )
 }

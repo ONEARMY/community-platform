@@ -1,25 +1,24 @@
-import type { IMapPin, MapFilterOptionsList } from 'oa-shared'
+import type { MapFilterOption, MapPin } from 'oa-shared'
 
 export const filterPins = (
-  activePinFilters: MapFilterOptionsList,
-  pins: IMapPin[],
-): IMapPin[] => {
+  activePinFilters: MapFilterOption[],
+  pins: MapPin[],
+): MapPin[] => {
   if (activePinFilters.length === 0) {
     return pins
   }
   const activeFilterIdsForType = (type: string) =>
     activePinFilters
       .filter(({ filterType }) => filterType === type)
-      .map(({ _id }) => _id)
+      .map(({ label }) => label)
 
   const typeFilters = activeFilterIdsForType('profileType')
 
-  let filteredPins: IMapPin[] = [...pins]
+  let filteredPins: MapPin[] = [...pins]
 
   if (typeFilters.length > 0) {
     const profileTypeFilteredList = pins.filter(
-      ({ creator }) =>
-        creator?.profileType && typeFilters.includes(creator?.profileType),
+      ({ profile }) => profile?.type && typeFilters.includes(profile?.type),
     )
     filteredPins = profileTypeFilteredList
   }
@@ -27,21 +26,27 @@ export const filterPins = (
   const tagFilters = activeFilterIdsForType('profileTag')
 
   if (tagFilters.length > 0) {
-    filteredPins = filteredPins.filter(({ creator }) => {
-      const tagIds = creator?.tags?.map(({ _id }) => _id)
-      return tagFilters.some((tagId) => tagIds?.includes(tagId))
+    filteredPins = filteredPins.filter(({ profile }) => {
+      const tags = profile?.tags?.map(({ name }) => name)
+      return tagFilters.some((tagId) => tags?.includes(tagId))
     })
   }
 
   const badgeFilters = activeFilterIdsForType('badge')
 
   if (badgeFilters.length > 0) {
-    filteredPins = filteredPins.filter(({ creator }) => {
-      if (!creator?.badges) return false
-      const badges = Object.keys(creator?.badges).filter(
-        (key) => creator?.badges && creator.badges[key],
+    filteredPins = filteredPins.filter(({ profile }) => {
+      if (!profile?.isVerified && !profile!.isSupporter) {
+        return false
+      }
+
+      return (
+        badgeFilters.filter(
+          (badge) =>
+            (badge === 'verified' && profile!.isVerified) ||
+            (badge === 'supporter' && profile!.isSupporter),
+        ).length > 0
       )
-      return badgeFilters.filter((badge) => badges.includes(badge)).length > 0
     })
   }
 
@@ -50,8 +55,8 @@ export const filterPins = (
   if (settingFilters.length > 0) {
     // Right now visitor filter is only setting filter. If N>1 this should be smarter.
     filteredPins = filteredPins.filter(
-      ({ creator }) =>
-        creator?.openToVisitors && creator.openToVisitors.policy !== 'closed',
+      ({ profile }) =>
+        profile?.visitorPolicy && profile.visitorPolicy.policy !== 'closed',
     )
   }
 

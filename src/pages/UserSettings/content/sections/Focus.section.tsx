@@ -29,7 +29,7 @@ const ProfileTypes = () => {
 
   return (
     <Field
-      name="profileType"
+      name="type"
       render={(props) => (
         <FlexSectionContainer data-cy="FocusSection">
           <Flex sx={{ flexDirection: 'column', gap: 1 }}>
@@ -55,7 +55,7 @@ const ProfileTypes = () => {
                   <CustomRadioField
                     data-cy={profile.label}
                     value={profile.label}
-                    name="profileType"
+                    name="type"
                     isSelected={profile.label === props.input.value}
                     onChange={(v) => props.input.onChange(v as ProfileTypeName)}
                     textLabel={profile.textLabel}

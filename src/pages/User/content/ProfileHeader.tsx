@@ -1,24 +1,18 @@
 import { MemberBadge, Username } from 'oa-components'
-import { type IUser, ProfileTypeList } from 'oa-shared'
+import { type Profile, ProfileTypeList } from 'oa-shared'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
-import { cdnImageUrl } from 'src/utils/cdnImageUrl'
-import { getUserCountry } from 'src/utils/getUserCountry'
 import { Avatar, Box, Flex, Heading } from 'theme-ui'
 
 interface IProps {
-  user: IUser
+  user: Profile
 }
 
 export const ProfileHeader = ({ user }: IProps) => {
-  const { displayName, profileType, userImage } = user
-
-  const profileImageSrc = userImage?.downloadUrl
-    ? cdnImageUrl(userImage.downloadUrl)
-    : DefaultMemberImage
+  const profileImageSrc = user.photo?.publicUrl ?? DefaultMemberImage
 
   return (
     <Box sx={{ position: 'relative' }}>
-      {profileType !== ProfileTypeList.MEMBER && (
+      {user.type !== ProfileTypeList.MEMBER && (
         <Box
           sx={{
             display: 'block',
@@ -29,21 +23,21 @@ export const ProfileHeader = ({ user }: IProps) => {
           }}
         >
           <Box sx={{ display: ['none', 'none', 'block'] }}>
-            <MemberBadge size={150} profileType={profileType} />
+            <MemberBadge size={150} profileType={user.type} />
           </Box>
           <Box sx={{ display: ['none', 'block', 'none'] }}>
-            <MemberBadge size={100} profileType={profileType} />
+            <MemberBadge size={100} profileType={user.type} />
           </Box>
           <Box sx={{ display: ['block', 'none', 'none'] }}>
-            <MemberBadge size={75} profileType={profileType} />
+            <MemberBadge size={75} profileType={user.type} />
           </Box>
         </Box>
       )}
       <Flex sx={{ gap: 2, alignItems: 'center', paddingBottom: [2, 4] }}>
-        {userImage?.downloadUrl && profileType !== ProfileTypeList.MEMBER && (
+        {profileImageSrc && user.type !== ProfileTypeList.MEMBER && (
           <Avatar
             data-cy="userImage"
-            src={cdnImageUrl(userImage.downloadUrl, { width: 50 })}
+            src={profileImageSrc}
             sx={{
               objectFit: 'cover',
               width: '50px',
@@ -52,7 +46,7 @@ export const ProfileHeader = ({ user }: IProps) => {
           />
         )}
 
-        {profileType === ProfileTypeList.MEMBER && (
+        {user.type === ProfileTypeList.MEMBER && (
           <Avatar
             data-cy="profile-avatar"
             loading="lazy"
@@ -67,10 +61,10 @@ export const ProfileHeader = ({ user }: IProps) => {
         <Flex sx={{ flexDirection: 'column' }}>
           <Username
             user={{
-              ...user,
-              countryCode: getUserCountry(user),
-              isSupporter: !!user.badges?.supporter,
-              isVerified: !!user.badges?.verified,
+              userName: user.username,
+              countryCode: user.country,
+              isSupporter: !!user.isSupporter,
+              isVerified: !!user.isVerified,
             }}
             sx={{ alignSelf: 'flex-start' }}
           />
@@ -80,7 +74,7 @@ export const ProfileHeader = ({ user }: IProps) => {
             style={{ wordBreak: 'break-word' }}
             data-cy="userDisplayName"
           >
-            {displayName}
+            {user.displayName}
           </Heading>
         </Flex>
       </Flex>

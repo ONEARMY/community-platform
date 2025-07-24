@@ -3,7 +3,7 @@ import { Select } from 'oa-components'
 import { UserRole } from 'oa-shared'
 import { SITE, VERSION } from 'src/config/config'
 import { getDevSiteRole } from 'src/config/devSiteConfig'
-import { Box, Flex, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 
 /**
  * A simple header component that reminds developers that they are working on a dev
@@ -14,54 +14,42 @@ const DevSiteHeader = observer(() => {
     <>
       {showDevSiteHeader() && (
         <Flex
-          data-cy="devSiteHeader"
-          bg="#f58d8e"
-          py={1}
-          px={1}
-          style={{ alignItems: 'center', zIndex: 3001 }}
+          sx={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#f58d8e',
+            padding: 1,
+            zIndex: 3001,
+            flexDirection: ['column', 'row'],
+            gap: 2,
+            fontSize: 2,
+          }}
         >
-          <Text
-            color={'white'}
-            sx={{
-              flex: '1',
-              textAlign: 'center',
-              fontSize: 2,
-            }}
-          >
+          <Text color="white">
             This is a dev version of the platform (v{VERSION})
           </Text>
-          <Flex
-            data-cy="devSiteRoleSelectContainer"
-            sx={{ alignItems: 'center' }}
-            ml={2}
-          >
-            <Text color={'white'} mr="1" title={SITE} sx={{ fontSize: 2 }}>
+          <Flex sx={{ alignItems: 'center', gap: 2 }}>
+            <Text color={'white'} title={SITE} sx={{ fontSize: 2 }}>
               View as:
             </Text>
-            <Box sx={{ width: '150px' }} mr={3}>
-              <Select
-                options={siteRoles}
-                placeholder="Role"
-                defaultValue={
-                  siteRoles.find((s) => s.value === getDevSiteRole()) ||
-                  siteRoles[0]
-                }
-                onChange={(s: any) => setSiteRole(s.value)}
-              />
-            </Box>
-          </Flex>
-          <Flex data-cy="devSiteSelectContainer" sx={{ alignItems: 'center' }}>
-            <Text color={'white'} mr="1" title={SITE} sx={{ fontSize: 2 }}>
+            <Select
+              options={siteRoles}
+              placeholder="Role"
+              defaultValue={
+                siteRoles.find((s) => s.value === getDevSiteRole()) ||
+                siteRoles[0]
+              }
+              onChange={(s: any) => setSiteRole(s.value)}
+            />
+            <Text color={'white'} title={SITE} sx={{ fontSize: 2 }}>
               Site:
             </Text>
-            <Box sx={{ width: '130px' }} mr={3}>
-              <Select
-                options={devSites}
-                placeholder="Site"
-                defaultValue={devSites.find((s) => s.value === SITE)}
-                onChange={(s: any) => setSite(s.value)}
-              />
-            </Box>
+            <Select
+              options={devSites}
+              placeholder="Site"
+              defaultValue={devSites.find((s) => s.value === SITE)}
+              onChange={(s: any) => setSite(s.value)}
+            />
           </Flex>
         </Flex>
       )}

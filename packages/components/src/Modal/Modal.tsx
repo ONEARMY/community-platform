@@ -40,7 +40,7 @@ export const Modal = (props: Props) => {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
-    z-index: 4000;
+    z-index: 5000;
   `
 
   const ModalContent = styled(Box)`
@@ -59,7 +59,7 @@ export const Modal = (props: Props) => {
     background: white;
     border: 2px solid black;
     border-radius: 10px;
-    z-index: 4001;
+    z-index: 5001;
     overflow: hidden;
   `
 

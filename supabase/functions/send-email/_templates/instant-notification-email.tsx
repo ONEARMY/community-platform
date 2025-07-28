@@ -32,11 +32,7 @@ export const InstantNotificationEmail = (props: IProps) => {
   const { notification, settings, user } = props
 
   const buttonLink = urlAppend(
-    `${settings.siteUrl}/${notification.title.parentSlug}`,
-    'notification',
-  )
-  const headerLink = urlAppend(
-    `${settings.siteUrl}/${notification.slug}`,
+    `${settings.siteUrl}/${notification.link}`,
     'notification',
   )
 
@@ -48,13 +44,9 @@ export const InstantNotificationEmail = (props: IProps) => {
       userCode={user.code}
     >
       <Header>
-        <Link href={headerLink}>
-          <Heading>
-            <strong>{notification.title.triggeredBy}</strong>{' '}
-            {notification.title.middle} {' on '}
-            {notification.title.parentTitle}
-          </Heading>
-        </Link>
+        <Heading>
+          {notification.triggeredBy} {notification.title}
+        </Heading>
       </Header>
 
       <BoxText>

@@ -30,7 +30,7 @@ describe('NotificationDisplay', () => {
           }),
           triggeredBy: {
             id: 1,
-            username: 'daveO',
+            username: 'dave0',
             photoUrl: '',
           },
         })
@@ -38,20 +38,18 @@ describe('NotificationDisplay', () => {
         const notificationDisplay =
           NotificationDisplay.fromNotification(notification)
 
-        expect(notificationDisplay.slug).toBe(
+        expect(notificationDisplay.link).toBe(
           'news/new-thing-coming#comment:101',
         )
         expect(notificationDisplay.body).toBe('Great work')
-        expect(notificationDisplay.title).toStrictEqual({
-          triggeredBy: 'daveO',
-          middle: 'left a comment',
-          parentTitle: 'New thing coming',
-          parentSlug: 'news/new-thing-coming',
-        })
+        expect(notificationDisplay.title).toBe(
+          'left a comment on New thing coming',
+        )
+        expect(notificationDisplay.triggeredBy).toBe('dave0')
         expect(notificationDisplay.email).toStrictEqual({
           body: 'Great work',
           buttonLabel: 'See the full discussion',
-          preview: 'daveO has left a new comment',
+          preview: 'dave0 has left a new comment',
           subject: 'A new comment on New thing coming',
         })
       })
@@ -75,14 +73,10 @@ describe('NotificationDisplay', () => {
         const notificationDisplay =
           NotificationDisplay.fromNotification(notification)
 
-        expect(notificationDisplay.slug).toBe('library/best-guide#comment:102')
+        expect(notificationDisplay.link).toBe('library/best-guide#comment:102')
         expect(notificationDisplay.body).toBe('Amazing')
-        expect(notificationDisplay.title).toStrictEqual({
-          triggeredBy: 'JEFF123',
-          middle: 'left a comment',
-          parentTitle: 'Best Guide',
-          parentSlug: 'library/best-guide',
-        })
+        expect(notificationDisplay.title).toBe('left a comment on Best Guide')
+        expect(notificationDisplay.triggeredBy).toBe('JEFF123')
         expect(notificationDisplay.email).toStrictEqual({
           body: 'Amazing',
           buttonLabel: 'See the full discussion',
@@ -110,16 +104,14 @@ describe('NotificationDisplay', () => {
         const notificationDisplay =
           NotificationDisplay.fromNotification(notification)
 
-        expect(notificationDisplay.slug).toBe(
+        expect(notificationDisplay.link).toBe(
           'questions/where-to-start#comment:103',
         )
         expect(notificationDisplay.body).toBe("I'm not sure.")
-        expect(notificationDisplay.title).toStrictEqual({
-          triggeredBy: 'Ben',
-          middle: 'left a comment',
-          parentTitle: 'Where to start?',
-          parentSlug: 'questions/where-to-start',
-        })
+        expect(notificationDisplay.title).toBe(
+          'left a comment on Where to start?',
+        )
+        expect(notificationDisplay.triggeredBy).toBe('Ben')
         expect(notificationDisplay.email).toStrictEqual({
           body: "I'm not sure.",
           buttonLabel: 'See the full discussion',
@@ -152,16 +144,14 @@ describe('NotificationDisplay', () => {
         const notificationDisplay =
           NotificationDisplay.fromNotification(notification)
 
-        expect(notificationDisplay.slug).toBe(
+        expect(notificationDisplay.link).toBe(
           'research/new-buildings?update_777#comment:104',
         )
         expect(notificationDisplay.body).toBe("I'm not sure.")
-        expect(notificationDisplay.title).toStrictEqual({
-          triggeredBy: 'Mario',
-          middle: 'left a comment',
-          parentTitle: 'New Buildings: Digging',
-          parentSlug: 'research/new-buildings#update_777',
-        })
+        expect(notificationDisplay.title).toBe(
+          'left a comment on New Buildings: Digging',
+        )
+        expect(notificationDisplay.triggeredBy).toBe('Mario')
         expect(notificationDisplay.email).toStrictEqual({
           body: "I'm not sure.",
           buttonLabel: 'See the full discussion',
@@ -185,7 +175,7 @@ describe('NotificationDisplay', () => {
           }),
           triggeredBy: {
             id: 1,
-            username: 'daveO',
+            username: 'dave0',
             photoUrl: '',
           },
         })
@@ -193,20 +183,18 @@ describe('NotificationDisplay', () => {
         const notificationDisplay =
           NotificationDisplay.fromNotification(notification)
 
-        expect(notificationDisplay.slug).toBe(
+        expect(notificationDisplay.link).toBe(
           'news/new-thing-coming#comment:101',
         )
         expect(notificationDisplay.body).toBe('Great work')
-        expect(notificationDisplay.title).toStrictEqual({
-          triggeredBy: 'daveO',
-          middle: 'left a reply',
-          parentTitle: 'New thing coming',
-          parentSlug: 'news/new-thing-coming',
-        })
+        expect(notificationDisplay.title).toBe(
+          'left a reply on New thing coming',
+        )
+        expect(notificationDisplay.triggeredBy).toBe('dave0')
         expect(notificationDisplay.email).toStrictEqual({
           body: 'Great work',
           buttonLabel: 'See the full discussion',
-          preview: 'daveO has left a new reply',
+          preview: 'dave0 has left a new reply',
           subject: 'A new reply on New thing coming',
         })
       })
@@ -230,14 +218,10 @@ describe('NotificationDisplay', () => {
         const notificationDisplay =
           NotificationDisplay.fromNotification(notification)
 
-        expect(notificationDisplay.slug).toBe('library/best-guide#comment:102')
+        expect(notificationDisplay.link).toBe('library/best-guide#comment:102')
         expect(notificationDisplay.body).toBe('Amazing')
-        expect(notificationDisplay.title).toStrictEqual({
-          triggeredBy: 'JEFF123',
-          middle: 'left a reply',
-          parentTitle: 'Best Guide',
-          parentSlug: 'library/best-guide',
-        })
+        expect(notificationDisplay.title).toBe('left a reply on Best Guide')
+        expect(notificationDisplay.triggeredBy).toBe('JEFF123')
         expect(notificationDisplay.email).toStrictEqual({
           body: 'Amazing',
           buttonLabel: 'See the full discussion',
@@ -265,16 +249,14 @@ describe('NotificationDisplay', () => {
         const notificationDisplay =
           NotificationDisplay.fromNotification(notification)
 
-        expect(notificationDisplay.slug).toBe(
+        expect(notificationDisplay.link).toBe(
           'questions/where-to-start#comment:103',
         )
         expect(notificationDisplay.body).toBe("I'm not sure.")
-        expect(notificationDisplay.title).toStrictEqual({
-          triggeredBy: 'Ben',
-          middle: 'left a reply',
-          parentTitle: 'Where to start?',
-          parentSlug: 'questions/where-to-start',
-        })
+        expect(notificationDisplay.title).toBe(
+          'left a reply on Where to start?',
+        )
+        expect(notificationDisplay.triggeredBy).toBe('Ben')
         expect(notificationDisplay.email).toStrictEqual({
           body: "I'm not sure.",
           buttonLabel: 'See the full discussion',
@@ -307,16 +289,14 @@ describe('NotificationDisplay', () => {
         const notificationDisplay =
           NotificationDisplay.fromNotification(notification)
 
-        expect(notificationDisplay.slug).toBe(
+        expect(notificationDisplay.link).toBe(
           'research/new-buildings?update_777#comment:104',
         )
         expect(notificationDisplay.body).toBe("I'm not sure.")
-        expect(notificationDisplay.title).toStrictEqual({
-          triggeredBy: 'Mario',
-          middle: 'left a reply',
-          parentTitle: 'New Buildings: Digging',
-          parentSlug: 'research/new-buildings#update_777',
-        })
+        expect(notificationDisplay.title).toBe(
+          'left a reply on New Buildings: Digging',
+        )
+        expect(notificationDisplay.triggeredBy).toBe('Mario')
         expect(notificationDisplay.email).toStrictEqual({
           body: "I'm not sure.",
           buttonLabel: 'See the full discussion',
@@ -349,16 +329,14 @@ describe('NotificationDisplay', () => {
         const notificationDisplay =
           NotificationDisplay.fromNotification(notification)
 
-        expect(notificationDisplay.slug).toBe(
+        expect(notificationDisplay.link).toBe(
           'research/second-building#update_654',
         )
         expect(notificationDisplay.body).toBe('Foundations')
-        expect(notificationDisplay.title).toStrictEqual({
-          triggeredBy: 'Julie',
-          middle: 'published a new update',
-          parentTitle: 'Second Building',
-          parentSlug: 'research/second-building',
-        })
+        expect(notificationDisplay.title).toBe(
+          'published a new update on Second Building',
+        )
+        expect(notificationDisplay.triggeredBy).toBe('Julie')
         expect(notificationDisplay.email).toStrictEqual({
           body: 'Foundations:\n\nWe put some tiles down.',
           buttonLabel: 'Join the discussion',

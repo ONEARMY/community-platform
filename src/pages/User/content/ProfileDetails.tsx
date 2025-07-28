@@ -61,7 +61,6 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
             gap: 2,
           }}
         >
-          {/* TODO: check tags functionality */}
           {tags && <TagList tags={tags.map((t) => ({ label: t.name }))} />}
           {about && <Paragraph>{about}</Paragraph>}
 

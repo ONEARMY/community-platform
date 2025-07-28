@@ -9,7 +9,7 @@ import type {
   ProfileFormData,
 } from 'oa-shared'
 
-const get = async (): Promise<Profile | null> => {
+const get = async (): Promise<Profile | undefined> => {
   try {
     const url = new URL('/api/profile', window.location.origin)
 
@@ -19,8 +19,6 @@ const get = async (): Promise<Profile | null> => {
   } catch (error) {
     logger.error('Failed to fetch research articles', { error })
   }
-
-  return null
 }
 
 const update = async (value: ProfileFormData) => {

@@ -55,7 +55,7 @@ describe('[Settings]', () => {
       const description = "I'm a very active member"
       const profileType = 'member'
       const tag = ['Sewing', 'Accounting']
-      const website = 'https://social.network' // TODO: set link
+      const website = 'https://social.network'
 
       cy.step('Incomplete profile banner visible when logged out')
       cy.get('[data-cy=notificationBanner]').should('not.exist')

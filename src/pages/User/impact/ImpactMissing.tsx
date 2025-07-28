@@ -7,12 +7,12 @@ import { Flex, Text } from 'theme-ui'
 import { IMPACT_REPORT_LINKS } from './constants'
 import { invisible, missing, reportYearLabel } from './labels'
 
-import type { IImpactYear, IImpactYearFieldList, Profile } from 'oa-shared'
+import type { IImpactDataField, IImpactYear, Profile } from 'oa-shared'
 
 interface Props {
-  fields: IImpactYearFieldList | undefined
+  fields: IImpactDataField[] | undefined
   owner: Profile | undefined
-  visibleFields: IImpactYearFieldList | undefined
+  visibleFields: IImpactDataField[] | undefined
   year: IImpactYear
 }
 

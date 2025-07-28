@@ -31,7 +31,7 @@ describe('NotificationDisplay', () => {
           triggeredBy: {
             id: 1,
             username: 'daveO',
-            photoUrl: '',
+            photo: null,
           },
         })
 
@@ -186,7 +186,7 @@ describe('NotificationDisplay', () => {
           triggeredBy: {
             id: 1,
             username: 'daveO',
-            photoUrl: '',
+            photo: null,
           },
         })
 

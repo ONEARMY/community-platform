@@ -1,13 +1,15 @@
 import { logger } from 'src/logger'
 
 import type {
+  IImpactDataField,
+  IUserImpact,
   MapPin,
   MapPinFormData,
   Profile,
   ProfileFormData,
 } from 'oa-shared'
 
-const get = async () => {
+const get = async (): Promise<Profile | null> => {
   try {
     const url = new URL('/api/profile', window.location.origin)
 
@@ -17,6 +19,8 @@ const get = async () => {
   } catch (error) {
     logger.error('Failed to fetch research articles', { error })
   }
+
+  return null
 }
 
 const update = async (value: ProfileFormData) => {
@@ -114,7 +118,28 @@ const deletePin = async () => {
     throw new Error(response.statusText)
   }
 
-  return await response.json()
+  return
+}
+
+const updateImpact = async (
+  year: number,
+  fields: IImpactDataField[],
+): Promise<IUserImpact> => {
+  const data = new FormData()
+
+  data.append('year', year.toString())
+  data.append('fields', JSON.stringify(fields))
+
+  const response = await fetch('/api/settings/impact', {
+    method: 'POST',
+    body: data,
+  })
+
+  if (!response.ok) {
+    throw new Error(response.statusText)
+  }
+
+  return (await response.json()) as IUserImpact
 }
 
 export const profileService = {
@@ -122,4 +147,5 @@ export const profileService = {
   update,
   upsertPin,
   deletePin,
+  updateImpact,
 }

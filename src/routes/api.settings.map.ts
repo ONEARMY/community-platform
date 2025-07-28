@@ -5,7 +5,7 @@ import { ProfileServiceServer } from 'src/services/profileService.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
-import type { DBMapPin, DBProfile, UpsertPin } from 'shared/lib'
+import type { DBMapPin, DBProfile, UpsertPin } from 'oa-shared'
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
@@ -73,7 +73,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error creatsavinging map pin', headers },
+      { status: 500, statusText: 'Error saving map pin', headers },
     )
   }
 }

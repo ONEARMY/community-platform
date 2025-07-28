@@ -18,6 +18,14 @@ export class ProfileFactory {
         ? this.imageService.getPublicUrls(dbProfile.cover_images)
         : null
 
+    let impact = null
+
+    try {
+      impact = dbProfile.impact ? JSON.parse(dbProfile.impact) : null
+    } catch (error) {
+      console.error('error parsing impact')
+    }
+
     return new Profile({
       id: dbProfile.id,
       createdAt: dbProfile.created_at,
@@ -35,7 +43,7 @@ export class ProfileFactory {
       isBlockedFromMessaging: !!dbProfile.is_blocked_from_messaging,
       about: dbProfile.about,
       coverImages: coverImages,
-      impact: dbProfile.impact,
+      impact,
       isContactable: !!dbProfile.is_contactable,
       lastActive: dbProfile.last_active,
       website: dbProfile.website,

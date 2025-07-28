@@ -71,17 +71,15 @@ export interface IUserBadges {
   supporter?: boolean
 }
 
-export interface IUserImpact {
-  [key: number]: IImpactYearFieldList
-}
-
 export interface IImpactDataField {
   id: string
   value: number
   isVisible: boolean
 }
 
-export type IImpactYearFieldList = IImpactDataField[]
+export interface IUserImpact {
+  [year: number]: IImpactDataField[]
+}
 
 export type IImpactYear = 2019 | 2020 | 2021 | 2022 | 2023 | 2024
 

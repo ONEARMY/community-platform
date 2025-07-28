@@ -20,7 +20,7 @@ import type {
 export class DBProfile {
   readonly id: number
   readonly created_at: Date
-  readonly tags: DBProfileTag[]
+  readonly tags?: DBProfileTag[]
   readonly pin?: DBMapPin
   username: string
   display_name: string
@@ -35,13 +35,13 @@ export class DBProfile {
   visitor_policy: string | null
   is_blocked_from_messaging: boolean | null
   about: string | null
-  impact: IUserImpact
+  impact: string | null
   is_contactable: boolean
   last_active: Date | null
   website: string | null
   total_views: number
   auth_id: string
-  tag_ids: number[]
+  tag_ids: number[] | null
 
   constructor(obj: DBProfile) {
     Object.assign(this, obj)
@@ -58,7 +58,7 @@ export class Profile {
   country: string
   about: string | null
   type: ProfileTypeName
-  impact: IUserImpact
+  impact: IUserImpact | null
   photo: Image | null
   isContactable: boolean
   isBlockedFromMessaging: boolean
@@ -82,6 +82,14 @@ export class Profile {
     coverImages: Image[] = null,
     authorVotes?: AuthorVotes[],
   ) {
+    let impact = null
+
+    try {
+      impact = dbProfile.impact ? JSON.parse(dbProfile.impact) : null
+    } catch (error) {
+      console.error('error parsing impact')
+    }
+
     return new Profile({
       id: dbProfile.id,
       createdAt: dbProfile.created_at,
@@ -99,7 +107,7 @@ export class Profile {
       isBlockedFromMessaging: !!dbProfile.is_blocked_from_messaging,
       about: dbProfile.about,
       coverImages: coverImages,
-      impact: dbProfile.impact,
+      impact,
       isContactable: !!dbProfile.is_contactable,
       lastActive: dbProfile.last_active,
       website: dbProfile.website,
@@ -115,12 +123,11 @@ export class Profile {
 
 export type NotificationActionType = 'newContent' | 'newComment'
 export type NotificationContentType = 'researchUpdate' | 'comment' | 'reply'
+export type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photo'>
 
 type NotificationContent = News | Comment | Question | ResearchUpdate
 type NotificationSourceContentType = SubscribableContentTypes
 type NotificationSourceContent = News | Project | Question | ResearchItem
-
-type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photo'>
 
 export class DBNotification implements IDBDocSB {
   readonly id: number

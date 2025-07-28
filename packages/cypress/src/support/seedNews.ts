@@ -16,7 +16,7 @@ export const seedNews = async (profiles, tagsData) => {
     {
       news: MOCK_DATA.news.map((news) => ({
         ...news,
-        created_by: profiles.data[0].id,
+        created_by: profiles[0].id,
         tags: [tagsData.data[0].id, tagsData.data[1].id],
         category: categories.data[0].id,
         tenant_id: tenantId,

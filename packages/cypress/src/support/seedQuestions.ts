@@ -44,7 +44,7 @@ export const seedQuestions = async (profiles) => {
       questions: MOCK_DATA.questions.map((question) => ({
         ...question,
         tenant_id: tenantId,
-        created_by: profiles.data[0].id,
+        created_by: profiles[0].id,
         category: categories.data[0].id,
       })),
     },

@@ -26,13 +26,18 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   const { client, headers } = createSupabaseServerClient(request)
 
-  const sourceParam = isNaN(+params.sourceId) ? 'source_id_legacy' : 'source_id'
-  const sourceId = isNaN(+params.sourceId) ? params.sourceId : +params.sourceId
+  try {
+    const sourceParam = isNaN(+params.sourceId)
+      ? 'source_id_legacy'
+      : 'source_id'
+    const sourceId = isNaN(+params.sourceId)
+      ? params.sourceId
+      : +params.sourceId
 
-  const result = await client
-    .from('comments')
-    .select(
-      `
+    const result = await client
+      .from('comments')
+      .select(
+        `
       id, 
       comment, 
       created_at, 
@@ -45,55 +50,68 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       created_by,
       profiles(id, display_name, username, is_verified, is_supporter, photo_url, country)
     `,
-    )
-    .eq('source_type', params.sourceType)
-    .eq(sourceParam, sourceId)
-    .order('created_at', { ascending: true })
+      )
+      .eq('source_type', params.sourceType)
+      .eq(sourceParam, sourceId)
+      .order('created_at', { ascending: true })
 
-  if (result.error) {
-    console.error(result.error)
-
-    return Response.json({}, { headers, status: 500 })
-  }
-
-  const dbComments = result.data.map(
-    (x) =>
-      new DBComment({
-        ...x,
-        profile: x.profiles as unknown as DBAuthor,
-      }),
-  )
-
-  const commentsByParentId = dbComments.reduce((acc, comment) => {
-    const parentId = comment.parent_id ?? 0
-    if (!acc[parentId]) {
-      acc[parentId] = []
+    if (result.error) {
+      console.error(result.error)
+      return Response.json({}, { headers, status: 500 })
     }
-    acc[parentId].push(comment)
-    return acc
-  }, {})
 
-  const commentFactory = new CommentFactory(new ImageServiceServer(client))
+    const dbComments = result.data.map(
+      (x) =>
+        new DBComment({
+          ...x,
+          profile: x.profiles as unknown as DBAuthor,
+        }),
+    )
 
-  const commentWithReplies = (commentsByParentId[0] ?? []).map(
-    (mainComment: DBComment) => {
-      const replies: Reply[] = (commentsByParentId[mainComment.id] ?? []).map(
-        (reply: DBComment) => commentFactory.fromDBWithAuthor(reply, []),
-      )
-      return commentFactory.fromDBWithAuthor(
-        mainComment,
-        replies.filter((x) => !x.deleted).sort((a, b) => a.id - b.id),
-      )
-    },
-  )
+    const commentsByParentId = dbComments.reduce<Record<number, DBComment[]>>(
+      (acc, comment) => {
+        const parentId = comment.parent_id ?? 0
+        if (!acc[parentId]) {
+          acc[parentId] = []
+        }
+        acc[parentId].push(comment)
+        return acc
+      },
+      {},
+    )
 
-  // remove deleted comments that don't have replies
-  const deletedFilter = commentWithReplies.filter(
-    (comment: Comment) =>
-      !comment.deleted || (comment.replies?.length || 0) > 0,
-  )
+    const commentFactory = new CommentFactory(new ImageServiceServer(client))
 
-  return Response.json({ comments: deletedFilter }, { headers })
+    const mainComments = commentsByParentId[0] ?? []
+
+    const commentsWithReplies = await Promise.all(
+      mainComments.map(async (mainComment: DBComment) => {
+        const replyDBComments = commentsByParentId[mainComment.id] ?? []
+
+        const replies: Reply[] = await Promise.all(
+          replyDBComments.map((reply: DBComment) =>
+            commentFactory.fromDBWithAuthor(reply, []),
+          ),
+        )
+
+        const filteredReplies = replies
+          .filter((reply) => !reply.deleted)
+          .sort((a, b) => a.id - b.id)
+
+        return commentFactory.fromDBWithAuthor(mainComment, filteredReplies)
+      }),
+    )
+
+    const filteredComments = commentsWithReplies.filter(
+      (comment: Comment) =>
+        !comment.deleted || (comment.replies?.length || 0) > 0,
+    )
+
+    return Response.json({ comments: filteredComments }, { headers })
+  } catch (error) {
+    console.error(error)
+    return Response.json({}, { status: 500, headers })
+  }
 }
 
 export async function action({ params, request }: LoaderFunctionArgs) {

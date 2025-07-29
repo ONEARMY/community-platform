@@ -28,8 +28,6 @@ const createInstantNotificationEmail = async (
   profileId: number,
 ) => {
   try {
-    console.log('In createInstantNotificationEmail')
-
     const profileResponse = await client
       .from('profiles')
       .select('created_at')
@@ -49,7 +47,7 @@ const createInstantNotificationEmail = async (
     const rpcResponse = await client.rpc('get_user_email_by_profile_id', {
       id: profileId,
     })
-    console.log({ rpcResponse })
+
     if (!rpcResponse.data || rpcResponse.data.length === 0) {
       const error = `No email found for profile ID: ${profileId}`
       console.error(error)

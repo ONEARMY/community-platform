@@ -13,7 +13,6 @@ import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
-import { MultipleCommentSectionWrapper } from 'src/pages/common/CommentsSupabase/MultipleCommentSectionWrapper'
 import {
   getResearchCommentId,
   getResearchUpdateId,
@@ -36,8 +35,8 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
   const location = useLocation()
   const { userStore } = useCommonStores().stores
   const loggedInUser = userStore.activeUser
-  const [subscribed, setSubscribed] = useState<boolean>(false) // TODO
-  const [voted, setVoted] = useState<boolean>(false) // TODO
+  const [subscribed, setSubscribed] = useState<boolean>(false)
+  const [voted, setVoted] = useState<boolean>(false)
   const [subscribersCount, setSubscribersCount] = useState<number>(
     research.subscriberCount,
   )
@@ -184,18 +183,16 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
           gap: [4, 6],
         }}
       >
-        <MultipleCommentSectionWrapper>
-          {sortedUpdates?.map((update, index) => (
-            <ResearchUpdate
-              research={research}
-              update={update}
-              key={update.id}
-              updateIndex={index}
-              isEditable={isEditable}
-              slug={research.slug}
-            />
-          ))}
-        </MultipleCommentSectionWrapper>
+        {sortedUpdates?.map((update, index) => (
+          <ResearchUpdate
+            research={research}
+            update={update}
+            key={update.id}
+            updateIndex={index}
+            isEditable={isEditable}
+            slug={research.slug}
+          />
+        ))}
       </Flex>
 
       <ClientOnly fallback={<></>}>

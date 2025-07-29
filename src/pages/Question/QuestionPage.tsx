@@ -9,12 +9,9 @@ import {
   TagList,
   UsefulStatsButton,
 } from 'oa-components'
-import { type IUser, type Question, UserRole } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
-import { AuthWrapper } from 'src/common/AuthWrapper'
-import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { usefulService } from 'src/services/usefulService'
@@ -23,7 +20,10 @@ import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
+import { DraftTag } from '../common/Drafts/DraftTag'
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
+
+import type { IUser, Question } from 'oa-shared'
 
 interface IProps {
   question: Question
@@ -101,6 +101,9 @@ export const QuestionPage = observer(({ question }: IProps) => {
                       onUsefulClick(voted ? 'delete' : 'add')
                     }
                   />
+
+                  {question.isDraft && <DraftTag />}
+
                   {isEditable && (
                     <Link to={'/questions/' + question.slug + '/edit'}>
                       <Button type="button" variant="primary" data-cy="edit">
@@ -165,7 +168,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
         <ContentStatistics
           statistics={[
             {
-              icon: 'view',
+              icon: 'show',
               label: buildStatisticsLabel({
                 stat: question.totalViews,
                 statUnit: 'view',
@@ -189,7 +192,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
               }),
             },
             {
-              icon: 'comment',
+              icon: 'comment-outline',
               label: buildStatisticsLabel({
                 stat: question.commentCount,
                 statUnit: 'comment',
@@ -212,19 +215,9 @@ export const QuestionPage = observer(({ question }: IProps) => {
           >
             <CommentSectionSupabase
               authors={question.author?.id ? [question.author?.id] : []}
+              setSubscribersCount={setSubscribersCount}
               sourceId={question.id}
               sourceType="questions"
-              followButton={
-                <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
-                  <FollowButtonAction
-                    labelFollow="Follow Comments"
-                    labelUnfollow="Following Comments"
-                    contentType="questions"
-                    item={question}
-                    setSubscribersCount={setSubscribersCount}
-                  />
-                </AuthWrapper>
-              }
             />
           </Card>
         )}

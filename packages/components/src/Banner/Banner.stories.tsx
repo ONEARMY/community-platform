@@ -1,6 +1,6 @@
 import { Banner } from './Banner'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Layout/Banner',

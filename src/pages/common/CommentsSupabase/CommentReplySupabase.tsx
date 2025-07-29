@@ -56,7 +56,7 @@ export const CommentReply = observer(
             paddingRight: 2,
           }}
         >
-          <Icon glyph="arrow-curved-bottom-right" />
+          <Icon glyph="reply-outline" />
         </Box>
         <Flex
           id={`comment:${comment.id}`}

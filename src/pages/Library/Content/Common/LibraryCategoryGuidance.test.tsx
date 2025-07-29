@@ -1,16 +1,25 @@
+import { faker } from '@faker-js/faker'
 import { render, screen } from '@testing-library/react'
 import { guidance } from 'src/pages/Library/labels'
-import { FactoryOldCategory } from 'src/test/factories/OldCategory'
 import { describe, expect, it } from 'vitest'
 
 import { LibraryCategoryGuidance } from './LibraryCategoryGuidance'
 import { LibraryFormProvider } from './LibraryFormProvider'
 
-describe('HowtoCategoryGuidance', () => {
+describe('LibraryCategoryGuidance', () => {
   it('renders expected main content when a category that exists is present', async () => {
     render(
       <LibraryFormProvider>
-        <LibraryCategoryGuidance category={FactoryOldCategory} type="main" />
+        <LibraryCategoryGuidance
+          category={{
+            id: 1,
+            createdAt: faker.date.past(),
+            modifiedAt: faker.date.past(),
+            name: 'Moulds',
+            type: 'projects',
+          }}
+          type="main"
+        />
       </LibraryFormProvider>,
     )
 

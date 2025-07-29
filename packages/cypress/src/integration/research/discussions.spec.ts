@@ -3,8 +3,15 @@
 import { UserRole } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
+import { generateAlphaNumeric } from '../../utils/TestUtils'
+
+let randomId
 
 describe('[Research.Discussions]', () => {
+  beforeEach(() => {
+    randomId = generateAlphaNumeric(10).toLowerCase()
+  })
+
   it('can open using deep links', () => {
     // TODO find a way to test this
   })
@@ -18,7 +25,7 @@ describe('[Research.Discussions]', () => {
     cy.signIn(admin.email, admin.password)
 
     const newComment = `An example comment from ${admin.userName}`
-    const updatedNewComment = `I've updated my comment now. Love ${admin.userName}`
+    const updatedNewComment = `I've updated my comment now. Love ${admin.userName}. ${randomId}!`
 
     const research = MOCK_DATA.research[1]
     const researchPath = `/research/${research.slug}`
@@ -49,7 +56,7 @@ describe('[Research.Discussions]', () => {
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
 
     cy.step('First commentor can respond')
-    const secondReply = `Quick reply. ${admin.userName}`
+    const secondReply = `Quick reply. ${admin.userName}. ${randomId}...`
 
     cy.logout()
     cy.signIn(admin.email, admin.password)
@@ -62,6 +69,12 @@ describe('[Research.Discussions]', () => {
       title: research.title,
       username: secondCommentor._id,
     })
+    cy.wait(2000)
+    cy.get('[data-cy=highlighted-comment]')
+      .contains(updatedNewReply)
+      .should('be.inViewport', 10)
+
+    cy.visit(researchPath)
 
     cy.step('Can add reply')
     cy.get('[data-cy="HideDiscussionContainer:button"]').click()

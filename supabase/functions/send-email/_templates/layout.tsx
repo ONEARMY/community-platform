@@ -21,6 +21,7 @@ const body = {
   fontFamily: '"Varela Round", Arial, sans-serif',
   fontSize: '14px',
   color: '#000000',
+  maxWidth: '100%',
 }
 
 const card = {
@@ -38,62 +39,70 @@ const link = {
 }
 
 const mainContainer = {
-  maxWidth: '600px',
+  maxWidth: '100%',
+  width: '600px',
 }
 
-const wrapper = {
-  backgroundColor: '#f4f6f7',
-  maxWidth: 'none',
-  width: '100%',
-}
+type EmailType = 'service' | 'moderation' | 'notification'
 
 type LayoutArgs = {
   children: React.ReactNode
+  emailType: EmailType
   preview: string
   settings: TenantSettings
+  userCode?: string
 }
 
-export const Layout = ({ children, preview, settings }: LayoutArgs) => {
+export const urlAppend = (path: string, emailType: EmailType) => {
+  const url = new URL(`${path}`)
+  url.searchParams.append('utm_source', emailType)
+  url.searchParams.append('utm_medium', 'email')
+  return url.toString()
+}
+
+export const Layout = (props: LayoutArgs) => {
+  const { children, emailType, preview, settings, userCode } = props
+
+  const basePreferencesPath = userCode
+    ? `${settings.siteUrl}/email-preferences?code=${userCode}`
+    : `${settings.siteUrl}/settings/notifications`
+  const preferencesUpdatePath = urlAppend(basePreferencesPath, emailType)
+
+  const isNotificationEmail = emailType === 'notification'
+
   return (
-    <Html>
+    <Html lang="en">
       <Head />
       <Preview>{preview}</Preview>
       <Body style={body}>
-        <Container style={wrapper}>
-          <Container style={mainContainer}>
-            <Img
-              alt={settings.siteName}
-              height={85}
-              width={85}
-              src={settings.siteImage}
-              style={{ margin: '30px auto' }}
-            />
-            <Container style={card}>
-              <Section>{children}</Section>
-            </Container>
-            <Footer>
-              You are receiving important community updates by default. <br />
-              You can update your{' '}
-              <Link
-                href={`${settings.siteUrl}/settings/notifications`}
-                style={link}
-              >
-                {' '}
-                email preferences anytime
-              </Link>{' '}
-              or unsubscribe with ease. <br />
-              Something is not right? Send us{' '}
-              <Link
-                href={
-                  'https://onearmy.retool.com/form/c48a8f5a-4f53-4c58-adda-ef4f3cd8dee1#page=email'
-                }
-                style={link}
-              >
-                feedback
-              </Link>
-              .
-            </Footer>
-          </Container>
+        <Container style={mainContainer}>
+          <Img
+            alt={settings.siteName}
+            height="85px"
+            width="85px"
+            src={settings.siteImage}
+            style={{ margin: '30px auto' }}
+          />
+          <Section style={card}>{children}</Section>
+          <Footer>
+            {!isNotificationEmail && <>This is a service email.</>}
+            {isNotificationEmail && (
+              <>
+                <Link href={preferencesUpdatePath} style={link}>
+                  Unsubscribe or update your email preferences.
+                </Link>
+              </>
+            )}
+            <br />
+            Something is not right? Send us{' '}
+            <Link
+              href={`${settings.siteUrl}/feedback/#page=email`}
+              style={link}
+            >
+              feedback
+            </Link>
+            .
+          </Footer>
         </Container>
       </Body>
     </Html>

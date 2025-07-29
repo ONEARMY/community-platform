@@ -11,6 +11,7 @@ import type { Tag } from './tag'
 
 export class DBQuestion implements IDBContentDoc {
   readonly id: number
+  is_draft: boolean
   readonly created_at: Date
   readonly modified_at: Date | null
   readonly author?: DBAuthor
@@ -37,18 +38,19 @@ export class DBQuestion implements IDBContentDoc {
 
 export class Question implements IContentDoc {
   id: number
-  createdAt: Date
-  modifiedAt: Date | null
   author: Author | null
   category: Category | null
   commentCount: number
+  createdAt: Date
   deleted: boolean
-  title: string
+  isDraft: boolean
+  modifiedAt: Date | null
   previousSlugs: string[]
   slug: string
   subscriberCount: number
   tags: Tag[]
   tagIds?: number[]
+  title: string
   totalViews: number
   usefulCount: number
 
@@ -62,31 +64,33 @@ export class Question implements IContentDoc {
   static fromDB(obj: DBQuestion, tags: Tag[], images?: Image[]) {
     return new Question({
       id: obj.id,
-      createdAt: new Date(obj.created_at),
       author: obj.author ? Author.fromDB(obj.author) : null,
-      modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
-      title: obj.title,
-      previousSlugs: obj.previous_slugs,
-      slug: obj.slug,
+      category: obj.category ? Category.fromDB(obj.category) : null,
+      createdAt: new Date(obj.created_at),
+      commentCount: obj.comment_count || 0,
+      deleted: obj.deleted || false,
       description: obj.description,
       images: images || [],
-      deleted: obj.deleted || false,
-      usefulCount: obj.useful_count || 0,
+      isDraft: obj.is_draft || false,
+      modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
+      previousSlugs: obj.previous_slugs,
+      slug: obj.slug,
       subscriberCount: obj.subscriber_count || 0,
-      commentCount: obj.comment_count || 0,
-      category: obj.category ? Category.fromDB(obj.category) : null,
-      totalViews: obj.total_views || 0,
       tagIds: obj.tags,
       tags: tags,
+      title: obj.title,
+      totalViews: obj.total_views || 0,
+      usefulCount: obj.useful_count || 0,
     })
   }
 }
 
 export type QuestionFormData = {
-  title: string
-  description: string
   category: SelectValue | null
-  tags?: number[]
-  images: IConvertedFileMeta[] | null
+  description: string
   existingImages: Image[] | null
+  images: IConvertedFileMeta[] | null
+  isDraft: boolean
+  tags?: number[]
+  title: string
 }

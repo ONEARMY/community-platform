@@ -28,14 +28,14 @@ describe('[Questions]', () => {
 
     it('Filters', () => {
       cy.step('Can select a category to limit items displayed')
-      cy.get('[data-cy=CategoryVerticalList]').within(() => {
+      cy.get('[data-cy=CategoryHorizonalList]').within(() => {
         cy.contains('Machines').click()
       })
-      cy.get('[data-cy=CategoryVerticalList-Item-active]')
+      cy.get('[data-cy=CategoryHorizonalList-Item-active]')
       cy.url().should('include', 'category=')
 
       cy.step('Can remove the category filter by selecting it again')
-      cy.get('[data-cy=CategoryVerticalList]').within(() => {
+      cy.get('[data-cy=CategoryHorizonalList]').within(() => {
         cy.contains('Machines').click()
       })
       cy.url().should('not.include', 'category=')

@@ -97,9 +97,11 @@ Cypress.Commands.add('addToMarkdownField', (text: string) => {
 })
 
 Cypress.Commands.add('saveSettingsForm', () => {
-  cy.get('[data-cy=save]').click()
+  cy.get('[data-cy=save]').click({ force: true })
+  cy.get('[data-cy=loader]').should('exist')
+  cy.get('[data-cy=loader]').should('not.exist')
   cy.get('[data-cy=errors-container]').should('not.exist')
-  cy.get('[data-cy=save]').should('not.be.disabled')
+  cy.get('[data-cy="TextNotification: success"]').should('be.visible')
 })
 
 Cypress.Commands.add('setSettingAddContactLink', (link: ILink) => {
@@ -302,11 +304,9 @@ Cypress.Commands.add('signUpNewUser', (user?) => {
 })
 
 Cypress.Commands.add('completeUserProfile', (username) => {
-  const userImage = 'avatar'
-
   cy.log('Complete user profile')
   cy.visit('/settings')
-  cy.setSettingImage(userImage, 'userImage')
+  cy.setSettingImage('avatar', 'userImage')
   cy.wait(1500)
   cy.setSettingBasicUserInfo({
     description: `${username} profile description.`,

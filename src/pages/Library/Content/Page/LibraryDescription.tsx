@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link, useNavigate } from '@remix-run/react'
 import {
   Button,
@@ -7,41 +7,37 @@ import {
   ContentStatistics,
   LinkifyText,
   ModerationStatus,
+  TagList,
   UsefulStatsButton,
 } from 'oa-components'
-import { IModerationStatus } from 'oa-shared'
+import { DifficultyLevelRecord, type IUser, type Project } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import { trackEvent } from 'src/common/Analytics'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { TagList } from 'src/common/Tags/TagsList'
+import { DownloadWrapper } from 'src/common/DownloadWrapper'
 import { logger } from 'src/logger'
 import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
-import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import {
   buildStatisticsLabel,
   capitalizeFirstLetter,
-  isAllowedToDeleteContent,
-  isAllowedToEditContent,
+  hasAdminRights,
 } from 'src/utils/helpers'
 import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui'
 
-import { LibraryDownloads } from './LibraryDownloads'
-
-import type { ILibrary, ITag, IUser } from 'oa-shared'
+import { libraryService } from '../../library.service'
 
 const DELETION_LABEL = 'Project marked for deletion'
 
 interface IProps {
   commentsCount: number
-  item: ILibrary.DB & { tagList?: ITag[] }
+  item: Project
   loggedInUser: IUser | undefined
   votedUsefulCount?: number
-  verified?: boolean
   hasUserVotedUseful: boolean
   onUsefulClick: () => Promise<void>
+  subscribersCount: number
 }
 
 export const LibraryDescription = (props: IProps) => {
@@ -51,49 +47,27 @@ export const LibraryDescription = (props: IProps) => {
     item,
     loggedInUser,
     onUsefulClick,
+    subscribersCount,
     votedUsefulCount,
   } = props
-  const {
-    _contentModifiedTimestamp,
-    _created,
-    _createdBy,
-    _deleted,
-    _id,
-    _modified,
-    category,
-    cover_image,
-    cover_image_alt,
-    creatorCountry,
-    description,
-    difficulty_level,
-    moderation,
-    moderatorFeedback,
-    slug,
-    steps,
-    tags,
-    time,
-    title,
-    total_views,
-  } = item
 
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   const navigate = useNavigate()
-  const { stores } = useCommonStores()
 
-  const handleDelete = async (_id: string) => {
+  const handleDelete = async () => {
     try {
-      await stores.LibraryStore.delete(_id)
+      await libraryService.deleteProject(item.id)
       trackEvent({
         category: 'Library',
         action: 'Deleted',
-        label: title,
+        label: item.title,
       })
       logger.debug(
         {
           category: 'Library',
           action: 'Deleted',
-          label: title,
+          label: item.title,
         },
         DELETION_LABEL,
       )
@@ -105,11 +79,19 @@ export const LibraryDescription = (props: IProps) => {
     }
   }
 
+  const isEditable = useMemo(() => {
+    return (
+      !!loggedInUser &&
+      (hasAdminRights(loggedInUser as IUser) ||
+        item.author?.username === loggedInUser.userName)
+    )
+  }, [loggedInUser, item.author])
+
   return (
     <Card variant="responsive">
       <Flex
         data-cy="library-basis"
-        data-id={_id}
+        data-id={item.id}
         sx={{
           overflow: 'hidden',
           flexDirection: ['column-reverse', 'column-reverse', 'row'],
@@ -123,7 +105,7 @@ export const LibraryDescription = (props: IProps) => {
             width: ['100%', '100%', `${(1 / 2) * 100}%`],
           }}
         >
-          {_deleted && (
+          {item.deleted && (
             <Text color="red" pl={2} mb={2} data-cy="how-to-deleted">
               * Marked for deletion
             </Text>
@@ -132,7 +114,7 @@ export const LibraryDescription = (props: IProps) => {
             <ClientOnly fallback={<></>}>
               {() => (
                 <>
-                  {moderation === IModerationStatus.ACCEPTED && (
+                  {item.moderation === 'accepted' && (
                     <UsefulStatsButton
                       votedUsefulCount={votedUsefulCount}
                       hasUserVotedUseful={hasUserVotedUseful}
@@ -144,85 +126,95 @@ export const LibraryDescription = (props: IProps) => {
               )}
             </ClientOnly>
             {/* Check if logged in user is the creator of the project OR a super-admin */}
-            {loggedInUser && isAllowedToEditContent(item, loggedInUser) && (
-              <Link to={'/library/' + slug + '/edit'}>
-                <Button type="button" variant="primary" data-cy="edit">
+            {isEditable && (
+              <Link to={'/library/' + item.slug + '/edit'} data-cy="edit">
+                <Button type="button" variant="primary">
                   Edit
                 </Button>
               </Link>
             )}
 
-            {loggedInUser && isAllowedToDeleteContent(item, loggedInUser) && (
-              <Fragment key={'how-to-delete-action'}>
+            {isEditable && (
+              <>
                 <Button
                   type="button"
                   data-cy="Library: delete button"
                   variant={'secondary'}
                   icon="delete"
-                  disabled={_deleted}
+                  disabled={item.deleted}
                   onClick={() => setShowDeleteModal(true)}
                 >
                   Delete
                 </Button>
 
                 <ConfirmModal
-                  key={_id}
                   isOpen={showDeleteModal}
                   message="Are you sure you want to delete this project?"
                   confirmButtonText="Delete"
                   handleCancel={() => setShowDeleteModal(false)}
-                  handleConfirm={() => handleDelete && handleDelete(_id)}
+                  handleConfirm={() => handleDelete()}
                 />
-              </Fragment>
+              </>
             )}
-          </Flex>
-          {moderatorFeedback && moderation !== IModerationStatus.ACCEPTED ? (
-            <Alert
-              variant="info"
-              sx={{
-                my: 2,
-              }}
-            >
-              <Box
+
+            {item.isDraft && (
+              <Flex
                 sx={{
-                  textAlign: 'left',
+                  marginBottom: 'auto',
+                  minWidth: '100px',
+                  borderRadius: 1,
+                  height: '44px',
+                  background: 'lightgrey',
                 }}
               >
-                <Heading as="p" variant="small" mb={2}>
+                <Text
+                  sx={{
+                    display: 'inline-block',
+                    verticalAlign: 'middle',
+                    color: 'black',
+                    fontSize: [2, 2, 3],
+                    padding: 2,
+                    margin: 'auto',
+                  }}
+                  data-cy="status-draft"
+                >
+                  Draft
+                </Text>
+              </Flex>
+            )}
+          </Flex>
+          {item.moderatonFeedback && item.moderation !== 'accepted' && (
+            <Alert variant="info">
+              <Box sx={{ textAlign: 'left' }}>
+                <Heading as="p" variant="small">
                   Moderator Feedback
                 </Heading>
-                <Text sx={{ fontSize: 2 }}>{moderatorFeedback}</Text>
+                <Text sx={{ fontSize: 2 }}>{item.moderatonFeedback}</Text>
               </Box>
             </Alert>
-          ) : null}
+          )}
           <Box>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <Flex sx={{ flexDirection: 'column', gap: 2 }}>
                 <UserNameTag
-                  userName={_createdBy}
-                  countryCode={creatorCountry}
-                  createdAt={_created}
-                  modifiedAt={_contentModifiedTimestamp || _modified}
+                  userName={item.author?.username || ''}
+                  createdAt={item.createdAt}
+                  modifiedAt={item.modifiedAt}
+                  countryCode={item.author?.country}
                   action="Published"
                 />
-                {category && (
-                  <Category category={category} sx={{ fontSize: 2, mt: 2 }} />
+                {item.category && (
+                  <Category category={item.category} sx={{ fontSize: 2 }} />
                 )}
-                <Heading
-                  as="h1"
-                  mt={category ? 1 : 2}
-                  mb={1}
-                  data-cy="how-to-title"
-                >
-                  {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
-                  {capitalizeFirstLetter(title)}
+                <Heading as="h1" data-cy="project-title">
+                  {capitalizeFirstLetter(item.title)}
                 </Heading>
                 <Text
                   variant="paragraph"
                   sx={{ whiteSpace: 'pre-line' }}
-                  data-cy="how-to-description"
+                  data-cy="project-description"
                 >
-                  <LinkifyText>{description}</LinkifyText>
+                  <LinkifyText>{item.description}</LinkifyText>
                 </Text>
               </Flex>
             </Flex>
@@ -238,32 +230,43 @@ export const LibraryDescription = (props: IProps) => {
                 mr="2"
                 mb="2"
               />
-              {time}
+              {item.time}
             </Flex>
-            <Flex
-              sx={{ flexDirection: ['column', 'row', 'row'] }}
-              data-cy="difficulty-level"
-            >
-              <Image
-                loading="lazy"
-                src={DifficultyLevel}
-                height="15"
-                width="16"
-                mr="2"
-                mb="2"
-              />
-              {difficulty_level}
-            </Flex>
-          </Flex>
-          <ClientOnly fallback={<></>}>
-            {/* TODO: remove ClientOnly when we have a Tags API which we can on the loader - need it now because tags only load client-side which causes a html mismatch error */}
-            {() => (
-              <>
-                <TagList tags={tags} />
-                <LibraryDownloads item={item} />
-              </>
+            {item.difficultyLevel && (
+              <Flex
+                sx={{ flexDirection: ['column', 'row', 'row'] }}
+                data-cy="difficulty-level"
+              >
+                <Image
+                  loading="lazy"
+                  src={DifficultyLevel}
+                  height="15"
+                  width="16"
+                  mr="2"
+                  mb="2"
+                />
+                {DifficultyLevelRecord[item.difficultyLevel]}
+              </Flex>
             )}
-          </ClientOnly>
+          </Flex>
+
+          <Flex sx={{ marginTop: 'auto', flexDirection: 'column', gap: 1 }}>
+            <TagList tags={item.tags.map((t) => ({ label: t.name }))} />
+            <DownloadWrapper
+              fileDownloadCount={item.fileDownloadCount}
+              fileLink={
+                item.hasFileLink
+                  ? `/api/documents/project/${item.id}/link`
+                  : undefined
+              }
+              files={item.files?.map((x) => ({
+                id: x.id,
+                name: x.name,
+                size: x.size,
+                url: `/api/documents/project/${item.id}/${x.id}`,
+              }))}
+            />
+          </Flex>
         </Flex>
         <Box
           sx={{
@@ -271,16 +274,12 @@ export const LibraryDescription = (props: IProps) => {
             position: 'relative',
           }}
         >
-          <Box
-            sx={{
-              overflow: 'hidden',
-            }}
-          >
+          <Box sx={{ overflow: 'hidden' }}>
             <Box
               sx={{
                 width: '100%',
                 height: '0',
-                pb: '75%',
+                paddingBottom: '75%',
               }}
             ></Box>
             <Box
@@ -292,29 +291,29 @@ export const LibraryDescription = (props: IProps) => {
                 right: '0',
               }}
             >
-              {cover_image && (
+              {item.coverImage && (
                 // 3407 - AspectImage creates divs that can mess up page layout,
                 // so using Image here instead and recreating the div layout
                 // that was created by AspectImage
                 <Image
                   loading="lazy"
-                  src={cdnImageUrl(cover_image.downloadUrl)}
+                  src={item.coverImage.publicUrl}
                   sx={{
                     objectFit: 'cover',
                     height: '100%',
                     width: '100%',
                   }}
                   crossOrigin=""
-                  alt={cover_image_alt ?? 'project cover image'}
+                  alt="project cover image"
                 />
               )}
             </Box>
           </Box>
-          {moderation !== IModerationStatus.ACCEPTED && (
+
+          {!item.isDraft && item.moderation !== 'accepted' && (
             <ModerationStatus
-              status={moderation}
-              contentType="library"
-              sx={{ top: 0, position: 'absolute', right: 0 }}
+              status={item.moderation}
+              sx={{ top: 3, position: 'absolute', right: 3, fontSize: 2 }}
             />
           )}
         </Box>
@@ -328,9 +327,9 @@ export const LibraryDescription = (props: IProps) => {
       <ContentStatistics
         statistics={[
           {
-            icon: 'view',
+            icon: 'show',
             label: buildStatisticsLabel({
-              stat: total_views,
+              stat: item.totalViews,
               statUnit: 'view',
               usePlural: true,
             }),
@@ -344,7 +343,15 @@ export const LibraryDescription = (props: IProps) => {
             }),
           },
           {
-            icon: 'comment',
+            icon: 'thunderbolt-grey',
+            label: buildStatisticsLabel({
+              stat: subscribersCount,
+              statUnit: 'following',
+              usePlural: false,
+            }),
+          },
+          {
+            icon: 'comment-outline',
             label: buildStatisticsLabel({
               stat: commentsCount || 0,
               statUnit: 'comment',
@@ -354,7 +361,7 @@ export const LibraryDescription = (props: IProps) => {
           {
             icon: 'update',
             label: buildStatisticsLabel({
-              stat: steps.length,
+              stat: item.steps.length,
               statUnit: 'step',
               usePlural: true,
             }),

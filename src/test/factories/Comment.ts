@@ -1,18 +1,31 @@
 import { faker } from '@faker-js/faker'
 
-import type { IComment } from 'oa-shared'
+import type { Comment, DiscussionContentTypes } from 'oa-shared'
 
 export const FactoryComment = (
-  commentOverloads: Partial<IComment> = {},
-): IComment => ({
-  _id: faker.string.uuid(),
-  _created: faker.date.past().toString(),
-  _edited: faker.date.past().toString(),
-  _creatorId: faker.internet.userName(),
-  creatorName: faker.internet.userName(),
-  creatorCountry: '',
-  parentCommentId: faker.string.uuid(),
-  text: faker.lorem.paragraph(),
-  isUserVerified: faker.datatype.boolean(),
+  commentOverloads: Partial<Comment> = {},
+): Comment => ({
+  id: faker.number.int(),
+  createdAt: faker.date.past(),
+  modifiedAt: faker.date.past(),
+  createdBy: {
+    id: faker.number.int(),
+    displayName: faker.person.firstName(),
+    isSupporter: faker.datatype.boolean(),
+    isVerified: faker.datatype.boolean(),
+    username: faker.internet.userName(),
+    photoUrl: faker.image.url(),
+    country: faker.location.countryCode(),
+  },
+  parentId: faker.number.int(),
+  comment: faker.lorem.paragraph(),
+  deleted: faker.datatype.boolean(),
+  sourceId: faker.number.int(),
+  sourceType: faker.helpers.arrayElement<DiscussionContentTypes>([
+    'news',
+    'projects',
+    'questions',
+    'research_update',
+  ]),
   ...commentOverloads,
 })

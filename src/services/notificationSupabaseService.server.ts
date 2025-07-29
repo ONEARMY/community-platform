@@ -3,9 +3,11 @@ import { notificationEmailService } from './notificationEmailService.server'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
   DBComment,
-  DBSubscriber,
+  DBProfile,
+  DBResearchItem,
   NewNotificationData,
   NotificationActionType,
+  ResearchUpdate,
   SubscribableContentTypes,
 } from 'oa-shared'
 
@@ -13,7 +15,7 @@ const setSourceContentType = async (
   comment: DBComment,
   client: SupabaseClient,
 ) => {
-  if (!(comment.source_type === 'research_update')) {
+  if (comment.source_type !== 'research_update') {
     return comment.source_id
   }
   const researchUpdate = await client
@@ -25,65 +27,37 @@ const setSourceContentType = async (
   return researchUpdate.data?.research_id
 }
 
-const createNotificationNewComment = async (
-  comment: DBComment,
+const getSubscribedUsers = async (
+  contentId: number,
+  contentType: SubscribableContentTypes,
   client: SupabaseClient,
-) => {
-  if (!comment.created_by) {
-    return
-  }
-
+): Promise<number[]> => {
   try {
-    const isReply = !!comment.parent_id
-    const contentId = isReply ? comment.parent_id : comment.source_id
-    const contentType: SubscribableContentTypes = isReply
-      ? 'comments'
-      : comment.source_type
-
+    console.log('In getSubscribedUsers')
     const subscribedUsers = await client
       .from('subscribers')
       .select('user_id')
       .eq('content_id', contentId)
       .eq('content_type', contentType)
-
-    if (!subscribedUsers.data) {
-      return
+    console.log({ subscribedUsers })
+    if (!subscribedUsers.data || subscribedUsers.data.length === 0) {
+      return []
     }
 
-    subscribedUsers.data.map(async (subscriber: Partial<DBSubscriber>) => {
-      const isResearchUpdate = comment.source_type === 'research_update'
-      const sourceContentId = await setSourceContentType(comment, client)
-
-      const notification: NewNotificationData = {
-        actionType: 'newComment' as NotificationActionType,
-        ownedById: subscriber.user_id!,
-        contentId: comment.id!,
-        sourceContentType: isResearchUpdate ? 'research' : comment.source_type!,
-        sourceContentId: sourceContentId,
-        parentContentId: isResearchUpdate ? comment.source_id! : null,
-        triggeredById: comment.created_by!,
-        contentType: isReply ? 'reply' : 'comment',
-        parentCommentId: isReply ? comment.parent_id : null,
-      }
-
-      createNotification(client, notification, subscriber.user_id!)
-    })
+    return [...new Set(subscribedUsers.data.map((user) => user.user_id))]
   } catch (error) {
-    console.log(error)
-
-    return Response.json(
-      { error },
-      { status: 500, statusText: 'Error creating notification' },
-    )
+    console.error(error)
+    throw new Error(error)
   }
 }
 
 const createNotification = async (
   client: SupabaseClient,
   notification: NewNotificationData,
-  userId: number,
+  profileId: number,
 ) => {
   try {
+    console.log('In createNotification')
     const data = {
       action_type: notification.actionType,
       content_type: notification.contentType,
@@ -97,12 +71,12 @@ const createNotification = async (
       is_read: false,
       tenant_id: process.env.TENANT_ID!,
     }
-
+    console.log({ data })
     const response = await client.from('notifications').insert(data).select(`
       *,
       triggered_by:profiles!notifications_triggered_by_id_fkey(id,username)
     `)
-
+    console.log({ response })
     if (response.error || !response.data) {
       throw response.error || 'No data returned'
     }
@@ -110,18 +84,124 @@ const createNotification = async (
     await notificationEmailService.createInstantNotificationEmail(
       client,
       response.data[0],
-      userId,
+      profileId,
     )
   } catch (error) {
-    console.log(error)
+    console.error(error)
 
     return Response.json(
       { error },
-      { status: 500, statusText: 'Error creating notification' },
+      {
+        status: 500,
+        statusText: `Error creating notification: ${notification.contentType}`,
+      },
+    )
+  }
+}
+
+const createNotificationsNewComment = async (
+  comment: DBComment,
+  client: SupabaseClient,
+) => {
+  console.log('In createNotificationsNewComment')
+  if (!comment.created_by) {
+    return
+  }
+
+  try {
+    const isReply = !!comment.parent_id
+    const contentId = isReply ? comment.parent_id : comment.source_id
+    console.log({
+      isReply,
+      contentId,
+    })
+
+    if (!contentId) {
+      return new Error('contentId not found')
+    }
+    const contentType: SubscribableContentTypes = isReply
+      ? 'comments'
+      : comment.source_type
+    console.log({ contentType })
+    const subscribers = await getSubscribedUsers(contentId, contentType, client)
+    console.log({ subscribers })
+    const isResearchUpdate = comment.source_type === 'research_update'
+    const sourceContentId = await setSourceContentType(comment, client)
+
+    await Promise.all(
+      subscribers.map((subscriberId: number) => {
+        const notification: NewNotificationData = {
+          actionType: 'newComment' as NotificationActionType,
+          ownedById: subscriberId!,
+          contentId: comment.id!,
+          sourceContentType: isResearchUpdate
+            ? 'research'
+            : comment.source_type!,
+          sourceContentId: sourceContentId,
+          parentContentId: isResearchUpdate ? comment.source_id! : null,
+          triggeredById: comment.created_by!,
+          contentType: isReply ? 'reply' : 'comment',
+          parentCommentId: isReply ? comment.parent_id : null,
+        }
+
+        return createNotification(client, notification, subscriberId!)
+      }),
+    )
+  } catch (error) {
+    console.error(error)
+
+    return Response.json(
+      { error },
+      { status: 500, statusText: 'Error creating notifications: Comments' },
+    )
+  }
+}
+
+const createNotificationsResearchUpdate = async (
+  research: DBResearchItem,
+  researchUpdate: ResearchUpdate,
+  profile: DBProfile,
+  client: SupabaseClient,
+) => {
+  try {
+    const contentType: SubscribableContentTypes = 'research'
+
+    const subscribers = await getSubscribedUsers(
+      research.id,
+      contentType,
+      client,
+    )
+
+    await Promise.all(
+      subscribers.map(async (subscriberId: number) => {
+        const notification: NewNotificationData = {
+          actionType: 'newContent',
+          ownedById: subscriberId!,
+          contentId: researchUpdate.id!,
+          sourceContentType: 'research',
+          sourceContentId: research.id,
+          parentContentId: researchUpdate.id,
+          contentType: 'researchUpdate',
+          triggeredById: profile.id,
+        }
+
+        return createNotification(client, notification, subscriberId!)
+      }),
+    )
+  } catch (error) {
+    console.error(error)
+
+    return Response.json(
+      { error },
+      {
+        status: 500,
+        statusText: 'Error creating notifications: Research update',
+      },
     )
   }
 }
 
 export const notificationsSupabaseServiceServer = {
-  createNotificationNewComment,
+  createNotificationsNewComment,
+  createNotificationsResearchUpdate,
 }

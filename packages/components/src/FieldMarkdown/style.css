@@ -1,6 +1,8 @@
 .mdxeditor {
   border-radius: 8px;
   border: 2px solid #f0f0f3;
+  position: relative;
+  z-index: 0;
 
   &.mdxeditor-error {
     border: 2px solid red;
@@ -9,5 +11,5 @@
 
 /* hacky way to hide the markdown diff part of https://mdxeditor.dev/editor/docs/diff-source */
 [aria-label='Diff mode'] {
-  display: none
+  display: none;
 }

@@ -1,37 +1,53 @@
-import { Button, ElWithBeforeIcon } from 'oa-components'
+import { Button, ElWithBeforeIcon, Loader } from 'oa-components'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { Box, Card, Flex, Heading } from 'theme-ui'
 
+import { ErrorsContainer } from './ErrorsContainer'
+
 import type { ContentFormType } from 'oa-shared'
+import type { IErrorsListSet } from './types'
 
 interface IProps {
   buttonLabel: string
   contentType: ContentFormType
   children: React.ReactNode
+  errorsClientSide: IErrorsListSet[] | undefined
+  errorSubmitting: string | undefined | null
   guidelines?: React.ReactNode
   handleSubmit: () => void
+  handleSubmitDraft: () => void
   heading: string
-  saveError: React.ReactNode | null
+  hasValidationErrors: boolean
+  belowBody?: React.ReactNode
   sidebar?: React.ReactNode
+  submitFailed: boolean
   submitting: boolean
   unsavedChangesDialog?: React.ReactNode
-  valid: boolean
 }
+
+const DRAFT_LABEL = 'Save as draft'
 
 export const FormWrapper = (props: IProps) => {
   const {
+    belowBody,
     buttonLabel,
     children,
     contentType,
+    errorsClientSide,
+    errorSubmitting,
     guidelines,
     handleSubmit,
+    handleSubmitDraft,
     heading,
-    saveError,
+    hasValidationErrors,
     sidebar,
+    submitFailed,
     submitting,
     unsavedChangesDialog,
-    valid,
   } = props
+
+  const hasClientSideErrors = hasValidationErrors && submitFailed
+
   return (
     <Flex sx={{ flexWrap: 'wrap', backgroundColor: 'inherit', marginTop: 4 }}>
       <Flex
@@ -67,6 +83,7 @@ export const FormWrapper = (props: IProps) => {
           <Card sx={{ marginTop: 4, padding: 4, overflow: 'visible' }}>
             {children}
           </Card>
+          {belowBody}
         </Box>
       </Flex>
       <Flex
@@ -88,18 +105,37 @@ export const FormWrapper = (props: IProps) => {
           data-cy="submit"
           variant="primary"
           type="submit"
-          disabled={submitting || !valid}
+          disabled={submitting}
           onClick={handleSubmit}
           sx={{
             width: '100%',
-            mb: ['40px', '40px', 0],
             display: 'block',
+            marginBottom: ['40px', '40px', 0],
           }}
         >
           {buttonLabel}
         </Button>
+
+        <Button
+          data-cy="draft"
+          onClick={handleSubmitDraft}
+          variant="secondary"
+          type="submit"
+          disabled={submitting}
+          sx={{
+            width: '100%',
+            display: 'block',
+          }}
+        >
+          <span>{DRAFT_LABEL}</span>
+        </Button>
+
         {sidebar && sidebar}
-        {saveError && saveError}
+        {submitting && (
+          <Loader label="Submitting, please do not close the page..." />
+        )}
+        {errorSubmitting && <ErrorsContainer saving={[errorSubmitting]} />}
+        {hasClientSideErrors && <ErrorsContainer client={errorsClientSide} />}
       </Flex>
     </Flex>
   )

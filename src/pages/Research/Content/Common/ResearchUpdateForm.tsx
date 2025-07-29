@@ -5,16 +5,16 @@ import { Button, ConfirmModal, ResearchEditorOverview } from 'oa-components'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
+import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors'
 import { fireConfetti } from 'src/utils/fireConfetti'
 
-import { buttons, headings, overview, update } from '../../labels'
+import { FilesFields } from '../../../common/FormFields/FilesFields'
+import { buttons, headings, update } from '../../labels'
 import { researchService } from '../../research.service'
 import { DescriptionField } from '../CreateResearch/Form/DescriptionField'
-import { FilesFields } from '../CreateResearch/Form/FilesFields'
 import { ResearchImagesField } from '../CreateResearch/Form/ResearchImagesField'
 import { TitleField } from '../CreateResearch/Form/TitleField'
 import VideoUrlField from '../CreateResearch/Form/VideoUrlField'
-import { ResearchErrors } from './ResearchErrors'
 
 import type {
   MediaFile,
@@ -123,16 +123,6 @@ export const ResearchUpdateForm = (props: IProps) => {
     })
   }
 
-  const removeExistingFile = (id: string) => {
-    setInitialValues((prevState: ResearchUpdateFormData) => {
-      return {
-        ...prevState,
-        existingFiles:
-          prevState.existingFiles?.filter((file) => file.id !== id) ?? null,
-      }
-    })
-  }
-
   return (
     <>
       <Form<ResearchUpdateFormData>
@@ -144,19 +134,14 @@ export const ResearchUpdateForm = (props: IProps) => {
           handleSubmit,
           hasValidationErrors,
           errors,
-          valid,
+          submitFailed,
           submitSucceeded,
           submitting,
-          submitFailed,
           values,
         }) => {
-          const saveError = saveErrorMessage && (
-            <ResearchErrors
-              errors={errors}
-              isVisible={!!saveErrorMessage}
-              labels={overview}
-            />
-          )
+          const errorsClientSide = [errorSet(errors, update)]
+
+          const handleSubmitDraft = () => onSubmit(values, true)
 
           const numberOfImageInputsAvailable = (values as any)?.images
             ? Math.min((values as any).images.filter((x) => !!x).length + 1, 10)
@@ -170,20 +155,6 @@ export const ResearchUpdateForm = (props: IProps) => {
 
           const sidebar = (
             <>
-              <Button
-                data-cy="draft"
-                variant="secondary"
-                type="submit"
-                disabled={isSaving}
-                onClick={() => onSubmit(values, true)}
-                sx={{
-                  alignSelf: 'stretch',
-                  justifyContent: 'center',
-                }}
-              >
-                {buttons.draft}
-              </Button>
-
               {isEdit ? (
                 <Button
                   data-cy="delete"
@@ -199,12 +170,6 @@ export const ResearchUpdateForm = (props: IProps) => {
                   {buttons.deletion.text}
                 </Button>
               ) : null}
-
-              <ResearchErrors
-                errors={errors}
-                isVisible={submitFailed && hasValidationErrors}
-                labels={update}
-              />
 
               {props.research && (
                 <ResearchEditorOverview
@@ -225,13 +190,16 @@ export const ResearchUpdateForm = (props: IProps) => {
             <FormWrapper
               buttonLabel={buttons.publish}
               contentType="researchUpdate"
+              errorsClientSide={errorsClientSide}
+              errorSubmitting={saveErrorMessage}
               handleSubmit={handleSubmit}
+              handleSubmitDraft={handleSubmitDraft}
+              hasValidationErrors={hasValidationErrors}
               heading={heading}
-              saveError={saveError}
               sidebar={sidebar}
+              submitFailed={submitFailed}
               submitting={submitting}
               unsavedChangesDialog={unsavedChangesDialog}
-              valid={valid}
             >
               <TitleField />
               <DescriptionField />
@@ -241,10 +209,7 @@ export const ResearchUpdateForm = (props: IProps) => {
                 removeExistingImage={removeExistingImage}
               />
               <VideoUrlField />
-              <FilesFields
-                files={initialValues?.existingFiles || []}
-                deleteFile={removeExistingFile}
-              />
+              <FilesFields />
             </FormWrapper>
           )
         }}

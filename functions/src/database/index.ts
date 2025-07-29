@@ -1,1 +1,0 @@
-exports.updates = require('./updates')

@@ -1,16 +1,31 @@
 import { tagsServiceServer } from 'src/services/tagsService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
+import type { ContentType, IDBContentDoc } from 'oa-shared'
 
 type Slug = string
 type Id = number
 type Client = SupabaseClient
-type Table = 'questions' | 'news' | 'research'
+
+const getDraftCount = async (
+  client: Client,
+  profileId: number,
+  table: ContentType,
+) => {
+  const { count } = await client
+    .from(table)
+    .select('id', { count: 'exact' })
+    .eq('is_draft', true)
+    .eq('created_by', profileId)
+    .or('deleted.eq.false,deleted.is.null')
+
+  return count
+}
 
 const getMetaFields = async (
   client: Client,
   id: Id,
-  table: Table,
+  table: ContentType,
   tagIds: number[],
 ) => {
   return await Promise.all([
@@ -30,7 +45,7 @@ const getMetaFields = async (
 
 const incrementViewCount = async (
   client: Client,
-  table: Table,
+  table: ContentType,
   totalViews: number | undefined,
   id: Id,
 ) => {
@@ -44,30 +59,46 @@ async function isDuplicateExistingSlug(
   slug: Slug,
   id: Id,
   client: Client,
-  table: Table,
+  table: ContentType,
 ) {
   const { data } = await client
     .from(table)
-    .select('id,slug')
-    .eq('slug', slug)
+    .select('id,slug,previous_slugs')
+    .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
     .single()
 
   return !!data?.id && data.id !== id
 }
 
-async function isDuplicateNewSlug(slug: Slug, client: Client, table: Table) {
+async function isDuplicateNewSlug(
+  slug: Slug,
+  client: Client,
+  table: ContentType,
+) {
   const { data } = await client
     .from(table)
-    .select('slug')
-    .eq('slug', slug)
+    .select('slug,previous_slugs')
+    .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
     .single()
 
   return !!data
 }
 
+function updatePreviousSlugs(content: IDBContentDoc, newSlug: Slug) {
+  if (content.slug !== newSlug) {
+    return content.previous_slugs
+      ? [...content.previous_slugs, content.slug]
+      : [content.slug]
+  }
+
+  return content.previous_slugs
+}
+
 export const contentServiceServer = {
+  getDraftCount,
   getMetaFields,
   incrementViewCount,
   isDuplicateExistingSlug,
   isDuplicateNewSlug,
+  updatePreviousSlugs,
 }

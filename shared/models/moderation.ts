@@ -1,3 +1,4 @@
+// USED FOR MAP ONLY - remove after map migration
 export enum IModerationStatus {
   DRAFT = 'draft',
   AWAITING_MODERATION = 'awaiting-moderation',
@@ -6,15 +7,22 @@ export enum IModerationStatus {
   ACCEPTED = 'accepted',
 }
 
-export interface IModeration {
+export interface IModerable {
   moderation: IModerationStatus
-  moderatorFeedback?: string
-}
-export interface IModerable extends IModeration {
-  _createdBy?: string
-  _id?: string
 }
 
-export type IModerationUpdate = {
-  _id: string
-} & IModeration
+export interface IModeration {
+  moderation: Moderation
+  moderatonFeedback?: string
+}
+
+export interface IDBModeration {
+  moderation: Moderation
+  moderation_feedback: string | null
+}
+
+export type Moderation =
+  | 'awaiting-moderation'
+  | 'improvements-needed'
+  | 'rejected'
+  | 'accepted'

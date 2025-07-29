@@ -57,17 +57,6 @@ export const getUserAndEmail = async (userName: string) => {
   return { toUser, toUserEmail }
 }
 
-export const isBelowMessageLimit = async (email) => {
-  const { docs } = await db
-    .collection(DB_ENDPOINTS.messages)
-    .where('email', '==', email)
-    .get()
-  if (docs.length >= EMAIL_ADDRESS_SEND_LIMIT) {
-    throw new Error(errors.MESSAGE_LIMIT)
-  }
-  return true
-}
-
 export const isReceiverContactable = async (userName) => {
   const { toUser } = await getUserAndEmail(userName)
   if (
@@ -101,23 +90,6 @@ export const isUserAllowedToMessage = async (uid) => {
     throw new Error(errors.USER_BLOCKED)
   }
   return true
-}
-
-export const isValidMessageRequest = async ({
-  email,
-  toUserName,
-}: IMessageDB) => {
-  const userDoc = await firebaseAuth.getUserByEmail(email)
-
-  try {
-    isSameEmail(userDoc, email)
-    await isUserAllowedToMessage(userDoc.uid)
-    await isBelowMessageLimit(email)
-    await isReceiverContactable(toUserName)
-    return true
-  } catch (error) {
-    throw error
-  }
 }
 
 export const SITE_URL = CONFIG.deployment.site_url

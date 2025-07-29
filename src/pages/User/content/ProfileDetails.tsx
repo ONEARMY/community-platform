@@ -7,8 +7,7 @@ import { isModuleSupported, MODULE } from 'src/modules'
 import { EnvironmentContext } from 'src/pages/common/EnvironmentContext'
 import { Box, Divider, Flex, Paragraph } from 'theme-ui'
 
-import type { IUser } from 'oa-shared'
-import type { UserCreatedDocs } from '../types'
+import type { IUser, UserCreatedDocs } from 'oa-shared'
 
 interface IProps {
   docs: UserCreatedDocs
@@ -40,8 +39,8 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
       <Flex
         sx={{
           alignItems: 'stretch',
-          flexDirection: ['column', 'column', 'row'],
-          gap: [2, 2, 4],
+          flexDirection: ['column', 'row', 'row'],
+          gap: [2, 4, 4],
           justifyContent: 'space-between',
         }}
       >
@@ -72,14 +71,15 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
         </Flex>
         <Divider
           sx={{
-            width: ['100%', '100%', '1px'],
-            height: ['1px', '1px', 'auto'],
+            width: ['100%', '1px', '1px'],
+            height: ['1px', 'auto', 'auto'],
             alignSelf: 'stretch',
-            border: '2px solid #0000001A',
+            border: ['none', '2px solid #0000001A', '2px solid #0000001A'],
+            borderTop: '2px solid #0000001A',
             m: 0,
           }}
         />
-        <Box sx={{ marginTop: [3, 3, 0] }}>
+        <Box>
           <AuthWrapper
             roleRequired={UserRole.BETA_TESTER}
             fallback={

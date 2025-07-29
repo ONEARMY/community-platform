@@ -25,6 +25,26 @@ export const clearDatabase = async (tables: string[], tenantId: string) => {
   }
 }
 
+export const createStorage = async (tenantId: string) => {
+  const supabase = supabaseAdminClient()
+
+  await supabase.storage.createBucket(tenantId, {
+    public: true,
+  })
+
+  await supabase.storage.createBucket(tenantId + '-documents')
+}
+
+export const clearStorage = async (tenantId: string) => {
+  const supabase = supabaseAdminClient()
+
+  await supabase.storage.emptyBucket(tenantId)
+  await supabase.storage.deleteBucket(tenantId)
+
+  await supabase.storage.emptyBucket(tenantId + '-documents')
+  await supabase.storage.deleteBucket(tenantId + '-documents')
+}
+
 export const generateAlphaNumeric = (length: number) => {
   let result = ''
   const characters =

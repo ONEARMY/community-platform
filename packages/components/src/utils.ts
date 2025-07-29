@@ -4,7 +4,7 @@ import type {
   Author,
   Comment,
   News,
-  Notification,
+  NotificationDisplay,
   Question,
   ResearchItem,
   ResearchUpdate,
@@ -83,26 +83,31 @@ export const fakeNewsSB = (newsOverloads: Partial<News> = {}): News => ({
   usefulCount: faker.datatype.number(20),
   body: faker.random.words(50),
   heroImage: null,
+  isDraft: false,
   ...newsOverloads,
 })
 
-export const fakeNotification = (
-  notificationOverloads: Partial<Notification> = {},
-): Notification => ({
+export const fakeDisplayNotification = (
+  notificationOverloads: Partial<NotificationDisplay> = {},
+): NotificationDisplay => ({
   id: faker.datatype.number(),
-  actionType: 'newComment',
-  contentId: faker.datatype.number(100),
-  contentType: 'comment',
-  createdAt: faker.date.past(),
-  modifiedAt: null,
-  ownedById: faker.datatype.number(100),
   isRead: faker.datatype.boolean(),
-  parentCommentId: null,
-  parentContentId: null,
-  sourceContentType: 'news',
-  sourceContentId: faker.datatype.number(100),
-  triggeredBy: fakeAuthorSB(),
-  ownedBy: fakeAuthorSB(),
+  contentType: 'comment',
+  email: {
+    body: undefined,
+    buttonLabel: 'See the full discussion',
+    preview: 'Jeff has left a new comment',
+    subject: 'A new comment on something',
+  },
+  sidebar: {
+    icon: 'discussion',
+    image: faker.image.avatar(),
+  },
+  title: `left a comment on Title`,
+  triggeredBy: faker.internet.userName(),
+  date: faker.date.past(),
+  body: faker.lorem.text(),
+  link: 'comment',
   ...notificationOverloads,
 })
 
@@ -125,6 +130,7 @@ export const fakeQuestionSB = (
   tags: [],
   totalViews: faker.datatype.number(100),
   usefulCount: faker.datatype.number(20),
+  isDraft: false,
   ...questionOverloads,
 })
 
@@ -152,6 +158,7 @@ export const fakeResearchItem = (
   updates: [],
   tags: [],
   totalViews: faker.datatype.number(100),
+  isDraft: false,
   ...researchItemOverloads,
 })
 

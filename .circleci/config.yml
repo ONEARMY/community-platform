@@ -351,11 +351,10 @@ jobs:
               --build-secret VITE_NO_MESSAGING="$VITE_NO_MESSAGING" \
               --build-secret VITE_HIDE_MEMBER_PINS_BY_DEFAULT="$VITE_HIDE_MEMBER_PINS_BY_DEFAULT" \
               --build-secret TENANT_ID="$TENANT_ID" \
-              --build-secret PATREON_CLIENT_ID="$PATREON_CLIENT_ID" \
-              --build-secret PATREON_CLIENT_SECRET="$PATREON_CLIENT_SECRET"
+              --build-secret PATREON_CLIENT_ID="$PATREON_CLIENT_ID"
       - run:
-          name: Set Supabase Secrets
-          command: flyctl -a << parameters.FLY_APP_NAME >> secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL RESEND_API_KEY=$RESEND_API_KEY TENANT_ID=$TENANT_ID PATREON_CLIENT_ID=$PATREON_CLIENT_ID PATREON_CLIENT_SECRET=$PATREON_CLIENT_SECRET
+          name: Set Server Secrets
+          command: flyctl -a << parameters.FLY_APP_NAME >> secrets set SUPABASE_API_URL=$SUPABASE_API_URL SUPABASE_KEY=$SUPABASE_KEY SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL RESEND_API_KEY=$RESEND_API_KEY TENANT_ID=$TENANT_ID PATREON_CLIENT_ID=$PATREON_CLIENT_ID PATREON_CLIENT_SECRET=$PATREON_CLIENT_SECRET TOKEN_SECRET="$TOKEN_SECRET"
   # deploy-supabase:
   #   docker:
   #     - image: cimg/node:20.7.0
@@ -403,18 +402,6 @@ jobs:
             CI_GROUP: ci-<< parameters.CI_BROWSER >>
       - store_artifacts:
           path: ./packages/cypress/src/screenshots/
-
-  chromatic:
-    docker: *docker
-    resource_class: medium
-    environment:
-      CYPRESS_INSTALL_BINARY: 0
-    steps:
-      - setup_repo
-      - attach_workspace:
-          at: '.'
-      - run:
-          command: yarn build-storybook
 
   release:
     docker: *docker
@@ -479,13 +466,6 @@ workflows:
             parameters:
               CI_NODE: [1, 2, 3, 4]
               CI_BROWSER: ['chrome']
-      - chromatic:
-          name: 'Release storybook to chromatic'
-          requires:
-            - test_e2e
-          context:
-            - e2e-tests
-          <<: *filter_only_default_branch
       #---------------------- Approval ----------------------
       - approve:
           type: approval

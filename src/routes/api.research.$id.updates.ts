@@ -1,7 +1,6 @@
 import { ResearchUpdate, UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { discordServiceServer } from 'src/services/discordService.server'
-import { notificationsService } from 'src/services/notificationsService.server'
+import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server'
 import { profileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
@@ -37,6 +36,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const research = researchResult.data as unknown as DBResearchItem
     const profile = await profileServiceServer.getByAuthId(user!.id, client)
 
+    if (!profile) {
+      return Response.json({}, { status: 400, statusText: 'User not found' })
+    }
+
     const { valid, status, statusText } = validateRequest(
       request,
       user,
@@ -71,16 +74,19 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         video_url: data.videoUrl,
         is_draft: data.isDraft,
         research_id: researchId,
-        created_by: profile!.id,
+        created_by: profile.id,
         tenant_id: process.env.TENANT_ID,
       })
-      .select()
+      .select('*,research:research(id,collaborators,created_by,is_draft,slug)')
+      .single()
 
     if (updateResult.error || !updateResult.data) {
       throw updateResult.error
     }
 
-    const researchUpdate = ResearchUpdate.fromDB(updateResult.data[0], [])
+    const dbResearchUpdate = updateResult.data
+    const researchUpdate = ResearchUpdate.fromDB(dbResearchUpdate, [])
+    researchUpdate.research = updateResult.data.research
 
     await uploadAndUpdateImages(
       uploadedImages,
@@ -96,22 +102,18 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       client,
     )
 
-    await addSubscribers(research, profile?.id, client)
+    await subscribersServiceServer.addResearchUpdateSubscribers(
+      researchUpdate,
+      profile.id,
+      client,
+    )
 
-    if (!research.is_draft && !researchUpdate.isDraft) {
-      notificationsService.sendResearchUpdateNotification(
-        client,
-        research,
-        updateResult.data[0],
-        profile as DBProfile,
-      )
-      notifyDiscord(
-        research,
-        researchUpdate,
-        profile!,
-        new URL(request.url).origin.replace('http:', 'https:'),
-      )
-    }
+    broadcastCoordinationServiceServer.researchUpdate(
+      researchUpdate,
+      profile,
+      client,
+      request,
+    )
 
     return Response.json({ researchUpdate }, { headers, status: 201 })
   } catch (error) {
@@ -121,12 +123,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       { status: 500, statusText: 'Error creating research' },
     )
   }
-}
-
-const addSubscribers = async (update, profile, client) => {
-  subscribersServiceServer.add('research_update', update.id, profile.id, client)
-  // To do: Subscribe collaborators too
-  return
 }
 
 async function uploadAndUpdateImages(
@@ -197,17 +193,6 @@ function validateImages(images: File[]) {
   }
 
   return { valid: errors.length === 0, errors }
-}
-
-async function notifyDiscord(
-  research: DBResearchItem,
-  update: ResearchUpdate,
-  profile: DBProfile,
-  siteUrl: string,
-) {
-  discordServiceServer.postWebhookRequest(
-    `🧪 ${profile.username} posted a new research update: ${update.title}\nCheck it out here: <${siteUrl}/research/${research.slug}#update_${update.id}>`,
-  )
 }
 
 function validateRequest(

@@ -1,11 +1,18 @@
+import { UserRole } from 'oa-shared'
+
 import {
   generateAlphaNumeric,
   generateNewUserDetails,
 } from '../../utils/TestUtils'
 
+let initialRandomId
+
 describe('[Question]', () => {
+  beforeEach(() => {
+    initialRandomId = generateAlphaNumeric(8).toLowerCase()
+  })
+
   describe('[Create a question]', () => {
-    const initialRandomId = generateAlphaNumeric(8).toLowerCase()
     const initialTitle = initialRandomId + ' Health cost of plastic?'
     const initialExpectedSlug = initialRandomId + '-health-cost-of-plastic'
     const initialQuestionDescription =
@@ -19,6 +26,9 @@ describe('[Question]', () => {
     const updatedQuestionDescription = `${initialQuestionDescription} and super awesome goggles`
 
     it('[By Authenticated]', () => {
+      // Needed for notifications as feature behind auth wrapper:
+      localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
+
       cy.visit('/questions')
       const user = generateNewUserDetails()
       cy.signUpNewUser(user)
@@ -40,13 +50,14 @@ describe('[Question]', () => {
 
       cy.get('[data-cy=field-title]', { timeout: 20000 })
 
-      // cy.step('Add images')
-      // cy.get('[data-cy=image-upload-0]')
-      //   .find(':file')
-      //   .attachFile('images/howto-step-pic1.jpg')
-      // cy.get('[data-cy=image-upload-1]')
-      //   .find(':file')
-      //   .attachFile('images/howto-step-pic2.jpg')
+      cy.step('Cannot be published when empty')
+      cy.get('[data-cy=submit]').click()
+      cy.get('[data-cy=errors-container]')
+
+      cy.step('Add image')
+      cy.get('[data-cy=image-upload-0]')
+        .find(':file')
+        .attachFile('images/howto-step-pic1.jpg')
 
       cy.step('Add title field')
       cy.get('[data-cy=field-title]')
@@ -58,6 +69,21 @@ describe('[Question]', () => {
       cy.get('[data-cy=field-description]').type(initialQuestionDescription, {
         delay: 0,
       })
+
+      cy.get('[data-cy=draft]').click()
+      cy.url().should('include', `/questions/${initialExpectedSlug}`)
+
+      cy.step('Can get to drafts')
+      cy.visit('/questions')
+      cy.contains(initialTitle).should('not.exist')
+      cy.get('[data-cy=my-drafts]').click()
+      cy.contains(initialTitle).click()
+
+      cy.step('Shows draft question')
+      cy.get('[data-cy=draft-tag]').should('be.visible')
+      cy.contains(initialQuestionDescription)
+      cy.get('[data-cy=edit]').click()
+
       cy.step('Add category')
       cy.selectTag(category, '[data-cy=category-select]')
 
@@ -68,10 +94,9 @@ describe('[Question]', () => {
       // cy.selectTag(tag2, '[data-cy="tag-select"]')
 
       cy.step('Submit question')
-      cy.get('[data-cy=submit]')
-        .click()
-        .url()
-        .should('include', `/questions/${initialExpectedSlug}`)
+      cy.get('[data-cy=submit]').click()
+
+      cy.url().should('include', `/questions/${initialExpectedSlug}`)
 
       cy.step('All question fields visible')
       cy.contains(initialTitle)
@@ -84,9 +109,7 @@ describe('[Question]', () => {
       cy.step('All ready for a discussion')
       cy.contains('0 comments')
       cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion')
-
-      // Currently beta testers only:
-      // cy.get('[data-cy=follow-button]').contains('Following')
+      cy.get('[data-cy=follow-button]').contains('Following')
 
       cy.step('Edit question')
       cy.get('[data-cy=edit]')
@@ -120,13 +143,11 @@ describe('[Question]', () => {
         .should('include', `/questions/${updatedExpectedSlug}`)
       cy.contains(updatedTitle)
 
-      // Bug: Missing previous slug functionality
-      //
-      // cy.step('Can access the question with the previous slug')
-      // cy.visit(`/questions/${initialExpectedSlug}`)
-      // cy.contains(updatedTitle)
+      cy.step('Can access the question with the previous slug')
+      cy.visit(`/questions/${initialExpectedSlug}`)
+      cy.contains(updatedTitle)
 
-      cy.step('All updated fields visiable on list')
+      cy.step('All updated fields visible on list')
       cy.visit('/questions')
       cy.contains(updatedTitle)
       cy.contains(category)

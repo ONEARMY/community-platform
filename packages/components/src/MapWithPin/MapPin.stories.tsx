@@ -1,6 +1,6 @@
 import { MapPin } from './MapPin.client'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Map/MapPin',

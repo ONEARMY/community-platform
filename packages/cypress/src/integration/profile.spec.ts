@@ -2,7 +2,6 @@ import { faker } from '@faker-js/faker'
 import { ExternalLinkLabel } from 'oa-shared'
 
 import { MESSAGE_MAX_CHARACTERS } from '../../../../src/pages/User/constants'
-import { missing } from '../../../../src/pages/User/impact/labels'
 import { contact } from '../../../../src/pages/User/labels'
 import { MOCK_DATA } from '../data'
 import { UserMenuItem } from '../support/commandsUi'
@@ -13,7 +12,7 @@ import {
 
 const { profile_views, subscriber } = MOCK_DATA.users
 const eventReader = MOCK_DATA.users.event_reader
-const userProfiletype = MOCK_DATA.users.settings_workplace_new
+const workspacePopulated = MOCK_DATA.users.settings_workplace_new
 const workspaceEmpty = MOCK_DATA.users.settings_workplace_empty
 
 const betaTester = MOCK_DATA.users['beta-tester']
@@ -100,11 +99,11 @@ describe('[Profile]', () => {
       cy.step('Can opt-out of being contacted')
       cy.logout()
       cy.signIn(contactee.email, contactee.password)
+      cy.completeUserProfile(contactee.username)
+
       cy.visit('/settings')
+      cy.completeUserProfile(contactee.username)
       cy.get('[data-cy=PublicContactSection]').should('be.visible')
-      cy.get('[data-cy=info-description')
-        .clear()
-        .type('Here for the contact testing')
       cy.get('[data-cy=isContactableByPublic-true]').click({ force: true })
       cy.saveSettingsForm()
       cy.get('[data-cy=isContactableByPublic-false]')
@@ -136,6 +135,7 @@ describe('[Profile]', () => {
 
       cy.visit(`/u/${contactee.username}`)
       cy.get('[data-cy=contact-tab]').click()
+      cy.get('[data-cy=UserContactWrapper]')
       cy.get('[data-cy="UserContactForm-NotAvailable"]')
       cy.get('[data-cy="UserContactForm"]').should('not.exist')
       cy.get('[data-cy="profile-link"]').should(
@@ -166,20 +166,26 @@ describe('[Profile]', () => {
       cy.step('No setting to turn it on')
       cy.visit('/settings')
       cy.get('[data-cy=PublicContactSection]').should('not.exist')
-    })
 
-    it('[Can see impact data for workspaces]', () => {
-      setIsPreciousPlastic()
+      cy.step('No contact form even when links are present')
+      cy.get('[data-cy=tab-Profile]').click()
+      cy.setSettingImage('avatar', 'userImage')
+      cy.setSettingBasicUserInfo({
+        displayName: user.username,
+        country: 'Tokelau',
+        description: 'contact checking',
+      })
+      cy.setSettingAddContactLink({
+        index: 0,
+        label: ExternalLinkLabel.SOCIAL_MEDIA,
+        url: 'http://something.to.delete/',
+      })
 
-      cy.signIn(subscriber.email, subscriber.password)
+      cy.saveSettingsForm()
 
-      cy.step('Can go to impact data')
-      cy.visit(`/u/${userProfiletype.userName}`)
-      cy.get('[data-cy=ImpactTab]').click()
-      cy.get('[data-cy=ImpactPanel]').should('be.visible')
-      cy.contains(missing.user.label)
-      cy.contains('2021')
-      cy.contains('3 full time employees')
+      cy.visit(`/u/${user.username}`)
+      cy.get('[data-cy=contact-tab]').click()
+      cy.get('[data-cy=UserContactWrapper]').should('not.exist')
     })
 
     it('[Can see contribution data for workspaces]', () => {
@@ -188,7 +194,7 @@ describe('[Profile]', () => {
       cy.signIn(subscriber.email, subscriber.password)
 
       cy.step('Can go to contribution data')
-      cy.visit(`/u/${userProfiletype.userName}`)
+      cy.visit(`/u/${workspacePopulated.userName}`)
       cy.get('[data-cy=ContribTab]').click()
     })
 
@@ -268,9 +274,14 @@ describe('[Profile]', () => {
 })
 
 describe('[By Beta Tester]', () => {
-  it('[Displays view count for profile with views]', () => {
+  it('[Displays other information]', () => {
     cy.signIn(betaTester.email, betaTester.password)
     cy.visit(`/u/${profile_views.userName}`)
+
+    cy.step('Displays view count for profile with views')
     cy.get('[data-testid=profile-views-stat]').contains(/Views: \d+/)
+
+    cy.step('Displays member history info')
+    cy.get('[data-cy=MemberHistory]').contains('Member since')
   })
 })

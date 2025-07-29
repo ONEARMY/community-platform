@@ -4,9 +4,18 @@
 import { UserRole } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
-import { generateNewUserDetails } from '../../utils/TestUtils'
+import {
+  generateAlphaNumeric,
+  generateNewUserDetails,
+} from '../../utils/TestUtils'
+
+let randomId
 
 describe('[Questions.Discussions]', () => {
+  beforeEach(() => {
+    randomId = generateAlphaNumeric(8).toLowerCase()
+  })
+
   it('shows existing comments', () => {
     const question = MOCK_DATA.questions[0]
     cy.visit(`/questions/${question.slug}`)
@@ -20,12 +29,13 @@ describe('[Questions.Discussions]', () => {
 
     const commenter = generateNewUserDetails()
     const question = MOCK_DATA.questions[2]
+    const questionPath = `/questions/${question.slug}`
 
     const newComment = `An interesting question. The answer must be... ${commenter.username}`
-    const updatedNewComment = `An interesting question. The answer must be that when the sky is red, the apocalypse _might_ be on the way. Love, ${commenter.username}`
+    const updatedNewComment = `An interesting question. The answer must be that when the sky is red, the apocalypse _might_ be on the way. Love, ${commenter.username}. ${randomId}!`
     const newReply = `Thanks Dave and Ben. What does everyone else think? - ${commenter.username}`
     const updatedNewReply = `Anyone else? Your truly ${commenter.username}`
-    const questionPath = `/questions/${question.slug}`
+    const secondReply = `Quick reply. ${randomId}? ${commenter.username}`
 
     cy.signUpNewUser(commenter)
 
@@ -56,7 +66,6 @@ describe('[Questions.Discussions]', () => {
     cy.step('Can edit their reply')
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
     cy.step('Another user can leave a reply')
-    const secondReply = `Quick reply. ${commenter.username}`
 
     cy.step('First commentor can respond')
     cy.logout()
@@ -69,6 +78,10 @@ describe('[Questions.Discussions]', () => {
       title: question.title,
       username: replier.username,
     })
+    cy.get('[data-cy=highlighted-comment]')
+      .contains(updatedNewReply)
+      .should('be.inViewport', 10)
+
     cy.visit(questionPath)
 
     cy.step('Can add reply')

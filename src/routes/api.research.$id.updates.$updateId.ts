@@ -1,6 +1,6 @@
 import { ResearchUpdate } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { notificationsService } from 'src/services/notificationsService.server'
+import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server'
 import { profileServiceServer } from 'src/services/profileService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
@@ -8,7 +8,7 @@ import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBMedia, DBProfile, DBResearchUpdate, MediaFile } from 'oa-shared'
+import type { DBMedia, DBResearchUpdate, MediaFile } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   try {
@@ -68,7 +68,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       .select()
       .eq('id', updateId)
       .single()
-    const update = researchUpdateResult.data as DBResearchUpdate
+
+    const oldResearchUpdate = researchUpdateResult.data as DBResearchUpdate
 
     const uploadedImages = formData.getAll('images') as File[]
     const uploadedFiles = formData.getAll('files') as File[]
@@ -84,7 +85,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       )
     }
 
-    const uploadPath = `research/${researchId}/updates/${update.id}`
+    const uploadPath = `research/${researchId}/updates/${oldResearchUpdate.id}`
     const images = await updateOrReplaceImage(
       imagesToKeepIds as string[],
       uploadedImages,
@@ -101,7 +102,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       client,
     )
 
-    const updateResult = await client
+    const researchUpdateAfterUpdating = await client
       .from('research_updates')
       .update({
         title: data.title,
@@ -112,28 +113,34 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         video_url: data.videoUrl,
         files: files.map((x) => ({ id: x.id, name: x.name, size: x.size })),
       })
-      .eq('id', update.id)
-      .select('*,research:research(slug)')
+      .eq('id', oldResearchUpdate.id)
+      .select('*,research:research(id,slug,is_draft)')
       .single()
 
-    if (updateResult.error || !updateResult.data) {
-      throw updateResult.error
+    if (
+      researchUpdateAfterUpdating.error ||
+      !researchUpdateAfterUpdating.data
+    ) {
+      throw researchUpdateAfterUpdating.error
     }
 
-    if (update.is_draft && !updateResult.data.is_draft) {
-      notificationsService.sendResearchUpdateNotification(
-        client,
-        updateResult.data.research,
-        updateResult.data,
-        profile as DBProfile,
-      )
-    }
+    const researchUpdate = ResearchUpdate.fromDB(
+      researchUpdateAfterUpdating.data,
+      [],
+    )
+    researchUpdate.research = researchUpdateAfterUpdating.data.research
 
-    const researchUpdate = ResearchUpdate.fromDB(updateResult.data, [])
+    broadcastCoordinationServiceServer.researchUpdate(
+      researchUpdate,
+      profile,
+      client,
+      request,
+      oldResearchUpdate,
+    )
 
     return Response.json({ researchUpdate }, { headers, status: 201 })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return Response.json(
       {},
       { status: 500, statusText: 'Error creating research' },
@@ -163,6 +170,7 @@ async function updateOrReplaceImage(
   }
 
   if (newUploads.length > 0) {
+    // TODO:remove unused images from storage
     const result = await storageServiceServer.uploadImage(
       newUploads,
       path,

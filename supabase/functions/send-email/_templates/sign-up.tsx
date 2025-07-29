@@ -40,7 +40,7 @@ export const SignUpEmail = (props: SignUpEmailProps) => {
   const href = `${supabaseUrl}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${redirect_to}`
 
   return (
-    <Layout preview={copy.preview} settings={settings}>
+    <Layout emailType="service" preview={copy.preview} settings={settings}>
       <Heading>{copy.h1(username)}</Heading>
       <Hero>{copy.emailConfirmationBody}</Hero>
 

@@ -1,13 +1,13 @@
 import { Image, MediaFile } from 'oa-shared'
 
+import type { TransformOptions } from '@supabase/storage-js'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBMedia } from 'oa-shared'
-import type { ImageSize } from 'src/config/imageTransforms'
 
 const getPublicUrls = (
   client: SupabaseClient,
   images: DBMedia[],
-  size?: ImageSize,
+  size?: TransformOptions,
 ): Image[] => {
   return images?.map((x) => {
     const { data } = client.storage
@@ -39,7 +39,7 @@ const uploadImage = async (
   for (const file of files) {
     const result = await client.storage
       .from(process.env.TENANT_ID as string)
-      .upload(`${path}/${file.name}`, file)
+      .upload(`${path}/${file.name}`, file, { upsert: true })
 
     if (result.data === null) {
       errors.push(`Error uploading file: ${file.name}`)
@@ -88,6 +88,10 @@ const removeFiles = async (paths: string[], client: SupabaseClient) => {
   await client.storage.from(process.env.TENANT_ID + '-documents').remove(paths)
 }
 
+const removeImages = async (paths: string[], client: SupabaseClient) => {
+  await client.storage.from(process.env.TENANT_ID as string).remove(paths)
+}
+
 const getPathDocuments = async (
   path: string,
   mapUrlPrefix: string,
@@ -117,5 +121,6 @@ export const storageServiceServer = {
   uploadImage,
   uploadFile,
   removeFiles,
+  removeImages,
   getPathDocuments,
 }

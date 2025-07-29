@@ -4,21 +4,30 @@ import { observer } from 'mobx-react'
 import {
   Category,
   ContentStatistics,
+  DisplayDate,
   DisplayMarkdown,
   TagList,
 } from 'oa-components'
-import { type IUser, type News, UserRole } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
-import { AuthWrapper } from 'src/common/AuthWrapper'
-import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
-import { AspectRatio, Box, Button, Card, Flex, Heading, Image } from 'theme-ui'
+import {
+  AspectRatio,
+  Box,
+  Button,
+  Card,
+  Flex,
+  Heading,
+  Image,
+  Text,
+} from 'theme-ui'
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
-import { UserNameTag } from '../common/UserNameTag/UserNameTag'
+import { DraftTag } from '../common/Drafts/DraftTag'
+
+import type { IUser, News } from 'oa-shared'
 
 interface IProps {
   news: News
@@ -79,13 +88,11 @@ export const NewsPage = observer(({ news }: IProps) => {
             {news.title}
           </Heading>
 
-          <UserNameTag
-            userName={news.author?.username || ''}
-            countryCode={news.author?.country || ''}
-            createdAt={news.createdAt}
-            modifiedAt={news.modifiedAt}
-            action="Published"
-          />
+          <Text variant="auxiliary">
+            <DisplayDate action={'Published'} createdAt={news.createdAt} />
+          </Text>
+
+          {news.isDraft && <DraftTag />}
 
           {isEditable && (
             <ClientOnly fallback={<></>}>
@@ -112,7 +119,7 @@ export const NewsPage = observer(({ news }: IProps) => {
             <ContentStatistics
               statistics={[
                 {
-                  icon: 'view',
+                  icon: 'show',
                   label: buildStatisticsLabel({
                     stat: news.totalViews,
                     statUnit: 'view',
@@ -128,7 +135,7 @@ export const NewsPage = observer(({ news }: IProps) => {
                   }),
                 },
                 {
-                  icon: 'comment',
+                  icon: 'comment-outline',
                   label: buildStatisticsLabel({
                     stat: news.commentCount,
                     statUnit: 'comment',
@@ -155,17 +162,7 @@ export const NewsPage = observer(({ news }: IProps) => {
               authors={news.author?.id ? [news.author?.id] : []}
               sourceId={news.id}
               sourceType="news"
-              followButton={
-                <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
-                  <FollowButtonAction
-                    labelFollow="Follow Comments"
-                    labelUnfollow="Following Comments"
-                    contentType="news"
-                    item={news}
-                    setSubscribersCount={setSubscribersCount}
-                  />
-                </AuthWrapper>
-              }
+              setSubscribersCount={setSubscribersCount}
             />
           </Card>
         )}

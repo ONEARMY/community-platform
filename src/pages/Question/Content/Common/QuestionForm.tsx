@@ -9,6 +9,7 @@ import {
   TagsField,
   TitleField,
 } from 'src/pages/common/FormFields'
+import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors'
 import { QuestionPostingGuidelines } from 'src/pages/Question/Content/Common'
 import {
   QuestionDescriptionField,
@@ -22,9 +23,7 @@ import {
   endsWithQuestionMark,
   minValue,
   required,
-  setAllowDraftSaveFalse,
 } from 'src/utils/validators'
-import { Alert } from 'theme-ui'
 
 import { QUESTION_MAX_IMAGES, QUESTION_MIN_TITLE_LENGTH } from '../../constants'
 
@@ -41,12 +40,13 @@ export const QuestionForm = (props: IProps) => {
   const { question, parentType } = props
   const navigate = useNavigate()
   const [initialValues, setInitialValues] = useState<QuestionFormData>({
-    title: '',
+    category: null,
     description: '',
     existingImages: [],
-    category: null,
-    tags: [],
     images: [],
+    isDraft: false,
+    tags: [],
+    title: '',
   })
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
   const [intentionalNavigation, setIntentionalNavigation] = useState(false)
@@ -58,21 +58,25 @@ export const QuestionForm = (props: IProps) => {
     }
 
     setInitialValues({
-      title: question.title,
-      description: question.description,
-      existingImages: question.images,
       category: question.category
         ? {
             value: question.category.id?.toString(),
             label: question.category.name,
           }
         : null,
-      tags: question.tagIds,
+      description: question.description,
+      existingImages: question.images,
       images: null,
+      isDraft: question.isDraft,
+      tags: question.tagIds,
+      title: question.title,
     })
   }, [question])
 
-  const onSubmit = async (formValues: Partial<QuestionFormData>) => {
+  const onSubmit = async (
+    formValues: Partial<QuestionFormData>,
+    isDraft: boolean = false,
+  ) => {
     setIntentionalNavigation(true)
     setSaveErrorMessage(null)
 
@@ -83,6 +87,7 @@ export const QuestionForm = (props: IProps) => {
         tags: formValues.tags,
         category: formValues.category || null,
         images: formValues.images || null,
+        isDraft: isDraft,
         existingImages: initialValues.existingImages || null,
       })
 
@@ -111,17 +116,22 @@ export const QuestionForm = (props: IProps) => {
   return (
     <Form
       data-testid={props['data-testid']}
-      onSubmit={onSubmit}
-      mutators={{ setAllowDraftSaveFalse }}
+      onSubmit={(values) => onSubmit(values, false)}
       initialValues={initialValues}
       render={({
+        errors,
         dirty,
+        handleSubmit,
+        hasValidationErrors,
+        submitFailed,
         submitting,
         submitSucceeded,
-        handleSubmit,
-        valid,
         values,
       }) => {
+        const errorsClientSide = [errorSet(errors, LABELS.fields)]
+
+        const handleSubmitDraft = () => onSubmit(values, true)
+
         const numberOfImageInputsAvailable = (values as any)?.images
           ? Math.min(
               (values as any).images.filter((x) => !!x).length + 1,
@@ -129,34 +139,32 @@ export const QuestionForm = (props: IProps) => {
             )
           : 1
 
-        const validate = composeValidators(
-          required,
-          minValue(QUESTION_MIN_TITLE_LENGTH),
-          endsWithQuestionMark(),
-        )
-
-        const saveError = saveErrorMessage && (
-          <Alert variant="failure" sx={{ mt: 3 }}>
-            {saveErrorMessage}
-          </Alert>
-        )
         const unsavedChangesDialog = (
           <UnsavedChangesDialog
             hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
           />
         )
 
+        const validate = composeValidators(
+          required,
+          minValue(QUESTION_MIN_TITLE_LENGTH),
+          endsWithQuestionMark(),
+        )
+
         return (
           <FormWrapper
             buttonLabel={LABELS.buttons[parentType]}
             contentType="questions"
+            errorsClientSide={errorsClientSide}
+            errorSubmitting={saveErrorMessage}
             guidelines={<QuestionPostingGuidelines />}
             handleSubmit={handleSubmit}
+            handleSubmitDraft={handleSubmitDraft}
+            hasValidationErrors={hasValidationErrors}
             heading={LABELS.headings[parentType]}
-            saveError={saveError}
+            submitFailed={submitFailed}
             submitting={submitting}
             unsavedChangesDialog={unsavedChangesDialog}
-            valid={valid}
           >
             <TitleField
               placeholder={LABELS.fields.title.placeholder}

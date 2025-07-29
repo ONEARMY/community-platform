@@ -37,6 +37,9 @@ export const categoriesSupabase = [
     name: 'Moulds',
   },
   {
+    name: 'Guides',
+  },
+  {
     name: 'Other',
   },
 ]

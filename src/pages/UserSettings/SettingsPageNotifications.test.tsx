@@ -6,7 +6,7 @@ import { FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
 
 import { FormProvider } from './__mocks__/FormProvider'
-import { SettingsPageNotifications } from './SettingsPageNotifications'
+import { FirebaseNotifications } from './FirebaseNotifications'
 
 let mockUser = FactoryUser({})
 
@@ -22,7 +22,7 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
   }),
 }))
 
-describe('SettingsPageNotifications', () => {
+describe('FirebaseNotifications', () => {
   it('renders the users existing notification preference', async () => {
     mockUser = FactoryUser({
       notification_settings: {
@@ -32,7 +32,7 @@ describe('SettingsPageNotifications', () => {
     // Act
     let wrapper
     act(() => {
-      wrapper = FormProvider(mockUser, <SettingsPageNotifications />)
+      wrapper = FormProvider(mockUser, <FirebaseNotifications />)
     })
 
     await waitFor(() => {
@@ -51,7 +51,7 @@ describe('SettingsPageNotifications', () => {
     // Act
     let wrapper
     act(() => {
-      wrapper = FormProvider(mockUser, <SettingsPageNotifications />)
+      wrapper = FormProvider(mockUser, <FirebaseNotifications />)
     })
 
     await waitFor(() => {

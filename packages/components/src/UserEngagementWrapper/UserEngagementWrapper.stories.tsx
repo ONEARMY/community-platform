@@ -1,9 +1,9 @@
 import { Box, Button } from 'theme-ui'
 
-import { ArticleCallToAction, UsefulStatsButton } from '..'
+import { ArticleCallToActionSupabase, UsefulStatsButton } from '..'
 import { UserEngagementWrapper } from './UserEngagementWrapper'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Layout/UserEngagementWrapper',
@@ -14,10 +14,14 @@ export const Default: StoryFn<typeof UserEngagementWrapper> = () => (
   <Box sx={{ maxWidth: '1000px', margin: '0 auto' }}>
     <UserEngagementWrapper>
       <Box sx={{ margin: 3 }}>
-        <ArticleCallToAction
+        <ArticleCallToActionSupabase
           author={{
-            userName: 'library._createdBy',
-            countryCode: 'us',
+            username: 'library._createdBy',
+            country: 'US',
+            displayName: 'display name',
+            isSupporter: true,
+            id: 1,
+            photoUrl: null,
             isVerified: true,
           }}
         >
@@ -30,7 +34,7 @@ export const Default: StoryFn<typeof UserEngagementWrapper> = () => (
             isLoggedIn={false}
             onUsefulClick={() => new Promise(() => {})}
           />
-        </ArticleCallToAction>
+        </ArticleCallToActionSupabase>
       </Box>
     </UserEngagementWrapper>
   </Box>

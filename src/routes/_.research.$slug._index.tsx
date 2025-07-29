@@ -1,16 +1,14 @@
 import { useLoaderData } from '@remix-run/react'
-import { Author, ResearchItem } from 'oa-shared'
+import { ResearchItem } from 'oa-shared'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { ResearchArticlePage } from 'src/pages/Research/Content/ResearchArticlePage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
-import { profileServiceServer } from 'src/services/profileService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBResearchItem, ResearchUpdate } from 'oa-shared'
+import type { ResearchUpdate } from 'oa-shared'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -20,25 +18,16 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     params.slug as string,
   )
 
-  if (result.error || !result.data) {
+  if (result.error || !result.item) {
     return Response.json({ research: null }, { headers })
   }
 
   const {
     data: { user },
   } = await client.auth.getUser()
-  let currentUserId: number | undefined
+  const currentUsername = user?.user_metadata?.username
 
-  if (user) {
-    const result = await client
-      .from('profiles')
-      .select('id')
-      .eq('auth_id', user.id)
-      .limit(1)
-    currentUserId = result.data?.at(0)?.id
-  }
-
-  const dbResearch = result.data as unknown as DBResearchItem
+  const dbResearch = result.item
 
   if (dbResearch.id) {
     await contentServiceServer.incrementViewCount(
@@ -57,8 +46,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       dbResearch.tags,
     )
 
-  const collaborators = await getCollaborators(dbResearch.collaborators, client)
-
   const images = researchServiceServer.getResearchPublicMedia(
     dbResearch,
     client,
@@ -68,29 +55,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     dbResearch,
     tags,
     images,
-    collaborators,
-    currentUserId,
+    result.collaborators,
+    currentUsername,
   )
   research.usefulCount = usefulVotes.count || 0
   research.subscriberCount = subscribers.count || 0
 
   return Response.json({ research }, { headers })
-}
-
-const getCollaborators = async (
-  collaboratorIds: string[] | null,
-  client: SupabaseClient,
-) => {
-  if (collaboratorIds === null || collaboratorIds.length === 0) {
-    return []
-  }
-
-  const users = await profileServiceServer.getUsersByUsername(
-    collaboratorIds,
-    client,
-  )
-
-  return users?.map((user) => Author.fromDB(user))
 }
 
 export function HydrateFallback() {

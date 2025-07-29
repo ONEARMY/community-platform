@@ -1,7 +1,12 @@
 import { storageServiceServer } from './storageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBMedia } from 'oa-shared'
+import type { DBMedia, DBNews } from 'oa-shared'
+
+async function getById(id: number, client: SupabaseClient) {
+  const result = await client.from('news').select().eq('id', id).single()
+  return result.data as DBNews
+}
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
   return client
@@ -14,6 +19,7 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
        modified_at,
        comment_count,
        body,
+       is_draft,
        moderation,
        slug,
        summary,
@@ -46,6 +52,7 @@ const getHeroImage = async (
 }
 
 export const newsServiceServer = {
+  getById,
   getBySlug,
   getHeroImage,
 }

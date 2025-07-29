@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 
 import { NotificationItem } from './NotificationItem'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Components/NotificationItem',

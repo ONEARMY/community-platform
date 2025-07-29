@@ -35,7 +35,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       client,
     )
 
-    if (uploadedImage?.errors) {
+    if (uploadedImage?.errors && uploadedImage?.errors.length > 0) {
       throw uploadedImage?.errors
     }
 

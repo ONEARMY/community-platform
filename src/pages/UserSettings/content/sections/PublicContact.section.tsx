@@ -23,6 +23,7 @@ export const PublicContactSection = observer((props: Props) => {
         gap: 2,
       }}
     >
+      <a id="public-contact"></a>
       <Heading as="h2">{title}</Heading>
       <Text variant="quiet" sx={{ fontSize: 2 }}>
         {description}

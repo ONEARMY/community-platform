@@ -46,23 +46,19 @@ export class MapsStore extends ModuleStore {
     const activeUser = this.activeUser
     const isAdmin = hasAdminRights(activeUser as IUser)
 
-    pins = pins
-      .filter((p) => {
-        const isDeleted = p._deleted || false
-        const isPinAccepted = p.moderation === IModerationStatus.ACCEPTED
-        const wasCreatedByUser = activeUser && p._id === activeUser.userName
-        const isAdminAndAccepted =
-          isAdmin && p.moderation !== IModerationStatus.REJECTED
+    pins = pins.filter((p) => {
+      const isDeleted = p._deleted || false
+      const isPinAccepted = p.moderation === IModerationStatus.ACCEPTED
+      const wasCreatedByUser = activeUser && p._id === activeUser.userName
+      const isAdminAndAccepted =
+        isAdmin && p.moderation !== IModerationStatus.REJECTED
 
-        return (
-          p.type &&
-          !isDeleted &&
-          (isPinAccepted || wasCreatedByUser || isAdminAndAccepted)
-        )
-      })
-      .map((p) => {
-        return { ...p, verified: this.aggregationsStore.isVerified(p._id) }
-      })
+      return (
+        p.type &&
+        !isDeleted &&
+        (isPinAccepted || wasCreatedByUser || isAdminAndAccepted)
+      )
+    })
     this.mapPins = pins
   }
 

@@ -12,7 +12,7 @@ Users can choose if they would like to receive these emails, and if so, at what 
 
 ## Notification Email Process
 
-Based on the user's `notifications` and `notification_settings`, the [user notifications aggregation](../aggregations/userNotifications.aggregations.ts) creates a `emails_pending` collection to store any notifications for users that are not yet `notified` or `read`. This aggregation is refreshed any time the `users` collection is updated.
+Based on the user's `notifications` and `notification_settings`, creates a `emails_pending` collection to store any notifications for users that are not yet `notified` or `read`. This aggregation is refreshed any time the `users` collection is updated.
 
 The function [createNotificationEmails](./createNotificationEmails.ts) in this directory reads from the `emails_pending` collection and writes to the `emails` collection. The `emails` collection is set up with the [trigger email extension](https://firebase.google.com/docs/extensions/official/firestore-send-email) to send emails to users via [Brevo](https://www.brevo.com/) (formerly Sendinblue).
 

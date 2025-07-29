@@ -9,6 +9,30 @@ export enum QuestionSearchParams {
   sort = 'sort',
 }
 
+const getDraftCount = async () => {
+  try {
+    const response = await fetch('/api/questions/drafts/count')
+    const { total } = (await response.json()) as { total: number }
+
+    return total
+  } catch (error) {
+    logger.error('Failed to fetch draft count', { error })
+    return 0
+  }
+}
+
+const getDrafts = async () => {
+  try {
+    const response = await fetch('/api/questions/drafts')
+    const { items } = (await response.json()) as { items: Question[] }
+
+    return items
+  } catch (error) {
+    logger.error('Failed to fetch draft questions', { error })
+    return []
+  }
+}
+
 const search = async (
   q: string,
   category: string,
@@ -37,5 +61,7 @@ const search = async (
 }
 
 export const questionService = {
+  getDraftCount,
+  getDrafts,
   search,
 }

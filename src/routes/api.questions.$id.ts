@@ -1,18 +1,23 @@
-import { Image, Question } from 'oa-shared'
+import { Question } from 'oa-shared'
+import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { profileServiceServer } from 'src/services/profileService.server'
+import { questionServiceServer } from 'src/services/questionService.server'
+import { storageServiceServer } from 'src/services/storageService.server'
 import { hasAdminRightsSupabase, validateImages } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 
 import { contentServiceServer } from '../services/contentService.server'
-import { uploadImages } from './api.questions'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBProfile, DBQuestion } from 'oa-shared'
+import type { DBMedia, DBQuestion } from 'oa-shared'
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   try {
+    const id = Number(params.id)
+
     const formData = await request.formData()
     const imagesToKeepIds = formData.getAll('existingImages')
 
@@ -22,9 +27,11 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       category: formData.has('category')
         ? Number(formData.get('category'))
         : null,
+      is_draft: formData.get('is_draft') === 'true',
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
         : null,
+      slug: convertToSlug(formData.get('title') as string),
     }
 
     const { client, headers } = createSupabaseServerClient(request)
@@ -33,11 +40,14 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       data: { user },
     } = await client.auth.getUser()
 
+    const currentQuestion = await questionServiceServer.getById(id, client)
+
     const { valid, status, statusText } = await validateRequest(
       params,
       request,
       user,
       data,
+      currentQuestion,
       client,
     )
 
@@ -58,9 +68,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       )
     }
 
-    const questionId = Number(params.id)
-
-    let images: Image[] = []
+    let images: DBMedia[] = []
 
     if (imagesToKeepIds.length > 0) {
       const questionImages = await client
@@ -77,30 +85,32 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     }
 
     if (uploadedImages.length > 0) {
-      const imageResult = await uploadImages(questionId, uploadedImages, client)
+      const mediaResult = await storageServiceServer.uploadImage(
+        uploadedImages,
+        `questions/${id}`,
+        client,
+      )
 
-      if (imageResult) {
-        const newImages = imageResult.images.map(
-          (x) =>
-            new Image({
-              id: x.id,
-              publicUrl: x.fullPath,
-            }),
-        )
-
-        images = [...images, ...newImages]
+      if (mediaResult) {
+        images = [...images, ...mediaResult.media]
       }
     }
 
-    const slug = convertToSlug(data.title)
+    const previousSlugs = contentServiceServer.updatePreviousSlugs(
+      currentQuestion,
+      data.slug,
+    )
+
     const questionResult = await client
       .from('questions')
       .update({
         category: data.category,
         description: data.description,
+        is_draft: data.is_draft,
         images,
         title: data.title,
-        slug,
+        slug: data.slug,
+        previous_slugs: previousSlugs,
         tags: data.tags,
         modified_at: new Date(),
       })
@@ -111,7 +121,13 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       throw questionResult.error
     }
 
-    const question = Question.fromDB(questionResult.data[0], [])
+    const newImages = storageServiceServer.getPublicUrls(
+      client,
+      questionResult.data[0].images,
+      IMAGE_SIZES.GALLERY,
+    )
+
+    const question = Question.fromDB(questionResult.data[0], [], newImages)
 
     return Response.json({ question }, { headers, status: 200 })
   } catch (error) {
@@ -128,6 +144,7 @@ async function validateRequest(
   request: Request,
   user: User | null,
   data: any,
+  currentQuestion: DBQuestion,
   client: SupabaseClient,
 ) {
   if (!user) {
@@ -150,16 +167,18 @@ async function validateRequest(
     return { status: 400, statusText: 'description is required' }
   }
 
-  const slug = convertToSlug(data.title)
-  const questionId = Number(params.id!)
+  if (!currentQuestion) {
+    return { status: 400, statusText: 'Question not found' }
+  }
 
   if (
-    await contentServiceServer.isDuplicateExistingSlug(
-      slug,
-      questionId,
+    currentQuestion.slug !== data.slug &&
+    (await contentServiceServer.isDuplicateExistingSlug(
+      data.slug,
+      currentQuestion.id,
       client,
       'questions',
-    )
+    ))
   ) {
     return {
       status: 409,
@@ -167,30 +186,13 @@ async function validateRequest(
     }
   }
 
-  const existingQuestionResult = await client
-    .from('questions')
-    .select()
-    .eq('id', questionId)
-    .single()
+  const profile = await profileServiceServer.getByAuthId(user!.id, client)
 
-  if (existingQuestionResult.error || !existingQuestionResult.data) {
-    return { status: 400, statusText: 'Question not found' }
-  }
-
-  const existingQuestion = existingQuestionResult.data as DBQuestion
-
-  const profileRequest = await client
-    .from('profiles')
-    .select('id,roles')
-    .eq('auth_id', user.id)
-    .limit(1)
-
-  if (profileRequest.error || !profileRequest.data?.at(0)) {
+  if (!profile) {
     return { status: 400, statusText: 'User not found' }
   }
 
-  const profile = profileRequest.data[0] as DBProfile
-  const isCreator = existingQuestion.created_by === profile.id
+  const isCreator = currentQuestion.created_by === profile.id
   const hasAdminRights = hasAdminRightsSupabase(profile)
 
   if (!isCreator && !hasAdminRights) {

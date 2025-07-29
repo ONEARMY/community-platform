@@ -6,6 +6,7 @@ import type { DBCategory } from './category'
 import type { IConvertedFileMeta } from './common'
 import type { IContentDoc, IDBContentDoc } from './content'
 import type { IDBDocSB, IDBDownloadable, IDoc, IDownloadable } from './document'
+import type { IFilesForm } from './filesForm'
 import type { DBMedia, Image, IMediaFile, MediaFile } from './media'
 import type { SelectValue } from './other'
 import type { Tag } from './tag'
@@ -38,7 +39,7 @@ export class DBResearchItem implements IDBContentDoc {
   category_id?: number
   tags: number[]
   status: ResearchStatus
-  is_draft?: boolean
+  is_draft: boolean
   collaborators: string[] | null
 
   constructor(obj: Omit<DBResearchItem, 'id'>) {
@@ -69,7 +70,7 @@ export class ResearchItem implements IContentDoc {
   collaborators: Author[]
   collaboratorsUsernames: string[] | null
   updates: ResearchUpdate[]
-  isDraft?: boolean
+  isDraft: boolean
 
   constructor(obj: ResearchItem) {
     Object.assign(this, obj)
@@ -80,7 +81,7 @@ export class ResearchItem implements IContentDoc {
     tags: Tag[],
     images: Image[] = [],
     collaborators: Author[] = [],
-    currentUserId?: number,
+    currentUsername?: string,
   ) {
     const filteredUpdates = obj.updates?.filter((update) => {
       if (update.deleted) {
@@ -91,14 +92,12 @@ export class ResearchItem implements IContentDoc {
         return true
       }
 
-      if (!currentUserId) {
+      if (!currentUsername) {
         return false
       }
 
-      const isAuthor = obj.author?.id === currentUserId
-      const isCollaborator = (collaborators || [])
-        .map((collaborator) => collaborator.id)
-        .includes(currentUserId)
+      const isAuthor = obj.author?.username === currentUsername
+      const isCollaborator = (obj.collaborators || []).includes(currentUsername)
 
       return isAuthor || isCollaborator
     })
@@ -158,7 +157,7 @@ export class DBResearchUpdate implements IDBDocSB, IDBDownloadable {
   files: IMediaFile[] | null
   video_url: string | null
 
-  constructor(obj: Omit<DBResearchItem, 'id'>) {
+  constructor(obj: Omit<DBResearchUpdate, 'id'>) {
     Object.assign(this, obj)
   }
 }
@@ -179,6 +178,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
   researchId: number
   title: string
   videoUrl: string | null
+  research?: DBResearchItem
 
   constructor(obj: ResearchUpdate) {
     Object.assign(this, obj)
@@ -228,7 +228,7 @@ export type ResearchFormData = {
   existingImage: Image | null
 }
 
-export type ResearchUpdateFormData = {
+export interface ResearchUpdateFormData extends IFilesForm {
   title: string
   description: string
   images?: File[]

@@ -150,14 +150,24 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         tenant_id: process.env.TENANT_ID,
       })
       .select()
+      .single()
 
     if (researchResult.error || !researchResult.data) {
       throw researchResult.error
     }
 
-    const research = ResearchItem.fromDB(researchResult.data[0], [])
+    const research = ResearchItem.fromDB(
+      researchResult.data,
+      [],
+      [],
+      researchResult.data.collaborators,
+    )
 
-    addSubscribers(research, profile, client)
+    await subscribersServiceServer.addResearchSubscribers(
+      research,
+      profile.id,
+      client,
+    )
 
     if (uploadedImage) {
       const mediaResult = await storageServiceServer.uploadImage(
@@ -191,12 +201,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       { status: 500, statusText: 'Error creating research' },
     )
   }
-}
-
-const addSubscribers = async (research, profile, client) => {
-  subscribersServiceServer.add('research', research.id, profile.id, client)
-  // To do: Subscribe collaborators too
-  return
 }
 
 async function validateRequest(request: Request, user: User | null, data: any) {

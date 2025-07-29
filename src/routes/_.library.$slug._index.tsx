@@ -1,23 +1,53 @@
-import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import { Library } from 'src/pages/Library/Content/Page/Library'
-import { libraryService } from 'src/pages/Library/library.service'
+import { Project } from 'oa-shared'
+import { ProjectPage } from 'src/pages/Library/Content/Page/ProjectPage'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
-import { pageViewService } from 'src/services/pageViewService.server'
+import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { contentServiceServer } from 'src/services/contentService.server'
+import { libraryServiceServer } from 'src/services/libraryService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { ILibrary } from 'oa-shared'
+import type { DBProject } from 'oa-shared'
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  const item = await libraryService.getBySlug(params.slug as string)
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  const { client, headers } = createSupabaseServerClient(request)
 
-  if (item?._id) {
-    // not awaited to not block the render
-    pageViewService.incrementViewCount('library', item._id)
+  const result = await libraryServiceServer.getBySlug(
+    client,
+    params.slug as string,
+  )
+
+  if (result.error || !result.data) {
+    return Response.json({ project: null }, { headers })
   }
 
-  return json({ item })
+  const dbProject = result.data as unknown as DBProject
+
+  if (dbProject.id) {
+    await contentServiceServer.incrementViewCount(
+      client,
+      'projects',
+      dbProject.total_views,
+      dbProject.id,
+    )
+  }
+
+  const [usefulVotes, subscribers, tags] =
+    await contentServiceServer.getMetaFields(
+      client,
+      dbProject.id,
+      'projects',
+      dbProject.tags,
+    )
+
+  const images = libraryServiceServer.getProjectPublicMedia(dbProject, client)
+
+  const project = Project.fromDB(dbProject, tags, images)
+  project.usefulCount = usefulVotes.count || 0
+  project.subscriberCount = subscribers.count || 0
+
+  return Response.json({ project }, { headers })
 }
 
 export function HydrateFallback() {
@@ -27,24 +57,24 @@ export function HydrateFallback() {
 }
 
 export const meta = mergeMeta<typeof loader>(({ data }) => {
-  const item = data?.item as ILibrary.DB
+  const project = data?.project as Project
 
-  if (!item) {
+  if (!project) {
     return []
   }
 
-  const title = `${item.title} - Library - ${import.meta.env.VITE_SITE_NAME}`
+  const title = `${project.title} - Library - ${import.meta.env.VITE_SITE_NAME}`
 
-  return generateTags(title, item.description, item.cover_image?.downloadUrl)
+  return generateTags(title, project.description, project.coverImage?.publicUrl)
 })
 
 export default function Index() {
   const data = useLoaderData<typeof loader>()
-  const item = data.item as ILibrary.DB // there is some inference issue, shouldn't need 'as'
+  const project = data.project as Project
 
-  if (!item) {
+  if (!project) {
     return <NotFoundPage />
   }
 
-  return <Library item={item} />
+  return <ProjectPage item={project} />
 }

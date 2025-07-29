@@ -7,16 +7,14 @@ import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { TagsField } from 'src/pages/common/FormFields'
-import {
-  ResearchErrors,
-  ResearchPostingGuidelines,
-} from 'src/pages/Research/Content/Common'
+import { ImageField } from 'src/pages/common/FormFields/ImageField'
+import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors'
+import { ResearchPostingGuidelines } from 'src/pages/Research/Content/Common'
 import { fireConfetti } from 'src/utils/fireConfetti'
 import { Text } from 'theme-ui'
 
 import { buttons, headings, overview } from '../../labels'
 import { researchService } from '../../research.service'
-import { ResearchImageField } from '../CreateResearch/Form/ResearchImageField'
 import { ResearchCollaboratorsField } from './FormFields/ResearchCollaboratorsField'
 import { ResearchDescriptionField } from './FormFields/ResearchDescriptionField'
 import { ResearchTitleField } from './FormFields/ResearchTitleField'
@@ -29,8 +27,7 @@ interface IProps {
 }
 
 const ResearchForm = ({ research }: IProps) => {
-  const [initialValues, setInitialValues] =
-    useState<Partial<ResearchFormData>>()
+  const [initialValues, setInitialValues] = useState<ResearchFormData>()
   const navigate = useNavigate()
   const [intentionalNavigation, setIntentionalNavigation] = useState(false)
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
@@ -51,6 +48,7 @@ const ResearchForm = ({ research }: IProps) => {
           : [],
         tags: research?.tagIds || [],
         existingImage: research?.image,
+        image: undefined,
       })
     }
   }, [research])
@@ -90,13 +88,6 @@ const ResearchForm = ({ research }: IProps) => {
     }
   }
 
-  const removeImage = () => {
-    setInitialValues({
-      ...initialValues!,
-      existingImage: null,
-    })
-  }
-
   const heading = research ? headings.overview.edit : headings.overview.create
 
   return (
@@ -106,40 +97,30 @@ const ResearchForm = ({ research }: IProps) => {
       mutators={{
         ...arrayMutators,
       }}
+      validate={(values) => {
+        const errors = {}
+        if (values.image == null && values.existingImage === null) {
+          errors['image'] = 'An image is required (either new or existing).'
+        }
+        return errors
+      }}
       validateOnBlur
       render={({
-        dirty,
         errors,
-        values,
-        valid,
+        dirty,
         handleSubmit,
+        hasValidationErrors,
+        submitFailed,
         submitting,
         submitSucceeded,
+        values,
       }) => {
-        const saveError = saveErrorMessage && (
-          <ResearchErrors
-            errors={errors}
-            isVisible={!!saveErrorMessage}
-            labels={overview}
-          />
-        )
+        const errorsClientSide = [errorSet(errors, overview)]
+
+        const handleSubmitDraft = () => onSubmit(values, true)
 
         const sidebar = (
           <>
-            <Button
-              data-cy="draft"
-              onClick={() => onSubmit(values, true)}
-              variant="secondary"
-              type="submit"
-              disabled={submitting || !valid}
-              sx={{
-                width: '100%',
-                display: 'block',
-              }}
-            >
-              <span>{buttons.draft}</span>
-            </Button>
-
             {research?.id && (
               <Button
                 data-cy="draft"
@@ -195,25 +176,24 @@ const ResearchForm = ({ research }: IProps) => {
           <FormWrapper
             buttonLabel={buttons.publish}
             contentType="research"
+            errorsClientSide={errorsClientSide}
+            errorSubmitting={saveErrorMessage}
             guidelines={<ResearchPostingGuidelines />}
             handleSubmit={handleSubmit}
+            handleSubmitDraft={handleSubmitDraft}
+            hasValidationErrors={hasValidationErrors}
             heading={heading}
-            saveError={saveError}
             sidebar={sidebar}
+            submitFailed={submitFailed}
             submitting={submitting}
             unsavedChangesDialog={unsavedChangesDialog}
-            valid={valid}
           >
             <ResearchTitleField />
             <ResearchDescriptionField />
             <ResearchFieldCategory />
             <TagsField title={overview.tags.title} />
             <ResearchCollaboratorsField />
-            <ResearchImageField
-              label="Cover Image"
-              existingImage={initialValues?.existingImage || null}
-              remove={removeImage}
-            />
+            <ImageField title="Cover Image" />
           </FormWrapper>
         )
       }}

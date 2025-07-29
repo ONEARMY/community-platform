@@ -1016,6 +1016,42 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "JCSergent",
+      "name": "JC Sergent",
+      "avatar_url": "https://avatars.githubusercontent.com/u/34434102?v=4",
+      "profile": "https://github.com/JCSergent",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "fel4-dev",
+      "name": "Fel4",
+      "avatar_url": "https://avatars.githubusercontent.com/u/94372355?v=4",
+      "profile": "https://github.com/fel4-dev",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "matteobu",
+      "name": "Matteo Bucciol",
+      "avatar_url": "https://avatars.githubusercontent.com/u/62759388?v=4",
+      "profile": "http://matteo.codes",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ernestorbemx",
+      "name": "ernestorbemx",
+      "avatar_url": "https://avatars.githubusercontent.com/u/204041962?v=4",
+      "profile": "https://github.com/ernestorbemx",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

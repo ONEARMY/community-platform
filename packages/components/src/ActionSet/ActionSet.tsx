@@ -44,9 +44,9 @@ export const ActionSet = ({ children, itemType }: IProps) => {
             position: 'absolute',
             right: 0,
             zIndex: 1,
-            padding: 2,
-            gap: 2,
-            minWidth: '190px',
+            padding: 1,
+            gap: 1,
+            minWidth: '200px',
           }}
         >
           <Flex

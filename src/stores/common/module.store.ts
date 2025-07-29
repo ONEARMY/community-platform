@@ -122,27 +122,20 @@ export class ModuleStore {
   get db() {
     return this.rootStore!.dbV2
   }
-
   get activeUser() {
     return this.rootStore!.stores.userStore.user
   }
-
   get userStore() {
     return this.rootStore!.stores.userStore
   }
-
   get mapsStore() {
     return this.rootStore!.stores.mapsStore
   }
-  get aggregationsStore() {
-    return this.rootStore!.stores.aggregationsStore
+  get tagsStore() {
+    return this.rootStore!.stores.tagsStore
   }
   get userNotificationsStore() {
     return this.rootStore!.stores.userNotificationsStore
-  }
-
-  get discussionStore() {
-    return this.rootStore!.stores.discussionStore
   }
 
   /****************************************************************************

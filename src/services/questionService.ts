@@ -3,29 +3,30 @@ import { DBQuestion, Question } from 'oa-shared'
 import type { QuestionFormData } from 'oa-shared'
 
 const upsert = async (id: number | null, question: QuestionFormData) => {
-  const data = new FormData()
-  data.append('title', question.title)
-  data.append('description', question.description)
+  const body = new FormData()
+  body.append('title', question.title)
+  body.append('description', question.description)
+  body.append('is_draft', question.isDraft ? 'true' : 'false')
 
   if (question.tags && question.tags.length > 0) {
     for (const tag of question.tags) {
-      data.append('tags', tag.toString())
+      body.append('tags', tag.toString())
     }
   }
 
   if (question.category) {
-    data.append('category', question.category?.value.toString())
+    body.append('category', question.category?.value.toString())
   }
 
   if (question.images && question.images.length > 0) {
     for (const image of question.images) {
-      data.append('images', image.photoData, image.name)
+      body.append('images', image.photoData, image.name)
     }
   }
 
   if (question.existingImages && question.existingImages.length > 0) {
     for (const image of question.existingImages) {
-      data.append('existingImages', image.id)
+      body.append('existingImages', image.id)
     }
   }
 
@@ -33,11 +34,11 @@ const upsert = async (id: number | null, question: QuestionFormData) => {
     id === null
       ? await fetch(`/api/questions`, {
           method: 'POST',
-          body: data,
+          body,
         })
       : await fetch(`/api/questions/${id}`, {
           method: 'PUT',
-          body: data,
+          body,
         })
 
   if (response.status !== 200 && response.status !== 201) {

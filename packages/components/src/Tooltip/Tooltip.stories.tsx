@@ -2,7 +2,7 @@ import { Button } from 'theme-ui'
 
 import { Tooltip } from './Tooltip'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Components/Tooltip',

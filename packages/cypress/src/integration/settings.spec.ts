@@ -1,4 +1,4 @@
-import { ExternalLinkLabel } from 'oa-shared'
+import { ExternalLinkLabel, UserRole } from 'oa-shared'
 
 import { MOCK_DATA } from '../data'
 import { SingaporeStubResponse } from '../fixtures/searchResults'
@@ -70,6 +70,7 @@ describe('[Settings]', () => {
       cy.clickMenuItem(UserMenuItem.Profile)
 
       cy.step('Incomplete profile banner visible')
+      cy.get('[data-cy=emptyProfileMessage]').should('be.visible')
       cy.get('[data-cy=incompleteProfileBanner]').click()
 
       cy.step('Cannot add map pin')
@@ -142,6 +143,7 @@ describe('[Settings]', () => {
 
       cy.step('Updated settings display on profile')
       cy.visit(`u/${user.username}`)
+      cy.get('[data-cy=emptyProfileMessage]').should('not.exist')
       cy.contains(user.username)
       cy.contains(displayName)
       cy.contains(description)
@@ -289,6 +291,7 @@ describe('[Settings]', () => {
         country,
         description,
       })
+      cy.setSettingImage('avatar', 'userImage')
       cy.selectTag(tag, '[data-cy=tag-select]')
       cy.setSettingAddContactLink({
         index: 0,
@@ -461,6 +464,7 @@ describe('[Settings]', () => {
         country,
         description,
       })
+      cy.setSettingImage('avatar', 'userImage')
       cy.selectTag(tag, '[data-cy=tag-select]')
       cy.setSettingAddContactLink({
         index: 0,
@@ -597,13 +601,29 @@ describe('[Settings]', () => {
         cy.get('[data-cy=Username]').should('not.include.text', user.username)
       })
     })
-  })
-})
 
-const deleteAccount = () => {
-  cy.visit('/settings/account')
-  cy.get('[data-cy=delete-account-modal-open-button]').click()
-  cy.get('[data-cy=delete-account-modal-confirmation-input]').type('DELETE')
-  cy.get('[data-cy=delete-account-modal-confirm-button]').click()
-  cy.wait(5000)
-}
+    it('Notifications', () => {
+      localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
+      cy.signUpNewUser()
+
+      cy.step('Notification setting not shown when messaging off')
+      localStorage.setItem('VITE_NO_MESSAGING', 'true')
+      cy.visit('/settings')
+      cy.get('[data-cy=tab-Notifications]').click()
+      cy.get('[data-cy=messages-link]').should('not.exist')
+
+      cy.step('Notification setting present for contact feature ')
+      localStorage.setItem('VITE_NO_MESSAGING', 'false')
+      cy.visit('/settings')
+      cy.get('[data-cy=tab-Notifications]').click()
+      cy.get('[data-cy=messages-link]')
+    })
+  })
+
+  const deleteAccount = () => {
+    cy.visit('/settings/account')
+    cy.get('[data-cy=delete-account-modal-open-button]').click()
+    cy.get('[data-cy=delete-account-modal-confirmation-input]').type('DELETE')
+    cy.get('[data-cy=delete-account-modal-confirm-button]').click()
+    cy.wait(5000)
+  }

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Field } from 'react-final-form'
-import TagsSelect from 'src/common/Tags/TagsSelect'
+import TagsSelect from 'src/common/Form/TagsSelect'
 import { fields } from 'src/pages/UserSettings/labels'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { getProfileTagsForTheme } from 'src/utils/getProfileTagsForTheme'

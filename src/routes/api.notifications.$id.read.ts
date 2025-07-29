@@ -29,7 +29,7 @@ export const action = async ({ params, request }: LoaderFunctionArgs) => {
 
     return Response.json({}, { headers, status: 200 })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return Response.json(
       {},
       { status: 500, statusText: 'Error setting notification as read' },

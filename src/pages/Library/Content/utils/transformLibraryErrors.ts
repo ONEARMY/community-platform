@@ -2,6 +2,7 @@ import { intro as introLabels, steps as stepsLabels } from '../../labels'
 
 import type {
   IErrorsListSet,
+  ILabels,
   IStepErrorsList,
   ITopLevelErrorsList,
 } from 'src/common/Form/types'
@@ -26,9 +27,23 @@ const introErrors = (errors: ITopLevelErrorsList): IErrorsListSet => {
   return { errors, keys, labels, title }
 }
 
+export const errorSet = (
+  errorSet: ITopLevelErrorsList | undefined,
+  labels: ILabels,
+): IErrorsListSet => {
+  const errors = errorSet ? errorSet : {}
+  const keys = errors ? Object.keys(errors).filter((key) => labels[key]) : []
+
+  return { errors, keys, labels }
+}
+
 export const transformLibraryErrors = (
-  errors: ITopLevelErrorsList,
+  errors: ITopLevelErrorsList | undefined,
 ): IErrorsListSet[] => {
+  if (!errors) {
+    return []
+  }
+
   const transformedErrorsSet = [introErrors(errors)]
 
   if (errors.steps && typeof errors.steps !== 'string') {

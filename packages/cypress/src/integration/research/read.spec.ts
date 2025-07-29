@@ -43,15 +43,15 @@ describe('[Research]', () => {
 
         cy.step('Can select a category to limit items displayed')
         cy.get('[data-cy=category]').contains('Machines')
-        cy.get('[data-cy=CategoryVerticalList]').within(() => {
+        cy.get('[data-cy=CategoryHorizonalList]').within(() => {
           cy.contains('Moulds').click()
         })
-        cy.get('[data-cy=CategoryVerticalList-Item-active]')
+        cy.get('[data-cy=CategoryHorizonalList-Item-active]')
         cy.get('[data-cy=category]').contains('Moulds')
         cy.get('[data-cy=category]').contains('Machines').should('not.exist')
 
         cy.step('Can remove the category filter by selecting it again')
-        cy.get('[data-cy=CategoryVerticalList]').within(() => {
+        cy.get('[data-cy=CategoryHorizonalList]').within(() => {
           cy.contains('Moulds').click()
         })
         cy.get('[data-cy=category]').contains('Machines')

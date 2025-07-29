@@ -9,7 +9,6 @@ import {
   FaSignal,
   FaSlack,
 } from 'react-icons/fa'
-import { GoLinkExternal } from 'react-icons/go'
 import {
   MdAccessTime,
   MdAccountCircle,
@@ -22,7 +21,6 @@ import {
   MdKeyboardArrowDown,
   MdLocationOn,
   MdLock,
-  MdMail,
   MdMailOutline,
   MdMenu,
   MdMoreVert,
@@ -55,15 +53,17 @@ export const glyphs: IGlyphs = {
   'account-circle': <MdAccountCircle />,
   add: <MdAdd />,
   account: iconMap.account,
+  approved: iconMap.approved,
   'arrow-back': <MdArrowBack />,
-  'arrow-curved-bottom-right': iconMap.arrowCurvedBottomRight,
   'arrow-down': <MdKeyboardArrowDown />,
   'arrow-forward': <MdArrowForward />,
   'arrow-full-down': iconMap.arrowFullDown,
   'arrow-full-up': iconMap.arrowFullUp,
+  attention: iconMap.attention,
   bazar: iconMap.bazar,
   category: iconMap.category,
   comment: iconMap.comment,
+  'comment-outline': iconMap.commentOutline,
   construction: iconMap.construction,
   contact: iconMap.contact,
   check: <MdCheck />,
@@ -72,19 +72,20 @@ export const glyphs: IGlyphs = {
   'chevron-right': iconMap.chevronRight,
   'chevron-up': iconMap.chevronUp,
   close: iconMap.close,
+  declined: iconMap.declined,
   delete: iconMap.delete,
   difficulty: <FaSignal />,
   discord: iconMap.discord,
   discussion: iconMap.discussion,
   discussionFollow: iconMap.discussionFollow,
   discussionUnfollow: iconMap.discussionUnfollow,
+  doubleTick: iconMap.doubleTick,
   download: <MdFileDownload />,
   'download-cloud': <DownloadIcon />,
   edit: iconMap.edit,
-  email: <MdMail />,
+  email: iconMap.email,
   employee: iconMap.employee,
   'email-outline': iconMap.emailOutline,
-  'external-link': <GoLinkExternal />,
   'external-url': <ExternalUrl />,
   facebook: <FaFacebookF />,
   filter: <FaFilter />,
@@ -96,6 +97,7 @@ export const glyphs: IGlyphs = {
   guides: iconMap.guides,
   hide: iconMap.hide,
   hyperlink: iconMap.hyperlink,
+  information: iconMap.information,
   image: <MdImage />,
   impact: iconMap.impact,
   instagram: <FaInstagram />,
@@ -107,6 +109,7 @@ export const glyphs: IGlyphs = {
   machines: iconMap.machines,
   'mail-outline': <MdMailOutline />,
   map: iconMap.map,
+  megaphone: iconMap.megaphone,
   'megaphone-active': iconMap.megaphoneActive,
   'megaphone-inactive': iconMap.megaphoneInactive,
   menu: <MdMenu />,
@@ -120,7 +123,10 @@ export const glyphs: IGlyphs = {
   products: iconMap.products,
   profile: iconMap.profile,
   recycling: iconMap.recycling,
+  reply: iconMap.reply,
+  'reply-outline': iconMap.replyOutline,
   report: iconMap.report,
+  research: iconMap.research,
   revenue: iconMap.revenue,
   search: iconMap.search,
   slack: <FaSlack />,
@@ -141,14 +147,13 @@ export const glyphs: IGlyphs = {
   utilities: iconMap.utilities,
   useful: iconMap.useful,
   verified: iconMap.verified,
-  view: iconMap.view,
   volunteer: iconMap.volunteer,
   website: iconMap.website,
 }
 
-export type Props = IProps & VerticalAlignProps & SpaceProps
+export type IconProps = IProps & VerticalAlignProps & SpaceProps
 
-const IconWrapper = styled.div<Props>`
+const IconWrapper = styled.div<IconProps>`
   display: inline-block;
   flex: 0 0 ${(props) => (props.size ? `${props.size}px` : '32px')};
   width: ${(props) => (props.size ? `${props.size}px` : '32px')};
@@ -176,7 +181,7 @@ export const getGlyph = (glyph: string) => {
   return glyph in glyphs ? glyphs[glyph as keyof IGlyphs] : null
 }
 
-export const Icon = (props: Props) => {
+export const Icon = (props: IconProps) => {
   const { glyph, size, sx } = props
 
   if (!getGlyph(glyph)) {

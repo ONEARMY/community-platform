@@ -33,7 +33,7 @@ export const AuthWrapper = observer((props: IProps) => {
   return <>{isAuthorized ? childElements : props.fallback || <></>}</>
 })
 
-const isUserAuthorized = (
+export const isUserAuthorized = (
   user?: IUserDB | null,
   roleRequired?: UserRole | UserRole[],
 ) => {

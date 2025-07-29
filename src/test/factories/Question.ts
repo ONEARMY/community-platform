@@ -6,6 +6,7 @@ export const FactoryQuestionItem = (
   questionOverloads: Partial<Question> = {},
 ): Question => ({
   id: faker.number.int(),
+  isDraft: false,
   createdAt: faker.date.past(),
   deleted: faker.datatype.boolean(),
   modifiedAt: faker.date.past(),

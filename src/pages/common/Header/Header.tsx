@@ -25,7 +25,7 @@ import { NotificationsSupabase } from './Menu/Notifications/NotificationsSupabas
 import { getFormattedNotifications } from './getFormattedNotifications'
 import { MobileMenuContext } from './MobileMenuContext'
 
-import type { Notification } from 'oa-shared'
+import type { NotificationDisplay } from 'oa-shared'
 import type { ThemeWithName } from 'oa-themes'
 
 const MobileNotificationsWrapper = ({ children }) => {
@@ -101,7 +101,7 @@ const Header = observer(() => {
 
   // New notifications states
   const [notificationsSupabase, setNotificationsSupabase] = useState<
-    Notification[] | null
+    NotificationDisplay[] | null
   >(null)
   const [isUpdatingNotifications, setIsUpdatingNotifications] =
     useState<boolean>(true)
@@ -176,7 +176,13 @@ const Header = observer(() => {
                 isMobileMenuActive={showMobileNotifications}
                 areThereNotifications={areThereNotifications}
               />
-              <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+              <AuthWrapper
+                roleRequired={[
+                  UserRole.BETA_TESTER,
+                  UserRole.RESEARCH_CREATOR,
+                  UserRole.ADMIN,
+                ]}
+              >
                 <NotificationsSupabase device="mobile" />
               </AuthWrapper>
             </MobileNotificationsWrapper>
@@ -203,7 +209,13 @@ const Header = observer(() => {
                     userNotificationsStore.markAllNotificationsNotified()
                   }
                 />
-                <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+                <AuthWrapper
+                  roleRequired={[
+                    UserRole.BETA_TESTER,
+                    UserRole.RESEARCH_CREATOR,
+                    UserRole.ADMIN,
+                  ]}
+                >
                   <NotificationsSupabase device="desktop" />
                 </AuthWrapper>
               </>
@@ -259,7 +271,13 @@ const Header = observer(() => {
                   userNotificationsStore.markAllNotificationsNotified()
                 }
               />
-              <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+              <AuthWrapper
+                roleRequired={[
+                  UserRole.BETA_TESTER,
+                  UserRole.RESEARCH_CREATOR,
+                  UserRole.ADMIN,
+                ]}
+              >
                 <NotificationsSupabase device="mobile" />
               </AuthWrapper>
             </MobileMenuWrapper>

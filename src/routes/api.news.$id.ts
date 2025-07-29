@@ -1,6 +1,8 @@
 import { News } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
+import { newsServiceServer } from 'src/services/newsService.server'
+import { profileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown'
 import { hasAdminRightsSupabase, validateImage } from 'src/utils/helpers'
@@ -9,20 +11,23 @@ import { convertToSlug } from 'src/utils/slug'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBNews, DBProfile } from 'oa-shared'
+import type { DBNews } from 'oa-shared'
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   try {
+    const id = Number(params.id)
     const formData = await request.formData()
     const data = {
       body: formData.get('body') as string,
       category: formData.has('category')
         ? Number(formData.get('category'))
         : null,
+      isDraft: formData.get('is_draft') === 'true',
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
         : null,
       title: formData.get('title') as string,
+      slug: convertToSlug(formData.get('title') as string),
     }
 
     const { client, headers } = createSupabaseServerClient(request)
@@ -31,11 +36,14 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       data: { user },
     } = await client.auth.getUser()
 
+    const currentNews = await newsServiceServer.getById(id, client)
+
     const { valid, status, statusText } = await validateRequest(
       params,
       request,
       user,
       data,
+      currentNews,
       client,
     )
 
@@ -43,7 +51,6 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       return Response.json({}, { status, statusText })
     }
 
-    const slug = convertToSlug(data.title)
     const existingHeroImage = formData.get('existingHeroImage') as string | null
     const newHeroImage = formData.get('heroImage') as File | null
     const imageValidation = validateImage(newHeroImage)
@@ -58,19 +65,26 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       )
     }
 
+    const previousSlugs = contentServiceServer.updatePreviousSlugs(
+      currentNews,
+      data.slug,
+    )
+
     const newsResult = await client
       .from('news')
       .update({
         body: data.body,
         category: data.category,
+        is_draft: data.isDraft,
         modified_at: new Date(),
-        slug,
+        slug: data.slug,
+        previous_slugs: previousSlugs,
         summary: getSummaryFromMarkdown(data.body),
         tags: data.tags,
         title: data.title,
         ...(!existingHeroImage && { hero_image: null }),
       })
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
 
     if (newsResult.error || !newsResult.data) {
@@ -105,7 +119,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     return Response.json({ news }, { headers, status: 200 })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return Response.json({}, { status: 500, statusText: 'Error creating news' })
   }
 }
@@ -115,6 +129,7 @@ async function validateRequest(
   request: Request,
   user: User | null,
   data: any,
+  currentNews: DBNews,
   client: SupabaseClient,
 ) {
   if (!user) {
@@ -137,16 +152,18 @@ async function validateRequest(
     return { status: 400, statusText: 'Body is required' }
   }
 
-  const slug = convertToSlug(data.title)
-  const newsId = Number(params.id!)
+  if (!currentNews) {
+    return { status: 400, statusText: 'News not found' }
+  }
 
   if (
-    await contentServiceServer.isDuplicateExistingSlug(
-      slug,
-      newsId,
+    currentNews.slug !== data.slug &&
+    (await contentServiceServer.isDuplicateExistingSlug(
+      data.slug,
+      currentNews.id,
       client,
       'news',
-    )
+    ))
   ) {
     return {
       status: 409,
@@ -154,30 +171,13 @@ async function validateRequest(
     }
   }
 
-  const existingNewsResult = await client
-    .from('news')
-    .select()
-    .eq('id', newsId)
-    .single()
+  const profile = await profileServiceServer.getByAuthId(user!.id, client)
 
-  if (existingNewsResult.error || !existingNewsResult.data) {
-    return { status: 400, statusText: 'News not found' }
-  }
-
-  const existingNews = existingNewsResult.data as DBNews
-
-  const profileRequest = await client
-    .from('profiles')
-    .select('id,roles')
-    .eq('auth_id', user.id)
-    .limit(1)
-
-  if (profileRequest.error || !profileRequest.data?.at(0)) {
+  if (!profile) {
     return { status: 400, statusText: 'User not found' }
   }
 
-  const profile = profileRequest.data[0] as DBProfile
-  const isCreator = existingNews.created_by === profile.id
+  const isCreator = currentNews.created_by === profile.id
   const hasAdminRights = hasAdminRightsSupabase(profile)
 
   if (!isCreator && !hasAdminRights) {

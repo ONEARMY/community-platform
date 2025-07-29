@@ -17,6 +17,7 @@ import { type IUser, type ResearchItem, ResearchStatusRecord } from 'oa-shared'
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
+import { DraftTag } from 'src/pages/common/Drafts/DraftTag'
 import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
 import { buildStatisticsLabel } from 'src/utils/helpers'
 import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
@@ -150,31 +151,7 @@ const ResearchDescription = ({
               )}
             </Flex>
             <Flex sx={{ justifyContent: 'flex-end', gap: 3 }}>
-              {research.isDraft && (
-                <Flex
-                  sx={{
-                    marginBottom: 'auto',
-                    minWidth: '100px',
-                    borderRadius: 1,
-                    height: '44px',
-                    background: 'lightgrey',
-                  }}
-                >
-                  <Text
-                    sx={{
-                      display: 'inline-block',
-                      verticalAlign: 'middle',
-                      color: 'black',
-                      fontSize: [2, 2, 3],
-                      padding: 2,
-                      margin: 'auto',
-                    }}
-                    data-cy="research-draft"
-                  >
-                    Draft
-                  </Text>
-                </Flex>
-              )}
+              {research.isDraft && <DraftTag />}
               <Flex
                 sx={{
                   marginBottom: 'auto',
@@ -273,7 +250,7 @@ const ResearchDescription = ({
       <ContentStatistics
         statistics={[
           {
-            icon: 'view',
+            icon: 'show',
             label: buildStatisticsLabel({
               stat: research.totalViews || 0,
               statUnit: 'view',
@@ -297,7 +274,7 @@ const ResearchDescription = ({
             }),
           },
           {
-            icon: 'comment',
+            icon: 'comment-outline',
             label: buildStatisticsLabel({
               stat: commentsCount || 0,
               statUnit: 'comment',

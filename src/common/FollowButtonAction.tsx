@@ -6,23 +6,18 @@ import { useCommonStores } from './hooks/useCommonStores'
 import { trackEvent } from './Analytics'
 
 import type { OptionalFollowButtonProps } from 'oa-components'
-import type {
-  Comment,
-  News,
-  Question,
-  ResearchUpdate,
-  SubscribableContentTypes,
-} from 'oa-shared'
+import type { SubscribableContentTypes } from 'oa-shared'
 
 interface IProps extends OptionalFollowButtonProps {
   contentType: SubscribableContentTypes
-  item: Comment | News | Question | ResearchUpdate
+  itemId: number
   setSubscribersCount?: Dispatch<SetStateAction<number>>
+  hideSubscribeIcon?: boolean
   tooltipContent?: string
 }
 
 export const FollowButtonAction = (props: IProps) => {
-  const { contentType, item, setSubscribersCount } = props
+  const { contentType, hideSubscribeIcon, itemId, setSubscribersCount } = props
   const [subscribed, setSubscribed] = useState<boolean>(false)
 
   const { userStore } = useCommonStores().stores
@@ -32,7 +27,7 @@ export const FollowButtonAction = (props: IProps) => {
     const getSubscribed = async () => {
       const subscribed = await subscribersService.isSubscribed(
         contentType,
-        item.id,
+        itemId,
       )
       setSubscribed(subscribed)
     }
@@ -40,7 +35,7 @@ export const FollowButtonAction = (props: IProps) => {
     if (activeUser) {
       getSubscribed()
     }
-  }, [activeUser, item])
+  }, [activeUser, itemId])
 
   const onFollowClick = async () => {
     if (!activeUser?._id) {
@@ -48,7 +43,7 @@ export const FollowButtonAction = (props: IProps) => {
     }
 
     if (!subscribed) {
-      const response = await subscribersService.add(contentType, item.id)
+      const response = await subscribersService.add(contentType, itemId)
 
       if (response.ok) {
         setSubscribed(true)
@@ -56,7 +51,7 @@ export const FollowButtonAction = (props: IProps) => {
           setSubscribersCount((prev: number) => prev + 1 || 1)
       }
     } else {
-      const response = await subscribersService.remove(contentType, item.id)
+      const response = await subscribersService.remove(contentType, itemId)
 
       if (response.ok) {
         setSubscribed(false)
@@ -68,8 +63,12 @@ export const FollowButtonAction = (props: IProps) => {
     trackEvent({
       category: contentType,
       action,
-      label: `${item.id}`,
+      label: `${itemId}`,
     })
+  }
+
+  if (!subscribed && hideSubscribeIcon) {
+    return
   }
 
   return (

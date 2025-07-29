@@ -100,8 +100,8 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
                   iconFollow="discussionFollow"
                   iconUnfollow="discussionUnfollow"
                   itemId={comment.id}
-                  labelFollow="Not following replies"
-                  labelUnfollow="Following replies"
+                  labelFollow="Follow replies"
+                  labelUnfollow="Unfollow replies"
                   sx={{ fontSize: 1 }}
                   variant="subtle"
                 />
@@ -119,11 +119,11 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
               <FollowButtonAction
                 contentType="comments"
                 itemId={comment.id}
-                labelFollow="Not following replies"
-                labelUnfollow="Following replies"
+                labelFollow="Follow replies"
+                labelUnfollow="Unfollow replies"
                 showIconOnly
-                tooltipFollow="Not following replies"
-                tooltipUnfollow="Following replies"
+                tooltipFollow="Follow replies"
+                tooltipUnfollow="Unfollow replies"
                 variant="subtle"
                 hideSubscribeIcon
               />

@@ -99,7 +99,7 @@ export const NotificationListSupabase = (props: IProps) => {
               data-testid="NotificationListSupabase-MarkAllRead"
               onClick={markAllRead}
               disabled={isUpdatingNotifications}
-              icon="add"
+              icon="doubleTick"
               variant="outline"
             >
               Mark all read

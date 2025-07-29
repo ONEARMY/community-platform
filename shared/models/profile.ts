@@ -206,27 +206,21 @@ export class NotificationDisplay {
   id: number
   isRead: boolean
   contentType: NotificationContentType
-
+  body?: string
+  date: Date
   email: {
     body: string | undefined
     buttonLabel: string
     preview: string
     subject: string
   }
+  link: string
   sidebar: {
     icon?: string
     image?: string
   }
-  title: {
-    triggeredBy?: string
-    middle: string
-    parentTitle: string
-    parentSlug: string
-  }
-  date: Date
-  slug: string
-
-  body?: string
+  title: string
+  triggeredBy: string
 
   constructor(obj: NotificationDisplay) {
     Object.assign(this, obj)
@@ -260,7 +254,9 @@ export class NotificationDisplay {
     }
   }
 
-  static setEmailPreview(notification: Notification, parentTitle: string) {
+  static setEmailPreview(notification: Notification) {
+    const parentTitle = this.setParentTitle(notification)
+
     switch (notification.contentType) {
       case 'researchUpdate': {
         return `New research update on ${parentTitle}`
@@ -283,7 +279,9 @@ export class NotificationDisplay {
     }
   }
 
-  static setEmailSubject(notification: Notification, parentTitle: string) {
+  static setEmailSubject(notification: Notification) {
+    const parentTitle = this.setParentTitle(notification)
+
     switch (notification.contentType) {
       case 'researchUpdate': {
         return `New update on ${parentTitle}`
@@ -323,19 +321,21 @@ export class NotificationDisplay {
       : new Date(notification.createdAt)
   }
 
-  static setParentMiddle(notification: Notification) {
+  static setTitle(notification: Notification) {
+    const parentTitle = this.setParentTitle(notification)
+
     switch (notification.contentType) {
       case 'researchUpdate': {
-        return 'published a new update'
+        return `published a new update on ${parentTitle}`
       }
       case 'comment': {
-        return 'left a comment'
+        return `left a comment on ${parentTitle}`
       }
       case 'reply': {
-        return 'left a reply'
+        return `left a reply on ${parentTitle}`
       }
       default: {
-        return ''
+        return parentTitle
       }
     }
   }
@@ -352,8 +352,9 @@ export class NotificationDisplay {
     return title
   }
 
-  static setParentSlug(notification: Notification) {
+  static setParentLink(notification: Notification) {
     const slug = notification.sourceContent?.slug || ''
+
     switch (notification.sourceContentType) {
       case 'research': {
         if (notification.actionType === 'newComment') {
@@ -376,10 +377,13 @@ export class NotificationDisplay {
   static setSidebarIcon(contentType: NotificationContentType): string {
     switch (contentType) {
       case 'comment': {
-        return 'discussion'
+        return 'comment'
       }
       case 'reply': {
-        return 'discussion'
+        return 'comment'
+      }
+      case 'researchUpdate': {
+        return 'update'
       }
       default: {
         return 'thunderbolt'
@@ -391,8 +395,9 @@ export class NotificationDisplay {
     return author?.photo?.publicUrl || ''
   }
 
-  static setSlug(notification: Notification) {
-    const baseSlug = this.setParentSlug(notification)
+  static setLink(notification: Notification) {
+    const baseLink = this.setParentLink(notification)
+
     switch (notification.contentType) {
       case 'comment': {
         return this.setSlugDiscussion(notification)
@@ -401,50 +406,44 @@ export class NotificationDisplay {
         return this.setSlugDiscussion(notification)
       }
       case 'researchUpdate': {
-        return `${baseSlug}#update_${notification.contentId}`
+        return `${baseLink}#update_${notification.contentId}`
       }
     }
   }
 
   static setSlugDiscussion(notification: Notification) {
-    const baseSlug = this.setParentSlug(notification)
+    const baseLink = this.setParentLink(notification)
 
     switch (notification.sourceContentType) {
       case 'research': {
         return `research/${notification.sourceContent?.slug}?update_${notification.parentContentId}#comment:${notification.content?.id}`
       }
       default: {
-        return `${baseSlug}#comment:${notification.content?.id}`
+        return `${baseLink}#comment:${notification.content?.id}`
       }
     }
   }
 
   static fromNotification(notification: Notification): NotificationDisplay {
-    const parentTitle = this.setParentTitle(notification)
-
     return new NotificationDisplay({
       id: notification.id,
       isRead: notification.isRead,
+      body: this.setBody(notification),
       contentType: notification.contentType,
+      date: this.setDate(notification),
       email: {
         body: this.setEmailBody(notification),
         buttonLabel: this.setEmailButtonLabel(notification),
-        preview: this.setEmailPreview(notification, parentTitle),
-        subject: this.setEmailSubject(notification, parentTitle),
+        preview: this.setEmailPreview(notification),
+        subject: this.setEmailSubject(notification),
       },
       sidebar: {
         icon: this.setSidebarIcon(notification.contentType),
         image: this.setSidebarImage(notification.triggeredBy),
       },
-      title: {
-        triggeredBy: notification.triggeredBy?.username || '',
-        middle: this.setParentMiddle(notification),
-        parentTitle,
-        parentSlug: this.setParentSlug(notification),
-      },
-      date: this.setDate(notification),
-      body: this.setBody(notification),
-      slug: this.setSlug(notification),
+      title: this.setTitle(notification),
+      triggeredBy: notification.triggeredBy?.username || '',
+      link: this.setLink(notification),
     })
   }
 }

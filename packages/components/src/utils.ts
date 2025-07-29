@@ -106,15 +106,11 @@ export const fakeDisplayNotification = (
     icon: 'discussion',
     image: faker.image.avatar(),
   },
-  title: {
-    triggeredBy: faker.internet.userName(),
-    middle: `left a comment`,
-    parentTitle: 'Title',
-    parentSlug: 'research-title',
-  },
+  title: `left a comment on Title`,
+  triggeredBy: faker.internet.userName(),
   date: faker.date.past(),
   body: faker.lorem.text(),
-  slug: 'comment',
+  link: 'comment',
   ...notificationOverloads,
 })
 

@@ -262,7 +262,7 @@ const ResearchDescription = ({
             }),
           },
           {
-            icon: 'megaphone-inactive',
+            icon: 'thunderbolt-grey',
             label: buildStatisticsLabel({
               stat: subscribersCount || 0,
               statUnit: 'following',
@@ -278,7 +278,7 @@ const ResearchDescription = ({
             }),
           },
           {
-            icon: 'comment',
+            icon: 'comment-outline',
             label: buildStatisticsLabel({
               stat: commentsCount || 0,
               statUnit: 'comment',

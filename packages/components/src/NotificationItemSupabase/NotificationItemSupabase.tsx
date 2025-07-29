@@ -5,6 +5,7 @@ import { Icon } from '../Icon/Icon'
 import { InternalLink } from '../InternalLink/InternalLink'
 
 import type { NotificationDisplay } from 'oa-shared'
+import type { ThemeUIStyleObject } from 'theme-ui'
 import type { availableGlyphs } from '../Icon/types'
 
 interface IProps {
@@ -12,6 +13,30 @@ interface IProps {
   modalDismiss: () => void
   notification: NotificationDisplay
 }
+
+const commentStyling = {
+  '::before': {
+    content: 'open-quote',
+    position: 'absolute',
+    fontSize: '4em',
+    color: 'white',
+    textShadow:
+      '2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000',
+    transform: 'translateX(-8px) rotate(-10deg) translateY(-12px)',
+  },
+  '::after': {
+    content: 'close-quote',
+    position: 'relative',
+    bottom: 0,
+    height: 0,
+    width: '10px',
+    fontSize: '4em',
+    color: 'white',
+    textShadow:
+      '2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000',
+    transform: 'translateX(-8px) rotate(10deg) translateY(14px)',
+  },
+} as ThemeUIStyleObject
 
 export const NotificationItemSupabase = (props: IProps) => {
   const { markRead, modalDismiss, notification } = props
@@ -31,88 +56,58 @@ export const NotificationItemSupabase = (props: IProps) => {
     modalDismiss()
   }
 
+  const isDiscussion =
+    notification.contentType === 'comment' ||
+    notification.contentType === 'reply'
+
   return (
     <Flex
       data-cy="NotificationListItemSupabase"
       data-testid="NotificationListItemSupabase"
-      sx={{ gap: 2 }}
     >
-      <Flex
-        sx={{
-          ...borderStyle,
-          alignItems: 'center',
-          cursor: 'pointer',
-          display: notification.isRead ? 'none' : 'flex',
-          '&:hover': {
-            background: '#fee77b',
-          },
-        }}
-        onClick={() => markRead(notification.id)}
+      <InternalLink
+        onClick={onClick}
+        to={notification.link}
+        sx={{ color: 'black', width: '100%' }}
       >
-        <Icon
-          data-cy="NotificationListItemSupabase-unread"
-          glyph="chevron-right"
-        />
-      </Flex>
-      <Flex sx={{ ...borderStyle, flex: 1 }}>
-        {notification.sidebar.icon && (
-          <Flex>
-            <Icon
-              glyph={notification.sidebar.icon as availableGlyphs}
-              size={30}
-            />
-          </Flex>
-        )}
-
-        <Flex sx={{ flex: 1, flexDirection: 'column', gap: 2 }}>
-          <Flex sx={{ justifyContent: 'space-between', gap: 2 }}>
-            <Text>
-              <InternalLink
-                to={`/u/${notification.title.triggeredBy}`}
-                sx={{
-                  color: 'grey',
-                  '&:hover': { textDecoration: 'underline' },
-                }}
-                onClick={onClick}
-              >
-                {notification.title.triggeredBy}
-              </InternalLink>{' '}
-              {notification.title.middle}
-              {' on '}{' '}
-              <InternalLink
-                to={notification.title.parentSlug}
-                sx={{
-                  color: 'black',
-                  fontWeight: 'bold',
-                  '&:hover': { textDecoration: 'underline' },
-                }}
-                onClick={onClick}
-              >
-                {notification.title.parentTitle}
-              </InternalLink>
-            </Text>
-            <Text sx={{ fontSize: 1, color: 'grey', textAlign: 'right' }}>
-              <DisplayDate createdAt={notification.date} showLabel={false} />
-            </Text>
-          </Flex>
-          <InternalLink
-            to={notification.slug}
-            sx={{ color: 'black' }}
-            onClick={onClick}
-          >
-            <Flex
-              sx={{
-                background: '#E2EDF7',
-                border: '2px solid black',
-                borderRadius: 5,
-                padding: 2,
-              }}
-            >
-              <Text sx={{ alignSelf: 'flex-start' }}>{notification.body}</Text>
+        <Flex sx={borderStyle}>
+          {notification.sidebar.icon && (
+            <Flex>
+              <Icon
+                glyph={notification.sidebar.icon as availableGlyphs}
+                size={30}
+              />
             </Flex>
-          </InternalLink>
+          )}
+
+          <Flex sx={{ flex: 1, flexDirection: 'column', gap: 2 }}>
+            <Flex sx={{ justifyContent: 'space-between', gap: 2 }}>
+              <Text sx={{ flex: 1 }}>
+                {notification.triggeredBy} {notification.title}
+              </Text>
+              <Text sx={{ fontSize: 1, color: 'grey', textAlign: 'right' }}>
+                <DisplayDate createdAt={notification.date} showLabel={false} />
+              </Text>
+            </Flex>
+            <Flex sx={{ ...(isDiscussion ? commentStyling : {}) }}>
+              <Text
+                sx={{
+                  background: '#E2EDF7',
+                  border: '2px solid black',
+                  borderRadius: 5,
+                  padding: 2,
+
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {notification.body}
+              </Text>
+            </Flex>
+          </Flex>
         </Flex>
-      </Flex>
+      </InternalLink>
     </Flex>
   )
 }

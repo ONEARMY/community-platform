@@ -236,7 +236,14 @@ export const CommentSectionSupabase = (props: IProps) => {
   return (
     <AuthorsContext.Provider value={{ authors }}>
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-        <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+        <Flex
+          sx={{
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: 1,
+            justifyContent: 'space-between',
+          }}
+        >
           <CommentsTitle comments={comments} />
           <AuthWrapper
             roleRequired={[

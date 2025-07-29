@@ -13,13 +13,14 @@ export const InformationTooltip = (props: IProps) => {
 
   return (
     <>
-      <Icon
-        {...props}
-        data-tooltip-id={id}
-        data-tooltip-content={props.tooltip}
-      />
+      <Icon {...props} data-tooltip-id={id} />
 
-      <Tooltip id={id} />
+      <Tooltip id={id}>
+        <p
+          dangerouslySetInnerHTML={{ __html: props.tooltip }}
+          style={{ textAlign: 'center', margin: 0 }}
+        />
+      </Tooltip>
     </>
   )
 }

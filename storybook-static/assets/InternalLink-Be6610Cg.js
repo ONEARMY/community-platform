@@ -1,1 +1,0 @@
-import{r as e,j as i,L as s}from"./iframe-COd5Vz8v.js";import{L as t}from"./theme-ui-components.esm-BLpgKNMo.js";const r=e.forwardRef(((e,r)=>i.jsx(t,{as:s,ref:r,...e,children:e.children})));r.displayName="InternalLink",r.__docgenInfo={description:"",methods:[],displayName:"InternalLink"};export{r as I};

@@ -1,0 +1,1 @@
+import{h as r,j as t,E as j,b as x,p as o}from"./iframe-Cjt2dpkB.js";function c(s,a,c){return r.call(a,"css")?t.jsx(j,x(s,a),c):t.jsx(s,a,c)}function i(s,a,c){return r.call(a,"css")?t.jsxs(j,x(s,a),c):t.jsxs(s,a,c)}const e=(s,t,a)=>c(s,o(t),a),f=(s,t,a)=>i(s,o(t),a);export{f as a,e as j};

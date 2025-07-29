@@ -566,36 +566,31 @@ describe('[Settings]', () => {
       const randomId = generateAlphaNumeric(8).toLowerCase()
       const slug = `${randomId}-create-research-article-test`
 
-      beforeEach(async () => {
-        // Add admin role to allow the creation of research
+      beforeEach(() => {
         const adminClient = supabaseAdminClient()
-        await adminClient
+        cy.wrap(adminClient
           .from('profiles')
           .update({ roles: ['admin'] })
           .eq('username', user.username)
-        cy.visit('/research/create')
-        cy.get('[data-cy=intro-title')
-          .clear()
-          .type(`${randomId} Create research article test`)
-        cy.get('[data-cy=intro-description]').type(
-          'After creating, the research will be deleted.',
-        )
-        cy.get('[data-cy=file-input-field]').click()
-        cy.get('.uppy-Dashboard-input:first').as('file-input')
-        cy.get('@file-input').selectFile('src/fixtures/files/Example.pdf', {
-          force: true,
-        })
-        cy.get('.uppy-StatusBar-actionBtn--upload').as('upload-button')
-        cy.get('@upload-button').click()
-        cy.get('[data-cy=submit]').click()
+        ).then(() => {
+          cy.visit('/research/create')
+          cy.get('[data-cy=intro-title')
+            .type(`${randomId} Create research article test`)
+          cy.get('[data-cy=intro-description]').type(
+            'After creating, the research will be deleted.',
+          )
+          cy.get('[data-testid="image-input"]')
+            .attachFile(`images/profile-cover-1.jpg`, { force: true })
+          cy.get('[data-cy=submit]').click()
 
-        deleteAccount()
+          deleteAccount()
+        })
       })
 
-      // TODO - check the user assignment is removed from the research
       it('removes the user assignment from the research', () => {
         cy.wait(5000)
         cy.visit(`/research/${slug}`)
+        cy.get('[data-cy=Username]').should('not.include.text', user.username)
       })
     })
   })

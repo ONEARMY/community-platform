@@ -568,19 +568,23 @@ describe('[Settings]', () => {
 
       beforeEach(() => {
         const adminClient = supabaseAdminClient()
-        cy.wrap(adminClient
-          .from('profiles')
-          .update({ roles: ['admin'] })
-          .eq('username', user.username)
+        cy.wrap(
+          adminClient
+            .from('profiles')
+            .update({ roles: ['admin'] })
+            .eq('username', user.username),
         ).then(() => {
           cy.visit('/research/create')
-          cy.get('[data-cy=intro-title')
-            .type(`${randomId} Create research article test`)
+          cy.get('[data-cy=intro-title').type(
+            `${randomId} Create research article test`,
+          )
           cy.get('[data-cy=intro-description]').type(
             'After creating, the research will be deleted.',
           )
-          cy.get('[data-testid="image-input"]')
-            .attachFile(`images/profile-cover-1.jpg`, { force: true })
+          cy.get('[data-testid="image-input"]').attachFile(
+            `images/profile-cover-1.jpg`,
+            { force: true },
+          )
           cy.get('[data-cy=submit]').click()
 
           deleteAccount()

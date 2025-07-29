@@ -26,8 +26,8 @@ export const CategoryVerticalList = (props: IProps) => {
         ? 1
         : -1
       : (a as ICategory)._created > (b as ICategory)._created
-      ? 1
-      : -1,
+        ? 1
+        : -1,
   )
 
   const isCategorySelected = (category: Category | ICategory) => {

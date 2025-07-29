@@ -8,13 +8,7 @@ import { subscribersServiceServer } from 'src/services/subscribersService.server
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type {
-  Comment,
-  DBAuthor,
-  DBProfile,
-  DiscussionContentTypes,
-  Reply,
-} from 'oa-shared'
+import type { DBAuthor, DBProfile, DiscussionContentTypes } from 'oa-shared'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   if (!params.sourceId) {
@@ -68,46 +62,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
         }),
     )
 
-    const commentsByParentId = dbComments.reduce<Record<number, DBComment[]>>(
-      (acc, comment) => {
-        const parentId = comment.parent_id ?? 0
-        if (!acc[parentId]) {
-          acc[parentId] = []
-        }
-        acc[parentId].push(comment)
-        return acc
-      },
-      {},
-    )
-
     const commentFactory = new CommentFactory(new ImageServiceServer(client))
+    const comments = await commentFactory.fromDBCommentsToThreads(dbComments)
 
-    const mainComments = commentsByParentId[0] ?? []
-
-    const commentsWithReplies = await Promise.all(
-      mainComments.map(async (mainComment: DBComment) => {
-        const replyDBComments = commentsByParentId[mainComment.id] ?? []
-
-        const replies: Reply[] = await Promise.all(
-          replyDBComments.map((reply: DBComment) =>
-            commentFactory.fromDBWithAuthor(reply, []),
-          ),
-        )
-
-        const filteredReplies = replies
-          .filter((reply) => !reply.deleted)
-          .sort((a, b) => a.id - b.id)
-
-        return commentFactory.fromDBWithAuthor(mainComment, filteredReplies)
-      }),
-    )
-
-    const filteredComments = commentsWithReplies.filter(
-      (comment: Comment) =>
-        !comment.deleted || (comment.replies?.length || 0) > 0,
-    )
-
-    return Response.json({ comments: filteredComments }, { headers })
+    return Response.json({ comments }, { headers })
   } catch (error) {
     console.error(error)
     return Response.json({}, { status: 500, headers })
@@ -198,7 +156,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   })
 
   const commentFactory = new CommentFactory(new ImageServiceServer(client))
-  const comment = commentFactory.fromDBWithAuthor(commentDb)
+  const comment = await commentFactory.fromDBWithAuthor(commentDb)
 
   return Response.json(comment, {
     headers,

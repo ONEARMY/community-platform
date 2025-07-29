@@ -30,6 +30,48 @@ export class CommentFactory {
     })
   }
 
+  async fromDBCommentsToThreads(dbComments: DBComment[]): Promise<Comment[]> {
+    const commentsByParentId = this.groupCommentsByParentId(dbComments)
+
+    const mainComments = commentsByParentId[0] ?? []
+
+    const commentsWithReplies = await Promise.all(
+      mainComments.map(async (mainComment: DBComment) => {
+        const replyDBComments = commentsByParentId[mainComment.id] ?? []
+
+        const replies: Reply[] = await Promise.all(
+          replyDBComments.map((reply: DBComment) =>
+            this.fromDBWithAuthor(reply, []),
+          ),
+        )
+
+        const filteredReplies = replies
+          .filter((reply) => !reply.deleted)
+          .sort((a, b) => a.id - b.id)
+
+        return this.fromDBWithAuthor(mainComment, filteredReplies)
+      }),
+    )
+
+    return commentsWithReplies.filter(
+      (comment: Comment) =>
+        !comment.deleted || (comment.replies?.length || 0) > 0,
+    )
+  }
+
+  private groupCommentsByParentId(
+    dbComments: DBComment[],
+  ): Record<number, DBComment[]> {
+    return dbComments.reduce<Record<number, DBComment[]>>((acc, comment) => {
+      const parentId = comment.parent_id ?? 0
+      if (!acc[parentId]) {
+        acc[parentId] = []
+      }
+      acc[parentId].push(comment)
+      return acc
+    }, {})
+  }
+
   private async createAuthor(dbAuthor: DBAuthor): Promise<Author> {
     const photo = dbAuthor.photo
       ? this.imageService.getPublicUrl(dbAuthor.photo)

@@ -59,7 +59,6 @@ const createFirebaseProfile = async (authUser: User) => {
   await dbRef.set(user)
 }
 
-<<<<<<< HEAD
 const getProfileForAuthUser = async (
   client: SupabaseClient,
   userId: string,

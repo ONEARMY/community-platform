@@ -619,11 +619,12 @@ describe('[Settings]', () => {
       cy.get('[data-cy=messages-link]')
     })
   })
+})
 
-  const deleteAccount = () => {
-    cy.visit('/settings/account')
-    cy.get('[data-cy=delete-account-modal-open-button]').click()
-    cy.get('[data-cy=delete-account-modal-confirmation-input]').type('DELETE')
-    cy.get('[data-cy=delete-account-modal-confirm-button]').click()
-    cy.wait(5000)
-  }
+const deleteAccount = () => {
+  cy.visit('/settings/account')
+  cy.get('[data-cy=delete-account-modal-open-button]').click()
+  cy.get('[data-cy=delete-account-modal-confirmation-input]').type('DELETE')
+  cy.get('[data-cy=delete-account-modal-confirm-button]').click()
+  cy.wait(5000)
+}

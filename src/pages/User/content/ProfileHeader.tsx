@@ -1,7 +1,9 @@
 import { MemberBadge, Username } from 'oa-components'
-import { type Profile, ProfileTypeList } from 'oa-shared'
+import { ProfileTypeList } from 'oa-shared'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { Avatar, Box, Flex, Heading } from 'theme-ui'
+
+import type { Profile } from 'oa-shared'
 
 interface IProps {
   user: Profile
@@ -59,15 +61,7 @@ export const ProfileHeader = ({ user }: IProps) => {
           />
         )}
         <Flex sx={{ flexDirection: 'column' }}>
-          <Username
-            user={{
-              userName: user.username,
-              countryCode: user.country,
-              isSupporter: !!user.isSupporter,
-              isVerified: !!user.isVerified,
-            }}
-            sx={{ alignSelf: 'flex-start' }}
-          />
+          <Username user={user} sx={{ alignSelf: 'flex-start' }} />
           <Heading
             as="h1"
             color={'black'}

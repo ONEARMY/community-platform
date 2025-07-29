@@ -64,15 +64,10 @@ export const CardDetailsSpaceProfile = ({ profile, isLink }: IProps) => {
             <MemberBadge profileType={profile.type} size={30} />
           )}
           <Username
-            user={{
-              userName: profile.username,
-              countryCode: profile.country,
-              isVerified: profile.isVerified || false,
-              isSupporter: profile.isContactable || false,
-            }}
-            sx={{ alignSelf: 'flex-start' }}
+            user={profile}
             isLink={isLink}
             target="_blank"
+            sx={{ alignSelf: 'flex-start' }}
           />
         </Flex>
 

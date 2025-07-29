@@ -1,6 +1,5 @@
 import { Flex } from 'theme-ui'
 
-import { CardDetailsFallback } from './CardDetailsFallback'
 import { CardDetailsMemberProfile } from './CardDetailsMemberProfile'
 import { CardDetailsSpaceProfile } from './CardDetailsSpaceProfile'
 
@@ -24,9 +23,6 @@ export const CardProfile = ({ item, isLink = false }: IProps) => {
       )}
       {isMember && (
         <CardDetailsMemberProfile profile={profile} isLink={isLink} />
-      )}
-      {!isWorkspace && !isMember && (
-        <CardDetailsFallback item={item} isLink={isLink} />
       )}
     </Flex>
   )

@@ -115,10 +115,7 @@ const ResearchUpdate = (props: IProps) => {
                 <Box sx={{ width: ['100%', '75%', '75%'] }}>
                   {update.author && (
                     <Box sx={{ mb: 2 }} data-testid="collaborator/creator">
-                      <UserNameTag
-                        userName={update.author?.username || ''}
-                        countryCode={update.author?.country}
-                      />
+                      <UserNameTag author={update.author} />
                     </Box>
                   )}
 

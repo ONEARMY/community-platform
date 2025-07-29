@@ -1,45 +1,40 @@
+import { countryToAlpha2 } from 'country-to-iso'
 import { Flex, Text } from 'theme-ui'
 
 import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
-import { FlagIconLibrary } from '../FlagIcon/FlagIcon'
+import { FlagIcon } from '../FlagIcon/FlagIcon'
 import { InternalLink } from '../InternalLink/InternalLink'
-import { twoCharacterCountryCodes } from './TwoCharacterCountryCodes'
 import { UserBadge } from './UserBadge'
 
+import type { Author } from 'oa-shared'
 import type { HTMLAttributeAnchorTarget } from 'react'
 import type { ThemeUIStyleObject } from 'theme-ui'
-import type { User } from '../types/common'
 
 export interface IProps {
-  user: User
+  user: Author
   sx?: ThemeUIStyleObject
   isLink?: boolean
   target?: HTMLAttributeAnchorTarget
 }
 
-const isValidCountryCode = (str: string) =>
-  str && twoCharacterCountryCodes.has(str.toUpperCase())
+const getCountryCode = (country: string | undefined) => {
+  if (!country) {
+    return null
+  }
+  return countryToAlpha2(country)
+}
 
 export const Username = ({ user, sx, target, isLink = true }: IProps) => {
-  const { countryCode, userName, isSupporter, isVerified } = user
+  const { username, isSupporter, isVerified } = user
+
+  const countryCode = user.country ? getCountryCode(user.country) : null
 
   const UserNameBody = (
-    <Flex
-      data-cy="Username"
-      sx={{
-        fontFamily: 'body',
-        alignItems: 'center',
-      }}
-    >
-      <Flex mr={1}>
-        {countryCode && isValidCountryCode(countryCode) ? (
+    <Flex data-cy="Username" sx={{ fontFamily: 'body' }}>
+      <Flex sx={{ gap: 1, alignItems: 'center' }}>
+        {countryCode ? (
           <Flex data-testid="Username: known flag">
-            <FlagIconLibrary
-              countryCode={countryCode}
-              svg={true}
-              title={countryCode}
-              data-cy={`country:${countryCode}`}
-            />
+            <FlagIcon countryCode={countryCode} />
           </Flex>
         ) : (
           <Flex
@@ -57,20 +52,20 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
             }}
           ></Flex>
         )}
-      </Flex>
 
-      <Text
-        sx={{
-          color: 'black',
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
-          maxWidth: '100%',
-        }}
-        title={userName}
-      >
-        {userName}
-      </Text>
+        <Text
+          sx={{
+            color: 'black',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            maxWidth: '100%',
+          }}
+          title={username}
+        >
+          {username}
+        </Text>
+      </Flex>
       {isVerified && <UserBadge badgeName="verified" />}
       {isSupporter && <UserBadge badgeName="supporter" />}
     </Flex>
@@ -82,7 +77,7 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
 
   return (
     <InternalLink
-      to={`/u/${userName}`}
+      to={`/u/${username}`}
       target={target || '_self'}
       sx={{
         border: '1px solid transparent',

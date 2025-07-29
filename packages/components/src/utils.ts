@@ -9,7 +9,6 @@ import type {
   ResearchItem,
   ResearchUpdate,
 } from 'oa-shared'
-import type { IComment } from './CommentItem/types'
 
 export const fakeAuthorSB = (
   authorOverloads: Partial<Author> = {},
@@ -27,26 +26,12 @@ export const fakeAuthorSB = (
   ...authorOverloads,
 })
 
-export const fakeComment = (commentOverloads: Partial<IComment> = {}) => ({
-  _created: faker.date.past().toString(),
-  creatorCountry: faker.location.countryCode().toLowerCase(),
-  _creatorId: faker.internet.userName(),
-  _id: faker.database.mongodbObjectId(),
-  creatorName: faker.internet.userName(),
-  isUserVerified: faker.datatype.boolean(),
-  isUserSupporter: faker.datatype.boolean(),
-  text: faker.lorem.text(),
-  isEditable: faker.datatype.boolean(),
-  creatorImage: faker.datatype.boolean() ? faker.image.avatar() : undefined,
-  ...commentOverloads,
-})
-
-export const createFakeComments = (
+export const createFakeCommentsSB = (
   numberOfComments = 2,
   commentOverloads = {},
-): IComment[] =>
+): Comment[] =>
   [...Array(numberOfComments).keys()].slice(0).map(() =>
-    fakeComment({
+    fakeCommentSB({
       ...commentOverloads,
     }),
   )

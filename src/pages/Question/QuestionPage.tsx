@@ -115,13 +115,14 @@ export const QuestionPage = observer(({ question }: IProps) => {
             </ClientOnly>
           </Flex>
 
-          <UserNameTag
-            userName={question.author?.username || ''}
-            countryCode={question.author?.country || ''}
-            createdAt={question.createdAt}
-            modifiedAt={question.modifiedAt}
-            action="Asked"
-          />
+          {question.author && (
+            <UserNameTag
+              author={question.author}
+              createdAt={question.createdAt}
+              modifiedAt={question.modifiedAt}
+              action="Asked"
+            />
+          )}
 
           <Flex sx={{ flexDirection: 'column', gap: 2 }}>
             {question.category && <Category category={question.category} />}

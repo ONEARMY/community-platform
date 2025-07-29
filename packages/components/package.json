@@ -28,6 +28,7 @@
     "@mui/base": "next",
     "@remix-run/node": "^2.12.1",
     "@remix-run/react": "^2.12.1",
+    "country-to-iso": "^1.6.1",
     "date-fns": "^2.29.3",
     "framer-motion": "^12.11.1",
     "linkify-plugin-mention": "^4.0.2",

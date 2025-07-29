@@ -42,7 +42,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       source_type,
       parent_id,
       created_by,
-      profiles(id, display_name, username, is_verified, is_supporter, photo_url, country)
+      profiles(id, display_name, username, is_verified, is_supporter, photo, country)
     `,
       )
       .eq('source_type', params.sourceType)
@@ -133,7 +133,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
       parent_id,
       source_type,
       created_by,
-      profiles(id, display_name, username, is_verified, is_supporter, photo_url, country)
+      profiles(id, display_name, username, is_verified, is_supporter, photo, country)
     `,
     )
     .single()

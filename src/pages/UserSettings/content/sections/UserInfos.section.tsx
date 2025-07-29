@@ -105,14 +105,14 @@ export const UserInfosSection = ({ formValues }: IProps) => {
             <Text sx={{ fontSize: 1 }} variant="quiet">
               Preview:
             </Text>
-            <Username
-              user={{
-                userName: profile?.username || '',
-                countryCode,
-                isSupporter: false,
-                isVerified: false,
-              }}
-            />
+            {profile?.username && (
+              <Username
+                user={{
+                  ...profile,
+                  country: countryCode,
+                }}
+              />
+            )}
           </Flex>
         </Flex>
 

@@ -198,13 +198,14 @@ export const LibraryDescription = (props: IProps) => {
           <Box>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-                <UserNameTag
-                  userName={item.author?.username || ''}
-                  createdAt={item.createdAt}
-                  modifiedAt={item.modifiedAt}
-                  countryCode={item.author?.country}
-                  action="Published"
-                />
+                {item.author && (
+                  <UserNameTag
+                    author={item.author}
+                    createdAt={item.createdAt}
+                    modifiedAt={item.modifiedAt}
+                    action="Published"
+                  />
+                )}
                 {item.category && (
                   <Category category={item.category} sx={{ fontSize: 2 }} />
                 )}

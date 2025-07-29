@@ -6,7 +6,7 @@ import {
   Button,
   ConfirmModal,
   ExternalLink,
-  FlagIconEvents,
+  FlagIcon,
   Icon,
   Loader,
   MapWithPin,
@@ -58,10 +58,7 @@ const LocationDataTextDisplay = ({ pin }: { pin?: MapPin }) => {
         {mapForm.locationLabel}
         <Flex sx={{ gap: 1 }}>
           {pin.name}
-          <FlagIconEvents
-            countryCode={pin.countryCode}
-            title={pin.countryCode}
-          />
+          <FlagIcon countryCode={pin.countryCode} />
         </Flex>
       </Text>
       {pin.moderation !== 'accepted' ? (

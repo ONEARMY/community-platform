@@ -46,15 +46,10 @@ export const CardDetailsMemberProfile = ({ profile, isLink }: IProps) => {
 
       <Flex sx={{ flexDirection: 'column', gap: 1, flex: 1 }}>
         <Username
-          user={{
-            userName: profile.username,
-            countryCode: profile.country,
-            isSupporter: profile.isSupporter || false,
-            isVerified: profile.isVerified || false,
-          }}
-          sx={{ alignSelf: 'flex-start' }}
+          user={profile}
           isLink={isLink}
           target="_blank"
+          sx={{ alignSelf: 'flex-start' }}
         />
         {profile.tags && profile.tags.length > 0 && (
           <ProfileTagsList tags={profile.tags} isSpace={false} />

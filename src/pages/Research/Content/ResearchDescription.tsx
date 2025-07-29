@@ -42,19 +42,18 @@ interface IProps {
   updatesCount: number
   onUsefulClick: () => Promise<void>
   onFollowClick: () => void
-  contributors?: { userName: string; isVerified: boolean }[]
 }
 
-const ResearchDescription = ({
-  research,
-  isEditable,
-  isDeletable,
-  subscribersCount,
-  votedUsefulCount,
-  commentsCount,
-  updatesCount,
-  ...props
-}: IProps) => {
+const ResearchDescription = (props: IProps) => {
+  const {
+    research,
+    isEditable,
+    isDeletable,
+    subscribersCount,
+    votedUsefulCount,
+    commentsCount,
+    updatesCount,
+  } = props
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const navigate = useNavigate()
 
@@ -184,15 +183,16 @@ const ResearchDescription = ({
           </Flex>
           <Box sx={{ marginX: 2 }}>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
-              <UserNameTag
-                userName={research.author?.username || ''}
-                createdAt={research.createdAt}
-                modifiedAt={lastUpdated.toISOString()}
-                countryCode={research.author?.country}
-                action="Started"
-              />
+              {research.author && (
+                <UserNameTag
+                  author={research.author}
+                  createdAt={research.createdAt}
+                  modifiedAt={lastUpdated.toISOString()}
+                  action="Started"
+                />
+              )}
 
-              {props.contributors && props?.contributors.length ? (
+              {research.collaborators && research.collaborators.length ? (
                 <Flex
                   sx={{
                     alignItems: 'flex-start',
@@ -213,7 +213,7 @@ const ResearchDescription = ({
                       With contributions from
                     </Text>
                   </Flex>
-                  {props.contributors.map((contributor, key) => (
+                  {research.collaborators.map((contributor, key) => (
                     <Username key={key} user={contributor} />
                   ))}
                 </Flex>

@@ -98,14 +98,7 @@ export const CommentDisplay = (props: IProps) => {
               }}
             >
               <Flex sx={{ alignItems: 'center', gap: 2 }}>
-                <Username
-                  user={{
-                    userName: comment.createdBy?.username || '',
-                    countryCode: comment.createdBy?.country,
-                    isVerified: comment.createdBy?.isVerified,
-                    isSupporter: comment.createdBy?.isSupporter,
-                  }}
-                />
+                {comment.createdBy && <Username user={comment.createdBy} />}
                 <Text sx={{ fontSize: 1, color: 'darkGrey' }}>
                   <DisplayDate
                     createdAt={comment.createdAt}

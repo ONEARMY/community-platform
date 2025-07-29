@@ -1,6 +1,7 @@
 import { Username } from './Username'
 
 import type { Meta } from '@storybook/react-vite'
+import type { Author } from 'oa-shared'
 
 export default {
   title: 'Components/Username',
@@ -10,69 +11,69 @@ export default {
 export const Verified = {
   args: {
     user: {
-      userName: 'a-username',
-      countryCode: 'pt',
+      username: 'a-username',
+      country: 'pt',
       isSupporter: false,
       isVerified: true,
-    },
+    } as Author,
   },
 }
 
 export const Unverified = {
   args: {
     user: {
-      countryCode: 'pt',
-      userName: 'a-username',
+      country: 'pt',
+      username: 'a-username',
       isVerified: false,
       isSupporter: false,
-    },
+    } as Author,
   },
 }
 
 export const VerifiedSupporter = {
   args: {
     user: {
-      countryCode: 'pt',
-      userName: 'a-username',
+      country: 'pt',
+      username: 'a-username',
       isVerified: true,
       isSupporter: true,
-    },
+    } as Author,
   },
 }
 
 export const UnverifiedSupporter = {
   args: {
     user: {
-      countryCode: 'pt',
-      userName: 'a-username',
+      country: 'pt',
+      username: 'a-username',
       isVerified: false,
       isSupporter: true,
-    },
+    } as Author,
   },
 }
 
 export const WithoutFlag = {
   args: {
     user: {
-      userName: 'a-username',
-    },
+      username: 'a-username',
+    } as Author,
   },
 }
 
 export const InvalidCountryCode = {
   args: {
     user: {
-      userName: 'a-username',
-      countryCode: 'zz',
-    },
+      username: 'a-username',
+      country: 'zz',
+    } as Author,
   },
 }
 
 export const InlineStyles = {
   args: {
     user: {
-      userName: 'a-username',
-    },
+      username: 'a-username',
+    } as Author,
     sx: {
       outline: '10px solid red',
     },

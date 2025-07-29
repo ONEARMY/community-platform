@@ -139,14 +139,9 @@ const ResearchListItem = ({ item }: IProps) => {
               }}
             >
               <Flex sx={{ alignItems: 'center', gap: 2 }}>
-                <Username
-                  user={{
-                    userName: item.author?.username || '',
-                    countryCode: item.author?.country,
-                    isVerified: item.author?.isVerified,
-                  }}
-                  sx={{ position: 'relative' }}
-                />
+                {item.author && (
+                  <Username user={item.author} sx={{ position: 'relative' }} />
+                )}
                 {Boolean(collaborators.length) && (
                   <Text
                     sx={{

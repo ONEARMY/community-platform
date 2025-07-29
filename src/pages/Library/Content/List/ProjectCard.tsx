@@ -72,15 +72,11 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
               />
             </Heading>
 
-            <Box>
-              <Username
-                user={{
-                  userName: item.author?.username || '',
-                  countryCode: item.author?.country,
-                  isVerified: item.author?.isVerified,
-                }}
-              />
-            </Box>
+            {item.author && (
+              <Box>
+                <Username user={item.author} />
+              </Box>
+            )}
           </Flex>
 
           <Flex sx={{ justifyContent: 'flex-end' }}>

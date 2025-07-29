@@ -1,11 +1,11 @@
 import { Button } from '../Button/Button'
 import { nonDeletedCommentsCount } from '../DiscussionTitle/DiscussionTitle'
 
-import type { IComment } from '../CommentItem/types'
+import type { Comment } from 'oa-shared'
 
 export interface Props {
   isShowReplies: boolean
-  replies: IComment[]
+  replies: Comment[]
   setIsShowReplies: () => void
 }
 
@@ -20,8 +20,8 @@ export const ButtonShowReplies = (props: Props) => {
       ? `Hide ${count} ${count === 1 ? 'reply' : 'replies'}`
       : `Show ${count} ${count === 1 ? 'reply' : 'replies'}`
     : isShowReplies
-      ? `Hide`
-      : `Reply`
+    ? `Hide`
+    : `Reply`
 
   return (
     <Button

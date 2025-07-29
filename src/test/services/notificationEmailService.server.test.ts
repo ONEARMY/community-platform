@@ -49,45 +49,6 @@ describe('notificationEmailService', () => {
       expect(mocks.functionsInvoke).not.toHaveBeenCalled()
     })
 
-    it('should return early when user is not a beta-tester', async () => {
-      const { client, mocks } = createMockSupabaseClient()
-      const notification = factoryDBNotification()
-
-      mocks.single.mockResolvedValue({
-        data: { created_at: '2024-01-01', roles: ['user'] },
-      })
-
-      const result =
-        await notificationEmailService.createInstantNotificationEmail(
-          client,
-          notification,
-          123,
-        )
-
-      expect(result).toBeUndefined()
-      expect(mocks.rpc).not.toHaveBeenCalled()
-      expect(mocks.functionsInvoke).not.toHaveBeenCalled()
-    })
-
-    it('should return early when user has no roles', async () => {
-      const { client, mocks } = createMockSupabaseClient()
-      const notification = factoryDBNotification()
-
-      mocks.single.mockResolvedValue({
-        data: { created_at: '2024-01-01', roles: null },
-      })
-
-      const result =
-        await notificationEmailService.createInstantNotificationEmail(
-          client,
-          notification,
-          123,
-        )
-
-      expect(result).toBeUndefined()
-      expect(mocks.rpc).not.toHaveBeenCalled()
-    })
-
     it('should return early when shouldSendEmail returns false', async () => {
       const { client, mocks } = createMockSupabaseClient()
       const notification = factoryDBNotification()

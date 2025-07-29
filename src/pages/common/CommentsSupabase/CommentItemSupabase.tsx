@@ -8,7 +8,6 @@ import {
   Modal,
 } from 'oa-components'
 import { UserRole } from 'oa-shared'
-import { AuthWrapper, isUserAuthorized } from 'src/common/AuthWrapper'
 import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Card, Flex } from 'theme-ui'
@@ -56,11 +55,6 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
   }, [activeUser])
 
   const item = 'CommentItem'
-  const hasPlatformRole = isUserAuthorized(activeUser, [
-    UserRole.BETA_TESTER,
-    UserRole.RESEARCH_CREATOR,
-    UserRole.ADMIN,
-  ])
 
   useEffect(() => {
     if (comment.highlighted) {
@@ -89,47 +83,29 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
           setShowDeleteModal={setShowDeleteModal}
           setShowEditModal={setShowEditModal}
           followButton={
-            hasPlatformRole && (
-              <AuthWrapper
-                roleRequired={[
-                  UserRole.BETA_TESTER,
-                  UserRole.RESEARCH_CREATOR,
-                  UserRole.ADMIN,
-                ]}
-              >
-                <FollowButtonAction
-                  contentType="comments"
-                  iconFollow="discussionFollow"
-                  iconUnfollow="discussionUnfollow"
-                  itemId={comment.id}
-                  labelFollow="Follow replies"
-                  labelUnfollow="Unfollow replies"
-                  sx={{ fontSize: 1 }}
-                  variant="subtle"
-                />
-              </AuthWrapper>
-            )
+            <FollowButtonAction
+              contentType="comments"
+              iconFollow="discussionFollow"
+              iconUnfollow="discussionUnfollow"
+              itemId={comment.id}
+              labelFollow="Follow replies"
+              labelUnfollow="Unfollow replies"
+              sx={{ fontSize: 1 }}
+              variant="subtle"
+            />
           }
           followButtonIcon={
-            <AuthWrapper
-              roleRequired={[
-                UserRole.BETA_TESTER,
-                UserRole.RESEARCH_CREATOR,
-                UserRole.ADMIN,
-              ]}
-            >
-              <FollowButtonAction
-                contentType="comments"
-                itemId={comment.id}
-                labelFollow="Follow replies"
-                labelUnfollow="Unfollow replies"
-                showIconOnly
-                tooltipFollow="Follow replies"
-                tooltipUnfollow="Unfollow replies"
-                variant="subtle"
-                hideSubscribeIcon
-              />
-            </AuthWrapper>
+            <FollowButtonAction
+              contentType="comments"
+              itemId={comment.id}
+              labelFollow="Follow replies"
+              labelUnfollow="Unfollow replies"
+              showIconOnly
+              tooltipFollow="Follow replies"
+              tooltipUnfollow="Unfollow replies"
+              variant="subtle"
+              hideSubscribeIcon
+            />
           }
         />
 

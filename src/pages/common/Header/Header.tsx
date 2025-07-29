@@ -176,15 +176,7 @@ const Header = observer(() => {
                 isMobileMenuActive={showMobileNotifications}
                 areThereNotifications={areThereNotifications}
               />
-              <AuthWrapper
-                roleRequired={[
-                  UserRole.BETA_TESTER,
-                  UserRole.RESEARCH_CREATOR,
-                  UserRole.ADMIN,
-                ]}
-              >
-                <NotificationsSupabase device="mobile" />
-              </AuthWrapper>
+              <NotificationsSupabase device="mobile" />
             </MobileNotificationsWrapper>
           )}
           <Flex
@@ -209,15 +201,7 @@ const Header = observer(() => {
                     userNotificationsStore.markAllNotificationsNotified()
                   }
                 />
-                <AuthWrapper
-                  roleRequired={[
-                    UserRole.BETA_TESTER,
-                    UserRole.RESEARCH_CREATOR,
-                    UserRole.ADMIN,
-                  ]}
-                >
-                  <NotificationsSupabase device="desktop" />
-                </AuthWrapper>
+                <NotificationsSupabase device="desktop" />
               </>
             )}
             {isModuleSupported(
@@ -271,15 +255,7 @@ const Header = observer(() => {
                   userNotificationsStore.markAllNotificationsNotified()
                 }
               />
-              <AuthWrapper
-                roleRequired={[
-                  UserRole.BETA_TESTER,
-                  UserRole.RESEARCH_CREATOR,
-                  UserRole.ADMIN,
-                ]}
-              >
-                <NotificationsSupabase device="mobile" />
-              </AuthWrapper>
+              <NotificationsSupabase device="mobile" />
             </MobileMenuWrapper>
           </AnimationContainer>
         )}

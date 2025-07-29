@@ -67,6 +67,7 @@ describe('notificationsPreferencesService', () => {
 
       const [, options] = mockFetch.mock.calls[0]
       const body = options.body as FormData
+
       expect(body.get('id')).toBe('123')
       expect(body.get('comments')).toBe('true')
       expect(body.get('replies')).toBe('false')
@@ -86,9 +87,9 @@ describe('notificationsPreferencesService', () => {
       }
 
       await notificationsPreferencesService.setPreferences(formData)
-
       const [, options] = mockFetch.mock.calls[0]
       const body = options.body as FormData
+
       expect(body.get('id')).toBeNull()
       expect(body.get('comments')).toBe('false')
       expect(body.get('replies')).toBe('true')
@@ -107,9 +108,9 @@ describe('notificationsPreferencesService', () => {
       }
 
       await notificationsPreferencesService.setPreferences(formData)
-
       const [, options] = mockFetch.mock.calls[0]
       const body = options.body as FormData
+
       expect(body.get('id')).toBeNull()
     })
   })
@@ -128,6 +129,7 @@ describe('notificationsPreferencesService', () => {
 
       const [, options] = mockFetch.mock.calls[0]
       const body = options.body as FormData
+
       expect(body.get('id')).toBe('456')
       expect(body.get('comments')).toBe('false')
       expect(body.get('replies')).toBe('false')
@@ -143,6 +145,7 @@ describe('notificationsPreferencesService', () => {
 
       const [, options] = mockFetch.mock.calls[0]
       const body = options.body as FormData
+
       expect(body.get('id')).toBeNull()
       expect(body.get('comments')).toBe('false')
       expect(body.get('replies')).toBe('false')

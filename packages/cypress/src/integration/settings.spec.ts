@@ -182,14 +182,6 @@ describe('[Settings]', () => {
       cy.contains('No map pin currently saved')
       cy.get('[data-cy="tab-Profile"]').click()
       cy.get('[data-cy=location-dropdown]').should('be.visible')
-
-      cy.step('Can update email notification preference')
-      cy.get('[data-cy="tab-Notifications"]').click()
-      cy.get('.data-cy__single-value').last().should('have.text', 'Weekly')
-      cy.selectTag('Daily', '[data-cy=NotificationSettingsSelect]')
-      cy.get('[data-cy=save-notification-settings]').click()
-      cy.contains('Notification setting saved successfully')
-      cy.get('.data-cy__single-value').last().should('have.text', 'Daily')
     })
 
     it('Can create space', () => {

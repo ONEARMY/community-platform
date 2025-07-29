@@ -1,74 +1,80 @@
 import { MOCK_DATA } from '../data'
-import { seedDatabase, supabaseAdminClient } from '../utils/TestUtils'
+import { supabaseAdminClient } from '../utils/TestUtils'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 // Creates user accounts and respective profiles
 export const seedAccounts = async () => {
-  const tenantId = Cypress.env('TENANT_ID')
   const supabase = supabaseAdminClient()
 
   const accounts = Object.values(MOCK_DATA.users)
-    .filter((x) => !!x['password'] && !!x['email'] && !!x.userName)
+    .filter((x) => !!x['password'] && !!x['email'] && !!x.username)
     .map((user) => ({
-      id: '',
       email: user['email'],
-      username: user.userName,
       password: user['password'],
-      roles: user.userRoles,
+      ...user,
     }))
 
-  const userIds = await Promise.all(
-    accounts.map((user) =>
-      signUp(supabase, user.email, user.username, user.password),
-    ),
-  )
+  const existingUsers = await supabase.auth.admin.listUsers()
 
-  for (let i = 0; i < accounts.length; i++) {
-    accounts[i].id = userIds[i]
+  let profiles
+  if (existingUsers.data.users.length === 10) {
+    const result = await Promise.all(
+      existingUsers.data.users.map(async (authUser) => {
+        const user = accounts.find(
+          (account) => account.email === authUser.email,
+        )
+        return await createProfile(supabase, user, authUser.id)
+      }),
+    )
+    profiles = result
+  } else {
+    const result = await Promise.all(
+      accounts.map(
+        async (account) => await createAuthAndProfile(supabase, account),
+      ),
+    )
+    profiles = result
   }
 
-  const profiles = accounts
-    .filter((x) => x.id)
-    .map((x) => ({
-      auth_id: x.id,
-      username: x.username,
-      tenant_id: tenantId,
-      created_at: new Date().toUTCString(),
-      display_name: x.username,
-      is_verified: true,
-      is_supporter: false,
-      roles: x.roles,
-    }))
-
-  return await seedDatabase({ profiles }, tenantId)
+  return { profiles }
 }
 
-const signUp = async (
-  supabase: SupabaseClient,
-  email: string,
-  username: string,
-  password: string,
-) => {
-  const result = await supabase.auth.admin.createUser({
-    email,
-    password,
+const createAuthAndProfile = async (supabase, user) => {
+  const authUser = await supabase.auth.admin.createUser({
+    email: user.email,
+    password: user.password,
     email_confirm: true,
     user_metadata: {
-      username,
+      username: user.username,
     },
   })
 
-  if (result.error) {
-    // most of the time the user already exists because auth accounts are multi-tenant.
-    return (
-      await supabase.rpc('get_user_id_by_email', {
-        email,
-      })
-    ).data?.at(0)?.id
-  }
+  const authId = authUser.data.id
+  return await createProfile(supabase, user, authId)
+}
 
-  return result.data.user.id
+const createProfile = async (
+  supabase: SupabaseClient,
+  user: any,
+  authId: string,
+) => {
+  const tenantId = Cypress.env('TENANT_ID')
+
+  const profileResult = await supabase
+    .from('profiles')
+    .upsert({
+      auth_id: authId,
+      display_name: user.username,
+      username: user.username,
+      roles: user.roles,
+      tenant_id: tenantId,
+      type: user.type,
+    })
+    .select('*')
+    .single()
+
+  return profileResult.data
 }
 
 export const deleteAccounts = async () => {

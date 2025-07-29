@@ -29,6 +29,7 @@ export const users = {
     roles: [UserRole.BETA_TESTER],
     email: 'demo_beta_tester@example.com',
     password: 'demo_beta_tester',
+    type: 'member',
   },
   admin: {
     id: 3,
@@ -38,22 +39,7 @@ export const users = {
     roles: [UserRole.ADMIN],
     email: 'demo_admin@example.com',
     password: 'demo_admin',
-  },
-  notification_howto_author: {
-    isVerified: false,
-    createdAt: new Date('2022-01-09T12:07:05.988Z'),
-    displayName: 'notification_howto_author',
-    id: 4,
-    username: 'notification_howto_author',
-    roles: [],
-  },
-  notification_triggerer: {
-    isVerified: false,
-    createdAt: new Date('2022-01-09T12:07:05.988Z'),
-    displayName: 'notification_triggerer',
-    id: 5,
-    username: 'notification_triggerer',
-    roles: [],
+    type: 'member',
   },
   event_reader: {
     id: 6,
@@ -64,6 +50,7 @@ export const users = {
     email: 'event_reader@test.com',
     password: 'test1234',
     roles: [UserRole.BETA_TESTER],
+    type: 'member',
   },
   howto_creator: {
     id: 7,
@@ -74,6 +61,7 @@ export const users = {
     createdAt: new Date('2020-01-07T15:46:00.297Z'),
     displayName: 'howto_creator',
     roles: [],
+    type: 'member',
   },
   research_creator: {
     id: 8,
@@ -84,16 +72,17 @@ export const users = {
     createdAt: new Date('2020-01-07T15:46:00.297Z'),
     displayName: 'research_creator',
     roles: [UserRole.RESEARCH_CREATOR],
+    type: 'member',
   },
   settings_community_new: {
     id: 9,
-    type: null,
     coverImages: [],
     isVerified: true,
     createdAt: new Date('2020-01-07T12:15:08.726Z'),
     displayName: 'settings_community_new',
     username: 'settings_community_new',
     roles: [],
+    type: 'community-builder',
   },
   settings_machine_new: {
     isVerified: true,
@@ -102,6 +91,7 @@ export const users = {
     username: 'settings_machine_new',
     id: 10,
     roles: [],
+    type: 'machine-builder',
   },
   settings_member_new: {
     country: 'Poland',
@@ -113,6 +103,7 @@ export const users = {
     createdAt: new Date('2020-01-07T12:14:30.030Z'),
     displayName: 'settings_member_new',
     roles: [],
+    type: 'member',
   },
   settings_plastic_new: {
     isVerified: true,
@@ -120,8 +111,8 @@ export const users = {
     displayName: 'settings_plastic_new',
     username: 'settings_plastic_new',
     id: 12,
-    type: null,
     roles: [],
+    type: 'member',
   },
   settings_workplace_empty: {
     isVerified: true,
@@ -201,5 +192,6 @@ export const users = {
     website: 'http://profile_views.example.com',
     about: 'Hi! I have 99 views',
     country: 'nl',
+    type: 'member',
   },
 } as { [id: string]: Partial<Profile> & { email?: string; password?: string } }

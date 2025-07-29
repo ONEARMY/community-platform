@@ -21,8 +21,7 @@ export const seedResearch = async (profiles, tagsData) => {
       title: item.title,
       description: item.description,
       slug: item.slug,
-      created_by:
-        profiles.data.find((x) => x.username === item.createdBy)?.id || null,
+      created_by: profiles.find((x) => x.username === item.createdBy).id,
       tags: [tagsData.data[0].id, tagsData.data[1].id],
       category: categories.data[i % 2].id,
       deleted: item.deleted,
@@ -30,7 +29,7 @@ export const seedResearch = async (profiles, tagsData) => {
       tenant_id: tenantId,
     })
   }
-
+  console.log({ researchData })
   const { research } = await seedDatabase(
     {
       research: researchData,
@@ -49,7 +48,9 @@ export const seedResearch = async (profiles, tagsData) => {
             title: item.title,
             research_id: research.data[i].id,
             description: item.description,
-            created_by: profiles.data[0].id,
+            created_by: profiles.find(
+              (x) => x.username === researchItem.createdBy,
+            ).id,
             is_draft: item.draft || false,
             tenant_id: tenantId,
           })),

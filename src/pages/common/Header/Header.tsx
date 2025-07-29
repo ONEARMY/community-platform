@@ -12,9 +12,6 @@ import { isModuleSupported, MODULE } from 'src/modules'
 import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
 import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
 import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
-import { NotificationsDesktop } from 'src/pages/common/Header/Menu/Notifications/NotificationsDesktop'
-import { NotificationsIcon } from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
-import { NotificationsMobile } from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import { notificationSupabaseService } from 'src/services/notificationSupabaseService'
 import { Flex, Text, useThemeUI } from 'theme-ui'
@@ -22,7 +19,6 @@ import { Flex, Text, useThemeUI } from 'theme-ui'
 import { EnvironmentContext } from '../EnvironmentContext'
 import { NotificationsContext } from '../NotificationsContext'
 import { NotificationsSupabase } from './Menu/Notifications/NotificationsSupabase'
-import { getFormattedNotifications } from './getFormattedNotifications'
 import { MobileMenuContext } from './MobileMenuContext'
 
 import type { NotificationDisplay } from 'oa-shared'
@@ -91,11 +87,7 @@ const Header = observer(() => {
   const env = useContext(EnvironmentContext)
   const { userNotificationsStore } = useCommonStores().stores
   const user = userNotificationsStore.user
-  const notifications = getFormattedNotifications(
-    userNotificationsStore.getUnreadNotifications(),
-  )
-  const [showMobileNotifications, setShowMobileNotifications] = useState(false)
-  const areThereNotifications = Boolean(notifications.length)
+
   const isLoggedInUser = !!user
   const [isVisible, setIsVisible] = useState(false)
 
@@ -169,13 +161,6 @@ const Header = observer(() => {
           </Flex>
           {isLoggedInUser && (
             <MobileNotificationsWrapper>
-              <NotificationsIcon
-                onCLick={() =>
-                  setShowMobileNotifications(!showMobileNotifications)
-                }
-                isMobileMenuActive={showMobileNotifications}
-                areThereNotifications={areThereNotifications}
-              />
               <NotificationsSupabase device="mobile" />
             </MobileNotificationsWrapper>
           )}
@@ -190,20 +175,7 @@ const Header = observer(() => {
             }}
           >
             <MenuDesktop />
-            {isLoggedInUser && (
-              <>
-                <NotificationsDesktop
-                  notifications={notifications}
-                  markAllRead={() =>
-                    userNotificationsStore.markAllNotificationsRead()
-                  }
-                  markAllNotified={() =>
-                    userNotificationsStore.markAllNotificationsNotified()
-                  }
-                />
-                <NotificationsSupabase device="desktop" />
-              </>
-            )}
+            {isLoggedInUser && <NotificationsSupabase device="desktop" />}
             {isModuleSupported(
               env?.VITE_SUPPORTED_MODULES || '',
               MODULE.USER,
@@ -240,22 +212,6 @@ const Header = observer(() => {
           <AnimationContainer key={'mobilePanelContainer'}>
             <MobileMenuWrapper>
               <MenuMobilePanel />
-            </MobileMenuWrapper>
-          </AnimationContainer>
-        )}
-        {showMobileNotifications && (
-          <AnimationContainer key={'mobileNotificationsContainer'}>
-            <MobileMenuWrapper>
-              <NotificationsMobile
-                notifications={notifications}
-                markAllRead={() =>
-                  userNotificationsStore.markAllNotificationsRead()
-                }
-                markAllNotified={() =>
-                  userNotificationsStore.markAllNotificationsNotified()
-                }
-              />
-              <NotificationsSupabase device="mobile" />
             </MobileMenuWrapper>
           </AnimationContainer>
         )}

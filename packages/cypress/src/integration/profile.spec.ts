@@ -169,6 +169,7 @@ describe('[Profile]', () => {
 
       cy.step('No contact form even when links are present')
       cy.get('[data-cy=tab-Profile]').click()
+      cy.setSettingImage('avatar', 'userImage')
       cy.setSettingBasicUserInfo({
         displayName: user.username,
         country: 'Tokelau',
@@ -179,7 +180,6 @@ describe('[Profile]', () => {
         label: ExternalLinkLabel.SOCIAL_MEDIA,
         url: 'http://something.to.delete/',
       })
-      cy.setSettingImage('avatar', 'userImage')
 
       cy.saveSettingsForm()
 

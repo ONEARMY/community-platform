@@ -11,6 +11,6 @@ describe('DeleteProfileModal', () => {
   it('validates the component behaviour', () => {
     const { getByText } = render(<Default {...(Default.args as IProps)} />)
 
-    expect(getByText('DeleteProfileModal')).toBeInTheDocument()
+    expect(getByText('Delete account')).toBeInTheDocument()
   })
 })

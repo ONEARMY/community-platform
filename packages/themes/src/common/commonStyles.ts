@@ -20,6 +20,7 @@ export const commonStyles = {
     blue: '#83ceeb',
     red: '#eb1b1f',
     red2: '#f58d8e',
+    redCrayola: '#e9475a',
     softblue: '#e2edf7',
     bluetag: '#5683b0',
     grey: '#61646b',

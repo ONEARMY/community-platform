@@ -1,6 +1,6 @@
 import { DeleteProfileModal } from './DeleteProfileModal'
 
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 export default {
   title: 'Layout/DeleteProfileModal',

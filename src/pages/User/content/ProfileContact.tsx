@@ -21,7 +21,7 @@ export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
   const shouldShowContactOutput = !isMessagingModuleOff()
 
   return (
-    <Flex sx={{ flexDirection: 'column', gap: '1rem' }}>
+    <Flex sx={{ flexDirection: 'column' }}>
       {shouldShowContactOutput && (
         <Box data-cy="UserContactWrapper">
           <ClientOnly fallback={<></>}>
@@ -50,7 +50,9 @@ export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
       )}
 
       {user.website && (
-        <Flex sx={{ flexDirection: 'column', gap: '0.5rem' }}>
+        <Flex
+          sx={{ flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}
+        >
           <span>Website</span>
           <ProfileLink url={user.website} />
         </Flex>

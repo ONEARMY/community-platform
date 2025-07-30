@@ -43,7 +43,7 @@ alter table "public"."profiles" add column "impact" json;
 
 alter table "public"."profiles" add column "is_blocked_from_messaging" boolean;
 
-alter table "public"."profiles" add column "is_contactable" boolean;
+alter table "public"."profiles" add column "is_contactable" boolean default true;
 
 alter table "public"."profiles" add column "is_supporter" boolean;
 

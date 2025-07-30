@@ -66,8 +66,6 @@ export {
   ModerationRecord,
 } from './ModerationStatus/ModerationStatus'
 export { MoreContainer } from './MoreContainer/MoreContainer'
-export { NotificationItem } from './NotificationItem/NotificationItem'
-export { NotificationList } from './NotificationList/NotificationList'
 export { NotificationListSupabase } from './NotificationListSupabase/NotificationListSupabase'
 export { NotificationsModal } from './NotificationsModal/NotificationsModal'
 export { OsmGeocoding } from './OsmGeocoding/OsmGeocoding'

@@ -2,9 +2,11 @@ import { UserRole } from '../../models'
 
 import type { Profile } from '../../models'
 
-export const users = {
+type Users = {
+  [id: string]: Partial<Profile> & { email: string; password: string }
+}
+export const users: Users = {
   subscriber: {
-    id: 1,
     createdAt: new Date('2022-01-30T18:51:57.719Z'),
     displayName: 'demo_user',
     username: 'demo_user',
@@ -22,7 +24,6 @@ export const users = {
     type: 'member',
   },
   'beta-tester': {
-    id: 2,
     createdAt: new Date('2022-01-30T18:51:57.719Z'),
     displayName: 'demo_beta_tester',
     username: 'demo_beta_tester',
@@ -30,9 +31,13 @@ export const users = {
     email: 'demo_beta_tester@example.com',
     password: 'demo_beta_tester',
     type: 'member',
+    about: '',
+    photo: {
+      id: 'string',
+      publicUrl: 'string',
+    },
   },
   admin: {
-    id: 3,
     createdAt: new Date('2022-01-30T18:51:57.719Z'),
     displayName: 'demo_admin',
     username: 'demo_admin',
@@ -40,9 +45,13 @@ export const users = {
     email: 'demo_admin@example.com',
     password: 'demo_admin',
     type: 'member',
+    about: 'admin',
+    photo: {
+      id: 'string',
+      publicUrl: 'string',
+    },
   },
   event_reader: {
-    id: 6,
     username: 'event_reader',
     isVerified: false,
     createdAt: new Date('2019-08-15T00:00:00.000Z'),
@@ -51,9 +60,13 @@ export const users = {
     password: 'test1234',
     roles: [UserRole.BETA_TESTER],
     type: 'member',
+    about: '',
+    photo: {
+      id: 'string',
+      publicUrl: 'string',
+    },
   },
   howto_creator: {
-    id: 7,
     email: 'howto_creator@test.com',
     username: 'howto_creator',
     password: 'test1234',
@@ -62,9 +75,13 @@ export const users = {
     displayName: 'howto_creator',
     roles: [],
     type: 'member',
+    about: 'howto_creator stuff',
+    photo: {
+      id: 'string',
+      publicUrl: 'string',
+    },
   },
   research_creator: {
-    id: 8,
     email: 'research_creator@test.com',
     password: 'research_creator',
     username: 'research_creator',
@@ -73,54 +90,57 @@ export const users = {
     displayName: 'research_creator',
     roles: [UserRole.RESEARCH_CREATOR],
     type: 'member',
-  },
-  settings_community_new: {
-    id: 9,
-    coverImages: [],
-    isVerified: true,
-    createdAt: new Date('2020-01-07T12:15:08.726Z'),
-    displayName: 'settings_community_new',
-    username: 'settings_community_new',
-    roles: [],
-    type: 'community-builder',
+    about: 'research_creator research_creator',
+    photo: {
+      id: 'string',
+      publicUrl: 'string',
+    },
   },
   settings_machine_new: {
     isVerified: true,
     createdAt: new Date('2020-01-07T12:14:50.354Z'),
     displayName: 'settings_machine_new',
+    email: 'settings_machine_new@test.com',
     username: 'settings_machine_new',
-    id: 10,
+    password: 'settings_machine_new',
     roles: [],
     type: 'machine-builder',
+    about: '',
+    photo: {
+      id: 'string',
+      publicUrl: 'string',
+    },
   },
   settings_member_new: {
     country: 'Poland',
     username: 'settings_member_new',
     email: 'settings_member_new@test.com',
     password: 'test1234',
-    id: 11,
     isVerified: true,
     createdAt: new Date('2020-01-07T12:14:30.030Z'),
     displayName: 'settings_member_new',
     roles: [],
     type: 'member',
-  },
-  settings_plastic_new: {
-    isVerified: true,
-    createdAt: new Date('2020-01-07T12:15:42.218Z'),
-    displayName: 'settings_plastic_new',
-    username: 'settings_plastic_new',
-    id: 12,
-    roles: [],
-    type: 'member',
+    about: '',
+    photo: {
+      id: 'string',
+      publicUrl: 'string',
+    },
   },
   settings_workplace_empty: {
     isVerified: true,
     createdAt: new Date('2020-01-07T12:15:42.218Z'),
     displayName: 'settings_workplace_empty',
     username: 'settings_workplace_empty',
+    email: 'settings_workplace_empty@test.com',
+    password: 'settings_workplace_empty',
     id: 13,
     type: 'workspace',
+    about: '',
+    photo: {
+      id: 'string',
+      publicUrl: 'string',
+    },
   },
   settings_workplace_new: {
     isVerified: true,
@@ -163,6 +183,11 @@ export const users = {
       ],
     },
     isContactable: false,
+    about: '',
+    photo: {
+      id: 'string',
+      publicUrl: 'string',
+    },
   },
   mapview_testing_rejected: {
     isVerified: true,
@@ -174,6 +199,11 @@ export const users = {
     email: 'mapview_testing_rejected@test.com',
     password: 'mapview_testing_rejected@test.com',
     roles: [],
+    about: '',
+    photo: {
+      id: 'string',
+      publicUrl: 'string',
+    },
   },
   profile_views: {
     id: 16,
@@ -193,5 +223,9 @@ export const users = {
     about: 'Hi! I have 99 views',
     country: 'nl',
     type: 'member',
+    photo: {
+      id: 'string',
+      publicUrl: 'string',
+    },
   },
-} as { [id: string]: Partial<Profile> & { email?: string; password?: string } }
+}

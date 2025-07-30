@@ -26,14 +26,13 @@ import type {
   useful_votesScalars,
 } from '@snaplet/seed'
 
-const tenant_id = 'precious-plastic'
+const tenant_id = `precious-plastic`
 
 const _PROFILES_BASE: Partial<profilesScalars> = {
   tenant_id,
   type: ProfileTypeList.MEMBER,
   roles: [],
   photo: null,
-  location: null,
   patreon: null,
   impact: null,
   is_verified: true,
@@ -96,43 +95,43 @@ const seedTags = (): tagsChildInputs => [{ ..._TAGS_BASE, name: 'tag 1' }]
 
 const seedUsers = () => [
   {
-    email: 'jereerickson92@test.com',
+    email: 'jereerickson92@seed.com',
     password: copycat.password({}),
   },
   {
-    email: 'aldaplaskett48@test.com',
+    email: 'aldaplaskett48@seed.com',
     password: copycat.password({}),
   },
   {
-    email: 'sampathpini67@test.com',
+    email: 'sampathpini67@seed.com',
     password: copycat.password({}),
   },
   {
-    email: 'galenagiugovaz15@test.com',
+    email: 'galenagiugovaz15@seed.com',
     password: copycat.password({}),
   },
   {
-    email: 'veniaminjewell33@test.com',
+    email: 'veniaminjewell33@seed.com',
     password: copycat.password({}),
   },
   {
-    email: 'cortneybrown81@test.com',
+    email: 'cortneybrown81@seed.com',
     password: copycat.password({}),
   },
   {
-    email: 'melisavang56@test.com',
+    email: 'melisavang56@seed.com',
     password: copycat.password({}),
   },
   {
-    email: 'lianabegam24@test.com',
+    email: 'lianabegam24@seed.com',
     password: copycat.password({}),
   },
   {
-    email: 'akromstarkova72@test.com',
+    email: 'akromstarkova72@seed.com',
     password: copycat.password({}),
   },
   {
-    email: 'mirzoblazkova19@test.com',
+    email: 'mirzoblazkova19@seed.com',
     password: copycat.password({}),
   },
 ]

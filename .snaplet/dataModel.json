@@ -4348,20 +4348,6 @@
           "maxLength": null
         },
         {
-          "id": "public.profiles.photo_url",
-          "name": "photo_url",
-          "columnName": "photo_url",
-          "type": "text",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.profiles.about",
           "name": "about",
           "columnName": "about",
@@ -4455,7 +4441,7 @@
           "isList": false,
           "isGenerated": false,
           "sequence": false,
-          "hasDefaultValue": false,
+          "hasDefaultValue": true,
           "isId": false,
           "maxLength": null
         },
@@ -4464,20 +4450,6 @@
           "name": "is_supporter",
           "columnName": "is_supporter",
           "type": "bool",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.profiles.location",
-          "name": "location",
-          "columnName": "location",
-          "type": "json",
           "isRequired": false,
           "kind": "scalar",
           "isList": false,

@@ -18,7 +18,7 @@ interface IProps extends OptionalFollowButtonProps {
 
 export const FollowButtonAction = (props: IProps) => {
   const { contentType, hideSubscribeIcon, itemId, setSubscribersCount } = props
-  const [subscribed, setSubscribed] = useState<boolean>(false)
+  const [subscribed, setSubscribed] = useState<boolean | undefined>(undefined)
   const { profile } = useProfileStore()
 
   useEffect(() => {
@@ -66,6 +66,10 @@ export const FollowButtonAction = (props: IProps) => {
   }
 
   if (!subscribed && hideSubscribeIcon) {
+    return
+  }
+
+  if (subscribed === undefined) {
     return
   }
 

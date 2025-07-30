@@ -1,7 +1,7 @@
 import { MOCK_DATA } from '../data'
 import { supabaseAdminClient } from '../utils/TestUtils'
 
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { SupabaseClient, User } from '@supabase/supabase-js'
 
 // Creates user accounts and respective profiles
 export const seedAccounts = async () => {
@@ -17,30 +17,17 @@ export const seedAccounts = async () => {
 
   const existingUsers = await supabase.auth.admin.listUsers()
 
-  let profiles
-  if (existingUsers.data.users.length === 10) {
-    const result = await Promise.all(
-      existingUsers.data.users.map(async (authUser) => {
-        const user = accounts.find(
-          (account) => account.email === authUser.email,
-        )
-        return await createProfile(supabase, user, authUser.id)
-      }),
-    )
-    profiles = result
-  } else {
-    const result = await Promise.all(
-      accounts.map(
-        async (account) => await createAuthAndProfile(supabase, account),
-      ),
-    )
-    profiles = result
-  }
+  const profiles = await Promise.all(
+    accounts.map(
+      async (account) =>
+        await createAuthAndProfile(supabase, account, existingUsers.data.users),
+    ),
+  )
 
   return { profiles }
 }
 
-const createAuthAndProfile = async (supabase, user) => {
+const createAuthAndProfile = async (supabase, user, existingUsers: User[]) => {
   const authUser = await supabase.auth.admin.createUser({
     email: user.email,
     password: user.password,
@@ -49,6 +36,19 @@ const createAuthAndProfile = async (supabase, user) => {
       username: user.username,
     },
   })
+
+  let profile
+  if (authUser.error?.code === 'email_exists') {
+    const authUser = existingUsers.find(
+      (authUser) => authUser.email === user.email,
+    )
+
+    if (authUser) {
+      return (profile = await createProfile(supabase, user, authUser.id))
+    }
+
+    return profile
+  }
 
   const authId = authUser.data.id
   return await createProfile(supabase, user, authId)
@@ -61,18 +61,33 @@ const createProfile = async (
 ) => {
   const tenantId = Cypress.env('TENANT_ID')
 
+  const { data } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('auth_id', authId)
+    .eq('tenant_id', tenantId)
+    .single()
+
+  if (data) {
+    return data
+  }
+
   const profileResult = await supabase
     .from('profiles')
-    .upsert({
+    .insert({
       auth_id: authId,
       display_name: user.username,
       username: user.username,
       roles: user.roles,
       tenant_id: tenantId,
       type: user.type,
+      about: user.about || '',
+      photo: user.photo || {},
     })
     .select('*')
     .single()
+
+  console.log(profileResult)
 
   return profileResult.data
 }

@@ -154,10 +154,6 @@ describe('[Settings]', () => {
       cy.contains('Your current map pin is here:')
       cy.contains(locationStub.country)
 
-      cy.step('Setting map pin makes location field disappear')
-      cy.get('[data-cy="tab-Profile"]').click()
-      cy.get('[data-cy=location-dropdown]').should('not.exist')
-
       cy.step('Can view pin on new map')
       cy.visit(`/map#${user.username}`)
       cy.wait(2000)
@@ -169,16 +165,6 @@ describe('[Settings]', () => {
       cy.get('[data-cy=remove-map-pin]').click()
       cy.get('[data-cy="Confirm.modal: Confirm"]').click()
       cy.contains('No map pin currently saved')
-      cy.get('[data-cy="tab-Profile"]').click()
-      cy.get('[data-cy=location-dropdown]').should('be.visible')
-
-      cy.step('Can update email notification preference')
-      cy.get('[data-cy="tab-Notifications"]').click()
-      cy.get('.data-cy__single-value').last().should('have.text', 'Weekly')
-      cy.selectTag('Daily', '[data-cy=NotificationSettingsSelect]')
-      cy.get('[data-cy=save-notification-settings]').click()
-      cy.contains('Notification setting saved successfully')
-      cy.get('.data-cy__single-value').last().should('have.text', 'Daily')
     })
 
     it('Can create space', () => {

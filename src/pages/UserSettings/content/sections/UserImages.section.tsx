@@ -36,6 +36,7 @@ export const UserImagesSection = ({
 
         <Box
           data-testid="photo"
+          data-cy="userImage"
           sx={{
             width: '120px',
             height: '120px',

@@ -169,11 +169,6 @@ describe('[Profile]', () => {
         country: 'Tokelau',
         description: 'contact checking',
       })
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.SOCIAL_MEDIA,
-        url: 'http://something.to.delete/',
-      })
 
       cy.saveSettingsForm()
 

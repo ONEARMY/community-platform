@@ -99,7 +99,7 @@ describe('[Research]', () => {
         .attachFile('images/howto-step-pic1.jpg')
 
       cy.step('New collaborators can be assigned to research')
-      cy.selectTag(subscriber.userName, '[data-cy=UserNameSelect]')
+      cy.selectTag(subscriber.username, '[data-cy=UserNameSelect]')
 
       cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=submit]').click()
@@ -110,7 +110,7 @@ describe('[Research]', () => {
       cy.step('Research article displays correctly')
       cy.contains(expected.title)
       cy.contains(expected.description)
-      cy.contains(admin.userName)
+      cy.contains(admin.username)
 
       cy.step('Can access the research with the previous slug')
       cy.visit(`/research/${initialExpectedSlug}`)
@@ -191,7 +191,7 @@ describe('[Research]', () => {
         content: updateTitle,
         path: `${researchURL}#update_`,
         title: expected.title,
-        username: subscriber.userName,
+        username: subscriber.username,
       })
 
       // cy.get('[data-cy=file-download-counter]').should(
@@ -345,10 +345,6 @@ describe('[Research]', () => {
 
       cy.step('Notification about update published')
       cy.visit(`/research/`)
-      cy.get('[data-cy="toggle-notifications-modal"]')
-        .last()
-        .click({ force: true })
-      cy.get('[data-cy="notification"]').contains(finalUpdateTitle).click()
 
       cy.step('All ready for a discussion')
       cy.contains('0 comments')
@@ -365,7 +361,7 @@ describe('[Research]', () => {
         content: finalUpdateTitle,
         path: `${researchURL}#update_`,
         title: researchItem.title,
-        username: researcher.userName,
+        username: researcher.username,
       })
     })
 

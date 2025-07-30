@@ -1,17 +1,17 @@
 import { useLoaderData } from '@remix-run/react'
-import { AuthorVotes, Profile } from 'oa-shared'
+import { AuthorVotes } from 'oa-shared'
+import { ProfileFactory } from 'src/factories/profileFactory.server'
 import { ProfilePage } from 'src/pages/User/content/ProfilePage'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { libraryServiceServer } from 'src/services/libraryService.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
 import { questionServiceServer } from 'src/services/questionService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
-import { storageServiceServer } from 'src/services/storageService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 import { Text } from 'theme-ui'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { UserCreatedDocs } from 'oa-shared'
+import type { Profile, UserCreatedDocs } from 'oa-shared'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -40,21 +40,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const authorVotes = authorVotesDb
     ? authorVotesDb.map((x) => AuthorVotes.fromDB(x))
     : undefined
-  const [photo] = profileDb.photo
-    ? storageServiceServer.getPublicUrls(client, [profileDb.photo])
-    : []
-  const coverImages = profileDb.cover_images
-    ? storageServiceServer.getPublicUrls(client, profileDb.cover_images)
-    : undefined
 
   if (profileDb?.id) {
     // not awaited to not block the render
     profileService.incrementViewCount(profileDb.id, profileDb.total_views)
   }
 
+  const profileFactory = new ProfileFactory(client)
+
   return Response.json(
     {
-      profile: Profile.fromDB(profileDb, photo, coverImages, authorVotes),
+      profile: profileFactory.fromDB(profileDb, authorVotes),
       userCreatedDocs,
     },
     { headers },

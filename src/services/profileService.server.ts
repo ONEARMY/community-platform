@@ -100,7 +100,7 @@ export class ProfileServiceServer {
 
   async getAuthorUsefulVotes(id: number) {
     const { data, error } = await this.client.rpc('get_author_vote_counts', {
-      id,
+      author_id: id,
     })
 
     if (error || !data) {

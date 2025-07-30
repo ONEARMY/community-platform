@@ -10,16 +10,6 @@ export interface Props {
   sx?: ThemeUICSSObject
 }
 
-export const capitalizeFirstLetter = (str: string) =>
-  str.charAt(0).toUpperCase() + str.slice(1)
-
-/**
- * Ensure urls are complete (start http/https://) and replace emails with mailto
- */
-const rewriteUrl = (url: string) => {
-  return url.indexOf('http') === 0 ? url : `http://${url}`
-}
-
 export const ProfileLink = (props: Props) => {
   return (
     <Flex
@@ -38,8 +28,10 @@ export const ProfileLink = (props: Props) => {
         marginLeft={2}
         color="black"
         data-cy="profile-website"
-        href={rewriteUrl(props.url)}
-      />
+        href={props.url}
+      >
+        {props.url}
+      </ExternalLink>
     </Flex>
   )
 }

@@ -13,10 +13,16 @@ const Template: StoryFn<typeof UserStatistics> = (args) => (
 
 export const Default = Template.bind({})
 Default.args = {
-  userName: 'Test User',
-  country: 'Greenland',
-  isVerified: true,
-  isSupporter: true,
+  profile: {
+    username: 'Test User',
+    id: 1,
+    isSupporter: true,
+    isVerified: true,
+    totalViews: 23,
+  },
+  pin: {
+    country: 'Greenland',
+  },
   libraryCount: 10,
   usefulCount: 20,
   researchCount: 2,

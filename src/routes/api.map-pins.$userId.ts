@@ -35,6 +35,7 @@ export const loader = async ({ request, params }) => {
     `,
     )
     .eq('profile_id', profileId)
+    .eq('moderation', 'accepted')
 
   if (error) {
     console.error(error)

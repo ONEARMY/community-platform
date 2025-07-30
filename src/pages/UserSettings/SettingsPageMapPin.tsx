@@ -56,9 +56,9 @@ const LocationDataTextDisplay = ({ pin }: { pin?: MapPin }) => {
         data-testid="LocationDataTextDisplay"
       >
         {mapForm.locationLabel}
-        <Flex sx={{ gap: 1 }}>
-          {pin.name}
+        <Flex sx={{ gap: 1, alignItems: 'center' }}>
           <FlagIcon countryCode={pin.countryCode} />
+          {pin.name}
         </Flex>
       </Text>
       {pin.moderation !== 'accepted' ? (
@@ -127,11 +127,7 @@ export const SettingsPageMapPin = () => {
 
   useEffect(() => {
     const init = async () => {
-      if (!profile) {
-        return
-      }
-
-      const pin = await mapPinService.getMapPinById(profile.id)
+      const pin = await mapPinService.getCurrentUserMapPin()
 
       if (pin) {
         setMapPin(pin)
@@ -141,7 +137,7 @@ export const SettingsPageMapPin = () => {
     }
 
     init()
-  }, [profile, notification])
+  }, [])
 
   const onSubmit = async (obj: { location: ILatLng }) => {
     setIsLoading(true)

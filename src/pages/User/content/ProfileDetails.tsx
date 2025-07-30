@@ -1,12 +1,9 @@
-import { useContext, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { TagList, UserStatistics, VisitorModal } from 'oa-components'
-import { UserRole } from 'oa-shared'
-import { AuthWrapper } from 'src/common/AuthWrapper'
-import { isModuleSupported, MODULE } from 'src/modules'
-import { EnvironmentContext } from 'src/pages/common/EnvironmentContext'
+import { mapPinService } from 'src/pages/Maps/map.service'
 import { Box, Divider, Flex, Paragraph } from 'theme-ui'
 
-import type { Profile, UserCreatedDocs } from 'oa-shared'
+import type { MapPin, Profile, UserCreatedDocs } from 'oa-shared'
 
 interface IProps {
   docs: UserCreatedDocs
@@ -15,8 +12,23 @@ interface IProps {
 }
 
 export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
-  const { about, tags, visitorPolicy, username } = profile
+  const { about, tags, visitorPolicy } = profile
   const [showVisitorModal, setShowVisitorModal] = useState(false)
+  const [pin, setPin] = useState<MapPin | undefined>(undefined)
+
+  useEffect(() => {
+    const getPin = async () => {
+      try {
+        const pin = await mapPinService.getMapPinById(profile.id)
+        if (pin) {
+          setPin(pin)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    getPin()
+  }, [profile.id])
 
   const hideVisitorDetails = (target?: string) => {
     setShowVisitorModal(false)
@@ -24,14 +36,6 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
       selectTab(target)
     }
   }
-
-  const env = useContext(EnvironmentContext)
-  const isMapModule = isModuleSupported(
-    env?.VITE_SUPPORTED_MODULES || '',
-    MODULE.MAP,
-  )
-
-  const country = isMapModule ? profile?.country : undefined
 
   const userTotalUseful = useMemo(() => {
     if (!profile?.authorUsefulVotes) {
@@ -79,39 +83,17 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
             alignSelf: 'stretch',
             border: ['none', '2px solid #0000001A', '2px solid #0000001A'],
             borderTop: '2px solid #0000001A',
-            m: 0,
+            margin: 0,
           }}
         />
-        <Box>
-          <AuthWrapper
-            roleRequired={UserRole.BETA_TESTER}
-            fallback={
-              <UserStatistics
-                userName={username}
-                country={country}
-                isVerified={!!profile.isVerified}
-                isSupporter={!!profile.isSupporter}
-                libraryCount={docs?.projects.length || 0}
-                usefulCount={userTotalUseful}
-                researchCount={docs?.research.length || 0}
-                totalViews={0}
-                questionCount={docs?.questions.length || 0}
-              />
-            }
-          >
-            <UserStatistics
-              userName={username}
-              country={country}
-              isVerified={!!profile.isVerified}
-              isSupporter={!!profile.isSupporter}
-              libraryCount={docs?.projects.length || 0}
-              usefulCount={userTotalUseful}
-              researchCount={docs?.research.length || 0}
-              totalViews={profile.totalViews || 0}
-              questionCount={docs?.questions.length || 0}
-            />
-          </AuthWrapper>
-        </Box>
+        <UserStatistics
+          profile={profile}
+          pin={pin}
+          libraryCount={docs?.projects.length || 0}
+          usefulCount={userTotalUseful}
+          researchCount={docs?.research.length || 0}
+          questionCount={docs?.questions.length || 0}
+        />
       </Flex>
     </Box>
   )

@@ -6,11 +6,12 @@ import type { MapPin } from 'oa-shared'
 export interface IMapPinService {
   getMapPins: () => Promise<MapPin[]>
   getMapPinById: (id: number) => Promise<MapPin | null>
+  getCurrentUserMapPin: () => Promise<MapPin | null>
 }
 
 const getMapPins = async () => {
   try {
-    const response = await fetch('/api/mappins')
+    const response = await fetch('/api/map-pins')
     const { mapPins } = await response.json()
 
     return mapPins
@@ -22,7 +23,7 @@ const getMapPins = async () => {
 
 const getMapPinById = async (id: number) => {
   try {
-    const response = await fetch('/api/mappins/' + id)
+    const response = await fetch('/api/map-pins/' + id)
     const { mapPin } = await response.json()
 
     return mapPin as MapPin
@@ -32,9 +33,24 @@ const getMapPinById = async (id: number) => {
   }
 }
 
+const getCurrentUserMapPin = async () => {
+  try {
+    const response = await fetch('/api/map-pin')
+    const { mapPin } = await response.json()
+
+    return mapPin as MapPin
+  } catch (error) {
+    logger.error('Failed to fetch current user map pinprofile-website', {
+      error,
+    })
+    return null
+  }
+}
+
 export const MapPinServiceContext = createContext<IMapPinService | null>(null)
 
 export const mapPinService: IMapPinService = {
   getMapPins,
   getMapPinById,
+  getCurrentUserMapPin,
 }

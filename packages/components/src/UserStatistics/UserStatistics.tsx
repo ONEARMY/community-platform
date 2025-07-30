@@ -10,27 +10,24 @@ import { ExternalLink } from '../ExternalLink/ExternalLink'
 import { Icon } from '../Icon/Icon'
 import { InternalLink } from '../InternalLink/InternalLink'
 
+import type { MapPin, Profile } from 'oa-shared'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface UserStatisticsProps {
-  userName: string
-  country?: string
-  isVerified: boolean
-  isSupporter?: boolean
+  profile: Pick<
+    Profile,
+    'id' | 'username' | 'isVerified' | 'isSupporter' | 'totalViews'
+  >
+  pin?: Pick<MapPin, 'country'>
   libraryCount: number
   usefulCount: number
   researchCount: number
-  totalViews: number
-  hasLocation?: boolean
-  sx?: ThemeUIStyleObject | undefined
   questionCount: number
+  sx?: ThemeUIStyleObject | undefined
 }
 
 export const UserStatistics = (props: UserStatisticsProps) => {
-  const hasLocation =
-    props.country !== undefined && props.userName !== undefined
-
-  if (isEmpty({ hasLocation, ...props })) {
+  if (isEmpty({ ...props })) {
     return null
   }
 
@@ -51,9 +48,9 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           justifyContent: ['center', 'flex-start', 'flex-start'],
         }}
       >
-        {hasLocation && (
+        {props.pin && (
           <InternalLink
-            to={'/map/#' + props.userName}
+            to={'/map/#' + props.profile.username}
             sx={{ color: 'black' }}
             data-testid="location-link"
           >
@@ -66,21 +63,21 @@ export const UserStatistics = (props: UserStatisticsProps) => {
             >
               <Flex sx={{ alignItems: 'center' }}>
                 <Icon glyph="map" size={22} />
-                <Box ml={1}>{props.country || 'View on Map'}</Box>
+                <Box ml={1}>{props.pin.country || 'View on Map'}</Box>
               </Flex>
             </CardButton>
           </InternalLink>
         )}
 
         <Flex sx={{ gap: 2, flexDirection: 'column' }}>
-          {props.isVerified && (
+          {props.profile.isVerified && (
             <Flex data-testid="verified-stat">
               <Icon glyph="verified" size={22} />
               <Box ml={1}>Verified</Box>
             </Flex>
           )}
 
-          {props?.isSupporter && (
+          {props?.profile.isSupporter && (
             <Flex data-testid="supporter-stat">
               <Icon glyph="supporter" size={22} />
               <Box ml={1}>
@@ -104,7 +101,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 
           {props.libraryCount > 0 && (
             <InternalLink
-              to={'/library?q=' + props.userName}
+              to={'/library?q=' + props.profile.username}
               sx={{ color: 'black' }}
               data-testid="library-link"
             >
@@ -117,7 +114,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 
           {props.researchCount > 0 && (
             <InternalLink
-              to={'/research?q=' + props.userName}
+              to={'/research?q=' + props.profile.username}
               sx={{ color: 'black' }}
               data-testid="research-link"
             >
@@ -141,10 +138,10 @@ export const UserStatistics = (props: UserStatisticsProps) => {
             </InternalLink>
           )}
 
-          {props.totalViews > 0 && (
+          {props.profile.totalViews > 0 && (
             <Flex data-testid="profile-views-stat">
               <Icon glyph="show" size={22} />
-              <Box ml={1}>{`Views: ${props.totalViews}`}</Box>
+              <Box ml={1}>{`Views: ${props.profile.totalViews}`}</Box>
             </Flex>
           )}
         </Flex>
@@ -153,11 +150,13 @@ export const UserStatistics = (props: UserStatisticsProps) => {
   )
 }
 
-const isEmpty = (props: UserStatisticsProps) =>
-  !props.hasLocation &&
-  !props.isVerified &&
-  !props.isSupporter &&
+const isEmpty = (
+  props: UserStatisticsProps & { pin?: Pick<MapPin, 'country'> },
+) =>
+  !props.pin &&
+  !props.profile.isVerified &&
+  !props.profile.isSupporter &&
   !props.libraryCount &&
   !props.researchCount &&
-  !props.totalViews &&
+  !props.profile.totalViews &&
   !props.usefulCount

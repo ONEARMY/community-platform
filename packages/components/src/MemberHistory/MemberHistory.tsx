@@ -1,4 +1,5 @@
-import { formatDistanceToNow, isValid } from 'date-fns'
+import { useMemo } from 'react'
+import { formatDistanceToNow } from 'date-fns'
 import { Divider, Flex, Text } from 'theme-ui'
 
 export interface IProps {
@@ -7,16 +8,31 @@ export interface IProps {
 }
 
 export const MemberHistory = (props: IProps) => {
-  const memberSince =
-    props.memberSince && isValid(props.memberSince)
-      ? props.memberSince.getFullYear()
-      : null
-  const lastActive =
-    props.lastActive && isValid(props.lastActive)
-      ? formatDistanceToNow(props.lastActive, {
+  const memberSince = useMemo(() => {
+    try {
+      if (props.memberSince) {
+        return props.memberSince.getFullYear()
+      }
+    } catch (error) {
+      console.error(error)
+    }
+
+    return null
+  }, [props.memberSince])
+
+  const lastActive = useMemo(() => {
+    try {
+      if (props.lastActive) {
+        return formatDistanceToNow(props.lastActive, {
           addSuffix: true,
         })
-      : null
+      }
+    } catch (error) {
+      console.error(error)
+    }
+
+    return null
+  }, [props.lastActive])
 
   return (
     <Flex

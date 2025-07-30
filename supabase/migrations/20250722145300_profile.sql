@@ -49,6 +49,8 @@ alter table "public"."profiles" drop column "tags";
 
 alter table "public"."profiles" drop column "total_useful";
 
+alter table "public"."profiles" drop column "location";
+
 alter table "public"."profiles" add column "cover_images" json[];
 
 alter table "public"."profiles" add column "last_active" timestamp with time zone;
@@ -62,6 +64,7 @@ alter table "public"."profiles" add column "visitor_policy" json;
 alter table "public"."profiles" add column "website" text;
 
 alter table "public"."profiles" alter column "type" set not null;
+
 
 CREATE INDEX map_pins_lat_lng_idx ON public.map_pins USING btree (lat, lng);
 

@@ -10,7 +10,6 @@ import type {
   DBNotificationsPreferences,
   NotificationContentType,
   NotificationsPreferenceTypes,
-  Profile,
 } from 'oa-shared'
 
 const preferenceTypes: PreferenceTypes = {
@@ -29,27 +28,14 @@ const createInstantNotificationEmail = async (
   profileId: number,
 ) => {
   try {
-    console.log('In createInstantNotificationEmail')
-    // Temporarily only for admins, beta-testers, research_creators
     const profileResponse = await client
       .from('profiles')
-      .select('created_at,roles')
+      .select('created_at')
       .eq('id', profileId)
       .single()
 
     if (!profileResponse.data) {
       console.error('Profile not found for ID:', profileId)
-      return
-    }
-
-    const roles = profileResponse.data.roles as Profile['roles']
-    console.log({ roles })
-    const approvedRoles = ['admin', 'beta-tester', 'research_creator']
-    const hasPlatformRole = !!roles?.every((role) =>
-      approvedRoles.includes(role),
-    )
-
-    if (!hasPlatformRole) {
       return
     }
 
@@ -61,7 +47,7 @@ const createInstantNotificationEmail = async (
     const rpcResponse = await client.rpc('get_user_email_by_profile_id', {
       id: profileId,
     })
-    console.log({ rpcResponse })
+
     if (!rpcResponse.data || rpcResponse.data.length === 0) {
       const error = `No email found for profile ID: ${profileId}`
       console.error(error)
@@ -75,7 +61,6 @@ const createInstantNotificationEmail = async (
     }
 
     const fullNotification = await transformNotification(dbNotification, client)
-    console.log({ fullNotification })
     const code = tokens.generate(profileId, profileResponse.data.created_at)
 
     return await client.functions.invoke('send-email', {

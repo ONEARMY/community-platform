@@ -218,6 +218,7 @@ describe('[Library]', () => {
       cy.fillIntroTitle(`qwerty ${randomId}`)
 
       cy.get('[data-cy=draft]').click()
+      cy.get('[data-cy=errors-container]').should('not.exist')
 
       const firstSlug = `/library/qwerty-${randomId}`
       cy.url().should('include', firstSlug)
@@ -269,6 +270,7 @@ describe('[Library]', () => {
 
       cy.step('A full draft was saved')
       cy.get('[data-cy=draft]').click()
+      cy.get('[data-cy=errors-container]').should('not.exist')
 
       cy.step('A full draft can be submitted for review')
       cy.get('[data-cy=edit]').click()

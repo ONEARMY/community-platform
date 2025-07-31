@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AuthorsContext, CommentsTitle } from 'oa-components'
-import { Comment, UserRole } from 'oa-shared'
-import { AuthWrapper } from 'src/common/AuthWrapper'
+import { Comment } from 'oa-shared'
 import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { commentService } from 'src/services/commentService'
 import { subscribersService } from 'src/services/subscribersService'
@@ -245,21 +244,13 @@ export const CommentSectionSupabase = (props: IProps) => {
           }}
         >
           <CommentsTitle comments={comments} />
-          <AuthWrapper
-            roleRequired={[
-              UserRole.BETA_TESTER,
-              UserRole.RESEARCH_CREATOR,
-              UserRole.ADMIN,
-            ]}
-          >
-            <FollowButtonAction
-              labelFollow="Follow Comments"
-              labelUnfollow="Following Comments"
-              contentType={sourceType}
-              itemId={sourceId}
-              setSubscribersCount={setSubscribersCount}
-            />
-          </AuthWrapper>
+          <FollowButtonAction
+            labelFollow="Follow Comments"
+            labelUnfollow="Following Comments"
+            contentType={sourceType}
+            itemId={sourceId}
+            setSubscribersCount={setSubscribersCount}
+          />
         </Flex>
         {displayedComments.map((comment) => (
           <Box key={comment.id}>

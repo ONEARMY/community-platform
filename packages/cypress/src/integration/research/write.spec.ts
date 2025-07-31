@@ -343,19 +343,11 @@ describe('[Research]', () => {
       cy.contains(finalUpdateTitle)
       cy.get('[data-cy=DraftUpdateLabel]').should('not.exist')
 
-      cy.step('Notification about update published')
-      cy.visit(`/research/`)
-      cy.get('[data-cy="toggle-notifications-modal"]')
-        .last()
-        .click({ force: true })
-      cy.get('[data-cy="notification"]').contains(finalUpdateTitle).click()
-
       cy.step('All ready for a discussion')
       cy.contains('0 comments')
       cy.get('[data-cy="HideDiscussionContainer:button"]').click()
       cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion')
-      // Currently beta testers only:
-      // cy.get('[data-cy=follow-button]').contains('Following')
+      cy.get('[data-cy=follow-button]').contains('Following')
       cy.contains('0 comments')
 
       cy.step('Now published draft has generated notifications')

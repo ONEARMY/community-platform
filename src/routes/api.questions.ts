@@ -204,8 +204,6 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
           .eq('id', questionId)
           .select()
 
-        console.log({ updateResult })
-
         if (updateResult.data) {
           question.images = updateResult.data[0].images
         }

@@ -1,16 +1,19 @@
 import { Field } from 'react-final-form'
-import TagsSelectV2 from 'src/common/Tags/TagsSelectV2'
+import { ProfileTagsSelect } from 'src/common/Tags/ProfileTagsSelect'
 import { fields } from 'src/pages/UserSettings/labels'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { Flex, Text } from 'theme-ui'
 
 import { FlexSectionContainer } from '../elements'
 
-export const ProfileTags = () => {
-  const { description, title } = fields.tags
+import type { ProfileTypeName } from 'oa-shared'
 
-  const { profile } = useProfileStore()
+interface IProps {
+  profileType: ProfileTypeName | undefined
+}
+
+export const ProfileTags = ({ profileType }: IProps) => {
+  const { description, title } = fields.tags
 
   return (
     <FlexSectionContainer>
@@ -27,13 +30,13 @@ export const ProfileTags = () => {
           {description}
         </Text>
         <Field
-          name="tags"
-          component={(input) => (
-            <TagsSelectV2
-              value={input.value || []}
+          name="tagIds"
+          component={({ input }) => (
+            <ProfileTagsSelect
+              value={input.value}
               onChange={(tags) => input.onChange(tags)}
-              tagsSource={profile?.tags || []}
               maxTotal={5}
+              profileType={profileType}
               isForm
             />
           )}

@@ -50,7 +50,7 @@ describe('[Profile]', () => {
 
       cy.step('Go to Profile')
       cy.clickMenuItem(UserMenuItem.Profile)
-      cy.wait(5000)
+      cy.wait(1000)
       cy.url().should('include', `/u/${user.username}`)
       cy.get('[data-cy=SpaceProfile]').should('not.exist')
       cy.get('[data-cy=MemberProfile]').should('be.visible')

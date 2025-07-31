@@ -2,10 +2,14 @@ import { copycat } from '@snaplet/copycat'
 import { createSeedClient } from '@snaplet/seed'
 import { ProfileTypeList } from 'oa-shared'
 
+// import * as allData from 'oa-shared/mocks/data'
 import libraryJson from './.snaplet/library.json'
 import questionsJson from './.snaplet/questions.json'
 import { convertToSlug } from './src/utils/slug'
 
+// const MOCK_DATA = {
+//   ...allData,
+// }
 import type {
   categoriesChildInputs,
   categoriesScalars,
@@ -92,6 +96,12 @@ const _USEFUL_VOTES_BASE: Partial<useful_votesScalars> = {
 }
 
 const seedTags = (): tagsChildInputs => [{ ..._TAGS_BASE, name: 'tag 1' }]
+
+// const seedProfileTags = (): profile_tagsChildInputs =>
+//   MOCK_DATA.profileTags.map((tag) => ({
+//     ...tag,
+//     tenant_id,
+//   }))
 
 const seedUsers = () => [
   {
@@ -450,6 +460,8 @@ const main = async () => {
   ])
 
   const { users } = await seed.users(seedUsers())
+  // await seed.profile_tags(seedProfileTags())
+
   const { profiles } = await seed.profiles(
     (seedProfiles() as Array<any>).map((profile: profilesInputs, index) => ({
       ...profile,

@@ -29,7 +29,7 @@ export const seedResearch = async (profiles, tagsData) => {
       tenant_id: tenantId,
     })
   }
-  console.log({ researchData })
+
   const { research } = await seedDatabase(
     {
       research: researchData,

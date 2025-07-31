@@ -20,6 +20,7 @@ const completeProfile = {
 }
 const mockUseProfileStore = vi.hoisted(() => vi.fn())
 const mockGetMapPinById = vi.hoisted(() => vi.fn())
+const mockGetCurrentUserMapPin = vi.hoisted(() => vi.fn())
 
 vi.mock('src/stores/Profile/profile.store', () => ({
   useProfileStore: mockUseProfileStore,
@@ -30,6 +31,7 @@ vi.mock('src/stores/Profile/profile.store', () => ({
 vi.mock('../Maps/map.service', () => ({
   mapPinService: {
     getMapPinById: mockGetMapPinById,
+    getCurrentUserMapPin: mockGetCurrentUserMapPin,
   },
 }))
 
@@ -103,7 +105,6 @@ describe('SettingsPageMapPin', () => {
       expect(
         wrapper.getAllByTestId('WorkspaceMapPinRequiredStars'),
       ).toHaveLength(1)
-      expect(wrapper.getAllByTestId('LocationDataTextDisplay')).toHaveLength(1)
       expect(wrapper.getAllByText(name, { exact: false })).toHaveLength(1)
       expect(
         wrapper.getAllByText(moderationFeedback, { exact: false }),

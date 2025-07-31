@@ -3,7 +3,11 @@ import { UserRole } from '../../models'
 import type { Profile } from '../../models'
 
 type Users = {
-  [id: string]: Partial<Profile> & { email: string; password: string }
+  [id: string]: Partial<Profile> & {
+    email: string
+    password: string
+    username: string
+  }
 }
 export const users: Users = {
   subscriber: {

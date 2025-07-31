@@ -126,7 +126,7 @@ Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
 
   cy.step('Update Info section')
   displayName && cy.get('[data-cy=displayName').clear().type(displayName)
-  cy.get('[data-cy=info-description').clear().type(description)
+  cy.get('[data-cy=info-about').clear().type(description)
   country && cy.selectTag(country, '[data-cy=country-dropdown]')
   website && cy.get('[data-cy=website').clear().type(website)
 })
@@ -139,6 +139,7 @@ Cypress.Commands.add('setSettingImage', (image, selector) => {
   cy.get(`[data-cy=${selector}]`)
     .find(':file')
     .attachFile(`images/${image}.jpg`)
+  cy.wait(2000)
 })
 
 Cypress.Commands.add('setSettingImpactData', (year: number, fields) => {
@@ -295,7 +296,6 @@ Cypress.Commands.add('completeUserProfile', (username) => {
   cy.log('Complete user profile')
   cy.visit('/settings')
   cy.setSettingImage('avatar', 'userImage')
-  cy.wait(1500)
   cy.setSettingBasicUserInfo({
     description: `${username} profile description.`,
   })

@@ -1,6 +1,6 @@
 import type { DBTag } from '../../models/tag'
 
-export const tagsSupabase: Partial<DBTag>[] = [
+export const tags: Partial<DBTag>[] = [
   {
     created_at: new Date(),
     name: 'product',

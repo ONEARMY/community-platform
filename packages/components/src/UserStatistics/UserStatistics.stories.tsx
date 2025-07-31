@@ -14,7 +14,7 @@ const Template: StoryFn<typeof UserStatistics> = (args) => (
 export const Default = Template.bind({})
 Default.args = {
   profile: {
-    username: 'Test User',
+    country: 'Greenland',
     id: 1,
     badges: [
       {
@@ -32,6 +32,7 @@ Default.args = {
       },
     ],
     totalViews: 23,
+    username: 'Test User',
   },
   pin: {
     country: 'Greenland',

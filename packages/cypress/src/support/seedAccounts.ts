@@ -7,13 +7,11 @@ import type { SupabaseClient, User } from '@supabase/supabase-js'
 export const seedAccounts = async () => {
   const supabase = supabaseAdminClient()
 
-  const accounts = Object.values(MOCK_DATA.users)
-    .filter((x) => !!x['password'] && !!x['email'] && !!x.username)
-    .map((user) => ({
-      email: user['email'],
-      password: user['password'],
-      ...user,
-    }))
+  const accounts = Object.values(MOCK_DATA.users).map((user) => ({
+    email: user['email'],
+    password: user['password'],
+    ...user,
+  }))
 
   const existingUsers = await supabase.auth.admin.listUsers()
 
@@ -86,8 +84,6 @@ const createProfile = async (
     })
     .select('*')
     .single()
-
-  console.log(profileResult)
 
   return profileResult.data
 }

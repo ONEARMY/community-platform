@@ -532,3 +532,7 @@ as permissive
 for all
 to public
 using ((tenant_id = ((current_setting('request.headers'::text, true))::json ->> 'x-tenant-id'::text)));
+
+
+alter table "public"."profiles" drop column "photo_url";
+

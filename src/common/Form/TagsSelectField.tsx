@@ -1,7 +1,7 @@
-import TagsSelectV2 from '../Tags/TagsSelectV2'
+import { TagsSelect } from '../Tags/TagsSelect'
 
-export const TagsSelectFieldV2 = ({ input, ...rest }) => (
-  <TagsSelectV2
+export const TagsSelectField = ({ input, ...rest }) => (
+  <TagsSelect
     styleVariant="selector"
     placeholder="Select tags (max 4)"
     isForm={true}

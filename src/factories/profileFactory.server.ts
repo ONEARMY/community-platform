@@ -48,6 +48,7 @@ export class ProfileFactory {
       patreon: dbProfile.patreon || null,
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
+      tagIds: dbProfile.tag_ids,
       tags: dbProfile.tags?.map((x) => ProfileTag.fromDB(x)),
       badges: dbProfile.badges?.map((x) => ProfileBadge.fromDBJoin(x)),
     })

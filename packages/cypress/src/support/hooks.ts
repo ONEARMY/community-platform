@@ -2,7 +2,7 @@ import { clearDatabase, clearStorage, createStorage } from '../utils/TestUtils'
 import { seedAccounts } from './seedAccounts'
 import { seedLibrary } from './seedLibrary'
 import { seedNews } from './seedNews'
-import { seedQuestions, seedTags } from './seedQuestions'
+import { seedProfileTags, seedQuestions, seedTags } from './seedQuestions'
 import { seedResearch } from './seedResearch'
 
 /**
@@ -28,11 +28,12 @@ before(() => {
     //   ['categories', 'comments', 'news', 'profiles', 'questions', 'tags'],
     //   Cypress.env('TENANT_ID'),
     // )
+    await createStorage(Cypress.env('TENANT_ID'))
 
     const { profiles } = await seedAccounts()
-    const { tags } = await seedTags()
+    await seedProfileTags()
 
-    await createStorage(Cypress.env('TENANT_ID'))
+    const { tags } = await seedTags()
     await seedQuestions(profiles)
     await seedNews(profiles, tags)
     await seedResearch(profiles, tags)

@@ -67,12 +67,12 @@ export const UserInfosSection = ({ formValues }: IProps) => {
           />
         </Flex>
 
-        <ProfileTags />
+        <ProfileTags profileType={formValues.type} />
 
         <Flex sx={{ flexDirection: 'column', gap: 1 }}>
           <Text>{about.title} *</Text>
           <Field
-            data-cy="info-description"
+            data-cy="info-about"
             name="about"
             component={FieldTextarea}
             showCharacterCount

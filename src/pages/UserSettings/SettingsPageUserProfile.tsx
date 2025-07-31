@@ -76,7 +76,7 @@ export const SettingsPageUserProfile = () => {
       visitorPreferencePolicy: profile.visitorPolicy?.policy,
       visitorPreferenceDetails: profile.visitorPolicy?.details,
       website: profile.website || '',
-      tagIds: profile.tags?.map((x) => x.id) || [],
+      tagIds: profile.tagIds,
     }),
     [],
   )

@@ -61,6 +61,7 @@ export class Profile {
   isBlockedFromMessaging: boolean
   visitorPolicy: UserVisitorPreference | null
   website: string | null
+  tagIds: number[] | null
   tags?: ProfileTag[]
   badges?: ProfileBadge[]
   totalViews: number
@@ -110,6 +111,7 @@ export class Profile {
       patreon: dbProfile.patreon,
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
+      tagIds: dbProfile.tag_ids,
       tags: dbProfile.tags?.map((x) => ProfileTag.fromDB(x)),
     })
   }
@@ -458,7 +460,7 @@ export type NewNotificationData = {
 
 export type ProfileFormData = {
   displayName: string
-  tagIds: number[]
+  tagIds: number[] | null
   about: string
   country: string
   website: string

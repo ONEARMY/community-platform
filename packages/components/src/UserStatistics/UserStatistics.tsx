@@ -14,7 +14,10 @@ import type { MapPin, Profile } from 'oa-shared'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface UserStatisticsProps {
-  profile: Pick<Profile, 'id' | 'username' | 'badges' | 'totalViews'>
+  profile: Pick<
+    Profile,
+    'id' | 'username' | 'badges' | 'totalViews' | 'country'
+  >
   pin?: Pick<MapPin, 'country'>
   libraryCount: number
   usefulCount: number
@@ -31,15 +34,15 @@ export const UserStatistics = (props: UserStatisticsProps) => {
   return (
     <Card
       sx={{
-        p: 2,
         backgroundColor: 'background',
         border: 0,
+        padding: 1,
         ...props.sx,
       }}
     >
       <Flex
         sx={{
-          gap: 4,
+          gap: 2,
           flexDirection: ['row', 'column', 'column'],
           alignItems: ['center', 'flex-start', 'flex-start'],
           justifyContent: ['center', 'flex-start', 'flex-start'],
@@ -53,17 +56,24 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           >
             <CardButton
               sx={{
-                p: '12px',
                 border: '2px solid black',
                 boxShadow: '0px 2px 0px 0px black',
+                padding: 2,
               }}
             >
-              <Flex sx={{ alignItems: 'center' }}>
+              <Flex sx={{ alignItems: 'center', gap: 2 }}>
                 <Icon glyph="map" size={22} />
-                <Box ml={1}>{props.pin.country || 'View on Map'}</Box>
+                <Box>{props.pin.country || 'View on Map'}</Box>
               </Flex>
             </CardButton>
           </InternalLink>
+        )}
+
+        {!props.pin && props.profile.country && (
+          <Flex sx={{ alignItems: 'center', gap: 1 }}>
+            <Icon glyph="map" size={22} />
+            <Box>{props.profile.country}</Box>
+          </Flex>
         )}
 
         <Flex sx={{ gap: 2, flexDirection: 'column' }}>

@@ -33,7 +33,6 @@ const isPageOwnerCheck = (activeUser?: Profile, owner?: Profile) => {
   const usersPresent = activeUser && owner
   const usersTheSame = activeUser?.username === owner?.username
 
-  console.log({ activeUser, owner })
   return usersPresent && usersTheSame ? true : false
 }
 

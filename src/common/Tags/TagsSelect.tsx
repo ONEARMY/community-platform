@@ -17,7 +17,7 @@ export interface IProps extends Partial<FieldRenderProps<any, any>> {
   maxTotal?: number
 }
 
-const TagsSelectV2 = (props: IProps) => {
+export const TagsSelect = (props: IProps) => {
   const [allTags, setAllTags] = useState<Tag[]>([])
   const [selectedTags, setSelectedTags] = useState<Tag[]>([])
 
@@ -48,10 +48,7 @@ const TagsSelectV2 = (props: IProps) => {
   const isOptionDisabled = () => selectedTags.length >= (props.maxTotal || 4)
 
   return (
-    <FieldContainer
-      // provide a data attribute that can be used to see if tags populated
-      data-cy={allTags?.length > 0 ? 'tag-select' : 'tag-select-empty'}
-    >
+    <FieldContainer data-cy="tag-select">
       <Select
         variant={props.isForm ? 'form' : undefined}
         options={allTags}
@@ -67,5 +64,3 @@ const TagsSelectV2 = (props: IProps) => {
     </FieldContainer>
   )
 }
-
-export default TagsSelectV2

@@ -28,7 +28,7 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
     !!mapState.activeProfileTypeFilters.length ||
     !!mapState.activeTagFilters.length
 
-  if (mapState.notification) {
+  if (mapState.loadingMessage) {
     return (
       <Flex
         sx={{
@@ -38,7 +38,7 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
           justifyContent: 'center',
         }}
       >
-        <Loader label={mapState.notification} sx={{ alignSelf: 'center' }} />
+        <Loader label={mapState.loadingMessage} sx={{ alignSelf: 'center' }} />
       </Flex>
     )
   }

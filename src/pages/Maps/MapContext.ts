@@ -22,7 +22,7 @@ export const MapContext = createContext<{
   activeProfileSettingFilters: string[]
   location: ILatLng
   selectedPin: MapPin | null | undefined
-  notification: string
+  loadingMessage: string
   isMobile: boolean
   boundaries: LatLngBounds | null
   toggleActiveTagFilter: (value: number) => void

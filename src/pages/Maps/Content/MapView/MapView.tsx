@@ -89,11 +89,7 @@ export const MapView = () => {
         </Button>
       </Flex>
       {mapState.allPins && (
-        <Clusters
-          pins={mapState.allPins}
-          onPinClick={mapState.selectPin}
-          prefix="new"
-        />
+        <Clusters pins={mapState.allPins} onPinClick={mapState.selectPin} />
       )}
       {mapState.selectedPin && (
         <Popup

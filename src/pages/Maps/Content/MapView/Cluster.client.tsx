@@ -11,12 +11,10 @@ import 'react-leaflet-markercluster/dist/styles.min.css'
 interface IProps {
   pins: MapPin[]
   onPinClick: (pin: MapPin) => void
-  prefix?: string // Temporarily needed while two maps are rendered
 }
 
 export const Clusters: React.FunctionComponent<IProps> = ({
   pins,
-  prefix,
   onPinClick,
 }) => {
   /**
@@ -37,7 +35,7 @@ export const Clusters: React.FunctionComponent<IProps> = ({
         .filter(({ lat }) => Boolean(lat))
         .map((pin) => (
           <Marker
-            key={`${prefix}-${pin.id}`}
+            key={pin.id}
             position={[pin.lat, pin.lng]}
             icon={createMarkerIcon(pin)}
             onClick={() => {

@@ -42,7 +42,7 @@ const MapsPage = () => {
   const [selectedPin, selectPin] = useState<MapPin | null | undefined>(
     undefined,
   )
-  const [notification, setNotification] = useState<string>('Loading...')
+  const [loadingMessage, setLoadingMessage] = useState<string>('Loading...')
   const [isMobile, setIsMobile] = useState(false)
 
   const filteredPins = useMemo<MapPin[]>(() => {
@@ -68,7 +68,7 @@ const MapsPage = () => {
         const pins = await mapPinService.getMapPins()
         setAllPins(pins)
       } catch (error) {
-        setNotification(error)
+        setLoadingMessage(error)
       }
     }
 
@@ -90,12 +90,12 @@ const MapsPage = () => {
           }
         }
       } catch (error) {
-        setNotification(error)
+        setLoadingMessage(error)
       }
     }
 
-    Promise.all([fetchMapPins(), fetchMapFilters()]).then(() =>
-      setNotification(''),
+    Promise.all([fetchMapPins(), fetchMapFilters()]).then(
+      () => setLoadingMessage(''), // TODO: change name to setMessage
     )
   }, [])
 
@@ -161,7 +161,7 @@ const MapsPage = () => {
         allTags,
         location: pinLocation,
         setLocation: setPinLocation,
-        notification,
+        loadingMessage,
         selectedPin,
         selectPin,
         filteredPins,

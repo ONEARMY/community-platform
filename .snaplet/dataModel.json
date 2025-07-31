@@ -4640,6 +4640,34 @@
           "maxLength": null
         },
         {
+          "id": "public.profile_types.description",
+          "name": "description",
+          "columnName": "description",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.profile_types.map_pin_name",
+          "name": "map_pin_name",
+          "columnName": "map_pin_name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "profiles",
           "type": "profiles",
           "isRequired": false,

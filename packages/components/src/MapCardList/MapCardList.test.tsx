@@ -3,8 +3,8 @@ import '@testing-library/jest-dom/vitest'
 import { describe, expect, it } from 'vitest'
 
 import { render } from '../test/utils'
-import { EMPTY_LIST, type IProps } from './CardList'
-import { Default, WhenDisplayIsZero } from './CardList.stories'
+import { EMPTY_LIST, type IProps } from './MapCardList'
+import { Default, WhenDisplayIsZero } from './MapCardList.stories'
 
 describe('CardList', () => {
   it('Shows all items when no filtering is done', () => {

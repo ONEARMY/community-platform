@@ -1,43 +1,36 @@
+import { useContext } from 'react'
+import { CardButton, MemberBadge, VerticalList } from 'oa-components'
 import { Text } from 'theme-ui'
 
-import { CardButton } from '../CardButton/CardButton'
-import { MemberBadge } from '../MemberBadge/MemberBadge'
-import { VerticalList } from '../VerticalList/VerticalList.client'
+import { MapContext } from '../../MapContext'
 
-import type { MapFilterOption, ProfileTypeName } from 'oa-shared'
+import type { ProfileTypeName } from 'oa-shared'
 
-export interface IProps {
-  activeFilters: MapFilterOption[]
-  availableFilters: MapFilterOption[]
-  onFilterChange: (filter: MapFilterOption) => void
-}
+export const MemberTypeList = () => {
+  const mapState = useContext(MapContext)
 
-export const MemberTypeVerticalList = (props: IProps) => {
-  const { activeFilters, availableFilters, onFilterChange } = props
-
-  const items = availableFilters?.filter(
-    ({ filterType }) => filterType === 'profileType',
-  )
-
-  if (!items || !items.length || items.length < 2) {
+  if (!mapState || (mapState.allProfileTypes?.length || 0) < 2) {
     return null
   }
 
   return (
     <VerticalList dataCy="MemberTypeVerticalList">
-      {items.map((item, index) => {
-        const isSelected = !!activeFilters.find(
-          (filter) => item.label === filter.label,
+      {mapState.allProfileTypes.map((profileType, index) => {
+        const isSelected = !!mapState.activeProfileTypeFilters.find(
+          (activeFilter) => profileType.name === activeFilter,
         )
+
         return (
           <CardButton
             data-cy={`MemberTypeVerticalList-Item${
               isSelected ? '-active' : ''
             }`}
             data-testid="MemberTypeVerticalList-Item"
-            title={item._id}
+            title={profileType.displayName}
             key={index}
-            onClick={() => onFilterChange(item)}
+            onClick={() =>
+              mapState.toggleActiveProfileTypeFilter(profileType.name)
+            }
             extrastyles={{
               background: 'none',
               flexDirection: 'column',
@@ -58,9 +51,12 @@ export const MemberTypeVerticalList = (props: IProps) => {
             }}
             isSelected={isSelected}
           >
-            <MemberBadge size={40} profileType={item._id as ProfileTypeName} />
+            <MemberBadge
+              size={40}
+              profileType={profileType.name as ProfileTypeName}
+            />
             <Text variant="quiet" sx={{ fontSize: 1 }}>
-              {item.label}
+              {profileType.displayName}
             </Text>
           </CardButton>
         )

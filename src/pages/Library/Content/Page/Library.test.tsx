@@ -50,8 +50,14 @@ describe('Library', () => {
       item.author = {
         id: faker.number.int(),
         displayName: 'LibraryAuthor',
-        isVerified: true,
-        isSupporter: false,
+        badges: [
+          {
+            id: 1,
+            displayName: 'PRO',
+            name: 'pro',
+            imageUrl: faker.image.avatar(),
+          },
+        ],
         photo: {
           publicUrl: faker.image.avatar(),
           id: '',
@@ -89,8 +95,14 @@ describe('Library', () => {
     item.author = {
       id: faker.number.int(),
       displayName: 'LibraryAuthor',
-      isVerified: true,
-      isSupporter: false,
+      badges: [
+        {
+          id: 1,
+          displayName: 'PRO',
+          name: 'pro',
+          imageUrl: faker.image.avatar(),
+        },
+      ],
       photo: {
         publicUrl: faker.image.avatar(),
         id: '',
@@ -119,8 +131,14 @@ describe('Library', () => {
     item.author = {
       id: faker.number.int(),
       displayName: 'LibraryAuthor',
-      isVerified: true,
-      isSupporter: false,
+      badges: [
+        {
+          id: 1,
+          displayName: 'PRO',
+          name: 'pro',
+          imageUrl: faker.image.avatar(),
+        },
+      ],
       photo: {
         publicUrl: faker.image.avatar(),
         id: '',
@@ -142,8 +160,7 @@ describe('Library', () => {
     item.author = {
       id: faker.number.int(),
       displayName: 'NotLibraryAuthor',
-      isVerified: false,
-      isSupporter: false,
+      badges: [],
       photo: {
         publicUrl: faker.image.avatar(),
         id: '',
@@ -168,8 +185,14 @@ describe('Library', () => {
             author: {
               id: faker.number.int(),
               displayName: 'LibraryAuthor',
-              isVerified: true,
-              isSupporter: false,
+              badges: [
+                {
+                  id: 1,
+                  displayName: 'PRO',
+                  name: 'pro',
+                  imageUrl: faker.image.avatar(),
+                },
+              ],
               photo: {
                 publicUrl: faker.image.avatar(),
                 id: '',

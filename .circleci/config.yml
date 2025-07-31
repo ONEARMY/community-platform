@@ -127,8 +127,6 @@ commands:
           environment:
             GOOGLE_APPLICATION_CREDENTIALS: service_account.json
 
-examples:
-
 ######################################################################################################
 #  Jobs - Independently specified lists of tasks and environments for execution
 ######################################################################################################
@@ -349,7 +347,6 @@ jobs:
               --build-secret VITE_COMMUNITY_PROGRAM_URL="$VITE_COMMUNITY_PROGRAM_URL" \
               --build-secret VITE_QUESTIONS_GUIDELINES_URL="$VITE_QUESTIONS_GUIDELINES_URL" \
               --build-secret VITE_NO_MESSAGING="$VITE_NO_MESSAGING" \
-              --build-secret VITE_HIDE_MEMBER_PINS_BY_DEFAULT="$VITE_HIDE_MEMBER_PINS_BY_DEFAULT" \
               --build-secret TENANT_ID="$TENANT_ID" \
               --build-secret PATREON_CLIENT_ID="$PATREON_CLIENT_ID"
       - run:

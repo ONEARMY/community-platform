@@ -1,58 +1,34 @@
-import { useState } from 'react'
-import {
-  Button,
-  CardList,
-  Loader,
-  MapFilterList,
-  MemberTypeVerticalList,
-  Modal,
-  OsmGeocoding,
-} from 'oa-components'
+import { useContext, useState } from 'react'
+import { Button, Loader, MapCardList, Modal, OsmGeocoding } from 'oa-components'
 import { Flex, Text } from 'theme-ui'
 
-import type { ILatLng, MapFilterOption, MapPin } from 'oa-shared'
+import { MapContext } from '../../MapContext'
+import { MapFilterList } from '../../MapFilterList'
+import { MemberTypeList } from '../MemberTypeVerticalList/MemberTypeVerticalList.client'
 
 interface IProps {
-  pins: MapPin[] | null
-  activePinFilters: MapFilterOption[]
-  availableFilters: MapFilterOption[]
-  notification: string
-  onBlur: () => void
-  onPinClick: (pin: MapPin) => void
-  onFilterChange: (filter: MapFilterOption) => void
-  onLocationChange: (latlng: ILatLng) => void
-  selectedPin: MapPin | undefined
-  setShowMobileList?: (set: boolean) => void
   viewport: 'desktop' | 'mobile'
 }
 
-export const MapWithListHeader = (props: IProps) => {
+export const MapWithListHeader = ({ viewport }: IProps) => {
+  const mapState = useContext(MapContext)
   const [showFilters, setShowFilters] = useState<boolean>(false)
-  const {
-    pins,
-    activePinFilters,
-    availableFilters,
-    notification,
-    onBlur,
-    onFilterChange,
-    onLocationChange,
-    onPinClick,
-    selectedPin,
-    setShowMobileList,
-    viewport,
-  } = props
+
   const isMobile = viewport === 'mobile'
 
   const toggleFilterModal = () => setShowFilters(!showFilters)
-  const hasFiltersSelected = activePinFilters.length !== 0
 
-  const sx = {
-    width: ['350px', '600px'],
-    minWidth: '350px',
-    padding: '0 !important',
+  if (!mapState) {
+    return null
   }
 
-  if (notification) {
+  const hasFiltersSelected =
+    !!mapState.activeBadgeFilters.length ||
+    !!mapState.activeProfileSettingFilters.length ||
+    !!mapState.activeProfileTypeFilters.length ||
+    !!mapState.activeTagFilters.length
+
+  if (mapState.notification) {
     return (
       <Flex
         sx={{
@@ -62,23 +38,23 @@ export const MapWithListHeader = (props: IProps) => {
           justifyContent: 'center',
         }}
       >
-        <Loader label={notification} sx={{ alignSelf: 'center' }} />
+        <Loader label={mapState.notification} sx={{ alignSelf: 'center' }} />
       </Flex>
     )
   }
 
   return (
     <>
-      <Modal onDidDismiss={toggleFilterModal} isOpen={showFilters} sx={sx}>
-        {pins && (
-          <MapFilterList
-            activeFilters={activePinFilters}
-            availableFilters={availableFilters}
-            onClose={toggleFilterModal}
-            onFilterChange={onFilterChange}
-            pinCount={pins.length}
-          />
-        )}
+      <Modal
+        onDidDismiss={toggleFilterModal}
+        isOpen={showFilters}
+        sx={{
+          width: ['350px', '600px'],
+          minWidth: '350px',
+          padding: '0 !important',
+        }}
+      >
+        {mapState?.allPins && <MapFilterList onClose={toggleFilterModal} />}
       </Modal>
 
       <Flex
@@ -94,9 +70,8 @@ export const MapWithListHeader = (props: IProps) => {
           <OsmGeocoding
             callback={({ lat, lon }) => {
               if (lat && lon) {
-                onLocationChange({ lat, lng: lon })
-                onBlur()
-                setShowMobileList && setShowMobileList(false)
+                mapState.setLocation({ lat, lng: lon })
+                mapState.setIsMobile(false)
               }
             }}
             countrycodes=""
@@ -113,18 +88,14 @@ export const MapWithListHeader = (props: IProps) => {
           </Button>
         </Flex>
 
-        <MemberTypeVerticalList
-          activeFilters={activePinFilters}
-          availableFilters={availableFilters}
-          onFilterChange={onFilterChange}
-        />
+        <MemberTypeList />
       </Flex>
-      {pins && (
-        <CardList
+      {mapState && (
+        <MapCardList
           columnsCountBreakPoints={isMobile ? { 300: 1, 600: 2 } : undefined}
-          list={pins}
-          onPinClick={onPinClick}
-          selectedPin={selectedPin}
+          list={mapState.filteredPins}
+          onPinClick={(pin) => mapState.selectPin(pin)}
+          selectedPin={mapState.selectedPin}
           viewport={viewport}
         />
       )}

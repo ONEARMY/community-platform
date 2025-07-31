@@ -6,25 +6,7 @@ import { filterPins } from './filterPins'
 import type { MapPin } from 'oa-shared'
 
 describe('filterPins', () => {
-  const memberFilter = {
-    _id: 'member',
-    filterType: 'profileType',
-    label: 'member',
-  }
-
-  const tagFilter = {
-    _id: 'designer',
-    filterType: 'profileTag',
-    label: 'Designer',
-  }
-
-  const builderFilter = {
-    _id: 'builder',
-    filterType: 'profileTag',
-    label: 'builder',
-  }
-
-  const workspacePin = {
+  const workspacePin: MapPin = {
     id: 1,
     moderation: 'accepted',
     lat: 0,
@@ -34,23 +16,26 @@ describe('filterPins', () => {
     administrative: '',
     country: '',
     countryCode: '',
-    postcode: '',
     profileId: 1,
     profile: {
       id: 1,
       username: 'bob_the_builder',
-      isVerified: true,
       lastActive: new Date(),
-      countryCode: 'uk',
+      country: 'uk',
       displayName: 'Bob the Builder',
       isContactable: false,
-      isSupporter: false,
       visitorPolicy: null,
       about: '',
-      country: '',
       photo: null,
-      openToVisitors: null,
       type: ProfileTypeList.WORKSPACE,
+      badges: [
+        {
+          id: 1,
+          name: 'verified',
+          displayName: 'Verified',
+          imageUrl: '',
+        },
+      ],
       tags: [
         {
           id: 1,
@@ -60,7 +45,7 @@ describe('filterPins', () => {
         },
       ],
     },
-  } as MapPin
+  }
 
   const memberPin = {
     id: 2,
@@ -77,18 +62,24 @@ describe('filterPins', () => {
     profile: {
       id: 2,
       username: 'bob_the_member',
-      isVerified: true,
       lastActive: new Date(),
       countryCode: 'uk',
       displayName: 'Bob the Member',
       isContactable: false,
-      isSupporter: false,
       about: '',
       country: '',
       visitorPolicy: null,
       photo: null,
       openToVisitors: null,
       type: ProfileTypeList.MEMBER,
+      badges: [
+        {
+          id: 1,
+          name: 'verified',
+          displayName: 'Verified',
+          imageUrl: '',
+        },
+      ],
     },
   } as MapPin
 
@@ -108,18 +99,24 @@ describe('filterPins', () => {
     profile: {
       id: 3,
       username: 'bob_the_tagged',
-      isVerified: true,
       lastActive: new Date(),
       countryCode: 'uk',
       displayName: 'Bob the Tagged',
       isContactable: false,
-      isSupporter: false,
       about: '',
       country: '',
       photo: null,
       openToVisitors: null,
       type: ProfileTypeList.MEMBER,
       visitorPolicy: null,
+      badges: [
+        {
+          id: 1,
+          name: 'verified',
+          displayName: 'Verified',
+          imageUrl: '',
+        },
+      ],
       tags: [
         {
           id: 1,
@@ -134,14 +131,11 @@ describe('filterPins', () => {
   const allPinsInView: MapPin[] = [workspacePin, memberPin, taggedMemberPin]
 
   it('returns all pins when no filters provided', () => {
-    const activePinFilters = []
-
-    expect(filterPins(activePinFilters, allPinsInView)).toEqual(allPinsInView)
+    expect(filterPins(allPinsInView, {})).toEqual(allPinsInView)
   })
 
   it('returns only the correct profile type pins when filter is provided', () => {
-    const activePinFilters = [memberFilter]
-    const filtered = filterPins(activePinFilters, allPinsInView)
+    const filtered = filterPins(allPinsInView, { types: ['member'] })
     expect(filtered.map((x) => x.id)).toEqual([
       memberPin.id,
       taggedMemberPin.id,
@@ -149,14 +143,17 @@ describe('filterPins', () => {
   })
 
   it('returns only the pins when profile type and tag filters are provided', () => {
-    const activePinFilters = [memberFilter, tagFilter]
-    const filtered = filterPins(activePinFilters, allPinsInView)
+    const filtered = filterPins(allPinsInView, {
+      types: ['member'],
+      tags: [1],
+    })
     expect(filtered.map((x) => x.id)).toEqual([taggedMemberPin.id])
   })
 
   it('returns an empty arry when no pins meet the filter criteria', () => {
-    const activePinFilters = [builderFilter]
-    const filtered = filterPins(activePinFilters, allPinsInView)
+    const filtered = filterPins(allPinsInView, {
+      tags: [55],
+    })
     expect(filtered).toEqual([])
   })
 })

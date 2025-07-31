@@ -13,7 +13,7 @@ export interface IProps {
   columnsCountBreakPoints?: { [key: number]: number }
   list: MapPin[]
   onPinClick: (arg: MapPin) => void
-  selectedPin: MapPin | undefined
+  selectedPin?: MapPin | null
   viewport: string
 }
 
@@ -21,7 +21,7 @@ const DEFAULT_BREAKPOINTS = { 600: 1, 1100: 2, 1600: 3 }
 export const EMPTY_LIST = 'Oh nos! Nothing to show!'
 const ITEMS_PER_RENDER = 20
 
-export const CardList = (props: IProps) => {
+export const MapCardList = (props: IProps) => {
   const [renderCount, setRenderCount] = useState<number>(ITEMS_PER_RENDER)
   const [displayItems, setDisplayItems] = useState<JSX.Element[]>([])
   const { list, onPinClick, selectedPin, viewport } = props

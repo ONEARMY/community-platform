@@ -1,28 +1,17 @@
 import { Image } from 'theme-ui'
 
-import VerifiedBadgeIcon from '../../assets/icons/icon-verified-badge.svg'
-import SupporterBadgeIcon from '../../assets/icons/supporter.svg'
+import type { ProfileBadge } from 'oa-shared'
 
 interface IProps {
-  badgeName: string
+  badge: ProfileBadge
 }
 
-export const UserBadge = ({ badgeName }: IProps) => {
-  const options: { [key: string]: string } = {
-    verified: VerifiedBadgeIcon,
-    supporter: SupporterBadgeIcon,
-  }
-  const src: string | null = options[badgeName] || null
-
-  if (!src) {
-    return
-  }
-
+export const UserBadge = ({ badge }: IProps) => {
   return (
     <Image
-      src={src}
+      src={badge.imageUrl}
       sx={{ ml: 1, height: 16, width: 16 }}
-      data-testid={`Username: ${badgeName} badge`}
+      data-testid={`Username: ${badge.name} badge`}
     />
   )
 }

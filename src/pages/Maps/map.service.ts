@@ -1,12 +1,13 @@
 import { createContext } from 'react'
 import { logger } from 'src/logger'
 
-import type { MapPin } from 'oa-shared'
+import type { FilterResponse, MapPin } from 'oa-shared'
 
 export interface IMapPinService {
   getMapPins: () => Promise<MapPin[]>
   getMapPinById: (id: number) => Promise<MapPin | null>
   getCurrentUserMapPin: () => Promise<MapPin | null>
+  getMapFilters: () => Promise<FilterResponse | null>
 }
 
 const getMapPins = async () => {
@@ -47,10 +48,25 @@ const getCurrentUserMapPin = async () => {
   }
 }
 
+const getMapFilters = async () => {
+  try {
+    const response = await fetch('/api/map-filters')
+    const result = await response.json()
+
+    return result as FilterResponse
+  } catch (error) {
+    logger.error('Failed to fetch map filters', {
+      error,
+    })
+    return null
+  }
+}
+
 export const MapPinServiceContext = createContext<IMapPinService | null>(null)
 
 export const mapPinService: IMapPinService = {
   getMapPins,
   getMapPinById,
   getCurrentUserMapPin,
+  getMapFilters,
 }

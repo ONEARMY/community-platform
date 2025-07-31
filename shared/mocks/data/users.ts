@@ -53,7 +53,6 @@ export const users: Users = {
   },
   event_reader: {
     username: 'event_reader',
-    isVerified: false,
     createdAt: new Date('2019-08-15T00:00:00.000Z'),
     displayName: 'event_reader',
     email: 'event_reader@test.com',
@@ -70,7 +69,6 @@ export const users: Users = {
     email: 'howto_creator@test.com',
     username: 'howto_creator',
     password: 'test1234',
-    isVerified: false,
     createdAt: new Date('2020-01-07T15:46:00.297Z'),
     displayName: 'howto_creator',
     roles: [],
@@ -85,7 +83,6 @@ export const users: Users = {
     email: 'research_creator@test.com',
     password: 'research_creator',
     username: 'research_creator',
-    isVerified: false,
     createdAt: new Date('2020-01-07T15:46:00.297Z'),
     displayName: 'research_creator',
     roles: [UserRole.RESEARCH_CREATOR],
@@ -97,7 +94,14 @@ export const users: Users = {
     },
   },
   settings_machine_new: {
-    isVerified: true,
+    badges: [
+      {
+        id: 1,
+        displayName: 'PRO',
+        name: 'pro',
+        imageUrl: 'svg',
+      },
+    ],
     createdAt: new Date('2020-01-07T12:14:50.354Z'),
     displayName: 'settings_machine_new',
     email: 'settings_machine_new@test.com',
@@ -116,7 +120,14 @@ export const users: Users = {
     username: 'settings_member_new',
     email: 'settings_member_new@test.com',
     password: 'test1234',
-    isVerified: true,
+    badges: [
+      {
+        id: 1,
+        displayName: 'PRO',
+        name: 'pro',
+        imageUrl: 'svg',
+      },
+    ],
     createdAt: new Date('2020-01-07T12:14:30.030Z'),
     displayName: 'settings_member_new',
     roles: [],
@@ -128,7 +139,14 @@ export const users: Users = {
     },
   },
   settings_workplace_empty: {
-    isVerified: true,
+    badges: [
+      {
+        id: 1,
+        displayName: 'PRO',
+        name: 'pro',
+        imageUrl: 'svg',
+      },
+    ],
     createdAt: new Date('2020-01-07T12:15:42.218Z'),
     displayName: 'settings_workplace_empty',
     username: 'settings_workplace_empty',
@@ -143,7 +161,14 @@ export const users: Users = {
     },
   },
   settings_workplace_new: {
-    isVerified: true,
+    badges: [
+      {
+        id: 1,
+        displayName: 'PRO',
+        name: 'pro',
+        imageUrl: 'svg',
+      },
+    ],
     createdAt: new Date('2020-01-07T12:14:15.081Z'),
     displayName: 'settings_workplace_new',
     username: 'settings_workplace_new',
@@ -190,7 +215,14 @@ export const users: Users = {
     },
   },
   mapview_testing_rejected: {
-    isVerified: true,
+    badges: [
+      {
+        id: 1,
+        displayName: 'PRO',
+        name: 'pro',
+        imageUrl: 'svg',
+      },
+    ],
     createdAt: new Date('2020-01-07T12:14:15.081Z'),
     displayName: 'mapview_testing_rejected',
     username: 'mapview_testing_rejected',

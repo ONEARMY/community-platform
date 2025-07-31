@@ -8,8 +8,6 @@ export const FactoryDBProfile = (
   id: faker.number.int(),
   username: faker.internet.userName(),
   display_name: faker.internet.userName(),
-  is_verified: faker.datatype.boolean(),
-  is_supporter: faker.datatype.boolean(),
   photo: {
     id: faker.string.uuid(),
     path: faker.image.avatar(),
@@ -29,7 +27,6 @@ export const FactoryDBProfile = (
   is_contactable: false,
   last_active: faker.date.past(),
   website: faker.internet.url(),
-  tag_ids: null,
   total_views: 0,
   ...dbProfileOverloads,
 })

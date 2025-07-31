@@ -74,11 +74,7 @@ export const createClusterIcon = () => {
 export const createMarkerIcon = (pin: MapPin, draggable?: boolean) => {
   const icon =
     pin.moderation === 'accepted'
-      ? Workspace.findWorkspaceBadge(
-          pin.profile!.type,
-          true,
-          pin.profile!.isVerified,
-        )
+      ? Workspace.findWorkspaceBadge(pin.profile!.type, true)
       : AwaitingModerationHighlight
   return divIcon({
     className: `icon-marker icon-${pin.profile!.type}`,

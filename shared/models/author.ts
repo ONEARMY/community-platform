@@ -1,25 +1,17 @@
-import type { DBMedia, Image } from './media'
+import { ProfileBadge } from './profileBadge'
 
-export class DBAuthor {
-  readonly id: number
-  readonly country?: string
-  readonly display_name: string
-  readonly is_supporter: boolean
-  readonly is_verified: boolean
-  readonly photo: DBMedia | null
-  readonly username: string
+import type { Image } from './media'
+import type { DBProfile } from './profile'
 
-  constructor(dbAuthor: DBAuthor) {
-    Object.assign(this, dbAuthor)
-  }
-}
-
+export type DBAuthor = Pick<
+  DBProfile,
+  'id' | 'country' | 'display_name' | 'photo' | 'username' | 'badges'
+>
 export class Author {
   id: number
   country?: string
   displayName: string
-  isVerified: boolean
-  isSupporter: boolean
+  badges?: ProfileBadge[]
   photo: Image | null
   username: string
 
@@ -31,8 +23,8 @@ export class Author {
     return new Author({
       id: dbAuthor.id,
       country: dbAuthor.country,
-      isSupporter: dbAuthor.is_supporter,
-      isVerified: dbAuthor.is_verified,
+      badges:
+        dbAuthor.badges?.map((x) => ProfileBadge.fromDBJoin(x)) || undefined,
       displayName: dbAuthor.display_name,
       photo: photo,
       username: dbAuthor.username,

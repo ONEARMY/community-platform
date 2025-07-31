@@ -1,4 +1,4 @@
-import { Box, Card, Flex } from 'theme-ui'
+import { Box, Card, Flex, Image } from 'theme-ui'
 
 import ForumIcon from '../../assets/icons/icon-forum.svg'
 import HowToCountIcon from '../../assets/icons/icon-library.svg'
@@ -14,10 +14,7 @@ import type { MapPin, Profile } from 'oa-shared'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface UserStatisticsProps {
-  profile: Pick<
-    Profile,
-    'id' | 'username' | 'isVerified' | 'isSupporter' | 'totalViews'
-  >
+  profile: Pick<Profile, 'id' | 'username' | 'badges' | 'totalViews'>
   pin?: Pick<MapPin, 'country'>
   libraryCount: number
   usefulCount: number
@@ -70,27 +67,24 @@ export const UserStatistics = (props: UserStatisticsProps) => {
         )}
 
         <Flex sx={{ gap: 2, flexDirection: 'column' }}>
-          {props.profile.isVerified && (
-            <Flex data-testid="verified-stat">
-              <Icon glyph="verified" size={22} />
-              <Box ml={1}>Verified</Box>
-            </Flex>
-          )}
-
-          {props?.profile.isSupporter && (
-            <Flex data-testid="supporter-stat">
-              <Icon glyph="supporter" size={22} />
-              <Box ml={1}>
-                <ExternalLink
-                  href="https://www.patreon.com/one_army"
-                  target="_blank"
-                  sx={{ color: 'black' }}
-                >
-                  Supporter
-                </ExternalLink>
+          {props?.profile.badges?.map((x) => (
+            <Flex key={x.id} sx={{ gap: 1 }} data-testid={`badge_${x.name}`}>
+              <Image src={x.imageUrl} />
+              <Box>
+                {x.actionUrl ? (
+                  <ExternalLink
+                    href={x.actionUrl}
+                    target="_blank"
+                    sx={{ color: 'black' }}
+                  >
+                    <span>{x.displayName}</span>
+                  </ExternalLink>
+                ) : (
+                  <span>{x.displayName}</span>
+                )}
               </Box>
             </Flex>
-          )}
+          ))}
 
           {props.usefulCount > 0 && (
             <Flex data-testid="useful-stat">
@@ -154,8 +148,7 @@ const isEmpty = (
   props: UserStatisticsProps & { pin?: Pick<MapPin, 'country'> },
 ) =>
   !props.pin &&
-  !props.profile.isVerified &&
-  !props.profile.isSupporter &&
+  !props.profile.badges?.length &&
   !props.libraryCount &&
   !props.researchCount &&
   !props.profile.totalViews &&

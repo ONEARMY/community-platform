@@ -8,6 +8,7 @@ import type { DBMedia, Image } from './media'
 import type { IDBModeration, IModeration, Moderation } from './moderation'
 import type { News } from './news'
 import type { IPatreonUser } from './patreon'
+import type { DBProfileBadgeJoin, ProfileBadge } from './profileBadge'
 import type { DBProfileTag } from './profileTag'
 import type { Question } from './question'
 import type { ResearchItem, ResearchUpdate } from './research'
@@ -21,11 +22,10 @@ export class DBProfile {
   readonly id: number
   readonly created_at: Date
   readonly tags?: DBProfileTag[]
+  readonly badges?: DBProfileBadgeJoin[]
   readonly pin?: DBMapPin
   username: string
   display_name: string
-  is_verified: boolean
-  is_supporter: boolean
   photo: DBMedia | null
   cover_images: DBMedia[] | null
   country: string
@@ -41,7 +41,6 @@ export class DBProfile {
   website: string | null
   total_views: number
   auth_id: string
-  tag_ids: number[] | null
 
   constructor(obj: DBProfile) {
     Object.assign(this, obj)
@@ -53,8 +52,6 @@ export class Profile {
   createdAt: Date
   username: string
   displayName: string
-  isVerified: boolean
-  isSupporter: boolean
   country: string
   about: string | null
   type: ProfileTypeName
@@ -65,6 +62,7 @@ export class Profile {
   visitorPolicy: UserVisitorPreference | null
   website: string | null
   tags?: ProfileTag[]
+  badges?: ProfileBadge[]
   totalViews: number
   roles: string[] | null
   lastActive: Date | null
@@ -97,8 +95,6 @@ export class Profile {
       displayName: dbProfile.display_name,
       username: dbProfile.username,
       photo: photo,
-      isSupporter: dbProfile.is_supporter,
-      isVerified: dbProfile.is_verified,
       roles: dbProfile.roles || null,
       type: dbProfile.type,
       visitorPolicy: dbProfile.visitor_policy
@@ -496,7 +492,7 @@ export class DBMapPin implements IDBModeration {
 export class MapPin implements IModeration {
   readonly id: number
   readonly profileId: number
-  readonly profile: PinProfile | null
+  readonly profile: PinProfile
   country: string
   countryCode: string
   name: string | null
@@ -549,8 +545,6 @@ export type DBPinProfile = Pick<
   | 'display_name'
   | 'username'
   | 'country'
-  | 'is_verified'
-  | 'is_supporter'
   | 'photo'
   | 'tags'
   | 'type'
@@ -558,7 +552,7 @@ export type DBPinProfile = Pick<
   | 'about'
   | 'is_contactable'
   | 'last_active'
->
+> & { badges: DBProfileBadgeJoin[] }
 
 export type PinProfile = Pick<
   Profile,
@@ -566,8 +560,6 @@ export type PinProfile = Pick<
   | 'displayName'
   | 'username'
   | 'country'
-  | 'isVerified'
-  | 'isSupporter'
   | 'photo'
   | 'tags'
   | 'type'
@@ -575,7 +567,7 @@ export type PinProfile = Pick<
   | 'about'
   | 'isContactable'
   | 'lastActive'
->
+> & { badges: ProfileBadge[] }
 
 export type UpsertPin = Omit<
   DBMapPin,

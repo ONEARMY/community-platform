@@ -1,4 +1,4 @@
-import { Profile, ProfileTag } from 'oa-shared'
+import { Profile, ProfileBadge, ProfileTag } from 'oa-shared'
 import { ImageServiceServer } from 'src/services/imageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -33,8 +33,6 @@ export class ProfileFactory {
       displayName: dbProfile.display_name,
       username: dbProfile.username,
       photo: photo || null,
-      isSupporter: dbProfile.is_supporter,
-      isVerified: dbProfile.is_verified,
       roles: dbProfile.roles || null,
       type: dbProfile.type,
       visitorPolicy: dbProfile.visitor_policy
@@ -51,6 +49,7 @@ export class ProfileFactory {
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
       tags: dbProfile.tags?.map((x) => ProfileTag.fromDB(x)),
+      badges: dbProfile.badges?.map((x) => ProfileBadge.fromDBJoin(x)),
     })
   }
 }

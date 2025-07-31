@@ -21,8 +21,7 @@ export const fakeAuthorSB = (
     id: faker.string.uuid(),
     publicUrl: faker.image.avatar(),
   },
-  isVerified: faker.datatype.boolean(),
-  isSupporter: faker.datatype.boolean(),
+  badges: [],
   ...authorOverloads,
 })
 

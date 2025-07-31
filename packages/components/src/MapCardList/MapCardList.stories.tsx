@@ -1,19 +1,18 @@
-import { CardList } from './CardList'
+import { MapCardList } from './MapCardList'
 
 import type { Meta, StoryFn } from '@storybook/react-vite'
 import type { MapPin, Moderation, ProfileTypeName } from 'oa-shared'
 
 export default {
   title: 'Map/CardList',
-  component: CardList,
-} as Meta<typeof CardList>
+  component: MapCardList,
+} as Meta<typeof MapCardList>
 
 const list = [
   {
     id: 1,
     profile: {
       type: 'member' as ProfileTypeName,
-      isVerified: false,
     },
     moderation: 'accepted' as Moderation,
     lat: 0,
@@ -24,7 +23,6 @@ const list = [
     moderation: 'accepted' as Moderation,
     profile: {
       type: 'collection-point' as ProfileTypeName,
-      isVerified: false,
     },
     lat: 10,
     lng: -38,
@@ -33,7 +31,6 @@ const list = [
     id: 3,
     profile: {
       type: 'member' as ProfileTypeName,
-      isVerified: false,
     },
     moderation: 'accepted' as Moderation,
     lat: 102,
@@ -43,7 +40,6 @@ const list = [
     id: 4,
     profile: {
       type: 'member' as ProfileTypeName,
-      isVerified: false,
     },
     moderation: 'accepted' as Moderation,
     lat: 0,
@@ -53,9 +49,9 @@ const list = [
 
 const onPinClick = () => undefined
 
-export const Default: StoryFn<typeof CardList> = () => {
+export const Default: StoryFn<typeof MapCardList> = () => {
   return (
-    <CardList
+    <MapCardList
       list={list}
       onPinClick={onPinClick}
       selectedPin={undefined}
@@ -64,9 +60,9 @@ export const Default: StoryFn<typeof CardList> = () => {
   )
 }
 
-export const WhenDisplayIsZero: StoryFn<typeof CardList> = () => {
+export const WhenDisplayIsZero: StoryFn<typeof MapCardList> = () => {
   return (
-    <CardList
+    <MapCardList
       list={[]}
       onPinClick={onPinClick}
       selectedPin={undefined}

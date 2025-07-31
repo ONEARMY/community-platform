@@ -1,73 +1,18 @@
+import { useContext } from 'react'
 import { Button } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
 
+import { MapContext } from '../../MapContext'
 import { MapWithListHeader } from './MapWithListHeader'
 
-import type { MapFilterOption, MapPin } from 'oa-shared'
+export const MapList = () => {
+  const mapState = useContext(MapContext)
 
-interface IProps {
-  activePinFilters: MapFilterOption[]
-  allToggleFilters: MapFilterOption[]
-  notification: string
-  onBlur: () => void
-  onLocationChange: (ILatLng) => void
-  onPinClick: (pin: MapPin) => void
-  pins: MapPin[] | null
-  selectedPin: MapPin | undefined
-  setActivePinFilters: (MapFilterOption) => void
-  setShowMobileList: (boolean) => void
-  showMobileList: boolean
-}
-
-export const MapList = (props: IProps) => {
-  const {
-    activePinFilters,
-    allToggleFilters,
-    notification,
-    onBlur,
-    onLocationChange,
-    onPinClick,
-    pins,
-    selectedPin,
-    setActivePinFilters,
-    setShowMobileList,
-    showMobileList,
-  } = props
-
-  const onFilterChange = (changedOption: MapFilterOption) => {
-    const isFilterPresent = !!activePinFilters.find(
-      (pinFilter) => pinFilter.label == changedOption.label,
-    )
-
-    if (isFilterPresent) {
-      setActivePinFilters((filter) =>
-        filter.filter(
-          (existingOption) => existingOption.label !== changedOption.label,
-        ),
-      )
-      return
-    }
-
-    setActivePinFilters((activePinFilters) => [
-      ...activePinFilters,
-      changedOption,
-    ])
+  if (!mapState) {
+    return null
   }
 
-  const mobileListDisplay = showMobileList ? 'block' : 'none'
-
-  const headerProps = {
-    activePinFilters,
-    availableFilters: allToggleFilters,
-    notification,
-    onBlur,
-    onFilterChange,
-    onLocationChange,
-    onPinClick,
-    pins,
-    selectedPin,
-    setShowMobileList,
-  }
+  const mobileListDisplay = mapState.isMobile ? 'block' : 'none'
 
   return (
     <>
@@ -77,11 +22,11 @@ export const MapList = (props: IProps) => {
           display: ['none', 'none', 'block', 'block'],
           background: 'white',
           flex: 1,
-          overflowY: 'scroll',
+          overflowY: 'auto',
           overflowX: 'hidden',
         }}
       >
-        <MapWithListHeader {...headerProps} viewport="desktop" />
+        <MapWithListHeader viewport="desktop" />
       </Box>
 
       {/* Mobile/tablet list view */}
@@ -90,7 +35,7 @@ export const MapList = (props: IProps) => {
           display: [mobileListDisplay, mobileListDisplay, 'none', 'none'],
           background: 'white',
           width: '100%',
-          overflow: 'scroll',
+          overflow: 'auto',
         }}
       >
         <Flex
@@ -106,13 +51,13 @@ export const MapList = (props: IProps) => {
             data-cy="ShowMapButton"
             icon="map"
             sx={{ position: 'sticky', marginTop: 2 }}
-            onClick={() => setShowMobileList(false)}
+            onClick={() => mapState.setIsMobile(false)}
             small
           >
             Show map view
           </Button>
         </Flex>
-        <MapWithListHeader {...headerProps} viewport="mobile" />
+        <MapWithListHeader viewport="mobile" />
       </Box>
     </>
   )

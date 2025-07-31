@@ -1,4 +1,7 @@
 import type { ILatLng } from './common'
+import type { ProfileBadge } from './profileBadge'
+import type { ProfileTag } from './profileTag'
+import type { ProfileType } from './profileType'
 import type { ProfileTypeName, WorkspaceType } from './user'
 
 export interface IMapGrouping {
@@ -21,9 +24,23 @@ export enum IPinGrouping {
   PLACE = 'place',
 }
 
-export interface MapFilterOption {
-  _id: string
-  label: string
-  filterType: string
-  imageSrc?: string
+export type MapFilters = {
+  tags?: ProfileTag[]
+  badges?: ProfileBadge[]
+  types?: ProfileType[]
+  settings?: string[]
+}
+
+export type DBMapSettings = {
+  default_type_filters: string[] | null
+  setting_filters: string[] | null
+}
+
+export type DefaultMapFilters = {
+  types?: string[]
+}
+
+export type FilterResponse = {
+  filters: MapFilters
+  defaultFilters: DefaultMapFilters
 }

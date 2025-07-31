@@ -93,8 +93,6 @@
     "dotenv": "^10.0.0",
     "final-form": "4.20.2",
     "final-form-arrays": "^3.0.2",
-    "firebase": "10.6.0",
-    "firebase-admin": "^12.7.0",
     "framer-motion": "^11.2.10",
     "fs-extra": "^10.0.0",
     "fuse.js": "^6.4.6",

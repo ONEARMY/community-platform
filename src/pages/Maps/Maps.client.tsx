@@ -1,69 +1,197 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Box } from 'theme-ui'
+import { useLocation, useNavigate } from '@remix-run/react'
+import { Box, Flex } from 'theme-ui'
 
-import { allMapFilterOptions } from './Content/MapView/allMapFilterOptions'
-import { MapContainer } from './Content/MapView/MapContainer'
+import { MapList } from './Content/MapView/MapList'
+import { MapView } from './Content/MapView/MapView'
+import { filterPins } from './utils/filterPins'
 import { mapPinService } from './map.service'
+import { MapContext } from './MapContext'
 
-import type { MapFilterOption, MapPin } from 'oa-shared'
+import type { LatLngBounds } from 'leaflet'
+import type {
+  ILatLng,
+  MapPin,
+  ProfileBadge,
+  ProfileTag,
+  ProfileType,
+} from 'oa-shared'
 
 import './styles.css'
 
-const STARTING_NOTIFICATION = 'Loading...'
-
 const MapsPage = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const [boundaries, setBoundaries] = useState<LatLngBounds | null>(null)
   const [allPins, setAllPins] = useState<MapPin[] | null>(null)
-  const [notification, setNotification] = useState<string>(
-    STARTING_NOTIFICATION,
+  const [allProfileTypes, setAllProfileTypes] = useState<ProfileType[]>([])
+  const [allBadges, setAllBadges] = useState<ProfileBadge[]>([])
+  const [allTags, setAllTags] = useState<ProfileTag[]>([])
+  const [allProfileSettings, setAllProfileSettings] = useState<string[]>([])
+  const [activeBadgeFilters, setActiveBadges] = useState<string[]>([])
+  const [activeProfileSettingFilters, setActiveSettings] = useState<string[]>(
+    [],
   )
+  const [activeProfileTypeFilters, setActiveTypes] = useState<string[]>([])
+  const [activeTagFilters, setActiveTags] = useState<number[]>([])
+  const [pinLocation, setPinLocation] = useState<ILatLng>({
+    lat: 30.0,
+    lng: 19.0,
+  })
+  const [selectedPin, selectPin] = useState<MapPin | null | undefined>(
+    undefined,
+  )
+  const [notification, setNotification] = useState<string>('Loading...')
+  const [isMobile, setIsMobile] = useState(false)
+
+  const filteredPins = useMemo<MapPin[]>(() => {
+    return filterPins(allPins || [], {
+      settings: activeProfileSettingFilters,
+      badges: activeBadgeFilters,
+      types: activeProfileTypeFilters,
+      tags: activeTagFilters,
+      boundaries: boundaries ?? undefined,
+    })
+  }, [
+    allPins,
+    activeProfileSettingFilters,
+    activeBadgeFilters,
+    activeProfileTypeFilters,
+    activeTagFilters,
+    boundaries,
+  ])
 
   useEffect(() => {
     const fetchMapPins = async () => {
       try {
         const pins = await mapPinService.getMapPins()
         setAllPins(pins)
-        setNotification('')
       } catch (error) {
         setNotification(error)
       }
     }
 
-    fetchMapPins()
-  }, [])
+    const fetchMapFilters = async () => {
+      try {
+        const response = await mapPinService.getMapFilters()
 
-  const allToggleFilters = useMemo<MapFilterOption[]>(() => {
-    if (!allPins) {
-      return []
+        if (response) {
+          if (response.filters) {
+            setAllProfileTypes(response.filters.types || [])
+            setAllBadges(response.filters.badges || [])
+            setAllTags(response.filters.tags || [])
+            setAllProfileSettings(response.filters.settings || [])
+          }
+          if (response.defaultFilters) {
+            if (response.defaultFilters.types) {
+              setActiveTypes(response.defaultFilters.types)
+            }
+          }
+        }
+      } catch (error) {
+        setNotification(error)
+      }
     }
 
-    const pinDetails = allPins.map(({ profile }) => {
-      return [
-        profile?.type,
-        // Hiding member tags for the moment
-        ...(profile?.type && profile?.type !== 'member'
-          ? profile.tags?.map(({ name }) => name) || []
-          : []),
-        ...(profile?.isVerified ? ['verified'] : []),
-        ...(profile?.isSupporter ? ['supporter'] : []),
-        ...(profile?.visitorPolicy ? ['visitors'] : []),
-      ]
-    })
-
-    const filtersNeeded = [...new Set(pinDetails.flat())]
-
-    return allMapFilterOptions.filter((validFilter) =>
-      filtersNeeded.some((neededfilter) => neededfilter === validFilter._id),
+    Promise.all([fetchMapPins(), fetchMapFilters()]).then(() =>
+      setNotification(''),
     )
-  }, [allPins])
+  }, [])
+
+  const toggleActiveBadgeFilter = (value: string) => {
+    if (activeBadgeFilters.includes(value)) {
+      setActiveBadges(activeBadgeFilters.filter((x) => x !== value))
+    } else {
+      setActiveBadges((values) => [...values, value])
+    }
+  }
+  const toggleActiveProfileSettingFilter = (value: string) => {
+    if (activeProfileSettingFilters.includes(value)) {
+      setActiveSettings(activeProfileSettingFilters.filter((x) => x !== value))
+    } else {
+      setActiveSettings((values) => [...values, value])
+    }
+  }
+  const toggleActiveProfileTypeFilter = (value: string) => {
+    if (activeProfileTypeFilters.includes(value)) {
+      setActiveTypes(activeProfileTypeFilters.filter((x) => x !== value))
+    } else {
+      setActiveTypes((values) => [...values, value])
+    }
+  }
+  const toggleActiveTagFilter = (value: number) => {
+    if (activeTagFilters.includes(value)) {
+      setActiveTags(activeTagFilters.filter((x) => x !== value))
+    } else {
+      setActiveTags((values) => [...values, value])
+    }
+  }
+
+  useEffect(() => {
+    if (selectedPin) {
+      navigate(`/map#${selectedPin.profile!.username}`, { replace: true })
+    } else if (selectedPin === null) {
+      navigate('/map', { replace: true })
+    }
+  }, [selectedPin])
+
+  useEffect(() => {
+    const pinId = location.hash.slice(1)
+    const username = pinId.length > 0 ? pinId : undefined
+
+    if (allPins && username) {
+      const foundPin = allPins.find((pin) => pin.profile!.username === username)
+      if (foundPin) {
+        setPinLocation({ lat: foundPin.lat, lng: foundPin.lng })
+      }
+      selectPin(foundPin)
+    } else {
+      selectPin(null)
+    }
+  }, [location.hash, allPins])
 
   return (
-    <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)', width: '100%' }}>
-      <MapContainer
-        allPins={allPins}
-        allToggleFilters={allToggleFilters}
-        notification={notification}
-      />
-    </Box>
+    <MapContext.Provider
+      value={{
+        allPins,
+        allProfileTypes,
+        allProfileSettings,
+        allBadges,
+        allTags,
+        location: pinLocation,
+        setLocation: setPinLocation,
+        notification,
+        selectedPin,
+        selectPin,
+        filteredPins,
+        activeBadgeFilters,
+        activeProfileSettingFilters,
+        activeProfileTypeFilters,
+        activeTagFilters,
+        toggleActiveBadgeFilter,
+        toggleActiveProfileSettingFilter,
+        toggleActiveProfileTypeFilter,
+        toggleActiveTagFilter,
+        isMobile,
+        setIsMobile,
+        boundaries,
+        setBoundaries,
+      }}
+    >
+      <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)', width: '100%' }}>
+        <Flex
+          sx={{
+            flexDirection: 'row',
+            height: '100%',
+          }}
+        >
+          <MapList />
+
+          <MapView />
+        </Flex>
+      </Box>
+    </MapContext.Provider>
   )
 }
 

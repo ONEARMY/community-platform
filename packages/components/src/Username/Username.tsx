@@ -25,7 +25,7 @@ const getCountryCode = (country: string | undefined) => {
 }
 
 export const Username = ({ user, sx, target, isLink = true }: IProps) => {
-  const { username, isSupporter, isVerified } = user
+  const { username, badges } = user
 
   const countryCode = user.country ? getCountryCode(user.country) : null
 
@@ -66,8 +66,9 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
           {username}
         </Text>
       </Flex>
-      {isVerified && <UserBadge badgeName="verified" />}
-      {isSupporter && <UserBadge badgeName="supporter" />}
+      {badges?.map((x) => (
+        <UserBadge key={x.id} badge={x} />
+      ))}
     </Flex>
   )
 

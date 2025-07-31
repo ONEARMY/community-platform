@@ -119,7 +119,6 @@ export class ProfileServiceServer {
       display_name: values.displayName,
       website: values.website,
       is_contactable: values.isContactable,
-      tag_ids: values.tagIds,
       type: values.type,
       visitor_policy: values.visitorPreferencePolicy
         ? JSON.stringify({
@@ -201,6 +200,13 @@ export class ProfileServiceServer {
           profile_tags(
             id,
             name
+          )
+        ),
+        badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            icon
           )
         )`,
       )

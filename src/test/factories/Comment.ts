@@ -11,8 +11,21 @@ export const FactoryComment = (
   createdBy: {
     id: faker.number.int(),
     displayName: faker.person.firstName(),
-    isSupporter: faker.datatype.boolean(),
-    isVerified: faker.datatype.boolean(),
+    badges: [
+      {
+        id: 1,
+        name: 'pro',
+        displayName: 'PRO',
+        imageUrl: faker.image.avatar(),
+      },
+      {
+        id: 2,
+        name: 'supporter',
+        displayName: 'Supporter',
+        actionUrl: faker.internet.url(),
+        imageUrl: faker.image.avatar(),
+      },
+    ],
     username: faker.internet.userName(),
     photo: {
       id: faker.string.uuid(),

@@ -53,8 +53,15 @@ export const DefaultSpace: StoryFn<typeof PinProfile> = () => {
       },
       about:
         'Lorem ipsum odor amet, consectetuer adipiscing elit. Lorem ipsum odor amet, consectetuer adipiscing elit.',
-      isVerified: false,
-      isSupporter: true,
+      badges: [
+        {
+          id: 1,
+          name: 'supporter',
+          displayName: 'Supporter',
+          actionUrl: 'https://www.patreon.com/one_army',
+          imageUrl: faker.image.avatar(),
+        },
+      ],
       displayName: 'user',
       isContactable: true,
       type: 'workspace' as ProfileTypeName,

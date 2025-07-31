@@ -59,8 +59,6 @@ export const FactoryResearchItem = (
   author: {
     id: faker.number.int(),
     displayName: faker.internet.userName(),
-    isSupporter: false,
-    isVerified: false,
     photo: {
       id: faker.string.uuid(),
       publicUrl: faker.image.avatar(),

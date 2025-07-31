@@ -17,8 +17,21 @@ export const FactoryUser = (
   type: faker.helpers.arrayElement(Object.values(ProfileTypeList)),
   username: faker.internet.userName(),
   displayName: faker.person.fullName(),
-  isVerified: faker.datatype.boolean(),
-  isSupporter: faker.datatype.boolean(),
+  badges: [
+    {
+      id: 1,
+      name: 'pro',
+      displayName: 'PRO',
+      imageUrl: faker.image.avatar(),
+    },
+    {
+      id: 2,
+      name: 'supporter',
+      displayName: 'Supporter',
+      actionUrl: faker.internet.url(),
+      imageUrl: faker.image.avatar(),
+    },
+  ],
   website: faker.internet.url(),
   country: faker.location.countryCode(),
   coverImages: [] as any[],

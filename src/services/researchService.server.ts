@@ -30,6 +30,7 @@ const getBySlug = async (client: SupabaseClient, slug: string) => {
           profile_badges(
             id,
             name,
+            display_name,
             image_url,
             action_url
           )
@@ -52,6 +53,7 @@ const getBySlug = async (client: SupabaseClient, slug: string) => {
           profile_badges(
             id,
             name,
+            display_name,
             image_url,
             action_url
           )

@@ -47,6 +47,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
           profile_badges(
             id,
             name,
+            display_name,
             image_url,
             action_url
           )
@@ -146,6 +147,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
         profile_badges(
           id,
           name,
+          display_name,
           image_url,
           action_url
         )

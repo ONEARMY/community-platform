@@ -40,7 +40,7 @@ create table "public"."profile_badges" (
     "name" text not null,
     "display_name" text not null,
     "image_url" text not null,
-    "action_url" text not null,
+    "action_url" text,
     "tenant_id" text not null
 );
 

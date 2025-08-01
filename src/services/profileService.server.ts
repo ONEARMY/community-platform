@@ -61,6 +61,7 @@ export class ProfileServiceServer {
           profile_badges(
             id,
             name,
+            display_name,
             image_url,
             action_url
           )
@@ -214,6 +215,7 @@ export class ProfileServiceServer {
           profile_badges(
             id,
             name,
+            display_name,
             image_url,
             action_url
           )

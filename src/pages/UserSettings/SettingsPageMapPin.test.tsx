@@ -73,7 +73,6 @@ describe('SettingsPageMapPin', () => {
 
   it('renders for space', async () => {
     const moderationFeedback = 'Need a better name'
-    const name = 'Super cool place'
     const mockUser = FactoryUser({
       about: 'An important space',
       displayName: 'Jeffo',
@@ -81,7 +80,9 @@ describe('SettingsPageMapPin', () => {
       coverImages: [factoryImage],
     })
     const mockPin = FactoryMapPin({
-      name,
+      country: 'Portugal',
+      countryCode: 'pt',
+      name: 'Super cool place',
       moderation: 'improvements-needed',
       moderationFeedback,
       profile: mockUser as PinProfile,
@@ -91,7 +92,7 @@ describe('SettingsPageMapPin', () => {
       profile: mockUser,
       update: vi.fn(),
     })
-    mockGetMapPinById.mockResolvedValue(mockPin) // Mock a pin for a space
+    mockGetCurrentUserMapPin.mockResolvedValue(mockPin) // Mock a pin for a space
 
     // Act
     let wrapper
@@ -105,7 +106,9 @@ describe('SettingsPageMapPin', () => {
       expect(
         wrapper.getAllByTestId('WorkspaceMapPinRequiredStars'),
       ).toHaveLength(1)
-      expect(wrapper.getAllByText(name, { exact: false })).toHaveLength(1)
+      expect(wrapper.getAllByText(mockPin.name, { exact: false })).toHaveLength(
+        1,
+      )
       expect(
         wrapper.getAllByText(moderationFeedback, { exact: false }),
       ).toHaveLength(1)

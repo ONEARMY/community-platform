@@ -42,6 +42,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
           profile_badges(
             id,
             name,
+            display_name,
             image_url,
             action_url
           )

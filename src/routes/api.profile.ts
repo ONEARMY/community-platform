@@ -36,6 +36,7 @@ export const loader = async ({ request }) => {
           profile_badges(
             id,
             name,
+            display_name,
             image_url,
             action_url
           )

@@ -1,16 +1,16 @@
 import { ProfileBadge } from './profileBadge'
 
-import type { Image } from './media'
+import type { DBMedia, Image } from './media'
 import type { DBProfileBadgeJoin } from './profileBadge'
 
 // TODO: derive from DBProfile - not doing because was causing circular dependencies
 export type DBAuthor = {
-  id: number
-  country: string
-  display_name: string
-  photo: string
-  username: string
-  badges: DBProfileBadgeJoin[]
+  readonly id: number
+  readonly username: string
+  readonly country: string
+  readonly display_name: string
+  readonly photo: DBMedia | null
+  readonly badges?: DBProfileBadgeJoin[]
 }
 export class Author {
   id: number

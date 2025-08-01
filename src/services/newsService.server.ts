@@ -29,7 +29,14 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
        total_views,
        tenant_id,
        hero_image,
-       author:profiles(id, display_name, username, is_verified, is_supporter, country)
+       author:profiles(id, display_name, username, country, badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            image_url,
+            action_url
+          )
+        ))
      `,
     )
     .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)

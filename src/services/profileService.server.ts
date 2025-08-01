@@ -48,8 +48,6 @@ export class ProfileServiceServer {
         `id,
         username,
         display_name,
-        is_verified,
-        is_supporter,
         photo,
         cover_images,
         country,
@@ -57,6 +55,14 @@ export class ProfileServiceServer {
           profile_tags(
             id,
             name
+          )
+        ),
+        badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            image_url,
+            action_url
           )
         )`,
       )

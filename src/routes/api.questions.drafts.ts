@@ -38,7 +38,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
         category:category(id,name),
         is_draft,
         comment_count,
-        author:profiles(id, display_name, username, is_verified, is_supporter, country)
+        author:profiles(id, display_name, username, country, badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            image_url,
+            action_url
+          )
+        ))
   `,
     )
     .or('deleted.eq.false,deleted.is.null')

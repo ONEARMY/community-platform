@@ -47,9 +47,15 @@ export class MapServiceServer {
             type,
             display_name,
             username,
-            is_verified,
-            is_supporter,
-            photo
+            photo,
+            badges:profile_badges_relations(
+              profile_badges(
+                id,
+                name,
+                image_url,
+                action_url
+              )
+            )
           )`,
         )
         .single()
@@ -87,9 +93,15 @@ export class MapServiceServer {
             type,
             display_name,
             username,
-            is_verified,
-            is_supporter,
-            photo
+            photo,
+            badges:profile_badges_relations(
+              profile_badges(
+                id,
+                name,
+                image_url,
+                action_url
+              )
+            )
           )`,
         )
         .single()

@@ -43,7 +43,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
        status,
        is_draft,
        collaborators,
-       author:profiles(id, display_name, username, is_verified, is_supporter, country),
+       author:profiles(id, display_name, username, country, badges:profile_badges_relations(
+        profile_badges(
+          id,
+          name,
+          image_url,
+          action_url
+        )
+      )),
        updates:research_updates(
         id, 
         created_at, 
@@ -59,7 +66,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
         modified_at, 
         deleted,
         is_draft,
-        update_author:profiles(id, display_name, username, is_verified, is_supporter, country)
+        update_author:profiles(id, display_name, username, country, badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            image_url,
+            action_url
+          )
+        ))
       )
       `,
     )

@@ -1,3 +1,4 @@
+import { ProfileBadge } from './profileBadge'
 import { ProfileTag } from './profileTag'
 
 import type { Comment } from './comment'
@@ -8,7 +9,7 @@ import type { DBMedia, Image } from './media'
 import type { IDBModeration, IModeration, Moderation } from './moderation'
 import type { News } from './news'
 import type { IPatreonUser } from './patreon'
-import type { DBProfileBadgeJoin, ProfileBadge } from './profileBadge'
+import type { DBProfileBadgeJoin } from './profileBadge'
 import type { DBProfileTagJoin } from './profileTag'
 import type { Question } from './question'
 import type { ResearchItem, ResearchUpdate } from './research'
@@ -110,6 +111,7 @@ export class Profile {
       patreon: dbProfile.patreon,
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
+      badges: dbProfile.badges?.map((x) => ProfileBadge.fromDBJoin(x)),
       tags: dbProfile.tags?.map((x) => ProfileTag.fromDBJoin(x)),
     })
   }

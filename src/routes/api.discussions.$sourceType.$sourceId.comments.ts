@@ -42,7 +42,16 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       source_type,
       parent_id,
       created_by,
-      profiles(id, display_name, username, is_verified, is_supporter, photo, country)
+      profiles(id, display_name, username, photo, country,
+        badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            image_url,
+            action_url
+          )
+        )
+      )
     `,
       )
       .eq('source_type', params.sourceType)
@@ -133,7 +142,14 @@ export async function action({ params, request }: LoaderFunctionArgs) {
       parent_id,
       source_type,
       created_by,
-      profiles(id, display_name, username, is_verified, is_supporter, photo, country)
+      profiles(id, display_name, username, photo, country, badges:profile_badges_relations(
+        profile_badges(
+          id,
+          name,
+          image_url,
+          action_url
+        )
+      ))
     `,
     )
     .single()

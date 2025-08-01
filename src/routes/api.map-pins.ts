@@ -38,13 +38,19 @@ export const loader = async ({ request }) => {
         type,
         display_name,
         username,
-        is_verified,
-        is_supporter,
         photo,
         tags:profile_tags_relations(
           profile_tags(
             id,
             name
+          )
+        ),
+        badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            image_url,
+            action_url
           )
         )
       )

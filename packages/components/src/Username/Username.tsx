@@ -30,43 +30,46 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
   const countryCode = user.country ? getCountryCode(user.country) : null
 
   const UserNameBody = (
-    <Flex data-cy="Username" sx={{ fontFamily: 'body' }}>
-      <Flex sx={{ gap: 1, alignItems: 'center' }}>
-        {countryCode ? (
-          <Flex data-testid="Username: known flag">
-            <FlagIcon countryCode={countryCode} />
-          </Flex>
-        ) : (
-          <Flex
-            data-testid="Username: unknown flag"
-            sx={{
-              backgroundImage: `url("${flagUnknownSVG}")`,
-              backgroundSize: 'cover',
-              borderRadius: '3px',
-              height: '14px',
-              width: '21px !important',
-              justifyContent: 'center',
-              alignItems: 'center',
-              lineHeight: 0,
-              overflow: 'hidden',
-            }}
-          ></Flex>
-        )}
-
-        <Text
+    <Flex
+      data-cy="Username"
+      sx={{ fontFamily: 'body', gap: 1, alignItems: 'center' }}
+    >
+      {countryCode ? (
+        <Flex data-testid="Username: known flag">
+          <FlagIcon countryCode={countryCode} />
+        </Flex>
+      ) : (
+        <Flex
+          data-testid="Username: unknown flag"
           sx={{
-            color: 'black',
+            backgroundImage: `url("${flagUnknownSVG}")`,
+            backgroundSize: 'cover',
+            borderRadius: '3px',
+            height: '14px',
+            width: '21px !important',
+            justifyContent: 'center',
+            alignItems: 'center',
+            lineHeight: 0,
             overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-            maxWidth: '100%',
           }}
-          title={username}
-        >
-          {username}
-        </Text>
-      </Flex>
-      {badges?.map((x) => <UserBadge key={x.id} badge={x} />)}
+        ></Flex>
+      )}
+
+      <Text
+        sx={{
+          color: 'black',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          maxWidth: '100%',
+        }}
+        title={username}
+      >
+        {username}
+      </Text>
+      {badges?.map((x) => (
+        <UserBadge key={x.id} badge={x} />
+      ))}
     </Flex>
   )
 

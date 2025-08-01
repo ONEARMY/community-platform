@@ -4756,20 +4756,6 @@
           "maxLength": null
         },
         {
-          "id": "public.profiles.is_verified",
-          "name": "is_verified",
-          "columnName": "is_verified",
-          "type": "bool",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.profiles.country",
           "name": "country",
           "columnName": "country",
@@ -4878,20 +4864,6 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.profiles.is_supporter",
-          "name": "is_supporter",
-          "columnName": "is_supporter",
-          "type": "bool",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
         },

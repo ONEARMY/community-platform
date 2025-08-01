@@ -27,7 +27,16 @@ export const loader = async ({ request }) => {
 
   const { data } = await client
     .from('profiles')
-    .select('id,username,display_name,photo,badges,country')
+    .select(
+      `id,username,display_name,photo,country, badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            image_url,
+            action_url
+          )
+        )`,
+    )
     .or(`username.ilike.%${q}%,display_name.ilike.%${q}%`)
     .limit(10)
 

@@ -15,8 +15,6 @@ const createUserProfile = async (
     auth_id: args.user.id,
     username: args.username,
     display_name: args.username,
-    is_verified: false,
-    is_supporter: false,
     type: 'member',
     tenant_id: process.env.TENANT_ID,
   })

@@ -41,7 +41,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
         tags,
         moderation,
         is_draft,
-        author:profiles(id, display_name, username, is_verified, is_supporter, country),
+        author:profiles(id, display_name, username, country, badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            image_url,
+            action_url
+          )
+        )),
         steps:project_steps(
           id, 
           created_at, 

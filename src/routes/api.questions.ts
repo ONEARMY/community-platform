@@ -30,7 +30,14 @@ export const loader = async ({ request }) => {
     .select(
       `
       id,
-      author:profiles(id, display_name, username, is_verified, is_supporter, country),
+      author:profiles(id, display_name, username, country, badges:profile_badges_relations(
+        profile_badges(
+          id,
+          name,
+          image_url,
+          action_url
+        )
+      )),
       category:category(id,name),
       created_at,
       created_by,

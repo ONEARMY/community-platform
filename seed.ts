@@ -39,10 +39,8 @@ const _PROFILES_BASE: Partial<profilesScalars> = {
   photo: null,
   patreon: null,
   impact: null,
-  is_verified: true,
   is_blocked_from_messaging: false,
   is_contactable: true,
-  is_supporter: true,
   total_views: 0,
 }
 

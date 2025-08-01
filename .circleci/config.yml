@@ -102,31 +102,6 @@ commands:
       - *install_packages
       - *save_yarn_cache
 
-  firebase_deploy:
-    description: Deploy to Firebase
-    parameters:
-      token:
-        type: string
-        default: ''
-        description: Firebase Deploy Token
-      alias:
-        type: string
-        default: 'default'
-        description: Firebase project alias to deploy to
-    steps:
-      - run:
-          name: Export application credentials
-          command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service_account.json
-      - run:
-          name: Configure Firebase Extensions
-          command: envsubst < extensions/firestore-send-email.config > extensions/firestore-send-email.env
-      - run:
-          # Use version of firebase-tools already installed in functions workspace to deploy
-          name: Deploy to Firebase
-          command: npx firebase-tools@12.7.0 deploy --only functions --debug -P << parameters.alias >> --non-interactive --force
-          environment:
-            GOOGLE_APPLICATION_CREDENTIALS: service_account.json
-
 ######################################################################################################
 #  Jobs - Independently specified lists of tasks and environments for execution
 ######################################################################################################
@@ -150,53 +125,6 @@ jobs:
       CYPRESS_INSTALL_BINARY: 0
     steps:
       - setup_repo
-
-  test_functions:
-    docker:
-      # use base image published by platform to ensure compatibility
-      - image: onearmyplatform/community-platform-emulator:pp-2023-11-09c
-    resource_class: large
-    environment:
-      CYPRESS_INSTALL_BINARY: 0
-    steps:
-      - setup_repo
-      - attach_workspace:
-          at: '.'
-      # Copy docker generated files to include correct firebase.json port bindings,
-      # dummy credentials and runtimeconfig (note overwrites )
-      # Also create dummy build folder used to copy index.html as part of webpack build
-      # and build (required before running tests)
-      - run:
-          name: Build Functions
-          command: |
-            cp /app/firebase.json firebase.json
-            cp /app/credentials.json credentials.json
-            cp /app/functions/.runtimeconfig.json functions/.runtimeconfig.json
-            mkdir build
-            touch build/index.html
-            yarn workspace functions build
-      - run:
-          name: Test Functions
-          # Run functions emulator test command with additional flags to ensure CI receives correct exit code
-          command: cd functions && yarn test-ci
-      - persist_to_workspace:
-          root: .
-          paths:
-            - functions/coverage
-            - functions/reports
-      - store_test_results:
-          path: functions/reports
-
-  test_functions_upload_coverage:
-    docker: *docker
-    resource_class: medium+
-    environment:
-      CYPRESS_INSTALL_BINARY: 0
-    steps:
-      - setup_repo
-      - attach_workspace:
-          at: '.'
-      - codecov/upload
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine
@@ -297,9 +225,6 @@ jobs:
       - setup_repo
       - attach_workspace:
           at: '.'
-      # - firebase_deploy:
-      #     # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
-      #     alias: << parameters.DEPLOY_ALIAS >>
       - run:
           name: Prune Docker resources
           command: |
@@ -441,14 +366,6 @@ workflows:
           name: Build Storybook
           requires:
             - 'Lint code'
-      - test_functions:
-          name: 'Cloud Function tests'
-          requires:
-            - 'Lint code'
-      - test_functions_upload_coverage:
-          name: 'Upload Cloud Function coverage'
-          requires:
-            - 'Cloud Function tests'
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:

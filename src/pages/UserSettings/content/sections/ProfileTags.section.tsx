@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { Field } from 'react-final-form'
 import { ProfileTagsSelect } from 'src/common/Tags/ProfileTagsSelect'
 import { fields } from 'src/pages/UserSettings/labels'
@@ -15,6 +16,19 @@ interface IProps {
 export const ProfileTags = ({ profileType }: IProps) => {
   const { description, title } = fields.tags
 
+  const renderTagsSelect = useCallback(
+    ({ input }) => (
+      <ProfileTagsSelect
+        value={input.value}
+        onChange={(tags) => input.onChange(tags)}
+        maxTotal={5}
+        profileType={profileType}
+        isForm
+      />
+    ),
+    [profileType],
+  )
+
   return (
     <FlexSectionContainer>
       <Flex
@@ -31,15 +45,7 @@ export const ProfileTags = ({ profileType }: IProps) => {
         </Text>
         <Field
           name="tagIds"
-          component={({ input }) => (
-            <ProfileTagsSelect
-              value={input.value}
-              onChange={(tags) => input.onChange(tags)}
-              maxTotal={5}
-              profileType={profileType}
-              isForm
-            />
-          )}
+          component={renderTagsSelect}
           isEqual={COMPARISONS.tags}
         />
       </Flex>

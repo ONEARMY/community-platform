@@ -12,10 +12,6 @@ export class DBProfileBadge {
 
 export class DBProfileBadgeJoin {
   profile_badges: DBProfileBadge
-
-  constructor(obj: Partial<DBProfileBadge>) {
-    Object.assign(this, obj)
-  }
 }
 
 export class ProfileBadge {
@@ -29,14 +25,14 @@ export class ProfileBadge {
     Object.assign(this, obj)
   }
 
-  static fromDBJoin(tag: DBProfileBadgeJoin) {
-    const value = tag.profile_badges
+  static fromDBJoin(value: DBProfileBadgeJoin) {
+    const badge = value.profile_badges
     return new ProfileBadge({
-      id: value.id,
-      name: value.name,
-      displayName: value.display_name,
-      imageUrl: value.image_url,
-      actionUrl: value.action_url || undefined,
+      id: badge.id,
+      name: badge.name,
+      displayName: badge.display_name,
+      imageUrl: badge.image_url,
+      actionUrl: badge.action_url || undefined,
     })
   }
 

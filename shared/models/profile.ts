@@ -9,7 +9,7 @@ import type { IDBModeration, IModeration, Moderation } from './moderation'
 import type { News } from './news'
 import type { IPatreonUser } from './patreon'
 import type { DBProfileBadgeJoin, ProfileBadge } from './profileBadge'
-import type { DBProfileTag } from './profileTag'
+import type { DBProfileTagJoin } from './profileTag'
 import type { Question } from './question'
 import type { ResearchItem, ResearchUpdate } from './research'
 import type {
@@ -21,7 +21,7 @@ import type {
 export class DBProfile {
   readonly id: number
   readonly created_at: Date
-  readonly tags?: DBProfileTag[]
+  readonly tags?: DBProfileTagJoin[]
   readonly badges?: DBProfileBadgeJoin[]
   readonly pin?: DBMapPin
   username: string
@@ -110,7 +110,7 @@ export class Profile {
       patreon: dbProfile.patreon,
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
-      tags: dbProfile.tags?.map((x) => ProfileTag.fromDB(x)),
+      tags: dbProfile.tags?.map((x) => ProfileTag.fromDBJoin(x)),
     })
   }
 }

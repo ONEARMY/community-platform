@@ -150,6 +150,8 @@ export class ProfileServiceServer {
       valuesToUpdate['photo'] = newPhoto?.media[0]
     }
 
+    await this.updateTags(id, values.tagIds || [])
+
     let imagesToRemove = existingProfile?.cover_images
     let imagesToKeep: DBMedia[] = []
 
@@ -206,7 +208,8 @@ export class ProfileServiceServer {
           profile_badges(
             id,
             name,
-            icon
+            image_url,
+            action_url
           )
         )`,
       )
@@ -216,5 +219,49 @@ export class ProfileServiceServer {
     }
 
     return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile)
+  }
+
+  async updateTags(profileId: number, tagIds: number[]) {
+    const { data } = await this.client
+      .from('profile_tags_relations')
+      .select('*')
+      .eq('profile_id', profileId)
+
+    // Determine which tags to add and remove
+    const existingTagIds = data?.map((rel) => rel.profile_tag_id) || []
+    const tagsToAdd = tagIds.filter((tagId) => !existingTagIds.includes(tagId))
+    const tagsToRemove = existingTagIds.filter(
+      (tagId) => !tagIds.includes(tagId),
+    )
+
+    // Remove tags that are no longer needed
+    if (tagsToRemove.length > 0) {
+      const { error } = await this.client
+        .from('profile_tags_relations')
+        .delete()
+        .eq('profile_id', profileId)
+        .in('profile_tag_id', tagsToRemove)
+
+      if (error) {
+        console.error(error)
+      }
+    }
+
+    // Add new tags
+    if (tagsToAdd.length > 0) {
+      const newRelations = tagsToAdd.map((tagId) => ({
+        profile_id: profileId,
+        profile_tag_id: tagId,
+        tenant_id: process.env.TENANT_ID,
+      }))
+
+      const { error } = await this.client
+        .from('profile_tags_relations')
+        .insert(newRelations)
+
+      if (error) {
+        console.error(error)
+      }
+    }
   }
 }

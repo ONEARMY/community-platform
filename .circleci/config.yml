@@ -372,7 +372,6 @@ workflows:
             - 'Build Application'
             - 'Unit tests'
             - 'Circular dependency test'
-            - 'Cloud Function tests'
             - 'Build Storybook'
           context:
             - e2e-tests

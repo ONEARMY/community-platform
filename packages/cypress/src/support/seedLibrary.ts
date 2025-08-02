@@ -26,7 +26,7 @@ export const seedLibrary = async (profiles, tagsData) => {
       time: item.time,
       difficulty_level: item.difficultyLevel,
       created_by:
-        profiles.data.find((x) => x.username === item.createdBy)?.id || null,
+        profiles.find((x) => x.username === item.createdBy).id || null,
       tags: [tagsData.data[0].id, tagsData.data[1].id],
       category: categories.data[i % 2].id,
       deleted: item.deleted,

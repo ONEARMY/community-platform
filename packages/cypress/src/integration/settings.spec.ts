@@ -1,4 +1,4 @@
-import { ExternalLinkLabel, UserRole } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 
 import { MOCK_DATA } from '../data'
 import { SingaporeStubResponse } from '../fixtures/searchResults'
@@ -31,7 +31,7 @@ describe('[Settings]', () => {
 
     cy.step('Go to User Settings')
     cy.clickMenuItem(UserMenuItem.Settings)
-    cy.wait(5000)
+    cy.wait(1000)
     cy.get('[data-cy=displayName').clear().type('Wrong user')
 
     cy.step('Confirm shown when attempting to go to another page')
@@ -50,12 +50,13 @@ describe('[Settings]', () => {
       cy.viewport('macbook-16')
 
       const country = 'Bolivia'
+      const countryCode = 'BO'
       const userImage = 'avatar'
       const displayName = 'ff_settings_member_new'
       const description = "I'm a very active member"
       const profileType = 'member'
-      const tag = ['Sewing', 'Accounting']
-      const url = 'https://social.network'
+      const tag = ['Product Design', 'Accounting']
+      const website = 'https://social.network'
 
       cy.step('Incomplete profile banner visible when logged out')
       cy.get('[data-cy=notificationBanner]').should('not.exist')
@@ -91,10 +92,11 @@ describe('[Settings]', () => {
         displayName,
         country,
         description,
+        website,
       })
-      cy.selectTag(tag[0], '[data-cy=tag-select]')
-      cy.selectTag(tag[1], '[data-cy=tag-select]')
-      cy.get('[data-cy="country:BO"]')
+      cy.selectTag(tag[0], '[data-cy=profile-tag-select]')
+      cy.selectTag(tag[1], '[data-cy=profile-tag-select]')
+      cy.get(`[data-cy="country:${countryCode}"]`)
 
       cy.step('Errors if trying to upload invalid image')
       cy.get(`[data-cy=userImage]`)
@@ -108,23 +110,6 @@ describe('[Settings]', () => {
 
       cy.step("Can't add cover image")
       cy.get('[data-cy=coverImages]').should('not.exist')
-
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.SOCIAL_MEDIA,
-        url: 'http://something.to.delete/',
-      })
-
-      cy.setSettingAddContactLink({
-        index: 1,
-        label: ExternalLinkLabel.SOCIAL_MEDIA,
-        url,
-      })
-
-      // Remove first item
-      cy.get('[data-cy="delete-link-0"]').last().trigger('click')
-      cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible')
-      cy.get('[data-cy="Confirm.modal: Confirm"]').trigger('click')
 
       cy.saveSettingsForm()
 
@@ -146,7 +131,7 @@ describe('[Settings]', () => {
       cy.contains(country)
       cy.contains(tag[0])
       cy.contains(tag[1])
-      cy.get('[data-cy="country:bo"]')
+      cy.get(`[data-cy="country:${countryCode}"]`)
       cy.get(`[data-cy="MemberBadge-${profileType}"]`)
       cy.get('[data-cy="profile-avatar"]')
         .should('have.attr', 'src')
@@ -165,10 +150,6 @@ describe('[Settings]', () => {
       cy.contains('Your current map pin is here:')
       cy.contains(locationStub.country)
 
-      cy.step('Setting map pin makes location field disappear')
-      cy.get('[data-cy="tab-Profile"]').click()
-      cy.get('[data-cy=location-dropdown]').should('not.exist')
-
       cy.step('Can view pin on new map')
       cy.visit(`/map#${user.username}`)
       cy.wait(2000)
@@ -180,16 +161,6 @@ describe('[Settings]', () => {
       cy.get('[data-cy=remove-map-pin]').click()
       cy.get('[data-cy="Confirm.modal: Confirm"]').click()
       cy.contains('No map pin currently saved')
-      cy.get('[data-cy="tab-Profile"]').click()
-      cy.get('[data-cy=location-dropdown]').should('be.visible')
-
-      cy.step('Can update email notification preference')
-      cy.get('[data-cy="tab-Notifications"]').click()
-      cy.get('.data-cy__single-value').last().should('have.text', 'Weekly')
-      cy.selectTag('Daily', '[data-cy=NotificationSettingsSelect]')
-      cy.get('[data-cy=save-notification-settings]').click()
-      cy.contains('Notification setting saved successfully')
-      cy.get('.data-cy__single-value').last().should('have.text', 'Daily')
     })
 
     it('Can create space', () => {
@@ -198,7 +169,7 @@ describe('[Settings]', () => {
       const displayName = 'new_ff_space'
       const description = 'We have some space to run a workplace'
       const profileType = 'space'
-      const tag = 'Recolor'
+      const tag = 'Meetups'
       const url = 'something@test.com'
 
       const user = generateNewUserDetails()
@@ -217,17 +188,12 @@ describe('[Settings]', () => {
         displayName,
         description,
       })
-      cy.selectTag(tag, '[data-cy=tag-select]')
+      cy.selectTag(tag, '[data-cy=profile-tag-select]')
 
       cy.step('Can add avatar and cover image')
       cy.setSettingImage(userImage, 'userImage')
       cy.setSettingImage(coverImage, 'coverImages-0')
 
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.EMAIL,
-        url,
-      })
       cy.saveSettingsForm()
 
       cy.step('Updated settings display on profile')
@@ -247,7 +213,7 @@ describe('[Settings]', () => {
       cy.step('Updated settings display on contact tab')
       cy.get('[data-cy="contact-tab"]').click()
       cy.contains(`Other users are able to contact you`)
-      cy.get('[data-cy="profile-link"]').should(
+      cy.get('[data-cy="profile-website"]').should(
         'have.attr',
         'href',
         `mailto:${url}`,
@@ -288,12 +254,7 @@ describe('[Settings]', () => {
         description,
       })
       cy.setSettingImage('avatar', 'userImage')
-      cy.selectTag(tag, '[data-cy=tag-select]')
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.SOCIAL_MEDIA,
-        url: 'http://something.to.delete/',
-      })
+      cy.selectTag(tag, '[data-cy=profile-tag-select]')
       cy.saveSettingsForm()
 
       cy.step('Updated settings display on profile')
@@ -335,18 +296,13 @@ describe('[Settings]', () => {
         displayName,
         description,
       })
-      cy.selectTag(tag, '[data-cy=tag-select]')
+      cy.selectTag(tag, '[data-cy=profile-tag-select]')
 
       cy.step('Can add avatar and cover image')
       cy.setSettingImage(userImage, 'userImage')
       cy.setSettingImage(coverImage, 'coverImages-0')
 
       cy.step('Can add contact link and visitor details')
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.EMAIL,
-        url,
-      })
       cy.setSettingVisitorPolicy(visitorType, visitorDetails)
       cy.saveSettingsForm()
 
@@ -373,7 +329,7 @@ describe('[Settings]', () => {
       cy.step('Updated settings display on contact tab')
       cy.get('[data-cy="contact-tab"]').click()
       cy.contains(`Other users are able to contact you`)
-      cy.get('[data-cy="profile-link"]').should(
+      cy.get('[data-cy="profile-website"]').should(
         'have.attr',
         'href',
         `mailto:${url}`,
@@ -395,8 +351,8 @@ describe('[Settings]', () => {
       cy.visit('/settings')
       const machineBuilderXp = ['Electronics', 'Welding']
       cy.setSettingFocus('machine-builder')
-      cy.selectTag(machineBuilderXp[0], '[data-cy=tag-select]')
-      cy.selectTag(machineBuilderXp[1], '[data-cy=tag-select]')
+      cy.selectTag(machineBuilderXp[0], '[data-cy=profile-tag-select]')
+      cy.selectTag(machineBuilderXp[1], '[data-cy=profile-tag-select]')
       cy.saveSettingsForm()
       cy.visit(`u/${user.username}`)
       cy.get(`[data-cy="MemberBadge-machine-builder"]`)
@@ -407,7 +363,7 @@ describe('[Settings]', () => {
       cy.visit('/settings')
       const communityXp = 'Host Events'
       cy.setSettingFocus('community-builder')
-      cy.selectTag(communityXp, '[data-cy=tag-select]')
+      cy.selectTag(communityXp, '[data-cy=profile-tag-select]')
       cy.saveSettingsForm()
       cy.visit(`u/${user.username}`)
       cy.get(`[data-cy="MemberBadge-community-builder"]`)
@@ -417,7 +373,7 @@ describe('[Settings]', () => {
       cy.visit('/settings')
       const collectionXp = 'HDPE'
       cy.setSettingFocus('collection-point')
-      cy.selectTag(collectionXp, '[data-cy=tag-select]')
+      cy.selectTag(collectionXp, '[data-cy=profile-tag-select]')
       cy.saveSettingsForm()
       cy.visit(`u/${user.username}`)
       cy.get(`[data-cy="MemberBadge-collection-point"]`)
@@ -448,30 +404,6 @@ describe('[Settings]', () => {
       cy.visit('/settings')
       cy.contains('Infos')
       cy.get('[data-cy=FocusSection]').should('not.exist')
-
-      const country = 'Bolivia'
-      const displayName = 'pk_member_new'
-      const description = "I'm a very active member"
-      const tag = 'Landscaping'
-
-      cy.step('Can set the required fields')
-      cy.setSettingBasicUserInfo({
-        displayName,
-        country,
-        description,
-      })
-      cy.setSettingImage('avatar', 'userImage')
-      cy.selectTag(tag, '[data-cy=tag-select]')
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.SOCIAL_MEDIA,
-        url: 'http://something.to.delete/',
-      })
-      cy.saveSettingsForm()
-
-      cy.step('Updated settings display on profile')
-      cy.visit(`u/${user.username}`)
-      cy.contains(tag)
     })
   })
 

@@ -52,10 +52,6 @@ interface IProps {
   onDelete: (index: number) => void
   moveStep: (indexfrom: number, indexTo: number) => void
 }
-interface IState {
-  showDeleteModal: boolean
-  _toDocsList: boolean
-}
 
 /**
  * Ensure that the project description meets the following criteria:
@@ -71,13 +67,10 @@ export const LibraryStepField = ({
   onDelete,
   moveStep,
 }: IProps) => {
-  const [state, setState] = useState<IState>({
-    showDeleteModal: false,
-    _toDocsList: false,
-  })
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   const toggleDeleteModal = () => {
-    setState((state) => ({ ...state, showDeleteModal: !state.showDeleteModal }))
+    setShowDeleteModal((state) => !state)
   }
 
   const confirmDelete = () => {
@@ -174,7 +167,7 @@ export const LibraryStepField = ({
 
           <Modal
             onDidDismiss={() => toggleDeleteModal()}
-            isOpen={!!state.showDeleteModal}
+            isOpen={!!showDeleteModal}
           >
             <Text>{deleteButton.warning}</Text>
             <Flex mt={3} p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>

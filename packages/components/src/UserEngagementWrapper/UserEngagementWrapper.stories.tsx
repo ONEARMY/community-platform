@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import { Box, Button } from 'theme-ui'
 
 import { ArticleCallToActionSupabase, UsefulStatsButton } from '..'
@@ -19,10 +20,23 @@ export const Default: StoryFn<typeof UserEngagementWrapper> = () => (
             username: 'library._createdBy',
             country: 'US',
             displayName: 'display name',
-            isSupporter: true,
+            badges: [
+              {
+                id: 1,
+                name: 'pro',
+                displayName: 'PRO',
+                imageUrl: faker.image.avatar(),
+              },
+              {
+                id: 2,
+                name: 'supporter',
+                displayName: 'Supporter',
+                actionUrl: faker.internet.url(),
+                imageUrl: faker.image.avatar(),
+              },
+            ],
             id: 1,
-            photoUrl: null,
-            isVerified: true,
+            photo: null,
           }}
         >
           <Button sx={{ fontSize: 2 }} onClick={() => null}>

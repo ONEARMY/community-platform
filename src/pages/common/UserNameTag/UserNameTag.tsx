@@ -1,34 +1,23 @@
 import { DisplayDate, Username } from 'oa-components'
 import { Flex, Text } from 'theme-ui'
 
+import type { Author } from 'oa-shared'
+
 interface IProps {
-  userName: string
-  countryCode: string | undefined
+  author: Author
   createdAt?: string | number | Date
   action?: string
   modifiedAt?: string | number | Date | null
 }
 
 export const UserNameTag = (props: IProps) => {
-  const {
-    userName,
-    countryCode,
-    createdAt,
-    action = 'Published',
-    modifiedAt,
-  } = props
+  const { author, createdAt, action = 'Published', modifiedAt } = props
 
   return (
     <Flex sx={{ flexDirection: 'column' }}>
       <Flex sx={{ alignItems: 'center' }}>
         <Flex sx={{ alignItems: 'center' }}>
-          <Username
-            user={{
-              userName,
-              countryCode,
-            }}
-            sx={{ position: 'relative' }}
-          />
+          <Username user={author} sx={{ position: 'relative' }} />
           {createdAt && (
             <Text
               variant="auxiliary"

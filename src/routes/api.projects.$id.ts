@@ -2,7 +2,7 @@ import { Project, ProjectStep, UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
 import { libraryServiceServer } from 'src/services/libraryService.server'
-import { profileServiceServer } from 'src/services/profileService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { convertToSlug } from 'src/utils/slug'
 
@@ -54,8 +54,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { status: 401, statusText: 'unauthorized' })
     }
 
+    const profileService = new ProfileServiceServer(client)
+
     const currentProject = await libraryServiceServer.getById(id, client)
-    const profile = await profileServiceServer.getByAuthId(user!.id, client)
+    const profile = await profileService.getByAuthId(user!.id)
 
     const { valid, status, statusText } = await validateRequest(
       request,
@@ -306,6 +308,7 @@ async function updateOrReplaceImages(
     if (existingMedia.data && existingMedia.data.images?.length > 0) {
       media = existingMedia.data.images.filter((x) => idsToKeep.includes(x.id))
     }
+    // TODO: delete other images
   }
 
   if (newUploads.length > 0) {

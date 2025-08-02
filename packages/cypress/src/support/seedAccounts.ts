@@ -1,74 +1,103 @@
 import { MOCK_DATA } from '../data'
-import { seedDatabase, supabaseAdminClient } from '../utils/TestUtils'
+import { supabaseAdminClient } from '../utils/TestUtils'
 
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { DBProfile } from 'oa-shared'
 
 // Creates user accounts and respective profiles
 export const seedAccounts = async () => {
-  const tenantId = Cypress.env('TENANT_ID')
   const supabase = supabaseAdminClient()
 
-  const accounts = Object.values(MOCK_DATA.users)
-    .filter((x) => !!x['password'] && !!x['email'] && !!x.userName)
-    .map((user) => ({
-      id: '',
-      email: user['email'],
-      username: user.userName,
-      password: user['password'],
-      roles: user.userRoles,
-    }))
+  const accounts = Object.values(MOCK_DATA.users).map((user) => ({
+    email: user['email'],
+    password: user['password'],
+    ...user,
+  }))
 
-  const userIds = await Promise.all(
-    accounts.map((user) =>
-      signUp(supabase, user.email, user.username, user.password),
+  const existingUsers = await supabase.auth.admin.listUsers()
+
+  const profiles = await Promise.all(
+    accounts.map(
+      async (account) =>
+        await createAuthAndProfile(supabase, account, existingUsers.data.users),
     ),
   )
 
-  for (let i = 0; i < accounts.length; i++) {
-    accounts[i].id = userIds[i]
-  }
-
-  const profiles = accounts
-    .filter((x) => x.id)
-    .map((x) => ({
-      auth_id: x.id,
-      username: x.username,
-      tenant_id: tenantId,
-      created_at: new Date().toUTCString(),
-      display_name: x.username,
-      is_verified: true,
-      is_supporter: false,
-      roles: x.roles,
-    }))
-
-  return await seedDatabase({ profiles }, tenantId)
+  return { profiles }
 }
 
-const signUp = async (
-  supabase: SupabaseClient,
-  email: string,
-  username: string,
-  password: string,
-) => {
-  const result = await supabase.auth.admin.createUser({
-    email,
-    password,
+const createAuthAndProfile = async (supabase, user, existingUsers: User[]) => {
+  const authUser = await supabase.auth.admin.createUser({
+    email: user.email,
+    password: user.password,
     email_confirm: true,
     user_metadata: {
-      username,
+      username: user.username,
     },
   })
 
-  if (result.error) {
-    // most of the time the user already exists because auth accounts are multi-tenant.
-    return (
-      await supabase.rpc('get_user_id_by_email', {
-        email,
-      })
-    ).data?.at(0)?.id
+  let profile
+  if (authUser.error?.code === 'email_exists') {
+    const authUser = existingUsers.find(
+      (authUser) => authUser.email === user.email,
+    )
+
+    if (authUser) {
+      return (profile = await createProfile(supabase, user, authUser.id))
+    }
+
+    return profile
   }
 
-  return result.data.user.id
+  const authId = authUser.data.id
+  return await createProfile(supabase, user, authId)
+}
+
+const createProfile = async (
+  supabase: SupabaseClient,
+  user: any,
+  authId: string,
+) => {
+  const tenantId = Cypress.env('TENANT_ID')
+
+  const { data } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('auth_id', authId)
+    .eq('tenant_id', tenantId)
+    .single()
+
+  if (data) {
+    return data
+  }
+
+  const profileDB: Partial<DBProfile> & { tenant_id: string } = {
+    auth_id: authId,
+    display_name: user.username,
+    username: user.username,
+    roles: user.roles,
+    tenant_id: tenantId,
+    type: user.type,
+    about: user.about || '',
+    photo: user.photo || {},
+    country: user.country,
+    cover_images: user.cover_images || null,
+    impact: user.impact || null,
+    is_blocked_from_messaging: user.is_blocked_from_messaging || false,
+    is_contactable: user.is_contactable || true,
+    last_active: user.last_active || null,
+    total_views: user.total_views || 0,
+    visitor_policy: user.visitor_policy || null,
+    website: user.website || null,
+  }
+
+  const profileResult = await supabase
+    .from('profiles')
+    .insert(profileDB)
+    .select('*')
+    .single()
+
+  return profileResult.data
 }
 
 export const deleteAccounts = async () => {

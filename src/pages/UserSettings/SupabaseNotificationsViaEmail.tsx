@@ -4,7 +4,10 @@ import { notificationsPreferencesViaEmailService } from 'src/services/notificati
 
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm'
 
-import type { DBNotificationsPreferences } from 'oa-shared'
+import type {
+  DBNotificationsPreferences,
+  DBPreferencesWithProfileContact,
+} from 'oa-shared'
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
 
 interface IProps {
@@ -14,7 +17,7 @@ interface IProps {
 export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [initialValues, setInitialValues] =
-    useState<DBNotificationsPreferences | null>(null)
+    useState<DBPreferencesWithProfileContact | null>(null)
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
 
   const refreshPreferences = async () => {
@@ -55,7 +58,7 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
     try {
       await notificationsPreferencesViaEmailService.setUnsubscribe(
         userCode,
-        initialValues?.id,
+        initialValues?.preferences.id,
       )
       await refreshPreferences()
       setSubmitResults({
@@ -71,10 +74,11 @@ export const SupabaseNotificationsViaEmail = ({ userCode }: IProps) => {
 
   return (
     <SupabaseNotificationsForm
-      initialValues={initialValues}
+      initialValues={initialValues?.preferences || null}
       isLoading={isLoading}
       onSubmit={onSubmit}
       onUnsubscribe={onUnsubscribe}
+      profileIsContactable={initialValues?.is_contactable}
       submitResults={submitResults}
     />
   )

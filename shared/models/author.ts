@@ -1,38 +1,37 @@
-export class DBAuthor {
+import { ProfileBadge } from './profileBadge'
+
+import type { DBMedia, Image } from './media'
+import type { DBProfileBadgeJoin } from './profileBadge'
+
+// TODO: derive from DBProfile - not doing because was causing circular dependencies
+export type DBAuthor = {
   readonly id: number
-  readonly country?: string
-  readonly display_name: string
-  readonly is_supporter: boolean
-  readonly is_verified: boolean
-  readonly photo_url: string | null
   readonly username: string
-
-  constructor(dbAuthor: DBAuthor) {
-    Object.assign(this, dbAuthor)
-  }
+  readonly country: string
+  readonly display_name: string
+  readonly photo: DBMedia | null
+  readonly badges?: DBProfileBadgeJoin[]
 }
-
 export class Author {
   id: number
   country?: string
   displayName: string
-  isVerified: boolean
-  isSupporter: boolean
-  photoUrl: string | null
+  badges?: ProfileBadge[]
+  photo: Image | null
   username: string
 
   constructor(author: Author) {
     Object.assign(this, author)
   }
 
-  static fromDB(dbAuthor: DBAuthor) {
+  static fromDB(dbAuthor: DBAuthor, photo?: Image) {
     return new Author({
       id: dbAuthor.id,
       country: dbAuthor.country,
-      isSupporter: dbAuthor.is_supporter,
-      isVerified: dbAuthor.is_verified,
+      badges:
+        dbAuthor.badges?.map((x) => ProfileBadge.fromDBJoin(x)) || undefined,
       displayName: dbAuthor.display_name,
-      photoUrl: dbAuthor.photo_url,
+      photo: photo,
       username: dbAuthor.username,
     })
   }

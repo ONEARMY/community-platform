@@ -2,7 +2,7 @@ import { News } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
 import { newsServiceServer } from 'src/services/newsService.server'
-import { profileServiceServer } from 'src/services/profileService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown'
 import { hasAdminRightsSupabase, validateImage } from 'src/utils/helpers'
@@ -171,7 +171,8 @@ async function validateRequest(
     }
   }
 
-  const profile = await profileServiceServer.getByAuthId(user!.id, client)
+  const profileService = new ProfileServiceServer(client)
+  const profile = await profileService.getByAuthId(user!.id)
 
   if (!profile) {
     return { status: 400, statusText: 'User not found' }

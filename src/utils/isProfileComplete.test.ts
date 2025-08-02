@@ -1,18 +1,19 @@
 import { ProfileTypeList } from 'oa-shared'
-import { factoryImage, factoryLink, FactoryUser } from 'src/test/factories/User'
+import { factoryImage, FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it } from 'vitest'
 
 import { isProfileComplete } from './isProfileComplete'
 
+import type { Profile } from 'oa-shared'
+
 describe('isProfileComplete', () => {
   describe('member', () => {
     it('returns true for a completed profile', () => {
-      const completeProfile = {
+      const completeProfile: Partial<Profile> = {
         about: 'A member',
         displayName: 'Jeffo',
-        links: [factoryLink],
-        profileType: ProfileTypeList.MEMBER,
-        userImage: factoryImage,
+        type: ProfileTypeList.MEMBER,
+        photo: factoryImage,
       }
       const user = FactoryUser(completeProfile)
 
@@ -21,35 +22,32 @@ describe('isProfileComplete', () => {
 
     describe('returns false if any core field is missing', () => {
       it('no about', () => {
-        const missingAbout = {
+        const missingAbout: Partial<Profile> = {
           displayName: 'Jeffo',
-          links: [factoryLink],
-          profileType: ProfileTypeList.MEMBER,
-          userImage: factoryImage,
+          type: ProfileTypeList.MEMBER,
+          photo: factoryImage,
         }
         const user = FactoryUser(missingAbout)
 
         expect(isProfileComplete(user)).toBe(false)
       })
       it('no displayName', () => {
-        const missingDisplayName = {
+        const missingDisplayName: Partial<Profile> = {
           about: 'A member',
           displayName: undefined,
-          links: [factoryLink],
-          profileType: ProfileTypeList.MEMBER,
-          userImage: factoryImage,
+          type: ProfileTypeList.MEMBER,
+          photo: factoryImage,
         }
         const user = FactoryUser(missingDisplayName)
 
         expect(isProfileComplete(user)).toBe(false)
       })
       it('no userImage', () => {
-        const missingUserImage = {
+        const missingUserImage: Partial<Profile> = {
           about: 'A member',
           displayName: 'Jeffo',
-          links: [factoryLink],
-          profileType: ProfileTypeList.MEMBER,
-          userImage: undefined,
+          type: ProfileTypeList.MEMBER,
+          photo: undefined,
         }
         const user = FactoryUser(missingUserImage)
 
@@ -60,11 +58,10 @@ describe('isProfileComplete', () => {
 
   describe('space', () => {
     it('returns true for a completed profile', () => {
-      const completeProfile = {
+      const completeProfile: Partial<Profile> = {
         about: 'An important space',
         displayName: 'Jeffo',
-        links: [factoryLink],
-        profileType: ProfileTypeList.COMMUNITY_BUILDER,
+        type: ProfileTypeList.COMMUNITY_BUILDER,
         coverImages: [factoryImage],
       }
       const user = FactoryUser(completeProfile)
@@ -74,10 +71,9 @@ describe('isProfileComplete', () => {
 
     describe('returns false if any core field is missing', () => {
       it('no about', () => {
-        const missingAbout = {
+        const missingAbout: Partial<Profile> = {
           displayName: 'Jeffo',
-          links: [factoryLink],
-          profileType: ProfileTypeList.COLLECTION_POINT,
+          type: ProfileTypeList.COLLECTION_POINT,
           coverImages: [factoryImage],
         }
         const user = FactoryUser(missingAbout)
@@ -85,11 +81,10 @@ describe('isProfileComplete', () => {
         expect(isProfileComplete(user)).toBe(false)
       })
       it('no displayName', () => {
-        const missingDisplayName = {
+        const missingDisplayName: Partial<Profile> = {
           about: 'An important space',
           displayName: undefined,
-          links: [factoryLink],
-          profileType: ProfileTypeList.MACHINE_BUILDER,
+          type: ProfileTypeList.MACHINE_BUILDER,
           coverImages: [factoryImage],
         }
         const user = FactoryUser(missingDisplayName)
@@ -97,11 +92,10 @@ describe('isProfileComplete', () => {
         expect(isProfileComplete(user)).toBe(false)
       })
       it('no userImage', () => {
-        const missingUserImage = {
+        const missingUserImage: Partial<Profile> = {
           about: 'An important space',
           displayName: 'Jeffo',
-          links: [factoryLink],
-          profileType: ProfileTypeList.COLLECTION_POINT,
+          type: ProfileTypeList.COLLECTION_POINT,
           coverImages: [],
         }
         const user = FactoryUser(missingUserImage)
@@ -111,12 +105,11 @@ describe('isProfileComplete', () => {
     })
   })
   it('returns false if profile type missing', () => {
-    const missingProfileType = {
+    const missingProfileType: Partial<Profile> = {
       about: 'An unknown...',
       displayName: 'Jeffo',
-      profileType: undefined,
-      links: [factoryLink],
-      userImage: factoryImage,
+      type: undefined,
+      photo: factoryImage,
     }
     const user = FactoryUser(missingProfileType)
 

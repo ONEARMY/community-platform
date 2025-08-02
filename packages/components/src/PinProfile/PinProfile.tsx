@@ -6,18 +6,16 @@ import { CardButton } from '../CardButton/CardButton'
 import { CardProfile } from '../CardProfile/CardProfile'
 import { InternalLink } from '../InternalLink/InternalLink'
 
-import type { IMapPin } from 'oa-shared'
+import type { MapPin } from 'oa-shared'
 
 export interface IProps {
-  item: IMapPin
+  item: MapPin
   onClose: () => void
 }
 
-export const PinProfile = (props: IProps) => {
-  const { item, onClose } = props
-  const { creator } = item
-
-  const isWorkspace = creator?.profileType && creator?.profileType !== 'member'
+export const PinProfile = ({ item, onClose }: IProps) => {
+  const isWorkspace = item.profile?.type === 'space'
+  const isContactable = isWorkspace && item.profile?.isContactable !== false
 
   return (
     <CardButton sx={{ '&:hover': 'none' }} data-cy="PinProfile">
@@ -34,10 +32,10 @@ export const PinProfile = (props: IProps) => {
       <Box sx={{ width: '100%', height: '100%', zIndex: 2 }}>
         <CardProfile item={item} isLink />
 
-        {isWorkspace && creator?.isContactableByPublic !== false && (
+        {isContactable && (
           <Flex sx={{ justifyContent: 'flex-end' }}>
             <InternalLink
-              to={`/u/${creator?._id}#contact`}
+              to={`/u/${item.profile?.username}#contact`}
               data-cy="PinProfileMessageLink"
               target="_blank"
             >

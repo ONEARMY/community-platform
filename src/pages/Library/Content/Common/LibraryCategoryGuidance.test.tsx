@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker'
 import { render, screen } from '@testing-library/react'
-import { guidance } from 'src/pages/Library/labels'
 import { describe, expect, it } from 'vitest'
 
+import { guidance } from '../../labels'
 import { LibraryCategoryGuidance } from './LibraryCategoryGuidance'
 import { LibraryFormProvider } from './LibraryFormProvider'
 

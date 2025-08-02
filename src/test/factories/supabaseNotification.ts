@@ -2,6 +2,8 @@ import { Notification } from 'oa-shared'
 
 import { FactoryComment } from './Comment'
 
+import type { BasicAuthorDetails } from 'oa-shared'
+
 export const factorySupabaseNotification = (
   notificationOverloads: Partial<Notification> = {},
 ): Notification => {
@@ -24,11 +26,16 @@ export const factorySupabaseNotification = (
   })
 }
 
-export const factoryTriggeredBy = (triggeredByOverloads = {}) => {
+export const factoryTriggeredBy = (
+  triggeredByOverloads = {},
+): BasicAuthorDetails => {
   return {
     id: 1,
     username: 'daveTheHakkens',
-    photoUrl: 'https://url.com/image.png',
+    photo: {
+      id: '',
+      publicUrl: 'https://url.com/image.png',
+    },
     ...triggeredByOverloads,
   }
 }

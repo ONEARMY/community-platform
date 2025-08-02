@@ -1,26 +1,22 @@
-import * as React from 'react'
 import { ReactCountryFlag } from 'react-country-flag'
-import styled from '@emotion/styled'
-import { Box } from 'theme-ui'
 
-export const FlagIconEvents = styled(ReactCountryFlag)`
-  border-radius: 5px;
-  background-size: cover !important;
-  height: 23px;
-  width: 35px !important;
-`
+interface IProps {
+  countryCode: string
+}
 
-export const FlagIconLibrary = styled(ReactCountryFlag)`
-  border-radius: 3px;
-  background-size: cover !important;
-  height: 14px;
-  width: 21px !important;
-`
-
-export const FlagIcon = (props: any) => (
-  <Box {...(props as any)}>
-    <FlagIconEvents countryCode={props.code} title={props.code} svg={true}>
-      {props.children}
-    </FlagIconEvents>
-  </Box>
-)
+export const FlagIcon = ({ countryCode }: IProps) => {
+  return (
+    <ReactCountryFlag
+      data-cy={`country:${countryCode}`}
+      countryCode={countryCode}
+      title={countryCode}
+      svg={true}
+      style={{
+        borderRadius: '3px',
+        backgroundSize: 'cover',
+        height: '14px',
+        width: '21px',
+      }}
+    />
+  )
+}

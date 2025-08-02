@@ -42,7 +42,7 @@ export const fields: ILabels = {
       "Describe in details what you do and who you are. Write in English otherwise your profile won't be approved.",
   },
   country: {
-    title: 'Your location',
+    title: 'Country',
     description:
       "Thought about adding yourself to our map? If you do, we'll automatically set this field.",
   },
@@ -78,9 +78,8 @@ export const fields: ILabels = {
       "Let's track our collective positive impact! Add data about your recycling work and show the world the power of a movement of small scale recyclers!",
     title: 'Positive impact',
   },
-  links: {
-    placeholder: 'Link',
-    title: 'Contacts & links',
+  website: {
+    title: 'Website',
   },
   location: {
     error: 'Please select your location',

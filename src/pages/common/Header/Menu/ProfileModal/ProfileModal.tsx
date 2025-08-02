@@ -4,8 +4,8 @@ import { observer } from 'mobx-react'
 import { ReturnPathLink } from 'oa-components'
 import { preciousPlasticTheme } from 'oa-themes'
 import { AuthWrapper } from 'src/common/AuthWrapper'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Box, Flex } from 'theme-ui'
 
 // TODO: Remove direct usage of Theme
@@ -41,7 +41,8 @@ const ModalLink = styled(NavLink)`
 `
 
 export const ProfileModal = observer(() => {
-  const { userStore } = useCommonStores().stores
+  const { profile: activeUser } = useProfileStore()
+
   return (
     <ModalContainer data-cy="user-menu-list">
       <Flex
@@ -56,7 +57,7 @@ export const ProfileModal = observer(() => {
         }}
       >
         <ModalLink
-          to={'/u/' + userStore.activeUser?.userName}
+          to={'/u/' + activeUser?.username}
           data-cy="menu-Profile"
           className={({ isActive }) => (isActive ? 'current' : '')}
         >

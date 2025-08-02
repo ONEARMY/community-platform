@@ -18,38 +18,30 @@ export const ArticleCallToActionSupabase = (props: IProps) => {
       sx={{
         flexDirection: 'column',
         alignItems: 'center',
+        alignContent: 'center',
       }}
     >
-      <Text variant="body" sx={{ fontSize: 2 }}>
-        Made by
-        <Username
-          user={{
-            userName: author.username,
-            isVerified: author.isVerified,
-            countryCode: author.country,
-          }}
-          sx={{ ml: 1 }}
-        />
-      </Text>
+      <Flex>
+        <Text variant="body" sx={{ fontSize: 2, alignContent: 'center' }}>
+          Made by
+        </Text>
+        <Username user={author} sx={{ ml: 1 }} />
+      </Flex>
       {contributors && contributors.length ? (
         <Text
-          data-testid="ArticleCallToAction: contributors"
           variant="quiet"
-          sx={{ display: 'block', mt: 2, textAlign: 'center', fontSize: 2 }}
+          sx={{
+            display: 'block',
+            marginTop: 2,
+            textAlign: 'center',
+            fontSize: 2,
+            gap: 1,
+            alignItems: 'center',
+          }}
         >
           With contributions from:{' '}
           {contributors.map((contributor, key) => (
-            <Username
-              key={key}
-              user={{
-                userName: contributor.username,
-                isVerified: contributor.isVerified,
-                countryCode: contributor.country,
-              }}
-              sx={{
-                mr: 1,
-              }}
-            />
+            <Username key={key} user={contributor} />
           ))}
         </Text>
       ) : null}

@@ -130,8 +130,7 @@ describe('[Map]', () => {
   })
 
   it("Doesn't show member pins when config is set", () => {
-    localStorage.setItem('VITE_THEME', 'precious-plastic') // Not essential
-    localStorage.setItem('VITE_HIDE_MEMBER_PINS_BY_DEFAULT', 'true')
+    // TODO: mock the filters endpoint instead
 
     cy.step('Every profile type other than member is set')
     cy.visit('/map')

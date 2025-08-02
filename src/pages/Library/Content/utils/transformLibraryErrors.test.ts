@@ -1,6 +1,6 @@
-import { intro, steps } from 'src/pages/Library/labels'
 import { describe, expect, it } from 'vitest'
 
+import { intro, steps } from '../../labels'
 import { transformLibraryErrors } from './transformLibraryErrors'
 
 describe('transformLibraryErrors', () => {

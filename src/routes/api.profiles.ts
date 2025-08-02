@@ -27,11 +27,21 @@ export const loader = async ({ request }) => {
 
   const { data } = await client
     .from('profiles')
-    .select('id,username,display_name,photo_url,is_verified,country')
+    .select(
+      `id,username,display_name,photo,country, badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            display_name,
+            image_url,
+            action_url
+          )
+        )`,
+    )
     .or(`username.ilike.%${q}%,display_name.ilike.%${q}%`)
     .limit(10)
 
-  const profiles = data?.map((x) => Profile.fromDB(x as DBProfile))
+  const profiles = data?.map((x) => Profile.fromDB(x as unknown as DBProfile))
 
   return Response.json(profiles, { headers, status: 200 })
 }

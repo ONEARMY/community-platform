@@ -1,40 +1,32 @@
-import { useMemo } from 'react'
+import { useCallback } from 'react'
 import { Field } from 'react-final-form'
-import TagsSelect from 'src/common/Form/TagsSelect'
+import { ProfileTagsSelect } from 'src/common/Tags/ProfileTagsSelect'
 import { fields } from 'src/pages/UserSettings/labels'
 import { COMPARISONS } from 'src/utils/comparisons'
-import { getProfileTagsForTheme } from 'src/utils/getProfileTagsForTheme'
 import { Flex, Text } from 'theme-ui'
 
 import { FlexSectionContainer } from '../elements'
 
+import type { ProfileTypeName } from 'oa-shared'
+
 interface IProps {
-  isMemberProfile: boolean
+  profileType: ProfileTypeName | undefined
 }
 
-export const ProfileTags = ({ isMemberProfile }: IProps) => {
+export const ProfileTags = ({ profileType }: IProps) => {
   const { description, title } = fields.tags
 
-  const WrappedTagsSelect = ({ input, ...rest }) => {
-    const profileTags = getProfileTagsForTheme(
-      isMemberProfile ? 'member' : 'space',
-    )
-
-    return (
-      <TagsSelect
+  const renderTagsSelect = useCallback(
+    ({ input }) => (
+      <ProfileTagsSelect
         value={input.value}
         onChange={(tags) => input.onChange(tags)}
-        tagsSource={profileTags}
         maxTotal={5}
+        profileType={profileType}
         isForm
-        {...rest}
       />
-    )
-  }
-
-  const memoWrappedTagsSelect = useMemo(
-    () => WrappedTagsSelect,
-    [isMemberProfile],
+    ),
+    [profileType],
   )
 
   return (
@@ -52,8 +44,8 @@ export const ProfileTags = ({ isMemberProfile }: IProps) => {
           {description}
         </Text>
         <Field
-          name="tags"
-          component={memoWrappedTagsSelect}
+          name="tagIds"
+          component={renderTagsSelect}
           isEqual={COMPARISONS.tags}
         />
       </Flex>

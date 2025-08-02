@@ -1,55 +1,19 @@
-import { useEffect } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { Button, Map } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
 
+import { MapContext } from '../../MapContext'
 import { ButtonZoomIn } from './ButtonZoomIn'
 import { Clusters } from './Cluster.client'
 import { Popup } from './Popup.client'
 
 import type { LatLngExpression } from 'leaflet'
-import type { ILatLng, IMapPin } from 'oa-shared'
-import type { RefObject } from 'react'
-import type { Map as MapType, MapProps } from 'react-leaflet'
+import type { Map as MapType } from 'react-leaflet'
 
-interface IProps {
-  allPins: IMapPin[] | null
-  center: ILatLng
-  mapRef: RefObject<MapType<MapProps, any>>
-  onBlur: () => void
-  onPinClick: (IMapPin) => void
-  selectedPin: IMapPin | undefined
-  setBoundaries: (LatLngBounds) => void
-  setCenter: (ILatLng) => void
-  setShowMobileList: (boolean) => void
-  setZoom: (number) => void
-  zoom: number
-}
-
-export const MapView = (props: IProps) => {
-  const {
-    allPins,
-    center,
-    mapRef,
-    onBlur,
-    onPinClick,
-    selectedPin,
-    setBoundaries,
-    setCenter,
-    setShowMobileList,
-    setZoom,
-    zoom,
-  } = props
-
-  const handleLocationChange = () => {
-    if (mapRef.current) {
-      const boundaries = mapRef.current.leafletElement.getBounds()
-      setBoundaries(boundaries)
-    }
-  }
-
-  const isViewportGreaterThanTablet = window.innerWidth > 1024
-  const mapCenter: LatLngExpression = center ? [center.lat, center.lng] : [0, 0]
-  const mapZoom = center ? zoom : 2
+export const MapView = () => {
+  const mapState = useContext(MapContext)
+  const [zoom, setZoom] = useState(2)
+  const mapRef = useRef<MapType>(null)
 
   useEffect(() => {
     if (mapRef.current) {
@@ -57,17 +21,32 @@ export const MapView = (props: IProps) => {
     }
   }, [mapRef])
 
+  if (!mapState) {
+    return null
+  }
+
+  const handleLocationChange = () => {
+    if (mapRef.current) {
+      mapState.setBoundaries(mapRef.current.leafletElement.getBounds())
+    }
+  }
+
+  const isViewportGreaterThanTablet = window.innerWidth > 1024
+  const mapCenter: LatLngExpression = mapState.location
+    ? [mapState.location.lat, mapState.location.lng]
+    : [0, 0]
+
   return (
     <Map
       ref={mapRef}
       className="markercluster-map"
       center={mapCenter}
-      zoom={mapZoom}
+      zoom={mapState?.location ? zoom : 2}
       setZoom={setZoom}
       maxZoom={18}
       style={{ flex: 1, backgroundColor: '#AAD3DF' }}
       zoomControl={isViewportGreaterThanTablet}
-      onclick={onBlur}
+      onclick={() => mapState.selectPin(null)}
       ondragend={handleLocationChange}
       onzoomend={handleLocationChange}
       onresize={isViewportGreaterThanTablet ? handleLocationChange : undefined}
@@ -85,7 +64,10 @@ export const MapView = (props: IProps) => {
           gap: 2,
         }}
       >
-        <ButtonZoomIn setCenter={setCenter} setZoom={setZoom} />
+        <ButtonZoomIn
+          setCenter={(value) => mapState.setLocation(value)}
+          setZoom={setZoom}
+        />
       </Box>
 
       <Flex
@@ -100,17 +82,21 @@ export const MapView = (props: IProps) => {
           data-cy="ShowMobileListButton"
           icon="step"
           sx={{ display: ['flex', 'flex', 'none'], zIndex: 1000 }}
-          onClick={() => setShowMobileList(true)}
+          onClick={() => mapState.setIsMobile(true)}
           small
         >
           Show list view
         </Button>
       </Flex>
-      {allPins && (
-        <Clusters pins={allPins} onPinClick={onPinClick} prefix="new" />
+      {mapState.allPins && (
+        <Clusters pins={mapState.allPins} onPinClick={mapState.selectPin} />
       )}
-      {selectedPin && (
-        <Popup activePin={selectedPin} mapRef={mapRef} onClose={onBlur} />
+      {mapState.selectedPin && (
+        <Popup
+          activePin={mapState.selectedPin}
+          mapRef={mapRef}
+          onClose={() => mapState.selectPin(null)}
+        />
       )}
     </Map>
   )

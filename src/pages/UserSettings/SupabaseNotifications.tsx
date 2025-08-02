@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { form } from 'src/pages/UserSettings/labels'
 import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm'
 
@@ -14,12 +14,9 @@ export const SupabaseNotifications = () => {
     useState<DBNotificationsPreferences | null>(null)
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
 
-  const { userStore } = useCommonStores().stores
-  const user = userStore.activeUser
+  const { profile } = useProfileStore()
   const hasMessagingOn =
-    user?.isContactableByPublic === undefined
-      ? true
-      : user?.isContactableByPublic
+    profile?.isContactable === undefined ? true : profile?.isContactable
 
   const refreshPreferences = async () => {
     const preferences = await notificationsPreferencesService.getPreferences()
@@ -63,15 +60,15 @@ export const SupabaseNotifications = () => {
     }
   }
 
-  if (!user) return null
+  if (!profile) return null
 
   return (
     <SupabaseNotificationsForm
       initialValues={initialValues}
       isLoading={isLoading}
-      hasMessagingOn={hasMessagingOn}
       onSubmit={onSubmit}
       onUnsubscribe={onUnsubscribe}
+      profileIsContactable={hasMessagingOn}
       submitResults={submitResults}
     />
   )

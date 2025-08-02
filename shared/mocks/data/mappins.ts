@@ -1,16 +1,4 @@
 export const mappins = {
-  settings_community_new: {
-    _id: 'settings_community_new',
-    _deleted: false,
-    type: 'community-builder',
-    moderation: 'awaiting-moderation',
-    location: {
-      lat: 51.5073,
-      lng: -0.127647,
-    },
-    _modified: '2020-01-07T12:15:09.178Z',
-    _created: '2020-01-07T12:15:09.178Z',
-  },
   settings_machine_new: {
     _deleted: false,
     type: 'machine-builder',
@@ -22,18 +10,6 @@ export const mappins = {
     _modified: '2020-01-07T12:14:50.764Z',
     _created: '2020-01-07T12:14:50.764Z',
     _id: 'settings_machine_new',
-  },
-  settings_plastic_new: {
-    type: 'collection-point',
-    moderation: 'awaiting-moderation',
-    location: {
-      lat: 2.19082,
-      lng: 102.256,
-    },
-    _modified: '2020-01-07T12:15:42.751Z',
-    _created: '2020-01-07T12:15:42.751Z',
-    _id: 'settings_plastic_new',
-    _deleted: false,
   },
   settings_workplace_new: {
     type: 'workspace',

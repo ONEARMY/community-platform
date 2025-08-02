@@ -8,24 +8,10 @@ import { describe, expect, it, vi } from 'vitest'
 import { FormProvider } from './__mocks__/FormProvider'
 import { SettingsPageImpact } from './SettingsPageImpact'
 
-let mockUser = FactoryUser()
-
-vi.mock('src/common/hooks/useCommonStores', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  __esModule: true,
-  useCommonStores: () => ({
-    stores: {
-      userStore: {
-        activeUser: mockUser,
-      },
-    },
-  }),
-}))
-
-describe('SettingsPageImpact', () => {
-  it('renders existing and missing impact', async () => {
-    mockUser = FactoryUser({
-      profileType: ProfileTypeList.SPACE,
+vi.mock('src/stores/Profile/profile.store', () => ({
+  useProfileStore: () => ({
+    profile: FactoryUser({
+      type: ProfileTypeList.SPACE,
       impact: {
         2023: [
           {
@@ -40,11 +26,18 @@ describe('SettingsPageImpact', () => {
           },
         ],
       },
-    })
+    }),
+  }),
+  ProfileStoreProvider: ({ children }: { children: React.ReactNode }) =>
+    children,
+}))
+
+describe('SettingsPageImpact', () => {
+  it('renders existing and missing impact', async () => {
     // Act
     let wrapper
     act(() => {
-      wrapper = FormProvider(mockUser, <SettingsPageImpact />)
+      wrapper = FormProvider(<SettingsPageImpact />)
     })
 
     await waitFor(() => {

@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker'
-import { ExternalLinkLabel } from 'oa-shared'
 
 import { MESSAGE_MAX_CHARACTERS } from '../../../../src/pages/User/constants'
 import { contact } from '../../../../src/pages/User/labels'
@@ -26,13 +25,13 @@ describe('[Profile]', () => {
   describe('[By Anonymous]', () => {
     it('[Can view all public profile information]', () => {
       cy.step('Go to Profile')
-      cy.visit(`/u/${eventReader.userName}`)
+      cy.visit(`/u/${eventReader.username}`)
       cy.title().should(
         'eq',
         `${eventReader.displayName} - Profile - Precious Plastic`,
       )
 
-      cy.get('[data-cy=userDisplayName]').contains(eventReader.userName)
+      cy.get('[data-cy=userDisplayName]').contains(eventReader.username)
       cy.get('[data-testid=library-stat]').contains('1')
       cy.get('[data-testid=research-stat]').should('exist')
 
@@ -51,7 +50,7 @@ describe('[Profile]', () => {
 
       cy.step('Go to Profile')
       cy.clickMenuItem(UserMenuItem.Profile)
-      cy.wait(5000)
+      cy.wait(1000)
       cy.url().should('include', `/u/${user.username}`)
       cy.get('[data-cy=SpaceProfile]').should('not.exist')
       cy.get('[data-cy=MemberProfile]').should('be.visible')
@@ -104,9 +103,9 @@ describe('[Profile]', () => {
       cy.visit('/settings')
       cy.completeUserProfile(contactee.username)
       cy.get('[data-cy=PublicContactSection]').should('be.visible')
-      cy.get('[data-cy=isContactableByPublic-true]').click({ force: true })
+      cy.get('[data-cy=isContactable-true]').click({ force: true })
       cy.saveSettingsForm()
-      cy.get('[data-cy=isContactableByPublic-false]')
+      cy.get('[data-cy=isContactable-false]')
 
       cy.step('No contact tab visible for contactee')
       cy.visit(`/u/${contactee.username}`)
@@ -126,11 +125,6 @@ describe('[Profile]', () => {
       cy.logout()
       cy.signIn(contactee.email, contactee.password)
       cy.visit('/settings')
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.EMAIL,
-        url: 'something@test.com',
-      })
       cy.saveSettingsForm()
 
       cy.visit(`/u/${contactee.username}`)
@@ -138,7 +132,7 @@ describe('[Profile]', () => {
       cy.get('[data-cy=UserContactWrapper]')
       cy.get('[data-cy="UserContactForm-NotAvailable"]')
       cy.get('[data-cy="UserContactForm"]').should('not.exist')
-      cy.get('[data-cy="profile-link"]').should(
+      cy.get('[data-cy="profile-website"]').should(
         'have.attr',
         'href',
         `mailto:something@test.com`,
@@ -175,11 +169,6 @@ describe('[Profile]', () => {
         country: 'Tokelau',
         description: 'contact checking',
       })
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.SOCIAL_MEDIA,
-        url: 'http://something.to.delete/',
-      })
 
       cy.saveSettingsForm()
 
@@ -194,7 +183,7 @@ describe('[Profile]', () => {
       cy.signIn(subscriber.email, subscriber.password)
 
       cy.step('Can go to contribution data')
-      cy.visit(`/u/${workspacePopulated.userName}`)
+      cy.visit(`/u/${workspacePopulated.username}`)
       cy.get('[data-cy=ContribTab]').click()
     })
 
@@ -204,7 +193,7 @@ describe('[Profile]', () => {
       cy.signIn(subscriber.email, subscriber.password)
 
       cy.step('Ensure hidden with no contributions')
-      cy.visit(`/u/${workspaceEmpty.userName}`)
+      cy.visit(`/u/${workspaceEmpty.username}`)
       cy.get('[data-cy=MemberProfile]').should('not.exist')
       cy.get('[data-cy=SpaceProfile]').should('be.visible')
 
@@ -214,7 +203,7 @@ describe('[Profile]', () => {
 
     it('[Cannot see profile views]', () => {
       cy.signIn(subscriber.email, subscriber.password)
-      cy.visit(`/u/${profile_views.userName}`)
+      cy.visit(`/u/${profile_views.username}`)
       cy.get('[data-testid=profile-views-stat]').should('not.exist')
     })
 
@@ -222,7 +211,7 @@ describe('[Profile]', () => {
       setIsPreciousPlastic()
       cy.signIn(subscriber.email, subscriber.password)
 
-      cy.visit(`/u/${subscriber.userName}`)
+      cy.visit(`/u/${subscriber.username}`)
 
       cy.get('[data-testid=questions-link]').should('be.visible')
       cy.get('[data-testid=questions-stat]')
@@ -235,7 +224,7 @@ describe('[Profile]', () => {
       setIsPreciousPlastic()
       cy.signIn(subscriber.email, subscriber.password)
 
-      cy.visit(`/u/${subscriber.userName}`)
+      cy.visit(`/u/${subscriber.username}`)
 
       cy.get('[data-testid=questions-link]').click()
       cy.url().should('include', `questions`)
@@ -245,7 +234,7 @@ describe('[Profile]', () => {
       setIsPreciousPlastic()
       cy.signIn(subscriber.email, subscriber.password)
 
-      cy.visit(`/u/${subscriber.userName}`)
+      cy.visit(`/u/${subscriber.username}`)
 
       cy.get('[data-cy=ContribTab]').click()
       cy.get('[data-testid="question-contributions"]').should('be.visible')
@@ -258,7 +247,7 @@ describe('[Profile]', () => {
       setIsPreciousPlastic()
       cy.signIn(subscriber.email, subscriber.password)
 
-      cy.visit(`/u/${subscriber.userName}`)
+      cy.visit(`/u/${subscriber.username}`)
       cy.get('[data-cy=ContribTab]').click()
 
       cy.get('[data-cy="the-first-test-question-link"]').click()
@@ -276,7 +265,7 @@ describe('[Profile]', () => {
 describe('[By Beta Tester]', () => {
   it('[Displays other information]', () => {
     cy.signIn(betaTester.email, betaTester.password)
-    cy.visit(`/u/${profile_views.userName}`)
+    cy.visit(`/u/${profile_views.username}`)
 
     cy.step('Displays view count for profile with views')
     cy.get('[data-testid=profile-views-stat]').contains(/Views: \d+/)

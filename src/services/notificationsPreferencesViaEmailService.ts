@@ -1,11 +1,11 @@
 import type {
-  DBNotificationsPreferences,
+  DBPreferencesWithProfileContact,
   NotificationsPreferencesViaEmailFormData,
 } from 'oa-shared'
 
 const getPreferences = async (
   userCode: string,
-): Promise<DBNotificationsPreferences | null> => {
+): Promise<DBPreferencesWithProfileContact | null> => {
   try {
     const response = await fetch(
       `/api/notifications-preferences-via-email/${userCode}`,
@@ -16,8 +16,8 @@ const getPreferences = async (
       return null
     }
 
-    const { preferences } = await response.json()
-    return preferences
+    const { preferences, is_contactable } = await response.json()
+    return { preferences, is_contactable }
   } catch (err) {
     console.error(err)
     return null

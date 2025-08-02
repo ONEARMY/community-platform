@@ -3,6 +3,9 @@
 // This is more consistent than others and allows better querying
 export type ISODateString = string
 
+/**
+ * @deprecated Use the native File instead. See ImageInputV2. Should no longer "convert" images client side.
+ */
 export interface IConvertedFileMeta {
   photoData: File
   objectUrl: string
@@ -15,16 +18,6 @@ export type FetchState = 'idle' | 'fetching' | 'completed'
 export interface ILatLng {
   lat: number
   lng: number
-}
-
-export interface ILocation {
-  name: string
-  country: string
-  countryCode: string
-  administrative: string
-  latlng: ILatLng
-  postcode: string
-  value: string
 }
 
 export type Collaborator = {

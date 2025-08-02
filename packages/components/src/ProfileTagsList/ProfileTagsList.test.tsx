@@ -23,7 +23,7 @@ describe('ProfileTagsList', () => {
 
   it('shows open when open for visitors', () => {
     const { getByText } = render(
-      <ProfileTagsList tags={[]} openToVisitors={{ policy: 'open' }} isSpace />,
+      <ProfileTagsList tags={[]} visitorPolicy={{ policy: 'open' }} isSpace />,
     )
 
     expect(getByText('Open to visitors', { exact: false })).toBeInTheDocument()
@@ -33,7 +33,7 @@ describe('ProfileTagsList', () => {
     const { getByText } = render(
       <ProfileTagsList
         tags={[]}
-        openToVisitors={{ policy: 'appointment' }}
+        visitorPolicy={{ policy: 'appointment' }}
         isSpace
       />,
     )
@@ -48,7 +48,7 @@ describe('ProfileTagsList', () => {
     const { getByText } = render(
       <ProfileTagsList
         tags={[]}
-        openToVisitors={{ policy: 'closed' }}
+        visitorPolicy={{ policy: 'closed' }}
         showVisitorModal={callback}
         isSpace
       />,

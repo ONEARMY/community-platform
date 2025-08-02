@@ -5,9 +5,11 @@ import { logger } from 'src/logger'
 
 import { GetLocation } from '../../utils/geolocation'
 
+import type { ILatLng } from 'oa-shared'
+
 interface IProps {
-  setCenter: (ILatLng) => void
-  setZoom: (number) => void
+  setCenter: (value: ILatLng) => void
+  setZoom: (value: number) => void
 }
 
 const ZOOM_IN_TOOLTIP = 'Zoom in to your location'

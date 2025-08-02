@@ -1,6 +1,3 @@
-import { DB_ENDPOINTS } from 'oa-shared'
-import { firestore } from 'src/utils/firebase'
-
 import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type {
   IPatreonMembershipAttributes,
@@ -170,16 +167,6 @@ const verifyAndUpdatePatreonUser = async (
       is_supporter: isSupporterUser,
     })
     .eq('auth_id', user.id)
-
-  // Update in firebase - need this until we fully migrate profile and map
-  await firestore
-    .doc(DB_ENDPOINTS.users + '/' + user.user_metadata['username'])
-    .update({
-      patreon: patreonUserParsed,
-      badges: {
-        supporter: isSupporterUser,
-      },
-    })
 }
 
 const disconnectUser = async (user: User, client: SupabaseClient) => {
@@ -187,16 +174,6 @@ const disconnectUser = async (user: User, client: SupabaseClient) => {
     .from('profiles')
     .update({ patreon: null, is_supporter: false })
     .eq('auth_id', user.id)
-
-  // Update in firebase - need this until we fully migrate profile and map
-  await firestore
-    .doc(DB_ENDPOINTS.users + '/' + user.user_metadata['username'])
-    .update({
-      patreon: null,
-      badges: {
-        supporter: false,
-      },
-    })
 }
 
 export const patreonServiceServer = {

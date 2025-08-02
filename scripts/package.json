@@ -12,7 +12,7 @@
     "mustache": "^4.2.0",
     "oa-shared": "workspace:*",
     "rimraf": "^5.0.5",
-    "ts-node": "^10.2.1"
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/rimraf": "^3.0.2"

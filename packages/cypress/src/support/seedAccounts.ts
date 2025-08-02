@@ -2,6 +2,7 @@ import { MOCK_DATA } from '../data'
 import { supabaseAdminClient } from '../utils/TestUtils'
 
 import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { DBProfile } from 'oa-shared'
 
 // Creates user accounts and respective profiles
 export const seedAccounts = async () => {
@@ -70,18 +71,29 @@ const createProfile = async (
     return data
   }
 
+  const profileDB: Partial<DBProfile> & { tenant_id: string } = {
+    auth_id: authId,
+    display_name: user.username,
+    username: user.username,
+    roles: user.roles,
+    tenant_id: tenantId,
+    type: user.type,
+    about: user.about || '',
+    photo: user.photo || {},
+    country: user.country,
+    cover_images: user.cover_images || null,
+    impact: user.impact || null,
+    is_blocked_from_messaging: user.is_blocked_from_messaging || false,
+    is_contactable: user.is_contactable || true,
+    last_active: user.last_active || null,
+    total_views: user.total_views || 0,
+    visitor_policy: user.visitor_policy || null,
+    website: user.website || null,
+  }
+
   const profileResult = await supabase
     .from('profiles')
-    .insert({
-      auth_id: authId,
-      display_name: user.username,
-      username: user.username,
-      roles: user.roles,
-      tenant_id: tenantId,
-      type: user.type,
-      about: user.about || '',
-      photo: user.photo || {},
-    })
+    .insert(profileDB)
     .select('*')
     .single()
 

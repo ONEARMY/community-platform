@@ -45,9 +45,7 @@ describe('Delete account flow', () => {
   describe('when I type the exact "DELETE" confirmation', () => {
     beforeEach(() => {
       cy.get('[data-cy=delete-account-modal-open-button]').click()
-      cy.get('[data-cy=delete-account-modal-confirmation-input]').type(
-        'DELETE',
-      )
+      cy.get('[data-cy=delete-account-modal-confirmation-input]').type('DELETE')
     })
 
     it('enables and lets me delete my account', () => {

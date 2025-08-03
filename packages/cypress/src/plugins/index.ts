@@ -1,5 +1,4 @@
 /* global console */
-
 export function setupNodeEvents(on: Cypress.PluginEvents) {
   /**
    * Log console to terminal

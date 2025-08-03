@@ -64,6 +64,17 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
       backgroundColor: colors.white,
     },
   },
+  danger: {
+    ...BASE_BUTTON,
+    border: '0px',
+    backgroundColor: 'transparent',
+    textDecoration: 'underline',
+    textUnderlineOffset: '2px',
+    color: colors.redCrayola,
+    '&[disabled]': {
+      opacity: 0.5,
+    },
+  },
   success: {
     ...BASE_BUTTON,
     border: '2px solid ' + colors.black,

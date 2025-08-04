@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Card, Flex } from 'theme-ui'
 
 import { Button } from '../Button/Button'
@@ -12,6 +12,7 @@ interface IProps {
 
 export const ActionSet = ({ children, itemType }: IProps) => {
   const [show, setShow] = useState<boolean>(false)
+  const cardRef = useRef<HTMLDivElement>(null)
 
   const toDisplay = children.filter((child) => !!child)
   if (!children || toDisplay.length === 0) {
@@ -20,8 +21,27 @@ export const ActionSet = ({ children, itemType }: IProps) => {
 
   const onClick = () => setShow((show) => !show)
 
+  useEffect(() => {
+  const handleClickOutsideDropdownCard = (event: MouseEvent) => {
+    if (
+      cardRef.current &&
+      !cardRef.current.contains(event.target as Node)
+    ) {
+      setShow((prev) => !prev)
+    }
+  }
+
+  if(show) document.addEventListener("mousedown", handleClickOutsideDropdownCard)
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutsideDropdownCard)
+  }
+}, [show])
+
+
   return (
     <Flex
+      ref={cardRef}
       sx={{
         display: 'inline-block',
         position: 'relative',
@@ -56,7 +76,9 @@ export const ActionSet = ({ children, itemType }: IProps) => {
               flexDirection: 'column',
             }}
           >
-            {...children}
+
+              {...children}
+
           </Flex>
         </Card>
       )}

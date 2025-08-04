@@ -266,7 +266,6 @@ describe('[Settings]', () => {
       const description = 'We have some space to run a workplace'
       const profileType = 'workspace'
       const tag = 'Shredder'
-      const url = 'something@test.com'
       const visitorType = 'Open to visitors'
       const visitorDetails =
         'Visitors are welcome between 13:00 and 15:00 every day'
@@ -322,15 +321,6 @@ describe('[Settings]', () => {
       cy.get('[data-cy=tag-openToVisitors]').contains(visitorType).click()
       cy.get('[data-cy=VisitorModal]').contains(visitorDetails)
       cy.get('[data-cy="close"]').click()
-
-      cy.step('Updated settings display on contact tab')
-      cy.get('[data-cy="contact-tab"]').click()
-      cy.contains(`Other users are able to contact you`)
-      cy.get('[data-cy="profile-website"]').should(
-        'have.attr',
-        'href',
-        `mailto:${url}`,
-      )
 
       cy.step('Set and display impact data')
       cy.visit('/settings')

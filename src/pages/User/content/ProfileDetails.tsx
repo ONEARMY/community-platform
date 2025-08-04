@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { TagList, UserStatistics, VisitorModal } from 'oa-components'
-import { UserRole } from 'oa-shared'
+import { UserStatistics, VisitorModal } from 'oa-components'
+import { ProfileTypeList, UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
+import { ProfileTags } from 'src/pages/common/ProfileTags'
 import { mapPinService } from 'src/pages/Maps/map.service'
 import { Box, Divider, Flex, Paragraph } from 'theme-ui'
 
@@ -69,7 +70,14 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
             gap: 2,
           }}
         >
-          {tags && <TagList tags={tags.map((t) => ({ label: t.name }))} />}
+          {(tags || visitorPolicy) && (
+            <ProfileTags
+              tags={tags}
+              showVisitorModal={() => setShowVisitorModal(true)}
+              visitorPolicy={visitorPolicy}
+              isSpace={profile.type !== ProfileTypeList.MEMBER}
+            />
+          )}
           {about && <Paragraph>{about}</Paragraph>}
 
           {visitorPolicy && (

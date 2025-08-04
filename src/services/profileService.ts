@@ -30,7 +30,6 @@ const update = async (value: ProfileFormData) => {
   data.append('country', value.country)
   data.append('type', value.type)
   data.append('isContactable', value.isContactable ? 'true' : 'false')
-  data.append('showVisitorPolicy', value.showVisitorPolicy.toString())
   data.append('website', value.website)
 
   if (value.existingCoverImages && value.existingCoverImages?.length > 0) {

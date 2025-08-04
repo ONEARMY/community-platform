@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { TagList, UserStatistics, VisitorModal } from 'oa-components'
+import { UserRole } from 'oa-shared'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { mapPinService } from 'src/pages/Maps/map.service'
 import { Box, Divider, Flex, Paragraph } from 'theme-ui'
 
@@ -14,6 +16,8 @@ interface IProps {
 export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
   const { about, tags, visitorPolicy } = profile
   const [showVisitorModal, setShowVisitorModal] = useState(false)
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [pin, setPin] = useState<MapPin | undefined>(undefined)
 
   useEffect(() => {
@@ -86,14 +90,28 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
             margin: 0,
           }}
         />
-        <UserStatistics
-          profile={profile}
-          pin={pin}
-          libraryCount={docs?.projects.length || 0}
-          usefulCount={userTotalUseful}
-          researchCount={docs?.research.length || 0}
-          questionCount={docs?.questions.length || 0}
-        />
+        <AuthWrapper
+          roleRequired={UserRole.BETA_TESTER}
+          fallback={
+            <UserStatistics
+              profile={profile}
+              libraryCount={docs?.projects.length || 0}
+              usefulCount={userTotalUseful}
+              researchCount={docs?.research.length || 0}
+              questionCount={docs?.questions.length || 0}
+              showViews={false}
+            />
+          }
+        >
+          <UserStatistics
+            profile={profile}
+            libraryCount={docs?.projects.length || 0}
+            usefulCount={userTotalUseful}
+            researchCount={docs?.research.length || 0}
+            questionCount={docs?.questions.length || 0}
+            showViews
+          />
+        </AuthWrapper>
       </Flex>
     </Box>
   )

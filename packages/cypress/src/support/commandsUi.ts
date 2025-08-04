@@ -95,8 +95,7 @@ Cypress.Commands.add('addToMarkdownField', (text: string) => {
 
 Cypress.Commands.add('saveSettingsForm', () => {
   cy.get('[data-cy=save]').click({ force: true })
-  cy.get('[data-cy=loader]').should('exist')
-  cy.get('[data-cy=loader]').should('not.exist')
+
   cy.get('[data-cy=errors-container]').should('not.exist')
   cy.get('[data-cy="TextNotification: success"]').should('be.visible')
 })

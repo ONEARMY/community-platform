@@ -53,7 +53,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const mapService = new MapServiceServer(client)
-    const result = await mapService.upsert(data)
+    const result = await mapService.upsert(data, profile)
 
     if (result?.error) {
       console.error(result.error)

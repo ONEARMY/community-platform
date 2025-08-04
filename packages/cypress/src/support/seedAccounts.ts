@@ -2,7 +2,7 @@ import { MOCK_DATA } from '../data'
 import { supabaseAdminClient } from '../utils/TestUtils'
 
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBProfile } from 'oa-shared'
+import type { DBProfile, Profile } from 'oa-shared'
 
 // Creates user accounts and respective profiles
 export const seedAccounts = async () => {
@@ -55,7 +55,7 @@ const createAuthAndProfile = async (supabase, user, existingUsers: User[]) => {
 
 const createProfile = async (
   supabase: SupabaseClient,
-  user: any,
+  user: Partial<Profile>,
   authId: string,
 ) => {
   const tenantId = Cypress.env('TENANT_ID')
@@ -72,6 +72,7 @@ const createProfile = async (
   }
 
   const profileDB: Partial<DBProfile> & { tenant_id: string } = {
+    created_at: user.createdAt,
     auth_id: authId,
     display_name: user.username,
     username: user.username,
@@ -79,15 +80,13 @@ const createProfile = async (
     tenant_id: tenantId,
     type: user.type,
     about: user.about || '',
-    photo: user.photo || {},
+    photo: user.photo || null,
     country: user.country,
-    cover_images: user.cover_images || null,
+    cover_images: user.coverImages || ([] as any),
     impact: user.impact || null,
-    is_blocked_from_messaging: user.is_blocked_from_messaging || false,
-    is_contactable: user.is_contactable || true,
-    last_active: user.last_active || null,
-    total_views: user.total_views || 0,
-    visitor_policy: user.visitor_policy || null,
+    is_blocked_from_messaging: user.isBlockedFromMessaging || false,
+    is_contactable: user.isContactable || true,
+    last_active: user.lastActive || null,
     website: user.website || null,
   }
 

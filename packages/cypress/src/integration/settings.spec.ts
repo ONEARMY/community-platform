@@ -170,7 +170,7 @@ describe('[Settings]', () => {
       const description = 'We have some space to run a workplace'
       const profileType = 'space'
       const tag = 'Meetups'
-      const url = 'something@test.com'
+      const website = 'https://wikipedia.com'
 
       const user = generateNewUserDetails()
       cy.signUpNewUser(user)
@@ -187,6 +187,7 @@ describe('[Settings]', () => {
       cy.setSettingBasicUserInfo({
         displayName,
         description,
+        website,
       })
       cy.selectTag(tag, '[data-cy=profile-tag-select]')
 
@@ -213,11 +214,7 @@ describe('[Settings]', () => {
       cy.step('Updated settings display on contact tab')
       cy.get('[data-cy="contact-tab"]').click()
       cy.contains(`Other users are able to contact you`)
-      cy.get('[data-cy="profile-website"]').should(
-        'have.attr',
-        'href',
-        `mailto:${url}`,
-      )
+      cy.get('[data-cy="profile-website"]').should('have.attr', 'href', website)
     })
   })
 

@@ -11,7 +11,7 @@ export const MemberHistory = (props: IProps) => {
   const memberSince = useMemo(() => {
     try {
       if (props.memberSince) {
-        return props.memberSince.getFullYear()
+        return new Date(props.memberSince).getFullYear().toString()
       }
     } catch (error) {
       console.error(error)
@@ -23,7 +23,7 @@ export const MemberHistory = (props: IProps) => {
   const lastActive = useMemo(() => {
     try {
       if (props.lastActive) {
-        return formatDistanceToNow(props.lastActive, {
+        return formatDistanceToNow(new Date(props.lastActive), {
           addSuffix: true,
         })
       }

@@ -36,7 +36,6 @@ export const UserImagesSection = ({
 
         <Box
           data-testid="photo"
-          data-cy="userImage"
           sx={{
             width: '120px',
             height: '120px',
@@ -49,6 +48,7 @@ export const UserImagesSection = ({
               render={({ input, meta }) => {
                 return (
                   <ImageInputFieldV2
+                    dataCy="userImage"
                     input={input}
                     meta={meta}
                     onFilesChange={(file) => input.onChange(file)}
@@ -136,6 +136,7 @@ export const UserImagesSection = ({
                     render={({ input, meta }) => {
                       return (
                         <ImageInputFieldV2
+                          dataCy={`coverImages-${i}`}
                           input={input}
                           meta={meta}
                           onFilesChange={(file) => input.onChange(file)}

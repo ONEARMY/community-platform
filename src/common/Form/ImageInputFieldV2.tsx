@@ -7,13 +7,16 @@ import type { FieldProps } from './types'
 
 type IImageInputProps = Partial<React.ComponentProps<typeof ImageInputV2>>
 
-interface IProps extends FieldProps, IImageInputProps {}
+interface IProps extends FieldProps, IImageInputProps {
+  dataCy: string
+}
 
 export const ImageInputFieldV2 = (props: IProps) => {
-  const { meta, onFilesChange } = props
+  const { dataCy, meta, onFilesChange } = props
 
   return (
     <FieldContainer
+      data-cy={dataCy}
       style={{
         height: '100%',
         width: '100%',

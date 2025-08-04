@@ -99,9 +99,6 @@ describe('[Profile]', () => {
       cy.logout()
       cy.signIn(contactee.email, contactee.password)
       cy.completeUserProfile(contactee.username)
-
-      cy.visit('/settings')
-      cy.completeUserProfile(contactee.username)
       cy.get('[data-cy=PublicContactSection]').should('be.visible')
       cy.get('[data-cy=isContactable-true]').click({ force: true })
       cy.saveSettingsForm()
@@ -121,10 +118,11 @@ describe('[Profile]', () => {
       cy.visit(`/u/${contactee.username}`)
       cy.get('[data-cy=contact-tab]').should('not.exist')
 
-      cy.step('Contact tab shows when links are present')
+      cy.step('Contact tab shows when website link is present')
       cy.logout()
       cy.signIn(contactee.email, contactee.password)
       cy.visit('/settings')
+      cy.get('[data-cy=website').clear().type('https://bbc.co.uk')
       cy.saveSettingsForm()
 
       cy.visit(`/u/${contactee.username}`)
@@ -135,7 +133,7 @@ describe('[Profile]', () => {
       cy.get('[data-cy="profile-website"]').should(
         'have.attr',
         'href',
-        `mailto:something@test.com`,
+        `https://bbc.co.uk`,
       )
 
       cy.step('Contact tab links shows for everyone else')

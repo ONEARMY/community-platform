@@ -23,6 +23,7 @@ export interface UserStatisticsProps {
   usefulCount: number
   researchCount: number
   questionCount: number
+  showViews: boolean
   sx?: ThemeUIStyleObject | undefined
 }
 
@@ -142,7 +143,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
             </InternalLink>
           )}
 
-          {props.profile.totalViews > 0 && (
+          {props.showViews && props.profile.totalViews > 0 && (
             <Flex data-testid="profile-views-stat">
               <Icon glyph="show" size={22} />
               <Box ml={1}>{`Views: ${props.profile.totalViews}`}</Box>
@@ -159,6 +160,7 @@ const isEmpty = (
 ) =>
   !props.pin &&
   !props.profile.badges?.length &&
+  !props.profile.country &&
   !props.libraryCount &&
   !props.researchCount &&
   !props.profile.totalViews &&

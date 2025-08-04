@@ -40,6 +40,7 @@ export const users: Users = {
       id: 'string',
       publicUrl: 'string',
     },
+    lastActive: new Date('2022-01-30T18:51:57.719Z'),
   },
   admin: {
     createdAt: new Date('2022-01-30T18:51:57.719Z'),

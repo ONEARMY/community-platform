@@ -3796,8 +3796,8 @@
           "nullNotDistinct": false
         },
         {
-          "name": "idx_name_bucket_unique",
-          "fields": ["bucket_id", "name"],
+          "name": "idx_name_bucket_level_unique",
+          "fields": ["bucket_id", "level", "name"],
           "nullNotDistinct": false
         },
         {
@@ -4180,7 +4180,7 @@
           "name": "action_url",
           "columnName": "action_url",
           "type": "text",
-          "isRequired": true,
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -4626,20 +4626,6 @@
           "maxLength": null
         },
         {
-          "id": "public.profile_types.tenant_id",
-          "name": "tenant_id",
-          "columnName": "tenant_id",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.profile_types.description",
           "name": "description",
           "columnName": "description",
@@ -4657,6 +4643,20 @@
           "id": "public.profile_types.map_pin_name",
           "name": "map_pin_name",
           "columnName": "map_pin_name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.profile_types.tenant_id",
+          "name": "tenant_id",
+          "columnName": "tenant_id",
           "type": "text",
           "isRequired": true,
           "kind": "scalar",
@@ -4752,6 +4752,20 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.profiles.is_verified",
+          "name": "is_verified",
+          "columnName": "is_verified",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
           "isId": false,
           "maxLength": null
         },
@@ -4864,6 +4878,20 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.profiles.is_supporter",
+          "name": "is_supporter",
+          "columnName": "is_supporter",
+          "type": "bool",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
         },

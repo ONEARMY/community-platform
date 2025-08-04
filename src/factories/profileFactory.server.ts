@@ -28,7 +28,7 @@ export class ProfileFactory {
 
     return new Profile({
       id: dbProfile.id,
-      createdAt: dbProfile.created_at,
+      createdAt: new Date(dbProfile.created_at),
       country: dbProfile.country,
       displayName: dbProfile.display_name,
       username: dbProfile.username,
@@ -43,7 +43,9 @@ export class ProfileFactory {
       coverImages: coverImages,
       impact,
       isContactable: !!dbProfile.is_contactable,
-      lastActive: dbProfile.last_active,
+      lastActive: dbProfile.last_active
+        ? new Date(dbProfile.last_active)
+        : null,
       website: dbProfile.website,
       patreon: dbProfile.patreon || null,
       totalViews: dbProfile.total_views,

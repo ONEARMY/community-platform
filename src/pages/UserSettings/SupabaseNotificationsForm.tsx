@@ -92,7 +92,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
       ),
       description:
         'Password resets, email verifications and other service emails',
-      glyph: 'email',
+      glyph: 'service-email',
       name: 'Service emails',
     },
   ]
@@ -112,7 +112,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
         </InternalLink>
       ),
       description: 'Through the contact form on your profile page',
-      glyph: 'discussion',
+      glyph: 'email',
       name: 'Receiving messages',
     })
   }

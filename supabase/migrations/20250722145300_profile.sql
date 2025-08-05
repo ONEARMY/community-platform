@@ -89,6 +89,8 @@ alter table "public"."profiles" drop column "total_useful";
 
 alter table "public"."profiles" drop column "location";
 
+alter table "public"."profiles" drop column "is_verified";
+
 alter table "public"."profiles" add column "cover_images" json[];
 
 alter table "public"."profiles" add column "last_active" timestamp with time zone;

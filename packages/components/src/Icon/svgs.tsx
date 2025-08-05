@@ -64,6 +64,7 @@ import replySVG from '../../assets/icons/reply.svg'
 import replyOutlineSVG from '../../assets/icons/reply-outline.svg'
 import reportSVG from '../../assets/icons/report.svg'
 import revenueSVG from '../../assets/icons/revenue.svg'
+import serviceEmailSVG from '../../assets/icons/service-email.svg'
 import slidersSVG from '../../assets/icons/sliders.svg'
 import starterKitsSVG from '../../assets/icons/starter-kits.svg'
 import stepSVG from '../../assets/icons/step.svg'
@@ -148,6 +149,7 @@ export const iconMap = {
   research: <ImageIcon src={researchSVG} />,
   revenue: <ImageIcon src={revenueSVG} />,
   search: <ImageIcon src={searchSVG} />,
+  serviceEmail: <ImageIcon src={serviceEmailSVG} />,
   show: <ImageIcon src={eyeSVG} />,
   sliders: <ImageIcon src={slidersSVG} />,
   socialMedia: <ImageIcon src={socialMediaSVG} />,

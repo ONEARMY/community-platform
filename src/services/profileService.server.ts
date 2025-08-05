@@ -81,6 +81,15 @@ export class ProfileServiceServer {
       .from('profiles')
       .select(
         `*,
+        badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            display_name,
+            image_url,
+            action_url
+          )
+        ),
         tags:profile_tags_relations(
           profile_tags(
             id,

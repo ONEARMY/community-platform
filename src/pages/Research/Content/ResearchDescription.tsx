@@ -77,7 +77,9 @@ const ResearchDescription = (props: IProps) => {
     const dates = [
       research?.modifiedAt,
       ...(research?.updates?.map((update) => update?.modifiedAt) || []),
-    ].filter((date): date is Date => date !== null)
+    ]
+      .filter((date): date is Date => date !== null)
+      .map((date) => new Date(date))
 
     return dates.length > 0 ? max(dates) : new Date()
   }, [research])

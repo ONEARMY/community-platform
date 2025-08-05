@@ -47,10 +47,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const profileFactory = new ProfileFactory(client)
+  const profile = profileFactory.fromDB(profileDb, authorVotes)
 
   return Response.json(
     {
-      profile: profileFactory.fromDB(profileDb, authorVotes),
+      profile,
       userCreatedDocs,
     },
     { headers },

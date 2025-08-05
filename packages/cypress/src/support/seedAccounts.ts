@@ -1,11 +1,11 @@
 import { MOCK_DATA } from '../data'
-import { supabaseAdminClient } from '../utils/TestUtils'
+import { seedDatabase, supabaseAdminClient } from '../utils/TestUtils'
 
 import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { DBProfile, Profile } from 'oa-shared'
 
 // Creates user accounts and respective profiles
-export const seedAccounts = async () => {
+export const seedAccounts = async (profileBadges) => {
   const supabase = supabaseAdminClient()
 
   const accounts = Object.values(MOCK_DATA.users).map((user) => ({
@@ -14,19 +14,29 @@ export const seedAccounts = async () => {
     ...user,
   }))
 
-  const existingUsers = await supabase.auth.admin.listUsers()
+  const existingUsers = await supabase.auth.admin.listUsers({ perPage: 10000 })
 
   const profiles = await Promise.all(
     accounts.map(
       async (account) =>
-        await createAuthAndProfile(supabase, account, existingUsers.data.users),
+        await createAuthAndProfile(
+          supabase,
+          account,
+          existingUsers.data.users,
+          profileBadges.data[0].id,
+        ),
     ),
   )
 
   return { profiles }
 }
 
-const createAuthAndProfile = async (supabase, user, existingUsers: User[]) => {
+const createAuthAndProfile = async (
+  supabase,
+  user,
+  existingUsers: User[],
+  profileBadgeId: number,
+) => {
   const authUser = await supabase.auth.admin.createUser({
     email: user.email,
     password: user.password,
@@ -43,20 +53,26 @@ const createAuthAndProfile = async (supabase, user, existingUsers: User[]) => {
     )
 
     if (authUser) {
-      return (profile = await createProfile(supabase, user, authUser.id))
+      return (profile = await createProfile(
+        supabase,
+        user,
+        authUser.id,
+        profileBadgeId,
+      ))
     }
 
     return profile
   }
 
   const authId = authUser.data.id
-  return await createProfile(supabase, user, authId)
+  return await createProfile(supabase, user, authId, profileBadgeId)
 }
 
 const createProfile = async (
   supabase: SupabaseClient,
   user: Partial<Profile>,
   authId: string,
+  profileBadgeId: number,
 ) => {
   const tenantId = Cypress.env('TENANT_ID')
 
@@ -74,7 +90,7 @@ const createProfile = async (
   const profileDB: Partial<DBProfile> & { tenant_id: string } = {
     created_at: user.createdAt,
     auth_id: authId,
-    display_name: user.username,
+    display_name: user.displayName,
     username: user.username,
     roles: user.roles,
     tenant_id: tenantId,
@@ -95,6 +111,21 @@ const createProfile = async (
     .insert(profileDB)
     .select('*')
     .single()
+
+  if (profileResult.data.username === 'demo_user') {
+    await seedDatabase(
+      {
+        profile_badges_relations: [
+          {
+            profile_id: profileResult.data.id,
+            profile_badge_id: profileBadgeId,
+            tenant_id: tenantId,
+          },
+        ],
+      },
+      tenantId,
+    )
+  }
 
   return profileResult.data
 }

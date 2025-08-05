@@ -258,6 +258,39 @@ describe('[Profile]', () => {
         .contains('The first test question?')
     })
   })
+  describe('badges', () => {
+    it('should be shown across the platform', () => {
+      cy.step('On profile')
+      cy.visit(`/u/${subscriber.username}`)
+      cy.get('[data-testid="badge_pro"]').contains('PRO')
+      cy.get('[data-testid="Username: pro badge"]')
+
+      cy.step('On project pages')
+      cy.get('[data-cy="ContribTab"]').click()
+      cy.get('[data-testid="library-link"]').first().click()
+      cy.get('[data-cy=library-basis]').get(
+        '[data-testid="Username: pro badge"]',
+      )
+
+      // Test bug, the research links 404
+      // cy.step('On research pages')
+      // cy.visit(`/u/${subscriber.username}`)
+      // cy.get('[data-cy="ContribTab"]').click()
+      // cy.get('[data-testid="research-link"]').first().click()
+      // cy.get('[data-testid="Username: pro badge"]')
+
+      cy.step('On question pages')
+      cy.visit(`/u/${subscriber.username}`)
+      cy.get('[data-cy="ContribTab"]').click()
+      cy.get('[data-testid="questions-link"]').first().click()
+      cy.get('[data-cy=question-body]').get(
+        '[data-testid="Username: pro badge"]',
+      )
+      cy.get('[data-cy=comments-section]').get(
+        '[data-testid="Username: pro badge"]',
+      )
+    })
+  })
 })
 
 describe('[By Beta Tester]', () => {

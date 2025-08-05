@@ -1,3 +1,4 @@
+export { badges } from './badges'
 export { categories } from './categories'
 export { discussions } from './discussions'
 export { library } from './library'

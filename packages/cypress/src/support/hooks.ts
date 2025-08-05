@@ -1,5 +1,6 @@
 import { clearDatabase, clearStorage, createStorage } from '../utils/TestUtils'
 import { seedAccounts } from './seedAccounts'
+import { seedBadges } from './seedBadges'
 import { seedLibrary } from './seedLibrary'
 import { seedNews } from './seedNews'
 import { seedProfileTags, seedQuestions, seedTags } from './seedQuestions'
@@ -30,7 +31,8 @@ before(() => {
     // )
     await createStorage(Cypress.env('TENANT_ID'))
 
-    const { profiles } = await seedAccounts()
+    const { profile_badges } = await seedBadges()
+    const { profiles } = await seedAccounts(profile_badges)
     await seedProfileTags()
 
     const { tags } = await seedTags()
@@ -66,6 +68,8 @@ after(async () => {
       'projects',
       'project_steps',
       'tags',
+      'profile_badges',
+      'profile_badges_relations',
     ],
     Cypress.env('TENANT_ID'),
   )

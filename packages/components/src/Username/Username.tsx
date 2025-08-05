@@ -67,9 +67,10 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
       >
         {username}
       </Text>
-      {badges?.map((x) => (
-        <UserBadge key={x.id} badge={x} />
-      ))}
+      {badges &&
+        badges.map((badge) => {
+          return <UserBadge key={badge.id} badge={badge} />
+        })}
     </Flex>
   )
 

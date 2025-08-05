@@ -86,7 +86,11 @@ export const QuestionPage = observer(({ question }: IProps) => {
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
       <Breadcrumbs content={question} variant="question" />
-      <Card sx={{ position: 'relative' }} variant="responsive">
+      <Card
+        data-cy="question-body"
+        sx={{ position: 'relative' }}
+        variant="responsive"
+      >
         <Flex sx={{ flexDirection: 'column', padding: [3, 4], gap: 3 }}>
           <Flex sx={{ flexWrap: 'wrap', gap: 3 }}>
             <ClientOnly fallback={<></>}>
@@ -205,6 +209,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
       <ClientOnly fallback={<></>}>
         {() => (
           <Card
+            data-cy="comments-section"
             variant="responsive"
             sx={{
               background: 'softblue',

@@ -88,7 +88,8 @@ export class Profile {
     } catch (error) {
       console.error('error parsing impact')
     }
-
+    console.log('hello?')
+    console.log(dbProfile.badges)
     return new Profile({
       id: dbProfile.id,
       createdAt: dbProfile.created_at,

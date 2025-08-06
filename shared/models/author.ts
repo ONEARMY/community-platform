@@ -1,7 +1,7 @@
 import { ProfileBadge } from './profileBadge'
 
 import type { DBMedia, Image } from './media'
-import type { DBProfileBadgeJoin } from './profileBadge'
+import type { DBProfileBadge, DBProfileBadgeJoin } from './profileBadge'
 
 // TODO: derive from DBProfile - not doing because was causing circular dependencies
 export type DBAuthor = {
@@ -10,7 +10,7 @@ export type DBAuthor = {
   readonly country: string
   readonly display_name: string
   readonly photo: DBMedia | null
-  readonly badges?: DBProfileBadgeJoin[]
+  readonly badges?: DBProfileBadgeJoin[] | DBProfileBadge[]
 }
 export class Author {
   id: number
@@ -25,11 +25,17 @@ export class Author {
   }
 
   static fromDB(dbAuthor: DBAuthor, photo?: Image) {
+    const badges =
+      dbAuthor.badges?.map((badge) =>
+        badge.profile_badges
+          ? ProfileBadge.fromDBJoin(badge)
+          : ProfileBadge.fromDBJSONJoin(badge as DBProfileBadge),
+      ) || []
+
     return new Author({
       id: dbAuthor.id,
       country: dbAuthor.country,
-      badges:
-        dbAuthor.badges?.map((x) => ProfileBadge.fromDBJoin(x)) || undefined,
+      badges,
       displayName: dbAuthor.display_name,
       photo: photo,
       username: dbAuthor.username,

@@ -63,10 +63,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   try {
     const formData = await request.formData()
+    const country = formData.get('country')
+
     const data = {
       displayName: formData.get('displayName') as string,
       about: formData.get('about') as string,
-      country: formData.get('country') as string,
+      country: country === 'null' ? null : country,
       type: formData.get('type'),
       existingImageId: formData.get('existingImageId') as string,
       isContactable: formData.get('isContactable') === 'true',

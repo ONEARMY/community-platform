@@ -287,15 +287,15 @@ describe('[Research]', () => {
         .type(researchItem.description)
       cy.selectTag(researchItem.category, '[data-cy=category-select]')
       cy.get('[data-cy=submit]').click()
-      cy.get('[data-cy="loader"]')
-      cy.contains(researchItem.title)
       cy.get('[data-cy=follow-button]').contains('Following')
+      cy.contains(researchItem.title)
 
       cy.step('Users can follow for research updates (for later expectations)')
       cy.logout()
       cy.signIn(admin.email, admin.password)
       cy.visit(researchURL)
       cy.get('[data-cy=follow-button]').first().click()
+      cy.clearNotifications()
       cy.logout()
 
       cy.step('Can start adding research update')
@@ -342,9 +342,6 @@ describe('[Research]', () => {
       cy.get('[data-cy=submit]').click()
       cy.contains(finalUpdateTitle)
       cy.get('[data-cy=DraftUpdateLabel]').should('not.exist')
-
-      cy.step('Notification about update published')
-      cy.visit(`/research/`)
 
       cy.step('All ready for a discussion')
       cy.contains('0 comments')

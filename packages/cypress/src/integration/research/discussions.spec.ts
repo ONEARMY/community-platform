@@ -24,8 +24,8 @@ describe('[Research.Discussions]', () => {
 
     cy.signIn(admin.email, admin.password)
 
-    const newComment = `An example comment from ${admin.userName}`
-    const updatedNewComment = `I've updated my comment now. Love ${admin.userName}. ${randomId}!`
+    const newComment = `An example comment from ${admin.username}`
+    const updatedNewComment = `I've updated my comment now. Love ${admin.username}. ${randomId}!`
 
     const research = MOCK_DATA.research[1]
     const researchPath = `/research/${research.slug}`
@@ -39,8 +39,8 @@ describe('[Research.Discussions]', () => {
     cy.editDiscussionItem('CommentItem', newComment, updatedNewComment)
 
     cy.step('Another user can add reply')
-    const newReply = `An interesting point, I hadn't thought about that. All the best ${secondCommentor.userName}`
-    const updatedNewReply = `I hadn't thought about that. Really good point. ${secondCommentor.userName}`
+    const newReply = `An interesting point, I hadn't thought about that. All the best ${secondCommentor.username}`
+    const updatedNewReply = `I hadn't thought about that. Really good point. ${secondCommentor.username}`
 
     cy.logout()
 
@@ -56,18 +56,17 @@ describe('[Research.Discussions]', () => {
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
 
     cy.step('First commentor can respond')
-    const secondReply = `Quick reply. ${admin.userName}. ${randomId}...`
+    const secondReply = `Quick reply. ${admin.username}. ${randomId}...`
 
+    cy.step('Notification generated for reply from replier')
     cy.logout()
     cy.signIn(admin.email, admin.password)
     cy.visit(researchPath)
-
-    cy.step('Notification generated for reply from replier')
     cy.expectNewNotification({
       content: updatedNewReply,
       path: researchPath,
       title: research.title,
-      username: secondCommentor._id,
+      username: secondCommentor.username,
     })
     cy.wait(2000)
     cy.get('[data-cy=highlighted-comment]')
@@ -97,7 +96,7 @@ describe('[Research.Discussions]', () => {
       content: secondReply,
       path: researchPath,
       title: research.title,
-      username: admin.userName,
+      username: admin.username,
     })
 
     // Currently hard to test as the article is created via the seed

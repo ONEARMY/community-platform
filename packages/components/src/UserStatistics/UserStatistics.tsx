@@ -1,4 +1,4 @@
-import { Box, Card, Flex, Image } from 'theme-ui'
+import { Box, Card, Flex, Image, Text } from 'theme-ui'
 
 import ForumIcon from '../../assets/icons/icon-forum.svg'
 import HowToCountIcon from '../../assets/icons/icon-library.svg'
@@ -78,20 +78,20 @@ export const UserStatistics = (props: UserStatisticsProps) => {
         )}
 
         <Flex sx={{ gap: 2, flexDirection: 'column' }}>
-          {props?.profile.badges?.map((x) => (
-            <Flex key={x.id} sx={{ gap: 1 }} data-testid={`badge_${x.name}`}>
-              <Image src={x.imageUrl} />
+          {props?.profile.badges?.map((badge) => (
+            <Flex
+              key={badge.id}
+              sx={{ alignItems: 'center', gap: 1 }}
+              data-testid={`badge_${badge.name}`}
+            >
+              <Image src={badge.imageUrl} />
               <Box>
-                {x.actionUrl ? (
-                  <ExternalLink
-                    href={x.actionUrl}
-                    target="_blank"
-                    sx={{ color: 'black' }}
-                  >
-                    <span>{x.displayName}</span>
+                {badge.actionUrl ? (
+                  <ExternalLink href={badge.actionUrl} target="_blank">
+                    <Text sx={{ color: 'black' }}>{badge.displayName}</Text>
                   </ExternalLink>
                 ) : (
-                  <span>{x.displayName}</span>
+                  <Text sx={{ color: 'black' }}>{badge.displayName}</Text>
                 )}
               </Box>
             </Flex>

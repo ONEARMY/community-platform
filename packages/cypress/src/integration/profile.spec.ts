@@ -272,12 +272,11 @@ describe('[Profile]', () => {
         '[data-testid="Username: pro badge"]',
       )
 
-      // Test bug, the research links 404
-      // cy.step('On research pages')
-      // cy.visit(`/u/${subscriber.username}`)
-      // cy.get('[data-cy="ContribTab"]').click()
-      // cy.get('[data-testid="research-link"]').first().click()
-      // cy.get('[data-testid="Username: pro badge"]')
+      cy.step('On research pages')
+      cy.visit(`/u/${subscriber.username}`)
+      cy.get('[data-cy="ContribTab"]').click()
+      cy.get('[data-testid="research-link"]').first().click()
+      cy.get('[data-testid="Username: pro badge"]')
 
       cy.step('On question pages')
       cy.visit(`/u/${subscriber.username}`)

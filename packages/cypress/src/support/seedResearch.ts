@@ -37,7 +37,6 @@ export const seedResearch = async (profiles, tagsData) => {
     tenantId,
   )
 
-  // seeding
   for (let i = 0; i < MOCK_DATA.research.length; i++) {
     const researchItem = MOCK_DATA.research[i]
 

@@ -2,6 +2,7 @@ import { clearDatabase, clearStorage, createStorage } from '../utils/TestUtils'
 import { seedAccounts } from './seedAccounts'
 import { seedBadges } from './seedBadges'
 import { seedLibrary } from './seedLibrary'
+import { seedMap } from './seedMap'
 import { seedNews } from './seedNews'
 import { seedProfileTags, seedQuestions, seedTags } from './seedQuestions'
 import { seedResearch } from './seedResearch'
@@ -34,6 +35,8 @@ before(() => {
     const { profile_badges } = await seedBadges()
     const { profiles } = await seedAccounts(profile_badges)
     await seedProfileTags()
+
+    await seedMap(profiles)
 
     const { tags } = await seedTags()
     await seedQuestions(profiles)

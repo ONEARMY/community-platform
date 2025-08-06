@@ -1,16 +1,12 @@
 import { createSeedClient } from '@snaplet/seed'
+import * as allData from 'oa-shared/mocks/data'
 
-// import * as allData from 'oa-shared/mocks/data'
 import libraryJson from './.snaplet/library.json'
 import questionsJson from './.snaplet/questions.json'
-import { mapPinsSeed } from './seed/mapPinsSeed'
 import { profilesSeed } from './seed/profilesSeed'
 import { usersSeed } from './seed/usersSeed'
 import { convertToSlug } from './src/utils/slug'
 
-// const MOCK_DATA = {
-//   ...allData,
-// }
 import type {
   categoriesChildInputs,
   categoriesScalars,
@@ -34,6 +30,10 @@ import type {
 } from '@snaplet/seed'
 
 const tenant_id = `precious-plastic`
+
+const MOCK_DATA = {
+  ...allData,
+}
 
 const _QUESTIONS_BASE: Partial<questionsScalars> = {
   tenant_id,
@@ -144,12 +144,13 @@ const seedMapPins = (
 ): Partial<map_pinsScalars>[] => {
   const pins: Partial<map_pinsScalars>[] = []
 
-  const pinsSeed = mapPinsSeed(tenant_id)
+  const pinsSeed = MOCK_DATA.mapPins
   const minLength = Math.min(pinsSeed.length, profiles.length)
 
   for (let i = 0; i < minLength; i++) {
     pins.push({
       ...pinsSeed[i],
+      tenant_id,
       profile_id: profiles[i].id,
     })
   }

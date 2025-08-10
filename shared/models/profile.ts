@@ -77,8 +77,8 @@ export class Profile {
 
   static fromDB(
     dbProfile: DBProfile,
-    photo: Image = null,
-    coverImages: Image[] = null,
+    photo: Image | null = null,
+    coverImages: Image[] | null = null,
     authorVotes?: AuthorVotes[],
   ) {
     let impact = null

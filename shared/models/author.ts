@@ -33,7 +33,7 @@ export class Author {
       country: dbAuthor.country,
       badges,
       displayName: dbAuthor.display_name,
-      photo: photo,
+      photo: photo ?? null,
       username: dbAuthor.username,
     })
   }

@@ -88,15 +88,15 @@ export class Profile {
     } catch (error) {
       console.error('error parsing impact')
     }
-    console.log('hello?')
-    console.log(dbProfile.badges)
+
     return new Profile({
       id: dbProfile.id,
       createdAt: dbProfile.created_at,
       country: dbProfile.country,
       displayName: dbProfile.display_name,
       username: dbProfile.username,
-      photo: photo,
+      photo: photo ?? null,
+
       roles: dbProfile.roles || null,
       type: dbProfile.type,
       visitorPolicy: dbProfile.visitor_policy
@@ -104,12 +104,12 @@ export class Profile {
         : null,
       isBlockedFromMessaging: !!dbProfile.is_blocked_from_messaging,
       about: dbProfile.about,
-      coverImages: coverImages,
+      coverImages: coverImages ?? null,
       impact,
       isContactable: !!dbProfile.is_contactable,
       lastActive: dbProfile.last_active,
       website: dbProfile.website,
-      patreon: dbProfile.patreon,
+      patreon: dbProfile.patreon ?? null,
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
       badges: dbProfile.badges?.map((x) => ProfileBadge.fromDBJoin(x)),

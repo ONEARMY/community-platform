@@ -18868,7 +18868,7 @@ __metadata:
     ts-jest: "npm:29.1.4"
     ts-loader: "npm:^9.5.1"
     ts-node: "npm:^10.9.2"
-    typescript: "npm:^5.1.6"
+    typescript: "npm:^5.7.2"
     uuid: "npm:^9.0.1"
     webpack: "npm:^5.91.0"
     webpack-cli: "npm:^5.1.4"
@@ -25629,7 +25629,7 @@ __metadata:
     styled-system: "npm:^5.1.5"
     theme-ui: "npm:^0.16.2"
     ts-node: "npm:^10.9.2"
-    typescript: "npm:^5.1.6"
+    typescript: "npm:^5.7.2"
     use-debounce: "npm:^8.0.4"
     vite-plugin-svgr: "npm:^4.2.0"
     vitest: "npm:^1.6.0"
@@ -25657,7 +25657,7 @@ __metadata:
     fs-extra: "npm:^11.2.0"
     oa-shared: "workspace:*"
     ts-node: "npm:^10.9.2"
-    typescript: "npm:^5.1.6"
+    typescript: "npm:^5.7.2"
     wait-on: "npm:^7.2.0"
     wait-port: "npm:^1.1.0"
   languageName: unknown
@@ -25698,7 +25698,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "oa-shared@workspace:shared"
   dependencies:
-    typescript: "npm:^5.1.6"
+    typescript: "npm:^5.7.2"
   languageName: unknown
   linkType: soft
 
@@ -25706,7 +25706,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "oa-themes@workspace:packages/themes"
   dependencies:
-    typescript: "npm:^5.1.6"
+    typescript: "npm:^5.7.2"
   languageName: unknown
   linkType: soft
 
@@ -25985,7 +25985,7 @@ __metadata:
     ts-node: "npm:^10.9.2"
     tslog: "npm:^4.9.2"
     tsx: "npm:^4.20.3"
-    typescript: "npm:^5.1.6"
+    typescript: "npm:^5.7.2"
     vite: "npm:^5.2.12"
     vite-plugin-env-compatible: "npm:^2.0.1"
     vite-plugin-svgr: "npm:^4.2.0"
@@ -32269,23 +32269,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.1.6":
-  version: 5.7.2
-  resolution: "typescript@npm:5.7.2"
+"typescript@npm:^5.7.2":
+  version: 5.9.2
+  resolution: "typescript@npm:5.9.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/4caa3904df69db9d4a8bedc31bafc1e19ffb7b24fbde2997a1633ae1398d0de5bdbf8daf602ccf3b23faddf1aeeb9b795223a2ed9c9a4fdcaf07bfde114a401a
+  checksum: 10/cc2fe6c822819de5d453fa25aa9f32096bf70dde215d481faa1ad84a283dfb264e33988ed8f6d36bc803dd0b16dbe943efa311a798ef76d5b3892a05dfbfd628
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.1.6#optional!builtin<compat/typescript>":
-  version: 5.7.2
-  resolution: "typescript@patch:typescript@npm%3A5.7.2#optional!builtin<compat/typescript>::version=5.7.2&hash=cef18b"
+"typescript@patch:typescript@npm%3A^5.7.2#optional!builtin<compat/typescript>":
+  version: 5.9.2
+  resolution: "typescript@patch:typescript@npm%3A5.9.2#optional!builtin<compat/typescript>::version=5.9.2&hash=cef18b"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/ff27fc124bceb8969be722baa38af945b2505767cf794de3e2715e58f61b43780284060287d651fcbbdfb6f917f4653b20f4751991f17e0706db389b9bb3f75d
+  checksum: 10/a8606016982f2f46ed085e9b4b84d8a5251b42ff0560c995c20f3c3ab9543e37c1015d92ab2f1cc7b2af2b499d12bac57e11789da271fb3225af8ec0b24e5b64
   languageName: node
   linkType: hard
 

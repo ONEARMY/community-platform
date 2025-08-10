@@ -185,7 +185,7 @@
     "supabase": "1.223.10",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.3",
-    "typescript": "^5.1.6",
+    "typescript": "^5.7.2",
     "vite": "^5.2.12",
     "vite-plugin-env-compatible": "^2.0.1",
     "vite-plugin-svgr": "^4.2.0",

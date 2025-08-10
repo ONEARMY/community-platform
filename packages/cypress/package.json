@@ -18,7 +18,7 @@
     "fs-extra": "^11.2.0",
     "oa-shared": "workspace:*",
     "ts-node": "^10.9.2",
-    "typescript": "^5.1.6",
+    "typescript": "^5.7.2",
     "wait-on": "^7.2.0",
     "wait-port": "^1.1.0"
   },

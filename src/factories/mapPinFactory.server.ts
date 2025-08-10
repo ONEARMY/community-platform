@@ -44,7 +44,7 @@ export class MapPinFactory {
       type: profile.type,
       photo: photo || null,
       isContactable: profile.is_contactable,
-      tags: profile.tags?.map((x) => ProfileTag.fromDB(x)),
+      tags: profile.tags?.map((x) => ProfileTag.fromDBJoin(x)),
       badges: profile.badges?.map((x) => ProfileBadge.fromDBJoin(x)),
     } as PinProfile
   }

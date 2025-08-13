@@ -10,6 +10,8 @@ import {
 import { UserRole } from 'oa-shared'
 import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
+import { trackEvent } from 'src/common/Analytics'
+import { usefulService } from 'src/services/usefulService'
 import { Card, Flex } from 'theme-ui'
 
 import { CommentReply } from './CommentReplySupabase'
@@ -44,6 +46,8 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
     () => !!comment.replies?.some((x) => x.highlighted),
   )
   const { profile } = useProfileStore()
+  const [usefulCount, setUsefulCount] = useState<number>(comment.voteCount)
+  const [voted, setVoted] = useState<boolean>(false)
 
   const isEditable = useMemo(() => {
     return (
@@ -55,6 +59,17 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
   const item = 'CommentItem'
 
   useEffect(() => {
+    const getVoted = async () => {
+      const voted = await usefulService.hasVoted('comment', comment.id)
+      setVoted(voted)
+    }
+
+    if (activeUser) {
+      getVoted()
+    }
+  }, [activeUser, comment])
+
+  useEffect(() => {
     if (comment.highlighted) {
       commentRef.current?.scrollIntoView({
         behavior: 'smooth',
@@ -62,6 +77,34 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
       })
     }
   }, [comment.highlighted])
+
+  const onUsefulClick = async (
+    vote: 'add' | 'delete',
+    eventCategory = 'Comment',
+  ) => {
+    if (!activeUser?.userName) {
+      return
+    }
+
+    // Trigger update without waiting
+    if (vote === 'add') {
+      await usefulService.add('comment', comment.id)
+    } else {
+      await usefulService.remove('comment', comment.id)
+    }
+
+    setVoted((prev) => !prev)
+
+    setUsefulCount((prev) => {
+      return vote === 'add' ? prev + 1 : prev - 1
+    })
+
+    trackEvent({
+      category: eventCategory,
+      action: vote === 'add' ? 'CommentUseful' : 'CommentUsefulRemoved',
+      label: `comment-${comment.id}`,
+    })
+  }
 
   return (
     <Flex
@@ -105,6 +148,10 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
               hideSubscribeIcon
             />
           }
+          onUsefulClick={onUsefulClick}
+          hasUserVotedUseful={voted}
+          votedUsefulCount={usefulCount}
+          isLoggedIn={!!activeUser}
         />
 
         <Flex

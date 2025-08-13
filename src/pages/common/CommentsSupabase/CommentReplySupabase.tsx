@@ -8,6 +8,8 @@ import {
   Modal,
 } from 'oa-components'
 import { UserRole } from 'oa-shared'
+import { trackEvent } from 'src/common/Analytics'
+import { usefulService } from 'src/services/usefulService'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Box, Flex, Text } from 'theme-ui'
 
@@ -26,6 +28,8 @@ export const CommentReply = observer(
     const commentRef = useRef<HTMLDivElement>()
     const [showEditModal, setShowEditModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [usefulCount, setUsefulCount] = useState<number>(comment.voteCount)
+    const [voted, setVoted] = useState<boolean>(comment.hasVoted) // TODO: retrieve the info from userStore ?
 
     const { profile: activeUser } = useProfileStore()
 
@@ -34,6 +38,17 @@ export const CommentReply = observer(
         activeUser?.username === comment.createdBy?.username ||
         activeUser?.roles?.includes(UserRole.ADMIN)
       )
+    }, [activeUser, comment])
+
+    useEffect(() => {
+      const getVoted = async () => {
+        const voted = await usefulService.hasVoted('comment', comment.id)
+        setVoted(voted)
+      }
+
+      if (loggedInUser) {
+        getVoted()
+      }
     }, [activeUser, comment])
 
     useEffect(() => {
@@ -46,6 +61,37 @@ export const CommentReply = observer(
     }, [comment.highlighted])
 
     const item = 'ReplyItem'
+    const loggedInUser = userStore.activeUser
+
+    const onUsefulClick = async (
+      vote: 'add' | 'delete',
+      eventCategory = 'Comment',
+    ) => {
+      console.log('Reply Comment Test', vote, eventCategory)
+
+      if (!loggedInUser?.userName) {
+        return
+      }
+
+      // Trigger update without waiting
+      if (vote === 'add') {
+        await usefulService.add('comment', comment.id)
+      } else {
+        await usefulService.remove('comment', comment.id)
+      }
+
+      setVoted((prev) => !prev)
+
+      setUsefulCount((prev) => {
+        return vote === 'add' ? prev + 1 : prev - 1
+      })
+
+      trackEvent({
+        category: eventCategory,
+        action: vote === 'add' ? 'CommentUseful' : 'CommentUsefulRemoved',
+        label: `comment-${comment.id}`,
+      })
+    }
 
     return (
       <Flex>
@@ -80,6 +126,10 @@ export const CommentReply = observer(
                 comment={comment}
                 setShowDeleteModal={setShowDeleteModal}
                 setShowEditModal={setShowEditModal}
+                onUsefulClick={onUsefulClick}
+                hasUserVotedUseful={voted}
+                votedUsefulCount={usefulCount}
+                isLoggedIn={!!loggedInUser}
               />
             )}
           </Flex>

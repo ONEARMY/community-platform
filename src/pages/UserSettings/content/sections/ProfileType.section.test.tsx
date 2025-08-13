@@ -2,22 +2,33 @@ import '@testing-library/jest-dom/vitest'
 
 import { render, screen } from '@testing-library/react'
 import { SettingsFormProvider } from 'src/test/components/SettingsFormProvider'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { headings } from '../../labels'
 import { ProfileTypeSection } from './ProfileType.section'
 
+import type { ProfileTag } from 'oa-shared'
+
+vi.mock('src/services/profileTagsService', () => ({
+  profileTagsService: {
+    getAllTags: vi.fn().mockResolvedValue([
+      { id: 1, name: 'member', profileType: 'member' },
+      { id: 2, name: 'space', profileType: 'space' },
+    ] as ProfileTag[]),
+  },
+}))
+
 describe('Focus', () => {
-  it('render focus section if more than one activity available', () => {
+  it('render focus section if less than 2 activities', () => {
     render(
       <SettingsFormProvider>
         <ProfileTypeSection
           profileTypes={[
             {
               id: 1,
-              name: 'test',
-              displayName: 'Test',
-              description: 'test desc',
+              name: 'member',
+              displayName: 'Member',
+              description: 'Member desc',
               isSpace: false,
               imageUrl: '',
               mapPinName: '',
@@ -29,19 +40,19 @@ describe('Focus', () => {
       </SettingsFormProvider>,
     )
 
-    expect(screen.queryByText(headings.focus)).toBeInTheDocument()
+    expect(screen.queryByText(headings.focus)).not.toBeInTheDocument()
   })
 
-  it('does not render focus section if less than two activities available', () => {
+  it('does not render focus section more than 2 activities', () => {
     render(
       <SettingsFormProvider>
         <ProfileTypeSection
           profileTypes={[
             {
               id: 1,
-              name: 'test',
-              displayName: 'Test',
-              description: 'test desc',
+              name: 'member',
+              displayName: 'Member',
+              description: 'Member desc',
               isSpace: false,
               imageUrl: '',
               mapPinName: '',
@@ -50,10 +61,10 @@ describe('Focus', () => {
             },
             {
               id: 2,
-              name: 'test 2',
-              displayName: 'Test 2',
-              description: 'test desc 2',
-              isSpace: false,
+              name: 'space',
+              displayName: 'Space',
+              description: 'space desc',
+              isSpace: true,
               imageUrl: '',
               mapPinName: '',
               order: 2,
@@ -64,6 +75,6 @@ describe('Focus', () => {
       </SettingsFormProvider>,
     )
 
-    expect(screen.queryByText(headings.focus)).not.toBeInTheDocument()
+    expect(screen.queryByText(headings.focus)).toBeInTheDocument()
   })
 })

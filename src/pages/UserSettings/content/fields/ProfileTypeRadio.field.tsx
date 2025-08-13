@@ -1,15 +1,14 @@
 import React from 'react'
-import { observer } from 'mobx-react'
 import { MemberBadge } from 'oa-components'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Flex, Input, Label, Text } from 'theme-ui'
 
 import { HiddenInput } from '../elements'
 
+import type { ProfileType } from 'oa-shared'
 import type { FieldRenderProps } from 'react-final-form'
 
 interface IProps {
-  value: string
+  value: ProfileType
   onChange: (value: string) => void
   isSelected: boolean
   textLabel?: string
@@ -42,7 +41,7 @@ const HiddenInputField = ({ input, meta, ...rest }: FieldProps) => (
 // validation - return undefined if no error (i.e. valid)
 const isRequired = (value: any) => (value ? undefined : 'Required')
 
-export const ProfileTypeRadioField = observer((props: IProps) => {
+export const ProfileTypeRadioField = (props: IProps) => {
   const {
     value,
     isSelected,
@@ -53,7 +52,6 @@ export const ProfileTypeRadioField = observer((props: IProps) => {
     required,
     'data-cy': dataCy,
   } = props
-  const { getProfileTypeByName } = useProfileStore()
 
   const classNames: string[] = []
   if (isSelected) {
@@ -62,7 +60,6 @@ export const ProfileTypeRadioField = observer((props: IProps) => {
   if (fullWidth) {
     classNames.push('full-width')
   }
-  const profileType = getProfileTypeByName(value)
 
   return (
     <Label
@@ -84,22 +81,20 @@ export const ProfileTypeRadioField = observer((props: IProps) => {
           borderColor: 'green',
         },
       }}
-      htmlFor={value}
+      htmlFor={value.name}
       className={classNames.join(' ')}
       data-cy={dataCy}
     >
       <HiddenInput
-        id={value}
+        id={value.name}
         name={name}
-        value={value}
+        value={value.name}
         type="radio"
         component={HiddenInputField}
         checked={isSelected}
         validate={required ? isRequired : undefined}
         validateFields={[]}
-        onChange={(v) => {
-          props.onChange(v.target.value)
-        }}
+        onChange={(v) => props.onChange(v.target.value)}
       />
       <Flex
         sx={{
@@ -109,7 +104,7 @@ export const ProfileTypeRadioField = observer((props: IProps) => {
           padding: 2,
         }}
       >
-        <MemberBadge size={130} profileType={profileType} />
+        <MemberBadge size={130} profileType={value} />
       </Flex>
       <Flex sx={{ flexDirection: 'column' }}>
         {textLabel && (
@@ -141,4 +136,4 @@ export const ProfileTypeRadioField = observer((props: IProps) => {
       </Flex>
     </Label>
   )
-})
+}

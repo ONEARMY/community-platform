@@ -27,9 +27,9 @@ describe('filterPins', () => {
       about: '',
       photo: null,
       type: {
-        id: 1,
-        name: 'member',
-        displayName: 'Member',
+        id: 2,
+        name: 'workspace',
+        displayName: 'Workspace',
         description: 'teste',
       } as ProfileType,
       badges: [

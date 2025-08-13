@@ -9,6 +9,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   try {
     const profileService = new ProfileTypesServiceServer(client)
     const profileTypes = await profileService.get()
+
     return Response.json(profileTypes, { headers, status: 200 })
   } catch (error) {
     console.error(error)

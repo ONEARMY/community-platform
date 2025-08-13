@@ -28,7 +28,7 @@ export const filterPins = (
 
   if (types?.length) {
     filteredPins = filteredPins.filter(
-      (x) => x.profile?.type?.id && types.includes(x.profile?.type?.name),
+      (x) => x.profile?.type?.name && types.includes(x.profile?.type?.name),
     )
   }
 

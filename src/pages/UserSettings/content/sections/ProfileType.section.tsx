@@ -53,7 +53,7 @@ export const ProfileTypeSection = ({
                 <Box key={index}>
                   <ProfileTypeRadioField
                     data-cy={profileType.name}
-                    value={profileType.name}
+                    value={profileType}
                     name="type"
                     isSelected={profileType.name === props.input.value}
                     onChange={(v) => props.input.onChange(v)}

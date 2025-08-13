@@ -70,7 +70,7 @@ export const UserImagesSection = ({
       </Flex>
 
       {!isMemberProfile && (
-        <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+        <Flex data-testid="coverImage" sx={{ flexDirection: 'column', gap: 1 }}>
           <Heading variant="subHeading">{`${fields.coverImages.title} *`}</Heading>
           <Text variant="paragraph">{fields.coverImages.description}</Text>
 
@@ -87,7 +87,6 @@ export const UserImagesSection = ({
                       }}
                       key={`existing-image-${index}`}
                       data-cy={`existing-image-${index}`}
-                      data-testid="coverImage"
                     >
                       <FieldContainer
                         style={{

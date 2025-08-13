@@ -90,12 +90,12 @@ describe('src/utils/helpers', () => {
 
   describe('isContactable', () => {
     it('should default to true when field undefined', () => {
-      expect(isContactable(undefined)).toBe(true)
+      expect(isContactable(null)).toBe(true)
     })
 
     it('should return true when given true', () => {
       const user = FactoryUser({ isContactable: true })
-      expect(isContactable(user.isContactable)).toBe(true)
+      expect(isContactable(user.isContactable as boolean)).toBe(true)
     })
 
     it('should return false when given false', () => {

@@ -35,7 +35,7 @@ export class DBProfile {
   is_blocked_from_messaging: boolean | null
   about: string | null
   impact: string | null
-  is_contactable: boolean
+  is_contactable: boolean | null
   last_active: Date | null
   website: string | null
   total_views: number
@@ -57,7 +57,7 @@ export class Profile {
   type: ProfileType | null
   impact: IUserImpact | null
   photo: Image | null
-  isContactable: boolean
+  isContactable: boolean | null
   isBlockedFromMessaging: boolean
   visitorPolicy: UserVisitorPreference | null
   website: string | null
@@ -105,7 +105,7 @@ export class Profile {
       about: dbProfile.about,
       coverImages: coverImages ?? null,
       impact,
-      isContactable: !!dbProfile.is_contactable,
+      isContactable: dbProfile.is_contactable || null,
       lastActive: dbProfile.last_active,
       website: dbProfile.website,
       patreon: dbProfile.patreon ?? null,

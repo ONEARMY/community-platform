@@ -59,6 +59,8 @@ describe('[Profile]', () => {
     })
 
     it('[Contact form]', () => {
+      localStorage.setItem('VITE_NO_MESSAGING', 'false')
+
       const contactee = generateNewUserDetails()
 
       cy.step('Can sign-up and have a contact form')

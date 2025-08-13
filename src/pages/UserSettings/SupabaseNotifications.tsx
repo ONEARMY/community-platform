@@ -3,6 +3,7 @@ import { observer } from 'mobx-react'
 import { form } from 'src/pages/UserSettings/labels'
 import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
+import { isContactable } from 'src/utils/helpers'
 
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm'
 
@@ -16,8 +17,7 @@ export const SupabaseNotifications = observer(() => {
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
 
   const { profile } = useProfileStore()
-  const hasMessagingOn =
-    profile?.isContactable === undefined ? true : profile?.isContactable
+  const hasMessagingOn = isContactable(profile?.isContactable || null)
 
   const refreshPreferences = async () => {
     const preferences = await notificationsPreferencesService.getPreferences()

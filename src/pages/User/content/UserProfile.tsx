@@ -11,6 +11,7 @@ import {
 import { UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isPreciousPlastic } from 'src/config/config'
+import { isContactable } from 'src/utils/helpers'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Alert, Box, Card, Flex } from 'theme-ui'
 
@@ -34,7 +35,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
   const { about, impact, type, tags } = user
   const location = useLocation()
   const isMember = !type?.isSpace
-  const hasContactOption = user.isContactable || !!user.website
+  const hasContactOption = isContactable(user.isContactable) || !!user.website
   const hasContributed =
     docs?.projects.length + docs?.research.length + docs?.questions.length > 0
   const hasImpacted = !!impact

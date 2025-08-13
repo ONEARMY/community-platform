@@ -112,10 +112,14 @@ export const isMessagingModuleOff = () => {
 }
 
 export const isUserContactable = (user: Partial<Profile>) => {
-  return isContactable(user.isContactable)
+  if (typeof user.isContactable === 'boolean') {
+    return isContactable(user.isContactable)
+  }
+
+  return isContactable(null)
 }
 
-export const isContactable = (preference: boolean | undefined) => {
+export const isContactable = (preference: boolean | null) => {
   if (isMessagingModuleOff()) {
     return false
   }

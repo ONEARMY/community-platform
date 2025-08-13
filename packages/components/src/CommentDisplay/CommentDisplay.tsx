@@ -7,6 +7,7 @@ import { CommentAvatar } from '../CommentAvatar/CommentAvatar'
 import { CommentBody } from '../CommentBody/CommentBody'
 import { DisplayDate } from '../DisplayDate/DisplayDate'
 import { AuthorsContext } from '../providers/AuthorsContext'
+import { UsefulButtonLite } from '../UsefulStatsButton/UsefulButtonLite'
 import { Username } from '../Username/Username'
 
 import type { Comment } from 'oa-shared'
@@ -14,10 +15,17 @@ import type { ReactNode } from 'react'
 
 export interface IProps {
   comment: Comment
-  isEditable: boolean | undefined
   itemType: 'ReplyItem' | 'CommentItem'
+  isLoggedIn: boolean
+  isEditable: boolean | undefined
   setShowDeleteModal: (arg: boolean) => void
   setShowEditModal: (arg: boolean) => void
+  votedUsefulCount: number
+  hasUserVotedUseful: boolean
+  onUsefulClick: (
+    vote: 'add' | 'delete',
+    eventCategory?: string,
+  ) => Promise<void>
   followButton?: ReactNode
   followButtonIcon?: ReactNode
 }
@@ -27,12 +35,16 @@ const DELETED_COMMENT = 'The original comment got deleted'
 export const CommentDisplay = (props: IProps) => {
   const {
     comment,
-    isEditable,
     itemType,
-    setShowDeleteModal,
-    setShowEditModal,
+    isLoggedIn,
+    isEditable,
     followButton,
     followButtonIcon,
+    hasUserVotedUseful,
+    votedUsefulCount,
+    setShowDeleteModal,
+    setShowEditModal,
+    onUsefulClick,
   } = props
 
   const { authors } = useContext(AuthorsContext)
@@ -140,7 +152,20 @@ export const CommentDisplay = (props: IProps) => {
                 </ActionSet>
               </Flex>
             </Flex>
-            <CommentBody body={comment.comment} />
+            <Flex
+              sx={{
+                flexDirection: 'column',
+                gap: 2,
+              }}
+            >
+              <CommentBody body={comment.comment} />
+              <UsefulButtonLite
+                votedUsefulCount={votedUsefulCount}
+                hasUserVotedUseful={hasUserVotedUseful}
+                isLoggedIn={!!isLoggedIn}
+                onUsefulClick={onUsefulClick}
+              />
+            </Flex>
           </Flex>
         </Flex>
       </Flex>

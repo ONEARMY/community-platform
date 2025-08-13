@@ -129,6 +129,7 @@ export const glyphs: IGlyphs = {
   research: iconMap.research,
   revenue: iconMap.revenue,
   search: iconMap.search,
+  'service-email': iconMap.serviceEmail,
   slack: <FaSlack />,
   sliders: iconMap.sliders,
   star: iconMap.star,

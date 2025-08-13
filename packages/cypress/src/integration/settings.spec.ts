@@ -161,6 +161,8 @@ describe('[Settings]', () => {
       cy.get('[data-cy=remove-map-pin]').click()
       cy.get('[data-cy="Confirm.modal: Confirm"]').click()
       cy.contains('No map pin currently saved')
+      cy.get('[data-cy="tab-Profile"]').click()
+      cy.get('[data-cy=location-dropdown]').should('be.visible')
     })
 
     it('Can create space', () => {

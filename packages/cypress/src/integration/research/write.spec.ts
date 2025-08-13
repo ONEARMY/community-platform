@@ -347,8 +347,7 @@ describe('[Research]', () => {
       cy.contains('0 comments')
       cy.get('[data-cy="HideDiscussionContainer:button"]').click()
       cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion')
-      // Currently beta testers only:
-      // cy.get('[data-cy=follow-button]').contains('Following')
+      cy.get('[data-cy=follow-button]').contains('Following')
       cy.contains('0 comments')
 
       cy.step('Now published draft has generated notifications')

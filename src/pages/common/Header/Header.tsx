@@ -87,6 +87,7 @@ const Header = observer(() => {
   const env = useContext(EnvironmentContext)
   const { profile } = useProfileStore()
   const isLoggedIn = !!profile
+
   const [isVisible, setIsVisible] = useState(false)
 
   // New notifications states
@@ -159,15 +160,7 @@ const Header = observer(() => {
           </Flex>
           {isLoggedIn && (
             <MobileNotificationsWrapper>
-              <AuthWrapper
-                roleRequired={[
-                  UserRole.BETA_TESTER,
-                  UserRole.RESEARCH_CREATOR,
-                  UserRole.ADMIN,
-                ]}
-              >
-                <NotificationsSupabase device="mobile" />
-              </AuthWrapper>
+              <NotificationsSupabase device="mobile" />
             </MobileNotificationsWrapper>
           )}
           <Flex
@@ -181,17 +174,7 @@ const Header = observer(() => {
             }}
           >
             <MenuDesktop />
-            {isLoggedIn && (
-              <AuthWrapper
-                roleRequired={[
-                  UserRole.BETA_TESTER,
-                  UserRole.RESEARCH_CREATOR,
-                  UserRole.ADMIN,
-                ]}
-              >
-                <NotificationsSupabase device="desktop" />
-              </AuthWrapper>
-            )}
+            {isLoggedIn && <NotificationsSupabase device="desktop" />}
             {isModuleSupported(
               env?.VITE_SUPPORTED_MODULES || '',
               MODULE.USER,
@@ -231,21 +214,6 @@ const Header = observer(() => {
             </MobileMenuWrapper>
           </AnimationContainer>
         )}
-        <AnimationContainer key={'mobileNotificationsContainer'}>
-          <MobileMenuWrapper>
-            {isLoggedIn && (
-              <AuthWrapper
-                roleRequired={[
-                  UserRole.BETA_TESTER,
-                  UserRole.RESEARCH_CREATOR,
-                  UserRole.ADMIN,
-                ]}
-              >
-                <NotificationsSupabase device="mobile" />
-              </AuthWrapper>
-            )}
-          </MobileMenuWrapper>
-        </AnimationContainer>
       </MobileMenuContext.Provider>
     </NotificationsContext.Provider>
   )

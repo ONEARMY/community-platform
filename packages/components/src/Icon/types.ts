@@ -75,6 +75,7 @@ export type availableGlyphs =
   | 'report'
   | 'research'
   | 'revenue'
+  | 'service-email'
   | 'show'
   | 'slack'
   | 'sliders'

@@ -102,8 +102,7 @@ describe('[News.Write]', () => {
       cy.step('All ready for a discussion')
       cy.contains('0 comments')
       cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion')
-      // Currently beta testers only:
-      // cy.get('[data-cy=follow-button]').contains('Following Comments')
+      cy.get('[data-cy=follow-button]').contains('Following Comments')
 
       cy.step('Edit fields')
       cy.wait(2000)

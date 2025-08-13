@@ -14,6 +14,7 @@ import type {
   newsScalars,
   profile_badges_relationsScalars,
   profile_badgesScalars,
+  profile_typesScalars,
   profilesInputs,
   profilesScalars,
   project_stepsChildInputs,
@@ -88,6 +89,10 @@ const _BADGES_BASE: Partial<profile_badgesScalars> = {
   tenant_id,
 }
 
+const _TYPES_BASE: Partial<profile_typesScalars> = {
+  tenant_id,
+}
+
 const _BADGES_RELATIONS_BASE: Partial<profile_badges_relationsScalars> = {
   tenant_id,
 }
@@ -99,6 +104,31 @@ const seedTags = (): tagsChildInputs => [{ ..._TAGS_BASE, name: 'tag 1' }]
 //     ...tag,
 //     tenant_id,
 //   }))
+
+const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
+  {
+    ..._TYPES_BASE,
+    name: 'member',
+    display_name: 'Member',
+    is_space: false,
+    description: 'test',
+    image_url: '',
+    map_pin_name: '',
+    order: 1,
+    small_image_url: '',
+  },
+  {
+    ..._TYPES_BASE,
+    name: 'space',
+    display_name: 'Space',
+    is_space: true,
+    description: 'test',
+    image_url: '',
+    map_pin_name: '',
+    order: 2,
+    small_image_url: '',
+  },
+]
 
 const seedBadges = (): Partial<profile_badgesScalars>[] => [
   { ..._BADGES_BASE, name: 'supporter', display_name: 'Supporter' },
@@ -390,12 +420,14 @@ const main = async () => {
 
   const { users } = await seed.users(usersSeed())
   // await seed.profile_tags(seedProfileTags())
+  const { profile_types } = await seed.profile_types(seedProfileTypes())
 
   const { profiles } = await seed.profiles(
-    (profilesSeed(tenant_id) as Array<any>).map(
+    (profilesSeed(tenant_id) as any[]).map(
       (profile: profilesInputs, index) => ({
         ...profile,
         auth_id: users[index].id,
+        profile_type: profile_types[0].id,
       }),
     ),
   )

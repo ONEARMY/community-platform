@@ -17,29 +17,6 @@ export type WorkspaceType =
   | 'injection'
   | 'mix'
 
-export const ProfileTypeList = {
-  MEMBER: 'member',
-  SPACE: 'space',
-  WORKSPACE: 'workspace',
-  MACHINE_BUILDER: 'machine-builder',
-  COMMUNITY_BUILDER: 'community-builder',
-  COLLECTION_POINT: 'collection-point',
-} as const
-
-export type ProfileTypeName =
-  (typeof ProfileTypeList)[keyof typeof ProfileTypeList]
-
-export type MemberOrSpace =
-  | (typeof ProfileTypeList)['MEMBER']
-  | (typeof ProfileTypeList)['SPACE']
-
-export interface IProfileType {
-  label: ProfileTypeName
-  imageSrc?: string
-  cleanImageSrc?: string
-  cleanImageVerifiedSrc?: string
-  textLabel?: string
-}
 export interface IWorkspaceType {
   label: WorkspaceType
   imageSrc?: string

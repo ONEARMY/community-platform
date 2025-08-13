@@ -62,7 +62,7 @@ export class MapServiceServer {
         .single()
     } else {
       const moderation: Moderation =
-        profile.type === 'member' ? 'accepted' : 'awaiting-moderation'
+        profile.type?.name === 'member' ? 'accepted' : 'awaiting-moderation'
 
       return await this.client
         .from('map_pins')

@@ -5,7 +5,7 @@ import sendMobile from '../../assets/icons/contact.svg'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
 import { ReturnPathLink } from '../ReturnPathLink/ReturnPathLink'
 
-import type { ProfileTypeName } from 'oa-shared'
+import type { ProfileType } from 'oa-shared'
 
 import './CreateComment.css'
 
@@ -18,7 +18,7 @@ export interface Props {
   onChange: (value: string) => void
   comment: string
   placeholder?: string
-  userProfileType?: ProfileTypeName
+  profileType?: ProfileType
   buttonLabel?: string
 }
 
@@ -26,7 +26,6 @@ export const CreateComment = (props: Props) => {
   const [textareaIsFocussed, setTextareaIsFocussed] = useState<boolean>(false)
 
   const { comment, isLoggedIn, isReply, maxLength, onSubmit, isLoading } = props
-  const userProfileType = props.userProfileType || 'member'
   const placeholder = props.placeholder || 'Leave your questions or feedback...'
   const buttonLabel = props.buttonLabel ?? 'Leave a comment'
 
@@ -49,7 +48,7 @@ export const CreateComment = (props: Props) => {
           flexShrink: 0,
         }}
       >
-        <MemberBadge profileType={userProfileType} useLowDetailVersion />
+        <MemberBadge profileType={props.profileType} useLowDetailVersion />
       </Box>
       <Box
         sx={{

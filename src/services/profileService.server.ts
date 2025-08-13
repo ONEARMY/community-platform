@@ -1,6 +1,7 @@
 import { ProfileFactory } from 'src/factories/profileFactory.server'
 
 import { ImageServiceServer } from './imageService.server'
+import { ProfileTypesServiceServer } from './profileTypesSeervice.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
@@ -129,13 +130,16 @@ export class ProfileServiceServer {
 
   async updateProfile(id: number, values: ProfileFormData) {
     const imageService = new ImageServiceServer(this.client)
+    const types = await new ProfileTypesServiceServer(this.client).get()
+    const typeId = types.find((x) => x.name === values.type)!.id
+
     const valuesToUpdate = {
       about: values.about,
       country: values.country,
       display_name: values.displayName,
       website: values.website,
       is_contactable: values.isContactable,
-      type: values.type,
+      profile_type: typeId,
       visitor_policy: values.visitorPreferencePolicy
         ? JSON.stringify({
             policy: values.visitorPreferencePolicy,

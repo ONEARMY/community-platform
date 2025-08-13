@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { observer } from 'mobx-react'
 import { form } from 'src/pages/UserSettings/labels'
 import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
@@ -8,7 +9,7 @@ import { SupabaseNotificationsForm } from './SupabaseNotificationsForm'
 import type { DBNotificationsPreferences } from 'oa-shared'
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
 
-export const SupabaseNotifications = () => {
+export const SupabaseNotifications = observer(() => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [initialValues, setInitialValues] =
     useState<DBNotificationsPreferences | null>(null)
@@ -72,4 +73,4 @@ export const SupabaseNotifications = () => {
       submitResults={submitResults}
     />
   )
-}
+})

@@ -1,10 +1,9 @@
-import { ProfileTypeList } from 'oa-shared'
 import { factoryImage, FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it } from 'vitest'
 
 import { isProfileComplete } from './isProfileComplete'
 
-import type { Profile } from 'oa-shared'
+import type { Profile, ProfileType } from 'oa-shared'
 
 describe('isProfileComplete', () => {
   describe('member', () => {
@@ -12,7 +11,7 @@ describe('isProfileComplete', () => {
       const completeProfile: Partial<Profile> = {
         about: 'A member',
         displayName: 'Jeffo',
-        type: ProfileTypeList.MEMBER,
+        type: { id: 1, name: 'member' } as ProfileType,
         photo: factoryImage,
       }
       const user = FactoryUser(completeProfile)
@@ -24,7 +23,7 @@ describe('isProfileComplete', () => {
       it('no about', () => {
         const missingAbout: Partial<Profile> = {
           displayName: 'Jeffo',
-          type: ProfileTypeList.MEMBER,
+          type: { id: 1, name: 'member' } as ProfileType,
           photo: factoryImage,
         }
         const user = FactoryUser(missingAbout)
@@ -35,7 +34,7 @@ describe('isProfileComplete', () => {
         const missingDisplayName: Partial<Profile> = {
           about: 'A member',
           displayName: undefined,
-          type: ProfileTypeList.MEMBER,
+          type: { id: 1, name: 'member' } as ProfileType,
           photo: factoryImage,
         }
         const user = FactoryUser(missingDisplayName)
@@ -46,7 +45,7 @@ describe('isProfileComplete', () => {
         const missingUserImage: Partial<Profile> = {
           about: 'A member',
           displayName: 'Jeffo',
-          type: ProfileTypeList.MEMBER,
+          type: { id: 1, name: 'member' } as ProfileType,
           photo: undefined,
         }
         const user = FactoryUser(missingUserImage)
@@ -61,7 +60,7 @@ describe('isProfileComplete', () => {
       const completeProfile: Partial<Profile> = {
         about: 'An important space',
         displayName: 'Jeffo',
-        type: ProfileTypeList.COMMUNITY_BUILDER,
+        type: { id: 1, name: 'community-builder' } as ProfileType,
         coverImages: [factoryImage],
       }
       const user = FactoryUser(completeProfile)
@@ -73,7 +72,7 @@ describe('isProfileComplete', () => {
       it('no about', () => {
         const missingAbout: Partial<Profile> = {
           displayName: 'Jeffo',
-          type: ProfileTypeList.COLLECTION_POINT,
+          type: { id: 1, name: 'community-builder' } as ProfileType,
           coverImages: [factoryImage],
         }
         const user = FactoryUser(missingAbout)
@@ -84,7 +83,7 @@ describe('isProfileComplete', () => {
         const missingDisplayName: Partial<Profile> = {
           about: 'An important space',
           displayName: undefined,
-          type: ProfileTypeList.MACHINE_BUILDER,
+          type: { id: 1, name: 'community-builder' } as ProfileType,
           coverImages: [factoryImage],
         }
         const user = FactoryUser(missingDisplayName)
@@ -95,7 +94,7 @@ describe('isProfileComplete', () => {
         const missingUserImage: Partial<Profile> = {
           about: 'An important space',
           displayName: 'Jeffo',
-          type: ProfileTypeList.COLLECTION_POINT,
+          type: { id: 1, name: 'community-builder' } as ProfileType,
           coverImages: [],
         }
         const user = FactoryUser(missingUserImage)

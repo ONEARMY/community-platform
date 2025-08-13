@@ -2,13 +2,13 @@ import type { ILatLng } from './common'
 import type { ProfileBadge } from './profileBadge'
 import type { ProfileTag } from './profileTag'
 import type { ProfileType } from './profileType'
-import type { ProfileTypeName, WorkspaceType } from './user'
+import type { WorkspaceType } from './user'
 
 export interface IMapGrouping {
   _count?: number
   grouping: IPinGrouping
   displayName: string
-  type: ProfileTypeName
+  type: string
   subType?: WorkspaceType
   icon: string
   hidden?: boolean

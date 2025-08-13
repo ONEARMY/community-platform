@@ -7,13 +7,11 @@ import { Flex, Text } from 'theme-ui'
 
 import { FlexSectionContainer } from '../elements'
 
-import type { ProfileTypeName } from 'oa-shared'
-
 interface IProps {
-  profileType: ProfileTypeName | undefined
+  typeName: string | undefined
 }
 
-export const ProfileTags = ({ profileType }: IProps) => {
+export const ProfileTags = ({ typeName }: IProps) => {
   const { description, title } = fields.tags
 
   const renderTagsSelect = useCallback(
@@ -22,11 +20,11 @@ export const ProfileTags = ({ profileType }: IProps) => {
         value={input.value}
         onChange={(tags) => input.onChange(tags)}
         maxTotal={5}
-        profileType={profileType}
+        profileType={typeName}
         isForm
       />
     ),
-    [profileType],
+    [typeName],
   )
 
   return (

@@ -1,9 +1,8 @@
-import { ProfileTypeList } from 'oa-shared'
 import { describe, expect, it } from 'vitest'
 
 import { filterPins } from './filterPins'
 
-import type { MapPin } from 'oa-shared'
+import type { MapPin, ProfileType } from 'oa-shared'
 
 describe('filterPins', () => {
   const workspacePin: MapPin = {
@@ -27,7 +26,12 @@ describe('filterPins', () => {
       visitorPolicy: null,
       about: '',
       photo: null,
-      type: ProfileTypeList.WORKSPACE,
+      type: {
+        id: 1,
+        name: 'member',
+        displayName: 'Member',
+        description: 'teste',
+      } as ProfileType,
       badges: [
         {
           id: 1,
@@ -71,7 +75,12 @@ describe('filterPins', () => {
       visitorPolicy: null,
       photo: null,
       openToVisitors: null,
-      type: ProfileTypeList.MEMBER,
+      type: {
+        id: 1,
+        name: 'member',
+        displayName: 'Member',
+        description: 'teste',
+      } as ProfileType,
       badges: [
         {
           id: 1,
@@ -107,7 +116,12 @@ describe('filterPins', () => {
       country: '',
       photo: null,
       openToVisitors: null,
-      type: ProfileTypeList.MEMBER,
+      type: {
+        id: 1,
+        name: 'member',
+        displayName: 'Member',
+        description: 'teste',
+      } as ProfileType,
       visitorPolicy: null,
       badges: [
         {
@@ -135,7 +149,9 @@ describe('filterPins', () => {
   })
 
   it('returns only the correct profile type pins when filter is provided', () => {
-    const filtered = filterPins(allPinsInView, { types: ['member'] })
+    const filtered = filterPins(allPinsInView, {
+      types: ['member'],
+    })
     expect(filtered.map((x) => x.id)).toEqual([
       memberPin.id,
       taggedMemberPin.id,

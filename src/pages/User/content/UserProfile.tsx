@@ -8,7 +8,7 @@ import {
   Tabs,
   TabsList,
 } from 'oa-components'
-import { ProfileTypeList, UserRole } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isPreciousPlastic } from 'src/config/config'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
@@ -33,7 +33,7 @@ interface IProps {
 export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
   const { about, impact, type, tags } = user
   const location = useLocation()
-  const isMember = type === ProfileTypeList.MEMBER
+  const isMember = !type?.isSpace
   const hasContactOption = user.isContactable || !!user.website
   const hasContributed =
     docs?.projects.length + docs?.research.length + docs?.questions.length > 0
@@ -59,7 +59,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
     >
       {isMember && (
         <MemberBadge
-          profileType={ProfileTypeList.MEMBER}
+          profileType={type || undefined}
           size={50}
           sx={{
             alignSelf: 'center',

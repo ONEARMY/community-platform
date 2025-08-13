@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { useNavigate } from 'react-router'
 import { Link } from '@remix-run/react'
+import { observer } from 'mobx-react'
 import {
   Button,
   ConfirmModal,
@@ -12,7 +13,6 @@ import {
   MapWithPin,
   ModerationRecord,
 } from 'oa-components'
-import { ProfileTypeList } from 'oa-shared'
 import {
   buttons,
   headings,
@@ -94,7 +94,7 @@ const LocationDataTextDisplay = ({ pin }: { pin?: MapPin }) => {
   )
 }
 
-export const SettingsPageMapPin = () => {
+export const SettingsPageMapPin = observer(() => {
   const communityProgramUrl =
     import.meta.env.VITE_COMMUNITY_PROGRAM_URL ||
     process.env.VITE_COMMUNITY_PROGRAM_URL
@@ -109,7 +109,7 @@ export const SettingsPageMapPin = () => {
 
   const { profile } = useProfileStore()
 
-  const isMember = profile?.type === ProfileTypeList.MEMBER
+  const isMember = !profile?.type?.isSpace
   const { addPinTitle, yourPinTitle } = headings.map
   const formId = 'MapSection'
 
@@ -359,4 +359,4 @@ export const SettingsPageMapPin = () => {
       )}
     </Flex>
   )
-}
+})

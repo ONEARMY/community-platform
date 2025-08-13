@@ -45,6 +45,16 @@ export const loader = async ({ request }) => {
             name
           )
         ),
+        type:profile_types(
+          id,
+          name,
+          display_name,
+          image_url,
+          small_image_url,
+          map_pin_name,
+          description,
+          is_space
+        ),
         badges:profile_badges_relations(
           profile_badges(
             id,

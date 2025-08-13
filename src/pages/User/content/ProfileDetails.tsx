@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { UserStatistics, VisitorModal } from 'oa-components'
-import { ProfileTypeList, UserRole } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { ProfileTags } from 'src/pages/common/ProfileTags'
 import { mapPinService } from 'src/pages/Maps/map.service'
@@ -75,7 +75,7 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
               tags={tags}
               showVisitorModal={() => setShowVisitorModal(true)}
               visitorPolicy={visitorPolicy}
-              isSpace={profile.type !== ProfileTypeList.MEMBER}
+              isSpace={profile.type?.isSpace || false}
             />
           )}
           {about && <Paragraph>{about}</Paragraph>}

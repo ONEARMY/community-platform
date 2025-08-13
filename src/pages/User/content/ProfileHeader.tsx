@@ -1,5 +1,4 @@
 import { MemberBadge, Username } from 'oa-components'
-import { ProfileTypeList } from 'oa-shared'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { Avatar, Box, Flex, Heading } from 'theme-ui'
 
@@ -14,7 +13,7 @@ export const ProfileHeader = ({ user }: IProps) => {
 
   return (
     <Box sx={{ position: 'relative' }}>
-      {user.type !== ProfileTypeList.MEMBER && (
+      {user.type?.isSpace && (
         <Box
           sx={{
             display: 'block',
@@ -36,7 +35,7 @@ export const ProfileHeader = ({ user }: IProps) => {
         </Box>
       )}
       <Flex sx={{ gap: 2, alignItems: 'center', paddingBottom: [2, 4] }}>
-        {profileImageSrc && user.type !== ProfileTypeList.MEMBER && (
+        {profileImageSrc && user.type?.isSpace && (
           <Avatar
             data-cy="userImage"
             src={profileImageSrc}
@@ -48,7 +47,7 @@ export const ProfileHeader = ({ user }: IProps) => {
           />
         )}
 
-        {user.type === ProfileTypeList.MEMBER && (
+        {!user.type?.isSpace && (
           <Avatar
             data-cy="profile-avatar"
             loading="lazy"

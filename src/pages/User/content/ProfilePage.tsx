@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Button, InternalLink } from 'oa-components'
-import { ProfileTypeList } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
@@ -27,8 +26,7 @@ export const ProfilePage = observer((props: IProps) => {
     () => activeUser?.username === profile?.username,
     [activeUser?.username],
   )
-  const showMemberProfile =
-    profile?.type === ProfileTypeList.MEMBER || profile?.type === undefined
+  const showMemberProfile = !profile?.type?.isSpace
 
   return (
     <Flex

@@ -1,4 +1,4 @@
-import { Profile, ProfileBadge, ProfileTag } from 'oa-shared'
+import { Profile, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared'
 import { ImageServiceServer } from 'src/services/imageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -34,7 +34,7 @@ export class ProfileFactory {
       username: dbProfile.username,
       photo: photo || null,
       roles: dbProfile.roles || null,
-      type: dbProfile.type,
+      type: dbProfile.type ? ProfileType.fromDB(dbProfile.type) : null,
       visitorPolicy: dbProfile.visitor_policy
         ? JSON.parse(dbProfile.visitor_policy)
         : null,

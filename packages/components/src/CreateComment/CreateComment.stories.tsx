@@ -1,13 +1,27 @@
 import { useState } from 'react'
+import { faker } from '@faker-js/faker'
 
 import { CreateComment } from './CreateComment'
 
 import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { ProfileType } from 'oa-shared'
 
 export default {
   title: 'Commenting/CreateComment',
   component: CreateComment,
 } as Meta<typeof CreateComment>
+
+const member: ProfileType = {
+  name: 'member',
+  description: 'A member profile',
+  displayName: 'Member',
+  id: 2,
+  imageUrl: faker.image.avatar(),
+  mapPinName: 'Member',
+  order: 1,
+  smallImageUrl: faker.image.avatar(),
+  isSpace: false,
+}
 
 export const Default: StoryFn<typeof CreateComment> = () => {
   const [comment, setComment] = useState('')
@@ -16,7 +30,7 @@ export const Default: StoryFn<typeof CreateComment> = () => {
       comment={comment}
       onChange={setComment}
       onSubmit={() => null}
-      userProfileType="member"
+      profileType={member}
       maxLength={1000}
       isLoggedIn={true}
     />
@@ -30,7 +44,7 @@ export const LoggedOut: StoryFn<typeof CreateComment> = () => {
       comment={comment}
       onChange={setComment}
       onSubmit={() => null}
-      userProfileType="member"
+      profileType={member}
       maxLength={123}
       isLoggedIn={false}
     />
@@ -52,7 +66,7 @@ Donec dapibus leo quis sagittis fringilla. Phasellus ut imperdiet sapien. Nullam
       comment={comment}
       onChange={setComment}
       onSubmit={() => null}
-      userProfileType="member"
+      profileType={member}
       maxLength={12300}
       isLoggedIn={true}
     />
@@ -68,7 +82,7 @@ export const WithCustomPlaceholder: StoryFn<typeof CreateComment> = () => {
       placeholder="Custom placeholder"
       onChange={setComment}
       onSubmit={() => null}
-      userProfileType="member"
+      profileType={member}
       maxLength={12300}
       isLoggedIn={true}
     />

@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { divIcon, point } from 'leaflet'
 import clusterIcon from 'src/assets/icons/map-cluster.svg'
 import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg'
-import Workspace from 'src/pages/User/workspace/Workspace'
 import { useThemeUI } from 'theme-ui'
 
 import type { MarkerCluster } from 'leaflet'
@@ -74,7 +73,7 @@ export const createClusterIcon = () => {
 export const createMarkerIcon = (pin: MapPin, draggable?: boolean) => {
   const icon =
     pin.moderation === 'accepted'
-      ? Workspace.findWorkspaceBadge(pin.profile!.type, true)
+      ? pin.profile!.type?.smallImageUrl
       : AwaitingModerationHighlight
   return divIcon({
     className: `icon-marker icon-${pin.profile!.type}`,

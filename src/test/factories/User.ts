@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker'
-import { ProfileTypeList } from 'oa-shared'
 
 import type { Image, Profile } from 'oa-shared'
 
@@ -14,7 +13,17 @@ export const FactoryUser = (
 ): Partial<Profile> => ({
   id: faker.number.int(),
   createdAt: faker.date.past(),
-  type: faker.helpers.arrayElement(Object.values(ProfileTypeList)),
+  type: {
+    id: faker.number.int(),
+    name: faker.word.noun(),
+    displayName: faker.word.noun(),
+    description: faker.word.noun(),
+    imageUrl: faker.image.avatar(),
+    smallImageUrl: faker.image.avatar(),
+    mapPinName: faker.word.noun(),
+    order: faker.number.int(),
+    isSpace: false,
+  },
   username: faker.internet.userName(),
   displayName: faker.person.fullName(),
   badges: [

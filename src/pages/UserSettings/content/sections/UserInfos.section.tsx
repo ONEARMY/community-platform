@@ -1,7 +1,7 @@
 import { Field } from 'react-final-form'
 import { countries } from 'countries-list'
+import { observer } from 'mobx-react'
 import { FieldInput, FieldTextarea, Username } from 'oa-components'
-import { ProfileTypeList } from 'oa-shared'
 import { SelectField } from 'src/common/Form/Select.field'
 import { fields, headings } from 'src/pages/UserSettings/labels'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
@@ -21,10 +21,10 @@ interface IProps {
   formValues: Partial<ProfileFormData>
 }
 
-export const UserInfosSection = ({ formValues }: IProps) => {
+export const UserInfosSection = observer(({ formValues }: IProps) => {
   const { profile } = useProfileStore()
 
-  const isMemberProfile = profile?.type === ProfileTypeList.MEMBER
+  const isMemberProfile = !profile?.type?.isSpace
   const { about, country, displayName, userName, website } = fields
 
   const countryCode = Object.keys(countries).find(
@@ -67,7 +67,7 @@ export const UserInfosSection = ({ formValues }: IProps) => {
           />
         </Flex>
 
-        <ProfileTags profileType={formValues.type} />
+        <ProfileTags typeName={formValues.type || ''} />
 
         <Flex sx={{ flexDirection: 'column', gap: 1 }}>
           <Text>{about.title} *</Text>
@@ -130,4 +130,4 @@ export const UserInfosSection = ({ formValues }: IProps) => {
       </Flex>
     </FlexSectionContainer>
   )
-}
+})

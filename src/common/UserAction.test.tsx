@@ -4,6 +4,8 @@ import { afterEach, describe, it, vi } from 'vitest'
 
 import { UserAction } from './UserAction'
 
+import type { ProfileType } from 'oa-shared'
+
 const mockUseProfileStore = vi.hoisted(() => vi.fn())
 
 vi.mock('src/stores/Profile/profile.store', () => ({
@@ -41,7 +43,7 @@ describe('UserAction', () => {
   it('should render the loggedIn component when a user is logged in and profile complete', async () => {
     const completeUser = FactoryUser({
       about: 'about',
-      type: 'member',
+      type: { id: 1, name: 'member' } as ProfileType,
       photo: factoryImage,
     })
     mockUseProfileStore.mockReturnValue({

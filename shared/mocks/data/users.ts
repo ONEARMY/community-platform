@@ -25,7 +25,6 @@ export const users: Users = {
     about: "Hi! I'm a robot 🤖 Beep boop",
     email: 'demo_user@example.com',
     password: 'demo_user',
-    type: 'member',
   },
   'beta-tester': {
     createdAt: new Date('2022-01-30T18:51:57.719Z'),
@@ -34,7 +33,6 @@ export const users: Users = {
     roles: [UserRole.BETA_TESTER],
     email: 'demo_beta_tester@example.com',
     password: 'demo_beta_tester',
-    type: 'member',
     about: '',
     photo: {
       id: 'string',
@@ -49,7 +47,6 @@ export const users: Users = {
     roles: [UserRole.ADMIN],
     email: 'demo_admin@example.com',
     password: 'demo_admin',
-    type: 'member',
     about: 'admin',
     photo: {
       id: 'string',
@@ -63,7 +60,6 @@ export const users: Users = {
     email: 'event_reader@test.com',
     password: 'test1234',
     roles: [UserRole.BETA_TESTER],
-    type: 'member',
     about: '',
     photo: {
       id: 'string',
@@ -77,7 +73,6 @@ export const users: Users = {
     createdAt: new Date('2020-01-07T15:46:00.297Z'),
     displayName: 'howto_creator',
     roles: [],
-    type: 'member',
     about: 'howto_creator stuff',
     photo: {
       id: 'string',
@@ -91,7 +86,6 @@ export const users: Users = {
     createdAt: new Date('2020-01-07T15:46:00.297Z'),
     displayName: 'research_creator',
     roles: [UserRole.RESEARCH_CREATOR],
-    type: 'member',
     about: 'research_creator research_creator',
     photo: {
       id: 'string',
@@ -113,7 +107,6 @@ export const users: Users = {
     username: 'settings_machine_new',
     password: 'settings_machine_new',
     roles: [],
-    type: 'machine-builder',
     about: '',
     photo: {
       id: 'string',
@@ -136,7 +129,6 @@ export const users: Users = {
     createdAt: new Date('2020-01-07T12:14:30.030Z'),
     displayName: 'settings_member_new',
     roles: [],
-    type: 'member',
     about: '',
     photo: {
       id: 'string',
@@ -158,7 +150,6 @@ export const users: Users = {
     email: 'settings_workplace_empty@test.com',
     password: 'settings_workplace_empty',
     id: 13,
-    type: 'workspace',
     about: '',
     photo: {
       id: 'string',
@@ -179,7 +170,6 @@ export const users: Users = {
     username: 'settings_workplace_new',
     website: 'http://settings_workplace_new.example.com',
     id: 14,
-    type: 'workspace',
     email: 'settings_workplace_new@test.com',
     password: 'test1234',
     roles: [UserRole.BETA_TESTER],
@@ -232,7 +222,6 @@ export const users: Users = {
     displayName: 'mapview_testing_rejected',
     username: 'mapview_testing_rejected',
     id: 15,
-    type: 'workspace',
     email: 'mapview_testing_rejected@test.com',
     password: 'mapview_testing_rejected@test.com',
     roles: [],
@@ -259,7 +248,6 @@ export const users: Users = {
     website: 'http://profile_views.example.com',
     about: 'Hi! I have 99 views',
     country: 'nl',
-    type: 'member',
     photo: {
       id: 'string',
       publicUrl: 'string',

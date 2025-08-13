@@ -4,8 +4,6 @@ import { Text } from 'theme-ui'
 
 import { MapContext } from '../../MapContext'
 
-import type { ProfileTypeName } from 'oa-shared'
-
 export const MemberTypeList = () => {
   const mapState = useContext(MapContext)
 
@@ -51,10 +49,7 @@ export const MemberTypeList = () => {
             }}
             isSelected={isSelected}
           >
-            <MemberBadge
-              size={40}
-              profileType={profileType.name as ProfileTypeName}
-            />
+            <MemberBadge size={40} profileType={profileType} />
             <Text variant="quiet" sx={{ fontSize: 1 }}>
               {profileType.displayName}
             </Text>

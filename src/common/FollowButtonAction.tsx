@@ -1,4 +1,5 @@
 import { type Dispatch, type SetStateAction, useEffect, useState } from 'react'
+import { observer } from 'mobx-react'
 import { FollowButton } from 'oa-components'
 import { subscribersService } from 'src/services/subscribersService'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
@@ -16,7 +17,7 @@ interface IProps extends OptionalFollowButtonProps {
   tooltipContent?: string
 }
 
-export const FollowButtonAction = (props: IProps) => {
+export const FollowButtonAction = observer((props: IProps) => {
   const { contentType, hideSubscribeIcon, itemId, setSubscribersCount } = props
   const [subscribed, setSubscribed] = useState<boolean | undefined>(undefined)
   const { profile } = useProfileStore()
@@ -81,4 +82,4 @@ export const FollowButtonAction = (props: IProps) => {
       onFollowClick={onFollowClick}
     />
   )
-}
+})

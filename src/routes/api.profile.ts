@@ -1,6 +1,7 @@
 import { ProfileFactory } from 'src/factories/profileFactory.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
+import { ProfileTypesServiceServer } from 'src/services/profileTypesSeervice.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
@@ -94,17 +95,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       data: { user },
     } = await client.auth.getUser()
 
-    const { data: profileData } = await client
-      .from('profiles')
-      .select('id')
-      .eq('auth_id', user?.id)
-      .single()
+    const profileData = await new ProfileServiceServer(client).getByAuthId(
+      user!.id,
+    )
+    const profileTypes = await new ProfileTypesServiceServer(client).get()
+
+    const memberTypes =
+      profileTypes.filter((x) => x.isSpace === false).map((x) => x.name) || null
 
     const { valid, status, statusText } = await validateRequest(
       request,
       user,
       data,
       profileData,
+      memberTypes,
     )
 
     if (!valid) {
@@ -130,6 +134,7 @@ async function validateRequest(
   user: User | null,
   data: ProfileFormData,
   profile: { id: number } | null,
+  memberTypes: string[] | null,
 ) {
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'method not allowed' }
@@ -151,7 +156,7 @@ async function validateRequest(
     return { status: 400, statusText: 'type is required' }
   }
 
-  if (data.type !== 'member') {
+  if (!memberTypes || !memberTypes?.includes(data.type)) {
     if (
       (!data.existingCoverImageIds ||
         data.existingCoverImageIds.length === 0) &&

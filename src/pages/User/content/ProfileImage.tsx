@@ -1,5 +1,4 @@
 import { ImageGallery } from 'oa-components'
-import { ProfileTypeList } from 'oa-shared'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { AspectRatio, Box, Flex } from 'theme-ui'
 
@@ -10,7 +9,7 @@ interface IProps {
 }
 
 export const ProfileImage = ({ user }: IProps) => {
-  if (user.type === ProfileTypeList.MEMBER) {
+  if (!user.type?.isSpace) {
     return null
   }
 

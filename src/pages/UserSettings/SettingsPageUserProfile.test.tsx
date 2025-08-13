@@ -2,12 +2,13 @@ import '@testing-library/jest-dom/vitest'
 
 import { faker } from '@faker-js/faker'
 import { act, waitFor } from '@testing-library/react'
-import { ProfileTypeList } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { FormProvider } from './__mocks__/FormProvider'
 import { SettingsPageUserProfile } from './SettingsPageUserProfile'
+
+import type { ProfileType } from 'oa-shared'
 
 const mockUseProfileStore = vi.hoisted(() => vi.fn())
 
@@ -23,7 +24,13 @@ describe('UserSettings', () => {
   })
 
   it('renders fields for member', async () => {
-    const mockUser = FactoryUser({ type: ProfileTypeList.MEMBER })
+    const mockUser = FactoryUser({
+      type: {
+        id: 1,
+        name: 'Member',
+        isSpace: false,
+      } as ProfileType,
+    })
     mockUseProfileStore.mockReturnValue({
       profile: mockUser,
       update: vi.fn(),
@@ -45,7 +52,11 @@ describe('UserSettings', () => {
 
   it('renders fields for collection point', async () => {
     const mockUser = FactoryUser({
-      type: ProfileTypeList.COLLECTION_POINT,
+      type: {
+        id: 1,
+        name: 'collection-point',
+        isSpace: true,
+      } as ProfileType,
       coverImages: [
         {
           id: '',
@@ -74,7 +85,11 @@ describe('UserSettings', () => {
 
   it('renders fields for community builder', async () => {
     const mockUser = FactoryUser({
-      type: ProfileTypeList.COMMUNITY_BUILDER,
+      type: {
+        id: 1,
+        name: 'community-builder',
+        isSpace: true,
+      } as ProfileType,
       coverImages: [
         {
           id: '',
@@ -104,7 +119,11 @@ describe('UserSettings', () => {
 
   it('renders fields for machine builder', async () => {
     const mockUser = FactoryUser({
-      type: ProfileTypeList.MACHINE_BUILDER,
+      type: {
+        id: 1,
+        name: 'machine-builder',
+        isSpace: true,
+      } as ProfileType,
       coverImages: [
         {
           id: '',
@@ -137,7 +156,11 @@ describe('UserSettings', () => {
 
   it('renders fields for space', async () => {
     const mockUser = FactoryUser({
-      type: ProfileTypeList.SPACE,
+      type: {
+        id: 1,
+        name: 'space',
+        isSpace: true,
+      } as ProfileType,
       coverImages: [
         {
           id: '',
@@ -178,7 +201,11 @@ describe('UserSettings', () => {
 
   it('renders fields for workspace', async () => {
     const mockUser = FactoryUser({
-      type: ProfileTypeList.WORKSPACE,
+      type: {
+        id: 1,
+        name: 'workspace',
+        isSpace: true,
+      } as ProfileType,
       coverImages: [
         {
           id: '',

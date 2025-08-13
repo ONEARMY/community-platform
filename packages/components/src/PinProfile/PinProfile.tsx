@@ -14,8 +14,7 @@ export interface IProps {
 }
 
 export const PinProfile = ({ item, onClose }: IProps) => {
-  const isWorkspace = item.profile?.type === 'space'
-  const isContactable = isWorkspace && item.profile?.isContactable !== false
+  const isContactable = item.profile?.isContactable !== false
 
   return (
     <CardButton sx={{ '&:hover': 'none' }} data-cy="PinProfile">

@@ -1,4 +1,4 @@
-import { MapPin, ProfileBadge, ProfileTag } from 'oa-shared'
+import { MapPin, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared'
 import { ImageServiceServer } from 'src/services/imageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -41,7 +41,7 @@ export class MapPinFactory {
       country: profile.country,
       displayName: profile.display_name,
       visitorPolicy: profile.visitor_policy,
-      type: profile.type,
+      type: profile.type ? ProfileType.fromDB(profile.type) : null,
       photo: photo || null,
       isContactable: profile.is_contactable,
       tags: profile.tags?.map((x) => ProfileTag.fromDBJoin(x)),

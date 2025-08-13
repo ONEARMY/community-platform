@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker'
 import { PinProfile } from './PinProfile'
 
 import type { Meta, StoryFn } from '@storybook/react-vite'
-import type { MapPin, Moderation, ProfileTypeName } from 'oa-shared'
+import type { MapPin, Moderation } from 'oa-shared'
 
 export default {
   title: 'Map/PinProfile',
@@ -26,7 +26,11 @@ export const DefaultMember: StoryFn<typeof PinProfile> = () => {
       },
       displayName: 'member_no1',
       isContactable: false,
-      type: 'member' as ProfileTypeName,
+      type: {
+        id: 1,
+        name: 'member',
+        displayName: 'Member',
+      },
     },
   } as MapPin
 
@@ -64,7 +68,11 @@ export const DefaultSpace: StoryFn<typeof PinProfile> = () => {
       ],
       displayName: 'user',
       isContactable: true,
-      type: 'workspace' as ProfileTypeName,
+      type: {
+        id: 2,
+        name: 'workspace',
+        displayName: 'Workspace',
+      },
       tags: [{ name: 'Sheetpress', id: 1 }],
     },
   } as MapPin

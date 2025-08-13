@@ -4,17 +4,17 @@ import { profileTagsService } from 'src/services/profileTagsService'
 
 import { FieldContainer } from '../Form/FieldContainer'
 
-import type { ProfileCategory, ProfileTag, ProfileTypeName } from 'oa-shared'
+import type { ProfileCategory, ProfileTag } from 'oa-shared'
 import type { FieldRenderProps } from 'react-final-form'
 
 export interface IProps extends Partial<FieldRenderProps<any, any>> {
   value: number[]
-  profileType: ProfileTypeName | undefined
+  profileType: string | undefined
   placeholder?: string
 }
 
 const onProfileTypeChange = (
-  profileType: ProfileTypeName | undefined,
+  profileType: string | undefined,
 ): ProfileCategory => {
   if (!profileType || profileType === 'member') {
     return 'member'

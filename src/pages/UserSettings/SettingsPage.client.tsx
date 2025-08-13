@@ -1,7 +1,6 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react'
 import { SettingsFormWrapper } from 'oa-components'
-import { ProfileTypeList } from 'oa-shared'
 import { isPreciousPlastic } from 'src/config/config'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
@@ -27,7 +26,7 @@ export const SettingsPage = observer(() => {
     return null
   }
 
-  const isMember = profile.type === ProfileTypeList.MEMBER
+  const isMember = !profile.type?.isSpace
   const showImpactTab = !isMember && isPreciousPlastic()
   const showMapTab = isModuleSupported(
     env?.VITE_SUPPORTED_MODULES || '',

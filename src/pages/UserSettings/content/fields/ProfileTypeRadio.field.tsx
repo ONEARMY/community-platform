@@ -1,10 +1,11 @@
 import React from 'react'
+import { observer } from 'mobx-react'
 import { MemberBadge } from 'oa-components'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Flex, Input, Label, Text } from 'theme-ui'
 
 import { HiddenInput } from '../elements'
 
-import type { ProfileTypeName } from 'oa-shared'
 import type { FieldRenderProps } from 'react-final-form'
 
 interface IProps {
@@ -41,7 +42,7 @@ const HiddenInputField = ({ input, meta, ...rest }: FieldProps) => (
 // validation - return undefined if no error (i.e. valid)
 const isRequired = (value: any) => (value ? undefined : 'Required')
 
-export const CustomRadioField = (props: IProps) => {
+export const ProfileTypeRadioField = observer((props: IProps) => {
   const {
     value,
     isSelected,
@@ -52,14 +53,16 @@ export const CustomRadioField = (props: IProps) => {
     required,
     'data-cy': dataCy,
   } = props
+  const { getProfileTypeByName } = useProfileStore()
 
-  const classNames: Array<string> = []
+  const classNames: string[] = []
   if (isSelected) {
     classNames.push('selected')
   }
   if (fullWidth) {
     classNames.push('full-width')
   }
+  const profileType = getProfileTypeByName(value)
 
   return (
     <Label
@@ -106,7 +109,7 @@ export const CustomRadioField = (props: IProps) => {
           padding: 2,
         }}
       >
-        <MemberBadge size={130} profileType={value as ProfileTypeName} />
+        <MemberBadge size={130} profileType={profileType} />
       </Flex>
       <Flex sx={{ flexDirection: 'column' }}>
         {textLabel && (
@@ -138,4 +141,4 @@ export const CustomRadioField = (props: IProps) => {
       </Flex>
     </Label>
   )
-}
+})

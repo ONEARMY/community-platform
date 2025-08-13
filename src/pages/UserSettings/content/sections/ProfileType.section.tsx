@@ -1,16 +1,20 @@
 import { Field } from 'react-final-form'
 import { ExternalLink } from 'oa-components'
-import { getSupportedProfileTypes } from 'src/modules/profile'
 import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
 import { Box, Flex, Grid, Heading, Paragraph, Text, useThemeUI } from 'theme-ui'
 
 import { FlexSectionContainer } from '../elements'
-import { CustomRadioField } from '../fields/CustomRadio.field'
+import { ProfileTypeRadioField } from '../fields/ProfileTypeRadio.field'
 
-import type { ProfileTypeName } from 'oa-shared'
+import type { ProfileType } from 'oa-shared'
 import type { ThemeWithName } from 'oa-themes'
 
-const ProfileTypes = () => {
+type ProfileTypeSectionProps = {
+  profileTypes: ProfileType[]
+}
+export const ProfileTypeSection = ({
+  profileTypes,
+}: ProfileTypeSectionProps) => {
   const profileGuidelinesUrl =
     import.meta.env.VITE_PROFILE_GUIDELINES_URL ||
     process.env.VITE_PROFILE_GUIDELINES_URL
@@ -18,12 +22,7 @@ const ProfileTypes = () => {
   const themeUi = useThemeUI()
   const theme = themeUi.theme as ThemeWithName
 
-  // Only profile types with a valid theme badge will display
-  const profileTypes = getSupportedProfileTypes().filter(({ label }) =>
-    Object.keys(theme.badges).includes(label),
-  )
-
-  if (profileTypes.length < 2) {
+  if (!profileTypes || profileTypes.length < 2) {
     return null
   }
 
@@ -50,15 +49,15 @@ const ProfileTypes = () => {
             {props.meta.error && <Text color={theme.colors.red}>{error}</Text>}
 
             <Grid columns={['repeat(auto-fill, minmax(125px, 1fr))']} gap={2}>
-              {profileTypes.map((profile, index: number) => (
+              {profileTypes.map((profileType, index: number) => (
                 <Box key={index}>
-                  <CustomRadioField
-                    data-cy={profile.label}
-                    value={profile.label}
+                  <ProfileTypeRadioField
+                    data-cy={profileType.name}
+                    value={profileType.name}
                     name="type"
-                    isSelected={profile.label === props.input.value}
-                    onChange={(v) => props.input.onChange(v as ProfileTypeName)}
-                    textLabel={profile.textLabel}
+                    isSelected={profileType.name === props.input.value}
+                    onChange={(v) => props.input.onChange(v)}
+                    textLabel={profileType.displayName}
                   />
                 </Box>
               ))}
@@ -69,7 +68,3 @@ const ProfileTypes = () => {
     />
   )
 }
-
-export const FocusSection = () => (
-  <Field name="profileType" render={ProfileTypes} />
-)

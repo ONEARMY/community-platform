@@ -1,17 +1,18 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { toJS } from 'mobx'
+import { observer } from 'mobx-react'
 import { Button, Loader } from 'oa-components'
-import { type ProfileFormData, ProfileTypeList } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { profileService } from 'src/services/profileService'
+import { profileTypesService } from 'src/services/profileTypesService'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { isContactable, isMessagingModuleOff } from 'src/utils/helpers'
 import { Flex } from 'theme-ui'
 
-import { FocusSection } from './content/sections/Focus.section'
+import { ProfileTypeSection } from './content/sections/ProfileType.section'
 import { PublicContactSection } from './content/sections/PublicContact.section'
 import { UserImagesSection } from './content/sections/UserImages.section'
 import { UserInfosSection } from './content/sections/UserInfos.section'
@@ -19,14 +20,24 @@ import { VisitorSection } from './content/sections/VisitorSection'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 import { buttons } from './labels'
 
+import type { ProfileFormData, ProfileType } from 'oa-shared'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
-export const SettingsPageUserProfile = () => {
+export const SettingsPageUserProfile = observer(() => {
   const [notification, setNotification] = useState<
     IFormNotification | undefined
   >(undefined)
 
   const { profile, update } = useProfileStore()
+  const [profileTypes, setProfileTypes] = useState<ProfileType[]>([])
+
+  useEffect(() => {
+    const getProfileTypes = async () => {
+      const types = await profileTypesService.getProfileTypes()
+      setProfileTypes(types)
+    }
+    getProfileTypes()
+  }, [])
 
   if (!profile) {
     return null
@@ -72,7 +83,7 @@ export const SettingsPageUserProfile = () => {
       existingPhoto: profile.photo ? toJS(profile.photo) : undefined,
       country: profile.country,
       showVisitorPolicy: !!profile.visitorPolicy,
-      type: profile.type,
+      type: profile.type!.name,
       visitorPreferencePolicy: profile.visitorPolicy?.policy,
       visitorPreferenceDetails: profile.visitorPolicy?.details,
       website: profile.website || '',
@@ -100,7 +111,8 @@ export const SettingsPageUserProfile = () => {
         errors,
         form,
       }) => {
-        const isMember = values.type === ProfileTypeList.MEMBER
+        const isMember = !profileTypes.find((x) => x.id === values.type)
+          ?.isSpace
 
         return (
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
@@ -115,7 +127,7 @@ export const SettingsPageUserProfile = () => {
 
             <form id={formId} onSubmit={handleSubmit}>
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
-                <FocusSection />
+                <ProfileTypeSection profileTypes={profileTypes} />
                 <UserInfosSection formValues={values} />
                 <UserImagesSection
                   isMemberProfile={isMember}
@@ -162,4 +174,4 @@ export const SettingsPageUserProfile = () => {
       }}
     />
   )
-}
+})

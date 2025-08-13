@@ -2,11 +2,13 @@ import { createContext, useContext, useEffect } from 'react'
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import { SessionContext } from 'src/pages/common/SessionContext'
 import { profileService } from 'src/services/profileService'
+import { profileTypesService } from 'src/services/profileTypesService'
 
-import type { Profile } from 'oa-shared'
+import type { Profile, ProfileType } from 'oa-shared'
 
 export class ProfileStore {
   profile?: Profile = undefined
+  profileTypes?: ProfileType[] = undefined
 
   refresh = async () => {
     const profile = await profileService.get()
@@ -24,12 +26,27 @@ export class ProfileStore {
     this.profile = value
   }
 
+  initProfileTypes = async () => {
+    const profileTypes = await profileTypesService.getProfileTypes()
+
+    runInAction(() => {
+      // runInAction because of async method
+      this.profileTypes = profileTypes
+    })
+  }
+
+  getProfileTypeByName = (name: string) => {
+    return this.profileTypes?.find((type) => type.name === name)
+  }
+
   constructor() {
     makeObservable(this, {
       profile: observable,
+      profileTypes: observable,
       refresh: action,
       clear: action,
       update: action,
+      initProfileTypes: action,
     })
   }
 }
@@ -53,6 +70,10 @@ export const ProfileStoreProvider = ({
 
     profileStore.refresh()
   }, [user?.id])
+
+  useEffect(() => {
+    profileStore.initProfileTypes()
+  }, [])
 
   return (
     <ProfileStoreContext.Provider value={profileStore}>

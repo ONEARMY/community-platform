@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Foco from 'react-foco'
+import { observer } from 'mobx-react'
 import { MemberBadge } from 'oa-components'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import { ProfileModal } from 'src/pages/common/Header/Menu/ProfileModal/ProfileModal'
@@ -15,7 +16,7 @@ interface IProps {
   isMobile: boolean
 }
 
-const Profile = (props: IProps) => {
+const Profile = observer((props: IProps) => {
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false)
   const { profile: profile } = useProfileStore()
 
@@ -69,7 +70,10 @@ const Profile = (props: IProps) => {
             }}
           />
         ) : (
-          <MemberBadge profileType={profile.type} sx={{ cursor: 'pointer' }} />
+          <MemberBadge
+            profileType={profile.type || undefined}
+            sx={{ cursor: 'pointer' }}
+          />
         )}
       </Flex>
       <Flex>
@@ -81,6 +85,6 @@ const Profile = (props: IProps) => {
       </Flex>
     </Box>
   )
-}
+})
 
 export default Profile

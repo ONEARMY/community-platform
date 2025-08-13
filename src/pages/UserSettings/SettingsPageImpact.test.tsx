@@ -1,17 +1,23 @@
 import '@testing-library/jest-dom/vitest'
 
 import { act, waitFor } from '@testing-library/react'
-import { ProfileTypeList } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
 
 import { FormProvider } from './__mocks__/FormProvider'
 import { SettingsPageImpact } from './SettingsPageImpact'
 
+import type { ProfileType } from 'oa-shared'
+
 vi.mock('src/stores/Profile/profile.store', () => ({
   useProfileStore: () => ({
     profile: FactoryUser({
-      type: ProfileTypeList.SPACE,
+      type: {
+        id: 1,
+        displayName: 'space',
+        name: 'space',
+        isSpace: true,
+      } as ProfileType,
       impact: {
         2023: [
           {

@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker'
 import { CardListItem } from './CardListItem'
 
 import type { Meta, StoryFn } from '@storybook/react-vite'
-import type { MapPin, Moderation, ProfileTypeName } from 'oa-shared'
+import type { MapPin, Moderation, ProfileType } from 'oa-shared'
 
 export default {
   title: 'Map/CardListItem',
@@ -12,6 +12,30 @@ export default {
 
 const onPinClick = () => undefined
 const viewport = 'desktop'
+
+const member: ProfileType = {
+  name: 'member',
+  description: 'A member profile',
+  displayName: 'Member',
+  id: 2,
+  imageUrl: faker.image.avatar(),
+  mapPinName: 'Member',
+  order: 1,
+  smallImageUrl: faker.image.avatar(),
+  isSpace: false,
+}
+
+const space: ProfileType = {
+  name: 'space',
+  description: 'A space profile',
+  displayName: 'Space',
+  id: 3,
+  imageUrl: faker.image.avatar(),
+  mapPinName: 'Space',
+  order: 1,
+  smallImageUrl: faker.image.avatar(),
+  isSpace: true,
+}
 
 export const DefaultMember: StoryFn<typeof CardListItem> = () => {
   const item = {
@@ -29,7 +53,7 @@ export const DefaultMember: StoryFn<typeof CardListItem> = () => {
       },
       displayName: 'member_no1',
       isContactable: false,
-      type: 'member' as ProfileTypeName,
+      type: member,
     },
   } as MapPin
 
@@ -63,7 +87,7 @@ export const DefaultSpace: StoryFn<typeof CardListItem> = () => {
         'Lorem ipsum odor amet, consectetuer adipiscing elit. Lorem ipsum odor amet, consectetuer adipiscing elit.',
       displayName: 'member_no1',
       isContactable: false,
-      type: 'space' as ProfileTypeName,
+      type: space,
       tags: [{ id: 1, name: 'Sheetpress' }],
     },
   } as MapPin

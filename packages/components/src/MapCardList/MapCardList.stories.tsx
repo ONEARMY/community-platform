@@ -1,7 +1,7 @@
 import { MapCardList } from './MapCardList'
 
 import type { Meta, StoryFn } from '@storybook/react-vite'
-import type { MapPin, Moderation, ProfileTypeName } from 'oa-shared'
+import type { MapPin, Moderation } from 'oa-shared'
 
 export default {
   title: 'Map/CardList',
@@ -12,7 +12,11 @@ const list = [
   {
     id: 1,
     profile: {
-      type: 'member' as ProfileTypeName,
+      type: {
+        id: 1,
+        name: 'member',
+        displayName: 'Member',
+      },
     },
     moderation: 'accepted' as Moderation,
     lat: 0,
@@ -22,7 +26,11 @@ const list = [
     id: 2,
     moderation: 'accepted' as Moderation,
     profile: {
-      type: 'collection-point' as ProfileTypeName,
+      type: {
+        id: 2,
+        name: 'collection-point',
+        displayName: 'Collection Point',
+      },
     },
     lat: 10,
     lng: -38,
@@ -30,7 +38,11 @@ const list = [
   {
     id: 3,
     profile: {
-      type: 'member' as ProfileTypeName,
+      type: {
+        id: 1,
+        name: 'member',
+        displayName: 'Member',
+      },
     },
     moderation: 'accepted' as Moderation,
     lat: 102,
@@ -39,7 +51,11 @@ const list = [
   {
     id: 4,
     profile: {
-      type: 'member' as ProfileTypeName,
+      type: {
+        id: 1,
+        name: 'member',
+        displayName: 'Member',
+      },
     },
     moderation: 'accepted' as Moderation,
     lat: 0,

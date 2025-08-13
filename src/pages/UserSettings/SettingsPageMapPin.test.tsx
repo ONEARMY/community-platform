@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 
 import { act, waitFor } from '@testing-library/react'
-import { ProfileTypeList } from 'oa-shared'
 import { FactoryMapPin } from 'src/test/factories/MapPin'
 import { factoryImage, FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
@@ -9,13 +8,17 @@ import { describe, expect, it, vi } from 'vitest'
 import { FormProvider } from './__mocks__/FormProvider'
 import { SettingsPageMapPin } from './SettingsPageMapPin'
 
-import type { PinProfile } from 'oa-shared'
+import type { PinProfile, ProfileType } from 'oa-shared'
 
 const completeProfile = {
   about: 'A member',
   displayName: 'Jeffo',
   website: 'www.example.com',
-  type: ProfileTypeList.MEMBER,
+  type: {
+    id: 1,
+    name: 'member',
+    isSpace: false,
+  } as ProfileType,
   photo: factoryImage,
 }
 const mockUseProfileStore = vi.hoisted(() => vi.fn())
@@ -76,7 +79,11 @@ describe('SettingsPageMapPin', () => {
     const mockUser = FactoryUser({
       about: 'An important space',
       displayName: 'Jeffo',
-      type: ProfileTypeList.COMMUNITY_BUILDER,
+      type: {
+        id: 1,
+        name: 'community-builder',
+        isSpace: true,
+      } as ProfileType,
       coverImages: [factoryImage],
     })
     const mockPin = FactoryMapPin({
@@ -118,7 +125,11 @@ describe('SettingsPageMapPin', () => {
   it('renders for user with incomplete profile', async () => {
     const mockUser = FactoryUser({
       displayName: 'Jeffo',
-      type: ProfileTypeList.MEMBER,
+      type: {
+        id: 1,
+        name: 'member',
+        isSpace: false,
+      } as ProfileType,
       photo: factoryImage,
     })
     mockUseProfileStore.mockReturnValue({

@@ -1,5 +1,6 @@
 import { ProfileBadge } from './profileBadge'
 import { ProfileTag } from './profileTag'
+import { ProfileType } from './profileType'
 
 import type { Comment } from './comment'
 import type { SubscribableContentTypes } from './common'
@@ -11,13 +12,10 @@ import type { News } from './news'
 import type { IPatreonUser } from './patreon'
 import type { DBProfileBadgeJoin } from './profileBadge'
 import type { DBProfileTagJoin } from './profileTag'
+import type { DBProfileType } from './profileType'
 import type { Question } from './question'
 import type { ResearchItem, ResearchUpdate } from './research'
-import type {
-  IUserImpact,
-  ProfileTypeName,
-  UserVisitorPreference,
-} from './user'
+import type { IUserImpact, UserVisitorPreference } from './user'
 
 export class DBProfile {
   readonly id: number
@@ -25,6 +23,7 @@ export class DBProfile {
   readonly tags?: DBProfileTagJoin[]
   readonly badges?: DBProfileBadgeJoin[]
   readonly pin?: DBMapPin
+  readonly type?: DBProfileType
   username: string
   display_name: string
   photo: DBMedia | null
@@ -32,7 +31,6 @@ export class DBProfile {
   country: string
   patreon?: IPatreonUser
   roles: string[] | null
-  type: ProfileTypeName
   visitor_policy: string | null
   is_blocked_from_messaging: boolean | null
   about: string | null
@@ -42,6 +40,7 @@ export class DBProfile {
   website: string | null
   total_views: number
   auth_id: string
+  profile_type: number
 
   constructor(obj: DBProfile) {
     Object.assign(this, obj)
@@ -55,7 +54,7 @@ export class Profile {
   displayName: string
   country: string
   about: string | null
-  type: ProfileTypeName
+  type: ProfileType | null
   impact: IUserImpact | null
   photo: Image | null
   isContactable: boolean
@@ -98,7 +97,7 @@ export class Profile {
       photo: photo ?? null,
 
       roles: dbProfile.roles || null,
-      type: dbProfile.type,
+      type: dbProfile.type ? ProfileType.fromDB(dbProfile.type) : null,
       visitorPolicy: dbProfile.visitor_policy
         ? (JSON.parse(dbProfile.visitor_policy) as UserVisitorPreference)
         : null,
@@ -466,7 +465,7 @@ export type ProfileFormData = {
   country: string
   website: string
   isContactable: boolean
-  type: ProfileTypeName
+  type: string
   photo?: File
   existingPhoto?: Image
   existingCoverImages?: Image[]

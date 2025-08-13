@@ -61,8 +61,10 @@ create table "public"."profile_types" (
     "display_name" text not null,
     "order" smallint not null,
     "image_url" text not null,
+    "small_image_url" text not null,
     "description" text not null,
     "map_pin_name" text not null,
+    "is_space" boolean not null,
     "tenant_id" text not null
 );
 

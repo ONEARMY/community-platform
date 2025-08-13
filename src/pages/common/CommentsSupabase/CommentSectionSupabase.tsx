@@ -4,6 +4,7 @@ import { Comment } from 'oa-shared'
 import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { commentService } from 'src/services/commentService'
 import { subscribersService } from 'src/services/subscribersService'
+import { usefulService } from 'src/services/usefulService'
 import { Box, Button, Flex } from 'theme-ui'
 
 import { CommentItemSupabase } from './CommentItemSupabase'
@@ -72,7 +73,40 @@ export const CommentSectionSupabase = (props: IProps) => {
           }
         }
 
-        setComments(comments || [])
+        const commentsWithVotes = await Promise.all(
+          comments.map(async (comment) => {
+            // Get vote count for the main comment
+            const count = await usefulService.getVoteCount(
+              'comment',
+              comment.id,
+            )
+
+            // Get vote counts for replies if they exist
+            let repliesWithVotes = comment.replies || []
+            if (comment.replies?.length) {
+              repliesWithVotes = await Promise.all(
+                comment.replies.map(async (reply) => {
+                  const replyCount = await usefulService.getVoteCount(
+                    'comment',
+                    reply.id,
+                  )
+                  return {
+                    ...reply,
+                    voteCount: replyCount ?? 0,
+                  }
+                }),
+              )
+            }
+
+            return {
+              ...comment,
+              voteCount: count ?? 0,
+              replies: repliesWithVotes,
+            }
+          }),
+        )
+
+        setComments(commentsWithVotes || [])
       } catch (err) {
         console.error(err)
       }

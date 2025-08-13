@@ -33,6 +33,22 @@ export const seedProfileTags = async () => {
   return response
 }
 
+export const seedProfileTypes = async () => {
+  const tenantId = Cypress.env('TENANT_ID')
+
+  const response = await seedDatabase(
+    {
+      profile_types: MOCK_DATA.profileTypes.map((type) => ({
+        ...type,
+        tenant_id: tenantId,
+      })),
+    },
+    tenantId,
+  )
+
+  return response
+}
+
 export const seedTags = async () => {
   const tenantId = Cypress.env('TENANT_ID')
 

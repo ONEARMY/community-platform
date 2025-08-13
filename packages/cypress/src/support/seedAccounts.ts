@@ -5,7 +5,7 @@ import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { DBProfile, Profile } from 'oa-shared'
 
 // Creates user accounts and respective profiles
-export const seedAccounts = async (profileBadges) => {
+export const seedAccounts = async (profileBadges, profileTags) => {
   const supabase = supabaseAdminClient()
 
   const accounts = Object.values(MOCK_DATA.users).map((user) => ({
@@ -24,6 +24,7 @@ export const seedAccounts = async (profileBadges) => {
           account,
           existingUsers.data.users,
           profileBadges.data[0].id,
+          [profileTags.data[0].id, profileTags.data[1].id],
         ),
     ),
   )
@@ -36,6 +37,7 @@ const createAuthAndProfile = async (
   user,
   existingUsers: User[],
   profileBadgeId: number,
+  profilTagIds: number[],
 ) => {
   const authUser = await supabase.auth.admin.createUser({
     email: user.email,
@@ -58,6 +60,7 @@ const createAuthAndProfile = async (
         user,
         authUser.id,
         profileBadgeId,
+        profilTagIds,
       ))
     }
 
@@ -65,7 +68,13 @@ const createAuthAndProfile = async (
   }
 
   const authId = authUser.data.id
-  return await createProfile(supabase, user, authId, profileBadgeId)
+  return await createProfile(
+    supabase,
+    user,
+    authId,
+    profileBadgeId,
+    profilTagIds,
+  )
 }
 
 const createProfile = async (
@@ -73,6 +82,7 @@ const createProfile = async (
   user: Partial<Profile>,
   authId: string,
   profileBadgeId: number,
+  profilTagIds: number[],
 ) => {
   const tenantId = Cypress.env('TENANT_ID')
 
@@ -126,6 +136,23 @@ const createProfile = async (
       tenantId,
     )
   }
+  console.log({ profilTagIds })
+  Promise.all(
+    profilTagIds.map(async (profileTag) => {
+      return seedDatabase(
+        {
+          profile_tags_relations: [
+            {
+              profile_id: profileResult.data.id,
+              profile_tag_id: profileTag,
+              tenant_id: tenantId,
+            },
+          ],
+        },
+        tenantId,
+      )
+    }),
+  )
 
   return profileResult.data
 }

@@ -78,7 +78,7 @@ export const createMarkerIcon = (pin: MapPin, draggable?: boolean) => {
       : AwaitingModerationHighlight
   return divIcon({
     className: `icon-marker icon-${pin.profile!.type}`,
-    html: `<img data-cy="pin-${pin.id}" src="${icon}" style="${draggable ? 'cursor: grab' : ''}" />`,
+    html: `<img data-cy="pin-${pin.profile.username}" src="${icon}" style="${draggable ? 'cursor: grab' : ''}" />`,
     iconSize: point(38, 38, true),
   })
 }

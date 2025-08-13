@@ -4,7 +4,12 @@ import { seedBadges } from './seedBadges'
 import { seedLibrary } from './seedLibrary'
 import { seedMap } from './seedMap'
 import { seedNews } from './seedNews'
-import { seedProfileTags, seedQuestions, seedTags } from './seedQuestions'
+import {
+  seedProfileTags,
+  seedProfileTypes,
+  seedQuestions,
+  seedTags,
+} from './seedQuestions'
 import { seedResearch } from './seedResearch'
 
 /**
@@ -32,9 +37,10 @@ before(() => {
     // )
     await createStorage(Cypress.env('TENANT_ID'))
 
+    await seedProfileTypes()
     const { profile_badges } = await seedBadges()
-    const { profiles } = await seedAccounts(profile_badges)
-    await seedProfileTags()
+    const { profile_tags } = await seedProfileTags()
+    const { profiles } = await seedAccounts(profile_badges, profile_tags)
 
     await seedMap(profiles)
 

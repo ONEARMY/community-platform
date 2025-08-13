@@ -1,6 +1,6 @@
 import { createSeedClient } from '@snaplet/seed'
-import * as allData from 'oa-shared/mocks/data'
 
+// import * as allData from 'oa-shared/mocks/data'
 import libraryJson from './.snaplet/library.json'
 import questionsJson from './.snaplet/questions.json'
 import { profilesSeed } from './seed/profilesSeed'
@@ -10,7 +10,7 @@ import { convertToSlug } from './src/utils/slug'
 import type {
   categoriesChildInputs,
   categoriesScalars,
-  map_pinsScalars,
+  // map_pinsScalars,
   newsScalars,
   profile_badges_relationsScalars,
   profile_badgesScalars,
@@ -31,9 +31,9 @@ import type {
 
 const tenant_id = `precious-plastic`
 
-const MOCK_DATA = {
-  ...allData,
-}
+// const MOCK_DATA = {
+//   ...allData,
+// }
 
 const _QUESTIONS_BASE: Partial<questionsScalars> = {
   tenant_id,
@@ -139,24 +139,24 @@ const seedBadgesRelations = (
   return relations
 }
 
-const seedMapPins = (
-  profiles: profilesScalars[],
-): Partial<map_pinsScalars>[] => {
-  const pins: Partial<map_pinsScalars>[] = []
+// const seedMapPins = (
+//   profiles: profilesScalars[],
+// ): Partial<map_pinsScalars>[] | void => {
+//   const pins: Partial<map_pinsScalars>[] = []
+//   const pinsSeed = MOCK_DATA.mapPins
 
-  const pinsSeed = MOCK_DATA.mapPins
-  const minLength = Math.min(pinsSeed.length, profiles.length)
+//   const minLength = Math.min(pinsSeed.length, profiles.length)
 
-  for (let i = 0; i < minLength; i++) {
-    pins.push({
-      ...pinsSeed[i],
-      tenant_id,
-      profile_id: profiles[i].id,
-    })
-  }
+//   for (let i = 0; i < minLength; i++) {
+//     pins.push({
+//       ...pinsSeed[i],
+//       tenant_id,
+//       profile_id: profiles[i].id,
+//     })
+//   }
 
-  return pins
-}
+//   return pins
+// }
 
 const seedCategories = (): categoriesChildInputs => [
   { ..._CATEGORIES_BASE, name: 'Questions', type: 'questions' },
@@ -405,7 +405,7 @@ const main = async () => {
     seedBadgesRelations(profiles, profile_badges),
   )
 
-  await seed.map_pins(seedMapPins(profiles))
+  // await seed.map_pins(seedMapPins(profiles))
   const { tags } = await seed.tags(seedTags())
   const { categories } = await seed.categories(seedCategories())
 

@@ -108,7 +108,7 @@ export const CommentSectionSupabase = (props: IProps) => {
 
   const editComment = async (id: number, comment: string) => {
     try {
-      const result = await commentService.editcomment(sourceId, id, comment)
+      const result = await commentService.editComment(sourceId, id, comment)
       const now = new Date()
 
       if (result.status === 204) {
@@ -180,7 +180,7 @@ export const CommentSectionSupabase = (props: IProps) => {
 
   const editReply = async (id: number, replyText: string, parentId: number) => {
     try {
-      const result = await commentService.editcomment(sourceId, id, replyText)
+      const result = await commentService.editComment(sourceId, id, replyText)
       const now = new Date()
 
       if (result.status === 204) {

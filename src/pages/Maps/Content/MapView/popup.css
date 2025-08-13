@@ -1,6 +1,6 @@
 .markercluster-map .leaflet-popup-content {
   margin: 0;
-  z-index: 99991;
+  z-index: 4002;
 }
 
 .markercluster-map .leaflet-popup-content p {

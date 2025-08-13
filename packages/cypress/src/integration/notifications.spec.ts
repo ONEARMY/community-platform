@@ -1,9 +1,5 @@
-import { UserRole } from 'oa-shared'
-
 describe('[Notifications]', () => {
   it('email preferences can be set', () => {
-    localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
-
     cy.signUpCompletedUser()
     cy.visit('/settings')
 

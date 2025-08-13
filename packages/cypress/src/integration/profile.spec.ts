@@ -166,6 +166,7 @@ describe('[Profile]', () => {
         displayName: user.username,
         country: 'Tokelau',
         description: 'contact checking',
+        website: 'https://greatbritishbakeoff.com',
       })
 
       cy.saveSettingsForm()

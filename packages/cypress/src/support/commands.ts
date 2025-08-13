@@ -1,7 +1,6 @@
 import 'cypress-file-upload'
 
 import { deleteDB } from 'idb'
-import { UserRole } from 'oa-shared'
 
 interface ExpectedNewNotification {
   content: string
@@ -97,9 +96,6 @@ Cypress.Commands.add('interceptAddressReverseFetch', (addressResponse) => {
 Cypress.Commands.overwrite('log', (subject, message) => cy.task('log', message))
 
 Cypress.Commands.add('clearNotifications', () => {
-  localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
-  cy.wait(2000)
-
   cy.get('[data-cy=NotificationsSupabase-desktop]').click()
 
   cy.get('[data-cy=NotificationListSupabase]').then(($listView) => {
@@ -115,9 +111,6 @@ Cypress.Commands.add(
   (props: ExpectedNewNotification) => {
     const { content, path, title, username } = props
 
-    localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
-    cy.wait(3000)
-
     cy.get('[data-cy=NotificationsSupabase-desktop]').click()
 
     cy.get('[data-cy=NotificationListSupabase]').contains(username)
@@ -129,8 +122,5 @@ Cypress.Commands.add(
 )
 
 Cypress.Commands.add('expectNoNewNotification', () => {
-  localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
-  cy.wait(3000)
-
   cy.get('[data-cy=notifications-no-new-messages]').first()
 })

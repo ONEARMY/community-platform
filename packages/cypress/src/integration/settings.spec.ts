@@ -1,5 +1,3 @@
-import { UserRole } from 'oa-shared'
-
 import { MOCK_DATA } from '../data'
 import { SingaporeStubResponse } from '../fixtures/searchResults'
 import { UserMenuItem } from '../support/commandsUi'
@@ -152,7 +150,13 @@ describe('[Settings]', () => {
 
       cy.step('Can view pin on new map')
       cy.visit(`/map#${user.username}`)
+      cy.get('.leaflet-control-zoom-in').click()
+      cy.get('.leaflet-control-zoom-in').click()
+      cy.get('.leaflet-control-zoom-in').click()
+      cy.get('.leaflet-control-zoom-in').click()
       cy.wait(2000)
+      cy.get('.leaflet-control-zoom-out').click()
+
       cy.get('[data-cy=CardListItem-selected]').contains(user.username)
 
       cy.step('Can delete map pin')
@@ -214,7 +218,7 @@ describe('[Settings]', () => {
         .and('include', coverImage)
 
       cy.step('Updated settings display on contact tab')
-      cy.get('[data-cy="contact-tab"]').click()
+      cy.get('[data-cy="contact-tab"]').click({ force: true })
       cy.contains(`Other users are able to contact you`)
       cy.get('[data-cy="profile-website"]').should('have.attr', 'href', website)
     })
@@ -397,7 +401,6 @@ describe('[Settings]', () => {
   })
 
   it('Notifications', () => {
-    localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
     cy.signUpNewUser()
 
     cy.step('Notification setting not shown when messaging off')

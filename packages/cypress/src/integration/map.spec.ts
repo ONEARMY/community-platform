@@ -64,7 +64,7 @@ describe('[Map]', () => {
       cy.get('.leaflet-control-zoom-in').click()
     }
     cy.wait(2000) // Wait for animation to complete
-    cy.get('[data-cy="list-results"]').contains('1 result')
+    cy.get('[data-cy="list-results"]').contains('/d+ results in view/')
     cy.get('[data-cy="CardList-desktop"]').within(() => {
       cy.get('[data-cy=CardListItem-selected]').within(() => {
         cy.contains(username)

@@ -54,13 +54,14 @@ export const UsefulButtonLite = (props: IProps) => {
           fontSize: 1,
           backgroundColor: hasUserVotedUseful
             ? theme.colors.offWhite
-            : theme.colors.softgrey,
+            : theme.colors.silver,
           border: 'none',
-          margin: 0,
+          marginRight: 5,
           padding: 1,
           display: 'flex',
           height: '80%',
           alignItems: 'center',
+          width: 32,
           gap: 1,
           '&:hover': {
             backgroundColor: theme.colors.softblue,
@@ -78,9 +79,13 @@ export const UsefulButtonLite = (props: IProps) => {
           </Text>
           <Icon
             glyph={'star-active'}
-            ml={3}
-            size={'sm'}
+            ml={5}
+            size={18}
             filter={hasUserVotedUseful ? 'unset' : 'grayscale(1)'}
+            sx={{
+              position: 'absolute',
+              right: '-8px',
+            }}
           />
         </Flex>
       </Button>

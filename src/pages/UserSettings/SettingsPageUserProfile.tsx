@@ -100,7 +100,6 @@ export const SettingsPageUserProfile = observer(() => {
         errors,
         form,
       }) => {
-        console.log({ profileTypes })
         const isMember = !profileTypes?.find((x) => x.name === values.type)
           ?.isSpace
 

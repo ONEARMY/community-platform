@@ -37,10 +37,14 @@ before(() => {
     // )
     await createStorage(Cypress.env('TENANT_ID'))
 
-    await seedProfileTypes()
+    const { profile_types } = await seedProfileTypes()
     const { profile_badges } = await seedBadges()
     const { profile_tags } = await seedProfileTags()
-    const { profiles } = await seedAccounts(profile_badges, profile_tags)
+    const { profiles } = await seedAccounts(
+      profile_badges.data,
+      profile_tags.data,
+      profile_types.data,
+    )
 
     await seedMap(profiles)
 
@@ -79,6 +83,9 @@ after(async () => {
       'tags',
       'profile_badges',
       'profile_badges_relations',
+      'profile_tags',
+      'profile_tags_replations',
+      'profile_types',
     ],
     Cypress.env('TENANT_ID'),
   )

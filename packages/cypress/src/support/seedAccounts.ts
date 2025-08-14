@@ -2,10 +2,20 @@ import { MOCK_DATA } from '../data'
 import { seedDatabase, supabaseAdminClient } from '../utils/TestUtils'
 
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBProfile, Profile } from 'oa-shared'
+import type {
+  DBProfile,
+  DBProfileBadge,
+  DBProfileTag,
+  DBProfileType,
+  Profile,
+} from 'oa-shared'
 
 // Creates user accounts and respective profiles
-export const seedAccounts = async (profileBadges, profileTags) => {
+export const seedAccounts = async (
+  profileBadges: DBProfileBadge[],
+  profileTags: DBProfileTag[],
+  profileTypes: DBProfileType[],
+) => {
   const supabase = supabaseAdminClient()
 
   const accounts = Object.values(MOCK_DATA.users).map((user) => ({
@@ -17,16 +27,17 @@ export const seedAccounts = async (profileBadges, profileTags) => {
   const existingUsers = await supabase.auth.admin.listUsers({ perPage: 10000 })
 
   const profiles = await Promise.all(
-    accounts.map(
-      async (account) =>
-        await createAuthAndProfile(
-          supabase,
-          account,
-          existingUsers.data.users,
-          profileBadges.data[0].id,
-          [profileTags.data[0].id, profileTags.data[1].id],
-        ),
-    ),
+    accounts.map(async (account) => {
+      const profileType = profileTypes.find((type) => type.name === 'member')
+      return await createAuthAndProfile(
+        supabase,
+        account,
+        existingUsers.data.users,
+        profileBadges[0].id,
+        [profileTags[0].id, profileTags[1].id],
+        profileType.id,
+      )
+    }),
   )
 
   return { profiles }
@@ -38,6 +49,7 @@ const createAuthAndProfile = async (
   existingUsers: User[],
   profileBadgeId: number,
   profilTagIds: number[],
+  profileTypeId: number,
 ) => {
   const authUser = await supabase.auth.admin.createUser({
     email: user.email,
@@ -61,6 +73,7 @@ const createAuthAndProfile = async (
         authUser.id,
         profileBadgeId,
         profilTagIds,
+        profileTypeId,
       ))
     }
 
@@ -74,6 +87,7 @@ const createAuthAndProfile = async (
     authId,
     profileBadgeId,
     profilTagIds,
+    profileTypeId,
   )
 }
 
@@ -83,6 +97,7 @@ const createProfile = async (
   authId: string,
   profileBadgeId: number,
   profilTagIds: number[],
+  profileTypeId: number,
 ) => {
   const tenantId = Cypress.env('TENANT_ID')
 
@@ -104,7 +119,7 @@ const createProfile = async (
     username: user.username,
     roles: user.roles,
     tenant_id: tenantId,
-    type: user.type,
+    profile_type: profileTypeId,
     about: user.about || '',
     photo: user.photo || null,
     country: user.country,

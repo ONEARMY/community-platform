@@ -72,7 +72,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 
         {!props.pin && props.profile.country && (
           <Flex sx={{ alignItems: 'center', gap: 1 }}>
-            <Icon glyph="map" size={22} />
+            <Icon glyph="map" size={20} />
             <Box>{props.profile.country}</Box>
           </Flex>
         )}
@@ -84,7 +84,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               sx={{ alignItems: 'center', gap: 1 }}
               data-testid={`badge_${badge.name}`}
             >
-              <Image src={badge.imageUrl} />
+              <Image width={20} height={20} src={badge.imageUrl} />
               <Box>
                 {badge.actionUrl ? (
                   <ExternalLink href={badge.actionUrl} target="_blank">

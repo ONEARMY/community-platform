@@ -1,4 +1,5 @@
 import { MapPinFactory } from 'src/factories/mapPinFactory.server'
+import { ProfileFactory } from 'src/factories/profileFactory.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { MapServiceServer } from 'src/services/mapService.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
@@ -20,15 +21,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const profileService = new ProfileServiceServer(client)
-    const profile = await profileService.getByAuthId(user!.id)
+    const dbProfile = await profileService.getByAuthId(user!.id)
 
-    if (!profile) {
+    if (!dbProfile) {
       return { status: 404, statusText: 'profile not found' }
     }
 
     if (request.method === 'DELETE') {
-      return await deletePin(request, profile)
+      return await deletePin(request, dbProfile)
     }
+
+    const profile = new ProfileFactory(client).fromDB(dbProfile)
 
     const formData = await request.formData()
     const data: UpsertPin = {

@@ -211,6 +211,7 @@ describe('[Settings]', () => {
 
     cy.step('Updated settings display on contact tab')
     cy.get('[data-cy="contact-tab"]').click({ force: true })
+    cy.get('[data-cy="contact-tab"]').click({ force: true })
     cy.contains(`Other users are able to contact you`)
     cy.get('[data-cy="profile-website"]').should('have.attr', 'href', website)
   })
@@ -242,7 +243,7 @@ describe('[Precious Plastic]', () => {
     const coverImage = 'profile-cover-1-edited'
     const userImage = 'avatar'
     const displayName = 'settings_workplace_new'
-    const description = 'We have some space to run a workplace'
+    const description = 'We have a precious space.'
     const profileType = 'workspace'
     const tag = 'Shredder'
     const visitorType = 'Open to visitors'

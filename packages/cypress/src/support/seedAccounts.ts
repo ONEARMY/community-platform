@@ -154,7 +154,7 @@ const createProfile = async (
       tenantId,
     )
   }
-  console.log({ profilTagIds })
+
   Promise.all(
     profilTagIds.map(async (profileTag) => {
       return seedDatabase(

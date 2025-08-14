@@ -1,10 +1,10 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBProfile, Moderation, UpsertPin } from 'oa-shared'
+import type { Moderation, Profile, UpsertPin } from 'oa-shared'
 
 export class MapServiceServer {
   constructor(private client: SupabaseClient) {}
 
-  async upsert(pin: UpsertPin, profile: DBProfile) {
+  async upsert(pin: UpsertPin, profile: Profile) {
     const existingPin = await this.client
       .from('map_pins')
       .select('id,moderation')

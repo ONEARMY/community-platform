@@ -17,7 +17,19 @@ export class ProfileServiceServer {
   async getByAuthId(id: string): Promise<DBProfile | null> {
     const { data } = await this.client
       .from('profiles')
-      .select('*')
+      .select(
+        `*,
+        type:profile_types(
+          id,
+          name,
+          display_name,
+          image_url,
+          small_image_url,
+          description,
+          map_pin_name,
+          is_space
+        )`,
+      )
       .eq('auth_id', id)
       .single()
 
@@ -31,7 +43,19 @@ export class ProfileServiceServer {
   async getById(id: number): Promise<DBProfile | null> {
     const { data } = await this.client
       .from('profiles')
-      .select('*')
+      .select(
+        `*,
+        type:profile_types(
+          id,
+          name,
+          display_name,
+          image_url,
+          small_image_url,
+          description,
+          map_pin_name,
+          is_space
+        )`,
+      )
       .eq('id', id)
       .single()
 

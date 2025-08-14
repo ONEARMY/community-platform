@@ -65,7 +65,8 @@ const LocationDataTextDisplay = ({ pin }: { pin?: MapPin }) => {
         <>
           <Alert variant="warning" sx={{ gap: 1 }}>
             <Text sx={{ fontSize: 1 }}>
-              Your pin status is {ModerationRecord[pin.moderation]}
+              Your pin status is{' '}
+              {ModerationRecord[pin.moderation].toLowerCase()}
             </Text>
             {pin.moderationFeedback && (
               <>

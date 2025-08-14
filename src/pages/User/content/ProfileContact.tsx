@@ -17,7 +17,7 @@ interface IProps {
 }
 
 export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
-  const isUserProfileContactable = !isUserContactable(user)
+  const isUserProfileContactable = isUserContactable(user)
   const shouldShowContactOutput = !isMessagingModuleOff()
 
   return (

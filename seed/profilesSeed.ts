@@ -1,12 +1,10 @@
-import { ProfileTypeList } from 'oa-shared'
-
 import type { profilesChildInputs, profilesScalars } from '@snaplet/seed'
 
 const _PROFILES_BASE: (tenant_id: string) => Partial<profilesScalars> = (
   tenant_id: string,
 ) => ({
   tenant_id,
-  type: ProfileTypeList.MEMBER,
+  type: 'member',
   roles: [],
   photo: null,
   patreon: null,

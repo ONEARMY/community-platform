@@ -48,16 +48,15 @@ export const seedResearch = async (profiles: DBProfile[], tagsData) => {
 
   for (let i = 0; i < MOCK_DATA.research.length; i++) {
     const researchItem = MOCK_DATA.research[i]
+    const createdBy =
+      profiles.find(
+        (profile) => profile.username === researchItem.created_by_username,
+      ).id || profiles[0].id
 
-    if (researchItem.updates && researchItem.updates.length) {
-      const createdBy =
-        profiles.find(
-          (profile) => profile.username === researchItem.created_by_username,
-        ).id || profiles[0].id
-
+    if (researchItem.updates) {
       const { research_updates } = await seedDatabase(
         {
-          research_updates: researchItem.updates.map((item) => ({
+          research_updates: MOCK_DATA.researchUpdates.map((item) => ({
             created_at: item.created_at,
             deleted: item.deleted,
             description: item.description,

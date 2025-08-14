@@ -11,7 +11,7 @@ const search = async (q: string) => {
 
     return (await response.json()) as Profile[]
   } catch (error) {
-    logger.error('Failed to fetch research articles', { error })
+    logger.error('Failed to fetch profiles', { error })
     return []
   }
 }

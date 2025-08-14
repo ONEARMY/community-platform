@@ -7,7 +7,7 @@ export const researchUpdates: Partial<DBResearchUpdate>[] = [
     modified_at: new Date('2022-03-27T22:10:11.271Z'),
     description: 'qwerty',
     comment_count: 1,
-    title: 'qwerty',
+    title: 'qwerty 1',
     files: [
       {
         name: 'art final 2.skp',
@@ -23,7 +23,7 @@ export const researchUpdates: Partial<DBResearchUpdate>[] = [
     modified_at: new Date('2022-03-27T22:10:11.271Z'),
     description: 'qwerty',
     comment_count: 0,
-    title: 'qwerty',
+    title: 'qwerty 2',
   },
   {
     created_at: new Date('2022-03-27T22:10:11.271Z'),
@@ -31,7 +31,7 @@ export const researchUpdates: Partial<DBResearchUpdate>[] = [
     modified_at: new Date('2022-03-27T22:10:11.271Z'),
     description: 'qwerty',
     comment_count: 0,
-    title: 'qwerty',
+    title: 'qwerty 3',
   },
   {
     created_at: new Date('2022-03-27T22:10:11.271Z'),
@@ -39,6 +39,6 @@ export const researchUpdates: Partial<DBResearchUpdate>[] = [
     modified_at: new Date('2022-03-27T22:10:11.271Z'),
     description: 'qwerty',
     comment_count: 0,
-    title: 'qwerty',
+    title: 'qwerty 4',
   },
 ]

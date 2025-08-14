@@ -25,7 +25,7 @@ export class ProfileBadge {
     Object.assign(this, obj)
   }
 
-  static fromDBJoin(value: DBProfileBadgeJoin) {
+  static fromDBJoin(value: DBProfileBadgeJoin): ProfileBadge {
     const badge = value.profile_badges
     return new ProfileBadge({
       id: badge.id,
@@ -36,7 +36,7 @@ export class ProfileBadge {
     })
   }
 
-  static fromDBJSONJoin(badge: DBProfileBadge) {
+  static fromDBJSONJoin(badge: DBProfileBadge): ProfileBadge {
     return new ProfileBadge({
       id: badge.id,
       name: badge.name,

@@ -48,11 +48,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const dbItems = data as DBResearchItem[]
-  const items = dbItems.map((x) => {
-    const images = x.image
-      ? storageServiceServer.getPublicUrls(client, [x.image], IMAGE_SIZES.LIST)
+  const items = dbItems.map((dbResearchItem) => {
+    const images = dbResearchItem.image
+      ? storageServiceServer.getPublicUrls(
+          client,
+          [dbResearchItem.image],
+          IMAGE_SIZES.LIST,
+        )
       : []
-    return ResearchItem.fromDB(x, [], images)
+    return ResearchItem.fromDB(dbResearchItem, [], images)
   })
 
   if (items && items.length > 0) {

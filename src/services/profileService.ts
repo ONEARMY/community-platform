@@ -17,7 +17,7 @@ const get = async (): Promise<Profile | undefined> => {
 
     return (await response.json()) as Profile
   } catch (error) {
-    logger.error('Failed to fetch research articles', { error })
+    logger.error('Failed to fetch profile', { error })
   }
 }
 

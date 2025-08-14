@@ -66,6 +66,16 @@ export class ProfileServiceServer {
             image_url,
             action_url
           )
+        ),
+        type:profile_types(
+          id,
+          name,
+          display_name,
+          image_url,
+          small_image_url,
+          description,
+          map_pin_name,
+          is_space
         )`,
       )
       .in('username', usernames)
@@ -96,6 +106,16 @@ export class ProfileServiceServer {
             id,
             name
           )
+        ),
+        type:profile_types(
+          id,
+          name,
+          display_name,
+          image_url,
+          small_image_url,
+          description,
+          map_pin_name,
+          is_space
         )`,
       )
       .eq('username', username)

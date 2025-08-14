@@ -1,4 +1,4 @@
-import { Profile } from 'oa-shared'
+import { ProfileFactory } from 'src/factories/profileFactory.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
 import type { DBProfile } from 'oa-shared'
@@ -47,8 +47,11 @@ export const loader = async ({ request }) => {
     )
     .or(`username.ilike.%${q}%,display_name.ilike.%${q}%`)
     .limit(10)
+  const profileFactory = new ProfileFactory(client)
 
-  const profiles = data?.map((x) => Profile.fromDB(x as unknown as DBProfile))
+  const profiles = data?.map((x) =>
+    profileFactory.fromDB(x as unknown as DBProfile),
+  )
 
   return Response.json(profiles, { headers, status: 200 })
 }

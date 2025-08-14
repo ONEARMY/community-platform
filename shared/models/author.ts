@@ -27,7 +27,7 @@ export class Author {
   static fromDB(dbAuthor: DBAuthor, photo?: Image) {
     const badges =
       dbAuthor.badges?.map((badge) =>
-        badge.profile_badges
+        (badge as any).profile_badges
           ? ProfileBadge.fromDBJoin(badge)
           : ProfileBadge.fromDBJSONJoin(badge as DBProfileBadge),
       ) || []

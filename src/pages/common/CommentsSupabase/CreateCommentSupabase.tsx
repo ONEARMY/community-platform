@@ -1,6 +1,11 @@
 import { useMemo, useState } from 'react'
 import { observer } from 'mobx-react'
-import { Button, MemberBadge, ReturnPathLink } from 'oa-components'
+import {
+  Button,
+  CommentAvatar,
+  MemberBadge,
+  ReturnPathLink,
+} from 'oa-components'
 import { UserAction } from 'src/common/UserAction'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
@@ -68,7 +73,14 @@ export const CreateCommentSupabase = observer((props: IProps) => {
               flexShrink: 0,
             }}
           >
-            <MemberBadge profileType={profileType} useLowDetailVersion />
+            {profile?.photo?.publicUrl ? (
+              <CommentAvatar
+                displayName={profile?.displayName}
+                photo={profile?.photo?.publicUrl}
+              />
+            ) : (
+              <MemberBadge profileType={profileType} useLowDetailVersion />
+            )}
           </Box>
           <Box
             sx={{

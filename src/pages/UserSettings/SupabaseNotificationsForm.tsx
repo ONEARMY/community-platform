@@ -102,7 +102,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
       component: (
         <InternalLink
           data-cy="messages-link"
-          to="/settings/profile/#public-contact"
+          to="/settings/profile#public-contact"
           sx={{ textAlign: 'center' }}
         >
           {profileIsContactable

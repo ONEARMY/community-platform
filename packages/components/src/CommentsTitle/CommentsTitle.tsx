@@ -12,13 +12,11 @@ export interface IProps {
 }
 
 export const CommentsTitle = ({ comments }: IProps) => {
-  const commentCount = useMemo(
-    () =>
+  const title = useMemo(() => {
+    const commentCount =
       comments.filter((x) => !x.deleted).length +
-      comments.flatMap((x) => x.replies).filter((x) => !!x).length,
-    [comments],
-  )
-  const setTitle = () => {
+      comments.flatMap((x) => x.replies).filter((x) => !!x).length
+
     if (commentCount === 0) {
       return NO_COMMENTS
     }
@@ -27,9 +25,7 @@ export const CommentsTitle = ({ comments }: IProps) => {
     }
 
     return `${commentCount} ${COMMENTS}`
-  }
-
-  const title = setTitle()
+  }, [comments])
 
   return (
     <Heading as="h3" data-cy="DiscussionTitle">

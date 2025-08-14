@@ -24,7 +24,7 @@ describe('[Research.Discussions]', () => {
     const newComment = `An example comment from ${admin.username}`
     const updatedNewComment = `I've updated my comment now. Love ${admin.username}. ${randomId}!`
 
-    const research = MOCK_DATA.research[1]
+    const research = MOCK_DATA.research[0]
     const researchPath = `/research/${research.slug}`
 
     cy.step('Can add comment')

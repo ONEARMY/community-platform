@@ -35,12 +35,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     limit_val: ITEMS_PER_PAGE,
   })
 
-  const countRersult = await client.rpc('get_research_count', {
+  const countResult = await client.rpc('get_research_count', {
     search_query: q || null,
     category_id: category,
     research_status: status || null,
   })
-  const count = countRersult.data || 0
+  const count = countResult.data || 0
 
   if (error) {
     console.error(error)

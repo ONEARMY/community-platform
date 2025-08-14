@@ -131,7 +131,7 @@ Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
 })
 
 Cypress.Commands.add('setSettingFocus', (focus: string) => {
-  cy.get(`[data-cy=${focus}]`).click()
+  cy.get(`[data-cy=${focus}]`).first().click()
 })
 
 Cypress.Commands.add('setSettingImage', (image, selector) => {

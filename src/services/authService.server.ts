@@ -15,7 +15,6 @@ const createUserProfile = async (
     .from('profile_types')
     .select('*')
     .eq('name', 'member')
-    .maybeSingle()
 
   if (error) {
     console.error(error)
@@ -27,7 +26,7 @@ const createUserProfile = async (
     username: args.username,
     display_name: args.username,
     tenant_id: process.env.TENANT_ID,
-    profile_type: data.id,
+    profile_type: data[0].id,
   })
 }
 

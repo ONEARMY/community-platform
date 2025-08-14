@@ -8,7 +8,7 @@ export const seedMap = async (profiles) => {
     message: tenantId,
   })
 
-  const res = await seedDatabase(
+  const response = await seedDatabase(
     {
       map_pins: MOCK_DATA.mapPins.map((pin, index) => ({
         profile_id: profiles[index].id,
@@ -19,5 +19,5 @@ export const seedMap = async (profiles) => {
     tenantId,
   )
 
-  console.log(res)
+  return response
 }

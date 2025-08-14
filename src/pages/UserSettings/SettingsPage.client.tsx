@@ -32,7 +32,7 @@ export const SettingsPage = observer(() => {
     env?.VITE_SUPPORTED_MODULES || '',
     MODULE.MAP,
   )
-  const incompleteProfile = !isProfileComplete(profile || undefined)
+  const incompleteProfile = !isProfileComplete(profile)
 
   const profileTab = {
     title: 'Profile',

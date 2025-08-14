@@ -7,6 +7,7 @@ type Users = {
     email: string
     password: string
     username: string
+    profileType: string
   }
 }
 export const users: Users = {
@@ -25,6 +26,7 @@ export const users: Users = {
     about: "Hi! I'm a robot 🤖 Beep boop",
     email: 'demo_user@example.com',
     password: 'demo_user',
+    profileType: 'member',
   },
   'beta-tester': {
     createdAt: new Date('2022-01-30T18:51:57.719Z'),
@@ -39,6 +41,7 @@ export const users: Users = {
       publicUrl: 'string',
     },
     lastActive: new Date('2022-01-30T18:51:57.719Z'),
+    profileType: 'member',
   },
   admin: {
     createdAt: new Date('2022-01-30T18:51:57.719Z'),
@@ -52,6 +55,7 @@ export const users: Users = {
       id: 'string',
       publicUrl: 'string',
     },
+    profileType: 'member',
   },
   event_reader: {
     username: 'event_reader',
@@ -65,6 +69,7 @@ export const users: Users = {
       id: 'string',
       publicUrl: 'string',
     },
+    profileType: 'member',
   },
   howto_creator: {
     email: 'howto_creator@test.com',
@@ -78,6 +83,7 @@ export const users: Users = {
       id: 'string',
       publicUrl: 'string',
     },
+    profileType: 'member',
   },
   research_creator: {
     email: 'research_creator@test.com',
@@ -91,6 +97,7 @@ export const users: Users = {
       id: 'string',
       publicUrl: 'string',
     },
+    profileType: 'member',
   },
   settings_machine_new: {
     badges: [
@@ -112,6 +119,7 @@ export const users: Users = {
       id: 'string',
       publicUrl: 'string',
     },
+    profileType: 'machine-builder',
   },
   settings_member_new: {
     country: 'Poland',
@@ -134,6 +142,7 @@ export const users: Users = {
       id: 'string',
       publicUrl: 'string',
     },
+    profileType: 'member',
   },
   settings_workplace_empty: {
     badges: [
@@ -155,6 +164,7 @@ export const users: Users = {
       id: 'string',
       publicUrl: 'string',
     },
+    profileType: 'workspace',
   },
   settings_workplace_new: {
     badges: [
@@ -208,6 +218,7 @@ export const users: Users = {
       id: 'string',
       publicUrl: 'string',
     },
+    profileType: 'workspace',
   },
   mapview_testing_rejected: {
     badges: [
@@ -230,6 +241,7 @@ export const users: Users = {
       id: 'string',
       publicUrl: 'string',
     },
+    profileType: 'member',
   },
   profile_views: {
     id: 16,
@@ -252,5 +264,6 @@ export const users: Users = {
       id: 'string',
       publicUrl: 'string',
     },
+    profileType: 'member',
   },
 }

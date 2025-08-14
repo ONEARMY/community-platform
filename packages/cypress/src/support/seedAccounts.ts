@@ -28,7 +28,10 @@ export const seedAccounts = async (
 
   const profiles = await Promise.all(
     accounts.map(async (account) => {
-      const profileType = profileTypes.find((type) => type.name === 'member')
+      const profileType =
+        profileTypes.find((type) => type.name === account.profileType) ||
+        profileTypes[0]
+
       return await createAuthAndProfile(
         supabase,
         account,

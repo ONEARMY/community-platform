@@ -27,7 +27,7 @@ export const SettingsPageUserProfile = observer(() => {
     IFormNotification | undefined
   >(undefined)
 
-  const { profileTypes, profile, update } = useProfileStore()
+  const { profileTypes, profile, update, refresh } = useProfileStore()
 
   if (!profile) {
     return null
@@ -39,7 +39,8 @@ export const SettingsPageUserProfile = observer(() => {
     try {
       const updatedProfile = await profileService.update(values)
 
-      update(updatedProfile) // update local store
+      update(updatedProfile)
+      refresh()
 
       setNotification({
         message: 'Profile Saved',

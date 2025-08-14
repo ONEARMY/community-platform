@@ -45,7 +45,7 @@ export const seedProfileTypes = async () => {
     },
     tenantId,
   )
-  console.log(response)
+
   return response
 }
 

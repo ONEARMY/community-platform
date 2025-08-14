@@ -56,7 +56,6 @@ export const QuestionPage = observer(({ question }: IProps) => {
     )
   }, [activeUser, question.author])
 
-
   const configOnUsefulClick = {
     contentType: 'questions' as ContentType,
     contentId: question.id,

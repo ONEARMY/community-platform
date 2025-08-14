@@ -70,6 +70,7 @@ describe('[Profile]', () => {
 
       cy.step("Logged out people can see that they're contactable")
       cy.logout()
+      cy.wait(2000)
       cy.visit(`/u/${contactee.username}`)
       cy.get('[data-cy="UserContactNotLoggedIn"]')
 
@@ -252,6 +253,7 @@ describe('[Profile]', () => {
       cy.get('[data-cy=ContribTab]').click()
 
       cy.get('[data-cy="the-first-test-question-link"]').click()
+      cy.wait(2000)
       cy.url().should(
         'include',
         `/questions/the-first-test-question?utm_source=user-profile`,
@@ -299,10 +301,8 @@ describe('[By Beta Tester]', () => {
   it('[Displays other information]', () => {
     cy.signIn(betaTester.email, betaTester.password)
     cy.visit(`/u/${profile_views.username}`)
-
     cy.step('Displays view count for profile with views')
     cy.get('[data-testid=profile-views-stat]').contains(/Views: \d+/)
-
     cy.step('Displays member history info')
     cy.get('[data-cy=MemberHistory]').contains('Member since')
   })

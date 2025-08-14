@@ -28,8 +28,8 @@ export class Author {
     const badges =
       dbAuthor.badges?.map((badge) =>
         (badge as any).profile_badges
-          ? ProfileBadge.fromDBJoin(badge as any)
-          : ProfileBadge.fromDBJSONJoin(badge as DBProfileBadge),
+          ? ProfileBadge.fromDBJoin(badge as DBProfileBadgeJoin)
+          : ProfileBadge.fromDB(badge as DBProfileBadge),
       ) || []
 
     return new Author({

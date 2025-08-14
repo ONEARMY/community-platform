@@ -36,16 +36,6 @@ export class ProfileBadge {
     })
   }
 
-  static fromDBJSONJoin(badge: DBProfileBadge): ProfileBadge {
-    return new ProfileBadge({
-      id: badge.id,
-      name: badge.name,
-      displayName: badge.display_name,
-      imageUrl: badge.image_url,
-      actionUrl: badge.action_url || undefined,
-    })
-  }
-
   static fromDB(value: DBProfileBadge) {
     return new ProfileBadge({
       id: value.id,

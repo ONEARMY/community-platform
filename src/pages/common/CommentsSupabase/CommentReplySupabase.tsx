@@ -8,12 +8,12 @@ import {
   Modal,
 } from 'oa-components'
 import { UserRole } from 'oa-shared'
-import { trackEvent } from 'src/common/Analytics'
 import { usefulService } from 'src/services/usefulService'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
+import { onUsefulClick } from 'src/utils/onUsefulClick'
 import { Box, Flex, Text } from 'theme-ui'
 
-import type { Reply } from 'oa-shared'
+import type { ContentType, Reply } from 'oa-shared'
 
 const DELETED_COMMENT = 'The original comment got deleted'
 
@@ -63,33 +63,23 @@ export const CommentReply = observer(
     const item = 'ReplyItem'
     const loggedInUser = userStore.activeUser
 
-    const onUsefulClick = async (
+    const configOnUsefulClick = {
+      contentType: 'comment' as ContentType,
+      contentId: comment.id,
+      eventCategory: 'Comment',
+      slug: `${comment}+${comment.id}`,
+      setVoted,
+      setUsefulCount,
+      loggedInUser: loggedInUser,
+    }
+
+    const handleUsefulClick = async (
       vote: 'add' | 'delete',
       eventCategory = 'Comment',
     ) => {
-      console.log('Reply Comment Test', vote, eventCategory)
-
-      if (!loggedInUser?.userName) {
-        return
-      }
-
-      // Trigger update without waiting
-      if (vote === 'add') {
-        await usefulService.add('comment', comment.id)
-      } else {
-        await usefulService.remove('comment', comment.id)
-      }
-
-      setVoted((prev) => !prev)
-
-      setUsefulCount((prev) => {
-        return vote === 'add' ? prev + 1 : prev - 1
-      })
-
-      trackEvent({
-        category: eventCategory,
-        action: vote === 'add' ? 'CommentUseful' : 'CommentUsefulRemoved',
-        label: `comment-${comment.id}`,
+      await onUsefulClick({
+        vote,
+        config: { ...configOnUsefulClick, eventCategory },
       })
     }
 
@@ -126,7 +116,9 @@ export const CommentReply = observer(
                 comment={comment}
                 setShowDeleteModal={setShowDeleteModal}
                 setShowEditModal={setShowEditModal}
-                onUsefulClick={onUsefulClick}
+                onUsefulClick={() =>
+                  handleUsefulClick(voted ? 'delete' : 'add')
+                }
                 hasUserVotedUseful={voted}
                 votedUsefulCount={usefulCount}
                 isLoggedIn={!!loggedInUser}

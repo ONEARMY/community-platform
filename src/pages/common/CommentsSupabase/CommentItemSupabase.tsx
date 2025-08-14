@@ -9,15 +9,15 @@ import {
 } from 'oa-components'
 import { UserRole } from 'oa-shared'
 import { FollowButtonAction } from 'src/common/FollowButtonAction'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { trackEvent } from 'src/common/Analytics'
 import { usefulService } from 'src/services/usefulService'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
+import { onUsefulClick } from 'src/utils/onUsefulClick'
 import { Card, Flex } from 'theme-ui'
 
 import { CommentReply } from './CommentReplySupabase'
 import { CreateCommentSupabase } from './CreateCommentSupabase'
 
-import type { Comment, DiscussionContentTypes } from 'oa-shared'
+import type { Comment, ContentType, DiscussionContentTypes } from 'oa-shared'
 
 export interface ICommentItemProps {
   comment: Comment
@@ -78,31 +78,23 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
     }
   }, [comment.highlighted])
 
-  const onUsefulClick = async (
+  const configOnUsefulClick = {
+    contentType: 'comment' as ContentType,
+    contentId: comment.id,
+    eventCategory: 'Comment',
+    slug: `${comment}+${comment.id}`,
+    setVoted,
+    setUsefulCount,
+    loggedInUser: activeUser,
+  }
+
+  const handleUsefulClick = async (
     vote: 'add' | 'delete',
     eventCategory = 'Comment',
   ) => {
-    if (!activeUser?.userName) {
-      return
-    }
-
-    // Trigger update without waiting
-    if (vote === 'add') {
-      await usefulService.add('comment', comment.id)
-    } else {
-      await usefulService.remove('comment', comment.id)
-    }
-
-    setVoted((prev) => !prev)
-
-    setUsefulCount((prev) => {
-      return vote === 'add' ? prev + 1 : prev - 1
-    })
-
-    trackEvent({
-      category: eventCategory,
-      action: vote === 'add' ? 'CommentUseful' : 'CommentUsefulRemoved',
-      label: `comment-${comment.id}`,
+    await onUsefulClick({
+      vote,
+      config: { ...configOnUsefulClick, eventCategory },
     })
   }
 
@@ -148,7 +140,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
               hideSubscribeIcon
             />
           }
-          onUsefulClick={onUsefulClick}
+          onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}
           hasUserVotedUseful={voted}
           votedUsefulCount={usefulCount}
           isLoggedIn={!!activeUser}

@@ -1,7 +1,7 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { ContentType } from 'shared/lib/models/common'
+import type { ContentType } from 'oa-shared'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)

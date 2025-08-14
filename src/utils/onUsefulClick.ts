@@ -1,7 +1,7 @@
 import { trackEvent } from 'src/common/Analytics'
 import { usefulService } from 'src/services/usefulService'
 
-import type { ContentType, IUserDB } from 'shared/lib'
+import type { ContentType, IUserDB } from 'oa-shared'
 
 interface UsefulClickProps {
   vote: 'add' | 'delete'

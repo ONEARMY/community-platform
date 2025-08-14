@@ -32,9 +32,9 @@ export const MemberBadge = (props: Props) => {
       height={badgeSize}
       title={profileType.displayName}
       src={
-        (badgeSize > MINIMUM_SIZE && !useLowDetailVersion
-          ? profileType.imageUrl
-          : profileType.smallImageUrl) || badge
+        badgeSize > MINIMUM_SIZE && !useLowDetailVersion
+          ? profileType.imageUrl || badge
+          : profileType.smallImageUrl || badge
       }
     />
   )

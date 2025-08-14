@@ -3796,8 +3796,8 @@
           "nullNotDistinct": false
         },
         {
-          "name": "idx_name_bucket_unique",
-          "fields": ["bucket_id", "name"],
+          "name": "idx_name_bucket_level_unique",
+          "fields": ["bucket_id", "level", "name"],
           "nullNotDistinct": false
         },
         {
@@ -4626,9 +4626,9 @@
           "maxLength": null
         },
         {
-          "id": "public.profile_types.tenant_id",
-          "name": "tenant_id",
-          "columnName": "tenant_id",
+          "id": "public.profile_types.small_image_url",
+          "name": "small_image_url",
+          "columnName": "small_image_url",
           "type": "text",
           "isRequired": true,
           "kind": "scalar",
@@ -4668,11 +4668,11 @@
           "maxLength": null
         },
         {
-          "id": "public.profile_types.small_image_url",
-          "name": "small_image_url",
-          "columnName": "small_image_url",
-          "type": "text",
-          "isRequired": false,
+          "id": "public.profile_types.is_space",
+          "name": "is_space",
+          "columnName": "is_space",
+          "type": "bool",
+          "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -4682,10 +4682,10 @@
           "maxLength": null
         },
         {
-          "id": "public.profile_types.is_space",
-          "name": "is_space",
-          "columnName": "is_space",
-          "type": "bool",
+          "id": "public.profile_types.tenant_id",
+          "name": "tenant_id",
+          "columnName": "tenant_id",
+          "type": "text",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,

@@ -48,12 +48,7 @@ const Profile = observer((props: IProps) => {
   }
 
   return (
-    <Box
-      data-cy="user-menu"
-      sx={{
-        width: '93px',
-      }}
-    >
+    <Box data-cy="user-menu" sx={{ width: '93px' }}>
       <Flex
         onClick={() => setShowProfileModal((x) => !x)}
         sx={{ ml: 1, height: '100%' }}

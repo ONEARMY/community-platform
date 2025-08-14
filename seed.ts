@@ -112,10 +112,12 @@ const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
     display_name: 'Member',
     is_space: false,
     description: 'test',
-    image_url: '',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/map-member.svg',
     map_pin_name: '',
     order: 1,
-    small_image_url: '',
+    small_image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/map-member.svg',
   },
   {
     ..._TYPES_BASE,

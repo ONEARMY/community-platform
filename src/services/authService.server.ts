@@ -11,12 +11,23 @@ const createUserProfile = async (
 ) => {
   // Should add more typing here about the required fields needed to create a profile
 
+  const { data, error } = await client
+    .from('profile_types')
+    .select('*')
+    .eq('name', 'member')
+    .maybeSingle()
+
+  if (error) {
+    console.error(error)
+    throw 'Default member type not found'
+  }
+
   return await client.from('profiles').insert({
     auth_id: args.user.id,
     username: args.username,
     display_name: args.username,
-    type: 'member',
     tenant_id: process.env.TENANT_ID,
+    profile_type: data.id,
   })
 }
 

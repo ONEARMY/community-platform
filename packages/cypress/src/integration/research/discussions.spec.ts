@@ -24,12 +24,12 @@ describe('[Research.Discussions]', () => {
     const newComment = `An example comment from ${admin.username}`
     const updatedNewComment = `I've updated my comment now. Love ${admin.username}. ${randomId}!`
 
-    const research = MOCK_DATA.research[0]
+    const research = MOCK_DATA.research[1]
     const researchPath = `/research/${research.slug}`
 
     cy.step('Can add comment')
     cy.visit(researchPath)
-    cy.get('[data-cy="HideDiscussionContainer:button"]').click()
+    cy.get('[data-cy="HideDiscussionContainer:button"]').first().click()
     cy.addComment(newComment)
 
     cy.step('Can edit their comment')
@@ -43,7 +43,7 @@ describe('[Research.Discussions]', () => {
 
     cy.signIn(secondCommentor.email, secondCommentor.password)
     cy.visit(researchPath)
-    cy.get('[data-cy="HideDiscussionContainer:button"]').click()
+    cy.get('[data-cy="HideDiscussionContainer:button"]').first().click()
 
     cy.addReply(newReply)
     cy.wait(1000)
@@ -71,7 +71,7 @@ describe('[Research.Discussions]', () => {
     cy.visit(researchPath)
 
     cy.step('Can add reply')
-    cy.get('[data-cy="HideDiscussionContainer:button"]').click()
+    cy.get('[data-cy="HideDiscussionContainer:button"]').first().click()
     cy.addReply(secondReply)
 
     cy.step('Can delete their comment')

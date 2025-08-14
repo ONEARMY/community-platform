@@ -47,8 +47,8 @@ export const seedAccounts = async (
 }
 
 const createAuthAndProfile = async (
-  supabase,
-  user,
+  supabase: SupabaseClient,
+  user: any,
   existingUsers: User[],
   profileBadgeId: number,
   profilTagIds: number[],

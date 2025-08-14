@@ -77,6 +77,7 @@ after(async () => {
       'research',
       'research_updates',
       'notifications',
+      'notifications_preferences',
       'profiles',
       'questions',
       'projects',

@@ -78,33 +78,46 @@ export const transformNotification = async (
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  try {
+    const {
+      data: { user },
+    } = await client.auth.getUser()
 
-  if (!user) {
-    return Response.json({}, { headers, status: 401 })
-  }
+    if (!user) {
+      return Response.json({}, { headers, status: 401 })
+    }
 
-  const profile = await client
-    .from('profiles')
-    .select('id')
-    .eq('auth_id', user.id)
-    .single()
+    const profileResponse = await client
+      .from('profiles')
+      .select('id')
+      .eq('auth_id', user.id)
+      .maybeSingle() // Maybe single due to dup profiles in tests
 
-  const response = await client
-    .from('notifications')
-    .select(
-      `
+    if (!profileResponse.data || profileResponse.error) {
+      throw profileResponse.error || 'No user found'
+    }
+
+    const { data, error } = await client
+      .from('notifications')
+      .select(
+        `
       *,
       triggered_by:profiles!notifications_triggered_by_id_fkey(id,username)
     `,
-    )
-    .eq('owned_by_id', profile?.data?.id)
+      )
+      .eq('owned_by_id', profileResponse?.data?.id)
 
-  const notifications = response.data?.length
-    ? await transformNotificationList(response.data, client)
-    : []
+    if (error) {
+      throw error
+    }
 
-  return Response.json({ notifications }, { headers, status: 200 })
+    const notifications = data?.length
+      ? await transformNotificationList(data, client)
+      : []
+
+    return Response.json({ notifications }, { headers, status: 200 })
+  } catch (error) {
+    console.error(error)
+    return Response.json({ error }, { headers, status: 500 })
+  }
 }

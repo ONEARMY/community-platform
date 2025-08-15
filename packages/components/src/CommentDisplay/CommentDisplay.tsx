@@ -73,7 +73,7 @@ export const CommentDisplay = (props: IProps) => {
         >
           <CommentAvatar
             displayName={comment.createdBy?.displayName}
-            photoUrl={comment.createdBy?.photoUrl}
+            photo={comment.createdBy?.photo?.publicUrl}
             isCommentAuthor={
               comment.createdBy?.id
                 ? authors.includes(comment.createdBy?.id)
@@ -98,14 +98,7 @@ export const CommentDisplay = (props: IProps) => {
               }}
             >
               <Flex sx={{ alignItems: 'center', gap: 2 }}>
-                <Username
-                  user={{
-                    userName: comment.createdBy?.username || '',
-                    countryCode: comment.createdBy?.country,
-                    isVerified: comment.createdBy?.isVerified,
-                    // TODO: isSupporter
-                  }}
-                />
+                {comment.createdBy && <Username user={comment.createdBy} />}
                 <Text sx={{ fontSize: 1, color: 'darkGrey' }}>
                   <DisplayDate
                     createdAt={comment.createdAt}

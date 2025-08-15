@@ -5,9 +5,6 @@ import { getButtons } from '../common/button'
 import type { ThemeWithName } from '../types'
 
 export type { ButtonVariants } from '../common/button'
-import memberBadgeHighDetail from '../../assets/images/themes/fixing-fashion/avatar_member_lg.svg' // use enum to specify list of possible colors for typing
-import memberBadgeLowDetail from '../../assets/images/themes/fixing-fashion/avatar_member_sm.svg'
-import spaceBadge from '../../assets/images/themes/fixing-fashion/avatar_space_lg.svg'
 
 export const colors = {
   ...baseTheme.colors,
@@ -31,14 +28,4 @@ export const StyledComponentTheme: ThemeWithName = {
   alerts,
   colors,
   buttons: getButtons(colors),
-  badges: {
-    member: {
-      lowDetail: memberBadgeLowDetail,
-      normal: memberBadgeHighDetail,
-    },
-    space: {
-      lowDetail: spaceBadge,
-      normal: spaceBadge,
-    },
-  },
 }

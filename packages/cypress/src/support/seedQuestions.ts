@@ -7,7 +7,7 @@ export const seedCategories = async (type: string) => {
 
   return await seedDatabase(
     {
-      categories: MOCK_DATA.categoriesSupabase.map((category) => ({
+      categories: MOCK_DATA.categories.map((category) => ({
         ...category,
         type,
         tenant_id: tenantId,
@@ -17,12 +17,44 @@ export const seedCategories = async (type: string) => {
   )
 }
 
+export const seedProfileTags = async () => {
+  const tenantId = Cypress.env('TENANT_ID')
+
+  const response = await seedDatabase(
+    {
+      profile_tags: MOCK_DATA.profileTags.map((category) => ({
+        ...category,
+        tenant_id: tenantId,
+      })),
+    },
+    tenantId,
+  )
+
+  return response
+}
+
+export const seedProfileTypes = async () => {
+  const tenantId = Cypress.env('TENANT_ID')
+
+  const response = await seedDatabase(
+    {
+      profile_types: MOCK_DATA.profileTypes.map((type) => ({
+        ...type,
+        tenant_id: tenantId,
+      })),
+    },
+    tenantId,
+  )
+
+  return response
+}
+
 export const seedTags = async () => {
   const tenantId = Cypress.env('TENANT_ID')
 
   return await seedDatabase(
     {
-      tags: MOCK_DATA.tagsSupabase.map((category) => ({
+      tags: MOCK_DATA.tags.map((category) => ({
         ...category,
         tenant_id: tenantId,
       })),
@@ -44,7 +76,7 @@ export const seedQuestions = async (profiles) => {
       questions: MOCK_DATA.questions.map((question) => ({
         ...question,
         tenant_id: tenantId,
-        created_by: profiles.data[0].id,
+        created_by: profiles[0].id,
         category: categories.data[0].id,
       })),
     },

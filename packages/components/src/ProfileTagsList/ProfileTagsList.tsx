@@ -2,13 +2,13 @@ import { Flex, Text } from 'theme-ui'
 
 import { visitorDisplayData } from '../VisitorModal/VisitorModal'
 
-import type { IProfileTag, IUser } from 'oa-shared'
+import type { Profile, ProfileTag } from 'oa-shared'
 import type { ComponentProps } from 'react'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface IProps {
-  tags: IProfileTag[] | null
-  openToVisitors?: IUser['openToVisitors']
+  tags: ProfileTag[] | null
+  visitorPolicy?: Profile['visitorPolicy']
   isSpace: boolean
   showVisitorModal?: () => void
   sx?: ThemeUIStyleObject
@@ -68,7 +68,7 @@ const policyColors = new Map([
 ])
 
 export const ProfileTagsList = (props: IProps) => {
-  const { tags, openToVisitors, isSpace, showVisitorModal, sx, large } = props
+  const { tags, visitorPolicy, isSpace, showVisitorModal, sx, large } = props
   const tagList = tags || []
 
   return (
@@ -77,20 +77,15 @@ export const ProfileTagsList = (props: IProps) => {
       data-testid="ProfileTagsList"
       sx={{ gap: 1, flexWrap: 'wrap', ...sx }}
     >
-      {tagList.map(({ label, color }, index) => (
-        <Tag
-          key={index}
-          color={color || DEFAULT_COLOR}
-          label={label}
-          large={large}
-        />
+      {tagList.map(({ name }, index) => (
+        <Tag key={index} color={DEFAULT_COLOR} label={name} large={large} />
       ))}
-      {openToVisitors && isSpace && (
+      {visitorPolicy && isSpace && (
         <Tag
           dataCy="tag-openToVisitors"
-          color={policyColors.get(openToVisitors.policy)}
+          color={policyColors.get(visitorPolicy.policy)}
           label={`${
-            visitorDisplayData.get(openToVisitors.policy)?.label
+            visitorDisplayData.get(visitorPolicy.policy)?.label
           } \u24D8`}
           onClick={() => {
             showVisitorModal && showVisitorModal()

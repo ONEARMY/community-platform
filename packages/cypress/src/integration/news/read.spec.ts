@@ -60,7 +60,7 @@ describe('[News.Read]', () => {
         'content',
         body,
       )
-      cy.step('Links in description are clickable')
+      cy.step('Website is clickable')
       cy.contains('a', 'OneArmy').should(
         'have.attr',
         'href',

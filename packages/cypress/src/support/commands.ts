@@ -1,9 +1,6 @@
 import 'cypress-file-upload'
 
 import { deleteDB } from 'idb'
-import { UserRole } from 'oa-shared'
-
-import { TestDB } from './db/firebase'
 
 interface ExpectedNewNotification {
   content: string
@@ -17,16 +14,11 @@ declare global {
     interface Chainable {
       clearServiceWorkers(): Promise<void>
       deleteIDB(name: string): Promise<boolean>
+      clearNotifications(): Chainable<void>
       expectNewNotification(ExpectedNewNotification): Chainable<void>
       expectNoNewNotification(): Chainable<void>
       interceptAddressSearchFetch(addressResponse): Chainable<void>
       interceptAddressReverseFetch(addressResponse): Chainable<void>
-      queryDocuments(
-        collectionName: string,
-        fieldPath: string,
-        opStr: any,
-        value: string,
-      ): Chainable<any[]>
       step(message: string)
     }
   }
@@ -38,7 +30,6 @@ declare global {
  * @remark - async code should be wrapped in a Cypress.promise block to allow the resolved promise to be
  * used in chained results
  */
-const firestore = TestDB
 /** Delete an indexeddb - resolving true on success and false if blocked (open connections) */
 Cypress.Commands.add('deleteIDB', (name: string) => {
   cy.wrap('Delete Firebase IDB: ' + name)
@@ -79,19 +70,6 @@ Cypress.Commands.add('clearServiceWorkers', () => {
   })
 })
 
-Cypress.Commands.add(
-  'queryDocuments',
-  (collectionName: string, fieldPath: string, opStr: any, value: string) => {
-    Cypress.log({
-      displayName: 'queryDocuments',
-      consoleProps: () => {
-        return { collectionName, fieldPath, opStr, value }
-      },
-    })
-    return firestore.queryDocuments(collectionName, fieldPath, opStr, value)
-  },
-)
-
 Cypress.Commands.add('step', (message: string) => {
   Cypress.log({
     displayName: 'step',
@@ -117,17 +95,24 @@ Cypress.Commands.add('interceptAddressReverseFetch', (addressResponse) => {
  */
 Cypress.Commands.overwrite('log', (subject, message) => cy.task('log', message))
 
+Cypress.Commands.add('clearNotifications', () => {
+  cy.get('[data-cy=NotificationsSupabase-desktop]').click()
+
+  cy.get('[data-cy=NotificationListSupabase]').then(($listView) => {
+    if ($listView.text().includes('Mark all read')) {
+      cy.get('[data-cy=NotificationListSupabase-MarkAllRead]').click()
+    }
+  })
+  cy.get('[data-cy=NotificationListSupabase-CloseButton]').click()
+})
+
 Cypress.Commands.add(
   'expectNewNotification',
   (props: ExpectedNewNotification) => {
     const { content, path, title, username } = props
 
-    localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
-    cy.wait(3000)
+    cy.get('[data-cy=NotificationsSupabase-desktop]').click()
 
-    cy.get('[data-cy=NotificationsSupabase-desktop]').within(() => {
-      cy.get('[data-cy=notifications-new-messages]').click()
-    })
     cy.get('[data-cy=NotificationListSupabase]').contains(username)
     cy.get('[data-cy=NotificationListSupabase]').contains(title)
     cy.get('[data-cy=NotificationListSupabase]').contains(content).click()
@@ -137,8 +122,5 @@ Cypress.Commands.add(
 )
 
 Cypress.Commands.add('expectNoNewNotification', () => {
-  localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
-  cy.wait(3000)
-
   cy.get('[data-cy=notifications-no-new-messages]').first()
 })

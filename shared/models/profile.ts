@@ -1,22 +1,46 @@
+import { ProfileBadge } from './profileBadge'
+import { ProfileTag } from './profileTag'
+import { ProfileType } from './profileType'
+
 import type { Comment } from './comment'
 import type { SubscribableContentTypes } from './common'
 import type { IDBDocSB, IDoc } from './document'
 import type { Project } from './library'
+import type { DBMedia, Image } from './media'
+import type { IDBModeration, IModeration, Moderation } from './moderation'
 import type { News } from './news'
 import type { IPatreonUser } from './patreon'
+import type { DBProfileBadgeJoin } from './profileBadge'
+import type { DBProfileTagJoin } from './profileTag'
+import type { DBProfileType } from './profileType'
 import type { Question } from './question'
 import type { ResearchItem, ResearchUpdate } from './research'
+import type { IUserImpact, UserVisitorPreference } from './user'
 
 export class DBProfile {
-  id: number
+  readonly id: number
+  readonly created_at: Date
+  readonly tags?: DBProfileTagJoin[]
+  readonly badges?: DBProfileBadgeJoin[]
+  readonly pin?: DBMapPin
+  readonly type?: DBProfileType
   username: string
   display_name: string
-  is_verified: boolean
-  is_supporter: boolean
-  photo_url: string | null
+  photo: DBMedia | null
+  cover_images: DBMedia[] | null
   country: string
   patreon?: IPatreonUser
   roles: string[] | null
+  visitor_policy: string | null
+  is_blocked_from_messaging: boolean | null
+  about: string | null
+  impact: string | null
+  is_contactable: boolean | null
+  last_active: Date | null
+  website: string | null
+  total_views: number
+  auth_id: string
+  profile_type: number
 
   constructor(obj: DBProfile) {
     Object.assign(this, obj)
@@ -25,29 +49,70 @@ export class DBProfile {
 
 export class Profile {
   id: number
+  createdAt: Date
   username: string
   displayName: string
-  isVerified: boolean
-  isSupporter: boolean
-  photoUrl: string | null
   country: string
-  patreon?: IPatreonUser
+  about: string | null
+  type: ProfileType | null
+  impact: IUserImpact | null
+  photo: Image | null
+  isContactable: boolean | null
+  isBlockedFromMessaging: boolean
+  visitorPolicy: UserVisitorPreference | null
+  website: string | null
+  tags?: ProfileTag[]
+  badges?: ProfileBadge[]
+  totalViews: number
   roles: string[] | null
+  lastActive: Date | null
+  coverImages: Image[] | null
+  patreon: IPatreonUser | null
+  authorUsefulVotes?: AuthorVotes[]
 
   constructor(obj: Profile) {
     Object.assign(this, obj)
   }
 
-  static fromDB(dbProfile: DBProfile) {
+  static fromDB(
+    dbProfile: DBProfile,
+    photo: Image | null = null,
+    coverImages: Image[] | null = null,
+    authorVotes?: AuthorVotes[],
+  ) {
+    let impact = null
+
+    try {
+      impact = dbProfile.impact ? JSON.parse(dbProfile.impact) : null
+    } catch (error) {
+      console.error('error parsing impact')
+    }
+
     return new Profile({
       id: dbProfile.id,
+      createdAt: dbProfile.created_at,
       country: dbProfile.country,
       displayName: dbProfile.display_name,
       username: dbProfile.username,
-      isSupporter: dbProfile.is_supporter,
-      isVerified: dbProfile.is_verified,
-      photoUrl: dbProfile.photo_url || null,
+      photo: photo ?? null,
+
       roles: dbProfile.roles || null,
+      type: dbProfile.type ? ProfileType.fromDB(dbProfile.type) : null,
+      visitorPolicy: dbProfile.visitor_policy
+        ? (JSON.parse(dbProfile.visitor_policy) as UserVisitorPreference)
+        : null,
+      isBlockedFromMessaging: !!dbProfile.is_blocked_from_messaging,
+      about: dbProfile.about,
+      coverImages: coverImages ?? null,
+      impact,
+      isContactable: dbProfile.is_contactable || null,
+      lastActive: dbProfile.last_active,
+      website: dbProfile.website,
+      patreon: dbProfile.patreon ?? null,
+      totalViews: dbProfile.total_views,
+      authorUsefulVotes: authorVotes,
+      badges: dbProfile.badges?.map((x) => ProfileBadge.fromDBJoin(x)),
+      tags: dbProfile.tags?.map((x) => ProfileTag.fromDBJoin(x)),
     })
   }
 }
@@ -56,12 +121,11 @@ export class Profile {
 
 export type NotificationActionType = 'newContent' | 'newComment'
 export type NotificationContentType = 'researchUpdate' | 'comment' | 'reply'
+export type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photo'>
 
 type NotificationContent = News | Comment | Question | ResearchUpdate
 type NotificationSourceContentType = SubscribableContentTypes
 type NotificationSourceContent = News | Project | Question | ResearchItem
-
-type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photoUrl'>
 
 export class DBNotification implements IDBDocSB {
   readonly id: number
@@ -326,7 +390,7 @@ export class NotificationDisplay {
   }
 
   static setSidebarImage(author: BasicAuthorDetails | undefined): string {
-    return author?.photoUrl || ''
+    return author?.photo?.publicUrl || ''
   }
 
   static setLink(notification: Notification) {
@@ -393,3 +457,121 @@ export type NewNotificationData = {
   sourceContentId: number
   triggeredById: number
 }
+
+export type ProfileFormData = {
+  displayName: string
+  tagIds: number[] | null
+  about: string
+  country: string
+  website: string
+  isContactable: boolean
+  type: string
+  photo?: File
+  existingPhoto?: Image
+  existingCoverImages?: Image[]
+  existingCoverImageIds?: string[]
+  coverImages?: File[]
+  showVisitorPolicy: boolean
+  visitorPreferencePolicy?: UserVisitorPreference['policy']
+  visitorPreferenceDetails?: UserVisitorPreference['details']
+}
+
+export class DBMapPin implements IDBModeration {
+  readonly id: number
+  readonly profile: DBPinProfile
+  profile_id: number
+  country: string // check if necessary
+  country_code: string
+  name: string | null
+  administrative: string | null
+  post_code: string | null
+  lat: number
+  lng: number
+  moderation: Moderation
+  moderation_feedback: string
+}
+
+export class MapPin implements IModeration {
+  readonly id: number
+  readonly profileId: number
+  readonly profile: PinProfile
+  country: string
+  countryCode: string
+  name: string | null
+  administrative: string | null
+  postCode: string | null
+  lat: number
+  lng: number
+  moderation: Moderation
+  moderationFeedback?: string
+
+  constructor(obj: MapPin) {
+    Object.assign(this, obj)
+  }
+}
+
+export type MapPinFormData = {
+  lat: number
+  lng: number
+  country: string
+  countryCode: string
+  administrative: string
+  postCode: string
+  name: string
+}
+
+export interface DBAuthorVotes {
+  content_type: string
+  vote_count: number
+}
+
+export class AuthorVotes {
+  contentType: string
+  voteCount: number
+
+  constructor(obj: AuthorVotes) {
+    Object.assign(this, obj)
+  }
+
+  static fromDB(dbVotes: DBAuthorVotes) {
+    return new AuthorVotes({
+      contentType: dbVotes.content_type,
+      voteCount: dbVotes.vote_count,
+    })
+  }
+}
+
+export type DBPinProfile = Pick<
+  DBProfile,
+  | 'id'
+  | 'display_name'
+  | 'username'
+  | 'country'
+  | 'photo'
+  | 'tags'
+  | 'type'
+  | 'visitor_policy'
+  | 'about'
+  | 'is_contactable'
+  | 'last_active'
+> & { badges: DBProfileBadgeJoin[] }
+
+export type PinProfile = Pick<
+  Profile,
+  | 'id'
+  | 'displayName'
+  | 'username'
+  | 'country'
+  | 'photo'
+  | 'tags'
+  | 'type'
+  | 'visitorPolicy'
+  | 'about'
+  | 'isContactable'
+  | 'lastActive'
+> & { badges: ProfileBadge[] }
+
+export type UpsertPin = Omit<
+  DBMapPin,
+  'id' | 'profile' | 'moderation' | 'moderation_feedback'
+>

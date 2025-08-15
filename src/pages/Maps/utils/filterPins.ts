@@ -1,57 +1,57 @@
-import type { IMapPin, MapFilterOptionsList } from 'oa-shared'
+import { latLongFilter } from './filterLatLong'
+
+import type { LatLngBounds } from 'leaflet'
+import type { MapPin } from 'oa-shared'
 
 export const filterPins = (
-  activePinFilters: MapFilterOptionsList,
-  pins: IMapPin[],
-): IMapPin[] => {
-  if (activePinFilters.length === 0) {
-    return pins
+  allPins: MapPin[],
+  filters: {
+    tags?: number[]
+    types?: string[]
+    badges?: string[]
+    settings?: string[]
+    boundaries?: LatLngBounds
+  },
+): MapPin[] => {
+  if (!allPins?.length) {
+    return []
   }
-  const activeFilterIdsForType = (type: string) =>
-    activePinFilters
-      .filter(({ filterType }) => filterType === type)
-      .map(({ _id }) => _id)
+  const { tags, types, badges, settings, boundaries } = filters
 
-  const typeFilters = activeFilterIdsForType('profileType')
+  let filteredPins = structuredClone(allPins)
 
-  let filteredPins: IMapPin[] = [...pins]
-
-  if (typeFilters.length > 0) {
-    const profileTypeFilteredList = pins.filter(
-      ({ creator }) =>
-        creator?.profileType && typeFilters.includes(creator?.profileType),
+  if (tags?.length) {
+    filteredPins = filteredPins.filter((x) =>
+      x.profile?.tags?.some((tag) => tags.includes(tag.id)),
     )
-    filteredPins = profileTypeFilteredList
   }
 
-  const tagFilters = activeFilterIdsForType('profileTag')
-
-  if (tagFilters.length > 0) {
-    filteredPins = filteredPins.filter(({ creator }) => {
-      const tagIds = creator?.tags?.map(({ _id }) => _id)
-      return tagFilters.some((tagId) => tagIds?.includes(tagId))
-    })
-  }
-
-  const badgeFilters = activeFilterIdsForType('badge')
-
-  if (badgeFilters.length > 0) {
-    filteredPins = filteredPins.filter(({ creator }) => {
-      if (!creator?.badges) return false
-      const badges = Object.keys(creator?.badges).filter(
-        (key) => creator?.badges && creator.badges[key],
-      )
-      return badgeFilters.filter((badge) => badges.includes(badge)).length > 0
-    })
-  }
-
-  const settingFilters = activeFilterIdsForType('setting')
-
-  if (settingFilters.length > 0) {
-    // Right now visitor filter is only setting filter. If N>1 this should be smarter.
+  if (types?.length) {
     filteredPins = filteredPins.filter(
-      ({ creator }) =>
-        creator?.openToVisitors && creator.openToVisitors.policy !== 'closed',
+      (x) => x.profile?.type?.name && types.includes(x.profile?.type?.name),
+    )
+  }
+
+  if (badges?.length) {
+    filteredPins = filteredPins.filter((x) =>
+      x.profile?.badges?.some((badge) => badges.includes(badge.name)),
+    )
+  }
+
+  if (settings?.length) {
+    // Right now visitor filter is only setting filter. This should be smarter.
+    filteredPins = filteredPins.filter(
+      (x) => x.profile?.visitorPolicy?.policy === 'open',
+    )
+  }
+
+  if (boundaries) {
+    filteredPins = latLongFilter(
+      {
+        _northEast: boundaries.getNorthEast(),
+        _southWest: boundaries.getSouthWest(),
+      },
+      allPins,
     )
   }
 

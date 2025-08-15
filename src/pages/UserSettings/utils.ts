@@ -1,6 +1,6 @@
 import { impactQuestions } from './content/impactQuestions'
 
-import type { IImpactDataField, IImpactYearFieldList } from 'oa-shared'
+import type { IImpactDataField } from 'oa-shared'
 import type { IImpactQuestion } from './content/impactQuestions'
 
 export interface ImpactDataFieldInputs {
@@ -12,56 +12,57 @@ interface IInputs {
 }
 
 export const transformImpactData = (
-  fields: IImpactYearFieldList,
+  fields: IImpactDataField[],
 ): ImpactDataFieldInputs => {
+  const questionMap = new Map(impactQuestions.map((q) => [q.id, q]))
   const transformed = {} as ImpactDataFieldInputs
 
-  Object.values(fields).forEach((field) => {
-    const questionField = impactQuestions.find(
-      (question) => question.id === field.id,
-    )
-    return (transformed[field.id] = {
-      ...questionField,
-      ...field,
-    } as IImpactQuestion)
-  })
+  for (const field of fields) {
+    const questionField = questionMap.get(field.id)
+    if (questionField) {
+      transformed[field.id] = {
+        ...questionField,
+        ...field,
+      } as IImpactQuestion
+    }
+  }
 
   return transformed
 }
 
-export const transformImpactInputs = (
-  inputs: IInputs,
-): IImpactYearFieldList => {
-  const fields = [] as IImpactYearFieldList
+export const transformImpactInputs = (inputs: IInputs): IImpactDataField[] => {
+  const questionMap = new Map(impactQuestions.map((q) => [q.id, q]))
+  const fields: IImpactDataField[] = []
 
-  Object.keys(inputs).forEach((key) => {
-    const field = inputs[key]
-    const question = impactQuestions.find(({ id }) => id === key)
-
-    if (field && question && field.value) {
+  for (const [key, field] of Object.entries(inputs)) {
+    if (field?.value && questionMap.has(key)) {
       fields.push({
-        id: question.id,
+        id: key,
         value: field.value,
-        isVisible:
-          typeof field.isVisible === 'boolean' ? field.isVisible : true,
+        isVisible: field.isVisible ?? true,
       })
     }
-  })
+  }
 
   return fields
 }
 
 export const sortImpactYearDisplayFields = (
-  fields: IImpactYearFieldList | undefined,
-): IImpactYearFieldList => {
-  const sortedFields = [] as IImpactYearFieldList
+  fields: IImpactDataField[] | undefined,
+): IImpactDataField[] => {
   if (!fields) {
-    return sortedFields
+    return []
   }
 
-  impactQuestions.forEach((question) => {
-    const answer = fields.find((element) => element.id === question.id)
-    answer !== undefined ? sortedFields.push(answer) : null
-  })
+  const fieldMap = new Map(fields.map((field) => [field.id, field]))
+  const sortedFields: IImpactDataField[] = []
+
+  for (const question of impactQuestions) {
+    const field = fieldMap.get(question.id)
+    if (field) {
+      sortedFields.push(field)
+    }
+  }
+
   return sortedFields
 }

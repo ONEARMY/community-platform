@@ -20,14 +20,7 @@ export const AuthorTag = ({
     <Flex sx={{ flexDirection: 'column' }}>
       <Flex sx={{ alignItems: 'center' }}>
         <Flex sx={{ alignItems: 'center' }}>
-          <Username
-            user={{
-              userName: author.username,
-              countryCode: author.country,
-              isVerified: author.isVerified,
-            }}
-            sx={{ position: 'relative' }}
-          />
+          <Username user={author} sx={{ position: 'relative' }} />
           <Text
             variant="auxiliary"
             sx={{

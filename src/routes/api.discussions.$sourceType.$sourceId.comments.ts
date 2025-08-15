@@ -1,18 +1,14 @@
-import { Comment, DBComment } from 'oa-shared'
+import { DBComment } from 'oa-shared'
+import { CommentFactory } from 'src/factories/commentFactory.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { notificationsService } from 'src/services/notificationsService.server'
+import { ImageServiceServer } from 'src/services/imageService.server'
 import { notificationsSupabaseServiceServer } from 'src/services/notificationSupabaseService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type {
-  DBAuthor,
-  DBProfile,
-  DiscussionContentTypes,
-  Reply,
-} from 'oa-shared'
+import type { DBAuthor, DBProfile, DiscussionContentTypes } from 'oa-shared'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   if (!params.sourceId) {
@@ -24,13 +20,18 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   const { client, headers } = createSupabaseServerClient(request)
 
-  const sourceParam = isNaN(+params.sourceId) ? 'source_id_legacy' : 'source_id'
-  const sourceId = isNaN(+params.sourceId) ? params.sourceId : +params.sourceId
+  try {
+    const sourceParam = isNaN(+params.sourceId)
+      ? 'source_id_legacy'
+      : 'source_id'
+    const sourceId = isNaN(+params.sourceId)
+      ? params.sourceId
+      : +params.sourceId
 
-  const result = await client
-    .from('comments')
-    .select(
-      `
+    const result = await client
+      .from('comments')
+      .select(
+        `
       id, 
       comment, 
       created_at, 
@@ -41,55 +42,44 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       source_type,
       parent_id,
       created_by,
-      profiles(id, firebase_auth_id, display_name, username, is_verified, is_supporter, photo_url, country)
+      profiles(id, display_name, username, photo, country,
+        badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            display_name,
+            image_url,
+            action_url
+          )
+        )
+      )
     `,
-    )
-    .eq('source_type', params.sourceType)
-    .eq(sourceParam, sourceId)
-    .order('created_at', { ascending: true })
+      )
+      .eq('source_type', params.sourceType)
+      .eq(sourceParam, sourceId)
+      .order('created_at', { ascending: true })
 
-  if (result.error) {
-    console.error(result.error)
-
-    return Response.json({}, { headers, status: 500 })
-  }
-
-  const dbComments = result.data.map(
-    (x) =>
-      new DBComment({
-        ...x,
-        profile: x.profiles as unknown as DBAuthor,
-      }),
-  )
-
-  const commentsByParentId = dbComments.reduce((acc, comment) => {
-    const parentId = comment.parent_id ?? 0
-    if (!acc[parentId]) {
-      acc[parentId] = []
+    if (result.error) {
+      console.error(result.error)
+      return Response.json({}, { headers, status: 500 })
     }
-    acc[parentId].push(comment)
-    return acc
-  }, {})
 
-  const commentWithReplies = (commentsByParentId[0] ?? []).map(
-    (mainComment: DBComment) => {
-      const replies: Reply[] = (commentsByParentId[mainComment.id] ?? []).map(
-        (reply: DBComment) => Comment.fromDB(reply),
-      )
-      return Comment.fromDB(
-        mainComment,
-        replies.filter((x) => !x.deleted).sort((a, b) => a.id - b.id),
-      )
-    },
-  )
+    const dbComments = result.data.map(
+      (x) =>
+        new DBComment({
+          ...x,
+          profile: x.profiles as unknown as DBAuthor,
+        }),
+    )
 
-  // remove deleted comments that don't have replies
-  const deletedFilter = commentWithReplies.filter(
-    (comment: Comment) =>
-      !comment.deleted || (comment.replies?.length || 0) > 0,
-  )
+    const commentFactory = new CommentFactory(new ImageServiceServer(client))
+    const comments = await commentFactory.fromDBCommentsToThreads(dbComments)
 
-  return Response.json({ comments: deletedFilter }, { headers })
+    return Response.json({ comments }, { headers })
+  } catch (error) {
+    console.error(error)
+    return Response.json({}, { status: 500, headers })
+  }
 }
 
 export async function action({ params, request }: LoaderFunctionArgs) {
@@ -153,7 +143,15 @@ export async function action({ params, request }: LoaderFunctionArgs) {
       parent_id,
       source_type,
       created_by,
-      profiles(id, firebase_auth_id, display_name, username, is_verified, is_supporter, photo_url, country)
+      profiles(id, display_name, username, photo, country, badges:profile_badges_relations(
+        profile_badges(
+          id,
+          name,
+          display_name,
+          image_url,
+          action_url
+        )
+      ))
     `,
     )
     .single()
@@ -164,23 +162,24 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 
     addSubscriptions(comment, profile, client)
 
-    notificationsService.sendCommentNotification(client, comment, profile)
     notificationsSupabaseServiceServer.createNotificationsNewComment(
       comment,
       client,
     )
   }
 
-  return Response.json(
-    new DBComment({
-      ...(commentResult.data as DBComment),
-      profile: (commentResult.data as any).profiles as DBAuthor,
-    }),
-    {
-      headers,
-      status: commentResult.error ? 500 : 201,
-    },
-  )
+  const commentDb = new DBComment({
+    ...(commentResult.data as DBComment),
+    profile: (commentResult.data as any).profiles as DBAuthor,
+  })
+
+  const commentFactory = new CommentFactory(new ImageServiceServer(client))
+  const comment = await commentFactory.fromDBWithAuthor(commentDb)
+
+  return Response.json(comment, {
+    headers,
+    status: commentResult.error ? 500 : 201,
+  })
 }
 
 function addSubscriptions(

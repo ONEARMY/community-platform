@@ -2,7 +2,6 @@ export const discussions = {
   '06fjiZWeyxxMkE0brp6n': {
     _created: '2022-02-10T20:22:15.500Z',
     _deleted: false,
-    _id: '06fjiZWeyxxMkE0brp6n',
     _modified: '2023-02-15T02:45:15.500Z',
     contributorIds: ['howto_creator', 'benfurber', 'davehakkens'],
     sourceId: '3s7Fyn6Jf8ryANJM6Jf6',
@@ -12,7 +11,6 @@ export const discussions = {
         _created: '2022-02-10T20:22:15.500Z',
         _creatorId: 'howto_creator',
         _edited: '2022-02-10T20:22:15.500Z',
-        _id: 'ZAB2SoUZtzUyeYLg9Cro',
         creatorCountry: 'af',
         creatorName: 'howto_creator',
         creatorImage:
@@ -23,7 +21,6 @@ export const discussions = {
       {
         _created: '2023-02-10T20:22:15.500Z',
         _creatorId: 'benfurber',
-        _id: 'ZtzUyeYLgZAB2SoU9Cro',
         creatorCountry: 'uk',
         creatorName: 'benfurber',
         parentCommentId: null,
@@ -32,7 +29,6 @@ export const discussions = {
       {
         _created: '2023-02-11T02:22:15.500Z',
         _creatorId: 'benfurber',
-        _id: 'BtzUAB2SoU9CroyeYLgZ',
         creatorCountry: 'uk',
         creatorName: 'benfurber',
         parentCommentId: 'ZAB2SoUZtzUyeYLg9Cro',
@@ -42,7 +38,6 @@ export const discussions = {
         _created: '2023-02-12T02:22:19.500Z',
         _edited: '2023-02-12T02:22:43.500Z',
         _creatorId: 'davehakkens',
-        _id: 'Bt9CroyeYLgZ55555',
         creatorCountry: '',
         creatorName: 'davehakkens',
         parentCommentId: 'ZAB2SoUZtzUyeYLg9Cro',

@@ -1,8 +1,6 @@
 // This is basically an identical set of steps to the discussion tests for
 // questions, projects and research. Any changes here should be replicated there.
 
-import { UserRole } from 'oa-shared'
-
 import { MOCK_DATA } from '../../data'
 import {
   generateAlphaNumeric,
@@ -25,8 +23,6 @@ describe('[Library.Discussions]', () => {
   })
 
   it('allows authenticated users to contribute to discussions', () => {
-    localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
-
     const commenter = generateNewUserDetails()
     const project = MOCK_DATA.projects[2]
     const projectPath = `/library/${project.slug}`

@@ -1,5 +1,3 @@
-import { UserRole } from 'oa-shared'
-
 import {
   generateAlphaNumeric,
   generateNewUserDetails,
@@ -13,21 +11,19 @@ describe('[Question]', () => {
   })
 
   describe('[Create a question]', () => {
-    const initialTitle = initialRandomId + ' Health cost of plastic?'
-    const initialExpectedSlug = initialRandomId + '-health-cost-of-plastic'
-    const initialQuestionDescription =
-      "Hello! I'm wondering how people feel about the health concerns about working with melting plastic and being in environments with microplastics. I have been working with recycling plastic (hdpe) for two years now, shredding and injection molding and haven't had any bad consequences yet. But with the low knowledge around micro plastics and its effects on the human body, and many concerns and hypotheses I have been a bit concerned lately.So I would like to ask the people in this community how you are feeling about it, and if you have experienced any issues with the microplastics or gases yet, if so how long have you been working with it? And what extra steps do you take to be protected from it? I use a gas mask with dust filters"
-    const category = 'Moulds'
-    // const tag1 = 'product'
-    // const tag2 = 'workshop'
-    const updatedRandomId = generateAlphaNumeric(8).toLowerCase()
-    const updatedTitle = updatedRandomId + ' Real health cost of plastic?'
-    const updatedExpectedSlug = updatedRandomId + '-real-health-cost-of-plastic'
-    const updatedQuestionDescription = `${initialQuestionDescription} and super awesome goggles`
-
     it('[By Authenticated]', () => {
-      // Needed for notifications as feature behind auth wrapper:
-      localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
+      const initialTitle = initialRandomId + ' Health cost of plastic?'
+      const initialExpectedSlug = initialRandomId + '-health-cost-of-plastic'
+      const initialQuestionDescription =
+        "Hello! I'm wondering how people feel about the health concerns about working with melting plastic and being in environments with microplastics. I have been working with recycling plastic (hdpe) for two years now, shredding and injection molding and haven't had any bad consequences yet. But with the low knowledge around micro plastics and its effects on the human body, and many concerns and hypotheses I have been a bit concerned lately.So I would like to ask the people in this community how you are feeling about it, and if you have experienced any issues with the microplastics or gases yet, if so how long have you been working with it? And what extra steps do you take to be protected from it? I use a gas mask with dust filters"
+      const category = 'Moulds'
+      // const tag1 = 'product'
+      // const tag2 = 'workshop'
+      const updatedRandomId = generateAlphaNumeric(8).toLowerCase()
+      const updatedTitle = updatedRandomId + ' Real health cost of plastic?'
+      const updatedExpectedSlug =
+        updatedRandomId + '-real-health-cost-of-plastic'
+      const updatedQuestionDescription = `${initialQuestionDescription} and super awesome goggles`
 
       cy.visit('/questions')
       const user = generateNewUserDetails()

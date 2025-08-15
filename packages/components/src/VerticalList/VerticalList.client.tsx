@@ -71,6 +71,7 @@ const NoScrollbar = styled('div')({
   },
 
   '& .react-horizontal-scrolling-menu--scroll-container': {
+    display: 'flex',
     scrollbarWidth: 'none',
     '-ms-overflow-style': 'none',
   },

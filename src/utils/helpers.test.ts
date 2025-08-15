@@ -8,7 +8,6 @@ import {
   formatLowerNoSpecial,
   getProjectEmail,
   hasAdminRights,
-  isAllowedToPin,
   isContactable,
   isUserBlockedFromMessaging,
   isUserContactable,
@@ -41,63 +40,18 @@ describe('src/utils/helpers', () => {
     })
 
     it('should return false when user does not have any roles', () => {
-      const user = FactoryUser({ userRoles: [] })
+      const user = FactoryUser({ roles: [] })
       expect(hasAdminRights(user)).toBe(false)
     })
 
     it('should return false when user does not have admin or super-admin roles', () => {
-      const user = FactoryUser({ userRoles: [UserRole.BETA_TESTER] })
+      const user = FactoryUser({ roles: [UserRole.BETA_TESTER] })
       expect(hasAdminRights(user)).toBe(false)
     })
 
     it('should return true when user has admin role', () => {
-      const user = FactoryUser({ userRoles: [UserRole.ADMIN] })
+      const user = FactoryUser({ roles: [UserRole.ADMIN] })
       expect(hasAdminRights(user)).toBe(true)
-    })
-  })
-
-  describe('isAllowedToPin Function', () => {
-    it('should return false when user is not provided', () => {
-      const pin = { _id: 'pinID' } as any
-      expect(isAllowedToPin(pin)).toBe(false)
-    })
-
-    it('should return true when user has admin rights', () => {
-      const pin = { _id: 'pinID' } as any
-      expect(
-        isAllowedToPin(
-          pin,
-          FactoryUser({
-            userName: 'testUser',
-            userRoles: [UserRole.ADMIN],
-          }),
-        ),
-      ).toBe(true)
-    })
-
-    it('should return true when pin _id matches user userName', () => {
-      const pin = { _id: 'testUser' } as any
-      expect(
-        isAllowedToPin(
-          pin,
-          FactoryUser({
-            userName: 'testUser',
-            userRoles: [],
-          }),
-        ),
-      ).toBe(true)
-    })
-
-    it('should return false when user has no admin rights and pin _id does not match user userName', () => {
-      const pin = { _id: 'pinID' } as any
-      expect(
-        isAllowedToPin(
-          pin,
-          FactoryUser({
-            userRoles: [],
-          }),
-        ),
-      ).toBe(false)
     })
   })
 
@@ -119,29 +73,29 @@ describe('src/utils/helpers', () => {
 
   describe('isUserContactable', () => {
     it('should default to true when field empty on user', () => {
-      const user = FactoryUser({ isContactableByPublic: undefined })
+      const user = FactoryUser({ isContactable: undefined })
       expect(isUserContactable(user)).toBe(true)
     })
 
     it('should return true when a user is contactable', () => {
-      const user = FactoryUser({ isContactableByPublic: true })
+      const user = FactoryUser({ isContactable: true })
       expect(isUserContactable(user)).toBe(true)
     })
 
     it("should return false when a user isn't contactable", () => {
-      const user = FactoryUser({ isContactableByPublic: false })
+      const user = FactoryUser({ isContactable: false })
       expect(isUserContactable(user)).toBe(false)
     })
   })
 
   describe('isContactable', () => {
     it('should default to true when field undefined', () => {
-      expect(isContactable(undefined)).toBe(true)
+      expect(isContactable(null)).toBe(true)
     })
 
     it('should return true when given true', () => {
-      const user = FactoryUser({ isContactableByPublic: true })
-      expect(isContactable(user.isContactableByPublic)).toBe(true)
+      const user = FactoryUser({ isContactable: true })
+      expect(isContactable(user.isContactable as boolean)).toBe(true)
     })
 
     it('should return false when given false', () => {

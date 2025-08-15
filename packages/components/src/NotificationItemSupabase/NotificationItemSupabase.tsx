@@ -71,6 +71,7 @@ export const NotificationItemSupabase = (props: IProps) => {
         sx={{ color: 'black', width: '100%' }}
       >
         <Flex sx={borderStyle}>
+          {notification.sidebar.image && <>hi</>}
           {notification.sidebar.icon && (
             <Flex>
               <Icon
@@ -79,7 +80,6 @@ export const NotificationItemSupabase = (props: IProps) => {
               />
             </Flex>
           )}
-
           <Flex sx={{ flex: 1, flexDirection: 'column', gap: 2 }}>
             <Flex sx={{ justifyContent: 'space-between', gap: 2 }}>
               <Text sx={{ flex: 1 }}>

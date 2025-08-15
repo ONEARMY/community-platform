@@ -1,11 +1,10 @@
-import { isObservableObject, toJS } from 'mobx'
-import { IModerationStatus, UserRole } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 import { getConfigurationOption, NO_MESSAGING } from 'src/config/config'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 
 import { SUPPORTED_IMAGE_TYPES } from './storage'
 
-import type { DBDoc, DBProfile, IMapPin, IModerable, IUser } from 'oa-shared'
+import type { DBProfile, IModeration, Profile } from 'oa-shared'
 
 const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi
 
@@ -73,22 +72,11 @@ export const getDay = (d: Date) => {
   return `${d.getDate()}`
 }
 
-/**
- * Checks if the user has admin rights based on their roles.
- *
- * @param {IUser} [user] - The user for whom to check admin rights.
- * @returns {boolean}
- */
-export const hasAdminRights = (user?: IUser) => {
+export const hasAdminRights = (user?: Partial<Profile>) => {
   if (!user) {
     return false
   }
-  if (isObservableObject(user)) {
-    user = toJS(user)
-  }
-
-  const roles =
-    user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
+  const roles = user.roles && Array.isArray(user.roles) ? user.roles : []
 
   return roles.includes(UserRole.ADMIN)
 }
@@ -103,38 +91,36 @@ export const hasAdminRightsSupabase = (user?: DBProfile) => {
   return roles.includes(UserRole.ADMIN)
 }
 
-export const needsModeration = (doc: IModerable, user?: IUser) => {
+export const needsModeration = (doc: IModeration, user?: Profile) => {
   if (!hasAdminRights(user)) {
     return false
   }
-  return doc.moderation !== IModerationStatus.ACCEPTED
+  return doc.moderation !== 'accepted'
 }
 
-export const isAllowedToPin = (pin: IMapPin, user?: IUser) => {
-  if (hasAdminRights(user) || (pin._id && user && pin._id === user.userName)) {
-    return true
-  } else {
-    return false
-  }
-}
-
-export const isUserBlockedFromMessaging = (user: IUser | null | undefined) => {
+export const isUserBlockedFromMessaging = (
+  user: Partial<Profile> | null | undefined,
+) => {
   if (!user) {
     return null
   }
   return user.isBlockedFromMessaging
 }
 
-export const isMessagingBlocked = () => {
+export const isMessagingModuleOff = () => {
   return NO_MESSAGING === 'true'
 }
 
-export const isUserContactable = (user: IUser) => {
-  return isContactable(user.isContactableByPublic)
+export const isUserContactable = (user: Partial<Profile>) => {
+  if (typeof user.isContactable === 'boolean') {
+    return isContactable(user.isContactable)
+  }
+
+  return isContactable(null)
 }
 
-export const isContactable = (preference: boolean | undefined) => {
-  if (isMessagingBlocked()) {
+export const isContactable = (preference: boolean | null) => {
+  if (isMessagingModuleOff()) {
     return false
   }
 
@@ -146,11 +132,6 @@ export const isContactable = (preference: boolean | undefined) => {
 export const getProjectEmail = (subject: string) => {
   const site = getConfigurationOption('VITE_THEME', 'precious-plastic')
   return `mailto:platform@onearmy.earth?subject=${subject}%20${site}`
-}
-
-// ensure docs passed to edit check contain _createdBy field
-export interface IEditableDoc extends DBDoc {
-  _createdBy: string
 }
 
 export const randomIntFromInterval = (min, max) =>

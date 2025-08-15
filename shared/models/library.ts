@@ -83,7 +83,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
   commentCount: number
   fileDownloadCount: number
   moderation: Moderation
-  moderatonFeedback?: string
+  moderationFeedback?: string
   time?: string
 
   constructor(obj: Project) {
@@ -117,7 +117,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
       fileDownloadCount: obj.file_download_count || 0,
       files: obj.files,
       moderation: obj.moderation,
-      moderatonFeedback: obj.moderation_feedback,
+      moderationFeedback: obj.moderation_feedback,
       // no fileLink as it must be shown only for authenticated users
       hasFileLink: !!obj.file_link,
       time: obj.time,

@@ -16,7 +16,7 @@ export const NotificationsSupabase = ({ device }: IProps) => {
   const { notifications, isUpdatingNotifications, updateNotifications } =
     useContext(NotificationsContext)
 
-  if (!notifications?.length) {
+  if (!notifications === undefined) {
     return <></>
   }
 
@@ -30,9 +30,9 @@ export const NotificationsSupabase = ({ device }: IProps) => {
     updateNotifications && (await updateNotifications())
   }
 
-  const isNoNewNotifications =
-    notifications.length === 0 ||
-    notifications?.filter(({ isRead }) => isRead === false).length === 0
+  const hasNewNotifications =
+    notifications &&
+    notifications?.filter(({ isRead }) => isRead === false).length > 0
 
   const onClick = () => setIsOpen(!isOpen)
 
@@ -49,14 +49,14 @@ export const NotificationsSupabase = ({ device }: IProps) => {
 
   return (
     <Box data-cy={`NotificationsSupabase-${device}`}>
-      {isNoNewNotifications && (
+      {!hasNewNotifications && (
         <Icon
           data-cy="notifications-no-new-messages"
           glyph="megaphone-inactive"
           {...iconProps}
         />
       )}
-      {!isNoNewNotifications && (
+      {hasNewNotifications && (
         <Icon
           data-cy="notifications-new-messages"
           glyph="megaphone-active"
@@ -69,7 +69,7 @@ export const NotificationsSupabase = ({ device }: IProps) => {
           markAllRead={markAllRead}
           markRead={markRead}
           modalDismiss={onClick}
-          notifications={notifications}
+          notifications={notifications || []}
         />
       </NotificationsModal>
     </Box>

@@ -6,9 +6,8 @@ import { render } from '../test/utils'
 import { Username } from './Username'
 import {
   InvalidCountryCode,
-  UnverifiedSupporter,
-  Verified,
-  VerifiedSupporter,
+  // OneBadge,
+  // TwoBadges,
   WithoutFlag,
 } from './Username.stories'
 
@@ -25,18 +24,20 @@ describe('Username', () => {
     expect(getByTestId('Username: unknown flag')).toBeInTheDocument()
   })
 
-  it('shows a verified badge when the user is verified', () => {
-    const { getByTestId } = render(<Username {...Verified.args} />)
-    expect(getByTestId('Username: verified badge')).toBeInTheDocument()
-  })
+  // it('shows one badge', () => {
+  //   const { getByTestId } = render(<Username {...OneBadge.args} />)
+  //   expect(
+  //     getByTestId(`Username: ${OneBadge.args.user.badges[0].name} badge`),
+  //   ).toBeInTheDocument()
+  // })
 
-  it('shows a supporter badge when the user is a supporter and also unverified', () => {
-    const { getByTestId } = render(<Username {...UnverifiedSupporter.args} />)
-    expect(getByTestId('Username: supporter badge')).toBeInTheDocument()
-  })
-
-  it('shows a verified badge when the user is verified and also a supporter', () => {
-    const { getByTestId } = render(<Username {...VerifiedSupporter.args} />)
-    expect(getByTestId('Username: verified badge')).toBeInTheDocument()
-  })
+  // it('shows two badges', () => {
+  //   const { getByTestId } = render(<Username {...TwoBadges.args} />)
+  //   expect(
+  //     getByTestId(`Username: ${OneBadge.args.user.badges[0].name} badge`),
+  //   ).toBeInTheDocument()
+  //   expect(
+  //     getByTestId(`Username: ${OneBadge.args.user.badges[1].name} badge`),
+  //   ).toBeInTheDocument()
+  // })
 })

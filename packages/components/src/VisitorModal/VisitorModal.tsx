@@ -5,7 +5,7 @@ import { Modal } from '../Modal/Modal'
 import { VisitorModalFooter } from './VisitorModalFooter'
 import { VisitorModalHeader } from './VisitorModalHeader'
 
-import type { IUser, UserVisitorPreferencePolicy } from 'oa-shared'
+import type { Profile, UserVisitorPreferencePolicy } from 'oa-shared'
 import type { DisplayData, HideProp } from './props'
 
 export const visitorDisplayData = new Map<
@@ -41,14 +41,14 @@ export const visitorDisplayData = new Map<
 
 export type VisitorModalProps = HideProp & {
   show: boolean
-  user: IUser
+  user: Profile
 }
 
 export const VisitorModal = ({ show, hide, user }: VisitorModalProps) => {
-  const { displayName, openToVisitors, isContactableByPublic } = user
+  const { displayName, visitorPolicy, isContactable } = user
 
   const displayData =
-    openToVisitors && visitorDisplayData.get(openToVisitors.policy)
+    visitorPolicy && visitorDisplayData.get(visitorPolicy.policy)
 
   if (!displayData) {
     return <></>
@@ -66,12 +66,12 @@ export const VisitorModal = ({ show, hide, user }: VisitorModalProps) => {
         data-cy="VisitorModal"
         sx={{ flexDirection: 'column', padding: '16px' }}
       >
-        {openToVisitors.details && <>Details from {displayName}:</>}
+        {visitorPolicy.details && <>Details from {displayName}:</>}
         <Text variant="quiet">
-          {openToVisitors.details || displayData.default}
+          {visitorPolicy.details || displayData.default}
         </Text>
       </Flex>
-      {openToVisitors.policy !== 'closed' && isContactableByPublic && (
+      {visitorPolicy.policy !== 'closed' && isContactable && (
         <VisitorModalFooter hide={hide} />
       )}
     </Modal>

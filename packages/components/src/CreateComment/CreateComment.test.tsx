@@ -1,11 +1,26 @@
 import '@testing-library/jest-dom/vitest'
 
+import { faker } from '@faker-js/faker'
 import { fireEvent } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import { render } from '../test/utils'
 import { CreateComment } from './CreateComment'
 import { WithCustomPlaceholder } from './CreateComment.stories'
+
+import type { ProfileType } from 'oa-shared'
+
+const member: ProfileType = {
+  name: 'member',
+  description: 'A member profile',
+  displayName: 'Member',
+  id: 2,
+  imageUrl: faker.image.avatar(),
+  mapPinName: 'Member',
+  order: 1,
+  smallImageUrl: faker.image.avatar(),
+  isSpace: false,
+}
 
 describe('CreateComment Component', () => {
   const mockOnSubmit = vi.fn()
@@ -110,7 +125,7 @@ describe('CreateComment Component', () => {
         placeholder="Custom placeholder"
         onChange={vi.fn()}
         onSubmit={() => null}
-        userProfileType="member"
+        profileType={member}
         maxLength={12300}
         isLoggedIn={true}
       />,

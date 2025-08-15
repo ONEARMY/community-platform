@@ -1,5 +1,3 @@
-import memberBadgeHighDetail from '../../assets/images/themes/project-kamp/avatar_member_lg.svg'
-import memberBadgeLowDetail from '../../assets/images/themes/project-kamp/avatar_member_sm.svg'
 import logo from '../../assets/images/themes/project-kamp/project-kamp-header.png'
 import { baseTheme } from '../common'
 import { getButtons } from '../common/button'
@@ -30,10 +28,4 @@ export const StyledComponentTheme: ThemeWithName = {
   alerts,
   colors,
   buttons: getButtons(colors),
-  badges: {
-    member: {
-      lowDetail: memberBadgeLowDetail,
-      normal: memberBadgeHighDetail,
-    },
-  },
 }

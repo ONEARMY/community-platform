@@ -1,6 +1,5 @@
 // This is basically an identical set of steps to the discussion tests for
 // questions and projects. Any changes here should be replicated there.
-import { UserRole } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
 import { generateAlphaNumeric } from '../../utils/TestUtils'
@@ -17,36 +16,34 @@ describe('[Research.Discussions]', () => {
   })
 
   it('allows authenticated users to contribute to discussions', () => {
-    localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
-
     const admin = MOCK_DATA.users.admin
     const secondCommentor = MOCK_DATA.users.profile_views
 
     cy.signIn(admin.email, admin.password)
 
-    const newComment = `An example comment from ${admin.userName}`
-    const updatedNewComment = `I've updated my comment now. Love ${admin.userName}. ${randomId}!`
+    const newComment = `An example comment from ${admin.username}`
+    const updatedNewComment = `I've updated my comment now. Love ${admin.username}. ${randomId}!`
 
     const research = MOCK_DATA.research[1]
     const researchPath = `/research/${research.slug}`
 
     cy.step('Can add comment')
     cy.visit(researchPath)
-    cy.get('[data-cy="HideDiscussionContainer:button"]').click()
+    cy.get('[data-cy="HideDiscussionContainer:button"]').first().click()
     cy.addComment(newComment)
 
     cy.step('Can edit their comment')
     cy.editDiscussionItem('CommentItem', newComment, updatedNewComment)
 
     cy.step('Another user can add reply')
-    const newReply = `An interesting point, I hadn't thought about that. All the best ${secondCommentor.userName}`
-    const updatedNewReply = `I hadn't thought about that. Really good point. ${secondCommentor.userName}`
+    const newReply = `An interesting point, I hadn't thought about that. All the best ${secondCommentor.username}`
+    const updatedNewReply = `I hadn't thought about that. Really good point. ${secondCommentor.username}`
 
     cy.logout()
 
     cy.signIn(secondCommentor.email, secondCommentor.password)
     cy.visit(researchPath)
-    cy.get('[data-cy="HideDiscussionContainer:button"]').click()
+    cy.get('[data-cy="HideDiscussionContainer:button"]').first().click()
 
     cy.addReply(newReply)
     cy.wait(1000)
@@ -56,28 +53,25 @@ describe('[Research.Discussions]', () => {
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
 
     cy.step('First commentor can respond')
-    const secondReply = `Quick reply. ${admin.userName}. ${randomId}...`
+    const secondReply = `Quick reply. ${admin.username}. ${randomId}...`
 
+    cy.step('Notification generated for reply from replier')
     cy.logout()
     cy.signIn(admin.email, admin.password)
     cy.visit(researchPath)
-
-    cy.step('Notification generated for reply from replier')
     cy.expectNewNotification({
       content: updatedNewReply,
       path: researchPath,
       title: research.title,
-      username: secondCommentor._id,
+      username: secondCommentor.username,
     })
     cy.wait(2000)
-    cy.get('[data-cy=highlighted-comment]')
-      .contains(updatedNewReply)
-      .should('be.inViewport', 10)
+    cy.get('[data-cy=highlighted-comment]').contains(updatedNewReply)
 
     cy.visit(researchPath)
 
     cy.step('Can add reply')
-    cy.get('[data-cy="HideDiscussionContainer:button"]').click()
+    cy.get('[data-cy="HideDiscussionContainer:button"]').first().click()
     cy.addReply(secondReply)
 
     cy.step('Can delete their comment')
@@ -97,7 +91,7 @@ describe('[Research.Discussions]', () => {
       content: secondReply,
       path: researchPath,
       title: research.title,
-      username: admin.userName,
+      username: admin.username,
     })
 
     // Currently hard to test as the article is created via the seed

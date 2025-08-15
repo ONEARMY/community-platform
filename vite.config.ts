@@ -38,6 +38,9 @@ export default defineConfig({
   },
   build: {
     sourcemap: process.env.NODE_ENV !== 'production', // to enable local server-side debugging
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
   },
   plugins: [
     !process.env.VITEST

@@ -1,43 +1,14 @@
 import type { ILatLng } from './common'
-import type { IModerationStatus } from './moderation'
-import type { IProfileTag } from './tags'
-import type {
-  IUserBadges,
-  ProfileTypeName,
-  UserVisitorPreference,
-  WorkspaceType,
-} from './user'
-
-/**
- * Map pins have a `type` which correspond to icon
- * They can also optionally have a subtype for additional filtering
- */
-export interface IMapPin {
-  moderation: IModerationStatus
-  _createdBy?: string
-  _id: string
-  _deleted: boolean
-  type: ProfileTypeName
-  location: ILatLng
-  verified: boolean
-  subType?: WorkspaceType // For old map
-  comments?: string
-  creator?: IProfileCreator
-}
-
-/**
- * @param detail - by default details are pulled on pin open, using
- * the pin _id param as the user profile ID required for lookup
- */
-export interface IMapPinWithDetail extends IMapPin {
-  detail: IMapPinDetail
-}
+import type { ProfileBadge } from './profileBadge'
+import type { ProfileTag } from './profileTag'
+import type { ProfileType } from './profileType'
+import type { WorkspaceType } from './user'
 
 export interface IMapGrouping {
   _count?: number
   grouping: IPinGrouping
   displayName: string
-  type: ProfileTypeName
+  type: string
   subType?: WorkspaceType
   icon: string
   hidden?: boolean
@@ -53,39 +24,23 @@ export enum IPinGrouping {
   PLACE = 'place',
 }
 
-export interface IMapPinDetail {
-  country: string | null
-  displayName?: string
-  heroImageUrl: string
-  name: string
-  profilePicUrl: string
-  profileUrl: string
-  shortDescription: string
-  verifiedBadge?: boolean
+export type MapFilters = {
+  tags?: ProfileTag[]
+  badges?: ProfileBadge[]
+  types?: ProfileType[]
+  settings?: string[]
 }
 
-export interface IProfileCreator {
-  _id: string
-  _lastActive: string
-  about?: string
-  badges?: IUserBadges
-  countryCode: string
-  coverImage?: string
-  displayName: string
-  isContactableByPublic?: boolean
-  openToVisitors?: UserVisitorPreference
-  profileType: ProfileTypeName
-  tags?: IProfileTag[]
-  workspaceType?: string
-  userImage?: string
+export type DBMapSettings = {
+  default_type_filters: string[] | null
+  setting_filters: string[] | null
 }
 
-// Overlap with IWorkspaceType
-export interface MapFilterOption {
-  _id: string
-  label: string
-  filterType: string
-  imageSrc?: string
+export type DefaultMapFilters = {
+  types?: string[]
 }
 
-export type MapFilterOptionsList = MapFilterOption[]
+export type FilterResponse = {
+  filters: MapFilters
+  defaultFilters: DefaultMapFilters
+}

@@ -1,17 +1,17 @@
 import { Heading } from 'theme-ui'
 
-import type { IComment } from '../CommentItem/types'
+import type { Comment } from 'oa-shared'
 
 export const NO_COMMENTS = 'Start the discussion'
 export const ONE_COMMENT = '1 Comment'
 export const COMMENTS = 'Comments'
 
 export interface IProps {
-  comments: IComment[]
+  comments: Comment[]
 }
 
-export const nonDeletedCommentsCount = (comments: IComment[]) => {
-  return comments.filter(({ _deleted }) => _deleted !== true).length
+export const nonDeletedCommentsCount = (comments: Comment[]) => {
+  return comments.filter(({ deleted }) => deleted !== true).length
 }
 
 export const DiscussionTitle = ({ comments }: IProps) => {

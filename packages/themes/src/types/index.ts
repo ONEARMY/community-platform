@@ -1,19 +1,10 @@
-import type { ProfileTypeName } from 'oa-shared'
-
 export interface PlatformTheme {
   id: string
   siteName: string
   description: string
   logo: string
   favicon: string
-  badge: string
-  avatar: string
   styles: ThemeWithName
-}
-
-type Badge = {
-  lowDetail: string
-  normal: string
 }
 
 export interface ThemeWithName {
@@ -21,10 +12,6 @@ export interface ThemeWithName {
   logo: string
 
   alerts: any
-
-  badges: {
-    [K in ProfileTypeName]?: Badge
-  }
 
   text: any
 

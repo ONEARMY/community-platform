@@ -1,15 +1,24 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
-import { userService } from 'src/services/userService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const profileId = await userService.getIdByCurrentAuthUser(client, headers)
+  const {
+    data: { user },
+  } = await client.auth.getUser()
 
-  if (!profileId) {
+  if (!user) {
+    return Response.json({}, { headers, status: 401 })
+  }
+
+  const profileService = new ProfileServiceServer(client)
+  const profile = await profileService.getByAuthId(user.id)
+
+  if (!profile) {
     return Response.json(
       {},
       { headers, status: 400, statusText: 'invalid user' },
@@ -18,7 +27,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const count = await contentServiceServer.getDraftCount(
     client,
-    profileId,
+    profile.id,
     'research',
   )
 

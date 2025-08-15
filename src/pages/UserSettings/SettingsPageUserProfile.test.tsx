@@ -1,28 +1,61 @@
 import '@testing-library/jest-dom/vitest'
 
+import { faker } from '@faker-js/faker'
 import { act, waitFor } from '@testing-library/react'
-import { ProfileTypeList } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { FormProvider } from './__mocks__/FormProvider'
 import { SettingsPageUserProfile } from './SettingsPageUserProfile'
 
-let mockUser = FactoryUser({})
+import type { ProfileTag, ProfileType } from 'oa-shared'
 
-vi.mock('src/common/hooks/useCommonStores', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  __esModule: true,
-  useCommonStores: () => ({
-    stores: {
-      userStore: {
-        activeUser: mockUser,
-      },
-      tagsStore: {
-        allTags: [],
-      },
-    },
-  }),
+const mockUseProfileStore = vi.hoisted(() => vi.fn())
+
+const mockProfileTypes = [
+  {
+    id: 1,
+    name: 'member',
+    isSpace: false,
+    description: 'Member',
+    displayName: 'Member',
+    imageUrl: '',
+    mapPinName: '',
+    order: 1,
+    smallImageUrl: '',
+  },
+  {
+    id: 2,
+    name: 'collection-point',
+    isSpace: true,
+    description: 'Collection Point',
+    displayName: 'Collection Point',
+    imageUrl: '',
+    mapPinName: '',
+    order: 2,
+    smallImageUrl: '',
+  },
+]
+
+vi.mock('src/stores/Profile/profile.store', () => ({
+  useProfileStore: mockUseProfileStore,
+  ProfileStoreProvider: ({ children }: { children: React.ReactNode }) =>
+    children,
+}))
+
+vi.mock('src/services/profileTypesService', () => ({
+  profileTypesService: {
+    getProfileTypes: vi.fn().mockResolvedValue(mockProfileTypes),
+  },
+}))
+
+vi.mock('src/services/profileTagsService', () => ({
+  profileTagsService: {
+    getAllTags: vi.fn().mockResolvedValue([
+      { id: 1, name: 'member', profileType: 'member' },
+      { id: 2, name: 'space', profileType: 'space' },
+    ] as ProfileTag[]),
+  },
 }))
 
 describe('UserSettings', () => {
@@ -31,99 +64,71 @@ describe('UserSettings', () => {
   })
 
   it('renders fields for member', async () => {
-    mockUser = FactoryUser({ profileType: ProfileTypeList.MEMBER })
+    const mockUser = FactoryUser({
+      type: {
+        id: 1,
+        name: 'Member',
+        isSpace: false,
+      } as ProfileType,
+    })
+    mockUseProfileStore.mockReturnValue({
+      profile: mockUser,
+      profileTypes: mockProfileTypes,
+      update: vi.fn(),
+    })
+
     // Act
     let wrapper
     act(() => {
-      wrapper = FormProvider(mockUser, <SettingsPageUserProfile />)
+      wrapper = FormProvider(<SettingsPageUserProfile />)
     })
 
     await waitFor(() => {
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
-      expect(wrapper.queryByTestId('cover-image')).toBeNull()
+      expect(wrapper.getAllByTestId('photo')).toHaveLength(1)
+      expect(wrapper.queryByTestId('coverImage')).toBeNull()
     })
   })
 
   it('renders fields for collection point', async () => {
-    mockUser = FactoryUser({ profileType: ProfileTypeList.COLLECTION_POINT })
+    const avatarUrl = faker.image.avatar()
+    const mockUser = FactoryUser({
+      type: {
+        id: 2,
+        name: 'collection-point',
+        description: 'Collection Point',
+        displayName: 'Collection Point',
+        imageUrl: '',
+        mapPinName: '',
+        order: 1,
+        smallImageUrl: '',
+        isSpace: true,
+      } as ProfileType,
+      coverImages: [
+        {
+          id: '123',
+          publicUrl: avatarUrl,
+        },
+      ],
+    })
+    mockUseProfileStore.mockReturnValue({
+      profile: mockUser,
+      profileTypes: mockProfileTypes,
+      update: vi.fn(),
+    })
+
     // Act
     let wrapper
     act(() => {
-      wrapper = FormProvider(mockUser, <SettingsPageUserProfile />)
+      wrapper = FormProvider(<SettingsPageUserProfile />)
     })
 
     await waitFor(() => {
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
-    })
-  })
-
-  it('renders fields for community builder', async () => {
-    mockUser = FactoryUser({ profileType: ProfileTypeList.COMMUNITY_BUILDER })
-    // Act
-    let wrapper
-    act(() => {
-      wrapper = FormProvider(mockUser, <SettingsPageUserProfile />)
-    })
-
-    await waitFor(() => {
-      expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
-    })
-  })
-
-  it('renders fields for machine builder', async () => {
-    mockUser = FactoryUser({ profileType: ProfileTypeList.MACHINE_BUILDER })
-    // Act
-    let wrapper
-    act(() => {
-      wrapper = FormProvider(mockUser, <SettingsPageUserProfile />)
-    })
-
-    await waitFor(() => {
-      expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
-    })
-  })
-
-  it('renders fields for space', async () => {
-    mockUser = FactoryUser({ profileType: ProfileTypeList.SPACE })
-    // Act
-    let wrapper
-    act(() => {
-      wrapper = FormProvider(mockUser, <SettingsPageUserProfile />)
-    })
-
-    await waitFor(() => {
-      expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
-    })
-  })
-
-  it('renders fields for workspace', async () => {
-    mockUser = FactoryUser({ profileType: ProfileTypeList.WORKSPACE })
-    // Act
-    let wrapper
-    act(() => {
-      wrapper = FormProvider(mockUser, <SettingsPageUserProfile />)
-    })
-
-    await waitFor(() => {
-      expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
+      expect(wrapper.getAllByTestId('photo')).toHaveLength(1)
+      expect(wrapper.getAllByTestId('coverImage')).toHaveLength(1)
     })
   })
 })

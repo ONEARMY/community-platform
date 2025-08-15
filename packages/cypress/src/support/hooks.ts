@@ -1,8 +1,15 @@
 import { clearDatabase, clearStorage, createStorage } from '../utils/TestUtils'
 import { seedAccounts } from './seedAccounts'
+import { seedBadges } from './seedBadges'
 import { seedLibrary } from './seedLibrary'
+import { seedMap } from './seedMap'
 import { seedNews } from './seedNews'
-import { seedQuestions, seedTags } from './seedQuestions'
+import {
+  seedProfileTags,
+  seedProfileTypes,
+  seedQuestions,
+  seedTags,
+} from './seedQuestions'
 import { seedResearch } from './seedResearch'
 
 /**
@@ -28,11 +35,20 @@ before(() => {
     //   ['categories', 'comments', 'news', 'profiles', 'questions', 'tags'],
     //   Cypress.env('TENANT_ID'),
     // )
-
-    const { profiles } = await seedAccounts()
-    const { tags } = await seedTags()
-
     await createStorage(Cypress.env('TENANT_ID'))
+
+    const { profile_types } = await seedProfileTypes()
+    const { profile_badges } = await seedBadges()
+    const { profile_tags } = await seedProfileTags()
+    const { profiles } = await seedAccounts(
+      profile_badges.data,
+      profile_tags.data,
+      profile_types.data,
+    )
+
+    await seedMap(profiles)
+
+    const { tags } = await seedTags()
     await seedQuestions(profiles)
     await seedNews(profiles, tags)
     await seedResearch(profiles, tags)
@@ -60,11 +76,18 @@ after(async () => {
       'news',
       'research',
       'research_updates',
+      'notifications',
+      'notifications_preferences',
       'profiles',
       'questions',
       'projects',
       'project_steps',
       'tags',
+      'profile_badges',
+      'profile_badges_relations',
+      'profile_tags',
+      'profile_tags_relations',
+      'profile_types',
     ],
     Cypress.env('TENANT_ID'),
   )

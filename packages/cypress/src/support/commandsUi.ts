@@ -1,7 +1,6 @@
 import { form } from '../../../../src/pages/UserSettings/labels'
 import { generateNewUserDetails } from '../utils/TestUtils'
 
-import type { IUser } from 'oa-shared'
 // import { visitorDisplayData } from 'oa-components'
 
 export enum UserMenuItem {
@@ -14,9 +13,8 @@ interface IInfo {
   displayName?: string
   country?: string
   description: string
+  website?: string
 }
-
-type ILink = Omit<IUser['links'][0] & { index: number }, 'key'>
 
 interface IMapPin {
   searchKeyword: string
@@ -59,7 +57,6 @@ declare global {
        * @param selector Specify the selector of the react-select element
        **/
       selectTag(tagName: string, selector?: string): Chainable<void>
-      setSettingAddContactLink(link: ILink)
       setSettingVisitorPolicy(policyText: string, details?: string)
       clearSettingVisitorPolicy()
       setSettingBasicUserInfo(info: IInfo)
@@ -98,20 +95,9 @@ Cypress.Commands.add('addToMarkdownField', (text: string) => {
 
 Cypress.Commands.add('saveSettingsForm', () => {
   cy.get('[data-cy=save]').click({ force: true })
-  cy.get('[data-cy=loader]').should('exist')
-  cy.get('[data-cy=loader]').should('not.exist')
+
   cy.get('[data-cy=errors-container]').should('not.exist')
   cy.get('[data-cy="TextNotification: success"]').should('be.visible')
-})
-
-Cypress.Commands.add('setSettingAddContactLink', (link: ILink) => {
-  cy.step('Set Contact Link')
-  cy.get('[data-cy=add-link]').click()
-  cy.selectTag(link.label, `[data-cy=select-link-${link.index}]`)
-  cy.get(`[data-cy=input-link-${link.index}]`)
-    .clear()
-    .type(link.url)
-    .blur({ force: true })
 })
 
 Cypress.Commands.add(
@@ -135,22 +121,24 @@ Cypress.Commands.add('clearSettingVisitorPolicy', () => {
 })
 
 Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
-  const { country, description, displayName } = info
+  const { country, description, displayName, website } = info
 
   cy.step('Update Info section')
   displayName && cy.get('[data-cy=displayName').clear().type(displayName)
-  cy.get('[data-cy=info-description').clear().type(description)
-  country && cy.selectTag(country, '[data-cy=location-dropdown]')
+  cy.get('[data-cy=info-about').clear().type(description)
+  country && cy.selectTag(country, '[data-cy=country-dropdown]')
+  website && cy.get('[data-cy=website').clear().type(website)
 })
 
 Cypress.Commands.add('setSettingFocus', (focus: string) => {
-  cy.get(`[data-cy=${focus}]`).click()
+  cy.get(`[data-cy=${focus}]`).first().click()
 })
 
 Cypress.Commands.add('setSettingImage', (image, selector) => {
   cy.get(`[data-cy=${selector}]`)
     .find(':file')
     .attachFile(`images/${image}.jpg`)
+  cy.wait(2000)
 })
 
 Cypress.Commands.add('setSettingImpactData', (year: number, fields) => {
@@ -182,8 +170,8 @@ Cypress.Commands.add('fillSettingMapPin', (mapPin: IMapPin) => {
 
 Cypress.Commands.add('setSettingPublicContact', () => {
   cy.step('Opts out of public contact')
-  cy.get('[data-cy=isContactableByPublic').should('be.checked')
-  cy.get('[data-cy=isContactableByPublic').click({ force: true })
+  cy.get('[data-cy=isContactable').should('be.checked')
+  cy.get('[data-cy=isContactable').click({ force: true })
 })
 
 Cypress.Commands.add(
@@ -307,7 +295,6 @@ Cypress.Commands.add('completeUserProfile', (username) => {
   cy.log('Complete user profile')
   cy.visit('/settings')
   cy.setSettingImage('avatar', 'userImage')
-  cy.wait(1500)
   cy.setSettingBasicUserInfo({
     description: `${username} profile description.`,
   })

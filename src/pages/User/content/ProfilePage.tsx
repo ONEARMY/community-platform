@@ -1,18 +1,17 @@
 import { useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Button, InternalLink } from 'oa-components'
-import { ProfileTypeList } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Flex } from 'theme-ui'
 
 import { UserProfile } from './UserProfile'
 
-import type { IUserDB, UserCreatedDocs } from 'oa-shared'
+import type { Profile, UserCreatedDocs } from 'oa-shared'
 
 interface IProps {
-  profile: IUserDB
+  profile: Profile
   userCreatedDocs: UserCreatedDocs
 }
 
@@ -22,14 +21,12 @@ interface IProps {
  */
 export const ProfilePage = observer((props: IProps) => {
   const { profile, userCreatedDocs } = props
-  const { userStore } = useCommonStores().stores
+  const { profile: activeUser } = useProfileStore()
   const isViewingOwnProfile = useMemo(
-    () => userStore.activeUser?._id === profile?._id,
-    [userStore.activeUser?._id],
+    () => activeUser?.username === profile?.username,
+    [activeUser?.username],
   )
-  const showMemberProfile =
-    profile?.profileType === ProfileTypeList.MEMBER ||
-    profile?.profileType === undefined
+  const showMemberProfile = !profile?.type?.isSpace
 
   return (
     <Flex

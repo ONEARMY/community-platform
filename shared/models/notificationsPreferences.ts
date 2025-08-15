@@ -19,6 +19,11 @@ export class DBNotificationsPreferences extends DBNotificationsPreferencesFields
   user_id: number
 }
 
+export interface DBPreferencesWithProfileContact {
+  preferences: DBNotificationsPreferences
+  is_contactable: undefined | boolean
+}
+
 export type NotificationsPreferenceTypes =
   | 'comments'
   | 'replies'

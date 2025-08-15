@@ -18,28 +18,20 @@ import type { News } from 'oa-shared'
 const Theme = testingThemeStyles
 
 const activeUser = FactoryUser({
-  userRoles: [UserRole.BETA_TESTER],
+  roles: [UserRole.BETA_TESTER],
 })
 
-const mockUser = FactoryUser()
 const mockNewsItem = FactoryNewsItem({
   slug: 'testSlug',
 })
 
-vi.mock('src/common/hooks/useCommonStores', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  __esModule: true,
-  useCommonStores: () => ({
-    stores: {
-      userStore: {
-        getUserByUsername: vi.fn().mockResolvedValue(mockUser),
-      },
-    },
+vi.mock('src/stores/Profile/profile.store', () => ({
+  useProfileStore: () => ({
+    profile: FactoryUser(),
   }),
+  ProfileStoreProvider: ({ children }: { children: React.ReactNode }) =>
+    children,
 }))
-
-vi.mock('src/stores/News/news.store')
-vi.mock('src/stores/Discussions/discussions.store')
 
 describe('News', () => {
   afterEach(() => {
@@ -92,7 +84,7 @@ const getWrapper = (news: News) => {
 
   return render(
     <Provider
-      userStore={{
+      profileStore={{
         user: activeUser,
       }}
     >

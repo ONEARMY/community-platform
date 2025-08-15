@@ -9,7 +9,7 @@ import {
 } from 'oa-components'
 import { UserRole } from 'oa-shared'
 import { FollowButtonAction } from 'src/common/FollowButtonAction'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Card, Flex } from 'theme-ui'
 
 import { CommentReply } from './CommentReplySupabase'
@@ -43,16 +43,14 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
   const [showReplies, setShowReplies] = useState(
     () => !!comment.replies?.some((x) => x.highlighted),
   )
-  const {
-    userStore: { activeUser },
-  } = useCommonStores().stores
+  const { profile } = useProfileStore()
 
   const isEditable = useMemo(() => {
     return (
-      activeUser?._id === comment.createdBy?.username ||
-      activeUser?.userRoles?.includes(UserRole.ADMIN)
+      profile?.username === comment.createdBy?.username ||
+      profile?.roles?.includes(UserRole.ADMIN)
     )
-  }, [activeUser])
+  }, [profile])
 
   const item = 'CommentItem'
 

@@ -1,7 +1,7 @@
 import { Author, ResearchItem, UserRole } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 
-import { profileServiceServer } from './profileService.server'
+import { ProfileServiceServer } from './profileService.server'
 import { storageServiceServer } from './storageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -26,7 +26,15 @@ const getBySlug = async (client: SupabaseClient, slug: string) => {
        status,
        is_draft,
        collaborators,
-       author:profiles(id, display_name, username, is_verified, is_supporter, country),
+       author:profiles(id, display_name, username, country, badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            display_name,
+            image_url,
+            action_url
+          )
+        )),
        updates:research_updates(
         id, 
         created_at, 
@@ -41,7 +49,15 @@ const getBySlug = async (client: SupabaseClient, slug: string) => {
         comment_count, 
         modified_at, 
         deleted,
-        update_author:profiles(id, display_name, username, is_verified, is_supporter, country)
+        update_author:profiles(id, display_name, username, country, badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            display_name,
+            image_url,
+            action_url
+          )
+        ))
       )
      `,
     )
@@ -72,10 +88,8 @@ const getCollaborators = async (
     return []
   }
 
-  const users = await profileServiceServer.getUsersByUsername(
-    collaboratorIds,
-    client,
-  )
+  const profileService = new ProfileServiceServer(client)
+  const users = await profileService.getUsersByUsername(collaboratorIds)
 
   return users?.map((user) => Author.fromDB(user))
 }

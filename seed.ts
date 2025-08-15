@@ -1,16 +1,20 @@
-import { copycat } from '@snaplet/copycat'
 import { createSeedClient } from '@snaplet/seed'
-import { ProfileTypeList } from 'oa-shared'
 
+// import * as allData from 'oa-shared/mocks/data'
 import libraryJson from './.snaplet/library.json'
 import questionsJson from './.snaplet/questions.json'
+import { profilesSeed } from './seed/profilesSeed'
+import { usersSeed } from './seed/usersSeed'
 import { convertToSlug } from './src/utils/slug'
 
 import type {
   categoriesChildInputs,
   categoriesScalars,
+  // map_pinsScalars,
   newsScalars,
-  profilesChildInputs,
+  profile_badges_relationsScalars,
+  profile_badgesScalars,
+  profile_typesScalars,
   profilesInputs,
   profilesScalars,
   project_stepsChildInputs,
@@ -26,26 +30,11 @@ import type {
   useful_votesScalars,
 } from '@snaplet/seed'
 
-const tenant_id = 'precious-plastic'
+const tenant_id = `precious-plastic`
 
-const _PROFILES_BASE: Partial<profilesScalars> = {
-  tenant_id,
-  type: ProfileTypeList.MEMBER,
-  roles: [],
-  tags: [],
-  photo_url: null,
-  links: null,
-  location: null,
-  notification_settings: null,
-  patreon: null,
-  impact: null,
-  is_verified: true,
-  is_blocked_from_messaging: false,
-  is_contactable: true,
-  is_supporter: true,
-  total_useful: 0,
-  total_views: 0,
-}
+// const MOCK_DATA = {
+//   ...allData,
+// }
 
 const _QUESTIONS_BASE: Partial<questionsScalars> = {
   tenant_id,
@@ -96,133 +85,110 @@ const _USEFUL_VOTES_BASE: Partial<useful_votesScalars> = {
   content_type: 'questions',
 }
 
+const _BADGES_BASE: Partial<profile_badgesScalars> = {
+  tenant_id,
+}
+
+const _TYPES_BASE: Partial<profile_typesScalars> = {
+  tenant_id,
+}
+
+const _BADGES_RELATIONS_BASE: Partial<profile_badges_relationsScalars> = {
+  tenant_id,
+}
+
 const seedTags = (): tagsChildInputs => [{ ..._TAGS_BASE, name: 'tag 1' }]
 
-const seedUsers = () => [
+// const seedProfileTags = (): profile_tagsChildInputs =>
+//   MOCK_DATA.profileTags.map((tag) => ({
+//     ...tag,
+//     tenant_id,
+//   }))
+
+const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
   {
-    email: 'jereerickson92@test.com',
-    password: copycat.password({}),
+    ..._TYPES_BASE,
+    name: 'member',
+    display_name: 'Member',
+    is_space: false,
+    description: 'test',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/map-member.svg',
+    map_pin_name: '',
+    order: 1,
+    small_image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/map-member.svg',
   },
   {
-    email: 'aldaplaskett48@test.com',
-    password: copycat.password({}),
-  },
-  {
-    email: 'sampathpini67@test.com',
-    password: copycat.password({}),
-  },
-  {
-    email: 'galenagiugovaz15@test.com',
-    password: copycat.password({}),
-  },
-  {
-    email: 'veniaminjewell33@test.com',
-    password: copycat.password({}),
-  },
-  {
-    email: 'cortneybrown81@test.com',
-    password: copycat.password({}),
-  },
-  {
-    email: 'melisavang56@test.com',
-    password: copycat.password({}),
-  },
-  {
-    email: 'lianabegam24@test.com',
-    password: copycat.password({}),
-  },
-  {
-    email: 'akromstarkova72@test.com',
-    password: copycat.password({}),
-  },
-  {
-    email: 'mirzoblazkova19@test.com',
-    password: copycat.password({}),
+    ..._TYPES_BASE,
+    name: 'space',
+    display_name: 'Space',
+    is_space: true,
+    description: 'test',
+    image_url: '',
+    map_pin_name: '',
+    order: 2,
+    small_image_url: '',
   },
 ]
 
-const seedProfiles = (): profilesChildInputs => [
-  {
-    ..._PROFILES_BASE,
-    username: 'jereerickson92',
-    display_name: 'Jere Erickson',
-    country: 'Portugal',
-    about:
-      "Passionate about creating meaningful connections and exploring new experiences. Whether it's traveling to new destinations, trying new foods, or diving into fresh hobbies, I'm all about embracing the adventure in life. Let's chat and share our stories!",
-  },
-  {
-    ..._PROFILES_BASE,
-    username: 'aldaplaskett48',
-    display_name: 'Alda Plaskett',
-    country: 'Spain',
-    about:
-      "Tech enthusiast, avid reader, and coffee lover. I spend my days coding, learning about the latest trends, and finding ways to innovate. Always up for a deep conversation or a good book recommendation. Let's connect and exchange ideas!",
-  },
-  {
-    ..._PROFILES_BASE,
-    username: 'sampathpini67',
-    display_name: 'Sampath Pini',
-    country: 'France',
-    about:
-      "Fitness junkie who believes in the power of mental and physical health. When I'm not in the gym, you can find me hiking, practicing yoga, or experimenting with healthy recipes. Looking for like-minded people who value balance and growth. Let's inspire each other!",
-  },
-  {
-    ..._PROFILES_BASE,
-    username: 'galenagiugovaz15',
-    display_name: 'Galena Giugovaz',
-    country: 'Sudan',
-    about:
-      "Curious traveler with a passion for photography and storytelling. Exploring the world, one city at a time, while capturing moments that tell unique stories. I believe that life is all about experiences and the memories we create. Let's share the journey!",
-  },
-  {
-    ..._PROFILES_BASE,
-    username: 'veniaminjewell33',
-    display_name: 'Veniamin Jewell',
-    country: 'Tuvalu',
-    about:
-      "Creative soul with a love for design and innovation. I'm always experimenting with new ways to bring ideas to life—whether it's through art, technology, or writing. Let's collaborate and create something beautiful together!",
-  },
-  {
-    ..._PROFILES_BASE,
-    username: 'cortneybrown81',
-    display_name: 'Cortney Brown',
-    country: 'Ukraine',
-    about:
-      "Outgoing and energetic, I'm always looking for new adventures and opportunities to grow. Whether it's trying a new hobby or tackling an exciting project, I'm up for anything. Join me on my journey, and let's make the most out of every moment!",
-  },
-  {
-    ..._PROFILES_BASE,
-    username: 'melisavang56',
-    display_name: 'Melisa Vang',
-    country: 'Uruguay',
-    about:
-      "Music is my life, and I'm constantly seeking out new sounds and genres to explore. From playing instruments to attending live shows, I live and breathe rhythm. If you're passionate about music or just want to chat about the latest trends, let's connect!",
-  },
-  {
-    ..._PROFILES_BASE,
-    username: 'lianabegam24',
-    display_name: 'Liana Begam',
-    country: 'United States',
-    about:
-      "Outdoor enthusiast and nature lover who finds peace in hiking, camping, and exploring the great outdoors. When I'm not soaking up the beauty of nature, you'll find me sharing my love for the environment with others. Looking to meet fellow adventurers!",
-  },
-  {
-    ..._PROFILES_BASE,
-    username: 'akromstarkova72',
-    display_name: 'Akrom Stárková',
-    country: 'Yemen',
-    about:
-      "Ambitious and driven, I strive to make the most out of every opportunity. Whether it's working on personal projects or helping others achieve their goals, I believe in continuous growth and learning. Let's build a community of success together!",
-  },
-  {
-    ..._PROFILES_BASE,
-    username: 'mirzoblazkova19',
-    display_name: 'Mirzo Blažková',
-    country: 'Zimbabwe',
-    about:
-      "Bookworm with a passion for storytelling and deep discussions. I'm always immersed in a good novel or seeking out new perspectives on life. Looking to connect with fellow book lovers or anyone interested in meaningful conversations. Let's dive into the world of words together!",
-  },
+const seedBadges = (): Partial<profile_badgesScalars>[] => [
+  { ..._BADGES_BASE, name: 'supporter', display_name: 'Supporter' },
+  { ..._BADGES_BASE, name: 'pro', display_name: 'PRO' },
 ]
+
+/// populates badges: 2/3 of profiles to have: 1 and 2 badges, others remain with no badge
+const seedBadgesRelations = (
+  profiles: profilesScalars[],
+  badges: profile_badgesScalars[],
+): Partial<profile_badges_relationsScalars>[] => {
+  const relations: Partial<profile_badges_relationsScalars>[] = []
+
+  const profilesPerGroup = Math.ceil(profiles.length / 3)
+  const oneBadgeGroup = profiles.slice(profilesPerGroup, profilesPerGroup * 2)
+  const twoBadgesGroup = profiles.slice(profilesPerGroup * 2)
+
+  // 1 badge each
+  for (const profile of oneBadgeGroup) {
+    relations.push({
+      ..._BADGES_RELATIONS_BASE,
+      profile_id: profile.id,
+      profile_badge_id: badges[0].id,
+    })
+  }
+
+  // all (2) badges each
+  for (const profile of twoBadgesGroup) {
+    for (let i = 0; i < badges.length; i++) {
+      relations.push({
+        ..._BADGES_RELATIONS_BASE,
+        profile_id: profile.id,
+        profile_badge_id: badges[i].id,
+      })
+    }
+  }
+
+  return relations
+}
+
+// const seedMapPins = (
+//   profiles: profilesScalars[],
+// ): Partial<map_pinsScalars>[] | void => {
+//   const pins: Partial<map_pinsScalars>[] = []
+//   const pinsSeed = MOCK_DATA.mapPins
+
+//   const minLength = Math.min(pinsSeed.length, profiles.length)
+
+//   for (let i = 0; i < minLength; i++) {
+//     pins.push({
+//       ...pinsSeed[i],
+//       tenant_id,
+//       profile_id: profiles[i].id,
+//     })
+//   }
+
+//   return pins
+// }
 
 const seedCategories = (): categoriesChildInputs => [
   { ..._CATEGORIES_BASE, name: 'Questions', type: 'questions' },
@@ -437,6 +403,7 @@ const main = async () => {
     {
       name: tenant_id,
       public: true,
+      allowed_mime_types: [''],
     },
     { name: `${tenant_id}-documents` },
   ])
@@ -453,14 +420,26 @@ const main = async () => {
     },
   ])
 
-  const { users } = await seed.users(seedUsers())
+  const { users } = await seed.users(usersSeed())
+  // await seed.profile_tags(seedProfileTags())
+  const { profile_types } = await seed.profile_types(seedProfileTypes())
+
   const { profiles } = await seed.profiles(
-    (seedProfiles() as Array<any>).map((profile: profilesInputs, index) => ({
-      ...profile,
-      auth_id: users[index].id,
-    })),
+    (profilesSeed(tenant_id) as any[]).map(
+      (profile: profilesInputs, index) => ({
+        ...profile,
+        auth_id: users[index].id,
+        profile_type: profile_types[0].id,
+      }),
+    ),
   )
 
+  const { profile_badges } = await seed.profile_badges(seedBadges())
+  await seed.profile_badges_relations(
+    seedBadgesRelations(profiles, profile_badges),
+  )
+
+  // await seed.map_pins(seedMapPins(profiles))
   const { tags } = await seed.tags(seedTags())
   const { categories } = await seed.categories(seedCategories())
 

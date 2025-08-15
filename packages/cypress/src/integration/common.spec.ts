@@ -99,7 +99,7 @@ describe('[Common]', () => {
 
       cy.step('Go to Profile')
       cy.clickMenuItem(UserMenuItem.Profile)
-      cy.url().should('include', `/u/${MOCK_DATA.users.subscriber._id}`)
+      cy.url().should('include', `/u/${MOCK_DATA.users.subscriber.username}`)
 
       cy.step('Go to Settings')
       cy.toggleUserMenuOn()

@@ -1,23 +1,39 @@
-import { useContext, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { UserStatistics, VisitorModal } from 'oa-components'
-import { ProfileTypeList, UserRole } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
-import { ProfileTags } from 'src/common/ProfileTags'
-import { isModuleSupported, MODULE } from 'src/modules'
-import { EnvironmentContext } from 'src/pages/common/EnvironmentContext'
+import { ProfileTags } from 'src/pages/common/ProfileTags'
+import { mapPinService } from 'src/pages/Maps/map.service'
 import { Box, Divider, Flex, Paragraph } from 'theme-ui'
 
-import type { IUser, UserCreatedDocs } from 'oa-shared'
+import type { MapPin, Profile, UserCreatedDocs } from 'oa-shared'
 
 interface IProps {
   docs: UserCreatedDocs
-  user: IUser
+  profile: Profile
   selectTab: (target: string) => void
 }
 
-export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
-  const { about, location, tags, openToVisitors, userName } = user
+export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
+  const { about, tags, visitorPolicy } = profile
   const [showVisitorModal, setShowVisitorModal] = useState(false)
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [pin, setPin] = useState<MapPin | undefined>(undefined)
+
+  useEffect(() => {
+    const getPin = async () => {
+      try {
+        const pin = await mapPinService.getMapPinById(profile.id)
+        if (pin) {
+          setPin(pin)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    getPin()
+  }, [profile.id])
 
   const hideVisitorDetails = (target?: string) => {
     setShowVisitorModal(false)
@@ -26,13 +42,16 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
     }
   }
 
-  const env = useContext(EnvironmentContext)
-  const isMapModule = isModuleSupported(
-    env?.VITE_SUPPORTED_MODULES || '',
-    MODULE.MAP,
-  )
+  const userTotalUseful = useMemo(() => {
+    if (!profile?.authorUsefulVotes) {
+      return 0
+    }
 
-  const country = isMapModule ? location?.country : undefined
+    return profile.authorUsefulVotes.reduce(
+      (sum, vote) => sum + vote.voteCount,
+      0,
+    )
+  }, [profile.authorUsefulVotes])
 
   return (
     <Box style={{ height: '100%' }}>
@@ -51,21 +70,29 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
             gap: 2,
           }}
         >
-          {(tags || openToVisitors) && (
+          {(tags || visitorPolicy) && (
             <ProfileTags
-              tagIds={tags}
+              tags={tags}
               showVisitorModal={() => setShowVisitorModal(true)}
-              openToVisitors={openToVisitors}
-              isSpace={user.profileType !== ProfileTypeList.MEMBER}
+              visitorPolicy={visitorPolicy}
+              isSpace={profile.type?.isSpace || false}
             />
           )}
-          {about && <Paragraph>{about}</Paragraph>}
+          {about && (
+            <Paragraph
+              sx={{
+                whiteSpace: 'pre-wrap',
+              }}
+            >
+              {about}
+            </Paragraph>
+          )}
 
-          {openToVisitors && (
+          {visitorPolicy && (
             <VisitorModal
               show={showVisitorModal}
               hide={hideVisitorDetails}
-              user={user}
+              user={profile}
             />
           )}
         </Flex>
@@ -76,39 +103,33 @@ export const ProfileDetails = ({ docs, user, selectTab }: IProps) => {
             alignSelf: 'stretch',
             border: ['none', '2px solid #0000001A', '2px solid #0000001A'],
             borderTop: '2px solid #0000001A',
-            m: 0,
+            margin: 0,
           }}
         />
-        <Box>
-          <AuthWrapper
-            roleRequired={UserRole.BETA_TESTER}
-            fallback={
-              <UserStatistics
-                userName={userName}
-                country={country}
-                isVerified={!!user.badges?.verified}
-                isSupporter={!!user.badges?.supporter}
-                libraryCount={docs?.projects.length || 0}
-                usefulCount={user.totalUseful || 0}
-                researchCount={docs?.research.length || 0}
-                totalViews={0}
-                questionCount={docs?.questions.length || 0}
-              />
-            }
-          >
+        <AuthWrapper
+          roleRequired={UserRole.BETA_TESTER}
+          fallback={
             <UserStatistics
-              userName={userName}
-              country={country}
-              isVerified={!!user.badges?.verified}
-              isSupporter={!!user.badges?.supporter}
+              profile={profile}
+              pin={pin}
               libraryCount={docs?.projects.length || 0}
-              usefulCount={user.totalUseful || 0}
+              usefulCount={userTotalUseful}
               researchCount={docs?.research.length || 0}
-              totalViews={user.total_views || 0}
               questionCount={docs?.questions.length || 0}
+              showViews={false}
             />
-          </AuthWrapper>
-        </Box>
+          }
+        >
+          <UserStatistics
+            profile={profile}
+            pin={pin}
+            libraryCount={docs?.projects.length || 0}
+            usefulCount={userTotalUseful}
+            researchCount={docs?.research.length || 0}
+            questionCount={docs?.questions.length || 0}
+            showViews
+          />
+        </AuthWrapper>
       </Flex>
     </Box>
   )

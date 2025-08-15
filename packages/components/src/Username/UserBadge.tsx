@@ -1,28 +1,26 @@
+import { useMemo } from 'react'
+import { Tooltip } from 'react-tooltip'
 import { Image } from 'theme-ui'
 
-import VerifiedBadgeIcon from '../../assets/icons/icon-verified-badge.svg'
-import SupporterBadgeIcon from '../../assets/icons/supporter.svg'
+import type { ProfileBadge } from 'oa-shared'
 
 interface IProps {
-  badgeName: string
+  badge: ProfileBadge
 }
 
-export const UserBadge = ({ badgeName }: IProps) => {
-  const options: { [key: string]: string } = {
-    verified: VerifiedBadgeIcon,
-    supporter: SupporterBadgeIcon,
-  }
-  const src: string | null = options[badgeName] || null
-
-  if (!src) {
-    return
-  }
+export const UserBadge = ({ badge }: IProps) => {
+  const uuid = useMemo(() => (Math.random() * 16).toString(), [])
 
   return (
-    <Image
-      src={src}
-      sx={{ ml: 1, height: 16, width: 16 }}
-      data-testid={`Username: ${badgeName} badge`}
-    />
+    <>
+      <Image
+        src={badge.imageUrl}
+        sx={{ ml: 1, height: 16, width: 16 }}
+        data-testid={`Username: ${badge.name} badge`}
+        data-tooltip-id={uuid}
+        data-tooltip-content={badge.displayName}
+      />
+      <Tooltip id={uuid} />
+    </>
   )
 }

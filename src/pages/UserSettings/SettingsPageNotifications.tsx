@@ -1,9 +1,6 @@
-import { UserRole } from 'oa-shared'
-import { AuthWrapper } from 'src/common/AuthWrapper'
 import { fields } from 'src/pages/UserSettings/labels'
 import { Flex, Heading, Text } from 'theme-ui'
 
-import { FirebaseNotifications } from './FirebaseNotifications'
 import { SupabaseNotifications } from './SupabaseNotifications'
 
 export const SettingsPageNotifications = () => {
@@ -22,16 +19,7 @@ export const SettingsPageNotifications = () => {
         <Text variant="quiet">{description}</Text>
       </Flex>
 
-      <FirebaseNotifications />
-      <AuthWrapper
-        roleRequired={[
-          UserRole.BETA_TESTER,
-          UserRole.RESEARCH_CREATOR,
-          UserRole.ADMIN,
-        ]}
-      >
-        <SupabaseNotifications />
-      </AuthWrapper>
+      <SupabaseNotifications />
     </Flex>
   )
 }

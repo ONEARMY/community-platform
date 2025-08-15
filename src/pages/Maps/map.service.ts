@@ -13,6 +13,7 @@ export interface IMapPinService {
 const getMapPins = async () => {
   try {
     const response = await fetch('/api/map-pins', {
+      cache: 'force-cache',
       headers: {
         'Cache-Control': 'max-age=1800', // 30 minutes
       },

@@ -22,22 +22,19 @@ export const ActionSet = ({ children, itemType }: IProps) => {
   const onClick = () => setShow((show) => !show)
 
   useEffect(() => {
-  const handleClickOutsideDropdownCard = (event: MouseEvent) => {
-    if (
-      cardRef.current &&
-      !cardRef.current.contains(event.target as Node)
-    ) {
-      setShow((prev) => !prev)
+    const handleClickOutsideDropdownCard = (event: MouseEvent) => {
+      if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
+        setShow((prev) => !prev)
+      }
     }
-  }
 
-  if(show) document.addEventListener("mousedown", handleClickOutsideDropdownCard)
+    if (show)
+      document.addEventListener('mousedown', handleClickOutsideDropdownCard)
 
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutsideDropdownCard)
-  }
-}, [show])
-
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutsideDropdownCard)
+    }
+  }, [show])
 
   return (
     <Flex
@@ -76,9 +73,7 @@ export const ActionSet = ({ children, itemType }: IProps) => {
               flexDirection: 'column',
             }}
           >
-
-              {...children}
-
+            {...children}
           </Flex>
         </Card>
       )}

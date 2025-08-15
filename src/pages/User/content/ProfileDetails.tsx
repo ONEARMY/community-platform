@@ -78,7 +78,15 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
               isSpace={profile.type?.isSpace || false}
             />
           )}
-          {about && <Paragraph>{about}</Paragraph>}
+          {about && (
+            <Paragraph
+              sx={{
+                whiteSpace: 'pre-wrap',
+              }}
+            >
+              {about}
+            </Paragraph>
+          )}
 
           {visitorPolicy && (
             <VisitorModal

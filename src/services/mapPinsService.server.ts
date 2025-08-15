@@ -68,7 +68,6 @@ export class MapPinsServiceServer {
       `,
       )
       .eq('moderation', 'accepted')
-      .or('profile_id')
 
     if (!data || error) {
       console.error(error)

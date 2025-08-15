@@ -63,40 +63,42 @@ const MapsPage = () => {
   ])
 
   useEffect(() => {
-    const fetchMapPins = async () => {
+    const init = async () => {
       try {
-        const pins = await mapPinService.getMapPins()
-        setAllPins(pins)
-      } catch (error) {
-        setLoadingMessage(error)
-      }
-    }
-
-    const fetchMapFilters = async () => {
-      try {
-        const response = await mapPinService.getMapFilters()
-
-        if (response) {
-          if (response.filters) {
-            setAllProfileTypes(response.filters.types || [])
-            setAllBadges(response.filters.badges || [])
-            setAllTags(response.filters.tags || [])
-            setAllProfileSettings(response.filters.settings || [])
-          }
-          if (response.defaultFilters) {
-            if (response.defaultFilters.types) {
-              setActiveTypes(response.defaultFilters.types)
-            }
-          }
+        const [pins, filters, userPin] = await Promise.all([
+          mapPinService.getMapPins(),
+          mapPinService.getMapFilters(),
+          mapPinService.getCurrentUserMapPin(),
+        ])
+        let pinsToSet: MapPin[] = []
+        if (pins) {
+          pinsToSet = pins
         }
+
+        // might be missing because it's not approved
+        const userPinMissing = !pinsToSet.find((x) => x.id === userPin?.id)
+        if (userPin && userPinMissing) {
+          pinsToSet.push(userPin)
+        }
+
+        setAllPins(pinsToSet)
+
+        if (filters?.filters) {
+          setAllProfileTypes(filters.filters.types || [])
+          setAllBadges(filters.filters.badges || [])
+          setAllTags(filters.filters.tags || [])
+          setAllProfileSettings(filters.filters.settings || [])
+        }
+        if (filters?.defaultFilters?.types) {
+          setActiveTypes(filters.defaultFilters.types)
+        }
+
+        setLoadingMessage('')
       } catch (error) {
         setLoadingMessage(error)
       }
     }
-
-    Promise.all([fetchMapPins(), fetchMapFilters()]).then(
-      () => setLoadingMessage(''), // TODO: change name to setMessage
-    )
+    init()
   }, [])
 
   const toggleActiveBadgeFilter = (value: string) => {

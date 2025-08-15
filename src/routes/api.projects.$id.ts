@@ -342,6 +342,7 @@ async function deleteProject(request: Request, id: number) {
     await client
       .from('projects')
       .update({
+        modified_at: new Date(),
         deleted: true,
       })
       .eq('id', id)

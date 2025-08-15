@@ -149,6 +149,7 @@ async function deleteResearch(request, id: number) {
     await client
       .from('research')
       .update({
+        modified_at: new Date(),
         deleted: true,
       })
       .eq('id', id)

@@ -51,7 +51,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
       >
         {props.pin && (
           <InternalLink
-            to={'/map/#' + props.profile.username}
+            to={'/map#' + props.profile.username}
             sx={{ color: 'black' }}
             data-testid="location-link"
           >

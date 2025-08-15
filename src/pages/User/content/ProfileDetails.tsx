@@ -103,6 +103,7 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
           fallback={
             <UserStatistics
               profile={profile}
+              pin={pin}
               libraryCount={docs?.projects.length || 0}
               usefulCount={userTotalUseful}
               researchCount={docs?.research.length || 0}
@@ -113,6 +114,7 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
         >
           <UserStatistics
             profile={profile}
+            pin={pin}
             libraryCount={docs?.projects.length || 0}
             usefulCount={userTotalUseful}
             researchCount={docs?.research.length || 0}

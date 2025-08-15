@@ -74,7 +74,7 @@ export const SettingsPageUserProfile = observer(() => {
       existingPhoto: profile.photo ? toJS(profile.photo) : undefined,
       country: profile.country,
       showVisitorPolicy: !!profile.visitorPolicy,
-      visitorPreferencePolicy: profile.visitorPolicy?.policy,
+      visitorPreferencePolicy: profile.visitorPolicy?.policy || 'open',
       visitorPreferenceDetails: profile.visitorPolicy?.details,
       website: profile.website || '',
       tagIds: profile.tags?.map((x) => x.id) || null,

@@ -40,6 +40,8 @@ const update = async (value: ProfileFormData) => {
     }
   }
 
+  data.append('showVisitorPolicy', value.showVisitorPolicy ? 'true' : 'false')
+
   if (value.showVisitorPolicy) {
     if (value.visitorPreferenceDetails) {
       data.append('visitorPreferenceDetails', value.visitorPreferenceDetails)

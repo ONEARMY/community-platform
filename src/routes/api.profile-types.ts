@@ -1,5 +1,5 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { ProfileTypesServiceServer } from 'src/services/profileTypesSeervice.server'
+import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 

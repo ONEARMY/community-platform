@@ -61,6 +61,7 @@ export const loader = async ({ request, params }) => {
     const pinsDb = data[0] as unknown as DBMapPin
     const pinFactory = new MapPinFactory(client)
     const mapPin = pinFactory.fromDBWithProfile(pinsDb)
+
     return Response.json({ mapPin }, { headers })
   } catch (error) {
     console.error(error)

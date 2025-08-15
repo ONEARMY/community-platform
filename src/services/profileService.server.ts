@@ -1,7 +1,7 @@
 import { ProfileFactory } from 'src/factories/profileFactory.server'
 
 import { ImageServiceServer } from './imageService.server'
-import { ProfileTypesServiceServer } from './profileTypesSeervice.server'
+import { ProfileTypesServiceServer } from './profileTypesService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type {

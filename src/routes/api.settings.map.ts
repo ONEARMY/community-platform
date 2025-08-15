@@ -1,6 +1,7 @@
 import { MapPinFactory } from 'src/factories/mapPinFactory.server'
 import { ProfileFactory } from 'src/factories/profileFactory.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { MapPinsServiceServer } from 'src/services/mapPinsService.server'
 import { MapServiceServer } from 'src/services/mapService.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
 
@@ -112,14 +113,10 @@ async function validateRequest(
 async function deletePin(request: Request, profile: DBProfile) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const { error } = await client
-    .from('map_pins')
-    .delete()
-    .eq('profile_id', profile.id)
-
-  if (error) {
+  try {
+    await new MapPinsServiceServer(client).delete(profile.id)
+  } catch (error) {
     console.error(error)
-
     return Response.json(
       {},
       { headers, status: 500, statusText: 'Error deleting pin' },

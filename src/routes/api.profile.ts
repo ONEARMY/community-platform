@@ -1,7 +1,7 @@
 import { ProfileFactory } from 'src/factories/profileFactory.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
-import { ProfileTypesServiceServer } from 'src/services/profileTypesSeervice.server'
+import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'

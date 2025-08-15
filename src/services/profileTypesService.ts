@@ -2,7 +2,11 @@ import type { ProfileType } from 'oa-shared'
 
 const getProfileTypes = async () => {
   try {
-    const response = await fetch('/api/profile-types')
+    const response = await fetch('/api/profile-types', {
+      headers: {
+        'Cache-Control': 'max-age=1800', // 30 minutes
+      },
+    })
 
     return ((await response.json()) as ProfileType[]) || []
   } catch (error) {

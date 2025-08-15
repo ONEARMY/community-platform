@@ -76,9 +76,16 @@ const MapsPage = () => {
         }
 
         // might be missing because it's not approved
-        const userPinMissing = !pinsToSet.find((x) => x.id === userPin?.id)
-        if (userPin && userPinMissing) {
-          pinsToSet.push(userPin)
+        const existingPinIndex = pinsToSet.findIndex(
+          (x) => x.id === userPin?.id,
+        )
+
+        if (userPin) {
+          if (existingPinIndex >= 0) {
+            pinsToSet[existingPinIndex] = userPin
+          } else {
+            pinsToSet.push(userPin)
+          }
         }
 
         setAllPins(pinsToSet)

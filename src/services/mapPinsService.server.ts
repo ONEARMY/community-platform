@@ -99,4 +99,8 @@ export class MapPinsServiceServer {
 
     cache.delete('mappins')
   }
+
+  clearCache() {
+    cache.delete('mappins')
+  }
 }

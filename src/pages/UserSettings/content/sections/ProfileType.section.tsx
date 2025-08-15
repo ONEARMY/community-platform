@@ -49,18 +49,25 @@ export const ProfileTypeSection = ({
             {props.meta.error && <Text color={theme.colors.red}>{error}</Text>}
 
             <Grid columns={['repeat(auto-fill, minmax(125px, 1fr))']} gap={2}>
-              {profileTypes.map((profileType, index: number) => (
-                <Box key={index}>
-                  <ProfileTypeRadioField
-                    data-cy={profileType.name}
-                    value={profileType}
-                    name="type"
-                    isSelected={profileType.name === props.input.value}
-                    onChange={(v) => props.input.onChange(v)}
-                    textLabel={profileType.displayName}
-                  />
-                </Box>
-              ))}
+              {profileTypes
+                .toSorted((a, b) => {
+                  if (a.isSpace !== b.isSpace) {
+                    return a.isSpace ? 1 : -1
+                  }
+                  return a.order - b.order
+                })
+                .map((profileType, index: number) => (
+                  <Box key={index}>
+                    <ProfileTypeRadioField
+                      data-cy={profileType.name}
+                      value={profileType}
+                      name="type"
+                      isSelected={profileType.name === props.input.value}
+                      onChange={(v) => props.input.onChange(v)}
+                      textLabel={profileType.displayName}
+                    />
+                  </Box>
+                ))}
             </Grid>
           </Flex>
         </FlexSectionContainer>

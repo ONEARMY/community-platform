@@ -51,7 +51,7 @@ export const MemberTypeList = () => {
           >
             <MemberBadge size={40} profileType={profileType} />
             <Text variant="quiet" sx={{ fontSize: 1 }}>
-              {profileType.displayName}
+              {profileType.mapPinName}
             </Text>
           </CardButton>
         )

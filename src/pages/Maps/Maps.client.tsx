@@ -91,7 +91,10 @@ const MapsPage = () => {
         setAllPins(pinsToSet)
 
         if (filters?.filters) {
-          setAllProfileTypes(filters.filters.types || [])
+          const sortedTypes = (filters.filters.types || []).toSorted(
+            (a, b) => a.order - b.order,
+          )
+          setAllProfileTypes(sortedTypes)
           setAllBadges(filters.filters.badges || [])
           setAllTags(filters.filters.tags || [])
           setAllProfileSettings(filters.filters.settings || [])

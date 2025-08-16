@@ -9,9 +9,11 @@ import {
 } from 'oa-components'
 import { UserRole } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { usefulService } from 'src/services/usefulService'
+import { onUsefulClick } from 'src/utils/onUsefulClick'
 import { Box, Flex, Text } from 'theme-ui'
 
-import type { Reply } from 'oa-shared'
+import type { ContentType, Reply } from 'oa-shared'
 
 const DELETED_COMMENT = 'The original comment got deleted'
 
@@ -26,6 +28,8 @@ export const CommentReply = observer(
     const commentRef = useRef<HTMLDivElement>()
     const [showEditModal, setShowEditModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [usefulCount, setUsefulCount] = useState<number>(comment.voteCount)
+    const [voted, setVoted] = useState<boolean>(comment.hasVoted) // TODO: retrieve the info from userStore ?
 
     const { userStore } = useCommonStores().stores
     const { activeUser } = userStore
@@ -38,6 +42,17 @@ export const CommentReply = observer(
     }, [activeUser, comment])
 
     useEffect(() => {
+      const getVoted = async () => {
+        const voted = await usefulService.hasVoted('comment', comment.id)
+        setVoted(voted)
+      }
+
+      if (loggedInUser) {
+        getVoted()
+      }
+    }, [activeUser, comment])
+
+    useEffect(() => {
       if (comment.highlighted) {
         commentRef.current?.scrollIntoView({
           behavior: 'smooth',
@@ -47,6 +62,27 @@ export const CommentReply = observer(
     }, [comment.highlighted])
 
     const item = 'ReplyItem'
+    const loggedInUser = userStore.activeUser
+
+    const configOnUsefulClick = {
+      contentType: 'comment' as ContentType,
+      contentId: comment.id,
+      eventCategory: 'Comment',
+      slug: `${comment}+${comment.id}`,
+      setVoted,
+      setUsefulCount,
+      loggedInUser: loggedInUser,
+    }
+
+    const handleUsefulClick = async (
+      vote: 'add' | 'delete',
+      eventCategory = 'Comment',
+    ) => {
+      await onUsefulClick({
+        vote,
+        config: { ...configOnUsefulClick, eventCategory },
+      })
+    }
 
     return (
       <Flex>
@@ -81,6 +117,12 @@ export const CommentReply = observer(
                 comment={comment}
                 setShowDeleteModal={setShowDeleteModal}
                 setShowEditModal={setShowEditModal}
+                onUsefulClick={() =>
+                  handleUsefulClick(voted ? 'delete' : 'add')
+                }
+                hasUserVotedUseful={voted}
+                votedUsefulCount={usefulCount}
+                isLoggedIn={!!loggedInUser}
               />
             )}
           </Flex>

@@ -20,12 +20,13 @@ import {
 import { subscribersService } from 'src/services/subscribersService'
 import { usefulService } from 'src/services/usefulService'
 import { hasAdminRights } from 'src/utils/helpers'
+import { onUsefulClick } from 'src/utils/onUsefulClick'
 import { Box, Flex } from 'theme-ui'
 
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 
-import type { IUser, ResearchItem } from 'oa-shared'
+import type { ContentType, IUser, ResearchItem } from 'oa-shared'
 
 interface IProps {
   research: ResearchItem
@@ -42,31 +43,23 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
   )
   const [usefulCount, setUsefulCount] = useState<number>(research.usefulCount)
 
-  const onUsefulClick = async (
+  const configOnUsefulClick = {
+    contentType: 'research' as ContentType,
+    contentId: research.id,
+    eventCategory: 'Research',
+    slug: research.slug,
+    setVoted,
+    setUsefulCount,
+    loggedInUser: loggedInUser,
+  }
+
+  const handleUsefulClick = async (
     vote: 'add' | 'delete',
-    eventCategory = 'Research',
+    eventCategory = 'Library',
   ) => {
-    if (!loggedInUser?.userName) {
-      return
-    }
-
-    // Trigger update without waiting
-    if (vote === 'add') {
-      await usefulService.add('research', research.id)
-    } else {
-      await usefulService.remove('research', research.id)
-    }
-
-    setVoted((prev) => !prev)
-
-    setUsefulCount((prev) => {
-      return vote === 'add' ? prev + 1 : prev - 1
-    })
-
-    trackEvent({
-      category: eventCategory,
-      action: vote === 'add' ? 'ResearchUseful' : 'ResearchUsefulRemoved',
-      label: research.slug,
+    await onUsefulClick({
+      vote,
+      config: { ...configOnUsefulClick, eventCategory },
     })
   }
 
@@ -163,7 +156,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
         hasUserVotedUseful={voted}
         hasUserSubscribed={subscribed}
         onUsefulClick={() =>
-          onUsefulClick(voted ? 'delete' : 'add', 'ResearchDescription')
+          handleUsefulClick(voted ? 'delete' : 'add', 'ResearchDescription')
         }
         onFollowClick={() => onFollowClick(subscribed ? 'remove' : 'add')}
         contributors={research.collaborators?.map((x) => ({
@@ -213,7 +206,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
                     votedUsefulCount={usefulCount}
                     hasUserVotedUseful={voted}
                     onUsefulClick={() =>
-                      onUsefulClick(
+                      handleUsefulClick(
                         voted ? 'delete' : 'add',
                         'ArticleCallToAction',
                       )

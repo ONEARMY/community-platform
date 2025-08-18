@@ -26,10 +26,11 @@ export const loader = async ({ request, params }) => {
         moderation_feedback,
         profile:profiles(
           id,
-          type,
+          country,
           display_name,
-          username,
           photo,
+          type,
+          username,
           badges:profile_badges_relations(
             profile_badges(
               id,

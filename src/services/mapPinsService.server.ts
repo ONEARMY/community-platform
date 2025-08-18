@@ -35,10 +35,11 @@ export class MapPinsServiceServer {
         moderation,
         profile:profiles(
           id,
-          type,
+          country,
           display_name,
-          username,
           photo,
+          type,
+          username,
           tags:profile_tags_relations(
             profile_tags(
               id,

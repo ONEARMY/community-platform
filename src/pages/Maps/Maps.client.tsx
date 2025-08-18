@@ -155,11 +155,10 @@ const MapsPage = () => {
     if (allPins && username) {
       const foundPin = allPins.find((pin) => pin.profile!.username === username)
       if (foundPin) {
+        selectPin(foundPin)
         setPinLocation({ lat: foundPin.lat, lng: foundPin.lng })
       }
       selectPin(foundPin)
-    } else {
-      selectPin(null)
     }
   }, [location.hash, allPins])
 

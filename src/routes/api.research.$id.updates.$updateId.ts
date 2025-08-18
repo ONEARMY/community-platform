@@ -8,20 +8,15 @@ import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBMedia, DBResearchUpdate, MediaFile } from 'oa-shared'
+import type { DBMedia, DBProfile, DBResearchUpdate, MediaFile } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   try {
+    const { client, headers } = createSupabaseServerClient(request)
+
     const researchId = Number(params.id)
     const updateId = Number(params.updateId)
-
-    if (request.method === 'DELETE') {
-      return await deleteResearchUpdate(request, researchId, updateId)
-    }
-
     const formData = await request.formData()
-    const imagesToKeepIds = formData.getAll('existingImages')
-    const filesToKeepIds = formData.getAll('existingFiles')
 
     const data = {
       title: formData.get('title') as string,
@@ -30,37 +25,33 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       fileUrl: formData.get('fileUrl') as string,
       isDraft: formData.get('draft') === 'true',
     }
+    const imagesToKeepIds = formData.getAll('existingImages')
+    const filesToKeepIds = formData.getAll('existingFiles')
+    const uploadedImages = formData.getAll('images') as File[]
+    const uploadedFiles = formData.getAll('files') as File[]
+    const userData = await client.auth.getUser()
+    const profile = await profileServiceServer.getByAuthId(
+      userData.data.user!.id,
+      client,
+    )
 
-    const { client, headers } = createSupabaseServerClient(request)
-
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    if (request.method === 'DELETE') {
+      return await deleteResearchUpdate(request, researchId, updateId)
+    }
 
     const { valid, status, statusText } = await validateRequest(
       request,
-      user,
+      userData.data.user,
       data,
+      profile,
+      researchId,
+      updateId,
+      uploadedImages,
+      client,
     )
 
     if (!valid) {
       return Response.json({}, { status, statusText })
-    }
-
-    const profile = await profileServiceServer.getByAuthId(
-      user?.id || '',
-      client,
-    )
-
-    if (
-      !researchServiceServer.isAllowedToEditUpdate(
-        profile,
-        researchId,
-        updateId,
-        client,
-      )
-    ) {
-      return Response.json({}, { status: 403, headers })
     }
 
     const researchUpdateResult = await client
@@ -71,47 +62,14 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const oldResearchUpdate = researchUpdateResult.data as DBResearchUpdate
 
-    const uploadedImages = formData.getAll('images') as File[]
-    const uploadedFiles = formData.getAll('files') as File[]
-    const imageValidation = validateImages(uploadedImages)
-
-    if (!imageValidation.valid) {
-      return Response.json(
-        {},
-        {
-          status: 400,
-          statusText: imageValidation.errors.join(', '),
-        },
-      )
-    }
-
-    const uploadPath = `research/${researchId}/updates/${oldResearchUpdate.id}`
-    const images = await updateOrReplaceImage(
-      imagesToKeepIds as string[],
-      uploadedImages,
-      updateId,
-      uploadPath,
-      client,
-    )
-
-    const files = await updateOrReplaceFile(
-      filesToKeepIds as string[],
-      uploadedFiles,
-      updateId,
-      uploadPath,
-      client,
-    )
-
     const researchUpdateAfterUpdating = await client
       .from('research_updates')
       .update({
         title: data.title,
         description: data.description,
         is_draft: data.isDraft,
-        images,
         modified_at: new Date(),
         video_url: data.videoUrl,
-        files: files.map((x) => ({ id: x.id, name: x.name, size: x.size })),
       })
       .eq('id', oldResearchUpdate.id)
       .select('*,research:research(id,slug,is_draft)')
@@ -130,20 +88,63 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     )
     researchUpdate.research = researchUpdateAfterUpdating.data.research
 
-    broadcastCoordinationServiceServer.researchUpdate(
-      researchUpdate,
-      profile,
-      client,
-      request,
-      oldResearchUpdate,
-    )
+    try {
+      const uploadPath = `research/${researchId}/updates/${oldResearchUpdate.id}`
 
-    return Response.json({ researchUpdate }, { headers, status: 201 })
+      await updateOrReplaceImage(
+        imagesToKeepIds as string[],
+        uploadedImages,
+        updateId,
+        uploadPath,
+        client,
+      )
+
+      await updateOrReplaceFile(
+        filesToKeepIds as string[],
+        uploadedFiles,
+        updateId,
+        uploadPath,
+        client,
+      )
+
+      broadcastCoordinationServiceServer.researchUpdate(
+        researchUpdate,
+        profile,
+        client,
+        request,
+        oldResearchUpdate,
+      )
+
+      return Response.json({ researchUpdate }, { headers, status: 201 })
+    } catch (error) {
+      console.error(error)
+
+      await client
+        .from('research_updates')
+        .update({
+          title: oldResearchUpdate.title,
+          description: oldResearchUpdate.description,
+          is_draft: oldResearchUpdate.is_draft,
+          modified_at: oldResearchUpdate.modified_at,
+          video_url: oldResearchUpdate.video_url,
+        })
+        .eq('id', oldResearchUpdate.id)
+        .select('id')
+        .single()
+
+      return Response.json(
+        {},
+        {
+          status: 500,
+          statusText: 'Error after trying to update research update',
+        },
+      )
+    }
   } catch (error) {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error creating research' },
+      { status: 500, statusText: 'Error updating research update' },
     )
   }
 }
@@ -155,7 +156,7 @@ async function updateOrReplaceImage(
   path: string,
   client: SupabaseClient,
 ) {
-  let media: DBMedia[] = []
+  let images: DBMedia[] = []
 
   if (idsToKeep.length > 0) {
     const existingMedia = await client
@@ -165,7 +166,7 @@ async function updateOrReplaceImage(
       .single()
 
     if (existingMedia.data && existingMedia.data.images?.length > 0) {
-      media = existingMedia.data.images.filter((x) => idsToKeep.includes(x.id))
+      images = existingMedia.data.images.filter((x) => idsToKeep.includes(x.id))
     }
   }
 
@@ -178,11 +179,17 @@ async function updateOrReplaceImage(
     )
 
     if (result) {
-      media = [...media, ...result.media]
+      images = [...images, ...result.media]
     }
   }
 
-  return media
+  if (images && images.length > 0) {
+    await client
+      .from('research_updates')
+      .update({ images })
+      .eq('id', updateId)
+      .select()
+  }
 }
 
 async function updateOrReplaceFile(
@@ -227,7 +234,15 @@ async function updateOrReplaceFile(
     }
   }
 
-  return media
+  if (media && media.length > 0) {
+    return await client
+      .from('research_updates')
+      .update({
+        files: media,
+      })
+      .eq('id', updateId)
+      .select()
+  }
 }
 
 async function deleteResearchUpdate(request, id: number, updateId: number) {
@@ -267,7 +282,16 @@ function validateImages(images: File[]) {
   return { valid: errors.length === 0, errors }
 }
 
-async function validateRequest(request: Request, user: User | null, data: any) {
+async function validateRequest(
+  request: Request,
+  user: User | null,
+  data: any,
+  profile: DBProfile | null,
+  researchId: number,
+  updateId: number,
+  images: File[],
+  client: SupabaseClient,
+) {
   if (!user) {
     return { status: 401, statusText: 'unauthorized' }
   }
@@ -282,6 +306,29 @@ async function validateRequest(request: Request, user: User | null, data: any) {
 
   if (!data.description) {
     return { status: 400, statusText: 'description is required' }
+  }
+
+  if (!profile) {
+    return { status: 400, statusText: 'User not found' }
+  }
+
+  if (
+    !researchServiceServer.isAllowedToEditUpdate(
+      profile,
+      researchId,
+      updateId,
+      client,
+    )
+  ) {
+    return { status: 401, statusText: 'unauthorized to edit' }
+  }
+
+  const imageValidation = validateImages(images)
+  if (!imageValidation.valid) {
+    return {
+      status: 400,
+      statusText: imageValidation.errors.join(', '),
+    }
   }
 
   return { valid: true }

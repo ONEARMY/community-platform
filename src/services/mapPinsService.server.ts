@@ -40,6 +40,15 @@ export class MapPinsServiceServer {
           photo,
           type,
           username,
+          badges:profile_badges_relations(
+            profile_badges(
+              id,
+              name,
+              display_name,
+              image_url,
+              action_url
+            )
+          ),
           tags:profile_tags_relations(
             profile_tags(
               id,
@@ -55,15 +64,6 @@ export class MapPinsServiceServer {
             map_pin_name,
             description,
             is_space
-          ),
-          badges:profile_badges_relations(
-            profile_badges(
-              id,
-              name,
-              display_name,
-              image_url,
-              action_url
-            )
           )
         )
       `,

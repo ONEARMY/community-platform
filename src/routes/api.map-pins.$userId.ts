@@ -39,6 +39,22 @@ export const loader = async ({ request, params }) => {
               image_url,
               action_url
             )
+          ),
+          tags:profile_tags_relations(
+            profile_tags(
+              id,
+              name
+            )
+          ),
+          type:profile_types(
+            id,
+            name,
+            display_name,
+            image_url,
+            small_image_url,
+            map_pin_name,
+            description,
+            is_space
           )
         )
       `,

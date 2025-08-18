@@ -73,7 +73,7 @@ export const createClusterIcon = () => {
 export const createMarkerIcon = (pin: MapPin, draggable?: boolean) => {
   const icon =
     pin.moderation === 'accepted'
-      ? pin.profile!.type?.smallImageUrl
+      ? pin.profile!.type?.smallImageUrl || clusterIcon
       : AwaitingModerationHighlight
   return divIcon({
     className: `icon-marker icon-${pin.profile!.type}`,

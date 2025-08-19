@@ -1,15 +1,4 @@
-import * as utils from './utils'
-
-import {
-  errors,
-  isReceiverContactable,
-  isSameEmail,
-  isUserAllowedToMessage,
-} from './utils'
-
-import type { UserRecord } from 'firebase-admin/auth'
-import { IUserDB } from 'oa-shared/models/user'
-import { IMessageDB } from 'oa-shared/models/messages'
+import { errors, isSameEmail, isUserAllowedToMessage } from './utils'
 
 const messageDocs = []
 let isBlockedFromMessaging = false
@@ -44,37 +33,6 @@ jest.mock('../config/config', () => ({
     },
   },
 }))
-
-describe('isReceiverContactable', () => {
-  it('returns true when user is contactable', async () => {
-    jest.spyOn(utils, 'getUserAndEmail').mockResolvedValue({
-      toUser: { isContactableByPublic: true } as IUserDB,
-      toUserEmail: 'anything@email.com',
-    })
-
-    await expect(isReceiverContactable('uid')).resolves.toEqual(true)
-  })
-
-  it("returns true when contactable value isn't specified", async () => {
-    jest.spyOn(utils, 'getUserAndEmail').mockResolvedValue({
-      toUser: {} as IUserDB,
-      toUserEmail: 'anything@email.com',
-    })
-
-    await expect(isReceiverContactable('uid')).resolves.toEqual(true)
-  })
-
-  it("errors when user isn't contactable", async () => {
-    jest.spyOn(utils, 'getUserAndEmail').mockResolvedValue({
-      toUser: { isContactableByPublic: false } as IUserDB,
-      toUserEmail: 'anything@email.com',
-    })
-
-    await expect(isReceiverContactable('uid')).rejects.toThrowError(
-      errors.PROFILE_NOT_CONTACTABLE,
-    )
-  })
-})
 
 describe('isSameEmail', () => {
   it('returns true when emails provided are the same', () => {

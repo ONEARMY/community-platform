@@ -1,7 +1,7 @@
 import { ResearchItem, UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
-import { profileServiceServer } from 'src/services/profileService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
@@ -197,7 +197,7 @@ async function validateRequest(
     }
   }
 
-  const profile = await profileServiceServer.getByAuthId(user!.id, client)
+  const profile = await new ProfileServiceServer(client).getByAuthId(user!.id)
 
   if (!profile) {
     return { status: 400, statusText: 'User not found' }

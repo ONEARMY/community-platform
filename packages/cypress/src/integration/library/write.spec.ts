@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { DifficultyLevelRecord, IModerationStatus, UserRole } from 'oa-shared'
+import { DifficultyLevelRecord } from 'oa-shared'
 
 import { MOCK_DATA } from '../../data'
 import {
@@ -108,11 +108,11 @@ describe('[Library]', () => {
     const creator = MOCK_DATA.users.howto_creator
 
     const expected = {
-      _createdBy: creator.userName,
+      _createdBy: creator.username,
       _deleted: false,
       category: 'Moulds',
       description: 'After creating, the project will be deleted',
-      moderation: IModerationStatus.AWAITING_MODERATION,
+      moderation: 'awaiting-moderation',
       difficulty_level: DifficultyLevelRecord.medium,
       time: '1-2 weeks',
       title: `Create a project test ${randomId}`,
@@ -164,9 +164,6 @@ describe('[Library]', () => {
     }
 
     it('[By Authenticated]', () => {
-      // Needed for notifications as feature behind auth wrapper:
-      localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
-
       const {
         category,
         description,

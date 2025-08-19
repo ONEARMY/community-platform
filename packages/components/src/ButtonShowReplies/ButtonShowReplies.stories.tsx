@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { createFakeComments } from '../utils'
+import { createFakeCommentsSB } from '../utils'
 import { ButtonShowReplies } from './ButtonShowReplies'
 
 import type { Meta, StoryFn } from '@storybook/react-vite'
@@ -13,7 +13,7 @@ export default {
 export const Default: StoryFn<typeof ButtonShowReplies> = () => {
   const [isShowReplies, setIsShowReplies] = useState<boolean>(false)
 
-  const replies = createFakeComments(7)
+  const replies = createFakeCommentsSB(7)
 
   return (
     <ButtonShowReplies
@@ -25,7 +25,7 @@ export const Default: StoryFn<typeof ButtonShowReplies> = () => {
 }
 
 export const RepliesShowing: StoryFn<typeof ButtonShowReplies> = () => {
-  const replies = createFakeComments(6)
+  const replies = createFakeCommentsSB(6)
 
   return (
     <ButtonShowReplies
@@ -37,7 +37,7 @@ export const RepliesShowing: StoryFn<typeof ButtonShowReplies> = () => {
 }
 
 export const OneReply: StoryFn<typeof ButtonShowReplies> = () => {
-  const replies = createFakeComments(1)
+  const replies = createFakeCommentsSB(1)
 
   return (
     <ButtonShowReplies
@@ -59,7 +59,7 @@ export const NoReplies: StoryFn<typeof ButtonShowReplies> = () => {
 }
 
 export const NoCreatorName: StoryFn<typeof ButtonShowReplies> = () => {
-  const replies = createFakeComments(1)
+  const replies = createFakeCommentsSB(1)
 
   return (
     <ButtonShowReplies

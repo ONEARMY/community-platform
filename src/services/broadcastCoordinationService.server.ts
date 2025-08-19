@@ -1,5 +1,4 @@
 import { discordServiceServer } from './discordService.server'
-import { notificationsService } from './notificationsService.server'
 import { notificationsSupabaseServiceServer } from './notificationSupabaseService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -21,12 +20,6 @@ function researchUpdate(
   }
 
   if (beforeCheck && update.isDraft === false && !!update.research) {
-    notificationsService.sendResearchUpdateNotification(
-      client,
-      research,
-      update,
-      profile as DBProfile,
-    )
     notificationsSupabaseServiceServer.createNotificationsResearchUpdate(
       research,
       update,

@@ -8,9 +8,18 @@ export const library: Project[] = [
     author: {
       id: 4,
       displayName: 'test',
-      isSupporter: false,
-      isVerified: true,
-      photoUrl: '',
+      badges: [
+        {
+          id: 1,
+          name: 'pro',
+          displayName: 'PRO',
+          imageUrl: '',
+        },
+      ],
+      photo: {
+        id: '',
+        publicUrl: '',
+      },
       username: 'test',
     },
     tags: [
@@ -301,9 +310,18 @@ export const library: Project[] = [
     author: {
       id: 5,
       displayName: 'test',
-      isSupporter: false,
-      isVerified: true,
-      photoUrl: '',
+      badges: [
+        {
+          id: 1,
+          name: 'pro',
+          displayName: 'PRO',
+          imageUrl: '',
+        },
+      ],
+      photo: {
+        id: '',
+        publicUrl: '',
+      },
       username: 'test',
     },
     tags: [
@@ -556,9 +574,18 @@ export const library: Project[] = [
     author: {
       id: 4,
       displayName: 'test',
-      isSupporter: false,
-      isVerified: true,
-      photoUrl: '',
+      badges: [
+        {
+          id: 1,
+          name: 'pro',
+          displayName: 'PRO',
+          imageUrl: '',
+        },
+      ],
+      photo: {
+        id: '',
+        publicUrl: '',
+      },
       username: 'test',
     },
     tags: [
@@ -598,9 +625,18 @@ export const library: Project[] = [
     author: {
       id: 2,
       displayName: 'test',
-      isSupporter: false,
-      isVerified: true,
-      photoUrl: '',
+      badges: [
+        {
+          id: 1,
+          name: 'pro',
+          displayName: 'PRO',
+          imageUrl: '',
+        },
+      ],
+      photo: {
+        id: '',
+        publicUrl: '',
+      },
       username: 'test',
     },
     deleted: false,
@@ -661,9 +697,18 @@ export const library: Project[] = [
     author: {
       id: 1,
       displayName: 'test',
-      isSupporter: false,
-      isVerified: true,
-      photoUrl: '',
+      badges: [
+        {
+          id: 1,
+          name: 'pro',
+          displayName: 'PRO',
+          imageUrl: '',
+        },
+      ],
+      photo: {
+        id: '',
+        publicUrl: '',
+      },
       username: 'test',
     },
     deleted: true,

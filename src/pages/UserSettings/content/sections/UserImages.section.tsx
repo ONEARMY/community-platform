@@ -1,20 +1,26 @@
 import { Field } from 'react-final-form'
-import { FieldArray } from 'react-final-form-arrays'
-import { ImageInputField } from 'src/common/Form/ImageInput.field'
+import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components'
+import { FieldContainer } from 'src/common/Form/FieldContainer'
+import { ImageInputFieldV2 } from 'src/common/Form/ImageInputFieldV2'
 import { fields, headings } from 'src/pages/UserSettings/labels'
-import { required } from 'src/utils/validators'
-import { Box, Flex, Heading, Text } from 'theme-ui'
+import { Box, Flex, Heading, Image as ImageComponent, Text } from 'theme-ui'
 
-import type { IUploadedFileMeta, IUser } from 'oa-shared'
+import type { FormApi } from 'final-form'
+import type { ProfileFormData } from 'oa-shared'
 
 interface IProps {
-  values: IUser
+  values: ProfileFormData
   isMemberProfile: boolean
+  form: FormApi<ProfileFormData, Partial<ProfileFormData>>
 }
 
-export const UserImagesSection = ({ isMemberProfile, values }: IProps) => {
-  const { coverImages, userImage } = values
-  const isRequired = { validate: required }
+export const UserImagesSection = ({
+  isMemberProfile,
+  values,
+  form,
+}: IProps) => {
+  const numberOfImageInputsAvailable =
+    4 - (values.existingCoverImages?.filter((x) => !!x)?.length || 0)
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: 3 }}>
@@ -29,79 +35,118 @@ export const UserImagesSection = ({ isMemberProfile, values }: IProps) => {
         <Text variant="paragraph">{fields.userImage.description}</Text>
 
         <Box
-          data-testid="userImage"
+          data-testid="photo"
           sx={{
             width: '120px',
             height: '120px',
           }}
         >
-          <Field
-            component={ImageInputField}
-            data-cy="userImage"
-            hasText={false}
-            initialValue={userImage}
-            name="userImage"
-            validateFields={[]}
-            imageDisplaySx={{
-              borderRadius: '100%',
-              objectFit: 'cover',
-              width: '120px',
-              height: '120px',
-            }}
-            {...(isMemberProfile && isRequired)}
-          />
+          {!values.existingPhoto ? (
+            <Field
+              hasText={false}
+              name="photo"
+              render={({ input, meta }) => {
+                return (
+                  <ImageInputFieldV2
+                    dataCy="userImage"
+                    input={input}
+                    meta={meta}
+                    onFilesChange={(file) => input.onChange(file)}
+                  />
+                )
+              }}
+            />
+          ) : (
+            <ImageInputWrapper hasUploadedImg={true}>
+              <ImageComponent src={values.existingPhoto?.publicUrl} />
+              <ImageInputDeleteImage
+                onClick={() => {
+                  form.change('existingPhoto', undefined)
+                }}
+              />
+            </ImageInputWrapper>
+          )}
         </Box>
       </Flex>
 
       {!isMemberProfile && (
-        <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+        <Flex data-testid="coverImage" sx={{ flexDirection: 'column', gap: 1 }}>
           <Heading variant="subHeading">{`${fields.coverImages.title} *`}</Heading>
           <Text variant="paragraph">{fields.coverImages.description}</Text>
 
-          <FieldArray
-            name="coverImages"
-            initialValue={coverImages as IUploadedFileMeta[]}
-          >
-            {({ fields, meta }) => {
-              return (
-                <>
-                  {meta.error && (
-                    <Text sx={{ fontSize: 1, color: 'error' }}>
-                      {meta.error}
-                    </Text>
-                  )}
-
-                  <Flex
-                    sx={{
-                      flexDirection: 'row',
-                      flexWrap: 'wrap',
-                      gap: 2,
-                    }}
-                  >
-                    {fields.map((name, index: number) => (
-                      <Box
-                        key={name}
-                        sx={{
-                          height: '100px',
-                          width: '150px',
+          <Flex>
+            <Field name="existingCoverImages">
+              {({ input }) => (
+                <Flex>
+                  {values.existingCoverImages?.map((image, index) => (
+                    <Box
+                      sx={{
+                        width: '150px',
+                        height: '100px',
+                        marginRight: '10px',
+                      }}
+                      key={`existing-image-${index}`}
+                      data-cy={`existing-image-${index}`}
+                    >
+                      <FieldContainer
+                        style={{
+                          height: '100%',
+                          width: '100%',
+                          overflow: 'hidden',
                         }}
-                        data-cy="cover-image"
-                        data-testid="cover-image"
                       >
-                        <Field
-                          hasText={false}
-                          name={name}
-                          validateFields={[]}
-                          data-cy={`coverImages-${index}`}
-                          component={ImageInputField}
+                        <ImageInputWrapper hasUploadedImg={true}>
+                          <ImageComponent src={image.publicUrl} />
+                          <Field
+                            name={`existingCoverImages[${index}]`}
+                            render={() => (
+                              <ImageInputDeleteImage
+                                onClick={() => {
+                                  const currentImages = input.value || []
+                                  const updatedImages = currentImages.filter(
+                                    (_, i) => i !== index,
+                                  )
+                                  input.onChange(updatedImages)
+                                }}
+                              />
+                            )}
+                          />
+                        </ImageInputWrapper>
+                      </FieldContainer>
+                    </Box>
+                  ))}
+                </Flex>
+              )}
+            </Field>
+
+            <Flex>
+              {[...Array(numberOfImageInputsAvailable)].map((_, i) => (
+                <Box
+                  key={`coverImages${i}`}
+                  sx={{
+                    width: '150px',
+                    height: '100px',
+                    marginRight: '10px',
+                  }}
+                >
+                  <Field
+                    hasText={false}
+                    name={`coverImages[${i}]`}
+                    render={({ input, meta }) => {
+                      return (
+                        <ImageInputFieldV2
+                          dataCy={`coverImages-${i}`}
+                          input={input}
+                          meta={meta}
+                          onFilesChange={(file) => input.onChange(file)}
                         />
-                      </Box>
-                    ))}
-                  </Flex>
-                </>
-              )
-            }}
-          </FieldArray>
+                      )
+                    }}
+                  />
+                </Box>
+              ))}
+            </Flex>
+          </Flex>
         </Flex>
       )}
     </Flex>

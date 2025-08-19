@@ -1,5 +1,4 @@
 import logo from '../../assets/images/precious-plastic-logo-official.svg'
-import badge from '../../assets/images/themes/precious-plastic/avatar_member_sm.svg'
 import favicon from '../../assets/images/themes/precious-plastic/favicon.ico'
 import { styles } from './styles'
 
@@ -12,7 +11,5 @@ export const Theme: PlatformTheme = {
     'A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste.',
   logo,
   favicon,
-  badge,
-  avatar: '',
   styles,
 }

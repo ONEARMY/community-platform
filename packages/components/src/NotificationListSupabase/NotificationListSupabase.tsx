@@ -40,7 +40,7 @@ export const NotificationListSupabase = (props: IProps) => {
       <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
         <Heading sx={{ fontSize: 6 }}>Notifications</Heading>
         <ButtonIcon
-          data-cy="MapFilterList-CloseButton"
+          data-cy="NotificationListSupabase-CloseButton"
           icon="close"
           onClick={modalDismiss}
           sx={{ border: 'none', paddingLeft: 2, paddingRight: 3 }}
@@ -97,6 +97,7 @@ export const NotificationListSupabase = (props: IProps) => {
           {anyUnread && (
             <Button
               data-testid="NotificationListSupabase-MarkAllRead"
+              data-cy="NotificationListSupabase-MarkAllRead"
               onClick={markAllRead}
               disabled={isUpdatingNotifications}
               icon="doubleTick"

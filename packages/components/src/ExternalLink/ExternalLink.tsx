@@ -9,5 +9,16 @@ import type { LinkProps } from 'theme-ui'
  * https://pointjupiter.com/what-noopener-noreferrer-nofollow-explained/
  */
 export const ExternalLink = (props: LinkProps) => {
-  return <Link {...props} target="_blank" rel="noopener noreferrer"></Link>
+  return (
+    <Link
+      {...props}
+      sx={{
+        ':hover': {
+          textDecoration: 'underline',
+        },
+      }}
+      target="_blank"
+      rel="noopener noreferrer"
+    ></Link>
+  )
 }

@@ -10,8 +10,8 @@ import type { IProps } from './MemberHistory'
 describe('MemberHistory', () => {
   it('renders member since and last active', () => {
     const props: IProps = {
-      memberSince: '2020-01-01',
-      lastActive: '2023-01-01',
+      memberSince: new Date(2020, 0, 1),
+      lastActive: new Date(2023, 0, 1),
     }
     const { getByText } = render(<MemberHistory {...props} />)
     expect(getByText('Member since 2020')).toBeInTheDocument()
@@ -20,8 +20,8 @@ describe('MemberHistory', () => {
 
   it('renders only since details if given weird last active data', () => {
     const props: IProps = {
-      memberSince: '2020-01-01',
-      lastActive: '197565b9553',
+      memberSince: new Date(2020, 0, 1),
+      lastActive: new Date(2020, 0, 1),
     }
     const { getByText, queryAllByText } = render(<MemberHistory {...props} />)
     expect(getByText('Member since 2020')).toBeInTheDocument()

@@ -6,11 +6,12 @@ import defaultProfileImage from '../../assets/images/default_member.svg'
 type CommentAvatarProps = {
   displayName?: string
   isCommentAuthor?: boolean
-  photoUrl?: string | null
+  photo?: string | null
 }
 
 export const CommentAvatar = (props: CommentAvatarProps) => {
-  const { displayName, isCommentAuthor = false, photoUrl } = props
+  const { displayName, isCommentAuthor = false, photo } = props
+
   const alt = displayName
     ? `Avatar of ${displayName}`
     : 'Avatar of comment author'
@@ -35,7 +36,7 @@ export const CommentAvatar = (props: CommentAvatarProps) => {
       )}
       <Avatar
         data-cy="commentAvatarImage"
-        src={photoUrl ?? defaultProfileImage}
+        src={photo ?? defaultProfileImage}
         sx={{
           objectFit: 'cover',
           width: ['30px', '50px'],

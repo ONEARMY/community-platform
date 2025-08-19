@@ -1,25 +1,13 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Provider } from 'mobx-react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'
 import { FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
 
 import { contact } from '../labels'
 import { UserContactForm } from './UserContactForm'
 
-vi.mock('src/common/hooks/useCommonStores', () => {
-  return {
-    useCommonStores: () => ({
-      stores: {
-        userStore: {
-          getUserEmail: () => vi.fn().mockReturnValue('Bob@email.com'),
-          activeUser: () => vi.fn().mockReturnValue(true),
-        },
-      },
-    }),
-  }
-})
+import type { Profile } from 'oa-shared'
 
 vi.mock('src/services/messageService', () => {
   return {
@@ -31,15 +19,15 @@ vi.mock('src/services/messageService', () => {
 })
 
 describe('UserContactForm', () => {
-  const profileUser = FactoryUser({ isContactableByPublic: true })
+  const profileUser = FactoryUser({ isContactable: true })
 
   it('sends an message to the store', async () => {
     const user = userEvent.setup()
 
     render(
-      <Provider {...useCommonStores().stores}>
-        <UserContactForm user={profileUser} />
-      </Provider>,
+      <ProfileStoreProvider>
+        <UserContactForm user={profileUser as Profile} />
+      </ProfileStoreProvider>,
     )
 
     await screen.findByText(`Send a message to ${profileUser.displayName}`)
@@ -56,12 +44,12 @@ describe('UserContactForm', () => {
   })
 
   it('renders nothing if not profile is not contactable', () => {
-    const uncontactable = FactoryUser({ isContactableByPublic: false })
+    const uncontactable = FactoryUser({ isContactable: false })
 
     const { container } = render(
-      <Provider {...useCommonStores().stores}>
-        <UserContactForm user={uncontactable} />
-      </Provider>,
+      <ProfileStoreProvider>
+        <UserContactForm user={uncontactable as Profile} />
+      </ProfileStoreProvider>,
     )
 
     expect(container.innerHTML).toBe('')

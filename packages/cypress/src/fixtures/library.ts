@@ -1,5 +1,5 @@
 import dateformat from 'dateformat'
-import { DifficultyLevel, IModerationStatus } from 'oa-shared'
+import { DifficultyLevel, Moderation } from 'oa-shared'
 
 import { generateAlphaNumeric } from '../utils/TestUtils'
 
@@ -44,7 +44,7 @@ export const library: ILibrary.DB = {
       _animationKey: 'unique1',
     },
   ],
-  moderation: IModerationStatus.ACCEPTED,
+  moderation: Moderation.ACCEPTED,
   tags: {},
   category: {
     _id: 'categoryNtr9asrGucgt7JKdRpc',

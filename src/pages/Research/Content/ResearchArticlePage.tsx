@@ -11,7 +11,6 @@ import {
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import {
   getResearchCommentId,
@@ -19,13 +18,14 @@ import {
 } from 'src/pages/Research/Content/helper'
 import { subscribersService } from 'src/services/subscribersService'
 import { usefulService } from 'src/services/usefulService'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { hasAdminRights } from 'src/utils/helpers'
 import { Box, Flex } from 'theme-ui'
 
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 
-import type { IUser, ResearchItem } from 'oa-shared'
+import type { ResearchItem } from 'oa-shared'
 
 interface IProps {
   research: ResearchItem
@@ -33,8 +33,7 @@ interface IProps {
 
 export const ResearchArticlePage = observer(({ research }: IProps) => {
   const location = useLocation()
-  const { userStore } = useCommonStores().stores
-  const loggedInUser = userStore.activeUser
+  const { profile: activeUser } = useProfileStore()
   const [subscribed, setSubscribed] = useState<boolean>(false)
   const [voted, setVoted] = useState<boolean>(false)
   const [subscribersCount, setSubscribersCount] = useState<number>(
@@ -46,7 +45,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
     vote: 'add' | 'delete',
     eventCategory = 'Research',
   ) => {
-    if (!loggedInUser?.userName) {
+    if (!activeUser) {
       return
     }
 
@@ -84,11 +83,11 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
       setVoted(voted)
     }
 
-    if (loggedInUser) {
+    if (activeUser) {
       getSubscribed()
       getVoted()
     }
-  }, [loggedInUser, research])
+  }, [activeUser, research])
 
   const scrollIntoRelevantSection = () => {
     if (getResearchCommentId(location.hash) === '') return
@@ -103,7 +102,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
   }, [location.hash])
 
   const onFollowClick = async (value: 'add' | 'remove') => {
-    if (!loggedInUser?._id) {
+    if (!activeUser) {
       return
     }
     if (value === 'add') {
@@ -126,22 +125,22 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
 
   const isEditable = useMemo(() => {
     return (
-      !!loggedInUser &&
-      (hasAdminRights(loggedInUser as IUser) ||
-        research.author?.username === loggedInUser.userName ||
+      !!activeUser &&
+      (hasAdminRights(activeUser) ||
+        research.author?.username === activeUser.username ||
         research.collaborators
           ?.map((c) => c.username)
-          .includes(loggedInUser.userName))
+          .includes(activeUser.username))
     )
-  }, [loggedInUser, research.author])
+  }, [activeUser, research.author])
 
   const isDeletable = useMemo(() => {
     return (
-      !!loggedInUser &&
-      (hasAdminRights(loggedInUser as IUser) ||
-        research.author?.username === loggedInUser.userName)
+      !!activeUser &&
+      (hasAdminRights(activeUser) ||
+        research.author?.username === activeUser.username)
     )
-  }, [loggedInUser, research.author])
+  }, [activeUser, research.author])
 
   const sortedUpdates = useMemo(() => {
     return research?.updates?.toSorted(
@@ -157,7 +156,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
         research={research}
         key={research.id}
         votedUsefulCount={usefulCount}
-        loggedInUser={loggedInUser as IUser}
+        activeUser={activeUser}
         isEditable={isEditable}
         isDeletable={isDeletable}
         hasUserVotedUseful={voted}
@@ -166,11 +165,6 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
           onUsefulClick(voted ? 'delete' : 'add', 'ResearchDescription')
         }
         onFollowClick={() => onFollowClick(subscribed ? 'remove' : 'add')}
-        contributors={research.collaborators?.map((x) => ({
-          userName: x.username,
-          isVerified: x.isVerified,
-          countryCode: x.country,
-        }))}
         subscribersCount={subscribersCount}
         commentsCount={research.commentCount}
         updatesCount={research.updates.length}
@@ -209,7 +203,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
                   contributors={research.collaborators}
                 >
                   <UsefulStatsButton
-                    isLoggedIn={!!loggedInUser}
+                    isLoggedIn={!!activeUser}
                     votedUsefulCount={usefulCount}
                     hasUserVotedUseful={voted}
                     onUsefulClick={() =>
@@ -220,7 +214,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
                     }
                   />
                   <FollowButton
-                    isLoggedIn={!!loggedInUser}
+                    isLoggedIn={!!activeUser}
                     hasUserSubscribed={subscribed}
                     onFollowClick={() =>
                       onFollowClick(subscribed ? 'remove' : 'add')

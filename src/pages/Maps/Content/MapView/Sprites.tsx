@@ -1,14 +1,11 @@
 import { useEffect } from 'react'
-import L from 'leaflet'
-import { IModerationStatus } from 'oa-shared'
+import { divIcon, point } from 'leaflet'
 import clusterIcon from 'src/assets/icons/map-cluster.svg'
 import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg'
-import { logger } from 'src/logger'
-import Workspace from 'src/pages/User/workspace/Workspace'
 import { useThemeUI } from 'theme-ui'
 
 import type { MarkerCluster } from 'leaflet'
-import type { IMapPin } from 'oa-shared'
+import type { MapPin } from 'oa-shared'
 
 import './sprites.css'
 
@@ -56,7 +53,7 @@ export const createClusterIcon = () => {
     const themeBaseColorForRgba: RegExpExecArray | null =
       /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(theme.colors.accent.base)
 
-    return L.divIcon({
+    return divIcon({
       html: `${icon}<span class="icon-cluster-text" style="
         background: ${theme.colors.accent.base};
         font-size: ${fontSize}px;
@@ -68,23 +65,20 @@ export const createClusterIcon = () => {
           ${parseInt(themeBaseColorForRgba![3], 16)}, 0.5);
         ">${clusterChildCount}</span>`,
       className: className.join(' '),
-      iconSize: L.point(iconSize, iconSize, true),
+      iconSize: point(iconSize, iconSize, true),
     })
   }
 }
 
-export const createMarkerIcon = (pin: IMapPin, draggable?: boolean) => {
+export const createMarkerIcon = (pin: MapPin, draggable?: boolean) => {
   const icon =
-    pin.moderation === IModerationStatus.ACCEPTED
-      ? Workspace.findWorkspaceBadge(pin.type, true, pin.verified)
+    pin.moderation === 'accepted'
+      ? pin.profile!.type?.smallImageUrl || clusterIcon
       : AwaitingModerationHighlight
-  if (!pin.type) {
-    logger.debug('NO TYPE', pin)
-  }
-  return L.divIcon({
-    className: `icon-marker icon-${pin.type}`,
-    html: `<img data-cy="pin-${pin._id}" src="${icon}" style="${draggable ? 'cursor: grab' : ''}" />`,
-    iconSize: L.point(38, 38, true),
+  return divIcon({
+    className: `icon-marker icon-${pin.profile!.type}`,
+    html: `<img data-cy="pin-${pin.profile.username}" src="${icon}" style="${draggable ? 'cursor: grab' : ''}" />`,
+    iconSize: point(38, 38, true),
   })
 }
 

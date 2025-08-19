@@ -12,15 +12,6 @@ describe('UserStatistics', () => {
     render(<Default {...(Default.args as UserStatisticsProps)} />)
   })
 
-  it('renders verified icon when isVerified is true', () => {
-    const { getByTestId } = render(
-      <Default {...(Default.args as UserStatisticsProps)} />,
-    )
-    const verifiedIcon = getByTestId('verified-stat')
-
-    expect(verifiedIcon).toBeInTheDocument()
-  })
-
   it('renders location link when country and userName are provided', () => {
     const { getByTestId } = render(
       <Default {...(Default.args as UserStatisticsProps)} />,
@@ -46,15 +37,6 @@ describe('UserStatistics', () => {
     const researchLink = getByTestId('research-link')
 
     expect(researchLink.getAttribute('href')).toBe('/research?q=Test User')
-  })
-
-  it('renders supporter icon when isSupporter is true', () => {
-    const { getByTestId } = render(
-      <Default {...(Default.args as UserStatisticsProps)} />,
-    )
-    const supporterLink = getByTestId('supporter-stat')
-
-    expect(supporterLink).toBeInTheDocument()
   })
 
   it('renders useful count when usefulCount is provided', () => {

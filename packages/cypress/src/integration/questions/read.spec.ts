@@ -69,7 +69,7 @@ describe('[Questions]', () => {
         'content',
         description,
       )
-      cy.step('Links in description are clickable')
+      cy.step('Website is clickable')
       cy.contains('a', 'https://www.onearmy.earth/')
 
       cy.step('Breadcrumbs work')

@@ -23,7 +23,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
     const userData = await client
       .from('profiles')
-      .select('id')
+      .select('id,is_contactable')
       .eq('id', profileId)
       .eq('created_at', decoded.profileCreatedAt)
       .maybeSingle()
@@ -39,8 +39,13 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       .eq('user_id', userId)
       .maybeSingle()
 
+    const is_contactable = userData.data?.is_contactable
     const preferences = preferencesData.data || DEFAULT_NOTIFICATION_PREFERENCES
-    return Response.json({ preferences }, { headers, status: 200 })
+
+    return Response.json(
+      { preferences, is_contactable },
+      { headers, status: 200 },
+    )
   } catch (error) {
     console.error(error)
     return Response.json({ error }, { headers, status: 500 })

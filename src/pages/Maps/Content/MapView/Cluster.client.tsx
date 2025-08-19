@@ -4,19 +4,17 @@ import MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import { createClusterIcon, createMarkerIcon } from './Sprites'
 
-import type { IMapPin } from 'oa-shared'
+import type { MapPin } from 'oa-shared'
 
 import 'react-leaflet-markercluster/dist/styles.min.css'
 
 interface IProps {
-  pins: Array<IMapPin>
-  onPinClick: (pin: IMapPin) => void
-  prefix?: string // Temporarily needed while two maps are rendered
+  pins: MapPin[]
+  onPinClick: (pin: MapPin) => void
 }
 
 export const Clusters: React.FunctionComponent<IProps> = ({
   pins,
-  prefix,
   onPinClick,
 }) => {
   /**
@@ -34,11 +32,11 @@ export const Clusters: React.FunctionComponent<IProps> = ({
       maxClusterRadius={54}
     >
       {pins
-        .filter(({ location }) => Boolean(location))
+        .filter(({ lat }) => Boolean(lat))
         .map((pin) => (
           <Marker
-            key={`${prefix}-${pin._id}`}
-            position={[pin.location.lat, pin.location.lng]}
+            key={pin.id}
+            position={[pin.lat, pin.lng]}
             icon={createMarkerIcon(pin)}
             onClick={() => {
               onPinClick(pin)

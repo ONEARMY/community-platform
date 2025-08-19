@@ -12,7 +12,11 @@ import {
   UsefulStatsButton,
   Username,
 } from 'oa-components'
-import { type IUser, type ResearchItem, ResearchStatusRecord } from 'oa-shared'
+import {
+  type Profile,
+  type ResearchItem,
+  ResearchStatusRecord,
+} from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { trackEvent } from 'src/common/Analytics'
@@ -29,7 +33,7 @@ interface IProps {
   research: ResearchItem
   isEditable: boolean
   isDeletable: boolean
-  loggedInUser: IUser | undefined
+  activeUser: Profile | undefined
   votedUsefulCount?: number
   hasUserVotedUseful: boolean
   hasUserSubscribed: boolean
@@ -38,19 +42,18 @@ interface IProps {
   updatesCount: number
   onUsefulClick: () => Promise<void>
   onFollowClick: () => void
-  contributors?: { userName: string; isVerified: boolean }[]
 }
 
-const ResearchDescription = ({
-  research,
-  isEditable,
-  isDeletable,
-  subscribersCount,
-  votedUsefulCount,
-  commentsCount,
-  updatesCount,
-  ...props
-}: IProps) => {
+const ResearchDescription = (props: IProps) => {
+  const {
+    research,
+    isEditable,
+    isDeletable,
+    subscribersCount,
+    votedUsefulCount,
+    commentsCount,
+    updatesCount,
+  } = props
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const navigate = useNavigate()
 
@@ -74,7 +77,9 @@ const ResearchDescription = ({
     const dates = [
       research?.modifiedAt,
       ...(research?.updates?.map((update) => update?.modifiedAt) || []),
-    ].filter((date): date is Date => date !== null)
+    ]
+      .filter((date): date is Date => date !== null)
+      .map((date) => new Date(date))
 
     return dates.length > 0 ? max(dates) : new Date()
   }, [research])
@@ -104,12 +109,12 @@ const ResearchDescription = ({
                     <UsefulStatsButton
                       votedUsefulCount={votedUsefulCount}
                       hasUserVotedUseful={props.hasUserVotedUseful}
-                      isLoggedIn={!!props.loggedInUser}
+                      isLoggedIn={!!props.activeUser}
                       onUsefulClick={props.onUsefulClick}
                     />
                     <FollowButton
                       hasUserSubscribed={props.hasUserSubscribed}
-                      isLoggedIn={!!props.loggedInUser}
+                      isLoggedIn={!!props.activeUser}
                       onFollowClick={props.onFollowClick}
                       tooltipFollow="Follow to be notified about new updates"
                       tooltipUnfollow="Unfollow to stop be notified about new updates"
@@ -180,15 +185,16 @@ const ResearchDescription = ({
           </Flex>
           <Box sx={{ marginX: 2 }}>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
-              <UserNameTag
-                userName={research.author?.username || ''}
-                createdAt={research.createdAt}
-                modifiedAt={lastUpdated.toISOString()}
-                countryCode={research.author?.country}
-                action="Started"
-              />
+              {research.author && (
+                <UserNameTag
+                  author={research.author}
+                  createdAt={research.createdAt}
+                  modifiedAt={lastUpdated.toISOString()}
+                  action="Started"
+                />
+              )}
 
-              {props.contributors && props?.contributors.length ? (
+              {research.collaborators && research.collaborators.length ? (
                 <Flex
                   sx={{
                     alignItems: 'flex-start',
@@ -209,7 +215,7 @@ const ResearchDescription = ({
                       With contributions from
                     </Text>
                   </Flex>
-                  {props.contributors.map((contributor, key) => (
+                  {research.collaborators.map((contributor, key) => (
                     <Username key={key} user={contributor} />
                   ))}
                 </Flex>

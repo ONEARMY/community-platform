@@ -5,8 +5,7 @@ import { faker } from '@faker-js/faker'
 import { createRoutesFromElements, Route } from '@remix-run/react'
 import { act, render, waitFor, within } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
-import { Provider } from 'mobx-react'
-import { UserRole } from 'oa-shared'
+import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'
 import {
   FactoryResearchItem,
   FactoryResearchItemUpdate,
@@ -21,22 +20,14 @@ import type { Author, ResearchItem } from 'oa-shared'
 
 const Theme = testingThemeStyles
 
-const activeUser = FactoryUser({
-  userRoles: [UserRole.BETA_TESTER],
-})
-
 const mockUser = FactoryUser({ country: 'AF' })
 
-vi.mock('src/common/hooks/useCommonStores', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  __esModule: true,
-  useCommonStores: () => ({
-    stores: {
-      userStore: {
-        getUserByUsername: vi.fn().mockResolvedValue(mockUser),
-      },
-    },
-  }),
+vi.mock('src/stores/Profile/profile.store', () => ({
+  useProfileStore: vi.fn(() => ({
+    profile: mockUser,
+  })),
+  ProfileStoreProvider: ({ children }: { children: React.ReactNode }) =>
+    children,
 }))
 
 vi.mock('src/stores/Research/research.store')
@@ -279,14 +270,10 @@ const getWrapper = (research: ResearchItem) => {
   )
 
   return render(
-    <Provider
-      userStore={{
-        user: activeUser,
-      }}
-    >
+    <ProfileStoreProvider>
       <ThemeProvider theme={Theme}>
         <RouterProvider router={router} />
       </ThemeProvider>
-    </Provider>,
+    </ProfileStoreProvider>,
   )
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useContext } from 'react'
 import { ExternalLink as Link } from 'oa-components'
 import { Box } from 'theme-ui'
 
@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const MenuMobileExternalLink = ({ content, href }: IProps) => {
-  const mobileMenuContext = React.useContext(MobileMenuContext)
+  const mobileMenuContext = useContext(MobileMenuContext)
   const id = content.toLowerCase().replace(' ', '-')
 
   return (

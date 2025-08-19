@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { Form } from 'react-final-form'
 import { useLocation } from '@remix-run/react'
 import { observer } from 'mobx-react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { UserContactError } from 'src/pages/User/contact'
 import { form } from 'src/pages/UserSettings/labels'
+import { profileService } from 'src/services/profileService'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Flex, Heading, Text } from 'theme-ui'
 
 import {
@@ -15,7 +16,7 @@ import {
 import { ImpactYearField } from '../fields/ImpactYear.field'
 import { ImpactYearDisplayField } from '../fields/ImpactYearDisplay.field'
 
-import type { IImpactYear, IImpactYearFieldList } from 'oa-shared'
+import type { IImpactDataField, IImpactYear } from 'oa-shared'
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
@@ -24,7 +25,7 @@ interface Props {
 }
 
 export const ImpactYearSection = observer(({ year }: Props) => {
-  const [impact, setImpact] = useState<IImpactYearFieldList | undefined>(
+  const [impact, setImpact] = useState<IImpactDataField[] | undefined>(
     undefined,
   )
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
@@ -32,7 +33,7 @@ export const ImpactYearSection = observer(({ year }: Props) => {
 
   const impactDivRef = useRef<HTMLInputElement>(null)
   const { hash } = useLocation()
-  const { userStore } = useCommonStores().stores
+  const { profile } = useProfileStore()
 
   const formId = `impactForm-${year}`
   const sx = {
@@ -46,7 +47,7 @@ export const ImpactYearSection = observer(({ year }: Props) => {
 
   useEffect(() => {
     const fetchImpact = () => {
-      const impact = userStore.activeUser?.impact
+      const impact = profile?.impact
       if (impact && impact[year]) {
         setImpact(impact[year])
       }
@@ -78,11 +79,10 @@ export const ImpactYearSection = observer(({ year }: Props) => {
     setSubmitResults(null)
     try {
       const fields = transformImpactInputs(values)
-      const sortedFields = sortImpactYearDisplayFields(fields)
-      await userStore.updateUserImpact(fields, year)
+      await profileService.updateImpact(year, fields)
       setSubmitResults({ type: 'success', message: form.saveSuccess })
       setIsEditMode(false)
-      setImpact(sortedFields)
+      setImpact(sortImpactYearDisplayFields(fields))
     } catch (error) {
       setSubmitResults({ type: 'error', message: error.message })
     }

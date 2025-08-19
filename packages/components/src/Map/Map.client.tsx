@@ -14,10 +14,10 @@ export interface IProps extends MapProps {
 }
 
 export const Map = forwardRef((props: IProps, ref: Ref<LeafletMap>) => {
-  const { children, setZoom } = props
-
   const onViewportChanged = (viewport: Viewport) => {
-    viewport.zoom && setZoom(viewport.zoom)
+    if (viewport.zoom) {
+      props.setZoom(viewport.zoom)
+    }
   }
 
   return (
@@ -27,9 +27,9 @@ export const Map = forwardRef((props: IProps, ref: Ref<LeafletMap>) => {
         url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
       />
 
-      {children}
+      {props.children}
     </LeafletMap>
   )
 })
 
-Map.displayName = 'Map'
+Map.displayName = 'Map' // Is this needed?

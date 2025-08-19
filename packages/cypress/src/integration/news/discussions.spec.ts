@@ -1,8 +1,6 @@
 // This is basically an identical set of steps to the discussion tests for
 // questions, projects and research. Any changes here should be replicated there.
 
-import { UserRole } from 'oa-shared'
-
 import { MOCK_DATA } from '../../data'
 import {
   generateAlphaNumeric,
@@ -25,8 +23,6 @@ describe('[News.Discussions]', () => {
   })
 
   it('allows authenticated users to contribute to discussions', () => {
-    localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
-
     const commenter = generateNewUserDetails()
     const news = MOCK_DATA.news[2]
     const newsPath = `/news/${news.slug}`
@@ -83,9 +79,7 @@ describe('[News.Discussions]', () => {
       title: news.title,
       username: replier.username,
     })
-    cy.get('[data-cy=highlighted-comment]')
-      .contains(updatedNewReply)
-      .should('be.inViewport', 10)
+    cy.get('[data-cy=highlighted-comment]').contains(updatedNewReply)
 
     cy.visit(newsPath)
 

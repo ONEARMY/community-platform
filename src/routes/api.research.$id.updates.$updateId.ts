@@ -1,7 +1,7 @@
 import { ResearchUpdate } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server'
-import { profileServiceServer } from 'src/services/profileService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
@@ -47,10 +47,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { status, statusText })
     }
 
-    const profile = await profileServiceServer.getByAuthId(
-      user?.id || '',
-      client,
-    )
+    const profileService = new ProfileServiceServer(client)
+    const profile = await profileService.getByAuthId(user?.id || '')
 
     if (
       !researchServiceServer.isAllowedToEditUpdate(
@@ -237,7 +235,8 @@ async function deleteResearchUpdate(request, id: number, updateId: number) {
     data: { user },
   } = await client.auth.getUser()
 
-  const profile = await profileServiceServer.getByAuthId(user?.id || '', client)
+  const profileService = new ProfileServiceServer(client)
+  const profile = await profileService.getByAuthId(user?.id || '')
 
   if (
     !researchServiceServer.isAllowedToEditUpdate(profile, id, updateId, client)

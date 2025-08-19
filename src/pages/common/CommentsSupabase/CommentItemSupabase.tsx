@@ -140,10 +140,12 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
               hideSubscribeIcon
             />
           }
-          onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}
-          hasUserVotedUseful={voted}
-          votedUsefulCount={usefulCount}
-          isLoggedIn={!!activeUser}
+          usefulButtonConfig={{
+            onUsefulClick: () => handleUsefulClick(voted ? 'delete' : 'add'),
+            hasUserVotedUseful: voted,
+            votedUsefulCount: usefulCount,
+            isLoggedIn: !!activeUser,
+          }}
         />
 
         <Flex

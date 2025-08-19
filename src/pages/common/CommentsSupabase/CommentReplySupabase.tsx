@@ -116,12 +116,13 @@ export const CommentReply = observer(
                 comment={comment}
                 setShowDeleteModal={setShowDeleteModal}
                 setShowEditModal={setShowEditModal}
-                onUsefulClick={() =>
-                  handleUsefulClick(voted ? 'delete' : 'add')
-                }
-                hasUserVotedUseful={voted}
-                votedUsefulCount={usefulCount}
-                isLoggedIn={!!loggedInUser}
+                usefulButtonConfig={{
+                  onUsefulClick: () =>
+                    handleUsefulClick(voted ? 'delete' : 'add'),
+                  hasUserVotedUseful: voted,
+                  votedUsefulCount: usefulCount,
+                  isLoggedIn: !!loggedInUser,
+                }}
               />
             )}
           </Flex>

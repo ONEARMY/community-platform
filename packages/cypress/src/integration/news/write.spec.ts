@@ -142,12 +142,44 @@
 //       cy.visit(`/news/${initialExpectedSlug}`)
 //       cy.contains(updatedTitle)
 
-//       cy.step('All updated fields visible on list')
-//       cy.visit('/news')
-//       cy.contains(updatedSummary)
-//       cy.contains(updatedTitle)
-//       cy.contains(category)
-//     })
+//  cy.step('All updated fields visible on list')
+// cy.visit('/news')
+// cy.contains(updatedSummary)
+// cy.contains(updatedTitle)
+// cy.contains(category)
+
+// cy.step('Can add profile badge')
+// cy.visit(`/news/${updatedExpectedSlug}/edit`)
+// cy.wait(1000)
+// cy.selectTag('PRO', '[data-cy=profileBadge-select]')
+// cy.get('[data-cy=submit]')
+//   .click()
+//   .url()
+//   .should('include', `/news/${updatedExpectedSlug}`)
+// cy.get('[data-cy=profileBadge]').contains('only news')
+
+// cy.step('Not visible to logged out users')
+// cy.wait(1000)
+// cy.logout()
+// cy.reload()
+// cy.url().should(
+//   'include',
+//   `/sign-in?returnUrl=%2Fnews%2F${updatedExpectedSlug}`,
+// )
+
+// cy.step('Not visible on the list view')
+// cy.visit('/news')
+// cy.contains(updatedTitle).should('not.exist')
+
+// cy.step("Logged in user (who is not an admin) can't view item")
+// cy.signUpNewUser()
+// cy.visit(`/news/${updatedExpectedSlug}`)
+// cy.reload()
+// cy.url().should('include', `/news`)
+// cy.url().should('not.include', `updatedExpectedSlug`)
+
+// Should also check that a user with the right badge (and not an admin) can view
+// })
 
 //     it('[By Anonymous]', () => {
 //       cy.step('Ask users to login before creating a news')

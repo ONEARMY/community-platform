@@ -41,6 +41,7 @@ export const loader = async ({ request }) => {
       slug,
       summary,
       category:category(id,name),
+      profile_badge:profile_badge(*),
       tags,
       title,
       total_views,
@@ -54,7 +55,6 @@ export const loader = async ({ request }) => {
           action_url
         )
       ))`,
-      { count: 'exact' },
     )
     .eq('is_draft', false)
 
@@ -74,8 +74,11 @@ export const loader = async ({ request }) => {
 
   const total = queryResult.count
   const data = queryResult.data as unknown as DBNews[]
-
-  const items = data.map((dbNews) => News.fromDB(dbNews, []))
+  const allNews = data.map((dbNews) => News.fromDB(dbNews, []))
+  const items = await newsServiceServer.filterNewsByUserFunctions(
+    allNews,
+    client,
+  )
 
   if (items && items.length > 0) {
     // Populate useful votes
@@ -114,6 +117,9 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         ? (formData.get('category') as string)
         : null,
       isDraft: formData.get('is_draft') === 'true',
+      profileBadge: formData.has('profileBadge')
+        ? (formData.get('profileBadge') as string)
+        : null,
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
         : null,
@@ -179,16 +185,17 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const newsResult = await client
       .from('news')
       .insert({
-        created_by: profile.id,
-        title: data.title,
         body: data.body,
+        category: data.category,
+        created_by: profile.id,
         is_draft: data.isDraft,
         moderation: 'accepted' as Moderation,
+        profile_badge: data.profileBadge,
         slug,
         summary: getSummaryFromMarkdown(data.body),
-        category: data.category,
         tags: data.tags,
         tenant_id: process.env.TENANT_ID,
+        title: data.title,
       })
       .select()
 

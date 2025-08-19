@@ -5,6 +5,7 @@ import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { CategoryField } from 'src/pages/common/FormFields/Category.field'
+import { ProfileBadgeField } from 'src/pages/common/FormFields/ProfileBadgeField'
 import { TagsField } from 'src/pages/common/FormFields/Tags.field'
 import { TitleField } from 'src/pages/common/FormFields/Title.field'
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors'
@@ -35,6 +36,7 @@ export const NewsForm = (props: IProps) => {
     existingHeroImage: null,
     isDraft: null,
     heroImage: null,
+    profileBadge: null,
     tags: [],
     title: '',
   })
@@ -59,6 +61,13 @@ export const NewsForm = (props: IProps) => {
       existingHeroImage: news.heroImage,
       isDraft: news.isDraft,
       heroImage: null,
+      profileBadge: news.profileBadge
+        ? {
+            value: news.profileBadge.id?.toString(),
+            label: news.profileBadge.displayName,
+          }
+        : null,
+
       tags: news.tagIds,
       title: news.title,
     })
@@ -78,6 +87,7 @@ export const NewsForm = (props: IProps) => {
         heroImage: formValues.heroImage || null,
         isDraft: isDraft,
         existingHeroImage: initialValues.existingHeroImage || null,
+        profileBadge: formValues.profileBadge || null,
         tags: formValues.tags,
         title: formValues.title!,
       })
@@ -183,6 +193,10 @@ export const NewsForm = (props: IProps) => {
             />
             <CategoryField type="news" />
             <TagsField title={LABELS.fields.tags.title} />
+            <ProfileBadgeField
+              placeholder={LABELS.fields.profileBadge.placeholder as string}
+              title={LABELS.fields.profileBadge.title}
+            />
             <NewsBodyField imageUpload={imageUpload} />
           </FormWrapper>
         )

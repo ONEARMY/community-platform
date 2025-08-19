@@ -4,6 +4,7 @@ import {
   Icon,
   IconCountWithTooltip,
   InternalLink,
+  ProfileBadgeContentLabel,
   // ModerationStatus,
 } from 'oa-components'
 import { Highlighter } from 'src/common/Highlighter'
@@ -73,6 +74,9 @@ export const NewsListItem = ({ news, query }: IProps) => {
 
             {news.category && (
               <Category category={news.category} sx={{ fontSize: 2 }} />
+            )}
+            {news.profileBadge && (
+              <ProfileBadgeContentLabel profileBadge={news.profileBadge} />
             )}
           </Flex>
 

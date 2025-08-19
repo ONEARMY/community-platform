@@ -133,8 +133,20 @@ const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
 ]
 
 const seedBadges = (): Partial<profile_badgesScalars>[] => [
-  { ..._BADGES_BASE, name: 'supporter', display_name: 'Supporter' },
-  { ..._BADGES_BASE, name: 'pro', display_name: 'PRO' },
+  {
+    ..._BADGES_BASE,
+    name: 'supporter',
+    display_name: 'Supporter',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
+  },
+  {
+    ..._BADGES_BASE,
+    name: 'pro',
+    display_name: 'PRO',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/pro.svg',
+  },
 ]
 
 /// populates badges: 2/3 of profiles to have: 1 and 2 badges, others remain with no badge

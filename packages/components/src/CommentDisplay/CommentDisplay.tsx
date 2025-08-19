@@ -167,14 +167,16 @@ export const CommentDisplay = (props: IProps) => {
               }}
             >
               <CommentBody body={comment.comment} />
-              <UsefulButtonLite
-                usefulButtonLiteConfig={{
-                  votedUsefulCount: votedUsefulCount,
-                  hasUserVotedUseful: hasUserVotedUseful,
-                  isLoggedIn: !!isLoggedIn,
-                  onUsefulClick: onUsefulClick,
-                }}
-              />
+              {usefulButtonConfig && (
+                <UsefulButtonLite
+                  usefulButtonLiteConfig={{
+                    votedUsefulCount,
+                    hasUserVotedUseful,
+                    isLoggedIn,
+                    onUsefulClick,
+                  }}
+                />
+              )}
             </Flex>
           </Flex>
         </Flex>

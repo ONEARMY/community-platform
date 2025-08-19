@@ -8,18 +8,27 @@ import { Icon } from '../Icon/Icon'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface IProps {
-  hasUserVotedUseful?: boolean
-  votedUsefulCount: number | undefined
-  isLoggedIn: boolean
-  onUsefulClick: (
-    vote: 'add' | 'delete',
-    eventCategory?: string,
-  ) => Promise<void>
-  sx?: ThemeUIStyleObject
+  usefulButtonLiteConfig: {
+    hasUserVotedUseful: boolean
+    votedUsefulCount: number
+    isLoggedIn: boolean
+    onUsefulClick: (
+      vote: 'add' | 'delete',
+      eventCategory?: string,
+    ) => Promise<void>
+    sx?: ThemeUIStyleObject
+  }
 }
 
 export const UsefulButtonLite = (props: IProps) => {
-  const { hasUserVotedUseful, votedUsefulCount } = props
+  const {
+    hasUserVotedUseful,
+    votedUsefulCount,
+    isLoggedIn,
+    sx,
+    onUsefulClick,
+  } = props.usefulButtonLiteConfig
+
   const { theme } = useThemeUI() as any
   const navigate = useNavigate()
   const uuid = useMemo(() => (Math.random() * 16).toString(), [])
@@ -28,7 +37,7 @@ export const UsefulButtonLite = (props: IProps) => {
   const handleUsefulClick = async () => {
     setDisabled(true)
     try {
-      await props.onUsefulClick(usefulAction, 'Comment')
+      await onUsefulClick(usefulAction, 'Comment')
     } catch (err) {
       // handle error or ignore
     }
@@ -40,10 +49,10 @@ export const UsefulButtonLite = (props: IProps) => {
       <Button
         type="button"
         data-tooltip-id={uuid}
-        data-tooltip-content={props.isLoggedIn ? '' : 'Login to add your vote'}
-        data-cy={props.isLoggedIn ? 'vote-useful' : 'vote-useful-redirect'}
+        data-tooltip-content={isLoggedIn ? '' : 'Login to add your vote'}
+        data-cy={isLoggedIn ? 'vote-useful' : 'vote-useful-redirect'}
         onClick={() =>
-          props.isLoggedIn
+          isLoggedIn
             ? handleUsefulClick()
             : navigate(
                 '/sign-in?returnUrl=' + encodeURIComponent(location.pathname),
@@ -66,7 +75,7 @@ export const UsefulButtonLite = (props: IProps) => {
           '&:hover': {
             backgroundColor: theme.colors.softblue,
           },
-          ...props.sx,
+          ...sx,
         }}
       >
         <Flex sx={{ alignItems: 'center' }}>

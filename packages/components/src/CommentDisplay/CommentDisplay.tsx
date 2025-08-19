@@ -12,20 +12,24 @@ import { Username } from '../Username/Username'
 
 import type { Comment } from 'oa-shared'
 import type { ReactNode } from 'react'
+import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface IProps {
   comment: Comment
   itemType: 'ReplyItem' | 'CommentItem'
-  isLoggedIn: boolean
   isEditable: boolean | undefined
   setShowDeleteModal: (arg: boolean) => void
   setShowEditModal: (arg: boolean) => void
-  votedUsefulCount: number
-  hasUserVotedUseful: boolean
-  onUsefulClick: (
-    vote: 'add' | 'delete',
-    eventCategory?: string,
-  ) => Promise<void>
+  usefulButtonConfig?: {
+    hasUserVotedUseful: boolean
+    votedUsefulCount: number
+    isLoggedIn: boolean
+    onUsefulClick: (
+      vote: 'add' | 'delete',
+      eventCategory?: string,
+    ) => Promise<void>
+    sx?: ThemeUIStyleObject
+  }
   followButton?: ReactNode
   followButtonIcon?: ReactNode
 }
@@ -36,16 +40,20 @@ export const CommentDisplay = (props: IProps) => {
   const {
     comment,
     itemType,
-    isLoggedIn,
     isEditable,
     followButton,
     followButtonIcon,
-    hasUserVotedUseful,
-    votedUsefulCount,
     setShowDeleteModal,
     setShowEditModal,
-    onUsefulClick,
+    usefulButtonConfig,
   } = props
+
+  const {
+    votedUsefulCount = 0,
+    hasUserVotedUseful = false,
+    isLoggedIn = false,
+    onUsefulClick = () => Promise.resolve(),
+  } = usefulButtonConfig || {}
 
   const { authors } = useContext(AuthorsContext)
   const border = `${comment.highlighted ? '2px dashed black' : 'none'}`
@@ -160,10 +168,12 @@ export const CommentDisplay = (props: IProps) => {
             >
               <CommentBody body={comment.comment} />
               <UsefulButtonLite
-                votedUsefulCount={votedUsefulCount}
-                hasUserVotedUseful={hasUserVotedUseful}
-                isLoggedIn={!!isLoggedIn}
-                onUsefulClick={onUsefulClick}
+                usefulButtonLiteConfig={{
+                  votedUsefulCount: votedUsefulCount,
+                  hasUserVotedUseful: hasUserVotedUseful,
+                  isLoggedIn: !!isLoggedIn,
+                  onUsefulClick: onUsefulClick,
+                }}
               />
             </Flex>
           </Flex>

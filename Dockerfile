@@ -18,12 +18,6 @@ RUN corepack enable && \
 # Add CircleCI context variables as ARGs
 ARG VITE_BRANCH
 ARG VITE_CDN_URL
-ARG VITE_FIREBASE_API_KEY
-ARG VITE_FIREBASE_AUTH_DOMAIN
-ARG VITE_FIREBASE_DATABASE_URL
-ARG VITE_FIREBASE_MESSAGING_SENDER_ID
-ARG VITE_FIREBASE_PROJECT_ID
-ARG VITE_FIREBASE_STORAGE_BUCKET
 ARG VITE_SENTRY_DSN
 ARG VITE_GA_TRACKING_ID
 ARG VITE_PATREON_CLIENT_ID
@@ -42,7 +36,6 @@ ARG VITE_HOWTOS_HEADING
 ARG VITE_COMMUNITY_PROGRAM_URL
 ARG VITE_QUESTIONS_GUIDELINES_URL
 ARG VITE_NO_MESSAGING
-ARG VITE_HIDE_MEMBER_PINS_BY_DEFAULT
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
@@ -59,12 +52,6 @@ RUN yarn install
 
 RUN --mount=type=secret,id=VITE_BRANCH \
     --mount=type=secret,id=VITE_CDN_URL \
-    --mount=type=secret,id=VITE_FIREBASE_API_KEY \
-    --mount=type=secret,id=VITE_FIREBASE_AUTH_DOMAIN \
-    --mount=type=secret,id=VITE_FIREBASE_DATABASE_URL \
-    --mount=type=secret,id=VITE_FIREBASE_MESSAGING_SENDER_ID \
-    --mount=type=secret,id=VITE_FIREBASE_PROJECT_ID \
-    --mount=type=secret,id=VITE_FIREBASE_STORAGE_BUCKET \
     --mount=type=secret,id=VITE_SENTRY_DSN \
     --mount=type=secret,id=VITE_GA_TRACKING_ID \
     --mount=type=secret,id=VITE_PATREON_CLIENT_ID \
@@ -83,15 +70,8 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     --mount=type=secret,id=VITE_COMMUNITY_PROGRAM_URL \
     --mount=type=secret,id=VITE_QUESTIONS_GUIDELINES_URL \
     --mount=type=secret,id=VITE_NO_MESSAGING \
-    --mount=type=secret,id=VITE_HIDE_MEMBER_PINS_BY_DEFAULT \
     VITE_CDN_URL="$(cat /run/secrets/VITE_CDN_URL)" && \
     VITE_BRANCH="$(cat /run/secrets/VITE_BRANCH)" && \
-    VITE_FIREBASE_API_KEY="$(cat /run/secrets/VITE_FIREBASE_API_KEY)" && \
-    VITE_FIREBASE_AUTH_DOMAIN="$(cat /run/secrets/VITE_FIREBASE_AUTH_DOMAIN)" && \
-    VITE_FIREBASE_DATABASE_URL="$(cat /run/secrets/VITE_FIREBASE_DATABASE_URL)" && \
-    VITE_FIREBASE_MESSAGING_SENDER_ID="$(cat /run/secrets/VITE_FIREBASE_MESSAGING_SENDER_ID)" && \
-    VITE_FIREBASE_PROJECT_ID="$(cat /run/secrets/VITE_FIREBASE_PROJECT_ID)" && \
-    VITE_FIREBASE_STORAGE_BUCKET="$(cat /run/secrets/VITE_FIREBASE_STORAGE_BUCKET)" && \
     VITE_SENTRY_DSN="$(cat /run/secrets/VITE_SENTRY_DSN)" && \
     VITE_GA_TRACKING_ID="$(cat /run/secrets/VITE_GA_TRACKING_ID)" && \
     VITE_PATREON_CLIENT_ID="$(cat /run/secrets/VITE_PATREON_CLIENT_ID)" && \
@@ -110,15 +90,8 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     VITE_COMMUNITY_PROGRAM_URL="$(cat /run/secrets/VITE_COMMUNITY_PROGRAM_URL)" && \
     VITE_QUESTIONS_GUIDELINES_URL="$(cat /run/secrets/VITE_QUESTIONS_GUIDELINES_URL)" && \
     VITE_NO_MESSAGING="$(cat /run/secrets/VITE_NO_MESSAGING)" && \
-    VITE_HIDE_MEMBER_PINS_BY_DEFAULT="$(cat /run/secrets/VITE_HIDE_MEMBER_PINS_BY_DEFAULT)" && \
     echo "VITE_CDN_URL=\"${VITE_CDN_URL}\"" >> .env && \
     echo "VITE_BRANCH=\"${VITE_BRANCH}\"" >> .env && \
-    echo "VITE_FIREBASE_API_KEY=\"${VITE_FIREBASE_API_KEY}\"" >> .env && \
-    echo "VITE_FIREBASE_AUTH_DOMAIN=\"${VITE_FIREBASE_AUTH_DOMAIN}\"" >> .env && \
-    echo "VITE_FIREBASE_DATABASE_URL=\"${VITE_FIREBASE_DATABASE_URL}\"" >> .env && \
-    echo "VITE_FIREBASE_MESSAGING_SENDER_ID=\"${VITE_FIREBASE_MESSAGING_SENDER_ID}\"" >> .env && \
-    echo "VITE_FIREBASE_PROJECT_ID=\"${VITE_FIREBASE_PROJECT_ID}\"" >> .env && \
-    echo "VITE_FIREBASE_STORAGE_BUCKET=\"${VITE_FIREBASE_STORAGE_BUCKET}\"" >> .env && \
     echo "VITE_SENTRY_DSN=\"${VITE_SENTRY_DSN}\"" >> .env && \
     echo "VITE_GA_TRACKING_ID=\"${VITE_GA_TRACKING_ID}\"" >> .env && \
     echo "VITE_PATREON_CLIENT_ID=\"${VITE_PATREON_CLIENT_ID}\"" >> .env && \
@@ -136,8 +109,7 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     echo "VITE_HOWTOS_HEADING=\"${VITE_HOWTOS_HEADING}\"" >> .env && \
     echo "VITE_COMMUNITY_PROGRAM_URL=\"${VITE_COMMUNITY_PROGRAM_URL}\"" >> .env && \
     echo "VITE_QUESTIONS_GUIDELINES_URL=\"${VITE_QUESTIONS_GUIDELINES_URL}\"" >> .env && \
-    echo "VITE_NO_MESSAGING=\"${VITE_NO_MESSAGING}\"" >> .env && \
-    echo "VITE_HIDE_MEMBER_PINS_BY_DEFAULT=\"${VITE_HIDE_MEMBER_PINS_BY_DEFAULT}\"" >> .env
+    echo "VITE_NO_MESSAGING=\"${VITE_NO_MESSAGING}\"" >> .env
 
 # Build application
 RUN yarn run build

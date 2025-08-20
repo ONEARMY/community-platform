@@ -17,7 +17,7 @@ export class DBComment implements IDBDocSB {
   readonly source_type: DiscussionContentTypes
   readonly source_id_legacy: string | null
   readonly parent_id: number | null
-
+  readonly vote_count?: number
   readonly hasVoted?: boolean
 
   constructor(comment: DBComment) {
@@ -36,6 +36,7 @@ export class DBComment implements IDBDocSB {
       source_type: obj.sourceType,
       parent_id: obj.parentId,
       deleted: obj.deleted,
+      vote_count: obj.voteCount || 0,
       hasVoted: obj.hasVoted,
     })
   }
@@ -53,6 +54,7 @@ export class Comment implements IDoc {
   sourceType: DiscussionContentTypes
   parentId: number | null
   highlighted?: boolean
+  voteCount?: number
   hasVoted?: boolean
   replies?: Reply[]
 
@@ -71,6 +73,7 @@ export class Comment implements IDoc {
       sourceType: obj.source_type,
       parentId: obj.parent_id,
       deleted: obj.deleted,
+      voteCount: obj.vote_count || 0,
       hasVoted: obj.hasVoted,
       replies: replies,
     })

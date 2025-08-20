@@ -27,7 +27,7 @@ export const CommentReply = observer(
     const commentRef = useRef<HTMLDivElement>()
     const [showEditModal, setShowEditModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
-    const [usefulCount, setUsefulCount] = useState<number>(comment.voteCount)
+    const [usefulCount, setUsefulCount] = useState<number>(comment.voteCount ?? 0)
     const [voted, setVoted] = useState<boolean>(false)
 
     const { profile: activeUser } = useProfileStore()

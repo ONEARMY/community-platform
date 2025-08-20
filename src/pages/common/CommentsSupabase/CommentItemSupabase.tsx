@@ -45,7 +45,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
     () => !!comment.replies?.some((x) => x.highlighted),
   )
   const { profile } = useProfileStore()
-  const [usefulCount, setUsefulCount] = useState<number>(comment.voteCount)
+  const [usefulCount, setUsefulCount] = useState<number>(comment.voteCount ?? 0)
   const [voted, setVoted] = useState<boolean>(false)
 
   const isEditable = useMemo(() => {

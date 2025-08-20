@@ -57,6 +57,7 @@ describe('[News.Write]', () => {
       cy.addToMarkdownField(initialNewsBodyThree)
 
       cy.get('[data-cy=draft]').click()
+      cy.wait(2000)
       cy.url().should('include', `/news/${initialExpectedSlug}`)
 
       cy.step('Can get to drafts')
@@ -106,10 +107,9 @@ describe('[News.Write]', () => {
 
       cy.step('Edit fields')
       cy.wait(2000)
-      cy.get('[data-cy=edit]')
-        .click()
-        .url()
-        .should('include', `/news/${initialExpectedSlug}/edit`)
+      cy.get('[data-cy=edit]').click()
+      cy.wait(2000)
+      cy.url().should('include', `/news/${initialExpectedSlug}/edit`)
 
       cy.get('[data-cy=field-title]').clear().type(updatedTitle).blur()
       cy.get('.mdxeditor-root-contenteditable').type('{selectAll}{del}')
@@ -126,10 +126,9 @@ describe('[News.Write]', () => {
 
       cy.step('Updated news details shown')
       cy.wait(2000)
-      cy.get('[data-cy=submit]')
-        .click()
-        .url()
-        .should('include', `/news/${updatedExpectedSlug}`)
+      cy.get('[data-cy=submit]').click()
+      cy.wait(2000)
+      cy.url().should('include', `/news/${updatedExpectedSlug}`)
       cy.contains(updatedNewsBody)
 
       cy.contains(updatedTitle)

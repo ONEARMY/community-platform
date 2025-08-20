@@ -49,7 +49,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
     slug: research.slug,
     setVoted,
     setUsefulCount,
-    loggedInUser: loggedInUser,
+    loggedInUser: activeUser,
   }
 
   const handleUsefulClick = async (

@@ -1,12 +1,12 @@
 import { trackEvent } from 'src/common/Analytics'
 import { usefulService } from 'src/services/usefulService'
 
-import type { ContentType, IUserDB } from 'oa-shared'
+import type { ContentType, Profile } from 'oa-shared'
 
 interface UsefulClickProps {
   vote: 'add' | 'delete'
   config: {
-    loggedInUser: IUserDB | null | undefined
+    loggedInUser: Profile | null | undefined
     contentType: ContentType
     contentId: number
     eventCategory: string
@@ -30,7 +30,7 @@ const onUsefulClick = async (props: UsefulClickProps) => {
     setUsefulCount,
   } = config
 
-  if (!loggedInUser?.userName) {
+  if (!loggedInUser?.username) {
     return
   }
 

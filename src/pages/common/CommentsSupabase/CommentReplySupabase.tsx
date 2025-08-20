@@ -53,7 +53,7 @@ export const CommentReply = observer(
     }, [comment.highlighted])
 
     const item = 'ReplyItem'
-    const loggedInUser = userStore.activeUser
+    const loggedInUser = activeUser
 
     const configOnUsefulClick = {
       contentType: 'comment' as ContentType,

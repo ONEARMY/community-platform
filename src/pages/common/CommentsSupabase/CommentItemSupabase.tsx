@@ -59,7 +59,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
 
   useEffect(() => {
     setVoted(comment.hasVoted ?? false)
-  }, [activeUser, comment])
+  }, [profile, comment])
 
   useEffect(() => {
     if (comment.highlighted) {
@@ -77,7 +77,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
     slug: `${comment}+${comment.id}`,
     setVoted,
     setUsefulCount,
-    loggedInUser: activeUser,
+    loggedInUser: profile,
   }
 
   const handleUsefulClick = async (
@@ -136,7 +136,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
             onUsefulClick: () => handleUsefulClick(voted ? 'delete' : 'add'),
             hasUserVotedUseful: voted,
             votedUsefulCount: usefulCount,
-            isLoggedIn: !!activeUser,
+            isLoggedIn: !!profile,
           }}
         />
 

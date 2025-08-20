@@ -46,7 +46,7 @@ describe('CommentDisplay', () => {
       id: 0,
       isVerified: false,
       isSupporter: false,
-      photoUrl: null,
+      photo: null,
     },
     sourceId: 1,
     sourceType: 'questions' as const,

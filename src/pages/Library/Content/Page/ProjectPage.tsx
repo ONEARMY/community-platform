@@ -51,7 +51,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
     slug: item.slug,
     setVoted,
     setUsefulCount,
-    loggedInUser: loggedInUser,
+    loggedInUser: activeUser,
   }
 
   const handleUsefulClick = async (

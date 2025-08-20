@@ -26,7 +26,7 @@ export class CommentFactory {
       sourceType: dbComment.source_type,
       parentId: dbComment.parent_id,
       deleted: dbComment.deleted,
-      voteCount: dbComment.voteCount || 0,
+      voteCount: dbComment.vote_count || 0,
       hasVoted: dbComment.hasVoted || false,
       replies: replies,
     })

@@ -20,98 +20,91 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
-  let currentUserId: number | null = null
+  try {
+    const {
+      data: { user },
+    } = await client.auth.getUser()
+    let currentUserId: number | null = null
 
-  if (user?.id) {
-    const profileResult = await client
-      .from('profiles')
-      .select('id')
-      .eq('auth_id', user.id)
-      .single()
+    if (user?.id) {
+      const profileResult = await client
+        .from('profiles')
+        .select('id')
+        .eq('auth_id', user.id)
+        .single()
 
-    if (!profileResult.error) {
-      currentUserId = profileResult.data.id
+      if (!profileResult.error) {
+        currentUserId = profileResult.data.id
+      }
     }
-  }
 
-  const sourceParam = isNaN(+params.sourceId) ? 'source_id_legacy' : 'source_id'
-  const sourceId = isNaN(+params.sourceId) ? params.sourceId : +params.sourceId
+    const sourceParam = isNaN(+params.sourceId)
+      ? 'source_id_legacy'
+      : 'source_id'
+    const sourceId = isNaN(+params.sourceId)
+      ? params.sourceId
+      : +params.sourceId
 
     const result = await client
       .from('comments')
       .select(
         `
-      id, 
-      comment, 
-      created_at, 
-      modified_at, 
-      deleted, 
-      source_id, 
-      source_id_legacy,
-      source_type,
-      parent_id,
-      created_by,
-      profiles(id, display_name, username, photo, country,
-        badges:profile_badges_relations(
-          profile_badges(
-            id,
-            name,
-            display_name,
-            image_url,
-            action_url
+        id, 
+        comment, 
+        created_at, 
+        modified_at, 
+        deleted, 
+        source_id, 
+        source_id_legacy,
+        source_type,
+        parent_id,
+        created_by,
+        profiles(id, display_name, username, photo, country,
+          badges:profile_badges_relations(
+            profile_badges(
+              id,
+              name,
+              display_name,
+              image_url,
+              action_url
+            )
           )
         )
-      )
-    `,
+      `,
       )
       .eq('source_type', params.sourceType)
       .eq(sourceParam, sourceId)
       .order('created_at', { ascending: true })
 
-  if (result.error) {
-    console.error(result.error)
-
-    return Response.json({}, { headers, status: 500 })
-  }
-
-  let votedCommentIds: Set<number> = new Set()
-  if (currentUserId) {
-    const votesResult = await client
-      .from('useful_votes')
-      .select('content_id')
-      .eq('user_id', currentUserId)
-      .eq('content_type', 'comment')
-
-    if (!votesResult.error) {
-      votedCommentIds = new Set(votesResult.data.map((vote) => vote.content_id))
+    if (result.error) {
+      console.error(result.error)
+      return Response.json({}, { headers, status: 500 })
     }
-  }
 
-  const dbComments = result.data.map((x) => {
-    const hasVoted = votedCommentIds.has(x.id)
-    return new DBComment({
-      ...x,
-      profile: x.profiles as unknown as DBAuthor,
-      hasVoted,
+    // Get all comment IDs that the current user has voted on
+    let votedCommentIds: Set<number> = new Set()
+    if (currentUserId) {
+      const votesResult = await client
+        .from('useful_votes')
+        .select('content_id')
+        .eq('user_id', currentUserId)
+        .eq('content_type', 'comment')
+
+      if (!votesResult.error) {
+        votedCommentIds = new Set(
+          votesResult.data.map((vote) => vote.content_id),
+        )
+      }
+    }
+
+    const dbComments = result.data.map((x) => {
+      const hasVoted = votedCommentIds.has(x.id)
+      return new DBComment({
+        ...x,
+        profile: x.profiles as unknown as DBAuthor,
+        hasVoted,
+      })
     })
-  })
-
-  const commentsByParentId = dbComments.reduce((acc, comment) => {
-    const parentId = comment.parent_id ?? 0
-    if (!acc[parentId]) {
-      acc[parentId] = []
-    }
-
-    const dbComments = result.data.map(
-      (x) =>
-        new DBComment({
-          ...x,
-          profile: x.profiles as unknown as DBAuthor,
-        }),
-    )
 
     const commentFactory = new CommentFactory(new ImageServiceServer(client))
     const comments = await commentFactory.fromDBCommentsToThreads(dbComments)

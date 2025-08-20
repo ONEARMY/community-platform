@@ -9,7 +9,6 @@ import {
 } from 'oa-components'
 import { UserRole } from 'oa-shared'
 import { FollowButtonAction } from 'src/common/FollowButtonAction'
-import { usefulService } from 'src/services/usefulService'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { onUsefulClick } from 'src/utils/onUsefulClick'
 import { Card, Flex } from 'theme-ui'
@@ -59,14 +58,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
   const item = 'CommentItem'
 
   useEffect(() => {
-    const getVoted = async () => {
-      const voted = await usefulService.hasVoted('comment', comment.id)
-      setVoted(voted)
-    }
-
-    if (activeUser) {
-      getVoted()
-    }
+    setVoted(comment.hasVoted ?? false)
   }, [activeUser, comment])
 
   useEffect(() => {

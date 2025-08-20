@@ -8,7 +8,6 @@ import {
   Modal,
 } from 'oa-components'
 import { UserRole } from 'oa-shared'
-import { usefulService } from 'src/services/usefulService'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { onUsefulClick } from 'src/utils/onUsefulClick'
 import { Box, Flex, Text } from 'theme-ui'
@@ -29,7 +28,7 @@ export const CommentReply = observer(
     const [showEditModal, setShowEditModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [usefulCount, setUsefulCount] = useState<number>(comment.voteCount)
-    const [voted, setVoted] = useState<boolean>(comment.hasVoted) // TODO: retrieve the info from userStore ?
+    const [voted, setVoted] = useState<boolean>(false) 
 
     const { profile: activeUser } = useProfileStore()
 
@@ -41,14 +40,7 @@ export const CommentReply = observer(
     }, [activeUser, comment])
 
     useEffect(() => {
-      const getVoted = async () => {
-        const voted = await usefulService.hasVoted('comment', comment.id)
-        setVoted(voted)
-      }
-
-      if (loggedInUser) {
-        getVoted()
-      }
+      setVoted(comment.hasVoted ?? false)
     }, [activeUser, comment])
 
     useEffect(() => {

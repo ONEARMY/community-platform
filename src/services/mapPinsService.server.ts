@@ -71,12 +71,7 @@ export class MapPinsServiceServer {
       .eq('moderation', 'accepted')
 
     if (!data || error) {
-      console.error(error)
-
-      return Response.json(
-        {},
-        { status: 500, statusText: 'Error fetching map-pins' },
-      )
+      throw error
     }
 
     const pinsDb = data as unknown as DBMapPin[]

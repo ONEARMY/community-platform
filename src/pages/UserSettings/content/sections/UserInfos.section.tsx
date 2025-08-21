@@ -27,9 +27,6 @@ export const UserInfosSection = observer(({ formValues }: IProps) => {
   const isMemberProfile = !profile?.type?.isSpace
   const { about, country, displayName, userName, website } = fields
 
-  const countryCode = Object.keys(countries).find(
-    (key) => countries[key].name === formValues.country,
-  )
   return (
     <FlexSectionContainer>
       <Flex
@@ -92,9 +89,9 @@ export const UserInfosSection = observer(({ formValues }: IProps) => {
           <Field data-cy="country-dropdown" name="country">
             {(field) => (
               <SelectField
-                options={Object.keys(countries).map((country) => ({
-                  label: `${countries[country].emoji} ${countries[country].native}`,
-                  value: countries[country].name,
+                options={Object.keys(countries).map((countryCode) => ({
+                  label: `${countries[countryCode].emoji} ${countries[countryCode].native}`,
+                  value: countryCode, // Use the country code (e.g., 'US', 'PT') as the value
                 }))}
                 placeholder="Select your country..."
                 {...field}
@@ -109,7 +106,7 @@ export const UserInfosSection = observer(({ formValues }: IProps) => {
               <Username
                 user={{
                   ...profile,
-                  country: countryCode,
+                  country: formValues.country,
                 }}
               />
             )}

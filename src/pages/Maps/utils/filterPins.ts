@@ -22,7 +22,9 @@ export const filterPins = (
 
   if (tags?.length) {
     filteredPins = filteredPins.filter((x) =>
-      x.profile?.tags?.some((tag) => tags.includes(tag.id)),
+      tags.every((tag) =>
+        x.profile?.tags?.some((profileTag) => profileTag.id === tag),
+      ),
     )
   }
 

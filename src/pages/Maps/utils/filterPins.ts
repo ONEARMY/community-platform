@@ -51,7 +51,7 @@ export const filterPins = (
         _northEast: boundaries.getNorthEast(),
         _southWest: boundaries.getSouthWest(),
       },
-      allPins,
+      filteredPins,
     )
   }
 

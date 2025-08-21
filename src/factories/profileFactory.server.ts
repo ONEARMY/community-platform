@@ -19,11 +19,33 @@ export class ProfileFactory {
         : null
 
     let impact = null
+    let visitorPolicy = null
 
     try {
-      impact = dbProfile.impact ? JSON.parse(dbProfile.impact) : null
+      if (dbProfile.impact) {
+        if (typeof dbProfile.impact === 'string') {
+          impact = JSON.parse(dbProfile.impact)
+        } else if (typeof dbProfile.impact === 'object') {
+          impact = dbProfile.impact
+        }
+      }
     } catch (error) {
       console.error('error parsing impact')
+    }
+
+    try {
+      if (dbProfile.visitor_policy) {
+        if (typeof dbProfile.visitor_policy === 'string') {
+          visitorPolicy = JSON.parse(dbProfile.visitor_policy)
+        } else if (
+          typeof dbProfile.impact === 'object' &&
+          (dbProfile.visitor_policy as any)?.policy
+        ) {
+          visitorPolicy = dbProfile.visitor_policy
+        }
+      }
+    } catch (error) {
+      console.error('error parsing visitor policy')
     }
 
     return new Profile({
@@ -35,9 +57,7 @@ export class ProfileFactory {
       photo: photo || null,
       roles: dbProfile.roles || null,
       type: dbProfile.type ? ProfileType.fromDB(dbProfile.type) : null,
-      visitorPolicy: dbProfile.visitor_policy
-        ? JSON.parse(dbProfile.visitor_policy)
-        : null,
+      visitorPolicy,
       isBlockedFromMessaging: !!dbProfile.is_blocked_from_messaging,
       about: dbProfile.about,
       coverImages: coverImages,

@@ -15,47 +15,54 @@ import type { Profile, UserCreatedDocs } from 'oa-shared'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
-  const profileService = new ProfileServiceServer(client)
+  try {
+    const profileService = new ProfileServiceServer(client)
 
-  const username = params.id as string
+    const username = params.id as string
 
-  const [profileDb, projects, research, questions] = await Promise.all([
-    profileService.getByUsername(username),
-    libraryServiceServer.getUserProjects(client, username),
-    researchServiceServer.getUserResearch(client, username),
-    questionServiceServer.getQuestionsByUser(client, username),
-  ])
+    const [profileDb, projects, research, questions] = await Promise.all([
+      profileService.getByUsername(username),
+      libraryServiceServer.getUserProjects(client, username),
+      researchServiceServer.getUserResearch(client, username),
+      questionServiceServer.getQuestionsByUser(client, username),
+    ])
 
-  const userCreatedDocs = {
-    projects,
-    research,
-    questions,
-  } as UserCreatedDocs
+    const userCreatedDocs = {
+      projects,
+      research,
+      questions,
+    } as UserCreatedDocs
 
-  if (!profileDb) {
-    return Response.json({ profile: null, headers })
+    if (!profileDb) {
+      return Response.json({ profile: null, headers })
+    }
+
+    const authorVotesDb = await profileService.getAuthorUsefulVotes(
+      profileDb.id,
+    )
+    const authorVotes = authorVotesDb
+      ? authorVotesDb.map((x) => AuthorVotes.fromDB(x))
+      : undefined
+
+    if (profileDb?.id) {
+      // not awaited to not block the render
+      profileService.incrementViewCount(profileDb.id, profileDb.total_views)
+    }
+
+    const profileFactory = new ProfileFactory(client)
+    const profile = profileFactory.fromDB(profileDb, authorVotes)
+
+    return Response.json(
+      {
+        profile,
+        userCreatedDocs,
+      },
+      { headers },
+    )
+  } catch (error) {
+    console.error(error)
+    return Response.json({}, { headers })
   }
-
-  const authorVotesDb = await profileService.getAuthorUsefulVotes(profileDb.id)
-  const authorVotes = authorVotesDb
-    ? authorVotesDb.map((x) => AuthorVotes.fromDB(x))
-    : undefined
-
-  if (profileDb?.id) {
-    // not awaited to not block the render
-    profileService.incrementViewCount(profileDb.id, profileDb.total_views)
-  }
-
-  const profileFactory = new ProfileFactory(client)
-  const profile = profileFactory.fromDB(profileDb, authorVotes)
-
-  return Response.json(
-    {
-      profile,
-      userCreatedDocs,
-    },
-    { headers },
-  )
 }
 
 export function HydrateFallback() {

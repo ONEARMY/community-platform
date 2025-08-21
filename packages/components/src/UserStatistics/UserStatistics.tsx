@@ -70,13 +70,6 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           </InternalLink>
         )}
 
-        {!props.pin && props.profile.country && (
-          <Flex sx={{ alignItems: 'center', gap: 1 }}>
-            <Icon glyph="map" size={20} />
-            <Box>{props.profile.country}</Box>
-          </Flex>
-        )}
-
         <Flex sx={{ gap: 2, flexDirection: 'column' }}>
           {props?.profile.badges?.map((badge) => (
             <Flex

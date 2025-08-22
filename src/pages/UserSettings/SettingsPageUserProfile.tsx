@@ -59,7 +59,9 @@ export const SettingsPageUserProfile = observer(() => {
     }
   }
 
-  const existingCoverImages = profile.coverImages?.map((x) => toJS(x))
+  const existingCoverImages = profile.coverImages
+    ? profile?.coverImages?.slice(0, 4).map((image) => toJS(image))
+    : []
   const coverImages = new Array(4 - (existingCoverImages?.length || 0))
 
   const initialValues = useMemo<ProfileFormData>(

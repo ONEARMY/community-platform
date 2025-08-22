@@ -1,7 +1,44 @@
+import { UserRole } from 'oa-shared'
+import { ProfileFactory } from 'src/factories/profileFactory.server'
+
+import { ProfileServiceServer } from './profileService.server'
 import { storageServiceServer } from './storageService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBMedia, DBNews } from 'oa-shared'
+import type { DBMedia, DBNews, News, Profile } from 'oa-shared'
+
+async function filterNewsByUserFunctions(allNews, client) {
+  const {
+    data: { user },
+  } = await client.auth.getUser()
+
+  if (!user) {
+    return allNews.filter((item) => !item.profileBadge)
+  }
+
+  const profileService = new ProfileServiceServer(client)
+  const dbProfile = await profileService.getByAuthId(user!.id)
+  const profile = new ProfileFactory(client).fromDB(dbProfile!)
+
+  const isAdmin = profile.roles?.includes(UserRole.ADMIN) ?? false
+
+  if (isAdmin) {
+    return allNews
+  }
+
+  return filterNewsByUserBadges(allNews, profile)
+}
+
+function filterNewsByUserBadges(news: News[], profile: Profile): News[] {
+  const userBadgeIds = new Set(profile.badges?.map((badge) => badge.id))
+
+  return news.filter((item) => {
+    if (!item.profileBadge) {
+      return true
+    }
+    return userBadgeIds.has(item.profileBadge.id)
+  })
+}
 
 async function getById(id: number, client: SupabaseClient) {
   const result = await client.from('news').select().eq('id', id).single()
@@ -24,6 +61,7 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
        slug,
        summary,
        category:category(id,name),
+       profile_badge:profile_badge(*),
        tags,
        title,
        total_views,
@@ -60,6 +98,8 @@ const getHeroImage = async (
 }
 
 export const newsServiceServer = {
+  filterNewsByUserFunctions,
+  filterNewsByUserBadges,
   getById,
   getBySlug,
   getHeroImage,

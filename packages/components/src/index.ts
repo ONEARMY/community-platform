@@ -69,6 +69,7 @@ export { NotificationListSupabase } from './NotificationListSupabase/Notificatio
 export { NotificationsModal } from './NotificationsModal/NotificationsModal'
 export { OsmGeocoding } from './OsmGeocoding/OsmGeocoding'
 export { PinProfile } from './PinProfile/PinProfile'
+export { ProfileBadgeContentLabel } from './ProfileBadgeContentLabel/ProfileBadgeContentLabel'
 export { ProfileLink } from './ProfileLink/ProfileLink'
 export { ProfileTagsList } from './ProfileTagsList/ProfileTagsList'
 export { ResearchEditorOverview } from './ResearchEditorOverview/ResearchEditorOverview'

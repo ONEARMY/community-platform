@@ -6,6 +6,7 @@ import {
   ContentStatistics,
   DisplayDate,
   DisplayMarkdown,
+  ProfileBadgeContentLabel,
   TagList,
 } from 'oa-components'
 // eslint-disable-next-line import/no-unresolved
@@ -69,6 +70,9 @@ export const NewsPage = observer(({ news }: IProps) => {
         >
           <Flex sx={{ alignItems: 'center', gap: 2 }}>
             {news.category && <Category category={news.category} />}
+            {news.profileBadge && (
+              <ProfileBadgeContentLabel profileBadge={news.profileBadge} />
+            )}
             {news.tags && (
               <TagList
                 data-cy="news-tags"

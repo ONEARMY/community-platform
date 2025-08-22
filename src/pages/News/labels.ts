@@ -22,6 +22,10 @@ export const fields: ILabels = {
       'Write and structure the body of your article. Markdown is also supported.',
     title: 'Body',
   },
+  profileBadge: {
+    title: 'Limit to badged users',
+    placeholder: 'Select if this is for profiles with a certain profile badge',
+  },
   summary: {
     title: 'Summary',
     description: 'What will show on the main page',

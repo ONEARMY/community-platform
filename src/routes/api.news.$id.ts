@@ -23,6 +23,9 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         ? Number(formData.get('category'))
         : null,
       isDraft: formData.get('is_draft') === 'true',
+      profileBadge: formData.has('profileBadge')
+        ? (formData.get('profileBadge') as string)
+        : null,
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
         : null,
@@ -79,6 +82,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         modified_at: new Date(),
         slug: data.slug,
         previous_slugs: previousSlugs,
+        profile_badge: data.profileBadge,
         summary: getSummaryFromMarkdown(data.body),
         tags: data.tags,
         title: data.title,

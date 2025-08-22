@@ -1,5 +1,6 @@
 import { Author } from './author'
 import { Category } from './category'
+import { ProfileBadge } from './profileBadge'
 
 import type { DBAuthor } from './author'
 import type { DBCategory } from './category'
@@ -7,6 +8,7 @@ import type { IConvertedFileMeta } from './common'
 import type { IContentDoc, IDBContentDoc } from './content'
 import type { DBMedia, Image } from './media'
 import type { SelectValue } from './other'
+import type { DBProfileBadge } from './profileBadge'
 import type { Tag } from './tag'
 
 export class DBNews implements IDBContentDoc {
@@ -24,6 +26,7 @@ export class DBNews implements IDBContentDoc {
   readonly title: string
   readonly total_views?: number
   readonly previous_slugs: string[]
+  readonly profile_badge: DBProfileBadge | null
   readonly slug: string
   readonly summary: string | null
   readonly tags: number[]
@@ -34,50 +37,54 @@ export class DBNews implements IDBContentDoc {
 
 export class News implements IContentDoc {
   id: number
-  isDraft: boolean
-  createdAt: Date
-  modifiedAt: Date | null
   author: Author | null
+  body: string
   category: Category | null
   commentCount: number
+  createdAt: Date
   deleted: boolean
-  title: string
+  heroImage: Image | null
+  isDraft: boolean
+  modifiedAt: Date | null
+  profileBadge: ProfileBadge | null
   previousSlugs: string[]
   slug: string
   subscriberCount: number
   summary: string | null
   tags: Tag[]
   tagIds?: number[]
+  title: string
   totalViews: number
   usefulCount: number
-  body: string
-  heroImage: Image | null
 
-  constructor(obj: any) {
-    Object.assign(this, obj)
+  constructor(news: Partial<News>) {
+    Object.assign(this, news)
   }
 
-  static fromDB(obj: DBNews, tags: Tag[], heroImage?: Image | null) {
+  static fromDB(news: DBNews, tags: Tag[], heroImage?: Image | null) {
     return new News({
-      id: obj.id,
-      author: obj.author ? Author.fromDB(obj.author) : null,
-      body: obj.body,
-      category: obj.category ? Category.fromDB(obj.category) : null,
-      commentCount: obj.comment_count || 0,
-      createdAt: new Date(obj.created_at),
-      deleted: obj.deleted || false,
-      isDraft: obj.is_draft || false,
+      id: news.id,
+      author: news.author ? Author.fromDB(news.author) : null,
+      body: news.body,
+      category: news.category ? Category.fromDB(news.category) : null,
+      commentCount: news.comment_count || 0,
+      createdAt: new Date(news.created_at),
+      deleted: news.deleted || false,
+      isDraft: news.is_draft || false,
       heroImage: heroImage || null,
-      modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
-      previousSlugs: obj.previous_slugs,
-      slug: obj.slug,
-      subscriberCount: obj.subscriber_count || 0,
-      summary: obj.summary || null,
-      tagIds: obj.tags,
+      modifiedAt: news.modified_at ? new Date(news.modified_at) : null,
+      profileBadge: news.profile_badge
+        ? ProfileBadge.fromDB(news.profile_badge)
+        : null,
+      previousSlugs: news.previous_slugs,
+      slug: news.slug,
+      subscriberCount: news.subscriber_count || 0,
+      summary: news.summary || null,
+      tagIds: news.tags,
       tags,
-      title: obj.title,
-      totalViews: obj.total_views || 0,
-      usefulCount: obj.useful_count || 0,
+      title: news.title,
+      totalViews: news.total_views || 0,
+      usefulCount: news.useful_count || 0,
     })
   }
 }
@@ -88,6 +95,7 @@ export type NewsFormData = {
   existingHeroImage: Image | null
   heroImage: IConvertedFileMeta | null
   isDraft: boolean | null
-  title: string
+  profileBadge: SelectValue | null
   tags?: number[]
+  title: string
 }

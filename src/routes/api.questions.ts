@@ -53,6 +53,7 @@ export const loader = async ({ request }) => {
       { count: 'exact' },
     )
     .eq('is_draft', false)
+    .or('deleted.is.null,deleted.neq.true')
 
   if (q) {
     query = query.textSearch('questions_search_fields', q)

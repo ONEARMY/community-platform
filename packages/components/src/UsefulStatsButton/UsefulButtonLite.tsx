@@ -48,8 +48,8 @@ export const UsefulButtonLite = (props: IProps) => {
     !votedUsefulCount || votedUsefulCount === 0
       ? 'transparent'
       : hasUserVotedUseful
-      ? theme.colors.offWhite
-      : theme.colors.silver
+        ? theme.colors.offWhite
+        : theme.colors.silver
 
   return (
     <Flex sx={{ alignSelf: 'flex-end' }}>

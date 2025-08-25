@@ -43,5 +43,7 @@ export const FactoryComment = (
     'questions',
     'research_update',
   ]),
+  voteCount: faker.number.int({ min: 0, max: 100 }),
+  hasVoted: faker.datatype.boolean(),
   ...commentOverloads,
 })

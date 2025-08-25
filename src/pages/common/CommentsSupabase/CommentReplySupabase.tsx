@@ -9,9 +9,10 @@ import {
 } from 'oa-components'
 import { UserRole } from 'oa-shared'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
+import { onUsefulClick } from 'src/utils/onUsefulClick'
 import { Box, Flex, Text } from 'theme-ui'
 
-import type { Reply } from 'oa-shared'
+import type { ContentType, Reply } from 'oa-shared'
 
 const DELETED_COMMENT = 'The original comment got deleted'
 
@@ -26,6 +27,10 @@ export const CommentReply = observer(
     const commentRef = useRef<HTMLDivElement>()
     const [showEditModal, setShowEditModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [usefulCount, setUsefulCount] = useState<number>(
+      comment.voteCount ?? 0,
+    )
+    const [voted, setVoted] = useState<boolean>(false)
 
     const { profile: activeUser } = useProfileStore()
 
@@ -34,6 +39,10 @@ export const CommentReply = observer(
         activeUser?.username === comment.createdBy?.username ||
         activeUser?.roles?.includes(UserRole.ADMIN)
       )
+    }, [activeUser, comment])
+
+    useEffect(() => {
+      setVoted(comment.hasVoted ?? false)
     }, [activeUser, comment])
 
     useEffect(() => {
@@ -46,6 +55,27 @@ export const CommentReply = observer(
     }, [comment.highlighted])
 
     const item = 'ReplyItem'
+    const loggedInUser = activeUser
+
+    const configOnUsefulClick = {
+      contentType: 'comment' as ContentType,
+      contentId: comment.id,
+      eventCategory: 'Comment',
+      slug: `${comment}+${comment.id}`,
+      setVoted,
+      setUsefulCount,
+      loggedInUser: loggedInUser,
+    }
+
+    const handleUsefulClick = async (
+      vote: 'add' | 'delete',
+      eventCategory = 'Comment',
+    ) => {
+      await onUsefulClick({
+        vote,
+        config: { ...configOnUsefulClick, eventCategory },
+      })
+    }
 
     return (
       <Flex>
@@ -80,6 +110,13 @@ export const CommentReply = observer(
                 comment={comment}
                 setShowDeleteModal={setShowDeleteModal}
                 setShowEditModal={setShowEditModal}
+                usefulButtonConfig={{
+                  onUsefulClick: () =>
+                    handleUsefulClick(voted ? 'delete' : 'add'),
+                  hasUserVotedUseful: voted,
+                  votedUsefulCount: usefulCount,
+                  isLoggedIn: !!loggedInUser,
+                }}
               />
             )}
           </Flex>

@@ -7,17 +7,29 @@ import { CommentAvatar } from '../CommentAvatar/CommentAvatar'
 import { CommentBody } from '../CommentBody/CommentBody'
 import { DisplayDate } from '../DisplayDate/DisplayDate'
 import { AuthorsContext } from '../providers/AuthorsContext'
+import { UsefulButtonLite } from '../UsefulStatsButton/UsefulButtonLite'
 import { Username } from '../Username/Username'
 
 import type { Comment } from 'oa-shared'
 import type { ReactNode } from 'react'
+import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface IProps {
   comment: Comment
-  isEditable: boolean | undefined
   itemType: 'ReplyItem' | 'CommentItem'
+  isEditable: boolean | undefined
   setShowDeleteModal: (arg: boolean) => void
   setShowEditModal: (arg: boolean) => void
+  usefulButtonConfig?: {
+    hasUserVotedUseful: boolean
+    votedUsefulCount: number
+    isLoggedIn: boolean
+    onUsefulClick: (
+      vote: 'add' | 'delete',
+      eventCategory?: string,
+    ) => Promise<void>
+    sx?: ThemeUIStyleObject
+  }
   followButton?: ReactNode
   followButtonIcon?: ReactNode
 }
@@ -27,13 +39,21 @@ const DELETED_COMMENT = 'The original comment got deleted'
 export const CommentDisplay = (props: IProps) => {
   const {
     comment,
-    isEditable,
     itemType,
-    setShowDeleteModal,
-    setShowEditModal,
+    isEditable,
     followButton,
     followButtonIcon,
+    setShowDeleteModal,
+    setShowEditModal,
+    usefulButtonConfig,
   } = props
+
+  const {
+    votedUsefulCount = 0,
+    hasUserVotedUseful = false,
+    isLoggedIn = false,
+    onUsefulClick = () => Promise.resolve(),
+  } = usefulButtonConfig || {}
 
   const { authors } = useContext(AuthorsContext)
   const border = `${comment.highlighted ? '2px dashed black' : 'none'}`
@@ -140,7 +160,24 @@ export const CommentDisplay = (props: IProps) => {
                 </ActionSet>
               </Flex>
             </Flex>
-            <CommentBody body={comment.comment} />
+            <Flex
+              sx={{
+                flexDirection: 'column',
+                gap: 2,
+              }}
+            >
+              <CommentBody body={comment.comment} />
+              {usefulButtonConfig && (
+                <UsefulButtonLite
+                  usefulButtonLiteConfig={{
+                    votedUsefulCount,
+                    hasUserVotedUseful,
+                    isLoggedIn,
+                    onUsefulClick,
+                  }}
+                />
+              )}
+            </Flex>
           </Flex>
         </Flex>
       </Flex>

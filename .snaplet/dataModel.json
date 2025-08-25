@@ -9964,6 +9964,9 @@
       "schemaName": "public",
       "values": [
         {
+          "name": "comment"
+        },
+        {
           "name": "news"
         },
         {

@@ -44,6 +44,13 @@ export const UsefulButtonLite = (props: IProps) => {
     setDisabled(false)
   }
 
+  const backgroundColor =
+    !votedUsefulCount || votedUsefulCount === 0
+      ? 'transparent'
+      : hasUserVotedUseful
+      ? theme.colors.offWhite
+      : theme.colors.silver
+
   return (
     <Flex sx={{ alignSelf: 'flex-end' }}>
       <Button
@@ -61,31 +68,35 @@ export const UsefulButtonLite = (props: IProps) => {
         disabled={disabled}
         sx={{
           fontSize: 1,
-          backgroundColor: hasUserVotedUseful
-            ? theme.colors.offWhite
-            : theme.colors.silver,
+          backgroundColor: backgroundColor,
           border: 'none',
           marginRight: 5,
           padding: 1,
+          paddingRight: 4,
           display: 'flex',
-          height: '80%',
+          height: '20px',
+          minHeight: '20px',
           alignItems: 'center',
-          width: 32,
+          width: 'auto',
           gap: 1,
           '&:hover': {
-            backgroundColor: theme.colors.softblue,
+            backgroundColor: backgroundColor,
+            transform: 'none',
+            boxShadow: 'none',
           },
           ...sx,
         }}
       >
         <Flex sx={{ alignItems: 'center' }}>
-          <Text
-            sx={{
-              display: 'inline-block',
-            }}
-          >
-            {votedUsefulCount ?? 0}
-          </Text>
+          {votedUsefulCount > 0 && (
+            <Text
+              sx={{
+                display: 'inline-block',
+              }}
+            >
+              {votedUsefulCount ?? 0}
+            </Text>
+          )}
           <Icon
             glyph={'star-active'}
             ml={5}
@@ -93,7 +104,7 @@ export const UsefulButtonLite = (props: IProps) => {
             filter={hasUserVotedUseful ? 'unset' : 'grayscale(1)'}
             sx={{
               position: 'absolute',
-              right: '-8px',
+              right: '-10px',
             }}
           />
         </Flex>

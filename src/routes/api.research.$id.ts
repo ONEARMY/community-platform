@@ -34,9 +34,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         : null,
       isDraft: formData.get('draft') === 'true',
       slug: convertToSlug(formData.get('title') as string),
+      uploadedImage: formData.get('image') as File,
+      existingImage: formData.get('existingImage') as string | null,
     }
-    const uploadedImage = formData.get('image') as File
-    const existingImage = formData.get('existingImage') as string | null
 
     const { client, headers } = createSupabaseServerClient(request)
 
@@ -74,7 +74,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         previous_slugs: previousSlugs,
         is_draft: data.isDraft,
         collaborators: data.collaborators,
-        ...(!existingImage && { image: null }),
+        ...(!data.existingImage && { image: null }),
       })
       .eq('id', id)
       .select()
@@ -92,10 +92,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       client,
     )
 
-    if (uploadedImage) {
+    if (data.uploadedImage) {
       // TODO:remove unused images from storage
       const mediaResult = await storageServiceServer.uploadImage(
-        [uploadedImage],
+        [data.uploadedImage],
         `research/${research.id}`,
         client,
       )
@@ -180,6 +180,10 @@ async function validateRequest(
 
   if (!data.description) {
     return { status: 400, statusText: 'description is required' }
+  }
+
+  if (!data.isDraft && !data.uploadedImage && !data.existingImage) {
+    return { status: 400, statusText: 'image is required' }
   }
 
   if (

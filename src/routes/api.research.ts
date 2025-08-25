@@ -99,8 +99,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       collaborators: formData.has('collaborators')
         ? (formData.getAll('collaborators') as string[])
         : null,
+      uploadedImage: formData.get('image') as File | null,
     }
-    const uploadedImage = formData.get('image') as File | null
 
     const { client, headers } = createSupabaseServerClient(request)
 
@@ -174,9 +174,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       client,
     )
 
-    if (uploadedImage) {
+    if (data.uploadedImage) {
       const mediaResult = await storageServiceServer.uploadImage(
-        [uploadedImage],
+        [data.uploadedImage],
         `research/${research.id}`,
         client,
       )
@@ -223,6 +223,10 @@ async function validateRequest(request: Request, user: User | null, data: any) {
 
   if (!data.description) {
     return { status: 400, statusText: 'description is required' }
+  }
+
+  if (!data.isDraft && !data.uploadedImage && !data.existingImage) {
+    return { status: 400, statusText: 'image is required' }
   }
 
   return { valid: true }

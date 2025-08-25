@@ -84,7 +84,7 @@ describe('UsefulButtonLite', () => {
     },
   }
 
-  it('shows 0 when votedUsefulCount is 0', () => {
+  it('does not show count when votedUsefulCount is 0', () => {
     const props: IProps = {
       usefulButtonLiteConfig: {
         ...defaultProps.usefulButtonLiteConfig,
@@ -98,7 +98,8 @@ describe('UsefulButtonLite', () => {
       </TestWrapper>,
     )
 
-    expect(screen.getByText('0')).toBeInTheDocument()
+    expect(screen.queryByText('0')).not.toBeInTheDocument()
+    expect(screen.getByRole('button')).toBeInTheDocument()
   })
 
   it('shows the icon as gray when hasUserVotedUseful is false', () => {

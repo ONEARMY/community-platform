@@ -8,10 +8,10 @@ import {
   Tabs,
   TabsList,
 } from 'oa-components'
-import { ProfileTypeList, UserRole } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isPreciousPlastic } from 'src/config/config'
-import { isUserContactable } from 'src/utils/helpers'
+import { isContactable } from 'src/utils/helpers'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Alert, Box, Card, Flex } from 'theme-ui'
 
@@ -23,34 +23,29 @@ import { ProfileHeader } from './ProfileHeader'
 import { ProfileImage } from './ProfileImage'
 import UserCreatedDocuments from './UserCreatedDocuments'
 
-import type { IUser, IUserDB, UserCreatedDocs } from 'oa-shared'
+import type { Profile, UserCreatedDocs } from 'oa-shared'
 
 interface IProps {
   docs: UserCreatedDocs
   isViewingOwnProfile: boolean
-  user: IUser
+  user: Profile
 }
 
 export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
-  const { about, impact, links, profileType, tags } = user
-
-  const useLocationHook = useLocation()
-
-  const isMember = profileType === ProfileTypeList.MEMBER
-
-  const hasContactOption =
-    isUserContactable(user) || (links && Object.keys(links).length !== 0)
+  const { about, impact, type, tags } = user
+  const location = useLocation()
+  const isMember = !type?.isSpace
+  const hasContactOption = isContactable(user.isContactable) || !!user.website
   const hasContributed =
     docs?.projects.length + docs?.research.length + docs?.questions.length > 0
   const hasImpacted = !!impact
   const hasProfile =
     about || (tags && Object.keys(tags).length !== 0) || hasContributed
 
-  const showEmptyProfileAlert =
-    isViewingOwnProfile && !isProfileComplete(user as IUserDB)
+  const showEmptyProfileAlert = isViewingOwnProfile && !isProfileComplete(user)
 
   const defaultValue =
-    useLocationHook?.hash?.slice(1) || (hasProfile ? 'profile' : 'contact')
+    location?.hash?.slice(1) || (hasProfile ? 'profile' : 'contact')
 
   const [selectedTab, setSelectedTab] = useState(defaultValue)
 
@@ -65,7 +60,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
     >
       {isMember && (
         <MemberBadge
-          profileType={ProfileTypeList.MEMBER}
+          profileType={type || undefined}
           size={50}
           sx={{
             alignSelf: 'center',
@@ -121,7 +116,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
               <TabPanel value="profile">
                 <ProfileDetails
                   docs={docs}
-                  user={user}
+                  profile={user}
                   selectTab={setSelectedTab}
                 />
               </TabPanel>
@@ -147,8 +142,8 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
           </Box>
           <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
             <MemberHistory
-              memberSince={user.profileCreated}
-              lastActive={user._lastActive}
+              memberSince={user.createdAt}
+              lastActive={user.lastActive}
             />
           </AuthWrapper>
         </Flex>

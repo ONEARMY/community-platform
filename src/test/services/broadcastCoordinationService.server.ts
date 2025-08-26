@@ -1,6 +1,5 @@
 import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server'
 import { discordServiceServer } from 'src/services/discordService.server'
-import { notificationsService } from 'src/services/notificationsService.server'
 import { notificationsSupabaseServiceServer } from 'src/services/notificationSupabaseService.server'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -43,9 +42,6 @@ describe('broadcastCoordinationServiceServer', () => {
         )
 
         expect(
-          notificationsService.sendResearchUpdateNotification,
-        ).not.toHaveBeenCalled()
-        expect(
           notificationsSupabaseServiceServer.createNotificationsResearchUpdate,
         ).not.toHaveBeenCalled()
         expect(discordServiceServer.postWebhookRequest).not.toHaveBeenCalled()
@@ -66,9 +62,6 @@ describe('broadcastCoordinationServiceServer', () => {
           mockRequest,
         )
 
-        expect(
-          notificationsService.sendResearchUpdateNotification,
-        ).not.toHaveBeenCalled()
         expect(
           notificationsSupabaseServiceServer.createNotificationsResearchUpdate,
         ).not.toHaveBeenCalled()
@@ -95,9 +88,6 @@ describe('broadcastCoordinationServiceServer', () => {
         )
 
         expect(
-          notificationsService.sendResearchUpdateNotification,
-        ).not.toHaveBeenCalled()
-        expect(
           notificationsSupabaseServiceServer.createNotificationsResearchUpdate,
         ).not.toHaveBeenCalled()
         expect(discordServiceServer.postWebhookRequest).not.toHaveBeenCalled()
@@ -123,14 +113,6 @@ describe('broadcastCoordinationServiceServer', () => {
         )
 
         expect(
-          notificationsService.sendResearchUpdateNotification,
-        ).toHaveBeenCalledWith(
-          mockClient,
-          mockResearch,
-          researchUpdate,
-          mockProfile,
-        )
-        expect(
           notificationsSupabaseServiceServer.createNotificationsResearchUpdate,
         ).toHaveBeenCalledWith(
           mockResearch,
@@ -154,14 +136,6 @@ describe('broadcastCoordinationServiceServer', () => {
           mockRequest,
         )
 
-        expect(
-          notificationsService.sendResearchUpdateNotification,
-        ).toHaveBeenCalledWith(
-          mockClient,
-          mockResearch,
-          researchUpdate,
-          mockProfile,
-        )
         expect(
           notificationsSupabaseServiceServer.createNotificationsResearchUpdate,
         ).toHaveBeenCalledWith(

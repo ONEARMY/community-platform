@@ -5,44 +5,29 @@ type CreateProfileArgs = {
   username: string
 }
 
-type UpdateProfileArgs = {
-  supabaseAuthId: string
-  firebaseAuthId: string
-}
-
 const createUserProfile = async (
   args: CreateProfileArgs,
   client: SupabaseClient,
 ) => {
+  // Should add more typing here about the required fields needed to create a profile
+
+  const { data, error } = await client
+    .from('profile_types')
+    .select('*')
+    .eq('name', 'member')
+
+  if (error) {
+    console.error(error)
+    throw 'Default member type not found'
+  }
+
   return await client.from('profiles').insert({
     auth_id: args.user.id,
     username: args.username,
     display_name: args.username,
-    is_verified: false,
-    is_supporter: false,
-    firebase_auth_id: '',
     tenant_id: process.env.TENANT_ID,
+    profile_type: data[0].id,
   })
-}
-
-const updateUserProfile = async (
-  args: UpdateProfileArgs,
-  client: SupabaseClient,
-) => {
-  return await client
-    .from('profiles')
-    .update({ auth_id: args.supabaseAuthId })
-    .eq('firebase_auth_id', args.firebaseAuthId)
-}
-
-const getUserByFirebaseId = async (
-  firebaseAuthId: string,
-  client: SupabaseClient,
-) => {
-  return await client
-    .from('profiles')
-    .select('auth_id,username')
-    .eq('firebase_auth_id', firebaseAuthId)
 }
 
 const isUsernameAvailable = async (
@@ -56,6 +41,4 @@ const isUsernameAvailable = async (
 export const authServiceServer = {
   createUserProfile,
   isUsernameAvailable,
-  updateUserProfile,
-  getUserByFirebaseId,
 }

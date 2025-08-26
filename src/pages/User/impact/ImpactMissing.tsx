@@ -1,19 +1,18 @@
 import { Link } from '@remix-run/react'
-import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import { Button, ExternalLink } from 'oa-components'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Flex, Text } from 'theme-ui'
 
 import { IMPACT_REPORT_LINKS } from './constants'
 import { invisible, missing, reportYearLabel } from './labels'
 
-import type { IImpactYear, IImpactYearFieldList, IUser } from 'oa-shared'
+import type { IImpactDataField, IImpactYear, Profile } from 'oa-shared'
 
 interface Props {
-  fields: IImpactYearFieldList | undefined
-  owner: IUser | undefined
-  visibleFields: IImpactYearFieldList | undefined
+  fields: IImpactDataField[] | undefined
+  owner: Profile | undefined
+  visibleFields: IImpactDataField[] | undefined
   year: IImpactYear
 }
 
@@ -30,20 +29,20 @@ const isAllInvisible = (fields, visibleFields) => {
   return false
 }
 
-const isPageOwnerCheck = (activeUser, owner) => {
+const isPageOwnerCheck = (activeUser?: Profile, owner?: Profile) => {
   const usersPresent = activeUser && owner
-  const usersTheSame = toJS(activeUser)?.userName === owner?.userName
+  const usersTheSame = activeUser?.username === owner?.username
 
   return usersPresent && usersTheSame ? true : false
 }
 
 export const ImpactMissing = observer((props: Props) => {
   const { fields, owner, visibleFields, year } = props
-  const { userStore } = useCommonStores().stores
+  const { profile } = useProfileStore()
 
   const labelSet = isAllInvisible(fields, visibleFields) ? invisible : missing
 
-  const isPageOwner = isPageOwnerCheck(userStore.activeUser, owner)
+  const isPageOwner = isPageOwnerCheck(profile, owner)
   const isReportYear = IMPACT_REPORT_LINKS[year] ? true : false
 
   const button = `${year} ${labelSet.user.link}`

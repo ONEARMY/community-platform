@@ -1,5 +1,3 @@
-import type { ISODateString } from './common'
-
 /*************************************************************************************
  * Generate a list of DB endpoints used in the app
  *
@@ -47,11 +45,3 @@ if (!('process' in globalThis)) {
 export const DB_ENDPOINTS = generateDBEndpoints()
 
 export type DBEndpoint = keyof typeof DB_ENDPOINTS
-
-export interface DBDoc {
-  _id: string
-  _created: ISODateString
-  _modified?: ISODateString
-  _deleted: boolean
-  _contentModifiedTimestamp?: ISODateString
-}

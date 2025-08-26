@@ -1,9 +1,5 @@
-import { UserRole } from 'oa-shared'
-
 describe('[Notifications]', () => {
   it('email preferences can be set', () => {
-    localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
-
     cy.signUpCompletedUser()
     cy.visit('/settings')
 
@@ -41,7 +37,7 @@ describe('[Notifications]', () => {
       .contains('Stop receiving messages')
       .click()
 
-    cy.get('[data-cy=isContactableByPublic-true]').click({ force: true })
+    cy.get('[data-cy=isContactable-true]').click({ force: true })
     cy.saveSettingsForm()
 
     cy.get('[data-cy=tab-Notifications]').click()

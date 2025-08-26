@@ -53,9 +53,25 @@ export const ArticleCallToActionSupabaseSingleContributor: StoryFn<
         id: faker.datatype.number(),
         country: faker.address.countryCode(),
         displayName: faker.name.firstName(),
-        isVerified: faker.datatype.boolean(),
-        isSupporter: faker.datatype.boolean(),
-        photoUrl: faker.image.imageUrl(),
+        badges: [
+          {
+            id: 1,
+            name: 'pro',
+            displayName: 'PRO',
+            imageUrl: faker.image.avatar(),
+          },
+          {
+            id: 2,
+            name: 'supporter',
+            displayName: 'Supporter',
+            actionUrl: faker.internet.url(),
+            imageUrl: faker.image.avatar(),
+          },
+        ],
+        photo: {
+          id: faker.datatype.string(),
+          publicUrl: faker.image.imageUrl(),
+        },
         username: faker.internet.userName(),
       },
     ]}
@@ -68,9 +84,25 @@ const makeFakeUser = (): Author => ({
   id: faker.datatype.number(),
   country: faker.address.countryCode(),
   displayName: faker.name.firstName(),
-  isVerified: faker.datatype.boolean(),
-  isSupporter: faker.datatype.boolean(),
-  photoUrl: faker.image.imageUrl(),
+  badges: [
+    {
+      id: 1,
+      name: 'pro',
+      displayName: 'PRO',
+      imageUrl: faker.image.avatar(),
+    },
+    {
+      id: 2,
+      name: 'supporter',
+      displayName: 'Supporter',
+      actionUrl: faker.internet.url(),
+      imageUrl: faker.image.avatar(),
+    },
+  ],
+  photo: {
+    id: faker.datatype.string(),
+    publicUrl: faker.image.imageUrl(),
+  },
   username: faker.internet.userName(),
 })
 

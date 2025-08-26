@@ -28,11 +28,9 @@ describe('NotificationDisplay', () => {
             title: 'New thing coming',
             slug: 'new-thing-coming',
           }),
-          triggeredBy: {
-            id: 1,
+          triggeredBy: factoryTriggeredBy({
             username: 'dave0',
-            photoUrl: '',
-          },
+          }),
         })
 
         const notificationDisplay =
@@ -173,11 +171,9 @@ describe('NotificationDisplay', () => {
             title: 'New thing coming',
             slug: 'new-thing-coming',
           }),
-          triggeredBy: {
-            id: 1,
+          triggeredBy: factoryTriggeredBy({
             username: 'dave0',
-            photoUrl: '',
-          },
+          }),
         })
 
         const notificationDisplay =

@@ -16,19 +16,20 @@ describe('notificationsPreferencesViaEmailService', () => {
   describe('getPreferences', () => {
     it('should return preferences when API call succeeds', async () => {
       const mockPreferences = {
-        id: 1,
-        user_id: 123,
-        comments: true,
-        replies: false,
-        research_updates: true,
-        is_unsubscribed: false,
+        is_contactable: true,
+        preferences: {
+          id: 1,
+          user_id: 123,
+          comments: true,
+          replies: false,
+          research_updates: true,
+          is_unsubscribed: false,
+        },
       }
 
       global.fetch = vi
         .fn()
-        .mockResolvedValue(
-          createFetchResponse({ preferences: mockPreferences }),
-        )
+        .mockResolvedValue(createFetchResponse(mockPreferences))
 
       const result =
         await notificationsPreferencesViaEmailService.getPreferences('user123')

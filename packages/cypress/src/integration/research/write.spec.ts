@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker'
-import { UserRole } from 'oa-shared'
 
 import { RESEARCH_TITLE_MIN_LENGTH } from '../../../../../src/pages/Research/constants'
 import { MOCK_DATA } from '../../data'
@@ -30,9 +29,6 @@ describe('[Research]', () => {
 
   describe('[Create research article]', () => {
     it('[By Authenticated]', () => {
-      // Needed for notifications as feature behind auth wrapper:
-      localStorage.setItem('devSiteRole', UserRole.BETA_TESTER)
-
       const initialRandomId = generateAlphaNumeric(4).toLowerCase()
       const initialTitle = initialRandomId + ' Initial Title'
       const initialExpectedSlug = initialRandomId + '-initial-title'
@@ -99,7 +95,7 @@ describe('[Research]', () => {
         .attachFile('images/howto-step-pic1.jpg')
 
       cy.step('New collaborators can be assigned to research')
-      cy.selectTag(subscriber.userName, '[data-cy=UserNameSelect]')
+      cy.selectTag(subscriber.username, '[data-cy=UserNameSelect]')
 
       cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=submit]').click()
@@ -110,7 +106,7 @@ describe('[Research]', () => {
       cy.step('Research article displays correctly')
       cy.contains(expected.title)
       cy.contains(expected.description)
-      cy.contains(admin.userName)
+      cy.contains(admin.username)
 
       cy.step('Can access the research with the previous slug')
       cy.visit(`/research/${initialExpectedSlug}`)
@@ -191,7 +187,7 @@ describe('[Research]', () => {
         content: updateTitle,
         path: `${researchURL}#update_`,
         title: expected.title,
-        username: subscriber.userName,
+        username: subscriber.username,
       })
 
       // cy.get('[data-cy=file-download-counter]').should(
@@ -286,16 +282,21 @@ describe('[Research]', () => {
         .clear()
         .type(researchItem.description)
       cy.selectTag(researchItem.category, '[data-cy=category-select]')
+      cy.get('[data-cy=image-upload]')
+        .find(':file')
+        .attachFile('images/howto-step-pic1.jpg')
+      cy.wait(500)
       cy.get('[data-cy=submit]').click()
-      cy.get('[data-cy="loader"]')
-      cy.contains(researchItem.title)
+      cy.wait(2000)
       cy.get('[data-cy=follow-button]').contains('Following')
+      cy.contains(researchItem.title)
 
       cy.step('Users can follow for research updates (for later expectations)')
       cy.logout()
       cy.signIn(admin.email, admin.password)
       cy.visit(researchURL)
       cy.get('[data-cy=follow-button]').first().click()
+      cy.clearNotifications()
       cy.logout()
 
       cy.step('Can start adding research update')
@@ -357,7 +358,7 @@ describe('[Research]', () => {
         content: finalUpdateTitle,
         path: `${researchURL}#update_`,
         title: researchItem.title,
-        username: researcher.userName,
+        username: researcher.username,
       })
     })
 

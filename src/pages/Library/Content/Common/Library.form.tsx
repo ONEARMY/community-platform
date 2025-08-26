@@ -7,9 +7,10 @@ import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { FilesFields } from 'src/pages/common/FormFields/FilesFields'
 import { ImageField } from 'src/pages/common/FormFields/ImageField'
+import { TagsField } from 'src/pages/common/FormFields/Tags.field'
 import { Flex } from 'theme-ui'
 
-import { buttons, headings } from '../../labels'
+import { buttons, headings, intro } from '../../labels'
 import { libraryService } from '../../library.service'
 import { transformLibraryErrors } from '../utils'
 import { LibraryCategoryField } from './LibraryCategory.field'
@@ -17,7 +18,6 @@ import { LibraryDescriptionField } from './LibraryDescription.field'
 import { LibraryDifficultyField } from './LibraryDifficulty.field'
 import { LibraryPostingGuidelines } from './LibraryPostingGuidelines'
 import { LibraryStepsContainerField } from './LibraryStepsContainer.field'
-import { LibraryTagsField } from './LibraryTags.field'
 import { LibraryTimeField } from './LibraryTime.field'
 import { LibraryTitleField } from './LibraryTitle.field'
 
@@ -51,7 +51,8 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       existingFiles: files,
       fileLink: fileLink,
       steps: project?.steps
-        ?.toSorted((a, b) => a.order - b.order)
+        ?.slice()
+        .sort((a, b) => a.order - b.order)
         .map((x) => ({
           id: x.id,
           title: x.title,
@@ -180,7 +181,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                   <LibraryTitleField />
                   <LibraryDescriptionField />
                   <LibraryCategoryField />
-                  <LibraryTagsField />
+                  <TagsField title={intro.tags.title} />
                   <LibraryTimeField />
                   <LibraryDifficultyField />
                   <FilesFields />

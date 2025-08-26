@@ -1,5 +1,5 @@
 import { Field } from 'react-final-form'
-import { TagsSelectFieldV2 } from 'src/common/Form/TagsSelectFieldV2'
+import { TagsSelectField } from 'src/common/Form/TagsSelectField'
 import { FormFieldWrapper } from 'src/pages/common/FormFields'
 import { COMPARISONS } from 'src/utils/comparisons'
 
@@ -16,7 +16,7 @@ export const TagsField = ({ title }: IProps) => {
         data-cy={`field-${name}`}
         name={name}
         id={name}
-        component={TagsSelectFieldV2}
+        component={TagsSelectField}
         isEqual={COMPARISONS.tagsSupabase}
       />
     </FormFieldWrapper>

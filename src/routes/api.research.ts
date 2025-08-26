@@ -3,7 +3,7 @@ import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { ITEMS_PER_PAGE } from 'src/pages/Research/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
-import { profileServiceServer } from 'src/services/profileService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
 import { convertToSlug } from 'src/utils/slug'
@@ -35,12 +35,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     limit_val: ITEMS_PER_PAGE,
   })
 
-  const countRersult = await client.rpc('get_research_count', {
+  const countResult = await client.rpc('get_research_count', {
     search_query: q || null,
     category_id: category,
     research_status: status || null,
   })
-  const count = countRersult.data || 0
+  const count = countResult.data || 0
 
   if (error) {
     console.error(error)
@@ -48,11 +48,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const dbItems = data as DBResearchItem[]
-  const items = dbItems.map((x) => {
-    const images = x.image
-      ? storageServiceServer.getPublicUrls(client, [x.image], IMAGE_SIZES.LIST)
+  const items = dbItems.map((dbResearchItem) => {
+    const images = dbResearchItem.image
+      ? storageServiceServer.getPublicUrls(
+          client,
+          [dbResearchItem.image],
+          IMAGE_SIZES.LIST,
+        )
       : []
-    return ResearchItem.fromDB(x, [], images)
+    return ResearchItem.fromDB(dbResearchItem, [], images)
   })
 
   if (items && items.length > 0) {
@@ -95,8 +99,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       collaborators: formData.has('collaborators')
         ? (formData.getAll('collaborators') as string[])
         : null,
+      uploadedImage: formData.get('image') as File | null,
     }
-    const uploadedImage = formData.get('image') as File | null
 
     const { client, headers } = createSupabaseServerClient(request)
 
@@ -128,7 +132,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       )
     }
 
-    const profile = await profileServiceServer.getByAuthId(user!.id, client)
+    const profileService = new ProfileServiceServer(client)
+    const profile = await profileService.getByAuthId(user!.id)
 
     if (!profile) {
       return Response.json({}, { status: 400, statusText: 'User not found' })
@@ -169,9 +174,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       client,
     )
 
-    if (uploadedImage) {
+    if (data.uploadedImage) {
       const mediaResult = await storageServiceServer.uploadImage(
-        [uploadedImage],
+        [data.uploadedImage],
         `research/${research.id}`,
         client,
       )
@@ -218,6 +223,10 @@ async function validateRequest(request: Request, user: User | null, data: any) {
 
   if (!data.description) {
     return { status: 400, statusText: 'description is required' }
+  }
+
+  if (!data.isDraft && !data.uploadedImage && !data.existingImage) {
+    return { status: 400, statusText: 'image is required' }
   }
 
   return { valid: true }

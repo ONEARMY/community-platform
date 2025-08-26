@@ -1,6 +1,6 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
-import { IModerationStatus, News } from 'oa-shared'
+import { News } from 'oa-shared'
 import { ITEMS_PER_PAGE } from 'src/pages/News/constants'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { discordServiceServer } from 'src/services/discordService.server'
@@ -15,7 +15,7 @@ import { contentServiceServer } from '../services/contentService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { AuthError, User } from '@supabase/supabase-js'
-import type { DBNews, DBProfile } from 'oa-shared'
+import type { DBNews, DBProfile, Moderation } from 'oa-shared'
 import type { NewsSortOption } from 'src/pages/News/NewsSortOptions'
 
 export const loader = async ({ request }) => {
@@ -45,7 +45,15 @@ export const loader = async ({ request }) => {
       title,
       total_views,
       hero_image,
-      author:profiles(id, display_name, username, is_verified, is_supporter, country)`,
+      author:profiles(id, display_name, username, country, badges:profile_badges_relations(
+        profile_badges(
+          id,
+          name,
+          display_name,
+          image_url,
+          action_url
+        )
+      ))`,
       { count: 'exact' },
     )
     .eq('is_draft', false)
@@ -175,7 +183,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         title: data.title,
         body: data.body,
         is_draft: data.isDraft,
-        moderation: IModerationStatus.ACCEPTED,
+        moderation: 'accepted' as Moderation,
         slug,
         summary: getSummaryFromMarkdown(data.body),
         category: data.category,

@@ -7,13 +7,13 @@ import { UserRole } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { AuthWrapper } from 'src/common/AuthWrapper'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isModuleSupported, MODULE } from 'src/modules'
 import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
 import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
 import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import { notificationSupabaseService } from 'src/services/notificationSupabaseService'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Flex, Text, useThemeUI } from 'theme-ui'
 
 import { EnvironmentContext } from '../EnvironmentContext'
@@ -85,10 +85,9 @@ const AnimationContainer = (props: any) => {
 const Header = observer(() => {
   const { theme } = useThemeUI()
   const env = useContext(EnvironmentContext)
-  const { userNotificationsStore } = useCommonStores().stores
-  const user = userNotificationsStore.user
+  const { profile } = useProfileStore()
+  const isLoggedIn = !!profile
 
-  const isLoggedInUser = !!user
   const [isVisible, setIsVisible] = useState(false)
 
   // New notifications states
@@ -137,7 +136,7 @@ const Header = observer(() => {
         >
           <Flex>
             <Logo />
-            {isLoggedInUser && (
+            {isLoggedIn && (
               <AuthWrapper roleRequired={UserRole.BETA_TESTER} borderLess>
                 <Flex
                   className="user-beta-icon"
@@ -159,7 +158,7 @@ const Header = observer(() => {
               </AuthWrapper>
             )}
           </Flex>
-          {isLoggedInUser && (
+          {isLoggedIn && (
             <MobileNotificationsWrapper>
               <NotificationsSupabase device="mobile" />
             </MobileNotificationsWrapper>
@@ -175,7 +174,7 @@ const Header = observer(() => {
             }}
           >
             <MenuDesktop />
-            {isLoggedInUser && <NotificationsSupabase device="desktop" />}
+            {isLoggedIn && <NotificationsSupabase device="desktop" />}
             {isModuleSupported(
               env?.VITE_SUPPORTED_MODULES || '',
               MODULE.USER,

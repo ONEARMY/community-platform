@@ -12,10 +12,10 @@ import { messageService } from 'src/services/messageService'
 import { isUserContactable } from 'src/utils/helpers'
 import { Box, Flex, Heading } from 'theme-ui'
 
-import type { IUser } from 'oa-shared'
+import type { Profile } from 'oa-shared'
 
 interface Props {
-  user: IUser
+  user: Profile
 }
 
 type SubmitResults = { type: 'success' | 'error'; message: string }
@@ -34,7 +34,7 @@ export const UserContactForm = observer(({ user }: Props) => {
   const onSubmit = async (formValues, form) => {
     setSubmitResults(null)
     const response = await messageService.sendMessage({
-      to: user.userName,
+      to: user.username,
       message: formValues.message,
       name: formValues.name,
     })

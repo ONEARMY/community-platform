@@ -1,8 +1,14 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { observer } from 'mobx-react'
-import { Button, MemberBadge, ReturnPathLink } from 'oa-components'
+import {
+  Button,
+  CommentAvatar,
+  MemberBadge,
+  ReturnPathLink,
+} from 'oa-components'
 import { UserAction } from 'src/common/UserAction'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Box, Flex, Text, Textarea } from 'theme-ui'
 
 import type { DiscussionContentTypes } from 'oa-shared'
@@ -22,12 +28,20 @@ interface IProps {
 
 export const CreateCommentSupabase = observer((props: IProps) => {
   const { onSubmit, isLoading, isReply, sx } = props
-  const userProfileType = 'member'
   const placeholder = props.placeholder || 'Leave your questions or feedback...'
   const buttonLabel = isReply ? 'Leave a reply' : 'Leave a comment'
 
   const [comment, setComment] = useState<string>('')
   const [isFocused, setIsFocused] = useState<boolean>(false)
+  const { profile, profileTypes } = useProfileStore()
+
+  const profileType = useMemo(() => {
+    if (profile?.type) {
+      return profile.type
+    }
+
+    return profileTypes?.find((x) => !x.isSpace)
+  }, [profile, profileTypes])
 
   const commentIsActive = comment.length > 0 || isFocused
 
@@ -59,7 +73,14 @@ export const CreateCommentSupabase = observer((props: IProps) => {
               flexShrink: 0,
             }}
           >
-            <MemberBadge profileType={userProfileType} useLowDetailVersion />
+            {profile?.photo?.publicUrl ? (
+              <CommentAvatar
+                displayName={profile?.displayName}
+                photo={profile?.photo?.publicUrl}
+              />
+            ) : (
+              <MemberBadge profileType={profileType} useLowDetailVersion />
+            )}
           </Box>
           <Box
             sx={{

@@ -1,17 +1,17 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Form } from 'react-final-form'
-import { ARRAY_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
 import { toJS } from 'mobx'
+import { observer } from 'mobx-react'
 import { Button, Loader } from 'oa-components'
-import { ProfileTypeList } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
-import { isContactable, isMessagingBlocked } from 'src/utils/helpers'
+import { profileService } from 'src/services/profileService'
+import { useProfileStore } from 'src/stores/Profile/profile.store'
+import { isContactable, isMessagingModuleOff } from 'src/utils/helpers'
 import { Flex } from 'theme-ui'
 
-import { FocusSection } from './content/sections/Focus.section'
+import { ProfileTypeSection } from './content/sections/ProfileType.section'
 import { PublicContactSection } from './content/sections/PublicContact.section'
 import { UserImagesSection } from './content/sections/UserImages.section'
 import { UserInfosSection } from './content/sections/UserInfos.section'
@@ -19,35 +19,28 @@ import { VisitorSection } from './content/sections/VisitorSection'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 import { buttons } from './labels'
 
-import type { IUser } from 'oa-shared'
+import type { ProfileFormData } from 'oa-shared'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
-export const SettingsPageUserProfile = () => {
+export const SettingsPageUserProfile = observer(() => {
   const [notification, setNotification] = useState<
     IFormNotification | undefined
   >(undefined)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const { userStore } = useCommonStores().stores
-  const user = toJS(userStore.activeUser)
+  const { profileTypes, profile, update, refresh } = useProfileStore()
 
-  if (!user) return null
+  if (!profile) {
+    return null
+  }
 
-  const saveProfile = async (values: IUser) => {
-    setIsLoading(true)
-
-    const toUpdate = {
-      _id: user._id,
-      ...values,
-    }
-
-    toUpdate.coverImages = toUpdate.coverImages.filter((cover) => !!cover)
-
-    toUpdate.links = toUpdate.links || []
+  const saveProfile = async (values: ProfileFormData) => {
+    values.coverImages = values.coverImages?.filter((cover) => !!cover) || []
 
     try {
-      logger.debug({ profile: toUpdate }, 'SettingsPage.saveProfile')
-      await userStore.updateUserProfile(toUpdate, 'settings-save-profile')
+      const updatedProfile = await profileService.update(values)
+
+      update(updatedProfile)
+      refresh()
 
       setNotification({
         message: 'Profile Saved',
@@ -56,10 +49,7 @@ export const SettingsPageUserProfile = () => {
         variant: 'success',
       })
     } catch (error) {
-      logger.warn(
-        { error, profile: toUpdate },
-        'SettingsPage.saveProfile.error',
-      )
+      logger.error(error, 'SettingsPage.saveProfile.error')
       setNotification({
         message: `Save Failed - ${error}`,
         icon: 'close',
@@ -67,38 +57,32 @@ export const SettingsPageUserProfile = () => {
         variant: 'failure',
       })
     }
-    setIsLoading(false)
   }
 
-  const validateForm = (v: IUser) => {
-    const errors: any = {}
-    // must have at least 1 cover (awkward react final form array format)
-    if (!v.coverImages[0] && v.profileType !== ProfileTypeList.MEMBER) {
-      errors.coverImages = []
-      errors.coverImages[ARRAY_ERROR] = 'Must have at least one cover image'
-    }
-    return errors
-  }
+  const existingCoverImages = profile.coverImages
+    ? profile?.coverImages?.slice(0, 4).map((image) => toJS(image))
+    : []
+  const coverImages = new Array(4 - (existingCoverImages?.length || 0))
 
-  const emptyArray = new Array(4).fill(null)
-  const coverImages = user.coverImages
-    ? emptyArray.map((v, i) => (user.coverImages[i] ? user.coverImages[i] : v))
-    : emptyArray
-
-  const initialValues = {
-    profileType: user.profileType || ProfileTypeList.MEMBER,
-    displayName: user.displayName || null,
-    userName: user.userName,
-    links: user.links || [],
-    location: user.location || null,
-    about: user.about || null,
-    isContactableByPublic: isContactable(user.isContactableByPublic),
-    userImage: user.userImage || null,
-    coverImages,
-    tags: user.tags || {},
-    openToVisitors: user.openToVisitors,
-  }
-
+  const initialValues = useMemo<ProfileFormData>(
+    () => ({
+      type: profile.type?.name || 'member',
+      displayName: profile.displayName || '',
+      userName: profile.username,
+      about: profile.about || '',
+      isContactable: isContactable(profile.isContactable),
+      coverImages: coverImages,
+      existingCoverImages: existingCoverImages,
+      existingPhoto: profile.photo ? toJS(profile.photo) : undefined,
+      country: profile.country,
+      showVisitorPolicy: !!profile.visitorPolicy,
+      visitorPreferencePolicy: profile.visitorPolicy?.policy || 'open',
+      visitorPreferenceDetails: profile.visitorPolicy?.details,
+      website: profile.website || '',
+      tagIds: profile.tags?.map((x) => x.id) || null,
+    }),
+    [],
+  )
   const formId = 'userProfileForm'
 
   return (
@@ -106,7 +90,6 @@ export const SettingsPageUserProfile = () => {
       id={formId}
       onSubmit={async (values) => await saveProfile(values)}
       initialValues={initialValues}
-      validate={validateForm}
       mutators={{ ...arrayMutators }}
       validateOnBlur
       render={({
@@ -118,15 +101,15 @@ export const SettingsPageUserProfile = () => {
         handleSubmit,
         invalid,
         errors,
+        form,
       }) => {
-        if (isLoading) return <Loader sx={{ alignSelf: 'center' }} />
-
-        const isMember = values.profileType === ProfileTypeList.MEMBER
+        const isMember = !profileTypes?.find((x) => x.name === values.type)
+          ?.isSpace
 
         return (
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
             <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
-
+            {submitting && <Loader sx={{ alignSelf: 'center' }} />}
             <SettingsFormNotifications
               errors={errors}
               notification={notification}
@@ -135,20 +118,29 @@ export const SettingsPageUserProfile = () => {
 
             <form id={formId} onSubmit={handleSubmit}>
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
-                <FocusSection />
-
+                <ProfileTypeSection profileTypes={profileTypes || []} />
                 <UserInfosSection formValues={values} />
-
-                <UserImagesSection isMemberProfile={isMember} values={values} />
+                <UserImagesSection
+                  isMemberProfile={isMember}
+                  values={values}
+                  form={form}
+                />
 
                 {!isMember && (
-                  <VisitorSection openToVisitors={values.openToVisitors} />
+                  <VisitorSection
+                    visitorPolicy={
+                      values.showVisitorPolicy
+                        ? {
+                            policy: values.visitorPreferencePolicy,
+                            details: values.visitorPreferenceDetails,
+                          }
+                        : undefined
+                    }
+                  />
                 )}
 
-                {!isMessagingBlocked() && (
-                  <PublicContactSection
-                    isContactableByPublic={values.isContactableByPublic}
-                  />
+                {!isMessagingModuleOff() && (
+                  <PublicContactSection isContactable={values.isContactable} />
                 )}
               </Flex>
             </form>
@@ -161,7 +153,7 @@ export const SettingsPageUserProfile = () => {
                 invalid ? `Errors: ${Object.keys(errors || {})}` : 'Submit'
               }
               onClick={() => window.scrollTo(0, 0)}
-              variant={'primary'}
+              variant="primary"
               type="submit"
               disabled={submitting}
               sx={{ alignSelf: 'flex-start' }}
@@ -173,4 +165,4 @@ export const SettingsPageUserProfile = () => {
       }}
     />
   )
-}
+})

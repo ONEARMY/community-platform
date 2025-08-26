@@ -1,74 +1,178 @@
 import { MOCK_DATA } from '../data'
 import { seedDatabase, supabaseAdminClient } from '../utils/TestUtils'
 
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type {
+  DBProfile,
+  DBProfileBadge,
+  DBProfileTag,
+  DBProfileType,
+  Profile,
+} from 'oa-shared'
 
 // Creates user accounts and respective profiles
-export const seedAccounts = async () => {
-  const tenantId = Cypress.env('TENANT_ID')
+export const seedAccounts = async (
+  profileBadges: DBProfileBadge[],
+  profileTags: DBProfileTag[],
+  profileTypes: DBProfileType[],
+) => {
   const supabase = supabaseAdminClient()
 
-  const accounts = Object.values(MOCK_DATA.users)
-    .filter((x) => !!x['password'] && !!x['email'] && !!x.userName)
-    .map((user) => ({
-      id: '',
-      email: user['email'],
-      username: user.userName,
-      password: user['password'],
-      roles: user.userRoles,
-    }))
+  const accounts = Object.values(MOCK_DATA.users).map((user) => ({
+    email: user['email'],
+    password: user['password'],
+    ...user,
+  }))
 
-  const userIds = await Promise.all(
-    accounts.map((user) =>
-      signUp(supabase, user.email, user.username, user.password),
-    ),
+  const existingUsers = await supabase.auth.admin.listUsers({ perPage: 10000 })
+
+  const profiles = await Promise.all(
+    accounts.map(async (account) => {
+      const profileType =
+        profileTypes.find((type) => type.name === account.profileType) ||
+        profileTypes[0]
+
+      return await createAuthAndProfile(
+        supabase,
+        account,
+        existingUsers.data.users,
+        profileBadges[0].id,
+        [profileTags[0].id, profileTags[1].id],
+        profileType.id,
+      )
+    }),
   )
 
-  for (let i = 0; i < accounts.length; i++) {
-    accounts[i].id = userIds[i]
-  }
-
-  const profiles = accounts
-    .filter((x) => x.id)
-    .map((x) => ({
-      auth_id: x.id,
-      username: x.username,
-      tenant_id: tenantId,
-      created_at: new Date().toUTCString(),
-      display_name: x.username,
-      is_verified: true,
-      is_supporter: false,
-      roles: x.roles,
-    }))
-
-  return await seedDatabase({ profiles }, tenantId)
+  return { profiles }
 }
 
-const signUp = async (
+const createAuthAndProfile = async (
   supabase: SupabaseClient,
-  email: string,
-  username: string,
-  password: string,
+  user: any,
+  existingUsers: User[],
+  profileBadgeId: number,
+  profilTagIds: number[],
+  profileTypeId: number,
 ) => {
-  const result = await supabase.auth.admin.createUser({
-    email,
-    password,
+  const authUser = await supabase.auth.admin.createUser({
+    email: user.email,
+    password: user.password,
     email_confirm: true,
     user_metadata: {
-      username,
+      username: user.username,
     },
   })
 
-  if (result.error) {
-    // most of the time the user already exists because auth accounts are multi-tenant.
-    return (
-      await supabase.rpc('get_user_id_by_email', {
-        email,
-      })
-    ).data?.at(0)?.id
+  let profile
+  if (authUser.error?.code === 'email_exists') {
+    const authUser = existingUsers.find(
+      (authUser) => authUser.email === user.email,
+    )
+
+    if (authUser) {
+      return (profile = await createProfile(
+        supabase,
+        user,
+        authUser.id,
+        profileBadgeId,
+        profilTagIds,
+        profileTypeId,
+      ))
+    }
+
+    return profile
   }
 
-  return result.data.user.id
+  const authId = authUser.data.id
+  return await createProfile(
+    supabase,
+    user,
+    authId,
+    profileBadgeId,
+    profilTagIds,
+    profileTypeId,
+  )
+}
+
+const createProfile = async (
+  supabase: SupabaseClient,
+  user: Partial<Profile>,
+  authId: string,
+  profileBadgeId: number,
+  profilTagIds: number[],
+  profileTypeId: number,
+) => {
+  const tenantId = Cypress.env('TENANT_ID')
+
+  const { data } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('auth_id', authId)
+    .eq('tenant_id', tenantId)
+    .single()
+
+  if (data) {
+    return data
+  }
+
+  const profileDB: Partial<DBProfile> & { tenant_id: string } = {
+    created_at: user.createdAt,
+    auth_id: authId,
+    display_name: user.displayName,
+    username: user.username,
+    roles: user.roles,
+    tenant_id: tenantId,
+    profile_type: profileTypeId,
+    about: user.about || '',
+    photo: user.photo || null,
+    country: user.country,
+    cover_images: user.coverImages || ([] as any),
+    impact: user.impact || null,
+    is_blocked_from_messaging: user.isBlockedFromMessaging || false,
+    is_contactable: user.isContactable || true,
+    last_active: user.lastActive || null,
+    website: user.website || null,
+  }
+
+  const profileResult = await supabase
+    .from('profiles')
+    .insert(profileDB)
+    .select('*')
+    .single()
+
+  if (profileResult.data.username === 'demo_user') {
+    await seedDatabase(
+      {
+        profile_badges_relations: [
+          {
+            profile_id: profileResult.data.id,
+            profile_badge_id: profileBadgeId,
+            tenant_id: tenantId,
+          },
+        ],
+      },
+      tenantId,
+    )
+  }
+
+  Promise.all(
+    profilTagIds.map(async (profileTag) => {
+      return seedDatabase(
+        {
+          profile_tags_relations: [
+            {
+              profile_id: profileResult.data.id,
+              profile_tag_id: profileTag,
+              tenant_id: tenantId,
+            },
+          ],
+        },
+        tenantId,
+      )
+    }),
+  )
+
+  return profileResult.data
 }
 
 export const deleteAccounts = async () => {

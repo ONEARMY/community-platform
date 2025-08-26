@@ -1,7 +1,7 @@
 import { ResearchItem, UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
-import { profileServiceServer } from 'src/services/profileService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
@@ -34,9 +34,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         : null,
       isDraft: formData.get('draft') === 'true',
       slug: convertToSlug(formData.get('title') as string),
+      uploadedImage: formData.get('image') as File,
+      existingImage: formData.get('existingImage') as string | null,
     }
-    const uploadedImage = formData.get('image') as File
-    const existingImage = formData.get('existingImage') as string | null
 
     const { client, headers } = createSupabaseServerClient(request)
 
@@ -74,7 +74,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         previous_slugs: previousSlugs,
         is_draft: data.isDraft,
         collaborators: data.collaborators,
-        ...(!existingImage && { image: null }),
+        ...(!data.existingImage && { image: null }),
       })
       .eq('id', id)
       .select()
@@ -92,10 +92,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       client,
     )
 
-    if (uploadedImage) {
+    if (data.uploadedImage) {
       // TODO:remove unused images from storage
       const mediaResult = await storageServiceServer.uploadImage(
-        [uploadedImage],
+        [data.uploadedImage],
         `research/${research.id}`,
         client,
       )
@@ -183,6 +183,10 @@ async function validateRequest(
     return { status: 400, statusText: 'description is required' }
   }
 
+  if (!data.isDraft && !data.uploadedImage && !data.existingImage) {
+    return { status: 400, statusText: 'image is required' }
+  }
+
   if (
     research.slug !== data.slug &&
     (await contentServiceServer.isDuplicateExistingSlug(
@@ -198,7 +202,7 @@ async function validateRequest(
     }
   }
 
-  const profile = await profileServiceServer.getByAuthId(user!.id, client)
+  const profile = await new ProfileServiceServer(client).getByAuthId(user!.id)
 
   if (!profile) {
     return { status: 400, statusText: 'User not found' }

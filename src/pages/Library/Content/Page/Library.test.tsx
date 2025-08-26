@@ -7,13 +7,13 @@ import { act, render, waitFor, within } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
 import { GlobalStyles } from 'oa-components'
-import { IModerationStatus } from 'oa-shared'
 import { preciousPlasticTheme } from 'oa-themes'
+import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'
 import {
   FactoryLibraryItem,
   FactoryLibraryItemStep,
 } from 'src/test/factories/Library'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 import { ProjectPage } from './ProjectPage'
 
@@ -22,16 +22,6 @@ import type { Project } from 'oa-shared'
 const Theme = preciousPlasticTheme.styles
 const item = FactoryLibraryItem()
 
-vi.mock('src/common/hooks/useCommonStores', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  __esModule: true,
-  useCommonStores: () => ({
-    stores: {
-      userStore: {},
-    },
-  }),
-}))
-
 const factory = (override?: Project) => {
   const ReactStub = createRemixStub([
     {
@@ -39,11 +29,13 @@ const factory = (override?: Project) => {
       Component: () => (
         <>
           <Global styles={GlobalStyles} />
-          <ThemeProvider theme={Theme}>
-            <Provider>
-              <ProjectPage item={override ?? item} />
-            </Provider>
-          </ThemeProvider>
+          <ProfileStoreProvider>
+            <ThemeProvider theme={Theme}>
+              <Provider>
+                <ProjectPage item={override ?? item} />
+              </Provider>
+            </ThemeProvider>
+          </ProfileStoreProvider>
         </>
       ),
     },
@@ -58,13 +50,22 @@ describe('Library', () => {
       item.author = {
         id: faker.number.int(),
         displayName: 'LibraryAuthor',
-        isVerified: true,
-        isSupporter: false,
-        photoUrl: faker.image.avatar(),
+        badges: [
+          {
+            id: 1,
+            displayName: 'PRO',
+            name: 'pro',
+            imageUrl: faker.image.avatar(),
+          },
+        ],
+        photo: {
+          publicUrl: faker.image.avatar(),
+          id: '',
+        },
         username: faker.internet.userName(),
       }
-      item.moderation = IModerationStatus.AWAITING_MODERATION
-      item.moderatonFeedback = 'Moderation comments'
+      item.moderation = 'awaiting-moderation'
+      item.moderationFeedback = 'Moderation comments'
 
       act(() => {
         wrapper = factory()
@@ -77,8 +78,8 @@ describe('Library', () => {
 
     it('hides feedback when project is accepted', async () => {
       let wrapper
-      item.moderation = IModerationStatus.ACCEPTED
-      item.moderatonFeedback = 'Moderation comments'
+      item.moderation = 'accepted'
+      item.moderationFeedback = 'Moderation comments'
 
       await act(async () => {
         wrapper = factory()
@@ -94,13 +95,22 @@ describe('Library', () => {
     item.author = {
       id: faker.number.int(),
       displayName: 'LibraryAuthor',
-      isVerified: true,
-      isSupporter: false,
-      photoUrl: faker.image.avatar(),
+      badges: [
+        {
+          id: 1,
+          displayName: 'PRO',
+          name: 'pro',
+          imageUrl: faker.image.avatar(),
+        },
+      ],
+      photo: {
+        publicUrl: faker.image.avatar(),
+        id: '',
+      },
       username: faker.internet.userName(),
     }
     item.steps = [FactoryLibraryItemStep({})]
-    item.moderation = IModerationStatus.ACCEPTED
+    item.moderation = 'accepted'
     item.totalViews = 0
     item.usefulCount = 0
     item.commentCount = 0
@@ -121,9 +131,18 @@ describe('Library', () => {
     item.author = {
       id: faker.number.int(),
       displayName: 'LibraryAuthor',
-      isVerified: true,
-      isSupporter: false,
-      photoUrl: faker.image.avatar(),
+      badges: [
+        {
+          id: 1,
+          displayName: 'PRO',
+          name: 'pro',
+          imageUrl: faker.image.avatar(),
+        },
+      ],
+      photo: {
+        publicUrl: faker.image.avatar(),
+        id: '',
+      },
       username: faker.internet.userName(),
     }
 
@@ -141,9 +160,11 @@ describe('Library', () => {
     item.author = {
       id: faker.number.int(),
       displayName: 'NotLibraryAuthor',
-      isVerified: false,
-      isSupporter: false,
-      photoUrl: faker.image.avatar(),
+      badges: [],
+      photo: {
+        publicUrl: faker.image.avatar(),
+        id: '',
+      },
       username: faker.internet.userName(),
     }
     await act(async () => {
@@ -164,9 +185,18 @@ describe('Library', () => {
             author: {
               id: faker.number.int(),
               displayName: 'LibraryAuthor',
-              isVerified: true,
-              isSupporter: false,
-              photoUrl: faker.image.avatar(),
+              badges: [
+                {
+                  id: 1,
+                  displayName: 'PRO',
+                  name: 'pro',
+                  imageUrl: faker.image.avatar(),
+                },
+              ],
+              photo: {
+                publicUrl: faker.image.avatar(),
+                id: '',
+              },
               username: faker.internet.userName(),
             },
             steps: [FactoryLibraryItemStep()],

@@ -31,9 +31,25 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
     id: faker.number.int(),
     country: faker.location.countryCode(),
     displayName: faker.internet.userName(),
-    isVerified: faker.datatype.boolean(),
-    isSupporter: faker.datatype.boolean(),
-    photoUrl: faker.image.avatar(),
+    badges: [
+      {
+        id: 1,
+        name: 'pro',
+        displayName: 'PRO',
+        imageUrl: faker.image.avatar(),
+      },
+      {
+        id: 2,
+        name: 'supporter',
+        displayName: 'Supporter',
+        actionUrl: faker.internet.url(),
+        imageUrl: faker.image.avatar(),
+      },
+    ],
+    photo: {
+      id: faker.string.uuid(),
+      publicUrl: faker.image.avatar(),
+    },
     username: faker.internet.userName(),
   },
   category: {

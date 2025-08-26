@@ -32,13 +32,13 @@ export const QuestionListHeader = (props: IProps) => {
   const { draftCount, handleShowDrafts, showDrafts } = props
 
   const [categories, setCategories] = useState<Category[]>([])
-  const [searchString, setSearchString] = useState<string>('')
-
   const [searchParams, setSearchParams] = useSearchParams()
+  const q = searchParams.get(QuestionSearchParams.q)
+  const [searchString, setSearchString] = useState<string>(() => q ?? '')
+
   const categoryParam = searchParams.get(QuestionSearchParams.category)
   const category =
     (categoryParam && categories?.find((x) => x.id === +categoryParam)) ?? null
-  const q = searchParams.get(QuestionSearchParams.q)
   const sort = searchParams.get(QuestionSearchParams.sort) as QuestionSortOption
 
   useEffect(() => {
@@ -50,10 +50,6 @@ export const QuestionListHeader = (props: IProps) => {
 
     initCategories()
   }, [])
-
-  useEffect(() => {
-    setSearchString(q || '')
-  }, [q])
 
   const updateFilter = useCallback(
     (key: QuestionSearchParams, value: string) => {

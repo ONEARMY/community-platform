@@ -1,61 +1,54 @@
 import '@testing-library/jest-dom/vitest'
 
 import { act, waitFor } from '@testing-library/react'
-import { IModerationStatus, ProfileTypeList } from 'oa-shared'
 import { FactoryMapPin } from 'src/test/factories/MapPin'
-import { factoryImage, factoryLink, FactoryUser } from 'src/test/factories/User'
+import { factoryImage, FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
 
 import { FormProvider } from './__mocks__/FormProvider'
 import { SettingsPageMapPin } from './SettingsPageMapPin'
 
-import type { ILocation } from 'oa-shared'
+import type { PinProfile, ProfileType } from 'oa-shared'
 
 const completeProfile = {
   about: 'A member',
   displayName: 'Jeffo',
-  links: [factoryLink],
-  profileType: ProfileTypeList.MEMBER,
-  userImage: factoryImage,
+  website: 'www.example.com',
+  type: {
+    id: 1,
+    name: 'member',
+    isSpace: false,
+  } as ProfileType,
+  photo: factoryImage,
 }
-let mockUser = FactoryUser()
-let mockPin = FactoryMapPin()
+const mockUseProfileStore = vi.hoisted(() => vi.fn())
+const mockGetMapPinById = vi.hoisted(() => vi.fn())
+const mockGetCurrentUserMapPin = vi.hoisted(() => vi.fn())
 
-vi.mock('src/common/hooks/useCommonStores', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  __esModule: true,
-  useCommonStores: () => ({
-    stores: {
-      userStore: {
-        activeUser: mockUser,
-      },
-      mapsStore: {
-        getPin: vi.fn().mockResolvedValue(mockPin),
-      },
-      themeStore: {
-        currentTheme: {
-          id: 'string',
-          siteName: 'string',
-          logo: 'string',
-          badge: 'string',
-          avatar: 'string',
-          academyResource: 'string',
-          styles: {
-            communityProgramURL: '',
-          },
-        },
-      },
-    },
-  }),
+vi.mock('src/stores/Profile/profile.store', () => ({
+  useProfileStore: mockUseProfileStore,
+  ProfileStoreProvider: ({ children }: { children: React.ReactNode }) =>
+    children,
+}))
+
+vi.mock('../Maps/map.service', () => ({
+  mapPinService: {
+    getMapPinById: mockGetMapPinById,
+    getCurrentUserMapPin: mockGetCurrentUserMapPin,
+  },
 }))
 
 describe('SettingsPageMapPin', () => {
   it('renders for no pin', async () => {
-    mockUser = FactoryUser(completeProfile)
+    const mockUser = FactoryUser(completeProfile)
+    mockUseProfileStore.mockReturnValue({
+      profile: mockUser,
+      update: vi.fn(),
+    })
     // Act
     let wrapper
     act(() => {
-      wrapper = FormProvider(mockUser, <SettingsPageMapPin />)
+      wrapper = FormProvider(<SettingsPageMapPin />)
     })
 
     await waitFor(() => {
@@ -69,55 +62,49 @@ describe('SettingsPageMapPin', () => {
   })
 
   it('renders for member', async () => {
-    const name = 'Super cool place'
-    mockUser = FactoryUser({
-      ...completeProfile,
-      profileType: ProfileTypeList.MEMBER,
-      location: {
-        name,
-        countryCode: 'br',
-        latlng: { lng: 0, lat: 0 },
-      } as ILocation,
-    })
     // Act
     let wrapper
     act(() => {
-      wrapper = FormProvider(mockUser, <SettingsPageMapPin />)
+      wrapper = FormProvider(<SettingsPageMapPin />)
     })
 
     await waitFor(() => {
       expect(wrapper.getAllByTestId('descriptionMember')).toHaveLength(1)
       expect(wrapper.queryAllByTestId('descriptionSpace')).toHaveLength(0)
-      expect(wrapper.getAllByTestId('LocationDataTextDisplay')).toHaveLength(1)
-      expect(wrapper.getAllByText(name, { exact: false })).toHaveLength(1)
     })
   })
 
   it('renders for space', async () => {
-    const comments = 'Need a better name'
-    const name = 'Super cool place'
-
-    mockPin = FactoryMapPin({
-      comments,
-      moderation: IModerationStatus.IMPROVEMENTS_NEEDED,
-    })
-
-    mockUser = FactoryUser({
+    const moderationFeedback = 'Need a better name'
+    const mockUser = FactoryUser({
       about: 'An important space',
       displayName: 'Jeffo',
-      links: [factoryLink],
-      profileType: ProfileTypeList.COMMUNITY_BUILDER,
+      type: {
+        id: 1,
+        name: 'community-builder',
+        isSpace: true,
+      } as ProfileType,
       coverImages: [factoryImage],
-      location: {
-        name,
-        countryCode: 'br',
-        latlng: { lng: 0, lat: 0 },
-      } as ILocation,
     })
+    const mockPin = FactoryMapPin({
+      country: 'Portugal',
+      countryCode: 'pt',
+      name: 'Super cool place',
+      moderation: 'improvements-needed',
+      moderationFeedback,
+      profile: mockUser as PinProfile,
+    })
+
+    mockUseProfileStore.mockReturnValue({
+      profile: mockUser,
+      update: vi.fn(),
+    })
+    mockGetCurrentUserMapPin.mockResolvedValue(mockPin) // Mock a pin for a space
+
     // Act
     let wrapper
     act(() => {
-      wrapper = FormProvider(mockUser, <SettingsPageMapPin />)
+      wrapper = FormProvider(<SettingsPageMapPin />)
     })
 
     await waitFor(() => {
@@ -126,23 +113,33 @@ describe('SettingsPageMapPin', () => {
       expect(
         wrapper.getAllByTestId('WorkspaceMapPinRequiredStars'),
       ).toHaveLength(1)
-      expect(wrapper.getAllByTestId('LocationDataTextDisplay')).toHaveLength(1)
-      expect(wrapper.getAllByText(name, { exact: false })).toHaveLength(1)
-      expect(wrapper.getAllByText(comments, { exact: false })).toHaveLength(1)
+      expect(wrapper.getAllByText(mockPin.name, { exact: false })).toHaveLength(
+        1,
+      )
+      expect(
+        wrapper.getAllByText(moderationFeedback, { exact: false }),
+      ).toHaveLength(1)
     })
   })
 
   it('renders for user with incomplete profile', async () => {
-    mockUser = FactoryUser({
+    const mockUser = FactoryUser({
       displayName: 'Jeffo',
-      links: [factoryLink],
-      profileType: ProfileTypeList.MEMBER,
-      userImage: factoryImage,
+      type: {
+        id: 1,
+        name: 'member',
+        isSpace: false,
+      } as ProfileType,
+      photo: factoryImage,
+    })
+    mockUseProfileStore.mockReturnValue({
+      profile: mockUser,
+      update: vi.fn(),
     })
 
     let wrapper
     act(() => {
-      wrapper = FormProvider(mockUser, <SettingsPageMapPin />)
+      wrapper = FormProvider(<SettingsPageMapPin />)
     })
 
     await waitFor(() => {

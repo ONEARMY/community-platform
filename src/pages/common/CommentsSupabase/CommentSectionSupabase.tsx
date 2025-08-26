@@ -34,10 +34,12 @@ export const CommentSectionSupabase = (props: IProps) => {
   const newComments = useMemo(() => {
     return comments.filter((x) => newCommentIds.includes(x.id))
   }, [comments, newCommentIds])
-  const displayShowMore = useMemo(
-    () => comments.length - newCommentIds.length > commentLimit,
-    [comments, commentLimit, newCommentIds],
-  )
+
+  const remainingCommentsCount = useMemo(() => {
+    const nonNewCount = comments.length - newCommentIds.length
+    const shown = Math.min(commentLimit, nonNewCount)
+    return Math.max(0, nonNewCount - shown)
+  }, [comments, newCommentIds, commentLimit])
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -90,7 +92,7 @@ export const CommentSectionSupabase = (props: IProps) => {
       )
 
       if (result.status === 201) {
-        const newComment = Comment.fromDB(await result.json())
+        const newComment = new Comment(await result.json())
         subscribersService.add(
           newComment.sourceType,
           Number(newComment.sourceId),
@@ -160,7 +162,7 @@ export const CommentSectionSupabase = (props: IProps) => {
       )
 
       if (result.status === 201) {
-        const newReply = Comment.fromDB(await result.json()) as Reply
+        const newReply = new Comment(await result.json()) as Reply
 
         setComments((comments) =>
           comments.map((comment) => {
@@ -266,7 +268,7 @@ export const CommentSectionSupabase = (props: IProps) => {
           </Box>
         ))}
 
-        {displayShowMore && (
+        {remainingCommentsCount > 0 && (
           <Flex>
             <Button
               type="button"
@@ -275,7 +277,7 @@ export const CommentSectionSupabase = (props: IProps) => {
               data-cy="show-more-comments"
               onClick={() => setCommentLimit((prev) => prev + commentPageSize)}
             >
-              show more comments
+              {`show ${remainingCommentsCount} more comment${remainingCommentsCount === 1 ? '' : 's'}`}
             </Button>
           </Flex>
         )}

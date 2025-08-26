@@ -1,63 +1,59 @@
+import { countryToAlpha2 } from 'country-to-iso'
 import { Flex, Text } from 'theme-ui'
 
 import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
-import { FlagIconLibrary } from '../FlagIcon/FlagIcon'
+import { FlagIcon } from '../FlagIcon/FlagIcon'
 import { InternalLink } from '../InternalLink/InternalLink'
-import { twoCharacterCountryCodes } from './TwoCharacterCountryCodes'
 import { UserBadge } from './UserBadge'
 
+import type { Author } from 'oa-shared'
 import type { HTMLAttributeAnchorTarget } from 'react'
 import type { ThemeUIStyleObject } from 'theme-ui'
-import type { User } from '../types/common'
 
 export interface IProps {
-  user: User
+  user: Author
   sx?: ThemeUIStyleObject
   isLink?: boolean
   target?: HTMLAttributeAnchorTarget
 }
 
-const isValidCountryCode = (str: string) =>
-  str && twoCharacterCountryCodes.has(str.toUpperCase())
+const getCountryCode = (country: string | undefined) => {
+  if (!country) {
+    return null
+  }
+  return countryToAlpha2(country)
+}
 
 export const Username = ({ user, sx, target, isLink = true }: IProps) => {
-  const { countryCode, userName, isSupporter, isVerified } = user
+  const { username, badges } = user
+
+  const countryCode = user.country ? getCountryCode(user.country) : null
 
   const UserNameBody = (
     <Flex
       data-cy="Username"
-      sx={{
-        fontFamily: 'body',
-        alignItems: 'center',
-      }}
+      sx={{ fontFamily: 'body', gap: 1, alignItems: 'center' }}
     >
-      <Flex mr={1}>
-        {countryCode && isValidCountryCode(countryCode) ? (
-          <Flex data-testid="Username: known flag">
-            <FlagIconLibrary
-              countryCode={countryCode}
-              svg={true}
-              title={countryCode}
-              data-cy={`country:${countryCode}`}
-            />
-          </Flex>
-        ) : (
-          <Flex
-            data-testid="Username: unknown flag"
-            sx={{
-              backgroundImage: `url("${flagUnknownSVG}")`,
-              backgroundSize: 'cover',
-              borderRadius: '3px',
-              height: '14px',
-              width: '21px !important',
-              justifyContent: 'center',
-              alignItems: 'center',
-              lineHeight: 0,
-              overflow: 'hidden',
-            }}
-          ></Flex>
-        )}
-      </Flex>
+      {countryCode ? (
+        <Flex data-testid="Username: known flag">
+          <FlagIcon countryCode={countryCode} />
+        </Flex>
+      ) : (
+        <Flex
+          data-testid="Username: unknown flag"
+          sx={{
+            backgroundImage: `url("${flagUnknownSVG}")`,
+            backgroundSize: 'cover',
+            borderRadius: '3px',
+            height: '14px',
+            width: '21px !important',
+            justifyContent: 'center',
+            alignItems: 'center',
+            lineHeight: 0,
+            overflow: 'hidden',
+          }}
+        ></Flex>
+      )}
 
       <Text
         sx={{
@@ -67,12 +63,14 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
           textOverflow: 'ellipsis',
           maxWidth: '100%',
         }}
-        title={userName}
+        title={username}
       >
-        {userName}
+        {username}
       </Text>
-      {isVerified && <UserBadge badgeName="verified" />}
-      {isSupporter && <UserBadge badgeName="supporter" />}
+      {badges &&
+        badges.map((badge) => {
+          return <UserBadge key={badge.id} badge={badge} />
+        })}
     </Flex>
   )
 
@@ -82,7 +80,7 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
 
   return (
     <InternalLink
-      to={`/u/${userName}`}
+      to={`/u/${username}`}
       target={target || '_self'}
       sx={{
         border: '1px solid transparent',

@@ -5,7 +5,6 @@ import {
   ModerationStatus,
   Username,
 } from 'oa-components'
-import { IModerationStatus } from 'oa-shared'
 import { Highlighter } from 'src/common/Highlighter'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Box, Card, Flex, Heading, Image } from 'theme-ui'
@@ -44,18 +43,17 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
               alt={`Cover image of ${item.title}`}
             />
           )}
-          {item.moderation &&
-            item.moderation !== IModerationStatus.ACCEPTED && (
-              <ModerationStatus
-                status={item.moderation}
-                sx={{
-                  top: 2,
-                  position: 'absolute',
-                  right: 2,
-                  alignSelf: 'self-start',
-                }}
-              />
-            )}
+          {item.moderation && item.moderation !== 'accepted' && (
+            <ModerationStatus
+              status={item.moderation}
+              sx={{
+                top: 2,
+                position: 'absolute',
+                right: 2,
+                alignSelf: 'self-start',
+              }}
+            />
+          )}
         </Flex>
         <Flex
           sx={{
@@ -74,15 +72,11 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
               />
             </Heading>
 
-            <Box>
-              <Username
-                user={{
-                  userName: item.author?.username || '',
-                  countryCode: item.author?.country,
-                  isVerified: item.author?.isVerified,
-                }}
-              />
-            </Box>
+            {item.author && (
+              <Box>
+                <Username user={item.author} />
+              </Box>
+            )}
           </Flex>
 
           <Flex sx={{ justifyContent: 'flex-end' }}>

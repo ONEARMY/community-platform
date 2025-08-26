@@ -1,11 +1,11 @@
 import { Button } from '../Button/Button'
 import { nonDeletedCommentsCount } from '../DiscussionTitle/DiscussionTitle'
 
-import type { IComment } from '../CommentItem/types'
+import type { Comment } from 'oa-shared'
 
 export interface Props {
   isShowReplies: boolean
-  replies: IComment[]
+  replies: Comment[]
   setIsShowReplies: () => void
 }
 

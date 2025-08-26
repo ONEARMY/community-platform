@@ -12,8 +12,8 @@ import GlobalSiteFooter from 'src/pages/common/GlobalSiteFooter/GlobalSiteFooter
 import Header from 'src/pages/common/Header/Header'
 import { SessionContext } from 'src/pages/common/SessionContext'
 import { StickyButton } from 'src/pages/common/StickyButton'
-import { UserStoreWrapper } from 'src/pages/common/UserStoreWrapper'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'
 import { Flex } from 'theme-ui'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -42,7 +42,7 @@ export default function Index() {
   return (
     <EnvironmentContext.Provider value={environment}>
       <SessionContext.Provider value={user}>
-        <UserStoreWrapper>
+        <ProfileStoreProvider>
           <Flex
             sx={{ height: '100vh', flexDirection: 'column' }}
             data-cy="page-container"
@@ -57,7 +57,7 @@ export default function Index() {
             <GlobalSiteFooter />
             <ClientOnly fallback={<></>}>{() => <StickyButton />}</ClientOnly>
           </Flex>
-        </UserStoreWrapper>
+        </ProfileStoreProvider>
       </SessionContext.Provider>
     </EnvironmentContext.Provider>
   )

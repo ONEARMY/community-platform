@@ -31,21 +31,15 @@ interface IProps {
 export const LibraryListHeader = (props: IProps) => {
   const { draftCount, handleShowDrafts, showDrafts } = props
   const [categories, setCategories] = useState<Category[]>([])
-  const [searchString, setSearchString] = useState<string>('')
-
   const [searchParams, setSearchParams] = useSearchParams()
+  const q = searchParams.get(LibrarySearchParams.q)
+  const [searchString, setSearchString] = useState<string>(q ?? '')
+
   const categoryParam = Number(searchParams.get(LibrarySearchParams.category))
   const category = categories?.find((x) => x.id === categoryParam) ?? null
-  const q = searchParams.get(LibrarySearchParams.q)
   const sort = searchParams.get(LibrarySearchParams.sort) as LibrarySortOption
 
   const headingTitle = import.meta.env.VITE_HOWTOS_HEADING
-
-  useEffect(() => {
-    if (q && q.length > 0) {
-      setSearchString(q)
-    }
-  }, [q])
 
   useEffect(() => {
     const initCategories = async () => {

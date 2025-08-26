@@ -1,7 +1,7 @@
 import { Project } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { profileServiceServer } from 'src/services/profileService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -18,7 +18,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return Response.json({}, { headers, status: 401 })
   }
 
-  const profile = await profileServiceServer.getByAuthId(user.id, client)
+  const profileService = new ProfileServiceServer(client)
+  const profile = await profileService.getByAuthId(user.id)
 
   if (!profile) {
     return Response.json({ items: [], total: 0 }, { headers })
@@ -40,7 +41,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
         tags,
         moderation,
         is_draft,
-        author:profiles(id, display_name, username, is_verified, is_supporter, country),
+        author:profiles(id, display_name, username, country, badges:profile_badges_relations(
+          profile_badges(
+            id,
+            name,
+            display_name,
+            image_url,
+            action_url
+          )
+        )),
         steps:project_steps(
           id, 
           created_at, 

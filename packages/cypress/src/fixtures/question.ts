@@ -1,5 +1,5 @@
 import dateformat from 'dateformat'
-import { IModerationStatus } from 'oa-shared'
+import { Moderation } from 'oa-shared'
 
 import { generateAlphaNumeric } from '../utils/TestUtils'
 
@@ -19,7 +19,7 @@ export const question: IQuestionDB = {
   tags: {
     dibcwRYbQVzfQfmSkg5x: true,
   },
-  moderation: IModerationStatus.ACCEPTED,
+  moderation: Moderation.ACCEPTED,
   _createdBy: 'super-question-creator',
   creatorCountry: 'fr',
   keywords: [],

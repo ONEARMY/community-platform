@@ -256,10 +256,13 @@ Cypress.Commands.add(
   (element, oldComment, updatedNewComment) => {
     cy.get(`[data-cy="${element}: ActionSetButton"]`).last().click()
     cy.get(`[data-cy="${element}: edit button"]`).click()
-    cy.get('[data-cy=edit-comment]').clear().type(updatedNewComment)
+    cy.get('[data-cy=edit-comment]').as('editField')
+    cy.get('@editField').clear({ force: true })
+    cy.get('@editField').type(updatedNewComment)
     cy.get('[data-cy=edit-comment-submit]').click()
+    cy.get('@editField').should('not.exist')
 
-    cy.get('[data-cy=edit-comment]').should('not.exist')
+    cy.wait(1000)
     cy.get(`[data-cy=Own${element}]`).contains(updatedNewComment)
     cy.get(`[data-cy=Own${element}]`).contains('less than a minute ago')
     cy.get(`[data-cy=Own${element}]`).contains(oldComment).should('not.exist')

@@ -1,19 +1,24 @@
+import { useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { Flex, Label } from 'theme-ui'
 import { object, string } from 'yup'
 
+import { Banner } from '../Banner/Banner'
 import { Button } from '../Button/Button'
 import { FieldTextarea } from '../FieldTextarea/FieldTextarea'
 
 export interface IProps {
   comment: string
   handleCancel: () => void
-  handleSubmit: (commentText: string) => void
+  handleSubmit: (commentText: string) => Promise<Response>
   isReply: boolean
+  setShowEditModal: any
 }
 
 export const EditComment = (props: IProps) => {
-  const { comment, isReply } = props
+  const { comment, isReply, setShowEditModal } = props
+
+  const [error, setError] = useState<string | undefined>(undefined)
 
   const validationSchema = object({
     comment: string().required('Make sure this field is filled correctly'),
@@ -22,9 +27,17 @@ export const EditComment = (props: IProps) => {
   const required = (value: string) =>
     value?.trim() ? undefined : 'Comment cannot be blank'
 
-  const handleFormSubmit = (comment: string) => {
-    if (comment?.trim()) {
-      props?.handleSubmit(comment)
+  const handleFormSubmit = async (comment: string) => {
+    if (!comment?.trim()) {
+      return
+    }
+
+    const response = await props.handleSubmit(comment)
+
+    if (response.ok) {
+      setShowEditModal(false)
+    } else {
+      setError(response.statusText)
     }
   }
 
@@ -54,13 +67,15 @@ export const EditComment = (props: IProps) => {
       data-cy="EditCommentForm"
       render={({ invalid, handleSubmit, values }) => {
         const disabled = invalid
+
         return (
           <Flex
             as="form"
             sx={{
               flexDirection: 'column',
+              padding: 2,
+              gap: 2,
             }}
-            p={2}
             onSubmit={handleSubmit}
           >
             <Label
@@ -70,6 +85,9 @@ export const EditComment = (props: IProps) => {
             >
               Edit {isReply ? 'Reply' : 'Comment'}
             </Label>
+
+            {error && <Banner variant="failure">{error}</Banner>}
+
             <Field
               component={FieldTextarea}
               data-cy="edit-comment"

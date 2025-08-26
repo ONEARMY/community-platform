@@ -36,11 +36,16 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 
   const commentId: string = params.id!
 
-  if (request.method === 'DELETE') {
-    return deleteComment(supabase, commentId, profile)
-  }
+  try {
+    if (request.method === 'DELETE') {
+      return deleteComment(supabase, commentId, profile)
+    }
 
-  return updateComment(supabase, request, commentId, profile)
+    return updateComment(supabase, request, commentId, profile)
+  } catch (error) {
+    console.error(error)
+    return Response.json(error)
+  }
 }
 
 async function updateComment(
@@ -52,7 +57,7 @@ async function updateComment(
   const json = await request.json()
 
   if (!json.comment) {
-    return json({}, { status: 400, statusText: 'comment is required' })
+    return Response.json({}, { status: 400, statusText: 'comment is required' })
   }
 
   const { data, error } = await client
@@ -62,13 +67,13 @@ async function updateComment(
     .single()
 
   if (error || !data) {
-    return json({}, { status: 404, statusText: 'comment not found' })
+    return Response.json({}, { status: 404, statusText: 'comment not found' })
   }
 
   const comment = data as DBComment
 
   if (comment.created_by !== user.id && !isUserAdmin(user)) {
-    return json({}, { status: 403, statusText: 'forbidden' })
+    return Response.json({}, { status: 403, statusText: 'forbidden' })
   }
 
   const result = await client
@@ -78,7 +83,7 @@ async function updateComment(
 
   if (result.error) {
     console.error(result.error)
-    return json(
+    return Response.json(
       {},
       { headers, status: 500, statusText: 'Error updating comment' },
     )

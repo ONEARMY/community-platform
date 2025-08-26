@@ -34,7 +34,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         : null,
       isDraft: formData.get('draft') === 'true',
       slug: convertToSlug(formData.get('title') as string),
-      uploadedImage: formData.get('image') as File,
+      uploadedImage: formData.get('image') as File | null,
       existingImage: formData.get('existingImage') as string | null,
     }
 

@@ -19,10 +19,10 @@ import type { Comment, DiscussionContentTypes } from 'oa-shared'
 
 export interface ICommentItemProps {
   comment: Comment
-  onEdit: (id: number, comment: string) => void
+  onEdit: (id: number, comment: string) => Promise<Response>
   onDelete: (id: number) => void
   onReply: (reply: string) => void
-  onEditReply: (id: number, reply: string) => void
+  onEditReply: (id: number, reply: string) => Promise<Response>
   onDeleteReply: (id: number) => void
   sourceType: DiscussionContentTypes
 }
@@ -122,9 +122,9 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
                 <CommentReply
                   key={x.id}
                   comment={x}
-                  onEdit={(id: number, comment: string) =>
-                    onEditReply(id, comment)
-                  }
+                  onEdit={async (id: number, comment: string) => {
+                    return await onEditReply(id, comment)
+                  }}
                   onDelete={(id: number) => onDeleteReply(id)}
                 />
               ))}
@@ -148,9 +148,9 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
         <EditComment
           comment={comment.comment}
           handleSubmit={async (commentText) => {
-            onEdit(comment.id, commentText)
-            setShowEditModal(false)
+            return await onEdit(comment.id, commentText)
           }}
+          setShowEditModal={setShowEditModal}
           handleCancel={() => setShowEditModal(false)}
           isReply={false}
         />

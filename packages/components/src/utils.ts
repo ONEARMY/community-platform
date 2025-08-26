@@ -5,6 +5,8 @@ import type {
   Comment,
   News,
   NotificationDisplay,
+  PinProfile,
+  ProfileType,
   Question,
   ResearchItem,
   ResearchUpdate,
@@ -169,4 +171,40 @@ export const fakeResearchUpdate = (
   videoUrl: null,
   title: faker.random.words(8),
   ...researchItemOverloads,
+})
+
+export const fakeProfileType = (
+  profileTypeOverLoads: Partial<ProfileType> = {},
+): ProfileType => ({
+  id: faker.number.int(),
+  description: '',
+  displayName: '',
+  imageUrl: faker.image.avatar(),
+  smallImageUrl: faker.image.avatar(),
+  mapPinName: 'Wants to get started',
+  name: 'Member',
+  order: 0,
+  isSpace: false,
+  ...profileTypeOverLoads,
+})
+
+export const fakePinProfile = (
+  pinProfileOverLoads: Partial<PinProfile> = {},
+): PinProfile => ({
+  id: faker.number.int(),
+  about: '',
+  country: faker.location.country(),
+  coverImages: null,
+  displayName: faker.person.firstName(),
+  username: faker.internet.userName(),
+  photo: {
+    id: faker.string.uuid(),
+    publicUrl: faker.image.avatar(),
+  },
+  type: fakeProfileType(),
+  badges: [],
+  visitorPolicy: null,
+  isContactable: true,
+  lastActive: new Date(),
+  ...pinProfileOverLoads,
 })

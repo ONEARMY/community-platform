@@ -38,6 +38,7 @@ export class MapPinsServiceServer {
           country,
           display_name,
           photo,
+          cover_images,
           type,
           about,
           username,
@@ -77,7 +78,9 @@ export class MapPinsServiceServer {
 
     const pinsDb = data as unknown as DBMapPin[]
     const pinFactory = new MapPinFactory(this.client)
-    const mapPins = pinsDb.map((x) => pinFactory.fromDBWithProfile(x))
+    const mapPins = pinsDb
+      .filter((pin) => pin.profile)
+      .map((pin) => pinFactory.fromDBWithProfile(pin))
 
     cache.set('mappins', mapPins)
 

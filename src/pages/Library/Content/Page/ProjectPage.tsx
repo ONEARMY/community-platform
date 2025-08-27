@@ -13,12 +13,13 @@ import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { CommentSectionSupabase } from 'src/pages/common/CommentsSupabase/CommentSectionSupabase'
 import { usefulService } from 'src/services/usefulService'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
+import { onUsefulClick } from 'src/utils/onUsefulClick'
 import { Card, Flex } from 'theme-ui'
 
 import { LibraryDescription } from './LibraryDescription'
 import Step from './LibraryStep'
 
-import type { Project, ProjectStep } from 'oa-shared'
+import type { ContentType, Project, ProjectStep } from 'oa-shared'
 
 type ProjectPageProps = {
   item: Project
@@ -43,31 +44,23 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
     }
   }, [activeUser, item])
 
-  const onUsefulClick = async (
+  const configOnUsefulClick = {
+    contentType: 'projects' as ContentType,
+    contentId: item.id,
+    eventCategory: 'Library',
+    slug: item.slug,
+    setVoted,
+    setUsefulCount,
+    loggedInUser: activeUser,
+  }
+
+  const handleUsefulClick = async (
     vote: 'add' | 'delete',
     eventCategory = 'Library',
   ) => {
-    if (!activeUser) {
-      return
-    }
-
-    // Trigger update without waiting
-    if (vote === 'add') {
-      await usefulService.add('projects', item.id)
-    } else {
-      await usefulService.remove('projects', item.id)
-    }
-
-    setVoted((prev) => !prev)
-
-    setUsefulCount((prev) => {
-      return vote === 'add' ? prev + 1 : prev - 1
-    })
-
-    trackEvent({
-      category: eventCategory,
-      action: vote === 'add' ? 'ProjectUseful' : 'ProjectUsefulRemoved',
-      label: item.slug,
+    await onUsefulClick({
+      vote,
+      config: { ...configOnUsefulClick, eventCategory },
     })
   }
 
@@ -81,7 +74,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
         votedUsefulCount={usefulCount}
         hasUserVotedUseful={voted}
         onUsefulClick={() =>
-          onUsefulClick(voted ? 'delete' : 'add', 'LibraryDescription')
+          handleUsefulClick(voted ? 'delete' : 'add', 'LibraryDescription')
         }
         subscribersCount={subscribersCount}
       />
@@ -127,7 +120,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                   hasUserVotedUseful={voted}
                   isLoggedIn={!!activeUser}
                   onUsefulClick={() =>
-                    onUsefulClick(
+                    handleUsefulClick(
                       voted ? 'delete' : 'add',
                       'ArticleCallToAction',
                     )

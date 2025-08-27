@@ -10,12 +10,13 @@ import {
 import { UserRole } from 'oa-shared'
 import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
+import { onUsefulClick } from 'src/utils/onUsefulClick'
 import { Card, Flex } from 'theme-ui'
 
 import { CommentReply } from './CommentReplySupabase'
 import { CreateCommentSupabase } from './CreateCommentSupabase'
 
-import type { Comment, DiscussionContentTypes } from 'oa-shared'
+import type { Comment, ContentType, DiscussionContentTypes } from 'oa-shared'
 
 export interface ICommentItemProps {
   comment: Comment
@@ -44,6 +45,8 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
     () => !!comment.replies?.some((x) => x.highlighted),
   )
   const { profile } = useProfileStore()
+  const [usefulCount, setUsefulCount] = useState<number>(comment.voteCount ?? 0)
+  const [voted, setVoted] = useState<boolean>(false)
 
   const isEditable = useMemo(() => {
     return (
@@ -55,6 +58,10 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
   const item = 'CommentItem'
 
   useEffect(() => {
+    setVoted(comment.hasVoted ?? false)
+  }, [profile, comment])
+
+  useEffect(() => {
     if (comment.highlighted) {
       commentRef.current?.scrollIntoView({
         behavior: 'smooth',
@@ -62,6 +69,26 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
       })
     }
   }, [comment.highlighted])
+
+  const configOnUsefulClick = {
+    contentType: 'comment' as ContentType,
+    contentId: comment.id,
+    eventCategory: 'Comment',
+    slug: `${comment}+${comment.id}`,
+    setVoted,
+    setUsefulCount,
+    loggedInUser: profile,
+  }
+
+  const handleUsefulClick = async (
+    vote: 'add' | 'delete',
+    eventCategory = 'Comment',
+  ) => {
+    await onUsefulClick({
+      vote,
+      config: { ...configOnUsefulClick, eventCategory },
+    })
+  }
 
   return (
     <Flex
@@ -105,6 +132,12 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
               hideSubscribeIcon
             />
           }
+          usefulButtonConfig={{
+            onUsefulClick: () => handleUsefulClick(voted ? 'delete' : 'add'),
+            hasUserVotedUseful: voted,
+            votedUsefulCount: usefulCount,
+            isLoggedIn: !!profile,
+          }}
         />
 
         <Flex

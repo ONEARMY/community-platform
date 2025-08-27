@@ -4,6 +4,7 @@ import { Comment } from 'oa-shared'
 import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { commentService } from 'src/services/commentService'
 import { subscribersService } from 'src/services/subscribersService'
+import { usefulService } from 'src/services/usefulService'
 import { Box, Button, Flex } from 'theme-ui'
 
 import { CommentItemSupabase } from './CommentItemSupabase'
@@ -75,7 +76,40 @@ export const CommentSectionSupabase = (props: IProps) => {
           }
         }
 
-        setComments(comments || [])
+        const commentsWithVotes = await Promise.all(
+          comments.map(async (comment) => {
+            // Get vote count for the main comment
+            const count = await usefulService.getVoteCount(
+              'comment',
+              comment.id,
+            )
+
+            // Get vote counts for replies if they exist
+            let repliesWithVotes = comment.replies || []
+            if (comment.replies?.length) {
+              repliesWithVotes = await Promise.all(
+                comment.replies.map(async (reply) => {
+                  const replyCount = await usefulService.getVoteCount(
+                    'comment',
+                    reply.id,
+                  )
+                  return {
+                    ...reply,
+                    voteCount: replyCount ?? 0,
+                  }
+                }),
+              )
+            }
+
+            return {
+              ...comment,
+              voteCount: count ?? 0,
+              replies: repliesWithVotes,
+            }
+          }),
+        )
+
+        setComments(commentsWithVotes || [])
       } catch (err) {
         console.error(err)
       }
@@ -111,7 +145,7 @@ export const CommentSectionSupabase = (props: IProps) => {
 
   const editComment = async (id: number, comment: string) => {
     try {
-      const result = await commentService.editcomment(sourceId, id, comment)
+      const result = await commentService.editComment(sourceId, id, comment)
       const now = new Date()
 
       if (result.status === 204) {
@@ -181,7 +215,7 @@ export const CommentSectionSupabase = (props: IProps) => {
 
   const editReply = async (id: number, replyText: string, parentId: number) => {
     try {
-      const result = await commentService.editcomment(sourceId, id, replyText)
+      const result = await commentService.editComment(sourceId, id, replyText)
       const now = new Date()
 
       if (result.status === 204) {

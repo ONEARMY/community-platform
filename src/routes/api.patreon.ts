@@ -26,11 +26,14 @@ export const loader = async ({ request }) => {
 }
 
 export const action = async ({ request }) => {
-  if (request.method !== 'DELETE') {
-    return Response.json({}, { status: 405, statusText: 'method not allowed' })
-  }
-
   const { client, headers } = createSupabaseServerClient(request)
+
+  if (request.method !== 'DELETE') {
+    return Response.json(
+      {},
+      { headers, status: 405, statusText: 'method not allowed' },
+    )
+  }
 
   const {
     data: { user },

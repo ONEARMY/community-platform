@@ -109,6 +109,8 @@ export const loader = async ({ request }) => {
 }
 
 export const action = async ({ request }: LoaderFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+
   try {
     const formData = await request.formData()
     const data = {
@@ -126,8 +128,6 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       title: formData.get('title') as string,
     }
 
-    const { client, headers } = createSupabaseServerClient(request)
-
     const {
       data: { user },
       error,
@@ -141,7 +141,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const slug = convertToSlug(data.title)
@@ -150,6 +150,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json(
         {},
         {
+          headers,
           status: 409,
           statusText: 'This news already exists',
         },
@@ -163,6 +164,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json(
         {},
         {
+          headers,
           status: 400,
           statusText: imageValidation.error.message || 'Error uploading image',
         },
@@ -177,7 +179,10 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     if (profileRequest.error || !profileRequest.data?.at(0)) {
       console.error(profileRequest.error)
-      return Response.json({}, { status: 400, statusText: 'User not found' })
+      return Response.json(
+        {},
+        { headers, status: 400, statusText: 'User not found' },
+      )
     }
 
     const profile = profileRequest.data[0] as DBProfile
@@ -204,7 +209,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const news = News.fromDB(newsResult.data[0], [])
-    subscribersServiceServer.add('news', news.id, profile.id, client)
+    subscribersServiceServer.add('news', news.id, profile.id, client, headers)
 
     if (!news.isDraft) {
       notifyDiscord(
@@ -241,7 +246,10 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({ news }, { headers, status: 201 })
   } catch (error) {
     console.error(error)
-    return Response.json({}, { status: 500, statusText: 'Error creating news' })
+    return Response.json(
+      {},
+      { headers, status: 500, statusText: 'Error creating news' },
+    )
   }
 }
 

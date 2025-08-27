@@ -11,11 +11,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url)
   const patreonCode = url.searchParams.get('code')
 
-  if (!patreonCode) {
-    return Response.json({ error: 'No code provided' }, { status: 400 })
-  }
-
   const { client, headers } = createSupabaseServerClient(request)
+
+  if (!patreonCode) {
+    return Response.json(
+      { error: 'No code provided' },
+      { status: 400, headers },
+    )
+  }
 
   try {
     const {

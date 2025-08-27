@@ -86,6 +86,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+
   try {
     const formData = await request.formData()
     const uploadedCoverImage = formData.get('coverImage') as File | null
@@ -113,7 +115,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       slug: convertToSlug((formData.get('title') as string) || ''),
     }
 
-    const { client, headers } = createSupabaseServerClient(request)
     const {
       data: { user },
     } = await client.auth.getUser()
@@ -126,7 +127,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const profileService = new ProfileServiceServer(client)
@@ -137,7 +138,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     if (!profile) {
-      return Response.json({}, { status: 400, statusText: 'User not found' })
+      return Response.json(
+        {},
+        { headers, status: 400, statusText: 'User not found' },
+      )
     }
 
     const projectDb = await createProject(client, data, profile)
@@ -167,14 +171,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     project.steps = await uploadSteps(data, formData, projectDb, client)
-    subscribersServiceServer.add('projects', project.id, profile.id, client)
+    subscribersServiceServer.add(
+      'projects',
+      project.id,
+      profile.id,
+      client,
+      headers,
+    )
 
     return Response.json({ project }, { headers, status: 201 })
   } catch (error) {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error creating project' },
+      { headers, status: 500, statusText: 'Error creating project' },
     )
   }
 }

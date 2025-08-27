@@ -13,7 +13,7 @@ export const loader = async ({ request }) => {
 
     return Response.json(
       {},
-      { status: 500, statusText: 'Error fetching map-pins' },
+      { headers, status: 500, statusText: 'Error fetching map-pins' },
     )
   }
 }

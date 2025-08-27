@@ -9,12 +9,14 @@ export async function action({ request }: LoaderFunctionArgs) {
 
   const data = await request.json()
 
-  if (!data.ids) {
-    return Response.json({}, { status: 400, statusText: 'ids is required' })
-  }
-
   const { client, headers } = createSupabaseServerClient(request)
 
+  if (!data.ids) {
+    return Response.json(
+      {},
+      { status: 400, statusText: 'ids is required', headers },
+    )
+  }
   // It would be more efficient to make a group by query.
   // But it isn't supported by the sdk. Can create an sql function if performance is an issue.
   // Also, this won't be needed once we fully migrate to supabase.

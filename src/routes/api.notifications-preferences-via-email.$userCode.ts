@@ -15,7 +15,10 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
   try {
     if (!params.userCode) {
-      return Response.json({}, { status: 401, statusText: 'unauthorized' })
+      return Response.json(
+        {},
+        { headers, status: 401, statusText: 'unauthorized' },
+      )
     }
 
     const decoded = tokens.verify(params.userCode) as DecodedToken
@@ -30,7 +33,10 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
     const userId = userData.data?.id as number
     if (!userId) {
-      return Response.json({}, { status: 401, statusText: 'unauthorized' })
+      return Response.json(
+        {},
+        { headers, status: 401, statusText: 'unauthorized' },
+      )
     }
 
     const preferencesData = await client
@@ -57,7 +63,10 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
   try {
     if (!params.userCode) {
-      return Response.json({}, { status: 401, statusText: 'unauthorized' })
+      return Response.json(
+        {},
+        { headers, status: 401, statusText: 'unauthorized' },
+      )
     }
 
     const decoded = tokens.verify(params.userCode) as DecodedToken
@@ -73,14 +82,18 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
     const userId = userData.data?.id as number
 
     if (!userId) {
-      return Response.json({}, { status: 401, statusText: 'unauthorized' })
+      return Response.json(
+        {},
+        { headers, status: 401, statusText: 'unauthorized' },
+      )
     }
 
     const { valid, status, statusText } = await validateRequest(request, userId)
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
+
     const formData = await request.formData()
     const existingPreferences = await client
       .from('notifications_preferences')

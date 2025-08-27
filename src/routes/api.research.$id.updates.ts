@@ -11,6 +11,8 @@ import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { DBProfile, DBResearchItem } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+
   try {
     const researchId = Number(params.id)
     const formData = await request.formData()
@@ -21,8 +23,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       fileUrl: formData.get('fileUrl') as string,
       isDraft: formData.get('draft') === 'true',
     }
-
-    const { client, headers } = createSupabaseServerClient(request)
 
     const {
       data: { user },
@@ -38,7 +38,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const profile = await profileService.getByAuthId(user!.id)
 
     if (!profile) {
-      return Response.json({}, { status: 400, statusText: 'User not found' })
+      return Response.json(
+        {},
+        { headers, status: 400, statusText: 'User not found' },
+      )
     }
 
     const { valid, status, statusText } = validateRequest(
@@ -50,7 +53,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const uploadedImages = formData.getAll('images') as File[]
@@ -61,6 +64,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json(
         {},
         {
+          headers,
           status: 400,
           statusText: imageValidation.errors.join(', '),
         },
@@ -107,12 +111,14 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       researchUpdate,
       profile.id,
       client,
+      headers,
     )
 
     broadcastCoordinationServiceServer.researchUpdate(
       researchUpdate,
       profile,
       client,
+      headers,
       request,
     )
 
@@ -121,7 +127,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error creating research' },
+      { headers, status: 500, statusText: 'Error creating research' },
     )
   }
 }

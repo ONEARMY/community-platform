@@ -20,7 +20,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   } = await client.auth.getUser()
 
   if (!user) {
-    return Response.json({}, { status: 401, statusText: 'unauthorized' })
+    return Response.json(
+      {},
+      { headers, status: 401, statusText: 'unauthorized' },
+    )
   }
 
   const { data } = await client
@@ -50,8 +53,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     } = await client.auth.getUser()
 
     const { valid, status, statusText } = await validateRequest(request, user)
+
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     if (id) {
@@ -77,7 +81,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     if (!data) {
       console.error(error)
-      return Response.json({}, { status: 401, statusText: 'User not found' })
+      return Response.json(
+        {},
+        { headers, status: 401, statusText: 'User not found' },
+      )
     }
 
     await client.from('notifications_preferences').insert({

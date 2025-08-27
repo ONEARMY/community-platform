@@ -13,7 +13,10 @@ export async function action({ request, params }: LoaderFunctionArgs) {
   } = await client.auth.getUser()
 
   if (!user) {
-    return Response.json({}, { status: 401, statusText: 'unauthorized' })
+    return Response.json(
+      {},
+      { headers, status: 401, statusText: 'unauthorized' },
+    )
   }
 
   const profileResult = await client
@@ -24,7 +27,10 @@ export async function action({ request, params }: LoaderFunctionArgs) {
 
   if (!profileResult.data || profileResult.error) {
     console.error(profileResult.error + ' auth_id:' + user.id)
-    return Response.json({}, { status: 400, statusText: 'user not found' })
+    return Response.json(
+      {},
+      { headers, status: 400, statusText: 'user not found' },
+    )
   }
 
   let result
@@ -47,7 +53,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
 
   if (result.error) {
     console.error(result.error)
-    return Response.json({}, { status: 500, statusText: 'error' })
+    return Response.json({}, { headers, status: 500, statusText: 'error' })
   }
 
   return Response.json({}, { headers, status: 200 })

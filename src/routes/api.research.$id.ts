@@ -12,6 +12,8 @@ import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { DBResearchItem } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+
   try {
     const id = Number(params.id)
 
@@ -38,8 +40,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       existingImage: formData.get('existingImage') as string | null,
     }
 
-    const { client, headers } = createSupabaseServerClient(request)
-
     const {
       data: { user },
     } = await client.auth.getUser()
@@ -55,7 +55,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const previousSlugs = contentServiceServer.updatePreviousSlugs(
@@ -90,6 +90,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       oldResearch,
       research,
       client,
+      headers,
     )
 
     if (data.uploadedImage) {
@@ -127,7 +128,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error creating research' },
+      { headers, status: 500, statusText: 'Error creating research' },
     )
   }
 }

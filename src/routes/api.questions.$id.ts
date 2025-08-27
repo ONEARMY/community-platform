@@ -15,6 +15,8 @@ import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { DBMedia, DBQuestion } from 'oa-shared'
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+
   try {
     const id = Number(params.id)
 
@@ -34,8 +36,6 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       slug: convertToSlug(formData.get('title') as string),
     }
 
-    const { client, headers } = createSupabaseServerClient(request)
-
     const {
       data: { user },
     } = await client.auth.getUser()
@@ -52,7 +52,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const uploadedImages = formData.getAll('images') as File[]
@@ -62,6 +62,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       return Response.json(
         {},
         {
+          headers,
           status: 400,
           statusText: imageValidation.errors.join(', '),
         },
@@ -134,7 +135,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error creating question' },
+      { headers, status: 500, statusText: 'Error creating question' },
     )
   }
 }

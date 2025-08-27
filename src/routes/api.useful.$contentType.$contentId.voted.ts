@@ -10,7 +10,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   } = await client.auth.getUser()
 
   if (!user) {
-    return Response.json({}, { status: 401, statusText: 'unauthorized' })
+    return Response.json(
+      {},
+      { headers, status: 401, statusText: 'unauthorized' },
+    )
   }
 
   const useful = await client

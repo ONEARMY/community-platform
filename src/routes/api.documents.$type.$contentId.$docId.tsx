@@ -42,7 +42,7 @@ async function resolveUrl(
   }
 
   if (docId === 'link') {
-    return await resolveFileLink(tableName, contentId, client)
+    return await resolveFileLink(tableName, contentId, client, headers)
   }
 
   const path = await resolvePath(tableName, contentId, client)
@@ -68,7 +68,7 @@ async function resolveUrl(
 
   if (!result.data?.signedUrl) {
     console.error(result.error)
-    return Response.json({}, { status: 500 })
+    return Response.json({}, { status: 500, headers })
   }
 
   return redirect(result.data?.signedUrl)
@@ -78,6 +78,7 @@ async function resolveFileLink(
   tableName: string,
   id: number,
   client: SupabaseClient,
+  headers: Headers,
 ) {
   const { data, error } = await client
     .from(tableName)
@@ -87,7 +88,7 @@ async function resolveFileLink(
 
   if (!data) {
     console.error(error)
-    return Response.json({}, { status: 500 })
+    return Response.json({}, { status: 500, headers })
   }
 
   return redirect(data.file_link)

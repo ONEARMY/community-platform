@@ -21,15 +21,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const error = url.searchParams.get('error_description')
   const token = url.searchParams.get('token')
 
+  const { client, headers } = createSupabaseServerClient(request)
+
   if (error) {
-    return Response.json({ error })
+    return Response.json({ error }, { headers })
   }
 
   if (token) {
-    return Response.json({ token })
+    return Response.json({ token }, { headers })
   }
-
-  const { client, headers } = createSupabaseServerClient(request)
 
   const {
     data: { user },

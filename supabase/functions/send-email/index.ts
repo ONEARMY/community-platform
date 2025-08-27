@@ -69,7 +69,7 @@ Deno.serve(async (req) => {
       }
       case 'moderation_notification': {
         if (email_data.notification) {
-          subject = `Moderation update for: ${email_data.notification.title.parentTitle}`
+          subject = `Moderation update for: ${email_data.notification.email.subject}`
           html = await render(React.createElement(ModerationEmail, details))
         }
         break

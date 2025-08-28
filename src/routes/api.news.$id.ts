@@ -1,4 +1,5 @@
 import { News } from 'oa-shared'
+import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
 import { newsServiceServer } from 'src/services/newsService.server'
@@ -115,6 +116,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         const [image] = storageServiceServer.getPublicUrls(
           client,
           mediaFiles.media,
+          IMAGE_SIZES.GALLERY,
         )
 
         news.heroImage = image

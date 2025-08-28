@@ -1,4 +1,5 @@
 import { UserRole } from 'oa-shared'
+import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { ProfileFactory } from 'src/factories/profileFactory.server'
 
 import { ProfileServiceServer } from './profileService.server'
@@ -91,8 +92,11 @@ const getHeroImage = async (
     return null
   }
 
-  const size = { width: 1240, height: 620 }
-  const images = storageServiceServer.getPublicUrls(client, [dbImage], size)
+  const images = storageServiceServer.getPublicUrls(
+    client,
+    [dbImage],
+    IMAGE_SIZES.GALLERY,
+  )
 
   return images[0]
 }

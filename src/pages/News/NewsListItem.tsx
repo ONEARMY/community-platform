@@ -43,7 +43,10 @@ export const NewsListItem = ({ news, query }: IProps) => {
         {news.heroImage && (
           <InternalLink to={url}>
             <AspectRatio ratio={2 / 1}>
-              <Image src={news.heroImage.publicUrl} sx={{ width: '100%' }} />
+              <Image
+                src={news.heroImage.publicUrl}
+                sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
             </AspectRatio>
           </InternalLink>
         )}

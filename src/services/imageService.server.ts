@@ -64,6 +64,7 @@ export class ImageServiceServer {
 
       if (result.data === null) {
         errors.push(`Error uploading file: ${file.name}`)
+        errors.push(`${result.error?.message} ${result.error?.cause}`)
         continue
       }
 

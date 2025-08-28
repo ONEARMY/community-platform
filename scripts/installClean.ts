@@ -3,6 +3,10 @@ import fs from 'fs'
 import globby from 'globby'
 import path from 'path'
 import { rimrafSync } from 'rimraf'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const REPO_SRC = path.resolve(__dirname, '../')
 
@@ -11,10 +15,8 @@ async function installClean() {
   console.log('Starting clean install. This could take a few minutes...')
   // delete existing node_modules
   const packageJsonPaths = globby.sync(
-    ['**/package.json', '!**/node_modules'],
-    {
-      cwd: REPO_SRC,
-    },
+    ['**/package.json', '!**/node_modules/**'],
+    { cwd: REPO_SRC },
   )
   for (const packageJsonPath of packageJsonPaths) {
     const folder = path.dirname(packageJsonPath)

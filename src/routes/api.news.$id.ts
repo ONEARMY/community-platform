@@ -15,6 +15,8 @@ import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { DBNews } from 'oa-shared'
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+
   try {
     const id = Number(params.id)
     const formData = await request.formData()
@@ -34,8 +36,6 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       slug: convertToSlug(formData.get('title') as string),
     }
 
-    const { client, headers } = createSupabaseServerClient(request)
-
     const {
       data: { user },
     } = await client.auth.getUser()
@@ -52,7 +52,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const existingHeroImage = formData.get('existingHeroImage') as string | null
@@ -63,6 +63,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       return Response.json(
         {},
         {
+          headers,
           status: 400,
           statusText: imageValidation.error.message,
         },
@@ -126,7 +127,10 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     return Response.json({ news }, { headers, status: 200 })
   } catch (error) {
     console.error(error)
-    return Response.json({}, { status: 500, statusText: 'Error creating news' })
+    return Response.json(
+      {},
+      { headers, status: 500, statusText: 'Error creating news' },
+    )
   }
 }
 

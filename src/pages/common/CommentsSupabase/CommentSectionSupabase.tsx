@@ -22,9 +22,10 @@ const commentPageSize = 10
 
 export const CommentSectionSupabase = (props: IProps) => {
   const { authors, setSubscribersCount, sourceId, sourceType } = props
+
   const [comments, setComments] = useState<Comment[]>([])
-  const [newCommentIds, setNewCommentIds] = useState<number[]>([])
   const [commentLimit, setCommentLimit] = useState<number>(commentPageSize)
+  const [newCommentIds, setNewCommentIds] = useState<number[]>([])
 
   const displayedComments = useMemo(() => {
     return comments
@@ -100,11 +101,11 @@ export const CommentSectionSupabase = (props: IProps) => {
 
         setComments((comments) => [...comments, newComment])
         setNewCommentIds([...newCommentIds, newComment.id])
-      } else {
-        // show error
       }
+      return result
     } catch (err) {
       console.error(err)
+      return err
     }
   }
 
@@ -123,11 +124,11 @@ export const CommentSectionSupabase = (props: IProps) => {
             return x
           }),
         )
-      } else {
-        // TODO: show error
       }
+      return result
     } catch (err) {
       console.error(err)
+      return err
     }
   }
 
@@ -144,9 +145,8 @@ export const CommentSectionSupabase = (props: IProps) => {
             return x
           }),
         )
-      } else {
-        // show error
       }
+      return result
     } catch (err) {
       console.error(err)
     }
@@ -172,9 +172,8 @@ export const CommentSectionSupabase = (props: IProps) => {
             return comment
           }),
         )
-      } else {
-        // show error
       }
+      return result
     } catch (err) {
       console.error(err)
     }
@@ -200,11 +199,11 @@ export const CommentSectionSupabase = (props: IProps) => {
             return comment
           }),
         )
-      } else {
-        // show error
       }
+      return result
     } catch (err) {
       console.error(err)
+      return err
     }
   }
 
@@ -226,11 +225,11 @@ export const CommentSectionSupabase = (props: IProps) => {
             return comment
           }),
         )
-      } else {
-        // show error
       }
+      return result
     } catch (err) {
       console.error(err)
+      return err
     }
   }
 

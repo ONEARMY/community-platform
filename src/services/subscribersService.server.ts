@@ -33,6 +33,7 @@ const addResearchSubscribers = async (
   research: ResearchItem,
   profileId: number,
   client: SupabaseClient,
+  headers: Headers,
   addFunction = add,
 ) => {
   const subscribers = await combineSubscribers(
@@ -42,7 +43,7 @@ const addResearchSubscribers = async (
   )
   return Promise.all([
     subscribers.map((subscriber) => {
-      addFunction('research', research.id, subscriber, client)
+      addFunction('research', research.id, subscriber, client, headers)
     }),
   ])
 }
@@ -51,6 +52,7 @@ const addResearchUpdateSubscribers = async (
   update: ResearchUpdate,
   profileId: number,
   client: SupabaseClient,
+  headers: Headers,
   addFunction = add,
 ) => {
   const subscribers = await combineSubscribers(
@@ -60,7 +62,7 @@ const addResearchUpdateSubscribers = async (
   )
   return Promise.all([
     subscribers.map((subscriber) => {
-      addFunction('research_update', update.id, subscriber, client)
+      addFunction('research_update', update.id, subscriber, client, headers)
     }),
   ])
 }
@@ -70,6 +72,7 @@ const add = async (
   contentId: number,
   profileId: number,
   client: SupabaseClient,
+  headers: Headers,
 ) => {
   try {
     const response = await client
@@ -81,7 +84,7 @@ const add = async (
       .single()
 
     if (response.data) {
-      return Response.json({}, { status: 200 })
+      return Response.json({}, { headers, status: 200 })
     }
 
     await client.from('subscribers').insert({
@@ -90,11 +93,11 @@ const add = async (
       user_id: profileId,
       tenant_id: process.env.TENANT_ID!,
     })
-    return Response.json({}, { status: 200 })
+    return Response.json({}, { headers, status: 200 })
   } catch (error) {
     if (error) {
       console.error(error)
-      return Response.json({}, { status: 500, statusText: 'error' })
+      return Response.json({}, { headers, status: 500, statusText: 'error' })
     }
   }
 }
@@ -103,6 +106,7 @@ const updateResearchSubscribers = async (
   oldResearch: DBResearchItem,
   newResearch: ResearchItem,
   client: SupabaseClient,
+  headers: Headers,
   addFunction = add,
 ) => {
   const oldCollaborators = oldResearch.collaborators || []
@@ -123,7 +127,7 @@ const updateResearchSubscribers = async (
   )
   return Promise.all([
     subscribers.map((subscriber) => {
-      addFunction('research', newResearch.id, subscriber, client)
+      addFunction('research', newResearch.id, subscriber, client, headers)
     }),
   ])
 }

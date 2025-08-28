@@ -53,7 +53,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const mapService = new MapServiceServer(client)
@@ -77,7 +77,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error saving map pin', headers },
+      { headers, status: 500, statusText: 'Error saving map pin' },
     )
   }
 }

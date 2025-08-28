@@ -21,7 +21,7 @@ export const Banner = (props: IProps) => {
       onClick={onClick}
       variant={variant || 'failure'}
       sx={{
-        borderRadius: 0,
+        borderRadius: 2,
         alignItems: 'center',
         flex: '1',
         justifyContent: 'center',

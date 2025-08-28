@@ -38,7 +38,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const fields: IImpactDataField[] = JSON.parse(data.fields)
@@ -60,7 +60,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error saving impact', headers },
+      { headers, status: 500, statusText: 'Error saving impact' },
     )
   }
 }

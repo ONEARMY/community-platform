@@ -8,6 +8,8 @@ import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { TenantSettings } from 'oa-shared'
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+
   try {
     const formData = await request.formData()
 
@@ -16,8 +18,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       message: formData.get('message') as string,
       name: formData.has('name') ? (formData.get('name') as string) : undefined,
     }
-
-    const { client, headers } = createSupabaseServerClient(request)
 
     const {
       data: { user },
@@ -30,7 +30,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const userProfile = await client
@@ -63,6 +63,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json(
         { error: 'Too many requests' },
         {
+          headers,
           status: 429,
           statusText:
             "You've contacted a lot of people today! So to protect the platform from spam we haven't sent this message.",
@@ -118,7 +119,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     if (sendResult.error) {
       return Response.json(
         { error: sendResult.error },
-        { status: 429, statusText: sendResult.error },
+        { headers, status: 429, statusText: sendResult.error },
       )
     }
 
@@ -128,7 +129,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     return Response.json(
       { error },
-      { status: 500, statusText: 'Error sending message' },
+      { headers, status: 500, statusText: 'Error sending message' },
     )
   }
 }

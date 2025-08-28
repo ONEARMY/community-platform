@@ -30,10 +30,8 @@ interface IProps {
 export const ModerationEmail = (props: IProps) => {
   const { notification, settings } = props
 
-  const buttonLink = urlAppend(
-    `${settings.siteUrl}/${notification.link}`,
-    'moderation',
-  )
+  const buttonLink = `${settings.siteUrl}/${notification.link}`
+
   const preview = `${notification.triggeredBy} ${notification.title}`
   const buttonWording = notification.body ? 'Update it now' : 'See it live'
 

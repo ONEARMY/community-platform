@@ -19,6 +19,8 @@ const mockGetPreferences =
   notificationsPreferencesServiceServer.getPreferences as Mock
 
 describe('notificationEmailService', () => {
+  const headers = new Headers()
+
   beforeEach(() => {
     vi.clearAllMocks()
     console.error = vi.fn()
@@ -38,6 +40,7 @@ describe('notificationEmailService', () => {
           client,
           notification,
           123,
+          headers,
         )
 
       expect(result).toBeUndefined()
@@ -64,6 +67,7 @@ describe('notificationEmailService', () => {
           client,
           notification,
           123,
+          headers,
         )
 
       expect(result).toBeUndefined()
@@ -93,6 +97,7 @@ describe('notificationEmailService', () => {
         client,
         notification,
         profileId,
+        headers,
       )
 
       expect(console.error).toHaveBeenCalledWith(
@@ -124,6 +129,7 @@ describe('notificationEmailService', () => {
           client,
           notification,
           profileId,
+          headers,
         )
 
       expect(result).toBeUndefined()
@@ -162,6 +168,7 @@ describe('notificationEmailService', () => {
         client,
         notification,
         profileId,
+        headers,
       )
 
       expect(mocks.from).toHaveBeenCalledWith('profiles')
@@ -209,6 +216,7 @@ describe('notificationEmailService', () => {
         client,
         notification,
         123,
+        headers,
       )
 
       expect(mocks.functionsInvoke).toHaveBeenCalled()
@@ -232,6 +240,7 @@ describe('notificationEmailService', () => {
           client,
           notification,
           123,
+          headers,
         )
 
       expect(result).toBeUndefined()
@@ -262,6 +271,7 @@ describe('notificationEmailService', () => {
         client,
         notification,
         123,
+        headers,
       )
 
       expect(mocks.functionsInvoke).toHaveBeenCalled()
@@ -285,6 +295,7 @@ describe('notificationEmailService', () => {
           client,
           notification,
           123,
+          headers,
         )
 
       expect(result).toBeUndefined()
@@ -315,6 +326,7 @@ describe('notificationEmailService', () => {
         client,
         notification,
         123,
+        headers,
       )
 
       expect(mocks.functionsInvoke).toHaveBeenCalled()
@@ -345,6 +357,7 @@ describe('notificationEmailService', () => {
         client,
         notification,
         123,
+        headers,
       )
 
       expect(mocks.functionsInvoke).toHaveBeenCalled()
@@ -373,6 +386,7 @@ describe('notificationEmailService', () => {
         client,
         notification,
         123,
+        headers,
       )
 
       expect(mocks.functionsInvoke).toHaveBeenCalled()

@@ -7,13 +7,13 @@ import type { ContentType } from 'oa-shared'
 import type { LoaderFunctionArgs } from 'react-router'
 
 export const action = async ({ request }: LoaderFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+
   try {
     const formData = await request.formData()
     const contentType = formData.get('contentType') as ContentType
     const imageFile = formData.get('imageFile') as File
     const id = formData.has('id') ? Number(formData.get('id') as string) : null
-
-    const { client, headers } = createSupabaseServerClient(request)
 
     const {
       data: { user },
@@ -26,7 +26,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { status, statusText, headers })
     }
 
     const uploadedImage = await storageServiceServer.uploadImage(
@@ -49,7 +49,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error uploading image' },
+      { headers, status: 500, statusText: 'Error uploading image' },
     )
   }
 }

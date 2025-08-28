@@ -54,6 +54,7 @@ const createNotification = async (
   client: SupabaseClient,
   notification: NewNotificationData,
   profileId: number,
+  headers: Headers,
 ) => {
   try {
     const data = {
@@ -83,6 +84,7 @@ const createNotification = async (
       client,
       response.data[0],
       profileId,
+      headers,
     )
   } catch (error) {
     console.error(error)
@@ -90,6 +92,7 @@ const createNotification = async (
     return Response.json(
       { error },
       {
+        headers,
         status: 500,
         statusText: `Error creating notification: ${notification.contentType}`,
       },
@@ -100,6 +103,7 @@ const createNotification = async (
 const createNotificationsNewComment = async (
   comment: DBComment,
   client: SupabaseClient,
+  headers: Headers,
 ) => {
   if (!comment.created_by) {
     return
@@ -137,7 +141,7 @@ const createNotificationsNewComment = async (
           parentCommentId: isReply ? comment.parent_id : null,
         }
 
-        return createNotification(client, notification, subscriberId!)
+        return createNotification(client, notification, subscriberId!, headers)
       }),
     )
   } catch (error) {
@@ -145,7 +149,11 @@ const createNotificationsNewComment = async (
 
     return Response.json(
       { error },
-      { status: 500, statusText: 'Error creating notifications: Comments' },
+      {
+        headers,
+        status: 500,
+        statusText: 'Error creating notifications: Comments',
+      },
     )
   }
 }
@@ -155,6 +163,7 @@ const createNotificationsResearchUpdate = async (
   researchUpdate: ResearchUpdate,
   profile: DBProfile,
   client: SupabaseClient,
+  headers: Headers,
 ) => {
   try {
     const contentType: SubscribableContentTypes = 'research'
@@ -178,7 +187,7 @@ const createNotificationsResearchUpdate = async (
           triggeredById: profile.id,
         }
 
-        return createNotification(client, notification, subscriberId!)
+        return createNotification(client, notification, subscriberId!, headers)
       }),
     )
   } catch (error) {
@@ -187,6 +196,7 @@ const createNotificationsResearchUpdate = async (
     return Response.json(
       { error },
       {
+        headers,
         status: 500,
         statusText: 'Error creating notifications: Research update',
       },

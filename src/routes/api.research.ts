@@ -84,6 +84,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+
   try {
     const formData = await request.formData()
     const data = {
@@ -102,8 +104,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       uploadedImage: formData.get('image') as File | null,
     }
 
-    const { client, headers } = createSupabaseServerClient(request)
-
     const {
       data: { user },
     } = await client.auth.getUser()
@@ -115,7 +115,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const slug = convertToSlug(data.title)
@@ -136,7 +136,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const profile = await profileService.getByAuthId(user!.id)
 
     if (!profile) {
-      return Response.json({}, { status: 400, statusText: 'User not found' })
+      return Response.json(
+        {},
+        { headers, status: 400, statusText: 'User not found' },
+      )
     }
 
     const researchStatus: ResearchStatus = 'in-progress'
@@ -172,6 +175,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       research,
       profile.id,
       client,
+      headers,
     )
 
     if (data.uploadedImage) {
@@ -203,7 +207,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error creating research' },
+      { headers, status: 500, statusText: 'Error creating research' },
     )
   }
 }

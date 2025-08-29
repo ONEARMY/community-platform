@@ -43,15 +43,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const drafts = result.data as unknown as DBNews[]
   const items = drafts.map((x) => {
-    const image = x.hero_image
+    const images = x.hero_image
       ? storageServiceServer.getPublicUrls(
           client,
           [x.hero_image],
-          IMAGE_SIZES.LIST,
+          IMAGE_SIZES.GALLERY,
         )
       : []
 
-    return News.fromDB(x, [], image[0])
+    return News.fromDB(x, [], images[0])
   })
 
   return Response.json({ items }, { headers })

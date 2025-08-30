@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Link } from '@remix-run/react'
 import { Banner } from 'oa-components'
 import { bannerService } from 'src/pages/common/banner.service'
 import { Flex } from 'theme-ui'
@@ -32,9 +31,9 @@ export const AlertBanner = () => {
 
   if (banner.url) {
     return (
-      <Link to={banner.url} target="_blank">
+      <a href={banner.url} target="_blank" rel="noreferrer">
         {bannerContent}
-      </Link>
+      </a>
     )
   }
 

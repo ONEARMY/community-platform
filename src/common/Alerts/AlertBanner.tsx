@@ -24,9 +24,7 @@ export const AlertBanner = () => {
 
   const bannerContent = (
     <Flex>
-      <Banner
-        sx={{ backgroundColor: 'softblue', color: 'black', cursor: 'hand' }}
-      >
+      <Banner variant="accent" sx={{ color: 'black', cursor: 'hand' }}>
         {banner.text}
       </Banner>
     </Flex>

@@ -13,10 +13,10 @@ interface IProps {
   onPinClick: (pin: MapPin) => void
 }
 
-export const Clusters: React.FunctionComponent<IProps> = ({
+export const Clusters = ({
   pins,
   onPinClick,
-}) => {
+}: IProps) => {
   /**
    * Documentation of Leaflet Clusters for better understanding
    * https://github.com/Leaflet/Leaflet.markercluster#clusters-methods

@@ -7,7 +7,7 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
 import Mustache from 'mustache'
-import { resolve, dirname } from 'path'
+import { dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)

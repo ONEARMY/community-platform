@@ -41,7 +41,7 @@
     "@types/dateformat": "^3.0.1",
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.8.0",
+    "@types/node": "^22.18.0",
     "@types/uuid": "^9.0.0",
     "@types/webpack": "^5.28.5",
     "@types/webpack-node-externals": "^3.0.4",

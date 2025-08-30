@@ -11,7 +11,7 @@
 #
 ####################################################################
 
-FROM node:20.9.0-bullseye-slim
+FROM node:22.18.0-bullseye-slim
 
 WORKDIR /app
 

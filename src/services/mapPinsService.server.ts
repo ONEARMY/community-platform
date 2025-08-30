@@ -14,7 +14,12 @@ export class MapPinsServiceServer {
     const cachedMappins = await cache.get('mappins')
 
     // check if cached map pins are available and a producation environment, if not - load from db and cache them
-    if (cachedMappins && isProductionEnvironment()) {
+    if (
+      cachedMappins &&
+      Array.isArray(cachedMappins) &&
+      cachedMappins.length > 0 &&
+      isProductionEnvironment()
+    ) {
       return cachedMappins
     }
 

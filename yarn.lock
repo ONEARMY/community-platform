@@ -15355,7 +15355,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express@npm:^4.17.3, express@npm:^4.19.2, express@npm:^4.20.0":
+"express@npm:^4.17.3, express@npm:^4.20.0":
   version: 4.21.1
   resolution: "express@npm:4.21.1"
   dependencies:
@@ -25622,14 +25622,6 @@ __metadata:
   checksum: 10/c9fa63bbbd7431066174a48ba2dd9986dfd930c3a8b59de9c29d7b6854ec1c12a80d15310869ea5166d413b99f041bfa3dd80a7947bcd44ea8e6eb3ffeabfa1f
   languageName: node
   linkType: hard
-
-"simulated-webook-receiver@workspace:packages/simulated-webhook-receiver":
-  version: 0.0.0-use.local
-  resolution: "simulated-webook-receiver@workspace:packages/simulated-webhook-receiver"
-  dependencies:
-    express: "npm:^4.19.2"
-  languageName: unknown
-  linkType: soft
 
 "siphash@npm:^1.1.0":
   version: 1.2.0

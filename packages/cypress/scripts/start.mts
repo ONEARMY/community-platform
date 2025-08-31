@@ -57,7 +57,6 @@ process.on('unhandledRejection', (err) => {
  * - DB seeding happens inbetween test suites, but really should happen before/after test
  * scripts start and end (particularly teardown, as it won't be called if tests fail).
  * Possibly could be done with a Cypress.task or similar
- * Temp cli function to wipe hanging db: `firebase use ci; firebase firestore:delete --all-collections`
  */
 main()
   .then(() => process.exit(0))

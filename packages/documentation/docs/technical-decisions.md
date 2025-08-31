@@ -63,16 +63,3 @@ Having updates being stored in their own table is beneficial:
 The solution is to have a `tsvector` column that also contains update data which comes from the `research_updates` table.
 To build the column data, a `combined_research_search_fields(research_id)` is used to combine all data (main + updates).
 To automate indexing from `research_update` an INSERT/UPDATE trigger is needed.
-
-## Local firebase sync testing/debugging
-
-_This is temporary until we fully migrate to supabase!_
-We can create and deploy the sync function to the firebase dev environment.
-Then, using ngrok, expose our local supabase url to the internet, and point the firebase function to it.
-(ngrok http http://127.0.0.1:54321)
-
-To authenticate, we need to create these 3 secrets, for each firebase project:
-firebase functions:secrets:set SUPABASE_API_URL
-firebase functions:secrets:set SUPABASE_API_KEY
-firebase functions:secrets:set TENANT_ID
-(Check values with firebase functions:secrets:access SECRET_NAME)

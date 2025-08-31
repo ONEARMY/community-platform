@@ -6,7 +6,6 @@ functions
 extensions
 .circleci
 .github
-.husky
 .nxs
 docs
 packages/cypress

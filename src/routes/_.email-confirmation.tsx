@@ -1,95 +1,154 @@
 import { useEffect } from 'react'
-import { Link, redirect } from '@remix-run/react'
+import { Form } from 'react-final-form'
+import {
+  redirect,
+  useActionData,
+  useLoaderData,
+  useNavigate,
+} from '@remix-run/react'
 import { Button, HeroBanner } from 'oa-components'
 import Main from 'src/pages/common/Layout/Main'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { fireConfetti } from 'src/utils/fireConfetti'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { client, headers } = createSupabaseServerClient(request)
   const url = new URL(request.url)
-
   const error = url.searchParams.get('error_description')
-  if (error) {
-    console.error('Email confirmation error:', error)
-    return redirect('/sign-in?error=email-confirmation-failed', { headers })
-  }
+  const token = url.searchParams.get('token')
 
-  // Check if user is already authenticated
+  const { client, headers } = createSupabaseServerClient(request)
+
   const {
     data: { user },
   } = await client.auth.getUser()
 
   if (user) {
-    // User is already logged in, redirect to profile completion
     return redirect('/settings', { headers })
   }
 
-  const code = url.searchParams.get('code')
-  if (!code) {
-    // No code provided, redirect to sign in
-    return redirect('/sign-in', { headers })
+  if (error) {
+    return Response.json({ error }, { headers })
   }
 
-  // Exchange code for session to log the user in
-  const result = await client.auth.exchangeCodeForSession(code)
-
-  if (result.error) {
-    console.error('Email confirmation exchange error:', result.error)
-    return redirect('/sign-in?error=email-confirmation-expired', { headers })
+  if (token) {
+    return Response.json({ token }, { headers })
   }
 
-  // Successfully confirmed and logged in - show success page
-  return Response.json({}, { headers })
+  return redirect('/')
+}
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+  const url = new URL(request.url)
+
+  // Get the token from URL params (it should still be there)
+  const token = url.searchParams.get('token')
+
+  if (!token) {
+    return Response.json(
+      { error: 'Your reset link is invalid' },
+      { status: 400, headers },
+    )
+  }
+
+  const tokenVerification = await client.auth.verifyOtp({
+    token_hash: token,
+    type: 'signup',
+  })
+
+  if (!tokenVerification.data.user) {
+    return Response.json(
+      { error: 'Your link has expired or is invalid' },
+      { status: 400, headers },
+    )
+  }
+
+  return Response.json({ success: true }, { headers })
 }
 
 export default function Index() {
+  const navigate = useNavigate()
+  const data = useLoaderData<typeof loader>()
+  const actionData = useActionData<typeof action>()
+
   useEffect(() => {
-    fireConfetti()
-  }, [])
+    if (actionData?.success) {
+      fireConfetti()
+      navigate('/settings')
+    }
+  }, [actionData?.success])
+
   return (
     <Main style={{ flex: 1 }}>
-      <Flex
-        bg="inherit"
-        px={2}
-        sx={{ width: '100%' }}
-        css={{ maxWidth: '620px' }}
-        mx={'auto'}
-        mt={[5, 10]}
-        mb={3}
-      >
-        <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-          <HeroBanner type="celebration" />
-          <Card sx={{ borderRadius: 3 }}>
-            <Flex sx={{ padding: 4, gap: 4, flexDirection: 'column' }}>
-              <Flex sx={{ gap: 2, flexDirection: 'column' }}>
-                <Heading>Your email is confirmed!</Heading>
-                <Heading variant="small">Nice one</Heading>
-              </Flex>
+      <Form
+        onSubmit={() => {}}
+        render={({ submitting }) => {
+          return (
+            <form data-cy="email-confirmation-form" method="post">
+              <Flex
+                sx={{
+                  bg: 'inherit',
+                  px: 2,
+                  width: '100%',
+                  maxWidth: '620px',
+                  mx: 'auto',
+                  mt: [5, 10],
+                  mb: 3,
+                }}
+              >
+                <Flex sx={{ flexDirection: 'column', width: '100%' }}>
+                  <HeroBanner type="celebration" />
+                  <Card sx={{ borderRadius: 3 }}>
+                    <Flex
+                      sx={{
+                        flexWrap: 'wrap',
+                        flexDirection: 'column',
+                        padding: 4,
+                        gap: 4,
+                        width: '100%',
+                      }}
+                    >
+                      <Flex sx={{ gap: 2, flexDirection: 'column' }}>
+                        <Heading>Email confirmation</Heading>
+                      </Flex>
 
-              <Text sx={{ color: 'grey' }}>
-                Before contributing, we'd love it if you could let everyone know
-                who you are.
-              </Text>
+                      {data.error ? (
+                        <Text color="red">{data?.error}</Text>
+                      ) : (
+                        <>
+                          {actionData?.error && (
+                            <Text color="red">{actionData?.error}</Text>
+                          )}
 
-              <Flex sx={{ gap: 2 }}>
-                <Link to="/settings" data-cy="complete-profile-button">
-                  <Button
-                    type="button"
-                    variant="primary"
-                    sx={{ borderRadius: 3 }}
-                  >
-                    Complete your profile
-                  </Button>
-                </Link>
+                          <Flex>
+                            <Button
+                              large
+                              data-cy="submit"
+                              sx={{
+                                borderRadius: 3,
+                                width: '100%',
+                                justifyContent: 'center',
+                              }}
+                              variant="primary"
+                              disabled={submitting}
+                              type="submit"
+                            >
+                              Confirm Email
+                            </Button>
+                          </Flex>
+                        </>
+                      )}
+                    </Flex>
+                  </Card>
+                </Flex>
               </Flex>
-            </Flex>
-          </Card>
-        </Flex>
-      </Flex>
+            </form>
+          )
+        }}
+      />
     </Main>
   )
 }

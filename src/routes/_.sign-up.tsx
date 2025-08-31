@@ -46,7 +46,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData()
   const url = new URL(request.url)
   const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:'
-  const emailRedirectTo = `${protocol}//${url.host}/email-confirmation/`
+  const emailRedirectTo = `${protocol}//${url.host}/email-confirmation`
 
   const username = formData.get('username') as string
   if (!(await authServiceServer.isUsernameAvailable(username, client))) {

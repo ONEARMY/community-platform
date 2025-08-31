@@ -1,11 +1,9 @@
 *node_modules*
 dump
 build
-extensions
 .circleci
 .github
 .nxs
 docs
 packages/cypress
 packages/documentation
-scripts

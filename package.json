@@ -5,7 +5,6 @@
     "url": "https://github.com/ONEARMY/community-platform.git"
   },
   "workspaces": [
-    "functions",
     "shared",
     "packages/*",
     "scripts"
@@ -21,10 +20,7 @@
     "start:shared": "yarn workspace oa-shared dev",
     "start:prod": "yarn build:shared && yarn build:themes && yarn build:components && node ./server.js",
     "start:platform": "yarn build:shared && node ./server.js",
-    "start:platform:for-emulated-backend": "yarn build:shared && vite --port 4000",
     "start:platform-ci": "yarn build:shared && cross-env NODE_ENV=production node ./server.js",
-    "frontend:for-emulated-backend:watch": "concurrently --kill-others --names themes,components,platform --prefix-colors yellow,cyan,blue,magenta \"yarn start:themes\" \"yarn start:components\" \"yarn start:platform:for-emulated-backend\"",
-    "backend:emulator:watch": "docker-compose up --force-recreate --build",
     "build:themes": "yarn workspace oa-themes build",
     "build:components": "yarn workspace oa-components build",
     "build:vite": "tsc && remix vite:build",

@@ -2,7 +2,6 @@ containerization
 *node_modules*
 dump
 build
-functions
 extensions
 .circleci
 .github

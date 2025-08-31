@@ -47,16 +47,11 @@ const getSiteVariant = (): siteVariants => {
   if (devSiteVariant === 'preview') {
     return 'preview'
   }
-  if (devSiteVariant === 'emulated_site') {
-    return 'emulated_site'
-  }
+
   if (devSiteVariant === 'dev_site') {
     return 'dev_site'
   }
 
-  if (typeof location !== 'undefined' && location.host === 'localhost:4000') {
-    return 'emulated_site'
-  }
   if (
     (typeof location !== 'undefined' && location.host === 'localhost:3456') ||
     _c('VITE_SITE_VARIANT') === 'test-ci'

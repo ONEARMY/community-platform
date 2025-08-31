@@ -4,7 +4,6 @@ export interface ISentryConfig {
 }
 
 export type siteVariants =
-  | 'emulated_site'
   | 'dev_site'
   | 'test-ci'
   | 'staging'

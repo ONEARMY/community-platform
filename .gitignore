@@ -7,11 +7,6 @@ node_modules
 /coverage
 /reports
 /junit.xml
-/functions/coverage
-/functions/junit.xml
-
-functions/service.json
-functions/backup.json
 
 # production
 /build

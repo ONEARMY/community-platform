@@ -39,13 +39,7 @@ module.exports = {
     {
       type: 'category',
       label: 'Backend Development',
-      items: [
-        'Backend Development/BackendOverview',
-        'Backend Development/firebase-emulator',
-        'Backend Development/firestore-backup',
-        'Backend Development/integrations',
-        'Backend Development/tests',
-      ],
+      items: ['Backend Development/integrations', 'Backend Development/tests'],
     },
     {
       type: 'category',

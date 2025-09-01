@@ -69,24 +69,11 @@ aliases:
         - /home/circleci/.yarn/install-state.gz
       key: v9-yarn-{{ checksum "yarn.lock" }}
 
-  # Example debugging commands for use troubleshooting caching (du will exit with status 141)
-  - &check_folders
-    run:
-      name: check folders
-      command: |
-        ls -a ~/project
-        du -a /home | sort -n -r | head -n 500
-
   - &filter_only_default_branch
     filters:
       branches:
         only:
           - master
-  - &filter_only_ci_test
-    filters:
-      branches:
-        only:
-          - ci/circle-ci-release
 
 ######################################################################################################
 #  Commands - Reusable collections of steps

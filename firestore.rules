@@ -7,7 +7,7 @@ service cloud.firestore {
     }
 
     function userIntegrationsWrite() {
-      // User integrations may only be writen to if the updated resource pertains to the authenticated user.
+      // User integrations may only be written to if the updated resource pertains to the authenticated user.
       return request.auth.uid == request.resource.id
     }
 

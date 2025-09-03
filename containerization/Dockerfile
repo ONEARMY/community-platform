@@ -91,7 +91,7 @@ RUN \
 # 2) install the dependencies
 # 3) copy the application files
 #
-# Doing it like this optimizes rebuilds, as dependenices
+# Doing it like this optimizes rebuilds, as dependencies
 # change much less often compared to application files.
 #
 # source: https://www.docker.com/blog/getting-started-with-docker-using-node-jspart-i/

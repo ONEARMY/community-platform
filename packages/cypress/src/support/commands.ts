@@ -1,7 +1,5 @@
 import 'cypress-file-upload'
 
-import { deleteDB } from 'idb'
-
 interface ExpectedNewNotification {
   content: string
   path: string
@@ -13,7 +11,6 @@ declare global {
   namespace Cypress {
     interface Chainable {
       clearServiceWorkers(): Promise<void>
-      deleteIDB(name: string): Promise<boolean>
       clearNotifications(): Chainable<void>
       expectNewNotification(ExpectedNewNotification): Chainable<void>
       expectNoNewNotification(): Chainable<void>
@@ -23,32 +20,6 @@ declare global {
     }
   }
 }
-
-/**
- * Create custom commands that can be used within cypress chaining and namespace
- * @remark - any called functions should be 'wrapped' in a cy.wrap('some name') statement to allow chaining
- * @remark - async code should be wrapped in a Cypress.promise block to allow the resolved promise to be
- * used in chained results
- */
-/** Delete an indexeddb - resolving true on success and false if blocked (open connections) */
-Cypress.Commands.add('deleteIDB', (name: string) => {
-  cy.wrap('Delete Firebase IDB: ' + name)
-    .then(() => {
-      return new Cypress.Promise<boolean>((resolve) => {
-        // Ensure DB exists - NOTE - only supported in chrome
-        // ;(indexedDB as any).databases().then((names: string[]) => {
-        //   if (names.includes(name)) {
-        deleteDB(name, {
-          // blocked implies active connection; for now just resolve false but in the
-          // future may want to find better resolution
-          blocked: () => resolve(false),
-        })
-          .then(() => resolve(true))
-          .catch(() => resolve(false))
-      })
-    })
-    .then((deleted) => cy.log('deleted?', deleted))
-})
 
 Cypress.Commands.add('clearServiceWorkers', () => {
   cy.window().then((w) => {

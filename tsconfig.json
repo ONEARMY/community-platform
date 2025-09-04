@@ -36,15 +36,8 @@
   "exclude": [
     "node_modules",
     "build",
-    "scripts",
-    "acceptance-tests",
-    "webpack",
     "jest",
     "src/setupTests.ts",
-    "functions",
-    "src/utils/UserMigration",
-    "src/setupProxy.js",
-    "src/assets/userReportInit.js",
     "packages/components",
     "packages/themes"
   ]

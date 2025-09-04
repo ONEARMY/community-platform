@@ -50,7 +50,8 @@ export const ProfileTypeSection = ({
 
             <Grid columns={['repeat(auto-fill, minmax(125px, 1fr))']} gap={2}>
               {profileTypes
-                .toSorted((a, b) => {
+                .slice()
+                .sort((a, b) => {
                   if (a.isSpace !== b.isSpace) {
                     return a.isSpace ? 1 : -1
                   }

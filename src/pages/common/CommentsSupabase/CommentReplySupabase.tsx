@@ -18,7 +18,7 @@ const DELETED_COMMENT = 'The original comment got deleted'
 
 export interface ICommentItemProps {
   comment: Reply
-  onEdit: (id: number, comment: string) => void
+  onEdit: (id: number, comment: string) => Promise<Response>
   onDelete: (id: number) => void
 }
 
@@ -125,9 +125,9 @@ export const CommentReply = observer(
             <EditComment
               comment={comment.comment}
               handleSubmit={async (commentText) => {
-                onEdit(comment.id, commentText)
-                setShowEditModal(false)
+                return await onEdit(comment.id, commentText)
               }}
+              setShowEditModal={setShowEditModal}
               handleCancel={() => setShowEditModal(false)}
               isReply={true}
             />

@@ -3,7 +3,7 @@
 Various content needs to be shared between different parts of the app, e.g.
 
 - Frontend src
-- Backend functions
+- Storybook components
 - Cypress e2e tests
 
 The shared workspace can be used to share functions and constants between other projects

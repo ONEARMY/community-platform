@@ -41,6 +41,7 @@ export const loader = async ({ request }) => {
       slug,
       summary,
       category:category(id,name),
+      profile_badge:profile_badge(*),
       tags,
       title,
       total_views,
@@ -54,7 +55,6 @@ export const loader = async ({ request }) => {
           action_url
         )
       ))`,
-      { count: 'exact' },
     )
     .eq('is_draft', false)
 
@@ -74,8 +74,11 @@ export const loader = async ({ request }) => {
 
   const total = queryResult.count
   const data = queryResult.data as unknown as DBNews[]
-
-  const items = data.map((dbNews) => News.fromDB(dbNews, []))
+  const allNews = data.map((dbNews) => News.fromDB(dbNews, []))
+  const items = await newsServiceServer.filterNewsByUserFunctions(
+    allNews,
+    client,
+  )
 
   if (items && items.length > 0) {
     // Populate useful votes
@@ -106,6 +109,8 @@ export const loader = async ({ request }) => {
 }
 
 export const action = async ({ request }: LoaderFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+
   try {
     const formData = await request.formData()
     const data = {
@@ -114,13 +119,14 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         ? (formData.get('category') as string)
         : null,
       isDraft: formData.get('is_draft') === 'true',
+      profileBadge: formData.has('profileBadge')
+        ? (formData.get('profileBadge') as string)
+        : null,
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
         : null,
       title: formData.get('title') as string,
     }
-
-    const { client, headers } = createSupabaseServerClient(request)
 
     const {
       data: { user },
@@ -135,7 +141,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const slug = convertToSlug(data.title)
@@ -144,6 +150,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json(
         {},
         {
+          headers,
           status: 409,
           statusText: 'This news already exists',
         },
@@ -157,6 +164,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json(
         {},
         {
+          headers,
           status: 400,
           statusText: imageValidation.error.message || 'Error uploading image',
         },
@@ -171,7 +179,10 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     if (profileRequest.error || !profileRequest.data?.at(0)) {
       console.error(profileRequest.error)
-      return Response.json({}, { status: 400, statusText: 'User not found' })
+      return Response.json(
+        {},
+        { headers, status: 400, statusText: 'User not found' },
+      )
     }
 
     const profile = profileRequest.data[0] as DBProfile
@@ -179,16 +190,17 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const newsResult = await client
       .from('news')
       .insert({
-        created_by: profile.id,
-        title: data.title,
         body: data.body,
+        category: data.category,
+        created_by: profile.id,
         is_draft: data.isDraft,
         moderation: 'accepted' as Moderation,
+        profile_badge: data.profileBadge,
         slug,
         summary: getSummaryFromMarkdown(data.body),
-        category: data.category,
         tags: data.tags,
         tenant_id: process.env.TENANT_ID,
+        title: data.title,
       })
       .select()
 
@@ -197,7 +209,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const news = News.fromDB(newsResult.data[0], [])
-    subscribersServiceServer.add('news', news.id, profile.id, client)
+    subscribersServiceServer.add('news', news.id, profile.id, client, headers)
 
     if (!news.isDraft) {
       notifyDiscord(
@@ -234,7 +246,10 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({ news }, { headers, status: 201 })
   } catch (error) {
     console.error(error)
-    return Response.json({}, { status: 500, statusText: 'Error creating news' })
+    return Response.json(
+      {},
+      { headers, status: 500, statusText: 'Error creating news' },
+    )
   }
 }
 

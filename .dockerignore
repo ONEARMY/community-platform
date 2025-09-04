@@ -1,15 +1,9 @@
-containerization
 *node_modules*
 dump
 build
-functions
-extensions
 .circleci
 .github
-.husky
 .nxs
 docs
 packages/cypress
 packages/documentation
-packages/simulated-webhook-receiver
-scripts

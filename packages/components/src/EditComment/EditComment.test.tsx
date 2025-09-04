@@ -8,7 +8,7 @@ import { EditComment, type IProps } from './EditComment'
 import { Default, EditReply } from './EditComment.stories'
 
 describe('EditComment', () => {
-  const mockOnSubmit = vi.fn()
+  const mockOnSubmit = vi.fn().mockImplementation(() => new Response())
   const mockOnCancel = vi.fn()
 
   it('showed correct title when a comment', () => {
@@ -17,17 +17,20 @@ describe('EditComment', () => {
     expect(getByText('Edit Comment')).toBeInTheDocument()
     expect(() => getByText('Edit Reply')).toThrow()
   })
+
   it('showed correct title when a reply', () => {
     const { getByText } = render(<EditReply {...(EditReply.args as IProps)} />)
 
     expect(getByText('Edit Reply')).toBeInTheDocument()
     expect(() => getByText('Edit Comment')).toThrow()
   })
+
   it('enables save button when comment is not empty', () => {
     const screen = render(
       <EditComment
         isReply={false}
         comment="Test comment"
+        setShowEditModal={() => null}
         handleCancel={mockOnCancel}
         handleSubmit={mockOnSubmit}
       />,
@@ -40,6 +43,7 @@ describe('EditComment', () => {
       <EditComment
         isReply={false}
         comment="Test comment"
+        setShowEditModal={() => null}
         handleCancel={mockOnCancel}
         handleSubmit={mockOnSubmit}
       />,
@@ -48,22 +52,26 @@ describe('EditComment', () => {
     fireEvent.click(button)
     expect(mockOnSubmit).toHaveBeenCalledWith('Test comment')
   })
+
   it('disables save button when comment is empty', () => {
     const screen = render(
       <EditComment
         isReply={false}
         comment=""
+        setShowEditModal={() => null}
         handleCancel={mockOnCancel}
         handleSubmit={mockOnSubmit}
       />,
     )
     expect(screen.getByTestId('edit-comment-submit')).toBeDisabled()
   })
+
   it('should dispaly error message when the comment is empty', () => {
     const screen = render(
       <EditComment
         isReply={false}
         comment=""
+        setShowEditModal={() => null}
         handleCancel={mockOnCancel}
         handleSubmit={mockOnSubmit}
       />,

@@ -84,6 +84,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+
   try {
     const formData = await request.formData()
     const data = {
@@ -99,10 +101,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       collaborators: formData.has('collaborators')
         ? (formData.getAll('collaborators') as string[])
         : null,
+      uploadedImage: formData.get('image') as File | null,
     }
-    const uploadedImage = formData.get('image') as File | null
-
-    const { client, headers } = createSupabaseServerClient(request)
 
     const {
       data: { user },
@@ -115,7 +115,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const slug = convertToSlug(data.title)
@@ -136,7 +136,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const profile = await profileService.getByAuthId(user!.id)
 
     if (!profile) {
-      return Response.json({}, { status: 400, statusText: 'User not found' })
+      return Response.json(
+        {},
+        { headers, status: 400, statusText: 'User not found' },
+      )
     }
 
     const researchStatus: ResearchStatus = 'in-progress'
@@ -172,11 +175,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       research,
       profile.id,
       client,
+      headers,
     )
 
-    if (uploadedImage) {
+    if (data.uploadedImage) {
       const mediaResult = await storageServiceServer.uploadImage(
-        [uploadedImage],
+        [data.uploadedImage],
         `research/${research.id}`,
         client,
       )
@@ -203,7 +207,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error creating research' },
+      { headers, status: 500, statusText: 'Error creating research' },
     )
   }
 }
@@ -223,6 +227,10 @@ async function validateRequest(request: Request, user: User | null, data: any) {
 
   if (!data.description) {
     return { status: 400, statusText: 'description is required' }
+  }
+
+  if (!data.isDraft && !data.uploadedImage && !data.existingImage) {
+    return { status: 400, statusText: 'image is required' }
   }
 
   return { valid: true }

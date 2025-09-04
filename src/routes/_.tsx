@@ -20,13 +20,13 @@ import type { LoaderFunctionArgs } from '@remix-run/node'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const environment = getEnvVariables()
-  const { client } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request)
 
   const {
     data: { user },
   } = await client.auth.getUser()
 
-  return Response.json({ environment, user })
+  return Response.json({ environment, user }, { headers })
 }
 
 export function HydrateFallback() {

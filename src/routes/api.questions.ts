@@ -53,6 +53,7 @@ export const loader = async ({ request }) => {
       { count: 'exact' },
     )
     .eq('is_draft', false)
+    .or('deleted.is.null,deleted.neq.true')
 
   if (q) {
     query = query.textSearch('questions_search_fields', q)
@@ -102,6 +103,8 @@ export const loader = async ({ request }) => {
 }
 
 export const action = async ({ request }: LoaderFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+
   try {
     const formData = await request.formData()
     const data = {
@@ -116,8 +119,6 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         : null,
     }
 
-    const { client, headers } = createSupabaseServerClient(request)
-
     const {
       data: { user },
     } = await client.auth.getUser()
@@ -129,7 +130,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const slug = convertToSlug(data.title)
@@ -140,6 +141,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json(
         {},
         {
+          headers,
           status: 409,
           statusText: 'This question already exists',
         },
@@ -153,6 +155,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json(
         {},
         {
+          headers,
           status: 400,
           statusText: imageValidation.errors.join(', '),
         },
@@ -166,7 +169,10 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     if (profileRequest.error || !profileRequest.data?.at(0)) {
       console.error(profileRequest.error)
-      return Response.json({}, { status: 400, statusText: 'User not found' })
+      return Response.json(
+        {},
+        { headers, status: 400, statusText: 'User not found' },
+      )
     }
 
     const profile = profileRequest.data[0] as DBProfile
@@ -189,12 +195,18 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     if (questionResult.error || !questionResult.data) {
       return Response.json(
         {},
-        { status: 400, statusText: questionResult.error.details },
+        { headers, status: 400, statusText: questionResult.error.details },
       )
     }
 
     const question = Question.fromDB(questionResult.data[0], [])
-    subscribersServiceServer.add('questions', question.id, profile.id, client)
+    subscribersServiceServer.add(
+      'questions',
+      question.id,
+      profile.id,
+      client,
+      headers,
+    )
 
     if (uploadedImages.length > 0) {
       const questionId = Number(questionResult.data[0].id)
@@ -231,7 +243,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error creating question' },
+      { headers, status: 500, statusText: 'Error creating question' },
     )
   }
 }

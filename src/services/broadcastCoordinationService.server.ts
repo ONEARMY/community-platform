@@ -8,6 +8,7 @@ function researchUpdate(
   update: ResearchUpdate,
   profile: DBProfile | null,
   client: SupabaseClient,
+  headers: Headers,
   request: Request,
   oldUpdate?: DBResearchUpdate,
 ) {
@@ -25,6 +26,7 @@ function researchUpdate(
       update,
       profile as DBProfile,
       client,
+      headers,
     )
     discordServiceServer.postWebhookRequest(
       `🧪 ${profile.username} posted a new research update: ${update.title}\nCheck it out here: <${siteUrl}/research/${research.slug}#update_${update.id}>`,

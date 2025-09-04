@@ -5,9 +5,9 @@ import type { Params } from '@remix-run/react'
 import type { User } from '@supabase/supabase-js'
 
 export const action = async ({ params, request }: LoaderFunctionArgs) => {
-  try {
-    const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request)
 
+  try {
     const {
       data: { user },
     } = await client.auth.getUser()
@@ -19,7 +19,7 @@ export const action = async ({ params, request }: LoaderFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const profile = await client
@@ -38,7 +38,11 @@ export const action = async ({ params, request }: LoaderFunctionArgs) => {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error setting notification as read' },
+      {
+        headers,
+        status: 500,
+        statusText: 'Error setting notification as read',
+      },
     )
   }
 }

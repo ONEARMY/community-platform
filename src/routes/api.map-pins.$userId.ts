@@ -30,6 +30,7 @@ export const loader = async ({ request, params }) => {
           display_name,
           photo,
           type,
+          about,
           username,
           badges:profile_badges_relations(
             profile_badges(
@@ -67,7 +68,7 @@ export const loader = async ({ request, params }) => {
 
       return Response.json(
         {},
-        { status: 500, statusText: 'Error fetching map-pins', headers },
+        { headers, status: 500, statusText: 'Error fetching map-pins' },
       )
     }
 

@@ -1,4 +1,5 @@
 import { News } from 'oa-shared'
+import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { contentServiceServer } from 'src/services/contentService.server'
 import { newsServiceServer } from 'src/services/newsService.server'
@@ -14,6 +15,8 @@ import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { DBNews } from 'oa-shared'
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+
   try {
     const id = Number(params.id)
     const formData = await request.formData()
@@ -23,14 +26,15 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         ? Number(formData.get('category'))
         : null,
       isDraft: formData.get('is_draft') === 'true',
+      profileBadge: formData.has('profileBadge')
+        ? (formData.get('profileBadge') as string)
+        : null,
       tags: formData.has('tags')
         ? formData.getAll('tags').map((x) => Number(x))
         : null,
       title: formData.get('title') as string,
       slug: convertToSlug(formData.get('title') as string),
     }
-
-    const { client, headers } = createSupabaseServerClient(request)
 
     const {
       data: { user },
@@ -48,7 +52,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const existingHeroImage = formData.get('existingHeroImage') as string | null
@@ -59,6 +63,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       return Response.json(
         {},
         {
+          headers,
           status: 400,
           statusText: imageValidation.error.message,
         },
@@ -79,6 +84,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         modified_at: new Date(),
         slug: data.slug,
         previous_slugs: previousSlugs,
+        profile_badge: data.profileBadge,
         summary: getSummaryFromMarkdown(data.body),
         tags: data.tags,
         title: data.title,
@@ -111,6 +117,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         const [image] = storageServiceServer.getPublicUrls(
           client,
           mediaFiles.media,
+          IMAGE_SIZES.GALLERY,
         )
 
         news.heroImage = image
@@ -120,7 +127,10 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     return Response.json({ news }, { headers, status: 200 })
   } catch (error) {
     console.error(error)
-    return Response.json({}, { status: 500, statusText: 'Error creating news' })
+    return Response.json(
+      {},
+      { headers, status: 500, statusText: 'Error creating news' },
+    )
   }
 }
 

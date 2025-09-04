@@ -14,7 +14,12 @@ export class MapPinsServiceServer {
     const cachedMappins = await cache.get('mappins')
 
     // check if cached map pins are available and a producation environment, if not - load from db and cache them
-    if (cachedMappins && isProductionEnvironment()) {
+    if (
+      cachedMappins &&
+      Array.isArray(cachedMappins) &&
+      cachedMappins.length > 0 &&
+      isProductionEnvironment()
+    ) {
       return cachedMappins
     }
 
@@ -38,7 +43,8 @@ export class MapPinsServiceServer {
           country,
           display_name,
           photo,
-          type,
+          cover_images,
+          about,
           username,
           badges:profile_badges_relations(
             profile_badges(
@@ -71,17 +77,14 @@ export class MapPinsServiceServer {
       .eq('moderation', 'accepted')
 
     if (!data || error) {
-      console.error(error)
-
-      return Response.json(
-        {},
-        { status: 500, statusText: 'Error fetching map-pins' },
-      )
+      throw error
     }
 
     const pinsDb = data as unknown as DBMapPin[]
     const pinFactory = new MapPinFactory(this.client)
-    const mapPins = pinsDb.map((x) => pinFactory.fromDBWithProfile(x))
+    const mapPins = pinsDb
+      .filter((pin) => pin.profile)
+      .map((pin) => pinFactory.fromDBWithProfile(pin))
 
     cache.set('mappins', mapPins)
 

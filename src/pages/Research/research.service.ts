@@ -122,6 +122,10 @@ const upsert = async (
       throw new Error('Duplicate research item', { cause: 409 })
     }
 
+    if (response.status === 400) {
+      throw new Error(response.statusText, { cause: 409 })
+    }
+
     throw new Error('Error saving research', { cause: 500 })
   }
 

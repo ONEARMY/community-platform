@@ -23,9 +23,10 @@ const commentPageSize = 10
 
 export const CommentSectionSupabase = (props: IProps) => {
   const { authors, setSubscribersCount, sourceId, sourceType } = props
+
   const [comments, setComments] = useState<Comment[]>([])
-  const [newCommentIds, setNewCommentIds] = useState<number[]>([])
   const [commentLimit, setCommentLimit] = useState<number>(commentPageSize)
+  const [newCommentIds, setNewCommentIds] = useState<number[]>([])
 
   const displayedComments = useMemo(() => {
     return comments
@@ -35,10 +36,12 @@ export const CommentSectionSupabase = (props: IProps) => {
   const newComments = useMemo(() => {
     return comments.filter((x) => newCommentIds.includes(x.id))
   }, [comments, newCommentIds])
-  const displayShowMore = useMemo(
-    () => comments.length - newCommentIds.length > commentLimit,
-    [comments, commentLimit, newCommentIds],
-  )
+
+  const remainingCommentsCount = useMemo(() => {
+    const nonNewCount = comments.length - newCommentIds.length
+    const shown = Math.min(commentLimit, nonNewCount)
+    return Math.max(0, nonNewCount - shown)
+  }, [comments, newCommentIds, commentLimit])
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -132,11 +135,11 @@ export const CommentSectionSupabase = (props: IProps) => {
 
         setComments((comments) => [...comments, newComment])
         setNewCommentIds([...newCommentIds, newComment.id])
-      } else {
-        // show error
       }
+      return result
     } catch (err) {
       console.error(err)
+      return err
     }
   }
 
@@ -155,11 +158,11 @@ export const CommentSectionSupabase = (props: IProps) => {
             return x
           }),
         )
-      } else {
-        // TODO: show error
       }
+      return result
     } catch (err) {
       console.error(err)
+      return err
     }
   }
 
@@ -176,9 +179,8 @@ export const CommentSectionSupabase = (props: IProps) => {
             return x
           }),
         )
-      } else {
-        // show error
       }
+      return result
     } catch (err) {
       console.error(err)
     }
@@ -204,9 +206,8 @@ export const CommentSectionSupabase = (props: IProps) => {
             return comment
           }),
         )
-      } else {
-        // show error
       }
+      return result
     } catch (err) {
       console.error(err)
     }
@@ -232,11 +233,11 @@ export const CommentSectionSupabase = (props: IProps) => {
             return comment
           }),
         )
-      } else {
-        // show error
       }
+      return result
     } catch (err) {
       console.error(err)
+      return err
     }
   }
 
@@ -258,11 +259,11 @@ export const CommentSectionSupabase = (props: IProps) => {
             return comment
           }),
         )
-      } else {
-        // show error
       }
+      return result
     } catch (err) {
       console.error(err)
+      return err
     }
   }
 
@@ -300,7 +301,7 @@ export const CommentSectionSupabase = (props: IProps) => {
           </Box>
         ))}
 
-        {displayShowMore && (
+        {remainingCommentsCount > 0 && (
           <Flex>
             <Button
               type="button"
@@ -309,7 +310,7 @@ export const CommentSectionSupabase = (props: IProps) => {
               data-cy="show-more-comments"
               onClick={() => setCommentLimit((prev) => prev + commentPageSize)}
             >
-              show more comments
+              {`show ${remainingCommentsCount} more comment${remainingCommentsCount === 1 ? '' : 's'}`}
             </Button>
           </Flex>
         )}

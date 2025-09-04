@@ -22,6 +22,7 @@ describe('broadcastCoordinationServiceServer', () => {
     const mockResearch = FactoryDBResearchItem({
       is_draft: false,
     })
+    const mockHeaders = new Headers()
 
     beforeEach(() => {
       vi.clearAllMocks()
@@ -38,6 +39,7 @@ describe('broadcastCoordinationServiceServer', () => {
           researchUpdate,
           mockProfile,
           mockClient,
+          mockHeaders,
           mockRequest,
         )
 
@@ -59,6 +61,7 @@ describe('broadcastCoordinationServiceServer', () => {
           researchUpdate,
           mockProfile,
           mockClient,
+          mockHeaders,
           mockRequest,
         )
 
@@ -83,6 +86,7 @@ describe('broadcastCoordinationServiceServer', () => {
           researchUpdate,
           mockProfile,
           mockClient,
+          mockHeaders,
           mockRequest,
           oldResearchUpdate,
         )
@@ -108,6 +112,7 @@ describe('broadcastCoordinationServiceServer', () => {
           researchUpdate,
           mockProfile,
           mockClient,
+          mockHeaders,
           mockRequest,
           oldResearchUpdate,
         )
@@ -133,6 +138,7 @@ describe('broadcastCoordinationServiceServer', () => {
           researchUpdate,
           mockProfile,
           mockClient,
+          mockHeaders,
           mockRequest,
         )
 

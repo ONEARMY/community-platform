@@ -5,7 +5,6 @@
     "url": "https://github.com/ONEARMY/community-platform.git"
   },
   "workspaces": [
-    "functions",
     "shared",
     "packages/*",
     "scripts"
@@ -21,10 +20,7 @@
     "start:shared": "yarn workspace oa-shared dev",
     "start:prod": "yarn build:shared && yarn build:themes && yarn build:components && node ./server.js",
     "start:platform": "yarn build:shared && node ./server.js",
-    "start:platform:for-emulated-backend": "yarn build:shared && vite --port 4000",
     "start:platform-ci": "yarn build:shared && cross-env NODE_ENV=production node ./server.js",
-    "frontend:for-emulated-backend:watch": "concurrently --kill-others --names themes,components,platform --prefix-colors yellow,cyan,blue,magenta \"yarn start:themes\" \"yarn start:components\" \"yarn start:platform:for-emulated-backend\"",
-    "backend:emulator:watch": "docker-compose up --force-recreate --build",
     "build:themes": "yarn workspace oa-themes build",
     "build:components": "yarn workspace oa-components build",
     "build:vite": "tsc && remix vite:build",
@@ -46,8 +42,6 @@
     "docs": "yarn workspace oa-docs start",
     "db:reset": "npx supabase db reset && yarn db:seed",
     "db:seed": "npx @snaplet/seed sync && npx tsx seed.ts > seed.sql && yarn format",
-    "install:clean": "yarn workspace oa-scripts install:clean",
-    "postinstall": "husky install",
     "commit": "git-cz"
   },
   "browserslist": {
@@ -175,7 +169,6 @@
     "eslint-plugin-sort-class-members": "^1.20.0",
     "eslint-plugin-unicorn": "^53.0.0",
     "eslint-plugin-vitest": "^0.5.4",
-    "husky": "^9.0.11",
     "idb": "^8.0.0",
     "lint-staged": "^15.2.7",
     "mobx-react-devtools": "^6.1.1",

@@ -99,7 +99,7 @@ const ResearchForm = ({ research }: IProps) => {
       }}
       validate={(values) => {
         const errors = {}
-        if (values.image == null && values.existingImage === null) {
+        if (values.image == null && values.existingImage == null) {
           errors['image'] = 'An image is required (either new or existing).'
         }
         return errors

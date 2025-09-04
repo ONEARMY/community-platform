@@ -3,13 +3,16 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 
 export async function action({ request, params }: LoaderFunctionArgs) {
+  const { client, headers } = createSupabaseServerClient(request)
+
   if (request.method !== 'POST' && request.method !== 'DELETE') {
-    return Response.json({}, { status: 405, statusText: 'method not allowed' })
+    return Response.json(
+      {},
+      { headers, status: 405, statusText: 'method not allowed' },
+    )
   }
 
   try {
-    const { client, headers } = createSupabaseServerClient(request)
-
     const {
       data: { user },
     } = await client.auth.getUser()
@@ -63,7 +66,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
   } catch (error) {
     if (error) {
       console.error(error)
-      return Response.json({}, { status: 500, statusText: 'error' })
+      return Response.json({}, { headers, status: 500, statusText: 'error' })
     }
   }
 }

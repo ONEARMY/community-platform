@@ -11,15 +11,14 @@ import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { DBAuthor, DBProfile, DiscussionContentTypes } from 'oa-shared'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
+  const { client, headers } = createSupabaseServerClient(request)
+
   if (!params.sourceId) {
     return Response.json(
       {},
-      { status: 400, statusText: 'sourceId is required' },
+      { headers, status: 400, statusText: 'sourceId is required' },
     )
   }
-
-  const { client, headers } = createSupabaseServerClient(request)
-
   try {
     const {
       data: { user },
@@ -136,7 +135,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   )
 
   if (!valid) {
-    return Response.json({}, { status, statusText })
+    return Response.json({}, { headers, status, statusText })
   }
 
   const currentUser = await client
@@ -148,7 +147,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   if (currentUser.error || !currentUser.data?.at(0)) {
     return Response.json(
       {},
-      { status: 400, statusText: 'profile not found ' + user!.id },
+      { headers, status: 400, statusText: 'profile not found ' + user!.id },
     )
   }
 
@@ -194,11 +193,12 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     const comment = commentResult.data as DBComment
     const profile = currentUser.data[0] as DBProfile
 
-    addSubscriptions(comment, profile, client)
+    addSubscriptions(comment, profile, client, headers)
 
     notificationsSupabaseServiceServer.createNotificationsNewComment(
       comment,
       client,
+      headers,
     )
   }
 
@@ -220,6 +220,7 @@ function addSubscriptions(
   comment: DBComment,
   profile: DBProfile,
   client: SupabaseClient,
+  headers: Headers,
 ) {
   if (comment.source_id && !comment.parent_id) {
     // Subscribe to peer comments...
@@ -228,9 +229,16 @@ function addSubscriptions(
       comment.source_id,
       profile.id,
       client,
+      headers,
     )
     // ...add replies to this comment
-    subscribersServiceServer.add('comments', comment.id, profile.id, client)
+    subscribersServiceServer.add(
+      'comments',
+      comment.id,
+      profile.id,
+      client,
+      headers,
+    )
   }
 
   if (comment.source_id && comment.parent_id) {
@@ -240,6 +248,7 @@ function addSubscriptions(
       comment.parent_id,
       profile.id,
       client,
+      headers,
     )
   }
 }

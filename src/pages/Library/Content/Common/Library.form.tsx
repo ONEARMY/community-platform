@@ -51,7 +51,8 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       existingFiles: files,
       fileLink: fileLink,
       steps: project?.steps
-        ?.toSorted((a, b) => a.order - b.order)
+        ?.slice()
+        .sort((a, b) => a.order - b.order)
         .map((x) => ({
           id: x.id,
           title: x.title,

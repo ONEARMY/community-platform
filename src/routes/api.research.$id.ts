@@ -12,6 +12,8 @@ import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type { DBResearchItem } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+
   try {
     const id = Number(params.id)
 
@@ -34,11 +36,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         : null,
       isDraft: formData.get('draft') === 'true',
       slug: convertToSlug(formData.get('title') as string),
+      uploadedImage: formData.get('image') as File | null,
+      existingImage: formData.get('existingImage') as string | null,
     }
-    const uploadedImage = formData.get('image') as File
-    const existingImage = formData.get('existingImage') as string | null
-
-    const { client, headers } = createSupabaseServerClient(request)
 
     const {
       data: { user },
@@ -55,7 +55,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const previousSlugs = contentServiceServer.updatePreviousSlugs(
@@ -74,7 +74,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         previous_slugs: previousSlugs,
         is_draft: data.isDraft,
         collaborators: data.collaborators,
-        ...(!existingImage && { image: null }),
+        ...(!data.existingImage && { image: null }),
       })
       .eq('id', id)
       .select()
@@ -90,12 +90,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       oldResearch,
       research,
       client,
+      headers,
     )
 
-    if (uploadedImage) {
+    if (data.uploadedImage) {
       // TODO:remove unused images from storage
       const mediaResult = await storageServiceServer.uploadImage(
-        [uploadedImage],
+        [data.uploadedImage],
         `research/${research.id}`,
         client,
       )
@@ -127,7 +128,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error creating research' },
+      { headers, status: 500, statusText: 'Error creating research' },
     )
   }
 }
@@ -149,6 +150,7 @@ async function deleteResearch(request, id: number) {
     await client
       .from('research')
       .update({
+        modified_at: new Date(),
         deleted: true,
       })
       .eq('id', id)
@@ -180,6 +182,10 @@ async function validateRequest(
 
   if (!data.description) {
     return { status: 400, statusText: 'description is required' }
+  }
+
+  if (!data.isDraft && !data.uploadedImage && !data.existingImage) {
+    return { status: 400, statusText: 'image is required' }
   }
 
   if (

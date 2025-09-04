@@ -19,7 +19,10 @@ export const loader = async ({ request }) => {
     const profile = await profileService.getByAuthId(user!.id)
 
     if (!profile) {
-      return Response.json({}, { status: 400, statusText: 'user not found' })
+      return Response.json(
+        {},
+        { headers, status: 400, statusText: 'user not found' },
+      )
     }
 
     const { data, error } = await client
@@ -43,6 +46,7 @@ export const loader = async ({ request }) => {
           display_name,
           photo,
           type,
+          about,
           username,
           badges:profile_badges_relations(
             profile_badges(
@@ -79,7 +83,7 @@ export const loader = async ({ request }) => {
 
       return Response.json(
         {},
-        { status: 500, statusText: 'Error fetching map-pins', headers },
+        { headers, status: 500, statusText: 'Error fetching map-pins' },
       )
     }
 

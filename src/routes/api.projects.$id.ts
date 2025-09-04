@@ -11,6 +11,8 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBMedia, DBProfile, DBProject, MediaFile } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+
   try {
     const id = Number(params.id)
 
@@ -45,13 +47,15 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const existingCoverImageId = formData.get('existingCoverImage') as string
     const filesToKeepIds = formData.getAll('existingFiles') as string[]
 
-    const { client, headers } = createSupabaseServerClient(request)
     const {
       data: { user },
     } = await client.auth.getUser()
 
     if (!user) {
-      return Response.json({}, { status: 401, statusText: 'unauthorized' })
+      return Response.json(
+        {},
+        { headers, status: 401, statusText: 'unauthorized' },
+      )
     }
 
     const profileService = new ProfileServiceServer(client)
@@ -68,7 +72,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     // 1. Upload files
@@ -173,7 +177,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error creating project' },
+      { headers, status: 500, statusText: 'Error creating project' },
     )
   }
 }
@@ -342,6 +346,7 @@ async function deleteProject(request: Request, id: number) {
     await client
       .from('projects')
       .update({
+        modified_at: new Date(),
         deleted: true,
       })
       .eq('id', id)

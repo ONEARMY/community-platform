@@ -1,9 +1,13 @@
+import { redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import { News } from 'oa-shared'
+import { News, UserRole } from 'oa-shared'
+import { ProfileFactory } from 'src/factories/profileFactory.server'
 import { NewsPage } from 'src/pages/News/NewsPage'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { newsServiceServer } from 'src/services/newsService.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
+import { redirectServiceServer } from 'src/services/redirectService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import { contentServiceServer } from '../services/contentService.server'
@@ -21,15 +25,45 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const dbNews = result.data as unknown as DBNews
+  const profileBadgeId = dbNews.profile_badge?.id
 
-  if (dbNews.id) {
-    await contentServiceServer.incrementViewCount(
-      client,
-      'news',
-      dbNews.total_views,
-      dbNews.id,
-    )
+  if (!profileBadgeId) {
+    const news = await loadNews(client, dbNews)
+    return Response.json({ news }, { headers })
   }
+
+  const {
+    data: { user },
+  } = await client.auth.getUser()
+
+  if (!user) {
+    return redirectServiceServer.redirectSignIn(`/news/${dbNews.slug}`, headers)
+  }
+
+  const profileService = new ProfileServiceServer(client)
+  const dbProfile = await profileService.getByAuthId(user.id)
+  const profile = new ProfileFactory(client).fromDB(dbProfile!)
+
+  const isAdmin = profile.roles?.includes(UserRole.ADMIN) ?? false
+  const hasLinkedBadge = !!profile?.badges?.find(
+    (badge) => badge.id === profileBadgeId,
+  )
+
+  if (isAdmin || hasLinkedBadge) {
+    const news = await loadNews(client, dbNews)
+    return Response.json({ news }, { headers })
+  }
+
+  return redirect('/news')
+}
+
+async function loadNews(client, dbNews) {
+  await contentServiceServer.incrementViewCount(
+    client,
+    'news',
+    dbNews.total_views,
+    dbNews!.id,
+  )
 
   const [usefulVotes, subscribers, tags] =
     await contentServiceServer.getMetaFields(
@@ -48,7 +82,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   news.usefulCount = usefulVotes.count || 0
   news.subscriberCount = subscribers.count || 0
 
-  return Response.json({ news }, { headers })
+  return news
 }
 
 export function HydrateFallback() {

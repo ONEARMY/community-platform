@@ -18,6 +18,7 @@ describe('subscribersServiceServer', () => {
   describe('addResearchSubscribers', () => {
     it('calls add once when no collaborators are present', async () => {
       const mockAdd = vi.fn()
+      const mockHeaders = new Headers()
       const { client } = createMockSupabaseClient()
 
       const research: ResearchItem = FactoryResearchItem({
@@ -30,15 +31,23 @@ describe('subscribersServiceServer', () => {
         research,
         profileId,
         client,
+        mockHeaders,
         mockAdd,
       )
 
       expect(mockAdd).toHaveBeenCalledTimes(1)
-      expect(mockAdd).toHaveBeenCalledWith('research', 123, 456, client)
+      expect(mockAdd).toHaveBeenCalledWith(
+        'research',
+        123,
+        456,
+        client,
+        mockHeaders,
+      )
     })
 
     it('calls add right number of times for unique collaborators', async () => {
       const mockAdd = vi.fn()
+      const mockHeaders = new Headers()
       const { client, mocks } = createMockSupabaseClient()
       mocks.single.mockResolvedValueOnce({ data: { id: 55 } })
       mocks.single.mockResolvedValueOnce({ data: { id: 55 } })
@@ -54,17 +63,25 @@ describe('subscribersServiceServer', () => {
         research,
         profileId,
         client,
+        mockHeaders,
         mockAdd,
       )
 
       expect(mockAdd).toHaveBeenCalledTimes(3)
-      expect(mockAdd).toHaveBeenCalledWith('research', 123, 456, client)
+      expect(mockAdd).toHaveBeenCalledWith(
+        'research',
+        123,
+        456,
+        client,
+        mockHeaders,
+      )
     })
   })
 
   describe('addResearchUpdateSubscribers', () => {
     it('calls add twice when no collaborators are present', async () => {
       const mockAdd = vi.fn()
+      const mockHeaders = new Headers()
       const { client } = createMockSupabaseClient()
 
       const update: ResearchUpdate = FactoryResearchItemUpdate({
@@ -80,18 +97,32 @@ describe('subscribersServiceServer', () => {
         update,
         profileId,
         client,
+        mockHeaders,
         mockAdd,
       )
 
       expect(mockAdd).toHaveBeenCalledTimes(2)
-      expect(mockAdd).toHaveBeenCalledWith('research_update', 789, 456, client)
-      expect(mockAdd).toHaveBeenCalledWith('research_update', 789, 88, client)
+      expect(mockAdd).toHaveBeenCalledWith(
+        'research_update',
+        789,
+        456,
+        client,
+        mockHeaders,
+      )
+      expect(mockAdd).toHaveBeenCalledWith(
+        'research_update',
+        789,
+        88,
+        client,
+        mockHeaders,
+      )
     })
   })
 
   describe('updateResearchSubscribers', () => {
     it('does not call add when no new collaborators are present', async () => {
       const mockAdd = vi.fn()
+      const mockHeaders = new Headers()
       const { client } = createMockSupabaseClient()
 
       const oldResearch: DBResearchItem = FactoryDBResearchItem({
@@ -108,6 +139,7 @@ describe('subscribersServiceServer', () => {
         oldResearch,
         newResearch,
         client,
+        mockHeaders,
         mockAdd,
       )
 
@@ -116,6 +148,7 @@ describe('subscribersServiceServer', () => {
 
     it('calls add for each new unique collaborator', async () => {
       const mockAdd = vi.fn()
+      const mockHeaders = new Headers()
       const { client, mocks } = createMockSupabaseClient()
 
       mocks.single.mockResolvedValueOnce({ data: { id: 99 } })
@@ -135,12 +168,25 @@ describe('subscribersServiceServer', () => {
         oldResearch,
         newResearch,
         client,
+        mockHeaders,
         mockAdd,
       )
 
       expect(mockAdd).toHaveBeenCalledTimes(2)
-      expect(mockAdd).toHaveBeenCalledWith('research', 789, 99, client)
-      expect(mockAdd).toHaveBeenCalledWith('research', 789, 100, client)
+      expect(mockAdd).toHaveBeenCalledWith(
+        'research',
+        789,
+        99,
+        client,
+        mockHeaders,
+      )
+      expect(mockAdd).toHaveBeenCalledWith(
+        'research',
+        789,
+        100,
+        client,
+        mockHeaders,
+      )
     })
   })
 })

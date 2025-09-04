@@ -20,9 +20,9 @@ export const CategoryHorizonalList = (props: IProps) => {
     return null
   }
 
-  const orderedCategories = allCategories.toSorted((a, b) =>
-    a.createdAt > b.createdAt ? 1 : -1,
-  )
+  const orderedCategories = allCategories
+    .slice()
+    .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
 
   const isCategorySelected = (category: Category) => {
     return category.id === activeCategory?.id

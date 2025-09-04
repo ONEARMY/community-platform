@@ -6,9 +6,10 @@ import type { User } from '@supabase/supabase-js'
 import type { ResearchStatus } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
+  const { client, headers } = createSupabaseServerClient(request)
+
   try {
     const id = Number(params.id)
-    const { client, headers } = createSupabaseServerClient(request)
 
     const {
       data: { user },
@@ -27,7 +28,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     )
 
     if (!valid) {
-      return Response.json({}, { status, statusText })
+      return Response.json({}, { headers, status, statusText })
     }
 
     const canEdit = await researchServiceServer.isAllowedToEditResearchById(
@@ -54,7 +55,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     console.error(error)
     return Response.json(
       {},
-      { status: 500, statusText: 'Error creating research' },
+      { headers, status: 500, statusText: 'Error creating research' },
     )
   }
 }

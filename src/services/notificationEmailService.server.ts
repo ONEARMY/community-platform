@@ -26,6 +26,7 @@ const createInstantNotificationEmail = async (
   client: SupabaseClient,
   dbNotification: DBNotification,
   profileId: number,
+  headers: Headers,
 ) => {
   try {
     const profileResponse = await client
@@ -77,7 +78,11 @@ const createInstantNotificationEmail = async (
     })
   } catch (error) {
     console.error('Error creating email notification:', error)
-    return Response.json(error, { status: 500, statusText: error.statusText })
+    return Response.json(error, {
+      headers,
+      status: 500,
+      statusText: error.statusText,
+    })
   }
 }
 

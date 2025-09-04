@@ -91,9 +91,9 @@ const MapsPage = () => {
         setAllPins(pinsToSet)
 
         if (filters?.filters) {
-          const sortedTypes = (filters.filters.types || []).toSorted(
-            (a, b) => a.order - b.order,
-          )
+          const sortedTypes = (filters.filters.types || [])
+            .slice()
+            .sort((a, b) => a.order - b.order)
           setAllProfileTypes(sortedTypes)
           setAllBadges(filters.filters.badges || [])
           setAllTags(filters.filters.tags || [])

@@ -118,7 +118,6 @@ describe('[Settings]', () => {
     cy.contains(user.username)
     cy.contains(displayName)
     cy.contains(description)
-    cy.contains(country)
     cy.contains(tag[0])
     cy.contains(tag[1])
     cy.get(`[data-cy="country:${countryCode}"]`)

@@ -33,12 +33,18 @@ export class MapPinFactory {
     const photo = profile.photo
       ? this.imageService.getPublicUrl(profile.photo)
       : null
+    const coverImages = profile.cover_images
+      ? profile.cover_images.map((image) =>
+          this.imageService.getPublicUrl(image),
+        )
+      : null
 
     return {
       id: profile.id,
       about: profile.about,
       username: profile.username,
       country: profile.country,
+      coverImages,
       displayName: profile.display_name,
       visitorPolicy: profile.visitor_policy,
       type: profile.type ? ProfileType.fromDB(profile.type) : null,

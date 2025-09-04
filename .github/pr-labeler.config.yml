@@ -1,13 +1,11 @@
 # Configuration for pr-labeller actions
-"Mod: Library 📰":
+'Mod: Library 📰':
   - src/pages/Library/**/*
-"Mod: Maps 🗺":
+'Mod: Maps 🗺':
   - src/pages/Maps/**/*
-"Mod: Research 🔬":
+'Mod: Research 🔬':
   - src/pages/Research/**/*
-"backend":
-  - functions/**/*
-"Documentation":
+'Documentation':
   - packages/documentation/**/*
-"Mod: DevOps 🤖":
-  - any: ["cypress/**/*", "scripts/**/*", ".circleci/config.yml"]
+'Mod: DevOps 🤖':
+  - any: ['cypress/**/*', 'scripts/**/*', '.circleci/config.yml']

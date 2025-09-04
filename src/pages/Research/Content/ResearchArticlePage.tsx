@@ -136,10 +136,12 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
   }, [activeUser, research.author])
 
   const sortedUpdates = useMemo(() => {
-    return research?.updates?.toSorted(
-      (a, b) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-    )
+    return research?.updates
+      ?.slice()
+      .sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      )
   }, [research?.updates])
 
   return (

@@ -10,7 +10,7 @@ import type { IProps } from './UsefulButtonLite'
 
 const mockTheme = {
   colors: {
-    offWhite: '#f8f8f8',
+    background: '#f4f6f7',
     silver: '#c0c0c0',
     softblue: '#e6f3ff',
   },

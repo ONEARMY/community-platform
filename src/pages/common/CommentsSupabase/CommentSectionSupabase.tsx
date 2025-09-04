@@ -285,6 +285,7 @@ export const CommentSectionSupabase = (props: IProps) => {
             contentType={sourceType}
             itemId={sourceId}
             setSubscribersCount={setSubscribersCount}
+            small={false}
           />
         </Flex>
         {displayedComments.map((comment) => (

@@ -50,6 +50,7 @@ export const ActionSet = ({ children, itemType }: IProps) => {
         icon="more-vert"
         onClick={onClick}
         variant="subtle"
+        small={true}
         showIconOnly
       >
         Show Actions

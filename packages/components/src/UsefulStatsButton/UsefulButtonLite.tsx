@@ -47,10 +47,34 @@ export const UsefulButtonLite = (props: IProps) => {
   const backgroundColor =
     !votedUsefulCount || votedUsefulCount === 0
       ? 'transparent'
-      : theme.colors.offWhite
+      : theme.colors.background
 
   return (
-    <Flex sx={{ alignSelf: 'flex-end' }}>
+    <Flex
+      sx={{ alignSelf: 'flex-end', position: 'relative', alignItems: 'center' }}
+    >
+      {votedUsefulCount > 0 && (
+        <Flex
+          sx={{
+            position: 'absolute',
+            left: -6,
+            backgroundColor,
+            lineHeight: '1rem',
+            minWidth: '2.75rem',
+            width: 'fit-content',
+            height: '1.5rem',
+            borderTopLeftRadius: 1,
+            borderBottomLeftRadius: 1,
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            padding: '4px',
+            fontSize: '14px',
+            zIndex: 1,
+          }}
+        >
+          <Text>{votedUsefulCount ?? 0}</Text>
+        </Flex>
+      )}
       <Button
         type="button"
         data-tooltip-id={uuid}
@@ -64,46 +88,28 @@ export const UsefulButtonLite = (props: IProps) => {
               )
         }
         disabled={disabled}
+        variant="outline"
         sx={{
+          position: 'relative',
           fontSize: 1,
-          backgroundColor: backgroundColor,
           border: 'none',
-          marginRight: 5,
           padding: 1,
-          paddingRight: 4,
+          paddingRight: 8,
+          paddingLeft: 8,
           display: 'flex',
-          height: '20px',
-          minHeight: '20px',
           alignItems: 'center',
-          width: 'auto',
+          width: '2rem',
+          height: '2rem',
           gap: 1,
-          '&:hover': {
-            backgroundColor: backgroundColor,
-            transform: 'none',
-            boxShadow: 'none',
-          },
+          zIndex: 2,
           ...sx,
         }}
       >
         <Flex sx={{ alignItems: 'center' }}>
-          {votedUsefulCount > 0 && (
-            <Text
-              sx={{
-                display: 'inline-block',
-              }}
-            >
-              {votedUsefulCount ?? 0}
-            </Text>
-          )}
           <Icon
-            glyph={'star-active'}
-            ml={5}
-            size={18}
+            glyph="star-active"
+            size={24}
             filter={hasUserVotedUseful ? 'unset' : 'grayscale(1)'}
-            sx={{
-              position: 'absolute',
-              right: '-10px',
-            }}
           />
         </Flex>
       </Button>

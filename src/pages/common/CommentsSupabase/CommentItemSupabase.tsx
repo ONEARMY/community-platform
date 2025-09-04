@@ -130,6 +130,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
               tooltipUnfollow="Unfollow replies"
               variant="subtle"
               hideSubscribeIcon
+              small={true}
             />
           }
           usefulButtonConfig={{

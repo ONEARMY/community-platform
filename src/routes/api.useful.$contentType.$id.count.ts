@@ -1,7 +1,7 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { ContentType } from 'oa-shared'
+import type { UsefulContentType } from 'oa-shared'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -13,10 +13,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     'projects',
     'research',
     'news',
-    'comment',
-  ] as const satisfies readonly ContentType[]
+    'comments',
+  ] as const satisfies readonly UsefulContentType[]
 
-  if (!allowedContentTypes.includes(contentType as ContentType)) {
+  if (!allowedContentTypes.includes(contentType as UsefulContentType)) {
     return Response.json({ error: 'Unsupported content type' }, { status: 400 })
   }
 

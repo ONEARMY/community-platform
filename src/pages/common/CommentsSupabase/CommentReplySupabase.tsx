@@ -12,7 +12,7 @@ import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { onUsefulClick } from 'src/utils/onUsefulClick'
 import { Box, Flex, Text } from 'theme-ui'
 
-import type { ContentType, Reply } from 'oa-shared'
+import type { Reply } from 'oa-shared'
 
 const DELETED_COMMENT = 'The original comment got deleted'
 
@@ -57,23 +57,21 @@ export const CommentReply = observer(
     const item = 'ReplyItem'
     const loggedInUser = activeUser
 
-    const configOnUsefulClick = {
-      contentType: 'comment' as ContentType,
-      contentId: comment.id,
-      eventCategory: 'Comment',
-      slug: `${comment}+${comment.id}`,
-      setVoted,
-      setUsefulCount,
-      loggedInUser: loggedInUser,
-    }
-
     const handleUsefulClick = async (
       vote: 'add' | 'delete',
       eventCategory = 'Comment',
     ) => {
       await onUsefulClick({
         vote,
-        config: { ...configOnUsefulClick, eventCategory },
+        config: {
+          contentType: 'comments',
+          contentId: comment.id,
+          slug: `${comment}+${comment.id}`,
+          setVoted,
+          setUsefulCount,
+          loggedInUser: loggedInUser,
+          eventCategory,
+        },
       })
     }
 

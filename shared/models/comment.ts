@@ -18,27 +18,10 @@ export class DBComment implements IDBDocSB {
   readonly source_id_legacy: string | null
   readonly parent_id: number | null
   readonly vote_count?: number
-  readonly hasVoted?: boolean
+  readonly has_voted?: boolean
 
   constructor(comment: DBComment) {
     Object.assign(this, comment)
-  }
-
-  static toDB(obj: Comment) {
-    return new DBComment({
-      id: obj.id,
-      created_at: new Date(obj.createdAt),
-      created_by: obj.createdBy?.id || null,
-      modified_at: obj.modifiedAt ? new Date(obj.modifiedAt) : null,
-      comment: obj.comment,
-      source_id: typeof obj.sourceId === 'number' ? obj.sourceId : null,
-      source_id_legacy: typeof obj.sourceId === 'string' ? obj.sourceId : null,
-      source_type: obj.sourceType,
-      parent_id: obj.parentId,
-      deleted: obj.deleted,
-      vote_count: obj.voteCount || 0,
-      hasVoted: obj.hasVoted,
-    })
   }
 }
 
@@ -74,7 +57,7 @@ export class Comment implements IDoc {
       parentId: obj.parent_id,
       deleted: obj.deleted,
       voteCount: obj.vote_count || 0,
-      hasVoted: obj.hasVoted,
+      hasVoted: obj.has_voted,
       replies: replies,
     })
   }

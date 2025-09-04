@@ -16,7 +16,7 @@ import { Card, Flex } from 'theme-ui'
 import { CommentReply } from './CommentReplySupabase'
 import { CreateCommentSupabase } from './CreateCommentSupabase'
 
-import type { Comment, ContentType, DiscussionContentTypes } from 'oa-shared'
+import type { Comment, DiscussionContentTypes } from 'oa-shared'
 
 export interface ICommentItemProps {
   comment: Comment
@@ -70,23 +70,21 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
     }
   }, [comment.highlighted])
 
-  const configOnUsefulClick = {
-    contentType: 'comment' as ContentType,
-    contentId: comment.id,
-    eventCategory: 'Comment',
-    slug: `${comment}+${comment.id}`,
-    setVoted,
-    setUsefulCount,
-    loggedInUser: profile,
-  }
-
   const handleUsefulClick = async (
     vote: 'add' | 'delete',
     eventCategory = 'Comment',
   ) => {
     await onUsefulClick({
       vote,
-      config: { ...configOnUsefulClick, eventCategory },
+      config: {
+        contentType: 'comments',
+        contentId: comment.id,
+        slug: `${comment}+${comment.id}`,
+        setVoted,
+        setUsefulCount,
+        loggedInUser: profile,
+        eventCategory,
+      },
     })
   }
 

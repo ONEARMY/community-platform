@@ -20,7 +20,7 @@ export interface IProps {
   isEditable: boolean | undefined
   setShowDeleteModal: (arg: boolean) => void
   setShowEditModal: (arg: boolean) => void
-  usefulButtonConfig?: {
+  usefulButtonConfig: {
     hasUserVotedUseful: boolean
     votedUsefulCount: number
     isLoggedIn: boolean
@@ -47,13 +47,6 @@ export const CommentDisplay = (props: IProps) => {
     setShowEditModal,
     usefulButtonConfig,
   } = props
-
-  const {
-    votedUsefulCount = 0,
-    hasUserVotedUseful = false,
-    isLoggedIn = false,
-    onUsefulClick = () => Promise.resolve(),
-  } = usefulButtonConfig || {}
 
   const { authors } = useContext(AuthorsContext)
   const border = `${comment.highlighted ? '2px dashed black' : 'none'}`
@@ -167,16 +160,7 @@ export const CommentDisplay = (props: IProps) => {
               }}
             >
               <CommentBody body={comment.comment} />
-              {usefulButtonConfig && (
-                <UsefulButtonLite
-                  usefulButtonLiteConfig={{
-                    votedUsefulCount,
-                    hasUserVotedUseful,
-                    isLoggedIn,
-                    onUsefulClick,
-                  }}
-                />
-              )}
+              <UsefulButtonLite usefulButtonLiteConfig={usefulButtonConfig} />
             </Flex>
           </Flex>
         </Flex>

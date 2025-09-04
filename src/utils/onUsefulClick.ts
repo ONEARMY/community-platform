@@ -1,13 +1,13 @@
 import { trackEvent } from 'src/common/Analytics'
 import { usefulService } from 'src/services/usefulService'
 
-import type { ContentType, Profile } from 'oa-shared'
+import type { Profile, UsefulContentType } from 'oa-shared'
 
 interface UsefulClickProps {
   vote: 'add' | 'delete'
   config: {
     loggedInUser: Profile | null | undefined
-    contentType: ContentType
+    contentType: UsefulContentType
     contentId: number
     eventCategory: string
     setVoted: (value: boolean | ((prev: boolean) => boolean)) => void

@@ -37,73 +37,13 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       }
     }
 
-    const sourceParam = isNaN(+params.sourceId)
-      ? 'source_id_legacy'
-      : 'source_id'
-    const sourceId = isNaN(+params.sourceId)
-      ? params.sourceId
-      : +params.sourceId
-
-    const result = await client
-      .from('comments')
-      .select(
-        `
-        id, 
-        comment, 
-        created_at, 
-        modified_at, 
-        deleted, 
-        source_id, 
-        source_id_legacy,
-        source_type,
-        parent_id,
-        created_by,
-        profiles(id, display_name, username, photo, country,
-          badges:profile_badges_relations(
-            profile_badges(
-              id,
-              name,
-              display_name,
-              image_url,
-              action_url
-            )
-          )
-        )
-      `,
-      )
-      .eq('source_type', params.sourceType)
-      .eq(sourceParam, sourceId)
-      .order('created_at', { ascending: true })
-
-    if (result.error) {
-      console.error(result.error)
-      return Response.json({}, { headers, status: 500 })
-    }
-
-    // Get all comment IDs that the current user has voted on
-    let votedCommentIds: Set<number> = new Set()
-    if (currentUserId) {
-      const votesResult = await client
-        .from('useful_votes')
-        .select('content_id')
-        .eq('user_id', currentUserId)
-        .eq('content_type', 'comment')
-
-      if (!votesResult.error) {
-        votedCommentIds = new Set(
-          votesResult.data.map((vote) => vote.content_id),
-        )
-      }
-    }
-
-    const dbComments = result.data.map((x) => {
-      const hasVoted = votedCommentIds.has(x.id)
-      return new DBComment({
-        ...x,
-        profile: x.profiles as unknown as DBAuthor,
-        hasVoted,
-      })
+    const result = await client.rpc('get_comments_with_votes', {
+      p_source_type: params.sourceType,
+      p_source_id: params.sourceId,
+      p_current_user_id: currentUserId || null,
     })
+
+    const dbComments = result.data as DBComment[]
 
     const commentFactory = new CommentFactory(new ImageServiceServer(client))
     const comments = await commentFactory.fromDBCommentsToThreads(dbComments)

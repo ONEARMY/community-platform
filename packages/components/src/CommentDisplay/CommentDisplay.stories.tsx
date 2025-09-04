@@ -109,21 +109,6 @@ export const ShortTextWithLink: StoryFn<typeof CommentDisplay> = () => {
   )
 }
 
-export const WithoutUsefulButton: StoryFn<typeof CommentDisplay> = () => {
-  const comment = fakeCommentSB()
-
-  return (
-    <CommentDisplay
-      comment={comment}
-      itemType={itemType}
-      isEditable={isEditable}
-      setShowDeleteModal={setShowDeleteModal}
-      setShowEditModal={setShowEditModal}
-      // No usefulButtonConfig - button won't render
-    />
-  )
-}
-
 export const UserVotedUseful: StoryFn<typeof CommentDisplay> = () => {
   const comment = fakeCommentSB()
   const votedConfig = {

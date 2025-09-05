@@ -37,7 +37,7 @@ describe('[Notifications]', () => {
       .contains('Stop receiving messages')
       .click()
 
-    cy.get('[data-cy=isContactable-true]').click({ force: true })
+    cy.get('[data-cy=isContactable-true]').should('be.visible').click()
     cy.saveSettingsForm()
 
     cy.get('[data-cy=tab-Notifications]').click()

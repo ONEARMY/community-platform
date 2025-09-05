@@ -16,15 +16,13 @@ describe('[Reset password]', () => {
 
     cy.step('Reset Password requires email')
     cy.visit('/sign-in')
-    cy.get('[data-cy=lost-password]').click({ force: true })
-    cy.wait(1000)
-    cy.get('[data-cy=email]').type(email)
+    cy.get('[data-cy=lost-password]').click()
+    cy.get('[data-cy=email]').should('be.visible').type(email)
     cy.get('[data-cy=submit]').click()
 
     cy.step('Reset Password should go back')
     cy.get('[data-cy=go-back]').should('be.visible')
-    cy.wait(1000)
-    cy.get('[data-cy=go-back]').click({ force: true })
+    cy.get('[data-cy=go-back]').click()
     cy.get('[data-cy=email]').should('be.visible')
   })
 })

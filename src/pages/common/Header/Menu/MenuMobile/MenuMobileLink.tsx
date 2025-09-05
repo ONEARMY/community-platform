@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import { NavLink } from '@remix-run/react'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
@@ -48,7 +48,7 @@ const MenuLink = styled(NavLink)`
 `
 
 const MenuMobileLink = (props: IProps) => {
-  const mobileMenuContext = React.useContext(MobileMenuContext)
+  const mobileMenuContext = useContext(MobileMenuContext)
 
   return (
     <PanelItem data-cy="mobile-menu-item">

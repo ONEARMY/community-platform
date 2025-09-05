@@ -59,11 +59,11 @@ describe('[Map]', () => {
 
     cy.step('As the user moves in the list updates')
     cy.visit(`/map#${username}`)
-    cy.wait(2000) // Wait for animation to complete
+    cy.get(`[data-cy=pin-${username}]`).should('be.visible') // Wait for animation to complete
     for (let i = 0; i < 9; i++) {
       cy.get('.leaflet-control-zoom-in').click()
     }
-    cy.wait(2000) // Wait for animation to complete
+    cy.get('[data-cy="CardList-desktop"]').should('be.visible') // Wait for animation to complete
     cy.get('[data-cy="CardList-desktop"]').within(() => {
       cy.get('[data-cy=CardListItem-selected]').within(() => {
         cy.contains(username)

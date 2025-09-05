@@ -48,7 +48,7 @@ describe('[Library.Discussions]', () => {
 
     cy.get('[data-cy=follow-button]').contains('Follow Comments')
     cy.addComment(newComment)
-    cy.wait(2000)
+    cy.get('[data-cy=follow-button]').contains('Following Comments').should('be.visible')
     cy.reload()
     cy.get('[data-cy=follow-button]').contains('Following Comments')
 
@@ -61,8 +61,7 @@ describe('[Library.Discussions]', () => {
     cy.signUpCompletedUser(replier)
     cy.visit(projectPath)
     cy.addReply(newReply)
-    cy.wait(1000)
-    cy.contains('Comments')
+    cy.contains('Comments').should('be.visible')
 
     cy.step('Can edit their reply')
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)

@@ -20,7 +20,7 @@ describe('[Questions]', () => {
 
       cy.step('should remove search filter after back navigation')
       cy.get('[data-cy=questions-search-box]').clear().type(`deal`)
-      cy.wait(2000)
+      cy.get('[data-cy=question-list-item]').should('be.visible')
       cy.get('[data-cy=question-list-item]').click()
       cy.go('back')
       cy.url().should('not.include', 'q=deal')

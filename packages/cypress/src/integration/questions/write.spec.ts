@@ -59,7 +59,8 @@ describe('[Question]', () => {
       cy.get('[data-cy=field-title]')
         .clear()
         .type(initialTitle)
-        .blur({ force: true })
+        .should('be.visible')
+        .blur()
 
       cy.step('Add title description')
       cy.get('[data-cy=field-description]').type(initialQuestionDescription, {

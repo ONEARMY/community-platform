@@ -90,11 +90,11 @@ Cypress.Commands.add('addToMarkdownField', (text: string) => {
     .type('{enter}')
     .type('{enter}')
     .type(text)
-    .blur({ force: true })
+    .should('be.visible').blur()
 })
 
 Cypress.Commands.add('saveSettingsForm', () => {
-  cy.get('[data-cy=save]').click({ force: true })
+  cy.get('[data-cy=save]').should('be.visible').click()
 
   cy.get('[data-cy=errors-container]').should('not.exist')
   cy.get('[data-cy="TextNotification: success"]').should('be.visible')
@@ -104,20 +104,20 @@ Cypress.Commands.add(
   'setSettingVisitorPolicy',
   (policyText: string, details?: string) => {
     cy.step('Set Visitor policy')
-    cy.get('[data-testid="openToVisitors-switch"]').click({ force: true })
+    cy.get('[data-testid="openToVisitors-switch"]').should('be.visible').click()
     cy.selectTag(policyText, '[data-cy="openToVisitors-policy"]')
     if (details) {
       cy.get('[data-cy="openToVisitors-details"]')
         .clear()
         .type(details)
-        .blur({ force: true })
+        .should('be.visible').blur()
     }
   },
 )
 
 Cypress.Commands.add('clearSettingVisitorPolicy', () => {
   cy.step('Clear visitor policy')
-  cy.get('[data-testid="openToVisitors-switch"]').click({ force: true })
+  cy.get('[data-testid="openToVisitors-switch"]').should('be.visible').click()
 })
 
 Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
@@ -138,7 +138,7 @@ Cypress.Commands.add('setSettingImage', (image, selector) => {
   cy.get(`[data-cy=${selector}]`)
     .find(':file')
     .attachFile(`images/${image}.jpg`)
-  cy.wait(2000)
+  cy.get(`[data-cy=${selector}]`).should('be.visible')
 })
 
 Cypress.Commands.add('setSettingImpactData', (year: number, fields) => {
@@ -171,7 +171,7 @@ Cypress.Commands.add('fillSettingMapPin', (mapPin: IMapPin) => {
 Cypress.Commands.add('setSettingPublicContact', () => {
   cy.step('Opts out of public contact')
   cy.get('[data-cy=isContactable').should('be.checked')
-  cy.get('[data-cy=isContactable').click({ force: true })
+  cy.get('[data-cy=isContactable').should('be.visible').click()
 })
 
 Cypress.Commands.add(
@@ -179,7 +179,7 @@ Cypress.Commands.add(
   (username: string, email: string, password: string) => {
     cy.log('Fill in sign-up form')
     cy.visit('/sign-up')
-    cy.wait(2000)
+    cy.get('[data-cy=username]').should('be.visible')
     cy.get('[data-cy=username]').clear().type(username)
     cy.get('[data-cy=email]').clear().type(email)
     cy.get('[data-cy=password]').clear().type(password)
@@ -191,7 +191,7 @@ Cypress.Commands.add(
 Cypress.Commands.add('signIn', (email: string, password: string) => {
   cy.log('Fill in sign in form')
   cy.visit('/sign-in')
-  cy.wait(2000)
+  cy.get('[data-cy=email]').should('be.visible')
   cy.get('[data-cy=email]').clear().type(email)
   cy.get('[data-cy=password]').clear().type(password)
   cy.get('[data-cy=submit]').click()
@@ -204,7 +204,7 @@ Cypress.Commands.add('logout', () => {
 
 Cypress.Commands.add('fillIntroTitle', (intro: string) => {
   cy.log('Fill in intro title')
-  cy.get('[data-cy=intro-title]').clear().type(intro).blur({ force: true })
+  cy.get('[data-cy=intro-title]').clear().type(intro).should('be.visible').blur()
 })
 
 Cypress.Commands.add('toggleUserMenuOn', () => {
@@ -215,7 +215,7 @@ Cypress.Commands.add('toggleUserMenuOn', () => {
 
 Cypress.Commands.add('toggleUserMenuOff', () => {
   Cypress.log({ displayName: 'CLOSE_USER_MENU' })
-  cy.get('[data-cy=header]').click({ force: true })
+  cy.get('[data-cy=header]').should('be.visible').click()
 })
 
 Cypress.Commands.add('clickMenuItem', (menuItem: UserMenuItem) => {
@@ -230,15 +230,15 @@ Cypress.Commands.add('clickMenuItem', (menuItem: UserMenuItem) => {
 })
 
 Cypress.Commands.add('screenClick', () => {
-  cy.get('[data-cy=header]').click({ force: true })
+  cy.get('[data-cy=header]').should('be.visible').click()
 })
 
 Cypress.Commands.add(
   'selectTag',
   (tagName: string, selector = '[data-cy=tag-select]') => {
     cy.log('Select tag', tagName)
-    cy.get(`${selector} input`).click({ force: true })
-    cy.get(`${selector} input`).type(tagName, { force: true })
+    cy.get(`${selector} input`).should('be.visible').click()
+    cy.get(`${selector} input`).type(tagName)
     cy.get(`${selector} .data-cy__menu-list`).contains(tagName).click()
   },
 )
@@ -257,12 +257,12 @@ Cypress.Commands.add(
     cy.get(`[data-cy="${element}: ActionSetButton"]`).last().click()
     cy.get(`[data-cy="${element}: edit button"]`).click()
     cy.get('[data-cy=edit-comment]').as('editField')
-    cy.get('@editField').clear({ force: true })
+    cy.get('@editField').should('be.visible').clear()
     cy.get('@editField').type(updatedNewComment)
     cy.get('[data-cy=edit-comment-submit]').click()
     cy.get('@editField').should('not.exist')
 
-    cy.wait(1000)
+    cy.get(`[data-cy=Own${element}]`).should('be.visible')
     cy.get(`[data-cy=Own${element}]`).contains(updatedNewComment)
     cy.get(`[data-cy=Own${element}]`).contains('less than a minute ago')
     cy.get(`[data-cy=Own${element}]`).contains(oldComment).should('not.exist')
@@ -278,7 +278,7 @@ Cypress.Commands.add('deleteDiscussionItem', (element, item) => {
 })
 
 Cypress.Commands.add('addReply', (reply: string) => {
-  cy.get('[data-cy=show-replies]').first().click({ force: true })
+  cy.get('[data-cy=show-replies]').first().should('be.visible').click()
   cy.get('[data-cy=reply-form]').first().type(reply)
   cy.get('[data-cy=reply-submit]').first().click()
 

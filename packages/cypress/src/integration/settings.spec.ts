@@ -30,8 +30,7 @@ describe('[Settings]', () => {
 
     cy.step('Go to User Settings')
     cy.clickMenuItem(UserMenuItem.Settings)
-    cy.wait(1000)
-    cy.get('[data-cy=displayName').clear().type('Wrong user')
+    cy.get('[data-cy=displayName').should('be.visible').clear().type('Wrong user')
 
     cy.step('Confirm shown when attempting to go to another page')
     cy.get('[data-cy=page-link]').contains('Library').click()
@@ -127,7 +126,7 @@ describe('[Settings]', () => {
       .and('include', userImage)
 
     cy.step('Can add map pin')
-    cy.get('[data-cy=EditYourProfile]').click({ force: true })
+    cy.get('[data-cy=EditYourProfile]').should('be.visible').click()
     cy.get('[data-cy="tab-Map"]').click()
     cy.get('[data-cy=descriptionMember]').should('be.visible')
     cy.contains('No map pin currently saved')
@@ -145,7 +144,7 @@ describe('[Settings]', () => {
     cy.get('.leaflet-control-zoom-in').click()
     cy.get('.leaflet-control-zoom-in').click()
     cy.get('.leaflet-control-zoom-in').click()
-    cy.wait(2000)
+    cy.get('[data-cy=CardListItem-selected]').should('be.visible')
     cy.get('.leaflet-control-zoom-out').click()
 
     cy.get('[data-cy=CardListItem-selected]').contains(user.username)
@@ -209,8 +208,7 @@ describe('[Settings]', () => {
       .and('include', coverImage)
 
     cy.step('Updated settings display on contact tab')
-    cy.get('[data-cy="contact-tab"]').click({ force: true })
-    cy.get('[data-cy="contact-tab"]').click({ force: true })
+    cy.get('[data-cy="contact-tab"]').should('be.visible').click()
     cy.contains(`Other users are able to contact you`)
     cy.get('[data-cy="profile-website"]').should('have.attr', 'href', website)
   })

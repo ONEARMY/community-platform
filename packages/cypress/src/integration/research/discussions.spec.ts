@@ -46,8 +46,7 @@ describe('[Research.Discussions]', () => {
     cy.get('[data-cy="HideDiscussionContainer:button"]').first().click()
 
     cy.addReply(newReply)
-    cy.wait(1000)
-    cy.contains('Comments')
+    cy.contains('Comments').should('be.visible')
 
     cy.step('Can edit their reply')
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
@@ -65,8 +64,7 @@ describe('[Research.Discussions]', () => {
       title: research.title,
       username: secondCommentor.username,
     })
-    cy.wait(2000)
-    cy.get('[data-cy=highlighted-comment]').contains(updatedNewReply)
+    cy.get('[data-cy=highlighted-comment]').contains(updatedNewReply).should('be.visible')
 
     cy.visit(researchPath)
 

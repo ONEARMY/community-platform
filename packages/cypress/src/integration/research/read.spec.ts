@@ -58,8 +58,8 @@ describe('[Research]', () => {
 
         cy.step('Can filter by research status')
         cy.get('[data-cy=ItemResearchStatus]').contains('In Progress')
-        cy.contains('Filter by status').click({ force: true })
-        cy.contains('Completed').click({ force: true })
+        cy.contains('Filter by status').should('be.visible').click()
+        cy.contains('Completed').should('be.visible').click()
         cy.get('[data-cy=ItemResearchStatus]').contains('Completed')
         cy.get('[data-cy=ItemResearchStatus]')
           .contains('In progress')

@@ -82,8 +82,7 @@ describe('[Library]', () => {
           //   .to.have.attr('src')
           //   .match(coverFileRegex)
         })
-        cy.wait(2000)
-        cy.get('[data-cy=tag-list]').then(($tagList) => {
+        cy.get('[data-cy=tag-list]').should('be.visible').then(($tagList) => {
           expect($tagList).to.contain('product')
           expect($tagList).to.contain('exhibition')
         })

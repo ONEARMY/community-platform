@@ -56,8 +56,7 @@ describe('[Questions.Discussions]', () => {
     cy.signUpCompletedUser(replier)
     cy.visit(questionPath)
     cy.addReply(newReply)
-    cy.wait(1000)
-    cy.contains('Comments')
+    cy.contains('Comments').should('be.visible')
 
     cy.step('Can edit their reply')
     cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)

@@ -65,7 +65,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=errors-container]')
 
       cy.step('Warn if title not long enough')
-      cy.get('[data-cy=intro-title').clear().type('Q').blur({ force: true })
+      cy.get('[data-cy=intro-title').clear().type('Q').should('be.visible').blur()
       cy.contains(`Should be more than ${RESEARCH_TITLE_MIN_LENGTH} characters`)
 
       cy.step('Enter research article details')
@@ -132,28 +132,29 @@ describe('[Research]', () => {
 
       cy.step('Enter update details')
       cy.get('[data-cy=intro-title]')
-        .wait(0)
+        .should('be.visible')
         .focus()
         .clear()
         .type(updateTitle)
-        .blur({ force: true })
+        .should('be.visible')
+        .blur()
 
       cy.get('[data-cy=intro-description]')
         .clear()
         .type(updateDescription)
-        .blur({ force: true })
+        .should('be.visible')
+        .blur()
 
       cy.get('[data-cy=videoUrl]')
         .clear()
         .type(updateVideoUrl)
-        .blur({ force: true })
+        .should('be.visible')
+        .blur()
 
       cy.step('Add file to update')
       cy.get('[data-cy=file-input-field]').click()
       cy.get('.uppy-Dashboard-input:first').as('file-input')
-      cy.get('@file-input').selectFile('src/fixtures/files/Example.pdf', {
-        force: true,
-      })
+      cy.get('@file-input').selectFile('src/fixtures/files/Example.pdf')
       cy.get('.uppy-StatusBar-actionBtn--upload').as('upload-button')
       cy.get('@upload-button').click()
 
@@ -285,9 +286,8 @@ describe('[Research]', () => {
       cy.get('[data-cy=image-upload]')
         .find(':file')
         .attachFile('images/howto-step-pic1.jpg')
-      cy.wait(2000)
-      cy.get('[data-cy=submit]').click()
-      cy.wait(2000)
+      cy.get('[data-cy=submit]').should('be.visible').click()
+      cy.get('[data-cy=follow-button]').should('be.visible')
       cy.get('[data-cy=follow-button]').contains('Following')
       cy.contains(researchItem.title)
 
@@ -307,7 +307,7 @@ describe('[Research]', () => {
       cy.fillIntroTitle(updateTitle)
 
       cy.get('[data-cy=intro-description]')
-        .wait(0)
+        .should('be.visible')
         .focus()
         .clear()
         .type(updateDescription)
@@ -336,10 +336,8 @@ describe('[Research]', () => {
       cy.step('Draft updates can be published')
       cy.signIn(researcher.email, researcher.password)
       cy.visit(researchURL)
-      cy.wait(2000)
-      cy.get('[data-cy=edit-update]').click()
-      cy.contains('Edit your update')
-      cy.wait(1000)
+      cy.get('[data-cy=edit-update]').should('be.visible').click()
+      cy.contains('Edit your update').should('be.visible')
       cy.fillIntroTitle(finalUpdateTitle)
       cy.get('[data-cy=submit]').click()
       cy.contains(finalUpdateTitle)

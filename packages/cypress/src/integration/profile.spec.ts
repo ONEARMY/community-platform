@@ -50,7 +50,6 @@ describe('[Profile]', () => {
 
       cy.step('Go to Profile')
       cy.clickMenuItem(UserMenuItem.Profile)
-      cy.wait(1000)
       cy.url().should('include', `/u/${user.username}`)
       cy.get('[data-cy=SpaceProfile]').should('not.exist')
       cy.get('[data-cy=MemberProfile]').should('be.visible')
@@ -70,8 +69,8 @@ describe('[Profile]', () => {
 
       cy.step("Logged out people can see that they're contactable")
       cy.logout()
-      cy.wait(2000)
       cy.visit(`/u/${contactee.username}`)
+      cy.get('[data-cy="UserContactNotLoggedIn"]').should('be.visible')
       cy.get('[data-cy="UserContactNotLoggedIn"]')
 
       cy.step('Other users can contact people')
@@ -94,7 +93,7 @@ describe('[Profile]', () => {
         .trim()
 
       cy.get('[data-cy=name]').type('Bob')
-      cy.get('[data-cy=message]').invoke('val', message).blur({ force: true })
+      cy.get('[data-cy=message]').should('be.visible').invoke('val', message).blur()
       cy.get('[data-cy=contact-submit]').click()
       cy.contains(contact.successMessage)
 
@@ -103,7 +102,7 @@ describe('[Profile]', () => {
       cy.signIn(contactee.email, contactee.password)
       cy.completeUserProfile(contactee.username)
       cy.get('[data-cy=PublicContactSection]').should('be.visible')
-      cy.get('[data-cy=isContactable-true]').click({ force: true })
+      cy.get('[data-cy=isContactable-true]').should('be.visible').click()
       cy.saveSettingsForm()
       cy.get('[data-cy=isContactable-false]')
 
@@ -253,7 +252,6 @@ describe('[Profile]', () => {
       cy.get('[data-cy=ContribTab]').click()
 
       cy.get('[data-cy="the-first-test-question-link"]').click()
-      cy.wait(2000)
       cy.url().should(
         'include',
         `/questions/the-first-test-question?utm_source=user-profile`,

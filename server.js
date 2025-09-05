@@ -2,8 +2,16 @@
 import { createRequestHandler } from '@remix-run/express'
 import compression from 'compression'
 import dotenv from 'dotenv'
-import express from 'express'
-import helmet from 'helmet'
+import express, { static as expressStatic } from 'express'
+import {
+  contentSecurityPolicy,
+  dnsPrefetchControl,
+  hidePoweredBy,
+  hsts,
+  noSniff,
+  referrerPolicy,
+  xssFilter,
+} from 'helmet'
 
 dotenv.config()
 dotenv.config({ path: '.env.local', override: true })
@@ -56,7 +64,7 @@ if (cdnUrl) {
 
 // helmet config
 app.use(
-  helmet.contentSecurityPolicy({
+  contentSecurityPolicy({
     directives: {
       fontSrc: ["'self'", 'fonts.gstatic.com', 'fonts.googleapis.com'],
       connectSrc: [
@@ -117,19 +125,19 @@ app.use(
 // Enforce HTTPS only on production
 if (process.env.NODE_ENV === 'production') {
   app.use(
-    helmet.hsts({
+    hsts({
       maxAge: 31536000,
       preload: true,
       includeSubDomains: false,
     }),
   )
 }
-app.use(helmet.dnsPrefetchControl({ allow: true }))
-app.use(helmet.hidePoweredBy())
-app.use(helmet.noSniff())
-app.use(helmet.referrerPolicy({ policy: ['origin'] }))
-app.use(helmet.xssFilter())
-app.use(helmet.hidePoweredBy())
+app.use(dnsPrefetchControl({ allow: true }))
+app.use(hidePoweredBy())
+app.use(noSniff())
+app.use(referrerPolicy({ policy: ['origin'] }))
+app.use(xssFilter())
+app.use(hidePoweredBy())
 
 app.use(function (req, res, next) {
   if (!('JSONResponse' in res)) {
@@ -147,11 +155,11 @@ if (viteDevServer) {
   // Vite fingerprints its assets so we can cache forever.
   app.use(
     '/assets',
-    express.static('build/client/assets', { immutable: true, maxAge: '1y' }),
+    expressStatic('build/client/assets', { immutable: true, maxAge: '1y' }),
   )
 }
 
-app.use(express.static('build/client', { maxAge: '1h' }))
+app.use(expressStatic('build/client', { maxAge: '1h' }))
 
 app.all('*', remixHandler)
 

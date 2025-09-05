@@ -82,10 +82,12 @@ describe('[Library]', () => {
           //   .to.have.attr('src')
           //   .match(coverFileRegex)
         })
-        cy.get('[data-cy=tag-list]').should('be.visible').then(($tagList) => {
-          expect($tagList).to.contain('product')
-          expect($tagList).to.contain('exhibition')
-        })
+        cy.get('[data-cy=tag-list]')
+          .should('be.visible')
+          .then(($tagList) => {
+            expect($tagList).to.contain('product')
+            expect($tagList).to.contain('exhibition')
+          })
         // cy.get('[data-cy=file-download-counter]').should(
         //   'contain',
         //   '1,234 downloads',

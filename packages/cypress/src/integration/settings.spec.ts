@@ -30,7 +30,10 @@ describe('[Settings]', () => {
 
     cy.step('Go to User Settings')
     cy.clickMenuItem(UserMenuItem.Settings)
-    cy.get('[data-cy=displayName').should('be.visible').clear().type('Wrong user')
+    cy.get('[data-cy=displayName')
+      .should('be.visible')
+      .clear()
+      .type('Wrong user')
 
     cy.step('Confirm shown when attempting to go to another page')
     cy.get('[data-cy=page-link]').contains('Library').click()

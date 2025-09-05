@@ -64,7 +64,9 @@ describe('[Research.Discussions]', () => {
       title: research.title,
       username: secondCommentor.username,
     })
-    cy.get('[data-cy=highlighted-comment]').contains(updatedNewReply).should('be.visible')
+    cy.get('[data-cy=highlighted-comment]')
+      .contains(updatedNewReply)
+      .should('be.visible')
 
     cy.visit(researchPath)
 

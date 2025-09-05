@@ -90,7 +90,8 @@ Cypress.Commands.add('addToMarkdownField', (text: string) => {
     .type('{enter}')
     .type('{enter}')
     .type(text)
-    .should('be.visible').blur()
+    .should('be.visible')
+    .blur()
 })
 
 Cypress.Commands.add('saveSettingsForm', () => {
@@ -110,7 +111,8 @@ Cypress.Commands.add(
       cy.get('[data-cy="openToVisitors-details"]')
         .clear()
         .type(details)
-        .should('be.visible').blur()
+        .should('be.visible')
+        .blur()
     }
   },
 )
@@ -204,7 +206,11 @@ Cypress.Commands.add('logout', () => {
 
 Cypress.Commands.add('fillIntroTitle', (intro: string) => {
   cy.log('Fill in intro title')
-  cy.get('[data-cy=intro-title]').clear().type(intro).should('be.visible').blur()
+  cy.get('[data-cy=intro-title]')
+    .clear()
+    .type(intro)
+    .should('be.visible')
+    .blur()
 })
 
 Cypress.Commands.add('toggleUserMenuOn', () => {

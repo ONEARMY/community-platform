@@ -65,7 +65,11 @@ describe('[Research]', () => {
       cy.get('[data-cy=errors-container]')
 
       cy.step('Warn if title not long enough')
-      cy.get('[data-cy=intro-title').clear().type('Q').should('be.visible').blur()
+      cy.get('[data-cy=intro-title')
+        .clear()
+        .type('Q')
+        .should('be.visible')
+        .blur()
       cy.contains(`Should be more than ${RESEARCH_TITLE_MIN_LENGTH} characters`)
 
       cy.step('Enter research article details')

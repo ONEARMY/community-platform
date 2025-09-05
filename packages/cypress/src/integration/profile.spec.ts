@@ -93,7 +93,10 @@ describe('[Profile]', () => {
         .trim()
 
       cy.get('[data-cy=name]').type('Bob')
-      cy.get('[data-cy=message]').should('be.visible').invoke('val', message).blur()
+      cy.get('[data-cy=message]')
+        .should('be.visible')
+        .invoke('val', message)
+        .blur()
       cy.get('[data-cy=contact-submit]').click()
       cy.contains(contact.successMessage)
 

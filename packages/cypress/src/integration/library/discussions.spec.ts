@@ -48,7 +48,9 @@ describe('[Library.Discussions]', () => {
 
     cy.get('[data-cy=follow-button]').contains('Follow Comments')
     cy.addComment(newComment)
-    cy.get('[data-cy=follow-button]').contains('Following Comments').should('be.visible')
+    cy.get('[data-cy=follow-button]')
+      .contains('Following Comments')
+      .should('be.visible')
     cy.reload()
     cy.get('[data-cy=follow-button]').contains('Following Comments')
 

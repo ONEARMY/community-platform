@@ -26,9 +26,8 @@ END;
 $function$;
 
 CREATE OR REPLACE FUNCTION public.get_comments_with_votes(p_source_type text, p_source_id bigint, p_current_user_id bigint DEFAULT NULL::bigint)
- RETURNS TABLE(id bigint, comment text, created_at timestamp with time zone, modified_at timestamp with time zone, deleted boolean, source_id bigint, source_type text, parent_id bigint, created_by bigint, profiles jsonb, vote_count bigint, has_voted boolean)
- LANGUAGE plpgsql
-AS $function$
+RETURNS TABLE(id bigint, comment text, created_at timestamp with time zone, modified_at timestamp with time zone, deleted boolean, source_id bigint, source_type text, parent_id bigint, created_by bigint, profile json, vote_count bigint, has_voted boolean)
+LANGUAGE plpgsql AS $function$
 BEGIN
   RETURN QUERY
   SELECT 
@@ -41,19 +40,19 @@ BEGIN
     c.source_type,
     c.parent_id,
     c.created_by,
-    -- Build the profiles JSON structure
+    -- Build the profile JSON structure
     CASE 
-      WHEN p.id IS NOT NULL THEN
-        jsonb_build_object(
+      WHEN p.id IS NOT NULL THEN 
+        json_build_object(
           'id', p.id,
           'display_name', p.display_name,
           'username', p.username,
           'photo', p.photo,
           'country', p.country,
-          'badges', COALESCE(badges_agg.badges_array, '[]'::jsonb)
+          'badges', COALESCE(badges_agg.badges_array, '[]'::json)
         )
-      ELSE NULL
-    END as profiles,
+      ELSE NULL 
+    END as profile,
     -- Count of useful votes for this comment
     COALESCE(vote_counts.vote_count, 0) as vote_count,
     -- Whether current user has voted on this comment
@@ -68,8 +67,8 @@ BEGIN
   LEFT JOIN (
     SELECT 
       pbr.profile_id,
-      jsonb_agg(
-        jsonb_build_object(
+      json_agg(
+        json_build_object(
           'id', pb.id,
           'name', pb.name,
           'display_name', pb.display_name,
@@ -94,7 +93,7 @@ BEGIN
   LEFT JOIN (
     SELECT DISTINCT uv.content_id
     FROM useful_votes uv
-    WHERE uv.content_type = 'comments' 
+    WHERE uv.content_type = 'comments'
       AND uv.user_id = p_current_user_id
   ) user_votes ON c.id = user_votes.content_id
   WHERE 
@@ -102,7 +101,4 @@ BEGIN
     AND c.source_id = p_source_id
   ORDER BY c.created_at ASC;
 END;
-$function$
-;
-
-
+$function$;

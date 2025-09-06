@@ -80,6 +80,7 @@ export const UsefulButtonLite = (props: IProps) => {
         data-tooltip-id={uuid}
         data-tooltip-content={isLoggedIn ? '' : 'Login to add your vote'}
         data-cy={isLoggedIn ? 'vote-useful' : 'vote-useful-redirect'}
+        title="Mark as useful"
         onClick={() =>
           isLoggedIn
             ? handleUsefulClick()

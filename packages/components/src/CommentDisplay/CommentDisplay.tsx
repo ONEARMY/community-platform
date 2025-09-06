@@ -115,7 +115,6 @@ export const CommentDisplay = (props: IProps) => {
                 <Text sx={{ fontSize: 1, color: 'darkGrey' }}>
                   <DisplayDate
                     createdAt={comment.createdAt}
-                    modifiedAt={comment.modifiedAt}
                     showLabel={false}
                   />
                 </Text>

@@ -118,18 +118,20 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
             />
           }
           followButtonIcon={
-            <FollowButtonAction
-              contentType="comments"
-              itemId={comment.id}
-              labelFollow="Follow replies"
-              labelUnfollow="Unfollow replies"
-              showIconOnly
-              tooltipFollow="Follow replies"
-              tooltipUnfollow="Unfollow replies"
-              variant="subtle"
-              hideSubscribeIcon
-              small={true}
-            />
+            <Flex sx={{ display: ['none', 'inline'] }}>
+              <FollowButtonAction
+                contentType="comments"
+                itemId={comment.id}
+                labelFollow="Follow replies"
+                labelUnfollow="Unfollow replies"
+                showIconOnly
+                tooltipFollow="Follow replies"
+                tooltipUnfollow="Unfollow replies"
+                variant="subtle"
+                hideSubscribeIcon
+                small={true}
+              />
+            </Flex>
           }
           usefulButtonConfig={{
             onUsefulClick: () => handleUsefulClick(voted ? 'delete' : 'add'),

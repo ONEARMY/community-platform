@@ -24,7 +24,7 @@ const buttonSizeProps: { [key: string]: any } = {
   small: {
     px: 2,
     py: 1,
-    pl: 7,
+    pl: '2rem',
     fontSize: 1,
     height: '2rem',
   },
@@ -85,9 +85,13 @@ function sanitizedProps(obj: BtnProps, keysToRemove: AvailableButtonProps) {
 }
 
 export const Button = (props: BtnProps) => {
-  const [size] = Object.keys(props).filter((prop) =>
-    Object.prototype.hasOwnProperty.call(buttonSizeProps, prop),
-  )
+  let size = 'default'
+
+  if (props.small === true) {
+    size = 'small'
+  } else if (props.large === true) {
+    size = 'large'
+  }
 
   return (
     <ThemeUiButton

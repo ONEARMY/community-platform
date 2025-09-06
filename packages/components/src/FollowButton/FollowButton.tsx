@@ -64,6 +64,7 @@ export const FollowButton = (props: FollowButtonProps) => {
         }
         icon={hasUserSubscribed ? iconFollow : iconUnfollow}
         showIconOnly={showIconOnly}
+        small={!!props.small}
       >
         {hasUserSubscribed ? labelUnfollow : labelFollow}
       </Button>

@@ -19,8 +19,8 @@ export const ButtonShowReplies = (props: Props) => {
       ? `Hide ${count} ${count === 1 ? 'reply' : 'replies'}`
       : `Show ${count} ${count === 1 ? 'reply' : 'replies'}`
     : isShowReplies
-    ? `Hide`
-    : `Reply`
+      ? `Hide`
+      : `Reply`
 
   return (
     <Button

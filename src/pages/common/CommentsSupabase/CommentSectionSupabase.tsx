@@ -75,39 +75,6 @@ export const CommentSectionSupabase = (props: IProps) => {
           }
         }
 
-        // const commentsWithVotes = await Promise.all(
-        //   comments.map(async (comment) => {
-        //     // Get vote count for the main comment
-        //     const count = await usefulService.getVoteCount(
-        //       'comment',
-        //       comment.id,
-        //     )
-
-        //     // Get vote counts for replies if they exist
-        //     let repliesWithVotes = comment.replies || []
-        //     if (comment.replies?.length) {
-        //       repliesWithVotes = await Promise.all(
-        //         comment.replies.map(async (reply) => {
-        //           const replyCount = await usefulService.getVoteCount(
-        //             'comment',
-        //             reply.id,
-        //           )
-        //           return {
-        //             ...reply,
-        //             voteCount: replyCount ?? 0,
-        //           }
-        //         }),
-        //       )
-        //     }
-
-        //     return {
-        //       ...comment,
-        //       voteCount: count ?? 0,
-        //       replies: repliesWithVotes,
-        //     }
-        //   }),
-        // )
-
         setComments(comments || [])
       } catch (err) {
         console.error(err)

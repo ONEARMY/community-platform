@@ -155,7 +155,6 @@ export const CommentDisplay = (props: IProps) => {
             <Flex
               sx={{
                 flexDirection: 'column',
-                gap: 2,
               }}
             >
               <CommentBody body={comment.comment} />

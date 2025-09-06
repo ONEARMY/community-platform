@@ -146,7 +146,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
             alignItems: 'stretch',
             flexDirection: 'column',
             flex: 1,
-            gap: 2,
+            gap: 4,
             marginTop: 3,
           }}
         >

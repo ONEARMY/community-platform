@@ -67,7 +67,7 @@ export const UsefulButtonLite = (props: IProps) => {
             borderBottomLeftRadius: 1,
             justifyContent: 'flex-start',
             alignItems: 'center',
-            padding: '4px',
+            padding: '4px 4px 4px 8px',
             fontSize: '14px',
             zIndex: 1,
           }}

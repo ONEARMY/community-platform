@@ -100,7 +100,7 @@ export const CommentDisplay = (props: IProps) => {
             sx={{
               justifyContent: 'space-between',
               flexDirection: 'column',
-              gap: 2,
+              gap: 1,
             }}
           >
             <Flex

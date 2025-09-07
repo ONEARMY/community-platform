@@ -14,7 +14,6 @@
     "cypress-file-upload": "5.0.8",
     "dotenv": "^10.0.0",
     "eslint-plugin-mocha": "^10.4.3",
-    "firebase": "10.6.0",
     "fs-extra": "^11.2.0",
     "oa-shared": "workspace:*",
     "ts-node": "^10.9.2",

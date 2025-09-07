@@ -48,38 +48,6 @@ This project and everyone participating in it is governed by the [Code of Conduc
 
 There are two options.
 
-#### Cloud based backend
-
-This option is simple but only starts the frontend. The backend services are hosted on the internet (https://precious-plastics-v4-dev.firebaseapp.com) and may be accessed by many developers.
-
-This setup is:
-
-- Good for starting
-- Good for frontend development
-- Bad for backend development
-
-Simply run:
-
-```
-yarn run start
-```
-
-In this case:
-
-- frontend: http://localhost:3000
-
-#### Emulator based backend
-
-This option is slightly more complicated but allows you to run the frontend and backend system locally (except for sending emails.)
-This option is experimental. It requires you set up supabase locally, a PostgreSQL-based open source firebase alternative.
-
-This setup is:
-
-- Good for frontend development
-- Good for backend development
-
-See the details for [setting up supabase locally here](https://github.com/ONEARMY/community-platform/blob/master/docs/supabase.md).
-
 ### Learn more
 
 More information is available in the [developer documentation](https://docs.platform.onearmy.earth/).
@@ -106,13 +74,12 @@ We have a small bounty system as a way of saying thanks to developers for contri
 - **`scripts`** & **`config`** : contains build-related scripts and configuration files. Usually, you don't need to touch them.
 
 - **`cypress`** : contains the test automation of End-to-end tests.
-- **`functions`** : contains the backend firebase related functions.
 - **`src`** : contains the source code. The codebase is written in ES2015.
   - **`assets`** : contains assets such as icons/images.
   - **`models`** : here you will find the general data flow, such as a user's profile, while component states and properties are declared within the component.
   - **`pages`** : makes up the visual routing of the application. Each folder then corresponds to a **section** or **module** of the platform.
   - **`stores`** : In addition to app state, the store folder contains actions and dispatchers, while global state property mapping is dealt with in page components.
-  - **`utils`** : contains global utility functions, e.g. firebase database helper.
+  - **`utils`** : contains global utility functions.
 - **`packages/components/`**: - general stateless components that compose the app.
 - **`packages/themes/`**: - theme definitions for presentation inherited by components
 - **`types`** : contains TypeScript type definitions
@@ -141,27 +108,6 @@ As this is a large project spread across many developers it is important that th
 We also expect code to follow standard best practices, such as sensible variable naming, informative comments and avoiding files larger than a couple hundred lines of code (with emphasis on usability and reusability).
 
 Running `yarn format` from the project root prior to committing will ensure the code you're adding is formatted to align with the standards of this project.
-
-## 🔬 &nbsp; Commit style guide
-
-To help everyone with understanding the commit history of this project and support our automated release tooling the following commit rules are enforced.
-
-- commit message format of `$type($scope): $message`, for example: `docs: add commit style guide`
-- maximum of 100 characters
-
-For those of you who work with [git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks), this project offers a [husky](https://github.com/typicode/husky) commit message as well.
-
-Here's a more detailed explanation of how you can format the commit message heading:
-
-```
-<type>(<scope>): <short summary>
-  │       │             │
-  │       │             └─⫸ Summary in present tense. Not capitalized. No period at the end.
-  │       │
-  │       └─⫸ Commit Scope (optional): platform|docs|storybook|functions|scripts
-  │
-  └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
-```
 
 ## Writing Tests for Pull Requests
 

@@ -11,19 +11,19 @@ import {
 } from 'oa-components'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
-import { trackEvent } from 'src/common/Analytics'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { usefulService } from 'src/services/usefulService'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
+import { onUsefulClick } from 'src/utils/onUsefulClick'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
 import { DraftTag } from '../common/Drafts/DraftTag'
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 
-import type { Question } from 'oa-shared'
+import type { ContentType, Question } from 'oa-shared'
 
 interface IProps {
   question: Question
@@ -55,31 +55,20 @@ export const QuestionPage = observer(({ question }: IProps) => {
     )
   }, [activeUser, question.author])
 
-  const onUsefulClick = async (vote: 'add' | 'delete') => {
-    if (!activeUser) {
-      return
-    }
+  const configOnUsefulClick = {
+    contentType: 'questions' as ContentType,
+    contentId: question.id,
+    eventCategory: 'QuestionPage',
+    slug: question.slug,
+    setVoted,
+    setUsefulCount,
+    loggedInUser: activeUser,
+  }
 
-    if (vote === 'add') {
-      const response = await usefulService.add('questions', question.id)
-
-      if (response.ok) {
-        setVoted(true)
-        setUsefulCount((prev) => prev + 1 || 1)
-      }
-    } else {
-      const response = await usefulService.remove('questions', question.id)
-
-      if (response.ok) {
-        setVoted(false)
-        setUsefulCount((prev) => prev - 1 || 0)
-      }
-    }
-
-    trackEvent({
-      category: 'QuestionPage',
-      action: vote === 'add' ? 'QuestionUseful' : 'QuestionUsefulRemoved',
-      label: question.slug,
+  const handleUsefulClick = async (vote: 'add' | 'delete') => {
+    await onUsefulClick({
+      vote,
+      config: configOnUsefulClick,
     })
   }
 
@@ -101,7 +90,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
                     hasUserVotedUseful={voted}
                     isLoggedIn={!!activeUser}
                     onUsefulClick={() =>
-                      onUsefulClick(voted ? 'delete' : 'add')
+                      handleUsefulClick(voted ? 'delete' : 'add')
                     }
                   />
 

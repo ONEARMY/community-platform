@@ -56,7 +56,6 @@ before(() => {
   })
   localStorage.clear()
   cy.clearServiceWorkers()
-  cy.deleteIDB('OneArmyCache')
 })
 
 afterEach(() => {

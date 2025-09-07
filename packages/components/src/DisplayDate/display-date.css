@@ -1,0 +1,18 @@
+.date-mobile {
+  display: inline;
+}
+
+.date-desktop {
+  display: none;
+}
+
+/* Show desktop version and hide mobile version on screens wider than 768px */
+@media (min-width: 768px) {
+  .date-mobile {
+    display: none;
+  }
+
+  .date-desktop {
+    display: inline;
+  }
+}

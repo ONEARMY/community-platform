@@ -10,6 +10,7 @@ import {
 import { UserRole } from 'oa-shared'
 import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
+import { onUsefulClick } from 'src/utils/onUsefulClick'
 import { Card, Flex } from 'theme-ui'
 
 import { CommentReply } from './CommentReplySupabase'
@@ -44,6 +45,8 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
     () => !!comment.replies?.some((x) => x.highlighted),
   )
   const { profile } = useProfileStore()
+  const [usefulCount, setUsefulCount] = useState<number>(comment.voteCount ?? 0)
+  const [voted, setVoted] = useState<boolean>(false)
 
   const isEditable = useMemo(() => {
     return (
@@ -55,6 +58,10 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
   const item = 'CommentItem'
 
   useEffect(() => {
+    setVoted(comment.hasVoted ?? false)
+  }, [profile, comment])
+
+  useEffect(() => {
     if (comment.highlighted) {
       commentRef.current?.scrollIntoView({
         behavior: 'smooth',
@@ -62,6 +69,24 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
       })
     }
   }, [comment.highlighted])
+
+  const handleUsefulClick = async (
+    vote: 'add' | 'delete',
+    eventCategory = 'Comment',
+  ) => {
+    await onUsefulClick({
+      vote,
+      config: {
+        contentType: 'comments',
+        contentId: comment.id,
+        slug: `${comment}+${comment.id}`,
+        setVoted,
+        setUsefulCount,
+        loggedInUser: profile,
+        eventCategory,
+      },
+    })
+  }
 
   return (
     <Flex
@@ -93,18 +118,27 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
             />
           }
           followButtonIcon={
-            <FollowButtonAction
-              contentType="comments"
-              itemId={comment.id}
-              labelFollow="Follow replies"
-              labelUnfollow="Unfollow replies"
-              showIconOnly
-              tooltipFollow="Follow replies"
-              tooltipUnfollow="Unfollow replies"
-              variant="subtle"
-              hideSubscribeIcon
-            />
+            <Flex sx={{ display: ['none', 'inline'] }}>
+              <FollowButtonAction
+                contentType="comments"
+                itemId={comment.id}
+                labelFollow="Follow replies"
+                labelUnfollow="Unfollow replies"
+                showIconOnly
+                tooltipFollow="Follow replies"
+                tooltipUnfollow="Unfollow replies"
+                variant="subtle"
+                hideSubscribeIcon
+                small={true}
+              />
+            </Flex>
           }
+          usefulButtonConfig={{
+            onUsefulClick: () => handleUsefulClick(voted ? 'delete' : 'add'),
+            hasUserVotedUseful: voted,
+            votedUsefulCount: usefulCount,
+            isLoggedIn: !!profile,
+          }}
         />
 
         <Flex
@@ -112,7 +146,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
             alignItems: 'stretch',
             flexDirection: 'column',
             flex: 1,
-            gap: 2,
+            gap: 4,
             marginTop: 3,
           }}
         >

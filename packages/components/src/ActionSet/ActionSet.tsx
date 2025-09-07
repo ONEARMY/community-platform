@@ -50,6 +50,7 @@ export const ActionSet = ({ children, itemType }: IProps) => {
         icon="more-vert"
         onClick={onClick}
         variant="subtle"
+        small={true}
         showIconOnly
       >
         Show Actions
@@ -60,8 +61,7 @@ export const ActionSet = ({ children, itemType }: IProps) => {
           sx={{
             position: 'absolute',
             right: 0,
-            zIndex: 1,
-            padding: 1,
+            zIndex: 10,
             gap: 1,
             minWidth: '200px',
           }}

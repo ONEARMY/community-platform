@@ -102,32 +102,3 @@ BEGIN
   ORDER BY c.created_at ASC;
 END;
 $function$;
-
-CREATE OR REPLACE FUNCTION public.get_author_vote_counts(author_id bigint)
- RETURNS TABLE(content_type text, vote_count bigint)
- LANGUAGE sql
- STABLE
-AS $function$
-    SELECT 
-        uv.content_type,
-        COUNT(*) as vote_count
-    FROM useful_votes uv
-    WHERE (uv.content_type = 'questions' AND EXISTS (
-        SELECT 1 FROM questions q WHERE q.id = uv.content_id AND q.created_by = author_id
-    ))
-    OR (uv.content_type = 'projects' AND EXISTS (
-        SELECT 1 FROM projects p WHERE p.id = uv.content_id AND p.created_by = author_id
-    ))
-    OR (uv.content_type = 'news' AND EXISTS (
-        SELECT 1 FROM news n WHERE n.id = uv.content_id AND n.created_by = author_id
-    ))
-    OR (uv.content_type = 'research' AND EXISTS (
-        SELECT 1 FROM research r WHERE r.id = uv.content_id AND r.created_by = author_id
-    ))
-    OR (uv.content_type = 'comments' AND EXISTS (
-        SELECT 1 FROM comments c WHERE c.id = uv.content_id AND c.created_by = author_id
-    ))
-    GROUP BY uv.content_type
-    ORDER BY vote_count DESC;
-$function$
-;

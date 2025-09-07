@@ -46,7 +46,9 @@ export const CommentSectionSupabase = (props: IProps) => {
     const fetchComments = async () => {
       try {
         const comments = await commentService.getComments(sourceType, sourceId)
-        const highlightedCommentId = location.hash.replace('#comment:', '')
+        const highlightedCommentId = location.hash?.startsWith('#comment:')
+          ? location.hash.replace('#comment:', '')
+          : null
 
         if (highlightedCommentId) {
           const highlightedComment = comments.find(
@@ -83,6 +85,15 @@ export const CommentSectionSupabase = (props: IProps) => {
 
     fetchComments()
   }, [sourceId, location?.hash])
+
+  useEffect(() => {
+    if (window.location.hash && window.location.hash === '#discussion') {
+      const el = document.getElementById('discussion')
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+  }, [])
 
   const postComment = async (comment: string) => {
     try {
@@ -235,7 +246,7 @@ export const CommentSectionSupabase = (props: IProps) => {
 
   return (
     <AuthorsContext.Provider value={{ authors }}>
-      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+      <Flex sx={{ flexDirection: 'column', gap: 2 }} id="discussion">
         <Flex
           sx={{
             alignItems: 'center',

@@ -94,6 +94,8 @@ export const EditComment = (props: IProps) => {
               id="comment"
               validate={required}
               name="comment"
+              rows={2}
+              sx={{ padding: 1 }}
             />
             <Flex mt={4} ml="auto">
               <Button

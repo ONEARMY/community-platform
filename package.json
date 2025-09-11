@@ -140,7 +140,7 @@
     "@types/canvas-confetti": "^1",
     "@types/flux-standard-action": "1.1.0",
     "@types/jsonwebtoken": "^9",
-    "@types/node": "^20.8.0",
+    "@types/node": "^22.18.0",
     "@types/pg": "^8.11.11",
     "@types/pubsub-js": "^1.5.18",
     "@types/react": "18.3.3",
@@ -148,8 +148,8 @@
     "@types/react-leaflet": "^1.1.6",
     "@types/react-leaflet-markercluster": "^2.0.0",
     "@types/react-select": "^2.0.17",
-    "@typescript-eslint/eslint-plugin": "^7.13.0",
-    "@typescript-eslint/parser": "^7.13.0",
+    "@typescript-eslint/eslint-plugin": "^8.41.0",
+    "@typescript-eslint/parser": "^8.41.0",
     "@vitejs/plugin-react": "^4.3.0",
     "@vitest/coverage-v8": "^1.6.0",
     "all-contributors-cli": "^6.20.0",
@@ -193,7 +193,7 @@
   },
   "engines": {
     "npm": "please-use-yarn",
-    "node": ">=20"
+    "node": ">=22.18.0"
   },
   "packageManager": "yarn@4.5.1"
 }

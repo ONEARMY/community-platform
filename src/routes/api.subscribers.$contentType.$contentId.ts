@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { ProfileServiceServer } from 'src/services/profileService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 
@@ -21,13 +22,9 @@ export async function action({ request, params }: LoaderFunctionArgs) {
       throw { status: 401, statusText: 'unauthorized' }
     }
 
-    const profileResult = await client
-      .from('profiles')
-      .select()
-      .eq('auth_id', user.id)
-      .limit(1)
+    const profile = await new ProfileServiceServer(client).getByAuthId(user.id)
 
-    if (!profileResult.data || profileResult.error) {
+    if (!profile) {
       throw { status: 400, statusText: 'user not found' }
     }
 
@@ -37,7 +34,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
         .select('*')
         .eq('content_type', params.contentType)
         .eq('content_id', Number(params.contentId))
-        .eq('user_id', profileResult.data[0].id)
+        .eq('user_id', profile.id)
         .single()
 
       if (response.data) {
@@ -47,7 +44,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
       await client.from('subscribers').insert({
         content_type: params.contentType,
         content_id: Number(params.contentId),
-        user_id: profileResult.data[0].id,
+        user_id: profile.id,
         tenant_id: process.env.TENANT_ID!,
       })
     }
@@ -58,8 +55,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
         .delete()
         .eq('content_type', params.contentType)
         .eq('content_id', Number(params.contentId))
-        .eq('user_id', profileResult.data[0].id)
-        .eq('tenant_id', process.env.TENANT_ID!)
+        .eq('user_id', profile.id)
     }
 
     return Response.json({}, { headers, status: 200 })

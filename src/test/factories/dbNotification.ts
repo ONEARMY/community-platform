@@ -18,5 +18,6 @@ export const factoryDBNotification = (
   source_content_id: 1,
   triggered_by: {} as any,
   triggered_by_id: 1,
+  should_email: true,
   ...userOverloads,
 })

@@ -1,26 +1,8 @@
 import { transformNotification } from 'src/routes/api.notifications'
-import { DEFAULT_NOTIFICATION_PREFERENCES } from 'src/routes/api.notifications-preferences'
 import { tokens } from 'src/utils/tokens.server'
 
-import { notificationsPreferencesServiceServer } from './notificationsPreferencesService.server'
-
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type {
-  DBNotification,
-  DBNotificationsPreferences,
-  NotificationContentType,
-  NotificationsPreferenceTypes,
-} from 'oa-shared'
-
-const preferenceTypes: PreferenceTypes = {
-  comment: 'comments',
-  reply: 'replies',
-  researchUpdate: 'research_updates',
-}
-
-type PreferenceTypes = {
-  [type in NotificationContentType]: NotificationsPreferenceTypes
-}
+import type { DBNotification } from 'oa-shared'
 
 const createInstantNotificationEmail = async (
   client: SupabaseClient,
@@ -37,11 +19,6 @@ const createInstantNotificationEmail = async (
 
     if (!profileResponse.data) {
       console.error('Profile not found for ID:', profileId)
-      return
-    }
-
-    const shouldEmail = await shouldSendEmail(client, dbNotification, profileId)
-    if (!shouldEmail) {
       return
     }
 
@@ -84,37 +61,6 @@ const createInstantNotificationEmail = async (
       statusText: error.statusText,
     })
   }
-}
-
-const shouldSendEmail = async (
-  client: SupabaseClient,
-  dbNotification: DBNotification,
-  profileId: number,
-): Promise<boolean> => {
-  const actionType = preferenceTypes[dbNotification.content_type]
-  if (!actionType) {
-    return false
-  }
-
-  const preferences =
-    await notificationsPreferencesServiceServer.getPreferences(
-      client,
-      profileId,
-    )
-
-  if (!preferences) {
-    return DEFAULT_NOTIFICATION_PREFERENCES[actionType]
-  }
-
-  const userPreferences = preferences as DBNotificationsPreferences
-
-  if (userPreferences.is_unsubscribed) {
-    return false
-  }
-
-  return (
-    userPreferences[actionType] ?? DEFAULT_NOTIFICATION_PREFERENCES[actionType]
-  )
 }
 
 export const notificationEmailService = {

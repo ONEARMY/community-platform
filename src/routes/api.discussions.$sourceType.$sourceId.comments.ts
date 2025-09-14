@@ -2,7 +2,7 @@ import { DBComment } from 'oa-shared'
 import { CommentFactory } from 'src/factories/commentFactory.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { ImageServiceServer } from 'src/services/imageService.server'
-import { notificationsSupabaseServiceServer } from 'src/services/notificationSupabaseService.server'
+import { notificationsSupabaseServiceServer } from 'src/services/notificationsSupabaseService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'

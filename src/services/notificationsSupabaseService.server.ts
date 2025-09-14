@@ -1,15 +1,31 @@
+import { DEFAULT_NOTIFICATION_PREFERENCES } from 'src/routes/api.notifications-preferences'
+
 import { notificationEmailService } from './notificationEmailService.server'
+import { notificationsPreferencesServiceServer } from './notificationsPreferencesService.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
   DBComment,
+  DBNotificationsPreferences,
   DBProfile,
   DBResearchItem,
   NewNotificationData,
   NotificationActionType,
+  NotificationContentType,
+  NotificationsPreferenceTypes,
   ResearchUpdate,
   SubscribableContentTypes,
 } from 'oa-shared'
+
+const preferenceTypes: PreferenceTypes = {
+  comment: 'comments',
+  reply: 'replies',
+  researchUpdate: 'research_updates',
+}
+
+type PreferenceTypes = {
+  [type in NotificationContentType]: NotificationsPreferenceTypes
+}
 
 const setSourceContentType = async (
   comment: DBComment,
@@ -57,6 +73,8 @@ const createNotification = async (
   headers: Headers,
 ) => {
   try {
+    const shouldEmail = await shouldSendEmail(client, notification, profileId)
+
     const data = {
       action_type: notification.actionType,
       content_type: notification.contentType,
@@ -69,6 +87,7 @@ const createNotification = async (
       parent_comment_id: notification.parentCommentId,
       is_read: false,
       tenant_id: process.env.TENANT_ID!,
+      should_email: shouldEmail,
     }
 
     const response = await client.from('notifications').insert(data).select(`
@@ -80,12 +99,14 @@ const createNotification = async (
       throw response.error || 'No data returned'
     }
 
-    await notificationEmailService.createInstantNotificationEmail(
-      client,
-      response.data[0],
-      profileId,
-      headers,
-    )
+    if (shouldEmail) {
+      await notificationEmailService.createInstantNotificationEmail(
+        client,
+        response.data[0],
+        profileId,
+        headers,
+      )
+    }
   } catch (error) {
     console.error(error)
 
@@ -204,7 +225,39 @@ const createNotificationsResearchUpdate = async (
   }
 }
 
+export const shouldSendEmail = async (
+  client: SupabaseClient,
+  notification: NewNotificationData,
+  profileId: number,
+): Promise<boolean> => {
+  const actionType = preferenceTypes[notification.contentType]
+  if (!actionType) {
+    return false
+  }
+
+  const preferences =
+    await notificationsPreferencesServiceServer.getPreferences(
+      client,
+      profileId,
+    )
+
+  if (!preferences) {
+    return DEFAULT_NOTIFICATION_PREFERENCES[actionType]
+  }
+
+  const userPreferences = preferences as DBNotificationsPreferences
+
+  if (userPreferences.is_unsubscribed) {
+    return false
+  }
+
+  return (
+    userPreferences[actionType] ?? DEFAULT_NOTIFICATION_PREFERENCES[actionType]
+  )
+}
+
 export const notificationsSupabaseServiceServer = {
+  createNotification,
   createNotificationsNewComment,
   createNotificationsResearchUpdate,
 }

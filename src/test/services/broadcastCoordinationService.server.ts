@@ -1,6 +1,6 @@
 import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server'
 import { discordServiceServer } from 'src/services/discordService.server'
-import { notificationsSupabaseServiceServer } from 'src/services/notificationSupabaseService.server'
+import { notificationsSupabaseServiceServer } from 'src/services/notificationsSupabaseService.server'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { FactoryDBProfile } from '../factories/profile'

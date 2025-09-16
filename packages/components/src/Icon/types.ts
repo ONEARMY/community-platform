@@ -40,7 +40,7 @@ export type availableGlyphs =
   | 'filter'
   | 'flag-unknown'
   | 'food'
-  | 'from the team'
+  | 'version 5'
   | 'guides'
   | 'hide'
   | 'hyperlink'

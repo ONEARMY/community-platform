@@ -4,7 +4,7 @@ import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordi
 import { ProfileServiceServer } from 'src/services/profileService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
-import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
+import { validateImages } from 'src/utils/storage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
@@ -255,18 +255,6 @@ async function deleteResearchUpdate(request, id: number, updateId: number) {
     .eq('id', updateId)
 
   return Response.json({}, { status: 200, headers })
-}
-
-function validateImages(images: File[]) {
-  const errors: string[] = []
-  for (const image of images) {
-    if (!SUPPORTED_IMAGE_TYPES.includes(image.type)) {
-      errors.push(`Unsupported image extension: ${image.type}`)
-      continue
-    }
-  }
-
-  return { valid: errors.length === 0, errors }
 }
 
 async function validateRequest(request: Request, user: User | null, data: any) {

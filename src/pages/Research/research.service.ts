@@ -1,4 +1,5 @@
 import { logger } from 'src/logger'
+import { getCleanFileName } from 'src/utils/storage'
 
 import type {
   IConvertedFileMeta,
@@ -99,7 +100,11 @@ const upsert = async (
   }
 
   if (research.image) {
-    data.append('image', research.image.photoData, research.image.name)
+    data.append(
+      'image',
+      research.image.photoData,
+      getCleanFileName(research.image.name),
+    )
   }
 
   if (research.existingImage) {
@@ -147,7 +152,7 @@ const upsertUpdate = async (
   if (update.images && update.images.length > 0) {
     for (const image of update.images as unknown as IConvertedFileMeta[]) {
       if (image) {
-        data.append('images', image.photoData, image.name)
+        data.append('images', image.photoData, getCleanFileName(image.name))
       }
     }
   }
@@ -163,7 +168,7 @@ const upsertUpdate = async (
   if (update.files && update.files.length > 0) {
     for (const file of update.files) {
       if (file) {
-        data.append('files', file, file.name)
+        data.append('files', file, getCleanFileName(file.name))
       }
     }
   }

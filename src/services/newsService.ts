@@ -1,4 +1,5 @@
 import { News } from 'oa-shared'
+import { getCleanFileName } from 'src/utils/storage'
 
 import type { DBNews, NewsFormData } from 'oa-shared'
 
@@ -24,7 +25,11 @@ const upsert = async (id: number | null, form: NewsFormData) => {
   }
 
   if (form.heroImage) {
-    body.append('heroImage', form.heroImage.photoData, form.heroImage.name)
+    body.append(
+      'heroImage',
+      form.heroImage.photoData,
+      getCleanFileName(form.heroImage.name),
+    )
   }
 
   if (form.existingHeroImage) {

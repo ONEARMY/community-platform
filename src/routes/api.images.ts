@@ -1,6 +1,6 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { storageServiceServer } from 'src/services/storageService.server'
-import { validateImage } from 'src/utils/helpers'
+import { validateImage } from 'src/utils/storage'
 
 import type { User } from '@supabase/supabase-js'
 import type { ContentType } from 'oa-shared'

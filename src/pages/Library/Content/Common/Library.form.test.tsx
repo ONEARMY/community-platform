@@ -1,18 +1,30 @@
 import '@testing-library/jest-dom/vitest'
 
 import { createRemixStub } from '@remix-run/testing'
-import { act, fireEvent, render } from '@testing-library/react'
+import { act, cleanup, fireEvent, render } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'
 import { FactoryLibraryItem } from 'src/test/factories/Library'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { LibraryForm } from './Library.form'
 
 import type { MediaFile, Project } from 'oa-shared'
 
 const Theme = testingThemeStyles
+
+// Mock timers to prevent async operations from running after tests
+beforeEach(() => {
+  vi.useFakeTimers()
+})
+
+afterEach(() => {
+  // Clean up any pending timers
+  vi.runOnlyPendingTimers()
+  vi.useRealTimers()
+  cleanup()
+})
 
 describe('Library form', () => {
   describe('Provides user information', () => {
@@ -27,6 +39,11 @@ describe('Library form', () => {
 
       // Assert
       expect(wrapper.getByText('Maximum file size 50MB')).toBeInTheDocument()
+
+      // Clean up any pending timers before test completes
+      act(() => {
+        vi.runAllTimers()
+      })
     })
   })
 
@@ -44,6 +61,11 @@ describe('Library form', () => {
       expect(
         wrapper.queryByTestId('invalid-file-warning'),
       ).not.toBeInTheDocument()
+
+      // Clean up any pending timers before test completes
+      act(() => {
+        vi.runAllTimers()
+      })
     })
 
     it('Does not appear when submitting only files', () => {
@@ -66,6 +88,11 @@ describe('Library form', () => {
       expect(
         wrapper.queryByTestId('invalid-file-warning'),
       ).not.toBeInTheDocument()
+
+      // Clean up any pending timers before test completes
+      act(() => {
+        vi.runAllTimers()
+      })
     })
 
     it('Appears when submitting 2 file types', () => {
@@ -88,6 +115,11 @@ describe('Library form', () => {
 
       // Assert
       expect(wrapper.queryByTestId('invalid-file-warning')).toBeInTheDocument()
+
+      // Clean up any pending timers before test completes
+      act(() => {
+        vi.runAllTimers()
+      })
     })
 
     it('Does not appear when files are removed and filelink added', async () => {
@@ -125,6 +157,11 @@ describe('Library form', () => {
       expect(
         wrapper.queryByTestId('invalid-file-warning'),
       ).not.toBeInTheDocument()
+
+      // Clean up any pending timers before test completes
+      act(() => {
+        vi.runAllTimers()
+      })
     })
   })
 })

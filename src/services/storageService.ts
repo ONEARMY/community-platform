@@ -1,8 +1,18 @@
-const imageUpload = async (id, contentType, imageFile) => {
+import { getCleanFileName } from 'src/utils/storage'
+
+import type { ContentType } from 'oa-shared'
+
+const imageUpload = async (
+  id: number | null,
+  contentType: ContentType,
+  imageFile: File,
+) => {
   const body = new FormData()
-  body.append('id', id)
+  if (id) {
+    body.append('id', id.toString())
+  }
   body.append('contentType', contentType)
-  body.append('imageFile', imageFile, imageFile.name)
+  body.append('imageFile', imageFile, getCleanFileName(imageFile.name))
 
   const response = await fetch(`/api/images`, {
     method: 'POST',

@@ -1,4 +1,5 @@
 import { logger } from 'src/logger'
+import { getCleanFileName } from 'src/utils/storage'
 
 import type { Project, ProjectFormData } from 'oa-shared'
 import type { LibrarySortOption } from './Content/List/LibrarySortOptions'
@@ -97,7 +98,11 @@ const upsert = async (
   }
 
   if (formData.image) {
-    data.append('coverImage', formData.image.photoData, formData.image.name)
+    data.append(
+      'coverImage',
+      formData.image.photoData,
+      getCleanFileName(formData.image.name),
+    )
   }
 
   if (formData.existingImage) {
@@ -107,7 +112,7 @@ const upsert = async (
   if (formData.files && formData.files.length > 0) {
     for (const file of formData.files) {
       if (file) {
-        data.append('files', file, file.name)
+        data.append('files', file, getCleanFileName(file.name))
       }
     }
   }
@@ -134,7 +139,11 @@ const upsert = async (
       if (step.images && step.images.length) {
         for (const image of step.images) {
           if (image) {
-            data.append(`steps.[${i}].images`, image.photoData, image.name)
+            data.append(
+              `steps.[${i}].images`,
+              image.photoData,
+              getCleanFileName(image.name),
+            )
           }
         }
       }

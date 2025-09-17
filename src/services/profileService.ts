@@ -1,4 +1,5 @@
 import { logger } from 'src/logger'
+import { getCleanFileName } from 'src/utils/storage'
 
 import type {
   IImpactDataField,
@@ -60,7 +61,8 @@ const update = async (value: ProfileFormData) => {
   }
 
   if (value.photo) {
-    data.append('photo', value.photo, value.photo.name)
+    const cleanName = getCleanFileName(value.photo.name)
+    data.append('photo', value.photo, cleanName)
   }
 
   if (value.coverImages?.length) {

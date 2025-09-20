@@ -63,10 +63,10 @@ export const CombinedSearchSort = (props: IProps) => {
           lineHeight: 1.2,
           '& > div': {
             whiteSpace: 'normal',
-            wordWrap: 'break-word'
-          }
-        }
-      } as any
+            wordWrap: 'break-word',
+          },
+        },
+      } as any,
     },
     '&::after': {
       content: '""',

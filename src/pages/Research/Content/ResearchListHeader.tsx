@@ -3,6 +3,7 @@ import { Link, useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
 import {
   CategoryHorizonalList,
+  CombinedSearchSort,
   ReturnPathLink,
   SearchField,
   Select,
@@ -162,7 +163,35 @@ export const ResearchFilterHeader = (props: IProps) => {
         flexWrap: 'wrap',
       }}
     >
-      <Flex sx={{ width: ['100%', '100%', '220px'] }}>
+      <Flex sx={{ display: ['flex', 'flex', 'none'] }}>
+        <CombinedSearchSort
+          sortOptions={ResearchSortOptions.toArray(!!q)}
+          sortPlaceholder="Sort"
+          sortValue={{ label: ResearchSortOptions.get(sort), value: sort }}
+          onSortChange={(sortBy) =>
+            updateFilter(ResearchSearchParams.sort, sortBy.value)
+          }
+          searchValue={searchString}
+          searchPlaceholder="Search..."
+          onSearchChange={(value) => {
+            setSearchString(value)
+            onSearchInputChange(value)
+          }}
+          onSearchDelete={() => {
+            setSearchString('')
+            searchValue('')
+          }}
+          onSearchSubmit={() => searchValue(searchString)}
+          dataCy="research-mobile-search-sort"
+        />
+      </Flex>
+
+      <Flex
+        sx={{
+          width: ['0px', '0px', '220px'],
+          display: ['none', 'none', 'flex'],
+        }}
+      >
         <FieldContainer>
           <Select
             options={ResearchSortOptions.toArray(!!q)}
@@ -175,7 +204,12 @@ export const ResearchFilterHeader = (props: IProps) => {
         </FieldContainer>
       </Flex>
 
-      <Flex sx={{ width: ['100%', '100%', '220px'] }}>
+      <Flex
+        sx={{
+          width: ['0px', '0px', '220px'],
+          display: ['none', 'none', 'flex'],
+        }}
+      >
         <FieldContainer>
           <Select
             options={researchStatusOptions}
@@ -192,7 +226,12 @@ export const ResearchFilterHeader = (props: IProps) => {
         </FieldContainer>
       </Flex>
 
-      <Flex sx={{ width: ['100%', '100%', '270px'] }}>
+      <Flex
+        sx={{
+          width: ['0px', '0px', '270px'],
+          display: ['none', 'none', 'flex'],
+        }}
+      >
         <SearchField
           dataCy="research-search-box"
           placeHolder={listing.search}

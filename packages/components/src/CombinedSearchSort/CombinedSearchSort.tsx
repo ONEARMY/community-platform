@@ -39,7 +39,7 @@ export const CombinedSearchSort = (props: IProps) => {
   }
 
   const sortContainerStyles: ThemeUIStyleObject = {
-    width: '150px',
+    width: '125px',
     flexShrink: 0,
     position: 'relative',
     '& > div': {

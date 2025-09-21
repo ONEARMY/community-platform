@@ -62,27 +62,17 @@ const SignUpMessagePage = ({ email }) => {
               </Flex>
               <Text sx={{ textAlign: 'center', color: 'grey' }}>
                 <p>
-                  <strong>
-                    Before you get stuck in we just need you to verify your
-                    email address
-                  </strong>
-                  .<br />
-                  We've sent a link to{' '}
+                  Before you dive in, please confirm you email through the link
+                  we've sent to{' '}
                   <Text
                     sx={{
                       background:
-                        'linear-gradient(0deg, #FFE2E1 60%, #FFF 40%)',
+                        'linear-gradient(0deg, #ffe2e1 60%, #fff 40%)',
                       paddingX: 1,
                     }}
                   >
                     {email}
                   </Text>
-                  . <br />
-                </p>
-                <p>
-                  Please click it to confirm your account.
-                  <br />
-                  After you've done that, you can login.
                 </p>
               </Text>
             </Flex>

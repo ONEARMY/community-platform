@@ -20,24 +20,15 @@ const copy = {
 
 interface SignUpEmailProps {
   username: string
-  supabaseUrl: string
-  email_action_type: string
   redirect_to: string
   token_hash: string
   settings: TenantSettings
 }
 
 export const SignUpEmail = (props: SignUpEmailProps) => {
-  const {
-    username,
-    supabaseUrl,
-    email_action_type,
-    redirect_to,
-    settings,
-    token_hash,
-  } = props
+  const { username, redirect_to, settings, token_hash } = props
 
-  const href = `${supabaseUrl}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${redirect_to}`
+  const href = `${redirect_to}?token=${token_hash}`
 
   return (
     <Layout emailType="service" preview={copy.preview} settings={settings}>

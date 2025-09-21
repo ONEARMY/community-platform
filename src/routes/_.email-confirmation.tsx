@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import {
   redirect,
@@ -9,7 +9,6 @@ import {
 import { Button, HeroBanner } from 'oa-components'
 import Main from 'src/pages/common/Layout/Main'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { fireConfetti } from 'src/utils/fireConfetti'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
@@ -73,11 +72,11 @@ export default function Index() {
   const navigate = useNavigate()
   const data = useLoaderData<typeof loader>()
   const actionData = useActionData<typeof action>()
+  const [isConfirmed, setIsConfirmed] = useState(false)
 
   useEffect(() => {
     if (actionData?.success) {
-      fireConfetti()
-      navigate('/settings')
+      setIsConfirmed(true)
     }
   }, [actionData?.success])
 
@@ -100,7 +99,7 @@ export default function Index() {
                 }}
               >
                 <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-                  <HeroBanner type="celebration" />
+                  <HeroBanner type={isConfirmed ? 'celebration' : 'email'} />
                   <Card sx={{ borderRadius: 3 }}>
                     <Flex
                       sx={{
@@ -112,7 +111,11 @@ export default function Index() {
                       }}
                     >
                       <Flex sx={{ gap: 2, flexDirection: 'column' }}>
-                        <Heading>Email confirmation</Heading>
+                        <Heading>
+                          {isConfirmed
+                            ? 'Email verified!'
+                            : 'Email confirmation'}
+                        </Heading>
                       </Flex>
 
                       {data.error ? (
@@ -123,21 +126,56 @@ export default function Index() {
                             <Text color="red">{actionData?.error}</Text>
                           )}
 
-                          <Flex>
-                            <Button
-                              large
-                              data-cy="submit"
-                              sx={{
-                                borderRadius: 3,
-                                width: '100%',
-                                justifyContent: 'center',
-                              }}
-                              variant="primary"
-                              disabled={submitting}
-                              type="submit"
-                            >
-                              Confirm Email
-                            </Button>
+                          <Flex
+                            sx={{
+                              flexDirection: 'column',
+                              alignItems: 'flex-start',
+                              gap: '2rem',
+                            }}
+                          >
+                            {isConfirmed ? (
+                              <>
+                                <Text
+                                  sx={{
+                                    textAlign: 'center',
+                                    color: 'grey',
+                                    gap: '2rem',
+                                  }}
+                                >
+                                  Great! You can now continue to setup your
+                                  profile!
+                                </Text>
+                                <Button
+                                  large
+                                  sx={{
+                                    borderRadius: 3,
+                                    width: '100%',
+                                    justifyContent: 'center',
+                                  }}
+                                  variant="primary"
+                                  disabled={submitting}
+                                  type="button"
+                                  onClick={() => navigate('/settings')}
+                                >
+                                  Setup my profile
+                                </Button>
+                              </>
+                            ) : (
+                              <Button
+                                large
+                                data-cy="submit"
+                                sx={{
+                                  borderRadius: 3,
+                                  width: '100%',
+                                  justifyContent: 'center',
+                                }}
+                                variant="primary"
+                                disabled={submitting}
+                                type="submit"
+                              >
+                                Confirm Email
+                              </Button>
+                            )}
                           </Flex>
                         </>
                       )}

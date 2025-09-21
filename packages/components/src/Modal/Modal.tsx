@@ -64,7 +64,14 @@ export const Modal = (props: Props) => {
   `
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : 'unset'
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+
+      return () => {
+        document.body.style.overflow = originalOverflow
+      }
+    }
   }, [isOpen])
 
   return (

@@ -5,7 +5,6 @@
     "url": "https://github.com/ONEARMY/community-platform.git"
   },
   "workspaces": [
-    "functions",
     "shared",
     "packages/*",
     "scripts"
@@ -21,10 +20,7 @@
     "start:shared": "yarn workspace oa-shared dev",
     "start:prod": "yarn build:shared && yarn build:themes && yarn build:components && node ./server.js",
     "start:platform": "yarn build:shared && node ./server.js",
-    "start:platform:for-emulated-backend": "yarn build:shared && vite --port 4000",
     "start:platform-ci": "yarn build:shared && cross-env NODE_ENV=production node ./server.js",
-    "frontend:for-emulated-backend:watch": "concurrently --kill-others --names themes,components,platform --prefix-colors yellow,cyan,blue,magenta \"yarn start:themes\" \"yarn start:components\" \"yarn start:platform:for-emulated-backend\"",
-    "backend:emulator:watch": "docker-compose up --force-recreate --build",
     "build:themes": "yarn workspace oa-themes build",
     "build:components": "yarn workspace oa-components build",
     "build:vite": "tsc && remix vite:build",
@@ -46,8 +42,6 @@
     "docs": "yarn workspace oa-docs start",
     "db:reset": "npx supabase db reset && yarn db:seed",
     "db:seed": "npx @snaplet/seed sync && npx tsx seed.ts > seed.sql && yarn format",
-    "install:clean": "yarn workspace oa-scripts install:clean",
-    "postinstall": "husky install",
     "commit": "git-cz"
   },
   "browserslist": {
@@ -88,6 +82,7 @@
     "canvas-confetti": "^1.9.3",
     "compression": "^1.7.4",
     "countries-list": "^2.6.1",
+    "country-to-iso": "^1.6.1",
     "date-fns": "^3.3.0",
     "debounce": "^1.2.0",
     "dotenv": "^10.0.0",
@@ -145,7 +140,7 @@
     "@types/canvas-confetti": "^1",
     "@types/flux-standard-action": "1.1.0",
     "@types/jsonwebtoken": "^9",
-    "@types/node": "^20.8.0",
+    "@types/node": "^22.18.0",
     "@types/pg": "^8.11.11",
     "@types/pubsub-js": "^1.5.18",
     "@types/react": "18.3.3",
@@ -153,8 +148,8 @@
     "@types/react-leaflet": "^1.1.6",
     "@types/react-leaflet-markercluster": "^2.0.0",
     "@types/react-select": "^2.0.17",
-    "@typescript-eslint/eslint-plugin": "^7.13.0",
-    "@typescript-eslint/parser": "^7.13.0",
+    "@typescript-eslint/eslint-plugin": "^8.41.0",
+    "@typescript-eslint/parser": "^8.41.0",
     "@vitejs/plugin-react": "^4.3.0",
     "@vitest/coverage-v8": "^1.6.0",
     "all-contributors-cli": "^6.20.0",
@@ -174,7 +169,6 @@
     "eslint-plugin-sort-class-members": "^1.20.0",
     "eslint-plugin-unicorn": "^53.0.0",
     "eslint-plugin-vitest": "^0.5.4",
-    "husky": "^9.0.11",
     "idb": "^8.0.0",
     "lint-staged": "^15.2.7",
     "mobx-react-devtools": "^6.1.1",
@@ -199,7 +193,7 @@
   },
   "engines": {
     "npm": "please-use-yarn",
-    "node": ">=20"
+    "node": ">=22.18.0"
   },
   "packageManager": "yarn@4.5.1"
 }

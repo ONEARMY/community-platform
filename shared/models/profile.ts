@@ -141,6 +141,7 @@ export class DBNotification implements IDBDocSB {
   readonly parent_content_id: number | null
   readonly source_content_type: NotificationSourceContentType
   readonly source_content_id: number
+  readonly should_email: boolean
   readonly triggered_by: DBProfile
   readonly triggered_by_id: number
 

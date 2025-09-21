@@ -2,7 +2,7 @@ import { DBComment } from 'oa-shared'
 import { CommentFactory } from 'src/factories/commentFactory.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { ImageServiceServer } from 'src/services/imageService.server'
-import { notificationsSupabaseServiceServer } from 'src/services/notificationSupabaseService.server'
+import { notificationsSupabaseServiceServer } from 'src/services/notificationsSupabaseService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
@@ -20,56 +20,30 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     )
   }
   try {
-    const sourceParam = isNaN(+params.sourceId)
-      ? 'source_id_legacy'
-      : 'source_id'
-    const sourceId = isNaN(+params.sourceId)
-      ? params.sourceId
-      : +params.sourceId
+    const {
+      data: { user },
+    } = await client.auth.getUser()
+    let currentUserId: number | null = null
 
-    const result = await client
-      .from('comments')
-      .select(
-        `
-      id, 
-      comment, 
-      created_at, 
-      modified_at, 
-      deleted, 
-      source_id, 
-      source_id_legacy,
-      source_type,
-      parent_id,
-      created_by,
-      profiles(id, display_name, username, photo, country,
-        badges:profile_badges_relations(
-          profile_badges(
-            id,
-            name,
-            display_name,
-            image_url,
-            action_url
-          )
-        )
-      )
-    `,
-      )
-      .eq('source_type', params.sourceType)
-      .eq(sourceParam, sourceId)
-      .order('created_at', { ascending: true })
+    if (user?.id) {
+      const profileResult = await client
+        .from('profiles')
+        .select('id')
+        .eq('auth_id', user.id)
+        .single()
 
-    if (result.error) {
-      console.error(result.error)
-      return Response.json({}, { headers, status: 500 })
+      if (!profileResult.error) {
+        currentUserId = profileResult.data.id
+      }
     }
 
-    const dbComments = result.data.map(
-      (x) =>
-        new DBComment({
-          ...x,
-          profile: x.profiles as unknown as DBAuthor,
-        }),
-    )
+    const result = await client.rpc('get_comments_with_votes', {
+      p_source_type: params.sourceType,
+      p_source_id: params.sourceId,
+      p_current_user_id: currentUserId || null,
+    })
+
+    const dbComments = result.data as DBComment[]
 
     const commentFactory = new CommentFactory(new ImageServiceServer(client))
     const comments = await commentFactory.fromDBCommentsToThreads(dbComments)

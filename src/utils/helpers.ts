@@ -2,8 +2,6 @@ import { UserRole } from 'oa-shared'
 import { getConfigurationOption, NO_MESSAGING } from 'src/config/config'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 
-import { SUPPORTED_IMAGE_TYPES } from './storage'
-
 import type { DBProfile, IModeration, Profile } from 'oa-shared'
 
 const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi
@@ -47,18 +45,6 @@ export const numberWithCommas = (number: number) => {
 export const capitalizeFirstLetter = (str: string) => {
   if (!str || typeof str !== 'string') return ''
   return str.charAt(0).toUpperCase() + str.slice(1)
-}
-
-/**
- *  Function used to generate random ID in same manner as firestore
- */
-export const randomID = () => {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  let autoId = ''
-  for (let i = 0; i < 20; i++) {
-    autoId += chars.charAt(Math.floor(Math.random() * chars.length))
-  }
-  return autoId
 }
 
 /************************************************************************
@@ -151,27 +137,4 @@ export const buildStatisticsLabel = ({
   }
 
   return `${typeof stat === 'number' ? stat : 0} ${statUnit}s`
-}
-
-export function validateImage(image: File | null) {
-  const error =
-    image?.type && !SUPPORTED_IMAGE_TYPES.includes(image.type)
-      ? new Error(`Unsupported image extension: ${image.type}`)
-      : null
-  const valid: boolean = !error
-
-  return { valid, error }
-}
-
-export function validateImages(images: File[]) {
-  const errors: Error[] = []
-  for (const image of images) {
-    const { error } = validateImage(image)
-    if (error) {
-      errors.push(error)
-    }
-    continue
-  }
-
-  return { valid: errors.length === 0, errors }
 }

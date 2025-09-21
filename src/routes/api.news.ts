@@ -8,8 +8,8 @@ import { newsServiceServer } from 'src/services/newsService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown'
-import { validateImage } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
+import { validateImage } from 'src/utils/storage'
 
 import { contentServiceServer } from '../services/contentService.server'
 

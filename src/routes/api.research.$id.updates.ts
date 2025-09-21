@@ -4,7 +4,7 @@ import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordi
 import { ProfileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
-import { SUPPORTED_IMAGE_TYPES } from 'src/utils/storage'
+import { validateImages } from 'src/utils/storage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
@@ -188,18 +188,6 @@ async function uploadAndUpdateFiles(
       }
     }
   }
-}
-
-function validateImages(images: File[]) {
-  const errors: string[] = []
-  for (const image of images) {
-    if (!SUPPORTED_IMAGE_TYPES.includes(image.type)) {
-      errors.push(`Unsupported image extension: ${image.type}`)
-      continue
-    }
-  }
-
-  return { valid: errors.length === 0, errors }
 }
 
 function validateRequest(

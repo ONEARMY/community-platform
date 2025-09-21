@@ -67,15 +67,13 @@ Each role gets paid a bit differently. Contributors and maintainers get paid acc
 
 ## Onboarding checklist
 
-| Tasks                                                                                                                                                      | 🤙 Contributor | ⚡️ Maintainer | 🔧 Core Maintainer |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | -------------- | ------------------ |
-| Invite to [Discord](https://discord.gg/gJ7Yyk4) #development                                                                                               | ☑️             | ☑️             | ☑️                 |
-| Send link to [bounty](/Contributing/bounties) system                                                                                                       | ☑️             | ☑️             | ☑️                 |
-| Add GitHub [maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access)                                                         |                | ☑️             | ☑️                 |
-| Add maintainer status using [All contributors ](#recognising-contributors)                                                                                 |                | ☑️             | ☑️                 |
-| Get on a video call                                                                                                                                        |                | ☑️             | ☑️                 |
-| Explain hourly rate vs bounty system                                                                                                                       |                | ☑️             | ☑️                 |
-| Add GitHub [core maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access)                                                    |                |                | ☑️                 |
-| Add core-maintainer status using [All contributors ](#recognising-contributors)                                                                            |                |                | ☑️                 |
-| Invite to Google Analytics                                                                                                                                 |                |                | ☑️                 |
-| Invite to **Firebase** projects: Precious Plastic PROD, Precious Plastic DEV, Project Kamp PROD, Project Kamp DEV, Fixing Fashion PROD, Fixing Fashion DEV |                |                | ☑️                 |
+| Tasks                                                                                                   | 🤙 Contributor | ⚡️ Maintainer | 🔧 Core Maintainer |
+| ------------------------------------------------------------------------------------------------------- | -------------- | -------------- | ------------------ |
+| Invite to [Discord](https://discord.gg/gJ7Yyk4) #development                                            | ☑️             | ☑️             | ☑️                 |
+| Send link to [bounty](/Contributing/bounties) system                                                    | ☑️             | ☑️             | ☑️                 |
+| Add GitHub [maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access)      |                | ☑️             | ☑️                 |
+| Add maintainer status using [All contributors ](#recognising-contributors)                              |                | ☑️             | ☑️                 |
+| Get on a video call                                                                                     |                | ☑️             | ☑️                 |
+| Explain hourly rate vs bounty system                                                                    |                | ☑️             | ☑️                 |
+| Add GitHub [core maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access) |                |                | ☑️                 |
+| Add core-maintainer status using [All contributors ](#recognising-contributors)                         |                |                | ☑️                 |

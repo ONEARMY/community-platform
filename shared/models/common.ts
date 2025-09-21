@@ -28,6 +28,13 @@ export type Collaborator = {
 
 export type ContentType = 'questions' | 'projects' | 'research' | 'news'
 
+export type UsefulContentType =
+  | 'questions'
+  | 'projects'
+  | 'research'
+  | 'news'
+  | 'comments'
+
 export type ContentFormType =
   | 'questions'
   | 'projects'

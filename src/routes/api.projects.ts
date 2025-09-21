@@ -7,6 +7,7 @@ import { ProfileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
 import { convertToSlug } from 'src/utils/slug'
+import { validateImage } from 'src/utils/storage'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient, User } from '@supabase/supabase-js'
@@ -90,8 +91,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   try {
     const formData = await request.formData()
-    const uploadedCoverImage = formData.get('coverImage') as File | null
-    const uploadedFiles = formData.getAll('files') as File[] | null
     const isDraft = formData.get('draft') === 'true'
     const data = {
       title: formData.get('title') as string,
@@ -113,6 +112,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       moderation: isDraft ? undefined : ('awaiting-moderation' as Moderation),
       stepCount: parseInt(formData.get('stepCount') as string),
       slug: convertToSlug((formData.get('title') as string) || ''),
+      uploadedCoverImage: formData.get('coverImage') as File | null,
+      uploadedFiles: formData.getAll('files') as File[] | null,
     }
 
     const {
@@ -147,9 +148,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const projectDb = await createProject(client, data, profile)
     const project = Project.fromDB(projectDb, [])
 
-    if (uploadedCoverImage) {
+    if (data.uploadedCoverImage) {
       const images = await uploadAndUpdateImage(
-        [uploadedCoverImage],
+        [data.uploadedCoverImage],
         `projects/${project.id}`,
         'projects',
         'cover_image',
@@ -161,9 +162,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       }
     }
 
-    if (uploadedFiles) {
+    if (data.uploadedFiles) {
       await uploadAndUpdateFiles(
-        uploadedFiles,
+        data.uploadedFiles,
         `projects/${project.id}`,
         project,
         client,
@@ -250,6 +251,16 @@ async function validateRequest(
     await contentServiceServer.isDuplicateNewSlug(data.slug, client, 'projects')
   ) {
     return { status: 409, statusText: 'This project already exists' }
+  }
+
+  const imageValidation = validateImage(data.uploadedCoverImage)
+
+  if (!imageValidation.valid) {
+    return {
+      value: false,
+      status: 400,
+      statusText: imageValidation.error?.message,
+    }
   }
 
   return { valid: true }

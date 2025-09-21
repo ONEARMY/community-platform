@@ -1,15 +1,19 @@
 import { UserAction } from '../UserAction'
+import { AlertBanner } from './AlertBanner'
 import { AlertIncompleteProfile } from './AlertIncompleteProfile'
 
 export const Alerts = () => {
   return (
-    <UserAction
-      loggedIn={
-        <>
-          <AlertIncompleteProfile />
-        </>
-      }
-      loggedOut={null}
-    />
+    <>
+      <AlertBanner />
+      <UserAction
+        loggedIn={
+          <>
+            <AlertIncompleteProfile />
+          </>
+        }
+        loggedOut={null}
+      />
+    </>
   )
 }

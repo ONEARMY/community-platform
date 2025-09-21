@@ -7,17 +7,29 @@ import { CommentAvatar } from '../CommentAvatar/CommentAvatar'
 import { CommentBody } from '../CommentBody/CommentBody'
 import { DisplayDate } from '../DisplayDate/DisplayDate'
 import { AuthorsContext } from '../providers/AuthorsContext'
+import { UsefulButtonLite } from '../UsefulStatsButton/UsefulButtonLite'
 import { Username } from '../Username/Username'
 
 import type { Comment } from 'oa-shared'
 import type { ReactNode } from 'react'
+import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface IProps {
   comment: Comment
-  isEditable: boolean | undefined
   itemType: 'ReplyItem' | 'CommentItem'
+  isEditable: boolean | undefined
   setShowDeleteModal: (arg: boolean) => void
   setShowEditModal: (arg: boolean) => void
+  usefulButtonConfig: {
+    hasUserVotedUseful: boolean
+    votedUsefulCount: number
+    isLoggedIn: boolean
+    onUsefulClick: (
+      vote: 'add' | 'delete',
+      eventCategory?: string,
+    ) => Promise<void>
+    sx?: ThemeUIStyleObject
+  }
   followButton?: ReactNode
   followButtonIcon?: ReactNode
 }
@@ -27,12 +39,13 @@ const DELETED_COMMENT = 'The original comment got deleted'
 export const CommentDisplay = (props: IProps) => {
   const {
     comment,
-    isEditable,
     itemType,
-    setShowDeleteModal,
-    setShowEditModal,
+    isEditable,
     followButton,
     followButtonIcon,
+    setShowDeleteModal,
+    setShowEditModal,
+    usefulButtonConfig,
   } = props
 
   const { authors } = useContext(AuthorsContext)
@@ -87,7 +100,7 @@ export const CommentDisplay = (props: IProps) => {
             sx={{
               justifyContent: 'space-between',
               flexDirection: 'column',
-              gap: 2,
+              gap: 1,
             }}
           >
             <Flex
@@ -102,7 +115,6 @@ export const CommentDisplay = (props: IProps) => {
                 <Text sx={{ fontSize: 1, color: 'darkGrey' }}>
                   <DisplayDate
                     createdAt={comment.createdAt}
-                    modifiedAt={comment.modifiedAt}
                     showLabel={false}
                   />
                 </Text>
@@ -140,7 +152,14 @@ export const CommentDisplay = (props: IProps) => {
                 </ActionSet>
               </Flex>
             </Flex>
-            <CommentBody body={comment.comment} />
+            <Flex
+              sx={{
+                flexDirection: 'column',
+              }}
+            >
+              <CommentBody body={comment.comment} />
+              <UsefulButtonLite usefulButtonLiteConfig={usefulButtonConfig} />
+            </Flex>
           </Flex>
         </Flex>
       </Flex>

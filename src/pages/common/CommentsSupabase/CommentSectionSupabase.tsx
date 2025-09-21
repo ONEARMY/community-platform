@@ -46,7 +46,9 @@ export const CommentSectionSupabase = (props: IProps) => {
     const fetchComments = async () => {
       try {
         const comments = await commentService.getComments(sourceType, sourceId)
-        const highlightedCommentId = location.hash.replace('#comment:', '')
+        const highlightedCommentId = location.hash?.startsWith('#comment:')
+          ? location.hash.replace('#comment:', '')
+          : null
 
         if (highlightedCommentId) {
           const highlightedComment = comments.find(
@@ -84,6 +86,15 @@ export const CommentSectionSupabase = (props: IProps) => {
     fetchComments()
   }, [sourceId, location?.hash])
 
+  useEffect(() => {
+    if (window.location.hash && window.location.hash === '#discussion') {
+      const el = document.getElementById('discussion')
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+  }, [])
+
   const postComment = async (comment: string) => {
     try {
       const result = await commentService.postComment(
@@ -111,7 +122,7 @@ export const CommentSectionSupabase = (props: IProps) => {
 
   const editComment = async (id: number, comment: string) => {
     try {
-      const result = await commentService.editcomment(sourceId, id, comment)
+      const result = await commentService.editComment(sourceId, id, comment)
       const now = new Date()
 
       if (result.status === 204) {
@@ -181,7 +192,7 @@ export const CommentSectionSupabase = (props: IProps) => {
 
   const editReply = async (id: number, replyText: string, parentId: number) => {
     try {
-      const result = await commentService.editcomment(sourceId, id, replyText)
+      const result = await commentService.editComment(sourceId, id, replyText)
       const now = new Date()
 
       if (result.status === 204) {
@@ -235,7 +246,7 @@ export const CommentSectionSupabase = (props: IProps) => {
 
   return (
     <AuthorsContext.Provider value={{ authors }}>
-      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+      <Flex sx={{ flexDirection: 'column', gap: 2 }} id="discussion">
         <Flex
           sx={{
             alignItems: 'center',
@@ -251,6 +262,7 @@ export const CommentSectionSupabase = (props: IProps) => {
             contentType={sourceType}
             itemId={sourceId}
             setSubscribersCount={setSubscribersCount}
+            small={false}
           />
         </Flex>
         {displayedComments.map((comment) => (

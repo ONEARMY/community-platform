@@ -4,10 +4,9 @@ on:
   pull_request_target:
     # Trigger when labels are changed or more commits added to a PR that contains labels
     types: [labeled, synchronize]
-    # Only create a preview if changes have been made to the main src code or backend functions
+    # Only create a preview if changes have been made to the main src code
     paths:
       - 'src/**'
-      - 'functions/**'
       - 'packages/components/**'
       - '.github/workflows/pr-preview.yml'
       - 'package.json'

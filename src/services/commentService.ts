@@ -6,7 +6,7 @@ const deleteComment = async (sourceId: string | number, id: number) => {
   })
 }
 
-const editcomment = async (
+const editComment = async (
   sourceId: string | number,
   id: number,
   comment: string,
@@ -56,6 +56,6 @@ export const commentService = {
   getComments,
   getCommentSourceId,
   postComment,
-  editcomment,
+  editComment,
   deleteComment,
 }

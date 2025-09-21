@@ -43,7 +43,7 @@ Please make sure to read the [Contributing Guide](/CONTRIBUTING.md) before makin
 
 It also covers lots of handy additional information such as setting up a local server, or finding [good first issues](https://github.com/ONEARMY/community-platform/issues?q=is%3Aissue+is%3Aopen+label%3A%22Good+first+issue%22) to work on.
 
-To startup the project locally use `yarn start`, but before that, follow [Getting Started](/docs/supabase.md)
+To startup the project locally use `yarn start`, but before that, follow [Getting Started](/packages/documentation/docs/supabase.md)
 
 If needed you can [drop us a line here](mailto:platform@onearmy.earth?subject=contact%20from%20github) 👋
 Or join our [Discord channel](https://discord.gg/gJ7Yyk4)

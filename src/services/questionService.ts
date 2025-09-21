@@ -1,4 +1,5 @@
 import { DBQuestion, Question } from 'oa-shared'
+import { getCleanFileName } from 'src/utils/storage'
 
 import type { QuestionFormData } from 'oa-shared'
 
@@ -20,7 +21,7 @@ const upsert = async (id: number | null, question: QuestionFormData) => {
 
   if (question.images && question.images.length > 0) {
     for (const image of question.images) {
-      body.append('images', image.photoData, image.name)
+      body.append('images', image.photoData, getCleanFileName(image.name))
     }
   }
 

@@ -1,5 +1,4 @@
 import { Button } from '../Button/Button'
-import { nonDeletedCommentsCount } from '../DiscussionTitle/DiscussionTitle'
 
 import type { Comment } from 'oa-shared'
 
@@ -12,7 +11,7 @@ export interface Props {
 export const ButtonShowReplies = (props: Props) => {
   const { isShowReplies, replies, setIsShowReplies } = props
 
-  const count = nonDeletedCommentsCount(replies)
+  const count = replies.filter(({ deleted }) => deleted !== true).length
   const icon = isShowReplies ? 'chevron-up' : 'chevron-down'
 
   const text = count

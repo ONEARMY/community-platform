@@ -36,8 +36,8 @@ export const CommentBody = ({ body }: IProps) => {
           lineHeight: 1.3,
           maxHeight,
           overflow: 'hidden',
-          whiteSpace: 'pre-wrap',
           wordBreak: 'break-word',
+          whiteSpace: 'pre-wrap',
           fontSize: [2, 3],
         }}
         ref={textRef}

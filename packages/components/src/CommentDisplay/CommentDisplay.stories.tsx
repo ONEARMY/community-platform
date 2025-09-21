@@ -10,8 +10,26 @@ export default {
 
 const itemType = 'CommentItem'
 const isEditable = false
+const isLoggedIn = true
+const votedUsefulCount = 0
+const hasUserVotedUseful = false
 const setShowDeleteModal = () => {}
 const setShowEditModal = () => {}
+const mockHandleUsefulClick = async (
+  vote: 'add' | 'delete',
+  eventCategory = 'Comment',
+): Promise<void> => {
+  console.log('handleUsefulClick called with:', { vote, eventCategory })
+  return new Promise<void>((resolve) => setTimeout(() => resolve(), 300))
+}
+
+// Common useful button config
+const usefulButtonConfig = {
+  votedUsefulCount,
+  hasUserVotedUseful,
+  isLoggedIn,
+  onUsefulClick: mockHandleUsefulClick,
+}
 
 export const Default: StoryFn<typeof CommentDisplay> = () => {
   const comment = fakeCommentSB()
@@ -21,6 +39,7 @@ export const Default: StoryFn<typeof CommentDisplay> = () => {
       comment={comment}
       itemType={itemType}
       isEditable={isEditable}
+      usefulButtonConfig={usefulButtonConfig}
       setShowDeleteModal={setShowDeleteModal}
       setShowEditModal={setShowEditModal}
     />
@@ -35,6 +54,7 @@ export const Editable: StoryFn<typeof CommentDisplay> = () => {
       comment={comment}
       itemType={itemType}
       isEditable={true}
+      usefulButtonConfig={usefulButtonConfig}
       setShowDeleteModal={setShowDeleteModal}
       setShowEditModal={setShowEditModal}
     />
@@ -49,6 +69,7 @@ export const Edited: StoryFn<typeof CommentDisplay> = () => {
       comment={comment}
       itemType={itemType}
       isEditable={isEditable}
+      usefulButtonConfig={usefulButtonConfig}
       setShowDeleteModal={setShowDeleteModal}
       setShowEditModal={setShowEditModal}
     />
@@ -64,6 +85,7 @@ export const LongText: StoryFn<typeof CommentDisplay> = () => {
       comment={comment}
       itemType={itemType}
       isEditable={isEditable}
+      usefulButtonConfig={usefulButtonConfig}
       setShowDeleteModal={setShowDeleteModal}
       setShowEditModal={setShowEditModal}
     />
@@ -80,6 +102,27 @@ export const ShortTextWithLink: StoryFn<typeof CommentDisplay> = () => {
       comment={comment}
       itemType={itemType}
       isEditable={isEditable}
+      usefulButtonConfig={usefulButtonConfig}
+      setShowDeleteModal={setShowDeleteModal}
+      setShowEditModal={setShowEditModal}
+    />
+  )
+}
+
+export const UserVotedUseful: StoryFn<typeof CommentDisplay> = () => {
+  const comment = fakeCommentSB()
+  const votedConfig = {
+    ...usefulButtonConfig,
+    hasUserVotedUseful: true,
+    votedUsefulCount: 5,
+  }
+
+  return (
+    <CommentDisplay
+      comment={comment}
+      itemType={itemType}
+      isEditable={isEditable}
+      usefulButtonConfig={votedConfig}
       setShowDeleteModal={setShowDeleteModal}
       setShowEditModal={setShowEditModal}
     />

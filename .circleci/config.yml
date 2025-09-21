@@ -25,7 +25,7 @@ aliases:
   # use a base image running node v18 with chrome/firefox browsers preinstalled
   # This can be applied to any job via `docker: *docker` syntax
   - &docker
-    - image: cimg/node:20.7.0-browsers
+    - image: cimg/node:22.18.0-browsers
 
   # Use base image with support for node version parameter and matrix
   # This can be applied to any job via `<<: *docker_matrix` syntax
@@ -33,7 +33,7 @@ aliases:
       parameters:
         node-version:
           type: string
-          default: 20.7.0-browsers
+          default: 22.18.0-browsers
       docker:
         - image: cimg/node:<< parameters.node-version >>
 
@@ -69,24 +69,11 @@ aliases:
         - /home/circleci/.yarn/install-state.gz
       key: v9-yarn-{{ checksum "yarn.lock" }}
 
-  # Example debugging commands for use troubleshooting caching (du will exit with status 141)
-  - &check_folders
-    run:
-      name: check folders
-      command: |
-        ls -a ~/project
-        du -a /home | sort -n -r | head -n 500
-
   - &filter_only_default_branch
     filters:
       branches:
         only:
           - master
-  - &filter_only_ci_test
-    filters:
-      branches:
-        only:
-          - ci/circle-ci-release
 
 ######################################################################################################
 #  Commands - Reusable collections of steps
@@ -206,7 +193,7 @@ jobs:
           command: yarn storybook:build
   deploy:
     docker:
-      - image: cimg/node:20.7.0
+      - image: cimg/node:22.18.0
     resource_class: medium+
     parameters:
       # optional environment variables to set during build process

@@ -116,7 +116,8 @@ export const CreateCommentSupabase = observer((props: IProps) => {
                       aria-label="Comment"
                       data-cy={isReply ? 'reply-form' : 'comments-form'}
                       placeholder={placeholder}
-                      rows={1}
+                      rows={2}
+                      sx={{ padding: 2 }}
                       onFocus={() => setIsFocused(true)}
                       onBlur={() => setIsFocused(false)}
                     />

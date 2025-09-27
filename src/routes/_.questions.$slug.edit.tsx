@@ -38,7 +38,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbQuestion = result.data as unknown as DBQuestion
 
   if (!(await isUserAllowedToEdit(dbQuestion, user, client))) {
-    return redirect('/forbidden', { headers })
+    return redirect('/forbidden?page=question-edit', { headers })
   }
 
   let images: Image[] = []

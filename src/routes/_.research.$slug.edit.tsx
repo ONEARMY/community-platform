@@ -47,7 +47,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       currentUsername,
     ))
   ) {
-    return redirect('/forbidden', { headers })
+    return redirect('/forbidden?page=research-edit', { headers })
   }
 
   return Response.json({ research }, { headers })

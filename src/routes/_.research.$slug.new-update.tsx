@@ -42,7 +42,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       username,
     ))
   ) {
-    return redirect('/forbidden', { headers })
+    return redirect('/forbidden?page=research-edit-create', { headers })
   }
 
   return Response.json({ research }, { headers })

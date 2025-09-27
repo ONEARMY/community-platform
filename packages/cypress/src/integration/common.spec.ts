@@ -36,6 +36,17 @@ describe('[Common]', () => {
     cy.url().should('include', '/map')
   })
 
+  it('[Forbidden Page]', () => {
+    cy.step('When not given page details')
+    cy.visit('/forbidden')
+    cy.contains("You don't have the right permissions")
+    cy.contains('Report the problem')
+
+    cy.visit('/forbidden?page=news-create')
+    cy.contains('This is a new feature')
+    cy.contains('I want to use it')
+  })
+
   describe('[User feedback button]', () => {
     it('[Desktop]', () => {
       cy.visit('/library')

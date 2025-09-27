@@ -36,7 +36,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       username,
     ))
   ) {
-    return redirect('/forbidden', { headers })
+    return redirect('/forbidden?page=library-edit', { headers })
   }
 
   const images = libraryServiceServer.getProjectPublicMedia(projectDb, client)

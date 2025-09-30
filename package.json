@@ -84,6 +84,7 @@
     "@uppy/react": "^3.3.1",
     "canvas-confetti": "^1.9.3",
     "compression": "^1.7.4",
+    "core-js": "^3.45.1",
     "countries-list": "^2.6.1",
     "country-to-iso": "^1.6.1",
     "date-fns": "^3.3.0",

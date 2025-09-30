@@ -12630,6 +12630,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"core-js@npm:^3.45.1":
+  version: 3.45.1
+  resolution: "core-js@npm:3.45.1"
+  checksum: 10/b9dca79b1af8bb4f0d4af0752ea98d694fe157abaf55513fd4084df32dfd4398f0fc57898b32cdb643c1cecb87b9231c2a2ce535797c80ae328eac6d6078ee61
+  languageName: node
+  linkType: hard
+
 "core-util-is@npm:1.0.2":
   version: 1.0.2
   resolution: "core-util-is@npm:1.0.2"
@@ -21735,6 +21742,7 @@ __metadata:
     chai-subset: "npm:^1.6.0"
     compression: "npm:^1.7.4"
     concurrently: "npm:^6.2.0"
+    core-js: "npm:^3.45.1"
     countries-list: "npm:^2.6.1"
     country-to-iso: "npm:^1.6.1"
     cross-env: "npm:^7.0.3"

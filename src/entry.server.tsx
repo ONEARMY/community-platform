@@ -1,6 +1,3 @@
-// Polyfill for Safari 15 RegExp support - due to markdown display
-import 'core-js/features/regexp'
-
 import { renderToPipeableStream, renderToString } from 'react-dom/server'
 import { CacheProvider } from '@emotion/react'
 import createEmotionServer from '@emotion/server/create-instance'

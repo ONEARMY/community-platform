@@ -9421,6 +9421,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/trusted-types@npm:^2.0.7":
+  version: 2.0.7
+  resolution: "@types/trusted-types@npm:2.0.7"
+  checksum: 10/8e4202766a65877efcf5d5a41b7dd458480b36195e580a3b1085ad21e948bc417d55d6f8af1fd2a7ad008015d4117d5fdfe432731157da3c68678487174e4ba3
+  languageName: node
+  linkType: hard
+
 "@types/unist@npm:*, @types/unist@npm:^3.0.0":
   version: 3.0.3
   resolution: "@types/unist@npm:3.0.3"
@@ -12630,13 +12637,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.45.1":
-  version: 3.45.1
-  resolution: "core-js@npm:3.45.1"
-  checksum: 10/b9dca79b1af8bb4f0d4af0752ea98d694fe157abaf55513fd4084df32dfd4398f0fc57898b32cdb643c1cecb87b9231c2a2ce535797c80ae328eac6d6078ee61
-  languageName: node
-  linkType: hard
-
 "core-util-is@npm:1.0.2":
   version: 1.0.2
   resolution: "core-util-is@npm:1.0.2"
@@ -13659,6 +13659,18 @@ __metadata:
   dependencies:
     domelementtype: "npm:^2.3.0"
   checksum: 10/809b805a50a9c6884a29f38aec0a4e1b4537f40e1c861950ed47d10b049febe6b79ab72adaeeebb3cc8fc1cd33f34e97048a72a9265103426d93efafa78d3e96
+  languageName: node
+  linkType: hard
+
+"dompurify@npm:^3.2.7":
+  version: 3.2.7
+  resolution: "dompurify@npm:3.2.7"
+  dependencies:
+    "@types/trusted-types": "npm:^2.0.7"
+  dependenciesMeta:
+    "@types/trusted-types":
+      optional: true
+  checksum: 10/51b7866fb834ee62d6c415f41ece5ce11db7b463f60a822932a1f832573a40b98be7715550298690e7647988fbe086db1098bda9b10548b3166fc975eb9bd849
   languageName: node
   linkType: hard
 
@@ -17016,13 +17028,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"html-url-attributes@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "html-url-attributes@npm:3.0.1"
-  checksum: 10/494074c2f730c5c0e517aa1b10111fb36732534a2d2b70427582c4a615472b47da472cf3a17562cc653826d378d20960f2783e0400f4f7cf0c3c2d91c6188d13
-  languageName: node
-  linkType: hard
-
 "html-void-elements@npm:^3.0.0":
   version: 3.0.0
   resolution: "html-void-elements@npm:3.0.0"
@@ -19233,6 +19238,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"marked@npm:^16.3.0":
+  version: 16.3.0
+  resolution: "marked@npm:16.3.0"
+  bin:
+    marked: bin/marked.js
+  checksum: 10/60497834b9acfb3b3994222509d359ecb9a197c885dfeb77e2050a287cd2f4ab19f00d5597172b47f9e0c54d9e1e13d8b2dd73322b7838599e1f16d1d6283f5b
+  languageName: node
+  linkType: hard
+
 "md-to-react-email@npm:5.0.5":
   version: 5.0.5
   resolution: "md-to-react-email@npm:5.0.5"
@@ -19553,16 +19567,6 @@ __metadata:
     mdast-util-from-markdown: "npm:^2.0.0"
     mdast-util-to-markdown: "npm:^2.0.0"
   checksum: 10/05474226e163a3f407fccb5780b0d8585a95e548e5da4a85227df43f281b940c7941a9a9d4af1be4f885fe554731647addb057a728e87aa1f503ff9cc72c9163
-  languageName: node
-  linkType: hard
-
-"mdast-util-newline-to-break@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "mdast-util-newline-to-break@npm:2.0.0"
-  dependencies:
-    "@types/mdast": "npm:^4.0.0"
-    mdast-util-find-and-replace: "npm:^3.0.0"
-  checksum: 10/2300312c02501458854129e776cbbf6daafa6b7675a54a634f9a3c76055b0466081ad9eebde6bc655030e868fd7c183352acd856bcd265b3ea96f214c4f7fd7b
   languageName: node
   linkType: hard
 
@@ -21456,6 +21460,7 @@ __metadata:
     babel-loader: "npm:8.1.0"
     country-to-iso: "npm:^1.6.1"
     date-fns: "npm:^2.29.3"
+    dompurify: "npm:^3.2.7"
     eslint: "npm:^8.50.0"
     eslint-plugin-import: "npm:^2.28.1"
     eslint-plugin-storybook: "npm:^9.0.15"
@@ -21465,6 +21470,7 @@ __metadata:
     linkify-plugin-mention: "npm:^4.0.2"
     linkify-react: "npm:^4.0.2"
     linkifyjs: "npm:^4.0.2"
+    marked: "npm:^16.3.0"
     mustache: "npm:^4.2.0"
     oa-themes: "workspace:^"
     photoswipe: "npm:^5.4.1"
@@ -21475,7 +21481,6 @@ __metadata:
     react-horizontal-scrolling-menu: "npm:^8.2.0"
     react-icons: "npm:^5.3.0"
     react-image-crop: "npm:^11.0.5"
-    react-markdown: "npm:^10.1.0"
     react-player: "npm:3.0.0-canary.4"
     react-portal: "npm:^4.2.2"
     react-responsive-masonry: "npm:2.1.7"
@@ -21483,9 +21488,6 @@ __metadata:
     react-router-dom: "npm:^6.26.0"
     react-select: "npm:^5.8.1"
     react-tooltip: "npm:^5.28.0"
-    remark-breaks: "npm:^4.0.0"
-    remark-gfm: "npm:^4.0.1"
-    remark-youtube: "npm:^1.3.2"
     storybook: "npm:9.0.15"
     styled-system: "npm:^5.1.5"
     theme-ui: "npm:^0.16.2"
@@ -21742,12 +21744,12 @@ __metadata:
     chai-subset: "npm:^1.6.0"
     compression: "npm:^1.7.4"
     concurrently: "npm:^6.2.0"
-    core-js: "npm:^3.45.1"
     countries-list: "npm:^2.6.1"
     country-to-iso: "npm:^1.6.1"
     cross-env: "npm:^7.0.3"
     date-fns: "npm:^3.3.0"
     debounce: "npm:^1.2.0"
+    dompurify: "npm:^3.2.7"
     dotenv: "npm:^10.0.0"
     env-cmd: "npm:^10.1.0"
     eslint: "npm:^8.57.0"
@@ -24071,28 +24073,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-markdown@npm:^10.1.0":
-  version: 10.1.0
-  resolution: "react-markdown@npm:10.1.0"
-  dependencies:
-    "@types/hast": "npm:^3.0.0"
-    "@types/mdast": "npm:^4.0.0"
-    devlop: "npm:^1.0.0"
-    hast-util-to-jsx-runtime: "npm:^2.0.0"
-    html-url-attributes: "npm:^3.0.0"
-    mdast-util-to-hast: "npm:^13.0.0"
-    remark-parse: "npm:^11.0.0"
-    remark-rehype: "npm:^11.0.0"
-    unified: "npm:^11.0.0"
-    unist-util-visit: "npm:^5.0.0"
-    vfile: "npm:^6.0.0"
-  peerDependencies:
-    "@types/react": ">=18"
-    react: ">=18"
-  checksum: 10/886c037d18266e94750abbc00c6096435bccd4da5f2d1727984bcbdf83e9f2a5cc9a6b0eecfe6c30456dc26546fee41c7f6aecbf176e6d7453963df4abefd7df
-  languageName: node
-  linkType: hard
-
 "react-player@npm:3.0.0-canary.4":
   version: 3.0.0-canary.4
   resolution: "react-player@npm:3.0.0-canary.4"
@@ -24671,17 +24651,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-breaks@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "remark-breaks@npm:4.0.0"
-  dependencies:
-    "@types/mdast": "npm:^4.0.0"
-    mdast-util-newline-to-break: "npm:^2.0.0"
-    unified: "npm:^11.0.0"
-  checksum: 10/6841b88ea4995ec9d469bb10f8272ce264466ffd706a85a931fd6d451dc81440916bd62118d62f10b7c61704b740e7eda4c0c8bee62dc27e8a02ee2766af1bf2
-  languageName: node
-  linkType: hard
-
 "remark-directive@npm:^3.0.0":
   version: 3.0.0
   resolution: "remark-directive@npm:3.0.0"
@@ -24731,7 +24700,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remark-gfm@npm:^4.0.0, remark-gfm@npm:^4.0.1":
+"remark-gfm@npm:^4.0.0":
   version: 4.0.1
   resolution: "remark-gfm@npm:4.0.1"
   dependencies:
@@ -24833,17 +24802,6 @@ __metadata:
     mdast-util-to-markdown: "npm:^2.0.0"
     unified: "npm:^11.0.0"
   checksum: 10/32b2f6093ba08e713183629b37e633e0999b6981560eec41f04fe957f76fc6f56dcc14c87c6b45419863be844c6f1130eb2dc055085fc0adc0775b1df7340348
-  languageName: node
-  linkType: hard
-
-"remark-youtube@npm:^1.3.2":
-  version: 1.3.2
-  resolution: "remark-youtube@npm:1.3.2"
-  dependencies:
-    unist-util-visit: "npm:^5.0.0"
-  peerDependencies:
-    remark-rehype: ^11.1.0
-  checksum: 10/20f9d3666a6c94c0dda58d6e3e64807417fe3b7d643655aab1e0a4d265dc3051e3c2b8b713d5e64bc46ffe9c6dd355cf9b0a163a00b4c4696e7b522c0fcd1b85
   languageName: node
   linkType: hard
 

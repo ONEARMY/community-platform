@@ -49,14 +49,14 @@
       ">0.2%",
       "not dead",
       "not op_mini all",
-      "iOS >= 14",
-      "safari >= 14"
+      "iOS >= 15",
+      "safari >= 15"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version",
-      "iOS >= 14"
+      "iOS >= 15"
     ]
   },
   "resolutions": {
@@ -84,11 +84,11 @@
     "@uppy/react": "^3.3.1",
     "canvas-confetti": "^1.9.3",
     "compression": "^1.7.4",
-    "core-js": "^3.45.1",
     "countries-list": "^2.6.1",
     "country-to-iso": "^1.6.1",
     "date-fns": "^3.3.0",
     "debounce": "^1.2.0",
+    "dompurify": "^3.2.7",
     "dotenv": "^10.0.0",
     "final-form": "4.20.2",
     "final-form-arrays": "^3.0.2",

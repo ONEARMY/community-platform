@@ -1,6 +1,3 @@
-// Polyfill for Safari 15 RegExp support - due to markdown display
-import 'core-js/features/regexp'
-
 import { startTransition, useMemo, useState } from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import { CacheProvider } from '@emotion/react'

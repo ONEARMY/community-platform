@@ -37,7 +37,7 @@ export default defineConfig({
     global: 'globalThis',
   },
   build: {
-    target: 'es2020',
+    target: ['es2019', 'safari14'],
     sourcemap: process.env.NODE_ENV !== 'production', // to enable local server-side debugging
     commonjsOptions: {
       transformMixedEsModules: true,

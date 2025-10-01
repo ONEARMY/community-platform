@@ -6,6 +6,7 @@
     "allowJs": true,
     "baseUrl": ".",
     "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,

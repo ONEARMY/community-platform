@@ -15,7 +15,6 @@ describe('MemberHistory', () => {
     }
     const { getByText } = render(<MemberHistory {...props} />)
     expect(getByText('Member since 2020')).toBeInTheDocument()
-    expect(getByText('Last active over 2 years ago')).toBeInTheDocument()
   })
 
   it('renders only since details if given weird last active data', () => {

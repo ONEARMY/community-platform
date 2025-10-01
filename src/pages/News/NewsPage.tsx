@@ -108,20 +108,7 @@ export const NewsPage = observer(({ news }: IProps) => {
             </ClientOnly>
           )}
 
-          <DisplayMarkdownStylingWrapper
-            sx={{
-              img: {
-                borderRadius: 2,
-                maxWidth: ['105%', '105%', '120%'],
-                marginLeft: ['-2.5%', '-2.5%', '-10%'],
-              },
-              iframe: {
-                maxWidth: ['105%', '105%', '120%'],
-                maxHeight: ['300px', '370px', '420px'],
-                marginLeft: ['-2.5%', '-2.5%', '-10%'],
-              },
-            }}
-          >
+          <DisplayMarkdownStylingWrapper>
             <div dangerouslySetInnerHTML={{ __html: news.bodyHtml }} />
           </DisplayMarkdownStylingWrapper>
 

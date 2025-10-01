@@ -130,7 +130,8 @@ export const NewsPage = observer(({ news }: IProps) => {
               flexWrap: 'wrap',
               gap: 2,
               justifyContent: 'stretch',
-              paddingY: 2,
+              paddingTop: 2,
+              paddingBottom: 2,
             }}
           >
             <ContentStatistics

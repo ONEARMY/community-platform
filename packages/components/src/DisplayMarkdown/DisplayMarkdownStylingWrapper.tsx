@@ -15,7 +15,8 @@ export const DisplayMarkdownStylingWrapper = ({ children, sx }: IProps) => {
         fontFamily: 'body',
         blockquote: {
           borderLeft: '3px solid',
-          paddingY: '1px',
+          paddingTop: '1px',
+          paddingBottom: '1px',
           paddingLeft: 2,
           margin: 0,
         },

@@ -18,9 +18,8 @@ import {
   toolbarPlugin,
   UndoRedo,
 } from '@mdxeditor/editor'
-import { Flex, Text } from 'theme-ui'
+import { Box, Flex, Text } from 'theme-ui'
 
-import { DisplayMarkdownStylingWrapper } from '../DisplayMarkdown/DisplayMarkdownStylingWrapper'
 import { AddImage } from './AddImage'
 
 import type { MDXEditorMethods } from '@mdxeditor/editor'
@@ -82,8 +81,20 @@ export const FieldMarkdown = (props: IProps) => {
       {showError && (
         <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>
       )}
-      <DisplayMarkdownStylingWrapper
+      <Box
         sx={{
+          alignSelf: 'stretch',
+          fontFamily: 'body',
+          lineHeight: 1.5,
+          a: {
+            color: 'primary',
+            textDecoration: 'underline',
+            '&:hover': { textDecoration: 'none' },
+          },
+          h3: { fontSize: 2 },
+          h4: { fontSize: 2 },
+          h5: { fontSize: 2 },
+          h6: { fontSize: 2 },
           img: {
             borderRadius: 2,
             maxWidth: '100%',
@@ -99,7 +110,7 @@ export const FieldMarkdown = (props: IProps) => {
           onChange={(ev) => input.onChange(ev)}
           {...rest}
         />
-      </DisplayMarkdownStylingWrapper>
+      </Box>
     </Flex>
   )
 }

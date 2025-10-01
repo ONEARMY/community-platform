@@ -1,10 +1,3 @@
-/**
- * Utility functions for markdown processing
- */
-
-/**
- * Extract YouTube video ID from various YouTube URL formats
- */
 export const extractYouTubeId = (url: string): string | null => {
   const patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
@@ -22,9 +15,6 @@ export const extractYouTubeId = (url: string): string | null => {
   return null
 }
 
-/**
- * Replace YouTube URLs with iframe embeds
- */
 export const processYouTubeLinks = (
   html: string,
   width = 760,
@@ -57,9 +47,6 @@ export const processYouTubeLinks = (
   })
 }
 
-/**
- * Process standalone YouTube URLs (not in links)
- */
 export const processStandaloneYouTubeUrls = (
   html: string,
   width = 760,

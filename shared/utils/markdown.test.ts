@@ -4,7 +4,7 @@ import {
   extractYouTubeId,
   processStandaloneYouTubeUrls,
   processYouTubeLinks,
-} from './utils'
+} from './markdown'
 
 describe('DisplayMarkdown utils', () => {
   describe('extractYouTubeId', () => {

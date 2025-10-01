@@ -13,13 +13,6 @@ export const DisplayMarkdownStylingWrapper = ({ children, sx }: IProps) => {
       sx={{
         alignSelf: 'stretch',
         fontFamily: 'body',
-        blockquote: {
-          borderLeft: '3px solid',
-          paddingTop: '1px',
-          paddingBottom: '1px',
-          paddingLeft: 2,
-          margin: 0,
-        },
         lineHeight: 1.5,
         a: {
           color: 'primary',

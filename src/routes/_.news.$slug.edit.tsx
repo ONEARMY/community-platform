@@ -25,7 +25,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   if (!(await isAllowedToEdit(user, client))) {
-    return redirect('/forbidden', { headers })
+    return redirect('/forbidden?page=news-edit', { headers })
   }
 
   if (!params.slug) {

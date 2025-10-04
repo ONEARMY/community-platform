@@ -59,7 +59,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       username,
     ))
   ) {
-    return redirect('/forbidden', { headers })
+    return redirect('/forbidden?page=research-update-edit', { headers })
   }
 
   const updateDb = researchDb.updates.find(

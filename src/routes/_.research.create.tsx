@@ -26,7 +26,7 @@ export async function loader({ request }) {
   const canCreate = isAdmin || isResearchCreator
 
   if (!canCreate) {
-    return redirect('/forbidden', { headers })
+    return redirect('/forbidden?page=research-create', { headers })
   }
 
   return Response.json({}, { headers })

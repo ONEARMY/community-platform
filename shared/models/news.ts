@@ -1,9 +1,5 @@
 import { marked } from 'marked'
 
-import {
-  processStandaloneYouTubeUrls,
-  processYouTubeLinks,
-} from '../utils/markdown'
 import { Author } from './author'
 import { Category } from './category'
 import { ProfileBadge } from './profileBadge'
@@ -69,13 +65,14 @@ export class News implements IContentDoc {
   }
 
   static fromDB(news: DBNews, tags: Tag[], heroImage?: Image | null) {
-    let htmlBody = marked(news.body, {
+    const htmlBody = marked(news.body, {
       breaks: true,
       gfm: true,
     }) as string
 
-    htmlBody = processYouTubeLinks(htmlBody, 760, 420)
-    htmlBody = processStandaloneYouTubeUrls(htmlBody, 760, 420)
+    // removed as we might want to show a simple link instead
+    // htmlBody = processYouTubeLinks(htmlBody, 760, 420)
+    // htmlBody = processStandaloneYouTubeUrls(htmlBody, 760, 420)
 
     return new News({
       id: news.id,

@@ -47,6 +47,13 @@ enabled = true
 # sql_paths = ['./seeds/*.sql', '../project-src/seeds/*-load-testing.sql']
 sql_paths = ['./seed.sql']
 
+[db.migrations]
+schema_paths = [
+  "./schemas/common.sql",
+  "./schemas/profiles.sql",
+  "./schemas/*.sql",
+]
+
 [realtime]
 enabled = true
 # Bind realtime via either IPv4 or IPv6. (default: IPv4)

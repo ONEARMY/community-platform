@@ -1,11 +1,10 @@
-import { useMemo, useState } from 'react'
-import { Link, useNavigate } from '@remix-run/react'
+import { useMemo } from 'react'
 import { max } from 'date-fns'
 import {
-  Button,
+  AuthorDisplay,
   Category,
-  ConfirmModal,
   ContentStatistics,
+  DisplayDate,
   FollowButton,
   LinkifyText,
   TagList,
@@ -19,14 +18,10 @@ import {
 } from 'oa-shared'
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
-import { trackEvent } from 'src/common/Analytics'
-import { logger } from 'src/logger'
 import { DraftTag } from 'src/pages/common/Drafts/DraftTag'
-import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
 import { buildStatisticsLabel } from 'src/utils/helpers'
-import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
+import { Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
-import { researchService } from '../research.service'
 import { researchStatusColour } from '../researchHelpers'
 
 interface IProps {
@@ -47,31 +42,11 @@ interface IProps {
 const ResearchDescription = (props: IProps) => {
   const {
     research,
-    isEditable,
-    isDeletable,
     subscribersCount,
     votedUsefulCount,
     commentsCount,
     updatesCount,
   } = props
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const navigate = useNavigate()
-
-  const handleDelete = async (research: ResearchItem) => {
-    try {
-      await researchService.deleteResearch(research.id)
-      trackEvent({
-        category: 'Research',
-        action: 'Deleted',
-        label: research.title,
-      })
-
-      navigate('/research')
-    } catch (err) {
-      logger.error(err)
-      // at least log the error
-    }
-  }
 
   const lastUpdated = useMemo(() => {
     const dates = [
@@ -95,85 +70,67 @@ const ResearchDescription = (props: IProps) => {
           flexDirection: ['column-reverse', 'column-reverse', 'row'],
         }}
       >
-        <Flex sx={{ flexDirection: 'column', width: '100%', padding: [2, 4] }}>
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            width: '100%',
+            padding: [2, 4],
+            gap: 3,
+          }}
+        >
           {research.deleted && (
             <Text color="red" pl={2} mb={2} data-cy="research-deleted">
               * Marked for deletion
             </Text>
           )}
-          <Flex sx={{ justifyContent: 'space-between' }}>
-            <Flex sx={{ flexWrap: 'wrap', gap: 3 }}>
-              <ClientOnly fallback={<></>}>
-                {() => (
-                  <>
-                    <UsefulStatsButton
-                      votedUsefulCount={votedUsefulCount}
-                      hasUserVotedUseful={props.hasUserVotedUseful}
-                      isLoggedIn={!!props.activeUser}
-                      onUsefulClick={props.onUsefulClick}
-                    />
-                    <FollowButton
-                      hasUserSubscribed={props.hasUserSubscribed}
-                      isLoggedIn={!!props.activeUser}
-                      onFollowClick={props.onFollowClick}
-                      tooltipFollow="Follow to be notified about new updates"
-                      tooltipUnfollow="Unfollow to stop be notified about new updates"
-                    />
-                  </>
-                )}
-              </ClientOnly>
-              {/* Show edit button for the creator of the research OR a super-admin */}
-              {isEditable && (
-                <Link to={'/research/' + research.slug + '/edit'}>
-                  <Button type="button" variant="primary" data-cy="edit">
-                    Edit
-                  </Button>
-                </Link>
-              )}
+          <Flex
+            sx={{ justifyContent: 'space-between', gap: 3, flexWrap: 'wrap' }}
+          >
+            <Flex
+              sx={{
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                gap: 1,
+              }}
+            >
+              <AuthorDisplay author={research.author} />
 
-              {isDeletable && (
-                <>
-                  <Button
-                    type="button"
-                    data-cy="Research: delete button"
-                    variant="secondary"
-                    icon="delete"
-                    disabled={research.deleted}
-                    onClick={() => setShowDeleteModal(true)}
-                  >
-                    Delete
-                  </Button>
-
-                  <ConfirmModal
-                    key={research.id}
-                    isOpen={showDeleteModal}
-                    message="Are you sure you want to delete this Research?"
-                    confirmButtonText="Delete"
-                    handleCancel={() => setShowDeleteModal(false)}
-                    handleConfirm={() => handleDelete && handleDelete(research)}
-                  />
-                </>
-              )}
+              {research.collaborators && research.collaborators.length ? (
+                <Flex sx={{ alignItems: 'center', gap: 1 }}>
+                  <Text variant="auxiliary" sx={{ color: 'lightgrey' }}>
+                    With contributions from
+                  </Text>
+                  {research.collaborators.map((contributor, key) => (
+                    <Username key={key} user={contributor} />
+                  ))}
+                </Flex>
+              ) : null}
             </Flex>
-            <Flex sx={{ justifyContent: 'flex-end', gap: 3 }}>
+            <Flex
+              sx={{
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+                gap: 3,
+              }}
+            >
               {research.isDraft && <DraftTag />}
+
+              {research.category && (
+                <Category category={research.category} sx={{ fontSize: 2 }} />
+              )}
+
               <Flex
                 sx={{
-                  marginBottom: 'auto',
-                  minWidth: '100px',
                   borderRadius: 1,
-                  height: '44px',
                   background: researchStatusColour(research.status),
                 }}
               >
                 <Text
                   sx={{
-                    display: 'inline-block',
-                    verticalAlign: 'middle',
-                    color: 'black',
-                    fontSize: [2, 2, 3],
-                    padding: 2,
-                    margin: 'auto',
+                    fontSize: '14px',
+                    paddingX: 2,
+                    paddingY: 1,
                   }}
                 >
                   {research.status
@@ -183,76 +140,49 @@ const ResearchDescription = (props: IProps) => {
               </Flex>
             </Flex>
           </Flex>
-          <Box sx={{ marginX: 2 }}>
-            <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
-              {research.author && (
-                <UserNameTag
-                  author={research.author}
-                  createdAt={research.createdAt}
-                  modifiedAt={lastUpdated.toISOString()}
-                  action="Started"
+
+          <Text variant="auxiliary">
+            <DisplayDate
+              createdAt={research.createdAt}
+              modifiedAt={lastUpdated.toISOString()}
+              action="Started"
+            />
+          </Text>
+
+          <Heading as="h1" data-testid="research-title">
+            {research.title}
+          </Heading>
+
+          <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
+            <LinkifyText>{research.description}</LinkifyText>
+          </Text>
+
+          <TagList tags={research.tags.map((t) => ({ label: t.name }))} />
+
+          <ClientOnly fallback={<></>}>
+            {() => (
+              <Flex sx={{ gap: 3 }}>
+                <UsefulStatsButton
+                  votedUsefulCount={votedUsefulCount}
+                  hasUserVotedUseful={props.hasUserVotedUseful}
+                  isLoggedIn={!!props.activeUser}
+                  onUsefulClick={props.onUsefulClick}
                 />
-              )}
-
-              {research.collaborators && research.collaborators.length ? (
-                <Flex
-                  sx={{
-                    alignItems: 'flex-start',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    marginTop: 1,
-                  }}
-                >
-                  <Flex sx={{ alignItems: 'center' }}>
-                    <Text
-                      variant="auxiliary"
-                      sx={{
-                        mt: 1,
-                        mr: 1,
-                        color: 'lightgrey',
-                      }}
-                    >
-                      With contributions from
-                    </Text>
-                  </Flex>
-                  {research.collaborators.map((contributor, key) => (
-                    <Username key={key} user={contributor} />
-                  ))}
-                </Flex>
-              ) : null}
-            </Flex>
-
-            {research.category && (
-              <Category
-                category={research.category}
-                sx={{ fontSize: 2, mt: 2 }}
-              />
+                <FollowButton
+                  hasUserSubscribed={props.hasUserSubscribed}
+                  isLoggedIn={!!props.activeUser}
+                  onFollowClick={props.onFollowClick}
+                  tooltipFollow="Follow to be notified about new updates"
+                  tooltipUnfollow="Unfollow to stop be notified about new updates"
+                />
+              </Flex>
             )}
-            <Heading
-              as="h1"
-              sx={{
-                mt: research.category ? 1 : 2,
-                mb: 1,
-              }}
-              data-testid="research-title"
-            >
-              {research.title}
-            </Heading>
-            <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
-              <LinkifyText>{research.description}</LinkifyText>
-            </Text>
-            <Flex sx={{ mt: 4 }}>
-              <TagList tags={research.tags.map((t) => ({ label: t.name }))} />
-            </Flex>
-          </Box>
+          </ClientOnly>
         </Flex>
       </Flex>
-      <Divider
-        sx={{
-          m: 0,
-          border: '1px solid black',
-        }}
-      />
+
+      <Divider sx={{ border: '1px solid black', margin: 0 }} />
+
       <ContentStatistics
         statistics={[
           {

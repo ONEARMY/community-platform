@@ -22,8 +22,6 @@ alter table "public"."categories" alter column type type "public"."content_types
 
 drop type "public"."content_types__old_version_to_be_dropped";
 
-alter table "public"."profiles" alter column "is_contactable" drop default;
-
 CREATE UNIQUE INDEX banners_pkey ON public.banners USING btree (id);
 
 CREATE UNIQUE INDEX questions_pkey ON public.questions USING btree (id);

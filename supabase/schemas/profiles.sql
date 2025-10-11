@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS "public"."profiles" (
     "roles" "text"[],
     "impact" "json",
     "is_blocked_from_messaging" boolean,
-    "is_contactable" boolean,
+    "is_contactable" boolean default true,
     "is_supporter" boolean,
     "patreon" "json",
     "total_views" integer,

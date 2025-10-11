@@ -2,8 +2,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import {
+  AuthorDisplay,
   Category,
   ContentStatistics,
+  DisplayDate,
   ImageGallery,
   LinkifyText,
   TagList,
@@ -17,11 +19,10 @@ import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
 import { onUsefulClick } from 'src/utils/onUsefulClick'
-import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
+import { Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
 import { DraftTag } from '../common/Drafts/DraftTag'
-import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 
 import type { ContentType, Question } from 'oa-shared'
 
@@ -73,52 +74,44 @@ export const QuestionPage = observer(({ question }: IProps) => {
   }
 
   return (
-    <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
-      <Breadcrumbs content={question} variant="question" />
+    <Flex
+      sx={{
+        alignSelf: 'center',
+        width: '100%',
+        maxWidth: '1000px',
+        flexDirection: 'column',
+      }}
+    >
+      <Breadcrumbs content={question} variant="question">
+        {isEditable && (
+          <Link to={'/questions/' + question.slug + '/edit'}>
+            <Button type="button" variant="primary" data-cy="edit">
+              Edit
+            </Button>
+          </Link>
+        )}
+      </Breadcrumbs>
+
       <Card
         data-cy="question-body"
         sx={{ position: 'relative' }}
         variant="responsive"
       >
         <Flex sx={{ flexDirection: 'column', padding: [3, 4], gap: 3 }}>
-          <Flex sx={{ flexWrap: 'wrap', gap: 3 }}>
-            <ClientOnly fallback={<></>}>
-              {() => (
-                <>
-                  <UsefulStatsButton
-                    votedUsefulCount={usefulCount}
-                    hasUserVotedUseful={voted}
-                    isLoggedIn={!!activeUser}
-                    onUsefulClick={() =>
-                      handleUsefulClick(voted ? 'delete' : 'add')
-                    }
-                  />
-
-                  {question.isDraft && <DraftTag />}
-
-                  {isEditable && (
-                    <Link to={'/questions/' + question.slug + '/edit'}>
-                      <Button type="button" variant="primary" data-cy="edit">
-                        Edit
-                      </Button>
-                    </Link>
-                  )}
-                </>
-              )}
-            </ClientOnly>
+          <Flex sx={{ flex: 'column', justifyContent: 'space-between' }}>
+            <AuthorDisplay author={question.author} />
+            {question.category && <Category category={question.category} />}
           </Flex>
 
-          {question.author && (
-            <UserNameTag
-              author={question.author}
-              createdAt={question.createdAt}
-              modifiedAt={question.modifiedAt}
-              action="Asked"
-            />
-          )}
-
           <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-            {question.category && <Category category={question.category} />}
+            <Text variant="auxiliary">
+              <DisplayDate
+                createdAt={question.createdAt}
+                modifiedAt={question.modifiedAt}
+                action="Asked"
+              />
+            </Text>
+
             <Heading
               as="h1"
               data-cy="question-title"
@@ -149,14 +142,25 @@ export const QuestionPage = observer(({ question }: IProps) => {
               />
             )}
           </Flex>
+          <ClientOnly fallback={<></>}>
+            {() => (
+              <Flex>
+                <UsefulStatsButton
+                  votedUsefulCount={usefulCount}
+                  hasUserVotedUseful={voted}
+                  isLoggedIn={!!activeUser}
+                  onUsefulClick={() =>
+                    handleUsefulClick(voted ? 'delete' : 'add')
+                  }
+                />
+
+                {question.isDraft && <DraftTag />}
+              </Flex>
+            )}
+          </ClientOnly>
         </Flex>
 
-        <Divider
-          sx={{
-            m: 0,
-            border: '.5px solid black',
-          }}
-        />
+        <Divider sx={{ border: '1px solid black', margin: 0 }} />
 
         <ContentStatistics
           statistics={[
@@ -216,6 +220,6 @@ export const QuestionPage = observer(({ question }: IProps) => {
           </Card>
         )}
       </ClientOnly>
-    </Box>
+    </Flex>
   )
 })

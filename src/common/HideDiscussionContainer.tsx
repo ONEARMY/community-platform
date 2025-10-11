@@ -33,7 +33,7 @@ export const HideDiscussionContainer = ({
   return (
     <Box
       sx={{
-        backgroundColor: viewComments ? '#e2edf7' : 'inherit',
+        backgroundColor: viewComments ? 'softblue' : 'inherit',
         borderTop: '2px solid #111',
         padding: 2,
         transition: 'background-color 120ms ease-out',
@@ -51,7 +51,7 @@ export const HideDiscussionContainer = ({
           '&:hover': { bg: '#ececec' },
         }}
         onClick={() => setViewComments((prev) => !prev)}
-        backgroundColor={viewComments ? '#c2daf0' : '#e2edf7'}
+        backgroundColor={viewComments ? '#c2daf0' : 'softblue'}
         className={viewComments ? 'viewComments' : ''}
         data-cy="HideDiscussionContainer:button"
       >

@@ -65,6 +65,7 @@ CREATE POLICY "tenant_isolation" ON "public"."projects" USING (("tenant_id" = (S
 
 CREATE OR REPLACE FUNCTION "public"."combined_project_search_fields"("project_id_param" bigint) RETURNS "text"
     LANGUAGE "sql"
+    SET search_path = public, pg_temp
     AS $$
   SELECT
     (SELECT p.title || ' ' || p.description FROM projects p WHERE p.id = project_id_param) || ' ' ||
@@ -75,6 +76,7 @@ $$;
 
 CREATE OR REPLACE FUNCTION "public"."get_projects"("search_query" "text" DEFAULT NULL::"text", "category_id" bigint DEFAULT NULL::bigint, "sort_by" "text" DEFAULT 'Newest'::"text", "limit_val" integer DEFAULT 12, "offset_val" integer DEFAULT 0, "current_username" "text" DEFAULT NULL::"text") RETURNS TABLE("id" bigint, "created_at" timestamp with time zone, "created_by" bigint, "modified_at" timestamp with time zone, "description" "text", "slug" "text", "cover_image" "json", "category" "json", "tags" "text"[], "title" "text", "moderation" "text", "total_views" bigint, "author" "json", "comment_count" integer)
     LANGUAGE "plpgsql"
+    SET search_path = public, pg_temp
     AS $$DECLARE
     ts_query tsquery;
 BEGIN
@@ -155,6 +157,7 @@ END;$$;
 
 CREATE OR REPLACE FUNCTION "public"."get_projects_count"("search_query" "text" DEFAULT NULL::"text", "category_id" integer DEFAULT NULL::integer, "current_username" "text" DEFAULT NULL::"text") RETURNS integer
     LANGUAGE "plpgsql"
+    SET search_path = public, pg_temp
     AS $$
 DECLARE
   ts_query tsquery;
@@ -178,6 +181,7 @@ $$;
 
 CREATE OR REPLACE FUNCTION "public"."get_user_projects"("username_param" "text") RETURNS TABLE("id" bigint, "title" "text", "slug" "text", "total_useful" bigint)
     LANGUAGE "plpgsql"
+    SET search_path = public, pg_temp
     AS $$
 BEGIN
   RETURN QUERY
@@ -199,6 +203,7 @@ $$;
 
 CREATE OR REPLACE FUNCTION "public"."update_project_tsvector"() RETURNS "trigger"
     LANGUAGE "plpgsql"
+    SET search_path = public, pg_temp
     AS $$
 BEGIN
   IF TG_TABLE_NAME = 'project_steps' THEN

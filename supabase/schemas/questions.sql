@@ -1,5 +1,6 @@
 CREATE OR REPLACE FUNCTION "public"."get_user_questions"("username_param" "text") RETURNS TABLE("id" bigint, "title" "text", "slug" "text", "total_useful" bigint)
     LANGUAGE "plpgsql"
+    SET search_path = public, pg_temp
     AS $$
 BEGIN
   RETURN QUERY
@@ -41,6 +42,7 @@ CREATE TABLE IF NOT EXISTS "public"."questions" (
 
 CREATE OR REPLACE FUNCTION "public"."questions_search_fields"("public"."questions") RETURNS "text"
     LANGUAGE "sql"
+    SET search_path = public, pg_temp
     AS $_$
   SELECT $1.title || ' ' || $1.description;
 $_$;

@@ -28,6 +28,7 @@ CREATE POLICY "tenant_isolation" ON "public"."useful_votes" USING (("tenant_id" 
 
 CREATE OR REPLACE FUNCTION "public"."get_author_vote_counts"("author_id" bigint) RETURNS TABLE("content_type" "text", "vote_count" bigint)
     LANGUAGE "sql" STABLE
+    SET search_path = public, pg_temp
     AS $$
     SELECT 
         uv.content_type,
@@ -51,6 +52,7 @@ $$;
 
 CREATE OR REPLACE FUNCTION "public"."get_useful_votes_count_by_content_id"("p_content_type" "public"."useful_content_types", "p_content_ids" bigint[]) RETURNS TABLE("content_id" bigint, "count" bigint)
     LANGUAGE "plpgsql"
+    SET search_path = public, pg_temp
     AS $$
 BEGIN
   RETURN QUERY
@@ -62,15 +64,3 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION "public"."get_useful_votes_count_by_content_id"("p_content_type" "public"."useful_content_types", "p_content_ids" bigint[]) RETURNS TABLE("content_id" bigint, "count" bigint)
-    LANGUAGE "plpgsql"
-    AS $$
-BEGIN
-  RETURN QUERY
-  SELECT v.content_id, COUNT(*) as count
-  FROM public.useful_votes v
-  WHERE v.content_type = p_content_type
-    AND v.content_id = ANY(p_content_ids)
-  GROUP BY v.content_id;
-END;
-$$;

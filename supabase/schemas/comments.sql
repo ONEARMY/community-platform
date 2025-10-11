@@ -25,6 +25,7 @@ CREATE POLICY "tenant_isolation" ON "public"."comments" USING (("tenant_id" = (S
 
 CREATE OR REPLACE FUNCTION "public"."comment_authors_by_source_id"("source_id_input" bigint) RETURNS SETOF "text"
     LANGUAGE "sql"
+    SET search_path = public, pg_temp
     AS $$
   SELECT DISTINCT (p.username)
   FROM comments c
@@ -33,18 +34,9 @@ CREATE OR REPLACE FUNCTION "public"."comment_authors_by_source_id"("source_id_in
   WHERE c.source_id = source_id_input
 $$;
 
-CREATE OR REPLACE FUNCTION "public"."comment_authors_by_source_id_legacy"("source_id_legacy_input" "text") RETURNS SETOF "text"
-    LANGUAGE "sql"
-    AS $$
-  SELECT DISTINCT (p.username)
-  FROM comments c
-  INNER JOIN profiles p
-  ON c.created_by = p.id
-  WHERE c.source_id_legacy = source_id_legacy_input
-$$;
-
 CREATE OR REPLACE FUNCTION "public"."get_comments_with_votes"("p_source_type" "text", "p_source_id" bigint, "p_current_user_id" bigint DEFAULT NULL::bigint) RETURNS TABLE("id" bigint, "comment" "text", "created_at" timestamp with time zone, "modified_at" timestamp with time zone, "deleted" boolean, "source_id" bigint, "source_type" "text", "parent_id" bigint, "created_by" bigint, "profile" "json", "vote_count" bigint, "has_voted" boolean)
     LANGUAGE "plpgsql"
+    SET search_path = public, pg_temp
     AS $$
 BEGIN
   RETURN QUERY
@@ -123,6 +115,7 @@ $$;
 
 CREATE OR REPLACE FUNCTION "public"."update_comment_count"() RETURNS "trigger"
     LANGUAGE "plpgsql"
+    SET search_path = public, pg_temp
     AS $$BEGIN
   IF (TG_OP = 'INSERT') THEN
     IF NEW.source_type IS NOT NULL AND NEW.source_id IS NOT NULL AND (NEW.deleted IS NULL OR NEW.deleted = false) THEN

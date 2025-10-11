@@ -72,6 +72,7 @@ CREATE POLICY "tenant_isolation" ON "public"."research_updates" USING (("tenant_
 
 CREATE OR REPLACE FUNCTION "public"."combined_research_search_fields"("research_id_param" bigint) RETURNS "text"
     LANGUAGE "sql"
+    SET search_path = public, pg_temp
     AS $$
   SELECT
     (SELECT r.title || ' ' || r.description FROM research r WHERE r.id = research_id_param) || ' ' ||
@@ -82,6 +83,7 @@ $$;
 
 CREATE OR REPLACE FUNCTION "public"."get_research"("search_query" "text" DEFAULT NULL::"text", "category_id" bigint DEFAULT NULL::bigint, "research_status" "public"."research_status" DEFAULT NULL::"public"."research_status", "sort_by" "text" DEFAULT 'Newest'::"text", "limit_val" integer DEFAULT 10, "offset_val" integer DEFAULT 0) RETURNS TABLE("id" bigint, "created_at" timestamp with time zone, "created_by" bigint, "modified_at" timestamp with time zone, "description" "text", "slug" "text", "image" "json", "status" "public"."research_status", "category" "json", "tags" "text"[], "title" "text", "total_views" integer, "author" "json", "update_count" bigint, "comment_count" bigint)
     LANGUAGE "plpgsql"
+    SET search_path = public, pg_temp
     AS $$
 DECLARE
   ts_query tsquery;
@@ -185,6 +187,7 @@ $$;
 
 CREATE OR REPLACE FUNCTION "public"."get_research_count"("search_query" "text" DEFAULT NULL::"text", "category_id" integer DEFAULT NULL::integer, "research_status" "public"."research_status" DEFAULT NULL::"public"."research_status") RETURNS integer
     LANGUAGE "plpgsql"
+    SET search_path = public, pg_temp
     AS $$
 BEGIN
   RETURN (
@@ -202,6 +205,7 @@ $$;
 
 CREATE OR REPLACE FUNCTION "public"."get_user_research"("username_param" "text") RETURNS TABLE("id" bigint, "title" "text", "slug" "text", "total_useful" bigint)
     LANGUAGE "plpgsql"
+    SET search_path = public, pg_temp
     AS $$
 BEGIN
   RETURN QUERY
@@ -222,6 +226,7 @@ $$;
 
 CREATE OR REPLACE FUNCTION "public"."update_research_tsvector"() RETURNS "trigger"
     LANGUAGE "plpgsql"
+    SET search_path = public, pg_temp
     AS $$
 BEGIN
   IF TG_TABLE_NAME = 'research_updates' THEN

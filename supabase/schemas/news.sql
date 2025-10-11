@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS "public"."news" (
 
 CREATE OR REPLACE FUNCTION "public"."news_search_fields"("public"."news") RETURNS "text"
     LANGUAGE "sql"
+    SET search_path = public, pg_temp
     AS $_$
   SELECT $1.title || ' ' || $1.body;
 $_$;

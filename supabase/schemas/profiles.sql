@@ -123,6 +123,7 @@ CREATE POLICY "tenant_isolation" ON "public"."profiles" USING (("tenant_id" = (S
 
 CREATE OR REPLACE FUNCTION "public"."is_username_available"("username" "text") RETURNS boolean
     LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET search_path = public, pg_temp
     AS $_$
   SELECT NOT EXISTS (SELECT 1 FROM profiles WHERE username = $1);
 $_$;

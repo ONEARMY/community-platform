@@ -27,11 +27,13 @@ To sign-up locally, you can get the email confirmation link at http://localhost:
 ### Using online Supabase free version
 
 #### Create your Supabase instance
+
 You can also use the online Supabase free version.
 For this, create your Supabase account at https://supabase.com and create a new project.
 Install the Supabase CLI : https://supabase.com/docs/guides/local-development/cli/getting-started
 
 #### Link your Supabase instance and push the db schema
+
 First, connect to the Supabase CLI using `supabase login`.
 Get your project-id from your Supabase project, you can find it in the project settings general section.
 Now from the project root, run `supabase link --project-ref your-project-id`.
@@ -42,11 +44,11 @@ SUPABASE_API_URL={URL}
 SUPABASE_KEY={anon key}
 SUPABASE_SERVICE_ROLE_KEY={service_role key}
 
-
-
 ## Migrations
 
-After making schema changes, use the this command to create a migration file:
+We use Supabase Declarative Schemas feature.
+Schema changes must be made in the /supabase/schemas folder, following the current pattern (1 sql file per feature).
+After making the schema changes, a migration file needs to be generated, use this command:
 `supabase db diff --file [migration_name]`
 
 ## Running Cypress Tests

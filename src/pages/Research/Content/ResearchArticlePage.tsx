@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useLocation } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { observer } from 'mobx-react';
 import {
   ArticleCallToActionSupabase,
   Button,
+  ConfirmModal,
   FollowButton,
   UsefulStatsButton,
   UserEngagementWrapper,
@@ -11,6 +12,7 @@ import {
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
+import { logger } from 'src/logger';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { getResearchCommentId, getResearchUpdateId } from 'src/pages/Research/Content/helper';
 import { subscribersService } from 'src/services/subscribersService';
@@ -20,6 +22,7 @@ import { hasAdminRights } from 'src/utils/helpers';
 import { onUsefulClick } from 'src/utils/onUsefulClick';
 import { Box, Flex } from 'theme-ui';
 
+import { researchService } from '../research.service';
 import ResearchDescription from './ResearchDescription';
 import ResearchUpdate from './ResearchUpdate';
 
@@ -36,6 +39,9 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
   const [voted, setVoted] = useState<boolean>(false);
   const [subscribersCount, setSubscribersCount] = useState<number>(research.subscriberCount);
   const [usefulCount, setUsefulCount] = useState<number>(research.usefulCount);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const navigate = useNavigate();
 
   const configOnUsefulClick = {
     contentType: 'research' as ContentType,
@@ -125,9 +131,58 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
       .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   }, [research?.updates]);
 
+  const handleDelete = async (research: ResearchItem) => {
+    try {
+      await researchService.deleteResearch(research.id);
+      trackEvent({
+        category: 'Research',
+        action: 'Deleted',
+        label: research.title,
+      });
+
+      navigate('/research');
+    } catch (err) {
+      logger.error(err);
+      // at least log the error
+    }
+  };
+
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
-      <Breadcrumbs content={research} variant="research" />
+      <Breadcrumbs content={research} variant="research">
+        <Flex sx={{ gap: 2 }}>
+          {isDeletable && (
+            <>
+              <Button
+                type="button"
+                data-cy="Research: delete button"
+                variant="secondary"
+                icon="delete"
+                disabled={research.deleted}
+                onClick={() => setShowDeleteModal(true)}
+              >
+                Delete
+              </Button>
+
+              <ConfirmModal
+                key={research.id}
+                isOpen={showDeleteModal}
+                message="Are you sure you want to delete this Research?"
+                confirmButtonText="Delete"
+                handleCancel={() => setShowDeleteModal(false)}
+                handleConfirm={() => handleDelete && handleDelete(research)}
+              />
+            </>
+          )}
+          {isEditable && (
+            <Link to={'/research/' + research.slug + '/edit'}>
+              <Button type="button" variant="primary" data-cy="edit">
+                Edit
+              </Button>
+            </Link>
+          )}
+        </Flex>
+      </Breadcrumbs>
       <ResearchDescription
         research={research}
         key={research.id}

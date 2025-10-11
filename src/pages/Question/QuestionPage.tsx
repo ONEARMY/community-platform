@@ -2,8 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { observer } from 'mobx-react';
 import {
+  AuthorDisplay,
   Category,
   ContentStatistics,
+  DisplayDate,
   ImageGallery,
   LinkifyText,
   TagList,
@@ -17,11 +19,10 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
 import { onUsefulClick } from 'src/utils/onUsefulClick';
-import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
+import { Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
-import { UserNameTag } from '../common/UserNameTag/UserNameTag';
 
 import type { ContentType, Question } from 'oa-shared';
 
@@ -68,118 +69,130 @@ export const QuestionPage = observer(({ question }: IProps) => {
   };
 
   return (
-    <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
-      <Breadcrumbs content={question} variant="question" />
+    <Flex
+      sx={{
+        alignSelf: 'center',
+        width: '100%',
+        maxWidth: '1000px',
+        flexDirection: 'column',
+      }}
+    >
+      <Breadcrumbs content={question} variant="question">
+        {isEditable && (
+          <Link to={'/questions/' + question.slug + '/edit'}>
+            <Button type="button" variant="primary" data-cy="edit">
+              Edit
+            </Button>
+          </Link>
+        )}
+      </Breadcrumbs>
+
       <Card data-cy="question-body" sx={{ position: 'relative' }} variant="responsive">
-        <Flex sx={{ flexDirection: 'column', padding: [3, 4], gap: 3 }}>
-          <Flex sx={{ flexWrap: 'wrap', gap: 3 }}>
-            <ClientOnly fallback={<></>}>
-              {() => (
-                <>
-                  <UsefulStatsButton
-                    votedUsefulCount={usefulCount}
-                    hasUserVotedUseful={voted}
-                    isLoggedIn={!!activeUser}
-                    onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}
-                  />
+        <Flex sx={{ flexDirection: 'column', padding: [3, 4], gap: 4 }}>
+          <Heading as="h1" data-cy="question-title" data-testid="question-title">
+            {question.title}
+          </Heading>
 
-                  {question.isDraft && <DraftTag />}
+          <Flex sx={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+            <AuthorDisplay author={question.author} />
 
-                  {isEditable && (
-                    <Link to={'/questions/' + question.slug + '/edit'}>
-                      <Button type="button" variant="primary" data-cy="edit">
-                        Edit
-                      </Button>
-                    </Link>
-                  )}
-                </>
-              )}
-            </ClientOnly>
+            <Text variant="auxiliary">
+              <DisplayDate
+                createdAt={question.createdAt}
+                modifiedAt={question.modifiedAt}
+                action="Asked"
+              />
+            </Text>
+
+            {question.isDraft && <DraftTag />}
+
+            {question.category && <Category category={question.category} />}
           </Flex>
 
-          {question.author && (
-            <UserNameTag
-              author={question.author}
-              createdAt={question.createdAt}
-              modifiedAt={question.modifiedAt}
-              action="Asked"
+          <Text variant="paragraph" data-cy="question-description" sx={{ whiteSpace: 'pre-line' }}>
+            <LinkifyText>{question.description}</LinkifyText>
+          </Text>
+
+          {question.images && (
+            <ImageGallery
+              images={formatImagesForGallery(question.images) as any}
+              allowPortrait={true}
             />
           )}
 
-          <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-            {question.category && <Category category={question.category} />}
-            <Heading as="h1" data-cy="question-title" data-testid="question-title">
-              {question.title}
-            </Heading>
-
-            <Text
-              variant="paragraph"
-              data-cy="question-description"
-              sx={{ whiteSpace: 'pre-line' }}
-            >
-              <LinkifyText>{question.description}</LinkifyText>
-            </Text>
-
-            {question.images && (
-              <ImageGallery
-                images={formatImagesForGallery(question.images) as any}
-                allowPortrait={true}
-              />
-            )}
-
-            {question.tags && (
-              <TagList
-                data-cy="question-tags"
-                tags={question.tags.map((t) => ({ label: t.name }))}
-              />
-            )}
-          </Flex>
+          {question.tags && (
+            <TagList data-cy="question-tags" tags={question.tags.map((t) => ({ label: t.name }))} />
+          )}
         </Flex>
 
-        <Divider
+        <Divider sx={{ border: '1px solid black', margin: 0 }} />
+        <Flex
           sx={{
-            m: 0,
-            border: '.5px solid black',
+            alignItems: 'center',
+            flexDirection: 'row',
+            padding: [2, 3],
+            gap: 2,
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
           }}
-        />
+        >
+          <ClientOnly fallback={<></>}>
+            {() => (
+              <>
+                <UsefulStatsButton
+                  votedUsefulCount={usefulCount}
+                  hasUserVotedUseful={voted}
+                  isLoggedIn={!!activeUser}
+                  onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}
+                />
+              </>
+            )}
+          </ClientOnly>
 
-        <ContentStatistics
-          statistics={[
-            {
-              icon: 'show',
-              label: buildStatisticsLabel({
+          <ContentStatistics
+            statistics={[
+              {
+                icon: 'show',
+                label: buildStatisticsLabel({
+                  stat: question.totalViews,
+                  statUnit: 'view',
+                  usePlural: true,
+                }),
                 stat: question.totalViews,
-                statUnit: 'view',
-                usePlural: true,
-              }),
-            },
-            {
-              icon: 'thunderbolt-grey',
-              label: buildStatisticsLabel({
+              },
+              {
+                icon: 'thunderbolt-grey',
+                label: buildStatisticsLabel({
+                  stat: subscribersCount,
+                  statUnit: 'following',
+                  usePlural: false,
+                }),
                 stat: subscribersCount,
-                statUnit: 'following',
-                usePlural: false,
-              }),
-            },
-            {
-              icon: 'star',
-              label: buildStatisticsLabel({
+              },
+              {
+                icon: 'star',
+                label: buildStatisticsLabel({
+                  stat: usefulCount,
+                  statUnit: 'useful',
+                  usePlural: false,
+                }),
                 stat: usefulCount,
-                statUnit: 'useful',
-                usePlural: false,
-              }),
-            },
-            {
-              icon: 'comment-outline',
-              label: buildStatisticsLabel({
+              },
+              {
+                icon: 'comment-outline',
+                label: buildStatisticsLabel({
+                  stat: question.commentCount,
+                  statUnit: 'comment',
+                  usePlural: true,
+                }),
                 stat: question.commentCount,
-                statUnit: 'comment',
-                usePlural: true,
-              }),
-            },
-          ]}
-        />
+              },
+            ]}
+            alwaysShow
+          />
+        </Flex>
       </Card>
+
       <ClientOnly fallback={<></>}>
         {() => (
           <Card
@@ -201,6 +214,6 @@ export const QuestionPage = observer(({ question }: IProps) => {
           </Card>
         )}
       </ClientOnly>
-    </Box>
+    </Flex>
   );
 });

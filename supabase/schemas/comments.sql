@@ -21,7 +21,7 @@ ALTER TABLE ONLY "public"."comments"
 
 ALTER TABLE "public"."comments" ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "tenant_isolation" ON "public"."comments" USING (("tenant_id" = (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
+CREATE POLICY "tenant_isolation" ON "public"."comments" USING (("tenant_id" = (SELECT (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text"))));
 
 CREATE OR REPLACE FUNCTION "public"."comment_authors_by_source_id"("source_id_input" bigint) RETURNS SETOF "text"
     LANGUAGE "sql"

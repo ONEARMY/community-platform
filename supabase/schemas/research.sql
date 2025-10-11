@@ -66,8 +66,8 @@ ALTER TABLE ONLY "public"."research_updates"
 ALTER TABLE "public"."research" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "public"."research_updates" ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "tenant_isolation" ON "public"."research" USING (("tenant_id" = (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
-CREATE POLICY "tenant_isolation" ON "public"."research_updates" USING (("tenant_id" = (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
+CREATE POLICY "tenant_isolation" ON "public"."research" USING (("tenant_id" = (SELECT (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text"))));
+CREATE POLICY "tenant_isolation" ON "public"."research_updates" USING (("tenant_id" = (SELECT (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text"))));
 
 
 CREATE OR REPLACE FUNCTION "public"."combined_research_search_fields"("research_id_param" bigint) RETURNS "text"

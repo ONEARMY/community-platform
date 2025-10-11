@@ -61,4 +61,4 @@ ALTER TABLE ONLY "public"."questions"
 
 ALTER TABLE "public"."questions" ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "tenant_isolation" ON "public"."questions" USING (("tenant_id" = (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
+CREATE POLICY "tenant_isolation" ON "public"."questions" USING (("tenant_id" = (SELECT (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text"))));

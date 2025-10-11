@@ -33,5 +33,5 @@ ALTER TABLE ONLY "public"."map_pins"
 ALTER TABLE "public"."map_pins" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "public"."map_settings" ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "tenant_isolation" ON "public"."map_pins" USING (("tenant_id" = (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
-CREATE POLICY "tenant_isolation" ON "public"."map_settings" USING (("tenant_id" = (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
+CREATE POLICY "tenant_isolation" ON "public"."map_pins" USING (("tenant_id" = (SELECT (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text"))));
+CREATE POLICY "tenant_isolation" ON "public"."map_settings" USING (("tenant_id" = (SELECT (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text"))));

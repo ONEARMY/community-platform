@@ -11,4 +11,4 @@ CREATE TABLE IF NOT EXISTS "public"."tenant_settings" (
 
 ALTER TABLE "public"."tenant_settings" ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "tenant_isolation" ON "public"."tenant_settings" USING (("tenant_id" = (SELECT (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text"))));
+CREATE POLICY "tenant_isolation" ON "public"."tenant_settings" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));

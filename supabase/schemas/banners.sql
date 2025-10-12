@@ -9,4 +9,5 @@ CREATE TABLE IF NOT EXISTS "public"."banners" (
 
 ALTER TABLE "public"."banners" ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "tenant_isolation" ON "public"."banners" USING (("tenant_id" = ( SELECT (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text"))));
+CREATE POLICY "tenant_isolation" ON "public"."banners" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
+

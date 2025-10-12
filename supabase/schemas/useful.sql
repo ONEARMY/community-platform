@@ -24,7 +24,7 @@ ALTER TABLE ONLY "public"."useful_votes"
 
 ALTER TABLE "public"."useful_votes" ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "tenant_isolation" ON "public"."useful_votes" USING (("tenant_id" = (SELECT (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text"))));
+CREATE POLICY "tenant_isolation" ON "public"."useful_votes" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));
 
 CREATE OR REPLACE FUNCTION "public"."get_author_vote_counts"("author_id" bigint) RETURNS TABLE("content_type" "text", "vote_count" bigint)
     LANGUAGE "sql" STABLE

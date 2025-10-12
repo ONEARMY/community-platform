@@ -21,4 +21,4 @@ CREATE POLICY "message_isolation" ON "public"."messages" AS RESTRICTIVE TO "auth
 
 ALTER TABLE "public"."messages" ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "tenant_isolation" ON "public"."messages" TO "authenticated" USING (("tenant_id" = (SELECT (("current_setting"('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text"))));
+CREATE POLICY "tenant_isolation" ON "public"."messages" TO "authenticated" USING (("tenant_id" = ((SELECT current_setting('request.headers'::"text", true))::"json" ->> 'x-tenant-id'::"text")));

@@ -4,8 +4,9 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
 import { questionServiceServer } from 'src/services/questionService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
-import { hasAdminRightsSupabase, validateImages } from 'src/utils/helpers'
+import { hasAdminRightsSupabase } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
+import { validateImages } from 'src/utils/storage'
 
 import { contentServiceServer } from '../services/contentService.server'
 

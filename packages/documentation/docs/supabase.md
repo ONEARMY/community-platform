@@ -50,7 +50,9 @@ SUPABASE_SERVICE_ROLE_KEY={service_role key}
 
 ## Migrations
 
-After making schema changes, use the this command to create a migration file:
+We use Supabase Declarative Schemas feature.
+Schema changes must be made in the /supabase/schemas folder, following the current pattern (1 sql file per feature).
+After making the schema changes, a migration file needs to be generated, use this command:
 `supabase db diff --file [migration_name]`
 
 ## Running Cypress Tests

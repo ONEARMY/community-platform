@@ -4,6 +4,7 @@ import type { News } from 'oa-shared'
 
 export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   body: faker.lorem.paragraph(),
+  bodyHtml: faker.lorem.paragraph(),
   createdAt: faker.date.past(),
   deleted: faker.datatype.boolean(),
   id: faker.number.int(),

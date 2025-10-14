@@ -5,7 +5,6 @@ import {
   Category,
   ContentStatistics,
   DisplayDate,
-  DisplayMarkdown,
   ProfileBadgeContentLabel,
   TagList,
 } from 'oa-components'
@@ -108,14 +107,42 @@ export const NewsPage = observer(({ news }: IProps) => {
             </ClientOnly>
           )}
 
-          <DisplayMarkdown body={news.body} />
+          <Box
+            sx={{
+              alignSelf: 'stretch',
+              fontFamily: 'body',
+              lineHeight: 1.5,
+              a: {
+                color: 'primary',
+                textDecoration: 'underline',
+                '&:hover': { textDecoration: 'none' },
+              },
+              h3: { fontSize: 2 },
+              h4: { fontSize: 2 },
+              h5: { fontSize: 2 },
+              h6: { fontSize: 2 },
+              img: {
+                borderRadius: 2,
+                maxWidth: ['105%', '105%', '120%'],
+                marginLeft: ['-2.5%', '-2.5%', '-10%'],
+              },
+              iframe: {
+                maxWidth: ['105%', '105%', '120%'],
+                maxHeight: ['300px', '370px', '420px'],
+                marginLeft: ['-2.5%', '-2.5%', '-10%'],
+              },
+            }}
+          >
+            <div dangerouslySetInnerHTML={{ __html: news.bodyHtml }} />
+          </Box>
 
           <Flex
             sx={{
               flexWrap: 'wrap',
               gap: 2,
               justifyContent: 'stretch',
-              paddingY: 2,
+              paddingTop: 2,
+              paddingBottom: 2,
             }}
           >
             <ContentStatistics

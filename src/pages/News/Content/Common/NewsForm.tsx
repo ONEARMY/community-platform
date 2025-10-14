@@ -103,7 +103,7 @@ export const NewsForm = (props: IProps) => {
     }
   }
 
-  const imageUpload = async (imageFile) => {
+  const imageUpload = async (imageFile: File) => {
     if (!imageFile) {
       return
     }

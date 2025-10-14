@@ -12,7 +12,7 @@ import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
 import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
 import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
-import { notificationSupabaseService } from 'src/services/notificationSupabaseService'
+import { notificationSupabaseService } from 'src/services/notificationsSupabaseService'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { Flex, Text, useThemeUI } from 'theme-ui'
 

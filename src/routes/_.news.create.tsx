@@ -26,7 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .limit(1)
 
   if (!data!.at(0)!.roles?.includes(UserRole.ADMIN)) {
-    return redirect('/forbidden', { headers })
+    return redirect('/forbidden?page=news-create', { headers })
   }
 
   return null

@@ -91,7 +91,7 @@ export const glyphs: IGlyphs = {
   filter: <FaFilter />,
   'flag-unknown': iconMap.flagUnknown,
   food: iconMap.food,
-  'from the team': iconMap.fromTheTeam,
+  'version 5': iconMap.fromTheTeam,
   globe: iconMap.globe,
   'gps-location': iconMap.gpsLocation,
   guides: iconMap.guides,

@@ -71,6 +71,7 @@ export const fakeNewsSB = (newsOverloads: Partial<News> = {}): News => ({
   totalViews: faker.number.int(100),
   usefulCount: faker.number.int(20),
   body: faker.word.words(50),
+  bodyHtml: faker.word.words(50),
   heroImage: null,
   isDraft: false,
   profileBadge: null,

@@ -57,7 +57,7 @@ const allCategoriesForPreciousPlastic = [
     createdAt: new Date('2022-12-05T18:03:51.313Z'),
     id: 7,
     modifiedAt: null,
-    name: 'From the Team',
+    name: 'Version 5',
     type: 'questions' as ContentType,
   },
 ]

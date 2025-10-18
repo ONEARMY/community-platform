@@ -8,5 +8,13 @@ export default {
 } as Meta<typeof IconCountWithTooltip>
 
 export const Default: StoryFn<typeof IconCountWithTooltip> = () => (
-  <IconCountWithTooltip count={3} icon="comment" text="Number of comments" />
+  <IconCountWithTooltip count={345} icon="show" text="Number of Views" />
+)
+
+export const LargeCount: StoryFn<typeof IconCountWithTooltip> = () => (
+  <IconCountWithTooltip count={1500} icon="show" text="Number of Views" />
+)
+
+export const VeryLargeCount: StoryFn<typeof IconCountWithTooltip> = () => (
+  <IconCountWithTooltip count={2099999} icon="show" text="Number of Views" />
 )

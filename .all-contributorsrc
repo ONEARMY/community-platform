@@ -1070,6 +1070,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "chris-staunton",
+      "name": "Chris Staunton",
+      "avatar_url": "https://avatars.githubusercontent.com/u/60261694?v=4",
+      "profile": "https://github.com/chris-staunton",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

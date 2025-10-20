@@ -1,10 +1,8 @@
-import { useMemo, useState } from 'react'
-import { Link, useNavigate } from '@remix-run/react'
 import {
-  Button,
+  AuthorDisplay,
   Category,
-  ConfirmModal,
   ContentStatistics,
+  DisplayDate,
   LinkifyText,
   ModerationStatus,
   TagList,
@@ -15,22 +13,11 @@ import { DifficultyLevelRecord } from 'oa-shared'
 import { ClientOnly } from 'remix-utils/client-only'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
-import { trackEvent } from 'src/common/Analytics'
 import { DownloadWrapper } from 'src/common/DownloadWrapper'
-import { logger } from 'src/logger'
-import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
-import {
-  buildStatisticsLabel,
-  capitalizeFirstLetter,
-  hasAdminRights,
-} from 'src/utils/helpers'
+import { buildStatisticsLabel, capitalizeFirstLetter } from 'src/utils/helpers'
 import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui'
 
-import { libraryService } from '../../library.service'
-
 import type { Profile, Project } from 'oa-shared'
-
-const DELETION_LABEL = 'Project marked for deletion'
 
 interface IProps {
   commentsCount: number
@@ -52,42 +39,6 @@ export const LibraryDescription = (props: IProps) => {
     subscribersCount,
     votedUsefulCount,
   } = props
-
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
-
-  const navigate = useNavigate()
-
-  const handleDelete = async () => {
-    try {
-      await libraryService.deleteProject(item.id)
-      trackEvent({
-        category: 'Library',
-        action: 'Deleted',
-        label: item.title,
-      })
-      logger.debug(
-        {
-          category: 'Library',
-          action: 'Deleted',
-          label: item.title,
-        },
-        DELETION_LABEL,
-      )
-
-      navigate('/library')
-    } catch (err) {
-      logger.error(err)
-      // at least log the error
-    }
-  }
-
-  const isEditable = useMemo(() => {
-    return (
-      !!loggedInUser &&
-      (hasAdminRights(loggedInUser) ||
-        item.author?.username === loggedInUser.username)
-    )
-  }, [loggedInUser, item.author])
 
   return (
     <Card variant="responsive">
@@ -112,79 +63,7 @@ export const LibraryDescription = (props: IProps) => {
               * Marked for deletion
             </Text>
           )}
-          <Flex sx={{ flexWrap: 'wrap', gap: 3 }}>
-            <ClientOnly fallback={<></>}>
-              {() => (
-                <>
-                  {item.moderation === 'accepted' && (
-                    <UsefulStatsButton
-                      votedUsefulCount={votedUsefulCount}
-                      hasUserVotedUseful={hasUserVotedUseful}
-                      isLoggedIn={loggedInUser ? true : false}
-                      onUsefulClick={onUsefulClick}
-                    />
-                  )}
-                </>
-              )}
-            </ClientOnly>
-            {/* Check if logged in user is the creator of the project OR a super-admin */}
-            {isEditable && (
-              <Link to={'/library/' + item.slug + '/edit'} data-cy="edit">
-                <Button type="button" variant="primary">
-                  Edit
-                </Button>
-              </Link>
-            )}
 
-            {isEditable && (
-              <>
-                <Button
-                  type="button"
-                  data-cy="Library: delete button"
-                  variant={'secondary'}
-                  icon="delete"
-                  disabled={item.deleted}
-                  onClick={() => setShowDeleteModal(true)}
-                >
-                  Delete
-                </Button>
-
-                <ConfirmModal
-                  isOpen={showDeleteModal}
-                  message="Are you sure you want to delete this project?"
-                  confirmButtonText="Delete"
-                  handleCancel={() => setShowDeleteModal(false)}
-                  handleConfirm={() => handleDelete()}
-                />
-              </>
-            )}
-
-            {item.isDraft && (
-              <Flex
-                sx={{
-                  marginBottom: 'auto',
-                  minWidth: '100px',
-                  borderRadius: 1,
-                  height: '44px',
-                  background: 'lightgrey',
-                }}
-              >
-                <Text
-                  sx={{
-                    display: 'inline-block',
-                    verticalAlign: 'middle',
-                    color: 'black',
-                    fontSize: [2, 2, 3],
-                    padding: 2,
-                    margin: 'auto',
-                  }}
-                  data-cy="status-draft"
-                >
-                  Draft
-                </Text>
-              </Flex>
-            )}
-          </Flex>
           {item.moderationFeedback && item.moderation !== 'accepted' && (
             <Alert variant="info">
               <Box sx={{ textAlign: 'left' }}>
@@ -195,33 +74,58 @@ export const LibraryDescription = (props: IProps) => {
               </Box>
             </Alert>
           )}
-          <Box>
-            <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
-              <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-                {item.author && (
-                  <UserNameTag
-                    author={item.author}
-                    createdAt={item.createdAt}
-                    modifiedAt={item.modifiedAt}
-                    action="Published"
-                  />
+
+          <Flex
+            sx={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}
+          >
+            <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+              <AuthorDisplay author={item.author} />
+
+              <Flex sx={{ gap: 2 }}>
+                {item.isDraft && (
+                  <Flex
+                    sx={{
+                      borderRadius: 1,
+                      background: 'lightgrey',
+                    }}
+                  >
+                    <Text
+                      sx={{
+                        fontSize: '14px',
+                        paddingX: 2,
+                        paddingY: 1,
+                      }}
+                    >
+                      Draft
+                    </Text>
+                  </Flex>
                 )}
+
                 {item.category && (
                   <Category category={item.category} sx={{ fontSize: 2 }} />
                 )}
-                <Heading as="h1" data-cy="project-title">
-                  {capitalizeFirstLetter(item.title)}
-                </Heading>
-                <Text
-                  variant="paragraph"
-                  sx={{ whiteSpace: 'pre-line' }}
-                  data-cy="project-description"
-                >
-                  <LinkifyText>{item.description}</LinkifyText>
-                </Text>
               </Flex>
+
+              <Text variant="auxiliary">
+                <DisplayDate
+                  createdAt={item.createdAt}
+                  modifiedAt={item.modifiedAt}
+                  action="Published"
+                />
+              </Text>
+
+              <Heading as="h1" data-cy="project-title">
+                {capitalizeFirstLetter(item.title)}
+              </Heading>
+              <Text
+                variant="paragraph"
+                sx={{ whiteSpace: 'pre-line' }}
+                data-cy="project-description"
+              >
+                <LinkifyText>{item.description}</LinkifyText>
+              </Text>
             </Flex>
-          </Box>
+          </Flex>
 
           <Flex sx={{ gap: 3, fontSize: 2 }}>
             <Flex sx={{ flexDirection: ['column', 'row', 'row'] }}>
@@ -269,6 +173,22 @@ export const LibraryDescription = (props: IProps) => {
                 url: `/api/documents/project/${item.id}/${x.id}`,
               }))}
             />
+          </Flex>
+          <Flex sx={{ flexWrap: 'wrap', gap: 3 }}>
+            <ClientOnly fallback={<></>}>
+              {() => (
+                <>
+                  {item.moderation === 'accepted' && (
+                    <UsefulStatsButton
+                      votedUsefulCount={votedUsefulCount}
+                      hasUserVotedUseful={hasUserVotedUseful}
+                      isLoggedIn={loggedInUser ? true : false}
+                      onUsefulClick={onUsefulClick}
+                    />
+                  )}
+                </>
+              )}
+            </ClientOnly>
           </Flex>
         </Flex>
         <Box
@@ -321,12 +241,7 @@ export const LibraryDescription = (props: IProps) => {
           )}
         </Box>
       </Flex>
-      <Divider
-        sx={{
-          m: 0,
-          border: '1px solid black',
-        }}
-      />
+      <Divider sx={{ border: '1px solid black', margin: 0 }} />
       <ContentStatistics
         statistics={[
           {

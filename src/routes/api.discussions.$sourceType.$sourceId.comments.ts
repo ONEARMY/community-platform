@@ -4,6 +4,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { ImageServiceServer } from 'src/services/imageService.server'
 import { notificationsSupabaseServiceServer } from 'src/services/notificationsSupabaseService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
@@ -149,6 +150,8 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 
   const commentFactory = new CommentFactory(new ImageServiceServer(client))
   const comment = await commentFactory.fromDBWithAuthor(commentDb)
+
+  updateUserActivity(client, user!.id)
 
   return Response.json(comment, {
     headers,

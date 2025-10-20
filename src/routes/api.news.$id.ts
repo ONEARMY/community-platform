@@ -5,6 +5,7 @@ import { contentServiceServer } from 'src/services/contentService.server'
 import { newsServiceServer } from 'src/services/newsService.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown'
 import { hasAdminRightsSupabase } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
@@ -124,6 +125,8 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         news.heroImage = image
       }
     }
+
+    updateUserActivity(client, user!.id)
 
     return Response.json({ news }, { headers, status: 200 })
   } catch (error) {

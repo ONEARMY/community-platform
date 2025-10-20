@@ -4,6 +4,7 @@ import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordi
 import { ProfileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 import { validateImages } from 'src/utils/storage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
@@ -121,6 +122,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       headers,
       request,
     )
+
+    updateUserActivity(client, user!.id)
 
     return Response.json({ researchUpdate }, { headers, status: 201 })
   } catch (error) {

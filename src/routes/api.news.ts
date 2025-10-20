@@ -7,6 +7,7 @@ import { discordServiceServer } from 'src/services/discordService.server'
 import { newsServiceServer } from 'src/services/newsService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown'
 import { convertToSlug } from 'src/utils/slug'
 import { validateImage } from 'src/utils/storage'
@@ -242,6 +243,8 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         news.heroImage = image
       }
     }
+
+    updateUserActivity(client, user!.id)
 
     return Response.json({ news }, { headers, status: 201 })
   } catch (error) {

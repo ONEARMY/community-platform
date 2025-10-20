@@ -6,6 +6,7 @@ import { contentServiceServer } from 'src/services/contentService.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
@@ -201,6 +202,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         }
       }
     }
+
+    updateUserActivity(client, user!.id)
 
     return Response.json({ research }, { headers, status: 201 })
   } catch (error) {

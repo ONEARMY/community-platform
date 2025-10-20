@@ -4,6 +4,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
 import { questionServiceServer } from 'src/services/questionService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 import { hasAdminRightsSupabase } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 import { validateImages } from 'src/utils/storage'
@@ -130,6 +131,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     )
 
     const question = Question.fromDB(questionResult.data[0], [], newImages)
+    updateUserActivity(client, user!.id)
 
     return Response.json({ question }, { headers, status: 200 })
   } catch (error) {

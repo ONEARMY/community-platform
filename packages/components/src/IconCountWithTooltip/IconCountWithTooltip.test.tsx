@@ -3,7 +3,11 @@ import '@testing-library/jest-dom/vitest'
 import { describe, expect, it } from 'vitest'
 
 import { render } from '../test/utils'
-import { Default, LargeCount, VeryLargeCount } from './IconCountWithTooltip.stories'
+import {
+  Default,
+  LargeCount,
+  VeryLargeCount,
+} from './IconCountWithTooltip.stories'
 
 import type { IconCountWithTooltipProps } from './IconCountWithTooltip'
 
@@ -27,7 +31,9 @@ describe('IconCountWithTooltip', () => {
     expect(getByText('1.5K')).toBeInTheDocument()
 
     rerender(
-      <VeryLargeCount {...(VeryLargeCount.args as IconCountWithTooltipProps)} />,
+      <VeryLargeCount
+        {...(VeryLargeCount.args as IconCountWithTooltipProps)}
+      />,
     )
 
     expect(getByText('2.1M')).toBeInTheDocument()

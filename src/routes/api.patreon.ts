@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 
 import { patreonServiceServer } from '../services/patreonService.server'
 
@@ -45,6 +46,8 @@ export const action = async ({ request }) => {
 
   try {
     await patreonServiceServer.disconnectUser(user, client)
+
+    updateUserActivity(client, user.id)
 
     return Response.json({}, { headers, status: 200 })
   } catch (err) {

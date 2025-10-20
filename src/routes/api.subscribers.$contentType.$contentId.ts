@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 
@@ -57,6 +58,8 @@ export async function action({ request, params }: LoaderFunctionArgs) {
         .eq('content_id', Number(params.contentId))
         .eq('user_id', profile.id)
     }
+
+    updateUserActivity(client, user.id)
 
     return Response.json({}, { headers, status: 200 })
   } catch (error) {

@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
@@ -95,6 +96,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       is_unsubscribed,
       tenant_id: process.env.TENANT_ID!,
     })
+
+    updateUserActivity(client, user!.id)
 
     return Response.json({}, { headers, status: 200 })
   } catch (error) {

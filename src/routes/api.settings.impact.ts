@@ -1,6 +1,7 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { ImpactServiceServer } from 'src/services/impactService.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
@@ -54,6 +55,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const impact = result.data as unknown as IUserImpact
+
+    updateUserActivity(client, user.id)
 
     return Response.json({ impact }, { headers, status: 200 })
   } catch (error) {

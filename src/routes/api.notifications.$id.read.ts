@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
@@ -26,6 +27,8 @@ export const action = async ({ params, request }: LoaderFunctionArgs) => {
       .from('notifications')
       .update({ is_read: true })
       .eq('id', params.id)
+
+    updateUserActivity(client, user!.id)
 
     return Response.json({}, { headers, status: 200 })
   } catch (error) {

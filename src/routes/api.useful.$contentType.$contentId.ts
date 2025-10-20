@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 
@@ -55,6 +56,8 @@ export async function action({ request, params }: LoaderFunctionArgs) {
     console.error(result.error)
     return Response.json({}, { headers, status: 500, statusText: 'error' })
   }
+
+  updateUserActivity(client, user.id)
 
   return Response.json({}, { headers, status: 200 })
 }

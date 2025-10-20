@@ -93,9 +93,9 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
               }}
             >
               <IconCountWithTooltip
-                count={item.commentCount || 0}
-                icon="comment"
-                text="Comments"
+                count={item.totalViews || 0}
+                icon="show"
+                text="Views"
               />
               <IconCountWithTooltip
                 count={item.usefulCount || 0}

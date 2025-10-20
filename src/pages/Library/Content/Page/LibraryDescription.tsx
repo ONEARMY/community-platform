@@ -89,6 +89,9 @@ export const LibraryDescription = (props: IProps) => {
     )
   }, [loggedInUser, item.author])
 
+  const showFeedback =
+    item.moderationFeedback && item.moderation !== 'accepted' && isEditable
+
   return (
     <Card variant="responsive">
       <Flex
@@ -185,9 +188,9 @@ export const LibraryDescription = (props: IProps) => {
               </Flex>
             )}
           </Flex>
-          {item.moderationFeedback && item.moderation !== 'accepted' && (
+          {showFeedback && (
             <Alert variant="info">
-              <Box sx={{ textAlign: 'left' }}>
+              <Box sx={{ textAlign: 'left' }} data-cy="moderationFeedback">
                 <Heading as="p" variant="small">
                   Moderator Feedback
                 </Heading>

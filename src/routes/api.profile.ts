@@ -170,6 +170,10 @@ async function validateRequest(
   }
 
   if (!memberTypes || !memberTypes?.includes(data.type)) {
+    if (!data.existingPhoto && !data.photo) {
+      return { status: 400, statusText: 'photo is required' }
+    }
+
     if (
       (!data.existingCoverImageIds ||
         data.existingCoverImageIds.length === 0) &&

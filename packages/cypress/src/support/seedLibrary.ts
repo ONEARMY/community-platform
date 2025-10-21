@@ -32,6 +32,9 @@ export const seedLibrary = async (profiles, tagsData) => {
       deleted: item.deleted,
       moderation: item.moderation,
       tenant_id: tenantId,
+      ...(item.moderationFeedback
+        ? { moderation_feedback: item.moderationFeedback }
+        : {}),
     })
   }
 

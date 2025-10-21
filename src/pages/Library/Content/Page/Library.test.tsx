@@ -44,51 +44,6 @@ const factory = (override?: Project) => {
   return render(<ReactStub />)
 }
 describe('Library', () => {
-  describe('moderator feedback', () => {
-    it('displays feedback for items which are not accepted', async () => {
-      let wrapper
-      item.author = {
-        id: faker.number.int(),
-        displayName: 'LibraryAuthor',
-        badges: [
-          {
-            id: 1,
-            displayName: 'PRO',
-            name: 'pro',
-            imageUrl: faker.image.avatar(),
-          },
-        ],
-        photo: {
-          publicUrl: faker.image.avatar(),
-          id: '',
-        },
-        username: faker.internet.userName(),
-      }
-      item.moderation = 'awaiting-moderation'
-      item.moderationFeedback = 'Moderation comments'
-
-      act(() => {
-        wrapper = factory()
-      })
-
-      await waitFor(() => {
-        expect(wrapper.getByText('Moderation comments')).toBeInTheDocument()
-      })
-    })
-
-    it('hides feedback when project is accepted', async () => {
-      let wrapper
-      item.moderation = 'accepted'
-      item.moderationFeedback = 'Moderation comments'
-
-      await act(async () => {
-        wrapper = factory()
-      })
-
-      expect(() => wrapper.getByText('Moderation comments')).toThrow()
-    })
-  })
-
   it('displays content statistics', async () => {
     let wrapper
     item.id = 1

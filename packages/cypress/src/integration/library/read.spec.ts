@@ -3,31 +3,35 @@ import { users } from 'oa-shared/mocks/data'
 
 import { MOCK_DATA } from '../../data'
 
-const library = MOCK_DATA.library
+const library = MOCK_DATA.projects
 
 describe('[Library]', () => {
+  const demoAdmin = users.admin
+
   beforeEach(() => {
     cy.visit('/library')
   })
 
   describe('[List Library Projects]', () => {
     it('[By Everyone]', () => {
+      const project = library[0]
+
       cy.step('Has expected page title')
       cy.title().should('include', `Library`)
-
       cy.step('Can search for items')
-      cy.get('[data-cy=library-search-box]').click().type('beams')
+      cy.get('[data-cy=library-search-box]').click().type('brick')
       cy.get('[data-cy=card]').its('length').should('be.eq', 1)
 
       cy.step('All basic info displayed on each card')
-      const projectSlug = 'make-glass-like-beams'
-      const projectUrl = `/library/${projectSlug}`
+      const projectUrl = `/library/${project.slug}`
       // const coverFileRegex = /howto-intro.jpg/
 
       cy.get('[data-cy=card]').within(() => {
-        cy.contains('Make glass-like beams').should('be.visible')
+        cy.contains(project.title).should('be.visible')
         // cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
-        cy.get('[data-cy=Username]').contains('demo_user')
+        cy.get('[data-cy=Username]').contains(
+          users.settings_workplace_new.username,
+        )
         cy.get('[data-cy=category]').contains('Machines')
         cy.get('a').should('have.attr', 'href').and('eq', projectUrl)
       })
@@ -175,8 +179,6 @@ describe('[Library]', () => {
     })
 
     describe('[By Admin]', () => {
-      const demoAdmin = users.admin
-
       beforeEach(() => {
         cy.signIn(demoAdmin.email, demoAdmin.password)
         cy.visit(itemUrl)
@@ -187,6 +189,27 @@ describe('[Library]', () => {
 
         cy.get('[data-cy="Library: delete button"]').should('be.visible')
       })
+    })
+  })
+
+  describe('[Moderation]', () => {
+    it('[Feedback]', () => {
+      cy.visit('/library/rubbish-title')
+
+      cy.step('Feedback not visible when logged out')
+      cy.get('[data-cy="moderationstatus-improvements-needed"]')
+      cy.get('[data-cy="moderationFeedback"]').should('not.exist')
+
+      cy.step('Feedback is visible to content owner')
+      cy.signIn('demo_user@example.com', 'demo_user')
+      cy.visit('/library/rubbish-title')
+      cy.get('[data-cy="moderationFeedback"]')
+
+      cy.step('Feedback is visible to admins')
+      cy.logout()
+      cy.signIn(demoAdmin.email, demoAdmin.password)
+      cy.visit('/library/rubbish-title')
+      cy.get('[data-cy="moderationFeedback"]')
     })
   })
 

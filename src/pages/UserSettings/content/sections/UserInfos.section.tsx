@@ -35,7 +35,9 @@ export const UserInfosSection = observer(({ formValues }: IProps) => {
       >
         <Heading as="h2">{headings.infos}</Heading>
         <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-          <Text>{userName.title} *</Text>
+          <Text>
+            {userName.title} <Text color="red">*</Text>
+          </Text>
           <Text variant="quiet" sx={{ fontSize: 2 }}>
             {userName.description}
           </Text>
@@ -50,7 +52,9 @@ export const UserInfosSection = observer(({ formValues }: IProps) => {
         </Flex>
 
         <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-          <Text>{displayName.title} *</Text>
+          <Text>
+            {displayName.title} <Text color="red">*</Text>
+          </Text>
           <Text variant="quiet" sx={{ fontSize: 2 }}>
             {displayName.description}
           </Text>
@@ -67,7 +71,9 @@ export const UserInfosSection = observer(({ formValues }: IProps) => {
         <ProfileTags typeName={formValues.type || ''} />
 
         <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-          <Text>{about.title} *</Text>
+          <Text>
+            {about.title} <Text color="red">*</Text>
+          </Text>
           <Field
             data-cy="info-about"
             name="about"

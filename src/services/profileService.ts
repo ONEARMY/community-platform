@@ -60,6 +60,10 @@ const update = async (value: ProfileFormData) => {
     }
   }
 
+  if (value.existingPhoto) {
+    data.append('existingPhoto', JSON.stringify(value.existingPhoto))
+  }
+
   if (value.photo) {
     data.append('photo', value.photo, getCleanFileName(value.photo.name))
   }

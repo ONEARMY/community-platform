@@ -25,12 +25,14 @@ export const UserImagesSection = ({
   return (
     <Flex sx={{ flexDirection: 'column', gap: 3 }}>
       <Heading as="h2">
-        {isMemberProfile ? fields.userImage.title : headings.images} {' *'}
+        {isMemberProfile ? fields.userImage.title : headings.images}
       </Heading>
 
       <Flex sx={{ flexDirection: 'column', alignContent: 'stretch', gap: 1 }}>
         {!isMemberProfile && (
-          <Heading variant="subHeading">{fields.userImage.title}</Heading>
+          <Heading variant="subHeading">
+            {fields.userImage.title} <Text color="red">*</Text>
+          </Heading>
         )}
         <Text variant="paragraph">{fields.userImage.description}</Text>
 
@@ -71,7 +73,9 @@ export const UserImagesSection = ({
 
       {!isMemberProfile && (
         <Flex data-testid="coverImage" sx={{ flexDirection: 'column', gap: 1 }}>
-          <Heading variant="subHeading">{`${fields.coverImages.title} *`}</Heading>
+          <Heading variant="subHeading">
+            {fields.coverImages.title} <Text color="red">*</Text>
+          </Heading>
           <Text variant="paragraph">{fields.coverImages.description}</Text>
 
           <Flex>

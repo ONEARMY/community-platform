@@ -6,7 +6,7 @@ import { MapList } from './Content/MapView/MapList'
 import { MapView } from './Content/MapView/MapView'
 import { filterPins } from './utils/filterPins'
 import { mapPinService } from './map.service'
-import { MapContext } from './MapContext'
+import { MapContext, PROFILE_ZOOM_LEVEL } from './MapContext'
 
 import type { LatLngBounds } from 'leaflet'
 import type {
@@ -44,6 +44,16 @@ const MapsPage = () => {
   )
   const [loadingMessage, setLoadingMessage] = useState<string>('Loading...')
   const [isMobile, setIsMobile] = useState(false)
+  const [zoom, setZoom] = useState<number>(2)
+  const [mapRef, setMapRef] = useState<any>(null)
+
+  const updateMapView = (location: ILatLng, zoomLevel: number) => {
+    if (mapRef?.leafletElement) {
+      mapRef.leafletElement.setView([location.lat, location.lng], zoomLevel)
+    }
+    setPinLocation(location)
+    setZoom(zoomLevel)
+  }
 
   const filteredPins = useMemo<MapPin[]>(() => {
     return filterPins(allPins || [], {
@@ -155,10 +165,13 @@ const MapsPage = () => {
     if (allPins && username) {
       const foundPin = allPins.find((pin) => pin.profile!.username === username)
       if (foundPin) {
+        if (selectedPin?.profile?.username !== username) {
+          selectPin(foundPin)
+        }
+        updateMapView({ lat: foundPin.lat, lng: foundPin.lng }, PROFILE_ZOOM_LEVEL)
+      } else {
         selectPin(foundPin)
-        setPinLocation({ lat: foundPin.lat, lng: foundPin.lng })
       }
-      selectPin(foundPin)
     }
   }, [location.hash, allPins])
 
@@ -188,6 +201,10 @@ const MapsPage = () => {
         setIsMobile,
         boundaries,
         setBoundaries,
+        zoom,
+        setZoom,
+        setView: updateMapView,
+        setMapRef,
       }}
     >
       <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)', width: '100%' }}>

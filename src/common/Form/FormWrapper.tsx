@@ -49,19 +49,25 @@ export const FormWrapper = (props: IProps) => {
   const hasClientSideErrors = hasValidationErrors && submitFailed
 
   return (
-    <Flex sx={{ flexWrap: 'wrap', backgroundColor: 'inherit', marginTop: 4 }}>
+    <Flex
+      sx={{
+        flexWrap: 'wrap',
+        backgroundColor: 'inherit',
+        marginTop: 4,
+        gap: '1rem',
+      }}
+    >
       <Flex
         sx={{
           backgroundColor: 'inherit',
-          px: 2,
           width: ['100%', '100%', `${(2 / 3) * 100}%`],
         }}
       >
         {unsavedChangesDialog}
-        <Box
+        <Flex
           as="form"
           id={`${contentType}Form`}
-          sx={{ width: '100%' }}
+          sx={{ width: '100%', flexDirection: 'column', gap: '1rem' }}
           onSubmit={handleSubmit}
         >
           <Card sx={{ backgroundColor: 'softblue' }}>
@@ -76,24 +82,19 @@ export const FormWrapper = (props: IProps) => {
             </Flex>
           </Card>
           {guidelines && (
-            <Box sx={{ marginX: '20px', display: ['block', 'block', 'none'] }}>
-              {guidelines}
-            </Box>
+            <Box sx={{ display: ['block', 'block', 'none'] }}>{guidelines}</Box>
           )}
-          <Card sx={{ marginTop: 4, padding: 4, overflow: 'visible' }}>
-            {children}
-          </Card>
+          <Card sx={{ padding: 4, overflow: 'visible' }}>{children}</Card>
           {belowBody}
-        </Box>
+        </Flex>
       </Flex>
       <Flex
         sx={{
           flexDirection: 'column',
-          height: '100%',
-          px: 2,
           backgroundColor: 'inherit',
           maxWidth: ['inherit', 'inherit', '400px'],
-          width: ['100%', '100%', `${100 / 3}%`],
+          width: ['100%', '100%', '30%'],
+          alignItems: 'space-between',
           gap: 3,
         }}
       >
@@ -110,7 +111,6 @@ export const FormWrapper = (props: IProps) => {
           sx={{
             width: '100%',
             display: 'block',
-            marginBottom: ['40px', '40px', 0],
           }}
         >
           {buttonLabel}
@@ -130,10 +130,12 @@ export const FormWrapper = (props: IProps) => {
           <span>{DRAFT_LABEL}</span>
         </Button>
 
-        {sidebar && sidebar}
         {submitting && (
           <Loader label="Submitting, please do not close the page..." />
         )}
+
+        {sidebar && sidebar}
+
         {errorSubmitting && <ErrorsContainer saving={[errorSubmitting]} />}
         {hasClientSideErrors && <ErrorsContainer client={errorsClientSide} />}
       </Flex>

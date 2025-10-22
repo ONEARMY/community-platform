@@ -15,22 +15,26 @@ export class ImageServiceServer {
       return undefined
     }
 
-    const { data } = this.client.storage
-      .from(process.env.TENANT_ID as string)
-      .getPublicUrl(
-        image.path,
-        size
-          ? {
-              transform: size,
-            }
-          : undefined,
-      )
+    try {
+      const { data } = this.client.storage
+        .from(process.env.TENANT_ID as string)
+        .getPublicUrl(
+          image.path,
+          size
+            ? {
+                transform: size,
+              }
+            : undefined,
+        )
 
-    if (!data) {
+      if (!data?.publicUrl) {
+        return undefined
+      }
+
+      return new Image({ id: image.id, publicUrl: data.publicUrl })
+    } catch (error) {
       return undefined
     }
-
-    return new Image({ id: image.id, publicUrl: data.publicUrl })
   }
 
   getPublicUrls(images: DBMedia[], size?: TransformOptions): Image[] {

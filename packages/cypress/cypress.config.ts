@@ -1,8 +1,5 @@
 import { defineConfig } from 'cypress'
 
-import viteConfig from '../../vite.config'
-import { setupNodeEvents } from './src/plugins'
-
 export default defineConfig({
   defaultCommandTimeout: 15000,
   watchForFileChanges: true,
@@ -24,17 +21,9 @@ export default defineConfig({
     openMode: 0,
   },
   e2e: {
-    setupNodeEvents: setupNodeEvents,
     baseUrl: 'http://localhost:3456',
     specPattern: 'src/integration/**/*.{js,jsx,ts,tsx}',
     supportFile: 'src/support/index.ts',
     experimentalStudio: true,
-  },
-  component: {
-    devServer: {
-      bundler: 'vite',
-      framework: 'react',
-      viteConfig: { ...viteConfig },
-    },
   },
 })

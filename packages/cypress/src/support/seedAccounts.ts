@@ -83,7 +83,7 @@ const createAuthAndProfile = async (
     return profile
   }
 
-  const authId = authUser.data.id
+  const authId = authUser.data.user.id
   return await createProfile(
     supabase,
     user,
@@ -138,14 +138,17 @@ const createProfile = async (
     .from('profiles')
     .insert(profileDB)
     .select('*')
-    .single()
 
-  if (profileResult.data.username === 'demo_user') {
+  if (!profileResult.data || profileResult.data.length === 0) {
+    console.error('Failed to create profile')
+  }
+
+  if (profileResult.data[0].username === 'demo_user') {
     await seedDatabase(
       {
         profile_badges_relations: [
           {
-            profile_id: profileResult.data.id,
+            profile_id: profileResult.data[0].id,
             profile_badge_id: profileBadgeId,
             tenant_id: tenantId,
           },
@@ -161,7 +164,7 @@ const createProfile = async (
         {
           profile_tags_relations: [
             {
-              profile_id: profileResult.data.id,
+              profile_id: profileResult.data[0].id,
               profile_tag_id: profileTag,
               tenant_id: tenantId,
             },
@@ -172,7 +175,7 @@ const createProfile = async (
     }),
   )
 
-  return profileResult.data
+  return profileResult.data[0]
 }
 
 export const deleteAccounts = async () => {

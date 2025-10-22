@@ -60,11 +60,6 @@ describe('[Research]', () => {
       cy.contains('[data-cy="ResearchListItem"]', 'Qwerty').within(() => {
         cy.get('[data-cy="follow-button"]').should('exist');
       });
-
-      cy.step('Unfollow from article view to clean up');
-      cy.visit(researchArticleUrl);
-      cy.get('[data-cy="follow-button"]').first().click();
-      cy.wait(2000);
     });
   });
 });

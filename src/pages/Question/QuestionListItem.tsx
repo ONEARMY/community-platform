@@ -11,6 +11,7 @@ import { UserNameTag } from '../common/UserNameTag/UserNameTag';
 import { listing } from './labels';
 
 import type { Question } from 'oa-shared';
+import { FollowButtonAction } from 'src/common/FollowButtonAction';
 
 interface IProps {
   question: Question;
@@ -110,6 +111,21 @@ export const QuestionListItem = ({ question, query }: IProps) => {
             paddingX: 12,
           }}
         >
+          <FollowButtonAction
+            contentType="questions"
+            itemId={question.id}
+            showIconOnly
+            hideSubscribeIcon
+            variant="subtle"
+            small
+            tooltipUnfollow="You are following this"
+            sx={{
+              cursor: 'default',
+              '&:hover': {
+                backgroundColor: 'transparent',
+              },
+            }}
+          />
           <IconCountWithTooltip
             count={question.usefulCount}
             icon="star-active"

@@ -5,6 +5,7 @@ import { capitalizeFirstLetter } from 'src/utils/helpers';
 import { Box, Card, Flex, Heading, Image } from 'theme-ui';
 
 import type { Project } from 'oa-shared';
+import { FollowButtonAction } from 'src/common/FollowButtonAction';
 
 type ProjectCardProps = {
   item: Project;
@@ -87,6 +88,21 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
                 justifyContent: 'flex-end',
               }}
             >
+              <FollowButtonAction
+                contentType="projects"
+                itemId={item.id}
+                showIconOnly
+                hideSubscribeIcon
+                variant="subtle"
+                small
+                tooltipUnfollow="You are following this"
+                sx={{
+                  cursor: 'default',
+                  '&:hover': {
+                    backgroundColor: 'transparent',
+                  },
+                }}
+              />
               <IconCountWithTooltip count={item.totalViews || 0} icon="show" text="Views" />
               <IconCountWithTooltip
                 count={item.usefulCount || 0}

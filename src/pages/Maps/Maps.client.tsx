@@ -168,7 +168,10 @@ const MapsPage = () => {
         if (selectedPin?.profile?.username !== username) {
           selectPin(foundPin)
         }
-        updateMapView({ lat: foundPin.lat, lng: foundPin.lng }, PROFILE_ZOOM_LEVEL)
+        updateMapView(
+          { lat: foundPin.lat, lng: foundPin.lng },
+          PROFILE_ZOOM_LEVEL,
+        )
       } else {
         selectPin(foundPin)
       }

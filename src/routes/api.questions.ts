@@ -7,6 +7,7 @@ import { contentServiceServer } from 'src/services/contentService.server'
 import { discordServiceServer } from 'src/services/discordService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 import { convertToSlug } from 'src/utils/slug'
 import { validateImages } from 'src/utils/storage'
 
@@ -237,6 +238,8 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         new URL(request.url).origin.replace('http:', 'https:'),
       )
     }
+
+    updateUserActivity(client, user!.id)
 
     return Response.json({ question }, { headers, status: 201 })
   } catch (error) {

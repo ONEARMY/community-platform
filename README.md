@@ -207,6 +207,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ernestorbemx"><img src="https://avatars.githubusercontent.com/u/204041962?v=4?s=60" width="60px;" alt="ernestorbemx"/><br /><sub><b>ernestorbemx</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=ernestorbemx" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jproberson"><img src="https://avatars.githubusercontent.com/u/50461518?v=4?s=60" width="60px;" alt="jproberson"/><br /><sub><b>jproberson</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=jproberson" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://abhishekdotsol.vercel.app/"><img src="https://avatars.githubusercontent.com/u/177325053?v=4?s=60" width="60px;" alt="Abhishek Singh"/><br /><sub><b>Abhishek Singh</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Abhishek-singh88" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/chris-staunton"><img src="https://avatars.githubusercontent.com/u/60261694?v=4?s=60" width="60px;" alt="Chris Staunton"/><br /><sub><b>Chris Staunton</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=chris-staunton" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

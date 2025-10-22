@@ -13,9 +13,25 @@ export interface IconCountWithTooltipProps {
   text: string
 }
 
+function shortFormatNumber(num: number): string {
+  const units = [
+    { value: 1000000, suffix: 'M' },
+    { value: 1000, suffix: 'K' },
+  ]
+
+  for (const { value, suffix } of units) {
+    if (num >= value) {
+      return (num / value).toFixed(1).replace(/\.0$/, '') + suffix
+    }
+  }
+
+  return num.toString()
+}
+
 export const IconCountWithTooltip = (props: IconCountWithTooltipProps) => {
   const { count, dataCy, icon, text } = props
   const id = useMemo(() => (Math.random() * 16).toString(), [])
+  const countText = shortFormatNumber(count)
 
   return (
     <>
@@ -31,7 +47,7 @@ export const IconCountWithTooltip = (props: IconCountWithTooltipProps) => {
           fontSize: [1, 2, 2],
         }}
       >
-        {count}
+        {countText}
         <Icon glyph={icon} ml={1} />
       </Text>
       <Tooltip id={id} />

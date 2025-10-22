@@ -4,6 +4,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { MapPinsServiceServer } from 'src/services/mapPinsService.server'
 import { MapServiceServer } from 'src/services/mapService.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
@@ -71,6 +72,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const mapPin = pinFactory.fromDBWithProfile(
       result.data as unknown as DBMapPin,
     )
+
+    updateUserActivity(client, user.id)
 
     return Response.json({ mapPin }, { headers, status: 200 })
   } catch (error) {

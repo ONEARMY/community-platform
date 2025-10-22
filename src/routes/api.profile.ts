@@ -2,10 +2,11 @@ import { ProfileFactory } from 'src/factories/profileFactory.server'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
-import type { ProfileFormData } from 'oa-shared'
+import type { Image, ProfileFormData } from 'oa-shared'
 
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request)
@@ -76,12 +77,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData()
     const country = formData.get('country')
 
+    let existingPhoto: Image | null = null
+
+    if (formData.has('existingPhoto')) {
+      existingPhoto = JSON.parse(formData.get('existingPhoto') as string)
+    }
+
     const data = {
       displayName: formData.get('displayName') as string,
       about: formData.get('about') as string,
       country: country === 'null' ? null : country,
       type: formData.get('type'),
-      existingImageId: formData.get('existingImageId') as string,
+      existingPhoto,
       isContactable: formData.get('isContactable') === 'true',
       showVisitorPolicy: formData.get('showVisitorPolicy') === 'true',
       visitorPreferenceDetails: formData.get(
@@ -132,6 +139,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const profileService = new ProfileServiceServer(client)
     const profile = await profileService.updateProfile(profileData?.id, data)
 
+    updateUserActivity(client, user!.id)
+
     return Response.json(profile, { headers, status: 200 })
   } catch (error) {
     console.error(error)
@@ -167,6 +176,10 @@ async function validateRequest(
   }
 
   if (!memberTypes || !memberTypes?.includes(data.type)) {
+    if (!data.existingPhoto && !data.photo) {
+      return { status: 400, statusText: 'photo is required' }
+    }
+
     if (
       (!data.existingCoverImageIds ||
         data.existingCoverImageIds.length === 0) &&

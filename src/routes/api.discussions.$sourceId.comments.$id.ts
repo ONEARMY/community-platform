@@ -1,5 +1,6 @@
 import { UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
@@ -99,6 +100,8 @@ async function updateComment(
     )
   }
 
+  updateUserActivity(client, user.auth_id)
+
   return new Response(null, { headers, status: 204 })
 }
 
@@ -138,6 +141,8 @@ async function deleteComment(
       { headers, status: 500, statusText: 'Error deleting comment' },
     )
   }
+
+  updateUserActivity(client, user.auth_id)
 
   return new Response(null, { headers, status: 204 })
 }

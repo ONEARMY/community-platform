@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { researchServiceServer } from 'src/services/researchService.server'
+import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
 import type { User } from '@supabase/supabase-js'
@@ -49,6 +50,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     if (result.error) {
       throw result.error
     }
+
+    updateUserActivity(client, user!.id)
 
     return Response.json(null, { headers, status: 200 })
   } catch (error) {

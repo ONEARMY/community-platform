@@ -6,6 +6,7 @@ import {
   Username,
 } from 'oa-components'
 import { type ResearchItem, ResearchStatusRecord } from 'oa-shared'
+import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
@@ -200,6 +201,21 @@ const ResearchListItem = ({ item }: IProps) => {
               justifyContent: 'space-around',
             }}
           >
+            <FollowButtonAction
+              contentType="research"
+              itemId={item.id}
+              showIconOnly
+              hideSubscribeIcon
+              variant="subtle"
+              small
+              tooltipUnfollow="You are following this"
+              sx={{
+                cursor: 'default',
+                '&:hover': {
+                  backgroundColor: 'transparent',
+                },
+              }}
+            />
             <IconCountWithTooltip
               count={usefulDisplayCount}
               icon="star-active"

@@ -98,6 +98,15 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
                 tooltipUnfollow="You are following this"
                 sx={{
                   cursor: 'default',
+                  padding: 0,
+                  height: 'auto',
+                  minWidth: 'auto',
+                  border: 'none',
+                  lineHeight: 0,
+                  '& > div': {
+                    position: 'relative',
+                    px: 0,
+                  },
                   '&:hover': {
                     backgroundColor: 'transparent',
                   },

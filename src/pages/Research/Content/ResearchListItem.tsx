@@ -170,6 +170,26 @@ const ResearchListItem = ({ item }: IProps) => {
                   alignItems: 'center',
                 }}
               >
+                <FollowButtonAction
+                  contentType="research"
+                  itemId={item.id}
+                  showIconOnly
+                  hideSubscribeIcon
+                  variant="subtle"
+                  small
+                  sx={{
+                    cursor: 'default',
+                    padding: 0,
+                    height: 'auto',
+                    minWidth: 'auto',
+                    border: 'none',
+                    lineHeight: 0,
+                    '& > div': {
+                      position: 'relative',
+                      px: 0,
+                    },
+                  }}
+                />
                 <Text color="black" sx={_commonStatisticStyle}>
                   {usefulDisplayCount}
                   <Icon glyph="star-active" ml={1} />
@@ -199,6 +219,15 @@ const ResearchListItem = ({ item }: IProps) => {
               tooltipUnfollow="You are following this"
               sx={{
                 cursor: 'default',
+                padding: 0,
+                height: 'auto',
+                minWidth: 'auto',
+                border: 'none',
+                lineHeight: 0,
+                '& > div': {
+                  position: 'relative',
+                  px: 0,
+                },
                 '&:hover': {
                   backgroundColor: 'transparent',
                 },

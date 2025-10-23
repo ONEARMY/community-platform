@@ -1,8 +1,8 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import { Button, Map } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
 
-import { MapContext } from '../../MapContext'
+import { MapContext, PROFILE_ZOOM_LEVEL } from '../../MapContext'
 import { ButtonZoomIn } from './ButtonZoomIn'
 import { Clusters } from './Cluster.client'
 import { Popup } from './Popup.client'
@@ -12,14 +12,13 @@ import type { Map as MapType } from 'react-leaflet'
 
 export const MapView = () => {
   const mapState = useContext(MapContext)
-  const [zoom, setZoom] = useState(2)
   const mapRef = useRef<MapType>(null)
 
   useEffect(() => {
-    if (mapRef.current) {
-      ;(window as any).mapInstance = mapRef.current
+    if (mapRef.current && mapState) {
+      mapState.setMapRef(mapRef.current)
     }
-  }, [mapRef])
+  }, [mapRef.current, mapState])
 
   if (!mapState) {
     return null
@@ -41,8 +40,8 @@ export const MapView = () => {
       ref={mapRef}
       className="markercluster-map"
       center={mapCenter}
-      zoom={mapState?.location ? zoom : 2}
-      setZoom={setZoom}
+      zoom={mapState.zoom}
+      setZoom={mapState.setZoom}
       maxZoom={18}
       style={{ flex: 1, backgroundColor: '#AAD3DF' }}
       zoomControl={isViewportGreaterThanTablet}
@@ -66,7 +65,7 @@ export const MapView = () => {
       >
         <ButtonZoomIn
           setCenter={(value) => mapState.setLocation(value)}
-          setZoom={setZoom}
+          setZoom={mapState.setZoom}
         />
       </Box>
 
@@ -91,7 +90,10 @@ export const MapView = () => {
       {mapState.filteredPins && (
         <Clusters
           pins={mapState.filteredPins}
-          onPinClick={mapState.selectPin}
+          onPinClick={(pin) => {
+            mapState.selectPin(pin)
+            mapState.setView({ lat: pin.lat, lng: pin.lng }, PROFILE_ZOOM_LEVEL)
+          }}
         />
       )}
       {mapState.selectedPin && (

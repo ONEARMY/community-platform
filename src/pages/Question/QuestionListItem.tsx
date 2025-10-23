@@ -4,14 +4,15 @@ import {
   InternalLink,
   // ModerationStatus,
 } from 'oa-components';
-import { Highlighter } from 'src/common/Highlighter';
+
 import { Box, Card, Flex, Heading } from 'theme-ui';
+import { FollowButtonAction } from 'src/common/FollowButtonAction';
+import { Highlighter } from 'src/common/Highlighter';
 
 import { UserNameTag } from '../common/UserNameTag/UserNameTag';
 import { listing } from './labels';
 
 import type { Question } from 'oa-shared';
-import { FollowButtonAction } from 'src/common/FollowButtonAction';
 
 interface IProps {
   question: Question;

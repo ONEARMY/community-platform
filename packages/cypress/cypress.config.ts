@@ -21,6 +21,14 @@ export default defineConfig({
     openMode: 0,
   },
   e2e: {
+    setupNodeEvents: (on) => {
+      on('task', {
+        log(message) {
+          console.log(message)
+          return null
+        },
+      })
+    },
     baseUrl: 'http://localhost:3456',
     specPattern: 'src/integration/**/*.{js,jsx,ts,tsx}',
     supportFile: 'src/support/index.ts',

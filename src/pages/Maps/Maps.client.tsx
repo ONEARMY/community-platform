@@ -88,7 +88,13 @@ const MapsPage = () => {
           }
         }
 
-        setAllPins(pinsToSet)
+        setAllPins(
+          pinsToSet.sort((x) =>
+            x.profile.lastActive
+              ? -new Date(x.profile.lastActive).getTime()
+              : 0,
+          ),
+        )
 
         if (filters?.filters) {
           const sortedTypes = (filters.filters.types || [])

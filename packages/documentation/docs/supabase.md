@@ -24,6 +24,10 @@ Run `yarn db:seed` to run the DB migration scripts and update your local databas
 Now you can start the project with `yarn start`.
 To sign-up locally, you can get the email confirmation link at http://localhost:54324/monitor
 
+### Updating local supabase
+
+https://supabase.com/docs/guides/local-development/cli/getting-started?queryGroups=platform&platform=macos#updating-the-supabase-cli
+
 ### Using online Supabase free version
 
 #### Create your Supabase instance

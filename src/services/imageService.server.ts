@@ -38,19 +38,16 @@ export class ImageServiceServer {
   }
 
   getPublicUrls(images: DBMedia[], size?: TransformOptions): Image[] {
-    return images?.map((x) => {
-      const { data } = this.client.storage
-        .from(process.env.TENANT_ID as string)
-        .getPublicUrl(
-          x.path,
-          size
-            ? {
-                transform: size,
-              }
-            : undefined,
-        )
-      return new Image({ id: x.id, publicUrl: data.publicUrl })
-    })
+    const result: Image[] = []
+
+    for (const x of images) {
+      const img = this.getPublicUrl(x, size)
+      if (img) {
+        result.push(img)
+      }
+    }
+
+    return result
   }
 
   async uploadImage(files: File[], path: string) {

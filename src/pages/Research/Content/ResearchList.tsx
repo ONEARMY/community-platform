@@ -83,6 +83,7 @@ const ResearchList = () => {
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
       <ResearchFilterHeader
+        itemCount={total}
         draftCount={draftCount}
         handleShowDrafts={handleShowDrafts}
         showDrafts={showDrafts}

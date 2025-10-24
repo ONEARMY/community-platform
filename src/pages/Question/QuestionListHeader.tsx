@@ -23,13 +23,14 @@ import type { Category } from 'oa-shared'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 interface IProps {
+  itemCount?: number
   draftCount: number
   handleShowDrafts: () => void
   showDrafts: boolean
 }
 
 export const QuestionListHeader = (props: IProps) => {
-  const { draftCount, handleShowDrafts, showDrafts } = props
+  const { itemCount, draftCount, handleShowDrafts, showDrafts } = props
 
   const [categories, setCategories] = useState<Category[]>([])
   const [searchParams, setSearchParams] = useSearchParams()
@@ -184,6 +185,7 @@ export const QuestionListHeader = (props: IProps) => {
 
   return (
     <ListHeader
+      itemCount={showDrafts ? draftCount : itemCount}
       actionComponents={actionComponents}
       showDrafts={false}
       headingTitle={headings.list}

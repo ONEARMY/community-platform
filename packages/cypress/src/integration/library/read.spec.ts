@@ -4,6 +4,7 @@ import { users } from 'oa-shared/mocks/data'
 import { MOCK_DATA } from '../../data'
 
 const library = MOCK_DATA.projects
+const label = MOCK_DATA.questions.length === 1 ? 'Item' : 'Items'
 
 describe('[Library]', () => {
   const demoAdmin = users.admin
@@ -18,6 +19,11 @@ describe('[Library]', () => {
 
       cy.step('Has expected page title')
       cy.title().should('include', `Library`)
+      cy.step('Displays Item count')
+      cy.contains(
+        `${MOCK_DATA.projects.filter((r) => !r.deleted && r.moderation === 'accepted').length} ${label}`,
+      )
+
       cy.step('Can search for items')
       cy.get('[data-cy=library-search-box]').click().type('brick')
       cy.get('[data-cy=card]').its('length').should('be.eq', 1)

@@ -1,6 +1,7 @@
 import { MOCK_DATA } from '../../data'
 
 const article = Object.values(MOCK_DATA.research)[0]
+const label = MOCK_DATA.research.length === 1 ? 'Item' : 'Items'
 
 describe('[Research]', () => {
   const { description, slug, title } = article
@@ -17,6 +18,11 @@ describe('[Research]', () => {
 
         cy.step('Has expected page title')
         cy.title().should('include', `Research`)
+
+        cy.step('Displays Item count')
+        cy.contains(
+          `${MOCK_DATA.research.filter((r) => !r.deleted && !r.is_draft).length} ${label}`,
+        )
 
         cy.step('Can search for items')
         cy.get('[data-cy=research-search-box]').click().type('qwerty')

@@ -1,6 +1,7 @@
 import { MOCK_DATA } from '../../data'
 
 const question = MOCK_DATA.questions[0]
+const label = MOCK_DATA.questions.length === 1 ? 'Item' : 'Items'
 
 describe('[Questions]', () => {
   describe('[List questions]', () => {
@@ -9,6 +10,9 @@ describe('[Questions]', () => {
 
       cy.step('Has expected page title')
       cy.title().should('include', `Questions`)
+
+      cy.step('Displays Item count')
+      cy.contains(`${MOCK_DATA.questions.length} ${label}`)
 
       cy.step('Questions display')
 

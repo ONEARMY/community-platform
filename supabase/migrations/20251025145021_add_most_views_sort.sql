@@ -11,7 +11,7 @@ BEGIN
     IF search_query IS NOT NULL THEN
         ts_query := to_tsquery('english', search_query);
     END IF;
-
+    
     RETURN QUERY
     SELECT
         p.id,
@@ -83,3 +83,5 @@ BEGIN
     LIMIT limit_val OFFSET offset_val;
 END;$function$
 ;
+
+

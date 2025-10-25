@@ -4,7 +4,7 @@ import { users } from 'oa-shared/mocks/data'
 import { MOCK_DATA } from '../../data'
 
 const library = MOCK_DATA.projects
-const label = MOCK_DATA.questions.length === 1 ? 'Item' : 'Items'
+const label = MOCK_DATA.questions.length === 1 ? 'item' : 'items'
 
 describe('[Library]', () => {
   const demoAdmin = users.admin

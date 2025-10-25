@@ -1,7 +1,7 @@
 import { MOCK_DATA } from '../../data'
 
 const article = Object.values(MOCK_DATA.research)[0]
-const label = MOCK_DATA.research.length === 1 ? 'Item' : 'Items'
+const label = MOCK_DATA.research.length === 1 ? 'item' : 'items'
 
 describe('[Research]', () => {
   const { description, slug, title } = article

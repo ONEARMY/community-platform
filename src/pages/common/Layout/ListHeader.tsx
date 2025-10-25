@@ -21,7 +21,7 @@ export const ListHeader = (props: IProps) => {
     filteringComponents,
   } = props
 
-  const itemLabel = itemCount === 1 ? 'Item' : 'Items'
+  const itemLabel = itemCount === 1 ? 'item' : 'items'
 
   return (
     <>

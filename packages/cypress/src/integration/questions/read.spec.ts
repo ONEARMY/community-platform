@@ -1,7 +1,7 @@
 import { MOCK_DATA } from '../../data'
 
 const question = MOCK_DATA.questions[0]
-const label = MOCK_DATA.questions.length === 1 ? 'Item' : 'Items'
+const label = MOCK_DATA.questions.length === 1 ? 'item' : 'items'
 
 describe('[Questions]', () => {
   describe('[List questions]', () => {

@@ -5,6 +5,7 @@ export type LibrarySortOption =
   | 'LatestUpdated'
   | 'MostDownloads'
   | 'MostComments'
+  | 'MostViews'
 
 const BaseOptions = new Map<LibrarySortOption, string>()
 BaseOptions.set('Newest', 'Newest')
@@ -12,6 +13,7 @@ BaseOptions.set('MostComments', 'Most Comments')
 BaseOptions.set('LatestUpdated', 'Latest Updated')
 BaseOptions.set('MostUseful', 'Most Useful')
 BaseOptions.set('MostDownloads', 'Most Downloads')
+BaseOptions.set('MostViews', 'Most Views')
 
 const QueryParamOptions = new Map<LibrarySortOption, string>(BaseOptions)
 QueryParamOptions.set('MostRelevant', 'Most Relevant')

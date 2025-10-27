@@ -20,7 +20,7 @@ export const seedResearch = async (profiles: DBProfile[], tagsData) => {
     const item = MOCK_DATA.research[i]
     const createdBy: number =
       profiles.find((profile) => profile.username === item.created_by_username)
-        .id || profiles[0].id
+        ?.id || profiles[0].id
 
     researchData.push({
       created_at: item.created_at,

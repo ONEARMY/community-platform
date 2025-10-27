@@ -1,10 +1,10 @@
 import { useContext, useState } from 'react'
+import { LatLngBounds } from 'leaflet'
 import { Button, Loader, MapCardList, Modal, OsmGeocoding } from 'oa-components'
 import { Flex, Text } from 'theme-ui'
 
 import { MapContext, PROFILE_ZOOM_LEVEL } from '../../MapContext'
 import { MapFilterList } from '../../MapFilterList'
-import { getAdaptiveZoomLevel } from '../../utils/adaptiveZoom'
 import { MemberTypeList } from '../MemberTypeVerticalList/MemberTypeVerticalList.client'
 
 interface IProps {
@@ -69,11 +69,14 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
       >
         <Flex sx={{ paddingX: 4, gap: 2, flexDirection: 'row' }}>
           <OsmGeocoding
-            callback={({ lat, lon }) => {
-              if (lat && lon) {
-                const zoomLevel = getAdaptiveZoomLevel(result)
+            callback={({ boundingbox }) => {
+              if (boundingbox) {
+                const bounds = new LatLngBounds(
+                  [parseFloat(boundingbox[0]), parseFloat(boundingbox[2])],
+                  [parseFloat(boundingbox[1]), parseFloat(boundingbox[3])],
+                )
                 mapState.selectPin(null)
-                mapState.setView({ lat, lng: lon }, zoomLevel)
+                mapState.fitBounds(bounds)
                 mapState.setIsMobile(false)
               }
             }}

@@ -55,6 +55,12 @@ const MapsPage = () => {
     setZoom(zoomLevel)
   }
 
+  const fitMapBounds = (bounds: LatLngBounds) => {
+    if (mapRef?.leafletElement) {
+      mapRef.leafletElement.fitBounds(bounds)
+    }
+  }
+
   const filteredPins = useMemo<MapPin[]>(() => {
     return filterPins(allPins || [], {
       settings: activeProfileSettingFilters,
@@ -207,6 +213,7 @@ const MapsPage = () => {
         zoom,
         setZoom,
         setView: updateMapView,
+        fitBounds: fitMapBounds,
         setMapRef,
       }}
     >

@@ -4,6 +4,7 @@ import { Flex, Text } from 'theme-ui'
 
 import { MapContext, PROFILE_ZOOM_LEVEL } from '../../MapContext'
 import { MapFilterList } from '../../MapFilterList'
+import { getAdaptiveZoomLevel } from '../../utils/adaptiveZoom'
 import { MemberTypeList } from '../MemberTypeVerticalList/MemberTypeVerticalList.client'
 
 interface IProps {
@@ -70,8 +71,9 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
           <OsmGeocoding
             callback={({ lat, lon }) => {
               if (lat && lon) {
+                const zoomLevel = getAdaptiveZoomLevel(result)
                 mapState.selectPin(null)
-                mapState.setView({ lat, lng: lon }, PROFILE_ZOOM_LEVEL)
+                mapState.setView({ lat, lng: lon }, zoomLevel)
                 mapState.setIsMobile(false)
               }
             }}

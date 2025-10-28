@@ -9,6 +9,8 @@ import type {
   ProfileType,
 } from 'oa-shared'
 
+export const PROFILE_ZOOM_LEVEL = 12
+
 export const MapContext = createContext<{
   allPins: MapPin[] | null
   allBadges: ProfileBadge[]
@@ -25,6 +27,7 @@ export const MapContext = createContext<{
   loadingMessage: string
   isMobile: boolean
   boundaries: LatLngBounds | null
+  zoom: number
   toggleActiveTagFilter: (value: number) => void
   toggleActiveBadgeFilter: (value: string) => void
   toggleActiveProfileTypeFilter: (value: string) => void
@@ -33,4 +36,8 @@ export const MapContext = createContext<{
   selectPin: (value: MapPin | null) => void
   setIsMobile: (value: boolean) => void
   setBoundaries: (value: LatLngBounds | null) => void
+  setZoom: (value: number) => void
+  setView: (location: ILatLng, zoom: number) => void
+  fitBounds: (bounds: LatLngBounds) => void
+  setMapRef: (ref: any) => void
 } | null>(null)

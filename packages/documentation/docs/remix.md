@@ -7,7 +7,8 @@ It follows a [File System Route Convention](https://remix.run/docs/en/main/start
 (Soon will be changed to routes.ts approach -> https://www.youtube.com/live/fjTX8hQTlEc?si=PISGwpmF603tvre_&t=726)
 
 Each route is a normal React component file that should include a [loader](https://remix.run/docs/en/main/route/loader) function, that function runs exclusively on the server (or clientLoader for browser only).
-Parts of the component might be rendered client side, for that we can use React.lazy or wrap them with <ClientOnly> component from `remix-utils`.
+
+Parts of the component might be rendered client side, for that we can use React.lazy or wrap them with `<ClientOnly>` component from `remix-utils`.
 
 Additionally, routes could also export [Links](https://remix.run/docs/en/main/route/links) and [Meta](https://remix.run/docs/en/main/route/meta) functions that will be added to the html head.
 

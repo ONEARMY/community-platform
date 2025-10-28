@@ -146,6 +146,7 @@ BEGIN
                 (SELECT COALESCE(COUNT(uv.id), 0)
                  FROM useful_votes uv
                  WHERE uv.content_id = p.id AND uv.content_type = 'projects')
+            WHEN sort_by = 'MostViews' THEN p.total_views
             ELSE 0
         END DESC NULLS LAST,
         CASE

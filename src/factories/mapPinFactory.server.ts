@@ -49,6 +49,7 @@ export class MapPinFactory {
       visitorPolicy: profile.visitor_policy,
       type: profile.type ? ProfileType.fromDB(profile.type) : null,
       photo: photo || null,
+      lastActive: profile.last_active,
       isContactable: profile.is_contactable,
       tags: profile.tags?.map((x) => ProfileTag.fromDBJoin(x)),
       badges: profile.badges?.map((x) => ProfileBadge.fromDBJoin(x)),

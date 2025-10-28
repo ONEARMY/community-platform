@@ -14,7 +14,7 @@ title: Local Setup
    This will be used to run the local server. It included the `npm` package manager
 
    :::tip
-   The recommended version of node to use is **node 20** as this is what also runs in the production environment. If running a higher version and experiencing issues please file a bug report.
+   The recommended version of node to use is **node 22.18** as this is what also runs in the production environment. If running a higher version and experiencing issues please file a bug report.
 
    You can use tools like  
    [nodenv](https://github.com/nodenv/nodenv)  

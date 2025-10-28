@@ -11,7 +11,6 @@ import { ImageField } from 'src/pages/common/FormFields/ImageField'
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors'
 import { ResearchPostingGuidelines } from 'src/pages/Research/Content/Common'
 import { fireConfetti } from 'src/utils/fireConfetti'
-import { Text } from 'theme-ui'
 
 import { buttons, headings, overview } from '../../labels'
 import { researchService } from '../../research.service'
@@ -147,8 +146,6 @@ const ResearchForm = ({ research }: IProps) => {
               </Button>
             )}
 
-            {submitting && <Text>Submitting...</Text>}
-
             {research?.updates && (
               <ResearchEditorOverview
                 sx={{ marginTop: 4 }}
@@ -166,6 +163,7 @@ const ResearchForm = ({ research }: IProps) => {
             )}
           </>
         )
+
         const unsavedChangesDialog = (
           <UnsavedChangesDialog
             hasChanges={dirty && !submitSucceeded && !intentionalNavigation}

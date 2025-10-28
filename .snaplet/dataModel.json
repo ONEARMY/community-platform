@@ -300,7 +300,7 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "banner_pkey",
+          "name": "banners_pkey",
           "fields": ["id"],
           "nullNotDistinct": false
         }
@@ -2650,12 +2650,12 @@
           "maxLength": null
         },
         {
-          "name": "profiles_public_messages_sender_idToprofiles",
+          "name": "profiles_public_messages_receiver_idToprofiles",
           "type": "profiles",
-          "isRequired": true,
+          "isRequired": false,
           "kind": "object",
-          "relationName": "public_messages_sender_idToprofiles",
-          "relationFromFields": ["sender_id"],
+          "relationName": "public_messages_receiver_idToprofiles",
+          "relationFromFields": ["receiver_id"],
           "relationToFields": ["id"],
           "isList": false,
           "isId": false,
@@ -5853,11 +5853,11 @@
           "hasDefaultValue": false
         },
         {
-          "name": "public_messages_public_messages_sender_idToprofiles",
+          "name": "public_messages_public_messages_receiver_idToprofiles",
           "type": "public_messages",
           "isRequired": false,
           "kind": "object",
-          "relationName": "public_messages_sender_idToprofiles",
+          "relationName": "public_messages_receiver_idToprofiles",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -6946,7 +6946,7 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "question_pkey",
+          "name": "questions_pkey",
           "fields": ["id"],
           "nullNotDistinct": false
         },
@@ -7738,7 +7738,7 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "research_update_pkey",
+          "name": "research_updates_pkey",
           "fields": ["id"],
           "nullNotDistinct": false
         }
@@ -10834,6 +10834,9 @@
     "content_types": {
       "schemaName": "public",
       "values": [
+        {
+          "name": "comments"
+        },
         {
           "name": "news"
         },

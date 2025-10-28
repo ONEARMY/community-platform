@@ -46,6 +46,7 @@ export class MapPinsServiceServer {
           cover_images,
           about,
           username,
+          last_active,
           badges:profile_badges_relations(
             profile_badges(
               id,

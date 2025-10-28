@@ -1,5 +1,9 @@
 import { MOCK_DATA } from '../data'
-import { seedDatabase, supabaseAdminClient } from '../utils/TestUtils'
+import {
+  seedDatabase,
+  supabaseAdminClient,
+  supabaseClient,
+} from '../utils/TestUtils'
 
 import type { SupabaseClient, User } from '@supabase/supabase-js'
 import type {
@@ -10,11 +14,28 @@ import type {
   Profile,
 } from 'oa-shared'
 
+export const seedProfileImages = async (): Promise<
+  { id: string; path: string; fullPath: string }[]
+> => {
+  const tenantId = Cypress.env('TENANT_ID')
+
+  const supabase = supabaseClient(tenantId)
+  const { data: image1Data } = await supabase.storage
+    .from(tenantId)
+    .upload('profiles/image1.png', new Blob())
+  const { data: image2Data } = await supabase.storage
+    .from(tenantId)
+    .upload('profiles/image2.png', new Blob())
+
+  return [image1Data, image2Data]
+}
+
 // Creates user accounts and respective profiles
 export const seedAccounts = async (
   profileBadges: DBProfileBadge[],
   profileTags: DBProfileTag[],
   profileTypes: DBProfileType[],
+  profileImages: { id: string; path: string; fullPath: string }[],
 ) => {
   const supabase = supabaseAdminClient()
 
@@ -39,6 +60,7 @@ export const seedAccounts = async (
         profileBadges[0].id,
         [profileTags[0].id, profileTags[1].id],
         profileType.id,
+        profileImages,
       )
     }),
   )
@@ -53,6 +75,7 @@ const createAuthAndProfile = async (
   profileBadgeId: number,
   profilTagIds: number[],
   profileTypeId: number,
+  profileImages: { id: string; path: string; fullPath: string }[],
 ) => {
   const authUser = await supabase.auth.admin.createUser({
     email: user.email,
@@ -63,27 +86,18 @@ const createAuthAndProfile = async (
     },
   })
 
-  let profile
+  let authId: string
+
   if (authUser.error?.code === 'email_exists') {
-    const authUser = existingUsers.find(
-      (authUser) => authUser.email === user.email,
+    const existingUser = existingUsers.find(
+      (existingUser) => existingUser.email === user.email,
     )
 
-    if (authUser) {
-      return (profile = await createProfile(
-        supabase,
-        user,
-        authUser.id,
-        profileBadgeId,
-        profilTagIds,
-        profileTypeId,
-      ))
-    }
-
-    return profile
+    authId = existingUser.id
+  } else if (authUser.data?.user?.id) {
+    authId = authUser.data.user.id
   }
 
-  const authId = authUser.data.id
   return await createProfile(
     supabase,
     user,
@@ -91,6 +105,7 @@ const createAuthAndProfile = async (
     profileBadgeId,
     profilTagIds,
     profileTypeId,
+    profileImages,
   )
 }
 
@@ -101,6 +116,7 @@ const createProfile = async (
   profileBadgeId: number,
   profilTagIds: number[],
   profileTypeId: number,
+  profileImages: { id: string; path: string; fullPath: string }[],
 ) => {
   const tenantId = Cypress.env('TENANT_ID')
 
@@ -124,10 +140,10 @@ const createProfile = async (
     tenant_id: tenantId,
     profile_type: profileTypeId,
     about: user.about || '',
-    photo: user.photo || null,
+    photo: user.photo ? profileImages[0] : null,
     country: user.country,
     cover_images: user.coverImages || ([] as any),
-    impact: user.impact || null,
+    impact: JSON.stringify(user.impact) || null,
     is_blocked_from_messaging: user.isBlockedFromMessaging || false,
     is_contactable: user.isContactable || true,
     last_active: user.lastActive || null,
@@ -138,14 +154,17 @@ const createProfile = async (
     .from('profiles')
     .insert(profileDB)
     .select('*')
-    .single()
 
-  if (profileResult.data.username === 'demo_user') {
+  if (!profileResult.data || profileResult.data.length === 0) {
+    console.error('Failed to create profile')
+  }
+
+  if (profileResult.data[0].username === 'demo_user') {
     await seedDatabase(
       {
         profile_badges_relations: [
           {
-            profile_id: profileResult.data.id,
+            profile_id: profileResult.data[0].id,
             profile_badge_id: profileBadgeId,
             tenant_id: tenantId,
           },
@@ -161,7 +180,7 @@ const createProfile = async (
         {
           profile_tags_relations: [
             {
-              profile_id: profileResult.data.id,
+              profile_id: profileResult.data[0].id,
               profile_tag_id: profileTag,
               tenant_id: tenantId,
             },
@@ -172,7 +191,7 @@ const createProfile = async (
     }),
   )
 
-  return profileResult.data
+  return profileResult.data[0]
 }
 
 export const deleteAccounts = async () => {

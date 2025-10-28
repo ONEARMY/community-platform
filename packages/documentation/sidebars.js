@@ -33,16 +33,6 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'Frontend Development',
-      items: ['Frontend Development/overview', 'Frontend Development/modules'],
-    },
-    {
-      type: 'category',
-      label: 'Backend Development',
-      items: ['Backend Development/integrations', 'Backend Development/tests'],
-    },
-    {
-      type: 'category',
       label: 'Testing',
       items: ['Testing/overview', 'Testing/end-to-end'],
     },
@@ -54,14 +44,6 @@ module.exports = {
           type: 'category',
           label: 'Continuous Integration',
           items: ['Deployment/circle-ci'],
-        },
-        {
-          type: 'category',
-          label: 'Server Maintenance',
-          items: [
-            'Server Maintenance/dataMigration',
-            'Server Maintenance/manualBackups',
-          ],
         },
         {
           type: 'doc',

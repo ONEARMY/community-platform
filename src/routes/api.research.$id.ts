@@ -102,7 +102,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         client,
       )
 
-      if (mediaResult?.errors) {
+      if (mediaResult?.errors?.length) {
         console.error(mediaResult.errors)
       }
 
@@ -111,12 +111,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
           .from('research')
           .update({ image: mediaResult.media[0] })
           .eq('id', research.id)
-          .select()
+          .select('image')
 
-        if (result.data) {
+        if (result.data && result.data.length > 0) {
           const [image] = storageServiceServer.getPublicUrls(
             client,
-            result.data,
+            result.data?.at(0)?.image ? [result.data[0].image] : [],
           )
 
           research.image = image

@@ -4,7 +4,10 @@ import { SettingsFormWrapper } from 'oa-components'
 import { isPreciousPlastic } from 'src/config/config'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { isProfileComplete } from 'src/utils/isProfileComplete'
+import {
+  getMissingProfileFields,
+  isProfileComplete,
+} from 'src/utils/isProfileComplete'
 import { Box, Flex, Text } from 'theme-ui'
 
 import { EnvironmentContext } from '../common/EnvironmentContext'
@@ -33,6 +36,7 @@ export const SettingsPage = observer(() => {
     MODULE.MAP,
   )
   const incompleteProfile = !isProfileComplete(profile)
+  const missingFields = getMissingProfileFields(profile)
 
   const profileTab = {
     title: 'Profile',
@@ -46,6 +50,16 @@ export const SettingsPage = observer(() => {
           In order to post comments or create content, we'd like you to share
           something about yourself.
         </Text>
+        {missingFields.length > 0 && (
+          <Text>
+            Missing required fields:
+            <ul style={{ margin: '0.5em 0 0 0', paddingLeft: '1.5em' }}>
+              {missingFields.map((field) => (
+                <li key={field}>{field}</li>
+              ))}
+            </ul>
+          </Text>
+        )}
       </Flex>
     ),
     body: <SettingsPageUserProfile />,

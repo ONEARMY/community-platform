@@ -1,0 +1,1 @@
+import{r as e,j as i,L as s}from"./iframe-Dyks2otr.js";import{L as t}from"./theme-ui-components.esm-CrX3Ask8.js";const r=e.forwardRef(((r,e)=>i.jsx(t,{as:s,ref:e,...r,children:r.children})));r.displayName="InternalLink",r.__docgenInfo={description:"",methods:[],displayName:"InternalLink"};export{r as I};

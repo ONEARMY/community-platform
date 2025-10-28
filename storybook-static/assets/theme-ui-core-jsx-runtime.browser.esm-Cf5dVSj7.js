@@ -1,0 +1,1 @@
+import{h as r,j as t,E as j,b as x,p as o}from"./iframe-Dyks2otr.js";function c(s,a,o){return r.call(a,"css")?t.jsx(j,x(s,a),o):t.jsx(s,a,o)}function i(s,a,o){return r.call(a,"css")?t.jsxs(j,x(s,a),o):t.jsxs(s,a,o)}const e=(s,t,r)=>c(s,o(t),r),f=(s,t,r)=>i(s,o(t),r);export{f as a,e as j};

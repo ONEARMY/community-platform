@@ -13,3 +13,28 @@ export const isProfileComplete = (user: Partial<Profile>): boolean => {
 
   return isBasicInfoFilled && (isMemberFilled || isSpaceFilled)
 }
+
+export const getMissingProfileFields = (
+  user: Partial<Profile>,
+): string[] => {
+  const { about, coverImages, displayName, photo } = user
+  const missing: string[] = []
+
+  if (!displayName) {
+    missing.push('Display name')
+  }
+
+  if (!about) {
+    missing.push('About')
+  }
+
+  const isMember = user.type?.name === 'member'
+
+  if (isMember && !photo?.id) {
+    missing.push('Profile photo')
+  } else if (!isMember && (!coverImages || !coverImages[0]?.publicUrl)) {
+    missing.push('Cover image')
+  }
+
+  return missing
+}

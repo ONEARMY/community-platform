@@ -14,9 +14,7 @@ export const isProfileComplete = (user: Partial<Profile>): boolean => {
   return isBasicInfoFilled && (isMemberFilled || isSpaceFilled)
 }
 
-export const getMissingProfileFields = (
-  user: Partial<Profile>,
-): string[] => {
+export const getMissingProfileFields = (user: Partial<Profile>): string[] => {
   const { about, coverImages, displayName, photo } = user
   const missing: string[] = []
 

@@ -15,9 +15,12 @@ Make sure you have the docker app open.
 Run `supabase start` (Ensure you run it on the project folder root.)
 Run `supabase status`
 Create a .env.local file at the project root (same level as .env) and fill in the keys with values from the command above:
-SUPABASE_API_URL={API URL}
-SUPABASE_KEY={anon key}
-SUPABASE_SERVICE_ROLE_KEY={service_role key}
+
+```
+SUPABASE_API_URL=<API URL>
+SUPABASE_KEY=<anon key>
+SUPABASE_SERVICE_ROLE_KEY=<service_role key>
+```
 
 Run `yarn db:seed` to run the DB migration scripts and update your local database schema. You will have to run this again whenever there are DB schema changes.
 
@@ -44,9 +47,12 @@ Now from the project root, run `supabase link --project-ref your-project-id`.
 Finally, push your schema using `supabase db push`.
 
 To finish you should fill the .env.local file with the values from the "Data API" section of your project settings:
-SUPABASE_API_URL={URL}
-SUPABASE_KEY={anon key}
-SUPABASE_SERVICE_ROLE_KEY={service_role key}
+
+```
+SUPABASE_API_URL=<API URL>
+SUPABASE_KEY=<anon key>
+SUPABASE_SERVICE_ROLE_KEY=<service_role key>
+```
 
 ## Migrations
 

@@ -42,7 +42,7 @@ describe('[Question]', () => {
       cy.step('Can add a library project now profile is complete')
       cy.visit('/questions')
       cy.get('[data-cy=complete-profile-question]').should('not.exist')
-      cy.get('[data-cy=create-question]').click()
+      cy.get('[data-cy=create-question]').last().click()
 
       cy.get('[data-cy=field-title]', { timeout: 20000 })
 

@@ -189,7 +189,7 @@ describe('[Library]', () => {
 
       cy.step('Access the create project page')
       cy.get('a[href="/library/create"]').should('be.visible')
-      cy.get('[data-cy=create-project]').last().click()
+      cy.get('[data-cy=create-project]:visible').click()
       cy.contains('Add your project').should('be.visible')
 
       cy.step('Warn if title has less than minimum required characters')
@@ -337,7 +337,7 @@ describe('[Library]', () => {
       cy.get('[data-cy=loader]').should('not.exist')
       cy.step('Access the create project')
       cy.get('a[href="/library/create"]').should('be.visible')
-      cy.get('[data-cy=create-project]').last().click()
+      cy.get('[data-cy=create-project]:visible').click()
       cy.fillIntroTitle(expected.title)
       cy.get('[data-cy=page-link][href*="/library"]').click()
       cy.get('[data-cy="Confirm.modal: Cancel"]').click()

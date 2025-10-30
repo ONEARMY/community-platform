@@ -55,7 +55,7 @@ describe('[Research]', () => {
       cy.step('Create the research article')
       cy.visit('/research')
       cy.get('[data-cy=loader]').should('not.exist')
-      cy.get('[data-cy=create]').last().click()
+      cy.get('[data-cy=create]:visible').click()
 
       cy.step('Warn if title is identical to an existing one')
       cy.contains('Start your Research')
@@ -274,7 +274,7 @@ describe('[Research]', () => {
       cy.visit('/research')
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('a[href="/research/create"]').should('be.visible')
-      cy.get('[data-cy=create]').last().click()
+      cy.get('[data-cy=create]:visible').click()
 
       cy.step('Enter research article details')
       cy.get('[data-cy=intro-title').clear().type(researchItem.title).blur()

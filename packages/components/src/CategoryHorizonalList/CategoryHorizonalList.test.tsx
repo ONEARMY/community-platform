@@ -14,13 +14,13 @@ import type { IProps } from './CategoryHorizonalList'
 describe('CategoryHorizonalList', () => {
   // https://stackoverflow.com/a/62148101
   beforeEach(() => {
-    const mockIntersectionObserver = vi.fn()
-    mockIntersectionObserver.mockReturnValue({
-      observe: () => null,
-      unobserve: () => null,
-      disconnect: () => null,
+    window.IntersectionObserver = vi.fn().mockImplementation(function () {
+      return {
+        observe: vi.fn(),
+        unobserve: vi.fn(),
+        disconnect: vi.fn(),
+      }
     })
-    window.IntersectionObserver = mockIntersectionObserver
   })
 
   it('renders each member type given', async () => {

@@ -68,6 +68,8 @@ app.use(
         '*.google-analytics.com',
         '*.cloudfunctions.net',
         'sentry.io',
+        '*.sentry.io',
+        'https://plausible.io',
         ...wsUrls,
       ],
       defaultSrc: [
@@ -88,6 +90,7 @@ app.use(
         '*.analytics.google.com',
         '*.google-analytics.com',
         'www.youtube.com',
+        'https://plausible.io',
         "'unsafe-eval'",
         "'unsafe-inline'",
       ],

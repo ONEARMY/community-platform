@@ -3,9 +3,9 @@ import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import svgr from 'vite-plugin-svgr'
 
-import type { UserConfig as VitestUserConfigInterface } from 'vitest/config'
+import type { ViteUserConfig } from 'vitest/config'
 
-const vitestConfig: VitestUserConfigInterface = {
+const vitestConfig: ViteUserConfig = {
   test: {
     environment: 'jsdom',
     globals: true,

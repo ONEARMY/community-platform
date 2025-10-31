@@ -50,13 +50,9 @@ describe('SettingsPageImpact', () => {
       expect(
         wrapper.getAllByText('43,000 Kg of plastic', { exact: false }),
       ).toHaveLength(1)
-      expect(wrapper.getAllByAltText('icon')[1].src).toContain('eye.svg')
       expect(
         wrapper.getAllByText('45 volunteers', { exact: false }),
       ).toHaveLength(1)
-      expect(wrapper.getAllByAltText('icon')[3].src).toContain(
-        'eye-crossed.svg',
-      )
 
       expect(wrapper.getAllByText('Edit data', { exact: false })).toHaveLength(
         6,

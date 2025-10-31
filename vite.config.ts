@@ -7,12 +7,12 @@ import { defineConfig } from 'vite'
 import svgr from 'vite-plugin-svgr'
 import ViteTsConfigPathsPlugin from 'vite-tsconfig-paths'
 
-import type { UserConfig as VitestUserConfigInterface } from 'vitest/config'
+import type { ViteUserConfig } from 'vitest/config'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-const vitestConfig: VitestUserConfigInterface = {
+const vitestConfig: ViteUserConfig = {
   test: {
     environment: 'jsdom',
     globals: true,

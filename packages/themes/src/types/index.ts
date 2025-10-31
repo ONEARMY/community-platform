@@ -2,8 +2,6 @@ export interface PlatformTheme {
   id: string
   siteName: string
   description: string
-  logo: string
-  favicon: string
   styles: ThemeWithName
 }
 

@@ -100,12 +100,10 @@ const getEnvironmentTheme = () => {
 }
 
 export const links: LinksFunction = () => {
-  const theme = getEnvironmentTheme()
-
   return [
     {
       rel: 'icon',
-      href: theme.favicon,
+      href: '/api/favicon',
       type: 'image/x-icon',
     },
   ]

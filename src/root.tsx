@@ -30,6 +30,7 @@ const Document = withEmotionCache(
     const serverStyleData = useContext(ServerStyleContext)
     const clientStyleData = useContext(ClientStyleContext)
     const reinjectStylesRef = useRef(true)
+    const isProd = import.meta.env.VITE_BRANCH === 'production'
 
     // Only executed on client
     // When a top level ErrorBoundary or CatchBoundary are rendered,
@@ -76,6 +77,20 @@ const Document = withEmotionCache(
               dangerouslySetInnerHTML={{ __html: css }}
             />
           ))}
+          {isProd && (
+            <>
+              <script
+                async
+                src="https://plausible.io/js/pa-MejTiAhWWEhDHQzZg3cBg.js"
+              />
+              <script
+                dangerouslySetInnerHTML={{
+                  __html:
+                    'window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)};plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init();',
+                }}
+              />
+            </>
+          )}
         </head>
         <body>
           {children}

@@ -30,7 +30,7 @@ const Document = withEmotionCache(
     const serverStyleData = useContext(ServerStyleContext)
     const clientStyleData = useContext(ClientStyleContext)
     const reinjectStylesRef = useRef(true)
-    const isProd = import.meta.env.NODE_ENV === 'production'
+    const isProd = import.meta.env.VITE_BRANCH === 'production'
 
     // Only executed on client
     // When a top level ErrorBoundary or CatchBoundary are rendered,

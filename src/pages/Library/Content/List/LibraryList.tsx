@@ -85,6 +85,7 @@ export const LibraryList = () => {
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
       <LibraryListHeader
+        itemCount={total}
         draftCount={draftCount}
         handleShowDrafts={handleShowDrafts}
         showDrafts={showDrafts}

@@ -1,6 +1,7 @@
-import { Flex, Heading } from 'theme-ui'
+import { Flex, Heading, Text } from 'theme-ui'
 
 interface IProps {
+  itemCount?: number
   actionComponents: React.ReactNode
   actionComponentsMaxWidth?: string
   headingTitle: string
@@ -11,6 +12,7 @@ interface IProps {
 
 export const ListHeader = (props: IProps) => {
   const {
+    itemCount,
     actionComponents,
     actionComponentsMaxWidth,
     headingTitle,
@@ -18,6 +20,8 @@ export const ListHeader = (props: IProps) => {
     categoryComponent,
     filteringComponents,
   } = props
+
+  const itemLabel = itemCount === 1 ? 'item' : 'items'
 
   return (
     <>
@@ -42,19 +46,58 @@ export const ListHeader = (props: IProps) => {
         </Heading>
         <Flex sx={{ justifyContent: 'center' }}>{categoryComponent}</Flex>
       </Flex>
-
       <Flex
         sx={{
           justifyContent: 'space-between',
           flexDirection: ['column', 'column', 'row'],
-          gap: 2,
+          gap: [2, 2, 2],
           paddingX: [2, 0],
           maxWidth: actionComponentsMaxWidth || '100%',
         }}
       >
-        {!showDrafts ? filteringComponents : <div></div>}
-
-        <Flex sx={{ gap: 2, alignContent: 'flex-end', alignSelf: 'flex-end' }}>
+        <Flex
+          sx={{
+            flexDirection: ['column', 'column', 'row'],
+            gap: [2, 2, 2],
+            width: ['100%', '100%', 'auto'],
+            alignItems: ['flex-start', 'flex-start', 'center'],
+          }}
+        >
+          <Flex
+            sx={{
+              width: ['100%', '100%', 'auto'],
+              '& > *': { flexGrow: [1, 1, 0] },
+            }}
+          >
+            {!showDrafts ? (
+              filteringComponents
+            ) : (
+              <div style={{ width: '100%' }}></div>
+            )}
+          </Flex>
+          <Flex
+            sx={{
+              flexDirection: 'row',
+              justifyContent: ['space-between', 'space-between', 'flex-start'],
+              alignItems: 'center',
+              width: ['100%', '100%', 'auto'],
+            }}
+          >
+            <Text sx={{ marginLeft: [0, 0, 2] }}>
+              {itemCount ? `${itemCount} ${itemLabel}` : ''}
+            </Text>
+            <Flex sx={{ gap: 2, display: ['flex', 'flex', 'none'] }}>
+              {actionComponents}
+            </Flex>
+          </Flex>
+        </Flex>
+        <Flex
+          sx={{
+            gap: 2,
+            alignSelf: ['flex-start', 'flex-start', 'flex-end'],
+            display: ['none', 'none', 'flex'],
+          }}
+        >
           {actionComponents}
         </Flex>
       </Flex>

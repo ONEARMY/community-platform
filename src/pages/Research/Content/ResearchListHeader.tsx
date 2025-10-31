@@ -26,6 +26,7 @@ import type { Category, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from '../ResearchSortOptions'
 
 interface IProps {
+  itemCount: number
   draftCount: number
   handleShowDrafts: () => void
   showDrafts: boolean
@@ -38,7 +39,7 @@ const researchStatusOptions: { label: string; value: ResearchStatus | '' }[] = [
 ]
 
 export const ResearchFilterHeader = (props: IProps) => {
-  const { draftCount, handleShowDrafts, showDrafts } = props
+  const { itemCount, draftCount, handleShowDrafts, showDrafts } = props
 
   const [categories, setCategories] = useState<Category[]>([])
   const [searchString, setSearchString] = useState<string>('')
@@ -213,6 +214,7 @@ export const ResearchFilterHeader = (props: IProps) => {
 
   return (
     <ListHeader
+      itemCount={showDrafts ? draftCount : itemCount}
       actionComponents={actionComponents}
       showDrafts={showDrafts}
       headingTitle={listing.heading}

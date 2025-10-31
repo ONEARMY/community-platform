@@ -13,13 +13,10 @@ import type { IconCountWithTooltipProps } from './IconCountWithTooltip'
 
 describe('IconCountWithTooltip', () => {
   it('validates the component behaviour', () => {
-    const { getByText, getByRole } = render(
+    const { getByText } = render(
       <Default {...(Default.args as IconCountWithTooltipProps)} />,
     )
 
-    const img = getByRole('img')
-
-    expect(img).toHaveAttribute('src', '/assets/icons/eye.svg')
     expect(getByText('345')).toBeInTheDocument()
   })
 

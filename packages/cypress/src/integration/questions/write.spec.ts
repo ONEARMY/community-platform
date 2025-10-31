@@ -42,7 +42,7 @@ describe('[Question]', () => {
       cy.step('Can add a library project now profile is complete')
       cy.visit('/questions')
       cy.get('[data-cy=complete-profile-question]').should('not.exist')
-      cy.get('[data-cy=create-question]').click()
+      cy.get('[data-cy=create-question]:visible').click()
 
       cy.get('[data-cy=field-title]', { timeout: 20000 })
 
@@ -72,7 +72,7 @@ describe('[Question]', () => {
       cy.step('Can get to drafts')
       cy.visit('/questions')
       cy.contains(initialTitle).should('not.exist')
-      cy.get('[data-cy=my-drafts]').click()
+      cy.get('[data-cy=my-drafts]:visible').click()
       cy.contains(initialTitle).click()
 
       cy.step('Shows draft question')

@@ -23,13 +23,14 @@ import type { Category } from 'oa-shared'
 import type { LibrarySortOption } from './LibrarySortOptions'
 
 interface IProps {
+  itemCount?: number
   draftCount: number
   handleShowDrafts: () => void
   showDrafts: boolean
 }
 
 export const LibraryListHeader = (props: IProps) => {
-  const { draftCount, handleShowDrafts, showDrafts } = props
+  const { itemCount, draftCount, handleShowDrafts, showDrafts } = props
   const [categories, setCategories] = useState<Category[]>([])
   const [searchParams, setSearchParams] = useSearchParams()
   const q = searchParams.get(LibrarySearchParams.q)
@@ -190,6 +191,7 @@ export const LibraryListHeader = (props: IProps) => {
 
   return (
     <ListHeader
+      itemCount={showDrafts ? draftCount : itemCount}
       actionComponents={actionComponents}
       showDrafts={showDrafts}
       headingTitle={headingTitle}

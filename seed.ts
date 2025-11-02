@@ -413,11 +413,16 @@ const main = async () => {
 
   await seed.buckets([
     {
+      id: tenant_id,
       name: tenant_id,
       public: true,
-      allowed_mime_types: [''],
+      allowed_mime_types: [],
     },
-    { name: `${tenant_id}-documents` },
+    {
+      id: `${tenant_id}-documents`,
+      name: `${tenant_id}-documents`,
+      allowed_mime_types: [],
+    },
   ])
 
   await seed.tenant_settings([

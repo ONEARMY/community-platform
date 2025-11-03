@@ -17,7 +17,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const claims = await client.auth.getClaims()
 
-  if (claims.data?.claims) {
+  if (!claims.data?.claims) {
     return Response.json(
       {},
       { headers, status: 401, statusText: 'unauthorized' },
@@ -27,7 +27,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { data } = await client
     .from('notifications_preferences')
     .select('*, profiles!inner(id)')
-    .eq('profiles.auth_id', claims.data?.claims.sub)
+    .eq('profiles.auth_id', claims.data?.claims?.sub)
     .single()
 
   const preferences = data || DEFAULT_NOTIFICATION_PREFERENCES

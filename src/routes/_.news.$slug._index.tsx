@@ -39,7 +39,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const profileService = new ProfileServiceServer(client)
-  const dbProfile = await profileService.getByAuthId(claims.data?.claims.sub)
+  const dbProfile = await profileService.getByAuthId(claims.data.claims.sub)
   const profile = new ProfileFactory(client).fromDB(dbProfile!)
 
   const isAdmin = profile.roles?.includes(UserRole.ADMIN) ?? false

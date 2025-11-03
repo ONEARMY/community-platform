@@ -20,7 +20,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { data } = await client
     .from('profiles')
     .select('id,roles')
-    .eq('auth_id', claims.data?.claims.sub)
+    .eq('auth_id', claims.data.claims.sub)
     .limit(1)
 
   if (!data!.at(0)!.roles?.includes(UserRole.ADMIN)) {

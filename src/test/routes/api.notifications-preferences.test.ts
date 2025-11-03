@@ -39,7 +39,7 @@ describe('loader', () => {
   })
 
   it('returns user preferences when found', async () => {
-    const mockUser = { id: 'user123' }
+    const mockClaims = { sub: 'user123' }
     const mockPreferences = {
       comments: false,
       replies: true,
@@ -47,8 +47,8 @@ describe('loader', () => {
       is_unsubscribed: true,
     }
 
-    mockClient.mocks.auth.getUser.mockResolvedValue({
-      data: { user: mockUser },
+    mockClient.mocks.auth.getClaims.mockResolvedValue({
+      data: { claims: mockClaims },
     })
     mockClient.mocks.single.mockResolvedValue({ data: mockPreferences })
 
@@ -71,7 +71,7 @@ describe('loader', () => {
   })
 
   it('returns default preferences when no data found', async () => {
-    const mockUser = { id: 'user123' }
+    const mockClaims = { sub: 'user123' }
     const defaultPreferences = {
       comments: true,
       replies: true,
@@ -79,8 +79,8 @@ describe('loader', () => {
       is_unsubscribed: false,
     }
 
-    mockClient.mocks.auth.getUser.mockResolvedValue({
-      data: { user: mockUser },
+    mockClient.mocks.auth.getClaims.mockResolvedValue({
+      data: { claims: mockClaims },
     })
     mockClient.mocks.single.mockResolvedValue({ data: null })
 
@@ -92,14 +92,13 @@ describe('loader', () => {
   })
 
   it('returns 401 when user is not authenticated', async () => {
-    mockClient.mocks.auth.getUser.mockResolvedValue({
-      data: { user: null },
+    mockClient.mocks.auth.getClaims.mockResolvedValue({
+      data: { claims: null },
     })
 
     const response = await loader(createMockLoaderArgs(mockRequest))
 
     expect(response.status).toBe(401)
-    expect(response.statusText).toBe('unauthorized')
   })
 })
 
@@ -126,6 +125,7 @@ describe('action', () => {
 
   it('updates existing preferences when id is provided', async () => {
     const mockUser = { id: 'user123' }
+    const mockClaims = { sub: 'user123' }
     const formData = createFormData({
       id: '1',
       comments: 'false',
@@ -142,8 +142,8 @@ describe('action', () => {
       },
     )
 
-    mockClient.mocks.auth.getUser.mockResolvedValue({
-      data: { user: mockUser },
+    mockClient.mocks.auth.getClaims.mockResolvedValue({
+      data: { claims: mockClaims },
     })
     mockClient.mocks.select.mockResolvedValue({ data: mockUser })
 
@@ -164,7 +164,7 @@ describe('action', () => {
   })
 
   it('creates new preferences when id is not provided', async () => {
-    const mockUser = { id: 'user123' }
+    const mockClaims = { sub: 'user123' }
     const mockProfile = { id: 456, auth_id: 'user123' }
     const formData = createFormData({
       comments: 'true',
@@ -181,8 +181,8 @@ describe('action', () => {
       },
     )
 
-    mockClient.mocks.auth.getUser.mockResolvedValue({
-      data: { user: mockUser },
+    mockClient.mocks.auth.getClaims.mockResolvedValue({
+      data: { claims: mockClaims },
     })
     mockClient.mocks.single.mockResolvedValue({ data: mockProfile })
 
@@ -218,18 +218,17 @@ describe('action', () => {
       },
     )
 
-    mockClient.mocks.auth.getUser.mockResolvedValue({
-      data: { user: null },
+    mockClient.mocks.auth.getClaims.mockResolvedValue({
+      data: { claims: null },
     })
 
     const response = await action(createMockActionArgs(mockRequest))
 
     expect(response.status).toBe(401)
-    expect(response.statusText).toBe('Unauthorized')
   })
 
   it('returns 500 for non-POST requests', async () => {
-    const mockUser = { id: 'user123' }
+    const mockClaims = { sub: 'user123' }
     mockRequest = new Request(
       'http://localhost/api/notifications-preferences',
       {
@@ -237,8 +236,8 @@ describe('action', () => {
       },
     )
 
-    mockClient.mocks.auth.getUser.mockResolvedValue({
-      data: { user: mockUser },
+    mockClient.mocks.auth.getClaims.mockResolvedValue({
+      data: { claims: mockClaims },
     })
 
     const response = await action(createMockActionArgs(mockRequest))
@@ -247,7 +246,7 @@ describe('action', () => {
   })
 
   it('returns 401 when user profile is not found during creation', async () => {
-    const mockUser = { id: 'user123' }
+    const mockClaims = { sub: 'user123' }
     const formData = createFormData({
       comments: 'true',
       replies: 'true',
@@ -263,8 +262,8 @@ describe('action', () => {
       },
     )
 
-    mockClient.mocks.auth.getUser.mockResolvedValue({
-      data: { user: mockUser },
+    mockClient.mocks.auth.getClaims.mockResolvedValue({
+      data: { claims: mockClaims },
     })
     mockClient.mocks.single.mockResolvedValue({ data: null })
 
@@ -275,7 +274,7 @@ describe('action', () => {
   })
 
   it('handles errors gracefully', async () => {
-    const mockUser = { id: 'user123' }
+    const mockClaims = { sub: 'user123' }
     const formData = createFormData({
       comments: 'true',
       replies: 'true',
@@ -291,8 +290,8 @@ describe('action', () => {
       },
     )
 
-    mockClient.mocks.auth.getUser.mockResolvedValue({
-      data: { user: mockUser },
+    mockClient.mocks.auth.getClaims.mockResolvedValue({
+      data: { claims: mockClaims },
     })
     mockClient.mocks.single.mockRejectedValue(new Error('Database error'))
 

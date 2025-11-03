@@ -22,7 +22,7 @@ export const loader = async ({ request }) => {
     const { data, error } = await client
       .from('profiles')
       .update({ last_active: nowUtc })
-      .eq('auth_id', claims.data?.claims.sub)
+      .eq('auth_id', claims.data.claims.sub)
       .select(
         `*,
         tags:profile_tags_relations(

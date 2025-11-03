@@ -27,7 +27,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     return Response.json({}, { headers, status, statusText })
   }
 
-  const profile = await getProfileByAuthId(request, claims.data?.claims.sub)
+  const profile = await getProfileByAuthId(request, claims.data.claims.sub)
 
   if (!profile) {
     return Response.json(

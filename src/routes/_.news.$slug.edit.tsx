@@ -22,7 +22,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     )
   }
 
-  if (!(await isAllowedToEdit(claims.data?.claims.sub, client))) {
+  if (!(await isAllowedToEdit(claims.data.claims.sub, client))) {
     return redirect('/forbidden?page=news-edit', { headers })
   }
 

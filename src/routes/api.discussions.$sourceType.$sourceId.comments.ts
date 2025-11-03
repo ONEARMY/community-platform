@@ -29,7 +29,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       const profileResult = await client
         .from('profiles')
         .select('id')
-        .eq('auth_id', claims.data?.claims.sub)
+        .eq('auth_id', claims.data.claims.sub)
         .single()
 
       if (!profileResult.error) {

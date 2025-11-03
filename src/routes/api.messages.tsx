@@ -27,7 +27,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const { valid, status, statusText } = await validateRequest(
       request,
-      claims.data?.claims.email,
+      claims.data.claims.email,
       data,
     )
 

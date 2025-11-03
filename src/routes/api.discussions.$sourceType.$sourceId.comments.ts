@@ -50,7 +50,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
     return Response.json({ comments }, { headers })
   } catch (error) {
-    console.error(error)
+    console.log(error)
     return Response.json({}, { status: 500, headers })
   }
 }

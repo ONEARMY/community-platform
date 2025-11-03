@@ -19,14 +19,14 @@ const useDrafts = <T,>({ getDraftCount, getDrafts }: Props<T>) => {
 
   useEffect(() => {
     const fetchDraftCount = async () => {
-      if (session?.id) {
+      if (session?.sub) {
         const count = await getDraftCount()
 
         setDraftCount(count)
       }
     }
     fetchDraftCount()
-  }, [session?.id])
+  }, [session?.sub])
 
   const handleShowDrafts = async () => {
     setShowDrafts((showDrafts) => !showDrafts)

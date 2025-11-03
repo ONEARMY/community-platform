@@ -60,16 +60,16 @@ export const ProfileStoreProvider = ({
 }: {
   children: React.ReactNode
 }) => {
-  const user = useContext(SessionContext)
+  const claims = useContext(SessionContext)
 
   useEffect(() => {
-    if (!user?.id) {
+    if (!claims?.id) {
       profileStore.clear()
       return
     }
 
     profileStore.refresh()
-  }, [user?.id])
+  }, [claims?.sub])
 
   useEffect(() => {
     profileStore.initProfileTypes()

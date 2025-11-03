@@ -22,11 +22,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const environment = getEnvVariables()
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  return Response.json({ environment, user }, { headers })
+  return Response.json({ environment, user: claims.data?.claims }, { headers })
 }
 
 export function HydrateFallback() {

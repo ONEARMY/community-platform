@@ -79,18 +79,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
 
   try {
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
 
-    if (!user) {
+    if (!claims.data?.claims) {
       return Response.json({}, { headers, status: 401 })
     }
 
     const profileResponse = await client
       .from('profiles')
       .select('id')
-      .eq('auth_id', user.id)
+      .eq('auth_id', claims.data.claims.sub)
       .maybeSingle() // Maybe single due to dup profiles in tests
 
     if (!profileResponse.data || profileResponse.error) {

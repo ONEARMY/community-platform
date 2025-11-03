@@ -15,7 +15,7 @@ import { validateImage } from 'src/utils/storage'
 import { contentServiceServer } from '../services/contentService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { AuthError, User } from '@supabase/supabase-js'
+import type { AuthError } from '@supabase/supabase-js'
 import type { DBNews, DBProfile, Moderation } from 'oa-shared'
 import type { NewsSortOption } from 'src/pages/News/NewsSortOptions'
 
@@ -129,16 +129,16 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       title: formData.get('title') as string,
     }
 
-    const {
-      data: { user },
-      error,
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
+
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
+    }
 
     const { valid, status, statusText } = await validateRequest(
       request,
-      user,
       data,
-      error,
+      claims.error,
     )
 
     if (!valid) {
@@ -175,7 +175,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const profileRequest = await client
       .from('profiles')
       .select('id,username')
-      .eq('auth_id', user!.id)
+      .eq('auth_id', claims.data.claims.sub)
       .limit(1)
 
     if (profileRequest.error || !profileRequest.data?.at(0)) {
@@ -244,7 +244,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       }
     }
 
-    updateUserActivity(client, user!.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json({ news }, { headers, status: 201 })
   } catch (error) {
@@ -267,7 +267,6 @@ function notifyDiscord(news: News, profile: DBProfile, siteUrl: string) {
 
 async function validateRequest(
   request: Request,
-  user: User | null,
   data: any,
   authError: AuthError | null,
 ) {
@@ -276,10 +275,6 @@ async function validateRequest(
       status: authError?.status,
       statusText: authError?.message || 'Unknown authentication error',
     }
-  }
-
-  if (!user) {
-    return { status: 401, statusText: 'Unauthorized: No user found' }
   }
 
   if (request.method !== 'POST') {

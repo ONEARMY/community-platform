@@ -5,18 +5,15 @@ import { ProfileTypesServiceServer } from 'src/services/profileTypesService.serv
 import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
-import type { User } from '@supabase/supabase-js'
 import type { Image, ProfileFormData } from 'oa-shared'
 
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request)
 
   try {
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
 
-    if (!user) {
+    if (!claims.data?.claims) {
       return Response.json({}, { headers, status: 401 })
     }
 
@@ -25,7 +22,7 @@ export const loader = async ({ request }) => {
     const { data, error } = await client
       .from('profiles')
       .update({ last_active: nowUtc })
-      .eq('auth_id', user.id)
+      .eq('auth_id', claims.data?.claims.sub)
       .select(
         `*,
         tags:profile_tags_relations(
@@ -108,12 +105,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       coverImages: formData.getAll('coverImages') as File[],
     } as ProfileFormData
 
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
+
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
+    }
 
     const profileData = await new ProfileServiceServer(client).getByAuthId(
-      user!.id,
+      claims.data.claims.sub,
     )
     const profileTypes = await new ProfileTypesServiceServer(client).get()
 
@@ -122,7 +121,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const { valid, status, statusText } = await validateRequest(
       request,
-      user,
       data,
       profileData,
       memberTypes,
@@ -139,7 +137,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const profileService = new ProfileServiceServer(client)
     const profile = await profileService.updateProfile(profileData?.id, data)
 
-    updateUserActivity(client, user!.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json(profile, { headers, status: 200 })
   } catch (error) {
@@ -150,17 +148,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 async function validateRequest(
   request: Request,
-  user: User | null,
   data: ProfileFormData,
   profile: { id: number } | null,
   memberTypes: string[] | null,
 ) {
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'method not allowed' }
-  }
-
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
   }
 
   if (!profile?.id) {

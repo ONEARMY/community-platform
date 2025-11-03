@@ -17,11 +17,9 @@ export const loader = async ({ request }) => {
     )
   }
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (!claims.data?.claims) {
     return Response.json({}, { headers, status: 401 })
   }
 

@@ -14,18 +14,17 @@ import type { LoaderFunctionArgs } from 'react-router'
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const { data } = await client.auth.getClaims()
 
-  if (!user) {
+  if (!data?.claims) {
     return redirectServiceServer.redirectSignIn(
       `/library/${params.slug}/edit`,
       headers,
     )
   }
 
-  const username = user.user_metadata.username
+  // const username = user.user_metadata.username
+  const username = data.claims.username
   const projectDb = (
     await libraryServiceServer.getBySlug(client, params.slug as string)
   ).data as unknown as DBProject

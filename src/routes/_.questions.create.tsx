@@ -9,11 +9,9 @@ import type { LoaderFunctionArgs } from '@remix-run/node'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (!claims.data?.claims) {
     return redirectServiceServer.redirectSignIn('/questions/create', headers)
   }
 

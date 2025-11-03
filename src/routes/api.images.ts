@@ -2,7 +2,6 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { validateImage } from 'src/utils/storage'
 
-import type { User } from '@supabase/supabase-js'
 import type { ContentType } from 'oa-shared'
 import type { LoaderFunctionArgs } from 'react-router'
 
@@ -15,12 +14,13 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const imageFile = formData.get('imageFile') as File
     const id = formData.has('id') ? Number(formData.get('id') as string) : null
 
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
+
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
+    }
 
     const { valid, status, statusText } = await validateRequest(
-      user,
       request,
       imageFile,
     )
@@ -31,7 +31,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const uploadedImage = await storageServiceServer.uploadImage(
       [imageFile],
-      `${id ? contentType : 'users'}/${id ?? user!.id}`,
+      `${id ? contentType : 'users'}/${id ?? claims.data.claims.sub}`,
       client,
     )
 
@@ -54,15 +54,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   }
 }
 
-async function validateRequest(
-  user: User | null,
-  request: Request,
-  imageFile: File,
-) {
-  if (!user) {
-    return { status: 401, statusText: 'Unauthorized' }
-  }
-
+async function validateRequest(request: Request, imageFile: File) {
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'Method not allowed' }
   }

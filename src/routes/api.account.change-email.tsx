@@ -10,12 +10,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const newEmail = formData.get('email') as string
   const password = formData.get('password') as string
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
   const signInResult = await client.auth.signInWithPassword({
-    email: user!.email as string,
+    email: claims.data?.claims!.email as string,
     password,
   })
 

@@ -4,7 +4,7 @@ import { sendEmail } from '../.server/resend'
 import ReceiverMessage from '../.server/templates/ReceiverMessage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { TenantSettings } from 'oa-shared'
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -19,13 +19,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       name: formData.has('name') ? (formData.get('name') as string) : undefined,
     }
 
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
+
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
+    }
 
     const { valid, status, statusText } = await validateRequest(
       request,
-      user,
+      claims.data?.claims.email,
       data,
     )
 
@@ -36,7 +38,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const userProfile = await client
       .from('profiles')
       .select('id,username')
-      .eq('username', user!.user_metadata.username)
+      .eq('username', claims.data.claims.user_metadata.username)
 
     const recipientProfile = await client
       .from('profiles')
@@ -103,7 +105,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         }}
         text={data.message}
         receiverName={data.to}
-        messengerEmailAddress={user?.email as string}
+        messengerEmailAddress={claims.data.claims.email as string}
         messengerName={data.name}
         messengerUsername={messenger.username}
       />
@@ -153,11 +155,11 @@ export async function getTenantSettings(
   }
 }
 
-async function validateRequest(request: Request, user: User | null, data: any) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
+async function validateRequest(
+  request: Request,
+  userEmail: string | null,
+  data: any,
+) {
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'method not allowed' }
   }
@@ -170,7 +172,7 @@ async function validateRequest(request: Request, user: User | null, data: any) {
     return { status: 400, statusText: 'message is required' }
   }
 
-  if (!user.email) {
+  if (!userEmail) {
     return { status: 400, statusText: 'Unable to get messenger email address' }
   }
 

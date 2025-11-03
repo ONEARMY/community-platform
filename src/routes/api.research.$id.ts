@@ -9,19 +9,19 @@ import { updateUserActivity } from 'src/utils/activity.server'
 import { convertToSlug } from 'src/utils/slug'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBResearchItem } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
+  const id = Number(params.id)
+
+  if (request.method === 'DELETE') {
+    return await deleteResearch(request, id)
+  }
+
   const { client, headers } = createSupabaseServerClient(request)
 
   try {
-    const id = Number(params.id)
-
-    if (request.method === 'DELETE') {
-      return await deleteResearch(request, id)
-    }
-
     const formData = await request.formData()
     const data = {
       title: formData.get('title') as string,
@@ -41,15 +41,17 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       existingImage: formData.get('existingImage') as string | null,
     }
 
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
+
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
+    }
 
     const oldResearch = await researchServiceServer.getById(id, client)
 
     const { valid, status, statusText } = await validateRequest(
       request,
-      user,
+      claims.data.claims.sub,
       data,
       oldResearch,
       client,
@@ -124,7 +126,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       }
     }
 
-    updateUserActivity(client, user!.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json({ research }, { headers, status: 201 })
   } catch (error) {
@@ -139,26 +141,32 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 async function deleteResearch(request, id: number) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  try {
+    const claims = await client.auth.getClaims()
 
-  const canEdit = await researchServiceServer.isAllowedToEditResearchById(
-    client,
-    id,
-    user?.user_metadata.username,
-  )
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
+    }
 
-  if (canEdit) {
-    await client
-      .from('research')
-      .update({
-        modified_at: new Date(),
-        deleted: true,
-      })
-      .eq('id', id)
+    const canEdit = await researchServiceServer.isAllowedToEditResearchById(
+      client,
+      id,
+      claims.data.claims.user_metadata.username,
+    )
 
-    return Response.json({}, { status: 200, headers })
+    if (canEdit) {
+      await client
+        .from('research')
+        .update({
+          modified_at: new Date(),
+          deleted: true,
+        })
+        .eq('id', id)
+
+      return Response.json({}, { status: 200, headers })
+    }
+  } catch (error) {
+    console.error('Delete research error:', error)
   }
 
   return Response.json({}, { status: 500, headers })
@@ -166,15 +174,11 @@ async function deleteResearch(request, id: number) {
 
 async function validateRequest(
   request: Request,
-  user: User | null,
+  userAuthId: string,
   data: any,
   research: DBResearchItem,
   client: SupabaseClient,
 ) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
   if (request.method !== 'PUT') {
     return { status: 405, statusText: 'method not allowed' }
   }
@@ -206,7 +210,7 @@ async function validateRequest(
     }
   }
 
-  const profile = await new ProfileServiceServer(client).getByAuthId(user!.id)
+  const profile = await new ProfileServiceServer(client).getByAuthId(userAuthId)
 
   if (!profile) {
     return { status: 400, statusText: 'User not found' }

@@ -1,4 +1,4 @@
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
   IPatreonMembershipAttributes,
   IPatreonTierAttributes,
@@ -127,7 +127,7 @@ const getCurrentPatreonUser = async (accessToken: string) => {
 
 const verifyAndUpdatePatreonUser = async (
   code: string,
-  user: User,
+  userAuthId: string,
   client: SupabaseClient,
   origin: string,
 ) => {
@@ -166,14 +166,14 @@ const verifyAndUpdatePatreonUser = async (
       patreon: patreonUserParsed,
       is_supporter: isSupporterUser,
     })
-    .eq('auth_id', user.id)
+    .eq('auth_id', userAuthId)
 }
 
-const disconnectUser = async (user: User, client: SupabaseClient) => {
+const disconnectUser = async (userAuthId: string, client: SupabaseClient) => {
   await client
     .from('profiles')
     .update({ patreon: null, is_supporter: false })
-    .eq('auth_id', user.id)
+    .eq('auth_id', userAuthId)
 }
 
 export const patreonServiceServer = {

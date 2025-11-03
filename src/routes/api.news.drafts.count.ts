@@ -7,19 +7,14 @@ import type { LoaderFunctionArgs } from '@remix-run/node'
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
-    return Response.json(
-      {},
-      { headers, status: 401, statusText: 'Unauthorized' },
-    )
+  if (!claims.data?.claims) {
+    return Response.json({}, { headers, status: 401 })
   }
 
   const profileService = new ProfileServiceServer(client)
-  const profile = await profileService.getByAuthId(user.id)
+  const profile = await profileService.getByAuthId(claims.data.claims.sub)
 
   if (!profile) {
     return Response.json(

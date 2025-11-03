@@ -6,18 +6,16 @@ import { patreonServiceServer } from '../services/patreonService.server'
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (!claims.data?.claims) {
     return Response.json({}, { headers, status: 401 })
   }
 
   const { data } = await client
     .from('profiles')
     .select('patreon,is_supporter')
-    .eq('auth_id', user.id)
+    .eq('auth_id', claims.data.claims.sub)
     .single()
 
   return Response.json(
@@ -36,18 +34,16 @@ export const action = async ({ request }) => {
     )
   }
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (!claims.data?.claims) {
     return Response.json({}, { headers, status: 401 })
   }
 
   try {
-    await patreonServiceServer.disconnectUser(user, client)
+    await patreonServiceServer.disconnectUser(claims.data.claims.sub, client)
 
-    updateUserActivity(client, user.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json({}, { headers, status: 200 })
   } catch (err) {

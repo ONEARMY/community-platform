@@ -8,7 +8,7 @@ import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBAuthor, DBProfile, DiscussionContentTypes } from 'oa-shared'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
@@ -21,16 +21,15 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     )
   }
   try {
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
+
     let currentUserId: number | null = null
 
-    if (user?.id) {
+    if (claims.data?.claims?.sub) {
       const profileResult = await client
         .from('profiles')
         .select('id')
-        .eq('auth_id', user.id)
+        .eq('auth_id', claims.data?.claims.sub)
         .single()
 
       if (!profileResult.error) {
@@ -61,16 +60,17 @@ export async function action({ params, request }: LoaderFunctionArgs) {
 
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
+
+  if (!claims.data?.claims) {
+    return Response.json({}, { headers, status: 401 })
+  }
 
   const sourceType = mapSourceType(params.sourceType! as DiscussionContentTypes)
 
   const { valid, status, statusText } = await validateRequest(
     params,
     request,
-    user,
     data,
     sourceType,
   )
@@ -82,13 +82,17 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   const currentUser = await client
     .from('profiles')
     .select()
-    .eq('auth_id', user!.id)
+    .eq('auth_id', claims.data.claims.sub)
     .limit(1)
 
   if (currentUser.error || !currentUser.data?.at(0)) {
     return Response.json(
       {},
-      { headers, status: 400, statusText: 'profile not found ' + user!.id },
+      {
+        headers,
+        status: 400,
+        statusText: 'profile not found ' + claims.data.claims.sub,
+      },
     )
   }
 
@@ -151,7 +155,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   const commentFactory = new CommentFactory(new ImageServiceServer(client))
   const comment = await commentFactory.fromDBWithAuthor(commentDb)
 
-  updateUserActivity(client, user!.id)
+  updateUserActivity(client, claims.data.claims.sub)
 
   return Response.json(comment, {
     headers,
@@ -199,14 +203,9 @@ function addSubscriptions(
 async function validateRequest(
   params: Params<string>,
   request: Request,
-  user: User | null,
   data: any,
   sourceType: 'news' | 'research_update' | 'projects' | 'questions' | null,
 ) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
   if (!params.sourceId) {
     return { status: 400, statusText: 'sourceId is required' }
   }

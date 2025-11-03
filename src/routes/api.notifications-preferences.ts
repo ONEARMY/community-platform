@@ -2,7 +2,6 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
-import type { User } from '@supabase/supabase-js'
 import type { DBNotificationsPreferencesFields } from 'oa-shared'
 
 export const DEFAULT_NOTIFICATION_PREFERENCES: DBNotificationsPreferencesFields =
@@ -16,11 +15,9 @@ export const DEFAULT_NOTIFICATION_PREFERENCES: DBNotificationsPreferencesFields 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (claims.data?.claims) {
     return Response.json(
       {},
       { headers, status: 401, statusText: 'unauthorized' },
@@ -30,7 +27,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { data } = await client
     .from('notifications_preferences')
     .select('*, profiles!inner(id)')
-    .eq('profiles.auth_id', user.id)
+    .eq('profiles.auth_id', claims.data?.claims.sub)
     .single()
 
   const preferences = data || DEFAULT_NOTIFICATION_PREFERENCES
@@ -49,11 +46,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const research_updates = formData.get('research_updates') === 'true'
     const is_unsubscribed = formData.get('is_unsubscribed') === 'true'
 
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
 
-    const { valid, status, statusText } = await validateRequest(request, user)
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
+    }
+
+    const { valid, status, statusText } = await validateRequest(request)
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText })
@@ -77,7 +76,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const { data, error } = await client
       .from('profiles')
       .select('id, auth_id')
-      .eq('auth_id', user?.id)
+      .eq('auth_id', claims.data.claims.sub)
       .single()
 
     if (!data) {
@@ -97,7 +96,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       tenant_id: process.env.TENANT_ID!,
     })
 
-    updateUserActivity(client, user!.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json({}, { headers, status: 200 })
   } catch (error) {
@@ -106,11 +105,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 }
 
-async function validateRequest(request: Request, user: User | null) {
-  if (!user) {
-    return { valid: false, status: 401, statusText: 'Unauthorized' }
-  }
-
+async function validateRequest(request: Request) {
   if (request.method !== 'POST') {
     return { valid: false, status: 405, statusText: 'Method not allowed' }
   }

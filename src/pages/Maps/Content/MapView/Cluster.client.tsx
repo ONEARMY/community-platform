@@ -13,9 +13,15 @@ interface IProps {
   pins: MapPin[]
   onPinClick: (pin: MapPin) => void
   onClusterClick: (cluster: MarkerCluster) => void
+  clusterGroupRef?: React.RefObject<MarkerClusterGroup>
 }
 
-export const Clusters = ({ pins, onPinClick, onClusterClick }: IProps) => {
+export const Clusters = ({
+  pins,
+  onPinClick,
+  onClusterClick,
+  clusterGroupRef,
+}: IProps) => {
   /**
    * Documentation of Leaflet Clusters for better understanding
    * https://github.com/Leaflet/Leaflet.markercluster#clusters-methods
@@ -23,6 +29,7 @@ export const Clusters = ({ pins, onPinClick, onClusterClick }: IProps) => {
    */
   return (
     <MarkerClusterGroup
+      ref={clusterGroupRef}
       iconCreateFunction={createClusterIcon()}
       showCoverageOnHover={false}
       spiderfyOnMaxZoom={true}

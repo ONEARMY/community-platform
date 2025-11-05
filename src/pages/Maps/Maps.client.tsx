@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from '@remix-run/react'
 import { Box, Flex } from 'theme-ui'
+import type MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import { MapList } from './Content/MapView/MapList'
 import { MapView } from './Content/MapView/MapView'
 import { filterPins } from './utils/filterPins'
 import { mapPinService } from './map.service'
-import { MapContext, PROFILE_ZOOM_LEVEL } from './MapContext'
+import { MapContext } from './MapContext'
 
-import type { LatLngBounds } from 'leaflet'
+import type { LatLngBounds, Marker } from 'leaflet'
+import type { Map as MapType } from 'react-leaflet'
 import type {
   ILatLng,
   MapPin,
@@ -45,7 +47,8 @@ const MapsPage = () => {
   const [loadingMessage, setLoadingMessage] = useState<string>('Loading...')
   const [isMobile, setIsMobile] = useState(false)
   const [zoom, setZoom] = useState<number>(2)
-  const [mapRef, setMapRef] = useState<any>(null)
+  const [mapRef, setMapRef] = useState<MapType | null>(null)
+  const [clusterGroupRef, setClusterGroupRef] = useState<MarkerClusterGroup | null>(null)
 
   const updateMapView = (location: ILatLng, zoomLevel: number) => {
     if (mapRef?.leafletElement) {
@@ -65,6 +68,30 @@ const MapsPage = () => {
     if (mapRef?.leafletElement) {
       mapRef.leafletElement.fitBounds(bounds)
     }
+  }
+
+  const selectPinAndHandleCluster = (pin: MapPin) => {
+    selectPin(pin)
+
+    const clusterGroup = clusterGroupRef?.leafletElement
+
+    if (clusterGroup?.getLayers && mapRef) {
+      const allMarkers = clusterGroup.getLayers()
+      const marker = allMarkers.find((m: Marker) => {
+        const pos = m.getLatLng()
+        return pos.lat === Number(pin.lat) && pos.lng === Number(pin.lng)
+      })
+
+      if (marker) {
+        const visibleParent = clusterGroup.getVisibleParent(marker)
+        if (visibleParent !== marker && visibleParent.getBounds) {
+          fitMapBounds(visibleParent.getBounds())
+          return
+        }
+      }
+    }
+
+    panMapTo({ lat: pin.lat, lng: pin.lng })
   }
 
   const filteredPins = useMemo<MapPin[]>(() => {
@@ -184,11 +211,7 @@ const MapsPage = () => {
       const foundPin = allPins.find((pin) => pin.profile!.username === username)
       if (foundPin) {
         if (selectedPin?.profile?.username !== username) {
-          selectPin(foundPin)
-          updateMapView(
-            { lat: foundPin.lat, lng: foundPin.lng },
-            PROFILE_ZOOM_LEVEL,
-          )
+          selectPinAndHandleCluster(foundPin)
         }
       } else {
         selectPin(foundPin)
@@ -209,6 +232,7 @@ const MapsPage = () => {
         loadingMessage,
         selectedPin,
         selectPin,
+        selectPinWithClusterCheck: selectPinAndHandleCluster,
         filteredPins,
         activeBadgeFilters,
         activeProfileSettingFilters,
@@ -228,6 +252,7 @@ const MapsPage = () => {
         panTo: panMapTo,
         fitBounds: fitMapBounds,
         setMapRef,
+        setClusterGroupRef,
       }}
     >
       <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)', width: '100%' }}>

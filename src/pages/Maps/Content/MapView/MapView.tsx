@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef } from 'react'
 import { Button, Map } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
+import MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import { MapContext } from '../../MapContext'
 import { ButtonZoomIn } from './ButtonZoomIn'
@@ -13,12 +14,19 @@ import type { Map as MapType } from 'react-leaflet'
 export const MapView = () => {
   const mapState = useContext(MapContext)
   const mapRef = useRef<MapType>(null)
+  const clusterGroupRef = useRef<MarkerClusterGroup>(null)
 
   useEffect(() => {
     if (mapRef.current && mapState) {
       mapState.setMapRef(mapRef.current)
     }
   }, [mapRef.current, mapState])
+
+  useEffect(() => {
+    if (clusterGroupRef.current && mapState) {
+      mapState.setClusterGroupRef(clusterGroupRef.current)
+    }
+  }, [clusterGroupRef.current, mapState])
 
   if (!mapState) {
     return null
@@ -90,14 +98,11 @@ export const MapView = () => {
       {mapState.filteredPins && (
         <Clusters
           pins={mapState.filteredPins}
-          onPinClick={(pin) => {
-            mapState.selectPin(pin)
-            mapState.panTo({ lat: pin.lat, lng: pin.lng })
-          }}
+          onPinClick={mapState.selectPinWithClusterCheck}
           onClusterClick={(cluster) => {
-            const bounds = cluster.getBounds()
-            mapState.fitBounds(bounds)
+            mapState.fitBounds(cluster.getBounds())
           }}
+          clusterGroupRef={clusterGroupRef}
         />
       )}
       {mapState.selectedPin && (

@@ -1,7 +1,6 @@
 import { useContext, useEffect, useRef } from 'react'
 import { Button, Map } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
-import MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import { MapContext } from '../../MapContext'
 import { ButtonZoomIn } from './ButtonZoomIn'
@@ -14,7 +13,7 @@ import type { Map as MapType } from 'react-leaflet'
 export const MapView = () => {
   const mapState = useContext(MapContext)
   const mapRef = useRef<MapType>(null)
-  const clusterGroupRef = useRef<MarkerClusterGroup>(null)
+  const clusterGroupRef = useRef<any>(null)
 
   useEffect(() => {
     if (mapRef.current && mapState) {

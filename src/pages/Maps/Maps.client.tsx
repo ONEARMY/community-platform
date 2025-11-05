@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from '@remix-run/react'
 import { Box, Flex } from 'theme-ui'
-import type MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import { MapList } from './Content/MapView/MapList'
 import { MapView } from './Content/MapView/MapView'
@@ -10,7 +9,6 @@ import { mapPinService } from './map.service'
 import { MapContext } from './MapContext'
 
 import type { LatLngBounds, Marker } from 'leaflet'
-import type { Map as MapType } from 'react-leaflet'
 import type {
   ILatLng,
   MapPin,
@@ -18,6 +16,7 @@ import type {
   ProfileTag,
   ProfileType,
 } from 'oa-shared'
+import type { Map as MapType } from 'react-leaflet'
 
 import './styles.css'
 
@@ -48,7 +47,7 @@ const MapsPage = () => {
   const [isMobile, setIsMobile] = useState(false)
   const [zoom, setZoom] = useState<number>(2)
   const [mapRef, setMapRef] = useState<MapType | null>(null)
-  const [clusterGroupRef, setClusterGroupRef] = useState<MarkerClusterGroup | null>(null)
+  const [clusterGroupRef, setClusterGroupRef] = useState<any>(null)
 
   const updateMapView = (location: ILatLng, zoomLevel: number) => {
     if (mapRef?.leafletElement) {

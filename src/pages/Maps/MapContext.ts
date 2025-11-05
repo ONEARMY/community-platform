@@ -1,8 +1,6 @@
 import { createContext } from 'react'
-import type MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import type { LatLngBounds } from 'leaflet'
-import type { Map as MapType } from 'react-leaflet'
 import type {
   ILatLng,
   MapPin,
@@ -10,6 +8,7 @@ import type {
   ProfileTag,
   ProfileType,
 } from 'oa-shared'
+import type { Map as MapType } from 'react-leaflet'
 
 export const MapContext = createContext<{
   allPins: MapPin[] | null
@@ -42,5 +41,5 @@ export const MapContext = createContext<{
   panTo: (location: ILatLng) => void
   fitBounds: (bounds: LatLngBounds) => void
   setMapRef: (ref: MapType) => void
-  setClusterGroupRef: (ref: MarkerClusterGroup) => void
+  setClusterGroupRef: (ref: any) => void
 } | null>(null)

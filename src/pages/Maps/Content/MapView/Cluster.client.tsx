@@ -13,7 +13,7 @@ interface IProps {
   pins: MapPin[]
   onPinClick: (pin: MapPin) => void
   onClusterClick: (cluster: MarkerCluster) => void
-  clusterGroupRef?: React.RefObject<MarkerClusterGroup>
+  clusterGroupRef?: React.RefObject<any>
 }
 
 export const Clusters = ({

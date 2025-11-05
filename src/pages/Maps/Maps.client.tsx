@@ -78,6 +78,12 @@ const MapsPage = () => {
     boundaries,
   ])
 
+  const availablePins = useMemo(
+    () =>
+      boundaries ? filterPins(allPins || [], { boundaries }) : allPins || [],
+    [allPins, boundaries],
+  )
+
   useEffect(() => {
     const init = async () => {
       try {
@@ -204,6 +210,7 @@ const MapsPage = () => {
         selectedPin,
         selectPin,
         filteredPins,
+        availablePins,
         activeBadgeFilters,
         activeProfileSettingFilters,
         activeProfileTypeFilters,

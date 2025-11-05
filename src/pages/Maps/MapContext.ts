@@ -38,6 +38,7 @@ export const MapContext = createContext<{
   setBoundaries: (value: LatLngBounds | null) => void
   setZoom: (value: number) => void
   setView: (location: ILatLng, zoom: number) => void
+  panTo: (location: ILatLng) => void
   fitBounds: (bounds: LatLngBounds) => void
   setMapRef: (ref: any) => void
 } | null>(null)

@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef } from 'react'
 import { Button, Map } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
 
-import { MapContext, PROFILE_ZOOM_LEVEL } from '../../MapContext'
+import { MapContext } from '../../MapContext'
 import { ButtonZoomIn } from './ButtonZoomIn'
 import { Clusters } from './Cluster.client'
 import { Popup } from './Popup.client'
@@ -92,7 +92,11 @@ export const MapView = () => {
           pins={mapState.filteredPins}
           onPinClick={(pin) => {
             mapState.selectPin(pin)
-            mapState.setView({ lat: pin.lat, lng: pin.lng }, PROFILE_ZOOM_LEVEL)
+            mapState.panTo({ lat: pin.lat, lng: pin.lng })
+          }}
+          onClusterClick={(cluster) => {
+            const bounds = cluster.getBounds()
+            mapState.fitBounds(bounds)
           }}
         />
       )}

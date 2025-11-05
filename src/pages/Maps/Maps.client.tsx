@@ -55,6 +55,12 @@ const MapsPage = () => {
     setZoom(zoomLevel)
   }
 
+  const panMapTo = (location: ILatLng) => {
+    if (mapRef?.leafletElement) {
+      mapRef.leafletElement.panTo([location.lat, location.lng])
+    }
+  }
+
   const fitMapBounds = (bounds: LatLngBounds) => {
     if (mapRef?.leafletElement) {
       mapRef.leafletElement.fitBounds(bounds)
@@ -179,11 +185,11 @@ const MapsPage = () => {
       if (foundPin) {
         if (selectedPin?.profile?.username !== username) {
           selectPin(foundPin)
+          updateMapView(
+            { lat: foundPin.lat, lng: foundPin.lng },
+            PROFILE_ZOOM_LEVEL,
+          )
         }
-        updateMapView(
-          { lat: foundPin.lat, lng: foundPin.lng },
-          PROFILE_ZOOM_LEVEL,
-        )
       } else {
         selectPin(foundPin)
       }
@@ -219,6 +225,7 @@ const MapsPage = () => {
         zoom,
         setZoom,
         setView: updateMapView,
+        panTo: panMapTo,
         fitBounds: fitMapBounds,
         setMapRef,
       }}

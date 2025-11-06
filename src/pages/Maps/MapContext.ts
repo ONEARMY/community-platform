@@ -18,7 +18,6 @@ export const MapContext = createContext<{
   allProfileTypes: ProfileType[]
   allProfileSettings: string[]
   filteredPins: MapPin[]
-  availablePins: MapPin[]
   activeTagFilters: number[]
   activeBadgeFilters: string[]
   activeProfileTypeFilters: string[]

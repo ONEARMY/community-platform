@@ -26,11 +26,11 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
       mapState.allTags.filter(
         (tag) =>
           mapState.activeTagFilters.includes(tag.id) ||
-          mapState.availablePins.some((pin) =>
+          mapState.filteredPins.some((pin) =>
             pin.profile?.tags?.some((t) => t.id === tag.id),
           ),
       ),
-    [mapState.allTags, mapState.activeTagFilters, mapState.availablePins],
+    [mapState.allTags, mapState.activeTagFilters, mapState.filteredPins],
   )
 
   const visibleBadges = useMemo(
@@ -38,11 +38,11 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
       mapState.allBadges.filter(
         (badge) =>
           mapState.activeBadgeFilters.includes(badge.name) ||
-          mapState.availablePins.some((pin) =>
+          mapState.filteredPins.some((pin) =>
             pin.profile?.badges?.some((b) => b.name === badge.name),
           ),
       ),
-    [mapState.allBadges, mapState.activeBadgeFilters, mapState.availablePins],
+    [mapState.allBadges, mapState.activeBadgeFilters, mapState.filteredPins],
   )
 
   const pinCount = mapState?.filteredPins?.length || 0

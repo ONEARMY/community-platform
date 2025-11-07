@@ -220,15 +220,14 @@ const MapsPage = () => {
     if (allPins && username) {
       const foundPin = allPins.find((pin) => pin.profile!.username === username)
       if (foundPin) {
-        const isPinVisible = filteredPins.some((pin) => pin.id === foundPin.id)
-        if (isPinVisible && selectedPin?.profile?.username !== username) {
+        if (selectedPin?.profile?.username !== username) {
           selectPinAndHandleCluster(foundPin)
         }
       } else {
         selectPin(foundPin)
       }
     }
-  }, [location.hash, allPins, filteredPins])
+  }, [location.hash, allPins])
 
   return (
     <MapContext.Provider

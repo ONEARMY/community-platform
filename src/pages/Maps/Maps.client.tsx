@@ -111,6 +111,17 @@ const MapsPage = () => {
   ])
 
   useEffect(() => {
+    if (selectedPin && filteredPins.length > 0) {
+      const isPinStillVisible = filteredPins.some(
+        (pin) => pin.id === selectedPin.id,
+      )
+      if (!isPinStillVisible) {
+        selectPin(null)
+      }
+    }
+  }, [filteredPins, selectedPin])
+
+  useEffect(() => {
     const init = async () => {
       try {
         const [pins, filters, userPin] = await Promise.all([
@@ -209,14 +220,15 @@ const MapsPage = () => {
     if (allPins && username) {
       const foundPin = allPins.find((pin) => pin.profile!.username === username)
       if (foundPin) {
-        if (selectedPin?.profile?.username !== username) {
+        const isPinVisible = filteredPins.some((pin) => pin.id === foundPin.id)
+        if (isPinVisible && selectedPin?.profile?.username !== username) {
           selectPinAndHandleCluster(foundPin)
         }
       } else {
         selectPin(foundPin)
       }
     }
-  }, [location.hash, allPins])
+  }, [location.hash, allPins, filteredPins])
 
   return (
     <MapContext.Provider

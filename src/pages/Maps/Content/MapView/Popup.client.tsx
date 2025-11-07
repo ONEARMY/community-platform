@@ -49,6 +49,7 @@ export const Popup = (props: IProps) => {
       closeButton={false}
       minWidth={250}
       maxWidth={300}
+      autoPan={false}
     >
       {onClose && <PinProfile item={props.activePin} onClose={onClose} />}
     </LeafletPopup>

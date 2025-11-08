@@ -48,6 +48,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const dbItems = data as DBResearchItem[]
+
+  if (!dbItems || dbItems.length === 0) {
+    return Response.json({ items: [], total: 0 }, { headers })
+  }
+
   const items = dbItems.map((dbResearchItem) => {
     const images = dbResearchItem.image
       ? storageServiceServer.getPublicUrls(

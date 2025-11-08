@@ -63,7 +63,7 @@ export const ProfileStoreProvider = ({
   const claims = useContext(SessionContext)
 
   useEffect(() => {
-    if (!claims?.id) {
+    if (!claims?.sub) {
       profileStore.clear()
       return
     }

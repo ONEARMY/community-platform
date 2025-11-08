@@ -111,7 +111,7 @@ const MapsPage = () => {
   ])
 
   useEffect(() => {
-    if (selectedPin) {
+    if (selectedPin && allPins && allPins.length > 0) {
       const isPinStillVisible = filteredPins.some(
         (pin) => pin.id === selectedPin.id,
       )
@@ -119,7 +119,7 @@ const MapsPage = () => {
         selectPin(null)
       }
     }
-  }, [filteredPins, selectedPin])
+  }, [filteredPins, selectedPin, allPins])
 
   useEffect(() => {
     const init = async () => {

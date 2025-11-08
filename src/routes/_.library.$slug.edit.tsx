@@ -24,7 +24,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   // const username = user.user_metadata.username
-  const username = data.claims.username
+  const username = data.claims.user_metadata.username
   const projectDb = (
     await libraryServiceServer.getBySlug(client, params.slug as string)
   ).data as unknown as DBProject

@@ -1,5 +1,4 @@
-import { redirect } from 'react-router'
-import { useLoaderData } from '@remix-run/react'
+import { redirect, useLoaderData } from '@remix-run/react'
 import { ResearchItem } from 'oa-shared'
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common/ResearchUpdateForm'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'

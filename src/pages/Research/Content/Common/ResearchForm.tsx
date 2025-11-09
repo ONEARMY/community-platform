@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
-import { useNavigate } from 'react-router'
+import { useNavigate } from '@remix-run/react'
 import arrayMutators from 'final-form-arrays'
 import { Button, ResearchEditorOverview } from 'oa-components'
 import { FormWrapper } from 'src/common/Form/FormWrapper'

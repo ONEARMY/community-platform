@@ -8,8 +8,8 @@ import { libraryServiceServer } from 'src/services/libraryService.server'
 import { redirectServiceServer } from 'src/services/redirectService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { DBProject } from 'oa-shared'
-import type { LoaderFunctionArgs } from 'react-router'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)

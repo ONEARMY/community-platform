@@ -2,8 +2,8 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 import { validateImage } from 'src/utils/storage'
 
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { ContentType } from 'oa-shared'
-import type { LoaderFunctionArgs } from 'react-router'
 
 export const action = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)

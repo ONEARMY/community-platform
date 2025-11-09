@@ -1,14 +1,11 @@
-import { renderToPipeableStream, renderToString } from 'react-dom/server'
+import { renderToPipeableStream } from 'react-dom/server'
 import { CacheProvider } from '@emotion/react'
-import createEmotionServer from '@emotion/server/create-instance'
-import { createReadableStreamFromReadable } from '@remix-run/node'
 import { RemixServer } from '@remix-run/react'
 import * as Sentry from '@sentry/remix'
 import { isbot } from 'isbot'
 import { PassThrough } from 'node:stream'
 
 import { SENTRY_CONFIG } from './config/config'
-import { ServerStyleContext } from './styles/context'
 import { createEmotionCache } from './styles/createEmotionCache'
 
 import type { EntryContext } from '@remix-run/node'
@@ -45,6 +42,7 @@ function handleBotRequest(
   remixContext: EntryContext,
 ) {
   return new Promise((resolve, reject) => {
+    let shellRendered = false
     const { pipe, abort } = renderToPipeableStream(
       <RemixServer
         context={remixContext}
@@ -53,12 +51,26 @@ function handleBotRequest(
       />,
       {
         onAllReady() {
+          shellRendered = true
           const body = new PassThrough()
+          const stream = new ReadableStream({
+            start(controller) {
+              body.on('data', (chunk: Buffer) => {
+                controller.enqueue(chunk)
+              })
+              body.on('end', () => {
+                controller.close()
+              })
+              body.on('error', (err) => {
+                controller.error(err)
+              })
+            },
+          })
 
           responseHeaders.set('Content-Type', 'text/html')
 
           resolve(
-            new Response(createReadableStreamFromReadable(body), {
+            new Response(stream, {
               headers: responseHeaders,
               status: responseStatusCode,
             }),
@@ -71,8 +83,9 @@ function handleBotRequest(
         },
         onError(error: unknown) {
           responseStatusCode = 500
-          // eslint-disable-next-line no-console
-          console.error(error)
+          if (shellRendered) {
+            console.error(error)
+          }
         },
       },
     )
@@ -87,38 +100,40 @@ function handleBrowserRequest(
   responseHeaders: Headers,
   remixContext: EntryContext,
 ) {
-  const cache = createEmotionCache()
-  const { extractCriticalToChunks } = createEmotionServer(cache)
-
-  const html = renderToString(
-    <ServerStyleContext.Provider value={null}>
-      <CacheProvider value={cache}>
-        <RemixServer context={remixContext} url={request.url} />
-      </CacheProvider>
-    </ServerStyleContext.Provider>,
-  )
-
-  const chunks = extractCriticalToChunks(html)
-
   return new Promise((resolve, reject) => {
+    let shellRendered = false
+    const cache = createEmotionCache()
+
     const { pipe, abort } = renderToPipeableStream(
-      <ServerStyleContext.Provider value={chunks.styles}>
-        <CacheProvider value={cache}>
-          <RemixServer
-            context={remixContext}
-            url={request.url}
-            abortDelay={ABORT_DELAY}
-          />
-        </CacheProvider>
-      </ServerStyleContext.Provider>,
+      <CacheProvider value={cache}>
+        <RemixServer
+          context={remixContext}
+          url={request.url}
+          abortDelay={ABORT_DELAY}
+        />
+      </CacheProvider>,
       {
         onShellReady() {
+          shellRendered = true
           const body = new PassThrough()
+          const stream = new ReadableStream({
+            start(controller) {
+              body.on('data', (chunk: Buffer) => {
+                controller.enqueue(chunk)
+              })
+              body.on('end', () => {
+                controller.close()
+              })
+              body.on('error', (err) => {
+                controller.error(err)
+              })
+            },
+          })
 
           responseHeaders.set('Content-Type', 'text/html')
 
           resolve(
-            new Response(createReadableStreamFromReadable(body), {
+            new Response(stream, {
               headers: responseHeaders,
               status: responseStatusCode,
             }),
@@ -130,9 +145,11 @@ function handleBrowserRequest(
           reject(error)
         },
         onError(error: unknown) {
-          // eslint-disable-next-line no-console
-          console.error(error)
-          responseStatusCode = 500
+          if (shellRendered) {
+            console.error(error)
+          } else {
+            responseStatusCode = 500
+          }
         },
       },
     )

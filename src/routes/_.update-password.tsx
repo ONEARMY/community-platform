@@ -31,11 +31,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({ token }, { headers })
   }
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (user) {
+  if (claims.data?.claims) {
     return Response.json({}, { headers })
   }
 

@@ -4,15 +4,10 @@ import type { LoaderFunctionArgs } from '@remix-run/node'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
-    return Response.json(
-      {},
-      { headers, status: 401, statusText: 'unauthorized' },
-    )
+  if (!claims.data?.claims) {
+    return Response.json({}, { headers, status: 401 })
   }
 
   const { data } = await client
@@ -20,7 +15,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     .select('id, profiles!inner(id)')
     .eq('content_id', params.contentId)
     .eq('content_type', params.contentType)
-    .eq('profiles.auth_id', user.id)
+    .eq('profiles.auth_id', claims.data.claims.sub)
 
   const subscribed = !!data && !(data.length === 0)
 

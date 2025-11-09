@@ -8,7 +8,7 @@ import { updateUserActivity } from 'src/utils/activity.server'
 import { validateImages } from 'src/utils/storage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBProfile, DBResearchItem } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -25,9 +25,11 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       isDraft: formData.get('draft') === 'true',
     }
 
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
+
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
+    }
 
     const researchResult = await client
       .from('research')
@@ -36,7 +38,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       .single()
     const research = researchResult.data as unknown as DBResearchItem
     const profileService = new ProfileServiceServer(client)
-    const profile = await profileService.getByAuthId(user!.id)
+    const profile = await profileService.getByAuthId(claims.data.claims.sub)
 
     if (!profile) {
       return Response.json(
@@ -47,7 +49,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const { valid, status, statusText } = validateRequest(
       request,
-      user,
       data,
       research,
       profile,
@@ -123,7 +124,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       request,
     )
 
-    updateUserActivity(client, user!.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json({ researchUpdate }, { headers, status: 201 })
   } catch (error) {
@@ -195,15 +196,10 @@ async function uploadAndUpdateFiles(
 
 function validateRequest(
   request: Request,
-  user: User | null,
   data: any,
   research: DBResearchItem | null,
   profile: DBProfile | null,
 ) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'method not allowed' }
   }

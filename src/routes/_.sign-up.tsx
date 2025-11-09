@@ -26,9 +26,9 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client } = createSupabaseServerClient(request)
-  const { data } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (data.user) {
+  if (claims.data?.claims) {
     return redirect('/')
   }
 

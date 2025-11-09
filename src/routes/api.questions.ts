@@ -12,7 +12,6 @@ import { convertToSlug } from 'src/utils/slug'
 import { validateImages } from 'src/utils/storage'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { User } from '@supabase/supabase-js'
 import type { DBProfile, DBQuestion, Moderation } from 'oa-shared'
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions'
 
@@ -120,15 +119,12 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         : null,
     }
 
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
 
-    const { valid, status, statusText } = await validateRequest(
-      request,
-      user,
-      data,
-    )
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
+    }
+    const { valid, status, statusText } = await validateRequest(request, data)
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText })
@@ -165,7 +161,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const profileRequest = await client
       .from('profiles')
       .select('id,username')
-      .eq('auth_id', user!.id)
+      .eq('auth_id', claims.data.claims.sub)
       .limit(1)
 
     if (profileRequest.error || !profileRequest.data?.at(0)) {
@@ -239,7 +235,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       )
     }
 
-    updateUserActivity(client, user!.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json({ question }, { headers, status: 201 })
   } catch (error) {
@@ -264,11 +260,7 @@ function notifyDiscord(
   )
 }
 
-async function validateRequest(request: Request, user: User | null, data: any) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
+async function validateRequest(request: Request, data: any) {
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'method not allowed' }
   }

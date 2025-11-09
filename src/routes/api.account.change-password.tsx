@@ -9,12 +9,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const oldPassword = formData.get('oldPassword') as string
   const newPassword = formData.get('newPassword') as string
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
   const signInResult = await client.auth.signInWithPassword({
-    email: user!.email as string,
+    email: claims.data?.claims!.email as string,
     password: oldPassword,
   })
 

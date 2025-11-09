@@ -8,17 +8,18 @@ import { storageServiceServer } from './storageService.server'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBMedia, DBNews, News, Profile } from 'oa-shared'
 
-async function filterNewsByUserFunctions(allNews, client) {
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+async function filterNewsByUserFunctions(
+  allNews: News[],
+  client: SupabaseClient,
+) {
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (!claims.data?.claims) {
     return allNews.filter((item) => !item.profileBadge)
   }
 
   const profileService = new ProfileServiceServer(client)
-  const dbProfile = await profileService.getByAuthId(user!.id)
+  const dbProfile = await profileService.getByAuthId(claims.data.claims.sub)
   const profile = new ProfileFactory(client).fromDB(dbProfile!)
 
   const isAdmin = profile.roles?.includes(UserRole.ADMIN) ?? false

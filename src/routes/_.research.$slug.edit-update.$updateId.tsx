@@ -13,11 +13,9 @@ import type { ResearchUpdate } from 'oa-shared'
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (!claims.data?.claims) {
     return redirectServiceServer.redirectSignIn(
       `/research/${params.slug}/edit-update/${params.updateId}`,
       headers,
@@ -33,7 +31,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return Response.json({ research: null }, { headers })
   }
 
-  const username = user.user_metadata.username
+  const username = claims.data.claims.user_metadata.username
   const researchDb = result.item
   const images = researchServiceServer.getResearchPublicMedia(
     researchDb,

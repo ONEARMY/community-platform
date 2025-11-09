@@ -13,6 +13,13 @@
       "cwd": "${workspaceFolder}"
     },
     {
+      "name": "Community Platform Unit Tests",
+      "command": "yarn test:unit",
+      "request": "launch",
+      "type": "node-terminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
       "name": "Attach by Process ID",
       "processId": "${command:PickProcess}",
       "request": "attach",

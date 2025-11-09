@@ -433,6 +433,8 @@ const main = async () => {
       email_from: 'platform@onearmy.earth',
       site_image:
         'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/precious-plastic/pp-logo.png',
+      site_favicon:
+        'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/precious-plastic/pp-logo.png',
       tenant_id,
     },
   ])

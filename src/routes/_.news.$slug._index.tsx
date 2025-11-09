@@ -32,16 +32,14 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return Response.json({ news }, { headers })
   }
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (!claims.data?.claims) {
     return redirectServiceServer.redirectSignIn(`/news/${dbNews.slug}`, headers)
   }
 
   const profileService = new ProfileServiceServer(client)
-  const dbProfile = await profileService.getByAuthId(user.id)
+  const dbProfile = await profileService.getByAuthId(claims.data.claims.sub)
   const profile = new ProfileFactory(client).fromDB(dbProfile!)
 
   const isAdmin = profile.roles?.includes(UserRole.ADMIN) ?? false

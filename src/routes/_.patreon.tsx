@@ -21,11 +21,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   try {
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
 
-    if (!user) {
+    if (!claims.data?.claims) {
       return redirect('/sign-in', { headers })
     }
 
@@ -34,7 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     await patreonServiceServer.verifyAndUpdatePatreonUser(
       patreonCode,
-      user,
+      claims.data.claims.sub,
       client,
       origin,
     )

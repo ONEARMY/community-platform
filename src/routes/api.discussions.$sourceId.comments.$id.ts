@@ -4,7 +4,7 @@ import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBComment, DBProfile } from 'oa-shared'
 
 type Supabase = {
@@ -15,22 +15,19 @@ type Supabase = {
 export async function action({ params, request }: LoaderFunctionArgs) {
   const supabase = createSupabaseServerClient(request)
   const headers = supabase.headers
+  const claims = await supabase.client.auth.getClaims()
 
-  const {
-    data: { user },
-  } = await supabase.client.auth.getUser()
+  if (!claims.data?.claims) {
+    return Response.json({}, { headers, status: 401 })
+  }
 
-  const { valid, status, statusText } = await validateRequest(
-    params,
-    request,
-    user,
-  )
+  const { valid, status, statusText } = await validateRequest(params, request)
 
   if (!valid) {
     return Response.json({}, { headers, status, statusText })
   }
 
-  const profile = await getProfileByAuthId(request, user!.id)
+  const profile = await getProfileByAuthId(request, claims.data.claims.sub)
 
   if (!profile) {
     return Response.json(
@@ -167,15 +164,7 @@ function isUserAdmin(user: DBProfile) {
   return user.roles && user.roles.includes(UserRole.ADMIN)
 }
 
-async function validateRequest(
-  params: Params<string>,
-  request: Request,
-  user: User | null,
-) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
+async function validateRequest(params: Params<string>, request: Request) {
   if (!params.sourceId) {
     return { status: 400, statusText: 'sourceId is required' }
   }

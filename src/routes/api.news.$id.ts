@@ -13,7 +13,7 @@ import { validateImage } from 'src/utils/storage'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBNews } from 'oa-shared'
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
@@ -38,16 +38,18 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       slug: convertToSlug(formData.get('title') as string),
     }
 
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
+
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
+    }
 
     const currentNews = await newsServiceServer.getById(id, client)
 
     const { valid, status, statusText } = await validateRequest(
       params,
       request,
-      user,
+      claims.data.claims.sub,
       data,
       currentNews,
       client,
@@ -126,7 +128,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       }
     }
 
-    updateUserActivity(client, user!.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json({ news }, { headers, status: 200 })
   } catch (error) {
@@ -141,15 +143,11 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 async function validateRequest(
   params: Params<string>,
   request: Request,
-  user: User | null,
+  userAuthId: string,
   data: any,
   currentNews: DBNews,
   client: SupabaseClient,
 ) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
   if (request.method !== 'PUT') {
     return { status: 405, statusText: 'Method not allowed' }
   }
@@ -186,7 +184,7 @@ async function validateRequest(
   }
 
   const profileService = new ProfileServiceServer(client)
-  const profile = await profileService.getByAuthId(user!.id)
+  const profile = await profileService.getByAuthId(userAuthId)
 
   if (!profile) {
     return { status: 400, statusText: 'User not found' }

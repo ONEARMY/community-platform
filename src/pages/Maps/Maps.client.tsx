@@ -6,9 +6,9 @@ import { MapList } from './Content/MapView/MapList'
 import { MapView } from './Content/MapView/MapView'
 import { filterPins } from './utils/filterPins'
 import { mapPinService } from './map.service'
-import { MapContext, PROFILE_ZOOM_LEVEL } from './MapContext'
+import { MapContext } from './MapContext'
 
-import type { LatLngBounds } from 'leaflet'
+import type { LatLngBounds, Marker } from 'leaflet'
 import type {
   ILatLng,
   MapPin,
@@ -16,6 +16,7 @@ import type {
   ProfileTag,
   ProfileType,
 } from 'oa-shared'
+import type { Map as MapType } from 'react-leaflet'
 
 import './styles.css'
 
@@ -45,7 +46,8 @@ const MapsPage = () => {
   const [loadingMessage, setLoadingMessage] = useState<string>('Loading...')
   const [isMobile, setIsMobile] = useState(false)
   const [zoom, setZoom] = useState<number>(2)
-  const [mapRef, setMapRef] = useState<any>(null)
+  const [mapRef, setMapRef] = useState<MapType | null>(null)
+  const [clusterGroupRef, setClusterGroupRef] = useState<any>(null)
 
   const updateMapView = (location: ILatLng, zoomLevel: number) => {
     if (mapRef?.leafletElement) {
@@ -55,10 +57,40 @@ const MapsPage = () => {
     setZoom(zoomLevel)
   }
 
+  const panMapTo = (location: ILatLng) => {
+    if (mapRef?.leafletElement) {
+      mapRef.leafletElement.panTo([location.lat, location.lng])
+    }
+  }
+
   const fitMapBounds = (bounds: LatLngBounds) => {
     if (mapRef?.leafletElement) {
       mapRef.leafletElement.fitBounds(bounds)
     }
+  }
+
+  const selectPinAndHandleCluster = (pin: MapPin) => {
+    selectPin(pin)
+
+    const clusterGroup = clusterGroupRef?.leafletElement
+
+    if (clusterGroup?.getLayers && mapRef) {
+      const allMarkers = clusterGroup.getLayers()
+      const marker = allMarkers.find((m: Marker) => {
+        const pos = m.getLatLng()
+        return pos.lat === Number(pin.lat) && pos.lng === Number(pin.lng)
+      })
+
+      if (marker) {
+        const visibleParent = clusterGroup.getVisibleParent(marker)
+        if (visibleParent !== marker && visibleParent.getBounds) {
+          fitMapBounds(visibleParent.getBounds())
+          return
+        }
+      }
+    }
+
+    panMapTo({ lat: pin.lat, lng: pin.lng })
   }
 
   const filteredPins = useMemo<MapPin[]>(() => {
@@ -77,6 +109,17 @@ const MapsPage = () => {
     activeTagFilters,
     boundaries,
   ])
+
+  useEffect(() => {
+    if (selectedPin && allPins && allPins.length > 0 && boundaries) {
+      const isPinStillVisible = filteredPins.some(
+        (pin) => pin.id === selectedPin.id,
+      )
+      if (!isPinStillVisible) {
+        selectPin(null)
+      }
+    }
+  }, [filteredPins, selectedPin, allPins, boundaries])
 
   useEffect(() => {
     const init = async () => {
@@ -177,18 +220,15 @@ const MapsPage = () => {
     if (allPins && username) {
       const foundPin = allPins.find((pin) => pin.profile!.username === username)
       if (foundPin) {
-        if (selectedPin?.profile?.username !== username) {
-          selectPin(foundPin)
+        const isPinVisible = filteredPins.some((pin) => pin.id === foundPin.id)
+        if (isPinVisible && selectedPin?.profile?.username !== username) {
+          selectPinAndHandleCluster(foundPin)
         }
-        updateMapView(
-          { lat: foundPin.lat, lng: foundPin.lng },
-          PROFILE_ZOOM_LEVEL,
-        )
       } else {
         selectPin(foundPin)
       }
     }
-  }, [location.hash, allPins])
+  }, [location.hash, allPins, filteredPins])
 
   return (
     <MapContext.Provider
@@ -203,6 +243,7 @@ const MapsPage = () => {
         loadingMessage,
         selectedPin,
         selectPin,
+        selectPinWithClusterCheck: selectPinAndHandleCluster,
         filteredPins,
         activeBadgeFilters,
         activeProfileSettingFilters,
@@ -219,8 +260,10 @@ const MapsPage = () => {
         zoom,
         setZoom,
         setView: updateMapView,
+        panTo: panMapTo,
         fitBounds: fitMapBounds,
         setMapRef,
+        setClusterGroupRef,
       }}
     >
       <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)', width: '100%' }}>

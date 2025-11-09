@@ -2,17 +2,18 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { User } from '@supabase/supabase-js'
 
 export const action = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
 
   try {
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
 
-    const { valid, status, statusText } = await validateRequest(request, user)
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
+    }
+
+    const { valid, status, statusText } = await validateRequest(request)
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText })
@@ -21,7 +22,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const profile = await client
       .from('profiles')
       .select('id')
-      .eq('auth_id', user?.id)
+      .eq('auth_id', claims.data.claims.sub)
       .single()
 
     await client
@@ -29,7 +30,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       .update({ is_read: true })
       .eq('owned_by_id', profile?.data?.id)
 
-    updateUserActivity(client, user!.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json({}, { headers, status: 200 })
   } catch (error) {
@@ -45,11 +46,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   }
 }
 
-async function validateRequest(request: Request, user: User | null) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
+async function validateRequest(request: Request) {
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'method not allowed' }
   }

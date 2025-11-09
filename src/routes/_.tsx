@@ -17,16 +17,17 @@ import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'
 import { Flex } from 'theme-ui'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { JwtPayload } from '@supabase/supabase-js'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const environment = getEnvVariables()
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const { data } = await client.auth.getClaims()
 
-  return Response.json({ environment, user }, { headers })
+  const claims: JwtPayload | undefined = data?.claims
+
+  return Response.json({ environment, claims }, { headers })
 }
 
 export function HydrateFallback() {
@@ -37,11 +38,11 @@ export function HydrateFallback() {
 
 // This is a Layout file, it will render for all routes that have _. prefix.
 export default function Index() {
-  const { environment, user } = useLoaderData<typeof loader>()
+  const { environment, claims } = useLoaderData<typeof loader>()
 
   return (
     <EnvironmentContext.Provider value={environment}>
-      <SessionContext.Provider value={user}>
+      <SessionContext.Provider value={claims}>
         <ProfileStoreProvider>
           <Flex
             sx={{ height: '100vh', flexDirection: 'column' }}

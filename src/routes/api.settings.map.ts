@@ -7,23 +7,20 @@ import { ProfileServiceServer } from 'src/services/profileService.server'
 import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
-import type { User } from '@supabase/supabase-js'
 import type { DBMapPin, DBProfile, UpsertPin } from 'oa-shared'
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
 
   try {
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
 
-    if (!user) {
-      return { status: 401, statusText: 'unauthorized' }
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
     }
 
     const profileService = new ProfileServiceServer(client)
-    const dbProfile = await profileService.getByAuthId(user!.id)
+    const dbProfile = await profileService.getByAuthId(claims.data.claims.sub)
 
     if (!dbProfile) {
       return { status: 404, statusText: 'profile not found' }
@@ -47,11 +44,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       profile_id: profile.id,
     }
 
-    const { valid, status, statusText } = await validateRequest(
-      request,
-      user,
-      data,
-    )
+    const { valid, status, statusText } = await validateRequest(request, data)
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText })
@@ -73,7 +66,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       result.data as unknown as DBMapPin,
     )
 
-    updateUserActivity(client, user.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json({ mapPin }, { headers, status: 200 })
   } catch (error) {
@@ -85,15 +78,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 }
 
-async function validateRequest(
-  request: Request,
-  user: User | null,
-  data: UpsertPin,
-) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
+async function validateRequest(request: Request, data: UpsertPin) {
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'method not allowed' }
   }

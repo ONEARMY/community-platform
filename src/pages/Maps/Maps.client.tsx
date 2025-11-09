@@ -111,7 +111,7 @@ const MapsPage = () => {
   ])
 
   useEffect(() => {
-    if (selectedPin && allPins && allPins.length > 0) {
+    if (selectedPin && allPins && allPins.length > 0 && boundaries) {
       const isPinStillVisible = filteredPins.some(
         (pin) => pin.id === selectedPin.id,
       )
@@ -119,7 +119,7 @@ const MapsPage = () => {
         selectPin(null)
       }
     }
-  }, [filteredPins, selectedPin, allPins])
+  }, [filteredPins, selectedPin, allPins, boundaries])
 
   useEffect(() => {
     const init = async () => {
@@ -220,14 +220,15 @@ const MapsPage = () => {
     if (allPins && username) {
       const foundPin = allPins.find((pin) => pin.profile!.username === username)
       if (foundPin) {
-        if (selectedPin?.profile?.username !== username) {
+        const isPinVisible = filteredPins.some((pin) => pin.id === foundPin.id)
+        if (isPinVisible && selectedPin?.profile?.username !== username) {
           selectPinAndHandleCluster(foundPin)
         }
       } else {
         selectPin(foundPin)
       }
     }
-  }, [location.hash, allPins])
+  }, [location.hash, allPins, filteredPins])
 
   return (
     <MapContext.Provider

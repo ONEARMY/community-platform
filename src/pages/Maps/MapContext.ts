@@ -8,8 +8,7 @@ import type {
   ProfileTag,
   ProfileType,
 } from 'oa-shared'
-
-export const PROFILE_ZOOM_LEVEL = 12
+import type { Map as MapType } from 'react-leaflet'
 
 export const MapContext = createContext<{
   allPins: MapPin[] | null
@@ -34,10 +33,13 @@ export const MapContext = createContext<{
   toggleActiveProfileSettingFilter: (value: string) => void
   setLocation: (value: ILatLng) => void
   selectPin: (value: MapPin | null) => void
+  selectPinWithClusterCheck: (pin: MapPin) => void
   setIsMobile: (value: boolean) => void
   setBoundaries: (value: LatLngBounds | null) => void
   setZoom: (value: number) => void
   setView: (location: ILatLng, zoom: number) => void
+  panTo: (location: ILatLng) => void
   fitBounds: (bounds: LatLngBounds) => void
-  setMapRef: (ref: any) => void
+  setMapRef: (ref: MapType) => void
+  setClusterGroupRef: (ref: any) => void
 } | null>(null)

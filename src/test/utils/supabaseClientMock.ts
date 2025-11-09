@@ -14,11 +14,11 @@ export const createMockSupabaseClient = () => {
   const mockInsert = vi.fn()
   const mockDelete = vi.fn()
   const mockLimit = vi.fn()
-  const mockGetUser = vi.fn()
+  const mockGetClaims = vi.fn()
 
   const mockClient = {
     auth: {
-      getUser: mockGetUser,
+      getClaims: mockGetClaims,
     },
     from: mockFrom,
     rpc: mockRpc,
@@ -50,7 +50,7 @@ export const createMockSupabaseClient = () => {
     client: mockClient,
     mocks: {
       auth: {
-        getUser: mockGetUser,
+        getClaims: mockGetClaims,
       },
       from: mockFrom,
       select: mockSelect,

@@ -48,21 +48,16 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const existingCoverImageId = formData.get('existingCoverImage') as string
     const filesToKeepIds = formData.getAll('existingFiles') as string[]
 
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
 
-    if (!user) {
-      return Response.json(
-        {},
-        { headers, status: 401, statusText: 'unauthorized' },
-      )
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
     }
 
     const profileService = new ProfileServiceServer(client)
 
     const currentProject = await libraryServiceServer.getById(id, client)
-    const profile = await profileService.getByAuthId(user!.id)
+    const profile = await profileService.getByAuthId(claims.data.claims.sub)
 
     const { valid, status, statusText } = await validateRequest(
       request,
@@ -174,7 +169,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       await libraryServiceServer.deleteStepsById([...stepsToDelete], client)
     }
 
-    updateUserActivity(client, user.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json({ project }, { headers, status: 201 })
   } catch (error) {
@@ -336,14 +331,16 @@ async function updateOrReplaceImages(
 async function deleteProject(request: Request, id: number) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
+
+  if (!claims.data?.claims) {
+    return Response.json({}, { headers, status: 401 })
+  }
 
   const canEdit = await libraryServiceServer.isAllowedToEditProjectById(
     client,
     id,
-    user?.user_metadata.username,
+    claims.data.claims.user_metadata.username,
   )
 
   if (canEdit) {

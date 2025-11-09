@@ -11,11 +11,9 @@ import type { DBResearchItem } from 'oa-shared'
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (!claims.data?.claims) {
     return redirectServiceServer.redirectSignIn(
       `/research/${params.slug}/edit`,
       headers,
@@ -31,7 +29,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return Response.json({ research: null }, { headers })
   }
 
-  const currentUsername = user.user_metadata.username
+  const currentUsername = claims.data.claims.user_metadata.username
   const researchDb = result.item as unknown as DBResearchItem
   const images = researchServiceServer.getResearchPublicMedia(
     researchDb,

@@ -3,7 +3,6 @@ import { researchServiceServer } from 'src/services/researchService.server'
 import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
-import type { User } from '@supabase/supabase-js'
 import type { ResearchStatus } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -12,9 +11,11 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   try {
     const id = Number(params.id)
 
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
+
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
+    }
 
     const formData = await request.formData()
 
@@ -22,11 +23,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       status: formData.get('status') as ResearchStatus,
     }
 
-    const { valid, status, statusText } = await validateRequest(
-      request,
-      user,
-      data,
-    )
+    const { valid, status, statusText } = await validateRequest(request, data)
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText })
@@ -35,7 +32,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const canEdit = await researchServiceServer.isAllowedToEditResearchById(
       client,
       id,
-      user!.user_metadata.username,
+      claims.data.claims.user_metadata.username,
     )
 
     if (!canEdit) {
@@ -51,7 +48,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       throw result.error
     }
 
-    updateUserActivity(client, user!.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json(null, { headers, status: 200 })
   } catch (error) {
@@ -65,13 +62,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
 async function validateRequest(
   request: Request,
-  user: User | null,
   data: { status: ResearchStatus },
 ) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
   if (request.method !== 'PATCH') {
     return { status: 405, statusText: 'method not allowed' }
   }

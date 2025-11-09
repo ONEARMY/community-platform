@@ -15,15 +15,14 @@ export async function action({ request, params }: LoaderFunctionArgs) {
   }
 
   try {
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
 
-    if (!user) {
-      throw { status: 401, statusText: 'unauthorized' }
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
     }
-
-    const profile = await new ProfileServiceServer(client).getByAuthId(user.id)
+    const profile = await new ProfileServiceServer(client).getByAuthId(
+      claims.data.claims.sub,
+    )
 
     if (!profile) {
       throw { status: 400, statusText: 'user not found' }
@@ -59,7 +58,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
         .eq('user_id', profile.id)
     }
 
-    updateUserActivity(client, user.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json({}, { headers, status: 200 })
   } catch (error) {

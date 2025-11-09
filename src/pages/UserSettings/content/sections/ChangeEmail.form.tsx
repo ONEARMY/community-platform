@@ -19,7 +19,7 @@ interface IFormValues {
 }
 
 export const ChangeEmailForm = () => {
-  const user = useContext(SessionContext)
+  const claims = useContext(SessionContext)
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
 
   const formId = 'changeEmail'
@@ -61,7 +61,7 @@ export const ChangeEmailForm = () => {
       <UserContactError submitResults={submitResults} />
       <Accordion
         title="Change Email"
-        subtitle={`${fields.email.title}: ${user?.email}`}
+        subtitle={`${fields.email.title}: ${claims?.email}`}
       >
         <Form
           onSubmit={onSubmit}
@@ -69,7 +69,7 @@ export const ChangeEmailForm = () => {
           render={({ handleSubmit, submitting, values }) => {
             const { password, newEmail } = values
             const disabled =
-              submitting || !password || !newEmail || newEmail === user?.email
+              submitting || !password || !newEmail || newEmail === claims?.email
 
             return (
               <Flex

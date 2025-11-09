@@ -7,24 +7,22 @@ import { redirectServiceServer } from 'src/services/redirectService.server'
 import { tagsServiceServer } from 'src/services/tagsService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBNews } from 'oa-shared'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (!claims.data?.claims) {
     return redirectServiceServer.redirectSignIn(
       `/news/${params.slug}/edit`,
       headers,
     )
   }
 
-  if (!(await isAllowedToEdit(user, client))) {
+  if (!(await isAllowedToEdit(claims.data.claims.sub, client))) {
     return redirect('/forbidden?page=news-edit', { headers })
   }
 
@@ -49,11 +47,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return Response.json({ news }, { headers })
 }
 
-async function isAllowedToEdit(user: User, client: SupabaseClient) {
+async function isAllowedToEdit(userAuthId: string, client: SupabaseClient) {
   const { data } = await client
     .from('profiles')
     .select('id,roles')
-    .eq('auth_id', user.id)
+    .eq('auth_id', userAuthId)
     .single()
 
   return data?.roles?.includes(UserRole.ADMIN)

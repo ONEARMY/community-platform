@@ -11,7 +11,7 @@ import { convertToSlug } from 'src/utils/slug'
 import { validateImage } from 'src/utils/storage'
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBProfile, DBProject, DBProjectStep, Moderation } from 'oa-shared'
 import type { LibrarySortOption } from 'src/pages/Library/Content/List/LibrarySortOptions'
 
@@ -24,11 +24,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const skip = Number(searchParams.get('skip')) || 0
 
   const { client, headers } = createSupabaseServerClient(request)
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  const username = user?.user_metadata?.username || null
+  const username = claims.data?.claims?.user_metadata?.username || null
 
   const { data, error } = await client.rpc('get_projects', {
     search_query: q || null,
@@ -117,13 +115,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       uploadedFiles: formData.getAll('files') as File[] | null,
     }
 
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
+
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
+    }
 
     const { valid, status, statusText } = await validateRequest(
       request,
-      user,
       data,
       client,
     )
@@ -133,7 +132,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const profileService = new ProfileServiceServer(client)
-    const profile = await profileService.getByAuthId(user!.id)
+    const profile = await profileService.getByAuthId(claims.data.claims.sub)
 
     if (!isDraft && profile?.roles?.includes(UserRole.ADMIN)) {
       data.moderation = 'accepted'
@@ -181,7 +180,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       headers,
     )
 
-    updateUserActivity(client, user!.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json({ project }, { headers, status: 201 })
   } catch (error) {
@@ -224,14 +223,9 @@ async function uploadSteps(data, formData, projectDb, client) {
 
 async function validateRequest(
   request: Request,
-  user: User | null,
   data: any,
   client: SupabaseClient,
 ) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'method not allowed' }
   }

@@ -8,7 +8,7 @@ import { updateUserActivity } from 'src/utils/activity.server'
 import { validateImages } from 'src/utils/storage'
 
 import type { ActionFunctionArgs } from '@remix-run/node'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBMedia, DBResearchUpdate, MediaFile } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -34,22 +34,20 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       isDraft: formData.get('draft') === 'true',
     }
 
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
 
-    const { valid, status, statusText } = await validateRequest(
-      request,
-      user,
-      data,
-    )
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
+    }
+
+    const { valid, status, statusText } = await validateRequest(request, data)
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText })
     }
 
     const profileService = new ProfileServiceServer(client)
-    const profile = await profileService.getByAuthId(user?.id || '')
+    const profile = await profileService.getByAuthId(claims.data.claims.sub)
 
     if (
       !researchServiceServer.isAllowedToEditUpdate(
@@ -139,7 +137,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       oldResearchUpdate,
     )
 
-    updateUserActivity(client, user!.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json({ researchUpdate }, { headers, status: 201 })
   } catch (error) {
@@ -236,12 +234,14 @@ async function updateOrReplaceFile(
 async function deleteResearchUpdate(request, id: number, updateId: number) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
+
+  if (!claims.data?.claims) {
+    return Response.json({}, { headers, status: 401 })
+  }
 
   const profileService = new ProfileServiceServer(client)
-  const profile = await profileService.getByAuthId(user?.id || '')
+  const profile = await profileService.getByAuthId(claims.data.claims.sub)
 
   if (
     !researchServiceServer.isAllowedToEditUpdate(profile, id, updateId, client)
@@ -260,11 +260,7 @@ async function deleteResearchUpdate(request, id: number, updateId: number) {
   return Response.json({}, { status: 200, headers })
 }
 
-async function validateRequest(request: Request, user: User | null, data: any) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
+async function validateRequest(request: Request, data: any) {
   if (request.method !== 'PUT') {
     return { status: 405, statusText: 'method not allowed' }
   }

@@ -22,10 +22,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return Response.json({ research: null }, { headers })
   }
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
-  const currentUsername = user?.user_metadata?.username
+  const claims = await client.auth.getClaims()
+  const currentUsername = claims.data?.claims?.user_metadata?.username
 
   const dbResearch = result.item
 

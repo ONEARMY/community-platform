@@ -8,16 +8,14 @@ import { redirectServiceServer } from 'src/services/redirectService.server'
 export async function loader({ request }) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (!claims.data?.claims) {
     return redirectServiceServer.redirectSignIn('/research/create', headers)
   }
 
   const profileService = new ProfileServiceServer(client)
-  const profile = await profileService.getByAuthId(user.id)
+  const profile = await profileService.getByAuthId(claims.data.claims.sub)
   const roles = (profile?.roles || []) as string[]
 
   // Check if user has required permissions

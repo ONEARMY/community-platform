@@ -20,11 +20,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const { data } = await client.auth.getClaims()
 
-  if (user) {
+  if (data?.claims) {
     return redirect('/settings', { headers })
   }
 

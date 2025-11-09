@@ -13,7 +13,7 @@ import { contentServiceServer } from '../services/contentService.server'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Params } from '@remix-run/react'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBMedia, DBQuestion } from 'oa-shared'
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
@@ -38,16 +38,18 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       slug: convertToSlug(formData.get('title') as string),
     }
 
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
+
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
+    }
 
     const currentQuestion = await questionServiceServer.getById(id, client)
 
     const { valid, status, statusText } = await validateRequest(
       params,
       request,
-      user,
+      claims.data.claims.sub,
       data,
       currentQuestion,
       client,
@@ -131,7 +133,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     )
 
     const question = Question.fromDB(questionResult.data[0], [], newImages)
-    updateUserActivity(client, user!.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json({ question }, { headers, status: 200 })
   } catch (error) {
@@ -146,15 +148,11 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 async function validateRequest(
   params: Params<string>,
   request: Request,
-  user: User | null,
+  userAuthId: string,
   data: any,
   currentQuestion: DBQuestion,
   client: SupabaseClient,
 ) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
   if (request.method !== 'PUT') {
     return { status: 405, statusText: 'method not allowed' }
   }
@@ -191,7 +189,7 @@ async function validateRequest(
   }
 
   const profileService = new ProfileServiceServer(client)
-  const profile = await profileService.getByAuthId(user!.id)
+  const profile = await profileService.getByAuthId(userAuthId)
 
   if (!profile) {
     return { status: 400, statusText: 'User not found' }

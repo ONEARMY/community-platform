@@ -10,11 +10,9 @@ import type { DBResearchUpdate, IDBDownloadable } from 'oa-shared'
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (!claims.data?.claims) {
     return Response.json({}, { status: 401, headers })
   }
 

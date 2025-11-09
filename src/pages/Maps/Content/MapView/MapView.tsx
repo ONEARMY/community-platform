@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef } from 'react'
 import { Button, Map } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
 
-import { MapContext, PROFILE_ZOOM_LEVEL } from '../../MapContext'
+import { MapContext } from '../../MapContext'
 import { ButtonZoomIn } from './ButtonZoomIn'
 import { Clusters } from './Cluster.client'
 import { Popup } from './Popup.client'
@@ -13,12 +13,19 @@ import type { Map as MapType } from 'react-leaflet'
 export const MapView = () => {
   const mapState = useContext(MapContext)
   const mapRef = useRef<MapType>(null)
+  const clusterGroupRef = useRef<any>(null)
 
   useEffect(() => {
     if (mapRef.current && mapState) {
       mapState.setMapRef(mapRef.current)
     }
   }, [mapRef.current, mapState])
+
+  useEffect(() => {
+    if (clusterGroupRef.current && mapState) {
+      mapState.setClusterGroupRef(clusterGroupRef.current)
+    }
+  }, [clusterGroupRef.current, mapState])
 
   if (!mapState) {
     return null
@@ -90,10 +97,11 @@ export const MapView = () => {
       {mapState.filteredPins && (
         <Clusters
           pins={mapState.filteredPins}
-          onPinClick={(pin) => {
-            mapState.selectPin(pin)
-            mapState.setView({ lat: pin.lat, lng: pin.lng }, PROFILE_ZOOM_LEVEL)
+          onPinClick={mapState.selectPinWithClusterCheck}
+          onClusterClick={(cluster) => {
+            mapState.fitBounds(cluster.getBounds())
           }}
+          clusterGroupRef={clusterGroupRef}
         />
       )}
       {mapState.selectedPin && (

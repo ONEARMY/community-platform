@@ -70,6 +70,7 @@ const generateSteps = (content: Content, variant: Variant) => {
 
 export const Breadcrumbs = ({ steps, content, variant }: BreadcrumbsProps) => {
   const breadcrumbsSteps = steps ?? generateSteps(content, variant)
+
   return (
     <Box sx={{ paddingLeft: [2, 0, 0] }}>
       <BreadcrumbsComponent steps={breadcrumbsSteps} />

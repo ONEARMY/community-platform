@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { DownloadWrapper } from './DownloadWrapper'
 
 const mockedUsedNavigate = vi.fn()
-vi.mock('react-router-dom', () => ({
+vi.mock('@remix-run/react', () => ({
   useNavigate: () => mockedUsedNavigate,
 }))
 
@@ -14,11 +14,6 @@ vi.mock('./UserAction', () => ({
   UserAction: ({ loggedOut }: { loggedOut: React.ReactNode }) => (
     <>{loggedOut}</>
   ),
-}))
-
-vi.mock('src/common/hooks/useCommonStores', () => ({
-  __esModule: true,
-  useCommonStores: vi.fn(),
 }))
 
 describe('DownloadWrapper', () => {

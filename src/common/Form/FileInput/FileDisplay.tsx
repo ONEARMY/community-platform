@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from '@remix-run/react'
 import { Icon } from 'oa-components'
 import { bytesToSize } from 'oa-shared'
 import { Flex, IconButton, Text } from 'theme-ui'

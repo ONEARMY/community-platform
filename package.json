@@ -2,7 +2,7 @@
   "name": "one-army-community-platform",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ONEARMY/community-platform.git"
+    "url": "git+https://github.com/ONEARMY/community-platform.git"
   },
   "workspaces": [
     "shared",
@@ -10,7 +10,7 @@
     "scripts"
   ],
   "private": true,
-  "main": "lib/index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "start": "concurrently --kill-others --names shared,themes,components,platform --prefix-colors cyan,blue,magenta \"yarn start:shared\" \"yarn start:themes\" \"yarn start:components\" \"yarn start:platform\"",

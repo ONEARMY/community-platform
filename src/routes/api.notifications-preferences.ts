@@ -1,7 +1,7 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { updateUserActivity } from 'src/utils/activity.server'
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import type { DBNotificationsPreferencesFields } from 'oa-shared'
 
 export const DEFAULT_NOTIFICATION_PREFERENCES: DBNotificationsPreferencesFields =

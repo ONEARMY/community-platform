@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Form } from 'react-final-form'
-import { useNavigate } from '@remix-run/react'
+import { useNavigate } from 'react-router';
 import arrayMutators from 'final-form-arrays'
 import { FormWrapper } from 'src/common/Form/FormWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'

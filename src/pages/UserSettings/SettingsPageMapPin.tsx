@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { useNavigate } from 'react-router'
-import { Link } from '@remix-run/react'
+import { Link } from 'react-router';
 import { observer } from 'mobx-react'
 import {
   Button,

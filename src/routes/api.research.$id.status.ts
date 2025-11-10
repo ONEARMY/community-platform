@@ -2,7 +2,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { updateUserActivity } from 'src/utils/activity.server'
 
-import type { ActionFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs } from 'react-router';
 import type { ResearchStatus } from 'oa-shared'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {

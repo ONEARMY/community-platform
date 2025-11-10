@@ -14,7 +14,7 @@ import { validateImage } from 'src/utils/storage'
 
 import { contentServiceServer } from '../services/contentService.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from 'react-router';
 import type { AuthError } from '@supabase/supabase-js'
 import type { DBNews, DBProfile, Moderation } from 'oa-shared'
 import type { NewsSortOption } from 'src/pages/News/NewsSortOptions'

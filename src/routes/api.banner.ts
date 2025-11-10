@@ -3,7 +3,7 @@ import { Banner } from 'oa-shared'
 import { isProductionEnvironment } from 'src/config/config'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from 'react-router';
 import type { DBBanner } from 'oa-shared'
 
 const cache = new Keyv<Banner[]>({ ttl: 600000 }) // ttl: 10 minutes

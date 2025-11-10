@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/vitest'
 
 import { Global } from '@emotion/react'
 import { faker } from '@faker-js/faker'
-import { createRemixStub } from '@remix-run/testing'
+import { createRoutesStub } from 'react-router';
 import { act, render, waitFor, within } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
@@ -23,7 +23,7 @@ const Theme = preciousPlasticTheme.styles
 const item = FactoryLibraryItem()
 
 const factory = (override?: Project) => {
-  const ReactStub = createRemixStub([
+  const ReactStub = createRoutesStub([
     {
       index: true,
       Component: () => (

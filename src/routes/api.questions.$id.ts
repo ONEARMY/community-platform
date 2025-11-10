@@ -11,8 +11,8 @@ import { validateImages } from 'src/utils/storage'
 
 import { contentServiceServer } from '../services/contentService.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { Params } from '@remix-run/react'
+import type { LoaderFunctionArgs } from 'react-router';
+import type { Params } from 'react-router';
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBMedia, DBQuestion } from 'oa-shared'
 

@@ -1,12 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react'
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router'
 import { Global, withEmotionCache } from '@emotion/react'
-import {
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from '@remix-run/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { GlobalStyles } from 'oa-components'
 import {
@@ -19,7 +13,7 @@ import { VITE_THEME } from './config/config'
 import { ClientStyleContext, ServerStyleContext } from './styles/context'
 import { generateTags } from './utils/seo.utils'
 
-import type { LinksFunction, MetaFunction } from '@remix-run/node'
+import type { LinksFunction, MetaFunction } from 'react-router'
 
 interface DocumentProps {
   children: React.ReactNode

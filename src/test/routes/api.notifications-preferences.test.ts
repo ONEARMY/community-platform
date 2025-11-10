@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { createMockSupabaseClient } from '../utils/supabaseClientMock'
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router'
 
 vi.mock('src/repository/supabase.server', () => ({
   createSupabaseServerClient: vi.fn(),
@@ -17,12 +17,14 @@ const createMockLoaderArgs = (request: Request): LoaderFunctionArgs => ({
   request,
   params: {},
   context: {},
+  unstable_pattern: '',
 })
 
 const createMockActionArgs = (request: Request): ActionFunctionArgs => ({
   request,
   params: {},
   context: {},
+  unstable_pattern: '',
 })
 
 describe('loader', () => {

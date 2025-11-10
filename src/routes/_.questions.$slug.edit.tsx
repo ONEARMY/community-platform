@@ -1,4 +1,4 @@
-import { redirect, useLoaderData } from '@remix-run/react'
+import { redirect, useLoaderData } from 'react-router'
 import { Question, UserRole } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm'
@@ -7,9 +7,9 @@ import { questionServiceServer } from 'src/services/questionService.server'
 import { redirectServiceServer } from 'src/services/redirectService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBQuestion, Image } from 'oa-shared'
+import type { LoaderFunctionArgs } from 'react-router'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -73,7 +73,7 @@ async function isUserAllowedToEdit(
 }
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>()
+  const data: any = useLoaderData<typeof loader>()
   const question = data.question as Question
 
   return (

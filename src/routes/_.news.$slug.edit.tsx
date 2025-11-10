@@ -1,4 +1,4 @@
-import { redirect, useLoaderData } from '@remix-run/react'
+import { redirect, useLoaderData } from 'react-router'
 import { News, UserRole } from 'oa-shared'
 import { NewsForm } from 'src/pages/News/Content/Common/NewsForm'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
@@ -6,9 +6,9 @@ import { newsServiceServer } from 'src/services/newsService.server'
 import { redirectServiceServer } from 'src/services/redirectService.server'
 import { tagsServiceServer } from 'src/services/tagsService.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBNews } from 'oa-shared'
+import type { LoaderFunctionArgs } from 'react-router'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -64,7 +64,7 @@ export function HydrateFallback() {
 }
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>()
+  const data = useLoaderData()
   const news = data.news as News
 
   return (

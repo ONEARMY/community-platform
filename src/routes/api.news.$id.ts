@@ -11,8 +11,8 @@ import { hasAdminRightsSupabase } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 import { validateImage } from 'src/utils/storage'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { Params } from '@remix-run/react'
+import type { LoaderFunctionArgs } from 'react-router';
+import type { Params } from 'react-router';
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBNews } from 'oa-shared'
 

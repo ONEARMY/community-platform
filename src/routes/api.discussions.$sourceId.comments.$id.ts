@@ -2,8 +2,8 @@ import { UserRole } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { updateUserActivity } from 'src/utils/activity.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { Params } from '@remix-run/react'
+import type { LoaderFunctionArgs } from 'react-router';
+import type { Params } from 'react-router';
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBComment, DBProfile } from 'oa-shared'
 

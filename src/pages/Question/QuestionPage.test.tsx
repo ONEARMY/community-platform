@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom/vitest'
 
-import { createMemoryRouter, RouterProvider } from 'react-router-dom'
+import { createMemoryRouter, RouterProvider } from 'react-router';
 import { faker } from '@faker-js/faker'
-import { createRoutesFromElements, Route } from '@remix-run/react'
+import { createRoutesFromElements, Route } from 'react-router';
 import { act, render, waitFor, within } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'

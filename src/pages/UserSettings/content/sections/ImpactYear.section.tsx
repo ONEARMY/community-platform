@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Form } from 'react-final-form'
-import { useLocation } from '@remix-run/react'
+import { useLocation } from 'react-router';
 import { observer } from 'mobx-react'
 import { UserContactError } from 'src/pages/User/contact'
 import { form } from 'src/pages/UserSettings/labels'

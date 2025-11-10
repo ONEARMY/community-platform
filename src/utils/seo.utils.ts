@@ -1,4 +1,4 @@
-import type { MetaFunction } from '@remix-run/node'
+import type { MetaFunction } from 'react-router'
 
 // from: https://gist.github.com/ryanflorence/ec1849c6d690cfbffcb408ecd633e069
 // This function makes it easy to set meta tags in nested routes.
@@ -9,7 +9,7 @@ export const mergeMeta = <T>(leafMetaFn: MetaFunction<T>): MetaFunction<T> => {
 
     return arg.matches.reduceRight((acc, match) => {
       for (const parentMeta of match.meta) {
-        const index = acc.findIndex(
+        const index = acc!.findIndex(
           (meta) =>
             ('name' in meta &&
               'name' in parentMeta &&
@@ -21,7 +21,7 @@ export const mergeMeta = <T>(leafMetaFn: MetaFunction<T>): MetaFunction<T> => {
         )
         if (index == -1) {
           // Parent meta not found in acc, so add it
-          acc.push(parentMeta)
+          acc!.push(parentMeta)
         }
       }
       return acc

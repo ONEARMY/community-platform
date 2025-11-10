@@ -1,12 +1,12 @@
-import { redirect, useLoaderData } from '@remix-run/react'
+import { redirect, useLoaderData } from 'react-router'
 import { ResearchItem } from 'oa-shared'
 import ResearchForm from 'src/pages/Research/Content/Common/ResearchForm'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { redirectServiceServer } from 'src/services/redirectService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { DBResearchItem } from 'oa-shared'
+import type { LoaderFunctionArgs } from 'react-router'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -52,7 +52,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>()
+  const data: any = useLoaderData<typeof loader>()
   const research = data.research as ResearchItem
 
   return <ResearchForm research={research} />

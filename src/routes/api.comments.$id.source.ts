@@ -1,6 +1,6 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const id = Number(params.id)

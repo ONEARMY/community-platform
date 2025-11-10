@@ -2,7 +2,7 @@ import { Notification, NotificationDisplay } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { resolveType } from 'src/utils/contentType.utils'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from 'react-router';
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBNotification } from 'oa-shared'
 

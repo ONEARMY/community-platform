@@ -1,4 +1,4 @@
-import { redirect } from '@remix-run/node'
+import { redirect } from 'react-router';
 import { UserRole } from 'oa-shared'
 import { UserAction } from 'src/common/UserAction'
 import { NewsForm } from 'src/pages/News/Content/Common/NewsForm'
@@ -7,7 +7,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { redirectServiceServer } from 'src/services/redirectService.server'
 import { Box } from 'theme-ui'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)

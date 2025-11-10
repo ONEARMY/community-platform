@@ -3,7 +3,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { sendEmail } from '../.server/resend'
 import ReceiverMessage from '../.server/templates/ReceiverMessage'
 
-import type { ActionFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs } from 'react-router';
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { TenantSettings } from 'oa-shared'
 

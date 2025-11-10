@@ -4,7 +4,7 @@ import { ProfileServiceServer } from 'src/services/profileService.server'
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server'
 import { updateUserActivity } from 'src/utils/activity.server'
 
-import type { ActionFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs } from 'react-router';
 import type { Image, ProfileFormData } from 'oa-shared'
 
 export const loader = async ({ request }) => {

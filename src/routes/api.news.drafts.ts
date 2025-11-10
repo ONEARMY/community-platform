@@ -4,7 +4,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { ProfileServiceServer } from 'src/services/profileService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from 'react-router';
 import type { DBNews } from 'oa-shared'
 
 export async function loader({ request }: LoaderFunctionArgs) {

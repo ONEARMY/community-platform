@@ -1,4 +1,4 @@
-import { redirect, useLoaderData } from '@remix-run/react'
+import { redirect, useLoaderData } from 'react-router'
 import { Project } from 'oa-shared'
 import { ClientOnly } from 'remix-utils/client-only'
 import { LibraryForm } from 'src/pages/Library/Content/Common/Library.form'
@@ -55,7 +55,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>()
+  const data: any = useLoaderData<typeof loader>()
   const item = data.project as Project
 
   return (

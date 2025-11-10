@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useLocation, useNavigate } from '@remix-run/react'
+import { useLocation, useNavigate } from 'react-router';
 import { Box, Flex } from 'theme-ui'
 
 import { MapList } from './Content/MapView/MapList'

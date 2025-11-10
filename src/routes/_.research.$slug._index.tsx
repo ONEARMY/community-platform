@@ -1,4 +1,4 @@
-import { useLoaderData } from '@remix-run/react'
+import { useLoaderData } from 'react-router'
 import { ResearchItem } from 'oa-shared'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { ResearchArticlePage } from 'src/pages/Research/Content/ResearchArticlePage'
@@ -7,8 +7,8 @@ import { contentServiceServer } from 'src/services/contentService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { ResearchUpdate } from 'oa-shared'
+import type { LoaderFunctionArgs } from 'react-router'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -68,9 +68,9 @@ export function HydrateFallback() {
   return <div></div>
 }
 
-export const meta = mergeMeta<typeof loader>(({ data }) => {
-  const research = data?.research as ResearchItem
-  const publicUpdates = data?.publicUpdates as ResearchUpdate[]
+export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
+  const research = (loaderData as any)?.research as ResearchItem
+  const publicUpdates = (loaderData as any)?.publicUpdates as ResearchUpdate[]
 
   if (!research) {
     return []
@@ -86,7 +86,7 @@ export const meta = mergeMeta<typeof loader>(({ data }) => {
 })
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>()
+  const data: any = useLoaderData<typeof loader>()
   const research = data.research as ResearchItem
 
   if (!research) {

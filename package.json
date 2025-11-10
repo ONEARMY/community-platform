@@ -61,8 +61,8 @@
   },
   "resolutions": {
     "__note1__": "Pin react version consistently in all child workspaces",
-    "react": "18.3.1",
-    "@types/react": "18.3.3"
+    "react": "19.2.0",
+    "@types/react": "19.2.2"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -108,9 +108,9 @@
     "oa-components": "workspace:*",
     "oa-shared": "workspace:*",
     "oa-themes": "workspace:*",
-    "react": "18.3.1",
+    "react": "19.2.0",
     "react-country-flag": "^3.1.0",
-    "react-dom": "18.3.1",
+    "react-dom": "19.2.0",
     "react-dropzone-esm": "^15.0.1",
     "react-final-form": "6.5.3",
     "react-final-form-arrays": "^3.1.3",
@@ -120,6 +120,7 @@
     "react-leaflet": "^2.5.0",
     "react-leaflet-markercluster": "^2.0.0-rc3",
     "react-router": "^7.9.5",
+    "react-tooltip": "^5.30.0",
     "remix-utils": "^9.0.0",
     "resend": "4.1.2",
     "rxjs": "^7.8.1",
@@ -146,8 +147,8 @@
     "@types/node": "^22.18.0",
     "@types/pg": "^8.11.11",
     "@types/pubsub-js": "^1.5.18",
-    "@types/react": "18.3.3",
-    "@types/react-dom": "18.3.0",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
     "@types/react-leaflet": "^1.1.6",
     "@types/react-leaflet-markercluster": "^2.0.0",
     "@types/react-select": "^2.0.17",

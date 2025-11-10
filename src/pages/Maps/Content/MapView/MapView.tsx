@@ -3,7 +3,7 @@ import { Button, Map } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
 
 import { MapContext } from '../../MapContext'
-import { ButtonZoomIn } from './ButtonZoomIn'
+import { ButtonZoomIn } from './ButtonZoomIn.client'
 import { Clusters } from './Cluster.client'
 import { Popup } from './Popup.client'
 

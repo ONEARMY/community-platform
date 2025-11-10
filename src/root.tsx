@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router'
 import { Global, withEmotionCache } from '@emotion/react'
 import { ThemeProvider } from '@theme-ui/core'
@@ -132,27 +132,11 @@ export const meta: MetaFunction = () => {
   return tags
 }
 
-function SafeHydrate({ children }: { children: React.ReactNode }) {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
-    return <div style={{ visibility: 'hidden' }}>{children}</div>
-  }
-
-  return <>{children}</>
-}
-
 export default function Root() {
   return (
     <Document>
       <ThemeProvider theme={getEnvironmentTheme().styles}>
-        <SafeHydrate>
-          <Outlet />
-        </SafeHydrate>
+        <Outlet />
         <Global styles={GlobalStyles} />
       </ThemeProvider>
     </Document>

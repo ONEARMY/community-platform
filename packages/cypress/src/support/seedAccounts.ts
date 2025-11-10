@@ -159,12 +159,12 @@ const createProfile = async (
     console.error('Failed to create profile')
   }
 
-  if (profileResult.data[0].username === 'demo_user') {
+  if (profileResult.data.at(0).username === 'demo_user') {
     await seedDatabase(
       {
         profile_badges_relations: [
           {
-            profile_id: profileResult.data[0].id,
+            profile_id: profileResult.data.at(0).id,
             profile_badge_id: profileBadgeId,
             tenant_id: tenantId,
           },

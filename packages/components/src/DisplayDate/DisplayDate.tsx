@@ -1,8 +1,6 @@
 import { differenceInSeconds, format, formatDistanceToNow } from 'date-fns'
 import { Text } from 'theme-ui'
 
-import './display-date.css'
-
 type DateType = string | number | Date
 
 export interface IProps {
@@ -30,16 +28,16 @@ export const DisplayDate = (props: IProps) => {
   return (
     <Text title={formattedDate}>
       {/* Mobile version - show short format */}
-      <span className="date-mobile">
+      <Text as="span" sx={{ display: ['inline', 'none'] }}>
         {showLabel && `${label} `}
         {shortRelativeDate}
-      </span>
+      </Text>
 
       {/* Desktop version - show full format */}
-      <span className="date-desktop">
+      <Text as="span" sx={{ display: ['none', 'inline'] }}>
         {showLabel && `${label} `}
         {relativeDate}
-      </span>
+      </Text>
     </Text>
   )
 }

@@ -236,6 +236,7 @@ describe('Research Article', () => {
           FactoryResearchItem({
             title: 'Innovative Study',
             category: undefined, // No category provided
+            updates: [],
           }),
         )
       })

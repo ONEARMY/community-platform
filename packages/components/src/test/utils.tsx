@@ -1,4 +1,4 @@
-import { createRoutesStub } from 'react-router';
+import { createRoutesStub } from 'react-router'
 import { render as testLibReact } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { preciousPlasticTheme } from 'oa-themes'

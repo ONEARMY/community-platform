@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 
-import { screen } from '@testing-library/react'
+import { act, screen } from '@testing-library/react'
 import { Text } from 'theme-ui'
 import { describe, expect, it } from 'vitest'
 
@@ -17,7 +17,9 @@ describe('Accordion', () => {
     const accordionTitle = getByText('Accordion Title')
     expect(screen.queryByText('Now you see me!')).not.toBeInTheDocument()
 
-    accordionTitle.click()
+    act(() => {
+      accordionTitle.click()
+    })
 
     expect(getByText('Now you see me!')).toBeInTheDocument()
   })

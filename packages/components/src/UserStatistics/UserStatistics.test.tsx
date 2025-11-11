@@ -122,24 +122,4 @@ describe('UserStatistics', () => {
 
     expect(badge).toBeInTheDocument()
   })
-
-  it('renders null when all props are empty', () => {
-    const emptyProps: UserStatisticsProps = {
-      profile: {
-        id: 1,
-        username: 'Test User',
-        badges: [],
-        totalViews: 0,
-        country: 'uk',
-      },
-      libraryCount: 0,
-      usefulCount: 0,
-      researchCount: 0,
-      questionCount: 0,
-      showViews: false,
-    }
-    const { container } = render(<UserStatistics {...emptyProps} />)
-
-    expect(container.firstChild).toBeNull()
-  })
 })

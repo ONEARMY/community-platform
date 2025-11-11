@@ -38,6 +38,26 @@ vi.mock('src/stores/Profile/profile.store', () => ({
     children,
 }))
 
+vi.mock('src/services/usefulService', () => {
+  return {
+    usefulService: {
+      hasVoted: () =>
+        new Response(null, { status: 200, statusText: 'ALLL good!' }),
+    },
+  }
+})
+
+vi.mock('src/services/commentService', () => {
+  return {
+    commentService: {
+      getComments: () =>
+        new Response(null, { status: 200, statusText: 'ALLL good!' }),
+      getCommentSourceId: () =>
+        new Response(null, { status: 200, statusText: 'ALLL good!' }),
+    },
+  }
+})
+
 describe('Questions', () => {
   afterEach(() => {
     // Clear all mocks after each test to ensure there's no leakage between tests

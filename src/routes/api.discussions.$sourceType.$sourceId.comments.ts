@@ -8,8 +8,7 @@ import { updateUserActivity } from 'src/utils/activity.server'
 
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBAuthor, DBProfile, DiscussionContentTypes } from 'oa-shared'
-import type { LoaderFunctionArgs } from 'react-router'
-import type { Params } from 'react-router'
+import type { LoaderFunctionArgs, Params } from 'react-router'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)

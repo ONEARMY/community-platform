@@ -1,7 +1,7 @@
 // Used the guide at https://mui.com/base-ui/react-tabs/ as a fundation
 
+import { matchPath, useLocation } from 'react-router'
 import { Tabs } from '@mui/base/Tabs'
-import { matchPath, useLocation } from 'react-router';
 import { Flex } from 'theme-ui'
 
 import { SettingsFormTab } from './SettingsFormTab'

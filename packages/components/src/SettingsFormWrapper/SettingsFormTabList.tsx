@@ -1,8 +1,8 @@
+import { useNavigate } from 'react-router'
 import styled from '@emotion/styled'
 import { Tab as BaseTab, tabClasses } from '@mui/base/Tab'
 import { TabsList as BaseTabsList } from '@mui/base/TabsList'
 import { prepareForSlot } from '@mui/base/utils'
-import { useNavigate } from 'react-router';
 import { Flex } from 'theme-ui'
 
 import { Icon } from '../Icon/Icon'

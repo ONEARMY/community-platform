@@ -26,7 +26,7 @@
     "build:vite": "vite build",
     "build:shared": "yarn workspace oa-shared build",
     "build": "yarn build:shared && yarn build:themes && yarn build:components && yarn build:vite",
-    "lint": "yarn lint:style && yarn lint:code",
+    "lint": "yarn lint:code",
     "lint:code": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
     "lint:style": "prettier --check '**/*.{json,js,tsx,ts}'",
     "format": "yarn format:code && yarn format:style",

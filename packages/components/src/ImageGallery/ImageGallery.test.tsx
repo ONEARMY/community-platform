@@ -5,16 +5,7 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { render } from '../test/utils'
 import { ImageGallery } from './ImageGallery'
-import {
-  Default,
-  DoNotShowNextPrevButtons,
-  HideThumbnailForSingleImage,
-  NoThumbnails,
-  ShowNextPrevButtons,
-  testImages,
-} from './ImageGallery.stories'
-
-import type { ImageGalleryProps } from './ImageGallery'
+import { testImages } from './ImageGallery.stories'
 
 describe('ImageGallery', () => {
   beforeAll(() => {
@@ -50,7 +41,7 @@ describe('ImageGallery', () => {
 
   it('renders correct image after clicking in its thumbnail', () => {
     const { getByTestId, getAllByTestId } = render(
-      <Default {...(Default.args as ImageGalleryProps)} />,
+      <ImageGallery images={testImages} />,
     )
     const mainImage = getByTestId('active-image')
     expect(mainImage).toBeInTheDocument()
@@ -70,8 +61,8 @@ describe('ImageGallery', () => {
 
   it('displays correct image in lightbox after clicking on the main image', async () => {
     const { findByRole, getByTestId } = render(
-      <Default
-        {...(Default.args as ImageGalleryProps)}
+      <ImageGallery
+        images={testImages}
         photoSwipeOptions={{
           // Forces a viewport size so that the images can be loaded
           getViewportSizeFn: function () {
@@ -102,8 +93,8 @@ describe('ImageGallery', () => {
 
   it('switches images in the lightbox after clicking on the next and previous arrows', async () => {
     const { findByRole, getByTestId, getByLabelText } = render(
-      <Default
-        {...(Default.args as ImageGalleryProps)}
+      <ImageGallery
+        images={testImages}
         photoSwipeOptions={{
           // Forces a viewport size so that the images can be loaded
           getViewportSizeFn: function () {
@@ -157,11 +148,7 @@ describe('ImageGallery', () => {
   })
 
   it('hides thumbnail for single image', () => {
-    const { getAllByTestId } = render(
-      <HideThumbnailForSingleImage
-        {...(HideThumbnailForSingleImage.args as ImageGalleryProps)}
-      />,
-    )
+    const { getAllByTestId } = render(<ImageGallery images={[testImages[0]]} />)
 
     expect(() => {
       getAllByTestId('thumbnail')
@@ -170,7 +157,7 @@ describe('ImageGallery', () => {
 
   it('supports no thumbnail option', () => {
     const { getAllByTestId } = render(
-      <NoThumbnails {...(NoThumbnails.args as ImageGalleryProps)} />,
+      <ImageGallery images={testImages} hideThumbnails />,
     )
 
     expect(() => {
@@ -180,8 +167,10 @@ describe('ImageGallery', () => {
 
   it('supports show next/previous buttons', () => {
     const { getByRole } = render(
-      <ShowNextPrevButtons
-        {...(ShowNextPrevButtons.args as ImageGalleryProps)}
+      <ImageGallery
+        images={testImages}
+        hideThumbnails
+        showNextPrevButton={true}
       />,
     )
 
@@ -194,8 +183,10 @@ describe('ImageGallery', () => {
 
   it('does not support show next/previous buttons because only one image', () => {
     const { queryByRole } = render(
-      <DoNotShowNextPrevButtons
-        {...(DoNotShowNextPrevButtons.args as ImageGalleryProps)}
+      <ImageGallery
+        images={[testImages[0]]}
+        hideThumbnails
+        showNextPrevButton={true}
       />,
     )
 

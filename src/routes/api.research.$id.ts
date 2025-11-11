@@ -8,9 +8,9 @@ import { subscribersServiceServer } from 'src/services/subscribersService.server
 import { updateUserActivity } from 'src/utils/activity.server'
 import { convertToSlug } from 'src/utils/slug'
 
-import type { ActionFunctionArgs } from 'react-router';
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBResearchItem } from 'oa-shared'
+import type { ActionFunctionArgs } from 'react-router'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const id = Number(params.id)

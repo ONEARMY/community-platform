@@ -77,7 +77,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
     showActiveImgLoading: true,
   })
 
-  const lightbox = useRef<PhotoSwipeLightbox>()
+  const lightbox = useRef<PhotoSwipeLightbox>(null)
   const activeImageIndex = state.activeImageIndex
   const activeImage = filteredImages[activeImageIndex]
   const imageNumber = filteredImages.length
@@ -121,7 +121,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
 
     return () => {
       lightbox.current?.destroy()
-      lightbox.current = undefined
+      lightbox.current = null
     }
   }, [props.images, props.photoSwipeOptions])
 

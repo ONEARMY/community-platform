@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom/vitest'
 
+import { createRoutesStub } from 'react-router'
 import { Global } from '@emotion/react'
 import { faker } from '@faker-js/faker'
-import { createRoutesStub } from 'react-router';
 import { act, render, waitFor, within } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'

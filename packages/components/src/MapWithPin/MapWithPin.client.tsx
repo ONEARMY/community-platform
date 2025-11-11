@@ -18,7 +18,7 @@ const mapInstructions =
   'To move your pin, grab it to move it or double click where you want it to go.'
 
 export interface Props {
-  mapRef: React.RefObject<MapType>
+  mapRef: React.RefObject<MapType | null>
   position: {
     lat: number
     lng: number

@@ -11,8 +11,8 @@ import { updateUserActivity } from 'src/utils/activity.server'
 import { convertToSlug } from 'src/utils/slug'
 import { validateImages } from 'src/utils/storage'
 
-import type { LoaderFunctionArgs } from 'react-router';
 import type { DBProfile, DBQuestion, Moderation } from 'oa-shared'
+import type { LoaderFunctionArgs } from 'react-router'
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions'
 
 export const loader = async ({ request }) => {

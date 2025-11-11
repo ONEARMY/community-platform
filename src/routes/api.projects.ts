@@ -10,9 +10,9 @@ import { updateUserActivity } from 'src/utils/activity.server'
 import { convertToSlug } from 'src/utils/slug'
 import { validateImage } from 'src/utils/storage'
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBProfile, DBProject, DBProjectStep, Moderation } from 'oa-shared'
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router'
 import type { LibrarySortOption } from 'src/pages/Library/Content/List/LibrarySortOptions'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

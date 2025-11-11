@@ -3,9 +3,9 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { sendEmail } from '../.server/resend'
 import ReceiverMessage from '../.server/templates/ReceiverMessage'
 
-import type { ActionFunctionArgs } from 'react-router';
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { TenantSettings } from 'oa-shared'
+import type { ActionFunctionArgs } from 'react-router'
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)

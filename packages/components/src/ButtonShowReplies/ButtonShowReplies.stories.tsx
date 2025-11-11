@@ -10,7 +10,7 @@ export default {
   component: ButtonShowReplies,
 } as Meta<typeof ButtonShowReplies>
 
-export const Default: StoryFn<typeof ButtonShowReplies> = () => {
+export const DefaultComponent = () => {
   const [isShowReplies, setIsShowReplies] = useState<boolean>(false)
 
   const replies = createFakeCommentsSB(7)
@@ -22,6 +22,10 @@ export const Default: StoryFn<typeof ButtonShowReplies> = () => {
       setIsShowReplies={() => setIsShowReplies(!isShowReplies)}
     />
   )
+}
+
+export const Default: StoryFn<typeof ButtonShowReplies> = () => {
+  return <DefaultComponent />
 }
 
 export const RepliesShowing: StoryFn<typeof ButtonShowReplies> = () => {

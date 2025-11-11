@@ -9,8 +9,8 @@ import { subscribersServiceServer } from 'src/services/subscribersService.server
 import { updateUserActivity } from 'src/utils/activity.server'
 import { convertToSlug } from 'src/utils/slug'
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import type { DBResearchItem, ResearchStatus } from 'oa-shared'
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router'
 import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

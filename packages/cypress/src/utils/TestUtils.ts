@@ -16,33 +16,49 @@ export enum Page {
   SETTINGS = '/settings',
 }
 
-export const clearDatabase = async (tables: string[], tenantId: string) => {
-  const supabase = supabaseClient(tenantId)
-
+export const clearDatabase = (tables: string[], _tenantId: string) => {
+  // Use Cypress tasks for server-side operations
   // sequential so there are no constraint issues
-  for (const table of tables) {
-    await supabase.from(table).delete().eq('tenant_id', tenantId)
-  }
+  tables.forEach((table) => {
+    cy.task('supabase:query', {
+      table,
+      method: 'delete',
+      filter: { tenant_id: _tenantId },
+    })
+  })
 }
 
 export const createStorage = async (tenantId: string) => {
-  const supabase = supabaseAdminClient()
-
-  await supabase.storage.createBucket(tenantId, {
-    public: true,
+  await new Cypress.Promise(async (resolve) => {
+    cy.task('supabase:storage:createBucket', {
+      bucketName: tenantId,
+      options: { public: true },
+    }).then(() => {
+      cy.task('supabase:storage:createBucket', {
+        bucketName: tenantId + '-documents',
+      }).then(() => resolve())
+    })
   })
-
-  await supabase.storage.createBucket(tenantId + '-documents')
 }
 
 export const clearStorage = async (tenantId: string) => {
-  const supabase = supabaseAdminClient()
-
-  await supabase.storage.emptyBucket(tenantId)
-  await supabase.storage.deleteBucket(tenantId)
-
-  await supabase.storage.emptyBucket(tenantId + '-documents')
-  await supabase.storage.deleteBucket(tenantId + '-documents')
+  await new Cypress.Promise((resolve) => {
+    cy.task('supabase:storage:emptyBucket', {
+      bucketName: tenantId,
+    }).then(() => {
+      cy.task('supabase:storage:deleteBucket', {
+        bucketName: tenantId,
+      }).then(() => {
+        cy.task('supabase:storage:emptyBucket', {
+          bucketName: tenantId + '-documents',
+        }).then(() => {
+          cy.task('supabase:storage:deleteBucket', {
+            bucketName: tenantId + '-documents',
+          }).then(() => resolve())
+        })
+      })
+    })
+  })
 }
 
 export const generateAlphaNumeric = (length: number) => {
@@ -72,20 +88,18 @@ export const generateNewUserDetails = (): IUserSignUpDetails => {
 
 export const getUserProfileByUsername = async (
   username: string,
-  tenantId: string,
+  _tenantId: string,
 ) => {
-  const supabase = supabaseClient(tenantId)
-  const { data, error } = await supabase
-    .from('profiles')
-    .select()
-    .eq('username', username)
-    .single()
-
-  if (error || !data) {
-    return error
-  }
-
-  return data
+  return new Cypress.Promise((resolve) => {
+    cy.task('supabase:query', {
+      table: 'profiles',
+      method: 'select',
+      data: '*',
+      filter: { username },
+    }).then((data: any) => {
+      resolve(data && Array.isArray(data) && data.length > 0 ? data[0] : null)
+    })
+  })
 }
 
 export const setIsPreciousPlastic = () => {
@@ -94,20 +108,30 @@ export const setIsPreciousPlastic = () => {
 
 export const seedDatabase = async (
   data: SeedData,
-  tenantId: string,
+  _tenantId: string,
 ): Promise<any> => {
-  const supabase = supabaseClient(tenantId)
   const results = {}
 
   for (const [table, rows] of Object.entries(data)) {
-    const result = await supabase.from(table).insert(rows).select()
-
-    if (!result.error) {
-      results[table] = result
-      continue
+    try {
+      const result = await new Cypress.Promise((resolve) => {
+        cy.task('supabase:query', {
+          table,
+          method: 'insert',
+          data: rows,
+        }).then((data) => resolve(data))
+      })
+      results[table] = { data: result, error: null }
+    } catch (error) {
+      // If insert fails, try to select existing data
+      const existingData = await new Cypress.Promise((resolve) => {
+        cy.task('supabase:query', {
+          table,
+          method: 'select',
+        }).then((data) => resolve(data))
+      })
+      results[table] = { data: existingData, error }
     }
-
-    results[table] = await supabase.from(table).select()
   }
 
   return results

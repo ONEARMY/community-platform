@@ -1,6 +1,7 @@
 // cypress.config.ts
-import { createClient } from '@supabase/supabase-js'
 import { defineConfig } from 'cypress'
+
+import { SupabaseTestsService } from './src/utils/supabaseTestsService'
 
 export default defineConfig({
   defaultCommandTimeout: 15000,
@@ -24,187 +25,86 @@ export default defineConfig({
   },
   e2e: {
     setupNodeEvents: (on, config) => {
-      // Initialize Supabase client with secret key for server-side operations
-      const supabase = createClient(
-        config.env.SUPABASE_URL || process.env.SUPABASE_URL,
-        config.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SECRET_KEY,
-      )
+      const supabaseUrl = config.env.SUPABASE_API_URL
+      const supabaseKey = config.env.SUPABASE_SERVICE_ROLE_KEY
+      const tenantId = config.env.TENANT_ID
 
       on('task', {
         log(message) {
+          // eslint-disable-next-line no-console
           console.log(message)
           return null
         },
 
-        // Admin API operations
-        async 'supabase:admin:listUsers'(
-          params: { page?: string; perPage?: number } = {},
-        ) {
-          try {
-            const { data, error } = await supabase.auth.admin.listUsers({
-              page: params.page ? parseInt(params.page) : undefined,
-              perPage: params.perPage || 10000,
-            })
-            if (error) throw error
-            return data
-          } catch (error) {
-            console.error('Failed to list users:', error)
-            throw error
-          }
-        },
-
-        async 'supabase:admin:createUser'(params: {
-          email: string
-          password: string
-          email_confirm?: boolean
-          user_metadata?: any
-        }) {
-          try {
-            const { data, error } = await supabase.auth.admin.createUser({
-              email: params.email,
-              password: params.password,
-              email_confirm: params.email_confirm ?? true,
-              user_metadata: params.user_metadata,
-            })
-            if (error) throw error
-            return data
-          } catch (error) {
-            console.error('Failed to create user:', error)
-            throw error
-          }
-        },
-
-        async 'supabase:admin:deleteUser'(userId: string) {
-          try {
-            const { data, error } = await supabase.auth.admin.deleteUser(userId)
-            if (error) throw error
-            return data
-          } catch (error) {
-            console.error('Failed to delete user:', error)
-            throw error
-          }
-        },
-
-        // Database operations
-        async 'supabase:query'(params: {
-          table: string
-          method: 'select' | 'insert' | 'update' | 'delete' | 'upsert'
-          data?: any
-          filter?: any
-        }) {
-          try {
-            let query: any = supabase.from(params.table)
-
-            switch (params.method) {
-              case 'select':
-                query = query.select(params.data || '*')
-                break
-              case 'insert':
-                query = query.insert(params.data)
-                break
-              case 'update':
-                query = query.update(params.data)
-                break
-              case 'delete':
-                query = query.delete()
-                break
-              case 'upsert':
-                query = query.upsert(params.data)
-                break
-            }
-
-            // Apply filters if provided
-            if (params.filter) {
-              Object.entries(params.filter).forEach(([key, value]) => {
-                query = query.eq(key, value)
-              })
-            }
-
-            const { data, error } = await query
-            if (error) throw error
-            return data
-          } catch (error) {
-            console.error('Supabase query failed:', error)
-            throw error
-          }
-        },
-
-        // Storage operations
-        async 'supabase:storage:createBucket'(params: {
-          bucketName: string
-          options?: any
-        }) {
-          try {
-            const { data, error } = await supabase.storage.createBucket(
-              params.bucketName,
-              params.options,
+        async 'seed database'() {
+          if (!supabaseUrl || !supabaseKey) {
+            throw new Error(
+              'SUPABASE_API_URL and SUPABASE_SERVICE_ROLE_KEY environment variables are required',
             )
-            if (error) throw error
-            return data
-          } catch (error) {
-            console.error('Failed to create bucket:', error)
-            throw error
           }
-        },
 
-        async 'supabase:storage:uploadFile'(params: {
-          bucketName: string
-          path: string
-          file: Buffer | Blob
-          options?: any
-        }) {
-          try {
-            const { data, error } = await supabase.storage
-              .from(params.bucketName)
-              .upload(params.path, params.file, params.options)
-            if (error) throw error
-            return data
-          } catch (error) {
-            console.error('Failed to upload file:', error)
-            throw error
-          }
-        },
+          const supabaseService = new SupabaseTestsService(
+            supabaseUrl,
+            supabaseKey,
+            tenantId,
+          )
+          await supabaseService.createStorage(tenantId)
 
-        async 'supabase:storage:deleteFiles'(params: {
-          bucketName: string
-          paths: string[]
-        }) {
-          try {
-            const { data, error } = await supabase.storage
-              .from(params.bucketName)
-              .remove(params.paths)
-            if (error) throw error
-            return data
-          } catch (error) {
-            console.error('Failed to delete files:', error)
-            throw error
-          }
-        },
+          const profileImages = await supabaseService.seedProfileImages()
+          const { profile_types } = await supabaseService.seedProfileTypes()
+          const { profile_badges } = await supabaseService.seedBadges()
+          const { profile_tags } = await supabaseService.seedProfileTags()
+          const { profiles } = await supabaseService.seedAccounts(
+            profile_badges.data,
+            profile_tags.data,
+            profile_types.data,
+            profileImages,
+          )
 
-        async 'supabase:storage:emptyBucket'(params: { bucketName: string }) {
-          try {
-            const { data, error } = await supabase.storage.emptyBucket(
-              params.bucketName,
-            )
-            if (error) throw error
-            return data
-          } catch (error) {
-            console.error('Failed to empty bucket:', error)
-            throw error
-          }
-        },
+          await supabaseService.seedMap(profiles)
 
-        async 'supabase:storage:deleteBucket'(params: { bucketName: string }) {
-          try {
-            const { data, error } = await supabase.storage.deleteBucket(
-              params.bucketName,
-            )
-            if (error) throw error
-            return data
-          } catch (error) {
-            console.error('Failed to delete bucket:', error)
-            throw error
-          }
+          const { tags } = await supabaseService.seedTags()
+          await supabaseService.seedQuestions(profiles)
+          await supabaseService.seedNews(profiles, tags)
+          await supabaseService.seedResearch(profiles, tags)
+          await supabaseService.seedLibrary(profiles, tags)
+          return null
+        },
+        async 'clear database'() {
+          const supabaseUrl = config.env.SUPABASE_API_URL
+          const supabaseKey = config.env.SUPABASE_SERVICE_ROLE_KEY
+          const tenantId = config.env.TENANT_ID
+
+          const supabaseService = new SupabaseTestsService(
+            supabaseUrl,
+            supabaseKey,
+            tenantId,
+          )
+
+          await supabaseService.clearDatabase(
+            [
+              'categories',
+              'comments',
+              'news',
+              'research',
+              'research_updates',
+              'notifications',
+              'notifications_preferences',
+              'profiles',
+              'questions',
+              'projects',
+              'project_steps',
+              'tags',
+              'profile_badges',
+              'profile_badges_relations',
+              'profile_tags',
+              'profile_tags_relations',
+              'profile_types',
+            ],
+            tenantId,
+          )
+
+          await supabaseService.clearStorage(tenantId)
         },
       })
 

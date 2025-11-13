@@ -297,11 +297,6 @@ jobs:
             - browser-tools/install-firefox
       # call main testing script
       - run:
-          name: Verify Supabase config
-          command: |
-            echo "Key last 10 chars: ${SUPABASE_KEY: -10}"
-            echo "Service role key last 10 chars: ${SUPABASE_SERVICE_ROLE_KEY: -10}"
-      - run:
           command: npm run test ci prod
           environment:
             VITE_SITE_VARIANT: test-ci

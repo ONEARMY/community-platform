@@ -299,10 +299,8 @@ jobs:
       - run:
           name: Verify Supabase config
           command: |
-            echo "API URL is set: ${SUPABASE_API_URL:+yes}"
-            echo "Key is set: ${SUPABASE_KEY:+yes}"
-            echo "Service role key is set: ${SUPABASE_SERVICE_ROLE_KEY:+yes}"
-            echo "Tenant ID is set: ${TENANT_ID:+yes}"
+            echo "Key last 10 chars: ${SUPABASE_KEY: -10}"
+            echo "Service role key last 10 chars: ${SUPABASE_SERVICE_ROLE_KEY: -10}"
       - run:
           command: npm run test ci prod
           environment:

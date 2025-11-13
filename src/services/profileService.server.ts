@@ -375,13 +375,21 @@ function determinePinModeration(
   const selectedType = types.find((x) => x.name === type)
   const currentType = types.find((x) => x.id === profile.profile_type)
 
+  let newValue: 'accepted' | 'awaiting-moderation' | undefined = undefined
+
   if (!selectedType || !currentType) {
     return undefined
   }
   if (currentType.isSpace && !selectedType.isSpace) {
-    return 'accepted'
+    newValue = 'accepted'
   }
   if (!currentType.isSpace && selectedType.isSpace) {
-    return 'awaiting-moderation'
+    newValue = 'awaiting-moderation'
   }
+
+  if (newValue === profile.pin.moderation) {
+    return undefined
+  }
+
+  return newValue
 }

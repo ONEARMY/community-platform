@@ -42,25 +42,6 @@ const factory = (override?: Project) => {
       </ThemeProvider>
     </ProfileStoreProvider>,
   )
-  // const ReactStub = createRoutesStub([
-  //   {
-  //     index: true,
-  //     Component: () => (
-  //       <>
-  //         <Global styles={GlobalStyles} />
-  //         <ProfileStoreProvider>
-  //           <ThemeProvider theme={Theme}>
-  //             <Provider>
-  //               <ProjectPage item={override ?? item} />
-  //             </Provider>
-  //           </ThemeProvider>
-  //         </ProfileStoreProvider>
-  //       </>
-  //     ),
-  //   },
-  // ])
-
-  // return render(<ReactStub />)
 }
 describe('Library', () => {
   it('displays content statistics', async () => {

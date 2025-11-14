@@ -18,20 +18,15 @@ export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  context: EntryContext,
 ) {
   return isbot(request.headers.get('user-agent') || '')
-    ? handleBotRequest(
-        request,
-        responseStatusCode,
-        responseHeaders,
-        remixContext,
-      )
+    ? handleBotRequest(request, responseStatusCode, responseHeaders, context)
     : handleBrowserRequest(
         request,
         responseStatusCode,
         responseHeaders,
-        remixContext,
+        context,
       )
 }
 
@@ -39,12 +34,12 @@ function handleBotRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  context: EntryContext,
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false
     const { pipe, abort } = renderToPipeableStream(
-      <ServerRouter context={remixContext} url={request.url} />,
+      <ServerRouter context={context} url={request.url} />,
       {
         onAllReady() {
           shellRendered = true
@@ -94,7 +89,7 @@ function handleBrowserRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  context: EntryContext,
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false
@@ -102,7 +97,7 @@ function handleBrowserRequest(
 
     const { pipe, abort } = renderToPipeableStream(
       <CacheProvider value={cache}>
-        <ServerRouter context={remixContext} url={request.url} />
+        <ServerRouter context={context} url={request.url} />
       </CacheProvider>,
       {
         onShellReady() {

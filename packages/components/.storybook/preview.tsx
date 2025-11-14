@@ -10,7 +10,7 @@ import {
   projectKampTheme,
   fixingFashionTheme,
 } from 'oa-themes'
-import { createRoutesStub } from 'react-router';
+import { createRoutesStub } from 'react-router'
 
 const themes = {
   pp: preciousPlasticTheme.styles,
@@ -50,7 +50,7 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => {
-      const RemixStub = createRoutesStub([
+      const RouterStub = createRoutesStub([
         {
           path: '/',
           Component: () => (
@@ -64,7 +64,7 @@ const preview: Preview = {
         },
       ])
 
-      return <RemixStub />
+      return <RouterStub />
     },
   ],
 }

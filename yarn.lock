@@ -20421,7 +20421,7 @@ __metadata:
     react-player: "npm:3.0.0-canary.4"
     react-portal: "npm:^4.2.2"
     react-responsive-masonry: "npm:2.1.7"
-    react-router: "npm:7.9.5"
+    react-router: "npm:^7.9.5"
     react-select: "npm:^5.8.1"
     react-tooltip: "npm:^5.30.0"
     storybook: "npm:9.1.16"
@@ -23024,22 +23024,6 @@ __metadata:
   peerDependencies:
     react: ">=15"
   checksum: 10/99d54a99af6bc6d7cad2e5ea7eee9485b62a8b8e16a1182b18daa7fad7dafa5e526850eaeebff629848b297ae055a9cb5b4aba8760e81af8b903efc049d48f5c
-  languageName: node
-  linkType: hard
-
-"react-router@npm:7.9.5":
-  version: 7.9.5
-  resolution: "react-router@npm:7.9.5"
-  dependencies:
-    cookie: "npm:^1.0.1"
-    set-cookie-parser: "npm:^2.6.0"
-  peerDependencies:
-    react: ">=18"
-    react-dom: ">=18"
-  peerDependenciesMeta:
-    react-dom:
-      optional: true
-  checksum: 10/cfef53455c5ead14450283218c73aa08d95dfeb6dd85e52c10d2534c2ee1ba55c6dab81df8655f8fcc5ae858f1796448d9895a225ffd8a2b2865a0a03a117073
   languageName: node
   linkType: hard
 

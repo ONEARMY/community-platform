@@ -12,7 +12,7 @@ const customRender = (
 ) =>
   testLibReact(ui, {
     wrapper: ({ children }: { children: React.ReactNode }) => {
-      const RemixStub = createRoutesStub([
+      const RouterStub = createRoutesStub([
         {
           path: '',
           Component() {
@@ -23,7 +23,7 @@ const customRender = (
 
       return (
         <ThemeProvider theme={preciousPlasticTheme.styles}>
-          <RemixStub />
+          <RouterStub />
         </ThemeProvider>
       )
     },

@@ -65,9 +65,9 @@
     "@types/react": "19.2.2"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.4",
+    "@emotion/react": "^11.14.0",
     "@emotion/server": "^11.11.0",
-    "@emotion/styled": "^11.11.5",
+    "@emotion/styled": "^11.14.1",
     "@react-email/components": "0.0.33",
     "@react-router/express": "^7.9.5",
     "@react-router/fs-routes": "^7.9.5",

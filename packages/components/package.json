@@ -21,8 +21,8 @@
   "dependencies": {
     "@babel/preset-env": "^7.27.2",
     "@babel/preset-react": "^7.27.1",
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@faker-js/faker": "^8.4.1",
     "@mdxeditor/editor": "^3.29.2",
     "@mui/base": "next",

@@ -23,7 +23,7 @@
     "start:platform-ci": "yarn build:shared && cross-env NODE_ENV=production node ./server.js",
     "build:themes": "yarn workspace oa-themes build",
     "build:components": "yarn workspace oa-components build",
-    "build:vite": "vite build",
+    "build:vite": "react-router build",
     "build:shared": "yarn workspace oa-shared build",
     "build": "yarn build:shared && yarn build:themes && yarn build:components && yarn build:vite",
     "lint": "yarn lint:code",

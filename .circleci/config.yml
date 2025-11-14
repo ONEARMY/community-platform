@@ -46,8 +46,8 @@ aliases:
         # https://circleci.com/docs/2.0/caching/
         # https://circleci.com/docs/2.0/yarn/
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - v9-yarn-{{ checksum "yarn.lock" }}
-        - v9-yarn-
+        - v10-yarn-{{ checksum "yarn.lock" }}
+        - v10-yarn-
   - &install_packages
     run:
       name: Install Packages
@@ -67,7 +67,7 @@ aliases:
       paths:
         - /home/circleci/.yarn/cache
         - /home/circleci/.yarn/install-state.gz
-      key: v9-yarn-{{ checksum "yarn.lock" }}
+      key: v10-yarn-{{ checksum "yarn.lock" }}
 
   - &filter_only_default_branch
     filters:

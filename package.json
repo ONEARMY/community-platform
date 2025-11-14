@@ -20,7 +20,7 @@
     "start:shared": "yarn workspace oa-shared dev",
     "start:prod": "yarn build:shared && yarn build:themes && yarn build:components && node ./server.js",
     "start:platform": "yarn build:shared && node ./server.js",
-    "start:platform-ci": "yarn build:shared && yarn build:vite && cross-env NODE_ENV=production node ./server.js",
+    "start:platform-ci": "yarn build:shared && cross-env NODE_ENV=production node ./server.js",
     "build:themes": "yarn workspace oa-themes build",
     "build:components": "yarn workspace oa-components build",
     "build:vite": "vite build",

@@ -15,10 +15,17 @@ interface IProps extends OptionalFollowButtonProps {
   setSubscribersCount?: Dispatch<SetStateAction<number>>
   hideSubscribeIcon?: boolean
   tooltipContent?: string
+  showIconOnly?: boolean
 }
 
 export const FollowButtonAction = observer((props: IProps) => {
-  const { contentType, hideSubscribeIcon, itemId, setSubscribersCount } = props
+  const {
+    contentType,
+    hideSubscribeIcon,
+    itemId,
+    setSubscribersCount,
+    showIconOnly,
+  } = props
   const [subscribed, setSubscribed] = useState<boolean | undefined>(undefined)
   const { profile } = useProfileStore()
 
@@ -37,7 +44,7 @@ export const FollowButtonAction = observer((props: IProps) => {
   }, [profile, itemId])
 
   const onFollowClick = async () => {
-    if (!profile) {
+    if (!profile || showIconOnly) {
       return
     }
 

@@ -63,7 +63,7 @@ describe('[Question]', () => {
 
       cy.step('Add title description')
       cy.get('[data-cy=field-description]').type(initialQuestionDescription, {
-        delay: 0,
+        delay: 5,
       })
 
       cy.get('[data-cy=draft]').click()

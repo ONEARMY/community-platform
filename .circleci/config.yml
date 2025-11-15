@@ -284,21 +284,6 @@ jobs:
       # retrieve build folder
       - attach_workspace:
           at: '.'
-      # ADD THIS DEBUG STEP HERE
-      - run:
-          name: Debug - List workspace contents
-          command: |
-            echo "=== Root directory ==="
-            ls -la
-            echo ""
-            echo "=== Build directory ==="
-            ls -la build/ 2>/dev/null || echo "build/ does not exist"
-            echo ""
-            echo "=== Build/server directory ==="
-            ls -la build/server/ 2>/dev/null || echo "build/server/ does not exist"
-            echo ""
-            echo "=== Build/client directory ==="
-            ls -la build/client/ 2>/dev/null || echo "build/client/ does not exist"
       # install testing browsers are required
       - when:
           condition:

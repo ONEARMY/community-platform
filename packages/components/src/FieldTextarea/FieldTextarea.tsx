@@ -78,7 +78,7 @@ export const FieldTextarea = ({
           }
           input.onBlur()
         }}
-        onChange={(ev) => input.onChange(ev)}
+        onChange={(ev) => input.onChange(ev.target.value)}
       />
 
       {showCharacterCount && maxLength && (

@@ -324,6 +324,7 @@ jobs:
 workflows:
   version: 2
   main_workflow:
+    max_auto_reruns: 1
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
       - lint:

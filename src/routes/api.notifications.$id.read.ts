@@ -1,8 +1,7 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { updateUserActivity } from 'src/utils/activity.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { Params } from '@remix-run/react'
+import type { LoaderFunctionArgs, Params } from 'react-router'
 
 export const action = async ({ params, request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)

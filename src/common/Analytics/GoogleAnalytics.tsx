@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import ReactGA from 'react-ga4'
-import { useLocation } from '@remix-run/react'
+import { useLocation } from 'react-router';
 import { GA_TRACKING_ID } from 'src/config/config'
 
 declare global {

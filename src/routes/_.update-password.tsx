@@ -6,7 +6,7 @@ import {
   useActionData,
   useLoaderData,
   useNavigate,
-} from '@remix-run/react'
+} from 'react-router'
 import { Button, FieldInput, HeroBanner } from 'oa-components'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import Main from 'src/pages/common/Layout/Main'
@@ -14,7 +14,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { required } from 'src/utils/validators'
 import { Card, Flex, Heading, Label, Text } from 'theme-ui'
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
@@ -93,8 +93,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Index() {
   const navigate = useNavigate()
-  const data = useLoaderData<typeof loader>()
-  const actionData = useActionData<typeof action>()
+  const data: any = useLoaderData<typeof loader>()
+  const actionData: any = useActionData<typeof action>()
 
   useEffect(() => {
     if (actionData?.success) {

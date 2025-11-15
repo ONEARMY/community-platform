@@ -6,10 +6,9 @@ import { notificationsSupabaseServiceServer } from 'src/services/notificationsSu
 import { subscribersServiceServer } from 'src/services/subscribersService.server'
 import { updateUserActivity } from 'src/utils/activity.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { Params } from '@remix-run/react'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBAuthor, DBProfile, DiscussionContentTypes } from 'oa-shared'
+import type { LoaderFunctionArgs, Params } from 'react-router'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -50,7 +49,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
     return Response.json({ comments }, { headers })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return Response.json({}, { status: 500, headers })
   }
 }

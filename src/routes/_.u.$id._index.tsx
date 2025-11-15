@@ -1,4 +1,4 @@
-import { useLoaderData } from '@remix-run/react'
+import { useLoaderData } from 'react-router'
 import { AuthorVotes } from 'oa-shared'
 import { ProfileFactory } from 'src/factories/profileFactory.server'
 import { ProfilePage } from 'src/pages/User/content/ProfilePage'
@@ -10,8 +10,8 @@ import { researchServiceServer } from 'src/services/researchService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 import { Text } from 'theme-ui'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Profile, UserCreatedDocs } from 'oa-shared'
+import type { LoaderFunctionArgs } from 'react-router'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -71,8 +71,8 @@ export function HydrateFallback() {
   return <div></div>
 }
 
-export const meta = mergeMeta<typeof loader>(({ data }) => {
-  const profile = data?.profile as Profile
+export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
+  const profile = (loaderData as any)?.profile as Profile
 
   if (!profile) {
     return []
@@ -84,7 +84,7 @@ export const meta = mergeMeta<typeof loader>(({ data }) => {
 })
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>()
+  const data = useLoaderData()
   const profile = data.profile as Profile
   const userCreatedDocs = data.userCreatedDocs as UserCreatedDocs
 

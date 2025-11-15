@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -17,9 +17,14 @@ const mockTheme = {
 }
 
 const mockNavigate = vi.fn()
-vi.mock('@remix-run/react', () => ({
-  useNavigate: () => mockNavigate,
-}))
+vi.mock('react-router', async (importOriginal) => {
+  const actual = await importOriginal()
+  const actualObj = typeof actual === 'object' && actual !== null ? actual : {}
+  return {
+    ...actualObj,
+    useNavigate: () => mockNavigate,
+  }
+})
 
 vi.mock('theme-ui', async () => {
   const actual = await import('theme-ui')

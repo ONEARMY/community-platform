@@ -9,7 +9,7 @@ export default {
   component: SettingsFormWrapper,
 } as Meta<typeof SettingsFormWrapper>
 
-export const Default: StoryFn<typeof SettingsFormWrapper> = () => (
+export const DefaultComponent = () => (
   <div style={{ maxWidth: '900px', margin: '0 auto' }}>
     <Alert variant="failure" sx={{ marginBottom: 4 }}>
       Only for initial render - tech debt around routing within storybook
@@ -48,6 +48,10 @@ export const Default: StoryFn<typeof SettingsFormWrapper> = () => (
       ]}
     />
   </div>
+)
+
+export const Default: StoryFn<typeof SettingsFormWrapper> = () => (
+  <DefaultComponent />
 )
 
 export const SingleTab: StoryFn<typeof SettingsFormWrapper> = () => (

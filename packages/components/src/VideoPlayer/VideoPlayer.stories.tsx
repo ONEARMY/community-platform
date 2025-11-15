@@ -12,6 +12,7 @@ const Template: StoryFn<typeof VideoPlayer> = (args) => (
 )
 
 export const Youtube = Template.bind({})
+
 Youtube.args = {
   videoUrl: 'https://www.youtube.com/watch?v=anqfVCLRQHE',
 }

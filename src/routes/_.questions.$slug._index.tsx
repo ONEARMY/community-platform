@@ -1,4 +1,4 @@
-import { useLoaderData } from '@remix-run/react'
+import { useLoaderData } from 'react-router'
 import { Question } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
@@ -10,8 +10,8 @@ import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import { contentServiceServer } from '../services/contentService.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { DBQuestion } from 'oa-shared'
+import type { LoaderFunctionArgs } from 'react-router'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -60,8 +60,8 @@ export function HydrateFallback() {
   return <div></div>
 }
 
-export const meta = mergeMeta<typeof loader>(({ data }) => {
-  const question = data?.question as Question
+export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
+  const question = (loaderData as any)?.question as Question
 
   if (!question) {
     return []
@@ -74,7 +74,7 @@ export const meta = mergeMeta<typeof loader>(({ data }) => {
 })
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>()
+  const data: any = useLoaderData<typeof loader>()
   const question = data.question as Question
 
   if (!question) {

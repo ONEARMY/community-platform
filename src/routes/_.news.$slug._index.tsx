@@ -1,5 +1,4 @@
-import { redirect } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { redirect, useLoaderData } from 'react-router'
 import { News, UserRole } from 'oa-shared'
 import { ProfileFactory } from 'src/factories/profileFactory.server'
 import { NewsPage } from 'src/pages/News/NewsPage'
@@ -12,8 +11,8 @@ import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import { contentServiceServer } from '../services/contentService.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { DBNews } from 'oa-shared'
+import type { LoaderFunctionArgs } from 'react-router'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -89,8 +88,8 @@ export function HydrateFallback() {
   return <div></div>
 }
 
-export const meta = mergeMeta<typeof loader>(({ data }) => {
-  const news = data?.news as News
+export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
+  const news = (loaderData as any)?.news as News
 
   if (!news) {
     return []
@@ -103,7 +102,7 @@ export const meta = mergeMeta<typeof loader>(({ data }) => {
 })
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>()
+  const data = useLoaderData()
   const news = data.news as News
 
   if (!news) {

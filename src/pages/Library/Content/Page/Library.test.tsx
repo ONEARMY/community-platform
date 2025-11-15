@@ -1,12 +1,14 @@
 import '@testing-library/jest-dom/vitest'
 
-import { Global } from '@emotion/react'
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router'
 import { faker } from '@faker-js/faker'
-import { createRemixStub } from '@remix-run/testing'
 import { act, render, waitFor, within } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
-import { Provider } from 'mobx-react'
-import { GlobalStyles } from 'oa-components'
 import { preciousPlasticTheme } from 'oa-themes'
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'
 import {
@@ -23,25 +25,23 @@ const Theme = preciousPlasticTheme.styles
 const item = FactoryLibraryItem()
 
 const factory = (override?: Project) => {
-  const ReactStub = createRemixStub([
-    {
-      index: true,
-      Component: () => (
-        <>
-          <Global styles={GlobalStyles} />
-          <ProfileStoreProvider>
-            <ThemeProvider theme={Theme}>
-              <Provider>
-                <ProjectPage item={override ?? item} />
-              </Provider>
-            </ThemeProvider>
-          </ProfileStoreProvider>
-        </>
-      ),
-    },
-  ])
+  const router = createMemoryRouter(
+    createRoutesFromElements(
+      <Route
+        index={true}
+        key={1}
+        element={<ProjectPage item={override ?? item} />}
+      />,
+    ),
+  )
 
-  return render(<ReactStub />)
+  return render(
+    <ProfileStoreProvider>
+      <ThemeProvider theme={Theme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </ProfileStoreProvider>,
+  )
 }
 describe('Library', () => {
   it('displays content statistics', async () => {

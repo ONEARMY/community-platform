@@ -1,6 +1,6 @@
 import { useContext } from 'react'
+import { NavLink } from 'react-router'
 import styled from '@emotion/styled'
-import { NavLink } from '@remix-run/react'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 import { getSupportedModules } from 'src/modules'
 import { getAvailablePageList } from 'src/pages/PageList'

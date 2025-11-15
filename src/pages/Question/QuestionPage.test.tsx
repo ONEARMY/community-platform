@@ -1,8 +1,12 @@
 import '@testing-library/jest-dom/vitest'
 
-import { createMemoryRouter, RouterProvider } from 'react-router-dom'
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router'
 import { faker } from '@faker-js/faker'
-import { createRoutesFromElements, Route } from '@remix-run/react'
 import { act, render, waitFor, within } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
@@ -33,6 +37,26 @@ vi.mock('src/stores/Profile/profile.store', () => ({
   ProfileStoreProvider: ({ children }: { children: React.ReactNode }) =>
     children,
 }))
+
+vi.mock('src/services/usefulService', () => {
+  return {
+    usefulService: {
+      hasVoted: () =>
+        new Response(null, { status: 200, statusText: 'ALLL good!' }),
+    },
+  }
+})
+
+vi.mock('src/services/commentService', () => {
+  return {
+    commentService: {
+      getComments: () =>
+        new Response(null, { status: 200, statusText: 'ALLL good!' }),
+      getCommentSourceId: () =>
+        new Response(null, { status: 200, statusText: 'ALLL good!' }),
+    },
+  }
+})
 
 describe('Questions', () => {
   afterEach(() => {

@@ -1,9 +1,4 @@
-import {
-  createMemoryRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from 'react-router-dom'
+import { createMemoryRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router';
 import { render } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'

@@ -1,7 +1,7 @@
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
-import type { ActionFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs } from 'react-router';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)

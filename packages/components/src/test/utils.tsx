@@ -1,4 +1,4 @@
-import { createRemixStub } from '@remix-run/testing'
+import { createRoutesStub } from 'react-router'
 import { render as testLibReact } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { preciousPlasticTheme } from 'oa-themes'
@@ -12,7 +12,7 @@ const customRender = (
 ) =>
   testLibReact(ui, {
     wrapper: ({ children }: { children: React.ReactNode }) => {
-      const RemixStub = createRemixStub([
+      const RouterStub = createRoutesStub([
         {
           path: '',
           Component() {
@@ -23,7 +23,7 @@ const customRender = (
 
       return (
         <ThemeProvider theme={preciousPlasticTheme.styles}>
-          <RemixStub />
+          <RouterStub />
         </ThemeProvider>
       )
     },

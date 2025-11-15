@@ -4,13 +4,28 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { render } from '../test/utils'
 import { ProfileTagsList } from './ProfileTagsList'
-import { Default } from './ProfileTagsList.stories'
-
-import type { IProps } from './ProfileTagsList'
 
 describe('ProfileTagsList', () => {
   it('shows the electronics tag from default arguments', () => {
-    const { getByText } = render(<Default {...(Default.args as IProps)} />)
+    const { getByText } = render(
+      <ProfileTagsList
+        tags={[
+          {
+            id: 1,
+            createdAt: new Date(),
+            name: 'Electronics',
+            profileType: 'space',
+          },
+          {
+            id: 2,
+            createdAt: new Date(),
+            name: 'Graphic Design',
+            profileType: 'member',
+          },
+        ]}
+        isSpace={false}
+      />,
+    )
 
     expect(getByText('Electronics')).toBeInTheDocument()
   })

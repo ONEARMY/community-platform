@@ -7,9 +7,9 @@ import { storageServiceServer } from 'src/services/storageService.server'
 import { updateUserActivity } from 'src/utils/activity.server'
 import { convertToSlug } from 'src/utils/slug'
 
-import type { ActionFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBMedia, DBProfile, DBProject, MediaFile } from 'oa-shared'
+import type { ActionFunctionArgs } from 'react-router'
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)

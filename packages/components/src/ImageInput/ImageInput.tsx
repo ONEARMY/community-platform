@@ -32,7 +32,7 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024 // 5MB in bytes
 
 export const ImageInput = (props: IProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const prevPropsValue = useRef<IInputValue | IMultipleInputValue>()
+  const prevPropsValue = useRef<IInputValue | IMultipleInputValue>(null)
 
   const { dataTestId, imageDisplaySx, onFilesChange, value } = props
 
@@ -92,7 +92,7 @@ export const ImageInput = (props: IProps) => {
       setPresentFiles(getPresentFiles(value))
     }
 
-    prevPropsValue.current = value
+    prevPropsValue.current = value || null
   }, [props])
 
   const hasImages = presentFiles.length > 0 || inputFiles.length > 0

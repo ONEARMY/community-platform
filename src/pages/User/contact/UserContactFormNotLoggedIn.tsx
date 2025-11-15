@@ -1,5 +1,5 @@
 import { Form } from 'react-final-form'
-import { useNavigate } from '@remix-run/react'
+import { useNavigate } from 'react-router';
 import { observer } from 'mobx-react'
 import { Button } from 'oa-components'
 import {

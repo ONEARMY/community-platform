@@ -1,7 +1,12 @@
 // As much as possible taken directly from https://asmyshlyaev177.github.io/react-horizontal-scrolling-menu/?path=/story/examples-simple--simple
 // Generally only edited for readability
 
-import React, { useContext } from 'react'
+import React, {
+  Children,
+  cloneElement,
+  isValidElement,
+  useContext,
+} from 'react'
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu'
 import styled from '@emotion/styled'
 import { Box } from 'theme-ui'
@@ -13,7 +18,7 @@ import type { publicApiType } from 'react-horizontal-scrolling-menu'
 import 'react-horizontal-scrolling-menu/dist/styles.css'
 
 export interface IProps {
-  children: React.ReactElement[]
+  children: React.ReactNode[]
   dataCy?: string
 }
 
@@ -50,6 +55,13 @@ export const RightArrow = () => {
 }
 
 export const VerticalList = ({ children, dataCy }: IProps) => {
+  const childrenWithIds: any = Children.map(children, (child, index) => {
+    if (isValidElement(child) && !(child.props as any).itemId) {
+      return cloneElement(child, { itemId: `item-${index}` } as any)
+    }
+    return child
+  })?.filter((x) => !!x)
+
   return (
     <Box data-cy={dataCy} sx={{ alignSelf: 'center', maxWidth: '100%' }}>
       <NoScrollbar>
@@ -58,7 +70,7 @@ export const VerticalList = ({ children, dataCy }: IProps) => {
           RightArrow={RightArrow}
           onWheel={onWheel}
         >
-          {children}
+          {childrenWithIds}
         </ScrollMenu>
       </NoScrollbar>
     </Box>

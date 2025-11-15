@@ -1,5 +1,5 @@
 import React from 'react'
-import { useLocation } from '@remix-run/react'
+import { useLocation } from 'react-router';
 import ExternalEmbed from 'src/pages/Academy/ExternalEmbed/ExternalEmbed'
 
 export const getFrameSrc = (base: string, path: string): string =>

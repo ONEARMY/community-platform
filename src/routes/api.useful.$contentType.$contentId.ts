@@ -1,7 +1,7 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { updateUserActivity } from 'src/utils/activity.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from 'react-router';
 
 export async function action({ request, params }: LoaderFunctionArgs) {
   if (request.method !== 'POST' && request.method !== 'DELETE') {

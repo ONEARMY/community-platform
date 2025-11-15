@@ -11,10 +11,9 @@ import { hasAdminRightsSupabase } from 'src/utils/helpers'
 import { convertToSlug } from 'src/utils/slug'
 import { validateImage } from 'src/utils/storage'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { Params } from '@remix-run/react'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBNews } from 'oa-shared'
+import type { LoaderFunctionArgs, Params } from 'react-router'
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)

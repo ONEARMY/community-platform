@@ -1,4 +1,4 @@
-import { useLoaderData } from '@remix-run/react'
+import { useLoaderData } from 'react-router'
 import { Project } from 'oa-shared'
 import { ProjectPage } from 'src/pages/Library/Content/Page/ProjectPage'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
@@ -7,8 +7,8 @@ import { contentServiceServer } from 'src/services/contentService.server'
 import { libraryServiceServer } from 'src/services/libraryService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { DBProject } from 'oa-shared'
+import type { LoaderFunctionArgs } from 'react-router'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
@@ -56,8 +56,8 @@ export function HydrateFallback() {
   return <div></div>
 }
 
-export const meta = mergeMeta<typeof loader>(({ data }) => {
-  const project = data?.project as Project
+export const meta = mergeMeta(({ loaderData }) => {
+  const project = (loaderData as any)?.project as Project
 
   if (!project) {
     return []
@@ -69,7 +69,7 @@ export const meta = mergeMeta<typeof loader>(({ data }) => {
 })
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>()
+  const data = useLoaderData()
   const project = data.project as Project
 
   if (!project) {

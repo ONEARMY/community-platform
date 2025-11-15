@@ -10,6 +10,7 @@ export interface IProps {
   statistics: {
     icon: availableGlyphs
     label: string
+    stat: number
   }[]
   alwaysShow?: boolean
 }
@@ -24,14 +25,13 @@ export const ContentStatistics = (props: IProps) => {
 
   return (
     <Flex
-      data-cy={'ContentStatistics'}
-      py={1}
+      data-cy="ContentStatistics"
       sx={{
         alignItems: ['flex-start', 'center', 'center'],
-        justifyContent: 'center',
         gap: 2,
         flexDirection: alwaysShow ? 'row' : ['column', 'row', 'row'],
         pl: alwaysShow ? 0 : [2, 0, 0],
+        flexWrap: 'wrap',
       }}
     >
       <Flex
@@ -71,12 +71,10 @@ export const ContentStatistics = (props: IProps) => {
       {statistics.map((statistic, idx) => (
         <Flex
           key={idx}
-          px={2}
-          py={1}
-          mb={1}
           sx={{
             alignItems: 'center',
             fontSize: '1',
+            paddingX: 2,
             display: [
               showStats || alwaysShow ? 'flex' : 'none',
               'flex',
@@ -85,7 +83,7 @@ export const ContentStatistics = (props: IProps) => {
           }}
         >
           <Icon glyph={statistic.icon} mr={1} size={'sm'} opacity={'0.5'} />
-          <Text>{statistic.label}</Text>
+          <Text>{statistic.stat}</Text>
         </Flex>
       ))}
     </Flex>

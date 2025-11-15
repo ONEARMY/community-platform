@@ -34,6 +34,19 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
       data-cy="Username"
       sx={{ fontFamily: 'body', gap: 1, alignItems: 'center' }}
     >
+      <Text
+        sx={{
+          color: 'black',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          maxWidth: '100%',
+        }}
+        title={username}
+      >
+        {username}
+      </Text>
+
       {countryCode ? (
         <Flex data-testid="Username: known flag">
           <FlagIcon countryCode={countryCode} />
@@ -55,18 +68,6 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
         ></Flex>
       )}
 
-      <Text
-        sx={{
-          color: 'black',
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
-          maxWidth: '100%',
-        }}
-        title={username}
-      >
-        {username}
-      </Text>
       {badges &&
         badges.map((badge) => {
           return <UserBadge key={badge.id} badge={badge} />

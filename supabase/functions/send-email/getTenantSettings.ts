@@ -4,7 +4,7 @@ export async function getTenantSettings(req, redirect_to) {
   const tenantId = hackyWayToGetTenantId(req.headers, redirect_to)
   const client = createClient(
     Deno.env.get('SUPABASE_URL') ?? '',
-    Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+    Deno.env.get('PUBLISHABLE_KEY') ?? '',
     {
       global: {
         headers: {

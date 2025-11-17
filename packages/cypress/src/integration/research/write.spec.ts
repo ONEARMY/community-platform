@@ -61,6 +61,7 @@ describe('[Research]', () => {
       cy.contains('Start your Research')
 
       cy.step('Cannot be published when empty')
+      cy.wait(1000)
       cy.get('[data-cy=submit]').click()
       cy.get('[data-cy=errors-container]').should('be.visible')
 
@@ -127,6 +128,7 @@ describe('[Research]', () => {
       cy.contains('New update')
 
       cy.step('Cannot be published when empty')
+      cy.wait(1000)
       cy.get('[data-cy=submit]').click()
       cy.get('[data-cy=errors-container]').should('be.visible')
 

@@ -27,18 +27,16 @@ export const CommentSectionSupabase = (props: IProps) => {
 
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentLimit, setCommentLimit] = useState<number>(commentPageSize);
-  const [sortBy, setSortBy] = useState<CommentSortOption>(
-    CommentSortOption.Newest,
-  );
+  const [sortBy, setSortBy] = useState<CommentSortOption>(CommentSortOption.Newest);
 
   const displayedComments = useMemo(() => {
-    const sortFn = CommentSortOptions.getSortFn(sortBy)
-    const sorted = [...comments].sort(sortFn)
-    return sorted.slice(0, commentLimit)
+    const sortFn = CommentSortOptions.getSortFn(sortBy);
+    const sorted = [...comments].sort(sortFn);
+    return sorted.slice(0, commentLimit);
   }, [comments, commentLimit, sortBy]);
 
   const remainingCommentsCount = useMemo(() => {
-    return Math.max(0, comments.length - commentLimit)
+    return Math.max(0, comments.length - commentLimit);
   }, [comments.length, commentLimit]);
 
   useEffect(() => {

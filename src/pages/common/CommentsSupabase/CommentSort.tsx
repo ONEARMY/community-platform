@@ -1,14 +1,14 @@
-import { Select } from 'oa-components'
-import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { Flex } from 'theme-ui'
+import { Select } from 'oa-components';
+import { FieldContainer } from 'src/common/Form/FieldContainer';
+import { Flex } from 'theme-ui';
 
-import { CommentSortOptions } from './CommentSortOptions'
+import { CommentSortOptions } from './CommentSortOptions';
 
-import type { CommentSortOption } from './CommentSortOptions'
+import type { CommentSortOption } from './CommentSortOptions';
 
 interface IProps {
-  sortBy: CommentSortOption
-  onSortChange: (sortBy: CommentSortOption) => void
+  sortBy: CommentSortOption;
+  onSortChange: (sortBy: CommentSortOption) => void;
 }
 
 export const CommentSort = ({ sortBy, onSortChange }: IProps) => {
@@ -28,5 +28,5 @@ export const CommentSort = ({ sortBy, onSortChange }: IProps) => {
         </div>
       </FieldContainer>
     </Flex>
-  )
-}
+  );
+};

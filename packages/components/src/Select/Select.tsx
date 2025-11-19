@@ -139,9 +139,7 @@ export const Select = (props: Props) => {
     }),
     control: (provided) => ({
       ...provided,
-      backgroundColor: props.useAlternateBackground
-        ? theme.colors.softblue
-        : theme.colors.white,
+      backgroundColor: props.useAlternateBackground ? theme.colors.softblue : theme.colors.white,
       minHeight: '40px',
       cursor: 'pointer',
       boxShadow: 'none',

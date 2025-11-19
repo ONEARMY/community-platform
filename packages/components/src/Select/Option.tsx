@@ -1,11 +1,11 @@
-import { components } from 'react-select'
-import { Flex, Text } from 'theme-ui'
+import { components } from 'react-select';
+import { Flex, Text } from 'theme-ui';
 
-import type { OptionProps } from 'react-select'
+import type { OptionProps } from 'react-select';
 
 // https://github.com/JedWatson/react-select/issues/685#issuecomment-420213835
 export const Option = (props: OptionProps) => {
-  const option: any = props.data
+  const option: any = props.data;
   if (option.imageElement) {
     return (
       <components.Option {...props}>
@@ -25,8 +25,8 @@ export const Option = (props: OptionProps) => {
           </Flex>
         </>
       </components.Option>
-    )
+    );
   }
 
-  return <components.Option {...props}>{props.label}</components.Option>
-}
+  return <components.Option {...props}>{props.label}</components.Option>;
+};

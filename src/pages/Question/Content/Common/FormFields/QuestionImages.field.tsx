@@ -1,26 +1,26 @@
-import { Field } from 'react-final-form'
-import styled from '@emotion/styled'
-import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components'
-import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { ImageInputField } from 'src/common/Form/ImageInput.field'
-import { FormFieldWrapper } from 'src/pages/common/FormFields'
-import { fields } from 'src/pages/Question/labels'
-import { COMPARISONS } from 'src/utils/comparisons'
-import { Image as ImageComponent } from 'theme-ui'
+import { Field } from 'react-final-form';
+import styled from '@emotion/styled';
+import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components';
+import { FieldContainer } from 'src/common/Form/FieldContainer';
+import { ImageInputField } from 'src/common/Form/ImageInput.field';
+import { FormFieldWrapper } from 'src/pages/common/FormFields';
+import { fields } from 'src/pages/Question/labels';
+import { COMPARISONS } from 'src/utils/comparisons';
+import { Image as ImageComponent } from 'theme-ui';
 
-import type { Image } from 'oa-shared'
+import type { Image } from 'oa-shared';
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
   height: 100px;
   margin-right: 10px;
   margin-bottom: 6px;
-`
+`;
 
 interface IProps {
-  inputsAvailable: number
-  existingImages: Image[] | null
-  removeExistingImage: (index: number) => void
+  inputsAvailable: number;
+  existingImages: Image[] | null;
+  removeExistingImage: (index: number) => void;
 }
 
 export const QuestionImagesField = (props: IProps) => {
@@ -32,10 +32,7 @@ export const QuestionImagesField = (props: IProps) => {
       flexWrap="wrap"
     >
       {[...Array(props.inputsAvailable)].map((_, i) => (
-        <ImageInputFieldWrapper
-          key={`image-upload-${i}`}
-          data-cy={`image-upload-${i}`}
-        >
+        <ImageInputFieldWrapper key={`image-upload-${i}`} data-cy={`image-upload-${i}`}>
           <Field
             hasText={false}
             name={`images[${i}]`}
@@ -45,10 +42,7 @@ export const QuestionImagesField = (props: IProps) => {
         </ImageInputFieldWrapper>
       ))}
       {props.existingImages?.map((image, i) => (
-        <ImageInputFieldWrapper
-          key={`existing-image-${i}`}
-          data-cy={`existing-image-${i}`}
-        >
+        <ImageInputFieldWrapper key={`existing-image-${i}`} data-cy={`existing-image-${i}`}>
           <FieldContainer
             style={{
               height: '100%',
@@ -58,13 +52,11 @@ export const QuestionImagesField = (props: IProps) => {
           >
             <ImageInputWrapper hasUploadedImg={true}>
               <ImageComponent src={image.publicUrl} />
-              <ImageInputDeleteImage
-                onClick={() => props.removeExistingImage(i)}
-              />
+              <ImageInputDeleteImage onClick={() => props.removeExistingImage(i)} />
             </ImageInputWrapper>
           </FieldContainer>
         </ImageInputFieldWrapper>
       ))}
     </FormFieldWrapper>
-  )
-}
+  );
+};

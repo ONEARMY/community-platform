@@ -1,15 +1,15 @@
-import { NavLink } from 'react-router'
-import styled from '@emotion/styled'
-import { observer } from 'mobx-react'
-import { ReturnPathLink } from 'oa-components'
-import { preciousPlasticTheme } from 'oa-themes'
-import { AuthWrapper } from 'src/common/AuthWrapper'
-import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { Box, Flex } from 'theme-ui'
+import { NavLink } from 'react-router';
+import styled from '@emotion/styled';
+import { observer } from 'mobx-react';
+import { ReturnPathLink } from 'oa-components';
+import { preciousPlasticTheme } from 'oa-themes';
+import { AuthWrapper } from 'src/common/AuthWrapper';
+import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { Box, Flex } from 'theme-ui';
 
 // TODO: Remove direct usage of Theme
-const theme = preciousPlasticTheme.styles
+const theme = preciousPlasticTheme.styles;
 
 const ModalContainer = styled(Box)`
   max-width: 100%;
@@ -19,7 +19,7 @@ const ModalContainer = styled(Box)`
   top: 60px;
   z-index: ${theme.zIndex.modalProfile};
   height: 100%;
-`
+`;
 
 const ModalLink = styled(NavLink)`
   z-index: ${theme.zIndex.modalProfile};
@@ -38,10 +38,10 @@ const ModalLink = styled(NavLink)`
   &.current {
     background-color: ${theme.colors.background};
   }
-`
+`;
 
 export const ProfileModal = observer(() => {
-  const { profile: activeUser } = useProfileStore()
+  const { profile: activeUser } = useProfileStore();
 
   return (
     <ModalContainer data-cy="user-menu-list">
@@ -80,15 +80,11 @@ export const ProfileModal = observer(() => {
             '&:hover': { background: 'background' },
           }}
         >
-          <ReturnPathLink
-            data-cy="menu-Logout"
-            to="/logout"
-            style={{ color: 'black' }}
-          >
+          <ReturnPathLink data-cy="menu-Logout" to="/logout" style={{ color: 'black' }}>
             Log out
           </ReturnPathLink>
         </Box>
       </Flex>
     </ModalContainer>
-  )
-})
+  );
+});

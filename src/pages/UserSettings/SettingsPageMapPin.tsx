@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { Field, Form } from 'react-final-form'
-import { Link, useNavigate } from 'react-router'
-import { observer } from 'mobx-react'
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Field, Form } from 'react-final-form';
+import { Link, useNavigate } from 'react-router';
+import { observer } from 'mobx-react';
 import {
   Button,
   ConfirmModal,
@@ -11,30 +11,25 @@ import {
   Loader,
   MapWithPin,
   ModerationRecord,
-} from 'oa-components'
-import {
-  buttons,
-  headings,
-  inCompleteProfile,
-  mapForm,
-} from 'src/pages/UserSettings/labels'
-import { profileService } from 'src/services/profileService'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { getLocationData } from 'src/utils/getLocationData'
-import { isProfileComplete } from 'src/utils/isProfileComplete'
-import { Alert, Card, Flex, Heading, Text } from 'theme-ui'
+} from 'oa-components';
+import { buttons, headings, inCompleteProfile, mapForm } from 'src/pages/UserSettings/labels';
+import { profileService } from 'src/services/profileService';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { getLocationData } from 'src/utils/getLocationData';
+import { isProfileComplete } from 'src/utils/isProfileComplete';
+import { Alert, Card, Flex, Heading, Text } from 'theme-ui';
 
-import { createMarkerIcon } from '../Maps/Content/MapView/Sprites'
-import { mapPinService } from '../Maps/map.service'
-import { SettingsFormNotifications } from './content/SettingsFormNotifications'
+import { createMarkerIcon } from '../Maps/Content/MapView/Sprites';
+import { mapPinService } from '../Maps/map.service';
+import { SettingsFormNotifications } from './content/SettingsFormNotifications';
 
-import type { DivIcon } from 'leaflet'
-import type { ILatLng, MapPin } from 'oa-shared'
-import type { Map } from 'react-leaflet'
-import type { IFormNotification } from './content/SettingsFormNotifications'
+import type { DivIcon } from 'leaflet';
+import type { ILatLng, MapPin } from 'oa-shared';
+import type { Map } from 'react-leaflet';
+import type { IFormNotification } from './content/SettingsFormNotifications';
 
 const LocationDataTextDisplay = ({ pin }: { pin?: MapPin }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   if (!pin)
     return (
@@ -45,7 +40,7 @@ const LocationDataTextDisplay = ({ pin }: { pin?: MapPin }) => {
       >
         {mapForm.noLocationLabel}
       </Text>
-    )
+    );
 
   return (
     <>
@@ -64,17 +59,14 @@ const LocationDataTextDisplay = ({ pin }: { pin?: MapPin }) => {
         <>
           <Alert variant="warning" sx={{ gap: 1 }}>
             <Text sx={{ fontSize: 1 }}>
-              Your pin status is{' '}
-              {ModerationRecord[pin.moderation].toLowerCase()}
+              Your pin status is {ModerationRecord[pin.moderation].toLowerCase()}
             </Text>
             {pin.moderationFeedback && (
               <>
                 {' - '}
                 <Text sx={{ fontSize: 1 }}>
                   Moderator feedback:{' '}
-                  <Text sx={{ fontWeight: 'bold' }}>
-                    {pin.moderationFeedback}
-                  </Text>
+                  <Text sx={{ fontWeight: 'bold' }}>{pin.moderationFeedback}</Text>
                 </Text>
               </>
             )}
@@ -91,104 +83,101 @@ const LocationDataTextDisplay = ({ pin }: { pin?: MapPin }) => {
         </Button>
       )}
     </>
-  )
-}
+  );
+};
 
 export const SettingsPageMapPin = observer(() => {
   const communityProgramUrl =
-    import.meta.env.VITE_COMMUNITY_PROGRAM_URL ||
-    process.env.VITE_COMMUNITY_PROGRAM_URL
-  const [mapPin, setMapPin] = useState<MapPin | undefined>()
-  const [markerIcon, setMarkerIcon] = useState<DivIcon>()
-  const [isLoading, setIsLoading] = useState(true)
-  const [notification, setNotification] = useState<
-    IFormNotification | undefined
-  >(undefined)
-  const [showConfirmModal, setShowConfirmModal] = useState(false)
-  const newMapRef = useRef<Map>(null)
+    import.meta.env.VITE_COMMUNITY_PROGRAM_URL || process.env.VITE_COMMUNITY_PROGRAM_URL;
+  const [mapPin, setMapPin] = useState<MapPin | undefined>();
+  const [markerIcon, setMarkerIcon] = useState<DivIcon>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [notification, setNotification] = useState<IFormNotification | undefined>(undefined);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const newMapRef = useRef<Map>(null);
 
-  const { profile } = useProfileStore()
+  const { profile } = useProfileStore();
 
-  const isMember = !profile?.type?.isSpace
-  const { addPinTitle, yourPinTitle } = headings.map
-  const formId = 'MapSection'
+  const isMember = !profile?.type?.isSpace;
+  const { addPinTitle, yourPinTitle } = headings.map;
+  const formId = 'MapSection';
 
   const initialValues = useMemo<{ location: ILatLng | null }>(() => {
     if (!mapPin) {
-      return { location: null }
+      return { location: null };
     }
     return {
       location: {
         lat: mapPin?.lat,
         lng: mapPin?.lng,
       },
-    }
-  }, [mapPin])
+    };
+  }, [mapPin]);
 
   useEffect(() => {
     const init = async () => {
-      const pin = await mapPinService.getCurrentUserMapPin()
+      const pin = await mapPinService.getCurrentUserMapPin();
 
       if (pin) {
-        setMapPin(pin)
-        setMarkerIcon(createMarkerIcon(pin, true))
+        setMapPin(pin);
+        setMarkerIcon(createMarkerIcon(pin, true));
       }
-      setIsLoading(false)
-    }
+      setIsLoading(false);
+    };
 
-    init()
-  }, [])
+    init();
+  }, []);
 
   const onSubmit = async (obj: { location: ILatLng }) => {
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
-      const pinData = await getLocationData(obj.location)
-      const newPin = await profileService.upsertPin(pinData)
-      setMapPin(newPin)
+      const pinData = await getLocationData(obj.location);
+      const newPin = await profileService.upsertPin(pinData);
+      setMapPin(newPin);
 
       setNotification({
         message: mapForm.successfulSave,
         icon: 'check',
         show: true,
         variant: 'success',
-      })
+      });
     } catch (error) {
       setNotification({
         message: `Save Failed - ${error.message} `,
         icon: 'close',
         show: true,
         variant: 'failure',
-      })
+      });
     }
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   const onSubmitDelete = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await profileService.deletePin()
-      setMapPin(undefined)
+      await profileService.deletePin();
+      setMapPin(undefined);
 
       setNotification({
         message: mapForm.successfulDelete,
         icon: 'check',
         show: true,
         variant: 'success',
-      })
+      });
     } catch (error) {
       setNotification({
         message: `Delete failed - ${error.message} `,
         icon: 'close',
         show: true,
         variant: 'failure',
-      })
+      });
     }
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   if (!profile) {
-    return null
+    return null;
   }
 
   return (
@@ -204,21 +193,13 @@ export const SettingsPageMapPin = observer(() => {
           {mapPin ? addPinTitle : yourPinTitle}
         </Heading>
         {isMember && (
-          <Text
-            variant="quiet"
-            data-cy="descriptionMember"
-            data-testid="descriptionMember"
-          >
+          <Text variant="quiet" data-cy="descriptionMember" data-testid="descriptionMember">
             {mapForm.descriptionMember}
           </Text>
         )}
 
         {!isMember && mapPin?.moderation !== 'accepted' && (
-          <Text
-            variant="quiet"
-            data-cy="descriptionSpace"
-            data-testid="descriptionSpace"
-          >
+          <Text variant="quiet" data-cy="descriptionSpace" data-testid="descriptionSpace">
             {mapForm.descriptionSpace}
             <br />
             <ExternalLink
@@ -238,17 +219,8 @@ export const SettingsPageMapPin = observer(() => {
           id={formId}
           onSubmit={onSubmit}
           initialValues={initialValues}
-          render={({
-            values,
-            errors,
-            submitFailed,
-            submitting,
-            handleSubmit,
-          }) => {
-            if (isLoading)
-              return (
-                <Loader label={mapForm.loading} sx={{ alignSelf: 'center' }} />
-              )
+          render={({ values, errors, submitFailed, submitting, handleSubmit }) => {
+            if (isLoading) return <Loader label={mapForm.loading} sx={{ alignSelf: 'center' }} />;
 
             return (
               <>
@@ -263,20 +235,18 @@ export const SettingsPageMapPin = observer(() => {
                 <Field
                   name="location"
                   render={({ input }) => {
-                    const { onChange, value } = input
+                    const { onChange, value } = input;
 
                     return (
                       <MapWithPin
                         mapRef={newMapRef}
                         position={{ lat: value.lat, lng: value.lng }}
-                        updatePosition={(newPosition: ILatLng) =>
-                          onChange(newPosition)
-                        }
+                        updatePosition={(newPosition: ILatLng) => onChange(newPosition)}
                         markerIcon={markerIcon}
                         zoom={2}
                         center={[0, 0]}
                       />
-                    )
+                    );
                   }}
                 />
 
@@ -316,7 +286,7 @@ export const SettingsPageMapPin = observer(() => {
                   </>
                 )}
               </>
-            )
+            );
           }}
         />
       ) : (
@@ -358,5 +328,5 @@ export const SettingsPageMapPin = observer(() => {
         </Card>
       )}
     </Flex>
-  )
-})
+  );
+});

@@ -6,5 +6,5 @@
 import { redirect } from 'react-router';
 
 export function loader() {
-  return redirect('/library/create', 301)
+  return redirect('/library/create', 301);
 }

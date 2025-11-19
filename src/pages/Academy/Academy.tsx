@@ -1,26 +1,24 @@
-import React from 'react'
+import React from 'react';
 import { useLocation } from 'react-router';
-import ExternalEmbed from 'src/pages/Academy/ExternalEmbed/ExternalEmbed'
+import ExternalEmbed from 'src/pages/Academy/ExternalEmbed/ExternalEmbed';
 
 export const getFrameSrc = (base: string, path: string): string =>
   `${base}${path
     .split('/')
     .filter((str) => str !== 'academy' && Boolean(str))
-    .join('/')}`
+    .join('/')}`;
 
 const Academy = () => {
-  const location = useLocation()
+  const location = useLocation();
 
   return (
     <ExternalEmbed
       src={getFrameSrc(
-        import.meta.env.VITE_ACADEMY_RESOURCE ||
-          process.env.VITE_ACADEMY_RESOURCE ||
-          '',
+        import.meta.env.VITE_ACADEMY_RESOURCE || process.env.VITE_ACADEMY_RESOURCE || '',
         location.pathname,
       )}
     />
-  )
-}
+  );
+};
 
-export default Academy
+export default Academy;

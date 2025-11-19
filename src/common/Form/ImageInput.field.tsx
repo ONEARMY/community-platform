@@ -1,25 +1,25 @@
-import { ImageInput } from 'oa-components'
-import { Text } from 'theme-ui'
+import { ImageInput } from 'oa-components';
+import { Text } from 'theme-ui';
 
-import { FieldContainer } from './FieldContainer'
+import { FieldContainer } from './FieldContainer';
 
-import type { FieldProps } from './types'
+import type { FieldProps } from './types';
 
 // Assign correct typing so that ImageInput props can also be passed down to child
 // Note, partial as default onChange function provided
-type IImageInputProps = Partial<React.ComponentProps<typeof ImageInput>>
+type IImageInputProps = Partial<React.ComponentProps<typeof ImageInput>>;
 
 interface IProps extends FieldProps, IImageInputProps {}
 
 export const ImageInputField = (props: IProps) => {
-  const { input, meta, 'data-cy': dataCy, dataTestId, ...rest } = props
+  const { input, meta, 'data-cy': dataCy, dataTestId, ...rest } = props;
 
   // as validation happens on blur also want to artificially trigger when values change
   // (no native blur event)
   const onFilesChange = (value) => {
-    input.onChange(value)
-    input.onBlur()
-  }
+    input.onChange(value);
+    input.onBlur();
+  };
 
   return (
     <FieldContainer
@@ -31,9 +31,7 @@ export const ImageInputField = (props: IProps) => {
       invalid={meta.touched && meta.error}
       data-cy={dataCy}
     >
-      {meta.error && meta.touched && (
-        <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>
-      )}
+      {meta.error && meta.touched && <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>}
 
       <ImageInput
         {...rest}
@@ -42,5 +40,5 @@ export const ImageInputField = (props: IProps) => {
         onFilesChange={onFilesChange}
       />
     </FieldContainer>
-  )
-}
+  );
+};

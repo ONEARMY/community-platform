@@ -1,28 +1,28 @@
-import { Flex, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui';
 
-import { visitorDisplayData } from '../VisitorModal/VisitorModal'
+import { visitorDisplayData } from '../VisitorModal/VisitorModal';
 
-import type { Profile, ProfileTag } from 'oa-shared'
-import type { ComponentProps } from 'react'
-import type { ThemeUIStyleObject } from 'theme-ui'
+import type { Profile, ProfileTag } from 'oa-shared';
+import type { ComponentProps } from 'react';
+import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface IProps {
-  tags: ProfileTag[] | null
-  visitorPolicy?: Profile['visitorPolicy']
-  isSpace: boolean
-  showVisitorModal?: () => void
-  sx?: ThemeUIStyleObject
-  large?: boolean
+  tags: ProfileTag[] | null;
+  visitorPolicy?: Profile['visitorPolicy'];
+  isSpace: boolean;
+  showVisitorModal?: () => void;
+  sx?: ThemeUIStyleObject;
+  large?: boolean;
 }
 
-const DEFAULT_COLOR = '#999999'
+const DEFAULT_COLOR = '#999999';
 
 type TagProps = ComponentProps<typeof Text> & {
-  label: string
-  large: IProps['large']
-  color?: string
-  dataCy?: string
-}
+  label: string;
+  large: IProps['large'];
+  color?: string;
+  dataCy?: string;
+};
 
 const Tag = ({ color, dataCy, label, large, onClick }: TagProps) => {
   const sizing = large
@@ -35,7 +35,7 @@ const Tag = ({ color, dataCy, label, large, onClick }: TagProps) => {
         fontSize: 1,
         paddingX: '7.5px',
         paddingY: '5px',
-      }
+      };
   return (
     <Text
       data-cy={dataCy}
@@ -58,18 +58,18 @@ const Tag = ({ color, dataCy, label, large, onClick }: TagProps) => {
     >
       {label}
     </Text>
-  )
-}
+  );
+};
 
 const policyColors = new Map([
   ['open', '#116503'],
   ['appointment', '#005471'],
   ['closed', DEFAULT_COLOR],
-])
+]);
 
 export const ProfileTagsList = (props: IProps) => {
-  const { tags, visitorPolicy, isSpace, showVisitorModal, sx, large } = props
-  const tagList = tags || []
+  const { tags, visitorPolicy, isSpace, showVisitorModal, sx, large } = props;
+  const tagList = tags || [];
 
   return (
     <Flex
@@ -84,15 +84,13 @@ export const ProfileTagsList = (props: IProps) => {
         <Tag
           dataCy="tag-openToVisitors"
           color={policyColors.get(visitorPolicy.policy)}
-          label={`${
-            visitorDisplayData.get(visitorPolicy.policy)?.label
-          } \u24D8`}
+          label={`${visitorDisplayData.get(visitorPolicy.policy)?.label} \u24D8`}
           onClick={() => {
-            showVisitorModal && showVisitorModal()
+            showVisitorModal && showVisitorModal();
           }}
           large={true}
         />
       )}
     </Flex>
-  )
-}
+  );
+};

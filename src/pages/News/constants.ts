@@ -1,4 +1,4 @@
-export const NEWS_MIN_TITLE_LENGTH = 5
-export const NEWS_MAX_TITLE_LENGTH = 60
-export const NEWS_MAX_DESCRIPTION_LENGTH = 10000
-export const ITEMS_PER_PAGE = 10
+export const NEWS_MIN_TITLE_LENGTH = 5;
+export const NEWS_MAX_TITLE_LENGTH = 60;
+export const NEWS_MAX_DESCRIPTION_LENGTH = 10000;
+export const ITEMS_PER_PAGE = 10;

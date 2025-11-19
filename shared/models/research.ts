@@ -1,79 +1,79 @@
-import { Author } from './author'
-import { Category } from './category'
+import { Author } from './author';
+import { Category } from './category';
 
-import type { DBAuthor } from './author'
-import type { DBCategory } from './category'
-import type { IConvertedFileMeta } from './common'
-import type { IContentDoc, IDBContentDoc } from './content'
-import type { IDBDocSB, IDBDownloadable, IDoc, IDownloadable } from './document'
-import type { IFilesForm } from './filesForm'
-import type { DBMedia, Image, IMediaFile, MediaFile } from './media'
-import type { SelectValue } from './other'
-import type { Tag } from './tag'
+import type { DBAuthor } from './author';
+import type { DBCategory } from './category';
+import type { IConvertedFileMeta } from './common';
+import type { IContentDoc, IDBContentDoc } from './content';
+import type { IDBDocSB, IDBDownloadable, IDoc, IDownloadable } from './document';
+import type { IFilesForm } from './filesForm';
+import type { DBMedia, Image, IMediaFile, MediaFile } from './media';
+import type { SelectValue } from './other';
+import type { Tag } from './tag';
 
-export type ResearchStatus = 'in-progress' | 'complete'
+export type ResearchStatus = 'in-progress' | 'complete';
 export const ResearchStatusRecord: Record<ResearchStatus, string> = {
   'in-progress': 'In Progress',
   complete: 'Completed',
-}
+};
 
 export class DBResearchItem implements IDBContentDoc {
-  readonly id: number
-  readonly created_at: Date
-  readonly deleted: boolean | null
-  readonly author?: DBAuthor
-  readonly update_count?: number
-  readonly useful_count?: number
-  readonly subscriber_count?: number
-  readonly comment_count?: number
-  readonly total_views?: number
-  readonly category: DBCategory | null
-  readonly updates: DBResearchUpdate[]
-  created_by: number | null
-  modified_at: Date | null
-  title: string
-  slug: string
-  previous_slugs: string[] | null
-  description: string
-  image: DBMedia | null
-  category_id?: number
-  tags: number[]
-  status: ResearchStatus
-  is_draft: boolean
-  collaborators: string[] | null
+  readonly id: number;
+  readonly created_at: Date;
+  readonly deleted: boolean | null;
+  readonly author?: DBAuthor;
+  readonly update_count?: number;
+  readonly useful_count?: number;
+  readonly subscriber_count?: number;
+  readonly comment_count?: number;
+  readonly total_views?: number;
+  readonly category: DBCategory | null;
+  readonly updates: DBResearchUpdate[];
+  created_by: number | null;
+  modified_at: Date | null;
+  title: string;
+  slug: string;
+  previous_slugs: string[] | null;
+  description: string;
+  image: DBMedia | null;
+  category_id?: number;
+  tags: number[];
+  status: ResearchStatus;
+  is_draft: boolean;
+  collaborators: string[] | null;
 
   constructor(obj: Omit<DBResearchItem, 'id'>) {
-    Object.assign(this, obj)
+    Object.assign(this, obj);
   }
 }
 
 export class ResearchItem implements IContentDoc {
-  id: number
-  createdAt: Date
-  author: Author | null
-  modifiedAt: Date | null
-  title: string
-  slug: string
-  previousSlugs: string[]
-  description: string
-  image: Image | null
-  deleted: boolean
-  usefulCount: number
-  subscriberCount: number
-  commentCount: number
-  updateCount: number
-  category: Category | null
-  totalViews: number
-  tags: Tag[]
-  tagIds?: number[]
-  status: ResearchStatus
-  collaborators: Author[]
-  collaboratorsUsernames: string[] | null
-  updates: ResearchUpdate[]
-  isDraft: boolean
+  id: number;
+  createdAt: Date;
+  author: Author | null;
+  modifiedAt: Date | null;
+  title: string;
+  slug: string;
+  previousSlugs: string[];
+  description: string;
+  image: Image | null;
+  deleted: boolean;
+  usefulCount: number;
+  subscriberCount: number;
+  commentCount: number;
+  updateCount: number;
+  category: Category | null;
+  totalViews: number;
+  tags: Tag[];
+  tagIds?: number[];
+  status: ResearchStatus;
+  collaborators: Author[];
+  collaboratorsUsernames: string[] | null;
+  updates: ResearchUpdate[];
+  isDraft: boolean;
 
   constructor(obj: ResearchItem) {
-    Object.assign(this, obj)
+    Object.assign(this, obj);
   }
 
   static fromDB(
@@ -85,30 +85,27 @@ export class ResearchItem implements IContentDoc {
   ) {
     const filteredUpdates = obj.updates?.filter((update) => {
       if (update.deleted) {
-        return false
+        return false;
       }
 
       if (!update.is_draft) {
-        return true
+        return true;
       }
 
       if (!currentUsername) {
-        return false
+        return false;
       }
 
-      const isAuthor = obj.author?.username === currentUsername
-      const isCollaborator = (obj.collaborators || []).includes(currentUsername)
+      const isAuthor = obj.author?.username === currentUsername;
+      const isCollaborator = (obj.collaborators || []).includes(currentUsername);
 
-      return isAuthor || isCollaborator
-    })
+      return isAuthor || isCollaborator;
+    });
 
     const processedUpdates =
       filteredUpdates
         ?.map((update) => ResearchUpdate.fromDB(update, images))
-        .sort(
-          (a, b) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-        ) || []
+        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) || [];
 
     return new ResearchItem({
       id: obj.id,
@@ -135,53 +132,53 @@ export class ResearchItem implements IContentDoc {
       collaborators: collaborators || [],
       // never show deleted updates; only show draft updates if current user is the author or collaborator
       updates: processedUpdates,
-    })
+    });
   }
 }
 
 export class DBResearchUpdate implements IDBDocSB, IDBDownloadable {
-  readonly id: number
-  readonly research_id: number
-  readonly created_at: Date
-  readonly deleted: boolean | null
-  readonly is_draft: boolean | null
-  readonly comment_count?: number
-  readonly file_download_count?: number
-  readonly update_author?: DBAuthor
-  created_by: number | null
-  modified_at: Date | null
-  title: string
-  description: string
-  images: DBMedia[] | null
-  file_link: string | null
-  files: IMediaFile[] | null
-  video_url: string | null
+  readonly id: number;
+  readonly research_id: number;
+  readonly created_at: Date;
+  readonly deleted: boolean | null;
+  readonly is_draft: boolean | null;
+  readonly comment_count?: number;
+  readonly file_download_count?: number;
+  readonly update_author?: DBAuthor;
+  created_by: number | null;
+  modified_at: Date | null;
+  title: string;
+  description: string;
+  images: DBMedia[] | null;
+  file_link: string | null;
+  files: IMediaFile[] | null;
+  video_url: string | null;
 
   constructor(obj: Omit<DBResearchUpdate, 'id'>) {
-    Object.assign(this, obj)
+    Object.assign(this, obj);
   }
 }
 
 export class ResearchUpdate implements IDoc, IDownloadable {
-  id: number
-  author: Author | null
-  commentCount: number
-  createdAt: Date
-  deleted: boolean
-  description: string
-  fileDownloadCount: number
-  files: IMediaFile[] | null
-  images: Image[] | null
-  isDraft: boolean
-  hasFileLink: boolean
-  modifiedAt: Date | null
-  researchId: number
-  title: string
-  videoUrl: string | null
-  research?: DBResearchItem
+  id: number;
+  author: Author | null;
+  commentCount: number;
+  createdAt: Date;
+  deleted: boolean;
+  description: string;
+  fileDownloadCount: number;
+  files: IMediaFile[] | null;
+  images: Image[] | null;
+  isDraft: boolean;
+  hasFileLink: boolean;
+  modifiedAt: Date | null;
+  researchId: number;
+  title: string;
+  videoUrl: string | null;
+  research?: DBResearchItem;
 
   constructor(obj: ResearchUpdate) {
-    Object.assign(this, obj)
+    Object.assign(this, obj);
   }
 
   static fromDB(obj: DBResearchUpdate, images?: Image[]) {
@@ -192,9 +189,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
       author: obj.update_author ? Author.fromDB(obj.update_author) : null,
       title: obj.title,
       description: obj.description,
-      images:
-        images?.filter((x) => obj.images?.map((x) => x.id)?.includes(x.id)) ||
-        [],
+      images: images?.filter((x) => obj.images?.map((x) => x.id)?.includes(x.id)) || [],
       files: obj.files,
       // no fileLink as it must be shown only for authenticated users
       hasFileLink: !!obj.file_link,
@@ -204,37 +199,37 @@ export class ResearchUpdate implements IDoc, IDownloadable {
       fileDownloadCount: obj.file_download_count || 0,
       isDraft: !!obj.is_draft,
       researchId: obj.research_id,
-    })
+    });
   }
 }
 
 function calculateUpdateCommentCount(research: DBResearchItem): number {
   if (research.comment_count) {
-    return research.comment_count
+    return research.comment_count;
   }
 
   return research.updates
     ?.filter((x) => x.deleted !== true && x.is_draft !== true)
-    .reduce((acc, x) => acc + (x.comment_count || 0), 0)
+    .reduce((acc, x) => acc + (x.comment_count || 0), 0);
 }
 
 export type ResearchFormData = {
-  title: string
-  description: string
-  category?: SelectValue
-  tags?: number[]
-  collaborators?: string[]
-  image?: IConvertedFileMeta
-  existingImage: Image | null
-}
+  title: string;
+  description: string;
+  category?: SelectValue;
+  tags?: number[];
+  collaborators?: string[];
+  image?: IConvertedFileMeta;
+  existingImage: Image | null;
+};
 
 export interface ResearchUpdateFormData extends IFilesForm {
-  title: string
-  description: string
-  images?: File[]
-  existingImages: Image[] | null
-  files?: File[]
-  existingFiles?: MediaFile[] | null
-  fileLink?: string
-  videoUrl?: string
+  title: string;
+  description: string;
+  images?: File[];
+  existingImages: Image[] | null;
+  files?: File[];
+  existingFiles?: MediaFile[] | null;
+  fileLink?: string;
+  videoUrl?: string;
 }

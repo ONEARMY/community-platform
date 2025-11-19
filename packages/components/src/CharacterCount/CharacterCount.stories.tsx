@@ -1,11 +1,11 @@
-import { CharacterCount } from './CharacterCount'
+import { CharacterCount } from './CharacterCount';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Components/CharacterCount',
   component: CharacterCount,
-} as Meta<typeof CharacterCount>
+} as Meta<typeof CharacterCount>;
 
 const errorValues = [
   {
@@ -18,15 +18,15 @@ const errorValues = [
     minSize: 0,
     maxSize: 100,
   },
-]
+];
 
 export const Default: StoryFn<typeof CharacterCount> = () => (
   <CharacterCount currentSize={0} minSize={0} maxSize={100} />
-)
+);
 
 export const WithValidState: StoryFn<typeof CharacterCount> = () => (
   <CharacterCount currentSize={50} minSize={0} maxSize={100} />
-)
+);
 
 export const WithError: StoryFn<typeof CharacterCount> = () => (
   <>
@@ -38,7 +38,7 @@ export const WithError: StoryFn<typeof CharacterCount> = () => (
           minSize={state.minSize}
           maxSize={state.maxSize}
         />
-      )
+      );
     })}
   </>
-)
+);

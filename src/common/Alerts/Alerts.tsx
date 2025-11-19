@@ -1,6 +1,6 @@
-import { UserAction } from '../UserAction'
-import { AlertBanner } from './AlertBanner'
-import { AlertIncompleteProfile } from './AlertIncompleteProfile'
+import { UserAction } from '../UserAction';
+import { AlertBanner } from './AlertBanner';
+import { AlertIncompleteProfile } from './AlertIncompleteProfile';
 
 export const Alerts = () => {
   return (
@@ -15,5 +15,5 @@ export const Alerts = () => {
         loggedOut={null}
       />
     </>
-  )
-}
+  );
+};

@@ -1,33 +1,29 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type {
   DBResearchItem,
   ResearchItem,
   ResearchUpdate,
   SubscribableContentTypes,
-} from 'oa-shared'
+} from 'oa-shared';
 
 const combineSubscribers = async (
   ids: (number | null | undefined)[],
   usernames: string[],
   client: SupabaseClient,
 ): Promise<number[]> => {
-  const profilesToSubscribe: number[] = ids.map((id) => Number(id))
+  const profilesToSubscribe: number[] = ids.map((id) => Number(id));
 
   for (const username of usernames) {
-    const { data } = await client
-      .from('profiles')
-      .select('id')
-      .eq('username', username)
-      .single()
+    const { data } = await client.from('profiles').select('id').eq('username', username).single();
     if (data && !!Number(data.id)) {
-      profilesToSubscribe.push(Number(data.id))
+      profilesToSubscribe.push(Number(data.id));
     }
   }
 
-  const uniqueIdSet = new Set([...profilesToSubscribe])
+  const uniqueIdSet = new Set([...profilesToSubscribe]);
 
-  return [...uniqueIdSet]
-}
+  return [...uniqueIdSet];
+};
 
 const addResearchSubscribers = async (
   research: ResearchItem,
@@ -40,13 +36,13 @@ const addResearchSubscribers = async (
     [profileId],
     research.collaboratorsUsernames || [],
     client,
-  )
+  );
   return Promise.all([
     subscribers.map((subscriber) => {
-      addFunction('research', research.id, subscriber, client, headers)
+      addFunction('research', research.id, subscriber, client, headers);
     }),
-  ])
-}
+  ]);
+};
 
 const addResearchUpdateSubscribers = async (
   update: ResearchUpdate,
@@ -59,13 +55,13 @@ const addResearchUpdateSubscribers = async (
     [profileId, update.research?.created_by],
     update.research?.collaborators || [],
     client,
-  )
+  );
   return Promise.all([
     subscribers.map((subscriber) => {
-      addFunction('research_update', update.id, subscriber, client, headers)
+      addFunction('research_update', update.id, subscriber, client, headers);
     }),
-  ])
-}
+  ]);
+};
 
 const add = async (
   contentType: SubscribableContentTypes,
@@ -81,10 +77,10 @@ const add = async (
       .eq('content_type', contentType)
       .eq('content_id', contentId)
       .eq('user_id', profileId)
-      .single()
+      .single();
 
     if (response.data) {
-      return Response.json({}, { headers, status: 200 })
+      return Response.json({}, { headers, status: 200 });
     }
 
     await client.from('subscribers').insert({
@@ -92,15 +88,15 @@ const add = async (
       content_id: contentId,
       user_id: profileId,
       tenant_id: process.env.TENANT_ID!,
-    })
-    return Response.json({}, { headers, status: 200 })
+    });
+    return Response.json({}, { headers, status: 200 });
   } catch (error) {
     if (error) {
-      console.error(error)
-      return Response.json({}, { headers, status: 500, statusText: 'error' })
+      console.error(error);
+      return Response.json({}, { headers, status: 500, statusText: 'error' });
     }
   }
-}
+};
 
 const updateResearchSubscribers = async (
   oldResearch: DBResearchItem,
@@ -109,32 +105,28 @@ const updateResearchSubscribers = async (
   headers: Headers,
   addFunction = add,
 ) => {
-  const oldCollaborators = oldResearch.collaborators || []
-  const newCollaborators = newResearch.collaboratorsUsernames || []
+  const oldCollaborators = oldResearch.collaborators || [];
+  const newCollaborators = newResearch.collaboratorsUsernames || [];
 
   const newCollaboratorUsernames = newCollaborators.filter(
     (username) => !oldCollaborators.includes(username),
-  )
+  );
 
   if (newCollaboratorUsernames.length === 0) {
-    return
+    return;
   }
 
-  const subscribers = await combineSubscribers(
-    [],
-    newCollaboratorUsernames,
-    client,
-  )
+  const subscribers = await combineSubscribers([], newCollaboratorUsernames, client);
   return Promise.all([
     subscribers.map((subscriber) => {
-      addFunction('research', newResearch.id, subscriber, client, headers)
+      addFunction('research', newResearch.id, subscriber, client, headers);
     }),
-  ])
-}
+  ]);
+};
 
 export const subscribersServiceServer = {
   addResearchSubscribers,
   addResearchUpdateSubscribers,
   add,
   updateResearchSubscribers,
-}
+};

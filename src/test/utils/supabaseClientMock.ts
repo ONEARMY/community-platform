@@ -1,20 +1,20 @@
-import { vi } from 'vitest'
+import { vi } from 'vitest';
 
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 export const createMockSupabaseClient = () => {
-  const mockSingle = vi.fn()
-  const mockMaybeSingle = vi.fn()
-  const mockEq = vi.fn()
-  const mockSelect = vi.fn()
-  const mockFrom = vi.fn()
-  const mockRpc = vi.fn()
-  const mockFunctionsInvoke = vi.fn()
-  const mockUpdate = vi.fn()
-  const mockInsert = vi.fn()
-  const mockDelete = vi.fn()
-  const mockLimit = vi.fn()
-  const mockGetClaims = vi.fn()
+  const mockSingle = vi.fn();
+  const mockMaybeSingle = vi.fn();
+  const mockEq = vi.fn();
+  const mockSelect = vi.fn();
+  const mockFrom = vi.fn();
+  const mockRpc = vi.fn();
+  const mockFunctionsInvoke = vi.fn();
+  const mockUpdate = vi.fn();
+  const mockInsert = vi.fn();
+  const mockDelete = vi.fn();
+  const mockLimit = vi.fn();
+  const mockGetClaims = vi.fn();
 
   const mockClient = {
     auth: {
@@ -25,7 +25,7 @@ export const createMockSupabaseClient = () => {
     functions: {
       invoke: mockFunctionsInvoke,
     },
-  } as unknown as SupabaseClient
+  } as unknown as SupabaseClient;
 
   const createQueryBuilder = () => ({
     select: mockSelect,
@@ -36,15 +36,15 @@ export const createMockSupabaseClient = () => {
     insert: mockInsert,
     delete: mockDelete,
     limit: mockLimit,
-  })
+  });
 
-  mockFrom.mockImplementation(() => createQueryBuilder())
-  mockSelect.mockImplementation(() => createQueryBuilder())
-  mockEq.mockImplementation(() => createQueryBuilder())
-  mockUpdate.mockImplementation(() => createQueryBuilder())
-  mockInsert.mockImplementation(() => createQueryBuilder())
-  mockDelete.mockImplementation(() => createQueryBuilder())
-  mockLimit.mockImplementation(() => createQueryBuilder())
+  mockFrom.mockImplementation(() => createQueryBuilder());
+  mockSelect.mockImplementation(() => createQueryBuilder());
+  mockEq.mockImplementation(() => createQueryBuilder());
+  mockUpdate.mockImplementation(() => createQueryBuilder());
+  mockInsert.mockImplementation(() => createQueryBuilder());
+  mockDelete.mockImplementation(() => createQueryBuilder());
+  mockLimit.mockImplementation(() => createQueryBuilder());
 
   return {
     client: mockClient,
@@ -64,5 +64,5 @@ export const createMockSupabaseClient = () => {
       rpc: mockRpc,
       functionsInvoke: mockFunctionsInvoke,
     },
-  }
-}
+  };
+};

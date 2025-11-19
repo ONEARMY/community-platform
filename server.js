@@ -1,12 +1,12 @@
 /* eslint-disable no-undef */
-import { createRequestHandler } from '@react-router/express'
-import compression from 'compression'
-import dotenv from 'dotenv'
-import express from 'express'
-import helmet from 'helmet'
+import { createRequestHandler } from '@react-router/express';
+import compression from 'compression';
+import dotenv from 'dotenv';
+import express from 'express';
+import helmet from 'helmet';
 
-dotenv.config()
-dotenv.config({ path: '.env.local', override: true })
+dotenv.config();
+dotenv.config({ path: '.env.local', override: true });
 
 const viteDevServer =
   process.env.NODE_ENV === 'production'
@@ -15,23 +15,23 @@ const viteDevServer =
         vite.createServer({
           server: { middlewareMode: true },
         }),
-      )
+      );
 
 const remixHandler = createRequestHandler({
   build: viteDevServer
     ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build')
     : // eslint-disable-next-line import/no-unresolved
       await import('./build/server/index.js'), // comment necessary because lint runs before build
-})
+});
 
-const app = express()
+const app = express();
 
-app.use(compression())
+app.use(compression());
 
 // http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
-app.disable('x-powered-by')
+app.disable('x-powered-by');
 
-const wsUrls = process.env.WS_URLS?.split(',').map((url) => url.trim())
+const wsUrls = process.env.WS_URLS?.split(',').map((url) => url.trim());
 
 const imgSrc = [
   "'self'",
@@ -46,12 +46,12 @@ const imgSrc = [
   '*.basemaps.cartocdn.com',
   '*.supabase.co',
   process.env.SUPABASE_API_URL,
-]
+];
 
-const cdnUrl = import.meta.env?.VITE_CDN_URL || process.env?.VITE_CDN_URL
+const cdnUrl = import.meta.env?.VITE_CDN_URL || process.env?.VITE_CDN_URL;
 
 if (cdnUrl) {
-  imgSrc.push(cdnUrl)
+  imgSrc.push(cdnUrl);
 }
 
 // helmet config
@@ -112,11 +112,10 @@ app.use(
       imgSrc: imgSrc,
       objectSrc: ["'self'"],
       // Enforce HTTPS only on production
-      upgradeInsecureRequests:
-        process.env.NODE_ENV === 'production' ? [] : null,
+      upgradeInsecureRequests: process.env.NODE_ENV === 'production' ? [] : null,
     },
   }),
-)
+);
 // Enforce HTTPS only on production
 if (process.env.NODE_ENV === 'production') {
   app.use(
@@ -125,42 +124,39 @@ if (process.env.NODE_ENV === 'production') {
       preload: true,
       includeSubDomains: false,
     }),
-  )
+  );
 }
-app.use(helmet.dnsPrefetchControl({ allow: true }))
-app.use(helmet.hidePoweredBy())
-app.use(helmet.noSniff())
-app.use(helmet.referrerPolicy({ policy: ['origin'] }))
-app.use(helmet.xssFilter())
-app.use(helmet.hidePoweredBy())
+app.use(helmet.dnsPrefetchControl({ allow: true }));
+app.use(helmet.hidePoweredBy());
+app.use(helmet.noSniff());
+app.use(helmet.referrerPolicy({ policy: ['origin'] }));
+app.use(helmet.xssFilter());
+app.use(helmet.hidePoweredBy());
 
 app.use(function (req, res, next) {
   if (!('JSONResponse' in res)) {
-    return next()
+    return next();
   }
 
-  res.set('Cache-Control', 'public, max-age=31557600')
-  res.json(res.JSONResponse)
-})
+  res.set('Cache-Control', 'public, max-age=31557600');
+  res.json(res.JSONResponse);
+});
 
 // handle asset requests
 if (viteDevServer) {
-  app.use(viteDevServer.middlewares)
+  app.use(viteDevServer.middlewares);
 } else {
   // Vite fingerprints its assets so we can cache forever.
-  app.use(
-    '/assets',
-    express.static('build/client/assets', { immutable: true, maxAge: '1y' }),
-  )
+  app.use('/assets', express.static('build/client/assets', { immutable: true, maxAge: '1y' }));
 }
 
-app.use(express.static('build/client', { maxAge: '1h' }))
+app.use(express.static('build/client', { maxAge: '1h' }));
 
-app.all('*', remixHandler)
+app.all('*', remixHandler);
 
-let port = process.env.PORT || 3456 // 3456 is default port for ci
+let port = process.env.PORT || 3456; // 3456 is default port for ci
 
 app.listen(port, '0.0.0.0', () => {
   // eslint-disable-next-line no-console, no-undef
-  console.log(`Express server started on http://0.0.0.0:${port}`)
-})
+  console.log(`Express server started on http://0.0.0.0:${port}`);
+});

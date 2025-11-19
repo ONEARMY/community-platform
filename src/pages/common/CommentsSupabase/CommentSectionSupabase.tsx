@@ -1,199 +1,183 @@
-import { useEffect, useMemo, useState } from 'react'
-import { AuthorsContext, CommentsTitle } from 'oa-components'
-import { Comment } from 'oa-shared'
-import { FollowButtonAction } from 'src/common/FollowButtonAction'
-import { commentService } from 'src/services/commentService'
-import { subscribersService } from 'src/services/subscribersService'
-import { Box, Button, Flex } from 'theme-ui'
+import { useEffect, useMemo, useState } from 'react';
+import { AuthorsContext, CommentsTitle } from 'oa-components';
+import { Comment } from 'oa-shared';
+import { FollowButtonAction } from 'src/common/FollowButtonAction';
+import { commentService } from 'src/services/commentService';
+import { subscribersService } from 'src/services/subscribersService';
+import { Box, Button, Flex } from 'theme-ui';
 
-import { CommentItemSupabase } from './CommentItemSupabase'
-import { CreateCommentSupabase } from './CreateCommentSupabase'
+import { CommentItemSupabase } from './CommentItemSupabase';
+import { CreateCommentSupabase } from './CreateCommentSupabase';
 
-import type { DiscussionContentTypes, Reply } from 'oa-shared'
-import type { Dispatch, SetStateAction } from 'react'
+import type { DiscussionContentTypes, Reply } from 'oa-shared';
+import type { Dispatch, SetStateAction } from 'react';
 
 interface IProps {
-  authors: Array<number>
-  sourceId: number
-  sourceType: DiscussionContentTypes
-  setSubscribersCount?: Dispatch<SetStateAction<number>>
+  authors: Array<number>;
+  sourceId: number;
+  sourceType: DiscussionContentTypes;
+  setSubscribersCount?: Dispatch<SetStateAction<number>>;
 }
-const commentPageSize = 10
+const commentPageSize = 10;
 
 export const CommentSectionSupabase = (props: IProps) => {
-  const { authors, setSubscribersCount, sourceId, sourceType } = props
+  const { authors, setSubscribersCount, sourceId, sourceType } = props;
 
-  const [comments, setComments] = useState<Comment[]>([])
-  const [commentLimit, setCommentLimit] = useState<number>(commentPageSize)
-  const [newCommentIds, setNewCommentIds] = useState<number[]>([])
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [commentLimit, setCommentLimit] = useState<number>(commentPageSize);
+  const [newCommentIds, setNewCommentIds] = useState<number[]>([]);
 
   const displayedComments = useMemo(() => {
-    return comments
-      .filter((x) => !newCommentIds.includes(x.id))
-      .slice(0, commentLimit)
-  }, [comments, commentLimit, newCommentIds])
+    return comments.filter((x) => !newCommentIds.includes(x.id)).slice(0, commentLimit);
+  }, [comments, commentLimit, newCommentIds]);
   const newComments = useMemo(() => {
-    return comments.filter((x) => newCommentIds.includes(x.id))
-  }, [comments, newCommentIds])
+    return comments.filter((x) => newCommentIds.includes(x.id));
+  }, [comments, newCommentIds]);
 
   const remainingCommentsCount = useMemo(() => {
-    const nonNewCount = comments.length - newCommentIds.length
-    const shown = Math.min(commentLimit, nonNewCount)
-    return Math.max(0, nonNewCount - shown)
-  }, [comments, newCommentIds, commentLimit])
+    const nonNewCount = comments.length - newCommentIds.length;
+    const shown = Math.min(commentLimit, nonNewCount);
+    return Math.max(0, nonNewCount - shown);
+  }, [comments, newCommentIds, commentLimit]);
 
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const comments = await commentService.getComments(sourceType, sourceId)
+        const comments = await commentService.getComments(sourceType, sourceId);
         const highlightedCommentId = location.hash?.startsWith('#comment:')
           ? location.hash.replace('#comment:', '')
-          : null
+          : null;
 
         if (highlightedCommentId) {
-          const highlightedComment = comments.find(
-            (x) => x.id === +highlightedCommentId,
-          )
+          const highlightedComment = comments.find((x) => x.id === +highlightedCommentId);
           if (highlightedComment) {
-            highlightedComment.highlighted = true
+            highlightedComment.highlighted = true;
           } else {
             // find in replies and set highlighted
             const highlightedReply = comments
               .flatMap((x) => x.replies)
-              .find((x) => x?.id === +highlightedCommentId)
+              .find((x) => x?.id === +highlightedCommentId);
 
             if (highlightedReply) {
-              highlightedReply.highlighted = true
+              highlightedReply.highlighted = true;
             }
           }
 
           // ensure highlighted comment is visible
           const index = comments.findIndex(
             (x) => x.highlighted || x.replies?.some((y) => y.highlighted),
-          )
+          );
 
           if (index > 5) {
-            setCommentLimit(index + 1)
+            setCommentLimit(index + 1);
           }
         }
 
-        setComments(comments || [])
+        setComments(comments || []);
       } catch (err) {
-        console.error(err)
+        console.error(err);
       }
-    }
+    };
 
-    fetchComments()
-  }, [sourceId, location?.hash])
+    fetchComments();
+  }, [sourceId, location?.hash]);
 
   useEffect(() => {
     if (window.location.hash && window.location.hash === '#discussion') {
-      const el = document.getElementById('discussion')
+      const el = document.getElementById('discussion');
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth' })
+        el.scrollIntoView({ behavior: 'smooth' });
       }
     }
-  }, [])
+  }, []);
 
   const postComment = async (comment: string) => {
     try {
-      const result = await commentService.postComment(
-        sourceId,
-        comment,
-        sourceType,
-      )
+      const result = await commentService.postComment(sourceId, comment, sourceType);
 
       if (result.status === 201) {
-        const newComment = new Comment(await result.json())
-        subscribersService.add(
-          newComment.sourceType,
-          Number(newComment.sourceId),
-        )
+        const newComment = new Comment(await result.json());
+        subscribersService.add(newComment.sourceType, Number(newComment.sourceId));
 
-        setComments((comments) => [...comments, newComment])
-        setNewCommentIds([...newCommentIds, newComment.id])
+        setComments((comments) => [...comments, newComment]);
+        setNewCommentIds([...newCommentIds, newComment.id]);
       }
-      return result
+      return result;
     } catch (err) {
-      console.error(err)
-      return err
+      console.error(err);
+      return err;
     }
-  }
+  };
 
   const editComment = async (id: number, comment: string) => {
     try {
-      const result = await commentService.editComment(sourceId, id, comment)
-      const now = new Date()
+      const result = await commentService.editComment(sourceId, id, comment);
+      const now = new Date();
 
       if (result.status === 204) {
         setComments((comments) =>
           comments.map((x) => {
             if (x.id === id) {
-              x.comment = comment
-              x.modifiedAt = now
+              x.comment = comment;
+              x.modifiedAt = now;
             }
-            return x
+            return x;
           }),
-        )
+        );
       }
-      return result
+      return result;
     } catch (err) {
-      console.error(err)
-      return err
+      console.error(err);
+      return err;
     }
-  }
+  };
 
   const deleteComment = async (id: number) => {
     try {
-      const result = await commentService.deleteComment(sourceId, id)
+      const result = await commentService.deleteComment(sourceId, id);
 
       if (result.status === 204) {
         setComments((comments) =>
           comments.map((x) => {
             if (x.id === id) {
-              x.deleted = true
+              x.deleted = true;
             }
-            return x
+            return x;
           }),
-        )
+        );
       }
-      return result
+      return result;
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
-  }
+  };
 
   const postReply = async (id: number, reply: string) => {
     try {
-      const result = await commentService.postComment(
-        sourceId,
-        reply,
-        sourceType,
-        id,
-      )
+      const result = await commentService.postComment(sourceId, reply, sourceType, id);
 
       if (result.status === 201) {
-        const newReply = new Comment(await result.json()) as Reply
+        const newReply = new Comment(await result.json()) as Reply;
 
         setComments((comments) =>
           comments.map((comment) => {
             if (comment.id === id) {
-              comment.replies = [...(comment.replies || []), newReply]
+              comment.replies = [...(comment.replies || []), newReply];
             }
-            return comment
+            return comment;
           }),
-        )
+        );
       }
-      return result
+      return result;
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
-  }
+  };
 
   const editReply = async (id: number, replyText: string, parentId: number) => {
     try {
-      const result = await commentService.editComment(sourceId, id, replyText)
-      const now = new Date()
+      const result = await commentService.editComment(sourceId, id, replyText);
+      const now = new Date();
 
       if (result.status === 204) {
         setComments((comments) =>
@@ -201,26 +185,26 @@ export const CommentSectionSupabase = (props: IProps) => {
             if (comment.id === parentId) {
               comment.replies = comment.replies?.map((reply) => {
                 if (reply.id === id) {
-                  reply.comment = replyText
-                  reply.modifiedAt = now
+                  reply.comment = replyText;
+                  reply.modifiedAt = now;
                 }
-                return reply
-              })
+                return reply;
+              });
             }
-            return comment
+            return comment;
           }),
-        )
+        );
       }
-      return result
+      return result;
     } catch (err) {
-      console.error(err)
-      return err
+      console.error(err);
+      return err;
     }
-  }
+  };
 
   const deleteReply = async (id: number, parentId: number) => {
     try {
-      const result = await commentService.deleteComment(sourceId, id)
+      const result = await commentService.deleteComment(sourceId, id);
 
       if (result.status === 204) {
         setComments((comments) =>
@@ -228,21 +212,21 @@ export const CommentSectionSupabase = (props: IProps) => {
             if (comment.id === parentId) {
               comment.replies = comment.replies?.map((reply) => {
                 if (reply.id === id) {
-                  reply.deleted = true
+                  reply.deleted = true;
                 }
-                return reply
-              })
+                return reply;
+              });
             }
-            return comment
+            return comment;
           }),
-        )
+        );
       }
-      return result
+      return result;
     } catch (err) {
-      console.error(err)
-      return err
+      console.error(err);
+      return err;
     }
-  }
+  };
 
   return (
     <AuthorsContext.Provider value={{ authors }}>
@@ -310,5 +294,5 @@ export const CommentSectionSupabase = (props: IProps) => {
         <CreateCommentSupabase onSubmit={postComment} sourceType={sourceType} />
       </Flex>
     </AuthorsContext.Provider>
-  )
-}
+  );
+};

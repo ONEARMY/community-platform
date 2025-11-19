@@ -1,22 +1,18 @@
-import { ThemeProvider } from '@theme-ui/core'
-import type { Preview } from '@storybook/react-vite'
-import React from 'react'
+import { ThemeProvider } from '@theme-ui/core';
+import type { Preview } from '@storybook/react-vite';
+import React from 'react';
 
-import { Global } from '@emotion/react'
-import { GlobalStyles } from '../src/GlobalStyles/GlobalStyles'
+import { Global } from '@emotion/react';
+import { GlobalStyles } from '../src/GlobalStyles/GlobalStyles';
 
-import {
-  preciousPlasticTheme,
-  projectKampTheme,
-  fixingFashionTheme,
-} from 'oa-themes'
-import { createRoutesStub } from 'react-router'
+import { preciousPlasticTheme, projectKampTheme, fixingFashionTheme } from 'oa-themes';
+import { createRoutesStub } from 'react-router';
 
 const themes = {
   pp: preciousPlasticTheme.styles,
   pk: projectKampTheme.styles,
   ff: fixingFashionTheme.styles,
-}
+};
 
 const preview: Preview = {
   parameters: {
@@ -62,11 +58,11 @@ const preview: Preview = {
             </>
           ),
         },
-      ])
+      ]);
 
-      return <RouterStub />
+      return <RouterStub />;
     },
   ],
-}
+};
 
-export default preview
+export default preview;

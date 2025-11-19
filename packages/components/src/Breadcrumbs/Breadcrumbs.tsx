@@ -1,11 +1,11 @@
-import { Flex } from 'theme-ui'
+import { Flex } from 'theme-ui';
 
-import { Icon } from '../Icon/Icon'
-import { BreadcrumbItem } from './BreadcrumbsItem'
+import { Icon } from '../Icon/Icon';
+import { BreadcrumbItem } from './BreadcrumbsItem';
 
-type Step = { text: string; link?: string }
+type Step = { text: string; link?: string };
 export interface BreadcrumbsProps {
-  steps: Step[]
+  steps: Step[];
 }
 
 export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
@@ -21,7 +21,7 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
       }}
     >
       {steps.map((step, index) => {
-        const isLast = index === steps.length - 1
+        const isLast = index === steps.length - 1;
         return (
           <Flex
             key={index}
@@ -40,8 +40,8 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
               />
             )}
           </Flex>
-        )
+        );
       })}
     </Flex>
-  )
-}
+  );
+};

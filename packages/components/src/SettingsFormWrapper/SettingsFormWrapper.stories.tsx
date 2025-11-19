@@ -1,13 +1,13 @@
-import { Alert, Text } from 'theme-ui'
+import { Alert, Text } from 'theme-ui';
 
-import { SettingsFormWrapper } from './SettingsFormWrapper'
+import { SettingsFormWrapper } from './SettingsFormWrapper';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Forms/SettingsFormWrapper',
   component: SettingsFormWrapper,
-} as Meta<typeof SettingsFormWrapper>
+} as Meta<typeof SettingsFormWrapper>;
 
 export const DefaultComponent = () => (
   <div style={{ maxWidth: '900px', margin: '0 auto' }}>
@@ -22,8 +22,8 @@ export const DefaultComponent = () => (
             <>
               <Text as="h3">✏️ Complete your profile</Text>
               <Text>
-                In order to post comments or create content, we'd like you to
-                share something about yourself.
+                In order to post comments or create content, we'd like you to share something about
+                yourself.
               </Text>
             </>
           ),
@@ -33,9 +33,7 @@ export const DefaultComponent = () => (
         {
           title: 'Notifications',
           body: <>Form Body 2</>,
-          notifications: (
-            <Alert variant="success">Nice, all submitted fine.</Alert>
-          ),
+          notifications: <Alert variant="success">Nice, all submitted fine.</Alert>,
           glyph: 'account-circle',
         },
         {
@@ -48,11 +46,9 @@ export const DefaultComponent = () => (
       ]}
     />
   </div>
-)
+);
 
-export const Default: StoryFn<typeof SettingsFormWrapper> = () => (
-  <DefaultComponent />
-)
+export const Default: StoryFn<typeof SettingsFormWrapper> = () => <DefaultComponent />;
 
 export const SingleTab: StoryFn<typeof SettingsFormWrapper> = () => (
   <div style={{ maxWidth: '900px' }}>
@@ -67,4 +63,4 @@ export const SingleTab: StoryFn<typeof SettingsFormWrapper> = () => (
       ]}
     />
   </div>
-)
+);

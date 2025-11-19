@@ -1,116 +1,102 @@
-import { Image, MediaFile } from 'oa-shared'
+import { Image, MediaFile } from 'oa-shared';
 
-import type { TransformOptions } from '@supabase/storage-js'
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBMedia } from 'oa-shared'
+import type { TransformOptions } from '@supabase/storage-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBMedia } from 'oa-shared';
 
 const getPublicUrls = (
   client: SupabaseClient,
   images: DBMedia[],
   size?: TransformOptions,
 ): Image[] => {
-  const result: Image[] = []
+  const result: Image[] = [];
 
   for (const x of images || []) {
     try {
-      const { data } = client.storage
-        .from(process.env.TENANT_ID as string)
-        .getPublicUrl(
-          x.path,
-          size
-            ? {
-                transform: size,
-              }
-            : undefined,
-        )
-      result.push(new Image({ id: x.id, publicUrl: data.publicUrl }))
+      const { data } = client.storage.from(process.env.TENANT_ID as string).getPublicUrl(
+        x.path,
+        size
+          ? {
+              transform: size,
+            }
+          : undefined,
+      );
+      result.push(new Image({ id: x.id, publicUrl: data.publicUrl }));
     } catch (error) {
       // Skip null images - don't add to result
     }
   }
 
-  return result
-}
+  return result;
+};
 
-const uploadImage = async (
-  files: File[],
-  path: string,
-  client: SupabaseClient,
-) => {
+const uploadImage = async (files: File[], path: string, client: SupabaseClient) => {
   if (!files || files.length === 0) {
-    return null
+    return null;
   }
 
-  const errors: string[] = []
-  const media: DBMedia[] = []
+  const errors: string[] = [];
+  const media: DBMedia[] = [];
 
   for (const file of files) {
     const result = await client.storage
       .from(process.env.TENANT_ID as string)
-      .upload(`${path}/${file.name}`, file, { upsert: true })
+      .upload(`${path}/${file.name}`, file, { upsert: true });
 
     if (result.data === null) {
-      errors.push(`Error uploading file: ${file.name}`)
-      continue
+      errors.push(`Error uploading file: ${file.name}`);
+      continue;
     }
 
-    media.push(result.data)
+    media.push(result.data);
   }
 
-  return { media, errors }
-}
+  return { media, errors };
+};
 
-const uploadFile = async (
-  files: File[],
-  path: string,
-  client: SupabaseClient,
-) => {
+const uploadFile = async (files: File[], path: string, client: SupabaseClient) => {
   if (!files || files.length === 0) {
-    return null
+    return null;
   }
 
-  const errors: string[] = []
-  const media: MediaFile[] = []
+  const errors: string[] = [];
+  const media: MediaFile[] = [];
 
   for (const file of files) {
     const result = await client.storage
       .from(process.env.TENANT_ID + '-documents')
-      .upload(`${path}/${file.name}`, file)
+      .upload(`${path}/${file.name}`, file);
 
     if (result.data === null) {
-      errors.push(`Error uploading file: ${file.name}`)
-      continue
+      errors.push(`Error uploading file: ${file.name}`);
+      continue;
     }
 
     media.push({
       id: result.data.id,
       name: result.data.path.split('/').at(-1)!,
       size: file.size,
-    })
+    });
   }
 
-  return { media, errors }
-}
+  return { media, errors };
+};
 
 const removeFiles = async (paths: string[], client: SupabaseClient) => {
-  await client.storage.from(process.env.TENANT_ID + '-documents').remove(paths)
-}
+  await client.storage.from(process.env.TENANT_ID + '-documents').remove(paths);
+};
 
 const removeImages = async (paths: string[], client: SupabaseClient) => {
-  await client.storage.from(process.env.TENANT_ID as string).remove(paths)
-}
+  await client.storage.from(process.env.TENANT_ID as string).remove(paths);
+};
 
-const getPathDocuments = async (
-  path: string,
-  mapUrlPrefix: string,
-  client: SupabaseClient,
-) => {
-  const documentsBucket = process.env.TENANT_ID + '-documents'
+const getPathDocuments = async (path: string, mapUrlPrefix: string, client: SupabaseClient) => {
+  const documentsBucket = process.env.TENANT_ID + '-documents';
 
-  const { data, error } = await client.storage.from(documentsBucket).list(path)
+  const { data, error } = await client.storage.from(documentsBucket).list(path);
 
   if (!data || error) {
-    return []
+    return [];
   }
 
   return data?.map(
@@ -121,8 +107,8 @@ const getPathDocuments = async (
         size: x.metadata.size,
         url: `${mapUrlPrefix}/${x.id}`,
       }),
-  )
-}
+  );
+};
 
 export const storageServiceServer = {
   getPublicUrls,
@@ -131,4 +117,4 @@ export const storageServiceServer = {
   removeFiles,
   removeImages,
   getPathDocuments,
-}
+};

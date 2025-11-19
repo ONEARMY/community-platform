@@ -1,25 +1,25 @@
-import { Image } from 'theme-ui'
+import { Image } from 'theme-ui';
 
-import badge from '../../assets/icons/icon-star-active.svg'
+import badge from '../../assets/icons/icon-star-active.svg';
 
-import type { ProfileType } from 'oa-shared'
-import type { ImageProps, ThemeUIStyleObject } from 'theme-ui'
+import type { ProfileType } from 'oa-shared';
+import type { ImageProps, ThemeUIStyleObject } from 'theme-ui';
 
 export interface Props extends ImageProps {
-  size?: number
-  profileType?: ProfileType
-  useLowDetailVersion?: boolean
-  sx?: ThemeUIStyleObject | undefined
+  size?: number;
+  profileType?: ProfileType;
+  useLowDetailVersion?: boolean;
+  sx?: ThemeUIStyleObject | undefined;
 }
 
-const MINIMUM_SIZE = 40
+const MINIMUM_SIZE = 40;
 
 export const MemberBadge = (props: Props) => {
-  const { profileType, size, useLowDetailVersion, sx } = props
-  const badgeSize = size ? size : MINIMUM_SIZE
+  const { profileType, size, useLowDetailVersion, sx } = props;
+  const badgeSize = size ? size : MINIMUM_SIZE;
 
   if (!profileType) {
-    return null
+    return null;
   }
 
   return (
@@ -37,5 +37,5 @@ export const MemberBadge = (props: Props) => {
           : profileType.smallImageUrl || badge
       }
     />
-  )
-}
+  );
+};

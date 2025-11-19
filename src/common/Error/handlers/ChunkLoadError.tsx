@@ -1,9 +1,9 @@
-import { useEffect } from 'react'
-import { Button } from 'oa-components'
-import { getProjectEmail } from 'src/utils/helpers'
-import { Box, Text } from 'theme-ui'
+import { useEffect } from 'react';
+import { Button } from 'oa-components';
+import { getProjectEmail } from 'src/utils/helpers';
+import { Box, Text } from 'theme-ui';
 
-import { attemptReload, isReloaded } from './Reloader'
+import { attemptReload, isReloaded } from './Reloader';
 
 /**
  * Handle screen-of-death issue where the user has tried to load JS code that no longer exists on the server
@@ -16,8 +16,8 @@ import { attemptReload, isReloaded } from './Reloader'
 export const ChunkLoadErrorHandler = () => {
   // when error first seen attempt to resolve with a reload
   useEffect(() => {
-    attemptReload()
-  })
+    attemptReload();
+  });
 
   return (
     <Box
@@ -40,12 +40,11 @@ export const ChunkLoadErrorHandler = () => {
           </Button>
           <Text mt={4} sx={{ fontSize: 0.75 }}>
             If it doesn't work you might need to try another browser.
-            <br></br>Or send us a{' '}
-            <a href={getProjectEmail('Platform%20Bugs')}>mail</a>, happy to help
-            :)
+            <br></br>Or send us a <a href={getProjectEmail('Platform%20Bugs')}>mail</a>, happy to
+            help :)
           </Text>
         </>
       )}
     </Box>
-  )
-}
+  );
+};

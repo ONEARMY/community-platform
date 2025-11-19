@@ -1,13 +1,8 @@
-import { Label } from 'theme-ui'
+import { Label } from 'theme-ui';
 
-import type { FieldProps } from './types'
+import type { FieldProps } from './types';
 
-export const CheckboxInput = ({
-  input,
-  id,
-  labelText,
-  ...rest
-}: FieldProps) => {
+export const CheckboxInput = ({ input, id, labelText, ...rest }: FieldProps) => {
   return (
     <>
       <input id={id} type="checkbox" {...input} {...rest}></input>
@@ -21,5 +16,5 @@ export const CheckboxInput = ({
         {labelText}
       </Label>
     </>
-  )
-}
+  );
+};

@@ -1,31 +1,29 @@
-import { useState } from 'react'
-import { Icon, InternalLink, Tooltip } from 'oa-components'
+import { useState } from 'react';
+import { Icon, InternalLink, Tooltip } from 'oa-components';
 
-import type { ResearchItem, ResearchUpdate } from 'oa-shared'
+import type { ResearchItem, ResearchUpdate } from 'oa-shared';
 
 interface IProps {
-  research: ResearchItem
-  update: ResearchUpdate
+  research: ResearchItem;
+  update: ResearchUpdate;
 }
 
-const COPY_TO_CLIPBOARD = 'Copy link to update'
-const IN_PROGRESS = '...Working on it...'
-const SUCCESS = 'Nice. All done. Now share away...!'
+const COPY_TO_CLIPBOARD = 'Copy link to update';
+const IN_PROGRESS = '...Working on it...';
+const SUCCESS = 'Nice. All done. Now share away...!';
 
 export const ResearchLinkToUpdate = ({ research, update }: IProps) => {
-  const [label, setLabel] = useState<string>(COPY_TO_CLIPBOARD)
+  const [label, setLabel] = useState<string>(COPY_TO_CLIPBOARD);
 
   const copyURLtoClipboard = async (slug: string, id: number) => {
-    setLabel(IN_PROGRESS)
+    setLabel(IN_PROGRESS);
     try {
-      await navigator.clipboard.writeText(
-        `${location.origin}/research/${slug}#update_${id}`,
-      )
-      setLabel(SUCCESS)
+      await navigator.clipboard.writeText(`${location.origin}/research/${slug}#update_${id}`);
+      setLabel(SUCCESS);
     } catch (error) {
-      setLabel(error.message)
+      setLabel(error.message);
     }
-  }
+  };
 
   return (
     <InternalLink
@@ -41,5 +39,5 @@ export const ResearchLinkToUpdate = ({ research, update }: IProps) => {
       />
       <Tooltip id="link-update" />
     </InternalLink>
-  )
-}
+  );
+};

@@ -1,11 +1,11 @@
-import { Flex, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui';
 
-import { UserBadge } from '../Username/UserBadge'
+import { UserBadge } from '../Username/UserBadge';
 
-import type { ProfileBadge } from 'oa-shared'
+import type { ProfileBadge } from 'oa-shared';
 
 export interface Props {
-  profileBadge: ProfileBadge
+  profileBadge: ProfileBadge;
 }
 
 export const ProfileBadgeContentLabel = ({ profileBadge }: Props) => {
@@ -26,5 +26,5 @@ export const ProfileBadgeContentLabel = ({ profileBadge }: Props) => {
       <UserBadge badge={profileBadge} />
       <Text>only news</Text>
     </Flex>
-  )
-}
+  );
+};

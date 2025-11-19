@@ -1,112 +1,96 @@
-import { useContext, useEffect, useRef } from 'react'
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router'
-import { Global, withEmotionCache } from '@emotion/react'
-import { ThemeProvider } from '@theme-ui/core'
-import { GlobalStyles } from 'oa-components'
-import {
-  fixingFashionTheme,
-  preciousPlasticTheme,
-  projectKampTheme,
-} from 'oa-themes'
+import { useContext, useEffect, useRef } from 'react';
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
+import { Global, withEmotionCache } from '@emotion/react';
+import { ThemeProvider } from '@theme-ui/core';
+import { GlobalStyles } from 'oa-components';
+import { fixingFashionTheme, preciousPlasticTheme, projectKampTheme } from 'oa-themes';
 
-import { VITE_THEME } from './config/config'
-import { ClientStyleContext, ServerStyleContext } from './styles/context'
-import { generateTags } from './utils/seo.utils'
+import { VITE_THEME } from './config/config';
+import { ClientStyleContext, ServerStyleContext } from './styles/context';
+import { generateTags } from './utils/seo.utils';
 
-import type { LinksFunction, MetaFunction } from 'react-router'
+import type { LinksFunction, MetaFunction } from 'react-router';
 
 interface DocumentProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
-const Document = withEmotionCache(
-  ({ children }: DocumentProps, emotionCache) => {
-    const serverStyleData = useContext(ServerStyleContext)
-    const clientStyleData = useContext(ClientStyleContext)
-    const reinjectStylesRef = useRef(true)
-    const isProd = import.meta.env.VITE_BRANCH === 'production'
+const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) => {
+  const serverStyleData = useContext(ServerStyleContext);
+  const clientStyleData = useContext(ClientStyleContext);
+  const reinjectStylesRef = useRef(true);
+  const isProd = import.meta.env.VITE_BRANCH === 'production';
 
-    // Only executed on client
-    // When a top level ErrorBoundary or CatchBoundary are rendered,
-    // the document head gets removed, so we have to create the style tags
-    useEffect(() => {
-      if (!reinjectStylesRef.current) {
-        return
-      }
-      // re-link sheet container
-      emotionCache.sheet.container = document.head
+  // Only executed on client
+  // When a top level ErrorBoundary or CatchBoundary are rendered,
+  // the document head gets removed, so we have to create the style tags
+  useEffect(() => {
+    if (!reinjectStylesRef.current) {
+      return;
+    }
+    // re-link sheet container
+    emotionCache.sheet.container = document.head;
 
-      // re-inject tags
-      const tags = emotionCache.sheet.tags
-      emotionCache.sheet.flush()
-      tags.forEach((tag) => {
-        ;(emotionCache.sheet as any)._insertTag(tag)
-      })
+    // re-inject tags
+    const tags = emotionCache.sheet.tags;
+    emotionCache.sheet.flush();
+    tags.forEach((tag) => {
+      (emotionCache.sheet as any)._insertTag(tag);
+    });
 
-      // reset cache to re-apply global styles
-      clientStyleData!.reset()
-      // ensure we only do this once per mount
-      reinjectStylesRef.current = false
-    }, [clientStyleData, emotionCache.sheet])
+    // reset cache to re-apply global styles
+    clientStyleData!.reset();
+    // ensure we only do this once per mount
+    reinjectStylesRef.current = false;
+  }, [clientStyleData, emotionCache.sheet]);
 
-    return (
-      <html lang="en">
-        <head>
-          <meta charSet="utf-8" />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  return (
+    <html lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="preconnect" href="https://storage.googleapis.com" crossOrigin="anonymous" />
+        <Meta />
+        <Links />
+        {serverStyleData?.map(({ key, ids, css }) => (
+          <style
+            key={key}
+            data-emotion={`${key} ${ids.join(' ')}`}
+            dangerouslySetInnerHTML={{ __html: css }}
           />
-          <link
-            rel="preconnect"
-            href="https://storage.googleapis.com"
-            crossOrigin="anonymous"
-          />
-          <Meta />
-          <Links />
-          {serverStyleData?.map(({ key, ids, css }) => (
-            <style
-              key={key}
-              data-emotion={`${key} ${ids.join(' ')}`}
-              dangerouslySetInnerHTML={{ __html: css }}
+        ))}
+        {isProd && (
+          <>
+            <script async src="https://plausible.io/js/pa-MejTiAhWWEhDHQzZg3cBg.js" />
+            <script
+              dangerouslySetInnerHTML={{
+                __html:
+                  'window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)};plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init();',
+              }}
             />
-          ))}
-          {isProd && (
-            <>
-              <script
-                async
-                src="https://plausible.io/js/pa-MejTiAhWWEhDHQzZg3cBg.js"
-              />
-              <script
-                dangerouslySetInnerHTML={{
-                  __html:
-                    'window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)};plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init();',
-                }}
-              />
-            </>
-          )}
-        </head>
-        <body>
-          {children}
-          <ScrollRestoration />
-          <Scripts />
-        </body>
-      </html>
-    )
-  },
-)
+          </>
+        )}
+      </head>
+      <body>
+        {children}
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  );
+});
 
 const getEnvironmentTheme = () => {
   switch (VITE_THEME) {
     case 'project-kamp':
-      return projectKampTheme
+      return projectKampTheme;
     case 'fixing-fashion':
-      return fixingFashionTheme
+      return fixingFashionTheme;
     case 'precious-plastic':
     default:
-      return preciousPlasticTheme
+      return preciousPlasticTheme;
   }
-}
+};
 
 export const links: LinksFunction = () => {
   return [
@@ -115,22 +99,22 @@ export const links: LinksFunction = () => {
       href: '/api/favicon',
       type: 'image/x-icon',
     },
-  ]
-}
+  ];
+};
 
 export const meta: MetaFunction = () => {
-  const theme = getEnvironmentTheme()
-  const tags = generateTags(theme.siteName, theme.description)
+  const theme = getEnvironmentTheme();
+  const tags = generateTags(theme.siteName, theme.description);
 
   if (import.meta.env.VITE_BRANCH !== 'production') {
     tags.push({
       name: 'robots',
       content: 'noindex',
-    })
+    });
   }
 
-  return tags
-}
+  return tags;
+};
 
 export default function Root() {
   return (
@@ -140,5 +124,5 @@ export default function Root() {
         <Global styles={GlobalStyles} />
       </ThemeProvider>
     </Document>
-  )
+  );
 }

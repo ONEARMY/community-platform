@@ -11,28 +11,28 @@ before(() => {
   // Add error handlers
   // https://docs.cypress.io/api/utilities/promise.html#Rejected-test-promises-do-not-fail-tests
   window.addEventListener('unhandledrejection', (event) => {
-    throw event.reason
-  })
+    throw event.reason;
+  });
   Cypress.Promise.onPossiblyUnhandledRejection((error) => {
-    throw error
-  })
+    throw error;
+  });
 
-  cy.task('seed database')
+  cy.task('seed database');
 
-  localStorage.clear()
-  cy.clearServiceWorkers()
-})
+  localStorage.clear();
+  cy.clearServiceWorkers();
+});
 
 afterEach(() => {
   // ensure all tests are also logged out (skip ui check in case page not loaded)
-  cy.logout()
-})
+  cy.logout();
+});
 
 after(async () => {
   Cypress.log({
     displayName: 'Clearing database for tenant',
     message: process.env.TENANT_ID,
-  })
+  });
 
-  cy.task('clear database')
-})
+  cy.task('clear database');
+});

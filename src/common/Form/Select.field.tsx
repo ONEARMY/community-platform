@@ -1,49 +1,45 @@
-import * as React from 'react'
-import { Select } from 'oa-components'
-import { Flex, Text } from 'theme-ui'
+import * as React from 'react';
+import { Select } from 'oa-components';
+import { Flex, Text } from 'theme-ui';
 
-import { FieldContainer } from './FieldContainer'
+import { FieldContainer } from './FieldContainer';
 
-import type { FieldProps } from './types'
+import type { FieldProps } from './types';
 
 interface ISelectOption {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }
 interface ISelectFieldProps extends FieldProps {
-  options?: ISelectOption[]
-  placeholder?: string
-  style?: React.CSSProperties
-  onCustomChange?: (value) => void
-  showError?: boolean
+  options?: ISelectOption[];
+  placeholder?: string;
+  style?: React.CSSProperties;
+  onCustomChange?: (value) => void;
+  showError?: boolean;
 }
 
 // annoyingly react-final-form saves the full option as values (not just the value field)
 // therefore the following two functions are used for converting to-from string values and field options
 
 // depending on select type (e.g. multi) and option selected get value
-const getValueFromSelect = (
-  v: ISelectOption | ISelectOption[] | null | undefined,
-) => (v ? (Array.isArray(v) ? v.map((el) => el.value) : v.value) : v)
+const getValueFromSelect = (v: ISelectOption | ISelectOption[] | null | undefined) =>
+  v ? (Array.isArray(v) ? v.map((el) => el.value) : v.value) : v;
 
 // given current values find the relevant select options
-const getValueForSelect = (
-  opts: ISelectOption[] = [],
-  v: string | string[] | null | undefined,
-) => {
-  const findVal = (optVal: string) => opts.find((o) => o.value === optVal)
+const getValueForSelect = (opts: ISelectOption[] = [], v: string | string[] | null | undefined) => {
+  const findVal = (optVal: string) => opts.find((o) => o.value === optVal);
   return v
     ? Array.isArray(v)
       ? v.map((optVal) => findVal(optVal) as ISelectOption)
       : findVal(v)
-    : null
-}
+    : null;
+};
 
 const defaultProps: Partial<ISelectFieldProps> = {
   getOptionLabel: (option: ISelectOption) => option.label,
   getOptionValue: (option: ISelectOption) => option.value,
   options: [],
-}
+};
 
 export const SelectField = ({
   input,
@@ -65,10 +61,10 @@ export const SelectField = ({
     >
       <Select
         onChange={(v) => {
-          const value = getValueFromSelect(v)
-          input.onChange(value)
+          const value = getValueFromSelect(v);
+          input.onChange(value);
           if (onCustomChange) {
-            onCustomChange(value)
+            onCustomChange(value);
           }
         }}
         onBlur={input.onBlur}
@@ -80,4 +76,4 @@ export const SelectField = ({
       />
     </FieldContainer>
   </Flex>
-)
+);

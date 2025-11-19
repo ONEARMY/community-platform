@@ -1,14 +1,14 @@
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
-import { PinProfile } from './PinProfile'
+import { PinProfile } from './PinProfile';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
-import type { MapPin, Moderation } from 'oa-shared'
+import type { Meta, StoryFn } from '@storybook/react-vite';
+import type { MapPin, Moderation } from 'oa-shared';
 
 export default {
   title: 'Map/PinProfile',
   component: PinProfile,
-} as Meta<typeof PinProfile>
+} as Meta<typeof PinProfile>;
 
 export const DefaultMember: StoryFn<typeof PinProfile> = () => {
   const item = {
@@ -32,14 +32,14 @@ export const DefaultMember: StoryFn<typeof PinProfile> = () => {
         displayName: 'Member',
       },
     },
-  } as MapPin
+  } as MapPin;
 
   return (
     <div style={{ width: '230px', position: 'fixed' }}>
       <PinProfile item={item} onClose={() => console.log()} />
     </div>
-  )
-}
+  );
+};
 
 export const DefaultSpace: StoryFn<typeof PinProfile> = () => {
   const item = {
@@ -75,11 +75,11 @@ export const DefaultSpace: StoryFn<typeof PinProfile> = () => {
       },
       tags: [{ name: 'Sheetpress', id: 1 }],
     },
-  } as MapPin
+  } as MapPin;
 
   return (
     <div style={{ width: '230px', position: 'fixed' }}>
       <PinProfile item={item} onClose={() => console.log()} />
     </div>
-  )
-}
+  );
+};

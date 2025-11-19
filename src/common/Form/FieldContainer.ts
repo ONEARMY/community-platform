@@ -1,9 +1,9 @@
-import { css } from '@emotion/react'
-import styled from '@emotion/styled'
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 
 interface IFormElement {
-  invalid?: boolean
-  customChange?: (location) => void
+  invalid?: boolean;
+  customChange?: (location) => void;
 }
 
 const inputStyles = ({ invalid }: IFormElement) => css`
@@ -26,7 +26,7 @@ const inputStyles = ({ invalid }: IFormElement) => css`
     border-color: blue;
     outline: none;
   }
-`
+`;
 
 // generic container used for some custom component fields
 export const FieldContainer = styled.div<IFormElement>`
@@ -35,4 +35,4 @@ export const FieldContainer = styled.div<IFormElement>`
   ${inputStyles};
   border: none;
   padding: 0;
-`
+`;

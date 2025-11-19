@@ -1,16 +1,16 @@
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
-import { Button } from '../Button/Button'
-import { UsefulStatsButton } from '../UsefulStatsButton/UsefulStatsButton'
-import { ArticleCallToActionSupabase } from './ArticleCallToActionSupabase'
+import { Button } from '../Button/Button';
+import { UsefulStatsButton } from '../UsefulStatsButton/UsefulStatsButton';
+import { ArticleCallToActionSupabase } from './ArticleCallToActionSupabase';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
-import type { Author } from 'oa-shared'
+import type { Meta, StoryFn } from '@storybook/react-vite';
+import type { Author } from 'oa-shared';
 
 export default {
   title: 'Layout/ArticleCallToActionSupabase',
   component: ArticleCallToActionSupabase,
-} as Meta<typeof ArticleCallToActionSupabase>
+} as Meta<typeof ArticleCallToActionSupabase>;
 
 export const ArticleCallToActionSupabaseCommentAndUseful: StoryFn<
   typeof ArticleCallToActionSupabase
@@ -24,7 +24,7 @@ export const ArticleCallToActionSupabaseCommentAndUseful: StoryFn<
       onUsefulClick={() => Promise.resolve()}
     />
   </ArticleCallToActionSupabase>
-)
+);
 
 export const ArticleCallToActionSupabaseUseful: StoryFn<
   typeof ArticleCallToActionSupabase
@@ -37,7 +37,7 @@ export const ArticleCallToActionSupabaseUseful: StoryFn<
       onUsefulClick={() => Promise.resolve()}
     />
   </ArticleCallToActionSupabase>
-)
+);
 
 export const ArticleCallToActionSupabaseSingleContributor: StoryFn<
   typeof ArticleCallToActionSupabase
@@ -74,7 +74,7 @@ export const ArticleCallToActionSupabaseSingleContributor: StoryFn<
   >
     <Button>Action</Button>
   </ArticleCallToActionSupabase>
-)
+);
 
 const makeFakeUser = (): Author => ({
   id: faker.datatype.number(),
@@ -100,18 +100,15 @@ const makeFakeUser = (): Author => ({
     publicUrl: faker.image.imageUrl(),
   },
   username: faker.internet.userName(),
-})
+});
 
 export const ArticleCallToActionSupabaseMultipleContributors: StoryFn<
   typeof ArticleCallToActionSupabase
 > = () => (
   <ArticleCallToActionSupabase
     author={makeFakeUser()}
-    contributors={faker.helpers.uniqueArray(
-      makeFakeUser,
-      Math.floor(Math.random() * 10),
-    )}
+    contributors={faker.helpers.uniqueArray(makeFakeUser, Math.floor(Math.random() * 10))}
   >
     <Button>Action</Button>
   </ArticleCallToActionSupabase>
-)
+);

@@ -1,23 +1,19 @@
-import { getConfigurationOption } from 'src/config/config'
+import { getConfigurationOption } from 'src/config/config';
 
 export interface ISEOMeta {
-  title: string
-  description: string
-  faviconUrl?: string
-  imageUrl?: string
+  title: string;
+  description: string;
+  faviconUrl?: string;
+  imageUrl?: string;
 }
 /** Reduced list of meta properties used within site index.html for update */
-type IPlatformMetaProperty =
-  | 'og:title'
-  | 'og:image'
-  | 'og:description'
-  | 'og:url'
+type IPlatformMetaProperty = 'og:title' | 'og:image' | 'og:description' | 'og:url';
 type IPlatformMetaName =
   | 'description'
   | 'twitter:title'
   | 'twitter:description'
   | 'twitter:image'
-  | 'twitter:card'
+  | 'twitter:card';
 
 /**
  * Update document SEO tags
@@ -31,38 +27,35 @@ type IPlatformMetaName =
  * https://github.com/nfl/react-helmet
  */
 export const seoTagsUpdate = (update: Partial<ISEOMeta>) => {
-  const { title, description, imageUrl, faviconUrl } = update
+  const { title, description, imageUrl, faviconUrl } = update;
 
   if (title) {
     const updatedTitle =
       title === 'Community Platform'
         ? title
-        : `${title} - ${getConfigurationOption(
-            'VITE_SITE_NAME',
-            'Community Platform',
-          )}`
+        : `${title} - ${getConfigurationOption('VITE_SITE_NAME', 'Community Platform')}`;
 
-    document.title = updatedTitle
+    document.title = updatedTitle;
 
-    setMetaProperty('og:title', updatedTitle)
-    setMetaName('twitter:title', updatedTitle)
+    setMetaProperty('og:title', updatedTitle);
+    setMetaName('twitter:title', updatedTitle);
   }
   if (description) {
-    setMetaName('description', description)
-    setMetaProperty('og:description', description)
-    setMetaName('twitter:description', description)
+    setMetaName('description', description);
+    setMetaProperty('og:description', description);
+    setMetaName('twitter:description', description);
   }
   if (faviconUrl) {
-    const el = document.getElementById('favicon') as HTMLLinkElement
+    const el = document.getElementById('favicon') as HTMLLinkElement;
     if (el) {
-      el.href = faviconUrl
+      el.href = faviconUrl;
     }
   }
   if (imageUrl) {
-    setMetaName('twitter:image', imageUrl)
-    setMetaProperty('og:image', imageUrl)
+    setMetaName('twitter:image', imageUrl);
+    setMetaProperty('og:image', imageUrl);
   }
-}
+};
 
 /**
  * Use a component to force SEO tag updates. This may be useful in cases such
@@ -70,29 +63,29 @@ export const seoTagsUpdate = (update: Partial<ISEOMeta>) => {
  * @example `<SeoTagsUpdateComponent title='my title' />`
  */
 export const SeoTagsUpdateComponent = (update: Partial<ISEOMeta>) => {
-  seoTagsUpdate(update)
-  return null
-}
+  seoTagsUpdate(update);
+  return null;
+};
 
 const setMetaName = (name: IPlatformMetaName, value: string) => {
-  let el = document.querySelector(`meta[name="${name}"]`)
+  let el = document.querySelector(`meta[name="${name}"]`);
 
   if (!el) {
-    el = document.createElement('meta')
-    el.setAttribute('name', name)
-    document.head.appendChild(el)
+    el = document.createElement('meta');
+    el.setAttribute('name', name);
+    document.head.appendChild(el);
   }
 
-  el.setAttribute('content', value)
-}
+  el.setAttribute('content', value);
+};
 const setMetaProperty = (property: IPlatformMetaProperty, value: string) => {
-  let el = document.querySelector(`meta[property="${property}"]`)
+  let el = document.querySelector(`meta[property="${property}"]`);
 
   if (!el) {
-    el = document.createElement('meta')
-    el.setAttribute('property', property)
-    document.head.appendChild(el)
+    el = document.createElement('meta');
+    el.setAttribute('property', property);
+    document.head.appendChild(el);
   }
 
-  el.setAttribute('content', value)
-}
+  el.setAttribute('content', value);
+};

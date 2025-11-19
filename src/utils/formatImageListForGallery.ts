@@ -1,11 +1,8 @@
-import type { Image } from 'oa-shared'
+import type { Image } from 'oa-shared';
 
-export const formatImagesForGallery = (
-  imageList: Image[],
-  altPrefix?: string,
-) => {
+export const formatImagesForGallery = (imageList: Image[], altPrefix?: string) => {
   if (!imageList) {
-    return []
+    return [];
   }
 
   return imageList
@@ -15,5 +12,5 @@ export const formatImagesForGallery = (
       downloadUrl: image.publicUrl,
       thumbnailUrl: image.publicUrl,
       alt: `${altPrefix ? altPrefix + ' ' : ''}Gallery image ${index + 1}`,
-    }))
-}
+    }));
+};

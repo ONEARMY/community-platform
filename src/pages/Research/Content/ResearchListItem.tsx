@@ -1,32 +1,26 @@
-import {
-  Category,
-  Icon,
-  IconCountWithTooltip,
-  InternalLink,
-  Username,
-} from 'oa-components'
-import { type ResearchItem, ResearchStatusRecord } from 'oa-shared'
-import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
+import { Category, Icon, IconCountWithTooltip, InternalLink, Username } from 'oa-components';
+import { type ResearchItem, ResearchStatusRecord } from 'oa-shared';
+import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui';
 
-import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
-import { researchStatusColour } from '../researchHelpers'
+import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg';
+import { researchStatusColour } from '../researchHelpers';
 
 interface IProps {
-  item: ResearchItem
+  item: ResearchItem;
 }
 
 const ResearchListItem = ({ item }: IProps) => {
-  const collaborators = item['collaborators'] || []
-  const usefulDisplayCount = item.usefulCount ?? 0
+  const collaborators = item['collaborators'] || [];
+  const usefulDisplayCount = item.usefulCount ?? 0;
 
   const _commonStatisticStyle = {
     display: 'flex',
     alignItems: 'center',
     fontSize: [1, 2, 2],
     ml: 3,
-  }
+  };
 
-  const status = item.status || 'in-progress'
+  const status = item.status || 'in-progress';
 
   return (
     <Card
@@ -108,9 +102,7 @@ const ResearchListItem = ({ item }: IProps) => {
                     {item.title}
                   </InternalLink>
                 </Heading>
-                {item.category && (
-                  <Category category={item.category} sx={{ fontSize: 2 }} />
-                )}
+                {item.category && <Category category={item.category} sx={{ fontSize: 2 }} />}
               </Flex>
               <Text
                 sx={{
@@ -139,9 +131,7 @@ const ResearchListItem = ({ item }: IProps) => {
               }}
             >
               <Flex sx={{ alignItems: 'center', gap: 2 }}>
-                {item.author && (
-                  <Username user={item.author} sx={{ position: 'relative' }} />
-                )}
+                {item.author && <Username user={item.author} sx={{ position: 'relative' }} />}
                 {Boolean(collaborators.length) && (
                   <Text
                     sx={{
@@ -153,9 +143,7 @@ const ResearchListItem = ({ item }: IProps) => {
                     }}
                   >
                     {collaborators.length +
-                      (collaborators.length === 1
-                        ? ' contributor'
-                        : ' contributors')}
+                      (collaborators.length === 1 ? ' contributor' : ' contributors')}
                   </Text>
                 )}
                 <Text
@@ -221,7 +209,7 @@ const ResearchListItem = ({ item }: IProps) => {
         </Grid>
       </Flex>
     </Card>
-  )
-}
+  );
+};
 
-export default ResearchListItem
+export default ResearchListItem;

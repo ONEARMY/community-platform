@@ -1,4 +1,4 @@
-import type { DBProfileBadge } from '../../models/profileBadge'
+import type { DBProfileBadge } from '../../models/profileBadge';
 
 export const badges: Partial<DBProfileBadge>[] = [
   {
@@ -15,4 +15,4 @@ export const badges: Partial<DBProfileBadge>[] = [
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
     action_url: '',
   },
-]
+];

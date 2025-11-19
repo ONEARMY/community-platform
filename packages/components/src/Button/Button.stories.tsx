@@ -1,7 +1,7 @@
-import { glyphs } from '../Icon/Icon'
-import { Button } from './Button'
+import { glyphs } from '../Icon/Icon';
+import { Button } from './Button';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   /* 👇 The title prop is optional.
@@ -10,7 +10,7 @@ export default {
    */
   title: 'Components/Button',
   component: Button,
-} as Meta<typeof Button>
+} as Meta<typeof Button>;
 
 const sizeOptions = [
   {
@@ -24,9 +24,9 @@ const sizeOptions = [
     large: true,
     label: 'Large',
   },
-]
+];
 
-export const Basic: StoryFn<typeof Button> = () => <Button>Button Text</Button>
+export const Basic: StoryFn<typeof Button> = () => <Button>Button Text</Button>;
 
 export const Disabled: StoryFn<typeof Button> = () => (
   <>
@@ -35,7 +35,7 @@ export const Disabled: StoryFn<typeof Button> = () => (
       Disabled
     </Button>
   </>
-)
+);
 
 export const Primary: StoryFn<typeof Button> = () => (
   <>
@@ -49,7 +49,7 @@ export const Primary: StoryFn<typeof Button> = () => (
       </Button>
     ))}
   </>
-)
+);
 
 export const Secondary: StoryFn<typeof Button> = () => (
   <>
@@ -63,7 +63,7 @@ export const Secondary: StoryFn<typeof Button> = () => (
       </Button>
     ))}
   </>
-)
+);
 
 export const Destructive: StoryFn<typeof Button> = () => (
   <>
@@ -77,7 +77,7 @@ export const Destructive: StoryFn<typeof Button> = () => (
       </Button>
     ))}
   </>
-)
+);
 
 export const Success: StoryFn<typeof Button> = () => (
   <>
@@ -91,7 +91,7 @@ export const Success: StoryFn<typeof Button> = () => (
       </Button>
     ))}
   </>
-)
+);
 
 export const Subtle: StoryFn<typeof Button> = () => (
   <>
@@ -105,7 +105,7 @@ export const Subtle: StoryFn<typeof Button> = () => (
       </Button>
     ))}
   </>
-)
+);
 
 export const Outline: StoryFn<typeof Button> = () => (
   <>
@@ -119,7 +119,7 @@ export const Outline: StoryFn<typeof Button> = () => (
       </Button>
     ))}
   </>
-)
+);
 
 export const Small: StoryFn<typeof Button> = () => (
   <>
@@ -128,7 +128,7 @@ export const Small: StoryFn<typeof Button> = () => (
       Small Button with Icon
     </Button>
   </>
-)
+);
 
 export const Large: StoryFn<typeof Button> = () => (
   <>
@@ -137,7 +137,7 @@ export const Large: StoryFn<typeof Button> = () => (
       Large Button with Icon
     </Button>
   </>
-)
+);
 
 export const IconOnly: StoryFn<typeof Button> = () => (
   <>
@@ -145,7 +145,7 @@ export const IconOnly: StoryFn<typeof Button> = () => (
       Icon Button with hidden text
     </Button>
   </>
-)
+);
 
 export const Icons: StoryFn<typeof Button> = () => (
   <>
@@ -159,4 +159,4 @@ export const Icons: StoryFn<typeof Button> = () => (
       ),
     )}
   </>
-)
+);

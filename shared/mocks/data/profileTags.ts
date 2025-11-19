@@ -1,4 +1,4 @@
-import type { DBProfileTag } from '../../models/profileTag'
+import type { DBProfileTag } from '../../models/profileTag';
 
 export const profileTags: Partial<DBProfileTag>[] = [
   {
@@ -173,4 +173,4 @@ export const profileTags: Partial<DBProfileTag>[] = [
     name: 'Marketing',
     profile_type: 'member',
   },
-]
+];

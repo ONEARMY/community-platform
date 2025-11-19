@@ -1,16 +1,16 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { faker } from '@faker-js/faker'
-import { act, waitFor } from '@testing-library/react'
-import { FactoryUser } from 'src/test/factories/User'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { faker } from '@faker-js/faker';
+import { act, waitFor } from '@testing-library/react';
+import { FactoryUser } from 'src/test/factories/User';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { FormProvider } from './__mocks__/FormProvider'
-import { SettingsPageUserProfile } from './SettingsPageUserProfile'
+import { FormProvider } from './__mocks__/FormProvider';
+import { SettingsPageUserProfile } from './SettingsPageUserProfile';
 
-import type { ProfileTag, ProfileType } from 'oa-shared'
+import type { ProfileTag, ProfileType } from 'oa-shared';
 
-const mockUseProfileStore = vi.hoisted(() => vi.fn())
+const mockUseProfileStore = vi.hoisted(() => vi.fn());
 
 const mockProfileTypes = [
   {
@@ -35,19 +35,18 @@ const mockProfileTypes = [
     order: 2,
     smallImageUrl: '',
   },
-]
+];
 
 vi.mock('src/stores/Profile/profile.store', () => ({
   useProfileStore: mockUseProfileStore,
-  ProfileStoreProvider: ({ children }: { children: React.ReactNode }) =>
-    children,
-}))
+  ProfileStoreProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
 
 vi.mock('src/services/profileTypesService', () => ({
   profileTypesService: {
     getProfileTypes: vi.fn().mockResolvedValue(mockProfileTypes),
   },
-}))
+}));
 
 vi.mock('src/services/profileTagsService', () => ({
   profileTagsService: {
@@ -56,12 +55,12 @@ vi.mock('src/services/profileTagsService', () => ({
       { id: 2, name: 'space', profileType: 'space' },
     ] as ProfileTag[]),
   },
-}))
+}));
 
 describe('UserSettings', () => {
   beforeEach(() => {
-    vi.resetAllMocks()
-  })
+    vi.resetAllMocks();
+  });
 
   it('renders fields for member', async () => {
     const mockUser = FactoryUser({
@@ -70,29 +69,29 @@ describe('UserSettings', () => {
         name: 'Member',
         isSpace: false,
       } as ProfileType,
-    })
+    });
     mockUseProfileStore.mockReturnValue({
       profile: mockUser,
       profileTypes: mockProfileTypes,
       update: vi.fn(),
-    })
+    });
 
     // Act
-    let wrapper
+    let wrapper;
     act(() => {
-      wrapper = FormProvider(<SettingsPageUserProfile />)
-    })
+      wrapper = FormProvider(<SettingsPageUserProfile />);
+    });
 
     await waitFor(() => {
-      expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('photo')).toHaveLength(1)
-      expect(wrapper.queryByTestId('coverImage')).toBeNull()
-    })
-  })
+      expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1);
+      expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1);
+      expect(wrapper.getAllByTestId('photo')).toHaveLength(1);
+      expect(wrapper.queryByTestId('coverImage')).toBeNull();
+    });
+  });
 
   it('renders fields for collection point', async () => {
-    const avatarUrl = faker.image.avatar()
+    const avatarUrl = faker.image.avatar();
     const mockUser = FactoryUser({
       type: {
         id: 2,
@@ -111,24 +110,24 @@ describe('UserSettings', () => {
           publicUrl: avatarUrl,
         },
       ],
-    })
+    });
     mockUseProfileStore.mockReturnValue({
       profile: mockUser,
       profileTypes: mockProfileTypes,
       update: vi.fn(),
-    })
+    });
 
     // Act
-    let wrapper
+    let wrapper;
     act(() => {
-      wrapper = FormProvider(<SettingsPageUserProfile />)
-    })
+      wrapper = FormProvider(<SettingsPageUserProfile />);
+    });
 
     await waitFor(() => {
-      expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('photo')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('coverImage')).toHaveLength(1)
-    })
-  })
-})
+      expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1);
+      expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1);
+      expect(wrapper.getAllByTestId('photo')).toHaveLength(1);
+      expect(wrapper.getAllByTestId('coverImage')).toHaveLength(1);
+    });
+  });
+});

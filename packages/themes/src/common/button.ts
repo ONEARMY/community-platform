@@ -1,4 +1,4 @@
-import type { ThemeWithName } from '../types'
+import type { ThemeWithName } from '../types';
 
 const BASE_BUTTON = {
   fontFamily: '"Varela Round", Arial, sans-serif',
@@ -12,7 +12,7 @@ const BASE_BUTTON = {
   width: 'auto',
   border: '2px solid',
   height: '2.75rem',
-}
+};
 
 export const getButtons = (colors: ThemeWithName['colors']) => ({
   primary: {
@@ -134,11 +134,6 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
       border: '1px solid ' + colors.lightgrey,
     },
   },
-})
+});
 
-export type ButtonVariants =
-  | 'primary'
-  | 'secondary'
-  | 'outline'
-  | 'disabled'
-  | 'subtle'
+export type ButtonVariants = 'primary' | 'secondary' | 'outline' | 'disabled' | 'subtle';

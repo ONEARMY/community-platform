@@ -1,22 +1,21 @@
-import { Flex } from 'theme-ui'
+import { Flex } from 'theme-ui';
 
-import { Icon } from '../Icon/Icon'
+import { Icon } from '../Icon/Icon';
 
-import type { ThemeUIStyleObject } from 'theme-ui'
-import type { availableGlyphs } from '../Icon/types'
+import type { ThemeUIStyleObject } from 'theme-ui';
+import type { availableGlyphs } from '../Icon/types';
 
-import './styles.css'
+import './styles.css';
 
 interface IProps {
-  disabled?: boolean
-  direction: 'left' | 'right'
-  sx?: ThemeUIStyleObject
-  onClick?: () => void
+  disabled?: boolean;
+  direction: 'left' | 'right';
+  sx?: ThemeUIStyleObject;
+  onClick?: () => void;
 }
 
 export const Arrow = ({ disabled, direction, onClick, sx }: IProps) => {
-  const glyph: availableGlyphs =
-    direction === 'left' ? 'chevron-left' : 'chevron-right'
+  const glyph: availableGlyphs = direction === 'left' ? 'chevron-left' : 'chevron-right';
 
   return (
     <Flex
@@ -52,5 +51,5 @@ export const Arrow = ({ disabled, direction, onClick, sx }: IProps) => {
         </Flex>
       )}
     </Flex>
-  )
-}
+  );
+};

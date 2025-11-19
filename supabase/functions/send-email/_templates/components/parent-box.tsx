@@ -1,5 +1,5 @@
-import React from 'react'
-import { Container, Section } from '@react-email/components'
+import React from 'react';
+import { Container, Section } from '@react-email/components';
 
 const section = {
   backgroundColor: '#e2edf7',
@@ -13,7 +13,7 @@ const section = {
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   maxWidth: '600px',
-}
+};
 
 const bar = {
   borderLeft: '2px solid #2e2e2e',
@@ -21,10 +21,10 @@ const bar = {
   height: '50px',
   marginBottom: '15px',
   width: '2px',
-}
+};
 
 interface IProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export const ParentBox = ({ children }: IProps) => (
@@ -32,4 +32,4 @@ export const ParentBox = ({ children }: IProps) => (
     <Section style={section}>{children}</Section>
     <Container style={bar} />
   </>
-)
+);

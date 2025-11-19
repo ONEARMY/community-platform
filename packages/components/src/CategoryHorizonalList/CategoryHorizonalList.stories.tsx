@@ -1,14 +1,14 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { CategoryHorizonalList } from './CategoryHorizonalList'
+import { CategoryHorizonalList } from './CategoryHorizonalList';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
-import type { Category, ContentType } from 'oa-shared'
+import type { Meta, StoryFn } from '@storybook/react-vite';
+import type { Category, ContentType } from 'oa-shared';
 
 export default {
   title: 'Components/CategoryHorizonalList',
   component: CategoryHorizonalList,
-} as Meta<typeof CategoryHorizonalList>
+} as Meta<typeof CategoryHorizonalList>;
 
 const allCategoriesForPreciousPlastic = [
   {
@@ -60,7 +60,7 @@ const allCategoriesForPreciousPlastic = [
     name: 'Version 5',
     type: 'questions' as ContentType,
   },
-]
+];
 
 const allCategoriesForProjectKamp = [
   {
@@ -98,14 +98,11 @@ const allCategoriesForProjectKamp = [
     name: 'Utilities',
     type: 'questions' as ContentType,
   },
-]
+];
 
 export const Basic: StoryFn<typeof CategoryHorizonalList> = () => {
-  const [activeCategory, setActiveCategory] = useState<Category | null>(null)
-  const allCategories = [
-    ...allCategoriesForPreciousPlastic,
-    ...allCategoriesForProjectKamp,
-  ]
+  const [activeCategory, setActiveCategory] = useState<Category | null>(null);
+  const allCategories = [...allCategoriesForPreciousPlastic, ...allCategoriesForProjectKamp];
 
   return (
     <div style={{ maxWidth: '500px' }}>
@@ -115,13 +112,11 @@ export const Basic: StoryFn<typeof CategoryHorizonalList> = () => {
         setActiveCategory={setActiveCategory}
       />
     </div>
-  )
-}
+  );
+};
 
-export const WhenGlyphNotPresent: StoryFn<
-  typeof CategoryHorizonalList
-> = () => {
-  const [activeCategory, setActiveCategory] = useState<Category | null>(null)
+export const WhenGlyphNotPresent: StoryFn<typeof CategoryHorizonalList> = () => {
+  const [activeCategory, setActiveCategory] = useState<Category | null>(null);
   const noGlyphCategories = [
     {
       createdAt: new Date('2022-12-03T18:03:51.313Z'),
@@ -144,7 +139,7 @@ export const WhenGlyphNotPresent: StoryFn<
       name: 'No Glphy C',
       type: 'questions' as ContentType,
     },
-  ]
+  ];
 
   return (
     <div style={{ maxWidth: '500px' }}>
@@ -154,16 +149,13 @@ export const WhenGlyphNotPresent: StoryFn<
         setActiveCategory={setActiveCategory}
       />
     </div>
-  )
-}
+  );
+};
 
 export const OnlyOne: StoryFn<typeof CategoryHorizonalList> = () => {
-  const [activeCategory, setActiveCategory] = useState<Category | null>(null)
+  const [activeCategory, setActiveCategory] = useState<Category | null>(null);
 
-  const twoCategories = [
-    allCategoriesForPreciousPlastic[0],
-    allCategoriesForPreciousPlastic[1],
-  ]
+  const twoCategories = [allCategoriesForPreciousPlastic[0], allCategoriesForPreciousPlastic[1]];
 
   return (
     <div style={{ maxWidth: '500px' }}>
@@ -174,5 +166,5 @@ export const OnlyOne: StoryFn<typeof CategoryHorizonalList> = () => {
       />
       (Shouldn't see anything, only renders for two or more)
     </div>
-  )
-}
+  );
+};

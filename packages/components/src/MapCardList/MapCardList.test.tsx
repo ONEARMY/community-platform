@@ -1,12 +1,12 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest';
 
-import { render } from '../test/utils'
-import { EMPTY_LIST, MapCardList } from './MapCardList'
+import { render } from '../test/utils';
+import { EMPTY_LIST, MapCardList } from './MapCardList';
 
-import type { MapPin, Moderation } from 'oa-shared'
-import type { IProps } from './MapCardList'
+import type { MapPin, Moderation } from 'oa-shared';
+import type { IProps } from './MapCardList';
 
 const defaultList = [
   {
@@ -61,27 +61,27 @@ const defaultList = [
     lat: 0,
     lng: 73,
   },
-] as MapPin[]
+] as MapPin[];
 
-const onPinClick = () => undefined
+const onPinClick = () => undefined;
 
 const defaultProps: IProps = {
   list: defaultList,
   onPinClick,
   selectedPin: undefined,
   viewport: 'stories',
-}
+};
 
 describe('CardList', () => {
   it('Shows all items when no filtering is done', () => {
-    const { getAllByTestId } = render(<MapCardList {...defaultProps} />)
+    const { getAllByTestId } = render(<MapCardList {...defaultProps} />);
 
-    expect(getAllByTestId('CardListItem').length).toBe(4)
-  })
+    expect(getAllByTestId('CardListItem').length).toBe(4);
+  });
 
   it('Shows the no item label when filtered items is empty', () => {
-    const { getByText } = render(<MapCardList {...defaultProps} list={[]} />)
+    const { getByText } = render(<MapCardList {...defaultProps} list={[]} />);
 
-    expect(getByText(EMPTY_LIST)).toBeInTheDocument()
-  })
-})
+    expect(getByText(EMPTY_LIST)).toBeInTheDocument();
+  });
+});

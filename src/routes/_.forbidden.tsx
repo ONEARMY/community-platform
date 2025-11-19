@@ -1,29 +1,29 @@
 import { useLoaderData } from 'react-router';
-import { Button, ExternalLink } from 'oa-components'
-import Main from 'src/pages/common/Layout/Main'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { Card, Flex, Heading, Text } from 'theme-ui'
+import { Button, ExternalLink } from 'oa-components';
+import Main from 'src/pages/common/Layout/Main';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { Card, Flex, Heading, Text } from 'theme-ui';
 
-import { getTenantSettings } from './api.messages'
+import { getTenantSettings } from './api.messages';
 
 import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const { client } = createSupabaseServerClient(request)
+  const { client } = createSupabaseServerClient(request);
 
-  const settings = await getTenantSettings(client)
+  const settings = await getTenantSettings(client);
 
-  const url = new URL(request.url)
-  const pageMatch = url.search.match(/[?&]page=([^&]*)/)
-  const page = pageMatch ? decodeURIComponent(pageMatch[1]) : null
+  const url = new URL(request.url);
+  const pageMatch = url.search.match(/[?&]page=([^&]*)/);
+  const page = pageMatch ? decodeURIComponent(pageMatch[1]) : null;
 
-  return { page, settings, url }
+  return { page, settings, url };
 }
 
 export default function Index() {
-  const { page, settings, url } = useLoaderData<typeof loader>() || {}
+  const { page, settings, url } = useLoaderData<typeof loader>() || {};
 
-  const actionLabel = page ? 'I want to use it' : 'Report the problem'
+  const actionLabel = page ? 'I want to use it' : 'Report the problem';
 
   return (
     <Main style={{ flex: 1 }}>
@@ -67,20 +67,20 @@ export default function Index() {
                     <>
                       <p>
                         <strong>
-                          This is a new feature and we are currently rolling it
-                          out to a small group of people.
+                          This is a new feature and we are currently rolling it out to a small group
+                          of people.
                         </strong>
                       </p>
                       <p>
-                        Let us know if you have a project to share and want to
-                        be an early tester. We'd love to set you up.
+                        Let us know if you have a project to share and want to be an early tester.
+                        We'd love to set you up.
                       </p>
                     </>
                   ) : (
                     <p>
                       <strong>
-                        You don't have the right permissions to go here right
-                        now. If this is wrong, please let us know.
+                        You don't have the right permissions to go here right now. If this is wrong,
+                        please let us know.
                       </strong>
                     </p>
                   )}
@@ -96,5 +96,5 @@ export default function Index() {
         </Flex>
       </Flex>
     </Main>
-  )
+  );
 }

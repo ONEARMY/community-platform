@@ -1,5 +1,5 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { IImpactDataField, IUserImpact } from 'oa-shared'
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { IImpactDataField, IUserImpact } from 'oa-shared';
 
 export class ImpactServiceServer {
   constructor(private client: SupabaseClient) {}
@@ -9,16 +9,16 @@ export class ImpactServiceServer {
       .from('profiles')
       .select('id,impact')
       .eq('id', profileId)
-      .single()
+      .single();
 
-    let impact: IUserImpact = {}
+    let impact: IUserImpact = {};
 
     if (existingImpact.data?.impact) {
-      const rawImpact = existingImpact.data.impact
-      impact = typeof rawImpact === 'string' ? JSON.parse(rawImpact) : rawImpact
+      const rawImpact = existingImpact.data.impact;
+      impact = typeof rawImpact === 'string' ? JSON.parse(rawImpact) : rawImpact;
     }
 
-    impact[year] = fields
+    impact[year] = fields;
 
     return await this.client
       .from('profiles')
@@ -27,6 +27,6 @@ export class ImpactServiceServer {
       })
       .eq('id', profileId)
       .select('impact')
-      .single()
+      .single();
   }
 }

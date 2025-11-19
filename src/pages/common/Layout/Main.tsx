@@ -1,16 +1,16 @@
-import { Flex } from 'theme-ui'
+import { Flex } from 'theme-ui';
 
-import type { FlexProps } from 'theme-ui'
+import type { FlexProps } from 'theme-ui';
 
 interface ILayoutProps {
-  ignoreMaxWidth?: boolean
+  ignoreMaxWidth?: boolean;
 }
 
-type IProps = FlexProps & ILayoutProps
+type IProps = FlexProps & ILayoutProps;
 
 const Main = (props: IProps) => {
   // avoid passing custom props
-  const { ignoreMaxWidth, ...rest } = props
+  const { ignoreMaxWidth, ...rest } = props;
 
   return (
     <Flex {...rest} sx={{ flexDirection: 'column' }}>
@@ -37,7 +37,7 @@ const Main = (props: IProps) => {
         {props.children}
       </Flex>
     </Flex>
-  )
-}
+  );
+};
 
-export default Main
+export default Main;

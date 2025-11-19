@@ -1,10 +1,10 @@
-import { Project, UserRole } from 'oa-shared'
-import { IMAGE_SIZES } from 'src/config/imageTransforms'
+import { Project, UserRole } from 'oa-shared';
+import { IMAGE_SIZES } from 'src/config/imageTransforms';
 
-import { storageServiceServer } from './storageService.server'
+import { storageServiceServer } from './storageService.server';
 
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBProject, DBProjectStep, Image } from 'oa-shared'
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBProject, DBProjectStep, Image } from 'oa-shared';
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
   return client
@@ -53,8 +53,8 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
     )
     .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
     .or('deleted.eq.false,deleted.is.null')
-    .single()
-}
+    .single();
+};
 
 const getUserProjects = async (
   client: SupabaseClient,
@@ -62,11 +62,11 @@ const getUserProjects = async (
 ): Promise<Partial<Project>[]> => {
   const { data, error } = await client.rpc('get_user_projects', {
     username_param: username,
-  })
+  });
 
   if (error) {
-    console.error('Error fetching user projects:', error)
-    return []
+    console.error('Error fetching user projects:', error);
+    return [];
   }
 
   return data?.map((x) => ({
@@ -74,37 +74,29 @@ const getUserProjects = async (
     title: x.title,
     slug: x.slug,
     usefulCount: x.total_useful,
-  }))
-}
+  }));
+};
 
-const getProjectPublicMedia = (
-  projectDb: DBProject,
-  client: SupabaseClient,
-) => {
-  const allImages: Image[] = []
+const getProjectPublicMedia = (projectDb: DBProject, client: SupabaseClient) => {
+  const allImages: Image[] = [];
   if (projectDb.cover_image) {
     const coverImage = storageServiceServer
       .getPublicUrls(client, [projectDb.cover_image], IMAGE_SIZES.LANDSCAPE)
-      ?.at(0)
+      ?.at(0);
 
     if (coverImage) {
-      allImages.push(coverImage)
+      allImages.push(coverImage);
     }
   }
 
-  const stepImages =
-    projectDb.steps?.flatMap((x) => x.images)?.filter((x) => !!x) || []
+  const stepImages = projectDb.steps?.flatMap((x) => x.images)?.filter((x) => !!x) || [];
 
   const publicStepImages = stepImages
-    ? storageServiceServer.getPublicUrls(
-        client,
-        stepImages,
-        IMAGE_SIZES.GALLERY,
-      )
-    : []
+    ? storageServiceServer.getPublicUrls(client, stepImages, IMAGE_SIZES.GALLERY)
+    : [];
 
-  return [...allImages, ...publicStepImages.filter((x) => !!x)]
-}
+  return [...allImages, ...publicStepImages.filter((x) => !!x)];
+};
 
 const isAllowedToEditProject = async (
   client: SupabaseClient,
@@ -112,69 +104,52 @@ const isAllowedToEditProject = async (
   currentUsername: string,
 ) => {
   if (!currentUsername) {
-    return false
+    return false;
   }
 
   if (currentUsername === authorUsername) {
-    return true
+    return true;
   }
 
-  const { data } = await client
-    .from('profiles')
-    .select('roles')
-    .eq('username', currentUsername)
+  const { data } = await client.from('profiles').select('roles').eq('username', currentUsername);
 
-  return data?.at(0)?.roles?.includes(UserRole.ADMIN)
-}
+  return data?.at(0)?.roles?.includes(UserRole.ADMIN);
+};
 
 const isAllowedToEditProjectById = async (
   client: SupabaseClient,
   id: number,
   currentUsername: string,
 ) => {
-  const projectResult = await client
-    .from('projects')
-    .select('id,created_by')
-    .eq('id', id)
-    .single()
+  const projectResult = await client.from('projects').select('id,created_by').eq('id', id).single();
 
-  const project = projectResult.data as unknown as DBProject
+  const project = projectResult.data as unknown as DBProject;
 
-  const item = Project.fromDB(project, [])
+  const item = Project.fromDB(project, []);
 
-  return isAllowedToEditProject(
-    client,
-    item.author?.username || '',
-    currentUsername,
-  )
-}
+  return isAllowedToEditProject(client, item.author?.username || '', currentUsername);
+};
 
 async function getById(id: number, client: SupabaseClient) {
-  const result = await client.from('projects').select().eq('id', id).single()
-  return result.data as DBProject
+  const result = await client.from('projects').select().eq('id', id).single();
+  return result.data as DBProject;
 }
 
-async function getProjectStepIds(
-  id: number,
-  client: SupabaseClient,
-): Promise<number[]> {
-  const result = await client
-    .from('project_steps')
-    .select('id')
-    .eq('project_id', id)
+async function getProjectStepIds(id: number, client: SupabaseClient): Promise<number[]> {
+  const result = await client.from('project_steps').select('id').eq('project_id', id);
 
-  return result.data?.map((x) => x.id) as number[]
+  return result.data?.map((x) => x.id) as number[];
 }
 
 async function upsertStep(
   client: SupabaseClient,
   stepId: number | null,
   values: {
-    title: string
-    description: string
-    projectId: number
-    videoUrl: string | null
-    order: number
+    title: string;
+    description: string;
+    projectId: number;
+    videoUrl: string | null;
+    order: number;
   },
 ) {
   if (stepId) {
@@ -188,11 +163,11 @@ async function upsertStep(
         order: values.order,
       })
       .eq('id', stepId)
-      .select()
+      .select();
     if (error || !data) {
-      throw error
+      throw error;
     }
-    return data[0] as unknown as DBProjectStep
+    return data[0] as unknown as DBProjectStep;
   } else {
     const { data, error } = await client
       .from('project_steps')
@@ -204,16 +179,16 @@ async function upsertStep(
         order: values.order,
         tenant_id: process.env.TENANT_ID,
       })
-      .select()
+      .select();
     if (error || !data) {
-      throw error
+      throw error;
     }
-    return data[0] as unknown as DBProjectStep
+    return data[0] as unknown as DBProjectStep;
   }
 }
 
 async function deleteStepsById(ids: number[], client: SupabaseClient) {
-  await client.from('project_steps').delete().in('id', ids)
+  await client.from('project_steps').delete().in('id', ids);
 }
 
 export const libraryServiceServer = {
@@ -226,4 +201,4 @@ export const libraryServiceServer = {
   upsertStep,
   getProjectStepIds,
   deleteStepsById,
-}
+};

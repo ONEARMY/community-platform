@@ -1,9 +1,9 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest';
 
-import { render } from '../test/utils'
-import { Breadcrumbs } from './Breadcrumbs'
+import { render } from '../test/utils';
+import { Breadcrumbs } from './Breadcrumbs';
 
 describe('Breadcrumbs', () => {
   it('validate full breadcrumbs', () => {
@@ -23,14 +23,14 @@ describe('Breadcrumbs', () => {
           },
         ]}
       />,
-    )
+    );
 
-    expect(getByText('Question')).toBeInTheDocument()
-    expect(getByText('Category')).toBeInTheDocument()
-    expect(getByText('Are we real?')).toBeInTheDocument()
-    const chevrons = getAllByTestId('breadcrumbsChevron')
-    expect(chevrons).toHaveLength(2)
-  })
+    expect(getByText('Question')).toBeInTheDocument();
+    expect(getByText('Category')).toBeInTheDocument();
+    expect(getByText('Are we real?')).toBeInTheDocument();
+    const chevrons = getAllByTestId('breadcrumbsChevron');
+    expect(chevrons).toHaveLength(2);
+  });
 
   it('validate no category breadcrumbs', () => {
     const { getByText, getAllByTestId } = render(
@@ -45,11 +45,11 @@ describe('Breadcrumbs', () => {
           },
         ]}
       />,
-    )
+    );
 
-    expect(getByText('Question')).toBeInTheDocument()
-    expect(getByText('Are we real?')).toBeInTheDocument()
-    const chevrons = getAllByTestId('breadcrumbsChevron')
-    expect(chevrons).toHaveLength(1)
-  })
-})
+    expect(getByText('Question')).toBeInTheDocument();
+    expect(getByText('Are we real?')).toBeInTheDocument();
+    const chevrons = getAllByTestId('breadcrumbsChevron');
+    expect(chevrons).toHaveLength(1);
+  });
+});

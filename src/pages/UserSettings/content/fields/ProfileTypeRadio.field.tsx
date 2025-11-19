@@ -1,31 +1,31 @@
-import React from 'react'
-import { MemberBadge } from 'oa-components'
-import { Flex, Input, Label, Text } from 'theme-ui'
+import React from 'react';
+import { MemberBadge } from 'oa-components';
+import { Flex, Input, Label, Text } from 'theme-ui';
 
-import { HiddenInput } from '../elements'
+import { HiddenInput } from '../elements';
 
-import type { ProfileType } from 'oa-shared'
-import type { FieldRenderProps } from 'react-final-form'
+import type { ProfileType } from 'oa-shared';
+import type { FieldRenderProps } from 'react-final-form';
 
 interface IProps {
-  value: ProfileType
-  onChange: (value: string) => void
-  isSelected: boolean
-  textLabel?: string
-  subText?: string
-  name: string
-  fullWidth?: boolean
-  required?: boolean
-  'data-cy'?: string
-  theme?: any
+  value: ProfileType;
+  onChange: (value: string) => void;
+  isSelected: boolean;
+  textLabel?: string;
+  subText?: string;
+  name: string;
+  fullWidth?: boolean;
+  required?: boolean;
+  'data-cy'?: string;
+  theme?: any;
 }
 
 type FieldProps = FieldRenderProps<any, any> & {
-  children?: React.ReactNode
-  disabled?: boolean
-  'data-cy'?: string
-  customOnBlur?: (event) => void
-}
+  children?: React.ReactNode;
+  disabled?: boolean;
+  'data-cy'?: string;
+  customOnBlur?: (event) => void;
+};
 
 const HiddenInputField = ({ input, meta, ...rest }: FieldProps) => (
   <>
@@ -36,10 +36,10 @@ const HiddenInputField = ({ input, meta, ...rest }: FieldProps) => (
       {...rest}
     />
   </>
-)
+);
 
 // validation - return undefined if no error (i.e. valid)
-const isRequired = (value: any) => (value ? undefined : 'Required')
+const isRequired = (value: any) => (value ? undefined : 'Required');
 
 export const ProfileTypeRadioField = (props: IProps) => {
   const {
@@ -51,14 +51,14 @@ export const ProfileTypeRadioField = (props: IProps) => {
     fullWidth,
     required,
     'data-cy': dataCy,
-  } = props
+  } = props;
 
-  const classNames: string[] = []
+  const classNames: string[] = [];
   if (isSelected) {
-    classNames.push('selected')
+    classNames.push('selected');
   }
   if (fullWidth) {
-    classNames.push('full-width')
+    classNames.push('full-width');
   }
 
   return (
@@ -135,5 +135,5 @@ export const ProfileTypeRadioField = (props: IProps) => {
         )}
       </Flex>
     </Label>
-  )
-}
+  );
+};

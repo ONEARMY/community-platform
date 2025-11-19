@@ -3,22 +3,22 @@
  * require extra function to separate out to handle preview of previously uploaded
  */
 
-import type { IConvertedFileMeta, IUploadedFileMeta } from 'oa-shared'
-import type { IMultipleInputValue, IValue } from './types'
+import type { IConvertedFileMeta, IUploadedFileMeta } from 'oa-shared';
+import type { IMultipleInputValue, IValue } from './types';
 
-type Value = IValue | undefined
+type Value = IValue | undefined;
 
 export const getPresentFiles = (value: Value): IMultipleInputValue => {
-  if (!value) return []
+  if (!value) return [];
 
-  const valArray = Array.isArray(value) ? value : [value]
+  const valArray = Array.isArray(value) ? value : [value];
 
   return valArray.filter((value) => {
     if (Object.prototype.hasOwnProperty.call(value, 'downloadUrl')) {
-      return value as IUploadedFileMeta
+      return value as IUploadedFileMeta;
     }
     if (Object.prototype.hasOwnProperty.call(value, 'objectUrl')) {
-      return value as IConvertedFileMeta
+      return value as IConvertedFileMeta;
     }
-  })
-}
+  });
+};

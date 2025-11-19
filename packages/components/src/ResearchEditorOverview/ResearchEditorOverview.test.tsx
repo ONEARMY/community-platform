@@ -1,11 +1,11 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest';
 
-import { render } from '../test/utils'
-import { ResearchEditorOverview } from './ResearchEditorOverview'
+import { render } from '../test/utils';
+import { ResearchEditorOverview } from './ResearchEditorOverview';
 
-import type { ResearchEditorOverviewProps } from './ResearchEditorOverview'
+import type { ResearchEditorOverviewProps } from './ResearchEditorOverview';
 
 const defaultProps: ResearchEditorOverviewProps = {
   updates: [
@@ -31,52 +31,44 @@ const defaultProps: ResearchEditorOverviewProps = {
   researchSlug: 'abc',
   showBackToResearchButton: true,
   showCreateUpdateButton: true,
-}
+};
 
 describe('ResearchEditorOverview', () => {
   it('renders correctly', () => {
-    const { container } = render(<ResearchEditorOverview {...defaultProps} />)
+    const { container } = render(<ResearchEditorOverview {...defaultProps} />);
 
-    expect(container).toMatchSnapshot()
-  })
+    expect(container).toMatchSnapshot();
+  });
 
   it('links back to research', () => {
     const { getByText } = render(
-      <ResearchEditorOverview
-        {...defaultProps}
-        showBackToResearchButton={true}
-      />,
-    )
+      <ResearchEditorOverview {...defaultProps} showBackToResearchButton={true} />,
+    );
 
-    expect(getByText('Back to research')).toBeInTheDocument()
-  })
+    expect(getByText('Back to research')).toBeInTheDocument();
+  });
 
   it('links to create update', () => {
     const { getByText } = render(
-      <ResearchEditorOverview
-        {...defaultProps}
-        showCreateUpdateButton={true}
-      />,
-    )
+      <ResearchEditorOverview {...defaultProps} showCreateUpdateButton={true} />,
+    );
 
-    expect(getByText('Create update')).toBeInTheDocument()
-  })
+    expect(getByText('Create update')).toBeInTheDocument();
+  });
 
   it('handles empty updates', () => {
-    const { container } = render(
-      <ResearchEditorOverview {...defaultProps} updates={[]} />,
-    )
+    const { container } = render(<ResearchEditorOverview {...defaultProps} updates={[]} />);
 
-    expect(container).toMatchSnapshot()
-  })
+    expect(container).toMatchSnapshot();
+  });
 
   it('handles falsey updates', () => {
     const { container } = render(
       <ResearchEditorOverview {...defaultProps} updates={null as any} />,
-    )
+    );
 
-    expect(container).toMatchSnapshot()
-  })
+    expect(container).toMatchSnapshot();
+  });
 
   it('handles malformed update item', () => {
     const { getByText } = render(
@@ -92,10 +84,10 @@ describe('ResearchEditorOverview', () => {
           ] as any
         }
       />,
-    )
+    );
 
-    expect(getByText('Update title')).toBeInTheDocument()
-  })
+    expect(getByText('Update title')).toBeInTheDocument();
+  });
 
   it('displays a Draft label', () => {
     const { getByText } = render(
@@ -110,8 +102,8 @@ describe('ResearchEditorOverview', () => {
           },
         ]}
       />,
-    )
+    );
 
-    expect(getByText('Draft')).toBeInTheDocument()
-  })
-})
+    expect(getByText('Draft')).toBeInTheDocument();
+  });
+});

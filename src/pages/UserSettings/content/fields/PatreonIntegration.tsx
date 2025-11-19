@@ -1,54 +1,54 @@
-import { useEffect, useState } from 'react'
-import { Button, Icon } from 'oa-components'
-import { PATREON_CLIENT_ID } from 'src/config/config'
-import { patreonService } from 'src/services/patreonService'
-import { Flex, Heading, Image, Text } from 'theme-ui'
+import { useEffect, useState } from 'react';
+import { Button, Icon } from 'oa-components';
+import { PATREON_CLIENT_ID } from 'src/config/config';
+import { patreonService } from 'src/services/patreonService';
+import { Flex, Heading, Image, Text } from 'theme-ui';
 
-import type { IPatreonUser } from 'oa-shared'
+import type { IPatreonUser } from 'oa-shared';
 
-export const HEADING = 'Patreon'
-export const SUCCESS_MESSAGE = 'Successfully linked Patreon account!'
+export const HEADING = 'Patreon';
+export const SUCCESS_MESSAGE = 'Successfully linked Patreon account!';
 export const SUPPORTER_MESSAGE =
-  'Thanks for supporting us! :) Update your data if you changed your Patreon tiers or remove the connection below.'
+  'Thanks for supporting us! :) Update your data if you changed your Patreon tiers or remove the connection below.';
 
-export const CONNECT_BUTTON_TEXT = 'Connect'
-export const UPDATE_BUTTON_TEXT = 'Update'
-export const REMOVE_BUTTON_TEXT = 'Disconnect'
+export const CONNECT_BUTTON_TEXT = 'Connect';
+export const UPDATE_BUTTON_TEXT = 'Update';
+export const REMOVE_BUTTON_TEXT = 'Disconnect';
 
 export const PatreonIntegration = () => {
   const [patreonUser, setPatreon] = useState<{
-    patreon: IPatreonUser
-    isSupporter: boolean
-  }>()
+    patreon: IPatreonUser;
+    isSupporter: boolean;
+  }>();
 
   useEffect(() => {
     const fetchPatreonData = async () => {
-      const patreonUser = await patreonService.getCurrentUserPatreon()
+      const patreonUser = await patreonService.getCurrentUserPatreon();
 
       if (patreonUser) {
-        setPatreon(patreonUser)
+        setPatreon(patreonUser);
       }
-    }
+    };
 
-    fetchPatreonData()
-  }, [])
+    fetchPatreonData();
+  }, []);
 
   const removePatreonConnection = async () => {
-    const result = await patreonService.disconnectUserPatreon()
+    const result = await patreonService.disconnectUserPatreon();
 
     if (result) {
-      setPatreon(undefined)
+      setPatreon(undefined);
     }
-  }
+  };
 
   const patreonRedirect = () => {
     // Redirect to patreon to get access code.
-    const redirectUri = `${window.location.protocol}//${window.location.host}/patreon`
+    const redirectUri = `${window.location.protocol}//${window.location.host}/patreon`;
 
     window.location.assign(
       `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${PATREON_CLIENT_ID}&redirect_uri=${redirectUri}`,
-    )
-  }
+    );
+  };
 
   return (
     <Flex
@@ -74,45 +74,43 @@ export const PatreonIntegration = () => {
               {patreonUser?.isSupporter && patreonUser.patreon.membership && (
                 <Flex sx={{ flexDirection: 'column' }}>
                   <Text mt={4}>{SUPPORTER_MESSAGE}</Text>
-                  {patreonUser.patreon.membership.tiers.map(
-                    ({ id, attributes }) => (
-                      <Flex
-                        key={id}
-                        sx={{
-                          alignItems: 'center',
-                          mt: 4,
+                  {patreonUser.patreon.membership.tiers.map(({ id, attributes }) => (
+                    <Flex
+                      key={id}
+                      sx={{
+                        alignItems: 'center',
+                        mt: 4,
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: '40px',
+                          height: '40px',
+                          overflow: 'hidden',
+                          marginRight: '10px',
                         }}
                       >
-                        <div
-                          style={{
-                            width: '40px',
+                        <Image
+                          src={attributes.image_url}
+                          sx={{
+                            borderRadius: '50%',
+                            width: 'auto',
                             height: '40px',
-                            overflow: 'hidden',
-                            marginRight: '10px',
+                            objectFit: 'cover',
+                            objectPosition: 'center',
                           }}
-                        >
-                          <Image
-                            src={attributes.image_url}
-                            sx={{
-                              borderRadius: '50%',
-                              width: 'auto',
-                              height: '40px',
-                              objectFit: 'cover',
-                              objectPosition: 'center',
-                            }}
-                          />
-                        </div>
-                        <Text>{attributes.title}</Text>
-                      </Flex>
-                    ),
-                  )}
+                        />
+                      </div>
+                      <Text>{attributes.title}</Text>
+                    </Flex>
+                  ))}
                 </Flex>
               )}
             </>
           ) : (
             <Text variant="quiet">
-              As a supporter you get a badge on the platform, special insights
-              and voting rights on decisions.
+              As a supporter you get a badge on the platform, special insights and voting rights on
+              decisions.
             </Text>
           )}
         </Flex>
@@ -123,15 +121,11 @@ export const PatreonIntegration = () => {
           {patreonUser?.patreon ? UPDATE_BUTTON_TEXT : CONNECT_BUTTON_TEXT}
         </Button>
         {patreonUser?.patreon && (
-          <Button
-            type="button"
-            onClick={removePatreonConnection}
-            variant="outline"
-          >
+          <Button type="button" onClick={removePatreonConnection} variant="outline">
             {REMOVE_BUTTON_TEXT}
           </Button>
         )}
       </Flex>
     </Flex>
-  )
-}
+  );
+};

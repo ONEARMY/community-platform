@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
 import type {
   DBResearchItem,
@@ -6,7 +6,7 @@ import type {
   ResearchFormData,
   ResearchItem,
   ResearchUpdate,
-} from 'oa-shared'
+} from 'oa-shared';
 
 export const FactoryResearchItemUpdate = (
   researchItemUpdateOverloads: Partial<ResearchUpdate> = {},
@@ -28,7 +28,7 @@ export const FactoryResearchItemUpdate = (
   isDraft: false,
   research: undefined,
   ...researchItemUpdateOverloads,
-})
+});
 
 export const FactoryDBResearchItemUpdate = (
   researchDBItemUpdateOverloads: Partial<DBResearchUpdate> = {},
@@ -49,7 +49,7 @@ export const FactoryDBResearchItemUpdate = (
   video_url: null,
   is_draft: false,
   ...researchDBItemUpdateOverloads,
-})
+});
 
 export const FactoryResearchItem = (
   researchItemOverloads: Partial<ResearchItem> = {},
@@ -85,7 +85,7 @@ export const FactoryResearchItem = (
   status: 'in-progress',
   usefulCount: 2,
   ...researchItemOverloads,
-})
+});
 
 export const FactoryDBResearchItem = (
   researchItemOverloads: Partial<DBResearchItem> = {},
@@ -112,7 +112,7 @@ export const FactoryDBResearchItem = (
   status: 'in-progress',
   useful_count: 2,
   ...researchItemOverloads,
-})
+});
 
 export const FactoryResearchItemFormInput = (
   researchItemOverloads: Partial<ResearchFormData> = {},
@@ -121,4 +121,4 @@ export const FactoryResearchItemFormInput = (
   description: faker.lorem.paragraphs(),
   existingImage: null,
   ...researchItemOverloads,
-})
+});

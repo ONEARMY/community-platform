@@ -1,5 +1,5 @@
-import { css } from '@emotion/react'
-import { commonStyles, GlobalFonts } from 'oa-themes'
+import { css } from '@emotion/react';
+import { commonStyles, GlobalFonts } from 'oa-themes';
 
 export const GlobalStyles = css`
   ${GlobalFonts}
@@ -43,4 +43,4 @@ export const GlobalStyles = css`
     white-space: nowrap;
     border: 0;
   }
-`
+`;

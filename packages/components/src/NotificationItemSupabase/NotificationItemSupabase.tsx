@@ -1,17 +1,17 @@
-import { Flex, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui';
 
-import { DisplayDate } from '../DisplayDate/DisplayDate'
-import { Icon } from '../Icon/Icon'
-import { InternalLink } from '../InternalLink/InternalLink'
+import { DisplayDate } from '../DisplayDate/DisplayDate';
+import { Icon } from '../Icon/Icon';
+import { InternalLink } from '../InternalLink/InternalLink';
 
-import type { NotificationDisplay } from 'oa-shared'
-import type { ThemeUIStyleObject } from 'theme-ui'
-import type { availableGlyphs } from '../Icon/types'
+import type { NotificationDisplay } from 'oa-shared';
+import type { ThemeUIStyleObject } from 'theme-ui';
+import type { availableGlyphs } from '../Icon/types';
 
 interface IProps {
-  markRead: (id: number) => void
-  modalDismiss: () => void
-  notification: NotificationDisplay
+  markRead: (id: number) => void;
+  modalDismiss: () => void;
+  notification: NotificationDisplay;
 }
 
 const commentStyling = {
@@ -36,10 +36,10 @@ const commentStyling = {
       '2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000',
     transform: 'translateX(-8px) rotate(10deg) translateY(14px)',
   },
-} as ThemeUIStyleObject
+} as ThemeUIStyleObject;
 
 export const NotificationItemSupabase = (props: IProps) => {
-  const { markRead, modalDismiss, notification } = props
+  const { markRead, modalDismiss, notification } = props;
 
   const borderStyle = {
     background: notification.isRead ? 'background' : '#fff0b4',
@@ -49,35 +49,24 @@ export const NotificationItemSupabase = (props: IProps) => {
     borderWidth: 2,
     padding: 2,
     gap: 2,
-  }
+  };
 
   const onClick = () => {
-    markRead(notification.id)
-    modalDismiss()
-  }
+    markRead(notification.id);
+    modalDismiss();
+  };
 
   const isDiscussion =
-    notification.contentType === 'comment' ||
-    notification.contentType === 'reply'
+    notification.contentType === 'comment' || notification.contentType === 'reply';
 
   return (
-    <Flex
-      data-cy="NotificationListItemSupabase"
-      data-testid="NotificationListItemSupabase"
-    >
-      <InternalLink
-        onClick={onClick}
-        to={notification.link}
-        sx={{ color: 'black', width: '100%' }}
-      >
+    <Flex data-cy="NotificationListItemSupabase" data-testid="NotificationListItemSupabase">
+      <InternalLink onClick={onClick} to={notification.link} sx={{ color: 'black', width: '100%' }}>
         <Flex sx={borderStyle}>
           {notification.sidebar.image && <>hi</>}
           {notification.sidebar.icon && (
             <Flex>
-              <Icon
-                glyph={notification.sidebar.icon as availableGlyphs}
-                size={30}
-              />
+              <Icon glyph={notification.sidebar.icon as availableGlyphs} size={30} />
             </Flex>
           )}
           <Flex sx={{ flex: 1, flexDirection: 'column', gap: 2 }}>
@@ -109,5 +98,5 @@ export const NotificationItemSupabase = (props: IProps) => {
         </Flex>
       </InternalLink>
     </Flex>
-  )
-}
+  );
+};

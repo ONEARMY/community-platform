@@ -1,16 +1,16 @@
 /** @jsxImportSource theme-ui */
-import { Box } from 'theme-ui'
+import { Box } from 'theme-ui';
 
-import type { Result } from './types'
+import type { Result } from './types';
 
 export interface Props {
-  results: Result[]
-  callback: any
-  setShowResults: React.Dispatch<React.SetStateAction<boolean>>
+  results: Result[];
+  callback: any;
+  setShowResults: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const OsmGeocodingResultsList = (props: Props) => {
-  const { results, callback, setShowResults } = props
+  const { results, callback, setShowResults } = props;
   return (
     <Box
       data-cy="osm-geocoding-results"
@@ -43,9 +43,9 @@ export const OsmGeocodingResultsList = (props: Props) => {
           }}
           key={index}
           onClick={() => {
-            setShowResults(false)
+            setShowResults(false);
             if (callback) {
-              callback(result)
+              callback(result);
             }
           }}
         >
@@ -53,5 +53,5 @@ export const OsmGeocodingResultsList = (props: Props) => {
         </Box>
       ))}
     </Box>
-  )
-}
+  );
+};

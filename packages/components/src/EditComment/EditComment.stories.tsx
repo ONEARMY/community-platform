@@ -1,11 +1,11 @@
-import { EditComment } from './EditComment'
+import { EditComment } from './EditComment';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Commenting/EditComment',
   component: EditComment,
-} as Meta<typeof EditComment>
+} as Meta<typeof EditComment>;
 
 export const Default: StoryFn<typeof EditComment> = () => (
   <EditComment
@@ -15,7 +15,7 @@ export const Default: StoryFn<typeof EditComment> = () => (
     handleCancel={() => null}
     handleSubmit={() => Promise.resolve(new Response(''))}
   />
-)
+);
 
 export const EditReply: StoryFn<typeof EditComment> = () => (
   <EditComment
@@ -25,4 +25,4 @@ export const EditReply: StoryFn<typeof EditComment> = () => (
     handleCancel={() => null}
     handleSubmit={() => Promise.resolve(new Response(''))}
   />
-)
+);

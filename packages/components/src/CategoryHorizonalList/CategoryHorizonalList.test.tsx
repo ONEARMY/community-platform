@@ -1,11 +1,11 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { render } from '../test/utils'
-import { CategoryHorizonalList } from './CategoryHorizonalList'
+import { render } from '../test/utils';
+import { CategoryHorizonalList } from './CategoryHorizonalList';
 
-import type { ContentType } from 'oa-shared'
+import type { ContentType } from 'oa-shared';
 
 const allCategoriesForPreciousPlastic = [
   {
@@ -57,7 +57,7 @@ const allCategoriesForPreciousPlastic = [
     name: 'Version 5',
     type: 'questions' as ContentType,
   },
-]
+];
 
 const allCategoriesForProjectKamp = [
   {
@@ -95,7 +95,7 @@ const allCategoriesForProjectKamp = [
     name: 'Utilities',
     type: 'questions' as ContentType,
   },
-]
+];
 
 describe('CategoryHorizonalList', () => {
   // https://stackoverflow.com/a/62148101
@@ -105,15 +105,12 @@ describe('CategoryHorizonalList', () => {
         observe: vi.fn(),
         unobserve: vi.fn(),
         disconnect: vi.fn(),
-      }
-    })
-  })
+      };
+    });
+  });
 
   it('renders each member type given', async () => {
-    const allCategories = [
-      ...allCategoriesForPreciousPlastic,
-      ...allCategoriesForProjectKamp,
-    ]
+    const allCategories = [...allCategoriesForPreciousPlastic, ...allCategoriesForProjectKamp];
 
     const { findAllByTestId } = render(
       <CategoryHorizonalList
@@ -121,18 +118,15 @@ describe('CategoryHorizonalList', () => {
         allCategories={allCategories}
         setActiveCategory={vi.fn()}
       />,
-    )
+    );
 
-    const allItems = await findAllByTestId('CategoryHorizonalList-Item')
+    const allItems = await findAllByTestId('CategoryHorizonalList-Item');
 
-    expect(allItems).toHaveLength(12)
-  })
+    expect(allItems).toHaveLength(12);
+  });
 
   it('orders by _created with oldest first', async () => {
-    const allCategories = [
-      ...allCategoriesForPreciousPlastic,
-      ...allCategoriesForProjectKamp,
-    ]
+    const allCategories = [...allCategoriesForPreciousPlastic, ...allCategoriesForProjectKamp];
 
     const { findAllByTestId } = render(
       <CategoryHorizonalList
@@ -140,13 +134,13 @@ describe('CategoryHorizonalList', () => {
         allCategories={allCategories}
         setActiveCategory={vi.fn()}
       />,
-    )
+    );
 
-    const allItems = await findAllByTestId('CategoryHorizonalList-Item')
+    const allItems = await findAllByTestId('CategoryHorizonalList-Item');
 
-    expect(allItems[0].title).toEqual('Machines')
-    expect(allItems[11].title).toEqual('Guides')
-  })
+    expect(allItems[0].title).toEqual('Machines');
+    expect(allItems[11].title).toEqual('Guides');
+  });
 
   it('renders default category glyph when specific glyph is missing', async () => {
     const noGlyphCategories = [
@@ -171,7 +165,7 @@ describe('CategoryHorizonalList', () => {
         name: 'No Glphy C',
         type: 'questions' as ContentType,
       },
-    ]
+    ];
 
     const { findAllByTestId } = render(
       <CategoryHorizonalList
@@ -179,18 +173,15 @@ describe('CategoryHorizonalList', () => {
         allCategories={noGlyphCategories}
         setActiveCategory={vi.fn()}
       />,
-    )
+    );
 
-    const allItems = await findAllByTestId('category-icon')
+    const allItems = await findAllByTestId('category-icon');
 
-    expect(allItems).toHaveLength(3)
-  })
+    expect(allItems).toHaveLength(3);
+  });
 
   it("doesn't render items when less than three at present", () => {
-    const twoCategories = [
-      allCategoriesForPreciousPlastic[0],
-      allCategoriesForPreciousPlastic[1],
-    ]
+    const twoCategories = [allCategoriesForPreciousPlastic[0], allCategoriesForPreciousPlastic[1]];
 
     const { getByTestId } = render(
       <CategoryHorizonalList
@@ -198,8 +189,8 @@ describe('CategoryHorizonalList', () => {
         allCategories={twoCategories}
         setActiveCategory={vi.fn()}
       />,
-    )
+    );
 
-    expect(() => getByTestId('MemberTypeVerticalList-Item')).toThrow()
-  })
-})
+    expect(() => getByTestId('MemberTypeVerticalList-Item')).toThrow();
+  });
+});

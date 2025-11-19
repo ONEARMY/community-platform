@@ -1,4 +1,4 @@
-import type { DBResearchUpdate } from '../../models'
+import type { DBResearchUpdate } from '../../models';
 
 export const researchUpdates: Partial<DBResearchUpdate>[] = [
   {
@@ -41,4 +41,4 @@ export const researchUpdates: Partial<DBResearchUpdate>[] = [
     comment_count: 0,
     title: 'qwerty 4',
   },
-]
+];

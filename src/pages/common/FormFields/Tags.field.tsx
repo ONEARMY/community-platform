@@ -1,14 +1,14 @@
-import { Field } from 'react-final-form'
-import { TagsSelectField } from 'src/common/Form/TagsSelectField'
-import { FormFieldWrapper } from 'src/pages/common/FormFields'
-import { COMPARISONS } from 'src/utils/comparisons'
+import { Field } from 'react-final-form';
+import { TagsSelectField } from 'src/common/Form/TagsSelectField';
+import { FormFieldWrapper } from 'src/pages/common/FormFields';
+import { COMPARISONS } from 'src/utils/comparisons';
 
 interface IProps {
-  title: string
+  title: string;
 }
 
 export const TagsField = ({ title }: IProps) => {
-  const name = 'tags'
+  const name = 'tags';
 
   return (
     <FormFieldWrapper htmlFor={name} text={title}>
@@ -20,5 +20,5 @@ export const TagsField = ({ title }: IProps) => {
         isEqual={COMPARISONS.tagsSupabase}
       />
     </FormFieldWrapper>
-  )
-}
+  );
+};

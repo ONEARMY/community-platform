@@ -1,30 +1,30 @@
-import { createRef, useEffect, useState } from 'react'
-import { Text } from 'theme-ui'
+import { createRef, useEffect, useState } from 'react';
+import { Text } from 'theme-ui';
 
-import { LinkifyText } from '../LinkifyText/LinkifyText'
+import { LinkifyText } from '../LinkifyText/LinkifyText';
 
 interface IProps {
-  body: string
+  body: string;
 }
-const SHORT_COMMENT = 129
+const SHORT_COMMENT = 129;
 
 export const CommentBody = ({ body }: IProps) => {
-  const textRef = createRef<any>()
+  const textRef = createRef<any>();
 
-  const [textHeight, setTextHeight] = useState(0)
-  const [isShowMore, setShowMore] = useState(false)
+  const [textHeight, setTextHeight] = useState(0);
+  const [isShowMore, setShowMore] = useState(false);
 
   useEffect(() => {
     if (textRef.current) {
-      setTextHeight(textRef.current.scrollHeight)
+      setTextHeight(textRef.current.scrollHeight);
     }
-  }, [textRef])
+  }, [textRef]);
 
   const showMore = () => {
-    setShowMore((prev) => !prev)
-  }
+    setShowMore((prev) => !prev);
+  };
 
-  const maxHeight = isShowMore ? 'max-content' : '128px'
+  const maxHeight = isShowMore ? 'max-content' : '128px';
 
   return (
     <>
@@ -58,5 +58,5 @@ export const CommentBody = ({ body }: IProps) => {
         </Text>
       )}
     </>
-  )
-}
+  );
+};

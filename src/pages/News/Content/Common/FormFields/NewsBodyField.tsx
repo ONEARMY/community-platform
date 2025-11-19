@@ -1,15 +1,15 @@
-import { Field } from 'react-final-form'
-import { FieldMarkdown } from 'oa-components'
-import { FormFieldWrapper } from 'src/pages/common/FormFields'
-import { fields } from 'src/pages/News/labels'
-import { required } from 'src/utils/validators'
+import { Field } from 'react-final-form';
+import { FieldMarkdown } from 'oa-components';
+import { FormFieldWrapper } from 'src/pages/common/FormFields';
+import { fields } from 'src/pages/News/labels';
+import { required } from 'src/utils/validators';
 
 interface IProps {
-  imageUpload: (image: File) => Promise<string>
+  imageUpload: (image: File) => Promise<string>;
 }
 
 export const NewsBodyField = ({ imageUpload }: IProps) => {
-  const name = 'body'
+  const name = 'body';
 
   return (
     <FormFieldWrapper htmlFor={name} text={fields.body.title} required>
@@ -23,5 +23,5 @@ export const NewsBodyField = ({ imageUpload }: IProps) => {
         validate={required}
       />
     </FormFieldWrapper>
-  )
-}
+  );
+};

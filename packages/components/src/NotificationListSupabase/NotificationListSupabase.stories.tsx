@@ -1,16 +1,16 @@
-import { fakeDisplayNotification } from '../utils'
-import { NotificationListSupabase } from './NotificationListSupabase'
+import { fakeDisplayNotification } from '../utils';
+import { NotificationListSupabase } from './NotificationListSupabase';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Components/NotificationListSupabase',
   component: NotificationListSupabase,
-} as Meta<typeof NotificationListSupabase>
+} as Meta<typeof NotificationListSupabase>;
 
-const newsReplyNotification = fakeDisplayNotification({ isRead: false })
+const newsReplyNotification = fakeDisplayNotification({ isRead: false });
 
-const questionCommentNotification = fakeDisplayNotification({ isRead: true })
+const questionCommentNotification = fakeDisplayNotification({ isRead: true });
 
 export const Default: StoryFn<typeof NotificationListSupabase> = () => (
   <NotificationListSupabase
@@ -20,11 +20,9 @@ export const Default: StoryFn<typeof NotificationListSupabase> = () => (
     modalDismiss={() => console.log('modalDismiss')}
     notifications={[newsReplyNotification, questionCommentNotification]}
   />
-)
+);
 
-export const NoNewNotifications: StoryFn<
-  typeof NotificationListSupabase
-> = () => (
+export const NoNewNotifications: StoryFn<typeof NotificationListSupabase> = () => (
   <NotificationListSupabase
     isUpdatingNotifications={false}
     markAllRead={() => console.log('markAllRead')}
@@ -32,4 +30,4 @@ export const NoNewNotifications: StoryFn<
     modalDismiss={() => console.log('modalDismiss')}
     notifications={[questionCommentNotification]}
   />
-)
+);

@@ -1,24 +1,18 @@
-import { useContext, useMemo } from 'react'
-import {
-  Button,
-  ButtonIcon,
-  MapFilterListItem,
-  MemberBadge,
-  UserBadge,
-} from 'oa-components'
-import { Checkbox, Flex, Heading, Label, Text } from 'theme-ui'
+import { useContext, useMemo } from 'react';
+import { Button, ButtonIcon, MapFilterListItem, MemberBadge, UserBadge } from 'oa-components';
+import { Checkbox, Flex, Heading, Label, Text } from 'theme-ui';
 
-import { MapContext } from './MapContext'
+import { MapContext } from './MapContext';
 
 type MapFilterListProps = {
-  onClose: () => void
-}
+  onClose: () => void;
+};
 
 export const MapFilterList = ({ onClose }: MapFilterListProps) => {
-  const mapState = useContext(MapContext)
+  const mapState = useContext(MapContext);
 
   if (!mapState) {
-    return null
+    return null;
   }
 
   const visibleTags = useMemo(
@@ -26,12 +20,10 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
       mapState.allTags.filter(
         (tag) =>
           mapState.activeTagFilters.includes(tag.id) ||
-          mapState.filteredPins.some((pin) =>
-            pin.profile?.tags?.some((t) => t.id === tag.id),
-          ),
+          mapState.filteredPins.some((pin) => pin.profile?.tags?.some((t) => t.id === tag.id)),
       ),
     [mapState.allTags, mapState.activeTagFilters, mapState.filteredPins],
-  )
+  );
 
   const visibleBadges = useMemo(
     () =>
@@ -43,12 +35,10 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
           ),
       ),
     [mapState.allBadges, mapState.activeBadgeFilters, mapState.filteredPins],
-  )
+  );
 
-  const pinCount = mapState?.filteredPins?.length || 0
-  const buttonLabel = `${pinCount} result${
-    pinCount === 1 ? '' : 's'
-  } in current view`
+  const pinCount = mapState?.filteredPins?.length || 0;
+  const buttonLabel = `${pinCount} result${pinCount === 1 ? '' : 's'} in current view`;
 
   return (
     <Flex
@@ -74,9 +64,7 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
             Filter what you see
           </Heading>
 
-          <Text variant="quiet">
-            Zoom out on the map to search the whole world
-          </Text>
+          <Text variant="quiet">Zoom out on the map to search the whole world</Text>
         </Flex>
 
         <ButtonIcon
@@ -100,13 +88,9 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
           <MapFilterListWrapper title="Profiles">
             {mapState.allProfileTypes.map((profileType, index) => (
               <MapFilterListItem
-                active={mapState.activeProfileTypeFilters.includes(
-                  profileType.name,
-                )}
+                active={mapState.activeProfileTypeFilters.includes(profileType.name)}
                 key={index}
-                onClick={() =>
-                  mapState.toggleActiveProfileTypeFilter(profileType.name)
-                }
+                onClick={() => mapState.toggleActiveProfileTypeFilter(profileType.name)}
                 filterType="profile"
               >
                 <MemberBadge size={30} profileType={profileType} />
@@ -148,9 +132,7 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
                 <Label key={badge.id} sx={{ alignItems: 'center', gap: 0 }}>
                   <Checkbox
                     onClick={() => mapState.toggleActiveBadgeFilter(badge.name)}
-                    defaultChecked={mapState.activeBadgeFilters?.includes(
-                      badge.name,
-                    )}
+                    defaultChecked={mapState.activeBadgeFilters?.includes(badge.name)}
                   />
                   {badge.displayName}
                   <UserBadge badge={badge} />
@@ -170,17 +152,13 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
               return (
                 <Label key={setting} sx={{ alignItems: 'center', gap: 0 }}>
                   <Checkbox
-                    onClick={() =>
-                      mapState.toggleActiveProfileSettingFilter(setting)
-                    }
-                    defaultChecked={mapState.activeBadgeFilters?.includes(
-                      setting,
-                    )}
+                    onClick={() => mapState.toggleActiveProfileSettingFilter(setting)}
+                    defaultChecked={mapState.activeBadgeFilters?.includes(setting)}
                   />
                   {/* There is only 1 for now, so it's hardcoded. */}
                   Open to Visitors
                 </Label>
-              )
+              );
             })}
           </MapFilterListWrapper>
         )}
@@ -197,15 +175,15 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
         </Button>
       </Flex>
     </Flex>
-  )
-}
+  );
+};
 
 const MapFilterListWrapper = ({
   title,
   children,
 }: {
-  title: string
-  children: React.ReactNode
+  title: string;
+  children: React.ReactNode;
 }) => {
   return (
     <Flex sx={{ gap: 1, flexDirection: 'column' }}>
@@ -224,5 +202,5 @@ const MapFilterListWrapper = ({
         {children}
       </Flex>
     </Flex>
-  )
-}
+  );
+};

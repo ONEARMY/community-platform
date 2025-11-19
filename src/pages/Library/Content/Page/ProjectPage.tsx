@@ -1,48 +1,46 @@
-import { useEffect, useState } from 'react'
-import { observer } from 'mobx-react'
+import { useEffect, useState } from 'react';
+import { observer } from 'mobx-react';
 import {
   ArticleCallToActionSupabase,
   Button,
   UsefulStatsButton,
   UserEngagementWrapper,
-} from 'oa-components'
+} from 'oa-components';
 // eslint-disable-next-line import/no-unresolved
-import { ClientOnly } from 'remix-utils/client-only'
-import { trackEvent } from 'src/common/Analytics'
-import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
-import { CommentSectionSupabase } from 'src/pages/common/CommentsSupabase/CommentSectionSupabase'
-import { usefulService } from 'src/services/usefulService'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { onUsefulClick } from 'src/utils/onUsefulClick'
-import { Card, Flex } from 'theme-ui'
+import { ClientOnly } from 'remix-utils/client-only';
+import { trackEvent } from 'src/common/Analytics';
+import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
+import { CommentSectionSupabase } from 'src/pages/common/CommentsSupabase/CommentSectionSupabase';
+import { usefulService } from 'src/services/usefulService';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { onUsefulClick } from 'src/utils/onUsefulClick';
+import { Card, Flex } from 'theme-ui';
 
-import { LibraryDescription } from './LibraryDescription'
-import Step from './LibraryStep'
+import { LibraryDescription } from './LibraryDescription';
+import Step from './LibraryStep';
 
-import type { ContentType, Project, ProjectStep } from 'oa-shared'
+import type { ContentType, Project, ProjectStep } from 'oa-shared';
 
 type ProjectPageProps = {
-  item: Project
-}
+  item: Project;
+};
 
 export const ProjectPage = observer(({ item }: ProjectPageProps) => {
-  const [subscribersCount, setSubscribersCount] = useState<number>(
-    item.subscriberCount,
-  )
-  const [voted, setVoted] = useState<boolean>(false)
-  const [usefulCount, setUsefulCount] = useState<number>(item.usefulCount)
-  const { profile: activeUser } = useProfileStore()
+  const [subscribersCount, setSubscribersCount] = useState<number>(item.subscriberCount);
+  const [voted, setVoted] = useState<boolean>(false);
+  const [usefulCount, setUsefulCount] = useState<number>(item.usefulCount);
+  const { profile: activeUser } = useProfileStore();
 
   useEffect(() => {
     const getVoted = async () => {
-      const voted = await usefulService.hasVoted('projects', item.id)
-      setVoted(voted)
-    }
+      const voted = await usefulService.hasVoted('projects', item.id);
+      setVoted(voted);
+    };
 
     if (activeUser) {
-      getVoted()
+      getVoted();
     }
-  }, [activeUser, item])
+  }, [activeUser, item]);
 
   const configOnUsefulClick = {
     contentType: 'projects' as ContentType,
@@ -52,17 +50,14 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
     setVoted,
     setUsefulCount,
     loggedInUser: activeUser,
-  }
+  };
 
-  const handleUsefulClick = async (
-    vote: 'add' | 'delete',
-    eventCategory = 'Library',
-  ) => {
+  const handleUsefulClick = async (vote: 'add' | 'delete', eventCategory = 'Library') => {
     await onUsefulClick({
       vote,
       config: { ...configOnUsefulClick, eventCategory },
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -73,9 +68,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
         commentsCount={item.commentCount}
         votedUsefulCount={usefulCount}
         hasUserVotedUseful={voted}
-        onUsefulClick={() =>
-          handleUsefulClick(voted ? 'delete' : 'add', 'LibraryDescription')
-        }
+        onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add', 'LibraryDescription')}
         subscribersCount={subscribersCount}
       />
       <Flex sx={{ flexDirection: 'column', marginTop: [3, 4], gap: 4 }}>
@@ -97,19 +90,17 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                     category: 'ArticleCallToAction',
                     action: 'ScrollLibraryComment',
                     label: item.slug,
-                  })
+                  });
                   document
                     .querySelector('[data-target="create-comment-container"]')
                     ?.scrollIntoView({
                       behavior: 'smooth',
-                    })
-                  ;(
-                    document.querySelector(
-                      '[data-cy="comments-form"]',
-                    ) as HTMLTextAreaElement
-                  )?.focus()
+                    });
+                  (
+                    document.querySelector('[data-cy="comments-form"]') as HTMLTextAreaElement
+                  )?.focus();
 
-                  return false
+                  return false;
                 }}
               >
                 Leave a comment
@@ -120,10 +111,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                   hasUserVotedUseful={voted}
                   isLoggedIn={!!activeUser}
                   onUsefulClick={() =>
-                    handleUsefulClick(
-                      voted ? 'delete' : 'add',
-                      'ArticleCallToAction',
-                    )
+                    handleUsefulClick(voted ? 'delete' : 'add', 'ArticleCallToAction')
                   }
                 />
               )}
@@ -149,5 +137,5 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
         )}
       </ClientOnly>
     </>
-  )
-})
+  );
+});

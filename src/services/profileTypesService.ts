@@ -1,4 +1,4 @@
-import type { ProfileType } from 'oa-shared'
+import type { ProfileType } from 'oa-shared';
 
 const getProfileTypes = async () => {
   try {
@@ -7,15 +7,15 @@ const getProfileTypes = async () => {
       headers: {
         'Cache-Control': 'max-age=1800', // 30 minutes
       },
-    })
+    });
 
-    return ((await response.json()) as ProfileType[]) || []
+    return ((await response.json()) as ProfileType[]) || [];
   } catch (error) {
-    console.error({ error })
-    return []
+    console.error({ error });
+    return [];
   }
-}
+};
 
 export const profileTypesService = {
   getProfileTypes,
-}
+};

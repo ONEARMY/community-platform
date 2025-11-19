@@ -1,13 +1,13 @@
-import { Button } from 'theme-ui'
+import { Button } from 'theme-ui';
 
-import { Tooltip } from './Tooltip'
+import { Tooltip } from './Tooltip';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Components/Tooltip',
   component: Tooltip,
-} as Meta<typeof Tooltip>
+} as Meta<typeof Tooltip>;
 
 export const Hover: StoryFn<typeof Tooltip> = () => (
   <>
@@ -16,4 +16,4 @@ export const Hover: StoryFn<typeof Tooltip> = () => (
     </Button>
     <Tooltip id="tooltip" />
   </>
-)
+);

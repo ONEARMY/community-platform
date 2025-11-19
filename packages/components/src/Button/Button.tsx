@@ -1,24 +1,24 @@
-import * as React from 'react'
-import { Button as ThemeUiButton, Flex, Text } from 'theme-ui'
+import * as React from 'react';
+import { Button as ThemeUiButton, Flex, Text } from 'theme-ui';
 
-import { Icon } from '../Icon/Icon'
+import { Icon } from '../Icon/Icon';
 
-import type { ButtonProps as ThemeUiButtonProps } from 'theme-ui'
-import type { IGlyphs } from '../Icon/types'
+import type { ButtonProps as ThemeUiButtonProps } from 'theme-ui';
+import type { IGlyphs } from '../Icon/types';
 
 // extend to allow any default button props (e.g. onClick) to also be passed
 export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
-  icon?: keyof IGlyphs
-  disabled?: boolean
-  small?: boolean
-  large?: boolean
-  showIconOnly?: boolean
-  iconColor?: string
-  iconFilter?: string
+  icon?: keyof IGlyphs;
+  disabled?: boolean;
+  small?: boolean;
+  large?: boolean;
+  showIconOnly?: boolean;
+  iconColor?: string;
+  iconFilter?: string;
 }
 
-type ToArray<Type> = [Type] extends [any] ? Type[] : never
-type AvailableButtonProps = ToArray<keyof BtnProps>
+type ToArray<Type> = [Type] extends [any] ? Type[] : never;
+type AvailableButtonProps = ToArray<keyof BtnProps>;
 
 const buttonSizeProps: { [key: string]: any } = {
   small: {
@@ -39,69 +39,63 @@ const buttonSizeProps: { [key: string]: any } = {
     fontSize: 4,
     height: '3.5rem',
   },
-}
+};
 
-export type BtnProps = IBtnProps & ThemeUiButtonProps
+export type BtnProps = IBtnProps & ThemeUiButtonProps;
 
 function getSizeProps(size: string, hasIcon: boolean) {
   if (!buttonSizeProps[size] && !hasIcon) {
-    return {}
+    return {};
   }
 
   if (!buttonSizeProps[size] && hasIcon) {
     return {
       px: 3,
       pl: 9,
-    }
+    };
   }
 
-  const sizeProps = { ...buttonSizeProps[size] }
+  const sizeProps = { ...buttonSizeProps[size] };
 
   if (!hasIcon) {
-    delete sizeProps.pl
+    delete sizeProps.pl;
   }
 
-  return sizeProps
+  return sizeProps;
 }
 
 function getScaleTransform(size: string) {
   if (size === 'large') {
-    return 1.25
+    return 1.25;
   }
 
-  return 1
+  return 1;
 }
 
 function sanitizedProps(obj: BtnProps, keysToRemove: AvailableButtonProps) {
-  const sanitizedObj = { ...obj }
+  const sanitizedObj = { ...obj };
 
   keysToRemove.forEach((prop) => {
     if (sanitizedObj[prop]) {
-      delete sanitizedObj[prop]
+      delete sanitizedObj[prop];
     }
-  })
+  });
 
-  return sanitizedObj
+  return sanitizedObj;
 }
 
 export const Button = (props: BtnProps) => {
-  let size = 'default'
+  let size = 'default';
 
   if (props.small === true) {
-    size = 'small'
+    size = 'small';
   } else if (props.large === true) {
-    size = 'large'
+    size = 'large';
   }
 
   return (
     <ThemeUiButton
-      {...sanitizedProps(props, [
-        'small',
-        'large',
-        'showIconOnly',
-        'iconColor',
-        'iconFilter',
-      ])}
+      {...sanitizedProps(props, ['small', 'large', 'showIconOnly', 'iconColor', 'iconFilter'])}
       sx={{
         ...getSizeProps(size, !!props.icon),
         ...(props.showIconOnly ? { pr: 0 } : {}),
@@ -128,11 +122,7 @@ export const Button = (props: BtnProps) => {
             pointerEvents: 'none',
           }}
         >
-          <Icon
-            glyph={props.icon}
-            color={props.iconColor}
-            filter={props.iconFilter}
-          />
+          <Icon glyph={props.icon} color={props.iconColor} filter={props.iconFilter} />
         </Flex>
       )}
       <Text
@@ -153,5 +143,5 @@ export const Button = (props: BtnProps) => {
         {props.children}
       </Text>
     </ThemeUiButton>
-  )
-}
+  );
+};

@@ -4,35 +4,35 @@
 export const imageValid = (file: File): Promise<void> => {
   return new Promise((resolve, reject) => {
     if (!file) {
-      reject()
-      return
+      reject();
+      return;
     }
 
-    const reader = new FileReader()
+    const reader = new FileReader();
 
     reader.onload = (e: ProgressEvent<FileReader>) => {
-      const img = document.createElement('img')
+      const img = document.createElement('img');
 
       img.onload = () => {
         // Image loaded successfully
-        img.remove()
-        resolve()
-      }
+        img.remove();
+        resolve();
+      };
 
       img.onerror = () => {
         // Image failed to load (possibly corrupted)
-        img.remove()
-        reject()
-      }
+        img.remove();
+        reject();
+      };
 
-      img.src = e.target?.result as string
-    }
+      img.src = e.target?.result as string;
+    };
 
     reader.onerror = () => {
       // Error reading file. It might be corrupted.
-      reject()
-    }
+      reject();
+    };
 
-    reader.readAsDataURL(file)
-  })
-}
+    reader.readAsDataURL(file);
+  });
+};

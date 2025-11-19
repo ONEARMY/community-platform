@@ -3,26 +3,26 @@ export type QuestionSortOption =
   | 'Newest'
   | 'LatestComments'
   | 'Comments'
-  | 'LeastComments'
+  | 'LeastComments';
 
-const BaseOptions = new Map<QuestionSortOption, string>()
-BaseOptions.set('Newest', 'Newest')
+const BaseOptions = new Map<QuestionSortOption, string>();
+BaseOptions.set('Newest', 'Newest');
 // BaseOptions.set('LatestComments', 'Latest Comments')
-BaseOptions.set('Comments', 'Most Comments')
-BaseOptions.set('LeastComments', 'Least Comments')
+BaseOptions.set('Comments', 'Most Comments');
+BaseOptions.set('LeastComments', 'Least Comments');
 
-const QueryParamOptions = new Map<QuestionSortOption, string>(BaseOptions)
-QueryParamOptions.set('MostRelevant', 'Most Relevant')
+const QueryParamOptions = new Map<QuestionSortOption, string>(BaseOptions);
+QueryParamOptions.set('MostRelevant', 'Most Relevant');
 
 const toArray = (hasQueryParam: boolean) => {
-  const options = hasQueryParam ? QueryParamOptions : BaseOptions
+  const options = hasQueryParam ? QueryParamOptions : BaseOptions;
   return Array.from(options, ([value, label]) => ({
     label: label,
     value: value,
-  }))
-}
+  }));
+};
 
 export const QuestionSortOptions = {
   get: (key: QuestionSortOption) => QueryParamOptions.get(key) ?? '',
   toArray,
-}
+};

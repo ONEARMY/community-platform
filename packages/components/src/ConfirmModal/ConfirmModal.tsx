@@ -1,26 +1,22 @@
-import { Flex, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui';
 
-import { Button } from '../Button/Button'
-import { Modal } from '../Modal/Modal'
+import { Button } from '../Button/Button';
+import { Modal } from '../Modal/Modal';
 
 export interface Props {
-  message: string
-  confirmButtonText: string
-  isOpen: boolean
-  handleCancel: () => void
-  handleConfirm: () => void
-  width?: number
+  message: string;
+  confirmButtonText: string;
+  isOpen: boolean;
+  handleCancel: () => void;
+  handleConfirm: () => void;
+  width?: number;
 }
 
 export const ConfirmModal = (props: Props) => {
-  const { message, confirmButtonText, isOpen, width } = props
+  const { message, confirmButtonText, isOpen, width } = props;
 
   return (
-    <Modal
-      onDidDismiss={() => props?.handleCancel}
-      isOpen={isOpen}
-      width={width}
-    >
+    <Modal onDidDismiss={() => props?.handleCancel} isOpen={isOpen} width={width}>
       <Flex
         data-cy="Confirm.modal: Modal"
         sx={{
@@ -54,5 +50,5 @@ export const ConfirmModal = (props: Props) => {
         </Flex>
       </Flex>
     </Modal>
-  )
-}
+  );
+};

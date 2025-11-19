@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest';
 
-import { intro, steps } from '../../labels'
-import { transformLibraryErrors } from './transformLibraryErrors'
+import { intro, steps } from '../../labels';
+import { transformLibraryErrors } from './transformLibraryErrors';
 
 describe('transformLibraryErrors', () => {
   describe('introErrors', () => {
@@ -10,7 +10,7 @@ describe('transformLibraryErrors', () => {
         notReal: 'anything',
         title: 'missing',
         category: 'add a category',
-      }
+      };
 
       const expected = [
         {
@@ -19,11 +19,11 @@ describe('transformLibraryErrors', () => {
           keys: ['title', 'category'],
           labels: intro,
         },
-      ]
+      ];
 
-      expect(transformLibraryErrors(errors)).toEqual(expected)
-    })
-  })
+      expect(transformLibraryErrors(errors)).toEqual(expected);
+    });
+  });
 
   describe('stepErrors', () => {
     it('transforms how final-forms provides steps errors into a set', () => {
@@ -38,24 +38,24 @@ describe('transformLibraryErrors', () => {
             title: 'missing',
           },
         ],
-      }
+      };
 
       const expectedStepTwo = {
         errors: { ...errors.steps[1] },
         title: 'Step 2',
         keys: ['title', 'text'],
         labels: steps,
-      }
+      };
 
       const expectedStepThree = {
         errors: { ...errors.steps[2] },
         title: 'Step 3',
         keys: ['title'],
         labels: steps,
-      }
+      };
 
-      const set = transformLibraryErrors(errors)
-      expect(set).toEqual([expectedStepTwo, expectedStepThree])
-    })
-  })
-})
+      const set = transformLibraryErrors(errors);
+      expect(set).toEqual([expectedStepTwo, expectedStepThree]);
+    });
+  });
+});

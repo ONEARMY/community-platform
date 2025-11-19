@@ -1,26 +1,26 @@
-import { useState } from 'react'
-import { Flex, Text } from 'theme-ui'
+import { useState } from 'react';
+import { Flex, Text } from 'theme-ui';
 
-import { Button } from '../Button/Button'
-import { Icon } from '../Icon/Icon'
+import { Button } from '../Button/Button';
+import { Icon } from '../Icon/Icon';
 
-import type { availableGlyphs } from '../Icon/types'
+import type { availableGlyphs } from '../Icon/types';
 
 export interface IProps {
   statistics: {
-    icon: availableGlyphs
-    label: string
-  }[]
-  alwaysShow?: boolean
+    icon: availableGlyphs;
+    label: string;
+  }[];
+  alwaysShow?: boolean;
 }
 
 export const ContentStatistics = (props: IProps) => {
-  const { alwaysShow, statistics } = props
-  const [showStats, setShowStats] = useState(false)
+  const { alwaysShow, statistics } = props;
+  const [showStats, setShowStats] = useState(false);
 
   const handleShowStats = () => {
-    setShowStats(!showStats)
-  }
+    setShowStats(!showStats);
+  };
 
   return (
     <Flex
@@ -77,11 +77,7 @@ export const ContentStatistics = (props: IProps) => {
           sx={{
             alignItems: 'center',
             fontSize: '1',
-            display: [
-              showStats || alwaysShow ? 'flex' : 'none',
-              'flex',
-              'flex',
-            ],
+            display: [showStats || alwaysShow ? 'flex' : 'none', 'flex', 'flex'],
           }}
         >
           <Icon glyph={statistic.icon} mr={1} size={'sm'} opacity={'0.5'} />
@@ -89,5 +85,5 @@ export const ContentStatistics = (props: IProps) => {
         </Flex>
       ))}
     </Flex>
-  )
-}
+  );
+};

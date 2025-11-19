@@ -1,5 +1,5 @@
-import { HeroBanner, Icon } from 'oa-components'
-import { Box, Card, Flex, Heading, Text } from 'theme-ui'
+import { HeroBanner, Icon } from 'oa-components';
+import { Box, Card, Flex, Heading, Text } from 'theme-ui';
 
 const SignUpMessagePage = ({ email }) => {
   return (
@@ -62,12 +62,10 @@ const SignUpMessagePage = ({ email }) => {
               </Flex>
               <Text sx={{ textAlign: 'center', color: 'grey' }}>
                 <p>
-                  Before you dive in, please confirm you email through the link
-                  we've sent to{' '}
+                  Before you dive in, please confirm you email through the link we've sent to{' '}
                   <Text
                     sx={{
-                      background:
-                        'linear-gradient(0deg, #ffe2e1 60%, #fff 40%)',
+                      background: 'linear-gradient(0deg, #ffe2e1 60%, #fff 40%)',
                       paddingX: 1,
                     }}
                   >
@@ -80,7 +78,7 @@ const SignUpMessagePage = ({ email }) => {
         </Flex>
       </Flex>
     </Flex>
-  )
-}
+  );
+};
 
-export default SignUpMessagePage
+export default SignUpMessagePage;

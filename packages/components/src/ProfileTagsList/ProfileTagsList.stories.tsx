@@ -1,11 +1,11 @@
-import { ProfileTagsList } from './ProfileTagsList'
+import { ProfileTagsList } from './ProfileTagsList';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Components/ProfileTagsList',
   component: ProfileTagsList,
-} as Meta<typeof ProfileTagsList>
+} as Meta<typeof ProfileTagsList>;
 
 export const Default: StoryFn<typeof ProfileTagsList> = () => (
   <ProfileTagsList
@@ -25,4 +25,4 @@ export const Default: StoryFn<typeof ProfileTagsList> = () => (
     ]}
     isSpace={false}
   />
-)
+);

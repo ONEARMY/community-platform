@@ -1,20 +1,20 @@
-import { Box, Flex } from 'theme-ui'
+import { Box, Flex } from 'theme-ui';
 
-import { Button } from '../Button/Button'
-import { ButtonIcon } from '../ButtonIcon/ButtonIcon'
-import { CardButton } from '../CardButton/CardButton'
-import { CardProfile } from '../CardProfile/CardProfile'
-import { InternalLink } from '../InternalLink/InternalLink'
+import { Button } from '../Button/Button';
+import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
+import { CardButton } from '../CardButton/CardButton';
+import { CardProfile } from '../CardProfile/CardProfile';
+import { InternalLink } from '../InternalLink/InternalLink';
 
-import type { MapPin } from 'oa-shared'
+import type { MapPin } from 'oa-shared';
 
 export interface IProps {
-  item: MapPin
-  onClose: () => void
+  item: MapPin;
+  onClose: () => void;
 }
 
 export const PinProfile = ({ item, onClose }: IProps) => {
-  const isContactable = item.profile?.isContactable !== false
+  const isContactable = item.profile?.isContactable !== false;
 
   return (
     <CardButton sx={{ '&:hover': 'none' }} data-cy="PinProfile">
@@ -46,5 +46,5 @@ export const PinProfile = ({ item, onClose }: IProps) => {
         )}
       </Box>
     </CardButton>
-  )
-}
+  );
+};

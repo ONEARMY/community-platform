@@ -1,37 +1,37 @@
-import { useEffect } from 'react'
-import { Portal } from 'react-portal'
-import styled from '@emotion/styled'
-import { Box } from 'theme-ui'
+import { useEffect } from 'react';
+import { Portal } from 'react-portal';
+import styled from '@emotion/styled';
+import { Box } from 'theme-ui';
 
-import type { ThemeUIStyleObject } from 'theme-ui'
+import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface Props {
-  isOpen: boolean
-  children?: React.ReactNode
-  width?: number
-  height?: number
-  onDidDismiss?: () => void
-  sx?: ThemeUIStyleObject | undefined
+  isOpen: boolean;
+  children?: React.ReactNode;
+  width?: number;
+  height?: number;
+  onDidDismiss?: () => void;
+  sx?: ThemeUIStyleObject | undefined;
 }
 
 const setVh = () => {
-  const vh = typeof window !== 'undefined' && window.innerHeight * 0.01
-  document.documentElement.style.setProperty('--vh', `${vh}px`)
-}
+  const vh = typeof window !== 'undefined' && window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+};
 
 export const Modal = (props: Props) => {
-  const { children, width, height, isOpen, sx } = props
+  const { children, width, height, isOpen, sx } = props;
 
   useEffect(() => {
-    setVh()
-    window.addEventListener('resize', setVh)
-  }, [])
+    setVh();
+    window.addEventListener('resize', setVh);
+  }, []);
 
   const dismiss = () => {
     if (props.onDidDismiss) {
-      props.onDidDismiss()
+      props.onDidDismiss();
     }
-  }
+  };
 
   const ModalBackdrop = styled(Box)`
     position: fixed;
@@ -41,7 +41,7 @@ export const Modal = (props: Props) => {
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
     z-index: 4000;
-  `
+  `;
 
   const ModalContent = styled(Box)`
     padding: 16px;
@@ -61,18 +61,18 @@ export const Modal = (props: Props) => {
     border-radius: 10px;
     z-index: 4001;
     overflow: hidden;
-  `
+  `;
 
   useEffect(() => {
     if (isOpen) {
-      const originalOverflow = document.body.style.overflow
-      document.body.style.overflow = 'hidden'
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
 
       return () => {
-        document.body.style.overflow = originalOverflow
-      }
+        document.body.style.overflow = originalOverflow;
+      };
     }
-  }, [isOpen])
+  }, [isOpen]);
 
   return (
     <>
@@ -83,5 +83,5 @@ export const Modal = (props: Props) => {
         </Portal>
       )}
     </>
-  )
-}
+  );
+};

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react';
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
@@ -17,34 +17,34 @@ import {
   thematicBreakPlugin,
   toolbarPlugin,
   UndoRedo,
-} from '@mdxeditor/editor'
-import { Box, Flex, Text } from 'theme-ui'
+} from '@mdxeditor/editor';
+import { Box, Flex, Text } from 'theme-ui';
 
-import { AddImage } from './AddImage'
+import { AddImage } from './AddImage';
 
-import type { MDXEditorMethods } from '@mdxeditor/editor'
-import type { FieldRenderProps } from 'react-final-form'
+import type { MDXEditorMethods } from '@mdxeditor/editor';
+import type { FieldRenderProps } from 'react-final-form';
 
-import '@mdxeditor/editor/style.css'
-import './style.css'
+import '@mdxeditor/editor/style.css';
+import './style.css';
 
-type FieldProps = FieldRenderProps<any, any> & { children?: React.ReactNode }
+type FieldProps = FieldRenderProps<any, any> & { children?: React.ReactNode };
 
 export interface IProps extends FieldProps {
-  imageUploadHandler: (image: File) => Promise<string>
-  disabled?: boolean
-  children?: React.ReactNode
-  'data-cy'?: string
+  imageUploadHandler: (image: File) => Promise<string>;
+  disabled?: boolean;
+  children?: React.ReactNode;
+  'data-cy'?: string;
 }
 
 export const FieldMarkdown = (props: IProps) => {
-  const ref = useRef<MDXEditorMethods>(null)
-  const { imageUploadHandler, input, meta, ...rest } = props
+  const ref = useRef<MDXEditorMethods>(null);
+  const { imageUploadHandler, input, meta, ...rest } = props;
 
   useEffect(() => {
-    ref.current?.getMarkdown()
-  }, [])
-  useEffect(() => ref.current?.setMarkdown(input.value), [input.value])
+    ref.current?.getMarkdown();
+  }, []);
+  useEffect(() => ref.current?.setMarkdown(input.value), [input.value]);
 
   const mainPluginList = [
     headingsPlugin({ allowedHeadingLevels: [1, 2] }),
@@ -59,7 +59,7 @@ export const FieldMarkdown = (props: IProps) => {
     linkDialogPlugin(),
     diffSourcePlugin({ readOnlyDiff: true }),
     markdownShortcutPlugin(),
-  ]
+  ];
 
   const toolbar = toolbarPlugin({
     toolbarContents: () => (
@@ -72,15 +72,13 @@ export const FieldMarkdown = (props: IProps) => {
         <BlockTypeSelect />
       </DiffSourceToggleWrapper>
     ),
-  })
+  });
 
-  const showError = meta.error && meta.touched
+  const showError = meta.error && meta.touched;
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-      {showError && (
-        <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>
-      )}
+      {showError && <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>}
       <Box
         sx={{
           alignSelf: 'stretch',
@@ -112,5 +110,5 @@ export const FieldMarkdown = (props: IProps) => {
         />
       </Box>
     </Flex>
-  )
-}
+  );
+};

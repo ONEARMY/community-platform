@@ -1,43 +1,43 @@
-import { useState } from 'react'
-import { Box, Button, Flex, Image, Text, Textarea } from 'theme-ui'
+import { useState } from 'react';
+import { Box, Button, Flex, Image, Text, Textarea } from 'theme-ui';
 
-import sendMobile from '../../assets/icons/contact.svg'
-import { MemberBadge } from '../MemberBadge/MemberBadge'
-import { ReturnPathLink } from '../ReturnPathLink/ReturnPathLink'
+import sendMobile from '../../assets/icons/contact.svg';
+import { MemberBadge } from '../MemberBadge/MemberBadge';
+import { ReturnPathLink } from '../ReturnPathLink/ReturnPathLink';
 
-import type { ProfileType } from 'oa-shared'
+import type { ProfileType } from 'oa-shared';
 
-import './CreateComment.css'
+import './CreateComment.css';
 
 export interface Props {
-  maxLength: number
-  isLoggedIn: boolean
-  isLoading?: boolean
-  isReply?: boolean
-  onSubmit: (value: string) => void
-  onChange: (value: string) => void
-  comment: string
-  placeholder?: string
-  profileType?: ProfileType
-  buttonLabel?: string
+  maxLength: number;
+  isLoggedIn: boolean;
+  isLoading?: boolean;
+  isReply?: boolean;
+  onSubmit: (value: string) => void;
+  onChange: (value: string) => void;
+  comment: string;
+  placeholder?: string;
+  profileType?: ProfileType;
+  buttonLabel?: string;
 }
 
 export const CreateComment = (props: Props) => {
-  const [textareaIsFocussed, setTextareaIsFocussed] = useState<boolean>(false)
+  const [textareaIsFocussed, setTextareaIsFocussed] = useState<boolean>(false);
 
-  const { comment, isLoggedIn, isReply, maxLength, onSubmit, isLoading } = props
-  const placeholder = props.placeholder || 'Leave your questions or feedback...'
-  const buttonLabel = props.buttonLabel ?? 'Leave a comment'
+  const { comment, isLoggedIn, isReply, maxLength, onSubmit, isLoading } = props;
+  const placeholder = props.placeholder || 'Leave your questions or feedback...';
+  const buttonLabel = props.buttonLabel ?? 'Leave a comment';
 
   const onChange = ({ parentNode, value }: HTMLTextAreaElement) => {
-    ;(parentNode! as HTMLDivElement).dataset.replicatedValue = value
-    props?.onChange(value)
-  }
+    (parentNode! as HTMLDivElement).dataset.replicatedValue = value;
+    props?.onChange(value);
+  };
 
-  const commentIsActive = comment.length > 0 || textareaIsFocussed
+  const commentIsActive = comment.length > 0 || textareaIsFocussed;
   const onClick = () => {
-    !isLoading && onSubmit(comment)
-  }
+    !isLoading && onSubmit(comment);
+  };
 
   return (
     <Flex data-target="create-comment-container" sx={{ gap: 2 }}>
@@ -78,7 +78,7 @@ export const CreateComment = (props: Props) => {
                 value={comment}
                 maxLength={maxLength}
                 onChange={(event) => {
-                  onChange && onChange(event.target)
+                  onChange && onChange(event.target);
                 }}
                 aria-label="Comment"
                 data-cy={isReply ? 'reply-form' : 'comments-form'}
@@ -138,8 +138,8 @@ export const CreateComment = (props: Props) => {
         </Button>
       </Flex>
     </Flex>
-  )
-}
+  );
+};
 
 const LoginPrompt = () => {
   return (
@@ -156,5 +156,5 @@ const LoginPrompt = () => {
         </ReturnPathLink>
       </Text>
     </Box>
-  )
-}
+  );
+};

@@ -1,1 +1,1 @@
-export { QuestionPostingGuidelines } from './QuestionPostingGuidelines'
+export { QuestionPostingGuidelines } from './QuestionPostingGuidelines';

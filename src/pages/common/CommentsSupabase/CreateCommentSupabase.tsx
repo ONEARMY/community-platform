@@ -1,55 +1,49 @@
-import { useMemo, useState } from 'react'
-import { observer } from 'mobx-react'
-import {
-  Button,
-  CommentAvatar,
-  MemberBadge,
-  ReturnPathLink,
-} from 'oa-components'
-import { UserAction } from 'src/common/UserAction'
-import { MAX_COMMENT_LENGTH } from 'src/constants'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { Box, Flex, Text, Textarea } from 'theme-ui'
+import { useMemo, useState } from 'react';
+import { observer } from 'mobx-react';
+import { Button, CommentAvatar, MemberBadge, ReturnPathLink } from 'oa-components';
+import { UserAction } from 'src/common/UserAction';
+import { MAX_COMMENT_LENGTH } from 'src/constants';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { Box, Flex, Text, Textarea } from 'theme-ui';
 
-import type { DiscussionContentTypes } from 'oa-shared'
-import type { ChangeEvent } from 'react'
-import type { ThemeUIStyleObject } from 'theme-ui'
+import type { DiscussionContentTypes } from 'oa-shared';
+import type { ChangeEvent } from 'react';
+import type { ThemeUIStyleObject } from 'theme-ui';
 
-import './CreateCommentSupabase.css'
+import './CreateCommentSupabase.css';
 
 interface IProps {
-  onSubmit: (value: string) => void
-  sourceType: DiscussionContentTypes
-  isLoading?: boolean
-  isReply?: boolean
-  placeholder?: string
-  sx?: ThemeUIStyleObject | undefined
+  onSubmit: (value: string) => void;
+  sourceType: DiscussionContentTypes;
+  isLoading?: boolean;
+  isReply?: boolean;
+  placeholder?: string;
+  sx?: ThemeUIStyleObject | undefined;
 }
 
 export const CreateCommentSupabase = observer((props: IProps) => {
-  const { onSubmit, isLoading, isReply, sx } = props
-  const placeholder = props.placeholder || 'Leave your questions or feedback...'
-  const buttonLabel = isReply ? 'Leave a reply' : 'Leave a comment'
+  const { onSubmit, isLoading, isReply, sx } = props;
+  const placeholder = props.placeholder || 'Leave your questions or feedback...';
+  const buttonLabel = isReply ? 'Leave a reply' : 'Leave a comment';
 
-  const [comment, setComment] = useState<string>('')
-  const [isFocused, setIsFocused] = useState<boolean>(false)
-  const { profile, profileTypes } = useProfileStore()
+  const [comment, setComment] = useState<string>('');
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const { profile, profileTypes } = useProfileStore();
 
   const profileType = useMemo(() => {
     if (profile?.type) {
-      return profile.type
+      return profile.type;
     }
 
-    return profileTypes?.find((x) => !x.isSpace)
-  }, [profile, profileTypes])
+    return profileTypes?.find((x) => !x.isSpace);
+  }, [profile, profileTypes]);
 
-  const commentIsActive = comment.length > 0 || isFocused
+  const commentIsActive = comment.length > 0 || isFocused;
 
   const onChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    ;(event.target.parentNode! as HTMLDivElement).dataset.replicatedValue =
-      event.target.value
-    setComment(event.target.value)
-  }
+    (event.target.parentNode! as HTMLDivElement).dataset.replicatedValue = event.target.value;
+    setComment(event.target.value);
+  };
 
   return (
     <Flex
@@ -62,10 +56,7 @@ export const CreateCommentSupabase = observer((props: IProps) => {
       }}
     >
       <Flex sx={{ flexDirection: 'column' }}>
-        <Flex
-          data-target="create-comment-container"
-          sx={{ gap: 2, padding: isReply ? 2 : 0 }}
-        >
+        <Flex data-target="create-comment-container" sx={{ gap: 2, padding: isReply ? 2 : 0 }}>
           <Box
             sx={{
               lineHeight: 0,
@@ -74,10 +65,7 @@ export const CreateCommentSupabase = observer((props: IProps) => {
             }}
           >
             {profile?.photo?.publicUrl ? (
-              <CommentAvatar
-                displayName={profile?.displayName}
-                photo={profile?.photo?.publicUrl}
-              />
+              <CommentAvatar displayName={profile?.displayName} photo={profile?.photo?.publicUrl} />
             ) : (
               <MemberBadge profileType={profileType} useLowDetailVersion />
             )}
@@ -106,9 +94,7 @@ export const CreateCommentSupabase = observer((props: IProps) => {
               incompleteProfile={<IncompleteProfilePrompt isReply={isReply} />}
               loggedIn={
                 <Flex sx={{ flexDirection: 'column' }}>
-                  <Box
-                    className={`grow-wrap ${commentIsActive ? 'value-set' : ''}`}
-                  >
+                  <Box className={`grow-wrap ${commentIsActive ? 'value-set' : ''}`}>
                     <Textarea
                       value={comment}
                       maxLength={MAX_COMMENT_LENGTH}
@@ -152,8 +138,8 @@ export const CreateCommentSupabase = observer((props: IProps) => {
               icon={isLoading ? undefined : 'contact'}
               onClick={() => {
                 if (!isLoading) {
-                  onSubmit(comment)
-                  setComment('')
+                  onSubmit(comment);
+                  setComment('');
                 }
               }}
               sx={{
@@ -171,8 +157,8 @@ export const CreateCommentSupabase = observer((props: IProps) => {
         </Flex>
       </Flex>
     </Flex>
-  )
-})
+  );
+});
 
 const LoginPrompt = ({ isReply }: { isReply?: boolean }) => {
   return (
@@ -186,14 +172,12 @@ const LoginPrompt = ({ isReply }: { isReply?: boolean }) => {
             color: 'inherit',
           }}
         >
-          {isReply
-            ? 'But first you need to login'
-            : 'Log in to leave a comment'}
+          {isReply ? 'But first you need to login' : 'Log in to leave a comment'}
         </ReturnPathLink>
       </Text>
     </Box>
-  )
-}
+  );
+};
 
 const IncompleteProfilePrompt = ({ isReply }: { isReply?: boolean }) => {
   return (
@@ -207,11 +191,9 @@ const IncompleteProfilePrompt = ({ isReply }: { isReply?: boolean }) => {
             color: 'inherit',
           }}
         >
-          {isReply
-            ? 'complete your profile'
-            : 'Complete your profile to leave a comment'}
+          {isReply ? 'complete your profile' : 'Complete your profile to leave a comment'}
         </ReturnPathLink>
       </Text>
     </Box>
-  )
-}
+  );
+};

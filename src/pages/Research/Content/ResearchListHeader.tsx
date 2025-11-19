@@ -1,103 +1,96 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
-import debounce from 'debounce'
-import {
-  CategoryHorizonalList,
-  ReturnPathLink,
-  SearchField,
-  Select,
-  Tooltip,
-} from 'oa-components'
-import { ResearchStatusRecord, UserRole } from 'oa-shared'
-import { AuthWrapper } from 'src/common/AuthWrapper'
-import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { UserAction } from 'src/common/UserAction'
-import { isPreciousPlastic } from 'src/config/config'
-import DraftButton from 'src/pages/common/Drafts/DraftButton'
-import { ListHeader } from 'src/pages/common/Layout/ListHeader'
-import { categoryService } from 'src/services/categoryService'
-import { Button, Flex } from 'theme-ui'
+import debounce from 'debounce';
+import { CategoryHorizonalList, ReturnPathLink, SearchField, Select, Tooltip } from 'oa-components';
+import { ResearchStatusRecord, UserRole } from 'oa-shared';
+import { AuthWrapper } from 'src/common/AuthWrapper';
+import { FieldContainer } from 'src/common/Form/FieldContainer';
+import { UserAction } from 'src/common/UserAction';
+import { isPreciousPlastic } from 'src/config/config';
+import DraftButton from 'src/pages/common/Drafts/DraftButton';
+import { ListHeader } from 'src/pages/common/Layout/ListHeader';
+import { categoryService } from 'src/services/categoryService';
+import { Button, Flex } from 'theme-ui';
 
-import { listing } from '../labels'
-import { ResearchSortOptions } from '../ResearchSortOptions'
-import { ResearchSearchParams } from './ResearchSearchParams'
+import { listing } from '../labels';
+import { ResearchSortOptions } from '../ResearchSortOptions';
+import { ResearchSearchParams } from './ResearchSearchParams';
 
-import type { Category, ResearchStatus } from 'oa-shared'
-import type { ResearchSortOption } from '../ResearchSortOptions'
+import type { Category, ResearchStatus } from 'oa-shared';
+import type { ResearchSortOption } from '../ResearchSortOptions';
 
 interface IProps {
-  itemCount: number
-  draftCount: number
-  handleShowDrafts: () => void
-  showDrafts: boolean
+  itemCount: number;
+  draftCount: number;
+  handleShowDrafts: () => void;
+  showDrafts: boolean;
 }
 
 const researchStatusOptions: { label: string; value: ResearchStatus | '' }[] = [
   { label: 'All', value: '' },
   { label: 'In Progress', value: 'in-progress' },
   { label: 'Completed', value: 'complete' },
-]
+];
 
 export const ResearchFilterHeader = (props: IProps) => {
-  const { itemCount, draftCount, handleShowDrafts, showDrafts } = props
+  const { itemCount, draftCount, handleShowDrafts, showDrafts } = props;
 
-  const [categories, setCategories] = useState<Category[]>([])
-  const [searchString, setSearchString] = useState<string>('')
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [searchString, setSearchString] = useState<string>('');
 
-  const [searchParams, setSearchParams] = useSearchParams()
-  const categoryParam = Number(searchParams.get(ResearchSearchParams.category))
-  const category = categories?.find((x) => x.id === categoryParam) ?? null
-  const q = searchParams.get(ResearchSearchParams.q)
-  const sort = searchParams.get(ResearchSearchParams.sort) as ResearchSortOption
-  const status =
-    (searchParams.get(ResearchSearchParams.status) as ResearchStatus) || ''
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categoryParam = Number(searchParams.get(ResearchSearchParams.category));
+  const category = categories?.find((x) => x.id === categoryParam) ?? null;
+  const q = searchParams.get(ResearchSearchParams.q);
+  const sort = searchParams.get(ResearchSearchParams.sort) as ResearchSortOption;
+  const status = (searchParams.get(ResearchSearchParams.status) as ResearchStatus) || '';
 
   useEffect(() => {
     const initCategories = async () => {
-      const categories = (await categoryService.getCategories('research')) || []
-      setCategories(categories)
-    }
+      const categories = (await categoryService.getCategories('research')) || [];
+      setCategories(categories);
+    };
 
-    initCategories()
-  }, [])
+    initCategories();
+  }, []);
 
   const updateFilter = useCallback(
     (key: ResearchSearchParams, value: string) => {
-      const params = new URLSearchParams(searchParams.toString())
+      const params = new URLSearchParams(searchParams.toString());
       if (value) {
-        params.set(key, value)
+        params.set(key, value);
       } else {
-        params.delete(key)
+        params.delete(key);
       }
-      setSearchParams(params)
+      setSearchParams(params);
     },
     [searchParams],
-  )
+  );
 
   const onSearchInputChange = useCallback(
     debounce((value: string) => {
-      searchValue(value)
+      searchValue(value);
     }, 500),
     [searchParams],
-  )
+  );
 
   const searchValue = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString())
-    params.set(ResearchSearchParams.q, value)
+    const params = new URLSearchParams(searchParams.toString());
+    params.set(ResearchSearchParams.q, value);
 
     if (value.length > 0 && sort !== 'MostRelevant') {
-      params.set(ResearchSearchParams.sort, 'MostRelevant')
+      params.set(ResearchSearchParams.sort, 'MostRelevant');
     }
 
     if (value.length === 0 || !value) {
-      params.set(ResearchSearchParams.sort, 'LatestUpdated')
+      params.set(ResearchSearchParams.sort, 'LatestUpdated');
     }
 
-    setSearchParams(params)
-  }
+    setSearchParams(params);
+  };
   const roleRequired = isPreciousPlastic()
     ? undefined
-    : [UserRole.ADMIN, UserRole.RESEARCH_CREATOR]
+    : [UserRole.ADMIN, UserRole.RESEARCH_CREATOR];
   const actionComponents = (
     <UserAction
       incompleteProfile={
@@ -140,7 +133,7 @@ export const ResearchFilterHeader = (props: IProps) => {
         )
       }
     />
-  )
+  );
 
   const categoryComponent = (
     <CategoryHorizonalList
@@ -153,7 +146,7 @@ export const ResearchFilterHeader = (props: IProps) => {
         )
       }
     />
-  )
+  );
 
   const filteringComponents = (
     <Flex
@@ -169,9 +162,7 @@ export const ResearchFilterHeader = (props: IProps) => {
             options={ResearchSortOptions.toArray(!!q)}
             placeholder={listing.sort}
             value={{ label: ResearchSortOptions.get(sort), value: sort }}
-            onChange={(sortBy) =>
-              updateFilter(ResearchSearchParams.sort, sortBy.value)
-            }
+            onChange={(sortBy) => updateFilter(ResearchSearchParams.sort, sortBy.value)}
           />
         </FieldContainer>
       </Flex>
@@ -181,14 +172,8 @@ export const ResearchFilterHeader = (props: IProps) => {
           <Select
             options={researchStatusOptions}
             placeholder={listing.status}
-            value={
-              status
-                ? { label: ResearchStatusRecord[status], value: status }
-                : undefined
-            }
-            onChange={(status) =>
-              updateFilter(ResearchSearchParams.status, status.value)
-            }
+            value={status ? { label: ResearchStatusRecord[status], value: status } : undefined}
+            onChange={(status) => updateFilter(ResearchSearchParams.status, status.value)}
           />
         </FieldContainer>
       </Flex>
@@ -199,18 +184,18 @@ export const ResearchFilterHeader = (props: IProps) => {
           placeHolder={listing.search}
           value={searchString}
           onChange={(value) => {
-            setSearchString(value)
-            onSearchInputChange(value)
+            setSearchString(value);
+            onSearchInputChange(value);
           }}
           onClickDelete={() => {
-            setSearchString('')
-            searchValue('')
+            setSearchString('');
+            searchValue('');
           }}
           onClickSearch={() => searchValue(searchString)}
         />
       </Flex>
     </Flex>
-  )
+  );
 
   return (
     <ListHeader
@@ -221,5 +206,5 @@ export const ResearchFilterHeader = (props: IProps) => {
       categoryComponent={categoryComponent}
       filteringComponents={filteringComponents}
     />
-  )
-}
+  );
+};

@@ -1,10 +1,10 @@
 import { Link } from 'react-router';
-import Main from 'src/pages/common/Layout/Main'
-import { Flex, Image, Text } from 'theme-ui'
+import Main from 'src/pages/common/Layout/Main';
+import { Flex, Image, Text } from 'theme-ui';
 
-import errorImage from '../../assets/images/404error.png'
+import errorImage from '../../assets/images/404error.png';
 
-import type { FC } from 'react'
+import type { FC } from 'react';
 
 export const NotFoundPage: FC = () => (
   <Main>
@@ -32,4 +32,4 @@ export const NotFoundPage: FC = () => (
       </Text>
     </Flex>
   </Main>
-)
+);

@@ -1,11 +1,11 @@
-import { commonStyles } from 'oa-themes'
-import { Flex } from 'theme-ui'
+import { commonStyles } from 'oa-themes';
+import { Flex } from 'theme-ui';
 
-import { ButtonIcon } from '../ButtonIcon/ButtonIcon'
+import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 
-import type { DisplayData, HideProp } from './props'
+import type { DisplayData, HideProp } from './props';
 
-type HeaderProps = HideProp & { data: DisplayData }
+type HeaderProps = HideProp & { data: DisplayData };
 
 export const VisitorModalHeader = ({ hide, data }: HeaderProps) => (
   <Flex
@@ -30,4 +30,4 @@ export const VisitorModalHeader = ({ hide, data }: HeaderProps) => (
       sx={{ border: 'none', paddingLeft: 2, paddingRight: 3 }}
     />
   </Flex>
-)
+);

@@ -1,49 +1,43 @@
-import { News } from 'oa-shared'
-import { IMAGE_SIZES } from 'src/config/imageTransforms'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { contentServiceServer } from 'src/services/contentService.server'
-import { newsServiceServer } from 'src/services/newsService.server'
-import { ProfileServiceServer } from 'src/services/profileService.server'
-import { storageServiceServer } from 'src/services/storageService.server'
-import { updateUserActivity } from 'src/utils/activity.server'
-import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown'
-import { hasAdminRightsSupabase } from 'src/utils/helpers'
-import { convertToSlug } from 'src/utils/slug'
-import { validateImage } from 'src/utils/storage'
+import { News } from 'oa-shared';
+import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { contentServiceServer } from 'src/services/contentService.server';
+import { newsServiceServer } from 'src/services/newsService.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
+import { storageServiceServer } from 'src/services/storageService.server';
+import { updateUserActivity } from 'src/utils/activity.server';
+import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
+import { hasAdminRightsSupabase } from 'src/utils/helpers';
+import { convertToSlug } from 'src/utils/slug';
+import { validateImage } from 'src/utils/storage';
 
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBNews } from 'oa-shared'
-import type { LoaderFunctionArgs, Params } from 'react-router'
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBNews } from 'oa-shared';
+import type { LoaderFunctionArgs, Params } from 'react-router';
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
-  const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request);
 
   try {
-    const id = Number(params.id)
-    const formData = await request.formData()
+    const id = Number(params.id);
+    const formData = await request.formData();
     const data = {
       body: formData.get('body') as string,
-      category: formData.has('category')
-        ? Number(formData.get('category'))
-        : null,
+      category: formData.has('category') ? Number(formData.get('category')) : null,
       isDraft: formData.get('is_draft') === 'true',
-      profileBadge: formData.has('profileBadge')
-        ? (formData.get('profileBadge') as string)
-        : null,
-      tags: formData.has('tags')
-        ? formData.getAll('tags').map((x) => Number(x))
-        : null,
+      profileBadge: formData.has('profileBadge') ? (formData.get('profileBadge') as string) : null,
+      tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       title: formData.get('title') as string,
       slug: convertToSlug(formData.get('title') as string),
-    }
+    };
 
-    const claims = await client.auth.getClaims()
+    const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
-      return Response.json({}, { headers, status: 401 })
+      return Response.json({}, { headers, status: 401 });
     }
 
-    const currentNews = await newsServiceServer.getById(id, client)
+    const currentNews = await newsServiceServer.getById(id, client);
 
     const { valid, status, statusText } = await validateRequest(
       params,
@@ -52,15 +46,15 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       data,
       currentNews,
       client,
-    )
+    );
 
     if (!valid) {
-      return Response.json({}, { headers, status, statusText })
+      return Response.json({}, { headers, status, statusText });
     }
 
-    const existingHeroImage = formData.get('existingHeroImage') as string | null
-    const newHeroImage = formData.get('heroImage') as File | null
-    const imageValidation = validateImage(newHeroImage)
+    const existingHeroImage = formData.get('existingHeroImage') as string | null;
+    const newHeroImage = formData.get('heroImage') as File | null;
+    const imageValidation = validateImage(newHeroImage);
 
     if (!imageValidation.valid && imageValidation.error) {
       return Response.json(
@@ -70,13 +64,10 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
           status: 400,
           statusText: imageValidation.error.message,
         },
-      )
+      );
     }
 
-    const previousSlugs = contentServiceServer.updatePreviousSlugs(
-      currentNews,
-      data.slug,
-    )
+    const previousSlugs = contentServiceServer.updatePreviousSlugs(currentNews, data.slug);
 
     const newsResult = await client
       .from('news')
@@ -94,20 +85,20 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         ...(!existingHeroImage && { hero_image: null }),
       })
       .eq('id', id)
-      .select()
+      .select();
 
     if (newsResult.error || !newsResult.data) {
-      throw newsResult.error
+      throw newsResult.error;
     }
 
-    const news = News.fromDB(newsResult.data[0], [])
+    const news = News.fromDB(newsResult.data[0], []);
 
     if (newHeroImage) {
       const mediaFiles = await storageServiceServer.uploadImage(
         [newHeroImage],
         `news/${news.id}`,
         client,
-      )
+      );
 
       if (mediaFiles?.media?.length) {
         await client
@@ -115,29 +106,26 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
           .update({
             hero_image: mediaFiles.media.at(0),
           })
-          .eq('id', news.id)
+          .eq('id', news.id);
 
         const [image] = storageServiceServer.getPublicUrls(
           client,
           mediaFiles.media,
           IMAGE_SIZES.GALLERY,
-        )
+        );
 
-        news.heroImage = image
+        news.heroImage = image;
       }
     }
 
-    updateUserActivity(client, claims.data.claims.sub)
+    updateUserActivity(client, claims.data.claims.sub);
 
-    return Response.json({ news }, { headers, status: 200 })
+    return Response.json({ news }, { headers, status: 200 });
   } catch (error) {
-    console.error(error)
-    return Response.json(
-      {},
-      { headers, status: 500, statusText: 'Error creating news' },
-    )
+    console.error(error);
+    return Response.json({}, { headers, status: 500, statusText: 'Error creating news' });
   }
-}
+};
 
 async function validateRequest(
   params: Params<string>,
@@ -148,53 +136,48 @@ async function validateRequest(
   client: SupabaseClient,
 ) {
   if (request.method !== 'PUT') {
-    return { status: 405, statusText: 'Method not allowed' }
+    return { status: 405, statusText: 'Method not allowed' };
   }
 
   if (!params.id) {
-    return { status: 400, statusText: 'id is required' }
+    return { status: 400, statusText: 'id is required' };
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'Title is required' }
+    return { status: 400, statusText: 'Title is required' };
   }
 
   if (!data.body) {
-    return { status: 400, statusText: 'Body is required' }
+    return { status: 400, statusText: 'Body is required' };
   }
 
   if (!currentNews) {
-    return { status: 400, statusText: 'News not found' }
+    return { status: 400, statusText: 'News not found' };
   }
 
   if (
     currentNews.slug !== data.slug &&
-    (await contentServiceServer.isDuplicateExistingSlug(
-      data.slug,
-      currentNews.id,
-      client,
-      'news',
-    ))
+    (await contentServiceServer.isDuplicateExistingSlug(data.slug, currentNews.id, client, 'news'))
   ) {
     return {
       status: 409,
       statusText: 'This news already exists',
-    }
+    };
   }
 
-  const profileService = new ProfileServiceServer(client)
-  const profile = await profileService.getByAuthId(userAuthId)
+  const profileService = new ProfileServiceServer(client);
+  const profile = await profileService.getByAuthId(userAuthId);
 
   if (!profile) {
-    return { status: 400, statusText: 'User not found' }
+    return { status: 400, statusText: 'User not found' };
   }
 
-  const isCreator = currentNews.created_by === profile.id
-  const hasAdminRights = hasAdminRightsSupabase(profile)
+  const isCreator = currentNews.created_by === profile.id;
+  const hasAdminRights = hasAdminRightsSupabase(profile);
 
   if (!isCreator && !hasAdminRights) {
-    return { status: 403, statusText: 'Unauthorized' }
+    return { status: 403, statusText: 'Unauthorized' };
   }
 
-  return { valid: true }
+  return { valid: true };
 }

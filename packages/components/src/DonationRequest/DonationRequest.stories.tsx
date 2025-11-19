@@ -1,11 +1,11 @@
-import { DonationRequest } from './DonationRequest'
+import { DonationRequest } from './DonationRequest';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Components/DonationRequest',
   component: DonationRequest,
-} as Meta<typeof DonationRequest>
+} as Meta<typeof DonationRequest>;
 
 export const Default: StoryFn<typeof DonationRequest> = () => (
   <div style={{ maxWidth: '1000px' }}>
@@ -17,4 +17,4 @@ export const Default: StoryFn<typeof DonationRequest> = () => (
       link="https://bbc.co.uk/"
     />
   </div>
-)
+);

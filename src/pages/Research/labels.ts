@@ -1,6 +1,6 @@
-import { RESEARCH_MAX_LENGTH, RESEARCH_TITLE_MAX_LENGTH } from './constants'
+import { RESEARCH_MAX_LENGTH, RESEARCH_TITLE_MAX_LENGTH } from './constants';
 
-import type { ILabels } from 'src/common/Form/types'
+import type { ILabels } from 'src/common/Form/types';
 
 export const buttons = {
   markCompleted: 'Mark as Completed',
@@ -12,7 +12,7 @@ export const buttons = {
   },
   files: 'Re-upload files (this will delete the existing ones)',
   publish: 'Publish',
-}
+};
 
 export const headings = {
   overview: {
@@ -23,7 +23,7 @@ export const headings = {
     create: 'New update',
     edit: 'Edit your update',
   },
-}
+};
 
 export const errors = {
   videoUrl: {
@@ -31,7 +31,7 @@ export const errors = {
     empty: 'Include either images or a video',
     invalidUrl: 'Please provide a valid YouTube Url',
   },
-}
+};
 
 export const overview: ILabels = {
   categories: {
@@ -60,7 +60,7 @@ export const overview: ILabels = {
   image: {
     title: 'Cover image',
   },
-}
+};
 
 export const update: ILabels = {
   description: {
@@ -78,7 +78,7 @@ export const update: ILabels = {
     title: 'Or embed a YouTube video',
     placeholder: 'https://youtube.com/watch?v=',
   },
-}
+};
 
 export const listing = {
   author: 'Filter by author',
@@ -88,10 +88,9 @@ export const listing = {
   incompleteProfile: 'Complete your profile to add your research',
   join: 'Sign up to add your research',
   loadMore: 'Load More',
-  loggedOut:
-    'Oh we really want your research knowledge. Trust us. But a login is needed first.',
+  loggedOut: 'Oh we really want your research knowledge. Trust us. But a login is needed first.',
   noItems: 'No research to show',
   search: 'Search for a research',
   sort: 'Sort by',
   status: 'Filter by status',
-}
+};

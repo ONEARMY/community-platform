@@ -1,18 +1,18 @@
-import { ImageInputV2 } from 'oa-components'
-import { Text } from 'theme-ui'
+import { ImageInputV2 } from 'oa-components';
+import { Text } from 'theme-ui';
 
-import { FieldContainer } from './FieldContainer'
+import { FieldContainer } from './FieldContainer';
 
-import type { FieldProps } from './types'
+import type { FieldProps } from './types';
 
-type IImageInputProps = Partial<React.ComponentProps<typeof ImageInputV2>>
+type IImageInputProps = Partial<React.ComponentProps<typeof ImageInputV2>>;
 
 interface IProps extends FieldProps, IImageInputProps {
-  dataCy: string
+  dataCy: string;
 }
 
 export const ImageInputFieldV2 = (props: IProps) => {
-  const { dataCy, meta, onFilesChange } = props
+  const { dataCy, meta, onFilesChange } = props;
 
   return (
     <FieldContainer
@@ -24,14 +24,12 @@ export const ImageInputFieldV2 = (props: IProps) => {
       }}
       invalid={meta.touched && meta.error}
     >
-      {meta.error && meta.touched && (
-        <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>
-      )}
+      {meta.error && meta.touched && <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>}
 
       <ImageInputV2
         existingImage={props.existingImage}
         onFilesChange={(file) => onFilesChange && onFilesChange(file)}
       />
     </FieldContainer>
-  )
-}
+  );
+};

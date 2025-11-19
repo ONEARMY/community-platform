@@ -1,32 +1,32 @@
-import { Flex, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui';
 
-import { DownloadButton } from '../DownloadButton/DownloadButton'
-import { ExternalLink } from '../ExternalLink/ExternalLink'
-import { Icon } from '../Icon/Icon'
-import { Tooltip } from '../Tooltip/Tooltip'
+import { DownloadButton } from '../DownloadButton/DownloadButton';
+import { ExternalLink } from '../ExternalLink/ExternalLink';
+import { Icon } from '../Icon/Icon';
+import { Tooltip } from '../Tooltip/Tooltip';
 
-import type { MediaFile } from 'oa-shared'
-import type { availableGlyphs } from '../Icon/types'
+import type { MediaFile } from 'oa-shared';
+import type { availableGlyphs } from '../Icon/types';
 
 export interface IProps {
-  file: MediaFile
-  fileDownloadCount?: number
-  forDonationRequest?: boolean
-  isLoggedIn?: boolean
-  allowDownload?: boolean
-  handleClick?: () => void
-  redirectToSignIn?: () => Promise<void>
+  file: MediaFile;
+  fileDownloadCount?: number;
+  forDonationRequest?: boolean;
+  isLoggedIn?: boolean;
+  allowDownload?: boolean;
+  handleClick?: () => void;
+  redirectToSignIn?: () => Promise<void>;
 }
 
 interface IPropFileDetails {
-  name: string
-  glyph: availableGlyphs
-  size: string
-  redirectToSignIn?: () => Promise<void>
+  name: string;
+  glyph: availableGlyphs;
+  size: string;
+  redirectToSignIn?: () => Promise<void>;
 }
 
 const FileDetails = (props: IPropFileDetails) => {
-  const { name, glyph, size, redirectToSignIn } = props
+  const { name, glyph, size, redirectToSignIn } = props;
 
   return (
     <>
@@ -65,19 +65,18 @@ const FileDetails = (props: IPropFileDetails) => {
       </Flex>
       <Tooltip id="login-download" />
     </>
-  )
-}
+  );
+};
 
 export const DownloadStaticFile = (props: IProps) => {
-  const { file, allowDownload, handleClick, redirectToSignIn, isLoggedIn } =
-    props
-  const size = bytesToSize(file.size || 0)
+  const { file, allowDownload, handleClick, redirectToSignIn, isLoggedIn } = props;
+  const size = bytesToSize(file.size || 0);
 
   if (!file) {
-    return null
+    return null;
   }
 
-  const forDownload = allowDownload && file.url && !redirectToSignIn
+  const forDownload = allowDownload && file.url && !redirectToSignIn;
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: 1 }}>
@@ -99,14 +98,14 @@ export const DownloadStaticFile = (props: IProps) => {
         onClick={() => handleClick && handleClick()}
       />
     </Flex>
-  )
-}
+  );
+};
 
 const bytesToSize = (bytes: number) => {
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
   if (bytes === 0) {
-    return '0 Bytes'
+    return '0 Bytes';
   }
-  const i = Number(Math.floor(Math.log(bytes) / Math.log(1024)))
-  return (bytes / Math.pow(1024, i)).toPrecision(3) + ' ' + sizes[i]
-}
+  const i = Number(Math.floor(Math.log(bytes) / Math.log(1024)));
+  return (bytes / Math.pow(1024, i)).toPrecision(3) + ' ' + sizes[i];
+};

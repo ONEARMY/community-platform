@@ -1,21 +1,21 @@
-import { createContext } from 'react'
-import { _supportedConfigurationOptions } from 'src/config/constants'
+import { createContext } from 'react';
+import { _supportedConfigurationOptions } from 'src/config/constants';
 
-import type { ConfigurationOption } from 'src/config/constants'
+import type { ConfigurationOption } from 'src/config/constants';
 
 export const getEnvVariables = (): Partial<EnvVariables> => {
-  const envVariables: Partial<EnvVariables> = {}
+  const envVariables: Partial<EnvVariables> = {};
   _supportedConfigurationOptions.forEach((option) => {
-    const value = import.meta.env[option]
+    const value = import.meta.env[option];
     if (value !== undefined) {
-      envVariables[option] = value
+      envVariables[option] = value;
     }
-  })
-  return envVariables
-}
+  });
+  return envVariables;
+};
 export const EnvironmentContext =
-  createContext<ReturnType<typeof getEnvVariables>>(getEnvVariables())
+  createContext<ReturnType<typeof getEnvVariables>>(getEnvVariables());
 
 type EnvVariables = {
-  [K in ConfigurationOption]: string
-}
+  [K in ConfigurationOption]: string;
+};

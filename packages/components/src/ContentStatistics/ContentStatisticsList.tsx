@@ -50,7 +50,7 @@ const StatisticItem = ({
   isLoading: boolean
   statKey: string
 }) => {
-  const hasModal = !!statistic.modalComponent
+  const displayModal = !!statistic.modalComponent && statistic.count
 
   return (
     <Flex
@@ -58,20 +58,20 @@ const StatisticItem = ({
         alignItems: 'center',
         fontSize: 1,
         display: [visible ? 'flex' : 'none', 'flex'],
-        cursor: hasModal ? 'pointer' : 'default',
+        cursor: displayModal ? 'pointer' : 'default',
         opacity: isLoading ? 0.6 : 1,
         pointerEvents: isLoading ? 'none' : 'auto',
         px: 2,
         py: 1,
         mb: 1,
       }}
-      onClick={() => hasModal && !isLoading && onOpenModal(statistic)}
+      onClick={() => displayModal && !isLoading && onOpenModal(statistic)}
       data-testid={`stat-${statistic.icon}`}
     >
       <Icon glyph={statistic.icon} mr={1} size="sm" opacity="0.5" />
       <Text
         sx={{
-          textDecoration: hasModal ? 'underline' : 'none',
+          textDecoration: displayModal ? 'underline' : 'none',
         }}
       >
         {statistic.label}

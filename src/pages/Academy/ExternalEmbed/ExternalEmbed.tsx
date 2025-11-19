@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router'
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 
 /*************************************************************************************
  *  Embed an Iframe
@@ -11,23 +11,23 @@ import { useNavigate } from 'react-router'
  *************************************************************************************/
 
 interface IProps {
-  src: string
+  src: string;
 }
 
 const ExternalEmbed = ({ src }: IProps) => {
-  const navigate = useNavigate()
-  const url = new URL(src)
-  const targetOrigin = url.protocol + '//' + url.hostname
+  const navigate = useNavigate();
+  const url = new URL(src);
+  const targetOrigin = url.protocol + '//' + url.hostname;
 
   useEffect(() => {
     // TODO - possible compatibility fallback for addEventListener (IE8)
     // Example: https://davidwalsh.name/window-iframe
-    window.addEventListener('message', handlePostmessageFromIframe, false)
+    window.addEventListener('message', handlePostmessageFromIframe, false);
 
     return () => {
-      window.removeEventListener('message', handlePostmessageFromIframe, false)
-    }
-  }, [])
+      window.removeEventListener('message', handlePostmessageFromIframe, false);
+    };
+  }, []);
 
   /**
    * Custom method to allow communication from Iframe to parent via postmessage
@@ -37,7 +37,7 @@ const ExternalEmbed = ({ src }: IProps) => {
     if ([targetOrigin].includes(e.origin)) {
       // communicate url changes, update navbar
       if (e.data && e.data.pathname) {
-        let newPathName = e.data.pathname
+        let newPathName = e.data.pathname;
 
         /**
          * At the moment this component is only used for handling contents within the `/academy`
@@ -45,16 +45,16 @@ const ExternalEmbed = ({ src }: IProps) => {
          * perhaps moved to an emitted event
          */
         if (!newPathName.startsWith(`/academy`)) {
-          newPathName = `/academy${newPathName}`
+          newPathName = `/academy${newPathName}`;
         }
-        navigate(newPathName)
+        navigate(newPathName);
       }
       // communicate a href link clicks, open link in new tab
       if (e.data && e.data.linkClick) {
-        window.open(e.data.linkClick, '_blank')
+        window.open(e.data.linkClick, '_blank');
       }
     }
-  }
+  };
 
   return (
     <div
@@ -73,6 +73,6 @@ const ExternalEmbed = ({ src }: IProps) => {
         title="precious plastic academy"
       />
     </div>
-  )
-}
-export default ExternalEmbed
+  );
+};
+export default ExternalEmbed;

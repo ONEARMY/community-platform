@@ -1,8 +1,8 @@
-import { Button, ReturnPathLink } from 'oa-components'
-import { Alert, Flex, Text } from 'theme-ui'
+import { Button, ReturnPathLink } from 'oa-components';
+import { Alert, Flex, Text } from 'theme-ui';
 
 interface Props {
-  displayName: string
+  displayName: string;
 }
 
 export const UserContactNotLoggedIn = ({ displayName }: Props) => {
@@ -12,9 +12,7 @@ export const UserContactNotLoggedIn = ({ displayName }: Props) => {
         <Text sx={{ textAlign: 'left' }}>
           {`${displayName} would love to hear from you...but you're not logged in!`}
         </Text>
-        <Text sx={{ textAlign: 'left' }}>
-          If you were you'd able to send them a message...
-        </Text>
+        <Text sx={{ textAlign: 'left' }}>If you were you'd able to send them a message...</Text>
         <Flex sx={{ alignItems: 'center', flexDirection: 'row', gap: 2 }}>
           <ReturnPathLink
             to="/sign-in"
@@ -33,5 +31,5 @@ export const UserContactNotLoggedIn = ({ displayName }: Props) => {
         </Flex>
       </Flex>
     </Alert>
-  )
-}
+  );
+};

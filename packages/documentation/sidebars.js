@@ -15,10 +15,7 @@ module.exports = {
         {
           type: 'category',
           label: 'Writing Documentation',
-          items: [
-            'Docs Contribution/running-docs-locally',
-            'Docs Contribution/md-style-guide',
-          ],
+          items: ['Docs Contribution/running-docs-locally', 'Docs Contribution/md-style-guide'],
         },
       ],
     },
@@ -79,4 +76,4 @@ module.exports = {
       href: 'pathname:///storybook-static/index.html',
     },
   ],
-}
+};

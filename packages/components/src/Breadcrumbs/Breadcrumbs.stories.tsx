@@ -1,11 +1,11 @@
-import { Breadcrumbs } from './Breadcrumbs'
+import { Breadcrumbs } from './Breadcrumbs';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Layout/Breadcrumbs',
   component: Breadcrumbs,
-} as Meta<typeof Breadcrumbs>
+} as Meta<typeof Breadcrumbs>;
 
 export const Default: StoryFn<typeof Breadcrumbs> = () => (
   <Breadcrumbs
@@ -23,7 +23,7 @@ export const Default: StoryFn<typeof Breadcrumbs> = () => (
       },
     ]}
   />
-)
+);
 
 export const NoCategory: StoryFn<typeof Breadcrumbs> = () => (
   <Breadcrumbs
@@ -37,4 +37,4 @@ export const NoCategory: StoryFn<typeof Breadcrumbs> = () => (
       },
     ]}
   />
-)
+);

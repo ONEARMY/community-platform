@@ -1,5 +1,5 @@
 /** @jsxImportSource theme-ui */
-import { IconContext } from 'react-icons'
+import { IconContext } from 'react-icons';
 import {
   FaCloudUploadAlt,
   FaFacebookF,
@@ -8,7 +8,7 @@ import {
   FaInstagram,
   FaSignal,
   FaSlack,
-} from 'react-icons/fa'
+} from 'react-icons/fa';
 import {
   MdAccessTime,
   MdAccountCircle,
@@ -26,27 +26,27 @@ import {
   MdMoreVert,
   MdNotifications,
   MdTurnedIn,
-} from 'react-icons/md'
-import styled from '@emotion/styled'
-import { space, verticalAlign } from 'styled-system'
+} from 'react-icons/md';
+import styled from '@emotion/styled';
+import { space, verticalAlign } from 'styled-system';
 
-import { DownloadIcon } from './DownloadIcon'
-import { ExternalUrl } from './ExternalUrl'
-import { iconMap } from './svgs'
+import { DownloadIcon } from './DownloadIcon';
+import { ExternalUrl } from './ExternalUrl';
+import { iconMap } from './svgs';
 
-import type { SpaceProps, VerticalAlignProps } from 'styled-system'
-import type { ThemeUIStyleObject } from 'theme-ui'
-import type { IGlyphs } from './types'
+import type { SpaceProps, VerticalAlignProps } from 'styled-system';
+import type { ThemeUIStyleObject } from 'theme-ui';
+import type { IGlyphs } from './types';
 
 export interface IProps extends React.ButtonHTMLAttributes<HTMLElement> {
-  glyph: keyof IGlyphs
-  color?: string
-  filter?: string
-  size?: number | string
-  marginRight?: string
-  opacity?: string
-  onClick?: () => void
-  sx?: ThemeUIStyleObject | undefined
+  glyph: keyof IGlyphs;
+  color?: string;
+  filter?: string;
+  size?: number | string;
+  marginRight?: string;
+  opacity?: string;
+  onClick?: () => void;
+  sx?: ThemeUIStyleObject | undefined;
 }
 
 export const glyphs: IGlyphs = {
@@ -150,9 +150,9 @@ export const glyphs: IGlyphs = {
   verified: iconMap.verified,
   volunteer: iconMap.volunteer,
   website: iconMap.website,
-}
+};
 
-export type IconProps = IProps & VerticalAlignProps & SpaceProps
+export type IconProps = IProps & VerticalAlignProps & SpaceProps;
 
 const IconWrapper = styled.div<IconProps>`
   display: inline-block;
@@ -168,7 +168,7 @@ const IconWrapper = styled.div<IconProps>`
     `
     cursor: pointer;
   `};
-`
+`;
 
 const sizeMap = {
   xs: 8,
@@ -176,27 +176,27 @@ const sizeMap = {
   md: 32,
   lg: 48,
   xl: 64,
-}
+};
 
 export const getGlyph = (glyph: string) => {
-  return glyph in glyphs ? glyphs[glyph as keyof IGlyphs] : null
-}
+  return glyph in glyphs ? glyphs[glyph as keyof IGlyphs] : null;
+};
 
 export const Icon = (props: IconProps) => {
-  const { glyph, size, sx } = props
+  const { glyph, size, sx } = props;
 
   if (!getGlyph(glyph)) {
-    return null
+    return null;
   }
 
-  const isSizeNumeric = !isNaN(size as any)
+  const isSizeNumeric = !isNaN(size as any);
 
-  let definedSize = 16
+  let definedSize = 16;
   if (isSizeNumeric) {
-    definedSize = size as number
+    definedSize = size as number;
   } else if (Object.keys(sizeMap).includes(size as string)) {
-    const pointer = size as 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-    definedSize = sizeMap[pointer]
+    const pointer = size as 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    definedSize = sizeMap[pointer];
   }
 
   return (
@@ -228,5 +228,5 @@ export const Icon = (props: IconProps) => {
         {getGlyph(glyph)}
       </IconContext.Provider>
     </IconWrapper>
-  )
-}
+  );
+};

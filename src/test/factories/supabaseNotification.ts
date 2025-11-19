@@ -1,8 +1,8 @@
-import { Notification } from 'oa-shared'
+import { Notification } from 'oa-shared';
 
-import { FactoryComment } from './Comment'
+import { FactoryComment } from './Comment';
 
-import type { BasicAuthorDetails } from 'oa-shared'
+import type { BasicAuthorDetails } from 'oa-shared';
 
 export const factorySupabaseNotification = (
   notificationOverloads: Partial<Notification> = {},
@@ -23,12 +23,10 @@ export const factorySupabaseNotification = (
     sourceContentId: 300,
     triggeredBy: factoryTriggeredBy(),
     ...notificationOverloads,
-  })
-}
+  });
+};
 
-export const factoryTriggeredBy = (
-  triggeredByOverloads = {},
-): BasicAuthorDetails => {
+export const factoryTriggeredBy = (triggeredByOverloads = {}): BasicAuthorDetails => {
   return {
     id: 1,
     username: 'daveTheHakkens',
@@ -37,5 +35,5 @@ export const factoryTriggeredBy = (
       publicUrl: 'https://url.com/image.png',
     },
     ...triggeredByOverloads,
-  }
-}
+  };
+};

@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router'
-import { Button, ExternalLink } from 'oa-components'
-import { Box, Text } from 'theme-ui'
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
+import { Button, ExternalLink } from 'oa-components';
+import { Box, Text } from 'theme-ui';
 
 export const StickyButton = () => {
-  const location = useLocation()
-  const [page, setPage] = useState<string>('')
+  const location = useLocation();
+  const [page, setPage] = useState<string>('');
 
   useEffect(() => {
-    setPage(window.location.href)
-  }, [location])
+    setPage(window.location.href);
+  }, [location]);
 
-  const href = `/feedback/#page=${page}`
+  const href = `/feedback/#page=${page}`;
 
   return (
     <Box
@@ -24,12 +24,7 @@ export const StickyButton = () => {
       }}
     >
       <ExternalLink href={href} data-cy="feedback">
-        <Button
-          type="button"
-          sx={{ display: ['none', 'inherit'] }}
-          variant="primary"
-          icon="update"
-        >
+        <Button type="button" sx={{ display: ['none', 'inherit'] }} variant="primary" icon="update">
           <Text>Report a Problem</Text>
         </Button>
 
@@ -44,5 +39,5 @@ export const StickyButton = () => {
         </Button>
       </ExternalLink>
     </Box>
-  )
-}
+  );
+};

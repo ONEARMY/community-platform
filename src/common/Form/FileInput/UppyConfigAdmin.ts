@@ -1,4 +1,4 @@
-import type { UppyOptions } from '@uppy/core'
+import type { UppyOptions } from '@uppy/core';
 
 export const UPPY_CONFIG_ADMIN: Partial<UppyOptions> = {
   restrictions: {
@@ -23,4 +23,4 @@ export const UPPY_CONFIG_ADMIN: Partial<UppyOptions> = {
       companionError: 'Connection with Companion failed',
     },
   },
-}
+};

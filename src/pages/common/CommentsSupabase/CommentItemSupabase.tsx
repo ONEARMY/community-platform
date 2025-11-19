@@ -1,79 +1,61 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { observer } from 'mobx-react'
-import {
-  ButtonShowReplies,
-  CommentDisplay,
-  ConfirmModal,
-  EditComment,
-  Modal,
-} from 'oa-components'
-import { UserRole } from 'oa-shared'
-import { FollowButtonAction } from 'src/common/FollowButtonAction'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { onUsefulClick } from 'src/utils/onUsefulClick'
-import { Card, Flex } from 'theme-ui'
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { observer } from 'mobx-react';
+import { ButtonShowReplies, CommentDisplay, ConfirmModal, EditComment, Modal } from 'oa-components';
+import { UserRole } from 'oa-shared';
+import { FollowButtonAction } from 'src/common/FollowButtonAction';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { onUsefulClick } from 'src/utils/onUsefulClick';
+import { Card, Flex } from 'theme-ui';
 
-import { CommentReply } from './CommentReplySupabase'
-import { CreateCommentSupabase } from './CreateCommentSupabase'
+import { CommentReply } from './CommentReplySupabase';
+import { CreateCommentSupabase } from './CreateCommentSupabase';
 
-import type { Comment, DiscussionContentTypes } from 'oa-shared'
+import type { Comment, DiscussionContentTypes } from 'oa-shared';
 
 export interface ICommentItemProps {
-  comment: Comment
-  onEdit: (id: number, comment: string) => Promise<Response>
-  onDelete: (id: number) => void
-  onReply: (reply: string) => void
-  onEditReply: (id: number, reply: string) => Promise<Response>
-  onDeleteReply: (id: number) => void
-  sourceType: DiscussionContentTypes
+  comment: Comment;
+  onEdit: (id: number, comment: string) => Promise<Response>;
+  onDelete: (id: number) => void;
+  onReply: (reply: string) => void;
+  onEditReply: (id: number, reply: string) => Promise<Response>;
+  onDeleteReply: (id: number) => void;
+  sourceType: DiscussionContentTypes;
 }
 
 export const CommentItemSupabase = observer((props: ICommentItemProps) => {
-  const {
-    comment,
-    onEdit,
-    onDelete,
-    onReply,
-    onEditReply,
-    onDeleteReply,
-    sourceType,
-  } = props
-  const commentRef = useRef<HTMLDivElement>()
-  const [showEditModal, setShowEditModal] = useState(false)
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const { comment, onEdit, onDelete, onReply, onEditReply, onDeleteReply, sourceType } = props;
+  const commentRef = useRef<HTMLDivElement>();
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showReplies, setShowReplies] = useState(
     () => !!comment.replies?.some((x) => x.highlighted),
-  )
-  const { profile } = useProfileStore()
-  const [usefulCount, setUsefulCount] = useState<number>(comment.voteCount ?? 0)
-  const [voted, setVoted] = useState<boolean>(false)
+  );
+  const { profile } = useProfileStore();
+  const [usefulCount, setUsefulCount] = useState<number>(comment.voteCount ?? 0);
+  const [voted, setVoted] = useState<boolean>(false);
 
   const isEditable = useMemo(() => {
     return (
-      profile?.username === comment.createdBy?.username ||
-      profile?.roles?.includes(UserRole.ADMIN)
-    )
-  }, [profile])
+      profile?.username === comment.createdBy?.username || profile?.roles?.includes(UserRole.ADMIN)
+    );
+  }, [profile]);
 
-  const item = 'CommentItem'
+  const item = 'CommentItem';
 
   useEffect(() => {
-    setVoted(comment.hasVoted ?? false)
-  }, [profile, comment])
+    setVoted(comment.hasVoted ?? false);
+  }, [profile, comment]);
 
   useEffect(() => {
     if (comment.highlighted) {
       commentRef.current?.scrollIntoView({
         behavior: 'smooth',
         block: 'center',
-      })
+      });
     }
-  }, [comment.highlighted])
+  }, [comment.highlighted]);
 
-  const handleUsefulClick = async (
-    vote: 'add' | 'delete',
-    eventCategory = 'Comment',
-  ) => {
+  const handleUsefulClick = async (vote: 'add' | 'delete', eventCategory = 'Comment') => {
     await onUsefulClick({
       vote,
       config: {
@@ -85,8 +67,8 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
         loggedInUser: profile,
         eventCategory,
       },
-    })
-  }
+    });
+  };
 
   return (
     <Flex
@@ -157,7 +139,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
                   key={x.id}
                   comment={x}
                   onEdit={async (id: number, comment: string) => {
-                    return await onEditReply(id, comment)
+                    return await onEditReply(id, comment);
                   }}
                   onDelete={(id: number) => onDeleteReply(id)}
                 />
@@ -182,7 +164,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
         <EditComment
           comment={comment.comment}
           handleSubmit={async (commentText) => {
-            return await onEdit(comment.id, commentText)
+            return await onEdit(comment.id, commentText);
           }}
           setShowEditModal={setShowEditModal}
           handleCancel={() => setShowEditModal(false)}
@@ -196,10 +178,10 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
         confirmButtonText="Delete"
         handleCancel={() => setShowDeleteModal(false)}
         handleConfirm={async () => {
-          onDelete(comment.id)
-          setShowDeleteModal(false)
+          onDelete(comment.id);
+          setShowDeleteModal(false);
         }}
       />
     </Flex>
-  )
-})
+  );
+});

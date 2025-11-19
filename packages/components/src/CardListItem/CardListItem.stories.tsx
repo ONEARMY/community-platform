@@ -1,17 +1,17 @@
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
-import { CardListItem } from './CardListItem'
+import { CardListItem } from './CardListItem';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
-import type { MapPin, Moderation, ProfileType } from 'oa-shared'
+import type { Meta, StoryFn } from '@storybook/react-vite';
+import type { MapPin, Moderation, ProfileType } from 'oa-shared';
 
 export default {
   title: 'Map/CardListItem',
   component: CardListItem,
-} as Meta<typeof CardListItem>
+} as Meta<typeof CardListItem>;
 
-const onPinClick = () => undefined
-const viewport = 'desktop'
+const onPinClick = () => undefined;
+const viewport = 'desktop';
 
 const member: ProfileType = {
   name: 'member',
@@ -23,7 +23,7 @@ const member: ProfileType = {
   order: 1,
   smallImageUrl: faker.image.avatar(),
   isSpace: false,
-}
+};
 
 const space: ProfileType = {
   name: 'space',
@@ -35,7 +35,7 @@ const space: ProfileType = {
   order: 1,
   smallImageUrl: faker.image.avatar(),
   isSpace: true,
-}
+};
 
 export const DefaultMember: StoryFn<typeof CardListItem> = () => {
   const item = {
@@ -55,19 +55,14 @@ export const DefaultMember: StoryFn<typeof CardListItem> = () => {
       isContactable: false,
       type: member,
     },
-  } as MapPin
+  } as MapPin;
 
   return (
     <div style={{ width: '500px' }}>
-      <CardListItem
-        item={item}
-        isSelectedPin={false}
-        onPinClick={onPinClick}
-        viewport={viewport}
-      />
+      <CardListItem item={item} isSelectedPin={false} onPinClick={onPinClick} viewport={viewport} />
     </div>
-  )
-}
+  );
+};
 
 export const DefaultSpace: StoryFn<typeof CardListItem> = () => {
   const item = {
@@ -90,16 +85,11 @@ export const DefaultSpace: StoryFn<typeof CardListItem> = () => {
       type: space,
       tags: [{ id: 1, name: 'Sheetpress' }],
     },
-  } as MapPin
+  } as MapPin;
 
   return (
     <div style={{ width: '500px' }}>
-      <CardListItem
-        item={item}
-        isSelectedPin={false}
-        onPinClick={onPinClick}
-        viewport={viewport}
-      />
+      <CardListItem item={item} isSelectedPin={false} onPinClick={onPinClick} viewport={viewport} />
     </div>
-  )
-}
+  );
+};

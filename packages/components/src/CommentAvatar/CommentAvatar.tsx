@@ -1,20 +1,18 @@
-import { Avatar, Image } from 'theme-ui'
+import { Avatar, Image } from 'theme-ui';
 
-import defaultBaloonUrl from '../../assets/images/author.svg'
-import defaultProfileImage from '../../assets/images/default_member.svg'
+import defaultBaloonUrl from '../../assets/images/author.svg';
+import defaultProfileImage from '../../assets/images/default_member.svg';
 
 type CommentAvatarProps = {
-  displayName?: string
-  isCommentAuthor?: boolean
-  photo?: string | null
-}
+  displayName?: string;
+  isCommentAuthor?: boolean;
+  photo?: string | null;
+};
 
 export const CommentAvatar = (props: CommentAvatarProps) => {
-  const { displayName, isCommentAuthor = false, photo } = props
+  const { displayName, isCommentAuthor = false, photo } = props;
 
-  const alt = displayName
-    ? `Avatar of ${displayName}`
-    : 'Avatar of comment author'
+  const alt = displayName ? `Avatar of ${displayName}` : 'Avatar of comment author';
 
   return (
     <>
@@ -50,5 +48,5 @@ export const CommentAvatar = (props: CommentAvatarProps) => {
         loading="lazy"
       />
     </>
-  )
-}
+  );
+};

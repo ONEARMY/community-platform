@@ -1,49 +1,48 @@
-import { useState } from 'react'
-import { Field, Form } from 'react-final-form'
-import { Flex, Label } from 'theme-ui'
-import { object, string } from 'yup'
+import { useState } from 'react';
+import { Field, Form } from 'react-final-form';
+import { Flex, Label } from 'theme-ui';
+import { object, string } from 'yup';
 
-import { Banner } from '../Banner/Banner'
-import { Button } from '../Button/Button'
-import { FieldTextarea } from '../FieldTextarea/FieldTextarea'
+import { Banner } from '../Banner/Banner';
+import { Button } from '../Button/Button';
+import { FieldTextarea } from '../FieldTextarea/FieldTextarea';
 
 export interface IProps {
-  comment: string
-  handleCancel: () => void
-  handleSubmit: (commentText: string) => Promise<Response>
-  isReply: boolean
-  setShowEditModal: any
+  comment: string;
+  handleCancel: () => void;
+  handleSubmit: (commentText: string) => Promise<Response>;
+  isReply: boolean;
+  setShowEditModal: any;
 }
 
 export const EditComment = (props: IProps) => {
-  const { comment, isReply, setShowEditModal } = props
+  const { comment, isReply, setShowEditModal } = props;
 
-  const [error, setError] = useState<string | undefined>(undefined)
+  const [error, setError] = useState<string | undefined>(undefined);
 
   const validationSchema = object({
     comment: string().required('Make sure this field is filled correctly'),
-  })
+  });
 
-  const required = (value: string) =>
-    value?.trim() ? undefined : 'Comment cannot be blank'
+  const required = (value: string) => (value?.trim() ? undefined : 'Comment cannot be blank');
 
   const handleFormSubmit = async (comment: string) => {
     if (!comment?.trim()) {
-      return
+      return;
     }
 
-    const response = await props.handleSubmit(comment)
+    const response = await props.handleSubmit(comment);
 
     if (response.ok) {
-      setShowEditModal(false)
+      setShowEditModal(false);
     } else {
-      setError(response.statusText)
+      setError(response.statusText);
     }
-  }
+  };
 
   const validateEditedComment = async (values: any) => {
     try {
-      await validationSchema.validate(values, { abortEarly: false })
+      await validationSchema.validate(values, { abortEarly: false });
     } catch (err: any) {
       return err.inner.reduce(
         (acc: any, error: any) => ({
@@ -51,9 +50,9 @@ export const EditComment = (props: IProps) => {
           [error.path]: error.message,
         }),
         {},
-      )
+      );
     }
-  }
+  };
 
   return (
     <Form
@@ -66,7 +65,7 @@ export const EditComment = (props: IProps) => {
       validate={validateEditedComment}
       data-cy="EditCommentForm"
       render={({ invalid, handleSubmit, values }) => {
-        const disabled = invalid
+        const disabled = invalid;
 
         return (
           <Flex
@@ -78,11 +77,7 @@ export const EditComment = (props: IProps) => {
             }}
             onSubmit={handleSubmit}
           >
-            <Label
-              as="label"
-              htmlFor="comment"
-              sx={{ marginBottom: '6px', fontSize: 3 }}
-            >
+            <Label as="label" htmlFor="comment" sx={{ marginBottom: '6px', fontSize: 3 }}>
               Edit {isReply ? 'Reply' : 'Comment'}
             </Label>
 
@@ -115,15 +110,15 @@ export const EditComment = (props: IProps) => {
                 small
                 disabled={disabled}
                 onClick={() => {
-                  handleFormSubmit(values.comment)
+                  handleFormSubmit(values.comment);
                 }}
               >
                 Save
               </Button>
             </Flex>
           </Flex>
-        )
+        );
       }}
     />
-  )
-}
+  );
+};

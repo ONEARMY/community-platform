@@ -1,12 +1,12 @@
-import dateformat from 'dateformat'
-import { Moderation } from 'oa-shared'
+import dateformat from 'dateformat';
+import { Moderation } from 'oa-shared';
 
-import { generateAlphaNumeric } from '../utils/TestUtils'
+import { generateAlphaNumeric } from '../utils/TestUtils';
 
-import type { IQuestionDB } from 'oa-shared'
+import type { IQuestionDB } from 'oa-shared';
 
-const _id = generateAlphaNumeric(20)
-const _created = dateformat(Date.now(), 'yyyy-mm-dd')
+const _id = generateAlphaNumeric(20);
+const _created = dateformat(Date.now(), 'yyyy-mm-dd');
 
 export const question: IQuestionDB = {
   _id,
@@ -30,4 +30,4 @@ export const question: IQuestionDB = {
     _modified: '2018-07-29T04:34:49.982Z',
     label: 'exhibition',
   },
-}
+};

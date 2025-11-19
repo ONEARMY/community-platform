@@ -1,39 +1,36 @@
-import { countryToAlpha2 } from 'country-to-iso'
-import { Flex, Text } from 'theme-ui'
+import { countryToAlpha2 } from 'country-to-iso';
+import { Flex, Text } from 'theme-ui';
 
-import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
-import { FlagIcon } from '../FlagIcon/FlagIcon'
-import { InternalLink } from '../InternalLink/InternalLink'
-import { UserBadge } from './UserBadge'
+import flagUnknownSVG from '../../assets/icons/flag-unknown.svg';
+import { FlagIcon } from '../FlagIcon/FlagIcon';
+import { InternalLink } from '../InternalLink/InternalLink';
+import { UserBadge } from './UserBadge';
 
-import type { Author } from 'oa-shared'
-import type { HTMLAttributeAnchorTarget } from 'react'
-import type { ThemeUIStyleObject } from 'theme-ui'
+import type { Author } from 'oa-shared';
+import type { HTMLAttributeAnchorTarget } from 'react';
+import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface IProps {
-  user: Author
-  sx?: ThemeUIStyleObject
-  isLink?: boolean
-  target?: HTMLAttributeAnchorTarget
+  user: Author;
+  sx?: ThemeUIStyleObject;
+  isLink?: boolean;
+  target?: HTMLAttributeAnchorTarget;
 }
 
 const getCountryCode = (country: string | undefined) => {
   if (!country) {
-    return null
+    return null;
   }
-  return countryToAlpha2(country)
-}
+  return countryToAlpha2(country);
+};
 
 export const Username = ({ user, sx, target, isLink = true }: IProps) => {
-  const { username, badges } = user
+  const { username, badges } = user;
 
-  const countryCode = user.country ? getCountryCode(user.country) : null
+  const countryCode = user.country ? getCountryCode(user.country) : null;
 
   const UserNameBody = (
-    <Flex
-      data-cy="Username"
-      sx={{ fontFamily: 'body', gap: 1, alignItems: 'center' }}
-    >
+    <Flex data-cy="Username" sx={{ fontFamily: 'body', gap: 1, alignItems: 'center' }}>
       {countryCode ? (
         <Flex data-testid="Username: known flag">
           <FlagIcon countryCode={countryCode} />
@@ -69,13 +66,13 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
       </Text>
       {badges &&
         badges.map((badge) => {
-          return <UserBadge key={badge.id} badge={badge} />
+          return <UserBadge key={badge.id} badge={badge} />;
         })}
     </Flex>
-  )
+  );
 
   if (!isLink) {
-    return UserNameBody
+    return UserNameBody;
   }
 
   return (
@@ -108,5 +105,5 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
     >
       {UserNameBody}
     </InternalLink>
-  )
-}
+  );
+};

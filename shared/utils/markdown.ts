@@ -3,25 +3,25 @@ export const extractYouTubeId = (url: string): string | null => {
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
     /youtube\.com\/v\/([^&\n?#]+)/,
     /youtube\.com\/watch\?.*v=([^&\n?#]+)/,
-  ]
+  ];
 
   for (const pattern of patterns) {
-    const match = url.match(pattern)
+    const match = url.match(pattern);
     if (match) {
-      return match[1]
+      return match[1];
     }
   }
 
-  return null
-}
+  return null;
+};
 
 export const processYouTubeLinks = (html: string): string => {
   // Match YouTube URLs in links
   const youtubePattern =
-    /<a[^>]*href=["']([^"']*(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)[^"']*)["'][^>]*>([^<]*)<\/a>/g
+    /<a[^>]*href=["']([^"']*(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)[^"']*)["'][^>]*>([^<]*)<\/a>/g;
 
   return html.replace(youtubePattern, (match, url, _linkText) => {
-    const videoId = extractYouTubeId(url)
+    const videoId = extractYouTubeId(url);
 
     if (videoId) {
       return `
@@ -34,56 +34,51 @@ export const processYouTubeLinks = (html: string): string => {
             title="YouTube video player">
           </iframe>
         </div>
-      `
+      `;
     }
 
-    return match // Return original if no video ID found
-  })
-}
+    return match; // Return original if no video ID found
+  });
+};
 
 export const processStandaloneYouTubeUrls = (html: string): string => {
   // Match YouTube URLs - Safari 15 compatible (no negative lookbehind)
   const youtubePattern =
-    /https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/g
+    /https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/g;
 
   // Find all potential YouTube URLs
-  const matches = Array.from(html.matchAll(youtubePattern))
+  const matches = Array.from(html.matchAll(youtubePattern));
 
   // Process matches in reverse order to avoid index shifting
   for (let i = matches.length - 1; i >= 0; i--) {
-    const match = matches[i]
-    const fullMatch = match[0]
-    const videoId = match[1]
-    const startIndex = match.index!
+    const match = matches[i];
+    const fullMatch = match[0];
+    const videoId = match[1];
+    const startIndex = match.index!;
 
     // Check if URL is already inside a link or iframe by examining context
-    const beforeMatch = html.substring(
-      Math.max(0, startIndex - 200),
-      startIndex,
-    )
+    const beforeMatch = html.substring(Math.max(0, startIndex - 200), startIndex);
     const afterMatch = html.substring(
       startIndex + fullMatch.length,
       Math.min(html.length, startIndex + fullMatch.length + 200),
-    )
+    );
 
     // Skip if already in a link
     const isInLink =
-      /<a[^>]*href=["'][^"']*$/.test(beforeMatch) &&
-      /["'][^>]*>[\s\S]*?<\/a>/.test(afterMatch)
+      /<a[^>]*href=["'][^"']*$/.test(beforeMatch) && /["'][^>]*>[\s\S]*?<\/a>/.test(afterMatch);
 
     // Skip if already in an iframe src attribute
     const isInIframe =
-      /<iframe[^>]*src=["'][^"']*$/.test(beforeMatch) &&
-      /["'][^>]*>/.test(afterMatch)
+      /<iframe[^>]*src=["'][^"']*$/.test(beforeMatch) && /["'][^>]*>/.test(afterMatch);
 
     // Skip if this is an embed URL that's already properly formatted
-    const isEmbedUrl = fullMatch.includes('/embed/')
+    const isEmbedUrl = fullMatch.includes('/embed/');
 
     // Skip if we're inside an existing YouTube embed div structure
     const isInYouTubeEmbed =
       beforeMatch.includes('<div style="position: relative; padding-bottom:') &&
       afterMatch.includes('</iframe>') &&
-      afterMatch.includes('</div>')
+      afterMatch.includes('</div>');
 
     if (!isInLink && !isInIframe && !isEmbedUrl && !isInYouTubeEmbed) {
       const replacement = `
@@ -96,14 +91,12 @@ export const processStandaloneYouTubeUrls = (html: string): string => {
             title="YouTube video player">
           </iframe>
         </div>
-      `
+      `;
 
       html =
-        html.substring(0, startIndex) +
-        replacement +
-        html.substring(startIndex + fullMatch.length)
+        html.substring(0, startIndex) + replacement + html.substring(startIndex + fullMatch.length);
     }
   }
 
-  return html
-}
+  return html;
+};

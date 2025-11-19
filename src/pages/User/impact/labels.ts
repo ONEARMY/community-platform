@@ -1,4 +1,4 @@
-export const heading = 'Impact'
+export const heading = 'Impact';
 
 export const invisible = {
   user: {
@@ -10,7 +10,7 @@ export const invisible = {
     label: "You've set all your data for this year to be private.",
     link: 'Update impact data',
   },
-}
+};
 
 export const missing = {
   user: {
@@ -21,7 +21,6 @@ export const missing = {
     label: "Looks like you haven't added your Impact Data yet.",
     link: 'Enter impact data',
   },
-}
+};
 
-export const reportYearLabel =
-  'In the meantime, check out the global report! :)'
+export const reportYearLabel = 'In the meantime, check out the global report! :)';

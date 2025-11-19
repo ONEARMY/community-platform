@@ -1,20 +1,20 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { DonationRequestModal } from './DonationRequestModal'
+import { DonationRequestModal } from './DonationRequestModal';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Components/DonationRequestModal',
   component: DonationRequestModal,
-} as Meta<typeof DonationRequestModal>
+} as Meta<typeof DonationRequestModal>;
 
 export const Default: StoryFn<typeof DonationRequestModal> = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(true)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
 
-  const toggleIsModalOpen = () => setIsModalOpen(!isModalOpen)
-  const callback = () => {}
-  const link = 'http://bbc.co.uk/'
+  const toggleIsModalOpen = () => setIsModalOpen(!isModalOpen);
+  const callback = () => {};
+  const link = 'http://bbc.co.uk/';
 
   return (
     <DonationRequestModal
@@ -26,5 +26,5 @@ export const Default: StoryFn<typeof DonationRequestModal> = () => {
       link={link}
       onDidDismiss={() => toggleIsModalOpen()}
     />
-  )
-}
+  );
+};

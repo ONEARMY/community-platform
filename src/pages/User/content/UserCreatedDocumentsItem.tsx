@@ -1,20 +1,20 @@
-import { Link } from 'react-router'
-import { Icon } from 'oa-components'
-import { Flex, Heading, Text } from 'theme-ui'
+import { Link } from 'react-router';
+import { Icon } from 'oa-components';
+import { Flex, Heading, Text } from 'theme-ui';
 
 interface IProps {
-  type: 'library' | 'research' | 'questions'
+  type: 'library' | 'research' | 'questions';
   item: {
-    id: string | number
-    title: string
-    slug: string
-    usefulVotes: number
-  }
+    id: string | number;
+    title: string;
+    slug: string;
+    usefulVotes: number;
+  };
 }
 
 const UserDocumentItem = ({ type, item }: IProps) => {
-  const { id, title, slug, usefulVotes } = item
-  const url = `/${type}/${encodeURIComponent(slug)}?utm_source=user-profile`
+  const { id, title, slug, usefulVotes } = item;
+  const url = `/${type}/${encodeURIComponent(slug)}?utm_source=user-profile`;
 
   return (
     <Flex
@@ -76,7 +76,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
         </Flex>
       </Link>
     </Flex>
-  )
-}
+  );
+};
 
-export default UserDocumentItem
+export default UserDocumentItem;

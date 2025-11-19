@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
 import type {
   DifficultyLevel,
@@ -6,11 +6,9 @@ import type {
   Project,
   // ProjectFormData,
   ProjectStep,
-} from 'oa-shared'
+} from 'oa-shared';
 
-export const FactoryLibraryItem = (
-  itemOverloads: Partial<Project> = {},
-): Project => ({
+export const FactoryLibraryItem = (itemOverloads: Partial<Project> = {}): Project => ({
   files: [],
   hasFileLink: faker.datatype.boolean(),
   difficultyLevel: faker.helpers.arrayElement<DifficultyLevel>([
@@ -52,11 +50,9 @@ export const FactoryLibraryItem = (
   author: null,
   tags: [],
   ...itemOverloads,
-})
+});
 
-export const FactoryLibraryItemStep = (
-  itemOverloads: Partial<ProjectStep> = {},
-): ProjectStep => ({
+export const FactoryLibraryItemStep = (itemOverloads: Partial<ProjectStep> = {}): ProjectStep => ({
   id: faker.number.int(),
   projectId: faker.number.int(),
   images: [
@@ -70,11 +66,9 @@ export const FactoryLibraryItemStep = (
   videoUrl: faker.internet.url(),
   order: faker.number.int(),
   ...itemOverloads,
-})
+});
 
-export const FactoryLibraryItemDraft = (
-  itemOverloads: Partial<Project> = {},
-): Project => ({
+export const FactoryLibraryItemDraft = (itemOverloads: Partial<Project> = {}): Project => ({
   id: faker.number.int(),
   isDraft: false,
   modifiedAt: faker.date.past(),
@@ -122,7 +116,7 @@ export const FactoryLibraryItemDraft = (
   totalViews: faker.number.int(),
   usefulCount: faker.number.int(),
   ...itemOverloads,
-})
+});
 
 // export const FactoryLibraryForm = (
 //   itemOverloads: Partial<ProjectFormData> = {},

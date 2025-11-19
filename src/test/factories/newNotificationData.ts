@@ -1,4 +1,4 @@
-import type { NewNotificationData } from 'oa-shared'
+import type { NewNotificationData } from 'oa-shared';
 
 export const factoryNewNotificationData = (
   userOverloads: Partial<NewNotificationData> = {},
@@ -13,4 +13,4 @@ export const factoryNewNotificationData = (
   sourceContentId: 1,
   triggeredById: 1,
   ...userOverloads,
-})
+});

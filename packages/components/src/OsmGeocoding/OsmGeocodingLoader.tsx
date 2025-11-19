@@ -1,4 +1,4 @@
-import { Box, Text } from 'theme-ui'
+import { Box, Text } from 'theme-ui';
 
 export const OsmGeocodingLoader = () => {
   return (
@@ -22,5 +22,5 @@ export const OsmGeocodingLoader = () => {
         <Text sx={{ fontSize: 1 }}>Fetching results from Open Street Map</Text>
       </Box>
     </>
-  )
-}
+  );
+};

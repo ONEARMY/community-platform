@@ -1,28 +1,28 @@
-import { Field, useForm, useFormState } from 'react-final-form'
-import styled from '@emotion/styled'
-import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components'
-import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { ImageInputField } from 'src/common/Form/ImageInput.field'
-import { FormFieldWrapper } from 'src/pages/common/FormFields'
-import { COMPARISONS } from 'src/utils/comparisons'
-import { Image as ImageComponent } from 'theme-ui'
+import { Field, useForm, useFormState } from 'react-final-form';
+import styled from '@emotion/styled';
+import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components';
+import { FieldContainer } from 'src/common/Form/FieldContainer';
+import { ImageInputField } from 'src/common/Form/ImageInput.field';
+import { FormFieldWrapper } from 'src/pages/common/FormFields';
+import { COMPARISONS } from 'src/utils/comparisons';
+import { Image as ImageComponent } from 'theme-ui';
 
-import type { IImageForm } from 'oa-shared'
+import type { IImageForm } from 'oa-shared';
 
 const ImageInputFieldWrapper = styled.div`
   height: 200px;
   width: 370px;
   max-width: 100%;
   margin-bottom: 6px;
-`
+`;
 
 type ImageFieldProps = {
-  title: string
-}
+  title: string;
+};
 
 export const ImageField = (props: ImageFieldProps) => {
-  const state = useFormState<IImageForm>()
-  const form = useForm<IImageForm>()
+  const state = useFormState<IImageForm>();
+  const form = useForm<IImageForm>();
 
   return (
     <FormFieldWrapper htmlFor="existingImage" text={props.title} required>
@@ -48,7 +48,7 @@ export const ImageField = (props: ImageFieldProps) => {
               <ImageComponent src={state.values.existingImage?.publicUrl} />
               <ImageInputDeleteImage
                 onClick={() => {
-                  form.change('existingImage', null)
+                  form.change('existingImage', null);
                 }}
               />
             </ImageInputWrapper>
@@ -56,5 +56,5 @@ export const ImageField = (props: ImageFieldProps) => {
         </ImageInputFieldWrapper>
       )}
     </FormFieldWrapper>
-  )
-}
+  );
+};

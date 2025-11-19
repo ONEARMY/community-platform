@@ -1,37 +1,32 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { fireEvent } from '@testing-library/react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { fireEvent } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AuthorsContext } from '../providers/AuthorsContext'
-import { render } from '../test/utils'
-import { CommentDisplay } from './CommentDisplay'
+import { AuthorsContext } from '../providers/AuthorsContext';
+import { render } from '../test/utils';
+import { CommentDisplay } from './CommentDisplay';
 
 vi.mock('../UsefulStatsButton/UsefulButtonLite', () => ({
   UsefulButtonLite: ({ usefulButtonLiteConfig }: any) => (
-    <button
-      data-testid="useful-button"
-      onClick={() => usefulButtonLiteConfig.onUsefulClick('add')}
-    >
+    <button data-testid="useful-button" onClick={() => usefulButtonLiteConfig.onUsefulClick('add')}>
       Useful {usefulButtonLiteConfig.votedUsefulCount}
     </button>
   ),
-}))
+}));
 
 vi.mock('../CommentAvatar/CommentAvatar', () => ({
-  CommentAvatar: ({ displayName }: any) => (
-    <div data-testid="comment-avatar">{displayName}</div>
-  ),
-}))
+  CommentAvatar: ({ displayName }: any) => <div data-testid="comment-avatar">{displayName}</div>,
+}));
 
 vi.mock('../CommentBody/CommentBody', () => ({
   CommentBody: ({ body }: any) => <div data-testid="comment-body">{body}</div>,
-}))
+}));
 
 describe('CommentDisplay', () => {
-  const mockSetShowDeleteModal = vi.fn()
-  const mockSetShowEditModal = vi.fn()
-  const mockOnUsefulClick = vi.fn(async () => Promise.resolve())
+  const mockSetShowDeleteModal = vi.fn();
+  const mockSetShowEditModal = vi.fn();
+  const mockOnUsefulClick = vi.fn(async () => Promise.resolve());
 
   const mockComment = {
     id: 1,
@@ -53,29 +48,27 @@ describe('CommentDisplay', () => {
     parentId: null,
     voteCount: 0,
     hasVoted: false,
-  }
+  };
 
   const mockUsefulButtonConfig = {
     hasUserVotedUseful: false,
     votedUsefulCount: 5,
     isLoggedIn: true,
     onUsefulClick: mockOnUsefulClick,
-  }
+  };
 
   const mockAuthorsContextValue = {
     authors: [0],
-  }
+  };
   const renderWithAuthorsContext = (ui: React.ReactElement) => {
     return render(
-      <AuthorsContext.Provider value={mockAuthorsContextValue}>
-        {ui}
-      </AuthorsContext.Provider>,
-    )
-  }
+      <AuthorsContext.Provider value={mockAuthorsContextValue}>{ui}</AuthorsContext.Provider>,
+    );
+  };
 
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
   it('renders comment body and avatar', () => {
     const { getByTestId } = renderWithAuthorsContext(
       <CommentDisplay
@@ -86,12 +79,12 @@ describe('CommentDisplay', () => {
         setShowEditModal={mockSetShowEditModal}
         usefulButtonConfig={mockUsefulButtonConfig}
       />,
-    )
+    );
 
-    expect(getByTestId('comment-body')).toBeInTheDocument()
-    expect(getByTestId('comment-avatar')).toBeInTheDocument()
-    expect(getByTestId('useful-button')).toBeInTheDocument()
-  })
+    expect(getByTestId('comment-body')).toBeInTheDocument();
+    expect(getByTestId('comment-avatar')).toBeInTheDocument();
+    expect(getByTestId('useful-button')).toBeInTheDocument();
+  });
 
   it('calls onUsefulClick when useful button is clicked', () => {
     const { getByTestId } = render(
@@ -103,18 +96,18 @@ describe('CommentDisplay', () => {
         setShowEditModal={mockSetShowEditModal}
         usefulButtonConfig={mockUsefulButtonConfig}
       />,
-    )
+    );
 
-    fireEvent.click(getByTestId('useful-button'))
-    expect(mockOnUsefulClick).toHaveBeenCalledWith('add')
-  })
+    fireEvent.click(getByTestId('useful-button'));
+    expect(mockOnUsefulClick).toHaveBeenCalledWith('add');
+  });
 
   it('increments useful count when useful button is clicked', () => {
-    let count = 5
+    let count = 5;
     const handleUsefulClick = vi.fn(() => {
-      count += 1
-      return Promise.resolve()
-    })
+      count += 1;
+      return Promise.resolve();
+    });
 
     const { getByTestId, rerender } = render(
       <CommentDisplay
@@ -129,13 +122,13 @@ describe('CommentDisplay', () => {
           onUsefulClick: handleUsefulClick,
         }}
       />,
-    )
+    );
 
-    const button = getByTestId('useful-button')
-    expect(button).toHaveTextContent('Useful 5')
+    const button = getByTestId('useful-button');
+    expect(button).toHaveTextContent('Useful 5');
 
-    fireEvent.click(button)
-    expect(handleUsefulClick).toHaveBeenCalledWith('add')
+    fireEvent.click(button);
+    expect(handleUsefulClick).toHaveBeenCalledWith('add');
 
     rerender(
       <CommentDisplay
@@ -150,8 +143,8 @@ describe('CommentDisplay', () => {
           onUsefulClick: handleUsefulClick,
         }}
       />,
-    )
+    );
 
-    expect(getByTestId('useful-button')).toHaveTextContent('Useful 6')
-  })
-})
+    expect(getByTestId('useful-button')).toHaveTextContent('Useful 6');
+  });
+});

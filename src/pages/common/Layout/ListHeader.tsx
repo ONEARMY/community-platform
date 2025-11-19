@@ -1,13 +1,13 @@
-import { Flex, Heading, Text } from 'theme-ui'
+import { Flex, Heading, Text } from 'theme-ui';
 
 interface IProps {
-  itemCount?: number
-  actionComponents: React.ReactNode
-  actionComponentsMaxWidth?: string
-  headingTitle: string
-  categoryComponent: React.ReactNode
-  filteringComponents: React.ReactNode
-  showDrafts: boolean
+  itemCount?: number;
+  actionComponents: React.ReactNode;
+  actionComponentsMaxWidth?: string;
+  headingTitle: string;
+  categoryComponent: React.ReactNode;
+  filteringComponents: React.ReactNode;
+  showDrafts: boolean;
 }
 
 export const ListHeader = (props: IProps) => {
@@ -19,9 +19,9 @@ export const ListHeader = (props: IProps) => {
     showDrafts,
     categoryComponent,
     filteringComponents,
-  } = props
+  } = props;
 
-  const itemLabel = itemCount === 1 ? 'item' : 'items'
+  const itemLabel = itemCount === 1 ? 'item' : 'items';
 
   return (
     <>
@@ -69,11 +69,7 @@ export const ListHeader = (props: IProps) => {
               '& > *': { flexGrow: [1, 1, 0] },
             }}
           >
-            {!showDrafts ? (
-              filteringComponents
-            ) : (
-              <div style={{ width: '100%' }}></div>
-            )}
+            {!showDrafts ? filteringComponents : <div style={{ width: '100%' }}></div>}
           </Flex>
           <Flex
             sx={{
@@ -86,9 +82,7 @@ export const ListHeader = (props: IProps) => {
             <Text sx={{ marginLeft: [0, 0, 2] }}>
               {itemCount ? `${itemCount} ${itemLabel}` : ''}
             </Text>
-            <Flex sx={{ gap: 2, display: ['flex', 'flex', 'none'] }}>
-              {actionComponents}
-            </Flex>
+            <Flex sx={{ gap: 2, display: ['flex', 'flex', 'none'] }}>{actionComponents}</Flex>
           </Flex>
         </Flex>
         <Flex
@@ -102,5 +96,5 @@ export const ListHeader = (props: IProps) => {
         </Flex>
       </Flex>
     </>
-  )
-}
+  );
+};

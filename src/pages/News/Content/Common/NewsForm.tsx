@@ -1,35 +1,35 @@
-import { useEffect, useState } from 'react'
-import { Form } from 'react-final-form'
-import { useNavigate } from 'react-router'
-import { FormWrapper } from 'src/common/Form/FormWrapper'
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
-import { logger } from 'src/logger'
-import { CategoryField } from 'src/pages/common/FormFields/Category.field'
-import { ProfileBadgeField } from 'src/pages/common/FormFields/ProfileBadgeField'
-import { TagsField } from 'src/pages/common/FormFields/Tags.field'
-import { TitleField } from 'src/pages/common/FormFields/Title.field'
-import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors'
-import { NewsPostingGuidelines } from 'src/pages/News/Content/Common/NewsPostingGuidelines'
-import * as LABELS from 'src/pages/News/labels'
-import { newsService } from 'src/services/newsService'
-import { storageService } from 'src/services/storageService'
-import { composeValidators, minValue, required } from 'src/utils/validators'
+import { useEffect, useState } from 'react';
+import { Form } from 'react-final-form';
+import { useNavigate } from 'react-router';
+import { FormWrapper } from 'src/common/Form/FormWrapper';
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
+import { logger } from 'src/logger';
+import { CategoryField } from 'src/pages/common/FormFields/Category.field';
+import { ProfileBadgeField } from 'src/pages/common/FormFields/ProfileBadgeField';
+import { TagsField } from 'src/pages/common/FormFields/Tags.field';
+import { TitleField } from 'src/pages/common/FormFields/Title.field';
+import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
+import { NewsPostingGuidelines } from 'src/pages/News/Content/Common/NewsPostingGuidelines';
+import * as LABELS from 'src/pages/News/labels';
+import { newsService } from 'src/services/newsService';
+import { storageService } from 'src/services/storageService';
+import { composeValidators, minValue, required } from 'src/utils/validators';
 
-import { NEWS_MIN_TITLE_LENGTH } from '../../constants'
-import { NewsBodyField, NewsImageField } from './FormFields'
+import { NEWS_MIN_TITLE_LENGTH } from '../../constants';
+import { NewsBodyField, NewsImageField } from './FormFields';
 
-import type { News, NewsFormData } from 'oa-shared'
-import type { MainFormAction } from 'src/common/Form/types'
+import type { News, NewsFormData } from 'oa-shared';
+import type { MainFormAction } from 'src/common/Form/types';
 
 interface IProps {
-  'data-testid'?: string
-  news: News | null
-  parentType: MainFormAction
+  'data-testid'?: string;
+  news: News | null;
+  parentType: MainFormAction;
 }
 
 export const NewsForm = (props: IProps) => {
-  const { news, parentType } = props
-  const navigate = useNavigate()
+  const { news, parentType } = props;
+  const navigate = useNavigate();
   const [initialValues, setInitialValues] = useState<NewsFormData>({
     body: '',
     category: null,
@@ -39,15 +39,15 @@ export const NewsForm = (props: IProps) => {
     profileBadge: null,
     tags: [],
     title: '',
-  })
-  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
-  const [intentionalNavigation, setIntentionalNavigation] = useState(false)
+  });
+  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
+  const [intentionalNavigation, setIntentionalNavigation] = useState(false);
 
-  const id = news?.id || null
+  const id = news?.id || null;
 
   useEffect(() => {
     if (!news) {
-      return
+      return;
     }
 
     setInitialValues({
@@ -70,15 +70,12 @@ export const NewsForm = (props: IProps) => {
 
       tags: news.tagIds,
       title: news.title,
-    })
-  }, [news])
+    });
+  }, [news]);
 
-  const onSubmit = async (
-    formValues: Partial<NewsFormData>,
-    isDraft = false,
-  ) => {
-    setIntentionalNavigation(true)
-    setSaveErrorMessage(null)
+  const onSubmit = async (formValues: Partial<NewsFormData>, isDraft = false) => {
+    setIntentionalNavigation(true);
+    setSaveErrorMessage(null);
 
     try {
       const result = await newsService.upsert(id, {
@@ -90,33 +87,33 @@ export const NewsForm = (props: IProps) => {
         profileBadge: formValues.profileBadge || null,
         tags: formValues.tags,
         title: formValues.title!,
-      })
+      });
 
       if (result) {
-        navigate('/news/' + result.slug)
+        navigate('/news/' + result.slug);
       }
     } catch (e) {
       if (e.cause && e.message) {
-        setSaveErrorMessage(e.message)
+        setSaveErrorMessage(e.message);
       }
-      logger.error(e)
+      logger.error(e);
     }
-  }
+  };
 
   const imageUpload = async (imageFile: File) => {
     if (!imageFile) {
-      return
+      return;
     }
     try {
-      const response = await storageService.imageUpload(id, 'news', imageFile)
-      return response.publicUrl
+      const response = await storageService.imageUpload(id, 'news', imageFile);
+      return response.publicUrl;
     } catch (e) {
       if (e.cause && e.message) {
-        setSaveErrorMessage(e.message)
+        setSaveErrorMessage(e.message);
       }
-      logger.error(e)
+      logger.error(e);
     }
-  }
+  };
 
   const removeExistingImage = () => {
     setInitialValues((prevState: NewsFormData) => {
@@ -124,9 +121,9 @@ export const NewsForm = (props: IProps) => {
         ...prevState,
         existingHeroImage: null,
         heroImage: null,
-      }
-    })
-  }
+      };
+    });
+  };
 
   return (
     <Form
@@ -134,14 +131,14 @@ export const NewsForm = (props: IProps) => {
       onSubmit={(values) => onSubmit(values, false)}
       initialValues={initialValues}
       validate={(values) => {
-        const errors = {}
+        const errors = {};
         if (!values.body?.length) {
-          errors['body'] = 'Body field required. Gotta have something to say...'
+          errors['body'] = 'Body field required. Gotta have something to say...';
         }
         if (values.heroImage == null && values.existingHeroImage === null) {
-          errors['heroImage'] = 'An image is required (either new or existing).'
+          errors['heroImage'] = 'An image is required (either new or existing).';
         }
-        return errors
+        return errors;
       }}
       render={({
         dirty,
@@ -153,19 +150,14 @@ export const NewsForm = (props: IProps) => {
         handleSubmit,
         values,
       }) => {
-        const errorsClientSide = [errorSet(errors, LABELS.fields)]
+        const errorsClientSide = [errorSet(errors, LABELS.fields)];
 
-        const handleSubmitDraft = () => onSubmit(values, true)
+        const handleSubmitDraft = () => onSubmit(values, true);
 
         const unsavedChangesDialog = (
-          <UnsavedChangesDialog
-            hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
-          />
-        )
-        const validate = composeValidators(
-          required,
-          minValue(NEWS_MIN_TITLE_LENGTH),
-        )
+          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />
+        );
+        const validate = composeValidators(required, minValue(NEWS_MIN_TITLE_LENGTH));
 
         return (
           <FormWrapper
@@ -199,8 +191,8 @@ export const NewsForm = (props: IProps) => {
             />
             <NewsBodyField imageUpload={imageUpload} />
           </FormWrapper>
-        )
+        );
       }}
     />
-  )
-}
+  );
+};

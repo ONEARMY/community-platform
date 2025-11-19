@@ -1,13 +1,13 @@
-import { Box, Flex } from 'theme-ui'
+import { Box, Flex } from 'theme-ui';
 
-import { ExternalLink } from '../ExternalLink/ExternalLink'
-import { Icon } from '../Icon/Icon'
+import { ExternalLink } from '../ExternalLink/ExternalLink';
+import { Icon } from '../Icon/Icon';
 
-import type { ThemeUICSSObject } from 'theme-ui'
+import type { ThemeUICSSObject } from 'theme-ui';
 
 export interface Props {
-  url: string
-  sx?: ThemeUICSSObject
+  url: string;
+  sx?: ThemeUICSSObject;
 }
 
 export const ProfileLink = (props: Props) => {
@@ -24,14 +24,9 @@ export const ProfileLink = (props: Props) => {
       <Box>
         <Icon glyph="website" size={22} />
       </Box>
-      <ExternalLink
-        marginLeft={2}
-        color="black"
-        data-cy="profile-website"
-        href={props.url}
-      >
+      <ExternalLink marginLeft={2} color="black" data-cy="profile-website" href={props.url}>
         {props.url}
       </ExternalLink>
     </Flex>
-  )
-}
+  );
+};

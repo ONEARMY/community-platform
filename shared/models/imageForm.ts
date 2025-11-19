@@ -1,7 +1,7 @@
-import type { IConvertedFileMeta } from './common'
-import type { Image } from './media'
+import type { IConvertedFileMeta } from './common';
+import type { Image } from './media';
 
 export interface IImageForm {
-  image?: IConvertedFileMeta
-  existingImage: Image | null
+  image?: IConvertedFileMeta;
+  existingImage: Image | null;
 }

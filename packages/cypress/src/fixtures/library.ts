@@ -1,12 +1,12 @@
-import dateformat from 'dateformat'
-import { DifficultyLevel, Moderation } from 'oa-shared'
+import dateformat from 'dateformat';
+import { DifficultyLevel, Moderation } from 'oa-shared';
 
-import { generateAlphaNumeric } from '../utils/TestUtils'
+import { generateAlphaNumeric } from '../utils/TestUtils';
 
-import type { ILibrary } from 'oa-shared'
+import type { ILibrary } from 'oa-shared';
 
-const _id = generateAlphaNumeric(20)
-const _created = dateformat(Date.now(), 'yyyy-mm-dd')
+const _id = generateAlphaNumeric(20);
+const _created = dateformat(Date.now(), 'yyyy-mm-dd');
 
 export const library: ILibrary.DB = {
   _id,
@@ -52,4 +52,4 @@ export const library: ILibrary.DB = {
     _deleted: false,
     label: 'Moulds',
   },
-}
+};

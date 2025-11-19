@@ -1,6 +1,6 @@
-import pkg from 'jsonwebtoken'
+import pkg from 'jsonwebtoken';
 
-const key = process.env.TOKEN_SECRET as string
+const key = process.env.TOKEN_SECRET as string;
 
 const generate = (profileId: number, profileCreatedAt: string) => {
   return pkg.sign(
@@ -9,11 +9,11 @@ const generate = (profileId: number, profileCreatedAt: string) => {
       profileCreatedAt,
     },
     key,
-  )
-}
+  );
+};
 
 const verify = (code: string): string | pkg.JwtPayload => {
-  return pkg.verify(code, key)
-}
+  return pkg.verify(code, key);
+};
 
-export const tokens = { generate, verify }
+export const tokens = { generate, verify };

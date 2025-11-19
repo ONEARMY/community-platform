@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
 export const questions = [
   {
@@ -29,7 +29,7 @@ export const questions = [
     title: 'Intro screenings question',
     total_views: 1,
   },
-]
+];
 
 for (let i = 0; i < 20; i++) {
   questions.push({
@@ -40,5 +40,5 @@ for (let i = 0; i < 20; i++) {
     slug: faker.lorem.slug(),
     title: faker.lorem.sentence(),
     total_views: faker.number.int(),
-  })
+  });
 }

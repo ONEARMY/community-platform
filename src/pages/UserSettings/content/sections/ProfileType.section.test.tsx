@@ -1,13 +1,13 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { render, screen } from '@testing-library/react'
-import { SettingsFormProvider } from 'src/test/components/SettingsFormProvider'
-import { describe, expect, it, vi } from 'vitest'
+import { render, screen } from '@testing-library/react';
+import { SettingsFormProvider } from 'src/test/components/SettingsFormProvider';
+import { describe, expect, it, vi } from 'vitest';
 
-import { headings } from '../../labels'
-import { ProfileTypeSection } from './ProfileType.section'
+import { headings } from '../../labels';
+import { ProfileTypeSection } from './ProfileType.section';
 
-import type { ProfileTag } from 'oa-shared'
+import type { ProfileTag } from 'oa-shared';
 
 vi.mock('src/services/profileTagsService', () => ({
   profileTagsService: {
@@ -16,7 +16,7 @@ vi.mock('src/services/profileTagsService', () => ({
       { id: 2, name: 'space', profileType: 'space' },
     ] as ProfileTag[]),
   },
-}))
+}));
 
 describe('Focus', () => {
   it('render focus section if less than 2 activities', () => {
@@ -38,10 +38,10 @@ describe('Focus', () => {
           ]}
         />
       </SettingsFormProvider>,
-    )
+    );
 
-    expect(screen.queryByText(headings.focus)).not.toBeInTheDocument()
-  })
+    expect(screen.queryByText(headings.focus)).not.toBeInTheDocument();
+  });
 
   it('does not render focus section more than 2 activities', () => {
     render(
@@ -73,8 +73,8 @@ describe('Focus', () => {
           ]}
         />
       </SettingsFormProvider>,
-    )
+    );
 
-    expect(screen.queryByText(headings.focus)).toBeInTheDocument()
-  })
-})
+    expect(screen.queryByText(headings.focus)).toBeInTheDocument();
+  });
+});

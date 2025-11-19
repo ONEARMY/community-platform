@@ -1,38 +1,38 @@
-import { useState } from 'react'
-import { insertImage$, usePublisher } from '@mdxeditor/editor'
-import { Box, Flex } from 'theme-ui'
+import { useState } from 'react';
+import { insertImage$, usePublisher } from '@mdxeditor/editor';
+import { Box, Flex } from 'theme-ui';
 
-import { Button } from '../Button/Button'
-import { ImageInput } from '../ImageInput/ImageInput'
-import { Loader } from '../Loader/Loader'
-import { Modal } from '../Modal/Modal'
+import { Button } from '../Button/Button';
+import { ImageInput } from '../ImageInput/ImageInput';
+import { Loader } from '../Loader/Loader';
+import { Modal } from '../Modal/Modal';
 
-import type { IFileMeta } from '../ImageInput/types'
+import type { IFileMeta } from '../ImageInput/types';
 
 interface IProps {
-  imageUploadHandler: (image: File) => Promise<string>
+  imageUploadHandler: (image: File) => Promise<string>;
 }
 
 export const AddImage = ({ imageUploadHandler }: IProps) => {
-  const insertImage = usePublisher(insertImage$)
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const insertImage = usePublisher(insertImage$);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const onFilesChange = async (fileMeta: IFileMeta) => {
-    setIsLoading(true)
+    setIsLoading(true);
 
     if (fileMeta) {
-      const file = await imageUploadHandler(fileMeta.photoData)
+      const file = await imageUploadHandler(fileMeta.photoData);
 
       insertImage({
         src: file,
         altText: fileMeta.name,
         title: fileMeta.name,
-      })
+      });
     }
-    setIsLoading(false)
-    setIsOpen(false)
-  }
+    setIsLoading(false);
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -57,11 +57,7 @@ export const AddImage = ({ imageUploadHandler }: IProps) => {
             {isLoading ? (
               <Loader />
             ) : (
-              <Button
-                variant="secondary"
-                type="button"
-                onClick={() => setIsOpen(false)}
-              >
+              <Button variant="secondary" type="button" onClick={() => setIsOpen(false)}>
                 Cancel
               </Button>
             )}
@@ -69,5 +65,5 @@ export const AddImage = ({ imageUploadHandler }: IProps) => {
         </Flex>
       </Modal>
     </>
-  )
-}
+  );
+};

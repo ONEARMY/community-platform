@@ -1,19 +1,19 @@
-import { Avatar, Box, Flex } from 'theme-ui'
+import { Avatar, Box, Flex } from 'theme-ui';
 
-import defaultProfileImage from '../../assets/images/default_member.svg'
-import { MemberBadge } from '../MemberBadge/MemberBadge'
-import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList'
-import { Username } from '../Username/Username'
+import defaultProfileImage from '../../assets/images/default_member.svg';
+import { MemberBadge } from '../MemberBadge/MemberBadge';
+import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList';
+import { Username } from '../Username/Username';
 
-import type { PinProfile } from 'oa-shared'
+import type { PinProfile } from 'oa-shared';
 
 interface IProps {
-  profile: PinProfile
-  isLink: boolean
+  profile: PinProfile;
+  isLink: boolean;
 }
 
 export const CardDetailsMemberProfile = ({ profile, isLink }: IProps) => {
-  const photoUrl = profile.photo?.publicUrl
+  const photoUrl = profile.photo?.publicUrl;
 
   return (
     <Flex
@@ -48,16 +48,11 @@ export const CardDetailsMemberProfile = ({ profile, isLink }: IProps) => {
       </Box>
 
       <Flex sx={{ flexDirection: 'column', gap: 1, flex: 1 }}>
-        <Username
-          user={profile}
-          sx={{ alignSelf: 'flex-start' }}
-          isLink={isLink}
-          target="_blank"
-        />
+        <Username user={profile} sx={{ alignSelf: 'flex-start' }} isLink={isLink} target="_blank" />
         {profile.tags && profile.tags.length > 0 && (
           <ProfileTagsList tags={profile.tags} isSpace={false} />
         )}
       </Flex>
     </Flex>
-  )
-}
+  );
+};

@@ -1,19 +1,19 @@
-import { Alert } from 'theme-ui'
+import { Alert } from 'theme-ui';
 
-import type { ThemeUIStyleObject } from 'theme-ui'
+import type { ThemeUIStyleObject } from 'theme-ui';
 
 // Types of alert currently specified in the theme
-type AlertVariants = 'accent' | 'failure' | 'info' | 'success'
+type AlertVariants = 'accent' | 'failure' | 'info' | 'success';
 
 export interface IProps {
-  children: React.ReactNode
-  onClick?: () => void
-  sx?: ThemeUIStyleObject | undefined
-  variant?: AlertVariants
+  children: React.ReactNode;
+  onClick?: () => void;
+  sx?: ThemeUIStyleObject | undefined;
+  variant?: AlertVariants;
 }
 
 export const Banner = (props: IProps) => {
-  const { children, onClick, sx, variant } = props
+  const { children, onClick, sx, variant } = props;
 
   return (
     <Alert
@@ -33,5 +33,5 @@ export const Banner = (props: IProps) => {
     >
       {children}
     </Alert>
-  )
-}
+  );
+};

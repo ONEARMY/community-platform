@@ -1,4 +1,4 @@
-import { ExternalLink, Guidelines } from 'oa-components'
+import { ExternalLink, Guidelines } from 'oa-components';
 
 export const NewsPostingGuidelines = () => {
   const steps = [
@@ -33,7 +33,7 @@ export const NewsPostingGuidelines = () => {
         🙂
       </span>
     </>,
-  ]
+  ];
 
-  return <Guidelines title="How does it work?" steps={steps} />
-}
+  return <Guidelines title="How does it work?" steps={steps} />;
+};

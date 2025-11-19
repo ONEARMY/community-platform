@@ -1,15 +1,15 @@
-import { useMemo } from 'react'
-import { Tooltip } from 'react-tooltip'
-import { Image } from 'theme-ui'
+import { useMemo } from 'react';
+import { Tooltip } from 'react-tooltip';
+import { Image } from 'theme-ui';
 
-import type { ProfileBadge } from 'oa-shared'
+import type { ProfileBadge } from 'oa-shared';
 
 interface IProps {
-  badge: ProfileBadge
+  badge: ProfileBadge;
 }
 
 export const UserBadge = ({ badge }: IProps) => {
-  const uuid = useMemo(() => (Math.random() * 16).toString(), [])
+  const uuid = useMemo(() => (Math.random() * 16).toString(), []);
 
   return (
     <>
@@ -22,5 +22,5 @@ export const UserBadge = ({ badge }: IProps) => {
       />
       <Tooltip id={uuid} />
     </>
-  )
-}
+  );
+};

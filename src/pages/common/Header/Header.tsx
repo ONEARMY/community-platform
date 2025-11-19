@@ -1,32 +1,32 @@
-import { useContext, useEffect, useState } from 'react'
-import { withTheme } from '@emotion/react'
-import { motion } from 'framer-motion'
-import { observer } from 'mobx-react'
-import { Button } from 'oa-components'
-import { UserRole } from 'oa-shared'
+import { useContext, useEffect, useState } from 'react';
+import { withTheme } from '@emotion/react';
+import { motion } from 'framer-motion';
+import { observer } from 'mobx-react';
+import { Button } from 'oa-components';
+import { UserRole } from 'oa-shared';
 // eslint-disable-next-line import/no-unresolved
-import { ClientOnly } from 'remix-utils/client-only'
-import { AuthWrapper } from 'src/common/AuthWrapper'
-import { isModuleSupported, MODULE } from 'src/modules'
-import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
-import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
-import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
-import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
-import { notificationSupabaseService } from 'src/services/notificationsSupabaseService'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { Flex, Text, useThemeUI } from 'theme-ui'
+import { ClientOnly } from 'remix-utils/client-only';
+import { AuthWrapper } from 'src/common/AuthWrapper';
+import { isModuleSupported, MODULE } from 'src/modules';
+import Logo from 'src/pages/common/Header/Menu/Logo/Logo';
+import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop';
+import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel';
+import Profile from 'src/pages/common/Header/Menu/Profile/Profile';
+import { notificationSupabaseService } from 'src/services/notificationsSupabaseService';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { Flex, Text, useThemeUI } from 'theme-ui';
 
-import { EnvironmentContext } from '../EnvironmentContext'
-import { NotificationsContext } from '../NotificationsContext'
-import { NotificationsSupabase } from './Menu/Notifications/NotificationsSupabase'
-import { MobileMenuContext } from './MobileMenuContext'
+import { EnvironmentContext } from '../EnvironmentContext';
+import { NotificationsContext } from '../NotificationsContext';
+import { NotificationsSupabase } from './Menu/Notifications/NotificationsSupabase';
+import { MobileMenuContext } from './MobileMenuContext';
 
-import type { NotificationDisplay } from 'oa-shared'
-import type { ThemeWithName } from 'oa-themes'
+import type { NotificationDisplay } from 'oa-shared';
+import type { ThemeWithName } from 'oa-themes';
 
 const MobileNotificationsWrapper = ({ children }) => {
-  const themeUi = useThemeUI()
-  const theme = themeUi.theme as ThemeWithName
+  const themeUi = useThemeUI();
+  const theme = themeUi.theme as ThemeWithName;
 
   return (
     <Flex
@@ -46,17 +46,14 @@ const MobileNotificationsWrapper = ({ children }) => {
     >
       {children}
     </Flex>
-  )
-}
+  );
+};
 
 const MobileMenuWrapper = ({ children, ...props }) => (
-  <Flex
-    {...props}
-    sx={{ position: 'relative', display: ['flex', 'flex', 'none'] }}
-  >
+  <Flex {...props} sx={{ position: 'relative', display: ['flex', 'flex', 'none'] }}>
     {children}
   </Flex>
-)
+);
 
 const AnimationContainer = (props: any) => {
   const variants = {
@@ -68,7 +65,7 @@ const AnimationContainer = (props: any) => {
       duration: 0.25,
       top: '-100%',
     },
-  }
+  };
   return (
     <motion.div
       layout
@@ -79,34 +76,33 @@ const AnimationContainer = (props: any) => {
     >
       {props.children}
     </motion.div>
-  )
-}
+  );
+};
 
 const Header = observer(() => {
-  const { theme } = useThemeUI()
-  const env = useContext(EnvironmentContext)
-  const { profile } = useProfileStore()
-  const isLoggedIn = !!profile
+  const { theme } = useThemeUI();
+  const env = useContext(EnvironmentContext);
+  const { profile } = useProfileStore();
+  const isLoggedIn = !!profile;
 
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false);
 
   // New notifications states
-  const [notificationsSupabase, setNotificationsSupabase] = useState<
-    NotificationDisplay[] | null
-  >(null)
-  const [isUpdatingNotifications, setIsUpdatingNotifications] =
-    useState<boolean>(true)
+  const [notificationsSupabase, setNotificationsSupabase] = useState<NotificationDisplay[] | null>(
+    null,
+  );
+  const [isUpdatingNotifications, setIsUpdatingNotifications] = useState<boolean>(true);
 
   const updateNotifications = async () => {
-    setIsUpdatingNotifications(true)
-    const notifications = await notificationSupabaseService.getNotifications()
-    setNotificationsSupabase(notifications)
-    setIsUpdatingNotifications(false)
-  }
+    setIsUpdatingNotifications(true);
+    const notifications = await notificationSupabaseService.getNotifications();
+    setNotificationsSupabase(notifications);
+    setIsUpdatingNotifications(false);
+  };
 
   useEffect(() => {
-    updateNotifications()
-  }, [])
+    updateNotifications();
+  }, []);
 
   return (
     <NotificationsContext.Provider
@@ -138,10 +134,7 @@ const Header = observer(() => {
             <Logo />
             {isLoggedIn && (
               <AuthWrapper roleRequired={UserRole.BETA_TESTER} borderLess>
-                <Flex
-                  className="user-beta-icon"
-                  sx={{ alignItems: 'center', marginLeft: 4 }}
-                >
+                <Flex className="user-beta-icon" sx={{ alignItems: 'center', marginLeft: 4 }}>
                   <Text
                     sx={{
                       color: 'white',
@@ -175,10 +168,9 @@ const Header = observer(() => {
           >
             <MenuDesktop />
             {isLoggedIn && <NotificationsSupabase device="desktop" />}
-            {isModuleSupported(
-              env?.VITE_SUPPORTED_MODULES || '',
-              MODULE.USER,
-            ) && <Profile isMobile={false} />}
+            {isModuleSupported(env?.VITE_SUPPORTED_MODULES || '', MODULE.USER) && (
+              <Profile isMobile={false} />
+            )}
           </Flex>
           <ClientOnly fallback={<></>}>
             {() => (
@@ -216,7 +208,7 @@ const Header = observer(() => {
         )}
       </MobileMenuContext.Provider>
     </NotificationsContext.Provider>
-  )
-})
+  );
+});
 
-export default withTheme(Header)
+export default withTheme(Header);

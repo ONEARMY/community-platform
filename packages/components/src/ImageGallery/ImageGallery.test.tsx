@@ -1,11 +1,11 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { act, waitFor } from '@testing-library/react'
-import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+import { act, waitFor } from '@testing-library/react';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { render } from '../test/utils'
-import { ImageGallery } from './ImageGallery'
-import { testImages } from './ImageGallery.stories'
+import { render } from '../test/utils';
+import { ImageGallery } from './ImageGallery';
+import { testImages } from './ImageGallery.stories';
 
 describe('ImageGallery', () => {
   beforeAll(() => {
@@ -21,50 +21,48 @@ describe('ImageGallery', () => {
         removeEventListener: vi.fn(),
         dispatchEvent: vi.fn(),
       })),
-    })
-  })
+    });
+  });
 
   beforeEach(() => {
     // Clean up any existing PhotoSwipe instance
     if ((global.window as any).pswp) {
-      ;(global.window as any).pswp.destroy()
-      delete (global.window as any).pswp
+      (global.window as any).pswp.destroy();
+      delete (global.window as any).pswp;
     }
-  })
+  });
 
   it('handles empty image prop', () => {
-    const { container } = render(<ImageGallery images={undefined as any} />)
+    const { container } = render(<ImageGallery images={undefined as any} />);
 
-    expect(container).toBeEmptyDOMElement()
-  })
+    expect(container).toBeEmptyDOMElement();
+  });
 
   it('renders correct image after clicking in its thumbnail', async () => {
-    const { getByTestId, getAllByTestId } = render(
-      <ImageGallery images={testImages} />,
-    )
-    const mainImage = getByTestId('active-image')
-    expect(mainImage).toBeInTheDocument()
+    const { getByTestId, getAllByTestId } = render(<ImageGallery images={testImages} />);
+    const mainImage = getByTestId('active-image');
+    expect(mainImage).toBeInTheDocument();
 
-    const thumbnails = getAllByTestId('thumbnail')
-    const firstThumbnail = thumbnails[0]
+    const thumbnails = getAllByTestId('thumbnail');
+    const firstThumbnail = thumbnails[0];
 
     act(() => {
-      firstThumbnail.click()
-    })
+      firstThumbnail.click();
+    });
 
     await waitFor(() => {
-      expect(mainImage.getAttribute('src')).toEqual(testImages[0].downloadUrl)
-    })
+      expect(mainImage.getAttribute('src')).toEqual(testImages[0].downloadUrl);
+    });
 
-    const thirdThumbnail = thumbnails[2]
+    const thirdThumbnail = thumbnails[2];
     act(() => {
-      thirdThumbnail.click()
-    })
+      thirdThumbnail.click();
+    });
 
     await waitFor(() => {
-      expect(mainImage.getAttribute('src')).toEqual(testImages[2].downloadUrl)
-    })
-  })
+      expect(mainImage.getAttribute('src')).toEqual(testImages[2].downloadUrl);
+    });
+  });
 
   it('displays correct image in lightbox after clicking on the main image', async () => {
     const { findByRole, getByTestId } = render(
@@ -76,33 +74,31 @@ describe('ImageGallery', () => {
             return {
               x: 200,
               y: 200,
-            }
+            };
           },
         }}
       />,
-    )
+    );
 
-    const mainImage = getByTestId('active-image')
-    expect(mainImage).toBeInTheDocument()
+    const mainImage = getByTestId('active-image');
+    expect(mainImage).toBeInTheDocument();
 
-    mainImage.click()
+    mainImage.click();
 
-    const lightboxDialog = await findByRole('dialog')
-    expect(lightboxDialog).toBeInTheDocument()
+    const lightboxDialog = await findByRole('dialog');
+    expect(lightboxDialog).toBeInTheDocument();
 
-    const group = await findByRole('group', { hidden: false })
-    expect(group).toBeInTheDocument()
+    const group = await findByRole('group', { hidden: false });
+    expect(group).toBeInTheDocument();
 
     // PhotoSwipe doesn't expose images with proper accessibility roles, so we query directly
     // Wait for the actual image (not placeholder) to be loaded
     await waitFor(() => {
-      const image = group.querySelector(
-        'img.pswp__img:not(.pswp__img--placeholder)',
-      )
-      expect(image).toBeInTheDocument()
-      expect(image?.getAttribute('src')).toEqual(mainImage.getAttribute('src'))
-    })
-  })
+      const image = group.querySelector('img.pswp__img:not(.pswp__img--placeholder)');
+      expect(image).toBeInTheDocument();
+      expect(image?.getAttribute('src')).toEqual(mainImage.getAttribute('src'));
+    });
+  });
 
   it('switches images in the lightbox after clicking on the next and previous arrows', async () => {
     const { findByRole, getByTestId, getByLabelText, getAllByRole } = render(
@@ -114,125 +110,103 @@ describe('ImageGallery', () => {
             return {
               x: 200,
               y: 200,
-            }
+            };
           },
         }}
       />,
-    )
+    );
 
-    const mainImage = getByTestId('active-image')
-    expect(mainImage).toBeInTheDocument()
+    const mainImage = getByTestId('active-image');
+    expect(mainImage).toBeInTheDocument();
 
-    mainImage.click()
+    mainImage.click();
 
-    const lightboxDialog = await findByRole('dialog')
-    expect(lightboxDialog).toBeInTheDocument()
+    const lightboxDialog = await findByRole('dialog');
+    expect(lightboxDialog).toBeInTheDocument();
 
     // Find the active slide (aria-hidden="false")
     await waitFor(() => {
-      const groups = getAllByRole('group', { hidden: false })
-      const activeGroup = groups.find(
-        (g) => g.getAttribute('aria-hidden') === 'false',
-      )
-      expect(activeGroup).toBeInTheDocument()
+      const groups = getAllByRole('group', { hidden: false });
+      const activeGroup = groups.find((g) => g.getAttribute('aria-hidden') === 'false');
+      expect(activeGroup).toBeInTheDocument();
 
-      const image = activeGroup?.querySelector(
-        'img.pswp__img:not(.pswp__img--placeholder)',
-      )
-      expect(image).toBeInTheDocument()
-      expect(image?.getAttribute('src')).toEqual(mainImage.getAttribute('src'))
-    })
+      const image = activeGroup?.querySelector('img.pswp__img:not(.pswp__img--placeholder)');
+      expect(image).toBeInTheDocument();
+      expect(image?.getAttribute('src')).toEqual(mainImage.getAttribute('src'));
+    });
 
     // Clicks on the next button
-    const nextImageButton = getByLabelText('Next')
+    const nextImageButton = getByLabelText('Next');
     act(() => {
-      nextImageButton.click()
-    })
+      nextImageButton.click();
+    });
 
     // Verifies that the image shown in the lightbox is the next image
     await waitFor(() => {
-      const groups = getAllByRole('group', { hidden: false })
-      const activeGroup = groups.find(
-        (g) => g.getAttribute('aria-hidden') === 'false',
-      )
-      expect(activeGroup).toBeInTheDocument()
+      const groups = getAllByRole('group', { hidden: false });
+      const activeGroup = groups.find((g) => g.getAttribute('aria-hidden') === 'false');
+      expect(activeGroup).toBeInTheDocument();
 
-      const image = activeGroup?.querySelector(
-        'img.pswp__img:not(.pswp__img--placeholder)',
-      )
-      expect(image).toBeInTheDocument()
-      expect(image?.getAttribute('src')).toEqual(testImages[1].downloadUrl)
-    })
+      const image = activeGroup?.querySelector('img.pswp__img:not(.pswp__img--placeholder)');
+      expect(image).toBeInTheDocument();
+      expect(image?.getAttribute('src')).toEqual(testImages[1].downloadUrl);
+    });
 
     // Clicks on the previous button
-    const previousImageButton = getByLabelText('Previous')
+    const previousImageButton = getByLabelText('Previous');
     act(() => {
-      previousImageButton.click()
-    })
+      previousImageButton.click();
+    });
 
     // Verifies that the image shown in the lightbox is the previous image
     await waitFor(() => {
-      const groups = getAllByRole('group', { hidden: false })
-      const activeGroup = groups.find(
-        (g) => g.getAttribute('aria-hidden') === 'false',
-      )
-      expect(activeGroup).toBeInTheDocument()
+      const groups = getAllByRole('group', { hidden: false });
+      const activeGroup = groups.find((g) => g.getAttribute('aria-hidden') === 'false');
+      expect(activeGroup).toBeInTheDocument();
 
-      const image = activeGroup?.querySelector(
-        'img.pswp__img:not(.pswp__img--placeholder)',
-      )
-      expect(image).toBeInTheDocument()
-      expect(image?.getAttribute('src')).toEqual(testImages[0].downloadUrl)
-    })
-  })
+      const image = activeGroup?.querySelector('img.pswp__img:not(.pswp__img--placeholder)');
+      expect(image).toBeInTheDocument();
+      expect(image?.getAttribute('src')).toEqual(testImages[0].downloadUrl);
+    });
+  });
 
   it('hides thumbnail for single image', () => {
-    const { getAllByTestId } = render(<ImageGallery images={[testImages[0]]} />)
+    const { getAllByTestId } = render(<ImageGallery images={[testImages[0]]} />);
 
     expect(() => {
-      getAllByTestId('thumbnail')
-    }).toThrow()
-  })
+      getAllByTestId('thumbnail');
+    }).toThrow();
+  });
 
   it('supports no thumbnail option', () => {
-    const { getAllByTestId } = render(
-      <ImageGallery images={testImages} hideThumbnails />,
-    )
+    const { getAllByTestId } = render(<ImageGallery images={testImages} hideThumbnails />);
 
     expect(() => {
-      getAllByTestId('thumbnail')
-    }).toThrow()
-  })
+      getAllByTestId('thumbnail');
+    }).toThrow();
+  });
 
   it('supports show next/previous buttons', () => {
     const { getByRole } = render(
-      <ImageGallery
-        images={testImages}
-        hideThumbnails
-        showNextPrevButton={true}
-      />,
-    )
+      <ImageGallery images={testImages} hideThumbnails showNextPrevButton={true} />,
+    );
 
-    const nextBtn = getByRole('button', { name: 'Next image' })
-    const previousBtn = getByRole('button', { name: 'Previous image' })
+    const nextBtn = getByRole('button', { name: 'Next image' });
+    const previousBtn = getByRole('button', { name: 'Previous image' });
 
-    expect(nextBtn).toBeInTheDocument()
-    expect(previousBtn).toBeInTheDocument()
-  })
+    expect(nextBtn).toBeInTheDocument();
+    expect(previousBtn).toBeInTheDocument();
+  });
 
   it('does not support show next/previous buttons because only one image', () => {
     const { queryByRole } = render(
-      <ImageGallery
-        images={[testImages[0]]}
-        hideThumbnails
-        showNextPrevButton={true}
-      />,
-    )
+      <ImageGallery images={[testImages[0]]} hideThumbnails showNextPrevButton={true} />,
+    );
 
-    const nextBtn = queryByRole('button', { name: 'Next image' })
-    const previousBtn = queryByRole('button', { name: 'Previous image' })
+    const nextBtn = queryByRole('button', { name: 'Next image' });
+    const previousBtn = queryByRole('button', { name: 'Previous image' });
 
-    expect(nextBtn).not.toBeInTheDocument()
-    expect(previousBtn).not.toBeInTheDocument()
-  })
-})
+    expect(nextBtn).not.toBeInTheDocument();
+    expect(previousBtn).not.toBeInTheDocument();
+  });
+});

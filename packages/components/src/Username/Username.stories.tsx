@@ -1,14 +1,14 @@
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
-import { Username } from './Username'
+import { Username } from './Username';
 
-import type { Meta } from '@storybook/react-vite'
-import type { Author } from 'oa-shared'
+import type { Meta } from '@storybook/react-vite';
+import type { Author } from 'oa-shared';
 
 export default {
   title: 'Components/Username',
   component: Username,
-} as Meta<typeof Username>
+} as Meta<typeof Username>;
 
 export const NoBadge = {
   args: {
@@ -17,7 +17,7 @@ export const NoBadge = {
       username: 'a-username',
     } as Author,
   },
-}
+};
 
 export const OneBadge = {
   args: {
@@ -34,7 +34,7 @@ export const OneBadge = {
       ],
     } as Author,
   },
-}
+};
 
 export const TwoBadges = {
   args: {
@@ -58,7 +58,7 @@ export const TwoBadges = {
       ],
     } as Author,
   },
-}
+};
 
 export const WithoutFlag = {
   args: {
@@ -66,7 +66,7 @@ export const WithoutFlag = {
       username: 'a-username',
     } as Author,
   },
-}
+};
 
 export const InvalidCountryCode = {
   args: {
@@ -75,7 +75,7 @@ export const InvalidCountryCode = {
       country: 'zz',
     } as Author,
   },
-}
+};
 
 export const InlineStyles = {
   args: {
@@ -86,4 +86,4 @@ export const InlineStyles = {
       outline: '10px solid red',
     },
   },
-}
+};

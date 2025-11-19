@@ -1,27 +1,27 @@
-import { ImageGallery } from 'oa-components'
-import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
-import { AspectRatio, Box, Flex } from 'theme-ui'
+import { ImageGallery } from 'oa-components';
+import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
+import { AspectRatio, Box, Flex } from 'theme-ui';
 
-import type { Profile } from 'oa-shared'
+import type { Profile } from 'oa-shared';
 
 interface IProps {
-  user: Profile
+  user: Profile;
 }
 
 export const ProfileImage = ({ user }: IProps) => {
   if (!user.type?.isSpace) {
-    return null
+    return null;
   }
 
   const getCoverImages = (user: Profile) => {
     if (user.coverImages && user.coverImages.length) {
-      return user.coverImages
+      return user.coverImages;
     }
 
-    return []
-  }
+    return [];
+  };
 
-  const coverImage = getCoverImages(user)
+  const coverImage = getCoverImages(user);
 
   return (
     <Box>
@@ -47,5 +47,5 @@ export const ProfileImage = ({ user }: IProps) => {
         </AspectRatio>
       )}
     </Box>
-  )
-}
+  );
+};

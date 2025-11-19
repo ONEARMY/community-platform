@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { Field } from 'react-final-form'
-import styled from '@emotion/styled'
+import { useState } from 'react';
+import { Field } from 'react-final-form';
+import styled from '@emotion/styled';
 import {
   Button,
   FieldInput,
@@ -8,24 +8,17 @@ import {
   ImageInputDeleteImage,
   ImageInputWrapper,
   Modal,
-} from 'oa-components'
-import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { ImageInputField } from 'src/common/Form/ImageInput.field'
-import { COMPARISONS } from 'src/utils/comparisons'
+} from 'oa-components';
+import { FieldContainer } from 'src/common/Form/FieldContainer';
+import { ImageInputField } from 'src/common/Form/ImageInput.field';
+import { COMPARISONS } from 'src/utils/comparisons';
 import {
   composeValidators,
   draftValidationWrapper,
   minValue,
   required,
-} from 'src/utils/validators'
-import {
-  Card,
-  Flex,
-  Heading,
-  Image as ImageComponent,
-  Label,
-  Text,
-} from 'theme-ui'
+} from 'src/utils/validators';
+import { Card, Flex, Heading, Image as ImageComponent, Label, Text } from 'theme-ui';
 
 import {
   LIBRARY_MIN_REQUIRED_STEPS,
@@ -33,24 +26,24 @@ import {
   LIBRARY_TITLE_MIN_LENGTH,
   STEP_DESCRIPTION_MAX_LENGTH,
   STEP_DESCRIPTION_MIN_LENGTH,
-} from '../../constants'
-import { buttons, errors, steps } from '../../labels'
+} from '../../constants';
+import { buttons, errors, steps } from '../../labels';
 
-import type { Image, IUploadedFileMeta } from 'oa-shared'
+import type { Image, IUploadedFileMeta } from 'oa-shared';
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
   height: 100px;
   margin-right: 10px;
-`
+`;
 
 interface IProps {
-  name: string
-  index: number
-  images: IUploadedFileMeta[]
-  existingImages: Image[]
-  onDelete: (index: number) => void
-  moveStep: (indexfrom: number, indexTo: number) => void
+  name: string;
+  index: number;
+  images: IUploadedFileMeta[];
+  existingImages: Image[];
+  onDelete: (index: number) => void;
+  moveStep: (indexfrom: number, indexTo: number) => void;
 }
 
 /**
@@ -67,62 +60,58 @@ export const LibraryStepField = ({
   onDelete,
   moveStep,
 }: IProps) => {
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const toggleDeleteModal = () => {
-    setShowDeleteModal((state) => !state)
-  }
+    setShowDeleteModal((state) => !state);
+  };
 
   const confirmDelete = () => {
-    toggleDeleteModal()
-    onDelete(index)
-  }
+    toggleDeleteModal();
+    onDelete(index);
+  };
 
   const validateStepMedia = (allValues: any) => {
     if (!allValues?.steps || !allValues?.steps.length) {
-      return null
+      return null;
     }
 
-    const stepValues = allValues.steps[index]
+    const stepValues = allValues.steps[index];
     if (!stepValues) {
-      return null
+      return null;
     }
 
     // More robust checking for images - ensure array exists AND has items
     const hasNewImages =
-      Array.isArray(stepValues.images) &&
-      stepValues.images?.filter((x) => !!x).length > 0
+      Array.isArray(stepValues.images) && stepValues.images?.filter((x) => !!x).length > 0;
     const hasExistingImages =
-      Array.isArray(stepValues.existingImages) &&
-      stepValues.existingImages.length > 0
-    const hasAnyImages = hasNewImages || hasExistingImages
+      Array.isArray(stepValues.existingImages) && stepValues.existingImages.length > 0;
+    const hasAnyImages = hasNewImages || hasExistingImages;
 
     if (stepValues.videoUrl) {
       if (hasAnyImages) {
-        return errors.videoUrl.both
+        return errors.videoUrl.both;
       }
 
-      const ytRegex = new RegExp(
-        /(youtu\.be\/|youtube\.com\/(watch\?v=|embed\/|v\/))/gi,
-      )
-      const urlValid = ytRegex.test(stepValues.videoUrl)
-      return urlValid ? null : errors.videoUrl.invalidUrl
+      const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/(watch\?v=|embed\/|v\/))/gi);
+      const urlValid = ytRegex.test(stepValues.videoUrl);
+      return urlValid ? null : errors.videoUrl.invalidUrl;
     }
 
-    return hasAnyImages ? null : errors.videoUrl.empty
-  }
+    return hasAnyImages ? null : errors.videoUrl.empty;
+  };
 
-  const { deleteButton } = buttons.steps
+  const { deleteButton } = buttons.steps;
   const _labelStyle = {
     fontSize: 2,
     marginBottom: 2,
-  }
+  };
 
-  const isAboveMinimumStep = index >= LIBRARY_MIN_REQUIRED_STEPS
+  const isAboveMinimumStep = index >= LIBRARY_MIN_REQUIRED_STEPS;
 
   const numberOfImageInputsAvailable = images
     ? Math.min(images.filter((x) => !!x).length + 1, 10)
-    : 1
+    : 1;
 
   return (
     <Card data-cy={`step_${index}`} mt={5} key={index}>
@@ -165,10 +154,7 @@ export const LibraryStepField = ({
             />
           )}
 
-          <Modal
-            onDidDismiss={() => toggleDeleteModal()}
-            isOpen={!!showDeleteModal}
-          >
+          <Modal onDidDismiss={() => toggleDeleteModal()} isOpen={!!showDeleteModal}>
             <Text>{deleteButton.warning}</Text>
             <Flex mt={3} p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
               <Flex px={1}>
@@ -235,10 +221,7 @@ export const LibraryStepField = ({
               draftValidationWrapper(
                 value,
                 allValues,
-                composeValidators(
-                  required,
-                  minValue(STEP_DESCRIPTION_MIN_LENGTH),
-                ),
+                composeValidators(required, minValue(STEP_DESCRIPTION_MIN_LENGTH)),
               )
             }
             validateFields={[]}
@@ -277,17 +260,13 @@ export const LibraryStepField = ({
                         <ImageComponent src={image.publicUrl} />
                         <Field
                           name={`steps[${index}].existing-image[${index}]`}
-                          validate={(_, allValues) =>
-                            validateStepMedia(allValues)
-                          }
+                          validate={(_, allValues) => validateStepMedia(allValues)}
                           render={() => (
                             <ImageInputDeleteImage
                               onClick={() => {
-                                const currentImages = input.value || []
-                                const updatedImages = currentImages.filter(
-                                  (_, i) => i !== index,
-                                )
-                                input.onChange(updatedImages)
+                                const currentImages = input.value || [];
+                                const updatedImages = currentImages.filter((_, i) => i !== index);
+                                input.onChange(updatedImages);
                               }}
                             />
                           )}
@@ -301,10 +280,7 @@ export const LibraryStepField = ({
           </Field>
 
           {[...Array(numberOfImageInputsAvailable)].map((_, i) => (
-            <ImageInputFieldWrapper
-              key={`image-upload-${i}`}
-              data-cy={`image-upload-${i}`}
-            >
+            <ImageInputFieldWrapper key={`image-upload-${i}`} data-cy={`image-upload-${i}`}>
               <Field
                 hasText={false}
                 name={`steps[${index}].images[${i}]`}
@@ -328,5 +304,5 @@ export const LibraryStepField = ({
         </Flex>
       </Flex>
     </Card>
-  )
-}
+  );
+};

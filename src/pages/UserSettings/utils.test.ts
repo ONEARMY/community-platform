@@ -1,15 +1,11 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest';
 
-import {
-  sortImpactYearDisplayFields,
-  transformImpactData,
-  transformImpactInputs,
-} from './utils'
+import { sortImpactYearDisplayFields, transformImpactData, transformImpactInputs } from './utils';
 
 describe('transformImpactData', () => {
   it('returns data structured as field inputs', () => {
     const description =
-      'What was your annual revenue (in USD)? By revenue we mean all money coming in.'
+      'What was your annual revenue (in USD)? By revenue we mean all money coming in.';
 
     const impactFields = [
       {
@@ -17,7 +13,7 @@ describe('transformImpactData', () => {
         value: 75000,
         isVisible: false,
       },
-    ]
+    ];
     const expected = {
       revenue: {
         id: 'revenue',
@@ -28,14 +24,14 @@ describe('transformImpactData', () => {
         value: 75000,
         isVisible: false,
       },
-    }
-    expect(transformImpactData(impactFields)).toEqual(expected)
-  })
-})
+    };
+    expect(transformImpactData(impactFields)).toEqual(expected);
+  });
+});
 
 describe('transformImpactInputs', () => {
   it('returns data structured as impact data', () => {
-    const description = 'How many machines did you build?'
+    const description = 'How many machines did you build?';
 
     const inputFields = {
       machines: {
@@ -45,7 +41,7 @@ describe('transformImpactInputs', () => {
         value: 20,
         isVisible: true,
       },
-    }
+    };
 
     const expected = [
       {
@@ -53,10 +49,10 @@ describe('transformImpactInputs', () => {
         value: 20,
         isVisible: true,
       },
-    ]
-    expect(transformImpactInputs(inputFields)).toEqual(expected)
-  })
-})
+    ];
+    expect(transformImpactInputs(inputFields)).toEqual(expected);
+  });
+});
 
 describe('sortImpactYearDisplayFields', () => {
   it('sorts impact data in the same order as impact questions', () => {
@@ -72,13 +68,13 @@ describe('sortImpactYearDisplayFields', () => {
         isVisible: true,
       },
       { id: 'plastic', value: 30000, isVisible: true },
-    ]
+    ];
 
     const expected = [
       { id: 'plastic', value: 30000, isVisible: true },
       { id: 'revenue', value: 2000, isVisible: true },
       { id: 'machines', value: 15, isVisible: true },
-    ]
-    expect(sortImpactYearDisplayFields(fields)).toEqual(expected)
-  })
-})
+    ];
+    expect(sortImpactYearDisplayFields(fields)).toEqual(expected);
+  });
+});

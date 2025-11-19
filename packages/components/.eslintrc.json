@@ -1,9 +1,5 @@
 {
-  "extends": [
-    "../../.eslintrc.json",
-    "plugin:import/recommended",
-    "plugin:storybook/recommended"
-  ],
+  "extends": ["../../.eslintrc.json", "plugin:import/recommended", "plugin:storybook/recommended"],
   "plugins": ["import"],
   "rules": {
     "react/prefer-stateless-function": ["error"],

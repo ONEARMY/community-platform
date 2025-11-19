@@ -1,16 +1,16 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { SearchField } from './SearchField'
+import { SearchField } from './SearchField';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Forms/SearchField',
   component: SearchField,
-} as Meta<typeof SearchField>
+} as Meta<typeof SearchField>;
 
 export const Default: StoryFn<typeof SearchField> = () => {
-  const [searchValue, setSearchValue] = useState<string>('')
+  const [searchValue, setSearchValue] = useState<string>('');
 
   return (
     <SearchField
@@ -21,5 +21,5 @@ export const Default: StoryFn<typeof SearchField> = () => {
       onClickDelete={() => setSearchValue('')}
       onClickSearch={() => {}}
     />
-  )
-}
+  );
+};

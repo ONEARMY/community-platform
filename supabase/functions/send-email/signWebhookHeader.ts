@@ -1,4 +1,4 @@
-import type { Webhook } from 'standardwebhooks'
+import type { Webhook } from 'standardwebhooks';
 
 /**
  * Signs the webhook headers. Why? Because for some reason Supabase doesn't
@@ -14,19 +14,19 @@ import type { Webhook } from 'standardwebhooks'
 export function signWebhookHeader(
   webhook: Webhook,
   headers: {
-    [k: string]: string
+    [k: string]: string;
   },
   payload: string,
 ): {
-  [k: string]: string
+  [k: string]: string;
 } {
-  const newDate = new Date()
-  const whId = 'webhook_id'
-  const signature = webhook.sign(whId, newDate, payload)
+  const newDate = new Date();
+  const whId = 'webhook_id';
+  const signature = webhook.sign(whId, newDate, payload);
 
-  headers['webhook-id'] = whId
-  headers['webhook-signature'] = signature
-  headers['webhook-timestamp'] = `${Math.floor(newDate.getTime() / 1000)}`
+  headers['webhook-id'] = whId;
+  headers['webhook-signature'] = signature;
+  headers['webhook-timestamp'] = `${Math.floor(newDate.getTime() / 1000)}`;
 
-  return headers
+  return headers;
 }

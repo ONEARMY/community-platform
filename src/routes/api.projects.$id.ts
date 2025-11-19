@@ -1,63 +1,57 @@
-import { Project, ProjectStep, UserRole } from 'oa-shared'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { contentServiceServer } from 'src/services/contentService.server'
-import { libraryServiceServer } from 'src/services/libraryService.server'
-import { ProfileServiceServer } from 'src/services/profileService.server'
-import { storageServiceServer } from 'src/services/storageService.server'
-import { updateUserActivity } from 'src/utils/activity.server'
-import { convertToSlug } from 'src/utils/slug'
+import { Project, ProjectStep, UserRole } from 'oa-shared';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { contentServiceServer } from 'src/services/contentService.server';
+import { libraryServiceServer } from 'src/services/libraryService.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
+import { storageServiceServer } from 'src/services/storageService.server';
+import { updateUserActivity } from 'src/utils/activity.server';
+import { convertToSlug } from 'src/utils/slug';
 
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBMedia, DBProfile, DBProject, MediaFile } from 'oa-shared'
-import type { ActionFunctionArgs } from 'react-router'
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBMedia, DBProfile, DBProject, MediaFile } from 'oa-shared';
+import type { ActionFunctionArgs } from 'react-router';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
-  const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request);
 
   try {
-    const id = Number(params.id)
+    const id = Number(params.id);
 
     if (request.method === 'DELETE') {
-      return await deleteProject(request, id)
+      return await deleteProject(request, id);
     }
 
-    const formData = await request.formData()
+    const formData = await request.formData();
 
-    const uploadedCoverImage = formData.get('coverImage') as File | null
-    const uploadedFiles = formData.getAll('files') as File[] | null
+    const uploadedCoverImage = formData.get('coverImage') as File | null;
+    const uploadedFiles = formData.getAll('files') as File[] | null;
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
       isDraft: formData.get('draft') === 'true',
       time: formData.get('time') as string,
-      category: formData.has('category')
-        ? (formData.get('category') as string)
-        : null,
-      tags: formData.has('tags')
-        ? formData.getAll('tags').map((x) => Number(x))
-        : null,
-      fileLink: formData.has('fileLink')
-        ? (formData.get('fileLink') as string)
-        : null,
+      category: formData.has('category') ? (formData.get('category') as string) : null,
+      tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
+      fileLink: formData.has('fileLink') ? (formData.get('fileLink') as string) : null,
       difficultyLevel: formData.has('difficultyLevel')
         ? (formData.get('difficultyLevel') as string)
         : null,
       stepCount: parseInt(formData.get('stepCount') as string),
       slug: convertToSlug(formData.get('title') as string),
-    }
-    const existingCoverImageId = formData.get('existingCoverImage') as string
-    const filesToKeepIds = formData.getAll('existingFiles') as string[]
+    };
+    const existingCoverImageId = formData.get('existingCoverImage') as string;
+    const filesToKeepIds = formData.getAll('existingFiles') as string[];
 
-    const claims = await client.auth.getClaims()
+    const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
-      return Response.json({}, { headers, status: 401 })
+      return Response.json({}, { headers, status: 401 });
     }
 
-    const profileService = new ProfileServiceServer(client)
+    const profileService = new ProfileServiceServer(client);
 
-    const currentProject = await libraryServiceServer.getById(id, client)
-    const profile = await profileService.getByAuthId(claims.data.claims.sub)
+    const currentProject = await libraryServiceServer.getById(id, client);
+    const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
     const { valid, status, statusText } = await validateRequest(
       request,
@@ -65,29 +59,26 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       data,
       currentProject,
       client,
-    )
+    );
 
     if (!valid) {
-      return Response.json({}, { headers, status, statusText })
+      return Response.json({}, { headers, status, statusText });
     }
 
     // 1. Upload files
     if (!existingCoverImageId && currentProject.cover_image?.id) {
       // remove existing
-      await storageServiceServer.removeImages(
-        [currentProject.cover_image.path],
-        client,
-      )
+      await storageServiceServer.removeImages([currentProject.cover_image.path], client);
     }
 
-    let newCoverImage: DBMedia | undefined = undefined
+    let newCoverImage: DBMedia | undefined = undefined;
     if (uploadedCoverImage) {
       const mediaResult = await storageServiceServer.uploadImage(
         [uploadedCoverImage],
         `projects/${currentProject.id}`,
         client,
-      )
-      newCoverImage = mediaResult?.media[0]
+      );
+      newCoverImage = mediaResult?.media[0];
     }
 
     const files = uploadedFiles
@@ -98,7 +89,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
           `projects/${id}`,
           client,
         )
-      : null
+      : null;
 
     // 2. Update project
     const projectDb = await updateProject(
@@ -109,28 +100,23 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       files,
       newCoverImage,
       existingCoverImageId,
-    )
-    const project = Project.fromDB(projectDb, [])
-    const existingStepIds = await libraryServiceServer.getProjectStepIds(
-      projectDb.id,
-      client,
-    )
+    );
+    const project = Project.fromDB(projectDb, []);
+    const existingStepIds = await libraryServiceServer.getProjectStepIds(projectDb.id, client);
 
     // 3. Upsert Steps
-    const stepsToKeepIds: number[] = []
+    const stepsToKeepIds: number[] = [];
 
     for (let i = 0; i < data.stepCount; i++) {
       const stepId = formData.has(`steps.[${i}].id`)
         ? Number(formData.get(`steps.[${i}].id`))
-        : null
+        : null;
       if (stepId) {
-        stepsToKeepIds.push(+stepId)
+        stepsToKeepIds.push(+stepId);
       }
 
-      const newImages = formData.getAll(`steps.[${i}].images`) as File[]
-      const existingImagesIds = formData.getAll(
-        `steps.[${i}].existingImages`,
-      ) as string[]
+      const newImages = formData.getAll(`steps.[${i}].images`) as File[];
+      const existingImagesIds = formData.getAll(`steps.[${i}].existingImages`) as string[];
 
       const stepDb = await libraryServiceServer.upsertStep(client, stepId, {
         title: formData.get(`steps.[${i}].title`) as string,
@@ -138,8 +124,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         videoUrl: (formData.get(`steps.[${i}].videoUrl`) as string) || null,
         projectId: projectDb.id,
         order: i + 1,
-      })
-      const step = ProjectStep.fromDB(stepDb)
+      });
+      const step = ProjectStep.fromDB(stepDb);
 
       // 4. Upload and set images of each Step
       const images = await updateOrReplaceImages(
@@ -148,38 +134,33 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         stepDb.id,
         `projects/${id}`,
         client,
-      )
+      );
 
       const { data } = await client
         .from('project_steps')
         .update({ images })
         .eq('id', stepDb.id)
         .select('images')
-        .single()
-      step.images = data?.images
-      project.steps.push(step)
+        .single();
+      step.images = data?.images;
+      project.steps.push(step);
     }
 
     // delete steps
-    const stepsToDelete = existingStepIds.filter(
-      (id) => !stepsToKeepIds.includes(id),
-    )
+    const stepsToDelete = existingStepIds.filter((id) => !stepsToKeepIds.includes(id));
 
     if (stepsToDelete.length > 0) {
-      await libraryServiceServer.deleteStepsById([...stepsToDelete], client)
+      await libraryServiceServer.deleteStepsById([...stepsToDelete], client);
     }
 
-    updateUserActivity(client, claims.data.claims.sub)
+    updateUserActivity(client, claims.data.claims.sub);
 
-    return Response.json({ project }, { headers, status: 201 })
+    return Response.json({ project }, { headers, status: 201 });
   } catch (error) {
-    console.error(error)
-    return Response.json(
-      {},
-      { headers, status: 500, statusText: 'Error creating project' },
-    )
+    console.error(error);
+    return Response.json({}, { headers, status: 500, statusText: 'Error creating project' });
   }
-}
+};
 
 async function validateRequest(
   request: Request,
@@ -189,22 +170,22 @@ async function validateRequest(
   client: SupabaseClient,
 ) {
   if (!profile) {
-    return { status: 400, statusText: 'User not found' }
+    return { status: 400, statusText: 'User not found' };
   }
   if (request.method !== 'PUT') {
-    return { status: 405, statusText: 'method not allowed' }
+    return { status: 405, statusText: 'method not allowed' };
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'title is required' }
+    return { status: 400, statusText: 'title is required' };
   }
 
   if (!data.description) {
-    return { status: 400, statusText: 'description is required' }
+    return { status: 400, statusText: 'description is required' };
   }
 
   if (!data.isDraft && (!data.stepCount || data.stepCount < 3)) {
-    return { status: 400, statusText: '3 steps are required' }
+    return { status: 400, statusText: '3 steps are required' };
   }
 
   if (
@@ -219,10 +200,10 @@ async function validateRequest(
     return {
       status: 409,
       statusText: 'This project already exists',
-    }
+    };
   }
 
-  return { valid: true }
+  return { valid: true };
 }
 
 async function updateProject(
@@ -230,39 +211,34 @@ async function updateProject(
   profile: DBProfile,
   currentProject: DBProject,
   data: {
-    title: string
-    description: string
-    isDraft: boolean
-    category: string | null
-    tags: number[] | null
-    fileLink: string | null
-    difficultyLevel: string | null
-    time: string | null
-    slug: string
+    title: string;
+    description: string;
+    isDraft: boolean;
+    category: string | null;
+    tags: number[] | null;
+    fileLink: string | null;
+    difficultyLevel: string | null;
+    time: string | null;
+    slug: string;
   },
   files: MediaFile[] | null,
   coverImage?: DBMedia,
   existingCoverImageId?: string,
 ) {
-  const previousSlugs = contentServiceServer.updatePreviousSlugs(
-    currentProject,
-    data.slug,
-  )
+  const previousSlugs = contentServiceServer.updatePreviousSlugs(currentProject, data.slug);
 
-  let cover_image: DBMedia | null = null
+  let cover_image: DBMedia | null = null;
 
   if (coverImage) {
-    cover_image = coverImage
+    cover_image = coverImage;
   } else if (existingCoverImageId) {
-    cover_image = currentProject.cover_image
+    cover_image = currentProject.cover_image;
   }
 
-  let moderation = currentProject.moderation
+  let moderation = currentProject.moderation;
 
   if (currentProject.is_draft && !data.isDraft) {
-    moderation = profile?.roles?.includes(UserRole.ADMIN)
-      ? 'accepted'
-      : 'awaiting-moderation'
+    moderation = profile?.roles?.includes(UserRole.ADMIN) ? 'accepted' : 'awaiting-moderation';
   }
 
   const projectResult = await client
@@ -283,13 +259,13 @@ async function updateProject(
       cover_image,
     })
     .eq('id', currentProject.id)
-    .select()
+    .select();
 
   if (projectResult.error || !projectResult.data) {
-    throw projectResult.error
+    throw projectResult.error;
   }
 
-  return projectResult.data[0] as unknown as DBProject
+  return projectResult.data[0] as unknown as DBProject;
 }
 
 async function updateOrReplaceImages(
@@ -299,49 +275,45 @@ async function updateOrReplaceImages(
   path: string,
   client: SupabaseClient,
 ) {
-  let media: DBMedia[] = []
+  let media: DBMedia[] = [];
 
   if (idsToKeep.length > 0) {
     const existingMedia = await client
       .from('project_steps')
       .select('images')
       .eq('id', stepId)
-      .single()
+      .single();
 
     if (existingMedia.data && existingMedia.data.images?.length > 0) {
-      media = existingMedia.data.images.filter((x) => idsToKeep.includes(x.id))
+      media = existingMedia.data.images.filter((x) => idsToKeep.includes(x.id));
     }
     // TODO: delete other images
   }
 
   if (newUploads.length > 0) {
-    const result = await storageServiceServer.uploadImage(
-      newUploads,
-      path,
-      client,
-    )
+    const result = await storageServiceServer.uploadImage(newUploads, path, client);
 
     if (result) {
-      media = [...media, ...result.media]
+      media = [...media, ...result.media];
     }
   }
 
-  return media
+  return media;
 }
 async function deleteProject(request: Request, id: number) {
-  const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request);
 
-  const claims = await client.auth.getClaims()
+  const claims = await client.auth.getClaims();
 
   if (!claims.data?.claims) {
-    return Response.json({}, { headers, status: 401 })
+    return Response.json({}, { headers, status: 401 });
   }
 
   const canEdit = await libraryServiceServer.isAllowedToEditProjectById(
     client,
     id,
     claims.data.claims.user_metadata.username,
-  )
+  );
 
   if (canEdit) {
     await client
@@ -350,12 +322,12 @@ async function deleteProject(request: Request, id: number) {
         modified_at: new Date(),
         deleted: true,
       })
-      .eq('id', id)
+      .eq('id', id);
 
-    return Response.json({}, { status: 200, headers })
+    return Response.json({}, { status: 200, headers });
   }
 
-  return Response.json({}, { status: 500, headers })
+  return Response.json({}, { status: 500, headers });
 }
 
 async function updateOrReplaceFile(
@@ -365,34 +337,30 @@ async function updateOrReplaceFile(
   path: string,
   client: SupabaseClient,
 ) {
-  const existingFiles = currentProject.files
+  const existingFiles = currentProject.files;
 
-  let media: MediaFile[] = []
-  let mediaToRemove: MediaFile[] = []
+  let media: MediaFile[] = [];
+  let mediaToRemove: MediaFile[] = [];
 
   if (existingFiles && existingFiles.length > 0) {
-    media = existingFiles.filter((x) => idsToKeep.includes(x.id))
-    mediaToRemove = existingFiles.filter((x) => !idsToKeep.includes(x.id))
+    media = existingFiles.filter((x) => idsToKeep.includes(x.id));
+    mediaToRemove = existingFiles.filter((x) => !idsToKeep.includes(x.id));
   }
 
   if (mediaToRemove.length > 0) {
     await storageServiceServer.removeFiles(
       mediaToRemove.map((x) => `${path}/${x.name}`),
       client,
-    )
+    );
   }
 
   if (newUploads.length > 0) {
-    const result = await storageServiceServer.uploadFile(
-      newUploads,
-      path,
-      client,
-    )
+    const result = await storageServiceServer.uploadFile(newUploads, path, client);
 
     if (result) {
-      media = [...media, ...result.media]
+      media = [...media, ...result.media];
     }
   }
 
-  return media
+  return media;
 }

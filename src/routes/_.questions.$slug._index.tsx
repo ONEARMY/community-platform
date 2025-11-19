@@ -1,28 +1,28 @@
-import { useLoaderData } from 'react-router'
-import { Question } from 'oa-shared'
-import { IMAGE_SIZES } from 'src/config/imageTransforms'
-import { NotFoundPage } from 'src/pages/NotFound/NotFound'
-import { QuestionPage } from 'src/pages/Question/QuestionPage'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { questionServiceServer } from 'src/services/questionService.server'
-import { storageServiceServer } from 'src/services/storageService.server'
-import { generateTags, mergeMeta } from 'src/utils/seo.utils'
+import { useLoaderData } from 'react-router';
+import { Question } from 'oa-shared';
+import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { NotFoundPage } from 'src/pages/NotFound/NotFound';
+import { QuestionPage } from 'src/pages/Question/QuestionPage';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { questionServiceServer } from 'src/services/questionService.server';
+import { storageServiceServer } from 'src/services/storageService.server';
+import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 
-import { contentServiceServer } from '../services/contentService.server'
+import { contentServiceServer } from '../services/contentService.server';
 
-import type { DBQuestion } from 'oa-shared'
-import type { LoaderFunctionArgs } from 'react-router'
+import type { DBQuestion } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request);
 
-  const result = await questionServiceServer.getBySlug(client, params.slug!)
+  const result = await questionServiceServer.getBySlug(client, params.slug!);
 
   if (result.error || !result.data) {
-    return Response.json({ question: null }, { headers })
+    return Response.json({ question: null }, { headers });
   }
 
-  const dbQuestion = result.data as unknown as DBQuestion
+  const dbQuestion = result.data as unknown as DBQuestion;
 
   if (dbQuestion.id) {
     await contentServiceServer.incrementViewCount(
@@ -30,56 +30,55 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       'questions',
       dbQuestion.total_views,
       dbQuestion.id,
-    )
+    );
   }
 
-  const [usefulVotes, subscribers, tags] =
-    await contentServiceServer.getMetaFields(
-      client,
-      dbQuestion.id,
-      'questions',
-      dbQuestion.tags,
-    )
+  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(
+    client,
+    dbQuestion.id,
+    'questions',
+    dbQuestion.tags,
+  );
 
   const images = storageServiceServer.getPublicUrls(
     client,
     dbQuestion.images!,
     IMAGE_SIZES.GALLERY,
-  )
+  );
 
-  const question = Question.fromDB(dbQuestion, tags, images)
-  question.usefulCount = usefulVotes.count || 0
-  question.subscriberCount = subscribers.count || 0
+  const question = Question.fromDB(dbQuestion, tags, images);
+  question.usefulCount = usefulVotes.count || 0;
+  question.subscriberCount = subscribers.count || 0;
 
-  return Response.json({ question }, { headers })
+  return Response.json({ question }, { headers });
 }
 
 export function HydrateFallback() {
   // This is required because all routes are loaded client-side. Avoids a page flicker before css is loaded.
   // Can be removed once ALL pages are using SSR.
-  return <div></div>
+  return <div></div>;
 }
 
 export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
-  const question = (loaderData as any)?.question as Question
+  const question = (loaderData as any)?.question as Question;
 
   if (!question) {
-    return []
+    return [];
   }
 
-  const title = `${question.title} - Question - ${import.meta.env.VITE_SITE_NAME}`
-  const imageUrl = question.images?.at(0)?.publicUrl
+  const title = `${question.title} - Question - ${import.meta.env.VITE_SITE_NAME}`;
+  const imageUrl = question.images?.at(0)?.publicUrl;
 
-  return generateTags(title, question.description, imageUrl)
-})
+  return generateTags(title, question.description, imageUrl);
+});
 
 export default function Index() {
-  const data: any = useLoaderData<typeof loader>()
-  const question = data.question as Question
+  const data: any = useLoaderData<typeof loader>();
+  const question = data.question as Question;
 
   if (!question) {
-    return <NotFoundPage />
+    return <NotFoundPage />;
   }
 
-  return <QuestionPage question={question} />
+  return <QuestionPage question={question} />;
 }

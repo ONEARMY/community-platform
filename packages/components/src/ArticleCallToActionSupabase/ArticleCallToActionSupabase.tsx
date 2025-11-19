@@ -1,17 +1,17 @@
-import { Flex, Heading, Text } from 'theme-ui'
+import { Flex, Heading, Text } from 'theme-ui';
 
-import { Username } from '../Username/Username'
+import { Username } from '../Username/Username';
 
-import type { Author } from 'oa-shared'
+import type { Author } from 'oa-shared';
 
 export interface IProps {
-  author: Author
-  children: React.ReactNode
-  contributors?: Author[]
+  author: Author;
+  children: React.ReactNode;
+  contributors?: Author[];
 }
 
 export const ArticleCallToActionSupabase = (props: IProps) => {
-  const { author, children, contributors } = props
+  const { author, children, contributors } = props;
 
   return (
     <Flex
@@ -55,5 +55,5 @@ export const ArticleCallToActionSupabase = (props: IProps) => {
         {children}
       </Flex>
     </Flex>
-  )
-}
+  );
+};

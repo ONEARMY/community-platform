@@ -1,5 +1,5 @@
-import { addons } from '@storybook/addons'
-import { create } from 'storybook/theming'
+import { addons } from '@storybook/addons';
+import { create } from 'storybook/theming';
 
 addons.setConfig({
   isFullscreen: false,
@@ -19,7 +19,7 @@ addons.setConfig({
     showRoots: false,
     collapsedRoots: ['other'],
   },
-})
+});
 
 // automatically import all files ending in *.stories.js
 // configure(require.context('../src', true, /\.stories\.(js|jsx|mdx)$/), module)

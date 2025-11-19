@@ -1,12 +1,10 @@
-import { ButtonIcon } from './ButtonIcon'
+import { ButtonIcon } from './ButtonIcon';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Map/ButtonIcon',
   component: ButtonIcon,
-} as Meta<typeof ButtonIcon>
+} as Meta<typeof ButtonIcon>;
 
-export const WithClose: StoryFn<typeof ButtonIcon> = () => (
-  <ButtonIcon icon="close" />
-)
+export const WithClose: StoryFn<typeof ButtonIcon> = () => <ButtonIcon icon="close" />;

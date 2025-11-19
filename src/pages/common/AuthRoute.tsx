@@ -1,9 +1,9 @@
-import { Navigate } from 'react-router'
-import { observer } from 'mobx-react'
-import { BlockedRoute } from 'oa-components'
-import { AuthWrapper } from 'src/common/AuthWrapper'
+import { Navigate } from 'react-router';
+import { observer } from 'mobx-react';
+import { BlockedRoute } from 'oa-components';
+import { AuthWrapper } from 'src/common/AuthWrapper';
 
-import type { UserRole } from 'oa-shared'
+import type { UserRole } from 'oa-shared';
 
 /*
     This provides a <AuthRoute /> component that can be used in place of <Route /> components
@@ -12,12 +12,12 @@ import type { UserRole } from 'oa-shared'
 
 export const AuthRoute = observer(
   (props: {
-    roleRequired?: UserRole | UserRole[]
+    roleRequired?: UserRole | UserRole[];
     /** Page to redirect if role not satisfied (default shows message) */
-    redirect?: string
-    children: React.ReactNode
+    redirect?: string;
+    children: React.ReactNode;
   }) => {
-    const { roleRequired, redirect, children } = props
+    const { roleRequired, redirect, children } = props;
 
     return (
       <AuthWrapper
@@ -36,6 +36,6 @@ export const AuthRoute = observer(
       >
         {children}
       </AuthWrapper>
-    )
+    );
   },
-)
+);

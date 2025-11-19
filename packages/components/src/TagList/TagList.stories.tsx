@@ -1,11 +1,11 @@
-import { TagList } from './TagList'
+import { TagList } from './TagList';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Components/TagList',
   component: TagList,
-} as Meta<typeof TagList>
+} as Meta<typeof TagList>;
 
 export const Default: StoryFn<typeof TagList> = () => (
   <TagList
@@ -18,4 +18,4 @@ export const Default: StoryFn<typeof TagList> = () => (
       },
     ]}
   />
-)
+);

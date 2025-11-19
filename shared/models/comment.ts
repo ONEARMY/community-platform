@@ -1,48 +1,48 @@
-import { Author } from './author'
+import { Author } from './author';
 
-import type { DBAuthor } from './author'
-import type { DiscussionContentTypes } from './common'
-import type { IDBDocSB, IDoc } from './document'
+import type { DBAuthor } from './author';
+import type { DiscussionContentTypes } from './common';
+import type { IDBDocSB, IDoc } from './document';
 
 export class DBComment implements IDBDocSB {
-  readonly id: number
-  readonly created_at: Date
-  readonly modified_at: Date | null
-  readonly created_by: number | null
-  readonly deleted: boolean
+  readonly id: number;
+  readonly created_at: Date;
+  readonly modified_at: Date | null;
+  readonly created_by: number | null;
+  readonly deleted: boolean;
 
-  readonly profile?: DBAuthor
-  readonly comment: string
-  readonly source_id: number | null
-  readonly source_type: DiscussionContentTypes
-  readonly source_id_legacy: string | null
-  readonly parent_id: number | null
-  readonly vote_count?: number
-  readonly has_voted?: boolean
+  readonly profile?: DBAuthor;
+  readonly comment: string;
+  readonly source_id: number | null;
+  readonly source_type: DiscussionContentTypes;
+  readonly source_id_legacy: string | null;
+  readonly parent_id: number | null;
+  readonly vote_count?: number;
+  readonly has_voted?: boolean;
 
   constructor(comment: DBComment) {
-    Object.assign(this, comment)
+    Object.assign(this, comment);
   }
 }
 
 export class Comment implements IDoc {
-  id: number
-  createdAt: Date
-  modifiedAt: Date | null
-  deleted: boolean
+  id: number;
+  createdAt: Date;
+  modifiedAt: Date | null;
+  deleted: boolean;
 
-  createdBy: Author | null
-  comment: string
-  sourceId: number | string
-  sourceType: DiscussionContentTypes
-  parentId: number | null
-  highlighted?: boolean
-  voteCount?: number
-  hasVoted?: boolean
-  replies?: Reply[]
+  createdBy: Author | null;
+  comment: string;
+  sourceId: number | string;
+  sourceType: DiscussionContentTypes;
+  parentId: number | null;
+  highlighted?: boolean;
+  voteCount?: number;
+  hasVoted?: boolean;
+  replies?: Reply[];
 
   constructor(comment: Comment) {
-    Object.assign(this, comment)
+    Object.assign(this, comment);
   }
 
   static fromDB(obj: DBComment, replies?: Reply[]) {
@@ -59,8 +59,8 @@ export class Comment implements IDoc {
       voteCount: obj.vote_count || 0,
       hasVoted: obj.has_voted,
       replies: replies,
-    })
+    });
   }
 }
 
-export type Reply = Omit<Comment, 'replies'>
+export type Reply = Omit<Comment, 'replies'>;

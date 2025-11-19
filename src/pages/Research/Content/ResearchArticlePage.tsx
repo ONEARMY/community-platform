@@ -1,46 +1,41 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Link, useLocation } from 'react-router'
-import { observer } from 'mobx-react'
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useLocation } from 'react-router';
+import { observer } from 'mobx-react';
 import {
   ArticleCallToActionSupabase,
   Button,
   FollowButton,
   UsefulStatsButton,
   UserEngagementWrapper,
-} from 'oa-components'
+} from 'oa-components';
 // eslint-disable-next-line import/no-unresolved
-import { ClientOnly } from 'remix-utils/client-only'
-import { trackEvent } from 'src/common/Analytics'
-import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
-import {
-  getResearchCommentId,
-  getResearchUpdateId,
-} from 'src/pages/Research/Content/helper'
-import { subscribersService } from 'src/services/subscribersService'
-import { usefulService } from 'src/services/usefulService'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { hasAdminRights } from 'src/utils/helpers'
-import { onUsefulClick } from 'src/utils/onUsefulClick'
-import { Box, Flex } from 'theme-ui'
+import { ClientOnly } from 'remix-utils/client-only';
+import { trackEvent } from 'src/common/Analytics';
+import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
+import { getResearchCommentId, getResearchUpdateId } from 'src/pages/Research/Content/helper';
+import { subscribersService } from 'src/services/subscribersService';
+import { usefulService } from 'src/services/usefulService';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { hasAdminRights } from 'src/utils/helpers';
+import { onUsefulClick } from 'src/utils/onUsefulClick';
+import { Box, Flex } from 'theme-ui';
 
-import ResearchDescription from './ResearchDescription'
-import ResearchUpdate from './ResearchUpdate'
+import ResearchDescription from './ResearchDescription';
+import ResearchUpdate from './ResearchUpdate';
 
-import type { ContentType, ResearchItem } from 'oa-shared'
+import type { ContentType, ResearchItem } from 'oa-shared';
 
 interface IProps {
-  research: ResearchItem
+  research: ResearchItem;
 }
 
 export const ResearchArticlePage = observer(({ research }: IProps) => {
-  const location = useLocation()
-  const { profile: activeUser } = useProfileStore()
-  const [subscribed, setSubscribed] = useState<boolean>(false)
-  const [voted, setVoted] = useState<boolean>(false)
-  const [subscribersCount, setSubscribersCount] = useState<number>(
-    research.subscriberCount,
-  )
-  const [usefulCount, setUsefulCount] = useState<number>(research.usefulCount)
+  const location = useLocation();
+  const { profile: activeUser } = useProfileStore();
+  const [subscribed, setSubscribed] = useState<boolean>(false);
+  const [voted, setVoted] = useState<boolean>(false);
+  const [subscribersCount, setSubscribersCount] = useState<number>(research.subscriberCount);
+  const [usefulCount, setUsefulCount] = useState<number>(research.usefulCount);
 
   const configOnUsefulClick = {
     contentType: 'research' as ContentType,
@@ -50,99 +45,85 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
     setVoted,
     setUsefulCount,
     loggedInUser: activeUser,
-  }
+  };
 
-  const handleUsefulClick = async (
-    vote: 'add' | 'delete',
-    eventCategory = 'Library',
-  ) => {
+  const handleUsefulClick = async (vote: 'add' | 'delete', eventCategory = 'Library') => {
     await onUsefulClick({
       vote,
       config: { ...configOnUsefulClick, eventCategory },
-    })
-  }
+    });
+  };
 
   useEffect(() => {
     const getSubscribed = async () => {
-      const subscribed = await subscribersService.isSubscribed(
-        'research',
-        research.id,
-      )
-      setSubscribed(subscribed)
-    }
+      const subscribed = await subscribersService.isSubscribed('research', research.id);
+      setSubscribed(subscribed);
+    };
 
     const getVoted = async () => {
-      const voted = await usefulService.hasVoted('research', research.id)
-      setVoted(voted)
-    }
+      const voted = await usefulService.hasVoted('research', research.id);
+      setVoted(voted);
+    };
 
     if (activeUser) {
-      getSubscribed()
-      getVoted()
+      getSubscribed();
+      getVoted();
     }
-  }, [activeUser, research])
+  }, [activeUser, research]);
 
   const scrollIntoRelevantSection = () => {
-    if (getResearchCommentId(location.hash) === '') return
-    const section = document.getElementById(
-      `update_${getResearchUpdateId(location.hash)}`,
-    )
-    section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+    if (getResearchCommentId(location.hash) === '') return;
+    const section = document.getElementById(`update_${getResearchUpdateId(location.hash)}`);
+    section?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   useEffect(() => {
-    scrollIntoRelevantSection()
-  }, [location.hash])
+    scrollIntoRelevantSection();
+  }, [location.hash]);
 
   const onFollowClick = async (value: 'add' | 'remove') => {
     if (!activeUser) {
-      return
+      return;
     }
     if (value === 'add') {
-      await subscribersService.add('research', research.id)
+      await subscribersService.add('research', research.id);
     } else {
-      await subscribersService.remove('research', research.id)
+      await subscribersService.remove('research', research.id);
     }
-    const action = subscribed ? 'Unsubscribed' : 'Subscribed'
+    const action = subscribed ? 'Unsubscribed' : 'Subscribed';
 
-    setSubscribersCount((prev) => prev + (subscribed ? -1 : 1))
+    setSubscribersCount((prev) => prev + (subscribed ? -1 : 1));
     // toggle subscribed
-    setSubscribed((prev) => !prev)
+    setSubscribed((prev) => !prev);
 
     trackEvent({
       category: 'Research',
       action: action,
       label: research.slug,
-    })
-  }
+    });
+  };
 
   const isEditable = useMemo(() => {
     return (
       !!activeUser &&
       (hasAdminRights(activeUser) ||
         research.author?.username === activeUser.username ||
-        research.collaborators
-          ?.map((c) => c.username)
-          .includes(activeUser.username))
-    )
-  }, [activeUser, research.author])
+        research.collaborators?.map((c) => c.username).includes(activeUser.username))
+    );
+  }, [activeUser, research.author]);
 
   const isDeletable = useMemo(() => {
     return (
       !!activeUser &&
-      (hasAdminRights(activeUser) ||
-        research.author?.username === activeUser.username)
-    )
-  }, [activeUser, research.author])
+      (hasAdminRights(activeUser) || research.author?.username === activeUser.username)
+    );
+  }, [activeUser, research.author]);
 
   const sortedUpdates = useMemo(() => {
     return research?.updates
       ?.slice()
-      .sort(
-        (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-      )
-  }, [research?.updates])
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  }, [research?.updates]);
 
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
@@ -156,9 +137,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
         isDeletable={isDeletable}
         hasUserVotedUseful={voted}
         hasUserSubscribed={subscribed}
-        onUsefulClick={() =>
-          handleUsefulClick(voted ? 'delete' : 'add', 'ResearchDescription')
-        }
+        onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add', 'ResearchDescription')}
         onFollowClick={() => onFollowClick(subscribed ? 'remove' : 'add')}
         subscribersCount={subscribersCount}
         commentsCount={research.commentCount}
@@ -202,18 +181,13 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
                     votedUsefulCount={usefulCount}
                     hasUserVotedUseful={voted}
                     onUsefulClick={() =>
-                      handleUsefulClick(
-                        voted ? 'delete' : 'add',
-                        'ArticleCallToAction',
-                      )
+                      handleUsefulClick(voted ? 'delete' : 'add', 'ArticleCallToAction')
                     }
                   />
                   <FollowButton
                     isLoggedIn={!!activeUser}
                     hasUserSubscribed={subscribed}
-                    onFollowClick={() =>
-                      onFollowClick(subscribed ? 'remove' : 'add')
-                    }
+                    onFollowClick={() => onFollowClick(subscribed ? 'remove' : 'add')}
                     tooltipFollow="Follow to be notified about new updates"
                     tooltipUnfollow="Unfollow to stop be notified about new updates"
                   />
@@ -242,5 +216,5 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
         </Flex>
       )}
     </Box>
-  )
-})
+  );
+});

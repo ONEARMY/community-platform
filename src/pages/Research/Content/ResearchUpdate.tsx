@@ -1,5 +1,5 @@
-import { useMemo } from 'react'
-import { Link } from 'react-router'
+import { useMemo } from 'react';
+import { Link } from 'react-router';
 import {
   Button,
   DisplayDate,
@@ -7,49 +7,46 @@ import {
   LinkifyText,
   Tooltip,
   VideoPlayer,
-} from 'oa-components'
+} from 'oa-components';
 // eslint-disable-next-line import/no-unresolved
-import { ClientOnly } from 'remix-utils/client-only'
-import { DownloadWrapper } from 'src/common/DownloadWrapper'
-import CollapsableCommentSection from 'src/pages/common/CommentsSupabase/CollapsableCommentSection'
-import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
-import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
-import { Box, Card, Flex, Heading, Text } from 'theme-ui'
+import { ClientOnly } from 'remix-utils/client-only';
+import { DownloadWrapper } from 'src/common/DownloadWrapper';
+import CollapsableCommentSection from 'src/pages/common/CommentsSupabase/CollapsableCommentSection';
+import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag';
+import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
+import { Box, Card, Flex, Heading, Text } from 'theme-ui';
 
-import { ResearchLinkToUpdate } from './ResearchLinkToUpdate'
+import { ResearchLinkToUpdate } from './ResearchLinkToUpdate';
 
-import type {
-  ResearchItem,
-  ResearchUpdate as ResearchUpdateModel,
-} from 'oa-shared'
+import type { ResearchItem, ResearchUpdate as ResearchUpdateModel } from 'oa-shared';
 
 interface IProps {
-  research: ResearchItem
-  update: ResearchUpdateModel
-  updateIndex: number
-  isEditable: boolean
-  slug: string
+  research: ResearchItem;
+  update: ResearchUpdateModel;
+  updateIndex: number;
+  isEditable: boolean;
+  slug: string;
 }
 
 const ResearchUpdate = (props: IProps) => {
-  const { research, update, updateIndex, isEditable, slug } = props
+  const { research, update, updateIndex, isEditable, slug } = props;
 
-  const displayNumber = updateIndex + 1
+  const displayNumber = updateIndex + 1;
 
   const authorIds = useMemo(() => {
-    const ids: number[] = []
+    const ids: number[] = [];
 
     if (research.author) {
-      ids.push(research.author.id)
+      ids.push(research.author.id);
     }
 
     for (const collaborator of research.collaborators) {
       if (collaborator) {
-        ids.push(collaborator.id)
+        ids.push(collaborator.id);
       }
     }
-    return ids
-  }, [research.author, research.collaborators])
+    return ids;
+  }, [research.author, research.collaborators]);
 
   return (
     <Flex
@@ -134,10 +131,7 @@ const ResearchUpdate = (props: IProps) => {
                 >
                   <Flex sx={{ flexDirection: ['column'] }}>
                     <Text variant="auxiliary">
-                      <DisplayDate
-                        createdAt={update.createdAt}
-                        action="Created"
-                      />
+                      <DisplayDate createdAt={update.createdAt} action="Created" />
                     </Text>
                     {update.modifiedAt !== update.createdAt && (
                       <Text variant="auxiliary">
@@ -151,9 +145,7 @@ const ResearchUpdate = (props: IProps) => {
                   </Flex>
                   {/* Show edit button for the creator of the research OR a super-admin */}
                   {isEditable && (
-                    <Link
-                      to={'/research/' + slug + '/edit-update/' + update.id}
-                    >
+                    <Link to={'/research/' + slug + '/edit-update/' + update.id}>
                       <Button
                         type="button"
                         variant="primary"
@@ -168,12 +160,7 @@ const ResearchUpdate = (props: IProps) => {
                 </Flex>
               </Flex>
               <Box>
-                <Text
-                  mt={3}
-                  variant="paragraph"
-                  color={'grey'}
-                  sx={{ whiteSpace: 'pre-line' }}
-                >
+                <Text mt={3} variant="paragraph" color={'grey'} sx={{ whiteSpace: 'pre-line' }}>
                   <LinkifyText>{update.description}</LinkifyText>
                 </Text>
               </Box>
@@ -191,10 +178,7 @@ const ResearchUpdate = (props: IProps) => {
                 />
               )}
             </Box>
-            <Flex
-              className="file-container"
-              sx={{ flexDirection: 'column', px: 4, mt: 3 }}
-            >
+            <Flex className="file-container" sx={{ flexDirection: 'column', px: 4, mt: 3 }}>
               <DownloadWrapper
                 fileDownloadCount={update.fileDownloadCount}
                 fileLink={
@@ -226,7 +210,7 @@ const ResearchUpdate = (props: IProps) => {
         </Flex>
       </Flex>
     </Flex>
-  )
-}
+  );
+};
 
-export default ResearchUpdate
+export default ResearchUpdate;

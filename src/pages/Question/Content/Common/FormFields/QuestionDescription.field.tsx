@@ -1,13 +1,13 @@
-import { Field } from 'react-final-form'
-import { FieldTextarea } from 'oa-components'
-import { FormFieldWrapper } from 'src/pages/common/FormFields'
-import { QUESTION_MAX_DESCRIPTION_LENGTH } from 'src/pages/Question/constants'
-import { fields } from 'src/pages/Question/labels'
-import { composeValidators, required } from 'src/utils/validators'
+import { Field } from 'react-final-form';
+import { FieldTextarea } from 'oa-components';
+import { FormFieldWrapper } from 'src/pages/common/FormFields';
+import { QUESTION_MAX_DESCRIPTION_LENGTH } from 'src/pages/Question/constants';
+import { fields } from 'src/pages/Question/labels';
+import { composeValidators, required } from 'src/utils/validators';
 
 export const QuestionDescriptionField = () => {
-  const { placeholder, title } = fields.description
-  const name = 'description'
+  const { placeholder, title } = fields.description;
+  const name = 'description';
 
   return (
     <FormFieldWrapper htmlFor={name} text={title} required>
@@ -22,5 +22,5 @@ export const QuestionDescriptionField = () => {
         showCharacterCount
       />
     </FormFieldWrapper>
-  )
-}
+  );
+};

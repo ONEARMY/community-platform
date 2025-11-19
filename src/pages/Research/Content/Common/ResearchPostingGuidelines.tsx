@@ -1,4 +1,4 @@
-import { ExternalLink, Guidelines } from 'oa-components'
+import { ExternalLink, Guidelines } from 'oa-components';
 
 export const ResearchPostingGuidelines = () => (
   <Guidelines
@@ -40,4 +40,4 @@ export const ResearchPostingGuidelines = () => (
       </>,
     ]}
   />
-)
+);

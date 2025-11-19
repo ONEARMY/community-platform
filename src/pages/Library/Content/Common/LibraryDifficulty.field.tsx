@@ -1,15 +1,15 @@
-import { Field } from 'react-final-form'
-import { SelectField } from 'src/common/Form/Select.field'
-import { FormFieldWrapper } from 'src/pages/common/FormFields'
-import { COMPARISONS } from 'src/utils/comparisons'
-import { draftValidationWrapper, required } from 'src/utils/validators'
+import { Field } from 'react-final-form';
+import { SelectField } from 'src/common/Form/Select.field';
+import { FormFieldWrapper } from 'src/pages/common/FormFields';
+import { COMPARISONS } from 'src/utils/comparisons';
+import { draftValidationWrapper, required } from 'src/utils/validators';
 
-import { intro } from '../../labels'
-import { DIFFICULTY_OPTIONS } from './FormSettings'
+import { intro } from '../../labels';
+import { DIFFICULTY_OPTIONS } from './FormSettings';
 
 export const LibraryDifficultyField = () => {
-  const { placeholder, title } = intro.difficultyLevel
-  const name = 'difficultyLevel'
+  const { placeholder, title } = intro.difficultyLevel;
+  const name = 'difficultyLevel';
 
   return (
     <FormFieldWrapper htmlFor={name} text={title} required>
@@ -18,9 +18,7 @@ export const LibraryDifficultyField = () => {
         id={name}
         name={name}
         data-cy="difficulty-select"
-        validate={(values, allValues) =>
-          draftValidationWrapper(values, allValues, required)
-        }
+        validate={(values, allValues) => draftValidationWrapper(values, allValues, required)}
         validateFields={[]}
         isEqual={COMPARISONS.textInput}
         component={SelectField}
@@ -28,5 +26,5 @@ export const LibraryDifficultyField = () => {
         placeholder={placeholder}
       />
     </FormFieldWrapper>
-  )
-}
+  );
+};

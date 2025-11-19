@@ -1,34 +1,30 @@
-import React, { useMemo, useState } from 'react'
-import { Button } from 'oa-components'
-import { Box } from 'theme-ui'
+import React, { useMemo, useState } from 'react';
+import { Button } from 'oa-components';
+import { Box } from 'theme-ui';
 
 interface IProps {
-  commentCount: number
-  children: React.ReactNode | React.ReactNode[]
-  showComments?: boolean
+  commentCount: number;
+  children: React.ReactNode | React.ReactNode[];
+  showComments?: boolean;
 }
 
-export const HideDiscussionContainer = ({
-  children,
-  commentCount,
-  showComments,
-}: IProps) => {
-  const [viewComments, setViewComments] = useState(() => showComments || false)
+export const HideDiscussionContainer = ({ children, commentCount, showComments }: IProps) => {
+  const [viewComments, setViewComments] = useState(() => showComments || false);
 
   const buttonText = useMemo(() => {
     if (!viewComments) {
       switch (commentCount) {
         case 0:
-          return 'Start a discussion'
+          return 'Start a discussion';
         case 1:
-          return 'View 1 comment'
+          return 'View 1 comment';
         default:
-          return `View ${commentCount} comments`
+          return `View ${commentCount} comments`;
       }
     }
 
-    return 'Collapse Comments'
-  }, [viewComments])
+    return 'Collapse Comments';
+  }, [viewComments]);
 
   return (
     <Box
@@ -59,5 +55,5 @@ export const HideDiscussionContainer = ({
       </Button>
       {viewComments && children}
     </Box>
-  )
-}
+  );
+};

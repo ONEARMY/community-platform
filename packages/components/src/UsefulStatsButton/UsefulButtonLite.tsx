@@ -1,58 +1,46 @@
-import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router'
-import { Flex, Text, useThemeUI } from 'theme-ui'
+import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { Flex, Text, useThemeUI } from 'theme-ui';
 
-import { Button } from '../Button/Button'
-import { Icon } from '../Icon/Icon'
+import { Button } from '../Button/Button';
+import { Icon } from '../Icon/Icon';
 
-import type { ThemeUIStyleObject } from 'theme-ui'
+import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface IProps {
   usefulButtonLiteConfig: {
-    hasUserVotedUseful: boolean
-    votedUsefulCount: number
-    isLoggedIn: boolean
-    onUsefulClick: (
-      vote: 'add' | 'delete',
-      eventCategory?: string,
-    ) => Promise<void>
-    sx?: ThemeUIStyleObject
-  }
+    hasUserVotedUseful: boolean;
+    votedUsefulCount: number;
+    isLoggedIn: boolean;
+    onUsefulClick: (vote: 'add' | 'delete', eventCategory?: string) => Promise<void>;
+    sx?: ThemeUIStyleObject;
+  };
 }
 
 export const UsefulButtonLite = (props: IProps) => {
-  const {
-    hasUserVotedUseful,
-    votedUsefulCount,
-    isLoggedIn,
-    sx,
-    onUsefulClick,
-  } = props.usefulButtonLiteConfig
+  const { hasUserVotedUseful, votedUsefulCount, isLoggedIn, sx, onUsefulClick } =
+    props.usefulButtonLiteConfig;
 
-  const { theme } = useThemeUI() as any
-  const navigate = useNavigate()
-  const uuid = useMemo(() => (Math.random() * 16).toString(), [])
-  const [disabled, setDisabled] = useState<boolean>()
-  const usefulAction = hasUserVotedUseful ? 'delete' : 'add'
+  const { theme } = useThemeUI() as any;
+  const navigate = useNavigate();
+  const uuid = useMemo(() => (Math.random() * 16).toString(), []);
+  const [disabled, setDisabled] = useState<boolean>();
+  const usefulAction = hasUserVotedUseful ? 'delete' : 'add';
   const handleUsefulClick = async () => {
-    setDisabled(true)
+    setDisabled(true);
     try {
-      await onUsefulClick(usefulAction, 'Comment')
+      await onUsefulClick(usefulAction, 'Comment');
     } catch (err) {
       // handle error or ignore
     }
-    setDisabled(false)
-  }
+    setDisabled(false);
+  };
 
   const backgroundColor =
-    !votedUsefulCount || votedUsefulCount === 0
-      ? 'transparent'
-      : theme.colors.background
+    !votedUsefulCount || votedUsefulCount === 0 ? 'transparent' : theme.colors.background;
 
   return (
-    <Flex
-      sx={{ alignSelf: 'flex-end', position: 'relative', alignItems: 'center' }}
-    >
+    <Flex sx={{ alignSelf: 'flex-end', position: 'relative', alignItems: 'center' }}>
       {votedUsefulCount > 0 && (
         <Flex
           sx={{
@@ -84,9 +72,7 @@ export const UsefulButtonLite = (props: IProps) => {
         onClick={() =>
           isLoggedIn
             ? handleUsefulClick()
-            : navigate(
-                '/sign-in?returnUrl=' + encodeURIComponent(location.pathname),
-              )
+            : navigate('/sign-in?returnUrl=' + encodeURIComponent(location.pathname))
         }
         disabled={disabled}
         variant="outline"
@@ -115,5 +101,5 @@ export const UsefulButtonLite = (props: IProps) => {
         </Flex>
       </Button>
     </Flex>
-  )
-}
+  );
+};

@@ -1,9 +1,9 @@
-import { Flex } from 'theme-ui'
+import { Flex } from 'theme-ui';
 
-import whiteBubble from '../../assets/images/white-bubble_1.svg'
+import whiteBubble from '../../assets/images/white-bubble_1.svg';
 
 export interface Props {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export const UserEngagementWrapper = ({ children }: Props) => {
@@ -22,5 +22,5 @@ export const UserEngagementWrapper = ({ children }: Props) => {
     >
       {children}
     </Flex>
-  )
-}
+  );
+};

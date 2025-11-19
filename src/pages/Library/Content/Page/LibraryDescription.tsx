@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router'
+import { useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router';
 import {
   Button,
   Category,
@@ -9,37 +9,33 @@ import {
   ModerationStatus,
   TagList,
   UsefulStatsButton,
-} from 'oa-components'
-import { DifficultyLevelRecord } from 'oa-shared'
+} from 'oa-components';
+import { DifficultyLevelRecord } from 'oa-shared';
 // eslint-disable-next-line import/no-unresolved
-import { ClientOnly } from 'remix-utils/client-only'
-import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
-import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
-import { trackEvent } from 'src/common/Analytics'
-import { DownloadWrapper } from 'src/common/DownloadWrapper'
-import { logger } from 'src/logger'
-import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
-import {
-  buildStatisticsLabel,
-  capitalizeFirstLetter,
-  hasAdminRights,
-} from 'src/utils/helpers'
-import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui'
+import { ClientOnly } from 'remix-utils/client-only';
+import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg';
+import TimeNeeded from 'src/assets/icons/icon-time-needed.svg';
+import { trackEvent } from 'src/common/Analytics';
+import { DownloadWrapper } from 'src/common/DownloadWrapper';
+import { logger } from 'src/logger';
+import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag';
+import { buildStatisticsLabel, capitalizeFirstLetter, hasAdminRights } from 'src/utils/helpers';
+import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 
-import { libraryService } from '../../library.service'
+import { libraryService } from '../../library.service';
 
-import type { Profile, Project } from 'oa-shared'
+import type { Profile, Project } from 'oa-shared';
 
-const DELETION_LABEL = 'Project marked for deletion'
+const DELETION_LABEL = 'Project marked for deletion';
 
 interface IProps {
-  commentsCount: number
-  item: Project
-  loggedInUser: Profile | undefined
-  votedUsefulCount?: number
-  hasUserVotedUseful: boolean
-  onUsefulClick: () => Promise<void>
-  subscribersCount: number
+  commentsCount: number;
+  item: Project;
+  loggedInUser: Profile | undefined;
+  votedUsefulCount?: number;
+  hasUserVotedUseful: boolean;
+  onUsefulClick: () => Promise<void>;
+  subscribersCount: number;
 }
 
 export const LibraryDescription = (props: IProps) => {
@@ -51,20 +47,20 @@ export const LibraryDescription = (props: IProps) => {
     onUsefulClick,
     subscribersCount,
     votedUsefulCount,
-  } = props
+  } = props;
 
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleDelete = async () => {
     try {
-      await libraryService.deleteProject(item.id)
+      await libraryService.deleteProject(item.id);
       trackEvent({
         category: 'Library',
         action: 'Deleted',
         label: item.title,
-      })
+      });
       logger.debug(
         {
           category: 'Library',
@@ -72,25 +68,23 @@ export const LibraryDescription = (props: IProps) => {
           label: item.title,
         },
         DELETION_LABEL,
-      )
+      );
 
-      navigate('/library')
+      navigate('/library');
     } catch (err) {
-      logger.error(err)
+      logger.error(err);
       // at least log the error
     }
-  }
+  };
 
   const isEditable = useMemo(() => {
     return (
       !!loggedInUser &&
-      (hasAdminRights(loggedInUser) ||
-        item.author?.username === loggedInUser.username)
-    )
-  }, [loggedInUser, item.author])
+      (hasAdminRights(loggedInUser) || item.author?.username === loggedInUser.username)
+    );
+  }, [loggedInUser, item.author]);
 
-  const showFeedback =
-    item.moderationFeedback && item.moderation !== 'accepted' && isEditable
+  const showFeedback = item.moderationFeedback && item.moderation !== 'accepted' && isEditable;
 
   return (
     <Card variant="responsive">
@@ -209,9 +203,7 @@ export const LibraryDescription = (props: IProps) => {
                     action="Published"
                   />
                 )}
-                {item.category && (
-                  <Category category={item.category} sx={{ fontSize: 2 }} />
-                )}
+                {item.category && <Category category={item.category} sx={{ fontSize: 2 }} />}
                 <Heading as="h1" data-cy="project-title">
                   {capitalizeFirstLetter(item.title)}
                 </Heading>
@@ -228,29 +220,12 @@ export const LibraryDescription = (props: IProps) => {
 
           <Flex sx={{ gap: 3, fontSize: 2 }}>
             <Flex sx={{ flexDirection: ['column', 'row', 'row'] }}>
-              <Image
-                loading="lazy"
-                src={TimeNeeded}
-                height="16"
-                width="16"
-                mr="2"
-                mb="2"
-              />
+              <Image loading="lazy" src={TimeNeeded} height="16" width="16" mr="2" mb="2" />
               {item.time}
             </Flex>
             {item.difficultyLevel && (
-              <Flex
-                sx={{ flexDirection: ['column', 'row', 'row'] }}
-                data-cy="difficulty-level"
-              >
-                <Image
-                  loading="lazy"
-                  src={DifficultyLevel}
-                  height="15"
-                  width="16"
-                  mr="2"
-                  mb="2"
-                />
+              <Flex sx={{ flexDirection: ['column', 'row', 'row'] }} data-cy="difficulty-level">
+                <Image loading="lazy" src={DifficultyLevel} height="15" width="16" mr="2" mb="2" />
                 {DifficultyLevelRecord[item.difficultyLevel]}
               </Flex>
             )}
@@ -260,11 +235,7 @@ export const LibraryDescription = (props: IProps) => {
             <TagList tags={item.tags.map((t) => ({ label: t.name }))} />
             <DownloadWrapper
               fileDownloadCount={item.fileDownloadCount}
-              fileLink={
-                item.hasFileLink
-                  ? `/api/documents/project/${item.id}/link`
-                  : undefined
-              }
+              fileLink={item.hasFileLink ? `/api/documents/project/${item.id}/link` : undefined}
               files={item.files?.map((x) => ({
                 id: x.id,
                 name: x.name,
@@ -375,5 +346,5 @@ export const LibraryDescription = (props: IProps) => {
         ]}
       />
     </Card>
-  )
-}
+  );
+};

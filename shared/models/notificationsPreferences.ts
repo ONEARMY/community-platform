@@ -1,44 +1,41 @@
 export class NotificationsPreferences {
-  id?: number
-  user_id?: number
-  comments: boolean
-  replies: boolean
-  researchUpdates: boolean
-  isUnsubscribed: boolean
+  id?: number;
+  user_id?: number;
+  comments: boolean;
+  replies: boolean;
+  researchUpdates: boolean;
+  isUnsubscribed: boolean;
 }
 
 export class DBNotificationsPreferencesFields {
-  comments: boolean
-  replies: boolean
-  research_updates: boolean
-  is_unsubscribed: boolean
+  comments: boolean;
+  replies: boolean;
+  research_updates: boolean;
+  is_unsubscribed: boolean;
 }
 
 export class DBNotificationsPreferences extends DBNotificationsPreferencesFields {
-  id: number
-  user_id: number
+  id: number;
+  user_id: number;
 }
 
 export interface DBPreferencesWithProfileContact {
-  preferences: DBNotificationsPreferences
-  is_contactable: undefined | boolean
+  preferences: DBNotificationsPreferences;
+  is_contactable: undefined | boolean;
 }
 
-export type NotificationsPreferenceTypes =
-  | 'comments'
-  | 'replies'
-  | 'research_updates'
+export type NotificationsPreferenceTypes = 'comments' | 'replies' | 'research_updates';
 
 export interface NotificationsPreferencesFormData {
-  comments: boolean
-  replies: boolean
-  research_updates: boolean
-  id?: number
+  comments: boolean;
+  replies: boolean;
+  research_updates: boolean;
+  id?: number;
 }
 
 export interface NotificationsPreferencesViaEmailFormData {
-  comments: boolean
-  replies: boolean
-  research_updates: boolean
-  userCode: string
+  comments: boolean;
+  replies: boolean;
+  research_updates: boolean;
+  userCode: string;
 }

@@ -1,6 +1,6 @@
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
-import type { News } from 'oa-shared'
+import type { News } from 'oa-shared';
 
 export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   body: faker.lorem.paragraph(),
@@ -67,4 +67,4 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   usefulCount: faker.number.int(),
   profileBadge: null,
   ...newsOverloads,
-})
+});

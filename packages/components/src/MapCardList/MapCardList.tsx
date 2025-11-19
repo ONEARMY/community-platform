@@ -1,35 +1,35 @@
-import { useEffect, useState } from 'react'
-import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
-import { compareDesc } from 'date-fns'
-import { Flex, Text } from 'theme-ui'
+import { useEffect, useState } from 'react';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
+import { compareDesc } from 'date-fns';
+import { Flex, Text } from 'theme-ui';
 
-import { Button } from '../Button/Button'
-import { CardListItem } from '../CardListItem/CardListItem'
-import { Icon } from '../Icon/Icon'
+import { Button } from '../Button/Button';
+import { CardListItem } from '../CardListItem/CardListItem';
+import { Icon } from '../Icon/Icon';
 
-import type { MapPin } from 'oa-shared'
-import type { JSX } from 'react'
+import type { MapPin } from 'oa-shared';
+import type { JSX } from 'react';
 
 export interface IProps {
-  columnsCountBreakPoints?: { [key: number]: number }
-  list: MapPin[]
-  onPinClick: (arg: MapPin) => void
-  selectedPin?: MapPin | null
-  viewport: string
+  columnsCountBreakPoints?: { [key: number]: number };
+  list: MapPin[];
+  onPinClick: (arg: MapPin) => void;
+  selectedPin?: MapPin | null;
+  viewport: string;
 }
 
-const DEFAULT_BREAKPOINTS = { 600: 1, 1100: 2, 1600: 3 }
-export const EMPTY_LIST = 'Oh nos! Nothing to show!'
-const ITEMS_PER_RENDER = 20
+const DEFAULT_BREAKPOINTS = { 600: 1, 1100: 2, 1600: 3 };
+export const EMPTY_LIST = 'Oh nos! Nothing to show!';
+const ITEMS_PER_RENDER = 20;
 
 export const MapCardList = (props: IProps) => {
-  const [renderCount, setRenderCount] = useState<number>(ITEMS_PER_RENDER)
-  const [displayItems, setDisplayItems] = useState<JSX.Element[]>([])
-  const { list, onPinClick, selectedPin, viewport } = props
+  const [renderCount, setRenderCount] = useState<number>(ITEMS_PER_RENDER);
+  const [displayItems, setDisplayItems] = useState<JSX.Element[]>([]);
+  const { list, onPinClick, selectedPin, viewport } = props;
 
   useEffect(() => {
-    setRenderCount(ITEMS_PER_RENDER)
-  }, [list])
+    setRenderCount(ITEMS_PER_RENDER);
+  }, [list]);
 
   useEffect(() => {
     const toRender = list
@@ -41,7 +41,7 @@ export const MapCardList = (props: IProps) => {
       )
       .slice(0, renderCount)
       .map((item) => {
-        const isSelectedPin = item.id === selectedPin?.id
+        const isSelectedPin = item.id === selectedPin?.id;
 
         return (
           <CardListItem
@@ -51,21 +51,19 @@ export const MapCardList = (props: IProps) => {
             onPinClick={onPinClick}
             viewport={viewport}
           />
-        )
-      })
+        );
+      });
 
-    setDisplayItems(toRender)
-  }, [renderCount, list])
+    setDisplayItems(toRender);
+  }, [renderCount, list]);
 
-  const addRenderItems = () =>
-    setRenderCount((count) => count + ITEMS_PER_RENDER)
+  const addRenderItems = () => setRenderCount((count) => count + ITEMS_PER_RENDER);
 
-  const hasMore = !(displayItems.length === list.length)
+  const hasMore = !(displayItems.length === list.length);
 
-  const isListEmpty = list.length === 0
-  const results = `${list.length} result${list.length == 1 ? '' : 's'} in view`
-  const columnsCountBreakPoints =
-    props.columnsCountBreakPoints || DEFAULT_BREAKPOINTS
+  const isListEmpty = list.length === 0;
+  const results = `${list.length} result${list.length == 1 ? '' : 's'} in view`;
+  const columnsCountBreakPoints = props.columnsCountBreakPoints || DEFAULT_BREAKPOINTS;
 
   return (
     <Flex
@@ -104,5 +102,5 @@ export const MapCardList = (props: IProps) => {
         </>
       )}
     </Flex>
-  )
-}
+  );
+};

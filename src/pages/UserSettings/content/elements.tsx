@@ -1,6 +1,6 @@
-import { Field } from 'react-final-form'
-import styled from '@emotion/styled'
-import { Flex } from 'theme-ui'
+import { Field } from 'react-final-form';
+import styled from '@emotion/styled';
+import { Flex } from 'theme-ui';
 
 export const Label = (props) => (
   <Flex
@@ -26,15 +26,15 @@ export const Label = (props) => (
   >
     {props.children}
   </Flex>
-)
+);
 
 export const HiddenInput = styled(Field)`
   position: absolute;
   opacity: 0;
   width: 0;
   height: 0;
-`
+`;
 
 export const FlexSectionContainer = (props) => (
   <Flex sx={{ flexDirection: 'column', gap: [3, 4] }}>{props.children}</Flex>
-)
+);

@@ -1,22 +1,20 @@
-import { Flex } from 'theme-ui'
+import { Flex } from 'theme-ui';
 
-import { IMPACT_YEARS } from './constants'
-import { ImpactItem } from './ImpactItem'
+import { IMPACT_YEARS } from './constants';
+import { ImpactItem } from './ImpactItem';
 
-import type { IUserImpact, Profile } from 'oa-shared'
+import type { IUserImpact, Profile } from 'oa-shared';
 
 interface Props {
-  impact: IUserImpact | undefined
-  user: Profile | undefined
+  impact: IUserImpact | undefined;
+  user: Profile | undefined;
 }
 
 export const Impact = (props: Props) => {
-  const impact = props.impact || []
+  const impact = props.impact || [];
 
   const renderByYear = IMPACT_YEARS.map((year, index) => {
-    const foundYear = impact
-      ? Object.keys(impact).find((key) => Number(key) === year)
-      : undefined
+    const foundYear = impact ? Object.keys(impact).find((key) => Number(key) === year) : undefined;
 
     return (
       <ImpactItem
@@ -25,14 +23,14 @@ export const Impact = (props: Props) => {
         key={index}
         user={props.user}
       />
-    )
-  })
+    );
+  });
 
   return (
     <Flex sx={{ flexFlow: 'row wrap' }} data-cy="ImpactPanel">
       {renderByYear.map((year) => {
-        return year
+        return year;
       })}
     </Flex>
-  )
-}
+  );
+};

@@ -1,103 +1,94 @@
-import { useCallback, useEffect, useState } from 'react'
-import { Link, useSearchParams } from 'react-router'
-import debounce from 'debounce'
-import {
-  CategoryHorizonalList,
-  ReturnPathLink,
-  SearchField,
-  Select,
-  Tooltip,
-} from 'oa-components'
-import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { UserAction } from 'src/common/UserAction'
-import DraftButton from 'src/pages/common/Drafts/DraftButton'
-import { ListHeader } from 'src/pages/common/Layout/ListHeader'
-import { categoryService } from 'src/services/categoryService'
-import { Button, Flex } from 'theme-ui'
+import { useCallback, useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router';
+import debounce from 'debounce';
+import { CategoryHorizonalList, ReturnPathLink, SearchField, Select, Tooltip } from 'oa-components';
+import { FieldContainer } from 'src/common/Form/FieldContainer';
+import { UserAction } from 'src/common/UserAction';
+import DraftButton from 'src/pages/common/Drafts/DraftButton';
+import { ListHeader } from 'src/pages/common/Layout/ListHeader';
+import { categoryService } from 'src/services/categoryService';
+import { Button, Flex } from 'theme-ui';
 
-import { listing } from '../../labels'
-import { LibrarySearchParams } from '../../library.service'
-import { LibrarySortOptions } from './LibrarySortOptions'
+import { listing } from '../../labels';
+import { LibrarySearchParams } from '../../library.service';
+import { LibrarySortOptions } from './LibrarySortOptions';
 
-import type { Category } from 'oa-shared'
-import type { LibrarySortOption } from './LibrarySortOptions'
+import type { Category } from 'oa-shared';
+import type { LibrarySortOption } from './LibrarySortOptions';
 
 interface IProps {
-  itemCount?: number
-  draftCount: number
-  handleShowDrafts: () => void
-  showDrafts: boolean
+  itemCount?: number;
+  draftCount: number;
+  handleShowDrafts: () => void;
+  showDrafts: boolean;
 }
 
 export const LibraryListHeader = (props: IProps) => {
-  const { itemCount, draftCount, handleShowDrafts, showDrafts } = props
-  const [categories, setCategories] = useState<Category[]>([])
-  const [searchParams, setSearchParams] = useSearchParams()
-  const q = searchParams.get(LibrarySearchParams.q)
-  const [searchString, setSearchString] = useState<string>(q ?? '')
+  const { itemCount, draftCount, handleShowDrafts, showDrafts } = props;
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const q = searchParams.get(LibrarySearchParams.q);
+  const [searchString, setSearchString] = useState<string>(q ?? '');
 
-  const categoryParam = Number(searchParams.get(LibrarySearchParams.category))
-  const category = categories?.find((x) => x.id === categoryParam) ?? null
-  const sort = searchParams.get(LibrarySearchParams.sort) as LibrarySortOption
+  const categoryParam = Number(searchParams.get(LibrarySearchParams.category));
+  const category = categories?.find((x) => x.id === categoryParam) ?? null;
+  const sort = searchParams.get(LibrarySearchParams.sort) as LibrarySortOption;
 
-  const headingTitle = import.meta.env.VITE_HOWTOS_HEADING
+  const headingTitle = import.meta.env.VITE_HOWTOS_HEADING;
 
   useEffect(() => {
     const initCategories = async () => {
-      const categories = (await categoryService.getCategories('projects')) || []
-      setCategories(categories)
-    }
+      const categories = (await categoryService.getCategories('projects')) || [];
+      setCategories(categories);
+    };
 
-    initCategories()
-  }, [])
+    initCategories();
+  }, []);
 
   const updateFilter = useCallback(
     (key: LibrarySearchParams, value: string) => {
-      const params = new URLSearchParams(searchParams.toString())
+      const params = new URLSearchParams(searchParams.toString());
       if (value) {
-        params.set(key, value)
+        params.set(key, value);
       } else {
-        params.delete(key)
+        params.delete(key);
       }
-      setSearchParams(params)
+      setSearchParams(params);
     },
     [searchParams],
-  )
+  );
 
   const onSearchInputChange = useCallback(
     debounce((value: string) => {
-      searchValue(value)
+      searchValue(value);
     }, 500),
     [searchParams],
-  )
+  );
 
   const searchValue = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString())
-    params.set(LibrarySearchParams.q, value)
+    const params = new URLSearchParams(searchParams.toString());
+    params.set(LibrarySearchParams.q, value);
 
     if (value.length > 0 && sort !== 'MostRelevant') {
-      params.set(LibrarySearchParams.sort, 'MostRelevant')
+      params.set(LibrarySearchParams.sort, 'MostRelevant');
     }
 
     if (value.length === 0 || !value) {
-      params.set(LibrarySearchParams.sort, 'Newest')
+      params.set(LibrarySearchParams.sort, 'Newest');
     }
 
-    setSearchParams(params)
-  }
+    setSearchParams(params);
+  };
 
   const categoryComponent = (
     <CategoryHorizonalList
       allCategories={categories}
       activeCategory={category}
       setActiveCategory={(updatedCategory) =>
-        updateFilter(
-          LibrarySearchParams.category,
-          (updatedCategory?.id || '').toString(),
-        )
+        updateFilter(LibrarySearchParams.category, (updatedCategory?.id || '').toString())
       }
     />
-  )
+  );
 
   const filteringComponents = (
     <Flex sx={{ gap: 2, flexDirection: ['column', 'row', 'row'] }}>
@@ -110,9 +101,7 @@ export const LibraryListHeader = (props: IProps) => {
               label: LibrarySortOptions.get(sort),
               value: sort,
             }}
-            onChange={(sortBy) =>
-              updateFilter(LibrarySearchParams.sort, sortBy.value)
-            }
+            onChange={(sortBy) => updateFilter(LibrarySearchParams.sort, sortBy.value)}
           />
         </FieldContainer>
       </Flex>
@@ -122,18 +111,18 @@ export const LibraryListHeader = (props: IProps) => {
           placeHolder={listing.search}
           value={searchString}
           onChange={(value) => {
-            setSearchString(value)
-            onSearchInputChange(value)
+            setSearchString(value);
+            onSearchInputChange(value);
           }}
           onClickDelete={() => {
-            setSearchString('')
-            searchValue('')
+            setSearchString('');
+            searchValue('');
           }}
           onClickSearch={() => searchValue(searchString)}
         />
       </Flex>
     </Flex>
-  )
+  );
 
   const actionComponents = (
     <UserAction
@@ -144,11 +133,7 @@ export const LibraryListHeader = (props: IProps) => {
             data-tooltip-id="tooltip"
             data-tooltip-content={listing.incompleteProfile}
           >
-            <Button
-              type="button"
-              data-cy="complete-profile-project"
-              variant="disabled"
-            >
+            <Button type="button" data-cy="complete-profile-project" variant="disabled">
               {listing.create}
             </Button>
           </Link>
@@ -163,12 +148,7 @@ export const LibraryListHeader = (props: IProps) => {
             handleShowDrafts={handleShowDrafts}
           />
           <Link to="/library/create">
-            <Button
-              type="button"
-              sx={{ width: '100%' }}
-              variant="primary"
-              data-cy="create-project"
-            >
+            <Button type="button" sx={{ width: '100%' }} variant="primary" data-cy="create-project">
               {listing.create}
             </Button>
           </Link>
@@ -176,18 +156,13 @@ export const LibraryListHeader = (props: IProps) => {
       }
       loggedOut={
         <ReturnPathLink to="/sign-up">
-          <Button
-            type="button"
-            sx={{ width: '100%' }}
-            variant="primary"
-            data-cy="sign-up"
-          >
+          <Button type="button" sx={{ width: '100%' }} variant="primary" data-cy="sign-up">
             {listing.join}
           </Button>
         </ReturnPathLink>
       }
     />
-  )
+  );
 
   return (
     <ListHeader
@@ -198,5 +173,5 @@ export const LibraryListHeader = (props: IProps) => {
       categoryComponent={categoryComponent}
       filteringComponents={filteringComponents}
     />
-  )
-}
+  );
+};

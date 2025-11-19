@@ -1,16 +1,14 @@
-import { Field } from 'react-final-form'
-import { fields } from 'src/pages/UserSettings/labels'
-import { Flex, Heading, Switch, Text } from 'theme-ui'
+import { Field } from 'react-final-form';
+import { fields } from 'src/pages/UserSettings/labels';
+import { Flex, Heading, Switch, Text } from 'theme-ui';
 
 type PublicContactSectionProps = {
-  isContactable: boolean
-}
+  isContactable: boolean;
+};
 
-export const PublicContactSection = ({
-  isContactable,
-}: PublicContactSectionProps) => {
-  const { description, placeholder, title } = fields.publicContentPreference
-  const name = 'isContactable'
+export const PublicContactSection = ({ isContactable }: PublicContactSectionProps) => {
+  const { description, placeholder, title } = fields.publicContentPreference;
+  const name = 'isContactable';
 
   return (
     <Flex
@@ -41,9 +39,9 @@ export const PublicContactSection = ({
                 },
               }}
             />
-          )
+          );
         }}
       </Field>
     </Flex>
-  )
-}
+  );
+};

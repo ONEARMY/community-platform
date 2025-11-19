@@ -1,10 +1,8 @@
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
-import type { Question } from 'oa-shared'
+import type { Question } from 'oa-shared';
 
-export const FactoryQuestionItem = (
-  questionOverloads: Partial<Question> = {},
-): Question => ({
+export const FactoryQuestionItem = (questionOverloads: Partial<Question> = {}): Question => ({
   id: faker.number.int(),
   isDraft: false,
   createdAt: faker.date.past(),
@@ -66,4 +64,4 @@ export const FactoryQuestionItem = (
   totalViews: faker.number.int(),
   usefulCount: faker.number.int(),
   ...questionOverloads,
-})
+});

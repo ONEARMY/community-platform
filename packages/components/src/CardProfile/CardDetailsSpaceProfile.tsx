@@ -1,34 +1,27 @@
-import { Box, Flex, Image, Text } from 'theme-ui'
+import { Box, Flex, Image, Text } from 'theme-ui';
 
-import { MemberBadge } from '../MemberBadge/MemberBadge'
-import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList'
-import { Username } from '../Username/Username'
+import { MemberBadge } from '../MemberBadge/MemberBadge';
+import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList';
+import { Username } from '../Username/Username';
 
-import type { PinProfile } from 'oa-shared'
+import type { PinProfile } from 'oa-shared';
 
 interface IProps {
-  profile: PinProfile
-  isLink: boolean
+  profile: PinProfile;
+  isLink: boolean;
 }
 
 export const CardDetailsSpaceProfile = ({ profile, isLink }: IProps) => {
   const coverImage =
-    profile.coverImages &&
-    profile.coverImages[0] &&
-    profile.coverImages[0]?.publicUrl
-  const profileUrl = profile.photo?.publicUrl
-  const hasImage = coverImage || profileUrl
+    profile.coverImages && profile.coverImages[0] && profile.coverImages[0]?.publicUrl;
+  const profileUrl = profile.photo?.publicUrl;
+  const hasImage = coverImage || profileUrl;
 
   const aboutText =
-    profile.about && profile.about.length > 80
-      ? profile.about.slice(0, 78) + '...'
-      : profile.about
+    profile.about && profile.about.length > 80 ? profile.about.slice(0, 78) + '...' : profile.about;
 
   return (
-    <Flex
-      data-testid="CardDetailsSpaceProfile"
-      sx={{ flexDirection: 'column', width: '100%' }}
-    >
+    <Flex data-testid="CardDetailsSpaceProfile" sx={{ flexDirection: 'column', width: '100%' }}>
       {hasImage && (
         <>
           <Flex sx={{ aspectRatio: 16 / 6, overflow: 'hidden' }}>
@@ -70,9 +63,7 @@ export const CardDetailsSpaceProfile = ({ profile, isLink }: IProps) => {
         }}
       >
         <Flex sx={{ gap: 2 }}>
-          {!hasImage && (
-            <MemberBadge profileType={profile.type || undefined} size={30} />
-          )}
+          {!hasImage && <MemberBadge profileType={profile.type || undefined} size={30} />}
           <Username
             user={profile}
             sx={{ alignSelf: 'flex-start' }}
@@ -92,5 +83,5 @@ export const CardDetailsSpaceProfile = ({ profile, isLink }: IProps) => {
         )}
       </Flex>
     </Flex>
-  )
-}
+  );
+};

@@ -1,6 +1,6 @@
-import { SiteFooter } from './SiteFooter'
+import { SiteFooter } from './SiteFooter';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   /* 👇 The title prop is optional.
@@ -9,8 +9,6 @@ export default {
    */
   title: 'Layout/SiteFooter',
   component: SiteFooter,
-} as Meta<typeof SiteFooter>
+} as Meta<typeof SiteFooter>;
 
-export const Default: StoryFn<typeof SiteFooter> = () => (
-  <SiteFooter siteName="Precious Plastic" />
-)
+export const Default: StoryFn<typeof SiteFooter> = () => <SiteFooter siteName="Precious Plastic" />;

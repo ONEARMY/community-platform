@@ -1,44 +1,44 @@
-import { Component } from 'react'
-import * as Sentry from '@sentry/react'
-import { SITE } from 'src/config/config'
+import { Component } from 'react';
+import * as Sentry from '@sentry/react';
+import { SITE } from 'src/config/config';
 
-import { ChunkLoadErrorHandler } from './handlers/ChunkLoadError'
-import { isReloaded } from './handlers/Reloader'
+import { ChunkLoadErrorHandler } from './handlers/ChunkLoadError';
+import { isReloaded } from './handlers/Reloader';
 
-import type { ReactNode } from 'react'
+import type { ReactNode } from 'react';
 
 interface IProps {
-  children: ReactNode
+  children: ReactNode;
 }
 interface IState {
-  error?: Error
+  error?: Error;
 }
 
 export default class ErrorBoundary extends Component<IProps, IState> {
   constructor(props: IProps) {
-    super(props)
-    this.state = {}
+    super(props);
+    this.state = {};
   }
 
   /** When catching errors automatically report them to sentry if production */
   componentDidCatch(error: Error, errorInfo: any) {
-    this.setState({ error })
+    this.setState({ error });
     if (SITE === 'production') {
       Sentry.withScope((scope) => {
         Object.keys(errorInfo).forEach((key) => {
-          scope.setExtra(key, errorInfo[key])
-        })
+          scope.setExtra(key, errorInfo[key]);
+        });
         // additionally track if the error has persisted after reload
         if (isReloaded()) {
-          scope.setExtra('persistedAfterReload', true)
+          scope.setExtra('persistedAfterReload', true);
         }
-        Sentry.captureException(error)
-      })
+        Sentry.captureException(error);
+      });
     }
   }
 
   isChunkLoadError(error: Error) {
-    return /loading chunk .+ failed/gi.test(error.message)
+    return /loading chunk .+ failed/gi.test(error.message);
   }
 
   /**
@@ -49,11 +49,7 @@ export default class ErrorBoundary extends Component<IProps, IState> {
    * was non-breaking so that the user can proceed as normal
    */
   render(): ReactNode {
-    const { error } = this.state
-    return error && this.isChunkLoadError(error) ? (
-      <ChunkLoadErrorHandler />
-    ) : (
-      this.props.children
-    )
+    const { error } = this.state;
+    return error && this.isChunkLoadError(error) ? <ChunkLoadErrorHandler /> : this.props.children;
   }
 }

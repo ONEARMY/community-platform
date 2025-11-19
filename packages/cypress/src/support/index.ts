@@ -12,7 +12,7 @@
 // You can read more here:
 // https://on.cypress.io/configuration
 // ***********************************************************
-import './hooks'
-import './commands'
-import './commandsUi'
-import './rules'
+import './hooks';
+import './commands';
+import './commandsUi';
+import './rules';

@@ -1,27 +1,27 @@
-import { useState } from 'react'
-import Foco from 'react-foco'
-import { observer } from 'mobx-react'
-import { MemberBadge } from 'oa-components'
-import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
-import { ProfileModal } from 'src/pages/common/Header/Menu/ProfileModal/ProfileModal'
-import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { Avatar, Box, Flex } from 'theme-ui'
+import { useState } from 'react';
+import Foco from 'react-foco';
+import { observer } from 'mobx-react';
+import { MemberBadge } from 'oa-components';
+import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink';
+import { ProfileModal } from 'src/pages/common/Header/Menu/ProfileModal/ProfileModal';
+import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { Avatar, Box, Flex } from 'theme-ui';
 
-import ProfileButtons from './ProfileButtons'
+import ProfileButtons from './ProfileButtons';
 
-import './profile.css'
+import './profile.css';
 
 interface IProps {
-  isMobile: boolean
+  isMobile: boolean;
 }
 
 const Profile = observer((props: IProps) => {
-  const [showProfileModal, setShowProfileModal] = useState<boolean>(false)
-  const { profile: profile } = useProfileStore()
+  const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
+  const { profile: profile } = useProfileStore();
 
   if (!profile) {
-    return <ProfileButtons isMobile={props.isMobile} />
+    return <ProfileButtons isMobile={props.isMobile} />;
   }
 
   if (props.isMobile) {
@@ -36,23 +36,16 @@ const Profile = observer((props: IProps) => {
       >
         <MenuMobileLink path={'/u/' + profile.username} content="Profile" />
         {COMMUNITY_PAGES_PROFILE.map((page) => (
-          <MenuMobileLink
-            path={page.path}
-            key={page.path}
-            content={page.title}
-          />
+          <MenuMobileLink path={page.path} key={page.path} content={page.title} />
         ))}
         <MenuMobileLink path="/logout" content="Log out" />
       </Box>
-    )
+    );
   }
 
   return (
     <Box data-cy="user-menu" sx={{ width: '93px' }}>
-      <Flex
-        onClick={() => setShowProfileModal((x) => !x)}
-        sx={{ ml: 1, height: '100%' }}
-      >
+      <Flex onClick={() => setShowProfileModal((x) => !x)} sx={{ ml: 1, height: '100%' }}>
         {profile.photo ? (
           <Avatar
             data-cy="header-avatar"
@@ -65,10 +58,7 @@ const Profile = observer((props: IProps) => {
             }}
           />
         ) : (
-          <MemberBadge
-            profileType={profile.type || undefined}
-            sx={{ cursor: 'pointer' }}
-          />
+          <MemberBadge profileType={profile.type || undefined} sx={{ cursor: 'pointer' }} />
         )}
       </Flex>
       <Flex>
@@ -79,7 +69,7 @@ const Profile = observer((props: IProps) => {
         )}
       </Flex>
     </Box>
-  )
-})
+  );
+});
 
-export default Profile
+export default Profile;

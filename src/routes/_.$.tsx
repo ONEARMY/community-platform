@@ -1,9 +1,9 @@
-import { NotFoundPage } from 'src/pages/NotFound/NotFound'
+import { NotFoundPage } from 'src/pages/NotFound/NotFound';
 
 export async function clientLoader() {
-  return null
+  return null;
 }
 
 export default function Index() {
-  return <NotFoundPage />
+  return <NotFoundPage />;
 }

@@ -1,16 +1,16 @@
-import { Box } from 'theme-ui'
+import { Box } from 'theme-ui';
 
-import { VerticalList } from './VerticalList.client'
+import { VerticalList } from './VerticalList.client';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Components/VerticalList',
   component: VerticalList,
-} as Meta<typeof VerticalList>
+} as Meta<typeof VerticalList>;
 
 export const Default: StoryFn<typeof VerticalList> = () => {
-  const items = ['hello', 'world!', '...', 'Yeah,', 'you!']
+  const items = ['hello', 'world!', '...', 'Yeah,', 'you!'];
   return (
     <div style={{ width: '500px' }}>
       <VerticalList>
@@ -28,5 +28,5 @@ export const Default: StoryFn<typeof VerticalList> = () => {
         ))}
       </VerticalList>
     </div>
-  )
-}
+  );
+};

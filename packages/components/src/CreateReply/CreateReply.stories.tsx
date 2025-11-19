@@ -1,11 +1,11 @@
-import { CreateReply } from './CreateReply'
+import { CreateReply } from './CreateReply';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Commenting/CreateReply',
   component: CreateReply,
-} as Meta<typeof CreateReply>
+} as Meta<typeof CreateReply>;
 
 export const Default: StoryFn<typeof CreateReply> = () => {
   return (
@@ -15,8 +15,8 @@ export const Default: StoryFn<typeof CreateReply> = () => {
       maxLength={75}
       onSubmit={() => Promise.resolve()}
     />
-  )
-}
+  );
+};
 
 export const LoggedIn: StoryFn<typeof CreateReply> = () => {
   return (
@@ -26,8 +26,8 @@ export const LoggedIn: StoryFn<typeof CreateReply> = () => {
       maxLength={1000}
       onSubmit={() => Promise.resolve()}
     />
-  )
-}
+  );
+};
 
 export const LoggedInWithError: StoryFn<typeof CreateReply> = () => {
   return (
@@ -36,8 +36,8 @@ export const LoggedInWithError: StoryFn<typeof CreateReply> = () => {
       isLoggedIn={true}
       maxLength={1000}
       onSubmit={async () => {
-        return Promise.reject(new Error('Error!'))
+        return Promise.reject(new Error('Error!'));
       }}
     />
-  )
-}
+  );
+};

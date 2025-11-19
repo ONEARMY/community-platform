@@ -1,19 +1,19 @@
-import { Flex } from 'theme-ui'
+import { Flex } from 'theme-ui';
 
-import { CardDetailsMemberProfile } from './CardDetailsMemberProfile'
-import { CardDetailsSpaceProfile } from './CardDetailsSpaceProfile'
+import { CardDetailsMemberProfile } from './CardDetailsMemberProfile';
+import { CardDetailsSpaceProfile } from './CardDetailsSpaceProfile';
 
-import type { MapPin } from 'oa-shared'
+import type { MapPin } from 'oa-shared';
 
 export interface IProps {
-  item: MapPin
-  isLink?: boolean
+  item: MapPin;
+  isLink?: boolean;
 }
 
 export const CardProfile = ({ item, isLink = false }: IProps) => {
-  const { profile } = item
+  const { profile } = item;
 
-  const isWorkspace = profile?.type && profile?.type.isSpace
+  const isWorkspace = profile?.type && profile?.type.isSpace;
 
   return (
     <Flex sx={{ alignItems: 'stretch', alignContent: 'stretch' }}>
@@ -23,5 +23,5 @@ export const CardProfile = ({ item, isLink = false }: IProps) => {
         <CardDetailsMemberProfile profile={profile} isLink={isLink} />
       )}
     </Flex>
-  )
-}
+  );
+};

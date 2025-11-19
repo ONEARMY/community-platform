@@ -3,23 +3,23 @@ import {
   IconCountWithTooltip,
   InternalLink,
   // ModerationStatus,
-} from 'oa-components'
-import { Highlighter } from 'src/common/Highlighter'
-import { Box, Card, Flex, Heading } from 'theme-ui'
+} from 'oa-components';
+import { Highlighter } from 'src/common/Highlighter';
+import { Box, Card, Flex, Heading } from 'theme-ui';
 
-import { UserNameTag } from '../common/UserNameTag/UserNameTag'
-import { listing } from './labels'
+import { UserNameTag } from '../common/UserNameTag/UserNameTag';
+import { listing } from './labels';
 
-import type { Question } from 'oa-shared'
+import type { Question } from 'oa-shared';
 
 interface IProps {
-  question: Question
-  query?: string
+  question: Question;
+  query?: string;
 }
 
 export const QuestionListItem = ({ question, query }: IProps) => {
-  const url = `/questions/${encodeURIComponent(question.slug)}`
-  const searchWords = [query || '']
+  const url = `/questions/${encodeURIComponent(question.slug)}`;
+  const searchWords = [query || ''];
 
   return (
     <Card
@@ -81,16 +81,11 @@ export const QuestionListItem = ({ question, query }: IProps) => {
                   },
                 }}
               >
-                <Highlighter
-                  searchWords={searchWords}
-                  textToHighlight={question.title}
-                />
+                <Highlighter searchWords={searchWords} textToHighlight={question.title} />
               </InternalLink>
             </Heading>
 
-            {question.category && (
-              <Category category={question.category} sx={{ fontSize: 2 }} />
-            )}
+            {question.category && <Category category={question.category} sx={{ fontSize: 2 }} />}
           </Flex>
 
           <Flex>
@@ -130,12 +125,9 @@ export const QuestionListItem = ({ question, query }: IProps) => {
 
       {query && (
         <Box sx={{ padding: 3, paddingTop: 0 }}>
-          <Highlighter
-            searchWords={searchWords}
-            textToHighlight={question.description}
-          />
+          <Highlighter searchWords={searchWords} textToHighlight={question.description} />
         </Box>
       )}
     </Card>
-  )
-}
+  );
+};

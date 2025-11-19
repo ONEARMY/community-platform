@@ -1,15 +1,15 @@
-import { faker } from '@faker-js/faker'
-import { Box, Button } from 'theme-ui'
+import { faker } from '@faker-js/faker';
+import { Box, Button } from 'theme-ui';
 
-import { ArticleCallToActionSupabase, UsefulStatsButton } from '..'
-import { UserEngagementWrapper } from './UserEngagementWrapper'
+import { ArticleCallToActionSupabase, UsefulStatsButton } from '..';
+import { UserEngagementWrapper } from './UserEngagementWrapper';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Layout/UserEngagementWrapper',
   component: UserEngagementWrapper,
-} as Meta<typeof UserEngagementWrapper>
+} as Meta<typeof UserEngagementWrapper>;
 
 export const Default: StoryFn<typeof UserEngagementWrapper> = () => (
   <Box sx={{ maxWidth: '1000px', margin: '0 auto' }}>
@@ -52,4 +52,4 @@ export const Default: StoryFn<typeof UserEngagementWrapper> = () => (
       </Box>
     </UserEngagementWrapper>
   </Box>
-)
+);

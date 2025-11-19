@@ -1,68 +1,66 @@
-import { useMemo, useState } from 'react'
-import { Form } from 'react-final-form'
-import arrayMutators from 'final-form-arrays'
-import { toJS } from 'mobx'
-import { observer } from 'mobx-react'
-import { Button, Loader } from 'oa-components'
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
-import { logger } from 'src/logger'
-import { profileService } from 'src/services/profileService'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { isContactable, isMessagingModuleOff } from 'src/utils/helpers'
-import { Flex } from 'theme-ui'
+import { useMemo, useState } from 'react';
+import { Form } from 'react-final-form';
+import arrayMutators from 'final-form-arrays';
+import { toJS } from 'mobx';
+import { observer } from 'mobx-react';
+import { Button, Loader } from 'oa-components';
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
+import { logger } from 'src/logger';
+import { profileService } from 'src/services/profileService';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { isContactable, isMessagingModuleOff } from 'src/utils/helpers';
+import { Flex } from 'theme-ui';
 
-import { ProfileTypeSection } from './content/sections/ProfileType.section'
-import { PublicContactSection } from './content/sections/PublicContact.section'
-import { UserImagesSection } from './content/sections/UserImages.section'
-import { UserInfosSection } from './content/sections/UserInfos.section'
-import { VisitorSection } from './content/sections/VisitorSection'
-import { SettingsFormNotifications } from './content/SettingsFormNotifications'
-import { buttons } from './labels'
+import { ProfileTypeSection } from './content/sections/ProfileType.section';
+import { PublicContactSection } from './content/sections/PublicContact.section';
+import { UserImagesSection } from './content/sections/UserImages.section';
+import { UserInfosSection } from './content/sections/UserInfos.section';
+import { VisitorSection } from './content/sections/VisitorSection';
+import { SettingsFormNotifications } from './content/SettingsFormNotifications';
+import { buttons } from './labels';
 
-import type { ProfileFormData } from 'oa-shared'
-import type { IFormNotification } from './content/SettingsFormNotifications'
+import type { ProfileFormData } from 'oa-shared';
+import type { IFormNotification } from './content/SettingsFormNotifications';
 
 export const SettingsPageUserProfile = observer(() => {
-  const [notification, setNotification] = useState<
-    IFormNotification | undefined
-  >(undefined)
+  const [notification, setNotification] = useState<IFormNotification | undefined>(undefined);
 
-  const { profileTypes, profile, update, refresh } = useProfileStore()
+  const { profileTypes, profile, update, refresh } = useProfileStore();
 
   if (!profile) {
-    return null
+    return null;
   }
 
   const saveProfile = async (values: ProfileFormData) => {
-    values.coverImages = values.coverImages?.filter((cover) => !!cover) || []
+    values.coverImages = values.coverImages?.filter((cover) => !!cover) || [];
 
     try {
-      const updatedProfile = await profileService.update(values)
+      const updatedProfile = await profileService.update(values);
 
-      update(updatedProfile)
-      refresh()
+      update(updatedProfile);
+      refresh();
 
       setNotification({
         message: 'Profile Saved',
         icon: 'check',
         show: true,
         variant: 'success',
-      })
+      });
     } catch (error) {
-      logger.error(error, 'SettingsPage.saveProfile.error')
+      logger.error(error, 'SettingsPage.saveProfile.error');
       setNotification({
         message: `Save Failed - ${error}`,
         icon: 'close',
         show: true,
         variant: 'failure',
-      })
+      });
     }
-  }
+  };
 
   const existingCoverImages = profile.coverImages
     ? profile?.coverImages?.slice(0, 4).map((image) => toJS(image))
-    : []
-  const coverImages = new Array(4 - (existingCoverImages?.length || 0))
+    : [];
+  const coverImages = new Array(4 - (existingCoverImages?.length || 0));
 
   const initialValues = useMemo<ProfileFormData>(
     () => ({
@@ -82,8 +80,8 @@ export const SettingsPageUserProfile = observer(() => {
       tagIds: profile.tags?.map((x) => x.id) || null,
     }),
     [],
-  )
-  const formId = 'userProfileForm'
+  );
+  const formId = 'userProfileForm';
 
   return (
     <Form
@@ -103,8 +101,7 @@ export const SettingsPageUserProfile = observer(() => {
         errors,
         form,
       }) => {
-        const isMember = !profileTypes?.find((x) => x.name === values.type)
-          ?.isSpace
+        const isMember = !profileTypes?.find((x) => x.name === values.type)?.isSpace;
 
         return (
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
@@ -120,11 +117,7 @@ export const SettingsPageUserProfile = observer(() => {
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
                 <ProfileTypeSection profileTypes={profileTypes || []} />
                 <UserInfosSection formValues={values} />
-                <UserImagesSection
-                  isMemberProfile={isMember}
-                  values={values}
-                  form={form}
-                />
+                <UserImagesSection isMemberProfile={isMember} values={values} form={form} />
 
                 {!isMember && (
                   <VisitorSection
@@ -149,9 +142,7 @@ export const SettingsPageUserProfile = observer(() => {
               large
               form={formId}
               data-cy="save"
-              title={
-                invalid ? `Errors: ${Object.keys(errors || {})}` : 'Submit'
-              }
+              title={invalid ? `Errors: ${Object.keys(errors || {})}` : 'Submit'}
               onClick={() => window.scrollTo(0, 0)}
               variant="primary"
               type="submit"
@@ -161,8 +152,8 @@ export const SettingsPageUserProfile = observer(() => {
               {buttons.save}
             </Button>
           </Flex>
-        )
+        );
       }}
     />
-  )
-})
+  );
+});

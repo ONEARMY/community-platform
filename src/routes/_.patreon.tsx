@@ -1,53 +1,50 @@
-import { redirect } from 'react-router'
-import Main from 'src/pages/common/Layout/Main'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { patreonServiceServer } from 'src/services/patreonService.server'
-import { generateTags, mergeMeta } from 'src/utils/seo.utils'
-import { Flex, Text } from 'theme-ui'
+import { redirect } from 'react-router';
+import Main from 'src/pages/common/Layout/Main';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { patreonServiceServer } from 'src/services/patreonService.server';
+import { generateTags, mergeMeta } from 'src/utils/seo.utils';
+import { Flex, Text } from 'theme-ui';
 
-import type { LoaderFunctionArgs } from 'react-router'
+import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const url = new URL(request.url)
-  const patreonCode = url.searchParams.get('code')
+  const url = new URL(request.url);
+  const patreonCode = url.searchParams.get('code');
 
-  const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request);
 
   if (!patreonCode) {
-    return Response.json(
-      { error: 'No code provided' },
-      { status: 400, headers },
-    )
+    return Response.json({ error: 'No code provided' }, { status: 400, headers });
   }
 
   try {
-    const claims = await client.auth.getClaims()
+    const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
-      return redirect('/sign-in', { headers })
+      return redirect('/sign-in', { headers });
     }
 
-    const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:'
-    const origin = `${protocol}//${url.host}`
+    const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
+    const origin = `${protocol}//${url.host}`;
 
     await patreonServiceServer.verifyAndUpdatePatreonUser(
       patreonCode,
       claims.data.claims.sub,
       client,
       origin,
-    )
+    );
 
-    return redirect('/settings/account', { headers })
+    return redirect('/settings/account', { headers });
   } catch (error) {
-    console.error('Error verifying patreon code', error)
+    console.error('Error verifying patreon code', error);
   }
 
-  return null
+  return null;
 }
 
 export const meta = mergeMeta<typeof loader>(() => {
-  return generateTags('Patreon')
-})
+  return generateTags('Patreon');
+});
 
 export default function Index() {
   return (
@@ -62,10 +59,9 @@ export default function Index() {
         }}
       >
         <Text>
-          Sorry, we encountered an error integrating your Patreon account.
-          Please try again later!
+          Sorry, we encountered an error integrating your Patreon account. Please try again later!
         </Text>
       </Flex>
     </Main>
-  )
+  );
 }

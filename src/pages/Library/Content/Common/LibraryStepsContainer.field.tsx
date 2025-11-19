@@ -1,14 +1,14 @@
-import { FieldArray } from 'react-final-form-arrays'
-import { AnimatePresence, motion } from 'framer-motion'
-import { Button } from 'oa-components'
-import { LibraryStepField } from 'src/pages/Library/Content/Common/LibraryStep.field'
-import { COMPARISONS } from 'src/utils/comparisons'
-import { Box, Flex, Heading, Text } from 'theme-ui'
+import { FieldArray } from 'react-final-form-arrays';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Button } from 'oa-components';
+import { LibraryStepField } from 'src/pages/Library/Content/Common/LibraryStep.field';
+import { COMPARISONS } from 'src/utils/comparisons';
+import { Box, Flex, Heading, Text } from 'theme-ui';
 
-import { buttons as buttonsLabel, steps as stepsLabel } from '../../labels'
+import { buttons as buttonsLabel, steps as stepsLabel } from '../../labels';
 
 interface IPropsAnimation {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 const AnimationContainer = ({ children }: IPropsAnimation) => {
@@ -26,19 +26,13 @@ const AnimationContainer = ({ children }: IPropsAnimation) => {
       duration: 0.2,
       top: '-100%',
     },
-  }
+  };
   return (
-    <motion.div
-      layout
-      initial="pre"
-      animate="enter"
-      exit="post"
-      variants={variants}
-    >
+    <motion.div layout initial="pre" animate="enter" exit="post" variants={variants}>
       {children}
     </motion.div>
-  )
-}
+  );
+};
 
 export const LibraryStepsContainerField = () => {
   return (
@@ -56,9 +50,7 @@ export const LibraryStepsContainerField = () => {
           </Box>
           <AnimatePresence>
             {fields.map((name, index: number) => (
-              <AnimationContainer
-                key={`${fields.value[index]._animationKey}-${index}`}
-              >
+              <AnimationContainer key={`${fields.value[index]._animationKey}-${index}`}>
                 <LibraryStepField
                   key={`${fields.value[index]._animationKey}-${index}2`}
                   name={name}
@@ -66,13 +58,13 @@ export const LibraryStepsContainerField = () => {
                   moveStep={(from, to) => {
                     if (to !== fields.length && to >= 0) {
                       // Move form fields
-                      fields.move(from, to)
+                      fields.move(from, to);
                     }
                   }}
                   images={fields.value[index].images || []}
                   existingImages={fields.value[index].existingImages || []}
                   onDelete={(fieldIndex: number) => {
-                    fields.remove(fieldIndex)
+                    fields.remove(fieldIndex);
                   }}
                 />
               </AnimationContainer>
@@ -93,7 +85,7 @@ export const LibraryStepsContainerField = () => {
                   description: '',
                   images: [],
                   existingImages: [],
-                })
+                });
               }}
             >
               {buttonsLabel.steps.add}
@@ -102,5 +94,5 @@ export const LibraryStepsContainerField = () => {
         </>
       )}
     </FieldArray>
-  )
-}
+  );
+};

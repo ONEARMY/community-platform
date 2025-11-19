@@ -1,13 +1,13 @@
 // eslint-disable-next-line import/no-unresolved
-import { ClientOnly } from 'remix-utils/client-only'
-import { Box, Flex } from 'theme-ui'
+import { ClientOnly } from 'remix-utils/client-only';
+import { Box, Flex } from 'theme-ui';
 
-import { ProfileButtonItem } from './ProfileButtonItem'
+import { ProfileButtonItem } from './ProfileButtonItem';
 
-import './profile.css'
+import './profile.css';
 
 interface IProps {
-  isMobile?: boolean
+  isMobile?: boolean;
 }
 
 const ProfileButtons = (props: IProps) => {
@@ -16,7 +16,7 @@ const ProfileButtons = (props: IProps) => {
     justifyContent: 'center',
     textAlign: 'center',
     width: '100%',
-  }
+  };
 
   if (props.isMobile) {
     return (
@@ -63,7 +63,7 @@ const ProfileButtons = (props: IProps) => {
           </ClientOnly>
         </Box>
       </Flex>
-    )
+    );
   }
 
   return (
@@ -80,16 +80,11 @@ const ProfileButtons = (props: IProps) => {
               fontSize: 2,
             }}
           />
-          <ProfileButtonItem
-            link="/sign-up"
-            text="Join"
-            variant="outline"
-            sx={{ fontSize: 2 }}
-          />
+          <ProfileButtonItem link="/sign-up" text="Join" variant="outline" sx={{ fontSize: 2 }} />
         </>
       )}
     </ClientOnly>
-  )
-}
+  );
+};
 
-export default ProfileButtons
+export default ProfileButtons;

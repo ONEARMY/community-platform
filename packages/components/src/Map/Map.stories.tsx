@@ -1,16 +1,16 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { Map } from './Map.client'
+import { Map } from './Map.client';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Map/Map',
   component: Map,
-} as Meta<typeof Map>
+} as Meta<typeof Map>;
 
 export const Default: StoryFn<typeof Map> = () => {
-  const [zoom, setZoom] = useState<number>(1)
+  const [zoom, setZoom] = useState<number>(1);
   return (
     <Map
       zoom={zoom}
@@ -21,5 +21,5 @@ export const Default: StoryFn<typeof Map> = () => {
       }}
       center={[0, 0]}
     />
-  )
-}
+  );
+};

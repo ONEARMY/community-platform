@@ -1,28 +1,22 @@
-import { Field } from 'react-final-form'
-import { FieldInput } from 'oa-components'
-import { FormFieldWrapper } from 'src/pages/common/FormFields'
-import { COMPARISONS } from 'src/utils/comparisons'
-import { composeValidators, minValue, required } from 'src/utils/validators'
+import { Field } from 'react-final-form';
+import { FieldInput } from 'oa-components';
+import { FormFieldWrapper } from 'src/pages/common/FormFields';
+import { COMPARISONS } from 'src/utils/comparisons';
+import { composeValidators, minValue, required } from 'src/utils/validators';
 
-import {
-  LIBRARY_TITLE_MAX_LENGTH,
-  LIBRARY_TITLE_MIN_LENGTH,
-} from '../../constants'
-import { intro } from '../../labels'
+import { LIBRARY_TITLE_MAX_LENGTH, LIBRARY_TITLE_MIN_LENGTH } from '../../constants';
+import { intro } from '../../labels';
 
 export const LibraryTitleField = () => {
-  const { placeholder, title } = intro.title
+  const { placeholder, title } = intro.title;
 
-  const name = 'title'
+  const name = 'title';
 
   const titleValidation = (value: string) => {
-    const validators = composeValidators(
-      required,
-      minValue(LIBRARY_TITLE_MIN_LENGTH),
-    )
+    const validators = composeValidators(required, minValue(LIBRARY_TITLE_MIN_LENGTH));
 
-    return validators(value)
-  }
+    return validators(value);
+  };
 
   return (
     <FormFieldWrapper htmlFor={name} text={title} required>
@@ -41,5 +35,5 @@ export const LibraryTitleField = () => {
         showCharacterCount={true}
       />
     </FormFieldWrapper>
-  )
-}
+  );
+};

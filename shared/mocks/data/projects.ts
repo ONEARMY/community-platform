@@ -300,4 +300,4 @@ export const projects = [
     title: 'Rubbish Title',
     steps: [],
   },
-]
+];

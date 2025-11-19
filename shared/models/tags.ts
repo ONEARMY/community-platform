@@ -1,3 +1,3 @@
 export interface ISelectedTags {
-  [key: string]: boolean
+  [key: string]: boolean;
 }

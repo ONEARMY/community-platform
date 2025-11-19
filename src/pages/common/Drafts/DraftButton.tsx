@@ -1,20 +1,16 @@
-import { Button } from 'oa-components'
+import { Button } from 'oa-components';
 
-import { drafts } from '../labels'
+import { drafts } from '../labels';
 
 type DraftButtonProps = {
-  showDrafts: boolean
-  draftCount: number
-  handleShowDrafts: () => void
-}
+  showDrafts: boolean;
+  draftCount: number;
+  handleShowDrafts: () => void;
+};
 
-const DraftButton = ({
-  showDrafts,
-  draftCount,
-  handleShowDrafts,
-}: DraftButtonProps) => {
+const DraftButton = ({ showDrafts, draftCount, handleShowDrafts }: DraftButtonProps) => {
   if (!draftCount) {
-    return <></>
+    return <></>;
   }
 
   return (
@@ -33,7 +29,7 @@ const DraftButton = ({
         </>
       )}
     </Button>
-  )
-}
+  );
+};
 
-export default DraftButton
+export default DraftButton;

@@ -1,20 +1,20 @@
-import { Box, Flex, Grid, Text } from 'theme-ui'
+import { Box, Flex, Grid, Text } from 'theme-ui';
 
-import { Icon } from '../Icon/Icon'
+import { Icon } from '../Icon/Icon';
 
-import type { ReactNode } from 'react'
-import type { availableGlyphs } from '../Icon/types'
+import type { ReactNode } from 'react';
+import type { availableGlyphs } from '../Icon/types';
 
 export interface GridFormFields {
-  glyph: availableGlyphs
-  name: string
-  description: string
-  component: ReactNode
+  glyph: availableGlyphs;
+  name: string;
+  description: string;
+  component: ReactNode;
 }
 
 export interface IProps {
-  fields: GridFormFields[]
-  heading: string
+  fields: GridFormFields[];
+  heading: string;
 }
 
 export const GridForm = ({ fields, heading }: IProps) => {
@@ -45,9 +45,7 @@ export const GridForm = ({ fields, heading }: IProps) => {
               <Icon glyph={field.glyph} size={20} />
               <Box>
                 <Text as="h4">{field.name}</Text>
-                <Text sx={{ color: 'GrayText', fontSize: 2 }}>
-                  {field.description}
-                </Text>
+                <Text sx={{ color: 'GrayText', fontSize: 2 }}>{field.description}</Text>
               </Box>
             </Flex>
             <Flex
@@ -59,8 +57,8 @@ export const GridForm = ({ fields, heading }: IProps) => {
               {field.component}
             </Flex>
           </Grid>
-        )
+        );
       })}
     </>
-  )
-}
+  );
+};

@@ -1,12 +1,12 @@
-import { MapCardList } from './MapCardList'
+import { MapCardList } from './MapCardList';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
-import type { MapPin, Moderation } from 'oa-shared'
+import type { Meta, StoryFn } from '@storybook/react-vite';
+import type { MapPin, Moderation } from 'oa-shared';
 
 export default {
   title: 'Map/CardList',
   component: MapCardList,
-} as Meta<typeof MapCardList>
+} as Meta<typeof MapCardList>;
 
 const list = [
   {
@@ -61,28 +61,18 @@ const list = [
     lat: 0,
     lng: 73,
   },
-] as MapPin[]
+] as MapPin[];
 
-const onPinClick = () => undefined
+const onPinClick = () => undefined;
 
 export const Default: StoryFn<typeof MapCardList> = () => {
   return (
-    <MapCardList
-      list={list}
-      onPinClick={onPinClick}
-      selectedPin={undefined}
-      viewport="stories"
-    />
-  )
-}
+    <MapCardList list={list} onPinClick={onPinClick} selectedPin={undefined} viewport="stories" />
+  );
+};
 
 export const WhenDisplayIsZero: StoryFn<typeof MapCardList> = () => {
   return (
-    <MapCardList
-      list={[]}
-      onPinClick={onPinClick}
-      selectedPin={undefined}
-      viewport="stories"
-    />
-  )
-}
+    <MapCardList list={[]} onPinClick={onPinClick} selectedPin={undefined} viewport="stories" />
+  );
+};

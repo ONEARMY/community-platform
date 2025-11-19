@@ -1,15 +1,15 @@
-import { Flex } from 'theme-ui'
+import { Flex } from 'theme-ui';
 
-import { glyphs, Icon } from './Icon'
+import { glyphs, Icon } from './Icon';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Components/Icon',
   component: Icon,
-} as Meta<typeof Icon>
+} as Meta<typeof Icon>;
 
-export const Default: StoryFn<typeof Icon> = () => <Icon glyph="delete" />
+export const Default: StoryFn<typeof Icon> = () => <Icon glyph="delete" />;
 
 export const Sizes: StoryFn<typeof Icon> = () => (
   <>
@@ -17,7 +17,7 @@ export const Sizes: StoryFn<typeof Icon> = () => (
       <Icon glyph="delete" key={key} size={size} />
     ))}
   </>
-)
+);
 
 export const Available: StoryFn<typeof Icon> = () => (
   <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>
@@ -27,7 +27,7 @@ export const Available: StoryFn<typeof Icon> = () => (
       </a>
     ))}
   </Flex>
-)
+);
 
 export const Colours: StoryFn<typeof Icon> = () => (
   <>
@@ -35,4 +35,4 @@ export const Colours: StoryFn<typeof Icon> = () => (
       <Icon glyph="delete" key={key} color={color} size={'lg'} />
     ))}
   </>
-)
+);

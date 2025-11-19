@@ -6,4 +6,4 @@ export const messages = {
     text: 'Message test',
     toUserName: 'settings_machine_new',
   },
-}
+};

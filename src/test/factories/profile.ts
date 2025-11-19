@@ -1,10 +1,8 @@
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
-import type { DBProfile } from 'oa-shared'
+import type { DBProfile } from 'oa-shared';
 
-export const FactoryDBProfile = (
-  dbProfileOverloads: Partial<DBProfile> = {},
-): DBProfile => ({
+export const FactoryDBProfile = (dbProfileOverloads: Partial<DBProfile> = {}): DBProfile => ({
   id: faker.number.int(),
   username: faker.internet.userName(),
   display_name: faker.internet.userName(),
@@ -40,4 +38,4 @@ export const FactoryDBProfile = (
   total_views: 0,
   profile_type: faker.number.int(),
   ...dbProfileOverloads,
-})
+});

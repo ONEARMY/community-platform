@@ -1,24 +1,24 @@
-import { Alert, Text } from 'theme-ui'
+import { Alert, Text } from 'theme-ui';
 
-import { guidance } from '../../labels'
+import { guidance } from '../../labels';
 
-import type { Category } from 'oa-shared'
+import type { Category } from 'oa-shared';
 
 interface IProps {
-  category?: Category
-  type: 'main' | 'files'
+  category?: Category;
+  type: 'main' | 'files';
 }
 
 export const LibraryCategoryGuidance = ({ category, type }: IProps) => {
   if (!category) {
-    return null
+    return null;
   }
 
-  const label = category.name.toLowerCase()
-  const labelExists = !!guidance[label] && !!guidance[label][type]
+  const label = category.name.toLowerCase();
+  const labelExists = !!guidance[label] && !!guidance[label][type];
 
   if (!labelExists) {
-    return null
+    return null;
   }
 
   return (
@@ -31,5 +31,5 @@ export const LibraryCategoryGuidance = ({ category, type }: IProps) => {
         }}
       />
     </Alert>
-  )
-}
+  );
+};

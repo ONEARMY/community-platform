@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
 import type {
   Author,
@@ -10,11 +10,9 @@ import type {
   Question,
   ResearchItem,
   ResearchUpdate,
-} from 'oa-shared'
+} from 'oa-shared';
 
-export const fakeAuthorSB = (
-  authorOverloads: Partial<Author> = {},
-): Author => ({
+export const fakeAuthorSB = (authorOverloads: Partial<Author> = {}): Author => ({
   id: faker.number.int(),
   country: faker.location.country(),
   displayName: faker.person.firstName(),
@@ -25,21 +23,16 @@ export const fakeAuthorSB = (
   },
   badges: [],
   ...authorOverloads,
-})
+});
 
-export const createFakeCommentsSB = (
-  numberOfComments = 2,
-  commentOverloads = {},
-): Comment[] =>
+export const createFakeCommentsSB = (numberOfComments = 2, commentOverloads = {}): Comment[] =>
   [...Array(numberOfComments).keys()].slice(0).map(() =>
     fakeCommentSB({
       ...commentOverloads,
     }),
-  )
+  );
 
-export const fakeCommentSB = (
-  commentOverloads: Partial<Comment> = {},
-): Comment => ({
+export const fakeCommentSB = (commentOverloads: Partial<Comment> = {}): Comment => ({
   id: faker.number.int(100),
   createdAt: new Date(),
   modifiedAt: new Date(),
@@ -52,7 +45,7 @@ export const fakeCommentSB = (
   highlighted: false,
   replies: [],
   ...commentOverloads,
-})
+});
 
 export const fakeNewsSB = (newsOverloads: Partial<News> = {}): News => ({
   id: faker.number.int(),
@@ -76,7 +69,7 @@ export const fakeNewsSB = (newsOverloads: Partial<News> = {}): News => ({
   isDraft: false,
   profileBadge: null,
   ...newsOverloads,
-})
+});
 
 export const fakeDisplayNotification = (
   notificationOverloads: Partial<NotificationDisplay> = {},
@@ -100,11 +93,9 @@ export const fakeDisplayNotification = (
   body: faker.lorem.text(),
   link: 'comment',
   ...notificationOverloads,
-})
+});
 
-export const fakeQuestionSB = (
-  questionOverloads: Partial<Question> = {},
-): Question => ({
+export const fakeQuestionSB = (questionOverloads: Partial<Question> = {}): Question => ({
   id: faker.number.int(),
   createdAt: faker.date.past(),
   modifiedAt: null,
@@ -123,7 +114,7 @@ export const fakeQuestionSB = (
   usefulCount: faker.number.int(20),
   isDraft: false,
   ...questionOverloads,
-})
+});
 
 export const fakeResearchItem = (
   researchItemOverloads: Partial<ResearchItem> = {},
@@ -151,7 +142,7 @@ export const fakeResearchItem = (
   totalViews: faker.number.int(100),
   isDraft: false,
   ...researchItemOverloads,
-})
+});
 
 export const fakeResearchUpdate = (
   researchItemOverloads: Partial<ResearchUpdate> = {},
@@ -172,11 +163,9 @@ export const fakeResearchUpdate = (
   videoUrl: null,
   title: faker.random.words(8),
   ...researchItemOverloads,
-})
+});
 
-export const fakeProfileType = (
-  profileTypeOverLoads: Partial<ProfileType> = {},
-): ProfileType => ({
+export const fakeProfileType = (profileTypeOverLoads: Partial<ProfileType> = {}): ProfileType => ({
   id: faker.number.int(),
   description: '',
   displayName: '',
@@ -187,11 +176,9 @@ export const fakeProfileType = (
   order: 0,
   isSpace: false,
   ...profileTypeOverLoads,
-})
+});
 
-export const fakePinProfile = (
-  pinProfileOverLoads: Partial<PinProfile> = {},
-): PinProfile => ({
+export const fakePinProfile = (pinProfileOverLoads: Partial<PinProfile> = {}): PinProfile => ({
   id: faker.number.int(),
   about: '',
   country: faker.location.country(),
@@ -208,4 +195,4 @@ export const fakePinProfile = (
   isContactable: true,
   lastActive: new Date(),
   ...pinProfileOverLoads,
-})
+});

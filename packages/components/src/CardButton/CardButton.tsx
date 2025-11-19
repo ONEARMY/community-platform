@@ -1,15 +1,15 @@
-import { Card } from 'theme-ui'
+import { Card } from 'theme-ui';
 
-import type { BoxProps, ThemeUIStyleObject } from 'theme-ui'
+import type { BoxProps, ThemeUIStyleObject } from 'theme-ui';
 
 export interface IProps extends BoxProps {
-  children: React.ReactNode
-  extrastyles?: ThemeUIStyleObject | undefined
-  isSelected?: boolean
+  children: React.ReactNode;
+  extrastyles?: ThemeUIStyleObject | undefined;
+  isSelected?: boolean;
 }
 
 export const CardButton = (props: IProps) => {
-  const { children, extrastyles, isSelected } = props
+  const { children, extrastyles, isSelected } = props;
 
   return (
     <Card
@@ -51,5 +51,5 @@ export const CardButton = (props: IProps) => {
     >
       {children}
     </Card>
-  )
-}
+  );
+};

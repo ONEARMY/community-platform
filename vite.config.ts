@@ -1,16 +1,16 @@
-import { reactRouter } from '@react-router/dev/vite'
-import react from '@vitejs/plugin-react'
-import { dirname, resolve } from 'path'
-import { fileURLToPath } from 'url'
+import { reactRouter } from '@react-router/dev/vite';
+import react from '@vitejs/plugin-react';
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
 /// <reference types="vitest" />
-import { defineConfig } from 'vite'
-import svgr from 'vite-plugin-svgr'
-import ViteTsConfigPathsPlugin from 'vite-tsconfig-paths'
+import { defineConfig } from 'vite';
+import svgr from 'vite-plugin-svgr';
+import ViteTsConfigPathsPlugin from 'vite-tsconfig-paths';
 
-import type { ViteUserConfig } from 'vitest/config'
+import type { ViteUserConfig } from 'vitest/config';
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const vitestConfig: ViteUserConfig = {
   test: {
@@ -29,7 +29,7 @@ const vitestConfig: ViteUserConfig = {
       hooks: 'list',
     },
   },
-}
+};
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -64,4 +64,4 @@ export default defineConfig({
     },
   },
   test: vitestConfig.test,
-})
+});

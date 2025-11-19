@@ -1,43 +1,38 @@
-import { useEffect, useState } from 'react'
-import { Form } from 'react-final-form'
-import { useNavigate } from 'react-router'
-import { Button, ConfirmModal, ResearchEditorOverview } from 'oa-components'
-import { FormWrapper } from 'src/common/Form/FormWrapper'
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
-import { logger } from 'src/logger'
-import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors'
-import { fireConfetti } from 'src/utils/fireConfetti'
+import { useEffect, useState } from 'react';
+import { Form } from 'react-final-form';
+import { useNavigate } from 'react-router';
+import { Button, ConfirmModal, ResearchEditorOverview } from 'oa-components';
+import { FormWrapper } from 'src/common/Form/FormWrapper';
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
+import { logger } from 'src/logger';
+import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
+import { fireConfetti } from 'src/utils/fireConfetti';
 
-import { FilesFields } from '../../../common/FormFields/FilesFields'
-import { buttons, headings, update } from '../../labels'
-import { researchService } from '../../research.service'
-import { DescriptionField } from '../CreateResearch/Form/DescriptionField'
-import { ResearchImagesField } from '../CreateResearch/Form/ResearchImagesField'
-import { TitleField } from '../CreateResearch/Form/TitleField'
-import VideoUrlField from '../CreateResearch/Form/VideoUrlField'
+import { FilesFields } from '../../../common/FormFields/FilesFields';
+import { buttons, headings, update } from '../../labels';
+import { researchService } from '../../research.service';
+import { DescriptionField } from '../CreateResearch/Form/DescriptionField';
+import { ResearchImagesField } from '../CreateResearch/Form/ResearchImagesField';
+import { TitleField } from '../CreateResearch/Form/TitleField';
+import VideoUrlField from '../CreateResearch/Form/VideoUrlField';
 
-import type {
-  MediaFile,
-  ResearchItem,
-  ResearchUpdate,
-  ResearchUpdateFormData,
-} from 'oa-shared'
+import type { MediaFile, ResearchItem, ResearchUpdate, ResearchUpdateFormData } from 'oa-shared';
 
 interface IProps {
-  research: ResearchItem
-  researchUpdate?: ResearchUpdate
-  files?: MediaFile[]
-  fileLink?: string
+  research: ResearchItem;
+  researchUpdate?: ResearchUpdate;
+  files?: MediaFile[];
+  fileLink?: string;
 }
 
 export const ResearchUpdateForm = (props: IProps) => {
-  const { research, researchUpdate, files, fileLink } = props
-  const navigate = useNavigate()
-  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
-  const [isSaving, setIsSaving] = useState<boolean>(false)
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [intentionalNavigation, setIntentionalNavigation] = useState(false)
-  const id = researchUpdate?.id || null
+  const { research, researchUpdate, files, fileLink } = props;
+  const navigate = useNavigate();
+  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [intentionalNavigation, setIntentionalNavigation] = useState(false);
+  const id = researchUpdate?.id || null;
   const [initialValues, setInitialValues] = useState<ResearchUpdateFormData>({
     title: '',
     description: '',
@@ -47,7 +42,7 @@ export const ResearchUpdateForm = (props: IProps) => {
     videoUrl: '',
     files: [],
     images: [],
-  })
+  });
 
   useEffect(() => {
     if (researchUpdate) {
@@ -60,68 +55,57 @@ export const ResearchUpdateForm = (props: IProps) => {
         videoUrl: researchUpdate?.videoUrl || '',
         files: [],
         images: [],
-      })
+      });
     }
-  }, [researchUpdate])
+  }, [researchUpdate]);
 
-  const onSubmit = async (
-    formData: ResearchUpdateFormData,
-    isDraft = false,
-  ) => {
+  const onSubmit = async (formData: ResearchUpdateFormData, isDraft = false) => {
     if (isSaving) {
-      return
+      return;
     }
-    setIsSaving(true)
-    setIntentionalNavigation(true)
-    setSaveErrorMessage(null)
+    setIsSaving(true);
+    setIntentionalNavigation(true);
+    setSaveErrorMessage(null);
 
     try {
-      const result = await researchService.upsertUpdate(
-        research.id,
-        id,
-        formData,
-        isDraft,
-      )
+      const result = await researchService.upsertUpdate(research.id, id, formData, isDraft);
 
       if (!isDraft) {
-        fireConfetti()
+        fireConfetti();
       }
 
       if (result) {
         setTimeout(() => {
-          navigate(
-            `/research/${research.slug}#update_${result.researchUpdate.id}`,
-          )
-        }, 100)
+          navigate(`/research/${research.slug}#update_${result.researchUpdate.id}`);
+        }, 100);
       }
     } catch (error) {
-      setSaveErrorMessage(error.message)
-      logger.error(error)
-      setIsSaving(false)
+      setSaveErrorMessage(error.message);
+      logger.error(error);
+      setIsSaving(false);
     }
-  }
+  };
 
   const handleDelete = async () => {
     if (!researchUpdate) {
-      return
+      return;
     }
-    setShowDeleteModal(false)
-    await researchService.deleteUpdate(props.research.id, researchUpdate.id)
-    window.location.assign('/research/' + props.research.slug)
-  }
+    setShowDeleteModal(false);
+    await researchService.deleteUpdate(props.research.id, researchUpdate.id);
+    window.location.assign('/research/' + props.research.slug);
+  };
 
-  const isEdit = !!researchUpdate
-  const heading = isEdit ? headings.update.edit : headings.update.create
+  const isEdit = !!researchUpdate;
+  const heading = isEdit ? headings.update.edit : headings.update.create;
 
   const removeExistingImage = (index: number) => {
     setInitialValues((prevState: ResearchUpdateFormData) => {
       return {
         ...prevState,
-        existingImages:
-          prevState.existingImages?.filter((_, i) => i !== index) ?? null,
-      }
-    })
-  }
+        existingImages: prevState.existingImages?.filter((_, i) => i !== index) ?? null,
+      };
+    });
+  };
 
   return (
     <>
@@ -139,19 +123,19 @@ export const ResearchUpdateForm = (props: IProps) => {
           submitting,
           values,
         }) => {
-          const errorsClientSide = [errorSet(errors, update)]
+          const errorsClientSide = [errorSet(errors, update)];
 
-          const handleSubmitDraft = () => onSubmit(values, true)
+          const handleSubmitDraft = () => onSubmit(values, true);
 
           const numberOfImageInputsAvailable = (values as any)?.images
             ? Math.min((values as any).images.filter((x) => !!x).length + 1, 10)
-            : 1
+            : 1;
 
           const unsavedChangesDialog = (
             <UnsavedChangesDialog
               hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
             />
-          )
+          );
 
           const sidebar = (
             <>
@@ -159,8 +143,8 @@ export const ResearchUpdateForm = (props: IProps) => {
                 <Button
                   data-cy="delete"
                   onClick={(evt) => {
-                    setShowDeleteModal(true)
-                    evt.preventDefault()
+                    setShowDeleteModal(true);
+                    evt.preventDefault();
                   }}
                   variant="destructive"
                   type="submit"
@@ -173,18 +157,14 @@ export const ResearchUpdateForm = (props: IProps) => {
 
               {props.research && (
                 <ResearchEditorOverview
-                  updates={getResearchUpdates(
-                    props.research.updates || [],
-                    !isEdit,
-                    values.title,
-                  )}
+                  updates={getResearchUpdates(props.research.updates || [], !isEdit, values.title)}
                   researchSlug={props.research?.slug}
                   showCreateUpdateButton={isEdit}
                   showBackToResearchButton={true}
                 />
               )}
             </>
-          )
+          );
 
           return (
             <FormWrapper
@@ -211,7 +191,7 @@ export const ResearchUpdateForm = (props: IProps) => {
               <VideoUrlField />
               <FilesFields />
             </FormWrapper>
-          )
+          );
         }}
       />
       <ConfirmModal
@@ -222,8 +202,8 @@ export const ResearchUpdateForm = (props: IProps) => {
         handleConfirm={handleDelete}
       />
     </>
-  )
-}
+  );
+};
 
 const getResearchUpdates = (
   updates: ResearchUpdate[],
@@ -246,4 +226,4 @@ const getResearchUpdates = (
           slug: null,
         }
       : null,
-  ].filter(Boolean)
+  ].filter(Boolean);

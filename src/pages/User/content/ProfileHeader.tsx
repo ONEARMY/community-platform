@@ -1,15 +1,15 @@
-import { MemberBadge, Username } from 'oa-components'
-import DefaultMemberImage from 'src/assets/images/default_member.svg'
-import { Avatar, Box, Flex, Heading } from 'theme-ui'
+import { MemberBadge, Username } from 'oa-components';
+import DefaultMemberImage from 'src/assets/images/default_member.svg';
+import { Avatar, Box, Flex, Heading } from 'theme-ui';
 
-import type { Profile } from 'oa-shared'
+import type { Profile } from 'oa-shared';
 
 interface IProps {
-  user: Profile
+  user: Profile;
 }
 
 export const ProfileHeader = ({ user }: IProps) => {
-  const profileImageSrc = user.photo?.publicUrl ?? DefaultMemberImage
+  const profileImageSrc = user.photo?.publicUrl ?? DefaultMemberImage;
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -72,5 +72,5 @@ export const ProfileHeader = ({ user }: IProps) => {
         </Flex>
       </Flex>
     </Box>
-  )
-}
+  );
+};

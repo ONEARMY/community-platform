@@ -8,11 +8,11 @@ import {
   LinkifyText,
   TagList,
   UsefulStatsButton,
+  UsefulVotersList,
 } from 'oa-components'
-// eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
-import { usefulService } from 'src/services/usefulService'
+// import { usefulService } from 'src/services/usefulService'
 import { useProfileStore } from 'src/stores/Profile/profile.store'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
@@ -23,7 +23,7 @@ import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectio
 import { DraftTag } from '../common/Drafts/DraftTag'
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 
-import type { ContentType, Question } from 'oa-shared'
+import type { ContentType, Question, UsefulVoter } from 'oa-shared'
 
 interface IProps {
   question: Question
@@ -36,25 +36,34 @@ export const QuestionPage = observer(({ question }: IProps) => {
   const [subscribersCount, setSubscribersCount] = useState<number>(
     question.subscriberCount,
   )
+  // const [usefulVoters, setUsefulVoters] = useState<any[]>([])
 
+  /* --------------------------------------------------------------------- *
+   *  1. Has the logged-in user already voted?
+   * --------------------------------------------------------------------- */
   useEffect(() => {
-    const getVoted = async () => {
-      const voted = await usefulService.hasVoted('questions', question.id)
-      setVoted(voted)
+    const checkVote = async () => {
+      if (activeUser) {
+        const hasVoted = await usefulService.hasVoted('questions', question.id)
+        setVoted(hasVoted)
+      }
     }
+    checkVote()
+  }, [activeUser, question.id])
 
-    if (activeUser) {
-      getVoted()
-    }
-  }, [activeUser, question])
-
+  /* --------------------------------------------------------------------- *
+   *  2. Edit permission
+   * --------------------------------------------------------------------- */
   const isEditable = useMemo(() => {
     return (
       hasAdminRights(activeUser) ||
       question.author?.username === activeUser?.username
     )
-  }, [activeUser, question.author])
+  }, [activeUser, question.author?.username])
 
+  /* --------------------------------------------------------------------- *
+   *  3. Useful-click handler (add / delete)
+   * --------------------------------------------------------------------- */
   const configOnUsefulClick = {
     contentType: 'questions' as ContentType,
     contentId: question.id,
@@ -66,21 +75,33 @@ export const QuestionPage = observer(({ question }: IProps) => {
   }
 
   const handleUsefulClick = async (vote: 'add' | 'delete') => {
-    await onUsefulClick({
-      vote,
-      config: configOnUsefulClick,
-    })
+    await onUsefulClick({ vote, config: configOnUsefulClick })
   }
 
+  /* --------------------------------------------------------------------- *
+   *  4. Load voters **only** when the modal is opened
+   * --------------------------------------------------------------------- */
+  // const loadUsefulVoters = async () => {
+  //   const users = await usefulService.usefulVoters('questions', question.id)
+  //   console.log('useful voters', users)
+  //   setUsefulVoters(users)
+  // }
+
+  /* --------------------------------------------------------------------- *
+   *  5. Render
+   * --------------------------------------------------------------------- */
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
       <Breadcrumbs content={question} variant="question" />
+
+      {/* -------------------------- QUESTION BODY -------------------------- */}
       <Card
         data-cy="question-body"
         sx={{ position: 'relative' }}
         variant="responsive"
       >
         <Flex sx={{ flexDirection: 'column', padding: [3, 4], gap: 3 }}>
+          {/* Useful button + draft + edit */}
           <Flex sx={{ flexWrap: 'wrap', gap: 3 }}>
             <ClientOnly fallback={<></>}>
               {() => (
@@ -97,7 +118,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
                   {question.isDraft && <DraftTag />}
 
                   {isEditable && (
-                    <Link to={'/questions/' + question.slug + '/edit'}>
+                    <Link to={`/questions/${question.slug}/edit`}>
                       <Button type="button" variant="primary" data-cy="edit">
                         Edit
                       </Button>
@@ -108,6 +129,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
             </ClientOnly>
           </Flex>
 
+          {/* Author */}
           {question.author && (
             <UserNameTag
               author={question.author}
@@ -117,6 +139,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
             />
           )}
 
+          {/* Title / description / images / tags */}
           <Flex sx={{ flexDirection: 'column', gap: 2 }}>
             {question.category && <Category category={question.category} />}
             <Heading
@@ -151,13 +174,9 @@ export const QuestionPage = observer(({ question }: IProps) => {
           </Flex>
         </Flex>
 
-        <Divider
-          sx={{
-            m: 0,
-            border: '.5px solid black',
-          }}
-        />
+        <Divider sx={{ m: 0, border: '.5px solid black' }} />
 
+        {/* -------------------------- STATISTICS -------------------------- */}
         <ContentStatistics
           statistics={[
             {
@@ -176,14 +195,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
                 usePlural: false,
               }),
             },
-            {
-              icon: 'star',
-              label: buildStatisticsLabel({
-                stat: usefulCount,
-                statUnit: 'useful',
-                usePlural: false,
-              }),
-            },
+            createUsefulStatistic('questions', question.id, usefulCount),
             {
               icon: 'comment-outline',
               label: buildStatisticsLabel({
@@ -195,6 +207,8 @@ export const QuestionPage = observer(({ question }: IProps) => {
           ]}
         />
       </Card>
+
+      {/* -------------------------- COMMENTS -------------------------- */}
       <ClientOnly fallback={<></>}>
         {() => (
           <Card
@@ -208,7 +222,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
             }}
           >
             <CommentSectionSupabase
-              authors={question.author?.id ? [question.author?.id] : []}
+              authors={question.author?.id ? [question.author.id] : []}
               setSubscribersCount={setSubscribersCount}
               sourceId={question.id}
               sourceType="questions"
@@ -219,3 +233,35 @@ export const QuestionPage = observer(({ question }: IProps) => {
     </Box>
   )
 })
+
+// import { UsefulVotersList } from '../common/UsefulVotersList' // Adjust path
+import { usefulService } from 'src/services/usefulService'
+
+import type { IStatistic } from 'packages/components/dist/ContentStatistics/ContentStatistics'
+// import type { IStatistic } from '../ContentStatistics' // Adjust path if needed
+
+export function createUsefulStatistic(
+  contentType: ContentType,
+  contentId: string | number,
+  usefulCount: number,
+): IStatistic {
+  return {
+    icon: 'star',
+    label: buildStatisticsLabel({
+      stat: usefulCount,
+      statUnit: 'useful',
+      usePlural: true,
+    }),
+    onOpen: async () => {
+      try {
+        return await usefulService.usefulVoters(contentType, contentId)
+      } catch (error) {
+        console.error('Failed to load useful voters:', error)
+        return [] // Fallback to empty list on error
+      }
+    },
+    modalComponent: (voters: UsefulVoter[]) => (
+      <UsefulVotersList voters={voters || []} />
+    ),
+  }
+}

@@ -1,0 +1,132 @@
+/** @jsxImportSource theme-ui */
+import { Avatar, Box, Flex, Text } from 'theme-ui'
+
+import { Button } from '../Button/Button'
+import { MemberBadge } from '../MemberBadge/MemberBadge'
+import { Username } from '../Username/Username'
+
+import type { UsefulVoter } from 'oa-shared'
+// import type { DBMedia, Image } from './media'
+
+interface IProps {
+  voters: UsefulVoter[]
+  onClose?: () => void
+  dataCy?: string
+  children?: React.ReactNode
+}
+
+export const UsefulVotersList = ({ voters = [], onClose, dataCy }: IProps) => {
+  return (
+    <Flex
+      data-cy={dataCy}
+      sx={{
+        position: 'fixed',
+        inset: 0,
+        bg: 'rgba(0,0,0,0.5)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000,
+      }}
+      onClick={onClose}
+    >
+      <Box
+        sx={{
+          bg: 'background',
+          borderRadius: '10px',
+          width: ['80%', '23%'],
+          height: ['60%', '50%'],
+          border: '2px solid',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+        onClick={(e) => e.stopPropagation()} // prevent modal close when clicking inside
+      >
+        <Flex
+          sx={{
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottom: '2px solid',
+            borderColor: 'muted',
+            p: 1,
+            width: '100%',
+            position: 'relative',
+          }}
+        >
+          <Text
+            sx={{
+              fontWeight: 600,
+              fontSize: 2,
+              textAlign: 'center',
+              width: '100%',
+            }}
+          >
+            Others that found it useful:
+          </Text>
+          <Button
+            variant="subtle"
+            showIconOnly
+            icon="close"
+            small
+            onClick={onClose}
+          />
+        </Flex>
+
+        <Box
+          sx={{
+            flex: '1 1 auto',
+            overflowY: 'auto',
+            pl: 3,
+          }}
+        >
+          {voters.length === 0 ? (
+            <Text sx={{ textAlign: 'center', color: 'muted', fontSize: 1 }}>
+              No voters yet.
+            </Text>
+          ) : (
+            <Box
+              as="ul"
+              sx={{
+                listStyle: 'none',
+                m: 0,
+                p: 0,
+              }}
+            >
+              {voters.map((voter) => (
+                <Flex
+                  as="li"
+                  key={voter.id}
+                  sx={{
+                    alignItems: 'center',
+                    py: 2,
+                    gap: 2,
+                  }}
+                >
+                  {voter.photo ? (
+                    <Avatar
+                      src={voter.photo?.publicUrl}
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                      }}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <MemberBadge
+                      profileType={voter.type || undefined}
+                      sx={{ cursor: 'pointer' }}
+                    />
+                  )}
+                  <Box>
+                    <Username user={voter} />
+                  </Box>
+                </Flex>
+              ))}
+            </Box>
+          )}
+        </Box>
+      </Box>
+    </Flex>
+  )
+}

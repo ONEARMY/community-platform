@@ -1,4 +1,4 @@
-import type { UsefulContentType } from 'oa-shared'
+import type { UsefulContentType, UsefulVoter } from 'oa-shared'
 
 const add = async (contentType: UsefulContentType, id: number) => {
   return await fetch(`/api/useful/${contentType}/${id}`, {
@@ -26,8 +26,25 @@ const hasVoted = async (contentType: UsefulContentType, id: number) => {
   }
 }
 
+const usefulVoters = async (
+  contentType: UsefulContentType,
+  id: number,
+): Promise<UsefulVoter[]> => {
+  try {
+    const response = await fetch(`/api/useful/${contentType}/${id}/users`)
+
+    const users = await response.json()
+
+    return users
+  } catch (error) {
+    console.error(error)
+    return []
+  }
+}
+
 export const usefulService = {
   add,
   remove,
   hasVoted,
+  usefulVoters,
 }

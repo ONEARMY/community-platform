@@ -19,6 +19,7 @@ import { trackEvent } from 'src/common/Analytics'
 import { DownloadWrapper } from 'src/common/DownloadWrapper'
 import { logger } from 'src/logger'
 import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
+import { createUsefulStatistic } from 'src/pages/Question/QuestionPage'
 import {
   buildStatisticsLabel,
   capitalizeFirstLetter,
@@ -340,14 +341,7 @@ export const LibraryDescription = (props: IProps) => {
               usePlural: true,
             }),
           },
-          {
-            icon: 'star',
-            label: buildStatisticsLabel({
-              stat: votedUsefulCount || 0,
-              statUnit: 'useful',
-              usePlural: false,
-            }),
-          },
+          createUsefulStatistic('projects', item.id, item.usefulCount),
           {
             icon: 'thunderbolt-grey',
             label: buildStatisticsLabel({

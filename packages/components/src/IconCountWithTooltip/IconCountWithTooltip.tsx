@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useId } from 'react';
 import { Text } from 'theme-ui';
 
 import { Icon } from '../Icon/Icon';
@@ -30,7 +30,7 @@ function shortFormatNumber(num: number): string {
 
 export const IconCountWithTooltip = (props: IconCountWithTooltipProps) => {
   const { count, dataCy, icon, text } = props;
-  const id = useMemo(() => (Math.random() * 16).toString(), []);
+  const id = useId();
   const countText = shortFormatNumber(count);
 
   return (

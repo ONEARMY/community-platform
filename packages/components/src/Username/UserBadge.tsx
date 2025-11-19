@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useId } from 'react';
 import { Tooltip } from 'react-tooltip';
 import { Image } from 'theme-ui';
 
@@ -9,7 +9,7 @@ interface IProps {
 }
 
 export const UserBadge = ({ badge }: IProps) => {
-  const uuid = useMemo(() => (Math.random() * 16).toString(), []);
+  const uuid = useId();
 
   return (
     <>

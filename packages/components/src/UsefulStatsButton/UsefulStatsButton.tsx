@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useId, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Text, useThemeUI } from 'theme-ui';
 
@@ -18,7 +18,7 @@ export interface IProps {
 export const UsefulStatsButton = (props: IProps) => {
   const { theme } = useThemeUI() as any;
   const navigate = useNavigate();
-  const uuid = useMemo(() => (Math.random() * 16).toString(), []);
+  const uuid = useId();
 
   const [disabled, setDisabled] = useState<boolean>();
 

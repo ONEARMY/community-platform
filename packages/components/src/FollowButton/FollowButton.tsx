@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useId } from 'react';
 import { useNavigate } from 'react-router';
 
 import { Button } from '../Button/Button';
@@ -41,7 +41,7 @@ export const FollowButton = (props: FollowButtonProps) => {
     variant = 'outline',
   } = props;
   const navigate = useNavigate();
-  const uuid = useMemo(() => (Math.random() * 16).toString(), []);
+  const uuid = useId();
 
   const tooltipContent = hasUserSubscribed ? tooltipUnfollow : tooltipFollow;
 

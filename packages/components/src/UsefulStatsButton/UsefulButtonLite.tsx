@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useId, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Flex, Text, useThemeUI } from 'theme-ui';
 
@@ -23,7 +23,7 @@ export const UsefulButtonLite = (props: IProps) => {
 
   const { theme } = useThemeUI() as any;
   const navigate = useNavigate();
-  const uuid = useMemo(() => (Math.random() * 16).toString(), []);
+  const uuid = useId();
   const [disabled, setDisabled] = useState<boolean>();
   const usefulAction = hasUserVotedUseful ? 'delete' : 'add';
   const handleUsefulClick = async () => {

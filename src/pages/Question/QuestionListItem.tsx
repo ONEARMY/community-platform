@@ -4,6 +4,7 @@ import {
   InternalLink,
   // ModerationStatus,
 } from 'oa-components'
+import { FollowButtonAction } from 'src/common/FollowButtonAction'
 import { Highlighter } from 'src/common/Highlighter'
 import { Box, Card, Flex, Heading } from 'theme-ui'
 
@@ -115,6 +116,30 @@ export const QuestionListItem = ({ question, query }: IProps) => {
             paddingX: 12,
           }}
         >
+          <FollowButtonAction
+            contentType="questions"
+            itemId={question.id}
+            showIconOnly
+            hideSubscribeIcon
+            variant="subtle"
+            small
+            tooltipUnfollow="You are following this"
+            sx={{
+              cursor: 'default',
+              padding: 0,
+              height: 'auto',
+              minWidth: 'auto',
+              border: 'none',
+              lineHeight: 0,
+              '& > div': {
+                position: 'relative',
+                px: 0,
+              },
+              '&:hover': {
+                backgroundColor: 'transparent',
+              },
+            }}
+          />
           <IconCountWithTooltip
             count={question.usefulCount}
             icon="star-active"

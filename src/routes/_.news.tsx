@@ -1,5 +1,5 @@
 // import { useContext } from 'react'
-import { Outlet } from 'react-router';
+import { Outlet } from 'react-router'
 // import { isModuleSupported, MODULE } from 'src/modules'
 // import { EnvironmentContext } from 'src/pages/common/EnvironmentContext'
 import Main from 'src/pages/common/Layout/Main'

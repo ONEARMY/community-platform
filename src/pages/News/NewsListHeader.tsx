@@ -1,5 +1,5 @@
 // import { useCallback, useEffect, useState } from 'react'
-import { Link } from 'react-router';
+import { Link } from 'react-router'
 // import debounce from 'debounce'
 import { Tooltip } from 'oa-components'
 import { UserRole } from 'oa-shared'

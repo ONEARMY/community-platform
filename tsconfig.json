@@ -1,15 +1,8 @@
 {
   "compilerOptions": {
     "target": "es2021",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "types": [
-      "@react-router/node",
-      "vite/client"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": ["@react-router/node", "vite/client"],
     "allowJs": true,
     "baseUrl": ".",
     "skipLibCheck": true,
@@ -40,10 +33,7 @@
     "useUnknownInCatchVariables": false,
     "downlevelIteration": true
   },
-  "include": [
-    "src/**/*",
-    "types"
-  ],
+  "include": ["src/**/*", "types"],
   "exclude": [
     "node_modules",
     "build",

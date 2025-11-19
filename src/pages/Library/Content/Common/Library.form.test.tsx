@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 
-import { createRoutesStub } from 'react-router';
+import { createRoutesStub } from 'react-router'
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'

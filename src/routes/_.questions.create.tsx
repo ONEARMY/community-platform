@@ -5,7 +5,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { redirectServiceServer } from 'src/services/redirectService.server'
 import { Box } from 'theme-ui'
 
-import type { LoaderFunctionArgs } from 'react-router';
+import type { LoaderFunctionArgs } from 'react-router'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)

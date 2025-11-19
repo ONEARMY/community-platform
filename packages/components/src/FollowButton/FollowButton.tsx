@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router'
 
 import { Button } from '../Button/Button'
 import { Tooltip } from '../Tooltip/Tooltip'

@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router';
+import { Outlet } from 'react-router'
 import Main from 'src/pages/common/Layout/Main'
 
 export async function loader() {

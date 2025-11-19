@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link } from 'react-router'
 import { observer } from 'mobx-react'
 import { VERSION } from 'src/config/config'
 import { Box, Flex, Image, Text, useThemeUI } from 'theme-ui'

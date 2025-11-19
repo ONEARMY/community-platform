@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link } from 'react-router'
 import { Icon } from 'oa-components'
 import { Flex, Heading, Text } from 'theme-ui'
 

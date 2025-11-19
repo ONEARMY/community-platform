@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router'
 
 /*************************************************************************************
  *  Embed an Iframe

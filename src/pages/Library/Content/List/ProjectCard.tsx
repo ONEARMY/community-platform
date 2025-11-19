@@ -1,4 +1,4 @@
-import { Link as RouterLink } from 'react-router';
+import { Link as RouterLink } from 'react-router'
 import {
   Category,
   IconCountWithTooltip,

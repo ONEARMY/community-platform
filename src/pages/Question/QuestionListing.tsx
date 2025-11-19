@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router'
 import { Button, Loader } from 'oa-components'
 import { logger } from 'src/logger'
 import { Card, Flex, Heading } from 'theme-ui'

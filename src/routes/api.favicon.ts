@@ -2,7 +2,7 @@ import Keyv from 'keyv'
 import { isProductionEnvironment } from 'src/config/config'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
-import type { LoaderFunctionArgs } from 'react-router';
+import type { LoaderFunctionArgs } from 'react-router'
 
 // Cache favicon bytes + content type. Use ArrayBuffer to satisfy BodyInit typing.
 const cache = new Keyv<{ body: ArrayBuffer; contentType: string }>({

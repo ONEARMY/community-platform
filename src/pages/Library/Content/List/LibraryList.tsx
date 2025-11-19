@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router'
 import { Button, Loader, MoreContainer } from 'oa-components'
 import { logger } from 'src/logger'
 import useDrafts from 'src/pages/common/Drafts/useDraftsSupabase'

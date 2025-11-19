@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router'
 import {
   DownloadButton,
   DownloadCounter,

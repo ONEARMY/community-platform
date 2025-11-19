@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link } from 'react-router'
 import Main from 'src/pages/common/Layout/Main'
 import { Flex, Image, Text } from 'theme-ui'
 

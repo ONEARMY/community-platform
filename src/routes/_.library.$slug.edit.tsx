@@ -1,4 +1,4 @@
-import { redirect, useLoaderData } from '@remix-run/react'
+import { redirect, useLoaderData } from 'react-router'
 import { Project } from 'oa-shared'
 import { ClientOnly } from 'remix-utils/client-only'
 import { LibraryForm } from 'src/pages/Library/Content/Common/Library.form'
@@ -14,18 +14,17 @@ import type { LoaderFunctionArgs } from 'react-router'
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const { data } = await client.auth.getClaims()
 
-  if (!user) {
+  if (!data?.claims) {
     return redirectServiceServer.redirectSignIn(
       `/library/${params.slug}/edit`,
       headers,
     )
   }
 
-  const username = user.user_metadata.username
+  // const username = user.user_metadata.username
+  const username = data.claims.user_metadata.username
   const projectDb = (
     await libraryServiceServer.getBySlug(client, params.slug as string)
   ).data as unknown as DBProject
@@ -56,7 +55,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>()
+  const data: any = useLoaderData<typeof loader>()
   const item = data.project as Project
 
   return (

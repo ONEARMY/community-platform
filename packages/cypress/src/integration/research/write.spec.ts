@@ -61,8 +61,9 @@ describe('[Research]', () => {
       cy.contains('Start your Research')
 
       cy.step('Cannot be published when empty')
+      cy.wait(1000)
       cy.get('[data-cy=submit]').click()
-      cy.get('[data-cy=errors-container]')
+      cy.get('[data-cy=errors-container]').should('be.visible')
 
       cy.step('Warn if title not long enough')
       cy.get('[data-cy=intro-title').clear().type('Q').blur({ force: true })
@@ -127,8 +128,9 @@ describe('[Research]', () => {
       cy.contains('New update')
 
       cy.step('Cannot be published when empty')
+      cy.wait(1000)
       cy.get('[data-cy=submit]').click()
-      cy.get('[data-cy=errors-container]')
+      cy.get('[data-cy=errors-container]').should('be.visible')
 
       cy.step('Enter update details')
       cy.get('[data-cy=intro-title]')

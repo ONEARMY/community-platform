@@ -8,7 +8,7 @@ import { DownloadWithDonationAsk } from './DownloadWithDonationAsk'
 import type { MediaFile } from 'oa-shared'
 
 const mockedUsedNavigate = vi.fn()
-vi.mock('react-router-dom', () => ({
+vi.mock('react-router', () => ({
   useNavigate: () => mockedUsedNavigate,
 }))
 

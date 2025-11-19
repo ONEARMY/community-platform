@@ -1,11 +1,11 @@
-import { redirect } from '@remix-run/node'
+import { redirect } from 'react-router';
 import Main from 'src/pages/common/Layout/Main'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { patreonServiceServer } from 'src/services/patreonService.server'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 import { Flex, Text } from 'theme-ui'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url)
@@ -21,11 +21,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   try {
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
 
-    if (!user) {
+    if (!claims.data?.claims) {
       return redirect('/sign-in', { headers })
     }
 
@@ -34,7 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     await patreonServiceServer.verifyAndUpdatePatreonUser(
       patreonCode,
-      user,
+      claims.data.claims.sub,
       client,
       origin,
     )

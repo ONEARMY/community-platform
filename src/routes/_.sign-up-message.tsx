@@ -1,8 +1,8 @@
-import { useLoaderData } from '@remix-run/react'
+import { useLoaderData } from 'react-router';
 import Main from 'src/pages/common/Layout/Main'
 import SignUpMessagePage from 'src/pages/SignUp/SignUpMessage'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url)

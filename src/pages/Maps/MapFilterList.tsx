@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useMemo } from 'react'
 import {
   Button,
   ButtonIcon,
@@ -20,6 +20,30 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
   if (!mapState) {
     return null
   }
+
+  const visibleTags = useMemo(
+    () =>
+      mapState.allTags.filter(
+        (tag) =>
+          mapState.activeTagFilters.includes(tag.id) ||
+          mapState.filteredPins.some((pin) =>
+            pin.profile?.tags?.some((t) => t.id === tag.id),
+          ),
+      ),
+    [mapState.allTags, mapState.activeTagFilters, mapState.filteredPins],
+  )
+
+  const visibleBadges = useMemo(
+    () =>
+      mapState.allBadges.filter(
+        (badge) =>
+          mapState.activeBadgeFilters.includes(badge.name) ||
+          mapState.filteredPins.some((pin) =>
+            pin.profile?.badges?.some((b) => b.name === badge.name),
+          ),
+      ),
+    [mapState.allBadges, mapState.activeBadgeFilters, mapState.filteredPins],
+  )
 
   const pinCount = mapState?.filteredPins?.length || 0
   const buttonLabel = `${pinCount} result${
@@ -74,32 +98,29 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
       >
         {(mapState.allProfileTypes?.length || 0) > 0 && (
           <MapFilterListWrapper title="Profiles">
-            {mapState.allProfileTypes.map((profileType, index) => {
-              return (
-                <MapFilterListItem
-                  active={mapState.activeProfileTypeFilters.includes(
-                    profileType.name,
-                  )}
-                  key={index}
-                  onClick={() =>
-                    mapState.toggleActiveProfileTypeFilter(profileType.name)
-                  }
-                  filterType="profile"
-                >
-                  <MemberBadge size={30} profileType={profileType} />
-                  <Text variant="quiet" sx={{ fontSize: 1 }}>
-                    {profileType.displayName}
-                  </Text>
-                </MapFilterListItem>
-              )
-            })}
+            {mapState.allProfileTypes.map((profileType, index) => (
+              <MapFilterListItem
+                active={mapState.activeProfileTypeFilters.includes(
+                  profileType.name,
+                )}
+                key={index}
+                onClick={() =>
+                  mapState.toggleActiveProfileTypeFilter(profileType.name)
+                }
+                filterType="profile"
+              >
+                <MemberBadge size={30} profileType={profileType} />
+                <Text variant="quiet" sx={{ fontSize: 1 }}>
+                  {profileType.displayName}
+                </Text>
+              </MapFilterListItem>
+            ))}
           </MapFilterListWrapper>
         )}
-
         {mapState.allTags.length > 0 && (
           <MapFilterListWrapper title="Spaces activities">
-            {mapState.allTags.map((tag) => {
-              return (
+            {visibleTags.length > 0 ? (
+              visibleTags.map((tag) => (
                 <MapFilterListItem
                   active={mapState.activeTagFilters.includes(tag.id)}
                   key={tag.id}
@@ -111,15 +132,19 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
                     {tag.name}
                   </Text>
                 </MapFilterListItem>
-              )
-            })}
+              ))
+            ) : (
+              <Text variant="quiet" sx={{ fontSize: 1 }}>
+                No space activities to show
+              </Text>
+            )}
           </MapFilterListWrapper>
         )}
 
         {(mapState.allBadges?.length || 0) > 0 && (
           <MapFilterListWrapper title="Badges">
-            {mapState.allBadges.map((badge) => {
-              return (
+            {visibleBadges.length > 0 ? (
+              visibleBadges.map((badge) => (
                 <Label key={badge.id} sx={{ alignItems: 'center', gap: 0 }}>
                   <Checkbox
                     onClick={() => mapState.toggleActiveBadgeFilter(badge.name)}
@@ -130,8 +155,12 @@ export const MapFilterList = ({ onClose }: MapFilterListProps) => {
                   {badge.displayName}
                   <UserBadge badge={badge} />
                 </Label>
-              )
-            })}
+              ))
+            ) : (
+              <Text variant="quiet" sx={{ fontSize: 1 }}>
+                No badges to show
+              </Text>
+            )}
           </MapFilterListWrapper>
         )}
 

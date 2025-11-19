@@ -71,14 +71,14 @@ export const FieldTextarea = ({
         onBlur={(e) => {
           if (modifiers) {
             e.target.value = processInputModifiers(e.target.value, modifiers)
-            input.onChange(e)
+            input.onChange(e.target.value)
           }
           if (customOnBlur) {
             customOnBlur(e)
           }
           input.onBlur()
         }}
-        onChange={(ev) => input.onChange(ev)}
+        onChange={(ev) => input.onChange(ev.target.value)}
       />
 
       {showCharacterCount && maxLength && (

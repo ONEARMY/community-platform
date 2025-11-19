@@ -1,7 +1,7 @@
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
-import type { ActionFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs } from 'react-router';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
@@ -10,12 +10,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const newEmail = formData.get('email') as string
   const password = formData.get('password') as string
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
   const signInResult = await client.auth.signInWithPassword({
-    email: user!.email as string,
+    email: claims.data?.claims!.email as string,
     password,
   })
 

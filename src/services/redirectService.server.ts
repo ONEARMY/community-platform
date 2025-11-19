@@ -1,4 +1,4 @@
-import { redirect } from '@remix-run/node'
+import { redirect } from 'react-router';
 
 const redirectSignIn = (returnUrl: string, headers: HeadersInit) => {
   return redirect(`/sign-in?returnUrl=${encodeURIComponent(returnUrl)}`, {

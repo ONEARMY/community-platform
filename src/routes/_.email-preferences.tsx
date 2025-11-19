@@ -1,20 +1,18 @@
-import { redirect, useLoaderData } from '@remix-run/react'
+import { redirect, useLoaderData } from 'react-router'
 import Main from 'src/pages/common/Layout/Main'
 import { SupabaseNotificationsViaEmail } from 'src/pages/UserSettings/SupabaseNotificationsViaEmail'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { Alert, Card, Flex } from 'theme-ui'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from 'react-router'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
   const url = new URL(request.url)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const { data } = await client.auth.getClaims()
 
-  if (user) {
+  if (data?.claims) {
     return redirect('/settings/notifications', { headers })
   }
 
@@ -29,7 +27,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>()
+  const data: any = useLoaderData<typeof loader>()
   const code = data.code
   const error = data.error as string
 

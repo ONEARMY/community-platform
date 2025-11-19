@@ -1,8 +1,12 @@
 import '@testing-library/jest-dom/vitest'
 
-import { createMemoryRouter, RouterProvider } from 'react-router-dom'
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router'
 import { faker } from '@faker-js/faker'
-import { createRoutesFromElements, Route } from '@remix-run/react'
 import { act, render, waitFor, within } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'
@@ -232,6 +236,7 @@ describe('Research Article', () => {
           FactoryResearchItem({
             title: 'Innovative Study',
             category: undefined, // No category provided
+            updates: [],
           }),
         )
       })

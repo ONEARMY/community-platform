@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { Field, Form } from 'react-final-form'
-import { Link, redirect, useActionData } from '@remix-run/react'
+import { Link, redirect, useActionData } from 'react-router'
 import {
   Button,
   ExternalLink,
@@ -22,13 +22,13 @@ import {
 import { Card, Flex, Heading, Label, Text } from 'theme-ui'
 import { bool, object, ref, string } from 'yup'
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client } = createSupabaseServerClient(request)
-  const { data } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (data.user) {
+  if (claims.data?.claims) {
     return redirect('/')
   }
 
@@ -103,7 +103,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 const rowWidth = ['100%', '100%', `100%`]
 
 export default function Index() {
-  const actionResponse = useActionData<typeof action>()
+  const actionResponse: any = useActionData<typeof action>()
 
   const validationSchema = object({
     username: string()

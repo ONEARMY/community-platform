@@ -1,5 +1,5 @@
+import { NavLink } from 'react-router'
 import styled from '@emotion/styled'
-import { NavLink } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { ReturnPathLink } from 'oa-components'
 import { preciousPlasticTheme } from 'oa-themes'

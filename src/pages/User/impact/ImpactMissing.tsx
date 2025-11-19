@@ -1,4 +1,4 @@
-import { Link } from '@remix-run/react'
+import { Link } from 'react-router';
 import { observer } from 'mobx-react'
 import { Button, ExternalLink } from 'oa-components'
 import { useProfileStore } from 'src/stores/Profile/profile.store'

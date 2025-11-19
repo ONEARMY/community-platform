@@ -1,18 +1,12 @@
 import React from 'react'
-import { Link, Text } from '@react-email/components'
+import { Text } from '@react-email/components'
 
 import { BoxText } from './components/box-text.tsx'
 import { Button } from './components/button.tsx'
-import { Layout, urlAppend } from './layout.tsx'
+import { Layout } from './layout.tsx'
 import { Heading } from './components/heading.tsx'
 
-import type {
-  Comment,
-  News,
-  Notification,
-  NotificationDisplay,
-  TenantSettings,
-} from 'oa-shared'
+import type { NotificationDisplay, TenantSettings } from 'oa-shared'
 import { Header } from './components/header.tsx'
 
 const text = {

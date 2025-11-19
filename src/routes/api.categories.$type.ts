@@ -3,8 +3,8 @@ import { Category } from 'oa-shared'
 import { isProductionEnvironment } from 'src/config/config'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { ContentType, DBCategory } from 'oa-shared'
+import type { LoaderFunctionArgs } from 'react-router'
 
 const cache = new Keyv<Category[]>({ ttl: 3600000 }) // ttl: 60 minutes
 

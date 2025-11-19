@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from '@remix-run/react'
+import { useNavigate } from 'react-router';
 import { Text, useThemeUI } from 'theme-ui'
 
 import { Button } from '../Button/Button'

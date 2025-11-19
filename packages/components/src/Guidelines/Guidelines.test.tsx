@@ -3,13 +3,11 @@ import '@testing-library/jest-dom/vitest'
 import { describe, expect, it } from 'vitest'
 
 import { render } from '../test/utils'
-import { Default } from './Guidelines.stories'
-
-import type { IProps } from './Guidelines'
+import { DefaultComponent } from './Guidelines.stories'
 
 describe('Guidelines', () => {
   it('validates the component behaviour', () => {
-    const { getByText } = render(<Default {...(Default.args as IProps)} />)
+    const { getByText } = render(<DefaultComponent />)
 
     expect(getByText('How does it work?')).toBeInTheDocument()
     expect(

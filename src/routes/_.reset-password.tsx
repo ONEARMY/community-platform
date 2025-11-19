@@ -1,6 +1,5 @@
 import { Field, Form } from 'react-final-form'
-import { redirect } from '@remix-run/node'
-import { Link, useActionData, useNavigate } from '@remix-run/react'
+import { Link, redirect, useActionData, useNavigate } from 'react-router'
 import { Button, FieldInput, HeroBanner } from 'oa-components'
 import Main from 'src/pages/common/Layout/Main'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
@@ -9,13 +8,13 @@ import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 import { required } from 'src/utils/validators'
 import { Card, Flex, Heading, Label, Text } from 'theme-ui'
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client } = createSupabaseServerClient(request)
-  const { data } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (data.user) {
+  if (claims.data?.claims) {
     return redirect(getReturnUrl(request))
   }
 
@@ -48,7 +47,7 @@ export const meta = mergeMeta<typeof loader>(() => {
 })
 
 export default function Index() {
-  const actionResponse = useActionData<typeof action>()
+  const actionResponse: any = useActionData<typeof action>()
   const navigate = useNavigate()
 
   return (

@@ -2,19 +2,23 @@ import { Notification, NotificationDisplay } from 'oa-shared'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { resolveType } from 'src/utils/contentType.utils'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBNotification } from 'oa-shared'
+import type { LoaderFunctionArgs } from 'react-router'
 
 const transformNotificationList = async (
   dbNotifications: DBNotification[],
   client: SupabaseClient,
 ) => {
-  return Promise.all(
+  return Promise.allSettled(
     dbNotifications.map((dbNotification) =>
       transformNotification(dbNotification, client),
     ),
-  )
+  ).then((results) => {
+    return results
+      .filter((result) => result.status === 'fulfilled')
+      .map((result) => result.value)
+  })
 }
 
 export const transformNotification = async (
@@ -39,6 +43,8 @@ export const transformNotification = async (
 
     if (content.data) {
       notification.content = content.data
+    } else {
+      throw Error('Comment not found, probably deleted')
     }
 
     const sourceContentType = resolveType(notification.sourceContentType)
@@ -79,18 +85,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
 
   try {
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
 
-    if (!user) {
+    if (!claims.data?.claims) {
       return Response.json({}, { headers, status: 401 })
     }
 
     const profileResponse = await client
       .from('profiles')
       .select('id')
-      .eq('auth_id', user.id)
+      .eq('auth_id', claims.data.claims.sub)
       .maybeSingle() // Maybe single due to dup profiles in tests
 
     if (!profileResponse.data || profileResponse.error) {

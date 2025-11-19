@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 
 import { Button } from '../Button/Button'
-import { LoggedOutWithCount } from '../UsefulStatsButton/UsefulStatsButton.stories'
+import { UsefulStatsButton } from '../UsefulStatsButton/UsefulStatsButton'
 import { ArticleCallToActionSupabase } from './ArticleCallToActionSupabase'
 
 import type { Meta, StoryFn } from '@storybook/react-vite'
@@ -17,13 +17,11 @@ export const ArticleCallToActionSupabaseCommentAndUseful: StoryFn<
 > = () => (
   <ArticleCallToActionSupabase author={makeFakeUser()}>
     <Button sx={{ fontSize: 2 }}>Leave a comment</Button>
-    <LoggedOutWithCount
+    <UsefulStatsButton
       isLoggedIn={false}
       hasUserVotedUseful={false}
       votedUsefulCount={0}
-      onUsefulClick={function (): Promise<void> {
-        throw new Error('Function not implemented.')
-      }}
+      onUsefulClick={() => Promise.resolve()}
     />
   </ArticleCallToActionSupabase>
 )
@@ -32,13 +30,11 @@ export const ArticleCallToActionSupabaseUseful: StoryFn<
   typeof ArticleCallToActionSupabase
 > = () => (
   <ArticleCallToActionSupabase author={makeFakeUser()}>
-    <LoggedOutWithCount
+    <UsefulStatsButton
       isLoggedIn={false}
       hasUserVotedUseful={false}
       votedUsefulCount={0}
-      onUsefulClick={function (): Promise<void> {
-        throw new Error('Function not implemented.')
-      }}
+      onUsefulClick={() => Promise.resolve()}
     />
   </ArticleCallToActionSupabase>
 )

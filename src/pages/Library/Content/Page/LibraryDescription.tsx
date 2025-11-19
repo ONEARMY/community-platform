@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Link, useNavigate } from '@remix-run/react'
+import { Link, useNavigate } from 'react-router';
 import {
   Button,
   Category,
@@ -93,7 +93,7 @@ export const LibraryDescription = (props: IProps) => {
     item.moderationFeedback && item.moderation !== 'accepted' && isEditable
 
   return (
-    <Card variant="responsive">
+    (<Card variant="responsive">
       <Flex
         data-cy="library-basis"
         data-id={item.id}
@@ -301,7 +301,7 @@ export const LibraryDescription = (props: IProps) => {
                 // 3407 - AspectImage creates divs that can mess up page layout,
                 // so using Image here instead and recreating the div layout
                 // that was created by AspectImage
-                <Image
+                (<Image
                   loading="lazy"
                   src={item.coverImage.publicUrl}
                   sx={{
@@ -311,7 +311,7 @@ export const LibraryDescription = (props: IProps) => {
                   }}
                   crossOrigin=""
                   alt="project cover image"
-                />
+                />)
               )}
             </Box>
           </Box>
@@ -374,6 +374,6 @@ export const LibraryDescription = (props: IProps) => {
           },
         ]}
       />
-    </Card>
-  )
+    </Card>)
+  );
 }

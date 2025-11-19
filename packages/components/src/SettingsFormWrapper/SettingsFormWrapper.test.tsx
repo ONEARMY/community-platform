@@ -3,13 +3,11 @@ import '@testing-library/jest-dom/vitest'
 import { describe, expect, it } from 'vitest'
 
 import { render } from '../test/utils'
-import { Default } from './SettingsFormWrapper.stories'
-
-import type { IProps } from './SettingsFormWrapper'
+import { DefaultComponent } from './SettingsFormWrapper.stories'
 
 describe('SettingsFormWrapper', () => {
   it('changes the tab display as expected', async () => {
-    const screen = render(<Default {...(Default.args as IProps)} />)
+    const screen = render(<DefaultComponent />)
     expect(screen.getByText('Form Body 1')).toBeInTheDocument()
 
     // Issue with how storybook is setup to do the routing

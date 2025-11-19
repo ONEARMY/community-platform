@@ -63,7 +63,7 @@ describe('[Question]', () => {
 
       cy.step('Add title description')
       cy.get('[data-cy=field-description]').type(initialQuestionDescription, {
-        delay: 0,
+        delay: 5,
       })
 
       cy.get('[data-cy=draft]').click()
@@ -116,7 +116,7 @@ describe('[Question]', () => {
       cy.step('Add title description')
       cy.get('[data-cy=field-description]')
         .clear()
-        .type(updatedQuestionDescription, { delay: 0 })
+        .type(updatedQuestionDescription, { delay: 5 })
 
       // cy.step('Update images by removing one')
       // cy.get('[data-cy=image-upload-0]')

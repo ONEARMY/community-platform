@@ -1,4 +1,4 @@
-import { redirect, useLoaderData } from '@remix-run/react'
+import { redirect, useLoaderData } from 'react-router'
 import { Question, UserRole } from 'oa-shared'
 import { IMAGE_SIZES } from 'src/config/imageTransforms'
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm'
@@ -7,18 +7,16 @@ import { questionServiceServer } from 'src/services/questionService.server'
 import { redirectServiceServer } from 'src/services/redirectService.server'
 import { storageServiceServer } from 'src/services/storageService.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBQuestion, Image } from 'oa-shared'
+import type { LoaderFunctionArgs } from 'react-router'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (!claims.data?.claims) {
     return redirectServiceServer.redirectSignIn(
       `/questions/${params.slug}/edit`,
       headers,
@@ -37,7 +35,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const dbQuestion = result.data as unknown as DBQuestion
 
-  if (!(await isUserAllowedToEdit(dbQuestion, user, client))) {
+  if (
+    !(await isUserAllowedToEdit(dbQuestion, claims.data.claims.sub, client))
+  ) {
     return redirect('/forbidden?page=question-edit', { headers })
   }
 
@@ -57,13 +57,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 async function isUserAllowedToEdit(
   dbQuestion: DBQuestion,
-  user: User,
+  userAuthId: string,
   client: SupabaseClient,
 ) {
   const profileResult = await client
     .from('profiles')
     .select('id,roles')
-    .eq('auth_id', user.id)
+    .eq('auth_id', userAuthId)
     .single()
 
   return (
@@ -73,7 +73,7 @@ async function isUserAllowedToEdit(
 }
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>()
+  const data: any = useLoaderData<typeof loader>()
   const question = data.question as Question
 
   return (

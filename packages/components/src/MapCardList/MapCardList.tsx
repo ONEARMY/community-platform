@@ -8,6 +8,7 @@ import { CardListItem } from '../CardListItem/CardListItem'
 import { Icon } from '../Icon/Icon'
 
 import type { MapPin } from 'oa-shared'
+import type { JSX } from 'react'
 
 export interface IProps {
   columnsCountBreakPoints?: { [key: number]: number }

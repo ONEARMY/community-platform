@@ -9,6 +9,7 @@ import type {
   DBMedia,
   DBProfile,
   ProfileFormData,
+  ProfileType,
 } from 'oa-shared'
 
 export class ProfileServiceServer {
@@ -63,6 +64,10 @@ export class ProfileServiceServer {
           description,
           map_pin_name,
           is_space
+        ),
+        pin:map_pins(
+          id,
+          moderation
         )`,
       )
       .eq('id', id)
@@ -185,6 +190,12 @@ export class ProfileServiceServer {
     const imageService = new ImageServiceServer(this.client)
     const types = await new ProfileTypesServiceServer(this.client).get()
     const typeId = types.find((x) => x.name === values.type)!.id
+    const existingProfile = await this.getById(id)
+    const pinModeration = determinePinModeration(
+      types,
+      existingProfile!,
+      values.type,
+    )
 
     const valuesToUpdate = {
       about: values.about,
@@ -201,9 +212,8 @@ export class ProfileServiceServer {
         : null,
     } as Partial<DBProfile>
 
-    const existingProfile = await this.getById(id)
     if (values.photo) {
-      const currentImagePath = existingProfile?.photo?.path
+      const currentImagePath = existingProfile!.photo?.path
 
       // remove current photo first
       if (currentImagePath) {
@@ -292,6 +302,14 @@ export class ProfileServiceServer {
       throw error
     }
 
+    if (pinModeration) {
+      //
+      await this.client
+        .from('map_pins')
+        .update({ moderation: pinModeration })
+        .eq('profile_id', id)
+    }
+
     return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile)
   }
 
@@ -338,4 +356,40 @@ export class ProfileServiceServer {
       }
     }
   }
+}
+
+/**
+ * Calculate the moderation status for a profile's map pin based on profile type changes.
+ *    If a profile changes from a space to 'member', the pin is automatically accepted.
+ *    If it changes from 'member' to a space, the pin requires moderation.
+ */
+function determinePinModeration(
+  types: ProfileType[],
+  profile: DBProfile,
+  type: string,
+) {
+  if (!profile.pin) {
+    return undefined
+  }
+
+  const selectedType = types.find((x) => x.name === type)
+  const currentType = types.find((x) => x.id === profile.profile_type)
+
+  let newValue: 'accepted' | 'awaiting-moderation' | undefined = undefined
+
+  if (!selectedType || !currentType) {
+    return undefined
+  }
+  if (currentType.isSpace && !selectedType.isSpace) {
+    newValue = 'accepted'
+  }
+  if (!currentType.isSpace && selectedType.isSpace) {
+    newValue = 'awaiting-moderation'
+  }
+
+  if (newValue === profile.pin.moderation) {
+    return undefined
+  }
+
+  return newValue
 }

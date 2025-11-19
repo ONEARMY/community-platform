@@ -16,7 +16,6 @@ export default defineConfig({
     'public.*',
     'auth.users',
     'auth.identities',
-    'auth.sessions',
     'storage.buckets',
   ],
 })

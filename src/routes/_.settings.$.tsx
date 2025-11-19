@@ -4,15 +4,13 @@ import { SettingsPage } from 'src/pages/UserSettings/SettingsPage.client'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { redirectServiceServer } from 'src/services/redirectService.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (!claims.data?.claims) {
     return redirectServiceServer.redirectSignIn('/settings', headers)
   }
 

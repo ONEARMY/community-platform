@@ -6,7 +6,6 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { render } from '../test/utils'
 import { CreateComment } from './CreateComment'
-import { WithCustomPlaceholder } from './CreateComment.stories'
 
 import type { ProfileType } from 'oa-shared'
 
@@ -120,7 +119,7 @@ describe('CreateComment Component', () => {
 
   it('renders with custom placeholder', () => {
     const screen = render(
-      <WithCustomPlaceholder
+      <CreateComment
         comment={''}
         placeholder="Custom placeholder"
         onChange={vi.fn()}

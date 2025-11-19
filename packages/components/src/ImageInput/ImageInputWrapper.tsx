@@ -1,6 +1,7 @@
-import React from 'react'
+import { forwardRef } from 'react'
 import { Flex } from 'theme-ui'
 
+import type { JSX } from 'react'
 import type { BoxProps } from 'theme-ui'
 
 interface ITitleProps {
@@ -9,7 +10,7 @@ interface ITitleProps {
 }
 
 // any export to fix: https://github.com/microsoft/TypeScript/issues/37597
-export const ImageInputWrapper = React.forwardRef<
+export const ImageInputWrapper = forwardRef<
   HTMLElement,
   BoxProps & ITitleProps
 >((props, ref): JSX.Element => {

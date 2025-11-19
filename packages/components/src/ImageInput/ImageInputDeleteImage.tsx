@@ -2,6 +2,7 @@ import { Flex } from 'theme-ui'
 
 import { Button } from '../Button/Button'
 
+import type { JSX } from 'react'
 import type { BoxProps, ThemeUIStyleObject } from 'theme-ui'
 
 const alignCenterWrapperStyles: ThemeUIStyleObject = {

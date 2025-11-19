@@ -9,11 +9,9 @@ import { Box } from 'theme-ui'
 export async function loader({ request }) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (!claims.data?.claims) {
     return redirectServiceServer.redirectSignIn('/library/create', headers)
   }
 

@@ -1,20 +1,17 @@
-import { redirect } from '@remix-run/node'
+import { redirect } from 'react-router'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { resolveType } from 'src/utils/contentType.utils'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { Params } from '@remix-run/react'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { DBResearchUpdate, IDBDownloadable } from 'oa-shared'
+import type { LoaderFunctionArgs, Params } from 'react-router'
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (!claims.data?.claims) {
     return Response.json({}, { status: 401, headers })
   }
 

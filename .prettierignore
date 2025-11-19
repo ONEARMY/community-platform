@@ -1,4 +1,6 @@
 build
 storybook-static
 dist
-.md
+shared/lib
+.react-router
+*.md

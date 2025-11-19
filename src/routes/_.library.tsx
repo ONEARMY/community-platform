@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/filename-case */
-import { Outlet } from '@remix-run/react'
+import { Outlet } from 'react-router';
 import Main from 'src/pages/common/Layout/Main'
 
 export async function loader() {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation } from '@remix-run/react'
+import { useLocation } from 'react-router';
 import { Button, ExternalLink } from 'oa-components'
 import { Box, Text } from 'theme-ui'
 

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Link } from '@remix-run/react'
+import { Link } from 'react-router';
 import { observer } from 'mobx-react'
 import {
   Category,

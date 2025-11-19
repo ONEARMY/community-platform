@@ -3,20 +3,22 @@ import '@testing-library/jest-dom/vitest'
 import { describe, expect, it } from 'vitest'
 
 import { render } from '../test/utils'
-import { CustomDetails, Default } from './DownloadButton.stories'
-
-import type { IProps } from './DownloadButton'
+import { DownloadButton } from './DownloadButton'
 
 describe('DownloadButton', () => {
   it('renders the default state', () => {
-    const { getByText } = render(<Default {...(Default.args as IProps)} />)
+    const { getByText } = render(<DownloadButton onClick={() => {}} />)
 
     expect(getByText('Download files')).toBeInTheDocument()
   })
 
   it('renders the custom options', () => {
     const { getByText } = render(
-      <CustomDetails {...(CustomDetails.args as IProps)} />,
+      <DownloadButton
+        onClick={() => {}}
+        glyph="download-cloud"
+        label="Hello there"
+      />,
     )
 
     expect(getByText('Hello there')).toBeInTheDocument()

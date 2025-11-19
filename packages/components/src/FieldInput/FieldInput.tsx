@@ -64,7 +64,7 @@ export const FieldInput = ({
       onBlur={(e) => {
         if (modifiers) {
           e.target.value = processInputModifiers(e.target.value, modifiers)
-          input.onChange(e)
+          input.onChange(e.target.value)
         }
         if (customOnBlur) {
           customOnBlur(e)
@@ -72,7 +72,7 @@ export const FieldInput = ({
         input.onBlur()
       }}
       onChange={(ev) => {
-        input.onChange(ev)
+        input.onChange(ev.target.value)
       }}
     />
   )

@@ -3,7 +3,7 @@ import { tokens } from 'src/utils/tokens.server'
 
 import { DEFAULT_NOTIFICATION_PREFERENCES } from './api.notifications-preferences'
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 
 interface DecodedToken {
   profileId: string

@@ -9,19 +9,27 @@ const getPublicUrls = (
   images: DBMedia[],
   size?: TransformOptions,
 ): Image[] => {
-  return images?.map((x) => {
-    const { data } = client.storage
-      .from(process.env.TENANT_ID as string)
-      .getPublicUrl(
-        x.path,
-        size
-          ? {
-              transform: size,
-            }
-          : undefined,
-      )
-    return new Image({ id: x.id, publicUrl: data.publicUrl })
-  })
+  const result: Image[] = []
+
+  for (const x of images || []) {
+    try {
+      const { data } = client.storage
+        .from(process.env.TENANT_ID as string)
+        .getPublicUrl(
+          x.path,
+          size
+            ? {
+                transform: size,
+              }
+            : undefined,
+        )
+      result.push(new Image({ id: x.id, publicUrl: data.publicUrl }))
+    } catch (error) {
+      // Skip null images - don't add to result
+    }
+  }
+
+  return result
 }
 
 const uploadImage = async (

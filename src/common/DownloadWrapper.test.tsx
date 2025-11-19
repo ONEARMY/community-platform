@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { DownloadWrapper } from './DownloadWrapper'
 
 const mockedUsedNavigate = vi.fn()
-vi.mock('react-router-dom', () => ({
+vi.mock('react-router', () => ({
   useNavigate: () => mockedUsedNavigate,
 }))
 

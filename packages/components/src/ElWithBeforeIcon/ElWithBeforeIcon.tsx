@@ -2,6 +2,7 @@ import { Box } from 'theme-ui'
 
 import checkmarkIcon from '../../assets/icons/icon-checkmark.svg'
 
+import type { JSX } from 'react'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface ElWithBeforeIconProps {

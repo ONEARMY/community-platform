@@ -1,23 +1,19 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { updateUserActivity } from 'src/utils/activity.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { Params } from '@remix-run/react'
-import type { User } from '@supabase/supabase-js'
+import type { LoaderFunctionArgs, Params } from 'react-router'
 
 export const action = async ({ params, request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request)
 
   try {
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims()
 
-    const { valid, status, statusText } = await validateRequest(
-      params,
-      request,
-      user,
-    )
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 })
+    }
+
+    const { valid, status, statusText } = await validateRequest(params, request)
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText })
@@ -28,7 +24,7 @@ export const action = async ({ params, request }: LoaderFunctionArgs) => {
       .update({ is_read: true })
       .eq('id', params.id)
 
-    updateUserActivity(client, user!.id)
+    updateUserActivity(client, claims.data.claims.sub)
 
     return Response.json({}, { headers, status: 200 })
   } catch (error) {
@@ -44,15 +40,7 @@ export const action = async ({ params, request }: LoaderFunctionArgs) => {
   }
 }
 
-async function validateRequest(
-  params: Params<string>,
-  request: Request,
-  user: User | null,
-) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
+async function validateRequest(params: Params<string>, request: Request) {
   if (request.method !== 'POST') {
     return { status: 405, statusText: 'method not allowed' }
   }

@@ -1,21 +1,19 @@
-import { redirect, useLoaderData } from '@remix-run/react'
+import { redirect, useLoaderData } from 'react-router'
 import { ResearchItem } from 'oa-shared'
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common'
 import { createSupabaseServerClient } from 'src/repository/supabase.server'
 import { redirectServiceServer } from 'src/services/redirectService.server'
 import { researchServiceServer } from 'src/services/researchService.server'
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { DBResearchItem } from 'oa-shared'
+import type { LoaderFunctionArgs } from 'react-router'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request)
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims()
 
-  if (!user) {
+  if (!claims.data?.claims) {
     return redirectServiceServer.redirectSignIn(
       `/research/${params.slug}/new-update`,
       headers,
@@ -31,7 +29,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return Response.json({ research: null }, { headers })
   }
 
-  const username = user.user_metadata.username
+  const username = claims.data.claims.user_metadata.username
   const researchDb = result.item as unknown as DBResearchItem
   const research = ResearchItem.fromDB(researchDb, [], [], result.collaborators)
 
@@ -49,7 +47,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>()
+  const data: any = useLoaderData<typeof loader>()
   const research = data.research as ResearchItem
 
   return <ResearchUpdateForm research={research} />

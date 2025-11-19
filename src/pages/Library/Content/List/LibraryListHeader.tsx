@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link, useSearchParams } from '@remix-run/react'
+import { Link, useSearchParams } from 'react-router';
 import debounce from 'debounce'
 import {
   CategoryHorizonalList,

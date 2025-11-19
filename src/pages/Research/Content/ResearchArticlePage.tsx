@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useLocation } from '@remix-run/react'
+import { Link, useLocation } from 'react-router';
 import { observer } from 'mobx-react'
 import {
   ArticleCallToActionSupabase,

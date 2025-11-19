@@ -1,17 +1,3 @@
-import { clearDatabase, clearStorage, createStorage } from '../utils/TestUtils'
-import { seedAccounts, seedProfileImages } from './seedAccounts'
-import { seedBadges } from './seedBadges'
-import { seedLibrary } from './seedLibrary'
-import { seedMap } from './seedMap'
-import { seedNews } from './seedNews'
-import {
-  seedProfileTags,
-  seedProfileTypes,
-  seedQuestions,
-  seedTags,
-} from './seedQuestions'
-import { seedResearch } from './seedResearch'
-
 /**
  * Before all tests begin seed the database. CY runs this before all specs.
  * Note, cy also automatically will clear browser caches.
@@ -30,32 +16,9 @@ before(() => {
   Cypress.Promise.onPossiblyUnhandledRejection((error) => {
     throw error
   })
-  cy.then(async () => {
-    // await clearDatabase(
-    //   ['categories', 'comments', 'news', 'profiles', 'questions', 'tags'],
-    //   Cypress.env('TENANT_ID'),
-    // )
-    await createStorage(Cypress.env('TENANT_ID'))
 
-    const profileImages = await seedProfileImages()
-    const { profile_types } = await seedProfileTypes()
-    const { profile_badges } = await seedBadges()
-    const { profile_tags } = await seedProfileTags()
-    const { profiles } = await seedAccounts(
-      profile_badges.data,
-      profile_tags.data,
-      profile_types.data,
-      profileImages,
-    )
+  cy.task('seed database')
 
-    await seedMap(profiles)
-
-    const { tags } = await seedTags()
-    await seedQuestions(profiles)
-    await seedNews(profiles, tags)
-    await seedResearch(profiles, tags)
-    await seedLibrary(profiles, tags)
-  })
   localStorage.clear()
   cy.clearServiceWorkers()
 })
@@ -68,30 +31,8 @@ afterEach(() => {
 after(async () => {
   Cypress.log({
     displayName: 'Clearing database for tenant',
-    message: Cypress.env('TENANT_ID'),
+    message: process.env.TENANT_ID,
   })
-  await clearDatabase(
-    [
-      'categories',
-      'comments',
-      'news',
-      'research',
-      'research_updates',
-      'notifications',
-      'notifications_preferences',
-      'profiles',
-      'questions',
-      'projects',
-      'project_steps',
-      'tags',
-      'profile_badges',
-      'profile_badges_relations',
-      'profile_tags',
-      'profile_tags_relations',
-      'profile_types',
-    ],
-    Cypress.env('TENANT_ID'),
-  )
 
-  await clearStorage(Cypress.env('TENANT_ID'))
+  cy.task('clear database')
 })

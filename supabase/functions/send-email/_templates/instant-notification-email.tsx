@@ -1,5 +1,5 @@
 import React from 'react'
-import { Column, Link, Section, Text } from '@react-email/components'
+import { Text } from '@react-email/components'
 
 import { BoxText } from './components/box-text.tsx'
 import { Button } from './components/button.tsx'

@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 
-import { createRemixStub } from '@remix-run/testing'
+import { createRoutesStub } from 'react-router';
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'
@@ -167,7 +167,7 @@ describe('Library form', () => {
 })
 
 const Wrapper = (project: Project, files?: MediaFile[], fileLink?: string) => {
-  const ReactStub = createRemixStub(
+  const ReactStub = createRoutesStub(
     [
       {
         index: true,

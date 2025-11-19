@@ -4,22 +4,33 @@ import { act, fireEvent } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import { render } from '../test/utils'
-import { EditComment, type IProps } from './EditComment'
-import { Default, EditReply } from './EditComment.stories'
+import { EditComment } from './EditComment'
+
+import type { IProps } from './EditComment'
 
 describe('EditComment', () => {
   const mockOnSubmit = vi.fn().mockImplementation(() => new Response())
   const mockOnCancel = vi.fn()
 
+  const defaultProps: IProps = {
+    isReply: false,
+    comment: 'A short comment',
+    setShowEditModal: () => null,
+    handleCancel: mockOnCancel,
+    handleSubmit: () => Promise.resolve(new Response('')),
+  }
+
   it('showed correct title when a comment', () => {
-    const { getByText } = render(<Default {...(Default.args as IProps)} />)
+    const { getByText } = render(<EditComment {...defaultProps} />)
 
     expect(getByText('Edit Comment')).toBeInTheDocument()
     expect(() => getByText('Edit Reply')).toThrow()
   })
 
   it('showed correct title when a reply', () => {
-    const { getByText } = render(<EditReply {...(EditReply.args as IProps)} />)
+    const { getByText } = render(
+      <EditComment {...defaultProps} isReply={true} />,
+    )
 
     expect(getByText('Edit Reply')).toBeInTheDocument()
     expect(() => getByText('Edit Comment')).toThrow()

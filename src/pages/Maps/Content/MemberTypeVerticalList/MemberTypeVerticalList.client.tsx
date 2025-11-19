@@ -14,8 +14,8 @@ export const MemberTypeList = () => {
   return (
     <VerticalList dataCy="MemberTypeVerticalList">
       {mapState.allProfileTypes.map((profileType, index) => {
-        const isSelected = !!mapState.activeProfileTypeFilters.find(
-          (activeFilter) => profileType.name === activeFilter,
+        const isSelected = mapState.activeProfileTypeFilters.includes(
+          profileType.name,
         )
 
         return (

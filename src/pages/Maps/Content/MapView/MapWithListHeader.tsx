@@ -3,7 +3,7 @@ import { LatLngBounds } from 'leaflet'
 import { Button, Loader, MapCardList, Modal, OsmGeocoding } from 'oa-components'
 import { Flex, Text } from 'theme-ui'
 
-import { MapContext, PROFILE_ZOOM_LEVEL } from '../../MapContext'
+import { MapContext } from '../../MapContext'
 import { MapFilterList } from '../../MapFilterList'
 import { MemberTypeList } from '../MemberTypeVerticalList/MemberTypeVerticalList.client'
 
@@ -101,8 +101,7 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
           columnsCountBreakPoints={isMobile ? { 300: 1, 600: 2 } : undefined}
           list={mapState.filteredPins}
           onPinClick={(pin) => {
-            mapState.selectPin(pin)
-            mapState.setView({ lat: pin.lat, lng: pin.lng }, PROFILE_ZOOM_LEVEL)
+            mapState.selectPinWithClusterCheck(pin)
           }}
           selectedPin={mapState.selectedPin}
           viewport={viewport}

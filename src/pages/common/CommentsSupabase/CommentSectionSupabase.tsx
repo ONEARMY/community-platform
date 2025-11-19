@@ -7,6 +7,8 @@ import { subscribersService } from 'src/services/subscribersService';
 import { Box, Button, Flex } from 'theme-ui';
 
 import { CommentItemSupabase } from './CommentItemSupabase';
+import { CommentSort } from './CommentSort';
+import { CommentSortOption, CommentSortOptions } from './CommentSortOptions';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
 
 import type { DiscussionContentTypes, Reply } from 'oa-shared';
@@ -25,20 +27,19 @@ export const CommentSectionSupabase = (props: IProps) => {
 
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentLimit, setCommentLimit] = useState<number>(commentPageSize);
-  const [newCommentIds, setNewCommentIds] = useState<number[]>([]);
+  const [sortBy, setSortBy] = useState<CommentSortOption>(
+    CommentSortOption.Newest,
+  );
 
   const displayedComments = useMemo(() => {
-    return comments.filter((x) => !newCommentIds.includes(x.id)).slice(0, commentLimit);
-  }, [comments, commentLimit, newCommentIds]);
-  const newComments = useMemo(() => {
-    return comments.filter((x) => newCommentIds.includes(x.id));
-  }, [comments, newCommentIds]);
+    const sortFn = CommentSortOptions.getSortFn(sortBy)
+    const sorted = [...comments].sort(sortFn)
+    return sorted.slice(0, commentLimit)
+  }, [comments, commentLimit, sortBy]);
 
   const remainingCommentsCount = useMemo(() => {
-    const nonNewCount = comments.length - newCommentIds.length;
-    const shown = Math.min(commentLimit, nonNewCount);
-    return Math.max(0, nonNewCount - shown);
-  }, [comments, newCommentIds, commentLimit]);
+    return Math.max(0, comments.length - commentLimit)
+  }, [comments.length, commentLimit]);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -100,7 +101,6 @@ export const CommentSectionSupabase = (props: IProps) => {
         subscribersService.add(newComment.sourceType, Number(newComment.sourceId));
 
         setComments((comments) => [...comments, newComment]);
-        setNewCommentIds([...newCommentIds, newComment.id]);
       }
       return result;
     } catch (err) {
@@ -233,21 +233,35 @@ export const CommentSectionSupabase = (props: IProps) => {
       <Flex sx={{ flexDirection: 'column', gap: 2 }} id="discussion">
         <Flex
           sx={{
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: 1,
-            justifyContent: 'space-between',
+            flexDirection: ['column', 'row'],
+            gap: 2,
           }}
         >
-          <CommentsTitle comments={comments} />
-          <FollowButtonAction
-            labelFollow="Follow Comments"
-            labelUnfollow="Following Comments"
-            contentType={sourceType}
-            itemId={sourceId}
-            setSubscribersCount={setSubscribersCount}
-            small={false}
-          />
+          <Flex
+            sx={{
+              alignItems: 'center',
+              gap: 1,
+              justifyContent: 'space-between',
+              flex: 1,
+            }}
+          >
+            <CommentsTitle comments={comments} />
+            <FollowButtonAction
+              labelFollow="Follow Comments"
+              labelUnfollow="Following Comments"
+              contentType={sourceType}
+              itemId={sourceId}
+              setSubscribersCount={setSubscribersCount}
+              sx={{
+                px: [2, 3, 3],
+                py: [1, 2, 2],
+                pl: ['2rem', 9, 9],
+                fontSize: [1, 2, 2],
+                height: ['2rem', 'auto', 'auto'],
+              }}
+            />
+          </Flex>
+          <CommentSort sortBy={sortBy} onSortChange={setSortBy} />
         </Flex>
         {displayedComments.map((comment) => (
           <Box key={comment.id}>
@@ -276,20 +290,6 @@ export const CommentSectionSupabase = (props: IProps) => {
             </Button>
           </Flex>
         )}
-
-        {newComments.map((comment) => (
-          <Box key={comment.id}>
-            <CommentItemSupabase
-              comment={comment}
-              onEdit={editComment}
-              onDelete={deleteComment}
-              onReply={(reply) => postReply(comment.id, reply)}
-              onEditReply={(id, reply) => editReply(id, reply, comment.id)}
-              onDeleteReply={(id) => deleteReply(id, comment.id)}
-              sourceType={sourceType}
-            />
-          </Box>
-        ))}
 
         <CreateCommentSupabase onSubmit={postComment} sourceType={sourceType} />
       </Flex>

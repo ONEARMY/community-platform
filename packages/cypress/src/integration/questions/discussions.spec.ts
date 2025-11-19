@@ -15,9 +15,82 @@ describe('[Questions.Discussions]', () => {
     const question = MOCK_DATA.questions[0];
     cy.visit(`/questions/${question.slug}`);
     cy.get(`[data-cy=comment-text]`).contains('First comment');
-    cy.get('[data-cy=show-replies]').click();
+    cy.get('[data-cy=show-replies]').first().click();
     cy.get(`[data-cy="ReplyItem"]`).contains('First Reply');
-  });
+  })
+
+  it('allows users to sort comments', () => {
+    const commenter = generateNewUserDetails()
+    const question = MOCK_DATA.questions[1]
+    const questionPath = `/questions/${question.slug}`
+
+    const comment1 = `First comment ${randomId}`
+    const comment2 = `Second comment ${randomId}`
+    const comment3 = `Third comment ${randomId}`
+
+    cy.step('Create user and add three comments')
+    cy.signUpNewUser(commenter)
+    cy.completeUserProfile(commenter.username)
+    cy.visit(questionPath)
+
+    cy.addComment(comment1)
+    cy.wait(1000)
+    cy.addComment(comment2)
+    cy.wait(1000)
+    cy.addComment(comment3)
+    cy.wait(1000)
+
+    cy.step('Mark first and third comments as useful')
+    cy.get('[data-cy=comment-text]')
+      .contains(comment1)
+      .parents('[data-cy=OwnCommentItem]')
+      .find('[data-cy=vote-useful]')
+      .first()
+      .click()
+    cy.wait(1000)
+
+    cy.get('[data-cy=comment-text]')
+      .contains(comment3)
+      .parents('[data-cy=OwnCommentItem]')
+      .find('[data-cy=vote-useful]')
+      .first()
+      .click()
+    cy.wait(1000)
+
+    cy.reload()
+    cy.wait(1000)
+
+    cy.step('Sort dropdown is visible')
+    cy.get('[data-cy=comment-sort-select]').should('be.visible')
+
+    cy.step('Default sort is newest - comment3 should be first')
+    cy.get('[data-cy=comment-sort-select]').contains('Newest')
+    cy.get('[data-cy=comment-text]').first().should('contain', comment3)
+
+    cy.step('Sort by oldest - comment1 should be first')
+    cy.get('[data-cy=comment-sort-select]').click()
+    cy.contains('Oldest').click()
+    cy.wait(500)
+    cy.get('[data-cy=comment-sort-select]').contains('Oldest')
+    cy.get('[data-cy=comment-text]').first().should('contain', comment1)
+
+    cy.step(
+      'Sort by most useful - comment3 should be first (newer of the two useful)',
+    )
+    cy.get('[data-cy=comment-sort-select]').click()
+    cy.contains('Most Useful').click()
+    cy.wait(500)
+    cy.get('[data-cy=comment-sort-select]').contains('Most Useful')
+    cy.get('[data-cy=comment-text]').first().should('contain', comment3)
+    cy.get('[data-cy=comment-text]').eq(1).should('contain', comment1)
+
+    cy.step('Sort back to newest')
+    cy.get('[data-cy=comment-sort-select]').click()
+    cy.contains('Newest').click()
+    cy.wait(500)
+    cy.get('[data-cy=comment-sort-select]').contains('Newest')
+    cy.get('[data-cy=comment-text]').first().should('contain', comment3)
+  })
 
   it('allows authenticated users to contribute to discussions', () => {
     const commenter = generateNewUserDetails();

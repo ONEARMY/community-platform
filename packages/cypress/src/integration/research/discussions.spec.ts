@@ -15,6 +15,80 @@ describe('[Research.Discussions]', () => {
     // TODO find a way to test this
   });
 
+  it('allows users to sort comments', () => {
+    const admin = MOCK_DATA.users.admin
+    const research = MOCK_DATA.research[0]
+    const researchPath = `/research/${research.slug}`
+
+    const comment1 = `First comment ${randomId}`
+    const comment2 = `Second comment ${randomId}`
+    const comment3 = `Third comment ${randomId}`
+
+    cy.step('Create admin user session and add three comments')
+    cy.signIn(admin.email, admin.password)
+    cy.visit(researchPath)
+    cy.get('[data-cy="HideDiscussionContainer:button"]').first().click()
+
+    cy.addComment(comment1)
+    cy.wait(1000)
+    cy.addComment(comment2)
+    cy.wait(1000)
+    cy.addComment(comment3)
+    cy.wait(1000)
+
+    cy.step('Mark first and third comments as useful')
+    cy.get('[data-cy=comment-text]')
+      .contains(comment1)
+      .parents('[data-cy=OwnCommentItem]')
+      .find('[data-cy=vote-useful]')
+      .first()
+      .click()
+    cy.wait(1000)
+
+    cy.get('[data-cy=comment-text]')
+      .contains(comment3)
+      .parents('[data-cy=OwnCommentItem]')
+      .find('[data-cy=vote-useful]')
+      .first()
+      .click()
+    cy.wait(1000)
+
+    cy.reload()
+    cy.wait(1000)
+    cy.get('[data-cy="HideDiscussionContainer:button"]').first().click()
+
+    cy.step('Sort dropdown is visible')
+    cy.get('[data-cy=comment-sort-select]').should('be.visible')
+
+    cy.step('Default sort is newest - comment3 should be first')
+    cy.get('[data-cy=comment-sort-select]').contains('Newest')
+    cy.get('[data-cy=comment-text]').first().should('contain', comment3)
+
+    cy.step('Sort by oldest - comment1 should be first')
+    cy.get('[data-cy=comment-sort-select]').click()
+    cy.contains('Oldest').click()
+    cy.wait(500)
+    cy.get('[data-cy=comment-sort-select]').contains('Oldest')
+    cy.get('[data-cy=comment-text]').first().should('contain', comment1)
+
+    cy.step(
+      'Sort by most useful - comment3 should be first (newer of the two useful)',
+    )
+    cy.get('[data-cy=comment-sort-select]').click()
+    cy.contains('Most Useful').click()
+    cy.wait(500)
+    cy.get('[data-cy=comment-sort-select]').contains('Most Useful')
+    cy.get('[data-cy=comment-text]').first().should('contain', comment3)
+    cy.get('[data-cy=comment-text]').eq(1).should('contain', comment1)
+
+    cy.step('Sort back to newest')
+    cy.get('[data-cy=comment-sort-select]').click()
+    cy.contains('Newest').click()
+    cy.wait(500)
+    cy.get('[data-cy=comment-sort-select]').contains('Newest')
+    cy.get('[data-cy=comment-text]').first().should('contain', comment3)
+  })
+
   it('allows authenticated users to contribute to discussions', () => {
     const admin = MOCK_DATA.users.admin;
     const secondCommentor = MOCK_DATA.users.profile_views;

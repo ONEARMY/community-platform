@@ -11,6 +11,7 @@ import {
 } from 'oa-components';
 import { ClientOnly } from 'remix-utils/client-only';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
+import { usefulService } from 'src/services/usefulService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';

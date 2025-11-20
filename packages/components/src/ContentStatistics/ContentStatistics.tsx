@@ -1,49 +1,49 @@
-import React, { useCallback, useState } from 'react'
-import { Flex, Text } from 'theme-ui'
+import React, { useCallback, useState } from 'react';
+import { Flex, Text } from 'theme-ui';
 
-import { Button } from '../Button/Button'
-import { StatisticsList } from './ContentStatisticsList'
+import { Button } from '../Button/Button';
+import { StatisticsList } from './ContentStatisticsList';
 
-import type { IStatistic } from './type'
+import type { IStatistic } from './type';
 
 export interface IProps {
-  statistics: IStatistic[]
-  alwaysShow?: boolean
+  statistics: IStatistic[];
+  alwaysShow?: boolean;
 }
 
 export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
-  const [showStats, setShowStats] = useState(false)
-  const [activeModal, setActiveModal] = useState<React.ReactNode | null>(null)
-  const [loadingStats, setLoadingStats] = useState<Set<string>>(new Set())
+  const [showStats, setShowStats] = useState(false);
+  const [activeModal, setActiveModal] = useState<React.ReactNode | null>(null);
+  const [loadingStats, setLoadingStats] = useState<Set<string>>(new Set());
 
-  const handleShowStats = () => setShowStats((v) => !v)
+  const handleShowStats = () => setShowStats((v) => !v);
 
   const handleOpenModal = useCallback(async (stat: IStatistic) => {
-    if (!stat.modalComponent) return
+    if (!stat.modalComponent) return;
 
-    const statKey = `${stat.icon}-${stat.label}`
-    setLoadingStats((prev) => new Set(prev).add(statKey))
+    const statKey = `${stat.icon}-${stat.label}`;
+    setLoadingStats((prev) => new Set(prev).add(statKey));
 
-    let data
+    let data;
     try {
-      if (stat.onOpen) data = await stat.onOpen()
+      if (stat.onOpen) data = await stat.onOpen();
     } finally {
       setLoadingStats((prev) => {
-        const next = new Set(prev)
-        next.delete(statKey)
-        return next
-      })
+        const next = new Set(prev);
+        next.delete(statKey);
+        return next;
+      });
     }
 
-    const modal = stat.modalComponent(data)
+    const modal = stat.modalComponent(data);
     setActiveModal(
       React.cloneElement(modal as React.ReactElement, {
         onClose: () => setActiveModal(null),
       }),
-    )
-  }, [])
+    );
+  }, []);
 
-  const visible = showStats || alwaysShow === true
+  const visible = showStats || alwaysShow === true;
 
   return (
     <Flex
@@ -66,9 +66,7 @@ export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
         }}
         onClick={handleShowStats}
       >
-        <Text sx={{ fontSize: '13px' }}>
-          {showStats ? '' : 'More Information'}
-        </Text>
+        <Text sx={{ fontSize: '13px' }}>{showStats ? '' : 'More Information'}</Text>
         <Button
           type="button"
           variant="subtle"

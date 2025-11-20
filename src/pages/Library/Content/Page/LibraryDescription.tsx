@@ -12,20 +12,16 @@ import {
 } from 'oa-components';
 import { DifficultyLevelRecord } from 'oa-shared';
 // eslint-disable-next-line import/no-unresolved
-import { ClientOnly } from 'remix-utils/client-only'
-import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
-import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
-import { trackEvent } from 'src/common/Analytics'
-import { DownloadWrapper } from 'src/common/DownloadWrapper'
-import { logger } from 'src/logger'
-import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
-import { createUsefulStatistic } from 'src/pages/Question/QuestionPage'
-import {
-  buildStatisticsLabel,
-  capitalizeFirstLetter,
-  hasAdminRights,
-} from 'src/utils/helpers'
-import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui'
+import { ClientOnly } from 'remix-utils/client-only';
+import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg';
+import TimeNeeded from 'src/assets/icons/icon-time-needed.svg';
+import { trackEvent } from 'src/common/Analytics';
+import { DownloadWrapper } from 'src/common/DownloadWrapper';
+import { logger } from 'src/logger';
+import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag';
+import { createUsefulStatistic } from 'src/pages/Question/QuestionPage';
+import { buildStatisticsLabel, capitalizeFirstLetter, hasAdminRights } from 'src/utils/helpers';
+import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 
 import { libraryService } from '../../library.service';
 

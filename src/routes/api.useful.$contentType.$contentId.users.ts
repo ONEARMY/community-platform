@@ -1,17 +1,16 @@
-import { json } from '@remix-run/node'
-import { ProfileFactory } from 'src/factories/profileFactory.server'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { ProfileFactory } from 'src/factories/profileFactory.server';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { UsefulVoter } from 'shared/models/profile'
+import type { LoaderFunctionArgs } from 'react-router';
+import type { UsefulVoter } from 'shared/models/profile';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  const { client, headers } = createSupabaseServerClient(request)
-  const { contentType, contentId } = params
-  const profileFactory = new ProfileFactory(client)
+  const { client, headers } = createSupabaseServerClient(request);
+  const { contentType, contentId } = params;
+  const profileFactory = new ProfileFactory(client);
 
   if (!contentType || !contentId) {
-    return json({ error: 'Missing parameters' }, { status: 400 })
+    return Response.json({ error: 'Missing parameters' }, { status: 400 });
   }
 
   const { data, error } = await client
@@ -37,17 +36,16 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     )
     .eq('content_type', contentType)
     .eq('content_id', Number(contentId))
-    .eq('tenant_id', process.env.TENANT_ID!)
+    .eq('tenant_id', process.env.TENANT_ID!);
 
   if (error) {
-    console.error(error)
-    return json({ error: error.message }, { status: 500 })
+    console.error(error);
+    return Response.json({ error: error.message }, { status: 500 });
   }
 
   // Transform the data using ProfileFactory and pick required properties
   const users: UsefulVoter[] = data.map((row) => {
-    const profile = profileFactory.fromDB(row.profiles)
-    console.log('profile:', profile)
+    const profile = profileFactory.fromDB(row.profiles);
     return {
       id: profile.id,
       username: profile.username,
@@ -56,8 +54,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       country: profile.country,
       badges: profile.badges,
       type: profile.type,
-    }
-  })
+    };
+  });
 
-  return json(users, { headers })
+  return Response.json(users, { headers });
 }

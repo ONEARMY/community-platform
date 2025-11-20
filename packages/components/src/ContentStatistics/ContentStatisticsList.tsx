@@ -1,27 +1,22 @@
-import { Flex, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui';
 
-import { Icon } from '../Icon/Icon'
+import { Icon } from '../Icon/Icon';
 
-import type { IStatistic } from './type'
+import type { IStatistic } from './type';
 
 interface Props {
-  statistics: IStatistic[]
-  visible: boolean
-  onOpenModal: (stat: IStatistic) => Promise<void>
-  loadingStats: Set<string>
+  statistics: IStatistic[];
+  visible: boolean;
+  onOpenModal: (stat: IStatistic) => Promise<void>;
+  loadingStats: Set<string>;
 }
 
-export const StatisticsList = ({
-  statistics,
-  visible,
-  onOpenModal,
-  loadingStats,
-}: Props) => {
+export const StatisticsList = ({ statistics, visible, onOpenModal, loadingStats }: Props) => {
   return (
     <>
       {statistics.map((stat, idx) => {
-        const statKey = `${stat.icon}-${stat.label}`
-        const isLoading = loadingStats.has(statKey)
+        const statKey = `${stat.icon}-${stat.label}`;
+        const isLoading = loadingStats.has(statKey);
 
         return (
           <StatisticItem
@@ -32,11 +27,11 @@ export const StatisticsList = ({
             isLoading={isLoading}
             statKey={statKey}
           />
-        )
+        );
       })}
     </>
-  )
-}
+  );
+};
 
 const StatisticItem = ({
   statistic,
@@ -44,13 +39,13 @@ const StatisticItem = ({
   onOpenModal,
   isLoading,
 }: {
-  statistic: IStatistic
-  visible: boolean
-  onOpenModal: (stat: IStatistic) => Promise<void>
-  isLoading: boolean
-  statKey: string
+  statistic: IStatistic;
+  visible: boolean;
+  onOpenModal: (stat: IStatistic) => Promise<void>;
+  isLoading: boolean;
+  statKey: string;
 }) => {
-  const displayModal = !!statistic.modalComponent && statistic.count
+  const displayModal = !!statistic.modalComponent && statistic.count;
 
   return (
     <Flex
@@ -82,5 +77,5 @@ const StatisticItem = ({
         </Text>
       )}
     </Flex>
-  )
-}
+  );
+};

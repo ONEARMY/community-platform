@@ -17,18 +17,18 @@ import type { Category } from 'oa-shared';
 import type { LibrarySortOption } from './LibrarySortOptions';
 
 interface IProps {
-  itemCount?: number
-  draftCount: number
-  handleShowDrafts: () => void
-  showDrafts: boolean
+  itemCount?: number;
+  draftCount: number;
+  handleShowDrafts: () => void;
+  showDrafts: boolean;
 }
 
 export const LibraryListHeader = (props: IProps) => {
-  const { itemCount, draftCount, handleShowDrafts, showDrafts } = props
-  const [categories, setCategories] = useState<Category[]>([])
-  const [searchParams, setSearchParams] = useSearchParams()
-  const q = searchParams.get(LibrarySearchParams.q)
-  const [searchString, setSearchString] = useState<string>(q ?? '')
+  const { itemCount, draftCount, handleShowDrafts, showDrafts } = props;
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const q = searchParams.get(LibrarySearchParams.q);
+  const [searchString, setSearchString] = useState<string>(q ?? '');
 
   const categoryParam = Number(searchParams.get(LibrarySearchParams.category));
   const category = categories?.find((x) => x.id === categoryParam) ?? null;

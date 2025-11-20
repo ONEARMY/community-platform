@@ -9,21 +9,21 @@ import {
   TagList,
   UsefulStatsButton,
   UsefulVotersList,
-} from 'oa-components'
-import { ClientOnly } from 'remix-utils/client-only'
-import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
+} from 'oa-components';
+import { ClientOnly } from 'remix-utils/client-only';
+import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 // import { usefulService } from 'src/services/usefulService'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
-import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
-import { onUsefulClick } from 'src/utils/onUsefulClick'
-import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
+import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
+import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
+import { onUsefulClick } from 'src/utils/onUsefulClick';
+import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
 import { UserNameTag } from '../common/UserNameTag/UserNameTag';
 
-import type { ContentType, Question, UsefulVoter } from 'oa-shared'
+import type { ContentType, Question, UsefulVoter } from 'oa-shared';
 
 interface IProps {
   question: Question;
@@ -41,12 +41,12 @@ export const QuestionPage = observer(({ question }: IProps) => {
   useEffect(() => {
     const checkVote = async () => {
       if (activeUser) {
-        const hasVoted = await usefulService.hasVoted('questions', question.id)
-        setVoted(hasVoted)
+        const hasVoted = await usefulService.hasVoted('questions', question.id);
+        setVoted(hasVoted);
       }
-    }
-    checkVote()
-  }, [activeUser, question.id])
+    };
+    checkVote();
+  }, [activeUser, question.id]);
 
   /* --------------------------------------------------------------------- *
    *  2. Edit permission
@@ -69,24 +69,9 @@ export const QuestionPage = observer(({ question }: IProps) => {
   };
 
   const handleUsefulClick = async (vote: 'add' | 'delete') => {
-    await onUsefulClick({
-      vote,
-      config: configOnUsefulClick,
-    });
+    await onUsefulClick({ vote, config: configOnUsefulClick });
   };
 
-  /* --------------------------------------------------------------------- *
-   *  4. Load voters **only** when the modal is opened
-   * --------------------------------------------------------------------- */
-  // const loadUsefulVoters = async () => {
-  //   const users = await usefulService.usefulVoters('questions', question.id)
-  //   console.log('useful voters', users)
-  //   setUsefulVoters(users)
-  // }
-
-  /* --------------------------------------------------------------------- *
-   *  5. Render
-   * --------------------------------------------------------------------- */
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
       <Breadcrumbs content={question} variant="question" />
@@ -216,13 +201,13 @@ export const QuestionPage = observer(({ question }: IProps) => {
         )}
       </ClientOnly>
     </Box>
-  )
-})
+  );
+});
 
 // import { UsefulVotersList } from '../common/UsefulVotersList' // Adjust path
-import { usefulService } from 'src/services/usefulService'
+import { usefulService } from 'src/services/usefulService';
 
-import type { IStatistic } from 'packages/components/dist/ContentStatistics/ContentStatistics'
+import type { IStatistic } from 'packages/components/dist/ContentStatistics/ContentStatistics';
 // import type { IStatistic } from '../ContentStatistics' // Adjust path if needed
 
 export function createUsefulStatistic(
@@ -240,14 +225,12 @@ export function createUsefulStatistic(
     }),
     onOpen: async () => {
       try {
-        return await usefulService.usefulVoters(contentType, contentId)
+        return await usefulService.usefulVoters(contentType, contentId);
       } catch (error) {
-        console.error('Failed to load useful voters:', error)
-        return [] // Fallback to empty list on error
+        console.error('Failed to load useful voters:', error);
+        return []; // Fallback to empty list on error
       }
     },
-    modalComponent: (voters: UsefulVoter[]) => (
-      <UsefulVotersList voters={voters || []} />
-    ),
-  }
+    modalComponent: (voters: UsefulVoter[]) => <UsefulVotersList voters={voters || []} />,
+  };
 }

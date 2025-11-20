@@ -1,18 +1,18 @@
 /** @jsxImportSource theme-ui */
-import { Avatar, Box, Flex, Text } from 'theme-ui'
+import { Avatar, Box, Flex, Text } from 'theme-ui';
 
-import { Button } from '../Button/Button'
-import { MemberBadge } from '../MemberBadge/MemberBadge'
-import { Username } from '../Username/Username'
+import { Button } from '../Button/Button';
+import { MemberBadge } from '../MemberBadge/MemberBadge';
+import { Username } from '../Username/Username';
 
-import type { UsefulVoter } from 'oa-shared'
+import type { UsefulVoter } from 'oa-shared';
 // import type { DBMedia, Image } from './media'
 
 interface IProps {
-  voters: UsefulVoter[]
-  onClose?: () => void
-  dataCy?: string
-  children?: React.ReactNode
+  voters: UsefulVoter[];
+  onClose?: () => void;
+  dataCy?: string;
+  children?: React.ReactNode;
 }
 
 export const UsefulVotersList = ({ voters = [], onClose, dataCy }: IProps) => {
@@ -35,7 +35,7 @@ export const UsefulVotersList = ({ voters = [], onClose, dataCy }: IProps) => {
           borderRadius: '10px',
           width: ['80%', '23%'],
           height: 'auto',
-          maxHeight: ['40%','50%'],
+          maxHeight: ['40%', '50%'],
           border: '2px solid',
           display: 'flex',
           flexDirection: 'column',
@@ -63,13 +63,7 @@ export const UsefulVotersList = ({ voters = [], onClose, dataCy }: IProps) => {
           >
             Others that found it useful:
           </Text>
-          <Button
-            variant="subtle"
-            showIconOnly
-            icon="close"
-            small
-            onClick={onClose}
-          />
+          <Button variant="subtle" showIconOnly icon="close" small onClick={onClose} />
         </Flex>
 
         <Box
@@ -80,9 +74,7 @@ export const UsefulVotersList = ({ voters = [], onClose, dataCy }: IProps) => {
           }}
         >
           {voters.length === 0 ? (
-            <Text sx={{ textAlign: 'center', color: 'muted', fontSize: 1 }}>
-              No voters yet.
-            </Text>
+            <Text sx={{ textAlign: 'center', color: 'muted', fontSize: 1 }}>No voters yet.</Text>
           ) : (
             <Box
               as="ul"
@@ -114,10 +106,7 @@ export const UsefulVotersList = ({ voters = [], onClose, dataCy }: IProps) => {
                       loading="lazy"
                     />
                   ) : (
-                    <MemberBadge
-                      profileType={voter.type || undefined}
-                      sx={{ cursor: 'pointer' }}
-                    />
+                    <MemberBadge profileType={voter.type || undefined} sx={{ cursor: 'pointer' }} />
                   )}
                   <Box>
                     <Username user={voter} />
@@ -129,5 +118,5 @@ export const UsefulVotersList = ({ voters = [], onClose, dataCy }: IProps) => {
         </Box>
       </Box>
     </Flex>
-  )
-}
+  );
+};

@@ -1,8 +1,8 @@
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
+import type { ProfileListItem } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
-import type { ProfileListItem } from 'shared/models/profile';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);

@@ -4,7 +4,7 @@ import { Flex, Text } from 'theme-ui';
 import { Button } from '../Button/Button';
 import { StatisticsList } from './ContentStatisticsList';
 
-import type { IStatistic } from './type';
+import type { IStatistic } from './types';
 
 export interface IProps {
   statistics: IStatistic[];
@@ -21,7 +21,7 @@ export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
 
   const handleOpenModal = useCallback(async (stat: IStatistic) => {
     if (!stat.modalComponent) return;
-  
+
     let data = undefined;
     if (stat.onOpen) {
       try {
@@ -30,13 +30,13 @@ export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
         console.error('Error loading modal data:', error);
       }
     }
-  
+
     const modalElement = stat.modalComponent(data);
     if (React.isValidElement(modalElement)) {
       setActiveModal(
         React.cloneElement(modalElement, {
           onClose: () => setActiveModal(null),
-        })
+        }),
       );
     } else {
       setActiveModal(null);
@@ -80,11 +80,7 @@ export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
         />
       </Flex>
 
-      <StatisticsList
-        statistics={statistics}
-        visible={visible}
-        onOpenModal={handleOpenModal}
-      />
+      <StatisticsList statistics={statistics} visible={visible} onOpenModal={handleOpenModal} />
 
       {activeModal && activeModal}
     </Flex>

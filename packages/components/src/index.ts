@@ -93,3 +93,4 @@ export type { availableGlyphs } from './Icon/types';
 export type { GridFormFields } from './GridForm/GridForm';
 export type { ITab } from './SettingsFormWrapper/SettingsFormTab';
 export type { OptionalFollowButtonProps } from './FollowButton/FollowButton';
+export type { IStatistic } from './ContentStatistics/types';

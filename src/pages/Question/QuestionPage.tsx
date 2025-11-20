@@ -6,7 +6,6 @@ import {
   ContentStatistics,
   ImageGallery,
   LinkifyText,
-  ProfileList,
   TagList,
   UsefulStatsButton,
 } from 'oa-components';
@@ -16,13 +15,14 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
 import { onUsefulClick } from 'src/utils/onUsefulClick';
+import { createUsefulStatistic } from 'src/utils/statistics';
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
 import { UserNameTag } from '../common/UserNameTag/UserNameTag';
 
-import type { ContentType, ProfileListItem, Question } from 'oa-shared';
+import type { ContentType, Question } from 'oa-shared';
 
 interface IProps {
   question: Question;
@@ -142,6 +142,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
                 statUnit: 'view',
                 usePlural: true,
               }),
+              count: question.totalViews,
             },
             {
               icon: 'thunderbolt-grey',
@@ -150,6 +151,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
                 statUnit: 'following',
                 usePlural: false,
               }),
+              count: subscribersCount,
             },
             createUsefulStatistic('questions', question.id, usefulCount),
             {
@@ -159,6 +161,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
                 statUnit: 'comment',
                 usePlural: true,
               }),
+              count: question.commentCount,
             },
           ]}
         />
@@ -188,34 +191,3 @@ export const QuestionPage = observer(({ question }: IProps) => {
     </Box>
   );
 });
-
-import { usefulService } from 'src/services/usefulService';
-
-import type { IStatistic } from 'packages/components/dist/ContentStatistics/ContentStatistics';
-
-export function createUsefulStatistic(
-  contentType: ContentType,
-  contentId: number,
-  usefulCount: number,
-): IStatistic {
-  return {
-    icon: 'star',
-    count: usefulCount,
-    label: buildStatisticsLabel({
-      stat: usefulCount,
-      statUnit: 'useful',
-      usePlural: true,
-    }),
-    onOpen: async () => {
-      try {
-        return await usefulService.usefulVoters(contentType, contentId);
-      } catch (error) {
-        console.error('Failed to load useful voters:', error);
-        return [];
-      }
-    },
-    modalComponent: (profiles: ProfileListItem[]) => (
-      <ProfileList header="Others that found it useful" profiles={profiles || []} />
-    ),
-  };
-}

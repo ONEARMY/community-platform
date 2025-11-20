@@ -2,7 +2,7 @@ import { Flex, Text } from 'theme-ui';
 
 import { Icon } from '../Icon/Icon';
 
-import type { IStatistic } from './type';
+import type { IStatistic } from './types';
 
 interface Props {
   statistics: IStatistic[];
@@ -14,14 +14,8 @@ export const StatisticsList = ({ statistics, visible, onOpenModal }: Props) => {
   return (
     <>
       {statistics.map((stat, idx) => {
-
         return (
-          <StatisticItem
-            key={idx}
-            statistic={stat}
-            visible={visible}
-            onOpenModal={onOpenModal}
-          />
+          <StatisticItem key={idx} statistic={stat} visible={visible} onOpenModal={onOpenModal} />
         );
       })}
     </>

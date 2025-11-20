@@ -1,98 +1,95 @@
-import { Author } from './author'
-import { Category } from './category'
+import { Author } from './author';
+import { Category } from './category';
 
-import type { DBAuthor } from './author'
-import type { DBCategory } from './category'
-import type { IConvertedFileMeta } from './common'
-import type { IContentDoc, IDBContentDoc } from './content'
-import type { IDBDownloadable, IDownloadable } from './document'
-import type { IFilesForm } from './filesForm'
-import type { IImageForm } from './imageForm'
-import type { DBMedia, Image, IMediaFile } from './media'
-import type { IDBModeration, IModeration, Moderation } from './moderation'
-import type { SelectValue } from './other'
-import type { Tag } from './tag'
+import type { DBAuthor } from './author';
+import type { DBCategory } from './category';
+import type { IConvertedFileMeta } from './common';
+import type { IContentDoc, IDBContentDoc } from './content';
+import type { IDBDownloadable, IDownloadable } from './document';
+import type { IFilesForm } from './filesForm';
+import type { IImageForm } from './imageForm';
+import type { DBMedia, Image, IMediaFile } from './media';
+import type { IDBModeration, IModeration, Moderation } from './moderation';
+import type { SelectValue } from './other';
+import type { Tag } from './tag';
 
-export type DifficultyLevel = 'easy' | 'medium' | 'hard' | 'very-hard'
+export type DifficultyLevel = 'easy' | 'medium' | 'hard' | 'very-hard';
 export const DifficultyLevelRecord: Record<DifficultyLevel, string> = {
   easy: 'Easy',
   medium: 'Medium',
   hard: 'Hard',
   'very-hard': 'Very Hard',
-}
+};
 
-export class DBProject
-  implements IDBContentDoc, IDBDownloadable, IDBModeration
-{
-  readonly id: number
-  readonly created_at: Date
-  readonly deleted: boolean | null
-  readonly author?: DBAuthor
-  readonly update_count?: number
-  readonly useful_count?: number
-  readonly subscriber_count?: number
-  readonly comment_count?: number
-  readonly total_views?: number
-  readonly category: DBCategory | null
-  readonly steps: DBProjectStep[] | null
-  created_by: number | null
-  modified_at: Date | null
-  title: string
-  slug: string
-  previous_slugs: string[] | null
-  description: string
-  difficulty_level: DifficultyLevel
-  cover_image: DBMedia | null
-  file_link: string | null
-  files: IMediaFile[] | null
-  category_id?: number
-  tags: number[]
-  is_draft: boolean | null
-  time?: string
-  file_download_count?: number
-  moderation: Moderation
-  moderation_feedback: string
+export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration {
+  readonly id: number;
+  readonly created_at: Date;
+  readonly deleted: boolean | null;
+  readonly author?: DBAuthor;
+  readonly update_count?: number;
+  readonly useful_count?: number;
+  readonly subscriber_count?: number;
+  readonly comment_count?: number;
+  readonly total_views?: number;
+  readonly category: DBCategory | null;
+  readonly steps: DBProjectStep[] | null;
+  created_by: number | null;
+  modified_at: Date | null;
+  title: string;
+  slug: string;
+  previous_slugs: string[] | null;
+  description: string;
+  difficulty_level: DifficultyLevel;
+  cover_image: DBMedia | null;
+  file_link: string | null;
+  files: IMediaFile[] | null;
+  category_id?: number;
+  tags: number[];
+  is_draft: boolean | null;
+  time?: string;
+  file_download_count?: number;
+  moderation: Moderation;
+  moderation_feedback: string;
 
   constructor(obj: Omit<DBProject, 'id'>) {
-    Object.assign(this, obj)
+    Object.assign(this, obj);
   }
 }
 
 export class Project implements IContentDoc, IDownloadable, IModeration {
-  id: number
-  createdAt: Date
-  author: Author | null
-  modifiedAt: Date | null
-  title: string
-  slug: string
-  previousSlugs: string[]
-  description: string
-  coverImage: Image | null
-  deleted: boolean
-  category: Category | null
-  totalViews: number
-  files: IMediaFile[] | null
-  hasFileLink: boolean
-  tags: Tag[]
-  tagIds?: number[]
-  difficultyLevel: DifficultyLevel
-  steps: ProjectStep[]
-  isDraft: boolean
-  usefulCount: number
-  subscriberCount: number
-  commentCount: number
-  fileDownloadCount: number
-  moderation: Moderation
-  moderationFeedback?: string
-  time?: string
+  id: number;
+  createdAt: Date;
+  author: Author | null;
+  modifiedAt: Date | null;
+  title: string;
+  slug: string;
+  previousSlugs: string[];
+  description: string;
+  coverImage: Image | null;
+  deleted: boolean;
+  category: Category | null;
+  totalViews: number;
+  files: IMediaFile[] | null;
+  hasFileLink: boolean;
+  tags: Tag[];
+  tagIds?: number[];
+  difficultyLevel: DifficultyLevel;
+  steps: ProjectStep[];
+  isDraft: boolean;
+  usefulCount: number;
+  subscriberCount: number;
+  commentCount: number;
+  fileDownloadCount: number;
+  moderation: Moderation;
+  moderationFeedback?: string;
+  time?: string;
 
   constructor(obj: Project) {
-    Object.assign(this, obj)
+    Object.assign(this, obj);
   }
 
   static fromDB(obj: DBProject, tags: Tag[], images: Image[] = []) {
-    const steps =
-      obj.steps?.map((update) => ProjectStep.fromDB(update, images)) || []
+    const steps = obj.steps?.map((update) => ProjectStep.fromDB(update, images)) || [];
 
     return new Project({
       id: obj.id,
@@ -122,35 +119,35 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
       hasFileLink: !!obj.file_link,
       time: obj.time,
       steps,
-    })
+    });
   }
 }
 
 export class DBProjectStep {
-  readonly id: number
-  readonly project_id: number
-  title: string
-  description: string
-  images: DBMedia[] | null
-  video_url: string | null
-  order: number
+  readonly id: number;
+  readonly project_id: number;
+  title: string;
+  description: string;
+  images: DBMedia[] | null;
+  video_url: string | null;
+  order: number;
 
   constructor(obj: Omit<DBProjectStep, 'id'>) {
-    Object.assign(this, obj)
+    Object.assign(this, obj);
   }
 }
 
 export class ProjectStep {
-  id: number
-  projectId: number
-  title: string
-  description: string
-  images: Image[] | null
-  videoUrl: string | null
-  order: number
+  id: number;
+  projectId: number;
+  title: string;
+  description: string;
+  images: Image[] | null;
+  videoUrl: string | null;
+  order: number;
 
   constructor(obj: ProjectStep) {
-    Object.assign(this, obj)
+    Object.assign(this, obj);
   }
 
   static fromDB(obj: DBProjectStep, images?: Image[]) {
@@ -159,30 +156,28 @@ export class ProjectStep {
       projectId: obj.project_id,
       title: obj.title,
       description: obj.description,
-      images:
-        images?.filter((x) => obj.images?.map((x) => x.id)?.includes(x.id)) ||
-        [],
+      images: images?.filter((x) => obj.images?.map((x) => x.id)?.includes(x.id)) || [],
       videoUrl: obj.video_url,
       order: obj.order,
-    })
+    });
   }
 }
 
 export interface ProjectFormData extends IFilesForm, IImageForm {
-  title: string
-  description: string
-  category?: SelectValue
-  tags?: number[]
-  difficultyLevel?: DifficultyLevel
-  time?: string
-  steps: ProjectStepFormData[]
+  title: string;
+  description: string;
+  category?: SelectValue;
+  tags?: number[];
+  difficultyLevel?: DifficultyLevel;
+  time?: string;
+  steps: ProjectStepFormData[];
 }
 
 export type ProjectStepFormData = {
-  id?: number
-  title: string
-  description: string
-  images?: IConvertedFileMeta[]
-  existingImages?: Image[] | null
-  videoUrl?: string
-}
+  id?: number;
+  title: string;
+  description: string;
+  images?: IConvertedFileMeta[];
+  existingImages?: Image[] | null;
+  videoUrl?: string;
+};

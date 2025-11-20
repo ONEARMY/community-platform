@@ -1,26 +1,26 @@
-import { Field, useForm, useFormState } from 'react-final-form'
-import { FieldInput } from 'oa-components'
-import { UserRole } from 'oa-shared'
+import { Field, useForm, useFormState } from 'react-final-form';
+import { FieldInput } from 'oa-components';
+import { UserRole } from 'oa-shared';
 // eslint-disable-next-line import/no-unresolved
-import { ClientOnly } from 'remix-utils/client-only'
-import { AuthWrapper } from 'src/common/AuthWrapper'
-import { FileInputField } from 'src/common/Form/FileInput.field'
-import { FileDisplay } from 'src/common/Form/FileInput/FileDisplay'
-import { MAX_LINK_LENGTH } from 'src/pages/constants'
-import { COMPARISONS } from 'src/utils/comparisons'
-import { Flex, Label, Text } from 'theme-ui'
+import { ClientOnly } from 'remix-utils/client-only';
+import { AuthWrapper } from 'src/common/AuthWrapper';
+import { FileInputField } from 'src/common/Form/FileInput.field';
+import { FileDisplay } from 'src/common/Form/FileInput/FileDisplay';
+import { MAX_LINK_LENGTH } from 'src/pages/constants';
+import { COMPARISONS } from 'src/utils/comparisons';
+import { Flex, Label, Text } from 'theme-ui';
 
-import { fileLabels } from './labels'
+import { fileLabels } from './labels';
 
-import type { IFilesForm, MediaFile, ProjectFormData } from 'oa-shared'
+import type { IFilesForm, MediaFile, ProjectFormData } from 'oa-shared';
 
 export const FilesFields = () => {
-  const state = useFormState<IFilesForm>()
-  const form = useForm<ProjectFormData>()
+  const state = useFormState<IFilesForm>();
+  const form = useForm<ProjectFormData>();
   const hasBothError = !!(
     (state.values?.existingFiles?.length || state.values?.files?.length) &&
     state.values.fileLink
-  )
+  );
 
   return (
     <ClientOnly fallback={<></>}>
@@ -35,7 +35,7 @@ export const FilesFields = () => {
                 form.change(
                   'existingFiles',
                   state.values.existingFiles?.filter((x) => x.id !== id),
-                )
+                );
               }}
             />
           )}
@@ -43,11 +43,11 @@ export const FilesFields = () => {
         </Flex>
       )}
     </ClientOnly>
-  )
-}
+  );
+};
 
 const WarningMessages = ({ show }) => {
-  const { error } = fileLabels.files
+  const { error } = fileLabels.files;
 
   return (
     <Flex sx={{ mb: 2 }}>
@@ -64,32 +64,28 @@ const WarningMessages = ({ show }) => {
         </Text>
       )}
     </Flex>
-  )
-}
+  );
+};
 
 const AlreadyAddedFiles = ({
   files,
   deleteFile,
 }: {
-  files: MediaFile[]
-  deleteFile: (id: string) => void
+  files: MediaFile[];
+  deleteFile: (id: string) => void;
 }) => {
   return (
     <Flex sx={{ flexDirection: 'column', gap: 2 }}>
       {files.map((file) => (
-        <FileDisplay
-          key={file.id}
-          file={file}
-          onRemove={() => deleteFile(file.id)}
-        />
+        <FileDisplay key={file.id} file={file} onRemove={() => deleteFile(file.id)} />
       ))}
     </Flex>
-  )
-}
+  );
+};
 
 const UploadNewFiles = () => {
-  const { fileLink, files } = fileLabels
-  const identity = 'file-download-link'
+  const { fileLink, files } = fileLabels;
+  const identity = 'file-download-link';
 
   return (
     <>
@@ -104,9 +100,7 @@ const UploadNewFiles = () => {
                 data-cy="file-input-field"
                 component={FileInputField}
               />
-              <Text sx={{ fontSize: 1, color: 'grey', mt: 1 }}>
-                {files.description}
-              </Text>
+              <Text sx={{ fontSize: 1, color: 'grey', mt: 1 }}>{files.description}</Text>
             </>
           }
         >
@@ -117,9 +111,7 @@ const UploadNewFiles = () => {
             admin={true}
             component={FileInputField}
           />
-          <Text sx={{ fontSize: 1, color: 'grey', mt: 1 }}>
-            Maximum file size 300MB
-          </Text>
+          <Text sx={{ fontSize: 1, color: 'grey', mt: 1 }}>Maximum file size 300MB</Text>
         </AuthWrapper>
       </Flex>
       <Flex sx={{ flexDirection: 'column' }}>
@@ -138,5 +130,5 @@ const UploadNewFiles = () => {
         />
       </Flex>
     </>
-  )
-}
+  );
+};

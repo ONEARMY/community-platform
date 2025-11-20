@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Link } from '@remix-run/react'
-import { observer } from 'mobx-react'
+import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router';
+import { observer } from 'mobx-react';
 import {
   Category,
   ContentStatistics,
@@ -19,24 +19,21 @@ import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
 import { onUsefulClick } from 'src/utils/onUsefulClick'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
-import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
-import { DraftTag } from '../common/Drafts/DraftTag'
-import { UserNameTag } from '../common/UserNameTag/UserNameTag'
+import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
+import { DraftTag } from '../common/Drafts/DraftTag';
+import { UserNameTag } from '../common/UserNameTag/UserNameTag';
 
 import type { ContentType, Question, UsefulVoter } from 'oa-shared'
 
 interface IProps {
-  question: Question
+  question: Question;
 }
 
 export const QuestionPage = observer(({ question }: IProps) => {
-  const { profile: activeUser } = useProfileStore()
-  const [voted, setVoted] = useState<boolean>(false)
-  const [usefulCount, setUsefulCount] = useState<number>(question.usefulCount)
-  const [subscribersCount, setSubscribersCount] = useState<number>(
-    question.subscriberCount,
-  )
-  // const [usefulVoters, setUsefulVoters] = useState<any[]>([])
+  const { profile: activeUser } = useProfileStore();
+  const [voted, setVoted] = useState<boolean>(false);
+  const [usefulCount, setUsefulCount] = useState<number>(question.usefulCount);
+  const [subscribersCount, setSubscribersCount] = useState<number>(question.subscriberCount);
 
   /* --------------------------------------------------------------------- *
    *  1. Has the logged-in user already voted?
@@ -55,11 +52,8 @@ export const QuestionPage = observer(({ question }: IProps) => {
    *  2. Edit permission
    * --------------------------------------------------------------------- */
   const isEditable = useMemo(() => {
-    return (
-      hasAdminRights(activeUser) ||
-      question.author?.username === activeUser?.username
-    )
-  }, [activeUser, question.author?.username])
+    return hasAdminRights(activeUser) || question.author?.username === activeUser?.username;
+  }, [activeUser, question.author]);
 
   /* --------------------------------------------------------------------- *
    *  3. Useful-click handler (add / delete)
@@ -72,11 +66,14 @@ export const QuestionPage = observer(({ question }: IProps) => {
     setVoted,
     setUsefulCount,
     loggedInUser: activeUser,
-  }
+  };
 
   const handleUsefulClick = async (vote: 'add' | 'delete') => {
-    await onUsefulClick({ vote, config: configOnUsefulClick })
-  }
+    await onUsefulClick({
+      vote,
+      config: configOnUsefulClick,
+    });
+  };
 
   /* --------------------------------------------------------------------- *
    *  4. Load voters **only** when the modal is opened
@@ -93,13 +90,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
       <Breadcrumbs content={question} variant="question" />
-
-      {/* -------------------------- QUESTION BODY -------------------------- */}
-      <Card
-        data-cy="question-body"
-        sx={{ position: 'relative' }}
-        variant="responsive"
-      >
+      <Card data-cy="question-body" sx={{ position: 'relative' }} variant="responsive">
         <Flex sx={{ flexDirection: 'column', padding: [3, 4], gap: 3 }}>
           {/* Useful button + draft + edit */}
           <Flex sx={{ flexWrap: 'wrap', gap: 3 }}>
@@ -110,9 +101,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
                     votedUsefulCount={usefulCount}
                     hasUserVotedUseful={voted}
                     isLoggedIn={!!activeUser}
-                    onUsefulClick={() =>
-                      handleUsefulClick(voted ? 'delete' : 'add')
-                    }
+                    onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}
                   />
 
                   {question.isDraft && <DraftTag />}
@@ -142,11 +131,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
           {/* Title / description / images / tags */}
           <Flex sx={{ flexDirection: 'column', gap: 2 }}>
             {question.category && <Category category={question.category} />}
-            <Heading
-              as="h1"
-              data-cy="question-title"
-              data-testid="question-title"
-            >
+            <Heading as="h1" data-cy="question-title" data-testid="question-title">
               {question.title}
             </Heading>
 

@@ -1,11 +1,11 @@
-import { ImageCrop } from './ImageCrop'
+import { ImageCrop } from './ImageCrop';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Forms/ImageCrop',
   component: ImageCrop,
-} as Meta<typeof ImageCrop>
+} as Meta<typeof ImageCrop>;
 
 export const Default: StoryFn<typeof ImageCrop> = () => (
   <div style={{ width: '600px' }}>
@@ -18,4 +18,4 @@ export const Default: StoryFn<typeof ImageCrop> = () => (
       title="Select crop"
     />
   </div>
-)
+);

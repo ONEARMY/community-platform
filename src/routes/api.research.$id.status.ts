@@ -1,84 +1,67 @@
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { researchServiceServer } from 'src/services/researchService.server'
-import { updateUserActivity } from 'src/utils/activity.server'
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { researchServiceServer } from 'src/services/researchService.server';
+import { updateUserActivity } from 'src/utils/activity.server';
 
-import type { ActionFunctionArgs } from '@remix-run/node'
-import type { User } from '@supabase/supabase-js'
-import type { ResearchStatus } from 'oa-shared'
+import type { ResearchStatus } from 'oa-shared';
+import type { ActionFunctionArgs } from 'react-router';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
-  const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request);
 
   try {
-    const id = Number(params.id)
+    const id = Number(params.id);
 
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims();
 
-    const formData = await request.formData()
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 });
+    }
+
+    const formData = await request.formData();
 
     const data = {
       status: formData.get('status') as ResearchStatus,
-    }
+    };
 
-    const { valid, status, statusText } = await validateRequest(
-      request,
-      user,
-      data,
-    )
+    const { valid, status, statusText } = await validateRequest(request, data);
 
     if (!valid) {
-      return Response.json({}, { headers, status, statusText })
+      return Response.json({}, { headers, status, statusText });
     }
 
     const canEdit = await researchServiceServer.isAllowedToEditResearchById(
       client,
       id,
-      user!.user_metadata.username,
-    )
+      claims.data.claims.user_metadata.username,
+    );
 
     if (!canEdit) {
-      return Response.json(null, { headers, status: 403 })
+      return Response.json(null, { headers, status: 403 });
     }
 
-    const result = await client
-      .from('research')
-      .update({ status: data.status })
-      .eq('id', id)
+    const result = await client.from('research').update({ status: data.status }).eq('id', id);
 
     if (result.error) {
-      throw result.error
+      throw result.error;
     }
 
-    updateUserActivity(client, user!.id)
+    updateUserActivity(client, claims.data.claims.sub);
 
-    return Response.json(null, { headers, status: 200 })
+    return Response.json(null, { headers, status: 200 });
   } catch (error) {
-    console.error(error)
-    return Response.json(
-      {},
-      { headers, status: 500, statusText: 'Error creating research' },
-    )
+    console.error(error);
+    return Response.json({}, { headers, status: 500, statusText: 'Error creating research' });
   }
-}
+};
 
-async function validateRequest(
-  request: Request,
-  user: User | null,
-  data: { status: ResearchStatus },
-) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
+async function validateRequest(request: Request, data: { status: ResearchStatus }) {
   if (request.method !== 'PATCH') {
-    return { status: 405, statusText: 'method not allowed' }
+    return { status: 405, statusText: 'method not allowed' };
   }
 
   if (data.status !== 'complete' && data.status !== 'in-progress') {
-    return { status: 400, statusText: 'invalid status' }
+    return { status: 400, statusText: 'invalid status' };
   }
 
-  return { valid: true }
+  return { valid: true };
 }

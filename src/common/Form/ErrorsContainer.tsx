@@ -1,21 +1,20 @@
-import { Box, Card, Flex, Text } from 'theme-ui'
+import { Box, Card, Flex, Text } from 'theme-ui';
 
-import { headings } from './labels'
+import { headings } from './labels';
 
-import type { IErrorsListSet } from './types'
+import type { IErrorsListSet } from './types';
 
 interface IProps {
-  client?: (IErrorsListSet | undefined)[] | undefined
-  saving?: (string | undefined | null)[]
+  client?: (IErrorsListSet | undefined)[] | undefined;
+  saving?: (string | undefined | null)[];
 }
 
 export const ErrorsContainer = ({ client, saving }: IProps) => {
-  const hasClientErrors = client && client.length !== 0
-  const hasSaveErrors =
-    saving && saving.filter((error) => error != undefined).length !== 0
+  const hasClientErrors = client && client.length !== 0;
+  const hasSaveErrors = saving && saving.filter((error) => error != undefined).length !== 0;
 
   if (!hasClientErrors && !hasSaveErrors) {
-    return null
+    return null;
   }
 
   return (
@@ -41,18 +40,18 @@ export const ErrorsContainer = ({ client, saving }: IProps) => {
       )}
       {hasClientErrors && <ErrorsListSet errorsListSet={client} />}
     </Card>
-  )
-}
+  );
+};
 
 const ErrorsListSet = ({ errorsListSet }) => {
   return errorsListSet.map((errorsList, index) => {
-    if (errorsList === undefined) return
-    return <ErrorsList key={index} errorsList={errorsList} />
-  })
-}
+    if (errorsList === undefined) return;
+    return <ErrorsList key={index} errorsList={errorsList} />;
+  });
+};
 
 const ErrorsList = ({ errorsList }) => {
-  const { errors, title, keys, labels } = errorsList
+  const { errors, title, keys, labels } = errorsList;
 
   return (
     <Flex sx={{ flexDirection: 'column' }}>
@@ -67,9 +66,9 @@ const ErrorsList = ({ errorsList }) => {
             <li key={index}>
               <strong>{labels[key].title}</strong>: {errors[key]}
             </li>
-          )
+          );
         })}
       </ul>
     </Flex>
-  )
-}
+  );
+};

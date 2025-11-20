@@ -1,15 +1,15 @@
-import { FieldTextarea } from './FieldTextarea'
+import { FieldTextarea } from './FieldTextarea';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Forms/FieldTextarea',
   component: FieldTextarea,
-} as Meta<typeof FieldTextarea>
+} as Meta<typeof FieldTextarea>;
 
 export const Default: StoryFn<typeof FieldTextarea> = () => (
   <FieldTextarea input={{} as any} placeholder="Text area input" meta={{}} />
-)
+);
 
 export const WithoutResizeHandle: StoryFn<typeof FieldTextarea> = () => (
   <FieldTextarea
@@ -18,7 +18,7 @@ export const WithoutResizeHandle: StoryFn<typeof FieldTextarea> = () => (
     sx={{ resize: 'none' }}
     meta={{ error: 'What an error', touched: true }}
   />
-)
+);
 
 export const WithError: StoryFn<typeof FieldTextarea> = () => (
   <FieldTextarea
@@ -26,7 +26,7 @@ export const WithError: StoryFn<typeof FieldTextarea> = () => (
     placeholder="Text area input"
     meta={{ error: 'What an error', touched: true }}
   />
-)
+);
 
 const characterCountValues = [
   {
@@ -47,7 +47,7 @@ const characterCountValues = [
     maxSize: 100,
     error: 'Character count must be a less than 100 characters',
   },
-]
+];
 
 export const WithCharacterCounts: StoryFn<typeof FieldTextarea> = () => (
   <>
@@ -55,25 +55,18 @@ export const WithCharacterCounts: StoryFn<typeof FieldTextarea> = () => (
       return (
         <FieldTextarea
           key={index}
-          input={
-            { value: 'Hello '.repeat(Math.round(state.currentSize / 6)) } as any
-          }
+          input={{ value: 'Hello '.repeat(Math.round(state.currentSize / 6)) } as any}
           placeholder="Text area input"
           meta={{ touched: true }}
           minLength={state.minSize}
           maxLength={state.maxSize}
           showCharacterCount
         />
-      )
+      );
     })}
   </>
-)
+);
 
 export const CustomRowHeight: StoryFn<typeof FieldTextarea> = () => (
-  <FieldTextarea
-    input={{} as any}
-    placeholder="Text area input"
-    meta={{}}
-    rows={10}
-  />
-)
+  <FieldTextarea input={{} as any} placeholder="Text area input" meta={{}} rows={10} />
+);

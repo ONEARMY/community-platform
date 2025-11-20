@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 export type availableGlyphs =
   | 'account-circle'
   | 'account'
@@ -98,6 +100,6 @@ export type availableGlyphs =
   | 'search'
   | 'starter kits'
   | 'globe'
-  | 'gps-location'
+  | 'gps-location';
 
-export type IGlyphs = { [k in availableGlyphs]: JSX.Element }
+export type IGlyphs = { [k in availableGlyphs]: JSX.Element };

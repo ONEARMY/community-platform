@@ -1,86 +1,78 @@
-import { useEffect, useState } from 'react'
-import { useSearchParams } from '@remix-run/react'
-import { Button, Loader, MoreContainer } from 'oa-components'
-import { logger } from 'src/logger'
-import useDrafts from 'src/pages/common/Drafts/useDraftsSupabase'
-import { Flex, Grid, Heading } from 'theme-ui'
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router';
+import { Button, Loader, MoreContainer } from 'oa-components';
+import { logger } from 'src/logger';
+import useDrafts from 'src/pages/common/Drafts/useDraftsSupabase';
+import { Flex, Grid, Heading } from 'theme-ui';
 
-import { listing } from '../../labels'
-import { LibrarySearchParams, libraryService } from '../../library.service'
-import { LibraryListHeader } from './LibraryListHeader'
-import { ProjectCard } from './ProjectCard'
+import { listing } from '../../labels';
+import { LibrarySearchParams, libraryService } from '../../library.service';
+import { LibraryListHeader } from './LibraryListHeader';
+import { ProjectCard } from './ProjectCard';
 
-import type { Project } from 'oa-shared'
-import type { LibrarySortOption } from './LibrarySortOptions'
+import type { Project } from 'oa-shared';
+import type { LibrarySortOption } from './LibrarySortOptions';
 
-const siteName = import.meta.env.VITE_SITE_NAME
+const siteName = import.meta.env.VITE_SITE_NAME;
 
 export const LibraryList = () => {
-  const [isFetching, setIsFetching] = useState<boolean>(true)
-  const [projects, setProjects] = useState<Project[]>([])
-  const [total, setTotal] = useState<number>(0)
-  const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } =
-    useDrafts<Project>({
+  const [isFetching, setIsFetching] = useState<boolean>(true);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [total, setTotal] = useState<number>(0);
+  const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } = useDrafts<Project>(
+    {
       getDraftCount: libraryService.getDraftCount,
       getDrafts: libraryService.getDrafts,
-    })
+    },
+  );
 
-  const [searchParams, setSearchParams] = useSearchParams()
-  const q = searchParams.get(LibrarySearchParams.q) || ''
-  const category = searchParams.get(LibrarySearchParams.category) || ''
-  const sort = searchParams.get(LibrarySearchParams.sort) as LibrarySortOption
+  const [searchParams, setSearchParams] = useSearchParams();
+  const q = searchParams.get(LibrarySearchParams.q) || '';
+  const category = searchParams.get(LibrarySearchParams.category) || '';
+  const sort = searchParams.get(LibrarySearchParams.sort) as LibrarySortOption;
 
   useEffect(() => {
     if (!sort) {
       // ensure sort is set
-      const params = new URLSearchParams(searchParams.toString())
+      const params = new URLSearchParams(searchParams.toString());
 
       if (q) {
-        params.set(LibrarySearchParams.sort, 'MostRelevant')
+        params.set(LibrarySearchParams.sort, 'MostRelevant');
       } else {
-        params.set(LibrarySearchParams.sort, 'Newest')
+        params.set(LibrarySearchParams.sort, 'Newest');
       }
-      setSearchParams(params)
+      setSearchParams(params);
     } else {
       // search only when sort is set (avoids duplicate requests)
-      fetchProjects()
+      fetchProjects();
     }
-  }, [q, category, sort])
+  }, [q, category, sort]);
 
   const fetchProjects = async (skip: number = 0) => {
-    setIsFetching(true)
+    setIsFetching(true);
 
     try {
-      const result = await libraryService.search(
-        q?.toLocaleLowerCase(),
-        category,
-        sort,
-        skip,
-      )
+      const result = await libraryService.search(q?.toLocaleLowerCase(), category, sort, skip);
 
       if (result) {
         if (skip) {
           // if skipFrom is set, means we are requesting another page that should be appended
-          setProjects((items) => [...items, ...result.items])
+          setProjects((items) => [...items, ...result.items]);
         } else {
-          setProjects(result.items)
+          setProjects(result.items);
         }
 
-        setTotal(result.total)
+        setTotal(result.total);
       }
     } catch (error) {
-      logger.error('error fetching library', error)
+      logger.error('error fetching library', error);
     }
 
-    setIsFetching(false)
-  }
+    setIsFetching(false);
+  };
 
   const showLoadMore =
-    !isFetching &&
-    !showDrafts &&
-    projects &&
-    projects.length > 0 &&
-    projects.length < total
+    !isFetching && !showDrafts && projects && projects.length > 0 && projects.length < total;
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
@@ -91,22 +83,16 @@ export const LibraryList = () => {
         showDrafts={showDrafts}
       />
 
-      <Grid
-        columns={[1, 2, 2, 3]}
-        gap={[2, 3, 4]}
-        sx={{ paddingTop: 1, marginBottom: 3 }}
-      >
+      <Grid columns={[1, 2, 2, 3]} gap={[2, 3, 4]} sx={{ paddingTop: 1, marginBottom: 3 }}>
         {showDrafts ? (
           drafts.map((item) => {
-            return <ProjectCard key={item.id} item={item} />
+            return <ProjectCard key={item.id} item={item} />;
           })
         ) : (
           <>
             {projects &&
               projects.length > 0 &&
-              projects.map((item, index) => (
-                <ProjectCard key={index} item={item} query={q} />
-              ))}
+              projects.map((item, index) => <ProjectCard key={index} item={item} query={q} />)}
           </>
         )}
       </Grid>
@@ -142,5 +128,5 @@ export const LibraryList = () => {
         </Flex>
       </MoreContainer>
     </Flex>
-  )
-}
+  );
+};

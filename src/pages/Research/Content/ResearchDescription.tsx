@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react'
-import { Link, useNavigate } from '@remix-run/react'
-import { max } from 'date-fns'
+import { useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router';
+import { max } from 'date-fns';
 import {
   Button,
   Category,
@@ -11,37 +11,33 @@ import {
   TagList,
   UsefulStatsButton,
   Username,
-} from 'oa-components'
-import {
-  type Profile,
-  type ResearchItem,
-  ResearchStatusRecord,
-} from 'oa-shared'
+} from 'oa-components';
+import { type Profile, type ResearchItem, ResearchStatusRecord } from 'oa-shared';
 // eslint-disable-next-line import/no-unresolved
-import { ClientOnly } from 'remix-utils/client-only'
-import { trackEvent } from 'src/common/Analytics'
-import { logger } from 'src/logger'
-import { DraftTag } from 'src/pages/common/Drafts/DraftTag'
-import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
-import { buildStatisticsLabel } from 'src/utils/helpers'
-import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
+import { ClientOnly } from 'remix-utils/client-only';
+import { trackEvent } from 'src/common/Analytics';
+import { logger } from 'src/logger';
+import { DraftTag } from 'src/pages/common/Drafts/DraftTag';
+import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag';
+import { buildStatisticsLabel } from 'src/utils/helpers';
+import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui';
 
-import { researchService } from '../research.service'
-import { researchStatusColour } from '../researchHelpers'
+import { researchService } from '../research.service';
+import { researchStatusColour } from '../researchHelpers';
 
 interface IProps {
-  research: ResearchItem
-  isEditable: boolean
-  isDeletable: boolean
-  activeUser: Profile | undefined
-  votedUsefulCount?: number
-  hasUserVotedUseful: boolean
-  hasUserSubscribed: boolean
-  subscribersCount: number
-  commentsCount: number
-  updatesCount: number
-  onUsefulClick: () => Promise<void>
-  onFollowClick: () => void
+  research: ResearchItem;
+  isEditable: boolean;
+  isDeletable: boolean;
+  activeUser: Profile | undefined;
+  votedUsefulCount?: number;
+  hasUserVotedUseful: boolean;
+  hasUserSubscribed: boolean;
+  subscribersCount: number;
+  commentsCount: number;
+  updatesCount: number;
+  onUsefulClick: () => Promise<void>;
+  onFollowClick: () => void;
 }
 
 const ResearchDescription = (props: IProps) => {
@@ -53,25 +49,25 @@ const ResearchDescription = (props: IProps) => {
     votedUsefulCount,
     commentsCount,
     updatesCount,
-  } = props
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const navigate = useNavigate()
+  } = props;
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleDelete = async (research: ResearchItem) => {
     try {
-      await researchService.deleteResearch(research.id)
+      await researchService.deleteResearch(research.id);
       trackEvent({
         category: 'Research',
         action: 'Deleted',
         label: research.title,
-      })
+      });
 
-      navigate('/research')
+      navigate('/research');
     } catch (err) {
-      logger.error(err)
+      logger.error(err);
       // at least log the error
     }
-  }
+  };
 
   const lastUpdated = useMemo(() => {
     const dates = [
@@ -79,10 +75,10 @@ const ResearchDescription = (props: IProps) => {
       ...(research?.updates?.map((update) => update?.modifiedAt) || []),
     ]
       .filter((date): date is Date => date !== null)
-      .map((date) => new Date(date))
+      .map((date) => new Date(date));
 
-    return dates.length > 0 ? max(dates) : new Date()
-  }, [research])
+    return dates.length > 0 ? max(dates) : new Date();
+  }, [research]);
 
   return (
     <Card variant="responsive">
@@ -176,9 +172,7 @@ const ResearchDescription = (props: IProps) => {
                     margin: 'auto',
                   }}
                 >
-                  {research.status
-                    ? ResearchStatusRecord[research.status]
-                    : 'In progress'}
+                  {research.status ? ResearchStatusRecord[research.status] : 'In progress'}
                 </Text>
               </Flex>
             </Flex>
@@ -223,10 +217,7 @@ const ResearchDescription = (props: IProps) => {
             </Flex>
 
             {research.category && (
-              <Category
-                category={research.category}
-                sx={{ fontSize: 2, mt: 2 }}
-              />
+              <Category category={research.category} sx={{ fontSize: 2, mt: 2 }} />
             )}
             <Heading
               as="h1"
@@ -298,7 +289,7 @@ const ResearchDescription = (props: IProps) => {
         ]}
       />
     </Card>
-  )
-}
+  );
+};
 
-export default ResearchDescription
+export default ResearchDescription;

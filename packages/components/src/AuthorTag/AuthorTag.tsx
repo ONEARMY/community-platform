@@ -1,21 +1,17 @@
-import { Flex, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui';
 
-import { DisplayDate } from '../DisplayDate/DisplayDate'
-import { Username } from '../Username/Username'
+import { DisplayDate } from '../DisplayDate/DisplayDate';
+import { Username } from '../Username/Username';
 
-import type { Author } from 'oa-shared'
+import type { Author } from 'oa-shared';
 
 interface AuthorTagProps {
-  author: Author
-  created: string | number | Date
-  action?: string
+  author: Author;
+  created: string | number | Date;
+  action?: string;
 }
 
-export const AuthorTag = ({
-  author,
-  created,
-  action = 'Published',
-}: AuthorTagProps) => {
+export const AuthorTag = ({ author, created, action = 'Published' }: AuthorTagProps) => {
   return (
     <Flex sx={{ flexDirection: 'column' }}>
       <Flex sx={{ alignItems: 'center' }}>
@@ -33,5 +29,5 @@ export const AuthorTag = ({
         </Flex>
       </Flex>
     </Flex>
-  )
-}
+  );
+};

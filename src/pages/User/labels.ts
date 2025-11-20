@@ -1,4 +1,4 @@
-import { MESSAGE_MAX_CHARACTERS } from './constants'
+import { MESSAGE_MAX_CHARACTERS } from './constants';
 
 export const contact = {
   button: 'Contact',
@@ -16,4 +16,4 @@ export const contact = {
     placeholder: "What's your name?",
   },
   successMessage: 'All sent',
-}
+};

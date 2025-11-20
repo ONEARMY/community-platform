@@ -1,7 +1,7 @@
-import { ReactCountryFlag } from 'react-country-flag'
+import { ReactCountryFlag } from 'react-country-flag';
 
 interface IProps {
-  countryCode: string
+  countryCode: string;
 }
 
 export const FlagIcon = ({ countryCode }: IProps) => {
@@ -18,5 +18,5 @@ export const FlagIcon = ({ countryCode }: IProps) => {
         width: '21px',
       }}
     />
-  )
-}
+  );
+};

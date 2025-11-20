@@ -1,16 +1,16 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { Tabs } from '@mui/base/Tabs'
-import { describe, expect, it } from 'vitest'
+import { Tabs } from '@mui/base/Tabs';
+import { describe, expect, it } from 'vitest';
 
-import { render } from '../test/utils'
-import { SettingsFormTab } from './SettingsFormTab'
+import { render } from '../test/utils';
+import { SettingsFormTab } from './SettingsFormTab';
 
 describe('SettingsFormTab', () => {
   it('renders all expected props', () => {
-    const bodyText = 'Profile settings area'
-    const headerText = 'Header area'
-    const notificationText = 'Success message'
+    const bodyText = 'Profile settings area';
+    const headerText = 'Header area';
+    const notificationText = 'Success message';
 
     const { getByText } = render(
       <Tabs defaultValue={'profile'}>
@@ -25,10 +25,10 @@ describe('SettingsFormTab', () => {
           value={'profile'}
         />
       </Tabs>,
-    )
+    );
 
-    expect(getByText(bodyText)).toBeInTheDocument()
-    expect(getByText(headerText)).toBeInTheDocument()
-    expect(getByText(notificationText)).toBeInTheDocument()
-  })
-})
+    expect(getByText(bodyText)).toBeInTheDocument();
+    expect(getByText(headerText)).toBeInTheDocument();
+    expect(getByText(notificationText)).toBeInTheDocument();
+  });
+});

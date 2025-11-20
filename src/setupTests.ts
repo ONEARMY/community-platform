@@ -2,6 +2,6 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import ResizeObserver from 'resize-observer-polyfill'
+import ResizeObserver from 'resize-observer-polyfill';
 
-global.ResizeObserver = ResizeObserver
+global.ResizeObserver = ResizeObserver;

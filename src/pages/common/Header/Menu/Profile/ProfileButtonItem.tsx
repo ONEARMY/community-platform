@@ -1,22 +1,22 @@
-import React, { useContext } from 'react'
-import { Button, ReturnPathLink } from 'oa-components'
+import React, { useContext } from 'react';
+import { Button, ReturnPathLink } from 'oa-components';
 
-import { MobileMenuContext } from '../../MobileMenuContext'
+import { MobileMenuContext } from '../../MobileMenuContext';
 
 interface IProps {
-  link: string
-  text: string
-  variant: string
-  style?: React.CSSProperties
-  isMobile?: boolean
+  link: string;
+  text: string;
+  variant: string;
+  style?: React.CSSProperties;
+  isMobile?: boolean;
 }
 
 interface IProps {
-  sx?: any
+  sx?: any;
 }
 
 export const ProfileButtonItem = (props: IProps) => {
-  const mobileMenuContext = useContext(MobileMenuContext)
+  const mobileMenuContext = useContext(MobileMenuContext);
 
   return (
     <ReturnPathLink to={props.link} style={{ minWidth: 'auto' }}>
@@ -28,13 +28,11 @@ export const ProfileButtonItem = (props: IProps) => {
         data-cy={props.text.toLowerCase()}
         sx={{
           ...props.sx,
-          display: props.isMobile
-            ? ['flex', 'flex', 'none']
-            : ['none', 'none', 'flex'],
+          display: props.isMobile ? ['flex', 'flex', 'none'] : ['none', 'none', 'flex'],
         }}
       >
         {props.text}
       </Button>
     </ReturnPathLink>
-  )
-}
+  );
+};

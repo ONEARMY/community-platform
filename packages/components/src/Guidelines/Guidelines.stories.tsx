@@ -1,14 +1,14 @@
-import { ExternalLink } from '../ExternalLink/ExternalLink'
-import { Guidelines } from './Guidelines'
+import { ExternalLink } from '../ExternalLink/ExternalLink';
+import { Guidelines } from './Guidelines';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Forms/Guidelines',
   component: Guidelines,
-} as Meta<typeof Guidelines>
+} as Meta<typeof Guidelines>;
 
-export const Default: StoryFn<typeof Guidelines> = () => (
+export const DefaultComponent = () => (
   <Guidelines
     title="How does it work?"
     steps={[
@@ -35,4 +35,6 @@ export const Default: StoryFn<typeof Guidelines> = () => (
       </>,
     ]}
   />
-)
+);
+
+export const Default: StoryFn<typeof Guidelines> = () => <DefaultComponent />;

@@ -1,17 +1,17 @@
-import { MapPin, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared'
-import { ImageServiceServer } from 'src/services/imageService.server'
+import { MapPin, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
+import { ImageServiceServer } from 'src/services/imageService.server';
 
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBMapPin, DBPinProfile, PinProfile } from 'oa-shared'
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBMapPin, DBPinProfile, PinProfile } from 'oa-shared';
 
 export class MapPinFactory {
-  private imageService: ImageServiceServer
+  private imageService: ImageServiceServer;
   constructor(client: SupabaseClient) {
-    this.imageService = new ImageServiceServer(client)
+    this.imageService = new ImageServiceServer(client);
   }
 
   fromDBWithProfile(pin: DBMapPin): MapPin {
-    const profile = this.getProfilePin(pin.profile)
+    const profile = this.getProfilePin(pin.profile);
 
     return new MapPin({
       id: pin.id,
@@ -26,18 +26,14 @@ export class MapPinFactory {
       profileId: pin.profile_id,
       moderationFeedback: pin.moderation_feedback,
       profile,
-    })
+    });
   }
 
   private getProfilePin(profile: DBPinProfile): PinProfile {
-    const photo = profile.photo
-      ? this.imageService.getPublicUrl(profile.photo)
-      : null
+    const photo = profile.photo ? this.imageService.getPublicUrl(profile.photo) : null;
     const coverImages = profile.cover_images
-      ? profile.cover_images.map((image) =>
-          this.imageService.getPublicUrl(image),
-        )
-      : null
+      ? profile.cover_images.map((image) => this.imageService.getPublicUrl(image))
+      : null;
 
     return {
       id: profile.id,
@@ -53,6 +49,6 @@ export class MapPinFactory {
       isContactable: profile.is_contactable,
       tags: profile.tags?.map((x) => ProfileTag.fromDBJoin(x)),
       badges: profile.badges?.map((x) => ProfileBadge.fromDBJoin(x)),
-    } as PinProfile
+    } as PinProfile;
   }
 }

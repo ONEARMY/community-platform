@@ -1,45 +1,45 @@
-import { useEffect, useState } from 'react'
-import { Tooltip } from 'react-tooltip'
-import { Button } from 'oa-components'
-import { logger } from 'src/logger'
+import { useEffect, useState } from 'react';
+import { Tooltip } from 'react-tooltip';
+import { Button } from 'oa-components';
+import { logger } from 'src/logger';
 
-import { GetLocation } from '../../utils/geolocation'
+import { GetLocation } from '../../utils/geolocation';
 
-import type { ILatLng } from 'oa-shared'
+import type { ILatLng } from 'oa-shared';
 
 interface IProps {
-  setCenter: (value: ILatLng) => void
-  setZoom: (value: number) => void
+  setCenter: (value: ILatLng) => void;
+  setZoom: (value: number) => void;
 }
 
-const ZOOM_IN_TOOLTIP = 'Zoom in to your location'
-const DENIED_TOOLTIP = 'Request to get your location already denied'
+const ZOOM_IN_TOOLTIP = 'Zoom in to your location';
+const DENIED_TOOLTIP = 'Request to get your location already denied';
 
 export const ButtonZoomIn = ({ setCenter, setZoom }: IProps) => {
-  const [isDisabled, setIsDisabled] = useState<boolean>(false)
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   useEffect(() => {
     navigator.permissions.query({ name: 'geolocation' }).then((result) => {
       if (result.state === 'denied') {
-        setIsDisabled(true)
+        setIsDisabled(true);
       }
-    })
-  }, [])
+    });
+  }, []);
 
   const promptUserLocation = async () => {
     try {
-      const position = await GetLocation()
+      const position = await GetLocation();
       setCenter({
         lat: position.coords.latitude,
         lng: position.coords.longitude,
-      })
+      });
     } catch (error) {
       if (error === 'User denied geolocation prompt') {
-        setIsDisabled(true)
+        setIsDisabled(true);
       }
-      logger.error(error)
+      logger.error(error);
     }
-  }
+  };
 
   const sx = {
     backgroundColor: 'white',
@@ -48,7 +48,7 @@ export const ButtonZoomIn = ({ setCenter, setZoom }: IProps) => {
     ':hover': {
       backgroundColor: 'lightgray',
     },
-  }
+  };
 
   return (
     <>
@@ -58,13 +58,13 @@ export const ButtonZoomIn = ({ setCenter, setZoom }: IProps) => {
         data-tooltip-id="locationButton-tooltip"
         sx={sx}
         onClick={() => {
-          promptUserLocation()
-          setZoom(9)
+          promptUserLocation();
+          setZoom(9);
         }}
         disabled={isDisabled}
         icon="gps-location"
       />
       <Tooltip id="locationButton-tooltip" place="left" />
     </>
-  )
-}
+  );
+};

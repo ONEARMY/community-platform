@@ -129,4 +129,4 @@ export const stopwords = new Set([
   'don',
   'should',
   'now',
-])
+]);

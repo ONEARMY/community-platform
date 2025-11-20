@@ -1,12 +1,12 @@
-import { Field } from 'react-final-form'
-import { FieldInput } from 'oa-components'
-import { COMPARISONS } from 'src/utils/comparisons'
-import { Flex, Label } from 'theme-ui'
+import { Field } from 'react-final-form';
+import { FieldInput } from 'oa-components';
+import { COMPARISONS } from 'src/utils/comparisons';
+import { Flex, Label } from 'theme-ui';
 
-import { errors as errorsLabel, update as updateLabels } from '../../../labels'
+import { errors as errorsLabel, update as updateLabels } from '../../../labels';
 
 const VideoUrlField = () => {
-  const { title, placeholder } = updateLabels.videoUrl
+  const { title, placeholder } = updateLabels.videoUrl;
 
   return (
     <Flex sx={{ flexDirection: 'column' }} mb={3}>
@@ -23,26 +23,24 @@ const VideoUrlField = () => {
         isEqual={COMPARISONS.textInput}
       />
     </Flex>
-  )
-}
+  );
+};
 
 const validateMedia = (videoUrl: string, values: any) => {
-  const images = values.images
-  const existingImages = values.existingImages
+  const images = values.images;
+  const existingImages = values.existingImages;
 
   if (videoUrl) {
     if ((images && images[0]) || (existingImages && existingImages[0])) {
-      return errorsLabel.videoUrl.both
+      return errorsLabel.videoUrl.both;
     }
-    const youtubeRegex = new RegExp(
-      /(youtu\.be\/|youtube\.com\/(watch\?v=|embed\/|v\/))/gi,
-    )
-    const urlValid = youtubeRegex.test(videoUrl)
-    return urlValid ? null : errorsLabel.videoUrl.invalidUrl
+    const youtubeRegex = new RegExp(/(youtu\.be\/|youtube\.com\/(watch\?v=|embed\/|v\/))/gi);
+    const urlValid = youtubeRegex.test(videoUrl);
+    return urlValid ? null : errorsLabel.videoUrl.invalidUrl;
   }
   return (images && images[0]) || (existingImages && existingImages[0])
     ? null
-    : errorsLabel.videoUrl.empty
-}
+    : errorsLabel.videoUrl.empty;
+};
 
-export default VideoUrlField
+export default VideoUrlField;

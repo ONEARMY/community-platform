@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { DownloadWithDonationAsk } from './DownloadWithDonationAsk'
+import { DownloadWithDonationAsk } from './DownloadWithDonationAsk';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Components/DownloadWithDonationAsk',
   component: DownloadWithDonationAsk,
-} as Meta<typeof DownloadWithDonationAsk>
+} as Meta<typeof DownloadWithDonationAsk>;
 
 const downloadProps = {
   body: 'Body Text for the donation request',
@@ -16,7 +16,7 @@ const downloadProps = {
   fileDownloadCount: 45,
   fileLink: 'https://example.com',
   handleClick: async () => {
-    alert('Clicked')
+    alert('Clicked');
   },
   files: [
     {
@@ -32,20 +32,20 @@ const downloadProps = {
       size: 3000,
     },
   ],
-}
+};
 
 export const WithFileLink: StoryFn<typeof DownloadWithDonationAsk> = () => {
-  const { files, ...props } = downloadProps
-  return <DownloadWithDonationAsk {...props} />
-}
+  const { files, ...props } = downloadProps;
+  return <DownloadWithDonationAsk {...props} />;
+};
 
 export const WithOneFile: StoryFn<typeof DownloadWithDonationAsk> = () => {
-  const { fileLink, ...rest } = downloadProps
-  const props = { ...rest, files: [rest.files[0]] }
-  return <DownloadWithDonationAsk {...props} />
-}
+  const { fileLink, ...rest } = downloadProps;
+  const props = { ...rest, files: [rest.files[0]] };
+  return <DownloadWithDonationAsk {...props} />;
+};
 
 export const WithFiles: StoryFn<typeof DownloadWithDonationAsk> = () => {
-  const { fileLink, ...props } = downloadProps
-  return <DownloadWithDonationAsk {...props} />
-}
+  const { fileLink, ...props } = downloadProps;
+  return <DownloadWithDonationAsk {...props} />;
+};

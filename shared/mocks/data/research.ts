@@ -1,8 +1,8 @@
-import type { DBResearchItem } from '../../models/research'
+import type { DBResearchItem } from '../../models/research';
 
 type ResearchSeed = Partial<DBResearchItem> & {
-  created_by_username: string
-}
+  created_by_username: string;
+};
 
 export const research: ResearchSeed[] = [
   {
@@ -10,8 +10,7 @@ export const research: ResearchSeed[] = [
     created_by_username: 'event_reader',
     deleted: false,
     modified_at: new Date('2022-03-27T22:10:11.271Z'),
-    description:
-      'qwertyefew. Super qwerty. Gotta keep saying qwerty. qwerty qwerty. Qwerty!',
+    description: 'qwertyefew. Super qwerty. Gotta keep saying qwerty. qwerty qwerty. Qwerty!',
     slug: 'qwerty',
     previous_slugs: ['qwerty'],
     title: 'Qwerty',
@@ -188,4 +187,4 @@ export const research: ResearchSeed[] = [
     title: 'A research test 12',
     is_draft: false,
   },
-]
+];

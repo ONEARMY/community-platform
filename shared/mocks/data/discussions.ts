@@ -59,11 +59,7 @@ export const discussions = {
     _deleted: false,
     _id: 'jj97weruogbewr',
     _modified: '2022-03-27T22:10:12.271Z',
-    contributorIds: [
-      'Q1sgtnNTPBSYCKEXCOWaOMcPqZD3',
-      'TPBSYCKEXCOWaOMcPqZD3Q1sgtnN',
-      'demo_admin',
-    ],
+    contributorIds: ['Q1sgtnNTPBSYCKEXCOWaOMcPqZD3', 'TPBSYCKEXCOWaOMcPqZD3Q1sgtnN', 'demo_admin'],
     sourceId: 'ERO3RibAuvz7Wt12LfTb',
     sourceType: 'researchUpdate',
     primaryContentId: '0up6oJCPP3M9bDYx34Et',
@@ -218,4 +214,4 @@ export const discussions = {
       },
     ],
   },
-}
+};

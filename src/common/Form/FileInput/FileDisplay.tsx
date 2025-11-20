@@ -1,14 +1,14 @@
-import { Link } from 'react-router-dom'
-import { Icon } from 'oa-components'
-import { bytesToSize } from 'oa-shared'
-import { Flex, IconButton, Text } from 'theme-ui'
+import { Link } from 'react-router';
+import { Icon } from 'oa-components';
+import { bytesToSize } from 'oa-shared';
+import { Flex, IconButton, Text } from 'theme-ui';
 
-import type { MediaFile } from 'oa-shared'
+import type { MediaFile } from 'oa-shared';
 
 type FileDisplayProps = {
-  file: MediaFile
-  onRemove: () => void
-}
+  file: MediaFile;
+  onRemove: () => void;
+};
 
 export const FileDisplay = ({ file, onRemove }: FileDisplayProps) => {
   return (
@@ -51,5 +51,5 @@ export const FileDisplay = ({ file, onRemove }: FileDisplayProps) => {
         <Icon size={16} glyph="close" />
       </IconButton>
     </Flex>
-  )
-}
+  );
+};

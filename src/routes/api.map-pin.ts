@@ -1,28 +1,23 @@
-import { MapPinFactory } from 'src/factories/mapPinFactory.server'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { ProfileServiceServer } from 'src/services/profileService.server'
+import { MapPinFactory } from 'src/factories/mapPinFactory.server';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
 
-import type { DBMapPin } from 'oa-shared'
+import type { DBMapPin } from 'oa-shared';
 
 export const loader = async ({ request }) => {
-  const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request);
   try {
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims();
 
-    if (!user) {
-      return Response.json({}, { headers, status: 401 })
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 });
     }
 
-    const profileService = new ProfileServiceServer(client)
-    const profile = await profileService.getByAuthId(user!.id)
+    const profileService = new ProfileServiceServer(client);
+    const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
     if (!profile) {
-      return Response.json(
-        {},
-        { headers, status: 400, statusText: 'user not found' },
-      )
+      return Response.json({}, { headers, status: 400, statusText: 'user not found' });
     }
 
     const { data, error } = await client
@@ -76,28 +71,25 @@ export const loader = async ({ request }) => {
         )
       `,
       )
-      .eq('profile_id', profile.id)
+      .eq('profile_id', profile.id);
 
     if (error) {
-      console.error(error)
+      console.error(error);
 
-      return Response.json(
-        {},
-        { headers, status: 500, statusText: 'Error fetching map-pins' },
-      )
+      return Response.json({}, { headers, status: 500, statusText: 'Error fetching map-pins' });
     }
 
     if (!data?.length) {
-      return Response.json({ mapPin: null }, { headers })
+      return Response.json({ mapPin: null }, { headers });
     }
 
-    const pinsDb = data[0] as unknown as DBMapPin
-    const pinFactory = new MapPinFactory(client)
-    const mapPin = pinFactory.fromDBWithProfile(pinsDb)
+    const pinsDb = data[0] as unknown as DBMapPin;
+    const pinFactory = new MapPinFactory(client);
+    const mapPin = pinFactory.fromDBWithProfile(pinsDb);
 
-    return Response.json({ mapPin }, { headers })
+    return Response.json({ mapPin }, { headers });
   } catch (error) {
-    console.error(error)
-    return Response.json({}, { status: 500, headers })
+    console.error(error);
+    return Response.json({}, { status: 500, headers });
   }
-}
+};

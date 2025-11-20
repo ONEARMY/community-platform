@@ -1,24 +1,24 @@
-import { forwardRef } from 'react'
-import { Map as LeafletMap, TileLayer } from 'react-leaflet'
+import { forwardRef } from 'react';
+import { Map as LeafletMap, TileLayer } from 'react-leaflet';
 
-import type { Ref, RefObject } from 'react'
-import type { MapProps, Viewport } from 'react-leaflet'
+import type { Ref, RefObject } from 'react';
+import type { MapProps, Viewport } from 'react-leaflet';
 
-import 'leaflet/dist/leaflet.css'
-import './index.css'
+import 'leaflet/dist/leaflet.css';
+import './index.css';
 
 export interface IProps extends MapProps {
-  setZoom: (arg: number) => void
-  children?: React.ReactNode | React.ReactNode[]
-  ref?: RefObject<LeafletMap> | undefined
+  setZoom: (arg: number) => void;
+  children?: React.ReactNode | React.ReactNode[];
+  ref?: RefObject<LeafletMap> | undefined;
 }
 
 export const Map = forwardRef((props: IProps, ref: Ref<LeafletMap>) => {
   const onViewportChanged = (viewport: Viewport) => {
     if (viewport.zoom) {
-      props.setZoom(viewport.zoom)
+      props.setZoom(viewport.zoom);
     }
-  }
+  };
 
   return (
     <LeafletMap ref={ref} onViewportChanged={onViewportChanged} {...props}>
@@ -29,7 +29,7 @@ export const Map = forwardRef((props: IProps, ref: Ref<LeafletMap>) => {
 
       {props.children}
     </LeafletMap>
-  )
-})
+  );
+});
 
-Map.displayName = 'Map' // Is this needed?
+Map.displayName = 'Map'; // Is this needed?

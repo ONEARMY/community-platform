@@ -1,47 +1,47 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react';
 
-import { SessionContext } from '../SessionContext'
+import { SessionContext } from '../SessionContext';
 
-import type { FetchState } from 'oa-shared'
+import type { FetchState } from 'oa-shared';
 
 type Props<T> = {
-  getDraftCount: () => Promise<number>
-  getDrafts: () => Promise<T[]>
-}
+  getDraftCount: () => Promise<number>;
+  getDrafts: () => Promise<T[]>;
+};
 
 const useDrafts = <T,>({ getDraftCount, getDrafts }: Props<T>) => {
-  const session = useContext(SessionContext)
+  const session = useContext(SessionContext);
 
-  const [draftCount, setDraftCount] = useState<number>(0)
-  const [drafts, setDrafts] = useState<T[]>([])
-  const [showDrafts, setShowDrafts] = useState<boolean>(false)
-  const [fetchingDrafts, setFetchingDrafts] = useState<FetchState>('idle')
+  const [draftCount, setDraftCount] = useState<number>(0);
+  const [drafts, setDrafts] = useState<T[]>([]);
+  const [showDrafts, setShowDrafts] = useState<boolean>(false);
+  const [fetchingDrafts, setFetchingDrafts] = useState<FetchState>('idle');
 
   useEffect(() => {
     const fetchDraftCount = async () => {
-      if (session?.id) {
-        const count = await getDraftCount()
+      if (session?.sub) {
+        const count = await getDraftCount();
 
-        setDraftCount(count)
+        setDraftCount(count);
       }
-    }
-    fetchDraftCount()
-  }, [session?.id])
+    };
+    fetchDraftCount();
+  }, [session?.sub]);
 
   const handleShowDrafts = async () => {
-    setShowDrafts((showDrafts) => !showDrafts)
+    setShowDrafts((showDrafts) => !showDrafts);
 
     if (fetchingDrafts !== 'idle') {
-      return
+      return;
     }
 
-    setFetchingDrafts('fetching')
+    setFetchingDrafts('fetching');
 
-    const items = await getDrafts()
-    setDrafts(items)
+    const items = await getDrafts();
+    setDrafts(items);
 
-    setFetchingDrafts('completed')
-  }
+    setFetchingDrafts('completed');
+  };
 
   return {
     handleShowDrafts,
@@ -49,7 +49,7 @@ const useDrafts = <T,>({ getDraftCount, getDrafts }: Props<T>) => {
     showDrafts,
     drafts,
     draftCount,
-  }
-}
+  };
+};
 
-export default useDrafts
+export default useDrafts;

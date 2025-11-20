@@ -1,78 +1,77 @@
-import { useEffect, useState } from 'react'
-import { useSearchParams } from '@remix-run/react'
-import { Button, Loader } from 'oa-components'
-import { logger } from 'src/logger'
-import { Card, Flex, Heading } from 'theme-ui'
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router';
+import { Button, Loader } from 'oa-components';
+import { logger } from 'src/logger';
+import { Card, Flex, Heading } from 'theme-ui';
 
-import useDrafts from '../common/Drafts/useDraftsSupabase'
-import { listing } from './labels'
-import { questionService } from './question.service'
-import { QuestionListHeader } from './QuestionListHeader'
-import { QuestionListItem } from './QuestionListItem'
+import useDrafts from '../common/Drafts/useDraftsSupabase';
+import { listing } from './labels';
+import { questionService } from './question.service';
+import { QuestionListHeader } from './QuestionListHeader';
+import { QuestionListItem } from './QuestionListItem';
 
-import type { Question } from 'oa-shared'
-import type { QuestionSortOption } from './QuestionSortOptions'
+import type { Question } from 'oa-shared';
+import type { QuestionSortOption } from './QuestionSortOptions';
 
 export const QuestionListing = () => {
-  const [isFetching, setIsFetching] = useState<boolean>(true)
-  const [questions, setQuestions] = useState<Question[]>([])
+  const [isFetching, setIsFetching] = useState<boolean>(true);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } =
     useDrafts<Question>({
       getDraftCount: questionService.getDraftCount,
       getDrafts: questionService.getDrafts,
-    })
+    });
 
-  const [total, setTotal] = useState<number>(0)
+  const [total, setTotal] = useState<number>(0);
 
-  const [searchParams, setSearchParams] = useSearchParams()
-  const q = searchParams.get('q') || ''
-  const category = searchParams.get('category') || ''
-  const sort = searchParams.get('sort') as QuestionSortOption
+  const [searchParams, setSearchParams] = useSearchParams();
+  const q = searchParams.get('q') || '';
+  const category = searchParams.get('category') || '';
+  const sort = searchParams.get('sort') as QuestionSortOption;
 
   useEffect(() => {
     if (!sort) {
       // ensure sort is set
-      const params = new URLSearchParams(searchParams.toString())
+      const params = new URLSearchParams(searchParams.toString());
 
       if (q) {
-        params.set('sort', 'MostRelevant')
+        params.set('sort', 'MostRelevant');
       } else {
-        params.set('sort', 'Newest')
+        params.set('sort', 'Newest');
       }
-      setSearchParams(params)
+      setSearchParams(params);
     } else {
       // search only when sort is set (avoids duplicate requests)
-      fetchQuestions()
+      fetchQuestions();
     }
-  }, [q, category, sort])
+  }, [q, category, sort]);
 
   const fetchQuestions = async (skip: number = 0) => {
-    setIsFetching(true)
+    setIsFetching(true);
 
     try {
-      const result = await questionService.search(q, category, sort, skip)
+      const result = await questionService.search(q, category, sort, skip);
 
       if (result) {
         if (skip) {
           // if skipFrom is set, means we are requesting another page that should be appended
-          setQuestions((questions) => [...questions, ...result.items])
+          setQuestions((questions) => [...questions, ...result.items]);
         } else {
-          setQuestions(result.items)
+          setQuestions(result.items);
         }
 
-        setTotal(result.total)
+        setTotal(result.total);
       }
     } catch (error) {
-      logger.error('error fetching questions', error)
+      logger.error('error fetching questions', error);
     }
 
-    setIsFetching(false)
-  }
+    setIsFetching(false);
+  };
 
-  const showLoadMore =
-    !isFetching && questions && questions.length > 0 && questions.length < total
+  const showLoadMore = !isFetching && questions && questions.length > 0 && questions.length < total;
 
-  const questionsList = showDrafts ? drafts : questions
+  const questionsList = showDrafts ? drafts : questions;
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
@@ -124,5 +123,5 @@ export const QuestionListing = () => {
 
       {(isFetching || isFetchingDrafts) && <Loader />}
     </Flex>
-  )
-}
+  );
+};

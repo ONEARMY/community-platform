@@ -1,35 +1,32 @@
-import { Box, Card, Flex, Image, Text } from 'theme-ui'
+import { Box, Card, Flex, Image, Text } from 'theme-ui';
 
-import ForumIcon from '../../assets/icons/icon-forum.svg'
-import HowToCountIcon from '../../assets/icons/icon-library.svg'
-import ResearchIcon from '../../assets/icons/icon-research.svg'
-import starActiveSVG from '../../assets/icons/icon-star-active.svg'
-import { CardButton } from '../CardButton/CardButton'
-import { ElWithBeforeIcon } from '../ElWithBeforeIcon/ElWithBeforeIcon'
-import { ExternalLink } from '../ExternalLink/ExternalLink'
-import { Icon } from '../Icon/Icon'
-import { InternalLink } from '../InternalLink/InternalLink'
+import ForumIcon from '../../assets/icons/icon-forum.svg';
+import HowToCountIcon from '../../assets/icons/icon-library.svg';
+import ResearchIcon from '../../assets/icons/icon-research.svg';
+import starActiveSVG from '../../assets/icons/icon-star-active.svg';
+import { CardButton } from '../CardButton/CardButton';
+import { ElWithBeforeIcon } from '../ElWithBeforeIcon/ElWithBeforeIcon';
+import { ExternalLink } from '../ExternalLink/ExternalLink';
+import { Icon } from '../Icon/Icon';
+import { InternalLink } from '../InternalLink/InternalLink';
 
-import type { MapPin, Profile } from 'oa-shared'
-import type { ThemeUIStyleObject } from 'theme-ui'
+import type { MapPin, Profile } from 'oa-shared';
+import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface UserStatisticsProps {
-  profile: Pick<
-    Profile,
-    'id' | 'username' | 'badges' | 'totalViews' | 'country'
-  >
-  pin?: Pick<MapPin, 'country'>
-  libraryCount: number
-  usefulCount: number
-  researchCount: number
-  questionCount: number
-  showViews: boolean
-  sx?: ThemeUIStyleObject | undefined
+  profile: Pick<Profile, 'id' | 'username' | 'badges' | 'totalViews' | 'country'>;
+  pin?: Pick<MapPin, 'country'>;
+  libraryCount: number;
+  usefulCount: number;
+  researchCount: number;
+  questionCount: number;
+  showViews: boolean;
+  sx?: ThemeUIStyleObject | undefined;
 }
 
 export const UserStatistics = (props: UserStatisticsProps) => {
   if (isEmpty({ ...props })) {
-    return null
+    return null;
   }
 
   return (
@@ -124,11 +121,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           )}
 
           {props.questionCount > 0 && (
-            <InternalLink
-              to={'/questions'}
-              sx={{ color: 'black' }}
-              data-testid="questions-link"
-            >
+            <InternalLink to={'/questions'} sx={{ color: 'black' }} data-testid="questions-link">
               <Flex data-testid="questions-stat">
                 <ElWithBeforeIcon icon={ForumIcon} />
                 {`Questions: ${props.questionCount}`}
@@ -145,16 +138,14 @@ export const UserStatistics = (props: UserStatisticsProps) => {
         </Flex>
       </Flex>
     </Card>
-  )
-}
+  );
+};
 
-const isEmpty = (
-  props: UserStatisticsProps & { pin?: Pick<MapPin, 'country'> },
-) =>
+const isEmpty = (props: UserStatisticsProps & { pin?: Pick<MapPin, 'country'> }) =>
   !props.pin &&
   !props.profile.badges?.length &&
   !props.profile.country &&
   !props.libraryCount &&
   !props.researchCount &&
   !props.profile.totalViews &&
-  !props.usefulCount
+  !props.usefulCount;

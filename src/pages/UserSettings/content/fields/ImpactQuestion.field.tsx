@@ -1,17 +1,16 @@
-import { Field } from 'react-final-form'
-import { FieldInput, Icon } from 'oa-components'
-import { Box, Flex, Label, Text } from 'theme-ui'
+import { Field } from 'react-final-form';
+import { FieldInput, Icon } from 'oa-components';
+import { Box, Flex, Label, Text } from 'theme-ui';
 
-import type { IImpactQuestion } from '../impactQuestions'
+import type { IImpactQuestion } from '../impactQuestions';
 
 interface Props {
-  formId: string
-  field: IImpactQuestion
+  formId: string;
+  field: IImpactQuestion;
 }
 
 export const ImpactQuestionField = ({ field, formId }: Props) => {
-  const initialValue =
-    typeof field.isVisible === 'boolean' ? field.isVisible : true
+  const initialValue = typeof field.isVisible === 'boolean' ? field.isVisible : true;
 
   return (
     <Box sx={{ marginBottom: 3 }}>
@@ -73,5 +72,5 @@ export const ImpactQuestionField = ({ field, formId }: Props) => {
         </Flex>
       </Flex>
     </Box>
-  )
-}
+  );
+};

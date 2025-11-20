@@ -1,18 +1,18 @@
-import { useCallback } from 'react'
-import { Field } from 'react-final-form'
-import { ProfileTagsSelect } from 'src/common/Tags/ProfileTagsSelect'
-import { fields } from 'src/pages/UserSettings/labels'
-import { COMPARISONS } from 'src/utils/comparisons'
-import { Flex, Text } from 'theme-ui'
+import { useCallback } from 'react';
+import { Field } from 'react-final-form';
+import { ProfileTagsSelect } from 'src/common/Tags/ProfileTagsSelect';
+import { fields } from 'src/pages/UserSettings/labels';
+import { COMPARISONS } from 'src/utils/comparisons';
+import { Flex, Text } from 'theme-ui';
 
-import { FlexSectionContainer } from '../elements'
+import { FlexSectionContainer } from '../elements';
 
 interface IProps {
-  typeName: string | undefined
+  typeName: string | undefined;
 }
 
 export const ProfileTags = ({ typeName }: IProps) => {
-  const { description, title } = fields.tags
+  const { description, title } = fields.tags;
 
   const renderTagsSelect = useCallback(
     ({ input }) => (
@@ -25,7 +25,7 @@ export const ProfileTags = ({ typeName }: IProps) => {
       />
     ),
     [typeName],
-  )
+  );
 
   return (
     <FlexSectionContainer>
@@ -41,12 +41,8 @@ export const ProfileTags = ({ typeName }: IProps) => {
         <Text variant="quiet" sx={{ fontSize: 2 }}>
           {description}
         </Text>
-        <Field
-          name="tagIds"
-          component={renderTagsSelect}
-          isEqual={COMPARISONS.tags}
-        />
+        <Field name="tagIds" component={renderTagsSelect} isEqual={COMPARISONS.tags} />
       </Flex>
     </FlexSectionContainer>
-  )
-}
+  );
+};

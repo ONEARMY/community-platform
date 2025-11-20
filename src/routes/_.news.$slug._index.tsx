@@ -1,116 +1,102 @@
-import { redirect } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
-import { News, UserRole } from 'oa-shared'
-import { ProfileFactory } from 'src/factories/profileFactory.server'
-import { NewsPage } from 'src/pages/News/NewsPage'
-import { NotFoundPage } from 'src/pages/NotFound/NotFound'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { newsServiceServer } from 'src/services/newsService.server'
-import { ProfileServiceServer } from 'src/services/profileService.server'
-import { redirectServiceServer } from 'src/services/redirectService.server'
-import { generateTags, mergeMeta } from 'src/utils/seo.utils'
+import { redirect, useLoaderData } from 'react-router';
+import { News, UserRole } from 'oa-shared';
+import { ProfileFactory } from 'src/factories/profileFactory.server';
+import { NewsPage } from 'src/pages/News/NewsPage';
+import { NotFoundPage } from 'src/pages/NotFound/NotFound';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { newsServiceServer } from 'src/services/newsService.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
+import { redirectServiceServer } from 'src/services/redirectService.server';
+import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 
-import { contentServiceServer } from '../services/contentService.server'
+import { contentServiceServer } from '../services/contentService.server';
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
-import type { DBNews } from 'oa-shared'
+import type { DBNews } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request);
 
-  const result = await newsServiceServer.getBySlug(client, params.slug!)
+  const result = await newsServiceServer.getBySlug(client, params.slug!);
 
   if (result.error || !result.data) {
-    return Response.json({ news: null }, { headers })
+    return Response.json({ news: null }, { headers });
   }
 
-  const dbNews = result.data as unknown as DBNews
-  const profileBadgeId = dbNews.profile_badge?.id
+  const dbNews = result.data as unknown as DBNews;
+  const profileBadgeId = dbNews.profile_badge?.id;
 
   if (!profileBadgeId) {
-    const news = await loadNews(client, dbNews)
-    return Response.json({ news }, { headers })
+    const news = await loadNews(client, dbNews);
+    return Response.json({ news }, { headers });
   }
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const claims = await client.auth.getClaims();
 
-  if (!user) {
-    return redirectServiceServer.redirectSignIn(`/news/${dbNews.slug}`, headers)
+  if (!claims.data?.claims) {
+    return redirectServiceServer.redirectSignIn(`/news/${dbNews.slug}`, headers);
   }
 
-  const profileService = new ProfileServiceServer(client)
-  const dbProfile = await profileService.getByAuthId(user.id)
-  const profile = new ProfileFactory(client).fromDB(dbProfile!)
+  const profileService = new ProfileServiceServer(client);
+  const dbProfile = await profileService.getByAuthId(claims.data.claims.sub);
+  const profile = new ProfileFactory(client).fromDB(dbProfile!);
 
-  const isAdmin = profile.roles?.includes(UserRole.ADMIN) ?? false
-  const hasLinkedBadge = !!profile?.badges?.find(
-    (badge) => badge.id === profileBadgeId,
-  )
+  const isAdmin = profile.roles?.includes(UserRole.ADMIN) ?? false;
+  const hasLinkedBadge = !!profile?.badges?.find((badge) => badge.id === profileBadgeId);
 
   if (isAdmin || hasLinkedBadge) {
-    const news = await loadNews(client, dbNews)
-    return Response.json({ news }, { headers })
+    const news = await loadNews(client, dbNews);
+    return Response.json({ news }, { headers });
   }
 
-  return redirect('/news')
+  return redirect('/news');
 }
 
 async function loadNews(client, dbNews) {
-  await contentServiceServer.incrementViewCount(
+  await contentServiceServer.incrementViewCount(client, 'news', dbNews.total_views, dbNews!.id);
+
+  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(
     client,
+    dbNews.id,
     'news',
-    dbNews.total_views,
-    dbNews!.id,
-  )
+    dbNews.tags,
+  );
 
-  const [usefulVotes, subscribers, tags] =
-    await contentServiceServer.getMetaFields(
-      client,
-      dbNews.id,
-      'news',
-      dbNews.tags,
-    )
+  const heroImage = await newsServiceServer.getHeroImage(client, dbNews.hero_image);
 
-  const heroImage = await newsServiceServer.getHeroImage(
-    client,
-    dbNews.hero_image,
-  )
+  const news = News.fromDB(dbNews, tags, heroImage);
+  news.usefulCount = usefulVotes.count || 0;
+  news.subscriberCount = subscribers.count || 0;
 
-  const news = News.fromDB(dbNews, tags, heroImage)
-  news.usefulCount = usefulVotes.count || 0
-  news.subscriberCount = subscribers.count || 0
-
-  return news
+  return news;
 }
 
 export function HydrateFallback() {
   // This is required because all routes are loaded client-side. Avoids a page flicker before css is loaded.
   // Can be removed once ALL pages are using SSR.
-  return <div></div>
+  return <div></div>;
 }
 
-export const meta = mergeMeta<typeof loader>(({ data }) => {
-  const news = data?.news as News
+export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
+  const news = (loaderData as any)?.news as News;
 
   if (!news) {
-    return []
+    return [];
   }
 
-  const title = `${news.title} - News - ${import.meta.env.VITE_SITE_NAME}`
-  const imageUrl = news.heroImage?.publicUrl
+  const title = `${news.title} - News - ${import.meta.env.VITE_SITE_NAME}`;
+  const imageUrl = news.heroImage?.publicUrl;
 
-  return generateTags(title, news.body, imageUrl)
-})
+  return generateTags(title, news.body, imageUrl);
+});
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>()
-  const news = data.news as News
+  const data = useLoaderData();
+  const news = data.news as News;
 
   if (!news) {
-    return <NotFoundPage />
+    return <NotFoundPage />;
   }
 
-  return <NewsPage news={news} />
+  return <NewsPage news={news} />;
 }

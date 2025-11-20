@@ -1,15 +1,10 @@
-import { ProfileFactory } from 'src/factories/profileFactory.server'
+import { ProfileFactory } from 'src/factories/profileFactory.server';
 
-import { ImageServiceServer } from './imageService.server'
-import { ProfileTypesServiceServer } from './profileTypesService.server'
+import { ImageServiceServer } from './imageService.server';
+import { ProfileTypesServiceServer } from './profileTypesService.server';
 
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type {
-  DBAuthorVotes,
-  DBMedia,
-  DBProfile,
-  ProfileFormData,
-} from 'oa-shared'
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBAuthorVotes, DBMedia, DBProfile, ProfileFormData, ProfileType } from 'oa-shared';
 
 export class ProfileServiceServer {
   constructor(private client: SupabaseClient) {}
@@ -40,13 +35,13 @@ export class ProfileServiceServer {
         )`,
       )
       .eq('auth_id', id)
-      .single()
+      .single();
 
     if (!data) {
-      return null
+      return null;
     }
 
-    return data as DBProfile
+    return data as DBProfile;
   }
 
   async getById(id: number): Promise<DBProfile | null> {
@@ -63,16 +58,20 @@ export class ProfileServiceServer {
           description,
           map_pin_name,
           is_space
+        ),
+        pin:map_pins(
+          id,
+          moderation
         )`,
       )
       .eq('id', id)
-      .single()
+      .single();
 
     if (!data) {
-      return null
+      return null;
     }
 
-    return data as DBProfile
+    return data as DBProfile;
   }
 
   async getUsersByUsername(usernames: string[]): Promise<DBProfile[] | null> {
@@ -111,13 +110,13 @@ export class ProfileServiceServer {
           is_space
         )`,
       )
-      .in('username', usernames)
+      .in('username', usernames);
 
     if (!data) {
-      return null
+      return null;
     }
 
-    return data as unknown as DBProfile[]
+    return data as unknown as DBProfile[];
   }
 
   async getByUsername(username: string): Promise<DBProfile | null> {
@@ -152,39 +151,41 @@ export class ProfileServiceServer {
         )`,
       )
       .eq('username', username)
-      .single()
+      .single();
 
     if (!data) {
-      return null
+      return null;
     }
 
-    return data as DBProfile
+    return data as DBProfile;
   }
 
   async incrementViewCount(id: number, totalViews: number) {
     return await this.client
       .from('profiles')
       .update({ total_views: (totalViews || 0) + 1 })
-      .eq('id', id)
+      .eq('id', id);
   }
 
   async getAuthorUsefulVotes(id: number) {
     const { data, error } = await this.client.rpc('get_author_vote_counts', {
       author_id: id,
-    })
+    });
 
     if (error || !data) {
-      console.error(error)
-      return null
+      console.error(error);
+      return null;
     }
 
-    return data as DBAuthorVotes[]
+    return data as DBAuthorVotes[];
   }
 
   async updateProfile(id: number, values: ProfileFormData) {
-    const imageService = new ImageServiceServer(this.client)
-    const types = await new ProfileTypesServiceServer(this.client).get()
-    const typeId = types.find((x) => x.name === values.type)!.id
+    const imageService = new ImageServiceServer(this.client);
+    const types = await new ProfileTypesServiceServer(this.client).get();
+    const typeId = types.find((x) => x.name === values.type)!.id;
+    const existingProfile = await this.getById(id);
+    const pinModeration = determinePinModeration(types, existingProfile!, values.type);
 
     const valuesToUpdate = {
       about: values.about,
@@ -199,71 +200,59 @@ export class ProfileServiceServer {
             details: values.visitorPreferenceDetails,
           })
         : null,
-    } as Partial<DBProfile>
+    } as Partial<DBProfile>;
 
-    const existingProfile = await this.getById(id)
     if (values.photo) {
-      const currentImagePath = existingProfile?.photo?.path
+      const currentImagePath = existingProfile!.photo?.path;
 
       // remove current photo first
       if (currentImagePath) {
-        await imageService.removeImages([currentImagePath])
+        await imageService.removeImages([currentImagePath]);
       }
 
-      const newPhoto = await imageService.uploadImage(
-        [values.photo],
-        `profiles/${id}`,
-      )
+      const newPhoto = await imageService.uploadImage([values.photo], `profiles/${id}`);
 
       if (!newPhoto || newPhoto?.errors?.length) {
-        console.error(newPhoto?.errors)
-        throw new Error('Error uploading profile photo')
+        console.error(newPhoto?.errors);
+        throw new Error('Error uploading profile photo');
       }
 
-      valuesToUpdate['photo'] = newPhoto?.media[0]
+      valuesToUpdate['photo'] = newPhoto?.media[0];
     }
 
-    await this.updateTags(id, values.tagIds || [])
+    await this.updateTags(id, values.tagIds || []);
 
-    let imagesToRemove = existingProfile?.cover_images
-    let imagesToKeep: DBMedia[] = []
+    let imagesToRemove = existingProfile?.cover_images;
+    let imagesToKeep: DBMedia[] = [];
 
     if (values.existingCoverImageIds?.length) {
-      imagesToRemove = imagesToRemove?.filter(
-        (x) => !values.existingCoverImageIds?.includes(x.id),
-      )
+      imagesToRemove = imagesToRemove?.filter((x) => !values.existingCoverImageIds?.includes(x.id));
       imagesToKeep =
         existingProfile?.cover_images?.filter((x) =>
           values.existingCoverImageIds?.includes(x.id),
-        ) || []
+        ) || [];
     }
 
     if (imagesToRemove?.length) {
-      await imageService.removeImages(imagesToRemove?.map((x) => x.path))
+      await imageService.removeImages(imagesToRemove?.map((x) => x.path));
     }
 
-    let updatedCoverImages = imagesToKeep || []
+    let updatedCoverImages = imagesToKeep || [];
 
     if (values.coverImages?.length) {
-      const newCoverImages = await imageService.uploadImage(
-        values.coverImages,
-        `profiles/${id}`,
-      )
+      const newCoverImages = await imageService.uploadImage(values.coverImages, `profiles/${id}`);
 
       if (!newCoverImages || newCoverImages?.errors?.length) {
-        console.error(newCoverImages?.errors)
-        throw new Error('Error uploading cover images')
+        console.error(newCoverImages?.errors);
+        throw new Error('Error uploading cover images');
       }
 
       // Add the newly uploaded images to the existing ones
-      updatedCoverImages = [
-        ...updatedCoverImages,
-        ...(newCoverImages?.media || []),
-      ]
+      updatedCoverImages = [...updatedCoverImages, ...(newCoverImages?.media || [])];
     }
 
     // Add the updated cover images to valuesToUpdate
-    valuesToUpdate['cover_images'] = updatedCoverImages
+    valuesToUpdate['cover_images'] = updatedCoverImages;
 
     const { data, error } = await this.client
       .from('profiles')
@@ -287,26 +276,29 @@ export class ProfileServiceServer {
           )
         )`,
       )
-      .single()
+      .single();
     if (error) {
-      throw error
+      throw error;
     }
 
-    return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile)
+    if (pinModeration) {
+      //
+      await this.client.from('map_pins').update({ moderation: pinModeration }).eq('profile_id', id);
+    }
+
+    return new ProfileFactory(this.client).fromDB(data as unknown as DBProfile);
   }
 
   async updateTags(profileId: number, tagIds: number[]) {
     const { data } = await this.client
       .from('profile_tags_relations')
       .select('*')
-      .eq('profile_id', profileId)
+      .eq('profile_id', profileId);
 
     // Determine which tags to add and remove
-    const existingTagIds = data?.map((rel) => rel.profile_tag_id) || []
-    const tagsToAdd = tagIds.filter((tagId) => !existingTagIds.includes(tagId))
-    const tagsToRemove = existingTagIds.filter(
-      (tagId) => !tagIds.includes(tagId),
-    )
+    const existingTagIds = data?.map((rel) => rel.profile_tag_id) || [];
+    const tagsToAdd = tagIds.filter((tagId) => !existingTagIds.includes(tagId));
+    const tagsToRemove = existingTagIds.filter((tagId) => !tagIds.includes(tagId));
 
     // Remove tags that are no longer needed
     if (tagsToRemove.length > 0) {
@@ -314,10 +306,10 @@ export class ProfileServiceServer {
         .from('profile_tags_relations')
         .delete()
         .eq('profile_id', profileId)
-        .in('profile_tag_id', tagsToRemove)
+        .in('profile_tag_id', tagsToRemove);
 
       if (error) {
-        console.error(error)
+        console.error(error);
       }
     }
 
@@ -327,15 +319,45 @@ export class ProfileServiceServer {
         profile_id: profileId,
         profile_tag_id: tagId,
         tenant_id: process.env.TENANT_ID,
-      }))
+      }));
 
-      const { error } = await this.client
-        .from('profile_tags_relations')
-        .insert(newRelations)
+      const { error } = await this.client.from('profile_tags_relations').insert(newRelations);
 
       if (error) {
-        console.error(error)
+        console.error(error);
       }
     }
   }
+}
+
+/**
+ * Calculate the moderation status for a profile's map pin based on profile type changes.
+ *    If a profile changes from a space to 'member', the pin is automatically accepted.
+ *    If it changes from 'member' to a space, the pin requires moderation.
+ */
+function determinePinModeration(types: ProfileType[], profile: DBProfile, type: string) {
+  if (!profile.pin) {
+    return undefined;
+  }
+
+  const selectedType = types.find((x) => x.name === type);
+  const currentType = types.find((x) => x.id === profile.profile_type);
+
+  let newValue: 'accepted' | 'awaiting-moderation' | undefined = undefined;
+
+  if (!selectedType || !currentType) {
+    return undefined;
+  }
+  if (currentType.isSpace && !selectedType.isSpace) {
+    newValue = 'accepted';
+  }
+  if (!currentType.isSpace && selectedType.isSpace) {
+    newValue = 'awaiting-moderation';
+  }
+
+  if (newValue === profile.pin.moderation) {
+    return undefined;
+  }
+
+  return newValue;
 }

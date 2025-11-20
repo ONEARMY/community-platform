@@ -47,13 +47,7 @@
     "import/no-unresolved": [
       "error",
       {
-        "ignore": [
-          "^src/",
-          "^oa-([a-z]+)/",
-          "^oa-components",
-          "^oa-themes",
-          "^oa-shared"
-        ]
+        "ignore": ["^src/", "^oa-([a-z]+)/", "^oa-components", "^oa-themes", "^oa-shared"]
       }
     ],
     "import/newline-after-import": "error",
@@ -79,20 +73,9 @@
           // Internal packages.
           ["^(@|components)(/.*|$)"],
           // Relative imports. Put same-folder imports and `.` last.
-          [
-            "^\\.\\.(?!/?$)",
-            "^\\.\\./?$",
-            "^\\./(?=.*/)(?!/?$)",
-            "^\\.(?!/?$)",
-            "^\\./?$"
-          ],
+          ["^\\.\\.(?!/?$)", "^\\.\\./?$", "^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
           // Type imports separated out.
-          [
-            "^node:.*\\u0000$",
-            "^@?\\w.*\\u0000$",
-            "^[^.].*\\u0000$",
-            "^\\..*\\u0000$"
-          ],
+          ["^node:.*\\u0000$", "^@?\\w.*\\u0000$", "^[^.].*\\u0000$", "^\\..*\\u0000$"],
           // Style imports.
           ["^.+\\.?(css)$"]
         ]
@@ -155,10 +138,7 @@
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-require-imports": "off", // allow require() imports
-    "@typescript-eslint/no-unused-expressions": [
-      "error",
-      { "allowShortCircuit": true }
-    ], // allow && expressions
+    "@typescript-eslint/no-unused-expressions": ["error", { "allowShortCircuit": true }], // allow && expressions
     "@typescript-eslint/no-empty-object-type": "off",
     "@typescript-eslint/no-namespace": "off",
     "@typescript-eslint/no-unused-vars": [
@@ -186,6 +166,7 @@
           }
         ]
       }
-    ]
+    ],
+    "no-console": ["warn", { "allow": ["warn", "error"] }]
   }
 }

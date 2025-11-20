@@ -1,31 +1,28 @@
-import { Form } from 'react-final-form'
-import { useNavigate } from '@remix-run/react'
-import { observer } from 'mobx-react'
-import { Button } from 'oa-components'
-import {
-  UserContactFieldMessage,
-  UserContactFieldName,
-} from 'src/pages/User/contact'
-import { contact } from 'src/pages/User/labels'
-import { isUserContactable } from 'src/utils/helpers'
-import { Box, Flex, Heading } from 'theme-ui'
+import { Form } from 'react-final-form';
+import { useNavigate } from 'react-router';
+import { observer } from 'mobx-react';
+import { Button } from 'oa-components';
+import { UserContactFieldMessage, UserContactFieldName } from 'src/pages/User/contact';
+import { contact } from 'src/pages/User/labels';
+import { isUserContactable } from 'src/utils/helpers';
+import { Box, Flex, Heading } from 'theme-ui';
 
-import type { Profile } from 'oa-shared'
+import type { Profile } from 'oa-shared';
 
 interface Props {
-  user: Profile
+  user: Profile;
 }
 
 export const UserContactFormNotLoggedIn = observer(({ user }: Props) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   if (!isUserContactable(user)) {
-    return null
+    return null;
   }
 
-  const { button, title } = contact
-  const buttonName = 'contact-submit'
-  const formId = 'contact-form'
+  const { button, title } = contact;
+  const buttonName = 'contact-submit';
+  const formId = 'contact-form';
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -104,10 +101,10 @@ export const UserContactFormNotLoggedIn = observer(({ user }: Props) => {
                   </Box>
                 </Flex>
               </form>
-            )
+            );
           }}
         />
       </Flex>
     </Box>
-  )
-})
+  );
+});

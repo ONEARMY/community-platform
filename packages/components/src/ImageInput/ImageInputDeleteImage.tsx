@@ -1,8 +1,9 @@
-import { Flex } from 'theme-ui'
+import { Flex } from 'theme-ui';
 
-import { Button } from '../Button/Button'
+import { Button } from '../Button/Button';
 
-import type { BoxProps, ThemeUIStyleObject } from 'theme-ui'
+import type { JSX } from 'react';
+import type { BoxProps, ThemeUIStyleObject } from 'theme-ui';
 
 const alignCenterWrapperStyles: ThemeUIStyleObject = {
   height: '100%',
@@ -10,7 +11,7 @@ const alignCenterWrapperStyles: ThemeUIStyleObject = {
   overflow: 'hidden',
   justifyContent: 'center',
   alignItems: 'center',
-}
+};
 
 const UploadImageOverlay = (props: BoxProps): JSX.Element => (
   <Flex
@@ -33,10 +34,10 @@ const UploadImageOverlay = (props: BoxProps): JSX.Element => (
   >
     {props.children}
   </Flex>
-)
+);
 
 interface IProps {
-  onClick: (event: Event) => void
+  onClick: (event: Event) => void;
 }
 
 export const ImageInputDeleteImage = ({ onClick }: IProps) => {
@@ -54,5 +55,5 @@ export const ImageInputDeleteImage = ({ onClick }: IProps) => {
         Delete
       </Button>
     </UploadImageOverlay>
-  )
-}
+  );
+};

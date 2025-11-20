@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
-import { Link } from 'theme-ui'
+import { Link } from 'theme-ui';
 
-import type { LinkProps } from 'theme-ui'
+import type { LinkProps } from 'theme-ui';
 
 /**
  * Provides a styled `a` tag. Opens in new tab with noopener and noreferrer rel attributes
@@ -20,5 +20,5 @@ export const ExternalLink = (props: LinkProps) => {
       target="_blank"
       rel="noopener noreferrer"
     ></Link>
-  )
-}
+  );
+};

@@ -1,15 +1,15 @@
-import { useState } from 'react'
-import { faker } from '@faker-js/faker'
+import { useState } from 'react';
+import { faker } from '@faker-js/faker';
 
-import { CreateComment } from './CreateComment'
+import { CreateComment } from './CreateComment';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
-import type { ProfileType } from 'oa-shared'
+import type { Meta, StoryFn } from '@storybook/react-vite';
+import type { ProfileType } from 'oa-shared';
 
 export default {
   title: 'Commenting/CreateComment',
   component: CreateComment,
-} as Meta<typeof CreateComment>
+} as Meta<typeof CreateComment>;
 
 const member: ProfileType = {
   name: 'member',
@@ -21,10 +21,10 @@ const member: ProfileType = {
   order: 1,
   smallImageUrl: faker.image.avatar(),
   isSpace: false,
-}
+};
 
 export const Default: StoryFn<typeof CreateComment> = () => {
-  const [comment, setComment] = useState('')
+  const [comment, setComment] = useState('');
   return (
     <CreateComment
       comment={comment}
@@ -34,11 +34,11 @@ export const Default: StoryFn<typeof CreateComment> = () => {
       maxLength={1000}
       isLoggedIn={true}
     />
-  )
-}
+  );
+};
 
 export const LoggedOut: StoryFn<typeof CreateComment> = () => {
-  const [comment, setComment] = useState('')
+  const [comment, setComment] = useState('');
   return (
     <CreateComment
       comment={comment}
@@ -48,8 +48,8 @@ export const LoggedOut: StoryFn<typeof CreateComment> = () => {
       maxLength={123}
       isLoggedIn={false}
     />
-  )
-}
+  );
+};
 
 export const WithLongComment: StoryFn<typeof CreateComment> = () => {
   const [comment, setComment] =
@@ -59,7 +59,7 @@ Vestibulum mi felis, blandit ut mollis sed, consequat et massa. Vivamus vitae se
 
 Donec ut tristique sapien. Morbi consectetur, elit sit amet molestie fringilla, eros odio rutrum est, sed dictum tortor massa et mi. Donec nec justo lorem. Suspendisse potenti. Proin molestie dolor sed ipsum porta sollicitudin eget quis mauris. Integer quis nisl magna. Vivamus convallis nunc ac mauris interdum tempor. Nullam elit velit, sollicitudin et porttitor sit amet, ultricies a sem. Mauris erat orci, sodales eget enim a, semper porta enim. Integer at mi molestie enim consectetur laoreet. Mauris diam ligula, lobortis nec tortor eget, pulvinar finibus dolor. Fusce ac tincidunt leo. Pellentesque elementum, tellus a feugiat commodo, leo risus ornare nulla, ut interdum justo dolor non turpis. Aliquam semper tortor quis nunc posuere tincidunt.
 
-Donec dapibus leo quis sagittis fringilla. Phasellus ut imperdiet sapien. Nullam posuere elementum odio, a condimentum velit. Integer diam lacus, iaculis eu faucibus eu, iaculis ac eros. Suspendisse accumsan accumsan congue. Vivamus feugiat mi quis massa convallis, sed vestibulum elit volutpat. Suspendisse in elit arcu. Cras fermentum condimentum odio, et ultrices urna auctor et. Ut orci metus, sagittis sit amet sollicitudin in, sagittis sed metus.`)
+Donec dapibus leo quis sagittis fringilla. Phasellus ut imperdiet sapien. Nullam posuere elementum odio, a condimentum velit. Integer diam lacus, iaculis eu faucibus eu, iaculis ac eros. Suspendisse accumsan accumsan congue. Vivamus feugiat mi quis massa convallis, sed vestibulum elit volutpat. Suspendisse in elit arcu. Cras fermentum condimentum odio, et ultrices urna auctor et. Ut orci metus, sagittis sit amet sollicitudin in, sagittis sed metus.`);
 
   return (
     <CreateComment
@@ -70,11 +70,11 @@ Donec dapibus leo quis sagittis fringilla. Phasellus ut imperdiet sapien. Nullam
       maxLength={12300}
       isLoggedIn={true}
     />
-  )
-}
+  );
+};
 
 export const WithCustomPlaceholder: StoryFn<typeof CreateComment> = () => {
-  const [comment, setComment] = useState('')
+  const [comment, setComment] = useState('');
 
   return (
     <CreateComment
@@ -86,5 +86,5 @@ export const WithCustomPlaceholder: StoryFn<typeof CreateComment> = () => {
       maxLength={12300}
       isLoggedIn={true}
     />
-  )
-}
+  );
+};

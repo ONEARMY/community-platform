@@ -1,24 +1,24 @@
-import { useEffect, useState } from 'react'
-import { Banner } from 'oa-components'
-import { bannerService } from 'src/pages/common/banner.service'
-import { Flex } from 'theme-ui'
+import { useEffect, useState } from 'react';
+import { Banner } from 'oa-components';
+import { bannerService } from 'src/pages/common/banner.service';
+import { Flex } from 'theme-ui';
 
-import type { Banner as BannerModel } from 'oa-shared'
+import type { Banner as BannerModel } from 'oa-shared';
 
 export const AlertBanner = () => {
-  const [banner, setBanner] = useState<BannerModel | null>(null)
+  const [banner, setBanner] = useState<BannerModel | null>(null);
 
   useEffect(() => {
     const fetchBanner = async () => {
-      const banner = await bannerService.getBanner()
-      setBanner(banner)
-    }
+      const banner = await bannerService.getBanner();
+      setBanner(banner);
+    };
 
-    fetchBanner()
-  }, [])
+    fetchBanner();
+  }, []);
 
   if (!banner?.text) {
-    return null
+    return null;
   }
 
   const bannerContent = (
@@ -27,15 +27,15 @@ export const AlertBanner = () => {
         {banner.text}
       </Banner>
     </Flex>
-  )
+  );
 
   if (banner.url) {
     return (
       <a href={banner.url} target="_blank" rel="noreferrer">
         {bannerContent}
       </a>
-    )
+    );
   }
 
-  return bannerContent
-}
+  return bannerContent;
+};

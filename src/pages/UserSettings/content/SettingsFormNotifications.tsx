@@ -1,23 +1,23 @@
-import { TextNotification } from 'oa-components'
-import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
-import { Text } from 'theme-ui'
+import { TextNotification } from 'oa-components';
+import { ErrorsContainer } from 'src/common/Form/ErrorsContainer';
+import { Text } from 'theme-ui';
 
 export type IFormNotification = {
-  message: string
-  icon: string
-  show: boolean
-  variant: 'success' | 'failure'
-}
+  message: string;
+  icon: string;
+  show: boolean;
+  variant: 'success' | 'failure';
+};
 
 type SettingsFormNotificationsProps = {
-  notification?: IFormNotification
-  submitFailed: boolean
+  notification?: IFormNotification;
+  submitFailed: boolean;
   errors:
     | {
-        [key: string]: any
+        [key: string]: any;
       }
-    | undefined
-}
+    | undefined;
+};
 
 export const SettingsFormNotifications = ({
   errors,
@@ -25,26 +25,19 @@ export const SettingsFormNotifications = ({
   submitFailed,
 }: SettingsFormNotificationsProps) => {
   const showSuccessNotification =
-    notification &&
-    notification.show &&
-    (!errors || Object.keys(errors).length === 0)
-  const showErrorsNotification = errors && submitFailed
+    notification && notification.show && (!errors || Object.keys(errors).length === 0);
+  const showErrorsNotification = errors && submitFailed;
 
   return (
     <>
       {showSuccessNotification && (
-        <TextNotification
-          isVisible={notification.show}
-          variant={notification.variant}
-        >
+        <TextNotification isVisible={notification.show} variant={notification.variant}>
           <Text>{notification.message}</Text>
         </TextNotification>
       )}
       {showErrorsNotification && (
-        <ErrorsContainer
-          saving={Object.values(errors).map((value) => String(value))}
-        />
+        <ErrorsContainer saving={Object.values(errors).map((value) => String(value))} />
       )}
     </>
-  )
-}
+  );
+};

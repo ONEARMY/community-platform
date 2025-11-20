@@ -1,23 +1,18 @@
-import { Link as RouterLink } from '@remix-run/react'
-import {
-  Category,
-  IconCountWithTooltip,
-  ModerationStatus,
-  Username,
-} from 'oa-components'
-import { Highlighter } from 'src/common/Highlighter'
-import { capitalizeFirstLetter } from 'src/utils/helpers'
-import { Box, Card, Flex, Heading, Image } from 'theme-ui'
+import { Link as RouterLink } from 'react-router';
+import { Category, IconCountWithTooltip, ModerationStatus, Username } from 'oa-components';
+import { Highlighter } from 'src/common/Highlighter';
+import { capitalizeFirstLetter } from 'src/utils/helpers';
+import { Box, Card, Flex, Heading, Image } from 'theme-ui';
 
-import type { Project } from 'oa-shared'
+import type { Project } from 'oa-shared';
 
 type ProjectCardProps = {
-  item: Project
-  query?: string
-}
+  item: Project;
+  query?: string;
+};
 
 export const ProjectCard = ({ item, query }: ProjectCardProps) => {
-  const searchWords = [query || '']
+  const searchWords = [query || ''];
 
   return (
     <Card data-cy="card" sx={{ marginX: [2, 0] }}>
@@ -92,11 +87,7 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
                 justifyContent: 'flex-end',
               }}
             >
-              <IconCountWithTooltip
-                count={item.totalViews || 0}
-                icon="show"
-                text="Views"
-              />
+              <IconCountWithTooltip count={item.totalViews || 0} icon="show" text="Views" />
               <IconCountWithTooltip
                 count={item.usefulCount || 0}
                 icon="star-active"
@@ -107,5 +98,5 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
         </Flex>
       </RouterLink>
     </Card>
-  )
-}
+  );
+};

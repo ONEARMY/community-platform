@@ -1,28 +1,28 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest';
 
-import { render } from '../test/utils'
-import { Username } from './Username'
+import { render } from '../test/utils';
+import { Username } from './Username';
 import {
   InvalidCountryCode,
   // OneBadge,
   // TwoBadges,
   WithoutFlag,
-} from './Username.stories'
+} from './Username.stories';
 
 describe('Username', () => {
   it('shows an unknown flag for empty value', () => {
-    const { getByTestId } = render(<Username {...WithoutFlag.args} />)
+    const { getByTestId } = render(<Username {...WithoutFlag.args} />);
 
-    expect(getByTestId('Username: unknown flag')).toBeInTheDocument()
-  })
+    expect(getByTestId('Username: unknown flag')).toBeInTheDocument();
+  });
 
   it('shows an unknown flag for an invalid country code', () => {
-    const { getByTestId } = render(<Username {...InvalidCountryCode.args} />)
+    const { getByTestId } = render(<Username {...InvalidCountryCode.args} />);
 
-    expect(getByTestId('Username: unknown flag')).toBeInTheDocument()
-  })
+    expect(getByTestId('Username: unknown flag')).toBeInTheDocument();
+  });
 
   // it('shows one badge', () => {
   //   const { getByTestId } = render(<Username {...OneBadge.args} />)
@@ -40,4 +40,4 @@ describe('Username', () => {
   //     getByTestId(`Username: ${OneBadge.args.user.badges[1].name} badge`),
   //   ).toBeInTheDocument()
   // })
-})
+});

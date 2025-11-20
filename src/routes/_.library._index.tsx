@@ -1,8 +1,8 @@
-import { LibraryList } from 'src/pages/Library/Content/List/LibraryList'
-import { SeoTagsUpdateComponent } from 'src/utils/seo'
+import { LibraryList } from 'src/pages/Library/Content/List/LibraryList';
+import { SeoTagsUpdateComponent } from 'src/utils/seo';
 
 export async function clientLoader() {
-  return null
+  return null;
 }
 
 export default function Index() {
@@ -11,5 +11,5 @@ export default function Index() {
       <SeoTagsUpdateComponent title="Library" />
       <LibraryList />
     </>
-  )
+  );
 }

@@ -1,19 +1,19 @@
-import { Link } from '@remix-run/react'
-import { observer } from 'mobx-react'
-import { VERSION } from 'src/config/config'
-import { Box, Flex, Image, Text, useThemeUI } from 'theme-ui'
+import { Link } from 'react-router';
+import { observer } from 'mobx-react';
+import { VERSION } from 'src/config/config';
+import { Box, Flex, Image, Text, useThemeUI } from 'theme-ui';
 
-import type { ThemeWithName } from 'oa-themes'
+import type { ThemeWithName } from 'oa-themes';
 
 const Logo = observer(() => {
-  const themeUi = useThemeUI()
-  const theme = themeUi.theme as ThemeWithName
+  const themeUi = useThemeUI();
+  const theme = themeUi.theme as ThemeWithName;
 
-  const name = import.meta.env.VITE_SITE_NAME || process.env.VITE_SITE_NAME
-  const logo = theme.logo
+  const name = import.meta.env.VITE_SITE_NAME || process.env.VITE_SITE_NAME;
+  const logo = theme.logo;
 
-  const nameAndVersion = `${name} logo ${VERSION}`
-  const logoSize = [50, 50, 100]
+  const nameAndVersion = `${name} logo ${VERSION}`;
+  const logoSize = [50, 50, 100];
 
   return (
     <Box
@@ -46,17 +46,12 @@ const Logo = observer(() => {
             title={nameAndVersion}
           />
         </Flex>
-        <Text
-          className="sr-only"
-          ml={2}
-          sx={{ display: ['none', 'none', 'block'] }}
-          color="black"
-        >
+        <Text className="sr-only" ml={2} sx={{ display: ['none', 'none', 'block'] }} color="black">
           {name}
         </Text>
       </Link>
     </Box>
-  )
-})
+  );
+});
 
-export default Logo
+export default Logo;

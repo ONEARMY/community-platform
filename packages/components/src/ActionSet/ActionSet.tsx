@@ -1,40 +1,39 @@
-import { useEffect, useRef, useState } from 'react'
-import { Card, Flex } from 'theme-ui'
+import { useEffect, useRef, useState } from 'react';
+import { Card, Flex } from 'theme-ui';
 
-import { Button } from '../Button/Button'
+import { Button } from '../Button/Button';
 
-import type { ReactNode } from 'react'
+import type { ReactNode } from 'react';
 
 interface IProps {
-  children: ReactNode[]
-  itemType: 'ReplyItem' | 'CommentItem'
+  children: ReactNode[];
+  itemType: 'ReplyItem' | 'CommentItem';
 }
 
 export const ActionSet = ({ children, itemType }: IProps) => {
-  const [show, setShow] = useState<boolean>(false)
-  const cardRef = useRef<HTMLDivElement>(null)
+  const [show, setShow] = useState<boolean>(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  const toDisplay = children.filter((child) => !!child)
+  const toDisplay = children.filter((child) => !!child);
   if (!children || toDisplay.length === 0) {
-    return <></>
+    return <></>;
   }
 
-  const onClick = () => setShow((show) => !show)
+  const onClick = () => setShow((show) => !show);
 
   useEffect(() => {
     const handleClickOutsideDropdownCard = (event: MouseEvent) => {
       if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
-        setShow((prev) => !prev)
+        setShow((prev) => !prev);
       }
-    }
+    };
 
-    if (show)
-      document.addEventListener('mousedown', handleClickOutsideDropdownCard)
+    if (show) document.addEventListener('mousedown', handleClickOutsideDropdownCard);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutsideDropdownCard)
-    }
-  }, [show])
+      document.removeEventListener('mousedown', handleClickOutsideDropdownCard);
+    };
+  }, [show]);
 
   return (
     <Flex
@@ -78,5 +77,5 @@ export const ActionSet = ({ children, itemType }: IProps) => {
         </Card>
       )}
     </Flex>
-  )
-}
+  );
+};

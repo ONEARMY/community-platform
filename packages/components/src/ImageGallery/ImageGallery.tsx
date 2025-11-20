@@ -1,41 +1,41 @@
-import { useEffect, useRef, useState } from 'react'
-import styled from '@emotion/styled'
-import PhotoSwipeLightbox from 'photoswipe/lightbox'
-import { Flex, Image as ThemeImage } from 'theme-ui'
+import { useEffect, useRef, useState } from 'react';
+import styled from '@emotion/styled';
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import { Flex, Image as ThemeImage } from 'theme-ui';
 
-import { Arrow } from '../ArrowIcon/ArrowIcon'
-import { ImageGalleryThumbnail } from '../ImageGalleryThumbnail/ImageGalleryThumbnail'
-import { Loader } from '../Loader/Loader'
+import { Arrow } from '../ArrowIcon/ArrowIcon';
+import { ImageGalleryThumbnail } from '../ImageGalleryThumbnail/ImageGalleryThumbnail';
+import { Loader } from '../Loader/Loader';
 
-import type { PhotoSwipeOptions } from 'photoswipe/lightbox'
+import type { PhotoSwipeOptions } from 'photoswipe/lightbox';
 
-import 'photoswipe/style.css'
+import 'photoswipe/style.css';
 
 export interface IImageGalleryItem {
-  downloadUrl: string
-  thumbnailUrl: string
-  contentType?: string | null
-  fullPath: string
-  name: string
-  type: string
-  size: number
-  timeCreated: string
-  updated: string
-  alt?: string
+  downloadUrl: string;
+  thumbnailUrl: string;
+  contentType?: string | null;
+  fullPath: string;
+  name: string;
+  type: string;
+  size: number;
+  timeCreated: string;
+  updated: string;
+  alt?: string;
 }
 
 export interface ImageGalleryProps {
-  images: IImageGalleryItem[]
-  allowPortrait?: boolean
-  photoSwipeOptions?: PhotoSwipeOptions
-  hideThumbnails?: boolean
-  showNextPrevButton?: boolean
+  images: IImageGalleryItem[];
+  allowPortrait?: boolean;
+  photoSwipeOptions?: PhotoSwipeOptions;
+  hideThumbnails?: boolean;
+  showNextPrevButton?: boolean;
 }
 
 interface IState {
-  activeImageIndex: number
-  showLightbox: boolean
-  showActiveImgLoading: boolean
+  activeImageIndex: number;
+  showLightbox: boolean;
+  showActiveImgLoading: boolean;
 }
 
 const NavButton = styled('button')`
@@ -46,7 +46,7 @@ const NavButton = styled('button')`
   bottom: 0;
   height: 100%;
   cursor: pointer;
-`
+`;
 
 // Container that reserves space to prevent layout shift
 const ImageContainer = styled('div')`
@@ -65,29 +65,28 @@ const ImageContainer = styled('div')`
   align-items: center;
   justify-content: center;
   background: #f5f5f5; /* Optional: subtle background while loading */
-`
+`;
 
 export const ImageGallery = (props: ImageGalleryProps) => {
   // Initialize with actual images from props, not empty array
-  const filteredImages = (props.images || []).filter((img) => img !== null)
+  const filteredImages = (props.images || []).filter((img) => img !== null);
 
   const [state, setState] = useState<IState>({
     activeImageIndex: 0,
     showLightbox: false,
     showActiveImgLoading: true,
-  })
+  });
 
-  const lightbox = useRef<PhotoSwipeLightbox>()
-  const activeImageIndex = state.activeImageIndex
-  const activeImage = filteredImages[activeImageIndex]
-  const imageNumber = filteredImages.length
-  const showThumbnails = !props.hideThumbnails && filteredImages.length > 1
-  const showNextPrevButton =
-    !!props.showNextPrevButton && filteredImages.length > 1
+  const lightbox = useRef<PhotoSwipeLightbox>(null);
+  const activeImageIndex = state.activeImageIndex;
+  const activeImage = filteredImages[activeImageIndex];
+  const imageNumber = filteredImages.length;
+  const showThumbnails = !props.hideThumbnails && filteredImages.length > 1;
+  const showNextPrevButton = !!props.showNextPrevButton && filteredImages.length > 1;
 
   // Only initialize PhotoSwipe on client-side
   useEffect(() => {
-    if (typeof window === 'undefined' || !filteredImages.length) return
+    if (typeof window === 'undefined' || !filteredImages.length) return;
 
     // Initializes the Photoswipe lightbox to use the provided images
     lightbox.current = new PhotoSwipeLightbox({
@@ -96,57 +95,53 @@ export const ImageGallery = (props: ImageGalleryProps) => {
       })),
       pswpModule: () => import('photoswipe'),
       ...(props.photoSwipeOptions ?? {}),
-    })
+    });
 
     // Before opening the lightbox, calculates the image sizes and
     // refreshes lightbox slide to adapt to these updated dimensions
     lightbox.current.on('beforeOpen', () => {
-      const photoswipe = lightbox.current?.pswp
-      const dataSource = photoswipe?.options?.dataSource
+      const photoswipe = lightbox.current?.pswp;
+      const dataSource = photoswipe?.options?.dataSource;
 
       if (Array.isArray(dataSource)) {
         dataSource.forEach((source, index) => {
-          const img = new Image()
+          const img = new Image();
           img.onload = () => {
-            source.width = img.naturalWidth
-            source.height = img.naturalHeight
-            photoswipe?.refreshSlideContent(index)
-          }
-          img.src = source.src as string
-        })
+            source.width = img.naturalWidth;
+            source.height = img.naturalHeight;
+            photoswipe?.refreshSlideContent(index);
+          };
+          img.src = source.src as string;
+        });
       }
-    })
+    });
 
-    lightbox.current.init()
+    lightbox.current.init();
 
     return () => {
-      lightbox.current?.destroy()
-      lightbox.current = undefined
-    }
-  }, [props.images, props.photoSwipeOptions])
+      lightbox.current?.destroy();
+      lightbox.current = null;
+    };
+  }, [props.images, props.photoSwipeOptions]);
 
   // Prevent native hash scrolling and handle it ourselves
   useEffect(() => {
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined') return;
 
-    let originalHash = ''
+    let originalHash = '';
 
     const preventNativeHashScroll = () => {
       if (window.location.hash) {
-        originalHash = window.location.hash
+        originalHash = window.location.hash;
         // Remove hash completely to prevent any native scrolling
-        window.history.replaceState(
-          null,
-          '',
-          window.location.pathname + window.location.search,
-        )
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
 
         // Prevent any scroll restoration
         if ('scrollRestoration' in window.history) {
-          window.history.scrollRestoration = 'manual'
+          window.history.scrollRestoration = 'manual';
         }
       }
-    }
+    };
 
     // Restore hash after component mounts
     const restoreHash = () => {
@@ -156,85 +151,83 @@ export const ImageGallery = (props: ImageGalleryProps) => {
             null,
             '',
             window.location.pathname + window.location.search + originalHash,
-          )
-        }, 50)
+          );
+        }, 50);
       }
-    }
+    };
 
-    preventNativeHashScroll()
-    restoreHash()
+    preventNativeHashScroll();
+    restoreHash();
 
     return () => {
       // Restore scroll restoration on cleanup
       if ('scrollRestoration' in window.history) {
-        window.history.scrollRestoration = 'auto'
+        window.history.scrollRestoration = 'auto';
       }
-    }
-  }, [])
+    };
+  }, []);
 
   const setActive = (imageIndex: number) => {
     setState({
       ...state,
       activeImageIndex: imageIndex,
       showActiveImgLoading: imageIndex !== state.activeImageIndex,
-    })
-  }
+    });
+  };
 
   const setActiveImgLoaded = () => {
     setState({
       ...state,
       showActiveImgLoading: false,
-    })
-  }
+    });
+  };
 
   const handleImageLoad = () => {
-    setActiveImgLoaded()
-  }
+    setActiveImgLoaded();
+  };
 
   const handleImageError = () => {
     // Also clear loading state on error
-    setActiveImgLoaded()
-  }
+    setActiveImgLoaded();
+  };
 
   // Check if image is already loaded (cached)
   useEffect(() => {
     if (activeImage) {
-      const img = new Image()
+      const img = new Image();
       img.onload = () => {
         if (img.complete) {
-          setActiveImgLoaded()
+          setActiveImgLoaded();
         }
-      }
-      img.src = activeImage.downloadUrl
+      };
+      img.src = activeImage.downloadUrl;
 
       // If image is already complete, clear loading immediately
       if (img.complete) {
-        setActiveImgLoaded()
+        setActiveImgLoaded();
       }
     }
-  }, [activeImage?.downloadUrl])
+  }, [activeImage?.downloadUrl]);
 
   const triggerLightbox = (): void => {
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined') return;
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore: Looks like a bug on their side, already a bug for it is open,
     // it should allow only one argument, as mentioned in their docs
-    lightbox.current?.loadAndOpen(state.activeImageIndex)
-  }
+    lightbox.current?.loadAndOpen(state.activeImageIndex);
+  };
 
   // Early return if no images - but this should rarely happen now
   if (!filteredImages.length) {
-    return null
+    return null;
   }
 
   return (
     <Flex sx={{ flexDirection: 'column' }}>
       <ImageContainer>
         {state.showActiveImgLoading && (
-          <Loader
-            sx={{ position: 'absolute', alignSelf: 'center', zIndex: 1 }}
-          />
+          <Loader sx={{ position: 'absolute', alignSelf: 'center', zIndex: 1 }} />
         )}
         <ThemeImage
           data-cy="active-image"
@@ -263,9 +256,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
                 zIndex: 2,
               }}
               onClick={() =>
-                setActive(
-                  activeImageIndex + 1 < imageNumber ? activeImageIndex + 1 : 0,
-                )
+                setActive(activeImageIndex + 1 < imageNumber ? activeImageIndex + 1 : 0)
               }
             >
               <Arrow direction="right" sx={{ marginRight: '10px' }} />
@@ -277,11 +268,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
                 zIndex: 2,
               }}
               onClick={() =>
-                setActive(
-                  activeImageIndex - 1 >= 0
-                    ? activeImageIndex - 1
-                    : imageNumber - 1,
-                )
+                setActive(activeImageIndex - 1 >= 0 ? activeImageIndex - 1 : imageNumber - 1)
               }
             >
               <Arrow direction="left" sx={{ marginLeft: '10px' }} />
@@ -306,5 +293,5 @@ export const ImageGallery = (props: ImageGalleryProps) => {
         </Flex>
       )}
     </Flex>
-  )
-}
+  );
+};

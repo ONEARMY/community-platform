@@ -1,67 +1,66 @@
-import { useEffect, useState } from 'react'
-import { observer } from 'mobx-react'
-import { form } from 'src/pages/UserSettings/labels'
-import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { isUserContactable } from 'src/utils/helpers'
+import { useEffect, useState } from 'react';
+import { observer } from 'mobx-react';
+import { form } from 'src/pages/UserSettings/labels';
+import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { isUserContactable } from 'src/utils/helpers';
 
-import { SupabaseNotificationsForm } from './SupabaseNotificationsForm'
+import { SupabaseNotificationsForm } from './SupabaseNotificationsForm';
 
-import type { DBNotificationsPreferences } from 'oa-shared'
-import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
+import type { DBNotificationsPreferences } from 'oa-shared';
+import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
 
 export const SupabaseNotifications = observer(() => {
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [initialValues, setInitialValues] =
-    useState<DBNotificationsPreferences | null>(null)
-  const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [initialValues, setInitialValues] = useState<DBNotificationsPreferences | null>(null);
+  const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null);
 
-  const { profile } = useProfileStore()
+  const { profile } = useProfileStore();
 
   const refreshPreferences = async () => {
-    const preferences = await notificationsPreferencesService.getPreferences()
-    setInitialValues(preferences)
-    setIsLoading(false)
-  }
+    const preferences = await notificationsPreferencesService.getPreferences();
+    setInitialValues(preferences);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    refreshPreferences()
-  }, [])
+    refreshPreferences();
+  }, []);
 
   const onSubmit = async (values: DBNotificationsPreferences) => {
-    setIsLoading(true)
-    setSubmitResults(null)
+    setIsLoading(true);
+    setSubmitResults(null);
 
     try {
-      await notificationsPreferencesService.setPreferences(values)
-      await refreshPreferences()
+      await notificationsPreferencesService.setPreferences(values);
+      await refreshPreferences();
       setSubmitResults({
         type: 'success',
         message: form.saveNotificationPreferences,
-      })
+      });
     } catch (error) {
-      setSubmitResults({ type: 'error', message: error.message })
+      setSubmitResults({ type: 'error', message: error.message });
     }
-  }
+  };
 
   const onUnsubscribe = async () => {
-    setIsLoading(true)
-    setSubmitResults(null)
+    setIsLoading(true);
+    setSubmitResults(null);
 
     try {
-      await notificationsPreferencesService.setUnsubscribe(initialValues?.id)
-      await refreshPreferences()
+      await notificationsPreferencesService.setUnsubscribe(initialValues?.id);
+      await refreshPreferences();
       setSubmitResults({
         type: 'success',
         message: form.saveNotificationPreferences,
-      })
+      });
     } catch (error) {
-      setSubmitResults({ type: 'error', message: error.message })
+      setSubmitResults({ type: 'error', message: error.message });
     }
-  }
+  };
 
   if (!profile) {
-    return null
+    return null;
   }
 
   return (
@@ -73,5 +72,5 @@ export const SupabaseNotifications = observer(() => {
       profileIsContactable={isUserContactable(profile)}
       submitResults={submitResults}
     />
-  )
-})
+  );
+});

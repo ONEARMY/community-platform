@@ -1,3 +1,3 @@
-import { preciousPlasticTheme } from 'oa-themes'
+import { preciousPlasticTheme } from 'oa-themes';
 
-export const testingThemeStyles = preciousPlasticTheme.styles
+export const testingThemeStyles = preciousPlasticTheme.styles;

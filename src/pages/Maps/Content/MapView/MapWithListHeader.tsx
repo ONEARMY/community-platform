@@ -1,32 +1,33 @@
-import { useContext, useState } from 'react'
-import { Button, Loader, MapCardList, Modal, OsmGeocoding } from 'oa-components'
-import { Flex, Text } from 'theme-ui'
+import { useContext, useState } from 'react';
+import { LatLngBounds } from 'leaflet';
+import { Button, Loader, MapCardList, Modal, OsmGeocoding } from 'oa-components';
+import { Flex, Text } from 'theme-ui';
 
-import { MapContext } from '../../MapContext'
-import { MapFilterList } from '../../MapFilterList'
-import { MemberTypeList } from '../MemberTypeVerticalList/MemberTypeVerticalList.client'
+import { MapContext } from '../../MapContext';
+import { MapFilterList } from '../../MapFilterList';
+import { MemberTypeList } from '../MemberTypeVerticalList/MemberTypeVerticalList.client';
 
 interface IProps {
-  viewport: 'desktop' | 'mobile'
+  viewport: 'desktop' | 'mobile';
 }
 
 export const MapWithListHeader = ({ viewport }: IProps) => {
-  const mapState = useContext(MapContext)
-  const [showFilters, setShowFilters] = useState<boolean>(false)
+  const mapState = useContext(MapContext);
+  const [showFilters, setShowFilters] = useState<boolean>(false);
 
-  const isMobile = viewport === 'mobile'
+  const isMobile = viewport === 'mobile';
 
-  const toggleFilterModal = () => setShowFilters(!showFilters)
+  const toggleFilterModal = () => setShowFilters(!showFilters);
 
   if (!mapState) {
-    return null
+    return null;
   }
 
   const hasFiltersSelected =
     !!mapState.activeBadgeFilters.length ||
     !!mapState.activeProfileSettingFilters.length ||
     !!mapState.activeProfileTypeFilters.length ||
-    !!mapState.activeTagFilters.length
+    !!mapState.activeTagFilters.length;
 
   if (mapState.loadingMessage) {
     return (
@@ -40,7 +41,7 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
       >
         <Loader label={mapState.loadingMessage} sx={{ alignSelf: 'center' }} />
       </Flex>
-    )
+    );
   }
 
   return (
@@ -68,10 +69,15 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
       >
         <Flex sx={{ paddingX: 4, gap: 2, flexDirection: 'row' }}>
           <OsmGeocoding
-            callback={({ lat, lon }) => {
-              if (lat && lon) {
-                mapState.setLocation({ lat, lng: lon })
-                mapState.setIsMobile(false)
+            callback={({ boundingbox }) => {
+              if (boundingbox) {
+                const bounds = new LatLngBounds(
+                  [parseFloat(boundingbox[0]), parseFloat(boundingbox[2])],
+                  [parseFloat(boundingbox[1]), parseFloat(boundingbox[3])],
+                );
+                mapState.selectPin(null);
+                mapState.fitBounds(bounds);
+                mapState.setIsMobile(false);
               }
             }}
             countrycodes=""
@@ -94,11 +100,13 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
         <MapCardList
           columnsCountBreakPoints={isMobile ? { 300: 1, 600: 2 } : undefined}
           list={mapState.filteredPins}
-          onPinClick={(pin) => mapState.selectPin(pin)}
+          onPinClick={(pin) => {
+            mapState.selectPinWithClusterCheck(pin);
+          }}
           selectedPin={mapState.selectedPin}
           viewport={viewport}
         />
       )}
     </>
-  )
-}
+  );
+};

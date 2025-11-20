@@ -1,21 +1,21 @@
-import { marked } from 'marked'
+import { marked } from 'marked';
 
 export const getSummaryFromMarkdown = (text: string) => {
   // Works for headings, paragraphs, etc.
   // Doesn't work for at list items and maybe more.
 
   if (!text) {
-    return null
+    return null;
   }
   // has to go to any as unhelpfully typed
   const linesWithTokens = marked
     .lexer(text)
-    .filter(({ tokens }: any) => !!tokens && tokens.length > 0)
-  const linesWithText = linesWithTokens.map((line: any) => line.tokens).flat()
+    .filter(({ tokens }: any) => !!tokens && tokens.length > 0);
+  const linesWithText = linesWithTokens.map((line: any) => line.tokens).flat();
 
   const flattenedLines = linesWithText
     .slice(0, 3)
-    .map((token) => token['text'] && token['text'].trim())
+    .map((token) => token['text'] && token['text'].trim());
 
-  return flattenedLines.join(' ')
-}
+  return flattenedLines.join(' ');
+};

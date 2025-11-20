@@ -1,21 +1,21 @@
-import { keyframes } from '@emotion/react'
-import { Alert, Close } from 'theme-ui'
+import { keyframes } from '@emotion/react';
+import { Alert, Close } from 'theme-ui';
 
 const fadeIn = keyframes({
   from: { opacity: 0, transform: 'translateY(-50%)' },
   to: { opacity: 1 },
-})
+});
 
 export interface TextNotificationProps {
-  children: any
-  variant: 'success' | 'failure'
-  isVisible: boolean
-  onDismiss?: any | null
+  children: any;
+  variant: 'success' | 'failure';
+  isVisible: boolean;
+  onDismiss?: any | null;
 }
 
 export const TextNotification = (props: TextNotificationProps) => {
   if (!props.isVisible) {
-    return <></>
+    return <></>;
   }
 
   return (
@@ -41,5 +41,5 @@ export const TextNotification = (props: TextNotificationProps) => {
         />
       )}
     </Alert>
-  )
-}
+  );
+};

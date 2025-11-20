@@ -1,4 +1,4 @@
-import type { DBProfileType } from '../../models/profileType'
+import type { DBProfileType } from '../../models/profileType';
 
 export const profileTypes: Partial<DBProfileType>[] = [
   {
@@ -61,4 +61,4 @@ export const profileTypes: Partial<DBProfileType>[] = [
     small_image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-collection-small.svg',
   },
-]
+];

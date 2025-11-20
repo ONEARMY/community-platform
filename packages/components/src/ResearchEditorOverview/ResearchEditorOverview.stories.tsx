@@ -1,17 +1,17 @@
-import { ResearchEditorOverview } from './ResearchEditorOverview'
+import { ResearchEditorOverview } from './ResearchEditorOverview';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Layout/ResearchEditorOverview',
   component: ResearchEditorOverview,
-} as Meta<typeof ResearchEditorOverview>
+} as Meta<typeof ResearchEditorOverview>;
 
 const Template: StoryFn<typeof ResearchEditorOverview> = (args) => (
   <ResearchEditorOverview {...args} />
-)
+);
 
-export const Default = Template.bind({})
+export const Default = Template.bind({});
 Default.args = {
   updates: [
     {
@@ -36,21 +36,21 @@ Default.args = {
   researchSlug: 'abc',
   showBackToResearchButton: true,
   showCreateUpdateButton: true,
-}
+};
 
-export const ShowBackToResearchButton = Template.bind({})
+export const ShowBackToResearchButton = Template.bind({});
 ShowBackToResearchButton.args = {
   ...Default.args,
   showBackToResearchButton: true,
-}
+};
 
-export const ShowCreateUpdateButton = Template.bind({})
+export const ShowCreateUpdateButton = Template.bind({});
 ShowCreateUpdateButton.args = {
   ...Default.args,
   showCreateUpdateButton: true,
-}
+};
 
-export const DraftItem = Template.bind({})
+export const DraftItem = Template.bind({});
 DraftItem.args = {
   ...Default.args,
   updates: [
@@ -61,4 +61,4 @@ DraftItem.args = {
       isDraft: true,
     },
   ],
-}
+};

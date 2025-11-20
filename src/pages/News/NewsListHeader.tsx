@@ -1,31 +1,31 @@
 // import { useCallback, useEffect, useState } from 'react'
-import { Link } from '@remix-run/react'
+import { Link } from 'react-router';
 // import debounce from 'debounce'
-import { Tooltip } from 'oa-components'
-import { UserRole } from 'oa-shared'
-import { AuthWrapper } from 'src/common/AuthWrapper'
+import { Tooltip } from 'oa-components';
+import { UserRole } from 'oa-shared';
+import { AuthWrapper } from 'src/common/AuthWrapper';
 // import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { UserAction } from 'src/common/UserAction'
+import { UserAction } from 'src/common/UserAction';
 // import {
 //   NewsSearchParams,
 // } from 'src/pages/News/newsContent.service'
-import { Button } from 'theme-ui'
+import { Button } from 'theme-ui';
 
-import DraftButton from '../common/Drafts/DraftButton'
-import { ListHeader } from '../common/Layout/ListHeader'
-import { headings, listing } from './labels'
+import DraftButton from '../common/Drafts/DraftButton';
+import { ListHeader } from '../common/Layout/ListHeader';
+import { headings, listing } from './labels';
 // import { NewsSortOptions } from './NewsSortOptions'
 
 // import type { Category } from 'oa-shared'
 
 interface IProps {
-  draftCount: number
-  handleShowDrafts: () => void
-  showDrafts: boolean
+  draftCount: number;
+  handleShowDrafts: () => void;
+  showDrafts: boolean;
 }
 
 export const NewsListHeader = (props: IProps) => {
-  const { draftCount, handleShowDrafts, showDrafts } = props
+  const { draftCount, handleShowDrafts, showDrafts } = props;
 
   // const [categories, setCategories] = useState<Category[]>([])
   // const [searchString, setSearchString] = useState<string>('')
@@ -94,11 +94,7 @@ export const NewsListHeader = (props: IProps) => {
             data-tooltip-id="tooltip"
             data-tooltip-content={listing.incompleteProfile}
           >
-            <Button
-              type="button"
-              data-cy="complete-profile-news"
-              variant="disabled"
-            >
+            <Button type="button" data-cy="complete-profile-news" variant="disabled">
               {listing.create}
             </Button>
           </Link>
@@ -121,7 +117,7 @@ export const NewsListHeader = (props: IProps) => {
       }
       loggedOut={<></>}
     />
-  )
+  );
 
   // const categoryComponent = (
   //   <CategoryHorizonalList
@@ -184,5 +180,5 @@ export const NewsListHeader = (props: IProps) => {
       categoryComponent={<></>}
       filteringComponents={<></>}
     />
-  )
-}
+  );
+};

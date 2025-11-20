@@ -1,42 +1,42 @@
-import { useRef } from 'react'
-import { Marker } from 'react-leaflet'
-import L from 'leaflet'
+import { useRef } from 'react';
+import { Marker } from 'react-leaflet';
+import L from 'leaflet';
 
-import customMarkerIcon from '../../assets/icons/map-marker.png'
+import customMarkerIcon from '../../assets/icons/map-marker.png';
 
-import type { DivIcon } from 'leaflet'
+import type { DivIcon } from 'leaflet';
 
 const customMarker = L.icon({
   iconUrl: customMarkerIcon,
   iconSize: [20, 28],
   iconAnchor: [10, 28],
-})
+});
 
 export interface IProps {
   position: {
-    lat: number
-    lng: number
-  }
-  onDrag(lng: number): void
-  markerIcon?: DivIcon
-  onClick?: () => void
+    lat: number;
+    lng: number;
+  };
+  onDrag(lng: number): void;
+  markerIcon?: DivIcon;
+  onClick?: () => void;
 }
 
 export const MapPin = (props: IProps) => {
-  const markerRef = useRef(null)
+  const markerRef = useRef(null);
 
   const handleDrag = () => {
-    const marker: any = markerRef.current
+    const marker: any = markerRef.current;
 
     if (!marker) {
-      return
+      return;
     }
 
-    const markerLatLng = marker.leafletElement.getLatLng()
+    const markerLatLng = marker.leafletElement.getLatLng();
     if (props.onDrag) {
-      props.onDrag(markerLatLng)
+      props.onDrag(markerLatLng);
     }
-  }
+  };
 
   return (
     <Marker
@@ -47,5 +47,5 @@ export const MapPin = (props: IProps) => {
       icon={props.markerIcon || customMarker}
       onclick={props.onClick}
     />
-  )
-}
+  );
+};

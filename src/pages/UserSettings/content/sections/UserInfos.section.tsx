@@ -1,38 +1,35 @@
-import { Field } from 'react-final-form'
-import { countries } from 'countries-list'
-import { observer } from 'mobx-react'
-import { FieldInput, FieldTextarea, Username } from 'oa-components'
-import { SelectField } from 'src/common/Form/Select.field'
-import { fields, headings } from 'src/pages/UserSettings/labels'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { required, validateUrl } from 'src/utils/validators'
-import { Flex, Heading, Text } from 'theme-ui'
+import { Field } from 'react-final-form';
+import { countries } from 'countries-list';
+import { observer } from 'mobx-react';
+import { FieldInput, FieldTextarea, Username } from 'oa-components';
+import { SelectField } from 'src/common/Form/Select.field';
+import { fields, headings } from 'src/pages/UserSettings/labels';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { required, validateUrl } from 'src/utils/validators';
+import { Flex, Heading, Text } from 'theme-ui';
 
 import {
   GROUP_PROFILE_DESCRIPTION_MAX_LENGTH,
   MEMBER_PROFILE_DESCRIPTION_MAX_LENGTH,
-} from '../../constants'
-import { FlexSectionContainer } from '../elements'
-import { ProfileTags } from './ProfileTags.section'
+} from '../../constants';
+import { FlexSectionContainer } from '../elements';
+import { ProfileTags } from './ProfileTags.section';
 
-import type { ProfileFormData } from 'oa-shared'
+import type { ProfileFormData } from 'oa-shared';
 
 interface IProps {
-  formValues: Partial<ProfileFormData>
+  formValues: Partial<ProfileFormData>;
 }
 
 export const UserInfosSection = observer(({ formValues }: IProps) => {
-  const { profile } = useProfileStore()
+  const { profile } = useProfileStore();
 
-  const isMemberProfile = !profile?.type?.isSpace
-  const { about, country, displayName, userName, website } = fields
+  const isMemberProfile = !profile?.type?.isSpace;
+  const { about, country, displayName, userName, website } = fields;
 
   return (
     <FlexSectionContainer>
-      <Flex
-        data-testid="UserInfosSection"
-        sx={{ flexDirection: 'column', gap: [3, 5] }}
-      >
+      <Flex data-testid="UserInfosSection" sx={{ flexDirection: 'column', gap: [3, 5] }}>
         <Heading as="h2">{headings.infos}</Heading>
         <Flex sx={{ flexDirection: 'column', gap: 1 }}>
           <Text>
@@ -132,5 +129,5 @@ export const UserInfosSection = observer(({ formValues }: IProps) => {
         </Flex>
       </Flex>
     </FlexSectionContainer>
-  )
-})
+  );
+});

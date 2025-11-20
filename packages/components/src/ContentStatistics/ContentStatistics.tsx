@@ -94,5 +94,5 @@ export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
       {/* Modal */}
       {activeModal && activeModal}
     </Flex>
-  )
-}
+  );
+};

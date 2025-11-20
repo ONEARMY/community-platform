@@ -1,8 +1,8 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest';
 
-import { filterPins } from './filterPins'
+import { filterPins } from './filterPins';
 
-import type { MapPin, ProfileType } from 'oa-shared'
+import type { MapPin, ProfileType } from 'oa-shared';
 
 describe('filterPins', () => {
   const workspacePin: MapPin = {
@@ -50,7 +50,7 @@ describe('filterPins', () => {
         },
       ],
     },
-  }
+  };
 
   const memberPin = {
     id: 2,
@@ -92,7 +92,7 @@ describe('filterPins', () => {
         },
       ],
     },
-  } as MapPin
+  } as MapPin;
 
   const taggedMemberPin = {
     id: 3,
@@ -143,36 +143,33 @@ describe('filterPins', () => {
         },
       ],
     },
-  } as MapPin
+  } as MapPin;
 
-  const allPinsInView: MapPin[] = [workspacePin, memberPin, taggedMemberPin]
+  const allPinsInView: MapPin[] = [workspacePin, memberPin, taggedMemberPin];
 
   it('returns all pins when no filters provided', () => {
-    expect(filterPins(allPinsInView, {})).toEqual(allPinsInView)
-  })
+    expect(filterPins(allPinsInView, {})).toEqual(allPinsInView);
+  });
 
   it('returns only the correct profile type pins when filter is provided', () => {
     const filtered = filterPins(allPinsInView, {
       types: ['member'],
-    })
-    expect(filtered.map((x) => x.id)).toEqual([
-      memberPin.id,
-      taggedMemberPin.id,
-    ])
-  })
+    });
+    expect(filtered.map((x) => x.id)).toEqual([memberPin.id, taggedMemberPin.id]);
+  });
 
   it('returns only the pins when profile type and tag filters are provided', () => {
     const filtered = filterPins(allPinsInView, {
       types: ['member'],
       tags: [1],
-    })
-    expect(filtered.map((x) => x.id)).toEqual([taggedMemberPin.id])
-  })
+    });
+    expect(filtered.map((x) => x.id)).toEqual([taggedMemberPin.id]);
+  });
 
   it('returns an empty arry when no pins meet the filter criteria', () => {
     const filtered = filterPins(allPinsInView, {
       tags: [55],
-    })
-    expect(filtered).toEqual([])
-  })
-})
+    });
+    expect(filtered).toEqual([]);
+  });
+});

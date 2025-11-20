@@ -1,21 +1,21 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { NavLink } from '@remix-run/react'
-import MenuCurrent from 'src/assets/images/menu-current.svg'
-import { Box } from 'theme-ui'
+import React, { useContext } from 'react';
+import { NavLink } from 'react-router';
+import styled from '@emotion/styled';
+import MenuCurrent from 'src/assets/images/menu-current.svg';
+import { Box } from 'theme-ui';
 
-import { MobileMenuContext } from '../../MobileMenuContext'
+import { MobileMenuContext } from '../../MobileMenuContext';
 
 interface IProps {
-  path: string
-  content: string
-  style?: React.CSSProperties
-  onClick?: () => void
+  path: string;
+  content: string;
+  style?: React.CSSProperties;
+  onClick?: () => void;
 }
 
 const PanelItem = styled(Box)`
   padding: ${(props) => props.theme.space[3]}px 0px;
-`
+`;
 
 const MenuLink = styled(NavLink)`
   color: ${(props) => props.theme.colors.black};
@@ -45,19 +45,19 @@ const MenuLink = styled(NavLink)`
       transform: translateX(-50%);
     }
   }
-`
+`;
 
 const MenuMobileLink = (props: IProps) => {
-  const mobileMenuContext = React.useContext(MobileMenuContext)
+  const mobileMenuContext = useContext(MobileMenuContext);
 
   return (
     <PanelItem data-cy="mobile-menu-item">
       <MenuLink
         to={props.path}
         onClick={() => {
-          mobileMenuContext.setIsVisible(false)
+          mobileMenuContext.setIsVisible(false);
           if (props.onClick) {
-            props.onClick()
+            props.onClick();
           }
         }}
         style={props.style}
@@ -66,7 +66,7 @@ const MenuMobileLink = (props: IProps) => {
         <span>{props.content}</span>
       </MenuLink>
     </PanelItem>
-  )
-}
+  );
+};
 
-export default MenuMobileLink
+export default MenuMobileLink;

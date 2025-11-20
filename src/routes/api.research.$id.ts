@@ -1,37 +1,33 @@
-import { ResearchItem, UserRole } from 'oa-shared'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { contentServiceServer } from 'src/services/contentService.server'
-import { ProfileServiceServer } from 'src/services/profileService.server'
-import { researchServiceServer } from 'src/services/researchService.server'
-import { storageServiceServer } from 'src/services/storageService.server'
-import { subscribersServiceServer } from 'src/services/subscribersService.server'
-import { updateUserActivity } from 'src/utils/activity.server'
-import { convertToSlug } from 'src/utils/slug'
+import { ResearchItem, UserRole } from 'oa-shared';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { contentServiceServer } from 'src/services/contentService.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
+import { researchServiceServer } from 'src/services/researchService.server';
+import { storageServiceServer } from 'src/services/storageService.server';
+import { subscribersServiceServer } from 'src/services/subscribersService.server';
+import { updateUserActivity } from 'src/utils/activity.server';
+import { convertToSlug } from 'src/utils/slug';
 
-import type { ActionFunctionArgs } from '@remix-run/node'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBResearchItem } from 'oa-shared'
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBResearchItem } from 'oa-shared';
+import type { ActionFunctionArgs } from 'react-router';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
-  const { client, headers } = createSupabaseServerClient(request)
+  const id = Number(params.id);
+
+  if (request.method === 'DELETE') {
+    return await deleteResearch(request, id);
+  }
+
+  const { client, headers } = createSupabaseServerClient(request);
 
   try {
-    const id = Number(params.id)
-
-    if (request.method === 'DELETE') {
-      return await deleteResearch(request, id)
-    }
-
-    const formData = await request.formData()
+    const formData = await request.formData();
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
-      category: formData.has('category')
-        ? Number(formData.get('category'))
-        : null,
-      tags: formData.has('tags')
-        ? formData.getAll('tags').map((x) => Number(x))
-        : null,
+      category: formData.has('category') ? Number(formData.get('category')) : null,
+      tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       collaborators: formData.has('collaborators')
         ? (formData.getAll('collaborators') as string[])
         : null,
@@ -39,30 +35,29 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       slug: convertToSlug(formData.get('title') as string),
       uploadedImage: formData.get('image') as File | null,
       existingImage: formData.get('existingImage') as string | null,
+    };
+
+    const claims = await client.auth.getClaims();
+
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 });
     }
 
-    const {
-      data: { user },
-    } = await client.auth.getUser()
-
-    const oldResearch = await researchServiceServer.getById(id, client)
+    const oldResearch = await researchServiceServer.getById(id, client);
 
     const { valid, status, statusText } = await validateRequest(
       request,
-      user,
+      claims.data.claims.sub,
       data,
       oldResearch,
       client,
-    )
+    );
 
     if (!valid) {
-      return Response.json({}, { headers, status, statusText })
+      return Response.json({}, { headers, status, statusText });
     }
 
-    const previousSlugs = contentServiceServer.updatePreviousSlugs(
-      oldResearch,
-      data.slug,
-    )
+    const previousSlugs = contentServiceServer.updatePreviousSlugs(oldResearch, data.slug);
 
     const researchResult = await client
       .from('research')
@@ -79,20 +74,20 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       })
       .eq('id', id)
       .select()
-      .single()
+      .single();
 
     if (researchResult.error || !researchResult.data) {
-      throw researchResult.error
+      throw researchResult.error;
     }
 
-    const research = ResearchItem.fromDB(researchResult.data, [])
+    const research = ResearchItem.fromDB(researchResult.data, []);
 
     await subscribersServiceServer.updateResearchSubscribers(
       oldResearch,
       research,
       client,
       headers,
-    )
+    );
 
     if (data.uploadedImage) {
       // TODO:remove unused images from storage
@@ -100,10 +95,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         [data.uploadedImage],
         `research/${research.id}`,
         client,
-      )
+      );
 
-      if (mediaResult?.errors) {
-        console.error(mediaResult.errors)
+      if (mediaResult?.errors?.length) {
+        console.error(mediaResult.errors);
       }
 
       if (mediaResult?.media && mediaResult.media.length > 0) {
@@ -111,117 +106,108 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
           .from('research')
           .update({ image: mediaResult.media[0] })
           .eq('id', research.id)
-          .select()
+          .select('image');
 
-        if (result.data) {
+        if (result.data && result.data.length > 0) {
           const [image] = storageServiceServer.getPublicUrls(
             client,
-            result.data,
-          )
+            result.data?.at(0)?.image ? [result.data[0].image] : [],
+          );
 
-          research.image = image
+          research.image = image;
         }
       }
     }
 
-    updateUserActivity(client, user!.id)
+    updateUserActivity(client, claims.data.claims.sub);
 
-    return Response.json({ research }, { headers, status: 201 })
+    return Response.json({ research }, { headers, status: 201 });
   } catch (error) {
-    console.error(error)
-    return Response.json(
-      {},
-      { headers, status: 500, statusText: 'Error creating research' },
-    )
+    console.error(error);
+    return Response.json({}, { headers, status: 500, statusText: 'Error creating research' });
   }
-}
+};
 
 async function deleteResearch(request, id: number) {
-  const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request);
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  try {
+    const claims = await client.auth.getClaims();
 
-  const canEdit = await researchServiceServer.isAllowedToEditResearchById(
-    client,
-    id,
-    user?.user_metadata.username,
-  )
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 });
+    }
 
-  if (canEdit) {
-    await client
-      .from('research')
-      .update({
-        modified_at: new Date(),
-        deleted: true,
-      })
-      .eq('id', id)
+    const canEdit = await researchServiceServer.isAllowedToEditResearchById(
+      client,
+      id,
+      claims.data.claims.user_metadata.username,
+    );
 
-    return Response.json({}, { status: 200, headers })
+    if (canEdit) {
+      await client
+        .from('research')
+        .update({
+          modified_at: new Date(),
+          deleted: true,
+        })
+        .eq('id', id);
+
+      return Response.json({}, { status: 200, headers });
+    }
+  } catch (error) {
+    console.error('Delete research error:', error);
   }
 
-  return Response.json({}, { status: 500, headers })
+  return Response.json({}, { status: 500, headers });
 }
 
 async function validateRequest(
   request: Request,
-  user: User | null,
+  userAuthId: string,
   data: any,
   research: DBResearchItem,
   client: SupabaseClient,
 ) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
   if (request.method !== 'PUT') {
-    return { status: 405, statusText: 'method not allowed' }
+    return { status: 405, statusText: 'method not allowed' };
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'title is required' }
+    return { status: 400, statusText: 'title is required' };
   }
 
   if (!data.description) {
-    return { status: 400, statusText: 'description is required' }
+    return { status: 400, statusText: 'description is required' };
   }
 
   if (!data.isDraft && !data.uploadedImage && !data.existingImage) {
-    return { status: 400, statusText: 'image is required' }
+    return { status: 400, statusText: 'image is required' };
   }
 
   if (
     research.slug !== data.slug &&
-    (await contentServiceServer.isDuplicateExistingSlug(
-      data.slug,
-      research.id,
-      client,
-      'research',
-    ))
+    (await contentServiceServer.isDuplicateExistingSlug(data.slug, research.id, client, 'research'))
   ) {
     return {
       status: 409,
       statusText: 'This research already exists',
-    }
+    };
   }
 
-  const profile = await new ProfileServiceServer(client).getByAuthId(user!.id)
+  const profile = await new ProfileServiceServer(client).getByAuthId(userAuthId);
 
   if (!profile) {
-    return { status: 400, statusText: 'User not found' }
+    return { status: 400, statusText: 'User not found' };
   }
 
   if (profile.roles?.includes(UserRole.ADMIN)) {
-    return { valid: true }
+    return { valid: true };
   }
 
-  if (
-    research.created_by !== profile.id &&
-    !research.collaborators?.includes(profile.username)
-  ) {
-    return { status: 403, statusText: 'forbidden' }
+  if (research.created_by !== profile.id && !research.collaborators?.includes(profile.username)) {
+    return { status: 403, statusText: 'forbidden' };
   }
 
-  return { valid: true }
+  return { valid: true };
 }

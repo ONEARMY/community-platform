@@ -1,17 +1,17 @@
-import { CardButton } from '../CardButton/CardButton'
+import { CardButton } from '../CardButton/CardButton';
 
-import type { ThemeUIStyleObject } from 'theme-ui'
+import type { ThemeUIStyleObject } from 'theme-ui';
 
 interface IProps {
-  active: boolean
-  onClick: () => void
-  children: React.ReactNode
-  filterType: string
-  sx?: ThemeUIStyleObject | undefined
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+  filterType: string;
+  sx?: ThemeUIStyleObject | undefined;
 }
 
 export const MapFilterListItem = (props: IProps) => {
-  const { active, onClick, children, filterType, sx } = props
+  const { active, onClick, children, filterType, sx } = props;
   return (
     <CardButton
       data-cy={`MapFilterListItem-${filterType}${active ? '-active' : ''}`}
@@ -39,5 +39,5 @@ export const MapFilterListItem = (props: IProps) => {
     >
       {children}
     </CardButton>
-  )
-}
+  );
+};

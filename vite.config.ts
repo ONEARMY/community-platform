@@ -1,18 +1,18 @@
-import { vitePlugin as remix } from '@remix-run/dev'
-import react from '@vitejs/plugin-react'
-import { dirname, resolve } from 'path'
-import { fileURLToPath } from 'url'
+import { reactRouter } from '@react-router/dev/vite';
+import react from '@vitejs/plugin-react';
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
 /// <reference types="vitest" />
-import { defineConfig } from 'vite'
-import svgr from 'vite-plugin-svgr'
-import ViteTsConfigPathsPlugin from 'vite-tsconfig-paths'
+import { defineConfig } from 'vite';
+import svgr from 'vite-plugin-svgr';
+import ViteTsConfigPathsPlugin from 'vite-tsconfig-paths';
 
-import type { UserConfig as VitestUserConfigInterface } from 'vitest/config'
+import type { ViteUserConfig } from 'vitest/config';
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-const vitestConfig: VitestUserConfigInterface = {
+const vitestConfig: ViteUserConfig = {
   test: {
     environment: 'jsdom',
     globals: true,
@@ -29,7 +29,7 @@ const vitestConfig: VitestUserConfigInterface = {
       hooks: 'list',
     },
   },
-}
+};
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -44,16 +44,7 @@ export default defineConfig({
     },
   },
   plugins: [
-    !process.env.VITEST
-      ? remix({
-          appDirectory: './src',
-          future: {
-            v3_fetcherPersist: true,
-            v3_relativeSplatPath: true,
-            v3_throwAbortReason: true,
-          },
-        })
-      : react(),
+    !process.env.VITEST ? reactRouter() : react(),
     // TODO - confirm if required (given manual resolutions below)
     ViteTsConfigPathsPlugin({
       root: './',
@@ -73,4 +64,4 @@ export default defineConfig({
     },
   },
   test: vitestConfig.test,
-})
+});

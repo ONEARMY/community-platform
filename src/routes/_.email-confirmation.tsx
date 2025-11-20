@@ -1,84 +1,74 @@
-import { useEffect, useState } from 'react'
-import { Form } from 'react-final-form'
-import {
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigate,
-} from '@remix-run/react'
-import { Button, HeroBanner } from 'oa-components'
-import Main from 'src/pages/common/Layout/Main'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { Card, Flex, Heading, Text } from 'theme-ui'
+import { useEffect, useState } from 'react';
+import { Form } from 'react-final-form';
+import { redirect, useActionData, useLoaderData, useNavigate } from 'react-router';
+import { Button, HeroBanner } from 'oa-components';
+import Main from 'src/pages/common/Layout/Main';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { Card, Flex, Heading, Text } from 'theme-ui';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const url = new URL(request.url)
-  const error = url.searchParams.get('error_description')
-  const token = url.searchParams.get('token')
+  const url = new URL(request.url);
+  const error = url.searchParams.get('error_description');
+  const token = url.searchParams.get('token');
 
-  const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request);
 
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const { data } = await client.auth.getClaims();
 
-  if (user) {
-    return redirect('/settings', { headers })
+  if (data?.claims) {
+    return redirect('/settings', { headers });
   }
 
   if (error) {
-    return Response.json({ error }, { headers })
+    return Response.json({ error }, { headers });
   }
 
   if (token) {
-    return Response.json({ token }, { headers })
+    return Response.json({ token }, { headers });
   }
 
-  return redirect('/')
-}
+  return redirect('/');
+};
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const { client, headers } = createSupabaseServerClient(request)
-  const url = new URL(request.url)
+  const { client, headers } = createSupabaseServerClient(request);
+  const url = new URL(request.url);
 
   // Get the token from URL params (it should still be there)
-  const token = url.searchParams.get('token')
+  const token = url.searchParams.get('token');
 
   if (!token) {
-    return Response.json(
-      { error: 'Your reset link is invalid' },
-      { status: 400, headers },
-    )
+    return Response.json({ error: 'Your reset link is invalid' }, { status: 400, headers });
   }
 
   const tokenVerification = await client.auth.verifyOtp({
     token_hash: token,
     type: 'signup',
-  })
+  });
 
   if (!tokenVerification.data.user) {
     return Response.json(
       { error: 'Your link has expired or is invalid' },
       { status: 400, headers },
-    )
+    );
   }
 
-  return Response.json({ success: true }, { headers })
-}
+  return Response.json({ success: true }, { headers });
+};
 
 export default function Index() {
-  const navigate = useNavigate()
-  const data = useLoaderData<typeof loader>()
-  const actionData = useActionData<typeof action>()
-  const [isConfirmed, setIsConfirmed] = useState(false)
+  const navigate = useNavigate();
+  const data = useLoaderData();
+  const actionData = useActionData();
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
   useEffect(() => {
     if (actionData?.success) {
-      setIsConfirmed(true)
+      setIsConfirmed(true);
     }
-  }, [actionData?.success])
+  }, [actionData?.success]);
 
   return (
     <Main style={{ flex: 1 }}>
@@ -111,20 +101,14 @@ export default function Index() {
                       }}
                     >
                       <Flex sx={{ gap: 2, flexDirection: 'column' }}>
-                        <Heading>
-                          {isConfirmed
-                            ? 'Email verified!'
-                            : 'Email confirmation'}
-                        </Heading>
+                        <Heading>{isConfirmed ? 'Email verified!' : 'Email confirmation'}</Heading>
                       </Flex>
 
                       {data.error ? (
                         <Text color="red">{data?.error}</Text>
                       ) : (
                         <>
-                          {actionData?.error && (
-                            <Text color="red">{actionData?.error}</Text>
-                          )}
+                          {actionData?.error && <Text color="red">{actionData?.error}</Text>}
 
                           <Flex
                             sx={{
@@ -142,8 +126,7 @@ export default function Index() {
                                     gap: '2rem',
                                   }}
                                 >
-                                  Great! You can now continue to setup your
-                                  profile!
+                                  Great! You can now continue to setup your profile!
                                 </Text>
                                 <Button
                                   large
@@ -184,9 +167,9 @@ export default function Index() {
                 </Flex>
               </Flex>
             </form>
-          )
+          );
         }}
       />
     </Main>
-  )
+  );
 }

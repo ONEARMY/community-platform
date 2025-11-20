@@ -1,3 +1,3 @@
-import createCache from '@emotion/cache'
+import createCache from '@emotion/cache';
 
-export const createEmotionCache = () => createCache({ key: 'css' })
+export const createEmotionCache = () => createCache({ key: 'css' });

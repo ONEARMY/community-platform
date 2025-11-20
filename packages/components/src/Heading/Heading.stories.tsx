@@ -1,16 +1,14 @@
-import { Heading } from 'theme-ui'
+import { Heading } from 'theme-ui';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Layout/Heading',
   component: Heading,
-} as Meta<typeof Heading>
+} as Meta<typeof Heading>;
 
-export const Default: StoryFn<typeof Heading> = () => (
-  <Heading>Default Heading style</Heading>
-)
+export const Default: StoryFn<typeof Heading> = () => <Heading>Default Heading style</Heading>;
 
 export const Small: StoryFn<typeof Heading> = () => (
   <Heading variant="small">Default Heading style</Heading>
-)
+);

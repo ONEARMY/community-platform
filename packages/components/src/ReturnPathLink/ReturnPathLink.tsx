@@ -1,16 +1,16 @@
-import { Link } from '@remix-run/react'
+import { Link } from 'react-router';
 
-import type { RemixLinkProps } from '@remix-run/react/dist/components'
-import type { RefAttributes } from 'react'
+import type { RefAttributes } from 'react';
+import type { LinkProps } from 'react-router';
 
-type IProps = RemixLinkProps & RefAttributes<HTMLAnchorElement>
+type IProps = LinkProps & RefAttributes<HTMLAnchorElement>;
 
 export const ReturnPathLink = (props: IProps) => {
-  const to = `${props.to}?returnUrl=${encodeURIComponent(location?.pathname)}`
+  const to = `${props.to}?returnUrl=${encodeURIComponent(location?.pathname)}`;
 
   return (
     <Link {...props} to={to}>
       {props.children}
     </Link>
-  )
-}
+  );
+};

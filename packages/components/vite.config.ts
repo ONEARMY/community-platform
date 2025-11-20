@@ -1,11 +1,11 @@
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react';
 /// <reference types="vitest" />
-import { defineConfig } from 'vite'
-import svgr from 'vite-plugin-svgr'
+import { defineConfig } from 'vite';
+import svgr from 'vite-plugin-svgr';
 
-import type { UserConfig as VitestUserConfigInterface } from 'vitest/config'
+import type { ViteUserConfig } from 'vitest/config';
 
-const vitestConfig: VitestUserConfigInterface = {
+const vitestConfig: ViteUserConfig = {
   test: {
     environment: 'jsdom',
     globals: true,
@@ -20,9 +20,9 @@ const vitestConfig: VitestUserConfigInterface = {
       hooks: 'list',
     },
   },
-}
+};
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
   plugins: [react(), svgr()],
   test: vitestConfig.test,
-})
+});

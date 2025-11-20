@@ -21,7 +21,6 @@ export const _supportedConfigurationOptions = [
   'VITE_API_URL',
   'VITE_SITE_NAME',
   'VITE_NO_MESSAGING',
-] as const
+] as const;
 
-export type ConfigurationOption =
-  (typeof _supportedConfigurationOptions)[number]
+export type ConfigurationOption = (typeof _supportedConfigurationOptions)[number];

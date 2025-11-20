@@ -1,4 +1,4 @@
-import type { DBNews } from '../../models/news'
+import type { DBNews } from '../../models/news';
 
 export const news: Partial<DBNews>[] = [
   {
@@ -55,4 +55,4 @@ export const news: Partial<DBNews>[] = [
     title: 'Intro screenings Update',
     total_views: 4,
   },
-]
+];

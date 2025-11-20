@@ -1,11 +1,11 @@
-import { createSeedClient } from '@snaplet/seed'
+import { createSeedClient } from '@snaplet/seed';
 
 // import * as allData from 'oa-shared/mocks/data'
-import libraryJson from './.snaplet/library.json'
-import questionsJson from './.snaplet/questions.json'
-import { profilesSeed } from './seed/profilesSeed'
-import { usersSeed } from './seed/usersSeed'
-import { convertToSlug } from './src/utils/slug'
+import libraryJson from './.snaplet/library.json';
+import questionsJson from './.snaplet/questions.json';
+import { profilesSeed } from './seed/profilesSeed';
+import { usersSeed } from './seed/usersSeed';
+import { convertToSlug } from './src/utils/slug';
 
 import type {
   categoriesChildInputs,
@@ -28,9 +28,9 @@ import type {
   tagsScalars,
   useful_votesChildInputs,
   useful_votesScalars,
-} from '@snaplet/seed'
+} from '@snaplet/seed';
 
-const tenant_id = `precious-plastic`
+const tenant_id = `precious-plastic`;
 
 // const MOCK_DATA = {
 //   ...allData,
@@ -44,7 +44,7 @@ const _QUESTIONS_BASE: Partial<questionsScalars> = {
   images: [],
   deleted: false,
   tags: [],
-}
+};
 
 const _PROJECT_BASE: Partial<projectsScalars> = {
   tenant_id,
@@ -57,47 +57,47 @@ const _PROJECT_BASE: Partial<projectsScalars> = {
   file_download_count: 0,
   total_views: 0,
   comment_count: 0,
-}
+};
 
 const _PROJECT_STEP_BASE = {
   tenant_id,
   images: null,
   video_url: null,
-}
+};
 
 const _CATEGORIES_BASE: Partial<categoriesScalars> = {
   tenant_id,
   legacy_id: null,
-}
+};
 
 const _TAGS_BASE: Partial<tagsScalars> = {
   tenant_id,
   legacy_id: null,
-}
+};
 
 const _SUBSCRIBERS_BASE: Partial<subscribersScalars> = {
   tenant_id,
   content_type: 'questions',
-}
+};
 
 const _USEFUL_VOTES_BASE: Partial<useful_votesScalars> = {
   tenant_id,
   content_type: 'questions',
-}
+};
 
 const _BADGES_BASE: Partial<profile_badgesScalars> = {
   tenant_id,
-}
+};
 
 const _TYPES_BASE: Partial<profile_typesScalars> = {
   tenant_id,
-}
+};
 
 const _BADGES_RELATIONS_BASE: Partial<profile_badges_relationsScalars> = {
   tenant_id,
-}
+};
 
-const seedTags = (): tagsChildInputs => [{ ..._TAGS_BASE, name: 'tag 1' }]
+const seedTags = (): tagsChildInputs => [{ ..._TAGS_BASE, name: 'tag 1' }];
 
 // const seedProfileTags = (): profile_tagsChildInputs =>
 //   MOCK_DATA.profileTags.map((tag) => ({
@@ -130,7 +130,7 @@ const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
     order: 2,
     small_image_url: '',
   },
-]
+];
 
 const seedBadges = (): Partial<profile_badgesScalars>[] => [
   {
@@ -147,18 +147,18 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
     image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/pro.svg',
   },
-]
+];
 
 /// populates badges: 2/3 of profiles to have: 1 and 2 badges, others remain with no badge
 const seedBadgesRelations = (
   profiles: profilesScalars[],
   badges: profile_badgesScalars[],
 ): Partial<profile_badges_relationsScalars>[] => {
-  const relations: Partial<profile_badges_relationsScalars>[] = []
+  const relations: Partial<profile_badges_relationsScalars>[] = [];
 
-  const profilesPerGroup = Math.ceil(profiles.length / 3)
-  const oneBadgeGroup = profiles.slice(profilesPerGroup, profilesPerGroup * 2)
-  const twoBadgesGroup = profiles.slice(profilesPerGroup * 2)
+  const profilesPerGroup = Math.ceil(profiles.length / 3);
+  const oneBadgeGroup = profiles.slice(profilesPerGroup, profilesPerGroup * 2);
+  const twoBadgesGroup = profiles.slice(profilesPerGroup * 2);
 
   // 1 badge each
   for (const profile of oneBadgeGroup) {
@@ -166,7 +166,7 @@ const seedBadgesRelations = (
       ..._BADGES_RELATIONS_BASE,
       profile_id: profile.id,
       profile_badge_id: badges[0].id,
-    })
+    });
   }
 
   // all (2) badges each
@@ -176,12 +176,12 @@ const seedBadgesRelations = (
         ..._BADGES_RELATIONS_BASE,
         profile_id: profile.id,
         profile_badge_id: badges[i].id,
-      })
+      });
     }
   }
 
-  return relations
-}
+  return relations;
+};
 
 // const seedMapPins = (
 //   profiles: profilesScalars[],
@@ -210,7 +210,7 @@ const seedCategories = (): categoriesChildInputs => [
   { ..._CATEGORIES_BASE, name: 'Moulds', type: 'projects' },
   { ..._CATEGORIES_BASE, name: 'Products', type: 'projects' },
   { ..._CATEGORIES_BASE, name: 'Important Updates', type: 'news' },
-]
+];
 
 // const seedComments = (
 //   profile: profilesInputs,
@@ -232,23 +232,19 @@ const seedQuestions = (profile: profilesInputs): questionsChildInputs =>
     title: q.title,
     description: q.description,
     comment_count: q.comments?.length || 0,
-  })) || []
+  })) || [];
 
-const seedSubscribers = (
-  questions: questionsScalars[],
-): subscribersChildInputs =>
+const seedSubscribers = (questions: questionsScalars[]): subscribersChildInputs =>
   questions.map((question) => ({
     ..._SUBSCRIBERS_BASE,
     content_id: question.id,
-  }))
+  }));
 
-const seedUsefulVotes = (
-  questions: questionsScalars[],
-): useful_votesChildInputs =>
+const seedUsefulVotes = (questions: questionsScalars[]): useful_votesChildInputs =>
   questions.map((question) => ({
     ..._USEFUL_VOTES_BASE,
     content_id: question.id,
-  }))
+  }));
 
 const bigBlockOfMarkdown = `# h1 Heading 8-)
 
@@ -331,7 +327,7 @@ Start numbering with offset:
 [link with title](http://nodeca.github.io/pica/demo/ "title text!")
 
 Autoconverted link [https://github.com/nodeca/pica](https://github.com/nodeca/pica) (enable linkify to see)
-`
+`;
 
 const base_news: Partial<newsScalars> = {
   comment_count: 0,
@@ -340,7 +336,7 @@ const base_news: Partial<newsScalars> = {
   previous_slugs: [],
   tenant_id,
   total_views: 0,
-}
+};
 
 const seedNews: Partial<newsScalars>[] = [
   {
@@ -350,7 +346,7 @@ const seedNews: Partial<newsScalars>[] = [
     slug: 'first-news-article',
     summary: 'The first',
   },
-]
+];
 
 const seedLibrary = (): Partial<projectsScalars>[] => [
   ...libraryJson.map((p: any) => ({
@@ -364,12 +360,10 @@ const seedLibrary = (): Partial<projectsScalars>[] => [
     file_link: p.file_link,
     comment_count: p.comments?.length || 0,
   })),
-]
+];
 
-const seedProjectSteps = (
-  projects: projectsScalars[],
-): project_stepsChildInputs => {
-  const steps: any[] = []
+const seedProjectSteps = (projects: projectsScalars[]): project_stepsChildInputs => {
+  const steps: any[] = [];
 
   libraryJson.forEach((p: any, index: number) => {
     if (p.steps && Array.isArray(p.steps)) {
@@ -381,13 +375,13 @@ const seedProjectSteps = (
           description: step.description,
           images: step.images || null,
           video_url: step.video_url || null,
-        })
-      })
+        });
+      });
     }
-  })
+  });
 
-  return steps
-}
+  return steps;
+};
 
 const baseResearch: Partial<researchScalars> = {
   status: 'in-progress',
@@ -395,7 +389,7 @@ const baseResearch: Partial<researchScalars> = {
   tenant_id,
   total_views: 0,
   collaborators: [],
-}
+};
 
 const seedResearch: Partial<researchScalars>[] = [
   {
@@ -404,21 +398,26 @@ const seedResearch: Partial<researchScalars>[] = [
     description: 'This is a super important area to investigate.',
     slug: 'the-first-big-old-research-topic',
   },
-]
+];
 
 const main = async () => {
-  const seed = await createSeedClient()
+  const seed = await createSeedClient();
 
-  await seed.$resetDatabase()
+  await seed.$resetDatabase();
 
   await seed.buckets([
     {
+      id: tenant_id,
       name: tenant_id,
       public: true,
-      allowed_mime_types: [''],
+      allowed_mime_types: [],
     },
-    { name: `${tenant_id}-documents` },
-  ])
+    {
+      id: `${tenant_id}-documents`,
+      name: `${tenant_id}-documents`,
+      allowed_mime_types: [],
+    },
+  ]);
 
   await seed.tenant_settings([
     {
@@ -428,46 +427,42 @@ const main = async () => {
       email_from: 'platform@onearmy.earth',
       site_image:
         'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/precious-plastic/pp-logo.png',
+      site_favicon:
+        'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/precious-plastic/pp-logo.png',
       tenant_id,
     },
-  ])
+  ]);
 
-  const { users } = await seed.users(usersSeed())
+  const { users } = await seed.users(usersSeed());
   // await seed.profile_tags(seedProfileTags())
-  const { profile_types } = await seed.profile_types(seedProfileTypes())
+  const { profile_types } = await seed.profile_types(seedProfileTypes());
 
   const { profiles } = await seed.profiles(
-    (profilesSeed(tenant_id) as any[]).map(
-      (profile: profilesInputs, index) => ({
-        ...profile,
-        auth_id: users[index].id,
-        profile_type: profile_types[0].id,
-      }),
-    ),
-  )
+    (profilesSeed(tenant_id) as any[]).map((profile: profilesInputs, index) => ({
+      ...profile,
+      auth_id: users[index].id,
+      profile_type: profile_types[0].id,
+    })),
+  );
 
-  const { profile_badges } = await seed.profile_badges(seedBadges())
-  await seed.profile_badges_relations(
-    seedBadgesRelations(profiles, profile_badges),
-  )
+  const { profile_badges } = await seed.profile_badges(seedBadges());
+  await seed.profile_badges_relations(seedBadgesRelations(profiles, profile_badges));
 
   // await seed.map_pins(seedMapPins(profiles))
-  const { tags } = await seed.tags(seedTags())
-  const { categories } = await seed.categories(seedCategories())
+  const { tags } = await seed.tags(seedTags());
+  const { categories } = await seed.categories(seedCategories());
 
-  const questionsAcc: questionsScalars[] = []
+  const questionsAcc: questionsScalars[] = [];
 
   for (const profile of profiles) {
     const { questions } = await seed.questions(seedQuestions(profile), {
       connect: { profiles: [profile] },
-    })
-    questionsAcc.push(...questions)
+    });
+    questionsAcc.push(...questions);
   }
 
   for (const profile of profiles) {
-    const questionsExceptMine = questionsAcc.filter(
-      (q) => q.created_by !== profile.id,
-    )
+    const questionsExceptMine = questionsAcc.filter((q) => q.created_by !== profile.id);
 
     // await seed.comments(seedComments(profile, questionsExceptMine), {
     //   connect: { profiles: [profile] },
@@ -475,11 +470,11 @@ const main = async () => {
 
     await seed.subscribers(seedSubscribers(questionsExceptMine), {
       connect: { profiles: [profile] },
-    })
+    });
 
     await seed.useful_votes(seedUsefulVotes(questionsExceptMine), {
       connect: { profiles: [profile] },
-    })
+    });
   }
 
   await seed.news(
@@ -489,7 +484,7 @@ const main = async () => {
       created_by: profiles[0].id,
       tags: [tags[0].id],
     })),
-  )
+  );
 
   const { projects } = await seed.projects(
     seedLibrary().map((item) => ({
@@ -498,9 +493,9 @@ const main = async () => {
       created_by: profiles[0].id,
       tags: [tags[0].name],
     })),
-  )
+  );
 
-  await seed.project_steps(seedProjectSteps(projects))
+  await seed.project_steps(seedProjectSteps(projects));
 
   await seed.research(
     seedResearch.map((item) => ({
@@ -509,9 +504,9 @@ const main = async () => {
       created_by: profiles[0].id,
       tags: [tags[0].id.toString()],
     })),
-  )
+  );
 
-  process.exit()
-}
+  process.exit();
+};
 
-main()
+main();

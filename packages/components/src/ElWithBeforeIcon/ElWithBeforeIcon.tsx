@@ -1,18 +1,19 @@
-import { Box } from 'theme-ui'
+import { Box } from 'theme-ui';
 
-import checkmarkIcon from '../../assets/icons/icon-checkmark.svg'
+import checkmarkIcon from '../../assets/icons/icon-checkmark.svg';
 
-import type { ThemeUIStyleObject } from 'theme-ui'
+import type { JSX } from 'react';
+import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface ElWithBeforeIconProps {
-  children?: React.ReactNode
-  icon: JSX.Element | string
-  size?: number
-  ticked?: boolean
-  contain?: boolean
+  children?: React.ReactNode;
+  icon: JSX.Element | string;
+  size?: number;
+  ticked?: boolean;
+  contain?: boolean;
 }
 
-const DEFAULT_ICON_SIZE = 22
+const DEFAULT_ICON_SIZE = 22;
 
 export const ElWithBeforeIcon = ({
   icon,
@@ -21,9 +22,9 @@ export const ElWithBeforeIcon = ({
   ticked,
   contain,
 }: ElWithBeforeIconProps) => {
-  let after: ThemeUIStyleObject = {}
+  let after: ThemeUIStyleObject = {};
 
-  const iconSize = size || DEFAULT_ICON_SIZE
+  const iconSize = size || DEFAULT_ICON_SIZE;
 
   if (ticked) {
     after = {
@@ -38,7 +39,7 @@ export const ElWithBeforeIcon = ({
 
       backgroundImage: `url("${checkmarkIcon}")`,
       backgroundRepeat: 'no-repeat',
-    }
+    };
   }
 
   return (
@@ -67,5 +68,5 @@ export const ElWithBeforeIcon = ({
     >
       {children}
     </Box>
-  )
-}
+  );
+};

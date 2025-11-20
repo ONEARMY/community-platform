@@ -1,20 +1,20 @@
-import { ImageGallery, LinkifyText, VideoPlayer } from 'oa-components'
+import { ImageGallery, LinkifyText, VideoPlayer } from 'oa-components';
 // eslint-disable-next-line import/no-unresolved
-import { ClientOnly } from 'remix-utils/client-only'
-import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
-import { Box, Card, Flex, Heading, Text } from 'theme-ui'
+import { ClientOnly } from 'remix-utils/client-only';
+import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
+import { Box, Card, Flex, Heading, Text } from 'theme-ui';
 
-import type { ProjectStep } from 'oa-shared'
+import type { ProjectStep } from 'oa-shared';
 
 interface IProps {
-  step: ProjectStep
-  stepindex: number
+  step: ProjectStep;
+  stepindex: number;
 }
 
 const Step = (props: IProps) => {
-  const { stepindex, step } = props
+  const { stepindex, step } = props;
 
-  const displayNumber = stepindex + 1
+  const displayNumber = stepindex + 1;
 
   return (
     <Flex
@@ -81,12 +81,7 @@ const Step = (props: IProps) => {
                 </ClientOnly>
               ) : step.images ? (
                 <ImageGallery
-                  images={
-                    formatImagesForGallery(
-                      step.images,
-                      `Step ${displayNumber}`,
-                    ) as any
-                  }
+                  images={formatImagesForGallery(step.images, `Step ${displayNumber}`) as any}
                 />
               ) : null}
             </Box>
@@ -94,7 +89,7 @@ const Step = (props: IProps) => {
         </Card>
       </Flex>
     </Flex>
-  )
-}
+  );
+};
 
-export default Step
+export default Step;

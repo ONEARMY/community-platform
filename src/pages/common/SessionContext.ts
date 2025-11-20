@@ -1,5 +1,5 @@
-import { createContext } from 'react'
+import { createContext } from 'react';
 
-import type { User } from '@supabase/supabase-js'
+import type { JwtPayload } from '@supabase/supabase-js';
 
-export const SessionContext = createContext<User | null>(null)
+export const SessionContext = createContext<JwtPayload | null>(null);

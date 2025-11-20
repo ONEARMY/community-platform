@@ -1,55 +1,51 @@
-import { Field, Form } from 'react-final-form'
-import { redirect } from '@remix-run/node'
-import { Link, useActionData, useNavigate } from '@remix-run/react'
-import { Button, FieldInput, HeroBanner } from 'oa-components'
-import Main from 'src/pages/common/Layout/Main'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { getReturnUrl } from 'src/utils/redirect.server'
-import { generateTags, mergeMeta } from 'src/utils/seo.utils'
-import { required } from 'src/utils/validators'
-import { Card, Flex, Heading, Label, Text } from 'theme-ui'
+import { Field, Form } from 'react-final-form';
+import { Link, redirect, useActionData, useNavigate } from 'react-router';
+import { Button, FieldInput, HeroBanner } from 'oa-components';
+import Main from 'src/pages/common/Layout/Main';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { getReturnUrl } from 'src/utils/redirect.server';
+import { generateTags, mergeMeta } from 'src/utils/seo.utils';
+import { required } from 'src/utils/validators';
+import { Card, Flex, Heading, Label, Text } from 'theme-ui';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { client } = createSupabaseServerClient(request)
-  const { data } = await client.auth.getUser()
+  const { client } = createSupabaseServerClient(request);
+  const claims = await client.auth.getClaims();
 
-  if (data.user) {
-    return redirect(getReturnUrl(request))
+  if (claims.data?.claims) {
+    return redirect(getReturnUrl(request));
   }
 
-  return null
-}
+  return null;
+};
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const { client, headers } = createSupabaseServerClient(request)
-  const formData = await request.formData()
+  const { client, headers } = createSupabaseServerClient(request);
+  const formData = await request.formData();
 
-  const url = new URL(request.url)
-  const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:'
-  const emailRedirectUrl = `${protocol}//${url.host}/update-password`
+  const url = new URL(request.url);
+  const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
+  const emailRedirectUrl = `${protocol}//${url.host}/update-password`;
 
   await client.auth.resetPasswordForEmail(formData.get('email') as string, {
     redirectTo: emailRedirectUrl,
-  })
+  });
 
   // Always return success and display a generic message, even when the user doesn't exist, for security reasons.
-  return Response.json(
-    { success: true, email: formData.get('email') },
-    { headers },
-  )
-}
+  return Response.json({ success: true, email: formData.get('email') }, { headers });
+};
 
 export const meta = mergeMeta<typeof loader>(() => {
-  const title = `Login - ${import.meta.env.VITE_SITE_NAME}`
+  const title = `Login - ${import.meta.env.VITE_SITE_NAME}`;
 
-  return generateTags(title)
-})
+  return generateTags(title);
+});
 
 export default function Index() {
-  const actionResponse = useActionData<typeof action>()
-  const navigate = useNavigate()
+  const actionResponse: any = useActionData<typeof action>();
+  const navigate = useNavigate();
 
   return (
     <Main style={{ flex: 1 }}>
@@ -88,15 +84,14 @@ export default function Index() {
                             We've sent a message to{' '}
                             <Text
                               sx={{
-                                background:
-                                  'linear-gradient(0deg, #FFE2E1 60%, #FFF 40%)',
+                                background: 'linear-gradient(0deg, #FFE2E1 60%, #FFF 40%)',
                                 paddingX: 1,
                               }}
                             >
                               {actionResponse?.email || 'your email address'}
                             </Text>
-                            . If it's a registered account you will receive an
-                            email with instructions.
+                            . If it's a registered account you will receive an email with
+                            instructions.
                             <br />
                             <br />
                             Please check you inbox (and spam folder).
@@ -110,9 +105,7 @@ export default function Index() {
                         )}
                       </Flex>
 
-                      {actionResponse?.error && (
-                        <Text color="red">{actionResponse?.error}</Text>
-                      )}
+                      {actionResponse?.error && <Text color="red">{actionResponse?.error}</Text>}
 
                       {actionResponse?.success ? (
                         <Button
@@ -161,9 +154,9 @@ export default function Index() {
                 </Flex>
               </Flex>
             </form>
-          )
+          );
         }}
       />
     </Main>
-  )
+  );
 }

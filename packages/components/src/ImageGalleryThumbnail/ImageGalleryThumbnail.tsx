@@ -1,21 +1,21 @@
-import React, { useState } from 'react'
-import styled from '@emotion/styled'
-import { Box, Image as ThemeImage } from 'theme-ui'
+import React, { useState } from 'react';
+import styled from '@emotion/styled';
+import { Box, Image as ThemeImage } from 'theme-ui';
 
-import { Loader } from '../Loader/Loader'
+import { Loader } from '../Loader/Loader';
 
-import type { CardProps } from 'theme-ui'
+import type { CardProps } from 'theme-ui';
 
-import 'photoswipe/style.css'
+import 'photoswipe/style.css';
 
 export interface ImageGalleryThumbnailProps {
-  setActiveIndex: (index: number) => void
-  allowPortrait: boolean
-  activeImageIndex: number
-  thumbnailUrl: string
-  index: number
-  alt?: string
-  name?: string
+  setActiveIndex: (index: number) => void;
+  allowPortrait: boolean;
+  activeImageIndex: number;
+  thumbnailUrl: string;
+  index: number;
+  alt?: string;
+  name?: string;
 }
 
 export const ThumbCard = styled<CardProps & React.ComponentProps<any>>(Box)`
@@ -26,16 +26,14 @@ export const ThumbCard = styled<CardProps & React.ComponentProps<any>>(Box)`
   &:hover {
     transform: translateY(-5px);
   }
-`
+`;
 
 export const ImageGalleryThumbnail = (props: ImageGalleryThumbnailProps) => {
-  const [thumbnailLoaded, setThumbnailLoaded] = useState<boolean>(false)
+  const [thumbnailLoaded, setThumbnailLoaded] = useState<boolean>(false);
 
   return (
     <>
-      {!thumbnailLoaded && (
-        <Loader sx={{ mb: 3, mt: 4, width: 100, height: 67 }} />
-      )}
+      {!thumbnailLoaded && <Loader sx={{ mb: 3, mt: 4, width: 100, height: 67 }} />}
       <ThumbCard
         data-cy="thumbnail"
         data-testid="thumbnail"
@@ -61,5 +59,5 @@ export const ImageGalleryThumbnail = (props: ImageGalleryThumbnailProps) => {
         />
       </ThumbCard>
     </>
-  )
-}
+  );
+};

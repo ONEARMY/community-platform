@@ -300,7 +300,7 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "banner_pkey",
+          "name": "banners_pkey",
           "fields": ["id"],
           "nullNotDistinct": false
         }
@@ -2650,12 +2650,12 @@
           "maxLength": null
         },
         {
-          "name": "profiles_public_messages_sender_idToprofiles",
+          "name": "profiles_public_messages_receiver_idToprofiles",
           "type": "profiles",
-          "isRequired": true,
+          "isRequired": false,
           "kind": "object",
-          "relationName": "public_messages_sender_idToprofiles",
-          "relationFromFields": ["sender_id"],
+          "relationName": "public_messages_receiver_idToprofiles",
+          "relationFromFields": ["receiver_id"],
           "relationToFields": ["id"],
           "isList": false,
           "isId": false,
@@ -3205,6 +3205,20 @@
           "name": "web_authn_aaguid",
           "columnName": "web_authn_aaguid",
           "type": "uuid",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.mfa_factors.last_webauthn_challenge_data",
+          "name": "last_webauthn_challenge_data",
+          "columnName": "last_webauthn_challenge_data",
+          "type": "jsonb",
           "isRequired": false,
           "kind": "scalar",
           "isList": false,
@@ -4114,6 +4128,282 @@
         }
       ]
     },
+    "oauth_authorizations": {
+      "id": "auth.oauth_authorizations",
+      "schemaName": "auth",
+      "tableName": "oauth_authorizations",
+      "fields": [
+        {
+          "id": "auth.oauth_authorizations.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_authorizations.authorization_id",
+          "name": "authorization_id",
+          "columnName": "authorization_id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_authorizations.client_id",
+          "name": "client_id",
+          "columnName": "client_id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_authorizations.user_id",
+          "name": "user_id",
+          "columnName": "user_id",
+          "type": "uuid",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_authorizations.redirect_uri",
+          "name": "redirect_uri",
+          "columnName": "redirect_uri",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_authorizations.scope",
+          "name": "scope",
+          "columnName": "scope",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_authorizations.state",
+          "name": "state",
+          "columnName": "state",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_authorizations.resource",
+          "name": "resource",
+          "columnName": "resource",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_authorizations.code_challenge",
+          "name": "code_challenge",
+          "columnName": "code_challenge",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_authorizations.code_challenge_method",
+          "name": "code_challenge_method",
+          "columnName": "code_challenge_method",
+          "type": "code_challenge_method",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_authorizations.response_type",
+          "name": "response_type",
+          "columnName": "response_type",
+          "type": "oauth_response_type",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_authorizations.status",
+          "name": "status",
+          "columnName": "status",
+          "type": "oauth_authorization_status",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_authorizations.authorization_code",
+          "name": "authorization_code",
+          "columnName": "authorization_code",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_authorizations.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_authorizations.expires_at",
+          "name": "expires_at",
+          "columnName": "expires_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_authorizations.approved_at",
+          "name": "approved_at",
+          "columnName": "approved_at",
+          "type": "timestamptz",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "oauth_clients",
+          "type": "oauth_clients",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "oauth_authorizationsTooauth_clients",
+          "relationFromFields": ["client_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "users",
+          "type": "users",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "oauth_authorizationsTousers",
+          "relationFromFields": ["user_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "oauth_authorizations_authorization_code_key",
+          "fields": ["authorization_code"],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "oauth_authorizations_authorization_id_key",
+          "fields": ["authorization_id"],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "oauth_authorizations_pkey",
+          "fields": ["id"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
     "oauth_clients": {
       "id": "auth.oauth_clients",
       "schemaName": "auth",
@@ -4134,25 +4424,11 @@
           "maxLength": null
         },
         {
-          "id": "auth.oauth_clients.client_id",
-          "name": "client_id",
-          "columnName": "client_id",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "auth.oauth_clients.client_secret_hash",
           "name": "client_secret_hash",
           "columnName": "client_secret_hash",
           "type": "text",
-          "isRequired": true,
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -4286,17 +4562,199 @@
           "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
+        },
+        {
+          "id": "auth.oauth_clients.client_type",
+          "name": "client_type",
+          "columnName": "client_type",
+          "type": "oauth_client_type",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "oauth_authorizations",
+          "type": "oauth_authorizations",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "oauth_authorizationsTooauth_clients",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "oauth_consents",
+          "type": "oauth_consents",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "oauth_consentsTooauth_clients",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "sessions",
+          "type": "sessions",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "sessionsTooauth_clients",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
         }
       ],
       "uniqueConstraints": [
         {
-          "name": "oauth_clients_client_id_key",
-          "fields": ["client_id"],
+          "name": "oauth_clients_pkey",
+          "fields": ["id"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "oauth_consents": {
+      "id": "auth.oauth_consents",
+      "schemaName": "auth",
+      "tableName": "oauth_consents",
+      "fields": [
+        {
+          "id": "auth.oauth_consents.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_consents.user_id",
+          "name": "user_id",
+          "columnName": "user_id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_consents.client_id",
+          "name": "client_id",
+          "columnName": "client_id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_consents.scopes",
+          "name": "scopes",
+          "columnName": "scopes",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_consents.granted_at",
+          "name": "granted_at",
+          "columnName": "granted_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.oauth_consents.revoked_at",
+          "name": "revoked_at",
+          "columnName": "revoked_at",
+          "type": "timestamptz",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "oauth_clients",
+          "type": "oauth_clients",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "oauth_consentsTooauth_clients",
+          "relationFromFields": ["client_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "users",
+          "type": "users",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "oauth_consentsTousers",
+          "relationFromFields": ["user_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "oauth_consents_pkey",
+          "fields": ["id"],
           "nullNotDistinct": false
         },
         {
-          "name": "oauth_clients_pkey",
-          "fields": ["id"],
+          "name": "oauth_consents_user_client_unique",
+          "fields": ["client_id", "user_id"],
           "nullNotDistinct": false
         }
       ]
@@ -5021,6 +5479,20 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.profile_badges_relations.created_at",
+          "name": "created_at",
+          "columnName": "created_at",
+          "type": "timestamptz",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
           "isId": false,
           "maxLength": null
         },
@@ -5853,11 +6325,11 @@
           "hasDefaultValue": false
         },
         {
-          "name": "public_messages_public_messages_sender_idToprofiles",
+          "name": "public_messages_public_messages_receiver_idToprofiles",
           "type": "public_messages",
           "isRequired": false,
           "kind": "object",
-          "relationName": "public_messages_sender_idToprofiles",
+          "relationName": "public_messages_receiver_idToprofiles",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -6946,7 +7418,7 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "question_pkey",
+          "name": "questions_pkey",
           "fields": ["id"],
           "nullNotDistinct": false
         },
@@ -7738,7 +8210,7 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "research_update_pkey",
+          "name": "research_updates_pkey",
           "fields": ["id"],
           "nullNotDistinct": false
         }
@@ -8905,6 +9377,62 @@
           "maxLength": null
         },
         {
+          "id": "auth.sessions.oauth_client_id",
+          "name": "oauth_client_id",
+          "columnName": "oauth_client_id",
+          "type": "uuid",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.sessions.refresh_token_hmac_key",
+          "name": "refresh_token_hmac_key",
+          "columnName": "refresh_token_hmac_key",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "auth.sessions.refresh_token_counter",
+          "name": "refresh_token_counter",
+          "columnName": "refresh_token_counter",
+          "type": "int8",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "oauth_clients",
+          "type": "oauth_clients",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "sessionsTooauth_clients",
+          "relationFromFields": ["oauth_client_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "users",
           "type": "users",
           "isRequired": true,
@@ -9624,6 +10152,20 @@
           "id": "public.tenant_settings.site_image",
           "name": "site_image",
           "columnName": "site_image",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.tenant_settings.site_favicon",
+          "name": "site_favicon",
+          "columnName": "site_favicon",
           "type": "text",
           "isRequired": false,
           "kind": "scalar",
@@ -10591,6 +11133,34 @@
           "hasDefaultValue": false
         },
         {
+          "name": "oauth_authorizations",
+          "type": "oauth_authorizations",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "oauth_authorizationsTousers",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "oauth_consents",
+          "type": "oauth_consents",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "oauth_consentsTousers",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "one_time_tokens",
           "type": "one_time_tokens",
           "isRequired": false,
@@ -10728,6 +11298,34 @@
         }
       ]
     },
+    "oauth_authorization_status": {
+      "schemaName": "auth",
+      "values": [
+        {
+          "name": "approved"
+        },
+        {
+          "name": "denied"
+        },
+        {
+          "name": "expired"
+        },
+        {
+          "name": "pending"
+        }
+      ]
+    },
+    "oauth_client_type": {
+      "schemaName": "auth",
+      "values": [
+        {
+          "name": "confidential"
+        },
+        {
+          "name": "public"
+        }
+      ]
+    },
     "oauth_registration_type": {
       "schemaName": "auth",
       "values": [
@@ -10736,6 +11334,14 @@
         },
         {
           "name": "manual"
+        }
+      ]
+    },
+    "oauth_response_type": {
+      "schemaName": "auth",
+      "values": [
+        {
+          "name": "code"
         }
       ]
     },
@@ -10834,6 +11440,9 @@
     "content_types": {
       "schemaName": "public",
       "values": [
+        {
+          "name": "comments"
+        },
         {
           "name": "news"
         },

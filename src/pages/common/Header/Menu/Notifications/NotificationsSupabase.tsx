@@ -1,40 +1,35 @@
-import { useContext, useState } from 'react'
-import {
-  Icon,
-  NotificationListSupabase,
-  NotificationsModal,
-} from 'oa-components'
-import { NotificationsContext } from 'src/pages/common/NotificationsContext'
-import { Box } from 'theme-ui'
+import { useContext, useState } from 'react';
+import { Icon, NotificationListSupabase, NotificationsModal } from 'oa-components';
+import { NotificationsContext } from 'src/pages/common/NotificationsContext';
+import { Box } from 'theme-ui';
 
 interface IProps {
-  device: 'desktop' | 'mobile'
+  device: 'desktop' | 'mobile';
 }
 
 export const NotificationsSupabase = ({ device }: IProps) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { notifications, isUpdatingNotifications, updateNotifications } =
-    useContext(NotificationsContext)
+    useContext(NotificationsContext);
 
   if (!notifications === undefined) {
-    return <></>
+    return <></>;
   }
 
   const markAllRead = async () => {
-    await fetch(`/api/notifications/all/read`, { method: 'POST' })
-    updateNotifications && (await updateNotifications())
-  }
+    await fetch(`/api/notifications/all/read`, { method: 'POST' });
+    updateNotifications && (await updateNotifications());
+  };
 
   const markRead = async (id: number) => {
-    await fetch(`/api/notifications/${id}/read`, { method: 'POST' })
-    updateNotifications && (await updateNotifications())
-  }
+    await fetch(`/api/notifications/${id}/read`, { method: 'POST' });
+    updateNotifications && (await updateNotifications());
+  };
 
   const hasNewNotifications =
-    notifications &&
-    notifications?.filter(({ isRead }) => isRead === false).length > 0
+    notifications && notifications?.filter(({ isRead }) => isRead === false).length > 0;
 
-  const onClick = () => setIsOpen(!isOpen)
+  const onClick = () => setIsOpen(!isOpen);
 
   const iconProps = {
     onClick,
@@ -45,23 +40,15 @@ export const NotificationsSupabase = ({ device }: IProps) => {
         borderRadius: 99,
       },
     },
-  }
+  };
 
   return (
     <Box data-cy={`NotificationsSupabase-${device}`}>
       {!hasNewNotifications && (
-        <Icon
-          data-cy="notifications-no-new-messages"
-          glyph="megaphone-inactive"
-          {...iconProps}
-        />
+        <Icon data-cy="notifications-no-new-messages" glyph="megaphone-inactive" {...iconProps} />
       )}
       {hasNewNotifications && (
-        <Icon
-          data-cy="notifications-new-messages"
-          glyph="megaphone-active"
-          {...iconProps}
-        />
+        <Icon data-cy="notifications-new-messages" glyph="megaphone-active" {...iconProps} />
       )}
       <NotificationsModal isOpen={isOpen}>
         <NotificationListSupabase
@@ -73,5 +60,5 @@ export const NotificationsSupabase = ({ device }: IProps) => {
         />
       </NotificationsModal>
     </Box>
-  )
-}
+  );
+};

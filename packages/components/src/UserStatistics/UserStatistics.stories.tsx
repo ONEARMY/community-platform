@@ -1,17 +1,15 @@
-import { UserStatistics } from './UserStatistics'
+import { UserStatistics } from './UserStatistics';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Layout/UserStatistics',
   component: UserStatistics,
-} as Meta<typeof UserStatistics>
+} as Meta<typeof UserStatistics>;
 
-const Template: StoryFn<typeof UserStatistics> = (args) => (
-  <UserStatistics {...args} />
-)
+const Template: StoryFn<typeof UserStatistics> = (args) => <UserStatistics {...args} />;
 
-export const Default = Template.bind({})
+export const Default = Template.bind({});
 Default.args = {
   profile: {
     country: 'Greenland',
@@ -40,4 +38,4 @@ Default.args = {
   libraryCount: 10,
   usefulCount: 20,
   researchCount: 2,
-}
+};

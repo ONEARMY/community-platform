@@ -1,10 +1,10 @@
-import { commonStyles } from 'oa-themes'
-import { Flex } from 'theme-ui'
+import { commonStyles } from 'oa-themes';
+import { Flex } from 'theme-ui';
 
-import { Button } from '../Button/Button'
-import { Icon } from '../Icon/Icon'
+import { Button } from '../Button/Button';
+import { Icon } from '../Icon/Icon';
 
-import type { HideProp } from './props'
+import type { HideProp } from './props';
 
 const ContactSpaceButton = ({ hide }: HideProp) => (
   <Button
@@ -17,7 +17,7 @@ const ContactSpaceButton = ({ hide }: HideProp) => (
       Contact the space
     </Flex>
   </Button>
-)
+);
 
 export const VisitorModalFooter = ({ hide }: HideProp) => (
   <Flex
@@ -29,4 +29,4 @@ export const VisitorModalFooter = ({ hide }: HideProp) => (
   >
     <ContactSpaceButton hide={hide} />
   </Flex>
-)
+);

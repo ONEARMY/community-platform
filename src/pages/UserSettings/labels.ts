@@ -1,4 +1,4 @@
-import type { ILabels } from 'src/common/Form/types'
+import type { ILabels } from 'src/common/Form/types';
 
 export const buttons = {
   changeEmail: 'Change email',
@@ -28,7 +28,7 @@ export const buttons = {
   submit: 'Submit',
   submitNewEmail: 'Save new email address',
   submitNewPassword: 'Save new password',
-}
+};
 
 export const fields: ILabels = {
   activities: {
@@ -52,8 +52,7 @@ export const fields: ILabels = {
     title: 'Add profile cover image(s)',
   },
   userImage: {
-    description:
-      'Visible on your profile and comments, best to upload as a square image.',
+    description: 'Visible on your profile and comments, best to upload as a square image.',
     title: 'Add an avatar',
   },
   deleteAccount: {
@@ -62,15 +61,13 @@ export const fields: ILabels = {
   },
   displayName: {
     title: 'Display Name',
-    description:
-      'Shown on your profile page. You can use spaces and everything!',
+    description: 'Shown on your profile page. You can use spaces and everything!',
   },
   email: {
     title: 'Current email address',
   },
   emailNotifications: {
-    description:
-      "We can send you emails with all the notifications you've missed.",
+    description: "We can send you emails with all the notifications you've missed.",
     title: 'Email notifications',
   },
   impact: {
@@ -112,8 +109,7 @@ export const fields: ILabels = {
   },
   userName: {
     title: 'Username',
-    description:
-      "You set this when you signed up and it can't be changed now. Sorry.",
+    description: "You set this when you signed up and it can't be changed now. Sorry.",
   },
   tags: {
     description: 'What are your main activities? (choose max five)',
@@ -132,13 +128,13 @@ export const fields: ILabels = {
     description:
       'This will be visible in your public profile. You can specify the opening hours, conditions or other details in the field below',
   },
-}
+};
 
 export const form = {
   defaultError: 'Make sure this field is filled correctly',
   saveSuccess: 'Yay! Impact data saved.',
   saveNotificationPreferences: 'Whoop. Preferences updated.',
-}
+};
 
 export const headings = {
   accountSettings: 'Account settings',
@@ -154,8 +150,7 @@ export const headings = {
       'Add yourself to the map as an individual who wants to get started. Find local community members and meetup to join forces and collaborate.',
     addPinTitle: 'Add yourself to the map',
     yourPinTitle: 'Your map pin',
-    existingPinLabel:
-      'The map pin you registered has the following description:',
+    existingPinLabel: 'The map pin you registered has the following description:',
   },
   visitors: 'Visitors',
   workspace: {
@@ -163,20 +158,19 @@ export const headings = {
       'In order to have your pin accepted on our map you have to collect at least 6 stars in the Ally Checklist. Learn more about the Community Program and how you can join.',
     title: 'Your map pin',
   },
-}
+};
 
 export const notificationForm = {
   loading: 'Loading your notification setting',
   successfulSave: 'Notification setting saved successfully - whoop',
-}
+};
 
 export const mapForm = {
   confirmDeletePin:
     'If you delete your location now, adding a new map pin in the future might need approving.',
   descriptionMember:
     "Add yourself to the map with a 'want to get started' pin so people can find you, reach out and collaborate. Make sure to add some contact details to your profile!",
-  descriptionSpace:
-    "Map pins undergo moderator's approval which might take several days.",
+  descriptionSpace: "Map pins undergo moderator's approval which might take several days.",
   loading: 'Loading your map pin',
   locationLabel: 'Your current map pin is here:',
   needsChanges:
@@ -184,9 +178,9 @@ export const mapForm = {
   noLocationLabel: 'No map pin currently saved',
   successfulSave: 'Map pin saved successfully - whoop',
   successfulDelete: 'Location data removed',
-}
+};
 
-export const missingData = 'Do you have impact data for this year?'
+export const missingData = 'Do you have impact data for this year?';
 
 export const inCompleteProfile =
-  'In order to add yourself to the map, you need to complete your profile'
+  'In order to add yourself to the map, you need to complete your profile';

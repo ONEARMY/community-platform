@@ -1,12 +1,12 @@
-import { useContext } from 'react'
-import styled from '@emotion/styled'
-import { NavLink } from '@remix-run/react'
-import MenuCurrent from 'src/assets/images/menu-current.svg'
-import { getSupportedModules } from 'src/modules'
-import { getAvailablePageList } from 'src/pages/PageList'
-import { Flex } from 'theme-ui'
+import { useContext } from 'react';
+import { NavLink } from 'react-router';
+import styled from '@emotion/styled';
+import MenuCurrent from 'src/assets/images/menu-current.svg';
+import { getSupportedModules } from 'src/modules';
+import { getAvailablePageList } from 'src/pages/PageList';
+import { Flex } from 'theme-ui';
 
-import { EnvironmentContext } from '../../EnvironmentContext'
+import { EnvironmentContext } from '../../EnvironmentContext';
 
 const MenuLink = styled(NavLink)`
   padding: 0px ${(props) => props.theme.space[4]}px;
@@ -37,16 +37,14 @@ const MenuLink = styled(NavLink)`
       pointer-events: none;
     }
   }
-`
+`;
 
 export const MenuDesktop = () => {
-  const env = useContext(EnvironmentContext)
+  const env = useContext(EnvironmentContext);
 
   return (
     <Flex sx={{ alignItems: 'center', width: '100%' }}>
-      {getAvailablePageList(
-        getSupportedModules(env?.VITE_SUPPORTED_MODULES || ''),
-      ).map((page) => (
+      {getAvailablePageList(getSupportedModules(env?.VITE_SUPPORTED_MODULES || '')).map((page) => (
         <Flex key={page.path}>
           <MenuLink to={page.path} data-cy="page-link">
             <Flex>{page.title}</Flex>
@@ -54,7 +52,7 @@ export const MenuDesktop = () => {
         </Flex>
       ))}
     </Flex>
-  )
-}
+  );
+};
 
-export default MenuDesktop
+export default MenuDesktop;

@@ -1,22 +1,20 @@
-import { ClientOnly } from 'remix-utils/client-only'
-import Main from 'src/pages/common/Layout/Main'
-import { SettingsPage } from 'src/pages/UserSettings/SettingsPage.client'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { redirectServiceServer } from 'src/services/redirectService.server'
+import { ClientOnly } from 'remix-utils/client-only';
+import Main from 'src/pages/common/Layout/Main';
+import { SettingsPage } from 'src/pages/UserSettings/SettingsPage.client';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { redirectServiceServer } from 'src/services/redirectService.server';
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const { client, headers } = createSupabaseServerClient(request)
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const { client, headers } = createSupabaseServerClient(request);
+  const claims = await client.auth.getClaims();
 
-  if (!user) {
-    return redirectServiceServer.redirectSignIn('/settings', headers)
+  if (!claims.data?.claims) {
+    return redirectServiceServer.redirectSignIn('/settings', headers);
   }
 
-  return null
+  return null;
 }
 
 export default function Index() {
@@ -24,5 +22,5 @@ export default function Index() {
     <Main style={{ flex: 1 }}>
       <ClientOnly fallback={<></>}>{() => <SettingsPage />}</ClientOnly>
     </Main>
-  )
+  );
 }

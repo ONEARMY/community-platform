@@ -1,55 +1,53 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Box, Button } from 'theme-ui'
+import { useEffect, useMemo, useState } from 'react';
+import { Box, Button } from 'theme-ui';
 
-import { CommentSectionSupabase } from './CommentSectionSupabase'
+import { CommentSectionSupabase } from './CommentSectionSupabase';
 
-import type { ResearchUpdate } from 'oa-shared'
+import type { ResearchUpdate } from 'oa-shared';
 
 type Props = {
-  authors: number[]
-  open: boolean
-  total: number
-  researchUpdate: ResearchUpdate
-}
+  authors: number[];
+  open: boolean;
+  total: number;
+  researchUpdate: ResearchUpdate;
+};
 
 const CollapsableCommentSection = (props: Props) => {
-  const { authors, open, total, researchUpdate } = props
+  const { authors, open, total, researchUpdate } = props;
 
-  const [isOpen, setIsOpen] = useState(() => open || false)
+  const [isOpen, setIsOpen] = useState(() => open || false);
 
   const buttonText = useMemo(() => {
     if (!isOpen) {
       switch (total) {
         case 0:
-          return 'Start a discussion'
+          return 'Start a discussion';
         case 1:
-          return 'View 1 comment'
+          return 'View 1 comment';
         default:
-          return `View ${total} comments`
+          return `View ${total} comments`;
       }
     }
 
-    return 'Collapse Comments'
-  }, [isOpen])
+    return 'Collapse Comments';
+  }, [isOpen]);
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search)
-    const hash = location.hash
+    const searchParams = new URLSearchParams(location.search);
+    const hash = location.hash;
 
     // Check if there's an update_N parameter and extract the ID after the underscore
-    const updateParam = Array.from(searchParams.keys()).find((key) =>
-      key.startsWith('update_'),
-    )
+    const updateParam = Array.from(searchParams.keys()).find((key) => key.startsWith('update_'));
     const hasMatchingUpdate =
-      updateParam && updateParam.split('_')[1] === researchUpdate.id.toString()
+      updateParam && updateParam.split('_')[1] === researchUpdate.id.toString();
 
     // Check if there's a #comment:N hash
-    const hasCommentHash = hash.startsWith('#comment:')
+    const hasCommentHash = hash.startsWith('#comment:');
 
     if (hasMatchingUpdate && hasCommentHash) {
-      setIsOpen(true)
+      setIsOpen(true);
     }
-  }, [location?.search, location?.hash, researchUpdate.id])
+  }, [location?.search, location?.hash, researchUpdate.id]);
 
   return (
     <Box
@@ -87,7 +85,7 @@ const CollapsableCommentSection = (props: Props) => {
         />
       )}
     </Box>
-  )
-}
+  );
+};
 
-export default CollapsableCommentSection
+export default CollapsableCommentSection;

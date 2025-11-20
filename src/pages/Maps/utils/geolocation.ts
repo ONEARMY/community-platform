@@ -7,14 +7,14 @@ export const GetLocation = async (): Promise<GeolocationPosition> => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          resolve(position)
+          resolve(position);
         },
         (error) => {
-          reject(error.message)
+          reject(error.message);
         },
-      )
+      );
     } else {
-      reject('Geolocation not supported')
+      reject('Geolocation not supported');
     }
-  })
-}
+  });
+};

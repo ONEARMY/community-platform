@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react'
-import { Flex } from 'theme-ui'
+import { useEffect, useState } from 'react';
+import { Flex } from 'theme-ui';
 
-import type { IConvertedFileMeta } from 'oa-shared'
+import type { IConvertedFileMeta } from 'oa-shared';
 
 interface IProps {
-  file: File
-  onImgConverted: (meta: IConvertedFileMeta) => void
+  file: File;
+  onImgConverted: (meta: IConvertedFileMeta) => void;
 }
 interface IState {
-  convertedFile?: IConvertedFileMeta
+  convertedFile?: IConvertedFileMeta;
 }
 
 const _generateFileMeta = (c: File) => {
@@ -17,36 +17,36 @@ const _generateFileMeta = (c: File) => {
     photoData: c,
     objectUrl: URL.createObjectURL(c),
     type: c.type,
-  }
-  return meta
-}
+  };
+  return meta;
+};
 
 export const ImageConverter = (props: IProps) => {
-  const [state, setState] = useState<IState>({})
-  const { convertedFile } = state
+  const [state, setState] = useState<IState>({});
+  const { convertedFile } = state;
 
   useEffect(() => {
-    compressFiles(props.file)
+    compressFiles(props.file);
 
     return () => {
       if (state.convertedFile) {
-        URL.revokeObjectURL(state.convertedFile.objectUrl)
+        URL.revokeObjectURL(state.convertedFile.objectUrl);
       }
-    }
-  }, [])
+    };
+  }, []);
 
   const compressFiles = async (file: File) => {
     // by default compress takes an array and gives back an array. We only want to handle a single image
-    const convertedMeta = _generateFileMeta(file)
+    const convertedMeta = _generateFileMeta(file);
     setState((state) => ({
       ...state,
       convertedFile: convertedMeta,
-    }))
-    props.onImgConverted(convertedMeta)
-  }
+    }));
+    props.onImgConverted(convertedMeta);
+  };
 
   if (!convertedFile) {
-    return null
+    return null;
   }
 
   return (
@@ -66,25 +66,20 @@ export const ImageConverter = (props: IProps) => {
       }}
       id="preview"
     />
-  )
-}
+  );
+};
 
 /** Insert a base-16 timestamp into a file's name and return it
  */
 export const addTimestampToFileName = (str: string): string => {
   // Return early for malformed input type 🙈
-  if (typeof str !== 'string') return str
+  if (typeof str !== 'string') return str;
 
-  const indexOfDot = str.lastIndexOf('.')
+  const indexOfDot = str.lastIndexOf('.');
 
   // Return early if the filename doesn't contain an extension
-  if (indexOfDot <= 0) return str
+  if (indexOfDot <= 0) return str;
 
   // inserts "-[current time in base-16]" right before the file type extension
-  return (
-    str.slice(0, indexOfDot) +
-    '-' +
-    Date.now().toString(16) +
-    str.slice(indexOfDot)
-  )
-}
+  return str.slice(0, indexOfDot) + '-' + Date.now().toString(16) + str.slice(indexOfDot);
+};

@@ -1,8 +1,8 @@
-import { Flex, Heading } from 'theme-ui'
+import { Flex, Heading } from 'theme-ui';
 
-import { MoreContainer } from './MoreContainer'
+import { MoreContainer } from './MoreContainer';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Layout/MoreContainer',
@@ -17,7 +17,7 @@ export default {
       ],
     },
   },
-} as Meta<typeof MoreContainer>
+} as Meta<typeof MoreContainer>;
 
 export const Default: StoryFn<typeof MoreContainer> = () => (
   <MoreContainer m={'0 auto'} pt={60} pb={90}>
@@ -32,4 +32,4 @@ export const Default: StoryFn<typeof MoreContainer> = () => (
       <>Some content</>
     </Flex>
   </MoreContainer>
-)
+);

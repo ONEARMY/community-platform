@@ -1,18 +1,18 @@
-import { Text } from 'theme-ui'
+import { Text } from 'theme-ui';
 
-import type { ThemeUIStyleObject } from 'theme-ui'
+import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface ITag {
-  label: string
+  label: string;
 }
 
 export interface Props {
-  tag: ITag
-  sx?: ThemeUIStyleObject | undefined
+  tag: ITag;
+  sx?: ThemeUIStyleObject | undefined;
 }
 
 export const Tag = ({ tag, sx }: Props) => {
-  if (!tag || !tag.label) return null
+  if (!tag || !tag.label) return null;
 
   return (
     <Text
@@ -27,5 +27,5 @@ export const Tag = ({ tag, sx }: Props) => {
     >
       {tag.label}
     </Text>
-  )
-}
+  );
+};

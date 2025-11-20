@@ -1,2 +1,2 @@
-export { ResearchPostingGuidelines } from './ResearchPostingGuidelines'
-export { ResearchUpdateForm } from './ResearchUpdateForm'
+export { ResearchPostingGuidelines } from './ResearchPostingGuidelines';
+export { ResearchUpdateForm } from './ResearchUpdateForm';

@@ -1,16 +1,13 @@
-import { FileInput } from './FileInput/FileInput'
+import { FileInput } from './FileInput/FileInput';
 
-import type { FieldProps } from './types'
+import type { FieldProps } from './types';
 
-export const FileInputField = ({
-  input,
-  ...rest
-}: FieldProps & { admin: boolean }) => (
+export const FileInputField = ({ input, ...rest }: FieldProps & { admin: boolean }) => (
   <FileInput
     {...rest}
     onFilesChange={(files) => {
-      input.onChange(files)
-      input.onBlur()
+      input.onChange(files);
+      input.onBlur();
     }}
   />
-)
+);

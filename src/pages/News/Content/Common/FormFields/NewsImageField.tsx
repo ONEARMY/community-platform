@@ -1,27 +1,27 @@
-import { Field } from 'react-final-form'
-import styled from '@emotion/styled'
-import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components'
-import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { ImageInputField } from 'src/common/Form/ImageInput.field'
-import { FormFieldWrapper } from 'src/pages/common/FormFields'
-import { fields } from 'src/pages/News/labels'
-import { COMPARISONS } from 'src/utils/comparisons'
-import { Image as ImageComponent } from 'theme-ui'
+import { Field } from 'react-final-form';
+import styled from '@emotion/styled';
+import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components';
+import { FieldContainer } from 'src/common/Form/FieldContainer';
+import { ImageInputField } from 'src/common/Form/ImageInput.field';
+import { FormFieldWrapper } from 'src/pages/common/FormFields';
+import { fields } from 'src/pages/News/labels';
+import { COMPARISONS } from 'src/utils/comparisons';
+import { Image as ImageComponent } from 'theme-ui';
 
-import type { Image } from 'oa-shared'
+import type { Image } from 'oa-shared';
 
 const ImageInputFieldWrapper = styled.div`
   width: 620px;
   height: 310px;
-`
+`;
 
 interface IProps {
-  existingHeroImage: Image | null
-  removeExistingImage: () => void
+  existingHeroImage: Image | null;
+  removeExistingImage: () => void;
 }
 
 export const NewsImageField = (props: IProps) => {
-  const { existingHeroImage, removeExistingImage } = props
+  const { existingHeroImage, removeExistingImage } = props;
 
   return (
     <FormFieldWrapper
@@ -44,10 +44,7 @@ export const NewsImageField = (props: IProps) => {
         </ImageInputFieldWrapper>
       )}
       {existingHeroImage && (
-        <ImageInputFieldWrapper
-          key="existingHeroImage"
-          data-cy="existingHeroImage"
-        >
+        <ImageInputFieldWrapper key="existingHeroImage" data-cy="existingHeroImage">
           <FieldContainer
             style={{
               height: '100%',
@@ -63,5 +60,5 @@ export const NewsImageField = (props: IProps) => {
         </ImageInputFieldWrapper>
       )}
     </FormFieldWrapper>
-  )
-}
+  );
+};

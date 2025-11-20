@@ -1,11 +1,11 @@
-import { InformationTooltip } from './InformationTooltip'
+import { InformationTooltip } from './InformationTooltip';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Components/Information',
   component: InformationTooltip,
-} as Meta<typeof InformationTooltip>
+} as Meta<typeof InformationTooltip>;
 
 export const Default: StoryFn<typeof InformationTooltip> = () => (
   <InformationTooltip
@@ -13,4 +13,4 @@ export const Default: StoryFn<typeof InformationTooltip> = () => (
     tooltip="Just a little wrapper for an icon/tooltip"
     size={30}
   />
-)
+);

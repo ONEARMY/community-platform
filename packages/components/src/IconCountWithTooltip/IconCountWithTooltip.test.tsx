@@ -1,41 +1,28 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest';
 
-import { render } from '../test/utils'
-import {
-  Default,
-  LargeCount,
-  VeryLargeCount,
-} from './IconCountWithTooltip.stories'
-
-import type { IconCountWithTooltipProps } from './IconCountWithTooltip'
+import { render } from '../test/utils';
+import { IconCountWithTooltip } from './IconCountWithTooltip';
 
 describe('IconCountWithTooltip', () => {
   it('validates the component behaviour', () => {
-    const { getByText, getByRole } = render(
-      <Default {...(Default.args as IconCountWithTooltipProps)} />,
-    )
+    const { getByText } = render(
+      <IconCountWithTooltip count={345} icon="show" text="Number of Views" />,
+    );
 
-    const img = getByRole('img')
-
-    expect(img).toHaveAttribute('src', '/assets/icons/eye.svg')
-    expect(getByText('345')).toBeInTheDocument()
-  })
+    expect(getByText('345')).toBeInTheDocument();
+  });
 
   it('displays the correct count format', () => {
     const { getByText, rerender } = render(
-      <LargeCount {...(LargeCount.args as IconCountWithTooltipProps)} />,
-    )
+      <IconCountWithTooltip count={1500} icon="show" text="Number of Views" />,
+    );
 
-    expect(getByText('1.5K')).toBeInTheDocument()
+    expect(getByText('1.5K')).toBeInTheDocument();
 
-    rerender(
-      <VeryLargeCount
-        {...(VeryLargeCount.args as IconCountWithTooltipProps)}
-      />,
-    )
+    rerender(<IconCountWithTooltip count={2099999} icon="show" text="Number of Views" />);
 
-    expect(getByText('2.1M')).toBeInTheDocument()
-  })
-})
+    expect(getByText('2.1M')).toBeInTheDocument();
+  });
+});

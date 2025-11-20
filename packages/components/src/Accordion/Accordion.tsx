@@ -1,20 +1,20 @@
-import { useState } from 'react'
-import { Flex, Heading, Text } from 'theme-ui'
+import { useState } from 'react';
+import { Flex, Heading, Text } from 'theme-ui';
 
-import { Icon } from '../Icon/Icon'
+import { Icon } from '../Icon/Icon';
 
-import type { ThemeUIStyleObject } from 'theme-ui'
+import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface IProps {
-  children: React.ReactNode
-  sx?: ThemeUIStyleObject | undefined
-  title: string
-  subtitle?: string
+  children: React.ReactNode;
+  sx?: ThemeUIStyleObject | undefined;
+  title: string;
+  subtitle?: string;
 }
 
 export const Accordion = (props: IProps) => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(false)
-  const { children, sx, title, subtitle } = props
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const { children, sx, title, subtitle } = props;
 
   return (
     <Flex
@@ -22,7 +22,7 @@ export const Accordion = (props: IProps) => {
       sx={{ flexDirection: 'column', gap: 2, cursor: 'pointer', ...sx }}
       onClick={() => {
         if (!isExpanded) {
-          setIsExpanded(true)
+          setIsExpanded(true);
         }
       }}
     >
@@ -40,10 +40,8 @@ export const Accordion = (props: IProps) => {
         <Icon glyph={isExpanded ? 'arrow-full-up' : 'arrow-full-down'} />
       </Flex>
 
-      {subtitle != undefined && (
-        <Text sx={{ fontSize: 1, color: 'gray' }}>{subtitle}</Text>
-      )}
+      {subtitle != undefined && <Text sx={{ fontSize: 1, color: 'gray' }}>{subtitle}</Text>}
       {isExpanded && children}
     </Flex>
-  )
-}
+  );
+};

@@ -12,8 +12,8 @@
  *
  **/
 
-import * as allData from 'oa-shared/mocks/data'
+import * as allData from 'oa-shared/mocks/data';
 
 export const MOCK_DATA = {
   ...allData,
-}
+};

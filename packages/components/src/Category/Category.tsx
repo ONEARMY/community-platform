@@ -1,15 +1,15 @@
-import { Flex, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui';
 
-import type { Category as CategoryType } from 'oa-shared'
-import type { ThemeUIStyleObject } from 'theme-ui'
+import type { Category as CategoryType } from 'oa-shared';
+import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface Props {
-  category: CategoryType
-  sx?: ThemeUIStyleObject | undefined
+  category: CategoryType;
+  sx?: ThemeUIStyleObject | undefined;
 }
 
 export const Category = (props: Props) => {
-  const { category, sx } = props
+  const { category, sx } = props;
 
   return (
     <Flex sx={{ alignItems: 'start' }}>
@@ -28,5 +28,5 @@ export const Category = (props: Props) => {
         {category.name}
       </Text>
     </Flex>
-  )
-}
+  );
+};

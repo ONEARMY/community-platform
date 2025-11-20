@@ -1,17 +1,17 @@
-import { Button } from 'oa-components'
-import { buttons } from 'src/pages/UserSettings/labels'
+import { Button } from 'oa-components';
+import { buttons } from 'src/pages/UserSettings/labels';
 
-import { impactQuestions } from '../impactQuestions'
-import { ImpactQuestionField } from './ImpactQuestion.field'
+import { impactQuestions } from '../impactQuestions';
+import { ImpactQuestionField } from './ImpactQuestion.field';
 
 interface Props {
-  formId: string
-  handleSubmit: () => void
-  submitting: boolean
+  formId: string;
+  handleSubmit: () => void;
+  submitting: boolean;
 }
 
 export const ImpactYearField = (props: Props) => {
-  const { formId, handleSubmit, submitting } = props
+  const { formId, handleSubmit, submitting } = props;
 
   return (
     <>
@@ -30,5 +30,5 @@ export const ImpactYearField = (props: Props) => {
         {buttons.impact.save}
       </Button>
     </>
-  )
-}
+  );
+};

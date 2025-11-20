@@ -1,65 +1,58 @@
-import { ResearchUpdate, UserRole } from 'oa-shared'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server'
-import { ProfileServiceServer } from 'src/services/profileService.server'
-import { storageServiceServer } from 'src/services/storageService.server'
-import { subscribersServiceServer } from 'src/services/subscribersService.server'
-import { updateUserActivity } from 'src/utils/activity.server'
-import { validateImages } from 'src/utils/storage'
+import { ResearchUpdate, UserRole } from 'oa-shared';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
+import { storageServiceServer } from 'src/services/storageService.server';
+import { subscribersServiceServer } from 'src/services/subscribersService.server';
+import { updateUserActivity } from 'src/utils/activity.server';
+import { validateImages } from 'src/utils/storage';
 
-import type { ActionFunctionArgs } from '@remix-run/node'
-import type { SupabaseClient, User } from '@supabase/supabase-js'
-import type { DBProfile, DBResearchItem } from 'oa-shared'
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBProfile, DBResearchItem } from 'oa-shared';
+import type { ActionFunctionArgs } from 'react-router';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
-  const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request);
 
   try {
-    const researchId = Number(params.id)
-    const formData = await request.formData()
+    const researchId = Number(params.id);
+    const formData = await request.formData();
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
       videoUrl: formData.get('videoUrl') as string,
       fileUrl: formData.get('fileUrl') as string,
       isDraft: formData.get('draft') === 'true',
-    }
+    };
 
-    const {
-      data: { user },
-    } = await client.auth.getUser()
+    const claims = await client.auth.getClaims();
+
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 });
+    }
 
     const researchResult = await client
       .from('research')
       .select('id,title,slug,collaborators,author:profiles(id, username)')
       .eq('id', researchId)
-      .single()
-    const research = researchResult.data as unknown as DBResearchItem
-    const profileService = new ProfileServiceServer(client)
-    const profile = await profileService.getByAuthId(user!.id)
+      .single();
+    const research = researchResult.data as unknown as DBResearchItem;
+    const profileService = new ProfileServiceServer(client);
+    const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
     if (!profile) {
-      return Response.json(
-        {},
-        { headers, status: 400, statusText: 'User not found' },
-      )
+      return Response.json({}, { headers, status: 400, statusText: 'User not found' });
     }
 
-    const { valid, status, statusText } = validateRequest(
-      request,
-      user,
-      data,
-      research,
-      profile,
-    )
+    const { valid, status, statusText } = validateRequest(request, data, research, profile);
 
     if (!valid) {
-      return Response.json({}, { headers, status, statusText })
+      return Response.json({}, { headers, status, statusText });
     }
 
-    const uploadedImages = formData.getAll('images') as File[]
-    const uploadedFiles = formData.getAll('files') as File[]
-    const imageValidation = validateImages(uploadedImages)
+    const uploadedImages = formData.getAll('images') as File[];
+    const uploadedFiles = formData.getAll('files') as File[];
+    const imageValidation = validateImages(uploadedImages);
 
     if (!imageValidation.valid) {
       return Response.json(
@@ -69,7 +62,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
           status: 400,
           statusText: imageValidation.errors.join(', '),
         },
-      )
+      );
     }
 
     const updateResult = await client
@@ -84,36 +77,36 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         tenant_id: process.env.TENANT_ID,
       })
       .select('*,research:research(id,collaborators,created_by,is_draft,slug)')
-      .single()
+      .single();
 
     if (updateResult.error || !updateResult.data) {
-      throw updateResult.error
+      throw updateResult.error;
     }
 
-    const dbResearchUpdate = updateResult.data
-    const researchUpdate = ResearchUpdate.fromDB(dbResearchUpdate, [])
-    researchUpdate.research = updateResult.data.research
+    const dbResearchUpdate = updateResult.data;
+    const researchUpdate = ResearchUpdate.fromDB(dbResearchUpdate, []);
+    researchUpdate.research = updateResult.data.research;
 
     await uploadAndUpdateImages(
       uploadedImages,
       `research/${researchId}/updates/${researchUpdate.id}`,
       researchUpdate,
       client,
-    )
+    );
 
     await uploadAndUpdateFiles(
       uploadedFiles,
       `research/${researchId}/updates/${researchUpdate.id}`,
       researchUpdate,
       client,
-    )
+    );
 
     await subscribersServiceServer.addResearchUpdateSubscribers(
       researchUpdate,
       profile.id,
       client,
       headers,
-    )
+    );
 
     broadcastCoordinationServiceServer.researchUpdate(
       researchUpdate,
@@ -121,19 +114,16 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       client,
       headers,
       request,
-    )
+    );
 
-    updateUserActivity(client, user!.id)
+    updateUserActivity(client, claims.data.claims.sub);
 
-    return Response.json({ researchUpdate }, { headers, status: 201 })
+    return Response.json({ researchUpdate }, { headers, status: 201 });
   } catch (error) {
-    console.error(error)
-    return Response.json(
-      {},
-      { headers, status: 500, statusText: 'Error creating research' },
-    )
+    console.error(error);
+    return Response.json({}, { headers, status: 500, statusText: 'Error creating research' });
   }
-}
+};
 
 async function uploadAndUpdateImages(
   files: File[],
@@ -142,11 +132,7 @@ async function uploadAndUpdateImages(
   client: SupabaseClient,
 ) {
   if (files.length > 0) {
-    const mediaResult = await storageServiceServer.uploadImage(
-      files,
-      path,
-      client,
-    )
+    const mediaResult = await storageServiceServer.uploadImage(files, path, client);
 
     if (mediaResult?.media && mediaResult.media.length > 0) {
       const result = await client
@@ -155,10 +141,10 @@ async function uploadAndUpdateImages(
           images: mediaResult.media,
         })
         .eq('id', researchUpdate.id)
-        .select()
+        .select();
 
       if (result.data) {
-        researchUpdate.images = result.data[0].images
+        researchUpdate.images = result.data[0].images;
       }
     }
   }
@@ -171,11 +157,7 @@ async function uploadAndUpdateFiles(
   client: SupabaseClient,
 ) {
   if (files.length > 0) {
-    const mediaResult = await storageServiceServer.uploadFile(
-      files,
-      path,
-      client,
-    )
+    const mediaResult = await storageServiceServer.uploadFile(files, path, client);
 
     if (mediaResult?.media && mediaResult.media.length > 0) {
       const result = await client
@@ -184,10 +166,10 @@ async function uploadAndUpdateFiles(
           files: mediaResult.media,
         })
         .eq('id', researchUpdate.id)
-        .select()
+        .select();
 
       if (result.data) {
-        researchUpdate.files = result.data[0].files
+        researchUpdate.files = result.data[0].files;
       }
     }
   }
@@ -195,33 +177,28 @@ async function uploadAndUpdateFiles(
 
 function validateRequest(
   request: Request,
-  user: User | null,
   data: any,
   research: DBResearchItem | null,
   profile: DBProfile | null,
 ) {
-  if (!user) {
-    return { status: 401, statusText: 'unauthorized' }
-  }
-
   if (request.method !== 'POST') {
-    return { status: 405, statusText: 'method not allowed' }
+    return { status: 405, statusText: 'method not allowed' };
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'title is required' }
+    return { status: 400, statusText: 'title is required' };
   }
 
   if (!data.description) {
-    return { status: 400, statusText: 'description is required' }
+    return { status: 400, statusText: 'description is required' };
   }
 
   if (!research) {
-    return { status: 400, statusText: 'Research not found' }
+    return { status: 400, statusText: 'Research not found' };
   }
 
   if (!profile) {
-    return { status: 400, statusText: 'User not found' }
+    return { status: 400, statusText: 'User not found' };
   }
 
   if (
@@ -229,8 +206,8 @@ function validateRequest(
     !research.collaborators?.includes(profile.username) &&
     !profile.roles?.includes(UserRole.ADMIN)
   ) {
-    return { status: 403, statusText: 'Forbidden' }
+    return { status: 403, statusText: 'Forbidden' };
   }
 
-  return { valid: true }
+  return { valid: true };
 }

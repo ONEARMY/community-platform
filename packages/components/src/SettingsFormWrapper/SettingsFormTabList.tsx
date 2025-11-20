@@ -1,25 +1,25 @@
-import styled from '@emotion/styled'
-import { Tab as BaseTab, tabClasses } from '@mui/base/Tab'
-import { TabsList as BaseTabsList } from '@mui/base/TabsList'
-import { prepareForSlot } from '@mui/base/utils'
-import { useNavigate } from '@remix-run/react'
-import { Flex } from 'theme-ui'
+import { useNavigate } from 'react-router';
+import styled from '@emotion/styled';
+import { Tab as BaseTab, tabClasses } from '@mui/base/Tab';
+import { TabsList as BaseTabsList } from '@mui/base/TabsList';
+import { prepareForSlot } from '@mui/base/utils';
+import { Flex } from 'theme-ui';
 
-import { Icon } from '../Icon/Icon'
-import { InternalLink } from '../InternalLink/InternalLink'
-import { Select } from '../Select/Select'
-import { routeName } from './utils'
+import { Icon } from '../Icon/Icon';
+import { InternalLink } from '../InternalLink/InternalLink';
+import { Select } from '../Select/Select';
+import { routeName } from './utils';
 
-import type { ITab } from './SettingsFormTab'
+import type { ITab } from './SettingsFormTab';
 
 interface IProps {
-  currentTab: string
-  tabs: ITab[]
+  currentTab: string;
+  tabs: ITab[];
 }
 
 export const SettingsFormTabList = (props: IProps) => {
-  const { currentTab, tabs } = props
-  const navigate = useNavigate()
+  const { currentTab, tabs } = props;
+  const navigate = useNavigate();
 
   const Tab = styled(BaseTab)`
     color: grey;
@@ -53,7 +53,7 @@ export const SettingsFormTabList = (props: IProps) => {
       border: 2px solid #1b1b1b;
       background-color: #e2edf7;
     }
-  `
+  `;
 
   const TabsList = styled(BaseTabsList)`
     width: 100%;
@@ -62,15 +62,14 @@ export const SettingsFormTabList = (props: IProps) => {
     flex-direction: column;
     justify-content: flex-start;
     align-content: flex-start;
-  `
+  `;
 
-  if (tabs.length === 1) return
+  if (tabs.length === 1) return;
 
   const defaultValue = {
-    label:
-      tabs.find(({ title }) => routeName(title) === currentTab)?.title || '',
+    label: tabs.find(({ title }) => routeName(title) === currentTab)?.title || '',
     value: currentTab,
-  }
+  };
 
   return (
     <>
@@ -87,7 +86,7 @@ export const SettingsFormTabList = (props: IProps) => {
               >
                 <Icon glyph={glyph} size={20} /> {title}
               </Tab>
-            )
+            );
           })}
         </TabsList>
       </Flex>
@@ -102,11 +101,11 @@ export const SettingsFormTabList = (props: IProps) => {
               return {
                 label: title,
                 value: routeName(title),
-              }
+              };
             })}
           />
         </TabsList>
       </Flex>
     </>
-  )
-}
+  );
+};

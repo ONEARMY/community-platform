@@ -1,4 +1,4 @@
-import type { TransformOptions } from '@supabase/storage-js'
+import type { TransformOptions } from '@supabase/storage-js';
 
 export const IMAGE_SIZES: { [key: string]: TransformOptions } = {
   LANDSCAPE: {
@@ -13,4 +13,4 @@ export const IMAGE_SIZES: { [key: string]: TransformOptions } = {
     width: 478,
     resize: 'contain',
   },
-}
+};

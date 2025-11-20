@@ -1,39 +1,39 @@
 // Used the guide at https://mui.com/base-ui/react-tabs/ as a fundation
 
-import { Tabs } from '@mui/base/Tabs'
-import { matchPath, useLocation } from '@remix-run/react'
-import { Flex } from 'theme-ui'
+import { matchPath, useLocation } from 'react-router';
+import { Tabs } from '@mui/base/Tabs';
+import { Flex } from 'theme-ui';
 
-import { SettingsFormTab } from './SettingsFormTab'
-import { SettingsFormTabList } from './SettingsFormTabList'
-import { routeName } from './utils'
+import { SettingsFormTab } from './SettingsFormTab';
+import { SettingsFormTabList } from './SettingsFormTabList';
+import { routeName } from './utils';
 
-import type { ITab } from './SettingsFormTab'
+import type { ITab } from './SettingsFormTab';
 
 export interface IProps {
-  tabs: ITab[]
-  style?: React.CSSProperties | undefined
+  tabs: ITab[];
+  style?: React.CSSProperties | undefined;
 }
 
 const useRouteMatch = (patterns: readonly string[]) => {
-  const { pathname } = useLocation()
+  const { pathname } = useLocation();
 
   for (const pattern of patterns) {
-    const possibleMatch = matchPath(pattern, pathname)
+    const possibleMatch = matchPath(pattern, pathname);
     if (possibleMatch !== null) {
-      return possibleMatch
+      return possibleMatch;
     }
   }
 
-  return null
-}
+  return null;
+};
 
 export const SettingsFormWrapper = (props: IProps) => {
-  const { style, tabs } = props
+  const { style, tabs } = props;
 
-  const routePaths = tabs.map(({ title }) => routeName(title))
-  const routeMatch = useRouteMatch(routePaths)
-  const currentTab = routeMatch?.pattern?.path || routePaths[0]
+  const routePaths = tabs.map(({ title }) => routeName(title));
+  const routeMatch = useRouteMatch(routePaths);
+  const currentTab = routeMatch?.pattern?.path || routePaths[0];
 
   return (
     <Tabs value={currentTab} style={style}>
@@ -56,16 +56,10 @@ export const SettingsFormWrapper = (props: IProps) => {
           }}
         >
           {tabs.map((tab, index) => {
-            return (
-              <SettingsFormTab
-                key={index}
-                value={routeName(tab.title)}
-                tab={tab}
-              />
-            )
+            return <SettingsFormTab key={index} value={routeName(tab.title)} tab={tab} />;
           })}
         </Flex>
       </Flex>
     </Tabs>
-  )
-}
+  );
+};

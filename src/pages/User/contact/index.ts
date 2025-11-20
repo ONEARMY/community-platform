@@ -1,5 +1,5 @@
-export { UserContactError } from './UserContactError'
-export { UserContactFieldMessage } from './UserContactFieldMessage'
-export { UserContactFieldName } from './UserContactFieldName'
-export { UserContactNotLoggedIn } from './UserContactNotLoggedIn'
-export { UserContactFormAvailable } from './UserContactFormAvailable'
+export { UserContactError } from './UserContactError';
+export { UserContactFieldMessage } from './UserContactFieldMessage';
+export { UserContactFieldName } from './UserContactFieldName';
+export { UserContactNotLoggedIn } from './UserContactNotLoggedIn';
+export { UserContactFormAvailable } from './UserContactFormAvailable';

@@ -1,8 +1,6 @@
-import type { profilesChildInputs, profilesScalars } from '@snaplet/seed'
+import type { profilesChildInputs, profilesScalars } from '@snaplet/seed';
 
-const _PROFILES_BASE: (tenant_id: string) => Partial<profilesScalars> = (
-  tenant_id: string,
-) => ({
+const _PROFILES_BASE: (tenant_id: string) => Partial<profilesScalars> = (tenant_id: string) => ({
   tenant_id,
   type: 'member',
   roles: [],
@@ -12,7 +10,7 @@ const _PROFILES_BASE: (tenant_id: string) => Partial<profilesScalars> = (
   is_blocked_from_messaging: false,
   is_contactable: true,
   total_views: 0,
-})
+});
 
 export const profilesSeed = (tenant_id: string): profilesChildInputs => [
   {
@@ -95,4 +93,4 @@ export const profilesSeed = (tenant_id: string): profilesChildInputs => [
     about:
       "Bookworm with a passion for storytelling and deep discussions. I'm always immersed in a good novel or seeking out new perspectives on life. Looking to connect with fellow book lovers or anyone interested in meaningful conversations. Let's dive into the world of words together!",
   },
-]
+];

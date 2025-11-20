@@ -1,35 +1,33 @@
-import { redirect } from '@remix-run/node'
-import { UserRole } from 'oa-shared'
-import { UserAction } from 'src/common/UserAction'
-import { NewsForm } from 'src/pages/News/Content/Common/NewsForm'
-import { listing } from 'src/pages/News/labels'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { redirectServiceServer } from 'src/services/redirectService.server'
-import { Box } from 'theme-ui'
+import { redirect } from 'react-router';
+import { UserRole } from 'oa-shared';
+import { UserAction } from 'src/common/UserAction';
+import { NewsForm } from 'src/pages/News/Content/Common/NewsForm';
+import { listing } from 'src/pages/News/labels';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { redirectServiceServer } from 'src/services/redirectService.server';
+import { Box } from 'theme-ui';
 
-import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const { client, headers } = createSupabaseServerClient(request)
-  const {
-    data: { user },
-  } = await client.auth.getUser()
+  const { client, headers } = createSupabaseServerClient(request);
+  const claims = await client.auth.getClaims();
 
-  if (!user) {
-    return redirectServiceServer.redirectSignIn('/news/create', headers)
+  if (!claims.data?.claims) {
+    return redirectServiceServer.redirectSignIn('/news/create', headers);
   }
 
   const { data } = await client
     .from('profiles')
     .select('id,roles')
-    .eq('auth_id', user.id)
-    .limit(1)
+    .eq('auth_id', claims.data.claims.sub)
+    .limit(1);
 
   if (!data!.at(0)!.roles?.includes(UserRole.ADMIN)) {
-    return redirect('/forbidden?page=news-create', { headers })
+    return redirect('/forbidden?page=news-create', { headers });
   }
 
-  return null
+  return null;
 }
 
 export default function Index() {
@@ -46,14 +44,8 @@ export default function Index() {
           {listing.incompleteProfile}
         </Box>
       }
-      loggedIn={
-        <NewsForm
-          data-testid="news-create-form"
-          parentType="create"
-          news={null}
-        />
-      }
+      loggedIn={<NewsForm data-testid="news-create-form" parentType="create" news={null} />}
       loggedOut={<></>}
     />
-  )
+  );
 }

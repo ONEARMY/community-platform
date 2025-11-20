@@ -1,40 +1,40 @@
-import { Text } from 'theme-ui'
+import { Text } from 'theme-ui';
 
-import { CardButton } from '../CardButton/CardButton'
-import { getGlyph, Icon } from '../Icon/Icon'
-import { VerticalList } from '../VerticalList/VerticalList.client'
+import { CardButton } from '../CardButton/CardButton';
+import { getGlyph, Icon } from '../Icon/Icon';
+import { VerticalList } from '../VerticalList/VerticalList.client';
 
-import type { Category } from 'oa-shared'
-import type { availableGlyphs } from '../Icon/types'
+import type { Category } from 'oa-shared';
+import type { availableGlyphs } from '../Icon/types';
 
 export interface IProps {
-  activeCategory: Category | null
-  allCategories: Category[]
-  setActiveCategory: (category: Category | null) => void
+  activeCategory: Category | null;
+  allCategories: Category[];
+  setActiveCategory: (category: Category | null) => void;
 }
 
 export const CategoryHorizonalList = (props: IProps) => {
-  const { activeCategory, allCategories, setActiveCategory } = props
+  const { activeCategory, allCategories, setActiveCategory } = props;
 
   if (!allCategories || !allCategories.length || allCategories.length < 3) {
-    return null
+    return null;
   }
 
   const orderedCategories = allCategories
     .slice()
-    .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
+    .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1));
 
   const isCategorySelected = (category: Category) => {
-    return category.id === activeCategory?.id
-  }
+    return category.id === activeCategory?.id;
+  };
 
   return (
     <VerticalList dataCy="CategoryHorizonalList">
       {orderedCategories.map((category, index) => {
-        const isSelected = isCategorySelected(category)
-        const name = category.name
-        const glyph = name.toLowerCase() as availableGlyphs
-        const hasGlyph = getGlyph(glyph)
+        const isSelected = isCategorySelected(category);
+        const name = category.name;
+        const glyph = name.toLowerCase() as availableGlyphs;
+        const hasGlyph = getGlyph(glyph);
 
         return (
           <CardButton
@@ -70,8 +70,8 @@ export const CategoryHorizonalList = (props: IProps) => {
               {name}
             </Text>
           </CardButton>
-        )
+        );
       })}
     </VerticalList>
-  )
-}
+  );
+};

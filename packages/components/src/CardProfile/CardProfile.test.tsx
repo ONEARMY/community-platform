@@ -1,21 +1,26 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest';
 
-import { render } from '../test/utils'
-import { Member, Space } from './CardProfile.stories'
+import { render } from '../test/utils';
+import { fakePinProfile, fakeProfileType } from '../utils';
+import { CardProfile } from './CardProfile';
 
-import type { IProps } from './CardProfile'
+import type { MapPin, PinProfile } from 'oa-shared';
 
 describe('CardProfile', () => {
   it('renders the member profile', () => {
-    const { getByTestId } = render(<Member {...(Member.args as IProps)} />)
+    const member: PinProfile = fakePinProfile();
+    const { getByTestId } = render(<CardProfile item={{ profile: member } as MapPin} />);
 
-    expect(getByTestId('CardDetailsMemberProfile')).toBeInTheDocument()
-  })
+    expect(getByTestId('CardDetailsMemberProfile')).toBeInTheDocument();
+  });
   it('renders the space profile', () => {
-    const { getByTestId } = render(<Space {...(Space.args as IProps)} />)
+    const space: PinProfile = fakePinProfile({
+      type: fakeProfileType({ isSpace: true }),
+    });
+    const { getByTestId } = render(<CardProfile item={{ profile: space } as MapPin} />);
 
-    expect(getByTestId('CardDetailsSpaceProfile')).toBeInTheDocument()
-  })
-})
+    expect(getByTestId('CardDetailsSpaceProfile')).toBeInTheDocument();
+  });
+});

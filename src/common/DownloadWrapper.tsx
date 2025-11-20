@@ -1,52 +1,46 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import {
-  DownloadButton,
-  DownloadCounter,
-  DownloadWithDonationAsk,
-} from 'oa-components'
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { DownloadButton, DownloadCounter, DownloadWithDonationAsk } from 'oa-components';
 
-import { UserAction } from './UserAction'
+import { UserAction } from './UserAction';
 
-import type { MediaFile } from 'oa-shared'
+import type { MediaFile } from 'oa-shared';
 
 interface IProps {
-  handleClick?: () => Promise<void>
-  fileDownloadCount: number
-  fileLink?: string
-  files?: MediaFile[]
+  handleClick?: () => Promise<void>;
+  fileDownloadCount: number;
+  fileLink?: string;
+  files?: MediaFile[];
 }
 
 export const DownloadWrapper = (props: IProps) => {
-  const { handleClick, fileLink, files, fileDownloadCount } = props
-  const hasFiles = files && files.length > 0
-  const [openModel, setOpenModel] = useState<boolean>(false)
+  const { handleClick, fileLink, files, fileDownloadCount } = props;
+  const hasFiles = files && files.length > 0;
+  const [openModel, setOpenModel] = useState<boolean>(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   if (!fileLink && !hasFiles) {
-    return null
+    return null;
   }
 
   useEffect(() => {
     if (sessionStorage.getItem('loginRedirect') && (fileLink || hasFiles)) {
-      sessionStorage.removeItem('loginRedirect')
+      sessionStorage.removeItem('loginRedirect');
       if (files && files?.length === 1) {
-        setOpenModel(true)
+        setOpenModel(true);
       }
     }
-  }, [fileLink, hasFiles])
+  }, [fileLink, hasFiles]);
 
   const handleLoggedOutDownloadClick = () => {
-    sessionStorage.setItem('loginRedirect', 'true')
-    navigate(
-      `/sign-in?returnUrl=${encodeURIComponent(`${location?.pathname}`)}`,
-    )
-  }
+    sessionStorage.setItem('loginRedirect', 'true');
+    navigate(`/sign-in?returnUrl=${encodeURIComponent(`${location?.pathname}`)}`);
+  };
 
-  const body = import.meta.env.VITE_DONATIONS_BODY
-  const iframeSrc = import.meta.env.VITE_DONATIONS_IFRAME_SRC
-  const imageURL = import.meta.env.VITE_DONATIONS_IMAGE_URL
+  const body = import.meta.env.VITE_DONATIONS_BODY;
+  const iframeSrc = import.meta.env.VITE_DONATIONS_IFRAME_SRC;
+  const imageURL = import.meta.env.VITE_DONATIONS_IMAGE_URL;
 
   return (
     <UserAction
@@ -64,13 +58,10 @@ export const DownloadWrapper = (props: IProps) => {
       }
       loggedOut={
         <>
-          <DownloadButton
-            isLoggedIn={false}
-            onClick={handleLoggedOutDownloadClick}
-          />
+          <DownloadButton isLoggedIn={false} onClick={handleLoggedOutDownloadClick} />
           <DownloadCounter total={fileDownloadCount} />
         </>
       }
     />
-  )
-}
+  );
+};

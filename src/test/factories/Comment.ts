@@ -1,10 +1,8 @@
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
-import type { Comment, DiscussionContentTypes } from 'oa-shared'
+import type { Comment, DiscussionContentTypes } from 'oa-shared';
 
-export const FactoryComment = (
-  commentOverloads: Partial<Comment> = {},
-): Comment => ({
+export const FactoryComment = (commentOverloads: Partial<Comment> = {}): Comment => ({
   id: faker.number.int(),
   createdAt: faker.date.past(),
   modifiedAt: faker.date.past(),
@@ -46,4 +44,4 @@ export const FactoryComment = (
   voteCount: faker.number.int({ min: 0, max: 100 }),
   hasVoted: faker.datatype.boolean(),
   ...commentOverloads,
-})
+});

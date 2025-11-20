@@ -1,17 +1,17 @@
-import Keyv from 'keyv'
-import { isProductionEnvironment } from 'src/config/config'
-import { MapPinFactory } from 'src/factories/mapPinFactory.server'
+import Keyv from 'keyv';
+import { isProductionEnvironment } from 'src/config/config';
+import { MapPinFactory } from 'src/factories/mapPinFactory.server';
 
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBMapPin, MapPin } from 'oa-shared'
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBMapPin, MapPin } from 'oa-shared';
 
-const cache = new Keyv<MapPin[]>({ ttl: 3600000 }) // ttl: 60 minutes
+const cache = new Keyv<MapPin[]>({ ttl: 3600000 }); // ttl: 60 minutes
 
 export class MapPinsServiceServer {
   constructor(private client: SupabaseClient) {}
 
   async get() {
-    const cachedMappins = await cache.get('mappins')
+    const cachedMappins = await cache.get('mappins');
 
     // check if cached map pins are available and a producation environment, if not - load from db and cache them
     if (
@@ -20,7 +20,7 @@ export class MapPinsServiceServer {
       cachedMappins.length > 0 &&
       isProductionEnvironment()
     ) {
-      return cachedMappins
+      return cachedMappins;
     }
 
     // get all profile tags
@@ -75,37 +75,34 @@ export class MapPinsServiceServer {
         )
       `,
       )
-      .eq('moderation', 'accepted')
+      .eq('moderation', 'accepted');
 
     if (!data || error) {
-      throw error
+      throw error;
     }
 
-    const pinsDb = data as unknown as DBMapPin[]
-    const pinFactory = new MapPinFactory(this.client)
+    const pinsDb = data as unknown as DBMapPin[];
+    const pinFactory = new MapPinFactory(this.client);
     const mapPins = pinsDb
       .filter((pin) => pin.profile)
-      .map((pin) => pinFactory.fromDBWithProfile(pin))
+      .map((pin) => pinFactory.fromDBWithProfile(pin));
 
-    cache.set('mappins', mapPins)
+    cache.set('mappins', mapPins);
 
-    return mapPins
+    return mapPins;
   }
 
   async delete(profileId: number) {
-    const { error } = await this.client
-      .from('map_pins')
-      .delete()
-      .eq('profile_id', profileId)
+    const { error } = await this.client.from('map_pins').delete().eq('profile_id', profileId);
 
     if (error) {
-      throw error
+      throw error;
     }
 
-    cache.delete('mappins')
+    cache.delete('mappins');
   }
 
   clearCache() {
-    cache.delete('mappins')
+    cache.delete('mappins');
   }
 }

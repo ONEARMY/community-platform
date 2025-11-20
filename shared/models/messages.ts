@@ -1,5 +1,5 @@
 export type SendMessage = {
-  to: string
-  message: string
-  name: string
-}
+  to: string;
+  message: string;
+  name: string;
+};

@@ -1,17 +1,17 @@
-import { useContext } from 'react'
-import { ExternalLink as Link } from 'oa-components'
-import { Box } from 'theme-ui'
+import { useContext } from 'react';
+import { ExternalLink as Link } from 'oa-components';
+import { Box } from 'theme-ui';
 
-import { MobileMenuContext } from '../../MobileMenuContext'
+import { MobileMenuContext } from '../../MobileMenuContext';
 
 interface IProps {
-  content: string
-  href: string
+  content: string;
+  href: string;
 }
 
 const MenuMobileExternalLink = ({ content, href }: IProps) => {
-  const mobileMenuContext = useContext(MobileMenuContext)
-  const id = content.toLowerCase().replace(' ', '-')
+  const mobileMenuContext = useContext(MobileMenuContext);
+  const id = content.toLowerCase().replace(' ', '-');
 
   return (
     <>
@@ -26,7 +26,7 @@ const MenuMobileExternalLink = ({ content, href }: IProps) => {
         </Link>
       </Box>
     </>
-  )
-}
+  );
+};
 
-export default MenuMobileExternalLink
+export default MenuMobileExternalLink;

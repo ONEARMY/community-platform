@@ -1,18 +1,18 @@
-import { Icon } from 'oa-components'
-import { impactQuestions } from 'src/pages/UserSettings/content/impactQuestions'
+import { Icon } from 'oa-components';
+import { impactQuestions } from 'src/pages/UserSettings/content/impactQuestions';
 
-import type { IImpactDataField } from 'oa-shared'
+import type { IImpactDataField } from 'oa-shared';
 
 interface Props {
-  id: IImpactDataField['id']
+  id: IImpactDataField['id'];
 }
 
 export const ImpactIcon = ({ id }: Props) => {
-  const question = impactQuestions.find((question) => question.id === id)
+  const question = impactQuestions.find((question) => question.id === id);
 
-  if (!question || !question.icon) return null
+  if (!question || !question.icon) return null;
 
-  const glyph = question.icon
+  const glyph = question.icon;
 
-  return <Icon glyph={glyph as any} />
-}
+  return <Icon glyph={glyph as any} />;
+};

@@ -8,4 +8,4 @@ export const fileLabels = {
     description: 'Maximum file size 50MB',
     error: 'Please provide either a file link or upload a file, not both.',
   },
-}
+};

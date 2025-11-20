@@ -1,71 +1,93 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { fireEvent, waitFor } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { fireEvent, waitFor } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 
-import { render } from '../test/utils'
-import { Default, LoggedIn, LoggedInWithError } from './CreateReply.stories'
-
-import type { Props } from './CreateReply'
+import { render } from '../test/utils';
+import { CreateReply } from './CreateReply';
 
 describe('CreateReply', () => {
   it('when logged out shows the login message', () => {
-    const { getByText } = render(<Default {...(Default.args as Props)} />)
+    const { getByText } = render(
+      <CreateReply
+        commentId="23543bh"
+        isLoggedIn={false}
+        maxLength={75}
+        onSubmit={() => Promise.resolve()}
+      />,
+    );
 
-    expect(
-      getByText('to leave a comment', { exact: false }),
-    ).toBeInTheDocument()
-  })
+    expect(getByText('to leave a comment', { exact: false })).toBeInTheDocument();
+  });
 
   it('when logged in shows the login message', () => {
-    const screen = render(<LoggedIn {...(LoggedIn.args as Props)} />)
+    const screen = render(
+      <CreateReply
+        commentId="23543bh"
+        isLoggedIn={true}
+        maxLength={1000}
+        onSubmit={() => Promise.resolve()}
+      />,
+    );
 
     const textarea = screen.getByPlaceholderText('Leave your question', {
       exact: false,
-    })
+    });
 
-    expect(textarea).toBeInTheDocument()
-  })
+    expect(textarea).toBeInTheDocument();
+  });
 
   it('clears the field after successful submission', () => {
-    const screen = render(<LoggedIn {...(LoggedIn.args as Props)} />)
+    const screen = render(
+      <CreateReply
+        commentId="23543bh"
+        isLoggedIn={true}
+        maxLength={1000}
+        onSubmit={() => Promise.resolve()}
+      />,
+    );
 
     const emptyTextArea = screen.getByPlaceholderText('Leave your question', {
       exact: false,
-    })
-    fireEvent.change(emptyTextArea, { target: { value: '123' } })
+    });
+    fireEvent.change(emptyTextArea, { target: { value: '123' } });
     const withText = screen.getByText('123', {
       exact: false,
-    })
-    expect(withText).toBeInTheDocument()
+    });
+    expect(withText).toBeInTheDocument();
 
-    const submitButton = screen.getByText('Leave a reply')
-    fireEvent.click(submitButton)
-    expect(emptyTextArea).toBeInTheDocument()
-  })
+    const submitButton = screen.getByText('Leave a reply');
+    fireEvent.click(submitButton);
+    expect(emptyTextArea).toBeInTheDocument();
+  });
 
   it('handles an error in the onSubmit prop', async () => {
     const screen = render(
-      <LoggedInWithError {...(LoggedInWithError.args as Props)} />,
-    )
+      <CreateReply
+        commentId="23543bh"
+        isLoggedIn={true}
+        maxLength={1000}
+        onSubmit={async () => {
+          return Promise.reject(new Error('Error!'));
+        }}
+      />,
+    );
 
     const emptyTextArea = screen.getByPlaceholderText('Leave your question', {
       exact: false,
-    })
+    });
     fireEvent.change(emptyTextArea, {
       target: { value: 'A comment for this field' },
-    })
+    });
 
-    const submitButton = screen.getByText('Leave a reply')
+    const submitButton = screen.getByText('Leave a reply');
 
-    fireEvent.click(submitButton)
+    fireEvent.click(submitButton);
 
     await waitFor(() => {
       expect(
-        screen.getByText(
-          'Unable to leave a comment at this time. Please try again later.',
-        ),
-      ).toBeInTheDocument()
-    })
-  })
-})
+        screen.getByText('Unable to leave a comment at this time. Please try again later.'),
+      ).toBeInTheDocument();
+    });
+  });
+});

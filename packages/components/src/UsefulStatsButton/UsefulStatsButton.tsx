@@ -1,36 +1,36 @@
-import { useMemo, useState } from 'react'
-import { useNavigate } from '@remix-run/react'
-import { Text, useThemeUI } from 'theme-ui'
+import { useId, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { Text, useThemeUI } from 'theme-ui';
 
-import { Button } from '../Button/Button'
-import { Tooltip } from '../Tooltip/Tooltip'
+import { Button } from '../Button/Button';
+import { Tooltip } from '../Tooltip/Tooltip';
 
-import type { ThemeUIStyleObject } from 'theme-ui'
+import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface IProps {
-  hasUserVotedUseful: boolean
-  votedUsefulCount: number | undefined
-  isLoggedIn: boolean
-  onUsefulClick: () => Promise<void>
-  sx?: ThemeUIStyleObject
+  hasUserVotedUseful: boolean;
+  votedUsefulCount: number | undefined;
+  isLoggedIn: boolean;
+  onUsefulClick: () => Promise<void>;
+  sx?: ThemeUIStyleObject;
 }
 
 export const UsefulStatsButton = (props: IProps) => {
-  const { theme } = useThemeUI() as any
-  const navigate = useNavigate()
-  const uuid = useMemo(() => (Math.random() * 16).toString(), [])
+  const { theme } = useThemeUI() as any;
+  const navigate = useNavigate();
+  const uuid = useId();
 
-  const [disabled, setDisabled] = useState<boolean>()
+  const [disabled, setDisabled] = useState<boolean>();
 
   const handleUsefulClick = async () => {
-    setDisabled(true)
+    setDisabled(true);
     try {
-      await props.onUsefulClick()
+      await props.onUsefulClick();
     } catch (err) {
       // do nothing
     }
-    setDisabled(false)
-  }
+    setDisabled(false);
+  };
 
   return (
     <>
@@ -42,9 +42,7 @@ export const UsefulStatsButton = (props: IProps) => {
         onClick={() =>
           props.isLoggedIn
             ? handleUsefulClick()
-            : navigate(
-                '/sign-in?returnUrl=' + encodeURIComponent(location.pathname),
-              )
+            : navigate('/sign-in?returnUrl=' + encodeURIComponent(location.pathname))
         }
         disabled={disabled}
         sx={{
@@ -81,5 +79,5 @@ export const UsefulStatsButton = (props: IProps) => {
       </Button>
       <Tooltip id={uuid} />
     </>
-  )
-}
+  );
+};

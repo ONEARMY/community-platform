@@ -1,142 +1,141 @@
-import { renderToPipeableStream, renderToString } from 'react-dom/server'
-import { CacheProvider } from '@emotion/react'
-import createEmotionServer from '@emotion/server/create-instance'
-import { createReadableStreamFromReadable } from '@remix-run/node'
-import { RemixServer } from '@remix-run/react'
-import * as Sentry from '@sentry/remix'
-import { isbot } from 'isbot'
-import { PassThrough } from 'node:stream'
+import { renderToPipeableStream } from 'react-dom/server';
+import { ServerRouter } from 'react-router';
+import { CacheProvider } from '@emotion/react';
+import * as Sentry from '@sentry/react-router';
+import { isbot } from 'isbot';
+import { PassThrough } from 'node:stream';
 
-import { SENTRY_CONFIG } from './config/config'
-import { ServerStyleContext } from './styles/context'
-import { createEmotionCache } from './styles/createEmotionCache'
+import { SENTRY_CONFIG } from './config/config';
+import { createEmotionCache } from './styles/createEmotionCache';
 
-import type { EntryContext } from '@remix-run/node'
+import type { EntryContext } from 'react-router';
 
-const ABORT_DELAY = 5_000
+const ABORT_DELAY = 5_000;
 
-Sentry.init({ ...SENTRY_CONFIG, autoInstrumentRemix: true })
+Sentry.init({ ...SENTRY_CONFIG });
 
 export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  context: EntryContext,
 ) {
   return isbot(request.headers.get('user-agent') || '')
-    ? handleBotRequest(
-        request,
-        responseStatusCode,
-        responseHeaders,
-        remixContext,
-      )
-    : handleBrowserRequest(
-        request,
-        responseStatusCode,
-        responseHeaders,
-        remixContext,
-      )
+    ? handleBotRequest(request, responseStatusCode, responseHeaders, context)
+    : handleBrowserRequest(request, responseStatusCode, responseHeaders, context);
 }
 
 function handleBotRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  context: EntryContext,
 ) {
   return new Promise((resolve, reject) => {
+    let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
-      <RemixServer
-        context={remixContext}
-        url={request.url}
-        abortDelay={ABORT_DELAY}
-      />,
+      <ServerRouter context={context} url={request.url} />,
       {
         onAllReady() {
-          const body = new PassThrough()
+          shellRendered = true;
+          const body = new PassThrough();
+          const stream = new ReadableStream({
+            start(controller) {
+              body.on('data', (chunk: Buffer) => {
+                controller.enqueue(chunk);
+              });
+              body.on('end', () => {
+                controller.close();
+              });
+              body.on('error', (err) => {
+                controller.error(err);
+              });
+            },
+          });
 
-          responseHeaders.set('Content-Type', 'text/html')
+          responseHeaders.set('Content-Type', 'text/html');
 
           resolve(
-            new Response(createReadableStreamFromReadable(body), {
+            new Response(stream, {
               headers: responseHeaders,
               status: responseStatusCode,
             }),
-          )
+          );
 
-          pipe(body)
+          pipe(body);
         },
         onShellError(error: unknown) {
-          reject(error)
+          reject(error);
         },
         onError(error: unknown) {
-          responseStatusCode = 500
-          // eslint-disable-next-line no-console
-          console.error(error)
+          responseStatusCode = 500;
+          if (shellRendered) {
+            console.error(error);
+          }
         },
       },
-    )
+    );
 
-    setTimeout(abort, ABORT_DELAY)
-  })
+    setTimeout(abort, ABORT_DELAY);
+  });
 }
 
 function handleBrowserRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  context: EntryContext,
 ) {
-  const cache = createEmotionCache()
-  const { extractCriticalToChunks } = createEmotionServer(cache)
-
-  const html = renderToString(
-    <ServerStyleContext.Provider value={null}>
-      <CacheProvider value={cache}>
-        <RemixServer context={remixContext} url={request.url} />
-      </CacheProvider>
-    </ServerStyleContext.Provider>,
-  )
-
-  const chunks = extractCriticalToChunks(html)
-
   return new Promise((resolve, reject) => {
+    let shellRendered = false;
+    const cache = createEmotionCache();
+
     const { pipe, abort } = renderToPipeableStream(
-      <ServerStyleContext.Provider value={chunks.styles}>
-        <CacheProvider value={cache}>
-          <RemixServer
-            context={remixContext}
-            url={request.url}
-            abortDelay={ABORT_DELAY}
-          />
-        </CacheProvider>
-      </ServerStyleContext.Provider>,
+      <CacheProvider value={cache}>
+        <ServerRouter context={context} url={request.url} />
+      </CacheProvider>,
       {
         onShellReady() {
-          const body = new PassThrough()
+          shellRendered = true;
+          const body = new PassThrough();
+          const stream = new ReadableStream({
+            start(controller) {
+              body.on('data', (chunk: Buffer) => {
+                controller.enqueue(chunk);
+              });
+              body.on('end', () => {
+                controller.close();
+              });
+              body.on('error', (err) => {
+                controller.error(err);
+              });
+            },
+          });
 
-          responseHeaders.set('Content-Type', 'text/html')
+          responseHeaders.set('Content-Type', 'text/html');
 
           resolve(
-            new Response(createReadableStreamFromReadable(body), {
+            new Response(stream, {
               headers: responseHeaders,
               status: responseStatusCode,
             }),
-          )
+          );
 
-          pipe(body)
+          pipe(body);
         },
         onShellError(error: unknown) {
-          reject(error)
+          reject(error);
         },
         onError(error: unknown) {
-          // eslint-disable-next-line no-console
-          console.error(error)
-          responseStatusCode = 500
+          if (shellRendered) {
+            console.error(error);
+          } else {
+            responseStatusCode = 500;
+          }
         },
       },
-    )
+    );
 
-    setTimeout(abort, ABORT_DELAY)
-  })
+    setTimeout(abort, ABORT_DELAY);
+  });
 }

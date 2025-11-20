@@ -1,33 +1,33 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { fireEvent, render } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { fireEvent, render } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
-import { DownloadWithDonationAsk } from './DownloadWithDonationAsk'
+import { DownloadWithDonationAsk } from './DownloadWithDonationAsk';
 
-import type { MediaFile } from 'oa-shared'
+import type { MediaFile } from 'oa-shared';
 
-const mockedUsedNavigate = vi.fn()
-vi.mock('react-router-dom', () => ({
+const mockedUsedNavigate = vi.fn();
+vi.mock('react-router', () => ({
   useNavigate: () => mockedUsedNavigate,
-}))
+}));
 
 vi.mock('src/common/hooks/useCommonStores', () => ({
   __esModule: true,
   useCommonStores: vi.fn(),
-}))
+}));
 
 const downloadProps = {
   body: 'Body Text for the donation request',
   iframeSrc: 'https://donorbox.org/embed/ppcpdonor?language=en',
   imageURL:
     'https://images.unsplash.com/photo-1520222984843-df35ebc0f24d?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjF9',
-}
+};
 
 describe('DownloadWithDonationAsk', () => {
   it('opens the donation modal for fileLink', () => {
-    const handleClick = vi.fn()
-    const fileLink = 'http://youtube.com/'
+    const handleClick = vi.fn();
+    const fileLink = 'http://youtube.com/';
 
     const { getAllByTestId } = render(
       <DownloadWithDonationAsk
@@ -37,22 +37,19 @@ describe('DownloadWithDonationAsk', () => {
         fileLink={fileLink}
         files={[]}
       />,
-    )
+    );
 
-    const downloadButton = getAllByTestId('downloadButton')[0]
-    fireEvent.click(downloadButton)
+    const downloadButton = getAllByTestId('downloadButton')[0];
+    fireEvent.click(downloadButton);
 
-    expect(getAllByTestId('DonationRequestSkip')[0]).toHaveAttribute(
-      'href',
-      fileLink,
-    )
-    expect(getAllByTestId('DonationRequest')[0]).toBeInTheDocument()
-    expect(handleClick).not.toHaveBeenCalled()
-  })
+    expect(getAllByTestId('DonationRequestSkip')[0]).toHaveAttribute('href', fileLink);
+    expect(getAllByTestId('DonationRequest')[0]).toBeInTheDocument();
+    expect(handleClick).not.toHaveBeenCalled();
+  });
 
   it('opens the donation modal for files', () => {
-    const publicUrl = 'http://great-url.com/'
-    const handleClick = vi.fn()
+    const publicUrl = 'http://great-url.com/';
+    const handleClick = vi.fn();
 
     const { getAllByTestId } = render(
       <DownloadWithDonationAsk
@@ -68,21 +65,18 @@ describe('DownloadWithDonationAsk', () => {
           } as MediaFile,
         ]}
       />,
-    )
+    );
 
-    const downloadButton = getAllByTestId('downloadButton')[0]
-    fireEvent.click(downloadButton)
+    const downloadButton = getAllByTestId('downloadButton')[0];
+    fireEvent.click(downloadButton);
 
-    expect(getAllByTestId('DonationRequestSkip')[0]).toHaveAttribute(
-      'href',
-      publicUrl,
-    )
-    expect(getAllByTestId('DonationRequest')[0]).toBeInTheDocument()
-    expect(handleClick).not.toHaveBeenCalled()
-  })
+    expect(getAllByTestId('DonationRequestSkip')[0]).toHaveAttribute('href', publicUrl);
+    expect(getAllByTestId('DonationRequest')[0]).toBeInTheDocument();
+    expect(handleClick).not.toHaveBeenCalled();
+  });
 
   it('renders the download counter with the correct total', () => {
-    const fileDownloadCount = 1234567
+    const fileDownloadCount = 1234567;
 
     const { container } = render(
       <DownloadWithDonationAsk
@@ -91,10 +85,10 @@ describe('DownloadWithDonationAsk', () => {
         fileLink={undefined}
         files={[]}
       />,
-    )
-    const counter = container.querySelector('[data-cy="file-download-counter"]')
-    expect(counter).toBeInTheDocument()
+    );
+    const counter = container.querySelector('[data-cy="file-download-counter"]');
+    expect(counter).toBeInTheDocument();
 
-    expect(counter).toHaveTextContent('1,234,567 downloads')
-  })
-})
+    expect(counter).toHaveTextContent('1,234,567 downloads');
+  });
+});

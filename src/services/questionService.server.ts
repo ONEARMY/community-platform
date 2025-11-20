@@ -1,10 +1,10 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBQuestion, Question } from 'oa-shared'
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBQuestion, Question } from 'oa-shared';
 
 const getById = async (id: number, client: SupabaseClient) => {
-  const result = await client.from('questions').select().eq('id', id).single()
-  return result.data as DBQuestion
-}
+  const result = await client.from('questions').select().eq('id', id).single();
+  return result.data as DBQuestion;
+};
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
   return client
@@ -38,8 +38,8 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
     )
     .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
     .or('deleted.eq.false,deleted.is.null')
-    .single()
-}
+    .single();
+};
 
 const getQuestionsByUser = async (
   client: SupabaseClient,
@@ -47,10 +47,10 @@ const getQuestionsByUser = async (
 ): Promise<Partial<Question>[]> => {
   const functionResult = await client.rpc('get_user_questions', {
     username_param: username,
-  })
+  });
 
   if (functionResult.error || functionResult.count === 0) {
-    return []
+    return [];
   }
 
   const items = functionResult.data.map((x) => {
@@ -59,14 +59,14 @@ const getQuestionsByUser = async (
       title: x.title,
       slug: x.slug,
       usefulCount: x.total_useful,
-    }
-  })
+    };
+  });
 
-  return items
-}
+  return items;
+};
 
 export const questionServiceServer = {
   getById,
   getBySlug,
   getQuestionsByUser,
-}
+};

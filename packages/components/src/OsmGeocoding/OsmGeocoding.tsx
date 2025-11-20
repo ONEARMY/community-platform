@@ -1,22 +1,22 @@
-import { useEffect, useRef, useState } from 'react'
-import { useDebouncedCallback } from 'use-debounce'
+import { useEffect, useRef, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
-import { SearchField } from '../SearchField/SearchField'
-import { OsmGeocodingLoader } from './OsmGeocodingLoader'
-import { OsmGeocodingResultsList } from './OsmGeocodingResultsList'
+import { SearchField } from '../SearchField/SearchField';
+import { OsmGeocodingLoader } from './OsmGeocodingLoader';
+import { OsmGeocodingResultsList } from './OsmGeocodingResultsList';
 
-import type { Result } from './types'
+import type { Result } from './types';
 
 export interface Props {
-  placeholder?: string
-  debounceMs?: number
-  iconUrl?: string
-  callback?: any
-  city?: string
-  countrycodes?: string
-  acceptLanguage?: string
-  viewbox?: string
-  loading?: boolean
+  placeholder?: string;
+  debounceMs?: number;
+  iconUrl?: string;
+  callback?: any;
+  city?: string;
+  countrycodes?: string;
+  acceptLanguage?: string;
+  viewbox?: string;
+  loading?: boolean;
 }
 
 export const OsmGeocoding = ({
@@ -27,73 +27,63 @@ export const OsmGeocoding = ({
   viewbox = '',
   loading = false,
 }: Props) => {
-  const [searchValue, setSearchValue] = useState('')
-  const [results, setResults] = useState<Result[]>([])
-  const [showResults, setShowResults] = useState(false)
-  const [showLoader, setShowLoader] = useState(loading)
-  const [queryLocationService, setQueryLocationService] = useState(false)
-  const mainContainerRef = useRef<HTMLDivElement>(null)
+  const [searchValue, setSearchValue] = useState('');
+  const [results, setResults] = useState<Result[]>([]);
+  const [showResults, setShowResults] = useState(false);
+  const [showLoader, setShowLoader] = useState(loading);
+  const [queryLocationService, setQueryLocationService] = useState(false);
+  const mainContainerRef = useRef<HTMLDivElement>(null);
 
   document.addEventListener('click', function (event) {
-    const isClickInside = mainContainerRef?.current?.contains(
-      event.target as Node,
-    )
+    const isClickInside = mainContainerRef?.current?.contains(event.target as Node);
     if (!isClickInside) {
-      setShowResults(false)
+      setShowResults(false);
     }
-  })
+  });
 
   document.onkeyup = function (event) {
     if (event.key === 'Escape') {
-      setShowResults(false)
+      setShowResults(false);
     }
-  }
+  };
 
   function getGeocoding(address = '') {
-    if (address.length === 0) return
+    if (address.length === 0) return;
 
-    setShowLoader(true)
+    setShowLoader(true);
 
-    let url = `https://nominatim.openstreetmap.org/search?format=json&q=${address}&accept-language=${acceptLanguage}`
+    let url = `https://nominatim.openstreetmap.org/search?format=json&q=${address}&accept-language=${acceptLanguage}`;
 
     if (viewbox.length) {
-      url = `${url}&viewbox=${viewbox}&bounded=1`
+      url = `${url}&viewbox=${viewbox}&bounded=1`;
     }
 
     fetch(url, {
       headers: new Headers({
-        'User-Agent':
-          'onearmy.earth Community Platform (https://platform.onearmy.earth)',
+        'User-Agent': 'onearmy.earth Community Platform (https://platform.onearmy.earth)',
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        setResults(data)
-        setShowResults(true)
+        setResults(data);
+        setShowResults(true);
       })
       .catch(null)
-      .finally(() => setShowLoader(false))
+      .finally(() => setShowLoader(false));
   }
 
-  const showResultsListing = !!results.length && showResults && !showLoader
+  const showResultsListing = !!results.length && showResults && !showLoader;
 
-  const dcb = useDebouncedCallback(
-    (search: string) => getGeocoding(search),
-    debounceMs,
-  )
+  const dcb = useDebouncedCallback((search: string) => getGeocoding(search), debounceMs);
 
   useEffect(() => {
     if (queryLocationService) {
-      dcb(searchValue)
+      dcb(searchValue);
     }
-  }, [searchValue, queryLocationService, dcb])
+  }, [searchValue, queryLocationService, dcb]);
 
   return (
-    <div
-      data-cy="osm-geocoding"
-      ref={mainContainerRef}
-      style={{ width: '100%' }}
-    >
+    <div data-cy="osm-geocoding" ref={mainContainerRef} style={{ width: '100%' }}>
       <SearchField
         autoComplete="off"
         name="geocoding"
@@ -102,16 +92,16 @@ export const OsmGeocoding = ({
         placeHolder={placeholder}
         value={searchValue}
         onChange={(value: string) => {
-          setQueryLocationService(true)
-          setSearchValue(value)
+          setQueryLocationService(true);
+          setSearchValue(value);
         }}
         onClickDelete={() => {
-          setSearchValue('')
-          setQueryLocationService(false)
+          setSearchValue('');
+          setQueryLocationService(false);
         }}
         onClickSearch={() => {
-          setQueryLocationService(true)
-          setSearchValue(searchValue)
+          setQueryLocationService(true);
+          setSearchValue(searchValue);
         }}
         additionalStyle={{
           background: 'white',
@@ -120,8 +110,7 @@ export const OsmGeocoding = ({
           border: '2px solid black',
           height: '44px',
           display: 'flex',
-          borderRadius:
-            showResultsListing || showLoader ? '5px 5px 0 0' : '5px',
+          borderRadius: showResultsListing || showLoader ? '5px 5px 0 0' : '5px',
           marginBottom: 0,
         }}
       />
@@ -131,15 +120,15 @@ export const OsmGeocoding = ({
           results={results}
           callback={(result: Result) => {
             if (result) {
-              setQueryLocationService(false)
-              setSearchValue(result.display_name)
+              setQueryLocationService(false);
+              setSearchValue(result.display_name);
             }
 
-            callback(result)
+            callback(result);
           }}
           setShowResults={setShowResults}
         />
       )}
     </div>
-  )
-}
+  );
+};

@@ -1,8 +1,7 @@
 export const SingaporeStubResponse = [
   {
     place_id: 297710747,
-    licence:
-      'Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright',
+    licence: 'Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright',
     osm_type: 'relation',
     osm_id: 536780,
     boundingbox: ['1.1303611', '1.5143183', '103.5666667', '104.5716696'],
@@ -14,12 +13,11 @@ export const SingaporeStubResponse = [
     importance: 0.8432767551059058,
     icon: 'https://nominatim.openstreetmap.org/ui/mapicons/poi_boundary_administrative.p.20.png',
   },
-]
+];
 
 export const SingaporeReverseStubResponse = {
   place_id: 250166445,
-  licence:
-    'Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright',
+  licence: 'Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright',
   osm_type: 'way',
   osm_id: 733562800,
   lat: '1.3572387983345497',
@@ -36,4 +34,4 @@ export const SingaporeReverseStubResponse = {
     country_code: 'sg',
   },
   boundingbox: ['1.3569979', '1.3604959', '103.8188088', '103.8214283'],
-}
+};

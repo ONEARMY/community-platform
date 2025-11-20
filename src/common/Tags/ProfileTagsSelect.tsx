@@ -1,70 +1,66 @@
-import { useEffect, useState } from 'react'
-import { Select } from 'oa-components'
-import { profileTagsService } from 'src/services/profileTagsService'
+import { useEffect, useState } from 'react';
+import { Select } from 'oa-components';
+import { profileTagsService } from 'src/services/profileTagsService';
 
-import { FieldContainer } from '../Form/FieldContainer'
+import { FieldContainer } from '../Form/FieldContainer';
 
-import type { ProfileCategory, ProfileTag } from 'oa-shared'
-import type { FieldRenderProps } from 'react-final-form'
+import type { ProfileCategory, ProfileTag } from 'oa-shared';
+import type { FieldRenderProps } from 'react-final-form';
 
 export interface IProps extends Partial<FieldRenderProps<any, any>> {
-  value: number[]
-  profileType: string | undefined
-  placeholder?: string
+  value: number[];
+  profileType: string | undefined;
+  placeholder?: string;
 }
 
-const onProfileTypeChange = (
-  profileType: string | undefined,
-): ProfileCategory => {
+const onProfileTypeChange = (profileType: string | undefined): ProfileCategory => {
   if (!profileType || profileType === 'member') {
-    return 'member'
+    return 'member';
   }
-  return 'space'
-}
+  return 'space';
+};
 
 export const ProfileTagsSelect = (props: IProps) => {
-  const [allTags, setAllTags] = useState<ProfileTag[]>([])
-  const [filteredTags, setFilteredTags] = useState<ProfileTag[]>([])
-  const [selectedTags, setSelectedTags] = useState<ProfileTag[]>([])
+  const [allTags, setAllTags] = useState<ProfileTag[]>([]);
+  const [filteredTags, setFilteredTags] = useState<ProfileTag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<ProfileTag[]>([]);
 
   const setFilters = () => {
-    const category = onProfileTypeChange(props.profileType)
+    const category = onProfileTypeChange(props.profileType);
 
-    const filteredByType = allTags.filter(
-      ({ profileType }) => profileType === category,
-    )
-    setFilteredTags(filteredByType)
-  }
+    const filteredByType = allTags.filter(({ profileType }) => profileType === category);
+    setFilteredTags(filteredByType);
+  };
 
   useEffect(() => {
     const initTags = async () => {
-      const tags = await profileTagsService.getAllTags()
+      const tags = await profileTagsService.getAllTags();
 
       if (!tags) {
-        return
+        return;
       }
-      setAllTags(tags)
-    }
+      setAllTags(tags);
+    };
 
-    initTags()
-  }, [])
+    initTags();
+  }, []);
 
   useEffect(() => {
     if (allTags.length > 0 && props.value.length > 0) {
-      setSelectedTags(allTags.filter((x) => props.value.includes(x.id)))
+      setSelectedTags(allTags.filter((x) => props.value.includes(x.id)));
     }
-  }, [allTags, props.value])
+  }, [allTags, props.value]);
 
   useEffect(() => {
-    setFilters()
-  }, [allTags, props.profileType])
+    setFilters();
+  }, [allTags, props.profileType]);
 
   const onChange = (tags: ProfileTag[]) => {
-    setSelectedTags(tags)
-    props.onChange(tags.map((x) => x.id))
-  }
+    setSelectedTags(tags);
+    props.onChange(tags.map((x) => x.id));
+  };
 
-  const isOptionDisabled = () => selectedTags.length >= (props.maxTotal || 4)
+  const isOptionDisabled = () => selectedTags.length >= (props.maxTotal || 4);
 
   return (
     <FieldContainer data-cy="profile-tag-select">
@@ -81,5 +77,5 @@ export const ProfileTagsSelect = (props: IProps) => {
         onChange={onChange}
       />
     </FieldContainer>
-  )
-}
+  );
+};

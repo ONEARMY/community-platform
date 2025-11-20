@@ -1,37 +1,30 @@
 export const loader = ({ request }: { request: Request }) => {
-  const { headers } = request
-  const host = headers.get('host')
-  let robotText = ''
+  const { headers } = request;
+  const host = headers.get('host');
+  let robotText = '';
 
   if (host?.includes('fly.dev')) {
     // disable for preview sites
     robotText = `User-agent: *
-      Disallow: /`
+      Disallow: /`;
   } else {
-    const allModules = [
-      'howto',
-      'map',
-      'research',
-      'academy',
-      'question',
-      'news',
-    ]
-    const availableModules = process.env.VITE_SUPPORTED_MODULES?.split(',')
+    const allModules = ['howto', 'map', 'research', 'academy', 'question', 'news'];
+    const availableModules = process.env.VITE_SUPPORTED_MODULES?.split(',');
 
-    robotText = 'User-agent: *'
+    robotText = 'User-agent: *';
 
     allModules.forEach((x) => {
-      let pagePath = ''
+      let pagePath = '';
       if (x === 'howto') {
-        pagePath = '/library/'
+        pagePath = '/library/';
       } else {
-        pagePath = `/${x}/`
+        pagePath = `/${x}/`;
       }
 
-      const permission = availableModules?.includes(x) ? 'Allow' : 'Disallow'
+      const permission = availableModules?.includes(x) ? 'Allow' : 'Disallow';
 
-      robotText += `\n${permission}: ${pagePath}`
-    })
+      robotText += `\n${permission}: ${pagePath}`;
+    });
   }
 
   return new Response(robotText, {
@@ -39,5 +32,5 @@ export const loader = ({ request }: { request: Request }) => {
     headers: {
       'Content-Type': 'text/plain',
     },
-  })
-}
+  });
+};

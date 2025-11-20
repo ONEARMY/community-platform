@@ -1,11 +1,11 @@
-import { ConfirmModal } from './ConfirmModal'
+import { ConfirmModal } from './ConfirmModal';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Layout/ConfirmModal',
   component: ConfirmModal,
-} as Meta<typeof ConfirmModal>
+} as Meta<typeof ConfirmModal>;
 
 export const Default: StoryFn<typeof ConfirmModal> = () => (
   <ConfirmModal
@@ -15,4 +15,4 @@ export const Default: StoryFn<typeof ConfirmModal> = () => (
     handleCancel={() => null}
     handleConfirm={() => null}
   />
-)
+);

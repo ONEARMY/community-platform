@@ -1,27 +1,24 @@
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type {
   IPatreonMembershipAttributes,
   IPatreonTierAttributes,
   IPatreonUser,
   IPatreonUserAttributes,
   PatreonSettings,
-} from 'oa-shared'
+} from 'oa-shared';
 
-const isSupporter = async (
-  patreonUser: IPatreonUser,
-  client: SupabaseClient,
-) => {
+const isSupporter = async (patreonUser: IPatreonUser, client: SupabaseClient) => {
   if (patreonUser.membership?.attributes.patron_status !== 'active_patron') {
-    return false
+    return false;
   }
 
-  const result = await client.from('patreon_settings').select('tiers').limit(1)
-  const patreonSettings = result.data?.[0] as PatreonSettings
+  const result = await client.from('patreon_settings').select('tiers').limit(1);
+  const patreonSettings = result.data?.[0] as PatreonSettings;
 
-  const validIds = patreonSettings.tiers.map((x) => x.id)
+  const validIds = patreonSettings.tiers.map((x) => x.id);
 
-  return patreonUser.membership?.tiers.some(({ id }) => validIds.includes(id))
-}
+  return patreonUser.membership?.tiers.some(({ id }) => validIds.includes(id));
+};
 
 const parsePatreonUser = (patreonUser: any): IPatreonUser => {
   // As we do not request the identity.membership scope, we only receive the user's membership to the
@@ -29,15 +26,13 @@ const parsePatreonUser = (patreonUser: any): IPatreonUser => {
   const membership =
     patreonUser.data.relationships.memberships.data.length > 0
       ? patreonUser.included.find(({ type }) => type === 'member')
-      : undefined
+      : undefined;
 
   const tiers = membership?.relationships.currently_entitled_tiers.data
     .map(({ id }) =>
-      patreonUser.included.find(
-        ({ type, id: includedId }) => type === 'tier' && id === includedId,
-      ),
+      patreonUser.included.find(({ type, id: includedId }) => type === 'tier' && id === includedId),
     )
-    .map(({ id, attributes }) => ({ id, attributes }))
+    .map(({ id, attributes }) => ({ id, attributes }));
 
   const userMembership = membership
     ? {
@@ -45,7 +40,7 @@ const parsePatreonUser = (patreonUser: any): IPatreonUser => {
         attributes: membership.attributes,
         tiers,
       }
-    : undefined
+    : undefined;
 
   return {
     id: patreonUser.data.id,
@@ -53,8 +48,8 @@ const parsePatreonUser = (patreonUser: any): IPatreonUser => {
     link: patreonUser.links.self,
     // Only include membership if the user is a member of the One Army Patreon page.
     ...(userMembership ? { membership: userMembership } : {}),
-  }
-}
+  };
+};
 
 /*
  * docs: https://docs.patreon.com/#get-api-oauth2-v2-identity
@@ -71,7 +66,7 @@ const getCurrentPatreonUser = async (accessToken: string) => {
     'last_name',
     'thumb_url',
     'url',
-  ]
+  ];
 
   const membershipFields: Array<keyof IPatreonMembershipAttributes> = [
     'campaign_lifetime_support_cents',
@@ -86,7 +81,7 @@ const getCurrentPatreonUser = async (accessToken: string) => {
     'pledge_cadence',
     'pledge_relationship_start',
     'will_pay_amount_cents',
-  ]
+  ];
 
   const tierFields: Array<keyof IPatreonTierAttributes> = [
     'amount_cents',
@@ -99,43 +94,41 @@ const getCurrentPatreonUser = async (accessToken: string) => {
     'published_at',
     'title',
     'url',
-  ]
+  ];
 
   const url = encodeURI(
     `https://www.patreon.com/api/oauth2/v2/identity?include=memberships,memberships.currently_entitled_tiers&fields[user]=${userFields.join(
       ',',
-    )}&fields[member]=${membershipFields.join(
-      ',',
-    )}&fields[tier]=${tierFields.join(',')}`,
-  )
+    )}&fields[member]=${membershipFields.join(',')}&fields[tier]=${tierFields.join(',')}`,
+  );
 
   const response = await fetch(url, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
-  })
+  });
 
   if (!response.ok) {
-    const { error } = await response.json()
-    console.error(error)
-    throw new Error('Error getting patreon user')
+    const { error } = await response.json();
+    console.error(error);
+    throw new Error('Error getting patreon user');
   }
 
-  return await response.json()
-}
+  return await response.json();
+};
 
 const verifyAndUpdatePatreonUser = async (
   code: string,
-  user: User,
+  userAuthId: string,
   client: SupabaseClient,
   origin: string,
 ) => {
-  const PATREON_CLIENT_ID = process.env.PATREON_CLIENT_ID
-  const PATREON_CLIENT_SECRET = process.env.PATREON_CLIENT_SECRET
+  const PATREON_CLIENT_ID = process.env.PATREON_CLIENT_ID;
+  const PATREON_CLIENT_SECRET = process.env.PATREON_CLIENT_SECRET;
 
   if (!PATREON_CLIENT_ID || !PATREON_CLIENT_SECRET) {
-    throw new Error('PATREON_CLIENT_ID and PATREON_CLIENT_SECRET must be set')
+    throw new Error('PATREON_CLIENT_ID and PATREON_CLIENT_SECRET must be set');
   }
 
   const response = await fetch(
@@ -146,18 +139,18 @@ const verifyAndUpdatePatreonUser = async (
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     },
-  )
+  );
 
   if (!response.ok) {
-    const result = await response.json()
-    console.error({ result })
-    throw new Error('Error getting patreon access token')
+    const result = await response.json();
+    console.error({ result });
+    throw new Error('Error getting patreon access token');
   }
 
-  const { access_token } = await response.json()
-  const patreonUser = await getCurrentPatreonUser(access_token)
-  const patreonUserParsed = parsePatreonUser(patreonUser)
-  const isSupporterUser = await isSupporter(patreonUserParsed, client)
+  const { access_token } = await response.json();
+  const patreonUser = await getCurrentPatreonUser(access_token);
+  const patreonUserParsed = parsePatreonUser(patreonUser);
+  const isSupporterUser = await isSupporter(patreonUserParsed, client);
 
   // Update in supabase
   await client
@@ -166,17 +159,17 @@ const verifyAndUpdatePatreonUser = async (
       patreon: patreonUserParsed,
       is_supporter: isSupporterUser,
     })
-    .eq('auth_id', user.id)
-}
+    .eq('auth_id', userAuthId);
+};
 
-const disconnectUser = async (user: User, client: SupabaseClient) => {
+const disconnectUser = async (userAuthId: string, client: SupabaseClient) => {
   await client
     .from('profiles')
     .update({ patreon: null, is_supporter: false })
-    .eq('auth_id', user.id)
-}
+    .eq('auth_id', userAuthId);
+};
 
 export const patreonServiceServer = {
   verifyAndUpdatePatreonUser,
   disconnectUser,
-}
+};

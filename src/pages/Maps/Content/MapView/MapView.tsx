@@ -1,48 +1,54 @@
-import { useContext, useEffect, useRef, useState } from 'react'
-import { Button, Map } from 'oa-components'
-import { Box, Flex } from 'theme-ui'
+import { useContext, useEffect, useRef } from 'react';
+import { Button, Map } from 'oa-components';
+import { Box, Flex } from 'theme-ui';
 
-import { MapContext } from '../../MapContext'
-import { ButtonZoomIn } from './ButtonZoomIn'
-import { Clusters } from './Cluster.client'
-import { Popup } from './Popup.client'
+import { MapContext } from '../../MapContext';
+import { ButtonZoomIn } from './ButtonZoomIn.client';
+import { Clusters } from './Cluster.client';
+import { Popup } from './Popup.client';
 
-import type { LatLngExpression } from 'leaflet'
-import type { Map as MapType } from 'react-leaflet'
+import type { LatLngExpression } from 'leaflet';
+import type { Map as MapType } from 'react-leaflet';
 
 export const MapView = () => {
-  const mapState = useContext(MapContext)
-  const [zoom, setZoom] = useState(2)
-  const mapRef = useRef<MapType>(null)
+  const mapState = useContext(MapContext);
+  const mapRef = useRef<MapType>(null);
+  const clusterGroupRef = useRef<any>(null);
 
   useEffect(() => {
-    if (mapRef.current) {
-      ;(window as any).mapInstance = mapRef.current
+    if (mapRef.current && mapState) {
+      mapState.setMapRef(mapRef.current);
     }
-  }, [mapRef])
+  }, [mapRef.current, mapState]);
+
+  useEffect(() => {
+    if (clusterGroupRef.current && mapState) {
+      mapState.setClusterGroupRef(clusterGroupRef.current);
+    }
+  }, [clusterGroupRef.current, mapState]);
 
   if (!mapState) {
-    return null
+    return null;
   }
 
   const handleLocationChange = () => {
     if (mapRef.current) {
-      mapState.setBoundaries(mapRef.current.leafletElement.getBounds())
+      mapState.setBoundaries(mapRef.current.leafletElement.getBounds());
     }
-  }
+  };
 
-  const isViewportGreaterThanTablet = window.innerWidth > 1024
+  const isViewportGreaterThanTablet = window.innerWidth > 1024;
   const mapCenter: LatLngExpression = mapState.location
     ? [mapState.location.lat, mapState.location.lng]
-    : [0, 0]
+    : [0, 0];
 
   return (
     <Map
       ref={mapRef}
       className="markercluster-map"
       center={mapCenter}
-      zoom={mapState?.location ? zoom : 2}
-      setZoom={setZoom}
+      zoom={mapState.zoom}
+      setZoom={mapState.setZoom}
       maxZoom={18}
       style={{ flex: 1, backgroundColor: '#AAD3DF' }}
       zoomControl={isViewportGreaterThanTablet}
@@ -66,7 +72,7 @@ export const MapView = () => {
       >
         <ButtonZoomIn
           setCenter={(value) => mapState.setLocation(value)}
-          setZoom={setZoom}
+          setZoom={mapState.setZoom}
         />
       </Box>
 
@@ -91,7 +97,11 @@ export const MapView = () => {
       {mapState.filteredPins && (
         <Clusters
           pins={mapState.filteredPins}
-          onPinClick={mapState.selectPin}
+          onPinClick={mapState.selectPinWithClusterCheck}
+          onClusterClick={(cluster) => {
+            mapState.fitBounds(cluster.getBounds());
+          }}
+          clusterGroupRef={clusterGroupRef}
         />
       )}
       {mapState.selectedPin && (
@@ -102,5 +112,5 @@ export const MapView = () => {
         />
       )}
     </Map>
-  )
-}
+  );
+};

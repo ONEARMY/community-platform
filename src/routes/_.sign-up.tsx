@@ -1,63 +1,50 @@
 /* eslint-disable unicorn/filename-case */
-import { Field, Form } from 'react-final-form'
-import { Link, redirect, useActionData } from '@remix-run/react'
-import {
-  Button,
-  ExternalLink,
-  FieldInput,
-  HeroBanner,
-  TextNotification,
-} from 'oa-components'
-import { FRIENDLY_MESSAGES } from 'oa-shared'
-import { PasswordField } from 'src/common/Form/PasswordField'
-import Main from 'src/pages/common/Layout/Main'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { authServiceServer } from 'src/services/authService.server'
-import { generateTags, mergeMeta } from 'src/utils/seo.utils'
-import {
-  composeValidators,
-  noSpecialCharacters,
-  required,
-} from 'src/utils/validators'
-import { Card, Flex, Heading, Label, Text } from 'theme-ui'
-import { bool, object, ref, string } from 'yup'
+import { Field, Form } from 'react-final-form';
+import { Link, redirect, useActionData } from 'react-router';
+import { Button, ExternalLink, FieldInput, HeroBanner, TextNotification } from 'oa-components';
+import { FRIENDLY_MESSAGES } from 'oa-shared';
+import { PasswordField } from 'src/common/Form/PasswordField';
+import Main from 'src/pages/common/Layout/Main';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { authServiceServer } from 'src/services/authService.server';
+import { generateTags, mergeMeta } from 'src/utils/seo.utils';
+import { composeValidators, noSpecialCharacters, required } from 'src/utils/validators';
+import { Card, Flex, Heading, Label, Text } from 'theme-ui';
+import { bool, object, ref, string } from 'yup';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { client } = createSupabaseServerClient(request)
-  const { data } = await client.auth.getUser()
+  const { client } = createSupabaseServerClient(request);
+  const claims = await client.auth.getClaims();
 
-  if (data.user) {
-    return redirect('/')
+  if (claims.data?.claims) {
+    return redirect('/');
   }
 
-  return null
-}
+  return null;
+};
 
 export const meta = mergeMeta<typeof loader>(() => {
-  const title = `Sign Up - ${import.meta.env.VITE_SITE_NAME}`
+  const title = `Sign Up - ${import.meta.env.VITE_SITE_NAME}`;
 
-  return generateTags(title)
-})
+  return generateTags(title);
+});
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const { client, headers } = createSupabaseServerClient(request)
-  const formData = await request.formData()
-  const url = new URL(request.url)
-  const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:'
-  const emailRedirectTo = `${protocol}//${url.host}/email-confirmation`
+  const { client, headers } = createSupabaseServerClient(request);
+  const formData = await request.formData();
+  const url = new URL(request.url);
+  const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
+  const emailRedirectTo = `${protocol}//${url.host}/email-confirmation`;
 
-  const username = formData.get('username') as string
+  const username = formData.get('username') as string;
   if (!(await authServiceServer.isUsernameAvailable(username, client))) {
-    return Response.json(
-      { error: FRIENDLY_MESSAGES['sign-up/username-taken'] },
-      { headers },
-    )
+    return Response.json({ error: FRIENDLY_MESSAGES['sign-up/username-taken'] }, { headers });
   }
 
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
+  const email = formData.get('email') as string;
+  const password = formData.get('password') as string;
 
   const { data, error } = await client.auth.signUp({
     email,
@@ -66,63 +53,47 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       data: { username },
       emailRedirectTo,
     },
-  })
+  });
 
   if (error) {
     if (error.code === 'weak_password') {
-      return Response.json(
-        { error: FRIENDLY_MESSAGES['password-weak'] },
-        { headers },
-      )
+      return Response.json({ error: FRIENDLY_MESSAGES['password-weak'] }, { headers });
     }
 
-    return Response.json(
-      { error: FRIENDLY_MESSAGES['generic-error'] },
-      { headers },
-    )
+    return Response.json({ error: FRIENDLY_MESSAGES['generic-error'] }, { headers });
   }
 
   if (data.user) {
     const response = await authServiceServer.createUserProfile(
       { user: data.user, username },
       client,
-    )
+    );
 
     // This will error if there is already a profile with this auth_id + tenant_id
     if (response.error) {
-      return Response.json(
-        { error: FRIENDLY_MESSAGES['generic-error'] },
-        { headers },
-      )
+      return Response.json({ error: FRIENDLY_MESSAGES['generic-error'] }, { headers });
     }
   }
 
-  return redirect(`/sign-up-message?email=${email}`, { headers })
-}
+  return redirect(`/sign-up-message?email=${email}`, { headers });
+};
 
-const rowWidth = ['100%', '100%', `100%`]
+const rowWidth = ['100%', '100%', `100%`];
 
 export default function Index() {
-  const actionResponse = useActionData<typeof action>()
+  const actionResponse: any = useActionData<typeof action>();
 
   const validationSchema = object({
-    username: string()
-      .min(2, FRIENDLY_MESSAGES['sign-up/username-short'])
-      .required('Required'),
-    email: string()
-      .email(FRIENDLY_MESSAGES['auth/invalid-email'])
-      .required('Required'),
+    username: string().min(2, FRIENDLY_MESSAGES['sign-up/username-short']).required('Required'),
+    email: string().email(FRIENDLY_MESSAGES['auth/invalid-email']).required('Required'),
     password: string()
       .min(6, FRIENDLY_MESSAGES['sign-up/password-short'])
       .required(FRIENDLY_MESSAGES['sign-up/password-required']),
     'confirm-password': string()
-      .oneOf(
-        [ref('password'), ''],
-        FRIENDLY_MESSAGES['sign-up/password-mismatch'],
-      )
+      .oneOf([ref('password'), ''], FRIENDLY_MESSAGES['sign-up/password-mismatch'])
       .required(FRIENDLY_MESSAGES['sign-up/email-required']),
     consent: bool().oneOf([true], FRIENDLY_MESSAGES['sign-up/terms']),
-  })
+  });
 
   return (
     <Main style={{ flex: 1 }}>
@@ -130,7 +101,7 @@ export default function Index() {
         onSubmit={() => {}}
         validate={async (values: any) => {
           try {
-            await validationSchema.validate(values, { abortEarly: false })
+            await validationSchema.validate(values, { abortEarly: false });
           } catch (err) {
             return err.inner.reduce(
               (acc: any, error) => ({
@@ -138,11 +109,11 @@ export default function Index() {
                 [error.path]: error.message,
               }),
               {},
-            )
+            );
           }
         }}
         render={({ submitting, invalid, pristine }) => {
-          const disabled = invalid || submitting
+          const disabled = invalid || submitting;
           return (
             <form method="post">
               <Flex
@@ -199,10 +170,7 @@ export default function Index() {
                           type="userName"
                           placeholder="yourusername"
                           component={FieldInput}
-                          validate={composeValidators(
-                            required,
-                            noSpecialCharacters,
-                          )}
+                          validate={composeValidators(required, noSpecialCharacters)}
                         />
                       </Flex>
                       <Flex
@@ -245,9 +213,7 @@ export default function Index() {
                           width: rowWidth,
                         }}
                       >
-                        <Label htmlFor="confirm-password">
-                          Confirm Password
-                        </Label>
+                        <Label htmlFor="confirm-password">Confirm Password</Label>
                         <PasswordField
                           data-cy="confirm-password"
                           name="confirm-password"
@@ -276,13 +242,9 @@ export default function Index() {
                             }}
                           >
                             I agree to the{' '}
-                            <ExternalLink href="/terms">
-                              Terms of Service
-                            </ExternalLink>
+                            <ExternalLink href="/terms">Terms of Service</ExternalLink>
                             <span> and </span>
-                            <ExternalLink href="/privacy">
-                              Privacy Policy
-                            </ExternalLink>
+                            <ExternalLink href="/privacy">Privacy Policy</ExternalLink>
                           </Text>
                         </Label>
                       </Flex>
@@ -308,9 +270,9 @@ export default function Index() {
                 </Flex>
               </Flex>
             </form>
-          )
+          );
         }}
       />
     </Main>
-  )
+  );
 }

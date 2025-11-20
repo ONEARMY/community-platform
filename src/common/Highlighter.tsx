@@ -1,17 +1,17 @@
-import Highlighter from 'react-highlight-words'
-import { Text } from 'theme-ui'
+import Highlighter from 'react-highlight-words';
+import { Text } from 'theme-ui';
 
 const HighLighted = ({ children }: { children: string }) => {
   return (
     <Text data-cy="HightedText" sx={{ background: 'accent.hover' }}>
       {children}
     </Text>
-  )
-}
+  );
+};
 
 export interface IProps {
-  searchWords: (string | RegExp)[]
-  textToHighlight: string
+  searchWords: (string | RegExp)[];
+  textToHighlight: string;
 }
 
 const HighlighterComponent = (props: IProps) => {
@@ -23,7 +23,7 @@ const HighlighterComponent = (props: IProps) => {
       searchWords={props.searchWords}
       textToHighlight={props.textToHighlight}
     />
-  )
-}
+  );
+};
 
-export { HighlighterComponent as Highlighter }
+export { HighlighterComponent as Highlighter };

@@ -1,7 +1,7 @@
 describe('[News.Search]', () => {
   beforeEach(() => {
-    cy.visit('/news')
-  })
+    cy.visit('/news');
+  });
 
   describe('[By Everyone]', () => {
     it('Searches', () => {
@@ -22,12 +22,12 @@ describe('[News.Search]', () => {
       // cy.get('[data-cy=news-list-item]').click()
       // cy.go('back')
       // cy.url().should('not.include', 'q=deal')
-    })
+    });
 
     // it('should load more news', () => {
     //   cy.get('[data-cy=news-list-item]:eq(21)').should('not.exist')
     //   cy.get('[data-cy=load-more]').click()
     //   cy.get('[data-cy=news-list-item]:eq(21)').should('exist')
     // })
-  })
-})
+  });
+});

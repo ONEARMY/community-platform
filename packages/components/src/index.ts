@@ -87,7 +87,7 @@ export { VerticalList } from './VerticalList/VerticalList.client';
 export { VideoPlayer } from './VideoPlayer/VideoPlayer';
 export { VisitorModal, visitorDisplayData } from './VisitorModal/VisitorModal';
 export { UserBadge } from './Username/UserBadge';
-export { UsefulVotersList } from './UsefulVotersList/UsefulVotersList';
+export { ProfileList } from './ProfileList/ProfileList';
 
 export type { availableGlyphs } from './Icon/types';
 export type { GridFormFields } from './GridForm/GridForm';

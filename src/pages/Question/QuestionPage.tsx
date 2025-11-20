@@ -6,13 +6,12 @@ import {
   ContentStatistics,
   ImageGallery,
   LinkifyText,
+  ProfileList,
   TagList,
   UsefulStatsButton,
-  UsefulVotersList,
 } from 'oa-components';
 import { ClientOnly } from 'remix-utils/client-only';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
-// import { usefulService } from 'src/services/usefulService'
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
@@ -23,7 +22,7 @@ import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectio
 import { DraftTag } from '../common/Drafts/DraftTag';
 import { UserNameTag } from '../common/UserNameTag/UserNameTag';
 
-import type { ContentType, Question, UsefulVoter } from 'oa-shared';
+import type { ContentType, ProfileListItem, Question } from 'oa-shared';
 
 interface IProps {
   question: Question;
@@ -35,9 +34,6 @@ export const QuestionPage = observer(({ question }: IProps) => {
   const [usefulCount, setUsefulCount] = useState<number>(question.usefulCount);
   const [subscribersCount, setSubscribersCount] = useState<number>(question.subscriberCount);
 
-  /* --------------------------------------------------------------------- *
-   *  1. Has the logged-in user already voted?
-   * --------------------------------------------------------------------- */
   useEffect(() => {
     const checkVote = async () => {
       if (activeUser) {
@@ -48,16 +44,10 @@ export const QuestionPage = observer(({ question }: IProps) => {
     checkVote();
   }, [activeUser, question.id]);
 
-  /* --------------------------------------------------------------------- *
-   *  2. Edit permission
-   * --------------------------------------------------------------------- */
   const isEditable = useMemo(() => {
     return hasAdminRights(activeUser) || question.author?.username === activeUser?.username;
   }, [activeUser, question.author]);
 
-  /* --------------------------------------------------------------------- *
-   *  3. Useful-click handler (add / delete)
-   * --------------------------------------------------------------------- */
   const configOnUsefulClick = {
     contentType: 'questions' as ContentType,
     contentId: question.id,
@@ -77,7 +67,6 @@ export const QuestionPage = observer(({ question }: IProps) => {
       <Breadcrumbs content={question} variant="question" />
       <Card data-cy="question-body" sx={{ position: 'relative' }} variant="responsive">
         <Flex sx={{ flexDirection: 'column', padding: [3, 4], gap: 3 }}>
-          {/* Useful button + draft + edit */}
           <Flex sx={{ flexWrap: 'wrap', gap: 3 }}>
             <ClientOnly fallback={<></>}>
               {() => (
@@ -103,7 +92,6 @@ export const QuestionPage = observer(({ question }: IProps) => {
             </ClientOnly>
           </Flex>
 
-          {/* Author */}
           {question.author && (
             <UserNameTag
               author={question.author}
@@ -113,7 +101,6 @@ export const QuestionPage = observer(({ question }: IProps) => {
             />
           )}
 
-          {/* Title / description / images / tags */}
           <Flex sx={{ flexDirection: 'column', gap: 2 }}>
             {question.category && <Category category={question.category} />}
             <Heading as="h1" data-cy="question-title" data-testid="question-title">
@@ -146,7 +133,6 @@ export const QuestionPage = observer(({ question }: IProps) => {
 
         <Divider sx={{ m: 0, border: '.5px solid black' }} />
 
-        {/* -------------------------- STATISTICS -------------------------- */}
         <ContentStatistics
           statistics={[
             {
@@ -178,7 +164,6 @@ export const QuestionPage = observer(({ question }: IProps) => {
         />
       </Card>
 
-      {/* -------------------------- COMMENTS -------------------------- */}
       <ClientOnly fallback={<></>}>
         {() => (
           <Card
@@ -204,15 +189,13 @@ export const QuestionPage = observer(({ question }: IProps) => {
   );
 });
 
-// import { UsefulVotersList } from '../common/UsefulVotersList' // Adjust path
 import { usefulService } from 'src/services/usefulService';
 
 import type { IStatistic } from 'packages/components/dist/ContentStatistics/ContentStatistics';
-// import type { IStatistic } from '../ContentStatistics' // Adjust path if needed
 
 export function createUsefulStatistic(
   contentType: ContentType,
-  contentId: string | number,
+  contentId: number,
   usefulCount: number,
 ): IStatistic {
   return {
@@ -228,9 +211,11 @@ export function createUsefulStatistic(
         return await usefulService.usefulVoters(contentType, contentId);
       } catch (error) {
         console.error('Failed to load useful voters:', error);
-        return []; // Fallback to empty list on error
+        return [];
       }
     },
-    modalComponent: (voters: UsefulVoter[]) => <UsefulVotersList voters={voters || []} />,
+    modalComponent: (profiles: ProfileListItem[]) => (
+      <ProfileList header="Others that found it useful" profiles={profiles || []} />
+    ),
   };
 }

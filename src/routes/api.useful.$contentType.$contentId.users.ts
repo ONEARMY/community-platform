@@ -2,7 +2,7 @@ import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
 import type { LoaderFunctionArgs } from 'react-router';
-import type { UsefulVoter } from 'shared/models/profile';
+import type { ProfileListItem } from 'shared/models/profile';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -44,7 +44,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   // Transform the data using ProfileFactory and pick required properties
-  const users: UsefulVoter[] = data.map((row) => {
+  const users: ProfileListItem[] = data.map((row) => {
     const profile = profileFactory.fromDB(row.profiles);
     return {
       id: profile.id,

@@ -1,4 +1,4 @@
-import type { UsefulContentType, UsefulVoter } from 'oa-shared';
+import type { ProfileListItem, UsefulContentType } from 'oa-shared';
 
 const add = async (contentType: UsefulContentType, id: number) => {
   return await fetch(`/api/useful/${contentType}/${id}`, {
@@ -26,7 +26,10 @@ const hasVoted = async (contentType: UsefulContentType, id: number) => {
   }
 };
 
-const usefulVoters = async (contentType: UsefulContentType, id: number): Promise<UsefulVoter[]> => {
+const usefulVoters = async (
+  contentType: UsefulContentType,
+  id: number,
+): Promise<ProfileListItem[]> => {
   try {
     const response = await fetch(`/api/useful/${contentType}/${id}/users`);
 

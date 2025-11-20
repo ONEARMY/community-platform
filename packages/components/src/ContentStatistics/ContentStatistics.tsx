@@ -37,7 +37,7 @@ export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
 
     const modal = stat.modalComponent(data);
     setActiveModal(
-      React.cloneElement(modal as React.ReactElement, {
+      React.cloneElement(modal as React.ReactElement<{ onClose: () => void }>, {
         onClose: () => setActiveModal(null),
       }),
     );

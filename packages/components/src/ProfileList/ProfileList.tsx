@@ -1,21 +1,20 @@
-/** @jsxImportSource theme-ui */
 import { Avatar, Box, Flex, Text } from 'theme-ui';
 
 import { Button } from '../Button/Button';
 import { MemberBadge } from '../MemberBadge/MemberBadge';
 import { Username } from '../Username/Username';
 
-import type { UsefulVoter } from 'oa-shared';
-// import type { DBMedia, Image } from './media'
+import type { ProfileListItem } from 'oa-shared';
 
 interface IProps {
-  voters: UsefulVoter[];
+  profiles: ProfileListItem[];
   onClose?: () => void;
   dataCy?: string;
   children?: React.ReactNode;
+  header: string;
 }
 
-export const UsefulVotersList = ({ voters = [], onClose, dataCy }: IProps) => {
+export const ProfileList = ({ profiles = [], onClose, dataCy, header }: IProps) => {
   return (
     <Flex
       data-cy={dataCy}
@@ -40,7 +39,7 @@ export const UsefulVotersList = ({ voters = [], onClose, dataCy }: IProps) => {
           display: 'flex',
           flexDirection: 'column',
         }}
-        onClick={(e) => e.stopPropagation()} // prevent modal close when clicking inside
+        onClick={(e) => e.stopPropagation()}
       >
         <Flex
           sx={{
@@ -61,7 +60,7 @@ export const UsefulVotersList = ({ voters = [], onClose, dataCy }: IProps) => {
               width: '100%',
             }}
           >
-            Others that found it useful:
+            {header}
           </Text>
           <Button variant="subtle" showIconOnly icon="close" small onClick={onClose} />
         </Flex>
@@ -73,8 +72,8 @@ export const UsefulVotersList = ({ voters = [], onClose, dataCy }: IProps) => {
             pl: 3,
           }}
         >
-          {voters.length === 0 ? (
-            <Text sx={{ textAlign: 'center', color: 'muted', fontSize: 1 }}>No voters yet.</Text>
+          {profiles.length === 0 ? (
+            <Text sx={{ textAlign: 'center', color: 'muted', fontSize: 1 }}>No users yet.</Text>
           ) : (
             <Box
               as="ul"
@@ -84,19 +83,19 @@ export const UsefulVotersList = ({ voters = [], onClose, dataCy }: IProps) => {
                 p: 0,
               }}
             >
-              {voters.map((voter) => (
+              {profiles.map((profile) => (
                 <Flex
                   as="li"
-                  key={voter.id}
+                  key={profile.id}
                   sx={{
                     alignItems: 'center',
                     py: 2,
                     gap: 2,
                   }}
                 >
-                  {voter.photo ? (
+                  {profile.photo ? (
                     <Avatar
-                      src={voter.photo?.publicUrl}
+                      src={profile.photo?.publicUrl}
                       sx={{
                         width: 40,
                         height: 40,
@@ -106,10 +105,13 @@ export const UsefulVotersList = ({ voters = [], onClose, dataCy }: IProps) => {
                       loading="lazy"
                     />
                   ) : (
-                    <MemberBadge profileType={voter.type || undefined} sx={{ cursor: 'pointer' }} />
+                    <MemberBadge
+                      profileType={profile.type || undefined}
+                      sx={{ cursor: 'pointer' }}
+                    />
                   )}
                   <Box>
-                    <Username user={voter} />
+                    <Username user={profile} />
                   </Box>
                 </Flex>
               ))}

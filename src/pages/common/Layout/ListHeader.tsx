@@ -23,8 +23,6 @@ export const ListHeader = (props: IProps) => {
 
   const itemLabel = itemCount === 1 ? 'item' : 'items';
 
-  const itemLabel = itemCount === 1 ? 'item' : 'items';
-
   return (
     <>
       <Flex

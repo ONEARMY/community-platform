@@ -27,7 +27,8 @@ describe('[Research.Discussions]', () => {
     cy.step('Create admin user session and add three comments');
     cy.signIn(admin.email, admin.password);
     cy.visit(researchPath);
-    cy.get('[data-cy="HideDiscussionContainer:button"]').first().click();
+    //cy.get('[data-cy="HideDiscussionContainer:button"]').first().click();
+    cy.get('[data-cy="HideDiscussionContainer:button"]').eq(1).click();
 
     cy.addComment(comment1);
     cy.wait(1000);
@@ -55,7 +56,7 @@ describe('[Research.Discussions]', () => {
 
     cy.reload();
     cy.wait(1000);
-    cy.get('[data-cy="HideDiscussionContainer:button"]').first().click();
+    cy.get('[data-cy="HideDiscussionContainer:button"]').eq(1).click();
 
     cy.step('Sort dropdown is visible');
     cy.get('[data-cy=comment-sort-select]').should('be.visible');

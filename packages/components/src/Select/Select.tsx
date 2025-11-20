@@ -22,6 +22,7 @@ export interface Props extends ReactSelectProps {
   getOptionValue?: any;
   defaultValue?: IOption;
   variant?: 'form' | 'formError' | 'icons' | 'tabs';
+  useAlternateBackground?: boolean; // this could be a specific color passed in but keeping it simple for now
 }
 
 export const Select = (props: Props) => {
@@ -138,7 +139,7 @@ export const Select = (props: Props) => {
     }),
     control: (provided) => ({
       ...provided,
-      backgroundColor: theme.colors.white,
+      backgroundColor: props.useAlternateBackground ? theme.colors.softblue : theme.colors.white,
       minHeight: '40px',
       cursor: 'pointer',
       boxShadow: 'none',
@@ -166,6 +167,7 @@ export const Select = (props: Props) => {
       border: '2px solid ' + theme.colors.black,
       boxShadow: 'none',
       backgroundColor: theme.colors.white,
+      zIndex: 3,
       ':hover': {
         border: '2px solid ' + theme.colors.black,
       },

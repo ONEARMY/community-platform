@@ -16,7 +16,9 @@ export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
   const [activeModal, setActiveModal] = useState<React.ReactNode | null>(null);
   const [loadingStats, setLoadingStats] = useState<Set<string>>(new Set());
 
-  const handleShowStats = () => setShowStats((v) => !v);
+  const handleShowStats = () => {
+    setShowStats(!showStats);
+  };
 
   const handleOpenModal = useCallback(async (stat: IStatistic) => {
     if (!stat.modalComponent) return;

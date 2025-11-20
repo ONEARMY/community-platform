@@ -16724,6 +16724,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"husky@npm:^9.1.7":
+  version: 9.1.7
+  resolution: "husky@npm:9.1.7"
+  bin:
+    husky: bin.js
+  checksum: 10/c2412753f15695db369634ba70f50f5c0b7e5cb13b673d0826c411ec1bd9ddef08c1dad89ea154f57da2521d2605bd64308af748749b27d08c5f563bcd89975f
+  languageName: node
+  linkType: hard
+
 "iconv-lite@npm:0.4.24, iconv-lite@npm:^0.4.24":
   version: 0.4.24
   resolution: "iconv-lite@npm:0.4.24"
@@ -20699,6 +20708,7 @@ __metadata:
     fs-extra: "npm:^10.0.0"
     fuse.js: "npm:^6.4.6"
     helmet: "npm:^7.1.0"
+    husky: "npm:^9.1.7"
     idb: "npm:^8.0.0"
     isbot: "npm:^5.1.13"
     jsonwebtoken: "npm:^9.0.2"

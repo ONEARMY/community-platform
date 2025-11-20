@@ -1,3 +1,4 @@
-module.exports = {
-  '*.{js,ts,tsx}': ['eslint --fix', 'git add'],
+export default {
+  '*.{js,jsx,ts,tsx}': ['eslint --fix', 'prettier --write'],
+  '*.json': ['prettier --write'],
 };

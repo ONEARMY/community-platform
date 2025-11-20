@@ -14,7 +14,6 @@ export interface IProps {
 export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
   const [showStats, setShowStats] = useState(false);
   const [activeModal, setActiveModal] = useState<React.ReactNode | null>(null);
-  const [loadingStats, setLoadingStats] = useState<Set<string>>(new Set());
 
   const handleShowStats = () => {
     setShowStats(!showStats);
@@ -22,27 +21,26 @@ export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
 
   const handleOpenModal = useCallback(async (stat: IStatistic) => {
     if (!stat.modalComponent) return;
-
-    const statKey = `${stat.icon}-${stat.label}`;
-    setLoadingStats((prev) => new Set(prev).add(statKey));
-
-    let data;
-    try {
-      if (stat.onOpen) data = await stat.onOpen();
-    } finally {
-      setLoadingStats((prev) => {
-        const next = new Set(prev);
-        next.delete(statKey);
-        return next;
-      });
+  
+    let data = undefined;
+    if (stat.onOpen) {
+      try {
+        data = await stat.onOpen();
+      } catch (error) {
+        console.error('Error loading modal data:', error);
+      }
     }
-
-    const modal = stat.modalComponent(data);
-    setActiveModal(
-      React.cloneElement(modal as React.ReactElement<{ onClose: () => void }>, {
-        onClose: () => setActiveModal(null),
-      }),
-    );
+  
+    const modalElement = stat.modalComponent(data);
+    if (React.isValidElement(modalElement)) {
+      setActiveModal(
+        React.cloneElement(modalElement, {
+          onClose: () => setActiveModal(null),
+        })
+      );
+    } else {
+      setActiveModal(null);
+    }
   }, []);
 
   const visible = showStats || alwaysShow === true;
@@ -58,7 +56,6 @@ export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
         pl: [2, 0],
       }}
     >
-      {/* Mobile Toggle */}
       <Flex
         sx={{
           display: [alwaysShow ? 'none' : 'flex', 'none'],
@@ -83,15 +80,12 @@ export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
         />
       </Flex>
 
-      {/* Statistics List */}
       <StatisticsList
         statistics={statistics}
         visible={visible}
         onOpenModal={handleOpenModal}
-        loadingStats={loadingStats}
       />
 
-      {/* Modal */}
       {activeModal && activeModal}
     </Flex>
   );

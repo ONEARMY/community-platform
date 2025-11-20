@@ -1,8 +1,8 @@
-import { Card, Flex, Heading, Text } from 'theme-ui'
+import { Card, Flex, Heading, Text } from 'theme-ui';
 
 export interface IProps {
-  title: string
-  steps: React.ReactElement[]
+  title: string;
+  steps: React.ReactElement[];
 }
 
 export const Guidelines = ({ title, steps }: IProps) => {
@@ -18,9 +18,9 @@ export const Guidelines = ({ title, steps }: IProps) => {
             <Text variant="auxiliary" key={index}>
               {`${index + 1}. `} {step}
             </Text>
-          )
+          );
         })}
       </Flex>
     </Card>
-  )
-}
+  );
+};

@@ -1,22 +1,19 @@
-import { Field } from 'react-final-form'
-import { FieldTextarea } from 'oa-components'
-import {
-  MESSAGE_MAX_CHARACTERS,
-  MESSAGE_MIN_CHARACTERS,
-} from 'src/pages/User/constants'
-import { contact } from 'src/pages/User/labels'
-import { required } from 'src/utils/validators'
-import { Box, Label } from 'theme-ui'
+import { Field } from 'react-final-form';
+import { FieldTextarea } from 'oa-components';
+import { MESSAGE_MAX_CHARACTERS, MESSAGE_MIN_CHARACTERS } from 'src/pages/User/constants';
+import { contact } from 'src/pages/User/labels';
+import { required } from 'src/utils/validators';
+import { Box, Label } from 'theme-ui';
 
 export const UserContactFieldMessage = () => {
-  const { title, placeholder } = contact.message
-  const name = 'message'
+  const { title, placeholder } = contact.message;
+  const name = 'message';
 
   const sx = {
     backgroundColor: 'white',
     height: '300px',
     resize: 'vertical',
-  }
+  };
 
   return (
     <Box>
@@ -36,5 +33,5 @@ export const UserContactFieldMessage = () => {
         showCharacterCount
       />
     </Box>
-  )
-}
+  );
+};

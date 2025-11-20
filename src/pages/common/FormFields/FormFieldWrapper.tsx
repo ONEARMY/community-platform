@@ -1,19 +1,19 @@
-import { Flex, Label, Text } from 'theme-ui'
+import { Flex, Label, Text } from 'theme-ui';
 
 const _labelStyle = {
   fontSize: 2,
   marginBottom: 2,
   display: 'block',
-}
+};
 
 interface IProps {
-  children: React.ReactNode
-  description?: string
-  htmlFor?: string
-  required?: boolean
-  flexDirection?: 'column' | 'row' | 'row-reverse' | 'column-reverse'
-  flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse'
-  text: string
+  children: React.ReactNode;
+  description?: string;
+  htmlFor?: string;
+  required?: boolean;
+  flexDirection?: 'column' | 'row' | 'row-reverse' | 'column-reverse';
+  flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse';
+  text: string;
 }
 
 export const FormFieldWrapper = (props: IProps) => {
@@ -25,9 +25,9 @@ export const FormFieldWrapper = (props: IProps) => {
     text,
     flexDirection = 'column',
     flexWrap = 'nowrap',
-  } = props
+  } = props;
 
-  const heading = required ? `${text} *` : text
+  const heading = required ? `${text} *` : text;
 
   return (
     <Flex sx={{ flexDirection, flexWrap, marginBottom: 2 }}>
@@ -43,5 +43,5 @@ export const FormFieldWrapper = (props: IProps) => {
 
       {children}
     </Flex>
-  )
-}
+  );
+};

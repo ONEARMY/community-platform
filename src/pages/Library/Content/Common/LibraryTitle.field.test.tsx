@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react'
-import { describe, it } from 'vitest'
+import { render, screen } from '@testing-library/react';
+import { describe, it } from 'vitest';
 
-import { LibraryFormProvider } from './LibraryFormProvider'
-import { LibraryTitleField } from './LibraryTitle.field'
+import { LibraryFormProvider } from './LibraryFormProvider';
+import { LibraryTitleField } from './LibraryTitle.field';
 
 describe('LibraryTitleField', () => {
   it('renders', async () => {
@@ -10,8 +10,8 @@ describe('LibraryTitleField', () => {
       <LibraryFormProvider>
         <LibraryTitleField />
       </LibraryFormProvider>,
-    )
+    );
 
-    await screen.findByText('0 / 50')
-  })
-})
+    await screen.findByText('0 / 50');
+  });
+});

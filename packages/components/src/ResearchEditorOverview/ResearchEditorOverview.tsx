@@ -1,44 +1,35 @@
-import { Box, Card, Heading, Text } from 'theme-ui'
+import { Box, Card, Heading, Text } from 'theme-ui';
 
-import { Button } from '../Button/Button'
-import { InternalLink } from '../InternalLink/InternalLink'
+import { Button } from '../Button/Button';
+import { InternalLink } from '../InternalLink/InternalLink';
 
-import type { ThemeUIStyleObject } from 'theme-ui'
+import type { ThemeUIStyleObject } from 'theme-ui';
 
 export type ResearchEditorOverviewUpdate = {
-  isActive: boolean
-  title: string
-  isDraft: boolean
-  id: number | null
-}
+  isActive: boolean;
+  title: string;
+  isDraft: boolean;
+  id: number | null;
+};
 
 export interface ResearchEditorOverviewProps {
-  updates: ResearchEditorOverviewUpdate[]
-  researchSlug: string
-  newItemTitle?: string
-  showCreateUpdateButton?: boolean
-  showBackToResearchButton?: boolean
-  sx?: ThemeUIStyleObject
+  updates: ResearchEditorOverviewUpdate[];
+  researchSlug: string;
+  newItemTitle?: string;
+  showCreateUpdateButton?: boolean;
+  showBackToResearchButton?: boolean;
+  sx?: ThemeUIStyleObject;
 }
 
 export const ResearchEditorOverview = (props: ResearchEditorOverviewProps) => {
-  const {
-    updates,
-    sx,
-    researchSlug,
-    showCreateUpdateButton,
-    showBackToResearchButton,
-  } = props
+  const { updates, sx, researchSlug, showCreateUpdateButton, showBackToResearchButton } = props;
   return (
     <Card sx={{ padding: 4, ...sx }}>
       <Heading as="h2" mb={3} variant="small">
         Research overview
       </Heading>
       {updates?.length ? (
-        <Box
-          as="ul"
-          sx={{ margin: 0, marginBottom: 4, padding: 0, paddingLeft: 3 }}
-        >
+        <Box as="ul" sx={{ margin: 0, marginBottom: 4, padding: 0, paddingLeft: 3 }}>
           {updates.map((update, index) => (
             <Box as="li" key={index} sx={{ marginBottom: 1 }}>
               <Text variant={'quiet'}>
@@ -84,10 +75,7 @@ export const ResearchEditorOverview = (props: ResearchEditorOverviewProps) => {
       ) : null}
       {showCreateUpdateButton ? (
         <Button small sx={{ mr: 2 }} data-cy="create-update" type="button">
-          <InternalLink
-            to={`/research/${researchSlug}/new-update`}
-            sx={{ color: 'black' }}
-          >
+          <InternalLink to={`/research/${researchSlug}/new-update`} sx={{ color: 'black' }}>
             Create update
           </InternalLink>
         </Button>
@@ -95,14 +83,11 @@ export const ResearchEditorOverview = (props: ResearchEditorOverviewProps) => {
 
       {showBackToResearchButton ? (
         <Button small variant="outline" type="button">
-          <InternalLink
-            to={`/research/${researchSlug}/edit`}
-            sx={{ color: 'black' }}
-          >
+          <InternalLink to={`/research/${researchSlug}/edit`} sx={{ color: 'black' }}>
             Back to research
           </InternalLink>
         </Button>
       ) : null}
     </Card>
-  )
-}
+  );
+};

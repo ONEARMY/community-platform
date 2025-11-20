@@ -1,32 +1,26 @@
-import { Field } from 'react-final-form'
-import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components'
-import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { ImageInputFieldV2 } from 'src/common/Form/ImageInputFieldV2'
-import { fields, headings } from 'src/pages/UserSettings/labels'
-import { Box, Flex, Heading, Image as ImageComponent, Text } from 'theme-ui'
+import { Field } from 'react-final-form';
+import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components';
+import { FieldContainer } from 'src/common/Form/FieldContainer';
+import { ImageInputFieldV2 } from 'src/common/Form/ImageInputFieldV2';
+import { fields, headings } from 'src/pages/UserSettings/labels';
+import { Box, Flex, Heading, Image as ImageComponent, Text } from 'theme-ui';
 
-import type { FormApi } from 'final-form'
-import type { ProfileFormData } from 'oa-shared'
+import type { FormApi } from 'final-form';
+import type { ProfileFormData } from 'oa-shared';
 
 interface IProps {
-  values: ProfileFormData
-  isMemberProfile: boolean
-  form: FormApi<ProfileFormData, Partial<ProfileFormData>>
+  values: ProfileFormData;
+  isMemberProfile: boolean;
+  form: FormApi<ProfileFormData, Partial<ProfileFormData>>;
 }
 
-export const UserImagesSection = ({
-  isMemberProfile,
-  values,
-  form,
-}: IProps) => {
+export const UserImagesSection = ({ isMemberProfile, values, form }: IProps) => {
   const numberOfImageInputsAvailable =
-    4 - (values.existingCoverImages?.filter((x) => !!x)?.length || 0)
+    4 - (values.existingCoverImages?.filter((x) => !!x)?.length || 0);
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: 3 }}>
-      <Heading as="h2">
-        {isMemberProfile ? fields.userImage.title : headings.images}
-      </Heading>
+      <Heading as="h2">{isMemberProfile ? fields.userImage.title : headings.images}</Heading>
 
       <Flex sx={{ flexDirection: 'column', alignContent: 'stretch', gap: 1 }}>
         {!isMemberProfile && (
@@ -55,7 +49,7 @@ export const UserImagesSection = ({
                     meta={meta}
                     onFilesChange={(file) => input.onChange(file)}
                   />
-                )
+                );
               }}
             />
           ) : (
@@ -63,7 +57,7 @@ export const UserImagesSection = ({
               <ImageComponent src={values.existingPhoto?.publicUrl} />
               <ImageInputDeleteImage
                 onClick={() => {
-                  form.change('existingPhoto', undefined)
+                  form.change('existingPhoto', undefined);
                 }}
               />
             </ImageInputWrapper>
@@ -106,11 +100,9 @@ export const UserImagesSection = ({
                             render={() => (
                               <ImageInputDeleteImage
                                 onClick={() => {
-                                  const currentImages = input.value || []
-                                  const updatedImages = currentImages.filter(
-                                    (_, i) => i !== index,
-                                  )
-                                  input.onChange(updatedImages)
+                                  const currentImages = input.value || [];
+                                  const updatedImages = currentImages.filter((_, i) => i !== index);
+                                  input.onChange(updatedImages);
                                 }}
                               />
                             )}
@@ -144,7 +136,7 @@ export const UserImagesSection = ({
                           meta={meta}
                           onFilesChange={(file) => input.onChange(file)}
                         />
-                      )
+                      );
                     }}
                   />
                 </Box>
@@ -154,5 +146,5 @@ export const UserImagesSection = ({
         </Flex>
       )}
     </Flex>
-  )
-}
+  );
+};

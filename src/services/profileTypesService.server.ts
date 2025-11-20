@@ -1,17 +1,17 @@
-import Keyv from 'keyv'
-import { ProfileType } from 'oa-shared'
-import { isProductionEnvironment } from 'src/config/config'
+import Keyv from 'keyv';
+import { ProfileType } from 'oa-shared';
+import { isProductionEnvironment } from 'src/config/config';
 
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js';
 
-const cache = new Keyv<ProfileType[]>({ ttl: 3600000 }) // ttl: 60 minutes
+const cache = new Keyv<ProfileType[]>({ ttl: 3600000 }); // ttl: 60 minutes
 
 export class ProfileTypesServiceServer {
   constructor(private client: SupabaseClient) {}
 
   async get(cached = true) {
     if (cached) {
-      const cachedProfileTypes = await cache.get('profile-types')
+      const cachedProfileTypes = await cache.get('profile-types');
 
       if (
         cachedProfileTypes &&
@@ -19,7 +19,7 @@ export class ProfileTypesServiceServer {
         cachedProfileTypes.length &&
         isProductionEnvironment()
       ) {
-        return cachedProfileTypes
+        return cachedProfileTypes;
       }
     }
 
@@ -33,13 +33,13 @@ export class ProfileTypesServiceServer {
       description,
       map_pin_name,
       is_space
-      `)
+      `);
 
-    const dbProfileTypes = profileTypesResult.data || []
-    const profileTypes = dbProfileTypes.map((x) => ProfileType.fromDB(x))
+    const dbProfileTypes = profileTypesResult.data || [];
+    const profileTypes = dbProfileTypes.map((x) => ProfileType.fromDB(x));
 
-    await cache.set('profile-types', profileTypes)
+    await cache.set('profile-types', profileTypes);
 
-    return profileTypes
+    return profileTypes;
   }
 }

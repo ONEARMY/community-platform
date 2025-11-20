@@ -1,25 +1,21 @@
-import { Notification, NotificationDisplay } from 'oa-shared'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { resolveType } from 'src/utils/contentType.utils'
+import { Notification, NotificationDisplay } from 'oa-shared';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { resolveType } from 'src/utils/contentType.utils';
 
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBNotification } from 'oa-shared'
-import type { LoaderFunctionArgs } from 'react-router'
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBNotification } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
 
 const transformNotificationList = async (
   dbNotifications: DBNotification[],
   client: SupabaseClient,
 ) => {
   return Promise.allSettled(
-    dbNotifications.map((dbNotification) =>
-      transformNotification(dbNotification, client),
-    ),
+    dbNotifications.map((dbNotification) => transformNotification(dbNotification, client)),
   ).then((results) => {
-    return results
-      .filter((result) => result.status === 'fulfilled')
-      .map((result) => result.value)
-  })
-}
+    return results.filter((result) => result.status === 'fulfilled').map((result) => result.value);
+  });
+};
 
 export const transformNotification = async (
   dbNotification: DBNotification,
@@ -30,39 +26,39 @@ export const transformNotification = async (
       comment: 'comments',
       reply: 'comments',
       researchUpdate: 'research_updates',
-    }
+    };
 
-    const notification = Notification.fromDB(dbNotification)
-    const contentType = contentTypes[notification.contentType]
+    const notification = Notification.fromDB(dbNotification);
+    const contentType = contentTypes[notification.contentType];
 
     const content = await client
       .from(contentType)
       .select('*')
       .eq('id', notification.contentId)
-      .single()
+      .single();
 
     if (content.data) {
-      notification.content = content.data
+      notification.content = content.data;
     } else {
-      throw Error('Comment not found, probably deleted')
+      throw Error('Comment not found, probably deleted');
     }
 
-    const sourceContentType = resolveType(notification.sourceContentType)
+    const sourceContentType = resolveType(notification.sourceContentType);
     const sourceContent = await client
       .from(sourceContentType)
       .select('*')
       .eq('id', notification.sourceContentId)
-      .single()
+      .single();
 
-    notification.sourceContent = sourceContent.data
+    notification.sourceContent = sourceContent.data;
 
     if (notification.parentCommentId) {
       const parentComment = await client
         .from('comments')
         .select('*')
         .eq('id', notification.parentCommentId)
-        .single()
-      notification.parentComment = parentComment.data
+        .single();
+      notification.parentComment = parentComment.data;
     }
 
     if (notification.parentContentId) {
@@ -70,35 +66,35 @@ export const transformNotification = async (
         .from('research_updates')
         .select('*')
         .eq('id', notification.parentContentId)
-        .single()
-      notification.parentContent = parentContent.data
+        .single();
+      notification.parentContent = parentContent.data;
     }
 
-    return NotificationDisplay.fromNotification(notification)
+    return NotificationDisplay.fromNotification(notification);
   } catch (error) {
-    console.error(error)
-    throw error
+    console.error(error);
+    throw error;
   }
-}
+};
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request);
 
   try {
-    const claims = await client.auth.getClaims()
+    const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
-      return Response.json({}, { headers, status: 401 })
+      return Response.json({}, { headers, status: 401 });
     }
 
     const profileResponse = await client
       .from('profiles')
       .select('id')
       .eq('auth_id', claims.data.claims.sub)
-      .maybeSingle() // Maybe single due to dup profiles in tests
+      .maybeSingle(); // Maybe single due to dup profiles in tests
 
     if (!profileResponse.data || profileResponse.error) {
-      throw profileResponse.error || 'No user found'
+      throw profileResponse.error || 'No user found';
     }
 
     const { data, error } = await client
@@ -109,19 +105,17 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       triggered_by:profiles!notifications_triggered_by_id_fkey(id,username)
     `,
       )
-      .eq('owned_by_id', profileResponse?.data?.id)
+      .eq('owned_by_id', profileResponse?.data?.id);
 
     if (error) {
-      throw error
+      throw error;
     }
 
-    const notifications = data?.length
-      ? await transformNotificationList(data, client)
-      : []
+    const notifications = data?.length ? await transformNotificationList(data, client) : [];
 
-    return Response.json({ notifications }, { headers, status: 200 })
+    return Response.json({ notifications }, { headers, status: 200 });
   } catch (error) {
-    console.error(error)
-    return Response.json({ error }, { headers, status: 500 })
+    console.error(error);
+    return Response.json({ error }, { headers, status: 500 });
   }
-}
+};

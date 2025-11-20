@@ -1,29 +1,26 @@
-import Keyv from 'keyv'
-import { Category } from 'oa-shared'
-import { isProductionEnvironment } from 'src/config/config'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import Keyv from 'keyv';
+import { Category } from 'oa-shared';
+import { isProductionEnvironment } from 'src/config/config';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
-import type { ContentType, DBCategory } from 'oa-shared'
-import type { LoaderFunctionArgs } from 'react-router'
+import type { ContentType, DBCategory } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
 
-const cache = new Keyv<Category[]>({ ttl: 3600000 }) // ttl: 60 minutes
+const cache = new Keyv<Category[]>({ ttl: 3600000 }); // ttl: 60 minutes
 
 const filterByType = (categories: Category[], type: ContentType) => {
-  return categories.filter((category) => category.type === type)
-}
+  return categories.filter((category) => category.type === type);
+};
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  const type = params.type as ContentType
-  const { client, headers } = createSupabaseServerClient(request)
+  const type = params.type as ContentType;
+  const { client, headers } = createSupabaseServerClient(request);
 
   if (!type) {
-    return Response.json(
-      {},
-      { headers, status: 400, statusText: 'type is required' },
-    )
+    return Response.json({}, { headers, status: 400, statusText: 'type is required' });
   }
 
-  const cachedCategories = await cache.get('categories')
+  const cachedCategories = await cache.get('categories');
 
   if (
     cachedCategories &&
@@ -31,23 +28,19 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     cachedCategories.length &&
     isProductionEnvironment()
   ) {
-    const categoriesForType = filterByType(cachedCategories, type)
-    return Response.json(categoriesForType, { headers, status: 200 })
+    const categoriesForType = filterByType(cachedCategories, type);
+    return Response.json(categoriesForType, { headers, status: 200 });
   }
 
-  const { data } = await client
-    .from('categories')
-    .select('id,name,created_at,type')
+  const { data } = await client.from('categories').select('id,name,created_at,type');
 
-  const categories = data?.map((category) =>
-    Category.fromDB(category as DBCategory),
-  )
+  const categories = data?.map((category) => Category.fromDB(category as DBCategory));
 
   if (categories && categories.length > 0) {
-    cache.set('categories', data, 3600000)
+    cache.set('categories', data, 3600000);
   }
 
-  const categoriesForType = categories ? filterByType(categories, type) : []
+  const categoriesForType = categories ? filterByType(categories, type) : [];
 
-  return Response.json(categoriesForType, { headers, status: 200 })
+  return Response.json(categoriesForType, { headers, status: 200 });
 }

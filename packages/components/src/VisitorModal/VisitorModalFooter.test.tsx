@@ -1,26 +1,26 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { act } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { act } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
-import { render } from '../test/utils'
-import { VisitorModalFooter } from './VisitorModalFooter'
+import { render } from '../test/utils';
+import { VisitorModalFooter } from './VisitorModalFooter';
 
 describe('VisitorModalFooter', () => {
   it('shows the contact button', () => {
-    const { getByText } = render(<VisitorModalFooter hide={() => {}} />)
+    const { getByText } = render(<VisitorModalFooter hide={() => {}} />);
 
-    expect(getByText('Contact the space')).toBeInTheDocument()
-  })
+    expect(getByText('Contact the space')).toBeInTheDocument();
+  });
 
   it('passes the "contact" target to the hide function on click', () => {
-    const hideTrigger = vi.fn()
-    const { getByText } = render(<VisitorModalFooter hide={hideTrigger} />)
+    const hideTrigger = vi.fn();
+    const { getByText } = render(<VisitorModalFooter hide={hideTrigger} />);
 
     act(() => {
-      getByText('Contact the space').click()
-    })
+      getByText('Contact the space').click();
+    });
 
-    expect(hideTrigger).toHaveBeenCalledWith('contact')
-  })
-})
+    expect(hideTrigger).toHaveBeenCalledWith('contact');
+  });
+});

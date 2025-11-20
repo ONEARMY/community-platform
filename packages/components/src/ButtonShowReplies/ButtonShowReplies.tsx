@@ -1,18 +1,18 @@
-import { Button } from '../Button/Button'
+import { Button } from '../Button/Button';
 
-import type { Comment } from 'oa-shared'
+import type { Comment } from 'oa-shared';
 
 export interface Props {
-  isShowReplies: boolean
-  replies: Comment[]
-  setIsShowReplies: () => void
+  isShowReplies: boolean;
+  replies: Comment[];
+  setIsShowReplies: () => void;
 }
 
 export const ButtonShowReplies = (props: Props) => {
-  const { isShowReplies, replies, setIsShowReplies } = props
+  const { isShowReplies, replies, setIsShowReplies } = props;
 
-  const count = replies.filter(({ deleted }) => deleted !== true).length
-  const icon = isShowReplies ? 'chevron-up' : 'chevron-down'
+  const count = replies.filter(({ deleted }) => deleted !== true).length;
+  const icon = isShowReplies ? 'chevron-up' : 'chevron-down';
 
   const text = count
     ? isShowReplies
@@ -20,7 +20,7 @@ export const ButtonShowReplies = (props: Props) => {
       : `Show ${count} ${count === 1 ? 'reply' : 'replies'}`
     : isShowReplies
       ? `Hide`
-      : `Reply`
+      : `Reply`;
 
   return (
     <Button
@@ -35,5 +35,5 @@ export const ButtonShowReplies = (props: Props) => {
     >
       {text}
     </Button>
-  )
-}
+  );
+};

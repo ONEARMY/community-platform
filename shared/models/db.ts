@@ -15,7 +15,7 @@ export const generateDBEndpoints = () => ({
   emails: `emails`,
   tags: `v3_tags`,
   user_integrations: `user_integrations`,
-})
+});
 
 /**
  * A list of known subcollections used in endpoints, e.g.
@@ -25,13 +25,13 @@ export const dbEndpointSubcollections = {
   user: ['revisions'],
   library: ['stats'],
   research: ['stats'],
-}
+};
 // React apps populate a process variable, however it might not always be accessible outside
 // (e.g. cypress will instead use it's own env to populate a prefix)
 
 // Hack - allow calls to process from cypress testing (react polyfills process.env otherwise)
 if (!('process' in globalThis)) {
-  globalThis.process = {} as any
+  globalThis.process = {} as any;
 }
 
 /**
@@ -42,6 +42,6 @@ if (!('process' in globalThis)) {
  * const allLibraryItems = await db.get(DB_ENDPOINTS.library)
  * ```
  */
-export const DB_ENDPOINTS = generateDBEndpoints()
+export const DB_ENDPOINTS = generateDBEndpoints();
 
-export type DBEndpoint = keyof typeof DB_ENDPOINTS
+export type DBEndpoint = keyof typeof DB_ENDPOINTS;

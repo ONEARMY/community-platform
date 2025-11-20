@@ -1,16 +1,16 @@
-import { AnimatePresence, motion } from 'framer-motion'
-import { Box, Flex } from 'theme-ui'
+import { AnimatePresence, motion } from 'framer-motion';
+import { Box, Flex } from 'theme-ui';
 
 export interface Props {
-  isOpen: boolean
-  children: React.ReactNode
+  isOpen: boolean;
+  children: React.ReactNode;
 }
 
 export const NotificationsModal = (props: Props) => {
-  const { children, isOpen } = props
+  const { children, isOpen } = props;
 
-  const visible = { y: '0', transition: { type: 'linear' } }
-  const hidden = { y: '-100%', transition: { type: 'linear' } }
+  const visible = { y: '0', transition: { type: 'linear' } };
+  const hidden = { y: '-100%', transition: { type: 'linear' } };
 
   return (
     <AnimatePresence>
@@ -54,5 +54,5 @@ export const NotificationsModal = (props: Props) => {
         </motion.div>
       )}
     </AnimatePresence>
-  )
-}
+  );
+};

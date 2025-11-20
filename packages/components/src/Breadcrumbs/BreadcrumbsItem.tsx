@@ -1,17 +1,17 @@
 import { Link } from 'react-router';
-import { Box, Text } from 'theme-ui'
+import { Box, Text } from 'theme-ui';
 
-import { Button } from '../Button/Button'
+import { Button } from '../Button/Button';
 
 interface BreadcrumbButtonProps {
-  text: string
-  link?: string
+  text: string;
+  link?: string;
 }
 
 interface BreadcrumbItemProps {
-  text: string
-  link?: string
-  isLast: boolean
+  text: string;
+  link?: string;
+  isLast: boolean;
 }
 
 const BreadcrumbButton = ({ text, link }: BreadcrumbButtonProps) => {
@@ -25,8 +25,8 @@ const BreadcrumbButton = ({ text, link }: BreadcrumbButtonProps) => {
     <Button type="button" variant="breadcrumb">
       {text}
     </Button>
-  )
-}
+  );
+};
 
 export const BreadcrumbItem = ({ text, link, isLast }: BreadcrumbItemProps) => (
   <Box
@@ -60,4 +60,4 @@ export const BreadcrumbItem = ({ text, link, isLast }: BreadcrumbItemProps) => (
       </Text>
     )}
   </Box>
-)
+);

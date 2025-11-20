@@ -1,57 +1,54 @@
-import { useEffect, useMemo, useState } from 'react'
-import { UserStatistics, VisitorModal } from 'oa-components'
-import { UserRole } from 'oa-shared'
-import { AuthWrapper } from 'src/common/AuthWrapper'
-import { ProfileTags } from 'src/pages/common/ProfileTags'
-import { mapPinService } from 'src/pages/Maps/map.service'
-import { Box, Divider, Flex, Paragraph } from 'theme-ui'
+import { useEffect, useMemo, useState } from 'react';
+import { UserStatistics, VisitorModal } from 'oa-components';
+import { UserRole } from 'oa-shared';
+import { AuthWrapper } from 'src/common/AuthWrapper';
+import { ProfileTags } from 'src/pages/common/ProfileTags';
+import { mapPinService } from 'src/pages/Maps/map.service';
+import { Box, Divider, Flex, Paragraph } from 'theme-ui';
 
-import type { MapPin, Profile, UserCreatedDocs } from 'oa-shared'
+import type { MapPin, Profile, UserCreatedDocs } from 'oa-shared';
 
 interface IProps {
-  docs: UserCreatedDocs
-  profile: Profile
-  selectTab: (target: string) => void
+  docs: UserCreatedDocs;
+  profile: Profile;
+  selectTab: (target: string) => void;
 }
 
 export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
-  const { about, tags, visitorPolicy } = profile
-  const [showVisitorModal, setShowVisitorModal] = useState(false)
+  const { about, tags, visitorPolicy } = profile;
+  const [showVisitorModal, setShowVisitorModal] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [pin, setPin] = useState<MapPin | undefined>(undefined)
+  const [pin, setPin] = useState<MapPin | undefined>(undefined);
 
   useEffect(() => {
     const getPin = async () => {
       try {
-        const pin = await mapPinService.getMapPinById(profile.id)
+        const pin = await mapPinService.getMapPinById(profile.id);
         if (pin) {
-          setPin(pin)
+          setPin(pin);
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
-    getPin()
-  }, [profile.id])
+    };
+    getPin();
+  }, [profile.id]);
 
   const hideVisitorDetails = (target?: string) => {
-    setShowVisitorModal(false)
+    setShowVisitorModal(false);
     if (target) {
-      selectTab(target)
+      selectTab(target);
     }
-  }
+  };
 
   const userTotalUseful = useMemo(() => {
     if (!profile?.authorUsefulVotes) {
-      return 0
+      return 0;
     }
 
-    return profile.authorUsefulVotes.reduce(
-      (sum, vote) => sum + vote.voteCount,
-      0,
-    )
-  }, [profile.authorUsefulVotes])
+    return profile.authorUsefulVotes.reduce((sum, vote) => sum + vote.voteCount, 0);
+  }, [profile.authorUsefulVotes]);
 
   return (
     <Box style={{ height: '100%' }}>
@@ -89,11 +86,7 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
           )}
 
           {visitorPolicy && (
-            <VisitorModal
-              show={showVisitorModal}
-              hide={hideVisitorDetails}
-              user={profile}
-            />
+            <VisitorModal show={showVisitorModal} hide={hideVisitorDetails} user={profile} />
           )}
         </Flex>
         <Divider
@@ -132,5 +125,5 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
         </AuthWrapper>
       </Flex>
     </Box>
-  )
-}
+  );
+};

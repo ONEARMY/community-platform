@@ -1,8 +1,8 @@
-import { subMonths } from 'date-fns'
+import { subMonths } from 'date-fns';
 
-import { DisplayDate } from './DisplayDate'
+import { DisplayDate } from './DisplayDate';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   /* 👇 The title prop is optional.
@@ -11,13 +11,13 @@ export default {
    */
   title: 'Components/DisplayDate',
   component: DisplayDate,
-} as Meta<typeof DisplayDate>
+} as Meta<typeof DisplayDate>;
 
 export const Default: StoryFn<typeof DisplayDate> = () => {
-  return <DisplayDate createdAt={new Date()}></DisplayDate>
-}
+  return <DisplayDate createdAt={new Date()}></DisplayDate>;
+};
 
 export const TwoMonthsAGo: StoryFn<typeof DisplayDate> = () => {
-  const twoMonthsAGo = subMonths(new Date(), 2)
-  return <DisplayDate createdAt={twoMonthsAGo}></DisplayDate>
-}
+  const twoMonthsAGo = subMonths(new Date(), 2);
+  return <DisplayDate createdAt={twoMonthsAGo}></DisplayDate>;
+};

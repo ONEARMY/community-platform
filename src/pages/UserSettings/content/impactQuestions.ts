@@ -1,20 +1,19 @@
 export interface IImpactQuestion {
-  id: string
-  icon: string
-  description: string
-  label: string
-  isVisible: boolean
-  value?: number
-  suffix?: string
-  prefix?: string
+  id: string;
+  icon: string;
+  description: string;
+  label: string;
+  isVisible: boolean;
+  value?: number;
+  suffix?: string;
+  prefix?: string;
 }
 
 export const impactQuestions: IImpactQuestion[] = [
   {
     id: 'plastic',
     icon: 'plastic',
-    description:
-      'How many KGs of plastic recycled have you recycled in that year?',
+    description: 'How many KGs of plastic recycled have you recycled in that year?',
     label: 'plastic recycled',
     suffix: 'Kg of',
     isVisible: true,
@@ -22,8 +21,7 @@ export const impactQuestions: IImpactQuestion[] = [
   {
     id: 'revenue',
     icon: 'revenue',
-    description:
-      'What was your annual revenue (in USD)? By revenue we mean all money coming in.',
+    description: 'What was your annual revenue (in USD)? By revenue we mean all money coming in.',
     label: 'revenue',
     prefix: 'USD',
     isVisible: true,
@@ -49,4 +47,4 @@ export const impactQuestions: IImpactQuestion[] = [
     label: 'machines built',
     isVisible: true,
   },
-]
+];

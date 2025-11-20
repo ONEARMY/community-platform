@@ -1,7 +1,7 @@
-import { ImageGallery } from './ImageGallery'
+import { ImageGallery } from './ImageGallery';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
-import type { IImageGalleryItem, ImageGalleryProps } from './ImageGallery'
+import type { Meta, StoryFn } from '@storybook/react-vite';
+import type { IImageGalleryItem, ImageGalleryProps } from './ImageGallery';
 
 const imageUrls = [
   {
@@ -20,7 +20,7 @@ const imageUrls = [
     full: 'https://picsum.photos/id/2/1500/1500',
     thumb: 'https://picsum.photos/id/2/150/150',
   },
-]
+];
 
 // eslint-disable-next-line storybook/prefer-pascal-case
 export const testImages: IImageGalleryItem[] = imageUrls.map((elt, i) => {
@@ -34,54 +34,40 @@ export const testImages: IImageGalleryItem[] = imageUrls.map((elt, i) => {
     thumbnailUrl: elt.thumb,
     timeCreated: new Date().toISOString(),
     updated: new Date().toISOString(),
-  }
-})
+  };
+});
 
 export default {
   title: 'Layout/ImageGallery',
   component: ImageGallery,
-} as Meta<typeof ImageGallery>
+} as Meta<typeof ImageGallery>;
 
-export const Default: StoryFn<typeof ImageGallery> = (
-  props: Omit<ImageGalleryProps, 'images'>,
-) => {
-  return <ImageGallery images={testImages} {...props} />
-}
+export const Default: StoryFn<typeof ImageGallery> = (props: Omit<ImageGalleryProps, 'images'>) => {
+  return <ImageGallery images={testImages} {...props} />;
+};
 
 export const NoThumbnails: StoryFn<typeof ImageGallery> = (
   props: Omit<ImageGalleryProps, 'images'>,
 ) => {
-  return <ImageGallery images={testImages} {...props} hideThumbnails />
-}
+  return <ImageGallery images={testImages} {...props} hideThumbnails />;
+};
 
 export const HideThumbnailForSingleImage: StoryFn<typeof ImageGallery> = (
   props: Omit<ImageGalleryProps, 'images'>,
 ) => {
-  return <ImageGallery images={[testImages[0]]} {...props} />
-}
+  return <ImageGallery images={[testImages[0]]} {...props} />;
+};
 
 export const ShowNextPrevButtons: StoryFn<typeof ImageGallery> = (
   props: Omit<ImageGalleryProps, 'images'>,
 ) => {
-  return (
-    <ImageGallery
-      images={testImages}
-      {...props}
-      hideThumbnails
-      showNextPrevButton={true}
-    />
-  )
-}
+  return <ImageGallery images={testImages} {...props} hideThumbnails showNextPrevButton={true} />;
+};
 
 export const DoNotShowNextPrevButtons: StoryFn<typeof ImageGallery> = (
   props: Omit<ImageGalleryProps, 'images'>,
 ) => {
   return (
-    <ImageGallery
-      images={[testImages[0]]}
-      {...props}
-      hideThumbnails
-      showNextPrevButton={true}
-    />
-  )
-}
+    <ImageGallery images={[testImages[0]]} {...props} hideThumbnails showNextPrevButton={true} />
+  );
+};

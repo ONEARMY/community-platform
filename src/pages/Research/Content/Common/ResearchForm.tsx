@@ -1,35 +1,35 @@
-import { useEffect, useState } from 'react'
-import { Form } from 'react-final-form'
-import { useNavigate } from 'react-router'
-import arrayMutators from 'final-form-arrays'
-import { Button, ResearchEditorOverview } from 'oa-components'
-import { FormWrapper } from 'src/common/Form/FormWrapper'
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
-import { logger } from 'src/logger'
-import { TagsField } from 'src/pages/common/FormFields'
-import { ImageField } from 'src/pages/common/FormFields/ImageField'
-import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors'
-import { ResearchPostingGuidelines } from 'src/pages/Research/Content/Common'
-import { fireConfetti } from 'src/utils/fireConfetti'
+import { useEffect, useState } from 'react';
+import { Form } from 'react-final-form';
+import { useNavigate } from 'react-router';
+import arrayMutators from 'final-form-arrays';
+import { Button, ResearchEditorOverview } from 'oa-components';
+import { FormWrapper } from 'src/common/Form/FormWrapper';
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
+import { logger } from 'src/logger';
+import { TagsField } from 'src/pages/common/FormFields';
+import { ImageField } from 'src/pages/common/FormFields/ImageField';
+import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
+import { ResearchPostingGuidelines } from 'src/pages/Research/Content/Common';
+import { fireConfetti } from 'src/utils/fireConfetti';
 
-import { buttons, headings, overview } from '../../labels'
-import { researchService } from '../../research.service'
-import { ResearchCollaboratorsField } from './FormFields/ResearchCollaboratorsField'
-import { ResearchDescriptionField } from './FormFields/ResearchDescriptionField'
-import { ResearchTitleField } from './FormFields/ResearchTitleField'
-import ResearchFieldCategory from './ResearchCategorySelect'
+import { buttons, headings, overview } from '../../labels';
+import { researchService } from '../../research.service';
+import { ResearchCollaboratorsField } from './FormFields/ResearchCollaboratorsField';
+import { ResearchDescriptionField } from './FormFields/ResearchDescriptionField';
+import { ResearchTitleField } from './FormFields/ResearchTitleField';
+import ResearchFieldCategory from './ResearchCategorySelect';
 
-import type { ResearchFormData, ResearchItem, ResearchStatus } from 'oa-shared'
+import type { ResearchFormData, ResearchItem, ResearchStatus } from 'oa-shared';
 
 interface IProps {
-  research?: ResearchItem
+  research?: ResearchItem;
 }
 
 const ResearchForm = ({ research }: IProps) => {
-  const [initialValues, setInitialValues] = useState<ResearchFormData>()
-  const navigate = useNavigate()
-  const [intentionalNavigation, setIntentionalNavigation] = useState(false)
-  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
+  const [initialValues, setInitialValues] = useState<ResearchFormData>();
+  const navigate = useNavigate();
+  const [intentionalNavigation, setIntentionalNavigation] = useState(false);
+  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (research) {
@@ -48,46 +48,42 @@ const ResearchForm = ({ research }: IProps) => {
         tags: research?.tagIds || [],
         existingImage: research?.image,
         image: undefined,
-      })
+      });
     }
-  }, [research])
+  }, [research]);
 
   const updateStatus = async (status: ResearchStatus) => {
     try {
-      await researchService.updateResearchStatus(research!.id, status)
-      navigate(`/research/${research!.slug}`)
+      await researchService.updateResearchStatus(research!.id, status);
+      navigate(`/research/${research!.slug}`);
     } catch (err) {
-      setSaveErrorMessage('Error updating research status')
+      setSaveErrorMessage('Error updating research status');
     }
-  }
+  };
 
   const onSubmit = async (values: ResearchFormData, isDraft = false) => {
-    setIntentionalNavigation(true)
-    setSaveErrorMessage(null)
+    setIntentionalNavigation(true);
+    setSaveErrorMessage(null);
 
     try {
-      const result = await researchService.upsert(
-        research?.id || null,
-        values,
-        isDraft,
-      )
+      const result = await researchService.upsert(research?.id || null, values, isDraft);
 
       if (!isDraft) {
-        fireConfetti()
+        fireConfetti();
       }
 
       setTimeout(() => {
-        navigate(`/research/${result.research.slug}`)
-      }, 100)
+        navigate(`/research/${result.research.slug}`);
+      }, 100);
     } catch (e) {
       if (e.cause && e.message) {
-        setSaveErrorMessage(e.message)
+        setSaveErrorMessage(e.message);
       }
-      logger.error(e)
+      logger.error(e);
     }
-  }
+  };
 
-  const heading = research ? headings.overview.edit : headings.overview.create
+  const heading = research ? headings.overview.edit : headings.overview.create;
 
   return (
     <Form<ResearchFormData>
@@ -97,11 +93,11 @@ const ResearchForm = ({ research }: IProps) => {
         ...arrayMutators,
       }}
       validate={(values) => {
-        const errors = {}
+        const errors = {};
         if (values.image == null && values.existingImage == null) {
-          errors['image'] = 'An image is required (either new or existing).'
+          errors['image'] = 'An image is required (either new or existing).';
         }
-        return errors
+        return errors;
       }}
       validateOnBlur
       render={({
@@ -114,9 +110,9 @@ const ResearchForm = ({ research }: IProps) => {
         submitSucceeded,
         values,
       }) => {
-        const errorsClientSide = [errorSet(errors, overview)]
+        const errorsClientSide = [errorSet(errors, overview)];
 
-        const handleSubmitDraft = () => onSubmit(values, true)
+        const handleSubmitDraft = () => onSubmit(values, true);
 
         const sidebar = (
           <>
@@ -124,11 +120,7 @@ const ResearchForm = ({ research }: IProps) => {
               <Button
                 data-cy="draft"
                 onClick={() =>
-                  updateStatus(
-                    research?.status === 'complete'
-                      ? 'in-progress'
-                      : 'complete',
-                  )
+                  updateStatus(research?.status === 'complete' ? 'in-progress' : 'complete')
                 }
                 variant={research?.status === 'complete' ? 'info' : 'success'}
                 type="submit"
@@ -139,9 +131,7 @@ const ResearchForm = ({ research }: IProps) => {
                 }}
               >
                 <span>
-                  {research?.status === 'complete'
-                    ? buttons.markInProgress
-                    : buttons.markCompleted}
+                  {research?.status === 'complete' ? buttons.markInProgress : buttons.markCompleted}
                 </span>
               </Button>
             )}
@@ -162,13 +152,11 @@ const ResearchForm = ({ research }: IProps) => {
               />
             )}
           </>
-        )
+        );
 
         const unsavedChangesDialog = (
-          <UnsavedChangesDialog
-            hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
-          />
-        )
+          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />
+        );
 
         return (
           <FormWrapper
@@ -193,10 +181,10 @@ const ResearchForm = ({ research }: IProps) => {
             <ResearchCollaboratorsField />
             <ImageField title="Cover Image" />
           </FormWrapper>
-        )
+        );
       }}
     />
-  )
-}
+  );
+};
 
-export default ResearchForm
+export default ResearchForm;

@@ -1,28 +1,23 @@
-import { OsmGeocoding } from './OsmGeocoding'
-import { OsmGeocodingResultsList } from './OsmGeocodingResultsList'
+import { OsmGeocoding } from './OsmGeocoding';
+import { OsmGeocodingResultsList } from './OsmGeocodingResultsList';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Components/OsmGeocoding',
   component: OsmGeocoding,
-} as Meta<typeof OsmGeocoding>
+} as Meta<typeof OsmGeocoding>;
 
-export const Default: StoryFn<typeof OsmGeocoding> = () => (
-  <OsmGeocoding loading={false} />
-)
+export const Default: StoryFn<typeof OsmGeocoding> = () => <OsmGeocoding loading={false} />;
 
-export const Loading: StoryFn<typeof OsmGeocoding> = () => (
-  <OsmGeocoding loading />
-)
+export const Loading: StoryFn<typeof OsmGeocoding> = () => <OsmGeocoding loading />;
 
 export const ResultsList: StoryFn<typeof OsmGeocodingResultsList> = () => (
   <OsmGeocodingResultsList
     results={[
       {
         place_id: 282375433,
-        licence:
-          'Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright',
+        licence: 'Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright',
         osm_type: 'relation',
         osm_id: 2658749,
         boundingbox: ['53.0035627', '53.0546835', '5.6146842', '5.7246007'],
@@ -36,8 +31,7 @@ export const ResultsList: StoryFn<typeof OsmGeocodingResultsList> = () => (
       },
       {
         place_id: 79535975,
-        licence:
-          'Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright',
+        licence: 'Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright',
         osm_type: 'node',
         osm_id: 7606839826,
         boundingbox: ['53.0276201', '53.0376201', '5.6468895', '5.6568895'],
@@ -52,30 +46,26 @@ export const ResultsList: StoryFn<typeof OsmGeocodingResultsList> = () => (
       },
       {
         place_id: 208556,
-        licence:
-          'Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright',
+        licence: 'Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright',
         osm_type: 'node',
         osm_id: 47984318,
         boundingbox: ['53.1169959', '53.1170959', '5.8099395', '5.8100395'],
         lat: '53.1170459',
         lon: '5.8099895',
-        display_name:
-          'Sneek, A32, Idaerd, Leeuwarden, Frisia, Netherlands, 9007SE, Netherlands',
+        display_name: 'Sneek, A32, Idaerd, Leeuwarden, Frisia, Netherlands, 9007SE, Netherlands',
         class: 'highway',
         type: 'motorway_junction',
         importance: 0.101,
       },
       {
         place_id: 210270,
-        licence:
-          'Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright',
+        licence: 'Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright',
         osm_type: 'node',
         osm_id: 47965735,
         boundingbox: ['53.1071958', '53.1072958', '5.8151597', '5.8152597'],
         lat: '53.1072458',
         lon: '5.8152097',
-        display_name:
-          'Sneek, A32, Idaerd, Leeuwarden, Frisia, Netherlands, 9007SH, Netherlands',
+        display_name: 'Sneek, A32, Idaerd, Leeuwarden, Frisia, Netherlands, 9007SH, Netherlands',
         class: 'highway',
         type: 'motorway_junction',
         importance: 0.101,
@@ -84,4 +74,4 @@ export const ResultsList: StoryFn<typeof OsmGeocodingResultsList> = () => (
     callback={undefined}
     setShowResults={() => null}
   />
-)
+);

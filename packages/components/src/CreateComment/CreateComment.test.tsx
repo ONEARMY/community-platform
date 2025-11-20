@@ -1,13 +1,13 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { faker } from '@faker-js/faker'
-import { fireEvent } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { faker } from '@faker-js/faker';
+import { fireEvent } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
-import { render } from '../test/utils'
-import { CreateComment } from './CreateComment'
+import { render } from '../test/utils';
+import { CreateComment } from './CreateComment';
 
-import type { ProfileType } from 'oa-shared'
+import type { ProfileType } from 'oa-shared';
 
 const member: ProfileType = {
   name: 'member',
@@ -19,11 +19,11 @@ const member: ProfileType = {
   order: 1,
   smallImageUrl: faker.image.avatar(),
   isSpace: false,
-}
+};
 
 describe('CreateComment Component', () => {
-  const mockOnSubmit = vi.fn()
-  const mockOnChange = vi.fn()
+  const mockOnSubmit = vi.fn();
+  const mockOnChange = vi.fn();
 
   it('renders correctly when logged in', () => {
     const screen = render(
@@ -34,12 +34,10 @@ describe('CreateComment Component', () => {
         onSubmit={mockOnSubmit}
         onChange={mockOnChange}
       />,
-    )
-    expect(
-      screen.getByPlaceholderText('Leave your questions or feedback...'),
-    ).toBeInTheDocument()
-    expect(screen.queryByText('Login to leave a comment')).toBeNull()
-  })
+    );
+    expect(screen.getByPlaceholderText('Leave your questions or feedback...')).toBeInTheDocument();
+    expect(screen.queryByText('Login to leave a comment')).toBeNull();
+  });
 
   it('renders login prompt when not logged in', () => {
     const screen = render(
@@ -50,14 +48,10 @@ describe('CreateComment Component', () => {
         onSubmit={mockOnSubmit}
         onChange={mockOnChange}
       />,
-    )
-    expect(
-      screen.getByText('Hi there! Login to leave a comment'),
-    ).toBeInTheDocument()
-    expect(
-      screen.queryByPlaceholderText('Leave your questions or feedback...'),
-    ).toBeNull()
-  })
+    );
+    expect(screen.getByText('Hi there! Login to leave a comment')).toBeInTheDocument();
+    expect(screen.queryByPlaceholderText('Leave your questions or feedback...')).toBeNull();
+  });
 
   it('enables submit button when comment is entered and user is logged in', () => {
     const screen = render(
@@ -68,9 +62,9 @@ describe('CreateComment Component', () => {
         onSubmit={mockOnSubmit}
         onChange={mockOnChange}
       />,
-    )
-    expect(screen.getByTestId('send-comment-button')).not.toBeDisabled()
-  })
+    );
+    expect(screen.getByTestId('send-comment-button')).not.toBeDisabled();
+  });
 
   it('disables submit button when no comment is entered', () => {
     const screen = render(
@@ -81,9 +75,9 @@ describe('CreateComment Component', () => {
         onSubmit={mockOnSubmit}
         onChange={mockOnChange}
       />,
-    )
-    expect(screen.getByTestId('send-comment-button')).toBeDisabled()
-  })
+    );
+    expect(screen.getByTestId('send-comment-button')).toBeDisabled();
+  });
 
   it('handles user input in textarea', () => {
     const screen = render(
@@ -94,13 +88,11 @@ describe('CreateComment Component', () => {
         onSubmit={mockOnSubmit}
         onChange={mockOnChange}
       />,
-    )
-    const textarea = screen.getByPlaceholderText(
-      'Leave your questions or feedback...',
-    )
-    fireEvent.change(textarea, { target: { value: 'New comment' } })
-    expect(mockOnChange).toHaveBeenCalledWith('New comment')
-  })
+    );
+    const textarea = screen.getByPlaceholderText('Leave your questions or feedback...');
+    fireEvent.change(textarea, { target: { value: 'New comment' } });
+    expect(mockOnChange).toHaveBeenCalledWith('New comment');
+  });
 
   it('calls onSubmit when the submit button is clicked', () => {
     const screen = render(
@@ -111,11 +103,11 @@ describe('CreateComment Component', () => {
         onSubmit={mockOnSubmit}
         onChange={mockOnChange}
       />,
-    )
-    const button = screen.getByTestId('send-comment-button')
-    fireEvent.click(button)
-    expect(mockOnSubmit).toHaveBeenCalledWith('Test comment')
-  })
+    );
+    const button = screen.getByTestId('send-comment-button');
+    fireEvent.click(button);
+    expect(mockOnSubmit).toHaveBeenCalledWith('Test comment');
+  });
 
   it('renders with custom placeholder', () => {
     const screen = render(
@@ -128,10 +120,8 @@ describe('CreateComment Component', () => {
         maxLength={12300}
         isLoggedIn={true}
       />,
-    )
+    );
 
-    expect(
-      screen.getByPlaceholderText('Custom placeholder'),
-    ).toBeInTheDocument()
-  })
-})
+    expect(screen.getByPlaceholderText('Custom placeholder')).toBeInTheDocument();
+  });
+});

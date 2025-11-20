@@ -1,51 +1,51 @@
-import { useEffect, useState } from 'react'
-import { Select } from 'oa-components'
-import { tagsService } from 'src/services/tagsService'
+import { useEffect, useState } from 'react';
+import { Select } from 'oa-components';
+import { tagsService } from 'src/services/tagsService';
 
-import { FieldContainer } from '../Form/FieldContainer'
+import { FieldContainer } from '../Form/FieldContainer';
 
-import type { Tag } from 'oa-shared'
-import type { FieldRenderProps } from 'react-final-form'
+import type { Tag } from 'oa-shared';
+import type { FieldRenderProps } from 'react-final-form';
 
 // we include props from react-final-form fields so it can be used as a custom field component
 export interface IProps extends Partial<FieldRenderProps<any, any>> {
-  isForm?: boolean
-  value: number[]
-  onChange: (val: number[]) => void
-  styleVariant?: 'selector' | 'filter'
-  placeholder?: string
-  maxTotal?: number
+  isForm?: boolean;
+  value: number[];
+  onChange: (val: number[]) => void;
+  styleVariant?: 'selector' | 'filter';
+  placeholder?: string;
+  maxTotal?: number;
 }
 
 export const TagsSelect = (props: IProps) => {
-  const [allTags, setAllTags] = useState<Tag[]>([])
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([])
+  const [allTags, setAllTags] = useState<Tag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
   useEffect(() => {
     const initTags = async () => {
-      const tags = await tagsService.getAllTags()
+      const tags = await tagsService.getAllTags();
       if (!tags) {
-        return
+        return;
       }
 
-      setAllTags(tags)
-    }
+      setAllTags(tags);
+    };
 
-    initTags()
-  }, [])
+    initTags();
+  }, []);
 
   useEffect(() => {
     if (allTags.length > 0 && props.value.length > 0) {
-      setSelectedTags(allTags.filter((x) => props.value.includes(x.id)))
+      setSelectedTags(allTags.filter((x) => props.value.includes(x.id)));
     }
-  }, [props.value, allTags])
+  }, [props.value, allTags]);
 
   const onChange = (tags: Tag[]) => {
-    setSelectedTags(tags)
-    props.onChange(tags.map((x) => x.id))
-  }
+    setSelectedTags(tags);
+    props.onChange(tags.map((x) => x.id));
+  };
 
-  const isOptionDisabled = () => selectedTags.length >= (props.maxTotal || 4)
+  const isOptionDisabled = () => selectedTags.length >= (props.maxTotal || 4);
 
   return (
     <FieldContainer data-cy="tag-select">
@@ -62,5 +62,5 @@ export const TagsSelect = (props: IProps) => {
         onChange={onChange}
       />
     </FieldContainer>
-  )
-}
+  );
+};

@@ -1,12 +1,12 @@
-import Main from 'src/pages/common/Layout/Main'
-import { mapPinService, MapPinServiceContext } from 'src/pages/Maps/map.service'
-import MapsPage from 'src/pages/Maps/Maps.client'
-import { SeoTagsUpdateComponent } from 'src/utils/seo'
+import Main from 'src/pages/common/Layout/Main';
+import { mapPinService, MapPinServiceContext } from 'src/pages/Maps/map.service';
+import MapsPage from 'src/pages/Maps/Maps.client';
+import { SeoTagsUpdateComponent } from 'src/utils/seo';
 
-import '../styles/leaflet.css'
+import '../styles/leaflet.css';
 
 export async function clientLoader() {
-  return null
+  return null;
 }
 
 export default function Index() {
@@ -17,5 +17,5 @@ export default function Index() {
         <MapsPage />
       </MapPinServiceContext.Provider>
     </Main>
-  )
+  );
 }

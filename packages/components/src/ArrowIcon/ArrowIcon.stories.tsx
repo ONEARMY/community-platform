@@ -1,6 +1,6 @@
-import { Arrow } from './ArrowIcon'
+import { Arrow } from './ArrowIcon';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   /* 👇 The title prop is optional.
@@ -9,7 +9,7 @@ export default {
    */
   title: 'Components/Arrow icon',
   component: Arrow,
-} as Meta<typeof Arrow>
+} as Meta<typeof Arrow>;
 
-export const Left: StoryFn<typeof Arrow> = () => <Arrow direction="left" />
-export const Right: StoryFn<typeof Arrow> = () => <Arrow direction="right" />
+export const Left: StoryFn<typeof Arrow> = () => <Arrow direction="left" />;
+export const Right: StoryFn<typeof Arrow> = () => <Arrow direction="right" />;

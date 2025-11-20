@@ -1,27 +1,22 @@
-import * as React from 'react'
-import { Marker } from 'react-leaflet'
-import MarkerClusterGroup from 'react-leaflet-markercluster'
+import * as React from 'react';
+import { Marker } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 
-import { createClusterIcon, createMarkerIcon } from './Sprites'
+import { createClusterIcon, createMarkerIcon } from './Sprites';
 
-import type { MarkerCluster } from 'leaflet'
-import type { MapPin } from 'oa-shared'
+import type { MarkerCluster } from 'leaflet';
+import type { MapPin } from 'oa-shared';
 
-import 'react-leaflet-markercluster/dist/styles.min.css'
+import 'react-leaflet-markercluster/dist/styles.min.css';
 
 interface IProps {
-  pins: MapPin[]
-  onPinClick: (pin: MapPin) => void
-  onClusterClick: (cluster: MarkerCluster) => void
-  clusterGroupRef?: React.RefObject<any>
+  pins: MapPin[];
+  onPinClick: (pin: MapPin) => void;
+  onClusterClick: (cluster: MarkerCluster) => void;
+  clusterGroupRef?: React.RefObject<any>;
 }
 
-export const Clusters = ({
-  pins,
-  onPinClick,
-  onClusterClick,
-  clusterGroupRef,
-}: IProps) => {
+export const Clusters = ({ pins, onPinClick, onClusterClick, clusterGroupRef }: IProps) => {
   /**
    * Documentation of Leaflet Clusters for better understanding
    * https://github.com/Leaflet/Leaflet.markercluster#clusters-methods
@@ -46,10 +41,10 @@ export const Clusters = ({
             position={[pin.lat, pin.lng]}
             icon={createMarkerIcon(pin)}
             onClick={() => {
-              onPinClick(pin)
+              onPinClick(pin);
             }}
           />
         ))}
     </MarkerClusterGroup>
-  )
-}
+  );
+};

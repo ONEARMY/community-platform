@@ -1,106 +1,91 @@
-import { useEffect } from 'react'
-import { Form } from 'react-final-form'
-import {
-  Link,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigate,
-} from 'react-router'
-import { Button, FieldInput, HeroBanner } from 'oa-components'
-import { PasswordField } from 'src/common/Form/PasswordField'
-import Main from 'src/pages/common/Layout/Main'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
-import { required } from 'src/utils/validators'
-import { Card, Flex, Heading, Label, Text } from 'theme-ui'
+import { useEffect } from 'react';
+import { Form } from 'react-final-form';
+import { Link, redirect, useActionData, useLoaderData, useNavigate } from 'react-router';
+import { Button, FieldInput, HeroBanner } from 'oa-components';
+import { PasswordField } from 'src/common/Form/PasswordField';
+import Main from 'src/pages/common/Layout/Main';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { required } from 'src/utils/validators';
+import { Card, Flex, Heading, Label, Text } from 'theme-ui';
 
-import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router'
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const url = new URL(request.url)
-  const error = url.searchParams.get('error_description')
-  const token = url.searchParams.get('token')
+  const url = new URL(request.url);
+  const error = url.searchParams.get('error_description');
+  const token = url.searchParams.get('token');
 
-  const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request);
 
   if (error) {
-    return Response.json({ error }, { headers })
+    return Response.json({ error }, { headers });
   }
 
   if (token) {
-    return Response.json({ token }, { headers })
+    return Response.json({ token }, { headers });
   }
 
-  const claims = await client.auth.getClaims()
+  const claims = await client.auth.getClaims();
 
   if (claims.data?.claims) {
-    return Response.json({}, { headers })
+    return Response.json({}, { headers });
   }
 
-  return redirect('/')
-}
+  return redirect('/');
+};
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const { client, headers } = createSupabaseServerClient(request)
-  const url = new URL(request.url)
+  const { client, headers } = createSupabaseServerClient(request);
+  const url = new URL(request.url);
 
-  const formData = await request.formData()
-  const password = formData.get('password') as string
-  const passwordRepeat = formData.get('passwordRepeat') as string
+  const formData = await request.formData();
+  const password = formData.get('password') as string;
+  const passwordRepeat = formData.get('passwordRepeat') as string;
 
   if (password !== passwordRepeat) {
-    return Response.json(
-      { error: 'Passwords do not match' },
-      { status: 400, headers },
-    )
+    return Response.json({ error: 'Passwords do not match' }, { status: 400, headers });
   }
 
   // Get the token from URL params (it should still be there)
-  const token = url.searchParams.get('token')
+  const token = url.searchParams.get('token');
 
   if (!token) {
-    return Response.json(
-      { error: 'Your reset link is invalid' },
-      { status: 400, headers },
-    )
+    return Response.json({ error: 'Your reset link is invalid' }, { status: 400, headers });
   }
 
   const tokenVerification = await client.auth.verifyOtp({
     token_hash: token,
     type: 'recovery',
-  })
+  });
 
   if (!tokenVerification.data.user) {
     return Response.json(
       { error: 'Your reset link has expired or is invalid' },
       { status: 400, headers },
-    )
+    );
   }
 
   // Now update the password
-  const result = await client.auth.updateUser({ password })
+  const result = await client.auth.updateUser({ password });
 
   if (result.error) {
-    return Response.json(
-      { error: result.error.message },
-      { status: 500, headers },
-    )
+    return Response.json({ error: result.error.message }, { status: 500, headers });
   }
 
   // Redirect with the session headers to automatically log in the user
-  return redirect('/', { headers })
-}
+  return redirect('/', { headers });
+};
 
 export default function Index() {
-  const navigate = useNavigate()
-  const data: any = useLoaderData<typeof loader>()
-  const actionData: any = useActionData<typeof action>()
+  const navigate = useNavigate();
+  const data: any = useLoaderData<typeof loader>();
+  const actionData: any = useActionData<typeof action>();
 
   useEffect(() => {
     if (actionData?.success) {
-      navigate('/')
+      navigate('/');
     }
-  }, [actionData?.success])
+  }, [actionData?.success]);
 
   return (
     <Main style={{ flex: 1 }}>
@@ -145,9 +130,7 @@ export default function Index() {
                         <Text color="red">{data?.error}</Text>
                       ) : (
                         <>
-                          {actionData?.error && (
-                            <Text color="red">{actionData?.error}</Text>
-                          )}
+                          {actionData?.error && <Text color="red">{actionData?.error}</Text>}
 
                           <Flex sx={{ flexDirection: 'column' }}>
                             <Label htmlFor="password">Your new password</Label>
@@ -161,9 +144,7 @@ export default function Index() {
                           </Flex>
 
                           <Flex sx={{ flexDirection: 'column' }}>
-                            <Label htmlFor="passwordRepeat">
-                              Repeat your new password
-                            </Label>
+                            <Label htmlFor="passwordRepeat">Repeat your new password</Label>
                             <PasswordField
                               name="passwordRepeat"
                               type="password"
@@ -196,9 +177,9 @@ export default function Index() {
                 </Flex>
               </Flex>
             </form>
-          )
+          );
         }}
       />
     </Main>
-  )
+  );
 }

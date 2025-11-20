@@ -42,7 +42,8 @@
     "docs": "yarn workspace oa-docs start",
     "db:reset": "npx supabase db reset && yarn db:seed",
     "db:seed": "npx @snaplet/seed sync && npx tsx seed.ts > seed.sql",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "prepare": "husky"
   },
   "browserslist": {
     "production": [
@@ -173,6 +174,7 @@
     "eslint-plugin-sort-class-members": "^1.20.0",
     "eslint-plugin-unicorn": "^53.0.0",
     "eslint-plugin-vitest": "^0.5.4",
+    "husky": "^9.1.7",
     "idb": "^8.0.0",
     "lint-staged": "^15.2.7",
     "mobx-react-devtools": "^6.1.1",

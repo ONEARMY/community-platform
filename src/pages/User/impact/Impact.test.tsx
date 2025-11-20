@@ -1,19 +1,14 @@
-import {
-  createMemoryRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from 'react-router'
-import { render, screen } from '@testing-library/react'
-import { ProfileStoreProvider } from 'src/stores/Profile/profile.store'
-import { FactoryUser } from 'src/test/factories/User'
-import { describe, expect, it, vi } from 'vitest'
+import { createMemoryRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router';
+import { render, screen } from '@testing-library/react';
+import { ProfileStoreProvider } from 'src/stores/Profile/profile.store';
+import { FactoryUser } from 'src/test/factories/User';
+import { describe, expect, it, vi } from 'vitest';
 
-import { IMPACT_YEARS } from './constants'
-import { Impact } from './Impact'
-import { invisible, missing } from './labels'
+import { IMPACT_YEARS } from './constants';
+import { Impact } from './Impact';
+import { invisible, missing } from './labels';
 
-import type { Profile } from 'oa-shared'
+import type { Profile } from 'oa-shared';
 
 vi.mock('src/stores/Profile/profile.store', () => ({
   useProfileStore: () => ({
@@ -21,9 +16,8 @@ vi.mock('src/stores/Profile/profile.store', () => ({
       username: 'activeUser',
     }),
   }),
-  ProfileStoreProvider: ({ children }: { children: React.ReactNode }) =>
-    children,
-}))
+  ProfileStoreProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
 
 describe('Impact', () => {
   describe('[public]', () => {
@@ -58,28 +52,28 @@ describe('Impact', () => {
             isVisible: false,
           },
         ],
-      }
+      };
 
       render(
         <ProfileStoreProvider>
           <Impact impact={impact} user={undefined} />
         </ProfileStoreProvider>,
-      )
+      );
 
-      await screen.findByText('45 volunteers')
-      await screen.findByText('23,000 Kg of plastic recycled')
-      await screen.findByText('USD 54,000 revenue')
-      const machineField = screen.queryByText('13 machines built')
-      expect(machineField).toBe(null)
+      await screen.findByText('45 volunteers');
+      await screen.findByText('23,000 Kg of plastic recycled');
+      await screen.findByText('USD 54,000 revenue');
+      const machineField = screen.queryByText('13 machines built');
+      expect(machineField).toBe(null);
 
       for (const year of IMPACT_YEARS) {
-        await screen.findByText(year)
+        await screen.findByText(year);
       }
 
-      await screen.findAllByText(missing.user.label)
-      await screen.findAllByText(invisible.user.label)
-    })
-  })
+      await screen.findAllByText(missing.user.label);
+      await screen.findAllByText(invisible.user.label);
+    });
+  });
 
   describe('[page owner]', () => {
     it('renders all fields with data formatted correctly', async () => {
@@ -98,8 +92,8 @@ describe('Impact', () => {
             isVisible: false,
           },
         ],
-      }
-      const user = FactoryUser({ impact, username: 'activeUser' })
+      };
+      const user = FactoryUser({ impact, username: 'activeUser' });
 
       const router = createMemoryRouter(
         createRoutesFromElements(
@@ -112,12 +106,12 @@ describe('Impact', () => {
             }
           ></Route>,
         ),
-      )
+      );
 
-      const screen = render(<RouterProvider router={router} />)
+      const screen = render(<RouterProvider router={router} />);
 
-      await screen.findAllByText(missing.owner.label)
-      await screen.findAllByText(invisible.owner.label)
-    })
-  })
-})
+      await screen.findAllByText(missing.owner.label);
+      await screen.findAllByText(invisible.owner.label);
+    });
+  });
+});

@@ -1,9 +1,9 @@
-import { observer } from 'mobx-react-lite'
-import { Select } from 'oa-components'
-import { UserRole } from 'oa-shared'
-import { SITE, VERSION } from 'src/config/config'
-import { getDevSiteRole } from 'src/config/devSiteConfig'
-import { Box, Flex, Text } from 'theme-ui'
+import { observer } from 'mobx-react-lite';
+import { Select } from 'oa-components';
+import { UserRole } from 'oa-shared';
+import { SITE, VERSION } from 'src/config/config';
+import { getDevSiteRole } from 'src/config/devSiteConfig';
+import { Box, Flex, Text } from 'theme-ui';
 
 /**
  * A simple header component that reminds developers that they are working on a dev
@@ -30,11 +30,7 @@ const DevSiteHeader = observer(() => {
           >
             This is a dev version of the platform (v{VERSION})
           </Text>
-          <Flex
-            data-cy="devSiteRoleSelectContainer"
-            sx={{ alignItems: 'center' }}
-            ml={2}
-          >
+          <Flex data-cy="devSiteRoleSelectContainer" sx={{ alignItems: 'center' }} ml={2}>
             <Text color={'white'} mr="1" title={SITE} sx={{ fontSize: 2 }}>
               View as:
             </Text>
@@ -42,10 +38,7 @@ const DevSiteHeader = observer(() => {
               <Select
                 options={siteRoles}
                 placeholder="Role"
-                defaultValue={
-                  siteRoles.find((s) => s.value === getDevSiteRole()) ||
-                  siteRoles[0]
-                }
+                defaultValue={siteRoles.find((s) => s.value === getDevSiteRole()) || siteRoles[0]}
                 onChange={(s: any) => setSiteRole(s.value)}
               />
             </Box>
@@ -66,63 +59,62 @@ const DevSiteHeader = observer(() => {
         </Flex>
       )}
     </>
-  )
-})
+  );
+});
 
 const showDevSiteHeader = () =>
-  devSites.some((s) => s.value === SITE) ||
-  window.location?.hostname === 'localhost'
+  devSites.some((s) => s.value === SITE) || window.location?.hostname === 'localhost';
 
 // we have 2 different dev sites, only show this component when on one and provide select
 const devSites = [
   { value: 'localhost', label: 'Dev' },
   { value: 'preview', label: 'Preview' },
-]
+];
 // dev site users can use either a default user profile or mock another admin role
 const siteRoles: { value: UserRole | string; label: string }[] = [
   { value: '', label: 'User' },
   { value: UserRole.BETA_TESTER, label: 'Beta Tester' },
   { value: UserRole.ADMIN, label: 'Admin' },
   // { value: 'super-admin', label: 'Super Admin' },
-]
+];
 
 /** Use localStorage to specify a site that will update from src/config */
 const setSite = async (site: string) => {
-  await clearCache(false)
-  localStorage.setItem('devSiteVariant', site)
-  localStorage.setItem('devSiteRole', getDevSiteRole())
-  window.location.reload()
-}
+  await clearCache(false);
+  localStorage.setItem('devSiteVariant', site);
+  localStorage.setItem('devSiteRole', getDevSiteRole());
+  window.location.reload();
+};
 
 /** Use localStorage to specify a role that can be applied while testing on dev sites */
 const setSiteRole = async (role: string) => {
   if (role) {
-    localStorage.setItem('devSiteRole', role)
+    localStorage.setItem('devSiteRole', role);
   } else {
-    localStorage.removeItem('devSiteRole')
+    localStorage.removeItem('devSiteRole');
   }
-  window.location.reload()
-}
+  window.location.reload();
+};
 
 /** Delete local,session and indexedDB storage */
 const clearCache = (reload = true) => {
   return new Promise((resolve) => {
-    localStorage.clear()
-    sessionStorage.clear()
-    const req = indexedDB.deleteDatabase('OneArmyCache')
+    localStorage.clear();
+    sessionStorage.clear();
+    const req = indexedDB.deleteDatabase('OneArmyCache');
     req.onsuccess = () => {
       if (reload) {
-        window.location.reload()
+        window.location.reload();
       }
-      resolve(true)
-    }
+      resolve(true);
+    };
     req.onerror = () => {
       if (reload) {
-        window.location.reload()
+        window.location.reload();
       }
-      resolve(false)
-    }
-  })
-}
+      resolve(false);
+    };
+  });
+};
 
-export default DevSiteHeader
+export default DevSiteHeader;

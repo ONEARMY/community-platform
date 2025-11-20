@@ -1,24 +1,24 @@
-import { trackEvent } from 'src/common/Analytics'
-import { usefulService } from 'src/services/usefulService'
+import { trackEvent } from 'src/common/Analytics';
+import { usefulService } from 'src/services/usefulService';
 
-import type { Profile, UsefulContentType } from 'oa-shared'
+import type { Profile, UsefulContentType } from 'oa-shared';
 
 interface UsefulClickProps {
-  vote: 'add' | 'delete'
+  vote: 'add' | 'delete';
   config: {
-    loggedInUser: Profile | null | undefined
-    contentType: UsefulContentType
-    contentId: number
-    eventCategory: string
-    setVoted: (value: boolean | ((prev: boolean) => boolean)) => void
-    setUsefulCount: (value: number | ((prev: number) => number)) => void
-    label?: string
-    slug?: string
-    checkResponse?: boolean
-  }
+    loggedInUser: Profile | null | undefined;
+    contentType: UsefulContentType;
+    contentId: number;
+    eventCategory: string;
+    setVoted: (value: boolean | ((prev: boolean) => boolean)) => void;
+    setUsefulCount: (value: number | ((prev: number) => number)) => void;
+    label?: string;
+    slug?: string;
+    checkResponse?: boolean;
+  };
 }
 const onUsefulClick = async (props: UsefulClickProps) => {
-  const { vote, config } = props
+  const { vote, config } = props;
   const {
     loggedInUser,
     contentType,
@@ -28,24 +28,24 @@ const onUsefulClick = async (props: UsefulClickProps) => {
     slug,
     setVoted,
     setUsefulCount,
-  } = config
+  } = config;
 
   if (!loggedInUser?.username) {
-    return
+    return;
   }
 
   // Trigger update without waiting
   if (vote === 'add') {
-    await usefulService.add(contentType, contentId)
+    await usefulService.add(contentType, contentId);
   } else {
-    await usefulService.remove(contentType, contentId)
+    await usefulService.remove(contentType, contentId);
   }
 
-  setVoted((prev) => !prev)
+  setVoted((prev) => !prev);
 
   setUsefulCount((prev) => {
-    return vote === 'add' ? prev + 1 : prev - 1
-  })
+    return vote === 'add' ? prev + 1 : prev - 1;
+  });
 
   trackEvent({
     category: eventCategory,
@@ -54,10 +54,9 @@ const onUsefulClick = async (props: UsefulClickProps) => {
         ? `${capitalize(contentType)}Useful`
         : `${capitalize(contentType)}UsefulRemoved`,
     label: label || slug || `${contentType}-${contentId}`,
-  })
-}
+  });
+};
 
-export { onUsefulClick }
+export { onUsefulClick };
 
-const capitalize = (str: string): string =>
-  str.charAt(0).toUpperCase() + str.slice(1)
+const capitalize = (str: string): string => str.charAt(0).toUpperCase() + str.slice(1);

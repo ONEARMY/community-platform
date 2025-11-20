@@ -1,15 +1,15 @@
-import { UserRole } from '../../models'
+import { UserRole } from '../../models';
 
-import type { Profile } from '../../models'
+import type { Profile } from '../../models';
 
 type Users = {
   [id: string]: Partial<Profile> & {
-    email: string
-    password: string
-    username: string
-    profileType: string
-  }
-}
+    email: string;
+    password: string;
+    username: string;
+    profileType: string;
+  };
+};
 export const users: Users = {
   subscriber: {
     createdAt: new Date('2022-01-30T18:51:57.719Z'),
@@ -266,4 +266,4 @@ export const users: Users = {
     },
     profileType: 'member',
   },
-}
+};

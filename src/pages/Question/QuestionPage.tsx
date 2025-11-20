@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router';
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react';
 import {
   Category,
   ContentStatistics,
@@ -8,52 +8,47 @@ import {
   LinkifyText,
   TagList,
   UsefulStatsButton,
-} from 'oa-components'
+} from 'oa-components';
 // eslint-disable-next-line import/no-unresolved
-import { ClientOnly } from 'remix-utils/client-only'
-import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
-import { usefulService } from 'src/services/usefulService'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
-import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers'
-import { onUsefulClick } from 'src/utils/onUsefulClick'
-import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
+import { ClientOnly } from 'remix-utils/client-only';
+import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
+import { usefulService } from 'src/services/usefulService';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
+import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
+import { onUsefulClick } from 'src/utils/onUsefulClick';
+import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
 
-import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase'
-import { DraftTag } from '../common/Drafts/DraftTag'
-import { UserNameTag } from '../common/UserNameTag/UserNameTag'
+import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
+import { DraftTag } from '../common/Drafts/DraftTag';
+import { UserNameTag } from '../common/UserNameTag/UserNameTag';
 
-import type { ContentType, Question } from 'oa-shared'
+import type { ContentType, Question } from 'oa-shared';
 
 interface IProps {
-  question: Question
+  question: Question;
 }
 
 export const QuestionPage = observer(({ question }: IProps) => {
-  const { profile: activeUser } = useProfileStore()
-  const [voted, setVoted] = useState<boolean>(false)
-  const [usefulCount, setUsefulCount] = useState<number>(question.usefulCount)
-  const [subscribersCount, setSubscribersCount] = useState<number>(
-    question.subscriberCount,
-  )
+  const { profile: activeUser } = useProfileStore();
+  const [voted, setVoted] = useState<boolean>(false);
+  const [usefulCount, setUsefulCount] = useState<number>(question.usefulCount);
+  const [subscribersCount, setSubscribersCount] = useState<number>(question.subscriberCount);
 
   useEffect(() => {
     const getVoted = async () => {
-      const voted = await usefulService.hasVoted('questions', question.id)
-      setVoted(voted)
-    }
+      const voted = await usefulService.hasVoted('questions', question.id);
+      setVoted(voted);
+    };
 
     if (activeUser) {
-      getVoted()
+      getVoted();
     }
-  }, [activeUser, question])
+  }, [activeUser, question]);
 
   const isEditable = useMemo(() => {
-    return (
-      hasAdminRights(activeUser) ||
-      question.author?.username === activeUser?.username
-    )
-  }, [activeUser, question.author])
+    return hasAdminRights(activeUser) || question.author?.username === activeUser?.username;
+  }, [activeUser, question.author]);
 
   const configOnUsefulClick = {
     contentType: 'questions' as ContentType,
@@ -63,23 +58,19 @@ export const QuestionPage = observer(({ question }: IProps) => {
     setVoted,
     setUsefulCount,
     loggedInUser: activeUser,
-  }
+  };
 
   const handleUsefulClick = async (vote: 'add' | 'delete') => {
     await onUsefulClick({
       vote,
       config: configOnUsefulClick,
-    })
-  }
+    });
+  };
 
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
       <Breadcrumbs content={question} variant="question" />
-      <Card
-        data-cy="question-body"
-        sx={{ position: 'relative' }}
-        variant="responsive"
-      >
+      <Card data-cy="question-body" sx={{ position: 'relative' }} variant="responsive">
         <Flex sx={{ flexDirection: 'column', padding: [3, 4], gap: 3 }}>
           <Flex sx={{ flexWrap: 'wrap', gap: 3 }}>
             <ClientOnly fallback={<></>}>
@@ -89,9 +80,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
                     votedUsefulCount={usefulCount}
                     hasUserVotedUseful={voted}
                     isLoggedIn={!!activeUser}
-                    onUsefulClick={() =>
-                      handleUsefulClick(voted ? 'delete' : 'add')
-                    }
+                    onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}
                   />
 
                   {question.isDraft && <DraftTag />}
@@ -119,11 +108,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
 
           <Flex sx={{ flexDirection: 'column', gap: 2 }}>
             {question.category && <Category category={question.category} />}
-            <Heading
-              as="h1"
-              data-cy="question-title"
-              data-testid="question-title"
-            >
+            <Heading as="h1" data-cy="question-title" data-testid="question-title">
               {question.title}
             </Heading>
 
@@ -217,5 +202,5 @@ export const QuestionPage = observer(({ question }: IProps) => {
         )}
       </ClientOnly>
     </Box>
-  )
-})
+  );
+});

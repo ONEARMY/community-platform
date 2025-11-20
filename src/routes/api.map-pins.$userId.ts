@@ -1,13 +1,13 @@
-import { MapPinFactory } from 'src/factories/mapPinFactory.server'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { MapPinFactory } from 'src/factories/mapPinFactory.server';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
-import type { DBMapPin } from 'oa-shared'
+import type { DBMapPin } from 'oa-shared';
 
 // runs on the server
 export const loader = async ({ request, params }) => {
-  const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request);
   try {
-    const profileId = Number(params.userId)
+    const profileId = Number(params.userId);
 
     const { data, error } = await client
       .from('map_pins')
@@ -61,28 +61,25 @@ export const loader = async ({ request, params }) => {
       `,
       )
       .eq('profile_id', profileId)
-      .eq('moderation', 'accepted')
+      .eq('moderation', 'accepted');
 
     if (error) {
-      console.error(error)
+      console.error(error);
 
-      return Response.json(
-        {},
-        { headers, status: 500, statusText: 'Error fetching map-pins' },
-      )
+      return Response.json({}, { headers, status: 500, statusText: 'Error fetching map-pins' });
     }
 
     if (!data?.length) {
-      return Response.json({ mapPin: null }, { headers })
+      return Response.json({ mapPin: null }, { headers });
     }
 
-    const pinsDb = data[0] as unknown as DBMapPin
-    const pinFactory = new MapPinFactory(client)
-    const mapPin = pinFactory.fromDBWithProfile(pinsDb)
+    const pinsDb = data[0] as unknown as DBMapPin;
+    const pinFactory = new MapPinFactory(client);
+    const mapPin = pinFactory.fromDBWithProfile(pinsDb);
 
-    return Response.json({ mapPin }, { headers })
+    return Response.json({ mapPin }, { headers });
   } catch (error) {
-    console.error(error)
-    return Response.json({}, { status: 500, headers })
+    console.error(error);
+    return Response.json({}, { status: 500, headers });
   }
-}
+};

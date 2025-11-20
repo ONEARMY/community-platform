@@ -4,9 +4,9 @@ import {
   LIBRARY_TITLE_MIN_LENGTH,
   STEP_DESCRIPTION_MAX_LENGTH,
   STEP_DESCRIPTION_MIN_LENGTH,
-} from './constants'
+} from './constants';
 
-import type { ILabels } from 'src/common/Form/types'
+import type { ILabels } from 'src/common/Form/types';
 
 export const headings = {
   create: 'Add your project',
@@ -14,7 +14,7 @@ export const headings = {
   errors: "Ouch, something's wrong",
   files: 'Do you have supporting files to help others replicate your project?',
   uploading: 'Uploading project',
-}
+};
 
 export const buttons = {
   draft: {
@@ -31,7 +31,7 @@ export const buttons = {
     add: 'Add step',
   },
   view: 'View Project',
-}
+};
 
 export const errors = {
   videoUrl: {
@@ -39,7 +39,7 @@ export const errors = {
     empty: 'Include either images or a video',
     invalidUrl: 'Please provide a valid YouTube Url',
   },
-}
+};
 
 export const intro: ILabels = {
   category: {
@@ -87,7 +87,7 @@ export const intro: ILabels = {
     placeholder: `Make a chair from... (${LIBRARY_TITLE_MIN_LENGTH} - ${LIBRARY_TITLE_MAX_LENGTH} characters)`,
     title: 'Title of your project',
   },
-}
+};
 
 export const guidance = {
   guides: {
@@ -134,7 +134,7 @@ export const guidance = {
       '<li>Show the final product</li>' +
       '<li>Link to the Bazar if you sell it there</li></ol>',
   },
-}
+};
 
 export const steps: ILabels = {
   heading: {
@@ -157,7 +157,7 @@ export const steps: ILabels = {
     title: 'YouTube video',
     placeholder: 'https://youtube.com/watch?v=',
   },
-}
+};
 
 export const listing = {
   create: 'Add your project',
@@ -166,10 +166,9 @@ export const listing = {
   incompleteProfile: 'Complete your profile to add your project',
   join: 'Sign up to add your project',
   loadMore: 'Load More',
-  loggedOut:
-    'We need that password of yours before learning about your awesome project...',
+  loggedOut: 'We need that password of yours before learning about your awesome project...',
   totalComments: 'Total comments',
   search: 'Search the library',
   sort: 'Sort by category',
   usefulness: 'How useful it is',
-}
+};

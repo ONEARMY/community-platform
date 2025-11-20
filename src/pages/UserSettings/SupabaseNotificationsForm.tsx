@@ -1,41 +1,29 @@
-import { useState } from 'react'
-import { Field, Form } from 'react-final-form'
-import {
-  ConfirmModal,
-  GridForm,
-  InformationTooltip,
-  InternalLink,
-  Loader,
-} from 'oa-components'
-import { UserContactError } from 'src/pages/User/contact'
-import { isMessagingModuleOff } from 'src/utils/helpers'
-import { Button, Flex } from 'theme-ui'
+import { useState } from 'react';
+import { Field, Form } from 'react-final-form';
+import { ConfirmModal, GridForm, InformationTooltip, InternalLink, Loader } from 'oa-components';
+import { UserContactError } from 'src/pages/User/contact';
+import { isMessagingModuleOff } from 'src/utils/helpers';
+import { Button, Flex } from 'theme-ui';
 
-import type { GridFormFields } from 'oa-components'
-import type { DBNotificationsPreferences } from 'oa-shared'
-import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
+import type { GridFormFields } from 'oa-components';
+import type { DBNotificationsPreferences } from 'oa-shared';
+import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
 
-const formId = 'SupabaseNotifications'
+const formId = 'SupabaseNotifications';
 
 interface IProps {
-  initialValues: DBNotificationsPreferences | null
-  isLoading: boolean
-  onSubmit: (values: DBNotificationsPreferences) => Promise<void>
-  onUnsubscribe: () => Promise<void>
-  profileIsContactable?: boolean
-  submitResults: SubmitResults | null
+  initialValues: DBNotificationsPreferences | null;
+  isLoading: boolean;
+  onSubmit: (values: DBNotificationsPreferences) => Promise<void>;
+  onUnsubscribe: () => Promise<void>;
+  profileIsContactable?: boolean;
+  submitResults: SubmitResults | null;
 }
 
 export const SupabaseNotificationsForm = (props: IProps) => {
-  const {
-    initialValues,
-    isLoading,
-    onSubmit,
-    onUnsubscribe,
-    profileIsContactable,
-    submitResults,
-  } = props
-  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
+  const { initialValues, isLoading, onSubmit, onUnsubscribe, profileIsContactable, submitResults } =
+    props;
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
   const fields: GridFormFields[] = [
     {
@@ -48,8 +36,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
           type="checkbox"
         />
       ),
-      description:
-        'Top-level comments on your contributions or contributions you follow',
+      description: 'Top-level comments on your contributions or contributions you follow',
       glyph: 'comment',
       name: 'New comments',
     },
@@ -90,12 +77,11 @@ export const SupabaseNotificationsForm = (props: IProps) => {
           tooltip="Afriad we've got to send these to you,<br/>so you can't opt-out. "
         />
       ),
-      description:
-        'Password resets, email verifications and other service emails',
+      description: 'Password resets, email verifications and other service emails',
       glyph: 'service-email',
       name: 'Service emails',
     },
-  ]
+  ];
 
   if (!isMessagingModuleOff()) {
     fields.push({
@@ -105,15 +91,13 @@ export const SupabaseNotificationsForm = (props: IProps) => {
           to="/settings/profile#public-contact"
           sx={{ textAlign: 'center' }}
         >
-          {profileIsContactable
-            ? 'Stop receiving messages'
-            : 'Start receiving messages'}
+          {profileIsContactable ? 'Stop receiving messages' : 'Start receiving messages'}
         </InternalLink>
       ),
       description: 'Through the contact form on your profile page',
       glyph: 'email',
       name: 'Receiving messages',
-    })
+    });
   }
 
   return (
@@ -123,7 +107,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
       initialValues={initialValues}
       render={({ submitting, handleSubmit }) => {
         if (isLoading) {
-          return <Loader />
+          return <Loader />;
         }
 
         return (
@@ -157,14 +141,14 @@ export const SupabaseNotificationsForm = (props: IProps) => {
                 confirmButtonText="Confirm"
                 handleCancel={() => setShowDeleteModal(false)}
                 handleConfirm={() => {
-                  onUnsubscribe()
-                  setShowDeleteModal(false)
+                  onUnsubscribe();
+                  setShowDeleteModal(false);
                 }}
               />
             </Flex>
           </Flex>
-        )
+        );
       }}
     />
-  )
-}
+  );
+};

@@ -1,17 +1,17 @@
-import '@testing-library/jest-dom/vitest'
+import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest';
 
-import { render } from '../test/utils'
-import { fakeDisplayNotification } from '../utils'
-import { NotificationListSupabase } from './NotificationListSupabase'
+import { render } from '../test/utils';
+import { fakeDisplayNotification } from '../utils';
+import { NotificationListSupabase } from './NotificationListSupabase';
 
 describe('NotificationListSupabase', () => {
   it('Can show all notifications', () => {
-    const newsReplyNotification = fakeDisplayNotification({ isRead: false })
+    const newsReplyNotification = fakeDisplayNotification({ isRead: false });
     const questionCommentNotification = fakeDisplayNotification({
       isRead: true,
-    })
+    });
 
     const { getAllByTestId } = render(
       <NotificationListSupabase
@@ -21,9 +21,9 @@ describe('NotificationListSupabase', () => {
         modalDismiss={vi.fn()}
         notifications={[newsReplyNotification, questionCommentNotification]}
       />,
-    )
+    );
 
-    const unreadNotifications = getAllByTestId('NotificationListItemSupabase')
-    expect(unreadNotifications).toHaveLength(1)
-  })
-})
+    const unreadNotifications = getAllByTestId('NotificationListItemSupabase');
+    expect(unreadNotifications).toHaveLength(1);
+  });
+});

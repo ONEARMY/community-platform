@@ -1,16 +1,16 @@
-import type { ILabels } from 'src/common/Form/types'
+import type { ILabels } from 'src/common/Form/types';
 
 export const buttons = {
   create: 'Publish',
   draft: { create: 'Save as draft', update: 'Save to draft' },
   edit: 'Update',
-}
+};
 
 export const headings = {
   create: 'Add news',
   edit: 'Edit your news',
   list: 'Latest news from the community',
-}
+};
 
 export const fields: ILabels = {
   category: {
@@ -18,8 +18,7 @@ export const fields: ILabels = {
     title: 'Which category fits your news?',
   },
   body: {
-    placeholder:
-      'Write and structure the body of your article. Markdown is also supported.',
+    placeholder: 'Write and structure the body of your article. Markdown is also supported.',
     title: 'Body',
   },
   profileBadge: {
@@ -39,10 +38,9 @@ export const fields: ILabels = {
   },
   heroImage: {
     title: 'Cover image',
-    description:
-      'This image should be landscape with 2:1 aspect ratio. We advise 1240x620px',
+    description: 'This image should be landscape with 2:1 aspect ratio. We advise 1240x620px',
   },
-}
+};
 
 export const listing = {
   create: 'Add news',
@@ -56,4 +54,4 @@ export const listing = {
   sort: 'Sort by',
   totalComments: 'Total comments',
   usefulness: 'How useful it is',
-}
+};

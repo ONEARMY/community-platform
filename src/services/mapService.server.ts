@@ -1,5 +1,5 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { Moderation, Profile, UpsertPin } from 'oa-shared'
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Moderation, Profile, UpsertPin } from 'oa-shared';
 
 export class MapServiceServer {
   constructor(private client: SupabaseClient) {}
@@ -8,14 +8,12 @@ export class MapServiceServer {
     const existingPin = await this.client
       .from('map_pins')
       .select('id,moderation')
-      .eq('profile_id', pin.profile_id)
-    const existingPinId = existingPin.data?.at(0)?.id
+      .eq('profile_id', pin.profile_id);
+    const existingPinId = existingPin.data?.at(0)?.id;
 
     if (existingPinId) {
       const moderation: Moderation =
-        existingPin.data![0].moderation === 'accepted'
-          ? 'accepted'
-          : 'awaiting-moderation'
+        existingPin.data![0].moderation === 'accepted' ? 'accepted' : 'awaiting-moderation';
 
       return await this.client
         .from('map_pins')
@@ -76,10 +74,10 @@ export class MapServiceServer {
             )
           )`,
         )
-        .single()
+        .single();
     } else {
       const moderation: Moderation =
-        profile.type?.name === 'member' ? 'accepted' : 'awaiting-moderation'
+        profile.type?.name === 'member' ? 'accepted' : 'awaiting-moderation';
 
       return await this.client
         .from('map_pins')
@@ -140,7 +138,7 @@ export class MapServiceServer {
             )
           )`,
         )
-        .single()
+        .single();
     }
   }
 }

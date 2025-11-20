@@ -1,20 +1,20 @@
-import { Flex, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui';
 
-import { Icon } from '../Icon/Icon'
-import { Tooltip } from '../Tooltip/Tooltip'
+import { Icon } from '../Icon/Icon';
+import { Tooltip } from '../Tooltip/Tooltip';
 
-import type { IGlyphs } from '../Icon/types'
+import type { IGlyphs } from '../Icon/types';
 
 export interface IProps {
-  onClick: () => void
+  onClick: () => void;
 
-  isLoggedIn?: boolean
-  label?: string
-  glyph?: keyof IGlyphs
+  isLoggedIn?: boolean;
+  label?: string;
+  glyph?: keyof IGlyphs;
 }
 
 export const DownloadButton = (props: IProps) => {
-  const { glyph, isLoggedIn, label, onClick } = props
+  const { glyph, isLoggedIn, label, onClick } = props;
   return (
     <>
       <Flex
@@ -49,5 +49,5 @@ export const DownloadButton = (props: IProps) => {
       </Flex>
       <Tooltip id="download-files" />
     </>
-  )
-}
+  );
+};

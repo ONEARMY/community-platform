@@ -1,12 +1,12 @@
-import styled from '@emotion/styled'
-import { Tab as MuiTab } from '@mui/base/Tab'
-import { TabPanel as MuiTabPanel } from '@mui/base/TabPanel'
-import { Tabs } from '@mui/base/Tabs'
-import { TabsList } from '@mui/base/TabsList'
+import styled from '@emotion/styled';
+import { Tab as MuiTab } from '@mui/base/Tab';
+import { TabPanel as MuiTabPanel } from '@mui/base/TabPanel';
+import { Tabs } from '@mui/base/Tabs';
+import { TabsList } from '@mui/base/TabsList';
 
-import type { PlatformTheme } from 'oa-themes'
+import type { PlatformTheme } from 'oa-themes';
 
-type Theme = PlatformTheme['styles']
+type Theme = PlatformTheme['styles'];
 
 export const Tab = styled(MuiTab)`
   background-color: transparent;
@@ -17,8 +17,7 @@ export const Tab = styled(MuiTab)`
   cursor: pointer;
   font-family: ${(p) => (p.theme as Theme)?.text?.heading.fontFamily};
   font-size: ${(p) => (p.theme as Theme)?.fontSizes?.[2]}px;
-  padding: ${(p) => (p.theme as Theme)?.space?.[2]}px
-    ${(p) => (p.theme as Theme)?.space?.[3]}px;
+  padding: ${(p) => (p.theme as Theme)?.space?.[2]}px ${(p) => (p.theme as Theme)?.space?.[3]}px;
   margin-right: ${(p) => (p.theme as Theme)?.space?.[3]}px;
   color: ${(p) => (p.theme as Theme)?.colors?.grey};
 
@@ -56,12 +55,12 @@ export const Tab = styled(MuiTab)`
       background-color: ${(p) => (p.theme as Theme)?.colors.background};
     }
   }
-`
+`;
 
 export const TabPanel = styled(MuiTabPanel)`
   background-color: ${(p) => (p.theme as Theme)?.colors.background};
   border-radius: ${(p) => (p.theme as Theme)?.space?.[2]}px;
   padding: ${(p) => (p.theme as Theme)?.space?.[3]}px;
-`
+`;
 
-export { Tabs, TabsList }
+export { Tabs, TabsList };

@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react'
-import { describe, it } from 'vitest'
+import { render, screen } from '@testing-library/react';
+import { describe, it } from 'vitest';
 
-import { LibraryFormProvider } from './LibraryFormProvider'
-import { LibraryStepsContainerField } from './LibraryStepsContainer.field'
+import { LibraryFormProvider } from './LibraryFormProvider';
+import { LibraryStepsContainerField } from './LibraryStepsContainer.field';
 
 describe('HowtoFieldStepsContainer', () => {
   it('renders', async () => {
@@ -10,9 +10,9 @@ describe('HowtoFieldStepsContainer', () => {
       <LibraryFormProvider>
         <LibraryStepsContainerField />
       </LibraryFormProvider>,
-    )
+    );
 
-    await screen.findByText('Add step')
-  })
+    await screen.findByText('Add step');
+  });
   // Will add behavioural test when #2698 is merged in; adding steps
-})
+});

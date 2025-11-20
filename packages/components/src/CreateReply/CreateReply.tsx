@@ -1,33 +1,33 @@
-import { useState } from 'react'
-import { Alert, Box } from 'theme-ui'
+import { useState } from 'react';
+import { Alert, Box } from 'theme-ui';
 
-import { CreateComment } from '../CreateComment/CreateComment'
+import { CreateComment } from '../CreateComment/CreateComment';
 
 export interface Props {
-  commentId: string
-  isLoggedIn: boolean
-  maxLength: number
-  onSubmit: (_id: string, reply: string) => Promise<void>
+  commentId: string;
+  isLoggedIn: boolean;
+  maxLength: number;
+  onSubmit: (_id: string, reply: string) => Promise<void>;
 }
 
 export const CreateReply = (props: Props) => {
-  const [reply, setReply] = useState<string>('')
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [isError, setIsError] = useState<boolean>(false)
-  const { commentId, isLoggedIn, maxLength, onSubmit } = props
+  const [reply, setReply] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const { commentId, isLoggedIn, maxLength, onSubmit } = props;
 
   const handleSubmit = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await onSubmit(commentId, reply)
-      setReply('')
-      setIsLoading(false)
+      await onSubmit(commentId, reply);
+      setReply('');
+      setIsLoading(false);
     } catch (error) {
       // Swallow the error for now
-      setIsLoading(false)
-      setIsError(true)
+      setIsLoading(false);
+      setIsError(true);
     }
-  }
+  };
 
   return (
     <Box
@@ -54,5 +54,5 @@ export const CreateReply = (props: Props) => {
         </Alert>
       ) : null}
     </Box>
-  )
-}
+  );
+};

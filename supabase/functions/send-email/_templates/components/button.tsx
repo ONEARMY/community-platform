@@ -1,5 +1,5 @@
-import React from 'react'
-import { Button as ButtonComp, Section } from '@react-email/components'
+import React from 'react';
+import { Button as ButtonComp, Section } from '@react-email/components';
 
 const button = {
   backgroundColor: '#E2EDF7',
@@ -9,11 +9,11 @@ const button = {
   fontSize: '16px',
   padding: '19px 30px',
   textDecoration: 'none',
-}
+};
 
 interface IProps {
-  children: React.ReactNode
-  href: string
+  children: React.ReactNode;
+  href: string;
 }
 
 export const Button = ({ children, href }: IProps) => (
@@ -22,4 +22,4 @@ export const Button = ({ children, href }: IProps) => (
       {children}
     </ButtonComp>
   </Section>
-)
+);

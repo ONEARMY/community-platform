@@ -1,13 +1,13 @@
-import { Flex } from 'theme-ui'
+import { Flex } from 'theme-ui';
 
-import { Tag } from '../Tag/Tag'
+import { Tag } from '../Tag/Tag';
 
-import type { ITag } from '../Tag/Tag'
+import type { ITag } from '../Tag/Tag';
 
 export interface TagListProps {}
 
 export interface IProps {
-  tags: ITag[]
+  tags: ITag[];
 }
 
 export const TagList = ({ tags }: IProps) => {
@@ -19,5 +19,5 @@ export const TagList = ({ tags }: IProps) => {
           <Tag key={tag.label} tag={tag} />
         ))}
     </Flex>
-  )
-}
+  );
+};

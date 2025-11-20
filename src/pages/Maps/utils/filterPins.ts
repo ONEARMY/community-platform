@@ -1,50 +1,46 @@
-import { latLongFilter } from './filterLatLong'
+import { latLongFilter } from './filterLatLong';
 
-import type { LatLngBounds } from 'leaflet'
-import type { MapPin } from 'oa-shared'
+import type { LatLngBounds } from 'leaflet';
+import type { MapPin } from 'oa-shared';
 
 export const filterPins = (
   allPins: MapPin[],
   filters: {
-    tags?: number[]
-    types?: string[]
-    badges?: string[]
-    settings?: string[]
-    boundaries?: LatLngBounds
+    tags?: number[];
+    types?: string[];
+    badges?: string[];
+    settings?: string[];
+    boundaries?: LatLngBounds;
   },
 ): MapPin[] => {
   if (!allPins?.length) {
-    return []
+    return [];
   }
-  const { tags, types, badges, settings, boundaries } = filters
+  const { tags, types, badges, settings, boundaries } = filters;
 
-  let filteredPins = structuredClone(allPins)
+  let filteredPins = structuredClone(allPins);
 
   if (tags?.length) {
     filteredPins = filteredPins.filter((x) =>
-      tags.every((tag) =>
-        x.profile?.tags?.some((profileTag) => profileTag.id === tag),
-      ),
-    )
+      tags.every((tag) => x.profile?.tags?.some((profileTag) => profileTag.id === tag)),
+    );
   }
 
   if (types?.length) {
     filteredPins = filteredPins.filter(
       (x) => x.profile?.type?.name && types.includes(x.profile?.type?.name),
-    )
+    );
   }
 
   if (badges?.length) {
     filteredPins = filteredPins.filter((x) =>
       x.profile?.badges?.some((badge) => badges.includes(badge.name)),
-    )
+    );
   }
 
   if (settings?.length) {
     // Right now visitor filter is only setting filter. This should be smarter.
-    filteredPins = filteredPins.filter(
-      (x) => x.profile?.visitorPolicy?.policy === 'open',
-    )
+    filteredPins = filteredPins.filter((x) => x.profile?.visitorPolicy?.policy === 'open');
   }
 
   if (boundaries) {
@@ -54,8 +50,8 @@ export const filterPins = (
         _southWest: boundaries.getSouthWest(),
       },
       filteredPins,
-    )
+    );
   }
 
-  return filteredPins
-}
+  return filteredPins;
+};

@@ -1,42 +1,33 @@
-import { useState } from 'react'
-import { Box, Flex, Heading } from 'theme-ui'
+import { useState } from 'react';
+import { Box, Flex, Heading } from 'theme-ui';
 
-import { Button } from '../Button/Button'
-import { ButtonIcon } from '../ButtonIcon/ButtonIcon'
-import { InternalLink } from '../InternalLink/InternalLink'
-import { Loader } from '../Loader/Loader'
-import { NotificationItemSupabase } from '../NotificationItemSupabase/NotificationItemSupabase'
+import { Button } from '../Button/Button';
+import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
+import { InternalLink } from '../InternalLink/InternalLink';
+import { Loader } from '../Loader/Loader';
+import { NotificationItemSupabase } from '../NotificationItemSupabase/NotificationItemSupabase';
 
-import type { NotificationDisplay } from 'oa-shared'
+import type { NotificationDisplay } from 'oa-shared';
 
 export interface IProps {
-  isUpdatingNotifications: boolean
-  markAllRead: () => void
-  markRead: (id: number) => void
-  modalDismiss: () => void
-  notifications: NotificationDisplay[]
+  isUpdatingNotifications: boolean;
+  markAllRead: () => void;
+  markRead: (id: number) => void;
+  modalDismiss: () => void;
+  notifications: NotificationDisplay[];
 }
 
 export const NotificationListSupabase = (props: IProps) => {
-  const [isUnreadOnly, setIsUnreadOnly] = useState<boolean>(true)
-  const {
-    isUpdatingNotifications,
-    markAllRead,
-    markRead,
-    modalDismiss,
-    notifications,
-  } = props
+  const [isUnreadOnly, setIsUnreadOnly] = useState<boolean>(true);
+  const { isUpdatingNotifications, markAllRead, markRead, modalDismiss, notifications } = props;
 
-  const anyUnread = notifications.filter(({ isRead }) => !isRead).length > 0
+  const anyUnread = notifications.filter(({ isRead }) => !isRead).length > 0;
   const notificationList = notifications
     .filter(({ isRead }) => (isUnreadOnly ? !isRead : !isRead || isRead))
-    .sort((a, b) => (a.date < b.date ? 1 : -1))
+    .sort((a, b) => (a.date < b.date ? 1 : -1));
 
   return (
-    <Flex
-      data-cy="NotificationListSupabase"
-      sx={{ flexDirection: 'column', gap: 4 }}
-    >
+    <Flex data-cy="NotificationListSupabase" sx={{ flexDirection: 'column', gap: 4 }}>
       <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
         <Heading sx={{ fontSize: 6 }}>Notifications</Heading>
         <ButtonIcon
@@ -129,7 +120,7 @@ export const NotificationListSupabase = (props: IProps) => {
               modalDismiss={modalDismiss}
               notification={notification}
             />
-          )
+          );
         })}
       {notificationList.length === 0 && !isUpdatingNotifications && (
         <Box
@@ -144,5 +135,5 @@ export const NotificationListSupabase = (props: IProps) => {
         </Box>
       )}
     </Flex>
-  )
-}
+  );
+};

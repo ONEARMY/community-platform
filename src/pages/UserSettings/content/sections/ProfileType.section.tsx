@@ -1,29 +1,26 @@
-import { Field } from 'react-final-form'
-import { ExternalLink } from 'oa-components'
-import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
-import { Box, Flex, Grid, Heading, Paragraph, Text, useThemeUI } from 'theme-ui'
+import { Field } from 'react-final-form';
+import { ExternalLink } from 'oa-components';
+import { buttons, fields, headings } from 'src/pages/UserSettings/labels';
+import { Box, Flex, Grid, Heading, Paragraph, Text, useThemeUI } from 'theme-ui';
 
-import { FlexSectionContainer } from '../elements'
-import { ProfileTypeRadioField } from '../fields/ProfileTypeRadio.field'
+import { FlexSectionContainer } from '../elements';
+import { ProfileTypeRadioField } from '../fields/ProfileTypeRadio.field';
 
-import type { ProfileType } from 'oa-shared'
-import type { ThemeWithName } from 'oa-themes'
+import type { ProfileType } from 'oa-shared';
+import type { ThemeWithName } from 'oa-themes';
 
 type ProfileTypeSectionProps = {
-  profileTypes: ProfileType[]
-}
-export const ProfileTypeSection = ({
-  profileTypes,
-}: ProfileTypeSectionProps) => {
+  profileTypes: ProfileType[];
+};
+export const ProfileTypeSection = ({ profileTypes }: ProfileTypeSectionProps) => {
   const profileGuidelinesUrl =
-    import.meta.env.VITE_PROFILE_GUIDELINES_URL ||
-    process.env.VITE_PROFILE_GUIDELINES_URL
-  const { description, error } = fields.activities
-  const themeUi = useThemeUI()
-  const theme = themeUi.theme as ThemeWithName
+    import.meta.env.VITE_PROFILE_GUIDELINES_URL || process.env.VITE_PROFILE_GUIDELINES_URL;
+  const { description, error } = fields.activities;
+  const themeUi = useThemeUI();
+  const theme = themeUi.theme as ThemeWithName;
 
   if (!profileTypes || profileTypes.length < 2) {
-    return null
+    return null;
   }
 
   return (
@@ -53,9 +50,9 @@ export const ProfileTypeSection = ({
                 .slice()
                 .sort((a, b) => {
                   if (a.isSpace !== b.isSpace) {
-                    return a.isSpace ? 1 : -1
+                    return a.isSpace ? 1 : -1;
                   }
-                  return a.order - b.order
+                  return a.order - b.order;
                 })
                 .map((profileType, index: number) => (
                   <Box key={index}>
@@ -74,5 +71,5 @@ export const ProfileTypeSection = ({
         </FlexSectionContainer>
       )}
     />
-  )
-}
+  );
+};

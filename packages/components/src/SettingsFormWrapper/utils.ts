@@ -1,2 +1,1 @@
-export const routeName = (tabTitle: string) =>
-  `/settings/${tabTitle.toLowerCase()}`
+export const routeName = (tabTitle: string) => `/settings/${tabTitle.toLowerCase()}`;

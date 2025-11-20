@@ -1,103 +1,93 @@
-import { useEffect, useRef, useState } from 'react'
-import Dropzone from 'react-dropzone-esm'
-import { Box, Flex, Image as ImageComponent, Text } from 'theme-ui'
+import { useEffect, useRef, useState } from 'react';
+import Dropzone from 'react-dropzone-esm';
+import { Box, Flex, Image as ImageComponent, Text } from 'theme-ui';
 
-import { Button } from '../Button/Button'
-import { Modal } from '../Modal/Modal'
-import { getPresentFiles } from './getPresentFiles'
-import { ImageConverterList } from './ImageConverterList'
-import { ImageInputDeleteImage } from './ImageInputDeleteImage'
-import { ImageInputWrapper } from './ImageInputWrapper'
-import { imageValid } from './imageValid'
-import { setSrc } from './setSrc'
+import { Button } from '../Button/Button';
+import { Modal } from '../Modal/Modal';
+import { getPresentFiles } from './getPresentFiles';
+import { ImageConverterList } from './ImageConverterList';
+import { ImageInputDeleteImage } from './ImageInputDeleteImage';
+import { ImageInputWrapper } from './ImageInputWrapper';
+import { imageValid } from './imageValid';
+import { setSrc } from './setSrc';
 
-import type { IConvertedFileMeta } from 'oa-shared'
-import type { ThemeUIStyleObject } from 'theme-ui'
-import type {
-  IFileMeta,
-  IInputValue,
-  IMultipleInputValue,
-  IValue,
-} from './types'
+import type { IConvertedFileMeta } from 'oa-shared';
+import type { ThemeUIStyleObject } from 'theme-ui';
+import type { IFileMeta, IInputValue, IMultipleInputValue, IValue } from './types';
 
 interface IProps {
-  onFilesChange: (fileMeta: IFileMeta) => void
-  imageDisplaySx?: ThemeUIStyleObject | undefined
-  value?: IValue
-  hasText?: boolean
-  dataTestId?: string
+  onFilesChange: (fileMeta: IFileMeta) => void;
+  imageDisplaySx?: ThemeUIStyleObject | undefined;
+  value?: IValue;
+  hasText?: boolean;
+  dataTestId?: string;
 }
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024 // 5MB in bytes
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 5MB in bytes
 
 export const ImageInput = (props: IProps) => {
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const prevPropsValue = useRef<IInputValue | IMultipleInputValue>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const prevPropsValue = useRef<IInputValue | IMultipleInputValue>(null);
 
-  const { dataTestId, imageDisplaySx, onFilesChange, value } = props
+  const { dataTestId, imageDisplaySx, onFilesChange, value } = props;
 
-  const [inputFiles, setInputFiles] = useState<File[]>([])
-  const [convertedFiles, setConvertedFiles] = useState<IConvertedFileMeta[]>([])
-  const [presentFiles, setPresentFiles] = useState<IMultipleInputValue>(
-    getPresentFiles(value),
-  )
-  const [isImageCorrupt, setIsImageCorrupt] = useState(false)
-  const [isImageTooLarge, setIsImageTooLarge] = useState(false)
-  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [inputFiles, setInputFiles] = useState<File[]>([]);
+  const [convertedFiles, setConvertedFiles] = useState<IConvertedFileMeta[]>([]);
+  const [presentFiles, setPresentFiles] = useState<IMultipleInputValue>(getPresentFiles(value));
+  const [isImageCorrupt, setIsImageCorrupt] = useState(false);
+  const [isImageTooLarge, setIsImageTooLarge] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const onDrop = async (selectedImage: File[]) => {
     try {
       // Check file size first
       if (selectedImage[0].size > MAX_FILE_SIZE) {
-        setIsImageTooLarge(true)
-        setIsImageCorrupt(false)
-        setShowErrorModal(true)
-        return
+        setIsImageTooLarge(true);
+        setIsImageCorrupt(false);
+        setShowErrorModal(true);
+        return;
       }
 
-      await imageValid(selectedImage[0])
-      setIsImageCorrupt(false)
-      setIsImageTooLarge(false)
+      await imageValid(selectedImage[0]);
+      setIsImageCorrupt(false);
+      setIsImageTooLarge(false);
 
-      setInputFiles(selectedImage)
+      setInputFiles(selectedImage);
     } catch (validationError) {
-      setIsImageCorrupt(true)
-      setIsImageTooLarge(false)
-      setShowErrorModal(true)
+      setIsImageCorrupt(true);
+      setIsImageTooLarge(false);
+      setShowErrorModal(true);
     }
-  }
+  };
 
-  const handleConvertedFileChange = (
-    newFile: IConvertedFileMeta,
-    index: number,
-  ) => {
-    const nextFiles = convertedFiles
-    nextFiles[index] = newFile
-    setConvertedFiles(convertedFiles)
+  const handleConvertedFileChange = (newFile: IConvertedFileMeta, index: number) => {
+    const nextFiles = convertedFiles;
+    nextFiles[index] = newFile;
+    setConvertedFiles(convertedFiles);
 
-    props.onFilesChange(convertedFiles[0])
-  }
+    props.onFilesChange(convertedFiles[0]);
+  };
 
   const handleImageDelete = (event: Event) => {
     // TODO - handle case where a server image is deleted (remove from server)
-    event.stopPropagation()
-    setInputFiles([])
-    setConvertedFiles([])
-    setPresentFiles([])
-    onFilesChange(null)
-  }
+    event.stopPropagation();
+    setInputFiles([]);
+    setConvertedFiles([]);
+    setPresentFiles([]);
+    onFilesChange(null);
+  };
 
   useEffect(() => {
     if (JSON.stringify(value) !== JSON.stringify(prevPropsValue.current)) {
-      setPresentFiles(getPresentFiles(value))
+      setPresentFiles(getPresentFiles(value));
     }
 
-    prevPropsValue.current = value || null
-  }, [props])
+    prevPropsValue.current = value || null;
+  }, [props]);
 
-  const hasImages = presentFiles.length > 0 || inputFiles.length > 0
-  const showUploadedImg = presentFiles.length > 0
-  const src = setSrc(presentFiles[0])
+  const hasImages = presentFiles.length > 0 || inputFiles.length > 0;
+  const showUploadedImg = presentFiles.length > 0;
+  const src = setSrc(presentFiles[0]);
 
   return (
     <Box p={0} sx={imageDisplaySx ? imageDisplaySx : { height: '100%' }}>
@@ -109,20 +99,14 @@ export const ImageInput = (props: IProps) => {
         onDrop={onDrop}
       >
         {({ getRootProps, getInputProps, rootRef }) => (
-          <ImageInputWrapper
-            {...getRootProps()}
-            ref={rootRef}
-            hasUploadedImg={showUploadedImg}
-          >
+          <ImageInputWrapper {...getRootProps()} ref={rootRef} hasUploadedImg={showUploadedImg}>
             <input
               ref={fileInputRef}
               data-testid={dataTestId || 'image-input'}
               {...getInputProps()}
             />
 
-            {showUploadedImg && (
-              <ImageComponent src={src} sx={imageDisplaySx} />
-            )}
+            {showUploadedImg && <ImageComponent src={src} sx={imageDisplaySx} />}
 
             {!showUploadedImg && (
               <ImageConverterList
@@ -135,19 +119,11 @@ export const ImageInput = (props: IProps) => {
                 Upload
               </Button>
             )}
-            {hasImages && (
-              <ImageInputDeleteImage
-                onClick={(event) => handleImageDelete(event)}
-              />
-            )}
+            {hasImages && <ImageInputDeleteImage onClick={(event) => handleImageDelete(event)} />}
           </ImageInputWrapper>
         )}
       </Dropzone>
-      <Modal
-        width={600}
-        isOpen={showErrorModal}
-        onDidDismiss={() => setShowErrorModal(false)}
-      >
+      <Modal width={600} isOpen={showErrorModal} onDidDismiss={() => setShowErrorModal(false)}>
         {isImageTooLarge && (
           <Flex
             data-cy="ImageUploadSizeError"
@@ -179,13 +155,10 @@ export const ImageInput = (props: IProps) => {
               gap: '20px',
             }}
           >
+            <Text>The uploaded image appears to be corrupted or a type we don't accept.</Text>
             <Text>
-              The uploaded image appears to be corrupted or a type we don't
-              accept.
-            </Text>
-            <Text>
-              Check your image is valid and one of the following formats: jpeg,
-              jpg, png, gif, heic, svg or webp.
+              Check your image is valid and one of the following formats: jpeg, jpg, png, gif, heic,
+              svg or webp.
             </Text>
             <Button
               data-cy="ImageUploadError-Button"
@@ -198,5 +171,5 @@ export const ImageInput = (props: IProps) => {
         )}
       </Modal>
     </Box>
-  )
-}
+  );
+};

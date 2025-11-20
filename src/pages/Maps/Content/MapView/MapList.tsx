@@ -1,18 +1,18 @@
-import { useContext } from 'react'
-import { Button } from 'oa-components'
-import { Box, Flex } from 'theme-ui'
+import { useContext } from 'react';
+import { Button } from 'oa-components';
+import { Box, Flex } from 'theme-ui';
 
-import { MapContext } from '../../MapContext'
-import { MapWithListHeader } from './MapWithListHeader'
+import { MapContext } from '../../MapContext';
+import { MapWithListHeader } from './MapWithListHeader';
 
 export const MapList = () => {
-  const mapState = useContext(MapContext)
+  const mapState = useContext(MapContext);
 
   if (!mapState) {
-    return null
+    return null;
   }
 
-  const mobileListDisplay = mapState.isMobile ? 'block' : 'none'
+  const mobileListDisplay = mapState.isMobile ? 'block' : 'none';
 
   return (
     <>
@@ -60,5 +60,5 @@ export const MapList = () => {
         <MapWithListHeader viewport="mobile" />
       </Box>
     </>
-  )
-}
+  );
+};

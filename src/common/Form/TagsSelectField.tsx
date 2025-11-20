@@ -1,4 +1,4 @@
-import { TagsSelect } from '../Tags/TagsSelect'
+import { TagsSelect } from '../Tags/TagsSelect';
 
 export const TagsSelectField = ({ input, ...rest }) => (
   <TagsSelect
@@ -9,4 +9,4 @@ export const TagsSelectField = ({ input, ...rest }) => (
     value={input.value}
     {...rest}
   />
-)
+);

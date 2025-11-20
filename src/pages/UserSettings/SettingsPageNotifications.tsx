@@ -1,10 +1,10 @@
-import { fields } from 'src/pages/UserSettings/labels'
-import { Flex, Heading, Text } from 'theme-ui'
+import { fields } from 'src/pages/UserSettings/labels';
+import { Flex, Heading, Text } from 'theme-ui';
 
-import { SupabaseNotifications } from './SupabaseNotifications'
+import { SupabaseNotifications } from './SupabaseNotifications';
 
 export const SettingsPageNotifications = () => {
-  const { description, title } = fields.emailNotifications
+  const { description, title } = fields.emailNotifications;
 
   return (
     <Flex
@@ -21,5 +21,5 @@ export const SettingsPageNotifications = () => {
 
       <SupabaseNotifications />
     </Flex>
-  )
-}
+  );
+};

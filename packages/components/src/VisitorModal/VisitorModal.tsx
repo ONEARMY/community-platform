@@ -1,17 +1,14 @@
-import { Flex, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui';
 
-import { iconMap } from '../Icon/svgs'
-import { Modal } from '../Modal/Modal'
-import { VisitorModalFooter } from './VisitorModalFooter'
-import { VisitorModalHeader } from './VisitorModalHeader'
+import { iconMap } from '../Icon/svgs';
+import { Modal } from '../Modal/Modal';
+import { VisitorModalFooter } from './VisitorModalFooter';
+import { VisitorModalHeader } from './VisitorModalHeader';
 
-import type { Profile, UserVisitorPreferencePolicy } from 'oa-shared'
-import type { DisplayData, HideProp } from './props'
+import type { Profile, UserVisitorPreferencePolicy } from 'oa-shared';
+import type { DisplayData, HideProp } from './props';
 
-export const visitorDisplayData = new Map<
-  UserVisitorPreferencePolicy,
-  DisplayData
->([
+export const visitorDisplayData = new Map<UserVisitorPreferencePolicy, DisplayData>([
   [
     'open',
     {
@@ -37,43 +34,30 @@ export const visitorDisplayData = new Map<
       default: 'It is not possible to come and visit this space.',
     },
   ],
-])
+]);
 
 export type VisitorModalProps = HideProp & {
-  show: boolean
-  user: Profile
-}
+  show: boolean;
+  user: Profile;
+};
 
 export const VisitorModal = ({ show, hide, user }: VisitorModalProps) => {
-  const { displayName, visitorPolicy, isContactable } = user
+  const { displayName, visitorPolicy, isContactable } = user;
 
-  const displayData =
-    visitorPolicy && visitorDisplayData.get(visitorPolicy.policy)
+  const displayData = visitorPolicy && visitorDisplayData.get(visitorPolicy.policy);
 
   if (!displayData) {
-    return <></>
+    return <></>;
   }
 
   return (
-    <Modal
-      isOpen={show}
-      onDidDismiss={hide}
-      width={450}
-      sx={{ padding: '0 !important' }}
-    >
+    <Modal isOpen={show} onDidDismiss={hide} width={450} sx={{ padding: '0 !important' }}>
       <VisitorModalHeader data={displayData} hide={hide} />
-      <Flex
-        data-cy="VisitorModal"
-        sx={{ flexDirection: 'column', padding: '16px' }}
-      >
+      <Flex data-cy="VisitorModal" sx={{ flexDirection: 'column', padding: '16px' }}>
         {visitorPolicy.details && <>Details from {displayName}:</>}
-        <Text variant="quiet">
-          {visitorPolicy.details || displayData.default}
-        </Text>
+        <Text variant="quiet">{visitorPolicy.details || displayData.default}</Text>
       </Flex>
-      {visitorPolicy.policy !== 'closed' && isContactable && (
-        <VisitorModalFooter hide={hide} />
-      )}
+      {visitorPolicy.policy !== 'closed' && isContactable && <VisitorModalFooter hide={hide} />}
     </Modal>
-  )
-}
+  );
+};

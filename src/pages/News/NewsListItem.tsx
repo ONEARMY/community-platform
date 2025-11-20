@@ -6,22 +6,22 @@ import {
   InternalLink,
   ProfileBadgeContentLabel,
   // ModerationStatus,
-} from 'oa-components'
-import { Highlighter } from 'src/common/Highlighter'
-import { AspectRatio, Button, Card, Flex, Heading, Image, Text } from 'theme-ui'
+} from 'oa-components';
+import { Highlighter } from 'src/common/Highlighter';
+import { AspectRatio, Button, Card, Flex, Heading, Image, Text } from 'theme-ui';
 
-import { listing } from './labels'
+import { listing } from './labels';
 
-import type { News } from 'oa-shared'
+import type { News } from 'oa-shared';
 
 interface IProps {
-  news: News
-  query?: string
+  news: News;
+  query?: string;
 }
 
 export const NewsListItem = ({ news, query }: IProps) => {
-  const url = `/news/${encodeURIComponent(news.slug)}`
-  const searchWords = [query || '']
+  const url = `/news/${encodeURIComponent(news.slug)}`;
+  const searchWords = [query || ''];
 
   return (
     <Card
@@ -68,19 +68,12 @@ export const NewsListItem = ({ news, query }: IProps) => {
                   marginBottom: 0.5,
                 }}
               >
-                <Highlighter
-                  searchWords={searchWords}
-                  textToHighlight={news.title}
-                />
+                <Highlighter searchWords={searchWords} textToHighlight={news.title} />
               </Heading>
             </InternalLink>
 
-            {news.category && (
-              <Category category={news.category} sx={{ fontSize: 2 }} />
-            )}
-            {news.profileBadge && (
-              <ProfileBadgeContentLabel profileBadge={news.profileBadge} />
-            )}
+            {news.category && <Category category={news.category} sx={{ fontSize: 2 }} />}
+            {news.profileBadge && <ProfileBadgeContentLabel profileBadge={news.profileBadge} />}
           </Flex>
 
           <Text variant="auxiliary">
@@ -88,14 +81,8 @@ export const NewsListItem = ({ news, query }: IProps) => {
           </Text>
 
           {news.summary && (
-            <Text
-              data-cy="news-list-item-summary"
-              sx={{ paddingY: 2, fontSize: 2 }}
-            >
-              <Highlighter
-                searchWords={searchWords}
-                textToHighlight={news.summary}
-              />
+            <Text data-cy="news-list-item-summary" sx={{ paddingY: 2, fontSize: 2 }}>
+              <Highlighter searchWords={searchWords} textToHighlight={news.summary} />
             </Text>
           )}
 
@@ -115,5 +102,5 @@ export const NewsListItem = ({ news, query }: IProps) => {
         </Flex>
       </Flex>
     </Card>
-  )
-}
+  );
+};

@@ -1,9 +1,9 @@
 const postWebhookRequest = async (message: string) => {
   try {
-    const discordWebhookUrl = process.env.DISCORD_WEBHOOK_URL as string
+    const discordWebhookUrl = process.env.DISCORD_WEBHOOK_URL as string;
 
     if (!discordWebhookUrl) {
-      return
+      return;
     }
 
     await fetch(discordWebhookUrl as string, {
@@ -14,12 +14,12 @@ const postWebhookRequest = async (message: string) => {
       body: JSON.stringify({
         content: message,
       }),
-    })
+    });
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};
 
 export const discordServiceServer = {
   postWebhookRequest,
-}
+};

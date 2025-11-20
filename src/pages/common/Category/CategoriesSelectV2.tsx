@@ -1,16 +1,16 @@
-import { Select } from 'oa-components'
+import { Select } from 'oa-components';
 
-import { FieldContainer } from '../../../common/Form/FieldContainer'
+import { FieldContainer } from '../../../common/Form/FieldContainer';
 
-import type { SelectValue } from 'oa-shared'
+import type { SelectValue } from 'oa-shared';
 
 export type CategoriesSelectProps = {
-  value: SelectValue | null
-  placeholder: string
-  isForm: boolean
-  categories: SelectValue[]
-  onChange: (value: SelectValue) => void
-}
+  value: SelectValue | null;
+  placeholder: string;
+  isForm: boolean;
+  categories: SelectValue[];
+  onChange: (value: SelectValue) => void;
+};
 
 export const CategoriesSelectV2 = ({
   value,
@@ -20,13 +20,11 @@ export const CategoriesSelectV2 = ({
   onChange,
 }: CategoriesSelectProps) => {
   const handleChange = (changedValue) => {
-    onChange(changedValue ?? null)
-  }
+    onChange(changedValue ?? null);
+  };
 
   return (
-    <FieldContainer
-      data-cy={categories ? 'category-select' : 'category-select-empty'}
-    >
+    <FieldContainer data-cy={categories ? 'category-select' : 'category-select-empty'}>
       <Select
         variant={isForm ? 'form' : undefined}
         options={categories}
@@ -36,5 +34,5 @@ export const CategoriesSelectV2 = ({
         isClearable={true}
       />
     </FieldContainer>
-  )
-}
+  );
+};

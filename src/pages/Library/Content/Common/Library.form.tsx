@@ -1,38 +1,38 @@
-import { useMemo, useState } from 'react'
-import { Form } from 'react-final-form'
+import { useMemo, useState } from 'react';
+import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
-import arrayMutators from 'final-form-arrays'
-import { FormWrapper } from 'src/common/Form/FormWrapper'
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
-import { logger } from 'src/logger'
-import { FilesFields } from 'src/pages/common/FormFields/FilesFields'
-import { ImageField } from 'src/pages/common/FormFields/ImageField'
-import { TagsField } from 'src/pages/common/FormFields/Tags.field'
-import { Flex } from 'theme-ui'
+import arrayMutators from 'final-form-arrays';
+import { FormWrapper } from 'src/common/Form/FormWrapper';
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
+import { logger } from 'src/logger';
+import { FilesFields } from 'src/pages/common/FormFields/FilesFields';
+import { ImageField } from 'src/pages/common/FormFields/ImageField';
+import { TagsField } from 'src/pages/common/FormFields/Tags.field';
+import { Flex } from 'theme-ui';
 
-import { buttons, headings, intro } from '../../labels'
-import { libraryService } from '../../library.service'
-import { transformLibraryErrors } from '../utils'
-import { LibraryCategoryField } from './LibraryCategory.field'
-import { LibraryDescriptionField } from './LibraryDescription.field'
-import { LibraryDifficultyField } from './LibraryDifficulty.field'
-import { LibraryPostingGuidelines } from './LibraryPostingGuidelines'
-import { LibraryStepsContainerField } from './LibraryStepsContainer.field'
-import { LibraryTimeField } from './LibraryTime.field'
-import { LibraryTitleField } from './LibraryTitle.field'
+import { buttons, headings, intro } from '../../labels';
+import { libraryService } from '../../library.service';
+import { transformLibraryErrors } from '../utils';
+import { LibraryCategoryField } from './LibraryCategory.field';
+import { LibraryDescriptionField } from './LibraryDescription.field';
+import { LibraryDifficultyField } from './LibraryDifficulty.field';
+import { LibraryPostingGuidelines } from './LibraryPostingGuidelines';
+import { LibraryStepsContainerField } from './LibraryStepsContainer.field';
+import { LibraryTimeField } from './LibraryTime.field';
+import { LibraryTitleField } from './LibraryTitle.field';
 
-import type { MediaFile, Project, ProjectFormData } from 'oa-shared'
+import type { MediaFile, Project, ProjectFormData } from 'oa-shared';
 
 interface LibraryFormProps {
-  project?: Project
-  files?: MediaFile[]
-  fileLink?: string
+  project?: Project;
+  files?: MediaFile[];
+  fileLink?: string;
 }
 
 export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
-  const navigate = useNavigate()
-  const [intentionalNavigation, setIntentionalNavigation] = useState(false)
-  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
+  const navigate = useNavigate();
+  const [intentionalNavigation, setIntentionalNavigation] = useState(false);
+  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
 
   const formValues = useMemo<ProjectFormData>(
     () => ({
@@ -67,42 +67,38 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       ],
     }),
     [project],
-  )
+  );
 
-  const headingText = project ? headings.edit : headings.create
+  const headingText = project ? headings.edit : headings.create;
 
   const onSubmit = async (values: ProjectFormData, isDraft = false) => {
-    setIntentionalNavigation(true)
-    setSaveErrorMessage(null)
+    setIntentionalNavigation(true);
+    setSaveErrorMessage(null);
 
     try {
       if (!isDraft) {
         if (!values.category?.value) {
-          setSaveErrorMessage('Category is required')
-          return
+          setSaveErrorMessage('Category is required');
+          return;
         } else if (!values.image && !values.existingImage?.id) {
-          setSaveErrorMessage('An image is required')
-          return
+          setSaveErrorMessage('An image is required');
+          return;
         }
       }
 
-      const result = await libraryService.upsert(
-        project?.id || null,
-        values,
-        isDraft,
-      )
+      const result = await libraryService.upsert(project?.id || null, values, isDraft);
 
       setTimeout(() => {
-        navigate(`/library/${result.project.slug}`)
-      }, 100)
+        navigate(`/library/${result.project.slug}`);
+      }, 100);
     } catch (e) {
       if (e.cause && e.message) {
-        setSaveErrorMessage(e.message)
+        setSaveErrorMessage(e.message);
       }
-      logger.error(e)
-      return
+      logger.error(e);
+      return;
     }
-  }
+  };
 
   return (
     <Form<ProjectFormData>
@@ -114,19 +110,18 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       validateOnBlur
       enableReinitialize={true}
       validate={(values) => {
-        const errors = {}
+        const errors = {};
 
         if (!values.category) {
-          errors['category'] = 'Category is required.'
+          errors['category'] = 'Category is required.';
         }
 
         if (!values.image && !values.existingImage) {
-          errors['existingImage'] =
-            'An image is required (either new or existing).'
-          errors['image'] = 'An image is required (either new or existing).'
+          errors['existingImage'] = 'An image is required (either new or existing).';
+          errors['image'] = 'An image is required (either new or existing).';
         }
 
-        return errors
+        return errors;
       }}
       render={({
         errors,
@@ -142,17 +137,15 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
           <Flex sx={{ flexDirection: 'column' }}>
             <LibraryStepsContainerField />
           </Flex>
-        )
+        );
 
-        const errorsClientSide = transformLibraryErrors(errors)
+        const errorsClientSide = transformLibraryErrors(errors);
 
-        const handleSubmitDraft = () => onSubmit(values, true)
+        const handleSubmitDraft = () => onSubmit(values, true);
 
         const unsavedChangesDialog = (
-          <UnsavedChangesDialog
-            hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
-          />
-        )
+          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />
+        );
 
         return (
           <>
@@ -192,8 +185,8 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
               </Flex>
             </FormWrapper>
           </>
-        )
+        );
       }}
     />
-  )
-}
+  );
+};

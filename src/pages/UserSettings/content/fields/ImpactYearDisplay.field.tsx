@@ -1,28 +1,28 @@
-import { observer } from 'mobx-react'
-import { Button, Icon } from 'oa-components'
-import { ImpactField } from 'src/pages/User/impact/ImpactField'
-import { buttons, missingData } from 'src/pages/UserSettings/labels'
-import { Box, Flex, Text } from 'theme-ui'
+import { observer } from 'mobx-react';
+import { Button, Icon } from 'oa-components';
+import { ImpactField } from 'src/pages/User/impact/ImpactField';
+import { buttons, missingData } from 'src/pages/UserSettings/labels';
+import { Box, Flex, Text } from 'theme-ui';
 
-import type { IImpactDataField } from 'oa-shared'
+import type { IImpactDataField } from 'oa-shared';
 
 interface Props {
-  fields: IImpactDataField[] | undefined
-  formId: string
-  setIsEditMode: (boolean) => void
+  fields: IImpactDataField[] | undefined;
+  formId: string;
+  setIsEditMode: (boolean) => void;
 }
 
 export const ImpactYearDisplayField = observer((props: Props) => {
-  const { fields, formId, setIsEditMode } = props
-  const { create, edit } = buttons.impact
+  const { fields, formId, setIsEditMode } = props;
+  const { create, edit } = buttons.impact;
 
-  const buttonLabel = fields ? edit : create
+  const buttonLabel = fields ? edit : create;
 
   return (
     <Flex sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
       {fields && fields.length > 0 ? (
         fields.map((field, index) => {
-          const glyph = field.isVisible ? 'show' : 'hide'
+          const glyph = field.isVisible ? 'show' : 'hide';
           return (
             <Box key={index} sx={{ width: '100%' }}>
               <Flex
@@ -36,7 +36,7 @@ export const ImpactYearDisplayField = observer((props: Props) => {
                 <Icon glyph={glyph} size={24} />
               </Flex>
             </Box>
-          )
+          );
         })
       ) : (
         <Text>{missingData}</Text>
@@ -50,5 +50,5 @@ export const ImpactYearDisplayField = observer((props: Props) => {
         {buttonLabel}
       </Button>
     </Flex>
-  )
-})
+  );
+});

@@ -1,21 +1,21 @@
-import { Box, Input } from 'theme-ui'
+import { Box, Input } from 'theme-ui';
 
-import { Icon } from '../Icon/Icon'
+import { Icon } from '../Icon/Icon';
 
-import type { ThemeUIStyleObject } from 'theme-ui'
+import type { ThemeUIStyleObject } from 'theme-ui';
 
 export type Props = {
-  autoComplete?: string
-  name?: string
-  id?: string
-  dataCy: string
-  placeHolder: string
-  value: string
-  onChange: (value: string) => void
-  onClickDelete: () => void
-  onClickSearch: () => void
-  additionalStyle?: ThemeUIStyleObject
-}
+  autoComplete?: string;
+  name?: string;
+  id?: string;
+  dataCy: string;
+  placeHolder: string;
+  value: string;
+  onChange: (value: string) => void;
+  onClickDelete: () => void;
+  onClickSearch: () => void;
+  additionalStyle?: ThemeUIStyleObject;
+};
 
 export const SearchField = (props: Props) => {
   const {
@@ -29,7 +29,7 @@ export const SearchField = (props: Props) => {
     onClickDelete,
     onClickSearch,
     additionalStyle = {},
-  } = props
+  } = props;
 
   return (
     <Box
@@ -92,5 +92,5 @@ export const SearchField = (props: Props) => {
         />
       </Box>
     </Box>
-  )
-}
+  );
+};

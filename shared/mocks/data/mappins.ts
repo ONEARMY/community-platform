@@ -1,4 +1,4 @@
-import type { DBMapPin } from '../../models/profile'
+import type { DBMapPin } from '../../models/profile';
 
 export const mapPins: Partial<DBMapPin>[] = [
   {
@@ -113,4 +113,4 @@ export const mapPins: Partial<DBMapPin>[] = [
     name: 'Rio de Janeiro',
     post_code: '20040',
   },
-]
+];

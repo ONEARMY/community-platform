@@ -1,35 +1,31 @@
-import ReactSelect from 'react-select'
-import { useThemeUI } from 'theme-ui'
+import ReactSelect from 'react-select';
+import { useThemeUI } from 'theme-ui';
 
-import { DropdownIndicator } from './DropdownIndicator'
-import { Option } from './Option'
+import { DropdownIndicator } from './DropdownIndicator';
+import { Option } from './Option';
 
-import type {
-  OptionsOrGroups,
-  Props as ReactSelectProps,
-  StylesConfig,
-} from 'react-select'
+import type { OptionsOrGroups, Props as ReactSelectProps, StylesConfig } from 'react-select';
 
 type IOption = {
-  label: string
-  value: string
-}
+  label: string;
+  value: string;
+};
 
 export interface Props extends ReactSelectProps {
-  options: OptionsOrGroups<any, any>
-  value?: any
-  onChange?: (arg: any) => void
-  placeholder?: string
-  isMulti?: boolean
-  isClearable?: boolean
-  getOptionLabel?: any
-  getOptionValue?: any
-  defaultValue?: IOption
-  variant?: 'form' | 'formError' | 'icons' | 'tabs'
+  options: OptionsOrGroups<any, any>;
+  value?: any;
+  onChange?: (arg: any) => void;
+  placeholder?: string;
+  isMulti?: boolean;
+  isClearable?: boolean;
+  getOptionLabel?: any;
+  getOptionValue?: any;
+  defaultValue?: IOption;
+  variant?: 'form' | 'formError' | 'icons' | 'tabs';
 }
 
 export const Select = (props: Props) => {
-  const { theme } = useThemeUI() as any
+  const { theme } = useThemeUI() as any;
 
   const SelectStyles: Partial<StylesConfig> = {
     container: (provided) => ({
@@ -58,9 +54,7 @@ export const Select = (props: Props) => {
       backgroundColor: isFocused ? theme.colors.white : theme.colors.background,
       boxShadow: 'none',
       cursor: 'pointer',
-      color: !isDisabled
-        ? data.color || theme.colors.black
-        : theme.colors.lightgrey,
+      color: !isDisabled ? data.color || theme.colors.black : theme.colors.lightgrey,
     }),
 
     menu: (provided) => ({
@@ -110,7 +104,7 @@ export const Select = (props: Props) => {
       },
       opacity: state.isFocused ? 1 : 0.3,
     }),
-  }
+  };
 
   const SelectStylesError: Partial<StylesConfig> = {
     ...SelectStyles,
@@ -131,7 +125,7 @@ export const Select = (props: Props) => {
         border: '1px solid ' + theme.colors.red,
       },
     }),
-  }
+  };
 
   const FilterStyles: Partial<StylesConfig> = {
     container: (provided) => ({
@@ -162,9 +156,7 @@ export const Select = (props: Props) => {
     option: (provided, state) => ({
       ...provided,
       color: theme.colors.black,
-      backgroundColor: state.isFocused
-        ? theme.colors.softblue
-        : theme.colors.white,
+      backgroundColor: state.isFocused ? theme.colors.softblue : theme.colors.white,
       cursor: 'pointer',
       boxShadow: 'none',
     }),
@@ -197,9 +189,9 @@ export const Select = (props: Props) => {
       flexWrap: 'nowrap',
       overflow: 'auto',
     }),
-  }
+  };
 
-  const options: OptionsOrGroups<any, any> | undefined = props.options || []
+  const options: OptionsOrGroups<any, any> | undefined = props.options || [];
 
   const styleVariant = {
     default: FilterStyles,
@@ -207,7 +199,7 @@ export const Select = (props: Props) => {
     formError: SelectStylesError,
     icons: FilterStyles,
     tabs: FilterStyles,
-  }
+  };
 
   return (
     <ReactSelect
@@ -227,5 +219,5 @@ export const Select = (props: Props) => {
       isOptionDisabled={props.isOptionDisabled}
       noOptionsMessage={props.noOptionsMessage}
     />
-  )
-}
+  );
+};

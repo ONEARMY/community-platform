@@ -1,18 +1,18 @@
-import { useMemo } from 'react'
-import { observer } from 'mobx-react-lite'
-import { Button, InternalLink } from 'oa-components'
+import { useMemo } from 'react';
+import { observer } from 'mobx-react-lite';
+import { Button, InternalLink } from 'oa-components';
 // eslint-disable-next-line import/no-unresolved
-import { ClientOnly } from 'remix-utils/client-only'
-import { useProfileStore } from 'src/stores/Profile/profile.store'
-import { Flex } from 'theme-ui'
+import { ClientOnly } from 'remix-utils/client-only';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { Flex } from 'theme-ui';
 
-import { UserProfile } from './UserProfile'
+import { UserProfile } from './UserProfile';
 
-import type { Profile, UserCreatedDocs } from 'oa-shared'
+import type { Profile, UserCreatedDocs } from 'oa-shared';
 
 interface IProps {
-  profile: Profile
-  userCreatedDocs: UserCreatedDocs
+  profile: Profile;
+  userCreatedDocs: UserCreatedDocs;
 }
 
 /**
@@ -20,13 +20,13 @@ interface IProps {
  * whether to render a MemberProfile or SpaceProfile.
  */
 export const ProfilePage = observer((props: IProps) => {
-  const { profile, userCreatedDocs } = props
-  const { profile: activeUser } = useProfileStore()
+  const { profile, userCreatedDocs } = props;
+  const { profile: activeUser } = useProfileStore();
   const isViewingOwnProfile = useMemo(
     () => activeUser?.username === profile?.username,
     [activeUser?.username],
-  )
-  const showMemberProfile = !profile?.type?.isSpace
+  );
+  const showMemberProfile = !profile?.type?.isSpace;
 
   return (
     <Flex
@@ -63,5 +63,5 @@ export const ProfilePage = observer((props: IProps) => {
         )}
       </ClientOnly>
     </Flex>
-  )
-})
+  );
+});

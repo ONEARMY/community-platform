@@ -1,4 +1,4 @@
-import type { DBNotificationsPreferences } from 'oa-shared'
+import type { DBNotificationsPreferences } from 'oa-shared';
 
 export const factoryNotificationsPreferences = (
   userOverloads: Partial<DBNotificationsPreferences> = {},
@@ -11,4 +11,4 @@ export const factoryNotificationsPreferences = (
     research_updates: true,
     is_unsubscribed: false,
     ...userOverloads,
-  }) as DBNotificationsPreferences
+  }) as DBNotificationsPreferences;

@@ -1,5 +1,5 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBNotificationsPreferences } from 'oa-shared'
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBNotificationsPreferences } from 'oa-shared';
 
 const getPreferences = async (
   client: SupabaseClient,
@@ -10,15 +10,15 @@ const getPreferences = async (
       .from('notifications_preferences')
       .select()
       .eq('user_id', profileId)
-      .single()
+      .single();
 
-    return data as DBNotificationsPreferences
+    return data as DBNotificationsPreferences;
   } catch (error) {
-    console.error('Failed to get notifications preferences:', error)
-    throw error
+    console.error('Failed to get notifications preferences:', error);
+    throw error;
   }
-}
+};
 
 export const notificationsPreferencesServiceServer = {
   getPreferences,
-}
+};

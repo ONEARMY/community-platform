@@ -1,24 +1,20 @@
-import { Flex, Heading } from 'theme-ui'
+import { Flex, Heading } from 'theme-ui';
 
-import UserCreatedDocumentsItem from './UserCreatedDocumentsItem'
+import UserCreatedDocumentsItem from './UserCreatedDocumentsItem';
 
-import type { UserCreatedDocs } from 'oa-shared'
+import type { UserCreatedDocs } from 'oa-shared';
 
 interface IProps {
-  docs: UserCreatedDocs
+  docs: UserCreatedDocs;
 }
 
 const UserCreatedDocuments = ({ docs }: IProps) => {
   return (
     <>
-      {(docs.projects.length > 0 ||
-        docs.research.length > 0 ||
-        docs.questions.length > 0) && (
+      {(docs.projects.length > 0 || docs.research.length > 0 || docs.questions.length > 0) && (
         <Flex sx={{ justifyContent: 'space-between', gap: 4 }}>
           {docs?.projects.length > 0 && (
-            <Flex
-              sx={{ flexDirection: 'column', flexBasis: '50%', mt: 2, mb: 6 }}
-            >
+            <Flex sx={{ flexDirection: 'column', flexBasis: '50%', mt: 2, mb: 6 }}>
               <Heading data-cy="library-contributions" as="h3" variant="small">
                 Library
               </Heading>
@@ -34,7 +30,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
                       usefulVotes: item.usefulCount || 0,
                     }}
                   />
-                )
+                );
               })}
             </Flex>
           )}
@@ -59,7 +55,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
                       usefulVotes: item.usefulCount!,
                     }}
                   />
-                )
+                );
               })}
             </Flex>
           )}
@@ -83,14 +79,14 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
                       usefulVotes: item.usefulCount!,
                     }}
                   />
-                )
+                );
               })}
             </Flex>
           )}
         </Flex>
       )}
     </>
-  )
-}
+  );
+};
 
-export default UserCreatedDocuments
+export default UserCreatedDocuments;

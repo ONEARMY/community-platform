@@ -1,18 +1,18 @@
-import { ProfileTagsList } from 'oa-components'
+import { ProfileTagsList } from 'oa-components';
 
-import type { Profile, ProfileTag } from 'oa-shared'
+import type { Profile, ProfileTag } from 'oa-shared';
 
-export type ShowVisitorModal = () => void
+export type ShowVisitorModal = () => void;
 
 interface IProps {
-  tags: ProfileTag[] | undefined
-  visitorPolicy?: Profile['visitorPolicy']
-  isSpace: boolean
-  showVisitorModal: ShowVisitorModal
+  tags: ProfileTag[] | undefined;
+  visitorPolicy?: Profile['visitorPolicy'];
+  isSpace: boolean;
+  showVisitorModal: ShowVisitorModal;
 }
 
 export const ProfileTags = (props: IProps) => {
-  const { tags, visitorPolicy, isSpace, showVisitorModal } = props
+  const { tags, visitorPolicy, isSpace, showVisitorModal } = props;
 
   return (
     <ProfileTagsList
@@ -22,5 +22,5 @@ export const ProfileTags = (props: IProps) => {
       showVisitorModal={showVisitorModal}
       large={true}
     />
-  )
-}
+  );
+};

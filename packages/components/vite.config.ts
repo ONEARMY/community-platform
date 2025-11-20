@@ -1,9 +1,9 @@
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react';
 /// <reference types="vitest" />
-import { defineConfig } from 'vite'
-import svgr from 'vite-plugin-svgr'
+import { defineConfig } from 'vite';
+import svgr from 'vite-plugin-svgr';
 
-import type { ViteUserConfig } from 'vitest/config'
+import type { ViteUserConfig } from 'vitest/config';
 
 const vitestConfig: ViteUserConfig = {
   test: {
@@ -20,9 +20,9 @@ const vitestConfig: ViteUserConfig = {
       hooks: 'list',
     },
   },
-}
+};
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
   plugins: [react(), svgr()],
   test: vitestConfig.test,
-})
+});

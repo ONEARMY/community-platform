@@ -1,8 +1,8 @@
-import ReactPlayer from 'react-player'
-import { Box } from 'theme-ui'
+import ReactPlayer from 'react-player';
+import { Box } from 'theme-ui';
 
 export interface Props {
-  videoUrl: string
+  videoUrl: string;
 }
 
 export const VideoPlayer = ({ videoUrl }: Props) => {
@@ -10,5 +10,5 @@ export const VideoPlayer = ({ videoUrl }: Props) => {
     <Box data-testid="VideoPlayer">
       <ReactPlayer width="auto" controls url={videoUrl} />
     </Box>
-  )
-}
+  );
+};

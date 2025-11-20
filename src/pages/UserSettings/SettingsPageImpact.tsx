@@ -1,10 +1,10 @@
-import { IMPACT_YEARS } from 'src/pages/User/impact/constants'
-import { ImpactYearSection } from 'src/pages/UserSettings/content/sections/ImpactYear.section'
-import { fields } from 'src/pages/UserSettings/labels'
-import { Box, Flex, Heading, Text } from 'theme-ui'
+import { IMPACT_YEARS } from 'src/pages/User/impact/constants';
+import { ImpactYearSection } from 'src/pages/UserSettings/content/sections/ImpactYear.section';
+import { fields } from 'src/pages/UserSettings/labels';
+import { Box, Flex, Heading, Text } from 'theme-ui';
 
 export const SettingsPageImpact = () => {
-  const { description, title } = fields.impact
+  const { description, title } = fields.impact;
 
   return (
     <Flex
@@ -21,9 +21,9 @@ export const SettingsPageImpact = () => {
 
       <Box>
         {IMPACT_YEARS.map((year) => {
-          return <ImpactYearSection year={year} key={year} />
+          return <ImpactYearSection year={year} key={year} />;
         })}
       </Box>
     </Flex>
-  )
-}
+  );
+};

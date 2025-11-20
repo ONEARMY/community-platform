@@ -8,5 +8,5 @@ import { redirect } from 'react-router';
 import type { LoaderFunctionArgs } from 'react-router';
 
 export function loader({ params }: LoaderFunctionArgs) {
-  return redirect(`/library/${params.slug}`, 301)
+  return redirect(`/library/${params.slug}`, 301);
 }

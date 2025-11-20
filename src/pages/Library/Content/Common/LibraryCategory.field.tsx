@@ -1,35 +1,35 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Field } from 'react-final-form'
-import { CategoriesSelectV2 } from 'src/pages/common/Category/CategoriesSelectV2'
-import { FormFieldWrapper } from 'src/pages/common/FormFields'
-import { intro } from 'src/pages/Library/labels'
-import { categoryService } from 'src/services/categoryService'
-import { required } from 'src/utils/validators'
+import { useEffect, useMemo, useState } from 'react';
+import { Field } from 'react-final-form';
+import { CategoriesSelectV2 } from 'src/pages/common/Category/CategoriesSelectV2';
+import { FormFieldWrapper } from 'src/pages/common/FormFields';
+import { intro } from 'src/pages/Library/labels';
+import { categoryService } from 'src/services/categoryService';
+import { required } from 'src/utils/validators';
 
-import { LibraryCategoryGuidance } from './LibraryCategoryGuidance'
+import { LibraryCategoryGuidance } from './LibraryCategoryGuidance';
 
-import type { Category, SelectValue } from 'oa-shared'
+import type { Category, SelectValue } from 'oa-shared';
 
 export const LibraryCategoryField = () => {
-  const { placeholder, title } = intro.category
+  const { placeholder, title } = intro.category;
 
-  const [categories, setCategories] = useState<Category[]>([])
+  const [categories, setCategories] = useState<Category[]>([]);
   const options = useMemo<SelectValue[]>(
     () => categories.map((x) => ({ label: x.name, value: x.id.toString() })),
     [categories],
-  )
+  );
 
   useEffect(() => {
     const getCategories = async () => {
-      const categories = await categoryService.getCategories('projects')
+      const categories = await categoryService.getCategories('projects');
 
       if (categories) {
-        setCategories(categories)
+        setCategories(categories);
       }
-    }
+    };
 
-    getCategories()
-  }, [])
+    getCategories();
+  }, []);
 
   return (
     <FormFieldWrapper text={title} required>
@@ -48,9 +48,7 @@ export const LibraryCategoryField = () => {
             />
             {input?.value?.value && (
               <LibraryCategoryGuidance
-                category={categories.find(
-                  (x) => x.id === Number(input.value.value),
-                )}
+                category={categories.find((x) => x.id === Number(input.value.value))}
                 type="main"
               />
             )}
@@ -58,5 +56,5 @@ export const LibraryCategoryField = () => {
         )}
       />
     </FormFieldWrapper>
-  )
-}
+  );
+};

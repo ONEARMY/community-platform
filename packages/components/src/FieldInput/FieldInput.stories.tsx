@@ -1,15 +1,15 @@
-import { FieldInput } from './FieldInput'
+import { FieldInput } from './FieldInput';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Forms/FieldInput',
   component: FieldInput,
-} as Meta<typeof FieldInput>
+} as Meta<typeof FieldInput>;
 
 export const Default: StoryFn<typeof FieldInput> = () => (
   <FieldInput placeholder="Input placeholder" meta={{}} input={{} as any} />
-)
+);
 
 export const WithError: StoryFn<typeof FieldInput> = () => (
   <FieldInput
@@ -17,4 +17,4 @@ export const WithError: StoryFn<typeof FieldInput> = () => (
     input={{} as any}
     meta={{ error: 'What an error', touched: true }}
   />
-)
+);

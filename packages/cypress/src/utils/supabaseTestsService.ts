@@ -1,8 +1,8 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js';
 
-import { MOCK_DATA } from '../data'
+import { MOCK_DATA } from '../data';
 
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { SupabaseClient, User } from '@supabase/supabase-js';
 import type {
   DBProfile,
   DBProfileBadge,
@@ -10,26 +10,26 @@ import type {
   DBProfileType,
   DBResearchItem,
   Profile,
-} from 'oa-shared'
+} from 'oa-shared';
 
 type SeedData = {
-  [tableName: string]: Array<Record<string, any>>
-}
+  [tableName: string]: Array<Record<string, any>>;
+};
 
 export class SupabaseTestsService {
-  private client: SupabaseClient<any, 'public', 'public', any, any>
-  private adminClient: SupabaseClient<any, 'public', 'public', any, any>
-  private tenantId: string
+  private client: SupabaseClient<any, 'public', 'public', any, any>;
+  private adminClient: SupabaseClient<any, 'public', 'public', any, any>;
+  private tenantId: string;
 
   constructor(apiUrl: string, secretKey: string, tenantId: string) {
-    this.tenantId = tenantId
+    this.tenantId = tenantId;
     this.client = createClient(apiUrl, secretKey, {
       global: {
         headers: {
           'x-tenant-id': tenantId,
         },
       },
-    })
+    });
 
     this.adminClient = createClient(apiUrl, secretKey, {
       global: {
@@ -41,7 +41,7 @@ export class SupabaseTestsService {
         autoRefreshToken: false,
         persistSession: false,
       },
-    })
+    });
   }
 
   async deleteAccounts() {
@@ -49,55 +49,55 @@ export class SupabaseTestsService {
       Object.values(MOCK_DATA.users)
         .filter((x) => !!x['email'])
         .map((x) => x['email']),
-    )
-    const result = await this.adminClient.auth.admin.listUsers()
+    );
+    const result = await this.adminClient.auth.admin.listUsers();
 
     for (const user of result.data.users) {
       // only delete mock users and test users
       if (mockUsers.has(user.email) || user.email!.endsWith('@resend.dev')) {
-        await this.adminClient.auth.admin.deleteUser(user.id)
+        await this.adminClient.auth.admin.deleteUser(user.id);
       }
     }
   }
 
   async seedDatabase(data: SeedData) {
-    const results: Record<string, any> = {}
+    const results: Record<string, any> = {};
 
     for (const [table, rows] of Object.entries(data)) {
-      const result = await this.client.from(table).insert(rows).select()
+      const result = await this.client.from(table).insert(rows).select();
 
       if (!result.error) {
-        results[table] = result
-        continue
+        results[table] = result;
+        continue;
       }
 
-      results[table] = await this.client.from(table).select()
+      results[table] = await this.client.from(table).select();
     }
 
-    return results
+    return results;
   }
 
   async clearDatabase(tables: string[], tenantId: string) {
     // sequential so there are no constraint issues
     for (const table of tables) {
-      await this.client.from(table).delete().eq('tenant_id', tenantId)
+      await this.client.from(table).delete().eq('tenant_id', tenantId);
     }
   }
 
   async createStorage(tenantId: string) {
     await this.adminClient.storage.createBucket(tenantId, {
       public: true,
-    })
+    });
 
-    await this.adminClient.storage.createBucket(tenantId + '-documents')
+    await this.adminClient.storage.createBucket(tenantId + '-documents');
   }
 
   async clearStorage(tenantId: string) {
-    await this.adminClient.storage.emptyBucket(tenantId)
-    await this.adminClient.storage.deleteBucket(tenantId)
+    await this.adminClient.storage.emptyBucket(tenantId);
+    await this.adminClient.storage.deleteBucket(tenantId);
 
-    await this.adminClient.storage.emptyBucket(tenantId + '-documents')
-    await this.adminClient.storage.deleteBucket(tenantId + '-documents')
+    await this.adminClient.storage.emptyBucket(tenantId + '-documents');
+    await this.adminClient.storage.deleteBucket(tenantId + '-documents');
   }
 
   async getUserProfileByUsername(username: string) {
@@ -105,26 +105,25 @@ export class SupabaseTestsService {
       .from('profiles')
       .select()
       .eq('username', username)
-      .single()
+      .single();
 
     if (error || !data) {
-      return error
+      return error;
     }
 
-    return data
+    return data;
   }
 
   async seedResearch(profiles: DBProfile[], tagsData) {
-    const { categories } = await this.seedCategories('research')
+    const { categories } = await this.seedCategories('research');
 
-    const researchData: Partial<DBResearchItem & { tenant_id: string }>[] = []
+    const researchData: Partial<DBResearchItem & { tenant_id: string }>[] = [];
 
     for (let i = 0; i < MOCK_DATA.research.length; i++) {
-      const item = MOCK_DATA.research[i]
+      const item = MOCK_DATA.research[i];
       const createdBy: number =
-        profiles.find(
-          (profile) => profile.username === item.created_by_username,
-        )?.id || profiles[0].id
+        profiles.find((profile) => profile.username === item.created_by_username)?.id ||
+        profiles[0].id;
 
       researchData.push({
         created_at: item.created_at,
@@ -140,19 +139,18 @@ export class SupabaseTestsService {
         tags: [tagsData.data[0].id, tagsData.data[1].id],
         category: categories.data[i % 2].id,
         tenant_id: this.tenantId,
-      })
+      });
     }
 
     const { research } = await this.seedDatabase({
       research: researchData,
-    })
+    });
 
     for (let i = 0; i < MOCK_DATA.research.length; i++) {
-      const researchItem = MOCK_DATA.research[i]
+      const researchItem = MOCK_DATA.research[i];
       const createdBy =
-        profiles.find(
-          (profile) => profile.username === researchItem.created_by_username,
-        ).id || profiles[0].id
+        profiles.find((profile) => profile.username === researchItem.created_by_username).id ||
+        profiles[0].id;
 
       if (researchItem.updates) {
         const { research_updates } = await this.seedDatabase({
@@ -166,7 +164,7 @@ export class SupabaseTestsService {
             created_by: createdBy,
             tenant_id: this.tenantId,
           })),
-        })
+        });
 
         // Only seed comments for first research
         if (i === 0) {
@@ -174,9 +172,9 @@ export class SupabaseTestsService {
             profiles,
             research_updates,
             'research_update',
-          )
+          );
 
-          await this.seedReply(profiles, comments, research)
+          await this.seedReply(profiles, comments, research);
         }
       }
     }
@@ -189,7 +187,7 @@ export class SupabaseTestsService {
         type,
         tenant_id: this.tenantId,
       })),
-    })
+    });
   }
 
   async seedProfileTags() {
@@ -198,9 +196,9 @@ export class SupabaseTestsService {
         ...category,
         tenant_id: this.tenantId,
       })),
-    })
+    });
 
-    return response
+    return response;
   }
 
   async seedProfileTypes() {
@@ -209,9 +207,9 @@ export class SupabaseTestsService {
         ...type,
         tenant_id: this.tenantId,
       })),
-    })
+    });
 
-    return response
+    return response;
   }
 
   async seedTags() {
@@ -220,11 +218,11 @@ export class SupabaseTestsService {
         ...category,
         tenant_id: this.tenantId,
       })),
-    })
+    });
   }
 
   async seedQuestions(profiles) {
-    const { categories } = await this.seedCategories('questions')
+    const { categories } = await this.seedCategories('questions');
 
     const { questions } = await this.seedDatabase({
       questions: MOCK_DATA.questions.map((question) => ({
@@ -233,14 +231,10 @@ export class SupabaseTestsService {
         created_by: profiles[0].id,
         category: categories.data[0].id,
       })),
-    })
+    });
 
-    const { comments } = await this.seedComment(
-      profiles,
-      questions,
-      'questions',
-    )
-    await this.seedReply(profiles, comments, questions)
+    const { comments } = await this.seedComment(profiles, questions, 'questions');
+    await this.seedReply(profiles, comments, questions);
   }
 
   async seedComment(profiles, sourceData, sourceType) {
@@ -255,8 +249,8 @@ export class SupabaseTestsService {
           source_id: sourceData.data[0].id,
         },
       ],
-    })
-    return commentData
+    });
+    return commentData;
   }
 
   async seedReply(profiles, comments, source) {
@@ -272,11 +266,11 @@ export class SupabaseTestsService {
           parent_id: comments.data[0].id,
         },
       ],
-    })
+    });
   }
 
   async seedNews(profiles, tagsData) {
-    const { categories } = await this.seedCategories('news')
+    const { categories } = await this.seedCategories('news');
 
     const { news } = await this.seedDatabase({
       news: MOCK_DATA.news.map((news) => ({
@@ -286,10 +280,10 @@ export class SupabaseTestsService {
         category: categories.data[0].id,
         tenant_id: this.tenantId,
       })),
-    })
+    });
 
-    const { comments } = await this.seedComment(profiles, news, 'news')
-    await this.seedReply(profiles, comments, news)
+    const { comments } = await this.seedComment(profiles, news, 'news');
+    await this.seedReply(profiles, comments, news);
   }
 
   async seedMap(profiles) {
@@ -299,18 +293,18 @@ export class SupabaseTestsService {
         tenant_id: this.tenantId,
         ...pin,
       })),
-    })
+    });
 
-    return response
+    return response;
   }
 
   async seedLibrary(profiles, tagsData) {
-    const { categories } = await this.seedCategories('projects')
+    const { categories } = await this.seedCategories('projects');
 
-    const projectsData = []
+    const projectsData = [];
 
     for (let i = 0; i < MOCK_DATA.projects.length; i++) {
-      const item = MOCK_DATA.projects[i]
+      const item = MOCK_DATA.projects[i];
 
       projectsData.push({
         created_at: item.createdAt,
@@ -320,27 +314,24 @@ export class SupabaseTestsService {
         slug: item.slug,
         time: item.time,
         difficulty_level: item.difficultyLevel,
-        created_by:
-          profiles.find((x) => x.username === item.createdBy).id || null,
+        created_by: profiles.find((x) => x.username === item.createdBy).id || null,
         tags: [tagsData.data[0].id, tagsData.data[1].id],
         category: categories.data[i % 2].id,
         deleted: item.deleted,
         moderation: item.moderation,
         tenant_id: this.tenantId,
-        ...(item.moderationFeedback
-          ? { moderation_feedback: item.moderationFeedback }
-          : {}),
-      })
+        ...(item.moderationFeedback ? { moderation_feedback: item.moderationFeedback } : {}),
+      });
     }
 
     // seed projects
     const { projects } = await this.seedDatabase({
       projects: projectsData,
-    })
+    });
 
     // seed steps
     for (let i = 0; i < MOCK_DATA.projects.length; i++) {
-      const project = MOCK_DATA.projects[i]
+      const project = MOCK_DATA.projects[i];
 
       if (project.steps && project.steps.length) {
         await this.seedDatabase({
@@ -351,13 +342,13 @@ export class SupabaseTestsService {
             video_url: item.video_url,
             tenant_id: this.tenantId,
           })),
-        })
+        });
       }
     }
 
     // seed comments
-    const { comments } = await this.seedComment(profiles, projects, 'projects')
-    await this.seedReply(profiles, comments, projects)
+    const { comments } = await this.seedComment(profiles, projects, 'projects');
+    await this.seedReply(profiles, comments, projects);
   }
 
   async seedBadges() {
@@ -366,23 +357,21 @@ export class SupabaseTestsService {
         ...badge,
         tenant_id: this.tenantId,
       })),
-    })
+    });
 
-    return response
+    return response;
   }
 
-  async seedProfileImages(): Promise<
-    { id: string; path: string; fullPath: string }[]
-  > {
+  async seedProfileImages(): Promise<{ id: string; path: string; fullPath: string }[]> {
     const { data: image1Data } = await this.client.storage
       .from(this.tenantId)
-      .upload('profiles/image1.png', new Blob())
+      .upload('profiles/image1.png', new Blob());
 
     const { data: image2Data } = await this.client.storage
       .from(this.tenantId)
-      .upload('profiles/image2.png', new Blob())
+      .upload('profiles/image2.png', new Blob());
 
-    return [image1Data, image2Data]
+    return [image1Data, image2Data];
   }
 
   // Creates user accounts and respective profiles
@@ -396,17 +385,16 @@ export class SupabaseTestsService {
       email: user['email'],
       password: user['password'],
       ...user,
-    }))
+    }));
 
     const existingUsers = await this.adminClient.auth.admin.listUsers({
       perPage: 10000,
-    })
+    });
 
     const profiles = await Promise.all(
       accounts.map(async (account) => {
         const profileType =
-          profileTypes.find((type) => type.name === account.profileType) ||
-          profileTypes[0]
+          profileTypes.find((type) => type.name === account.profileType) || profileTypes[0];
 
         return await this.createAuthAndProfile(
           account,
@@ -415,11 +403,11 @@ export class SupabaseTestsService {
           [profileTags[0].id, profileTags[1].id],
           profileType.id,
           profileImages,
-        )
+        );
       }),
-    )
+    );
 
-    return { profiles }
+    return { profiles };
   }
 
   async createAuthAndProfile(
@@ -437,18 +425,16 @@ export class SupabaseTestsService {
       user_metadata: {
         username: user.username,
       },
-    })
+    });
 
-    let authId: string
+    let authId: string;
 
     if (authUser.error?.code === 'email_exists') {
-      const existingUser = existingUsers.find(
-        (existingUser) => existingUser.email === user.email,
-      )
+      const existingUser = existingUsers.find((existingUser) => existingUser.email === user.email);
 
-      authId = existingUser.id
+      authId = existingUser.id;
     } else if (authUser.data?.user?.id) {
-      authId = authUser.data.user.id
+      authId = authUser.data.user.id;
     }
 
     return await this.createProfile(
@@ -458,7 +444,7 @@ export class SupabaseTestsService {
       profilTagIds,
       profileTypeId,
       profileImages,
-    )
+    );
   }
 
   async createProfile(
@@ -474,10 +460,10 @@ export class SupabaseTestsService {
       .select('*')
       .eq('auth_id', authId)
       .eq('tenant_id', this.tenantId)
-      .single()
+      .single();
 
     if (data) {
-      return data
+      return data;
     }
 
     const profileDB: Partial<DBProfile> & { tenant_id: string } = {
@@ -497,15 +483,12 @@ export class SupabaseTestsService {
       is_contactable: user.isContactable || true,
       last_active: user.lastActive || null,
       website: user.website || null,
-    }
+    };
 
-    const profileResult = await this.adminClient
-      .from('profiles')
-      .insert(profileDB)
-      .select('*')
+    const profileResult = await this.adminClient.from('profiles').insert(profileDB).select('*');
 
     if (!profileResult.data || profileResult.data.length === 0) {
-      console.error('Failed to create profile')
+      console.error('Failed to create profile');
     }
 
     if (profileResult.data[0].username === 'demo_user') {
@@ -517,7 +500,7 @@ export class SupabaseTestsService {
             tenant_id: this.tenantId,
           },
         ],
-      })
+      });
     }
 
     Promise.all(
@@ -530,10 +513,10 @@ export class SupabaseTestsService {
               tenant_id: this.tenantId,
             },
           ],
-        })
+        });
       }),
-    )
+    );
 
-    return profileResult.data[0]
+    return profileResult.data[0];
   }
 }

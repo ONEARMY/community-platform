@@ -1,91 +1,83 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
-import debounce from 'debounce'
-import {
-  CategoryHorizonalList,
-  ReturnPathLink,
-  SearchField,
-  Select,
-  Tooltip,
-} from 'oa-components'
-import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { UserAction } from 'src/common/UserAction'
-import { categoryService } from 'src/services/categoryService'
-import { Button, Flex } from 'theme-ui'
+import debounce from 'debounce';
+import { CategoryHorizonalList, ReturnPathLink, SearchField, Select, Tooltip } from 'oa-components';
+import { FieldContainer } from 'src/common/Form/FieldContainer';
+import { UserAction } from 'src/common/UserAction';
+import { categoryService } from 'src/services/categoryService';
+import { Button, Flex } from 'theme-ui';
 
-import DraftButton from '../common/Drafts/DraftButton'
-import { ListHeader } from '../common/Layout/ListHeader'
-import { headings, listing } from './labels'
-import { QuestionSearchParams } from './question.service'
-import { QuestionSortOptions } from './QuestionSortOptions'
+import DraftButton from '../common/Drafts/DraftButton';
+import { ListHeader } from '../common/Layout/ListHeader';
+import { headings, listing } from './labels';
+import { QuestionSearchParams } from './question.service';
+import { QuestionSortOptions } from './QuestionSortOptions';
 
-import type { Category } from 'oa-shared'
-import type { QuestionSortOption } from './QuestionSortOptions'
+import type { Category } from 'oa-shared';
+import type { QuestionSortOption } from './QuestionSortOptions';
 
 interface IProps {
-  itemCount?: number
-  draftCount: number
-  handleShowDrafts: () => void
-  showDrafts: boolean
+  itemCount?: number;
+  draftCount: number;
+  handleShowDrafts: () => void;
+  showDrafts: boolean;
 }
 
 export const QuestionListHeader = (props: IProps) => {
-  const { itemCount, draftCount, handleShowDrafts, showDrafts } = props
+  const { itemCount, draftCount, handleShowDrafts, showDrafts } = props;
 
-  const [categories, setCategories] = useState<Category[]>([])
-  const [searchParams, setSearchParams] = useSearchParams()
-  const q = searchParams.get(QuestionSearchParams.q)
-  const [searchString, setSearchString] = useState<string>(() => q ?? '')
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const q = searchParams.get(QuestionSearchParams.q);
+  const [searchString, setSearchString] = useState<string>(() => q ?? '');
 
-  const categoryParam = searchParams.get(QuestionSearchParams.category)
-  const category =
-    (categoryParam && categories?.find((x) => x.id === +categoryParam)) ?? null
-  const sort = searchParams.get(QuestionSearchParams.sort) as QuestionSortOption
+  const categoryParam = searchParams.get(QuestionSearchParams.category);
+  const category = (categoryParam && categories?.find((x) => x.id === +categoryParam)) ?? null;
+  const sort = searchParams.get(QuestionSearchParams.sort) as QuestionSortOption;
 
   useEffect(() => {
     const initCategories = async () => {
-      const categories =
-        (await categoryService.getCategories('questions')) || []
-      setCategories(categories)
-    }
+      const categories = (await categoryService.getCategories('questions')) || [];
+      setCategories(categories);
+    };
 
-    initCategories()
-  }, [])
+    initCategories();
+  }, []);
 
   const updateFilter = useCallback(
     (key: QuestionSearchParams, value: string) => {
-      const params = new URLSearchParams(searchParams.toString())
+      const params = new URLSearchParams(searchParams.toString());
       if (value) {
-        params.set(key, value)
+        params.set(key, value);
       } else {
-        params.delete(key)
+        params.delete(key);
       }
-      setSearchParams(params)
+      setSearchParams(params);
     },
     [searchParams],
-  )
+  );
 
   const onSearchInputChange = useCallback(
     debounce((value: string) => {
-      searchValue(value)
+      searchValue(value);
     }, 500),
     [searchParams],
-  )
+  );
 
   const searchValue = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString())
-    params.set('q', value)
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('q', value);
 
     if (value.length > 0 && sort !== 'MostRelevant') {
-      params.set('sort', 'MostRelevant')
+      params.set('sort', 'MostRelevant');
     }
 
     if (value.length === 0 || !value) {
-      params.set('sort', 'Newest')
+      params.set('sort', 'Newest');
     }
 
-    setSearchParams(params)
-  }
+    setSearchParams(params);
+  };
 
   const actionComponents = (
     <UserAction
@@ -96,11 +88,7 @@ export const QuestionListHeader = (props: IProps) => {
             data-tooltip-id="tooltip"
             data-tooltip-content={listing.incompleteProfile}
           >
-            <Button
-              type="button"
-              data-cy="complete-profile-question"
-              variant="disabled"
-            >
+            <Button type="button" data-cy="complete-profile-question" variant="disabled">
               {listing.create}
             </Button>
           </Link>
@@ -129,7 +117,7 @@ export const QuestionListHeader = (props: IProps) => {
         </ReturnPathLink>
       }
     />
-  )
+  );
 
   const categoryComponent = (
     <CategoryHorizonalList
@@ -142,7 +130,7 @@ export const QuestionListHeader = (props: IProps) => {
         )
       }
     />
-  )
+  );
 
   const filteringComponents = (
     <Flex
@@ -158,9 +146,7 @@ export const QuestionListHeader = (props: IProps) => {
             options={QuestionSortOptions.toArray(!!q)}
             placeholder={listing.sort}
             value={{ label: QuestionSortOptions.get(sort) }}
-            onChange={(sortBy) =>
-              updateFilter(QuestionSearchParams.sort, sortBy.value)
-            }
+            onChange={(sortBy) => updateFilter(QuestionSearchParams.sort, sortBy.value)}
           />
         </FieldContainer>
       </Flex>
@@ -170,18 +156,18 @@ export const QuestionListHeader = (props: IProps) => {
           placeHolder={listing.search}
           value={searchString}
           onChange={(value) => {
-            setSearchString(value)
-            onSearchInputChange(value)
+            setSearchString(value);
+            onSearchInputChange(value);
           }}
           onClickDelete={() => {
-            setSearchString('')
-            searchValue('')
+            setSearchString('');
+            searchValue('');
           }}
           onClickSearch={() => searchValue(searchString)}
         />
       </Flex>
     </Flex>
-  )
+  );
 
   return (
     <ListHeader
@@ -192,5 +178,5 @@ export const QuestionListHeader = (props: IProps) => {
       categoryComponent={categoryComponent}
       filteringComponents={filteringComponents}
     />
-  )
-}
+  );
+};

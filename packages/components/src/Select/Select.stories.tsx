@@ -1,13 +1,13 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { Select } from './Select'
+import { Select } from './Select';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Forms/Select',
   component: Select,
-} as Meta<typeof Select>
+} as Meta<typeof Select>;
 
 export const Default: StoryFn<typeof Select> = () => {
   return (
@@ -24,11 +24,11 @@ export const Default: StoryFn<typeof Select> = () => {
         },
       ]}
     />
-  )
-}
+  );
+};
 
 export const Clearable: StoryFn<typeof Select> = () => {
-  const [value, setValue] = useState()
+  const [value, setValue] = useState();
   return (
     <Select
       value={value}
@@ -46,14 +46,14 @@ export const Clearable: StoryFn<typeof Select> = () => {
         },
       ]}
     />
-  )
-}
+  );
+};
 
 export const MultipleSelect: StoryFn<typeof Select> = () => {
   const [value, setValue] = useState({
     value: 'value-three',
     label: 'Value 3',
-  })
+  });
 
   return (
     <Select
@@ -76,11 +76,11 @@ export const MultipleSelect: StoryFn<typeof Select> = () => {
         },
       ]}
     />
-  )
-}
+  );
+};
 
 export const FormSelect: StoryFn<typeof Select> = () => {
-  const [value, setValue] = useState()
+  const [value, setValue] = useState();
   return (
     <Select
       value={value}
@@ -98,11 +98,11 @@ export const FormSelect: StoryFn<typeof Select> = () => {
         },
       ]}
     />
-  )
-}
+  );
+};
 
 export const SelectWithIcons: StoryFn<typeof Select> = () => {
-  const [value, setValue] = useState()
+  const [value, setValue] = useState();
   return (
     <Select
       variant="icons"
@@ -143,5 +143,5 @@ export const SelectWithIcons: StoryFn<typeof Select> = () => {
         },
       ]}
     />
-  )
-}
+  );
+};

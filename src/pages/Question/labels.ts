@@ -1,16 +1,16 @@
-import type { ILabels } from 'src/common/Form/types'
+import type { ILabels } from 'src/common/Form/types';
 
 export const buttons = {
   create: 'Publish',
   draft: { create: 'Save as draft', update: 'Save to draft' },
   edit: 'Update',
-}
+};
 
 export const headings = {
   create: 'Ask your question to the community',
   edit: 'Edit your question to the community',
   list: 'Ask your questions and help others out',
-}
+};
 
 export const fields: ILabels = {
   category: {
@@ -18,8 +18,7 @@ export const fields: ILabels = {
     title: 'Which category fits your question?',
   },
   description: {
-    placeholder:
-      'What information will help the community understand what you need help with?',
+    placeholder: 'What information will help the community understand what you need help with?',
     title: 'Description',
   },
   tags: {
@@ -32,7 +31,7 @@ export const fields: ILabels = {
   images: {
     title: 'Upload image(s) for this question',
   },
-}
+};
 
 export const listing = {
   create: 'Ask a question',
@@ -46,4 +45,4 @@ export const listing = {
   sort: 'Sort by',
   totalComments: 'Total comments',
   usefulness: 'How useful it is',
-}
+};

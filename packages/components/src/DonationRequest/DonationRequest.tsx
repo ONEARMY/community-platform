@@ -1,23 +1,23 @@
-import { AspectImage, Card, Flex, Text } from 'theme-ui'
+import { AspectImage, Card, Flex, Text } from 'theme-ui';
 
-import { Button } from '../Button/Button'
-import { ExternalLink } from '../ExternalLink/ExternalLink'
+import { Button } from '../Button/Button';
+import { ExternalLink } from '../ExternalLink/ExternalLink';
 
 export interface IProps {
-  body: string | undefined
-  callback: () => void
-  iframeSrc: string | undefined
-  imageURL: string | undefined
-  link: string
+  body: string | undefined;
+  callback: () => void;
+  iframeSrc: string | undefined;
+  imageURL: string | undefined;
+  link: string;
 }
 
-const FALLBACK_DONATION_WIDGET = 'https://donorbox.org/embed/onearmy?a=b'
-const REQUEST_TITLE = 'Support our work'
-const REQUEST_THANKYOU = 'Thank you for helping to make this possible'
-export const BUTTON_LABEL = 'Download'
+const FALLBACK_DONATION_WIDGET = 'https://donorbox.org/embed/onearmy?a=b';
+const REQUEST_TITLE = 'Support our work';
+const REQUEST_THANKYOU = 'Thank you for helping to make this possible';
+export const BUTTON_LABEL = 'Download';
 
 export const DonationRequest = (props: IProps) => {
-  const { body, callback, iframeSrc, imageURL, link } = props
+  const { body, callback, iframeSrc, imageURL, link } = props;
   const iframeArgs = {
     allowpaymentrequest: 'allowpaymentrequest',
     allow: 'payment',
@@ -27,7 +27,7 @@ export const DonationRequest = (props: IProps) => {
     name: 'donorbox',
     seamless: true,
     src: iframeSrc || FALLBACK_DONATION_WIDGET,
-  }
+  };
 
   return (
     <>
@@ -40,10 +40,7 @@ export const DonationRequest = (props: IProps) => {
         data-cy="DonationRequest"
         data-testid="DonationRequest"
       >
-        <script
-          src="https://donorbox.org/widget.js"
-          data-paypalexpress="false"
-        ></script>
+        <script src="https://donorbox.org/widget.js" data-paypalexpress="false"></script>
 
         <Flex
           sx={{
@@ -106,5 +103,5 @@ export const DonationRequest = (props: IProps) => {
         </ExternalLink>
       </Flex>
     </>
-  )
-}
+  );
+};

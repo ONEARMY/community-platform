@@ -1,4 +1,4 @@
-import { Flex, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui';
 
 export const DraftTag = () => {
   return (
@@ -25,5 +25,5 @@ export const DraftTag = () => {
         Draft
       </Text>
     </Flex>
-  )
-}
+  );
+};

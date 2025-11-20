@@ -1,13 +1,13 @@
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
-import { ContentStatistics } from './ContentStatistics'
+import { ContentStatistics } from './ContentStatistics';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Layout/ContentStatistics',
   component: ContentStatistics,
-} as Meta<typeof ContentStatistics>
+} as Meta<typeof ContentStatistics>;
 
 export const Default: StoryFn<typeof ContentStatistics> = () => (
   <ContentStatistics
@@ -30,7 +30,7 @@ export const Default: StoryFn<typeof ContentStatistics> = () => (
       },
     ]}
   />
-)
+);
 
 export const SingleCount: StoryFn<typeof ContentStatistics> = () => (
   <ContentStatistics
@@ -53,4 +53,4 @@ export const SingleCount: StoryFn<typeof ContentStatistics> = () => (
       },
     ]}
   />
-)
+);

@@ -1,4 +1,4 @@
-import type { DBTag } from '../../models/tag'
+import type { DBTag } from '../../models/tag';
 
 export const tags: Partial<DBTag>[] = [
   {
@@ -41,4 +41,4 @@ export const tags: Partial<DBTag>[] = [
     created_at: new Date(),
     name: 'screening',
   },
-]
+];

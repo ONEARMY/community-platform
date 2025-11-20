@@ -1,8 +1,8 @@
 import { Outlet } from 'react-router';
-import Main from 'src/pages/common/Layout/Main'
+import Main from 'src/pages/common/Layout/Main';
 
 export async function loader() {
-  return null
+  return null;
 }
 
 // This is a Layout file, it will render for all research routes
@@ -11,5 +11,5 @@ export default function Index() {
     <Main style={{ flex: 1 }}>
       <Outlet />
     </Main>
-  )
+  );
 }

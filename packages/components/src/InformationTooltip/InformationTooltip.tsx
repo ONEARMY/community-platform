@@ -1,15 +1,16 @@
-import { Tooltip } from 'react-tooltip'
+import { useId } from 'react';
+import { Tooltip } from 'react-tooltip';
 
-import { Icon } from '../Icon/Icon'
+import { Icon } from '../Icon/Icon';
 
-import type { IconProps } from '../Icon/Icon'
+import type { IconProps } from '../Icon/Icon';
 
 export interface IProps extends IconProps {
-  tooltip: string
+  tooltip: string;
 }
 
 export const InformationTooltip = (props: IProps) => {
-  const id = Math.random().toString()
+  const id = useId();
 
   return (
     <>
@@ -22,5 +23,5 @@ export const InformationTooltip = (props: IProps) => {
         />
       </Tooltip>
     </>
-  )
-}
+  );
+};

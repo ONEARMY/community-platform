@@ -1,4 +1,4 @@
-import type { DBCategory } from '../../models'
+import type { DBCategory } from '../../models';
 
 export const categories: Partial<DBCategory>[] = [
   {
@@ -18,4 +18,4 @@ export const categories: Partial<DBCategory>[] = [
     type: 'projects',
   },
   // Add for other content types and update specs!
-]
+];

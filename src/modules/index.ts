@@ -13,16 +13,13 @@ export const getSupportedModules = (supportedModules: string): MODULE[] => {
   const envModules: string[] =
     (supportedModules || 'howto,map,research,academy,user,question,news')
       .split(',')
-      .map((s) => s.trim()) || []
+      .map((s) => s.trim()) || [];
   return [MODULE.CORE].concat(
     Object.values(MODULE).filter((module) => envModules.includes(module)),
-  )
-}
+  );
+};
 
-export const isModuleSupported = (
-  supportedModules: string,
-  MODULE: MODULE,
-): boolean => {
-  const supported = getSupportedModules(supportedModules)
-  return supported.includes(MODULE)
-}
+export const isModuleSupported = (supportedModules: string, MODULE: MODULE): boolean => {
+  const supported = getSupportedModules(supportedModules);
+  return supported.includes(MODULE);
+};

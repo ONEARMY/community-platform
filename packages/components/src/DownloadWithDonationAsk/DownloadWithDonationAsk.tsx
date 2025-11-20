@@ -1,45 +1,37 @@
-import { useState } from 'react'
-import { Flex } from 'theme-ui'
+import { useState } from 'react';
+import { Flex } from 'theme-ui';
 
-import { DonationRequestModal } from '../DonationRequestModal/DonationRequestModal'
-import { DownloadButton } from '../DownloadButton/DownloadButton'
-import { DownloadCounter } from '../DownloadCounter/DownloadCounter'
-import { DownloadStaticFile } from '../DownloadStaticFile/DownloadStaticFile'
+import { DonationRequestModal } from '../DonationRequestModal/DonationRequestModal';
+import { DownloadButton } from '../DownloadButton/DownloadButton';
+import { DownloadCounter } from '../DownloadCounter/DownloadCounter';
+import { DownloadStaticFile } from '../DownloadStaticFile/DownloadStaticFile';
 
-import type { MediaFile } from 'oa-shared'
+import type { MediaFile } from 'oa-shared';
 
 export interface IProps {
-  body: string
-  handleClick?: () => Promise<void>
-  iframeSrc: string
-  imageURL: string
-  fileDownloadCount: number
-  fileLink?: string
-  files?: MediaFile[]
-  openModel?: boolean
+  body: string;
+  handleClick?: () => Promise<void>;
+  iframeSrc: string;
+  imageURL: string;
+  fileDownloadCount: number;
+  fileLink?: string;
+  files?: MediaFile[];
+  openModel?: boolean;
 }
 
 export const DownloadWithDonationAsk = (props: IProps) => {
-  const {
-    body,
-    iframeSrc,
-    imageURL,
-    handleClick,
-    fileLink,
-    files,
-    openModel = false,
-  } = props
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(openModel)
-  const [link, setLink] = useState<string>('')
+  const { body, iframeSrc, imageURL, handleClick, fileLink, files, openModel = false } = props;
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(openModel);
+  const [link, setLink] = useState<string>('');
 
-  const toggleIsModalOpen = () => setIsModalOpen(!isModalOpen)
+  const toggleIsModalOpen = () => setIsModalOpen(!isModalOpen);
 
   const callback = () => {
-    toggleIsModalOpen()
+    toggleIsModalOpen();
     if (handleClick) {
-      handleClick()
+      handleClick();
     }
-  }
+  };
 
   return (
     <>
@@ -58,8 +50,8 @@ export const DownloadWithDonationAsk = (props: IProps) => {
           <DownloadButton
             isLoggedIn
             onClick={() => {
-              setLink(fileLink)
-              toggleIsModalOpen()
+              setLink(fileLink);
+              toggleIsModalOpen();
             }}
           />
         )}
@@ -71,8 +63,8 @@ export const DownloadWithDonationAsk = (props: IProps) => {
                 key={file ? file.url : `file-${index}`}
                 fileDownloadCount={props.fileDownloadCount}
                 handleClick={() => {
-                  setLink(file.url!)
-                  toggleIsModalOpen()
+                  setLink(file.url!);
+                  toggleIsModalOpen();
                 }}
                 isLoggedIn
               />
@@ -82,5 +74,5 @@ export const DownloadWithDonationAsk = (props: IProps) => {
         <DownloadCounter total={props.fileDownloadCount} />
       </>
     </>
-  )
-}
+  );
+};

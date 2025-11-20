@@ -1,9 +1,8 @@
-import { ExternalLink, Guidelines } from 'oa-components'
+import { ExternalLink, Guidelines } from 'oa-components';
 
 export const QuestionPostingGuidelines = () => {
   const guidelinesUrl =
-    import.meta.env.VITE_QUESTIONS_GUIDELINES_URL ||
-    process.env.VITE_QUESTIONS_GUIDELINES_URL
+    import.meta.env.VITE_QUESTIONS_GUIDELINES_URL || process.env.VITE_QUESTIONS_GUIDELINES_URL;
 
   const steps = [
     <>
@@ -37,7 +36,7 @@ export const QuestionPostingGuidelines = () => {
         🙂
       </span>
     </>,
-  ]
+  ];
 
   if (guidelinesUrl) {
     steps.unshift(
@@ -47,8 +46,8 @@ export const QuestionPostingGuidelines = () => {
           question guidelines.
         </ExternalLink>
       </>,
-    )
+    );
   }
 
-  return <Guidelines title="How does it work?" steps={steps} />
-}
+  return <Guidelines title="How does it work?" steps={steps} />;
+};

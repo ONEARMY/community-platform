@@ -1,11 +1,11 @@
-import { Author, ResearchItem, UserRole } from 'oa-shared'
-import { IMAGE_SIZES } from 'src/config/imageTransforms'
+import { Author, ResearchItem, UserRole } from 'oa-shared';
+import { IMAGE_SIZES } from 'src/config/imageTransforms';
 
-import { ProfileServiceServer } from './profileService.server'
-import { storageServiceServer } from './storageService.server'
+import { ProfileServiceServer } from './profileService.server';
+import { storageServiceServer } from './storageService.server';
 
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { DBProfile, DBResearchItem, DBResearchUpdate } from 'oa-shared'
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBProfile, DBResearchItem, DBResearchUpdate } from 'oa-shared';
 
 const getBySlug = async (client: SupabaseClient, slug: string) => {
   const { data, error } = await client
@@ -63,42 +63,35 @@ const getBySlug = async (client: SupabaseClient, slug: string) => {
     )
     .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
     .or('deleted.eq.false,deleted.is.null')
-    .single()
+    .single();
 
   if (!data || error) {
-    return { error }
+    return { error };
   }
 
-  const item = data as unknown as DBResearchItem
-  let collaborators: Author[] | undefined = []
+  const item = data as unknown as DBResearchItem;
+  let collaborators: Author[] | undefined = [];
 
   if (item?.collaborators?.length) {
     // potential improvement: could make an rpc query for the whole research + collaborators instead of 2 queries
-    collaborators = await getCollaborators(item.collaborators, client)
+    collaborators = await getCollaborators(item.collaborators, client);
   }
 
-  return { item, collaborators, error }
-}
+  return { item, collaborators, error };
+};
 
-const getCollaborators = async (
-  collaboratorIds: string[] | null,
-  client: SupabaseClient,
-) => {
+const getCollaborators = async (collaboratorIds: string[] | null, client: SupabaseClient) => {
   if (collaboratorIds === null || collaboratorIds.length === 0) {
-    return []
+    return [];
   }
 
-  const profileService = new ProfileServiceServer(client)
-  const users = await profileService.getUsersByUsername(collaboratorIds)
+  const profileService = new ProfileServiceServer(client);
+  const users = await profileService.getUsersByUsername(collaboratorIds);
 
-  return users?.map((user) => Author.fromDB(user))
-}
+  return users?.map((user) => Author.fromDB(user));
+};
 
-const getUpdate = async (
-  client: SupabaseClient,
-  researchId: number,
-  updateId: number,
-) => {
+const getUpdate = async (client: SupabaseClient, researchId: number, updateId: number) => {
   return client
     .from('research_updates')
     .select(
@@ -106,8 +99,8 @@ const getUpdate = async (
     )
     .eq('id', updateId)
     .eq('research_id', researchId)
-    .single()
-}
+    .single();
+};
 
 const getUserResearch = async (
   client: SupabaseClient,
@@ -115,11 +108,11 @@ const getUserResearch = async (
 ): Promise<Partial<ResearchItem>[]> => {
   const { data, error } = await client.rpc('get_user_research', {
     username_param: username,
-  })
+  });
 
   if (error) {
-    console.error('Error fetching user research:', error)
-    return []
+    console.error('Error fetching user research:', error);
+    return [];
   }
 
   return data?.map((x) => ({
@@ -127,27 +120,19 @@ const getUserResearch = async (
     title: x.title,
     slug: x.slug,
     usefulCount: x.total_useful,
-  }))
-}
+  }));
+};
 
-const getResearchPublicMedia = (
-  researchDb: DBResearchItem,
-  client: SupabaseClient,
-) => {
-  const allImages =
-    researchDb.updates?.flatMap((x) => x.images)?.filter((x) => !!x) || []
+const getResearchPublicMedia = (researchDb: DBResearchItem, client: SupabaseClient) => {
+  const allImages = researchDb.updates?.flatMap((x) => x.images)?.filter((x) => !!x) || [];
   if (researchDb.image) {
-    allImages.push(researchDb.image)
+    allImages.push(researchDb.image);
   }
 
   return allImages
-    ? storageServiceServer.getPublicUrls(
-        client,
-        allImages,
-        IMAGE_SIZES.LANDSCAPE,
-      )
-    : []
-}
+    ? storageServiceServer.getPublicUrls(client, allImages, IMAGE_SIZES.LANDSCAPE)
+    : [];
+};
 
 const isAllowedToEditResearch = async (
   client: SupabaseClient,
@@ -155,27 +140,24 @@ const isAllowedToEditResearch = async (
   currentUsername: string,
 ) => {
   if (!currentUsername) {
-    return false
+    return false;
   }
 
   if (currentUsername === research.author?.username) {
-    return true
+    return true;
   }
 
   if (
     Array.isArray(research.collaboratorsUsernames) &&
     research.collaboratorsUsernames.includes(currentUsername)
   ) {
-    return true
+    return true;
   }
 
-  const { data } = await client
-    .from('profiles')
-    .select('roles')
-    .eq('username', currentUsername)
+  const { data } = await client.from('profiles').select('roles').eq('username', currentUsername);
 
-  return data?.at(0)?.roles?.includes(UserRole.ADMIN)
-}
+  return data?.at(0)?.roles?.includes(UserRole.ADMIN);
+};
 
 const isAllowedToEditResearchById = async (
   client: SupabaseClient,
@@ -186,27 +168,23 @@ const isAllowedToEditResearchById = async (
     .from('research')
     .select('id,created_by,collaborators,author:profiles(id,username)')
     .eq('id', id)
-    .single()
+    .single();
 
-  const research = researchResult.data as unknown as DBResearchItem
+  const research = researchResult.data as unknown as DBResearchItem;
 
-  const item = ResearchItem.fromDB(research, [])
+  const item = ResearchItem.fromDB(research, []);
 
-  return isAllowedToEditResearch(client, item, currentUsername)
-}
+  return isAllowedToEditResearch(client, item, currentUsername);
+};
 
 async function getById(id: number, client: SupabaseClient) {
-  const result = await client.from('research').select().eq('id', id).single()
-  return result.data as DBResearchItem
+  const result = await client.from('research').select().eq('id', id).single();
+  return result.data as DBResearchItem;
 }
 
 async function getUpdateById(id: number, client: SupabaseClient) {
-  const result = await client
-    .from('research_updates')
-    .select()
-    .eq('id', id)
-    .single()
-  return result.data as DBResearchUpdate
+  const result = await client.from('research_updates').select().eq('id', id).single();
+  return result.data as DBResearchUpdate;
 }
 
 async function isAllowedToEditUpdate(
@@ -215,14 +193,11 @@ async function isAllowedToEditUpdate(
   updateId: number,
   client: SupabaseClient,
 ) {
-  const research = await researchServiceServer.getById(researchId, client)
-  const researchUpdate = await researchServiceServer.getUpdateById(
-    updateId,
-    client,
-  )
+  const research = await researchServiceServer.getById(researchId, client);
+  const researchUpdate = await researchServiceServer.getUpdateById(updateId, client);
 
   if (research.id !== researchUpdate.research_id) {
-    return false
+    return false;
   }
 
   return (
@@ -230,7 +205,7 @@ async function isAllowedToEditUpdate(
     (profile.id === research.author?.id ||
       research.collaborators?.includes(profile.username) ||
       profile?.roles?.includes(UserRole.ADMIN))
-  )
+  );
 }
 
 export const researchServiceServer = {
@@ -243,4 +218,4 @@ export const researchServiceServer = {
   isAllowedToEditResearch,
   isAllowedToEditResearchById,
   isAllowedToEditUpdate,
-}
+};

@@ -1,4 +1,4 @@
-import { copycat } from '@snaplet/copycat'
+import { copycat } from '@snaplet/copycat';
 
 export const usersSeed = () => [
   {
@@ -41,4 +41,4 @@ export const usersSeed = () => [
     email: 'mirzoblazkova19@seed.com',
     password: copycat.password({}),
   },
-]
+];

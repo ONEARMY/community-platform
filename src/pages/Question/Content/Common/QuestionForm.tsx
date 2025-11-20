@@ -1,44 +1,35 @@
-import { useEffect, useState } from 'react'
-import { Form } from 'react-final-form'
+import { useEffect, useState } from 'react';
+import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
-import { FormWrapper } from 'src/common/Form/FormWrapper'
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
-import { logger } from 'src/logger'
-import {
-  CategoryField,
-  TagsField,
-  TitleField,
-} from 'src/pages/common/FormFields'
-import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors'
-import { QuestionPostingGuidelines } from 'src/pages/Question/Content/Common'
+import { FormWrapper } from 'src/common/Form/FormWrapper';
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
+import { logger } from 'src/logger';
+import { CategoryField, TagsField, TitleField } from 'src/pages/common/FormFields';
+import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
+import { QuestionPostingGuidelines } from 'src/pages/Question/Content/Common';
 import {
   QuestionDescriptionField,
   QuestionImagesField,
-} from 'src/pages/Question/Content/Common/FormFields'
-import * as LABELS from 'src/pages/Question/labels'
-import { questionService } from 'src/services/questionService'
-import { fireConfetti } from 'src/utils/fireConfetti'
-import {
-  composeValidators,
-  endsWithQuestionMark,
-  minValue,
-  required,
-} from 'src/utils/validators'
+} from 'src/pages/Question/Content/Common/FormFields';
+import * as LABELS from 'src/pages/Question/labels';
+import { questionService } from 'src/services/questionService';
+import { fireConfetti } from 'src/utils/fireConfetti';
+import { composeValidators, endsWithQuestionMark, minValue, required } from 'src/utils/validators';
 
-import { QUESTION_MAX_IMAGES, QUESTION_MIN_TITLE_LENGTH } from '../../constants'
+import { QUESTION_MAX_IMAGES, QUESTION_MIN_TITLE_LENGTH } from '../../constants';
 
-import type { Question, QuestionFormData } from 'oa-shared'
-import type { MainFormAction } from 'src/common/Form/types'
+import type { Question, QuestionFormData } from 'oa-shared';
+import type { MainFormAction } from 'src/common/Form/types';
 
 interface IProps {
-  'data-testid'?: string
-  question: Question | null
-  parentType: MainFormAction
+  'data-testid'?: string;
+  question: Question | null;
+  parentType: MainFormAction;
 }
 
 export const QuestionForm = (props: IProps) => {
-  const { question, parentType } = props
-  const navigate = useNavigate()
+  const { question, parentType } = props;
+  const navigate = useNavigate();
   const [initialValues, setInitialValues] = useState<QuestionFormData>({
     category: null,
     description: '',
@@ -47,14 +38,14 @@ export const QuestionForm = (props: IProps) => {
     isDraft: false,
     tags: [],
     title: '',
-  })
-  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null)
-  const [intentionalNavigation, setIntentionalNavigation] = useState(false)
-  const id = question?.id || null
+  });
+  const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
+  const [intentionalNavigation, setIntentionalNavigation] = useState(false);
+  const id = question?.id || null;
 
   useEffect(() => {
     if (!question) {
-      return
+      return;
     }
 
     setInitialValues({
@@ -70,15 +61,12 @@ export const QuestionForm = (props: IProps) => {
       isDraft: question.isDraft,
       tags: question.tagIds,
       title: question.title,
-    })
-  }, [question])
+    });
+  }, [question]);
 
-  const onSubmit = async (
-    formValues: Partial<QuestionFormData>,
-    isDraft: boolean = false,
-  ) => {
-    setIntentionalNavigation(true)
-    setSaveErrorMessage(null)
+  const onSubmit = async (formValues: Partial<QuestionFormData>, isDraft: boolean = false) => {
+    setIntentionalNavigation(true);
+    setSaveErrorMessage(null);
 
     try {
       const result = await questionService.upsert(id, {
@@ -89,29 +77,28 @@ export const QuestionForm = (props: IProps) => {
         images: formValues.images || null,
         isDraft: isDraft,
         existingImages: initialValues.existingImages || null,
-      })
+      });
 
       if (result) {
-        fireConfetti()
-        navigate('/questions/' + result.slug)
+        fireConfetti();
+        navigate('/questions/' + result.slug);
       }
     } catch (e) {
       if (e.cause && e.message) {
-        setSaveErrorMessage(e.message)
+        setSaveErrorMessage(e.message);
       }
-      logger.error(e)
+      logger.error(e);
     }
-  }
+  };
 
   const removeExistingImage = (index: number) => {
     setInitialValues((prevState: QuestionFormData) => {
       return {
         ...prevState,
-        existingImages:
-          prevState.existingImages?.filter((_, i) => i !== index) ?? null,
-      }
-    })
-  }
+        existingImages: prevState.existingImages?.filter((_, i) => i !== index) ?? null,
+      };
+    });
+  };
 
   return (
     <Form
@@ -128,28 +115,23 @@ export const QuestionForm = (props: IProps) => {
         submitSucceeded,
         values,
       }) => {
-        const errorsClientSide = [errorSet(errors, LABELS.fields)]
+        const errorsClientSide = [errorSet(errors, LABELS.fields)];
 
-        const handleSubmitDraft = () => onSubmit(values, true)
+        const handleSubmitDraft = () => onSubmit(values, true);
 
         const numberOfImageInputsAvailable = (values as any)?.images
-          ? Math.min(
-              (values as any).images.filter((x) => !!x).length + 1,
-              QUESTION_MAX_IMAGES,
-            )
-          : 1
+          ? Math.min((values as any).images.filter((x) => !!x).length + 1, QUESTION_MAX_IMAGES)
+          : 1;
 
         const unsavedChangesDialog = (
-          <UnsavedChangesDialog
-            hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
-          />
-        )
+          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />
+        );
 
         const validate = composeValidators(
           required,
           minValue(QUESTION_MIN_TITLE_LENGTH),
           endsWithQuestionMark(),
-        )
+        );
 
         return (
           <FormWrapper
@@ -180,8 +162,8 @@ export const QuestionForm = (props: IProps) => {
             <CategoryField type="questions" />
             <TagsField title={LABELS.fields.tags.title} />
           </FormWrapper>
-        )
+        );
       }}
     />
-  )
-}
+  );
+};

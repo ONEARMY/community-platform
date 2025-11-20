@@ -1,4 +1,4 @@
-import { commonStyles } from './commonStyles'
+import { commonStyles } from './commonStyles';
 
 export const baseTheme = {
   colors: commonStyles.colors,
@@ -140,4 +140,4 @@ export const baseTheme = {
       color: commonStyles.colors.black,
     },
   },
-}
+};

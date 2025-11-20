@@ -1,4 +1,4 @@
-import type { DBNotification } from 'oa-shared'
+import type { DBNotification } from 'oa-shared';
 
 export const factoryDBNotification = (
   userOverloads: Partial<DBNotification> = {},
@@ -20,4 +20,4 @@ export const factoryDBNotification = (
   triggered_by_id: 1,
   should_email: true,
   ...userOverloads,
-})
+});

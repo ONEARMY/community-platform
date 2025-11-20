@@ -1,13 +1,13 @@
-import { faker } from '@faker-js/faker'
-import { Box } from 'theme-ui'
+import { faker } from '@faker-js/faker';
+import { Box } from 'theme-ui';
 
-import { Tab, TabPanel, Tabs, TabsList } from './TabbedContent'
+import { Tab, TabPanel, Tabs, TabsList } from './TabbedContent';
 
-import type { Meta, StoryFn } from '@storybook/react-vite'
+import type { Meta, StoryFn } from '@storybook/react-vite';
 
 export default {
   title: 'Components/TabbedContent',
-} as Meta
+} as Meta;
 
 export const Default: StoryFn = () => {
   return (
@@ -50,5 +50,5 @@ export const Default: StoryFn = () => {
         </TabPanel>
       </Tabs>
     </Box>
-  )
-}
+  );
+};

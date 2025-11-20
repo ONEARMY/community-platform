@@ -1,26 +1,23 @@
-import { ProfileFactory } from 'src/factories/profileFactory.server'
-import { createSupabaseServerClient } from 'src/repository/supabase.server'
+import { ProfileFactory } from 'src/factories/profileFactory.server';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
-import type { DBProfile } from 'oa-shared'
+import type { DBProfile } from 'oa-shared';
 
 export const loader = async ({ request }) => {
-  const { client, headers } = createSupabaseServerClient(request)
+  const { client, headers } = createSupabaseServerClient(request);
 
-  const url = new URL(request.url)
-  const params = new URLSearchParams(url.search)
-  const q = params.get('q')
+  const url = new URL(request.url);
+  const params = new URLSearchParams(url.search);
+  const q = params.get('q');
 
   if (!q) {
-    return Response.json(
-      {},
-      { headers, status: 400, statusText: 'q is required' },
-    )
+    return Response.json({}, { headers, status: 400, statusText: 'q is required' });
   }
 
-  const claims = await client.auth.getClaims()
+  const claims = await client.auth.getClaims();
 
   if (!claims.data?.claims) {
-    return Response.json({}, { headers, status: 401 })
+    return Response.json({}, { headers, status: 401 });
   }
 
   const { data } = await client
@@ -44,12 +41,10 @@ export const loader = async ({ request }) => {
       )`,
     )
     .or(`username.ilike.%${q}%,display_name.ilike.%${q}%`)
-    .limit(10)
-  const profileFactory = new ProfileFactory(client)
+    .limit(10);
+  const profileFactory = new ProfileFactory(client);
 
-  const profiles = data?.map((x) =>
-    profileFactory.fromDB(x as unknown as DBProfile),
-  )
+  const profiles = data?.map((x) => profileFactory.fromDB(x as unknown as DBProfile));
 
-  return Response.json(profiles, { headers, status: 200 })
-}
+  return Response.json(profiles, { headers, status: 200 });
+};

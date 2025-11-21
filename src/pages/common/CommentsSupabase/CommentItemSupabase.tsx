@@ -9,6 +9,7 @@ import { Card, Flex } from 'theme-ui';
 
 import { CommentReply } from './CommentReplySupabase';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
+import { useCopyCommentLink } from './useCopyCommentLink';
 
 import type { Comment, DiscussionContentTypes } from 'oa-shared';
 
@@ -70,6 +71,8 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
     });
   };
 
+  const copyCommentLink = useCopyCommentLink(comment);
+
   return (
     <Flex
       id={`comment:${comment.id}`}
@@ -87,6 +90,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
           comment={comment}
           setShowDeleteModal={setShowDeleteModal}
           setShowEditModal={setShowEditModal}
+          handleCopyLink={copyCommentLink}
           followButton={
             <FollowButtonAction
               contentType="comments"

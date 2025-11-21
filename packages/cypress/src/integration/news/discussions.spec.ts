@@ -125,6 +125,7 @@ describe('[News.Discussions]', () => {
     cy.logout();
     cy.signUpCompletedUser(replier);
     cy.visit(newsPath);
+    cy.wait(1000);
     cy.get('[data-cy=CommentItem]').contains(updatedNewComment).should('be.visible');
     cy.addReply(newReply);
     cy.contains('Comments');

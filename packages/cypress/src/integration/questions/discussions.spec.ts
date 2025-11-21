@@ -120,6 +120,7 @@ describe('[Questions.Discussions]', () => {
     cy.logout();
     cy.signUpCompletedUser(replier);
     cy.visit(questionPath);
+    cy.wait(1000);
     cy.get('[data-cy=CommentItem]').contains(updatedNewComment).should('be.visible');
     cy.addReply(newReply);
     cy.contains('Comments');

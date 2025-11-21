@@ -63,8 +63,8 @@ describe('[Questions.Discussions]', () => {
     cy.step('Sort dropdown is visible');
     cy.get('[data-cy=comment-sort-select]').should('be.visible');
 
-    cy.step('Default sort is newest - comment3 should be first');
-    cy.get('[data-cy=comment-sort-select]').contains('Newest');
+    cy.step('Default sort is oldest - comment3 should be first');
+    cy.get('[data-cy=comment-sort-select]').contains('Oldest');
     cy.get('[data-cy=comment-text]').first().should('contain', comment3);
 
     cy.step('Sort by oldest - comment1 should be first');
@@ -80,10 +80,10 @@ describe('[Questions.Discussions]', () => {
     cy.get('[data-cy=comment-text]').first().should('contain', comment3);
     cy.get('[data-cy=comment-text]').eq(1).should('contain', comment1);
 
-    cy.step('Sort back to newest');
+    cy.step('Sort back to oldest');
     cy.get('[data-cy=comment-sort-select]').click();
-    cy.contains('Newest').click();
-    cy.get('[data-cy=comment-sort-select]').contains('Newest');
+    cy.contains('Oldest').click();
+    cy.get('[data-cy=comment-sort-select]').contains('Oldest');
     cy.get('[data-cy=comment-text]').first().should('contain', comment3);
   });
 

@@ -63,15 +63,15 @@ describe('[Library.Discussions]', () => {
     cy.step('Sort dropdown is visible');
     cy.get('[data-cy=comment-sort-select]').should('be.visible');
 
-    cy.step('Default sort is newest - comment3 should be first');
-    cy.get('[data-cy=comment-sort-select]').contains('Newest');
-    cy.get('[data-cy=comment-text]').first().should('contain', comment3);
-
-    cy.step('Sort by oldest - comment1 should be first');
-    cy.get('[data-cy=comment-sort-select]').click();
-    cy.contains('Oldest').click();
+    cy.step('Default sort is oldest - comment1 should be first');
     cy.get('[data-cy=comment-sort-select]').contains('Oldest');
     cy.get('[data-cy=comment-text]').first().should('contain', comment1);
+
+    cy.step('Sort by newest - comment3 should be first');
+    cy.get('[data-cy=comment-sort-select]').click();
+    cy.contains('Newest').click();
+    cy.get('[data-cy=comment-sort-select]').contains('Newest');
+    cy.get('[data-cy=comment-text]').first().should('contain', comment3);
 
     cy.step('Sort by most useful - comment3 should be first (newer of the two useful)');
     cy.get('[data-cy=comment-sort-select]').click();
@@ -80,11 +80,11 @@ describe('[Library.Discussions]', () => {
     cy.get('[data-cy=comment-text]').first().should('contain', comment3);
     cy.get('[data-cy=comment-text]').eq(1).should('contain', comment1);
 
-    cy.step('Sort back to newest');
+    cy.step('Sort back to oldest - comment1 should be first');
     cy.get('[data-cy=comment-sort-select]').click();
-    cy.contains('Newest').click();
-    cy.get('[data-cy=comment-sort-select]').contains('Newest');
-    cy.get('[data-cy=comment-text]').first().should('contain', comment3);
+    cy.contains('Oldest').click();
+    cy.get('[data-cy=comment-sort-select]').contains('Oldest');
+    cy.get('[data-cy=comment-text]').first().should('contain', comment1);
   });
 
   it('allows authenticated users to contribute to discussions', () => {

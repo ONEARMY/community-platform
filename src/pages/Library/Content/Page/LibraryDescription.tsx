@@ -321,7 +321,7 @@ export const LibraryDescription = (props: IProps) => {
               statUnit: 'following',
               usePlural: false,
             }),
-            count: subscribersCount
+            count: subscribersCount,
           },
           {
             icon: 'comment-outline',

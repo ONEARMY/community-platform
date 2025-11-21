@@ -66,6 +66,7 @@ export const ActionSet = ({ children, itemType }: IProps) => {
           }}
         >
           <Flex
+            onClick={() => setShow(false)}
             sx={{
               alignItems: 'stretch',
               justifyItems: 'stretch',

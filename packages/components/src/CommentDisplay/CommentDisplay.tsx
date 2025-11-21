@@ -20,6 +20,7 @@ export interface IProps {
   isEditable: boolean | undefined;
   setShowDeleteModal: (arg: boolean) => void;
   setShowEditModal: (arg: boolean) => void;
+  handleCopyLink?: () => void;
   usefulButtonConfig: {
     hasUserVotedUseful: boolean;
     votedUsefulCount: number;
@@ -42,6 +43,7 @@ export const CommentDisplay = (props: IProps) => {
     followButtonIcon,
     setShowDeleteModal,
     setShowEditModal,
+    handleCopyLink,
     usefulButtonConfig,
   } = props;
 
@@ -129,6 +131,16 @@ export const CommentDisplay = (props: IProps) => {
                       Edit
                     </Button>
                   )}
+                  <Button
+                    type="button"
+                    data-cy={`${itemType}: copy link button`}
+                    variant="subtle"
+                    icon="copy-link"
+                    onClick={handleCopyLink}
+                    sx={{ fontSize: 1 }}
+                  >
+                    Copy Link
+                  </Button>
                   {isEditable && (
                     <Button
                       type="button"

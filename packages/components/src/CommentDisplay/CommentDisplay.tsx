@@ -50,12 +50,6 @@ export const CommentDisplay = (props: IProps) => {
   const { authors } = useContext(AuthorsContext);
   const border = `${comment.highlighted ? '2px dashed black' : 'none'}`;
 
-  const onCopyLinkClick = () => {
-    if (handleCopyLink) {
-      handleCopyLink();
-    }
-  };
-
   if (comment.deleted) {
     return (
       <Box
@@ -142,7 +136,7 @@ export const CommentDisplay = (props: IProps) => {
                     data-cy={`${itemType}: copy link button`}
                     variant="subtle"
                     icon="copy-link"
-                    onClick={onCopyLinkClick}
+                    onClick={handleCopyLink}
                     sx={{ fontSize: 1 }}
                   >
                     Copy Link

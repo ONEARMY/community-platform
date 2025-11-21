@@ -70,14 +70,12 @@ describe('[Questions.Discussions]', () => {
     cy.step('Sort by oldest - comment1 should be first');
     cy.get('[data-cy=comment-sort-select]').click();
     cy.contains('Oldest').click();
-    cy.wait(500);
     cy.get('[data-cy=comment-sort-select]').contains('Oldest');
     cy.get('[data-cy=comment-text]').first().should('contain', comment1);
 
     cy.step('Sort by most useful - comment3 should be first (newer of the two useful)');
     cy.get('[data-cy=comment-sort-select]').click();
     cy.contains('Most Useful').click();
-    cy.wait(500);
     cy.get('[data-cy=comment-sort-select]').contains('Most Useful');
     cy.get('[data-cy=comment-text]').first().should('contain', comment3);
     cy.get('[data-cy=comment-text]').eq(1).should('contain', comment1);
@@ -85,7 +83,6 @@ describe('[Questions.Discussions]', () => {
     cy.step('Sort back to newest');
     cy.get('[data-cy=comment-sort-select]').click();
     cy.contains('Newest').click();
-    cy.wait(500);
     cy.get('[data-cy=comment-sort-select]').contains('Newest');
     cy.get('[data-cy=comment-text]').first().should('contain', comment3);
   });
@@ -123,8 +120,8 @@ describe('[Questions.Discussions]', () => {
     cy.logout();
     cy.signUpCompletedUser(replier);
     cy.visit(questionPath);
-    cy.get('[data-cy=CommentItem]').should('be.visible');
-    cy.get('[data-cy=CommentItem]').contains(updatedNewComment);
+    cy.wait(1000);
+    cy.get('[data-cy=CommentItem]').contains(updatedNewComment).should('be.visible');
     cy.addReply(newReply);
     cy.contains('Comments');
 

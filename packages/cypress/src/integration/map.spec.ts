@@ -85,9 +85,10 @@ describe('[Map]', () => {
 
     cy.step('New map pins can be hidden by clicking the map');
     cy.get('[data-cy=PinProfile]').should('be.visible');
+    cy.wait(500);
     cy.get('.markercluster-map').click(10, 10);
-    cy.get('[data-cy=PinProfile]').should('not.exist');
     cy.url().should('not.include', `#${username}`);
+    cy.get('[data-cy=PinProfile]').should('not.exist');
 
     cy.step('Mobile list view can be shown');
     cy.viewport('samsung-note9');

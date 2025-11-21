@@ -17,7 +17,7 @@ export function createUsefulStatistic(
     label: buildStatisticsLabel({
       stat: usefulCount,
       statUnit: 'useful',
-      usePlural: true,
+      usePlural: false,
     }),
     onOpen: async () => {
       try {

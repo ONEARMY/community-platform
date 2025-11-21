@@ -19,8 +19,8 @@ import { trackEvent } from 'src/common/Analytics';
 import { DownloadWrapper } from 'src/common/DownloadWrapper';
 import { logger } from 'src/logger';
 import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag';
-import { createUsefulStatistic } from 'src/pages/Question/QuestionPage';
 import { buildStatisticsLabel, capitalizeFirstLetter, hasAdminRights } from 'src/utils/helpers';
+import { createUsefulStatistic } from 'src/utils/statistics';
 import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 
 import { libraryService } from '../../library.service';
@@ -311,6 +311,7 @@ export const LibraryDescription = (props: IProps) => {
               statUnit: 'view',
               usePlural: true,
             }),
+            count: item.totalViews,
           },
           createUsefulStatistic('projects', item.id, item.usefulCount),
           {
@@ -320,6 +321,7 @@ export const LibraryDescription = (props: IProps) => {
               statUnit: 'following',
               usePlural: false,
             }),
+            count: subscribersCount
           },
           {
             icon: 'comment-outline',
@@ -328,6 +330,7 @@ export const LibraryDescription = (props: IProps) => {
               statUnit: 'comment',
               usePlural: true,
             }),
+            count: commentsCount || 0,
           },
           {
             icon: 'update',
@@ -336,6 +339,7 @@ export const LibraryDescription = (props: IProps) => {
               statUnit: 'step',
               usePlural: true,
             }),
+            count: item.steps.length,
           },
         ]}
       />

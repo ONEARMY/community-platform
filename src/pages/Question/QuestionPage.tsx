@@ -9,7 +9,6 @@ import {
   TagList,
   UsefulStatsButton,
 } from 'oa-components';
-// eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { usefulService } from 'src/services/usefulService';
@@ -17,6 +16,7 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
 import { onUsefulClick } from 'src/utils/onUsefulClick';
+import { createUsefulStatistic } from 'src/utils/statistics';
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
@@ -36,15 +36,14 @@ export const QuestionPage = observer(({ question }: IProps) => {
   const [subscribersCount, setSubscribersCount] = useState<number>(question.subscriberCount);
 
   useEffect(() => {
-    const getVoted = async () => {
-      const voted = await usefulService.hasVoted('questions', question.id);
-      setVoted(voted);
+    const checkVote = async () => {
+      if (activeUser) {
+        const hasVoted = await usefulService.hasVoted('questions', question.id);
+        setVoted(hasVoted);
+      }
     };
-
-    if (activeUser) {
-      getVoted();
-    }
-  }, [activeUser, question]);
+    checkVote();
+  }, [activeUser, question.id]);
 
   const isEditable = useMemo(() => {
     return hasAdminRights(activeUser) || question.author?.username === activeUser?.username;
@@ -61,10 +60,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
   };
 
   const handleUsefulClick = async (vote: 'add' | 'delete') => {
-    await onUsefulClick({
-      vote,
-      config: configOnUsefulClick,
-    });
+    await onUsefulClick({ vote, config: configOnUsefulClick });
   };
 
   return (
@@ -86,7 +82,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
                   {question.isDraft && <DraftTag />}
 
                   {isEditable && (
-                    <Link to={'/questions/' + question.slug + '/edit'}>
+                    <Link to={`/questions/${question.slug}/edit`}>
                       <Button type="button" variant="primary" data-cy="edit">
                         Edit
                       </Button>
@@ -136,12 +132,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
           </Flex>
         </Flex>
 
-        <Divider
-          sx={{
-            m: 0,
-            border: '.5px solid black',
-          }}
-        />
+        <Divider sx={{ m: 0, border: '.5px solid black' }} />
 
         <ContentStatistics
           statistics={[
@@ -152,6 +143,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
                 statUnit: 'view',
                 usePlural: true,
               }),
+              count: question.totalViews,
             },
             {
               icon: 'thunderbolt-grey',
@@ -160,15 +152,9 @@ export const QuestionPage = observer(({ question }: IProps) => {
                 statUnit: 'following',
                 usePlural: false,
               }),
+              count: subscribersCount,
             },
-            {
-              icon: 'star',
-              label: buildStatisticsLabel({
-                stat: usefulCount,
-                statUnit: 'useful',
-                usePlural: false,
-              }),
-            },
+            createUsefulStatistic('questions', question.id, usefulCount),
             {
               icon: 'comment-outline',
               label: buildStatisticsLabel({
@@ -176,10 +162,12 @@ export const QuestionPage = observer(({ question }: IProps) => {
                 statUnit: 'comment',
                 usePlural: true,
               }),
+              count: question.commentCount,
             },
           ]}
         />
       </Card>
+
       <ClientOnly fallback={<></>}>
         {() => (
           <Card
@@ -193,7 +181,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
             }}
           >
             <CommentSectionSupabase
-              authors={question.author?.id ? [question.author?.id] : []}
+              authors={question.author?.id ? [question.author.id] : []}
               setSubscribersCount={setSubscribersCount}
               sourceId={question.id}
               sourceType="questions"

@@ -27,7 +27,7 @@ export const CommentSectionSupabase = (props: IProps) => {
 
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentLimit, setCommentLimit] = useState<number>(commentPageSize);
-  const [sortBy, setSortBy] = useState<CommentSortOption>(CommentSortOption.Newest);
+  const [sortBy, setSortBy] = useState<CommentSortOption>(CommentSortOption.Oldest);
 
   const displayedComments = useMemo(() => {
     const sortFn = CommentSortOptions.getSortFn(sortBy);

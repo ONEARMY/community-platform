@@ -13,17 +13,17 @@ type SortConfig = {
 
 const Options = new Map<CommentSortOption, SortConfig>([
   [
-    CommentSortOption.Newest,
-    {
-      label: 'Newest',
-      sortFn: (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-    },
-  ],
-  [
     CommentSortOption.Oldest,
     {
       label: 'Oldest',
       sortFn: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    },
+  ],
+  [
+    CommentSortOption.Newest,
+    {
+      label: 'Newest',
+      sortFn: (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     },
   ],
   [
@@ -51,7 +51,7 @@ const getOptions = () => {
 
 const getSortFn = (key: CommentSortOption) => {
   const config = Options.get(key);
-  return config?.sortFn ?? Options.get(CommentSortOption.Newest)!.sortFn;
+  return config?.sortFn ?? Options.get(CommentSortOption.Oldest)!.sortFn;
 };
 
 export const CommentSortOptions = {

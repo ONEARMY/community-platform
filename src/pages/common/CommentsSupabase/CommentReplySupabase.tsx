@@ -6,6 +6,8 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { onUsefulClick } from 'src/utils/onUsefulClick';
 import { Box, Flex, Text } from 'theme-ui';
 
+import { useCopyCommentLink } from './useCopyCommentLink';
+
 import type { Reply } from 'oa-shared';
 
 const DELETED_COMMENT = 'The original comment got deleted';
@@ -63,6 +65,8 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
     });
   };
 
+  const copyCommentLink = useCopyCommentLink(comment);
+
   return (
     <Flex>
       <Box
@@ -96,6 +100,7 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
               comment={comment}
               setShowDeleteModal={setShowDeleteModal}
               setShowEditModal={setShowEditModal}
+              handleCopyLink={copyCommentLink}
               usefulButtonConfig={{
                 onUsefulClick: () => handleUsefulClick(voted ? 'delete' : 'add'),
                 hasUserVotedUseful: voted,

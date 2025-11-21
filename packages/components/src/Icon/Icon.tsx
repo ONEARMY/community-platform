@@ -66,6 +66,7 @@ export const glyphs: IGlyphs = {
   'comment-outline': iconMap.commentOutline,
   construction: iconMap.construction,
   contact: iconMap.contact,
+  'copy-link': iconMap.copyLink,
   check: <MdCheck />,
   'chevron-down': iconMap.chevronDown,
   'chevron-left': iconMap.chevronLeft,

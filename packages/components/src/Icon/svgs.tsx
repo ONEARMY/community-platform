@@ -10,6 +10,7 @@ import collaboratorSVG from '../../assets/icons/collaborator.svg';
 import commentOutlineSVG from '../../assets/icons/comment-outline.svg';
 import constructionSVG from '../../assets/icons/construction.svg';
 import contactSVG from '../../assets/icons/contact.svg';
+import copyLinkSVG from '../../assets/icons/copy-link.svg';
 import closeSVG from '../../assets/icons/cross-close.svg';
 import declinedSVG from '../../assets/icons/declined.svg';
 import deleteSVG from '../../assets/icons/delete.svg';
@@ -107,6 +108,7 @@ export const iconMap = {
   commentOutline: <ImageIcon src={commentOutlineSVG} />,
   construction: <ImageIcon src={constructionSVG} />,
   contact: <ImageIcon src={contactSVG} />,
+  copyLink: <ImageIcon src={copyLinkSVG} />,
   declined: <ImageIcon src={declinedSVG} />,
   delete: <ImageIcon src={deleteSVG} />,
   discord: <ImageIcon src={discordSVG} />,

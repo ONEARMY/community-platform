@@ -165,7 +165,7 @@ const ResearchDescription = (props: IProps) => {
                 isLoggedIn={!!props.activeUser}
                 onFollowClick={props.onFollowClick}
                 tooltipFollow="Follow to be notified about new updates"
-                tooltipUnfollow="Unfollow to stop be notified about new updates"
+                tooltipUnfollow="Unfollow to stop being notified about new updates"
               />
             </Flex>
           )}

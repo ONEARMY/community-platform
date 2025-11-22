@@ -62,7 +62,7 @@ export class CommentFactory {
     }, {});
   }
 
-  private async createAuthor(dbAuthor: DBAuthor): Promise<Author> {
+  async createAuthor(dbAuthor: DBAuthor): Promise<Author> {
     const photo = dbAuthor.photo ? this.imageService.getPublicUrl(dbAuthor.photo) : undefined;
 
     return Author.fromDB(dbAuthor, photo);

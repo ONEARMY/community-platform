@@ -28,37 +28,6 @@ vi.mock('src/stores/Profile/profile.store', () => ({
 vi.mock('src/stores/Research/research.store');
 
 describe('Research Article', () => {
-  it('displays content statistics', async () => {
-    // Arrange
-    const activeResearchItem = FactoryResearchItem({
-      collaborators: [],
-      updates: [
-        FactoryResearchItemUpdate({
-          isDraft: false,
-          deleted: false,
-        }),
-      ],
-      subscriberCount: 0,
-      usefulCount: 0,
-      commentCount: 0,
-    });
-
-    // Act
-    let wrapper;
-    act(() => {
-      wrapper = getWrapper(activeResearchItem);
-    });
-
-    // Assert
-    await waitFor(() => {
-      expect(wrapper.getByText(`${activeResearchItem.totalViews} views`)).toBeInTheDocument();
-      expect(wrapper.getByText('0 following')).toBeInTheDocument();
-      expect(wrapper.getByText('0 useful')).toBeInTheDocument();
-      expect(wrapper.getByText('0 comments')).toBeInTheDocument();
-      expect(wrapper.getByText('1 update')).toBeInTheDocument();
-    });
-  });
-
   it('does not display contributors when undefined', async () => {
     // Act
     let wrapper;

@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 import { Breadcrumbs as BreadcrumbsComponent } from 'oa-components';
-import { Box } from 'theme-ui';
+import { Flex } from 'theme-ui';
 
 import type { News, Project, Question, ResearchItem } from 'oa-shared';
 
@@ -10,9 +10,10 @@ type Content = ResearchItem | Question | Project | News;
 type Variant = 'research' | 'question' | 'library' | 'news';
 
 interface BreadcrumbsProps {
-  steps?: Step[];
+  children?: React.ReactNode;
   content: Content;
   variant: Variant;
+  steps?: Step[];
 }
 
 const generateSteps = (content: Content, variant: Variant) => {
@@ -68,11 +69,27 @@ const generateSteps = (content: Content, variant: Variant) => {
   return steps;
 };
 
-export const Breadcrumbs = ({ steps, content, variant }: BreadcrumbsProps) => {
+export const Breadcrumbs = (props: BreadcrumbsProps) => {
+  const { children, steps, content, variant } = props;
+
   const breadcrumbsSteps = steps ?? generateSteps(content, variant);
+
   return (
-    <Box sx={{ paddingLeft: [2, 0, 0] }}>
-      <BreadcrumbsComponent steps={breadcrumbsSteps} />
-    </Box>
+    <Flex
+      sx={{
+        alignItems: 'baseline',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginBottom: 2,
+        paddingLeft: [2, 0, 0],
+      }}
+    >
+      <Flex sx={{ flex: ['none', 'none', 1] }}>
+        <BreadcrumbsComponent steps={breadcrumbsSteps} />
+      </Flex>
+
+      {children}
+    </Flex>
   );
 };

@@ -1,9 +1,11 @@
 import { useLoaderData } from 'react-router';
 import { Question } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { CommentFactory } from 'src/factories/commentFactory.server';
 import { NotFoundPage } from 'src/pages/NotFound/NotFound';
 import { QuestionPage } from 'src/pages/Question/QuestionPage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { ImageServiceServer } from 'src/services/imageService.server';
 import { questionServiceServer } from 'src/services/questionService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
@@ -49,6 +51,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const question = Question.fromDB(dbQuestion, tags, images);
   question.usefulCount = usefulVotes.count || 0;
   question.subscriberCount = subscribers.count || 0;
+
+  if (dbQuestion.author) {
+    const factory = new CommentFactory(new ImageServiceServer(client));
+    question.author = await factory.createAuthor(dbQuestion.author);
+  }
 
   return Response.json({ question }, { headers });
 }

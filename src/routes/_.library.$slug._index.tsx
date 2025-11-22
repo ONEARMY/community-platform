@@ -1,9 +1,11 @@
 import { useLoaderData } from 'react-router';
 import { Project } from 'oa-shared';
+import { CommentFactory } from 'src/factories/commentFactory.server';
 import { ProjectPage } from 'src/pages/Library/Content/Page/ProjectPage';
 import { NotFoundPage } from 'src/pages/NotFound/NotFound';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
+import { ImageServiceServer } from 'src/services/imageService.server';
 import { libraryServiceServer } from 'src/services/libraryService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 
@@ -42,6 +44,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const project = Project.fromDB(dbProject, tags, images);
   project.usefulCount = usefulVotes.count || 0;
   project.subscriberCount = subscribers.count || 0;
+
+  if (dbProject.author) {
+    const factory = new CommentFactory(new ImageServiceServer(client));
+    project.author = await factory.createAuthor(dbProject.author);
+  }
 
   return Response.json({ project }, { headers });
 }

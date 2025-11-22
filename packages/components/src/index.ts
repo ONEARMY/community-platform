@@ -1,7 +1,7 @@
 export { Accordion } from './Accordion/Accordion';
 export { ArticleCallToActionSupabase } from './ArticleCallToActionSupabase/ArticleCallToActionSupabase';
+export { AuthorDisplay } from './AuthorDisplay/AuthorDisplay';
 export { AuthorsContext } from './providers/AuthorsContext';
-export { AuthorTag } from './AuthorTag/AuthorTag';
 export { Banner } from './Banner/Banner';
 export { BlockedRoute } from './BlockedRoute/BlockedRoute';
 export { Breadcrumbs } from './Breadcrumbs/Breadcrumbs';

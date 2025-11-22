@@ -36,6 +36,7 @@ export const NewsPage = observer(({ news }: IProps) => {
   return (
     <Box sx={{ width: '100%', maxWidth: '620px', alignSelf: 'center' }}>
       <Breadcrumbs content={news} variant="news" />
+
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
         {news.heroImage && (
           <AspectRatio ratio={2 / 1}>
@@ -133,6 +134,7 @@ export const NewsPage = observer(({ news }: IProps) => {
                     statUnit: 'view',
                     usePlural: true,
                   }),
+                  stat: news.totalViews,
                 },
                 {
                   icon: 'thunderbolt-grey',
@@ -141,6 +143,7 @@ export const NewsPage = observer(({ news }: IProps) => {
                     statUnit: 'following',
                     usePlural: false,
                   }),
+                  stat: subscribersCount,
                 },
                 {
                   icon: 'comment-outline',
@@ -149,6 +152,7 @@ export const NewsPage = observer(({ news }: IProps) => {
                     statUnit: 'comment',
                     usePlural: true,
                   }),
+                  stat: news.commentCount,
                 },
               ]}
               alwaysShow

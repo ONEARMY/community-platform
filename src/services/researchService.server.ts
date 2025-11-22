@@ -26,7 +26,7 @@ const getBySlug = async (client: SupabaseClient, slug: string) => {
        status,
        is_draft,
        collaborators,
-       author:profiles(id, display_name, username, country, badges:profile_badges_relations(
+       author:profiles(id, display_name, username, photo, country, badges:profile_badges_relations(
           profile_badges(
             id,
             name,
@@ -49,7 +49,7 @@ const getBySlug = async (client: SupabaseClient, slug: string) => {
         comment_count, 
         modified_at, 
         deleted,
-        update_author:profiles(id, display_name, username, country, badges:profile_badges_relations(
+        update_author:profiles(id, display_name, username, photo, country, badges:profile_badges_relations(
           profile_badges(
             id,
             name,

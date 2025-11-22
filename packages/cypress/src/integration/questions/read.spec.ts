@@ -38,9 +38,10 @@ describe('[Questions]', () => {
       cy.visit(`/questions/${slug}`);
 
       cy.step('All metadata visible');
-      cy.contains(/\d+ view/);
-      cy.contains(/\d+ following/);
-      cy.contains(/\d+ useful/);
+      cy.get('[data-cy=ContentStatistics-views]').contains(/\d/);
+      cy.get('[data-cy=ContentStatistics-following]').contains(/\d/);
+      cy.get('[data-cy=ContentStatistics-useful]').contains(/\d/);
+      cy.get('[data-cy=ContentStatistics-comments]').contains(/\d/);
 
       cy.step('[Populates title, SEO and social tags]');
       cy.title().should('eq', pageTitle);

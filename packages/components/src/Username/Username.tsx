@@ -64,6 +64,7 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
       >
         {username}
       </Text>
+
       {badges &&
         badges.map((badge) => {
           return <UserBadge key={badge.id} badge={badge} />;

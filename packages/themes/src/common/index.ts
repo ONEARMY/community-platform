@@ -13,7 +13,7 @@ export const baseTheme = {
   text: {
     heading: {
       fontFamily: '"Varela Round", Arial, sans-serif',
-      fontSize: 5,
+      fontSize: 6,
       fontWeight: 'normal',
     },
     small: {

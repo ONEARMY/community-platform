@@ -81,7 +81,7 @@ export const NotificationItemSupabase = (props: IProps) => {
             <Flex sx={{ ...(isDiscussion ? commentStyling : {}) }}>
               <Text
                 sx={{
-                  background: '#E2EDF7',
+                  background: 'softblue',
                   border: '2px solid black',
                   borderRadius: 5,
                   padding: 2,

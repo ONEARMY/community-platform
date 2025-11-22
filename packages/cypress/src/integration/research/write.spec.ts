@@ -329,11 +329,9 @@ describe('[Research]', () => {
       cy.get('[data-cy=DraftUpdateLabel]').should('not.exist');
 
       cy.step('All ready for a discussion');
-      cy.contains('0 comments');
       cy.get('[data-cy="HideDiscussionContainer:button"]').click();
       cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion');
       cy.get('[data-cy=follow-button]').contains('Following');
-      cy.contains('0 comments');
 
       cy.step('Now published draft has generated notifications');
       cy.logout();

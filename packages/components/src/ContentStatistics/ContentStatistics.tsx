@@ -1,89 +1,88 @@
-import { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Flex, Text } from 'theme-ui';
 
 import { Button } from '../Button/Button';
-import { Icon } from '../Icon/Icon';
+import { StatisticsList } from './ContentStatisticsList';
 
-import type { availableGlyphs } from '../Icon/types';
+import type { IStatistic } from './types';
 
 export interface IProps {
-  statistics: {
-    icon: availableGlyphs;
-    label: string;
-  }[];
+  statistics: IStatistic[];
   alwaysShow?: boolean;
 }
 
-export const ContentStatistics = (props: IProps) => {
-  const { alwaysShow, statistics } = props;
+export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
   const [showStats, setShowStats] = useState(false);
+  const [activeModal, setActiveModal] = useState<React.ReactNode | null>(null);
 
   const handleShowStats = () => {
     setShowStats(!showStats);
   };
 
+  const handleOpenModal = useCallback(async (stat: IStatistic) => {
+    if (!stat.modalComponent) return;
+
+    let data = undefined;
+    if (stat.onOpen) {
+      try {
+        data = await stat.onOpen();
+      } catch (error) {
+        console.error('Error loading modal data:', error);
+      }
+    }
+
+    const modalElement = stat.modalComponent(data);
+    if (React.isValidElement(modalElement)) {
+      setActiveModal(
+        React.cloneElement(modalElement, {
+          onClose: () => setActiveModal(null),
+        }),
+      );
+    } else {
+      setActiveModal(null);
+    }
+  }, []);
+
+  const visible = showStats || alwaysShow === true;
+
   return (
     <Flex
-      data-cy={'ContentStatistics'}
-      py={1}
       sx={{
-        alignItems: ['flex-start', 'center', 'center'],
-        justifyContent: 'center',
-        gap: 2,
-        flexDirection: alwaysShow ? 'row' : ['column', 'row', 'row'],
-        pl: alwaysShow ? 0 : [2, 0, 0],
+        flexDirection: ['column', 'row'],
+        justifyContent: ['flex-start', 'center'],
+        alignItems: ['flex-start', 'center'],
+        gap: [2, 3],
+        py: 1,
+        pl: [2, 0],
       }}
     >
       <Flex
         sx={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          display: alwaysShow ? 'none' : ['flex', 'none', 'none'],
+          display: [alwaysShow ? 'none' : 'flex', 'none'],
           width: '100%',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
         onClick={handleShowStats}
       >
-        <Text
-          sx={{
-            fontSize: '13px',
-          }}
-        >
-          {showStats ? '' : 'More Information'}
-        </Text>
+        <Text sx={{ fontSize: '13px' }}>{showStats ? '' : 'More Information'}</Text>
         <Button
           type="button"
           variant="subtle"
-          showIconOnly={true}
+          showIconOnly
           icon={showStats ? 'chevron-up' : 'chevron-down'}
-          small={true}
+          small
           sx={{
-            borderWidth: '0px',
-            '&:hover': {
-              bg: 'white',
-            },
-            '&:active': {
-              bg: 'white',
-            },
+            borderWidth: 0,
+            '&:hover': { bg: 'white' },
+            '&:active': { bg: 'white' },
           }}
         />
       </Flex>
-      {statistics.map((statistic, idx) => (
-        <Flex
-          key={idx}
-          px={2}
-          py={1}
-          mb={1}
-          sx={{
-            alignItems: 'center',
-            fontSize: '1',
-            display: [showStats || alwaysShow ? 'flex' : 'none', 'flex', 'flex'],
-          }}
-        >
-          <Icon glyph={statistic.icon} mr={1} size={'sm'} opacity={'0.5'} />
-          <Text>{statistic.label}</Text>
-        </Flex>
-      ))}
+
+      <StatisticsList statistics={statistics} visible={visible} onOpenModal={handleOpenModal} />
+
+      {activeModal && activeModal}
     </Flex>
   );
 };

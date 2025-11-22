@@ -122,6 +122,10 @@ export class Profile {
 export type NotificationActionType = 'newContent' | 'newComment';
 export type NotificationContentType = 'researchUpdate' | 'comment' | 'reply';
 export type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photo'>;
+export type ProfileListItem = Pick<
+  Profile,
+  'id' | 'username' | 'displayName' | 'photo' | 'country' | 'badges' | 'type'
+>;
 
 type NotificationContent = News | Comment | Question | ResearchUpdate;
 type NotificationSourceContentType = SubscribableContentTypes;

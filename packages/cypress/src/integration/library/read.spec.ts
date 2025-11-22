@@ -71,6 +71,14 @@ describe('[Library]', () => {
 
         cy.step('Project has basic info');
         cy.title().should('eq', `${item.title} - Library - Precious Plastic`);
+
+        cy.step('All metadata visible');
+        cy.get('[data-cy=ContentStatistics-views]').contains(/\d/);
+        cy.get('[data-cy=ContentStatistics-useful]').contains(/\d/);
+        cy.get('[data-cy=ContentStatistics-following]').contains(/\d/);
+        cy.get('[data-cy=ContentStatistics-comments]').contains(/\d/);
+        cy.get('[data-cy=ContentStatistics-steps]').contains(/\d/);
+
         cy.get('[data-cy=library-basis]').then(($summary) => {
           expect($summary).to.contain(users.settings_workplace_new.username, 'Author');
           expect($summary).to.contain('Updated', 'Edit');

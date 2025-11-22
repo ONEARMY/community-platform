@@ -71,6 +71,7 @@ export const ContentStatistics = (props: IProps) => {
       {statistics.map((statistic, idx) => (
         <Flex
           key={idx}
+          data-cy={`ContentStatistics-${statistic.label}`}
           sx={{
             alignItems: 'center',
             fontSize: '1',

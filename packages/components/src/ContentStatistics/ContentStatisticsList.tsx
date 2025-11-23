@@ -46,6 +46,7 @@ const StatisticItem = ({
       }}
       onClick={() => displayModal && onOpenModal(statistic)}
       data-testid={`stat-${statistic.icon}`}
+      data-cy={`stat-${statistic.icon}`}
     >
       <Icon glyph={statistic.icon} mr={1} size="sm" opacity="0.5" />
       <Text

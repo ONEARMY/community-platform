@@ -20,6 +20,7 @@ import { logger } from 'src/logger';
 import { DraftTag } from 'src/pages/common/Drafts/DraftTag';
 import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag';
 import { buildStatisticsLabel } from 'src/utils/helpers';
+import { createUsefulStatistic } from 'src/utils/statistics';
 import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui';
 
 import { researchService } from '../research.service';
@@ -253,6 +254,7 @@ const ResearchDescription = (props: IProps) => {
               statUnit: 'view',
               usePlural: true,
             }),
+            count: research.totalViews || 0,
           },
           {
             icon: 'thunderbolt-grey',
@@ -261,15 +263,9 @@ const ResearchDescription = (props: IProps) => {
               statUnit: 'following',
               usePlural: false,
             }),
+            count: subscribersCount || 0,
           },
-          {
-            icon: 'star',
-            label: buildStatisticsLabel({
-              stat: votedUsefulCount || 0,
-              statUnit: 'useful',
-              usePlural: false,
-            }),
-          },
+          createUsefulStatistic('research', research.id, research.usefulCount),
           {
             icon: 'comment-outline',
             label: buildStatisticsLabel({
@@ -277,6 +273,7 @@ const ResearchDescription = (props: IProps) => {
               statUnit: 'comment',
               usePlural: true,
             }),
+            count: commentsCount || 0,
           },
           {
             icon: 'update',
@@ -285,6 +282,7 @@ const ResearchDescription = (props: IProps) => {
               statUnit: 'update',
               usePlural: true,
             }),
+            count: updatesCount || 0,
           },
         ]}
       />

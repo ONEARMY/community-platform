@@ -9,15 +9,14 @@ import type { ProfileListItem } from 'oa-shared';
 interface IProps {
   profiles: ProfileListItem[];
   onClose?: () => void;
-  dataCy?: string;
   children?: React.ReactNode;
   header: string;
 }
 
-export const ProfileList = ({ profiles = [], onClose, dataCy, header }: IProps) => {
+export const ProfileList = ({ profiles = [], onClose, header }: IProps) => {
   return (
     <Flex
-      data-cy={dataCy}
+      data-cy="profile-list-modal"
       sx={{
         position: 'fixed',
         inset: 0,

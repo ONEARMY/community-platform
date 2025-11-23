@@ -37,12 +37,9 @@ const StatisticItem = ({
     <Flex
       sx={{
         alignItems: 'center',
-        fontSize: 1,
-        display: [visible ? 'flex' : 'none', 'flex'],
-        cursor: displayModal ? 'pointer' : 'default',
-        px: 2,
-        py: 1,
-        mb: 1,
+        fontSize: '1',
+        paddingX: 2,
+        display: [visible ? 'flex' : 'none', 'flex', 'flex'],
       }}
       onClick={() => displayModal && onOpenModal(statistic)}
       data-testid={`stat-${statistic.icon}`}

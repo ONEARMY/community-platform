@@ -231,12 +231,14 @@ export const CommentSectionSupabase = (props: IProps) => {
       <Flex sx={{ flexDirection: 'column', gap: 2 }} id="discussion">
         <Flex
           sx={{
-            flexDirection: ['column', 'row'],
+            flexDirection: ['column', 'column', 'row'],
             gap: 2,
           }}
         >
           <Flex
             sx={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
               alignItems: 'center',
               gap: 1,
               justifyContent: 'space-between',
@@ -250,13 +252,6 @@ export const CommentSectionSupabase = (props: IProps) => {
               contentType={sourceType}
               itemId={sourceId}
               setSubscribersCount={setSubscribersCount}
-              sx={{
-                px: [2, 3, 3],
-                py: [1, 2, 2],
-                pl: ['2rem', 9, 9],
-                fontSize: [1, 2, 2],
-                height: ['2rem', 'auto', 'auto'],
-              }}
             />
           </Flex>
           {comments.length >= 5 && <CommentSort sortBy={sortBy} onSortChange={setSortBy} />}

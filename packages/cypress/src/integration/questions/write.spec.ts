@@ -94,7 +94,6 @@ describe('[Question]', () => {
       // contains images
 
       cy.step('All ready for a discussion');
-      cy.contains('0 comments');
       cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion');
       cy.get('[data-cy=follow-button]').contains('Following');
 

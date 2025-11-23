@@ -17,10 +17,9 @@ export const Category = (props: Props) => {
         data-cy="category"
         sx={{
           fontSize: 1,
-          color: '#555555',
-          backgroundColor: '#cccccc',
-          paddingX: '7.5px',
-          paddingY: '5px',
+          backgroundColor: 'lightGrey',
+          paddingX: 2,
+          paddingY: 1,
           borderRadius: 1,
           ...sx,
         }}

@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router';
 import {
+  AuthorDisplay,
   Button,
   DisplayDate,
   ImageGallery,
@@ -12,7 +13,6 @@ import {
 import { ClientOnly } from 'remix-utils/client-only';
 import { DownloadWrapper } from 'src/common/DownloadWrapper';
 import CollapsableCommentSection from 'src/pages/common/CommentsSupabase/CollapsableCommentSection';
-import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag';
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { Box, Card, Flex, Heading, Text } from 'theme-ui';
 
@@ -107,64 +107,54 @@ const ResearchUpdate = (props: IProps) => {
           }}
         >
           <Card variant="responsive">
-            <Flex sx={{ flexDirection: 'column', padding: [2, 3, 4] }}>
-              <Flex sx={{ flexDirection: ['column', 'row', 'row'] }}>
-                <Box sx={{ width: ['100%', '75%', '75%'] }}>
-                  {update.author && (
-                    <Box sx={{ mb: 2 }} data-testid="collaborator/creator">
-                      <UserNameTag author={update.author} />
-                    </Box>
-                  )}
+            <Flex sx={{ flexDirection: 'column', padding: [2, 4], gap: 2 }}>
+              <Flex
+                sx={{
+                  flexDirection: 'row',
+                  gap: 2,
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Heading as="h2">{update.title}</Heading>
 
-                  <Heading as="h2" sx={{ mb: 2 }}>
-                    {update.title}
-                  </Heading>
-                </Box>
-
-                <Flex
-                  sx={{
-                    flexDirection: ['row', 'column', 'column'],
-                    width: ['100%', '25%', '25%'],
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-end',
-                  }}
-                >
-                  <Flex sx={{ flexDirection: ['column'] }}>
-                    <Text variant="auxiliary">
-                      <DisplayDate createdAt={update.createdAt} action="Created" />
-                    </Text>
-                    {update.modifiedAt !== update.createdAt && (
-                      <Text variant="auxiliary">
-                        <DisplayDate
-                          createdAt={update.createdAt}
-                          modifiedAt={update.modifiedAt}
-                          action="Updated"
-                        />
-                      </Text>
-                    )}
-                  </Flex>
-                  {/* Show edit button for the creator of the research OR a super-admin */}
-                  {isEditable && (
-                    <Link to={'/research/' + slug + '/edit-update/' + update.id}>
-                      <Button
-                        type="button"
-                        variant="primary"
-                        data-cy="edit-update"
-                        ml="auto"
-                        mt={[0, 2, 2]}
-                      >
-                        Edit
-                      </Button>
-                    </Link>
-                  )}
-                </Flex>
+                {isEditable && (
+                  <Link to={'/research/' + slug + '/edit-update/' + update.id}>
+                    <Button type="button" variant="primary" data-cy="edit-update">
+                      Edit
+                    </Button>
+                  </Link>
+                )}
               </Flex>
-              <Box>
-                <Text mt={3} variant="paragraph" color={'grey'} sx={{ whiteSpace: 'pre-line' }}>
-                  <LinkifyText>{update.description}</LinkifyText>
+
+              <Flex sx={{ flexDirection: ['row'], alignItems: 'center', gap: 2 }}>
+                {update.author && (
+                  <Box data-testid="collaborator/creator">
+                    <AuthorDisplay author={update.author} />
+                  </Box>
+                )}
+
+                <Text variant="auxiliary">
+                  <DisplayDate createdAt={update.createdAt} action="Created" />
                 </Text>
-              </Box>
+
+                {update.modifiedAt !== update.createdAt && (
+                  <Text variant="auxiliary">
+                    <DisplayDate
+                      createdAt={update.createdAt}
+                      modifiedAt={update.modifiedAt}
+                      action="Updated"
+                    />
+                  </Text>
+                )}
+              </Flex>
             </Flex>
+
+            <Flex sx={{ padding: 4, paddingBottom: 4, paddingTop: 2 }}>
+              <Text variant="paragraph" color={'grey'} sx={{ whiteSpace: 'pre-line' }}>
+                <LinkifyText>{update.description}</LinkifyText>
+              </Text>
+            </Flex>
+
             <Box sx={{ width: '100%' }}>
               {update.videoUrl && (
                 <ClientOnly fallback={<></>}>

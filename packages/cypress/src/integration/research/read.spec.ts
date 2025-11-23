@@ -75,6 +75,14 @@ describe('[Research]', () => {
         cy.visit(researchArticleUrl);
 
         cy.title().should('eq', `${article.title} - Research - Precious Plastic`);
+
+        cy.step('All metadata visible');
+        cy.get('[data-cy=ContentStatistics-views]').contains(/\d/);
+        cy.get('[data-cy=ContentStatistics-following]').contains(/\d/);
+        cy.get('[data-cy=ContentStatistics-useful]').contains(/\d/);
+        cy.get('[data-cy=ContentStatistics-comment]').contains(/\d/);
+        cy.get('[data-cy=ContentStatistics-updates]').contains(/\d/);
+
         cy.step('[Populates title, SEO and social tags]');
         cy.title().should('eq', pageTitle);
         cy.get('meta[name="description"]').should('have.attr', 'content', description);

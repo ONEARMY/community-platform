@@ -64,7 +64,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         modified_at, 
         deleted,
         is_draft,
-        update_author:profiles(id, display_name, username, country, badges:profile_badges_relations(
+        update_author:profiles(id, display_name, username, photo, country, badges:profile_badges_relations(
           profile_badges(
             id,
             name,

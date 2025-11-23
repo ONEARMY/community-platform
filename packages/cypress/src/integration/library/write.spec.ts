@@ -197,7 +197,7 @@ describe('[Library]', () => {
 
       const firstSlug = `/library/qwerty-${randomId}`;
       cy.url().should('include', firstSlug);
-      cy.get('[data-cy=status-draft]').should('be.visible');
+      cy.contains('Draft');
 
       cy.step("Drafted project should not appear on user's profile");
       cy.visit('/u/' + creator.displayName);

@@ -31,7 +31,7 @@ const StatisticItem = ({
   visible: boolean;
   onOpenModal: (stat: IStatistic) => Promise<void>;
 }) => {
-  const displayModal = !!statistic.modalComponent && statistic.count;
+  const displayModal = !!statistic.modalComponent && statistic.stat;
 
   return (
     <Flex

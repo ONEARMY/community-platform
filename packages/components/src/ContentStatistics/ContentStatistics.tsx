@@ -47,21 +47,22 @@ export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
 
   return (
     <Flex
+      data-cy="ContentStatistics"
       sx={{
-        flexDirection: ['column', 'row'],
-        justifyContent: ['flex-start', 'center'],
-        alignItems: ['flex-start', 'center'],
-        gap: [2, 3],
-        py: 1,
-        pl: [2, 0],
+        alignItems: ['flex-start', 'center', 'center'],
+        gap: [0,2],
+        flexDirection: alwaysShow ? 'row' : ['column', 'row', 'row'],
+        pl: alwaysShow ? 0 : [2, 0, 0],
+        flexWrap: 'wrap',
       }}
     >
       <Flex
         sx={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           display: [alwaysShow ? 'none' : 'flex', 'none'],
           width: '100%',
-          justifyContent: 'space-between',
-          alignItems: 'center',
         }}
         onClick={handleShowStats}
       >

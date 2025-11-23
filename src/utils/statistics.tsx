@@ -13,7 +13,7 @@ export function createUsefulStatistic(
 ): IStatistic {
   return {
     icon: 'star',
-    count: usefulCount,
+    stat: usefulCount,
     label: buildStatisticsLabel({
       stat: usefulCount,
       statUnit: 'useful',

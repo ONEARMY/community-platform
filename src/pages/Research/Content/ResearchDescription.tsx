@@ -181,7 +181,7 @@ const ResearchDescription = (props: IProps) => {
                 statUnit: 'view',
                 usePlural: true,
               }),
-              count: research.totalViews || 0,
+              stat: research.totalViews || 0,
             },
             {
               icon: 'thunderbolt-grey',
@@ -190,7 +190,7 @@ const ResearchDescription = (props: IProps) => {
                 statUnit: 'following',
                 usePlural: false,
               }),
-              count: subscribersCount || 0,
+              stat: subscribersCount || 0,
             },
             createUsefulStatistic('research', research.id, research.usefulCount),
             {
@@ -200,7 +200,7 @@ const ResearchDescription = (props: IProps) => {
                 statUnit: 'comment',
                 usePlural: true,
               }),
-              count: commentsCount || 0,
+              stat: commentsCount || 0,
             },
             {
               icon: 'update',
@@ -209,7 +209,7 @@ const ResearchDescription = (props: IProps) => {
                 statUnit: 'update',
                 usePlural: true,
               }),
-              count: updatesCount || 0,
+              stat: updatesCount || 0,
             },
           ]}
           alwaysShow

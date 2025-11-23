@@ -244,9 +244,9 @@ export const LibraryDescription = (props: IProps) => {
                 statUnit: 'view',
                 usePlural: true,
               }),
-              count: item.totalViews,
+              stat: item.totalViews,
             },
-            createUsefulStatistic('projects', item.id, item.usefulCount),
+            createUsefulStatistic('projects', item.id, votedUsefulCount || 0),
             {
               icon: 'thunderbolt-grey',
               label: buildStatisticsLabel({
@@ -254,7 +254,7 @@ export const LibraryDescription = (props: IProps) => {
                 statUnit: 'following',
                 usePlural: false,
               }),
-              count: subscribersCount,
+              stat: subscribersCount,
             },
             {
               icon: 'comment-outline',
@@ -263,7 +263,7 @@ export const LibraryDescription = (props: IProps) => {
                 statUnit: 'comment',
                 usePlural: true,
               }),
-              count: commentsCount || 0,
+              stat: commentsCount || 0,
             },
             {
               icon: 'update',
@@ -272,7 +272,7 @@ export const LibraryDescription = (props: IProps) => {
                 statUnit: 'step',
                 usePlural: true,
               }),
-              count: item.steps.length,
+              stat: item.steps.length,
             },
           ]}
           alwaysShow

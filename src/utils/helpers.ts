@@ -127,8 +127,8 @@ export const buildStatisticsLabel = ({
   usePlural: boolean;
 }): string => {
   if (stat === 1 || !usePlural) {
-    return `${statUnit}`;
+    return `${stat} ${statUnit}`;
   }
 
-  return `${statUnit}s`;
+  return `${stat} ${statUnit}s`;
 };

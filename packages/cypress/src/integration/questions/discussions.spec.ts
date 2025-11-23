@@ -86,7 +86,7 @@ describe('[Questions.Discussions]', () => {
     cy.get('[data-cy=comment-sort-select]').click();
     cy.contains('Newest').click();
     cy.get('[data-cy=comment-sort-select]').contains('Newest');
-    cy.get('[data-cy=comment-text]').first().should('contain', comment3);
+    cy.get('[data-cy=comment-text]').first().should('contain', comment5);
 
     cy.step('Sort by most useful - comment3 should be first (newer of the two useful)');
     cy.get('[data-cy=comment-sort-select]').click();

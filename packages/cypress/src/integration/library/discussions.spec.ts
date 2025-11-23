@@ -27,18 +27,33 @@ describe('[Library.Discussions]', () => {
     const comment1 = `First comment ${randomId}`;
     const comment2 = `Second comment ${randomId}`;
     const comment3 = `Third comment ${randomId}`;
+    const comment4 = `Fourth comment ${randomId}`;
+    const comment5 = `Fifth comment ${randomId}`;
 
-    cy.step('Create user and add three comments');
+    cy.step('Create user and add five comments');
     cy.signUpNewUser(commenter);
     cy.completeUserProfile(commenter.username);
     cy.visit(projectPath);
 
     cy.addComment(comment1);
     cy.wait(1000);
+    cy.get('[data-cy=comment-sort-select]').should('not.exist');
+
     cy.addComment(comment2);
     cy.wait(1000);
+    cy.get('[data-cy=comment-sort-select]').should('not.exist');
+
     cy.addComment(comment3);
     cy.wait(1000);
+    cy.get('[data-cy=comment-sort-select]').should('not.exist');
+
+    cy.addComment(comment4);
+    cy.wait(1000);
+    cy.get('[data-cy=comment-sort-select]').should('not.exist');
+
+    cy.addComment(comment5);
+    cy.wait(1000);
+    cy.get('[data-cy=comment-sort-select]').should('be.visible');
 
     cy.step('Mark first and third comments as useful');
     cy.get('[data-cy=comment-text]')

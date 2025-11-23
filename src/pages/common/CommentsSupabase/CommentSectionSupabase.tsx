@@ -259,7 +259,7 @@ export const CommentSectionSupabase = (props: IProps) => {
               }}
             />
           </Flex>
-          <CommentSort sortBy={sortBy} onSortChange={setSortBy} />
+          {comments.length >= 5 && <CommentSort sortBy={sortBy} onSortChange={setSortBy} />}
         </Flex>
         {displayedComments.map((comment) => (
           <Box key={comment.id}>

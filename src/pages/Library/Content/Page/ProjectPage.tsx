@@ -1,29 +1,36 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router';
 import { observer } from 'mobx-react';
 import {
   ArticleCallToActionSupabase,
   Button,
+  ConfirmModal,
   UsefulStatsButton,
   UserEngagementWrapper,
 } from 'oa-components';
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
+import { logger } from 'src/logger';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { CommentSectionSupabase } from 'src/pages/common/CommentsSupabase/CommentSectionSupabase';
 import { usefulService } from 'src/services/usefulService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { hasAdminRights } from 'src/utils/helpers';
 import { onUsefulClick } from 'src/utils/onUsefulClick';
 import { Card, Flex } from 'theme-ui';
 
+import { libraryService } from '../../library.service';
 import { LibraryDescription } from './LibraryDescription';
 import Step from './LibraryStep';
 
 import type { ContentType, Project, ProjectStep } from 'oa-shared';
 
-type ProjectPageProps = {
+const DELETION_LABEL = 'Project marked for deletion';
+
+interface ProjectPageProps {
   item: Project;
-};
+}
 
 export const ProjectPage = observer(({ item }: ProjectPageProps) => {
   const [subscribersCount, setSubscribersCount] = useState<number>(item.subscriberCount);
@@ -59,9 +66,73 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
     });
   };
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleDelete = async () => {
+    try {
+      await libraryService.deleteProject(item.id);
+      trackEvent({
+        category: 'Library',
+        action: 'Deleted',
+        label: item.title,
+      });
+      logger.debug(
+        {
+          category: 'Library',
+          action: 'Deleted',
+          label: item.title,
+        },
+        DELETION_LABEL,
+      );
+
+      navigate('/library');
+    } catch (err) {
+      logger.error(err);
+      // at least log the error
+    }
+  };
+
+  const isEditable = useMemo(() => {
+    return (
+      !!activeUser && (hasAdminRights(activeUser) || item.author?.username === activeUser.username)
+    );
+  }, [activeUser, item.author]);
+
   return (
     <>
-      <Breadcrumbs content={item} variant="library" />
+      <Breadcrumbs content={item} variant="library">
+        {isEditable && (
+          <Flex sx={{ gap: 2, paddingLeft: 2 }}>
+            <Link to={'/library/' + item.slug + '/edit'} data-cy="edit">
+              <Button type="button" variant="primary">
+                Edit
+              </Button>
+            </Link>
+
+            <Button
+              type="button"
+              data-cy="Library: delete button"
+              variant={'secondary'}
+              icon="delete"
+              disabled={item.deleted}
+              onClick={() => setShowDeleteModal(true)}
+            >
+              Delete
+            </Button>
+
+            <ConfirmModal
+              isOpen={showDeleteModal}
+              message="Are you sure you want to delete this project?"
+              confirmButtonText="Delete"
+              handleCancel={() => setShowDeleteModal(false)}
+              handleConfirm={() => handleDelete()}
+            />
+          </Flex>
+        )}
+      </Breadcrumbs>
+
       <LibraryDescription
         item={item}
         loggedInUser={activeUser}

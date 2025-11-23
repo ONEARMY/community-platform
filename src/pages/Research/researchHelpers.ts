@@ -32,6 +32,6 @@ export const researchStatusColour = (researchStatus?: ResearchStatus): string =>
     case 'complete':
       return 'betaGreen';
     default:
-      return 'blue';
+      return 'softblue';
   }
 };

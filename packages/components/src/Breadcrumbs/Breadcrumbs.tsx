@@ -4,6 +4,7 @@ import { Icon } from '../Icon/Icon';
 import { BreadcrumbItem } from './BreadcrumbsItem';
 
 type Step = { text: string; link?: string };
+
 export interface BreadcrumbsProps {
   steps: Step[];
 }
@@ -14,7 +15,6 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
       sx={{
         marginLeft: -1,
         marginTop: [2, 2, 7],
-        marginBottom: 2,
         padding: 0,
         alignItems: 'center',
         width: '100%',

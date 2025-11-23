@@ -244,42 +244,40 @@ export const LibraryDescription = (props: IProps) => {
                 statUnit: 'view',
                 usePlural: true,
               }),
-              stat: item.totalViews,
-              statUnit: 'view',
-              usePlural: true,
-            }),
-            count: item.totalViews,
-          },
-          createUsefulStatistic('projects', item.id, item.usefulCount),
-          {
-            icon: 'thunderbolt-grey',
-            label: buildStatisticsLabel({
-              stat: subscribersCount,
-              statUnit: 'following',
-              usePlural: false,
-            }),
-            count: subscribersCount,
-          },
-          {
-            icon: 'comment-outline',
-            label: buildStatisticsLabel({
-              stat: commentsCount || 0,
-              statUnit: 'comment',
-              usePlural: true,
-            }),
-            count: commentsCount || 0,
-          },
-          {
-            icon: 'update',
-            label: buildStatisticsLabel({
-              stat: item.steps.length,
-              statUnit: 'step',
-              usePlural: true,
-            }),
-            count: item.steps.length,
-          },
-        ]}
-      />
+              count: item.totalViews,
+            },
+            createUsefulStatistic('projects', item.id, item.usefulCount),
+            {
+              icon: 'thunderbolt-grey',
+              label: buildStatisticsLabel({
+                stat: subscribersCount,
+                statUnit: 'following',
+                usePlural: false,
+              }),
+              count: subscribersCount,
+            },
+            {
+              icon: 'comment-outline',
+              label: buildStatisticsLabel({
+                stat: commentsCount || 0,
+                statUnit: 'comment',
+                usePlural: true,
+              }),
+              count: commentsCount || 0,
+            },
+            {
+              icon: 'update',
+              label: buildStatisticsLabel({
+                stat: item.steps.length,
+                statUnit: 'step',
+                usePlural: true,
+              }),
+              count: item.steps.length,
+            },
+          ]}
+          alwaysShow
+        />
+      </Flex>
     </Card>
   );
 };

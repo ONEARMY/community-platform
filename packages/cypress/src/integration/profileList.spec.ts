@@ -5,7 +5,7 @@ describe('[ProfileList Modal]', () => {
   const question = MOCK_DATA.questions[0];
   const { slug } = question;
 
-  it('[Opens and closes the useful voters modal]', () => {
+  it('[Opens the useful voters modal]', () => {
     const user = generateNewUserDetails();
     cy.signUpNewUser(user);
     cy.visit(`/questions/${slug}`);

@@ -19,7 +19,7 @@ import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
 import { onUsefulClick } from 'src/utils/onUsefulClick';
 import { createUsefulStatistic } from 'src/utils/statistics';
-import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
+import { Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';

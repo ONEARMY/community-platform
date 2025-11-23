@@ -17,7 +17,7 @@ import { ClientOnly } from 'remix-utils/client-only';
 import { DraftTag } from 'src/pages/common/Drafts/DraftTag';
 import { buildStatisticsLabel } from 'src/utils/helpers';
 import { createUsefulStatistic } from 'src/utils/statistics';
-import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui';
+import { Card, Divider, Flex, Heading, Text } from 'theme-ui';
 
 import { researchStatusColour } from '../researchHelpers';
 
@@ -181,42 +181,40 @@ const ResearchDescription = (props: IProps) => {
                 statUnit: 'view',
                 usePlural: true,
               }),
-              stat: research.totalViews || 0,
-              statUnit: 'view',
-              usePlural: true,
-            }),
-            count: research.totalViews || 0,
-          },
-          {
-            icon: 'thunderbolt-grey',
-            label: buildStatisticsLabel({
-              stat: subscribersCount || 0,
-              statUnit: 'following',
-              usePlural: false,
-            }),
-            count: subscribersCount || 0,
-          },
-          createUsefulStatistic('research', research.id, research.usefulCount),
-          {
-            icon: 'comment-outline',
-            label: buildStatisticsLabel({
-              stat: commentsCount || 0,
-              statUnit: 'comment',
-              usePlural: true,
-            }),
-            count: commentsCount || 0,
-          },
-          {
-            icon: 'update',
-            label: buildStatisticsLabel({
-              stat: updatesCount || 0,
-              statUnit: 'update',
-              usePlural: true,
-            }),
-            count: updatesCount || 0,
-          },
-        ]}
-      />
+              count: research.totalViews || 0,
+            },
+            {
+              icon: 'thunderbolt-grey',
+              label: buildStatisticsLabel({
+                stat: subscribersCount || 0,
+                statUnit: 'following',
+                usePlural: false,
+              }),
+              count: subscribersCount || 0,
+            },
+            createUsefulStatistic('research', research.id, research.usefulCount),
+            {
+              icon: 'comment-outline',
+              label: buildStatisticsLabel({
+                stat: commentsCount || 0,
+                statUnit: 'comment',
+                usePlural: true,
+              }),
+              count: commentsCount || 0,
+            },
+            {
+              icon: 'update',
+              label: buildStatisticsLabel({
+                stat: updatesCount || 0,
+                statUnit: 'update',
+                usePlural: true,
+              }),
+              count: updatesCount || 0,
+            },
+          ]}
+          alwaysShow
+        />
+      </Flex>
     </Card>
   );
 };

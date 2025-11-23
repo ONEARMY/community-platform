@@ -231,7 +231,9 @@ export const CommentSectionSupabase = (props: IProps) => {
       <Flex sx={{ flexDirection: 'column', gap: 2 }} id="discussion">
         <Flex
           sx={{
-            flexDirection: ['column', 'column', 'row'],
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            alignItems: 'center',
             gap: 2,
           }}
         >
@@ -241,8 +243,6 @@ export const CommentSectionSupabase = (props: IProps) => {
               flexWrap: 'wrap',
               alignItems: 'center',
               gap: 1,
-              justifyContent: 'space-between',
-              flex: 1,
             }}
           >
             <CommentsTitle comments={comments} />

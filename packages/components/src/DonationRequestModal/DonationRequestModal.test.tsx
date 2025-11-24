@@ -6,7 +6,6 @@ import { render } from '../test/utils';
 import { DonationRequestModal } from './DonationRequestModal';
 
 describe('DonationRequestModal', () => {
-  const link = 'http://bbc.co.uk/';
   const body =
     'All of the content here is free. Your donation supports this library of Open Source recycling knowledge. Making it possible for everyone in the world to use it and start recycling.';
   const iframeSrc = 'https://donorbox.org/embed/precious-plastic-2?default_interval=o&amp;a=b';
@@ -19,11 +18,9 @@ describe('DonationRequestModal', () => {
     const { getByText } = render(
       <DonationRequestModal
         body={body}
-        callback={vi.fn()}
         iframeSrc={iframeSrc}
         imageURL={imageURL}
         isOpen={true}
-        link={link}
         onDidDismiss={mockCall}
       />,
     );
@@ -35,11 +32,9 @@ describe('DonationRequestModal', () => {
     const { container } = render(
       <DonationRequestModal
         body={body}
-        callback={vi.fn()}
         iframeSrc={iframeSrc}
         imageURL={imageURL}
         isOpen={false}
-        link={link}
         onDidDismiss={() => vi.fn()}
       />,
     );

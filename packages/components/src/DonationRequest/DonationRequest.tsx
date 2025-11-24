@@ -1,23 +1,17 @@
 import { AspectImage, Card, Flex, Text } from 'theme-ui';
 
-import { Button } from '../Button/Button';
-import { ExternalLink } from '../ExternalLink/ExternalLink';
-
-export interface IProps {
+export type DonationRequestProps = {
   body: string | undefined;
-  callback: () => void;
   iframeSrc: string | undefined;
   imageURL: string | undefined;
-  link: string;
-}
+};
 
 const FALLBACK_DONATION_WIDGET = 'https://donorbox.org/embed/onearmy?a=b';
 const REQUEST_TITLE = 'Support our work';
 const REQUEST_THANKYOU = 'Thank you for helping to make this possible';
-export const BUTTON_LABEL = 'Download';
 
-export const DonationRequest = (props: IProps) => {
-  const { body, callback, iframeSrc, imageURL, link } = props;
+export const DonationRequest = (props: DonationRequestProps) => {
+  const { body, iframeSrc, imageURL } = props;
   const iframeArgs = {
     allowpaymentrequest: 'allowpaymentrequest',
     allow: 'payment',
@@ -82,26 +76,6 @@ export const DonationRequest = (props: IProps) => {
           </Flex>
         </Flex>
       </Card>
-      <Flex
-        sx={{
-          backgroundColor: 'offWhite',
-          borderRadius: '0 0 4px 4px',
-          flexDirection: ['column', 'row'],
-          padding: 2,
-          gap: 2,
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-        }}
-      >
-        <ExternalLink
-          href={link}
-          onClick={callback}
-          data-cy="DonationRequestSkip"
-          data-testid="DonationRequestSkip"
-        >
-          <Button>{BUTTON_LABEL}</Button>
-        </ExternalLink>
-      </Flex>
     </>
   );
 };

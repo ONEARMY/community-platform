@@ -3,33 +3,29 @@ import { Modal } from '../Modal/Modal';
 
 export interface IProps {
   body: string | undefined;
-  callback: () => void;
   imageURL: string | undefined;
   iframeSrc: string | undefined;
   isOpen: boolean;
-  link: string;
   onDidDismiss: () => void;
+  children?: React.ReactNode | React.ReactNode[];
 }
 
 export const DonationRequestModal = (props: IProps) => {
-  const { body, callback, iframeSrc, imageURL, isOpen, link, onDidDismiss } = props;
-
-  const sx = {
-    width: ['500px', '750px', '1050px'],
-    minWidth: '350px',
-    border: '0 !important',
-    background: 'none !important',
-  };
+  const { body, iframeSrc, imageURL, isOpen, onDidDismiss, children } = props;
 
   return (
-    <Modal onDidDismiss={onDidDismiss} isOpen={isOpen} sx={sx}>
-      <DonationRequest
-        body={body}
-        callback={callback}
-        iframeSrc={iframeSrc}
-        link={link}
-        imageURL={imageURL}
-      />
+    <Modal
+      onDidDismiss={onDidDismiss}
+      isOpen={isOpen}
+      sx={{
+        width: ['500px', '750px', '1050px'],
+        minWidth: '350px',
+        border: '0 !important',
+        background: 'none !important',
+      }}
+    >
+      <DonationRequest body={body} iframeSrc={iframeSrc} imageURL={imageURL} />
+      {children}
     </Modal>
   );
 };

@@ -4,7 +4,7 @@ import { fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { render } from '../test/utils';
-import { BUTTON_LABEL, DonationRequest } from './DonationRequest';
+import { DonationRequest } from './DonationRequest';
 
 describe('DonationRequest', () => {
   it('shows the expected content', async () => {
@@ -13,13 +13,7 @@ describe('DonationRequest', () => {
     const imageURL = 'anyold.png';
 
     const screen = render(
-      <DonationRequest
-        body={body}
-        callback={() => console.log('skipped')}
-        iframeSrc={iframeSrc}
-        imageURL={imageURL}
-        link=""
-      />,
+      <DonationRequest body={body} iframeSrc={iframeSrc} imageURL={imageURL} />,
     );
     const image = screen.getByTestId('donationRequestImage');
     const iframe = screen.getByTestId('donationRequestIframe');
@@ -33,11 +27,9 @@ describe('DonationRequest', () => {
     const body = 'All of the content here is free.';
     const mockCallback = vi.fn();
 
-    const screen = render(
-      <DonationRequest body={body} callback={mockCallback} iframeSrc="" imageURL="" link="" />,
-    );
+    const screen = render(<DonationRequest body={body} iframeSrc="" imageURL="" />);
 
-    const skipButton = screen.getByText(BUTTON_LABEL);
+    const skipButton = screen.getByText('Download');
     fireEvent.click(skipButton);
 
     expect(mockCallback).toHaveBeenCalled();

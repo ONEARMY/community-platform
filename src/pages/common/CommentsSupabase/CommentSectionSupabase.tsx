@@ -243,6 +243,8 @@ export const CommentSectionSupabase = (props: IProps) => {
               flexWrap: 'wrap',
               alignItems: 'center',
               gap: 1,
+              justifyContent: 'space-between',
+              flex: '1 1 auto',
             }}
           >
             <CommentsTitle comments={comments} />

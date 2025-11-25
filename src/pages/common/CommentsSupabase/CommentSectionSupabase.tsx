@@ -235,6 +235,7 @@ export const CommentSectionSupabase = (props: IProps) => {
             flexWrap: 'wrap',
             alignItems: 'center',
             gap: 2,
+            containerType: 'inline-size',
           }}
         >
           <Flex

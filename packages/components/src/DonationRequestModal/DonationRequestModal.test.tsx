@@ -9,7 +9,7 @@ describe('DonationRequestModal', () => {
   const body =
     'All of the content here is free. Your donation supports this library of Open Source recycling knowledge. Making it possible for everyone in the world to use it and start recycling.';
   const iframeSrc = 'https://donorbox.org/embed/precious-plastic-2?default_interval=o&amp;a=b';
-  const imageURL =
+  const imageUrl =
     'https://images.unsplash.com/photo-1520222984843-df35ebc0f24d?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjF9';
 
   it('shows the modal when isOpen is true', () => {
@@ -17,9 +17,9 @@ describe('DonationRequestModal', () => {
 
     const { getByText } = render(
       <DonationRequestModal
-        body={body}
+        description={body}
         iframeSrc={iframeSrc}
-        imageURL={imageURL}
+        imageUrl={imageUrl}
         isOpen={true}
         onDidDismiss={mockCall}
       />,
@@ -31,9 +31,9 @@ describe('DonationRequestModal', () => {
   it("doesn't shows the modal when isOpen is false", () => {
     const { container } = render(
       <DonationRequestModal
-        body={body}
+        description={body}
         iframeSrc={iframeSrc}
-        imageURL={imageURL}
+        imageUrl={imageUrl}
         isOpen={false}
         onDidDismiss={() => vi.fn()}
       />,

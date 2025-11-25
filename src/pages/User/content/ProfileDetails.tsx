@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import { UserStatistics, VisitorModal } from 'oa-components';
+import { Button, UserStatistics, VisitorModal } from 'oa-components';
 import { UserRole } from 'oa-shared';
 import { AuthWrapper } from 'src/common/AuthWrapper';
+import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
 import { ProfileTags } from 'src/pages/common/ProfileTags';
 import { mapPinService } from 'src/pages/Maps/map.service';
 import { Box, Divider, Flex, Paragraph } from 'theme-ui';
@@ -17,6 +18,7 @@ interface IProps {
 export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
   const { about, tags, visitorPolicy } = profile;
   const [showVisitorModal, setShowVisitorModal] = useState(false);
+  const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [pin, setPin] = useState<MapPin | undefined>(undefined);
@@ -99,9 +101,39 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
             margin: 0,
           }}
         />
-        <AuthWrapper
-          roleRequired={UserRole.BETA_TESTER}
-          fallback={
+        <Flex sx={{ flexDirection: 'column', gap: 2, alignItems: 'flex-start' }}>
+          {profile?.donationsEnabled && (
+            <>
+              <DonationRequestModalContainer
+                profileId={profile?.id}
+                isOpen={isDonationModalOpen}
+                onDidDismiss={() => setIsDonationModalOpen(false)}
+              />
+              <Button
+                icon="donate"
+                variant="outline"
+                iconColor="primary"
+                sx={{ backgroundColor: 'white', borderBottom: '4px solid' }}
+                onClick={() => setIsDonationModalOpen(true)}
+              >
+                Support this {profile.type?.displayName || 'space'}
+              </Button>
+            </>
+          )}
+          <AuthWrapper
+            roleRequired={UserRole.BETA_TESTER}
+            fallback={
+              <UserStatistics
+                profile={profile}
+                pin={pin}
+                libraryCount={docs?.projects.length || 0}
+                usefulCount={userTotalUseful}
+                researchCount={docs?.research.length || 0}
+                questionCount={docs?.questions.length || 0}
+                showViews={false}
+              />
+            }
+          >
             <UserStatistics
               profile={profile}
               pin={pin}
@@ -109,20 +141,10 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
               usefulCount={userTotalUseful}
               researchCount={docs?.research.length || 0}
               questionCount={docs?.questions.length || 0}
-              showViews={false}
+              showViews
             />
-          }
-        >
-          <UserStatistics
-            profile={profile}
-            pin={pin}
-            libraryCount={docs?.projects.length || 0}
-            usefulCount={userTotalUseful}
-            researchCount={docs?.research.length || 0}
-            questionCount={docs?.questions.length || 0}
-            showViews
-          />
-        </AuthWrapper>
+          </AuthWrapper>
+        </Flex>
       </Flex>
     </Box>
   );

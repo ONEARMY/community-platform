@@ -3,17 +3,18 @@ import { DonationRequestModal } from 'oa-components';
 
 import type { ReactNode } from 'react';
 
-interface DonationRequestModalContainerProps {
-  campaingId?: string;
+type DonationRequestModalContainerProps = {
   isOpen: boolean;
   onDidDismiss: () => void;
+  profileId?: number;
   children?: ReactNode | ReactNode[];
-}
+};
 
 type DonationSettings = {
-  body: string;
-  imageURL: string;
-  defaultCampaignId: string;
+  spaceName: string;
+  description: string;
+  imageUrl: string;
+  campaignId: string;
 };
 
 export const DonationRequestModalContainer = (props: DonationRequestModalContainerProps) => {
@@ -22,26 +23,29 @@ export const DonationRequestModalContainer = (props: DonationRequestModalContain
   // const imageURL = import.meta.env.VITE_DONATIONS_IMAGE_URL;
 
   const [settings, setSettings] = useState<DonationSettings>();
-  const embedUrl = `https://donorbox.org/embed/${props.campaingId || settings?.defaultCampaignId}`;
+  const embedUrl = `https://donorbox.org/embed/${settings?.campaignId}`;
 
   useEffect(() => {
     const fetchSettings = async () => {
-      const response = await fetch('/donation-settings');
-      const { body, imageURL, defaultCampaignId } = await response.json();
+      const response = await fetch(`/api/donation-settings/${props.profileId || 'default'}`);
+      const { spaceName, description, imageUrl, campaignId } = await response.json();
 
-      setSettings({ body, imageURL, defaultCampaignId });
+      setSettings({ spaceName, description, imageUrl, campaignId });
     };
 
-    fetchSettings();
-  }, []);
+    if (props.isOpen && !settings) {
+      fetchSettings();
+    }
+  }, [props.isOpen, settings]);
 
   return (
     <>
-      {settings && (
+      {settings?.campaignId && (
         <DonationRequestModal
-          body={settings.body}
+          spaceName={settings.spaceName}
+          description={settings.description}
           iframeSrc={embedUrl}
-          imageURL={settings.imageURL}
+          imageUrl={settings.imageUrl}
           isOpen={props.isOpen}
           onDidDismiss={props.onDidDismiss}
         >

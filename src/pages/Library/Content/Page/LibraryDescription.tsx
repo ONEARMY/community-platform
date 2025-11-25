@@ -152,6 +152,7 @@ export const LibraryDescription = (props: IProps) => {
           <Flex sx={{ marginTop: 'auto', flexDirection: 'column', gap: 1 }}>
             <TagList tags={item.tags.map((t) => ({ label: t.name }))} />
             <DownloadWrapper
+              authorProfileId={item.author?.id}
               fileDownloadCount={item.fileDownloadCount}
               fileLink={item.hasFileLink ? `/api/documents/project/${item.id}/link` : undefined}
               files={item.files?.map((x) => ({
@@ -235,6 +236,7 @@ export const LibraryDescription = (props: IProps) => {
                 onUsefulClick={onUsefulClick}
               />
               <DonationRequestModalContainer
+                profileId={item.author?.id}
                 isOpen={isDonationModalOpen}
                 onDidDismiss={() => setIsDonationModalOpen(false)}
               />

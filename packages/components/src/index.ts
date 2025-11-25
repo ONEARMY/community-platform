@@ -23,7 +23,6 @@ export { ConfirmModal } from "./ConfirmModal/ConfirmModal";
 export { CreateComment } from "./CreateComment/CreateComment";
 export { DisplayDate } from "./DisplayDate/DisplayDate";
 // export { DisplayMarkdownStylingWrapper } from './DisplayMarkdown/DisplayMarkdownStylingWrapper'
-export { DonationRequest } from "./DonationRequest/DonationRequest";
 export { DonationRequestModal } from "./DonationRequestModal/DonationRequestModal";
 export { DownloadButton } from "./DownloadButton/DownloadButton";
 export { DownloadCounter } from "./DownloadCounter/DownloadCounter";

@@ -1,14 +1,14 @@
-import { Project, UserRole } from 'oa-shared';
-import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { Project, UserRole } from "oa-shared";
+import { IMAGE_SIZES } from "src/config/imageTransforms";
 
-import { storageServiceServer } from './storageService.server';
+import { storageServiceServer } from "./storageService.server";
 
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBProject, DBProjectStep, Image } from 'oa-shared';
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DBProject, DBProjectStep, Image } from "oa-shared";
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
   return client
-    .from('projects')
+    .from("projects")
     .select(
       `
         id,
@@ -31,7 +31,7 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
         comment_count,
         moderation,
         moderation_feedback,
-        author:profiles(id, display_name, username, photo, country, badges:profile_badges_relations(
+        author:profiles(id, display_name, username, photo, country, donations_enabled, badges:profile_badges_relations(
           profile_badges(
             id,
             name,
@@ -52,7 +52,7 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
      `,
     )
     .or(`slug.eq.${slug},previous_slugs.cs.{"${slug}"}`)
-    .or('deleted.eq.false,deleted.is.null')
+    .or("deleted.eq.false,deleted.is.null")
     .single();
 };
 
@@ -60,12 +60,12 @@ const getUserProjects = async (
   client: SupabaseClient,
   username: string,
 ): Promise<Partial<Project>[]> => {
-  const { data, error } = await client.rpc('get_user_projects', {
+  const { data, error } = await client.rpc("get_user_projects", {
     username_param: username,
   });
 
   if (error) {
-    console.error('Error fetching user projects:', error);
+    console.error("Error fetching user projects:", error);
     return [];
   }
 
@@ -77,7 +77,10 @@ const getUserProjects = async (
   }));
 };
 
-const getProjectPublicMedia = (projectDb: DBProject, client: SupabaseClient) => {
+const getProjectPublicMedia = (
+  projectDb: DBProject,
+  client: SupabaseClient,
+) => {
   const allImages: Image[] = [];
   if (projectDb.cover_image) {
     const coverImage = storageServiceServer
@@ -89,10 +92,15 @@ const getProjectPublicMedia = (projectDb: DBProject, client: SupabaseClient) => 
     }
   }
 
-  const stepImages = projectDb.steps?.flatMap((x) => x.images)?.filter((x) => !!x) || [];
+  const stepImages =
+    projectDb.steps?.flatMap((x) => x.images)?.filter((x) => !!x) || [];
 
   const publicStepImages = stepImages
-    ? storageServiceServer.getPublicUrls(client, stepImages, IMAGE_SIZES.GALLERY)
+    ? storageServiceServer.getPublicUrls(
+      client,
+      stepImages,
+      IMAGE_SIZES.GALLERY,
+    )
     : [];
 
   return [...allImages, ...publicStepImages.filter((x) => !!x)];
@@ -111,7 +119,10 @@ const isAllowedToEditProject = async (
     return true;
   }
 
-  const { data } = await client.from('profiles').select('roles').eq('username', currentUsername);
+  const { data } = await client.from("profiles").select("roles").eq(
+    "username",
+    currentUsername,
+  );
 
   return data?.at(0)?.roles?.includes(UserRole.ADMIN);
 };
@@ -121,22 +132,33 @@ const isAllowedToEditProjectById = async (
   id: number,
   currentUsername: string,
 ) => {
-  const projectResult = await client.from('projects').select('id,created_by').eq('id', id).single();
+  const projectResult = await client.from("projects").select("id,created_by")
+    .eq("id", id).single();
 
   const project = projectResult.data as unknown as DBProject;
 
   const item = Project.fromDB(project, []);
 
-  return isAllowedToEditProject(client, item.author?.username || '', currentUsername);
+  return isAllowedToEditProject(
+    client,
+    item.author?.username || "",
+    currentUsername,
+  );
 };
 
 async function getById(id: number, client: SupabaseClient) {
-  const result = await client.from('projects').select().eq('id', id).single();
+  const result = await client.from("projects").select().eq("id", id).single();
   return result.data as DBProject;
 }
 
-async function getProjectStepIds(id: number, client: SupabaseClient): Promise<number[]> {
-  const result = await client.from('project_steps').select('id').eq('project_id', id);
+async function getProjectStepIds(
+  id: number,
+  client: SupabaseClient,
+): Promise<number[]> {
+  const result = await client.from("project_steps").select("id").eq(
+    "project_id",
+    id,
+  );
 
   return result.data?.map((x) => x.id) as number[];
 }
@@ -154,7 +176,7 @@ async function upsertStep(
 ) {
   if (stepId) {
     const { data, error } = await client
-      .from('project_steps')
+      .from("project_steps")
       .update({
         title: values.title,
         description: values.description,
@@ -162,7 +184,7 @@ async function upsertStep(
         video_url: values.videoUrl,
         order: values.order,
       })
-      .eq('id', stepId)
+      .eq("id", stepId)
       .select();
     if (error || !data) {
       throw error;
@@ -170,7 +192,7 @@ async function upsertStep(
     return data[0] as unknown as DBProjectStep;
   } else {
     const { data, error } = await client
-      .from('project_steps')
+      .from("project_steps")
       .insert({
         title: values.title,
         description: values.description,
@@ -188,7 +210,7 @@ async function upsertStep(
 }
 
 async function deleteStepsById(ids: number[], client: SupabaseClient) {
-  await client.from('project_steps').delete().in('id', ids);
+  await client.from("project_steps").delete().in("id", ids);
 }
 
 export const libraryServiceServer = {

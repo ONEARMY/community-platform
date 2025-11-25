@@ -12,10 +12,11 @@ interface IProps {
   fileDownloadCount: number;
   fileLink?: string;
   files?: MediaFile[];
+  authorProfileId?: number;
 }
 
 export const DownloadWrapper = (props: IProps) => {
-  const { fileLink, files, fileDownloadCount } = props;
+  const { fileLink, files, fileDownloadCount, authorProfileId } = props;
   const hasFiles = files && files.length > 0;
   const [openModel, setOpenModel] = useState<boolean>(false);
   const [link, setLink] = useState<string>('');
@@ -47,7 +48,7 @@ export const DownloadWrapper = (props: IProps) => {
           <DonationRequestModalContainer
             isOpen={openModel}
             onDidDismiss={() => setOpenModel(false)}
-            campaingId={''}
+            profileId={authorProfileId}
           >
             <Flex
               sx={{

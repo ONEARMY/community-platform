@@ -1,6 +1,5 @@
 import { Link as RouterLink } from 'react-router';
 import { Category, IconCountWithTooltip, ModerationStatus, Username } from 'oa-components';
-import { FollowButtonAction } from 'src/common/FollowButtonAction';
 import { Highlighter } from 'src/common/Highlighter';
 import { capitalizeFirstLetter } from 'src/utils/helpers';
 import { Box, Card, Flex, Heading, Image } from 'theme-ui';
@@ -88,30 +87,6 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
                 justifyContent: 'flex-end',
               }}
             >
-              <FollowButtonAction
-                contentType="projects"
-                itemId={item.id}
-                showIconOnly
-                hideSubscribeIcon
-                variant="subtle"
-                small
-                tooltipUnfollow="You are following this"
-                sx={{
-                  cursor: 'default',
-                  padding: 0,
-                  height: 'auto',
-                  minWidth: 'auto',
-                  border: 'none',
-                  lineHeight: 0,
-                  '& > div': {
-                    position: 'relative',
-                    px: 0,
-                  },
-                  '&:hover': {
-                    backgroundColor: 'transparent',
-                  },
-                }}
-              />
               <IconCountWithTooltip count={item.totalViews || 0} icon="show" text="Views" />
               <IconCountWithTooltip
                 count={item.usefulCount || 0}

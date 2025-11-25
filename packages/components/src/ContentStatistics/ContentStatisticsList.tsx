@@ -42,8 +42,8 @@ const StatisticItem = ({
         display: [visible ? 'flex' : 'none', 'flex', 'flex'],
       }}
       onClick={() => displayModal && onOpenModal(statistic)}
-      data-testid={`stat-${statistic.icon}`}
-      data-cy={`stat-${statistic.icon}`}
+      data-testid={`ContentStatistics-${statistic.icon}`}
+      data-cy={`ContentStatistics-${statistic.label}`}
     >
       <Icon glyph={statistic.icon} mr={1} size="sm" opacity="0.5" />
       <Text

@@ -9,8 +9,7 @@ describe('[ProfileList Modal]', () => {
     const user = generateNewUserDetails();
     cy.signUpNewUser(user);
     cy.visit(`/questions/${slug}`);
-    cy.contains('1 useful');
-    cy.get('[data-cy=stat-star]').should('be.visible').click();
+    cy.get('[data-cy=ContentStatistics-useful]').should('be.visible').click();
     cy.get('[data-cy=profile-list-modal]').should('be.visible');
     cy.get('[data-cy=profile-list-modal]').within(() => {
       cy.contains('Others that found it useful');
@@ -26,7 +25,7 @@ describe('[ProfileList Modal]', () => {
     const user = generateNewUserDetails();
     cy.signUpNewUser(user);
     cy.visit(`/questions/${slugNoVotes}`);
-    cy.get('[data-cy=stat-star]').should('be.visible').click();
+    cy.get('[data-cy=ContentStatistics-useful]').should('be.visible').click();
     cy.get('[data-cy=profile-list-modal]').should('not.exist');
   });
 });

@@ -50,7 +50,7 @@ export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
       data-cy="ContentStatistics"
       sx={{
         alignItems: ['flex-start', 'center', 'center'],
-        gap: [0, 2],
+        gap: 2,
         flexDirection: alwaysShow ? 'row' : ['column', 'row', 'row'],
         pl: alwaysShow ? 0 : [2, 0, 0],
         flexWrap: 'wrap',

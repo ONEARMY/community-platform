@@ -49,9 +49,10 @@ const StatisticItem = ({
       <Text
         sx={{
           textDecoration: displayModal ? 'underline' : 'none',
+          cursor: displayModal ? 'pointer' : 'default',
         }}
       >
-        {statistic.label}
+        {statistic.stat}
       </Text>
     </Flex>
   );

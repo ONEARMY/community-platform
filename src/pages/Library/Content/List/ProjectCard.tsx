@@ -1,11 +1,11 @@
 import { Link as RouterLink } from 'react-router';
 import { Category, IconCountWithTooltip, ModerationStatus, Username } from 'oa-components';
+import { FollowButtonAction } from 'src/common/FollowButtonAction';
 import { Highlighter } from 'src/common/Highlighter';
 import { capitalizeFirstLetter } from 'src/utils/helpers';
 import { Box, Card, Flex, Heading, Image } from 'theme-ui';
 
 import type { Project } from 'oa-shared';
-import { FollowButtonAction } from 'src/common/FollowButtonAction';
 
 type ProjectCardProps = {
   item: Project;

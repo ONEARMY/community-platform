@@ -40,6 +40,7 @@ const StatisticItem = ({
         fontSize: '1',
         paddingX: 2,
         display: [visible ? 'flex' : 'none', 'flex', 'flex'],
+        cursor: displayModal ? 'pointer' : 'default',
       }}
       onClick={() => displayModal && onOpenModal(statistic)}
       data-testid={`ContentStatistics-${statistic.icon}`}
@@ -49,7 +50,6 @@ const StatisticItem = ({
       <Text
         sx={{
           textDecoration: displayModal ? 'underline' : 'none',
-          cursor: displayModal ? 'pointer' : 'default',
         }}
       >
         {statistic.stat}

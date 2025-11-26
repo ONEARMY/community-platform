@@ -35,6 +35,7 @@ export const ProfileList = ({ profiles = [], onClose, header }: IProps) => {
           height: 'auto',
           maxHeight: ['40%', '50%'],
           border: '2px solid',
+          overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
         }}

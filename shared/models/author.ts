@@ -45,7 +45,7 @@ export class Author {
       displayName: dbAuthor.display_name,
       photo: photo ?? null,
       donationsEnabled: dbAuthor.donations_enabled,
-      profileType: ProfileType.fromDB(dbAuthor.profile_type),
+      profileType: dbAuthor.profile_type ? ProfileType.fromDB(dbAuthor.profile_type) : undefined,
     });
   }
 }

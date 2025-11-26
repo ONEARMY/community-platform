@@ -18,7 +18,6 @@ const ResearchListItem = ({ item }: IProps) => {
     display: 'flex',
     alignItems: 'center',
     fontSize: [1, 2, 2],
-    ml: 3,
   };
 
   const status = item.status || 'in-progress';
@@ -168,6 +167,7 @@ const ResearchListItem = ({ item }: IProps) => {
                 sx={{
                   display: ['flex', 'none', 'none'],
                   alignItems: 'center',
+                  gap: 3,
                 }}
               >
                 <FollowButtonAction
@@ -206,7 +206,8 @@ const ResearchListItem = ({ item }: IProps) => {
             sx={{
               display: ['none', 'flex', 'flex'],
               alignItems: 'center',
-              justifyContent: 'space-around',
+              justifyContent: 'flex-end',
+              gap: [4, 6, 8],
             }}
           >
             <FollowButtonAction

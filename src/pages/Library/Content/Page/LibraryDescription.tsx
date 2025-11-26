@@ -17,6 +17,7 @@ import TimeNeeded from 'src/assets/icons/icon-time-needed.svg';
 import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
 import { DownloadWrapper } from 'src/common/DownloadWrapper';
 import { buildStatisticsLabel, capitalizeFirstLetter, hasAdminRights } from 'src/utils/helpers';
+import { createUsefulStatistic } from 'src/utils/statistics';
 import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 
 import type { Profile, Project } from 'oa-shared';
@@ -263,15 +264,7 @@ export const LibraryDescription = (props: IProps) => {
               }),
               stat: item.totalViews,
             },
-            {
-              icon: 'star',
-              label: buildStatisticsLabel({
-                stat: votedUsefulCount || 0,
-                statUnit: 'useful',
-                usePlural: false,
-              }),
-              stat: votedUsefulCount || 0,
-            },
+            createUsefulStatistic('projects', item.id, votedUsefulCount || 0),
             {
               icon: 'thunderbolt-grey',
               label: buildStatisticsLabel({

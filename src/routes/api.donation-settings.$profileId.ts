@@ -22,7 +22,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     if (params.profileId) {
       try {
         const profileResult = await client.from("profiles").select(
-          "username,display_name,cover_images,donations_enabled",
+          "display_name,cover_images,donations_enabled",
         ).eq(
           "id",
           params.profileId,
@@ -31,13 +31,19 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         if (profileResult.data?.donations_enabled) {
           donationSettings.spaceName = profileResult.data.display_name;
           donationSettings.campaignId =
-            `${process.env.TENANT_ID}-${profileResult.data.username}`;
+            `${process.env.TENANT_ID}-${params.profileId}`;
           donationSettings.description = data?.donation_settings
             ?.spaceDescription;
 
           if (profileResult.data.cover_images?.at(0)?.url) {
             donationSettings.imageUrl = profileResult.data.cover_images[0].url;
           }
+        } else {
+          return Response.json({}, {
+            headers,
+            status: 400,
+            statusText: "Donations are not enabled for this profile",
+          });
         }
       } catch (error) {
         console.error("Error fetching profile donation settings:", error);

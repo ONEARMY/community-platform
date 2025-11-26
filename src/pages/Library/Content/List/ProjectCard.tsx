@@ -77,7 +77,7 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
           <Flex sx={{ justifyContent: 'flex-end' }}>
             {item.category && (
               <Flex sx={{ flex: 1 }}>
-                <Category category={item.category} />
+                <Category category={item.category} sx={{ color: 'black' }} />
               </Flex>
             )}
 

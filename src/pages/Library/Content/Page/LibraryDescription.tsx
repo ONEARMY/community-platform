@@ -236,19 +236,23 @@ export const LibraryDescription = (props: IProps) => {
                 isLoggedIn={loggedInUser ? true : false}
                 onUsefulClick={onUsefulClick}
               />
-              <DonationRequestModalContainer
-                profileId={item.author?.id}
-                isOpen={isDonationModalOpen}
-                onDidDismiss={() => setIsDonationModalOpen(false)}
-              />
-              <Button
-                icon="donate"
-                variant="outline"
-                iconColor="white"
-                onClick={() => setIsDonationModalOpen(true)}
-              >
-                Donate
-              </Button>
+              {item.author?.profileType?.isSpace && item.author?.donationsEnabled && (
+                <>
+                  <DonationRequestModalContainer
+                    profileId={item.author?.id}
+                    isOpen={isDonationModalOpen}
+                    onDidDismiss={() => setIsDonationModalOpen(false)}
+                  />
+                  <Button
+                    icon="donate"
+                    variant="outline"
+                    iconColor="white"
+                    onClick={() => setIsDonationModalOpen(true)}
+                  >
+                    Donate
+                  </Button>
+                </>
+              )}
             </Flex>
           )}
         </ClientOnly>

@@ -102,7 +102,7 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
           }}
         />
         <Flex sx={{ flexDirection: 'column', gap: 2, alignItems: 'flex-start' }}>
-          {profile?.donationsEnabled && (
+          {profile.type?.isSpace && profile?.donationsEnabled && (
             <>
               <DonationRequestModalContainer
                 profileId={profile?.id}

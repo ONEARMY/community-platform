@@ -1,7 +1,9 @@
 import { ProfileBadge } from './profileBadge';
+import { ProfileType } from './profileType';
 
 import type { DBMedia, Image } from './media';
 import type { DBProfileBadge, DBProfileBadgeJoin } from './profileBadge';
+import type { DBProfileType } from './profileType';
 
 // TODO: derive from DBProfile - not doing because was causing circular dependencies
 export type DBAuthor = {
@@ -11,7 +13,10 @@ export type DBAuthor = {
   readonly display_name: string;
   readonly photo: DBMedia | null;
   readonly badges?: DBProfileBadgeJoin[] | DBProfileBadge[];
+  readonly donations_enabled: boolean;
+  readonly profile_type: DBProfileType;
 };
+
 export class Author {
   id: number;
   country?: string;
@@ -19,6 +24,8 @@ export class Author {
   badges?: ProfileBadge[];
   photo: Image | null;
   username: string;
+  donationsEnabled: boolean;
+  profileType: ProfileType;
 
   constructor(author: Author) {
     Object.assign(this, author);
@@ -37,6 +44,8 @@ export class Author {
       badges,
       displayName: dbAuthor.display_name,
       photo: photo ?? null,
+      donationsEnabled: dbAuthor.donations_enabled,
+      profileType: ProfileType.fromDB(dbAuthor.profile_type),
     });
   }
 }

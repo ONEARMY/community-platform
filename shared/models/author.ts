@@ -13,8 +13,8 @@ export type DBAuthor = {
   readonly display_name: string;
   readonly photo: DBMedia | null;
   readonly badges?: DBProfileBadgeJoin[] | DBProfileBadge[];
-  readonly donations_enabled: boolean;
-  readonly profile_type: DBProfileType;
+  readonly donations_enabled?: boolean;
+  readonly profile_type?: DBProfileType;
 };
 
 export class Author {
@@ -24,8 +24,8 @@ export class Author {
   badges?: ProfileBadge[];
   photo: Image | null;
   username: string;
-  donationsEnabled: boolean;
-  profileType: ProfileType;
+  donationsEnabled?: boolean;
+  profileType?: ProfileType;
 
   constructor(author: Author) {
     Object.assign(this, author);

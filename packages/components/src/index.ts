@@ -87,8 +87,10 @@ export { VerticalList } from './VerticalList/VerticalList.client';
 export { VideoPlayer } from './VideoPlayer/VideoPlayer';
 export { VisitorModal, visitorDisplayData } from './VisitorModal/VisitorModal';
 export { UserBadge } from './Username/UserBadge';
+export { ProfileList } from './ProfileList/ProfileList';
 
 export type { availableGlyphs } from './Icon/types';
 export type { GridFormFields } from './GridForm/GridForm';
 export type { ITab } from './SettingsFormWrapper/SettingsFormTab';
 export type { OptionalFollowButtonProps } from './FollowButton/FollowButton';
+export type { IStatistic } from './ContentStatistics/types';

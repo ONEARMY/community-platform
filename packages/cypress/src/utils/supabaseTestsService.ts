@@ -234,7 +234,23 @@ export class SupabaseTestsService {
     });
 
     const { comments } = await this.seedComment(profiles, questions, 'questions');
+    await this.seedUsefulVotes(profiles, questions, 'questions');
     await this.seedReply(profiles, comments, questions);
+  }
+
+  async seedUsefulVotes(profiles, sourceData, sourceType) {
+    const usefulVotesData = await this.seedDatabase({
+      useful_votes: [
+        {
+          created_at: new Date().toUTCString(),
+          content_id: sourceData.data[0].id,
+          content_type: sourceType,
+          user_id: profiles[0].id,
+          tenant_id: this.tenantId,
+        },
+      ],
+    });
+    return usefulVotesData;
   }
 
   async seedComment(profiles, sourceData, sourceType) {

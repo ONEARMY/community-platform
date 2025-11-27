@@ -250,7 +250,7 @@ export const LibraryDescription = (props: IProps) => {
                     sx={{ fontSize: '14px' }}
                     onClick={() => setIsDonationModalOpen(true)}
                   >
-                    Donate
+                    Support this {item.author?.profileType?.displayName || 'Space'}
                   </Button>
                 </>
               )}

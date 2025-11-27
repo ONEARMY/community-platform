@@ -18,10 +18,6 @@ type DonationSettings = {
 };
 
 export const DonationRequestModalContainer = (props: DonationRequestModalContainerProps) => {
-  // const body = import.meta.env.VITE_DONATIONS_BODY;
-  // const iframeSrc = import.meta.env.VITE_DONATIONS_IFRAME_SRC;
-  // const imageURL = import.meta.env.VITE_DONATIONS_IMAGE_URL;
-
   const [settings, setSettings] = useState<DonationSettings>();
   const embedUrl = `https://donorbox.org/embed/${settings?.campaignId}`;
 

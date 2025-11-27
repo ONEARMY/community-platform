@@ -226,6 +226,17 @@ export const CommentSectionSupabase = (props: IProps) => {
     }
   };
 
+  const updateVoteCount = (id: number, newVoteCount: number) => {
+    setComments((comments) =>
+      comments.map((comment) => {
+        if (comment.id === id) {
+          comment.voteCount = newVoteCount;
+        }
+        return comment;
+      }),
+    );
+  };
+
   return (
     <AuthorsContext.Provider value={{ authors }}>
       <Flex sx={{ flexDirection: 'column', gap: 2 }} id="discussion">
@@ -268,6 +279,7 @@ export const CommentSectionSupabase = (props: IProps) => {
               onReply={(reply) => postReply(comment.id, reply)}
               onEditReply={(id, reply) => editReply(id, reply, comment.id)}
               onDeleteReply={(id) => deleteReply(id, comment.id)}
+              updateUsefulCount={updateVoteCount}
               sourceType={sourceType}
             />
           </Box>

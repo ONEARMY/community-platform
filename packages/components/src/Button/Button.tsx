@@ -98,7 +98,7 @@ export const Button = (props: BtnProps) => {
       {...sanitizedProps(props, ['small', 'large', 'showIconOnly', 'iconColor', 'iconFilter'])}
       sx={{
         ...getSizeProps(size, !!props.icon),
-        ...(props.showIconOnly ? { pr: 0 } : {}),
+        ...(props.showIconOnly ? { pr: 0, WebkitTapHighlightColor: 'transparent' } : {}),
         ...props.sx,
       }}
     >

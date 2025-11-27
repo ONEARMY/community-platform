@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { ImageServiceServer } from 'src/services/imageService.server';
 
 import type { LoaderFunctionArgs } from 'react-router';
 
@@ -29,8 +30,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
           donationSettings.campaignId = `${process.env.TENANT_ID}-${params.profileId}`;
           donationSettings.description = data?.donation_settings?.spaceDescription;
 
-          if (profileResult.data.cover_images?.at(0)?.url) {
-            donationSettings.imageUrl = profileResult.data.cover_images[0].url;
+          if (profileResult.data.cover_images?.at(0)) {
+            donationSettings.imageUrl = new ImageServiceServer(client).getPublicUrl(
+              profileResult.data.cover_images[0],
+            )?.publicUrl;
           }
         }
       } catch (error) {

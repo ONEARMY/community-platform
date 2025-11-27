@@ -247,6 +247,7 @@ export const LibraryDescription = (props: IProps) => {
                     icon="donate"
                     variant="outline"
                     iconColor="white"
+                    sx={{ fontSize: '14px' }}
                     onClick={() => setIsDonationModalOpen(true)}
                   >
                     Donate

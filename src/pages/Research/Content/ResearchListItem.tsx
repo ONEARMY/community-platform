@@ -1,5 +1,6 @@
 import { Category, Icon, IconCountWithTooltip, InternalLink, Username } from 'oa-components';
 import { type ResearchItem, ResearchStatusRecord } from 'oa-shared';
+import { FollowButtonAction } from 'src/common/FollowButtonAction';
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui';
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg';
@@ -17,7 +18,6 @@ const ResearchListItem = ({ item }: IProps) => {
     display: 'flex',
     alignItems: 'center',
     fontSize: [1, 2, 2],
-    ml: 3,
   };
 
   const status = item.status || 'in-progress';
@@ -167,8 +167,29 @@ const ResearchListItem = ({ item }: IProps) => {
                 sx={{
                   display: ['flex', 'none', 'none'],
                   alignItems: 'center',
+                  gap: 3,
                 }}
               >
+                <FollowButtonAction
+                  contentType="research"
+                  itemId={item.id}
+                  showIconOnly
+                  hideSubscribeIcon
+                  variant="subtle"
+                  small
+                  sx={{
+                    cursor: 'default',
+                    padding: 0,
+                    height: 'auto',
+                    minWidth: 'auto',
+                    border: 'none',
+                    lineHeight: 0,
+                    '& > div': {
+                      position: 'relative',
+                      px: 0,
+                    },
+                  }}
+                />
                 <Text color="black" sx={_commonStatisticStyle}>
                   {usefulDisplayCount}
                   <Icon glyph="star-active" ml={1} />
@@ -185,9 +206,34 @@ const ResearchListItem = ({ item }: IProps) => {
             sx={{
               display: ['none', 'flex', 'flex'],
               alignItems: 'center',
-              justifyContent: 'space-around',
+              justifyContent: 'flex-end',
+              gap: [4, 6, 8],
             }}
           >
+            <FollowButtonAction
+              contentType="research"
+              itemId={item.id}
+              showIconOnly
+              hideSubscribeIcon
+              variant="subtle"
+              small
+              tooltipUnfollow="You are following this"
+              sx={{
+                cursor: 'default',
+                padding: 0,
+                height: 'auto',
+                minWidth: 'auto',
+                border: 'none',
+                lineHeight: 0,
+                '& > div': {
+                  position: 'relative',
+                  px: 0,
+                },
+                '&:hover': {
+                  backgroundColor: 'transparent',
+                },
+              }}
+            />
             <IconCountWithTooltip
               count={usefulDisplayCount}
               icon="star-active"

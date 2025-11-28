@@ -23,8 +23,10 @@ describe('[Research.Discussions]', () => {
     const comment1 = `First comment ${randomId}`;
     const comment2 = `Second comment ${randomId}`;
     const comment3 = `Third comment ${randomId}`;
+    const comment4 = `Fourth comment ${randomId}`;
+    const comment5 = `Fifth comment ${randomId}`;
 
-    cy.step('Create admin user session and add three comments');
+    cy.step('Create admin user session and add five comments');
     cy.signIn(admin.email, admin.password);
     cy.visit(researchPath);
     //cy.get('[data-cy="HideDiscussionContainer:button"]').first().click();
@@ -32,10 +34,23 @@ describe('[Research.Discussions]', () => {
 
     cy.addComment(comment1);
     cy.wait(1000);
+    cy.get('[data-cy=comment-sort-select]').should('not.exist');
+
     cy.addComment(comment2);
     cy.wait(1000);
+    cy.get('[data-cy=comment-sort-select]').should('not.exist');
+
     cy.addComment(comment3);
     cy.wait(1000);
+    cy.get('[data-cy=comment-sort-select]').should('not.exist');
+
+    cy.addComment(comment4);
+    cy.wait(1000);
+    cy.get('[data-cy=comment-sort-select]').should('not.exist');
+
+    cy.addComment(comment5);
+    cy.wait(1000);
+    cy.get('[data-cy=comment-sort-select]').should('be.visible');
 
     cy.step('Mark first and third comments as useful');
     cy.get('[data-cy=comment-text]')
@@ -69,7 +84,7 @@ describe('[Research.Discussions]', () => {
     cy.get('[data-cy=comment-sort-select]').click();
     cy.contains('Newest').click();
     cy.get('[data-cy=comment-sort-select]').contains('Newest');
-    cy.get('[data-cy=comment-text]').first().should('contain', comment3);
+    cy.get('[data-cy=comment-text]').first().should('contain', comment5);
 
     cy.step('Sort by most useful - comment3 should be first (newer of the two useful)');
     cy.get('[data-cy=comment-sort-select]').click();

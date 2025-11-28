@@ -49,21 +49,13 @@ export const UserStatistics = (props: UserStatisticsProps) => {
         {props.pin && (
           <InternalLink
             to={'/map#' + props.profile.username}
-            sx={{ color: 'black' }}
+            sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
             data-testid="location-link"
           >
-            <CardButton
-              sx={{
-                border: '2px solid black',
-                boxShadow: '0px 2px 0px 0px black',
-                padding: 2,
-              }}
-            >
-              <Flex sx={{ alignItems: 'center', gap: 2 }}>
-                <Icon glyph="map" size={22} />
-                <Box>{props.pin.country || 'View on Map'}</Box>
-              </Flex>
-            </CardButton>
+            <Flex sx={{ alignItems: 'center', gap: 2 }}>
+              <Icon glyph="map" size={22} />
+              <Text>Location: {props.pin.country || 'View on Map'}</Text>
+            </Flex>
           </InternalLink>
         )}
 
@@ -97,7 +89,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           {props.libraryCount > 0 && (
             <InternalLink
               to={'/library?q=' + props.profile.username}
-              sx={{ color: 'black' }}
+              sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
               data-testid="library-link"
             >
               <Flex data-testid="library-stat">
@@ -110,7 +102,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           {props.researchCount > 0 && (
             <InternalLink
               to={'/research?q=' + props.profile.username}
-              sx={{ color: 'black' }}
+              sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
               data-testid="research-link"
             >
               <Flex data-testid="research-stat">
@@ -121,7 +113,11 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           )}
 
           {props.questionCount > 0 && (
-            <InternalLink to={'/questions'} sx={{ color: 'black' }} data-testid="questions-link">
+            <InternalLink
+              to={'/questions'}
+              sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
+              data-testid="questions-link"
+            >
               <Flex data-testid="questions-stat">
                 <ElWithBeforeIcon icon={ForumIcon} />
                 {`Questions: ${props.questionCount}`}

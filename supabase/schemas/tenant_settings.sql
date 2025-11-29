@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS "public"."tenant_settings" (
     "tenant_id" "text" NOT NULL,
     "email_from" "text",
     "site_image" "text",
-    "site_favicon" "text"
+    "site_favicon" "text",
+    "donation_settings" json
 );
 
 ALTER TABLE "public"."tenant_settings" ENABLE ROW LEVEL SECURITY;

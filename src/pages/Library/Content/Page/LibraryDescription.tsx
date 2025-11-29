@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   AuthorDisplay,
+  Button,
   Category,
   ContentStatistics,
   DisplayDate,
@@ -13,6 +14,7 @@ import { DifficultyLevelRecord } from 'oa-shared';
 import { ClientOnly } from 'remix-utils/client-only';
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg';
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg';
+import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
 import { DownloadWrapper } from 'src/common/DownloadWrapper';
 import { buildStatisticsLabel, capitalizeFirstLetter, hasAdminRights } from 'src/utils/helpers';
 import { createUsefulStatistic } from 'src/utils/statistics';
@@ -47,6 +49,8 @@ export const LibraryDescription = (props: IProps) => {
       (hasAdminRights(loggedInUser) || item.author?.username === loggedInUser.username)
     );
   }, [loggedInUser, item.author]);
+
+  const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
 
   const showFeedback = item.moderationFeedback && item.moderation !== 'accepted' && isEditable;
 
@@ -149,6 +153,7 @@ export const LibraryDescription = (props: IProps) => {
           <Flex sx={{ marginTop: 'auto', flexDirection: 'column', gap: 1 }}>
             <TagList tags={item.tags.map((t) => ({ label: t.name }))} />
             <DownloadWrapper
+              authorProfileId={item.author?.id}
               fileDownloadCount={item.fileDownloadCount}
               fileLink={item.hasFileLink ? `/api/documents/project/${item.id}/link` : undefined}
               files={item.files?.map((x) => ({
@@ -224,14 +229,32 @@ export const LibraryDescription = (props: IProps) => {
       >
         <ClientOnly fallback={<></>}>
           {() => (
-            <>
+            <Flex sx={{ gap: 2 }}>
               <UsefulStatsButton
                 votedUsefulCount={votedUsefulCount}
                 hasUserVotedUseful={hasUserVotedUseful}
                 isLoggedIn={loggedInUser ? true : false}
                 onUsefulClick={onUsefulClick}
               />
-            </>
+              {item.author?.profileType?.isSpace && item.author?.donationsEnabled && (
+                <>
+                  <DonationRequestModalContainer
+                    profileId={item.author?.id}
+                    isOpen={isDonationModalOpen}
+                    onDidDismiss={() => setIsDonationModalOpen(false)}
+                  />
+                  <Button
+                    icon="donate"
+                    variant="outline"
+                    iconColor="white"
+                    sx={{ fontSize: '14px' }}
+                    onClick={() => setIsDonationModalOpen(true)}
+                  >
+                    Support this {item.author?.profileType?.displayName || 'Space'}
+                  </Button>
+                </>
+              )}
+            </Flex>
           )}
         </ClientOnly>
 

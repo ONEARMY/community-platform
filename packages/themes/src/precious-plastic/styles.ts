@@ -1,16 +1,16 @@
-import logo from '../../assets/images/precious-plastic-logo-official.svg';
-import { baseTheme } from '../common';
-import { getButtons } from '../common/button';
+import logo from "../../assets/images/precious-plastic-logo-official.svg";
+import { baseTheme } from "../common";
+import { getButtons } from "../common/button";
 
-import type { ThemeWithName } from '../types';
+import type { ThemeWithName } from "../types";
 
-export type { ButtonVariants } from '../common/button';
+export type { ButtonVariants } from "../common/button";
 
 // use enum to specify list of possible colors for typing
 export const colors = {
   ...baseTheme.colors,
-  primary: 'red',
-  accent: { base: '#fee77b', hover: '#ffde45' },
+  primary: "#fee77b",
+  accent: { base: "#fee77b", hover: "#ffde45" },
 };
 
 export const alerts = {
@@ -23,7 +23,7 @@ export const alerts = {
 };
 
 export const styles: ThemeWithName = {
-  name: 'Precious Plastic',
+  name: "Precious Plastic",
   logo: logo,
   ...baseTheme,
   alerts,

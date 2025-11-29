@@ -13,7 +13,16 @@ interface IProps {
 
 export const CommentSort = ({ sortBy, onSortChange }: IProps) => {
   return (
-    <Flex sx={{ width: ['100%', 'auto'], minWidth: ['100%', '160px'] }}>
+    <Flex
+      sx={{
+        minWidth: '160px',
+        flex: '0 0 auto',
+        '@container (max-width: 600px)': {
+          flex: '1 1 100%',
+          minWidth: '100%',
+        },
+      }}
+    >
       <FieldContainer>
         <div data-cy="comment-sort-select">
           <Select

@@ -20,19 +20,28 @@ export interface ICommentItemProps {
   onReply: (reply: string) => void;
   onEditReply: (id: number, reply: string) => Promise<Response>;
   onDeleteReply: (id: number) => void;
+  updateUsefulCount?: (id: number, newVoteCount: number) => void;
   sourceType: DiscussionContentTypes;
 }
 
 export const CommentItemSupabase = observer((props: ICommentItemProps) => {
-  const { comment, onEdit, onDelete, onReply, onEditReply, onDeleteReply, sourceType } = props;
-  const commentRef = useRef<HTMLDivElement>();
+  const {
+    comment,
+    onEdit,
+    onDelete,
+    onReply,
+    onEditReply,
+    onDeleteReply,
+    updateUsefulCount,
+    sourceType,
+  } = props;
+  const commentRef = useRef<HTMLDivElement>(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showReplies, setShowReplies] = useState(
     () => !!comment.replies?.some((x) => x.highlighted),
   );
   const { profile } = useProfileStore();
-  const [usefulCount, setUsefulCount] = useState<number>(comment.voteCount ?? 0);
   const [voted, setVoted] = useState<boolean>(false);
 
   const isEditable = useMemo(() => {
@@ -64,7 +73,11 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
         contentId: comment.id,
         slug: `${comment}+${comment.id}`,
         setVoted,
-        setUsefulCount,
+        setUsefulCount: (newCount) => {
+          const count =
+            typeof newCount === 'function' ? newCount(comment.voteCount ?? 0) : newCount;
+          updateUsefulCount?.(comment.id, count);
+        },
         loggedInUser: profile,
         eventCategory,
       },
@@ -122,7 +135,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
           usefulButtonConfig={{
             onUsefulClick: () => handleUsefulClick(voted ? 'delete' : 'add'),
             hasUserVotedUseful: voted,
-            votedUsefulCount: usefulCount,
+            votedUsefulCount: comment.voteCount ?? 0,
             isLoggedIn: !!profile,
           }}
         />

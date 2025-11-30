@@ -75,7 +75,10 @@ export const FollowButton = (props: FollowButtonProps) => {
         data-tooltip-id={uuid}
         data-tooltip-content={isLoggedIn ? tooltipContent : 'Login to follow'}
         variant={variant}
-        sx={sx}
+        sx={{fontSize: 2,
+          ...sx
+
+        }}
         onClick={() =>
           isLoggedIn
             ? onFollowClick()

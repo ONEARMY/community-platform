@@ -20,7 +20,6 @@ export const ArticleCallToActionSupabaseCommentAndUseful: StoryFn<
     <UsefulStatsButton
       isLoggedIn={false}
       hasUserVotedUseful={false}
-      votedUsefulCount={0}
       onUsefulClick={() => Promise.resolve()}
     />
   </ArticleCallToActionSupabase>
@@ -33,7 +32,6 @@ export const ArticleCallToActionSupabaseUseful: StoryFn<
     <UsefulStatsButton
       isLoggedIn={false}
       hasUserVotedUseful={false}
-      votedUsefulCount={0}
       onUsefulClick={() => Promise.resolve()}
     />
   </ArticleCallToActionSupabase>

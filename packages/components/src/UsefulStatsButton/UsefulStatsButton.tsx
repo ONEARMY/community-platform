@@ -58,20 +58,9 @@ export const UsefulStatsButton = (props: IProps) => {
         iconFilter={props.hasUserVotedUseful ? 'unset' : 'grayscale(1)'}
       >
         <Text
-          pr={2}
           py={2}
           sx={{
             display: 'inline-block',
-          }}
-        >
-          {props.votedUsefulCount}
-        </Text>
-        <Text
-          pl={2}
-          py={2}
-          sx={{
-            display: 'inline-block',
-            borderLeft: `1px solid ${theme.colors.black}`,
           }}
         >
           {props.hasUserVotedUseful ? 'Marked as useful' : 'Mark as useful'}

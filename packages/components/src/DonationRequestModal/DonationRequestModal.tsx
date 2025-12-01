@@ -3,31 +3,30 @@ import { AspectImage, Card, Flex, Text } from 'theme-ui';
 import { Modal } from '../Modal/Modal';
 
 export interface IProps {
-  spaceName?: string;
   description?: string;
   imageUrl?: string;
   iframeSrc?: string;
+  spaceName?: string;
   isOpen: boolean;
   onDidDismiss: () => void;
   children?: React.ReactNode | React.ReactNode[];
 }
 
-const FALLBACK_DONATION_WIDGET = 'https://donorbox.org/embed/onearmy?a=b';
+const FALLBACK_DONATION_WIDGET = 'https://donorbox.org/embed/onearmy?a=b&hide_donation_meter=true';
 const REQUEST_THANKYOU = 'Thank you for helping to make this possible!';
 
 export const DonationRequestModal = (props: IProps) => {
   const { spaceName, description, iframeSrc, imageUrl, isOpen, onDidDismiss, children } = props;
+  const title = spaceName ? `Support ${spaceName}` : 'Support our work';
   const iframeArgs = {
     allowpaymentrequest: 'allowpaymentrequest',
     allow: 'payment',
     'data-donorbox-id': 'DonorBox-f2',
     'data-testid': 'donationRequestIframe',
-    frameBorder: '0',
     name: 'donorbox',
     seamless: true,
-    src: iframeSrc || FALLBACK_DONATION_WIDGET,
+    src: iframeSrc ? iframeSrc + '?hide_donation_meter=true' : FALLBACK_DONATION_WIDGET,
   };
-  const title = spaceName ? `Support ${spaceName}` : 'Support our work';
 
   return (
     <Modal
@@ -49,8 +48,12 @@ export const DonationRequestModal = (props: IProps) => {
         data-cy="DonationRequest"
         data-testid="DonationRequest"
       >
-        <script src="https://donorbox.org/widget.js" data-paypalexpress="false"></script>
-
+        <script
+          src="https://donorbox.org/widget.js"
+          type="module"
+          data-paypalexpress="false"
+          async
+        ></script>
         <Flex
           sx={{
             flexDirection: ['column', 'row'],
@@ -79,7 +82,7 @@ export const DonationRequestModal = (props: IProps) => {
           <Flex
             sx={{
               borderLeft: [0, '2px solid'],
-              minHeight: '542px',
+              minHeight: '524px',
               width: ['100%', '350px', '400px'],
             }}
           >

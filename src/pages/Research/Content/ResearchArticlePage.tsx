@@ -12,6 +12,7 @@ import {
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
+import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
 import { logger } from 'src/logger';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { getResearchCommentId, getResearchUpdateId } from 'src/pages/Research/Content/helper';
@@ -40,6 +41,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
   const [subscribersCount, setSubscribersCount] = useState<number>(research.subscriberCount);
   const [usefulCount, setUsefulCount] = useState<number>(research.usefulCount);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -246,6 +248,24 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
                     tooltipFollow="Follow to be notified about new updates"
                     tooltipUnfollow="Unfollow to stop being notified about new updates"
                   />
+                  {research.author?.profileType?.isSpace && research.author?.donationsEnabled && (
+                    <>
+                      <DonationRequestModalContainer
+                        profileId={research.author?.id}
+                        isOpen={isDonationModalOpen}
+                        onDidDismiss={() => setIsDonationModalOpen(false)}
+                      />
+                      <Button
+                        icon="donate"
+                        variant="outline"
+                        iconColor="primary"
+                        sx={{ fontSize: '14px' }}
+                        onClick={() => setIsDonationModalOpen(true)}
+                      >
+                        Support the author
+                      </Button>
+                    </>
+                  )}
                 </ArticleCallToActionSupabase>
               )}
             </Box>

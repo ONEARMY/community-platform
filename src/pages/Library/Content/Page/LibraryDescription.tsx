@@ -1,7 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import {
   AuthorDisplay,
-  Button,
   Category,
   ContentStatistics,
   DisplayDate,
@@ -14,7 +13,6 @@ import { DifficultyLevelRecord } from 'oa-shared';
 import { ClientOnly } from 'remix-utils/client-only';
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg';
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg';
-import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
 import { DownloadWrapper } from 'src/common/DownloadWrapper';
 import { buildStatisticsLabel, capitalizeFirstLetter, hasAdminRights } from 'src/utils/helpers';
 import { createUsefulStatistic } from 'src/utils/statistics';
@@ -49,8 +47,6 @@ export const LibraryDescription = (props: IProps) => {
       (hasAdminRights(loggedInUser) || item.author?.username === loggedInUser.username)
     );
   }, [loggedInUser, item.author]);
-
-  const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
 
   const showFeedback = item.moderationFeedback && item.moderation !== 'accepted' && isEditable;
 
@@ -236,24 +232,6 @@ export const LibraryDescription = (props: IProps) => {
                 isLoggedIn={loggedInUser ? true : false}
                 onUsefulClick={onUsefulClick}
               />
-              {item.author?.profileType?.isSpace && item.author?.donationsEnabled && (
-                <>
-                  <DonationRequestModalContainer
-                    profileId={item.author?.id}
-                    isOpen={isDonationModalOpen}
-                    onDidDismiss={() => setIsDonationModalOpen(false)}
-                  />
-                  <Button
-                    icon="donate"
-                    variant="outline"
-                    iconColor="white"
-                    sx={{ fontSize: '14px' }}
-                    onClick={() => setIsDonationModalOpen(true)}
-                  >
-                    Support this {item.author?.profileType?.displayName || 'Space'}
-                  </Button>
-                </>
-              )}
             </Flex>
           )}
         </ClientOnly>

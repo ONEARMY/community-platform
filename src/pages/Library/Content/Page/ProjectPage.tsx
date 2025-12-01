@@ -11,6 +11,7 @@ import {
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
+import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
 import { logger } from 'src/logger';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { CommentSectionSupabase } from 'src/pages/common/CommentsSupabase/CommentSectionSupabase';
@@ -37,6 +38,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
   const [voted, setVoted] = useState<boolean>(false);
   const [usefulCount, setUsefulCount] = useState<number>(item.usefulCount);
   const { profile: activeUser } = useProfileStore();
+  const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
 
   useEffect(() => {
     const getVoted = async () => {
@@ -185,6 +187,24 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                     handleUsefulClick(voted ? 'delete' : 'add', 'ArticleCallToAction')
                   }
                 />
+              )}
+              {item.author?.profileType?.isSpace && item.author?.donationsEnabled && (
+                <>
+                  <DonationRequestModalContainer
+                    profileId={item.author?.id}
+                    isOpen={isDonationModalOpen}
+                    onDidDismiss={() => setIsDonationModalOpen(false)}
+                  />
+                  <Button
+                    icon="donate"
+                    variant="outline"
+                    iconColor="primary"
+                    sx={{ fontSize: '14px' }}
+                    onClick={() => setIsDonationModalOpen(true)}
+                  >
+                    Support the author
+                  </Button>
+                </>
               )}
             </ArticleCallToActionSupabase>
             <Card

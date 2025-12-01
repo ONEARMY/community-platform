@@ -134,9 +134,11 @@ const MapsPage = () => {
         }
 
         setAllPins(
-          pinsToSet.sort((x) =>
-            x.profile.lastActive ? -new Date(x.profile.lastActive).getTime() : 0,
-          ),
+          pinsToSet.sort((a, b) => {
+            const aTime = a.profile.lastActive ? new Date(a.profile.lastActive).getTime() : 0;
+            const bTime = b.profile.lastActive ? new Date(b.profile.lastActive).getTime() : 0;
+            return bTime - aTime;
+          }),
         );
 
         if (filters?.filters) {

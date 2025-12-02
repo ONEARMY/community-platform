@@ -73,6 +73,7 @@ describe('[Research]', () => {
       it('[Visible to everyone]', () => {
         cy.step('Can visit research');
         cy.visit(researchArticleUrl);
+        cy.wait(1000);
 
         cy.title().should('eq', `${article.title} - Research - Precious Plastic`);
 
@@ -148,6 +149,7 @@ describe('[Research]', () => {
       it('[Delete button is visible]', () => {
         cy.signIn('demo_admin@example.com', 'demo_admin');
         cy.visit(researchArticleUrl);
+        cy.wait(1000);
 
         cy.step('Delete button should be visible to the author of the article');
         cy.get('[data-cy="Research: delete button"]').should('be.visible');

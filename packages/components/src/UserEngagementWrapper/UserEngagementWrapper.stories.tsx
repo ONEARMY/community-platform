@@ -43,7 +43,6 @@ export const Default: StoryFn<typeof UserEngagementWrapper> = () => (
             Leave a comment
           </Button>
           <UsefulStatsButton
-            votedUsefulCount={28}
             hasUserVotedUseful={false}
             isLoggedIn={false}
             onUsefulClick={() => new Promise(() => {})}

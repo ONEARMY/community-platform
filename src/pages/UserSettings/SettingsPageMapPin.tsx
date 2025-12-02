@@ -238,7 +238,7 @@ export const SettingsPageMapPin = observer(() => {
 
                   {previewMapPin && (
                     <Flex sx={{ gap: 1 }}>
-                      <Text variant="paragraph">Preview the new pin:</Text>
+                      <Text variant="paragraph">Your updated map pin:</Text>
                       <Text
                         variant="paragraph"
                         data-cy="LocationDataTextDisplay"

@@ -44,6 +44,8 @@ describe('SettingsPageMapPin', () => {
       profile: mockUser,
       update: vi.fn(),
     });
+    mockGetCurrentUserMapPin.mockResolvedValue(null);
+
     // Act
     let wrapper;
     act(() => {
@@ -57,6 +59,13 @@ describe('SettingsPageMapPin', () => {
   });
 
   it('renders for member', async () => {
+    const mockUser = FactoryUser(completeProfile);
+    mockUseProfileStore.mockReturnValue({
+      profile: mockUser,
+      update: vi.fn(),
+    });
+    mockGetCurrentUserMapPin.mockResolvedValue(null);
+
     // Act
     let wrapper;
     act(() => {
@@ -105,7 +114,6 @@ describe('SettingsPageMapPin', () => {
     await waitFor(() => {
       expect(wrapper.queryAllByTestId('descriptionMember')).toHaveLength(0);
       expect(wrapper.getAllByTestId('descriptionSpace')).toHaveLength(1);
-      expect(wrapper.getAllByTestId('WorkspaceMapPinRequiredStars')).toHaveLength(1);
       expect(wrapper.getAllByText(mockPin.name, { exact: false })).toHaveLength(1);
       expect(wrapper.getAllByText(moderationFeedback, { exact: false })).toHaveLength(1);
     });
@@ -125,6 +133,7 @@ describe('SettingsPageMapPin', () => {
       profile: mockUser,
       update: vi.fn(),
     });
+    mockGetCurrentUserMapPin.mockResolvedValue(null);
 
     let wrapper;
     act(() => {

@@ -26,6 +26,7 @@ import type {
   subscribersScalars,
   tagsChildInputs,
   tagsScalars,
+  upgrade_badgeScalars,
   useful_votesChildInputs,
   useful_votesScalars,
 } from '@snaplet/seed';
@@ -148,6 +149,37 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/pro.svg',
   },
 ];
+
+const seedUpgradeBadges = (
+  badges: profile_badgesScalars[],
+): Partial<upgrade_badgeScalars>[] => {
+  const proBadge = badges.find((badge) => badge.name === 'pro');
+  // const supporterBadge = badges.find((badge) => badge.name === 'supporter');
+
+  const upgradeBadges: Partial<upgrade_badgeScalars>[] = [];
+
+  if (proBadge) {
+    upgradeBadges.push({
+      tenant_id,
+      action_label: 'Go PRO',
+      badge_id: proBadge.id,
+      is_space: true,
+      action_url: 'https://www.preciousplastic.com/pro-membership',
+    });
+  }
+
+  // if (supporterBadge) {
+  //   upgradeBadges.push({
+  //     tenant_id,
+  //     action_label: 'Become a Supporter',
+  //     badge_id: supporterBadge.id,
+  //     is_space: false,
+  //     action_url: '',
+  //   });
+  // }
+
+  return upgradeBadges;
+};
 
 /// populates badges: 2/3 of profiles to have: 1 and 2 badges, others remain with no badge
 const seedBadgesRelations = (
@@ -447,6 +479,7 @@ const main = async () => {
 
   const { profile_badges } = await seed.profile_badges(seedBadges());
   await seed.profile_badges_relations(seedBadgesRelations(profiles, profile_badges));
+  await seed.upgrade_badge(seedUpgradeBadges(profile_badges));
 
   // await seed.map_pins(seedMapPins(profiles))
   const { tags } = await seed.tags(seedTags());

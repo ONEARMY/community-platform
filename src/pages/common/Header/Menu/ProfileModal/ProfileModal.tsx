@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { observer } from 'mobx-react';
 import { ReturnPathLink } from 'oa-components';
@@ -6,7 +7,10 @@ import { preciousPlasticTheme } from 'oa-themes';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { Box, Flex } from 'theme-ui';
+import { UpgradeBadgeService } from 'src/services/upgradeBadgeService';
+import { Box, Flex, Image } from 'theme-ui';
+
+import type { UpgradeBadge } from 'oa-shared';
 
 // TODO: Remove direct usage of Theme
 const theme = preciousPlasticTheme.styles;
@@ -42,6 +46,22 @@ const ModalLink = styled(NavLink)`
 
 export const ProfileModal = observer(() => {
   const { profile: activeUser } = useProfileStore();
+  const [upgradeBadges, setUpgradeBadges] = useState<UpgradeBadge[]>([]);
+
+  useEffect(() => {
+    const fetchUpgradeBadges = async () => {
+      const badges = await UpgradeBadgeService.getUpgradeBadges();
+      setUpgradeBadges(badges);
+    };
+    fetchUpgradeBadges();
+  }, []);
+
+  const isSpace = activeUser?.type?.isSpace || false;
+  const upgradeBadge = upgradeBadges.find((badge) => badge.isSpace === isSpace);
+
+  const userBadgeIds = activeUser?.badges?.map((badge) => badge.id) || [];
+  const hasUpgradeBadge = upgradeBadge ? userBadgeIds.includes(upgradeBadge.badgeId) : false;
+  const shouldShowUpgrade = upgradeBadge && !hasUpgradeBadge;
 
   return (
     <ModalContainer data-cy="user-menu-list">
@@ -63,6 +83,40 @@ export const ProfileModal = observer(() => {
         >
           Profile
         </ModalLink>
+        {shouldShowUpgrade && (
+          <Box
+            as="a"
+            href={upgradeBadge.actionUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-cy="menu-upgrade-badge"
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 2,
+              color: 'black',
+              padding: '10px 30px 10px 30px',
+              textAlign: 'left',
+              textDecoration: 'none',
+              width: '100%',
+              maxWidth: '100%',
+              maxHeight: '100%',
+              '&:hover': {
+                backgroundColor: 'background',
+              },
+            }}
+          >
+            {upgradeBadge.actionLabel}
+            {upgradeBadge.badgeImageUrl && (
+              <Image
+                src={upgradeBadge.badgeImageUrl}
+                sx={{ height: 16, width: 16 }}
+                alt={upgradeBadge.badgeName || 'badge'}
+              />
+            )}
+          </Box>
+        )}
         {COMMUNITY_PAGES_PROFILE.map((page) => (
           <AuthWrapper key={page.path}>
             <ModalLink

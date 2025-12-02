@@ -1,14 +1,15 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Button, InternalLink } from 'oa-components';
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { Flex } from 'theme-ui';
+import { UpgradeBadgeService } from 'src/services/upgradeBadgeService';
+import { Flex, Image } from 'theme-ui';
 
 import { UserProfile } from './UserProfile';
 
-import type { Profile, UserCreatedDocs } from 'oa-shared';
+import type { Profile, UpgradeBadge, UserCreatedDocs } from 'oa-shared';
 
 interface IProps {
   profile: Profile;
@@ -22,11 +23,28 @@ interface IProps {
 export const ProfilePage = observer((props: IProps) => {
   const { profile, userCreatedDocs } = props;
   const { profile: activeUser } = useProfileStore();
+  const [upgradeBadges, setUpgradeBadges] = useState<UpgradeBadge[]>([]);
+
   const isViewingOwnProfile = useMemo(
     () => activeUser?.username === profile?.username,
     [activeUser?.username],
   );
   const showMemberProfile = !profile?.type?.isSpace;
+
+  useEffect(() => {
+    const fetchUpgradeBadges = async () => {
+      const badges = await UpgradeBadgeService.getUpgradeBadges();
+      setUpgradeBadges(badges);
+    };
+    fetchUpgradeBadges();
+  }, []);
+
+  const isSpace = activeUser?.type?.isSpace || false;
+  const upgradeBadge = upgradeBadges.find((badge) => badge.isSpace === isSpace);
+
+  const userBadgeIds = activeUser?.badges?.map((badge) => badge.id) || [];
+  const hasUpgradeBadge = upgradeBadge ? userBadgeIds.includes(upgradeBadge.badgeId) : false;
+  const shouldShowUpgrade = upgradeBadge && !hasUpgradeBadge && isViewingOwnProfile;
 
   return (
     <Flex
@@ -39,18 +57,47 @@ export const ProfilePage = observer((props: IProps) => {
       }}
     >
       {isViewingOwnProfile && (
-        <InternalLink
+        <Flex
           sx={{
             alignSelf: ['center', 'flex-end'],
             marginBottom: 6,
             zIndex: 2,
+            gap: 2,
+            flexDirection: ['column', 'row'],
           }}
-          to="/settings"
         >
-          <Button type="button" data-cy="EditYourProfile">
-            Edit Your Profile
-          </Button>
-        </InternalLink>
+          {shouldShowUpgrade && (
+            <Button
+              as="a"
+              href={upgradeBadge.actionUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              type="button"
+              variant="outline"
+              data-cy="UpgradeBadge"
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                backgroundColor: 'white',
+              }}
+            >
+              {upgradeBadge.badgeImageUrl && (
+                <Image
+                  src={upgradeBadge.badgeImageUrl}
+                  sx={{ height: 16, width: 16, flexShrink: 0 }}
+                  alt={upgradeBadge.badgeName || 'badge'}
+                />
+              )}
+              {upgradeBadge.actionLabel}
+            </Button>
+          )}
+          <InternalLink to="/settings">
+            <Button type="button" data-cy="EditYourProfile">
+              Edit Your Profile
+            </Button>
+          </InternalLink>
+        </Flex>
       )}
 
       <ClientOnly fallback={<></>}>

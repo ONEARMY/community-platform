@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Button, UserStatistics, VisitorModal } from 'oa-components';
 import { UserRole } from 'oa-shared';
+import { trackEvent } from 'src/common/Analytics';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
 import { ProfileTags } from 'src/pages/common/ProfileTags';
@@ -114,7 +115,14 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
                 variant="outline"
                 iconColor="primary"
                 sx={{ backgroundColor: 'white', borderBottom: '4px solid' }}
-                onClick={() => setIsDonationModalOpen(true)}
+                onClick={() => {
+                  trackEvent({
+                    action: 'donationModalOpened',
+                    category: 'profiles',
+                    label: profile.username,
+                  });
+                  setIsDonationModalOpen(true);
+                }}
               >
                 Support this {profile.type?.displayName || 'space'}
               </Button>

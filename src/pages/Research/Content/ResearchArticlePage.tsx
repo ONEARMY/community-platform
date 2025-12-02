@@ -55,10 +55,10 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
     loggedInUser: activeUser,
   };
 
-  const handleUsefulClick = async (vote: 'add' | 'delete', eventCategory = 'Library') => {
+  const handleUsefulClick = async (vote: 'add' | 'delete') => {
     await onUsefulClick({
       vote,
-      config: { ...configOnUsefulClick, eventCategory },
+      config: { ...configOnUsefulClick, eventCategory: 'research' },
     });
   };
 
@@ -98,15 +98,13 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
     } else {
       await subscribersService.remove('research', research.id);
     }
-    const action = subscribed ? 'Unsubscribed' : 'Subscribed';
-
     setSubscribersCount((prev) => prev + (subscribed ? -1 : 1));
     // toggle subscribed
     setSubscribed((prev) => !prev);
 
     trackEvent({
-      category: 'Research',
-      action: action,
+      category: 'research',
+      action: subscribed ? 'unsubscribed' : 'subscribed',
       label: research.slug,
     });
   };
@@ -137,8 +135,8 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
     try {
       await researchService.deleteResearch(research.id);
       trackEvent({
-        category: 'Research',
-        action: 'Deleted',
+        category: 'research',
+        action: 'deleted',
         label: research.title,
       });
 
@@ -194,7 +192,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
         isDeletable={isDeletable}
         hasUserVotedUseful={voted}
         hasUserSubscribed={subscribed}
-        onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add', 'ResearchDescription')}
+        onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}
         onFollowClick={() => onFollowClick(subscribed ? 'remove' : 'add')}
         subscribersCount={subscribersCount}
         commentsCount={research.commentCount}
@@ -237,9 +235,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
                     isLoggedIn={!!activeUser}
                     votedUsefulCount={usefulCount}
                     hasUserVotedUseful={voted}
-                    onUsefulClick={() =>
-                      handleUsefulClick(voted ? 'delete' : 'add', 'ArticleCallToAction')
-                    }
+                    onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}
                   />
                   <FollowButton
                     isLoggedIn={!!activeUser}
@@ -260,7 +256,14 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
                         variant="outline"
                         iconColor="primary"
                         sx={{ fontSize: '14px' }}
-                        onClick={() => setIsDonationModalOpen(true)}
+                        onClick={() => {
+                          trackEvent({
+                            action: 'donationModalOpened',
+                            category: 'research',
+                            label: research.author?.username || '',
+                          });
+                          setIsDonationModalOpen(true);
+                        }}
                       >
                         Support the author
                       </Button>

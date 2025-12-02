@@ -5,7 +5,7 @@ import { ProfileServiceServer } from './profileService.server';
 import { storageServiceServer } from './storageService.server';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBProfile, DBResearchItem, DBResearchUpdate } from 'oa-shared';
+import type { DBAuthor, DBProfile, DBResearchItem, DBResearchUpdate } from 'oa-shared';
 
 const getBySlug = async (client: SupabaseClient, slug: string) => {
   const { data, error } = await client
@@ -90,7 +90,7 @@ const getCollaborators = async (collaboratorIds: string[] | null, client: Supaba
   const profileService = new ProfileServiceServer(client);
   const users = await profileService.getUsersByUsername(collaboratorIds);
 
-  return users?.map((user) => Author.fromDB(user));
+  return users?.map((user) => Author.fromDB(user as unknown as DBAuthor)) || [];
 };
 
 const getUpdate = async (client: SupabaseClient, researchId: number, updateId: number) => {

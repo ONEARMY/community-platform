@@ -12,7 +12,6 @@ import {
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
 import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
-import { logger } from 'src/logger';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { CommentSectionSupabase } from 'src/pages/common/CommentsSupabase/CommentSectionSupabase';
 import { usefulService } from 'src/services/usefulService';
@@ -26,8 +25,6 @@ import { LibraryDescription } from './LibraryDescription';
 import Step from './LibraryStep';
 
 import type { ContentType, Project, ProjectStep } from 'oa-shared';
-
-const DELETION_LABEL = 'Project marked for deletion';
 
 interface ProjectPageProps {
   item: Project;
@@ -61,10 +58,10 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
     loggedInUser: activeUser,
   };
 
-  const handleUsefulClick = async (vote: 'add' | 'delete', eventCategory = 'Library') => {
+  const handleUsefulClick = async (vote: 'add' | 'delete') => {
     await onUsefulClick({
       vote,
-      config: { ...configOnUsefulClick, eventCategory },
+      config: { ...configOnUsefulClick, eventCategory: 'projects' },
     });
   };
 
@@ -76,23 +73,14 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
     try {
       await libraryService.deleteProject(item.id);
       trackEvent({
-        category: 'Library',
-        action: 'Deleted',
+        category: 'projects',
+        action: 'deleted',
         label: item.title,
       });
-      logger.debug(
-        {
-          category: 'Library',
-          action: 'Deleted',
-          label: item.title,
-        },
-        DELETION_LABEL,
-      );
 
       navigate('/library');
     } catch (err) {
-      logger.error(err);
-      // at least log the error
+      console.error(err);
     }
   };
 
@@ -141,7 +129,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
         commentsCount={item.commentCount}
         votedUsefulCount={usefulCount}
         hasUserVotedUseful={voted}
-        onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add', 'LibraryDescription')}
+        onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}
         subscribersCount={subscribersCount}
       />
       <Flex sx={{ flexDirection: 'column', marginTop: [3, 4], gap: 4 }}>
@@ -159,11 +147,6 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 type="button"
                 sx={{ fontSize: 2 }}
                 onClick={() => {
-                  trackEvent({
-                    category: 'ArticleCallToAction',
-                    action: 'ScrollLibraryComment',
-                    label: item.slug,
-                  });
                   document
                     .querySelector('[data-target="create-comment-container"]')
                     ?.scrollIntoView({
@@ -183,9 +166,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                   votedUsefulCount={usefulCount}
                   hasUserVotedUseful={voted}
                   isLoggedIn={!!activeUser}
-                  onUsefulClick={() =>
-                    handleUsefulClick(voted ? 'delete' : 'add', 'ArticleCallToAction')
-                  }
+                  onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}
                 />
               )}
               {item.author?.profileType?.isSpace && item.author?.donationsEnabled && (
@@ -200,7 +181,14 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                     variant="outline"
                     iconColor="primary"
                     sx={{ fontSize: '14px' }}
-                    onClick={() => setIsDonationModalOpen(true)}
+                    onClick={() => {
+                      trackEvent({
+                        action: 'donationModalOpened',
+                        category: 'projects',
+                        label: item.author?.username || '',
+                      });
+                      setIsDonationModalOpen(true);
+                    }}
                   >
                     Support the author
                   </Button>

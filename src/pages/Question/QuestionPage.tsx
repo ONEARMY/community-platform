@@ -24,7 +24,7 @@ import { Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
 
-import type { ContentType, Question } from 'oa-shared';
+import type { Question } from 'oa-shared';
 
 interface IProps {
   question: Question;
@@ -50,18 +50,19 @@ export const QuestionPage = observer(({ question }: IProps) => {
     return hasAdminRights(activeUser) || question.author?.username === activeUser?.username;
   }, [activeUser, question.author]);
 
-  const configOnUsefulClick = {
-    contentType: 'questions' as ContentType,
-    contentId: question.id,
-    eventCategory: 'QuestionPage',
-    slug: question.slug,
-    setVoted,
-    setUsefulCount,
-    loggedInUser: activeUser,
-  };
-
   const handleUsefulClick = async (vote: 'add' | 'delete') => {
-    await onUsefulClick({ vote, config: configOnUsefulClick });
+    await onUsefulClick({
+      vote,
+      config: {
+        contentType: 'questions',
+        contentId: question.id,
+        eventCategory: 'questions',
+        slug: question.slug,
+        setVoted,
+        setUsefulCount,
+        loggedInUser: activeUser,
+      },
+    });
   };
 
   return (

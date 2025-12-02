@@ -218,7 +218,7 @@ export const LibraryDescription = (props: IProps) => {
           alignItems: 'center',
           flexDirection: 'row',
           padding: [2, 3],
-          gap: 2,
+          gap: 3,
           flexWrap: 'wrap',
           justifyContent: 'space-between',
         }}

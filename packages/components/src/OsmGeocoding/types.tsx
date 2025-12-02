@@ -3,7 +3,7 @@ export interface Result {
   licence: string;
   osm_type: string;
   osm_id: number;
-  boundingbox: Array<string>;
+  boundingbox: string[];
   display_name: string;
   lat: string;
   lon: string;

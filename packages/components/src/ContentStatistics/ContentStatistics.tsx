@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { cloneElement, isValidElement, useCallback, useState } from 'react';
 import { Flex, Text } from 'theme-ui';
 
 import { Button } from '../Button/Button';
@@ -32,9 +32,9 @@ export const ContentStatistics = ({ statistics, alwaysShow }: IProps) => {
     }
 
     const modalElement = stat.modalComponent(data);
-    if (React.isValidElement(modalElement)) {
+    if (isValidElement(modalElement)) {
       setActiveModal(
-        React.cloneElement(modalElement, {
+        cloneElement(modalElement, {
           onClose: () => setActiveModal(null),
         }),
       );

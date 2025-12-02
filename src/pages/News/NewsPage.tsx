@@ -119,7 +119,7 @@ export const NewsPage = observer(({ news }: IProps) => {
           <Flex
             sx={{
               flexWrap: 'wrap',
-              gap: 2,
+              gap: 3,
               justifyContent: 'stretch',
               paddingTop: 2,
               paddingBottom: 2,

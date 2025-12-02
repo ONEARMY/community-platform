@@ -154,8 +154,6 @@ export const headings = {
   },
   visitors: 'Visitors',
   workspace: {
-    description:
-      'In order to have your pin accepted on our map you have to collect at least 6 stars in the Ally Checklist. Learn more about the Community Program and how you can join.',
     title: 'Your map pin',
   },
 };
@@ -168,8 +166,7 @@ export const notificationForm = {
 export const mapForm = {
   confirmDeletePin:
     'If you delete your location now, adding a new map pin in the future might need approving.',
-  descriptionMember:
-    "Add yourself to the map with a 'want to get started' pin so people can find you, reach out and collaborate. Make sure to add some contact details to your profile!",
+  descriptionMember: 'Add yourself to the map so that people can reach out and collaborate!',
   descriptionSpace: "Map pins undergo moderator's approval which might take several days.",
   loading: 'Loading your map pin',
   locationLabel: 'Your current map pin is here:',

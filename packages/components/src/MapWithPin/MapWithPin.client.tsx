@@ -1,21 +1,16 @@
 import { useState } from 'react';
 import { ZoomControl } from 'react-leaflet';
-import { Alert, Box, Flex, Text } from 'theme-ui';
+import { Box, Flex } from 'theme-ui';
 
-import { Button } from '../Button/Button';
 import { Map } from '../Map/Map.client';
 import { OsmGeocoding } from '../OsmGeocoding/OsmGeocoding';
 import { MapPin } from './MapPin.client';
 
-import type { DivIcon, LeafletMouseEvent } from 'leaflet';
+import type { DivIcon } from 'leaflet';
 import type { Map as MapType } from 'react-leaflet';
 import type { Result } from '../OsmGeocoding/types';
 
 import 'leaflet/dist/leaflet.css';
-
-const useUserLocation = 'Use my current location';
-const mapInstructions =
-  'To move your pin, grab it to move it or double click where you want it to go.';
 
 export interface Props {
   mapRef: React.RefObject<MapType | null>;
@@ -24,10 +19,9 @@ export interface Props {
     lng: number;
   };
   markerIcon?: DivIcon;
-  updatePosition?: any;
+  updatePosition: (position: { lat: number; lng: number }) => void;
   center?: any;
   zoom?: number;
-  hasUserLocation?: boolean;
   onClickMapPin?: () => void;
   popup?: React.ReactNode;
 }
@@ -37,43 +31,8 @@ export const MapWithPin = (props: Props) => {
   const [center, setCenter] = useState(props.center || [props.position.lat, props.position.lng]);
   const { mapRef, position, markerIcon, onClickMapPin, popup } = props;
 
-  const hasUserLocation = props.hasUserLocation || false;
-  const onPositionChanged =
-    props.updatePosition ||
-    function () {
-      // do nothing
-    };
-
-  const setLocationToNavigatorLocation = () => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        onPositionChanged({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-        setCenter([position.coords.latitude, position.coords.longitude]);
-        setZoom(15);
-      },
-      () => {
-        // do nothing
-      },
-    );
-  };
-
-  const onDblClick = (evt: LeafletMouseEvent) => {
-    onPositionChanged({ ...evt.latlng });
-  };
-
   return (
     <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-      <Alert
-        variant="info"
-        sx={{
-          marginTop: 2,
-        }}
-      >
-        <Text sx={{ fontSize: 1 }}>{mapInstructions}</Text>
-      </Alert>
       <div
         style={{
           position: 'relative',
@@ -95,11 +54,12 @@ export const MapWithPin = (props: Props) => {
         >
           <Flex style={{ width: '280px' }}>
             <OsmGeocoding
+              placeholder="Type your address"
               callback={(data: Result) => {
                 if (data.lat && data.lon) {
-                  onPositionChanged({
-                    lat: data.lat,
-                    lng: data.lon,
+                  props.updatePosition({
+                    lat: Number(data.lat),
+                    lng: Number(data.lon),
                   });
                   setCenter([data.lat, data.lon]);
                   setZoom(15);
@@ -107,18 +67,6 @@ export const MapWithPin = (props: Props) => {
               }}
               acceptLanguage="en"
             />
-            {hasUserLocation && (
-              <Button
-                type="button"
-                mx={2}
-                onClick={(evt) => {
-                  evt.preventDefault();
-                  setLocationToNavigatorLocation();
-                }}
-              >
-                {useUserLocation}
-              </Button>
-            )}
           </Flex>
         </Box>
 
@@ -129,10 +77,10 @@ export const MapWithPin = (props: Props) => {
           zoom={zoom}
           zoomControl={false}
           setZoom={setZoom}
-          ondblclick={onDblClick}
+          onclick={(e) => props.updatePosition({ lat: e.latlng.lat, lng: e.latlng.lng })}
           doubleClickZoom={false}
           style={{
-            height: '500px',
+            height: '360px',
             zIndex: 1,
           }}
         >
@@ -146,7 +94,7 @@ export const MapWithPin = (props: Props) => {
                 onClick={onClickMapPin}
                 onDrag={(evt: any) => {
                   if (evt.lat && evt.lng)
-                    onPositionChanged({
+                    props.updatePosition({
                       lat: evt.lat,
                       lng: evt.lng,
                     });

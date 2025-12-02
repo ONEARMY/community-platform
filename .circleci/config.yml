@@ -250,7 +250,6 @@ jobs:
               --build-secret VITE_DONATIONS_IFRAME_SRC="$VITE_DONATIONS_IFRAME_SRC" \
               --build-secret VITE_DONATIONS_IMAGE_URL="$VITE_DONATIONS_IMAGE_URL" \
               --build-secret VITE_HOWTOS_HEADING="$VITE_HOWTOS_HEADING" \
-              --build-secret VITE_COMMUNITY_PROGRAM_URL="$VITE_COMMUNITY_PROGRAM_URL" \
               --build-secret VITE_QUESTIONS_GUIDELINES_URL="$VITE_QUESTIONS_GUIDELINES_URL" \
               --build-secret VITE_NO_MESSAGING="$VITE_NO_MESSAGING" \
               --build-secret TENANT_ID="$TENANT_ID" \

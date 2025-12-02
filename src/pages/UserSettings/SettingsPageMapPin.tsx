@@ -27,68 +27,6 @@ import type { ILatLng, MapPin } from 'oa-shared';
 import type { Map } from 'react-leaflet';
 import type { IFormNotification } from './content/SettingsFormNotifications';
 
-const LocationDataTextDisplay = ({ pin }: { pin?: MapPin }) => {
-  const navigate = useNavigate();
-
-  if (!pin)
-    return (
-      <Text
-        variant="paragraph"
-        sx={{ fontStyle: 'italic' }}
-        data-cy="NoLocationDataTextDisplay"
-        data-testid="NoLocationDataTextDisplay"
-      >
-        {mapForm.noLocationLabel}
-      </Text>
-    );
-
-  return (
-    <>
-      <Flex sx={{ gap: 2 }}>
-        <Text
-          variant="paragraph"
-          data-cy="LocationDataTextDisplay"
-          data-testid="LocationDataTextDisplay"
-        >
-          {mapForm.locationLabel}
-          <Flex sx={{ gap: 1, alignItems: 'center' }}>
-            <FlagIcon countryCode={pin.countryCode} />
-            {pin.name}
-          </Flex>
-        </Text>
-
-        {pin.moderation === 'accepted' && (
-          <Button
-            onClick={() => navigate(`/map#${pin.profile!.username}`)}
-            sx={{ alignSelf: 'flex-start' }}
-            icon="map"
-            variant="secondary"
-          >
-            See your pin on the map
-          </Button>
-        )}
-      </Flex>
-
-      {pin.moderation !== 'accepted' && (
-        <Alert variant="warning" sx={{ gap: 1 }}>
-          <Text sx={{ fontSize: 1 }}>
-            Your pin status is {ModerationRecord[pin.moderation].toLowerCase()}
-          </Text>
-          {pin.moderationFeedback && (
-            <>
-              {' - '}
-              <Text sx={{ fontSize: 1 }}>
-                Moderator feedback:{' '}
-                <Text sx={{ fontWeight: 'bold' }}>{pin.moderationFeedback}</Text>
-              </Text>
-            </>
-          )}
-        </Alert>
-      )}
-    </>
-  );
-};
-
 export const SettingsPageMapPin = observer(() => {
   const [mapPin, setMapPin] = useState<MapPin | undefined>();
   const [previewMapPin, setPreviewMapPin] = useState<MapPin | undefined>();
@@ -97,6 +35,7 @@ export const SettingsPageMapPin = observer(() => {
   const [notification, setNotification] = useState<IFormNotification | undefined>(undefined);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const newMapRef = useRef<Map>(null);
+  const navigate = useNavigate();
 
   const { profile } = useProfileStore();
 
@@ -223,7 +162,34 @@ export const SettingsPageMapPin = observer(() => {
                   notification={notification}
                   submitFailed={submitFailed}
                 />
-                <LocationDataTextDisplay pin={mapPin} />
+
+                {!mapPin && (
+                  <Text
+                    variant="paragraph"
+                    sx={{ fontStyle: 'italic' }}
+                    data-cy="NoLocationDataTextDisplay"
+                    data-testid="NoLocationDataTextDisplay"
+                  >
+                    {mapForm.noLocationLabel}
+                  </Text>
+                )}
+
+                {mapPin && mapPin.moderation !== 'accepted' && (
+                  <Alert variant="warning" sx={{ gap: 1 }}>
+                    <Text sx={{ fontSize: 1 }}>
+                      Your pin status is {ModerationRecord[mapPin.moderation].toLowerCase()}
+                    </Text>
+                    {mapPin.moderationFeedback && (
+                      <>
+                        {' - '}
+                        <Text sx={{ fontSize: 1 }}>
+                          Moderator feedback:{' '}
+                          <Text sx={{ fontWeight: 'bold' }}>{mapPin.moderationFeedback}</Text>
+                        </Text>
+                      </>
+                    )}
+                  </Alert>
+                )}
 
                 <Field
                   name="location"
@@ -254,23 +220,40 @@ export const SettingsPageMapPin = observer(() => {
                   }}
                 />
 
-                {previewMapPin && (
-                  <Flex sx={{ gap: 1 }}>
-                    <Text variant="paragraph">Preview the new pin:</Text>
-                    <Text
+                <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+                  {mapPin && (
+                    <Flex
+                      sx={{ gap: 1 }}
                       variant="paragraph"
                       data-cy="LocationDataTextDisplay"
                       data-testid="LocationDataTextDisplay"
                     >
+                      {mapForm.locationLabel}
                       <Flex sx={{ gap: 1, alignItems: 'center' }}>
-                        <FlagIcon countryCode={previewMapPin.countryCode} />
-                        {previewMapPin.name ||
-                          previewMapPin.administrative ||
-                          previewMapPin.country}
+                        <FlagIcon countryCode={mapPin.countryCode} />
+                        {mapPin.name}
                       </Flex>
-                    </Text>
-                  </Flex>
-                )}
+                    </Flex>
+                  )}
+
+                  {previewMapPin && (
+                    <Flex sx={{ gap: 1 }}>
+                      <Text variant="paragraph">Preview the new pin:</Text>
+                      <Text
+                        variant="paragraph"
+                        data-cy="LocationDataTextDisplay"
+                        data-testid="LocationDataTextDisplay"
+                      >
+                        <Flex sx={{ gap: 1, alignItems: 'center' }}>
+                          <FlagIcon countryCode={previewMapPin.countryCode} />
+                          {previewMapPin.name ||
+                            previewMapPin.administrative ||
+                            previewMapPin.country}
+                        </Flex>
+                      </Text>
+                    </Flex>
+                  )}
+                </Flex>
 
                 <Flex sx={{ gap: 2 }}>
                   <Button
@@ -295,6 +278,17 @@ export const SettingsPageMapPin = observer(() => {
                       icon="delete"
                     >
                       {buttons.removePin}
+                    </Button>
+                  )}
+
+                  {mapPin?.moderation === 'accepted' && (
+                    <Button
+                      onClick={() => navigate(`/map#${mapPin.profile!.username}`)}
+                      sx={{ alignSelf: 'flex-start' }}
+                      icon="map"
+                      variant="secondary"
+                    >
+                      See your pin on the map
                     </Button>
                   )}
                 </Flex>

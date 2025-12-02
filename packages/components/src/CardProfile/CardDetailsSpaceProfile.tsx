@@ -77,7 +77,7 @@ export const CardDetailsSpaceProfile = ({ profile, isLink }: IProps) => {
         )}
 
         {aboutText && (
-          <Text variant="quiet" sx={{ fontSize: 2 }}>
+          <Text variant="quiet" sx={{ fontSize: 2, wordBreak: 'break-word' }}>
             {aboutText}
           </Text>
         )}

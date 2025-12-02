@@ -42,7 +42,7 @@ export const CommentBody = ({ body }: IProps) => {
         }}
         ref={textRef}
       >
-        <LinkifyText>{body}</LinkifyText>
+        <LinkifyText>{body.trim()}</LinkifyText>
       </Text>
       {textHeight > SHORT_COMMENT && (
         <Text

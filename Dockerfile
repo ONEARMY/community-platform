@@ -33,7 +33,6 @@ ARG VITE_DONATIONS_BODY
 ARG VITE_DONATIONS_IFRAME_SRC
 ARG VITE_DONATIONS_IMAGE_URL
 ARG VITE_HOWTOS_HEADING
-ARG VITE_COMMUNITY_PROGRAM_URL
 ARG VITE_QUESTIONS_GUIDELINES_URL
 ARG VITE_NO_MESSAGING
 
@@ -67,7 +66,6 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     --mount=type=secret,id=VITE_DONATIONS_IFRAME_SRC \
     --mount=type=secret,id=VITE_DONATIONS_IMAGE_URL \
     --mount=type=secret,id=VITE_HOWTOS_HEADING \
-    --mount=type=secret,id=VITE_COMMUNITY_PROGRAM_URL \
     --mount=type=secret,id=VITE_QUESTIONS_GUIDELINES_URL \
     --mount=type=secret,id=VITE_NO_MESSAGING \
     VITE_CDN_URL="$(cat /run/secrets/VITE_CDN_URL)" && \
@@ -87,7 +85,6 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     VITE_DONATIONS_IFRAME_SRC="$(cat /run/secrets/VITE_DONATIONS_IFRAME_SRC)" && \
     VITE_DONATIONS_IMAGE_URL="$(cat /run/secrets/VITE_DONATIONS_IMAGE_URL)" && \
     VITE_HOWTOS_HEADING="$(cat /run/secrets/VITE_HOWTOS_HEADING)" && \
-    VITE_COMMUNITY_PROGRAM_URL="$(cat /run/secrets/VITE_COMMUNITY_PROGRAM_URL)" && \
     VITE_QUESTIONS_GUIDELINES_URL="$(cat /run/secrets/VITE_QUESTIONS_GUIDELINES_URL)" && \
     VITE_NO_MESSAGING="$(cat /run/secrets/VITE_NO_MESSAGING)" && \
     echo "VITE_CDN_URL=\"${VITE_CDN_URL}\"" >> .env && \
@@ -107,7 +104,6 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     echo "VITE_DONATIONS_IFRAME_SRC=\"${VITE_DONATIONS_IFRAME_SRC}\"" >> .env && \
     echo "VITE_DONATIONS_IMAGE_URL=\"${VITE_DONATIONS_IMAGE_URL}\"" >> .env && \
     echo "VITE_HOWTOS_HEADING=\"${VITE_HOWTOS_HEADING}\"" >> .env && \
-    echo "VITE_COMMUNITY_PROGRAM_URL=\"${VITE_COMMUNITY_PROGRAM_URL}\"" >> .env && \
     echo "VITE_QUESTIONS_GUIDELINES_URL=\"${VITE_QUESTIONS_GUIDELINES_URL}\"" >> .env && \
     echo "VITE_NO_MESSAGING=\"${VITE_NO_MESSAGING}\"" >> .env
 

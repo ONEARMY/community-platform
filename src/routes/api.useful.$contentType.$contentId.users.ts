@@ -1,7 +1,7 @@
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
-import type { ProfileListItem } from 'oa-shared';
+import type { DBProfile, ProfileListItem } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -44,9 +44,16 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   // Transform the data using ProfileFactory and pick required properties
-  const users: ProfileListItem[] = data.map((row) => {
-    const profile = profileFactory.fromDB(row.profiles);
-    return {
+  const users: ProfileListItem[] = [];
+
+  for (const row of data) {
+    if (row.profiles === null) {
+      continue;
+    }
+
+    const profile = profileFactory.fromDB(row.profiles as unknown as DBProfile);
+
+    users.push({
       id: profile.id,
       username: profile.username,
       displayName: profile.displayName,
@@ -54,8 +61,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       country: profile.country,
       badges: profile.badges,
       type: profile.type,
-    };
-  });
+    });
+  }
 
   return Response.json(users, { headers });
 }

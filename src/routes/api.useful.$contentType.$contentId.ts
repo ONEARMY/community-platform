@@ -19,6 +19,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
     .from('profiles')
     .select()
     .eq('auth_id', claims.data.claims.sub)
+    .eq('tenant_id', process.env.TENANT_ID!)
     .limit(1);
 
   if (!profileResult.data || profileResult.error) {

@@ -163,7 +163,6 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
               </Button>
               {item.moderation === 'accepted' && (
                 <UsefulStatsButton
-                  votedUsefulCount={usefulCount}
                   hasUserVotedUseful={voted}
                   isLoggedIn={!!activeUser}
                   onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}

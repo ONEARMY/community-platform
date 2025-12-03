@@ -115,7 +115,7 @@ enable_signup = true
 enable_anonymous_sign_ins = false
 # Allow/disallow testing manual linking of accounts
 enable_manual_linking = false
-signing_keys_path = "./signing_key.json"
+#signing_keys_path = "./signing_key.json"
 
 [auth.email]
 # Allow/disallow new user signups via email to your project.

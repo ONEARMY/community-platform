@@ -227,7 +227,6 @@ export const LibraryDescription = (props: IProps) => {
           {() => (
             <Flex sx={{ gap: 2 }}>
               <UsefulStatsButton
-                votedUsefulCount={votedUsefulCount}
                 hasUserVotedUseful={hasUserVotedUseful}
                 isLoggedIn={loggedInUser ? true : false}
                 onUsefulClick={onUsefulClick}

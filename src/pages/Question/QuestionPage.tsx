@@ -137,7 +137,6 @@ export const QuestionPage = observer(({ question }: IProps) => {
             {() => (
               <>
                 <UsefulStatsButton
-                  votedUsefulCount={usefulCount}
                   hasUserVotedUseful={voted}
                   isLoggedIn={!!activeUser}
                   onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}

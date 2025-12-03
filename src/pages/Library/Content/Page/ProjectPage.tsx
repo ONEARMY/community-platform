@@ -33,7 +33,6 @@ interface ProjectPageProps {
 }
 
 export const ProjectPage = observer(({ item }: ProjectPageProps) => {
-  const [subscribersCount, setSubscribersCount] = useState<number>(item.subscriberCount);
   const [voted, setVoted] = useState<boolean>(false);
   const [usefulCount, setUsefulCount] = useState<number>(item.usefulCount);
   const { profile: activeUser } = useProfileStore();
@@ -140,7 +139,6 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
         votedUsefulCount={usefulCount}
         hasUserVotedUseful={voted}
         onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add', 'LibraryDescription')}
-        subscribersCount={subscribersCount}
       />
       <Flex sx={{ flexDirection: 'column', marginTop: [3, 4], gap: 4 }}>
         {item.steps
@@ -198,7 +196,6 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
             >
               <CommentSectionSupabase
                 authors={item.author?.id ? [item.author?.id] : []}
-                setSubscribersCount={setSubscribersCount}
                 sourceId={item.id}
                 sourceType="projects"
               />

@@ -27,20 +27,16 @@ interface IProps {
   votedUsefulCount?: number;
   hasUserVotedUseful: boolean;
   onUsefulClick: () => Promise<void>;
-  subscribersCount: number;
 }
 
-export const LibraryDescription = (props: IProps) => {
-  const {
-    commentsCount,
-    hasUserVotedUseful,
-    item,
-    loggedInUser,
-    onUsefulClick,
-    subscribersCount,
-    votedUsefulCount,
-  } = props;
-
+export const LibraryDescription = ({
+  commentsCount,
+  hasUserVotedUseful,
+  item,
+  loggedInUser,
+  onUsefulClick,
+  votedUsefulCount,
+}: IProps) => {
   const isEditable = useMemo(() => {
     return (
       !!loggedInUser &&
@@ -247,15 +243,6 @@ export const LibraryDescription = (props: IProps) => {
             },
             createUsefulStatistic('projects', item.id, votedUsefulCount || 0),
             {
-              icon: 'thunderbolt-grey',
-              label: buildStatisticsLabel({
-                stat: subscribersCount,
-                statUnit: 'following',
-                usePlural: false,
-              }),
-              stat: subscribersCount,
-            },
-            {
               icon: 'comment-outline',
               label: buildStatisticsLabel({
                 stat: commentsCount || 0,
@@ -263,15 +250,6 @@ export const LibraryDescription = (props: IProps) => {
                 usePlural: true,
               }),
               stat: commentsCount || 0,
-            },
-            {
-              icon: 'update',
-              label: buildStatisticsLabel({
-                stat: item.steps.length,
-                statUnit: 'step',
-                usePlural: true,
-              }),
-              stat: item.steps.length,
             },
           ]}
           alwaysShow

@@ -1,6 +1,7 @@
 import { Flex, Text } from 'theme-ui';
 
 import { Icon } from '../Icon/Icon';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 import type { IStatistic } from './types';
 
@@ -32,6 +33,8 @@ const StatisticItem = ({
   onOpenModal: (stat: IStatistic) => Promise<void>;
 }) => {
   const displayModal = !!statistic.modalComponent && statistic.stat;
+  // capitalize first letter of label
+  const label = statistic.label.slice(0, 1).toUpperCase() + statistic.label.slice(1).toLowerCase();
 
   return (
     <Flex
@@ -45,6 +48,8 @@ const StatisticItem = ({
       onClick={() => displayModal && onOpenModal(statistic)}
       data-testid={`ContentStatistics-${statistic.icon}`}
       data-cy={`ContentStatistics-${statistic.label}`}
+      data-tooltip-id={statistic.label}
+      data-tooltip-content={label}
     >
       <Icon glyph={statistic.icon} mr={1} size="sm" opacity="0.5" />
       <Text
@@ -52,8 +57,9 @@ const StatisticItem = ({
           textDecoration: displayModal ? 'underline' : 'none',
         }}
       >
-        {statistic.stat}
+        {statistic.stat} {statistic.label}
       </Text>
+      <Tooltip id={statistic.label} />
     </Flex>
   );
 };

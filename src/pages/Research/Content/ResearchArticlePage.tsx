@@ -243,6 +243,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
                     onFollowClick={() => onFollowClick(subscribed ? 'remove' : 'add')}
                     tooltipFollow="Follow to be notified about new updates"
                     tooltipUnfollow="Unfollow to stop being notified about new updates"
+                    sx={{ backgroundColor: '#fff' }}
                   />
                   {research.author?.profileType?.isSpace && research.author?.donationsEnabled && (
                     <>
@@ -255,7 +256,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
                         icon="donate"
                         variant="outline"
                         iconColor="primary"
-                        sx={{ fontSize: '14px' }}
+                        sx={{ fontSize: '14px', backgroundColor: '#fff' }}
                         onClick={() => {
                           trackEvent({
                             action: 'donationModalOpened',

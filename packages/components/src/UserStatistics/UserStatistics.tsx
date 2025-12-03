@@ -39,26 +39,25 @@ export const UserStatistics = (props: UserStatisticsProps) => {
     >
       <Flex
         sx={{
-          gap: 2,
+          gap: 4,
           flexDirection: ['row', 'column', 'column'],
           alignItems: ['center', 'flex-start', 'flex-start'],
           justifyContent: ['center', 'flex-start', 'flex-start'],
         }}
       >
-        {props.pin && (
-          <InternalLink
-            to={'/map#' + props.profile.username}
-            sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
-            data-testid="location-link"
-          >
-            <Flex sx={{ alignItems: 'center', gap: 2 }}>
-              <Icon glyph="map" size={22} />
-              <Text>Location: {props.pin.country || 'View on Map'}</Text>
-            </Flex>
-          </InternalLink>
-        )}
-
-        <Flex sx={{ gap: 2, flexDirection: 'column' }}>
+        <Flex sx={{ gap: 4, flexDirection: 'column' }}>
+          {props.pin && (
+            <InternalLink
+              to={'/map#' + props.profile.username}
+              sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
+              data-testid="location-link"
+            >
+              <Flex sx={{ alignItems: 'center', gap: 2 }}>
+                <Icon glyph="map" size={22} />
+                <Text>Location: {props.pin.country || 'View on Map'}</Text>
+              </Flex>
+            </InternalLink>
+          )}
           {props?.profile.badges?.map((badge) => (
             <Flex
               key={badge.id}

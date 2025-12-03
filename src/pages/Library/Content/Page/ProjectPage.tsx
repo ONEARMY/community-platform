@@ -145,7 +145,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
             <ArticleCallToActionSupabase author={item.author!}>
               <Button
                 type="button"
-                sx={{ fontSize: 2 }}
+                sx={{ fontSize: 2, justifyContent: 'center' }}
                 onClick={() => {
                   document
                     .querySelector('[data-target="create-comment-container"]')
@@ -180,7 +180,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                     icon="donate"
                     variant="outline"
                     iconColor="primary"
-                    sx={{ fontSize: '14px' }}
+                    sx={{ fontSize: '14px', backgroundColor: '#fff' }}
                     onClick={() => {
                       trackEvent({
                         action: 'donationModalOpened',

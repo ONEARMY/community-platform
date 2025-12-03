@@ -59,7 +59,7 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
         sx={{
           alignItems: 'stretch',
           flexDirection: ['column', 'row', 'row'],
-          gap: [2, 4, 4],
+          gap: 4,
           justifyContent: 'space-between',
         }}
       >
@@ -102,7 +102,7 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
             margin: 0,
           }}
         />
-        <Flex sx={{ flexDirection: 'column', gap: 2, alignItems: 'flex-start' }}>
+        <Flex sx={{ flexDirection: 'column', gap: 4, alignItems: 'flex-start' }}>
           {profile.type?.isSpace && profile?.donationsEnabled && (
             <>
               <DonationRequestModalContainer

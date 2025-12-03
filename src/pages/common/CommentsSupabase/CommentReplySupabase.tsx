@@ -19,7 +19,7 @@ export interface ICommentItemProps {
 }
 
 export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentItemProps) => {
-  const commentRef = useRef<HTMLDivElement>();
+  const commentRef = useRef<HTMLDivElement>(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [usefulCount, setUsefulCount] = useState<number>(comment.voteCount ?? 0);

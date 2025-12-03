@@ -10,7 +10,7 @@ import './popup.css';
 
 interface IProps {
   activePin: MapPin;
-  mapRef: React.RefObject<Map>;
+  mapRef: React.RefObject<Map | null>;
   onClose?: () => void;
   customPosition?: ILatLng;
 }

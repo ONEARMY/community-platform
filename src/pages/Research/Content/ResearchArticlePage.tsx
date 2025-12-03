@@ -233,7 +233,6 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
                 >
                   <UsefulStatsButton
                     isLoggedIn={!!activeUser}
-                    votedUsefulCount={usefulCount}
                     hasUserVotedUseful={voted}
                     onUsefulClick={() =>
                       handleUsefulClick(voted ? 'delete' : 'add', 'ArticleCallToAction')

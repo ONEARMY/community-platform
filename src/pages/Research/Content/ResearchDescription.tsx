@@ -156,7 +156,6 @@ const ResearchDescription = (props: IProps) => {
           {() => (
             <Flex sx={{ gap: 3 }}>
               <UsefulStatsButton
-                votedUsefulCount={votedUsefulCount}
                 hasUserVotedUseful={props.hasUserVotedUseful}
                 isLoggedIn={!!props.activeUser}
                 onUsefulClick={props.onUsefulClick}
@@ -192,7 +191,7 @@ const ResearchDescription = (props: IProps) => {
               }),
               stat: subscribersCount || 0,
             },
-            createUsefulStatistic('research', research.id, research.usefulCount),
+            createUsefulStatistic('research', research.id, votedUsefulCount || 0),
             {
               icon: 'comment-outline',
               label: buildStatisticsLabel({

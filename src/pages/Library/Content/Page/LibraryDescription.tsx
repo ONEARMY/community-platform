@@ -226,7 +226,6 @@ export const LibraryDescription = (props: IProps) => {
           {() => (
             <>
               <UsefulStatsButton
-                votedUsefulCount={votedUsefulCount}
                 hasUserVotedUseful={hasUserVotedUseful}
                 isLoggedIn={loggedInUser ? true : false}
                 onUsefulClick={onUsefulClick}

@@ -3,8 +3,8 @@ import { observer } from 'mobx-react-lite';
 import { Button, InternalLink } from 'oa-components';
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
-import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { upgradeBadgeService } from 'src/services/upgradeBadgeService';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Flex, Image } from 'theme-ui';
 
 import { UserProfile } from './UserProfile';

@@ -150,9 +150,7 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
   },
 ];
 
-const seedUpgradeBadges = (
-  badges: profile_badgesScalars[],
-): Partial<upgrade_badgeScalars>[] => {
+const seedUpgradeBadges = (badges: profile_badgesScalars[]): Partial<upgrade_badgeScalars>[] => {
   const proBadge = badges.find((badge) => badge.name === 'pro');
   // const supporterBadge = badges.find((badge) => badge.name === 'supporter');
 

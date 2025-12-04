@@ -251,6 +251,15 @@ export const LibraryDescription = ({
               }),
               stat: commentsCount || 0,
             },
+            {
+              icon: 'update',
+              label: buildStatisticsLabel({
+                stat: item.steps.length,
+                statUnit: 'step',
+                usePlural: true,
+              }),
+              stat: item.steps.length,
+            },
           ]}
           alwaysShow
         />

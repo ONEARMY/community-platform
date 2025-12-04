@@ -57,7 +57,7 @@ const StatisticItem = ({
           textDecoration: displayModal ? 'underline' : 'none',
         }}
       >
-        {statistic.stat} {statistic.label}
+        {statistic.stat}
       </Text>
       <Tooltip id={statistic.label} />
     </Flex>

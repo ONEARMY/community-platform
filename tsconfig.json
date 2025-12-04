@@ -4,7 +4,6 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "types": ["@react-router/node", "vite/client"],
     "allowJs": true,
-    "baseUrl": ".",
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "esModuleInterop": true,
@@ -31,9 +30,10 @@
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": false,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "paths": { "*": ["./*"] }
   },
-  "include": ["src/**/*", "types"],
+  "include": ["src/**/*", "types", "vite-env.d.ts"],
   "exclude": [
     "node_modules",
     "build",

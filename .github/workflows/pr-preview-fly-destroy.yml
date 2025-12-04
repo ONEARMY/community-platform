@@ -11,7 +11,9 @@ env:
 
 jobs:
   label_removed:
-    if: (github.event.action == 'unlabeled' && github.event.label.name == 'Review allow-preview ✅') || github.event.action == 'closed'
+    if: |
+      (github.event.action == 'unlabeled' && github.event.label.name == 'Review allow-preview ✅') ||
+      (github.event.action == 'closed' && contains(github.event.pull_request.labels.*.name, 'Review allow-preview ✅'))
     runs-on: ubuntu-latest
     continue-on-error: true
     concurrency:
@@ -19,9 +21,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          # pull the repo from the pull request source, not the default local repo
-          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Destroy fly.io preview app
         id: destroy

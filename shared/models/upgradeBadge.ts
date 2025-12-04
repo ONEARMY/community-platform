@@ -1,4 +1,5 @@
 import type { DBProfileBadge } from './profileBadge';
+import { ProfileBadge } from './profileBadge';
 
 export class DBUpgradeBadge {
   id: number;
@@ -20,8 +21,7 @@ export class UpgradeBadge {
   badgeId: number;
   isSpace: boolean;
   actionUrl: string;
-  badgeImageUrl?: string;
-  badgeName?: string;
+  readonly badge?: ProfileBadge;
 
   constructor(obj: Partial<UpgradeBadge>) {
     Object.assign(this, obj);
@@ -34,8 +34,7 @@ export class UpgradeBadge {
       badgeId: value.badge_id,
       isSpace: value.is_space,
       actionUrl: value.action_url,
-      badgeImageUrl: value.badge?.image_url,
-      badgeName: value.badge?.name,
+      badge: value.badge ? ProfileBadge.fromDB(value.badge) : undefined,
     });
   }
 }

@@ -7,7 +7,7 @@ import { preciousPlasticTheme } from 'oa-themes';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { UpgradeBadgeService } from 'src/services/upgradeBadgeService';
+import { upgradeBadgeService } from 'src/services/upgradeBadgeService';
 import { Box, Flex, Image } from 'theme-ui';
 
 import type { UpgradeBadge } from 'oa-shared';
@@ -50,7 +50,7 @@ export const ProfileModal = observer(() => {
 
   useEffect(() => {
     const fetchUpgradeBadges = async () => {
-      const badges = await UpgradeBadgeService.getUpgradeBadges();
+      const badges = await upgradeBadgeService.getUpgradeBadges();
       setUpgradeBadges(badges);
     };
     fetchUpgradeBadges();
@@ -108,11 +108,11 @@ export const ProfileModal = observer(() => {
             }}
           >
             {upgradeBadge.actionLabel}
-            {upgradeBadge.badgeImageUrl && (
+            {upgradeBadge.badge?.imageUrl && (
               <Image
-                src={upgradeBadge.badgeImageUrl}
+                src={upgradeBadge.badge.imageUrl}
                 sx={{ height: 16, width: 16 }}
-                alt={upgradeBadge.badgeName || 'badge'}
+                alt={upgradeBadge.badge.displayName || 'badge'}
               />
             )}
           </Box>

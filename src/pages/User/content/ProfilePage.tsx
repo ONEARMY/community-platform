@@ -4,7 +4,7 @@ import { Button, InternalLink } from 'oa-components';
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { UpgradeBadgeService } from 'src/services/upgradeBadgeService';
+import { upgradeBadgeService } from 'src/services/upgradeBadgeService';
 import { Flex, Image } from 'theme-ui';
 
 import { UserProfile } from './UserProfile';
@@ -33,7 +33,7 @@ export const ProfilePage = observer((props: IProps) => {
 
   useEffect(() => {
     const fetchUpgradeBadges = async () => {
-      const badges = await UpgradeBadgeService.getUpgradeBadges();
+      const badges = await upgradeBadgeService.getUpgradeBadges();
       setUpgradeBadges(badges);
     };
     fetchUpgradeBadges();
@@ -82,11 +82,11 @@ export const ProfilePage = observer((props: IProps) => {
                 backgroundColor: 'white',
               }}
             >
-              {upgradeBadge.badgeImageUrl && (
+              {upgradeBadge.badge?.imageUrl && (
                 <Image
-                  src={upgradeBadge.badgeImageUrl}
+                  src={upgradeBadge.badge.imageUrl}
                   sx={{ height: 16, width: 16, flexShrink: 0 }}
-                  alt={upgradeBadge.badgeName || 'badge'}
+                  alt={upgradeBadge.badge.displayName || 'badge'}
                 />
               )}
               {upgradeBadge.actionLabel}

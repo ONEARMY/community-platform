@@ -63,7 +63,7 @@ describe('[Library]', () => {
         }
 
         images.forEach((image, index) => {
-          cy.get(`[data-cy=image-upload-${index}]`).find(':file').attachFile(image);
+          cy.get(`[data-cy=image-upload-${index}]`).find(':file').selectFile(image);
         });
       }
     });
@@ -225,7 +225,7 @@ describe('[Library]', () => {
       cy.step('Upload a cover for the intro');
       cy.get('[data-cy="image-upload"]')
         .find('input[type="file"]')
-        .attachFile('images/howto-intro.jpg');
+        .selectFile('images/howto-intro.jpg');
 
       fillStep(1, steps[0].title, steps[0].text, imagePaths);
       fillStep(2, steps[2].title, steps[2].text, [], steps[2].videoURL);

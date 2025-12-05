@@ -12392,15 +12392,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress-file-upload@npm:5.0.8":
-  version: 5.0.8
-  resolution: "cypress-file-upload@npm:5.0.8"
-  peerDependencies:
-    cypress: ">3.0.0"
-  checksum: 10/c2f66b6de7572ef1b2c609bf76ad63831ee20d7a8a2f144eccc2a7a1fb21994c2f5524ad4921a731bbd2e362aa6ff932506fa8c93c875bc1c0edda383e1125ba
-  languageName: node
-  linkType: hard
-
 "cypress@npm:13.15.1":
   version: 13.15.1
   resolution: "cypress@npm:13.15.1"
@@ -14114,19 +14105,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-mocha@npm:^10.4.3":
-  version: 10.5.0
-  resolution: "eslint-plugin-mocha@npm:10.5.0"
-  dependencies:
-    eslint-utils: "npm:^3.0.0"
-    globals: "npm:^13.24.0"
-    rambda: "npm:^7.4.0"
-  peerDependencies:
-    eslint: ">=7.0.0"
-  checksum: 10/cc2e9cc8efda173967fb31a27b5ebbab989a20a06fd310bb88e4ddf4299c1445365b48c74eadf37eacffb1b16386e5a866ed098a2c242ad61763aea17f324c83
-  languageName: node
-  linkType: hard
-
 "eslint-plugin-prefer-arrow-functions@npm:^3.3.2":
   version: 3.4.1
   resolution: "eslint-plugin-prefer-arrow-functions@npm:3.4.1"
@@ -14274,24 +14252,6 @@ __metadata:
     esrecurse: "npm:^4.3.0"
     estraverse: "npm:^5.2.0"
   checksum: 10/5c660fb905d5883ad018a6fea2b49f3cb5b1cbf2cd4bd08e98646e9864f9bc2c74c0839bed2d292e90a4a328833accc197c8f0baed89cbe8d605d6f918465491
-  languageName: node
-  linkType: hard
-
-"eslint-utils@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "eslint-utils@npm:3.0.0"
-  dependencies:
-    eslint-visitor-keys: "npm:^2.0.0"
-  peerDependencies:
-    eslint: ">=5"
-  checksum: 10/7675260a6b220c70f13e4cdbf077e93cad0dfb388429a27d6c0b584b2b20dca24594508e8bdb00a460a5764bd364a5018e20c2b8b1d70f82bcc3fdc30692a4d2
-  languageName: node
-  linkType: hard
-
-"eslint-visitor-keys@npm:^2.0.0":
-  version: 2.1.0
-  resolution: "eslint-visitor-keys@npm:2.1.0"
-  checksum: 10/db4547eef5039122d518fa307e938ceb8589da5f6e8f5222efaf14dd62f748ce82e2d2becd3ff9412a50350b726bda95dbea8515a471074547daefa58aee8735
   languageName: node
   linkType: hard
 
@@ -15752,7 +15712,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals@npm:^13.19.0, globals@npm:^13.20.0, globals@npm:^13.24.0":
+"globals@npm:^13.19.0, globals@npm:^13.20.0":
   version: 13.24.0
   resolution: "globals@npm:13.24.0"
   dependencies:
@@ -20120,10 +20080,8 @@ __metadata:
     "@vitejs/plugin-react": "npm:^5.1.1"
     cross-env: "npm:^7.0.3"
     cypress: "npm:13.15.1"
-    cypress-file-upload: "npm:5.0.8"
     dateformat: "npm:^5.0.3"
     dotenv: "npm:^10.0.0"
-    eslint-plugin-mocha: "npm:^10.4.3"
     fs-extra: "npm:^11.2.0"
     oa-shared: "workspace:*"
     ts-node: "npm:^10.9.2"
@@ -22127,13 +22085,6 @@ __metadata:
   version: 1.0.0
   resolution: "railroad-diagrams@npm:1.0.0"
   checksum: 10/5349cf7a27f28c2cd152b525964624e0d0a795ab062d01682084381570fbb07ab877035771bcfb27cd5b6a7ee9f8371ecc34ccc8c3bde3443676230a59a7a85e
-  languageName: node
-  linkType: hard
-
-"rambda@npm:^7.4.0":
-  version: 7.5.0
-  resolution: "rambda@npm:7.5.0"
-  checksum: 10/a87ee033803bf841ac35a12a04583cc36e2d8957e3bee97e45fc8944e64915f4534685724efe663a3088a8d719489f76febf444544b300642e7398c2e5412217
   languageName: node
   linkType: hard
 

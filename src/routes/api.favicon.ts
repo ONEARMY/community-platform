@@ -24,7 +24,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
   }
 
-  const { data, error } = await client.from('tenant_settings').select('site_favicon').limit(1);
+  const { data, error } = await client
+    .from('tenant_settings')
+    .select('site_favicon')
+    .eq('tenant_id', process.env.TENANT_ID)
+    .limit(1);
 
   if (error) {
     return new Response('Failed to load favicon metadata', { status: 500 });

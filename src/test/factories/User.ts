@@ -22,7 +22,7 @@ export const FactoryUser = (userOverloads: Partial<Profile> = {}): Partial<Profi
     order: faker.number.int(),
     isSpace: false,
   },
-  username: faker.internet.userName(),
+  username: faker.internet.username(),
   displayName: faker.person.fullName(),
   badges: [
     {

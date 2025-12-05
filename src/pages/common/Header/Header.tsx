@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { withTheme } from '@emotion/react';
-import { motion } from 'framer-motion';
+import { animated, useSpring } from '@react-spring/web';
 import { observer } from 'mobx-react';
 import { Button } from 'oa-components';
 import { UserRole } from 'oa-shared';
@@ -56,26 +56,14 @@ const MobileMenuWrapper = ({ children, ...props }) => (
 );
 
 const AnimationContainer = (props: any) => {
-  const variants = {
-    visible: {
-      duration: 0.25,
-      top: '0',
-    },
-    hidden: {
-      duration: 0.25,
-      top: '-100%',
-    },
-  };
+  const springStyle = useSpring({
+    from: { top: '-100%' },
+    to: { top: '0' },
+    config: { duration: 250 },
+  });
+
   return (
-    <motion.div
-      layout
-      style={{ position: 'relative' }}
-      initial="hidden"
-      animate="visible"
-      variants={variants}
-    >
-      {props.children}
-    </motion.div>
+    <animated.div style={{ position: 'relative', ...springStyle }}>{props.children}</animated.div>
   );
 };
 
@@ -200,7 +188,7 @@ const Header = observer(() => {
           </ClientOnly>
         </Flex>
         {isVisible && (
-          <AnimationContainer key={'mobilePanelContainer'}>
+          <AnimationContainer key="mobilePanelContainer">
             <MobileMenuWrapper>
               <MenuMobilePanel />
             </MobileMenuWrapper>

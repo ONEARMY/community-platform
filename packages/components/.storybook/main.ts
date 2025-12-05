@@ -1,6 +1,10 @@
 import { dirname, join } from 'path';
+import { createRequire } from 'module';
 import type { StorybookConfig } from '@storybook/react-vite';
 import { mergeConfig } from 'vite';
+
+const require = createRequire(import.meta.url);
+
 const Config: StorybookConfig = {
   stories: ['../src/**/*.stories.tsx', '../src/*.mdx'],
 

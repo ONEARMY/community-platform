@@ -1,4 +1,4 @@
-import 'cypress-file-upload';
+export {};
 
 interface ExpectedNewNotification {
   content: string;

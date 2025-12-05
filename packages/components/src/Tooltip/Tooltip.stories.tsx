@@ -2,7 +2,8 @@ import { Button } from 'theme-ui';
 
 import { Tooltip } from './Tooltip';
 
-import type { Meta, StoryFn } from '@storybook/react-vite';
+// eslint-disable-next-line storybook/no-renderer-packages
+import type { Meta, StoryFn } from '@storybook/react';
 
 export default {
   title: 'Components/Tooltip',

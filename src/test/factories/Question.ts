@@ -29,7 +29,7 @@ export const FactoryQuestionItem = (questionOverloads: Partial<Question> = {}): 
   author: {
     id: faker.number.int(),
     country: faker.location.countryCode(),
-    displayName: faker.internet.userName(),
+    displayName: faker.internet.username(),
     badges: [
       {
         id: 1,
@@ -49,7 +49,7 @@ export const FactoryQuestionItem = (questionOverloads: Partial<Question> = {}): 
       id: faker.string.uuid(),
       publicUrl: faker.image.avatar(),
     },
-    username: faker.internet.userName(),
+    username: faker.internet.username(),
   },
   category: {
     createdAt: new Date(),

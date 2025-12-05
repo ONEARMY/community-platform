@@ -5,7 +5,7 @@
     "start": "cross-env PORT=3456 node --loader ts-node/esm scripts/start.mts"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.6.0",
+    "@faker-js/faker": "^10.1.0",
     "@types/fs-extra": "^11.0.4",
     "@types/wait-on": "^5.3.4",
     "@vitejs/plugin-react": "^5.1.1",

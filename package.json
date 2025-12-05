@@ -93,7 +93,6 @@
     "express": "^4.19.2",
     "final-form": "4.20.2",
     "final-form-arrays": "^3.0.2",
-    "fs-extra": "^10.0.0",
     "helmet": "^7.1.0",
     "isbot": "^5.1.13",
     "jsonwebtoken": "^9.0.2",
@@ -127,7 +126,7 @@
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.11.0",
-    "@faker-js/faker": "^8.4.1",
+    "@faker-js/faker": "^10.1.0",
     "@react-router/dev": "^7.10.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",

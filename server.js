@@ -89,6 +89,7 @@ app.use(
         '*.analytics.google.com',
         '*.google-analytics.com',
         'www.youtube.com',
+        'donorbox.org',
         "'unsafe-eval'",
         "'unsafe-inline'",
       ],

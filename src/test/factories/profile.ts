@@ -37,5 +37,6 @@ export const FactoryDBProfile = (dbProfileOverloads: Partial<DBProfile> = {}): D
   website: faker.internet.url(),
   total_views: 0,
   profile_type: faker.number.int(),
+  donations_enabled: false,
   ...dbProfileOverloads,
 });

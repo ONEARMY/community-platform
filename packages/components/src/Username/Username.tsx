@@ -11,7 +11,7 @@ import type { HTMLAttributeAnchorTarget } from 'react';
 import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface IProps {
-  user: Author;
+  user: Partial<Author>;
   sx?: ThemeUIStyleObject;
   isLink?: boolean;
   target?: HTMLAttributeAnchorTarget;

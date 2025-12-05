@@ -4,7 +4,6 @@ import ForumIcon from '../../assets/icons/icon-forum.svg';
 import HowToCountIcon from '../../assets/icons/icon-library.svg';
 import ResearchIcon from '../../assets/icons/icon-research.svg';
 import starActiveSVG from '../../assets/icons/icon-star-active.svg';
-import { CardButton } from '../CardButton/CardButton';
 import { ElWithBeforeIcon } from '../ElWithBeforeIcon/ElWithBeforeIcon';
 import { ExternalLink } from '../ExternalLink/ExternalLink';
 import { Icon } from '../Icon/Icon';
@@ -40,34 +39,25 @@ export const UserStatistics = (props: UserStatisticsProps) => {
     >
       <Flex
         sx={{
-          gap: 2,
+          gap: 4,
           flexDirection: ['row', 'column', 'column'],
           alignItems: ['center', 'flex-start', 'flex-start'],
           justifyContent: ['center', 'flex-start', 'flex-start'],
         }}
       >
-        {props.pin && (
-          <InternalLink
-            to={'/map#' + props.profile.username}
-            sx={{ color: 'black' }}
-            data-testid="location-link"
-          >
-            <CardButton
-              sx={{
-                border: '2px solid black',
-                boxShadow: '0px 2px 0px 0px black',
-                padding: 2,
-              }}
+        <Flex sx={{ gap: 4, flexDirection: 'column' }}>
+          {props.pin && (
+            <InternalLink
+              to={'/map#' + props.profile.username}
+              sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
+              data-testid="location-link"
             >
               <Flex sx={{ alignItems: 'center', gap: 2 }}>
                 <Icon glyph="map" size={22} />
-                <Box>{props.pin.country || 'View on Map'}</Box>
+                <Text>Location: {props.pin.country || 'View on Map'}</Text>
               </Flex>
-            </CardButton>
-          </InternalLink>
-        )}
-
-        <Flex sx={{ gap: 2, flexDirection: 'column' }}>
+            </InternalLink>
+          )}
           {props?.profile.badges?.map((badge) => (
             <Flex
               key={badge.id}
@@ -97,7 +87,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           {props.libraryCount > 0 && (
             <InternalLink
               to={'/library?q=' + props.profile.username}
-              sx={{ color: 'black' }}
+              sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
               data-testid="library-link"
             >
               <Flex data-testid="library-stat">
@@ -110,7 +100,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           {props.researchCount > 0 && (
             <InternalLink
               to={'/research?q=' + props.profile.username}
-              sx={{ color: 'black' }}
+              sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
               data-testid="research-link"
             >
               <Flex data-testid="research-stat">
@@ -121,7 +111,11 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           )}
 
           {props.questionCount > 0 && (
-            <InternalLink to={'/questions'} sx={{ color: 'black' }} data-testid="questions-link">
+            <InternalLink
+              to={'/questions'}
+              sx={{ color: 'black', ':hover': { textDecoration: 'underline' } }}
+              data-testid="questions-link"
+            >
               <Flex data-testid="questions-stat">
                 <ElWithBeforeIcon icon={ForumIcon} />
                 {`Questions: ${props.questionCount}`}

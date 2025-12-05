@@ -12,6 +12,7 @@ import {
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
+import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
 import { logger } from 'src/logger';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { getResearchCommentId, getResearchUpdateId } from 'src/pages/Research/Content/helper';
@@ -40,6 +41,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
   const [subscribersCount, setSubscribersCount] = useState<number>(research.subscriberCount);
   const [usefulCount, setUsefulCount] = useState<number>(research.usefulCount);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -53,10 +55,10 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
     loggedInUser: activeUser,
   };
 
-  const handleUsefulClick = async (vote: 'add' | 'delete', eventCategory = 'Library') => {
+  const handleUsefulClick = async (vote: 'add' | 'delete') => {
     await onUsefulClick({
       vote,
-      config: { ...configOnUsefulClick, eventCategory },
+      config: { ...configOnUsefulClick, eventCategory: 'research' },
     });
   };
 
@@ -96,15 +98,13 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
     } else {
       await subscribersService.remove('research', research.id);
     }
-    const action = subscribed ? 'Unsubscribed' : 'Subscribed';
-
     setSubscribersCount((prev) => prev + (subscribed ? -1 : 1));
     // toggle subscribed
     setSubscribed((prev) => !prev);
 
     trackEvent({
-      category: 'Research',
-      action: action,
+      category: 'research',
+      action: subscribed ? 'unsubscribed' : 'subscribed',
       label: research.slug,
     });
   };
@@ -135,8 +135,8 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
     try {
       await researchService.deleteResearch(research.id);
       trackEvent({
-        category: 'Research',
-        action: 'Deleted',
+        category: 'research',
+        action: 'deleted',
         label: research.title,
       });
 
@@ -192,7 +192,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
         isDeletable={isDeletable}
         hasUserVotedUseful={voted}
         hasUserSubscribed={subscribed}
-        onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add', 'ResearchDescription')}
+        onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}
         onFollowClick={() => onFollowClick(subscribed ? 'remove' : 'add')}
         subscribersCount={subscribersCount}
         commentsCount={research.commentCount}
@@ -234,9 +234,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
                   <UsefulStatsButton
                     isLoggedIn={!!activeUser}
                     hasUserVotedUseful={voted}
-                    onUsefulClick={() =>
-                      handleUsefulClick(voted ? 'delete' : 'add', 'ArticleCallToAction')
-                    }
+                    onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}
                   />
                   <FollowButton
                     isLoggedIn={!!activeUser}
@@ -244,7 +242,33 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
                     onFollowClick={() => onFollowClick(subscribed ? 'remove' : 'add')}
                     tooltipFollow="Follow to be notified about new updates"
                     tooltipUnfollow="Unfollow to stop being notified about new updates"
+                    sx={{ backgroundColor: '#fff' }}
                   />
+                  {research.author?.profileType?.isSpace && research.author?.donationsEnabled && (
+                    <>
+                      <DonationRequestModalContainer
+                        profileId={research.author?.id}
+                        isOpen={isDonationModalOpen}
+                        onDidDismiss={() => setIsDonationModalOpen(false)}
+                      />
+                      <Button
+                        icon="donate"
+                        variant="outline"
+                        iconColor="primary"
+                        sx={{ fontSize: '14px', backgroundColor: '#fff' }}
+                        onClick={() => {
+                          trackEvent({
+                            action: 'donationModalOpened',
+                            category: 'research',
+                            label: research.author?.username || '',
+                          });
+                          setIsDonationModalOpen(true);
+                        }}
+                      >
+                        Support the author
+                      </Button>
+                    </>
+                  )}
                 </ArticleCallToActionSupabase>
               )}
             </Box>

@@ -246,9 +246,6 @@ jobs:
               --build-secret VITE_PROFILE_GUIDELINES_URL="$VITE_PROFILE_GUIDELINES_URL" \
               --build-secret VITE_SITE_NAME="$VITE_SITE_NAME" \
               --build-secret VITE_THEME="$VITE_THEME" \
-              --build-secret VITE_DONATIONS_BODY="$VITE_DONATIONS_BODY" \
-              --build-secret VITE_DONATIONS_IFRAME_SRC="$VITE_DONATIONS_IFRAME_SRC" \
-              --build-secret VITE_DONATIONS_IMAGE_URL="$VITE_DONATIONS_IMAGE_URL" \
               --build-secret VITE_HOWTOS_HEADING="$VITE_HOWTOS_HEADING" \
               --build-secret VITE_QUESTIONS_GUIDELINES_URL="$VITE_QUESTIONS_GUIDELINES_URL" \
               --build-secret VITE_NO_MESSAGING="$VITE_NO_MESSAGING" \

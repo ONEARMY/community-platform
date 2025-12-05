@@ -54,11 +54,10 @@ export const FollowButtonAction = observer((props: IProps) => {
         setSubscribersCount && setSubscribersCount((prev) => prev - 1 || 0);
       }
     }
-    const action = subscribed ? 'Unsubscribed' : 'Subscribed';
 
     trackEvent({
       category: contentType,
-      action,
+      action: subscribed ? 'unsubscribed' : 'subscribed',
       label: `${itemId}`,
     });
   };

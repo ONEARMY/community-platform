@@ -120,7 +120,7 @@
     "react-highlight-words": "^0.20.0",
     "react-leaflet": "^2.5.0",
     "react-leaflet-markercluster": "^2.0.0-rc3",
-    "react-router": "^7.9.5",
+    "react-router": "^7.10.1",
     "react-tooltip": "^5.30.0",
     "remix-utils": "^9.0.0",
     "resend": "4.1.2",

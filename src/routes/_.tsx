@@ -3,7 +3,6 @@ import { Outlet, useLoaderData } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { Alerts } from 'src/common/Alerts/Alerts';
 import { Analytics } from 'src/common/Analytics';
-import DevSiteHeader from 'src/pages/common/DevSiteHeader/DevSiteHeader';
 import { EnvironmentContext, getEnvVariables } from 'src/pages/common/EnvironmentContext';
 import GlobalSiteFooter from 'src/pages/common/GlobalSiteFooter/GlobalSiteFooter';
 import Header from 'src/pages/common/Header/Header';
@@ -43,7 +42,6 @@ export default function Index() {
         <ProfileStoreProvider>
           <Flex sx={{ height: '100vh', flexDirection: 'column' }} data-cy="page-container">
             <Analytics />
-            <ClientOnly fallback={<></>}>{() => <DevSiteHeader />}</ClientOnly>
             <Header />
             <Alerts />
 

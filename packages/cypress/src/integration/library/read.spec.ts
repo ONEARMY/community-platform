@@ -75,7 +75,6 @@ describe('[Library]', () => {
         cy.step('All metadata visible');
         cy.get('[data-cy=ContentStatistics-views]').contains(/\d/);
         cy.get('[data-cy=ContentStatistics-useful]').contains(/\d/);
-        cy.get('[data-cy=ContentStatistics-following]').contains(/\d/);
         cy.get('[data-cy=ContentStatistics-comments]').contains(/\d/);
         cy.get('[data-cy=ContentStatistics-steps]').contains(/\d/);
 

@@ -65,7 +65,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
     }
   }, [comment.highlighted]);
 
-  const handleUsefulClick = async (vote: 'add' | 'delete', eventCategory = 'Comment') => {
+  const handleUsefulClick = async (vote: 'add' | 'delete') => {
     await onUsefulClick({
       vote,
       config: {
@@ -79,7 +79,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
           updateUsefulCount?.(comment.id, count);
         },
         loggedInUser: profile,
-        eventCategory,
+        eventCategory: 'comments',
       },
     });
   };

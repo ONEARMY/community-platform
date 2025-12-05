@@ -1,16 +1,16 @@
-import logo from '../../assets/images/themes/project-kamp/project-kamp-header.png';
-import { baseTheme } from '../common';
-import { getButtons } from '../common/button';
+import logo from "../../assets/images/themes/project-kamp/project-kamp-header.png";
+import { baseTheme } from "../common";
+import { getButtons } from "../common/button";
 
-import type { ThemeWithName } from '../types';
+import type { ThemeWithName } from "../types";
 
-export type { ButtonVariants } from '../common/button';
+export type { ButtonVariants } from "../common/button";
 
 // use enum to specify list of possible colors for typing
 export const colors = {
   ...baseTheme.colors,
-  primary: 'green',
-  accent: { base: '#8ab57f', hover: 'hsl(108, 25%, 68%)' },
+  primary: "#8ab57f",
+  accent: { base: "#8ab57f", hover: "hsl(108, 25%, 68%)" },
 };
 
 export const alerts = {
@@ -22,7 +22,7 @@ export const alerts = {
 };
 
 export const StyledComponentTheme: ThemeWithName = {
-  name: 'Project Kamp',
+  name: "Project Kamp",
   logo: logo,
   ...baseTheme,
   alerts,

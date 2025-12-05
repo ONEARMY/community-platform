@@ -1,7 +1,5 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { SITE } from 'src/config/config';
-import { getDevSiteRole } from 'src/config/devSiteConfig';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 
 import type { Profile, UserRole } from 'oa-shared';
@@ -43,12 +41,6 @@ export const isUserAuthorized = (user?: Profile | null, roleRequired?: UserRole 
 
   const rolesRequired = Array.isArray(roleRequired) ? roleRequired : [roleRequired];
 
-  // if running dev or preview site allow wwwuser-overridden permissions (ignoring db user role)
-  if (SITE === 'dev_site' || SITE === 'preview' || SITE === 'test-ci') {
-    if (getDevSiteRole()) {
-      return rolesRequired.includes(getDevSiteRole());
-    }
-  }
   // otherwise use logged in user profile values
   if (user && roleRequired) {
     return userRoles.some((role) => rolesRequired.includes(role as UserRole));

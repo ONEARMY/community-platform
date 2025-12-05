@@ -77,7 +77,8 @@ CREATE TABLE IF NOT EXISTS "public"."profiles" (
     "photo" "json",
     "visitor_policy" "json",
     "website" "text",
-    "profile_type" bigint
+    "profile_type" bigint,
+    "donations_enabled" boolean DEFAULT false NOT NULL
 );
 
 ALTER TABLE ONLY "public"."profiles"

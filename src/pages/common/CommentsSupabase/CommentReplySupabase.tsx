@@ -50,7 +50,7 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
   const item = 'ReplyItem';
   const loggedInUser = activeUser;
 
-  const handleUsefulClick = async (vote: 'add' | 'delete', eventCategory = 'Comment') => {
+  const handleUsefulClick = async (vote: 'add' | 'delete') => {
     await onUsefulClick({
       vote,
       config: {
@@ -60,7 +60,7 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
         setVoted,
         setUsefulCount,
         loggedInUser: loggedInUser,
-        eventCategory,
+        eventCategory: 'comments',
       },
     });
   };

@@ -30,6 +30,7 @@ import {
 import styled from '@emotion/styled';
 import { space, verticalAlign } from 'styled-system';
 
+import { DonateIcon } from './DonateIcon';
 import { DownloadIcon } from './DownloadIcon';
 import { ExternalUrl } from './ExternalUrl';
 import { iconMap } from './svgs';
@@ -64,6 +65,7 @@ export const glyphs: IGlyphs = {
   category: iconMap.category,
   comment: iconMap.comment,
   'comment-outline': iconMap.commentOutline,
+  donate: <DonateIcon />,
   construction: iconMap.construction,
   contact: iconMap.contact,
   'copy-link': iconMap.copyLink,

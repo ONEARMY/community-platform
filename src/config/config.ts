@@ -36,22 +36,8 @@ export const getConfigurationOption = _c;
 /********************************************************************************************** */
 
 // On dev sites user can override default role
-// const devSiteRole: UserRole = localStorage.getItem('devSiteRole') as UserRole
 
 const getSiteVariant = (): siteVariants => {
-  const devSiteVariant: siteVariants =
-    typeof localStorage !== 'undefined' &&
-    localStorage &&
-    (localStorage.getItem('devSiteVariant') as any);
-
-  if (devSiteVariant === 'preview') {
-    return 'preview';
-  }
-
-  if (devSiteVariant === 'dev_site') {
-    return 'dev_site';
-  }
-
   if (
     (typeof location !== 'undefined' && location.host === 'localhost:3456') ||
     _c('VITE_SITE_VARIANT') === 'test-ci'
@@ -79,7 +65,6 @@ export const isProductionEnvironment = (): boolean => {
 };
 
 export const SITE = siteVariant;
-// export const DEV_SITE_ROLE = devSiteRole
 export const SENTRY_CONFIG: ISentryConfig = {
   dsn: _c('VITE_SENTRY_DSN', 'https://8c1f7eb4892e48b18956af087bdfa3ac@sentry.io/1399729'),
   environment: siteVariant,

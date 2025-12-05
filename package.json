@@ -125,6 +125,7 @@
     "yup": "^1.7.1"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.27.1",
     "@emotion/babel-plugin": "^11.11.0",
     "@faker-js/faker": "^10.1.0",
     "@react-router/dev": "^7.10.1",

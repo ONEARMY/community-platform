@@ -20288,6 +20288,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "one-army-community-platform@workspace:."
   dependencies:
+    "@babel/preset-typescript": "npm:^7.27.1"
     "@emotion/babel-plugin": "npm:^11.11.0"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/server": "npm:^11.11.0"

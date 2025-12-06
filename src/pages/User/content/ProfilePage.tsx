@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { Button, InternalLink } from 'oa-components';
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
+import { trackEvent } from 'src/common/Analytics';
 import { upgradeBadgeService } from 'src/services/upgradeBadgeService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Flex, Image } from 'theme-ui';
@@ -75,6 +76,13 @@ export const ProfilePage = observer((props: IProps) => {
               type="button"
               variant="outline"
               data-cy="UpgradeBadge"
+              onClick={() => {
+                trackEvent({
+                  category: 'profiles',
+                  action: 'upgradeBadgeClicked',
+                  label: upgradeBadge.actionLabel,
+                });
+              }}
               sx={{
                 display: 'flex',
                 alignItems: 'center',

@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import { observer } from 'mobx-react';
 import { ReturnPathLink } from 'oa-components';
 import { preciousPlasticTheme } from 'oa-themes';
+import { trackEvent } from 'src/common/Analytics';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList';
 import { upgradeBadgeService } from 'src/services/upgradeBadgeService';
@@ -90,6 +91,13 @@ export const ProfileModal = observer(() => {
             target="_blank"
             rel="noopener noreferrer"
             data-cy="menu-upgrade-badge"
+            onClick={() => {
+              trackEvent({
+                category: 'profiles',
+                action: 'upgradeBadgeClicked',
+                label: upgradeBadge.actionLabel,
+              });
+            }}
             sx={{
               display: 'flex',
               flexDirection: 'row',

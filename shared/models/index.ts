@@ -32,4 +32,5 @@ export * from './voteUseful';
 export * from './profileTag';
 export * from './profileBadge';
 export * from './profileType';
+export * from './upgradeBadge';
 export * from './banner';

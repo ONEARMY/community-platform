@@ -157,7 +157,7 @@ describe('[Library]', () => {
         title,
         total_downloads,
       } = expected;
-      const imagePaths = ['images/howto-step-pic1.jpg', 'images/howto-step-pic2.jpg'];
+      const imagePaths = ['src/fixtures/images/howto-step-pic1.jpg', 'src/fixtures/images/howto-step-pic2.jpg'];
       const categoryGuidanceMain = 'Cover image should show the fully built mould';
 
       cy.get('[data-cy="sign-up"]');
@@ -225,7 +225,7 @@ describe('[Library]', () => {
       cy.step('Upload a cover for the intro');
       cy.get('[data-cy="image-upload"]')
         .find('input[type="file"]')
-        .selectFile('images/howto-intro.jpg');
+        .selectFile('src/fixtures/images/howto-intro.jpg');
 
       fillStep(1, steps[0].title, steps[0].text, imagePaths);
       fillStep(2, steps[2].title, steps[2].text, [], steps[2].videoURL);

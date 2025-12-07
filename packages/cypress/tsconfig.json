@@ -9,9 +9,5 @@
     "resolveJsonModule": true,
     "jsx": "react"
   },
-  "include": ["**/*.ts", "**/*.mts"],
-  "ts-node": {
-    "transpileOnly": true,
-    "esm": true
-  }
+  "include": ["**/*.ts", "**/*.mts"]
 }

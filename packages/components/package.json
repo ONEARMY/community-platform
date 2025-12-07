@@ -14,7 +14,6 @@
     "build": "tsc --build --verbose",
     "dev": "tsc --watch",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
-    "new-component": "ts-node scripts/newComponent.ts",
     "test": "vitest",
     "test-ci": "vitest --coverage --reporter=junit --outputFile.junit=./reports/output.xml"
   },
@@ -68,7 +67,6 @@
     "prettier": "3.7.4",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
-    "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
     "vitest": "^4.0.5"
   }

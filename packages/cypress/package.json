@@ -2,7 +2,7 @@
   "name": "oa-cypress",
   "version": "1.0.0",
   "scripts": {
-    "start": "cross-env PORT=3456 node --loader ts-node/esm scripts/start.mts"
+    "start": "cross-env PORT=3456 tsx scripts/start.mts"
   },
   "devDependencies": {
     "@faker-js/faker": "^10.1.0",
@@ -11,7 +11,7 @@
     "cypress": "13.15.1",
     "dotenv": "^10.0.0",
     "oa-shared": "workspace:*",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.7.2",
     "wait-on": "^9.0.3"
   },

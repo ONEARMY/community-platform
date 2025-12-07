@@ -1,5 +1,5 @@
 import { FieldArray } from 'react-final-form-arrays';
-import { AnimatePresence, motion } from 'framer-motion';
+import { animated, useTransition } from '@react-spring/web';
 import { Button } from 'oa-components';
 import { LibraryStepField } from 'src/pages/Library/Content/Common/LibraryStep.field';
 import { COMPARISONS } from 'src/utils/comparisons';
@@ -9,28 +9,22 @@ import { buttons as buttonsLabel, steps as stepsLabel } from '../../labels';
 
 interface IPropsAnimation {
   children: React.ReactNode;
+  animationKey: string;
 }
 
-const AnimationContainer = ({ children }: IPropsAnimation) => {
-  const variants = {
-    pre: {
-      opacity: 0,
-    },
-    enter: {
-      opacity: 1,
-      duration: 0.2,
-      display: 'block',
-    },
-    post: {
-      display: 'none',
-      duration: 0.2,
-      top: '-100%',
-    },
-  };
+const AnimatedStep = ({ children, animationKey }: IPropsAnimation) => {
+  const transitions = useTransition(true, {
+    keys: animationKey,
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0, display: 'none' },
+    config: { duration: 200 },
+  });
+
   return (
-    <motion.div layout initial="pre" animate="enter" exit="post" variants={variants}>
-      {children}
-    </motion.div>
+    <>
+      {transitions((style, item) => item && <animated.div style={style}>{children}</animated.div>)}
+    </>
   );
 };
 
@@ -48,28 +42,29 @@ export const LibraryStepsContainerField = () => {
               }}
             />
           </Box>
-          <AnimatePresence>
-            {fields.map((name, index: number) => (
-              <AnimationContainer key={`${fields.value[index]._animationKey}-${index}`}>
-                <LibraryStepField
-                  key={`${fields.value[index]._animationKey}-${index}2`}
-                  name={name}
-                  index={index}
-                  moveStep={(from, to) => {
-                    if (to !== fields.length && to >= 0) {
-                      // Move form fields
-                      fields.move(from, to);
-                    }
-                  }}
-                  images={fields.value[index].images || []}
-                  existingImages={fields.value[index].existingImages || []}
-                  onDelete={(fieldIndex: number) => {
-                    fields.remove(fieldIndex);
-                  }}
-                />
-              </AnimationContainer>
-            ))}
-          </AnimatePresence>
+          {fields.map((name, index: number) => (
+            <AnimatedStep
+              key={`${fields.value[index]._animationKey}-${index}`}
+              animationKey={`${fields.value[index]._animationKey}-${index}`}
+            >
+              <LibraryStepField
+                key={`${fields.value[index]._animationKey}-${index}2`}
+                name={name}
+                index={index}
+                moveStep={(from, to) => {
+                  if (to !== fields.length && to >= 0) {
+                    // Move form fields
+                    fields.move(from, to);
+                  }
+                }}
+                images={fields.value[index].images || []}
+                existingImages={fields.value[index].existingImages || []}
+                onDelete={(fieldIndex: number) => {
+                  fields.remove(fieldIndex);
+                }}
+              />
+            </AnimatedStep>
+          ))}
           <Flex>
             <Button
               type="button"

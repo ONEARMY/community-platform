@@ -31,7 +31,7 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   author: {
     id: faker.number.int(),
     country: faker.location.countryCode(),
-    displayName: faker.internet.userName(),
+    displayName: faker.internet.username(),
     badges: [
       {
         id: 1,
@@ -51,7 +51,7 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
       id: faker.string.uuid(),
       publicUrl: faker.image.avatar(),
     },
-    username: faker.internet.userName(),
+    username: faker.internet.username(),
   },
   category: {
     createdAt: new Date(),

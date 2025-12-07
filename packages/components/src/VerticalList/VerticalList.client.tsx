@@ -39,8 +39,8 @@ export const RightArrow = () => {
 
 export const VerticalList = ({ children, dataCy }: IProps) => {
   const childrenWithIds: any = Children.map(children, (child, index) => {
-    if (isValidElement(child) && !(child.props as any).itemId) {
-      return cloneElement(child, { itemId: `item-${index}` } as any);
+    if (isValidElement(child) && !(child.props as any).itemID) {
+      return cloneElement(child, { itemID: `item-${index}` } as any);
     }
     return child;
   })?.filter((x) => !!x);
@@ -64,7 +64,7 @@ const NoScrollbar = styled('div')({
   '& .react-horizontal-scrolling-menu--scroll-container': {
     display: 'flex',
     scrollbarWidth: 'none',
-    '-ms-overflow-style': 'none',
+    msOverflowStyle: 'none',
   },
 });
 

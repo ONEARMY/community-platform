@@ -91,7 +91,9 @@ describe('[Settings]', () => {
     cy.get(`[data-cy="country:${countryCode}"]`);
 
     cy.step('Errors if trying to upload invalid image');
-    cy.get(`[data-cy=userImage]`).find(':file').attachFile(`images/file.random`);
+    cy.get(`[data-cy=userImage]`)
+      .find(':file')
+      .selectFile(`src/fixtures/images/file.random`, { force: true });
     cy.get('[data-cy=ImageUploadError]').should('be.visible');
     cy.get('[data-cy=ImageUploadError-Button]').click();
 

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Portal } from 'react-portal';
+import { createPortal } from 'react-dom';
 import styled from '@emotion/styled';
 import { Box } from 'theme-ui';
 
@@ -76,12 +76,14 @@ export const Modal = (props: Props) => {
 
   return (
     <>
-      {isOpen && (
-        <Portal>
-          <ModalBackdrop onClick={() => dismiss()} />
-          <ModalContent sx={{ height, width, ...sx }}>{children}</ModalContent>
-        </Portal>
-      )}
+      {isOpen &&
+        createPortal(
+          <>
+            <ModalBackdrop onClick={() => dismiss()} />
+            <ModalContent sx={{ height, width, ...sx }}>{children}</ModalContent>
+          </>,
+          document.body,
+        )}
     </>
   );
 };

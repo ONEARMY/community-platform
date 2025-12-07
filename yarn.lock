@@ -1632,7 +1632,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-env@npm:^7.20.2, @babel/preset-env@npm:^7.22.9, @babel/preset-env@npm:^7.27.2":
+"@babel/preset-env@npm:^7.20.2, @babel/preset-env@npm:^7.22.9":
   version: 7.27.2
   resolution: "@babel/preset-env@npm:7.27.2"
   dependencies:
@@ -1724,7 +1724,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-react@npm:^7.18.6, @babel/preset-react@npm:^7.22.5, @babel/preset-react@npm:^7.27.1":
+"@babel/preset-react@npm:^7.18.6, @babel/preset-react@npm:^7.22.5":
   version: 7.27.1
   resolution: "@babel/preset-react@npm:7.27.1"
   dependencies:
@@ -2913,7 +2913,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/babel-plugin@npm:^11.11.0, @emotion/babel-plugin@npm:^11.13.5":
+"@emotion/babel-plugin@npm:^11.13.5":
   version: 11.13.5
   resolution: "@emotion/babel-plugin@npm:11.13.5"
   dependencies:
@@ -8849,24 +8849,6 @@ __metadata:
     "@types/leaflet": "npm:*"
     "@types/react": "npm:*"
   checksum: 10/90a643dee8cabb02869f12cc61cb4299107d561b6c283561ba500c59d845f78480cc99c5fccbc2ed6edafe55b941bf7a8dd420944fe3e7381ef6677ede0741a0
-  languageName: node
-  linkType: hard
-
-"@types/react-portal@npm:^4.0.4":
-  version: 4.0.7
-  resolution: "@types/react-portal@npm:4.0.7"
-  dependencies:
-    "@types/react": "npm:*"
-  checksum: 10/ba21ce74197a2d4fa5e75bc23bc946144de4d2e832bfd5a08dfcc9a43d9c102f2bd71bbc6ca3c3a8aa582dda77bfa0db998e57c9080a9d1509abff08577c0572
-  languageName: node
-  linkType: hard
-
-"@types/react-responsive-masonry@npm:^2.1.3":
-  version: 2.1.3
-  resolution: "@types/react-responsive-masonry@npm:2.1.3"
-  dependencies:
-    "@types/react": "npm:*"
-  checksum: 10/bb9b04e45df6759e28b4dc9e6eea5a6869fc5898400a1a18518358f0740fd5a49c86d9b065407733bf6a087b05c8ef518a5c9e82fc1bc6b25720f4221326438c
   languageName: node
   linkType: hard
 
@@ -20004,8 +19986,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "oa-components@workspace:packages/components"
   dependencies:
-    "@babel/preset-env": "npm:^7.27.2"
-    "@babel/preset-react": "npm:^7.27.1"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/styled": "npm:^11.14.1"
     "@faker-js/faker": "npm:^10.1.0"
@@ -20020,8 +20000,6 @@ __metadata:
     "@testing-library/jest-dom": "npm:^6.9.1"
     "@testing-library/react": "npm:^16.3.0"
     "@types/react": "npm:^19.2.7"
-    "@types/react-portal": "npm:^4.0.4"
-    "@types/react-responsive-masonry": "npm:^2.1.3"
     "@vitejs/plugin-react": "npm:^5.1.1"
     country-to-iso: "npm:^1.6.1"
     date-fns: "npm:^4.1.0"
@@ -20042,9 +20020,7 @@ __metadata:
     react-dom: "npm:^19.2.1"
     react-horizontal-scrolling-menu: "npm:^8.2.0"
     react-icons: "npm:^5.3.0"
-    react-image-crop: "npm:^11.0.5"
     react-player: "npm:3.0.0-canary.4"
-    react-portal: "npm:^4.2.2"
     react-router: "npm:^7.10.1"
     react-select: "npm:^5.8.1"
     react-spring: "npm:^10.0.3"
@@ -20279,8 +20255,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "one-army-community-platform@workspace:."
   dependencies:
-    "@babel/preset-typescript": "npm:^7.27.1"
-    "@emotion/babel-plugin": "npm:^11.11.0"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/server": "npm:^11.11.0"
     "@emotion/styled": "npm:^11.14.1"
@@ -21920,7 +21894,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -22406,15 +22380,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-image-crop@npm:^11.0.5":
-  version: 11.0.7
-  resolution: "react-image-crop@npm:11.0.7"
-  peerDependencies:
-    react: ">=16.13.1"
-  checksum: 10/665a69c62b82c971f30589ddbfdb4e3c8f66d826ecc76ab97f507cd8f57f27bb413a445c686ba831b60a3469d132b8442887926bf048a0bdc119019dcd373f96
-  languageName: node
-  linkType: hard
-
 "react-is@npm:^16.13.1, react-is@npm:^16.6.0, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
@@ -22513,18 +22478,6 @@ __metadata:
     react: ^17.0.2 || ^18
     react-dom: ^17.0.2 || ^18
   checksum: 10/0bccc64af554c7c41dad3c4521843ae23e177dda388846f84d886ccd8b3c3619e8159124902f4117011a2e9c059366e9ae617bcc20042d69466035f83b38e158
-  languageName: node
-  linkType: hard
-
-"react-portal@npm:^4.2.2":
-  version: 4.2.2
-  resolution: "react-portal@npm:4.2.2"
-  dependencies:
-    prop-types: "npm:^15.5.8"
-  peerDependencies:
-    react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
-    react-dom: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
-  checksum: 10/e45fb8bcb7363f54c3d8ef0de438f7180dac8ccc461df8fb640268364baea7a7b0624fe8e812bcfe45d74908c2893fd85c5692185a4ba27a91b157f239294e72
   languageName: node
   linkType: hard
 

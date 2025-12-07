@@ -125,7 +125,9 @@ Cypress.Commands.add('setSettingFocus', (focus: string) => {
 });
 
 Cypress.Commands.add('setSettingImage', (image, selector) => {
-  cy.get(`[data-cy=${selector}]`).find(':file').selectFile(`src/fixtures/images/${image}.jpg`);
+  cy.get(`[data-cy=${selector}]`)
+    .find(':file')
+    .selectFile(`src/fixtures/images/${image}.jpg`, { force: true });
   cy.wait(2000);
 });
 

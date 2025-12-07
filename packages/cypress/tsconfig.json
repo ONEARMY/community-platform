@@ -3,7 +3,7 @@
     "target": "es2020",
     "module": "commonjs",
     "lib": ["ESNext", "dom"],
-    "types": ["cypress", "node", "cypress-file-upload"],
+    "types": ["cypress", "node"],
     "moduleResolution": "Node",
     "esModuleInterop": true,
     "resolveJsonModule": true,

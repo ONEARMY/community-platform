@@ -91,7 +91,9 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title').clear().type(expected.title).blur();
 
       cy.step('Add image');
-      cy.get('[data-cy=image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg');
+      cy.get('[data-cy=image-upload]')
+        .find(':file')
+        .selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
 
       cy.step('New collaborators can be assigned to research');
       cy.selectTag(subscriber.username, '[data-cy=UserNameSelect]');
@@ -272,7 +274,9 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title').clear().type(researchItem.title).blur();
       cy.get('[data-cy=intro-description]').clear().type(researchItem.description);
       cy.selectTag(researchItem.category, '[data-cy=category-select]');
-      cy.get('[data-cy=image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg');
+      cy.get('[data-cy=image-upload]')
+        .find(':file')
+        .selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.wait(2000);
       cy.get('[data-cy=submit]').click();
       cy.wait(2000);

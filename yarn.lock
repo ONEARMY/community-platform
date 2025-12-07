@@ -11765,13 +11765,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^9.3.0":
-  version: 9.5.0
-  resolution: "commander@npm:9.5.0"
-  checksum: 10/41c49b3d0f94a1fbeb0463c85b13f15aa15a9e0b4d5e10a49c0a1d58d4489b549d62262b052ae0aa6cfda53299bee487bfe337825df15e342114dde543f82906
-  languageName: node
-  linkType: hard
-
 "commander@npm:~12.1.0":
   version: 12.1.0
   resolution: "commander@npm:12.1.0"
@@ -20042,7 +20035,7 @@ __metadata:
     linkifyjs: "npm:^4.3.2"
     marked: "npm:^17.0.1"
     oa-themes: "workspace:^"
-    photoswipe: "npm:^5.4.1"
+    photoswipe: "npm:^5.4.4"
     prettier: "npm:3.7.4"
     react: "npm:^19.2.1"
     react-country-flag: "npm:^3.1.0"
@@ -20052,7 +20045,6 @@ __metadata:
     react-image-crop: "npm:^11.0.5"
     react-player: "npm:3.0.0-canary.4"
     react-portal: "npm:^4.2.2"
-    react-responsive-masonry: "npm:2.1.7"
     react-router: "npm:^7.10.1"
     react-select: "npm:^5.8.1"
     react-spring: "npm:^10.0.3"
@@ -20090,7 +20082,6 @@ __metadata:
     vite-plugin-svgr: "npm:^4.5.0"
     vite-tsconfig-paths: "npm:^5.1.4"
     wait-on: "npm:^7.2.0"
-    wait-port: "npm:^1.1.0"
   languageName: unknown
   linkType: soft
 
@@ -21103,7 +21094,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"photoswipe@npm:^5.4.1":
+"photoswipe@npm:^5.4.4":
   version: 5.4.4
   resolution: "photoswipe@npm:5.4.4"
   checksum: 10/89a2910f01668527875e1afdc4406194c71d634129ee498fe2c33959efd665abaaa144d44990c4506518a44f7bf0950f76c735b41404fef513ae644b4d4ebc9d
@@ -22592,13 +22583,6 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10/d4dfd38e4381fa6059c8b810568b2d3a31fe21168bb3e2f57d1b1885ee08736fbd5a3fd83936faef0d17031c9c4175a1af83885bfc6c4280611f025447b19a4c
-  languageName: node
-  linkType: hard
-
-"react-responsive-masonry@npm:2.1.7":
-  version: 2.1.7
-  resolution: "react-responsive-masonry@npm:2.1.7"
-  checksum: 10/802ef9b83ae0b7f8246f013215ad3903e970a9755a1aa23dacd5a8e96ac7b133ebd4e83cbf3a3e141f8c02707680f671b931388e3208e3cc3c60c9570d072b7b
   languageName: node
   linkType: hard
 
@@ -26520,19 +26504,6 @@ __metadata:
   bin:
     wait-on: bin/wait-on
   checksum: 10/00299e3b651c70d7082d02b93d9d4784cbe851914f1674d795d578d4826876193fdc7bee7e9491264b7c2d242ac9fe6e1fd09e1143409f730f13a7ee2da67fff
-  languageName: node
-  linkType: hard
-
-"wait-port@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "wait-port@npm:1.1.0"
-  dependencies:
-    chalk: "npm:^4.1.2"
-    commander: "npm:^9.3.0"
-    debug: "npm:^4.3.4"
-  bin:
-    wait-port: bin/wait-port.js
-  checksum: 10/c73aeaba7f60804885ac1185c6a0d3a250ddd9af6270c7f01a71a09eba2ad435cbfea16ab450fcc54c271d8cf3c6e1d78e03c93ce6c3ebc5ff8b0daa46c2d546
   languageName: node
   linkType: hard
 

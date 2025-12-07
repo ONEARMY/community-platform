@@ -19,8 +19,7 @@
     "vite": "^7.2.2",
     "vite-plugin-svgr": "^4.5.0",
     "vite-tsconfig-paths": "^5.1.4",
-    "wait-on": "^7.2.0",
-    "wait-port": "^1.1.0"
+    "wait-on": "^7.2.0"
   },
   "installConfig": {
     "hoistingLimits": "workspaces"

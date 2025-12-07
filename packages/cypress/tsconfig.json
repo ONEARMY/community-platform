@@ -1,19 +1,17 @@
 {
   "compilerOptions": {
     "target": "es2020",
-    "module": "commonjs",
+    "module": "NodeNext",
     "lib": ["ESNext", "dom"],
     "types": ["cypress", "node"],
-    "moduleResolution": "Node",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "jsx": "react"
   },
-  "include": ["**/*.ts", "scripts/start.mts"],
+  "include": ["**/*.ts", "**/*.mts"],
   "ts-node": {
     "transpileOnly": true,
-    "compilerOptions": {
-      "module": "commonjs"
-    }
+    "esm": true
   }
 }

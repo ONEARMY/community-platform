@@ -15,7 +15,7 @@
     "oa-shared": "workspace:*",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
-    "wait-on": "^7.2.0"
+    "wait-on": "^9.0.3"
   },
   "installConfig": {
     "hoistingLimits": "workspaces"

@@ -6,12 +6,10 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^10.1.0",
-    "@types/fs-extra": "^11.0.4",
     "@types/wait-on": "^5.3.4",
     "cross-env": "^7.0.3",
     "cypress": "13.15.1",
     "dotenv": "^10.0.0",
-    "fs-extra": "^11.2.0",
     "oa-shared": "workspace:*",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",

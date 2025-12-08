@@ -4,7 +4,7 @@ Thanks for being here already! You'll find all the information you need to start
 
 If you think something is missing, consider sending us a PR.
 
-## 🍽Summary
+## 🍽 Summary
 
 - [Code of conduct](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-code-of-conduct)
 - [Getting started](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-getting-started)
@@ -13,6 +13,7 @@ If you think something is missing, consider sending us a PR.
 - [Style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-style-guide)
 - [Testing](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-testing)
 - [Joining the team](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-joining-the-team)
+- [Contributing with UX/UI Design](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-contributing-with-ux/ui-design)
 
 ## 👐 Code of Conduct
 
@@ -112,3 +113,11 @@ We are always open to have more people involved. If you would like to contribute
 We ask this so that we can better understand how you might fit in with the rest of the team, and maximise your contributions.
 
 Here are more details about what to expect from becoming a [Maintainer](./docs/maintainers.md)
+
+## 🎨 Contributing with UX/UI Design
+
+We always welcome UX/UI design contributions in various shapes and forms. Whether it's designing new features, giving design feedback or optimising the existing flows.
+
+The best way to start would be to look at [open design issues](https://github.com/ONEARMY/community-platform/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22Task%3A%20Design%22) here in our GitHub Repository to see if anything sparks your interest. Another way is to get in touch with us [through Discord](https://discord.gg/p4hWHYeG), the introduce-yourself channel is a good place for that. :) Then we can chat about what would be interesting for you to help out with, as well as what we are currently working on.
+
+In the meantime you can check out our [UI Component library in Storybook](https://docs.platform.onearmy.earth/storybook-static/index.html?path=/story/components-icon--default).

@@ -53,7 +53,7 @@ jobs:
         run: yarn workspace oa-components install --immutable
 
       - name: Build Storybook
-        run: yarn workspace oa-components storybook build
+        run: yarn workspace oa-components build:sb
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

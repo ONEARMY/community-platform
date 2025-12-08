@@ -10,7 +10,7 @@ title: Local Setup
 1. Download and install [Git](https://git-scm.com/downloads)  
    This will be used to download the repository
 
-2. Download and install [Node](https://nodejs.org/en/download/)  
+2. Download and install [Node 22.18](https://nodejs.org/en/download/)  
    This will be used to run the local server. It included the `npm` package manager
 
    :::tip

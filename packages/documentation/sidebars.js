@@ -8,16 +8,8 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'How To Contribute',
-      items: [
-        'Contributing/start-contributing',
-        'Contributing/bounties',
-        {
-          type: 'category',
-          label: 'Writing Documentation',
-          items: ['Docs Contribution/running-docs-locally', 'Docs Contribution/md-style-guide'],
-        },
-      ],
+      label: 'Contributing',
+      items: ['Contributing/start-contributing', 'Contributing/team-principles'],
     },
     {
       type: 'category',
@@ -32,22 +24,6 @@ module.exports = {
       type: 'category',
       label: 'Testing',
       items: ['Testing/overview', 'Testing/end-to-end'],
-    },
-    {
-      type: 'category',
-      label: 'Advanced Guides',
-      items: [
-        {
-          type: 'category',
-          label: 'Continuous Integration',
-          items: ['Deployment/circle-ci'],
-        },
-        {
-          type: 'doc',
-          label: 'Environmental Impact',
-          id: 'Environmental Impact/environmental-impact',
-        },
-      ],
     },
     {
       type: 'doc',
@@ -68,12 +44,12 @@ module.exports = {
           label: 'Onboarding',
           id: 'Maintainers/onboarding',
         },
+        {
+          type: 'doc',
+          label: 'Releasing',
+          id: 'Deployment/circle-ci',
+        },
       ],
-    },
-    {
-      type: 'link',
-      label: 'Component Storybook',
-      href: 'pathname:///storybook-static/index.html',
     },
   ],
 };

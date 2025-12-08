@@ -9,45 +9,35 @@ By default we consider everyone that submits a pull request (PR) to be a contrib
 
 | Role                   | Payment       | Requirements                                      | Tasks                                                                                                       |
 | ---------------------- | ------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| **🤙 Contributor**     | Bounty System | Submit a PR                                       | Resolves issues by submitting pull requests                                                                 |
-| **⚡️ Maintainer**     | Bounty System | Minimum 3 merged PR's + chat with core maintainer | Review basic PR's, help contributors & improve documentation                                                |
+| **🤙 Contributor**     |  | A PR is merged                                       | Resolves issues by submitting pull requests                                                                 |
+| **⚡️ Maintainer**     | Hourly scale | Minimum 3 merged PR's + chat with core maintainer | Review PR's, help contributors & improve documentation                                                |
 | **🔧 Core Maintainer** | Hourly scale  | Minimum 3 months maintainer                       | Review complex PR's, improve code quality, devops, optimisations, security, general updates & documentation |
 
 ### 🤙 Things that Contributors do:
 
 #### Pick up issues
 
-1. Check our [documentation](/) to run it locally.
-2. Pick an open [issue](https://github.com/ONEARMY/community-platform/issues).
-3. If there is a [bounty](/Contributing/bounties) label on it you can claim a reward.
-4. Read our [contribution guidelines](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md).
-5. Bonus: Add [tests](/Testing/end-to-end).
+1. Pick an open [issue](https://github.com/ONEARMY/community-platform/issues).
+3. Read our [contribution guidelines](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md).
+3. Add [tests](/Testing/end-to-end).
 
 ### ⚡️ Things that Maintainers do:
 
 #### Review incoming code from Contributors
 
-1. Validate if code is clean.
-2. Validate if the [project structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--project-structure) is correct.
-3. Check out user profile to see who is behind the commit.
-4. Add them to our [contributors list](#recognising-contributors).
-5. Make sure [Lint commit](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--commit-style-guide) message is correct.
-6. Make sure all checks are passed and help to resolve errors.
-7. If there is a [bounty](/Contributing/bounties) label on the PR you can get it for reviewing.
-8. Bonus: Ask for integrating tests.
+1. Validate code quality and give feedback as needed.
+2. Help resolve problems.
+3. Ask to add tests as needed.
+4. Add new contributors to our [contributors list](#recognising-contributors).
 
 ### 🔧 Things that Core Maintainers do:
 
-#### Review complex PRs & release changes
-
-There is a workflow for deploying code changes from development to production environments. It ensures proper review, testing, and versioning before reaching production sites.
-
-The steps are as follows:
+#### Release changes
 
 - The PR is merged into the `master` branch.
-- `master` branch triggers an automated build and deployment to development environments.
-- Manual approval is required by a maintainer in CircleCI
-- After approval, an automated build, versioning, and deployment to production sites.
+- `master` branch triggers an automated CircleCI build.
+- Production deployment requires approval by a maintainer on CircleCI.
+- After approval, an automated build deploys to production sites.
 
 # Rewards:
 
@@ -63,17 +53,4 @@ After merging a new contributors PR:
 
 ### Payment
 
-Each role gets paid a bit differently. Contributors and maintainers get paid according to the [Bounty system](/Contributing/bounties). For core maintainers there is a separate hourly pay scale. Aimed at developers who help a bit more consistently at around 2-3 hours per week. If you're interested in these roles then feel free to reach out on [Discord](https://discord.gg/gJ7Yyk4).
-
-## Onboarding checklist
-
-| Tasks                                                                                                   | 🤙 Contributor | ⚡️ Maintainer | 🔧 Core Maintainer |
-| ------------------------------------------------------------------------------------------------------- | -------------- | -------------- | ------------------ |
-| Invite to [Discord](https://discord.gg/gJ7Yyk4) #development                                            | ☑️             | ☑️             | ☑️                 |
-| Send link to [bounty](/Contributing/bounties) system                                                    | ☑️             | ☑️             | ☑️                 |
-| Add GitHub [maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access)      |                | ☑️             | ☑️                 |
-| Add maintainer status using [All contributors ](#recognising-contributors)                              |                | ☑️             | ☑️                 |
-| Get on a video call                                                                                     |                | ☑️             | ☑️                 |
-| Explain hourly rate vs bounty system                                                                    |                | ☑️             | ☑️                 |
-| Add GitHub [core maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access) |                |                | ☑️                 |
-| Add core-maintainer status using [All contributors ](#recognising-contributors)                         |                |                | ☑️                 |
+There is a hourly pay for Maintainers. Aimed at developers who help more consistently. If you're interested to become a maintainer feel free to reach out on [Discord](https://discord.gg/gJ7Yyk4).

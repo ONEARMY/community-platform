@@ -1,23 +1,16 @@
 # E2E Testing
 
-End-to-end testing is carried out by [Cypress](https://www.cypress.io/), and executed against a dedicated firebase project (different to development and staging).
-
-You will notice the data in test is completely different to what you see when developing. In addition, the testing app starts at the port `localhost:3456` which all tests are run against.
-
-The tests are not comprehensive, but are slowly being built over time - particularly when bugs are noticed. Therefore if you identify a bug, before fixing it is recommended to add a test so that the bug is less likely to resurface in the future.
+We use [Cypress](https://www.cypress.io/), and tests run on a dedicated supabase cloud project.
 
 ## Getting Started
 
 ```
-yarn workspace oa-cypress install
-yarn workspace oa-cypress start
+yarn test
 ```
-
-(or shorthand `yarn test`)
 
 ### Data Seeding
 
-Will be automatically deleted after tests have completed running
+The seed runs when tests start and cleanup after tests complete.
 
 ### CI testing
 
@@ -25,4 +18,4 @@ Tests are automatically run on every pull request, and can be viewed on the cypr
 
 ### Browser testing
 
-Currently testing is carried out against chrome(stable) and firefox(latest) browsers. We are not able to support any additional browsers (e.g. safari) via ci as they are not currently supported by cypress. If this changes in the future then it would be good to add. See discussion around this here: https://github.com/ONEARMY/community-platform/issues/611
+Tests are run against Chrome. We used to run against firefox as well, but it caused too many flaky tests which caused a slow development and deployment flow.

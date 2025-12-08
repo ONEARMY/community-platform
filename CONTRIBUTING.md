@@ -6,13 +6,13 @@ If you think something is missing, consider sending us a PR.
 
 ## 🍽Summary
 
-- [Code of conduct](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--code-of-conduct)
-- [Getting started](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--getting-started)
-- [Project structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--project-structure)
-- [Branching](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--branching)
-- [Style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--style-guide)
-- [Testing](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--testing)
-- [Joining the team](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--joining-the-team)
+- [Code of conduct](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-code-of-conduct)
+- [Getting started](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-getting-started)
+- [Project structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-project-structure)
+- [Branching](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-branching)
+- [Style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-style-guide)
+- [Testing](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-testing)
+- [Joining the team](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-joining-the-team)
 
 ## 👐 Code of Conduct
 
@@ -68,17 +68,18 @@ We try to document some important [Technical Decisions](./docs/technical-decisio
 
 ## 🌳 Branching
 
-We have a single `master` branch which is linked to production and QA sites.
-To contribute, you should fork our `master` branch and create branches from your own fork. When your changes are ready, submit a PR from your fork branch, into our `master` branch.
-It is recommended to update your `master` fork regularly.
+We have a single `master` branch which is linked to production.
+QA sites will be created from Pull Request branches upon adding the `Review allow-preview ✅` label (Mainteiners only).
+To contribute, you should fork our `master` branch and create a branch from your own fork. When your changes are ready, submit a PR from your fork branch, into our `master` branch.
+It is recommended to update your `master` fork regularly to avoid conflicts.
 
 ## 🤓 Style guide
 
-We use Prettier and ESLint currently. This might soon evolve as there are new tools like Biome and oxlint which could provide significant performance and DX advantages.
+We use Prettier and ESLint. This might soon evolve as there are new and shiny tools ✨ like `Biome` and `oxlint` which could provide significant performance and DX advantages.
 
 Running `yarn format` from the project root prior to committing will ensure the code you're adding is formatted to align with the standards of this project.
 
-We expect code to follow standard best practices, such as, simple, clear and self-documenting code, with meaningful names, avoid deep nesting and prop-drilling, avoid unnecessary abstractions.
+We expect code to follow standard best practices, such as, simple, clear and self-documenting code, with meaningful names, avoid deep nesting and prop-drilling, and avoid unnecessary abstractions.
 
 ## ✅ Testing
 
@@ -86,6 +87,8 @@ Writing tests is crucial for maintaining a robust and reliable codebase. Tests p
 
 Test Writing Guidelines:
 
+- Unit Tests are useful for code that has logic, it could be a frontend component or a server-side function.
+- E2E tests are useful for full feature tests, which require database interaction.
 - Focus on testing significant aspects and edge cases, not for the sake of coverage.
 - Adhere to the testing conventions and styles established in the project.
 - If your changes affect existing functionality, update the corresponding tests to reflect the new behaviour.

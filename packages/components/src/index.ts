@@ -41,7 +41,6 @@ export { GridForm } from "./GridForm/GridForm";
 export { HeroBanner } from "./HeroBanner/HeroBanner";
 export { Icon } from "./Icon/Icon";
 export { IconCountWithTooltip } from "./IconCountWithTooltip/IconCountWithTooltip";
-export { ImageCrop } from "./ImageCrop/ImageCrop";
 export { ImageGallery } from "./ImageGallery/ImageGallery";
 export { ImageInput } from "./ImageInput/ImageInput";
 export { ImageInputV2 } from "./ImageInput/ImageInputV2";

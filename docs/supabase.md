@@ -22,7 +22,7 @@ SUPABASE_KEY=<anon key>
 SUPABASE_SERVICE_ROLE_KEY=<service_role key>
 ```
 
-Run `yarn db:seed` to run the DB migration scripts and update your local database schema. You will have to run this again whenever there are DB schema changes.
+Run `yarn db:seed` to run the DB migration scripts and update your local database schema. You will have to run this again whenever there are DB schema changes. For more in-depth seeding, please check [Seeding](./db-seeding.md).
 
 Now you can start the project with `yarn start`.
 To sign-up locally, you can get the email confirmation link at http://localhost:54324/monitor
@@ -63,6 +63,14 @@ After making the schema changes, a migration file needs to be generated, use thi
 
 ## Running Cypress Tests
 
+Running cypress tests locally will use the local database, while running on CI will use the QA database.
+For each test run, a new tenant_id is generated, which has a few benefits:
+
+- ensures no conflicts between parallel test runs
+- easier to cleanup
+- if the data isn't cleaned for some reason, it won't affect other runs
+  For each test file, there should be a `before` and `after` block to, respectively, seed and clean the database.
+
 Create a .env.local file at the packages/cypress folder
 SUPABASE_API_URL=your_api_key (probably http://127.0.0.1:54321)
 SUPABASE_KEY=your_key
@@ -76,26 +84,3 @@ Currently used for customizing Auth Emails.
 Supabase Auth Hooks have a timeout of 5 seconds which can easily be exceeded. To reduce the risk, the `resend` call is not awaited.
 If it is exceeded, the user gets an error on the UI, but still receives the email and can continue his flow.
 Haven't managed to run the functions locally yet (contributions welcome!).
-
-### Cypress with Supabase
-
-Running cypress tests locally will use the local database, while running on CI will use the QA database.
-For each test run, a new tenant_id is generated, which has a few benefits:
-
-- ensures no conflicts between parallel test runs
-- easier to cleanup
-- if the data isn't cleaned for some reason, it won't affect other runs
-  For each test file, there should be a `before` and `after` block to, respectively, seed and clean the database.
-
-### Local firebase sync testing/debugging
-
-_This is temporary until we fully migrate to supabase!_
-We can create and deploy the sync function to the firebase dev environment.
-Then, using ngrok, expose our local supabase url to the internet, and point the firebase function to it.
-(ngrok http http://127.0.0.1:54321)
-
-To authenticate, we need to create these 3 secrets, for each firebase project:
-firebase functions:secrets:set SUPABASE_API_URL
-firebase functions:secrets:set SUPABASE_API_KEY
-firebase functions:secrets:set TENANT_ID
-(Check values with firebase functions:secrets:access SECRET_NAME)

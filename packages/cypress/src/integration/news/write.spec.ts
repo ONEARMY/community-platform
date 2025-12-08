@@ -44,7 +44,7 @@
 //       cy.step('Add image')
 //       cy.get('[data-cy=heroImage-upload]')
 //         .find(':file')
-//         .attachFile('images/howto-step-pic1.jpg')
+//         .selectFile('images/howto-step-pic1.jpg')
 
 //       cy.step('Can add draft news')
 //       cy.get('[data-cy=field-title]')

@@ -95,7 +95,7 @@ export const FactoryLibraryItemDraft = (itemOverloads: Partial<Project> = {}): P
       id: faker.string.uuid(),
       publicUrl: faker.image.avatar(),
     },
-    username: faker.internet.userName(),
+    username: faker.internet.username(),
   },
   deleted: false,
   files: [],

@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import Foco from 'react-foco';
+import { useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react';
 import { MemberBadge } from 'oa-components';
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink';
@@ -16,9 +15,27 @@ interface IProps {
   isMobile: boolean;
 }
 
+const useClickOutside = (callback: () => void) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        callback();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [callback]);
+
+  return ref;
+};
+
 const Profile = observer((props: IProps) => {
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
   const { profile: profile } = useProfileStore();
+  const modalRef = useClickOutside(() => setShowProfileModal(false));
 
   if (!profile) {
     return <ProfileButtons isMobile={props.isMobile} />;
@@ -63,9 +80,9 @@ const Profile = observer((props: IProps) => {
       </Flex>
       <Flex>
         {showProfileModal && (
-          <Foco onClickOutside={() => setShowProfileModal(false)}>
+          <div ref={modalRef}>
             <ProfileModal />
-          </Foco>
+          </div>
         )}
       </Flex>
     </Box>

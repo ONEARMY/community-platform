@@ -44,9 +44,9 @@ export const ArticleCallToActionSupabaseSingleContributor: StoryFn<
     author={makeFakeUser()}
     contributors={[
       {
-        id: faker.datatype.number(),
-        country: faker.address.countryCode(),
-        displayName: faker.name.firstName(),
+        id: faker.number.int(),
+        country: faker.location.countryCode(),
+        displayName: faker.person.firstName(),
         badges: [
           {
             id: 1,
@@ -63,10 +63,10 @@ export const ArticleCallToActionSupabaseSingleContributor: StoryFn<
           },
         ],
         photo: {
-          id: faker.datatype.string(),
-          publicUrl: faker.image.imageUrl(),
+          id: faker.string.uuid(),
+          publicUrl: faker.image.avatar(),
         },
-        username: faker.internet.userName(),
+        username: faker.internet.username(),
       },
     ]}
   >
@@ -75,9 +75,9 @@ export const ArticleCallToActionSupabaseSingleContributor: StoryFn<
 );
 
 const makeFakeUser = (): Author => ({
-  id: faker.datatype.number(),
-  country: faker.address.countryCode(),
-  displayName: faker.name.firstName(),
+  id: faker.number.int(),
+  country: faker.location.countryCode(),
+  displayName: faker.person.firstName(),
   badges: [
     {
       id: 1,
@@ -94,10 +94,10 @@ const makeFakeUser = (): Author => ({
     },
   ],
   photo: {
-    id: faker.datatype.string(),
-    publicUrl: faker.image.imageUrl(),
+    id: faker.string.uuid(),
+    publicUrl: faker.image.avatar(),
   },
-  username: faker.internet.userName(),
+  username: faker.internet.username(),
 });
 
 export const ArticleCallToActionSupabaseMultipleContributors: StoryFn<

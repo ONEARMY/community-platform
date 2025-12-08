@@ -24,7 +24,7 @@ export const FactoryComment = (commentOverloads: Partial<Comment> = {}): Comment
         imageUrl: faker.image.avatar(),
       },
     ],
-    username: faker.internet.userName(),
+    username: faker.internet.username(),
     photo: {
       id: faker.string.uuid(),
       publicUrl: faker.image.avatar(),

@@ -2,8 +2,8 @@
   "imports": {
     "@react-email/components": "npm:@react-email/components@0.1.1",
     "oa-shared": "../../../shared/",
-    "react": "npm:react@19.1.0",
-    "resend": "npm:resend@4.6.0",
+    "react": "npm:react@19.2.1",
+    "resend": "npm:resend@6.5.2",
     "standardwebhooks": "npm:standardwebhooks@1.0.0"
   },
   "nodeModulesDir": "auto",

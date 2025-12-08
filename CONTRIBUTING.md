@@ -13,7 +13,7 @@ If you think something is missing, consider sending us a PR.
 - [Style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-style-guide)
 - [Testing](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-testing)
 - [Joining the team](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-joining-the-team)
-- [Contributing with UX/UI Design](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-contributing-with-ux/ui-design)
+- [Contributing with UX/UI Design](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-contributing-with-uxui-design)
 
 ## 👐 Code of Conduct
 

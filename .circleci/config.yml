@@ -141,15 +141,6 @@ jobs:
       - store_test_results:
           path: reports
 
-  # test_circular_dependency:
-  #   docker: *docker
-  #   environment:
-  #     CYPRESS_INSTALL_BINARY: 0
-  #   steps:
-  #     - setup_repo
-  #     - run:
-  #         command: yarn run test:madge
-
   build:
     <<: *docker_matrix
     environment:
@@ -336,10 +327,6 @@ workflows:
           name: 'Unit tests'
           requires:
             - 'Lint code'
-      # - test_circular_dependency:
-      #     name: 'Circular dependency test'
-      #     requires:
-      #       - 'Lint code'
       - storybook:
           name: Build Storybook
           requires:
@@ -349,7 +336,6 @@ workflows:
           requires:
             - 'Build Application'
             - 'Unit tests'
-            # - 'Circular dependency test'
             - 'Build Storybook'
           context:
             - e2e-tests

@@ -1,6 +1,6 @@
 {
   "imports": {
-    "@react-email/components": "npm:@react-email/components@0.1.1",
+    "@react-email/components": "npm:@react-email/components@1.0.1",
     "oa-shared": "../../../shared/",
     "react": "npm:react@19.2.1",
     "resend": "npm:resend@6.5.2",

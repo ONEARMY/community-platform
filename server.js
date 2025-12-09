@@ -69,7 +69,6 @@ app.use(
         '*.cloudfunctions.net',
         'sentry.io',
         '*.sentry.io',
-        'https://plausible.io',
         ...wsUrls,
       ],
       defaultSrc: [
@@ -90,7 +89,7 @@ app.use(
         '*.analytics.google.com',
         '*.google-analytics.com',
         'www.youtube.com',
-        'https://plausible.io',
+        'donorbox.org',
         "'unsafe-eval'",
         "'unsafe-inline'",
       ],

@@ -58,12 +58,12 @@ export const FactoryResearchItem = (
   isDraft: false,
   author: {
     id: faker.number.int(),
-    displayName: faker.internet.userName(),
+    displayName: faker.internet.username(),
     photo: {
       id: faker.string.uuid(),
       publicUrl: faker.image.avatar(),
     },
-    username: faker.internet.userName(),
+    username: faker.internet.username(),
   },
   modifiedAt: faker.date.past(),
   createdAt: faker.date.past(),

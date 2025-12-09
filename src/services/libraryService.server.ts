@@ -31,15 +31,18 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
         comment_count,
         moderation,
         moderation_feedback,
-        author:profiles(id, display_name, username, photo, country, badges:profile_badges_relations(
-          profile_badges(
-            id,
-            name,
-            display_name,
-            image_url,
-            action_url
+        author:profiles(id, display_name, username, photo, country, donations_enabled,
+          profile_type(id, display_name, name, is_space, image_url, small_image_url),
+          badges:profile_badges_relations(
+            profile_badges(
+              id,
+              name,
+              display_name,
+              image_url,
+              action_url
+            )
           )
-        )),
+        ),
         steps:project_steps(
           id, 
           created_at, 

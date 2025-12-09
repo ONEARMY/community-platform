@@ -14,23 +14,23 @@ export const Default: StoryFn<typeof ContentStatistics> = () => (
     statistics={[
       {
         icon: 'show',
-        label: `${faker.datatype.number()} views`,
-        stat: 889,
+        label: `${faker.number.int()} views`,
+        stat: faker.number.int(),
       },
       {
         icon: 'star',
-        label: `${faker.datatype.number()} useful`,
-        stat: 5,
+        label: `${faker.number.int()} useful`,
+        stat: faker.number.int(),
       },
       {
         icon: 'comment',
-        label: `${faker.datatype.number()} comments`,
-        stat: 4,
+        label: `${faker.number.int()} comments`,
+        stat: faker.number.int(),
       },
       {
         icon: 'update',
-        label: `${faker.datatype.number()} steps`,
-        stat: 12,
+        label: `${faker.number.int()} steps`,
+        stat: faker.number.int(),
       },
     ]}
   />

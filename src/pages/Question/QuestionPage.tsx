@@ -11,7 +11,6 @@ import {
   TagList,
   UsefulStatsButton,
 } from 'oa-components';
-// eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { usefulService } from 'src/services/usefulService';
@@ -19,12 +18,13 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
 import { onUsefulClick } from 'src/utils/onUsefulClick';
+import { createUsefulStatistic } from 'src/utils/statistics';
 import { Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
 
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
 
-import type { ContentType, Question } from 'oa-shared';
+import type { Question } from 'oa-shared';
 
 interface IProps {
   question: Question;
@@ -37,34 +37,31 @@ export const QuestionPage = observer(({ question }: IProps) => {
   const [subscribersCount, setSubscribersCount] = useState<number>(question.subscriberCount);
 
   useEffect(() => {
-    const getVoted = async () => {
-      const voted = await usefulService.hasVoted('questions', question.id);
-      setVoted(voted);
+    const checkVote = async () => {
+      if (activeUser) {
+        const hasVoted = await usefulService.hasVoted('questions', question.id);
+        setVoted(hasVoted);
+      }
     };
-
-    if (activeUser) {
-      getVoted();
-    }
-  }, [activeUser, question]);
+    checkVote();
+  }, [activeUser, question.id]);
 
   const isEditable = useMemo(() => {
     return hasAdminRights(activeUser) || question.author?.username === activeUser?.username;
   }, [activeUser, question.author]);
 
-  const configOnUsefulClick = {
-    contentType: 'questions' as ContentType,
-    contentId: question.id,
-    eventCategory: 'QuestionPage',
-    slug: question.slug,
-    setVoted,
-    setUsefulCount,
-    loggedInUser: activeUser,
-  };
-
   const handleUsefulClick = async (vote: 'add' | 'delete') => {
     await onUsefulClick({
       vote,
-      config: configOnUsefulClick,
+      config: {
+        contentType: 'questions',
+        contentId: question.id,
+        eventCategory: 'questions',
+        slug: question.slug,
+        setVoted,
+        setUsefulCount,
+        loggedInUser: activeUser,
+      },
     });
   };
 
@@ -131,7 +128,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
             alignItems: 'center',
             flexDirection: 'row',
             padding: [2, 3],
-            gap: 2,
+            gap: 3,
             flexWrap: 'wrap',
             justifyContent: 'space-between',
           }}
@@ -140,7 +137,6 @@ export const QuestionPage = observer(({ question }: IProps) => {
             {() => (
               <>
                 <UsefulStatsButton
-                  votedUsefulCount={usefulCount}
                   hasUserVotedUseful={voted}
                   isLoggedIn={!!activeUser}
                   onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}
@@ -169,15 +165,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
                 }),
                 stat: subscribersCount,
               },
-              {
-                icon: 'star',
-                label: buildStatisticsLabel({
-                  stat: usefulCount,
-                  statUnit: 'useful',
-                  usePlural: false,
-                }),
-                stat: usefulCount,
-              },
+              createUsefulStatistic('questions', question.id, usefulCount),
               {
                 icon: 'comment-outline',
                 label: buildStatisticsLabel({
@@ -206,7 +194,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
             }}
           >
             <CommentSectionSupabase
-              authors={question.author?.id ? [question.author?.id] : []}
+              authors={question.author?.id ? [question.author.id] : []}
               setSubscribersCount={setSubscribersCount}
               sourceId={question.id}
               sourceType="questions"

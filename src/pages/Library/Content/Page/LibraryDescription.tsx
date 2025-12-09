@@ -15,6 +15,7 @@ import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg';
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg';
 import { DownloadWrapper } from 'src/common/DownloadWrapper';
 import { buildStatisticsLabel, capitalizeFirstLetter, hasAdminRights } from 'src/utils/helpers';
+import { createUsefulStatistic } from 'src/utils/statistics';
 import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
 
 import type { Profile, Project } from 'oa-shared';
@@ -26,20 +27,16 @@ interface IProps {
   votedUsefulCount?: number;
   hasUserVotedUseful: boolean;
   onUsefulClick: () => Promise<void>;
-  subscribersCount: number;
 }
 
-export const LibraryDescription = (props: IProps) => {
-  const {
-    commentsCount,
-    hasUserVotedUseful,
-    item,
-    loggedInUser,
-    onUsefulClick,
-    subscribersCount,
-    votedUsefulCount,
-  } = props;
-
+export const LibraryDescription = ({
+  commentsCount,
+  hasUserVotedUseful,
+  item,
+  loggedInUser,
+  onUsefulClick,
+  votedUsefulCount,
+}: IProps) => {
   const isEditable = useMemo(() => {
     return (
       !!loggedInUser &&
@@ -148,6 +145,7 @@ export const LibraryDescription = (props: IProps) => {
           <Flex sx={{ marginTop: 'auto', flexDirection: 'column', gap: 1 }}>
             <TagList tags={item.tags.map((t) => ({ label: t.name }))} />
             <DownloadWrapper
+              authorProfileId={item.author?.id}
               fileDownloadCount={item.fileDownloadCount}
               fileLink={item.hasFileLink ? `/api/documents/project/${item.id}/link` : undefined}
               files={item.files?.map((x) => ({
@@ -216,21 +214,20 @@ export const LibraryDescription = (props: IProps) => {
           alignItems: 'center',
           flexDirection: 'row',
           padding: [2, 3],
-          gap: 2,
+          gap: 3,
           flexWrap: 'wrap',
           justifyContent: 'space-between',
         }}
       >
         <ClientOnly fallback={<></>}>
           {() => (
-            <>
+            <Flex sx={{ gap: 2 }}>
               <UsefulStatsButton
-                votedUsefulCount={votedUsefulCount}
                 hasUserVotedUseful={hasUserVotedUseful}
                 isLoggedIn={loggedInUser ? true : false}
                 onUsefulClick={onUsefulClick}
               />
-            </>
+            </Flex>
           )}
         </ClientOnly>
 
@@ -245,24 +242,7 @@ export const LibraryDescription = (props: IProps) => {
               }),
               stat: item.totalViews,
             },
-            {
-              icon: 'star',
-              label: buildStatisticsLabel({
-                stat: votedUsefulCount || 0,
-                statUnit: 'useful',
-                usePlural: false,
-              }),
-              stat: votedUsefulCount || 0,
-            },
-            {
-              icon: 'thunderbolt-grey',
-              label: buildStatisticsLabel({
-                stat: subscribersCount,
-                statUnit: 'following',
-                usePlural: false,
-              }),
-              stat: subscribersCount,
-            },
+            createUsefulStatistic('projects', item.id, votedUsefulCount || 0),
             {
               icon: 'comment-outline',
               label: buildStatisticsLabel({

@@ -36,12 +36,12 @@ export const ResearchFilterHeader = (props: IProps) => {
   const { itemCount, draftCount, handleShowDrafts, showDrafts } = props;
 
   const [categories, setCategories] = useState<Category[]>([]);
-  const [searchString, setSearchString] = useState<string>('');
-
   const [searchParams, setSearchParams] = useSearchParams();
+  const q = searchParams.get(ResearchSearchParams.q);
+  const [searchString, setSearchString] = useState<string>(q ?? '');
+
   const categoryParam = Number(searchParams.get(ResearchSearchParams.category));
   const category = categories?.find((x) => x.id === categoryParam) ?? null;
-  const q = searchParams.get(ResearchSearchParams.q);
   const sort = searchParams.get(ResearchSearchParams.sort) as ResearchSortOption;
   const status = (searchParams.get(ResearchSearchParams.status) as ResearchStatus) || '';
 

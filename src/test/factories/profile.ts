@@ -4,8 +4,8 @@ import type { DBProfile } from 'oa-shared';
 
 export const FactoryDBProfile = (dbProfileOverloads: Partial<DBProfile> = {}): DBProfile => ({
   id: faker.number.int(),
-  username: faker.internet.userName(),
-  display_name: faker.internet.userName(),
+  username: faker.internet.username(),
+  display_name: faker.internet.username(),
   photo: {
     id: faker.string.uuid(),
     path: faker.image.avatar(),
@@ -37,5 +37,6 @@ export const FactoryDBProfile = (dbProfileOverloads: Partial<DBProfile> = {}): D
   website: faker.internet.url(),
   total_views: 0,
   profile_type: faker.number.int(),
+  donations_enabled: false,
   ...dbProfileOverloads,
 });

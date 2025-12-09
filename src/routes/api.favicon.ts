@@ -4,8 +4,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
 import type { LoaderFunctionArgs } from 'react-router';
 
-// Cache favicon bytes + content type. Use ArrayBuffer to satisfy BodyInit typing.
-const cache = new Keyv<{ body: ArrayBuffer; contentType: string }>({
+const cache = new Keyv<{ body: string; contentType: string }>({
   ttl: 3600000,
 }); // ttl: 60 minutes
 
@@ -14,7 +13,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const cached = await cache.get('favicon');
   if (cached && isProductionEnvironment()) {
-    return new Response(cached.body, {
+    // Convert base64 back to Buffer for Response
+    const binary = Buffer.from(cached.body, 'base64');
+    return new Response(binary, {
       status: 200,
       headers: {
         ...headers,
@@ -24,7 +25,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
   }
 
-  const { data, error } = await client.from('tenant_settings').select('site_favicon').limit(1);
+  const { data, error } = await client
+    .from('tenant_settings')
+    .select('site_favicon')
+    .eq('tenant_id', process.env.TENANT_ID)
+    .limit(1);
 
   if (error) {
     return new Response('Failed to load favicon metadata', { status: 500 });
@@ -49,8 +54,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const contentType = imageRes.headers.get('content-type') || 'image/x-icon';
   const body = await imageRes.arrayBuffer();
 
-  // Cache the binary + content type
-  cache.set('favicon', { body, contentType });
+  // Cache as base64 string (ArrayBuffer doesn't serialize well)
+  const base64Body = Buffer.from(body).toString('base64');
+  cache.set('favicon', { body: base64Body, contentType });
 
   return new Response(body, {
     status: 200,

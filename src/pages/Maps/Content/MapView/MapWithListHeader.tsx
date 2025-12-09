@@ -32,12 +32,7 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
   if (mapState.loadingMessage) {
     return (
       <Flex
-        sx={{
-          background: 'background',
-          height: '100%',
-          width: '100%',
-          justifyContent: 'center',
-        }}
+        sx={{ background: 'background', height: '100%', width: '100%', justifyContent: 'center' }}
       >
         <Loader label={mapState.loadingMessage} sx={{ alignSelf: 'center' }} />
       </Flex>
@@ -49,11 +44,7 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
       <Modal
         onDidDismiss={toggleFilterModal}
         isOpen={showFilters}
-        sx={{
-          width: ['350px', '600px'],
-          minWidth: '350px',
-          padding: '0 !important',
-        }}
+        sx={{ width: ['350px', '600px'], minWidth: '350px', padding: '0 !important' }}
       >
         {mapState?.allPins && <MapFilterList onClose={toggleFilterModal} />}
       </Modal>
@@ -98,7 +89,6 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
       </Flex>
       {mapState && (
         <MapCardList
-          columnsCountBreakPoints={isMobile ? { 300: 1, 600: 2 } : undefined}
           list={mapState.filteredPins}
           onPinClick={(pin) => {
             mapState.selectPinWithClusterCheck(pin);

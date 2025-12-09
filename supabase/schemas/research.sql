@@ -142,8 +142,12 @@ BEGIN
     (SELECT COALESCE(SUM(ru.comment_count), 0) FROM research_updates ru WHERE ru.research_id = r.id AND (ru.is_draft IS NULL OR ru.is_draft = FALSE)
           AND (ru.deleted IS NULL OR ru.deleted = FALSE)) AS comment_count
   FROM research r
+  JOIN profiles prof ON prof.id = r.created_by
   WHERE
-    (search_query IS NULL OR r.fts @@ ts_query) AND
+    (search_query IS NULL OR
+     r.fts @@ ts_query OR
+     prof.username ILIKE '%' || search_query || '%'
+    ) AND
     (category_id IS NULL OR r.category = category_id) AND
     (research_status IS NULL OR r.status = research_status) AND
     (r.is_draft IS NULL OR r.is_draft = FALSE) AND
@@ -189,12 +193,22 @@ CREATE OR REPLACE FUNCTION "public"."get_research_count"("search_query" "text" D
     LANGUAGE "plpgsql"
     SET search_path = public, pg_temp
     AS $$
+DECLARE
+  ts_query tsquery;
 BEGIN
+  IF search_query IS NOT NULL THEN
+    ts_query := to_tsquery('english', search_query);
+  END IF;
+
   RETURN (
     SELECT COUNT(*)
     FROM research r
+    INNER JOIN profiles prof ON prof.id = r.created_by
     WHERE
-      (search_query IS NULL OR r.fts @@ to_tsquery('english', search_query)) AND
+      (search_query IS NULL OR
+       r.fts @@ ts_query OR
+       prof.username ILIKE '%' || search_query || '%'
+      ) AND
       (category_id IS NULL OR r.category = category_id) AND
       (research_status IS NULL OR r.status = research_status) AND
       (r.is_draft IS NULL OR r.is_draft = FALSE) AND

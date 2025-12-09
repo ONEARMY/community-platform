@@ -226,21 +226,37 @@ export const CommentSectionSupabase = (props: IProps) => {
     }
   };
 
+  const updateVoteCount = (id: number, newVoteCount: number) => {
+    setComments((comments) =>
+      comments.map((comment) => {
+        if (comment.id === id) {
+          comment.voteCount = newVoteCount;
+        }
+        return comment;
+      }),
+    );
+  };
+
   return (
     <AuthorsContext.Provider value={{ authors }}>
       <Flex sx={{ flexDirection: 'column', gap: 2 }} id="discussion">
         <Flex
           sx={{
-            flexDirection: ['column', 'row'],
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            alignItems: 'center',
             gap: 2,
+            containerType: 'inline-size',
           }}
         >
           <Flex
             sx={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
               alignItems: 'center',
               gap: 1,
               justifyContent: 'space-between',
-              flex: 1,
+              flex: '1 1 auto',
             }}
           >
             <CommentsTitle comments={comments} />
@@ -250,16 +266,9 @@ export const CommentSectionSupabase = (props: IProps) => {
               contentType={sourceType}
               itemId={sourceId}
               setSubscribersCount={setSubscribersCount}
-              sx={{
-                px: [2, 3, 3],
-                py: [1, 2, 2],
-                pl: ['2rem', 9, 9],
-                fontSize: [1, 2, 2],
-                height: ['2rem', 'auto', 'auto'],
-              }}
             />
           </Flex>
-          <CommentSort sortBy={sortBy} onSortChange={setSortBy} />
+          {comments.length >= 5 && <CommentSort sortBy={sortBy} onSortChange={setSortBy} />}
         </Flex>
         {displayedComments.map((comment) => (
           <Box key={comment.id}>
@@ -270,6 +279,7 @@ export const CommentSectionSupabase = (props: IProps) => {
               onReply={(reply) => postReply(comment.id, reply)}
               onEditReply={(id, reply) => editReply(id, reply, comment.id)}
               onDeleteReply={(id) => deleteReply(id, comment.id)}
+              updateUsefulCount={updateVoteCount}
               sourceType={sourceType}
             />
           </Box>

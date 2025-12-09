@@ -33,7 +33,6 @@ ARG VITE_DONATIONS_BODY
 ARG VITE_DONATIONS_IFRAME_SRC
 ARG VITE_DONATIONS_IMAGE_URL
 ARG VITE_HOWTOS_HEADING
-ARG VITE_COMMUNITY_PROGRAM_URL
 ARG VITE_QUESTIONS_GUIDELINES_URL
 ARG VITE_NO_MESSAGING
 
@@ -63,11 +62,7 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     --mount=type=secret,id=VITE_PLATFORM_PROFILES \
     --mount=type=secret,id=VITE_SITE_NAME \
     --mount=type=secret,id=VITE_THEME \
-    --mount=type=secret,id=VITE_DONATIONS_BODY \
-    --mount=type=secret,id=VITE_DONATIONS_IFRAME_SRC \
-    --mount=type=secret,id=VITE_DONATIONS_IMAGE_URL \
     --mount=type=secret,id=VITE_HOWTOS_HEADING \
-    --mount=type=secret,id=VITE_COMMUNITY_PROGRAM_URL \
     --mount=type=secret,id=VITE_QUESTIONS_GUIDELINES_URL \
     --mount=type=secret,id=VITE_NO_MESSAGING \
     VITE_CDN_URL="$(cat /run/secrets/VITE_CDN_URL)" && \
@@ -83,11 +78,7 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     VITE_PROFILE_GUIDELINES_URL="$(cat /run/secrets/VITE_PROFILE_GUIDELINES_URL)" && \
     VITE_SITE_NAME="$(cat /run/secrets/VITE_SITE_NAME)" && \
     VITE_THEME="$(cat /run/secrets/VITE_THEME)" && \
-    VITE_DONATIONS_BODY="$(cat /run/secrets/VITE_DONATIONS_BODY)" && \
-    VITE_DONATIONS_IFRAME_SRC="$(cat /run/secrets/VITE_DONATIONS_IFRAME_SRC)" && \
-    VITE_DONATIONS_IMAGE_URL="$(cat /run/secrets/VITE_DONATIONS_IMAGE_URL)" && \
     VITE_HOWTOS_HEADING="$(cat /run/secrets/VITE_HOWTOS_HEADING)" && \
-    VITE_COMMUNITY_PROGRAM_URL="$(cat /run/secrets/VITE_COMMUNITY_PROGRAM_URL)" && \
     VITE_QUESTIONS_GUIDELINES_URL="$(cat /run/secrets/VITE_QUESTIONS_GUIDELINES_URL)" && \
     VITE_NO_MESSAGING="$(cat /run/secrets/VITE_NO_MESSAGING)" && \
     echo "VITE_CDN_URL=\"${VITE_CDN_URL}\"" >> .env && \
@@ -103,11 +94,7 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     echo "VITE_PROFILE_GUIDELINES_URL=\"${VITE_PROFILE_GUIDELINES_URL}\"" >> .env && \
     echo "VITE_SITE_NAME=\"${VITE_SITE_NAME}\"" >> .env && \
     echo "VITE_THEME=\"${VITE_THEME}\"" >> .env && \
-    echo "VITE_DONATIONS_BODY=\"${VITE_DONATIONS_BODY}\"" >> .env && \
-    echo "VITE_DONATIONS_IFRAME_SRC=\"${VITE_DONATIONS_IFRAME_SRC}\"" >> .env && \
-    echo "VITE_DONATIONS_IMAGE_URL=\"${VITE_DONATIONS_IMAGE_URL}\"" >> .env && \
     echo "VITE_HOWTOS_HEADING=\"${VITE_HOWTOS_HEADING}\"" >> .env && \
-    echo "VITE_COMMUNITY_PROGRAM_URL=\"${VITE_COMMUNITY_PROGRAM_URL}\"" >> .env && \
     echo "VITE_QUESTIONS_GUIDELINES_URL=\"${VITE_QUESTIONS_GUIDELINES_URL}\"" >> .env && \
     echo "VITE_NO_MESSAGING=\"${VITE_NO_MESSAGING}\"" >> .env
 

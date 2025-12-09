@@ -14,6 +14,14 @@ export const getLocationData = async (latlng: ILatLng): Promise<MapPinFormData> 
     )
   ).json();
 
+  let name = response.address.city || response.address.town || response.address.village || '';
+
+  if (name) {
+    name += `, ${response.address.country}`;
+  } else {
+    name = response.address.country;
+  }
+
   const location: MapPinFormData = {
     country: response.address.country || '',
     countryCode: response.address.country_code || '',
@@ -21,7 +29,7 @@ export const getLocationData = async (latlng: ILatLng): Promise<MapPinFormData> 
     lat: lat,
     lng: lng,
     postCode: response.address.postcode || '',
-    name: response.address.city || response.address.town || response.address.village || '',
+    name: name,
   };
 
   return location;

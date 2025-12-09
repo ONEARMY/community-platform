@@ -47,7 +47,9 @@ describe('[Question]', () => {
       cy.get('[data-cy=errors-container]');
 
       cy.step('Add image');
-      cy.get('[data-cy=image-upload-0]').find(':file').attachFile('images/howto-step-pic1.jpg');
+      cy.get('[data-cy=image-upload-0]')
+        .find(':file')
+        .selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
 
       cy.step('Add title field');
       cy.get('[data-cy=field-title]').clear().type(initialTitle).blur({ force: true });

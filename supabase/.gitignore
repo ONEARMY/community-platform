@@ -3,3 +3,12 @@
 .temp
 .env
 signing_key.json
+
+# Supabase
+.branches
+.temp
+
+# dotenvx
+.env.keys
+.env.local
+.env.*.local

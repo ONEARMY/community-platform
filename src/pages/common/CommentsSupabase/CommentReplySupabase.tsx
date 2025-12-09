@@ -19,7 +19,7 @@ export interface ICommentItemProps {
 }
 
 export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentItemProps) => {
-  const commentRef = useRef<HTMLDivElement>();
+  const commentRef = useRef<HTMLDivElement>(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [usefulCount, setUsefulCount] = useState<number>(comment.voteCount ?? 0);
@@ -50,7 +50,7 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
   const item = 'ReplyItem';
   const loggedInUser = activeUser;
 
-  const handleUsefulClick = async (vote: 'add' | 'delete', eventCategory = 'Comment') => {
+  const handleUsefulClick = async (vote: 'add' | 'delete') => {
     await onUsefulClick({
       vote,
       config: {
@@ -60,7 +60,7 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
         setVoted,
         setUsefulCount,
         loggedInUser: loggedInUser,
-        eventCategory,
+        eventCategory: 'comments',
       },
     });
   };

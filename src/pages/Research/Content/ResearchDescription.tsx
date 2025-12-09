@@ -16,6 +16,7 @@ import { type Profile, type ResearchItem, ResearchStatusRecord } from 'oa-shared
 import { ClientOnly } from 'remix-utils/client-only';
 import { DraftTag } from 'src/pages/common/Drafts/DraftTag';
 import { buildStatisticsLabel } from 'src/utils/helpers';
+import { createUsefulStatistic } from 'src/utils/statistics';
 import { Card, Divider, Flex, Heading, Text } from 'theme-ui';
 
 import { researchStatusColour } from '../researchHelpers';
@@ -146,7 +147,7 @@ const ResearchDescription = (props: IProps) => {
         sx={{
           flexDirection: 'row',
           padding: [2, 3],
-          gap: 2,
+          gap: 3,
           flexWrap: 'wrap',
           justifyContent: 'space-between',
         }}
@@ -155,7 +156,6 @@ const ResearchDescription = (props: IProps) => {
           {() => (
             <Flex sx={{ gap: 3 }}>
               <UsefulStatsButton
-                votedUsefulCount={votedUsefulCount}
                 hasUserVotedUseful={props.hasUserVotedUseful}
                 isLoggedIn={!!props.activeUser}
                 onUsefulClick={props.onUsefulClick}
@@ -191,15 +191,7 @@ const ResearchDescription = (props: IProps) => {
               }),
               stat: subscribersCount || 0,
             },
-            {
-              icon: 'star',
-              label: buildStatisticsLabel({
-                stat: votedUsefulCount || 0,
-                statUnit: 'useful',
-                usePlural: false,
-              }),
-              stat: votedUsefulCount || 0,
-            },
+            createUsefulStatistic('research', research.id, votedUsefulCount || 0),
             {
               icon: 'comment-outline',
               label: buildStatisticsLabel({

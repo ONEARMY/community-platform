@@ -141,15 +141,6 @@ jobs:
       - store_test_results:
           path: reports
 
-  # test_circular_dependency:
-  #   docker: *docker
-  #   environment:
-  #     CYPRESS_INSTALL_BINARY: 0
-  #   steps:
-  #     - setup_repo
-  #     - run:
-  #         command: yarn run test:madge
-
   build:
     <<: *docker_matrix
     environment:
@@ -246,11 +237,7 @@ jobs:
               --build-secret VITE_PROFILE_GUIDELINES_URL="$VITE_PROFILE_GUIDELINES_URL" \
               --build-secret VITE_SITE_NAME="$VITE_SITE_NAME" \
               --build-secret VITE_THEME="$VITE_THEME" \
-              --build-secret VITE_DONATIONS_BODY="$VITE_DONATIONS_BODY" \
-              --build-secret VITE_DONATIONS_IFRAME_SRC="$VITE_DONATIONS_IFRAME_SRC" \
-              --build-secret VITE_DONATIONS_IMAGE_URL="$VITE_DONATIONS_IMAGE_URL" \
               --build-secret VITE_HOWTOS_HEADING="$VITE_HOWTOS_HEADING" \
-              --build-secret VITE_COMMUNITY_PROGRAM_URL="$VITE_COMMUNITY_PROGRAM_URL" \
               --build-secret VITE_QUESTIONS_GUIDELINES_URL="$VITE_QUESTIONS_GUIDELINES_URL" \
               --build-secret VITE_NO_MESSAGING="$VITE_NO_MESSAGING" \
               --build-secret TENANT_ID="$TENANT_ID" \
@@ -340,10 +327,6 @@ workflows:
           name: 'Unit tests'
           requires:
             - 'Lint code'
-      # - test_circular_dependency:
-      #     name: 'Circular dependency test'
-      #     requires:
-      #       - 'Lint code'
       - storybook:
           name: Build Storybook
           requires:
@@ -353,7 +336,6 @@ workflows:
           requires:
             - 'Build Application'
             - 'Unit tests'
-            # - 'Circular dependency test'
             - 'Build Storybook'
           context:
             - e2e-tests

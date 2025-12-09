@@ -2,6 +2,7 @@ import { trackEvent } from 'src/common/Analytics';
 import { usefulService } from 'src/services/usefulService';
 
 import type { Profile, UsefulContentType } from 'oa-shared';
+import type { EventAction, EventCategory } from 'src/common/Analytics';
 
 interface UsefulClickProps {
   vote: 'add' | 'delete';
@@ -9,7 +10,7 @@ interface UsefulClickProps {
     loggedInUser: Profile | null | undefined;
     contentType: UsefulContentType;
     contentId: number;
-    eventCategory: string;
+    eventCategory: EventCategory;
     setVoted: (value: boolean | ((prev: boolean) => boolean)) => void;
     setUsefulCount: (value: number | ((prev: number) => number)) => void;
     label?: string;
@@ -49,10 +50,9 @@ const onUsefulClick = async (props: UsefulClickProps) => {
 
   trackEvent({
     category: eventCategory,
-    action:
-      vote === 'add'
-        ? `${capitalize(contentType)}Useful`
-        : `${capitalize(contentType)}UsefulRemoved`,
+    action: (vote === 'add'
+      ? `${capitalize(contentType)}Useful`
+      : `${capitalize(contentType)}UsefulRemoved`) as EventAction,
     label: label || slug || `${contentType}-${contentId}`,
   });
 };

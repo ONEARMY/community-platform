@@ -84,20 +84,19 @@ export const ProfilePage = observer((props: IProps) => {
                 });
               }}
               sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
                 backgroundColor: 'white',
               }}
             >
-              {upgradeBadge.badge?.imageUrl && (
-                <Image
-                  src={upgradeBadge.badge.imageUrl}
-                  sx={{ height: 16, width: 16, flexShrink: 0 }}
-                  alt={upgradeBadge.badge.displayName || 'badge'}
-                />
-              )}
-              {upgradeBadge.actionLabel}
+              <Flex sx={{ alignItems: 'center', gap: 2 }}>
+                {upgradeBadge.badge?.imageUrl && (
+                  <Image
+                    src={upgradeBadge.badge.imageUrl}
+                    sx={{ height: 20, width: 20, flexShrink: 0 }}
+                    alt={upgradeBadge.badge.displayName || 'badge'}
+                  />
+                )}
+                {upgradeBadge.actionLabel}
+              </Flex>
             </Button>
           )}
           <InternalLink to="/settings">

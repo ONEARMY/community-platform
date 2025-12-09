@@ -119,7 +119,7 @@ export const ProfileModal = observer(() => {
             {upgradeBadge.badge?.imageUrl && (
               <Image
                 src={upgradeBadge.badge.imageUrl}
-                sx={{ height: 16, width: 16 }}
+                sx={{ height: 20, width: 20 }}
                 alt={upgradeBadge.badge.displayName || 'badge'}
               />
             )}

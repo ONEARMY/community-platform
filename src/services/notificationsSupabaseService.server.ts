@@ -136,7 +136,8 @@ const createNotificationsNewComment = async (
     }
     const contentType: SubscribableContentTypes = isReply ? 'comments' : comment.source_type;
 
-    const subscribers = await getSubscribedUsers(contentId, contentType, client);
+    let subscribers = await getSubscribedUsers(contentId, contentType, client);
+    subscribers = subscribers.filter((id) => id !== comment.created_by);
 
     const isResearchUpdate = comment.source_type === 'research_update';
     const sourceContentId = await setSourceContentType(comment, client);

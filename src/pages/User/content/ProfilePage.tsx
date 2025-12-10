@@ -1,16 +1,15 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Button, ExternalLink, InternalLink } from 'oa-components';
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
-import { upgradeBadgeService } from 'src/services/upgradeBadgeService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Flex, Image } from 'theme-ui';
 
 import { UserProfile } from './UserProfile';
 
-import type { Profile, UpgradeBadge, UserCreatedDocs } from 'oa-shared';
+import type { Profile, UserCreatedDocs } from 'oa-shared';
 
 interface IProps {
   profile: Profile;
@@ -23,8 +22,7 @@ interface IProps {
  */
 export const ProfilePage = observer((props: IProps) => {
   const { profile, userCreatedDocs } = props;
-  const { profile: activeUser } = useProfileStore();
-  const [upgradeBadges, setUpgradeBadges] = useState<UpgradeBadge[]>([]);
+  const { profile: activeUser, getUpgradeBadgeForCurrentUser } = useProfileStore();
 
   const isViewingOwnProfile = useMemo(
     () => activeUser?.username === profile?.username,
@@ -32,20 +30,8 @@ export const ProfilePage = observer((props: IProps) => {
   );
   const showMemberProfile = !profile?.type?.isSpace;
 
-  useEffect(() => {
-    const fetchUpgradeBadges = async () => {
-      const badges = await upgradeBadgeService.getUpgradeBadges();
-      setUpgradeBadges(badges);
-    };
-    fetchUpgradeBadges();
-  }, []);
-
-  const isSpace = activeUser?.type?.isSpace || false;
-  const upgradeBadge = upgradeBadges.find((badge) => badge.isSpace === isSpace);
-
-  const userBadgeIds = activeUser?.badges?.map((badge) => badge.id) || [];
-  const hasUpgradeBadge = upgradeBadge ? userBadgeIds.includes(upgradeBadge.badgeId) : false;
-  const shouldShowUpgrade = upgradeBadge && !hasUpgradeBadge && isViewingOwnProfile;
+  const upgradeBadge = getUpgradeBadgeForCurrentUser();
+  const shouldShowUpgrade = upgradeBadge && isViewingOwnProfile;
 
   return (
     <Flex
@@ -81,21 +67,15 @@ export const ProfilePage = observer((props: IProps) => {
                         label: upgradeBadge.actionLabel,
                       });
                     }}
-                    sx={{
-                      textDecoration: 'none',
-                      '&:hover': {
-                        textDecoration: 'none',
-                      },
-                    }}
+                    sx={{ textDecoration: 'none' }}
                   >
                     <Button
                       type="button"
-                      variant="outline"
                       sx={{
                         backgroundColor: 'white',
                       }}
                     >
-                      <Flex sx={{ alignItems: 'center', gap: 2 }}>
+                      <Flex sx={{ alignItems: 'center', gap: 1 }}>
                         {upgradeBadge.badge?.imageUrl && (
                           <Image
                             src={upgradeBadge.badge.imageUrl}

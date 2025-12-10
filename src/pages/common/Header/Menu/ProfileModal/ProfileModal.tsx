@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router';
 import styled from '@emotion/styled';
 import { observer } from 'mobx-react';
@@ -7,11 +6,8 @@ import { preciousPlasticTheme } from 'oa-themes';
 import { trackEvent } from 'src/common/Analytics';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList';
-import { upgradeBadgeService } from 'src/services/upgradeBadgeService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Box, Flex, Image } from 'theme-ui';
-
-import type { UpgradeBadge } from 'oa-shared';
 
 // TODO: Remove direct usage of Theme
 const theme = preciousPlasticTheme.styles;
@@ -46,23 +42,10 @@ const ModalLink = styled(NavLink)`
 `;
 
 export const ProfileModal = observer(() => {
-  const { profile: activeUser } = useProfileStore();
-  const [upgradeBadges, setUpgradeBadges] = useState<UpgradeBadge[]>([]);
+  const { profile: activeUser, getUpgradeBadgeForCurrentUser } = useProfileStore();
 
-  useEffect(() => {
-    const fetchUpgradeBadges = async () => {
-      const badges = await upgradeBadgeService.getUpgradeBadges();
-      setUpgradeBadges(badges);
-    };
-    fetchUpgradeBadges();
-  }, []);
-
-  const isSpace = activeUser?.type?.isSpace || false;
-  const upgradeBadge = upgradeBadges.find((badge) => badge.isSpace === isSpace);
-
-  const userBadgeIds = activeUser?.badges?.map((badge) => badge.id) || [];
-  const hasUpgradeBadge = upgradeBadge ? userBadgeIds.includes(upgradeBadge.badgeId) : false;
-  const shouldShowUpgrade = upgradeBadge && !hasUpgradeBadge;
+  const upgradeBadge = getUpgradeBadgeForCurrentUser();
+  const shouldShowUpgrade = !!upgradeBadge;
 
   return (
     <ModalContainer data-cy="user-menu-list">
@@ -87,6 +70,7 @@ export const ProfileModal = observer(() => {
         {shouldShowUpgrade && (
           <Box
             as="a"
+            // @ts-expect-error - Box doesn't properly type 'as' prop with anchor attributes
             href={upgradeBadge.actionUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -102,7 +86,7 @@ export const ProfileModal = observer(() => {
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
-              gap: 2,
+              gap: 1,
               color: 'black',
               padding: '10px 30px 10px 30px',
               textAlign: 'left',

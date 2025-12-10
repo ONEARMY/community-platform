@@ -93,7 +93,6 @@ export const NewsPage = observer(({ news }: IProps) => {
               fontFamily: 'body',
               lineHeight: 1.5,
               a: {
-                color: 'primary',
                 textDecoration: 'underline',
                 '&:hover': { textDecoration: 'none' },
               },

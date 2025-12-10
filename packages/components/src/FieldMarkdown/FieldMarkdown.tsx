@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
@@ -41,11 +41,6 @@ export const FieldMarkdown = (props: IProps) => {
   const ref = useRef<MDXEditorMethods>(null);
   const { imageUploadHandler, input, meta, ...rest } = props;
 
-  useEffect(() => {
-    ref.current?.getMarkdown();
-  }, []);
-  useEffect(() => ref.current?.setMarkdown(input.value), [input.value]);
-
   const mainPluginList = [
     headingsPlugin({ allowedHeadingLevels: [1, 2] }),
     listsPlugin(),
@@ -85,7 +80,6 @@ export const FieldMarkdown = (props: IProps) => {
           fontFamily: 'body',
           lineHeight: 1.5,
           a: {
-            color: 'primary',
             textDecoration: 'underline',
             '&:hover': { textDecoration: 'none' },
           },
@@ -100,9 +94,10 @@ export const FieldMarkdown = (props: IProps) => {
         }}
       >
         <MDXEditor
+          key={input.value?.slice(0, 10) || ''}
           ref={ref}
           className={showError ? 'mdxeditor-error' : ''}
-          markdown={''}
+          markdown={input.value || ''}
           plugins={[toolbar, ...mainPluginList]}
           onBlur={() => input.onBlur()}
           onChange={(ev) => input.onChange(ev)}

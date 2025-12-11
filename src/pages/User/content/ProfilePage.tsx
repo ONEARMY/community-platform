@@ -22,7 +22,7 @@ interface IProps {
  */
 export const ProfilePage = observer((props: IProps) => {
   const { profile, userCreatedDocs } = props;
-  const { profile: activeUser, getUpgradeBadgeForCurrentUser } = useProfileStore();
+  const { profile: activeUser, upgradeBadgeForCurrentUser } = useProfileStore();
 
   const isViewingOwnProfile = useMemo(
     () => activeUser?.username === profile?.username,
@@ -30,7 +30,7 @@ export const ProfilePage = observer((props: IProps) => {
   );
   const showMemberProfile = !profile?.type?.isSpace;
 
-  const upgradeBadge = getUpgradeBadgeForCurrentUser();
+  const upgradeBadge = upgradeBadgeForCurrentUser;
   const shouldShowUpgrade = upgradeBadge && isViewingOwnProfile;
 
   return (

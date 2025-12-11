@@ -42,9 +42,9 @@ const ModalLink = styled(NavLink)`
 `;
 
 export const ProfileModal = observer(() => {
-  const { profile: activeUser, getUpgradeBadgeForCurrentUser } = useProfileStore();
+  const { profile: activeUser, upgradeBadgeForCurrentUser } = useProfileStore();
 
-  const upgradeBadge = getUpgradeBadgeForCurrentUser();
+  const upgradeBadge = upgradeBadgeForCurrentUser;
   const shouldShowUpgrade = !!upgradeBadge;
 
   return (

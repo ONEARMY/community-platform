@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect } from 'react';
-import { action, makeObservable, observable, runInAction } from 'mobx';
+import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import { SessionContext } from 'src/pages/common/SessionContext';
 import { profileService } from 'src/services/profileService';
 import { profileTypesService } from 'src/services/profileTypesService';
@@ -45,7 +45,25 @@ export class ProfileStore {
     });
   };
 
-  getUpgradeBadgeForCurrentUser = () => {
+  getProfileTypeByName = (name: string) => {
+    return this.profileTypes?.find((type) => type.name === name);
+  };
+
+  constructor() {
+    makeObservable(this, {
+      profile: observable,
+      profileTypes: observable,
+      upgradeBadges: observable,
+      upgradeBadgeForCurrentUser: computed,
+      refresh: action,
+      clear: action,
+      update: action,
+      initProfileTypes: action,
+      initUpgradeBadges: action,
+    });
+  }
+
+  get upgradeBadgeForCurrentUser() {
     if (!this.profile || !this.upgradeBadges) {
       return undefined;
     }
@@ -57,23 +75,6 @@ export class ProfileStore {
     const hasUpgradeBadge = upgradeBadge ? userBadgeIds.includes(upgradeBadge.badgeId) : false;
 
     return hasUpgradeBadge ? undefined : upgradeBadge;
-  };
-
-  getProfileTypeByName = (name: string) => {
-    return this.profileTypes?.find((type) => type.name === name);
-  };
-
-  constructor() {
-    makeObservable(this, {
-      profile: observable,
-      profileTypes: observable,
-      upgradeBadges: observable,
-      refresh: action,
-      clear: action,
-      update: action,
-      initProfileTypes: action,
-      initUpgradeBadges: action,
-    });
   }
 }
 

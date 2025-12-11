@@ -49,6 +49,7 @@ export default defineConfig({
           const profileImages = await supabaseService.seedProfileImages();
           const { profile_types } = await supabaseService.seedProfileTypes();
           const { profile_badges } = await supabaseService.seedBadges();
+          await supabaseService.seedUpgradeBadges(profile_badges.data);
           const { profile_tags } = await supabaseService.seedProfileTags();
           const { profiles } = await supabaseService.seedAccounts(
             profile_badges.data,
@@ -92,6 +93,7 @@ export default defineConfig({
               'profile_tags',
               'profile_tags_relations',
               'profile_types',
+              'upgrade_badge',
             ],
             tenantId,
           );

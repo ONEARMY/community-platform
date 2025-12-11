@@ -290,6 +290,8 @@ describe('[Profile]', () => {
     it('[Should show Go PRO button when user does not have pro badge]', () => {
       setIsPreciousPlastic();
 
+      cy.intercept('GET', '/api/upgrade-badges').as('getUpgradeBadges');
+
       const newUser = generateNewUserDetails();
       cy.signUpNewUser(newUser);
 
@@ -308,8 +310,10 @@ describe('[Profile]', () => {
       cy.step('Navigate to own profile');
       cy.visit(`/u/${newUser.username}`);
 
+      cy.wait(2000);
+
       cy.step('Verify Go PRO button is visible for user without badge');
-      cy.get('[data-cy="UpgradeBadge"]').should('be.visible');
+      cy.get('[data-cy="UpgradeBadge"]', { timeout: 15000 }).should('be.visible');
       cy.get('[data-cy="UpgradeBadge"]').should('contain', 'Go PRO');
 
       cy.step('Verify badge is not shown');

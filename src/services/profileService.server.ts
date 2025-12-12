@@ -3,7 +3,7 @@ import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { ImageServiceServer } from './imageService.server';
 import { ProfileTypesServiceServer } from './profileTypesService.server';
 
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient, User } from '@supabase/supabase-js';
 import type { DBAuthorVotes, DBMedia, DBProfile, ProfileFormData, ProfileType } from 'oa-shared';
 
 export class ProfileServiceServer {
@@ -185,7 +185,7 @@ export class ProfileServiceServer {
     const types = await new ProfileTypesServiceServer(this.client).get();
     const typeId = types.find((x) => x.name === values.type)!.id;
     const existingProfile = await this.getById(id);
-    const pinModeration = determinePinModeration(types, existingProfile!, values.type);
+    const pinModeration = this.determinePinModeration(types, existingProfile!, values.type);
 
     const valuesToUpdate = {
       about: values.about,
@@ -328,36 +328,70 @@ export class ProfileServiceServer {
       }
     }
   }
-}
 
-/**
- * Calculate the moderation status for a profile's map pin based on profile type changes.
- *    If a profile changes from a space to 'member', the pin is automatically accepted.
- *    If it changes from 'member' to a space, the pin requires moderation.
- */
-function determinePinModeration(types: ProfileType[], profile: DBProfile, type: string) {
-  if (!profile.pin) {
-    return undefined;
+  async ensureProfile(user: User) {
+    const { data } = await this.client
+      .from('profiles')
+      .select('id')
+      .eq('auth_id', user.id)
+      .limit(1);
+
+    if (data?.at(0)) {
+      return;
+    }
+
+    if (!user.user_metadata.username) {
+      console.error('Cannot create profile without username in user metadata');
+    }
+
+    // Doesn't exist - create it
+    const profileType = await this.client
+      .from('profile_types')
+      .select('id')
+      .eq('is_space', false)
+      .limit(1);
+    const { error } = await this.client.from('profiles').insert({
+      auth_id: user.id,
+      display_name: user.user_metadata.username,
+      username: user.user_metadata.username,
+      profile_type: profileType.data?.at(0)?.id || null,
+      tenant_id: process.env.TENANT_ID,
+    });
+
+    if (error) {
+      console.error('Error creating profile for user:', error);
+    }
   }
 
-  const selectedType = types.find((x) => x.name === type);
-  const currentType = types.find((x) => x.id === profile.profile_type);
+  /**
+   * Calculate the moderation status for a profile's map pin based on profile type changes.
+   *    If a profile changes from a space to 'member', the pin is automatically accepted.
+   *    If it changes from 'member' to a space, the pin requires moderation.
+   */
+  private determinePinModeration(types: ProfileType[], profile: DBProfile, type: string) {
+    if (!profile.pin) {
+      return undefined;
+    }
 
-  let newValue: 'accepted' | 'awaiting-moderation' | undefined = undefined;
+    const selectedType = types.find((x) => x.name === type);
+    const currentType = types.find((x) => x.id === profile.profile_type);
 
-  if (!selectedType || !currentType) {
-    return undefined;
-  }
-  if (currentType.isSpace && !selectedType.isSpace) {
-    newValue = 'accepted';
-  }
-  if (!currentType.isSpace && selectedType.isSpace) {
-    newValue = 'awaiting-moderation';
-  }
+    let newValue: 'accepted' | 'awaiting-moderation' | undefined = undefined;
 
-  if (newValue === profile.pin.moderation) {
-    return undefined;
-  }
+    if (!selectedType || !currentType) {
+      return undefined;
+    }
+    if (currentType.isSpace && !selectedType.isSpace) {
+      newValue = 'accepted';
+    }
+    if (!currentType.isSpace && selectedType.isSpace) {
+      newValue = 'awaiting-moderation';
+    }
 
-  return newValue;
+    if (newValue === profile.pin.moderation) {
+      return undefined;
+    }
+
+    return newValue;
+  }
 }

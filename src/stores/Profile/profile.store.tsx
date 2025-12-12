@@ -1,14 +1,16 @@
 import { createContext, useContext, useEffect } from 'react';
-import { action, makeObservable, observable, runInAction } from 'mobx';
+import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import { SessionContext } from 'src/pages/common/SessionContext';
 import { profileService } from 'src/services/profileService';
 import { profileTypesService } from 'src/services/profileTypesService';
+import { upgradeBadgeService } from 'src/services/upgradeBadgeService';
 
-import type { Profile, ProfileType } from 'oa-shared';
+import type { Profile, ProfileType, UpgradeBadge } from 'oa-shared';
 
 export class ProfileStore {
   profile?: Profile = undefined;
   profileTypes?: ProfileType[] = undefined;
+  upgradeBadges?: UpgradeBadge[] = undefined;
 
   refresh = async () => {
     const profile = await profileService.get();
@@ -35,6 +37,14 @@ export class ProfileStore {
     });
   };
 
+  initUpgradeBadges = async () => {
+    const upgradeBadges = await upgradeBadgeService.getUpgradeBadges();
+
+    runInAction(() => {
+      this.upgradeBadges = upgradeBadges;
+    });
+  };
+
   getProfileTypeByName = (name: string) => {
     return this.profileTypes?.find((type) => type.name === name);
   };
@@ -43,11 +53,28 @@ export class ProfileStore {
     makeObservable(this, {
       profile: observable,
       profileTypes: observable,
+      upgradeBadges: observable,
+      upgradeBadgeForCurrentUser: computed,
       refresh: action,
       clear: action,
       update: action,
       initProfileTypes: action,
+      initUpgradeBadges: action,
     });
+  }
+
+  get upgradeBadgeForCurrentUser() {
+    if (!this.profile || !this.upgradeBadges) {
+      return undefined;
+    }
+
+    const isSpace = this.profile.type?.isSpace || false;
+    const upgradeBadge = this.upgradeBadges.find((badge) => badge.isSpace === isSpace);
+
+    const userBadgeIds = this.profile.badges?.map((badge) => badge.id) || [];
+    const hasUpgradeBadge = upgradeBadge ? userBadgeIds.includes(upgradeBadge.badgeId) : false;
+
+    return hasUpgradeBadge ? undefined : upgradeBadge;
   }
 }
 
@@ -69,6 +96,7 @@ export const ProfileStoreProvider = ({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     profileStore.initProfileTypes();
+    profileStore.initUpgradeBadges();
   }, []);
 
   return (

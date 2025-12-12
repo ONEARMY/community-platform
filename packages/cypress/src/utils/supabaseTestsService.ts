@@ -378,6 +378,28 @@ export class SupabaseTestsService {
     return response;
   }
 
+  async seedUpgradeBadges(profileBadges: DBProfileBadge[]) {
+    const proBadge = profileBadges.find((badge) => badge.name === 'pro');
+
+    if (!proBadge) {
+      return { upgrade_badge: { data: [] } };
+    }
+
+    const response = await this.seedDatabase({
+      upgrade_badge: [
+        {
+          tenant_id: this.tenantId,
+          action_label: 'Go PRO',
+          badge_id: proBadge.id,
+          is_space: true, // Only for workspaces
+          action_url: 'https://www.preciousplastic.com/pro-membership',
+        },
+      ],
+    });
+
+    return response;
+  }
+
   async seedProfileImages(): Promise<{ id: string; path: string; fullPath: string }[]> {
     const { data: image1Data } = await this.client.storage
       .from(this.tenantId)

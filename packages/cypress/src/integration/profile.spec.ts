@@ -271,6 +271,68 @@ describe('[Profile]', () => {
       cy.get('[data-cy=comments-section]').get('[data-testid="Username: pro badge"]');
     });
   });
+
+  describe('[Upgrade Badge Button]', () => {
+    it('[Should not show Go PRO button when user has pro badge]', () => {
+      setIsPreciousPlastic();
+
+      cy.step('User with pro badge should not see upgrade button');
+      cy.signIn(subscriber.email, subscriber.password);
+      cy.visit(`/u/${subscriber.username}`);
+
+      cy.step('Verify pro badge is visible');
+      cy.get('[data-testid="badge_pro"]').should('exist');
+
+      cy.step('Verify Go PRO button is not visible');
+      cy.get('[data-cy="UpgradeBadge"]').should('not.exist');
+    });
+
+    it('[Should show Go PRO button when user does not have pro badge]', () => {
+      setIsPreciousPlastic();
+
+      cy.intercept('GET', '/api/upgrade-badges').as('getUpgradeBadges');
+
+      const newUser = generateNewUserDetails();
+      cy.signUpNewUser(newUser);
+
+      cy.step('Set user as workspace to be eligible for PRO badge');
+      cy.visit('/settings');
+      cy.get('[data-cy=tab-Profile]').click();
+      cy.get('[data-cy=workspace]').click();
+      cy.setSettingImage('avatar', 'userImage');
+      cy.setSettingImage('profile-cover-1', 'coverImages-0');
+      cy.setSettingBasicUserInfo({
+        displayName: newUser.username,
+        description: 'A workspace profile',
+      });
+      cy.saveSettingsForm();
+
+      cy.step('Navigate to own profile');
+      cy.visit(`/u/${newUser.username}`);
+
+      cy.wait(2000);
+
+      cy.step('Verify Go PRO button is visible for user without badge');
+      cy.get('[data-cy="UpgradeBadge"]', { timeout: 15000 }).should('be.visible');
+      cy.get('[data-cy="UpgradeBadge"]').should('contain', 'Go PRO');
+
+      cy.step('Verify badge is not shown');
+      cy.get('[data-testid="badge_pro"]').should('not.exist');
+    });
+
+    it('[Should not show Go PRO button when viewing another user profile]', () => {
+      setIsPreciousPlastic();
+
+      const newUser = generateNewUserDetails();
+      cy.signUpNewUser(newUser);
+
+      cy.step('View another user profile');
+      cy.visit(`/u/${subscriber.username}`);
+
+      cy.step('Verify Go PRO button is not visible on other profiles');
+      cy.get('[data-cy="UpgradeBadge"]').should('not.exist');
+    });
+  });
 });
 
 describe('[By Beta Tester]', () => {

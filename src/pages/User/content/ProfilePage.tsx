@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, InternalLink } from 'oa-components';
+import { Button, ExternalLink, InternalLink } from 'oa-components';
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
+import { trackEvent } from 'src/common/Analytics';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { Flex } from 'theme-ui';
+import { Flex, Image } from 'theme-ui';
 
 import { UserProfile } from './UserProfile';
 
@@ -21,12 +22,16 @@ interface IProps {
  */
 export const ProfilePage = observer((props: IProps) => {
   const { profile, userCreatedDocs } = props;
-  const { profile: activeUser } = useProfileStore();
+  const { profile: activeUser, upgradeBadgeForCurrentUser } = useProfileStore();
+
   const isViewingOwnProfile = useMemo(
     () => activeUser?.username === profile?.username,
     [activeUser?.username],
   );
   const showMemberProfile = !profile?.type?.isSpace;
+
+  const upgradeBadge = upgradeBadgeForCurrentUser;
+  const shouldShowUpgrade = upgradeBadge && isViewingOwnProfile;
 
   return (
     <Flex
@@ -38,20 +43,61 @@ export const ProfilePage = observer((props: IProps) => {
         marginTop: isViewingOwnProfile ? 4 : [6, 8],
       }}
     >
-      {isViewingOwnProfile && (
-        <InternalLink
-          sx={{
-            alignSelf: ['center', 'flex-end'],
-            marginBottom: 6,
-            zIndex: 2,
-          }}
-          to="/settings"
-        >
-          <Button type="button" data-cy="EditYourProfile">
-            Edit Your Profile
-          </Button>
-        </InternalLink>
-      )}
+      <ClientOnly fallback={<></>}>
+        {() => (
+          <>
+            {isViewingOwnProfile && (
+              <Flex
+                sx={{
+                  alignSelf: ['center', 'flex-end'],
+                  marginBottom: 6,
+                  zIndex: 2,
+                  gap: 2,
+                  flexDirection: ['column', 'row'],
+                }}
+              >
+                {shouldShowUpgrade && (
+                  <ExternalLink
+                    href={upgradeBadge.actionUrl}
+                    data-cy="UpgradeBadge"
+                    onClick={() => {
+                      trackEvent({
+                        category: 'profiles',
+                        action: 'upgradeBadgeClicked',
+                        label: upgradeBadge.actionLabel,
+                      });
+                    }}
+                    sx={{ textDecoration: 'none' }}
+                  >
+                    <Button
+                      type="button"
+                      sx={{
+                        backgroundColor: 'white',
+                      }}
+                    >
+                      <Flex sx={{ alignItems: 'center', gap: 1 }}>
+                        {upgradeBadge.badge?.imageUrl && (
+                          <Image
+                            src={upgradeBadge.badge.imageUrl}
+                            sx={{ height: 20, width: 20, flexShrink: 0 }}
+                            alt={upgradeBadge.badge.displayName || 'badge'}
+                          />
+                        )}
+                        {upgradeBadge.actionLabel}
+                      </Flex>
+                    </Button>
+                  </ExternalLink>
+                )}
+                <InternalLink to="/settings">
+                  <Button type="button" data-cy="EditYourProfile">
+                    Edit Your Profile
+                  </Button>
+                </InternalLink>
+              </Flex>
+            )}
+          </>
+        )}
+      </ClientOnly>
 
       <ClientOnly fallback={<></>}>
         {() => (

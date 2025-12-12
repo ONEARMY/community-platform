@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { Box, Image as ThemeImage } from 'theme-ui';
 
@@ -30,6 +30,14 @@ export const ThumbCard = styled<CardProps & React.ComponentProps<any>>(Box)`
 
 export const ImageGalleryThumbnail = (props: ImageGalleryThumbnailProps) => {
   const [thumbnailLoaded, setThumbnailLoaded] = useState<boolean>(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    // Check if image is already loaded (for hydration mismatch cases)
+    if (imgRef.current?.complete && imgRef.current?.naturalWidth > 0) {
+      setThumbnailLoaded(true);
+    }
+  }, [props.index]);
 
   return (
     <>
@@ -43,6 +51,7 @@ export const ImageGalleryThumbnail = (props: ImageGalleryThumbnailProps) => {
         onClick={() => props.setActiveIndex(props.index)}
       >
         <ThemeImage
+          ref={imgRef}
           loading="lazy"
           src={props.thumbnailUrl}
           alt={props.alt ?? props.name}

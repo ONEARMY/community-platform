@@ -70,7 +70,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     : '/';
   const path = getReturnUrl(request, fallbackPath);
 
-  await new ProfileServiceServer(client).ensureProfile(data.user);
+  try {
+    // This will fail if there is already a profile for the current auth_id, or the auth_id is invalid (can be invalid the the credentials are wrong)
+    await new ProfileServiceServer(client).ensureProfile(data.user);
+  } catch (error) {
+    console.error(error);
+  }
 
   return redirect(path, { headers });
 };

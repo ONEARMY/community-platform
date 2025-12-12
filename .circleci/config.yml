@@ -209,11 +209,7 @@ jobs:
             docker system prune -a
       - run:
           name: Install fly command
-          command: |
-            # Install flyctl non-interactively and place binaries in /home/circleci/.fly/bin
-            curl -L https://fly.io/install.sh | sh -s -- -b /home/circleci/.fly/bin || true
-            # Ensure PATH is available in later steps
-            echo 'export PATH="/home/circleci/.fly/bin:$PATH"' >> $BASH_ENV
+          command: curl -L https://fly.io/install.sh | sh -s -- --non-interactive --setup-path
       - run:
           name: Add fly to PATH
           command: echo "export PATH=\"/home/circleci/.fly/bin:$PATH\"" >> $BASH_ENV

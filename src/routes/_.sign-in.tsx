@@ -4,6 +4,7 @@ import { Button, FieldInput, HeroBanner, TextNotification } from 'oa-components'
 import { PasswordField } from 'src/common/Form/PasswordField';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
 import { getReturnUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
@@ -68,6 +69,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     ? `/u/${data.user?.user_metadata.username}`
     : '/';
   const path = getReturnUrl(request, fallbackPath);
+
+  try {
+    // This will fail if there is already a profile for the current auth_id, or the auth_id is invalid (can be invalid the the credentials are wrong)
+    await new ProfileServiceServer(client).ensureProfile(data.user);
+  } catch (error) {
+    console.error(error);
+  }
 
   return redirect(path, { headers });
 };

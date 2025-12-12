@@ -209,7 +209,7 @@ jobs:
             docker system prune -a
       - run:
           name: Install fly command
-          command: curl -L https://fly.io/install.sh | sh
+          command: curl -L https://fly.io/install.sh | sh -s -- -y
       - run:
           name: Add fly to PATH
           command: echo "export PATH=\"/home/circleci/.fly/bin:$PATH\"" >> $BASH_ENV

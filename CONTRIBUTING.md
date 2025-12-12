@@ -120,4 +120,4 @@ We always welcome UX/UI design contributions in various shapes and forms. Whethe
 
 The best way to start would be to look at [open design issues](https://github.com/ONEARMY/community-platform/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22Task%3A%20Design%22) here in our GitHub Repository to see if anything sparks your interest. Another way is to get in touch with us [through Discord](https://discord.gg/p4hWHYeG), the introduce-yourself channel is a good place for that. :) Then we can chat about what would be interesting for you to help out with, as well as what we are currently working on.
 
-In the meantime you can check out our [UI Component library in Storybook](https://docs.platform.onearmy.earth/storybook-static/index.html?path=/story/components-icon--default).
+In the meantime you can check out our [UI Component library in Storybook](https://storybook.onearmy.earth).

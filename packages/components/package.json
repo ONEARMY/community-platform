@@ -21,7 +21,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@faker-js/faker": "^10.1.0",
-    "@mdxeditor/editor": "^3.29.2",
+    "@mdxeditor/editor": "^3.52.0",
     "@mui/base": "next",
     "@react-router/node": "^7.10.1",
     "country-to-iso": "^1.6.1",

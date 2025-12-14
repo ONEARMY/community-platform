@@ -36,6 +36,7 @@ interface IState {
   activeImageIndex: number;
   showLightbox: boolean;
   showActiveImgLoading: boolean;
+  activeImageAspectRatio: number | null;
 }
 
 const NavButton = styled('button')`
@@ -49,22 +50,29 @@ const NavButton = styled('button')`
 `;
 
 // Container that reserves space to prevent layout shift
-const ImageContainer = styled('div')`
+const ImageContainer = styled('div')<{ $flexibleAspectRatio: boolean }>`
   width: 100%;
   position: relative;
   /* Reserve space for the image before it loads */
   min-height: 300px;
 
-  @media (min-width: 768px) {
-    min-height: 450px;
-  }
+  ${(props) =>
+    !props.$flexibleAspectRatio
+      ? `
+    aspect-ratio: 16/9;
 
-  /* Ensure consistent aspect ratio */
-  aspect-ratio: 16/9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f5f5f5; /* Optional: subtle background while loading */
+    @media (min-width: 768px) {
+      min-height: 450px;
+    }
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5; /* Optional: subtle background while loading */
+  `
+      : `
+    display: block;
+  `}
 `;
 
 export const ImageGallery = (props: ImageGalleryProps) => {
@@ -75,6 +83,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
     activeImageIndex: 0,
     showLightbox: false,
     showActiveImgLoading: true,
+    activeImageAspectRatio: null,
   });
 
   const lightbox = useRef<PhotoSwipeLightbox>(null);
@@ -168,22 +177,29 @@ export const ImageGallery = (props: ImageGalleryProps) => {
   }, []);
 
   const setActive = (imageIndex: number) => {
-    setState({
-      ...state,
+    setState((prevState) => ({
+      ...prevState,
       activeImageIndex: imageIndex,
-      showActiveImgLoading: imageIndex !== state.activeImageIndex,
-    });
+      showActiveImgLoading: imageIndex !== prevState.activeImageIndex,
+      activeImageAspectRatio: null,
+    }));
   };
 
   const setActiveImgLoaded = () => {
-    setState({
-      ...state,
+    setState((prevState) => ({
+      ...prevState,
       showActiveImgLoading: false,
-    });
+    }));
   };
 
-  const handleImageLoad = () => {
-    setActiveImgLoaded();
+  const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.currentTarget;
+    const aspectRatio = img.naturalWidth / img.naturalHeight;
+    setState((prevState) => ({
+      ...prevState,
+      showActiveImgLoading: false,
+      activeImageAspectRatio: aspectRatio,
+    }));
   };
 
   const handleImageError = () => {
@@ -223,9 +239,16 @@ export const ImageGallery = (props: ImageGalleryProps) => {
     return null;
   }
 
+  // Detect images wider than 16:9 and remove aspect ratio constraint to prevent letterboxing
+  const ASPECT_RATIO_16_9 = 16 / 9;
+  const isWideImage = state.activeImageAspectRatio
+    ? state.activeImageAspectRatio > ASPECT_RATIO_16_9
+    : false;
+  const useFlexibleAspectRatio = isWideImage;
+
   return (
     <Flex sx={{ flexDirection: 'column' }}>
-      <ImageContainer>
+      <ImageContainer $flexibleAspectRatio={useFlexibleAspectRatio}>
         {state.showActiveImgLoading && (
           <Loader sx={{ position: 'absolute', alignSelf: 'center', zIndex: 1 }} />
         )}
@@ -234,9 +257,9 @@ export const ImageGallery = (props: ImageGalleryProps) => {
           data-testid="active-image"
           sx={{
             width: '100%',
-            height: '100%',
+            height: useFlexibleAspectRatio ? 'auto' : '100%',
             cursor: 'pointer',
-            objectFit: props.allowPortrait ? 'contain' : 'cover',
+            objectFit: useFlexibleAspectRatio ? 'none' : props.allowPortrait ? 'contain' : 'cover',
             opacity: state.showActiveImgLoading ? 0.3 : 1,
             transition: 'opacity 0.2s ease-in-out',
           }}

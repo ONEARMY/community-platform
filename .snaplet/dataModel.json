@@ -5627,6 +5627,20 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false
+        },
+        {
+          "name": "upgrade_badge",
+          "type": "upgrade_badge",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "upgrade_badgeToprofile_badges",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
         }
       ],
       "uniqueConstraints": [
@@ -10751,6 +10765,122 @@
         {
           "name": "tenants_external_id_index",
           "fields": ["external_id"],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "upgrade_badge": {
+      "id": "public.upgrade_badge",
+      "schemaName": "public",
+      "tableName": "upgrade_badge",
+      "fields": [
+        {
+          "id": "public.upgrade_badge.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"upgrade_badge_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.upgrade_badge.action_label",
+          "name": "action_label",
+          "columnName": "action_label",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.upgrade_badge.badge_id",
+          "name": "badge_id",
+          "columnName": "badge_id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.upgrade_badge.is_space",
+          "name": "is_space",
+          "columnName": "is_space",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.upgrade_badge.action_url",
+          "name": "action_url",
+          "columnName": "action_url",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.upgrade_badge.tenant_id",
+          "name": "tenant_id",
+          "columnName": "tenant_id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "profile_badges",
+          "type": "profile_badges",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "upgrade_badgeToprofile_badges",
+          "relationFromFields": ["badge_id"],
+          "relationToFields": ["id"],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "upgrade_badge_pkey",
+          "fields": ["id"],
           "nullNotDistinct": false
         }
       ]

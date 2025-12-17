@@ -5,13 +5,12 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/graphs/contributors/)
 [![discord](https://badges.aleen42.com/src/discord.svg)](https://discord.gg/gJ7Yyk4)
 
-# 🔗 &nbsp; tl;dr Quick Links
+# 🔗 &nbsp; tl;dr Quick Links 
 
 - [Our Project Website](https://www.onearmy.earth/community-platform)
 - [Precious Plastic Community (live site)](http://community.preciousplastic.com/)
 - [Project Kamp Community (live site)](http://community.projectkamp.com/)
-- [Developer documentation](https://onearmy.github.io/community-platform/)
-- [Contributing Guide](/CONTRIBUTING.md)
+- [Developer documentation](/CONTRIBUTING.md)
 
 # 🌍 &nbsp; Community Platform
 

@@ -259,7 +259,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
             width: '100%',
             height: useFlexibleAspectRatio ? 'auto' : '100%',
             cursor: 'pointer',
-            objectFit: useFlexibleAspectRatio ? 'none' : props.allowPortrait ? 'contain' : 'cover',
+            objectFit: props.allowPortrait ? 'contain' : 'cover',
             opacity: state.showActiveImgLoading ? 0.3 : 1,
             transition: 'opacity 0.2s ease-in-out',
           }}

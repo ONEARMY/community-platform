@@ -11,7 +11,8 @@ export type EventAction =
   | 'subscribed'
   | 'deleted'
   | 'useful'
-  | 'usefulRemoved';
+  | 'usefulRemoved'
+  | 'upgradeBadgeClicked';
 
 export type EventCategory = 'profiles' | SubscribableContentTypes;
 

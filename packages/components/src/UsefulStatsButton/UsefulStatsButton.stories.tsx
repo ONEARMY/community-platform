@@ -26,11 +26,7 @@ export const LoggedInWithCount: StoryFn<typeof UsefulStatsButton> = () => {
   };
 
   return (
-    <UsefulStatsButton
-      hasUserVotedUseful={voted}
-      isLoggedIn={true}
-      onUsefulClick={clickVote}
-    />
+    <UsefulStatsButton hasUserVotedUseful={voted} isLoggedIn={true} onUsefulClick={clickVote} />
   );
 };
 
@@ -43,10 +39,6 @@ export const CurrentUserHasVoted: StoryFn<typeof UsefulStatsButton> = () => {
   };
 
   return (
-    <UsefulStatsButton
-      hasUserVotedUseful={voted}
-      isLoggedIn={true}
-      onUsefulClick={clickVote}
-    />
+    <UsefulStatsButton hasUserVotedUseful={voted} isLoggedIn={true} onUsefulClick={clickVote} />
   );
 };

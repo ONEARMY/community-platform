@@ -5,17 +5,17 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/graphs/contributors/)
 [![discord](https://badges.aleen42.com/src/discord.svg)](https://discord.gg/gJ7Yyk4)
 
-# 🔗 &nbsp; tl;dr Quick Links
+# 🔗 &nbsp; tl;dr Quick Links 
 
-- [Project Website](https://platform.onearmy.earth)
-- [Precious Plastic Community Platform (live site)](http://community.preciousplastic.com/)
-- [Developer documentation](https://onearmy.github.io/community-platform/)
-- [Contributing Guide](/CONTRIBUTING.md)
+- [Our Project Website](https://www.onearmy.earth/community-platform)
+- [Precious Plastic Community (live site)](http://community.preciousplastic.com/)
+- [Project Kamp Community (live site)](http://community.projectkamp.com/)
+- [Developer documentation](/CONTRIBUTING.md)
 
 # 🌍 &nbsp; Community Platform
 
 Welcome to our Community Platform!
-We are building this giant castle to help unite people and contribute to social & environmental projects, such as [Precious Plastic](https://preciousplastic.com), [Phonebloks](https://phonebloks.com/), [ProjectKamp](https://projectkamp.com/) or [Story Hopper](https://story-hopper.com/). A platform to connect, educate and empower our global community (65K) to solve society's greatest challenges. Together.
+At [One Army](https://www.onearmy.earth) we are building this platform to help unite people and contribute to social & environmental projects, such as [Precious Plastic](https://preciousplastic.com), [Project Kamp](https://projectkamp.com/) and [Fixing Fashion](https://fixing.fashion). A platform to connect, educate and empower our global community (65K) to solve society's greatest challenges. Together.
 
 ## 👀 &nbsp; Why?
 
@@ -28,9 +28,9 @@ This platform aims to tackle these problems by creating a strong unified communi
 
 ## ⚡️ &nbsp; What is this platform?
 
-Our community platform helps people to grow communities and makes it easier to collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally and more. It aims to provide the tools to connect both online and offline. Amongst other features we have a library of projects, research, questions, commenting and a map.
+Our platform helps communities to grow and makes it easier to collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally and more. It aims to provide the tools to connect both online and offline. Amongst other features we have a library of projects, research, questions, news updates and a map.
 
-### Have a look on our [website](https://platform.onearmy.earth) to have a clear overview
+### Have a look on our [website](https://www.onearmy.earth/community-platform) to have a clear overview
 
 ## 👐 Open Source
 

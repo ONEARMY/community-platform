@@ -5,6 +5,7 @@ export type ResearchSortOption =
   | 'LeastComments'
   | 'LatestUpdated'
   | 'MostUseful'
+  | 'MostUsefulLastWeek'
   | 'MostUpdates';
 
 const BaseOptions = new Map<ResearchSortOption, string>();
@@ -13,6 +14,7 @@ BaseOptions.set('MostComments', 'Most Comments');
 BaseOptions.set('LeastComments', 'Least Comments');
 BaseOptions.set('LatestUpdated', 'Latest Updated');
 BaseOptions.set('MostUseful', 'Most Useful');
+BaseOptions.set('MostUsefulLastWeek', 'Most Useful Last Week');
 BaseOptions.set('MostUpdates', 'Most Updates');
 
 const QueryParamOptions = new Map<ResearchSortOption, string>(BaseOptions);

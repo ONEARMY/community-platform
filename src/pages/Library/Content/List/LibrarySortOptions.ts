@@ -2,6 +2,7 @@ export type LibrarySortOption =
   | 'MostRelevant'
   | 'Newest'
   | 'MostUseful'
+  | 'MostUsefulLastWeek'
   | 'LatestUpdated'
   | 'MostDownloads'
   | 'MostComments'
@@ -12,6 +13,7 @@ BaseOptions.set('Newest', 'Newest');
 BaseOptions.set('MostComments', 'Most Comments');
 BaseOptions.set('LatestUpdated', 'Latest Updated');
 BaseOptions.set('MostUseful', 'Most Useful');
+BaseOptions.set('MostUsefulLastWeek', 'Most Useful Last Week');
 BaseOptions.set('MostDownloads', 'Most Downloads');
 BaseOptions.set('MostViews', 'Most Views');
 

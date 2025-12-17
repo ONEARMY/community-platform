@@ -28,6 +28,7 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
   readonly author?: DBAuthor;
   readonly update_count?: number;
   readonly useful_count?: number;
+  readonly useful_votes_last_week?: number;
   readonly subscriber_count?: number;
   readonly comment_count?: number;
   readonly total_views?: number;
@@ -77,6 +78,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
   steps: ProjectStep[];
   isDraft: boolean;
   usefulCount: number;
+  usefulVotesLastWeek?: number;
   subscriberCount: number;
   commentCount: number;
   fileDownloadCount: number;
@@ -110,6 +112,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
       subscriberCount: obj.subscriber_count || 0,
       commentCount: obj.comment_count || 0,
       usefulCount: obj.useful_count || 0,
+      usefulVotesLastWeek: obj.useful_votes_last_week || 0,
       isDraft: obj.is_draft || false,
       fileDownloadCount: obj.file_download_count || 0,
       files: obj.files,

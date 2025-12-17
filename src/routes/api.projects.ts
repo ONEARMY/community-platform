@@ -1,6 +1,6 @@
 import { Project, ProjectStep, UserRole } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
-import { ITEMS_PER_PAGE } from 'src/pages/Library/constants';
+import { ITEMS_PER_PAGE, MOST_USEFUL_LAST_WEEK_DAYS } from 'src/pages/Library/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -35,6 +35,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     offset_val: skip,
     limit_val: ITEMS_PER_PAGE,
     current_username: username,
+    days_back: MOST_USEFUL_LAST_WEEK_DAYS,
   });
 
   const countResult = await client.rpc('get_projects_count', {

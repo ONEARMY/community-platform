@@ -1,21 +1,24 @@
 import { Link as RouterLink } from 'react-router';
 import { Category, IconCountWithTooltip, ModerationStatus, Username } from 'oa-components';
+import { AuthWrapper } from 'src/common/AuthWrapper';
 import { Highlighter } from 'src/common/Highlighter';
 import { capitalizeFirstLetter } from 'src/utils/helpers';
 import { Box, Card, Flex, Heading, Image } from 'theme-ui';
 
-import type { Project } from 'oa-shared';
+import { type Project, UserRole } from 'oa-shared';
 
 type ProjectCardProps = {
   item: Project;
   query?: string;
+  showWeeklyVotes?: boolean;
 };
 
-export const ProjectCard = ({ item, query }: ProjectCardProps) => {
+export const ProjectCard = ({ item, query, showWeeklyVotes }: ProjectCardProps) => {
   const searchWords = [query || ''];
+  const showWeeklyBadge = showWeeklyVotes && (item.usefulVotesLastWeek || 0) > 0;
 
   return (
-    <Card data-cy="card" sx={{ marginX: [2, 0] }}>
+    <Card data-cy="card" sx={{ marginX: [2, 0], position: 'relative' }}>
       <RouterLink to={`/library/${encodeURIComponent(item.slug)}`}>
         <Flex
           sx={{
@@ -73,6 +76,21 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
               </Box>
             )}
           </Flex>
+
+          {showWeeklyBadge && (
+            <AuthWrapper roleRequired={UserRole.BETA_TESTER} borderLess>
+              <Flex sx={{ justifyContent: 'flex-end' }}>
+                <Box
+                  sx={{
+                    color: 'red',
+                    padding: '2px',
+                  }}
+                >
+                  {item.usefulVotesLastWeek}
+                </Box>
+              </Flex>
+            </AuthWrapper>
+          )}
 
           <Flex sx={{ justifyContent: 'flex-end' }}>
             {item.category && (

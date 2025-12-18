@@ -29,7 +29,7 @@ export const SettingsPageAccount = observer(() => {
       <ChangeEmailForm />
 
       <Text variant="body">
-        {title}
+        {title}{' '}
         <ExternalLink sx={{ ml: 1, textDecoration: 'underline' }} href={DISCORD_INVITE_URL}>
           {description}
         </ExternalLink>

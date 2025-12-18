@@ -18,7 +18,7 @@ export const ProjectCard = ({ item, query, showWeeklyVotes }: ProjectCardProps) 
   const showWeeklyBadge = showWeeklyVotes && (item.usefulVotesLastWeek || 0) > 0;
 
   return (
-    <Card data-cy="card" sx={{ marginX: [2, 0], position: 'relative' }}>
+    <Card data-cy="card" sx={{ marginX: [2, 0] }}>
       <RouterLink to={`/library/${encodeURIComponent(item.slug)}`}>
         <Flex
           sx={{

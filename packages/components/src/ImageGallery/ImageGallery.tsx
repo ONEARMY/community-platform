@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import { Flex, Image as ThemeImage } from 'theme-ui';
@@ -53,16 +53,15 @@ const NavButton = styled('button')`
 const ImageContainer = styled('div')<{ $flexibleAspectRatio: boolean }>`
   width: 100%;
   position: relative;
-  /* Reserve space for the image before it loads */
-  min-height: 300px;
 
   ${(props) =>
     !props.$flexibleAspectRatio
       ? `
     aspect-ratio: 16/9;
+    min-height: 200px;
 
     @media (min-width: 768px) {
-      min-height: 450px;
+      min-height: 300px;
     }
 
     display: flex;
@@ -87,6 +86,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
   });
 
   const lightbox = useRef<PhotoSwipeLightbox>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
   const activeImageIndex = state.activeImageIndex;
   const activeImage = filteredImages[activeImageIndex];
   const imageNumber = filteredImages.length;
@@ -207,21 +207,17 @@ export const ImageGallery = (props: ImageGalleryProps) => {
     setActiveImgLoaded();
   };
 
-  // Check if image is already loaded (cached)
-  useEffect(() => {
-    if (activeImage) {
-      const img = new Image();
-      img.onload = () => {
-        if (img.complete) {
-          setActiveImgLoaded();
-        }
-      };
-      img.src = activeImage.downloadUrl;
+  useLayoutEffect(() => {
+    if (typeof window === 'undefined') return;
 
-      // If image is already complete, clear loading immediately
-      if (img.complete) {
-        setActiveImgLoaded();
-      }
+    const img = imageRef.current;
+    if (img && img.complete && img.naturalWidth > 0) {
+      const aspectRatio = img.naturalWidth / img.naturalHeight;
+      setState((prevState) => ({
+        ...prevState,
+        showActiveImgLoading: false,
+        activeImageAspectRatio: aspectRatio,
+      }));
     }
   }, [activeImage?.downloadUrl]);
 
@@ -253,6 +249,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
           <Loader sx={{ position: 'absolute', alignSelf: 'center', zIndex: 1 }} />
         )}
         <ThemeImage
+          ref={imageRef}
           data-cy="active-image"
           data-testid="active-image"
           sx={{

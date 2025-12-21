@@ -3,13 +3,13 @@ import { observer } from 'mobx-react';
 import { MemberBadge } from 'oa-components';
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink';
 import { ProfileModal } from 'src/pages/common/Header/Menu/ProfileModal/ProfileModal';
-import { UpgradeBadgeLink } from './UpgradeBadgeLink';
 import { MobileMenuContext } from 'src/pages/common/Header/MobileMenuContext';
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Avatar, Box, Flex } from 'theme-ui';
 
 import ProfileButtons from './ProfileButtons';
+import { UpgradeBadgeLink } from './UpgradeBadgeLink';
 
 import './profile.css';
 

@@ -112,12 +112,17 @@ Deno.serve(async (req) => {
       }
     }
 
-    await resend.emails.send({
-      from: `${settings.messageSignOff} <${settings.emailFrom}>`,
-      to,
-      subject,
-      html,
-    });
+    await resend.emails.send(
+      {
+        from: `${settings.messageSignOff} <${settings.emailFrom}>`,
+        to,
+        subject,
+        html,
+      },
+      {
+        idempotencyKey: `${email_data.email_action_type}/${crypto.randomUUID()}`,
+      },
+    );
   } catch (error: any) {
     console.error(error);
     return new Response(

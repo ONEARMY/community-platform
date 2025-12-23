@@ -56,7 +56,7 @@ const Profile = observer((props: IProps) => {
       >
         <MenuMobileLink path={'/u/' + profile.username} content="Profile" />
         {upgradeBadgeForCurrentUser && (
-          <Box data-cy="mobile-menu-item">
+          <Box data-cy="mobile-menu-item" sx={{ py: 3 }}>
             <UpgradeBadgeLink
               upgradeBadge={upgradeBadgeForCurrentUser}
               onClick={() => mobileMenuContext.setIsVisible(false)}

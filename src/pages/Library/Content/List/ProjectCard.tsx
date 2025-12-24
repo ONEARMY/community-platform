@@ -9,12 +9,10 @@ import { Box, Card, Flex, Heading, Image } from 'theme-ui';
 type ProjectCardProps = {
   item: Project;
   query?: string;
-  showWeeklyVotes?: boolean;
 };
 
-export const ProjectCard = ({ item, query, showWeeklyVotes }: ProjectCardProps) => {
+export const ProjectCard = ({ item, query }: ProjectCardProps) => {
   const searchWords = [query || ''];
-  const showWeeklyBadge = showWeeklyVotes && (item.usefulVotesLastWeek || 0) > 0;
 
   return (
     <Card data-cy="card" sx={{ marginX: [2, 0] }}>
@@ -76,20 +74,18 @@ export const ProjectCard = ({ item, query, showWeeklyVotes }: ProjectCardProps) 
             )}
           </Flex>
 
-          {showWeeklyBadge && (
-            <AuthWrapper roleRequired={UserRole.BETA_TESTER} borderLess>
-              <Flex sx={{ justifyContent: 'flex-end' }}>
-                <Box
-                  sx={{
-                    color: 'red',
-                    padding: '2px',
-                  }}
-                >
-                  {item.usefulVotesLastWeek}
-                </Box>
-              </Flex>
-            </AuthWrapper>
-          )}
+          <AuthWrapper roleRequired={UserRole.BETA_TESTER} borderLess>
+            <Flex sx={{ justifyContent: 'flex-end' }}>
+              <Box
+                sx={{
+                  color: 'red',
+                  padding: '2px',
+                }}
+              >
+                {item.usefulVotesLastWeek}
+              </Box>
+            </Flex>
+          </AuthWrapper>
 
           <Flex sx={{ justifyContent: 'flex-end' }}>
             {item.category && (

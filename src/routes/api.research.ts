@@ -1,6 +1,5 @@
 import { ResearchItem } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
-import { MOST_USEFUL_LAST_WEEK_DAYS } from 'src/pages/Library/constants';
 import { ITEMS_PER_PAGE } from 'src/pages/Research/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
@@ -32,7 +31,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     sort_by: sort,
     offset_val: skip,
     limit_val: ITEMS_PER_PAGE,
-    days_back: MOST_USEFUL_LAST_WEEK_DAYS,
   });
 
   const countResult = await client.rpc('get_research_count', {

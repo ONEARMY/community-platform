@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router';
 import { DownloadButton, DownloadCounter, DownloadStaticFile, ExternalLink } from 'oa-components';
 import { Button, Flex } from 'theme-ui';
 
+import { trackEvent } from './Analytics';
 import { DonationRequestModalContainer } from './DonationRequestModalContainer';
 import { UserAction } from './UserAction';
 
 import type { MediaFile } from 'oa-shared';
 
 interface IProps {
+  contentType: 'research' | 'projects';
   fileDownloadCount: number;
   fileLink?: string;
   files?: MediaFile[];
@@ -16,10 +18,10 @@ interface IProps {
 }
 
 export const DownloadWrapper = (props: IProps) => {
-  const { fileLink, files, fileDownloadCount, authorProfileId } = props;
+  const { fileLink, files, fileDownloadCount, authorProfileId, contentType } = props;
   const hasFiles = files && files.length > 0;
-  const [openModel, setOpenModel] = useState<boolean>(false);
-  const [link, setLink] = useState<string>('');
+  const [openModal, setOpenModal] = useState(false);
+  const [link, setLink] = useState('');
 
   const navigate = useNavigate();
 
@@ -31,7 +33,7 @@ export const DownloadWrapper = (props: IProps) => {
     if (sessionStorage.getItem('loginRedirect') && (fileLink || hasFiles)) {
       sessionStorage.removeItem('loginRedirect');
       if (files && files?.length === 1) {
-        setOpenModel(true);
+        setOpenModal(true);
       }
     }
   }, [fileLink, hasFiles]);
@@ -46,8 +48,8 @@ export const DownloadWrapper = (props: IProps) => {
       loggedIn={
         <>
           <DonationRequestModalContainer
-            isOpen={openModel}
-            onDidDismiss={() => setOpenModel(false)}
+            isOpen={openModal}
+            onDidDismiss={() => setOpenModal(false)}
             profileId={authorProfileId}
           >
             <Flex
@@ -63,7 +65,7 @@ export const DownloadWrapper = (props: IProps) => {
             >
               <ExternalLink
                 href={link}
-                onClick={() => setOpenModel(false)}
+                onClick={() => setOpenModal(false)}
                 data-cy="DonationRequestSkip"
                 data-testid="DonationRequestSkip"
               >
@@ -78,7 +80,11 @@ export const DownloadWrapper = (props: IProps) => {
                 isLoggedIn
                 onClick={() => {
                   setLink(fileLink);
-                  setOpenModel((x) => !x);
+                  setOpenModal(true);
+                  trackEvent({
+                    action: 'donationModalOpened',
+                    category: contentType,
+                  });
                 }}
               />
             )}
@@ -91,7 +97,11 @@ export const DownloadWrapper = (props: IProps) => {
                     fileDownloadCount={props.fileDownloadCount}
                     handleClick={() => {
                       setLink(file.url!);
-                      setOpenModel((x) => !x);
+                      setOpenModal(true);
+                      trackEvent({
+                        action: 'donationModalOpened',
+                        category: contentType,
+                      });
                     }}
                     isLoggedIn
                   />

@@ -1,10 +1,10 @@
 import { Link as RouterLink } from 'react-router';
 import { Category, IconCountWithTooltip, ModerationStatus, Username } from 'oa-components';
+import { type Project, UserRole } from 'oa-shared';
+import { AuthWrapper } from 'src/common/AuthWrapper';
 import { Highlighter } from 'src/common/Highlighter';
 import { capitalizeFirstLetter } from 'src/utils/helpers';
 import { Box, Card, Flex, Heading, Image } from 'theme-ui';
-
-import type { Project } from 'oa-shared';
 
 type ProjectCardProps = {
   item: Project;
@@ -73,6 +73,19 @@ export const ProjectCard = ({ item, query }: ProjectCardProps) => {
               </Box>
             )}
           </Flex>
+
+          <AuthWrapper roleRequired={UserRole.BETA_TESTER} borderLess>
+            <Flex sx={{ justifyContent: 'flex-end' }}>
+              <Box
+                sx={{
+                  color: 'red',
+                  padding: '2px',
+                }}
+              >
+                {item.usefulVotesLastWeek}
+              </Box>
+            </Flex>
+          </AuthWrapper>
 
           <Flex sx={{ justifyContent: 'flex-end' }}>
             {item.category && (

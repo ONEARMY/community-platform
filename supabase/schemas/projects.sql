@@ -74,7 +74,7 @@ CREATE OR REPLACE FUNCTION "public"."combined_project_search_fields"("project_id
   WHERE ps.project_id = project_id_param;
 $$;
 
-CREATE OR REPLACE FUNCTION "public"."get_projects"("search_query" "text" DEFAULT NULL::"text", "category_id" bigint DEFAULT NULL::bigint, "sort_by" "text" DEFAULT 'Newest'::"text", "limit_val" integer DEFAULT 12, "offset_val" integer DEFAULT 0, "current_username" "text" DEFAULT NULL::"text") RETURNS TABLE("id" bigint, "created_at" timestamp with time zone, "created_by" bigint, "modified_at" timestamp with time zone, "description" "text", "slug" "text", "cover_image" "json", "category" "json", "tags" "text"[], "title" "text", "moderation" "text", "total_views" bigint, "author" "json", "comment_count" integer)
+CREATE OR REPLACE FUNCTION "public"."get_projects"("search_query" "text" DEFAULT NULL::"text", "category_id" bigint DEFAULT NULL::bigint, "sort_by" "text" DEFAULT 'Newest'::"text", "limit_val" integer DEFAULT 12, "offset_val" integer DEFAULT 0, "current_username" "text" DEFAULT NULL::"text", "days_back" integer DEFAULT 7) RETURNS TABLE("id" bigint, "created_at" timestamp with time zone, "created_by" bigint, "modified_at" timestamp with time zone, "description" "text", "slug" "text", "cover_image" "json", "category" "json", "tags" "text"[], "title" "text", "moderation" "text", "total_views" bigint, "author" "json", "comment_count" integer, "useful_votes_last_week" integer)
     LANGUAGE "plpgsql"
     SET search_path = public, pg_temp
     AS $$DECLARE
@@ -122,7 +122,12 @@ BEGIN
               '[]'::json
           )
         ) FROM profiles prof WHERE prof.id = p.created_by) AS author,
-        p.comment_count
+        p.comment_count,
+        (SELECT COALESCE(COUNT(uv.id), 0)::integer
+         FROM useful_votes uv
+         WHERE uv.content_id = p.id
+           AND uv.content_type = 'projects'
+           AND uv.created_at >= NOW() - INTERVAL '1 day' * days_back) AS useful_votes_last_week
     FROM projects p
     JOIN profiles prof ON prof.id = p.created_by  -- Add explicit JOIN
     WHERE
@@ -146,6 +151,12 @@ BEGIN
                 (SELECT COALESCE(COUNT(uv.id), 0)
                  FROM useful_votes uv
                  WHERE uv.content_id = p.id AND uv.content_type = 'projects')
+            WHEN sort_by = 'MostUsefulLastWeek' THEN
+                (SELECT COALESCE(COUNT(uv.id), 0)
+                 FROM useful_votes uv
+                 WHERE uv.content_id = p.id
+                   AND uv.content_type = 'projects'
+                   AND uv.created_at >= NOW() - INTERVAL '1 day' * days_back)
             WHEN sort_by = 'MostViews' THEN p.total_views
             ELSE 0
         END DESC NULLS LAST,

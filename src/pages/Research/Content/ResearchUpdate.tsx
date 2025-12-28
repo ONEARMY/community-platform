@@ -170,6 +170,7 @@ const ResearchUpdate = (props: IProps) => {
             </Box>
             <Flex className="file-container" sx={{ flexDirection: 'column', px: 4, mt: 3 }}>
               <DownloadWrapper
+                contentType="research"
                 fileDownloadCount={update.fileDownloadCount}
                 fileLink={
                   update.hasFileLink

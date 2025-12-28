@@ -53,7 +53,7 @@ export const ProfilePage = observer((props: IProps) => {
                   marginBottom: 6,
                   zIndex: 2,
                   gap: 2,
-                  flexDirection: ['column', 'row'],
+                  flexDirection: 'row',
                 }}
               >
                 {shouldShowUpgrade && (

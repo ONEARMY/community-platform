@@ -90,7 +90,11 @@ const ResearchList = () => {
       {((researchItems && researchItems.length !== 0) || showDrafts) && (
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }} data-cy="ResearchList">
           {researchItemList.map((item) => (
-            <ResearchListItem key={item.id} item={item} />
+            <ResearchListItem
+              key={item.id}
+              item={item}
+              showWeeklyVotes={sort === 'MostUsefulLastWeek'}
+            />
           ))}
         </ul>
       )}

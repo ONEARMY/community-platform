@@ -1,5 +1,6 @@
 import { Category, Icon, IconCountWithTooltip, InternalLink, Username } from 'oa-components';
-import { type ResearchItem, ResearchStatusRecord } from 'oa-shared';
+import { type ResearchItem, ResearchStatusRecord, UserRole } from 'oa-shared';
+import { AuthWrapper } from 'src/common/AuthWrapper';
 import { FollowButtonAction } from 'src/common/FollowButtonAction';
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui';
 
@@ -8,11 +9,13 @@ import { researchStatusColour } from '../researchHelpers';
 
 interface IProps {
   item: ResearchItem;
+  showWeeklyVotes?: boolean;
 }
 
-const ResearchListItem = ({ item }: IProps) => {
+const ResearchListItem = ({ item, showWeeklyVotes }: IProps) => {
   const collaborators = item['collaborators'] || [];
   const usefulDisplayCount = item.usefulCount ?? 0;
+  const showWeeklyBadge = showWeeklyVotes && (item.usefulVotesLastWeek || 0) > 0;
 
   const _commonStatisticStyle = {
     display: 'flex',
@@ -254,6 +257,20 @@ const ResearchListItem = ({ item }: IProps) => {
           </Box>
         </Grid>
       </Flex>
+      {showWeeklyBadge && (
+        <AuthWrapper roleRequired={UserRole.BETA_TESTER} borderLess>
+          <Flex sx={{ justifyContent: 'flex-end' }}>
+            <Box
+              sx={{
+                color: 'red',
+                padding: '2px',
+              }}
+            >
+              {item.usefulVotesLastWeek}
+            </Box>
+          </Flex>
+        </AuthWrapper>
+      )}
     </Card>
   );
 };

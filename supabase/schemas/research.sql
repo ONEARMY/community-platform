@@ -81,7 +81,7 @@ CREATE OR REPLACE FUNCTION "public"."combined_research_search_fields"("research_
   WHERE ru.research_id = research_id_param;
 $$;
 
-CREATE OR REPLACE FUNCTION "public"."get_research"("search_query" "text" DEFAULT NULL::"text", "category_id" bigint DEFAULT NULL::bigint, "research_status" "public"."research_status" DEFAULT NULL::"public"."research_status", "sort_by" "text" DEFAULT 'Newest'::"text", "limit_val" integer DEFAULT 10, "offset_val" integer DEFAULT 0) RETURNS TABLE("id" bigint, "created_at" timestamp with time zone, "created_by" bigint, "modified_at" timestamp with time zone, "description" "text", "slug" "text", "image" "json", "status" "public"."research_status", "category" "json", "tags" "text"[], "title" "text", "total_views" integer, "author" "json", "update_count" bigint, "comment_count" bigint)
+CREATE OR REPLACE FUNCTION "public"."get_research"("search_query" "text" DEFAULT NULL::"text", "category_id" bigint DEFAULT NULL::bigint, "research_status" "public"."research_status" DEFAULT NULL::"public"."research_status", "sort_by" "text" DEFAULT 'Newest'::"text", "limit_val" integer DEFAULT 10, "offset_val" integer DEFAULT 0, "days_back" integer DEFAULT 7) RETURNS TABLE("id" bigint, "created_at" timestamp with time zone, "created_by" bigint, "modified_at" timestamp with time zone, "description" "text", "slug" "text", "image" "json", "status" "public"."research_status", "category" "json", "tags" "text"[], "title" "text", "total_views" integer, "author" "json", "update_count" bigint, "comment_count" bigint, "useful_votes_last_week" integer)
     LANGUAGE "plpgsql"
     SET search_path = public, pg_temp
     AS $$
@@ -140,7 +140,12 @@ BEGIN
     (SELECT COUNT(*) FROM research_updates ru WHERE ru.research_id = r.id AND (ru.is_draft IS NULL OR ru.is_draft = FALSE)
           AND (ru.deleted IS NULL OR ru.deleted = FALSE)) AS update_count,
     (SELECT COALESCE(SUM(ru.comment_count), 0) FROM research_updates ru WHERE ru.research_id = r.id AND (ru.is_draft IS NULL OR ru.is_draft = FALSE)
-          AND (ru.deleted IS NULL OR ru.deleted = FALSE)) AS comment_count
+          AND (ru.deleted IS NULL OR ru.deleted = FALSE)) AS comment_count,
+    (SELECT COALESCE(COUNT(uv.id), 0)::integer
+     FROM useful_votes uv
+     WHERE uv.content_id = r.id
+       AND uv.content_type = 'research'
+       AND uv.created_at >= NOW() - INTERVAL '1 day' * days_back) AS useful_votes_last_week
   FROM research r
   JOIN profiles prof ON prof.id = r.created_by
   WHERE
@@ -174,6 +179,11 @@ BEGIN
           AND (ru.deleted IS NULL OR ru.deleted = FALSE))
       WHEN sort_by = 'MostUseful' THEN
         (SELECT COALESCE(COUNT(uv.id), 0) FROM useful_votes uv WHERE uv.content_id = r.id AND uv.content_type = 'research')
+      WHEN sort_by = 'MostUsefulLastWeek' THEN
+        (SELECT COALESCE(COUNT(uv.id), 0) FROM useful_votes uv
+         WHERE uv.content_id = r.id
+           AND uv.content_type = 'research'
+           AND uv.created_at >= NOW() - INTERVAL '1 day' * days_back)
       WHEN sort_by = 'MostUpdates' THEN
         (SELECT COUNT(*) FROM research_updates ru WHERE ru.research_id = r.id AND (ru.is_draft IS NULL OR ru.is_draft = FALSE)
           AND (ru.deleted IS NULL OR ru.deleted = FALSE))

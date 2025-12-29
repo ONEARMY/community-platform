@@ -13,7 +13,7 @@ export const AlertBanner = () => {
       const banner = await bannerService.getBanner();
 
       if (banner) {
-        const didUserCloseBefore = sessionStorage.getItem(`bannerClosed_${banner.id}`) === 'true';
+        const didUserCloseBefore = localStorage.getItem(`bannerClosed_${banner.id}`) === 'true';
         if (!didUserCloseBefore) {
           setBanner({ ...banner, show: true });
         }
@@ -29,7 +29,7 @@ export const AlertBanner = () => {
     e.preventDefault();
     e.stopPropagation();
     if (banner) {
-      sessionStorage.setItem(`bannerClosed_${banner.id}`, 'true');
+      localStorage.setItem(`bannerClosed_${banner.id}`, 'true');
       setBanner({ ...banner, show: false });
     }
   };

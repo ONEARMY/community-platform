@@ -145,6 +145,7 @@ export const LibraryDescription = ({
           <Flex sx={{ marginTop: 'auto', flexDirection: 'column', gap: 1 }}>
             <TagList tags={item.tags.map((t) => ({ label: t.name }))} />
             <DownloadWrapper
+              contentType="projects"
               authorProfileId={item.author?.id}
               fileDownloadCount={item.fileDownloadCount}
               fileLink={item.hasFileLink ? `/api/documents/project/${item.id}/link` : undefined}

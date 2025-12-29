@@ -24,6 +24,7 @@ export class DBResearchItem implements IDBContentDoc {
   readonly author?: DBAuthor;
   readonly update_count?: number;
   readonly useful_count?: number;
+  readonly useful_votes_last_week?: number;
   readonly subscriber_count?: number;
   readonly comment_count?: number;
   readonly total_views?: number;
@@ -59,6 +60,7 @@ export class ResearchItem implements IContentDoc {
   image: Image | null;
   deleted: boolean;
   usefulCount: number;
+  usefulVotesLastWeek?: number;
   subscriberCount: number;
   commentCount: number;
   updateCount: number;
@@ -127,6 +129,7 @@ export class ResearchItem implements IContentDoc {
       subscriberCount: obj.subscriber_count || 0,
       commentCount: calculateUpdateCommentCount(obj),
       usefulCount: obj.useful_count || 0,
+      usefulVotesLastWeek: obj.useful_votes_last_week || 0,
       isDraft: obj.is_draft || false,
       collaboratorsUsernames: obj.collaborators,
       collaborators: collaborators || [],

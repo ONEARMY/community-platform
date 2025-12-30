@@ -1,4 +1,4 @@
-alter table "public"."profile_badges" add column "premium_tier_1" boolean not null default false;
+alter table "public"."profile_badges" add column "premium_tier" integer;
 
 set check_function_bodies = off;
 

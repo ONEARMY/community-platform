@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS "public"."profile_badges" (
     "image_url" "text" NOT NULL,
     "action_url" "text",
     "tenant_id" "text" NOT NULL,
-    "premium_tier_1" boolean DEFAULT false NOT NULL
+    "premium_tier" integer DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "public"."profile_badges_relations" (

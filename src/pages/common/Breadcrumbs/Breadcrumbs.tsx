@@ -85,7 +85,7 @@ export const Breadcrumbs = (props: BreadcrumbsProps) => {
         paddingLeft: [2, 0, 0],
       }}
     >
-      <Flex sx={{ flex: ['none', 'none', 1] }}>
+      <Flex sx={{ flex: ['none', 'none', 1], overflowX: 'auto', width: '100%' }}>
         <BreadcrumbsComponent steps={breadcrumbsSteps} />
       </Flex>
 

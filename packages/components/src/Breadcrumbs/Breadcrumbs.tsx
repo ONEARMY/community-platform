@@ -18,6 +18,7 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
         padding: 0,
         alignItems: 'center',
         width: '100%',
+        overflowX: 'auto',
       }}
     >
       {steps.map((step, index) => {
@@ -27,7 +28,8 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
             key={index}
             sx={{
               alignItems: 'center',
-              ...(isLast && { flex: '1', minWidth: 0 }),
+              flexShrink: isLast ? 1 : 0,
+              ...(isLast && { flex: '1', minWidth: '120px' }),
             }}
           >
             <BreadcrumbItem text={step.text} link={step.link} isLast={isLast} />

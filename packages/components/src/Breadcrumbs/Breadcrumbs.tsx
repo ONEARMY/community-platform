@@ -19,6 +19,10 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
         alignItems: 'center',
         width: '100%',
         overflowX: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+          display: 'none',
+        },
       }}
     >
       {steps.map((step, index) => {

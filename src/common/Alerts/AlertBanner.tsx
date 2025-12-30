@@ -1,32 +1,74 @@
 import { useEffect, useState } from 'react';
-import { Banner } from 'oa-components';
+import { Banner, Icon } from 'oa-components';
 import { bannerService } from 'src/pages/common/banner.service';
-import { Flex } from 'theme-ui';
+import { IconButton, Text } from 'theme-ui';
 
 import type { Banner as BannerModel } from 'oa-shared';
 
 export const AlertBanner = () => {
-  const [banner, setBanner] = useState<BannerModel | null>(null);
+  const [banner, setBanner] = useState<(BannerModel & { show: boolean }) | null>(null);
 
   useEffect(() => {
     const fetchBanner = async () => {
       const banner = await bannerService.getBanner();
-      setBanner(banner);
+
+      if (banner) {
+        const didUserCloseBefore = localStorage.getItem(`bannerClosed_${banner.id}`) === 'true';
+        if (!didUserCloseBefore) {
+          setBanner({ ...banner, show: true });
+        }
+      }
     };
 
     fetchBanner();
   }, []);
 
-  if (!banner?.text) {
+  const onClose = (
+    e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>,
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (banner) {
+      localStorage.setItem(`bannerClosed_${banner.id}`, 'true');
+      setBanner({ ...banner, show: false });
+    }
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      onClose(e);
+    }
+  };
+
+  if (!banner?.text || !banner.show) {
     return null;
   }
 
   const bannerContent = (
-    <Flex>
-      <Banner variant="accent" sx={{ color: 'black', cursor: 'hand' }}>
-        {banner.text}
-      </Banner>
-    </Flex>
+    <Banner
+      variant="accent"
+      sx={{
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        position: 'relative',
+        justifyContent: 'space-between',
+        gap: 1,
+      }}
+    >
+      <div style={{ width: '32px' }} />
+      <Text>{banner.text}</Text>
+      <IconButton
+        onClick={onClose}
+        onKeyDown={onKeyDown}
+        sx={{
+          cursor: 'pointer',
+          flexShrink: 0,
+        }}
+      >
+        <Icon glyph="close" />
+      </IconButton>
+    </Banner>
   );
 
   if (banner.url) {

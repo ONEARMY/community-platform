@@ -20,7 +20,8 @@ export class ProfileServiceServer {
             name,
             display_name,
             image_url,
-            action_url
+            action_url,
+            premium_tier
           )
         ),
         type:profile_types(
@@ -96,7 +97,8 @@ export class ProfileServiceServer {
             name,
             display_name,
             image_url,
-            action_url
+            action_url,
+            premium_tier
           )
         ),
         type:profile_types(
@@ -272,7 +274,8 @@ export class ProfileServiceServer {
             name,
             display_name,
             image_url,
-            action_url
+            action_url,
+            premium_tier
           )
         )`,
       )

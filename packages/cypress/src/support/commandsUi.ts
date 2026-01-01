@@ -80,13 +80,19 @@ declare global {
  */
 
 Cypress.Commands.add('addToMarkdownField', (text: string) => {
-  cy.get('.mdxeditor-root-contenteditable')
+  cy.get('[aria-label="editable markdown"]')
     .click()
     .type('{moveToEnd}')
     .type('{enter}')
-    .type('{enter}')
-    .type(text)
-    .blur({ force: true });
+    .type('{enter}');
+
+  for (let i = 0; i < text.length; i++) {
+    // This is a very slow way to do this, but avoidable currently.
+    cy.get('[aria-label="editable markdown"]')
+      .click()
+      .type('{moveToEnd}')
+      .type(text[i], { delay: 0 });
+  }
 });
 
 Cypress.Commands.add('saveSettingsForm', () => {

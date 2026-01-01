@@ -17,7 +17,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return Response.json(cachedBanner, { headers, status: 200 });
   }
 
-  const { data } = await client.from('banners').select('text,url').limit(1);
+  const { data } = await client.from('banners').select('id,text,url').limit(1);
 
   let banner: Banner = new Banner({ text: null, url: null });
   if (data && Array.isArray(data) && data.length > 0) {

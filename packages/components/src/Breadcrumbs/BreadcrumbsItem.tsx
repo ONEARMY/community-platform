@@ -35,7 +35,7 @@ export const BreadcrumbItem = ({ text, link, isLast }: BreadcrumbItemProps) => (
       marginRight: '3px',
       ...(isLast && {
         flex: '1',
-        minWidth: 0,
+        minWidth: '120px',
         maxWidth: '100%',
       }),
     }}

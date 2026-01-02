@@ -20,8 +20,8 @@ export class ProfileServiceServer {
             name,
             display_name,
             image_url,
-            action_url,
-            premium_tier
+            action_url
+            -- premium_tier -- TODO: uncomment once migration is applied to CI test database
           )
         ),
         type:profile_types(
@@ -97,8 +97,8 @@ export class ProfileServiceServer {
             name,
             display_name,
             image_url,
-            action_url,
-            premium_tier
+            action_url
+            -- premium_tier -- TODO: uncomment once migration is applied to CI test database
           )
         ),
         type:profile_types(
@@ -274,8 +274,8 @@ export class ProfileServiceServer {
             name,
             display_name,
             image_url,
-            action_url,
-            premium_tier
+            action_url
+            -- premium_tier -- TODO: uncomment once migration is applied to CI test database
           )
         )`,
       )

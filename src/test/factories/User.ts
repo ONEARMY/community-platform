@@ -30,6 +30,7 @@ export const FactoryUser = (userOverloads: Partial<Profile> = {}): Partial<Profi
       name: 'pro',
       displayName: 'PRO',
       imageUrl: faker.image.avatar(),
+      premiumTier: 1,
     },
     {
       id: 2,

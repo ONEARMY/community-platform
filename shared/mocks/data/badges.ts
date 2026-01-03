@@ -7,6 +7,7 @@ export const badges: Partial<DBProfileBadge>[] = [
     image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/pro.svg',
     action_url: '',
+    premium_tier: 1,
   },
   {
     name: 'supporter',
@@ -14,5 +15,6 @@ export const badges: Partial<DBProfileBadge>[] = [
     image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
     action_url: '',
+    premium_tier: null,
   },
 ];

@@ -5601,6 +5601,20 @@
           "maxLength": null
         },
         {
+          "id": "public.profile_badges.premium_tier",
+          "name": "premium_tier",
+          "columnName": "premium_tier",
+          "type": "int4",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "news",
           "type": "news",
           "isRequired": false,

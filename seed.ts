@@ -147,6 +147,7 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
     display_name: 'PRO',
     image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/pro.svg',
+    premium_tier: 1,
   },
 ];
 

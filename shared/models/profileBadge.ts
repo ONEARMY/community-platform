@@ -4,6 +4,7 @@ export class DBProfileBadge {
   display_name: string;
   image_url: string;
   action_url: string | null;
+  premium_tier: number | null;
 
   constructor(obj: Partial<DBProfileBadge>) {
     Object.assign(this, obj);
@@ -20,6 +21,7 @@ export class ProfileBadge {
   displayName: string;
   imageUrl: string;
   actionUrl?: string;
+  premiumTier?: number;
 
   constructor(obj: Partial<ProfileBadge>) {
     Object.assign(this, obj);
@@ -33,6 +35,7 @@ export class ProfileBadge {
       displayName: badge.display_name,
       imageUrl: badge.image_url,
       actionUrl: badge.action_url || undefined,
+      premiumTier: badge.premium_tier || undefined,
     });
   }
 
@@ -43,6 +46,7 @@ export class ProfileBadge {
       displayName: value.display_name,
       imageUrl: value.image_url,
       actionUrl: value.action_url || undefined,
+      premiumTier: value.premium_tier || undefined,
     });
   }
 }

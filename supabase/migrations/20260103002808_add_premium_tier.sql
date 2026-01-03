@@ -217,6 +217,3 @@ END;
 $function$
 ;
 
-drop policy "tenant_isolation" on "storage"."objects";
-
-

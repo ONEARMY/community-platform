@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { type Profile, UserRole } from 'oa-shared';
+import { PremiumTier, type Profile, UserRole } from 'oa-shared';
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store';
 import { FactoryUser } from 'src/test/factories/User';
 import { describe, expect, it, vi } from 'vitest';
@@ -33,7 +33,7 @@ describe('PremiumTierWrapper', () => {
   it('renders fallback when user does not have required tier', () => {
     const { getByText } = render(
       <ProfileStoreProvider>
-        <PremiumTierWrapper tierRequired={2} fallback={<div>Fallback Content</div>}>
+        <PremiumTierWrapper tierRequired={2 as PremiumTier} fallback={<div>Fallback Content</div>}>
           <div>Test Content</div>
         </PremiumTierWrapper>
       </ProfileStoreProvider>,
@@ -44,18 +44,7 @@ describe('PremiumTierWrapper', () => {
   it('renders child components when user has required tier', () => {
     const { getByText } = render(
       <ProfileStoreProvider>
-        <PremiumTierWrapper tierRequired={1}>
-          <div>Test Content</div>
-        </PremiumTierWrapper>
-      </ProfileStoreProvider>,
-    );
-    expect(getByText('Test Content')).toBeTruthy();
-  });
-
-  it('renders child components when tierRequired is 0', () => {
-    const { getByText } = render(
-      <ProfileStoreProvider>
-        <PremiumTierWrapper tierRequired={0}>
+        <PremiumTierWrapper tierRequired={PremiumTier.ONE}>
           <div>Test Content</div>
         </PremiumTierWrapper>
       </ProfileStoreProvider>,
@@ -67,6 +56,16 @@ describe('PremiumTierWrapper', () => {
 describe('userHasPremiumTier', () => {
   it('returns true for admin users regardless of tier', () => {
     const adminUser = FactoryUser({ roles: [UserRole.ADMIN], badges: [] }) as Profile;
-    expect(userHasPremiumTier(adminUser, 1)).toBe(true);
+    expect(userHasPremiumTier(adminUser, PremiumTier.ONE)).toBe(true);
+  });
+
+  it('returns false when user does not have required tier', () => {
+    const user = FactoryUser({ badges: [] }) as Profile;
+    expect(userHasPremiumTier(user, PremiumTier.ONE)).toBe(false);
+  });
+
+  it('returns true when no tier is required', () => {
+    const user = FactoryUser({ badges: [] }) as Profile;
+    expect(userHasPremiumTier(user, undefined)).toBe(true);
   });
 });

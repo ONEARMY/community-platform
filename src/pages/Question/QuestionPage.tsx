@@ -11,7 +11,9 @@ import {
   TagList,
   UsefulStatsButton,
 } from 'oa-components';
+import { PremiumTier } from 'oa-shared';
 import { ClientOnly } from 'remix-utils/client-only';
+import { userHasPremiumTier } from 'src/common/PremiumTierWrapper';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { usefulService } from 'src/services/usefulService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
@@ -165,7 +167,12 @@ export const QuestionPage = observer(({ question }: IProps) => {
                 }),
                 stat: subscribersCount,
               },
-              createUsefulStatistic('questions', question.id, usefulCount),
+              createUsefulStatistic(
+                'questions',
+                question.id,
+                usefulCount,
+                userHasPremiumTier(activeUser, PremiumTier.ONE),
+              ),
               {
                 icon: 'comment-outline',
                 label: buildStatisticsLabel({

@@ -37,7 +37,8 @@ export const loader = async ({ request }) => {
             name,
             display_name,
             image_url,
-            action_url
+            action_url,
+            premium_tier
           )
         ),
         type:profile_types(

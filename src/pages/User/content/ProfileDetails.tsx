@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Button, UserStatistics, VisitorModal } from 'oa-components';
-import { UserRole } from 'oa-shared';
+import { PremiumTier } from 'oa-shared';
 import { trackEvent } from 'src/common/Analytics';
-import { AuthWrapper } from 'src/common/AuthWrapper';
 import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
+import { PremiumTierWrapper } from 'src/common/PremiumTierWrapper';
 import { ProfileTags } from 'src/pages/common/ProfileTags';
 import { mapPinService } from 'src/pages/Maps/map.service';
 import { Box, Divider, Flex, Paragraph } from 'theme-ui';
@@ -128,8 +128,8 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
               </Button>
             </>
           )}
-          <AuthWrapper
-            roleRequired={UserRole.BETA_TESTER}
+          <PremiumTierWrapper
+            tierRequired={PremiumTier.ONE}
             fallback={
               <UserStatistics
                 profile={profile}
@@ -151,7 +151,7 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
               questionCount={docs?.questions.length || 0}
               showViews
             />
-          </AuthWrapper>
+          </PremiumTierWrapper>
         </Flex>
       </Flex>
     </Box>

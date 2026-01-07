@@ -1,5 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
+import { UserRole } from 'oa-shared';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 
 import type { Profile } from 'oa-shared';
@@ -19,14 +20,22 @@ export const PremiumTierWrapper = observer((props: IProps) => {
   return <>{hasRequiredTier ? children : fallback || null}</>;
 });
 
-export const userHasPremiumTier = (user?: Profile | null, tierRequired?: number): boolean => {
+export const userHasPremiumTier = (profile?: Profile | null, tierRequired?: number): boolean => {
   if (!tierRequired || tierRequired <= 0) {
     return true;
   }
 
-  if (!user?.badges || user.badges.length === 0) {
+  if (!profile) {
     return false;
   }
 
-  return user.badges.some((badge) => badge.premiumTier === tierRequired);
+  if (profile.roles?.includes(UserRole.ADMIN)) {
+    return true;
+  }
+
+  if (!profile.badges || profile.badges.length === 0) {
+    return false;
+  }
+
+  return profile.badges.some((badge) => badge.premiumTier === tierRequired);
 };

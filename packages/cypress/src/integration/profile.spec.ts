@@ -11,8 +11,6 @@ const eventReader = MOCK_DATA.users.event_reader;
 const workspacePopulated = MOCK_DATA.users.settings_workplace_new;
 const workspaceEmpty = MOCK_DATA.users.settings_workplace_empty;
 
-const betaTester = MOCK_DATA.users['beta-tester'];
-
 describe('[Profile]', () => {
   beforeEach(() => {
     cy.visit('/');
@@ -335,9 +333,9 @@ describe('[Profile]', () => {
   });
 });
 
-describe('[By Beta Tester]', () => {
+describe('[By Premium Tier User]', () => {
   it('[Displays other information]', () => {
-    cy.signIn(betaTester.email, betaTester.password);
+    cy.signIn(subscriber.email, subscriber.password);
     cy.visit(`/u/${profile_views.username}`);
     cy.step('Displays view count for profile with views');
     cy.get('[data-testid=profile-views-stat]').contains(/Views: \d+/);

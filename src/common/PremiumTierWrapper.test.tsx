@@ -1,9 +1,10 @@
 import { render } from '@testing-library/react';
+import { type Profile, UserRole } from 'oa-shared';
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store';
 import { FactoryUser } from 'src/test/factories/User';
 import { describe, expect, it, vi } from 'vitest';
 
-import { PremiumTierWrapper } from './PremiumTierWrapper';
+import { PremiumTierWrapper, userHasPremiumTier } from './PremiumTierWrapper';
 
 vi.mock('src/stores/Profile/profile.store', () => ({
   useProfileStore: () => ({
@@ -60,5 +61,12 @@ describe('PremiumTierWrapper', () => {
       </ProfileStoreProvider>,
     );
     expect(getByText('Test Content')).toBeTruthy();
+  });
+});
+
+describe('userHasPremiumTier', () => {
+  it('returns true for admin users regardless of tier', () => {
+    const adminUser = FactoryUser({ roles: [UserRole.ADMIN], badges: [] }) as Profile;
+    expect(userHasPremiumTier(adminUser, 1)).toBe(true);
   });
 });

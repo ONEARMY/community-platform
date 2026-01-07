@@ -9,7 +9,6 @@ import type { DBAuthorVotes, DBMedia, DBProfile, ProfileFormData, ProfileType } 
 export class ProfileServiceServer {
   constructor(private client: SupabaseClient) {}
 
-  // TODO: add premium_tier to profile_badges selection once migration is applied
   async getByAuthId(id: string): Promise<DBProfile | null> {
     const { data } = await this.client
       .from('profiles')
@@ -21,7 +20,8 @@ export class ProfileServiceServer {
             name,
             display_name,
             image_url,
-            action_url
+            action_url,
+            premium_tier
           )
         ),
         type:profile_types(
@@ -75,7 +75,6 @@ export class ProfileServiceServer {
     return data as DBProfile;
   }
 
-  // TODO: add premium_tier to profile_badges selection once migration is applied
   async getUsersByUsername(usernames: string[]): Promise<DBProfile[] | null> {
     const { data } = await this.client
       .from('profiles')
@@ -98,7 +97,8 @@ export class ProfileServiceServer {
             name,
             display_name,
             image_url,
-            action_url
+            action_url,
+            premium_tier
           )
         ),
         type:profile_types(
@@ -132,7 +132,8 @@ export class ProfileServiceServer {
             name,
             display_name,
             image_url,
-            action_url
+            action_url,
+            premium_tier
           )
         ),
         tags:profile_tags_relations(
@@ -274,10 +275,10 @@ export class ProfileServiceServer {
             name,
             display_name,
             image_url,
-            action_url
+            action_url,
+            premium_tier
           )
         )`,
-        // TODO: add premium_tier to profile_badges selection once migration is applied to CI test database
       )
       .single();
     if (error) {

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router';
 import { MemberBadge, MemberHistory, Tab, TabPanel, Tabs, TabsList } from 'oa-components';
-import { UserRole } from 'oa-shared';
-import { AuthWrapper } from 'src/common/AuthWrapper';
+import { PremiumTier } from 'oa-shared';
+import { PremiumTierWrapper } from 'src/common/PremiumTierWrapper';
 import { isPreciousPlastic } from 'src/config/config';
 import { isContactable } from 'src/utils/helpers';
 import { isProfileComplete } from 'src/utils/isProfileComplete';
@@ -123,9 +123,9 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
               )}
             </Tabs>
           </Box>
-          <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+          <PremiumTierWrapper tierRequired={PremiumTier.ONE}>
             <MemberHistory memberSince={user.createdAt} lastActive={user.lastActive} />
-          </AuthWrapper>
+          </PremiumTierWrapper>
         </Flex>
       </Card>
     </Flex>

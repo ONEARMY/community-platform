@@ -186,10 +186,12 @@ describe('[Profile]', () => {
       cy.get('[data-cy=ImpactTab]').should('not.exist');
     });
 
-    it('[Cannot see profile views]', () => {
-      cy.signIn(subscriber.email, subscriber.password);
+    it('[Cannot see profile views or member history without premium tier]', () => {
+      const user = generateNewUserDetails();
+      cy.signUpNewUser(user);
       cy.visit(`/u/${profile_views.username}`);
       cy.get('[data-testid=profile-views-stat]').should('not.exist');
+      cy.get('[data-cy=MemberHistory]').should('not.exist');
     });
 
     it('should display questions count on profile tab', () => {

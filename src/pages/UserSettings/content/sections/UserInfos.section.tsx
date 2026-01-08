@@ -1,5 +1,5 @@
 import { Field } from 'react-final-form';
-import { countries } from 'countries-list';
+import { getCountryDataList, getEmojiFlag } from 'countries-list';
 import { observer } from 'mobx-react';
 import { FieldInput, FieldTextarea, Username } from 'oa-components';
 import { SelectField } from 'src/common/Form/Select.field';
@@ -16,6 +16,11 @@ import { FlexSectionContainer } from '../elements';
 import { ProfileTags } from './ProfileTags.section';
 
 import type { ProfileFormData } from 'oa-shared';
+
+const countryOptions = getCountryDataList().map((country) => ({
+  label: `${getEmojiFlag(country.iso2)} ${country.native}`,
+  value: country.iso2,
+}));
 
 interface IProps {
   formValues: Partial<ProfileFormData>;
@@ -92,10 +97,7 @@ export const UserInfosSection = observer(({ formValues }: IProps) => {
           <Field data-cy="country-dropdown" name="country">
             {(field) => (
               <SelectField
-                options={Object.keys(countries).map((countryCode) => ({
-                  label: `${countries[countryCode].emoji} ${countries[countryCode].native}`,
-                  value: countryCode, // Use the country code (e.g., 'US', 'PT') as the value
-                }))}
+                options={countryOptions}
                 placeholder="Select your country..."
                 {...field}
               />

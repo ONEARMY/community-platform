@@ -1,3 +1,7 @@
+export enum PremiumTier {
+  ONE = 1,
+}
+
 export class DBProfileBadge {
   id: number;
   name: string;

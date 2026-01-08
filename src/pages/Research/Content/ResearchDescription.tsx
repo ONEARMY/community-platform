@@ -11,9 +11,10 @@ import {
   UsefulStatsButton,
   Username,
 } from 'oa-components';
-import { type Profile, type ResearchItem, ResearchStatusRecord } from 'oa-shared';
+import { PremiumTier, type Profile, type ResearchItem, ResearchStatusRecord } from 'oa-shared';
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
+import { userHasPremiumTier } from 'src/common/PremiumTierWrapper';
 import { DraftTag } from 'src/pages/common/Drafts/DraftTag';
 import { buildStatisticsLabel } from 'src/utils/helpers';
 import { createUsefulStatistic } from 'src/utils/statistics';
@@ -191,7 +192,12 @@ const ResearchDescription = (props: IProps) => {
               }),
               stat: subscribersCount || 0,
             },
-            createUsefulStatistic('research', research.id, votedUsefulCount || 0),
+            createUsefulStatistic(
+              'research',
+              research.id,
+              votedUsefulCount || 0,
+              userHasPremiumTier(props.activeUser, PremiumTier.ONE),
+            ),
             {
               icon: 'comment-outline',
               label: buildStatisticsLabel({

@@ -10,6 +10,7 @@ export function createUsefulStatistic(
   contentType: ContentType,
   contentId: number,
   usefulCount: number,
+  includeVotersList: boolean = false,
 ): IStatistic {
   return {
     icon: 'star',
@@ -19,16 +20,18 @@ export function createUsefulStatistic(
       statUnit: 'useful',
       usePlural: false,
     }),
-    onOpen: async () => {
-      try {
-        return await usefulService.usefulVoters(contentType, contentId);
-      } catch (error) {
-        console.error('Failed to load useful voters:', error);
-        return [];
-      }
-    },
-    modalComponent: (profiles: ProfileListItem[]) => (
-      <ProfileList header="Others that found it useful" profiles={profiles || []} />
-    ),
+    ...(includeVotersList && {
+      onOpen: async () => {
+        try {
+          return await usefulService.usefulVoters(contentType, contentId);
+        } catch (error) {
+          console.error('Failed to load useful voters:', error);
+          return [];
+        }
+      },
+      modalComponent: (profiles: ProfileListItem[]) => (
+        <ProfileList header="Others that found it useful" profiles={profiles || []} />
+      ),
+    }),
   };
 }

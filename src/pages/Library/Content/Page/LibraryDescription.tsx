@@ -9,11 +9,12 @@ import {
   TagList,
   UsefulStatsButton,
 } from 'oa-components';
-import { DifficultyLevelRecord } from 'oa-shared';
+import { DifficultyLevelRecord, PremiumTier } from 'oa-shared';
 import { ClientOnly } from 'remix-utils/client-only';
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg';
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg';
 import { DownloadWrapper } from 'src/common/DownloadWrapper';
+import { userHasPremiumTier } from 'src/common/PremiumTierWrapper';
 import { buildStatisticsLabel, capitalizeFirstLetter, hasAdminRights } from 'src/utils/helpers';
 import { createUsefulStatistic } from 'src/utils/statistics';
 import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
@@ -243,7 +244,12 @@ export const LibraryDescription = ({
               }),
               stat: item.totalViews,
             },
-            createUsefulStatistic('projects', item.id, votedUsefulCount || 0),
+            createUsefulStatistic(
+              'projects',
+              item.id,
+              votedUsefulCount || 0,
+              userHasPremiumTier(loggedInUser, PremiumTier.ONE),
+            ),
             {
               icon: 'comment-outline',
               label: buildStatisticsLabel({

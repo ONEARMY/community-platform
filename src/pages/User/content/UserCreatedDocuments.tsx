@@ -1,20 +1,21 @@
-import { Flex, Heading } from 'theme-ui';
+import { Flex, Grid, Heading } from 'theme-ui';
 
 import UserCreatedDocumentsItem from './UserCreatedDocumentsItem';
 
 import type { UserCreatedDocs } from 'oa-shared';
 
 interface IProps {
+  columns: number;
   docs: UserCreatedDocs;
 }
 
-const UserCreatedDocuments = ({ docs }: IProps) => {
+const UserCreatedDocuments = ({ columns, docs }: IProps) => {
   return (
     <>
       {(docs.projects.length > 0 || docs.research.length > 0 || docs.questions.length > 0) && (
-        <Flex sx={{ justifyContent: 'space-between', gap: 4 }}>
+        <Grid columns={[1, 1, columns]} gap={5}>
           {docs?.projects.length > 0 && (
-            <Flex sx={{ flexDirection: 'column', flexBasis: '50%', mt: 2, mb: 6 }}>
+            <Flex sx={{ flexDirection: 'column', gap: 2 }}>
               <Heading data-cy="library-contributions" as="h3" variant="small">
                 Library
               </Heading>
@@ -27,7 +28,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
                       id: item.id!,
                       slug: item.slug!,
                       title: item.title!,
-                      usefulVotes: item.usefulCount || 0,
+                      usefulCount: item.usefulCount || 0,
                     }}
                   />
                 );
@@ -35,11 +36,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
             </Flex>
           )}
           {docs?.research.length > 0 && (
-            <Flex
-              data-testid="research-contributions"
-              my={2}
-              sx={{ flexDirection: 'column', flexBasis: '50%' }}
-            >
+            <Flex data-testid="research-contributions" sx={{ flexDirection: 'column', gap: 2 }}>
               <Heading as="h3" variant="small">
                 Research
               </Heading>
@@ -52,7 +49,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
                       id: item.id!,
                       slug: item.slug!,
                       title: item.title!,
-                      usefulVotes: item.usefulCount!,
+                      usefulCount: item.usefulCount || 0,
                     }}
                   />
                 );
@@ -60,10 +57,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
             </Flex>
           )}
           {docs?.questions.length > 0 && (
-            <Flex
-              data-testid="question-contributions"
-              sx={{ flexDirection: 'column', flexBasis: '50%' }}
-            >
+            <Flex data-testid="question-contributions" sx={{ flexDirection: 'column', gap: 2 }}>
               <Heading as="h3" variant="small">
                 Questions
               </Heading>
@@ -76,14 +70,14 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
                       id: item.id!,
                       slug: item.slug!,
                       title: item.title!,
-                      usefulVotes: item.usefulCount!,
+                      usefulCount: item.usefulCount || 0,
                     }}
                   />
                 );
               })}
             </Flex>
           )}
-        </Flex>
+        </Grid>
       )}
     </>
   );

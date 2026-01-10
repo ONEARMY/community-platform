@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
-import { Icon } from 'oa-components';
-import { Flex, Heading, Text } from 'theme-ui';
+import { IconCountWithTooltip } from 'oa-components';
+import { Flex, Text } from 'theme-ui';
 
 interface IProps {
   type: 'library' | 'research' | 'questions';
@@ -8,21 +8,20 @@ interface IProps {
     id: string | number;
     title: string;
     slug: string;
-    usefulVotes: number;
+    usefulCount: number;
   };
 }
 
 const UserDocumentItem = ({ type, item }: IProps) => {
-  const { id, title, slug, usefulVotes } = item;
+  const { id, title, slug, usefulCount } = item;
   const url = `/${type}/${encodeURIComponent(slug)}?utm_source=user-profile`;
 
   return (
     <Flex
-      mb={1}
       sx={{
-        width: '100%',
-        position: 'relative',
-        borderBottom: '1px solid #c7c7c7',
+        background: 'white',
+        borderRadius: 2,
+        padding: 3,
       }}
     >
       <Link
@@ -33,45 +32,38 @@ const UserDocumentItem = ({ type, item }: IProps) => {
         data-cy={`${item.slug}-link`}
       >
         <Flex
-          pb={1}
-          pt={1}
           sx={{
             flexDirection: 'row',
             justifyItems: 'center',
             justifyContent: 'space-between',
+            gap: 3,
           }}
         >
-          <Heading
+          <Text
             as="p"
-            color={'black'}
+            color="black"
             sx={{
-              fontSize: ['12px', '12px', '16px'],
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
             }}
           >
             {title}
-          </Heading>
+          </Text>
           <Flex
             sx={{
               alignItems: 'center',
               justifyContent: 'flex-end',
             }}
           >
-            {
-              <Text
-                color="black"
-                ml={3}
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  fontSize: ['12px', '12px', '14px'],
-                  minWidth: '40px',
-                  justifyContent: 'flex-end',
-                }}
-              >
-                {usefulVotes}
-                <Icon glyph="star-active" ml={1} />
-              </Text>
-            }
+            <Flex
+              sx={{
+                flex: 1,
+                justifyContent: 'flex-end',
+              }}
+            >
+              <IconCountWithTooltip count={usefulCount} icon="star-active" text="Useful count" />
+            </Flex>
           </Flex>
         </Flex>
       </Link>

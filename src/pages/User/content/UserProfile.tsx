@@ -108,7 +108,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
               </TabPanel>
               {hasContributed && (
                 <TabPanel value="contributions">
-                  <UserCreatedDocuments docs={docs} />
+                  <UserCreatedDocuments columns={isMember ? 1 : 2} docs={docs} />
                 </TabPanel>
               )}
               {hasImpacted && isPreciousPlastic() && (

@@ -16,7 +16,7 @@ interface Props {
   year: IImpactYear;
 }
 
-const isAllInvisible = (fields, visibleFields) => {
+const isAllInvisible = (fields?: IImpactDataField[], visibleFields?: IImpactDataField[]) => {
   if (visibleFields && visibleFields.length === 0 && fields && fields.length > 0) {
     return true;
   }

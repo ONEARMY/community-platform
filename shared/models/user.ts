@@ -48,7 +48,7 @@ export interface IUserImpact {
   [year: number]: IImpactDataField[];
 }
 
-export type IImpactYear = 2019 | 2020 | 2021 | 2022 | 2023 | 2024;
+export type IImpactYear = 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025;
 
 export type INotificationUpdate = {
   _id: string;

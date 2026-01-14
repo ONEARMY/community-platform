@@ -1,7 +1,27 @@
-import { latLongFilter } from './filterLatLong';
-
 import type { LatLngBounds } from 'leaflet';
-import type { MapPin } from 'oa-shared';
+import type { IBoundingBox, MapPin } from 'oa-shared';
+
+const filterByLatLong = (boundaries: IBoundingBox, pins: MapPin[]): MapPin[] => {
+  return pins.filter(({ lat, lng }) => {
+    const inLat = lat >= boundaries._southWest.lat && lat <= boundaries._northEast.lat;
+    const inLng = lng >= boundaries._southWest.lng && lng <= boundaries._northEast.lng;
+    return inLat && inLng;
+  });
+};
+
+export const sortPinsByBadgeThenLastActive = (pins: MapPin[], badgeName: string): MapPin[] => {
+  return [...pins].sort((a, b) => {
+    const aHasBadge = a.profile?.badges?.some((badge) => badge.name === badgeName) ?? false;
+    const bHasBadge = b.profile?.badges?.some((badge) => badge.name === badgeName) ?? false;
+
+    if (aHasBadge && !bHasBadge) return -1;
+    if (!aHasBadge && bHasBadge) return 1;
+
+    const aTime = a.profile?.lastActive ? new Date(a.profile.lastActive).getTime() : 0;
+    const bTime = b.profile?.lastActive ? new Date(b.profile.lastActive).getTime() : 0;
+    return bTime - aTime;
+  });
+};
 
 export const filterPins = (
   allPins: MapPin[],
@@ -44,7 +64,7 @@ export const filterPins = (
   }
 
   if (boundaries) {
-    filteredPins = latLongFilter(
+    filteredPins = filterByLatLong(
       {
         _northEast: boundaries.getNorthEast(),
         _southWest: boundaries.getSouthWest(),

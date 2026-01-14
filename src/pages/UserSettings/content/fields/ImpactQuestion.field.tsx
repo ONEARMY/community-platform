@@ -10,8 +10,6 @@ interface Props {
 }
 
 export const ImpactQuestionField = ({ field, formId }: Props) => {
-  const initialValue = typeof field.isVisible === 'boolean' ? field.isVisible : true;
-
   return (
     <Box sx={{ marginBottom: 3 }}>
       <Label htmlFor={`${field.id}.value`} sx={{ marginBottom: 1 }}>
@@ -45,7 +43,20 @@ export const ImpactQuestionField = ({ field, formId }: Props) => {
               name={`${field.id}.value`}
               sx={{ background: 'white' }}
               type="number"
-              formatOnBlur
+              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
+                  e.preventDefault();
+                }
+              }}
+              onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                const target = e.target as HTMLInputElement;
+
+                target.value = target.value
+                  .replaceAll('e', '')
+                  .replaceAll('E', '')
+                  .replaceAll('+', '')
+                  .replaceAll('-', '');
+              }}
             />
           </Box>
 
@@ -65,7 +76,7 @@ export const ImpactQuestionField = ({ field, formId }: Props) => {
           <Field
             component="input"
             data-cy={`${formId}-field-${field.id}-isVisible`}
-            initialValue={initialValue}
+            initialValue={true}
             name={`${field.id}.isVisible`}
             type="checkbox"
           />

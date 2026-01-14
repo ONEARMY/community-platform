@@ -4,8 +4,7 @@ import { sortImpactYearDisplayFields, transformImpactData, transformImpactInputs
 
 describe('transformImpactData', () => {
   it('returns data structured as field inputs', () => {
-    const description =
-      'What was your annual revenue (in USD)? By revenue we mean all money coming in.';
+    const description = 'What was your annual revenue (in USD)?';
 
     const impactFields = [
       {

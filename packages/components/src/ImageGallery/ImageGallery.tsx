@@ -50,28 +50,48 @@ const NavButton = styled('button')`
 `;
 
 // Container that reserves space to prevent layout shift
-const ImageContainer = styled('div')<{ $flexibleAspectRatio: boolean }>`
+const ImageContainer = styled('div')<{
+  $flexibleAspectRatio: boolean;
+  $allowPortrait: boolean;
+}>`
   width: 100%;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  ${(props) =>
-    !props.$flexibleAspectRatio
-      ? `
-    aspect-ratio: 16/9;
-    min-height: 200px;
-
-    @media (min-width: 768px) {
-      min-height: 300px;
+  ${(props) => {
+    if (!props.$allowPortrait) {
+      return `
+        min-height: 300px;
+        @media (min-width: 768px) {
+          min-height: 450px;
+        }
+        aspect-ratio: 16/9;
+        background: #f5f5f5;
+      `;
     }
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f5f5f5; /* Optional: subtle background while loading */
-  `
-      : `
-    display: block;
-  `}
+    // Research/Questions with wide image: flexible, no aspect-ratio
+    if (props.$flexibleAspectRatio) {
+      return `
+        min-height: 200px;
+        @media (min-width: 768px) {
+          min-height: 300px;
+        }
+      `;
+    }
+
+    // Research/Questions with normal image: use aspect-ratio
+    return `
+      min-height: 200px;
+      @media (min-width: 768px) {
+        min-height: 300px;
+      }
+      aspect-ratio: 16/9;
+      background: #f5f5f5;
+    `;
+  }}
 `;
 
 export const ImageGallery = (props: ImageGalleryProps) => {
@@ -240,11 +260,12 @@ export const ImageGallery = (props: ImageGalleryProps) => {
   const isWideImage = state.activeImageAspectRatio
     ? state.activeImageAspectRatio > ASPECT_RATIO_16_9
     : false;
-  const useFlexibleAspectRatio = isWideImage;
+  const useFlexibleAspectRatio = isWideImage && !!props.allowPortrait;
+  const allowPortrait = !!props.allowPortrait;
 
   return (
     <Flex sx={{ flexDirection: 'column' }}>
-      <ImageContainer $flexibleAspectRatio={useFlexibleAspectRatio}>
+      <ImageContainer $flexibleAspectRatio={useFlexibleAspectRatio} $allowPortrait={allowPortrait}>
         {state.showActiveImgLoading && (
           <Loader sx={{ position: 'absolute', alignSelf: 'center', zIndex: 1 }} />
         )}
@@ -254,9 +275,9 @@ export const ImageGallery = (props: ImageGalleryProps) => {
           data-testid="active-image"
           sx={{
             width: '100%',
-            height: useFlexibleAspectRatio ? 'auto' : '100%',
+            height: !allowPortrait || !useFlexibleAspectRatio ? '100%' : 'auto',
             cursor: 'pointer',
-            objectFit: props.allowPortrait ? 'contain' : 'cover',
+            objectFit: allowPortrait ? 'contain' : 'cover',
             opacity: state.showActiveImgLoading ? 0.3 : 1,
             transition: 'opacity 0.2s ease-in-out',
           }}

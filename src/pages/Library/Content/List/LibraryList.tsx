@@ -39,7 +39,7 @@ export const LibraryList = () => {
       if (q) {
         params.set(LibrarySearchParams.sort, 'MostRelevant');
       } else {
-        params.set(LibrarySearchParams.sort, 'Newest');
+        params.set(LibrarySearchParams.sort, 'MostUsefulLastWeek');
       }
       setSearchParams(params);
     } else {

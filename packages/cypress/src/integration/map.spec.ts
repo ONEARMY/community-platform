@@ -23,6 +23,13 @@ describe('[Map]', () => {
     cy.get('[data-cy="CardList-desktop"]').should('be.visible');
     cy.get('[data-cy="list-results"]').contains(/\d+ results in view/);
 
+    cy.step('PRO users appear first in the list');
+    cy.get('[data-cy="CardList-desktop"]')
+      .find('[data-cy=CardListItem]')
+      .first()
+      .find('[data-testid="Username: pro badge"]')
+      .should('exist');
+
     cy.step('Map filters can be used');
     cy.get('[data-cy=MemberTypeVerticalList]')
       .first()

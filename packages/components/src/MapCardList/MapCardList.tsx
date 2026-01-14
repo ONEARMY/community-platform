@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { compareDesc } from 'date-fns';
 import { Box, Flex, Text } from 'theme-ui';
 
 import { Button } from '../Button/Button';
@@ -29,27 +28,19 @@ export const MapCardList = (props: IProps) => {
   }, [list]);
 
   useEffect(() => {
-    const toRender = list
-      .sort((a, b) =>
-        compareDesc(
-          a.profile!.lastActive || Date.parse('0'),
-          b.profile!.lastActive || Date.parse('0'),
-        ),
-      )
-      .slice(0, renderCount)
-      .map((item) => {
-        const isSelectedPin = item.id === selectedPin?.id;
+    const toRender = list.slice(0, renderCount).map((item) => {
+      const isSelectedPin = item.id === selectedPin?.id;
 
-        return (
-          <CardListItem
-            item={item}
-            key={item.id}
-            isSelectedPin={isSelectedPin}
-            onPinClick={onPinClick}
-            viewport={viewport}
-          />
-        );
-      });
+      return (
+        <CardListItem
+          item={item}
+          key={item.id}
+          isSelectedPin={isSelectedPin}
+          onPinClick={onPinClick}
+          viewport={viewport}
+        />
+      );
+    });
 
     setDisplayItems(toRender);
   }, [renderCount, list]);

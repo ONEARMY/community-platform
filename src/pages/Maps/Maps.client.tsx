@@ -4,7 +4,7 @@ import { Box, Flex } from 'theme-ui';
 
 import { MapList } from './Content/MapView/MapList';
 import { MapView } from './Content/MapView/MapView';
-import { filterPins } from './utils/filterPins';
+import { filterPins, sortPinsByBadgeThenLastActive } from './utils/pinUtils';
 import { mapPinService } from './map.service';
 import { MapContext } from './MapContext';
 
@@ -133,13 +133,7 @@ const MapsPage = () => {
           }
         }
 
-        setAllPins(
-          pinsToSet.sort((a, b) => {
-            const aTime = a.profile.lastActive ? new Date(a.profile.lastActive).getTime() : 0;
-            const bTime = b.profile.lastActive ? new Date(b.profile.lastActive).getTime() : 0;
-            return bTime - aTime;
-          }),
-        );
+        setAllPins(sortPinsByBadgeThenLastActive(pinsToSet, 'pro'));
 
         if (filters?.filters) {
           const sortedTypes = (filters.filters.types || [])

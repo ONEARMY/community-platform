@@ -33,10 +33,10 @@ export const stripMarkdownAndHtml = (text: string | null | undefined): string =>
   cleaned = cleaned.replace(/^#{1,6}\s+/gm, '');
 
   // - Links: [text](url) -> text
-  cleaned = cleaned.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
+  cleaned = cleaned.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
 
   // - Images: ![alt](url) -> alt
-  cleaned = cleaned.replace(/!\[([^\]]*)\]\([^\)]+\)/g, '$1');
+  cleaned = cleaned.replace(/!\[([^\]]*)\]\([^)]+\)/g, '$1');
 
   // - Code blocks: `code` -> code
   cleaned = cleaned.replace(/`([^`]+)`/g, '$1');

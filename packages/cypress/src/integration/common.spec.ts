@@ -54,7 +54,7 @@ describe('[Common]', () => {
       cy.get('[data-cy=feedback]').should('contain', 'Report a Problem');
       cy.get('[data-cy=feedback]')
         .should('have.attr', 'href')
-        .and('contain', '/library?sort=Newest');
+        .and('contain', '/library?sort=MostUsefulLastWeek');
 
       cy.visit('/map');
       cy.wait(2000);
@@ -69,7 +69,7 @@ describe('[Common]', () => {
       cy.get('[data-cy=feedback]').should('contain', 'Problem?');
       cy.get('[data-cy=feedback]')
         .should('have.attr', 'href')
-        .and('contain', '/library?sort=Newest');
+        .and('contain', '/library?sort=MostUsefulLastWeek');
 
       cy.visit('/map');
       cy.wait(2000);

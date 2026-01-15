@@ -7,9 +7,10 @@ import {
   ProfileBadgeContentLabel,
   // ModerationStatus,
 } from 'oa-components';
+import { AspectRatio, Button, Card, Flex, Heading, Image, Text } from 'theme-ui';
+
 import { Highlighter } from 'src/common/Highlighter';
 import { stripMarkdownAndHtml } from 'src/utils/stripMarkdownAndHtml';
-import { AspectRatio, Button, Card, Flex, Heading, Image, Text } from 'theme-ui';
 
 import { listing } from './labels';
 

@@ -22,9 +22,10 @@ export const stripMarkdownAndHtml = (text: string | null | undefined): string =>
   cleaned = cleaned.replace(/__([^_]+?)__/g, '$1');
 
   // - Italic: *text* or _text_ (after bold to avoid matching ** as two italics)
-  // Match single asterisk/underscore that's not part of bold markers
-  cleaned = cleaned.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, '$1');
-  cleaned = cleaned.replace(/(?<!_)_([^_\n]+?)_(?!_)/g, '$1');
+  // Since bold markers (** and __) are already removed, match single markers
+  // Use a simple pattern that avoids lookbehinds for better browser compatibility
+  cleaned = cleaned.replace(/\*([^*\n]+?)\*/g, '$1');
+  cleaned = cleaned.replace(/_([^_\n]+?)_/g, '$1');
 
   // - Strikethrough: ~~text~~
   cleaned = cleaned.replace(/~~([^~]+)~~/g, '$1');

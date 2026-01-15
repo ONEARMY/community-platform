@@ -1,8 +1,9 @@
-import { Flex, Text, useThemeUI } from 'theme-ui';
+import { Avatar, Flex, Text, useThemeUI } from 'theme-ui';
 
 import { DisplayDate } from '../DisplayDate/DisplayDate';
 import { Icon } from '../Icon/Icon';
 import { InternalLink } from '../InternalLink/InternalLink';
+import defaultProfileImage from '../../assets/images/default_member.svg';
 
 import type { NotificationDisplay } from 'oa-shared';
 import type { ThemeUIStyleObject } from 'theme-ui';
@@ -87,10 +88,40 @@ export const NotificationItemSupabase = (props: IProps) => {
             </Flex>
           )}
           <Flex sx={{ flex: 1, flexDirection: 'column', gap: 2 }}>
-            <Flex sx={{ justifyContent: 'space-between', gap: 2 }}>
-              <Text sx={{ flex: 1 }}>
-                {notification.triggeredBy} {notification.title}
-              </Text>
+            <Flex sx={{ justifyContent: 'space-between', gap: 2, alignItems: 'center' }}>
+              <Flex sx={{ gap: 2, alignItems: 'center', flex: 1 }}>
+                {notification.triggeredByAvatar && (
+                  <Avatar
+                    src={notification.triggeredByAvatar.publicUrl}
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      flexShrink: 0,
+                    }}
+                    alt={`Avatar of ${notification.triggeredBy}`}
+                    loading="lazy"
+                  />
+                )}
+                {!notification.triggeredByAvatar && (
+                  <Avatar
+                    src={defaultProfileImage}
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      flexShrink: 0,
+                    }}
+                    alt={`Avatar of ${notification.triggeredBy}`}
+                    loading="lazy"
+                  />
+                )}
+                <Text sx={{ flex: 1 }}>
+                  {notification.triggeredBy} {notification.title}
+                </Text>
+              </Flex>
               <Text sx={{ fontSize: 1, color: 'grey', textAlign: 'right' }}>
                 <DisplayDate createdAt={notification.date} showLabel={false} />
               </Text>

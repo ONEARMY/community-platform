@@ -226,6 +226,7 @@ export class NotificationDisplay {
   };
   title: string;
   triggeredBy: string;
+  triggeredByAvatar?: Image;
 
   constructor(obj: NotificationDisplay) {
     Object.assign(this, obj);
@@ -431,7 +432,7 @@ export class NotificationDisplay {
     }
   }
 
-  static fromNotification(notification: Notification): NotificationDisplay {
+  static fromNotification(notification: Notification, triggeredByAvatar?: Image): NotificationDisplay {
     return new NotificationDisplay({
       id: notification.id,
       isRead: notification.isRead,
@@ -450,6 +451,7 @@ export class NotificationDisplay {
       },
       title: this.setTitle(notification),
       triggeredBy: notification.triggeredBy?.username || "",
+      triggeredByAvatar,
       link: this.setLink(notification),
     });
   }

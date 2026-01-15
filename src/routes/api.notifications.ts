@@ -1,4 +1,5 @@
 import { Notification, NotificationDisplay } from 'oa-shared';
+import { ImageServiceServer } from 'src/services/imageService.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { resolveType } from 'src/utils/contentType.utils';
 
@@ -22,6 +23,7 @@ export const transformNotification = async (
   client: SupabaseClient,
 ) => {
   try {
+    const imageService = new ImageServiceServer(client);
     const contentTypes = {
       comment: 'comments',
       reply: 'comments',
@@ -30,6 +32,11 @@ export const transformNotification = async (
 
     const notification = Notification.fromDB(dbNotification);
     const contentType = contentTypes[notification.contentType];
+
+    // Convert triggered_by photo to Image if available
+    const triggeredByAvatar = notification.triggeredBy?.photo
+      ? imageService.getPublicUrl(notification.triggeredBy.photo)
+      : undefined;
 
     const content = await client
       .from(contentType)
@@ -70,7 +77,7 @@ export const transformNotification = async (
       notification.parentContent = parentContent.data;
     }
 
-    return NotificationDisplay.fromNotification(notification);
+    return NotificationDisplay.fromNotification(notification, triggeredByAvatar);
   } catch (error) {
     console.error(error);
     throw error;
@@ -102,7 +109,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       .select(
         `
       *,
-      triggered_by:profiles!notifications_triggered_by_id_fkey(id,username)
+      triggered_by:profiles!notifications_triggered_by_id_fkey(id,username,photo)
     `,
       )
       .eq('owned_by_id', profileResponse?.data?.id);

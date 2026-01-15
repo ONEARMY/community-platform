@@ -167,6 +167,63 @@ describe('[News.Write]', () => {
       cy.url().should('not.include', `updatedExpectedSlug`);
     });
 
+    it('[Can delete news article]', () => {
+      const deleteTitle = `${initialRandomId} News to delete`;
+      const deleteExpectedSlug = `${initialRandomId}-news-to-delete`;
+      const deleteNewsBody = 'This news will be deleted.';
+      const user = users.admin;
+
+      cy.signIn(user.email, user.password);
+
+      cy.step('Create a news article to delete');
+      cy.visit('/news/create');
+      cy.get('[data-cy=field-title]', { timeout: 20000 }).clear().type(deleteTitle).blur();
+      cy.addToMarkdownField(deleteNewsBody);
+      cy.get('[data-cy=heroImage-upload]')
+        .find(':file')
+        .selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.get('[data-cy=submit]').click();
+      cy.wait(2000);
+      cy.url().should('include', `/news/${deleteExpectedSlug}`);
+      cy.contains(deleteTitle);
+
+      cy.step('Delete button should be visible in edit mode');
+      cy.get('[data-cy=edit]').click();
+      cy.wait(1000);
+      cy.get('[data-cy=delete]').should('be.visible');
+      cy.get('[data-cy=delete]').should('contain', 'Delete this news');
+
+      cy.step('Delete button should not be visible in create mode');
+      cy.visit('/news/create');
+      cy.get('[data-cy=delete]').should('not.exist');
+
+      cy.step('Clicking delete shows confirmation modal');
+      cy.visit(`/news/${deleteExpectedSlug}/edit`);
+      cy.wait(1000);
+      cy.get('[data-cy=delete]').click();
+      cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible');
+      cy.contains('Are you sure you want to delete this news article?');
+      cy.get('[data-cy="Confirm.modal: Cancel"]').should('be.visible');
+      cy.get('[data-cy="Confirm.modal: Confirm"]').should('be.visible');
+
+      cy.step('Canceling delete keeps the news article');
+      cy.get('[data-cy="Confirm.modal: Cancel"]').click();
+      cy.get('[data-cy="Confirm.modal: Modal"]').should('not.exist');
+      cy.url().should('include', `/news/${deleteExpectedSlug}/edit`);
+      cy.visit(`/news/${deleteExpectedSlug}`);
+      cy.contains(deleteTitle);
+
+      cy.step('Confirming delete redirects to news list');
+      cy.get('[data-cy=edit]').click();
+      cy.wait(1000);
+      cy.get('[data-cy=delete]').click();
+      cy.get('[data-cy="Confirm.modal: Confirm"]').click();
+      cy.wait(2000);
+      cy.url().should('include', '/news');
+      cy.url().should('not.include', deleteExpectedSlug);
+      cy.contains(deleteTitle).should('not.exist');
+    });
+
     it('[By Anonymous]', () => {
       cy.step('Ask users to login before creating a news');
       cy.visit('/news');

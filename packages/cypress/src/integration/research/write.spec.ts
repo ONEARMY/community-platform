@@ -348,6 +348,140 @@ describe('[Research]', () => {
       });
     });
 
+    it('[Can delete research article]', () => {
+      const randomId = generateAlphaNumeric(8).toLowerCase();
+      const deleteTitle = `${randomId} Research to delete`;
+      const deleteExpectedSlug = `${randomId}-research-to-delete`;
+      const deleteDescription = 'This research will be deleted.';
+
+      cy.signIn(researcher.email, researcher.password);
+
+      cy.step('Create a research article to delete');
+      cy.visit('/research');
+      cy.get('[data-cy=loader]').should('not.exist');
+      cy.get('[data-cy=create]:visible').click();
+      cy.get('[data-cy=intro-title').clear().type(deleteTitle).blur();
+      cy.get('[data-cy=intro-description]').clear().type(deleteDescription);
+      cy.selectTag('Machines', '[data-cy=category-select]');
+      cy.get('[data-cy=image-upload]')
+        .find(':file')
+        .selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.wait(2000);
+      cy.get('[data-cy=submit]').click();
+      cy.wait(2000);
+      cy.url().should('include', `/research/${deleteExpectedSlug}`);
+      cy.contains(deleteTitle);
+
+      cy.step('Delete button should be visible in edit mode');
+      cy.get('[data-cy=edit]').click();
+      cy.wait(1000);
+      cy.get('[data-cy=delete]').should('be.visible');
+      cy.get('[data-cy=delete]').should('contain', 'Delete this research');
+
+      cy.step('Delete button should not be visible in create mode');
+      cy.visit('/research/create');
+      cy.get('[data-cy=delete]').should('not.exist');
+
+      cy.step('Clicking delete shows confirmation modal');
+      cy.visit(`/research/${deleteExpectedSlug}/edit`);
+      cy.wait(1000);
+      cy.get('[data-cy=delete]').click();
+      cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible');
+      cy.contains('Are you sure you want to delete this research?');
+      cy.get('[data-cy="Confirm.modal: Cancel"]').should('be.visible');
+      cy.get('[data-cy="Confirm.modal: Confirm"]').should('be.visible');
+
+      cy.step('Canceling delete keeps the research');
+      cy.get('[data-cy="Confirm.modal: Cancel"]').click();
+      cy.get('[data-cy="Confirm.modal: Modal"]').should('not.exist');
+      cy.url().should('include', `/research/${deleteExpectedSlug}/edit`);
+      cy.visit(`/research/${deleteExpectedSlug}`);
+      cy.contains(deleteTitle);
+
+      cy.step('Confirming delete redirects to research list');
+      cy.get('[data-cy=edit]').click();
+      cy.wait(1000);
+      cy.get('[data-cy=delete]').click();
+      cy.get('[data-cy="Confirm.modal: Confirm"]').click();
+      cy.wait(2000);
+      cy.url().should('include', '/research');
+      cy.url().should('not.include', deleteExpectedSlug);
+      cy.contains(deleteTitle).should('not.exist');
+    });
+
+    it('[Can delete research update]', () => {
+      const randomId = generateAlphaNumeric(8).toLowerCase();
+      const researchItem = {
+        title: `${randomId} Research for update delete test`,
+        slug: `${randomId}-research-for-update-delete-test`,
+        description: 'Research to test update deletion.',
+      };
+      const updateTitle = `${randomId} Update to delete`;
+      const updateDescription = 'This update will be deleted.';
+      const researchURL = `/research/${researchItem.slug}`;
+
+      cy.signIn(researcher.email, researcher.password);
+
+      cy.step('Create a research article with an update');
+      cy.visit('/research');
+      cy.get('[data-cy=loader]').should('not.exist');
+      cy.get('[data-cy=create]:visible').click();
+      cy.get('[data-cy=intro-title').clear().type(researchItem.title).blur();
+      cy.get('[data-cy=intro-description]').clear().type(researchItem.description);
+      cy.selectTag('Machines', '[data-cy=category-select]');
+      cy.get('[data-cy=image-upload]')
+        .find(':file')
+        .selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.wait(2000);
+      cy.get('[data-cy=submit]').click();
+      cy.wait(2000);
+      cy.url().should('include', researchURL);
+
+      cy.step('Create an update');
+      cy.get('[data-cy=addResearchUpdateButton]').click();
+      cy.fillIntroTitle(updateTitle);
+      cy.get('[data-cy=intro-description]').clear().type(updateDescription).blur();
+      cy.get('[data-cy=submit]').click();
+      cy.wait(2000);
+      cy.contains(updateTitle);
+
+      cy.step('Delete button should be visible when editing update');
+      cy.get('[data-cy=edit-update]').click();
+      cy.wait(1000);
+      cy.get('[data-cy=delete]').should('be.visible');
+      cy.get('[data-cy=delete]').should('contain', 'Delete this update');
+
+      cy.step('Delete button should not be visible when creating new update');
+      cy.visit(`${researchURL}/new-update`);
+      cy.get('[data-cy=delete]').should('not.exist');
+
+      cy.step('Clicking delete shows confirmation modal');
+      cy.visit(researchURL);
+      cy.get('[data-cy=edit-update]').click();
+      cy.wait(1000);
+      cy.get('[data-cy=delete]').click();
+      cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible');
+      cy.contains('Are you sure you want to delete this update?');
+      cy.get('[data-cy="Confirm.modal: Cancel"]').should('be.visible');
+      cy.get('[data-cy="Confirm.modal: Confirm"]').should('be.visible');
+
+      cy.step('Canceling delete keeps the update');
+      cy.get('[data-cy="Confirm.modal: Cancel"]').click();
+      cy.get('[data-cy="Confirm.modal: Modal"]').should('not.exist');
+      cy.visit(researchURL);
+      cy.contains(updateTitle);
+
+      cy.step('Confirming delete removes the update and redirects to research');
+      cy.get('[data-cy=edit-update]').click();
+      cy.wait(1000);
+      cy.get('[data-cy=delete]').click();
+      cy.get('[data-cy="Confirm.modal: Confirm"]').click();
+      cy.wait(2000);
+      cy.url().should('include', researchURL);
+      cy.contains(updateTitle).should('not.exist');
+      cy.contains(researchItem.title);
+    });
+
     // it('[By Admin]', () => {
     // Should check an admin can edit other's content
     // })

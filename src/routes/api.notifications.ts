@@ -1,6 +1,6 @@
 import { Notification, NotificationDisplay } from 'oa-shared';
-import { ImageServiceServer } from 'src/services/imageService.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { ImageServiceServer } from 'src/services/imageService.server';
 import { resolveType } from 'src/utils/contentType.utils';
 
 import type { SupabaseClient } from '@supabase/supabase-js';

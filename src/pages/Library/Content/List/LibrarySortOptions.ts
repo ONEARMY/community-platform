@@ -12,7 +12,6 @@ const BaseOptions = new Map<LibrarySortOption, string>();
 BaseOptions.set('MostUsefulLastWeek', 'Most Useful Last Week');
 BaseOptions.set('Newest', 'Newest');
 BaseOptions.set('MostComments', 'Most Comments');
-BaseOptions.set('LatestUpdated', 'Latest Updated');
 BaseOptions.set('MostUseful', 'Most Useful');
 BaseOptions.set('MostDownloads', 'Most Downloads');
 BaseOptions.set('MostViews', 'Most Views');

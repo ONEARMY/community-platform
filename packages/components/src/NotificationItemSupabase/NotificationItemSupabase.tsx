@@ -1,9 +1,9 @@
 import { Avatar, Flex, Text, useThemeUI } from 'theme-ui';
 
+import defaultProfileImage from '../../assets/images/default_member.svg';
 import { DisplayDate } from '../DisplayDate/DisplayDate';
 import { Icon } from '../Icon/Icon';
 import { InternalLink } from '../InternalLink/InternalLink';
-import defaultProfileImage from '../../assets/images/default_member.svg';
 
 import type { NotificationDisplay } from 'oa-shared';
 import type { ThemeUIStyleObject } from 'theme-ui';

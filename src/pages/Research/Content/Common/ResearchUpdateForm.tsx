@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
-import { Button, ConfirmModal, ResearchEditorOverview } from 'oa-components';
+import { ResearchEditorOverview } from 'oa-components';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { logger } from 'src/logger';
@@ -30,7 +30,7 @@ export const ResearchUpdateForm = (props: IProps) => {
   const navigate = useNavigate();
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
   const id = researchUpdate?.id || null;
   const [initialValues, setInitialValues] = useState<ResearchUpdateFormData>({
@@ -90,9 +90,14 @@ export const ResearchUpdateForm = (props: IProps) => {
     if (!researchUpdate) {
       return;
     }
-    setShowDeleteModal(false);
-    await researchService.deleteUpdate(props.research.id, researchUpdate.id);
-    window.location.assign('/research/' + props.research.slug);
+    setIsDeleting(true);
+    try {
+      await researchService.deleteUpdate(props.research.id, researchUpdate.id);
+      window.location.assign('/research/' + props.research.slug);
+    } catch (error) {
+      logger.error(error);
+      setIsDeleting(false);
+    }
   };
 
   const isEdit = !!researchUpdate;
@@ -139,22 +144,6 @@ export const ResearchUpdateForm = (props: IProps) => {
 
           const sidebar = (
             <>
-              {isEdit ? (
-                <Button
-                  data-cy="delete"
-                  onClick={(evt) => {
-                    setShowDeleteModal(true);
-                    evt.preventDefault();
-                  }}
-                  variant="destructive"
-                  type="submit"
-                  disabled={isSaving || submitting}
-                  sx={{ alignSelf: 'stretch', justifyContent: 'center' }}
-                >
-                  {buttons.deletion.text}
-                </Button>
-              ) : null}
-
               {props.research && (
                 <ResearchEditorOverview
                   updates={getResearchUpdates(props.research.updates || [], !isEdit, values.title)}
@@ -180,6 +169,10 @@ export const ResearchUpdateForm = (props: IProps) => {
               submitFailed={submitFailed}
               submitting={submitting}
               unsavedChangesDialog={unsavedChangesDialog}
+              onDelete={isEdit ? handleDelete : undefined}
+              deleteButtonLabel={buttons.deletion.text}
+              deleteConfirmMessage={buttons.deletion.message}
+              isDeleting={isDeleting}
             >
               <TitleField />
               <DescriptionField />
@@ -193,13 +186,6 @@ export const ResearchUpdateForm = (props: IProps) => {
             </FormWrapper>
           );
         }}
-      />
-      <ConfirmModal
-        isOpen={showDeleteModal}
-        message={buttons.deletion.message}
-        confirmButtonText={buttons.deletion.confirm}
-        handleCancel={() => setShowDeleteModal(false)}
-        handleConfirm={handleDelete}
       />
     </>
   );

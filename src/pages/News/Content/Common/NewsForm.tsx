@@ -42,8 +42,10 @@ export const NewsForm = (props: IProps) => {
   });
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const id = news?.id || null;
+  const isEdit = parentType === 'edit';
 
   useEffect(() => {
     if (!news) {
@@ -125,6 +127,20 @@ export const NewsForm = (props: IProps) => {
     });
   };
 
+  const handleDelete = async () => {
+    if (!id) {
+      return;
+    }
+    setIsDeleting(true);
+    try {
+      await newsService.delete(id);
+      navigate('/news');
+    } catch (error) {
+      logger.error(error);
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <Form
       data-testid={props['data-testid']}
@@ -173,6 +189,10 @@ export const NewsForm = (props: IProps) => {
             submitFailed={submitFailed}
             submitting={submitting}
             unsavedChangesDialog={unsavedChangesDialog}
+            onDelete={isEdit ? handleDelete : undefined}
+            deleteButtonLabel={LABELS.buttons.deletion.text}
+            deleteConfirmMessage={LABELS.buttons.deletion.message}
+            isDeleting={isDeleting}
           >
             <TitleField
               placeholder={LABELS.fields.title.placeholder}

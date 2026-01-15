@@ -53,6 +53,17 @@ const upsert = async (id: number | null, form: NewsFormData) => {
   return news;
 };
 
+const deleteNews = async (id: number) => {
+  const response = await fetch(`/api/news/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (response.status !== 200 && response.status !== 201) {
+    throw new Error('Error deleting news', { cause: 500 });
+  }
+};
+
 export const newsService = {
   upsert,
+  delete: deleteNews,
 };

@@ -55,6 +55,17 @@ const upsert = async (id: number | null, question: QuestionFormData) => {
   return Question.fromDB(new DBQuestion(newQuestion.question), []);
 };
 
+const deleteQuestion = async (id: number) => {
+  const response = await fetch(`/api/questions/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (response.status !== 200 && response.status !== 201) {
+    throw new Error('Error deleting question', { cause: 500 });
+  }
+};
+
 export const questionService = {
   upsert,
+  delete: deleteQuestion,
 };

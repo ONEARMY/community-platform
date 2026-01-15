@@ -30,6 +30,7 @@ const ResearchForm = ({ research }: IProps) => {
   const navigate = useNavigate();
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   useEffect(() => {
     if (research) {
@@ -84,6 +85,20 @@ const ResearchForm = ({ research }: IProps) => {
   };
 
   const heading = research ? headings.overview.edit : headings.overview.create;
+
+  const handleDelete = async () => {
+    if (!research?.id) {
+      return;
+    }
+    setIsDeleting(true);
+    try {
+      await researchService.deleteResearch(research.id);
+      navigate('/research');
+    } catch (error) {
+      logger.error(error);
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <Form<ResearchFormData>
@@ -173,6 +188,10 @@ const ResearchForm = ({ research }: IProps) => {
             submitFailed={submitFailed}
             submitting={submitting}
             unsavedChangesDialog={unsavedChangesDialog}
+            onDelete={research?.id ? handleDelete : undefined}
+            deleteButtonLabel={buttons.deletionResearch.text}
+            deleteConfirmMessage={buttons.deletionResearch.message}
+            isDeleting={isDeleting}
           >
             <ResearchTitleField />
             <ResearchDescriptionField />

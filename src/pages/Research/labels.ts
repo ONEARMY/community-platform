@@ -10,6 +10,11 @@ export const buttons = {
     confirm: 'Delete',
     message: 'Are you sure you want to delete this update?',
   },
+  deletionResearch: {
+    text: 'Delete this research',
+    confirm: 'Delete',
+    message: 'Are you sure you want to delete this research?',
+  },
   files: 'Re-upload files (this will delete the existing ones)',
   publish: 'Publish',
 };

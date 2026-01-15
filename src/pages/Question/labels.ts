@@ -4,6 +4,11 @@ export const buttons = {
   create: 'Publish',
   draft: { create: 'Save as draft', update: 'Save to draft' },
   edit: 'Update',
+  deletion: {
+    text: 'Delete this question',
+    confirm: 'Delete',
+    message: 'Are you sure you want to delete this question?',
+  },
 };
 
 export const headings = {

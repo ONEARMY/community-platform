@@ -74,7 +74,7 @@ export const LibraryListHeader = (props: IProps) => {
     }
 
     if (value.length === 0 || !value) {
-      params.set(LibrarySearchParams.sort, 'Newest');
+      params.set(LibrarySearchParams.sort, 'MostUsefulLastWeek');
     }
 
     setSearchParams(params);

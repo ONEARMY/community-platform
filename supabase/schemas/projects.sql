@@ -144,6 +144,7 @@ BEGIN
         CASE WHEN search_query IS NOT NULL THEN ts_rank_cd(p.fts, ts_query) END DESC NULLS LAST,
         CASE
             WHEN sort_by = 'Newest' THEN extract(epoch from p.created_at)
+            WHEN sort_by = 'LatestUpdated' THEN extract(epoch from p.modified_at)
             WHEN sort_by = 'MostComments' THEN p.comment_count
             WHEN sort_by = 'MostDownloads' THEN p.file_download_count
             WHEN sort_by = 'MostUseful' THEN

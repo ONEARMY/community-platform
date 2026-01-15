@@ -63,9 +63,14 @@ export const stripMarkdownAndHtml = (text: string | null | undefined): string =>
   cleaned = cleaned.replace(/\s+/g, ' ').trim();
 
   // Decode HTML entities (common ones)
+  // Decode &amp; first in a loop to handle double-encoded entities like &amp;amp; and &amp;lt;
+  // Then decode other entities
+  while (cleaned.includes('&amp;')) {
+    cleaned = cleaned.replace(/&amp;/g, '&');
+  }
+  
   cleaned = cleaned
     .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
     .replace(/&quot;/g, '"')

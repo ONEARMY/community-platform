@@ -89,6 +89,14 @@ describe('stripMarkdownAndHtml', () => {
     expect(stripMarkdownAndHtml('&nbsp;')).toBe(' ');
   });
 
+  it('should handle double-encoded HTML entities correctly', () => {
+    // &amp; should be decoded last to avoid double-unescaping
+    expect(stripMarkdownAndHtml('&amp;amp;')).toBe('&');
+    expect(stripMarkdownAndHtml('&amp;lt;')).toBe('<');
+    expect(stripMarkdownAndHtml('&amp;gt;')).toBe('>');
+    expect(stripMarkdownAndHtml('&amp;quot;')).toBe('"');
+  });
+
   it('should clean up extra whitespace', () => {
     expect(stripMarkdownAndHtml('  multiple   spaces  ')).toBe('multiple spaces');
     expect(stripMarkdownAndHtml('text\n\nwith\nnewlines')).toBe('text with newlines');

@@ -29,6 +29,13 @@ describe('stripMarkdownAndHtml', () => {
     expect(stripMarkdownAndHtml('This is *italic* text')).toBe('This is italic text');
   });
 
+  it('should remove Markdown bold + italic formatting', () => {
+    expect(stripMarkdownAndHtml('***bold italic text***')).toBe('bold italic text');
+    expect(stripMarkdownAndHtml('___bold italic text___')).toBe('bold italic text');
+    expect(stripMarkdownAndHtml('This is ***bold italic*** text')).toBe('This is bold italic text');
+    expect(stripMarkdownAndHtml('***Word***')).toBe('Word');
+  });
+
   it('should remove Markdown strikethrough', () => {
     expect(stripMarkdownAndHtml('~~strikethrough~~')).toBe('strikethrough');
     expect(stripMarkdownAndHtml('This is ~~strikethrough~~ text')).toBe('This is strikethrough text');

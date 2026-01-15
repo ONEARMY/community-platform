@@ -17,6 +17,10 @@ export const stripMarkdownAndHtml = (text: string | null | undefined): string =>
   cleaned = cleaned.replace(/<[^>]*>/g, '');
 
   // Remove Markdown formatting:
+  // - Bold + Italic: ***text*** or ___text___ (must come before bold/italic to avoid conflicts)
+  cleaned = cleaned.replace(/\*\*\*([^*]+?)\*\*\*/g, '$1');
+  cleaned = cleaned.replace(/___([^_]+?)___/g, '$1');
+
   // - Bold: **text** or __text__ (must come before italic to avoid conflicts)
   cleaned = cleaned.replace(/\*\*([^*]+?)\*\*/g, '$1');
   cleaned = cleaned.replace(/__([^_]+?)__/g, '$1');

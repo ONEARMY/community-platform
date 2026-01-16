@@ -6,10 +6,10 @@ import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Flex, Heading, Text } from 'theme-ui';
 
-import { ChangeEmailForm } from './content/sections/ChangeEmail.form';
-import { ChangePasswordForm } from './content/sections/ChangePassword.form';
 import { PatreonIntegration } from './content/fields/PatreonIntegration';
 import { DeleteAccountModal } from './content/modals/DeleteAccountModal';
+import { ChangeEmailForm } from './content/sections/ChangeEmail.form';
+import { ChangePasswordForm } from './content/sections/ChangePassword.form';
 import { headings } from './labels';
 
 export const SettingsPageAccount = observer(() => {

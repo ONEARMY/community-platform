@@ -86,33 +86,6 @@ const ResearchList = () => {
     // sort is always defined (either from URL or default), so this is safe
     fetchResearchItems();
   }, [fetchResearchItems]);
-    setIsFetching(true);
-
-    try {
-      const result = await researchService.search(
-        q?.toLocaleLowerCase(),
-        category,
-        sort,
-        status,
-        skip,
-      );
-
-      if (result) {
-        if (skip) {
-          // if skipFrom is set, means we are requesting another page that should be appended
-          setResearchItems((items) => [...items, ...result.items]);
-        } else {
-          setResearchItems(result.items);
-        }
-
-        setTotal(result.total);
-      }
-    } catch (error) {
-      logger.error('error fetching research items', error);
-    }
-
-    setIsFetching(false);
-  };
 
   const researchItemList = showDrafts ? drafts : researchItems;
 

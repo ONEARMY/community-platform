@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { Button, Loader } from 'oa-components';
 import { logger } from 'src/logger';
@@ -28,26 +28,64 @@ const ResearchList = () => {
   const q = searchParams.get(ResearchSearchParams.q) || '';
   const category = searchParams.get(ResearchSearchParams.category) || '';
   const status = searchParams.get(ResearchSearchParams.status) as ResearchStatus | null;
-  const sort = searchParams.get(ResearchSearchParams.sort) as ResearchSortOption;
+  const sortParam = searchParams.get(ResearchSearchParams.sort) as ResearchSortOption | null;
+  
+  // Compute default sort value immediately using useMemo to avoid race condition
+  // This ensures the dropdown always has a value, even before URL is updated
+  const defaultSort = useMemo<ResearchSortOption>(() => {
+    return q ? 'MostRelevant' : 'LatestUpdated';
+  }, [q]);
+  
+  // Use sortParam if available, otherwise fall back to defaultSort
+  // This ensures sort is always defined synchronously, preventing empty dropdown
+  const sort = sortParam || defaultSort;
+
+  const fetchResearchItems = useCallback(
+    async (skip: number = 0) => {
+      setIsFetching(true);
+
+      try {
+        const result = await researchService.search(
+          q?.toLocaleLowerCase(),
+          category,
+          sort,
+          status,
+          skip,
+        );
+
+        if (result) {
+          if (skip) {
+            // if skipFrom is set, means we are requesting another page that should be appended
+            setResearchItems((items) => [...items, ...result.items]);
+          } else {
+            setResearchItems(result.items);
+          }
+
+          setTotal(result.total);
+        }
+      } catch (error) {
+        logger.error('error fetching research items', error);
+      }
+
+      setIsFetching(false);
+    },
+    [q, category, sort, status],
+  );
 
   useEffect(() => {
-    if (!sort) {
-      // ensure sort is set
+    // Only update URL if sort parameter is missing, but use computed sort for rendering
+    if (!sortParam) {
       const params = new URLSearchParams(searchParams.toString());
-
-      if (q) {
-        params.set(ResearchSearchParams.sort, 'MostRelevant');
-      } else {
-        params.set(ResearchSearchParams.sort, 'LatestUpdated');
-      }
-      setSearchParams(params);
-    } else {
-      // search only when sort is set (avoids duplicate requests)
-      fetchResearchItems();
+      params.set(ResearchSearchParams.sort, defaultSort);
+      setSearchParams(params, { replace: true });
     }
-  }, [q, category, status, sort]);
+  }, [q, sortParam, defaultSort, searchParams, setSearchParams]);
 
-  const fetchResearchItems = async (skip: number = 0) => {
+  useEffect(() => {
+    // Fetch research items whenever filters change
+    // sort is always defined (either from URL or default), so this is safe
+    fetchResearchItems();
+  }, [fetchResearchItems]);
     setIsFetching(true);
 
     try {

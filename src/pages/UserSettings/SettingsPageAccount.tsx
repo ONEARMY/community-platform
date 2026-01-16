@@ -1,5 +1,5 @@
-import { observer } from 'mobx-react';
 import { useCallback, useState } from 'react';
+import { observer } from 'mobx-react';
 import { Accordion, Button } from 'oa-components';
 import { logger } from 'src/logger';
 import { profileService } from 'src/services/profileService';

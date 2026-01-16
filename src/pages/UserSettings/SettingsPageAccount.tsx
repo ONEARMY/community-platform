@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router';
-import { Button } from 'oa-components';
+import { Accordion, Button } from 'oa-components';
 import { logger } from 'src/logger';
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
@@ -11,7 +11,7 @@ import { DeleteAccountModal } from './content/modals/DeleteAccountModal';
 import { PatreonIntegration } from './content/fields/PatreonIntegration';
 import { ChangeEmailForm } from './content/sections/ChangeEmail.form';
 import { ChangePasswordForm } from './content/sections/ChangePassword.form';
-import { headings } from '../labels';
+import { headings } from './labels';
 
 export const SettingsPageAccount = observer(() => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -19,7 +19,7 @@ export const SettingsPageAccount = observer(() => {
   const navigate = useNavigate();
   const { clear: clearProfile } = useProfileStore();
 
-  const handleDeleteAccount = async () => {
+  const handleDeleteAccount = useCallback(async () => {
     setIsDeleting(true);
     try {
       await profileService.delete();
@@ -33,7 +33,15 @@ export const SettingsPageAccount = observer(() => {
       // Show error to user - could add a toast notification here
       alert('Failed to delete account. Please try again or contact support.');
     }
-  };
+  }, [clearProfile]);
+
+  const handleOpenDeleteModal = useCallback(() => {
+    setShowDeleteModal(true);
+  }, []);
+
+  const handleCloseDeleteModal = useCallback(() => {
+    setShowDeleteModal(false);
+  }, []);
 
   return (
     <Flex
@@ -52,23 +60,27 @@ export const SettingsPageAccount = observer(() => {
       <ChangePasswordForm />
       <ChangeEmailForm />
 
-      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-        <Text variant="body" sx={{ fontWeight: 'bold' }}>
-          Danger Zone
-        </Text>
-        <Button
-          variant="destructive"
-          onClick={() => setShowDeleteModal(true)}
-          disabled={isDeleting}
-          sx={{ alignSelf: 'flex-start' }}
-        >
-          Delete Profile
-        </Button>
-      </Flex>
+      <Accordion
+        title="Delete Profile"
+        subtitle="Permanently delete your account and all associated data. This action cannot be undone."
+      >
+        <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+          <Button
+            variant="primary"
+            onClick={handleOpenDeleteModal}
+            disabled={isDeleting}
+            sx={{
+              alignSelf: 'flex-start',
+            }}
+          >
+            Delete Profile
+          </Button>
+        </Flex>
+      </Accordion>
 
       <DeleteAccountModal
         isOpen={showDeleteModal}
-        onCancel={() => setShowDeleteModal(false)}
+        onCancel={handleCloseDeleteModal}
         onConfirm={handleDeleteAccount}
         isDeleting={isDeleting}
       />

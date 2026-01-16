@@ -59,12 +59,6 @@ interface FilterSortModalProps {
 }
 
 export const FilterSortModal = (props: FilterSortModalProps) => {
-  console.log('[FilterSortModal] RENDER', {
-    isOpen: props.isOpen,
-    selectedFilterValue: props.selectedFilterValue,
-    selectedSortValue: props.selectedSortValue,
-  });
-
   const {
     isOpen,
     onClose,
@@ -122,40 +116,16 @@ export const FilterSortModal = (props: FilterSortModalProps) => {
     const scrollTop = target.scrollTop;
     const threshold = 60;
 
-    console.log('[FilterSortModal] handleScroll', {
-      scrollTop,
-      threshold,
-      isScrolled: isScrolledRef.current,
-      titleElementRefExists: !!titleElementRef.current,
-      scrollContainerScrollTop: scrollableContentRef.current?.scrollTop,
-    });
-
     // Update title directly via DOM without causing re-render (NO setState calls)
     if (scrollTop > threshold && !isScrolledRef.current) {
-      console.log('[FilterSortModal] Changing to "Sort" - updating ref only (no setState)');
       isScrolledRef.current = true;
       if (titleElementRef.current) {
-        const beforeScrollTop = scrollableContentRef.current?.scrollTop;
         titleElementRef.current.textContent = 'Sort';
-        const afterScrollTop = scrollableContentRef.current?.scrollTop;
-        console.log('[FilterSortModal] Title updated to "Sort"', {
-          beforeScrollTop,
-          afterScrollTop,
-          scrollChanged: beforeScrollTop !== afterScrollTop,
-        });
       }
     } else if (scrollTop <= threshold && isScrolledRef.current) {
-      console.log('[FilterSortModal] Changing to "Filter and sort" - updating ref only (no setState)');
       isScrolledRef.current = false;
       if (titleElementRef.current) {
-        const beforeScrollTop = scrollableContentRef.current?.scrollTop;
         titleElementRef.current.textContent = 'Filter and sort';
-        const afterScrollTop = scrollableContentRef.current?.scrollTop;
-        console.log('[FilterSortModal] Title updated to "Filter and sort"', {
-          beforeScrollTop,
-          afterScrollTop,
-          scrollChanged: beforeScrollTop !== afterScrollTop,
-        });
       }
     }
   };
@@ -271,16 +241,9 @@ export const FilterSortModal = (props: FilterSortModalProps) => {
           <Text
             ref={(el) => {
               // Get the actual DOM element (Text might render as a div or span)
-              console.log('[FilterSortModal] Title ref callback', {
-                el,
-                elType: el?.constructor?.name,
-                isOpen,
-              });
               if (el) {
                 titleElementRef.current = el as HTMLDivElement;
-                console.log('[FilterSortModal] Title ref set successfully');
               } else {
-                console.log('[FilterSortModal] Title ref cleared');
                 titleElementRef.current = null;
               }
             }}

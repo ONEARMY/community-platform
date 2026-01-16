@@ -3,12 +3,12 @@ import { Link, useSearchParams } from 'react-router';
 import debounce from 'debounce';
 import {
   CategoryHorizonalList,
-  Icon,
   ReturnPathLink,
   SearchField,
   Select,
   Tooltip,
 } from 'oa-components';
+import type { Category, ResearchStatus } from 'oa-shared';
 import { ResearchStatusRecord, UserRole } from 'oa-shared';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
@@ -26,7 +26,6 @@ import { listing } from '../labels';
 import { ResearchSortOptions } from '../ResearchSortOptions';
 import { ResearchSearchParams } from './ResearchSearchParams';
 
-import type { Category, ResearchStatus } from 'oa-shared';
 import type { ResearchSortOption } from '../ResearchSortOptions';
 
 interface IProps {

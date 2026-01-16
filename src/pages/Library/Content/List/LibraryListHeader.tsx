@@ -9,6 +9,7 @@ import {
   Select,
   Tooltip,
 } from 'oa-components';
+import type { Category } from 'oa-shared';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { UserAction } from 'src/common/UserAction';
 import { useMobile } from 'src/hooks/useMobile';
@@ -23,7 +24,6 @@ import { listing } from '../../labels';
 import { LibrarySearchParams } from '../../library.service';
 import { LibrarySortOptions } from './LibrarySortOptions';
 
-import type { Category } from 'oa-shared';
 import type { LibrarySortOption } from './LibrarySortOptions';
 
 interface IProps {

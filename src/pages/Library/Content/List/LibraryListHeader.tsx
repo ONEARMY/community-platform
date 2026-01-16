@@ -120,6 +120,7 @@ export const LibraryListHeader = (props: IProps) => {
   );
 
   // Mobile filtering components
+  // Only rendered when isMobile is true (screen width <= 640px)
   const mobileFilteringComponents = isMobile ? (
     <Flex
       sx={{
@@ -192,8 +193,10 @@ export const LibraryListHeader = (props: IProps) => {
   ) : null;
 
   // Desktop filtering components
+  // Only rendered when isMobile is false (screen width > 640px)
+  // Matches live page: column until 768px (52em), then row
   const desktopFilteringComponents = !isMobile ? (
-    <Flex sx={{ gap: 2, flexDirection: ['column', 'row', 'row'] }}>
+    <Flex sx={{ gap: 2, flexDirection: ['column', 'column', 'row'], flexWrap: 'wrap' }}>
       <Flex sx={{ width: ['100%', '100%', '220px'] }}>
         <FieldContainer>
           <Select
@@ -226,6 +229,9 @@ export const LibraryListHeader = (props: IProps) => {
     </Flex>
   ) : null;
 
+  // Ensure only one set of filtering components is used based on screen size
+  // Mobile: screen width <= 640px
+  // Desktop: screen width > 640px
   const filteringComponents = isMobile ? mobileFilteringComponents : desktopFilteringComponents;
 
   const actionComponents = (

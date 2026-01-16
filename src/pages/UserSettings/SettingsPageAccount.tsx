@@ -1,10 +1,11 @@
 import { useCallback, useState } from 'react';
 import { observer } from 'mobx-react';
 import { Accordion, Button } from 'oa-components';
+import { Flex, Heading, Text } from 'theme-ui';
+
 import { logger } from 'src/logger';
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { Flex, Heading, Text } from 'theme-ui';
 
 import { ChangeEmailForm } from './content/sections/ChangeEmail.form';
 import { ChangePasswordForm } from './content/sections/ChangePassword.form';

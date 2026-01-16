@@ -143,10 +143,24 @@ const updateImpact = async (year: number, fields: IImpactDataField[]): Promise<I
   return (await response.json()) as IUserImpact;
 };
 
+const deleteProfile = async () => {
+  const response = await fetch('/api/account/delete', {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: response.statusText }));
+    throw new Error(error.error || 'Failed to delete profile');
+  }
+
+  return;
+};
+
 export const profileService = {
   get,
   update,
   upsertPin,
   deletePin,
   updateImpact,
+  delete: deleteProfile,
 };

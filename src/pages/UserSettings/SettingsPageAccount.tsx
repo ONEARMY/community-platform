@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react';
-import { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router';
+import { useCallback, useState } from 'react';
 import { Accordion, Button } from 'oa-components';
 import { logger } from 'src/logger';
 import { profileService } from 'src/services/profileService';
@@ -16,7 +15,6 @@ import { headings } from './labels';
 export const SettingsPageAccount = observer(() => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const navigate = useNavigate();
   const { clear: clearProfile } = useProfileStore();
 
   const handleDeleteAccount = useCallback(async () => {
@@ -30,8 +28,8 @@ export const SettingsPageAccount = observer(() => {
     } catch (error) {
       logger.error('Failed to delete account', error);
       setIsDeleting(false);
-      // Show error to user - could add a toast notification here
-      alert('Failed to delete account. Please try again or contact support.');
+      // Show error to user - TODO: add toast notification
+      // For now, error is logged and user can try again
     }
   }, [clearProfile]);
 

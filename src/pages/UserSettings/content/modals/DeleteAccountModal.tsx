@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect, useLayoutEffect, useRef, memo } from 'react';
+import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Button, Modal } from 'oa-components';
-import { Flex, Text, Input, Label, Box } from 'theme-ui';
+import { Box, Flex, Label, Text } from 'theme-ui';
 
 interface Props {
   isOpen: boolean;

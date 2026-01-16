@@ -1,15 +1,45 @@
+import { useCallback, useState } from 'react';
 import { observer } from 'mobx-react';
-import { ExternalLink } from 'oa-components';
-import { DISCORD_INVITE_URL } from 'src/constants';
-import { fields, headings } from 'src/pages/UserSettings/labels';
+import { Accordion, Button } from 'oa-components';
+import { logger } from 'src/logger';
+import { profileService } from 'src/services/profileService';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Flex, Heading, Text } from 'theme-ui';
 
 import { PatreonIntegration } from './content/fields/PatreonIntegration';
+import { DeleteAccountModal } from './content/modals/DeleteAccountModal';
 import { ChangeEmailForm } from './content/sections/ChangeEmail.form';
 import { ChangePasswordForm } from './content/sections/ChangePassword.form';
+import { headings } from './labels';
 
 export const SettingsPageAccount = observer(() => {
-  const { description, title } = fields.deleteAccount;
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { clear: clearProfile } = useProfileStore();
+
+  const handleDeleteAccount = useCallback(async () => {
+    setIsDeleting(true);
+    try {
+      await profileService.delete();
+      // Clear profile from store
+      clearProfile();
+      // Redirect to logout which will handle sign out and redirect to homepage
+      window.location.href = '/logout?returnUrl=/';
+    } catch (error) {
+      logger.error('Failed to delete account', error);
+      setIsDeleting(false);
+      // Show error to user - TODO: add toast notification
+      // For now, error is logged and user can try again
+    }
+  }, [clearProfile]);
+
+  const handleOpenDeleteModal = useCallback(() => {
+    setShowDeleteModal(true);
+  }, []);
+
+  const handleCloseDeleteModal = useCallback(() => {
+    setShowDeleteModal(false);
+  }, []);
 
   return (
     <Flex
@@ -28,12 +58,30 @@ export const SettingsPageAccount = observer(() => {
       <ChangePasswordForm />
       <ChangeEmailForm />
 
-      <Text variant="body">
-        {title}{' '}
-        <ExternalLink sx={{ ml: 1, textDecoration: 'underline' }} href={DISCORD_INVITE_URL}>
-          {description}
-        </ExternalLink>
-      </Text>
+      <Accordion
+        title="Delete Profile"
+        subtitle="Permanently delete your account and all associated data. This action cannot be undone."
+      >
+        <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+          <Button
+            variant="primary"
+            onClick={handleOpenDeleteModal}
+            disabled={isDeleting}
+            sx={{
+              alignSelf: 'flex-start',
+            }}
+          >
+            Delete Profile
+          </Button>
+        </Flex>
+      </Accordion>
+
+      <DeleteAccountModal
+        isOpen={showDeleteModal}
+        onCancel={handleCloseDeleteModal}
+        onConfirm={handleDeleteAccount}
+        isDeleting={isDeleting}
+      />
     </Flex>
   );
 });

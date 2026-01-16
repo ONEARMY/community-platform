@@ -2,8 +2,6 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { SearchField } from 'oa-components';
 import { Box, Flex, Text } from 'theme-ui';
 
-import { Icon } from 'oa-components';
-
 interface CollapsibleSearchProps {
   value: string;
   onChange: (value: string) => void;

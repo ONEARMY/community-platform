@@ -3,8 +3,6 @@ import styled from '@emotion/styled';
 import { Button, Modal } from 'oa-components';
 import { Box, Flex, Text } from 'theme-ui';
 
-import { Icon } from 'oa-components';
-
 const ScrollableContainer = styled.div`
   width: 340px;
   height: 394px;
@@ -93,18 +91,8 @@ export const FilterSortModal = (props: FilterSortModalProps) => {
   // Use ref instead of state to avoid re-renders during scroll
   const isScrolledRef = useRef<boolean>(false);
 
-  // Track state changes
-  useEffect(() => {
-    console.log('[FilterSortModal] State changed: dynamicTitle', dynamicTitle);
-  }, [dynamicTitle]);
-
   // Update temp values when modal opens or props change
   useEffect(() => {
-    console.log('[FilterSortModal] useEffect 1 - temp values', {
-      isOpen,
-      selectedFilterValue,
-      selectedSortValue,
-    });
     if (isOpen) {
       setTempFilterValue(selectedFilterValue || '');
       setTempSortValue(selectedSortValue);
@@ -113,28 +101,15 @@ export const FilterSortModal = (props: FilterSortModalProps) => {
 
   // Reset scroll state and title ONLY when modal first opens
   useEffect(() => {
-    console.log('[FilterSortModal] useEffect 2 - scroll reset', {
-      isOpen,
-      filterOptions: !!filterOptions,
-      onFilterChange: !!onFilterChange,
-      title,
-      titleElementRefExists: !!titleElementRef.current,
-    });
     if (isOpen) {
-      console.log('[FilterSortModal] Resetting isScrolledRef to false');
       isScrolledRef.current = false;
       const initialTitle = filterOptions && onFilterChange ? 'Filter and sort' : title;
-      console.log('[FilterSortModal] Setting initial title:', initialTitle);
       setDynamicTitle(initialTitle);
       // Update title element directly if ref is available
       if (titleElementRef.current) {
-        console.log('[FilterSortModal] Updating title element directly');
         titleElementRef.current.textContent = initialTitle;
-      } else {
-        console.log('[FilterSortModal] WARNING: titleElementRef.current is null');
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]); // Only depend on isOpen to prevent resets during scroll
 
   // Handle scroll to update title dynamically - update DOM directly to avoid re-renders
@@ -186,20 +161,12 @@ export const FilterSortModal = (props: FilterSortModalProps) => {
   };
 
   const handleApply = useCallback(() => {
-    console.log('[FilterSortModal] handleApply called', {
-      tempFilterValue,
-      selectedFilterValue,
-      tempSortValue,
-      selectedSortValue,
-    });
     // Always apply filter when Apply is clicked to ensure URL is updated
     if (onFilterChange) {
-      console.log('[FilterSortModal] Calling onFilterChange with', tempFilterValue);
       onFilterChange(tempFilterValue);
     }
     // Always apply sort when Apply is clicked
     if (onSortChange && tempSortValue !== selectedSortValue) {
-      console.log('[FilterSortModal] Calling onSortChange with', tempSortValue);
       onSortChange(tempSortValue);
     }
     onApply();
@@ -352,21 +319,9 @@ export const FilterSortModal = (props: FilterSortModalProps) => {
         {/* Content - Scrollable */}
         <ScrollableContainer
           ref={(el) => {
-            console.log('[FilterSortModal] ScrollableContainer ref callback', {
-              el,
-              scrollTop: el?.scrollTop,
-            });
             scrollableContentRef.current = el;
           }}
-          onScroll={(e) => {
-            const target = e.target as HTMLDivElement;
-            console.log('[FilterSortModal] onScroll event', {
-              scrollTop: target.scrollTop,
-              scrollHeight: target.scrollHeight,
-              clientHeight: target.clientHeight,
-            });
-            handleScroll(e);
-          }}
+          onScroll={handleScroll}
         >
           <Flex
             sx={{

@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useState, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import debounce from 'debounce';
-import { CategoryHorizonalList, ReturnPathLink, SearchField, Select, Tooltip } from 'oa-components';
+import {
+  CategoryHorizonalList,
+  Icon,
+  ReturnPathLink,
+  SearchField,
+  Select,
+  Tooltip,
+} from 'oa-components';
 import { ResearchStatusRecord, UserRole } from 'oa-shared';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
@@ -13,9 +20,7 @@ import { CollapsibleSearch } from 'src/pages/common/CollapsibleSearch/Collapsibl
 import { FilterSortModal } from 'src/pages/common/FilterSortModal/FilterSortModal';
 import { ListHeader } from 'src/pages/common/Layout/ListHeader';
 import { categoryService } from 'src/services/categoryService';
-import { Box, Button, Flex, Text } from 'theme-ui';
-
-import { Icon } from 'oa-components';
+import { Box, Button, Flex } from 'theme-ui';
 
 import { listing } from '../labels';
 import { ResearchSortOptions } from '../ResearchSortOptions';
@@ -66,13 +71,11 @@ export const ResearchFilterHeader = (props: IProps) => {
   const updateFilter = useCallback(
     (key: ResearchSearchParams, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
-      console.log('[ResearchListHeader] updateFilter called', { key, value, currentParams: searchParams.toString() });
       if (value) {
         params.set(key, value);
       } else {
         params.delete(key);
       }
-      console.log('[ResearchListHeader] updateFilter setting params to', params.toString());
       setSearchParams(params);
     },
     [searchParams, setSearchParams],

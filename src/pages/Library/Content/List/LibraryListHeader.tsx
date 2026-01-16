@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useState, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import debounce from 'debounce';
-import { CategoryHorizonalList, ReturnPathLink, SearchField, Select, Tooltip } from 'oa-components';
+import {
+  CategoryHorizonalList,
+  Icon,
+  ReturnPathLink,
+  SearchField,
+  Select,
+  Tooltip,
+} from 'oa-components';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { UserAction } from 'src/common/UserAction';
 import { useMobile } from 'src/hooks/useMobile';
@@ -11,8 +18,6 @@ import { FilterSortModal } from 'src/pages/common/FilterSortModal/FilterSortModa
 import { ListHeader } from 'src/pages/common/Layout/ListHeader';
 import { categoryService } from 'src/services/categoryService';
 import { Box, Button, Flex } from 'theme-ui';
-
-import { Icon } from 'oa-components';
 
 import { listing } from '../../labels';
 import { LibrarySearchParams } from '../../library.service';

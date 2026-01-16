@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import debounce from 'debounce';
 import { CategoryHorizonalList, ReturnPathLink, SearchField, Select, Tooltip } from 'oa-components';
@@ -7,10 +7,15 @@ import { AuthWrapper } from 'src/common/AuthWrapper';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { UserAction } from 'src/common/UserAction';
 import { isPreciousPlastic } from 'src/config/config';
+import { useMobile } from 'src/hooks/useMobile';
 import DraftButton from 'src/pages/common/Drafts/DraftButton';
+import { CollapsibleSearch } from 'src/pages/common/CollapsibleSearch/CollapsibleSearch';
+import { FilterSortModal } from 'src/pages/common/FilterSortModal/FilterSortModal';
 import { ListHeader } from 'src/pages/common/Layout/ListHeader';
 import { categoryService } from 'src/services/categoryService';
-import { Button, Flex } from 'theme-ui';
+import { Box, Button, Flex, Text } from 'theme-ui';
+
+import { Icon } from 'oa-components';
 
 import { listing } from '../labels';
 import { ResearchSortOptions } from '../ResearchSortOptions';
@@ -35,6 +40,8 @@ const researchStatusOptions: { label: string; value: ResearchStatus | '' }[] = [
 export const ResearchFilterHeader = (props: IProps) => {
   const { itemCount, draftCount, handleShowDrafts, showDrafts } = props;
 
+  const isMobile = useMobile();
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get(ResearchSearchParams.q);
@@ -88,6 +95,33 @@ export const ResearchFilterHeader = (props: IProps) => {
 
     setSearchParams(params);
   };
+
+  // Calculate active filter count for badge
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    if (status) count++;
+    if (category) count++;
+    // Don't count sort as it's always set
+    return count;
+  }, [status, category]);
+
+  // Generate results text
+  const resultsText = useMemo(() => {
+    if (!q) return undefined;
+    return `${itemCount} ${itemCount === 1 ? 'result' : 'results'} for "${q}"`;
+  }, [q, itemCount]);
+
+  const handleFilterModalApply = useCallback(() => {
+    setIsFilterModalOpen(false);
+  }, []);
+
+  const handleFilterModalReset = useCallback(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete(ResearchSearchParams.status);
+    params.delete(ResearchSearchParams.category);
+    setSearchParams(params);
+    setIsFilterModalOpen(false);
+  }, [searchParams, setSearchParams]);
   const roleRequired = isPreciousPlastic()
     ? undefined
     : [UserRole.ADMIN, UserRole.RESEARCH_CREATOR];
@@ -148,7 +182,80 @@ export const ResearchFilterHeader = (props: IProps) => {
     />
   );
 
-  const filteringComponents = (
+  // Mobile filtering components
+  const mobileFilteringComponents = isMobile ? (
+    <Flex
+      sx={{
+        gap: 2,
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+      }}
+    >
+      {/* Filter & Sort Button */}
+      <Box sx={{ position: 'relative' }}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => setIsFilterModalOpen(true)}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 2,
+            minWidth: '48px',
+            height: '48px',
+            borderColor: 'lightgrey',
+          }}
+        >
+          <Icon glyph="filter" size={20} />
+        </Button>
+        {activeFilterCount > 0 && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: -4,
+              right: -4,
+              backgroundColor: 'red2',
+              color: 'white',
+              borderRadius: '50%',
+              width: '20px',
+              height: '20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '12px',
+              fontWeight: 'bold',
+            }}
+          >
+            {activeFilterCount}
+          </Box>
+        )}
+      </Box>
+
+      {/* Collapsible Search */}
+      <Box sx={{ flex: 1 }}>
+        <CollapsibleSearch
+          value={searchString}
+          onChange={(value) => {
+            setSearchString(value);
+            onSearchInputChange(value);
+          }}
+          onSearch={() => searchValue(searchString)}
+          onClear={() => {
+            setSearchString('');
+            searchValue('');
+          }}
+          placeholder={listing.search}
+          dataCy="research-search-box"
+          resultsText={resultsText}
+        />
+      </Box>
+    </Flex>
+  ) : null;
+
+  // Desktop filtering components
+  const desktopFilteringComponents = !isMobile ? (
     <Flex
       sx={{
         gap: 2,
@@ -195,16 +302,39 @@ export const ResearchFilterHeader = (props: IProps) => {
         />
       </Flex>
     </Flex>
-  );
+  ) : null;
+
+  const filteringComponents = isMobile ? mobileFilteringComponents : desktopFilteringComponents;
 
   return (
-    <ListHeader
-      itemCount={showDrafts ? draftCount : itemCount}
-      actionComponents={actionComponents}
-      showDrafts={showDrafts}
-      headingTitle={listing.heading}
-      categoryComponent={categoryComponent}
-      filteringComponents={filteringComponents}
-    />
+    <>
+      <ListHeader
+        itemCount={showDrafts ? draftCount : itemCount}
+        actionComponents={actionComponents}
+        showDrafts={showDrafts}
+        headingTitle={listing.heading}
+        categoryComponent={categoryComponent}
+        filteringComponents={filteringComponents}
+      />
+      {isMobile && (
+        <FilterSortModal
+          isOpen={isFilterModalOpen}
+          onClose={() => setIsFilterModalOpen(false)}
+          onApply={handleFilterModalApply}
+          onReset={handleFilterModalReset}
+          filterOptions={researchStatusOptions.map((opt) => ({
+            label: opt.label,
+            value: opt.value,
+          }))}
+          filterLabel="Status"
+          selectedFilterValue={status}
+          onFilterChange={(value) => updateFilter(ResearchSearchParams.status, value)}
+          sortOptions={ResearchSortOptions.toArray(!!q)}
+          sortLabel="Sort"
+          selectedSortValue={sort || ''}
+          onSortChange={(value) => updateFilter(ResearchSearchParams.sort, value)}
+        />
+      )}
+    </>
   );
 };

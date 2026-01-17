@@ -1,57 +1,54 @@
+import { createElement } from 'react';
+import { sendBatchEmails } from 'src/.server/resend';
+import { InstantNotificationEmail } from 'src/.server/templates/instant-notification-email';
 import { transformNotification } from 'src/routes/api.notifications';
 import { tokens } from 'src/utils/tokens.server';
+
+import { TenantSettingsService } from './tenantSettingsService.server';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBNotification } from 'oa-shared';
 
-const createInstantNotificationEmail = async (
+const sendInstantNotificationEmails = async (
   client: SupabaseClient,
   dbNotification: DBNotification,
-  profileId: number,
   headers: Headers,
 ) => {
   try {
-    const profileResponse = await client
-      .from('profiles')
-      .select('created_at')
-      .eq('id', profileId)
-      .single();
-
-    if (!profileResponse.data) {
-      console.error('Profile not found for ID:', profileId);
-      return;
-    }
-
-    const rpcResponse = await client.rpc('get_user_email_by_profile_id', {
-      id: profileId,
+    const emailsToSend = await client.rpc('get_subscribed_users_emails_to_notify', {
+      p_content_id: dbNotification.content_id,
+      p_content_type: dbNotification.source_content_type,
+      p_notification_content_type: dbNotification.content_type,
     });
 
-    if (!rpcResponse.data || rpcResponse.data.length === 0) {
-      const error = `No email found for profile ID: ${profileId}`;
-      console.error(error);
-      throw error;
-    }
-
-    const userEmail = rpcResponse.data[0]?.email;
-    if (!userEmail) {
-      console.error('Email is missing for profile ID:', profileId);
-      return;
+    if (!emailsToSend.data || emailsToSend.data.length === 0) {
+      throw emailsToSend.error || new Error('No emails to send');
     }
 
     const fullNotification = await transformNotification(dbNotification, client);
-    const code = tokens.generate(profileId, profileResponse.data.created_at);
+    const profiles: { profileId: number; userEmail: string; profileCreatedAt: string }[] =
+      emailsToSend.data;
 
-    return await client.functions.invoke('send-email', {
-      body: {
-        user: {
-          code,
-          email: userEmail,
-        },
-        email_data: {
-          email_action_type: 'instant_notification',
-          notification: fullNotification,
-        },
-      },
+    const codes = profiles.map((p) => ({
+      email: p.userEmail,
+      code: tokens.generate(p.profileId, p.profileCreatedAt),
+    }));
+
+    const tenantSettings = await new TenantSettingsService(client).get();
+
+    sendBatchEmails({
+      from: '',
+      subject: 'You have a new notification',
+      emails: codes.map(({ code, email }) => {
+        return {
+          to: email,
+          template: createElement(InstantNotificationEmail, {
+            notification: fullNotification,
+            userCode: code,
+            settings: tenantSettings,
+          }),
+        };
+      }),
     });
   } catch (error) {
     console.error('Error creating email notification:', error);
@@ -64,5 +61,5 @@ const createInstantNotificationEmail = async (
 };
 
 export const notificationEmailService = {
-  createInstantNotificationEmail,
+  sendInstantNotificationEmails,
 };

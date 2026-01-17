@@ -19,6 +19,7 @@ describe('ProfileStore', () => {
           display_name: 'PRO',
           image_url: 'https://example.com/badge.png',
           action_url: 'https://example.com',
+          premium_tier: 1,
         },
       });
 

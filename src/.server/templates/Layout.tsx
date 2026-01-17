@@ -1,61 +1,100 @@
-import { Body, Container, Head, Html, Img, Preview, Section } from '@react-email/components';
-import { MessageSettings } from '../models/messageSettings';
+// Similar to src/.server/templates/Layout.tsx
 
-import type { ReactNode } from 'react';
+import React from 'react';
+import { Body, Container, Head, Html, Img, Link, Preview, Section } from '@react-email/components';
 
-const body = {
-  backgroundColor: '#f4f6f7',
-  fontFamily: 'Varela Round", Arial, sans-serif',
-  fontSize: '14px',
-  color: '#000000',
+import { Footer } from './components/footer';
+
+import type { TenantSettings } from 'oa-shared';
+
+const link = {
+  color: '#27272c',
+  fontWeight: 'bold',
+  textDecoration: 'underline',
 };
 
-const card = {
-  background: '#fff',
-  border: '2px solid black',
-  borderRadius: '15px',
-  padding: '15px',
-  margin: '0 auto',
-};
-
-const wrapper = {
-  maxWidth: '600px',
-};
+type EmailType = 'service' | 'moderation' | 'notification';
 
 type LayoutArgs = {
-  children: ReactNode;
-  settings: MessageSettings;
+  children: React.ReactNode;
+  emailType: EmailType;
   preview: string;
+  settings: TenantSettings;
+  userCode?: string;
 };
 
-export default function Layout({ children, settings, preview }: LayoutArgs) {
+export const urlAppend = (path: string, emailType: EmailType) => {
+  const url = new URL(`${path}`);
+  url.searchParams.append('utm_source', emailType);
+  url.searchParams.append('utm_medium', 'email');
+  return url.toString();
+};
+
+export const Layout = (props: LayoutArgs) => {
+  const { children, emailType, preview, settings, userCode } = props;
+
+  const basePreferencesPath = userCode
+    ? `${settings.siteUrl}/email-preferences?code=${userCode}`
+    : `${settings.siteUrl}/settings/notifications`;
+  const preferencesUpdatePath = urlAppend(basePreferencesPath, emailType);
+
+  const isNotificationEmail = emailType === 'notification';
+
   return (
-    <Html>
+    <Html lang="en">
       <Head />
       <Preview>{preview}</Preview>
-      <Body style={body}>
-        <Container style={wrapper}>
-          <Container style={card}>
-            <Section>
-              <Img width="85" alt={settings.siteName} src={settings.siteImage} />
-
-              {children}
-              <p>
-                Cheers,
-                <br />
-                {settings.messageSignOff}
-              </p>
-            </Section>
-          </Container>
-          <Container style={wrapper}>
-            <p style={{ textAlign: 'center' }}>
-              You've received this because you're opted in to be contacted by other community
-              members. If you want to opt out,{' '}
-              <a href={settings.siteUrl + '/settings'}>change that here</a>.
-            </p>
-          </Container>
+      <Body
+        style={{
+          backgroundColor: '#f4f6f7',
+          fontFamily: '"Varela Round", Arial, sans-serif',
+          fontSize: '14px',
+          color: '#000000',
+          maxWidth: '100%',
+        }}
+      >
+        <Container
+          style={{
+            maxWidth: '100%',
+            width: '600px',
+          }}
+        >
+          <Img
+            alt={settings.siteName}
+            height="85px"
+            width="85px"
+            src={settings.siteImage}
+            style={{ margin: '30px auto' }}
+          />
+          <Section
+            style={{
+              background: '#fff',
+              border: '2px solid black',
+              borderRadius: '15px',
+              padding: '20px',
+              margin: '0 auto',
+            }}
+          >
+            {children}
+          </Section>
+          <Footer>
+            {!isNotificationEmail && <>This is a service email.</>}
+            {isNotificationEmail && (
+              <>
+                <Link href={preferencesUpdatePath} style={link}>
+                  Unsubscribe or update your email preferences.
+                </Link>
+              </>
+            )}
+            <br />
+            Something is not right? Send us{' '}
+            <Link href={`${settings.siteUrl}/feedback/#page=email`} style={link}>
+              feedback
+            </Link>
+            .
+          </Footer>
         </Container>
       </Body>
     </Html>
   );
-}
+};

@@ -15,7 +15,7 @@ const getPreferences = async (
     return data as DBNotificationsPreferences;
   } catch (error) {
     console.error('Failed to get notifications preferences:', error);
-    throw error;
+    return null;
   }
 };
 

@@ -34,10 +34,9 @@ describe('notificationEmailService', () => {
         data: null,
       });
 
-      const result = await notificationEmailService.createInstantNotificationEmail(
+      const result = await notificationEmailService.sendInstantNotificationEmails(
         client,
         notification,
-        123,
         headers,
       );
 
@@ -65,12 +64,7 @@ describe('notificationEmailService', () => {
         data: null,
       });
 
-      await notificationEmailService.createInstantNotificationEmail(
-        client,
-        notification,
-        profileId,
-        headers,
-      );
+      await notificationEmailService.sendInstantNotificationEmails(client, notification, headers);
 
       expect(console.error).toHaveBeenCalledWith(`No email found for profile ID: ${profileId}`);
       expect(mocks.functionsInvoke).not.toHaveBeenCalled();
@@ -94,10 +88,9 @@ describe('notificationEmailService', () => {
         data: [{ email: null }],
       });
 
-      const result = await notificationEmailService.createInstantNotificationEmail(
+      const result = await notificationEmailService.sendInstantNotificationEmails(
         client,
         notification,
-        profileId,
         headers,
       );
 
@@ -130,12 +123,7 @@ describe('notificationEmailService', () => {
       mockTransformNotification.mockResolvedValue(transformedNotification);
       mockTokensGenerate.mockReturnValue(generatedToken);
 
-      await notificationEmailService.createInstantNotificationEmail(
-        client,
-        notification,
-        profileId,
-        headers,
-      );
+      await notificationEmailService.sendInstantNotificationEmails(client, notification, headers);
 
       expect(mocks.from).toHaveBeenCalledWith('profiles');
       expect(mocks.rpc).toHaveBeenCalledWith('get_user_email_by_profile_id', {

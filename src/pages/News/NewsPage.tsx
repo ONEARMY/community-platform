@@ -164,6 +164,7 @@ export const NewsPage = observer(({ news }: IProps) => {
 
           <Box
             ref={contentRef}
+            data-cy="news-body"
             sx={{
               alignSelf: 'stretch',
               fontFamily: 'body',

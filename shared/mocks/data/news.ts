@@ -2,7 +2,7 @@ import type { DBNews } from '../../models/news';
 
 export const news: Partial<DBNews>[] = [
   {
-    body: 'Test info with a link to [OneArmy](https://www.onearmy.earth/).',
+    body: 'Test info with a link to [OneArmy](https://www.onearmy.earth/).\n![test-img](https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2Fproject%2F0up6oJCPP3M9bDYx34Et%2F1426018318_414579695-17fcd6de5f7.jpg?alt=media&token=9f18315b-a1ad-410b-b31c-2161fb1d7142)',
     category: null,
     comment_count: 2,
     created_at: new Date(),

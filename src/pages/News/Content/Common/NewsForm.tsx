@@ -121,7 +121,16 @@ export const NewsForm = (props: IProps) => {
       onSubmit={(values) => onSubmit(values, false)}
       initialValues={initialValues}
       validate={validateForm}
-      subscription={{ submitting: true, pristine: true, hasValidationErrors: true, values: true }}
+      subscription={{
+        submitting: true,
+        pristine: true,
+        hasValidationErrors: true,
+        values: true,
+        dirty: true,
+        errors: true,
+        submitFailed: true,
+        submitSucceeded: true,
+      }}
       render={({
         dirty,
         errors,

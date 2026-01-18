@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Flex, Heading } from 'theme-ui';
+import { Box, Flex, Heading, useThemeUI } from 'theme-ui';
 
 import { Button } from '../Button/Button';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
@@ -18,6 +18,7 @@ export interface IProps {
 }
 
 export const NotificationListSupabase = (props: IProps) => {
+  const { theme } = useThemeUI() as any;
   const [isUnreadOnly, setIsUnreadOnly] = useState<boolean>(true);
   const { isUpdatingNotifications, markAllRead, markRead, modalDismiss, notifications } = props;
 
@@ -59,10 +60,10 @@ export const NotificationListSupabase = (props: IProps) => {
               onClick={() => setIsUnreadOnly(true)}
               variant="subtle"
               sx={{
-                backgroundColor: isUnreadOnly ? 'activeYellow' : 'white',
+                backgroundColor: isUnreadOnly ? theme.colors.primary : 'white',
                 borderRadius: 0,
                 ':hover': {
-                  backgroundColor: isUnreadOnly ? 'activeYellow' : 'white',
+                  backgroundColor: isUnreadOnly ? theme.colors.primary : 'white',
                   textDecoration: isUnreadOnly ? 'none' : 'underline',
                 },
               }}
@@ -74,10 +75,10 @@ export const NotificationListSupabase = (props: IProps) => {
               onClick={() => setIsUnreadOnly(false)}
               variant="subtle"
               sx={{
-                backgroundColor: !isUnreadOnly ? 'activeYellow' : 'white',
+                backgroundColor: !isUnreadOnly ? theme.colors.primary : 'white',
                 borderRadius: 0,
                 ':hover': {
-                  backgroundColor: !isUnreadOnly ? 'activeYellow' : 'white',
+                  backgroundColor: !isUnreadOnly ? theme.colors.primary : 'white',
                   textDecoration: !isUnreadOnly ? 'none' : 'underline',
                 },
               }}

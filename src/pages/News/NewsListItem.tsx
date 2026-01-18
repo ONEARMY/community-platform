@@ -8,6 +8,7 @@ import {
   // ModerationStatus,
 } from 'oa-components';
 import { Highlighter } from 'src/common/Highlighter';
+import { stripMarkdownAndHtml } from 'src/utils/stripMarkdownAndHtml';
 import { AspectRatio, Button, Card, Flex, Heading, Image, Text } from 'theme-ui';
 
 import { listing } from './labels';
@@ -82,7 +83,10 @@ export const NewsListItem = ({ news, query }: IProps) => {
 
           {news.summary && (
             <Text data-cy="news-list-item-summary" sx={{ paddingY: 2, fontSize: 2 }}>
-              <Highlighter searchWords={searchWords} textToHighlight={news.summary} />
+              <Highlighter
+                searchWords={searchWords}
+                textToHighlight={stripMarkdownAndHtml(news.summary)}
+              />
             </Text>
           )}
 

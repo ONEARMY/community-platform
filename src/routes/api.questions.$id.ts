@@ -18,6 +18,10 @@ import type { LoaderFunctionArgs, Params } from 'react-router';
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
 
+  if (request.method === 'DELETE') {
+    return await deleteQuestion(request, Number(params.id));
+  }
+
   try {
     const id = Number(params.id);
 
@@ -190,4 +194,51 @@ async function validateRequest(
   }
 
   return { valid: true };
+}
+
+async function deleteQuestion(request: Request, id: number) {
+  const { client, headers } = createSupabaseServerClient(request);
+
+  try {
+    const claims = await client.auth.getClaims();
+
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 });
+    }
+
+    const currentQuestion = await questionServiceServer.getById(id, client);
+
+    if (!currentQuestion) {
+      return Response.json({}, { headers, status: 404, statusText: 'Question not found' });
+    }
+
+    const profileService = new ProfileServiceServer(client);
+    const profile = await profileService.getByAuthId(claims.data.claims.sub);
+
+    if (!profile) {
+      return Response.json({}, { headers, status: 400, statusText: 'User not found' });
+    }
+
+    const isCreator = currentQuestion.created_by === profile.id;
+    const hasAdminRights = hasAdminRightsSupabase(profile);
+
+    if (!isCreator && !hasAdminRights) {
+      return Response.json({}, { headers, status: 403, statusText: 'Unauthorized' });
+    }
+
+    await client
+      .from('questions')
+      .update({
+        modified_at: new Date(),
+        deleted: true,
+      })
+      .eq('id', id);
+
+    updateUserActivity(client, claims.data.claims.sub);
+
+    return Response.json({}, { status: 200, headers });
+  } catch (error) {
+    console.error('Delete question error:', error);
+    return Response.json({}, { headers, status: 500, statusText: 'Error deleting question' });
+  }
 }

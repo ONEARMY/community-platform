@@ -41,7 +41,9 @@ export const QuestionForm = (props: IProps) => {
   });
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const id = question?.id || null;
+  const isEdit = parentType === 'edit';
 
   useEffect(() => {
     if (!question) {
@@ -100,6 +102,20 @@ export const QuestionForm = (props: IProps) => {
     });
   };
 
+  const handleDelete = async () => {
+    if (!id) {
+      return;
+    }
+    setIsDeleting(true);
+    try {
+      await questionService.delete(id);
+      navigate('/questions');
+    } catch (error) {
+      logger.error(error);
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <Form
       data-testid={props['data-testid']}
@@ -147,6 +163,10 @@ export const QuestionForm = (props: IProps) => {
             submitFailed={submitFailed}
             submitting={submitting}
             unsavedChangesDialog={unsavedChangesDialog}
+            onDelete={isEdit ? handleDelete : undefined}
+            deleteButtonLabel={LABELS.buttons.deletion.text}
+            deleteConfirmMessage={LABELS.buttons.deletion.message}
+            isDeleting={isDeleting}
           >
             <TitleField
               placeholder={LABELS.fields.title.placeholder}

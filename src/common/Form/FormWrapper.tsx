@@ -1,4 +1,5 @@
-import { Button, ElWithBeforeIcon, Loader } from 'oa-components';
+import { useState } from 'react';
+import { Button, ConfirmModal, ElWithBeforeIcon, Loader } from 'oa-components';
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg';
 import { Box, Card, Flex, Heading } from 'theme-ui';
 
@@ -23,6 +24,10 @@ interface IProps {
   submitFailed: boolean;
   submitting: boolean;
   unsavedChangesDialog?: React.ReactNode;
+  onDelete?: () => void | Promise<void>;
+  deleteButtonLabel?: string;
+  deleteConfirmMessage?: string;
+  isDeleting?: boolean;
 }
 
 const DRAFT_LABEL = 'Save as draft';
@@ -44,9 +49,27 @@ export const FormWrapper = (props: IProps) => {
     submitFailed,
     submitting,
     unsavedChangesDialog,
+    onDelete,
+    deleteButtonLabel = 'Delete',
+    deleteConfirmMessage = 'Are you sure you want to delete this item?',
+    isDeleting = false,
   } = props;
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const hasClientSideErrors = hasValidationErrors && submitFailed;
+
+  const handleDeleteClick = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    setShowDeleteModal(false);
+    if (onDelete) {
+      await onDelete();
+    }
+  };
 
   return (
     <Flex
@@ -126,6 +149,22 @@ export const FormWrapper = (props: IProps) => {
           <span>{DRAFT_LABEL}</span>
         </Button>
 
+        {onDelete && (
+          <Button
+            data-cy="delete"
+            onClick={handleDeleteClick}
+            variant="destructive"
+            type="button"
+            disabled={submitting || isDeleting}
+            sx={{
+              width: '100%',
+              display: 'block',
+            }}
+          >
+            {deleteButtonLabel}
+          </Button>
+        )}
+
         {submitting && <Loader label="Submitting, please do not close the page..." />}
 
         {sidebar && sidebar}
@@ -133,6 +172,15 @@ export const FormWrapper = (props: IProps) => {
         {errorSubmitting && <ErrorsContainer saving={[errorSubmitting]} />}
         {hasClientSideErrors && <ErrorsContainer client={errorsClientSide} />}
       </Flex>
+      {onDelete && (
+        <ConfirmModal
+          isOpen={showDeleteModal}
+          message={deleteConfirmMessage}
+          confirmButtonText="Delete"
+          handleCancel={() => setShowDeleteModal(false)}
+          handleConfirm={handleDeleteConfirm}
+        />
+      )}
     </Flex>
   );
 };

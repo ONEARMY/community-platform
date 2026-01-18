@@ -18,6 +18,10 @@ import type { LoaderFunctionArgs, Params } from 'react-router';
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
 
+  if (request.method === 'DELETE') {
+    return await deleteNews(request, Number(params.id));
+  }
+
   try {
     const id = Number(params.id);
     const formData = await request.formData();
@@ -180,4 +184,51 @@ async function validateRequest(
   }
 
   return { valid: true };
+}
+
+async function deleteNews(request: Request, id: number) {
+  const { client, headers } = createSupabaseServerClient(request);
+
+  try {
+    const claims = await client.auth.getClaims();
+
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 });
+    }
+
+    const currentNews = await newsServiceServer.getById(id, client);
+
+    if (!currentNews) {
+      return Response.json({}, { headers, status: 404, statusText: 'News not found' });
+    }
+
+    const profileService = new ProfileServiceServer(client);
+    const profile = await profileService.getByAuthId(claims.data.claims.sub);
+
+    if (!profile) {
+      return Response.json({}, { headers, status: 400, statusText: 'User not found' });
+    }
+
+    const isCreator = currentNews.created_by === profile.id;
+    const hasAdminRights = hasAdminRightsSupabase(profile);
+
+    if (!isCreator && !hasAdminRights) {
+      return Response.json({}, { headers, status: 403, statusText: 'Unauthorized' });
+    }
+
+    await client
+      .from('news')
+      .update({
+        modified_at: new Date(),
+        deleted: true,
+      })
+      .eq('id', id);
+
+    updateUserActivity(client, claims.data.claims.sub);
+
+    return Response.json({}, { status: 200, headers });
+  } catch (error) {
+    console.error('Delete news error:', error);
+    return Response.json({}, { headers, status: 500, statusText: 'Error deleting news' });
+  }
 }

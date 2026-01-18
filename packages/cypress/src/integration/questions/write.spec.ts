@@ -139,6 +139,65 @@ describe('[Question]', () => {
       cy.contains(category);
     });
 
+    it('[Can delete question]', () => {
+      const deleteTitle = initialRandomId + ' Question to delete?';
+      const deleteExpectedSlug = initialRandomId + '-question-to-delete';
+      const deleteQuestionDescription = 'This question will be deleted.';
+      const user = generateNewUserDetails();
+
+      cy.signUpNewUser(user);
+      cy.completeUserProfile(user.username);
+
+      cy.step('Create a question to delete');
+      cy.visit('/questions/create');
+      cy.get('[data-cy=field-title]', { timeout: 20000 }).clear().type(deleteTitle).blur();
+      cy.get('[data-cy=field-description]').type(deleteQuestionDescription, { delay: 5 });
+      cy.get('[data-cy=image-upload-0]')
+        .find(':file')
+        .selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.selectTag('Moulds', '[data-cy=category-select]');
+      cy.get('[data-cy=submit]').click();
+      cy.wait(2000);
+      cy.url().should('include', `/questions/${deleteExpectedSlug}`);
+      cy.contains(deleteTitle);
+
+      cy.step('Delete button should be visible in edit mode');
+      cy.get('[data-cy=edit]').click();
+      cy.wait(1000);
+      cy.get('[data-cy=delete]').should('be.visible');
+      cy.get('[data-cy=delete]').should('contain', 'Delete this question');
+
+      cy.step('Delete button should not be visible in create mode');
+      cy.visit('/questions/create');
+      cy.get('[data-cy=delete]').should('not.exist');
+
+      cy.step('Clicking delete shows confirmation modal');
+      cy.visit(`/questions/${deleteExpectedSlug}/edit`);
+      cy.wait(1000);
+      cy.get('[data-cy=delete]').click();
+      cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible');
+      cy.contains('Are you sure you want to delete this question?');
+      cy.get('[data-cy="Confirm.modal: Cancel"]').should('be.visible');
+      cy.get('[data-cy="Confirm.modal: Confirm"]').should('be.visible');
+
+      cy.step('Canceling delete keeps the question');
+      cy.get('[data-cy="Confirm.modal: Cancel"]').click();
+      cy.get('[data-cy="Confirm.modal: Modal"]').should('not.exist');
+      cy.url().should('include', `/questions/${deleteExpectedSlug}/edit`);
+      cy.visit(`/questions/${deleteExpectedSlug}`);
+      cy.contains(deleteTitle);
+
+      cy.step('Confirming delete redirects to questions list');
+      cy.get('[data-cy=edit]').click();
+      cy.wait(1000);
+      cy.get('[data-cy=delete]').click();
+      cy.get('[data-cy="Confirm.modal: Confirm"]').click();
+      cy.wait(2000);
+      cy.url().should('include', '/questions');
+      cy.url().should('not.include', deleteExpectedSlug);
+      cy.contains(deleteTitle).should('not.exist');
+    });
+
     it('[By Anonymous]', () => {
       cy.step('Ask users to login before creating a question');
       cy.visit('/questions');

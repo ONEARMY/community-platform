@@ -1,11 +1,15 @@
 export type SelectValue = { label: string; value: string };
 
-export interface TenantSettings {
+export class TenantSettings {
   siteName: string;
   siteUrl: string;
   messageSignOff: string;
   emailFrom: string;
   siteImage: string;
+
+  constructor(obj: Partial<TenantSettings>) {
+    Object.assign(this, obj);
+  }
 }
 
 export type UserEmailData = {

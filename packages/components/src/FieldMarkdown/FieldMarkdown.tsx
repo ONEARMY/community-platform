@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
@@ -41,33 +41,45 @@ export const FieldMarkdown = (props: IProps) => {
   const ref = useRef<MDXEditorMethods>(null);
   const { imageUploadHandler, input, meta, ...rest } = props;
 
-  const mainPluginList = [
-    headingsPlugin({ allowedHeadingLevels: [1, 2] }),
-    listsPlugin(),
-    quotePlugin(),
-    imagePlugin({
-      disableImageSettingsButton: true,
-      disableImageResize: true,
-    }),
-    thematicBreakPlugin(),
-    linkPlugin(),
-    linkDialogPlugin(),
-    diffSourcePlugin({ readOnlyDiff: true }),
-    markdownShortcutPlugin(),
-  ];
+  // Capture initial value once to use as key - this ensures editor remounts with new content
+  // but stays mounted while typing
+  const initialValueRef = useRef(input.value);
+  const editorKey = useRef(initialValueRef.current ? 'has-content' : 'empty').current;
 
-  const toolbar = toolbarPlugin({
-    toolbarContents: () => (
-      <DiffSourceToggleWrapper>
-        <UndoRedo />
-        <BoldItalicUnderlineToggles />
-        <ListsToggle />
-        <CreateLink />
-        <AddImage imageUploadHandler={imageUploadHandler} />
-        <BlockTypeSelect />
-      </DiffSourceToggleWrapper>
-    ),
-  });
+  const mainPluginList = useMemo(
+    () => [
+      headingsPlugin({ allowedHeadingLevels: [1, 2] }),
+      listsPlugin(),
+      quotePlugin(),
+      imagePlugin({
+        disableImageSettingsButton: true,
+        disableImageResize: true,
+      }),
+      thematicBreakPlugin(),
+      linkPlugin(),
+      linkDialogPlugin(),
+      diffSourcePlugin({ readOnlyDiff: true }),
+      markdownShortcutPlugin(),
+    ],
+    [],
+  );
+
+  const toolbar = useMemo(
+    () =>
+      toolbarPlugin({
+        toolbarContents: () => (
+          <DiffSourceToggleWrapper>
+            <UndoRedo />
+            <BoldItalicUnderlineToggles />
+            <ListsToggle />
+            <CreateLink />
+            <AddImage imageUploadHandler={imageUploadHandler} />
+            <BlockTypeSelect />
+          </DiffSourceToggleWrapper>
+        ),
+      }),
+    [imageUploadHandler],
+  );
 
   const showError = meta.error && meta.touched;
 
@@ -94,10 +106,10 @@ export const FieldMarkdown = (props: IProps) => {
         }}
       >
         <MDXEditor
-          key={input.value?.slice(0, 10) || ''}
+          key={editorKey}
           ref={ref}
           className={showError ? 'mdxeditor-error' : ''}
-          markdown={input.value || ''}
+          markdown={input.value}
           plugins={[toolbar, ...mainPluginList]}
           onBlur={() => input.onBlur()}
           onChange={(ev) => input.onChange(ev)}

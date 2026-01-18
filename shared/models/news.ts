@@ -101,7 +101,7 @@ export class News implements IContentDoc {
 }
 
 export type NewsFormData = {
-  body: string;
+  body: string | null;
   category: SelectValue | null;
   existingHeroImage: Image | null;
   heroImage: IConvertedFileMeta | null;

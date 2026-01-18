@@ -1,7 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBProject, DBProjectStep, Image } from 'oa-shared';
-import { Project, UserRole } from 'oa-shared';
+import { type DBProject, type DBProjectStep, type Image, Project, UserRole } from 'oa-shared';
+
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { ImageServiceServer } from './imageService.server';
 import { storageServiceServer } from './storageService.server';
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
@@ -61,6 +62,7 @@ const getUserProjects = async (
   client: SupabaseClient,
   username: string,
 ): Promise<Partial<Project>[]> => {
+  const imageService = new ImageServiceServer(client);
   const { data, error } = await client.rpc('get_user_projects', {
     username_param: username,
   });
@@ -70,12 +72,18 @@ const getUserProjects = async (
     return [];
   }
 
-  return data?.map((x) => ({
-    id: x.id,
-    title: x.title,
-    slug: x.slug,
-    usefulCount: x.total_useful,
-  }));
+  return data?.map((x) => {
+    const coverImage = x.cover_image ? imageService.getPublicUrl(x.cover_image) : null;
+
+    return {
+      id: x.id,
+      commentCount: x.comment_count,
+      coverImage,
+      title: x.title,
+      slug: x.slug,
+      usefulCount: x.total_useful,
+    };
+  });
 };
 
 const getProjectPublicMedia = (projectDb: DBProject, client: SupabaseClient) => {
@@ -189,7 +197,7 @@ async function upsertStep(
 }
 
 async function deleteStepsById(ids: number[], client: SupabaseClient) {
-  await client.from('project_steps').delete().in('id', ids);
+  await client.from('project_steps').delete().in('id');
 }
 
 export const libraryServiceServer = {

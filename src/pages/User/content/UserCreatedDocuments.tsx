@@ -13,8 +13,8 @@ const UserCreatedDocuments = ({ columns, docs }: IProps) => {
       {(docs.projects.length > 0 || docs.research.length > 0 || docs.questions.length > 0) && (
         <Grid columns={[1, 1, columns]} gap={5}>
           {docs?.projects.length > 0 && (
-            <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-              <Heading data-cy="library-contributions" as="h3" variant="small">
+            <Flex data-testid="library-contributions" sx={{ flexDirection: 'column', gap: 2 }}>
+              <Heading as="h3" variant="small">
                 Library
               </Heading>
               {docs.projects.map((item) => {
@@ -24,6 +24,8 @@ const UserCreatedDocuments = ({ columns, docs }: IProps) => {
                     type="library"
                     item={{
                       id: item.id!,
+                      commentCount: item.commentCount,
+                      coverImage: item.coverImage,
                       slug: item.slug!,
                       title: item.title!,
                       usefulCount: item.usefulCount || 0,
@@ -45,6 +47,7 @@ const UserCreatedDocuments = ({ columns, docs }: IProps) => {
                     type="research"
                     item={{
                       id: item.id!,
+                      coverImage: item.image,
                       slug: item.slug!,
                       title: item.title!,
                       usefulCount: item.usefulCount || 0,
@@ -66,6 +69,8 @@ const UserCreatedDocuments = ({ columns, docs }: IProps) => {
                     type="questions"
                     item={{
                       id: item.id!,
+                      commentCount: item.commentCount || 0,
+                      coverImage: item.images && item.images[0] ? item.images[0] : undefined,
                       slug: item.slug!,
                       title: item.title!,
                       usefulCount: item.usefulCount || 0,

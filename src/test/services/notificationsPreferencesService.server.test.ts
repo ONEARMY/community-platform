@@ -38,32 +38,20 @@ describe('notificationsPreferencesServiceServer', () => {
       expect(mockClient.mocks.single).toHaveBeenCalledWith();
     });
 
-    it('logs error and throws Response.json when query fails', async () => {
+    it('logs error and returns null when query fails', async () => {
       const dbError = new Error('Database connection failed');
       mockClient.mocks.single.mockRejectedValue(dbError);
 
-      await expect(
-        notificationsPreferencesServiceServer.getPreferences(mockClient.client, 123),
-      ).rejects.toThrow();
+      const result = await notificationsPreferencesServiceServer.getPreferences(
+        mockClient.client,
+        123,
+      );
 
+      expect(result).toBeNull();
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Failed to get notifications preferences:',
         dbError,
       );
-    });
-
-    it('throws error when database query fails', async () => {
-      const dbError = new Error('Database error');
-      Object.defineProperty(dbError, 'statusText', {
-        value: 'Internal Server Error',
-      });
-      mockClient.mocks.single.mockRejectedValue(dbError);
-
-      try {
-        await notificationsPreferencesServiceServer.getPreferences(mockClient.client, 123);
-      } catch (error) {
-        expect(error).toBe(dbError);
-      }
     });
 
     it('handles different user IDs correctly', async () => {

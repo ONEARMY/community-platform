@@ -1,7 +1,15 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBAuthor, DBProfile, DBResearchItem, DBResearchUpdate } from 'oa-shared';
-import { Author, ResearchItem, UserRole } from 'oa-shared';
+import {
+  Author,
+  DBAuthor,
+  DBProfile,
+  DBResearchItem,
+  DBResearchUpdate,
+  ResearchItem,
+  UserRole,
+} from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { ImageServiceServer } from './imageService.server';
 import { ProfileServiceServer } from './profileService.server';
 import { storageServiceServer } from './storageService.server';
 
@@ -106,6 +114,7 @@ const getUserResearch = async (
   client: SupabaseClient,
   username: string,
 ): Promise<Partial<ResearchItem>[]> => {
+  const imageService = new ImageServiceServer(client);
   const { data, error } = await client.rpc('get_user_research', {
     username_param: username,
   });
@@ -115,12 +124,17 @@ const getUserResearch = async (
     return [];
   }
 
-  return data?.map((x) => ({
-    id: x.id,
-    title: x.title,
-    slug: x.slug,
-    usefulCount: x.total_useful,
-  }));
+  return data?.map((x) => {
+    const image = x.image ? imageService.getPublicUrl(x.image) : null;
+    return {
+      id: x.id,
+      // commentCount: x.comment_count,
+      image,
+      title: x.title,
+      slug: x.slug,
+      usefulCount: x.total_useful,
+    };
+  });
 };
 
 const getResearchPublicMedia = (researchDb: DBResearchItem, client: SupabaseClient) => {

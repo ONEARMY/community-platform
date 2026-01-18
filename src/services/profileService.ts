@@ -1,4 +1,11 @@
-import type { IImpactDataField, IUserImpact, MapPin, MapPinFormData, Profile, ProfileFormData } from 'oa-shared';
+import type {
+  IImpactDataField,
+  IUserImpact,
+  MapPin,
+  MapPinFormData,
+  Profile,
+  ProfileFormData,
+} from 'oa-shared';
 import { logger } from 'src/logger';
 import { getCleanFileName } from 'src/utils/storage';
 

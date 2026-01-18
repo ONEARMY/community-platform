@@ -117,7 +117,10 @@ describe('[Research]', () => {
       cy.visit('/u/' + admin.displayName);
       cy.get('[data-testid=research-stat]').should('exist');
       cy.get('[data-cy=ContribTab]').click();
-      cy.get('[data-testid="research-contributions"]').should('be.visible');
+      cy.get('[data-testid="research-contributions"]').within(() => {
+        cy.contains(expected.title);
+        cy.get(`[data-cy="UserDocumentItem: coverImage for ${expected.title}"]`);
+      });
 
       cy.step('New collaborators can add update');
       cy.logout();

@@ -89,7 +89,7 @@ export const NewsPage = observer(({ news }: IProps) => {
 
     // 5. Attach click listeners to HTML images
     imageElements.forEach((img, index) => {
-      img.style.cursor = 'zoom-in';
+      img.style.cursor = 'pointer';
       img.onclick = (e) => {
         e.preventDefault();
         lightbox.loadAndOpen(index);
@@ -114,7 +114,7 @@ export const NewsPage = observer(({ news }: IProps) => {
             <Image
               ref={heroImageRef}
               src={news.heroImage.publicUrl}
-              sx={{ borderRadius: 2, width: '100%', cursor: 'zoom-in' }}
+              sx={{ borderRadius: 2, width: '100%', cursor: 'pointer' }}
             />
           </AspectRatio>
         )}

@@ -23,7 +23,7 @@ describe('notificationEmailService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     console.error = vi.fn();
-    
+
     // Mock TenantSettingsService
     vi.mocked(TenantSettingsService).prototype.get = vi.fn().mockResolvedValue({
       emailFrom: 'noreply@example.com',

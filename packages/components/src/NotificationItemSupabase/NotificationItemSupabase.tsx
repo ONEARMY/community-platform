@@ -1,4 +1,4 @@
-import { Flex, Text } from 'theme-ui';
+import { Flex, Text, useThemeUI } from 'theme-ui';
 
 import { DisplayDate } from '../DisplayDate/DisplayDate';
 import { Icon } from '../Icon/Icon';
@@ -13,6 +13,19 @@ interface IProps {
   modalDismiss: () => void;
   notification: NotificationDisplay;
 }
+
+/**
+ * Converts a hex color to rgba with specified opacity
+ */
+const hexToRgba = (hex: string, opacity: number): string => {
+  // Remove # if present
+  const cleanHex = hex.replace('#', '');
+  // Parse RGB values
+  const r = parseInt(cleanHex.substring(0, 2), 16);
+  const g = parseInt(cleanHex.substring(2, 4), 16);
+  const b = parseInt(cleanHex.substring(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+};
 
 const commentStyling = {
   '::before': {
@@ -39,11 +52,15 @@ const commentStyling = {
 } as ThemeUIStyleObject;
 
 export const NotificationItemSupabase = (props: IProps) => {
+  const { theme } = useThemeUI() as any;
   const { markRead, modalDismiss, notification } = props;
 
+  // Calculate 40% opacity background color for unread notifications
+  const primaryColorWithOpacity = hexToRgba(theme.colors.primary as string, 0.4);
+
   const borderStyle = {
-    background: notification.isRead ? 'background' : '#fff0b4',
-    borderColor: notification.isRead ? 'background' : 'activeYellow',
+    background: notification.isRead ? 'background' : primaryColorWithOpacity,
+    borderColor: notification.isRead ? 'background' : theme.colors.primary,
     borderRadius: 3,
     borderStyle: 'solid',
     borderWidth: 2,

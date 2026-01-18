@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import debounce from 'debounce';
 import { CategoryHorizonalList, ReturnPathLink, SearchField, Select, Tooltip } from 'oa-components';
@@ -42,8 +42,18 @@ export const ResearchFilterHeader = (props: IProps) => {
 
   const categoryParam = Number(searchParams.get(ResearchSearchParams.category));
   const category = categories?.find((x) => x.id === categoryParam) ?? null;
-  const sort = searchParams.get(ResearchSearchParams.sort) as ResearchSortOption;
+  const sortParam = searchParams.get(ResearchSearchParams.sort) as ResearchSortOption | null;
   const status = (searchParams.get(ResearchSearchParams.status) as ResearchStatus) || '';
+  
+  // Compute default sort value immediately using useMemo to avoid race condition
+  // This ensures the dropdown always has a value, even before URL is updated
+  const defaultSort = useMemo<ResearchSortOption>(() => {
+    return q ? 'MostRelevant' : 'LatestUpdated';
+  }, [q]);
+  
+  // Use sortParam if available, otherwise fall back to defaultSort
+  // This ensures sort is always defined synchronously, preventing empty dropdown
+  const sort = sortParam || defaultSort;
 
   useEffect(() => {
     const initCategories = async () => {

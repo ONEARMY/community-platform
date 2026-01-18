@@ -17,5 +17,14 @@ export const getSummaryFromMarkdown = (text: string) => {
     .slice(0, 3)
     .map((token) => token['text'] && token['text'].trim());
 
-  return flattenedLines.join(' ');
+  return flattenedLines
+    .join(' ')
+    .replaceAll('*', '')
+    .replaceAll('_', '')
+    .replaceAll('~~', '')
+    .replaceAll('`', '')
+    .replaceAll('<u>', '')
+    .replaceAll('</u>', '')
+    .replaceAll('<code>', '')
+    .replaceAll('</code>', '');
 };

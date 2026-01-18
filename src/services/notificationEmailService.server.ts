@@ -7,37 +7,60 @@ import { tokens } from 'src/utils/tokens.server';
 import { TenantSettingsService } from './tenantSettingsService.server';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBNotification } from 'oa-shared';
+import type {
+  DBNotification,
+  NotificationContentType,
+  NotificationsPreferenceTypes,
+} from 'oa-shared';
+
+const preferenceTypes: PreferenceTypes = {
+  comment: 'comments',
+  reply: 'comments',
+  researchUpdate: 'research_updates',
+};
+
+type PreferenceTypes = {
+  [type in NotificationContentType]: NotificationsPreferenceTypes;
+};
 
 const sendInstantNotificationEmails = async (
   client: SupabaseClient,
+  contentId: number,
   dbNotification: DBNotification,
   headers: Headers,
 ) => {
   try {
-    const emailsToSend = await client.rpc('get_subscribed_users_emails_to_notify', {
-      p_content_id: dbNotification.content_id,
-      p_content_type: dbNotification.source_content_type,
-      p_notification_content_type: dbNotification.content_type,
+    const subscribersToNotify = await client.rpc('get_subscribed_users_emails_to_notify', {
+      p_content_id: contentId,
+      p_content_type: preferenceTypes[dbNotification.content_type],
+      p_notification_content_type: dbNotification.source_content_type,
     });
 
-    if (!emailsToSend.data || emailsToSend.data.length === 0) {
-      throw emailsToSend.error || new Error('No emails to send');
+    if (subscribersToNotify.error || subscribersToNotify.data.length === 0) {
+      throw subscribersToNotify.error || new Error('No emails to send');
+    }
+
+    const emailsToSend = subscribersToNotify.data.filter(
+      (emailObj) => emailObj.profile_id !== dbNotification.triggered_by_id,
+    );
+
+    if (emailsToSend.length === 0) {
+      throw new Error('No emails to send');
     }
 
     const fullNotification = await transformNotification(dbNotification, client);
-    const profiles: { profileId: number; userEmail: string; profileCreatedAt: string }[] =
-      emailsToSend.data;
+    const profiles: { profile_id: number; email: string; profile_created_at: string }[] =
+      emailsToSend;
 
     const codes = profiles.map((p) => ({
-      email: p.userEmail,
-      code: tokens.generate(p.profileId, p.profileCreatedAt),
+      email: p.email,
+      code: tokens.generate(p.profile_id, p.profile_created_at),
     }));
 
     const tenantSettings = await new TenantSettingsService(client).get();
 
     sendBatchEmails({
-      from: '',
+      from: tenantSettings.emailFrom,
       subject: 'You have a new notification',
       emails: codes.map(({ code, email }) => {
         return {

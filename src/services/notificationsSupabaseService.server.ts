@@ -119,13 +119,19 @@ const createNotificationsNewComment = async (
       source_content_id: sourceContentId,
       parent_content_id: isResearchUpdate ? comment.source_id! : null,
       triggered_by_id: comment.created_by!,
+      triggered_by: (comment as any).profiles as DBProfile,
       content_type: isReply ? 'reply' : 'comment',
       parent_comment_id: isReply ? comment.parent_id : null,
     });
 
     await createNotifications(client, notification, subscriberIds);
 
-    await notificationEmailService.sendInstantNotificationEmails(client, notification, headers);
+    await notificationEmailService.sendInstantNotificationEmails(
+      client,
+      isReply ? comment.parent_id! : comment.source_id!,
+      notification,
+      headers,
+    );
   } catch (error) {
     console.error(error);
 

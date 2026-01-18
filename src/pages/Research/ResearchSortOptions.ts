@@ -2,20 +2,20 @@ export type ResearchSortOption =
   | 'MostRelevant'
   | 'Newest'
   | 'MostComments'
-  | 'LeastComments'
   | 'LatestUpdated'
   | 'MostUseful'
   | 'MostUsefulLastWeek'
-  | 'MostUpdates';
+  | 'MostDownloads'
+  | 'MostViews';
 
 const BaseOptions = new Map<ResearchSortOption, string>();
 BaseOptions.set('Newest', 'Newest');
-BaseOptions.set('MostComments', 'Most Comments');
-BaseOptions.set('LeastComments', 'Least Comments');
-BaseOptions.set('LatestUpdated', 'Latest Updated');
-BaseOptions.set('MostUseful', 'Most Useful');
-BaseOptions.set('MostUsefulLastWeek', 'Most Useful Last Week');
-BaseOptions.set('MostUpdates', 'Most Updates');
+BaseOptions.set('MostComments', 'Most comments');
+BaseOptions.set('LatestUpdated', 'Latest Updates');
+BaseOptions.set('MostUseful', 'Most useful');
+BaseOptions.set('MostUsefulLastWeek', 'Most useful this week');
+BaseOptions.set('MostDownloads', 'Most Downloads');
+BaseOptions.set('MostViews', 'Most Views');
 
 const QueryParamOptions = new Map<ResearchSortOption, string>(BaseOptions);
 QueryParamOptions.set('MostRelevant', 'Most Relevant');

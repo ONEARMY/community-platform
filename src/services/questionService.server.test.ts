@@ -18,6 +18,8 @@ describe('getQuestionsByUser', () => {
 
     const mockDBQuestion = {
       id: id,
+      comment_count: 1,
+      images: null,
       title: title,
       slug: slug,
       total_useful: usefulCount,
@@ -34,6 +36,8 @@ describe('getQuestionsByUser', () => {
     const expected = [
       {
         id: id,
+        commentCount: 1,
+        images: null,
         title: title,
         slug: slug,
         usefulCount: usefulCount,

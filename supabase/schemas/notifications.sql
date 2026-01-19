@@ -100,7 +100,7 @@ BEGIN
                     CASE p_notification_content_type
                         WHEN 'comment' THEN COALESCE(np.comments, true)
                         WHEN 'reply' THEN COALESCE(np.replies, true)
-                        WHEN 'researchUpdate' THEN COALESCE(np.research_updates, true)
+                        WHEN 'research_update' THEN COALESCE(np.research_updates, true)
                         ELSE true
                     END
                 )

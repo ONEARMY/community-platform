@@ -8,21 +8,9 @@ import type {
   DBProfile,
   DBResearchItem,
   NotificationActionType,
-  // NotificationContentType,
-  // NotificationsPreferenceTypes,
   ResearchUpdate,
   SubscribableContentTypes,
 } from 'oa-shared';
-
-// const preferenceTypes: PreferenceTypes = {
-//   comment: 'comments',
-//   reply: 'replies',
-//   researchUpdate: 'research_updates',
-// };
-
-// type PreferenceTypes = {
-//   [type in NotificationContentType]: NotificationsPreferenceTypes;
-// };
 
 const setSourceContentType = async (comment: DBComment, client: SupabaseClient) => {
   if (comment.source_type !== 'research_update') {
@@ -77,8 +65,8 @@ const createNotifications = async (
 
     const response = await client.from('notifications').insert(notificationsToInsert);
 
-    if (response.error || !response.data) {
-      throw response.error || 'No data returned';
+    if (response.error) {
+      throw response.error;
     }
   } catch (error) {
     console.error(error);
@@ -115,7 +103,7 @@ const createNotificationsNewComment = async (
     const notification = new DBNotification({
       action_type: 'newComment' as NotificationActionType,
       content_id: comment.id!,
-      source_content_type: isResearchUpdate ? 'research' : comment.source_type!,
+      source_content_type: comment.source_type!,
       source_content_id: sourceContentId,
       parent_content_id: isResearchUpdate ? comment.source_id! : null,
       triggered_by_id: comment.created_by!,
@@ -164,9 +152,17 @@ const createNotificationsResearchUpdate = async (
       parent_content_id: researchUpdate.id,
       content_type: 'researchUpdate',
       triggered_by_id: profile.id,
+      triggered_by: profile,
     });
 
-    return createNotifications(client, notification, subscribers);
+    await createNotifications(client, notification, subscribers);
+
+    await notificationEmailService.sendInstantNotificationEmails(
+      client,
+      researchUpdate.id,
+      notification,
+      headers,
+    );
   } catch (error) {
     console.error(error);
 

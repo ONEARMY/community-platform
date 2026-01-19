@@ -7,21 +7,7 @@ import { tokens } from 'src/utils/tokens.server';
 import { TenantSettingsService } from './tenantSettingsService.server';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type {
-  DBNotification,
-  NotificationContentType,
-  NotificationsPreferenceTypes,
-} from 'oa-shared';
-
-const preferenceTypes: PreferenceTypes = {
-  comment: 'comments',
-  reply: 'comments',
-  researchUpdate: 'research_updates',
-};
-
-type PreferenceTypes = {
-  [type in NotificationContentType]: NotificationsPreferenceTypes;
-};
+import type { DBNotification } from 'oa-shared';
 
 const sendInstantNotificationEmails = async (
   client: SupabaseClient,
@@ -32,8 +18,8 @@ const sendInstantNotificationEmails = async (
   try {
     const subscribersToNotify = await client.rpc('get_subscribed_users_emails_to_notify', {
       p_content_id: contentId,
-      p_content_type: preferenceTypes[dbNotification.content_type],
-      p_notification_content_type: dbNotification.source_content_type,
+      p_content_type: dbNotification.source_content_type,
+      p_notification_content_type: dbNotification.content_type,
     });
 
     if (subscribersToNotify.error || subscribersToNotify.data.length === 0) {

@@ -1,11 +1,13 @@
 import { Link } from 'react-router';
 import { IconCountWithTooltip } from 'oa-components';
-import { Flex, Text } from 'theme-ui';
+import { Flex, Image, Text } from 'theme-ui';
 
 interface IProps {
   type: 'library' | 'research' | 'questions';
   item: {
     id: string | number;
+    commentCount?: number;
+    coverImage?: any;
     title: string;
     slug: string;
     usefulCount: number;
@@ -13,7 +15,7 @@ interface IProps {
 }
 
 const UserDocumentItem = ({ type, item }: IProps) => {
-  const { id, title, slug, usefulCount } = item;
+  const { id, commentCount, coverImage, title, slug, usefulCount } = item;
   const url = `/${type}/${encodeURIComponent(slug)}?utm_source=user-profile`;
 
   return (
@@ -21,7 +23,6 @@ const UserDocumentItem = ({ type, item }: IProps) => {
       sx={{
         background: 'white',
         borderRadius: 2,
-        padding: 3,
       }}
     >
       <Link
@@ -35,34 +36,62 @@ const UserDocumentItem = ({ type, item }: IProps) => {
           sx={{
             flexDirection: 'row',
             justifyItems: 'center',
-            justifyContent: 'space-between',
-            gap: 3,
           }}
         >
-          <Text
-            as="p"
-            color="black"
-            sx={{
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-            }}
-          >
-            {title}
-          </Text>
+          {coverImage && coverImage.publicUrl && (
+            <Image
+              loading="lazy"
+              src={coverImage.publicUrl}
+              sx={{
+                objectFit: 'cover',
+                height: '100%',
+                width: '70px',
+                borderRadius: 2,
+              }}
+              crossOrigin=""
+              alt="project cover image"
+            />
+          )}
+
           <Flex
             sx={{
+              flexDirection: 'row',
+              justifyItems: 'center',
               alignItems: 'center',
-              justifyContent: 'flex-end',
+              justifyContent: 'space-between',
+              flex: 1,
+              padding: 3,
             }}
           >
+            <Text
+              as="p"
+              color="black"
+              sx={{
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+              }}
+            >
+              {title}
+            </Text>
             <Flex
               sx={{
-                flex: 1,
+                alignItems: 'center',
                 justifyContent: 'flex-end',
               }}
             >
-              <IconCountWithTooltip count={usefulCount} icon="star-active" text="Useful count" />
+              <Flex
+                sx={{
+                  flex: 1,
+                  gap: 3,
+                  justifyContent: 'flex-end',
+                }}
+              >
+                <IconCountWithTooltip count={usefulCount} icon="star-active" text="Useful count" />
+                {(commentCount || commentCount === 0) && (
+                  <IconCountWithTooltip count={commentCount} icon="comment" text="Comment count" />
+                )}
+              </Flex>
             </Flex>
           </Flex>
         </Flex>

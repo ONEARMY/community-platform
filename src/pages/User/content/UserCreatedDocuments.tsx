@@ -26,6 +26,8 @@ const UserCreatedDocuments = ({ columns, docs }: IProps) => {
                     type="library"
                     item={{
                       id: item.id!,
+                      commentCount: item.commentCount,
+                      coverImage: item.coverImage,
                       slug: item.slug!,
                       title: item.title!,
                       usefulCount: item.usefulCount || 0,
@@ -47,6 +49,7 @@ const UserCreatedDocuments = ({ columns, docs }: IProps) => {
                     type="research"
                     item={{
                       id: item.id!,
+                      coverImage: item.image,
                       slug: item.slug!,
                       title: item.title!,
                       usefulCount: item.usefulCount || 0,
@@ -68,6 +71,8 @@ const UserCreatedDocuments = ({ columns, docs }: IProps) => {
                     type="questions"
                     item={{
                       id: item.id!,
+                      commentCount: item.commentCount || 0,
+                      coverImage: item.images && item.images[0] ? item.images[0] : undefined,
                       slug: item.slug!,
                       title: item.title!,
                       usefulCount: item.usefulCount || 0,

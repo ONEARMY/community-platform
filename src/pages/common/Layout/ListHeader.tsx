@@ -48,52 +48,57 @@ export const ListHeader = (props: IProps) => {
       </Flex>
       <Flex
         sx={{
-          justifyContent: 'space-between',
-          flexDirection: ['column', 'column', 'row'],
+          justifyContent: actionComponents ? 'space-between' : 'flex-start',
+          flexDirection: ['row', 'row', 'row'],
           gap: [2, 2, 2],
           paddingX: [2, 0],
           maxWidth: actionComponentsMaxWidth || '100%',
+          alignItems: 'center',
+          width: '100%',
         }}
       >
         <Flex
           sx={{
-            flexDirection: ['column', 'column', 'row'],
+            flexDirection: ['row', 'row', 'row'],
             gap: [2, 2, 2],
-            width: ['100%', '100%', 'auto'],
-            alignItems: ['flex-start', 'flex-start', 'center'],
+            alignItems: 'center',
+            flex: actionComponents ? [1, 1, 1] : 1,
+            minWidth: actionComponents ? 'auto' : 0,
+            width: actionComponents ? 'auto' : '100%',
           }}
         >
           <Flex
             sx={{
-              width: ['100%', '100%', 'auto'],
-              '& > *': { flexGrow: [1, 1, 0] },
+              '& > *': { flexGrow: 0 },
+              width: actionComponents ? 'auto' : '100%',
+              minWidth: 0,
+              flex: actionComponents ? '0 1 auto' : 1,
             }}
           >
             {!showDrafts ? filteringComponents : <div style={{ width: '100%' }}></div>}
           </Flex>
-          <Flex
+          {/* Item count - show on mobile if there's space, always on desktop */}
+          <Text
             sx={{
-              flexDirection: 'row',
-              justifyContent: ['space-between', 'space-between', 'flex-start'],
-              alignItems: 'center',
-              width: ['100%', '100%', 'auto'],
+              margin: 0,
+              marginLeft: [0, 0, 2],
+              whiteSpace: 'nowrap',
+              display: ['none', 'none', 'block'],
             }}
           >
-            <Text sx={{ marginLeft: [0, 0, 2] }}>
-              {itemCount ? `${itemCount} ${itemLabel}` : ''}
-            </Text>
-            <Flex sx={{ gap: 2, display: ['flex', 'flex', 'none'] }}>{actionComponents}</Flex>
+            {itemCount ? `${itemCount} ${itemLabel}` : ''}
+          </Text>
+        </Flex>
+        {actionComponents && (
+          <Flex
+            sx={{
+              gap: 2,
+              flexShrink: 0,
+            }}
+          >
+            {actionComponents}
           </Flex>
-        </Flex>
-        <Flex
-          sx={{
-            gap: 2,
-            alignSelf: ['flex-start', 'flex-start', 'flex-end'],
-            display: ['none', 'none', 'flex'],
-          }}
-        >
-          {actionComponents}
-        </Flex>
+        )}
       </Flex>
     </>
   );

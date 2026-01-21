@@ -122,7 +122,8 @@ export class Profile {
 // Notifications here to avoid circular dependencies
 
 export type NotificationActionType = 'newContent' | 'newComment';
-export type NotificationContentType = 'researchUpdate' | 'comment' | 'reply';
+export const NotificationContentTypes = ['researchUpdate', 'comment', 'reply'] as const;
+export type NotificationContentType = (typeof NotificationContentTypes)[number];
 export type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photo'>;
 export type ProfileListItem = Pick<
   Profile,
@@ -150,8 +151,9 @@ export class DBNotification implements IDBDocSB {
   readonly should_email: boolean;
   readonly triggered_by: DBProfile;
   readonly triggered_by_id: number;
+  readonly tenant_id: string;
 
-  constructor(obj: any) {
+  constructor(obj: Partial<DBNotification>) {
     Object.assign(this, obj);
   }
 }
@@ -352,28 +354,6 @@ export class NotificationDisplay {
     return title;
   }
 
-  static setParentLink(notification: Notification) {
-    const slug = notification.sourceContent?.slug || '';
-
-    switch (notification.sourceContentType) {
-      case 'research': {
-        if (notification.actionType === 'newComment') {
-          return `research/${slug}#update_${notification.parentContentId}`;
-        }
-        return `${notification.sourceContentType}/${slug}`;
-      }
-      case 'research_update': {
-        return `research/${slug}#update_${notification.parentContentId}`;
-      }
-      case 'projects': {
-        return `library/${slug}`;
-      }
-      default: {
-        return `${notification.sourceContentType}/${slug}`;
-      }
-    }
-  }
-
   static setSidebarIcon(contentType: NotificationContentType): string {
     switch (contentType) {
       case 'comment': {
@@ -396,32 +376,7 @@ export class NotificationDisplay {
   }
 
   static setLink(notification: Notification) {
-    const baseLink = this.setParentLink(notification);
-
-    switch (notification.contentType) {
-      case 'comment': {
-        return this.setSlugDiscussion(notification);
-      }
-      case 'reply': {
-        return this.setSlugDiscussion(notification);
-      }
-      case 'researchUpdate': {
-        return `${baseLink}#update_${notification.contentId}`;
-      }
-    }
-  }
-
-  static setSlugDiscussion(notification: Notification) {
-    const baseLink = this.setParentLink(notification);
-
-    switch (notification.sourceContentType) {
-      case 'research': {
-        return `research/${notification.sourceContent?.slug}?update_${notification.parentContentId}#comment:${notification.content?.id}`;
-      }
-      default: {
-        return `${baseLink}#comment:${notification.content?.id}`;
-      }
-    }
+    return `/redirect?id=${notification.contentId}&ct=${notification.contentType}`;
   }
 
   static fromNotification(notification: Notification): NotificationDisplay {

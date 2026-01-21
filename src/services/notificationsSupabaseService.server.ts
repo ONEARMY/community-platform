@@ -7,7 +7,6 @@ import type {
   DBComment,
   DBProfile,
   DBResearchItem,
-  NotificationActionType,
   ResearchUpdate,
   SubscribableContentTypes,
 } from 'oa-shared';
@@ -101,7 +100,7 @@ const createNotificationsNewComment = async (
     const sourceContentId = await setSourceContentType(comment, client);
 
     const notification = new DBNotification({
-      action_type: 'newComment' as NotificationActionType,
+      action_type: 'newComment',
       content_id: comment.id!,
       source_content_type: comment.source_type!,
       source_content_id: sourceContentId,

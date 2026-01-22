@@ -137,6 +137,7 @@ const createNotificationsResearchUpdate = async (
     const subscribers = await getSubscribedUsers(research.id, contentType, client);
     const notification = new DBNotification({
       action_type: 'newContent',
+      title: research.title,
       content_id: researchUpdate.id!,
       content_type: 'research_updates',
       triggered_by_id: profile.id,

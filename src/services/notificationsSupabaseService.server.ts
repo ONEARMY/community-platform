@@ -40,14 +40,15 @@ const createNotifications = async (
   subscriberIds: SubscribedUser[],
 ): Promise<void> => {
   try {
-    const notificationsToInsert = subscriberIds.map((subscriber) => {
-      new DBNotification({
-        ...notification,
-        owned_by_id: subscriber.profile_id,
-        is_read: false,
-        tenant_id: process.env.TENANT_ID!,
-      });
-    });
+    const notificationsToInsert = subscriberIds.map(
+      (subscriber) =>
+        new DBNotification({
+          ...notification,
+          owned_by_id: subscriber.profile_id,
+          is_read: false,
+          tenant_id: process.env.TENANT_ID!,
+        }),
+    );
 
     const response = await client.from('notifications').insert(notificationsToInsert);
 
@@ -79,13 +80,24 @@ const createNotificationsNewComment = async (
     }
     const contentType: SubscribableContentTypes = isReply ? 'comments' : comment.source_type;
 
+    let title = '';
+    if (!isReply) {
+      const sourceItem = await client
+        .from(comment.source_type)
+        .select('title')
+        .eq('id', comment.source_id)
+        .single();
+      title = sourceItem.data?.title;
+    }
+
     const subscribers = (await getSubscribedUsers(contentId, contentType, client)).filter(
       (user) => user.profile_id !== comment.created_by,
     );
 
     const notification = new DBNotification({
-      action_type: 'newComment',
+      action_type: isReply ? 'newReply' : 'newComment',
       content_id: comment.id!,
+      title: title,
       triggered_by_id: comment.created_by!,
       triggered_by: (comment as any).profiles as DBProfile,
       content_type: 'comments',

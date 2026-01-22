@@ -316,7 +316,7 @@ export class NotificationDisplay {
         return `left a comment on ${notification.title}`;
       }
       case 'newReply': {
-        return `left a reply on ${notification.title}`;
+        return `left a reply`;
       }
       default: {
         return notification.title;

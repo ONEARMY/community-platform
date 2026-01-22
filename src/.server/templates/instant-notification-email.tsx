@@ -22,7 +22,7 @@ interface IProps {
 export const InstantNotificationEmail = (props: IProps) => {
   const { notification, settings, userCode } = props;
 
-  const buttonLink = urlAppend(`${settings.siteUrl}/${notification.link}`, 'notification');
+  const buttonLink = urlAppend(`${settings.siteUrl}${notification.link}`, 'notification');
 
   return (
     <Layout

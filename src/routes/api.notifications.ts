@@ -21,17 +21,10 @@ export const transformNotification = async (
   client: SupabaseClient,
 ) => {
   try {
-    const contentTypes = {
-      comment: 'comments',
-      reply: 'comments',
-      researchUpdate: 'research_updates',
-    };
-
     const notification = Notification.fromDB(dbNotification);
-    const contentType = contentTypes[notification.contentType];
 
     const content = await client
-      .from(contentType)
+      .from(notification.contentType)
       .select('*')
       .eq('id', notification.contentId)
       .single();

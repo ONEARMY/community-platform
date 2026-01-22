@@ -7,38 +7,50 @@ import { tokens } from 'src/utils/tokens.server';
 import { TenantSettingsService } from './tenantSettingsService.server';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBNotification } from 'oa-shared';
+import type { DBNotification, SubscribedUser } from 'oa-shared';
 
 const sendInstantNotificationEmails = async (
   client: SupabaseClient,
-  contentId: number,
+  subscribers: SubscribedUser[],
   dbNotification: DBNotification,
   headers: Headers,
 ) => {
   try {
-    const subscribersToNotify = await client.rpc('get_subscribed_users_emails_to_notify', {
-      p_content_id: contentId,
-      p_content_type: dbNotification.source_content_type,
-      p_notification_content_type: dbNotification.content_type,
+    const emailsToSend = subscribers.filter((result) => {
+      if (result.profile_id === dbNotification.triggered_by_id) {
+        return false;
+      }
+
+      if (result.is_unsubscribed) {
+        return false;
+      }
+
+      if (result.replies === false && dbNotification.action_type === 'newReply') {
+        return false;
+      }
+
+      if (result.comments === false && dbNotification.action_type === 'newComment') {
+        return false;
+      }
+
+      if (
+        result.research_updates === false &&
+        dbNotification.action_type === 'newContent' &&
+        dbNotification.content_type === 'research_updates'
+      ) {
+        return false;
+      }
+
+      return true;
     });
-
-    if (subscribersToNotify.error || subscribersToNotify.data.length === 0) {
-      throw subscribersToNotify.error || new Error('No emails to send');
-    }
-
-    const emailsToSend = subscribersToNotify.data.filter(
-      (emailObj) => emailObj.profile_id !== dbNotification.triggered_by_id,
-    );
 
     if (emailsToSend.length === 0) {
       throw new Error('No emails to send');
     }
 
     const fullNotification = await transformNotification(dbNotification, client);
-    const profiles: { profile_id: number; email: string; profile_created_at: string }[] =
-      emailsToSend;
 
-    const codes = profiles.map((p) => ({
+    const codes = emailsToSend.map((p) => ({
       email: p.email,
       code: tokens.generate(p.profile_id, p.profile_created_at),
     }));

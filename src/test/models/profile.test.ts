@@ -2,10 +2,7 @@ import { NotificationDisplay } from 'oa-shared';
 import { describe, expect, it } from 'vitest';
 
 import { FactoryComment } from '../factories/Comment';
-import { FactoryLibraryItem } from '../factories/Library';
-import { FactoryNewsItem } from '../factories/News';
-import { FactoryQuestionItem } from '../factories/Question';
-import { FactoryResearchItem, FactoryResearchItemUpdate } from '../factories/ResearchItem';
+import { FactoryResearchItemUpdate } from '../factories/ResearchItem';
 import { factorySupabaseNotification, factoryTriggeredBy } from '../factories/supabaseNotification';
 
 describe('NotificationDisplay', () => {
@@ -15,13 +12,8 @@ describe('NotificationDisplay', () => {
         const notification = factorySupabaseNotification({
           actionType: 'newComment',
           contentId: 101,
-          contentType: 'comment',
+          contentType: 'comments',
           content: FactoryComment({ id: 101, comment: 'Great work' }),
-          sourceContentType: 'news',
-          sourceContent: FactoryNewsItem({
-            title: 'New thing coming',
-            slug: 'new-thing-coming',
-          }),
           triggeredBy: factoryTriggeredBy({
             username: 'dave0',
           }),
@@ -45,13 +37,8 @@ describe('NotificationDisplay', () => {
         const notification = factorySupabaseNotification({
           actionType: 'newComment',
           contentId: 102,
-          contentType: 'comment',
+          contentType: 'comments',
           content: FactoryComment({ id: 102, comment: 'Amazing' }),
-          sourceContentType: 'projects',
-          sourceContent: FactoryLibraryItem({
-            title: 'Best Guide',
-            slug: 'best-guide',
-          }),
           triggeredBy: factoryTriggeredBy({
             username: 'JEFF123',
           }),
@@ -75,13 +62,8 @@ describe('NotificationDisplay', () => {
         const notification = factorySupabaseNotification({
           actionType: 'newComment',
           contentId: 103,
-          contentType: 'comment',
+          contentType: 'comments',
           content: FactoryComment({ id: 103, comment: "I'm not sure." }),
-          sourceContentType: 'questions',
-          sourceContent: FactoryQuestionItem({
-            title: 'Where to start?',
-            slug: 'where-to-start',
-          }),
           triggeredBy: factoryTriggeredBy({
             username: 'Ben',
           }),
@@ -105,18 +87,8 @@ describe('NotificationDisplay', () => {
         const notification = factorySupabaseNotification({
           actionType: 'newComment',
           contentId: 104,
-          contentType: 'comment',
+          contentType: 'comments',
           content: FactoryComment({ id: 104, comment: "I'm not sure." }),
-          sourceContentType: 'research',
-          sourceContent: FactoryResearchItem({
-            title: 'New Buildings',
-            slug: 'new-buildings',
-          }),
-          parentContentId: 777,
-          parentContent: FactoryResearchItemUpdate({
-            id: 777,
-            title: 'Digging',
-          }),
           triggeredBy: factoryTriggeredBy({
             username: 'Mario',
           }),
@@ -140,15 +112,10 @@ describe('NotificationDisplay', () => {
     describe('when a new reply', () => {
       it('on news', () => {
         const notification = factorySupabaseNotification({
-          actionType: 'newComment',
+          actionType: 'newReply',
           contentId: 101,
-          contentType: 'reply',
+          contentType: 'comments',
           content: FactoryComment({ id: 101, comment: 'Great work' }),
-          sourceContentType: 'news',
-          sourceContent: FactoryNewsItem({
-            title: 'New thing coming',
-            slug: 'new-thing-coming',
-          }),
           triggeredBy: factoryTriggeredBy({
             username: 'dave0',
           }),
@@ -170,15 +137,10 @@ describe('NotificationDisplay', () => {
 
       it('on library', () => {
         const notification = factorySupabaseNotification({
-          actionType: 'newComment',
+          actionType: 'newReply',
           contentId: 102,
-          contentType: 'reply',
+          contentType: 'comments',
           content: FactoryComment({ id: 102, comment: 'Amazing' }),
-          sourceContentType: 'projects',
-          sourceContent: FactoryLibraryItem({
-            title: 'Best Guide',
-            slug: 'best-guide',
-          }),
           triggeredBy: factoryTriggeredBy({
             username: 'JEFF123',
           }),
@@ -202,13 +164,8 @@ describe('NotificationDisplay', () => {
         const notification = factorySupabaseNotification({
           actionType: 'newComment',
           contentId: 103,
-          contentType: 'reply',
+          contentType: 'comments',
           content: FactoryComment({ id: 103, comment: "I'm not sure." }),
-          sourceContentType: 'questions',
-          sourceContent: FactoryQuestionItem({
-            title: 'Where to start?',
-            slug: 'where-to-start',
-          }),
           triggeredBy: factoryTriggeredBy({
             username: 'Ben',
           }),
@@ -230,20 +187,10 @@ describe('NotificationDisplay', () => {
 
       it('on research update', () => {
         const notification = factorySupabaseNotification({
-          actionType: 'newComment',
+          actionType: 'newReply',
           contentId: 104,
-          contentType: 'reply',
+          contentType: 'comments',
           content: FactoryComment({ id: 104, comment: "I'm not sure." }),
-          sourceContentType: 'research',
-          sourceContent: FactoryResearchItem({
-            title: 'New Buildings',
-            slug: 'new-buildings',
-          }),
-          parentContentId: 777,
-          parentContent: FactoryResearchItemUpdate({
-            id: 777,
-            title: 'Digging',
-          }),
           triggeredBy: factoryTriggeredBy({
             username: 'Mario',
           }),
@@ -269,16 +216,11 @@ describe('NotificationDisplay', () => {
         const notification = factorySupabaseNotification({
           actionType: 'newContent',
           contentId: 654,
-          contentType: 'researchUpdate',
+          contentType: 'research_updates',
           content: FactoryResearchItemUpdate({
             id: 654,
             title: 'Foundations',
             description: 'We put some tiles down.',
-          }),
-          sourceContentType: 'research',
-          sourceContent: FactoryResearchItem({
-            title: 'Second Building',
-            slug: 'second-building',
           }),
           triggeredBy: factoryTriggeredBy({
             username: 'Julie',

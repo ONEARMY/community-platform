@@ -56,8 +56,7 @@ export const NotificationItemSupabase = (props: IProps) => {
     modalDismiss();
   };
 
-  const isDiscussion =
-    notification.contentType === 'comment' || notification.contentType === 'reply';
+  const isDiscussion = notification.contentType === 'comments';
 
   return (
     <Flex data-cy="NotificationListItemSupabase" data-testid="NotificationListItemSupabase">

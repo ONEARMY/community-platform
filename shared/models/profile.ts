@@ -5,7 +5,6 @@ import { ProfileType } from './profileType';
 import type { Comment } from './comment';
 import type { SubscribableContentTypes } from './common';
 import type { IDBDocSB, IDoc } from './document';
-import type { Project } from './library';
 import type { DBMedia, Image } from './media';
 import type { IDBModeration, IModeration, Moderation } from './moderation';
 import type { News } from './news';
@@ -14,7 +13,7 @@ import type { DBProfileBadgeJoin } from './profileBadge';
 import type { DBProfileTagJoin } from './profileTag';
 import type { DBProfileType } from './profileType';
 import type { Question } from './question';
-import type { ResearchItem, ResearchUpdate } from './research';
+import type { ResearchUpdate } from './research';
 import type { IUserImpact, UserVisitorPreference } from './user';
 
 export class DBProfile {
@@ -121,8 +120,8 @@ export class Profile {
 
 // Notifications here to avoid circular dependencies
 
-export type NotificationActionType = 'newContent' | 'newComment';
-export const NotificationContentTypes = ['researchUpdate', 'comment', 'reply'] as const;
+export type NotificationActionType = 'newContent' | 'newComment' | 'newReply';
+export const NotificationContentTypes = ['research_updates', 'comments'] as const;
 export type NotificationContentType = (typeof NotificationContentTypes)[number];
 export type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photo'>;
 export type ProfileListItem = Pick<
@@ -132,23 +131,20 @@ export type ProfileListItem = Pick<
 
 type NotificationContent = News | Comment | Question | ResearchUpdate;
 type NotificationSourceContentType = SubscribableContentTypes;
-type NotificationSourceContent = News | Project | Question | ResearchItem;
 
 export class DBNotification implements IDBDocSB {
   readonly id: number;
+  readonly title: string;
   readonly action_type: NotificationActionType;
   readonly content_id: number;
   readonly content_type: NotificationContentType;
   readonly created_at: Date;
   is_read: boolean;
   modified_at: Date | null;
-  readonly owned_by: DBProfile;
-  readonly owned_by_id: number;
-  readonly parent_comment_id: number | null;
-  readonly parent_content_id: number | null;
   readonly source_content_type: NotificationSourceContentType;
   readonly source_content_id: number;
-  readonly should_email: boolean;
+  readonly owned_by: DBProfile;
+  readonly owned_by_id: number;
   readonly triggered_by: DBProfile;
   readonly triggered_by_id: number;
   readonly tenant_id: string;
@@ -161,22 +157,18 @@ export class DBNotification implements IDBDocSB {
 export class Notification implements IDoc {
   id: number;
   actionType: NotificationActionType;
+  title: string;
   contentId: number;
   contentType: NotificationContentType;
   createdAt: Date;
   modifiedAt: Date | null;
   ownedById: number;
   isRead: boolean;
-  parentCommentId: number | null;
-  parentContentId: number | null;
   sourceContentType: NotificationSourceContentType;
   sourceContentId: number;
 
   content?: NotificationContent;
   ownedBy?: BasicAuthorDetails;
-  parentComment?: Comment;
-  parentContent?: ResearchUpdate;
-  sourceContent?: NotificationSourceContent;
   triggeredBy?: BasicAuthorDetails;
 
   constructor(obj: Notification) {
@@ -186,17 +178,16 @@ export class Notification implements IDoc {
   static fromDB(dbNotification: DBNotification) {
     return new Notification({
       id: dbNotification.id,
+      title: dbNotification.title,
       actionType: dbNotification.action_type,
       contentType: dbNotification.content_type,
       contentId: dbNotification.content_id,
+      sourceContentId: dbNotification.source_content_id,
+      sourceContentType: dbNotification.source_content_type,
       createdAt: new Date(dbNotification.created_at),
       modifiedAt: dbNotification.modified_at ? new Date(dbNotification.modified_at) : null,
       ownedById: dbNotification.owned_by_id,
       isRead: dbNotification.is_read,
-      parentContentId: dbNotification.parent_content_id,
-      parentCommentId: dbNotification.parent_comment_id,
-      sourceContentType: dbNotification.source_content_type,
-      sourceContentId: dbNotification.source_content_id,
       triggeredBy: dbNotification.triggered_by
         ? Profile.fromDB(dbNotification.triggered_by)
         : undefined,
@@ -231,7 +222,7 @@ export class NotificationDisplay {
 
   static setEmailBody(notification: Notification): string {
     switch (notification.contentType) {
-      case 'researchUpdate': {
+      case 'research_updates': {
         return `${(notification.content as ResearchUpdate)?.title}:\n\n${
           (notification.content as ResearchUpdate)?.description
         }`;
@@ -244,13 +235,10 @@ export class NotificationDisplay {
 
   static setEmailButtonLabel(notification: Notification) {
     switch (notification.contentType) {
-      case 'researchUpdate': {
+      case 'research_updates': {
         return 'Join the discussion';
       }
-      case 'comment': {
-        return 'See the full discussion';
-      }
-      case 'reply': {
+      case 'comments': {
         return 'See the full discussion';
       }
       default: {
@@ -260,19 +248,17 @@ export class NotificationDisplay {
   }
 
   static setEmailPreview(notification: Notification) {
-    const parentTitle = this.setParentTitle(notification);
-
-    switch (notification.contentType) {
-      case 'researchUpdate': {
-        return `New research update on ${parentTitle}`;
+    switch (notification.actionType) {
+      case 'newContent': {
+        return `New research update on ${notification.title}`;
       }
-      case 'comment': {
+      case 'newComment': {
         if (notification.triggeredBy && notification.triggeredBy.username) {
           return `${notification.triggeredBy.username} has left a new comment`;
         }
         return 'A new comment notification';
       }
-      case 'reply': {
+      case 'newReply': {
         if (notification.triggeredBy && notification.triggeredBy.username) {
           return `${notification.triggeredBy.username} has left a new reply`;
         }
@@ -285,17 +271,15 @@ export class NotificationDisplay {
   }
 
   static setEmailSubject(notification: Notification) {
-    const parentTitle = this.setParentTitle(notification);
-
-    switch (notification.contentType) {
-      case 'researchUpdate': {
-        return `New update on ${parentTitle}`;
+    switch (notification.actionType) {
+      case 'newContent': {
+        return `New update on ${notification.title}`;
       }
-      case 'comment': {
-        return `A new comment on ${parentTitle}`;
+      case 'newComment': {
+        return `A new comment on ${notification.title}`;
       }
-      case 'reply': {
-        return `A new reply on ${parentTitle}`;
+      case 'newReply': {
+        return `A new reply on ${notification.title}`;
       }
       default: {
         return 'A new notification';
@@ -305,13 +289,10 @@ export class NotificationDisplay {
 
   static setBody(notification: Notification): string | undefined {
     switch (notification.contentType) {
-      case 'researchUpdate': {
+      case 'research_updates': {
         return (notification.content as ResearchUpdate)?.title;
       }
-      case 'comment': {
-        return (notification.content as Comment).comment;
-      }
-      case 'reply': {
+      case 'comments': {
         return (notification.content as Comment).comment;
       }
       default: {
@@ -327,42 +308,28 @@ export class NotificationDisplay {
   }
 
   static setTitle(notification: Notification) {
-    const parentTitle = this.setParentTitle(notification);
-
-    switch (notification.contentType) {
-      case 'researchUpdate': {
-        return `published a new update on ${parentTitle}`;
+    switch (notification.actionType) {
+      case 'newContent': {
+        return `published a new update on ${notification.title}`;
       }
-      case 'comment': {
-        return `left a comment on ${parentTitle}`;
+      case 'newComment': {
+        return `left a comment on ${notification.title}`;
       }
-      case 'reply': {
-        return `left a reply on ${parentTitle}`;
+      case 'newReply': {
+        return `left a reply on ${notification.title}`;
       }
       default: {
-        return parentTitle;
+        return notification.title;
       }
     }
-  }
-
-  static setParentTitle(notification: Notification) {
-    let title = notification.sourceContent?.title || '';
-
-    if (notification.contentType != 'researchUpdate' && notification.parentContent?.title) {
-      title = title + `: ${notification.parentContent.title}`;
-    }
-    return title;
   }
 
   static setSidebarIcon(contentType: NotificationContentType): string {
     switch (contentType) {
-      case 'comment': {
+      case 'comments': {
         return 'comment';
       }
-      case 'reply': {
-        return 'comment';
-      }
-      case 'researchUpdate': {
+      case 'research_updates': {
         return 'update';
       }
       default: {
@@ -519,3 +486,13 @@ export type PinProfile = Pick<
 > & { badges: ProfileBadge[] };
 
 export type UpsertPin = Omit<DBMapPin, 'id' | 'profile' | 'moderation' | 'moderation_feedback'>;
+
+export type SubscribedUser = {
+  profile_id: number;
+  profile_created_at: string;
+  email: string;
+  is_unsubscribed: boolean;
+  replies: boolean;
+  comments: boolean;
+  research_updates: boolean;
+};

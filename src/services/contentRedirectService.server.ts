@@ -7,10 +7,9 @@ export class ContentRedirectServiceServer {
 
   async getUrl(id: number, contentType: NotificationContentType): Promise<string | null> {
     switch (contentType) {
-      case 'researchUpdate':
+      case 'research_updates':
         return this.resolveResearchUpdateUrl(id);
-      case 'comment':
-      case 'reply':
+      case 'comments':
         return this.resolveCommentUrl(id);
     }
   }

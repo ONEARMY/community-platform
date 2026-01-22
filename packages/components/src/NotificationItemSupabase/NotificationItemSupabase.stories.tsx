@@ -12,7 +12,7 @@ export default {
 
 const newsCommentNotification = fakeDisplayNotification();
 const newsReplyNotification = fakeDisplayNotification({
-  contentType: 'reply',
+  contentType: 'comments',
 });
 
 // const questionCommentNotification = fakeDisplayNotification()

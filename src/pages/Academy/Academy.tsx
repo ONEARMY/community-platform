@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import ExternalEmbed from 'src/pages/Academy/ExternalEmbed/ExternalEmbed';
 
@@ -11,14 +11,23 @@ export const getFrameSrc = (base: string, path: string): string =>
 const Academy = () => {
   const location = useLocation();
 
-  return (
-    <ExternalEmbed
-      src={getFrameSrc(
-        import.meta.env.VITE_ACADEMY_RESOURCE || process.env.VITE_ACADEMY_RESOURCE || '',
-        location.pathname,
-      )}
-    />
+  const [initial, setInitial] = useState<string>(
+    import.meta.env.VITE_ACADEMY_RESOURCE || process.env.VITE_ACADEMY_RESOURCE || '',
   );
+
+  useEffect(() => {
+    // set initial only once
+    const newInitial = getFrameSrc(
+      import.meta.env.VITE_ACADEMY_RESOURCE || process.env.VITE_ACADEMY_RESOURCE || '',
+      location.pathname,
+    );
+
+    if (newInitial !== initial) {
+      setInitial(newInitial);
+    }
+  }, []);
+
+  return <ExternalEmbed src={initial} />;
 };
 
 export default Academy;

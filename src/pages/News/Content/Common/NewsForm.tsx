@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
@@ -30,48 +30,33 @@ interface IProps {
 export const NewsForm = (props: IProps) => {
   const { news, parentType } = props;
   const navigate = useNavigate();
-  const [initialValues, setInitialValues] = useState<NewsFormData>({
-    body: '',
-    category: null,
-    existingHeroImage: null,
-    isDraft: null,
+
+  // Initialize values directly from news to avoid delay from useEffect
+  const initialValues: NewsFormData = {
+    body: news?.body || '',
+    category: news?.category
+      ? {
+          value: news.category.id?.toString(),
+          label: news.category.name,
+        }
+      : null,
+    existingHeroImage: news?.heroImage || null,
+    isDraft: news?.isDraft || null,
     heroImage: null,
-    profileBadge: null,
-    tags: [],
-    title: '',
-  });
+    profileBadge: news?.profileBadge
+      ? {
+          value: news.profileBadge.id?.toString(),
+          label: news.profileBadge.displayName,
+        }
+      : null,
+    tags: news?.tagIds || [],
+    title: news?.title || '',
+  };
+
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
 
   const id = news?.id || null;
-
-  useEffect(() => {
-    if (!news) {
-      return;
-    }
-
-    setInitialValues({
-      body: news.body,
-      category: news.category
-        ? {
-            value: news.category.id?.toString(),
-            label: news.category.name,
-          }
-        : null,
-      existingHeroImage: news.heroImage,
-      isDraft: news.isDraft,
-      heroImage: null,
-      profileBadge: news.profileBadge
-        ? {
-            value: news.profileBadge.id?.toString(),
-            label: news.profileBadge.displayName,
-          }
-        : null,
-
-      tags: news.tagIds,
-      title: news.title,
-    });
-  }, [news]);
 
   const onSubmit = async (formValues: Partial<NewsFormData>, isDraft = false) => {
     setIntentionalNavigation(true);
@@ -100,49 +85,56 @@ export const NewsForm = (props: IProps) => {
     }
   };
 
-  const imageUpload = async (imageFile: File) => {
-    if (!imageFile) {
-      return;
-    }
-    try {
-      const response = await storageService.imageUpload(id, 'news', imageFile);
-      return response.publicUrl;
-    } catch (e) {
-      if (e.cause && e.message) {
-        setSaveErrorMessage(e.message);
+  const imageUpload = useCallback(
+    async (imageFile: File) => {
+      if (!imageFile) {
+        return;
       }
-      logger.error(e);
-    }
-  };
+      try {
+        const response = await storageService.imageUpload(id, 'news', imageFile);
+        return response.publicUrl;
+      } catch (e) {
+        if (e.cause && e.message) {
+          setSaveErrorMessage(e.message);
+        }
+        logger.error(e);
+      }
+    },
+    [id],
+  );
 
-  const removeExistingImage = () => {
-    setInitialValues((prevState: NewsFormData) => {
-      return {
-        ...prevState,
-        existingHeroImage: null,
-        heroImage: null,
-      };
-    });
-  };
+  const validateForm = useCallback((values) => {
+    const errors = {};
+    if (!values.body?.length) {
+      errors['body'] = 'Body field required. Gotta have something to say...';
+    }
+    if (values.heroImage == null && values.existingHeroImage === null) {
+      errors['heroImage'] = 'An image is required (either new or existing).';
+    }
+    return errors;
+  }, []);
 
   return (
     <Form
+      key={id || 'new'}
       data-testid={props['data-testid']}
       onSubmit={(values) => onSubmit(values, false)}
       initialValues={initialValues}
-      validate={(values) => {
-        const errors = {};
-        if (!values.body?.length) {
-          errors['body'] = 'Body field required. Gotta have something to say...';
-        }
-        if (values.heroImage == null && values.existingHeroImage === null) {
-          errors['heroImage'] = 'An image is required (either new or existing).';
-        }
-        return errors;
+      validate={validateForm}
+      subscription={{
+        submitting: true,
+        pristine: true,
+        hasValidationErrors: true,
+        values: true,
+        dirty: true,
+        errors: true,
+        submitFailed: true,
+        submitSucceeded: true,
       }}
       render={({
         dirty,
         errors,
+        form,
         hasValidationErrors,
         submitFailed,
         submitting,
@@ -150,6 +142,11 @@ export const NewsForm = (props: IProps) => {
         handleSubmit,
         values,
       }) => {
+        const removeExistingImage = () => {
+          form.change('existingHeroImage', null);
+          form.change('heroImage', null);
+        };
+
         const errorsClientSide = [errorSet(errors, LABELS.fields)];
 
         const handleSubmitDraft = () => onSubmit(values, true);
@@ -180,7 +177,7 @@ export const NewsForm = (props: IProps) => {
               title={LABELS.fields.title.title}
             />
             <NewsImageField
-              existingHeroImage={initialValues.existingHeroImage}
+              existingHeroImage={values.existingHeroImage}
               removeExistingImage={removeExistingImage}
             />
             <CategoryField type="news" />

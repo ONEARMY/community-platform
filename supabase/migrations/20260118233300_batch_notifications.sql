@@ -120,6 +120,8 @@ AS $function$BEGIN
 END;$function$
 ;
 
+alter table "public"."notifications" add column "title" text;
+
 ALTER TYPE public.notification_content_types ADD VALUE IF NOT EXISTS 'research_updates';
 ALTER TYPE public.notification_content_types ADD VALUE IF NOT EXISTS 'comments';
 ALTER TYPE public.notification_content_types ADD VALUE IF NOT EXISTS 'projects';

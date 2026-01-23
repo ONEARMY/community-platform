@@ -43,7 +43,13 @@ const createNotifications = async (
     const notificationsToInsert = subscriberIds.map(
       (subscriber) =>
         new DBNotification({
-          ...notification,
+          action_type: notification.action_type,
+          content_id: notification.content_id,
+          content_type: notification.content_type,
+          source_content_id: notification.source_content_id,
+          source_content_type: notification.source_content_type,
+          title: notification.title,
+          triggered_by_id: notification.triggered_by_id,
           owned_by_id: subscriber.profile_id,
           is_read: false,
           tenant_id: process.env.TENANT_ID!,

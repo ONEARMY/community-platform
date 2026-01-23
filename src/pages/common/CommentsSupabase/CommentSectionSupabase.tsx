@@ -11,13 +11,13 @@ import { CommentSort } from './CommentSort';
 import { CommentSortOption, CommentSortOptions } from './CommentSortOptions';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
 
-import type { DiscussionContentTypes, Reply } from 'oa-shared';
+import type { DiscussionContentType, Reply } from 'oa-shared';
 import type { Dispatch, SetStateAction } from 'react';
 
 interface IProps {
   authors: Array<number>;
   sourceId: number;
-  sourceType: DiscussionContentTypes;
+  sourceType: DiscussionContentType;
   setSubscribersCount?: Dispatch<SetStateAction<number>>;
 }
 const commentPageSize = 10;

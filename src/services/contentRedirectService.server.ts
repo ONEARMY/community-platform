@@ -44,7 +44,7 @@ export class ContentRedirectServiceServer {
     const comment = data as DBComment;
 
     switch (comment.source_type) {
-      case 'research_update':
+      case 'research_updates':
         return this.resolveResearchUpdateCommentUrl(comment.source_id!, comment.id);
       case 'news':
       case 'projects':

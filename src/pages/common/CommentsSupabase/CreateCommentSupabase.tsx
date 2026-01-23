@@ -6,7 +6,7 @@ import { MAX_COMMENT_LENGTH } from 'src/constants';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Box, Flex, Text, Textarea } from 'theme-ui';
 
-import type { DiscussionContentTypes } from 'oa-shared';
+import type { DiscussionContentType } from 'oa-shared';
 import type { ChangeEvent } from 'react';
 import type { ThemeUIStyleObject } from 'theme-ui';
 
@@ -14,7 +14,7 @@ import './CreateCommentSupabase.css';
 
 interface IProps {
   onSubmit: (value: string) => void;
-  sourceType: DiscussionContentTypes;
+  sourceType: DiscussionContentType;
   isLoading?: boolean;
   isReply?: boolean;
   placeholder?: string;

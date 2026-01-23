@@ -1079,6 +1079,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rejected-l",
+      "name": "Rej Ect",
+      "avatar_url": "https://avatars.githubusercontent.com/u/99460023?v=4",
+      "profile": "https://github.com/rejected-l",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "projectName": "community-platform",

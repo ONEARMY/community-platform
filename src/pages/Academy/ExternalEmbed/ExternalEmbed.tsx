@@ -17,7 +17,7 @@ interface IProps {
 const ExternalEmbed = ({ src }: IProps) => {
   const navigate = useNavigate();
   const url = new URL(src);
-  const targetOrigin = url.protocol + '//' + url.hostname;
+  const targetOrigin = url.protocol + '//' + url.hostname + (url.port ? ':' + url.port : '');
 
   useEffect(() => {
     // TODO - possible compatibility fallback for addEventListener (IE8)
@@ -47,7 +47,7 @@ const ExternalEmbed = ({ src }: IProps) => {
         if (!newPathName.startsWith(`/academy`)) {
           newPathName = `/academy${newPathName}`;
         }
-        navigate(newPathName);
+        navigate(newPathName, { viewTransition: true });
       }
       // communicate a href link clicks, open link in new tab
       if (e.data && e.data.linkClick) {

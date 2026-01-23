@@ -276,13 +276,13 @@ export class NotificationDisplay {
         return `New update on ${notification.title}`;
       }
       case 'newComment': {
-        return `A new comment on ${notification.title}`;
+        return `New comment on ${notification.title}`;
       }
       case 'newReply': {
-        return `A new reply on ${notification.title}`;
+        return `You have a new comment reply!`;
       }
       default: {
-        return 'A new notification';
+        return 'You have a new notification!';
       }
     }
   }

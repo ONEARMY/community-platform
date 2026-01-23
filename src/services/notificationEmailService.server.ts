@@ -59,7 +59,7 @@ const sendInstantNotificationEmails = async (
 
     sendBatchEmails({
       from: tenantSettings.emailFrom,
-      subject: 'You have a new notification',
+      subject: fullNotification.email.subject,
       emails: codes.map(({ code, email }) => {
         return {
           to: email,

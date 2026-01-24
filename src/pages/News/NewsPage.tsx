@@ -3,12 +3,12 @@ import { Link } from 'react-router';
 import { observer } from 'mobx-react';
 import {
   Category,
+  ContentImageLightbox,
   ContentStatistics,
   DisplayDate,
   ProfileBadgeContentLabel,
   TagList,
 } from 'oa-components';
-import PhotoSwipeLightbox from 'photoswipe/lightbox';
 // eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
@@ -27,8 +27,15 @@ interface IProps {
 
 export const NewsPage = observer(({ news }: IProps) => {
   const [subscribersCount, setSubscribersCount] = useState<number>(news.subscriberCount);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const [heroImage, setHeroImage] = useState<HTMLImageElement | null>(null);
   const heroImageRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    if (heroImageRef.current && !heroImage) {
+      // need state to trigger re-render of ContentImageLightbox because ref doesn't trigger re-render
+      setHeroImage(heroImageRef.current);
+    }
+  }, []);
 
   const { profile } = useProfileStore();
 
@@ -36,73 +43,9 @@ export const NewsPage = observer(({ news }: IProps) => {
     return hasAdminRights(profile) || news.author?.username === profile?.username;
   }, [profile, news.author]);
 
-  useEffect(() => {
-    if (!contentRef.current) return;
-
-    // 1. Find all images in the content body
-    const images = contentRef.current.querySelectorAll('img');
-    const imageElements = Array.from(images);
-
-    // Add hero image if it exists
-    if (heroImageRef.current) {
-      imageElements.unshift(heroImageRef.current as HTMLImageElement);
-    }
-
-    if (imageElements.length === 0) {
-      return;
-    }
-
-    // 2. Prepare data source for PhotoSwipe
-    const dataSource = imageElements.map((img) => ({
-      src: img.src,
-      width: img.naturalWidth || 800, // Fallback if not loaded yet
-      height: img.naturalHeight || 600,
-      alt: img.alt,
-    }));
-
-    // 3. Initialize Lightbox
-    const lightbox = new PhotoSwipeLightbox({
-      dataSource,
-      pswpModule: () => import('photoswipe'),
-      paddingFn: () => {
-        return {
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-        };
-      },
-    });
-
-    // 4. Update dimensions when image loads (crucial for accurate zooming)
-    lightbox.on('beforeOpen', () => {
-      const pswp = lightbox.pswp;
-      imageElements.forEach((img, index) => {
-        const data: any = dataSource[index];
-        data.width = img.naturalWidth;
-        data.height = img.naturalHeight;
-        pswp?.refreshSlideContent(index);
-      });
-    });
-
-    lightbox.init();
-
-    // 5. Attach click listeners to HTML images
-    imageElements.forEach((img, index) => {
-      img.style.cursor = 'pointer';
-      img.onclick = (e) => {
-        e.preventDefault();
-        lightbox.loadAndOpen(index);
-      };
-    });
-
-    return () => {
-      lightbox.destroy();
-      imageElements.forEach((img) => {
-        img.onclick = null;
-      });
-    };
-  }, [news.bodyHtml]);
+  const prependImages = useMemo(() => {
+    return heroImage ? [heroImage] : [];
+  }, [heroImage]);
 
   return (
     <Box sx={{ width: '100%', maxWidth: '620px', alignSelf: 'center' }}>
@@ -163,7 +106,6 @@ export const NewsPage = observer(({ news }: IProps) => {
           )}
 
           <Box
-            ref={contentRef}
             data-cy="news-body"
             sx={{
               alignSelf: 'stretch',
@@ -180,16 +122,17 @@ export const NewsPage = observer(({ news }: IProps) => {
               img: {
                 borderRadius: 2,
                 maxWidth: '100%',
-                marginLeft: 0,
               },
               iframe: {
-                maxWidth: '100%',
                 maxHeight: ['300px', '370px', '420px'],
-                marginLeft: 0,
               },
             }}
           >
-            <div dangerouslySetInnerHTML={{ __html: news.bodyHtml }} />
+            <ContentImageLightbox
+              prependImages={prependImages}
+            >
+              <div dangerouslySetInnerHTML={{ __html: news.bodyHtml }} />
+            </ContentImageLightbox>
           </Box>
 
           <Flex

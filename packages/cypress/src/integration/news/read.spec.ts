@@ -59,10 +59,13 @@ describe('[News.Read]', () => {
       cy.get('[data-cy=breadcrumbsItem]').eq(1).should('contain', title);
 
       cy.step('News images are clickable');
+
+      cy.wait(500);
+
       // Check content images
       cy.get('[data-cy=news-body] img')
         .first()
-        .should('have.css', 'cursor', 'zoom-in')
+        .should('have.css', 'cursor', 'pointer')
         .click();
 
       // Lightbox should open

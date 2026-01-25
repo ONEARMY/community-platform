@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS "public"."news" (
     "summary" "text",
     "fts" "tsvector" GENERATED ALWAYS AS ("to_tsvector"('"english"'::"regconfig", ((("title" || ' '::"text") || "body") || ("summary" || ''::"text")))) STORED,
     "is_draft" boolean DEFAULT false NOT NULL,
-    "profile_badge" bigint
+    "profile_badge" bigint,
+    "published_at" timestamp with time zone
 );
 
 CREATE OR REPLACE FUNCTION "public"."news_search_fields"("public"."news") RETURNS "text"

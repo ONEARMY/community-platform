@@ -93,6 +93,7 @@ export const QuestionListItem = ({ question, query }: IProps) => {
                 author={question.author}
                 createdAt={question.createdAt}
                 modifiedAt={question.modifiedAt}
+                publishedAt={question.publishedAt}
               />
             )}
           </Flex>

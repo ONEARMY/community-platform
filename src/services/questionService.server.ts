@@ -17,6 +17,7 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
        created_by,
        is_draft,
        modified_at,
+       published_at,
        comment_count,
        description,
        moderation,

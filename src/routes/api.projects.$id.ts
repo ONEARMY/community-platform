@@ -236,6 +236,9 @@ async function updateProject(
 
   let moderation = currentProject.moderation;
 
+  // Set published_at when transitioning from draft to published for the first time
+  const isFirstPublish = currentProject.is_draft && !data.isDraft && !currentProject.published_at;
+
   if (currentProject.is_draft && !data.isDraft) {
     moderation = profile?.roles?.includes(UserRole.ADMIN) ? 'accepted' : 'awaiting-moderation';
   }
@@ -256,6 +259,7 @@ async function updateProject(
       files,
       moderation,
       cover_image,
+      ...(isFirstPublish && { published_at: new Date() }),
     })
     .eq('id', currentProject.id)
     .select();

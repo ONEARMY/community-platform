@@ -251,6 +251,7 @@ async function createProject(
       category: data.category,
       tags: data.tags,
       is_draft: data.isDraft,
+      published_at: data.isDraft ? null : new Date(),
       file_link: data.fileLink,
       difficulty_level: data.difficultyLevel,
       time: data.time,

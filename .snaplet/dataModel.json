@@ -3893,6 +3893,20 @@
           "maxLength": null
         },
         {
+          "id": "public.news.published_at",
+          "name": "published_at",
+          "columnName": "published_at",
+          "type": "timestamptz",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "categories",
           "type": "categories",
           "isRequired": false,
@@ -7734,6 +7748,20 @@
           "maxLength": null
         },
         {
+          "id": "public.questions.published_at",
+          "name": "published_at",
+          "columnName": "published_at",
+          "type": "timestamptz",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "categories",
           "type": "categories",
           "isRequired": false,
@@ -8228,6 +8256,20 @@
           "maxLength": null
         },
         {
+          "id": "public.research.published_at",
+          "name": "published_at",
+          "columnName": "published_at",
+          "type": "timestamptz",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "categories",
           "type": "categories",
           "isRequired": false,
@@ -8516,6 +8558,20 @@
           "name": "legacy_id",
           "columnName": "legacy_id",
           "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.research_updates.published_at",
+          "name": "published_at",
+          "columnName": "published_at",
+          "type": "timestamptz",
           "isRequired": false,
           "kind": "scalar",
           "isList": false,

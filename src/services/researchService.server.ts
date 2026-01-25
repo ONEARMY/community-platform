@@ -22,6 +22,7 @@ const getBySlug = async (client: SupabaseClient, slug: string) => {
        created_at,
        created_by,
        modified_at,
+       published_at,
        title,
        description,
        slug,

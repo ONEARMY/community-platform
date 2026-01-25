@@ -131,13 +131,16 @@ const ResearchUpdate = (props: IProps) => {
                 )}
 
                 <Text variant="auxiliary">
-                  <DisplayDate createdAt={update.createdAt} action="Created" />
+                  <DisplayDate
+                    createdAt={update.publishedAt || update.createdAt}
+                    action="Created"
+                  />
                 </Text>
 
                 {update.modifiedAt !== update.createdAt && (
                   <Text variant="auxiliary">
                     <DisplayDate
-                      createdAt={update.createdAt}
+                      createdAt={update.publishedAt || update.createdAt}
                       modifiedAt={update.modifiedAt}
                       action="Updated"
                     />

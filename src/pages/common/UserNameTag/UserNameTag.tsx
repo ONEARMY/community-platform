@@ -7,10 +7,11 @@ interface IProps {
   createdAt?: string | number | Date;
   action?: string;
   modifiedAt?: string | number | Date | null;
+  publishedAt?: string | number | Date | null;
 }
 
 export const UserNameTag = (props: IProps) => {
-  const { author, createdAt, action = 'Published', modifiedAt } = props;
+  const { author, createdAt, action = 'Published', modifiedAt, publishedAt } = props;
 
   return (
     <Flex sx={{ flexDirection: 'column' }}>
@@ -25,7 +26,12 @@ export const UserNameTag = (props: IProps) => {
                 marginBottom: 2,
               }}
             >
-              | <DisplayDate action={action} createdAt={createdAt} modifiedAt={modifiedAt} />
+              |{' '}
+              <DisplayDate
+                action={action}
+                createdAt={publishedAt || createdAt}
+                modifiedAt={modifiedAt}
+              />
             </Text>
           )}
         </Flex>

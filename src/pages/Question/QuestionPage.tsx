@@ -85,7 +85,11 @@ export const QuestionPage = observer(({ question }: IProps) => {
             <AuthorDisplay author={question.author} />
 
             <Text variant="auxiliary">
-              <DisplayDate createdAt={question.createdAt} modifiedAt={question.modifiedAt} action="Asked" />
+              <DisplayDate
+                createdAt={question.publishedAt || question.createdAt}
+                modifiedAt={question.modifiedAt}
+                action="Asked"
+              />
             </Text>
 
             {question.isDraft && <DraftTag />}

@@ -75,7 +75,7 @@ export const NewsListItem = ({ news, query }: IProps) => {
           </Flex>
 
           <Text variant="auxiliary">
-            <DisplayDate action={'Published'} createdAt={news.createdAt} />
+            <DisplayDate createdAt={news.publishedAt || news.createdAt} />
           </Text>
 
           {news.summary && (

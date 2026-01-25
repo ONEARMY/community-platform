@@ -24,6 +24,7 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
   readonly id: number;
   readonly created_at: Date;
   readonly deleted: boolean | null;
+  readonly published_at: Date | null;
   readonly author?: DBAuthor;
   readonly update_count?: number;
   readonly useful_count?: number;
@@ -61,6 +62,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
   createdAt: Date;
   author: Author | null;
   modifiedAt: Date | null;
+  publishedAt: Date | null;
   title: string;
   slug: string;
   previousSlugs: string[];
@@ -97,6 +99,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
       createdAt: new Date(obj.created_at),
       author: obj.author ? Author.fromDB(obj.author) : null,
       modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
+      publishedAt: obj.published_at ? new Date(obj.published_at) : null,
       title: obj.title,
       slug: obj.slug,
       previousSlugs: obj.previous_slugs || [],

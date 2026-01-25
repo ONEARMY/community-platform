@@ -17,6 +17,7 @@ export class DBNews implements IDBContentDoc {
   readonly id: number;
   readonly created_at: Date;
   readonly modified_at: Date | null;
+  readonly published_at: Date | null;
   readonly author?: DBAuthor;
   readonly comment_count?: number;
   readonly category: DBCategory | null;
@@ -51,6 +52,7 @@ export class News implements IContentDoc {
   modifiedAt: Date | null;
   profileBadge: ProfileBadge | null;
   previousSlugs: string[];
+  publishedAt: Date | null;
   slug: string;
   subscriberCount: number;
   summary: string | null;
@@ -87,6 +89,7 @@ export class News implements IContentDoc {
       modifiedAt: news.modified_at ? new Date(news.modified_at) : null,
       profileBadge: news.profile_badge ? ProfileBadge.fromDB(news.profile_badge) : null,
       previousSlugs: news.previous_slugs,
+      publishedAt: news.published_at ? new Date(news.published_at) : null,
       slug: news.slug,
       subscriberCount: news.subscriber_count || 0,
       summary: news.summary || null,

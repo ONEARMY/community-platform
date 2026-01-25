@@ -106,7 +106,7 @@ const ResearchDescription = (props: IProps) => {
 
             <Text variant="auxiliary">
               <DisplayDate
-                createdAt={research.createdAt}
+                createdAt={research.publishedAt || research.createdAt}
                 modifiedAt={lastUpdated.toISOString()}
                 action="Started"
               />

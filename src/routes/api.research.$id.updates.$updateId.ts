@@ -92,6 +92,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       client,
     );
 
+    // Set published_at when transitioning from draft to published for the first time
+    const isFirstPublish =
+      oldResearchUpdate.is_draft && !data.isDraft && !oldResearchUpdate.published_at;
+
     const researchUpdateAfterUpdating = await client
       .from('research_updates')
       .update({
@@ -102,6 +106,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         modified_at: new Date(),
         video_url: data.videoUrl,
         files: files.map((x) => ({ id: x.id, name: x.name, size: x.size })),
+        ...(isFirstPublish && { published_at: new Date() }),
       })
       .eq('id', oldResearchUpdate.id)
       .select('*,research:research(id,title,slug,is_draft)')

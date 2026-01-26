@@ -94,7 +94,6 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const previousSlugs = contentServiceServer.updatePreviousSlugs(currentQuestion, data.slug);
 
-    // Set published_at when transitioning from draft to published for the first time
     const isFirstPublish =
       currentQuestion.is_draft && !data.is_draft && !currentQuestion.published_at;
 

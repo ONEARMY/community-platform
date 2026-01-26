@@ -7412,6 +7412,20 @@
           "maxLength": null
         },
         {
+          "id": "public.projects.published_at",
+          "name": "published_at",
+          "columnName": "published_at",
+          "type": "timestamptz",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "categories",
           "type": "categories",
           "isRequired": false,

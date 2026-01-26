@@ -13,6 +13,7 @@ describe('NotificationDisplay', () => {
           actionType: 'newComment',
           contentId: 101,
           contentType: 'comments',
+          title: 'New thing coming',
           content: FactoryComment({ id: 101, comment: 'Great work' }),
           triggeredBy: factoryTriggeredBy({
             username: 'dave0',
@@ -21,7 +22,7 @@ describe('NotificationDisplay', () => {
 
         const notificationDisplay = NotificationDisplay.fromNotification(notification);
 
-        expect(notificationDisplay.link).toBe('news/new-thing-coming#comment:101');
+        expect(notificationDisplay.link).toBe('/redirect?id=101&ct=comments');
         expect(notificationDisplay.body).toBe('Great work');
         expect(notificationDisplay.title).toBe('left a comment on New thing coming');
         expect(notificationDisplay.triggeredBy).toBe('dave0');
@@ -29,7 +30,7 @@ describe('NotificationDisplay', () => {
           body: 'Great work',
           buttonLabel: 'See the full discussion',
           preview: 'dave0 has left a new comment',
-          subject: 'A new comment on New thing coming',
+          subject: 'New comment on New thing coming',
         });
       });
 
@@ -38,6 +39,7 @@ describe('NotificationDisplay', () => {
           actionType: 'newComment',
           contentId: 102,
           contentType: 'comments',
+          title: 'Best Guide',
           content: FactoryComment({ id: 102, comment: 'Amazing' }),
           triggeredBy: factoryTriggeredBy({
             username: 'JEFF123',
@@ -46,7 +48,7 @@ describe('NotificationDisplay', () => {
 
         const notificationDisplay = NotificationDisplay.fromNotification(notification);
 
-        expect(notificationDisplay.link).toBe('library/best-guide#comment:102');
+        expect(notificationDisplay.link).toBe('/redirect?id=102&ct=comments');
         expect(notificationDisplay.body).toBe('Amazing');
         expect(notificationDisplay.title).toBe('left a comment on Best Guide');
         expect(notificationDisplay.triggeredBy).toBe('JEFF123');
@@ -54,7 +56,7 @@ describe('NotificationDisplay', () => {
           body: 'Amazing',
           buttonLabel: 'See the full discussion',
           preview: 'JEFF123 has left a new comment',
-          subject: 'A new comment on Best Guide',
+          subject: 'New comment on Best Guide',
         });
       });
 
@@ -63,6 +65,7 @@ describe('NotificationDisplay', () => {
           actionType: 'newComment',
           contentId: 103,
           contentType: 'comments',
+          title: 'Where to start?',
           content: FactoryComment({ id: 103, comment: "I'm not sure." }),
           triggeredBy: factoryTriggeredBy({
             username: 'Ben',
@@ -71,7 +74,7 @@ describe('NotificationDisplay', () => {
 
         const notificationDisplay = NotificationDisplay.fromNotification(notification);
 
-        expect(notificationDisplay.link).toBe('questions/where-to-start#comment:103');
+        expect(notificationDisplay.link).toBe('/redirect?id=103&ct=comments');
         expect(notificationDisplay.body).toBe("I'm not sure.");
         expect(notificationDisplay.title).toBe('left a comment on Where to start?');
         expect(notificationDisplay.triggeredBy).toBe('Ben');
@@ -79,7 +82,7 @@ describe('NotificationDisplay', () => {
           body: "I'm not sure.",
           buttonLabel: 'See the full discussion',
           preview: 'Ben has left a new comment',
-          subject: 'A new comment on Where to start?',
+          subject: 'New comment on Where to start?',
         });
       });
 
@@ -88,6 +91,7 @@ describe('NotificationDisplay', () => {
           actionType: 'newComment',
           contentId: 104,
           contentType: 'comments',
+          title: 'New Buildings: Digging',
           content: FactoryComment({ id: 104, comment: "I'm not sure." }),
           triggeredBy: factoryTriggeredBy({
             username: 'Mario',
@@ -96,7 +100,7 @@ describe('NotificationDisplay', () => {
 
         const notificationDisplay = NotificationDisplay.fromNotification(notification);
 
-        expect(notificationDisplay.link).toBe('research/new-buildings?update_777#comment:104');
+        expect(notificationDisplay.link).toBe('/redirect?id=104&ct=comments');
         expect(notificationDisplay.body).toBe("I'm not sure.");
         expect(notificationDisplay.title).toBe('left a comment on New Buildings: Digging');
         expect(notificationDisplay.triggeredBy).toBe('Mario');
@@ -104,7 +108,7 @@ describe('NotificationDisplay', () => {
           body: "I'm not sure.",
           buttonLabel: 'See the full discussion',
           preview: 'Mario has left a new comment',
-          subject: 'A new comment on New Buildings: Digging',
+          subject: 'New comment on New Buildings: Digging',
         });
       });
     });
@@ -123,15 +127,15 @@ describe('NotificationDisplay', () => {
 
         const notificationDisplay = NotificationDisplay.fromNotification(notification);
 
-        expect(notificationDisplay.link).toBe('news/new-thing-coming#comment:101');
+        expect(notificationDisplay.link).toBe('/redirect?id=101&ct=comments');
         expect(notificationDisplay.body).toBe('Great work');
-        expect(notificationDisplay.title).toBe('left a reply on New thing coming');
+        expect(notificationDisplay.title).toBe('left a reply');
         expect(notificationDisplay.triggeredBy).toBe('dave0');
         expect(notificationDisplay.email).toStrictEqual({
           body: 'Great work',
           buttonLabel: 'See the full discussion',
           preview: 'dave0 has left a new reply',
-          subject: 'A new reply on New thing coming',
+          subject: 'You have a new comment reply!',
         });
       });
 
@@ -148,21 +152,21 @@ describe('NotificationDisplay', () => {
 
         const notificationDisplay = NotificationDisplay.fromNotification(notification);
 
-        expect(notificationDisplay.link).toBe('library/best-guide#comment:102');
+        expect(notificationDisplay.link).toBe('/redirect?id=102&ct=comments');
         expect(notificationDisplay.body).toBe('Amazing');
-        expect(notificationDisplay.title).toBe('left a reply on Best Guide');
+        expect(notificationDisplay.title).toBe('left a reply');
         expect(notificationDisplay.triggeredBy).toBe('JEFF123');
         expect(notificationDisplay.email).toStrictEqual({
           body: 'Amazing',
           buttonLabel: 'See the full discussion',
           preview: 'JEFF123 has left a new reply',
-          subject: 'A new reply on Best Guide',
+          subject: 'You have a new comment reply!',
         });
       });
 
       it('on questions', () => {
         const notification = factorySupabaseNotification({
-          actionType: 'newComment',
+          actionType: 'newReply',
           contentId: 103,
           contentType: 'comments',
           content: FactoryComment({ id: 103, comment: "I'm not sure." }),
@@ -173,15 +177,15 @@ describe('NotificationDisplay', () => {
 
         const notificationDisplay = NotificationDisplay.fromNotification(notification);
 
-        expect(notificationDisplay.link).toBe('questions/where-to-start#comment:103');
+        expect(notificationDisplay.link).toBe('/redirect?id=103&ct=comments');
         expect(notificationDisplay.body).toBe("I'm not sure.");
-        expect(notificationDisplay.title).toBe('left a reply on Where to start?');
+        expect(notificationDisplay.title).toBe('left a reply');
         expect(notificationDisplay.triggeredBy).toBe('Ben');
         expect(notificationDisplay.email).toStrictEqual({
           body: "I'm not sure.",
           buttonLabel: 'See the full discussion',
           preview: 'Ben has left a new reply',
-          subject: 'A new reply on Where to start?',
+          subject: 'You have a new comment reply!',
         });
       });
 
@@ -198,15 +202,15 @@ describe('NotificationDisplay', () => {
 
         const notificationDisplay = NotificationDisplay.fromNotification(notification);
 
-        expect(notificationDisplay.link).toBe('research/new-buildings?update_777#comment:104');
+        expect(notificationDisplay.link).toBe('/redirect?id=104&ct=comments');
         expect(notificationDisplay.body).toBe("I'm not sure.");
-        expect(notificationDisplay.title).toBe('left a reply on New Buildings: Digging');
+        expect(notificationDisplay.title).toBe('left a reply');
         expect(notificationDisplay.triggeredBy).toBe('Mario');
         expect(notificationDisplay.email).toStrictEqual({
           body: "I'm not sure.",
           buttonLabel: 'See the full discussion',
           preview: 'Mario has left a new reply',
-          subject: 'A new reply on New Buildings: Digging',
+          subject: 'You have a new comment reply!',
         });
       });
     });
@@ -225,10 +229,11 @@ describe('NotificationDisplay', () => {
           triggeredBy: factoryTriggeredBy({
             username: 'Julie',
           }),
+          title: 'Second Building',
         });
         const notificationDisplay = NotificationDisplay.fromNotification(notification);
 
-        expect(notificationDisplay.link).toBe('research/second-building#update_654');
+        expect(notificationDisplay.link).toBe('/redirect?id=654&ct=research_updates');
         expect(notificationDisplay.body).toBe('Foundations');
         expect(notificationDisplay.title).toBe('published a new update on Second Building');
         expect(notificationDisplay.triggeredBy).toBe('Julie');

@@ -58,7 +58,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const previousSlugs = contentServiceServer.updatePreviousSlugs(oldResearch, data.slug);
 
-    // Set published_at when transitioning from draft to published for the first time
     const isFirstPublish = oldResearch.is_draft && !data.isDraft && !oldResearch.published_at;
 
     const researchResult = await client

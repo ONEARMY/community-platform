@@ -49,10 +49,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const signupResult = await client.auth.signUp({
     email,
     password,
-    options: {
-      data: { username },
-      emailRedirectTo,
-    },
+    options: { emailRedirectTo },
   });
 
   if (signupResult.error) {

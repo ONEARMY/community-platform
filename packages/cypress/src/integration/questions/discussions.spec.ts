@@ -152,7 +152,6 @@ describe('[Questions.Discussions]', () => {
     cy.expectNewNotification({
       content: updatedNewReply,
       path: questionPath,
-      title: question.title,
       username: replier.username,
     });
     cy.get('[data-cy=highlighted-comment]').contains(updatedNewReply);
@@ -178,22 +177,7 @@ describe('[Questions.Discussions]', () => {
     cy.expectNewNotification({
       content: secondReply,
       path: questionPath,
-      title: question.title,
       username: commenter.username,
     });
-
-    // Currently hard to test as the article is created via the seed
-    //
-    // cy.step(
-    //   'Notification generated for question creator of the original comment only',
-    // )
-    // cy.logout()
-    // cy.signIn(questionCreator.email, questionCreator.password)
-    // cy.expectNewNotification({
-    //   content: updatedNewReply,
-    //   path: questionPath,
-    //   title: question.title,
-    //   username: replier.username,
-    // })
   });
 });

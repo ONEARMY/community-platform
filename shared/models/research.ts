@@ -21,6 +21,7 @@ export class DBResearchItem implements IDBContentDoc {
   readonly id: number;
   readonly created_at: Date;
   readonly deleted: boolean | null;
+  readonly published_at: Date | null;
   readonly author?: DBAuthor;
   readonly update_count?: number;
   readonly useful_count?: number;
@@ -53,6 +54,7 @@ export class ResearchItem implements IContentDoc {
   createdAt: Date;
   author: Author | null;
   modifiedAt: Date | null;
+  publishedAt: Date | null;
   title: string;
   slug: string;
   previousSlugs: string[];
@@ -114,6 +116,7 @@ export class ResearchItem implements IContentDoc {
       createdAt: new Date(obj.created_at),
       author: obj.author ? Author.fromDB(obj.author) : null,
       modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
+      publishedAt: obj.published_at ? new Date(obj.published_at) : null,
       title: obj.title,
       slug: obj.slug,
       previousSlugs: obj.previous_slugs || [],
@@ -145,6 +148,7 @@ export class DBResearchUpdate implements IDBDocSB, IDBDownloadable {
   readonly created_at: Date;
   readonly deleted: boolean | null;
   readonly is_draft: boolean | null;
+  readonly published_at: Date | null;
   readonly comment_count?: number;
   readonly file_download_count?: number;
   readonly update_author?: DBAuthor;
@@ -175,6 +179,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
   isDraft: boolean;
   hasFileLink: boolean;
   modifiedAt: Date | null;
+  publishedAt: Date | null;
   researchId: number;
   title: string;
   videoUrl: string | null;
@@ -189,6 +194,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
       id: obj.id,
       createdAt: new Date(obj.created_at),
       modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
+      publishedAt: obj.published_at ? new Date(obj.published_at) : null,
       author: obj.update_author ? Author.fromDB(obj.update_author) : null,
       title: obj.title,
       description: obj.description,

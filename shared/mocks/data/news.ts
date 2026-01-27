@@ -2,7 +2,7 @@ import type { DBNews } from '../../models/news';
 
 export const news: Partial<DBNews>[] = [
   {
-    body: 'Test info with a link to [OneArmy](https://www.onearmy.earth/).',
+    body: 'Test info with a link to [OneArmy](https://www.onearmy.earth/).\n![test-img](https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/precious-plastic/pp-logo.png)',
     category: null,
     comment_count: 2,
     created_at: new Date(),

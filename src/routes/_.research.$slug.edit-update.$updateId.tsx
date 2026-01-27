@@ -2,6 +2,7 @@ import { redirect, useLoaderData } from 'react-router';
 import { ResearchItem } from 'oa-shared';
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common/ResearchUpdateForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { authServiceServer } from 'src/services/authService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { researchServiceServer } from 'src/services/researchService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
@@ -27,7 +28,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return Response.json({ research: null }, { headers });
   }
 
-  const username = claims.data.claims.user_metadata.username;
+  const authId = claims.data.claims.sub;
+  const profile = await authServiceServer.getProfileByAuthId(authId, client);
+  const username = profile?.username;
   const researchDb = result.item;
   const images = researchServiceServer.getResearchPublicMedia(researchDb, client);
   const research = ResearchItem.fromDB(researchDb, [], images, result.collaborators, username);
@@ -37,7 +40,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirect('/research');
   }
 
-  if (!(await researchServiceServer.isAllowedToEditResearch(client, research, username))) {
+  if (!(await researchServiceServer.isAllowedToEditResearch(client, research, authId))) {
     return redirect('/forbidden?page=research-update-edit', { headers });
   }
 

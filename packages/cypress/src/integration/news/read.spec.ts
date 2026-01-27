@@ -58,6 +58,26 @@ describe('[News.Read]', () => {
 
       cy.get('[data-cy=breadcrumbsItem]').eq(1).should('contain', title);
 
+      cy.step('News images are clickable');
+
+      cy.wait(500);
+
+      // Check content images
+      cy.get('[data-cy=news-body] img')
+        .first()
+        .should('have.css', 'cursor', 'pointer')
+        .click();
+
+      // Lightbox should open
+      cy.get('.pswp').should('be.visible');
+
+      // Wait for PhotoSwipe animation/initialization
+      cy.wait(1000);
+
+      // Close lightbox
+      cy.get('button[title="Close"]').click();
+      cy.get('.pswp').should('not.exist');
+
       // cy.step('Logged in users can complete actions')
       // cy.signIn('howto_creator@test.com', 'test1234')
       // cy.visit(`/news/${slug}`) // Page doesn't reload after login

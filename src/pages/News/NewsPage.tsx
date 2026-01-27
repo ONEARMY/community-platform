@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { observer } from 'mobx-react';
 import {
   Category,
+  ContentImageLightbox,
   ContentStatistics,
   DisplayDate,
   ProfileBadgeContentLabel,
@@ -26,12 +27,25 @@ interface IProps {
 
 export const NewsPage = observer(({ news }: IProps) => {
   const [subscribersCount, setSubscribersCount] = useState<number>(news.subscriberCount);
+  const [heroImage, setHeroImage] = useState<HTMLImageElement | null>(null);
+  const heroImageRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    if (heroImageRef.current && !heroImage) {
+      // need state to trigger re-render of ContentImageLightbox because ref doesn't trigger re-render
+      setHeroImage(heroImageRef.current);
+    }
+  }, []);
 
   const { profile } = useProfileStore();
 
   const isEditable = useMemo(() => {
     return hasAdminRights(profile) || news.author?.username === profile?.username;
   }, [profile, news.author]);
+
+  const prependImages = useMemo(() => {
+    return heroImage ? [heroImage] : [];
+  }, [heroImage]);
 
   return (
     <Box sx={{ width: '100%', maxWidth: '620px', alignSelf: 'center' }}>
@@ -40,7 +54,11 @@ export const NewsPage = observer(({ news }: IProps) => {
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
         {news.heroImage && (
           <AspectRatio ratio={2 / 1}>
-            <Image src={news.heroImage.publicUrl} sx={{ borderRadius: 2, width: '100%' }} />
+            <Image
+              ref={heroImageRef}
+              src={news.heroImage.publicUrl}
+              sx={{ borderRadius: 2, width: '100%', cursor: 'pointer' }}
+            />
           </AspectRatio>
         )}
 
@@ -88,6 +106,7 @@ export const NewsPage = observer(({ news }: IProps) => {
           )}
 
           <Box
+            data-cy="news-body"
             sx={{
               alignSelf: 'stretch',
               fontFamily: 'body',
@@ -102,17 +121,18 @@ export const NewsPage = observer(({ news }: IProps) => {
               h6: { fontSize: 2 },
               img: {
                 borderRadius: 2,
-                maxWidth: ['105%', '105%', '120%'],
-                marginLeft: ['-2.5%', '-2.5%', '-10%'],
+                maxWidth: '100%',
               },
               iframe: {
-                maxWidth: ['105%', '105%', '120%'],
                 maxHeight: ['300px', '370px', '420px'],
-                marginLeft: ['-2.5%', '-2.5%', '-10%'],
               },
             }}
           >
-            <div dangerouslySetInnerHTML={{ __html: news.bodyHtml }} />
+            <ContentImageLightbox
+              prependImages={prependImages}
+            >
+              <div dangerouslySetInnerHTML={{ __html: news.bodyHtml }} />
+            </ContentImageLightbox>
           </Box>
 
           <Flex

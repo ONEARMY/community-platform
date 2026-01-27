@@ -24,15 +24,6 @@ BEGIN
 END;
 $_$;
 
-CREATE OR REPLACE FUNCTION "public"."get_user_email_by_username"("username" "text") RETURNS TABLE("email" character varying)
-    LANGUAGE "plpgsql" SECURITY DEFINER
-    SET search_path = public, pg_temp
-    AS $_$
-BEGIN
-  RETURN QUERY SELECT au.email FROM auth.users au WHERE au.raw_user_meta_data->>'username' = $1;
-END;
-$_$;
-
 CREATE OR REPLACE FUNCTION "public"."get_user_id_by_email"("email" "text") RETURNS TABLE("id" "uuid")
     LANGUAGE "plpgsql" SECURITY DEFINER
     SET search_path = public, pg_temp

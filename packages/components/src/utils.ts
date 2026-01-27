@@ -76,7 +76,7 @@ export const fakeDisplayNotification = (
 ): NotificationDisplay => ({
   id: faker.number.int(),
   isRead: faker.datatype.boolean(),
-  contentType: 'comment',
+  contentType: 'comments',
   email: {
     body: undefined,
     buttonLabel: 'See the full discussion',

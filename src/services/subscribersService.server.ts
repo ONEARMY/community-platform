@@ -58,7 +58,7 @@ const addResearchUpdateSubscribers = async (
   );
   return Promise.all([
     subscribers.map((subscriber) => {
-      addFunction('research_update', update.id, subscriber, client, headers);
+      addFunction('research_updates', update.id, subscriber, client, headers);
     }),
   ]);
 };

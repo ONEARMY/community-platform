@@ -11,7 +11,7 @@ export const useCopyCommentLink = (comment: Comment | Reply) => {
       const baseUrl = `${window.location.origin}${location.pathname}`;
       let url = `${baseUrl}#comment:${comment.id}`;
 
-      if (comment.sourceType === 'research_update') {
+      if (comment.sourceType === 'research_updates') {
         const searchParams = new URLSearchParams(location.search);
         const updateParam = Array.from(searchParams.keys()).find((key) =>
           key.startsWith('update_'),

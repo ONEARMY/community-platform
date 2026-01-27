@@ -156,7 +156,6 @@ describe('[Library.Discussions]', () => {
     cy.expectNewNotification({
       content: updatedNewReply,
       path: projectPath,
-      title: project.title,
       username: replier.username,
     });
     cy.get('[data-cy=highlighted-comment]').contains(updatedNewReply);
@@ -182,7 +181,6 @@ describe('[Library.Discussions]', () => {
     cy.expectNewNotification({
       content: secondReply,
       path: projectPath,
-      title: project.title,
       username: commenter.username,
     });
   });

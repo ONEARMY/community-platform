@@ -22,7 +22,12 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
 describe('DownloadWrapper', () => {
   it('renders DownloadButton with isLoggedIn=false and shows DownloadCounter', () => {
     render(
-      <DownloadWrapper fileDownloadCount={42} fileLink="https://example.com/file.pdf" files={[]} />,
+      <DownloadWrapper
+        contentType="projects"
+        fileDownloadCount={42}
+        fileLink="https://example.com/file.pdf"
+        files={[]}
+      />,
     );
 
     expect(screen.getByText('Download files')).toBeInTheDocument();

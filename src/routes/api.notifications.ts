@@ -1,6 +1,5 @@
 import { Notification, NotificationDisplay } from 'oa-shared';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { resolveType } from 'src/utils/contentType.utils';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBNotification } from 'oa-shared';
@@ -22,17 +21,10 @@ export const transformNotification = async (
   client: SupabaseClient,
 ) => {
   try {
-    const contentTypes = {
-      comment: 'comments',
-      reply: 'comments',
-      researchUpdate: 'research_updates',
-    };
-
     const notification = Notification.fromDB(dbNotification);
-    const contentType = contentTypes[notification.contentType];
 
     const content = await client
-      .from(contentType)
+      .from(notification.contentType)
       .select('*')
       .eq('id', notification.contentId)
       .single();
@@ -41,33 +33,6 @@ export const transformNotification = async (
       notification.content = content.data;
     } else {
       throw Error('Comment not found, probably deleted');
-    }
-
-    const sourceContentType = resolveType(notification.sourceContentType);
-    const sourceContent = await client
-      .from(sourceContentType)
-      .select('*')
-      .eq('id', notification.sourceContentId)
-      .single();
-
-    notification.sourceContent = sourceContent.data;
-
-    if (notification.parentCommentId) {
-      const parentComment = await client
-        .from('comments')
-        .select('*')
-        .eq('id', notification.parentCommentId)
-        .single();
-      notification.parentComment = parentComment.data;
-    }
-
-    if (notification.parentContentId) {
-      const parentContent = await client
-        .from('research_updates')
-        .select('*')
-        .eq('id', notification.parentContentId)
-        .single();
-      notification.parentContent = parentContent.data;
     }
 
     return NotificationDisplay.fromNotification(notification);

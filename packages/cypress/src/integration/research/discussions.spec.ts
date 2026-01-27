@@ -147,7 +147,6 @@ describe('[Research.Discussions]', () => {
     cy.expectNewNotification({
       content: updatedNewReply,
       path: researchPath,
-      title: research.title,
       username: secondCommentor.username,
     });
     cy.wait(2000);
@@ -175,22 +174,7 @@ describe('[Research.Discussions]', () => {
     cy.expectNewNotification({
       content: secondReply,
       path: researchPath,
-      title: research.title,
       username: admin.username,
     });
-
-    // Currently hard to test as the article is created via the seed
-    //
-    // cy.step(
-    //   'Notification generated for research creator of the original comment only',
-    // )
-    // cy.logout()
-    // cy.signIn(questionCreator.email, questionCreator.password)
-    // cy.expectNewNotification({
-    //   content: updatedNewReply,
-    //   path: questionPath,
-    //   title: question.title,
-    //   username: replier.username,
-    // })
   });
 });

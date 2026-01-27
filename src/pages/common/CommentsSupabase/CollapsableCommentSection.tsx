@@ -80,7 +80,7 @@ const CollapsableCommentSection = (props: Props) => {
       {isOpen && (
         <CommentSectionSupabase
           sourceId={researchUpdate.id}
-          sourceType="research_update"
+          sourceType="research_updates"
           authors={authors}
         />
       )}

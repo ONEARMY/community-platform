@@ -183,47 +183,6 @@ describe('[Research]', () => {
         title: expected.title,
         username: subscriber.username,
       });
-
-      // cy.get('[data-cy=file-download-counter]').should(
-      //   'have.text',
-      //   '0 downloads',
-      // )
-
-      // cy.step('Download counter increments')
-      // cy.wait(1000)
-      // cy.get('[data-cy=downloadButton]').click()
-      // cy.get('[data-cy=DonationRequestSkip]')
-      //   .invoke('removeAttr', 'target')
-      //   .click()
-      // cy.go('back')
-
-      // Currently too-flaky, commenting it out.
-      //
-      // cy.reload()
-      // cy.get('[data-cy=file-download-counter]').should(
-      //   'have.text',
-      //   '1 download',
-      // )
-
-      // cy.step('Download count is preserved when replacing file')
-      // cy.get('[data-cy=edit-update]').click()
-      // cy.get('[data-cy=delete-file]').click()
-      // cy.get('[data-cy=file-input-field]').click()
-      // cy.get('.uppy-Dashboard-input:first').as('file-input')
-      // cy.get('@file-input').selectFile('src/fixtures/files/Example.pdf', {
-      //   force: true,
-      // })
-      // cy.get('.uppy-StatusBar-actionBtn--upload').as('upload-button')
-      // cy.get('@upload-button').click()
-
-      // cy.get('[data-cy=errors-container]').should('not.exist')
-      // cy.get('[data-cy=submit]').click()
-
-      // cy.step('Open the research update')
-      // cy.get('[data-cy=file-download-counter]').should(
-      //   'have.text',
-      //   '1 download',
-      // )
     });
 
     it('[By Anonymous]', () => {

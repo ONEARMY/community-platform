@@ -83,7 +83,9 @@ Cypress.Commands.add('expectNewNotification', (props: ExpectedNewNotification) =
   cy.get('[data-cy=NotificationsSupabase-desktop]').click();
 
   cy.get('[data-cy=NotificationListSupabase]').contains(username);
-  cy.get('[data-cy=NotificationListSupabase]').contains(title);
+  if (title) {
+    cy.get('[data-cy=NotificationListSupabase]').contains(title);
+  }
   cy.get('[data-cy=NotificationListSupabase]').contains(content).click();
 
   cy.url().should('include', path);

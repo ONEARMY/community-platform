@@ -342,8 +342,6 @@ export class ProfileServiceServer {
       return;
     }
 
-    // Profile should be created during signup. If we reach here without a username,
-    // it's an edge case (legacy user) and we can't create a profile without one.
     const username = user.user_metadata?.username;
     if (!username) {
       console.error('Cannot create profile: no username available');

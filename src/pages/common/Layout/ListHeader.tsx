@@ -1,11 +1,11 @@
 import { Flex, Heading, Text } from 'theme-ui';
 
 interface IProps {
-  itemCount?: number;
+  itemCount: number;
   actionComponents: React.ReactNode;
   headingTitle: string;
-  categoryComponent?: React.ReactNode;
-  filteringComponents?: React.ReactNode;
+  categoryComponent: React.ReactNode;
+  filteringComponents: React.ReactNode;
   showDrafts: boolean;
 }
 
@@ -42,7 +42,7 @@ export const ListHeader = (props: IProps) => {
         >
           {headingTitle}
         </Heading>
-        {categoryComponent && <Flex sx={{ justifyContent: 'center' }}>{categoryComponent}</Flex>}
+        <Flex sx={{ justifyContent: 'center' }}>{categoryComponent}</Flex>
       </Flex>
       <Flex
         sx={{
@@ -53,32 +53,28 @@ export const ListHeader = (props: IProps) => {
           maxWidth: '100%',
         }}
       >
-        {(itemCount || (!showDrafts && !!filteringComponents)) && (
-          <Flex
-            sx={{
-              flexDirection: ['column', 'column', 'row'],
-              gap: [2, 2, 2],
-              width: ['100%', '100%', 'auto'],
-              alignItems: ['flex-start', 'flex-start', 'center'],
-            }}
-          >
-            {!showDrafts && filteringComponents}
-            {itemCount && (
-              <Flex
-                sx={{
-                  flexDirection: 'row',
-                  justifyContent: ['space-between', 'space-between', 'flex-start'],
-                  alignItems: 'center',
-                  width: ['100%', '100%', 'auto'],
-                }}
-              >
-                {itemCount && (
-                  <Text sx={{ marginLeft: [0, 0, 2] }}>{`${itemCount} ${itemLabel}`}</Text>
-                )}
-              </Flex>
-            )}
-          </Flex>
-        )}
+        <Flex
+          sx={{
+            flexDirection: ['column', 'column', 'row'],
+            gap: [2, 2, 2],
+            width: ['100%', '100%', 'auto'],
+            alignItems: ['flex-start', 'flex-start', 'center'],
+          }}
+        >
+          {!showDrafts && filteringComponents}
+          {itemCount !== undefined && itemCount != null && (
+            <Flex
+              sx={{
+                flexDirection: 'row',
+                justifyContent: ['space-between', 'space-between', 'flex-start'],
+                alignItems: 'center',
+                width: ['100%', '100%', 'auto'],
+              }}
+            >
+              <Text sx={{ marginLeft: [0, 0, 2] }}>{`${itemCount} ${itemLabel}`}</Text>
+            </Flex>
+          )}
+        </Flex>
         <Flex
           sx={{
             gap: 2,

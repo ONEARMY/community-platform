@@ -5,7 +5,7 @@ import { profileService } from 'src/services/profileService';
 import { profileTypesService } from 'src/services/profileTypesService';
 import { upgradeBadgeService } from 'src/services/upgradeBadgeService';
 
-import type { Profile, ProfileType, UpgradeBadge } from 'oa-shared';
+import type { Profile, ProfileType, UpgradeBadge, UserRole } from 'oa-shared';
 
 export class ProfileStore {
   profile?: Profile = undefined;
@@ -49,11 +49,30 @@ export class ProfileStore {
     return this.profileTypes?.find((type) => type.name === name);
   };
 
+  isUserAuthorized = (roleRequired?: UserRole | UserRole[]) => {
+    const userRoles = this.profile?.roles || [];
+
+    // If no role required just check if user is logged in
+    if (!roleRequired || roleRequired.length === 0) {
+      return this.profile ? true : false;
+    }
+
+    const rolesRequired = Array.isArray(roleRequired) ? roleRequired : [roleRequired];
+
+    // otherwise use logged in user profile values
+    if (this.profile && roleRequired) {
+      return userRoles.some((role) => rolesRequired.includes(role as UserRole));
+    }
+
+    return false;
+  };
+
   constructor() {
     makeObservable(this, {
       profile: observable,
       profileTypes: observable,
       upgradeBadges: observable,
+      isUserAuthorized: observable,
       upgradeBadgeForCurrentUser: computed,
       refresh: action,
       clear: action,
@@ -106,8 +125,10 @@ export const ProfileStoreProvider = ({ children }: { children: React.ReactNode }
 
 export const useProfileStore = () => {
   const store = useContext(ProfileStoreContext);
+
   if (!store) {
     throw new Error('useProfileStore must be used within ProfileStoreProvider');
   }
+
   return store;
 };

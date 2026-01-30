@@ -5,6 +5,7 @@ import { ITEMS_PER_PAGE } from 'src/pages/News/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { discordServiceServer } from 'src/services/discordService.server';
 import { newsServiceServer } from 'src/services/newsService.server';
+import { ProfileServiceServer } from 'src/services/profileService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
@@ -27,6 +28,14 @@ export const loader = async ({ request }) => {
   const skip = Number(params.get('skip')) || 0;
 
   const { client, headers } = createSupabaseServerClient(request);
+  const claims = await client.auth.getClaims();
+  let currentUserBadges: number[] = [];
+  let isAdmin = false;
+  if (claims?.data?.claims?.sub) {
+    const profile = await new ProfileServiceServer(client).getByAuthId(claims.data.claims.sub);
+    isAdmin = !!profile?.roles?.includes('admin');
+    currentUserBadges = profile?.badges?.map((x) => x.profile_badges.id) || [];
+  }
 
   let query = client
     .from('news')
@@ -56,8 +65,16 @@ export const loader = async ({ request }) => {
           action_url
         )
       ))`,
+      { count: 'exact' },
     )
+
     .eq('is_draft', false);
+
+  if (!isAdmin) {
+    query = query.or(
+      `profile_badge.is.null${currentUserBadges.length > 0 ? `,profile_badge.in.(${currentUserBadges.join(',')})` : ''}`,
+    );
+  }
 
   if (q) {
     query = query.textSearch('news_search_fields', q);
@@ -71,12 +88,11 @@ export const loader = async ({ request }) => {
     query = query.order('comment_count', { ascending: true });
   }
 
-  const queryResult = await query.range(skip, skip + ITEMS_PER_PAGE); // 0 based
+  const queryResult = await query.range(skip, skip + ITEMS_PER_PAGE - 1); // 0 based
 
   const total = queryResult.count;
   const data = queryResult.data as unknown as DBNews[];
-  const allNews = data.map((dbNews) => News.fromDB(dbNews, []));
-  const items = await newsServiceServer.filterNewsByUserFunctions(allNews, client);
+  const items = data.map((dbNews) => News.fromDB(dbNews, []));
 
   if (items && items.length > 0) {
     // Populate useful votes

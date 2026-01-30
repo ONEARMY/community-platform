@@ -6,14 +6,26 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { AuthWrapper } from './AuthWrapper';
 
-vi.mock('src/stores/Profile/profile.store', () => ({
-  useProfileStore: () => ({
-    profile: FactoryUser({
-      roles: [UserRole.BETA_TESTER],
-    }),
-  }),
-  ProfileStoreProvider: ({ children }: { children: React.ReactNode }) => children,
-}));
+import type { Profile } from 'oa-shared';
+
+const { ProfileStore } = await vi.hoisted(async () => {
+  const actual = await import('src/stores/Profile/profile.store');
+  return { ProfileStore: actual.ProfileStore };
+});
+
+const mockStore = new ProfileStore();
+mockStore.profile = FactoryUser({
+  roles: [UserRole.BETA_TESTER],
+}) as Profile;
+
+vi.mock('src/stores/Profile/profile.store', async (importOriginal) => {
+  const actual: any = await importOriginal();
+  return {
+    ...actual,
+    useProfileStore: () => mockStore,
+    ProfileStoreProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
 
 describe('AuthWrapper', () => {
   it('renders fallback when user is not authorized', () => {

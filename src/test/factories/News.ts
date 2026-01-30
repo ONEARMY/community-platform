@@ -66,5 +66,6 @@ export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   totalViews: faker.number.int(),
   usefulCount: faker.number.int(),
   profileBadge: null,
+  publishedAt: faker.date.past(),
   ...newsOverloads,
 });

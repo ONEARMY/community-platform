@@ -152,6 +152,7 @@ export class SupabaseTestsService {
         status: item.status,
         created_by: createdBy,
         is_draft: item.is_draft,
+        published_at: item.is_draft ? null : item.created_at,
         tags: [tagsData.data[0].id, tagsData.data[1].id],
         category: categories.data[i % 2].id,
         tenant_id: this.tenantId,
@@ -176,6 +177,7 @@ export class SupabaseTestsService {
             title: item.title,
             research_id: research.data[i].id,
             created_by: createdBy,
+            published_at: item.created_at,
             tenant_id: this.tenantId,
           })),
         });
@@ -260,6 +262,7 @@ export class SupabaseTestsService {
         tenant_id: this.tenantId,
         created_by: profiles[0].id,
         category: categories.data[0].id,
+        published_at: question.created_at,
       })),
     });
 
@@ -325,6 +328,7 @@ export class SupabaseTestsService {
         tags: [tagsData.data[0].id, tagsData.data[1].id],
         category: categories.data[0].id,
         tenant_id: this.tenantId,
+        published_at: news.created_at,
       })),
     });
 
@@ -366,6 +370,7 @@ export class SupabaseTestsService {
         deleted: item.deleted,
         moderation: item.moderation,
         tenant_id: this.tenantId,
+        published_at: item.createdAt,
         ...(item.moderationFeedback ? { moderation_feedback: item.moderationFeedback } : {}),
       });
     }

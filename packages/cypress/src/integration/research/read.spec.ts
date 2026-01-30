@@ -81,7 +81,7 @@ describe('[Research]', () => {
         cy.get('[data-cy=ContentStatistics-views]').contains(/\d/);
         cy.get('[data-cy=ContentStatistics-following]').contains(/\d/);
         cy.get('[data-cy=ContentStatistics-useful]').contains(/\d/);
-        cy.get('[data-cy=ContentStatistics-comment]').contains(/\d/);
+        cy.get('[data-cy=ContentStatistics-comments]').contains(/\d/);
         cy.get('[data-cy=ContentStatistics-updates]').contains(/\d/);
 
         cy.step('[Populates title, SEO and social tags]');

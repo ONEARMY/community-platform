@@ -98,9 +98,8 @@ export const LibraryDescription = ({
 
             <Text variant="auxiliary">
               <DisplayDate
-                createdAt={item.createdAt}
+                createdAt={item.publishedAt || item.createdAt}
                 modifiedAt={item.modifiedAt}
-                action="Published"
               />
             </Text>
 

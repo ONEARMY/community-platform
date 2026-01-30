@@ -97,7 +97,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
 
             <Text variant="auxiliary">
               <DisplayDate
-                createdAt={question.createdAt}
+                createdAt={question.publishedAt || question.createdAt}
                 modifiedAt={question.modifiedAt}
                 action="Asked"
               />

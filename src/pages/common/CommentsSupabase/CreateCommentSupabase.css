@@ -23,12 +23,13 @@
 .grow-wrap > textarea,
 .grow-wrap::after {
   /* Identical styling required!! */
+  font-family: Inter, sans-serif;
   background: none;
   resize: none;
   padding: 15px;
   word-wrap: anywhere;
   border-color: transparent;
-  font-size: 12px;
+  font-size: 16px;
 
   /* Place on top of each other */
   grid-area: 1 / 1 / 2 / 2;
@@ -41,4 +42,13 @@
 .grow-wrap.value-set::after {
   /* Identical styling required!! */
   padding-bottom: 27px !important;
+}
+
+/* Mobile: match 40px button height */
+@media (max-width: 768px) {
+  .grow-wrap > textarea,
+  .grow-wrap::after {
+    font-size: 12px;
+    padding: 11px;
+  }
 }

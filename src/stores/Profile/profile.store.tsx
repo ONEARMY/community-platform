@@ -72,7 +72,6 @@ export class ProfileStore {
       profile: observable,
       profileTypes: observable,
       upgradeBadges: observable,
-      isUserAuthorized: observable,
       upgradeBadgeForCurrentUser: computed,
       refresh: action,
       clear: action,

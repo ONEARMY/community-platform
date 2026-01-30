@@ -211,6 +211,9 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/rejected-l"><img src="https://avatars.githubusercontent.com/u/99460023?v=4?s=60" width="60px;" alt="Rej Ect"/><br /><sub><b>Rej Ect</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=rejected-l" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/othman-shamla"><img src="https://avatars.githubusercontent.com/u/16326221?v=4?s=60" width="60px;" alt="othman-shamla"/><br /><sub><b>othman-shamla</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=othman-shamla" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/rsgb"><img src="https://avatars.githubusercontent.com/u/96707736?v=4?s=60" width="60px;" alt="RSGB"/><br /><sub><b>RSGB</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=rsgb" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 

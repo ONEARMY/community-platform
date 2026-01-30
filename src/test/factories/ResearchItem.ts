@@ -27,6 +27,7 @@ export const FactoryResearchItemUpdate = (
   videoUrl: null,
   isDraft: false,
   research: undefined,
+  publishedAt: faker.date.past(),
   ...researchItemUpdateOverloads,
 });
 
@@ -48,6 +49,7 @@ export const FactoryDBResearchItemUpdate = (
   title: faker.lorem.words(),
   video_url: null,
   is_draft: false,
+  published_at: faker.date.past(),
   ...researchDBItemUpdateOverloads,
 });
 
@@ -85,6 +87,7 @@ export const FactoryResearchItem = (
   status: 'in-progress',
   usefulCount: 2,
   ...researchItemOverloads,
+  publishedAt: researchItemOverloads.publishedAt ?? null,
 });
 
 export const FactoryDBResearchItem = (
@@ -111,6 +114,7 @@ export const FactoryDBResearchItem = (
   update_count: 0,
   status: 'in-progress',
   useful_count: 2,
+  published_at: faker.date.past(),
   ...researchItemOverloads,
 });
 

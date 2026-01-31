@@ -63,3 +63,23 @@ Having updates being stored in their own table is beneficial:
 The solution is to have a `tsvector` column that also contains update data which comes from the `research_updates` table.
 To build the column data, a `combined_research_search_fields(research_id)` is used to combine all data (main + updates).
 To automate indexing from `research_update` an INSERT/UPDATE trigger is needed.
+
+## Notifications
+
+Notifications are sent in batch to avoid hitting resend limits.
+Batches of 100 emails, wait 1 second per batch.
+
+Notifications are sent to users who subscribed a specific kind of content, when said content is created.
+There is a `subscriptions` table to keep track of that.
+
+Current notification types:
+- new research upgrade
+- new comment (for each of these content types - news, research_updates, questions, projects)
+- new reply (to a comment)
+
+As such, there are 3 action types: `newContent`, `newComment`, `newReply`.
+
+Why not merge `newComment` and `newReply`?
+- They were the same at first, but the logic is different enough to warrant the separation. For instance, in a `newReply` the "parent" is a comment, and to obtain extra info (content title), need to "go up a level" twice.
+- Due to this complexity, a decision was made to cut showing the `newReply` respective content title (can be added again later if necessary).
+- This also made the logic of `newComment` more straighforward.

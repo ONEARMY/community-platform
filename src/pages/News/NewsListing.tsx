@@ -28,7 +28,6 @@ export const NewsListing = () => {
 
   useEffect(() => {
     if (!sort) {
-      // ensure sort is set
       const params = new URLSearchParams(searchParams.toString());
 
       if (q) {
@@ -70,7 +69,7 @@ export const NewsListing = () => {
   const newsList = showDrafts ? drafts : news;
 
   return (
-    <Flex sx={{ flexDirection: 'column', gap: [2, 4], alignItems: 'center' }}>
+    <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
       <NewsListHeader
         draftCount={draftCount}
         handleShowDrafts={handleShowDrafts}

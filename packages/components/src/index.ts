@@ -14,6 +14,7 @@ export { CardListItem } from "./CardListItem/CardListItem";
 export { CardProfile } from "./CardProfile/CardProfile";
 export { Category } from "./Category/Category";
 export { CategoryHorizonalList } from "./CategoryHorizonalList/CategoryHorizonalList";
+export { ContentImageLightbox } from './ContentImageLightbox/ContentImageLightbox';
 export { ContentStatistics } from "./ContentStatistics/ContentStatistics";
 export { CommentDisplay } from "./CommentDisplay/CommentDisplay";
 export { CommentsTitle } from "./CommentsTitle/CommentsTitle";

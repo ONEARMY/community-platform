@@ -1088,6 +1088,24 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "othman-shamla",
+      "name": "othman-shamla",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16326221?v=4",
+      "profile": "https://github.com/othman-shamla",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rsgb",
+      "name": "RSGB",
+      "avatar_url": "https://avatars.githubusercontent.com/u/96707736?v=4",
+      "profile": "https://github.com/rsgb",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

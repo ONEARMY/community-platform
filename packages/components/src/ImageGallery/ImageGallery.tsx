@@ -1,9 +1,9 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import { Flex, Image as ThemeImage } from 'theme-ui';
 
 import { Arrow } from '../ArrowIcon/ArrowIcon';
+import { usePhotoSwipeLightbox } from '../hooks/usePhotoSwipeLightbox';
 import { ImageGalleryThumbnail } from '../ImageGalleryThumbnail/ImageGalleryThumbnail';
 import { Loader } from '../Loader/Loader';
 
@@ -105,7 +105,6 @@ export const ImageGallery = (props: ImageGalleryProps) => {
     activeImageAspectRatio: null,
   });
 
-  const lightbox = useRef<PhotoSwipeLightbox>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const activeImageIndex = state.activeImageIndex;
   const activeImage = filteredImages[activeImageIndex];
@@ -113,88 +112,13 @@ export const ImageGallery = (props: ImageGalleryProps) => {
   const showThumbnails = !props.hideThumbnails && filteredImages.length > 1;
   const showNextPrevButton = !!props.showNextPrevButton && filteredImages.length > 1;
 
-  // Only initialize PhotoSwipe on client-side
-  useEffect(() => {
-    if (typeof window === 'undefined' || !filteredImages.length) return;
-
-    // Initializes the Photoswipe lightbox to use the provided images
-    lightbox.current = new PhotoSwipeLightbox({
-      dataSource: filteredImages.map((image) => ({
-        src: image.downloadUrl,
-      })),
-      pswpModule: () => import('photoswipe'),
-      ...(props.photoSwipeOptions ?? {}),
-    });
-
-    // Before opening the lightbox, calculates the image sizes and
-    // refreshes lightbox slide to adapt to these updated dimensions
-    lightbox.current.on('beforeOpen', () => {
-      const photoswipe = lightbox.current?.pswp;
-      const dataSource = photoswipe?.options?.dataSource;
-
-      if (Array.isArray(dataSource)) {
-        dataSource.forEach((source, index) => {
-          const img = new Image();
-          img.onload = () => {
-            source.width = img.naturalWidth;
-            source.height = img.naturalHeight;
-            photoswipe?.refreshSlideContent(index);
-          };
-          img.src = source.src as string;
-        });
-      }
-    });
-
-    lightbox.current.init();
-
-    return () => {
-      lightbox.current?.destroy();
-      lightbox.current = null;
-    };
-  }, [props.images, props.photoSwipeOptions]);
-
-  // Prevent native hash scrolling and handle it ourselves
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    let originalHash = '';
-
-    const preventNativeHashScroll = () => {
-      if (window.location.hash) {
-        originalHash = window.location.hash;
-        // Remove hash completely to prevent any native scrolling
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
-
-        // Prevent any scroll restoration
-        if ('scrollRestoration' in window.history) {
-          window.history.scrollRestoration = 'manual';
-        }
-      }
-    };
-
-    // Restore hash after component mounts
-    const restoreHash = () => {
-      if (originalHash) {
-        setTimeout(() => {
-          window.history.replaceState(
-            null,
-            '',
-            window.location.pathname + window.location.search + originalHash,
-          );
-        }, 50);
-      }
-    };
-
-    preventNativeHashScroll();
-    restoreHash();
-
-    return () => {
-      // Restore scroll restoration on cleanup
-      if ('scrollRestoration' in window.history) {
-        window.history.scrollRestoration = 'auto';
-      }
-    };
-  }, []);
+  const { open } = usePhotoSwipeLightbox({
+    images: filteredImages.map((img) => ({
+      src: img.downloadUrl,
+      alt: img.alt,
+    })),
+    photoSwipeOptions: props.photoSwipeOptions,
+  });
 
   const setActive = (imageIndex: number) => {
     setState((prevState) => ({
@@ -243,11 +167,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
 
   const triggerLightbox = (): void => {
     if (typeof window === 'undefined') return;
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore: Looks like a bug on their side, already a bug for it is open,
-    // it should allow only one argument, as mentioned in their docs
-    lightbox.current?.loadAndOpen(state.activeImageIndex);
+    open(state.activeImageIndex);
   };
 
   // Early return if no images - but this should rarely happen now

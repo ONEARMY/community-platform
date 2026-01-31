@@ -22,6 +22,7 @@ type EmailData = {
   email_action_type: string;
   notification?: NotificationDisplay;
   redirect_to?: string;
+  token_hash?: string;
 };
 
 Deno.serve(async (req) => {

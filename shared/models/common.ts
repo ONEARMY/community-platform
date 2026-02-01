@@ -32,12 +32,18 @@ export type UsefulContentType = 'questions' | 'projects' | 'research' | 'news' |
 
 export type ContentFormType = 'questions' | 'projects' | 'research' | 'researchUpdate' | 'news';
 
-export type DiscussionContentTypes = 'questions' | 'projects' | 'research_update' | 'news';
+export const DiscussionContentTypes = [
+  'questions',
+  'projects',
+  'research_updates',
+  'news',
+] as const;
+export type DiscussionContentType = (typeof DiscussionContentTypes)[number];
 
 export type SubscribableContentTypes =
   | 'comments'
   | 'questions'
   | 'projects'
   | 'research'
-  | 'research_update'
+  | 'research_updates'
   | 'news';

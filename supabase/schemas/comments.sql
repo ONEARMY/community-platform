@@ -122,7 +122,7 @@ CREATE OR REPLACE FUNCTION "public"."update_comment_count"() RETURNS "trigger"
       IF NEW.source_type = 'questions' THEN
         UPDATE questions SET comment_count = COALESCE(comment_count, 0) + 1
         WHERE id = NEW.source_id;
-      ELSIF NEW.source_type = 'research_update' THEN
+      ELSIF NEW.source_type = 'research_updates' THEN
         UPDATE research_updates SET comment_count = COALESCE(comment_count, 0) + 1
         WHERE id = NEW.source_id;
       ELSIF NEW.source_type = 'news' THEN
@@ -141,7 +141,7 @@ CREATE OR REPLACE FUNCTION "public"."update_comment_count"() RETURNS "trigger"
         IF OLD.source_type = 'questions' THEN
           UPDATE questions SET comment_count = GREATEST(COALESCE(comment_count, 0) - 1, 0)
           WHERE id = OLD.source_id;
-        ELSIF OLD.source_type = 'research_update' THEN
+        ELSIF OLD.source_type = 'research_updates' THEN
           UPDATE research_updates SET comment_count = GREATEST(COALESCE(comment_count, 0) - 1, 0)
           WHERE id = OLD.source_id;
         ELSIF OLD.source_type = 'news' THEN
@@ -159,7 +159,7 @@ CREATE OR REPLACE FUNCTION "public"."update_comment_count"() RETURNS "trigger"
         IF NEW.source_type = 'questions' THEN
           UPDATE questions SET comment_count = COALESCE(comment_count, 0) + 1
           WHERE id = NEW.source_id;
-        ELSIF NEW.source_type = 'research_update' THEN
+        ELSIF NEW.source_type = 'research_updates' THEN
           UPDATE research_updates SET comment_count = COALESCE(comment_count, 0) + 1
           WHERE id = NEW.source_id;
         ELSIF NEW.source_type = 'news' THEN
@@ -178,7 +178,7 @@ CREATE OR REPLACE FUNCTION "public"."update_comment_count"() RETURNS "trigger"
       IF OLD.source_type = 'questions' THEN
         UPDATE questions SET comment_count = GREATEST(COALESCE(comment_count, 0) - 1, 0)
         WHERE id = OLD.source_id;
-      ELSIF OLD.source_type = 'research_update' THEN
+      ELSIF OLD.source_type = 'research_updates' THEN
         UPDATE research_updates SET comment_count = GREATEST(COALESCE(comment_count, 0) - 1, 0)
         WHERE id = OLD.source_id;
       ELSIF OLD.source_type = 'news' THEN

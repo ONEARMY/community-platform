@@ -8,7 +8,6 @@ import { EmailChangeNewEmail } from './_templates/email-change-new.tsx';
 import { MagicLinkEmail } from './_templates/magic-link.tsx';
 import { ResetPasswordEmail } from './_templates/reset-password.tsx';
 import { SignUpEmail } from './_templates/sign-up.tsx';
-import { InstantNotificationEmail } from './_templates/instant-notification-email.tsx';
 import { signWebhookHeader } from './signWebhookHeader.ts';
 import { getTenantSettings } from './getTenantSettings.ts';
 
@@ -23,10 +22,7 @@ type EmailData = {
   email_action_type: string;
   notification?: NotificationDisplay;
   redirect_to?: string;
-  token?: string;
   token_hash?: string;
-  token_new?: string;
-  token_hash_new?: string;
 };
 
 Deno.serve(async (req) => {
@@ -58,13 +54,6 @@ Deno.serve(async (req) => {
     } as any;
 
     switch (email_data.email_action_type) {
-      case 'instant_notification': {
-        if (email_data.notification) {
-          subject = email_data.notification.email.subject;
-          html = await render(React.createElement(InstantNotificationEmail, details));
-        }
-        break;
-      }
       case 'moderation_notification': {
         if (email_data.notification) {
           subject = `Moderation update for: ${email_data.notification.email.subject}`;

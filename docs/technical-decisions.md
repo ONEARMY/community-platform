@@ -83,3 +83,7 @@ Why not merge `newComment` and `newReply`?
 - They were the same at first, but the logic is different enough to warrant the separation. For instance, in a `newReply` the "parent" is a comment, and to obtain extra info (content title), need to "go up a level" twice.
 - Due to this complexity, a decision was made to cut showing the `newReply` respective content title (can be added again later if necessary).
 - This also made the logic of `newComment` more straighforward.
+
+Notification links are redirects: `/redirect?id={content_id}&ct={content_type}`
+where the `content_type` could be comments, questions, research_updates, news, questions, projects
+By using the redirect, we no longer need to generate the direct link in the "send notifications" step, which reduces complexity significantly.

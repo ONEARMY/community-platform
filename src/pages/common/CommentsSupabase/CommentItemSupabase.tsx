@@ -11,7 +11,7 @@ import { CommentReply } from './CommentReplySupabase';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
 import { useCopyCommentLink } from './useCopyCommentLink';
 
-import type { Comment, DiscussionContentTypes } from 'oa-shared';
+import type { Comment, DiscussionContentType } from 'oa-shared';
 
 export interface ICommentItemProps {
   comment: Comment;
@@ -21,7 +21,7 @@ export interface ICommentItemProps {
   onEditReply: (id: number, reply: string) => Promise<Response>;
   onDeleteReply: (id: number) => void;
   updateUsefulCount?: (id: number, newVoteCount: number) => void;
-  sourceType: DiscussionContentTypes;
+  sourceType: DiscussionContentType;
 }
 
 export const CommentItemSupabase = observer((props: ICommentItemProps) => {

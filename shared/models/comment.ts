@@ -1,7 +1,7 @@
 import { Author } from './author';
 
 import type { DBAuthor } from './author';
-import type { DiscussionContentTypes } from './common';
+import type { DiscussionContentType } from './common';
 import type { IDBDocSB, IDoc } from './document';
 
 export class DBComment implements IDBDocSB {
@@ -14,7 +14,7 @@ export class DBComment implements IDBDocSB {
   readonly profile?: DBAuthor;
   readonly comment: string;
   readonly source_id: number | null;
-  readonly source_type: DiscussionContentTypes;
+  readonly source_type: DiscussionContentType;
   readonly source_id_legacy: string | null;
   readonly parent_id: number | null;
   readonly vote_count?: number;
@@ -34,7 +34,7 @@ export class Comment implements IDoc {
   createdBy: Author | null;
   comment: string;
   sourceId: number | string;
-  sourceType: DiscussionContentTypes;
+  sourceType: DiscussionContentType;
   parentId: number | null;
   highlighted?: boolean;
   voteCount?: number;

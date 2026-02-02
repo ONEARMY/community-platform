@@ -90,8 +90,8 @@ describe('subscribersServiceServer', () => {
       );
 
       expect(mockAdd).toHaveBeenCalledTimes(2);
-      expect(mockAdd).toHaveBeenCalledWith('research_update', 789, 456, client, mockHeaders);
-      expect(mockAdd).toHaveBeenCalledWith('research_update', 789, 88, client, mockHeaders);
+      expect(mockAdd).toHaveBeenCalledWith('research_updates', 789, 456, client, mockHeaders);
+      expect(mockAdd).toHaveBeenCalledWith('research_updates', 789, 88, client, mockHeaders);
     });
   });
 

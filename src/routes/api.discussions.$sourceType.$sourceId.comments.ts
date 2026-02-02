@@ -1,4 +1,4 @@
-import { DBComment } from 'oa-shared';
+import { DBComment, DiscussionContentTypes } from 'oa-shared';
 import { CommentFactory } from 'src/factories/commentFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
@@ -7,7 +7,7 @@ import { subscribersServiceServer } from 'src/services/subscribersService.server
 import { updateUserActivity } from 'src/utils/activity.server';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBAuthor, DBProfile, DiscussionContentTypes } from 'oa-shared';
+import type { DBAuthor, DBProfile, DiscussionContentType } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
@@ -62,9 +62,12 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     return Response.json({}, { headers, status: 401 });
   }
 
-  const sourceType = mapSourceType(params.sourceType! as DiscussionContentTypes);
-
-  const { valid, status, statusText } = await validateRequest(params, request, data, sourceType);
+  const { valid, status, statusText } = await validateRequest(
+    params,
+    request,
+    data,
+    params.sourceType!,
+  );
 
   if (!valid) {
     return Response.json({}, { headers, status, statusText });
@@ -91,7 +94,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     comment: data.comment,
     source_id_legacy: isNaN(+params.sourceId!) ? params.sourceId : null,
     source_id: isNaN(+params.sourceId!) ? null : +params.sourceId!,
-    source_type: sourceType,
+    source_type: params.sourceType,
     created_by: currentUser.data[0].id,
     parent_id: data.parentId ?? null,
     tenant_id: process.env.TENANT_ID,
@@ -179,7 +182,7 @@ async function validateRequest(
   params: Params<string>,
   request: Request,
   data: any,
-  sourceType: 'news' | 'research_update' | 'projects' | 'questions' | null,
+  sourceType: string,
 ) {
   if (!params.sourceId) {
     return { status: 400, statusText: 'sourceId is required' };
@@ -197,24 +200,9 @@ async function validateRequest(
     return { status: 400, statusText: 'comment is required' };
   }
 
-  if (!sourceType) {
+  if (!sourceType || !DiscussionContentTypes.includes(sourceType as DiscussionContentType)) {
     return { status: 400, statusText: 'invalid sourceType' };
   }
 
   return { valid: true };
 }
-
-const mapSourceType = (sourceType: DiscussionContentTypes) => {
-  switch (sourceType) {
-    case 'research_update':
-      return 'research_update';
-    case 'news':
-      return 'news';
-    case 'projects':
-      return 'projects';
-    case 'questions':
-      return 'questions';
-    default:
-      throw new Error('Invalid sourceType');
-  }
-};

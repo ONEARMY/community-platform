@@ -105,7 +105,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         files: files.map((x) => ({ id: x.id, name: x.name, size: x.size })),
       })
       .eq('id', oldResearchUpdate.id)
-      .select('*,research:research(id,slug,is_draft)')
+      .select('*,research:research(id,title,slug,is_draft)')
       .single();
 
     if (researchUpdateAfterUpdating.error || !researchUpdateAfterUpdating.data) {

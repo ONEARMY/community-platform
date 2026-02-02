@@ -1,121 +1,71 @@
-import { DEFAULT_NOTIFICATION_PREFERENCES } from 'src/routes/api.notifications-preferences';
+import { DBNotification } from 'oa-shared';
 
 import { notificationEmailService } from './notificationEmailService.server';
-import { notificationsPreferencesServiceServer } from './notificationsPreferencesService.server';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type {
   DBComment,
-  DBNotificationsPreferences,
   DBProfile,
   DBResearchItem,
-  NewNotificationData,
-  NotificationActionType,
-  NotificationContentType,
-  NotificationsPreferenceTypes,
   ResearchUpdate,
   SubscribableContentTypes,
+  SubscribedUser,
 } from 'oa-shared';
-
-const preferenceTypes: PreferenceTypes = {
-  comment: 'comments',
-  reply: 'replies',
-  researchUpdate: 'research_updates',
-};
-
-type PreferenceTypes = {
-  [type in NotificationContentType]: NotificationsPreferenceTypes;
-};
-
-const setSourceContentType = async (comment: DBComment, client: SupabaseClient) => {
-  if (comment.source_type !== 'research_update') {
-    return comment.source_id;
-  }
-  const researchUpdate = await client
-    .from('research_updates')
-    .select('research_id')
-    .eq('id', comment.source_id)
-    .single();
-
-  return researchUpdate.data?.research_id;
-};
 
 const getSubscribedUsers = async (
   contentId: number,
   contentType: SubscribableContentTypes,
   client: SupabaseClient,
-): Promise<number[]> => {
+): Promise<SubscribedUser[]> => {
   try {
-    const subscribedUsers = await client
-      .from('subscribers')
-      .select('user_id')
-      .eq('content_id', contentId)
-      .eq('content_type', contentType);
+    const { error, data } = await client.rpc('get_subscribed_users_emails_to_notify', {
+      p_content_id: contentId,
+      p_content_type: contentType,
+    });
 
-    if (!subscribedUsers.data || subscribedUsers.data.length === 0) {
-      return [];
+    if (error || data.length === 0) {
+      throw error || new Error('No emails to send');
     }
 
-    return [...new Set(subscribedUsers.data.map((user) => user.user_id))];
+    return data as SubscribedUser[];
   } catch (error) {
     console.error(error);
     throw new Error(error);
   }
 };
 
-const createNotification = async (
+const createNotifications = async (
   client: SupabaseClient,
-  notification: NewNotificationData,
-  profileId: number,
-  headers: Headers,
-) => {
+  notification: DBNotification,
+  subscriberIds: SubscribedUser[],
+): Promise<void> => {
   try {
-    const shouldEmail = await shouldSendEmail(client, notification, profileId);
+    const notificationsToInsert = subscriberIds.map(
+      (subscriber) =>
+        new DBNotification({
+          action_type: notification.action_type,
+          content_id: notification.content_id,
+          content_type: notification.content_type,
+          source_content_id: notification.source_content_id,
+          source_content_type: notification.source_content_type,
+          title: notification.title,
+          triggered_by_id: notification.triggered_by_id,
+          owned_by_id: subscriber.profile_id,
+          is_read: false,
+          tenant_id: process.env.TENANT_ID!,
+        }),
+    );
 
-    const data = {
-      action_type: notification.actionType,
-      content_type: notification.contentType,
-      content_id: notification.contentId,
-      owned_by_id: notification.ownedById,
-      source_content_type: notification.sourceContentType,
-      source_content_id: notification.sourceContentId,
-      triggered_by_id: notification.triggeredById,
-      parent_content_id: notification.parentContentId,
-      parent_comment_id: notification.parentCommentId,
-      is_read: false,
-      tenant_id: process.env.TENANT_ID!,
-      should_email: shouldEmail,
-    };
+    const response = await client.from('notifications').insert(notificationsToInsert);
 
-    const response = await client.from('notifications').insert(data).select(`
-      *,
-      triggered_by:profiles!notifications_triggered_by_id_fkey(id,username)
-    `);
-
-    if (response.error || !response.data) {
-      throw response.error || 'No data returned';
-    }
-
-    if (shouldEmail) {
-      await notificationEmailService.createInstantNotificationEmail(
-        client,
-        response.data[0],
-        profileId,
-        headers,
-      );
+    if (response.error) {
+      throw response.error;
     }
   } catch (error) {
     console.error(error);
-
-    return Response.json(
-      { error },
-      {
-        headers,
-        status: 500,
-        statusText: `Error creating notification: ${notification.contentType}`,
-      },
-    );
   }
+
+  return;
 };
 
 const createNotificationsNewComment = async (
@@ -136,28 +86,36 @@ const createNotificationsNewComment = async (
     }
     const contentType: SubscribableContentTypes = isReply ? 'comments' : comment.source_type;
 
-    let subscribers = await getSubscribedUsers(contentId, contentType, client);
-    subscribers = subscribers.filter((id) => id !== comment.created_by);
+    let title = '';
+    if (!isReply) {
+      const sourceItem = await client
+        .from(comment.source_type)
+        .select('title')
+        .eq('id', comment.source_id)
+        .single();
+      title = sourceItem.data?.title;
+    }
 
-    const isResearchUpdate = comment.source_type === 'research_update';
-    const sourceContentId = await setSourceContentType(comment, client);
+    const subscribers = (await getSubscribedUsers(contentId, contentType, client)).filter(
+      (user) => user.profile_id !== comment.created_by,
+    );
 
-    await Promise.all(
-      subscribers.map((subscriberId: number) => {
-        const notification: NewNotificationData = {
-          actionType: 'newComment' as NotificationActionType,
-          ownedById: subscriberId!,
-          contentId: comment.id!,
-          sourceContentType: isResearchUpdate ? 'research' : comment.source_type!,
-          sourceContentId: sourceContentId,
-          parentContentId: isResearchUpdate ? comment.source_id! : null,
-          triggeredById: comment.created_by!,
-          contentType: isReply ? 'reply' : 'comment',
-          parentCommentId: isReply ? comment.parent_id : null,
-        };
+    const notification = new DBNotification({
+      action_type: isReply ? 'newReply' : 'newComment',
+      content_id: comment.id!,
+      title: title,
+      triggered_by_id: comment.created_by!,
+      triggered_by: (comment as any).profiles as DBProfile,
+      content_type: 'comments',
+    });
 
-        return createNotification(client, notification, subscriberId!, headers);
-      }),
+    await createNotifications(client, notification, subscribers);
+
+    await notificationEmailService.sendInstantNotificationEmails(
+      client,
+      subscribers,
+      notification,
+      headers,
     );
   } catch (error) {
     console.error(error);
@@ -182,24 +140,23 @@ const createNotificationsResearchUpdate = async (
 ) => {
   try {
     const contentType: SubscribableContentTypes = 'research';
-
     const subscribers = await getSubscribedUsers(research.id, contentType, client);
+    const notification = new DBNotification({
+      action_type: 'newContent',
+      title: research.title,
+      content_id: researchUpdate.id!,
+      content_type: 'research_updates',
+      triggered_by_id: profile.id,
+      triggered_by: profile,
+    });
 
-    await Promise.all(
-      subscribers.map(async (subscriberId: number) => {
-        const notification: NewNotificationData = {
-          actionType: 'newContent',
-          ownedById: subscriberId!,
-          contentId: researchUpdate.id!,
-          sourceContentType: 'research',
-          sourceContentId: research.id,
-          parentContentId: researchUpdate.id,
-          contentType: 'researchUpdate',
-          triggeredById: profile.id,
-        };
+    await createNotifications(client, notification, subscribers);
 
-        return createNotification(client, notification, subscriberId!, headers);
-      }),
+    await notificationEmailService.sendInstantNotificationEmails(
+      client,
+      subscribers,
+      notification,
+      headers,
     );
   } catch (error) {
     console.error(error);
@@ -215,33 +172,7 @@ const createNotificationsResearchUpdate = async (
   }
 };
 
-export const shouldSendEmail = async (
-  client: SupabaseClient,
-  notification: NewNotificationData,
-  profileId: number,
-): Promise<boolean> => {
-  const actionType = preferenceTypes[notification.contentType];
-  if (!actionType) {
-    return false;
-  }
-
-  const preferences = await notificationsPreferencesServiceServer.getPreferences(client, profileId);
-
-  if (!preferences) {
-    return DEFAULT_NOTIFICATION_PREFERENCES[actionType];
-  }
-
-  const userPreferences = preferences as DBNotificationsPreferences;
-
-  if (userPreferences.is_unsubscribed) {
-    return false;
-  }
-
-  return userPreferences[actionType] ?? DEFAULT_NOTIFICATION_PREFERENCES[actionType];
-};
-
 export const notificationsSupabaseServiceServer = {
-  createNotification,
   createNotificationsNewComment,
   createNotificationsResearchUpdate,
 };

@@ -70,8 +70,11 @@ We try to document some important [Technical Decisions](./docs/technical-decisio
 ## 🌳 Branching
 
 We have a single `master` branch which is linked to production.
+
 QA sites will be created from Pull Request branches upon adding the `Review allow-preview ✅` label (Mainteiners only).
+
 To contribute, you should fork our `master` branch and create a branch from your own fork. When your changes are ready, submit a PR from your fork branch, into our `master` branch.
+
 It is recommended to update your `master` fork regularly to avoid conflicts.
 
 ## 🤓 Style guide
@@ -80,11 +83,17 @@ We use Prettier and ESLint. This might soon evolve as there are new and shiny to
 
 Running `yarn format` from the project root prior to committing will ensure the code you're adding is formatted to align with the standards of this project.
 
-We expect code to follow standard best practices, such as, simple, clear and self-documenting code, with meaningful names, avoid deep nesting and prop-drilling, and avoid unnecessary abstractions.
+We expect code to follow standard practices:
+
+- Simple, clear and self-documenting code, with meaningful names.
+- avoid deep nesting and prop-drilling and avoid unnecessary abstractions.
+- Create additional functions if it would aid code readability.
+- Extend existing functions over creating new ones.
+- Don't add code comments.
 
 ## ✅ Testing
 
-Writing tests is crucial for maintaining a robust and reliable codebase. Tests provide a safety net that helps catch errors and unintended behaviour changes before they reach production.
+Writing tests is crucial for maintaining a robust and reliable codebase. Tests provide a safety net that helps catch errors and unintended behaviour changes before they reach production. Keep them simple and as easy to read as the other code.
 
 Test Writing Guidelines:
 
@@ -102,6 +111,11 @@ A few practices we ensure:
 - Secrets are managed server-side on fly.io
 - We use `helmet` for CSP and other security checks
 - Reduce and keep packages up-to-date to reduce potential vulnerabilities
+
+## First time contributing?
+
+Early on, and especially when contributing for the first time, please only submit and work on a single issue at a time. It's likely there's lots of little changes we'd like you to make while you get up to speed with how we work and what the code already does.
+
 
 ## 🤝 Joining the team
 

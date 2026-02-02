@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import type { Comment, DiscussionContentTypes } from 'oa-shared';
+import type { Comment, DiscussionContentType } from 'oa-shared';
 
 export const FactoryComment = (commentOverloads: Partial<Comment> = {}): Comment => ({
   id: faker.number.int(),
@@ -35,11 +35,11 @@ export const FactoryComment = (commentOverloads: Partial<Comment> = {}): Comment
   comment: faker.lorem.paragraph(),
   deleted: faker.datatype.boolean(),
   sourceId: faker.number.int(),
-  sourceType: faker.helpers.arrayElement<DiscussionContentTypes>([
+  sourceType: faker.helpers.arrayElement<DiscussionContentType>([
     'news',
     'projects',
     'questions',
-    'research_update',
+    'research_updates',
   ]),
   voteCount: faker.number.int({ min: 0, max: 100 }),
   hasVoted: faker.datatype.boolean(),

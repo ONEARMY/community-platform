@@ -76,7 +76,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         created_by: profile.id,
         tenant_id: process.env.TENANT_ID,
       })
-      .select('*,research:research(id,collaborators,created_by,is_draft,slug)')
+      .select('*,research:research(id,title,collaborators,created_by,is_draft,slug)')
       .single();
 
     if (updateResult.error || !updateResult.data) {

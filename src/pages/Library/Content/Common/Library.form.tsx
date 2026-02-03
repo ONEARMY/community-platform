@@ -33,6 +33,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
   const navigate = useNavigate();
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formValues = useMemo<ProjectFormData>(
     () => ({
@@ -74,15 +75,18 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
   const onSubmit = async (values: ProjectFormData, isDraft = false) => {
     setIntentionalNavigation(true);
     setSaveErrorMessage(null);
+    setIsSubmitting(true);
 
     try {
       if (!isDraft) {
         if (!values.category?.value) {
-          setSaveErrorMessage('Category is required');
-          return;
+          const error = 'Category is required';
+          setSaveErrorMessage(error);
+          throw new Error(error);
         } else if (!values.image && !values.existingImage?.id) {
-          setSaveErrorMessage('An image is required');
-          return;
+          const error = 'An image is required';
+          setSaveErrorMessage(error);
+          throw new Error(error);
         }
       }
 
@@ -96,7 +100,10 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
         setSaveErrorMessage(e.message);
       }
       logger.error(e);
-      return;
+      setIsSubmitting(false);
+      throw e;
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -141,7 +148,10 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
 
         const errorsClientSide = transformLibraryErrors(errors);
 
-        const handleSubmitDraft = () => onSubmit(values, true);
+        const handleSubmitDraft = async (e: React.MouseEvent) => {
+          e.preventDefault();
+          await onSubmit(values, true);
+        };
 
         const unsavedChangesDialog = (
           <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />
@@ -161,7 +171,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
               hasValidationErrors={hasValidationErrors}
               heading={headingText}
               submitFailed={submitFailed}
-              submitting={submitting}
+              submitting={submitting || isSubmitting}
               unsavedChangesDialog={unsavedChangesDialog}
             >
               <Flex

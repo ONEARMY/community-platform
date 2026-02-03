@@ -55,12 +55,14 @@ export const NewsForm = (props: IProps) => {
 
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const id = news?.id || null;
 
   const onSubmit = async (formValues: Partial<NewsFormData>, isDraft = false) => {
     setIntentionalNavigation(true);
     setSaveErrorMessage(null);
+    setIsSubmitting(true);
 
     try {
       const result = await newsService.upsert(id, {
@@ -82,6 +84,10 @@ export const NewsForm = (props: IProps) => {
         setSaveErrorMessage(e.message);
       }
       logger.error(e);
+      setIsSubmitting(false);
+      throw e;
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -149,7 +155,10 @@ export const NewsForm = (props: IProps) => {
 
         const errorsClientSide = [errorSet(errors, LABELS.fields)];
 
-        const handleSubmitDraft = () => onSubmit(values, true);
+        const handleSubmitDraft = async (e: React.MouseEvent) => {
+          e.preventDefault();
+          await onSubmit(values, true);
+        };
 
         const unsavedChangesDialog = (
           <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />
@@ -168,7 +177,7 @@ export const NewsForm = (props: IProps) => {
             hasValidationErrors={hasValidationErrors}
             heading={LABELS.headings[parentType]}
             submitFailed={submitFailed}
-            submitting={submitting}
+            submitting={submitting || isSubmitting}
             unsavedChangesDialog={unsavedChangesDialog}
           >
             <TitleField

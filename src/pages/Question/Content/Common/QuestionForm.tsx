@@ -41,6 +41,7 @@ export const QuestionForm = (props: IProps) => {
   });
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const id = question?.id || null;
 
   useEffect(() => {
@@ -67,6 +68,7 @@ export const QuestionForm = (props: IProps) => {
   const onSubmit = async (formValues: Partial<QuestionFormData>, isDraft: boolean = false) => {
     setIntentionalNavigation(true);
     setSaveErrorMessage(null);
+    setIsSubmitting(true);
 
     try {
       const result = await questionService.upsert(id, {
@@ -88,6 +90,10 @@ export const QuestionForm = (props: IProps) => {
         setSaveErrorMessage(e.message);
       }
       logger.error(e);
+      setIsSubmitting(false);
+      throw e;
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -117,7 +123,10 @@ export const QuestionForm = (props: IProps) => {
       }) => {
         const errorsClientSide = [errorSet(errors, LABELS.fields)];
 
-        const handleSubmitDraft = () => onSubmit(values, true);
+        const handleSubmitDraft = async (e: React.MouseEvent) => {
+          e.preventDefault();
+          await onSubmit(values, true);
+        };
 
         const numberOfImageInputsAvailable = (values as any)?.images
           ? Math.min((values as any).images.filter((x) => !!x).length + 1, QUESTION_MAX_IMAGES)
@@ -145,7 +154,7 @@ export const QuestionForm = (props: IProps) => {
             hasValidationErrors={hasValidationErrors}
             heading={LABELS.headings[parentType]}
             submitFailed={submitFailed}
-            submitting={submitting}
+            submitting={submitting || isSubmitting}
             unsavedChangesDialog={unsavedChangesDialog}
           >
             <TitleField

@@ -30,6 +30,7 @@ const ResearchForm = ({ research }: IProps) => {
   const navigate = useNavigate();
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (research) {
@@ -64,6 +65,7 @@ const ResearchForm = ({ research }: IProps) => {
   const onSubmit = async (values: ResearchFormData, isDraft = false) => {
     setIntentionalNavigation(true);
     setSaveErrorMessage(null);
+    setIsSubmitting(true);
 
     try {
       const result = await researchService.upsert(research?.id || null, values, isDraft);
@@ -80,6 +82,10 @@ const ResearchForm = ({ research }: IProps) => {
         setSaveErrorMessage(e.message);
       }
       logger.error(e);
+      setIsSubmitting(false);
+      throw e;
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -112,7 +118,10 @@ const ResearchForm = ({ research }: IProps) => {
       }) => {
         const errorsClientSide = [errorSet(errors, overview)];
 
-        const handleSubmitDraft = () => onSubmit(values, true);
+        const handleSubmitDraft = async (e: React.MouseEvent) => {
+          e.preventDefault();
+          await onSubmit(values, true);
+        };
 
         const sidebar = (
           <>
@@ -171,7 +180,7 @@ const ResearchForm = ({ research }: IProps) => {
             heading={heading}
             sidebar={sidebar}
             submitFailed={submitFailed}
-            submitting={submitting}
+            submitting={submitting || isSubmitting}
             unsavedChangesDialog={unsavedChangesDialog}
           >
             <ResearchTitleField />

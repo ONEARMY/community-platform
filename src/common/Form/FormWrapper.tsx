@@ -15,7 +15,7 @@ interface IProps {
   errorSubmitting: string | undefined | null;
   guidelines?: React.ReactNode;
   handleSubmit: () => void;
-  handleSubmitDraft: () => void;
+  handleSubmitDraft: (e: React.MouseEvent) => void;
   heading: string;
   hasValidationErrors: boolean;
   belowBody?: React.ReactNode;
@@ -123,7 +123,7 @@ export const FormWrapper = (props: IProps) => {
             display: 'block',
           }}
         >
-          <span>{DRAFT_LABEL}</span>
+          {DRAFT_LABEL}
         </Button>
 
         {submitting && <Loader label="Submitting, please do not close the page..." />}

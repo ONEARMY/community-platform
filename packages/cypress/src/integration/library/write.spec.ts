@@ -191,6 +191,7 @@ describe('[Library]', () => {
 
       cy.get('[data-cy=draft]').click();
 
+      cy.wait(1000);
       cy.get('[data-cy=errors-container]').should('be.visible');
       cy.contains('Duplicate project').should('be.visible');
 

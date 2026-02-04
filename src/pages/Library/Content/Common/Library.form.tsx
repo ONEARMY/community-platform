@@ -103,7 +103,6 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       }
       logger.error(e);
       setIsSubmitting(false);
-      throw e;
     } finally {
       setIsSubmitting(false);
     }

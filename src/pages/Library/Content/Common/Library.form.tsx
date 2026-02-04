@@ -34,6 +34,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSavingAsDraft, setIsSavingAsDraft] = useState(false);
 
   const formValues = useMemo<ProjectFormData>(
     () => ({
@@ -76,6 +77,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
     setIntentionalNavigation(true);
     setSaveErrorMessage(null);
     setIsSubmitting(true);
+    setIsSavingAsDraft(isDraft);
 
     try {
       if (!isDraft) {
@@ -101,7 +103,6 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       }
       logger.error(e);
       setIsSubmitting(false);
-      throw e;
     } finally {
       setIsSubmitting(false);
     }
@@ -146,7 +147,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
           </Flex>
         );
 
-        const errorsClientSide = transformLibraryErrors(errors);
+        const errorsClientSide = transformLibraryErrors(errors, isSavingAsDraft);
 
         const handleSubmitDraft = async (e: React.MouseEvent) => {
           e.preventDefault();

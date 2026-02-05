@@ -41,7 +41,7 @@ export const LibraryList = () => {
       } else {
         params.set(LibrarySearchParams.sort, 'MostUsefulLastWeek');
       }
-      setSearchParams(params);
+      setSearchParams(params, { replace: true });
     } else {
       // search only when sort is set (avoids duplicate requests)
       fetchProjects();

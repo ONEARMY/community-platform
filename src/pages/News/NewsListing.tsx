@@ -35,7 +35,7 @@ export const NewsListing = () => {
       } else {
         params.set('sort', 'Newest');
       }
-      setSearchParams(params);
+      setSearchParams(params, { replace: true });
     } else {
       // search only when sort is set (avoids duplicate requests)
       fetchNews();

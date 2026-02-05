@@ -6,6 +6,7 @@ import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import type { LibrarySortOption } from 'src/pages/Library/Content/List/LibrarySortOptions';
 import { ITEMS_PER_PAGE } from 'src/pages/Library/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { authServiceServer } from 'src/services/authService.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
@@ -24,8 +25,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const { client, headers } = createSupabaseServerClient(request);
   const claims = await client.auth.getClaims();
-
-  const username = claims.data?.claims?.user_metadata?.username || null;
+  const authId = claims.data?.claims?.sub;
+  const profile = authId ? await authServiceServer.getProfileByAuthId(authId, client) : null;
+  const username = profile?.username || null;
 
   const { data, error } = await client.rpc('get_projects', {
     search_query: q || null,

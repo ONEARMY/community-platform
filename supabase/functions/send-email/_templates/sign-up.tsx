@@ -18,20 +18,19 @@ const copy = {
 };
 
 interface SignUpEmailProps {
-  username: string;
   redirect_to: string;
   token_hash: string;
   settings: TenantSettings;
 }
 
 export const SignUpEmail = (props: SignUpEmailProps) => {
-  const { username, redirect_to, settings, token_hash } = props;
+  const { redirect_to, settings, token_hash } = props;
 
   const href = `${redirect_to}?token=${token_hash}`;
 
   return (
     <Layout emailType="service" preview={copy.preview} settings={settings}>
-      <Heading>{copy.h1(username)}</Heading>
+      <Heading>{copy.h1}</Heading>
       <Hero>{copy.emailConfirmationBody}</Hero>
 
       <Button href={href}>{copy.clickHere}</Button>

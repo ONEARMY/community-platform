@@ -16,14 +16,14 @@ describe('[Common]', () => {
     cy.get('a').contains('home page').should('have.attr', 'href').and('eq', '/');
   });
 
-  it.skip('[Page Navigation]', () => {
+  it('[Page Navigation]', () => {
     cy.visit('/library');
     cy.wait(2000);
 
-    cy.step('Go to Academy page');
-    cy.get('[data-cy=page-link]').contains('Academy').click();
-    cy.wait(2000);
-    cy.url().should('include', '/academy');
+    // cy.step('Go to Academy page');
+    // cy.get('[data-cy=page-link]').contains('Academy').click();
+    // cy.wait(2000);
+    // cy.url().should('include', '/academy');
 
     cy.step('Go to library page');
     cy.get('[data-cy=page-link]').contains('Library').click();

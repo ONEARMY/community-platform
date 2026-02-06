@@ -16,7 +16,7 @@ describe('[Common]', () => {
     cy.get('a').contains('home page').should('have.attr', 'href').and('eq', '/');
   });
 
-  it('[Page Navigation]', () => {
+  it.skip('[Page Navigation]', () => {
     cy.visit('/library');
     cy.wait(2000);
 

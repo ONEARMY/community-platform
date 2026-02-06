@@ -38,7 +38,7 @@ describe('[Profile]', () => {
     it('[User directed to own profile]', () => {
       const user = generateNewUserDetails();
       cy.signUpNewUser(user);
-      cy.visit('/news');
+      cy.visit('/');
 
       cy.step('Go to Profile');
       cy.clickMenuItem(UserMenuItem.Profile);

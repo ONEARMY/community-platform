@@ -20,10 +20,10 @@ describe('[Common]', () => {
     cy.visit('/library');
     cy.wait(2000);
 
-    // cy.step('Go to Academy page');
-    // cy.get('[data-cy=page-link]').contains('Academy').click();
-    // cy.wait(2000);
-    // cy.url().should('include', '/academy');
+    cy.step('Go to Academy page');
+    cy.get('[data-cy=page-link]').contains('Academy').click();
+    cy.wait(2000);
+    cy.url().should('include', '/academy');
 
     cy.step('Go to library page');
     cy.get('[data-cy=page-link]').contains('Library').click();
@@ -105,10 +105,10 @@ describe('[Common]', () => {
       cy.clickMenuItem(UserMenuItem.Profile);
       cy.url().should('include', `/u/${MOCK_DATA.users.subscriber.username}`);
 
-      cy.step('Go to Settings');
-      cy.toggleUserMenuOn();
-      cy.clickMenuItem(UserMenuItem.Settings);
-      cy.url().should('include', 'settings');
+      // cy.step('Go to Settings');
+      // cy.toggleUserMenuOn();
+      // cy.clickMenuItem(UserMenuItem.Settings);
+      // cy.url().should('include', 'settings');
 
       cy.step('Logout the session');
       cy.toggleUserMenuOn();

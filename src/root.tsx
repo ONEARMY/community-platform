@@ -45,7 +45,7 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
   }, [clientStyleData, emotionCache.sheet]);
 
   return (
-    <html lang="en">
+    <html lang="en" style={{ overflowY: 'scroll' }}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -59,13 +59,6 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
             dangerouslySetInnerHTML={{ __html: css }}
           />
         ))}
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `html {
-            overflow-y: scroll;
-          }`,
-          }}
-        ></style>
       </head>
       <body>
         {children}

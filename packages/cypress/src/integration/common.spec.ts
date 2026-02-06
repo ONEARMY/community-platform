@@ -105,10 +105,10 @@ describe('[Common]', () => {
       cy.clickMenuItem(UserMenuItem.Profile);
       cy.url().should('include', `/u/${MOCK_DATA.users.subscriber.username}`);
 
-      // cy.step('Go to Settings');
-      // cy.toggleUserMenuOn();
-      // cy.clickMenuItem(UserMenuItem.Settings);
-      // cy.url().should('include', 'settings');
+      cy.step('Go to Settings');
+      cy.toggleUserMenuOn();
+      cy.clickMenuItem(UserMenuItem.Settings);
+      cy.url().should('include', 'settings');
 
       cy.step('Logout the session');
       cy.toggleUserMenuOn();

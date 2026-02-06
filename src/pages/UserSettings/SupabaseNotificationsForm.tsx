@@ -144,7 +144,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
                 Unsubscribe from all emails
               </Button>
               <ConfirmModal
-                isOpen={!!showDeleteModal}
+                isOpen={showDeleteModal}
                 message="Unsubscribe from all current email notification types and any others we might add in the future."
                 confirmButtonText="Confirm"
                 handleCancel={() => setShowDeleteModal(false)}

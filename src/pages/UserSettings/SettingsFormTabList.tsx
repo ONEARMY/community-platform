@@ -21,7 +21,7 @@ export const SettingsFormTabList = (props: IProps) => {
     cursor: pointer;
     background-color: transparent;
     padding: 12px 18px;
-    border: none;
+    outline: none;
     border-radius: 12px;
     display: flex;
     gap: 8px;
@@ -35,7 +35,7 @@ export const SettingsFormTabList = (props: IProps) => {
     }
 
     &:focus {
-      border: 2px solid #666;
+      outline: 2px solid #666;
     }
 
     &.${tabClasses.disabled} {
@@ -45,7 +45,7 @@ export const SettingsFormTabList = (props: IProps) => {
 
     &.${tabClasses.selected} {
       color: #1b1b1b;
-      border: 2px solid #1b1b1b;
+      outline: 2px solid #1b1b1b;
       background-color: #e2edf7;
     }
   `;

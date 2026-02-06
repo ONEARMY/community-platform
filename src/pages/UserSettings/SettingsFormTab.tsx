@@ -10,7 +10,6 @@ interface IProps {
 
 export const SettingsFormTab = (props: IProps) => {
   const { tab, value } = props;
-  const { body, header } = tab;
 
   const sx = {
     borderRadius: 3,
@@ -24,8 +23,12 @@ export const SettingsFormTab = (props: IProps) => {
       value={value}
       style={{ display: 'flex', flexDirection: 'column', alignSelf: 'stretch' }}
     >
-      {header && <Card sx={{ ...sx, backgroundColor: 'softblue', padding: [3, 5] }}>{header}</Card>}
-      <Card sx={sx}>{body}</Card>
+      {tab.header && (
+        <Card sx={{ ...sx, backgroundColor: 'softblue', padding: [3, 5] }}>{tab.header}</Card>
+      )}
+      <Card sx={sx}>
+        <tab.body />
+      </Card>
     </TabPanel>
   );
 };

@@ -14,51 +14,40 @@ export interface GridFormFields {
 
 export interface IProps {
   fields: GridFormFields[];
-  heading: string;
 }
 
-export const GridForm = ({ fields, heading }: IProps) => {
+export const GridForm = ({ fields }: IProps) => {
   return (
     <>
-      <Grid columns={2} width="10%" sx={{ gap: 2, padding: 2 }}>
-        <Box>
-          <Flex>
-            <Text as="h3">{heading}</Text>
+      {fields.map((field, index) => (
+        <Grid
+          key={index}
+          gap={2}
+          columns={[2, '80% 20%']}
+          sx={{
+            borderRadius: 1,
+            background: index % 2 == 0 ? 'softblue' : 'white',
+            padding: 4,
+          }}
+          data-cy={`field: ${field.name}`}
+        >
+          <Flex sx={{ gap: 2 }}>
+            <Icon glyph={field.glyph} size={20} />
+            <Box>
+              <Text as="h4">{field.name}</Text>
+              <Text sx={{ color: 'GrayText', fontSize: 2 }}>{field.description}</Text>
+            </Box>
           </Flex>
-        </Box>
-        <Box></Box>
-      </Grid>
-      {fields.map((field, index) => {
-        return (
-          <Grid
-            key={index}
-            gap={2}
-            columns={[2, '80% 20%']}
+          <Flex
             sx={{
-              borderRadius: 1,
-              background: index % 2 == 0 ? 'softblue' : 'white',
-              padding: 4,
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
-            data-cy={`field: ${field.name}`}
           >
-            <Flex sx={{ gap: 2 }}>
-              <Icon glyph={field.glyph} size={20} />
-              <Box>
-                <Text as="h4">{field.name}</Text>
-                <Text sx={{ color: 'GrayText', fontSize: 2 }}>{field.description}</Text>
-              </Box>
-            </Flex>
-            <Flex
-              sx={{
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              {field.component}
-            </Flex>
-          </Grid>
-        );
-      })}
+            {field.component}
+          </Flex>
+        </Grid>
+      ))}
     </>
   );
 };

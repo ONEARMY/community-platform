@@ -2,15 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { Link, useNavigate } from 'react-router';
 import { observer } from 'mobx-react';
-import {
-  Button,
-  ConfirmModal,
-  FlagIcon,
-  Icon,
-  Loader,
-  MapWithPin,
-  ModerationRecord,
-} from 'oa-components';
+import { Button, ConfirmModal, FlagIcon, Icon, MapWithPin, ModerationRecord } from 'oa-components';
 import { buttons, headings, inCompleteProfile, mapForm } from 'src/pages/UserSettings/labels';
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
@@ -30,7 +22,6 @@ export const SettingsPageMapPin = observer(() => {
   const [mapPin, setMapPin] = useState<MapPin | undefined>();
   const [previewMapPin, setPreviewMapPin] = useState<MapPin | undefined>();
   const [markerIcon, setMarkerIcon] = useState<DivIcon>();
-  const [isLoading, setIsLoading] = useState(true);
   const [notification, setNotification] = useState<IFormNotification | undefined>(undefined);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const newMapRef = useRef<Map>(null);
@@ -62,15 +53,12 @@ export const SettingsPageMapPin = observer(() => {
         setMapPin(pin);
         setMarkerIcon(createMarkerIcon(pin, true));
       }
-      setIsLoading(false);
     };
 
     init();
   }, []);
 
   const onSubmit = async (obj: { location: ILatLng }) => {
-    setIsLoading(true);
-
     try {
       const pinData = await getLocationData(obj.location);
       const newPin = await profileService.upsertPin(pinData);
@@ -91,11 +79,9 @@ export const SettingsPageMapPin = observer(() => {
         variant: 'failure',
       });
     }
-    setIsLoading(false);
   };
 
   const onSubmitDelete = async () => {
-    setIsLoading(true);
     try {
       await profileService.deletePin();
       setMapPin(undefined);
@@ -114,7 +100,6 @@ export const SettingsPageMapPin = observer(() => {
         variant: 'failure',
       });
     }
-    setIsLoading(false);
   };
 
   if (!profile) {
@@ -152,8 +137,6 @@ export const SettingsPageMapPin = observer(() => {
           onSubmit={onSubmit}
           initialValues={initialValues}
           render={({ values, errors, submitFailed, submitting, handleSubmit }) => {
-            if (isLoading) return <Loader label={mapForm.loading} sx={{ alignSelf: 'center' }} />;
-
             return (
               <>
                 <SettingsFormNotifications
@@ -219,41 +202,42 @@ export const SettingsPageMapPin = observer(() => {
                   }}
                 />
 
-                <Flex sx={{ flexDirection: 'column', gap: 1 }}>
-                  {mapPin && (
-                    <Flex
-                      sx={{ gap: 1 }}
-                      variant="paragraph"
-                      data-cy="LocationDataTextDisplay"
-                      data-testid="LocationDataTextDisplay"
-                    >
-                      {mapForm.locationLabel}
-                      <Flex sx={{ gap: 1, alignItems: 'center' }}>
-                        <FlagIcon countryCode={mapPin.countryCode} />
-                        {mapPin.name}
-                      </Flex>
-                    </Flex>
-                  )}
-
-                  {previewMapPin && (
-                    <Flex sx={{ gap: 1 }}>
-                      <Text variant="paragraph">Your updated map pin:</Text>
-                      <Text
+                {(mapPin || previewMapPin) && (
+                  <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+                    {mapPin && (
+                      <Flex
+                        sx={{ gap: 1 }}
                         variant="paragraph"
                         data-cy="LocationDataTextDisplay"
                         data-testid="LocationDataTextDisplay"
                       >
+                        {mapForm.locationLabel}
                         <Flex sx={{ gap: 1, alignItems: 'center' }}>
-                          <FlagIcon countryCode={previewMapPin.countryCode} />
-                          {previewMapPin.name ||
-                            previewMapPin.administrative ||
-                            previewMapPin.country}
+                          <FlagIcon countryCode={mapPin.countryCode} />
+                          {mapPin.name}
                         </Flex>
-                      </Text>
-                    </Flex>
-                  )}
-                </Flex>
+                      </Flex>
+                    )}
 
+                    {previewMapPin && (
+                      <Flex sx={{ gap: 1 }}>
+                        <Text variant="paragraph">Your updated map pin:</Text>
+                        <Text
+                          variant="paragraph"
+                          data-cy="LocationDataTextDisplay"
+                          data-testid="LocationDataTextDisplay"
+                        >
+                          <Flex sx={{ gap: 1, alignItems: 'center' }}>
+                            <FlagIcon countryCode={previewMapPin.countryCode} />
+                            {previewMapPin.name ||
+                              previewMapPin.administrative ||
+                              previewMapPin.country}
+                          </Flex>
+                        </Text>
+                      </Flex>
+                    )}
+                  </Flex>
+                )}
                 <Flex sx={{ gap: 2 }}>
                   <Button
                     type="submit"

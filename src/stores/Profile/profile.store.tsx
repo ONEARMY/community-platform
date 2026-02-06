@@ -73,6 +73,8 @@ export class ProfileStore {
       profileTypes: observable,
       upgradeBadges: observable,
       upgradeBadgeForCurrentUser: computed,
+      isComplete: computed,
+      missingFields: computed,
       refresh: action,
       clear: action,
       update: action,
@@ -93,6 +95,59 @@ export class ProfileStore {
     const hasUpgradeBadge = upgradeBadge ? userBadgeIds.includes(upgradeBadge.badgeId) : false;
 
     return hasUpgradeBadge ? undefined : upgradeBadge;
+  }
+
+  get isComplete() {
+    if (!this.profile) {
+      return;
+    }
+
+    return this.isProfileComplete(this.profile);
+  }
+
+  get missingFields() {
+    if (!this.profile) {
+      return;
+    }
+
+    return this.getMissingFields(this.profile);
+  }
+
+  getMissingFields(profile: Partial<Profile>) {
+    const { about, coverImages, displayName, photo } = profile;
+    const missing: string[] = [];
+
+    if (!displayName) {
+      missing.push('Display name');
+    }
+
+    if (!about) {
+      missing.push('About');
+    }
+
+    const isMember = profile.type?.name === 'member';
+
+    if (isMember && !photo?.id) {
+      missing.push('Profile photo');
+    } else if (!isMember && (!coverImages || !coverImages[0]?.publicUrl)) {
+      missing.push('Cover image');
+    }
+
+    return missing;
+  }
+
+  isProfileComplete(profile: Partial<Profile>) {
+    const { about, coverImages, displayName, photo } = profile;
+
+    const isBasicInfoFilled = !!(about && displayName);
+
+    const isMember = profile.type?.name === 'member';
+    const isSpace = !isMember;
+
+    const isMemberFilled = isMember && !!photo?.id;
+    const isSpaceFilled = isSpace && !!coverImages && !!coverImages[0]?.publicUrl;
+
+    return isBasicInfoFilled && (isMemberFilled || isSpaceFilled);
   }
 }
 

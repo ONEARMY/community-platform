@@ -43,6 +43,7 @@ describe('SettingsPageMapPin', () => {
     mockUseProfileStore.mockReturnValue({
       profile: mockUser,
       update: vi.fn(),
+      isComplete: true,
     });
     mockGetCurrentUserMapPin.mockResolvedValue(null);
 
@@ -102,6 +103,7 @@ describe('SettingsPageMapPin', () => {
     mockUseProfileStore.mockReturnValue({
       profile: mockUser,
       update: vi.fn(),
+      isComplete: true,
     });
     mockGetCurrentUserMapPin.mockResolvedValue(mockPin); // Mock a pin for a space
 
@@ -132,6 +134,7 @@ describe('SettingsPageMapPin', () => {
     mockUseProfileStore.mockReturnValue({
       profile: mockUser,
       update: vi.fn(),
+      isComplete: false,
     });
     mockGetCurrentUserMapPin.mockResolvedValue(null);
 

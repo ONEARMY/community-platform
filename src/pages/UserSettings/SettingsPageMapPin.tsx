@@ -15,7 +15,6 @@ import { buttons, headings, inCompleteProfile, mapForm } from 'src/pages/UserSet
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { getLocationData } from 'src/utils/getLocationData';
-import { isProfileComplete } from 'src/utils/isProfileComplete';
 import { Alert, Card, Flex, Heading, Text } from 'theme-ui';
 
 import { createMarkerIcon } from '../Maps/Content/MapView/Sprites';
@@ -37,7 +36,7 @@ export const SettingsPageMapPin = observer(() => {
   const newMapRef = useRef<Map>(null);
   const navigate = useNavigate();
 
-  const { profile } = useProfileStore();
+  const { profile, isComplete } = useProfileStore();
 
   const isMember = !profile?.type?.isSpace;
   const { addPinTitle, yourPinTitle } = headings.map;
@@ -147,7 +146,7 @@ export const SettingsPageMapPin = observer(() => {
         )}
       </Flex>
 
-      {isProfileComplete(profile) ? (
+      {isComplete ? (
         <Form
           id={formId}
           onSubmit={onSubmit}

@@ -6,14 +6,7 @@ export const Alerts = () => {
   return (
     <>
       <AlertBanner />
-      <UserAction
-        loggedIn={
-          <>
-            <AlertIncompleteProfile />
-          </>
-        }
-        loggedOut={null}
-      />
+      <UserAction loggedIn={<AlertIncompleteProfile />} loggedOut={null} />
     </>
   );
 };

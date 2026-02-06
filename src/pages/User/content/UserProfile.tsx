@@ -4,8 +4,8 @@ import { MemberBadge, MemberHistory, Tab, TabPanel, Tabs, TabsList } from 'oa-co
 import { PremiumTier } from 'oa-shared';
 import { PremiumTierWrapper } from 'src/common/PremiumTierWrapper';
 import { isPreciousPlastic } from 'src/config/config';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { isContactable } from 'src/utils/helpers';
-import { isProfileComplete } from 'src/utils/isProfileComplete';
 import { Alert, Box, Card, Flex } from 'theme-ui';
 
 import { Impact } from '../impact/Impact';
@@ -27,13 +27,15 @@ interface IProps {
 export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
   const { about, impact, type, tags } = user;
   const location = useLocation();
+  const { isComplete } = useProfileStore();
+
   const isMember = !type?.isSpace;
   const hasContactOption = isContactable(user.isContactable) || !!user.website;
   const hasContributed = docs?.projects.length + docs?.research.length + docs?.questions.length > 0;
   const hasImpacted = !!impact;
   const hasProfile = about || (tags && Object.keys(tags).length !== 0) || hasContributed;
 
-  const showEmptyProfileAlert = isViewingOwnProfile && !isProfileComplete(user);
+  const showEmptyProfileAlert = isViewingOwnProfile && isComplete === false;
 
   const defaultValue = location?.hash?.slice(1) || (hasProfile ? 'profile' : 'contact');
 

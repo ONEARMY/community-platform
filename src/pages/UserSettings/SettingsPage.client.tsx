@@ -4,7 +4,6 @@ import { SettingsFormWrapper } from 'oa-components';
 import { isPreciousPlastic } from 'src/config/config';
 import { isModuleSupported, MODULE } from 'src/modules';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { getMissingProfileFields, isProfileComplete } from 'src/utils/isProfileComplete';
 import { Box, Flex, Text } from 'theme-ui';
 
 import { EnvironmentContext } from '../common/EnvironmentContext';
@@ -20,7 +19,7 @@ import '../../styles/leaflet.css';
 
 export const SettingsPage = observer(() => {
   const env = useContext(EnvironmentContext);
-  const { profile } = useProfileStore();
+  const { isComplete, missingFields, profile } = useProfileStore();
 
   if (!profile) {
     return null;
@@ -29,19 +28,17 @@ export const SettingsPage = observer(() => {
   const isMember = !profile.type?.isSpace;
   const showImpactTab = !isMember && isPreciousPlastic();
   const showMapTab = isModuleSupported(env?.VITE_SUPPORTED_MODULES || '', MODULE.MAP);
-  const incompleteProfile = !isProfileComplete(profile);
-  const missingFields = getMissingProfileFields(profile);
 
   const profileTab = {
     title: 'Profile',
-    header: incompleteProfile && (
+    header: isComplete === false && (
       <Flex sx={{ gap: 2, flexDirection: 'column' }} data-cy="CompleteProfileHeader">
         <Text as="h3">✏️ Complete your profile</Text>
         <Text>
           In order to post comments or create content, we'd like you to share something about
           yourself.
         </Text>
-        {missingFields.length > 0 && (
+        {missingFields && missingFields.length > 0 && (
           <Text>
             Missing required fields:
             <ul style={{ margin: '0.5em 0 0 0', paddingLeft: '1.5em' }}>

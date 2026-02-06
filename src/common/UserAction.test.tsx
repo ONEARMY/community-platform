@@ -27,6 +27,7 @@ describe('UserAction', () => {
     mockUseProfileStore.mockReturnValue({
       profile: mockUser,
       update: vi.fn(),
+      isComplete: false,
     });
 
     render(
@@ -48,6 +49,7 @@ describe('UserAction', () => {
     mockUseProfileStore.mockReturnValue({
       profile: completeUser,
       update: vi.fn(),
+      isComplete: true,
     });
 
     render(

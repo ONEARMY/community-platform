@@ -12,7 +12,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const claims = await client.auth.getClaims();
 
   if (!claims.data?.claims) {
-    return redirectServiceServer.redirectSignIn('/settings', headers);
+    return redirectServiceServer.redirectSignIn('/settings/profile', headers);
   }
 
   const url = new URL(request.url);

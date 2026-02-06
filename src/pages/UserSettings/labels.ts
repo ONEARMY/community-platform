@@ -148,7 +148,6 @@ export const headings = {
   map: {
     description:
       'Add yourself to the map as an individual who wants to get started. Find local community members and meetup to join forces and collaborate.',
-    addPinTitle: 'Add yourself to the map',
     yourPinTitle: 'Your map pin',
     existingPinLabel: 'The map pin you registered has the following description:',
   },

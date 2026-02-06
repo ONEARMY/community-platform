@@ -30,7 +30,6 @@ export const SettingsPageMapPin = observer(() => {
   const { profile, isComplete } = useProfileStore();
 
   const isMember = !profile?.type?.isSpace;
-  const { addPinTitle, yourPinTitle } = headings.map;
   const formId = 'MapSection';
 
   const initialValues = useMemo<{ location: ILatLng | null }>(() => {
@@ -116,7 +115,7 @@ export const SettingsPageMapPin = observer(() => {
     >
       <Flex sx={{ flexDirection: 'column', gap: 1 }}>
         <Heading as="h2" id="your-map-pin">
-          {mapPin ? addPinTitle : yourPinTitle}
+          {headings.map.yourPinTitle}
         </Heading>
         {isMember && (
           <Text variant="quiet" data-cy="descriptionMember" data-testid="descriptionMember">

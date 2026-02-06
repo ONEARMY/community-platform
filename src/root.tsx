@@ -59,6 +59,13 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
             dangerouslySetInnerHTML={{ __html: css }}
           />
         ))}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `html {
+            overflow-y: scroll;
+          }`,
+          }}
+        ></style>
       </head>
       <body>
         {children}

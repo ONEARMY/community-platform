@@ -20,7 +20,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return redirect('/settings/profile', { headers });
   }
 
-  return null;
+  return new Response(null, { headers });
 }
 
 export default function Index() {

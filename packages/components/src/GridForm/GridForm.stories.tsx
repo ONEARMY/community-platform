@@ -12,7 +12,6 @@ export default {
 export const Default: StoryFn<typeof GridForm> = () => (
   <Card sx={{ maxWidth: '600px', padding: 2 }}>
     <GridForm
-      heading="The heading area"
       fields={[
         {
           glyph: 'discussion',

@@ -142,4 +142,5 @@ const isEmpty = (props: UserStatisticsProps & { pin?: Pick<MapPin, 'country'> })
   !props.libraryCount &&
   !props.researchCount &&
   !props.profile.totalViews &&
+  !props.questionCount &&
   !props.usefulCount;

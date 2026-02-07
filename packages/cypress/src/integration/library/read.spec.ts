@@ -156,6 +156,14 @@ describe('[Library]', () => {
         });
         // This fails in firefox due to cross security, simply check url
         // .should(iframe => expect(iframe.contents().find('video')).to.visible)
+
+        cy.step('Project should appear on users profile');
+        cy.get('[data-cy=Username]').first().click();
+        cy.get('[data-testid=library-stat]').should('exist');
+        cy.get('[data-cy=ContribTab]').click();
+        cy.get('[data-testid="library-contributions"]').within(() => {
+          cy.contains(item.title);
+        });
       });
 
       it('[Delete button should not be visible to everyone', () => {

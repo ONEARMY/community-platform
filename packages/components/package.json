@@ -9,7 +9,7 @@
   "scripts": {
     "storybook": "yarn start",
     "start": "storybook dev -p 6006 --loglevel verbose",
-    "format": "biome format --write",
+    "format": "biome check --write",
     "build:sb": "yarn build --build && storybook build",
     "build": "tsc --build --verbose",
     "dev": "tsc --watch",

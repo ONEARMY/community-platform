@@ -27,7 +27,7 @@
     "build:shared": "yarn workspace oa-shared build",
     "build": "yarn build:shared && yarn build:themes && yarn build:components && yarn build:vite",
     "lint": "biome lint --write",
-    "format": "biome format --write",
+    "format": "biome check --write",
     "serve": "npx serve -s build",
     "test": "yarn workspace oa-cypress start",
     "test:components": "yarn build:shared && yarn build:themes && yarn build:components && yarn workspace oa-components test",

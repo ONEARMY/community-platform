@@ -15,7 +15,8 @@
       "!**/*.spec.*",
       "!**/*.stories.*",
       "!**/*.test.*",
-      "!**/styles/*"
+      "!**/styles/*",
+      "!**/supabase"
     ]
   },
   "formatter": {
@@ -30,7 +31,15 @@
     "bracketSpacing": true,
     "expand": "auto",
     "useEditorconfig": true,
-    "includes": ["**", "!**/build", "!**/storybook-static", "!**/dist", "!shared/lib", "!**/.react-router", "!**/*.md"]
+    "includes": [
+      "**",
+      "!**/build",
+      "!**/storybook-static",
+      "!**/dist",
+      "!shared/lib",
+      "!**/.react-router",
+      "!**/*.md"
+    ]
   },
   "linter": {
     "enabled": true,
@@ -122,7 +131,16 @@
         "useNamespaceKeyword": "error"
       }
     },
-    "includes": ["**", "!**/node_modules", "!**/functions", "!**/build", "!**/lib", "!**/storybook-static", "!**/dist", "!shared/lib"]
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!**/functions",
+      "!**/build",
+      "!**/lib",
+      "!**/storybook-static",
+      "!**/dist",
+      "!shared/lib"
+    ]
   },
   "javascript": {
     "formatter": {

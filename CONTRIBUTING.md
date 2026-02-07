@@ -79,8 +79,7 @@ It is recommended to update your `master` fork regularly to avoid conflicts.
 
 ## 🤓 Style guide
 
-We use `Biome` it has significant performance and DX advantages compared to the old `Eslint` and `Prettier`.
-Please install
+We use `Biome` please install the extension on your IDE https://biomejs.dev/guides/editors/first-party-extensions/.
 
 Running `yarn format` from the project root prior to committing will ensure the code you're adding is formatted to align with the standards of this project.
 

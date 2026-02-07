@@ -125,6 +125,7 @@
     "yup": "^1.7.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.3.14",
     "@faker-js/faker": "^10.1.0",
     "@react-router/dev": "^7.10.1",
     "@semantic-release/changelog": "^6.0.3",

@@ -1,11 +1,9 @@
 import { useId, useState } from 'react';
 import { useNavigate } from 'react-router';
+import type { ThemeUIStyleObject } from 'theme-ui';
 import { Text, useThemeUI } from 'theme-ui';
-
 import { Button } from '../Button/Button';
 import { Tooltip } from '../Tooltip/Tooltip';
-
-import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface IProps {
   hasUserVotedUseful: boolean;
@@ -25,7 +23,7 @@ export const UsefulStatsButton = (props: IProps) => {
     setDisabled(true);
     try {
       await props.onUsefulClick();
-    } catch (err) {
+    } catch (_) {
       // do nothing
     }
     setDisabled(false);

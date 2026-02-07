@@ -1,4 +1,6 @@
 /** @jsxImportSource theme-ui */
+
+import styled from '@emotion/styled';
 import { IconContext } from 'react-icons';
 import {
   FaCloudUploadAlt,
@@ -27,16 +29,13 @@ import {
   MdNotifications,
   MdTurnedIn,
 } from 'react-icons/md';
-import styled from '@emotion/styled';
+import type { SpaceProps, VerticalAlignProps } from 'styled-system';
 import { space, verticalAlign } from 'styled-system';
-
+import type { ThemeUIStyleObject } from 'theme-ui';
 import { DonateIcon } from './DonateIcon';
 import { DownloadIcon } from './DownloadIcon';
 import { ExternalUrl } from './ExternalUrl';
 import { iconMap } from './svgs';
-
-import type { SpaceProps, VerticalAlignProps } from 'styled-system';
-import type { ThemeUIStyleObject } from 'theme-ui';
 import type { IGlyphs } from './types';
 
 export interface IProps extends React.ButtonHTMLAttributes<HTMLElement> {
@@ -167,8 +166,8 @@ const IconWrapper = styled.div<IconProps>`
   position: relative;
   ${verticalAlign} ${space}
     ${(props) =>
-    props.onClick &&
-    `
+      props.onClick &&
+      `
     cursor: pointer;
   `};
 `;

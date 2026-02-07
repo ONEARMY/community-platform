@@ -1,18 +1,16 @@
+import { Button, Loader } from 'oa-components';
+import type { ResearchItem, ResearchStatus } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { Button, Loader } from 'oa-components';
 import { logger } from 'src/logger';
 import useDrafts from 'src/pages/common/Drafts/useDraftsSupabase';
 import { Box, Flex } from 'theme-ui';
-
 import { listing } from '../labels';
+import type { ResearchSortOption } from '../ResearchSortOptions';
 import { researchService } from '../research.service';
 import { ResearchFilterHeader } from './ResearchListHeader';
 import ResearchListItem from './ResearchListItem';
 import { ResearchSearchParams } from './ResearchSearchParams';
-
-import type { ResearchItem, ResearchStatus } from 'oa-shared';
-import type { ResearchSortOption } from '../ResearchSortOptions';
 
 const ResearchList = () => {
   const [isFetching, setIsFetching] = useState<boolean>(true);

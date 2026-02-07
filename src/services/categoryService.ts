@@ -1,6 +1,5 @@
-import { logger } from 'src/logger';
-
 import type { Category, ContentType } from 'oa-shared';
+import { logger } from 'src/logger';
 
 const getCategories = async (type: ContentType) => {
   try {

@@ -1,4 +1,7 @@
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBMedia, DBQuestion } from 'oa-shared';
 import { Question } from 'oa-shared';
+import type { LoaderFunctionArgs, Params } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -8,12 +11,7 @@ import { updateUserActivity } from 'src/utils/activity.server';
 import { hasAdminRightsSupabase } from 'src/utils/helpers';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImages } from 'src/utils/storage';
-
 import { contentServiceServer } from '../services/contentService.server';
-
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBMedia, DBQuestion } from 'oa-shared';
-import type { LoaderFunctionArgs, Params } from 'react-router';
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);

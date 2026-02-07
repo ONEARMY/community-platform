@@ -14,10 +14,10 @@ export const getPresentFiles = (value: Value): IMultipleInputValue => {
   const valArray = Array.isArray(value) ? value : [value];
 
   return valArray.filter((value) => {
-    if (Object.prototype.hasOwnProperty.call(value, 'downloadUrl')) {
+    if (Object.hasOwn(value, 'downloadUrl')) {
       return value as IUploadedFileMeta;
     }
-    if (Object.prototype.hasOwnProperty.call(value, 'objectUrl')) {
+    if (Object.hasOwn(value, 'objectUrl')) {
       return value as IConvertedFileMeta;
     }
   });

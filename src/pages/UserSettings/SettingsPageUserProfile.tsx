@@ -1,26 +1,24 @@
-import { useMemo, useState } from 'react';
-import { Form } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import { Button, Loader } from 'oa-components';
+import type { ProfileFormData } from 'oa-shared';
+import { useMemo, useState } from 'react';
+import { Form } from 'react-final-form';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { logger } from 'src/logger';
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { isContactable, isMessagingModuleOff } from 'src/utils/helpers';
 import { Flex } from 'theme-ui';
-
+import type { IFormNotification } from './content/SettingsFormNotifications';
+import { SettingsFormNotifications } from './content/SettingsFormNotifications';
 import { ProfileTypeSection } from './content/sections/ProfileType.section';
 import { PublicContactSection } from './content/sections/PublicContact.section';
 import { UserImagesSection } from './content/sections/UserImages.section';
 import { UserInfosSection } from './content/sections/UserInfos.section';
 import { VisitorSection } from './content/sections/VisitorSection';
-import { SettingsFormNotifications } from './content/SettingsFormNotifications';
 import { buttons } from './labels';
-
-import type { ProfileFormData } from 'oa-shared';
-import type { IFormNotification } from './content/SettingsFormNotifications';
 
 export const SettingsPageUserProfile = observer(() => {
   const [notification, setNotification] = useState<IFormNotification | undefined>(undefined);

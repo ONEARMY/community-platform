@@ -1,6 +1,5 @@
-import { RESEARCH_MAX_LENGTH, RESEARCH_TITLE_MAX_LENGTH } from './constants';
-
 import type { ILabels } from 'src/common/Form/types';
+import { RESEARCH_MAX_LENGTH, RESEARCH_TITLE_MAX_LENGTH } from './constants';
 
 export const buttons = {
   markCompleted: 'Mark as Completed',

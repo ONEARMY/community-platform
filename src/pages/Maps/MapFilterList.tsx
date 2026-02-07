@@ -1,5 +1,5 @@
-import { useContext, useMemo } from 'react';
 import { Button, ButtonIcon, MapFilterListItem, MemberBadge, UserBadge } from 'oa-components';
+import { useContext, useMemo } from 'react';
 import { Checkbox, Flex, Heading, Label, Text } from 'theme-ui';
 
 import { MapContext } from './MapContext';

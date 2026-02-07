@@ -1,10 +1,9 @@
+import type { IImpactDataField, IUserImpact } from 'oa-shared';
+import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImpactServiceServer } from 'src/services/impactService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
-
-import type { IImpactDataField, IUserImpact } from 'oa-shared';
-import type { ActionFunctionArgs } from 'react-router';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -73,7 +72,7 @@ async function validateRequest(request: Request, data: any) {
     if (!Array.isArray(fields) || !fields?.length) {
       return { status: 400, statusText: 'fields is not valid' };
     }
-  } catch (error) {
+  } catch (_) {
     return { status: 400, statusText: 'invalid fields' };
   }
 

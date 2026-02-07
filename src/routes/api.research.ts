@@ -1,6 +1,9 @@
+import type { DBResearchItem, ResearchStatus } from 'oa-shared';
 import { ResearchItem } from 'oa-shared';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { ITEMS_PER_PAGE } from 'src/pages/Research/constants';
+import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -8,10 +11,6 @@ import { storageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { convertToSlug } from 'src/utils/slug';
-
-import type { DBResearchItem, ResearchStatus } from 'oa-shared';
-import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);

@@ -1,6 +1,5 @@
-import { Button } from '../Button/Button';
-
 import type { Comment } from 'oa-shared';
+import { Button } from '../Button/Button';
 
 export interface Props {
   isShowReplies: boolean;

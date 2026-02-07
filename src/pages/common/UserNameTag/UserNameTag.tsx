@@ -1,7 +1,6 @@
 import { DisplayDate, Username } from 'oa-components';
-import { Flex, Text } from 'theme-ui';
-
 import type { Author } from 'oa-shared';
+import { Flex, Text } from 'theme-ui';
 
 interface IProps {
   author: Author;

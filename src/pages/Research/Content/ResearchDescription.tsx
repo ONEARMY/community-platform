@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { max } from 'date-fns';
 import {
   AuthorDisplay,
@@ -12,14 +11,13 @@ import {
   Username,
 } from 'oa-components';
 import { PremiumTier, type Profile, type ResearchItem, ResearchStatusRecord } from 'oa-shared';
-// eslint-disable-next-line import/no-unresolved
+import { useMemo } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 import { userHasPremiumTier } from 'src/common/PremiumTierWrapper';
 import { DraftTag } from 'src/pages/common/Drafts/DraftTag';
 import { buildStatisticsLabel } from 'src/utils/helpers';
 import { createUsefulStatistic } from 'src/utils/statistics';
 import { Card, Divider, Flex, Heading, Text } from 'theme-ui';
-
 import { researchStatusColour } from '../researchHelpers';
 
 interface IProps {

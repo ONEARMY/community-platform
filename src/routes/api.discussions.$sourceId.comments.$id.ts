@@ -1,10 +1,9 @@
-import { UserRole } from 'oa-shared';
-import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { updateUserActivity } from 'src/utils/activity.server';
-
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBComment, DBProfile } from 'oa-shared';
+import { UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { updateUserActivity } from 'src/utils/activity.server';
 
 type Supabase = {
   headers: Headers;

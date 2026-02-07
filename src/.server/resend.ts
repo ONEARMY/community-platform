@@ -1,5 +1,5 @@
-import { Resend } from 'resend';
 import type { ReactNode } from 'react';
+import { Resend } from 'resend';
 
 type SendEmailArgs = {
   to: string;

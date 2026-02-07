@@ -1,8 +1,6 @@
-import { Notification } from 'oa-shared';
-
-import { FactoryComment } from './Comment';
-
 import type { BasicAuthorDetails } from 'oa-shared';
+import { Notification } from 'oa-shared';
+import { FactoryComment } from './Comment';
 
 export const factorySupabaseNotification = (
   notificationOverloads: Partial<Notification> = {},

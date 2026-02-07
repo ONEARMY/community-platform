@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
 import { Banner, Icon } from 'oa-components';
+import type { Banner as BannerModel } from 'oa-shared';
+import { useEffect, useState } from 'react';
 import { bannerService } from 'src/pages/common/banner.service';
 import { IconButton, Text } from 'theme-ui';
-
-import type { Banner as BannerModel } from 'oa-shared';
 
 export const AlertBanner = () => {
   const [banner, setBanner] = useState<(BannerModel & { show: boolean }) | null>(null);

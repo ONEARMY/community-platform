@@ -1,5 +1,5 @@
-import { Field } from 'react-final-form';
 import { FieldMarkdown } from 'oa-components';
+import { Field } from 'react-final-form';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { fields } from 'src/pages/News/labels';
 import { required } from 'src/utils/validators';

@@ -1,9 +1,7 @@
-import { Box } from 'theme-ui';
-
-import checkmarkIcon from '../../assets/icons/icon-checkmark.svg';
-
 import type { JSX } from 'react';
 import type { ThemeUIStyleObject } from 'theme-ui';
+import { Box } from 'theme-ui';
+import checkmarkIcon from '../../assets/icons/icon-checkmark.svg';
 
 export interface ElWithBeforeIconProps {
   children?: React.ReactNode;

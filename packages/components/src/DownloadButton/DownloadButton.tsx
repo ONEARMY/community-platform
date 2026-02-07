@@ -1,9 +1,8 @@
 import { Flex, Text } from 'theme-ui';
 
 import { Icon } from '../Icon/Icon';
-import { Tooltip } from '../Tooltip/Tooltip';
-
 import type { IGlyphs } from '../Icon/types';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 export interface IProps {
   onClick: () => void;

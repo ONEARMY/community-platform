@@ -1,6 +1,5 @@
-import { Author, Comment } from 'oa-shared';
-
 import type { DBAuthor, DBComment, Reply } from 'oa-shared';
+import { Author, Comment } from 'oa-shared';
 import type { ImageServiceServer } from 'src/services/imageService.server';
 
 export class CommentFactory {

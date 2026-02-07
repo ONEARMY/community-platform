@@ -1,12 +1,10 @@
-import { useLoaderData } from 'react-router';
 import { Button, ExternalLink } from 'oa-components';
+import type { LoaderFunctionArgs } from 'react-router';
+import { useLoaderData } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { Card, Flex, Heading, Text } from 'theme-ui';
-
 import { getTenantSettings } from './api.messages';
-
-import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client } = createSupabaseServerClient(request);

@@ -1,14 +1,13 @@
+import type { DivIcon } from 'leaflet';
 import { useState } from 'react';
+import type { Map as MapType } from 'react-leaflet';
 import { ZoomControl } from 'react-leaflet';
 import { Box, Flex } from 'theme-ui';
-
+// biome-ignore lint/suspicious/noShadowRestrictedNames: this is an external library import
 import { Map } from '../Map/Map.client';
 import { OsmGeocoding } from '../OsmGeocoding/OsmGeocoding';
-import { MapPin } from './MapPin.client';
-
-import type { DivIcon } from 'leaflet';
-import type { Map as MapType } from 'react-leaflet';
 import type { Result } from '../OsmGeocoding/types';
+import { MapPin } from './MapPin.client';
 
 import 'leaflet/dist/leaflet.css';
 

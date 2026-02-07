@@ -1,8 +1,7 @@
 import Keyv from 'keyv';
+import type { LoaderFunctionArgs } from 'react-router';
 import { isProductionEnvironment } from 'src/config/config';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-
-import type { LoaderFunctionArgs } from 'react-router';
 
 const cache = new Keyv<{ body: string; contentType: string }>({
   ttl: 3600000,

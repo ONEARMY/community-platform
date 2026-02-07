@@ -1,8 +1,7 @@
 import { MemberBadge, Username } from 'oa-components';
+import type { Profile } from 'oa-shared';
 import DefaultMemberImage from 'src/assets/images/default_member.svg';
 import { Avatar, Box, Flex, Heading } from 'theme-ui';
-
-import type { Profile } from 'oa-shared';
 
 interface IProps {
   user: Profile;

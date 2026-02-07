@@ -1,10 +1,8 @@
+import type { DivIcon } from 'leaflet';
+import L from 'leaflet';
 import { useRef } from 'react';
 import { Marker } from 'react-leaflet';
-import L from 'leaflet';
-
 import customMarkerIcon from '../../assets/icons/map-marker.png';
-
-import type { DivIcon } from 'leaflet';
 
 const customMarker = L.icon({
   iconUrl: customMarkerIcon,

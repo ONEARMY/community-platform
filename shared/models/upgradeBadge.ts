@@ -1,6 +1,5 @@
-import { ProfileBadge } from './profileBadge';
-
 import type { DBProfileBadge } from './profileBadge';
+import { ProfileBadge } from './profileBadge';
 
 export class DBUpgradeBadge {
   id: number;

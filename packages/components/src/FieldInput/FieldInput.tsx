@@ -1,9 +1,7 @@
 import { useMemo } from 'react';
-import { Box, Flex, Input, Text } from 'theme-ui';
-
-import { CharacterCount } from '../CharacterCount/CharacterCount';
-
 import type { FieldRenderProps } from 'react-final-form';
+import { Box, Flex, Input, Text } from 'theme-ui';
+import { CharacterCount } from '../CharacterCount/CharacterCount';
 
 type FieldProps = FieldRenderProps<any, any> & { children?: React.ReactNode };
 

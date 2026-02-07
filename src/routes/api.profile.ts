@@ -1,11 +1,10 @@
+import type { Image, ProfileFormData } from 'oa-shared';
+import type { ActionFunctionArgs } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
-
-import type { Image, ProfileFormData } from 'oa-shared';
-import type { ActionFunctionArgs } from 'react-router';
 
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request);

@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
 import { DonationRequestModal } from 'oa-components';
-
 import type { ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 
 type DonationRequestModalContainerProps = {
   isOpen: boolean;

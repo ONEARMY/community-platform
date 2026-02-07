@@ -1,10 +1,8 @@
+import type { IImpactDataField, IImpactYear, Profile } from 'oa-shared';
 import { sortImpactYearDisplayFields } from 'src/pages/UserSettings/utils';
 import { Box, Flex, Heading } from 'theme-ui';
-
 import { ImpactField } from './ImpactField';
 import { ImpactMissing } from './ImpactMissing';
-
-import type { IImpactDataField, IImpactYear, Profile } from 'oa-shared';
 
 interface Props {
   year: IImpactYear;

@@ -2,9 +2,8 @@ import { useId } from 'react';
 import { Text } from 'theme-ui';
 
 import { Icon } from '../Icon/Icon';
-import { Tooltip } from '../Tooltip/Tooltip';
-
 import type { availableGlyphs } from '../Icon/types';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 export interface IconCountWithTooltipProps {
   count: number;

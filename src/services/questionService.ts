@@ -1,7 +1,6 @@
+import type { QuestionFormData } from 'oa-shared';
 import { DBQuestion, Question } from 'oa-shared';
 import { getCleanFileName } from 'src/utils/storage';
-
-import type { QuestionFormData } from 'oa-shared';
 
 const upsert = async (id: number | null, question: QuestionFormData) => {
   const body = new FormData();

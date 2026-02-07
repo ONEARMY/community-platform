@@ -1,8 +1,7 @@
-import { forwardRef } from 'react';
-import { Flex } from 'theme-ui';
-
 import type { JSX } from 'react';
+import { forwardRef } from 'react';
 import type { BoxProps } from 'theme-ui';
+import { Flex } from 'theme-ui';
 
 interface ITitleProps {
   hasUploadedImg: boolean;

@@ -1,6 +1,0 @@
-build
-storybook-static
-dist
-shared/lib
-.react-router
-*.md

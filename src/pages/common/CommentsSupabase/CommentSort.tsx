@@ -1,10 +1,8 @@
 import { Select } from 'oa-components';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { Flex } from 'theme-ui';
-
-import { CommentSortOptions } from './CommentSortOptions';
-
 import type { CommentSortOption } from './CommentSortOptions';
+import { CommentSortOptions } from './CommentSortOptions';
 
 interface IProps {
   sortBy: CommentSortOption;

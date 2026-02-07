@@ -1,8 +1,7 @@
-import { discordServiceServer } from './discordService.server';
-import { notificationsSupabaseServiceServer } from './notificationsSupabaseService.server';
-
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBProfile, DBResearchUpdate, ResearchUpdate } from 'oa-shared';
+import { discordServiceServer } from './discordService.server';
+import { notificationsSupabaseServiceServer } from './notificationsSupabaseService.server';
 
 function researchUpdate(
   update: ResearchUpdate,

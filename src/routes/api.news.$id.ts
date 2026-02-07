@@ -1,4 +1,7 @@
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBNews } from 'oa-shared';
 import { News } from 'oa-shared';
+import type { LoaderFunctionArgs, Params } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
@@ -10,10 +13,6 @@ import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
 import { hasAdminRightsSupabase } from 'src/utils/helpers';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImage } from 'src/utils/storage';
-
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBNews } from 'oa-shared';
-import type { LoaderFunctionArgs, Params } from 'react-router';
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);

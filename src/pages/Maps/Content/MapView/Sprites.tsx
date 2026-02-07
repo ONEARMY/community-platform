@@ -1,11 +1,10 @@
-import { useEffect } from 'react';
+import type { MarkerCluster } from 'leaflet';
 import { divIcon, point } from 'leaflet';
+import type { MapPin } from 'oa-shared';
+import { useEffect } from 'react';
 import clusterIcon from 'src/assets/icons/map-cluster.svg';
 import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg';
 import { useThemeUI } from 'theme-ui';
-
-import type { MarkerCluster } from 'leaflet';
-import type { MapPin } from 'oa-shared';
 
 import './sprites.css';
 

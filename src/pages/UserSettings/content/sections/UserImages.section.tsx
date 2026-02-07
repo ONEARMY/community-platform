@@ -1,12 +1,11 @@
-import { Field } from 'react-final-form';
+import type { FormApi } from 'final-form';
 import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components';
+import type { ProfileFormData } from 'oa-shared';
+import { Field } from 'react-final-form';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { ImageInputFieldV2 } from 'src/common/Form/ImageInputFieldV2';
 import { fields, headings } from 'src/pages/UserSettings/labels';
 import { Box, Flex, Heading, Image as ImageComponent, Text } from 'theme-ui';
-
-import type { FormApi } from 'final-form';
-import type { ProfileFormData } from 'oa-shared';
 
 interface IProps {
   values: ProfileFormData;

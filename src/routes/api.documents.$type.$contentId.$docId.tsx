@@ -1,10 +1,9 @@
-import { redirect } from 'react-router';
-import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { resolveType } from 'src/utils/contentType.utils';
-
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBResearchUpdate, IDBDownloadable } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
+import { redirect } from 'react-router';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { resolveType } from 'src/utils/contentType.utils';
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);

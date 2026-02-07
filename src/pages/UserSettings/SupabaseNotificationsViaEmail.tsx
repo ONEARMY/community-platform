@@ -1,11 +1,9 @@
+import type { DBNotificationsPreferences, DBPreferencesWithProfileContact } from 'oa-shared';
 import { useEffect, useState } from 'react';
+import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
 import { form } from 'src/pages/UserSettings/labels';
 import { notificationsPreferencesViaEmailService } from 'src/services/notificationsPreferencesViaEmailService';
-
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm';
-
-import type { DBNotificationsPreferences, DBPreferencesWithProfileContact } from 'oa-shared';
-import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
 
 interface IProps {
   userCode: string;

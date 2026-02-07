@@ -1,3 +1,4 @@
+import type { ILabels } from 'src/common/Form/types';
 import {
   LIBRARY_DESCRIPTION_MAX_LENGTH,
   LIBRARY_TITLE_MAX_LENGTH,
@@ -5,8 +6,6 @@ import {
   STEP_DESCRIPTION_MAX_LENGTH,
   STEP_DESCRIPTION_MIN_LENGTH,
 } from './constants';
-
-import type { ILabels } from 'src/common/Form/types';
 
 export const headings = {
   create: 'Add your project',

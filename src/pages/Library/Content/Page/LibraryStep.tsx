@@ -1,10 +1,8 @@
 import { ImageGallery, LinkifyText, VideoPlayer } from 'oa-components';
-// eslint-disable-next-line import/no-unresolved
+import type { ProjectStep } from 'oa-shared';
 import { ClientOnly } from 'remix-utils/client-only';
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { Box, Card, Flex, Heading, Text } from 'theme-ui';
-
-import type { ProjectStep } from 'oa-shared';
 
 interface IProps {
   step: ProjectStep;

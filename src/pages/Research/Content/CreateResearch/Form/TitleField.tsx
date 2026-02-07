@@ -1,5 +1,5 @@
-import { Field } from 'react-final-form';
 import { FieldInput } from 'oa-components';
+import { Field } from 'react-final-form';
 import { COMPARISONS } from 'src/utils/comparisons';
 import { composeValidators, minValue, required, validateTitle } from 'src/utils/validators';
 import { Flex, Label } from 'theme-ui';

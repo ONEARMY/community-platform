@@ -1,8 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
-
-import { SessionContext } from '../SessionContext';
-
 import type { FetchState } from 'oa-shared';
+import { useContext, useEffect, useState } from 'react';
+import { SessionContext } from '../SessionContext';
 
 type Props<T> = {
   getDraftCount: () => Promise<number>;

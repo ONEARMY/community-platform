@@ -1,22 +1,21 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Field, Form } from 'react-final-form';
-import { Link, useNavigate } from 'react-router';
+import type { DivIcon } from 'leaflet';
 import { observer } from 'mobx-react';
 import { Button, ConfirmModal, FlagIcon, Icon, MapWithPin, ModerationRecord } from 'oa-components';
+import type { ILatLng, MapPin } from 'oa-shared';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Field, Form } from 'react-final-form';
+// biome-ignore lint/suspicious/noShadowRestrictedNames: this is an external library import
+import type { Map } from 'react-leaflet';
+import { Link, useNavigate } from 'react-router';
 import { buttons, headings, inCompleteProfile, mapForm } from 'src/pages/UserSettings/labels';
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { getLocationData } from 'src/utils/getLocationData';
 import { Alert, Card, Flex, Heading, Text } from 'theme-ui';
-
 import { createMarkerIcon } from '../Maps/Content/MapView/Sprites';
 import { mapPinService } from '../Maps/map.service';
-import { SettingsFormNotifications } from './content/SettingsFormNotifications';
-
-import type { DivIcon } from 'leaflet';
-import type { ILatLng, MapPin } from 'oa-shared';
-import type { Map } from 'react-leaflet';
 import type { IFormNotification } from './content/SettingsFormNotifications';
+import { SettingsFormNotifications } from './content/SettingsFormNotifications';
 
 export const SettingsPageMapPin = observer(() => {
   const [mapPin, setMapPin] = useState<MapPin | undefined>();

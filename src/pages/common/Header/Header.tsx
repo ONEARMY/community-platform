@@ -1,10 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
 import { withTheme } from '@emotion/react';
 import { animated, useSpring } from '@react-spring/web';
 import { observer } from 'mobx-react';
 import { Button } from 'oa-components';
+import type { NotificationDisplay } from 'oa-shared';
 import { UserRole } from 'oa-shared';
-// eslint-disable-next-line import/no-unresolved
+import type { ThemeWithName } from 'oa-themes';
+import { useContext, useEffect, useState } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { isModuleSupported, MODULE } from 'src/modules';
@@ -15,14 +16,10 @@ import Profile from 'src/pages/common/Header/Menu/Profile/Profile';
 import { notificationSupabaseService } from 'src/services/notificationsSupabaseService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Flex, Text, useThemeUI } from 'theme-ui';
-
 import { EnvironmentContext } from '../EnvironmentContext';
 import { NotificationsContext } from '../NotificationsContext';
 import { NotificationsSupabase } from './Menu/Notifications/NotificationsSupabase';
 import { MobileMenuContext } from './MobileMenuContext';
-
-import type { NotificationDisplay } from 'oa-shared';
-import type { ThemeWithName } from 'oa-themes';
 
 const MobileNotificationsWrapper = ({ children }) => {
   const themeUi = useThemeUI();

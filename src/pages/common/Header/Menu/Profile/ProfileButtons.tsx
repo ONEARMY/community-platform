@@ -1,9 +1,6 @@
-// eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
 import { Box, Flex } from 'theme-ui';
-
 import { ProfileButtonItem } from './ProfileButtonItem';
-
 import './profile.css';
 
 interface IProps {

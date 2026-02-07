@@ -1,5 +1,5 @@
-import { type LoaderFunctionArgs, redirect } from 'react-router';
 import { type NotificationContentType, NotificationContentTypes } from 'oa-shared';
+import { type LoaderFunctionArgs, redirect } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ContentRedirectServiceServer } from 'src/services/contentRedirectService.server';
 

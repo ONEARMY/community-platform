@@ -1,12 +1,10 @@
+import { Select } from 'oa-components';
+import type { SelectValue } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { Field } from 'react-final-form';
-import { Select } from 'oa-components';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { ProfileBadgeService } from 'src/services/profileBadgeService';
-
 import { FormFieldWrapper } from './FormFieldWrapper';
-
-import type { SelectValue } from 'oa-shared';
 
 interface IProps {
   placeholder: string;

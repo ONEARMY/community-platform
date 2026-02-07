@@ -1,6 +1,5 @@
-import { logger } from 'src/logger';
-
 import type { Category, News } from 'oa-shared';
+import { logger } from 'src/logger';
 import type { NewsSortOption } from './NewsSortOptions';
 
 export enum NewsSearchParams {

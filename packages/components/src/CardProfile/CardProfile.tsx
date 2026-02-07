@@ -1,9 +1,7 @@
+import type { MapPin } from 'oa-shared';
 import { Flex } from 'theme-ui';
-
 import { CardDetailsMemberProfile } from './CardDetailsMemberProfile';
 import { CardDetailsSpaceProfile } from './CardDetailsSpaceProfile';
-
-import type { MapPin } from 'oa-shared';
 
 export interface IProps {
   item: MapPin;

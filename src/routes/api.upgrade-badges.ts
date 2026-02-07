@@ -1,10 +1,9 @@
 import Keyv from 'keyv';
+import type { DBUpgradeBadge } from 'oa-shared';
 import { UpgradeBadge } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
 import { isProductionEnvironment } from 'src/config/config';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-
-import type { DBUpgradeBadge } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
 
 const cache = new Keyv<UpgradeBadge[]>({ ttl: 1800000 }); // ttl: 30 minutes
 

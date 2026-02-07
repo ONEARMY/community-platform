@@ -1,5 +1,6 @@
+import type { JwtPayload } from '@supabase/supabase-js';
+import type { LoaderFunctionArgs } from 'react-router';
 import { Outlet, useLoaderData } from 'react-router';
-// eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
 import { Alerts } from 'src/common/Alerts/Alerts';
 import { Analytics } from 'src/common/Analytics';
@@ -11,9 +12,6 @@ import { StickyButton } from 'src/pages/common/StickyButton';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store';
 import { Flex } from 'theme-ui';
-
-import type { JwtPayload } from '@supabase/supabase-js';
-import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const environment = getEnvVariables();

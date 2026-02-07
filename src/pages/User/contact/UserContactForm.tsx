@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { Form } from 'react-final-form';
 import { observer } from 'mobx-react';
 import { Button } from 'oa-components';
+import type { Profile } from 'oa-shared';
+import { useState } from 'react';
+import { Form } from 'react-final-form';
 import {
   UserContactError,
   UserContactFieldMessage,
@@ -11,8 +12,6 @@ import { contact } from 'src/pages/User/labels';
 import { messageService } from 'src/services/messageService';
 import { isUserContactable } from 'src/utils/helpers';
 import { Box, Flex, Heading } from 'theme-ui';
-
-import type { Profile } from 'oa-shared';
 
 interface Props {
   user: Profile;

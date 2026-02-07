@@ -1,13 +1,12 @@
+import type { GridFormFields } from 'oa-components';
+import { ConfirmModal, GridForm, InformationTooltip, InternalLink, Loader } from 'oa-components';
+import type { DBNotificationsPreferences } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Field, Form } from 'react-final-form';
-import { ConfirmModal, GridForm, InformationTooltip, InternalLink, Loader } from 'oa-components';
 import { UserContactError } from 'src/pages/User/contact';
+import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
 import { isMessagingModuleOff } from 'src/utils/helpers';
 import { Button, Flex, Text } from 'theme-ui';
-
-import type { GridFormFields } from 'oa-components';
-import type { DBNotificationsPreferences } from 'oa-shared';
-import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
 
 const formId = 'SupabaseNotifications';
 

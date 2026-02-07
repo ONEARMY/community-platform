@@ -1,13 +1,13 @@
+import { Button, ConfirmModal, ResearchEditorOverview } from 'oa-components';
+import type { MediaFile, ResearchItem, ResearchUpdate, ResearchUpdateFormData } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
-import { Button, ConfirmModal, ResearchEditorOverview } from 'oa-components';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { logger } from 'src/logger';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
 import { fireConfetti } from 'src/utils/fireConfetti';
-
 import { FilesFields } from '../../../common/FormFields/FilesFields';
 import { buttons, headings, update } from '../../labels';
 import { researchService } from '../../research.service';
@@ -15,8 +15,6 @@ import { DescriptionField } from '../CreateResearch/Form/DescriptionField';
 import { ResearchImagesField } from '../CreateResearch/Form/ResearchImagesField';
 import { TitleField } from '../CreateResearch/Form/TitleField';
 import VideoUrlField from '../CreateResearch/Form/VideoUrlField';
-
-import type { MediaFile, ResearchItem, ResearchUpdate, ResearchUpdateFormData } from 'oa-shared';
 
 interface IProps {
   research: ResearchItem;

@@ -1,7 +1,8 @@
+import arrayMutators from 'final-form-arrays';
+import type { MediaFile, Project, ProjectFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
-import arrayMutators from 'final-form-arrays';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { logger } from 'src/logger';
@@ -9,7 +10,6 @@ import { FilesFields } from 'src/pages/common/FormFields/FilesFields';
 import { ImageField } from 'src/pages/common/FormFields/ImageField';
 import { TagsField } from 'src/pages/common/FormFields/Tags.field';
 import { Flex } from 'theme-ui';
-
 import { buttons, headings, intro } from '../../labels';
 import { libraryService } from '../../library.service';
 import { transformLibraryErrors } from '../utils';
@@ -20,8 +20,6 @@ import { LibraryPostingGuidelines } from './LibraryPostingGuidelines';
 import { LibraryStepsContainerField } from './LibraryStepsContainer.field';
 import { LibraryTimeField } from './LibraryTime.field';
 import { LibraryTitleField } from './LibraryTitle.field';
-
-import type { MediaFile, Project, ProjectFormData } from 'oa-shared';
 
 interface LibraryFormProps {
   project?: Project;

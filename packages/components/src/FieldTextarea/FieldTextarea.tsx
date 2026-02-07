@@ -1,9 +1,7 @@
 import { useMemo } from 'react';
-import { Flex, Text, Textarea } from 'theme-ui';
-
-import { CharacterCount } from '../CharacterCount/CharacterCount';
-
 import type { FieldRenderProps } from 'react-final-form';
+import { Flex, Text, Textarea } from 'theme-ui';
+import { CharacterCount } from '../CharacterCount/CharacterCount';
 
 type FieldProps = FieldRenderProps<any, any> & { children?: React.ReactNode };
 export interface Props extends FieldProps {

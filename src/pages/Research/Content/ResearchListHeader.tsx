@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router';
 import debounce from 'debounce';
 import { CategoryHorizonalList, ReturnPathLink, SearchField, Select, Tooltip } from 'oa-components';
+import type { Category, ResearchStatus } from 'oa-shared';
 import { ResearchStatusRecord, UserRole } from 'oa-shared';
+import { useCallback, useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { UserAction } from 'src/common/UserAction';
@@ -11,13 +12,10 @@ import DraftButton from 'src/pages/common/Drafts/DraftButton';
 import { ListHeader } from 'src/pages/common/Layout/ListHeader';
 import { categoryService } from 'src/services/categoryService';
 import { Button, Flex } from 'theme-ui';
-
 import { listing } from '../labels';
+import type { ResearchSortOption } from '../ResearchSortOptions';
 import { ResearchSortOptions } from '../ResearchSortOptions';
 import { ResearchSearchParams } from './ResearchSearchParams';
-
-import type { Category, ResearchStatus } from 'oa-shared';
-import type { ResearchSortOption } from '../ResearchSortOptions';
 
 interface IProps {
   itemCount: number;

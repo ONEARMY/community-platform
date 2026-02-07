@@ -1,4 +1,7 @@
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBMedia, DBProfile, DBProject, MediaFile } from 'oa-shared';
 import { Project, ProjectStep, UserRole } from 'oa-shared';
+import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { libraryServiceServer } from 'src/services/libraryService.server';
@@ -6,10 +9,6 @@ import { ProfileServiceServer } from 'src/services/profileService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { convertToSlug } from 'src/utils/slug';
-
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBMedia, DBProfile, DBProject, MediaFile } from 'oa-shared';
-import type { ActionFunctionArgs } from 'react-router';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);

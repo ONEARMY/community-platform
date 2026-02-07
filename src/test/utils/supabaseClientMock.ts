@@ -1,6 +1,5 @@
-import { vi } from 'vitest';
-
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { vi } from 'vitest';
 
 export const createMockSupabaseClient = () => {
   const mockSingle = vi.fn();

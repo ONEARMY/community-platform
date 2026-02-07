@@ -1,7 +1,6 @@
-import { Link } from 'react-router';
-
 import type { RefAttributes } from 'react';
 import type { LinkProps } from 'react-router';
+import { Link } from 'react-router';
 
 type IProps = LinkProps & RefAttributes<HTMLAnchorElement>;
 

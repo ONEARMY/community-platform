@@ -1,7 +1,6 @@
+import type { Comment } from 'oa-shared';
 import { useMemo } from 'react';
 import { Heading } from 'theme-ui';
-
-import type { Comment } from 'oa-shared';
 
 export const NO_COMMENTS = 'Start the discussion';
 export const ONE_COMMENT = '1 Comment';

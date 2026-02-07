@@ -44,6 +44,7 @@ export const action = async ({ request }) => {
 
     return Response.json({}, { headers, status: 200 });
   } catch (err) {
+    console.error(err);
     return Response.json({}, { headers, status: 500 });
   }
 };

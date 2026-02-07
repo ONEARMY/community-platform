@@ -1,7 +1,11 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
+import type { AuthError } from '@supabase/supabase-js';
+import type { DBNews, DBProfile, Moderation } from 'oa-shared';
 import { News } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/News/constants';
+import type { NewsSortOption } from 'src/pages/News/NewsSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { discordServiceServer } from 'src/services/discordService.server';
 import { newsServiceServer } from 'src/services/newsService.server';
@@ -12,13 +16,7 @@ import { updateUserActivity } from 'src/utils/activity.server';
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImage } from 'src/utils/storage';
-
 import { contentServiceServer } from '../services/contentService.server';
-
-import type { AuthError } from '@supabase/supabase-js';
-import type { DBNews, DBProfile, Moderation } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
-import type { NewsSortOption } from 'src/pages/News/NewsSortOptions';
 
 export const loader = async ({ request }) => {
   const url = new URL(request.url);

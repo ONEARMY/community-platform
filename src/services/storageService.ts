@@ -1,6 +1,5 @@
-import { getCleanFileName } from 'src/utils/storage';
-
 import type { ContentType } from 'oa-shared';
+import { getCleanFileName } from 'src/utils/storage';
 
 const imageUpload = async (id: number | null, contentType: ContentType, imageFile: File) => {
   const body = new FormData();

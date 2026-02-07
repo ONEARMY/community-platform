@@ -1,7 +1,6 @@
-import { impactQuestions } from './content/impactQuestions';
-
 import type { IImpactDataField } from 'oa-shared';
 import type { IImpactQuestion } from './content/impactQuestions';
+import { impactQuestions } from './content/impactQuestions';
 
 export interface ImpactDataFieldInputs {
   [key: string]: IImpactQuestion;

@@ -1,5 +1,3 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router';
 import { observer } from 'mobx-react';
 import {
   AuthorDisplay,
@@ -11,7 +9,10 @@ import {
   TagList,
   UsefulStatsButton,
 } from 'oa-components';
+import type { Question } from 'oa-shared';
 import { PremiumTier } from 'oa-shared';
+import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { userHasPremiumTier } from 'src/common/PremiumTierWrapper';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
@@ -22,11 +23,8 @@ import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
 import { onUsefulClick } from 'src/utils/onUsefulClick';
 import { createUsefulStatistic } from 'src/utils/statistics';
 import { Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
-
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
-
-import type { Question } from 'oa-shared';
 
 interface IProps {
   question: Question;

@@ -1,11 +1,9 @@
-import React from 'react';
 import { MemberBadge } from 'oa-components';
-import { Flex, Input, Label, Text } from 'theme-ui';
-
-import { HiddenInput } from '../elements';
-
 import type { ProfileType } from 'oa-shared';
+import React from 'react';
 import type { FieldRenderProps } from 'react-final-form';
+import { Flex, Input, Label, Text } from 'theme-ui';
+import { HiddenInput } from '../elements';
 
 interface IProps {
   value: ProfileType;

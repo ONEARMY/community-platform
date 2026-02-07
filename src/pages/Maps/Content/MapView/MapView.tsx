@@ -1,14 +1,13 @@
-import { useContext, useEffect, useRef } from 'react';
+import type { LatLngExpression } from 'leaflet';
+// biome-ignore lint/suspicious/noShadowRestrictedNames: this is an external library import
 import { Button, Map } from 'oa-components';
+import { useContext, useEffect, useRef } from 'react';
+import type { Map as MapType } from 'react-leaflet';
 import { Box, Flex } from 'theme-ui';
-
 import { MapContext } from '../../MapContext';
 import { ButtonZoomIn } from './ButtonZoomIn.client';
 import { Clusters } from './Cluster.client';
 import { Popup } from './Popup.client';
-
-import type { LatLngExpression } from 'leaflet';
-import type { Map as MapType } from 'react-leaflet';
 
 export const MapView = () => {
   const mapState = useContext(MapContext);

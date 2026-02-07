@@ -1,11 +1,9 @@
+import type { ProfileType } from 'oa-shared';
 import { useState } from 'react';
 import { Box, Button, Flex, Image, Text, Textarea } from 'theme-ui';
-
 import sendMobile from '../../assets/icons/contact.svg';
 import { MemberBadge } from '../MemberBadge/MemberBadge';
 import { ReturnPathLink } from '../ReturnPathLink/ReturnPathLink';
-
-import type { ProfileType } from 'oa-shared';
 
 import './CreateComment.css';
 

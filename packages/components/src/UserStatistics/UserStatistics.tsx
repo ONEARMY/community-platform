@@ -1,5 +1,6 @@
+import type { MapPin, Profile } from 'oa-shared';
+import type { ThemeUIStyleObject } from 'theme-ui';
 import { Box, Card, Flex, Image, Text } from 'theme-ui';
-
 import ForumIcon from '../../assets/icons/icon-forum.svg';
 import HowToCountIcon from '../../assets/icons/icon-library.svg';
 import ResearchIcon from '../../assets/icons/icon-research.svg';
@@ -8,9 +9,6 @@ import { ElWithBeforeIcon } from '../ElWithBeforeIcon/ElWithBeforeIcon';
 import { ExternalLink } from '../ExternalLink/ExternalLink';
 import { Icon } from '../Icon/Icon';
 import { InternalLink } from '../InternalLink/InternalLink';
-
-import type { MapPin, Profile } from 'oa-shared';
-import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface UserStatisticsProps {
   profile: Pick<Profile, 'id' | 'username' | 'badges' | 'totalViews' | 'country'>;

@@ -1,7 +1,6 @@
+import type { OptionProps } from 'react-select';
 import { components } from 'react-select';
 import { Flex, Text } from 'theme-ui';
-
-import type { OptionProps } from 'react-select';
 
 // https://github.com/JedWatson/react-select/issues/685#issuecomment-420213835
 export const Option = (props: OptionProps) => {

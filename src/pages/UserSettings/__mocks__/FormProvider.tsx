@@ -1,6 +1,6 @@
-import { createMemoryRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router';
 import { render } from '@testing-library/react';
 import { ThemeProvider } from '@theme-ui/core';
+import { createMemoryRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router';
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store';
 import { testingThemeStyles } from 'src/test/utils/themeUtils';
 

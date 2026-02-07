@@ -1,5 +1,5 @@
-import { useContext } from 'react';
 import { CardButton, MemberBadge, VerticalList } from 'oa-components';
+import { useContext } from 'react';
 import { Text } from 'theme-ui';
 
 import { MapContext } from '../../MapContext';

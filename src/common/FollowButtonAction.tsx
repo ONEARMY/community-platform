@@ -1,13 +1,11 @@
-import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
+import type { OptionalFollowButtonProps } from 'oa-components';
 import { FollowButton } from 'oa-components';
+import type { SubscribableContentTypes } from 'oa-shared';
+import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
 import { subscribersService } from 'src/services/subscribersService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-
 import { trackEvent } from './Analytics';
-
-import type { OptionalFollowButtonProps } from 'oa-components';
-import type { SubscribableContentTypes } from 'oa-shared';
 
 interface IProps extends OptionalFollowButtonProps {
   contentType: SubscribableContentTypes;

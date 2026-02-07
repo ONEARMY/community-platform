@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-import { Link } from 'react-router';
 import {
   AuthorDisplay,
   Button,
@@ -9,16 +7,15 @@ import {
   Tooltip,
   VideoPlayer,
 } from 'oa-components';
-// eslint-disable-next-line import/no-unresolved
+import type { ResearchItem, ResearchUpdate as ResearchUpdateModel } from 'oa-shared';
+import { useMemo } from 'react';
+import { Link } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { DownloadWrapper } from 'src/common/DownloadWrapper';
 import CollapsableCommentSection from 'src/pages/common/CommentsSupabase/CollapsableCommentSection';
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { Box, Card, Flex, Heading, Text } from 'theme-ui';
-
 import { ResearchLinkToUpdate } from './ResearchLinkToUpdate';
-
-import type { ResearchItem, ResearchUpdate as ResearchUpdateModel } from 'oa-shared';
 
 interface IProps {
   research: ResearchItem;

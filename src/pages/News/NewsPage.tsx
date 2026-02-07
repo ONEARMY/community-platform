@@ -1,5 +1,3 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router';
 import { observer } from 'mobx-react';
 import {
   Category,
@@ -9,17 +7,16 @@ import {
   ProfileBadgeContentLabel,
   TagList,
 } from 'oa-components';
-// eslint-disable-next-line import/no-unresolved
+import type { News } from 'oa-shared';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Link } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
 import { AspectRatio, Box, Button, Card, Flex, Heading, Image, Text } from 'theme-ui';
-
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
-
-import type { News } from 'oa-shared';
 
 interface IProps {
   news: News;
@@ -128,9 +125,7 @@ export const NewsPage = observer(({ news }: IProps) => {
               },
             }}
           >
-            <ContentImageLightbox
-              prependImages={prependImages}
-            >
+            <ContentImageLightbox prependImages={prependImages}>
               <div dangerouslySetInnerHTML={{ __html: news.bodyHtml }} />
             </ContentImageLightbox>
           </Box>

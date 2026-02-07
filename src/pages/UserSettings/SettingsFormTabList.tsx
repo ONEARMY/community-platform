@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
 import styled from '@emotion/styled';
 import { Tab as BaseTab, tabClasses } from '@mui/base/Tab';
 import { TabsList as BaseTabsList } from '@mui/base/TabsList';
 import { prepareForSlot } from '@mui/base/utils';
 import { Icon, InternalLink, Select } from 'oa-components';
+import { useMemo } from 'react';
 import { Flex } from 'theme-ui';
 
 import type { ISettingsTab } from './types';

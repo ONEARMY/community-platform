@@ -1,5 +1,5 @@
-import React from 'react';
 import { Heading as HeadingComp } from '@react-email/components';
+import React from 'react';
 
 interface IProps {
   children: React.ReactNode;

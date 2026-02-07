@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
 import { Button, ReturnPathLink } from 'oa-components';
+import React, { useContext } from 'react';
 
 import { MobileMenuContext } from '../../MobileMenuContext';
 
@@ -9,9 +9,6 @@ interface IProps {
   variant: string;
   style?: React.CSSProperties;
   isMobile?: boolean;
-}
-
-interface IProps {
   sx?: any;
 }
 

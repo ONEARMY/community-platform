@@ -1,13 +1,12 @@
-import { Field, useForm, useFormState } from 'react-final-form';
 import styled from '@emotion/styled';
 import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components';
+import type { IImageForm } from 'oa-shared';
+import { Field, useForm, useFormState } from 'react-final-form';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { ImageInputField } from 'src/common/Form/ImageInput.field';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { COMPARISONS } from 'src/utils/comparisons';
 import { Image as ImageComponent } from 'theme-ui';
-
-import type { IImageForm } from 'oa-shared';
 
 const ImageInputFieldWrapper = styled.div`
   height: 200px;

@@ -1,7 +1,6 @@
-import { Text } from 'theme-ui';
-
 import type { Moderation } from 'oa-shared';
 import type { ThemeUIStyleObject } from 'theme-ui';
+import { Text } from 'theme-ui';
 
 export const ModerationRecord: Record<Moderation, string> = {
   'awaiting-moderation': 'Awaiting Moderation',

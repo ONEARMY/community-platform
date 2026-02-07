@@ -1,11 +1,10 @@
+import type { LoaderFunctionArgs } from 'react-router';
 import { redirect } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { patreonServiceServer } from 'src/services/patreonService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { Flex, Text } from 'theme-ui';
-
-import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);

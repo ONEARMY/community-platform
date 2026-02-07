@@ -1,11 +1,9 @@
 import { useId, useState } from 'react';
 import { useNavigate } from 'react-router';
+import type { ThemeUIStyleObject } from 'theme-ui';
 import { Flex, Text, useThemeUI } from 'theme-ui';
-
 import { Button } from '../Button/Button';
 import { Icon } from '../Icon/Icon';
-
-import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface IProps {
   usefulButtonLiteConfig: {
@@ -30,7 +28,7 @@ export const UsefulButtonLite = (props: IProps) => {
     setDisabled(true);
     try {
       await onUsefulClick(usefulAction, 'Comment');
-    } catch (err) {
+    } catch (_) {
       // handle error or ignore
     }
     setDisabled(false);

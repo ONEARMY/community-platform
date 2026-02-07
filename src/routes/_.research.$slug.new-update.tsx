@@ -1,12 +1,11 @@
-import { redirect, useLoaderData } from 'react-router';
+import type { DBResearchItem } from 'oa-shared';
 import { ResearchItem } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
+import { redirect, useLoaderData } from 'react-router';
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { researchServiceServer } from 'src/services/researchService.server';
-
-import type { DBResearchItem } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);

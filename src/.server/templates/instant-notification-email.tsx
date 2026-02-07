@@ -1,11 +1,10 @@
 import { Text } from '@react-email/components';
-
-import { Header } from './components/header';
+import type { NotificationDisplay, TenantSettings } from 'oa-shared';
 import { BoxText } from './components/box-text';
 import { Button } from './components/button';
+import { Header } from './components/header';
 import { Heading } from './components/heading';
 import { Layout, urlAppend } from './Layout';
-import type { NotificationDisplay, TenantSettings } from 'oa-shared';
 
 const text = {
   color: '#686868',

@@ -1,8 +1,7 @@
-import { MapPin, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
-import { ImageServiceServer } from 'src/services/imageService.server';
-
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBMapPin, DBPinProfile, PinProfile } from 'oa-shared';
+import { MapPin, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
+import { ImageServiceServer } from 'src/services/imageService.server';
 
 export class MapPinFactory {
   private imageService: ImageServiceServer;

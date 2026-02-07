@@ -1,9 +1,8 @@
 import Keyv from 'keyv';
+import type { DBMapSettings, DefaultMapFilters, FilterResponse, MapFilters } from 'oa-shared';
 import { ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-
-import type { DBMapSettings, DefaultMapFilters, FilterResponse, MapFilters } from 'oa-shared';
 
 const cache = new Keyv<FilterResponse>({ ttl: 3600000 }); // expires 60 minutes after being set
 

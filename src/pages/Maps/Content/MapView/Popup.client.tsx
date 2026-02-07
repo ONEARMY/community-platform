@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react';
-import { Popup as LeafletPopup } from 'react-leaflet';
 import { Point } from 'leaflet';
 import { PinProfile } from 'oa-components';
-
 import type { ILatLng, MapPin } from 'oa-shared';
+import React, { useEffect, useRef } from 'react';
+// biome-ignore lint/suspicious/noShadowRestrictedNames: this is an external library import
 import type { Map } from 'react-leaflet';
+import { Popup as LeafletPopup } from 'react-leaflet';
 
 import './popup.css';
 

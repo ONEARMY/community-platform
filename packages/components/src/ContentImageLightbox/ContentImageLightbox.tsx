@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-
-import { usePhotoSwipeLightbox } from '../hooks/usePhotoSwipeLightbox';
-
 import type { PhotoSwipeOptions } from 'photoswipe/lightbox';
+import { useEffect, useRef, useState } from 'react';
+import { usePhotoSwipeLightbox } from '../hooks/usePhotoSwipeLightbox';
 
 interface Props {
   children: React.ReactNode;

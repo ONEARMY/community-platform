@@ -1,29 +1,27 @@
-import { useMemo, useRef } from 'react';
+import type { MDXEditorMethods } from '@mdxeditor/editor';
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
   CreateLink,
-  diffSourcePlugin,
   DiffSourceToggleWrapper,
+  diffSourcePlugin,
   headingsPlugin,
   imagePlugin,
+  ListsToggle,
   linkDialogPlugin,
   linkPlugin,
   listsPlugin,
-  ListsToggle,
-  markdownShortcutPlugin,
   MDXEditor,
+  markdownShortcutPlugin,
   quotePlugin,
   thematicBreakPlugin,
   toolbarPlugin,
   UndoRedo,
 } from '@mdxeditor/editor';
-import { Box, Flex, Text } from 'theme-ui';
-
-import { AddImage } from './AddImage';
-
-import type { MDXEditorMethods } from '@mdxeditor/editor';
+import { useMemo, useRef } from 'react';
 import type { FieldRenderProps } from 'react-final-form';
+import { Box, Flex, Text } from 'theme-ui';
+import { AddImage } from './AddImage';
 
 import '@mdxeditor/editor/style.css';
 import './style.css';

@@ -1,8 +1,8 @@
-import { NavLink } from 'react-router';
 import styled from '@emotion/styled';
 import { observer } from 'mobx-react';
 import { ReturnPathLink } from 'oa-components';
 import { preciousPlasticTheme } from 'oa-themes';
+import { NavLink } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { UpgradeBadgeLink } from 'src/pages/common/Header/Menu/Profile/UpgradeBadgeLink';
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList';

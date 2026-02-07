@@ -1,7 +1,3 @@
-import { DBNotification } from 'oa-shared';
-
-import { notificationEmailService } from './notificationEmailService.server';
-
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type {
   DBComment,
@@ -11,6 +7,8 @@ import type {
   SubscribableContentTypes,
   SubscribedUser,
 } from 'oa-shared';
+import { DBNotification } from 'oa-shared';
+import { notificationEmailService } from './notificationEmailService.server';
 
 const getSubscribedUsers = async (
   contentId: number,

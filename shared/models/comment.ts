@@ -1,6 +1,5 @@
-import { Author } from './author';
-
 import type { DBAuthor } from './author';
+import { Author } from './author';
 import type { DiscussionContentType } from './common';
 import type { IDBDocSB, IDoc } from './document';
 

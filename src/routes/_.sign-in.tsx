@@ -1,6 +1,7 @@
-import { Field, Form } from 'react-final-form';
-import { Link, redirect, useActionData } from 'react-router';
 import { Button, FieldInput, HeroBanner, TextNotification } from 'oa-components';
+import { Field, Form } from 'react-final-form';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
+import { Link, redirect, useActionData } from 'react-router';
 import { PasswordField } from 'src/common/Form/PasswordField';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -9,8 +10,6 @@ import { getReturnUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
 import { Card, Flex, Heading, Label, Text } from 'theme-ui';
-
-import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client } = createSupabaseServerClient(request);

@@ -1,11 +1,10 @@
-import { createContext, useContext, useEffect } from 'react';
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
+import type { Profile, ProfileType, UpgradeBadge, UserRole } from 'oa-shared';
+import { createContext, useContext, useEffect } from 'react';
 import { SessionContext } from 'src/pages/common/SessionContext';
 import { profileService } from 'src/services/profileService';
 import { profileTypesService } from 'src/services/profileTypesService';
 import { upgradeBadgeService } from 'src/services/upgradeBadgeService';
-
-import type { Profile, ProfileType, UpgradeBadge, UserRole } from 'oa-shared';
 
 export class ProfileStore {
   profile?: Profile = undefined;
@@ -99,7 +98,7 @@ export class ProfileStore {
 
   get isComplete() {
     if (!this.profile) {
-      return;
+      return null;
     }
 
     return this.isProfileComplete(this.profile);
@@ -107,7 +106,7 @@ export class ProfileStore {
 
   get missingFields() {
     if (!this.profile) {
-      return;
+      return null;
     }
 
     return this.getMissingFields(this.profile);

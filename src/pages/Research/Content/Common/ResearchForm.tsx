@@ -1,8 +1,9 @@
+import arrayMutators from 'final-form-arrays';
+import { Button, ResearchEditorOverview } from 'oa-components';
+import type { ResearchFormData, ResearchItem, ResearchStatus } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
-import arrayMutators from 'final-form-arrays';
-import { Button, ResearchEditorOverview } from 'oa-components';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { logger } from 'src/logger';
@@ -11,15 +12,12 @@ import { ImageField } from 'src/pages/common/FormFields/ImageField';
 import { errorSet } from 'src/pages/Library/Content/utils/transformLibraryErrors';
 import { ResearchPostingGuidelines } from 'src/pages/Research/Content/Common';
 import { fireConfetti } from 'src/utils/fireConfetti';
-
 import { buttons, headings, overview } from '../../labels';
 import { researchService } from '../../research.service';
 import { ResearchCollaboratorsField } from './FormFields/ResearchCollaboratorsField';
 import { ResearchDescriptionField } from './FormFields/ResearchDescriptionField';
 import { ResearchTitleField } from './FormFields/ResearchTitleField';
 import ResearchFieldCategory from './ResearchCategorySelect';
-
-import type { ResearchFormData, ResearchItem, ResearchStatus } from 'oa-shared';
 
 interface IProps {
   research?: ResearchItem;
@@ -58,6 +56,7 @@ const ResearchForm = ({ research }: IProps) => {
       await researchService.updateResearchStatus(research!.id, status);
       navigate(`/research/${research!.slug}`);
     } catch (err) {
+      console.error(err);
       setSaveErrorMessage('Error updating research status');
     }
   };

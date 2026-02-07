@@ -1,10 +1,9 @@
+import type { LoaderFunctionArgs } from 'react-router';
 import { redirect, useLoaderData } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
 import { SupabaseNotificationsViaEmail } from 'src/pages/UserSettings/SupabaseNotificationsViaEmail';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { Alert, Card, Flex } from 'theme-ui';
-
-import type { LoaderFunctionArgs } from 'react-router';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);

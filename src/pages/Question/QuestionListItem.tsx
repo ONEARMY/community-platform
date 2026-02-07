@@ -4,13 +4,11 @@ import {
   InternalLink,
   // ModerationStatus,
 } from 'oa-components';
+import type { Question } from 'oa-shared';
 import { Highlighter } from 'src/common/Highlighter';
 import { Box, Card, Flex, Heading } from 'theme-ui';
-
 import { UserNameTag } from '../common/UserNameTag/UserNameTag';
 import { listing } from './labels';
-
-import type { Question } from 'oa-shared';
 
 interface IProps {
   question: Question;

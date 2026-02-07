@@ -1,6 +1,3 @@
-import { logger } from 'src/logger';
-import { getCleanFileName } from 'src/utils/storage';
-
 import type {
   IImpactDataField,
   IUserImpact,
@@ -9,6 +6,8 @@ import type {
   Profile,
   ProfileFormData,
 } from 'oa-shared';
+import { logger } from 'src/logger';
+import { getCleanFileName } from 'src/utils/storage';
 
 const get = async (): Promise<Profile | undefined> => {
   try {

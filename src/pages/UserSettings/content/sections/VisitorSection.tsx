@@ -1,13 +1,11 @@
+import { FieldTextarea, Select, visitorDisplayData } from 'oa-components';
+import type { Profile, UserVisitorPreferencePolicy } from 'oa-shared';
+import { userVisitorPreferencePolicies } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { Field } from 'react-final-form';
-import { FieldTextarea, Select, visitorDisplayData } from 'oa-components';
-import { userVisitorPreferencePolicies } from 'oa-shared';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { Flex, Heading, Switch, Text } from 'theme-ui';
-
 import { fields, headings } from '../../labels';
-
-import type { Profile, UserVisitorPreferencePolicy } from 'oa-shared';
 
 interface Props {
   visitorPolicy?: Partial<Profile['visitorPolicy']>;

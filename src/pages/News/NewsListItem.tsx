@@ -7,12 +7,10 @@ import {
   ProfileBadgeContentLabel,
   // ModerationStatus,
 } from 'oa-components';
+import type { News } from 'oa-shared';
 import { Highlighter } from 'src/common/Highlighter';
 import { AspectRatio, Button, Card, Flex, Heading, Image, Text } from 'theme-ui';
-
 import { listing } from './labels';
-
-import type { News } from 'oa-shared';
 
 interface IProps {
   news: News;

@@ -1,7 +1,3 @@
-import { ProfileBadge } from './profileBadge';
-import { ProfileTag } from './profileTag';
-import { ProfileType } from './profileType';
-
 import type { Comment } from './comment';
 import type { SubscribableContentTypes } from './common';
 import type { IDBDocSB, IDoc } from './document';
@@ -10,8 +6,11 @@ import type { IDBModeration, IModeration, Moderation } from './moderation';
 import type { News } from './news';
 import type { IPatreonUser } from './patreon';
 import type { DBProfileBadgeJoin } from './profileBadge';
+import { ProfileBadge } from './profileBadge';
 import type { DBProfileTagJoin } from './profileTag';
+import { ProfileTag } from './profileTag';
 import type { DBProfileType } from './profileType';
+import { ProfileType } from './profileType';
 import type { Question } from './question';
 import type { ResearchUpdate } from './research';
 import type { IUserImpact, UserVisitorPreference } from './user';
@@ -85,7 +84,7 @@ export class Profile {
 
     try {
       impact = dbProfile.impact ? JSON.parse(dbProfile.impact) : null;
-    } catch (error) {
+    } catch (_) {
       console.error('error parsing impact');
     }
 
@@ -223,9 +222,7 @@ export class NotificationDisplay {
   static setEmailBody(notification: Notification): string {
     switch (notification.contentType) {
       case 'research_updates': {
-        return `${(notification.content as ResearchUpdate)?.title}:\n\n${
-          (notification.content as ResearchUpdate)?.description
-        }`;
+        return `${(notification.content as ResearchUpdate)?.title}:\n\n${(notification.content as ResearchUpdate)?.description}`;
       }
       default: {
         return this.setBody(notification) || '';

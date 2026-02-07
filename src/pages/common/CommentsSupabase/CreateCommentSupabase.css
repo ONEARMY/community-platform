@@ -5,7 +5,7 @@
 }
 .grow-wrap::after {
   /* Note the weird space! Needed to preventy jumpy behavior */
-  content: attr(data-replicated-value) ' ';
+  content: attr(data-replicated-value) " ";
 
   /* This is how textarea text behaves */
   white-space: pre-wrap;

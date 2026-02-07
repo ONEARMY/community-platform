@@ -22,7 +22,7 @@ export const CreateReply = (props: Props) => {
       await onSubmit(commentId, reply);
       setReply('');
       setIsLoading(false);
-    } catch (error) {
+    } catch (_) {
       // Swallow the error for now
       setIsLoading(false);
       setIsError(true);

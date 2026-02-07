@@ -1,17 +1,15 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
 import { observer } from 'mobx-react';
 import { ButtonShowReplies, CommentDisplay, ConfirmModal, EditComment, Modal } from 'oa-components';
+import type { Comment, DiscussionContentType } from 'oa-shared';
 import { UserRole } from 'oa-shared';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FollowButtonAction } from 'src/common/FollowButtonAction';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { onUsefulClick } from 'src/utils/onUsefulClick';
 import { Card, Flex } from 'theme-ui';
-
 import { CommentReply } from './CommentReplySupabase';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
 import { useCopyCommentLink } from './useCopyCommentLink';
-
-import type { Comment, DiscussionContentType } from 'oa-shared';
 
 export interface ICommentItemProps {
   comment: Comment;

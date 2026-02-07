@@ -1,8 +1,6 @@
-import { Flex, Grid, Heading } from 'theme-ui';
-
-import UserCreatedDocumentsItem from './UserCreatedDocumentsItem';
-
 import type { UserCreatedDocs } from 'oa-shared';
+import { Flex, Grid, Heading } from 'theme-ui';
+import UserCreatedDocumentsItem from './UserCreatedDocumentsItem';
 
 interface IProps {
   columns: number;

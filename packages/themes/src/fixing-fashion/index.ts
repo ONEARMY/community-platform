@@ -1,6 +1,5 @@
-import { StyledComponentTheme } from './styles';
-
 import type { PlatformTheme } from '../types';
+import { StyledComponentTheme } from './styles';
 
 export const Theme: PlatformTheme = {
   id: 'fixing-fashion',

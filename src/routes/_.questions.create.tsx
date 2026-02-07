@@ -1,11 +1,10 @@
+import type { LoaderFunctionArgs } from 'react-router';
 import { UserAction } from 'src/common/UserAction';
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm';
 import { listing } from 'src/pages/Question/labels';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { Box } from 'theme-ui';
-
-import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);

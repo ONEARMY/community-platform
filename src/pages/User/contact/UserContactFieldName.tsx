@@ -1,5 +1,5 @@
-import { Field } from 'react-final-form';
 import { FieldInput } from 'oa-components';
+import { Field } from 'react-final-form';
 import { contact } from 'src/pages/User/labels';
 import { Box, Label } from 'theme-ui';
 

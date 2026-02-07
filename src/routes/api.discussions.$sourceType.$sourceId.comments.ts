@@ -1,14 +1,13 @@
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBAuthor, DBProfile, DiscussionContentType } from 'oa-shared';
 import { DBComment, DiscussionContentTypes } from 'oa-shared';
+import type { LoaderFunctionArgs, Params } from 'react-router';
 import { CommentFactory } from 'src/factories/commentFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
 import { notificationsSupabaseServiceServer } from 'src/services/notificationsSupabaseService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
-
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBAuthor, DBProfile, DiscussionContentType } from 'oa-shared';
-import type { LoaderFunctionArgs, Params } from 'react-router';
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);

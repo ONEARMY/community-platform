@@ -1,6 +1,6 @@
-import { useContext, useState } from 'react';
 import { LatLngBounds } from 'leaflet';
 import { Button, Loader, MapCardList, Modal, OsmGeocoding } from 'oa-components';
+import { useContext, useState } from 'react';
 import { Flex, Text } from 'theme-ui';
 
 import { MapContext } from '../../MapContext';

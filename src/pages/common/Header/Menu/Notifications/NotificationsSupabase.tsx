@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react';
 import { Icon, NotificationListSupabase, NotificationsModal } from 'oa-components';
+import { useContext, useState } from 'react';
 import { NotificationsContext } from 'src/pages/common/NotificationsContext';
 import { Box } from 'theme-ui';
 

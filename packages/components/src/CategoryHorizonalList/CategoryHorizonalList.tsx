@@ -1,11 +1,9 @@
+import type { Category } from 'oa-shared';
 import { Text } from 'theme-ui';
-
 import { CardButton } from '../CardButton/CardButton';
 import { getGlyph, Icon } from '../Icon/Icon';
-import { VerticalList } from '../VerticalList/VerticalList.client';
-
-import type { Category } from 'oa-shared';
 import type { availableGlyphs } from '../Icon/types';
+import { VerticalList } from '../VerticalList/VerticalList.client';
 
 export interface IProps {
   activeCategory: Category | null;

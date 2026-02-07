@@ -1,12 +1,10 @@
+import type { MapPin } from 'oa-shared';
+import type { JSX } from 'react';
 import { useEffect, useState } from 'react';
 import { Box, Flex, Text } from 'theme-ui';
-
 import { Button } from '../Button/Button';
 import { CardListItem } from '../CardListItem/CardListItem';
 import { Icon } from '../Icon/Icon';
-
-import type { MapPin } from 'oa-shared';
-import type { JSX } from 'react';
 
 export interface IProps {
   list: MapPin[];

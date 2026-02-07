@@ -1,10 +1,8 @@
+import type { OptionsOrGroups, Props as ReactSelectProps, StylesConfig } from 'react-select';
 import ReactSelect from 'react-select';
 import { useThemeUI } from 'theme-ui';
-
 import { DropdownIndicator } from './DropdownIndicator';
 import { Option } from './Option';
-
-import type { OptionsOrGroups, Props as ReactSelectProps, StylesConfig } from 'react-select';
 
 type IOption = {
   label: string;

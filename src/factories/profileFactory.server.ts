@@ -1,8 +1,7 @@
-import { Profile, ProfileBadge, ProfileTag, ProfileType } from "oa-shared";
-import { ImageServiceServer } from "src/services/imageService.server";
-
-import type { SupabaseClient } from "@supabase/supabase-js";
-import type { AuthorVotes, DBProfile } from "oa-shared";
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { AuthorVotes, DBProfile } from 'oa-shared';
+import { Profile, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
+import { ImageServiceServer } from 'src/services/imageService.server';
 
 export class ProfileFactory {
   private imageService: ImageServiceServer;
@@ -23,29 +22,29 @@ export class ProfileFactory {
 
     try {
       if (dbProfile.impact) {
-        if (typeof dbProfile.impact === "string") {
+        if (typeof dbProfile.impact === 'string') {
           impact = JSON.parse(dbProfile.impact);
-        } else if (typeof dbProfile.impact === "object") {
+        } else if (typeof dbProfile.impact === 'object') {
           impact = dbProfile.impact;
         }
       }
-    } catch (error) {
-      console.error("error parsing impact");
+    } catch (_) {
+      console.error('error parsing impact');
     }
 
     try {
       if (dbProfile.visitor_policy) {
-        if (typeof dbProfile.visitor_policy === "string") {
+        if (typeof dbProfile.visitor_policy === 'string') {
           visitorPolicy = JSON.parse(dbProfile.visitor_policy);
         } else if (
-          typeof dbProfile.impact === "object" &&
+          typeof dbProfile.impact === 'object' &&
           (dbProfile.visitor_policy as any)?.policy
         ) {
           visitorPolicy = dbProfile.visitor_policy;
         }
       }
-    } catch (error) {
-      console.error("error parsing visitor policy");
+    } catch (_) {
+      console.error('error parsing visitor policy');
     }
 
     return new Profile({
@@ -63,20 +62,14 @@ export class ProfileFactory {
       coverImages: coverImages,
       impact,
       isContactable: !!dbProfile.is_contactable,
-      lastActive: dbProfile.last_active
-        ? new Date(dbProfile.last_active)
-        : null,
+      lastActive: dbProfile.last_active ? new Date(dbProfile.last_active) : null,
       website: dbProfile.website,
       patreon: dbProfile.patreon || null,
       totalViews: dbProfile.total_views,
       authorUsefulVotes: authorVotes,
       donationsEnabled: !!dbProfile.donations_enabled,
-      tags: dbProfile.tags
-        ? dbProfile.tags?.map((x) => ProfileTag.fromDBJoin(x))
-        : [],
-      badges: dbProfile.badges
-        ? dbProfile.badges?.map((x) => ProfileBadge.fromDBJoin(x))
-        : [],
+      tags: dbProfile.tags ? dbProfile.tags?.map((x) => ProfileTag.fromDBJoin(x)) : [],
+      badges: dbProfile.badges ? dbProfile.badges?.map((x) => ProfileBadge.fromDBJoin(x)) : [],
     });
   }
 }

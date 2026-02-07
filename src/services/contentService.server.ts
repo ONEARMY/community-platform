@@ -1,7 +1,6 @@
-import { tagsServiceServer } from 'src/services/tagsService.server';
-
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { ContentType, IDBContentDoc } from 'oa-shared';
+import { tagsServiceServer } from 'src/services/tagsService.server';
 
 type Slug = string;
 type Id = number;

@@ -1,10 +1,9 @@
 import Keyv from 'keyv';
+import type { DBProfileBadge } from 'oa-shared';
 import { ProfileBadge } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
 import { isProductionEnvironment } from 'src/config/config';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-
-import type { DBProfileBadge } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
 
 const cache = new Keyv<ProfileBadge[]>({ ttl: 3600000 }); // ttl: 60 minutes
 

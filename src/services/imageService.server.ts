@@ -1,8 +1,7 @@
-import { Image, MediaFile } from 'oa-shared';
-
 import type { TransformOptions } from '@supabase/storage-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBMedia } from 'oa-shared';
+import { Image, MediaFile } from 'oa-shared';
 
 export class ImageServiceServer {
   constructor(private client: SupabaseClient) {}
@@ -27,7 +26,7 @@ export class ImageServiceServer {
       }
 
       return new Image({ id: image.id, publicUrl: data.publicUrl });
-    } catch (error) {
+    } catch (_) {
       return undefined;
     }
   }

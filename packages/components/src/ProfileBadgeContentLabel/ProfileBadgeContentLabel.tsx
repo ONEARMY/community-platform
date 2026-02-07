@@ -1,8 +1,6 @@
-import { Flex, Text } from 'theme-ui';
-
-import { UserBadge } from '../Username/UserBadge';
-
 import type { ProfileBadge } from 'oa-shared';
+import { Flex, Text } from 'theme-ui';
+import { UserBadge } from '../Username/UserBadge';
 
 export interface Props {
   profileBadge: ProfileBadge;

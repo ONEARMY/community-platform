@@ -1,7 +1,6 @@
-import { Flex, Text } from 'theme-ui';
-
 import type { Category as CategoryType } from 'oa-shared';
 import type { ThemeUIStyleObject } from 'theme-ui';
+import { Flex, Text } from 'theme-ui';
 
 export interface Props {
   category: CategoryType;

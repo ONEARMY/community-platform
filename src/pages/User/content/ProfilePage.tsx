@@ -1,15 +1,12 @@
-import { useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Button, ExternalLink, InternalLink } from 'oa-components';
-// eslint-disable-next-line import/no-unresolved
+import type { Profile, UserCreatedDocs } from 'oa-shared';
+import { useMemo } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Flex, Image } from 'theme-ui';
-
 import { UserProfile } from './UserProfile';
-
-import type { Profile, UserCreatedDocs } from 'oa-shared';
 
 interface IProps {
   profile: Profile;

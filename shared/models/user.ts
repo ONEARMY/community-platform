@@ -1,6 +1,5 @@
 import type { INotification } from './notifications';
 
-/* eslint-disable @typescript-eslint/naming-convention */
 export enum UserRole {
   SUBSCRIBER = 'subscriber',
   ADMIN = 'admin',

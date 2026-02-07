@@ -38,7 +38,7 @@ export const FRIENDLY_MESSAGES = {
  */
 export const getFriendlyMessage = (systemMessage = '') => {
   const messageKey = systemMessage.toLowerCase();
-  if (Object.prototype.hasOwnProperty.call(FRIENDLY_MESSAGES, messageKey)) {
+  if (Object.hasOwn(FRIENDLY_MESSAGES, messageKey)) {
     return FRIENDLY_MESSAGES[messageKey];
   } else {
     console.log(`%c No friendly message for [${messageKey}]`, 'background: #222; color: #bada55');

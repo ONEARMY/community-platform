@@ -1,13 +1,12 @@
-import { Form } from 'react-final-form';
-import { useNavigate } from 'react-router';
 import { observer } from 'mobx-react';
 import { Button } from 'oa-components';
+import type { Profile } from 'oa-shared';
+import { Form } from 'react-final-form';
+import { useNavigate } from 'react-router';
 import { UserContactFieldMessage, UserContactFieldName } from 'src/pages/User/contact';
 import { contact } from 'src/pages/User/labels';
 import { isUserContactable } from 'src/utils/helpers';
 import { Box, Flex, Heading } from 'theme-ui';
-
-import type { Profile } from 'oa-shared';
 
 interface Props {
   user: Profile;

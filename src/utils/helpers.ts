@@ -1,8 +1,7 @@
+import type { DBProfile, IModeration, Profile } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { getConfigurationOption, NO_MESSAGING } from 'src/config/config';
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants';
-
-import type { DBProfile, IModeration, Profile } from 'oa-shared';
 
 const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi;
 
@@ -26,7 +25,7 @@ export const formatLowerNoSpecial = (text: string) => {
 export const arrayToJson = (arr: any[], keyField: string) => {
   const json = {};
   arr.forEach((el) => {
-    if (Object.prototype.hasOwnProperty.call(el, keyField)) {
+    if (Object.hasOwn(el, keyField)) {
       const key = el[keyField];
       json[key] = el;
     }

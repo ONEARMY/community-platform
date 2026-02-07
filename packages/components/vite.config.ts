@@ -21,7 +21,6 @@ const vitestConfig: ViteUserConfig = {
     },
   },
 };
-// eslint-disable-next-line import/no-default-export
 export default defineConfig({
   plugins: [react(), svgr()],
   test: vitestConfig.test,

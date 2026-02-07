@@ -1,8 +1,6 @@
-import { Box, Input } from 'theme-ui';
-
-import { Icon } from '../Icon/Icon';
-
 import type { ThemeUIStyleObject } from 'theme-ui';
+import { Box, Input } from 'theme-ui';
+import { Icon } from '../Icon/Icon';
 
 export type Props = {
   autoComplete?: string;

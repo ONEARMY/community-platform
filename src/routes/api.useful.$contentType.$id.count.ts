@@ -1,7 +1,6 @@
-import { createSupabaseServerClient } from 'src/repository/supabase.server';
-
 import type { UsefulContentType } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);

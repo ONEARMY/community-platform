@@ -1,12 +1,10 @@
+import type { MapPin } from 'oa-shared';
 import { Box, Flex } from 'theme-ui';
-
 import { Button } from '../Button/Button';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { CardButton } from '../CardButton/CardButton';
 import { CardProfile } from '../CardProfile/CardProfile';
 import { InternalLink } from '../InternalLink/InternalLink';
-
-import type { MapPin } from 'oa-shared';
 
 export interface IProps {
   item: MapPin;

@@ -1,6 +1,5 @@
-import { UserRole } from '../../models';
-
 import type { Profile } from '../../models';
+import { UserRole } from '../../models';
 
 type Users = {
   [id: string]: Partial<Profile> & {

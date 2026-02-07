@@ -1,11 +1,9 @@
+import type { MarkerCluster } from 'leaflet';
+import type { MapPin } from 'oa-shared';
 import * as React from 'react';
 import { Marker } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
-
 import { createClusterIcon, createMarkerIcon } from './Sprites';
-
-import type { MarkerCluster } from 'leaflet';
-import type { MapPin } from 'oa-shared';
 
 import 'react-leaflet-markercluster/dist/styles.min.css';
 

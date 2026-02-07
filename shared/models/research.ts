@@ -1,13 +1,12 @@
-import { Author } from './author';
-import { Category } from './category';
-
 import type { DBAuthor } from './author';
+import { Author } from './author';
 import type { DBCategory } from './category';
+import { Category } from './category';
 import type { IConvertedFileMeta } from './common';
 import type { IContentDoc, IDBContentDoc } from './content';
 import type { IDBDocSB, IDBDownloadable, IDoc, IDownloadable } from './document';
 import type { IFilesForm } from './filesForm';
-import type { DBMedia, Image, IMediaFile, MediaFile } from './media';
+import type { DBMedia, IMediaFile, Image, MediaFile } from './media';
 import type { SelectValue } from './other';
 import type { Tag } from './tag';
 

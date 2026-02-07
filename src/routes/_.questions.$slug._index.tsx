@@ -1,5 +1,7 @@
-import { useLoaderData } from 'react-router';
+import type { DBQuestion } from 'oa-shared';
 import { Question } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { CommentFactory } from 'src/factories/commentFactory.server';
 import { NotFoundPage } from 'src/pages/NotFound/NotFound';
@@ -9,11 +11,7 @@ import { ImageServiceServer } from 'src/services/imageService.server';
 import { questionServiceServer } from 'src/services/questionService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
-
 import { contentServiceServer } from '../services/contentService.server';
-
-import type { DBQuestion } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);

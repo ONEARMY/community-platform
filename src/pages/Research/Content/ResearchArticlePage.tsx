@@ -1,5 +1,3 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router';
 import { observer } from 'mobx-react';
 import {
   ArticleCallToActionSupabase,
@@ -9,7 +7,9 @@ import {
   UsefulStatsButton,
   UserEngagementWrapper,
 } from 'oa-components';
-// eslint-disable-next-line import/no-unresolved
+import type { ContentType, ResearchItem } from 'oa-shared';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
 import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
@@ -22,12 +22,9 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { hasAdminRights } from 'src/utils/helpers';
 import { onUsefulClick } from 'src/utils/onUsefulClick';
 import { Box, Flex } from 'theme-ui';
-
 import { researchService } from '../research.service';
 import ResearchDescription from './ResearchDescription';
 import ResearchUpdate from './ResearchUpdate';
-
-import type { ContentType, ResearchItem } from 'oa-shared';
 
 interface IProps {
   research: ResearchItem;

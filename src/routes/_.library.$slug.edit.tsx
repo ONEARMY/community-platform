@@ -1,15 +1,13 @@
-import { redirect, useLoaderData } from 'react-router';
+import type { DBProject } from 'oa-shared';
 import { Project } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
+import { redirect, useLoaderData } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { LibraryForm } from 'src/pages/Library/Content/Common/Library.form';
-/* eslint-disable unicorn/filename-case */
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { libraryServiceServer } from 'src/services/libraryService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
-
-import type { DBProject } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);

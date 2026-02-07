@@ -1,11 +1,9 @@
+import { Button } from 'oa-components';
+import type { ILatLng } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { Tooltip } from 'react-tooltip';
-import { Button } from 'oa-components';
 import { logger } from 'src/logger';
-
 import { GetLocation } from '../../utils/geolocation';
-
-import type { ILatLng } from 'oa-shared';
 
 interface IProps {
   setCenter: (value: ILatLng) => void;

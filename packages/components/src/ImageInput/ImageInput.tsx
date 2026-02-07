@@ -1,7 +1,8 @@
+import type { IConvertedFileMeta } from 'oa-shared';
 import { useEffect, useRef, useState } from 'react';
 import Dropzone from 'react-dropzone-esm';
+import type { ThemeUIStyleObject } from 'theme-ui';
 import { Box, Flex, Image as ImageComponent, Text } from 'theme-ui';
-
 import { Button } from '../Button/Button';
 import { Modal } from '../Modal/Modal';
 import { getPresentFiles } from './getPresentFiles';
@@ -10,9 +11,6 @@ import { ImageInputDeleteImage } from './ImageInputDeleteImage';
 import { ImageInputWrapper } from './ImageInputWrapper';
 import { imageValid } from './imageValid';
 import { setSrc } from './setSrc';
-
-import type { IConvertedFileMeta } from 'oa-shared';
-import type { ThemeUIStyleObject } from 'theme-ui';
 import type { IFileMeta, IInputValue, IMultipleInputValue, IValue } from './types';
 
 interface IProps {
@@ -53,7 +51,7 @@ export const ImageInput = (props: IProps) => {
       setIsImageTooLarge(false);
 
       setInputFiles(selectedImage);
-    } catch (validationError) {
+    } catch (_) {
       setIsImageCorrupt(true);
       setIsImageTooLarge(false);
       setShowErrorModal(true);

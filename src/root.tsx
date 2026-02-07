@@ -1,15 +1,13 @@
-import { useContext, useEffect, useRef } from 'react';
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 import { Global, withEmotionCache } from '@emotion/react';
 import { ThemeProvider } from '@theme-ui/core';
 import { GlobalStyles } from 'oa-components';
 import { fixingFashionTheme, preciousPlasticTheme, projectKampTheme } from 'oa-themes';
-
+import { useContext, useEffect, useRef } from 'react';
+import type { LinksFunction, MetaFunction } from 'react-router';
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 import { VITE_THEME } from './config/config';
 import { ClientStyleContext, ServerStyleContext } from './styles/context';
 import { generateTags } from './utils/seo.utils';
-
-import type { LinksFunction, MetaFunction } from 'react-router';
 
 interface DocumentProps {
   children: React.ReactNode;

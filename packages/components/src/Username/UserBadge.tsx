@@ -1,8 +1,7 @@
+import type { ProfileBadge } from 'oa-shared';
 import { useId } from 'react';
 import { Tooltip } from 'react-tooltip';
 import { Image } from 'theme-ui';
-
-import type { ProfileBadge } from 'oa-shared';
 
 interface IProps {
   badge: ProfileBadge;

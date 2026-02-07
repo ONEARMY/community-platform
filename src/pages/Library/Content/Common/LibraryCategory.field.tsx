@@ -1,3 +1,4 @@
+import type { Category, SelectValue } from 'oa-shared';
 import { useEffect, useMemo, useState } from 'react';
 import { Field } from 'react-final-form';
 import { CategoriesSelectV2 } from 'src/pages/common/Category/CategoriesSelectV2';
@@ -5,10 +6,7 @@ import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { intro } from 'src/pages/Library/labels';
 import { categoryService } from 'src/services/categoryService';
 import { required } from 'src/utils/validators';
-
 import { LibraryCategoryGuidance } from './LibraryCategoryGuidance';
-
-import type { Category, SelectValue } from 'oa-shared';
 
 export const LibraryCategoryField = () => {
   const { placeholder, title } = intro.category;

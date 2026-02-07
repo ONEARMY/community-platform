@@ -79,7 +79,7 @@ It is recommended to update your `master` fork regularly to avoid conflicts.
 
 ## 🤓 Style guide
 
-We use Prettier and ESLint. This might soon evolve as there are new and shiny tools ✨ like `Biome` and `oxlint` which could provide significant performance and DX advantages.
+We use `Biome` please install the extension on your IDE https://biomejs.dev/guides/editors/first-party-extensions/.
 
 Running `yarn format` from the project root prior to committing will ensure the code you're adding is formatted to align with the standards of this project.
 
@@ -107,6 +107,7 @@ Test Writing Guidelines:
 
 We have evolved our security practices with the introduction of React-Router 7, Fly.io and Supabase in 2024/2025.
 A few practices we ensure:
+
 - Database connection is done server-side only
 - Secrets are managed server-side on fly.io
 - We use `helmet` for CSP and other security checks
@@ -115,7 +116,6 @@ A few practices we ensure:
 ## First time contributing?
 
 Early on, and especially when contributing for the first time, please only submit and work on a single issue at a time. It's likely there's lots of little changes we'd like you to make while you get up to speed with how we work and what the code already does.
-
 
 ## 🤝 Joining the team
 

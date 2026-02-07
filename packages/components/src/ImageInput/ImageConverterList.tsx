@@ -1,6 +1,5 @@
-import { ImageConverter } from './ImageConverter';
-
 import type { IConvertedFileMeta } from 'oa-shared';
+import { ImageConverter } from './ImageConverter';
 
 interface IProps {
   inputFiles: File[];

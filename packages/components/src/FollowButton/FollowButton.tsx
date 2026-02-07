@@ -1,13 +1,11 @@
 import { useId } from 'react';
 import { useNavigate } from 'react-router';
+import type { ThemeUIStyleObject } from 'theme-ui';
 import { Box } from 'theme-ui';
-
 import { Button } from '../Button/Button';
 import { Icon } from '../Icon/Icon';
-import { Tooltip } from '../Tooltip/Tooltip';
-
-import type { ThemeUIStyleObject } from 'theme-ui';
 import type { availableGlyphs } from '../Icon/types';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 export interface OptionalFollowButtonProps {
   iconFollow?: availableGlyphs;

@@ -1,8 +1,7 @@
-import { trackEvent } from 'src/common/Analytics';
-import { Box, Image } from 'theme-ui';
-
 import type { UpgradeBadge } from 'oa-shared';
+import { trackEvent } from 'src/common/Analytics';
 import type { ThemeUIStyleObject } from 'theme-ui';
+import { Box, Image } from 'theme-ui';
 
 interface Props {
   upgradeBadge: UpgradeBadge;

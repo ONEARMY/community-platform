@@ -1,8 +1,7 @@
-import { trackEvent } from 'src/common/Analytics';
-import { usefulService } from 'src/services/usefulService';
-
 import type { Profile, UsefulContentType } from 'oa-shared';
 import type { EventAction, EventCategory } from 'src/common/Analytics';
+import { trackEvent } from 'src/common/Analytics';
+import { usefulService } from 'src/services/usefulService';
 
 interface UsefulClickProps {
   vote: 'add' | 'delete';

@@ -1,6 +1,5 @@
-import { logger } from 'src/logger';
-
 import type { ProfileBadge } from 'oa-shared';
+import { logger } from 'src/logger';
 
 const getProfileBadges = async () => {
   try {

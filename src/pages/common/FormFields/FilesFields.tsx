@@ -1,18 +1,15 @@
-import { Field, useForm, useFormState } from 'react-final-form';
 import { FieldInput } from 'oa-components';
+import type { IFilesForm, MediaFile, ProjectFormData } from 'oa-shared';
 import { UserRole } from 'oa-shared';
-// eslint-disable-next-line import/no-unresolved
+import { Field, useForm, useFormState } from 'react-final-form';
 import { ClientOnly } from 'remix-utils/client-only';
 import { AuthWrapper } from 'src/common/AuthWrapper';
-import { FileInputField } from 'src/common/Form/FileInput.field';
 import { FileDisplay } from 'src/common/Form/FileInput/FileDisplay';
+import { FileInputField } from 'src/common/Form/FileInput.field';
 import { MAX_LINK_LENGTH } from 'src/pages/constants';
 import { COMPARISONS } from 'src/utils/comparisons';
 import { Flex, Label, Text } from 'theme-ui';
-
 import { fileLabels } from './labels';
-
-import type { IFilesForm, MediaFile, ProjectFormData } from 'oa-shared';
 
 export const FilesFields = () => {
   const state = useFormState<IFilesForm>();

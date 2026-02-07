@@ -1,8 +1,6 @@
-import { Avatar, Flex } from 'theme-ui';
-
-import { Username } from '../Username/Username';
-
 import type { Author } from 'oa-shared';
+import { Avatar, Flex } from 'theme-ui';
+import { Username } from '../Username/Username';
 
 interface IProps {
   author: Author | null;

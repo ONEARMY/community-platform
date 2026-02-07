@@ -1,8 +1,7 @@
+import type { SupabaseClient } from '@supabase/supabase-js';
 import Keyv from 'keyv';
 import { ProfileType } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
-
-import type { SupabaseClient } from '@supabase/supabase-js';
 
 const cache = new Keyv<ProfileType[]>({ ttl: 3600000 }); // ttl: 60 minutes
 

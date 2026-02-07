@@ -1,9 +1,8 @@
-import { ProfileBadge } from './profileBadge';
-import { ProfileType } from './profileType';
-
 import type { DBMedia, Image } from './media';
 import type { DBProfileBadge, DBProfileBadgeJoin } from './profileBadge';
+import { ProfileBadge } from './profileBadge';
 import type { DBProfileType } from './profileType';
+import { ProfileType } from './profileType';
 
 // TODO: derive from DBProfile - not doing because was causing circular dependencies
 export type DBAuthor = {

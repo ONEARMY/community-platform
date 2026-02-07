@@ -31,16 +31,13 @@ export default defineConfig({
 
       on('task', {
         log(message) {
-          // eslint-disable-next-line no-console
           console.log(message);
           return null;
         },
 
         async 'seed database'() {
           if (!supabaseUrl || !supabaseKey) {
-            throw new Error(
-              'SUPABASE_API_URL and SUPABASE_SERVICE_ROLE_KEY environment variables are required',
-            );
+            throw new Error('SUPABASE_API_URL and SUPABASE_SERVICE_ROLE_KEY environment variables are required');
           }
 
           const supabaseService = new SupabaseTestsService(supabaseUrl, supabaseKey, tenantId);

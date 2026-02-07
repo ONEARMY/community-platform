@@ -38,7 +38,7 @@ export const ImageInputV2 = (props: IProps) => {
 
       setFile(selectedImage[0]);
       onFilesChange(selectedImage[0]);
-    } catch (validationError) {
+    } catch (_) {
       setIsImageCorrupt(true);
       setShowErrorModal(true);
     }

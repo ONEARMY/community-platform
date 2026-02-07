@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/filename-case */
 import { Outlet } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
 

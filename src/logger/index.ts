@@ -35,7 +35,6 @@ if (logTransport === 'googleCloudLogging') {
 
 const sendBeaconData = (url, data) => {
   const jsonData = JSON.stringify(data);
-  // eslint-disable-next-line no-console
   console.log('sendBeaconData', jsonData);
 
   if (navigator.sendBeacon) {
@@ -59,7 +58,6 @@ const fallbackToFetchAPI = (url, data) => {
     body: data,
     keepalive: true, // In case this is a page unload event
   }).catch((error) => {
-    // eslint-disable-next-line no-console
     console.error('Fetch failed:', error);
   });
 };

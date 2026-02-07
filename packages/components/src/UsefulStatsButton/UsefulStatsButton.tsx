@@ -1,11 +1,9 @@
 import { useId, useState } from 'react';
 import { useNavigate } from 'react-router';
+import type { ThemeUIStyleObject } from 'theme-ui';
 import { Text, useThemeUI } from 'theme-ui';
-
 import { Button } from '../Button/Button';
 import { Tooltip } from '../Tooltip/Tooltip';
-
-import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface IProps {
   hasUserVotedUseful: boolean;
@@ -25,7 +23,7 @@ export const UsefulStatsButton = (props: IProps) => {
     setDisabled(true);
     try {
       await props.onUsefulClick();
-    } catch (err) {
+    } catch (_) {
       // do nothing
     }
     setDisabled(false);
@@ -38,11 +36,7 @@ export const UsefulStatsButton = (props: IProps) => {
         data-tooltip-id={uuid}
         data-tooltip-content={props.isLoggedIn ? '' : 'Login to add your vote'}
         data-cy={props.isLoggedIn ? 'vote-useful' : 'vote-useful-redirect'}
-        onClick={() =>
-          props.isLoggedIn
-            ? handleUsefulClick()
-            : navigate('/sign-in?returnUrl=' + encodeURIComponent(location.pathname))
-        }
+        onClick={() => (props.isLoggedIn ? handleUsefulClick() : navigate('/sign-in?returnUrl=' + encodeURIComponent(location.pathname)))}
         disabled={disabled}
         sx={{
           fontSize: 2,

@@ -1,10 +1,8 @@
 import { ImageGallery, LinkifyText, VideoPlayer } from 'oa-components';
-// eslint-disable-next-line import/no-unresolved
+import type { ProjectStep } from 'oa-shared';
 import { ClientOnly } from 'remix-utils/client-only';
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { Box, Card, Flex, Heading, Text } from 'theme-ui';
-
-import type { ProjectStep } from 'oa-shared';
 
 interface IProps {
   step: ProjectStep;
@@ -76,13 +74,9 @@ const Step = (props: IProps) => {
             </Flex>
             <Box sx={{ width: ['100%', '100%', `${(1 / 2) * 100}%`] }}>
               {step.videoUrl ? (
-                <ClientOnly fallback={<></>}>
-                  {() => <VideoPlayer videoUrl={step.videoUrl!} />}
-                </ClientOnly>
+                <ClientOnly fallback={<></>}>{() => <VideoPlayer videoUrl={step.videoUrl!} />}</ClientOnly>
               ) : step.images ? (
-                <ImageGallery
-                  images={formatImagesForGallery(step.images, `Step ${displayNumber}`) as any}
-                />
+                <ImageGallery images={formatImagesForGallery(step.images, `Step ${displayNumber}`) as any} />
               ) : null}
             </Box>
           </Flex>

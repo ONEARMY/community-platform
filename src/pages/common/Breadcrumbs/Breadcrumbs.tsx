@@ -1,8 +1,6 @@
-/* eslint-disable no-case-declarations */
 import { Breadcrumbs as BreadcrumbsComponent } from 'oa-components';
-import { Flex } from 'theme-ui';
-
 import type { News, Project, Question, ResearchItem } from 'oa-shared';
+import { Flex } from 'theme-ui';
 
 // TODO: Refactor this component to not be coupled with Content items
 type Step = { text: string; link?: string };
@@ -20,7 +18,7 @@ const generateSteps = (content: Content, variant: Variant) => {
   const steps: Step[] = [];
 
   switch (variant) {
-    case 'research':
+    case 'research': {
       const research = content as ResearchItem;
       steps.push({ text: 'Research', link: '/research' });
 
@@ -33,7 +31,8 @@ const generateSteps = (content: Content, variant: Variant) => {
 
       steps.push({ text: research.title });
       break;
-    case 'question':
+    }
+    case 'question': {
       const question = content as Question;
       steps.push({ text: 'Question', link: '/questions' });
 
@@ -46,7 +45,8 @@ const generateSteps = (content: Content, variant: Variant) => {
 
       steps.push({ text: question.title });
       break;
-    case 'library':
+    }
+    case 'library': {
       const project = content as Project;
       steps.push({ text: 'Library', link: '/library' });
 
@@ -59,11 +59,13 @@ const generateSteps = (content: Content, variant: Variant) => {
 
       steps.push({ text: project.title });
       break;
-    case 'news':
+    }
+    case 'news': {
       const news = content as News;
       steps.push({ text: 'News', link: '/news' });
       steps.push({ text: news.title });
       break;
+    }
   }
 
   return steps;

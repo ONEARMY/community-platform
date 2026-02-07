@@ -1,8 +1,6 @@
-/* eslint-disable unicorn/filename-case */
+import type { ActionFunctionArgs } from 'react-router';
 import { redirect } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-
-import type { ActionFunctionArgs } from 'react-router';
 
 export const loader = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);

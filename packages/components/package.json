@@ -9,11 +9,11 @@
   "scripts": {
     "storybook": "yarn start",
     "start": "storybook dev -p 6006 --loglevel verbose",
-    "format": "prettier --write '**/*.{ts,tsx,mdx,md}'",
+    "format": "biome format --write",
     "build:sb": "yarn build --build && storybook build",
     "build": "tsc --build --verbose",
     "dev": "tsc --watch",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
+    "lint": "biome lint --write",
     "test": "vitest",
     "test-ci": "vitest --coverage --reporter=junit --outputFile.junit=./reports/output.xml"
   },
@@ -50,6 +50,7 @@
     "react": "19.2.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.3.14",
     "@react-router/dev": "^7.10.1",
     "@storybook/addon-docs": "10.1.4",
     "@storybook/addon-links": "^10.1.4",
@@ -64,7 +65,6 @@
     "eslint-plugin-storybook": "^9.0.15",
     "eslint-plugin-vitest": "^0.5.4",
     "jsdom": "^21.1.1",
-    "prettier": "3.7.4",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "typescript": "^5.7.2",

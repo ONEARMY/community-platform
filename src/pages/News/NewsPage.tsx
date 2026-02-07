@@ -1,25 +1,15 @@
+import { observer } from 'mobx-react';
+import { Category, ContentImageLightbox, ContentStatistics, DisplayDate, ProfileBadgeContentLabel, TagList } from 'oa-components';
+import type { News } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
-import { observer } from 'mobx-react';
-import {
-  Category,
-  ContentImageLightbox,
-  ContentStatistics,
-  DisplayDate,
-  ProfileBadgeContentLabel,
-  TagList,
-} from 'oa-components';
-// eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
 import { AspectRatio, Box, Button, Card, Flex, Heading, Image, Text } from 'theme-ui';
-
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
-
-import type { News } from 'oa-shared';
 
 interface IProps {
   news: News;
@@ -54,11 +44,7 @@ export const NewsPage = observer(({ news }: IProps) => {
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
         {news.heroImage && (
           <AspectRatio ratio={2 / 1}>
-            <Image
-              ref={heroImageRef}
-              src={news.heroImage.publicUrl}
-              sx={{ borderRadius: 2, width: '100%', cursor: 'pointer' }}
-            />
+            <Image ref={heroImageRef} src={news.heroImage.publicUrl} sx={{ borderRadius: 2, width: '100%', cursor: 'pointer' }} />
           </AspectRatio>
         )}
 
@@ -73,17 +59,10 @@ export const NewsPage = observer(({ news }: IProps) => {
           <Flex sx={{ alignItems: 'center', gap: 2 }}>
             {news.category && <Category category={news.category} />}
             {news.profileBadge && <ProfileBadgeContentLabel profileBadge={news.profileBadge} />}
-            {news.tags && (
-              <TagList data-cy="news-tags" tags={news.tags.map((t) => ({ label: t.name }))} />
-            )}
+            {news.tags && <TagList data-cy="news-tags" tags={news.tags.map((t) => ({ label: t.name }))} />}
           </Flex>
 
-          <Heading
-            as="h1"
-            data-cy="news-title"
-            data-testid="news-title"
-            sx={{ textAlign: 'center' }}
-          >
+          <Heading as="h1" data-cy="news-title" data-testid="news-title" sx={{ textAlign: 'center' }}>
             {news.title}
           </Heading>
 
@@ -128,9 +107,7 @@ export const NewsPage = observer(({ news }: IProps) => {
               },
             }}
           >
-            <ContentImageLightbox
-              prependImages={prependImages}
-            >
+            <ContentImageLightbox prependImages={prependImages}>
               <div dangerouslySetInnerHTML={{ __html: news.bodyHtml }} />
             </ContentImageLightbox>
           </Box>

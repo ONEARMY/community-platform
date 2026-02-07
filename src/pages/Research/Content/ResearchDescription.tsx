@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { max } from 'date-fns';
 import {
   AuthorDisplay,
@@ -12,14 +11,13 @@ import {
   Username,
 } from 'oa-components';
 import { PremiumTier, type Profile, type ResearchItem, ResearchStatusRecord } from 'oa-shared';
-// eslint-disable-next-line import/no-unresolved
+import { useMemo } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 import { userHasPremiumTier } from 'src/common/PremiumTierWrapper';
 import { DraftTag } from 'src/pages/common/Drafts/DraftTag';
 import { buildStatisticsLabel } from 'src/utils/helpers';
 import { createUsefulStatistic } from 'src/utils/statistics';
 import { Card, Divider, Flex, Heading, Text } from 'theme-ui';
-
 import { researchStatusColour } from '../researchHelpers';
 
 interface IProps {
@@ -41,10 +39,7 @@ const ResearchDescription = (props: IProps) => {
   const { research, subscribersCount, votedUsefulCount, commentsCount, updatesCount } = props;
 
   const lastUpdated = useMemo(() => {
-    const dates = [
-      research?.modifiedAt,
-      ...(research?.updates?.map((update) => update?.modifiedAt) || []),
-    ]
+    const dates = [research?.modifiedAt, ...(research?.updates?.map((update) => update?.modifiedAt) || [])]
       .filter((date): date is Date => date !== null)
       .map((date) => new Date(date));
 
@@ -107,11 +102,7 @@ const ResearchDescription = (props: IProps) => {
             {research.isDraft && <DraftTag />}
 
             <Text variant="auxiliary">
-              <DisplayDate
-                createdAt={research.createdAt}
-                modifiedAt={lastUpdated.toISOString()}
-                action="Started"
-              />
+              <DisplayDate createdAt={research.createdAt} modifiedAt={lastUpdated.toISOString()} action="Started" />
             </Text>
 
             {research.category && <Category category={research.category} sx={{ fontSize: 2 }} />}
@@ -192,12 +183,7 @@ const ResearchDescription = (props: IProps) => {
               }),
               stat: subscribersCount || 0,
             },
-            createUsefulStatistic(
-              'research',
-              research.id,
-              votedUsefulCount || 0,
-              userHasPremiumTier(props.activeUser, PremiumTier.ONE),
-            ),
+            createUsefulStatistic('research', research.id, votedUsefulCount || 0, userHasPremiumTier(props.activeUser, PremiumTier.ONE)),
             {
               icon: 'comment-outline',
               label: buildStatisticsLabel({

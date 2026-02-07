@@ -1,10 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
 import { withTheme } from '@emotion/react';
 import { animated, useSpring } from '@react-spring/web';
 import { observer } from 'mobx-react';
 import { Button } from 'oa-components';
+import type { NotificationDisplay } from 'oa-shared';
 import { UserRole } from 'oa-shared';
-// eslint-disable-next-line import/no-unresolved
+import type { ThemeWithName } from 'oa-themes';
+import { useContext, useEffect, useState } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { isModuleSupported, MODULE } from 'src/modules';
@@ -15,14 +16,10 @@ import Profile from 'src/pages/common/Header/Menu/Profile/Profile';
 import { notificationSupabaseService } from 'src/services/notificationsSupabaseService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Flex, Text, useThemeUI } from 'theme-ui';
-
 import { EnvironmentContext } from '../EnvironmentContext';
 import { NotificationsContext } from '../NotificationsContext';
 import { NotificationsSupabase } from './Menu/Notifications/NotificationsSupabase';
 import { MobileMenuContext } from './MobileMenuContext';
-
-import type { NotificationDisplay } from 'oa-shared';
-import type { ThemeWithName } from 'oa-themes';
 
 const MobileNotificationsWrapper = ({ children }) => {
   const themeUi = useThemeUI();
@@ -62,9 +59,7 @@ const AnimationContainer = (props: any) => {
     config: { duration: 250 },
   });
 
-  return (
-    <animated.div style={{ position: 'relative', ...springStyle }}>{props.children}</animated.div>
-  );
+  return <animated.div style={{ position: 'relative', ...springStyle }}>{props.children}</animated.div>;
 };
 
 const Header = observer(() => {
@@ -76,9 +71,7 @@ const Header = observer(() => {
   const [isVisible, setIsVisible] = useState(false);
 
   // New notifications states
-  const [notificationsSupabase, setNotificationsSupabase] = useState<NotificationDisplay[] | null>(
-    null,
-  );
+  const [notificationsSupabase, setNotificationsSupabase] = useState<NotificationDisplay[] | null>(null);
   const [isUpdatingNotifications, setIsUpdatingNotifications] = useState<boolean>(true);
 
   const updateNotifications = async () => {
@@ -156,9 +149,7 @@ const Header = observer(() => {
           >
             <MenuDesktop />
             {isLoggedIn && <NotificationsSupabase device="desktop" />}
-            {isModuleSupported(env?.VITE_SUPPORTED_MODULES || '', MODULE.USER) && (
-              <Profile isMobile={false} />
-            )}
+            {isModuleSupported(env?.VITE_SUPPORTED_MODULES || '', MODULE.USER) && <Profile isMobile={false} />}
           </Flex>
           <ClientOnly fallback={<></>}>
             {() => (

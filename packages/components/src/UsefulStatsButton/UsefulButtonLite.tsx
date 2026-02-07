@@ -1,11 +1,9 @@
 import { useId, useState } from 'react';
 import { useNavigate } from 'react-router';
+import type { ThemeUIStyleObject } from 'theme-ui';
 import { Flex, Text, useThemeUI } from 'theme-ui';
-
 import { Button } from '../Button/Button';
 import { Icon } from '../Icon/Icon';
-
-import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface IProps {
   usefulButtonLiteConfig: {
@@ -18,8 +16,7 @@ export interface IProps {
 }
 
 export const UsefulButtonLite = (props: IProps) => {
-  const { hasUserVotedUseful, votedUsefulCount, isLoggedIn, sx, onUsefulClick } =
-    props.usefulButtonLiteConfig;
+  const { hasUserVotedUseful, votedUsefulCount, isLoggedIn, sx, onUsefulClick } = props.usefulButtonLiteConfig;
 
   const { theme } = useThemeUI() as any;
   const navigate = useNavigate();
@@ -30,14 +27,13 @@ export const UsefulButtonLite = (props: IProps) => {
     setDisabled(true);
     try {
       await onUsefulClick(usefulAction, 'Comment');
-    } catch (err) {
+    } catch (_) {
       // handle error or ignore
     }
     setDisabled(false);
   };
 
-  const backgroundColor =
-    !votedUsefulCount || votedUsefulCount === 0 ? 'transparent' : theme.colors.background;
+  const backgroundColor = !votedUsefulCount || votedUsefulCount === 0 ? 'transparent' : theme.colors.background;
 
   return (
     <Flex sx={{ alignSelf: 'flex-end', position: 'relative', alignItems: 'center' }}>
@@ -69,11 +65,7 @@ export const UsefulButtonLite = (props: IProps) => {
         data-tooltip-content={isLoggedIn ? '' : 'Login to add your vote'}
         data-cy={isLoggedIn ? 'vote-useful' : 'vote-useful-redirect'}
         title="Mark as useful"
-        onClick={() =>
-          isLoggedIn
-            ? handleUsefulClick()
-            : navigate('/sign-in?returnUrl=' + encodeURIComponent(location.pathname))
-        }
+        onClick={() => (isLoggedIn ? handleUsefulClick() : navigate('/sign-in?returnUrl=' + encodeURIComponent(location.pathname)))}
         disabled={disabled}
         variant="outline"
         sx={{
@@ -93,11 +85,7 @@ export const UsefulButtonLite = (props: IProps) => {
         }}
       >
         <Flex sx={{ alignItems: 'center' }}>
-          <Icon
-            glyph="star-active"
-            size={24}
-            filter={hasUserVotedUseful ? 'unset' : 'grayscale(1)'}
-          />
+          <Icon glyph="star-active" size={24} filter={hasUserVotedUseful ? 'unset' : 'grayscale(1)'} />
         </Flex>
       </Button>
     </Flex>

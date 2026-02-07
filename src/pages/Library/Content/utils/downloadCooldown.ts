@@ -8,7 +8,7 @@ export const retrieveLocalStorageArray = (): localStorageExpiry[] => {
   if (typeof downloadCooldownArray === 'string') {
     return JSON.parse(downloadCooldownArray);
   } else {
-    return new Array<localStorageExpiry>();
+    return [] as localStorageExpiry[];
   }
 };
 

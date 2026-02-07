@@ -1,7 +1,8 @@
+import type { IConvertedFileMeta } from 'oa-shared';
 import { useEffect, useRef, useState } from 'react';
 import Dropzone from 'react-dropzone-esm';
+import type { ThemeUIStyleObject } from 'theme-ui';
 import { Box, Flex, Image as ImageComponent, Text } from 'theme-ui';
-
 import { Button } from '../Button/Button';
 import { Modal } from '../Modal/Modal';
 import { getPresentFiles } from './getPresentFiles';
@@ -10,9 +11,6 @@ import { ImageInputDeleteImage } from './ImageInputDeleteImage';
 import { ImageInputWrapper } from './ImageInputWrapper';
 import { imageValid } from './imageValid';
 import { setSrc } from './setSrc';
-
-import type { IConvertedFileMeta } from 'oa-shared';
-import type { ThemeUIStyleObject } from 'theme-ui';
 import type { IFileMeta, IInputValue, IMultipleInputValue, IValue } from './types';
 
 interface IProps {
@@ -53,7 +51,7 @@ export const ImageInput = (props: IProps) => {
       setIsImageTooLarge(false);
 
       setInputFiles(selectedImage);
-    } catch (validationError) {
+    } catch (_) {
       setIsImageCorrupt(true);
       setIsImageTooLarge(false);
       setShowErrorModal(true);
@@ -100,20 +98,11 @@ export const ImageInput = (props: IProps) => {
       >
         {({ getRootProps, getInputProps, rootRef }) => (
           <ImageInputWrapper {...getRootProps()} ref={rootRef} hasUploadedImg={showUploadedImg}>
-            <input
-              ref={fileInputRef}
-              data-testid={dataTestId || 'image-input'}
-              {...getInputProps()}
-            />
+            <input ref={fileInputRef} data-testid={dataTestId || 'image-input'} {...getInputProps()} />
 
             {showUploadedImg && <ImageComponent src={src} sx={imageDisplaySx} />}
 
-            {!showUploadedImg && (
-              <ImageConverterList
-                inputFiles={inputFiles}
-                handleConvertedFileChange={handleConvertedFileChange}
-              />
-            )}
+            {!showUploadedImg && <ImageConverterList inputFiles={inputFiles} handleConvertedFileChange={handleConvertedFileChange} />}
             {!hasImages && (
               <Button small variant="outline" icon="image" type="button">
                 Upload
@@ -156,10 +145,7 @@ export const ImageInput = (props: IProps) => {
             }}
           >
             <Text>The uploaded image appears to be corrupted or a type we don't accept.</Text>
-            <Text>
-              Check your image is valid and one of the following formats: jpeg, jpg, png, gif, heic,
-              svg or webp.
-            </Text>
+            <Text>Check your image is valid and one of the following formats: jpeg, jpg, png, gif, heic, svg or webp.</Text>
             <Button
               data-cy="ImageUploadError-Button"
               sx={{ marginTop: '20px', justifyContent: 'center' }}

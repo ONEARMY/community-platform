@@ -1,14 +1,8 @@
+import { observer } from 'mobx-react';
+import { ArticleCallToActionSupabase, Button, ConfirmModal, UsefulStatsButton, UserEngagementWrapper } from 'oa-components';
+import type { ContentType, Project, ProjectStep } from 'oa-shared';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { observer } from 'mobx-react';
-import {
-  ArticleCallToActionSupabase,
-  Button,
-  ConfirmModal,
-  UsefulStatsButton,
-  UserEngagementWrapper,
-} from 'oa-components';
-// eslint-disable-next-line import/no-unresolved
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
 import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
@@ -19,12 +13,9 @@ import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { hasAdminRights } from 'src/utils/helpers';
 import { onUsefulClick } from 'src/utils/onUsefulClick';
 import { Card, Flex } from 'theme-ui';
-
 import { libraryService } from '../../library.service';
 import { LibraryDescription } from './LibraryDescription';
 import Step from './LibraryStep';
-
-import type { ContentType, Project, ProjectStep } from 'oa-shared';
 
 interface ProjectPageProps {
   item: Project;
@@ -84,9 +75,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
   };
 
   const isEditable = useMemo(() => {
-    return (
-      !!activeUser && (hasAdminRights(activeUser) || item.author?.username === activeUser.username)
-    );
+    return !!activeUser && (hasAdminRights(activeUser) || item.author?.username === activeUser.username);
   }, [activeUser, item.author]);
 
   return (
@@ -145,14 +134,10 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 type="button"
                 sx={{ fontSize: 2, justifyContent: 'center' }}
                 onClick={() => {
-                  document
-                    .querySelector('[data-target="create-comment-container"]')
-                    ?.scrollIntoView({
-                      behavior: 'smooth',
-                    });
-                  (
-                    document.querySelector('[data-cy="comments-form"]') as HTMLTextAreaElement
-                  )?.focus();
+                  document.querySelector('[data-target="create-comment-container"]')?.scrollIntoView({
+                    behavior: 'smooth',
+                  });
+                  (document.querySelector('[data-cy="comments-form"]') as HTMLTextAreaElement)?.focus();
 
                   return false;
                 }}
@@ -202,11 +187,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 mt: 5,
               }}
             >
-              <CommentSectionSupabase
-                authors={item.author?.id ? [item.author?.id] : []}
-                sourceId={item.id}
-                sourceType="projects"
-              />
+              <CommentSectionSupabase authors={item.author?.id ? [item.author?.id] : []} sourceId={item.id} sourceType="projects" />
             </Card>
           </UserEngagementWrapper>
         )}

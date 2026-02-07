@@ -1,8 +1,7 @@
-import { forwardRef } from 'react';
-import { Map as LeafletMap, TileLayer } from 'react-leaflet';
-
 import type { Ref, RefObject } from 'react';
+import { forwardRef } from 'react';
 import type { MapProps, Viewport } from 'react-leaflet';
+import { Map as LeafletMap, TileLayer } from 'react-leaflet';
 
 import 'leaflet/dist/leaflet.css';
 import './index.css';
@@ -13,6 +12,7 @@ export interface IProps extends MapProps {
   ref?: RefObject<LeafletMap> | undefined;
 }
 
+// biome-ignore lint/suspicious/noShadowRestrictedNames: this is an external library import
 export const Map = forwardRef((props: IProps, ref: Ref<LeafletMap>) => {
   const onViewportChanged = (viewport: Viewport) => {
     if (viewport.zoom) {

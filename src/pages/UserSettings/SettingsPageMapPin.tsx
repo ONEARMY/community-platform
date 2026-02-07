@@ -1,22 +1,21 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Field, Form } from 'react-final-form';
-import { Link, useNavigate } from 'react-router';
+import type { DivIcon } from 'leaflet';
 import { observer } from 'mobx-react';
 import { Button, ConfirmModal, FlagIcon, Icon, MapWithPin, ModerationRecord } from 'oa-components';
+import type { ILatLng, MapPin } from 'oa-shared';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Field, Form } from 'react-final-form';
+// biome-ignore lint/suspicious/noShadowRestrictedNames: this is an external library import
+import type { Map } from 'react-leaflet';
+import { Link, useNavigate } from 'react-router';
 import { buttons, headings, inCompleteProfile, mapForm } from 'src/pages/UserSettings/labels';
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { getLocationData } from 'src/utils/getLocationData';
 import { Alert, Card, Flex, Heading, Text } from 'theme-ui';
-
 import { createMarkerIcon } from '../Maps/Content/MapView/Sprites';
 import { mapPinService } from '../Maps/map.service';
-import { SettingsFormNotifications } from './content/SettingsFormNotifications';
-
-import type { DivIcon } from 'leaflet';
-import type { ILatLng, MapPin } from 'oa-shared';
-import type { Map } from 'react-leaflet';
 import type { IFormNotification } from './content/SettingsFormNotifications';
+import { SettingsFormNotifications } from './content/SettingsFormNotifications';
 
 export const SettingsPageMapPin = observer(() => {
   const [mapPin, setMapPin] = useState<MapPin | undefined>();
@@ -138,11 +137,7 @@ export const SettingsPageMapPin = observer(() => {
           render={({ values, errors, submitFailed, submitting, handleSubmit }) => {
             return (
               <>
-                <SettingsFormNotifications
-                  errors={errors}
-                  notification={notification}
-                  submitFailed={submitFailed}
-                />
+                <SettingsFormNotifications errors={errors} notification={notification} submitFailed={submitFailed} />
 
                 {!mapPin && (
                   <Text
@@ -157,15 +152,12 @@ export const SettingsPageMapPin = observer(() => {
 
                 {mapPin && mapPin.moderation !== 'accepted' && (
                   <Alert variant="warning" sx={{ gap: 1 }}>
-                    <Text sx={{ fontSize: 1 }}>
-                      Your pin status is {ModerationRecord[mapPin.moderation].toLowerCase()}
-                    </Text>
+                    <Text sx={{ fontSize: 1 }}>Your pin status is {ModerationRecord[mapPin.moderation].toLowerCase()}</Text>
                     {mapPin.moderationFeedback && (
                       <>
                         {' - '}
                         <Text sx={{ fontSize: 1 }}>
-                          Moderator feedback:{' '}
-                          <Text sx={{ fontWeight: 'bold' }}>{mapPin.moderationFeedback}</Text>
+                          Moderator feedback: <Text sx={{ fontWeight: 'bold' }}>{mapPin.moderationFeedback}</Text>
                         </Text>
                       </>
                     )}
@@ -204,12 +196,7 @@ export const SettingsPageMapPin = observer(() => {
                 {(mapPin || previewMapPin) && (
                   <Flex sx={{ flexDirection: 'column', gap: 1 }}>
                     {mapPin && (
-                      <Flex
-                        sx={{ gap: 1 }}
-                        variant="paragraph"
-                        data-cy="LocationDataTextDisplay"
-                        data-testid="LocationDataTextDisplay"
-                      >
+                      <Flex sx={{ gap: 1 }} variant="paragraph" data-cy="LocationDataTextDisplay" data-testid="LocationDataTextDisplay">
                         {mapForm.locationLabel}
                         <Flex sx={{ gap: 1, alignItems: 'center' }}>
                           <FlagIcon countryCode={mapPin.countryCode} />
@@ -221,16 +208,10 @@ export const SettingsPageMapPin = observer(() => {
                     {previewMapPin && (
                       <Flex sx={{ gap: 1 }}>
                         <Text variant="paragraph">Your updated map pin:</Text>
-                        <Text
-                          variant="paragraph"
-                          data-cy="LocationDataTextDisplay"
-                          data-testid="LocationDataTextDisplay"
-                        >
+                        <Text variant="paragraph" data-cy="LocationDataTextDisplay" data-testid="LocationDataTextDisplay">
                           <Flex sx={{ gap: 1, alignItems: 'center' }}>
                             <FlagIcon countryCode={previewMapPin.countryCode} />
-                            {previewMapPin.name ||
-                              previewMapPin.administrative ||
-                              previewMapPin.country}
+                            {previewMapPin.name || previewMapPin.administrative || previewMapPin.country}
                           </Flex>
                         </Text>
                       </Flex>
@@ -306,18 +287,8 @@ export const SettingsPageMapPin = observer(() => {
             >
               {inCompleteProfile}
             </Text>
-            <Link
-              to="/settings"
-              data-testid="complete-profile-button"
-              data-cy="complete-profile-button"
-            >
-              <Button
-                type="button"
-                variant="secondary"
-                data-cy="mapPinPage"
-                backgroundColor="white"
-                sx={{ borderRadius: 3 }}
-              >
+            <Link to="/settings" data-testid="complete-profile-button" data-cy="complete-profile-button">
+              <Button type="button" variant="secondary" data-cy="mapPinPage" backgroundColor="white" sx={{ borderRadius: 3 }}>
                 <Flex sx={{ gap: 2 }}>
                   <Icon glyph={'profile'} size={20} />
                   <Text variant="paragraph">Complete your profile</Text>

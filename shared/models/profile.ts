@@ -1,7 +1,3 @@
-import { ProfileBadge } from './profileBadge';
-import { ProfileTag } from './profileTag';
-import { ProfileType } from './profileType';
-
 import type { Comment } from './comment';
 import type { SubscribableContentTypes } from './common';
 import type { IDBDocSB, IDoc } from './document';
@@ -10,8 +6,11 @@ import type { IDBModeration, IModeration, Moderation } from './moderation';
 import type { News } from './news';
 import type { IPatreonUser } from './patreon';
 import type { DBProfileBadgeJoin } from './profileBadge';
+import { ProfileBadge } from './profileBadge';
 import type { DBProfileTagJoin } from './profileTag';
+import { ProfileTag } from './profileTag';
 import type { DBProfileType } from './profileType';
+import { ProfileType } from './profileType';
 import type { Question } from './question';
 import type { ResearchUpdate } from './research';
 import type { IUserImpact, UserVisitorPreference } from './user';
@@ -75,17 +74,12 @@ export class Profile {
     Object.assign(this, obj);
   }
 
-  static fromDB(
-    dbProfile: DBProfile,
-    photo: Image | null = null,
-    coverImages: Image[] | null = null,
-    authorVotes?: AuthorVotes[],
-  ) {
+  static fromDB(dbProfile: DBProfile, photo: Image | null = null, coverImages: Image[] | null = null, authorVotes?: AuthorVotes[]) {
     let impact = null;
 
     try {
       impact = dbProfile.impact ? JSON.parse(dbProfile.impact) : null;
-    } catch (error) {
+    } catch (_) {
       console.error('error parsing impact');
     }
 
@@ -98,9 +92,7 @@ export class Profile {
       photo: photo ?? null,
       roles: dbProfile.roles || null,
       type: dbProfile.type ? ProfileType.fromDB(dbProfile.type) : null,
-      visitorPolicy: dbProfile.visitor_policy
-        ? (JSON.parse(dbProfile.visitor_policy) as UserVisitorPreference)
-        : null,
+      visitorPolicy: dbProfile.visitor_policy ? (JSON.parse(dbProfile.visitor_policy) as UserVisitorPreference) : null,
       isBlockedFromMessaging: !!dbProfile.is_blocked_from_messaging,
       about: dbProfile.about,
       coverImages: coverImages ?? null,
@@ -124,10 +116,7 @@ export type NotificationActionType = 'newContent' | 'newComment' | 'newReply';
 export const NotificationContentTypes = ['research_updates', 'comments'] as const;
 export type NotificationContentType = (typeof NotificationContentTypes)[number];
 export type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photo'>;
-export type ProfileListItem = Pick<
-  Profile,
-  'id' | 'username' | 'displayName' | 'photo' | 'country' | 'badges' | 'type'
->;
+export type ProfileListItem = Pick<Profile, 'id' | 'username' | 'displayName' | 'photo' | 'country' | 'badges' | 'type'>;
 
 type NotificationContent = News | Comment | Question | ResearchUpdate;
 type NotificationSourceContentType = SubscribableContentTypes;
@@ -188,9 +177,7 @@ export class Notification implements IDoc {
       modifiedAt: dbNotification.modified_at ? new Date(dbNotification.modified_at) : null,
       ownedById: dbNotification.owned_by_id,
       isRead: dbNotification.is_read,
-      triggeredBy: dbNotification.triggered_by
-        ? Profile.fromDB(dbNotification.triggered_by)
-        : undefined,
+      triggeredBy: dbNotification.triggered_by ? Profile.fromDB(dbNotification.triggered_by) : undefined,
       ownedBy: dbNotification.owned_by ? Profile.fromDB(dbNotification.owned_by) : undefined,
     });
   }
@@ -223,9 +210,7 @@ export class NotificationDisplay {
   static setEmailBody(notification: Notification): string {
     switch (notification.contentType) {
       case 'research_updates': {
-        return `${(notification.content as ResearchUpdate)?.title}:\n\n${
-          (notification.content as ResearchUpdate)?.description
-        }`;
+        return `${(notification.content as ResearchUpdate)?.title}:\n\n${(notification.content as ResearchUpdate)?.description}`;
       }
       default: {
         return this.setBody(notification) || '';
@@ -302,9 +287,7 @@ export class NotificationDisplay {
   }
 
   static setDate(notification: Notification) {
-    return notification.modifiedAt
-      ? new Date(notification.modifiedAt)
-      : new Date(notification.createdAt);
+    return notification.modifiedAt ? new Date(notification.modifiedAt) : new Date(notification.createdAt);
   }
 
   static setTitle(notification: Notification) {

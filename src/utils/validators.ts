@@ -36,10 +36,7 @@ const composeValidators =
   async (value) => {
     const allResponse = await Promise.all(validators.map((validator) => validator(value)));
 
-    return allResponse.reduce(
-      (message, value) => (typeof value === 'string' ? (message += value + '. ') : message),
-      '',
-    );
+    return allResponse.reduce((message, value) => (typeof value === 'string' ? (message += value + '. ') : message), '');
   };
 
 const validateUrl = (value: any) => {
@@ -63,7 +60,6 @@ const validateEmail = (value: string) => {
 
 const isEmail = (email: string) => {
   // From this stackoverflow thread https://stackoverflow.com/a/46181
-  // eslint-disable-next-line
   const re =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
@@ -98,8 +94,7 @@ const addProtocolMutator = ([name], state, { changeValue }) => {
  * Used for user input links, ensure url has http/https protocol as required for external linking,
  * E.g. https://instagram.com/my-username
  */
-const ensureExternalUrl = (url: string) =>
-  typeof url === 'string' && url.indexOf('://') === -1 ? `https://${url}` : url;
+const ensureExternalUrl = (url: string) => (typeof url === 'string' && url.indexOf('://') === -1 ? `https://${url}` : url);
 
 export {
   validateUrl,

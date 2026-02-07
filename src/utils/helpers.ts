@@ -26,7 +26,7 @@ export const formatLowerNoSpecial = (text: string) => {
 export const arrayToJson = (arr: any[], keyField: string) => {
   const json = {};
   arr.forEach((el) => {
-    if (Object.prototype.hasOwnProperty.call(el, keyField)) {
+    if (Object.hasOwn(el, keyField)) {
       const key = el[keyField];
       json[key] = el;
     }

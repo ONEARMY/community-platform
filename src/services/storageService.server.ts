@@ -22,7 +22,7 @@ const getPublicUrls = (
           : undefined,
       );
       result.push(new Image({ id: x.id, publicUrl: data.publicUrl }));
-    } catch (error) {
+    } catch (_) {
       // Skip null images - don't add to result
     }
   }

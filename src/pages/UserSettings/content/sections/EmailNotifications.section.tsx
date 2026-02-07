@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useMemo } from 'react';
 import { Field } from 'react-final-form';
 import { observer } from 'mobx-react';
 import { Select } from 'oa-components';
@@ -22,7 +22,7 @@ const emailFrequencyOptions: {
 ];
 
 export const EmailNotificationsSection = observer((props: IProps) => {
-  const defaultValue = React.useMemo(
+  const defaultValue = useMemo(
     () =>
       emailFrequencyOptions.find(
         ({ value }) =>
@@ -31,6 +31,7 @@ export const EmailNotificationsSection = observer((props: IProps) => {
       ),
     [props.notificationSettings?.emailFrequency],
   );
+
   return (
     <FieldContainer data-cy="NotificationSettingsSelect">
       <Field name="notification_settings.emailFrequency">

@@ -1,3 +1,4 @@
+import { redirect } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import Main from 'src/pages/common/Layout/Main';
 import { SettingsPage } from 'src/pages/UserSettings/SettingsPage.client';
@@ -11,10 +12,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const claims = await client.auth.getClaims();
 
   if (!claims.data?.claims) {
-    return redirectServiceServer.redirectSignIn('/settings', headers);
+    return redirectServiceServer.redirectSignIn('/settings/profile', headers);
   }
 
-  return null;
+  const url = new URL(request.url);
+  if (url.pathname === '/settings' || url.pathname === '/settings/') {
+    return redirect('/settings/profile', { headers });
+  }
+
+  return new Response(null, { headers });
 }
 
 export default function Index() {

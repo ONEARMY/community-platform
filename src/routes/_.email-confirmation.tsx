@@ -18,7 +18,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { data } = await client.auth.getClaims();
 
   if (data?.claims) {
-    return redirect('/settings', { headers });
+    return redirect('/settings/profile', { headers });
   }
 
   if (error) {
@@ -138,7 +138,7 @@ export default function Index() {
                                   variant="primary"
                                   disabled={submitting}
                                   type="button"
-                                  onClick={() => navigate('/settings')}
+                                  onClick={() => navigate('/settings/profile')}
                                 >
                                   Setup my profile
                                 </Button>

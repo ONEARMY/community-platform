@@ -1,16 +1,22 @@
 import Academy from 'src/pages/Academy/Academy';
 import Main from 'src/pages/common/Layout/Main';
-import { SeoTagsUpdateComponent } from 'src/utils/seo';
+import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 
-export async function clientLoader() {
+export async function loader() {
   return null;
 }
+
+export const meta = mergeMeta(() => {
+  return generateTags(`Academy - ${import.meta.env.VITE_SITE_NAME}`);
+});
 
 export default function Index() {
   return (
     <Main style={{ flex: 1, overflow: 'hidden' }} ignoreMaxWidth={true}>
-      <SeoTagsUpdateComponent title="Academy" />
       <Academy />
+      <style
+        dangerouslySetInnerHTML={{ __html: `html { overflow-y: hidden !important; }` }}
+      ></style>
     </Main>
   );
 }

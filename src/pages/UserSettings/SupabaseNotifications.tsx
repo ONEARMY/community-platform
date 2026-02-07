@@ -1,14 +1,12 @@
-import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
+import type { DBNotificationsPreferences } from 'oa-shared';
+import { useEffect, useState } from 'react';
+import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
 import { form } from 'src/pages/UserSettings/labels';
 import { notificationsPreferencesService } from 'src/services/notificationsPreferencesService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { isUserContactable } from 'src/utils/helpers';
-
 import { SupabaseNotificationsForm } from './SupabaseNotificationsForm';
-
-import type { DBNotificationsPreferences } from 'oa-shared';
-import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
 
 export const SupabaseNotifications = observer(() => {
   const [isLoading, setIsLoading] = useState<boolean>(true);

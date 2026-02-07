@@ -1,8 +1,6 @@
-import { Button } from 'theme-ui';
-
-import { Icon } from '../Icon/Icon';
-
 import type { ThemeUIStyleObject } from 'theme-ui';
+import { Button } from 'theme-ui';
+import { Icon } from '../Icon/Icon';
 import type { IGlyphs } from '../Icon/types';
 
 export interface IProps extends React.ButtonHTMLAttributes<HTMLElement> {

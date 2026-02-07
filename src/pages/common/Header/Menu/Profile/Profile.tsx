@@ -1,6 +1,6 @@
-import { useContext, useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react';
 import { MemberBadge } from 'oa-components';
+import { useContext, useEffect, useRef, useState } from 'react';
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink';
 import { ProfileModal } from 'src/pages/common/Header/Menu/ProfileModal/ProfileModal';
 import { MobileMenuContext } from 'src/pages/common/Header/MobileMenuContext';

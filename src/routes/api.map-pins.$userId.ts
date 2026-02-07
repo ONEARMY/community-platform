@@ -1,7 +1,6 @@
+import type { DBMapPin } from 'oa-shared';
 import { MapPinFactory } from 'src/factories/mapPinFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-
-import type { DBMapPin } from 'oa-shared';
 
 // runs on the server
 export const loader = async ({ request, params }) => {

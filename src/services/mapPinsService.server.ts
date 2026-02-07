@@ -1,9 +1,8 @@
+import type { SupabaseClient } from '@supabase/supabase-js';
 import Keyv from 'keyv';
+import type { DBMapPin, MapPin } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
 import { MapPinFactory } from 'src/factories/mapPinFactory.server';
-
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBMapPin, MapPin } from 'oa-shared';
 
 const cache = new Keyv<MapPin[]>({ ttl: 3600000 }); // ttl: 60 minutes
 

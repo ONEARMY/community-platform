@@ -1,14 +1,13 @@
+import { Button, FieldInput, HeroBanner } from 'oa-components';
 import { useEffect } from 'react';
 import { Form } from 'react-final-form';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { Link, redirect, useActionData, useLoaderData, useNavigate } from 'react-router';
-import { Button, FieldInput, HeroBanner } from 'oa-components';
 import { PasswordField } from 'src/common/Form/PasswordField';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { required } from 'src/utils/validators';
 import { Card, Flex, Heading, Label, Text } from 'theme-ui';
-
-import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);

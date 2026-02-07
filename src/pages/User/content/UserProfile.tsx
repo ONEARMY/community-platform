@@ -1,13 +1,13 @@
+import { MemberBadge, MemberHistory, Tab, TabPanel, Tabs, TabsList } from 'oa-components';
+import type { Profile, UserCreatedDocs } from 'oa-shared';
+import { PremiumTier } from 'oa-shared';
 import { useState } from 'react';
 import { useLocation } from 'react-router';
-import { MemberBadge, MemberHistory, Tab, TabPanel, Tabs, TabsList } from 'oa-components';
-import { PremiumTier } from 'oa-shared';
 import { PremiumTierWrapper } from 'src/common/PremiumTierWrapper';
 import { isPreciousPlastic } from 'src/config/config';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { isContactable } from 'src/utils/helpers';
 import { Alert, Box, Card, Flex } from 'theme-ui';
-
 import { Impact } from '../impact/Impact';
 import { heading } from '../impact/labels';
 import { ProfileContact } from './ProfileContact';
@@ -15,8 +15,6 @@ import { ProfileDetails } from './ProfileDetails';
 import { ProfileHeader } from './ProfileHeader';
 import { ProfileImage } from './ProfileImage';
 import UserCreatedDocuments from './UserCreatedDocuments';
-
-import type { Profile, UserCreatedDocs } from 'oa-shared';
 
 interface IProps {
   docs: UserCreatedDocs;

@@ -37,7 +37,9 @@ export const MapView = () => {
   };
 
   const isViewportGreaterThanTablet = window.innerWidth > 1024;
-  const mapCenter: LatLngExpression = mapState.location ? [mapState.location.lat, mapState.location.lng] : [0, 0];
+  const mapCenter: LatLngExpression = mapState.location
+    ? [mapState.location.lat, mapState.location.lng]
+    : [0, 0];
 
   return (
     <Map
@@ -67,7 +69,10 @@ export const MapView = () => {
           gap: 2,
         }}
       >
-        <ButtonZoomIn setCenter={(value) => mapState.setLocation(value)} setZoom={mapState.setZoom} />
+        <ButtonZoomIn
+          setCenter={(value) => mapState.setLocation(value)}
+          setZoom={mapState.setZoom}
+        />
       </Box>
 
       <Flex
@@ -98,7 +103,13 @@ export const MapView = () => {
           clusterGroupRef={clusterGroupRef}
         />
       )}
-      {mapState.selectedPin && <Popup activePin={mapState.selectedPin} mapRef={mapRef} onClose={() => mapState.selectPin(null)} />}
+      {mapState.selectedPin && (
+        <Popup
+          activePin={mapState.selectedPin}
+          mapRef={mapRef}
+          onClose={() => mapState.selectPin(null)}
+        />
+      )}
     </Map>
   );
 };

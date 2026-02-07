@@ -1,3 +1,5 @@
+import type { DBMapPin, DBProfile, UpsertPin } from 'oa-shared';
+import type { ActionFunctionArgs } from 'react-router';
 import { MapPinFactory } from 'src/factories/mapPinFactory.server';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -5,9 +7,6 @@ import { MapPinsServiceServer } from 'src/services/mapPinsService.server';
 import { MapServiceServer } from 'src/services/mapService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
-
-import type { DBMapPin, DBProfile, UpsertPin } from 'oa-shared';
-import type { ActionFunctionArgs } from 'react-router';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);

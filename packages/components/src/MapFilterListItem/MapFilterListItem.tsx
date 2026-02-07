@@ -1,6 +1,5 @@
-import { CardButton } from '../CardButton/CardButton';
-
 import type { ThemeUIStyleObject } from 'theme-ui';
+import { CardButton } from '../CardButton/CardButton';
 
 interface IProps {
   active: boolean;

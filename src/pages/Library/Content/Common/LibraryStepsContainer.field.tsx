@@ -1,6 +1,6 @@
-import { FieldArray } from 'react-final-form-arrays';
 import { animated, useTransition } from '@react-spring/web';
 import { Button } from 'oa-components';
+import { FieldArray } from 'react-final-form-arrays';
 import { LibraryStepField } from 'src/pages/Library/Content/Common/LibraryStep.field';
 import { COMPARISONS } from 'src/utils/comparisons';
 import { Box, Flex, Heading, Text } from 'theme-ui';

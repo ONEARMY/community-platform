@@ -1,6 +1,5 @@
-import { Card } from 'theme-ui';
-
 import type { BoxProps, ThemeUIStyleObject } from 'theme-ui';
+import { Card } from 'theme-ui';
 
 export interface IProps extends BoxProps {
   children: React.ReactNode;

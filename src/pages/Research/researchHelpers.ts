@@ -1,6 +1,5 @@
-import { UserRole } from 'oa-shared';
-
 import type { Author, DBProfile, ResearchItem, ResearchStatus, ResearchUpdate } from 'oa-shared';
+import { UserRole } from 'oa-shared';
 
 export const researchUpdateStatusFilter = (
   author: Author | null,

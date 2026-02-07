@@ -1,9 +1,7 @@
-import ReactGA from 'react-ga4';
-
-import { GoogleAnalytics } from './GoogleAnalytics';
-
 import type { SubscribableContentTypes } from 'oa-shared';
+import ReactGA from 'react-ga4';
 import type { UaEventOptions } from 'react-ga4/types/ga4';
+import { GoogleAnalytics } from './GoogleAnalytics';
 
 export type EventAction =
   | 'donationModalOpened'

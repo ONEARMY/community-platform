@@ -1,8 +1,6 @@
-import { Alert, Text } from 'theme-ui';
-
-import { guidance } from '../../labels';
-
 import type { Category } from 'oa-shared';
+import { Alert, Text } from 'theme-ui';
+import { guidance } from '../../labels';
 
 interface IProps {
   category?: Category;

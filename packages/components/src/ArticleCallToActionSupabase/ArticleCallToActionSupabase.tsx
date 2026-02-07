@@ -1,8 +1,6 @@
-import { Flex, Heading, Text } from 'theme-ui';
-
-import { Username } from '../Username/Username';
-
 import type { Author } from 'oa-shared';
+import { Flex, Heading, Text } from 'theme-ui';
+import { Username } from '../Username/Username';
 
 export interface IProps {
   author: Author;

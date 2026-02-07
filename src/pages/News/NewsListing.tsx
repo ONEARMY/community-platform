@@ -1,16 +1,14 @@
+import { Button, Loader } from 'oa-components';
+import type { News } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { Button, Loader } from 'oa-components';
 import { logger } from 'src/logger';
 import { newsContentService } from 'src/pages/News/newsContent.service';
 import { Flex, Heading } from 'theme-ui';
-
 import useDrafts from '../common/Drafts/useDraftsSupabase';
 import { listing } from './labels';
 import { NewsListHeader } from './NewsListHeader';
 import { NewsListItem } from './NewsListItem';
-
-import type { News } from 'oa-shared';
 import type { NewsSortOption } from './NewsSortOptions';
 
 export const NewsListing = () => {

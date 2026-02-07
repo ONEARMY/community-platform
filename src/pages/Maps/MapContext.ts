@@ -1,7 +1,6 @@
-import { createContext } from 'react';
-
 import type { LatLngBounds } from 'leaflet';
 import type { ILatLng, MapPin, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
+import { createContext } from 'react';
 import type { Map as MapType } from 'react-leaflet';
 
 export const MapContext = createContext<{

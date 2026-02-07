@@ -62,7 +62,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   if (data.user) {
-    const response = await authServiceServer.createUserProfile({ user: data.user, username }, client);
+    const response = await authServiceServer.createUserProfile(
+      { user: data.user, username },
+      client,
+    );
 
     // This will error if there is already a profile with this auth_id + tenant_id
     if (response.error) {
@@ -81,7 +84,9 @@ export default function Index() {
   const validationSchema = object({
     username: string().min(2, FRIENDLY_MESSAGES['sign-up/username-short']).required('Required'),
     email: string().email(FRIENDLY_MESSAGES['auth/invalid-email']).required('Required'),
-    password: string().min(6, FRIENDLY_MESSAGES['sign-up/password-short']).required(FRIENDLY_MESSAGES['sign-up/password-required']),
+    password: string()
+      .min(6, FRIENDLY_MESSAGES['sign-up/password-short'])
+      .required(FRIENDLY_MESSAGES['sign-up/password-required']),
     'confirm-password': string()
       .oneOf([ref('password'), ''], FRIENDLY_MESSAGES['sign-up/password-mismatch'])
       .required(FRIENDLY_MESSAGES['sign-up/email-required']),
@@ -109,7 +114,15 @@ export default function Index() {
           const disabled = invalid || submitting;
           return (
             <form method="post">
-              <Flex bg="inherit" px={2} sx={{ width: '100%' }} css={{ maxWidth: '620px' }} mx={'auto'} mt={[5, 10]} mb={3}>
+              <Flex
+                bg="inherit"
+                px={2}
+                sx={{ width: '100%' }}
+                css={{ maxWidth: '620px' }}
+                mx={'auto'}
+                mt={[5, 10]}
+                mb={3}
+              >
                 <Flex sx={{ flexDirection: 'column', width: '100%' }}>
                   <HeroBanner type="celebration" />
                   <Card sx={{ borderRadius: 3 }}>
@@ -214,13 +227,20 @@ export default function Index() {
                             alignItems: 'flex-start',
                           }}
                         >
-                          <Field data-cy="consent" name="consent" type="checkbox" component="input" validate={required} />
+                          <Field
+                            data-cy="consent"
+                            name="consent"
+                            type="checkbox"
+                            component="input"
+                            validate={required}
+                          />
                           <Text
                             sx={{
                               fontSize: 2,
                             }}
                           >
-                            I agree to the <ExternalLink href="/terms">Terms of Service</ExternalLink>
+                            I agree to the{' '}
+                            <ExternalLink href="/terms">Terms of Service</ExternalLink>
                             <span> and </span>
                             <ExternalLink href="/privacy">Privacy Policy</ExternalLink>
                           </Text>

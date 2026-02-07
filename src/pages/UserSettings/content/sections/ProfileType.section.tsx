@@ -1,13 +1,11 @@
-import { Field } from 'react-final-form';
 import { ExternalLink } from 'oa-components';
-import { buttons, fields, headings } from 'src/pages/UserSettings/labels';
-import { Box, Flex, Grid, Heading, Paragraph, Text, useThemeUI } from 'theme-ui';
-
-import { FlexSectionContainer } from '../elements';
-import { ProfileTypeRadioField } from '../fields/ProfileTypeRadio.field';
-
 import type { ProfileType } from 'oa-shared';
 import type { ThemeWithName } from 'oa-themes';
+import { Field } from 'react-final-form';
+import { buttons, fields, headings } from 'src/pages/UserSettings/labels';
+import { Box, Flex, Grid, Heading, Paragraph, Text, useThemeUI } from 'theme-ui';
+import { FlexSectionContainer } from '../elements';
+import { ProfileTypeRadioField } from '../fields/ProfileTypeRadio.field';
 
 type ProfileTypeSectionProps = {
   profileTypes: ProfileType[];

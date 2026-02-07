@@ -1,8 +1,7 @@
 import { ImageGallery } from 'oa-components';
+import type { Profile } from 'oa-shared';
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { AspectRatio, Box, Flex } from 'theme-ui';
-
-import type { Profile } from 'oa-shared';
 
 interface IProps {
   user: Profile;

@@ -1,5 +1,7 @@
-import { useLoaderData } from 'react-router';
+import type { Profile, UserCreatedDocs } from 'oa-shared';
 import { AuthorVotes } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { ProfilePage } from 'src/pages/User/content/ProfilePage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -9,9 +11,6 @@ import { questionServiceServer } from 'src/services/questionService.server';
 import { researchServiceServer } from 'src/services/researchService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { Text } from 'theme-ui';
-
-import type { Profile, UserCreatedDocs } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);

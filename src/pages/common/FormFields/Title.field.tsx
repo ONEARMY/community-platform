@@ -1,5 +1,5 @@
-import { Field } from 'react-final-form';
 import { FieldInput } from 'oa-components';
+import { Field } from 'react-final-form';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { NEWS_MAX_TITLE_LENGTH, NEWS_MIN_TITLE_LENGTH } from 'src/pages/News/constants';
 

@@ -1,5 +1,11 @@
 import { observer } from 'mobx-react';
-import { ArticleCallToActionSupabase, Button, ConfirmModal, UsefulStatsButton, UserEngagementWrapper } from 'oa-components';
+import {
+  ArticleCallToActionSupabase,
+  Button,
+  ConfirmModal,
+  UsefulStatsButton,
+  UserEngagementWrapper,
+} from 'oa-components';
 import type { ContentType, Project, ProjectStep } from 'oa-shared';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
@@ -75,7 +81,9 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
   };
 
   const isEditable = useMemo(() => {
-    return !!activeUser && (hasAdminRights(activeUser) || item.author?.username === activeUser.username);
+    return (
+      !!activeUser && (hasAdminRights(activeUser) || item.author?.username === activeUser.username)
+    );
   }, [activeUser, item.author]);
 
   return (
@@ -134,10 +142,14 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 type="button"
                 sx={{ fontSize: 2, justifyContent: 'center' }}
                 onClick={() => {
-                  document.querySelector('[data-target="create-comment-container"]')?.scrollIntoView({
-                    behavior: 'smooth',
-                  });
-                  (document.querySelector('[data-cy="comments-form"]') as HTMLTextAreaElement)?.focus();
+                  document
+                    .querySelector('[data-target="create-comment-container"]')
+                    ?.scrollIntoView({
+                      behavior: 'smooth',
+                    });
+                  (
+                    document.querySelector('[data-cy="comments-form"]') as HTMLTextAreaElement
+                  )?.focus();
 
                   return false;
                 }}
@@ -187,7 +199,11 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 mt: 5,
               }}
             >
-              <CommentSectionSupabase authors={item.author?.id ? [item.author?.id] : []} sourceId={item.id} sourceType="projects" />
+              <CommentSectionSupabase
+                authors={item.author?.id ? [item.author?.id] : []}
+                sourceId={item.id}
+                sourceType="projects"
+              />
             </Card>
           </UserEngagementWrapper>
         )}

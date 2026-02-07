@@ -1,16 +1,14 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
-import { Box, Flex } from 'theme-ui';
-
-import { MapList } from './Content/MapView/MapList';
-import { MapView } from './Content/MapView/MapView';
-import { filterPins, sortPinsByBadgeThenLastActive } from './utils/pinUtils';
-import { mapPinService } from './map.service';
-import { MapContext } from './MapContext';
-
 import type { LatLngBounds, Marker } from 'leaflet';
 import type { ILatLng, MapPin, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
+import { useEffect, useMemo, useState } from 'react';
 import type { Map as MapType } from 'react-leaflet';
+import { useLocation, useNavigate } from 'react-router';
+import { Box, Flex } from 'theme-ui';
+import { MapList } from './Content/MapView/MapList';
+import { MapView } from './Content/MapView/MapView';
+import { MapContext } from './MapContext';
+import { mapPinService } from './map.service';
+import { filterPins, sortPinsByBadgeThenLastActive } from './utils/pinUtils';
 
 import './styles.css';
 

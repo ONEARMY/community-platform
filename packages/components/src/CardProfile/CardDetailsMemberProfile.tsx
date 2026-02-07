@@ -1,11 +1,9 @@
+import type { PinProfile } from 'oa-shared';
 import { Avatar, Box, Flex } from 'theme-ui';
-
 import defaultProfileImage from '../../assets/images/default_member.svg';
 import { MemberBadge } from '../MemberBadge/MemberBadge';
 import { ProfileTagsList } from '../ProfileTagsList/ProfileTagsList';
 import { Username } from '../Username/Username';
-
-import type { PinProfile } from 'oa-shared';
 
 interface IProps {
   profile: PinProfile;

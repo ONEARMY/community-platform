@@ -1,5 +1,5 @@
-export * from './models';
 export * from './messages';
+export * from './models';
 export * from './theme';
 export * from './utils';
 

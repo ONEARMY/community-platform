@@ -171,7 +171,9 @@ export const ProfileStoreProvider = ({ children }: { children: React.ReactNode }
     profileStore.initUpgradeBadges();
   }, []);
 
-  return <ProfileStoreContext.Provider value={profileStore}>{children}</ProfileStoreContext.Provider>;
+  return (
+    <ProfileStoreContext.Provider value={profileStore}>{children}</ProfileStoreContext.Provider>
+  );
 };
 
 export const useProfileStore = () => {

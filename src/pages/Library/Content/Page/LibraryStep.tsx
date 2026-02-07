@@ -74,9 +74,13 @@ const Step = (props: IProps) => {
             </Flex>
             <Box sx={{ width: ['100%', '100%', `${(1 / 2) * 100}%`] }}>
               {step.videoUrl ? (
-                <ClientOnly fallback={<></>}>{() => <VideoPlayer videoUrl={step.videoUrl!} />}</ClientOnly>
+                <ClientOnly fallback={<></>}>
+                  {() => <VideoPlayer videoUrl={step.videoUrl!} />}
+                </ClientOnly>
               ) : step.images ? (
-                <ImageGallery images={formatImagesForGallery(step.images, `Step ${displayNumber}`) as any} />
+                <ImageGallery
+                  images={formatImagesForGallery(step.images, `Step ${displayNumber}`) as any}
+                />
               ) : null}
             </Box>
           </Flex>

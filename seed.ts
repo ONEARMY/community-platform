@@ -1,12 +1,3 @@
-import { createSeedClient } from '@snaplet/seed';
-
-// import * as allData from 'oa-shared/mocks/data'
-import libraryJson from './.snaplet/library.json';
-import questionsJson from './.snaplet/questions.json';
-import { profilesSeed } from './seed/profilesSeed';
-import { usersSeed } from './seed/usersSeed';
-import { convertToSlug } from './src/utils/slug';
-
 import type {
   categoriesChildInputs,
   categoriesScalars,
@@ -30,6 +21,13 @@ import type {
   useful_votesChildInputs,
   useful_votesScalars,
 } from '@snaplet/seed';
+import { createSeedClient } from '@snaplet/seed';
+// import * as allData from 'oa-shared/mocks/data'
+import libraryJson from './.snaplet/library.json';
+import questionsJson from './.snaplet/questions.json';
+import { profilesSeed } from './seed/profilesSeed';
+import { usersSeed } from './seed/usersSeed';
+import { convertToSlug } from './src/utils/slug';
 
 const tenant_id = `precious-plastic`;
 

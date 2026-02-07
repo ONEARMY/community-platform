@@ -1,21 +1,19 @@
-import { Field } from 'react-final-form';
 import { getCountryDataList, getEmojiFlag } from 'countries-list';
 import { observer } from 'mobx-react';
 import { FieldInput, FieldTextarea, Username } from 'oa-components';
+import type { ProfileFormData } from 'oa-shared';
+import { Field } from 'react-final-form';
 import { SelectField } from 'src/common/Form/Select.field';
 import { fields, headings } from 'src/pages/UserSettings/labels';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { required, validateUrl } from 'src/utils/validators';
 import { Flex, Heading, Text } from 'theme-ui';
-
 import {
   GROUP_PROFILE_DESCRIPTION_MAX_LENGTH,
   MEMBER_PROFILE_DESCRIPTION_MAX_LENGTH,
 } from '../../constants';
 import { FlexSectionContainer } from '../elements';
 import { ProfileTags } from './ProfileTags.section';
-
-import type { ProfileFormData } from 'oa-shared';
 
 const countryOptions = getCountryDataList().map((country) => ({
   label: `${getEmojiFlag(country.iso2)} ${country.native}`,

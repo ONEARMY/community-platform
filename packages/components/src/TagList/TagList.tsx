@@ -1,8 +1,6 @@
 import { Flex } from 'theme-ui';
-
-import { Tag } from '../Tag/Tag';
-
 import type { ITag } from '../Tag/Tag';
+import { Tag } from '../Tag/Tag';
 
 export interface TagListProps {}
 

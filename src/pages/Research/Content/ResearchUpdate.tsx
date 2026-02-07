@@ -1,4 +1,12 @@
-import { AuthorDisplay, Button, DisplayDate, ImageGallery, LinkifyText, Tooltip, VideoPlayer } from 'oa-components';
+import {
+  AuthorDisplay,
+  Button,
+  DisplayDate,
+  ImageGallery,
+  LinkifyText,
+  Tooltip,
+  VideoPlayer,
+} from 'oa-components';
 import type { ResearchItem, ResearchUpdate as ResearchUpdateModel } from 'oa-shared';
 import { useMemo } from 'react';
 import { Link } from 'react-router';
@@ -128,7 +136,11 @@ const ResearchUpdate = (props: IProps) => {
 
                 {update.modifiedAt !== update.createdAt && (
                   <Text variant="auxiliary">
-                    <DisplayDate createdAt={update.createdAt} modifiedAt={update.modifiedAt} action="Updated" />
+                    <DisplayDate
+                      createdAt={update.createdAt}
+                      modifiedAt={update.modifiedAt}
+                      action="Updated"
+                    />
                   </Text>
                 )}
               </Flex>
@@ -141,14 +153,27 @@ const ResearchUpdate = (props: IProps) => {
             </Flex>
 
             <Box sx={{ width: '100%' }}>
-              {update.videoUrl && <ClientOnly fallback={<></>}>{() => <VideoPlayer videoUrl={update.videoUrl!} />}</ClientOnly>}
-              {update.images && <ImageGallery images={formatImagesForGallery(update.images) as any} allowPortrait={true} />}
+              {update.videoUrl && (
+                <ClientOnly fallback={<></>}>
+                  {() => <VideoPlayer videoUrl={update.videoUrl!} />}
+                </ClientOnly>
+              )}
+              {update.images && (
+                <ImageGallery
+                  images={formatImagesForGallery(update.images) as any}
+                  allowPortrait={true}
+                />
+              )}
             </Box>
             <Flex className="file-container" sx={{ flexDirection: 'column', px: 4, mt: 3 }}>
               <DownloadWrapper
                 contentType="research"
                 fileDownloadCount={update.fileDownloadCount}
-                fileLink={update.hasFileLink ? `/api/documents/research_update/${update.id}/link` : undefined}
+                fileLink={
+                  update.hasFileLink
+                    ? `/api/documents/research_update/${update.id}/link`
+                    : undefined
+                }
                 files={update.files?.map((x) => ({
                   id: x.id,
                   name: x.name,
@@ -159,7 +184,14 @@ const ResearchUpdate = (props: IProps) => {
             </Flex>
             {!update.isDraft && (
               <ClientOnly fallback={<></>}>
-                {() => <CollapsableCommentSection authors={authorIds} open={false} total={update.commentCount} researchUpdate={update} />}
+                {() => (
+                  <CollapsableCommentSection
+                    authors={authorIds}
+                    open={false}
+                    total={update.commentCount}
+                    researchUpdate={update}
+                  />
+                )}
               </ClientOnly>
             )}
           </Card>

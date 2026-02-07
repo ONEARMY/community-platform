@@ -1,10 +1,8 @@
+import type { IImpactDataField } from 'oa-shared';
 import { impactQuestions } from 'src/pages/UserSettings/content/impactQuestions';
 import { numberWithCommas } from 'src/utils/helpers';
 import { Flex, Text } from 'theme-ui';
-
 import { ImpactIcon } from './ImpactIcon';
-
-import type { IImpactDataField } from 'oa-shared';
 
 interface Props {
   field: IImpactDataField;

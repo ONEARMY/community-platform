@@ -36,7 +36,10 @@ const composeValidators =
   async (value) => {
     const allResponse = await Promise.all(validators.map((validator) => validator(value)));
 
-    return allResponse.reduce((message, value) => (typeof value === 'string' ? (message += value + '. ') : message), '');
+    return allResponse.reduce(
+      (message, value) => (typeof value === 'string' ? (message += value + '. ') : message),
+      '',
+    );
   };
 
 const validateUrl = (value: any) => {
@@ -94,7 +97,8 @@ const addProtocolMutator = ([name], state, { changeValue }) => {
  * Used for user input links, ensure url has http/https protocol as required for external linking,
  * E.g. https://instagram.com/my-username
  */
-const ensureExternalUrl = (url: string) => (typeof url === 'string' && url.indexOf('://') === -1 ? `https://${url}` : url);
+const ensureExternalUrl = (url: string) =>
+  typeof url === 'string' && url.indexOf('://') === -1 ? `https://${url}` : url;
 
 export {
   validateUrl,

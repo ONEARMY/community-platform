@@ -1,7 +1,10 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
+import type { DBProfile, DBQuestion, Moderation } from 'oa-shared';
 import { Question } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/Question/constants';
+import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { discordServiceServer } from 'src/services/discordService.server';
@@ -10,10 +13,6 @@ import { subscribersServiceServer } from 'src/services/subscribersService.server
 import { updateUserActivity } from 'src/utils/activity.server';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImages } from 'src/utils/storage';
-
-import type { DBProfile, DBQuestion, Moderation } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
-import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions';
 
 export const loader = async ({ request }) => {
   const url = new URL(request.url);

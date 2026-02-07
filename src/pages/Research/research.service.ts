@@ -1,6 +1,3 @@
-import { logger } from 'src/logger';
-import { getCleanFileName } from 'src/utils/storage';
-
 import type {
   IConvertedFileMeta,
   ResearchFormData,
@@ -9,6 +6,8 @@ import type {
   ResearchUpdate,
   ResearchUpdateFormData,
 } from 'oa-shared';
+import { logger } from 'src/logger';
+import { getCleanFileName } from 'src/utils/storage';
 import type { ResearchSortOption } from './ResearchSortOptions';
 
 const search = async (

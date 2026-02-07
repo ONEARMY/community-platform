@@ -86,7 +86,9 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
             </Paragraph>
           )}
 
-          {visitorPolicy && <VisitorModal show={showVisitorModal} hide={hideVisitorDetails} user={profile} />}
+          {visitorPolicy && (
+            <VisitorModal show={showVisitorModal} hide={hideVisitorDetails} user={profile} />
+          )}
         </Flex>
         <Divider
           sx={{

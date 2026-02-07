@@ -59,7 +59,9 @@ const AnimationContainer = (props: any) => {
     config: { duration: 250 },
   });
 
-  return <animated.div style={{ position: 'relative', ...springStyle }}>{props.children}</animated.div>;
+  return (
+    <animated.div style={{ position: 'relative', ...springStyle }}>{props.children}</animated.div>
+  );
 };
 
 const Header = observer(() => {
@@ -71,7 +73,9 @@ const Header = observer(() => {
   const [isVisible, setIsVisible] = useState(false);
 
   // New notifications states
-  const [notificationsSupabase, setNotificationsSupabase] = useState<NotificationDisplay[] | null>(null);
+  const [notificationsSupabase, setNotificationsSupabase] = useState<NotificationDisplay[] | null>(
+    null,
+  );
   const [isUpdatingNotifications, setIsUpdatingNotifications] = useState<boolean>(true);
 
   const updateNotifications = async () => {
@@ -149,7 +153,9 @@ const Header = observer(() => {
           >
             <MenuDesktop />
             {isLoggedIn && <NotificationsSupabase device="desktop" />}
-            {isModuleSupported(env?.VITE_SUPPORTED_MODULES || '', MODULE.USER) && <Profile isMobile={false} />}
+            {isModuleSupported(env?.VITE_SUPPORTED_MODULES || '', MODULE.USER) && (
+              <Profile isMobile={false} />
+            )}
           </Flex>
           <ClientOnly fallback={<></>}>
             {() => (

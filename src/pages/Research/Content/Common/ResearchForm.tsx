@@ -41,7 +41,9 @@ const ResearchForm = ({ research }: IProps) => {
               label: research.category.name,
             }
           : undefined,
-        collaborators: Array.isArray(research?.collaboratorsUsernames) ? research.collaboratorsUsernames : [],
+        collaborators: Array.isArray(research?.collaboratorsUsernames)
+          ? research.collaboratorsUsernames
+          : [],
         tags: research?.tagIds || [],
         existingImage: research?.image,
         image: undefined,
@@ -103,7 +105,16 @@ const ResearchForm = ({ research }: IProps) => {
         return errors;
       }}
       validateOnBlur
-      render={({ errors, dirty, handleSubmit, hasValidationErrors, submitFailed, submitting, submitSucceeded, values }) => {
+      render={({
+        errors,
+        dirty,
+        handleSubmit,
+        hasValidationErrors,
+        submitFailed,
+        submitting,
+        submitSucceeded,
+        values,
+      }) => {
         const errorsClientSide = [errorSet(errors, overview)];
 
         const handleSubmitDraft = async (e: React.MouseEvent) => {
@@ -116,7 +127,9 @@ const ResearchForm = ({ research }: IProps) => {
             {research?.id && (
               <Button
                 data-cy="draft"
-                onClick={() => updateStatus(research?.status === 'complete' ? 'in-progress' : 'complete')}
+                onClick={() =>
+                  updateStatus(research?.status === 'complete' ? 'in-progress' : 'complete')
+                }
                 variant={research?.status === 'complete' ? 'info' : 'success'}
                 type="submit"
                 disabled={!research?.id}
@@ -125,7 +138,9 @@ const ResearchForm = ({ research }: IProps) => {
                   display: 'block',
                 }}
               >
-                <span>{research?.status === 'complete' ? buttons.markInProgress : buttons.markCompleted}</span>
+                <span>
+                  {research?.status === 'complete' ? buttons.markInProgress : buttons.markCompleted}
+                </span>
               </Button>
             )}
 
@@ -147,7 +162,9 @@ const ResearchForm = ({ research }: IProps) => {
           </>
         );
 
-        const unsavedChangesDialog = <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />;
+        const unsavedChangesDialog = (
+          <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />
+        );
 
         return (
           <FormWrapper

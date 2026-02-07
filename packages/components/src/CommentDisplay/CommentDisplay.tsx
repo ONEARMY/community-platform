@@ -1,6 +1,8 @@
+import type { Comment } from 'oa-shared';
+import type { ReactNode } from 'react';
 import { useContext } from 'react';
+import type { ThemeUIStyleObject } from 'theme-ui';
 import { Box, Flex, Text } from 'theme-ui';
-
 import { ActionSet } from '../ActionSet/ActionSet';
 import { Button } from '../Button/Button';
 import { CommentAvatar } from '../CommentAvatar/CommentAvatar';
@@ -9,10 +11,6 @@ import { DisplayDate } from '../DisplayDate/DisplayDate';
 import { AuthorsContext } from '../providers/AuthorsContext';
 import { UsefulButtonLite } from '../UsefulStatsButton/UsefulButtonLite';
 import { Username } from '../Username/Username';
-
-import type { Comment } from 'oa-shared';
-import type { ReactNode } from 'react';
-import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface IProps {
   comment: Comment;

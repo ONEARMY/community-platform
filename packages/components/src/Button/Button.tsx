@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { Button as ThemeUiButton, Flex, Text } from 'theme-ui';
-
-import { Icon } from '../Icon/Icon';
-
 import type { ButtonProps as ThemeUiButtonProps } from 'theme-ui';
+import { Flex, Text, Button as ThemeUiButton } from 'theme-ui';
+import { Icon } from '../Icon/Icon';
 import type { IGlyphs } from '../Icon/types';
 
 // extend to allow any default button props (e.g. onClick) to also be passed

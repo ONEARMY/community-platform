@@ -1,13 +1,15 @@
+import { observer } from 'mobx-react';
+import type { IImpactDataField, IImpactYear } from 'oa-shared';
 import { useEffect, useRef, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useLocation } from 'react-router';
-import { observer } from 'mobx-react';
 import { UserContactError } from 'src/pages/User/contact';
+import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
 import { form } from 'src/pages/UserSettings/labels';
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
+import type { ThemeUIStyleObject } from 'theme-ui';
 import { Flex, Heading, Text } from 'theme-ui';
-
 import {
   sortImpactYearDisplayFields,
   transformImpactData,
@@ -15,10 +17,6 @@ import {
 } from '../../utils';
 import { ImpactYearField } from '../fields/ImpactYear.field';
 import { ImpactYearDisplayField } from '../fields/ImpactYearDisplay.field';
-
-import type { IImpactDataField, IImpactYear } from 'oa-shared';
-import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
-import type { ThemeUIStyleObject } from 'theme-ui';
 
 interface Props {
   year: IImpactYear;

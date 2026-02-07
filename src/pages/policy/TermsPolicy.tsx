@@ -1,5 +1,5 @@
-import * as React from 'react';
 import { ExternalLink } from 'oa-components';
+import * as React from 'react';
 
 const TermsPolicy = () => {
   return (

@@ -1,13 +1,11 @@
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBNotification, SubscribedUser } from 'oa-shared';
 import { createElement } from 'react';
 import { sendBatchEmails } from 'src/.server/resend';
 import { InstantNotificationEmail } from 'src/.server/templates/instant-notification-email';
 import { transformNotification } from 'src/routes/api.notifications';
 import { tokens } from 'src/utils/tokens.server';
-
 import { TenantSettingsService } from './tenantSettingsService.server';
-
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBNotification, SubscribedUser } from 'oa-shared';
 
 const sendInstantNotificationEmails = async (
   client: SupabaseClient,

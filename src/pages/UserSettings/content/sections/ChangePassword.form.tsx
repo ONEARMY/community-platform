@@ -1,16 +1,14 @@
-import { useState } from 'react';
-import { Form } from 'react-final-form';
 import { Accordion, Button, FieldInput } from 'oa-components';
 import { FRIENDLY_MESSAGES } from 'oa-shared';
+import { useState } from 'react';
+import { Form } from 'react-final-form';
 import { PasswordField } from 'src/common/Form/PasswordField';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
+import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
 import { UserContactError } from 'src/pages/User/contact/UserContactError';
 import { buttons, fields } from 'src/pages/UserSettings/labels';
 import { Flex } from 'theme-ui';
-
 import { accountService } from '../../services/account.service';
-
-import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
 
 interface IFormValues {
   oldPassword: string;

@@ -1,6 +1,5 @@
-import { styles } from './styles';
-
 import type { PlatformTheme } from '../types';
+import { styles } from './styles';
 
 export const Theme: PlatformTheme = {
   id: 'precious-plastic',

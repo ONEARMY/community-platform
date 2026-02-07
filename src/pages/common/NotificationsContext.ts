@@ -1,6 +1,5 @@
-import { createContext } from 'react';
-
 import type { NotificationDisplay } from 'oa-shared';
+import { createContext } from 'react';
 
 type INotificationsContext = {
   notifications: NotificationDisplay[] | null;

@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
 import { Button, Icon } from 'oa-components';
+import type { IPatreonUser } from 'oa-shared';
+import { useEffect, useState } from 'react';
 import { PATREON_CLIENT_ID } from 'src/config/config';
 import { patreonService } from 'src/services/patreonService';
 import { Flex, Heading, Image, Text } from 'theme-ui';
-
-import type { IPatreonUser } from 'oa-shared';
 
 export const HEADING = 'Patreon';
 export const SUCCESS_MESSAGE = 'Successfully linked Patreon account!';

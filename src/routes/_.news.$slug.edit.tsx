@@ -1,14 +1,13 @@
-import { redirect, useLoaderData } from 'react-router';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBNews } from 'oa-shared';
 import { News, UserRole } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
+import { redirect, useLoaderData } from 'react-router';
 import { NewsForm } from 'src/pages/News/Content/Common/NewsForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { newsServiceServer } from 'src/services/newsService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { tagsServiceServer } from 'src/services/tagsService.server';
-
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBNews } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);

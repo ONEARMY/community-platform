@@ -1,13 +1,11 @@
+import { DownloadButton, DownloadCounter, DownloadStaticFile, ExternalLink } from 'oa-components';
+import type { MediaFile } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { DownloadButton, DownloadCounter, DownloadStaticFile, ExternalLink } from 'oa-components';
 import { Button, Flex } from 'theme-ui';
-
 import { trackEvent } from './Analytics';
 import { DonationRequestModalContainer } from './DonationRequestModalContainer';
 import { UserAction } from './UserAction';
-
-import type { MediaFile } from 'oa-shared';
 
 interface IProps {
   contentType: 'research' | 'projects';

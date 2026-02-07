@@ -39,7 +39,10 @@ const ResearchDescription = (props: IProps) => {
   const { research, subscribersCount, votedUsefulCount, commentsCount, updatesCount } = props;
 
   const lastUpdated = useMemo(() => {
-    const dates = [research?.modifiedAt, ...(research?.updates?.map((update) => update?.modifiedAt) || [])]
+    const dates = [
+      research?.modifiedAt,
+      ...(research?.updates?.map((update) => update?.modifiedAt) || []),
+    ]
       .filter((date): date is Date => date !== null)
       .map((date) => new Date(date));
 
@@ -102,7 +105,11 @@ const ResearchDescription = (props: IProps) => {
             {research.isDraft && <DraftTag />}
 
             <Text variant="auxiliary">
-              <DisplayDate createdAt={research.createdAt} modifiedAt={lastUpdated.toISOString()} action="Started" />
+              <DisplayDate
+                createdAt={research.createdAt}
+                modifiedAt={lastUpdated.toISOString()}
+                action="Started"
+              />
             </Text>
 
             {research.category && <Category category={research.category} sx={{ fontSize: 2 }} />}
@@ -183,7 +190,12 @@ const ResearchDescription = (props: IProps) => {
               }),
               stat: subscribersCount || 0,
             },
-            createUsefulStatistic('research', research.id, votedUsefulCount || 0, userHasPremiumTier(props.activeUser, PremiumTier.ONE)),
+            createUsefulStatistic(
+              'research',
+              research.id,
+              votedUsefulCount || 0,
+              userHasPremiumTier(props.activeUser, PremiumTier.ONE),
+            ),
             {
               icon: 'comment-outline',
               label: buildStatisticsLabel({

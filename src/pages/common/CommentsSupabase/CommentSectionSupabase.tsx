@@ -1,18 +1,16 @@
-import { useEffect, useMemo, useState } from 'react';
 import { AuthorsContext, CommentsTitle } from 'oa-components';
+import type { DiscussionContentType, Reply } from 'oa-shared';
 import { Comment } from 'oa-shared';
+import type { Dispatch, SetStateAction } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FollowButtonAction } from 'src/common/FollowButtonAction';
 import { commentService } from 'src/services/commentService';
 import { subscribersService } from 'src/services/subscribersService';
 import { Box, Button, Flex } from 'theme-ui';
-
 import { CommentItemSupabase } from './CommentItemSupabase';
 import { CommentSort } from './CommentSort';
 import { CommentSortOption, CommentSortOptions } from './CommentSortOptions';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
-
-import type { DiscussionContentType, Reply } from 'oa-shared';
-import type { Dispatch, SetStateAction } from 'react';
 
 interface IProps {
   authors: Array<number>;

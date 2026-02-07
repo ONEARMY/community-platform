@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
 import { Select } from 'oa-components';
-import { profileTagsService } from 'src/services/profileTagsService';
-
-import { FieldContainer } from '../Form/FieldContainer';
-
 import type { ProfileCategory, ProfileTag } from 'oa-shared';
+import { useEffect, useState } from 'react';
 import type { FieldRenderProps } from 'react-final-form';
+import { profileTagsService } from 'src/services/profileTagsService';
+import { FieldContainer } from '../Form/FieldContainer';
 
 export interface IProps extends Partial<FieldRenderProps<any, any>> {
   value: number[];

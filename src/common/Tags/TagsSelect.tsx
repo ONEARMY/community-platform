@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
 import { Select } from 'oa-components';
-import { tagsService } from 'src/services/tagsService';
-
-import { FieldContainer } from '../Form/FieldContainer';
-
 import type { Tag } from 'oa-shared';
+import { useEffect, useState } from 'react';
 import type { FieldRenderProps } from 'react-final-form';
+import { tagsService } from 'src/services/tagsService';
+import { FieldContainer } from '../Form/FieldContainer';
 
 // we include props from react-final-form fields so it can be used as a custom field component
 export interface IProps extends Partial<FieldRenderProps<any, any>> {

@@ -1,5 +1,5 @@
-import { Link } from 'react-router';
 import { IconCountWithTooltip } from 'oa-components';
+import { Link } from 'react-router';
 import { Flex, Text } from 'theme-ui';
 
 interface IProps {

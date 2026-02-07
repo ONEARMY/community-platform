@@ -1,7 +1,9 @@
+import type { Question, QuestionFormData } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
+import type { MainFormAction } from 'src/common/Form/types';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { logger } from 'src/logger';
 import { CategoryField, TagsField, TitleField } from 'src/pages/common/FormFields';
@@ -15,11 +17,7 @@ import * as LABELS from 'src/pages/Question/labels';
 import { questionService } from 'src/services/questionService';
 import { fireConfetti } from 'src/utils/fireConfetti';
 import { composeValidators, endsWithQuestionMark, minValue, required } from 'src/utils/validators';
-
 import { QUESTION_MAX_IMAGES, QUESTION_MIN_TITLE_LENGTH } from '../../constants';
-
-import type { Question, QuestionFormData } from 'oa-shared';
-import type { MainFormAction } from 'src/common/Form/types';
 
 interface IProps {
   'data-testid'?: string;

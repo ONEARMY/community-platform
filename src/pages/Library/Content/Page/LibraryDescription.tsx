@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import {
   AuthorDisplay,
   Category,
@@ -9,7 +8,9 @@ import {
   TagList,
   UsefulStatsButton,
 } from 'oa-components';
+import type { Profile, Project } from 'oa-shared';
 import { DifficultyLevelRecord, PremiumTier } from 'oa-shared';
+import { useMemo } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg';
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg';
@@ -18,8 +19,6 @@ import { userHasPremiumTier } from 'src/common/PremiumTierWrapper';
 import { buildStatisticsLabel, capitalizeFirstLetter, hasAdminRights } from 'src/utils/helpers';
 import { createUsefulStatistic } from 'src/utils/statistics';
 import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui';
-
-import type { Profile, Project } from 'oa-shared';
 
 interface IProps {
   commentsCount: number;

@@ -1,6 +1,5 @@
-import { TenantSettings } from 'oa-shared';
-
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { TenantSettings } from 'oa-shared';
 
 export class TenantSettingsService {
   constructor(private client: SupabaseClient) {}

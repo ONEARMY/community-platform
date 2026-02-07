@@ -1,5 +1,5 @@
-import { Field } from 'react-final-form';
 import { FieldTextarea } from 'oa-components';
+import { Field } from 'react-final-form';
 import { MESSAGE_MAX_CHARACTERS, MESSAGE_MIN_CHARACTERS } from 'src/pages/User/constants';
 import { contact } from 'src/pages/User/labels';
 import { required } from 'src/utils/validators';

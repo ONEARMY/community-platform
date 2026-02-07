@@ -1,11 +1,10 @@
+import type { DBProject } from 'oa-shared';
 import { Project } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
-
-import type { DBProject } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);

@@ -1,5 +1,5 @@
-import { Form } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
+import { Form } from 'react-final-form';
 import { vi } from 'vitest';
 
 import { FactoryUser } from '../factories/User';

@@ -1,15 +1,13 @@
+import type { Image } from 'oa-shared';
 import { useMemo, useRef, useState } from 'react';
 import Dropzone from 'react-dropzone-esm';
+import type { ThemeUIStyleObject } from 'theme-ui';
 import { Box, Flex, Image as ImageComponent, Text } from 'theme-ui';
-
 import { Button } from '../Button/Button';
 import { Modal } from '../Modal/Modal';
 import { ImageInputDeleteImage } from './ImageInputDeleteImage';
 import { ImageInputWrapper } from './ImageInputWrapper';
 import { imageValid } from './imageValid';
-
-import type { Image } from 'oa-shared';
-import type { ThemeUIStyleObject } from 'theme-ui';
 
 interface IProps {
   onFilesChange: (fileMeta: File | undefined) => void;

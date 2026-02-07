@@ -1,10 +1,8 @@
-import { ProfileList } from 'oa-components';
-import { usefulService } from 'src/services/usefulService';
-
-import { buildStatisticsLabel } from './helpers';
-
 import type { IStatistic } from 'oa-components';
+import { ProfileList } from 'oa-components';
 import type { ContentType, ProfileListItem } from 'oa-shared';
+import { usefulService } from 'src/services/usefulService';
+import { buildStatisticsLabel } from './helpers';
 
 export function createUsefulStatistic(
   contentType: ContentType,

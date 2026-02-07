@@ -1,6 +1,5 @@
-import { logger } from 'src/logger';
-
 import type { Profile } from 'oa-shared';
+import { logger } from 'src/logger';
 
 const search = async (q: string) => {
   try {

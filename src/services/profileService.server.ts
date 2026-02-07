@@ -1,10 +1,8 @@
-import { ProfileFactory } from 'src/factories/profileFactory.server';
-
-import { ImageServiceServer } from './imageService.server';
-import { ProfileTypesServiceServer } from './profileTypesService.server';
-
 import type { SupabaseClient, User } from '@supabase/supabase-js';
 import type { DBAuthorVotes, DBMedia, DBProfile, ProfileFormData, ProfileType } from 'oa-shared';
+import { ProfileFactory } from 'src/factories/profileFactory.server';
+import { ImageServiceServer } from './imageService.server';
+import { ProfileTypesServiceServer } from './profileTypesService.server';
 
 export class ProfileServiceServer {
   constructor(private client: SupabaseClient) {}

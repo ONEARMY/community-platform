@@ -1,14 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Meta, UppyFile } from '@uppy/core';
 import Uppy from '@uppy/core';
 import DashboardModal from '@uppy/react/dashboard-modal';
 import { Button } from 'oa-components';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Flex } from 'theme-ui';
-
 import { FileDisplay } from './FileDisplay';
 import { UPPY_CONFIG } from './UppyConfig';
 import { UPPY_CONFIG_ADMIN } from './UppyConfigAdmin';
-
-import type { Meta, UppyFile } from '@uppy/core';
 
 type FileType = UppyFile<Meta, Record<string, never>>;
 

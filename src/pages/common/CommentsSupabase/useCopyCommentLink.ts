@@ -1,7 +1,6 @@
+import type { Comment, Reply } from 'oa-shared';
 import { useCallback } from 'react';
 import { useLocation } from 'react-router';
-
-import type { Comment, Reply } from 'oa-shared';
 
 export const useCopyCommentLink = (comment: Comment | Reply) => {
   const location = useLocation();

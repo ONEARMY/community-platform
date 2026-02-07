@@ -1,10 +1,8 @@
 import { Button, ElWithBeforeIcon, Loader } from 'oa-components';
+import type { ContentFormType } from 'oa-shared';
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg';
 import { Box, Card, Flex, Heading } from 'theme-ui';
-
 import { ErrorsContainer } from './ErrorsContainer';
-
-import type { ContentFormType } from 'oa-shared';
 import type { IErrorsListSet } from './types';
 
 interface IProps {

@@ -1,9 +1,8 @@
-import { Notification, NotificationDisplay } from 'oa-shared';
-import { createSupabaseServerClient } from 'src/repository/supabase.server';
-
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBNotification } from 'oa-shared';
+import { Notification, NotificationDisplay } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
 const transformNotificationList = async (
   dbNotifications: DBNotification[],

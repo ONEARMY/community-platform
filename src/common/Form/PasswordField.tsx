@@ -1,6 +1,6 @@
+import { Icon } from 'oa-components';
 import { useState } from 'react';
 import { Field } from 'react-final-form';
-import { Icon } from 'oa-components';
 
 export const PasswordField = ({ name, component, ...rest }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);

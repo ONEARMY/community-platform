@@ -1,6 +1,5 @@
-import { logger } from 'src/logger';
-
 import type { UpgradeBadge } from 'oa-shared';
+import { logger } from 'src/logger';
 
 const getUpgradeBadges = async () => {
   try {

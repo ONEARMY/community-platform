@@ -1,9 +1,7 @@
+import type { IUserImpact, Profile } from 'oa-shared';
 import { Flex } from 'theme-ui';
-
 import { IMPACT_YEARS } from './constants';
 import { ImpactItem } from './ImpactItem';
-
-import type { IUserImpact, Profile } from 'oa-shared';
 
 interface Props {
   impact: IUserImpact | undefined;

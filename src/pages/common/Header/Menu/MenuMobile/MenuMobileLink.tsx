@@ -1,6 +1,6 @@
+import styled from '@emotion/styled';
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router';
-import styled from '@emotion/styled';
 import MenuCurrent from 'src/assets/images/menu-current.svg';
 import { Box } from 'theme-ui';
 

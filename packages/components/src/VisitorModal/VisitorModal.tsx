@@ -1,12 +1,10 @@
+import type { Profile, UserVisitorPreferencePolicy } from 'oa-shared';
 import { Flex, Text } from 'theme-ui';
-
 import { iconMap } from '../Icon/svgs';
 import { Modal } from '../Modal/Modal';
+import type { DisplayData, HideProp } from './props';
 import { VisitorModalFooter } from './VisitorModalFooter';
 import { VisitorModalHeader } from './VisitorModalHeader';
-
-import type { Profile, UserVisitorPreferencePolicy } from 'oa-shared';
-import type { DisplayData, HideProp } from './props';
 
 export const visitorDisplayData = new Map<UserVisitorPreferencePolicy, DisplayData>([
   [

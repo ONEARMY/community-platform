@@ -1,13 +1,11 @@
+import type { NotificationDisplay } from 'oa-shared';
 import { useState } from 'react';
 import { Box, Flex, Heading } from 'theme-ui';
-
 import { Button } from '../Button/Button';
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon';
 import { InternalLink } from '../InternalLink/InternalLink';
 import { Loader } from '../Loader/Loader';
 import { NotificationItemSupabase } from '../NotificationItemSupabase/NotificationItemSupabase';
-
-import type { NotificationDisplay } from 'oa-shared';
 
 export interface IProps {
   isUpdatingNotifications: boolean;

@@ -1,8 +1,6 @@
-import { Box, Flex, Grid, Text } from 'theme-ui';
-
-import { Icon } from '../Icon/Icon';
-
 import type { ReactNode } from 'react';
+import { Box, Flex, Grid, Text } from 'theme-ui';
+import { Icon } from '../Icon/Icon';
 import type { availableGlyphs } from '../Icon/types';
 
 export interface GridFormFields {

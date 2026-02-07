@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
 import { Button } from 'oa-components';
+import { useEffect } from 'react';
 import { getProjectEmail } from 'src/utils/helpers';
 import { Box, Text } from 'theme-ui';
 

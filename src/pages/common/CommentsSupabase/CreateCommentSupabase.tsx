@@ -1,14 +1,13 @@
-import { useMemo, useState } from 'react';
 import { observer } from 'mobx-react';
 import { Button, CommentAvatar, MemberBadge, ReturnPathLink } from 'oa-components';
+import type { DiscussionContentType } from 'oa-shared';
+import type { ChangeEvent } from 'react';
+import { useMemo, useState } from 'react';
 import { UserAction } from 'src/common/UserAction';
 import { MAX_COMMENT_LENGTH } from 'src/constants';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { Box, Flex, Text, Textarea } from 'theme-ui';
-
-import type { DiscussionContentType } from 'oa-shared';
-import type { ChangeEvent } from 'react';
 import type { ThemeUIStyleObject } from 'theme-ui';
+import { Box, Flex, Text, Textarea } from 'theme-ui';
 
 import './CreateCommentSupabase.css';
 

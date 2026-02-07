@@ -1,5 +1,9 @@
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DBProfile, DBProject, DBProjectStep, Moderation } from 'oa-shared';
 import { Project, ProjectStep, UserRole } from 'oa-shared';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import type { LibrarySortOption } from 'src/pages/Library/Content/List/LibrarySortOptions';
 import { ITEMS_PER_PAGE } from 'src/pages/Library/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
@@ -9,11 +13,6 @@ import { subscribersServiceServer } from 'src/services/subscribersService.server
 import { updateUserActivity } from 'src/utils/activity.server';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImage } from 'src/utils/storage';
-
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBProfile, DBProject, DBProjectStep, Moderation } from 'oa-shared';
-import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import type { LibrarySortOption } from 'src/pages/Library/Content/List/LibrarySortOptions';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);

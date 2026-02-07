@@ -1,7 +1,6 @@
+import type { FilterResponse, MapPin } from 'oa-shared';
 import { createContext } from 'react';
 import { logger } from 'src/logger';
-
-import type { FilterResponse, MapPin } from 'oa-shared';
 
 export interface IMapPinService {
   getMapPins: () => Promise<MapPin[]>;

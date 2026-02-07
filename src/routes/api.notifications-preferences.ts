@@ -1,8 +1,7 @@
-import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { updateUserActivity } from 'src/utils/activity.server';
-
 import type { DBNotificationsPreferencesFields } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { updateUserActivity } from 'src/utils/activity.server';
 
 export const DEFAULT_NOTIFICATION_PREFERENCES: DBNotificationsPreferencesFields = {
   comments: true,

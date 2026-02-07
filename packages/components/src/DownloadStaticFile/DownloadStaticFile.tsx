@@ -1,12 +1,10 @@
+import type { MediaFile } from 'oa-shared';
 import { Flex, Text } from 'theme-ui';
-
 import { DownloadButton } from '../DownloadButton/DownloadButton';
 import { ExternalLink } from '../ExternalLink/ExternalLink';
 import { Icon } from '../Icon/Icon';
-import { Tooltip } from '../Tooltip/Tooltip';
-
-import type { MediaFile } from 'oa-shared';
 import type { availableGlyphs } from '../Icon/types';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 export interface IProps {
   file: MediaFile;

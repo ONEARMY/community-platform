@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useRef } from 'react';
-import PhotoSwipeLightbox from 'photoswipe/lightbox';
-
 import type { PhotoSwipeOptions } from 'photoswipe/lightbox';
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import { useCallback, useEffect, useRef } from 'react';
 
 import 'photoswipe/style.css';
 
@@ -68,11 +67,7 @@ export const usePhotoSwipeLightbox = ({
       if (window.location.hash) {
         originalHash = window.location.hash;
         // Remove hash completely to prevent any native scrolling
-        window.history.replaceState(
-          null,
-          '',
-          window.location.pathname + window.location.search,
-        );
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
 
         // Prevent any scroll restoration
         if ('scrollRestoration' in window.history) {

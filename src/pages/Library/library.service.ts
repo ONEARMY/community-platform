@@ -1,7 +1,6 @@
+import type { Project, ProjectFormData } from 'oa-shared';
 import { logger } from 'src/logger';
 import { getCleanFileName } from 'src/utils/storage';
-
-import type { Project, ProjectFormData } from 'oa-shared';
 import type { LibrarySortOption } from './Content/List/LibrarySortOptions';
 
 export enum LibrarySearchParams {

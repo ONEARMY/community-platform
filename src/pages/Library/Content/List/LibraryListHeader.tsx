@@ -1,20 +1,18 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router';
 import debounce from 'debounce';
 import { CategoryHorizonalList, ReturnPathLink, SearchField, Select, Tooltip } from 'oa-components';
+import type { Category } from 'oa-shared';
+import { useCallback, useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { UserAction } from 'src/common/UserAction';
 import DraftButton from 'src/pages/common/Drafts/DraftButton';
 import { ListHeader } from 'src/pages/common/Layout/ListHeader';
 import { categoryService } from 'src/services/categoryService';
 import { Button, Flex } from 'theme-ui';
-
 import { listing } from '../../labels';
 import { LibrarySearchParams } from '../../library.service';
-import { LibrarySortOptions } from './LibrarySortOptions';
-
-import type { Category } from 'oa-shared';
 import type { LibrarySortOption } from './LibrarySortOptions';
+import { LibrarySortOptions } from './LibrarySortOptions';
 
 interface IProps {
   itemCount?: number;

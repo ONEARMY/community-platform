@@ -1,5 +1,12 @@
 import { observer } from 'mobx-react';
-import { ArticleCallToActionSupabase, Button, ConfirmModal, FollowButton, UsefulStatsButton, UserEngagementWrapper } from 'oa-components';
+import {
+  ArticleCallToActionSupabase,
+  Button,
+  ConfirmModal,
+  FollowButton,
+  UsefulStatsButton,
+  UserEngagementWrapper,
+} from 'oa-components';
 import type { ContentType, ResearchItem } from 'oa-shared';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
@@ -109,11 +116,16 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
   }, [activeUser, research.author]);
 
   const isDeletable = useMemo(() => {
-    return !!activeUser && (hasAdminRights(activeUser) || research.author?.username === activeUser.username);
+    return (
+      !!activeUser &&
+      (hasAdminRights(activeUser) || research.author?.username === activeUser.username)
+    );
   }, [activeUser, research.author]);
 
   const sortedUpdates = useMemo(() => {
-    return research?.updates?.slice().sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    return research?.updates
+      ?.slice()
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   }, [research?.updates]);
 
   const handleDelete = async (research: ResearchItem) => {
@@ -212,7 +224,10 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
               }}
             >
               {research.author && (
-                <ArticleCallToActionSupabase author={research.author} contributors={research.collaborators}>
+                <ArticleCallToActionSupabase
+                  author={research.author}
+                  contributors={research.collaborators}
+                >
                   <UsefulStatsButton
                     isLoggedIn={!!activeUser}
                     hasUserVotedUseful={voted}

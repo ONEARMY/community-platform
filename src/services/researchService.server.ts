@@ -1,11 +1,9 @@
-import { Author, ResearchItem, UserRole } from 'oa-shared';
-import { IMAGE_SIZES } from 'src/config/imageTransforms';
-
-import { ProfileServiceServer } from './profileService.server';
-import { storageServiceServer } from './storageService.server';
-
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBAuthor, DBProfile, DBResearchItem, DBResearchUpdate } from 'oa-shared';
+import { Author, ResearchItem, UserRole } from 'oa-shared';
+import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { ProfileServiceServer } from './profileService.server';
+import { storageServiceServer } from './storageService.server';
 
 const getBySlug = async (client: SupabaseClient, slug: string) => {
   const { data, error } = await client

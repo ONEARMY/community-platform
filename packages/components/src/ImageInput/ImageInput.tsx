@@ -98,11 +98,20 @@ export const ImageInput = (props: IProps) => {
       >
         {({ getRootProps, getInputProps, rootRef }) => (
           <ImageInputWrapper {...getRootProps()} ref={rootRef} hasUploadedImg={showUploadedImg}>
-            <input ref={fileInputRef} data-testid={dataTestId || 'image-input'} {...getInputProps()} />
+            <input
+              ref={fileInputRef}
+              data-testid={dataTestId || 'image-input'}
+              {...getInputProps()}
+            />
 
             {showUploadedImg && <ImageComponent src={src} sx={imageDisplaySx} />}
 
-            {!showUploadedImg && <ImageConverterList inputFiles={inputFiles} handleConvertedFileChange={handleConvertedFileChange} />}
+            {!showUploadedImg && (
+              <ImageConverterList
+                inputFiles={inputFiles}
+                handleConvertedFileChange={handleConvertedFileChange}
+              />
+            )}
             {!hasImages && (
               <Button small variant="outline" icon="image" type="button">
                 Upload
@@ -145,7 +154,10 @@ export const ImageInput = (props: IProps) => {
             }}
           >
             <Text>The uploaded image appears to be corrupted or a type we don't accept.</Text>
-            <Text>Check your image is valid and one of the following formats: jpeg, jpg, png, gif, heic, svg or webp.</Text>
+            <Text>
+              Check your image is valid and one of the following formats: jpeg, jpg, png, gif, heic,
+              svg or webp.
+            </Text>
             <Button
               data-cy="ImageUploadError-Button"
               sx={{ marginTop: '20px', justifyContent: 'center' }}

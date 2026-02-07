@@ -1,9 +1,7 @@
+import type { ResearchUpdate } from 'oa-shared';
 import { useEffect, useMemo, useState } from 'react';
 import { Box, Button } from 'theme-ui';
-
 import { CommentSectionSupabase } from './CommentSectionSupabase';
-
-import type { ResearchUpdate } from 'oa-shared';
 
 type Props = {
   authors: number[];

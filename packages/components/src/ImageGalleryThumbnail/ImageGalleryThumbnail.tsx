@@ -1,10 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { Box, Image as ThemeImage } from 'theme-ui';
-
-import { Loader } from '../Loader/Loader';
-
+import React, { useEffect, useRef, useState } from 'react';
 import type { CardProps } from 'theme-ui';
+import { Box, Image as ThemeImage } from 'theme-ui';
+import { Loader } from '../Loader/Loader';
 
 import 'photoswipe/style.css';
 

@@ -32,7 +32,11 @@ export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
                   )
                 }
                 loggedOut={
-                  isUserProfileContactable ? <UserContactFormNotLoggedIn user={user} /> : <UserContactFormNotLoggedIn user={user} />
+                  isUserProfileContactable ? (
+                    <UserContactFormNotLoggedIn user={user} />
+                  ) : (
+                    <UserContactFormNotLoggedIn user={user} />
+                  )
                 }
               />
             )}

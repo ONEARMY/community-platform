@@ -1,9 +1,7 @@
+import type { ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Card, Flex } from 'theme-ui';
-
 import { Button } from '../Button/Button';
-
-import type { ReactNode } from 'react';
 
 interface IProps {
   children: ReactNode[];

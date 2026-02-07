@@ -1,13 +1,11 @@
-import { Link } from 'react-router';
 import { observer } from 'mobx-react';
 import { Button, ExternalLink } from 'oa-components';
+import type { IImpactDataField, IImpactYear, Profile } from 'oa-shared';
+import { Link } from 'react-router';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Flex, Text } from 'theme-ui';
-
 import { IMPACT_REPORT_LINKS } from './constants';
 import { invisible, missing, reportYearLabel } from './labels';
-
-import type { IImpactDataField, IImpactYear, Profile } from 'oa-shared';
 
 interface Props {
   fields: IImpactDataField[] | undefined;

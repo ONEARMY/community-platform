@@ -1,14 +1,12 @@
 import { countryToAlpha2 } from 'country-to-iso';
+import type { Author } from 'oa-shared';
+import type { HTMLAttributeAnchorTarget } from 'react';
+import type { ThemeUIStyleObject } from 'theme-ui';
 import { Flex, Text } from 'theme-ui';
-
 import flagUnknownSVG from '../../assets/icons/flag-unknown.svg';
 import { FlagIcon } from '../FlagIcon/FlagIcon';
 import { InternalLink } from '../InternalLink/InternalLink';
 import { UserBadge } from './UserBadge';
-
-import type { Author } from 'oa-shared';
-import type { HTMLAttributeAnchorTarget } from 'react';
-import type { ThemeUIStyleObject } from 'theme-ui';
 
 export interface IProps {
   user: Partial<Author>;

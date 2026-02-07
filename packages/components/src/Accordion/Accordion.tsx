@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { Flex, Heading, Text } from 'theme-ui';
-
-import { Icon } from '../Icon/Icon';
-
 import type { ThemeUIStyleObject } from 'theme-ui';
+import { Flex, Heading, Text } from 'theme-ui';
+import { Icon } from '../Icon/Icon';
 
 export interface IProps {
   children: React.ReactNode;

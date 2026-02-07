@@ -1,6 +1,5 @@
-import { Flex } from 'theme-ui';
-
 import type { FlexProps } from 'theme-ui';
+import { Flex } from 'theme-ui';
 
 interface ILayoutProps {
   ignoreMaxWidth?: boolean;

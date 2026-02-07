@@ -1,8 +1,6 @@
-import { Flex } from 'theme-ui';
-
-import { Icon } from '../Icon/Icon';
-
 import type { ThemeUIStyleObject } from 'theme-ui';
+import { Flex } from 'theme-ui';
+import { Icon } from '../Icon/Icon';
 import type { availableGlyphs } from '../Icon/types';
 
 import './styles.css';

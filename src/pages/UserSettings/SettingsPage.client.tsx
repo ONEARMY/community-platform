@@ -1,12 +1,12 @@
-import { useContext, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router';
 import { Tabs } from '@mui/base/Tabs';
 import { observer } from 'mobx-react';
+import type { availableGlyphs } from 'oa-components';
+import { useContext, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import { isPreciousPlastic } from 'src/config/config';
 import { isModuleSupported, MODULE } from 'src/modules';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Box, Flex, Text } from 'theme-ui';
-
 import { EnvironmentContext } from '../common/EnvironmentContext';
 import { SettingsFormTab } from './SettingsFormTab';
 import { SettingsFormTabList } from './SettingsFormTabList';
@@ -15,8 +15,6 @@ import { SettingsPageImpact } from './SettingsPageImpact';
 import { SettingsPageMapPin } from './SettingsPageMapPin';
 import { SettingsPageNotifications } from './SettingsPageNotifications';
 import { SettingsPageUserProfile } from './SettingsPageUserProfile';
-
-import type { availableGlyphs } from 'oa-components';
 import type { ISettingsTab } from './types';
 
 import '../../styles/leaflet.css';

@@ -21,7 +21,10 @@ export const ProfilePage = observer((props: IProps) => {
   const { profile, userCreatedDocs } = props;
   const { profile: activeUser, upgradeBadgeForCurrentUser } = useProfileStore();
 
-  const isViewingOwnProfile = useMemo(() => activeUser?.username === profile?.username, [activeUser?.username]);
+  const isViewingOwnProfile = useMemo(
+    () => activeUser?.username === profile?.username,
+    [activeUser?.username],
+  );
   const showMemberProfile = !profile?.type?.isSpace;
 
   const upgradeBadge = upgradeBadgeForCurrentUser;
@@ -94,7 +97,13 @@ export const ProfilePage = observer((props: IProps) => {
       </ClientOnly>
 
       <ClientOnly fallback={<></>}>
-        {() => <UserProfile user={profile} docs={userCreatedDocs} isViewingOwnProfile={isViewingOwnProfile} />}
+        {() => (
+          <UserProfile
+            user={profile}
+            docs={userCreatedDocs}
+            isViewingOwnProfile={isViewingOwnProfile}
+          />
+        )}
       </ClientOnly>
     </Flex>
   );

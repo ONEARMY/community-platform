@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import { Field } from 'react-final-form';
 import styled from '@emotion/styled';
 import {
   Button,
@@ -9,6 +7,9 @@ import {
   ImageInputWrapper,
   Modal,
 } from 'oa-components';
+import type { Image, IUploadedFileMeta } from 'oa-shared';
+import { useState } from 'react';
+import { Field } from 'react-final-form';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { ImageInputField } from 'src/common/Form/ImageInput.field';
 import { COMPARISONS } from 'src/utils/comparisons';
@@ -19,7 +20,6 @@ import {
   required,
 } from 'src/utils/validators';
 import { Card, Flex, Heading, Image as ImageComponent, Label, Text } from 'theme-ui';
-
 import {
   LIBRARY_MIN_REQUIRED_STEPS,
   LIBRARY_TITLE_MAX_LENGTH,
@@ -28,8 +28,6 @@ import {
   STEP_DESCRIPTION_MIN_LENGTH,
 } from '../../constants';
 import { buttons, errors, steps } from '../../labels';
-
-import type { Image, IUploadedFileMeta } from 'oa-shared';
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;

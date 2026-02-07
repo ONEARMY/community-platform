@@ -1,9 +1,8 @@
-import React from 'react';
 import { observer } from 'mobx-react';
-import { UserRole } from 'oa-shared';
-import { useProfileStore } from 'src/stores/Profile/profile.store';
-
 import type { PremiumTier, Profile } from 'oa-shared';
+import { UserRole } from 'oa-shared';
+import React from 'react';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
 
 interface IProps {
   children: React.ReactNode;

@@ -1,9 +1,8 @@
+import styled from '@emotion/styled';
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import styled from '@emotion/styled';
-import { Box } from 'theme-ui';
-
 import type { ThemeUIStyleObject } from 'theme-ui';
+import { Box } from 'theme-ui';
 
 export interface Props {
   isOpen: boolean;

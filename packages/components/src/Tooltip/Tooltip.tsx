@@ -1,5 +1,5 @@
-import { Tooltip as ReactTooltip } from 'react-tooltip';
 import styled from '@emotion/styled';
+import { Tooltip as ReactTooltip } from 'react-tooltip';
 
 const StyledTooltip = styled(ReactTooltip)`
   opacity: 1 !important;

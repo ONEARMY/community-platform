@@ -1,14 +1,12 @@
-import { renderToPipeableStream } from 'react-dom/server';
-import { ServerRouter } from 'react-router';
+import { PassThrough } from 'node:stream';
 import { CacheProvider } from '@emotion/react';
 import * as Sentry from '@sentry/react-router';
 import { isbot } from 'isbot';
-import { PassThrough } from 'node:stream';
-
+import { renderToPipeableStream } from 'react-dom/server';
+import type { EntryContext } from 'react-router';
+import { ServerRouter } from 'react-router';
 import { SENTRY_CONFIG } from './config/config';
 import { createEmotionCache } from './styles/createEmotionCache';
-
-import type { EntryContext } from 'react-router';
 
 const ABORT_DELAY = 5_000;
 

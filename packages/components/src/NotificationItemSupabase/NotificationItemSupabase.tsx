@@ -1,12 +1,10 @@
-import { Flex, Text } from 'theme-ui';
-
-import { DisplayDate } from '../DisplayDate/DisplayDate';
-import { Icon } from '../Icon/Icon';
-import { InternalLink } from '../InternalLink/InternalLink';
-
 import type { NotificationDisplay } from 'oa-shared';
 import type { ThemeUIStyleObject } from 'theme-ui';
+import { Flex, Text } from 'theme-ui';
+import { DisplayDate } from '../DisplayDate/DisplayDate';
+import { Icon } from '../Icon/Icon';
 import type { availableGlyphs } from '../Icon/types';
+import { InternalLink } from '../InternalLink/InternalLink';
 
 interface IProps {
   markRead: (id: number) => void;

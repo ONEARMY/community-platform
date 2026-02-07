@@ -1,17 +1,16 @@
 import { marked } from 'marked';
 
 import { processStandaloneYouTubeUrls, processYouTubeLinks } from '../utils/markdown';
-import { Author } from './author';
-import { Category } from './category';
-import { ProfileBadge } from './profileBadge';
-
 import type { DBAuthor } from './author';
+import { Author } from './author';
 import type { DBCategory } from './category';
+import { Category } from './category';
 import type { IConvertedFileMeta } from './common';
 import type { IContentDoc, IDBContentDoc } from './content';
 import type { DBMedia, Image } from './media';
 import type { SelectValue } from './other';
 import type { DBProfileBadge } from './profileBadge';
+import { ProfileBadge } from './profileBadge';
 import type { Tag } from './tag';
 
 export class DBNews implements IDBContentDoc {

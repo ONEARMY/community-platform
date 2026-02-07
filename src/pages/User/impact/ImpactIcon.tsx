@@ -1,7 +1,6 @@
 import { Icon } from 'oa-components';
-import { impactQuestions } from 'src/pages/UserSettings/content/impactQuestions';
-
 import type { IImpactDataField } from 'oa-shared';
+import { impactQuestions } from 'src/pages/UserSettings/content/impactQuestions';
 
 interface Props {
   id: IImpactDataField['id'];

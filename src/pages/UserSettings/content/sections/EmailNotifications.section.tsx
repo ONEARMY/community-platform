@@ -1,11 +1,10 @@
-import { useMemo } from 'react';
-import { Field } from 'react-final-form';
 import { observer } from 'mobx-react';
 import { Select } from 'oa-components';
-import { EmailNotificationFrequency } from 'oa-shared';
-import { FieldContainer } from 'src/common/Form/FieldContainer';
-
 import type { INotificationSettings } from 'oa-shared';
+import { EmailNotificationFrequency } from 'oa-shared';
+import { useMemo } from 'react';
+import { Field } from 'react-final-form';
+import { FieldContainer } from 'src/common/Form/FieldContainer';
 
 interface IProps {
   notificationSettings?: INotificationSettings;

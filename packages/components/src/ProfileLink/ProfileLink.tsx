@@ -1,9 +1,7 @@
+import type { ThemeUICSSObject } from 'theme-ui';
 import { Box, Flex } from 'theme-ui';
-
 import { ExternalLink } from '../ExternalLink/ExternalLink';
 import { Icon } from '../Icon/Icon';
-
-import type { ThemeUICSSObject } from 'theme-ui';
 
 export interface Props {
   url: string;

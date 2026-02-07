@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
 import { formatDistanceToNow } from 'date-fns';
+import { useMemo } from 'react';
 import { Divider, Flex, Text } from 'theme-ui';
 
 export interface IProps {

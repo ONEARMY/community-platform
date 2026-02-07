@@ -1,10 +1,9 @@
 import { observer } from 'mobx-react';
 import { Button, Icon } from 'oa-components';
+import type { IImpactDataField } from 'oa-shared';
 import { ImpactField } from 'src/pages/User/impact/ImpactField';
 import { buttons, missingData } from 'src/pages/UserSettings/labels';
 import { Box, Flex, Text } from 'theme-ui';
-
-import type { IImpactDataField } from 'oa-shared';
 
 interface Props {
   fields: IImpactDataField[] | undefined;

@@ -1,5 +1,7 @@
-import { redirect, useLoaderData } from 'react-router';
+import type { DBNews } from 'oa-shared';
 import { News, UserRole } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
+import { redirect, useLoaderData } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { NewsPage } from 'src/pages/News/NewsPage';
 import { NotFoundPage } from 'src/pages/NotFound/NotFound';
@@ -8,11 +10,7 @@ import { newsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
-
 import { contentServiceServer } from '../services/contentService.server';
-
-import type { DBNews } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);

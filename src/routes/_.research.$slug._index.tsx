@@ -1,5 +1,7 @@
-import { useLoaderData } from 'react-router';
+import type { ResearchUpdate } from 'oa-shared';
 import { ResearchItem } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { CommentFactory } from 'src/factories/commentFactory.server';
 import { NotFoundPage } from 'src/pages/NotFound/NotFound';
 import { ResearchArticlePage } from 'src/pages/Research/Content/ResearchArticlePage';
@@ -8,9 +10,6 @@ import { contentServiceServer } from 'src/services/contentService.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
 import { researchServiceServer } from 'src/services/researchService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
-
-import type { ResearchUpdate } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);

@@ -13,7 +13,9 @@ export class ProfileFactory {
     const photo = this.imageService.getPublicUrl(dbProfile.photo);
 
     const coverImages =
-      dbProfile.cover_images && dbProfile.cover_images.length > 0 ? this.imageService.getPublicUrls(dbProfile.cover_images) : null;
+      dbProfile.cover_images && dbProfile.cover_images.length > 0
+        ? this.imageService.getPublicUrls(dbProfile.cover_images)
+        : null;
 
     let impact = null;
     let visitorPolicy = null;
@@ -34,7 +36,10 @@ export class ProfileFactory {
       if (dbProfile.visitor_policy) {
         if (typeof dbProfile.visitor_policy === 'string') {
           visitorPolicy = JSON.parse(dbProfile.visitor_policy);
-        } else if (typeof dbProfile.impact === 'object' && (dbProfile.visitor_policy as any)?.policy) {
+        } else if (
+          typeof dbProfile.impact === 'object' &&
+          (dbProfile.visitor_policy as any)?.policy
+        ) {
           visitorPolicy = dbProfile.visitor_policy;
         }
       }

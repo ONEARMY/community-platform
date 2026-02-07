@@ -1,13 +1,11 @@
-import { useLayoutEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
+import type { PhotoSwipeOptions } from 'photoswipe/lightbox';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { Flex, Image as ThemeImage } from 'theme-ui';
-
 import { Arrow } from '../ArrowIcon/ArrowIcon';
 import { usePhotoSwipeLightbox } from '../hooks/usePhotoSwipeLightbox';
 import { ImageGalleryThumbnail } from '../ImageGalleryThumbnail/ImageGalleryThumbnail';
 import { Loader } from '../Loader/Loader';
-
-import type { PhotoSwipeOptions } from 'photoswipe/lightbox';
 
 import 'photoswipe/style.css';
 

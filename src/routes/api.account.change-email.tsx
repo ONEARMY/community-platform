@@ -34,7 +34,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (result.error) {
     return Response.json(
       {
-        error: result.error.code === 'email_exists' ? FRIENDLY_MESSAGES['auth/email-already-in-use'] : FRIENDLY_MESSAGES['generic'],
+        error:
+          result.error.code === 'email_exists'
+            ? FRIENDLY_MESSAGES['auth/email-already-in-use']
+            : FRIENDLY_MESSAGES['generic'],
       },
       { headers, status: 400 },
     );

@@ -1,5 +1,5 @@
-import { Field } from 'react-final-form';
 import styled from '@emotion/styled';
+import { Field } from 'react-final-form';
 import { Flex } from 'theme-ui';
 
 export const Label = (props) => (

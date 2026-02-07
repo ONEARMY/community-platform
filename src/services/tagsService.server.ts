@@ -1,6 +1,5 @@
-import { Tag } from 'oa-shared';
-
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { Tag } from 'oa-shared';
 
 // Is this needed? It's just getting stuff that could be done by tagsService
 const getTags = async (client: SupabaseClient, tagIds: number[]) => {

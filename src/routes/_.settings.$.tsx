@@ -1,11 +1,10 @@
+import type { LoaderFunctionArgs } from 'react-router';
 import { redirect } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import Main from 'src/pages/common/Layout/Main';
 import { SettingsPage } from 'src/pages/UserSettings/SettingsPage.client';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
-
-import type { LoaderFunctionArgs } from 'react-router';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);

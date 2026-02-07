@@ -1,7 +1,6 @@
+import type { DBProfile } from 'oa-shared';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-
-import type { DBProfile } from 'oa-shared';
 
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request);

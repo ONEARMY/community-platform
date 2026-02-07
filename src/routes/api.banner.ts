@@ -1,10 +1,9 @@
 import Keyv from 'keyv';
+import type { DBBanner } from 'oa-shared';
 import { Banner } from 'oa-shared';
+import type { LoaderFunctionArgs } from 'react-router';
 import { isProductionEnvironment } from 'src/config/config';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-
-import type { DBBanner } from 'oa-shared';
-import type { LoaderFunctionArgs } from 'react-router';
 
 const cache = new Keyv<Banner[]>({ ttl: 600000 }); // ttl: 10 minutes
 

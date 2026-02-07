@@ -74,7 +74,12 @@ export class Profile {
     Object.assign(this, obj);
   }
 
-  static fromDB(dbProfile: DBProfile, photo: Image | null = null, coverImages: Image[] | null = null, authorVotes?: AuthorVotes[]) {
+  static fromDB(
+    dbProfile: DBProfile,
+    photo: Image | null = null,
+    coverImages: Image[] | null = null,
+    authorVotes?: AuthorVotes[],
+  ) {
     let impact = null;
 
     try {
@@ -92,7 +97,9 @@ export class Profile {
       photo: photo ?? null,
       roles: dbProfile.roles || null,
       type: dbProfile.type ? ProfileType.fromDB(dbProfile.type) : null,
-      visitorPolicy: dbProfile.visitor_policy ? (JSON.parse(dbProfile.visitor_policy) as UserVisitorPreference) : null,
+      visitorPolicy: dbProfile.visitor_policy
+        ? (JSON.parse(dbProfile.visitor_policy) as UserVisitorPreference)
+        : null,
       isBlockedFromMessaging: !!dbProfile.is_blocked_from_messaging,
       about: dbProfile.about,
       coverImages: coverImages ?? null,
@@ -116,7 +123,10 @@ export type NotificationActionType = 'newContent' | 'newComment' | 'newReply';
 export const NotificationContentTypes = ['research_updates', 'comments'] as const;
 export type NotificationContentType = (typeof NotificationContentTypes)[number];
 export type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photo'>;
-export type ProfileListItem = Pick<Profile, 'id' | 'username' | 'displayName' | 'photo' | 'country' | 'badges' | 'type'>;
+export type ProfileListItem = Pick<
+  Profile,
+  'id' | 'username' | 'displayName' | 'photo' | 'country' | 'badges' | 'type'
+>;
 
 type NotificationContent = News | Comment | Question | ResearchUpdate;
 type NotificationSourceContentType = SubscribableContentTypes;
@@ -177,7 +187,9 @@ export class Notification implements IDoc {
       modifiedAt: dbNotification.modified_at ? new Date(dbNotification.modified_at) : null,
       ownedById: dbNotification.owned_by_id,
       isRead: dbNotification.is_read,
-      triggeredBy: dbNotification.triggered_by ? Profile.fromDB(dbNotification.triggered_by) : undefined,
+      triggeredBy: dbNotification.triggered_by
+        ? Profile.fromDB(dbNotification.triggered_by)
+        : undefined,
       ownedBy: dbNotification.owned_by ? Profile.fromDB(dbNotification.owned_by) : undefined,
     });
   }
@@ -287,7 +299,9 @@ export class NotificationDisplay {
   }
 
   static setDate(notification: Notification) {
-    return notification.modifiedAt ? new Date(notification.modifiedAt) : new Date(notification.createdAt);
+    return notification.modifiedAt
+      ? new Date(notification.modifiedAt)
+      : new Date(notification.createdAt);
   }
 
   static setTitle(notification: Notification) {

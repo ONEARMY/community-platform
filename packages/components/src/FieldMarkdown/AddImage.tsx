@@ -1,13 +1,12 @@
-import { useState } from 'react';
 import { insertImage$, usePublisher } from '@mdxeditor/editor';
+import { useState } from 'react';
 import { Box, Flex } from 'theme-ui';
 
 import { Button } from '../Button/Button';
 import { ImageInput } from '../ImageInput/ImageInput';
+import type { IFileMeta } from '../ImageInput/types';
 import { Loader } from '../Loader/Loader';
 import { Modal } from '../Modal/Modal';
-
-import type { IFileMeta } from '../ImageInput/types';
 
 interface IProps {
   imageUploadHandler: (image: File) => Promise<string>;

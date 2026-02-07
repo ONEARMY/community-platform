@@ -1,12 +1,10 @@
+import type { ContentType, SelectValue } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { Field } from 'react-final-form';
 import { CategoriesSelectV2 } from 'src/pages/common/Category/CategoriesSelectV2';
 import { fields } from 'src/pages/Question/labels';
 import { categoryService } from 'src/services/categoryService';
-
 import { FormFieldWrapper } from './FormFieldWrapper';
-
-import type { ContentType, SelectValue } from 'oa-shared';
 
 interface IProps {
   type: ContentType;

@@ -1,10 +1,8 @@
+import type { ProfileListItem } from 'oa-shared';
 import { Avatar, Box, Flex, Text } from 'theme-ui';
-
 import { Button } from '../Button/Button';
 import { MemberBadge } from '../MemberBadge/MemberBadge';
 import { Username } from '../Username/Username';
-
-import type { ProfileListItem } from 'oa-shared';
 
 interface IProps {
   profiles: ProfileListItem[];

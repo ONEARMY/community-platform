@@ -1,8 +1,7 @@
-import React from 'react';
 import { observer } from 'mobx-react';
-import { useProfileStore } from 'src/stores/Profile/profile.store';
-
 import type { UserRole } from 'oa-shared';
+import React from 'react';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
 
 /*
     Simple wrapper to only render a component if the user is logged in (plus optional user role required)

@@ -1,9 +1,8 @@
-import { Link } from 'react-router';
 import { observer } from 'mobx-react';
+import type { ThemeWithName } from 'oa-themes';
+import { Link } from 'react-router';
 import { VERSION } from 'src/config/config';
 import { Box, Flex, Image, Text, useThemeUI } from 'theme-ui';
-
-import type { ThemeWithName } from 'oa-themes';
 
 const Logo = observer(() => {
   const themeUi = useThemeUI();

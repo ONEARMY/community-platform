@@ -1,11 +1,10 @@
-import { intro as introLabels, steps as stepsLabels } from '../../labels';
-
 import type {
   IErrorsListSet,
   ILabels,
   IStepErrorsList,
   ITopLevelErrorsList,
 } from 'src/common/Form/types';
+import { intro as introLabels, steps as stepsLabels } from '../../labels';
 
 const stepErrors = (stepErrors: IStepErrorsList): IErrorsListSet[] => {
   return stepErrors.map((errors, index) => {

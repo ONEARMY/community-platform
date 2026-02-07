@@ -1,5 +1,5 @@
-import { Field } from 'react-final-form';
 import { FieldTextarea } from 'oa-components';
+import { Field } from 'react-final-form';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { RESEARCH_MAX_LENGTH } from 'src/pages/Research/constants';
 import { overview } from 'src/pages/Research/labels';

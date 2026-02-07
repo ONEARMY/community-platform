@@ -1,14 +1,12 @@
 // As much as possible taken directly from https://asmyshlyaev177.github.io/react-horizontal-scrolling-menu/?path=/story/examples-simple--simple
 // Generally only edited for readability
 
-import React, { Children, cloneElement, isValidElement, useContext } from 'react';
-import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import styled from '@emotion/styled';
-import { Box } from 'theme-ui';
-
-import { Arrow } from '../ArrowIcon/ArrowIcon';
-
+import React, { Children, cloneElement, isValidElement, useContext } from 'react';
 import type { publicApiType } from 'react-horizontal-scrolling-menu';
+import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
+import { Box } from 'theme-ui';
+import { Arrow } from '../ArrowIcon/ArrowIcon';
 
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 

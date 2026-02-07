@@ -1,10 +1,8 @@
-import { Flex, Text } from 'theme-ui';
-
-import { visitorDisplayData } from '../VisitorModal/VisitorModal';
-
 import type { Profile, ProfileTag } from 'oa-shared';
 import type { ComponentProps } from 'react';
 import type { ThemeUIStyleObject } from 'theme-ui';
+import { Flex, Text } from 'theme-ui';
+import { visitorDisplayData } from '../VisitorModal/VisitorModal';
 
 export interface IProps {
   tags: ProfileTag[] | null;

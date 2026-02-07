@@ -1,11 +1,9 @@
 // Similar to src/.server/templates/Layout.tsx
 
-import React from 'react';
 import { Body, Container, Head, Html, Img, Link, Preview, Section } from '@react-email/components';
-
-import { Footer } from './components/footer';
-
 import type { TenantSettings } from 'oa-shared';
+import React from 'react';
+import { Footer } from './components/footer';
 
 const link = {
   color: '#27272c',

@@ -25,7 +25,7 @@ describe('[Research]', () => {
         );
 
         cy.step('Can search for items');
-        cy.get('[data-cy=research-search-box]').click().type('qwerty');
+        cy.get('[data-cy=research-search-box]').should('be.enabled').click().type('qwerty');
         cy.get('[data-cy=ResearchListItem]').its('length').should('be.eq', 2);
 
         cy.step('All basic info displayed on each card');

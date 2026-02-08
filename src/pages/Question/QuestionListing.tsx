@@ -74,8 +74,8 @@ export const QuestionListing = () => {
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
       <QuestionListHeader
-        itemCount={total}
-        draftCount={draftCount}
+        itemCount={isFetching ? undefined: total}
+        draftCount={isFetchingDrafts ? undefined : draftCount}
         handleShowDrafts={handleShowDrafts}
         showDrafts={showDrafts}
       />

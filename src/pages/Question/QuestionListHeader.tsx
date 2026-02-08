@@ -16,7 +16,7 @@ import { QuestionSearchParams } from './question.service';
 
 interface IProps {
   itemCount?: number;
-  draftCount: number;
+  draftCount?: number;
   handleShowDrafts: () => void;
   showDrafts: boolean;
 }
@@ -169,7 +169,7 @@ export const QuestionListHeader = (props: IProps) => {
 
   return (
     <ListHeader
-      itemCount={showDrafts ? draftCount : itemCount || 0}
+      itemCount={showDrafts ? draftCount : itemCount}
       actionComponents={actionComponents}
       showDrafts={false}
       headingTitle={headings.list}

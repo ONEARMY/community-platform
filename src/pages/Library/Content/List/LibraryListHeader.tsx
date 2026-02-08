@@ -16,7 +16,7 @@ import { LibrarySortOptions } from './LibrarySortOptions';
 
 interface IProps {
   itemCount?: number;
-  draftCount: number;
+  draftCount?: number;
   handleShowDrafts: () => void;
   showDrafts: boolean;
 }
@@ -164,7 +164,7 @@ export const LibraryListHeader = (props: IProps) => {
 
   return (
     <ListHeader
-      itemCount={showDrafts ? draftCount : itemCount || 0}
+      itemCount={showDrafts ? draftCount : itemCount}
       actionComponents={actionComponents}
       showDrafts={showDrafts}
       headingTitle={headingTitle}

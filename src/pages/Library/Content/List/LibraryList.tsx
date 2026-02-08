@@ -14,9 +14,9 @@ import { ProjectCard } from './ProjectCard';
 const siteName = import.meta.env.VITE_SITE_NAME;
 
 export const LibraryList = () => {
-  const [isFetching, setIsFetching] = useState<boolean>(true);
+  const [isFetching, setIsFetching] = useState(true);
   const [projects, setProjects] = useState<Project[]>([]);
-  const [total, setTotal] = useState<number>(0);
+  const [total, setTotal] = useState(0);
   const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } = useDrafts<Project>(
     {
       getDraftCount: libraryService.getDraftCount,
@@ -75,8 +75,8 @@ export const LibraryList = () => {
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
       <LibraryListHeader
-        itemCount={total}
-        draftCount={draftCount}
+        itemCount={isFetching ? undefined : total}
+        draftCount={isFetchingDrafts ? undefined : draftCount}
         handleShowDrafts={handleShowDrafts}
         showDrafts={showDrafts}
       />

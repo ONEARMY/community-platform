@@ -6,6 +6,7 @@ import { Link, useLocation, useNavigate } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
 import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
+import PageHeader from 'src/common/PageHeader';
 import { logger } from 'src/logger';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { getResearchCommentId, getResearchUpdateId } from 'src/pages/Research/Content/helper';
@@ -134,41 +135,67 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
 
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
-      <Breadcrumbs content={research} variant="research">
-        <Flex sx={{ gap: 2 }}>
-          {isDeletable && (
-            <>
-              <Button
-                type="button"
-                data-cy="Research: delete button"
-                variant="secondary"
-                icon="delete"
-                disabled={research.deleted}
-                onClick={() => setShowDeleteModal(true)}
-              >
-                Delete
-              </Button>
+      <PageHeader
+        actions={
+          (isDeletable || isEditable) && (
+            <Flex
+              sx={{
+                gap: 2,
+                paddingLeft: 2,
+                width: ['100%', 'auto', 'auto'],
+                justifyContent: 'flex-end',
+              }}
+            >
+              {isEditable && (
+                <Link to={'/research/' + research.slug + '/edit'}>
+                  <Button type="button" variant="primary" data-cy="edit">
+                    Edit
+                  </Button>
+                </Link>
+              )}
+              {isDeletable && (
+                <>
+                  <Button
+                    type="button"
+                    data-cy="Research: delete button"
+                    variant="destructive"
+                    disabled={research.deleted}
+                    onClick={() => setShowDeleteModal(true)}
+                  >
+                    Delete
+                  </Button>
 
-              <ConfirmModal
-                key={research.id}
-                isOpen={showDeleteModal}
-                message="Are you sure you want to delete this Research?"
-                confirmButtonText="Delete"
-                handleCancel={() => setShowDeleteModal(false)}
-                handleConfirm={() => handleDelete && handleDelete(research)}
-                confirmVariant="destructive"
-              />
-            </>
-          )}
-          {isEditable && (
-            <Link to={'/research/' + research.slug + '/edit'}>
-              <Button type="button" variant="primary" data-cy="edit">
-                Edit
-              </Button>
-            </Link>
-          )}
-        </Flex>
-      </Breadcrumbs>
+                  <ConfirmModal
+                    key={research.id}
+                    isOpen={showDeleteModal}
+                    message="Are you sure you want to delete this Research?"
+                    confirmButtonText="Delete"
+                    handleCancel={() => setShowDeleteModal(false)}
+                    handleConfirm={() => handleDelete && handleDelete(research)}
+                    confirmVariant="destructive"
+                  />
+                </>
+              )}
+            </Flex>
+          )
+        }
+      >
+        <Breadcrumbs
+          steps={[
+            { text: 'Research', link: '/research' },
+            ...(research.category
+              ? [
+                  {
+                    text: research.category.name,
+                    link: `/research?category=${research.category.id}`,
+                  },
+                ]
+              : []),
+            { text: research.title },
+          ]}
+        />
+      </PageHeader>
+
       <ResearchDescription
         research={research}
         key={research.id}

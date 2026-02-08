@@ -2,10 +2,10 @@ import styled from '@emotion/styled';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 
 const StyledTooltip = styled(ReactTooltip)`
-  opacity: 1 !important;
   z-index: 9999 !important;
-  line-height: 1.5rem;
   text-align: center;
+  border-radius: 5px !important;
+  padding: 5px 10px !important;
 `;
 
 type TooltipProps = {
@@ -15,11 +15,7 @@ type TooltipProps = {
 
 export const Tooltip = ({ children, id }: TooltipProps) => {
   return (
-    <StyledTooltip
-      id={id}
-      openEvents={{ mouseenter: true, focus: true }}
-      closeEvents={{ mouseleave: true, blur: true }}
-    >
+    <StyledTooltip id={id} openEvents={{ mouseenter: true, focus: true }} closeEvents={{ mouseleave: true, blur: true }}>
       {children}
     </StyledTooltip>
   );

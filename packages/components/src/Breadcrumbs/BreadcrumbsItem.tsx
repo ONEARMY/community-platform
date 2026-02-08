@@ -32,10 +32,8 @@ export const BreadcrumbItem = ({ text, link, isLast }: BreadcrumbItemProps) => (
   <Box
     style={{
       display: 'inline-flex',
-      marginRight: '3px',
       ...(isLast && {
         flex: '1',
-        minWidth: '120px',
         maxWidth: '100%',
       }),
     }}
@@ -54,6 +52,8 @@ export const BreadcrumbItem = ({ text, link, isLast }: BreadcrumbItemProps) => (
           whiteSpace: 'nowrap',
           overflow: 'hidden',
           width: '100%',
+          padding: 1,
+          paddingX: 3,
         }}
       >
         {text}

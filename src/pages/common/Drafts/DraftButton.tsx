@@ -1,16 +1,15 @@
 import { Button } from 'oa-components';
-
 import { drafts } from '../labels';
 
 type DraftButtonProps = {
   showDrafts: boolean;
-  draftCount: number;
+  draftCount?: number;
   handleShowDrafts: () => void;
 };
 
 const DraftButton = ({ showDrafts, draftCount, handleShowDrafts }: DraftButtonProps) => {
   if (!draftCount) {
-    return <></>;
+    return null;
   }
 
   return (

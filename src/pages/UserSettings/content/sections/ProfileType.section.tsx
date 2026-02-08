@@ -4,15 +4,14 @@ import type { ThemeWithName } from 'oa-themes';
 import { Field } from 'react-final-form';
 import { buttons, fields, headings } from 'src/pages/UserSettings/labels';
 import { Box, Flex, Grid, Heading, Paragraph, Text, useThemeUI } from 'theme-ui';
-import { FlexSectionContainer } from '../elements';
+import { ProfileSection } from '../elements';
 import { ProfileTypeRadioField } from '../fields/ProfileTypeRadio.field';
 
 type ProfileTypeSectionProps = {
   profileTypes: ProfileType[];
 };
 export const ProfileTypeSection = ({ profileTypes }: ProfileTypeSectionProps) => {
-  const profileGuidelinesUrl =
-    import.meta.env.VITE_PROFILE_GUIDELINES_URL || process.env.VITE_PROFILE_GUIDELINES_URL;
+  const profileGuidelinesUrl = import.meta.env.VITE_PROFILE_GUIDELINES_URL || process.env.VITE_PROFILE_GUIDELINES_URL;
   const { description, error } = fields.activities;
   const themeUi = useThemeUI();
   const theme = themeUi.theme as ThemeWithName;
@@ -25,16 +24,12 @@ export const ProfileTypeSection = ({ profileTypes }: ProfileTypeSectionProps) =>
     <Field
       name="type"
       render={(props) => (
-        <FlexSectionContainer data-cy="FocusSection">
+        <ProfileSection data-cy="FocusSection">
           <Flex sx={{ flexDirection: 'column', gap: 1 }}>
             <Heading as="h2">{headings.focus}</Heading>
             <Paragraph>
               {description}{' '}
-              <ExternalLink
-                href={profileGuidelinesUrl}
-                sx={{ textDecoration: 'underline', color: 'grey' }}
-                type="button"
-              >
+              <ExternalLink href={profileGuidelinesUrl} sx={{ textDecoration: 'underline', color: 'grey' }} type="button">
                 {buttons.guidelines}
               </ExternalLink>
             </Paragraph>
@@ -66,7 +61,7 @@ export const ProfileTypeSection = ({ profileTypes }: ProfileTypeSectionProps) =>
                 ))}
             </Grid>
           </Flex>
-        </FlexSectionContainer>
+        </ProfileSection>
       )}
     />
   );

@@ -5,7 +5,7 @@ import { fields } from 'src/pages/UserSettings/labels';
 import { COMPARISONS } from 'src/utils/comparisons';
 import { Flex, Text } from 'theme-ui';
 
-import { FlexSectionContainer } from '../elements';
+import { ProfileSection } from '../elements';
 
 interface IProps {
   typeName: string | undefined;
@@ -16,19 +16,13 @@ export const ProfileTags = ({ typeName }: IProps) => {
 
   const renderTagsSelect = useCallback(
     ({ input }) => (
-      <ProfileTagsSelect
-        value={input.value}
-        onChange={(tags) => input.onChange(tags)}
-        maxTotal={5}
-        profileType={typeName}
-        isForm
-      />
+      <ProfileTagsSelect value={input.value} onChange={(tags) => input.onChange(tags)} maxTotal={5} profileType={typeName} isForm />
     ),
     [typeName],
   );
 
   return (
-    <FlexSectionContainer>
+    <ProfileSection>
       <Flex
         data-testid="ProfileTags"
         sx={{
@@ -43,6 +37,6 @@ export const ProfileTags = ({ typeName }: IProps) => {
         </Text>
         <Field name="tagIds" component={renderTagsSelect} isEqual={COMPARISONS.tags} />
       </Flex>
-    </FlexSectionContainer>
+    </ProfileSection>
   );
 };

@@ -4,6 +4,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
 export const loader = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
+
   const { error } = await client.auth.signOut();
 
   if (error) {
@@ -15,5 +16,5 @@ export const loader = async ({ request }: ActionFunctionArgs) => {
 
   const location = returnUrl || '/';
 
-  return redirect(location);
+  return redirect(location, { headers });
 };

@@ -1,17 +1,12 @@
 import { observer } from 'mobx-react';
-import {
-  ArticleCallToActionSupabase,
-  Button,
-  ConfirmModal,
-  UsefulStatsButton,
-  UserEngagementWrapper,
-} from 'oa-components';
+import { ArticleCallToActionSupabase, Button, ConfirmModal, UsefulStatsButton, UserEngagementWrapper } from 'oa-components';
 import type { ContentType, Project, ProjectStep } from 'oa-shared';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
 import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
+import PageHeader from 'src/common/PageHeader';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { CommentSectionSupabase } from 'src/pages/common/CommentsSupabase/CommentSectionSupabase';
 import { usefulService } from 'src/services/usefulService';
@@ -81,43 +76,50 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
   };
 
   const isEditable = useMemo(() => {
-    return (
-      !!activeUser && (hasAdminRights(activeUser) || item.author?.username === activeUser.username)
-    );
+    return !!activeUser && (hasAdminRights(activeUser) || item.author?.username === activeUser.username);
   }, [activeUser, item.author]);
 
   return (
     <>
-      <Breadcrumbs content={item} variant="library">
-        {isEditable && (
-          <Flex sx={{ gap: 2, paddingLeft: 2 }}>
-            <Link to={'/library/' + item.slug + '/edit'} data-cy="edit">
-              <Button type="button" variant="primary">
-                Edit
+      <PageHeader
+        actions={
+          isEditable && (
+            <Flex sx={{ gap: 2, width: ['100%', 'auto', 'auto'], justifyContent: 'flex-end' }}>
+              <Link to={'/library/' + item.slug + '/edit'} data-cy="edit">
+                <Button type="button" variant="primary">
+                  Edit
+                </Button>
+              </Link>
+
+              <Button
+                type="button"
+                data-cy="Library: delete button"
+                variant="destructive"
+                disabled={item.deleted}
+                onClick={() => setShowDeleteModal(true)}
+              >
+                Delete
               </Button>
-            </Link>
 
-            <Button
-              type="button"
-              data-cy="Library: delete button"
-              variant={'secondary'}
-              icon="delete"
-              disabled={item.deleted}
-              onClick={() => setShowDeleteModal(true)}
-            >
-              Delete
-            </Button>
-
-            <ConfirmModal
-              isOpen={showDeleteModal}
-              message="Are you sure you want to delete this project?"
-              confirmButtonText="Delete"
-              handleCancel={() => setShowDeleteModal(false)}
-              handleConfirm={() => handleDelete()}
-            />
-          </Flex>
-        )}
-      </Breadcrumbs>
+              <ConfirmModal
+                isOpen={showDeleteModal}
+                message="Are you sure you want to delete this project?"
+                confirmButtonText="Delete"
+                handleCancel={() => setShowDeleteModal(false)}
+                handleConfirm={() => handleDelete()}
+              />
+            </Flex>
+          )
+        }
+      >
+        <Breadcrumbs
+          steps={[
+            { text: 'Library', link: '/library' },
+            ...(item.category ? [{ text: item.category.name, link: `/library?category=${item.category.id}` }] : []),
+            { text: item.title },
+          ]}
+        />
+      </PageHeader>
 
       <LibraryDescription
         item={item}
@@ -142,14 +144,10 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 type="button"
                 sx={{ fontSize: 2, justifyContent: 'center' }}
                 onClick={() => {
-                  document
-                    .querySelector('[data-target="create-comment-container"]')
-                    ?.scrollIntoView({
-                      behavior: 'smooth',
-                    });
-                  (
-                    document.querySelector('[data-cy="comments-form"]') as HTMLTextAreaElement
-                  )?.focus();
+                  document.querySelector('[data-target="create-comment-container"]')?.scrollIntoView({
+                    behavior: 'smooth',
+                  });
+                  (document.querySelector('[data-cy="comments-form"]') as HTMLTextAreaElement)?.focus();
 
                   return false;
                 }}
@@ -199,11 +197,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 mt: 5,
               }}
             >
-              <CommentSectionSupabase
-                authors={item.author?.id ? [item.author?.id] : []}
-                sourceId={item.id}
-                sourceType="projects"
-              />
+              <CommentSectionSupabase authors={item.author?.id ? [item.author?.id] : []} sourceId={item.id} sourceType="projects" />
             </Card>
           </UserEngagementWrapper>
         )}

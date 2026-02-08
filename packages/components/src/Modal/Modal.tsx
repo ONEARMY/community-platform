@@ -41,6 +41,8 @@ export const Modal = (props: Props) => {
     onDidDismiss?.();
   };
 
+  if (!isOpen) return null;
+
   return (
     <dialog
       ref={dialogRef}

@@ -1,7 +1,7 @@
 import { Flex, Heading, Text } from 'theme-ui';
 
 interface IProps {
-  itemCount: number;
+  itemCount?: number;
   actionComponents: React.ReactNode;
   headingTitle: string;
   categoryComponent: React.ReactNode;

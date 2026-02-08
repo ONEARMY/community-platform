@@ -13,14 +13,14 @@ import ResearchListItem from './ResearchListItem';
 import { ResearchSearchParams } from './ResearchSearchParams';
 
 const ResearchList = () => {
-  const [isFetching, setIsFetching] = useState<boolean>(true);
+  const [isFetching, setIsFetching] = useState(true);
   const [researchItems, setResearchItems] = useState<ResearchItem[]>([]);
   const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } =
     useDrafts<ResearchItem>({
       getDraftCount: researchService.getDraftCount,
       getDrafts: researchService.getDrafts,
     });
-  const [total, setTotal] = useState<number>(0);
+  const [total, setTotal] = useState(0);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get(ResearchSearchParams.q) || '';
@@ -79,8 +79,8 @@ const ResearchList = () => {
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
       <ResearchFilterHeader
-        itemCount={total}
-        draftCount={draftCount}
+        itemCount={isFetching ? undefined : total}
+        draftCount={isFetchingDrafts ? undefined : draftCount}
         handleShowDrafts={handleShowDrafts}
         showDrafts={showDrafts}
       />

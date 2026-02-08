@@ -93,13 +93,7 @@ export const EditComment = (props: IProps) => {
               sx={{ padding: 1 }}
             />
             <Flex mt={4} ml="auto">
-              <Button
-                type="button"
-                small
-                mr={4}
-                variant="secondary"
-                onClick={() => props?.handleCancel()}
-              >
+              <Button type="button" small mr={4} variant="outline" onClick={() => props?.handleCancel()}>
                 Cancel
               </Button>
               <Button

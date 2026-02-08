@@ -1,15 +1,14 @@
 import { QuestionListing } from 'src/pages/Question/QuestionListing';
-import { SeoTagsUpdateComponent } from 'src/utils/seo';
+import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 
-export async function clientLoader() {
+export async function loader() {
   return null;
 }
 
+export const meta = mergeMeta(() => {
+  return generateTags(`Questions - ${import.meta.env.VITE_SITE_NAME}`);
+});
+
 export default function Index() {
-  return (
-    <>
-      <SeoTagsUpdateComponent title="Questions" />
-      <QuestionListing />
-    </>
-  );
+  return <QuestionListing />;
 }

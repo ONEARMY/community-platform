@@ -1,15 +1,14 @@
 import { NewsListing } from 'src/pages/News/NewsListing';
-import { SeoTagsUpdateComponent } from 'src/utils/seo';
+import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 
-export async function clientLoader() {
+export async function loader() {
   return null;
 }
 
+export const meta = mergeMeta(() => {
+  return generateTags(`News - ${import.meta.env.VITE_SITE_NAME}`);
+});
+
 export default function Index() {
-  return (
-    <>
-      <SeoTagsUpdateComponent title="News" />
-      <NewsListing />
-    </>
-  );
+  return <NewsListing />;
 }

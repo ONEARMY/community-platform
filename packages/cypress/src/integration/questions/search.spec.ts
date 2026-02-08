@@ -5,6 +5,7 @@ describe('[Questions]', () => {
 
   describe('[By Everyone]', () => {
     it('Searches', () => {
+      cy.wait(2000);
       cy.step('Can search for items');
       cy.get('[data-cy=questions-search-box]').clear().type(`deal`);
       cy.url().should('include', 'q=deal');

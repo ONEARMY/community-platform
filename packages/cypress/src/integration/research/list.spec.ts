@@ -14,6 +14,7 @@ describe('[Research - List Articles]', () => {
   it('[Search Functionality - Filters articles]', () => {
     const searchTerm = 'test';
 
+    cy.wait(2000);
     cy.step('Type a keyword into the search bar');
     cy.get('[data-cy=research-search-box]').clear().type(searchTerm);
 

@@ -25,6 +25,7 @@ describe('[Research]', () => {
         );
 
         cy.step('Can search for items');
+        cy.wait(2000);
         cy.get('[data-cy=research-search-box]').click().type('qwerty');
         cy.get('[data-cy=ResearchListItem]').its('length').should('be.eq', 2);
 

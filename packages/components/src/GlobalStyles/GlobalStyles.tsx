@@ -3,6 +3,9 @@ import { commonStyles, GlobalFonts } from 'oa-themes';
 
 export const GlobalStyles = css`
   ${GlobalFonts}
+  html {
+    overflow-y: scroll;
+  }
   body {
     font-family: 'Varela Round', Arial, sans-serif;
     background-color: ${commonStyles.colors.background};
@@ -42,5 +45,11 @@ export const GlobalStyles = css`
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+  }
+  dialog::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+  }
+  dialog {
+    z-index: 4000;
   }
 `;

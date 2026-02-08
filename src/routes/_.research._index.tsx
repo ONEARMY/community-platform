@@ -1,15 +1,14 @@
 import ResearchList from 'src/pages/Research/Content/ResearchList';
-import { SeoTagsUpdateComponent } from 'src/utils/seo';
+import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 
-export async function clientLoader() {
+export async function loader() {
   return null;
 }
 
+export const meta = mergeMeta(() => {
+  return generateTags(`Map - ${import.meta.env.VITE_SITE_NAME}`);
+});
+
 export default function Index() {
-  return (
-    <>
-      <SeoTagsUpdateComponent title="Research" />
-      <ResearchList />
-    </>
-  );
+  return <ResearchList />;
 }

@@ -57,16 +57,6 @@ export const seoTagsUpdate = (update: Partial<ISEOMeta>) => {
   }
 };
 
-/**
- * Use a component to force SEO tag updates. This may be useful in cases such
- * as alongside a router's child routes
- * @example `<SeoTagsUpdateComponent title='my title' />`
- */
-export const SeoTagsUpdateComponent = (update: Partial<ISEOMeta>) => {
-  seoTagsUpdate(update);
-  return null;
-};
-
 const setMetaName = (name: IPlatformMetaName, value: string) => {
   let el = document.querySelector(`meta[name="${name}"]`);
 

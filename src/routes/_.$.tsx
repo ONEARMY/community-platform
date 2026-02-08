@@ -1,6 +1,6 @@
 import { NotFoundPage } from 'src/pages/NotFound/NotFound';
 
-export async function clientLoader() {
+export async function loader() {
   return null;
 }
 

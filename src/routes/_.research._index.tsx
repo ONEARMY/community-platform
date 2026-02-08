@@ -6,7 +6,7 @@ export async function loader() {
 }
 
 export const meta = mergeMeta(() => {
-  return generateTags(`Map - ${import.meta.env.VITE_SITE_NAME}`);
+  return generateTags(`Research - ${import.meta.env.VITE_SITE_NAME}`);
 });
 
 export default function Index() {

@@ -2,6 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBProject, DBProjectStep, Image } from 'oa-shared';
 import { Project, UserRole } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { authServiceServer } from './authService.server';
 import { storageServiceServer } from './storageService.server';
 
 const getBySlug = (client: SupabaseClient, slug: string) => {
@@ -102,33 +103,32 @@ const getProjectPublicMedia = (projectDb: DBProject, client: SupabaseClient) => 
 const isAllowedToEditProject = async (
   client: SupabaseClient,
   authorUsername: string,
-  currentUsername: string,
+  authId: string,
 ) => {
-  if (!currentUsername) {
+  if (!authId) {
     return false;
   }
 
-  if (currentUsername === authorUsername) {
+  const currentUser = await authServiceServer.getProfileByAuthId(authId, client);
+  if (!currentUser) {
+    return false;
+  }
+
+  if (currentUser.username === authorUsername) {
     return true;
   }
 
-  const { data } = await client.from('profiles').select('roles').eq('username', currentUsername);
-
-  return data?.at(0)?.roles?.includes(UserRole.ADMIN);
+  return currentUser.roles?.includes(UserRole.ADMIN);
 };
 
-const isAllowedToEditProjectById = async (
-  client: SupabaseClient,
-  id: number,
-  currentUsername: string,
-) => {
+const isAllowedToEditProjectById = async (client: SupabaseClient, id: number, authId: string) => {
   const projectResult = await client.from('projects').select('id,created_by').eq('id', id).single();
 
   const project = projectResult.data as unknown as DBProject;
 
   const item = Project.fromDB(project, []);
 
-  return isAllowedToEditProject(client, item.author?.username || '', currentUsername);
+  return isAllowedToEditProject(client, item.author?.username || '', authId);
 };
 
 async function getById(id: number, client: SupabaseClient) {

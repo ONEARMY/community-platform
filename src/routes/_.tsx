@@ -10,6 +10,7 @@ import Header from 'src/pages/common/Header/Header';
 import { SessionContext } from 'src/pages/common/SessionContext';
 import { StickyButton } from 'src/pages/common/StickyButton';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { authServiceServer } from 'src/services/authService.server';
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store';
 import { Flex } from 'theme-ui';
 
@@ -20,6 +21,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { data } = await client.auth.getClaims();
 
   const claims: JwtPayload | undefined = data?.claims;
+
+  // If authenticated but no profile, redirect to choose-username
+  const url = new URL(request.url);
+  const isChooseUsernamePage = url.pathname === '/choose-username';
+  if (claims?.sub && !isChooseUsernamePage) {
+    const profile = await authServiceServer.getProfileByAuthId(claims.sub, client);
+    if (!profile) {
+      return redirect('/choose-username', { headers });
+    }
+  }
 
   return Response.json({ environment, claims }, { headers });
 }

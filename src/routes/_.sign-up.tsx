@@ -47,10 +47,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const { data, error } = await client.auth.signUp({
     email,
     password,
-    options: {
-      data: { username },
-      emailRedirectTo,
-    },
+    options: { emailRedirectTo },
   });
 
   if (error) {

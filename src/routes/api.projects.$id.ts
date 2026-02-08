@@ -311,7 +311,7 @@ async function deleteProject(request: Request, id: number) {
   const canEdit = await libraryServiceServer.isAllowedToEditProjectById(
     client,
     id,
-    claims.data.claims.user_metadata.username,
+    claims.data.claims.sub,
   );
 
   if (canEdit) {

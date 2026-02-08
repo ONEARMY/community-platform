@@ -22,11 +22,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return Response.json({ research: null }, { headers });
   }
 
-  const username = claims.data.claims.user_metadata.username;
+  const authId = claims.data.claims.sub;
   const researchDb = result.item as unknown as DBResearchItem;
   const research = ResearchItem.fromDB(researchDb, [], [], result.collaborators);
 
-  if (!(await researchServiceServer.isAllowedToEditResearch(client, research, username))) {
+  if (!(await researchServiceServer.isAllowedToEditResearch(client, research, authId))) {
     return redirect('/forbidden?page=research-edit-create', { headers });
   }
 

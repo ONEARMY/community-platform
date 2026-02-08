@@ -6,6 +6,7 @@ import { CommentFactory } from 'src/factories/commentFactory.server';
 import { NotFoundPage } from 'src/pages/NotFound/NotFound';
 import { ResearchArticlePage } from 'src/pages/Research/Content/ResearchArticlePage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { authServiceServer } from 'src/services/authService.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
 import { researchServiceServer } from 'src/services/researchService.server';
@@ -21,7 +22,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const claims = await client.auth.getClaims();
-  const currentUsername = claims.data?.claims?.user_metadata?.username;
+  const authId = claims.data?.claims?.sub;
+  const profile = authId ? await authServiceServer.getProfileByAuthId(authId, client) : null;
+  const currentUsername = profile?.username;
 
   const dbResearch = result.item;
 

@@ -203,6 +203,10 @@ export class ProfileServiceServer {
         : null,
     } as Partial<DBProfile>;
 
+    if (values.userName) {
+      valuesToUpdate['username'] = values.userName;
+    }
+
     if (values.photo) {
       const currentImagePath = existingProfile!.photo?.path;
 
@@ -284,7 +288,6 @@ export class ProfileServiceServer {
     }
 
     if (pinModeration) {
-      //
       await this.client.from('map_pins').update({ moderation: pinModeration }).eq('profile_id', id);
     }
 
@@ -331,38 +334,14 @@ export class ProfileServiceServer {
     }
   }
 
-  async ensureProfile(user: User) {
+  async ensureProfile(authId: string): Promise<{ id: number; username: string } | null> {
     const { data } = await this.client
       .from('profiles')
-      .select('id')
-      .eq('auth_id', user.id)
-      .limit(1);
+      .select('id, username')
+      .eq('auth_id', authId)
+      .maybeSingle();
 
-    if (data?.at(0)) {
-      return;
-    }
-
-    if (!user.user_metadata.username) {
-      console.error('Cannot create profile without username in user metadata');
-    }
-
-    // Doesn't exist - create it
-    const profileType = await this.client
-      .from('profile_types')
-      .select('id')
-      .eq('is_space', false)
-      .limit(1);
-    const { error } = await this.client.from('profiles').insert({
-      auth_id: user.id,
-      display_name: user.user_metadata.username,
-      username: user.user_metadata.username,
-      profile_type: profileType.data?.at(0)?.id || null,
-      tenant_id: process.env.TENANT_ID,
-    });
-
-    if (error) {
-      console.error('Error creating profile for user:', error);
-    }
+    return data;
   }
 
   /**

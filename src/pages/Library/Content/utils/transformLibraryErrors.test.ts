@@ -21,7 +21,7 @@ describe('transformLibraryErrors', () => {
         },
       ];
 
-      expect(transformLibraryErrors(errors)).toEqual(expected);
+      expect(transformLibraryErrors(errors, false)).toEqual(expected);
     });
   });
 
@@ -54,7 +54,7 @@ describe('transformLibraryErrors', () => {
         labels: steps,
       };
 
-      const set = transformLibraryErrors(errors);
+      const set = transformLibraryErrors(errors, false);
       expect(set).toEqual([expectedStepTwo, expectedStepThree]);
     });
   });

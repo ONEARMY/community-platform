@@ -21,7 +21,7 @@ describe('UserCreatedDocuments', () => {
   it('renders only questions section', () => {
     render(
       <MemoryRouter>
-        <UserCreatedDocuments docs={{ projects: [], research: [], questions: mockQuestions }} />
+        <UserCreatedDocuments docs={{ projects: [], research: [], questions: mockQuestions }} columns={2} />
       </MemoryRouter>,
     );
     expect(screen.queryByText('Library')).not.toBeInTheDocument();
@@ -33,7 +33,7 @@ describe('UserCreatedDocuments', () => {
   it("renders nothing if questions aren't present", () => {
     const { container } = render(
       <MemoryRouter>
-        <UserCreatedDocuments docs={{ projects: [], research: [], questions: [] }} />
+        <UserCreatedDocuments docs={{ projects: [], research: [], questions: [] }} columns={2} />
       </MemoryRouter>,
     );
     expect(container).toBeEmptyDOMElement();

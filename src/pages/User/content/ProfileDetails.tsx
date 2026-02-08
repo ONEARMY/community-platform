@@ -1,11 +1,10 @@
-import { Button, UserStatistics, VisitorModal } from 'oa-components';
+import { Button, ProfileTagsList, UserStatistics, VisitorModal } from 'oa-components';
 import type { MapPin, Profile, UserCreatedDocs } from 'oa-shared';
 import { PremiumTier } from 'oa-shared';
 import { useEffect, useMemo, useState } from 'react';
 import { trackEvent } from 'src/common/Analytics';
 import { DonationRequestModalContainer } from 'src/common/DonationRequestModalContainer';
 import { PremiumTierWrapper } from 'src/common/PremiumTierWrapper';
-import { ProfileTags } from 'src/pages/common/ProfileTags';
 import { mapPinService } from 'src/pages/Maps/map.service';
 import { Box, Divider, Flex, Paragraph } from 'theme-ui';
 
@@ -69,11 +68,12 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
           }}
         >
           {(tags || visitorPolicy) && (
-            <ProfileTags
-              tags={tags}
-              showVisitorModal={() => setShowVisitorModal(true)}
+            <ProfileTagsList
+              tags={tags || null}
               visitorPolicy={visitorPolicy}
               isSpace={profile.type?.isSpace || false}
+              showVisitorModal={() => setShowVisitorModal(true)}
+              large={true}
             />
           )}
           {about && (
@@ -86,9 +86,7 @@ export const ProfileDetails = ({ docs, profile, selectTab }: IProps) => {
             </Paragraph>
           )}
 
-          {visitorPolicy && (
-            <VisitorModal show={showVisitorModal} hide={hideVisitorDetails} user={profile} />
-          )}
+          {visitorPolicy && <VisitorModal show={showVisitorModal} hide={hideVisitorDetails} user={profile} />}
         </Flex>
         <Divider
           sx={{

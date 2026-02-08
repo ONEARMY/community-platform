@@ -1,9 +1,10 @@
+import styled from '@emotion/styled';
 import { MemberBadge } from 'oa-components';
 import type { ProfileType } from 'oa-shared';
 import React from 'react';
 import type { FieldRenderProps } from 'react-final-form';
+import { Field } from 'react-final-form';
 import { Flex, Input, Label, Text } from 'theme-ui';
-import { HiddenInput } from '../elements';
 
 interface IProps {
   value: ProfileType;
@@ -26,30 +27,21 @@ type FieldProps = FieldRenderProps<any, any> & {
 };
 
 const HiddenInputField = ({ input, meta, ...rest }: FieldProps) => (
-  <>
-    <Input
-      type="hidden"
-      variant={meta.error && meta.touched ? 'error' : 'input'}
-      {...input}
-      {...rest}
-    />
-  </>
+  <Input type="hidden" variant={meta.error && meta.touched ? 'error' : 'input'} {...input} {...rest} />
 );
 
 // validation - return undefined if no error (i.e. valid)
 const isRequired = (value: any) => (value ? undefined : 'Required');
 
+const HiddenInput = styled(Field)`
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+`;
+
 export const ProfileTypeRadioField = (props: IProps) => {
-  const {
-    value,
-    isSelected,
-    textLabel,
-    subText,
-    name,
-    fullWidth,
-    required,
-    'data-cy': dataCy,
-  } = props;
+  const { value, isSelected, textLabel, subText, name, fullWidth, required, 'data-cy': dataCy } = props;
 
   const classNames: string[] = [];
   if (isSelected) {

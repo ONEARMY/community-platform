@@ -43,7 +43,7 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
   }, [clientStyleData, emotionCache.sheet]);
 
   return (
-    <html lang="en" style={{ overflowY: 'scroll' }}>
+    <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -51,11 +51,7 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
         <Meta />
         <Links />
         {serverStyleData?.map(({ key, ids, css }) => (
-          <style
-            key={key}
-            data-emotion={`${key} ${ids.join(' ')}`}
-            dangerouslySetInnerHTML={{ __html: css }}
-          />
+          <style key={key} data-emotion={`${key} ${ids.join(' ')}`} dangerouslySetInnerHTML={{ __html: css }} />
         ))}
       </head>
       <body>

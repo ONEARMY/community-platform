@@ -15,7 +15,10 @@ export const ResearchLinkToUpdate = ({ research, update }: IProps) => {
   const [showCheck, setShowCheck] = useState(false);
 
   const copyURLtoClipboard = async (slug: string, id: number) => {
-    await navigator.clipboard.writeText(`${location.origin}/research/${slug}#update_${id}`);
+    try {
+      // this try-catch is mainly for cypress not to error
+      await navigator.clipboard.writeText(`${location.origin}/research/${slug}#update_${id}`);
+    } catch (_) {}
     setShowCheck(true);
 
     setTimeout(() => {

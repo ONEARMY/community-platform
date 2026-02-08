@@ -5,7 +5,6 @@ import { data, Link, redirect, useActionData } from 'react-router';
 import { PasswordField } from 'src/common/Form/PasswordField';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { authServiceServer } from 'src/services/authService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { getReturnUrl } from 'src/utils/redirect.server';
@@ -70,15 +69,24 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   try {
     // This will fail if there is already a profile for the current auth_id, or the auth_id is invalid (can be invalid the the credentials are wrong)
-    await new ProfileServiceServer(client).ensureProfile(signInResult.data.user);
+    await new ProfileServiceServer(client).ensureProfile(signInResult.data.user.id);
   } catch (error) {
     console.error(error);
   }
 
   const profile = data.user
-    ? await authServiceServer.getProfileByAuthId(data.user.id, client)
+    ? await new ProfileServiceServer(client).ensureProfile(data.user.id)
     : null;
-  const fallbackPath = profile?.username ? `/u/${profile.username}` : '/';
+
+  if (!profile) {
+    const returnUrl = getReturnUrl(request);
+    const chooseUsernameUrl = returnUrl
+      ? `/choose-username?returnUrl=${encodeURIComponent(returnUrl)}`
+      : '/choose-username';
+    return redirect(chooseUsernameUrl, { headers });
+  }
+
+  const fallbackPath = `/u/${profile.username}`;
   const path = getReturnUrl(request, fallbackPath);
 
   return redirect(path, { headers });

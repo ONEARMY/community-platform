@@ -14,6 +14,7 @@ import { PremiumTier } from 'oa-shared';
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
+import PageHeader from 'src/common/PageHeader';
 import { userHasPremiumTier } from 'src/common/PremiumTierWrapper';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { usefulService } from 'src/services/usefulService';
@@ -74,15 +75,32 @@ export const QuestionPage = observer(({ question }: IProps) => {
         flexDirection: 'column',
       }}
     >
-      <Breadcrumbs content={question} variant="question">
-        {isEditable && (
-          <Link to={'/questions/' + question.slug + '/edit'}>
-            <Button type="button" variant="primary" data-cy="edit">
-              Edit
-            </Button>
-          </Link>
-        )}
-      </Breadcrumbs>
+      <PageHeader
+        actions={
+          isEditable && (
+            <Link to={'/questions/' + question.slug + '/edit'}>
+              <Button type="button" variant="primary" data-cy="edit">
+                Edit
+              </Button>
+            </Link>
+          )
+        }
+      >
+        <Breadcrumbs
+          steps={[
+            { text: 'Question', link: '/questions' },
+            ...(question.category
+              ? [
+                  {
+                    text: question.category.name,
+                    link: `/questions?category=${question.category.id}`,
+                  },
+                ]
+              : []),
+            { text: question.title },
+          ]}
+        />
+      </PageHeader>
 
       <Card data-cy="question-body" sx={{ position: 'relative' }} variant="responsive">
         <Flex sx={{ flexDirection: 'column', padding: [3, 4], gap: 4 }}>
@@ -94,11 +112,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
             <AuthorDisplay author={question.author} />
 
             <Text variant="auxiliary">
-              <DisplayDate
-                createdAt={question.createdAt}
-                modifiedAt={question.modifiedAt}
-                action="Asked"
-              />
+              <DisplayDate createdAt={question.createdAt} modifiedAt={question.modifiedAt} action="Asked" />
             </Text>
 
             {question.isDraft && <DraftTag />}
@@ -110,16 +124,9 @@ export const QuestionPage = observer(({ question }: IProps) => {
             <LinkifyText>{question.description}</LinkifyText>
           </Text>
 
-          {question.images && (
-            <ImageGallery
-              images={formatImagesForGallery(question.images) as any}
-              allowPortrait={true}
-            />
-          )}
+          {question.images && <ImageGallery images={formatImagesForGallery(question.images) as any} allowPortrait={true} />}
 
-          {question.tags && (
-            <TagList data-cy="question-tags" tags={question.tags.map((t) => ({ label: t.name }))} />
-          )}
+          {question.tags && <TagList data-cy="question-tags" tags={question.tags.map((t) => ({ label: t.name }))} />}
         </Flex>
 
         <Divider sx={{ border: '1px solid black', margin: 0 }} />
@@ -165,12 +172,7 @@ export const QuestionPage = observer(({ question }: IProps) => {
                 }),
                 stat: subscribersCount,
               },
-              createUsefulStatistic(
-                'questions',
-                question.id,
-                usefulCount,
-                userHasPremiumTier(activeUser, PremiumTier.ONE),
-              ),
+              createUsefulStatistic('questions', question.id, usefulCount, userHasPremiumTier(activeUser, PremiumTier.ONE)),
               {
                 icon: 'comment-outline',
                 label: buildStatisticsLabel({

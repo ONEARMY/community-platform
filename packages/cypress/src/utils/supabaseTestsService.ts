@@ -71,7 +71,7 @@ export class SupabaseTestsService {
         continue;
       }
 
-      results[table] = await this.client.from(table).select();
+      results[table] = result;
     }
 
     return results;

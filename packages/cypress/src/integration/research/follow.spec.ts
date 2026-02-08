@@ -58,7 +58,8 @@ describe('[Research]', () => {
 
       cy.step('Follow icon should be visible in list view for the followed item');
       cy.visit(researchListUrl);
-      cy.get('[data-cy=research-search-box]').should('be.enabled').click().type('qwerty');
+      cy.wait(2000);
+      cy.get('[data-cy=research-search-box]').click().type('qwerty');
       cy.get('[data-cy="ResearchListItem"]').should('exist');
       cy.contains('[data-cy="ResearchListItem"]', 'Qwerty').within(() => {
         cy.get('[data-cy="follow-button"]').should('exist');

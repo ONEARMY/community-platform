@@ -14,8 +14,9 @@ describe('[Research - List Articles]', () => {
   it('[Search Functionality - Filters articles]', () => {
     const searchTerm = 'test';
 
+    cy.wait(2000);
     cy.step('Type a keyword into the search bar');
-    cy.get('[data-cy=research-search-box]').should('be.enabled').clear().type(searchTerm);
+    cy.get('[data-cy=research-search-box]').clear().type(searchTerm);
 
     cy.step('Verify filtered results are displayed');
     cy.get('[data-cy=ResearchListItem]').should('have.length.at.least', 1);

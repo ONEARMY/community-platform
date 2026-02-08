@@ -18,8 +18,8 @@ import { ResearchSortOptions } from '../ResearchSortOptions';
 import { ResearchSearchParams } from './ResearchSearchParams';
 
 interface IProps {
-  itemCount: number;
-  draftCount: number;
+  itemCount?: number;
+  draftCount?: number;
   handleShowDrafts: () => void;
   showDrafts: boolean;
 }

@@ -15,8 +15,6 @@ import closeSVG from '../../assets/icons/cross-close.svg';
 import declinedSVG from '../../assets/icons/declined.svg';
 import deleteSVG from '../../assets/icons/delete.svg';
 import discussionSVG from '../../assets/icons/discussion.svg';
-import discussionFollowSVG from '../../assets/icons/discussion-follow.svg';
-import discussionUnfollowSVG from '../../assets/icons/discussion-unfollow.svg';
 import doubleTickSVG from '../../assets/icons/double-tick.svg';
 import editSVG from '../../assets/icons/edit.svg';
 import emailSVG from '../../assets/icons/email.svg';
@@ -113,8 +111,6 @@ export const iconMap = {
   delete: <ImageIcon src={deleteSVG} />,
   discord: <ImageIcon src={discordSVG} />,
   discussion: <ImageIcon src={discussionSVG} />,
-  discussionFollow: <ImageIcon src={discussionFollowSVG} />,
-  discussionUnfollow: <ImageIcon src={discussionUnfollowSVG} />,
   doubleTick: <ImageIcon src={doubleTickSVG} />,
   edit: <ImageIcon src={editSVG} />,
   email: <ImageIcon src={emailSVG} />,

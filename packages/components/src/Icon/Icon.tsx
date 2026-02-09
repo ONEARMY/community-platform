@@ -2,15 +2,7 @@
 
 import styled from '@emotion/styled';
 import { IconContext } from 'react-icons';
-import {
-  FaCloudUploadAlt,
-  FaFacebookF,
-  FaFilePdf,
-  FaFilter,
-  FaInstagram,
-  FaSignal,
-  FaSlack,
-} from 'react-icons/fa';
+import { FaCloudUploadAlt, FaFacebookF, FaFilePdf, FaFilter, FaInstagram, FaSignal, FaSlack } from 'react-icons/fa';
 import {
   MdAccessTime,
   MdAccountCircle,
@@ -79,8 +71,6 @@ export const glyphs: IGlyphs = {
   difficulty: <FaSignal />,
   discord: iconMap.discord,
   discussion: iconMap.discussion,
-  discussionFollow: iconMap.discussionFollow,
-  discussionUnfollow: iconMap.discussionUnfollow,
   doubleTick: iconMap.doubleTick,
   download: <MdFileDownload />,
   'download-cloud': <DownloadIcon />,
@@ -166,8 +156,8 @@ const IconWrapper = styled.div<IconProps>`
   position: relative;
   ${verticalAlign} ${space}
     ${(props) =>
-      props.onClick &&
-      `
+    props.onClick &&
+    `
     cursor: pointer;
   `};
 `;

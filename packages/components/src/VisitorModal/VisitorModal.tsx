@@ -20,8 +20,7 @@ export const visitorDisplayData = new Map<UserVisitorPreferencePolicy, DisplayDa
     {
       icon: iconMap.visitorsAppointment,
       label: 'Visitors after appointment',
-      default:
-        'This space prefers an appointment before visiting it. See their contact options, or get in touch directly!',
+      default: 'This space prefers an appointment before visiting it. See their contact options, or get in touch directly!',
     },
   ],
   [
@@ -49,7 +48,7 @@ export const VisitorModal = ({ show, hide, user }: VisitorModalProps) => {
   }
 
   return (
-    <Modal isOpen={show} onDidDismiss={hide} width={450} sx={{ padding: '0 !important' }}>
+    <Modal isOpen={show} onDismiss={hide} width={450} sx={{ padding: '0 !important' }}>
       <VisitorModalHeader data={displayData} hide={hide} />
       <Flex data-cy="VisitorModal" sx={{ flexDirection: 'column', padding: '16px' }}>
         {visitorPolicy.details && <>Details from {displayName}:</>}

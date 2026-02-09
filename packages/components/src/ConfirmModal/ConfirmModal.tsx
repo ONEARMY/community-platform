@@ -10,13 +10,15 @@ export interface Props {
   handleCancel: () => void;
   handleConfirm: () => void;
   width?: number;
+  cancelVariant?: 'outline' | 'destructive' | 'primary';
+  confirmVariant?: 'outline' | 'destructive' | 'primary';
 }
 
 export const ConfirmModal = (props: Props) => {
-  const { message, confirmButtonText, isOpen, width } = props;
+  const { message, confirmButtonText, isOpen, width, confirmVariant = 'primary', cancelVariant = 'outline' } = props;
 
   return (
-    <Modal onDidDismiss={() => props?.handleCancel} isOpen={isOpen} width={width}>
+    <Modal onDismiss={() => props?.handleCancel} isOpen={isOpen} width={width}>
       <Flex
         data-cy="Confirm.modal: Modal"
         sx={{
@@ -29,12 +31,7 @@ export const ConfirmModal = (props: Props) => {
       >
         <Text sx={{ alignSelf: 'stretch', fontWeight: 'bold' }}>{message}</Text>
         <Flex sx={{ gap: 2, flexWrap: 'wrap' }}>
-          <Button
-            type="button"
-            variant="outline"
-            data-cy="Confirm.modal: Cancel"
-            onClick={() => props?.handleCancel()}
-          >
+          <Button type="button" variant={cancelVariant} data-cy="Confirm.modal: Cancel" onClick={() => props?.handleCancel()}>
             Cancel
           </Button>
 
@@ -42,7 +39,7 @@ export const ConfirmModal = (props: Props) => {
             type="button"
             aria-label={`Confirm ${confirmButtonText} action`}
             data-cy="Confirm.modal: Confirm"
-            variant={'outline'}
+            variant={confirmVariant}
             onClick={() => props?.handleConfirm()}
           >
             {confirmButtonText}

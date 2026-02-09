@@ -172,6 +172,7 @@ export const ResearchArticlePage = observer(({ research }: IProps) => {
                     confirmButtonText="Delete"
                     handleCancel={() => setShowDeleteModal(false)}
                     handleConfirm={() => handleDelete && handleDelete(research)}
+                    confirmVariant="destructive"
                   />
                 </>
               )}

@@ -130,6 +130,7 @@ export const SupabaseNotificationsForm = (props: IProps) => {
                   onUnsubscribe();
                   setShowDeleteModal(false);
                 }}
+                confirmVariant="destructive"
               />
             </Flex>
           </Flex>

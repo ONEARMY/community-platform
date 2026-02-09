@@ -1,88 +1,80 @@
-import styled from '@emotion/styled';
-import { useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useRef } from 'react';
 import type { ThemeUIStyleObject } from 'theme-ui';
 import { Box } from 'theme-ui';
 
 export interface Props {
   isOpen: boolean;
-  children?: React.ReactNode;
+  onDismiss: () => void;
+  children: React.ReactNode;
   width?: number;
   height?: number;
-  onDidDismiss?: () => void;
-  sx?: ThemeUIStyleObject | undefined;
+  sx?: ThemeUIStyleObject;
 }
 
-const setVh = () => {
-  const vh = typeof window !== 'undefined' && window.innerHeight * 0.01;
-  document.documentElement.style.setProperty('--vh', `${vh}px`);
-};
-
 export const Modal = (props: Props) => {
-  const { children, width, height, isOpen, sx } = props;
+  const { children, width = 300, height, isOpen, sx, onDismiss } = props;
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
-    setVh();
-    window.addEventListener('resize', setVh);
-  }, []);
+    const dialog = dialogRef.current;
+    if (!dialog) return;
 
-  const dismiss = () => {
-    if (props.onDidDismiss) {
-      props.onDidDismiss();
-    }
-  };
-
-  const ModalBackdrop = styled(Box)`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 4000;
-  `;
-
-  const ModalContent = styled(Box)`
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: ${width || 300}px;
-    max-width: 100vw;
-    max-height: 100vh; // Fallback for browsers that do not support Custom Properties
-    max-height: calc(var(--vh, 1vh) * 95);
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    border: 2px solid black;
-    border-radius: 10px;
-    z-index: 4001;
-    overflow: hidden;
-  `;
-
-  useEffect(() => {
     if (isOpen) {
-      const originalOverflow = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-
-      return () => {
-        document.body.style.overflow = originalOverflow;
-      };
+      dialog.showModal();
+    } else {
+      dialog.close();
     }
   }, [isOpen]);
 
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    // Only close if clicking the backdrop (::backdrop)
+    const rect = dialog.getBoundingClientRect();
+    if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) {
+      onDismiss?.();
+    }
+  };
+
+  const handleClose = () => {
+    onDismiss?.();
+  };
+
+  if (!isOpen) return null;
+
   return (
-    <>
-      {isOpen &&
-        createPortal(
-          <>
-            <ModalBackdrop onClick={() => dismiss()} />
-            <ModalContent sx={{ height, width, ...sx }}>{children}</ModalContent>
-          </>,
-          document.body,
-        )}
-    </>
+    <dialog
+      ref={dialogRef}
+      onClick={handleBackdropClick}
+      onClose={handleClose}
+      style={{
+        padding: 0,
+        border: 'none',
+        borderRadius: '10px',
+        maxWidth: '90vw',
+        maxHeight: '95vh',
+        overflow: 'hidden',
+      }}
+    >
+      <Box
+        sx={{
+          padding: '16px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          width: width,
+          height: height,
+          maxWidth: 'inherit',
+          background: 'white',
+          border: '2px solid black',
+          borderRadius: '10px',
+          overflow: 'auto',
+          ...sx,
+        }}
+      >
+        {children}
+      </Box>
+    </dialog>
   );
 };

@@ -8,6 +8,15 @@ globalThis.ResizeObserver = class ResizeObserver {
   disconnect() {}
 };
 
+// Mock HTMLDialogElement methods (not available in jsdom)
+HTMLDialogElement.prototype.showModal = function () {
+  this.open = true;
+};
+
+HTMLDialogElement.prototype.close = function () {
+  this.open = false;
+};
+
 if (!globalThis.defined) {
   globalThis.defined = true;
 }

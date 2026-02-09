@@ -26,10 +26,7 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
   const { profile: activeUser } = useProfileStore();
 
   const isEditable = useMemo(() => {
-    return (
-      activeUser?.username === comment.createdBy?.username ||
-      activeUser?.roles?.includes(UserRole.ADMIN)
-    );
+    return activeUser?.username === comment.createdBy?.username || activeUser?.roles?.includes(UserRole.ADMIN);
   }, [activeUser, comment]);
 
   useEffect(() => {
@@ -75,11 +72,7 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
       >
         <Icon glyph="reply-outline" />
       </Box>
-      <Flex
-        id={`comment:${comment.id}`}
-        data-cy={isEditable ? `Own${item}` : item}
-        sx={{ flexDirection: 'column', width: '100%' }}
-      >
+      <Flex id={`comment:${comment.id}`} data-cy={isEditable ? `Own${item}` : item} sx={{ flexDirection: 'column', width: '100%' }}>
         <Flex sx={{ gap: 2 }} ref={commentRef as any}>
           {comment.deleted ? (
             <Box
@@ -109,7 +102,7 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
           )}
         </Flex>
 
-        <Modal width={600} isOpen={showEditModal}>
+        <Modal width={600} isOpen={showEditModal} onDismiss={() => setShowEditModal(false)}>
           <EditComment
             comment={comment.comment}
             handleSubmit={async (commentText) => {
@@ -130,6 +123,7 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
             onDelete(comment.id);
             setShowDeleteModal(false);
           }}
+          confirmVariant="destructive"
         />
       </Flex>
     </Flex>

@@ -107,6 +107,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 confirmButtonText="Delete"
                 handleCancel={() => setShowDeleteModal(false)}
                 handleConfirm={() => handleDelete()}
+                confirmVariant="destructive"
               />
             </Flex>
           )

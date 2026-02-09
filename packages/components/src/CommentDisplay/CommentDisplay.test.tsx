@@ -61,9 +61,7 @@ describe('CommentDisplay', () => {
     authors: [0],
   };
   const renderWithAuthorsContext = (ui: React.ReactElement) => {
-    return render(
-      <AuthorsContext.Provider value={mockAuthorsContextValue}>{ui}</AuthorsContext.Provider>,
-    );
+    return render(<AuthorsContext.Provider value={mockAuthorsContextValue}>{ui}</AuthorsContext.Provider>);
   };
 
   beforeEach(() => {
@@ -75,8 +73,7 @@ describe('CommentDisplay', () => {
         comment={mockComment}
         itemType="CommentItem"
         isEditable={false}
-        setShowDeleteModal={mockSetShowDeleteModal}
-        setShowEditModal={mockSetShowEditModal}
+        actions={<></>}
         usefulButtonConfig={mockUsefulButtonConfig}
       />,
     );
@@ -92,8 +89,7 @@ describe('CommentDisplay', () => {
         comment={mockComment}
         itemType="CommentItem"
         isEditable={false}
-        setShowDeleteModal={mockSetShowDeleteModal}
-        setShowEditModal={mockSetShowEditModal}
+        actions={<></>}
         usefulButtonConfig={mockUsefulButtonConfig}
       />,
     );
@@ -114,8 +110,7 @@ describe('CommentDisplay', () => {
         comment={mockComment}
         itemType="CommentItem"
         isEditable={false}
-        setShowDeleteModal={mockSetShowDeleteModal}
-        setShowEditModal={mockSetShowEditModal}
+        actions={<></>}
         usefulButtonConfig={{
           ...mockUsefulButtonConfig,
           votedUsefulCount: count,
@@ -135,8 +130,7 @@ describe('CommentDisplay', () => {
         comment={mockComment}
         itemType="CommentItem"
         isEditable={false}
-        setShowDeleteModal={mockSetShowDeleteModal}
-        setShowEditModal={mockSetShowEditModal}
+        actions={<></>}
         usefulButtonConfig={{
           ...mockUsefulButtonConfig,
           votedUsefulCount: count,

@@ -11,19 +11,18 @@ import {
 } from 'oa-components';
 import type { Question } from 'oa-shared';
 import { PremiumTier } from 'oa-shared';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import PageHeader from 'src/common/PageHeader';
 import { userHasPremiumTier } from 'src/common/PremiumTierWrapper';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
-import { usefulService } from 'src/services/usefulService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery';
 import { buildStatisticsLabel, hasAdminRights } from 'src/utils/helpers';
-import { onUsefulClick } from 'src/utils/onUsefulClick';
 import { createUsefulStatistic } from 'src/utils/statistics';
-import { Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
+import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui';
 import { CommentSectionSupabase } from '../common/CommentsSupabase/CommentSectionSupabase';
 import { DraftTag } from '../common/Drafts/DraftTag';
 
@@ -33,38 +32,12 @@ interface IProps {
 
 export const QuestionPage = observer(({ question }: IProps) => {
   const { profile: activeUser } = useProfileStore();
-  const [voted, setVoted] = useState<boolean>(false);
-  const [usefulCount, setUsefulCount] = useState<number>(question.usefulCount);
+  const { hasVoted, usefulCount, toggle: toggleVote } = useUsefulVote('questions', question.id, question.usefulCount);
   const [subscribersCount, setSubscribersCount] = useState<number>(question.subscriberCount);
-
-  useEffect(() => {
-    const checkVote = async () => {
-      if (activeUser) {
-        const hasVoted = await usefulService.hasVoted('questions', question.id);
-        setVoted(hasVoted);
-      }
-    };
-    checkVote();
-  }, [activeUser, question.id]);
 
   const isEditable = useMemo(() => {
     return hasAdminRights(activeUser) || question.author?.username === activeUser?.username;
   }, [activeUser, question.author]);
-
-  const handleUsefulClick = async (vote: 'add' | 'delete') => {
-    await onUsefulClick({
-      vote,
-      config: {
-        contentType: 'questions',
-        contentId: question.id,
-        eventCategory: 'questions',
-        slug: question.slug,
-        setVoted,
-        setUsefulCount,
-        loggedInUser: activeUser,
-      },
-    });
-  };
 
   return (
     <Flex
@@ -140,17 +113,11 @@ export const QuestionPage = observer(({ question }: IProps) => {
             justifyContent: 'space-between',
           }}
         >
-          <ClientOnly fallback={<></>}>
-            {() => (
-              <>
-                <UsefulStatsButton
-                  hasUserVotedUseful={voted}
-                  isLoggedIn={!!activeUser}
-                  onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}
-                />
-              </>
-            )}
-          </ClientOnly>
+          <Box>
+            <ClientOnly fallback={<></>}>
+              {() => <UsefulStatsButton hasUserVotedUseful={hasVoted} isLoggedIn={!!activeUser} onUsefulClick={toggleVote} />}
+            </ClientOnly>
+          </Box>
 
           <ContentStatistics
             statistics={[

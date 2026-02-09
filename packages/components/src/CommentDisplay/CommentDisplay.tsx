@@ -3,47 +3,25 @@ import type { ReactNode } from 'react';
 import { useContext } from 'react';
 import type { ThemeUIStyleObject } from 'theme-ui';
 import { Box, Flex, Text } from 'theme-ui';
-import { ActionSet } from '../ActionSet/ActionSet';
-import { Button } from '../Button/Button';
 import { CommentAvatar } from '../CommentAvatar/CommentAvatar';
 import { CommentBody } from '../CommentBody/CommentBody';
 import { DisplayDate } from '../DisplayDate/DisplayDate';
 import { AuthorsContext } from '../providers/AuthorsContext';
-import { UsefulButtonLite } from '../UsefulStatsButton/UsefulButtonLite';
+import { UsefulButtonLite, UsefulConfig } from '../UsefulStatsButton/UsefulButtonLite';
 import { Username } from '../Username/Username';
 
 export interface IProps {
   comment: Comment;
   itemType: 'ReplyItem' | 'CommentItem';
   isEditable: boolean | undefined;
-  setShowDeleteModal: (arg: boolean) => void;
-  setShowEditModal: (arg: boolean) => void;
-  handleCopyLink?: () => void;
-  usefulButtonConfig: {
-    hasUserVotedUseful: boolean;
-    votedUsefulCount: number;
-    isLoggedIn: boolean;
-    onUsefulClick: (vote: 'add' | 'delete', eventCategory?: string) => Promise<void>;
-    sx?: ThemeUIStyleObject;
-  };
-  followButton?: ReactNode;
-  followButtonIcon?: ReactNode;
+  actions: React.ReactNode;
+  usefulButtonConfig: UsefulConfig;
 }
 
 const DELETED_COMMENT = 'The original comment got deleted';
 
 export const CommentDisplay = (props: IProps) => {
-  const {
-    comment,
-    itemType,
-    isEditable,
-    followButton,
-    followButtonIcon,
-    setShowDeleteModal,
-    setShowEditModal,
-    handleCopyLink,
-    usefulButtonConfig,
-  } = props;
+  const { comment, actions, usefulButtonConfig } = props;
 
   const { authors } = useContext(AuthorsContext);
   const border = `${comment.highlighted ? '2px dashed black' : 'none'}`;
@@ -110,47 +88,7 @@ export const CommentDisplay = (props: IProps) => {
                 </Text>
               </Flex>
 
-              <Flex sx={{ alignItems: 'center', gap: 1 }}>
-                {followButtonIcon}
-
-                <ActionSet itemType={itemType}>
-                  {followButton}
-                  {isEditable && (
-                    <Button
-                      type="button"
-                      data-cy={`${itemType}: edit button`}
-                      variant="subtle"
-                      icon="edit"
-                      onClick={() => setShowEditModal(true)}
-                      sx={{ fontSize: 1 }}
-                    >
-                      Edit
-                    </Button>
-                  )}
-                  <Button
-                    type="button"
-                    data-cy={`${itemType}: copy link button`}
-                    variant="subtle"
-                    icon="copy-link"
-                    onClick={handleCopyLink}
-                    sx={{ fontSize: 1 }}
-                  >
-                    Copy Link
-                  </Button>
-                  {isEditable && (
-                    <Button
-                      type="button"
-                      data-cy={`${itemType}: delete button`}
-                      variant="subtle"
-                      icon="delete"
-                      onClick={() => setShowDeleteModal(true)}
-                      sx={{ fontSize: 1 }}
-                    >
-                      Delete
-                    </Button>
-                  )}
-                </ActionSet>
-              </Flex>
+              {actions && <Flex sx={{ alignItems: 'center', gap: 1 }}>{actions}</Flex>}
             </Flex>
             <Flex
               sx={{
@@ -158,7 +96,7 @@ export const CommentDisplay = (props: IProps) => {
               }}
             >
               <CommentBody body={comment.comment} />
-              <UsefulButtonLite usefulButtonLiteConfig={usefulButtonConfig} />
+              <UsefulButtonLite {...usefulButtonConfig} />
             </Flex>
           </Flex>
         </Flex>

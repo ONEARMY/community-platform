@@ -73,6 +73,7 @@ Notifications are sent to users who subscribed a specific kind of content, when 
 There is a `subscriptions` table to keep track of that.
 
 Current notification types:
+
 - new research upgrade
 - new comment (for each of these content types - news, research_updates, questions, projects)
 - new reply (to a comment)
@@ -80,6 +81,7 @@ Current notification types:
 As such, there are 3 action types: `newContent`, `newComment`, `newReply`.
 
 Why not merge `newComment` and `newReply`?
+
 - They were the same at first, but the logic is different enough to warrant the separation. For instance, in a `newReply` the "parent" is a comment, and to obtain extra info (content title), need to "go up a level" twice.
 - Due to this complexity, a decision was made to cut showing the `newReply` respective content title (can be added again later if necessary).
 - This also made the logic of `newComment` more straighforward.
@@ -87,3 +89,64 @@ Why not merge `newComment` and `newReply`?
 Notification links are redirects: `/redirect?id={content_id}&ct={content_type}`
 where the `content_type` could be comments, questions, research_updates, news, questions, projects
 By using the redirect, we no longer need to generate the direct link in the "send notifications" step, which reduces complexity significantly.
+
+## Subscription Store
+
+### Architecture
+
+```
+ProfileStoreProvider (existing)
+  └── SubscriptionStoreProvider (new)
+        └── App Components
+```
+
+### Pros
+
+- ✅ Clear separation of concerns
+- ✅ Independent lifecycle management
+- ✅ Easy to test in isolation
+- ✅ No impact on existing ProfileStore
+- ✅ Can be used anywhere in the component tree
+- ✅ Follows existing patterns in your codebase
+
+### Cons
+
+- ⚠️ Adds one more context provider layer
+- ⚠️ Need to nest providers in layout
+
+### Implementation Details
+
+**Store Structure:**
+
+```typescript
+class SubscriptionStore {
+  // Cache: Map<"contentType-itemId", subscriptionState>
+  subscriptions: Map<string, boolean>
+
+  // Track loading states to prevent duplicate calls
+  loadingStates: Map<string, boolean>
+
+  Methods:
+  - checkAndCacheSubscription(contentType, itemId): Promise<boolean>
+  - subscribe(contentType, itemId): Promise<void>
+  - unsubscribe(contentType, itemId): Promise<void>
+  - isSubscribed(contentType, itemId): boolean | undefined
+  - clearCache(): void
+}
+```
+
+**Provider Setup:**
+Place in `src/routes/_.tsx` inside `ProfileStoreProvider`:
+
+```tsx
+<ProfileStoreProvider>
+  <SubscriptionStoreProvider>{/* existing app */}</SubscriptionStoreProvider>
+</ProfileStoreProvider>
+```
+
+**Hook Usage:**
+
+```tsx
+const { isSubscribed, subscribe, unsubscribe } = useSubscriptionStore();
+const subscribed = isSubscribed('comments', 123);
+```

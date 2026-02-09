@@ -1,4 +1,4 @@
-import { createRef, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Text } from 'theme-ui';
 
 import { LinkifyText } from '../LinkifyText/LinkifyText';
@@ -9,8 +9,7 @@ interface IProps {
 const SHORT_COMMENT = 129;
 
 export const CommentBody = ({ body }: IProps) => {
-  const textRef = createRef<any>();
-
+  const textRef = useRef<HTMLDivElement>(null);
   const [textHeight, setTextHeight] = useState(0);
   const [isShowMore, setShowMore] = useState(false);
 
@@ -18,17 +17,14 @@ export const CommentBody = ({ body }: IProps) => {
     if (textRef.current) {
       setTextHeight(textRef.current.scrollHeight);
     }
-  }, [textRef]);
-
-  const showMore = () => {
-    setShowMore((prev) => !prev);
-  };
+  }, [body]);
 
   const maxHeight = isShowMore ? 'max-content' : '128px';
 
   return (
     <>
       <Text
+        ref={textRef}
         data-cy="comment-text"
         data-testid="commentText"
         sx={{
@@ -40,14 +36,13 @@ export const CommentBody = ({ body }: IProps) => {
           whiteSpace: 'pre-wrap',
           fontSize: [2, 3],
         }}
-        ref={textRef}
       >
         <LinkifyText>{body.trim()}</LinkifyText>
       </Text>
       {textHeight > SHORT_COMMENT && (
         <Text
           as="a"
-          onClick={showMore}
+          onClick={() => setShowMore((prev) => !prev)}
           sx={{
             color: 'gray',
             cursor: 'pointer',

@@ -8,13 +8,13 @@ export default {
 } as Meta<typeof FollowButton>;
 
 export const LoggedOut: StoryFn<typeof FollowButton> = () => (
-  <FollowButton isLoggedIn={false} hasUserSubscribed={false} onFollowClick={() => null} />
+  <FollowButton isLoggedIn={false} isFollowing={false} onFollowClick={() => null} />
 );
 
 export const LoggedIn: StoryFn<typeof FollowButton> = () => (
-  <FollowButton hasUserSubscribed={false} isLoggedIn={true} onFollowClick={() => null} />
+  <FollowButton isLoggedIn={true} isFollowing={false} onFollowClick={() => null} />
 );
 
 export const CurrentUserSubscribed: StoryFn<typeof FollowButton> = () => (
-  <FollowButton hasUserSubscribed={true} isLoggedIn={true} onFollowClick={() => null} />
+  <FollowButton isLoggedIn={true} isFollowing={true} onFollowClick={() => null} />
 );

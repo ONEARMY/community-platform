@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import { ArticleCallToActionSupabase, Button, ConfirmModal, UsefulStatsButton, UserEngagementWrapper } from 'oa-components';
-import type { ContentType, Project, ProjectStep } from 'oa-shared';
-import { useEffect, useMemo, useState } from 'react';
+import type { Project, ProjectStep } from 'oa-shared';
+import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { trackEvent } from 'src/common/Analytics';
@@ -9,10 +9,9 @@ import { DonationRequestModalContainer } from 'src/common/DonationRequestModalCo
 import PageHeader from 'src/common/PageHeader';
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs';
 import { CommentSectionSupabase } from 'src/pages/common/CommentsSupabase/CommentSectionSupabase';
-import { usefulService } from 'src/services/usefulService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { hasAdminRights } from 'src/utils/helpers';
-import { onUsefulClick } from 'src/utils/onUsefulClick';
 import { Card, Flex } from 'theme-ui';
 import { libraryService } from '../../library.service';
 import { LibraryDescription } from './LibraryDescription';
@@ -23,38 +22,9 @@ interface ProjectPageProps {
 }
 
 export const ProjectPage = observer(({ item }: ProjectPageProps) => {
-  const [voted, setVoted] = useState<boolean>(false);
-  const [usefulCount, setUsefulCount] = useState<number>(item.usefulCount);
   const { profile: activeUser } = useProfileStore();
+  const { hasVoted, usefulCount, toggle: toggleVote } = useUsefulVote('projects', item.id, item.usefulCount);
   const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
-
-  useEffect(() => {
-    const getVoted = async () => {
-      const voted = await usefulService.hasVoted('projects', item.id);
-      setVoted(voted);
-    };
-
-    if (activeUser) {
-      getVoted();
-    }
-  }, [activeUser, item]);
-
-  const configOnUsefulClick = {
-    contentType: 'projects' as ContentType,
-    contentId: item.id,
-    eventCategory: 'Library',
-    slug: item.slug,
-    setVoted,
-    setUsefulCount,
-    loggedInUser: activeUser,
-  };
-
-  const handleUsefulClick = async (vote: 'add' | 'delete') => {
-    await onUsefulClick({
-      vote,
-      config: { ...configOnUsefulClick, eventCategory: 'projects' },
-    });
-  };
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -127,8 +97,8 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
         loggedInUser={activeUser}
         commentsCount={item.commentCount}
         votedUsefulCount={usefulCount}
-        hasUserVotedUseful={voted}
-        onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}
+        hasUserVotedUseful={hasVoted}
+        onUsefulClick={toggleVote}
       />
       <Flex sx={{ flexDirection: 'column', marginTop: [3, 4], gap: 4 }}>
         {item.steps
@@ -156,11 +126,7 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 Leave a comment
               </Button>
               {item.moderation === 'accepted' && (
-                <UsefulStatsButton
-                  hasUserVotedUseful={voted}
-                  isLoggedIn={!!activeUser}
-                  onUsefulClick={() => handleUsefulClick(voted ? 'delete' : 'add')}
-                />
+                <UsefulStatsButton hasUserVotedUseful={hasVoted} isLoggedIn={!!activeUser} onUsefulClick={toggleVote} />
               )}
               {item.author?.profileType?.isSpace && item.author?.donationsEnabled && (
                 <>

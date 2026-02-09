@@ -1,11 +1,13 @@
-import { AuthorsContext, CommentsTitle } from 'oa-components';
+import { observer } from 'mobx-react';
+import { AuthorsContext, CommentsTitle, FollowButton } from 'oa-components';
 import type { DiscussionContentType, Reply } from 'oa-shared';
 import { Comment } from 'oa-shared';
 import type { Dispatch, SetStateAction } from 'react';
 import { useEffect, useMemo, useState } from 'react';
-import { FollowButtonAction } from 'src/common/FollowButtonAction';
 import { commentService } from 'src/services/commentService';
 import { subscribersService } from 'src/services/subscribersService';
+import { useProfileStore } from 'src/stores/Profile/profile.store';
+import { useSubscription } from 'src/stores/Subscription/useSubscription';
 import { Box, Button, Flex } from 'theme-ui';
 import { CommentItemSupabase } from './CommentItemSupabase';
 import { CommentSort } from './CommentSort';
@@ -20,12 +22,14 @@ interface IProps {
 }
 const commentPageSize = 10;
 
-export const CommentSectionSupabase = (props: IProps) => {
-  const { authors, setSubscribersCount, sourceId, sourceType } = props;
+export const CommentSectionSupabase = observer((props: IProps) => {
+  const { authors, sourceId, sourceType } = props;
 
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentLimit, setCommentLimit] = useState<number>(commentPageSize);
   const [sortBy, setSortBy] = useState<CommentSortOption>(CommentSortOption.Oldest);
+  const { isSubscribed, toggle: toggleFollowReplies } = useSubscription(sourceType, sourceId);
+  const { profile } = useProfileStore();
 
   const displayedComments = useMemo(() => {
     const sortFn = CommentSortOptions.getSortFn(sortBy);
@@ -41,9 +45,7 @@ export const CommentSectionSupabase = (props: IProps) => {
     const fetchComments = async () => {
       try {
         const comments = await commentService.getComments(sourceType, sourceId);
-        const highlightedCommentId = location.hash?.startsWith('#comment:')
-          ? location.hash.replace('#comment:', '')
-          : null;
+        const highlightedCommentId = location.hash?.startsWith('#comment:') ? location.hash.replace('#comment:', '') : null;
 
         if (highlightedCommentId) {
           const highlightedComment = comments.find((x) => x.id === +highlightedCommentId);
@@ -51,9 +53,7 @@ export const CommentSectionSupabase = (props: IProps) => {
             highlightedComment.highlighted = true;
           } else {
             // find in replies and set highlighted
-            const highlightedReply = comments
-              .flatMap((x) => x.replies)
-              .find((x) => x?.id === +highlightedCommentId);
+            const highlightedReply = comments.flatMap((x) => x.replies).find((x) => x?.id === +highlightedCommentId);
 
             if (highlightedReply) {
               highlightedReply.highlighted = true;
@@ -61,9 +61,7 @@ export const CommentSectionSupabase = (props: IProps) => {
           }
 
           // ensure highlighted comment is visible
-          const index = comments.findIndex(
-            (x) => x.highlighted || x.replies?.some((y) => y.highlighted),
-          );
+          const index = comments.findIndex((x) => x.highlighted || x.replies?.some((y) => y.highlighted));
 
           if (index > 5) {
             setCommentLimit(index + 1);
@@ -258,12 +256,13 @@ export const CommentSectionSupabase = (props: IProps) => {
             }}
           >
             <CommentsTitle comments={comments} />
-            <FollowButtonAction
+
+            <FollowButton
+              isFollowing={isSubscribed}
+              isLoggedIn={!!profile}
               labelFollow="Follow Comments"
               labelUnfollow="Following Comments"
-              contentType={sourceType}
-              itemId={sourceId}
-              setSubscribersCount={setSubscribersCount}
+              onFollowClick={toggleFollowReplies}
             />
           </Flex>
           {comments.length >= 5 && <CommentSort sortBy={sortBy} onSortChange={setSortBy} />}
@@ -301,4 +300,4 @@ export const CommentSectionSupabase = (props: IProps) => {
       </Flex>
     </AuthorsContext.Provider>
   );
-};
+});

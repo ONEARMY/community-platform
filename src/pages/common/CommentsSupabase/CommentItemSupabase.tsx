@@ -1,11 +1,21 @@
 import { observer } from 'mobx-react';
-import { ButtonShowReplies, CommentDisplay, ConfirmModal, EditComment, Modal } from 'oa-components';
+import {
+  ActionSet,
+  Button,
+  ButtonShowReplies,
+  CommentDisplay,
+  ConfirmModal,
+  EditComment,
+  FollowButton,
+  FollowIcon,
+  Modal,
+} from 'oa-components';
 import type { Comment, DiscussionContentType } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { FollowButtonAction } from 'src/common/FollowButtonAction';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { onUsefulClick } from 'src/utils/onUsefulClick';
+import { useSubscription } from 'src/stores/Subscription/useSubscription';
+import { useUsefulVote } from 'src/stores/UsefulVote/useUsefulVote';
 import { Card, Flex } from 'theme-ui';
 import { CommentReply } from './CommentReplySupabase';
 import { CreateCommentSupabase } from './CreateCommentSupabase';
@@ -29,7 +39,8 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showReplies, setShowReplies] = useState(() => !!comment.replies?.some((x) => x.highlighted));
   const { profile } = useProfileStore();
-  const [voted, setVoted] = useState<boolean>(false);
+  const { hasVoted, usefulCount, toggle: toggleVote } = useUsefulVote('comments', comment.id, comment.voteCount ?? 0);
+  const { isSubscribed: isFollowingReplies, toggle: toggleFollowReplies } = useSubscription('comments', comment.id);
 
   const isEditable = useMemo(() => {
     return profile?.username === comment.createdBy?.username || profile?.roles?.includes(UserRole.ADMIN);
@@ -37,9 +48,10 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
 
   const item = 'CommentItem';
 
+  // Update parent component with new vote count when it changes
   useEffect(() => {
-    setVoted(comment.hasVoted ?? false);
-  }, [profile, comment]);
+    updateUsefulCount?.(comment.id, usefulCount);
+  }, [usefulCount, comment.id, updateUsefulCount]);
 
   useEffect(() => {
     if (comment.highlighted) {
@@ -50,24 +62,6 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
     }
   }, [comment.highlighted]);
 
-  const handleUsefulClick = async (vote: 'add' | 'delete') => {
-    await onUsefulClick({
-      vote,
-      config: {
-        contentType: 'comments',
-        contentId: comment.id,
-        slug: `${comment}+${comment.id}`,
-        setVoted,
-        setUsefulCount: (newCount) => {
-          const count = typeof newCount === 'function' ? newCount(comment.voteCount ?? 0) : newCount;
-          updateUsefulCount?.(comment.id, count);
-        },
-        loggedInUser: profile,
-        eventCategory: 'comments',
-      },
-    });
-  };
-
   const copyCommentLink = useCopyCommentLink(comment);
 
   return (
@@ -77,41 +71,64 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
           isEditable={isEditable}
           itemType={item}
           comment={comment}
-          setShowDeleteModal={setShowDeleteModal}
-          setShowEditModal={setShowEditModal}
-          handleCopyLink={copyCommentLink}
-          followButton={
-            <FollowButtonAction
-              contentType="comments"
-              iconFollow="discussionFollow"
-              iconUnfollow="discussionUnfollow"
-              itemId={comment.id}
-              labelFollow="Follow replies"
-              labelUnfollow="Unfollow replies"
-              sx={{ fontSize: 1 }}
-              variant="subtle"
-            />
-          }
-          followButtonIcon={
-            <Flex sx={{ display: ['none', 'inline'] }}>
-              <FollowButtonAction
-                contentType="comments"
-                itemId={comment.id}
-                labelFollow="Follow replies"
-                labelUnfollow="Unfollow replies"
-                showIconOnly
-                tooltipFollow="Not following replies"
-                tooltipUnfollow="Following replies"
-                variant="subtle"
-                hideSubscribeIcon
-                small={true}
-              />
-            </Flex>
+          actions={
+            <>
+              {!!profile && isFollowingReplies && (
+                <Flex sx={{ display: ['none', 'inline'] }}>
+                  <FollowIcon tooltip="Following replies" />
+                </Flex>
+              )}
+              <ActionSet itemType="CommentItem">
+                <FollowButton
+                  isLoggedIn={!!profile}
+                  isFollowing={isFollowingReplies}
+                  onFollowClick={toggleFollowReplies}
+                  labelFollow="Follow replies"
+                  labelUnfollow="Unfollow replies"
+                  variant="subtle"
+                  sx={{ fontSize: 1 }}
+                />
+                {isEditable && (
+                  <Button
+                    type="button"
+                    data-cy="CommentItem: edit button"
+                    variant="subtle"
+                    icon="edit"
+                    onClick={() => setShowEditModal(true)}
+                    sx={{ fontSize: 1 }}
+                  >
+                    Edit
+                  </Button>
+                )}
+                <Button
+                  type="button"
+                  data-cy="CommentItem: copy link button"
+                  variant="subtle"
+                  icon="copy-link"
+                  onClick={copyCommentLink}
+                  sx={{ fontSize: 1 }}
+                >
+                  Copy Link
+                </Button>
+                {isEditable && (
+                  <Button
+                    type="button"
+                    data-cy="CommentItem delete button"
+                    variant="subtle"
+                    icon="delete"
+                    onClick={() => setShowDeleteModal(true)}
+                    sx={{ fontSize: 1 }}
+                  >
+                    Delete
+                  </Button>
+                )}
+              </ActionSet>
+            </>
           }
           usefulButtonConfig={{
-            onUsefulClick: () => handleUsefulClick(voted ? 'delete' : 'add'),
-            hasUserVotedUseful: voted,
-            votedUsefulCount: comment.voteCount ?? 0,
+            onUsefulClick: async () => await toggleVote(),
+            hasUserVotedUseful: hasVoted,
+            votedUsefulCount: usefulCount,
             isLoggedIn: !!profile,
           }}
         />

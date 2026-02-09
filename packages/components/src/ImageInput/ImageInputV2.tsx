@@ -61,11 +61,7 @@ export const ImageInputV2 = (props: IProps) => {
           <ImageInputWrapper {...getRootProps()} ref={rootRef} hasUploadedImg={!!existingImage}>
             <input ref={fileInputRef} data-testid={'image-input'} {...getInputProps()} />
 
-            {src ? (
-              <ImageComponent src={src} sx={imageDisplaySx} />
-            ) : (
-              <ImageComponent src={existingImage?.publicUrl} sx={imageDisplaySx} />
-            )}
+            {src ? <ImageComponent src={src} sx={imageDisplaySx} /> : <ImageComponent src={existingImage?.publicUrl} sx={imageDisplaySx} />}
 
             {!src && !existingImage ? (
               <Button small variant="outline" icon="image" type="button">
@@ -77,7 +73,7 @@ export const ImageInputV2 = (props: IProps) => {
           </ImageInputWrapper>
         )}
       </Dropzone>
-      <Modal width={600} isOpen={showErrorModal} onDidDismiss={() => setShowErrorModal(false)}>
+      <Modal width={600} isOpen={showErrorModal} onDismiss={() => setShowErrorModal(false)}>
         {isImageCorrupt && (
           <Flex
             data-cy="ImageUploadError"
@@ -89,10 +85,7 @@ export const ImageInputV2 = (props: IProps) => {
             }}
           >
             <Text>The uploaded image appears to be corrupted or a type we don't accept.</Text>
-            <Text>
-              Check your image is valid and one of the following formats: jpeg, jpg, png, gif, heic,
-              svg or webp.
-            </Text>
+            <Text>Check your image is valid and one of the following formats: jpeg, jpg, png, gif, heic, svg or webp.</Text>
             <Button
               data-cy="ImageUploadError-Button"
               sx={{ marginTop: '20px', justifyContent: 'center' }}

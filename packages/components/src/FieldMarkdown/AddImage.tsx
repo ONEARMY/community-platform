@@ -35,18 +35,11 @@ export const AddImage = ({ imageUploadHandler }: IProps) => {
 
   return (
     <>
-      <Button
-        small
-        variant="subtle"
-        icon="image"
-        type="button"
-        showIconOnly
-        onClick={() => setIsOpen(true)}
-      >
+      <Button small variant="subtle" icon="image" type="button" showIconOnly onClick={() => setIsOpen(true)}>
         Upload
       </Button>
 
-      <Modal isOpen={isOpen} width={600}>
+      <Modal isOpen={isOpen} width={600} onDismiss={() => setIsOpen(false)}>
         <Flex sx={{ flexDirection: 'column', gap: 2 }}>
           {isLoading && <>Loading</>}
           <Box sx={{ height: '300px' }}>

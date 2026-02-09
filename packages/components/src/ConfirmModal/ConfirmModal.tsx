@@ -18,7 +18,7 @@ export const ConfirmModal = (props: Props) => {
   const { message, confirmButtonText, isOpen, width, confirmVariant = 'primary', cancelVariant = 'outline' } = props;
 
   return (
-    <Modal onDidDismiss={() => props?.handleCancel} isOpen={isOpen} width={width}>
+    <Modal onDismiss={() => props?.handleCancel} isOpen={isOpen} width={width}>
       <Flex
         data-cy="Confirm.modal: Modal"
         sx={{

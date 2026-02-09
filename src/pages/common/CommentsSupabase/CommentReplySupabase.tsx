@@ -102,7 +102,7 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
           )}
         </Flex>
 
-        <Modal width={600} isOpen={showEditModal}>
+        <Modal width={600} isOpen={showEditModal} onDismiss={() => setShowEditModal(false)}>
           <EditComment
             comment={comment.comment}
             handleSubmit={async (commentText) => {

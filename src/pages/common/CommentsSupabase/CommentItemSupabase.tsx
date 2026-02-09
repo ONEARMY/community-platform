@@ -100,8 +100,8 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
                 labelFollow="Follow replies"
                 labelUnfollow="Unfollow replies"
                 showIconOnly
-                tooltipFollow="Follow replies"
-                tooltipUnfollow="Unfollow replies"
+                tooltipFollow="Not following replies"
+                tooltipUnfollow="Following replies"
                 variant="subtle"
                 hideSubscribeIcon
                 small={true}
@@ -149,7 +149,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
         </Flex>
       </Card>
 
-      <Modal width={600} isOpen={showEditModal}>
+      <Modal width={600} isOpen={showEditModal} onDismiss={() => setShowEditModal(false)}>
         <EditComment
           comment={comment.comment}
           handleSubmit={async (commentText) => {

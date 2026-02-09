@@ -1,24 +1,12 @@
 import styled from '@emotion/styled';
-import {
-  Button,
-  FieldInput,
-  FieldTextarea,
-  ImageInputDeleteImage,
-  ImageInputWrapper,
-  Modal,
-} from 'oa-components';
+import { Button, FieldInput, FieldTextarea, ImageInputDeleteImage, ImageInputWrapper, Modal } from 'oa-components';
 import type { Image, IUploadedFileMeta } from 'oa-shared';
 import { useState } from 'react';
 import { Field } from 'react-final-form';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { ImageInputField } from 'src/common/Form/ImageInput.field';
 import { COMPARISONS } from 'src/utils/comparisons';
-import {
-  composeValidators,
-  draftValidationWrapper,
-  minValue,
-  required,
-} from 'src/utils/validators';
+import { composeValidators, draftValidationWrapper, minValue, required } from 'src/utils/validators';
 import { Card, Flex, Heading, Image as ImageComponent, Label, Text } from 'theme-ui';
 import {
   LIBRARY_MIN_REQUIRED_STEPS,
@@ -50,14 +38,7 @@ interface IProps {
  * - minimum character length of 100 characters
  * - maximum character length of 1000 characters
  */
-export const LibraryStepField = ({
-  name,
-  index,
-  images,
-  existingImages,
-  onDelete,
-  moveStep,
-}: IProps) => {
+export const LibraryStepField = ({ name, index, images, existingImages, onDelete, moveStep }: IProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const toggleDeleteModal = () => {
@@ -80,10 +61,8 @@ export const LibraryStepField = ({
     }
 
     // More robust checking for images - ensure array exists AND has items
-    const hasNewImages =
-      Array.isArray(stepValues.images) && stepValues.images?.filter((x) => !!x).length > 0;
-    const hasExistingImages =
-      Array.isArray(stepValues.existingImages) && stepValues.existingImages.length > 0;
+    const hasNewImages = Array.isArray(stepValues.images) && stepValues.images?.filter((x) => !!x).length > 0;
+    const hasExistingImages = Array.isArray(stepValues.existingImages) && stepValues.existingImages.length > 0;
     const hasAnyImages = hasNewImages || hasExistingImages;
 
     if (stepValues.videoUrl) {
@@ -107,9 +86,7 @@ export const LibraryStepField = ({
 
   const isAboveMinimumStep = index >= LIBRARY_MIN_REQUIRED_STEPS;
 
-  const numberOfImageInputsAvailable = images
-    ? Math.min(images.filter((x) => !!x).length + 1, 10)
-    : 1;
+  const numberOfImageInputsAvailable = images ? Math.min(images.filter((x) => !!x).length + 1, 10) : 1;
 
   return (
     <Card data-cy={`step_${index}`} mt={5} key={index}>
@@ -152,7 +129,7 @@ export const LibraryStepField = ({
             />
           )}
 
-          <Modal onDidDismiss={() => toggleDeleteModal()} isOpen={!!showDeleteModal}>
+          <Modal onDismiss={() => toggleDeleteModal()} isOpen={!!showDeleteModal}>
             <Text>{deleteButton.warning}</Text>
             <Flex mt={3} p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
               <Flex px={1}>
@@ -161,13 +138,7 @@ export const LibraryStepField = ({
                 </Button>
               </Flex>
               <Flex px={1}>
-                <Button
-                  data-cy="confirm"
-                  data-testid="confirm"
-                  variant="outline"
-                  onClick={() => confirmDelete()}
-                  type="button"
-                >
+                <Button data-cy="confirm" data-testid="confirm" variant="outline" onClick={() => confirmDelete()} type="button">
                   {deleteButton.title}
                 </Button>
               </Flex>
@@ -189,11 +160,7 @@ export const LibraryStepField = ({
             maxLength={LIBRARY_TITLE_MAX_LENGTH}
             minLength={LIBRARY_TITLE_MIN_LENGTH}
             validate={(value, allValues) =>
-              draftValidationWrapper(
-                value,
-                allValues,
-                composeValidators(required, minValue(LIBRARY_TITLE_MIN_LENGTH)),
-              )
+              draftValidationWrapper(value, allValues, composeValidators(required, minValue(LIBRARY_TITLE_MIN_LENGTH)))
             }
             validateFields={[]}
             isEqual={COMPARISONS.textInput}
@@ -216,11 +183,7 @@ export const LibraryStepField = ({
             component={FieldTextarea}
             style={{ resize: 'vertical', height: '300px' }}
             validate={(value, allValues) =>
-              draftValidationWrapper(
-                value,
-                allValues,
-                composeValidators(required, minValue(STEP_DESCRIPTION_MIN_LENGTH)),
-              )
+              draftValidationWrapper(value, allValues, composeValidators(required, minValue(STEP_DESCRIPTION_MIN_LENGTH)))
             }
             validateFields={[]}
             isEqual={COMPARISONS.textInput}
@@ -243,10 +206,7 @@ export const LibraryStepField = ({
             {({ input }) => (
               <>
                 {existingImages?.map((image, index) => (
-                  <ImageInputFieldWrapper
-                    key={`existing-image-${index}`}
-                    data-cy={`existing-image-${index}`}
-                  >
+                  <ImageInputFieldWrapper key={`existing-image-${index}`} data-cy={`existing-image-${index}`}>
                     <FieldContainer
                       style={{
                         height: '100%',
@@ -279,12 +239,7 @@ export const LibraryStepField = ({
 
           {[...Array(numberOfImageInputsAvailable)].map((_, i) => (
             <ImageInputFieldWrapper key={`image-upload-${i}`} data-cy={`image-upload-${i}`}>
-              <Field
-                hasText={false}
-                name={`steps[${index}].images[${i}]`}
-                component={ImageInputField}
-                isEqual={COMPARISONS.image}
-              />
+              <Field hasText={false} name={`steps[${index}].images[${i}]`} component={ImageInputField} isEqual={COMPARISONS.image} />
             </ImageInputFieldWrapper>
           ))}
         </Flex>

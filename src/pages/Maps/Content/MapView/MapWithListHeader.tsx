@@ -31,9 +31,7 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
 
   if (mapState.loadingMessage) {
     return (
-      <Flex
-        sx={{ background: 'background', height: '100%', width: '100%', justifyContent: 'center' }}
-      >
+      <Flex sx={{ background: 'background', height: '100%', width: '100%', justifyContent: 'center' }}>
         <Loader label={mapState.loadingMessage} sx={{ alignSelf: 'center' }} />
       </Flex>
     );
@@ -42,7 +40,7 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
   return (
     <>
       <Modal
-        onDidDismiss={toggleFilterModal}
+        onDismiss={toggleFilterModal}
         isOpen={showFilters}
         sx={{ width: ['350px', '600px'], minWidth: '350px', padding: '0 !important' }}
       >

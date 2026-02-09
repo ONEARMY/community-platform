@@ -7,12 +7,12 @@ export interface Props {
   children?: React.ReactNode;
   width?: number;
   height?: number;
-  onDidDismiss?: () => void;
+  onDismiss?: () => void;
   sx?: ThemeUIStyleObject;
 }
 
 export const Modal = (props: Props) => {
-  const { children, width = 300, height, isOpen, sx, onDidDismiss } = props;
+  const { children, width = 300, height, isOpen, sx, onDismiss } = props;
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -33,12 +33,12 @@ export const Modal = (props: Props) => {
     // Only close if clicking the backdrop (::backdrop)
     const rect = dialog.getBoundingClientRect();
     if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) {
-      onDidDismiss?.();
+      onDismiss?.();
     }
   };
 
   const handleClose = () => {
-    onDidDismiss?.();
+    onDismiss?.();
   };
 
   if (!isOpen) return null;

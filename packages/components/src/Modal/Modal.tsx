@@ -4,10 +4,10 @@ import { Box } from 'theme-ui';
 
 export interface Props {
   isOpen: boolean;
-  children?: React.ReactNode;
+  onDismiss: () => void;
+  children: React.ReactNode;
   width?: number;
   height?: number;
-  onDismiss?: () => void;
   sx?: ThemeUIStyleObject;
 }
 

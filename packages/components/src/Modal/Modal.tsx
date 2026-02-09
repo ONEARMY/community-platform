@@ -52,7 +52,7 @@ export const Modal = (props: Props) => {
         padding: 0,
         border: 'none',
         borderRadius: '10px',
-        maxWidth: '100vw',
+        maxWidth: '90vw',
         maxHeight: '95vh',
         overflow: 'hidden',
       }}
@@ -65,6 +65,7 @@ export const Modal = (props: Props) => {
           justifyContent: 'space-between',
           width: width,
           height: height,
+          maxWidth: 'inherit',
           background: 'white',
           border: '2px solid black',
           borderRadius: '10px',

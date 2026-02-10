@@ -18,6 +18,7 @@ const update = async (value: ProfileFormData) => {
   const url = new URL('/api/profile', window.location.origin);
   const data = new FormData();
 
+  data.append('userName', value.userName);
   data.append('displayName', value.displayName);
   data.append('about', value.about);
   data.append('country', value.country);

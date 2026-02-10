@@ -2,6 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBAuthor, DBProfile, DBResearchItem, DBResearchUpdate } from 'oa-shared';
 import { Author, ResearchItem, UserRole } from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import { authServiceServer } from './authService.server';
 import { ProfileServiceServer } from './profileService.server';
 import { storageServiceServer } from './storageService.server';
 
@@ -137,33 +138,32 @@ const getResearchPublicMedia = (researchDb: DBResearchItem, client: SupabaseClie
 const isAllowedToEditResearch = async (
   client: SupabaseClient,
   research: ResearchItem,
-  currentUsername: string,
+  authId: string,
 ) => {
-  if (!currentUsername) {
+  if (!authId) {
     return false;
   }
 
-  if (currentUsername === research.author?.username) {
+  const currentUser = await authServiceServer.getProfileByAuthId(authId, client);
+  if (!currentUser) {
+    return false;
+  }
+
+  if (currentUser.username === research.author?.username) {
     return true;
   }
 
   if (
     Array.isArray(research.collaboratorsUsernames) &&
-    research.collaboratorsUsernames.includes(currentUsername)
+    research.collaboratorsUsernames.includes(currentUser.username)
   ) {
     return true;
   }
 
-  const { data } = await client.from('profiles').select('roles').eq('username', currentUsername);
-
-  return data?.at(0)?.roles?.includes(UserRole.ADMIN);
+  return currentUser.roles?.includes(UserRole.ADMIN);
 };
 
-const isAllowedToEditResearchById = async (
-  client: SupabaseClient,
-  id: number,
-  currentUsername: string,
-) => {
+const isAllowedToEditResearchById = async (client: SupabaseClient, id: number, authId: string) => {
   const researchResult = await client
     .from('research')
     .select('id,created_by,collaborators,author:profiles(id,username)')
@@ -174,7 +174,7 @@ const isAllowedToEditResearchById = async (
 
   const item = ResearchItem.fromDB(research, []);
 
-  return isAllowedToEditResearch(client, item, currentUsername);
+  return isAllowedToEditResearch(client, item, authId);
 };
 
 async function getById(id: number, client: SupabaseClient) {

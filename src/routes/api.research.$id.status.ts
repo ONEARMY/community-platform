@@ -31,7 +31,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const canEdit = await researchServiceServer.isAllowedToEditResearchById(
       client,
       id,
-      claims.data.claims.user_metadata.username,
+      claims.data.claims.sub,
     );
 
     if (!canEdit) {

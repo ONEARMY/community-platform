@@ -18,15 +18,14 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirectServiceServer.redirectSignIn(`/library/${params.slug}/edit`, headers);
   }
 
-  // const username = user.user_metadata.username
-  const username = data.claims.user_metadata.username;
+  const authId = data.claims.sub;
   const projectDb = (await libraryServiceServer.getBySlug(client, params.slug as string))
     .data as unknown as DBProject;
   if (
     !(await libraryServiceServer.isAllowedToEditProject(
       client,
       projectDb.author?.username || '',
-      username,
+      authId,
     ))
   ) {
     return redirect('/forbidden?page=library-edit', { headers });

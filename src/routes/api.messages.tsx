@@ -36,7 +36,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const userProfile = await client
       .from('profiles')
       .select('id,username')
-      .eq('username', claims.data.claims.user_metadata.username);
+      .eq('auth_id', claims.data.claims.sub);
 
     const recipientProfile = await client
       .from('profiles')
@@ -84,12 +84,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw messageResult.error;
     }
 
-    // TODO: use get_user_email_by_id only after removing firebase completely and all profiles have an auth_id
-    const emailResult = toAuthId
-      ? await client.rpc('get_user_email_by_id', { id: toAuthId })
-      : await client.rpc('get_user_email_by_username', {
-          username: data.to,
-        });
+    const emailResult = await client.rpc('get_user_email_by_id', { id: toAuthId });
     const receiver = emailResult.data[0];
     const messenger = userProfile.data![0];
 

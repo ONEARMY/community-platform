@@ -144,5 +144,12 @@ CREATE OR REPLACE FUNCTION "public"."is_username_available"("username" "text") R
     LANGUAGE "sql" STABLE SECURITY DEFINER
     SET search_path = public, pg_temp
     AS $_$
-  SELECT NOT EXISTS (SELECT 1 FROM profiles WHERE username = $1);
+  SELECT NOT EXISTS (
+    SELECT 1 FROM profiles
+    WHERE username = $1
+    AND tenant_id = ((SELECT current_setting('request.headers', true))::json ->> 'x-tenant-id')
+  );
 $_$;
+
+ALTER TABLE ONLY "public"."profiles"
+    ADD CONSTRAINT "profiles_username_key" UNIQUE ("username", "tenant_id");

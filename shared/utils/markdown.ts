@@ -16,9 +16,9 @@ export const extractYouTubeId = (url: string): string | null => {
 };
 
 export const processYouTubeLinks = (html: string): string => {
-  // Match YouTube URLs in links
+  // Match YouTube URLs in links (including links with nested HTML elements)
   const youtubePattern =
-    /<a[^>]*href=["']([^"']*(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)[^"']*)["'][^>]*>([^<]*)<\/a>/g;
+    /<a[^>]*href=["']([^"']*(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)[^"']*)["'][^>]*>([\s\S]*?)<\/a>/g;
 
   return html.replace(youtubePattern, (match, url, _linkText) => {
     const videoId = extractYouTubeId(url);
@@ -43,8 +43,7 @@ export const processYouTubeLinks = (html: string): string => {
 
 export const processStandaloneYouTubeUrls = (html: string): string => {
   // Match YouTube URLs - Safari 15 compatible (no negative lookbehind)
-  const youtubePattern =
-    /https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/g;
+  const youtubePattern = /https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/g;
 
   // Find all potential YouTube URLs
   const matches = Array.from(html.matchAll(youtubePattern));
@@ -58,18 +57,13 @@ export const processStandaloneYouTubeUrls = (html: string): string => {
 
     // Check if URL is already inside a link or iframe by examining context
     const beforeMatch = html.substring(Math.max(0, startIndex - 200), startIndex);
-    const afterMatch = html.substring(
-      startIndex + fullMatch.length,
-      Math.min(html.length, startIndex + fullMatch.length + 200),
-    );
+    const afterMatch = html.substring(startIndex + fullMatch.length, Math.min(html.length, startIndex + fullMatch.length + 200));
 
     // Skip if already in a link
-    const isInLink =
-      /<a[^>]*href=["'][^"']*$/.test(beforeMatch) && /["'][^>]*>[\s\S]*?<\/a>/.test(afterMatch);
+    const isInLink = /<a[^>]*href=["'][^"']*$/.test(beforeMatch) && /["'][^>]*>[\s\S]*?<\/a>/.test(afterMatch);
 
     // Skip if already in an iframe src attribute
-    const isInIframe =
-      /<iframe[^>]*src=["'][^"']*$/.test(beforeMatch) && /["'][^>]*>/.test(afterMatch);
+    const isInIframe = /<iframe[^>]*src=["'][^"']*$/.test(beforeMatch) && /["'][^>]*>/.test(afterMatch);
 
     // Skip if this is an embed URL that's already properly formatted
     const isEmbedUrl = fullMatch.includes('/embed/');
@@ -93,8 +87,7 @@ export const processStandaloneYouTubeUrls = (html: string): string => {
         </div>
       `;
 
-      html =
-        html.substring(0, startIndex) + replacement + html.substring(startIndex + fullMatch.length);
+      html = html.substring(0, startIndex) + replacement + html.substring(startIndex + fullMatch.length);
     }
   }
 

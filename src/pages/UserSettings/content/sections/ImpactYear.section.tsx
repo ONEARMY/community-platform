@@ -10,11 +10,7 @@ import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import type { ThemeUIStyleObject } from 'theme-ui';
 import { Flex, Heading, Text } from 'theme-ui';
-import {
-  sortImpactYearDisplayFields,
-  transformImpactData,
-  transformImpactInputs,
-} from '../../utils';
+import { sortImpactYearDisplayFields, transformImpactData, transformImpactInputs } from '../../utils';
 import { ImpactYearField } from '../fields/ImpactYear.field';
 import { ImpactYearDisplayField } from '../fields/ImpactYearDisplay.field';
 
@@ -29,7 +25,7 @@ export const ImpactYearSection = observer(({ year }: Props) => {
 
   const impactDivRef = useRef<HTMLInputElement>(null);
   const { hash } = useLocation();
-  const { profile } = useProfileStore();
+  const { profile, updateImpact } = useProfileStore();
 
   const formId = `impactForm-${year}`;
   const sx = {
@@ -75,7 +71,8 @@ export const ImpactYearSection = observer(({ year }: Props) => {
     setSubmitResults(null);
     try {
       const fields = transformImpactInputs(values);
-      await profileService.updateImpact(year, fields);
+      const impact = await profileService.updateImpact(year, fields);
+      updateImpact(impact);
       setSubmitResults({ type: 'success', message: form.saveSuccess });
       setIsEditMode(false);
       setImpact(sortImpactYearDisplayFields(fields));

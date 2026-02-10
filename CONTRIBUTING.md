@@ -81,6 +81,15 @@ It is recommended to update your `master` fork regularly to avoid conflicts.
 
 We use `Biome` please install the extension on your IDE https://biomejs.dev/guides/editors/first-party-extensions/.
 
+Add to your `.vscode/settings.json`:
+
+```
+   "editor.codeActionsOnSave": {
+      "source.organizeImports.biome": "explicit",
+      "source.fixAll.biome": "explicit"
+   }
+```
+
 Running `yarn format` from the project root prior to committing will ensure the code you're adding is formatted to align with the standards of this project.
 
 We expect code to follow standard practices:

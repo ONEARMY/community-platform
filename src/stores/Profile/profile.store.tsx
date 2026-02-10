@@ -1,5 +1,5 @@
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
-import type { Profile, ProfileType, UpgradeBadge, UserRole } from 'oa-shared';
+import type { IUserImpact, Profile, ProfileType, UpgradeBadge, UserRole } from 'oa-shared';
 import { createContext, useContext, useEffect } from 'react';
 import { SessionContext } from 'src/pages/common/SessionContext';
 import { profileService } from 'src/services/profileService';
@@ -44,6 +44,10 @@ export class ProfileStore {
     });
   };
 
+  updateImpact = async (impact: IUserImpact) => {
+    this.profile!.impact = impact;
+  };
+
   getProfileTypeByName = (name: string) => {
     return this.profileTypes?.find((type) => type.name === name);
   };
@@ -79,6 +83,7 @@ export class ProfileStore {
       update: action,
       initProfileTypes: action,
       initUpgradeBadges: action,
+      updateImpact: action,
     });
   }
 
@@ -171,9 +176,7 @@ export const ProfileStoreProvider = ({ children }: { children: React.ReactNode }
     profileStore.initUpgradeBadges();
   }, []);
 
-  return (
-    <ProfileStoreContext.Provider value={profileStore}>{children}</ProfileStoreContext.Provider>
-  );
+  return <ProfileStoreContext.Provider value={profileStore}>{children}</ProfileStoreContext.Provider>;
 };
 
 export const useProfileStore = () => {

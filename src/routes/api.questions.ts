@@ -64,7 +64,7 @@ export const loader = async ({ request }) => {
   }
 
   if (sort === 'Newest') {
-    query = query.order('created_at', { ascending: false });
+    query = query.order('published_at', { ascending: false });
   } else if (sort === 'Comments') {
     query = query.order('comment_count', { ascending: false });
   } else if (sort === 'LeastComments') {

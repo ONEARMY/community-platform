@@ -54,7 +54,6 @@ export const Modal = (props: Props) => {
         borderRadius: '10px',
         maxWidth: '90vw',
         maxHeight: '95vh',
-        overflow: 'hidden',
       }}
     >
       <Box
@@ -69,7 +68,6 @@ export const Modal = (props: Props) => {
           background: 'white',
           border: '2px solid black',
           borderRadius: '10px',
-          overflow: 'auto',
           ...sx,
         }}
       >

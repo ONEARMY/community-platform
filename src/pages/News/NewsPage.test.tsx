@@ -79,9 +79,7 @@ describe('News', () => {
         const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem');
         expect(breadcrumbItems).toHaveLength(2);
         expect(breadcrumbItems[0]).toHaveTextContent('News');
-        expect(breadcrumbItems[1]).toHaveTextContent(
-          'Do you prefer camping near a lake or in a forest?',
-        );
+        expect(breadcrumbItems[1]).toHaveTextContent('Do you prefer camping near a lake or in a forest?');
 
         // Assert: Check that the first breadcrumb item contains a link
         const firstLink = within(breadcrumbItems[0]).getByRole('link');
@@ -96,14 +94,9 @@ describe('News', () => {
 });
 
 const getWrapper = (news: News) => {
-  const router = createMemoryRouter(
-    createRoutesFromElements(
-      <Route path="/news/:slug" key={1} element={<NewsPage news={news} />} />,
-    ),
-    {
-      initialEntries: ['/news/news'],
-    },
-  );
+  const router = createMemoryRouter(createRoutesFromElements(<Route path="/news/:slug" key={1} element={<NewsPage news={news} />} />), {
+    initialEntries: ['/news/news'],
+  });
 
   return render(
     <Provider

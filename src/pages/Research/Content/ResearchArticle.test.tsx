@@ -237,13 +237,7 @@ describe('Research Article', () => {
 
 const getWrapper = (research: ResearchItem) => {
   const router = createMemoryRouter(
-    createRoutesFromElements(
-      <Route
-        path="/research/:slug"
-        key={1}
-        element={<ResearchArticlePage research={research} />}
-      />,
-    ),
+    createRoutesFromElements(<Route path="/research/:slug" key={1} element={<ResearchArticlePage research={research} />} />),
     {
       initialEntries: ['/research/article'],
     },

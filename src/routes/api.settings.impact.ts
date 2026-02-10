@@ -47,7 +47,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     updateUserActivity(client, claims.data.claims.sub);
 
-    return Response.json({ impact }, { headers, status: 200 });
+    return Response.json(impact, { headers, status: 200 });
   } catch (error) {
     console.error(error);
     return Response.json({}, { headers, status: 500, statusText: 'Error saving impact' });

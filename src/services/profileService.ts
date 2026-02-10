@@ -1,11 +1,4 @@
-import type {
-  IImpactDataField,
-  IUserImpact,
-  MapPin,
-  MapPinFormData,
-  Profile,
-  ProfileFormData,
-} from 'oa-shared';
+import type { IImpactDataField, IUserImpact, MapPin, MapPinFormData, Profile, ProfileFormData } from 'oa-shared';
 import { logger } from 'src/logger';
 import { getCleanFileName } from 'src/utils/storage';
 
@@ -138,8 +131,9 @@ const updateImpact = async (year: number, fields: IImpactDataField[]): Promise<I
   if (!response.ok) {
     throw new Error(response.statusText);
   }
+  const { impact } = await response.json();
 
-  return (await response.json()) as IUserImpact;
+  return JSON.parse(impact) as IUserImpact;
 };
 
 export const profileService = {

@@ -242,6 +242,8 @@ async function updateProject(
     moderation = profile?.roles?.includes(UserRole.ADMIN) ? 'accepted' : 'awaiting-moderation';
   }
 
+  const now = new Date();
+
   const projectResult = await client
     .from('projects')
     .update({
@@ -258,7 +260,8 @@ async function updateProject(
       files,
       moderation,
       cover_image,
-      ...(isFirstPublish && { published_at: new Date() }),
+      modified_at: now,
+      ...(isFirstPublish && { published_at: now }),
     })
     .eq('id', currentProject.id)
     .select();

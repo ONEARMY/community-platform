@@ -7,20 +7,50 @@ type DateType = string | number | Date;
 
 export interface IProps {
   createdAt: DateType;
-  action?: string;
+  publishedAction?: string;
   showLabel?: boolean;
   modifiedAt?: DateType | null;
+  publishedAt?: DateType | null;
 }
 
 export const DisplayDate = (props: IProps) => {
-  const { createdAt, modifiedAt, action = 'Published', showLabel = true } = props;
+  const {
+    createdAt,
+    modifiedAt,
+    publishedAt,
+    publishedAction = 'Published',
+    showLabel = true,
+  } = props;
 
-  const targetDate = new Date(modifiedAt || createdAt);
+  const displayDate = publishedAt || createdAt;
+  const targetDate = new Date(modifiedAt || displayDate);
 
   const formattedDate = format(targetDate, 'dd-MM-yyyy HH:mm');
   const relativeDate = formatDistanceToNow(targetDate, { addSuffix: true });
   const shortRelativeDate = formatDistanceShort(targetDate);
-  const label = modifiedAt && createdAt !== modifiedAt ? 'Updated ' : action;
+
+  const getLabel = () => {
+    const modifiedTime = modifiedAt ? new Date(modifiedAt).getTime() : null;
+    const publishedTime = publishedAt ? new Date(publishedAt).getTime() : null;
+    const createdTime = new Date(createdAt).getTime();
+
+    // Published and modified AFTER publishing
+    if (publishedTime && modifiedTime && modifiedTime > publishedTime) {
+      return 'Updated';
+    }
+    // Published (not modified after)
+    if (publishedTime) {
+      return publishedAction;
+    }
+    // Draft that was edited
+    if (modifiedTime && modifiedTime > createdTime) {
+      return 'Updated';
+    }
+    // Draft, never edited
+    return 'Created';
+  };
+
+  const label = getLabel();
 
   return (
     <Text title={formattedDate}>

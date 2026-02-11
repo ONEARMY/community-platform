@@ -95,6 +95,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const isFirstPublish =
       oldResearchUpdate.is_draft && !data.isDraft && !oldResearchUpdate.published_at;
 
+    const now = new Date();
+
     const researchUpdateAfterUpdating = await client
       .from('research_updates')
       .update({
@@ -102,10 +104,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         description: data.description,
         is_draft: data.isDraft,
         images,
-        modified_at: new Date(),
+        modified_at: now,
         video_url: data.videoUrl,
         files: files.map((x) => ({ id: x.id, name: x.name, size: x.size })),
-        ...(isFirstPublish && { published_at: new Date() }),
+        ...(isFirstPublish && { published_at: now }),
       })
       .eq('id', oldResearchUpdate.id)
       .select('*,research:research(id,title,slug,is_draft)')

@@ -5,13 +5,13 @@ import { Flex, Text } from 'theme-ui';
 interface IProps {
   author: Author;
   createdAt?: string | number | Date;
-  action?: string;
+  publishedAction?: string;
   modifiedAt?: string | number | Date | null;
   publishedAt?: string | number | Date | null;
 }
 
 export const UserNameTag = (props: IProps) => {
-  const { author, createdAt, action = 'Published', modifiedAt, publishedAt } = props;
+  const { author, createdAt, publishedAction = 'Published', modifiedAt, publishedAt } = props;
 
   return (
     <Flex sx={{ flexDirection: 'column' }}>
@@ -28,8 +28,9 @@ export const UserNameTag = (props: IProps) => {
             >
               |{' '}
               <DisplayDate
-                action={action}
-                createdAt={publishedAt || createdAt}
+                publishedAction={publishedAction}
+                createdAt={createdAt}
+                publishedAt={publishedAt}
                 modifiedAt={modifiedAt}
               />
             </Text>

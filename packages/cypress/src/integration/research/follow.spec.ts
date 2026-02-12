@@ -7,19 +7,9 @@ describe('[Research]', () => {
       cy.visit(researchArticleUrl);
       cy.step('Should redirect to sign in');
       cy.get('[data-cy="follow-button"]').should('not.exist');
+      cy.get('[data-cy="follow-redirect"]').should('exist');
       cy.get('[data-cy="follow-redirect"]').first().click();
       cy.url().should('include', '/sign-in');
-    });
-
-    it('[Follow button on list]', () => {
-      cy.visit(researchListUrl);
-      cy.step('Should not show follow icon when not logged in');
-      cy.get('[data-cy="ResearchListItem"]')
-        .first()
-        .within(() => {
-          cy.get('[data-cy="follow-button"]').should('not.exist');
-          cy.get('[data-cy="follow-redirect"]').should('not.exist');
-        });
     });
   });
 

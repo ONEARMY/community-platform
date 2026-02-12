@@ -22,10 +22,6 @@ export const FollowButton = (props: FollowButtonProps) => {
   const navigate = useNavigate();
   const uuid = useId();
 
-  if (isFollowing === undefined) {
-    return null;
-  }
-
   return (
     <>
       <Button
@@ -33,7 +29,7 @@ export const FollowButton = (props: FollowButtonProps) => {
         data-testid={isLoggedIn ? 'follow-button' : 'follow-redirect'}
         data-cy={isLoggedIn ? 'follow-button' : 'follow-redirect'}
         data-tooltip-id={uuid}
-        data-tooltip-content={isFollowing ? props.tooltipFollow : props.tooltipUnfollow}
+        data-tooltip-content={isFollowing ? props.tooltipUnfollow : props.tooltipFollow}
         variant={variant}
         sx={{ fontSize: 2, ...sx }}
         onClick={() => (isLoggedIn ? onFollowClick() : navigate('/sign-in?returnUrl=' + encodeURIComponent(location.pathname)))}

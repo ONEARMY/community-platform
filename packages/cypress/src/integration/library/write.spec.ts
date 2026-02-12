@@ -26,13 +26,7 @@ describe('[Library]', () => {
     cy.selectTag(difficultLevel, '[data-cy=difficulty-select]');
   };
 
-  const fillStep = (
-    stepNumber: number,
-    title: string,
-    description: string,
-    images: string[],
-    videoUrl?: string,
-  ) => {
+  const fillStep = (stepNumber: number, title: string, description: string, images: string[], videoUrl?: string) => {
     cy.step(`Filling step ${stepNumber}`);
     cy.get(`[data-cy=step_${stepNumber - 1}]`).should('be.visible');
     cy.get(`[data-cy=step_${stepNumber - 1}]`).within(($step) => {
@@ -63,9 +57,7 @@ describe('[Library]', () => {
         }
 
         images.forEach((image, index) => {
-          cy.get(`[data-cy=image-upload-${index}]`)
-            .find(':file')
-            .selectFile(image, { force: true });
+          cy.get(`[data-cy=image-upload-${index}]`).find(':file').selectFile(image, { force: true });
         });
       }
     });
@@ -74,9 +66,7 @@ describe('[Library]', () => {
   const deleteStep = (stepNumber: number) => {
     const stepIndex = stepNumber - 1;
     cy.step(`Deleting step [${stepNumber}]`);
-    cy.get(`[data-cy=step_${stepIndex}]:visible`, { timeout: 20000 })
-      .find('[data-cy=delete-step]')
-      .click();
+    cy.get(`[data-cy=step_${stepIndex}]:visible`, { timeout: 20000 }).find('[data-cy=delete-step]').click();
     cy.get('[data-cy=confirm]').click();
   };
 
@@ -148,21 +138,8 @@ describe('[Library]', () => {
     };
 
     it('[By Authenticated]', () => {
-      const {
-        category,
-        description,
-        difficulty_level,
-        fileLink,
-        slug,
-        steps,
-        time,
-        title,
-        total_downloads,
-      } = expected;
-      const imagePaths = [
-        'src/fixtures/images/howto-step-pic1.jpg',
-        'src/fixtures/images/howto-step-pic2.jpg',
-      ];
+      const { category, description, difficulty_level, fileLink, slug, steps, time, title, total_downloads } = expected;
+      const imagePaths = ['src/fixtures/images/howto-step-pic1.jpg', 'src/fixtures/images/howto-step-pic2.jpg'];
       const categoryGuidanceMain = 'Cover image should show the fully built mould';
 
       cy.get('[data-cy="sign-up"]');
@@ -229,9 +206,7 @@ describe('[Library]', () => {
 
       cy.get('[data-cy=fileLink]').type(fileLink);
       cy.step('Upload a cover for the intro');
-      cy.get('[data-cy="image-upload"]')
-        .find('input[type="file"]')
-        .selectFile('src/fixtures/images/howto-intro.jpg', { force: true });
+      cy.get('[data-cy="image-upload"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-intro.jpg', { force: true });
 
       fillStep(1, steps[0].title, steps[0].text, imagePaths);
       fillStep(2, steps[2].title, steps[2].text, [], steps[2].videoURL);
@@ -264,7 +239,7 @@ describe('[Library]', () => {
       cy.get('[data-cy=category]').should('contain', category);
       cy.get('[data-cy=difficulty-level]').should('contain', difficulty_level);
 
-      cy.get('[data-cy=follow-button]').contains('Following');
+      cy.get('[data-cy=follow-button]').first().should('contain', 'Following');
 
       steps.forEach((step, index) => {
         cy.get(`[data-cy=step_${index + 1}]`)

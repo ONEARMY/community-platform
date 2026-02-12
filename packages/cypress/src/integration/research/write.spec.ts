@@ -79,7 +79,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=draft]').click();
 
       cy.get('[data-cy=draft-tag]').should('be.visible');
-      cy.get('[data-cy=follow-button]').first().contains('Following');
+      cy.get('[data-cy=follow-button]').first().should('contain', 'Following');
 
       cy.step('Drafted Research should not appear on users profile');
       cy.visit('/u/' + admin.displayName);
@@ -91,9 +91,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title').clear().type(expected.title).blur();
 
       cy.step('Add image');
-      cy.get('[data-cy=image-upload]')
-        .find(':file')
-        .selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.get('[data-cy=image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
 
       cy.step('New collaborators can be assigned to research');
       cy.selectTag(subscriber.username, '[data-cy=UserNameSelect]');
@@ -123,7 +121,7 @@ describe('[Research]', () => {
       cy.logout();
       cy.signIn(subscriber.email, subscriber.password);
       cy.visit(`/research/${expected.slug}`);
-      cy.get('[data-cy=follow-button]').first().contains('Following');
+      cy.get('[data-cy=follow-button]').first().should('contain', 'Following');
       cy.visit(`/research/${expected.slug}/new-update`);
       cy.contains('New update');
 
@@ -133,12 +131,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=errors-container]').should('be.visible');
 
       cy.step('Enter update details');
-      cy.get('[data-cy=intro-title]')
-        .wait(0)
-        .focus()
-        .clear()
-        .type(updateTitle)
-        .blur({ force: true });
+      cy.get('[data-cy=intro-title]').wait(0).focus().clear().type(updateTitle).blur({ force: true });
 
       cy.get('[data-cy=intro-description]').clear().type(updateDescription).blur({ force: true });
 
@@ -163,17 +156,16 @@ describe('[Research]', () => {
       cy.get('[data-cy="CollapsableCommentSection"]')
         .last()
         .within(() => {
-          cy.get('[data-cy=follow-button]').contains('Following');
+          cy.get('[data-cy=follow-button]').should('contain', 'Following');
         });
 
       cy.step('Collaborator is subscribed to research and research update discussion');
       cy.logout();
       cy.signIn(subscriber.email, subscriber.password);
       cy.visit(researchURL);
-      cy.get('[data-cy=follow-button]').first().contains('Following');
+      cy.get('[data-cy=follow-button]').first().should('contain', 'Following');
       cy.get('[data-cy="HideDiscussionContainer:button"]').last().click();
-      cy.get('[data-cy=follow-button]').last().contains('Following');
-
+      cy.get('[data-cy=follow-button]').first().should('contain', 'Following');
       cy.step('Notification generated for update');
       cy.logout();
       cy.signIn(admin.email, admin.password);
@@ -233,13 +225,11 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title').clear().type(researchItem.title).blur();
       cy.get('[data-cy=intro-description]').clear().type(researchItem.description);
       cy.selectTag(researchItem.category, '[data-cy=category-select]');
-      cy.get('[data-cy=image-upload]')
-        .find(':file')
-        .selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.get('[data-cy=image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.wait(2000);
       cy.get('[data-cy=submit]').click();
       cy.wait(2000);
-      cy.get('[data-cy=follow-button]').contains('Following');
+      cy.get('[data-cy=follow-button]').should('contain', 'Following');
       cy.contains(researchItem.title);
 
       cy.step('Users can follow for research updates (for later expectations)');
@@ -294,7 +284,7 @@ describe('[Research]', () => {
       cy.step('All ready for a discussion');
       cy.get('[data-cy="HideDiscussionContainer:button"]').click();
       cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion');
-      cy.get('[data-cy=follow-button]').contains('Following');
+      cy.get('[data-cy=follow-button]').should('contain', 'Following');
 
       cy.step('Now published draft has generated notifications');
       cy.logout();

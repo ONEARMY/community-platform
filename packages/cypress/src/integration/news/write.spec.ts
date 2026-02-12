@@ -42,9 +42,7 @@ describe('[News.Write]', () => {
       cy.get('[data-cy=errors-container]');
 
       cy.step('Add image');
-      cy.get('[data-cy=heroImage-upload]')
-        .find(':file')
-        .selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
 
       cy.step('Can add draft news');
       cy.get('[data-cy=field-title]').clear().type(initialTitle).blur({ force: true });
@@ -130,7 +128,7 @@ describe('[News.Write]', () => {
       cy.contains(initialNewsBodyOne);
       cy.contains(initialNewsBodyTwo);
       cy.contains(initialNewsBodyThree);
-      cy.get('[data-cy=follow-button]').contains('Following');
+      cy.get('[data-cy=follow-button]').first().should('contain', 'Following');
 
       cy.step('Can access the news with the previous slug');
       cy.visit(`/news/${initialExpectedSlug}`);

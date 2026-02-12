@@ -59,11 +59,7 @@ describe('[Questions]', () => {
 
       cy.step('Breadcrumbs work');
       cy.get('[data-cy=breadcrumbsItem]').first().should('contain', 'Question');
-      cy.get('[data-cy=breadcrumbsItem]')
-        .first()
-        .children()
-        .should('have.attr', 'href')
-        .and('equal', `/questions`);
+      cy.get('[data-cy=breadcrumbsItem]').first().children().should('have.attr', 'href').and('equal', `/questions`);
 
       cy.get('[data-cy=breadcrumbsItem]').eq(1).should('contain', 'Machines');
 
@@ -72,12 +68,6 @@ describe('[Questions]', () => {
       cy.step('Logged in users can complete actions');
       cy.signIn('howto_creator@test.com', 'test1234');
       cy.visit(`/questions/${slug}`); // Page doesn't reload after login
-
-      // cy.get('[data-cy=follow-button]').click()
-      // cy.contains(`1 following`)
-
-      // cy.get('[data-cy=vote-useful]').click()
-      // cy.contains(`1 useful`)
     });
   });
 });

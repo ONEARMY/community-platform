@@ -50,11 +50,7 @@ describe('[News.Read]', () => {
 
       cy.step('Breadcrumbs work');
       cy.get('[data-cy=breadcrumbsItem]').first().should('contain', 'News');
-      cy.get('[data-cy=breadcrumbsItem]')
-        .first()
-        .children()
-        .should('have.attr', 'href')
-        .and('equal', `/news`);
+      cy.get('[data-cy=breadcrumbsItem]').first().children().should('have.attr', 'href').and('equal', `/news`);
 
       cy.get('[data-cy=breadcrumbsItem]').eq(1).should('contain', title);
 
@@ -63,10 +59,7 @@ describe('[News.Read]', () => {
       cy.wait(500);
 
       // Check content images
-      cy.get('[data-cy=news-body] img')
-        .first()
-        .should('have.css', 'cursor', 'pointer')
-        .click();
+      cy.get('[data-cy=news-body] img').first().should('have.css', 'cursor', 'pointer').click();
 
       // Lightbox should open
       cy.get('.pswp').should('be.visible');
@@ -77,16 +70,6 @@ describe('[News.Read]', () => {
       // Close lightbox
       cy.get('button[title="Close"]').click();
       cy.get('.pswp').should('not.exist');
-
-      // cy.step('Logged in users can complete actions')
-      // cy.signIn('howto_creator@test.com', 'test1234')
-      // cy.visit(`/news/${slug}`) // Page doesn't reload after login
-
-      // cy.get('[data-cy=follow-button]').click()
-      // cy.contains(`1 following`)
-
-      // cy.get('[data-cy=vote-useful]').click()
-      // cy.contains(`1 useful`)
     });
   });
 });

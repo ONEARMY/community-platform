@@ -22,54 +22,52 @@ export const DisplayDate = (props: IProps) => {
     showLabel = true,
   } = props;
 
-  const displayDate = publishedAt || createdAt;
-  const targetDate = new Date(modifiedAt || displayDate);
+  const modifiedTime = modifiedAt ? new Date(modifiedAt).getTime() : null;
+  const publishedTime = publishedAt ? new Date(publishedAt).getTime() : null;
+  const createdTime = new Date(createdAt).getTime();
 
-  const formattedDate = format(targetDate, 'dd-MM-yyyy HH:mm');
-  const relativeDate = formatDistanceToNow(targetDate, { addSuffix: true });
-  const shortRelativeDate = formatDistanceShort(targetDate);
+  const primaryDate = new Date(publishedAt || createdAt);
+  const primaryLabel = publishedTime ? publishedAction : 'Created';
 
-  const getLabel = () => {
-    const modifiedTime = modifiedAt ? new Date(modifiedAt).getTime() : null;
-    const publishedTime = publishedAt ? new Date(publishedAt).getTime() : null;
-    const createdTime = new Date(createdAt).getTime();
+  const wasEdited =
+    modifiedTime &&
+    ((publishedTime && modifiedTime > publishedTime) ||
+      (!publishedTime && modifiedTime > createdTime));
 
-    // Published and modified AFTER publishing
-    if (publishedTime && modifiedTime && modifiedTime > publishedTime) {
-      return 'Updated';
-    }
-    // Published (not modified after)
-    if (publishedTime) {
-      return publishedAction;
-    }
-    // Draft that was edited
-    if (modifiedTime && modifiedTime > createdTime) {
-      return 'Updated';
-    }
-    // Draft, never edited
-    return 'Created';
-  };
+  const modifiedDate = modifiedAt ? new Date(modifiedAt) : null;
 
-  const label = getLabel();
+  const primaryFormatted = format(primaryDate, 'dd-MM-yyyy HH:mm');
+  const primaryRelative = formatDistanceToNow(primaryDate, { addSuffix: true });
+  const primaryShort = formatDistanceShort(primaryDate);
+
+  const modifiedFormatted = modifiedDate ? format(modifiedDate, 'dd-MM-yyyy HH:mm') : '';
+  const modifiedRelative = modifiedDate
+    ? formatDistanceToNow(modifiedDate, { addSuffix: true })
+    : '';
+  const modifiedShort = modifiedDate ? formatDistanceShort(modifiedDate) : '';
 
   return (
-    <Text title={formattedDate}>
+    <Text
+      title={wasEdited ? `${primaryFormatted} (edited ${modifiedFormatted})` : primaryFormatted}
+    >
       {/* Mobile version - show short format */}
       <span className="date-mobile">
-        {showLabel && `${label} `}
-        {shortRelativeDate}
+        {showLabel && `${primaryLabel} `}
+        {primaryShort}
+        {wasEdited ? `. Edited ${modifiedShort}.` : '.'}
       </span>
 
       {/* Desktop version - show full format */}
       <span className="date-desktop">
-        {showLabel && `${label} `}
-        {relativeDate}
+        {showLabel && `${primaryLabel} `}
+        {primaryRelative}
+        {wasEdited ? `. Last edit ${modifiedRelative}.` : '.'}
       </span>
     </Text>
   );
 };
 
-function formatDistanceShort(date: Date, addSuffix = false) {
+function formatDistanceShort(date: Date) {
   const seconds = Math.abs(differenceInSeconds(new Date(), date));
 
   const intervals = [
@@ -84,7 +82,7 @@ function formatDistanceShort(date: Date, addSuffix = false) {
   for (const interval of intervals) {
     const count = Math.floor(seconds / interval.seconds);
     if (count >= 1) {
-      return addSuffix ? `${count}${interval.label} ago` : `${count}${interval.label}`;
+      return `${count}${interval.label}`;
     }
   }
 

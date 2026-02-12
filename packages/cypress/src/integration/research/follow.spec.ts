@@ -35,12 +35,12 @@ describe('[Research]', () => {
       cy.step('Should follow on click');
       cy.get('[data-cy="follow-button"]').first().click();
       cy.wait(2000);
-      cy.get('[data-cy="follow-button"]').first().should('contain.text', 'Following');
+      cy.get('[data-cy="follow-button"]').first().should('contain.text', 'Unfollow');
 
       cy.step('Should persist follow status on reload');
       cy.visit(researchArticleUrl);
       cy.wait(1000);
-      cy.get('[data-cy="follow-button"]').first().should('contain.text', 'Following');
+      cy.get('[data-cy="follow-button"]').first().should('contain.text', 'Unfollow');
       cy.get('[data-cy="follow-button"]').first().click();
       cy.wait(2000);
       cy.get('[data-cy="follow-button"]').should('be.visible').should('contain.text', 'Follow');

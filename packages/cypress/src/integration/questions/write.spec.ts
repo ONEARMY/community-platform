@@ -95,7 +95,7 @@ describe('[Question]', () => {
 
       cy.step('All ready for a discussion');
       cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion');
-      cy.get('[data-cy=follow-button]').first().should('contain', 'Following');
+      cy.get('[data-cy=follow-button]').first().should('contain', 'Unfollow');
 
       cy.step('Edit question');
       cy.get('[data-cy=edit]').click().url().should('include', `/questions/${initialExpectedSlug}/edit`);

@@ -1,1 +1,1 @@
-yarn biome check --staged
+  yarn lint-staged

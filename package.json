@@ -37,6 +37,9 @@
     "commit": "git-cz",
     "prepare": "husky"
   },
+  "lint-staged": {
+    "*.{js,ts,tsx,json}": ["biome check --write"]
+  },
   "browserslist": {
     "production": [">0.2%", "not dead", "not op_mini all", "iOS >= 15", "safari >= 15"],
     "development": [
@@ -134,6 +137,7 @@
     "concurrently": "^6.2.0",
     "cross-env": "^7.0.3",
     "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "pg": "^8.13.3",
     "supabase": "2.53.6",
     "tsx": "^4.20.3",

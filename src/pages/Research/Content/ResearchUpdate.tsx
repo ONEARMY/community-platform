@@ -135,6 +135,7 @@ const ResearchUpdate = (props: IProps) => {
                     createdAt={update.createdAt}
                     publishedAt={update.publishedAt}
                     modifiedAt={update.modifiedAt}
+                    publishedAction="Published"
                   />
                 </Text>
               </Flex>

@@ -79,7 +79,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=draft]').click();
 
       cy.get('[data-cy=draft-tag]').should('be.visible');
-      cy.get('[data-cy=follow-button]').first().should('contain', 'Unfollow');
+      cy.get('[data-cy=follow-button]').first().should('contain', 'Following');
 
       cy.step('Drafted Research should not appear on users profile');
       cy.visit('/u/' + admin.displayName);
@@ -121,7 +121,7 @@ describe('[Research]', () => {
       cy.logout();
       cy.signIn(subscriber.email, subscriber.password);
       cy.visit(`/research/${expected.slug}`);
-      cy.get('[data-cy=follow-button]').first().should('contain', 'Unfollow');
+      cy.get('[data-cy=follow-button]').first().should('contain', 'Following');
       cy.visit(`/research/${expected.slug}/new-update`);
       cy.contains('New update');
 
@@ -156,16 +156,16 @@ describe('[Research]', () => {
       cy.get('[data-cy="CollapsableCommentSection"]')
         .last()
         .within(() => {
-          cy.get('[data-cy=follow-button]').should('contain', 'Unfollow');
+          cy.get('[data-cy=follow-button]').should('contain', 'Following');
         });
 
       cy.step('Collaborator is subscribed to research and research update discussion');
       cy.logout();
       cy.signIn(subscriber.email, subscriber.password);
       cy.visit(researchURL);
-      cy.get('[data-cy=follow-button]').first().should('contain', 'Unfollow');
+      cy.get('[data-cy=follow-button]').first().should('contain', 'Following');
       cy.get('[data-cy="HideDiscussionContainer:button"]').last().click();
-      cy.get('[data-cy=follow-button]').first().should('contain', 'Unfollow');
+      cy.get('[data-cy=follow-button]').first().should('contain', 'Following');
       cy.step('Notification generated for update');
       cy.logout();
       cy.signIn(admin.email, admin.password);
@@ -229,7 +229,7 @@ describe('[Research]', () => {
       cy.wait(2000);
       cy.get('[data-cy=submit]').click();
       cy.wait(2000);
-      cy.get('[data-cy=follow-button]').should('contain', 'Unfollow');
+      cy.get('[data-cy=follow-button]').should('contain', 'Following');
       cy.contains(researchItem.title);
 
       cy.step('Users can follow for research updates (for later expectations)');
@@ -284,7 +284,7 @@ describe('[Research]', () => {
       cy.step('All ready for a discussion');
       cy.get('[data-cy="HideDiscussionContainer:button"]').click();
       cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion');
-      cy.get('[data-cy=follow-button]').should('contain', 'Unfollow');
+      cy.get('[data-cy=follow-button]').should('contain', 'Following');
 
       cy.step('Now published draft has generated notifications');
       cy.logout();

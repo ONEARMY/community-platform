@@ -18,7 +18,7 @@ export interface FollowButtonProps {
 }
 
 export const FollowButton = (props: FollowButtonProps) => {
-  const { isFollowing, isLoggedIn, labelFollow = 'Follow', labelUnfollow = 'Unfollow', onFollowClick, sx, variant = 'outline' } = props;
+  const { isFollowing, isLoggedIn, labelFollow = 'Follow', labelUnfollow = 'Following', onFollowClick, sx, variant = 'outline' } = props;
   const navigate = useNavigate();
   const uuid = useId();
 

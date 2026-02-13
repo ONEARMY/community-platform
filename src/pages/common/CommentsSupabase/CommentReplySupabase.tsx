@@ -96,7 +96,7 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
                   {isEditable && (
                     <Button
                       type="button"
-                      data-cy="ReplyItem delete button"
+                      data-cy="ReplyItem: delete button"
                       variant="subtle"
                       icon="delete"
                       onClick={() => setShowDeleteModal(true)}

@@ -113,7 +113,7 @@ export const CommentItemSupabase = observer((props: ICommentItemProps) => {
                 {isEditable && (
                   <Button
                     type="button"
-                    data-cy="CommentItem delete button"
+                    data-cy="CommentItem: delete button"
                     variant="subtle"
                     icon="delete"
                     onClick={() => setShowDeleteModal(true)}

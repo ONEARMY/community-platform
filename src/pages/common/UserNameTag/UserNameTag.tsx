@@ -15,18 +15,12 @@ export const UserNameTag = (props: IProps) => {
 
   return (
     <Flex sx={{ flexDirection: 'column' }}>
-      <Flex sx={{ alignItems: 'center' }}>
-        <Flex sx={{ alignItems: 'center' }}>
-          <Username user={author} sx={{ position: 'relative' }} />
-          {createdAt && (
-            <Text
-              variant="auxiliary"
-              sx={{
-                marginTop: 2,
-                marginBottom: 2,
-              }}
-            >
-              |{' '}
+      <Flex sx={{ alignItems: 'center', gap: 1 }}>
+        <Username user={author} sx={{ position: 'relative' }} />
+        {createdAt && (
+          <>
+            <Text variant="auxiliary">|</Text>
+            <Text variant="auxiliary">
               <DisplayDate
                 publishedAction={publishedAction}
                 createdAt={createdAt}
@@ -34,8 +28,8 @@ export const UserNameTag = (props: IProps) => {
                 modifiedAt={modifiedAt}
               />
             </Text>
-          )}
-        </Flex>
+          </>
+        )}
       </Flex>
     </Flex>
   );

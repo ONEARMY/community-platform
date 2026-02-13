@@ -88,10 +88,10 @@ export const NewsPage = observer(({ news }: IProps) => {
           </Heading>
 
           <Text variant="auxiliary">
+            {/* Intentionally not passing modifiedAt - news edits are often minor fixes */}
             <DisplayDate
               createdAt={news.createdAt}
               publishedAt={news.publishedAt}
-              modifiedAt={news.modifiedAt}
               publishedAction="Published"
             />
           </Text>

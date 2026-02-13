@@ -75,10 +75,10 @@ export const NewsListItem = ({ news, query }: IProps) => {
           </Flex>
 
           <Text variant="auxiliary">
+            {/* Intentionally not passing modifiedAt, news edits are often minor fixes */}
             <DisplayDate
               createdAt={news.createdAt}
               publishedAt={news.publishedAt}
-              modifiedAt={news.modifiedAt}
               publishedAction="Published"
             />
           </Text>

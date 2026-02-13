@@ -3,7 +3,7 @@ import { AuthorsContext, CommentsTitle, FollowButton } from 'oa-components';
 import type { DiscussionContentType, Reply } from 'oa-shared';
 import { Comment } from 'oa-shared';
 import type { Dispatch, SetStateAction } from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { commentService } from 'src/services/commentService';
 import { subscribersService } from 'src/services/subscribersService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
@@ -222,7 +222,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
     }
   };
 
-  const updateVoteCount = (id: number, newVoteCount: number) => {
+  const updateVoteCount = useCallback((id: number, newVoteCount: number) => {
     setComments((comments) =>
       comments.map((comment) => {
         if (comment.id === id) {
@@ -231,7 +231,7 @@ export const CommentSectionSupabase = observer((props: IProps) => {
         return comment;
       }),
     );
-  };
+  }, []);
 
   return (
     <AuthorsContext.Provider value={{ authors }}>

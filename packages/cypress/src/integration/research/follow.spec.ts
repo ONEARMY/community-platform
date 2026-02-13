@@ -62,7 +62,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=research-search-box]').click().type('qwerty');
       cy.get('[data-cy="ResearchListItem"]').should('exist');
       cy.contains('[data-cy="ResearchListItem"]', 'Qwerty').within(() => {
-        cy.get('[data-cy="follow-button"]').should('exist');
+        cy.get('[data-cy="follow-icon"]').should('exist');
       });
     });
   });

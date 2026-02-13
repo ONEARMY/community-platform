@@ -239,6 +239,8 @@ describe('[Library]', () => {
       cy.get('[data-cy=category]').should('contain', category);
       cy.get('[data-cy=difficulty-level]').should('contain', difficulty_level);
 
+      cy.get('[data-cy=follow-button]').first().should('contain', 'Following Comments');
+
       steps.forEach((step, index) => {
         cy.get(`[data-cy=step_${index + 1}]`)
           .find('[data-cy=step-title]')

@@ -128,7 +128,7 @@ describe('[News.Write]', () => {
       cy.contains(initialNewsBodyOne);
       cy.contains(initialNewsBodyTwo);
       cy.contains(initialNewsBodyThree);
-      cy.get('[data-cy=follow-button]').first().should('contain', 'Unfollow');
+      cy.get('[data-cy=follow-button]').first().should('contain', 'Following Comments');
 
       cy.step('Can access the news with the previous slug');
       cy.visit(`/news/${initialExpectedSlug}`);

@@ -79,6 +79,7 @@ export const NewsListItem = ({ news, query }: IProps) => {
               createdAt={news.createdAt}
               publishedAt={news.publishedAt}
               modifiedAt={news.modifiedAt}
+              publishedAction="Published"
             />
           </Text>
 

@@ -86,7 +86,12 @@ export const LibraryDescription = ({ commentsCount, hasUserVotedUseful, item, lo
             <AuthorDisplay author={item.author} />
 
             <Text variant="auxiliary">
-              <DisplayDate createdAt={item.createdAt} modifiedAt={item.modifiedAt} action="Published" />
+              <DisplayDate
+                createdAt={item.createdAt}
+                publishedAt={item.publishedAt}
+                modifiedAt={item.modifiedAt}
+                publishedAction="Published"
+              />
             </Text>
 
             {item.isDraft && (

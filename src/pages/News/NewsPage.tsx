@@ -92,6 +92,7 @@ export const NewsPage = observer(({ news }: IProps) => {
               createdAt={news.createdAt}
               publishedAt={news.publishedAt}
               modifiedAt={news.modifiedAt}
+              publishedAction="Published"
             />
           </Text>
 

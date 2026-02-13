@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Button, CommentDisplay, ConfirmModal, EditComment, Icon, Modal } from 'oa-components';
+import { ActionSet, Button, CommentDisplay, ConfirmModal, EditComment, Icon, Modal } from 'oa-components';
 import type { Reply } from 'oa-shared';
 import { UserRole } from 'oa-shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -70,7 +70,7 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
               itemType={item}
               comment={comment}
               actions={
-                <>
+                <ActionSet itemType="ReplyItem">
                   {isEditable && (
                     <Button
                       type="button"
@@ -105,7 +105,7 @@ export const CommentReply = observer(({ comment, onEdit, onDelete }: ICommentIte
                       Delete
                     </Button>
                   )}
-                </>
+                </ActionSet>
               }
               usefulButtonConfig={{
                 onUsefulClick: async () => await toggleVote(),

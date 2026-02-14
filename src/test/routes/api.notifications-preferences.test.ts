@@ -68,6 +68,7 @@ describe('loader', () => {
     const defaultPreferences = {
       comments: true,
       replies: true,
+      news: true,
       research_updates: true,
       is_unsubscribed: false,
     };
@@ -123,6 +124,7 @@ describe('action', () => {
       id: '1',
       comments: 'false',
       replies: 'true',
+      news: 'false',
       research_updates: 'false',
       is_unsubscribed: 'true',
     });
@@ -144,6 +146,7 @@ describe('action', () => {
     expect(mockClient.mocks.update).toHaveBeenCalledWith({
       comments: false,
       replies: true,
+      news: false,
       research_updates: false,
       is_unsubscribed: true,
     });
@@ -157,6 +160,7 @@ describe('action', () => {
     const formData = createFormData({
       comments: 'true',
       replies: 'false',
+      news: 'true',
       research_updates: 'true',
       is_unsubscribed: 'false',
     });
@@ -181,6 +185,7 @@ describe('action', () => {
       user_id: 456,
       comments: true,
       replies: false,
+      news: true,
       research_updates: true,
       is_unsubscribed: false,
       tenant_id: 'test-tenant',

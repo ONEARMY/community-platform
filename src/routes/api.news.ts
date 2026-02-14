@@ -1,13 +1,14 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
 import { HTTPException } from 'hono/http-exception';
+import { AuthError } from 'node_modules/@supabase/supabase-js';
 import type { DBMedia, DBNews, DBProfile, Moderation, NewsDTO } from 'oa-shared';
 import { News } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/News/constants';
 import type { NewsSortOption } from 'src/pages/News/NewsSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { discordServiceServer } from 'src/services/discordService.server';
+import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { SubscribersServiceServer } from 'src/services/subscribersService.server';
@@ -141,7 +142,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    await validateRequest(request, data);
+    await validateRequest(request, data, claims.error);
 
     const slug = convertToSlug(data.title);
 
@@ -191,11 +192,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const news = News.fromDB(newsResult.data[0], []);
     new SubscribersServiceServer(client).add('news', news.id, profile.id);
-
-    if (!news.isDraft) {
-      notifyDiscord(news, profile, new URL(request.url).origin.replace('http:', 'https:'));
-    }
-
+    new BroadcastCoordinationServiceServer(client).news(newsResult.data[0], profile, request);
     await new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 
     return Response.json({ news }, { headers, status: 201 });
@@ -209,20 +206,14 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   }
 };
 
-function notifyDiscord(news: News, profile: DBProfile, siteUrl: string) {
-  const title = news.title;
-  const slug = news.slug;
-
-  if (!profile.username) {
-    return;
+async function validateRequest(request: Request, data: any, authError: AuthError | null) {
+  if (authError) {
+    return {
+      status: authError?.status,
+      statusText: authError?.message || 'Unknown authentication error',
+    };
   }
 
-  discordServiceServer.postWebhookRequest(
-    `📰 ${profile.username} has news: ${title}\n<${siteUrl}/news/${slug}>`,
-  );
-}
-
-async function validateRequest(request: Request, data: NewsDTO): Promise<void> {
   if (request.method !== 'POST') {
     throw methodNotAllowedError();
   }

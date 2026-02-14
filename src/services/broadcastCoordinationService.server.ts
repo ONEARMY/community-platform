@@ -1,7 +1,31 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBProfile, DBResearchUpdate, ResearchUpdate } from 'oa-shared';
+import type { DBNews, DBProfile, DBResearchUpdate, News, ResearchUpdate } from 'oa-shared';
 import { discordServiceServer } from './discordService.server';
 import { notificationsSupabaseServiceServer } from './notificationsSupabaseService.server';
+
+function news(
+  news: DBNews,
+  profile: DBProfile | null,
+  client: SupabaseClient,
+  headers: Headers,
+  request: Request,
+  oldNews?: DBNews,
+) {
+  const beforeCheck = oldNews ? !!oldNews.is_draft : true;
+  const siteUrl = new URL(request.url).origin.replace('http:', 'https:');
+
+  if (!news || !profile || news?.is_draft) {
+    return;
+  }
+
+  if (beforeCheck && news.is_draft === false) {
+    notificationsSupabaseServiceServer.createNotificationsNews(news, client, headers)
+    
+    discordServiceServer.postWebhookRequest(
+      `📰 ${profile.username} has news: ${news.title}\n<${siteUrl}/news/${news.slug}>`,
+    );
+  }
+}
 
 function researchUpdate(
   update: ResearchUpdate,
@@ -34,5 +58,6 @@ function researchUpdate(
 }
 
 export const broadcastCoordinationServiceServer = {
+  news,
   researchUpdate,
 };

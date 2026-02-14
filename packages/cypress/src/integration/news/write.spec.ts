@@ -2,7 +2,7 @@ import { users } from 'oa-shared/mocks/data';
 
 import { generateAlphaNumeric } from '../../utils/TestUtils';
 
-let initialRandomId;
+let initialRandomId: string;
 
 describe('[News.Write]', () => {
   describe('[Create a news item]', () => {
@@ -12,7 +12,7 @@ describe('[News.Write]', () => {
 
     it('[By Authenticated]', () => {
       const initialTitle = `${initialRandomId} Amazing new thing`;
-      const initialExpectedSlug = `${initialRandomId}-amazing-new-thing`;
+      const initialExpectedSlug = `/news/${initialRandomId}-amazing-new-thing`;
       const initialNewsBodyOne = 'Yo.';
       const initialNewsBodyTwo = 'HiHi!';
       const initialNewsBodyThree = 'We did good.';
@@ -53,7 +53,7 @@ describe('[News.Write]', () => {
 
       cy.get('[data-cy=draft]').click();
       cy.wait(2000);
-      cy.url().should('include', `/news/${initialExpectedSlug}`);
+      cy.url().should('include', initialExpectedSlug);
 
       cy.step('Can get to drafts');
       cy.visit('/news');
@@ -64,6 +64,9 @@ describe('[News.Write]', () => {
       cy.step('Shows draft news');
       cy.get('[data-cy=draft-tag]').should('be.visible');
       cy.contains(initialNewsBodyOne);
+
+      cy.step('No notification generated yet')
+      cy.expectNoNewNotification()
 
       cy.step('Submit news');
       cy.get('[data-cy=edit]').click();
@@ -77,7 +80,7 @@ describe('[News.Write]', () => {
       cy.get('[data-cy=submit]').click();
 
       cy.wait(2000);
-      cy.url().should('include', `/news/${initialExpectedSlug}`);
+      cy.url().should('include', initialExpectedSlug);
 
       cy.step('All news fields shown');
       cy.visit('/news');
@@ -97,11 +100,19 @@ describe('[News.Write]', () => {
       cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion');
       cy.get('[data-cy=follow-button]').contains('Following Comments');
 
+      cy.step('Notification generated for update');
+      cy.expectNewNotification({
+        content: initialNewsBodyOne,
+        path: initialExpectedSlug,
+        title: initialTitle,
+        username: user.username,
+      });
+
       cy.step('Edit fields');
       cy.wait(2000);
       cy.get('[data-cy=edit]').click();
       cy.wait(2000);
-      cy.url().should('include', `/news/${initialExpectedSlug}/edit`);
+      cy.url().should('include', `${initialExpectedSlug}/edit`);
 
       cy.get('[data-cy=field-title]').clear().type(updatedTitle).blur();
       cy.get('.mdxeditor-root-contenteditable').type('{selectAll}{del}');

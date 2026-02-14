@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type {
   DBComment,
+  DBNews,
   DBProfile,
   DBResearchItem,
   ResearchUpdate,
@@ -12,19 +13,34 @@ import { NotificationEmailServiceServer } from './notificationEmailService.serve
 
 export class NotificationsSupabaseServiceServer {
   constructor(private client: SupabaseClient) {}
-
+  
   async getSubscribedUsers(
     contentId: number,
     contentType: SubscribableContentTypes,
   ): Promise<SubscribedUser[]> {
     try {
-      const { error, data } = await this.client.rpc('get_subscribed_users_emails_to_notify', {
-        p_content_id: contentId,
-        p_content_type: contentType,
-      });
+      let data;
 
-      if (error || data.length === 0) {
-        throw error || new Error('No emails to send');
+      if (contentType === 'news') {
+        const response = await this.client.from('profiles').select(
+          `id,
+          roles,
+          badges:profile_badges_relations(
+            profile_badges(id)
+          )
+          `
+        );
+        data = response.data && response.data.map(({ id, roles, badges }) => ({ 
+          badge_ids: badges ? badges.map(({profile_badges}) => profile_badges).flat().map((badge) => badge.id) : [],
+          profile_id: id,
+          roles,
+        }));
+      } else {
+        const response = await this.client.rpc('get_subscribed_users_emails_to_notify', {
+          p_content_id: contentId,
+          p_content_type: contentType,
+        });
+        data = response.data;
       }
 
       return data as SubscribedUser[];
@@ -112,14 +128,31 @@ export class NotificationsSupabaseServiceServer {
       );
     } catch (error) {
       console.error(error);
+    }
+  }
 
-      return Response.json(
-        { error },
-        {
-          status: 500,
-          statusText: 'Error creating notifications: Comments',
-        },
-      );
+  async createNotificationsNews(news: DBNews) {
+    try {
+      const contentId = news.id;
+
+      let subscribers = await this.getSubscribedUsers(contentId, 'news');
+      if (news.profile_badge) {
+        subscribers = subscribers.filter(
+          subscriber => subscriber.badge_ids.includes(news.profile_badge as unknown as number) || (subscriber.roles && subscriber.roles.includes('admin'))
+        )
+      }
+
+      const notification = new DBNotification({
+        action_type: 'news',
+        content_id: contentId,
+        title: news.title,
+        triggered_by_id: news.created_by!,
+        content_type: 'news',
+      });
+
+      await this.createNotifications(notification, subscribers);
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -140,14 +173,14 @@ export class NotificationsSupabaseServiceServer {
         triggered_by: profile,
       });
 
-      await this.createNotifications(notification, subscribers);
+        await this.createNotifications(notification, subscribers);
 
-      await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails(
-        subscribers,
-        notification,
-      );
-    } catch (error) {
-      console.error('Error creating notifications: Research update', error);
+        await new NotificationEmailServiceServer(this.client).sendInstantNotificationEmails(
+          subscribers,
+          notification,
+        );
+      } catch (error) {
+        console.error(error);
+      }
     }
-  }
 }

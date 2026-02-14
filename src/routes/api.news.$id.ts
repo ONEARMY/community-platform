@@ -5,6 +5,7 @@ import { News } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ContentServiceServer } from 'src/services/contentService.server';
+import { BroadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
@@ -75,6 +76,16 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     }
 
     const news = News.fromDB(newsResult.data[0], []);
+    const profileService = new ProfileServiceServer(client);
+    const profile = await profileService.getByAuthId(claims.data.claims.sub);
+
+    const broadcastCoordinationServiceServer = new BroadcastCoordinationServiceServer(client)
+    broadcastCoordinationServiceServer.news(
+      newsResult.data[0],
+      profile,
+      request,
+      currentNews,
+    );
 
     new ProfileServiceServer(client).updateUserActivity(claims.data.claims.sub);
 

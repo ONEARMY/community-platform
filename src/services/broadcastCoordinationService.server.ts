@@ -1,10 +1,32 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBProfile, DBResearchUpdate, ResearchUpdate } from 'oa-shared';
+import type { DBNews, DBProfile, DBResearchUpdate, ResearchUpdate } from 'oa-shared';
 import { discordServiceServer } from './discordService.server';
 import { NotificationsSupabaseServiceServer } from './notificationsSupabaseService.server';
 
 export class BroadcastCoordinationServiceServer {
   constructor(private client: SupabaseClient) {}
+
+  news(
+    news: DBNews,
+    profile: DBProfile | null,
+    request: Request,
+    oldNews?: DBNews,
+  ) {
+    const beforeCheck = oldNews ? !!oldNews.is_draft : true;
+    const siteUrl = new URL(request.url).origin.replace('http:', 'https:');
+
+    if (!news || !profile || news?.is_draft) {
+      return;
+    }
+
+    if (beforeCheck && news.is_draft === false) {
+      new NotificationsSupabaseServiceServer(this.client).createNotificationsNews(news);
+
+      discordServiceServer.postWebhookRequest(
+        `📰 ${profile.username} has news: ${news.title}\n<${siteUrl}/news/${news.slug}>`,
+      );
+    }
+  }
 
   researchUpdate(
     update: ResearchUpdate,

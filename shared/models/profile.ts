@@ -119,8 +119,8 @@ export class Profile {
 
 // Notifications here to avoid circular dependencies
 
-export type NotificationActionType = 'newContent' | 'newComment' | 'newReply';
-export const NotificationContentTypes = ['research_updates', 'comments'] as const;
+export type NotificationActionType = 'newContent' | 'newComment' | 'newReply' | 'news';
+export const NotificationContentTypes = ['research_updates', 'comments', 'news'] as const;
 export type NotificationContentType = (typeof NotificationContentTypes)[number];
 export type BasicAuthorDetails = Pick<Profile, 'id' | 'username' | 'photo'>;
 export type ProfileListItem = Pick<
@@ -292,6 +292,9 @@ export class NotificationDisplay {
       case 'comments': {
         return (notification.content as Comment).comment;
       }
+      case 'news': {
+        return (notification.content as News).summary || '';
+      }
       default: {
         return '';
       }
@@ -314,6 +317,9 @@ export class NotificationDisplay {
       }
       case 'newReply': {
         return `left a reply`;
+      }
+      case 'news': {
+        return `published a news article: ${notification.title}`;
       }
       default: {
         return notification.title;

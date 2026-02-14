@@ -7,7 +7,7 @@ import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/News/constants';
 import type { NewsSortOption } from 'src/pages/News/NewsSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { discordServiceServer } from 'src/services/discordService.server';
+import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { newsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
@@ -210,9 +210,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const news = News.fromDB(newsResult.data[0], []);
     subscribersServiceServer.add('news', news.id, profile.id, client, headers);
 
-    if (!news.isDraft) {
-      notifyDiscord(news, profile, new URL(request.url).origin.replace('http:', 'https:'));
-    }
+    broadcastCoordinationServiceServer.news(newsResult.data[0], profile, client, headers, request);
 
     if (uploadedHeroImageFile) {
       const mediaFiles = await storageServiceServer.uploadImage(
@@ -243,15 +241,6 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({}, { headers, status: 500, statusText: 'Error creating news' });
   }
 };
-
-function notifyDiscord(news: News, profile: DBProfile, siteUrl: string) {
-  const title = news.title;
-  const slug = news.slug;
-
-  discordServiceServer.postWebhookRequest(
-    `📰 ${profile.username} has news: ${title}\n<${siteUrl}/news/${slug}>`,
-  );
-}
 
 async function validateRequest(request: Request, data: any, authError: AuthError | null) {
   if (authError) {

@@ -27,6 +27,7 @@ const setPreferences = async (
 ): Promise<Response> => {
   const formData = new FormData();
   formData.append('comments', data.comments.toString());
+  formData.append('news', data.comments.toString());
   formData.append('replies', data.replies.toString());
   formData.append('research_updates', data.research_updates.toString());
   formData.append('is_unsubscribed', 'false');
@@ -43,6 +44,7 @@ const setUnsubscribe = async (userCode: string, id?: number): Promise<Response> 
     formData.append('id', id.toString());
   }
   formData.append('comments', 'false');
+  formData.append('news', 'false');
   formData.append('replies', 'false');
   formData.append('research_updates', 'false');
   formData.append('is_unsubscribed', 'true');

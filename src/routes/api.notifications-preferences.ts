@@ -5,6 +5,7 @@ import { updateUserActivity } from 'src/utils/activity.server';
 
 export const DEFAULT_NOTIFICATION_PREFERENCES: DBNotificationsPreferencesFields = {
   comments: true,
+  news: true,
   replies: true,
   research_updates: true,
   is_unsubscribed: false,
@@ -37,6 +38,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData();
     const id = formData.has('id') ? Number(formData.get('id') as string) : null;
     const comments = formData.get('comments') === 'true';
+    const news = formData.get('news') === 'true';
     const replies = formData.get('replies') === 'true';
     const research_updates = formData.get('research_updates') === 'true';
     const is_unsubscribed = formData.get('is_unsubscribed') === 'true';
@@ -58,6 +60,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         .from('notifications_preferences')
         .update({
           comments,
+          news,
           replies,
           research_updates,
           is_unsubscribed,
@@ -82,6 +85,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     await client.from('notifications_preferences').insert({
       user_id: data.id,
       comments,
+      news,
       replies,
       research_updates,
       is_unsubscribed,

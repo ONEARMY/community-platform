@@ -6,11 +6,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AuthorsContext } from '../providers/AuthorsContext';
 import { render } from '../test/utils';
 import { CommentDisplay } from './CommentDisplay';
+import { UsefulConfig } from '../UsefulStatsButton/UsefulButtonLite';
 
 vi.mock('../UsefulStatsButton/UsefulButtonLite', () => ({
-  UsefulButtonLite: ({ usefulButtonLiteConfig }: any) => (
-    <button data-testid="useful-button" onClick={() => usefulButtonLiteConfig.onUsefulClick('add')}>
-      Useful {usefulButtonLiteConfig.votedUsefulCount}
+  UsefulButtonLite: ({ onUsefulClick, votedUsefulCount }: UsefulConfig) => (
+    <button data-testid="useful-button" onClick={() => onUsefulClick('add')}>
+      Useful {votedUsefulCount}
     </button>
   ),
 }));
@@ -24,8 +25,6 @@ vi.mock('../CommentBody/CommentBody', () => ({
 }));
 
 describe('CommentDisplay', () => {
-  const mockSetShowDeleteModal = vi.fn();
-  const mockSetShowEditModal = vi.fn();
   const mockOnUsefulClick = vi.fn(async () => Promise.resolve());
 
   const mockComment = {
@@ -61,9 +60,7 @@ describe('CommentDisplay', () => {
     authors: [0],
   };
   const renderWithAuthorsContext = (ui: React.ReactElement) => {
-    return render(
-      <AuthorsContext.Provider value={mockAuthorsContextValue}>{ui}</AuthorsContext.Provider>,
-    );
+    return render(<AuthorsContext.Provider value={mockAuthorsContextValue}>{ui}</AuthorsContext.Provider>);
   };
 
   beforeEach(() => {
@@ -75,8 +72,7 @@ describe('CommentDisplay', () => {
         comment={mockComment}
         itemType="CommentItem"
         isEditable={false}
-        setShowDeleteModal={mockSetShowDeleteModal}
-        setShowEditModal={mockSetShowEditModal}
+        actions={<></>}
         usefulButtonConfig={mockUsefulButtonConfig}
       />,
     );
@@ -92,8 +88,7 @@ describe('CommentDisplay', () => {
         comment={mockComment}
         itemType="CommentItem"
         isEditable={false}
-        setShowDeleteModal={mockSetShowDeleteModal}
-        setShowEditModal={mockSetShowEditModal}
+        actions={<></>}
         usefulButtonConfig={mockUsefulButtonConfig}
       />,
     );
@@ -114,8 +109,7 @@ describe('CommentDisplay', () => {
         comment={mockComment}
         itemType="CommentItem"
         isEditable={false}
-        setShowDeleteModal={mockSetShowDeleteModal}
-        setShowEditModal={mockSetShowEditModal}
+        actions={<></>}
         usefulButtonConfig={{
           ...mockUsefulButtonConfig,
           votedUsefulCount: count,
@@ -135,8 +129,7 @@ describe('CommentDisplay', () => {
         comment={mockComment}
         itemType="CommentItem"
         isEditable={false}
-        setShowDeleteModal={mockSetShowDeleteModal}
-        setShowEditModal={mockSetShowEditModal}
+        actions={<></>}
         usefulButtonConfig={{
           ...mockUsefulButtonConfig,
           votedUsefulCount: count,

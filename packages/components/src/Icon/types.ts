@@ -25,8 +25,6 @@ export type availableGlyphs =
   | 'contact'
   | 'discord'
   | 'discussion'
-  | 'discussionFollow'
-  | 'discussionUnfollow'
   | 'declined'
   | 'delete'
   | 'difficulty'

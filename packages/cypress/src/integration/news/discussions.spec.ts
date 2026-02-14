@@ -43,11 +43,11 @@ describe('[News.Discussions]', () => {
     cy.visit(newsPath);
     cy.get('[data-cy=comments-incomplete-profile-prompt]').should('not.exist');
 
-    cy.get('[data-cy=follow-button]').contains('Follow Comments');
+    cy.get('[data-cy=follow-button]').should('contain', 'Follow Comments');
     cy.addComment(newComment);
     cy.wait(2000);
     cy.reload();
-    cy.get('[data-cy=follow-button]').contains('Following Comments');
+    cy.get('[data-cy=follow-button]').should('contain', 'Following Comments');
 
     cy.step('Can edit their comment');
     cy.editDiscussionItem('CommentItem', newComment, updatedNewComment);

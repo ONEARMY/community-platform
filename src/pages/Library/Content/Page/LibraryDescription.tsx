@@ -29,19 +29,9 @@ interface IProps {
   onUsefulClick: () => Promise<void>;
 }
 
-export const LibraryDescription = ({
-  commentsCount,
-  hasUserVotedUseful,
-  item,
-  loggedInUser,
-  onUsefulClick,
-  votedUsefulCount,
-}: IProps) => {
+export const LibraryDescription = ({ commentsCount, hasUserVotedUseful, item, loggedInUser, onUsefulClick, votedUsefulCount }: IProps) => {
   const isEditable = useMemo(() => {
-    return (
-      !!loggedInUser &&
-      (hasAdminRights(loggedInUser) || item.author?.username === loggedInUser.username)
-    );
+    return !!loggedInUser && (hasAdminRights(loggedInUser) || item.author?.username === loggedInUser.username);
   }, [loggedInUser, item.author]);
 
   const showFeedback = item.moderationFeedback && item.moderation !== 'accepted' && isEditable;
@@ -96,11 +86,7 @@ export const LibraryDescription = ({
             <AuthorDisplay author={item.author} />
 
             <Text variant="auxiliary">
-              <DisplayDate
-                createdAt={item.createdAt}
-                modifiedAt={item.modifiedAt}
-                action="Published"
-              />
+              <DisplayDate createdAt={item.createdAt} modifiedAt={item.modifiedAt} action="Published" />
             </Text>
 
             {item.isDraft && (
@@ -201,10 +187,7 @@ export const LibraryDescription = ({
           </Box>
 
           {!item.isDraft && item.moderation !== 'accepted' && (
-            <ModerationStatus
-              status={item.moderation}
-              sx={{ top: 3, position: 'absolute', right: 3, fontSize: 2 }}
-            />
+            <ModerationStatus status={item.moderation} sx={{ top: 3, position: 'absolute', right: 3, fontSize: 2 }} />
           )}
         </Box>
       </Flex>
@@ -220,17 +203,17 @@ export const LibraryDescription = ({
           justifyContent: 'space-between',
         }}
       >
-        <ClientOnly fallback={<></>}>
-          {() => (
-            <Flex sx={{ gap: 2 }}>
+        <Flex sx={{ gap: 2 }}>
+          <ClientOnly fallback={<></>}>
+            {() => (
               <UsefulStatsButton
                 hasUserVotedUseful={hasUserVotedUseful}
                 isLoggedIn={loggedInUser ? true : false}
                 onUsefulClick={onUsefulClick}
               />
-            </Flex>
-          )}
-        </ClientOnly>
+            )}
+          </ClientOnly>
+        </Flex>
 
         <ContentStatistics
           statistics={[
@@ -243,12 +226,7 @@ export const LibraryDescription = ({
               }),
               stat: item.totalViews,
             },
-            createUsefulStatistic(
-              'projects',
-              item.id,
-              votedUsefulCount || 0,
-              userHasPremiumTier(loggedInUser, PremiumTier.ONE),
-            ),
+            createUsefulStatistic('projects', item.id, votedUsefulCount || 0, userHasPremiumTier(loggedInUser, PremiumTier.ONE)),
             {
               icon: 'comment-outline',
               label: buildStatisticsLabel({

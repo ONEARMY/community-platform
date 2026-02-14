@@ -32,6 +32,31 @@ vi.mock('src/stores/Profile/profile.store', () => ({
   ProfileStoreProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
+vi.mock('src/stores/Subscription/subscription.store', () => ({
+  useSubscriptionStore: vi.fn(() => ({
+    isSubscribed: vi.fn(() => false),
+    isLoading: vi.fn(() => false),
+    checkAndCacheSubscription: vi.fn(),
+    subscribe: vi.fn(),
+    unsubscribe: vi.fn(),
+    toggleSubscription: vi.fn(),
+  })),
+  SubscriptionStoreProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
+vi.mock('src/stores/UsefulVote/usefulVote.store', () => ({
+  useUsefulVoteStore: vi.fn(() => ({
+    getVoteState: vi.fn(() => ({ hasVoted: false, usefulCount: 0, isLoading: false })),
+    hasVoted: vi.fn(() => false),
+    getUsefulCount: vi.fn(() => 0),
+    isLoading: vi.fn(() => false),
+    initializeVote: vi.fn(),
+    toggleVote: vi.fn(),
+    clearCache: vi.fn(),
+  })),
+  UsefulVoteStoreProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
 vi.mock('src/services/usefulService', () => {
   return {
     usefulService: {
@@ -79,9 +104,7 @@ describe('Questions', () => {
         expect(breadcrumbItems).toHaveLength(3);
         expect(breadcrumbItems[0]).toHaveTextContent('Question');
         expect(breadcrumbItems[1]).toHaveTextContent('Preference');
-        expect(breadcrumbItems[2]).toHaveTextContent(
-          'Do you prefer camping near a lake or in a forest?',
-        );
+        expect(breadcrumbItems[2]).toHaveTextContent('Do you prefer camping near a lake or in a forest?');
 
         // Assert: Check that the first two breadcrumb items contain links
         const firstLink = within(breadcrumbItems[0]).getByRole('link');
@@ -111,9 +134,7 @@ describe('Questions', () => {
         const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem');
         expect(breadcrumbItems).toHaveLength(2);
         expect(breadcrumbItems[0]).toHaveTextContent('Question');
-        expect(breadcrumbItems[1]).toHaveTextContent(
-          'Do you prefer camping near a lake or in a forest?',
-        );
+        expect(breadcrumbItems[1]).toHaveTextContent('Do you prefer camping near a lake or in a forest?');
 
         // Assert: Check that the first breadcrumb item contains a link
         const firstLink = within(breadcrumbItems[0]).getByRole('link');
@@ -129,9 +150,7 @@ describe('Questions', () => {
 
 const getWrapper = (question: Question) => {
   const router = createMemoryRouter(
-    createRoutesFromElements(
-      <Route path="/questions/:slug" key={1} element={<QuestionPage question={question} />} />,
-    ),
+    createRoutesFromElements(<Route path="/questions/:slug" key={1} element={<QuestionPage question={question} />} />),
     {
       initialEntries: ['/questions/question'],
     },

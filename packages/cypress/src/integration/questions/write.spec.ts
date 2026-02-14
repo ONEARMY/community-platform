@@ -47,9 +47,7 @@ describe('[Question]', () => {
       cy.get('[data-cy=errors-container]');
 
       cy.step('Add image');
-      cy.get('[data-cy=image-upload-0]')
-        .find(':file')
-        .selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
 
       cy.step('Add title field');
       cy.get('[data-cy=field-title]').clear().type(initialTitle).blur({ force: true });
@@ -97,13 +95,10 @@ describe('[Question]', () => {
 
       cy.step('All ready for a discussion');
       cy.get('[data-cy=DiscussionTitle]').contains('Start the discussion');
-      cy.get('[data-cy=follow-button]').contains('Following');
+      cy.get('[data-cy=follow-button]').first().should('contain', 'Following Comments');
 
       cy.step('Edit question');
-      cy.get('[data-cy=edit]')
-        .click()
-        .url()
-        .should('include', `/questions/${initialExpectedSlug}/edit`);
+      cy.get('[data-cy=edit]').click().url().should('include', `/questions/${initialExpectedSlug}/edit`);
 
       cy.step('Add title description');
       cy.get('[data-cy=field-description]').clear().type(updatedQuestionDescription, { delay: 5 });
@@ -114,19 +109,13 @@ describe('[Question]', () => {
       //   .click({ force: true })
 
       cy.step('Updated question details shown');
-      cy.get('[data-cy=submit]')
-        .click()
-        .url()
-        .should('include', `/questions/${initialExpectedSlug}`);
+      cy.get('[data-cy=submit]').click().url().should('include', `/questions/${initialExpectedSlug}`);
       cy.contains(updatedQuestionDescription);
 
       cy.step('Updating the title changes the slug');
       cy.get('[data-cy=edit]').click();
       cy.get('[data-cy=field-title]').clear().type(updatedTitle).blur();
-      cy.get('[data-cy=submit]')
-        .click()
-        .url()
-        .should('include', `/questions/${updatedExpectedSlug}`);
+      cy.get('[data-cy=submit]').click().url().should('include', `/questions/${updatedExpectedSlug}`);
       cy.contains(updatedTitle);
 
       cy.step('Can access the question with the previous slug');

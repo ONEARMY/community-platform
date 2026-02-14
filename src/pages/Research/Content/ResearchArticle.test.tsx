@@ -25,6 +25,31 @@ vi.mock('src/stores/Profile/profile.store', () => ({
   ProfileStoreProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
+vi.mock('src/stores/Subscription/subscription.store', () => ({
+  useSubscriptionStore: vi.fn(() => ({
+    isSubscribed: vi.fn(() => false),
+    isLoading: vi.fn(() => false),
+    checkAndCacheSubscription: vi.fn(),
+    subscribe: vi.fn(),
+    unsubscribe: vi.fn(),
+    toggleSubscription: vi.fn(),
+  })),
+  SubscriptionStoreProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
+vi.mock('src/stores/UsefulVote/usefulVote.store', () => ({
+  useUsefulVoteStore: vi.fn(() => ({
+    getVoteState: vi.fn(() => ({ hasVoted: false, usefulCount: 0, isLoading: false })),
+    hasVoted: vi.fn(() => false),
+    getUsefulCount: vi.fn(() => 0),
+    isLoading: vi.fn(() => false),
+    initializeVote: vi.fn(),
+    toggleVote: vi.fn(),
+    clearCache: vi.fn(),
+  })),
+  UsefulVoteStoreProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
 vi.mock('src/stores/Research/research.store');
 
 describe('Research Article', () => {
@@ -212,13 +237,7 @@ describe('Research Article', () => {
 
 const getWrapper = (research: ResearchItem) => {
   const router = createMemoryRouter(
-    createRoutesFromElements(
-      <Route
-        path="/research/:slug"
-        key={1}
-        element={<ResearchArticlePage research={research} />}
-      />,
-    ),
+    createRoutesFromElements(<Route path="/research/:slug" key={1} element={<ResearchArticlePage research={research} />} />),
     {
       initialEntries: ['/research/article'],
     },

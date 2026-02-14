@@ -1,4 +1,5 @@
 export { Accordion } from './Accordion/Accordion';
+export { ActionSet } from './ActionSet/ActionSet';
 export { ArticleCallToActionSupabase } from './ArticleCallToActionSupabase/ArticleCallToActionSupabase';
 export { AuthorDisplay } from './AuthorDisplay/AuthorDisplay';
 export { Banner } from './Banner/Banner';
@@ -35,8 +36,8 @@ export { FieldInput } from './FieldInput/FieldInput';
 export { FieldMarkdown } from './FieldMarkdown/FieldMarkdown';
 export { FieldTextarea } from './FieldTextarea/FieldTextarea';
 export { FlagIcon } from './FlagIcon/FlagIcon';
-export type { OptionalFollowButtonProps } from './FollowButton/FollowButton';
 export { FollowButton } from './FollowButton/FollowButton';
+export { FollowIcon } from './FollowIcon/FollowIcon';
 export { GlobalStyles } from './GlobalStyles/GlobalStyles';
 export type { GridFormFields } from './GridForm/GridForm';
 export { GridForm } from './GridForm/GridForm';

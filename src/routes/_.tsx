@@ -11,6 +11,8 @@ import { SessionContext } from 'src/pages/common/SessionContext';
 import { StickyButton } from 'src/pages/common/StickyButton';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store';
+import { SubscriptionStoreProvider } from 'src/stores/Subscription/subscription.store';
+import { UsefulVoteStoreProvider } from 'src/stores/UsefulVote/usefulVote.store';
 import { Flex } from 'theme-ui';
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -38,16 +40,20 @@ export default function Index() {
     <EnvironmentContext.Provider value={environment}>
       <SessionContext.Provider value={claims}>
         <ProfileStoreProvider>
-          <Flex sx={{ height: '100vh', flexDirection: 'column' }} data-cy="page-container">
-            <Analytics />
-            <Header />
-            <Alerts />
+          <SubscriptionStoreProvider>
+            <UsefulVoteStoreProvider>
+              <Flex sx={{ height: '100vh', flexDirection: 'column' }} data-cy="page-container">
+                <Analytics />
+                <Header />
+                <Alerts />
 
-            <Outlet />
+                <Outlet />
 
-            <GlobalSiteFooter />
-            <ClientOnly fallback={<></>}>{() => <StickyButton />}</ClientOnly>
-          </Flex>
+                <GlobalSiteFooter />
+                <ClientOnly fallback={<></>}>{() => <StickyButton />}</ClientOnly>
+              </Flex>
+            </UsefulVoteStoreProvider>
+          </SubscriptionStoreProvider>
         </ProfileStoreProvider>
       </SessionContext.Provider>
     </EnvironmentContext.Provider>

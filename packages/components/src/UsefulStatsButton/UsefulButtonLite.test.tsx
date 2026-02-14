@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { UsefulButtonLite } from './UsefulButtonLite';
 
-import type { IProps } from './UsefulButtonLite';
+import type { UsefulConfig } from './UsefulButtonLite';
 
 const mockTheme = {
   colors: {
@@ -67,9 +67,7 @@ vi.mock('../Icon/Icon', async () => {
   };
 });
 
-const TestWrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
+const TestWrapper = ({ children }: { children: React.ReactNode }) => <BrowserRouter>{children}</BrowserRouter>;
 
 describe('UsefulButtonLite', () => {
   const mockOnUsefulClick = vi.fn();
@@ -80,21 +78,17 @@ describe('UsefulButtonLite', () => {
     vi.spyOn(Math, 'random').mockReturnValue(0.5);
   });
 
-  const defaultProps: IProps = {
-    usefulButtonLiteConfig: {
-      hasUserVotedUseful: false,
-      votedUsefulCount: 5,
-      isLoggedIn: true,
-      onUsefulClick: mockOnUsefulClick,
-    },
+  const defaultProps: UsefulConfig = {
+    hasUserVotedUseful: false,
+    votedUsefulCount: 5,
+    isLoggedIn: true,
+    onUsefulClick: mockOnUsefulClick,
   };
 
   it('does not show count when votedUsefulCount is 0', () => {
-    const props: IProps = {
-      usefulButtonLiteConfig: {
-        ...defaultProps.usefulButtonLiteConfig,
-        votedUsefulCount: 0,
-      },
+    const props: UsefulConfig = {
+      ...defaultProps,
+      votedUsefulCount: 0,
     };
 
     render(
@@ -108,11 +102,9 @@ describe('UsefulButtonLite', () => {
   });
 
   it('shows the icon as gray when hasUserVotedUseful is false', () => {
-    const props: IProps = {
-      usefulButtonLiteConfig: {
-        ...defaultProps.usefulButtonLiteConfig,
-        hasUserVotedUseful: false,
-      },
+    const props: UsefulConfig = {
+      ...defaultProps,
+      hasUserVotedUseful: false,
     };
 
     render(
@@ -126,11 +118,9 @@ describe('UsefulButtonLite', () => {
   });
 
   it('shows the icon as coloured when hasUserVotedUseful is true', () => {
-    const props: IProps = {
-      usefulButtonLiteConfig: {
-        ...defaultProps.usefulButtonLiteConfig,
-        hasUserVotedUseful: true,
-      },
+    const props: UsefulConfig = {
+      ...defaultProps,
+      hasUserVotedUseful: true,
     };
 
     render(
@@ -144,12 +134,10 @@ describe('UsefulButtonLite', () => {
   });
 
   it('increases votedUsefulCount by 1 when user clicks and has not already voted', async () => {
-    const props: IProps = {
-      usefulButtonLiteConfig: {
-        ...defaultProps.usefulButtonLiteConfig,
-        hasUserVotedUseful: false,
-        votedUsefulCount: 3,
-      },
+    const props: UsefulConfig = {
+      ...defaultProps,
+      hasUserVotedUseful: false,
+      votedUsefulCount: 3,
     };
 
     render(
@@ -168,12 +156,10 @@ describe('UsefulButtonLite', () => {
   });
 
   it('decreases votedUsefulCount by 1 when user clicks and has already voted', async () => {
-    const props: IProps = {
-      usefulButtonLiteConfig: {
-        ...defaultProps.usefulButtonLiteConfig,
-        hasUserVotedUseful: true,
-        votedUsefulCount: 5,
-      },
+    const props: UsefulConfig = {
+      ...defaultProps,
+      hasUserVotedUseful: true,
+      votedUsefulCount: 5,
     };
 
     render(
@@ -213,11 +199,9 @@ describe('UsefulButtonLite', () => {
   });
 
   it('redirects to sign-in when user is not logged in', () => {
-    const props: IProps = {
-      usefulButtonLiteConfig: {
-        ...defaultProps.usefulButtonLiteConfig,
-        isLoggedIn: false,
-      },
+    const props: UsefulConfig = {
+      ...defaultProps,
+      isLoggedIn: false,
     };
 
     Object.defineProperty(window, 'location', {

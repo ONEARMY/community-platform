@@ -195,14 +195,18 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION "public"."get_user_projects"("username_param" "text") RETURNS TABLE("id" bigint, "title" "text", "slug" "text", "total_useful" bigint)
-    LANGUAGE "plpgsql"
-    SET search_path = public, pg_temp
-    AS $$
+DROP FUNCTION public.get_user_projects(username_param text);
+CREATE OR REPLACE FUNCTION public.get_user_projects(username_param text)
+ RETURNS TABLE(id bigint, comment_count integer, cover_image json, title text, slug text, total_useful bigint)
+ LANGUAGE plpgsql
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
 BEGIN
   RETURN QUERY
   SELECT 
     pr.id,
+    pr.comment_count,
+    pr.cover_image,
     pr.title,
     pr.slug,
     COALESCE(COUNT(uv.id), 0)::BIGINT AS total_useful
@@ -215,7 +219,8 @@ BEGIN
   AND (pr.moderation = 'accepted')
   GROUP BY pr.id, pr.title, pr.slug;
 END;
-$$;
+$function$
+;
 
 CREATE OR REPLACE FUNCTION "public"."update_project_tsvector"() RETURNS "trigger"
     LANGUAGE "plpgsql"

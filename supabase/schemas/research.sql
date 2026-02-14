@@ -227,14 +227,16 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION "public"."get_user_research"("username_param" "text") RETURNS TABLE("id" bigint, "title" "text", "slug" "text", "total_useful" bigint)
-    LANGUAGE "plpgsql"
-    SET search_path = public, pg_temp
-    AS $$
+CREATE OR REPLACE FUNCTION "public"."get_user_research"(username_param text) 
+ RETURNS TABLE("id" bigint, image json, title text, slug text, total_useful bigint)
+ LANGUAGE "plpgsql"
+ SET search_path = public, pg_temp
+AS $$
 BEGIN
   RETURN QUERY
   SELECT 
     r.id,
+    r.image,
     r.title,
     r.slug,
     COALESCE(COUNT(uv.id), 0)::BIGINT AS total_useful
@@ -247,6 +249,7 @@ BEGIN
   GROUP BY r.id, r.title, r.slug;
 END;
 $$;
+
 
 CREATE OR REPLACE FUNCTION "public"."update_research_tsvector"() RETURNS "trigger"
     LANGUAGE "plpgsql"

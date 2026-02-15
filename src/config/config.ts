@@ -24,9 +24,7 @@ const _c = (property: ConfigurationOption, fallbackValue?: string): string => {
 };
 
 const getFromLocalStorageFirst = (property: ConfigurationOption): string => {
-  return typeof localStorage !== 'undefined' && localStorage[property]
-    ? (localStorage.getItem(property) as string)
-    : _c(property, '');
+  return typeof localStorage !== 'undefined' && localStorage[property] ? (localStorage.getItem(property) as string) : _c(property, '');
 };
 
 export const getConfigurationOption = _c;
@@ -38,10 +36,7 @@ export const getConfigurationOption = _c;
 // On dev sites user can override default role
 
 const getSiteVariant = (): siteVariants => {
-  if (
-    (typeof location !== 'undefined' && location.host === 'localhost:3456') ||
-    _c('VITE_SITE_VARIANT') === 'test-ci'
-  ) {
+  if ((typeof location !== 'undefined' && location.host === 'localhost:3456') || _c('VITE_SITE_VARIANT') === 'test-ci') {
     return 'test-ci';
   }
   if (_c('VITE_SITE_VARIANT') === 'preview') {
@@ -70,15 +65,10 @@ export const SENTRY_CONFIG: ISentryConfig = {
   environment: siteVariant,
 };
 
-export const CDN_URL = _c('VITE_CDN_URL', '');
-export const VERSION = _c('VITE_PROJECT_VERSION', '');
 export const GA_TRACKING_ID = _c('VITE_GA_TRACKING_ID');
 export const PATREON_CLIENT_ID = _c('VITE_PATREON_CLIENT_ID');
-export const API_URL = _c('VITE_API_URL', 'https://platform-api-voymtdup6a-uc.a.run.app');
 
 export const VITE_THEME = getFromLocalStorageFirst('VITE_THEME');
-
-export const VITE_PLATFORM_PROFILES = getFromLocalStorageFirst('VITE_PLATFORM_PROFILES');
 
 export const isPreciousPlastic = (): boolean => {
   return getFromLocalStorageFirst('VITE_THEME') === 'precious-plastic';

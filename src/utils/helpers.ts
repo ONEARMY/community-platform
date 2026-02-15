@@ -11,8 +11,7 @@ export const stripSpecialCharacters = (text: string) => {
 };
 
 // get special characters from string using the same pattern as stripSpecialCharacters
-export const getSpecialCharacters = (text: string): string[] =>
-  Array.from(text.matchAll(specialCharactersPattern)).map((x) => x[0]);
+export const getSpecialCharacters = (text: string): string[] => Array.from(text.matchAll(specialCharactersPattern)).map((x) => x[0]);
 
 // convert to lower case and remove any special characters
 export const formatLowerNoSpecial = (text: string) => {
@@ -109,12 +108,11 @@ export const isContactable = (preference: boolean | null) => {
 };
 
 export const getProjectEmail = (subject: string) => {
-  const site = getConfigurationOption('VITE_THEME', 'precious-plastic');
-  return `mailto:platform@onearmy.earth?subject=${subject}%20${site}`;
+  const siteName = import.meta.env.VITE_SITE_NAME || process.env.VITE_SITE_NAME;
+  return `mailto:platform@onearmy.earth?subject=${subject}%20${siteName}`;
 };
 
-export const randomIntFromInterval = (min, max) =>
-  Math.floor(Math.random() * (max - min + 1) + min);
+export const randomIntFromInterval = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
 export const buildStatisticsLabel = ({
   stat,

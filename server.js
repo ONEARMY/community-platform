@@ -48,12 +48,6 @@ const imgSrc = [
   process.env.SUPABASE_API_URL,
 ];
 
-const cdnUrl = import.meta.env?.VITE_CDN_URL || process.env?.VITE_CDN_URL;
-
-if (cdnUrl) {
-  imgSrc.push(cdnUrl);
-}
-
 // helmet config
 app.use(
   helmet.contentSecurityPolicy({

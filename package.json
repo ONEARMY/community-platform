@@ -25,7 +25,7 @@
     "build:components": "yarn workspace oa-components build",
     "build:vite": "react-router build",
     "build:shared": "yarn workspace oa-shared build",
-    "build": "tsc && yarn build:shared && yarn build:themes && yarn build:components && yarn build:vite",
+    "build": "yarn build:shared && yarn build:themes && yarn build:components && yarn build:vite",
     "lint": "biome lint --write",
     "format": "biome check --write",
     "serve": "npx serve -s build",

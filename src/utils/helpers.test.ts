@@ -114,7 +114,7 @@ describe('src/utils/helpers', () => {
 describe('getProjectEmail', () => {
   it('returns the right project name at the end', () => {
     const subject = 'Whatever you need';
-    expect(getProjectEmail(subject)).toMatch('precious');
+    expect(getProjectEmail(subject)).toMatch('Precious Plastic');
     expect(getProjectEmail(subject)).toMatch(subject);
   });
 });

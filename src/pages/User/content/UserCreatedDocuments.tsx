@@ -25,7 +25,7 @@ const UserCreatedDocuments = ({ columns, docs }: IProps) => {
                     item={{
                       id: item.id!,
                       commentCount: item.commentCount,
-                      coverImage: item.coverImage,
+                      coverImage: item.coverImage || undefined,
                       slug: item.slug!,
                       title: item.title!,
                       usefulCount: item.usefulCount || 0,
@@ -47,7 +47,7 @@ const UserCreatedDocuments = ({ columns, docs }: IProps) => {
                     type="research"
                     item={{
                       id: item.id!,
-                      coverImage: item.image,
+                      coverImage: item.image || undefined,
                       slug: item.slug!,
                       title: item.title!,
                       usefulCount: item.usefulCount || 0,

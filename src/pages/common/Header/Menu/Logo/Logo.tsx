@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react';
 import type { ThemeWithName } from 'oa-themes';
 import { Link } from 'react-router';
-import { VERSION } from 'src/config/config';
 import { Box, Flex, Image, Text, useThemeUI } from 'theme-ui';
 
 const Logo = observer(() => {
@@ -11,7 +10,6 @@ const Logo = observer(() => {
   const name = import.meta.env.VITE_SITE_NAME || process.env.VITE_SITE_NAME;
   const logo = theme.logo;
 
-  const nameAndVersion = `${name} logo ${VERSION}`;
   const logoSize = [50, 50, 100];
 
   return (
@@ -41,8 +39,8 @@ const Logo = observer(() => {
               width: logoSize,
               height: logoSize,
             }}
-            alt={nameAndVersion}
-            title={nameAndVersion}
+            alt={`${name} logo`}
+            title={`${name} logo`}
           />
         </Flex>
         <Text className="sr-only" ml={2} sx={{ display: ['none', 'none', 'block'] }} color="black">

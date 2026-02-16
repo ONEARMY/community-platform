@@ -1,4 +1,3 @@
-DROP FUNCTION public.get_user_questions(username_param text);
 CREATE OR REPLACE FUNCTION public.get_user_questions(username_param text)
  RETURNS TABLE(id bigint, comment_count bigint, images json[], title text, slug text, total_useful bigint)
  LANGUAGE plpgsql

@@ -9,12 +9,12 @@ CREATE TABLE IF NOT EXISTS "public"."tenant_settings" (
     "site_image" "text",
     "site_favicon" "text",
     "donation_settings" JSON,
-    "no_messaging" BOOLEAN NOT NULL,
+    "no_messaging" BOOLEAN NOT NULL DEFAULT false,
     "library_heading" "text",
     "academy_resource" "text",
     "profile_guidelines" "text",
     "questions_guidelines" "text",
-    "supported_modules" "text",
+    "supported_modules" "text" DEFAULT 'library,map,research,academy,user,question,news',
     "patreon_id" "text"
 );
 

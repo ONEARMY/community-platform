@@ -2,6 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { TenantSettings } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { sendEmail } from '../.server/resend';
 import ReceiverMessage from '../.server/templates/ReceiverMessage';
 
@@ -60,7 +61,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       );
     }
 
-    const settings = await getTenantSettings(client);
+    const settings = await new TenantSettingsService(client).get();
 
     const messageResult = await client.from('messages').insert({
       sender_id: from,
@@ -116,41 +117,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return Response.json({ error }, { headers, status: 500, statusText: 'Error sending message' });
   }
 };
-
-export async function getTenantSettings(client: SupabaseClient): Promise<TenantSettings> {
-  const { data } = await client
-    .from('tenant_settings')
-    .select(
-      `site_name,
-      site_url,
-      message_sign_off,
-      email_from,
-      site_image,
-      no_messaging,
-      library_heading,
-      academy_resource,
-      profile_guidelines,
-      questions_guidelines,
-      supported_modules,
-      patreon_id`,
-    )
-    .single();
-
-  return new TenantSettings({
-    siteName: data?.site_name || 'The Community Platform',
-    siteUrl: data?.site_url || 'https://community.preciousplastic.com',
-    messageSignOff: data?.message_sign_off || 'One Army',
-    emailFrom: data?.email_from || 'hello@onearmy.earth',
-    noMessaging: data?.no_messaging || false,
-    academyResource: data?.academy_resource,
-    libraryHeading: data?.library_heading,
-    patreonId: data?.patreon_id,
-    profileGuidelines: data?.profile_guidelines,
-    questionsGuidelines: data?.questions_guidelines,
-    supportedModules: data?.supported_modules,
-    siteImage: data?.site_image || 'https://community.preciousplastic.com/assets/img/one-army-logo.png',
-  });
-}
 
 async function validateRequest(request: Request, userEmail: string | null, data: any) {
   if (request.method !== 'POST') {

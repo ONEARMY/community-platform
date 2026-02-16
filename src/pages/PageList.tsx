@@ -19,7 +19,7 @@ const ResearchModule: IPageNavigation = {
 };
 
 const library: IPageNavigation = {
-  module: MODULE.HOWTO,
+  module: MODULE.LIBRARY,
   path: '/library',
   title: 'Library',
 };
@@ -50,14 +50,7 @@ export const getAvailablePageList = (supportedModules: MODULE[]): IPageNavigatio
   return COMMUNITY_PAGES.filter((pageItem) => supportedModules.includes(pageItem.module));
 };
 
-export const COMMUNITY_PAGES: IPageNavigation[] = [
-  news,
-  library,
-  maps,
-  academy,
-  ResearchModule,
-  QuestionModule,
-];
+export const COMMUNITY_PAGES: IPageNavigation[] = [news, library, maps, academy, ResearchModule, QuestionModule];
 
 /** Additional pages to show in signed-in profile dropdown */
 export const COMMUNITY_PAGES_PROFILE: IPageNavigation[] = [settings];

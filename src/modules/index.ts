@@ -1,6 +1,6 @@
 export enum MODULE {
   CORE = 'core', // This is enabled on all installations
-  HOWTO = 'howto',
+  LIBRARY = 'library',
   MAP = 'map',
   RESEARCH = 'research',
   ACADEMY = 'academy',
@@ -11,12 +11,8 @@ export enum MODULE {
 
 export const getSupportedModules = (supportedModules: string): MODULE[] => {
   const envModules: string[] =
-    (supportedModules || 'howto,map,research,academy,user,question,news')
-      .split(',')
-      .map((s) => s.trim()) || [];
-  return [MODULE.CORE].concat(
-    Object.values(MODULE).filter((module) => envModules.includes(module)),
-  );
+    (supportedModules || 'library,map,research,academy,user,question,news').split(',').map((s) => s.trim()) || [];
+  return [MODULE.CORE].concat(Object.values(MODULE).filter((module) => envModules.includes(module)));
 };
 
 export const isModuleSupported = (supportedModules: string, MODULE: MODULE): boolean => {

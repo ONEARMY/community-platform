@@ -158,12 +158,10 @@ jobs:
       - run:
           name: Set branch environment
           command: |
-            echo 'export VITE_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
             echo 'export VITE_SITE_VARIANT=test-ci' >> $BASH_ENV
       - run:
           name: Check environment variables
           command: |
-            echo $VITE_PROJECT_VERSION
             echo $VITE_SITE_VARIANT
       - run:
           command: yarn build
@@ -225,15 +223,11 @@ jobs:
               --debug --verbose \
               --build-secret NODE_ENV="production" \
               --build-secret VITE_BRANCH="$VITE_BRANCH" \
-              --build-secret VITE_CDN_URL="$VITE_CDN_URL" \
               --build-secret VITE_SENTRY_DSN="$VITE_SENTRY_DSN" \
               --build-secret VITE_GA_TRACKING_ID="$VITE_GA_TRACKING_ID" \
               --build-secret VITE_PATREON_CLIENT_ID="$VITE_PATREON_CLIENT_ID" \
-              --build-secret VITE_PLATFORM_PROFILES="$VITE_PLATFORM_PROFILES" \
-              --build-secret VITE_PROJECT_VERSION="$VITE_PROJECT_VERSION" \
               --build-secret VITE_SUPPORTED_MODULES="$VITE_SUPPORTED_MODULES" \
               --build-secret VITE_ACADEMY_RESOURCE="$VITE_ACADEMY_RESOURCE" \
-              --build-secret VITE_API_URL="$VITE_API_URL" \
               --build-secret VITE_PROFILE_GUIDELINES_URL="$VITE_PROFILE_GUIDELINES_URL" \
               --build-secret VITE_SITE_NAME="$VITE_SITE_NAME" \
               --build-secret VITE_THEME="$VITE_THEME" \

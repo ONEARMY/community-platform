@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { TenantSettings } from 'oa-shared';
+import { TenantSettings } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { sendEmail } from '../.server/resend';
@@ -23,25 +23,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const { valid, status, statusText } = await validateRequest(
-      request,
-      claims.data.claims.email,
-      data,
-    );
+    const { valid, status, statusText } = await validateRequest(request, claims.data.claims.email, data);
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText });
     }
 
-    const userProfile = await client
-      .from('profiles')
-      .select('id,username')
-      .eq('username', claims.data.claims.user_metadata.username);
+    const userProfile = await client.from('profiles').select('id,username').eq('username', claims.data.claims.user_metadata.username);
 
-    const recipientProfile = await client
-      .from('profiles')
-      .select('id,auth_id')
-      .eq('username', data.to);
+    const recipientProfile = await client.from('profiles').select('id,auth_id').eq('username', data.to);
 
     const from = userProfile.data!.at(0)!.id;
     const to = recipientProfile.data!.at(0)!.id;
@@ -65,8 +55,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         {
           headers,
           status: 429,
-          statusText:
-            "You've contacted a lot of people today! So to protect the platform from spam we haven't sent this message.",
+          statusText: "You've contacted a lot of people today! So to protect the platform from spam we haven't sent this message.",
         },
       );
     }
@@ -117,10 +106,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     });
 
     if (sendResult.error) {
-      return Response.json(
-        { error: sendResult.error },
-        { headers, status: 429, statusText: sendResult.error },
-      );
+      return Response.json({ error: sendResult.error }, { headers, status: 429, statusText: sendResult.error });
     }
 
     return Response.json(null, { headers, status: 201 });
@@ -134,17 +120,36 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export async function getTenantSettings(client: SupabaseClient): Promise<TenantSettings> {
   const { data } = await client
     .from('tenant_settings')
-    .select('site_name,site_url,message_sign_off,email_from,site_image')
+    .select(
+      `site_name,
+      site_url,
+      message_sign_off,
+      email_from,
+      site_image,
+      no_messaging,
+      library_heading,
+      academy_resource,
+      profile_guidelines,
+      questions_guidelines,
+      supported_modules,
+      patreon_id`,
+    )
     .single();
 
-  return {
+  return new TenantSettings({
     siteName: data?.site_name || 'The Community Platform',
     siteUrl: data?.site_url || 'https://community.preciousplastic.com',
     messageSignOff: data?.message_sign_off || 'One Army',
     emailFrom: data?.email_from || 'hello@onearmy.earth',
-    siteImage:
-      data?.site_image || 'https://community.preciousplastic.com/assets/img/one-army-logo.png',
-  };
+    noMessaging: data?.no_messaging || false,
+    academyResource: data?.academy_resource,
+    libraryHeading: data?.library_heading,
+    patreonId: data?.patreon_id,
+    profileGuidelines: data?.profile_guidelines,
+    questionsGuidelines: data?.questions_guidelines,
+    supportedModules: data?.supported_modules,
+    siteImage: data?.site_image || 'https://community.preciousplastic.com/assets/img/one-army-logo.png',
+  });
 }
 
 async function validateRequest(request: Request, userEmail: string | null, data: any) {

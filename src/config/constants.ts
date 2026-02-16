@@ -13,7 +13,6 @@ export const _supportedConfigurationOptions = [
   'VITE_SUPPORTED_MODULES',
   'VITE_PATREON_CLIENT_ID',
   'VITE_SITE_NAME',
-  'VITE_NO_MESSAGING',
 ] as const;
 
 export type ConfigurationOption = (typeof _supportedConfigurationOptions)[number];

@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { getSupportedModules } from 'src/modules';
-import { EnvironmentContext } from 'src/pages/common/EnvironmentContext';
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink';
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile';
+import { TenantContext } from 'src/pages/common/TenantContext';
 import { getAvailablePageList } from 'src/pages/PageList';
 import { Box, Flex } from 'theme-ui';
 
 const MenuMobilePanel = () => {
-  const env = useContext(EnvironmentContext);
+  const tenantContext = useContext(TenantContext);
 
   return (
     <Box
@@ -28,7 +28,7 @@ const MenuMobilePanel = () => {
           boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
         }}
       >
-        {getAvailablePageList(getSupportedModules(env.VITE_SUPPORTED_MODULES || '')).map((page) => (
+        {getAvailablePageList(getSupportedModules(tenantContext?.environment.VITE_SUPPORTED_MODULES || '')).map((page) => (
           <MenuMobileLink path={page.path} content={page.title} key={page.path} />
         ))}
         <Profile isMobile={true} />

@@ -4,40 +4,41 @@ import { Outlet, useLoaderData } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { Alerts } from 'src/common/Alerts/Alerts';
 import { Analytics } from 'src/common/Analytics';
-import { EnvironmentContext, getEnvVariables } from 'src/pages/common/EnvironmentContext';
 import GlobalSiteFooter from 'src/pages/common/GlobalSiteFooter/GlobalSiteFooter';
 import Header from 'src/pages/common/Header/Header';
 import { SessionContext } from 'src/pages/common/SessionContext';
 import { StickyButton } from 'src/pages/common/StickyButton';
+import { getEnvVariables, TenantContext, TenantSettingsContext } from 'src/pages/common/TenantContext';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store';
 import { SubscriptionStoreProvider } from 'src/stores/Subscription/subscription.store';
 import { UsefulVoteStoreProvider } from 'src/stores/UsefulVote/usefulVote.store';
 import { Flex } from 'theme-ui';
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const environment = getEnvVariables();
   const { client, headers } = createSupabaseServerClient(request);
+  const environment = getEnvVariables();
+  const settings = await new TenantSettingsService(client).get();
+
+  const tenantSettings: TenantSettingsContext = {
+    ...settings,
+    environment,
+  };
 
   const { data } = await client.auth.getClaims();
 
   const claims: JwtPayload | undefined = data?.claims;
 
-  return Response.json({ environment, claims }, { headers });
-}
-
-export function HydrateFallback() {
-  // This is required because all routes are loaded client-side. Avoids a page flicker before css is loaded.
-  // Can be removed once ALL pages are using SSR.
-  return <div></div>;
+  return Response.json({ tenantSettings, claims }, { headers });
 }
 
 // This is a Layout file, it will render for all routes that have _. prefix.
 export default function Index() {
-  const { environment, claims } = useLoaderData<typeof loader>();
+  const { tenantSettings, claims } = useLoaderData<typeof loader>();
 
   return (
-    <EnvironmentContext.Provider value={environment}>
+    <TenantContext.Provider value={tenantSettings}>
       <SessionContext.Provider value={claims}>
         <ProfileStoreProvider>
           <SubscriptionStoreProvider>
@@ -56,6 +57,6 @@ export default function Index() {
           </SubscriptionStoreProvider>
         </ProfileStoreProvider>
       </SessionContext.Provider>
-    </EnvironmentContext.Provider>
+    </TenantContext.Provider>
   );
 }

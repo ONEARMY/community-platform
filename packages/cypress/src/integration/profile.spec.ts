@@ -14,7 +14,6 @@ const workspaceEmpty = MOCK_DATA.users.settings_workplace_empty;
 describe('[Profile]', () => {
   beforeEach(() => {
     cy.visit('/');
-    localStorage.setItem('VITE_NO_MESSAGING', 'false');
   });
 
   describe('[By Anonymous]', () => {
@@ -51,8 +50,6 @@ describe('[Profile]', () => {
     });
 
     it('[Contact form]', () => {
-      localStorage.setItem('VITE_NO_MESSAGING', 'false');
-
       const contactee = generateNewUserDetails();
 
       cy.step('Can sign-up and have a contact form');
@@ -129,7 +126,7 @@ describe('[Profile]', () => {
     });
 
     it("[Can't message users when config set]", () => {
-      localStorage.setItem('VITE_NO_MESSAGING', 'true');
+      // TODO: mock no_messaging true
 
       const user = generateNewUserDetails();
 
@@ -225,9 +222,7 @@ describe('[Profile]', () => {
 
       cy.get('[data-cy=ContribTab]').click();
       cy.get('[data-testid="question-contributions"]').should('be.visible');
-      cy.get('[data-testid="question-contributions"]')
-        .contains('The first test question?')
-        .should('be.visible');
+      cy.get('[data-testid="question-contributions"]').contains('The first test question?').should('be.visible');
     });
 
     it('should link to question page when question in clicked in contributions tab', () => {
@@ -240,9 +235,7 @@ describe('[Profile]', () => {
       cy.get('[data-cy="the-first-test-question-link"]').click();
       cy.wait(2000);
       cy.url().should('include', `/questions/the-first-test-question?utm_source=user-profile`);
-      cy.get('[data-cy="question-title"]')
-        .should('be.visible')
-        .contains('The first test question?');
+      cy.get('[data-cy="question-title"]').should('be.visible').contains('The first test question?');
     });
   });
   describe('badges', () => {

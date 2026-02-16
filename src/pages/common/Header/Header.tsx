@@ -16,8 +16,8 @@ import Profile from 'src/pages/common/Header/Menu/Profile/Profile';
 import { notificationSupabaseService } from 'src/services/notificationsSupabaseService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Flex, Text, useThemeUI } from 'theme-ui';
-import { EnvironmentContext } from '../EnvironmentContext';
 import { NotificationsContext } from '../NotificationsContext';
+import { TenantContext } from '../TenantContext';
 import { NotificationsSupabase } from './Menu/Notifications/NotificationsSupabase';
 import { MobileMenuContext } from './MobileMenuContext';
 
@@ -59,23 +59,19 @@ const AnimationContainer = (props: any) => {
     config: { duration: 250 },
   });
 
-  return (
-    <animated.div style={{ position: 'relative', ...springStyle }}>{props.children}</animated.div>
-  );
+  return <animated.div style={{ position: 'relative', ...springStyle }}>{props.children}</animated.div>;
 };
 
 const Header = observer(() => {
   const { theme } = useThemeUI();
-  const env = useContext(EnvironmentContext);
+  const tenantContext = useContext(TenantContext);
   const { profile } = useProfileStore();
   const isLoggedIn = !!profile;
 
   const [isVisible, setIsVisible] = useState(false);
 
   // New notifications states
-  const [notificationsSupabase, setNotificationsSupabase] = useState<NotificationDisplay[] | null>(
-    null,
-  );
+  const [notificationsSupabase, setNotificationsSupabase] = useState<NotificationDisplay[] | null>(null);
   const [isUpdatingNotifications, setIsUpdatingNotifications] = useState<boolean>(true);
 
   const updateNotifications = async () => {
@@ -153,9 +149,7 @@ const Header = observer(() => {
           >
             <MenuDesktop />
             {isLoggedIn && <NotificationsSupabase device="desktop" />}
-            {isModuleSupported(env?.VITE_SUPPORTED_MODULES || '', MODULE.USER) && (
-              <Profile isMobile={false} />
-            )}
+            {isModuleSupported(tenantContext?.environment?.VITE_SUPPORTED_MODULES || '', MODULE.USER) && <Profile isMobile={false} />}
           </Flex>
           <ClientOnly fallback={<></>}>
             {() => (

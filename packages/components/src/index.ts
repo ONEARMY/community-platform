@@ -67,6 +67,7 @@ export { MoreContainer } from './MoreContainer/MoreContainer';
 export { NotificationListSupabase } from './NotificationListSupabase/NotificationListSupabase';
 export { NotificationsModal } from './NotificationsModal/NotificationsModal';
 export { OsmGeocoding } from './OsmGeocoding/OsmGeocoding';
+export { PaginationIcons } from './PaginationIcons/PaginationIcons';
 export { PinProfile } from './PinProfile/PinProfile';
 export { ProfileBadgeContentLabel } from './ProfileBadgeContentLabel/ProfileBadgeContentLabel';
 export { ProfileLink } from './ProfileLink/ProfileLink';

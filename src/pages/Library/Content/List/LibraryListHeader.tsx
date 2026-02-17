@@ -1,12 +1,13 @@
 import debounce from 'debounce';
 import { CategoryHorizonalList, ReturnPathLink, SearchField, Select, Tooltip } from 'oa-components';
 import type { Category } from 'oa-shared';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { UserAction } from 'src/common/UserAction';
 import DraftButton from 'src/pages/common/Drafts/DraftButton';
 import { ListHeader } from 'src/pages/common/Layout/ListHeader';
+import { TenantContext } from 'src/pages/common/TenantContext';
 import { categoryService } from 'src/services/categoryService';
 import { Button, Flex } from 'theme-ui';
 import { listing } from '../../labels';
@@ -27,12 +28,11 @@ export const LibraryListHeader = (props: IProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get(LibrarySearchParams.q);
   const [searchString, setSearchString] = useState<string>(q ?? '');
+  const tenantContext = useContext(TenantContext);
 
   const categoryParam = Number(searchParams.get(LibrarySearchParams.category));
   const category = categories?.find((x) => x.id === categoryParam) ?? null;
   const sort = searchParams.get(LibrarySearchParams.sort) as LibrarySortOption;
-
-  const headingTitle = import.meta.env.VITE_HOWTOS_HEADING;
 
   useEffect(() => {
     const initCategories = async () => {
@@ -82,9 +82,7 @@ export const LibraryListHeader = (props: IProps) => {
     <CategoryHorizonalList
       allCategories={categories}
       activeCategory={category}
-      setActiveCategory={(updatedCategory) =>
-        updateFilter(LibrarySearchParams.category, (updatedCategory?.id || '').toString())
-      }
+      setActiveCategory={(updatedCategory) => updateFilter(LibrarySearchParams.category, (updatedCategory?.id || '').toString())}
     />
   );
 
@@ -126,11 +124,7 @@ export const LibraryListHeader = (props: IProps) => {
     <UserAction
       incompleteProfile={
         <>
-          <Link
-            to="/settings"
-            data-tooltip-id="tooltip"
-            data-tooltip-content={listing.incompleteProfile}
-          >
+          <Link to="/settings" data-tooltip-id="tooltip" data-tooltip-content={listing.incompleteProfile}>
             <Button type="button" data-cy="complete-profile-project" variant="disabled">
               {listing.create}
             </Button>
@@ -140,11 +134,7 @@ export const LibraryListHeader = (props: IProps) => {
       }
       loggedIn={
         <>
-          <DraftButton
-            showDrafts={showDrafts}
-            draftCount={draftCount}
-            handleShowDrafts={handleShowDrafts}
-          />
+          <DraftButton showDrafts={showDrafts} draftCount={draftCount} handleShowDrafts={handleShowDrafts} />
           <Link to="/library/create">
             <Button type="button" sx={{ width: '100%' }} variant="primary" data-cy="create-project">
               {listing.create}
@@ -167,7 +157,7 @@ export const LibraryListHeader = (props: IProps) => {
       itemCount={showDrafts ? draftCount : itemCount}
       actionComponents={actionComponents}
       showDrafts={showDrafts}
-      headingTitle={headingTitle}
+      headingTitle={tenantContext?.libraryHeading || ''}
       categoryComponent={categoryComponent}
       filteringComponents={filteringComponents}
     />

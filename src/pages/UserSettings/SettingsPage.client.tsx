@@ -27,7 +27,7 @@ export const SettingsPage = observer(() => {
 
   const isMember = !profile?.type?.isSpace;
   const showImpactTab = !isMember && isPreciousPlastic();
-  const showMapTab = isModuleSupported(tenantContext?.environment.VITE_SUPPORTED_MODULES || '', MODULE.MAP);
+  const showMapTab = isModuleSupported(tenantContext?.supportedModules || '', MODULE.MAP);
 
   const tabs: ISettingsTab[] = useMemo(
     () => [

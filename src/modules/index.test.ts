@@ -11,38 +11,32 @@ describe('getSupportedModules', () => {
   it('returns a default set of modules', () => {
     import.meta.env.VITE_SUPPORTED_MODULES = '';
     expect(getSupportedModules(import.meta.env.VITE_SUPPORTED_MODULES)).toStrictEqual([
-      MODULE.CORE,
       MODULE.LIBRARY,
       MODULE.MAP,
       MODULE.RESEARCH,
       MODULE.ACADEMY,
-      MODULE.USER,
-      MODULE.QUESTION,
+      MODULE.QUESTIONS,
       MODULE.NEWS,
     ]);
   });
 
   it('loads an additional module based on env configuration', () => {
     import.meta.env.VITE_SUPPORTED_MODULES = ` ${MODULE.LIBRARY} `;
-    expect(getSupportedModules(import.meta.env.VITE_SUPPORTED_MODULES)).toStrictEqual([MODULE.CORE, MODULE.LIBRARY]);
+    expect(getSupportedModules(import.meta.env.VITE_SUPPORTED_MODULES)).toStrictEqual([MODULE.LIBRARY]);
   });
 
   it('loads multiple modules based on env configuration', () => {
     import.meta.env.VITE_SUPPORTED_MODULES = ` ${MODULE.LIBRARY} `;
-    expect(getSupportedModules(import.meta.env.VITE_SUPPORTED_MODULES)).toStrictEqual([MODULE.CORE, MODULE.LIBRARY]);
+    expect(getSupportedModules(import.meta.env.VITE_SUPPORTED_MODULES)).toStrictEqual([MODULE.LIBRARY]);
   });
 
   it('ignores a malformed module definitions', () => {
     import.meta.env.VITE_SUPPORTED_MODULES = `fake module,${MODULE.LIBRARY},malicious `;
-    expect(getSupportedModules(import.meta.env.VITE_SUPPORTED_MODULES)).toStrictEqual([MODULE.CORE, MODULE.LIBRARY]);
+    expect(getSupportedModules(import.meta.env.VITE_SUPPORTED_MODULES)).toStrictEqual([MODULE.LIBRARY]);
   });
 });
 
 describe('isModuleSupported', () => {
-  it('returns true for default supported module', () => {
-    expect(isModuleSupported('', MODULE.CORE)).toBe(true);
-  });
-
   it('returns true for module enabled via env', () => {
     import.meta.env.VITE_SUPPORTED_MODULES = `${MODULE.RESEARCH}`;
     expect(isModuleSupported(import.meta.env.VITE_SUPPORTED_MODULES, MODULE.RESEARCH)).toBe(true);

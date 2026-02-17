@@ -23,7 +23,7 @@ export const meta = mergeMeta<typeof loader>(() => {
 export default function Index() {
   const tenantContext = useContext(TenantContext);
 
-  if (!isModuleSupported(tenantContext?.environment.VITE_SUPPORTED_MODULES || '', MODULE.QUESTION)) {
+  if (!isModuleSupported(tenantContext?.supportedModules || '', MODULE.QUESTIONS)) {
     return null;
   }
 

@@ -225,7 +225,6 @@ jobs:
               --build-secret VITE_BRANCH="$VITE_BRANCH" \
               --build-secret VITE_SENTRY_DSN="$VITE_SENTRY_DSN" \
               --build-secret VITE_GA_TRACKING_ID="$VITE_GA_TRACKING_ID" \
-              --build-secret VITE_SUPPORTED_MODULES="$VITE_SUPPORTED_MODULES" \
               --build-secret VITE_SITE_NAME="$VITE_SITE_NAME" \
               --build-secret VITE_THEME="$VITE_THEME" \
               --build-secret TENANT_ID="$TENANT_ID"

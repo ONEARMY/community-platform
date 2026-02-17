@@ -7,7 +7,7 @@ interface IPageNavigation {
 }
 
 const QuestionModule: IPageNavigation = {
-  module: MODULE.QUESTION,
+  module: MODULE.QUESTIONS,
   path: '/questions',
   title: 'Questions',
 };
@@ -22,11 +22,6 @@ const library: IPageNavigation = {
   module: MODULE.LIBRARY,
   path: '/library',
   title: 'Library',
-};
-const settings: IPageNavigation = {
-  module: MODULE.CORE,
-  path: '/settings',
-  title: 'Settings',
 };
 const academy: IPageNavigation = {
   module: MODULE.ACADEMY,
@@ -51,6 +46,3 @@ export const getAvailablePageList = (supportedModules: MODULE[]): IPageNavigatio
 };
 
 export const COMMUNITY_PAGES: IPageNavigation[] = [news, library, maps, academy, ResearchModule, QuestionModule];
-
-/** Additional pages to show in signed-in profile dropdown */
-export const COMMUNITY_PAGES_PROFILE: IPageNavigation[] = [settings];

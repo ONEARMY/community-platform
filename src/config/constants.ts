@@ -10,7 +10,6 @@ export const _supportedConfigurationOptions = [
   'VITE_BRANCH',
   'VITE_THEME',
   'VITE_SITE_VARIANT',
-  'VITE_SUPPORTED_MODULES',
   'VITE_SITE_NAME',
 ] as const;
 

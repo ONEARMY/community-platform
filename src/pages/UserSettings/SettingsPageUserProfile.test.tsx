@@ -1,13 +1,10 @@
 import '@testing-library/jest-dom/vitest';
-
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 import { FactoryUser } from 'src/test/factories/User';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { FormProvider } from './__mocks__/FormProvider';
 import { SettingsPageUserProfile } from './SettingsPageUserProfile';
-
 import type { ProfileTag, ProfileType } from 'oa-shared';
 
 const mockUseProfileStore = vi.hoisted(() => vi.fn());

@@ -6,170 +6,159 @@ import type {
   IPatreonUserAttributes,
   PatreonSettings,
 } from 'oa-shared';
+import { TenantSettingsService } from './tenantSettingsService.server';
 
-const isSupporter = async (patreonUser: IPatreonUser, client: SupabaseClient) => {
-  if (patreonUser.membership?.attributes.patron_status !== 'active_patron') {
-    return false;
+export class PatreonServiceServer {
+  constructor(private client: SupabaseClient) {}
+
+  async verifyAndUpdatePatreonUser(code: string, userAuthId: string, origin: string) {
+    const settings = await new TenantSettingsService(this.client).get(true);
+    const PATREON_CLIENT_ID = settings.patreonId;
+    const PATREON_CLIENT_SECRET = process.env.PATREON_CLIENT_SECRET; // TODO: use supabase vault
+
+    if (!PATREON_CLIENT_ID || !PATREON_CLIENT_SECRET) {
+      throw new Error('PATREON_CLIENT_ID and PATREON_CLIENT_SECRET must be set');
+    }
+
+    const response = await fetch(
+      `https://www.patreon.com/api/oauth2/token?code=${code}&grant_type=authorization_code&client_id=${PATREON_CLIENT_ID}&client_secret=${PATREON_CLIENT_SECRET}&redirect_uri=${origin}/patreon`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const result = await response.json();
+      console.error({ result });
+      throw new Error('Error getting patreon access token');
+    }
+
+    const { access_token } = await response.json();
+    const patreonUser = await this.getCurrentPatreonUser(access_token);
+    const patreonUserParsed = this.parsePatreonUser(patreonUser);
+    const isSupporterUser = await this.isSupporter(patreonUserParsed);
+
+    // Update in supabase
+    await this.client
+      .from('profiles')
+      .update({
+        patreon: patreonUserParsed,
+        is_supporter: isSupporterUser,
+      })
+      .eq('auth_id', userAuthId);
   }
 
-  const result = await client.from('patreon_settings').select('tiers').limit(1);
-  const patreonSettings = result.data?.[0] as PatreonSettings;
+  async disconnectUser(userAuthId: string) {
+    await this.client.from('profiles').update({ patreon: null, is_supporter: false }).eq('auth_id', userAuthId);
+  }
 
-  const validIds = patreonSettings.tiers.map((x) => x.id);
+  private async isSupporter(patreonUser: IPatreonUser) {
+    if (patreonUser.membership?.attributes.patron_status !== 'active_patron') {
+      return false;
+    }
 
-  return patreonUser.membership?.tiers.some(({ id }) => validIds.includes(id));
-};
+    const result = await this.client.from('patreon_settings').select('tiers').limit(1);
+    const patreonSettings = result.data?.[0] as PatreonSettings;
 
-const parsePatreonUser = (patreonUser: any): IPatreonUser => {
-  // As we do not request the identity.membership scope, we only receive the user's membership to the
-  // One Army Patreon page, not other campaigns they may be part of.
-  const membership =
-    patreonUser.data.relationships.memberships.data.length > 0
-      ? patreonUser.included.find(({ type }) => type === 'member')
+    const validIds = patreonSettings.tiers.map((x) => x.id);
+
+    return patreonUser.membership?.tiers.some(({ id }) => validIds.includes(id));
+  }
+
+  private parsePatreonUser(patreonUser: any): IPatreonUser {
+    // As we do not request the identity.membership scope, we only receive the user's membership to the
+    // One Army Patreon page, not other campaigns they may be part of.
+    const membership =
+      patreonUser.data.relationships.memberships.data.length > 0 ? patreonUser.included.find(({ type }) => type === 'member') : undefined;
+
+    const tiers = membership?.relationships.currently_entitled_tiers.data
+      .map(({ id }) => patreonUser.included.find(({ type, id: includedId }) => type === 'tier' && id === includedId))
+      .map(({ id, attributes }) => ({ id, attributes }));
+
+    const userMembership = membership
+      ? {
+          id: membership.id,
+          attributes: membership.attributes,
+          tiers,
+        }
       : undefined;
 
-  const tiers = membership?.relationships.currently_entitled_tiers.data
-    .map(({ id }) =>
-      patreonUser.included.find(({ type, id: includedId }) => type === 'tier' && id === includedId),
-    )
-    .map(({ id, attributes }) => ({ id, attributes }));
-
-  const userMembership = membership
-    ? {
-        id: membership.id,
-        attributes: membership.attributes,
-        tiers,
-      }
-    : undefined;
-
-  return {
-    id: patreonUser.data.id,
-    attributes: patreonUser.data.attributes,
-    link: patreonUser.links.self,
-    // Only include membership if the user is a member of the One Army Patreon page.
-    ...(userMembership ? { membership: userMembership } : {}),
-  };
-};
-
-/*
- * docs: https://docs.patreon.com/#get-api-oauth2-v2-identity
- * to fetch more user attributes, add them to the include and fields query params
- **/
-const getCurrentPatreonUser = async (accessToken: string) => {
-  const userFields: Array<keyof IPatreonUserAttributes> = [
-    'about',
-    'created',
-    'email',
-    'first_name',
-    'full_name',
-    'image_url',
-    'last_name',
-    'thumb_url',
-    'url',
-  ];
-
-  const membershipFields: Array<keyof IPatreonMembershipAttributes> = [
-    'campaign_lifetime_support_cents',
-    'currently_entitled_amount_cents',
-    'is_follower',
-    'last_charge_date',
-    'last_charge_status',
-    'lifetime_support_cents',
-    'next_charge_date',
-    'note',
-    'patron_status',
-    'pledge_cadence',
-    'pledge_relationship_start',
-    'will_pay_amount_cents',
-  ];
-
-  const tierFields: Array<keyof IPatreonTierAttributes> = [
-    'amount_cents',
-    'created_at',
-    'description',
-    'edited_at',
-    'image_url',
-    'patron_count',
-    'published',
-    'published_at',
-    'title',
-    'url',
-  ];
-
-  const url = encodeURI(
-    `https://www.patreon.com/api/oauth2/v2/identity?include=memberships,memberships.currently_entitled_tiers&fields[user]=${userFields.join(
-      ',',
-    )}&fields[member]=${membershipFields.join(',')}&fields[tier]=${tierFields.join(',')}`,
-  );
-
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
-  if (!response.ok) {
-    const { error } = await response.json();
-    console.error(error);
-    throw new Error('Error getting patreon user');
+    return {
+      id: patreonUser.data.id,
+      attributes: patreonUser.data.attributes,
+      link: patreonUser.links.self,
+      // Only include membership if the user is a member of the One Army Patreon page.
+      ...(userMembership ? { membership: userMembership } : {}),
+    };
   }
 
-  return await response.json();
-};
+  /*
+   * docs: https://docs.patreon.com/#get-api-oauth2-v2-identity
+   * to fetch more user attributes, add them to the include and fields query params
+   **/
+  private getCurrentPatreonUser = async (accessToken: string) => {
+    const userFields: Array<keyof IPatreonUserAttributes> = [
+      'about',
+      'created',
+      'email',
+      'first_name',
+      'full_name',
+      'image_url',
+      'last_name',
+      'thumb_url',
+      'url',
+    ];
 
-const verifyAndUpdatePatreonUser = async (
-  code: string,
-  userAuthId: string,
-  client: SupabaseClient,
-  origin: string,
-) => {
-  const PATREON_CLIENT_ID = process.env.PATREON_CLIENT_ID;
-  const PATREON_CLIENT_SECRET = process.env.PATREON_CLIENT_SECRET;
+    const membershipFields: Array<keyof IPatreonMembershipAttributes> = [
+      'campaign_lifetime_support_cents',
+      'currently_entitled_amount_cents',
+      'is_follower',
+      'last_charge_date',
+      'last_charge_status',
+      'lifetime_support_cents',
+      'next_charge_date',
+      'note',
+      'patron_status',
+      'pledge_cadence',
+      'pledge_relationship_start',
+      'will_pay_amount_cents',
+    ];
 
-  if (!PATREON_CLIENT_ID || !PATREON_CLIENT_SECRET) {
-    throw new Error('PATREON_CLIENT_ID and PATREON_CLIENT_SECRET must be set');
-  }
+    const tierFields: Array<keyof IPatreonTierAttributes> = [
+      'amount_cents',
+      'created_at',
+      'description',
+      'edited_at',
+      'image_url',
+      'patron_count',
+      'published',
+      'published_at',
+      'title',
+      'url',
+    ];
 
-  const response = await fetch(
-    `https://www.patreon.com/api/oauth2/token?code=${code}&grant_type=authorization_code&client_id=${PATREON_CLIENT_ID}&client_secret=${PATREON_CLIENT_SECRET}&redirect_uri=${origin}/patreon`,
-    {
-      method: 'POST',
+    const url = encodeURI(
+      `https://www.patreon.com/api/oauth2/v2/identity?include=memberships,memberships.currently_entitled_tiers&fields[user]=${userFields.join(
+        ',',
+      )}&fields[member]=${membershipFields.join(',')}&fields[tier]=${tierFields.join(',')}`,
+    );
+
+    const response = await fetch(url, {
+      method: 'GET',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${accessToken}`,
       },
-    },
-  );
+    });
 
-  if (!response.ok) {
-    const result = await response.json();
-    console.error({ result });
-    throw new Error('Error getting patreon access token');
-  }
+    if (!response.ok) {
+      const { error } = await response.json();
+      console.error(error);
+      throw new Error('Error getting patreon user');
+    }
 
-  const { access_token } = await response.json();
-  const patreonUser = await getCurrentPatreonUser(access_token);
-  const patreonUserParsed = parsePatreonUser(patreonUser);
-  const isSupporterUser = await isSupporter(patreonUserParsed, client);
-
-  // Update in supabase
-  await client
-    .from('profiles')
-    .update({
-      patreon: patreonUserParsed,
-      is_supporter: isSupporterUser,
-    })
-    .eq('auth_id', userAuthId);
-};
-
-const disconnectUser = async (userAuthId: string, client: SupabaseClient) => {
-  await client
-    .from('profiles')
-    .update({ patreon: null, is_supporter: false })
-    .eq('auth_id', userAuthId);
-};
-
-export const patreonServiceServer = {
-  verifyAndUpdatePatreonUser,
-  disconnectUser,
-};
+    return await response.json();
+  };
+}

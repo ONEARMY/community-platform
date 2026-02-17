@@ -11,7 +11,6 @@ export const _supportedConfigurationOptions = [
   'VITE_THEME',
   'VITE_SITE_VARIANT',
   'VITE_SUPPORTED_MODULES',
-  'VITE_PATREON_CLIENT_ID',
   'VITE_SITE_NAME',
 ] as const;
 

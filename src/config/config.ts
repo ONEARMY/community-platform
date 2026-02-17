@@ -66,7 +66,6 @@ export const SENTRY_CONFIG: ISentryConfig = {
 };
 
 export const GA_TRACKING_ID = _c('VITE_GA_TRACKING_ID');
-export const PATREON_CLIENT_ID = _c('VITE_PATREON_CLIENT_ID');
 
 export const VITE_THEME = getFromLocalStorageFirst('VITE_THEME');
 

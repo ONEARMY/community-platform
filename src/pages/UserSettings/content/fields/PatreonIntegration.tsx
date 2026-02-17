@@ -1,7 +1,7 @@
 import { Button, Icon } from 'oa-components';
 import type { IPatreonUser } from 'oa-shared';
-import { useEffect, useState } from 'react';
-import { PATREON_CLIENT_ID } from 'src/config/config';
+import { useContext, useEffect, useState } from 'react';
+import { TenantContext } from 'src/pages/common/TenantContext';
 import { patreonService } from 'src/services/patreonService';
 import { Flex, Heading, Image, Text } from 'theme-ui';
 
@@ -15,6 +15,7 @@ export const UPDATE_BUTTON_TEXT = 'Update';
 export const REMOVE_BUTTON_TEXT = 'Disconnect';
 
 export const PatreonIntegration = () => {
+  const tenantContext = useContext(TenantContext);
   const [patreonUser, setPatreon] = useState<{
     patreon: IPatreonUser;
     isSupporter: boolean;
@@ -45,9 +46,13 @@ export const PatreonIntegration = () => {
     const redirectUri = `${window.location.protocol}//${window.location.host}/patreon`;
 
     window.location.assign(
-      `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${PATREON_CLIENT_ID}&redirect_uri=${redirectUri}`,
+      `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${tenantContext?.patreonId}&redirect_uri=${redirectUri}`,
     );
   };
+
+  if (!tenantContext?.patreonId) {
+    return null;
+  }
 
   return (
     <Flex
@@ -107,10 +112,7 @@ export const PatreonIntegration = () => {
               )}
             </>
           ) : (
-            <Text variant="quiet">
-              As a supporter you get a badge on the platform, special insights and voting rights on
-              decisions.
-            </Text>
+            <Text variant="quiet">As a supporter you get a badge on the platform, special insights and voting rights on decisions.</Text>
           )}
         </Flex>
       </Flex>

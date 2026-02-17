@@ -10,29 +10,33 @@ const cache = new Keyv<UpgradeBadge[]>({ ttl: 1800000 }); // ttl: 30 minutes
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
 
-  const cachedUpgradeBadges = await cache.get('upgradeBadges');
+  try {
+    const cachedUpgradeBadges = await cache.get('upgradeBadges');
 
-  if (
-    cachedUpgradeBadges &&
-    Array.isArray(cachedUpgradeBadges) &&
-    cachedUpgradeBadges.length &&
-    isProductionEnvironment()
-  ) {
-    return Response.json(cachedUpgradeBadges, { headers, status: 200 });
+    if (cachedUpgradeBadges && Array.isArray(cachedUpgradeBadges) && cachedUpgradeBadges.length && isProductionEnvironment()) {
+      return Response.json(cachedUpgradeBadges, { headers, status: 200 });
+    }
+
+    const { data, error } = await client.from('upgrade_badge').select(
+      `
+        *,
+        badge:profile_badges(id, name, display_name, image_url, action_url)
+      `,
+    );
+
+    if (error) {
+      throw error;
+    }
+
+    const upgradeBadges = data?.map((badge) => UpgradeBadge.fromDB(badge as DBUpgradeBadge));
+
+    if (upgradeBadges && upgradeBadges.length > 0) {
+      cache.set('upgradeBadges', upgradeBadges, 1800000);
+    }
+
+    return Response.json(upgradeBadges, { headers, status: 200 });
+  } catch (error) {
+    console.error(error);
+    return Response.json({}, { headers, status: 500 });
   }
-
-  const { data } = await client.from('upgrade_badge').select(
-    `
-      *,
-      badge:profile_badges(id, name, display_name, image_url, action_url)
-    `,
-  );
-
-  const upgradeBadges = data?.map((badge) => UpgradeBadge.fromDB(badge as DBUpgradeBadge));
-
-  if (upgradeBadges && upgradeBadges.length > 0) {
-    cache.set('upgradeBadges', upgradeBadges, 1800000);
-  }
-
-  return Response.json(upgradeBadges, { headers, status: 200 });
 }

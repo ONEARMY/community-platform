@@ -16,8 +16,6 @@ interface IProps {
 
 const ExternalEmbed = ({ src }: IProps) => {
   const navigate = useNavigate();
-  const url = new URL(src);
-  const targetOrigin = url.protocol + '//' + url.hostname + (url.port ? ':' + url.port : '');
 
   useEffect(() => {
     // TODO - possible compatibility fallback for addEventListener (IE8)
@@ -55,6 +53,13 @@ const ExternalEmbed = ({ src }: IProps) => {
       }
     }
   };
+
+  if (!src) {
+    return null;
+  }
+
+  const url = new URL(src);
+  const targetOrigin = url.protocol + '//' + url.hostname + (url.port ? ':' + url.port : '');
 
   return (
     <div

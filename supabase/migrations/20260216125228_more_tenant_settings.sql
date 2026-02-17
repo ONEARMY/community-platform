@@ -10,4 +10,4 @@ alter table "public"."tenant_settings" add column "profile_guidelines" text;
 
 alter table "public"."tenant_settings" add column "questions_guidelines" text;
 
-alter table "public"."tenant_settings" add column "supported_modules" text default 'library,map,research,academy,user,question,news'::text;
+alter table "public"."tenant_settings" add column "supported_modules" text;

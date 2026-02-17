@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS "public"."tenant_settings" (
     "academy_resource" "text",
     "profile_guidelines" "text",
     "questions_guidelines" "text",
-    "supported_modules" "text" DEFAULT 'library,map,research,academy,user,question,news',
+    "supported_modules" "text",
     "patreon_id" "text"
 );
 

@@ -401,8 +401,14 @@ const main = async () => {
       profile_guidelines: 'https://community.preciousplastic.com/academy/guides/platform',
       questions_guidelines: 'https://community.preciousplastic.com/academy/guides/guidelines-questions',
       supported_modules: 'library,map,research,academy,questions,news',
-      donation_settings:
-        '{"defaultDescription":"All of the content here is free. Your donation supports this library of open source recycling knowledge. Making it possible for everyone in the world to use it and start recycling.","defaultCampaignId":"ppcpdonor","spaceDescription":"Support this space so they can continue to help recycling plastic and share more Open Source information. Your support fuels the small scale network of plastic recyclers.","defaultImageUrl":"/assets/img/precious-plastic/donation-banner.jpg"}',
+      donation_settings: {
+        defaultDescription:
+          'All of the content here is free. Your donation supports this library of open source recycling knowledge. Making it possible for everyone in the world to use it and start recycling.',
+        defaultCampaignId: 'ppcpdonor',
+        spaceDescription:
+          'Support this space so they can continue to help recycling plastic and share more Open Source information. Your support fuels the small scale network of plastic recyclers.',
+        defaultImageUrl: '/assets/img/precious-plastic/donation-banner.jpg',
+      },
       tenant_id,
     },
   ]);

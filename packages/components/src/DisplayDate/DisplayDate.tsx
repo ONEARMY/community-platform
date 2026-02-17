@@ -7,7 +7,7 @@ type DateType = string | number | Date;
 
 export interface IProps {
   createdAt: DateType;
-  publishedAction?: string;
+  publishedAction?: 'Published' | 'Started' | 'Asked';
   showLabel?: boolean;
   modifiedAt?: DateType | null;
   publishedAt?: DateType | null;

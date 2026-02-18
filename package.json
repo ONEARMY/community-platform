@@ -109,6 +109,7 @@
     "react-tooltip": "^5.30.0",
     "remix-utils": "^9.0.0",
     "resend": "6.5.2",
+    "stripe": "^20.3.1",
     "theme-ui": "^0.17.2",
     "tslog": "^4.10.2",
     "yup": "^1.7.1"

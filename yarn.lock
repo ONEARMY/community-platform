@@ -14309,6 +14309,7 @@ __metadata:
     react-tooltip: "npm:^5.30.0"
     remix-utils: "npm:^9.0.0"
     resend: "npm:6.5.2"
+    stripe: "npm:^20.3.1"
     supabase: "npm:2.53.6"
     theme-ui: "npm:^0.17.2"
     tslog: "npm:^4.10.2"
@@ -16932,6 +16933,18 @@ __metadata:
   version: 3.1.1
   resolution: "strip-json-comments@npm:3.1.1"
   checksum: 10/492f73e27268f9b1c122733f28ecb0e7e8d8a531a6662efbd08e22cccb3f9475e90a1b82cab06a392f6afae6d2de636f977e231296400d0ec5304ba70f166443
+  languageName: node
+  linkType: hard
+
+"stripe@npm:^20.3.1":
+  version: 20.3.1
+  resolution: "stripe@npm:20.3.1"
+  peerDependencies:
+    "@types/node": ">=16"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
+  checksum: 10/fe2ca2426d806f0588787af60505cba7efdeb733d724ab8b5980dc170e5cf80f4dcb5c34da1f1dcd380726ac4a271336f402ed02d8855b0171aa86bee538dd67
   languageName: node
   linkType: hard
 

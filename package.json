@@ -4,11 +4,7 @@
     "type": "git",
     "url": "https://github.com/ONEARMY/community-platform.git"
   },
-  "workspaces": [
-    "shared",
-    "packages/*",
-    "scripts"
-  ],
+  "workspaces": ["shared", "packages/*", "scripts"],
   "private": true,
   "main": "lib/index.js",
   "type": "module",
@@ -42,18 +38,10 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,ts,tsx,json}": [
-      "biome check --write"
-    ]
+    "*.{js,ts,tsx,json}": ["biome check --write --no-errors-on-unmatched"]
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all",
-      "iOS >= 15",
-      "safari >= 15"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all", "iOS >= 15", "safari >= 15"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",

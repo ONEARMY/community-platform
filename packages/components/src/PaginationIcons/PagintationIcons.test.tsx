@@ -1,12 +1,12 @@
-import "@testing-library/jest-dom/vitest";
+import '@testing-library/jest-dom/vitest';
 
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from 'vitest';
 
-import { render } from "../test/utils";
-import { PaginationIcons } from "./PaginationIcons";
+import { render } from '../test/utils';
+import { PaginationIcons } from './PaginationIcons';
 
-describe("PaginationIcons", () => {
-  it("renders the button with correct icon and title", () => {
+describe('PaginationIcons', () => {
+  it('renders the button with correct icon and title', () => {
     const { getByTestId, getByTitle } = render(
       <PaginationIcons
         hidden={false}
@@ -16,11 +16,11 @@ describe("PaginationIcons", () => {
       />,
     );
 
-    expect(getByTestId("pagination-icon-chevron-left")).toBeInTheDocument();
-    expect(getByTitle("Previous")).toBeInTheDocument();
+    expect(getByTestId('pagination-icon-chevron-left')).toBeInTheDocument();
+    expect(getByTitle('Previous')).toBeInTheDocument();
   });
 
-  it("hides the button when hidden prop is true", () => {
+  it('hides the button when hidden prop is true', () => {
     const { getByTestId } = render(
       <PaginationIcons
         hidden={true}
@@ -30,11 +30,11 @@ describe("PaginationIcons", () => {
       />,
     );
 
-    const button = getByTestId("pagination-icon-chevron-left");
-    expect(button.parentElement).toHaveStyle("display: none");
+    const button = getByTestId('pagination-icon-chevron-left');
+    expect(button).toHaveStyle('display: none');
   });
 
-  it("displays the button when hidden prop is false", () => {
+  it('displays the button when hidden prop is false', () => {
     const { getByTestId } = render(
       <PaginationIcons
         hidden={false}
@@ -44,11 +44,11 @@ describe("PaginationIcons", () => {
       />,
     );
 
-    const button = getByTestId("pagination-icon-chevron-right");
-    expect(button.parentElement).toHaveStyle("display: flex");
+    const button = getByTestId('pagination-icon-chevron-right');
+    expect(button).toHaveStyle('display: flex');
   });
 
-  it("calls onClick handler when button is clicked", () => {
+  it('calls onClick handler when button is clicked', () => {
     const handleClick = vi.fn();
     const { getByTestId } = render(
       <PaginationIcons
@@ -59,22 +59,14 @@ describe("PaginationIcons", () => {
       />,
     );
 
-    getByTestId("pagination-icon-chevron-right").click();
+    getByTestId('pagination-icon-chevron-right').click();
     expect(handleClick).toHaveBeenCalledOnce();
   });
 
-  it("renders different icon types", () => {
+  it('renders different icon types', () => {
     const icons: Array<
-      | "chevron-left"
-      | "chevron-right"
-      | "double-arrow-left"
-      | "double-arrow-right"
-    > = [
-      "chevron-left",
-      "chevron-right",
-      "double-arrow-left",
-      "double-arrow-right",
-    ];
+      'chevron-left' | 'chevron-right' | 'double-arrow-left' | 'double-arrow-right'
+    > = ['chevron-left', 'chevron-right', 'double-arrow-left', 'double-arrow-right'];
 
     icons.forEach((icon) => {
       const { getByTestId } = render(

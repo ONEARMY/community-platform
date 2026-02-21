@@ -16,7 +16,7 @@ interface IProps {
 }
 
 const UserDocumentItem = ({ type, item }: IProps) => {
-  const { id, commentCount, coverImage, title, slug } = item;
+  const { id, commentCount, coverImage, slug, title, usefulCount } = item;
   const url = `/${type}/${encodeURIComponent(slug)}?utm_source=user-profile`;
 
   return (
@@ -64,6 +64,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
               justifyContent: 'space-between',
               flex: 1,
               padding: 3,
+              gap: 2,
             }}
           >
             <Text
@@ -90,6 +91,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
                   justifyContent: 'flex-end',
                 }}
               >
+                <IconCountWithTooltip count={usefulCount} icon="star-active" text="Useful count" />
                 <IconCountWithTooltip
                   count={commentCount || 0}
                   icon="comment"

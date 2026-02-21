@@ -1,9 +1,10 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBNews } from 'oa-shared';
+import type { DBNews, DBProfile } from 'oa-shared';
 import { News } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { newsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -91,6 +92,17 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     }
 
     const news = News.fromDB(newsResult.data[0], []);
+    const profileService = new ProfileServiceServer(client);
+    const profile = await profileService.getByAuthId(claims.data.claims.sub);
+
+    broadcastCoordinationServiceServer.news(
+      newsResult.data[0],
+      profile,
+      client,
+      headers,
+      request,
+      currentNews
+    )
 
     if (newHeroImage) {
       const mediaFiles = await storageServiceServer.uploadImage(

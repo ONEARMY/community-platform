@@ -15,9 +15,10 @@ const sendInstantNotificationEmails = async (
 ) => {
   try {
     const emailsToSend = subscribers.filter((result) => {
-      if (result.profile_id === dbNotification.triggered_by_id) {
-        return false;
-      }
+      // Dup code. The user 
+      // if (result.profile_id === dbNotification.triggered_by_id) {
+      //   return false;
+      // }
 
       if (result.is_unsubscribed) {
         return false;

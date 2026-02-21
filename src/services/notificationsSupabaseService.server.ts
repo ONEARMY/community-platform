@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type {
   DBComment,
+  DBNews,
   DBProfile,
   DBResearchItem,
   ResearchUpdate,
@@ -16,10 +17,21 @@ const getSubscribedUsers = async (
   client: SupabaseClient,
 ): Promise<SubscribedUser[]> => {
   try {
-    const { error, data } = await client.rpc('get_subscribed_users_emails_to_notify', {
-      p_content_id: contentId,
-      p_content_type: contentType,
-    });
+    let data
+    let error
+
+    if (contentType === "news") {
+      const response = await client.from('profiles').select('id')
+        data = response.data && response.data.map(({id}) => ({ profile_id: id }))
+        error = response.error
+    } else {
+      const response = await client.rpc('get_subscribed_users_emails_to_notify', {
+        p_content_id: contentId,
+        p_content_type: contentType,
+      });
+      data = response.data
+      error = response.error
+    }
 
     if (error || data.length === 0) {
       throw error || new Error('No emails to send');
@@ -129,6 +141,42 @@ const createNotificationsNewComment = async (
   }
 };
 
+const createNotificationsNews = async (
+  news: DBNews,
+  client: SupabaseClient,
+  headers: Headers,
+) => {
+  try {
+    const contentId = news.id
+    const contentType: SubscribableContentTypes = 'news';
+
+    const subscribers = (await getSubscribedUsers(contentId, contentType, client))
+
+    const notification = new DBNotification({
+      action_type: 'news',
+      content_id: contentId,
+      title: news.title,
+      triggered_by_id: news.created_by!,
+      content_type: 'news',
+    });
+
+    await createNotifications(client, notification, subscribers);
+
+  } catch (error) {
+    console.error(error);
+
+    return Response.json(
+      { error },
+      {
+        headers,
+        status: 500,
+        statusText: 'Error creating notifications: News',
+      },
+    );
+  }
+};
+
+
 const createNotificationsResearchUpdate = async (
   research: DBResearchItem,
   researchUpdate: ResearchUpdate,
@@ -172,5 +220,6 @@ const createNotificationsResearchUpdate = async (
 
 export const notificationsSupabaseServiceServer = {
   createNotificationsNewComment,
+  createNotificationsNews,
   createNotificationsResearchUpdate,
 };

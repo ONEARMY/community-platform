@@ -17,6 +17,8 @@ import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImage } from 'src/utils/storage';
 import { contentServiceServer } from '../services/contentService.server';
+import { notificationsSupabaseServiceServer } from 'src/services/notificationsSupabaseService.server';
+import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 
 export const loader = async ({ request }) => {
   const url = new URL(request.url);
@@ -210,9 +212,13 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const news = News.fromDB(newsResult.data[0], []);
     subscribersServiceServer.add('news', news.id, profile.id, client, headers);
 
-    if (!news.isDraft) {
-      notifyDiscord(news, profile, new URL(request.url).origin.replace('http:', 'https:'));
-    }
+    broadcastCoordinationServiceServer.news(
+      newsResult.data[0],
+      profile,
+      client,
+      headers,
+      request
+    )
 
     if (uploadedHeroImageFile) {
       const mediaFiles = await storageServiceServer.uploadImage(
@@ -243,15 +249,6 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({}, { headers, status: 500, statusText: 'Error creating news' });
   }
 };
-
-function notifyDiscord(news: News, profile: DBProfile, siteUrl: string) {
-  const title = news.title;
-  const slug = news.slug;
-
-  discordServiceServer.postWebhookRequest(
-    `📰 ${profile.username} has news: ${title}\n<${siteUrl}/news/${slug}>`,
-  );
-}
 
 async function validateRequest(request: Request, data: any, authError: AuthError | null) {
   if (authError) {

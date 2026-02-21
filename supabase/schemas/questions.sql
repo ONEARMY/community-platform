@@ -42,7 +42,8 @@ CREATE TABLE IF NOT EXISTS "public"."questions" (
     "fts" "tsvector" GENERATED ALWAYS AS ("to_tsvector"('"english"'::"regconfig", (("title" || ' '::"text") || "description"))) STORED,
     "images" "json"[],
     "legacy_id" "text",
-    "is_draft" boolean DEFAULT false NOT NULL
+    "is_draft" boolean DEFAULT false NOT NULL,
+    "published_at" timestamp with time zone
 );
 
 CREATE OR REPLACE FUNCTION "public"."questions_search_fields"("public"."questions") RETURNS "text"

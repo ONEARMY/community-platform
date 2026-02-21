@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS "public"."research" (
     "fts" "tsvector",
     "collaborators" "text"[],
     "image" "json",
-    "legacy_id" "text"
+    "legacy_id" "text",
+    "published_at" timestamp with time zone
 );
 
 CREATE TABLE IF NOT EXISTS "public"."research_updates" (
@@ -44,7 +45,8 @@ CREATE TABLE IF NOT EXISTS "public"."research_updates" (
     "file_link" "text",
     "file_download_count" integer,
     "created_by" bigint,
-    "legacy_id" "text"
+    "legacy_id" "text",
+    "published_at" timestamp with time zone
 );
 
 CREATE INDEX "research_created_by_idx" ON "public"."research" USING "btree" ("created_by");
@@ -161,7 +163,7 @@ BEGIN
     -- Add relevance ranking when search query is provided
     CASE WHEN search_query IS NOT NULL THEN ts_rank_cd(r.fts, ts_query) END DESC NULLS LAST,
     CASE
-      WHEN sort_by = 'Newest' THEN extract(epoch from r.created_at)
+      WHEN sort_by = 'Newest' THEN extract(epoch from r.published_at)
       WHEN sort_by = 'LatestUpdated' THEN extract(epoch from
         GREATEST(
           r.modified_at,
@@ -194,7 +196,7 @@ BEGIN
         (SELECT COALESCE(SUM(ru.comment_count), 0) FROM research_updates ru WHERE ru.research_id = r.id AND (ru.is_draft IS NULL OR ru.is_draft = FALSE)
           AND (ru.deleted IS NULL OR ru.deleted = FALSE))
     END ASC NULLS LAST,
-    r.created_at DESC
+    r.published_at DESC
   LIMIT limit_val OFFSET offset_val;
 END;
 $$;

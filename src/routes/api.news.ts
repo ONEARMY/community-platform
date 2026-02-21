@@ -43,6 +43,7 @@ export const loader = async ({ request }) => {
       created_at,
       created_by,
       modified_at,
+      published_at,
       is_draft,
       comment_count,
       body,
@@ -79,7 +80,7 @@ export const loader = async ({ request }) => {
   }
 
   if (sort === 'Newest') {
-    query = query.order('created_at', { ascending: false });
+    query = query.order('published_at', { ascending: false });
   } else if (sort === 'Comments') {
     query = query.order('comment_count', { ascending: false });
   } else if (sort === 'LeastComments') {
@@ -195,6 +196,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         is_draft: data.isDraft,
         moderation: 'accepted' as Moderation,
         profile_badge: data.profileBadge,
+        published_at: data.isDraft ? null : new Date(),
         slug,
         summary: getSummaryFromMarkdown(data.body),
         tags: data.tags,

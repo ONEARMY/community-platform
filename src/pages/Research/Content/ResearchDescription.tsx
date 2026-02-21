@@ -78,7 +78,8 @@ const ResearchDescription = (props: IProps) => {
             {research.isDraft && <DraftTag />}
 
             <Text variant="auxiliary">
-              <DisplayDate createdAt={research.createdAt} modifiedAt={lastUpdated.toISOString()} action="Started" />
+              <DisplayDate createdAt={research.createdAt}
+                publishedAt={research.publishedAt} modifiedAt={lastUpdated.toISOString()} publishedAction="Started" />
             </Text>
 
             {research.category && <Category category={research.category} sx={{ fontSize: 2 }} />}

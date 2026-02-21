@@ -68,13 +68,17 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const previousSlugs = contentServiceServer.updatePreviousSlugs(currentNews, data.slug);
 
+    const isFirstPublish = currentNews.is_draft && !data.isDraft && !currentNews.published_at;
+
+    const now = new Date();
+
     const newsResult = await client
       .from('news')
       .update({
         body: data.body,
         category: data.category,
         is_draft: data.isDraft,
-        modified_at: new Date(),
+        modified_at: now,
         slug: data.slug,
         previous_slugs: previousSlugs,
         profile_badge: data.profileBadge,
@@ -82,6 +86,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         tags: data.tags,
         title: data.title,
         ...(!existingHeroImage && { hero_image: null }),
+        ...(isFirstPublish && { published_at: now }),
       })
       .eq('id', id)
       .select();

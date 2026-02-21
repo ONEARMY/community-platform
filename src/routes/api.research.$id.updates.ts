@@ -71,6 +71,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         description: data.description,
         video_url: data.videoUrl,
         is_draft: data.isDraft,
+        published_at: data.isDraft ? null : new Date(),
         research_id: researchId,
         created_by: profile.id,
         tenant_id: process.env.TENANT_ID,

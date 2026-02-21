@@ -85,7 +85,12 @@ export const QuestionPage = observer(({ question }: IProps) => {
             <AuthorDisplay author={question.author} />
 
             <Text variant="auxiliary">
-              <DisplayDate createdAt={question.createdAt} modifiedAt={question.modifiedAt} action="Asked" />
+              <DisplayDate
+                createdAt={question.createdAt}
+                publishedAt={question.publishedAt}
+                modifiedAt={question.modifiedAt}
+                publishedAction="Asked"
+              />
             </Text>
 
             {question.isDraft && <DraftTag />}
@@ -97,9 +102,16 @@ export const QuestionPage = observer(({ question }: IProps) => {
             <LinkifyText>{question.description}</LinkifyText>
           </Text>
 
-          {question.images && <ImageGallery images={formatImagesForGallery(question.images) as any} allowPortrait={true} />}
+          {question.images && (
+            <ImageGallery
+              images={formatImagesForGallery(question.images) as any}
+              allowPortrait={true}
+            />
+          )}
 
-          {question.tags && <TagList data-cy="question-tags" tags={question.tags.map((t) => ({ label: t.name }))} />}
+          {question.tags && (
+            <TagList data-cy="question-tags" tags={question.tags.map((t) => ({ label: t.name }))} />
+          )}
         </Flex>
 
         <Divider sx={{ border: '1px solid black', margin: 0 }} />
@@ -139,7 +151,12 @@ export const QuestionPage = observer(({ question }: IProps) => {
                 }),
                 stat: subscribersCount,
               },
-              createUsefulStatistic('questions', question.id, usefulCount, userHasPremiumTier(activeUser, PremiumTier.ONE)),
+              createUsefulStatistic(
+                'questions',
+                question.id,
+                usefulCount,
+                userHasPremiumTier(activeUser, PremiumTier.ONE),
+              ),
               {
                 icon: 'comment-outline',
                 label: buildStatisticsLabel({

@@ -169,7 +169,7 @@ export const QuestionListHeader = (props: IProps) => {
 
   return (
     <ListHeader
-      itemCount={showDrafts ? draftCount : itemCount}
+      itemCount={showDrafts ? draftCount : itemCount || 0}
       actionComponents={actionComponents}
       showDrafts={false}
       headingTitle={headings.list}

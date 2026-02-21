@@ -63,5 +63,6 @@ export const FactoryQuestionItem = (questionOverloads: Partial<Question> = {}): 
   commentCount: faker.number.int(),
   totalViews: faker.number.int(),
   usefulCount: faker.number.int(),
+  publishedAt: faker.date.past(),
   ...questionOverloads,
 });

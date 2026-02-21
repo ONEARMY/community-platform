@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import { Outlet } from 'react-router';
 import { isModuleSupported, MODULE } from 'src/modules';
-import { EnvironmentContext } from 'src/pages/common/EnvironmentContext';
 import Main from 'src/pages/common/Layout/Main';
+import { TenantContext } from 'src/pages/common/TenantContext';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 
 export async function loader() {
@@ -21,9 +21,9 @@ export const meta = mergeMeta<typeof loader>(() => {
 });
 
 export default function Index() {
-  const env = useContext(EnvironmentContext);
+  const tenantContext = useContext(TenantContext);
 
-  if (!isModuleSupported(env?.VITE_SUPPORTED_MODULES || '', MODULE.QUESTION)) {
+  if (!isModuleSupported(tenantContext?.supportedModules || '', MODULE.QUESTIONS)) {
     return null;
   }
 

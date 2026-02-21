@@ -1,6 +1,5 @@
 import type { DBProfile, IModeration, Profile } from 'oa-shared';
 import { UserRole } from 'oa-shared';
-import { getConfigurationOption, NO_MESSAGING } from 'src/config/config';
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants';
 
 const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi;
@@ -87,10 +86,6 @@ export const isUserBlockedFromMessaging = (user: Partial<Profile> | null | undef
   return user.isBlockedFromMessaging;
 };
 
-export const isMessagingModuleOff = () => {
-  return NO_MESSAGING === 'true';
-};
-
 export const isUserContactable = (user: Partial<Profile>) => {
   if (typeof user.isContactable === 'boolean') {
     return isContactable(user.isContactable);
@@ -100,10 +95,6 @@ export const isUserContactable = (user: Partial<Profile>) => {
 };
 
 export const isContactable = (preference: boolean | null) => {
-  if (isMessagingModuleOff()) {
-    return false;
-  }
-
   return typeof preference === 'boolean' ? preference : DEFAULT_PUBLIC_CONTACT_PREFERENCE;
 };
 

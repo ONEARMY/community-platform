@@ -2,7 +2,7 @@ import type { LoaderFunctionArgs } from 'react-router';
 import { redirect } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { patreonServiceServer } from 'src/services/patreonService.server';
+import { PatreonServiceServer } from 'src/services/patreonService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { Flex, Text } from 'theme-ui';
 
@@ -26,12 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
     const origin = `${protocol}//${url.host}`;
 
-    await patreonServiceServer.verifyAndUpdatePatreonUser(
-      patreonCode,
-      claims.data.claims.sub,
-      client,
-      origin,
-    );
+    await new PatreonServiceServer(client).verifyAndUpdatePatreonUser(patreonCode, claims.data.claims.sub, origin);
 
     return redirect('/settings/account', { headers });
   } catch (error) {
@@ -57,9 +52,7 @@ export default function Index() {
           mt: 15,
         }}
       >
-        <Text>
-          Sorry, we encountered an error integrating your Patreon account. Please try again later!
-        </Text>
+        <Text>Sorry, we encountered an error integrating your Patreon account. Please try again later!</Text>
       </Flex>
     </Main>
   );

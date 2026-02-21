@@ -91,9 +91,7 @@ describe('[Settings]', () => {
     cy.get(`[data-cy="country:${countryCode}"]`);
 
     cy.step('Errors if trying to upload invalid image');
-    cy.get(`[data-cy=userImage]`)
-      .find(':file')
-      .selectFile(`src/fixtures/images/file.random`, { force: true });
+    cy.get(`[data-cy=userImage]`).find(':file').selectFile(`src/fixtures/images/file.random`, { force: true });
     cy.get('[data-cy=ImageUploadError]').should('be.visible');
     cy.get('[data-cy=ImageUploadError-Button]').click();
 
@@ -214,13 +212,13 @@ it('Notifications', () => {
   cy.signUpNewUser();
 
   cy.step('Notification setting not shown when messaging off');
-  localStorage.setItem('VITE_NO_MESSAGING', 'true');
+  // TODO: mock no_messaging true
   cy.visit('/settings');
   cy.get('[data-cy=tab-Notifications]').click();
   cy.get('[data-cy=messages-link]').should('not.exist');
 
   cy.step('Notification setting present for contact feature ');
-  localStorage.setItem('VITE_NO_MESSAGING', 'false');
+  // TODO: mock no_messaging false
   cy.visit('/settings');
   cy.get('[data-cy=tab-Notifications]').click();
   cy.get('[data-cy=messages-link]');

@@ -3,14 +3,15 @@ import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import { Button, Loader } from 'oa-components';
 import type { ProfileFormData } from 'oa-shared';
-import { useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { logger } from 'src/logger';
 import { profileService } from 'src/services/profileService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { isContactable, isMessagingModuleOff } from 'src/utils/helpers';
+import { isContactable } from 'src/utils/helpers';
 import { Flex } from 'theme-ui';
+import { TenantContext } from '../common/TenantContext';
 import type { IFormNotification } from './content/SettingsFormNotifications';
 import { SettingsFormNotifications } from './content/SettingsFormNotifications';
 import { ProfileTypeSection } from './content/sections/ProfileType.section';
@@ -22,7 +23,7 @@ import { buttons } from './labels';
 
 export const SettingsPageUserProfile = observer(() => {
   const [notification, setNotification] = useState<IFormNotification | undefined>(undefined);
-
+  const tenantContext = useContext(TenantContext);
   const { profileTypes, profile, update, refresh } = useProfileStore();
 
   if (!profile) {
@@ -55,9 +56,7 @@ export const SettingsPageUserProfile = observer(() => {
     }
   };
 
-  const existingCoverImages = profile.coverImages
-    ? profile?.coverImages?.slice(0, 4).map((image) => toJS(image))
-    : [];
+  const existingCoverImages = profile.coverImages ? profile?.coverImages?.slice(0, 4).map((image) => toJS(image)) : [];
   const coverImages = new Array(4 - (existingCoverImages?.length || 0));
 
   const initialValues = useMemo<ProfileFormData>(
@@ -88,28 +87,14 @@ export const SettingsPageUserProfile = observer(() => {
       initialValues={initialValues}
       mutators={{ ...arrayMutators }}
       validateOnBlur
-      render={({
-        dirty,
-        submitFailed,
-        submitting,
-        submitSucceeded,
-        values,
-        handleSubmit,
-        invalid,
-        errors,
-        form,
-      }) => {
+      render={({ dirty, submitFailed, submitting, submitSucceeded, values, handleSubmit, invalid, errors, form }) => {
         const isMember = !profileTypes?.find((x) => x.name === values.type)?.isSpace;
 
         return (
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
             <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
             {submitting && <Loader sx={{ alignSelf: 'center' }} />}
-            <SettingsFormNotifications
-              errors={errors}
-              notification={notification}
-              submitFailed={submitFailed}
-            />
+            <SettingsFormNotifications errors={errors} notification={notification} submitFailed={submitFailed} />
 
             <form id={formId} onSubmit={handleSubmit}>
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
@@ -130,9 +115,7 @@ export const SettingsPageUserProfile = observer(() => {
                   />
                 )}
 
-                {!isMessagingModuleOff() && (
-                  <PublicContactSection isContactable={values.isContactable} />
-                )}
+                {!tenantContext?.noMessaging && <PublicContactSection isContactable={values.isContactable} />}
               </Flex>
             </form>
 

@@ -195,7 +195,6 @@ BEGIN
 END;
 $$;
 
-DROP FUNCTION public.get_user_projects(username_param text);
 CREATE OR REPLACE FUNCTION public.get_user_projects(username_param text)
  RETURNS TABLE(id bigint, comment_count integer, cover_image json, title text, slug text, total_useful bigint)
  LANGUAGE plpgsql

@@ -5,7 +5,6 @@ import { preciousPlasticTheme } from 'oa-themes';
 import { NavLink } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { UpgradeBadgeLink } from 'src/pages/common/Header/Menu/Profile/UpgradeBadgeLink';
-import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Box, Flex } from 'theme-ui';
 
@@ -60,11 +59,7 @@ export const ProfileModal = observer(() => {
           flexDirection: 'column',
         }}
       >
-        <ModalLink
-          to={'/u/' + activeUser?.username}
-          data-cy="menu-Profile"
-          className={({ isActive }) => (isActive ? 'current' : '')}
-        >
+        <ModalLink to={'/u/' + activeUser?.username} data-cy="menu-Profile" className={({ isActive }) => (isActive ? 'current' : '')}>
           Profile
         </ModalLink>
         {shouldShowUpgrade && (
@@ -80,17 +75,11 @@ export const ProfileModal = observer(() => {
             }}
           />
         )}
-        {COMMUNITY_PAGES_PROFILE.map((page) => (
-          <AuthWrapper key={page.path}>
-            <ModalLink
-              to={page.path}
-              data-cy={`menu-${page.title}`}
-              className={({ isActive }) => (isActive ? 'current' : '')}
-            >
-              {page.title}
-            </ModalLink>
-          </AuthWrapper>
-        ))}
+        <AuthWrapper>
+          <ModalLink to="/settings" data-cy="menu-Settings" className={({ isActive }) => (isActive ? 'current' : '')}>
+            Settings
+          </ModalLink>
+        </AuthWrapper>
         <Box
           sx={{
             padding: '10px 30px 10px 30px',

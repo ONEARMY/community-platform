@@ -96,6 +96,8 @@ export default defineConfig({
           );
 
           await supabaseService.clearStorage(tenantId);
+
+          return null;
         },
       });
 

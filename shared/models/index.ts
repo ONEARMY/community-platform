@@ -3,7 +3,6 @@ export * from './banner';
 export * from './category';
 export * from './comment';
 export * from './common';
-export * from './config';
 export * from './content';
 export * from './db';
 export * from './document';

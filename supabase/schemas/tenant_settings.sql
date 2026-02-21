@@ -8,7 +8,14 @@ CREATE TABLE IF NOT EXISTS "public"."tenant_settings" (
     "email_from" "text",
     "site_image" "text",
     "site_favicon" "text",
-    "donation_settings" json
+    "donation_settings" JSON,
+    "no_messaging" BOOLEAN NOT NULL DEFAULT false,
+    "library_heading" "text",
+    "academy_resource" "text",
+    "profile_guidelines" "text",
+    "questions_guidelines" "text",
+    "supported_modules" "text",
+    "patreon_id" "text"
 );
 
 ALTER TABLE "public"."tenant_settings" ENABLE ROW LEVEL SECURITY;

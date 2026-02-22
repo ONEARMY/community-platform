@@ -39,6 +39,32 @@ const createCheckoutSession = async (): Promise<string | null> => {
   return null;
 };
 
+type EmbeddedCheckoutResult = {
+  clientSecret: string;
+  publishableKey: string;
+};
+
+const createEmbeddedCheckoutSession = async (): Promise<EmbeddedCheckoutResult | null> => {
+  try {
+    const response = await fetch('/api/stripe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'embedded_checkout' }),
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    return { clientSecret: data.clientSecret, publishableKey: data.publishableKey };
+  } catch (error) {
+    console.error(error);
+  }
+
+  return null;
+};
+
 const createPortalSession = async (): Promise<string | null> => {
   try {
     const response = await fetch('/api/stripe', {
@@ -63,5 +89,6 @@ const createPortalSession = async (): Promise<string | null> => {
 export const stripeService = {
   getSubscriptionStatus,
   createCheckoutSession,
+  createEmbeddedCheckoutSession,
   createPortalSession,
 };

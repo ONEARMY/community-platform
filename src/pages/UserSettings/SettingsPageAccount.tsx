@@ -6,6 +6,7 @@ import { Flex, Heading, Text } from 'theme-ui';
 
 import { PatreonIntegration } from './content/fields/PatreonIntegration';
 import { StripeIntegration } from './content/fields/StripeIntegration';
+import { StripeIntegrationEmbedded } from './content/fields/StripeIntegrationEmbedded';
 import { ChangeEmailForm } from './content/sections/ChangeEmail.form';
 import { ChangePasswordForm } from './content/sections/ChangePassword.form';
 
@@ -27,6 +28,7 @@ export const SettingsPageAccount = observer(() => {
 
       <PatreonIntegration />
       <StripeIntegration />
+      <StripeIntegrationEmbedded />
       <ChangePasswordForm />
       <ChangeEmailForm />
 

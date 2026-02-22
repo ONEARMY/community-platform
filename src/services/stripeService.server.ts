@@ -95,6 +95,34 @@ const createCheckoutSession = async (
   return session.url;
 };
 
+const createEmbeddedCheckoutSession = async (
+  customerId: string,
+  priceId: string,
+  returnUrl: string,
+): Promise<string> => {
+  const stripe = getStripe();
+
+  const session = await stripe.checkout.sessions.create({
+    customer: customerId,
+    mode: 'subscription',
+    payment_method_types: ['card'],
+    ui_mode: 'embedded',
+    line_items: [
+      {
+        price: priceId,
+        quantity: 1,
+      },
+    ],
+    return_url: returnUrl,
+  });
+
+  if (!session.client_secret) {
+    throw new Error('Failed to create embedded checkout session');
+  }
+
+  return session.client_secret;
+};
+
 const createBillingPortalSession = async (
   customerId: string,
   returnUrl: string,
@@ -138,6 +166,7 @@ export const stripeServiceServer = {
   constructWebhookEvent,
   createBillingPortalSession,
   createCheckoutSession,
+  createEmbeddedCheckoutSession,
   getAuthIdByStripeCustomerId,
   getCustomerByAuthId,
   getOrCreateCustomer,

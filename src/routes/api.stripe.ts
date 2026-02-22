@@ -89,6 +89,31 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({ url: checkoutUrl }, { headers, status: 200 });
     }
 
+    if (actionType === 'embedded_checkout') {
+      const stripePriceId = priceId || process.env.STRIPE_PRICE_ID;
+      if (!stripePriceId) {
+        return Response.json({}, { headers, status: 400, statusText: 'price ID not configured' });
+      }
+
+      const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
+      if (!publishableKey) {
+        return Response.json(
+          {},
+          { headers, status: 400, statusText: 'publishable key not configured' },
+        );
+      }
+
+      const clientSecret = await stripeServiceServer.createEmbeddedCheckoutSession(
+        customerId,
+        stripePriceId,
+        `${origin}/settings?subscription=success`,
+      );
+
+      updateUserActivity(client, claims.data.claims.sub);
+
+      return Response.json({ clientSecret, publishableKey }, { headers, status: 200 });
+    }
+
     if (actionType === 'portal') {
       const portalUrl = await stripeServiceServer.createBillingPortalSession(
         customerId,

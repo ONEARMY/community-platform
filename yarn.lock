@@ -5554,6 +5554,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@stripe/react-stripe-js@npm:^5.6.0":
+  version: 5.6.0
+  resolution: "@stripe/react-stripe-js@npm:5.6.0"
+  dependencies:
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    "@stripe/stripe-js": ">=8.0.0 <9.0.0"
+    react: ">=16.8.0 <20.0.0"
+    react-dom: ">=16.8.0 <20.0.0"
+  checksum: 10/967388451f3b27d630a010c3ef5172f4878a05b8ff1fd65928fdaf7b6ec6923745b7ddd40679b2ee7bc142e401fab98eddc4b58bc49b6bed8be102913d905a59
+  languageName: node
+  linkType: hard
+
+"@stripe/stripe-js@npm:^8.8.0":
+  version: 8.8.0
+  resolution: "@stripe/stripe-js@npm:8.8.0"
+  checksum: 10/a059771590c6eb57efdcfb789da4783eb6e5a10d716bfe094ce5bcf7b28ba439867af53d055f7998cbd15a255e9dae020f9f4e6276defb4416d0457fc674fcfe
+  languageName: node
+  linkType: hard
+
 "@styled-system/background@npm:^5.1.2":
   version: 5.1.2
   resolution: "@styled-system/background@npm:5.1.2"
@@ -14246,6 +14266,8 @@ __metadata:
     "@sentry/react-router": "npm:^10.29.0"
     "@snaplet/copycat": "npm:^6.0.0"
     "@snaplet/seed": "npm:0.98.0"
+    "@stripe/react-stripe-js": "npm:^5.6.0"
+    "@stripe/stripe-js": "npm:^8.8.0"
     "@supabase/ssr": "npm:^0.7.0"
     "@supabase/supabase-js": "npm:^2.76.1"
     "@testing-library/jest-dom": "npm:^6.9.1"

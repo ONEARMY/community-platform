@@ -208,7 +208,7 @@ export class SupabaseTestsService {
         {
           site_name: 'Test Site',
           site_url: 'https://community.preciousplastic.com',
-          academy_resource: 'https://onearmy.github.io/academy',
+          academy_resource: 'https://onearmy.github.io/academy/',
           tenant_id: this.tenantId,
         },
       ],

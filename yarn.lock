@@ -5554,6 +5554,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@stripe/react-stripe-js@npm:^5.6.0":
+  version: 5.6.0
+  resolution: "@stripe/react-stripe-js@npm:5.6.0"
+  dependencies:
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    "@stripe/stripe-js": ">=8.0.0 <9.0.0"
+    react: ">=16.8.0 <20.0.0"
+    react-dom: ">=16.8.0 <20.0.0"
+  checksum: 10/967388451f3b27d630a010c3ef5172f4878a05b8ff1fd65928fdaf7b6ec6923745b7ddd40679b2ee7bc142e401fab98eddc4b58bc49b6bed8be102913d905a59
+  languageName: node
+  linkType: hard
+
+"@stripe/stripe-js@npm:^8.8.0":
+  version: 8.8.0
+  resolution: "@stripe/stripe-js@npm:8.8.0"
+  checksum: 10/a059771590c6eb57efdcfb789da4783eb6e5a10d716bfe094ce5bcf7b28ba439867af53d055f7998cbd15a255e9dae020f9f4e6276defb4416d0457fc674fcfe
+  languageName: node
+  linkType: hard
+
 "@styled-system/background@npm:^5.1.2":
   version: 5.1.2
   resolution: "@styled-system/background@npm:5.1.2"
@@ -14246,6 +14266,8 @@ __metadata:
     "@sentry/react-router": "npm:^10.29.0"
     "@snaplet/copycat": "npm:^6.0.0"
     "@snaplet/seed": "npm:0.98.0"
+    "@stripe/react-stripe-js": "npm:^5.6.0"
+    "@stripe/stripe-js": "npm:^8.8.0"
     "@supabase/ssr": "npm:^0.7.0"
     "@supabase/supabase-js": "npm:^2.76.1"
     "@testing-library/jest-dom": "npm:^6.9.1"
@@ -14309,6 +14331,7 @@ __metadata:
     react-tooltip: "npm:^5.30.0"
     remix-utils: "npm:^9.0.0"
     resend: "npm:6.5.2"
+    stripe: "npm:^20.3.1"
     supabase: "npm:2.53.6"
     theme-ui: "npm:^0.17.2"
     tslog: "npm:^4.10.2"
@@ -16932,6 +16955,18 @@ __metadata:
   version: 3.1.1
   resolution: "strip-json-comments@npm:3.1.1"
   checksum: 10/492f73e27268f9b1c122733f28ecb0e7e8d8a531a6662efbd08e22cccb3f9475e90a1b82cab06a392f6afae6d2de636f977e231296400d0ec5304ba70f166443
+  languageName: node
+  linkType: hard
+
+"stripe@npm:^20.3.1":
+  version: 20.3.1
+  resolution: "stripe@npm:20.3.1"
+  peerDependencies:
+    "@types/node": ">=16"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
+  checksum: 10/fe2ca2426d806f0588787af60505cba7efdeb733d724ab8b5980dc170e5cf80f4dcb5c34da1f1dcd380726ac4a271336f402ed02d8855b0171aa86bee538dd67
   languageName: node
   linkType: hard
 

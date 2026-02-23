@@ -1,10 +1,15 @@
 import { observer } from 'mobx-react';
 import { ExternalLink } from 'oa-components';
+import { UserRole } from 'oa-shared';
+import { AuthWrapper } from 'src/common/AuthWrapper';
 import { DISCORD_INVITE_URL } from 'src/constants';
 import { fields, headings } from 'src/pages/UserSettings/labels';
 import { Flex, Heading, Text } from 'theme-ui';
 
 import { PatreonIntegration } from './content/fields/PatreonIntegration';
+import { StripeIntegration } from './content/fields/StripeIntegration';
+import { StripeIntegrationElements } from './content/fields/StripeIntegrationElements';
+import { StripeIntegrationEmbedded } from './content/fields/StripeIntegrationEmbedded';
 import { ChangeEmailForm } from './content/sections/ChangeEmail.form';
 import { ChangePasswordForm } from './content/sections/ChangePassword.form';
 
@@ -25,6 +30,11 @@ export const SettingsPageAccount = observer(() => {
       </Flex>
 
       <PatreonIntegration />
+      <AuthWrapper roleRequired={UserRole.ADMIN}>
+        <StripeIntegration />
+        <StripeIntegrationEmbedded />
+        <StripeIntegrationElements />
+      </AuthWrapper>
       <ChangePasswordForm />
       <ChangeEmailForm />
 

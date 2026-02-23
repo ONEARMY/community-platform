@@ -3,6 +3,7 @@ import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 import { FactoryUser } from 'src/test/factories/User';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { TenantContext } from '../common/TenantContext';
 import { FormProvider } from './__mocks__/FormProvider';
 import { SettingsPageUserProfile } from './SettingsPageUserProfile';
 import type { ProfileTag, ProfileType } from 'oa-shared';
@@ -125,6 +126,53 @@ describe('UserSettings', () => {
       expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1);
       expect(wrapper.getAllByTestId('photo')).toHaveLength(1);
       expect(wrapper.getAllByTestId('coverImage')).toHaveLength(1);
+    });
+  });
+
+  it('hides PublicContactSection when noMessaging is true', async () => {
+    const mockUser = FactoryUser({
+      type: {
+        id: 1,
+        name: 'Member',
+        isSpace: false,
+      } as ProfileType,
+    });
+
+    mockUseProfileStore.mockReturnValue({
+      profile: mockUser,
+      profileTypes: mockProfileTypes,
+      update: vi.fn(),
+    });
+
+    const mockTenantContext = {
+      patreonId: '',
+      siteName: 'Test Site',
+      siteUrl: 'https://test.com',
+      messageSignOff: 'Test',
+      emailFrom: 'test@test.com',
+      siteImage: 'test.png',
+      noMessaging: true,
+      libraryHeading: 'Library',
+      academyResource: 'Academy',
+      profileGuidelines: 'Guidelines',
+      questionsGuidelines: 'Questions',
+      supportedModules: 'modules',
+      environment: {},
+    };
+
+    let wrapper;
+    act(() => {
+      wrapper = FormProvider(
+        <TenantContext.Provider value={mockTenantContext}>
+          <SettingsPageUserProfile />
+        </TenantContext.Provider>,
+      );
+    });
+
+    await waitFor(() => {
+      expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1);
+      expect(wrapper.queryByTestId('PublicContactSection')).toBeNull();
+      expect(wrapper.getAllByTestId('photo')).toHaveLength(1);
     });
   });
 });

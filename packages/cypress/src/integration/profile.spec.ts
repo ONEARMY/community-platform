@@ -125,40 +125,6 @@ describe('[Profile]', () => {
       cy.get('[data-cy="UserContactForm-NotAvailable"]').should('not.exist');
     });
 
-    it("[Can't message users when config set]", () => {
-      // TODO: mock no_messaging true
-
-      const user = generateNewUserDetails();
-
-      cy.step("Can sign-up and won't have a contact form");
-      cy.signUpNewUser(user);
-      cy.step('Go to Profile');
-      cy.visit(`/u/${user.username}`);
-
-      cy.step('No contact tab');
-      cy.get('[data-cy=contact-tab]').should('not.exist');
-
-      cy.step('No setting to turn it on');
-      cy.visit('/settings');
-      cy.get('[data-cy=PublicContactSection]').should('not.exist');
-
-      cy.step('No contact form even when links are present');
-      cy.get('[data-cy=tab-Profile]').click();
-      cy.setSettingImage('avatar', 'userImage');
-      cy.setSettingBasicUserInfo({
-        displayName: user.username,
-        country: 'Tokelau',
-        description: 'contact checking',
-        website: 'https://greatbritishbakeoff.com',
-      });
-
-      cy.saveSettingsForm();
-
-      cy.visit(`/u/${user.username}`);
-      cy.get('[data-cy=contact-tab]').click();
-      cy.get('[data-cy=UserContactWrapper]').should('not.exist');
-    });
-
     it('[Can see contribution data for workspaces]', () => {
       setIsPreciousPlastic();
 

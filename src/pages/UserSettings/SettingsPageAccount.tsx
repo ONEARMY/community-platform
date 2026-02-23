@@ -1,5 +1,7 @@
 import { observer } from 'mobx-react';
 import { ExternalLink } from 'oa-components';
+import { UserRole } from 'oa-shared';
+import { AuthWrapper } from 'src/common/AuthWrapper';
 import { DISCORD_INVITE_URL } from 'src/constants';
 import { fields, headings } from 'src/pages/UserSettings/labels';
 import { Flex, Heading, Text } from 'theme-ui';
@@ -28,9 +30,11 @@ export const SettingsPageAccount = observer(() => {
       </Flex>
 
       <PatreonIntegration />
-      <StripeIntegration />
-      <StripeIntegrationEmbedded />
-      <StripeIntegrationElements />
+      <AuthWrapper roleRequired={UserRole.ADMIN}>
+        <StripeIntegration />
+        <StripeIntegrationEmbedded />
+        <StripeIntegrationElements />
+      </AuthWrapper>
       <ChangePasswordForm />
       <ChangeEmailForm />
 

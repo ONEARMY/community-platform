@@ -2,10 +2,10 @@ import { SiteFooter } from 'oa-components';
 import { useContext, useMemo } from 'react';
 import { useLocation } from 'react-router';
 
-import { EnvironmentContext } from '../EnvironmentContext';
+import { TenantContext } from '../TenantContext';
 
 const GlobalSiteFooter = () => {
-  const env = useContext(EnvironmentContext);
+  const tenantContext = useContext(TenantContext);
   const location = useLocation();
 
   const showFooter = useMemo(() => {
@@ -14,7 +14,7 @@ const GlobalSiteFooter = () => {
     return !path.startsWith('/map') && !path.startsWith('/academy') && path !== '/';
   }, [location?.pathname]);
 
-  return showFooter ? <SiteFooter siteName={env?.VITE_SITE_NAME || 'Community Platform'} /> : null;
+  return showFooter ? <SiteFooter siteName={tenantContext?.environment?.VITE_SITE_NAME || 'Community Platform'} /> : null;
 };
 
 export default GlobalSiteFooter;

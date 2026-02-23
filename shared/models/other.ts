@@ -6,6 +6,13 @@ export class TenantSettings {
   messageSignOff: string;
   emailFrom: string;
   siteImage: string;
+  noMessaging: boolean;
+  libraryHeading: string;
+  academyResource: string;
+  profileGuidelines: string;
+  questionsGuidelines: string;
+  supportedModules: string;
+  patreonId: string;
 
   constructor(obj: Partial<TenantSettings>) {
     Object.assign(this, obj);

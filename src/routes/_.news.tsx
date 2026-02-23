@@ -1,8 +1,8 @@
-// import { useContext } from 'react'
+import { useContext } from 'react';
 import { Outlet } from 'react-router';
-// import { isModuleSupported, MODULE } from 'src/modules'
-// import { EnvironmentContext } from 'src/pages/common/EnvironmentContext'
+import { isModuleSupported, MODULE } from 'src/modules';
 import Main from 'src/pages/common/Layout/Main';
+import { TenantContext } from 'src/pages/common/TenantContext';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 
 export async function loader() {
@@ -15,17 +15,16 @@ export function HydrateFallback() {
 
 export const meta = mergeMeta<typeof loader>(() => {
   const title = `News - ${import.meta.env.VITE_SITE_NAME}`;
-  // const imageUrl = news.heroImage?.publicUrl
 
   return generateTags(title);
 });
 
 export default function Index() {
-  // const env = useContext(EnvironmentContext)
+  const tenantContext = useContext(TenantContext);
 
-  // if (!isModuleSupported(env?.VITE_SUPPORTED_MODULES || '', MODULE.NEWS)) {
-  //   return null
-  // }
+  if (!isModuleSupported(tenantContext?.supportedModules || '', MODULE.NEWS)) {
+    return null;
+  }
 
   return (
     <Main style={{ flex: 1 }}>

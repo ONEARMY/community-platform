@@ -1,5 +1,9 @@
-export const loader = ({ request }: { request: Request }) => {
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
+
+export const loader = async ({ request }: { request: Request }) => {
   const { headers } = request;
+
   const host = headers.get('host');
   let robotText = '';
 
@@ -8,18 +12,16 @@ export const loader = ({ request }: { request: Request }) => {
     robotText = `User-agent: *
       Disallow: /`;
   } else {
-    const allModules = ['howto', 'map', 'research', 'academy', 'question', 'news'];
-    const availableModules = process.env.VITE_SUPPORTED_MODULES?.split(',');
+    const { client } = createSupabaseServerClient(request);
+    const settings = await new TenantSettingsService(client).get();
+
+    const allModules = ['library', 'map', 'research', 'academy', 'questions', 'news'];
+    const availableModules = settings.supportedModules?.split(',');
 
     robotText = 'User-agent: *';
 
     allModules.forEach((x) => {
-      let pagePath = '';
-      if (x === 'howto') {
-        pagePath = '/library/';
-      } else {
-        pagePath = `/${x}/`;
-      }
+      let pagePath = `/${x}/`;
 
       const permission = availableModules?.includes(x) ? 'Allow' : 'Disallow';
 

@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom/vitest';
-
 import { createMemoryRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router';
 import { faker } from '@faker-js/faker';
 import { act, render, waitFor, within } from '@testing-library/react';
@@ -9,9 +8,7 @@ import { FactoryResearchItem, FactoryResearchItemUpdate } from 'src/test/factori
 import { FactoryUser } from 'src/test/factories/User';
 import { testingThemeStyles } from 'src/test/utils/themeUtils';
 import { describe, expect, it, vi } from 'vitest';
-
 import { ResearchArticlePage } from './ResearchArticlePage';
-
 import type { Author, ResearchItem } from 'oa-shared';
 
 const Theme = testingThemeStyles;

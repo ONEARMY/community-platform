@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import ExternalEmbed from 'src/pages/Academy/ExternalEmbed/ExternalEmbed';
+import { TenantContext } from '../common/TenantContext';
 
 export const getFrameSrc = (base: string, path: string): string =>
   `${base}${path
@@ -10,17 +11,13 @@ export const getFrameSrc = (base: string, path: string): string =>
 
 const Academy = () => {
   const location = useLocation();
+  const tenantContext = useContext(TenantContext);
 
-  const [initial, setInitial] = useState<string>(
-    import.meta.env.VITE_ACADEMY_RESOURCE || process.env.VITE_ACADEMY_RESOURCE || '',
-  );
+  const [initial, setInitial] = useState<string>(tenantContext?.academyResource || '');
 
   useEffect(() => {
     // set initial only once
-    const newInitial = getFrameSrc(
-      import.meta.env.VITE_ACADEMY_RESOURCE || process.env.VITE_ACADEMY_RESOURCE || '',
-      location.pathname,
-    );
+    const newInitial = getFrameSrc(tenantContext?.academyResource || '', location.pathname);
 
     if (newInitial !== initial) {
       setInitial(newInitial);

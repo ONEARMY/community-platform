@@ -7,7 +7,7 @@ import { isPreciousPlastic } from 'src/config/config';
 import { isModuleSupported, MODULE } from 'src/modules';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Box, Flex, Text } from 'theme-ui';
-import { EnvironmentContext } from '../common/EnvironmentContext';
+import { TenantContext } from '../common/TenantContext';
 import { SettingsFormTab } from './SettingsFormTab';
 import { SettingsFormTabList } from './SettingsFormTabList';
 import { SettingsPageAccount } from './SettingsPageAccount';
@@ -20,14 +20,14 @@ import type { ISettingsTab } from './types';
 import '../../styles/leaflet.css';
 
 export const SettingsPage = observer(() => {
-  const env = useContext(EnvironmentContext);
+  const tenantContext = useContext(TenantContext);
   const { isComplete, missingFields, profile } = useProfileStore();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
   const isMember = !profile?.type?.isSpace;
   const showImpactTab = !isMember && isPreciousPlastic();
-  const showMapTab = isModuleSupported(env?.VITE_SUPPORTED_MODULES || '', MODULE.MAP);
+  const showMapTab = isModuleSupported(tenantContext?.supportedModules || '', MODULE.MAP);
 
   const tabs: ISettingsTab[] = useMemo(
     () => [
@@ -37,10 +37,7 @@ export const SettingsPage = observer(() => {
         header: isComplete === false && (
           <Flex sx={{ gap: 2, flexDirection: 'column' }} data-cy="CompleteProfileHeader">
             <Text as="h3">✏️ Complete your profile</Text>
-            <Text>
-              In order to post comments or create content, we'd like you to share something about
-              yourself.
-            </Text>
+            <Text>In order to post comments or create content, we'd like you to share something about yourself.</Text>
             {missingFields && missingFields.length > 0 && (
               <Text>
                 Missing required fields:
@@ -115,11 +112,7 @@ export const SettingsPage = observer(() => {
             gap: 4,
           }}
         >
-          <SettingsFormTabList
-            tabs={tabs}
-            currentTab={pathname}
-            onTabChange={(path) => navigate(path)}
-          />
+          <SettingsFormTabList tabs={tabs} currentTab={pathname} onTabChange={(path) => navigate(path)} />
           <Flex
             sx={{
               alignContent: 'stretch',

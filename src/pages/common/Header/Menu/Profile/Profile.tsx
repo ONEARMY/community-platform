@@ -4,13 +4,10 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink';
 import { ProfileModal } from 'src/pages/common/Header/Menu/ProfileModal/ProfileModal';
 import { MobileMenuContext } from 'src/pages/common/Header/MobileMenuContext';
-import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Avatar, Box, Flex } from 'theme-ui';
-
 import ProfileButtons from './ProfileButtons';
 import { UpgradeBadgeLink } from './UpgradeBadgeLink';
-
 import './profile.css';
 
 interface IProps {
@@ -71,9 +68,7 @@ const Profile = observer((props: IProps) => {
             />
           </Box>
         )}
-        {COMMUNITY_PAGES_PROFILE.map((page) => (
-          <MenuMobileLink path={page.path} key={page.path} content={page.title} />
-        ))}
+        <MenuMobileLink path="/settings" content="Settings" />
         <MenuMobileLink path="/logout" content="Log out" />
       </Box>
     );

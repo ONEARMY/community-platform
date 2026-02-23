@@ -14,7 +14,6 @@ const workspaceEmpty = MOCK_DATA.users.settings_workplace_empty;
 describe('[Profile]', () => {
   beforeEach(() => {
     cy.visit('/');
-    localStorage.setItem('VITE_NO_MESSAGING', 'false');
   });
 
   describe('[By Anonymous]', () => {
@@ -51,8 +50,6 @@ describe('[Profile]', () => {
     });
 
     it('[Contact form]', () => {
-      localStorage.setItem('VITE_NO_MESSAGING', 'false');
-
       const contactee = generateNewUserDetails();
 
       cy.step('Can sign-up and have a contact form');
@@ -128,40 +125,6 @@ describe('[Profile]', () => {
       cy.get('[data-cy="UserContactForm-NotAvailable"]').should('not.exist');
     });
 
-    it("[Can't message users when config set]", () => {
-      localStorage.setItem('VITE_NO_MESSAGING', 'true');
-
-      const user = generateNewUserDetails();
-
-      cy.step("Can sign-up and won't have a contact form");
-      cy.signUpNewUser(user);
-      cy.step('Go to Profile');
-      cy.visit(`/u/${user.username}`);
-
-      cy.step('No contact tab');
-      cy.get('[data-cy=contact-tab]').should('not.exist');
-
-      cy.step('No setting to turn it on');
-      cy.visit('/settings');
-      cy.get('[data-cy=PublicContactSection]').should('not.exist');
-
-      cy.step('No contact form even when links are present');
-      cy.get('[data-cy=tab-Profile]').click();
-      cy.setSettingImage('avatar', 'userImage');
-      cy.setSettingBasicUserInfo({
-        displayName: user.username,
-        country: 'Tokelau',
-        description: 'contact checking',
-        website: 'https://greatbritishbakeoff.com',
-      });
-
-      cy.saveSettingsForm();
-
-      cy.visit(`/u/${user.username}`);
-      cy.get('[data-cy=contact-tab]').click();
-      cy.get('[data-cy=UserContactWrapper]').should('not.exist');
-    });
-
     it('[Can see contribution data for workspaces]', () => {
       setIsPreciousPlastic();
 
@@ -225,9 +188,7 @@ describe('[Profile]', () => {
 
       cy.get('[data-cy=ContribTab]').click();
       cy.get('[data-testid="question-contributions"]').should('be.visible');
-      cy.get('[data-testid="question-contributions"]')
-        .contains('The first test question?')
-        .should('be.visible');
+      cy.get('[data-testid="question-contributions"]').contains('The first test question?').should('be.visible');
     });
 
     it('should link to question page when question in clicked in contributions tab', () => {
@@ -240,9 +201,7 @@ describe('[Profile]', () => {
       cy.get('[data-cy="the-first-test-question-link"]').click();
       cy.wait(2000);
       cy.url().should('include', `/questions/the-first-test-question?utm_source=user-profile`);
-      cy.get('[data-cy="question-title"]')
-        .should('be.visible')
-        .contains('The first test question?');
+      cy.get('[data-cy="question-title"]').should('be.visible').contains('The first test question?');
     });
   });
   describe('badges', () => {

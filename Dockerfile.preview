@@ -33,7 +33,6 @@ RUN yarn install
 
 RUN echo "VITE_SITE_VARIANT=\"preview\"" >> .env && \
     echo "VITE_GA_TRACKING_ID=\"G-G4QQ9NSQPC\"" >> .env && \
-    echo "VITE_PATREON_CLIENT_ID=\"RLgZo7SKNVn8cOyFlYeGZsNnoCOjvzQiNJFskDfoxltZltjPPGNMPokwJckHNphU\"" >> .env && \
     echo "VITE_THEME=\"precious-plastic\"" >> .env
 
 # Build application

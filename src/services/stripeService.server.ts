@@ -66,6 +66,7 @@ const getOrCreateCustomer = async (
   return customer.id;
 };
 
+// --- Variant: Redirect ---
 const createCheckoutSession = async (
   customerId: string,
   priceId: string,
@@ -95,6 +96,7 @@ const createCheckoutSession = async (
   return session.url;
 };
 
+// --- Variant: Embedded ---
 const createEmbeddedCheckoutSession = async (
   customerId: string,
   priceId: string,
@@ -121,6 +123,38 @@ const createEmbeddedCheckoutSession = async (
   }
 
   return session.client_secret;
+};
+
+// --- Variant: Elements ---
+const createSubscriptionWithPaymentIntent = async (
+  customerId: string,
+  priceId: string,
+): Promise<string> => {
+  const stripe = getStripe();
+
+  const subscription = await stripe.subscriptions.create({
+    customer: customerId,
+    items: [{ price: priceId }],
+    payment_behavior: 'default_incomplete',
+    expand: ['latest_invoice'],
+  });
+
+  const invoice = subscription.latest_invoice as Stripe.Invoice;
+
+  const invoicePayments = await stripe.invoicePayments.list({
+    invoice: invoice.id,
+    expand: ['data.payment.payment_intent'],
+  });
+
+  const paymentIntent = invoicePayments.data[0]?.payment?.payment_intent as
+    | Stripe.PaymentIntent
+    | undefined;
+
+  if (!paymentIntent?.client_secret) {
+    throw new Error('Failed to get payment intent client secret');
+  }
+
+  return paymentIntent.client_secret;
 };
 
 const createBillingPortalSession = async (
@@ -167,6 +201,7 @@ export const stripeServiceServer = {
   createBillingPortalSession,
   createCheckoutSession,
   createEmbeddedCheckoutSession,
+  createSubscriptionWithPaymentIntent,
   getAuthIdByStripeCustomerId,
   getCustomerByAuthId,
   getOrCreateCustomer,

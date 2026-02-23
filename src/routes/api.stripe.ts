@@ -71,6 +71,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const origin = new URL(request.url).origin;
 
+    // --- Variant: Redirect ---
     if (actionType === 'checkout') {
       const stripePriceId = priceId || process.env.STRIPE_PRICE_ID;
       if (!stripePriceId) {
@@ -89,6 +90,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({ url: checkoutUrl }, { headers, status: 200 });
     }
 
+    // --- Variant: Embedded ---
     if (actionType === 'embedded_checkout') {
       const stripePriceId = priceId || process.env.STRIPE_PRICE_ID;
       if (!stripePriceId) {
@@ -107,6 +109,31 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         customerId,
         stripePriceId,
         `${origin}/settings?subscription=success`,
+      );
+
+      updateUserActivity(client, claims.data.claims.sub);
+
+      return Response.json({ clientSecret, publishableKey }, { headers, status: 200 });
+    }
+
+    // --- Variant: Elements ---
+    if (actionType === 'elements_subscription') {
+      const stripePriceId = priceId || process.env.STRIPE_PRICE_ID;
+      if (!stripePriceId) {
+        return Response.json({}, { headers, status: 400, statusText: 'price ID not configured' });
+      }
+
+      const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
+      if (!publishableKey) {
+        return Response.json(
+          {},
+          { headers, status: 400, statusText: 'publishable key not configured' },
+        );
+      }
+
+      const clientSecret = await stripeServiceServer.createSubscriptionWithPaymentIntent(
+        customerId,
+        stripePriceId,
       );
 
       updateUserActivity(client, claims.data.claims.sub);

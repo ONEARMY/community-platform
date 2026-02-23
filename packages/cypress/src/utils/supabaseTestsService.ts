@@ -206,6 +206,8 @@ export class SupabaseTestsService {
     return await this.seedDatabase({
       tenant_settings: [
         {
+          site_name: 'Test Site',
+          site_url: 'https://community.preciousplastic.com',
           academy_resource: 'https://onearmy.github.io/academy',
           tenant_id: this.tenantId,
         },

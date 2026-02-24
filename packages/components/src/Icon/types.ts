@@ -100,6 +100,8 @@ export type availableGlyphs =
   | 'starter kits'
   | 'globe'
   | 'gps-location'
-  | 'copy-link';
+  | 'copy-link'
+  | 'double-arrow-right'
+  | 'double-arrow-left';
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element };

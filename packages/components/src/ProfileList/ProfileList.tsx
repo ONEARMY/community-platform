@@ -4,6 +4,8 @@ import { Button } from '../Button/Button';
 import { MemberBadge } from '../MemberBadge/MemberBadge';
 import { Username } from '../Username/Username';
 
+const EMPTY_PROFILES: ProfileListItem[] = [];
+
 interface IProps {
   profiles: ProfileListItem[];
   onClose?: () => void;
@@ -11,7 +13,7 @@ interface IProps {
   header: string;
 }
 
-export const ProfileList = ({ profiles = [], onClose, header }: IProps) => {
+export const ProfileList = ({ profiles = EMPTY_PROFILES, onClose, header }: IProps) => {
   return (
     <Flex
       data-cy="profile-list-modal"

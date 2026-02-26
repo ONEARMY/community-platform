@@ -2,6 +2,8 @@ import type { PhotoSwipeOptions } from 'photoswipe/lightbox';
 import { useEffect, useRef, useState } from 'react';
 import { usePhotoSwipeLightbox } from '../hooks/usePhotoSwipeLightbox';
 
+const EMPTY_IMAGES: HTMLImageElement[] = [];
+
 interface Props {
   children: React.ReactNode;
   selector?: string;
@@ -13,7 +15,7 @@ export const ContentImageLightbox = ({
   children,
   selector = 'img',
   photoSwipeOptions,
-  prependImages = [],
+  prependImages = EMPTY_IMAGES,
 }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [images, setImages] = useState<{ src: string; alt?: string }[]>([]);

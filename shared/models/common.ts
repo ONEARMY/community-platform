@@ -20,12 +20,6 @@ export interface ILatLng {
   lng: number;
 }
 
-export type Collaborator = {
-  countryCode?: string | null;
-  userName: string;
-  isVerified: boolean;
-};
-
 export type ContentType = 'questions' | 'projects' | 'research' | 'news';
 
 export type UsefulContentType = 'questions' | 'projects' | 'research' | 'news' | 'comments';

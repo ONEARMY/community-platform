@@ -13,9 +13,6 @@ export const ActionSet = ({ children, itemType }: IProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const toDisplay = children.filter((child) => !!child);
-  if (!children || toDisplay.length === 0) {
-    return <></>;
-  }
 
   const onClick = () => setShow((show) => !show);
 
@@ -32,6 +29,10 @@ export const ActionSet = ({ children, itemType }: IProps) => {
       document.removeEventListener('mousedown', handleClickOutsideDropdownCard);
     };
   }, [show]);
+
+  if (!children || toDisplay.length === 0) {
+    return null;
+  }
 
   return (
     <Flex

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { SearchField } from '../SearchField/SearchField';
@@ -30,8 +30,7 @@ export const OsmGeocoding = ({
   const [searchValue, setSearchValue] = useState('');
   const [results, setResults] = useState<Result[]>([]);
   const [showResults, setShowResults] = useState(false);
-  const [showLoader, setShowLoader] = useState(loading);
-  const [queryLocationService, setQueryLocationService] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const mainContainerRef = useRef<HTMLDivElement>(null);
 
   document.addEventListener('click', function (event) {
@@ -50,7 +49,7 @@ export const OsmGeocoding = ({
   function getGeocoding(address = '') {
     if (address.length === 0) return;
 
-    setShowLoader(true);
+    setIsFetching(true);
 
     let url = `https://nominatim.openstreetmap.org/search?format=json&q=${address}&accept-language=${acceptLanguage}`;
 
@@ -69,18 +68,13 @@ export const OsmGeocoding = ({
         setShowResults(true);
       })
       .catch(null)
-      .finally(() => setShowLoader(false));
+      .finally(() => setIsFetching(false));
   }
 
+  const showLoader = loading || isFetching;
   const showResultsListing = !!results.length && showResults && !showLoader;
 
   const dcb = useDebouncedCallback((search: string) => getGeocoding(search), debounceMs);
-
-  useEffect(() => {
-    if (queryLocationService) {
-      dcb(searchValue);
-    }
-  }, [searchValue, queryLocationService, dcb]);
 
   return (
     <div data-cy="osm-geocoding" ref={mainContainerRef} style={{ width: '100%' }}>
@@ -92,16 +86,18 @@ export const OsmGeocoding = ({
         placeHolder={placeholder}
         value={searchValue}
         onChange={(value: string) => {
-          setQueryLocationService(true);
           setSearchValue(value);
+          if (value) {
+            dcb(value);
+          }
         }}
         onClickDelete={() => {
           setSearchValue('');
-          setQueryLocationService(false);
         }}
         onClickSearch={() => {
-          setQueryLocationService(true);
-          setSearchValue(searchValue);
+          if (searchValue) {
+            dcb(searchValue);
+          }
         }}
         additionalStyle={{
           background: 'white',
@@ -120,7 +116,6 @@ export const OsmGeocoding = ({
           results={results}
           callback={(result: Result) => {
             if (result) {
-              setQueryLocationService(false);
               setSearchValue(result.display_name);
             }
 

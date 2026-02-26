@@ -15,7 +15,7 @@ import {
 
 import type { IPatreonUser } from 'oa-shared';
 import type { Mock } from 'vitest';
-import { TenantContext } from 'src/pages/common/TenantContext';
+import { TenantContext, TenantSettingsContext } from 'src/pages/common/TenantContext';
 
 // Mock setup first (hoisted to the top by Vitest)
 vi.mock('src/services/patreonService', () => {
@@ -30,7 +30,7 @@ vi.mock('src/services/patreonService', () => {
 // Import the mocked service *after* vi.mock()
 import { patreonService } from 'src/services/patreonService';
 
-const mockTenantContext = {
+const mockTenantContext: TenantSettingsContext = {
   patreonId: 'mock-patreon-client-id',
   siteName: 'Test Site',
   siteUrl: 'https://test.com',
@@ -43,6 +43,7 @@ const mockTenantContext = {
   profileGuidelines: 'Guidelines',
   questionsGuidelines: 'Questions',
   supportedModules: 'modules',
+  logoUrl: '',
   environment: {},
 };
 

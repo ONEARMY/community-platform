@@ -9,7 +9,7 @@ import type { IFilesForm } from './filesForm';
 import type { IImageForm } from './imageForm';
 import type { DBMedia, IMediaFile, Image } from './media';
 import type { IDBModeration, IModeration, Moderation } from './moderation';
-import type { SelectValue } from './other';
+import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
 
 export type DifficultyLevel = 'easy' | 'medium' | 'hard' | 'very-hard';

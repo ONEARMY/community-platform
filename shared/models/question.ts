@@ -5,7 +5,7 @@ import { Category } from './category';
 import type { IConvertedFileMeta } from './common';
 import type { IContentDoc, IDBContentDoc } from './content';
 import type { DBMedia, Image } from './media';
-import type { SelectValue } from './other';
+import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
 
 export class DBQuestion implements IDBContentDoc {

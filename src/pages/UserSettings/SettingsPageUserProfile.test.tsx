@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 import { FactoryUser } from 'src/test/factories/User';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { TenantContext } from '../common/TenantContext';
+import { TenantContext, TenantSettingsContext } from '../common/TenantContext';
 import { FormProvider } from './__mocks__/FormProvider';
 import { SettingsPageUserProfile } from './SettingsPageUserProfile';
 import type { ProfileTag, ProfileType } from 'oa-shared';
@@ -144,7 +144,7 @@ describe('UserSettings', () => {
       update: vi.fn(),
     });
 
-    const mockTenantContext = {
+    const mockTenantContext: TenantSettingsContext = {
       patreonId: '',
       siteName: 'Test Site',
       siteUrl: 'https://test.com',
@@ -157,6 +157,7 @@ describe('UserSettings', () => {
       profileGuidelines: 'Guidelines',
       questionsGuidelines: 'Questions',
       supportedModules: 'modules',
+      logoUrl: '',
       environment: {},
     };
 

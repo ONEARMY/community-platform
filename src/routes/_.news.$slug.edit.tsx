@@ -41,19 +41,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 async function isAllowedToEdit(userAuthId: string, client: SupabaseClient) {
-  const { data } = await client
-    .from('profiles')
-    .select('id,roles')
-    .eq('auth_id', userAuthId)
-    .single();
+  const { data } = await client.from('profiles').select('id,roles').eq('auth_id', userAuthId).single();
 
   return data?.roles?.includes(UserRole.ADMIN);
-}
-
-export function HydrateFallback() {
-  // This is required because all routes are loaded client-side. Avoids a page flicker before css is loaded.
-  // Can be removed once ALL pages are using SSR.
-  return <div></div>;
 }
 
 export default function Index() {

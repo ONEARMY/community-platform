@@ -6,7 +6,6 @@ import { GA_TRACKING_ID } from 'src/config/config';
 export const GoogleAnalytics = () => {
   const location = useLocation();
 
-  // TODO: remove GA
   useEffect(() => {
     if (GA_TRACKING_ID) {
       ReactGA.initialize([{ trackingId: GA_TRACKING_ID }]);

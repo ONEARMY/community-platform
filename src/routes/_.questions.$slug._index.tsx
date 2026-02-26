@@ -1,7 +1,7 @@
 import type { DBQuestion } from 'oa-shared';
 import { Question } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
-import { useLoaderData } from 'react-router';
+import { data, useLoaderData } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { CommentFactory } from 'src/factories/commentFactory.server';
 import { NotFoundPage } from 'src/pages/NotFound/NotFound';
@@ -10,6 +10,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
 import { questionServiceServer } from 'src/services/questionService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
+import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { contentServiceServer } from '../services/contentService.server';
 
@@ -18,33 +19,21 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const result = await questionServiceServer.getBySlug(client, params.slug!);
 
+  const tenantSettings = await new TenantSettingsService(client).get();
+
   if (result.error || !result.data) {
-    return Response.json({ question: null }, { headers });
+    return data({ question: null, tenantSettings }, { headers });
   }
 
   const dbQuestion = result.data as unknown as DBQuestion;
 
   if (dbQuestion.id) {
-    await contentServiceServer.incrementViewCount(
-      client,
-      'questions',
-      dbQuestion.total_views,
-      dbQuestion.id,
-    );
+    await contentServiceServer.incrementViewCount(client, 'questions', dbQuestion.total_views, dbQuestion.id);
   }
 
-  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(
-    client,
-    dbQuestion.id,
-    'questions',
-    dbQuestion.tags,
-  );
+  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(client, dbQuestion.id, 'questions', dbQuestion.tags);
 
-  const images = storageServiceServer.getPublicUrls(
-    client,
-    dbQuestion.images!,
-    IMAGE_SIZES.GALLERY,
-  );
+  const images = storageServiceServer.getPublicUrls(client, dbQuestion.images!, IMAGE_SIZES.GALLERY);
 
   const question = Question.fromDB(dbQuestion, tags, images);
   question.usefulCount = usefulVotes.count || 0;
@@ -55,13 +44,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     question.author = await factory.createAuthor(dbQuestion.author);
   }
 
-  return Response.json({ question }, { headers });
-}
-
-export function HydrateFallback() {
-  // This is required because all routes are loaded client-side. Avoids a page flicker before css is loaded.
-  // Can be removed once ALL pages are using SSR.
-  return <div></div>;
+  return data({ question, tenantSettings }, { headers });
 }
 
 export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
@@ -71,7 +54,7 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
     return [];
   }
 
-  const title = `${question.title} - Question - ${import.meta.env.VITE_SITE_NAME}`;
+  const title = `${question.title} - Question - ${loaderData?.tenantSettings.siteName}`;
   const imageUrl = question.images?.at(0)?.publicUrl;
 
   return generateTags(title, question.description, imageUrl);

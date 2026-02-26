@@ -1,25 +1,28 @@
 import { Button, FieldInput, HeroBanner, TextNotification } from 'oa-components';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { Link, redirect, useActionData } from 'react-router';
+import { data, Link, redirect, useActionData } from 'react-router';
 import { PasswordField } from 'src/common/Form/PasswordField';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
+import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { getReturnUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
 import { Card, Flex, Heading, Label, Text } from 'theme-ui';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { client } = createSupabaseServerClient(request);
+  const { client, headers } = createSupabaseServerClient(request);
   const claims = await client.auth.getClaims();
 
   if (claims.data?.claims) {
-    return redirect(getReturnUrl(request));
+    return redirect(getReturnUrl(request), { headers });
   }
 
-  return null;
+  const tenantSettings = await new TenantSettingsService(client).get();
+
+  return data(tenantSettings, { headers });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -64,9 +67,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
   }
 
-  const fallbackPath = data.user?.user_metadata.username
-    ? `/u/${data.user?.user_metadata.username}`
-    : '/';
+  const fallbackPath = data.user?.user_metadata.username ? `/u/${data.user?.user_metadata.username}` : '/';
   const path = getReturnUrl(request, fallbackPath);
 
   try {
@@ -79,8 +80,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return redirect(path, { headers });
 };
 
-export const meta = mergeMeta<typeof loader>(() => {
-  const title = `Login - ${import.meta.env.VITE_SITE_NAME}`;
+export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
+  const title = `Sign In - ${loaderData?.siteName}`;
 
   return generateTags(title);
 });
@@ -135,22 +136,11 @@ export default function Index() {
 
                       <Flex sx={{ flexDirection: 'column' }}>
                         <Label htmlFor="title">Email</Label>
-                        <Field
-                          name="email"
-                          type="email"
-                          data-cy="email"
-                          component={FieldInput}
-                          validate={required}
-                        />
+                        <Field name="email" type="email" data-cy="email" component={FieldInput} validate={required} />
                       </Flex>
                       <Flex sx={{ flexDirection: 'column' }}>
                         <Label htmlFor="title">Password</Label>
-                        <PasswordField
-                          name="password"
-                          data-cy="password"
-                          component={FieldInput}
-                          validate={required}
-                        />
+                        <PasswordField name="password" data-cy="password" component={FieldInput} validate={required} />
                       </Flex>
                       <Flex sx={{ justifyContent: 'space-between' }}>
                         <Text sx={{ fontSize: 1 }} color={'grey'}>

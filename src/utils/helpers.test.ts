@@ -6,7 +6,6 @@ import {
   arrayToJson,
   capitalizeFirstLetter,
   formatLowerNoSpecial,
-  getProjectEmail,
   hasAdminRights,
   isContactable,
   isUserBlockedFromMessaging,
@@ -108,13 +107,5 @@ describe('src/utils/helpers', () => {
       const expectation = '1,000';
       expect(numberWithCommas(1000)).toEqual(expectation);
     });
-  });
-});
-
-describe('getProjectEmail', () => {
-  it('returns the right project name at the end', () => {
-    const subject = 'Whatever you need';
-    expect(getProjectEmail(subject)).toMatch('Precious Plastic');
-    expect(getProjectEmail(subject)).toMatch(subject);
   });
 });

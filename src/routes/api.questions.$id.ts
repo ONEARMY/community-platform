@@ -8,7 +8,7 @@ import { ProfileServiceServer } from 'src/services/profileService.server';
 import { questionServiceServer } from 'src/services/questionService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
-import { hasAdminRightsSupabase } from 'src/utils/helpers';
+import { hasAdminRights } from 'src/utils/helpers';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImages } from 'src/utils/storage';
 import { contentServiceServer } from '../services/contentService.server';
@@ -39,14 +39,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const currentQuestion = await questionServiceServer.getById(id, client);
 
-    const { valid, status, statusText } = await validateRequest(
-      params,
-      request,
-      claims.data.claims.sub,
-      data,
-      currentQuestion,
-      client,
-    );
+    const { valid, status, statusText } = await validateRequest(params, request, claims.data.claims.sub, data, currentQuestion, client);
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText });
@@ -69,11 +62,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     let images: DBMedia[] = [];
 
     if (imagesToKeepIds.length > 0) {
-      const questionImages = await client
-        .from('questions')
-        .select('images')
-        .eq('id', params.id)
-        .single();
+      const questionImages = await client.from('questions').select('images').eq('id', params.id).single();
 
       if (questionImages.data && questionImages.data?.images?.length > 0) {
         images = questionImages.data.images.filter((x) => imagesToKeepIds.includes(x.id));
@@ -81,11 +70,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     }
 
     if (uploadedImages.length > 0) {
-      const mediaResult = await storageServiceServer.uploadImage(
-        uploadedImages,
-        `questions/${id}`,
-        client,
-      );
+      const mediaResult = await storageServiceServer.uploadImage(uploadedImages, `questions/${id}`, client);
 
       if (mediaResult) {
         images = [...images, ...mediaResult.media];
@@ -114,11 +99,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       throw questionResult.error;
     }
 
-    const newImages = storageServiceServer.getPublicUrls(
-      client,
-      questionResult.data[0].images,
-      IMAGE_SIZES.GALLERY,
-    );
+    const newImages = storageServiceServer.getPublicUrls(client, questionResult.data[0].images, IMAGE_SIZES.GALLERY);
 
     const question = Question.fromDB(questionResult.data[0], [], newImages);
     updateUserActivity(client, claims.data.claims.sub);
@@ -160,12 +141,7 @@ async function validateRequest(
 
   if (
     currentQuestion.slug !== data.slug &&
-    (await contentServiceServer.isDuplicateExistingSlug(
-      data.slug,
-      currentQuestion.id,
-      client,
-      'questions',
-    ))
+    (await contentServiceServer.isDuplicateExistingSlug(data.slug, currentQuestion.id, client, 'questions'))
   ) {
     return {
       status: 409,
@@ -181,9 +157,8 @@ async function validateRequest(
   }
 
   const isCreator = currentQuestion.created_by === profile.id;
-  const hasAdminRights = hasAdminRightsSupabase(profile);
 
-  if (!isCreator && !hasAdminRights) {
+  if (!isCreator && !hasAdminRights(profile)) {
     return { status: 403, statusText: 'Unauthorized' };
   }
 

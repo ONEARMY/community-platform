@@ -20,7 +20,7 @@ describe('[Profile]', () => {
     it('[Can view all public profile information]', () => {
       cy.step('Go to Profile');
       cy.visit(`/u/${eventReader.username}`);
-      cy.title().should('eq', `${eventReader.displayName} - Profile - Precious Plastic`);
+      cy.title().should('eq', `${eventReader.displayName} - Profile - Test Site`);
 
       cy.get('[data-cy=userDisplayName]').contains(eventReader.username);
       cy.get('[data-testid=library-stat]').contains('1');

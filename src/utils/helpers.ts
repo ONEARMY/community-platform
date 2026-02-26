@@ -53,20 +53,10 @@ export const getDay = (d: Date) => {
   return `${d.getDate()}`;
 };
 
-export const hasAdminRights = (user?: Partial<Profile>) => {
+export const hasAdminRights = (user?: DBProfile | Partial<Profile>) => {
   if (!user) {
     return false;
   }
-  const roles = user.roles && Array.isArray(user.roles) ? user.roles : [];
-
-  return roles.includes(UserRole.ADMIN);
-};
-
-export const hasAdminRightsSupabase = (user?: DBProfile) => {
-  if (!user) {
-    return false;
-  }
-
   const roles = user.roles && Array.isArray(user.roles) ? user.roles : [];
 
   return roles.includes(UserRole.ADMIN);
@@ -97,13 +87,6 @@ export const isUserContactable = (user: Partial<Profile>) => {
 export const isContactable = (preference: boolean | null) => {
   return typeof preference === 'boolean' ? preference : DEFAULT_PUBLIC_CONTACT_PREFERENCE;
 };
-
-export const getProjectEmail = (subject: string) => {
-  const siteName = import.meta.env.VITE_SITE_NAME || process.env.VITE_SITE_NAME;
-  return `mailto:platform@onearmy.earth?subject=${subject}%20${siteName}`;
-};
-
-export const randomIntFromInterval = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
 export const buildStatisticsLabel = ({
   stat,

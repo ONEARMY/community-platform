@@ -1,5 +1,3 @@
-export type SelectValue = { label: string; value: string };
-
 export class TenantSettings {
   siteName: string;
   siteUrl: string;
@@ -13,17 +11,9 @@ export class TenantSettings {
   questionsGuidelines: string;
   supportedModules: string;
   patreonId: string;
+  logoUrl: string;
 
   constructor(obj: Partial<TenantSettings>) {
     Object.assign(this, obj);
   }
 }
-
-export type UserEmailData = {
-  email: string;
-  code: string;
-  new_email?: string;
-  user_metadata: {
-    username: string;
-  };
-};

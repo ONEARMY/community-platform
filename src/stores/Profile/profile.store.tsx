@@ -88,7 +88,7 @@ export class ProfileStore {
   }
 
   get upgradeBadgeForCurrentUser() {
-    if (!this.profile || !this.upgradeBadges) {
+    if (!this.profile || !this.upgradeBadges || !Array.isArray(this.upgradeBadges)) {
       return undefined;
     }
 

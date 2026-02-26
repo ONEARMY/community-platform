@@ -8,7 +8,7 @@ describe('[Research]', () => {
 
   const authoredResearchArticleUrl = '/research/a-test-research';
   // const image = updates[0].images[0].publicUrl
-  const pageTitle = `${title} - Research - Precious Plastic`;
+  const pageTitle = `${title} - Research - Test Site`;
   const researchArticleUrl = `/research/${slug}`;
 
   describe('[Read a research article]', () => {
@@ -20,9 +20,7 @@ describe('[Research]', () => {
         cy.title().should('include', `Research`);
 
         cy.step('Displays Item count');
-        cy.contains(
-          `${MOCK_DATA.research.filter((r) => !r.deleted && !r.is_draft).length} ${label}`,
-        );
+        cy.contains(`${MOCK_DATA.research.filter((r) => !r.deleted && !r.is_draft).length} ${label}`);
 
         cy.step('Can search for items');
         cy.wait(2000);
@@ -76,7 +74,7 @@ describe('[Research]', () => {
         cy.visit(researchArticleUrl);
         cy.wait(1000);
 
-        cy.title().should('eq', `${article.title} - Research - Precious Plastic`);
+        cy.title().should('eq', `${article.title} - Research - Test Site`);
 
         cy.step('All metadata visible');
         cy.get('[data-cy=ContentStatistics-views]').contains(/\d/);
@@ -112,11 +110,7 @@ describe('[Research]', () => {
 
         cy.step('Breadcrumbs work');
         cy.get('[data-cy=breadcrumbsItem]').first().should('contain', 'Research');
-        cy.get('[data-cy=breadcrumbsItem]')
-          .first()
-          .children()
-          .should('have.attr', 'href')
-          .and('equal', `/research`);
+        cy.get('[data-cy=breadcrumbsItem]').first().children().should('have.attr', 'href').and('equal', `/research`);
 
         cy.get('[data-cy=breadcrumbsItem]').eq(2).should('contain', article.title);
 

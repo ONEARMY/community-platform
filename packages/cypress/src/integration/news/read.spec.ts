@@ -24,7 +24,7 @@ describe('[News.Read]', () => {
     it('[By Everyone]', () => {
       const { body, slug, title } = news;
 
-      const pageTitle = `${title} - News - Precious Plastic`;
+      const pageTitle = `${title} - News - Test Site`;
 
       cy.step('Can visit news');
       cy.visit(`/news/${slug}`);

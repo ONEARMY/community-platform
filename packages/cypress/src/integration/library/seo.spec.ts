@@ -4,7 +4,7 @@ describe('[Library]', () => {
   describe('[SEO Metadata]', () => {
     const { slug, title, description } = MOCK_DATA.projects[0];
 
-    const pageTitle = `${title} - Library - Precious Plastic`;
+    const pageTitle = `${title} - Library - Test Site`;
 
     it('[Populates title and description tags]', () => {
       cy.visit(`/library/${slug}`);

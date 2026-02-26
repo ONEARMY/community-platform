@@ -56,7 +56,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 async function loadNews(client: SupabaseClient, dbNews: DBNews) {
   await contentServiceServer.incrementViewCount(client, 'news', dbNews.total_views, dbNews!.id);
 
-  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(client, dbNews.id, 'news', dbNews.tags);
+  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(
+    client,
+    dbNews.id,
+    'news',
+    dbNews.tags,
+  );
 
   const heroImage = await newsServiceServer.getHeroImage(client, dbNews.hero_image);
 
@@ -81,12 +86,11 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 });
 
 export default function Index() {
-  const data = useLoaderData();
-  const news = data.news as News;
+  const data = useLoaderData<typeof loader>();
 
-  if (!news) {
+  if (!data.news) {
     return <NotFoundPage />;
   }
 
-  return <NewsPage news={news} />;
+  return <NewsPage news={data.news} />;
 }

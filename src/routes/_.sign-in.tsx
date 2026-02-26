@@ -32,13 +32,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
-  const { error, data } = await client.auth.signInWithPassword({
+  const signInResult = await client.auth.signInWithPassword({
     email,
     password,
   });
 
-  if (error) {
-    if (error.code === 'email_not_confirmed') {
+  if (signInResult.error) {
+    if (signInResult.error.code === 'email_not_confirmed') {
       const url = new URL(request.url);
       const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
       const emailRedirectUrl = `${protocol}//${url.host}/email-confirmation`;
@@ -50,7 +50,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         },
       });
 
-      return Response.json(
+      return data(
         {
           error: 'We need to confirm your email before logging in. Please check your inbox :)',
         },
@@ -58,8 +58,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       );
     }
 
-    console.error(error);
-    return Response.json(
+    console.error(signInResult.error);
+    return data(
       {
         error: 'Invalid email or password.',
       },
@@ -67,12 +67,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
   }
 
-  const fallbackPath = data.user?.user_metadata.username ? `/u/${data.user?.user_metadata.username}` : '/';
+  const fallbackPath = signInResult.data.user?.user_metadata.username
+    ? `/u/${signInResult.data.user?.user_metadata.username}`
+    : '/';
   const path = getReturnUrl(request, fallbackPath);
 
   try {
     // This will fail if there is already a profile for the current auth_id, or the auth_id is invalid (can be invalid the the credentials are wrong)
-    await new ProfileServiceServer(client).ensureProfile(data.user);
+    await new ProfileServiceServer(client).ensureProfile(signInResult.data.user);
   } catch (error) {
     console.error(error);
   }
@@ -87,7 +89,7 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 });
 
 export default function Index() {
-  const actionResponse: any = useActionData<typeof action>();
+  const actionResponse = useActionData<typeof action>();
 
   return (
     <Main style={{ flex: 1 }}>
@@ -136,11 +138,22 @@ export default function Index() {
 
                       <Flex sx={{ flexDirection: 'column' }}>
                         <Label htmlFor="title">Email</Label>
-                        <Field name="email" type="email" data-cy="email" component={FieldInput} validate={required} />
+                        <Field
+                          name="email"
+                          type="email"
+                          data-cy="email"
+                          component={FieldInput}
+                          validate={required}
+                        />
                       </Flex>
                       <Flex sx={{ flexDirection: 'column' }}>
                         <Label htmlFor="title">Password</Label>
-                        <PasswordField name="password" data-cy="password" component={FieldInput} validate={required} />
+                        <PasswordField
+                          name="password"
+                          data-cy="password"
+                          component={FieldInput}
+                          validate={required}
+                        />
                       </Flex>
                       <Flex sx={{ justifyContent: 'space-between' }}>
                         <Text sx={{ fontSize: 1 }} color={'grey'}>

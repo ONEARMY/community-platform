@@ -76,11 +76,9 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 });
 
 export default function Index() {
-  const data = useLoaderData();
-  const profile = data.profile as Profile;
-  const userCreatedDocs = data.userCreatedDocs as UserCreatedDocs;
+  const data = useLoaderData<typeof loader>();
 
-  if (!profile) {
+  if (!data.profile) {
     return (
       <Text
         sx={{
@@ -95,5 +93,5 @@ export default function Index() {
     );
   }
 
-  return <ProfilePage profile={profile} userCreatedDocs={userCreatedDocs} />;
+  return <ProfilePage profile={data.profile} userCreatedDocs={data.userCreatedDocs} />;
 }

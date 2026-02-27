@@ -1,7 +1,6 @@
-import type { LatLngBounds, Marker } from 'leaflet';
+import type { LatLngBounds, Map as LeafletMap, Marker } from 'leaflet';
 import type { ILatLng, MapPin, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
 import { useEffect, useMemo, useState } from 'react';
-import type { Map as MapType } from 'react-leaflet';
 import { useLocation, useNavigate } from 'react-router';
 import { Box, Flex } from 'theme-ui';
 import { MapList } from './Content/MapView/MapList';
@@ -34,33 +33,33 @@ const MapsPage = () => {
   const [loadingMessage, setLoadingMessage] = useState<string>('Loading...');
   const [isMobile, setIsMobile] = useState(false);
   const [zoom, setZoom] = useState<number>(2);
-  const [mapRef, setMapRef] = useState<MapType | null>(null);
+  const [mapRef, setMapRef] = useState<LeafletMap | null>(null);
   const [clusterGroupRef, setClusterGroupRef] = useState<any>(null);
 
   const updateMapView = (location: ILatLng, zoomLevel: number) => {
-    if (mapRef?.leafletElement) {
-      mapRef.leafletElement.setView([location.lat, location.lng], zoomLevel);
+    if (mapRef) {
+      mapRef.setView([location.lat, location.lng], zoomLevel);
     }
     setPinLocation(location);
     setZoom(zoomLevel);
   };
 
   const panMapTo = (location: ILatLng) => {
-    if (mapRef?.leafletElement) {
-      mapRef.leafletElement.panTo([location.lat, location.lng]);
+    if (mapRef) {
+      mapRef.panTo([location.lat, location.lng]);
     }
   };
 
   const fitMapBounds = (bounds: LatLngBounds) => {
-    if (mapRef?.leafletElement) {
-      mapRef.leafletElement.fitBounds(bounds);
+    if (mapRef) {
+      mapRef.fitBounds(bounds);
     }
   };
 
   const selectPinAndHandleCluster = (pin: MapPin) => {
     selectPin(pin);
 
-    const clusterGroup = clusterGroupRef?.leafletElement;
+    const clusterGroup = clusterGroupRef;
 
     if (clusterGroup?.getLayers && mapRef) {
       const allMarkers = clusterGroup.getLayers();

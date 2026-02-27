@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import type { ButtonProps as ThemeUiButtonProps } from 'theme-ui';
 import { Flex, Text, Button as ThemeUiButton } from 'theme-ui';
 import { Icon } from '../Icon/Icon';

@@ -55,7 +55,7 @@ export { InformationTooltip } from './InformationTooltip/InformationTooltip';
 export { InternalLink } from './InternalLink/InternalLink';
 export { LinkifyText } from './LinkifyText/LinkifyText';
 export { Loader } from './Loader/Loader';
-export { Map } from './Map/Map.client';
+export { type IProps as MapProps, Map } from './Map/Map.client';
 export { MapCardList } from './MapCardList/MapCardList';
 export { MapFilterListItem } from './MapFilterListItem/MapFilterListItem';
 export { MapWithPin } from './MapWithPin/MapWithPin.client';

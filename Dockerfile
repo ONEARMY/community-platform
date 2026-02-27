@@ -19,7 +19,6 @@ RUN corepack enable && \
 ARG VITE_BRANCH
 ARG VITE_SENTRY_DSN
 ARG VITE_GA_TRACKING_ID
-ARG VITE_THEME
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
@@ -37,15 +36,12 @@ RUN yarn install
 RUN --mount=type=secret,id=VITE_BRANCH \
     --mount=type=secret,id=VITE_SENTRY_DSN \
     --mount=type=secret,id=VITE_GA_TRACKING_ID \
-    --mount=type=secret,id=VITE_THEME \
     VITE_BRANCH="$(cat /run/secrets/VITE_BRANCH)" && \
     VITE_SENTRY_DSN="$(cat /run/secrets/VITE_SENTRY_DSN)" && \
     VITE_GA_TRACKING_ID="$(cat /run/secrets/VITE_GA_TRACKING_ID)" && \
-    VITE_THEME="$(cat /run/secrets/VITE_THEME)" && \
     echo "VITE_BRANCH=\"${VITE_BRANCH}\"" >> .env && \
     echo "VITE_SENTRY_DSN=\"${VITE_SENTRY_DSN}\"" >> .env && \
-    echo "VITE_GA_TRACKING_ID=\"${VITE_GA_TRACKING_ID}\"" >> .env && \
-    echo "VITE_THEME=\"${VITE_THEME}\"" >> .env
+    echo "VITE_GA_TRACKING_ID=\"${VITE_GA_TRACKING_ID}\"" >> .env
 
 # Build application
 RUN yarn run build

@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom/vitest';
-
 import { createMemoryRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router';
 import { act, render, waitFor, within } from '@testing-library/react';
 import { ThemeProvider } from '@theme-ui/core';
@@ -7,14 +6,10 @@ import { Provider } from 'mobx-react';
 import { UserRole } from 'oa-shared';
 import { FactoryNewsItem } from 'src/test/factories/News';
 import { FactoryUser } from 'src/test/factories/User';
-import { testingThemeStyles } from 'src/test/utils/themeUtils';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-
 import { NewsPage } from './NewsPage';
-
 import type { News } from 'oa-shared';
-
-const Theme = testingThemeStyles;
+import { theme } from 'oa-themes';
 
 const activeUser = FactoryUser({
   roles: [UserRole.BETA_TESTER],
@@ -104,7 +99,7 @@ const getWrapper = (news: News) => {
         user: activeUser,
       }}
     >
-      <ThemeProvider theme={Theme}>
+      <ThemeProvider theme={theme}>
         <RouterProvider router={router} />
       </ThemeProvider>
     </Provider>,

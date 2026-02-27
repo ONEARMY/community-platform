@@ -82,7 +82,9 @@ export const LibraryListHeader = (props: IProps) => {
     <CategoryHorizonalList
       allCategories={categories}
       activeCategory={category}
-      setActiveCategory={(updatedCategory) => updateFilter(LibrarySearchParams.category, (updatedCategory?.id || '').toString())}
+      setActiveCategory={(updatedCategory) =>
+        updateFilter(LibrarySearchParams.category, (updatedCategory?.id || '').toString())
+      }
     />
   );
 
@@ -124,7 +126,11 @@ export const LibraryListHeader = (props: IProps) => {
     <UserAction
       incompleteProfile={
         <>
-          <Link to="/settings" data-tooltip-id="tooltip" data-tooltip-content={listing.incompleteProfile}>
+          <Link
+            to="/settings"
+            data-tooltip-id="tooltip"
+            data-tooltip-content={listing.incompleteProfile}
+          >
             <Button type="button" data-cy="complete-profile-project" variant="disabled">
               {listing.create}
             </Button>
@@ -134,7 +140,11 @@ export const LibraryListHeader = (props: IProps) => {
       }
       loggedIn={
         <>
-          <DraftButton showDrafts={showDrafts} draftCount={draftCount} handleShowDrafts={handleShowDrafts} />
+          <DraftButton
+            showDrafts={showDrafts}
+            draftCount={draftCount}
+            handleShowDrafts={handleShowDrafts}
+          />
           <Link to="/library/create">
             <Button type="button" sx={{ width: '100%' }} variant="primary" data-cy="create-project">
               {listing.create}

@@ -15,7 +15,7 @@ export interface TextNotificationProps {
 
 export const TextNotification = (props: TextNotificationProps) => {
   if (!props.isVisible) {
-    return <></>;
+    return null;
   }
 
   return (

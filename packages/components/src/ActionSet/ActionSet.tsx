@@ -14,7 +14,7 @@ export const ActionSet = ({ children, itemType }: IProps) => {
 
   const toDisplay = children.filter((child) => !!child);
   if (!children || toDisplay.length === 0) {
-    return <></>;
+    return null;
   }
 
   const onClick = () => setShow((show) => !show);

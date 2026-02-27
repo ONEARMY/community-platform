@@ -1,5 +1,6 @@
 export class TenantSettings {
   siteName: string;
+  siteDescription: string;
   siteUrl: string;
   messageSignOff: string;
   emailFrom: string;
@@ -11,7 +12,10 @@ export class TenantSettings {
   questionsGuidelines: string;
   supportedModules: string;
   patreonId: string;
-  logoUrl: string;
+  colorPrimary: string;
+  colorPrimaryHover: string;
+  colorAccent: string;
+  colorAccentHover: string;
 
   constructor(obj: Partial<TenantSettings>) {
     Object.assign(this, obj);

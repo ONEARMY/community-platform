@@ -21,6 +21,7 @@ export class TenantSettingsService {
       .from('tenant_settings')
       .select(
         `site_name,
+        site_description,
         site_url,
         message_sign_off,
         email_from,
@@ -31,16 +32,22 @@ export class TenantSettingsService {
         profile_guidelines,
         questions_guidelines,
         supported_modules,
-        patreon_id`,
+        patreon_id,
+        color_primary,
+        color_primary_hover,
+        color_accent,
+        color_accent_hover`,
       )
       .single();
 
     const settings = new TenantSettings({
       siteName: data?.site_name || 'The Community Platform',
+      siteDescription: data?.site_description || 'The Community Platform',
       siteUrl: data?.site_url || 'https://community.preciousplastic.com',
       messageSignOff: data?.message_sign_off || 'One Army',
       emailFrom: data?.email_from || 'hello@onearmy.earth',
-      siteImage: data?.site_image || 'https://community.preciousplastic.com/assets/img/one-army-logo.png',
+      siteImage:
+        data?.site_image || 'https://community.preciousplastic.com/assets/img/one-army-logo.png',
       noMessaging: data?.no_messaging || false,
       academyResource: data?.academy_resource,
       libraryHeading: data?.library_heading,
@@ -48,6 +55,10 @@ export class TenantSettingsService {
       profileGuidelines: data?.profile_guidelines,
       questionsGuidelines: data?.questions_guidelines,
       supportedModules: data?.supported_modules,
+      colorPrimary: data?.color_primary,
+      colorPrimaryHover: data?.color_primary_hover,
+      colorAccent: data?.color_accent,
+      colorAccentHover: data?.color_accent_hover,
     });
 
     cache.set('tenant-settings', settings);

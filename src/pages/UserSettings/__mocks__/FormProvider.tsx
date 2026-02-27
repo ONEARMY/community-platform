@@ -1,10 +1,8 @@
 import { render } from '@testing-library/react';
 import { ThemeProvider } from '@theme-ui/core';
+import { theme } from 'oa-themes';
 import { createMemoryRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router';
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store';
-import { testingThemeStyles } from 'src/test/utils/themeUtils';
-
-const Theme = testingThemeStyles;
 
 export const FormProvider = (element: React.ReactNode, routerInitialEntry?: string) => {
   if (routerInitialEntry !== undefined) {
@@ -18,7 +16,7 @@ export const FormProvider = (element: React.ReactNode, routerInitialEntry?: stri
 
   return render(
     <ProfileStoreProvider>
-      <ThemeProvider theme={Theme}>
+      <ThemeProvider theme={theme}>
         <RouterProvider router={router} />
       </ThemeProvider>
     </ProfileStoreProvider>,

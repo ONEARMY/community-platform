@@ -1,4 +1,4 @@
-import type { PlatformTheme } from '../types';
+import { commonStyles } from './commonStyles';
 
 const BASE_BUTTON = {
   fontFamily: '"Varela Round", Arial, sans-serif',
@@ -14,90 +14,93 @@ const BASE_BUTTON = {
   height: '2.75rem',
 };
 
-export const getButtons = (colors: PlatformTheme['colors']) => ({
+const { black, white, softblue, red2, betaGreen, blue, grey, background, lightgrey } =
+  commonStyles.colors;
+
+export const buttons = {
   primary: {
     ...BASE_BUTTON,
-    color: colors.black,
-    backgroundColor: colors.accent.base,
+    color: black,
+    backgroundColor: 'var(--color-primary)',
     '&:hover': {
-      backgroundColor: colors.accent.hover,
+      backgroundColor: 'var(--color-primary-hover)',
     },
     '&[disabled]': {
       opacity: 0.5,
       cursor: 'not-allowed',
     },
     '&[disabled]:hover': {
-      backgroundColor: colors.accent.base,
+      backgroundColor: 'var(--color-primary)',
     },
   },
   disabled: {
     ...BASE_BUTTON,
-    color: colors.black,
-    backgroundColor: colors.accent.base,
+    color: black,
+    backgroundColor: 'var(--color-primary)',
     opacity: 0.5,
     '&:hover': {
-      backgroundColor: colors.accent.hover,
+      backgroundColor: 'var(--color-primary-hover)',
     },
   },
   secondary: {
     ...BASE_BUTTON,
-    border: '2px solid ' + colors.black,
-    color: colors.black,
-    backgroundColor: colors.softblue,
+    border: '2px solid ' + black,
+    color: black,
+    backgroundColor: softblue,
     '&:hover': {
-      backgroundColor: colors.white,
+      backgroundColor: white,
       cursor: 'pointer',
     },
     '&[disabled]': {
       opacity: 0.5,
     },
     '&[disabled]:hover': {
-      backgroundColor: colors.softblue,
+      backgroundColor: softblue,
     },
   },
   destructive: {
     ...BASE_BUTTON,
-    border: '2px solid ' + colors.black,
-    backgroundColor: colors.red2,
-    color: colors.black,
+    border: '2px solid ' + black,
+    backgroundColor: red2,
+    color: black,
     '&:hover': {
-      backgroundColor: colors.white,
+      backgroundColor: white,
     },
   },
   success: {
     ...BASE_BUTTON,
-    border: '2px solid ' + colors.black,
-    backgroundColor: colors.betaGreen,
-    color: colors.black,
+    border: '2px solid ' + black,
+    backgroundColor: betaGreen,
+    color: black,
     '&:hover': {
       filter: 'brightness(90%)',
     },
   },
   info: {
     ...BASE_BUTTON,
-    border: '2px solid ' + colors.black,
-    backgroundColor: colors.blue,
-    color: colors.black,
+    border: '2px solid ' + black,
+    backgroundColor: blue,
+    color: black,
     '&:hover': {
       filter: 'brightness(90%)',
     },
   },
   outline: {
     ...BASE_BUTTON,
-    border: '2px solid ' + colors.black,
-    color: colors.black,
+    border: '2px solid ' + black,
+    color: black,
     backgroundColor: 'transparent',
     '&:hover': {
-      backgroundColor: colors.softblue,
+      backgroundColor: softblue,
     },
   },
   quiet: {
     ...BASE_BUTTON,
-    border: '2px dashed ' + colors.grey,
-    color: colors.grey,
+    border: '2px dashed ' + grey,
+    color: grey,
     backgroundColor: 'transparent',
     '&:hover': {
-      backgroundColor: colors.background,
+      backgroundColor: background,
     },
     fontSize: 1,
   },
@@ -109,16 +112,16 @@ export const getButtons = (colors: PlatformTheme['colors']) => ({
   subtle: {
     ...BASE_BUTTON,
     borderWidth: 0,
-    color: colors.black,
+    color: black,
     backgroundColor: 'transparent',
     '&:hover': {
-      backgroundColor: colors.softblue,
+      backgroundColor: softblue,
     },
     '&[disabled]': {
       opacity: 0.5,
     },
     '&[disabled]:hover': {
-      backgroundColor: colors.softblue,
+      backgroundColor: softblue,
     },
   },
   breadcrumb: {
@@ -130,10 +133,10 @@ export const getButtons = (colors: PlatformTheme['colors']) => ({
     color: 'dimgray',
     fontSize: 15,
     '&:hover': {
-      backgroundColor: colors.softblue,
-      border: '1px solid ' + colors.lightgrey,
+      backgroundColor: softblue,
+      border: '1px solid ' + lightgrey,
     },
   },
-});
+};
 
 export type ButtonVariants = 'primary' | 'secondary' | 'outline' | 'disabled' | 'subtle';

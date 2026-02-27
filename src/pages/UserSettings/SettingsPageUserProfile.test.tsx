@@ -147,6 +147,7 @@ describe('UserSettings', () => {
     const mockTenantContext: TenantSettingsContext = {
       patreonId: '',
       siteName: 'Test Site',
+      siteDescription: '',
       siteUrl: 'https://test.com',
       messageSignOff: 'Test',
       emailFrom: 'test@test.com',
@@ -157,7 +158,10 @@ describe('UserSettings', () => {
       profileGuidelines: 'Guidelines',
       questionsGuidelines: 'Questions',
       supportedModules: 'modules',
-      logoUrl: '',
+      colorPrimary: '#fee77b',
+      colorPrimaryHover: '#ffde45',
+      colorAccent: '#fee77b',
+      colorAccentHover: '#ffde45',
       environment: {},
     };
 

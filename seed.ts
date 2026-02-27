@@ -99,10 +99,12 @@ const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
     display_name: 'Member',
     is_space: false,
     description: 'test',
-    image_url: 'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/map-member.svg',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/map-member.svg',
     map_pin_name: '',
     order: 1,
-    small_image_url: 'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/map-member.svg',
+    small_image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/map-member.svg',
   },
   {
     ..._TYPES_BASE,
@@ -122,13 +124,15 @@ const seedBadges = (): Partial<profile_badgesScalars>[] => [
     ..._BADGES_BASE,
     name: 'supporter',
     display_name: 'Supporter',
-    image_url: 'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/supporter.svg',
   },
   {
     ..._BADGES_BASE,
     name: 'pro',
     display_name: 'PRO',
-    image_url: 'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/pro.svg',
+    image_url:
+      'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/icons/pro.svg',
     premium_tier: 1,
   },
 ];
@@ -153,7 +157,10 @@ const seedUpgradeBadges = (badges: profile_badgesScalars[]): Partial<upgrade_bad
 };
 
 /// populates badges: 2/3 of profiles to have: 1 and 2 badges, others remain with no badge
-const seedBadgesRelations = (profiles: profilesScalars[], badges: profile_badgesScalars[]): Partial<profile_badges_relationsScalars>[] => {
+const seedBadgesRelations = (
+  profiles: profilesScalars[],
+  badges: profile_badgesScalars[],
+): Partial<profile_badges_relationsScalars>[] => {
   const relations: Partial<profile_badges_relationsScalars>[] = [];
 
   const profilesPerGroup = Math.ceil(profiles.length / 3);
@@ -390,16 +397,21 @@ const main = async () => {
   await seed.tenant_settings([
     {
       site_name: 'Local Development Community',
+      site_description:
+        'A series of tools to collaborate around the world. Connect, share and meet each other to tackle problems.',
       site_url: 'http://localhost:3000',
       message_sign_off: 'The Dev Team',
       email_from: 'platform@onearmy.earth',
-      site_image: 'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/precious-plastic/pp-logo.png',
-      site_favicon: 'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/precious-plastic/pp-logo.png',
+      site_image:
+        'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/precious-plastic/pp-logo.png',
+      site_favicon:
+        'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/precious-plastic/pp-logo.png',
       academy_resource: 'https://onearmy.github.io/academy/',
       no_messaging: false,
       library_heading: 'The largest open source library of plastic recycling tools',
       profile_guidelines: 'https://community.preciousplastic.com/academy/guides/platform',
-      questions_guidelines: 'https://community.preciousplastic.com/academy/guides/guidelines-questions',
+      questions_guidelines:
+        'https://community.preciousplastic.com/academy/guides/guidelines-questions',
       supported_modules: 'library,map,research,academy,questions,news',
       donation_settings: {
         defaultDescription:
@@ -410,6 +422,10 @@ const main = async () => {
         defaultImageUrl: '/assets/img/precious-plastic/donation-banner.jpg',
       },
       tenant_id,
+      color_primary: '#fee77b',
+      color_primary_hover: '#ffde45',
+      color_accent: '#fee77b',
+      color_accent_hover: '#ffde45',
     },
   ]);
 

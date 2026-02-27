@@ -1,7 +1,15 @@
 import { commonStyles } from './commonStyles';
 
 export const baseTheme = {
-  colors: commonStyles.colors,
+  colors: {
+    ...commonStyles.colors,
+    // Theme-specific colors use CSS variables for dynamic theming
+    primary: { base: 'var(--color-primary)', hover: 'var(--color-primary-hover)' },
+    accent: {
+      base: 'var(--color-accent)',
+      hover: 'var(--color-accent-hover)',
+    },
+  },
   zIndex: {
     behind: -1,
     level: 0,

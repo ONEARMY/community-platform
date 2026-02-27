@@ -33,6 +33,7 @@ import { patreonService } from 'src/services/patreonService';
 const mockTenantContext: TenantSettingsContext = {
   patreonId: 'mock-patreon-client-id',
   siteName: 'Test Site',
+  siteDescription: '',
   siteUrl: 'https://test.com',
   messageSignOff: 'Test',
   emailFrom: 'test@test.com',
@@ -43,7 +44,10 @@ const mockTenantContext: TenantSettingsContext = {
   profileGuidelines: 'Guidelines',
   questionsGuidelines: 'Questions',
   supportedModules: 'modules',
-  logoUrl: '',
+  colorPrimary: '#fee77b',
+  colorPrimaryHover: '#ffde45',
+  colorAccent: '#fee77b',
+  colorAccentHover: '#ffde45',
   environment: {},
 };
 

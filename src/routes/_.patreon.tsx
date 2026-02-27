@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from 'react-router';
-import { redirect } from 'react-router';
+import { data, redirect } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { PatreonServiceServer } from 'src/services/patreonService.server';
@@ -13,7 +13,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
 
   if (!patreonCode) {
-    return Response.json({ error: 'No code provided' }, { status: 400, headers });
+    return data({ error: 'No code provided' }, { status: 400, headers });
   }
 
   try {
@@ -26,14 +26,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
     const origin = `${protocol}//${url.host}`;
 
-    await new PatreonServiceServer(client).verifyAndUpdatePatreonUser(patreonCode, claims.data.claims.sub, origin);
+    await new PatreonServiceServer(client).verifyAndUpdatePatreonUser(
+      patreonCode,
+      claims.data.claims.sub,
+      origin,
+    );
 
     return redirect('/settings/account', { headers });
   } catch (error) {
     console.error('Error verifying patreon code', error);
   }
 
-  return null;
+  return data({}, { headers });
 }
 
 export const meta = mergeMeta<typeof loader>(() => {
@@ -52,7 +56,9 @@ export default function Index() {
           mt: 15,
         }}
       >
-        <Text>Sorry, we encountered an error integrating your Patreon account. Please try again later!</Text>
+        <Text>
+          Sorry, we encountered an error integrating your Patreon account. Please try again later!
+        </Text>
       </Flex>
     </Main>
   );

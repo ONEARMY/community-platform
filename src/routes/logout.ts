@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs } from 'react-router';
-import { redirect } from 'react-router';
+import { data, redirect } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
 export const loader = async ({ request }: ActionFunctionArgs) => {
@@ -8,7 +8,7 @@ export const loader = async ({ request }: ActionFunctionArgs) => {
   const { error } = await client.auth.signOut();
 
   if (error) {
-    return Response.json({ success: false }, { headers });
+    return data({ success: false }, { headers });
   }
 
   const url = new URL(request.url);

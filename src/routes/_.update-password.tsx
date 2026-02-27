@@ -2,7 +2,7 @@ import { Button, FieldInput, HeroBanner } from 'oa-components';
 import { useEffect } from 'react';
 import { Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { Link, redirect, useActionData, useLoaderData, useNavigate } from 'react-router';
+import { data, Link, redirect, useActionData, useLoaderData, useNavigate } from 'react-router';
 import { PasswordField } from 'src/common/Form/PasswordField';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -16,21 +16,17 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const { client, headers } = createSupabaseServerClient(request);
 
-  if (error) {
-    return Response.json({ error }, { headers });
-  }
-
-  if (token) {
-    return Response.json({ token }, { headers });
+  if (error || token) {
+    return data({ token, error }, { headers });
   }
 
   const claims = await client.auth.getClaims();
 
   if (claims.data?.claims) {
-    return Response.json({}, { headers });
+    return data({ error: null }, { headers });
   }
 
-  return redirect('/');
+  return redirect('/', { headers });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -42,14 +38,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const passwordRepeat = formData.get('passwordRepeat') as string;
 
   if (password !== passwordRepeat) {
-    return Response.json({ error: 'Passwords do not match' }, { status: 400, headers });
+    return data({ success: false, error: 'Passwords do not match' }, { status: 400, headers });
   }
 
   // Get the token from URL params (it should still be there)
   const token = url.searchParams.get('token');
 
   if (!token) {
-    return Response.json({ error: 'Your reset link is invalid' }, { status: 400, headers });
+    return data({ success: false, error: 'Your reset link is invalid' }, { status: 400, headers });
   }
 
   const tokenVerification = await client.auth.verifyOtp({
@@ -58,8 +54,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   });
 
   if (!tokenVerification.data.user) {
-    return Response.json(
-      { error: 'Your reset link has expired or is invalid' },
+    return data(
+      { success: false, error: 'Your reset link has expired or is invalid' },
       { status: 400, headers },
     );
   }
@@ -68,7 +64,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await client.auth.updateUser({ password });
 
   if (result.error) {
-    return Response.json({ error: result.error.message }, { status: 500, headers });
+    return data({ success: false, error: result.error.message }, { status: 500, headers });
   }
 
   // Redirect with the session headers to automatically log in the user
@@ -77,8 +73,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Index() {
   const navigate = useNavigate();
-  const data: any = useLoaderData<typeof loader>();
-  const actionData: any = useActionData<typeof action>();
+  const data = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
 
   useEffect(() => {
     if (actionData?.success) {

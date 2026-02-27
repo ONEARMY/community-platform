@@ -18,16 +18,26 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const result = await libraryServiceServer.getBySlug(client, params.slug as string);
 
   if (result.error || !result.data) {
-    return Response.json({ project: null }, { headers });
+    return data({ project: null }, { headers });
   }
 
   const dbProject = result.data as unknown as DBProject;
 
   if (dbProject.id) {
-    await contentServiceServer.incrementViewCount(client, 'projects', dbProject.total_views, dbProject.id);
+    await contentServiceServer.incrementViewCount(
+      client,
+      'projects',
+      dbProject.total_views,
+      dbProject.id,
+    );
   }
 
-  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(client, dbProject.id, 'projects', dbProject.tags);
+  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(
+    client,
+    dbProject.id,
+    'projects',
+    dbProject.tags,
+  );
 
   const images = libraryServiceServer.getProjectPublicMedia(dbProject, client);
 
@@ -59,12 +69,11 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 });
 
 export default function Index() {
-  const data = useLoaderData();
-  const project = data.project as Project;
+  const data = useLoaderData<typeof loader>();
 
-  if (!project) {
+  if (!data.project) {
     return <NotFoundPage />;
   }
 
-  return <ProjectPage item={project} />;
+  return <ProjectPage item={data.project} />;
 }

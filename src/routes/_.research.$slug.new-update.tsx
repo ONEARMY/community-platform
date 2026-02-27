@@ -1,7 +1,7 @@
 import type { DBResearchItem } from 'oa-shared';
 import { ResearchItem } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
-import { redirect, useLoaderData } from 'react-router';
+import { data, redirect, useLoaderData } from 'react-router';
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
@@ -19,7 +19,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const result = await researchServiceServer.getBySlug(client, params.slug as string);
 
   if (result.error || !result.item) {
-    return Response.json({ research: null }, { headers });
+    return redirect('/research', { headers });
   }
 
   const username = claims.data.claims.user_metadata.username;
@@ -30,12 +30,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirect('/forbidden?page=research-edit-create', { headers });
   }
 
-  return Response.json({ research }, { headers });
+  return data({ research }, { headers });
 }
 
 export default function Index() {
-  const data: any = useLoaderData<typeof loader>();
-  const research = data.research as ResearchItem;
+  const data = useLoaderData<typeof loader>();
 
-  return <ResearchUpdateForm research={research} />;
+  return <ResearchUpdateForm research={data.research} />;
 }

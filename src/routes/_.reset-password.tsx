@@ -36,7 +36,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   });
 
   // Always return success and display a generic message, even when the user doesn't exist, for security reasons.
-  return Response.json({ success: true, email: formData.get('email') }, { headers });
+  return data({ success: true, email: formData.get('email') as string, error: null }, { headers });
 };
 
 export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
@@ -46,7 +46,7 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 });
 
 export default function Index() {
-  const actionResponse: any = useActionData<typeof action>();
+  const actionResponse = useActionData<typeof action>();
   const navigate = useNavigate();
 
   return (
@@ -92,7 +92,8 @@ export default function Index() {
                             >
                               {actionResponse?.email || 'your email address'}
                             </Text>
-                            . If it's a registered account you will receive an email with instructions.
+                            . If it's a registered account you will receive an email with
+                            instructions.
                             <br />
                             <br />
                             Please check you inbox (and spam folder).
@@ -123,7 +124,13 @@ export default function Index() {
                         <>
                           <Flex sx={{ flexDirection: 'column' }}>
                             <Label htmlFor="title">Email</Label>
-                            <Field name="email" type="email" data-cy="email" component={FieldInput} validate={required} />
+                            <Field
+                              name="email"
+                              type="email"
+                              data-cy="email"
+                              component={FieldInput}
+                              validate={required}
+                            />
                           </Flex>
 
                           <Flex>

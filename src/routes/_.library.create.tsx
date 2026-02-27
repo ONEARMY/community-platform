@@ -1,3 +1,4 @@
+import { data } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
 import { UserAction } from 'src/common/UserAction';
 import { LibraryForm } from 'src/pages/Library/Content/Common/Library.form';
@@ -15,7 +16,7 @@ export async function loader({ request }) {
     return redirectServiceServer.redirectSignIn('/library/create', headers);
   }
 
-  return Response.json({}, { headers });
+  return data({}, { headers });
 }
 
 export default function Index() {

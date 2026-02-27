@@ -1,5 +1,5 @@
 import { Select } from 'oa-components';
-import * as React from 'react';
+import React from 'react';
 import { Flex, Text } from 'theme-ui';
 
 import { FieldContainer } from './FieldContainer';

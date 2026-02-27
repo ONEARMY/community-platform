@@ -1,17 +1,34 @@
-import type { LatLngExpression } from 'leaflet';
+import type { LatLngExpression, Map as LeafletMap } from 'leaflet';
 // biome-ignore lint/suspicious/noShadowRestrictedNames: this is an external library import
 import { Button, Map } from 'oa-components';
 import { useContext, useEffect, useRef } from 'react';
-import type { Map as MapType } from 'react-leaflet';
+import { useMapEvents } from 'react-leaflet';
 import { Box, Flex } from 'theme-ui';
 import { MapContext } from '../../MapContext';
 import { ButtonZoomIn } from './ButtonZoomIn.client';
 import { Clusters } from './Cluster.client';
 import { Popup } from './Popup.client';
 
+// Component to handle map events
+function MapEventsHandler({
+  onLocationChange,
+  onMapClick,
+}: {
+  onLocationChange: () => void;
+  onMapClick: () => void;
+}) {
+  useMapEvents({
+    dragend: onLocationChange,
+    zoomend: onLocationChange,
+    resize: onLocationChange,
+    click: onMapClick,
+  });
+  return null;
+}
+
 export const MapView = () => {
   const mapState = useContext(MapContext);
-  const mapRef = useRef<MapType>(null);
+  const mapRef = useRef<LeafletMap>(null);
   const clusterGroupRef = useRef<any>(null);
 
   useEffect(() => {
@@ -32,7 +49,7 @@ export const MapView = () => {
 
   const handleLocationChange = () => {
     if (mapRef.current) {
-      mapState.setBoundaries(mapRef.current.leafletElement.getBounds());
+      mapState.setBoundaries(mapRef.current.getBounds());
     }
   };
 
@@ -42,74 +59,74 @@ export const MapView = () => {
     : [0, 0];
 
   return (
-    <Map
-      ref={mapRef}
-      className="markercluster-map"
-      center={mapCenter}
-      zoom={mapState.zoom}
-      setZoom={mapState.setZoom}
-      maxZoom={18}
-      style={{ flex: 1, backgroundColor: '#AAD3DF' }}
-      zoomControl={isViewportGreaterThanTablet}
-      onclick={() => mapState.selectPin(null)}
-      ondragend={handleLocationChange}
-      onzoomend={handleLocationChange}
-      onresize={isViewportGreaterThanTablet ? handleLocationChange : undefined}
-      useFlyTo
-    >
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          padding: 4,
-          zIndex: 1001,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 2,
-        }}
+    <Box className="markercluster-map" sx={{ flex: 1 }}>
+      <Map
+        ref={mapRef}
+        center={mapCenter}
+        zoom={mapState.zoom}
+        setZoom={mapState.setZoom}
+        maxZoom={18}
+        style={{ flex: 1, backgroundColor: '#AAD3DF', height: '100%', width: '100%' }}
+        zoomControl={isViewportGreaterThanTablet}
       >
-        <ButtonZoomIn
-          setCenter={(value) => mapState.setLocation(value)}
-          setZoom={mapState.setZoom}
+        <MapEventsHandler
+          onLocationChange={handleLocationChange}
+          onMapClick={() => mapState.selectPin(null)}
         />
-      </Box>
-
-      <Flex
-        sx={{
-          flexDirection: 'column',
-          alignItems: 'center',
-          padding: 2,
-          gap: 2,
-        }}
-      >
-        <Button
-          data-cy="ShowMobileListButton"
-          icon="step"
-          sx={{ display: ['flex', 'flex', 'none'], zIndex: 1000 }}
-          onClick={() => mapState.setIsMobile(true)}
-          small
-        >
-          Show list view
-        </Button>
-      </Flex>
-      {mapState.filteredPins && (
-        <Clusters
-          pins={mapState.filteredPins}
-          onPinClick={mapState.selectPinWithClusterCheck}
-          onClusterClick={(cluster) => {
-            mapState.fitBounds(cluster.getBounds());
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            padding: 4,
+            zIndex: 1001,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
           }}
-          clusterGroupRef={clusterGroupRef}
-        />
-      )}
-      {mapState.selectedPin && (
-        <Popup
-          activePin={mapState.selectedPin}
-          mapRef={mapRef}
-          onClose={() => mapState.selectPin(null)}
-        />
-      )}
-    </Map>
+        >
+          <ButtonZoomIn
+            setCenter={(value) => mapState.setLocation(value)}
+            setZoom={mapState.setZoom}
+          />
+        </Box>
+
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: 2,
+            gap: 2,
+          }}
+        >
+          <Button
+            data-cy="ShowMobileListButton"
+            icon="step"
+            sx={{ display: ['flex', 'flex', 'none'], zIndex: 1000 }}
+            onClick={() => mapState.setIsMobile(true)}
+            small
+          >
+            Show list view
+          </Button>
+        </Flex>
+        {mapState.filteredPins && mapState.filteredPins.length > 0 && (
+          <Clusters
+            pins={mapState.filteredPins}
+            onPinClick={mapState.selectPinWithClusterCheck}
+            onClusterClick={(cluster) => {
+              mapState.fitBounds(cluster.getBounds());
+            }}
+            clusterGroupRef={clusterGroupRef}
+          />
+        )}
+        {mapState.selectedPin && (
+          <Popup
+            activePin={mapState.selectedPin}
+            mapRef={mapRef}
+            onClose={() => mapState.selectPin(null)}
+          />
+        )}
+      </Map>
+    </Box>
   );
 };

@@ -20,7 +20,8 @@ export const visitorDisplayData = new Map<UserVisitorPreferencePolicy, DisplayDa
     {
       icon: iconMap.visitorsAppointment,
       label: 'Visitors after appointment',
-      default: 'This space prefers an appointment before visiting it. See their contact options, or get in touch directly!',
+      default:
+        'This space prefers an appointment before visiting it. See their contact options, or get in touch directly!',
     },
   ],
   [
@@ -44,7 +45,7 @@ export const VisitorModal = ({ show, hide, user }: VisitorModalProps) => {
   const displayData = visitorPolicy && visitorDisplayData.get(visitorPolicy.policy);
 
   if (!displayData) {
-    return <></>;
+    return null;
   }
 
   return (

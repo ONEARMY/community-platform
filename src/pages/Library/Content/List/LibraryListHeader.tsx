@@ -93,10 +93,7 @@ export const LibraryListHeader = (props: IProps) => {
           <Select
             options={LibrarySortOptions.toArray(!!q)}
             placeholder={listing.sort}
-            value={{
-              label: LibrarySortOptions.get(sort),
-              value: sort,
-            }}
+            value={sort ? { label: LibrarySortOptions.get(sort), value: sort } : undefined}
             onChange={(sortBy) => updateFilter(LibrarySearchParams.sort, sortBy.value)}
           />
         </FieldContainer>

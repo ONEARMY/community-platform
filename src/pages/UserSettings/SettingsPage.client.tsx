@@ -25,7 +25,7 @@ export const SettingsPage = observer(() => {
   const { pathname } = useLocation();
 
   const isMember = !profile?.type?.isSpace;
-  const showImpactTab = !isMember && tenantContext?.siteName === 'Precious Plastic';
+  const showImpactTab = !isMember && tenantContext?.showImpact;
   const showMapTab = isModuleSupported(tenantContext?.supportedModules || '', MODULE.MAP);
 
   const tabs: ISettingsTab[] = useMemo(

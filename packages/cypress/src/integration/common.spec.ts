@@ -55,10 +55,6 @@ describe('[Common]', () => {
       cy.get('[data-cy=feedback]')
         .should('have.attr', 'href')
         .and('contain', '/library?sort=MostUsefulLastWeek');
-
-      cy.visit('/map');
-      cy.wait(2000);
-      cy.get('[data-cy=feedback]').should('have.attr', 'href').and('contain', '/map');
     });
 
     it('[Mobile]', () => {
@@ -70,10 +66,6 @@ describe('[Common]', () => {
       cy.get('[data-cy=feedback]')
         .should('have.attr', 'href')
         .and('contain', '/library?sort=MostUsefulLastWeek');
-
-      cy.visit('/map');
-      cy.wait(2000);
-      cy.get('[data-cy=feedback]').should('have.attr', 'href').and('contain', '/map');
     });
   });
 

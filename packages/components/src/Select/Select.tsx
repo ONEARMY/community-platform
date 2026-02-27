@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import type { OptionsOrGroups, Props as ReactSelectProps, StylesConfig } from 'react-select';
 import ReactSelect from 'react-select';
 import { useThemeUI } from 'theme-ui';
@@ -25,6 +26,7 @@ export interface Props extends ReactSelectProps {
 
 export const Select = (props: Props) => {
   const { theme } = useThemeUI() as any;
+  const uuid = useId();
 
   const SelectStyles: Partial<StylesConfig> = {
     container: (provided) => ({
@@ -203,7 +205,8 @@ export const Select = (props: Props) => {
 
   return (
     <ReactSelect
-      classNamePrefix={'data-cy'}
+      classNamePrefix="data-cy"
+      instanceId={uuid}
       components={{ DropdownIndicator, Option }}
       defaultValue={props.defaultValue}
       getOptionLabel={props.getOptionLabel && props.getOptionLabel}

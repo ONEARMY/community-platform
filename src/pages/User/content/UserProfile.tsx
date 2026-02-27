@@ -4,7 +4,6 @@ import { PremiumTier } from 'oa-shared';
 import { useContext, useState } from 'react';
 import { useLocation } from 'react-router';
 import { PremiumTierWrapper } from 'src/common/PremiumTierWrapper';
-import { isPreciousPlastic } from 'src/config/config';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { isContactable } from 'src/utils/helpers';
@@ -30,7 +29,8 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
   const tenantContext = useContext(TenantContext);
 
   const isMember = !type?.isSpace;
-  const hasContactOption = (!tenantContext?.noMessaging && isContactable(user.isContactable)) || !!user.website;
+  const hasContactOption =
+    (!tenantContext?.noMessaging && isContactable(user.isContactable)) || !!user.website;
   const hasContributed = docs?.projects.length + docs?.research.length + docs?.questions.length > 0;
   const hasImpacted = !!impact;
   const hasProfile = about || (tags && Object.keys(tags).length !== 0) || hasContributed;
@@ -94,7 +94,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
                     Contributions
                   </Tab>
                 )}
-                {hasImpacted && isPreciousPlastic() && (
+                {hasImpacted && tenantContext?.showImpact && (
                   <Tab data-cy="ImpactTab" value="impact">
                     {heading}
                   </Tab>
@@ -113,7 +113,7 @@ export const UserProfile = ({ docs, isViewingOwnProfile, user }: IProps) => {
                   <UserCreatedDocuments columns={isMember ? 1 : 2} docs={docs} />
                 </TabPanel>
               )}
-              {hasImpacted && isPreciousPlastic() && (
+              {hasImpacted && tenantContext?.showImpact && (
                 <TabPanel value="impact">
                   <Impact impact={impact} user={user} />
                 </TabPanel>

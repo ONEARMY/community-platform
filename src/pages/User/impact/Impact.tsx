@@ -4,7 +4,7 @@ import { IMPACT_YEARS } from './constants';
 import { ImpactItem } from './ImpactItem';
 
 interface Props {
-  impact: IUserImpact | undefined;
+  impact: IUserImpact | null;
   user: Profile | undefined;
 }
 

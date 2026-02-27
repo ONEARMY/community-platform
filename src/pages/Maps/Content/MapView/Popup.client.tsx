@@ -1,22 +1,21 @@
+import type { Map as LeafletMap, Popup as LeafletPopupType } from 'leaflet';
 import { Point } from 'leaflet';
 import { PinProfile } from 'oa-components';
 import type { ILatLng, MapPin } from 'oa-shared';
 import React, { useEffect, useRef } from 'react';
-// biome-ignore lint/suspicious/noShadowRestrictedNames: this is an external library import
-import type { Map } from 'react-leaflet';
 import { Popup as LeafletPopup } from 'react-leaflet';
 
 import './popup.css';
 
 interface IProps {
   activePin: MapPin;
-  mapRef: React.RefObject<Map | null>;
+  mapRef: React.RefObject<LeafletMap | null>;
   onClose?: () => void;
   customPosition?: ILatLng;
 }
 
 export const Popup = (props: IProps) => {
-  const leafletRef = useRef<LeafletPopup>(null);
+  const leafletRef = useRef<LeafletPopupType>(null);
   const { mapRef, onClose, customPosition } = props;
 
   useEffect(() => {
@@ -27,7 +26,7 @@ export const Popup = (props: IProps) => {
   // open on props change
   const openPopup = () => {
     if (leafletRef.current && mapRef.current) {
-      leafletRef.current.leafletElement.openOn(mapRef.current!.leafletElement);
+      leafletRef.current.openOn(mapRef.current);
     }
   };
 

@@ -4,7 +4,11 @@
     "type": "git",
     "url": "https://github.com/ONEARMY/community-platform.git"
   },
-  "workspaces": ["shared", "packages/*", "scripts"],
+  "workspaces": [
+    "shared",
+    "packages/*",
+    "scripts"
+  ],
   "private": true,
   "main": "lib/index.js",
   "type": "module",
@@ -38,10 +42,18 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,ts,tsx,json}": ["biome check --write --no-errors-on-unmatched"]
+    "*.{js,ts,tsx,json}": [
+      "biome check --write --no-errors-on-unmatched"
+    ]
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all", "iOS >= 15", "safari >= 15"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all",
+      "iOS >= 15",
+      "safari >= 15"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
@@ -59,11 +71,11 @@
     "@emotion/server": "^11.11.0",
     "@emotion/styled": "^11.14.1",
     "@react-email/components": "0.3.3",
-    "@react-router/express": "^7.10.1",
-    "@react-router/fs-routes": "^7.10.1",
-    "@react-router/node": "^7.10.1",
-    "@sentry/react": "10.29.0",
-    "@sentry/react-router": "^10.29.0",
+    "@react-router/express": "^7.13.1",
+    "@react-router/fs-routes": "^7.13.1",
+    "@react-router/node": "^7.13.1",
+    "@sentry/react": "10.40.0",
+    "@sentry/react-router": "^10.40.0",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.76.1",
     "@uppy/core": "^5.2.0",
@@ -104,7 +116,7 @@
     "react-highlight-words": "^0.21.0",
     "react-leaflet": "^2.5.0",
     "react-leaflet-markercluster": "^2.0.0-rc3",
-    "react-router": "^7.10.1",
+    "react-router": "^7.13.1",
     "react-spring": "^10.0.3",
     "react-tooltip": "^5.30.0",
     "remix-utils": "^9.0.0",
@@ -116,7 +128,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.3.14",
     "@faker-js/faker": "^10.1.0",
-    "@react-router/dev": "^7.10.1",
+    "@react-router/dev": "^7.13.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@snaplet/copycat": "^6.0.0",
@@ -157,5 +169,5 @@
     "npm": "please-use-yarn",
     "node": ">=22.18.0"
   },
-  "packageManager": "yarn@4.5.1"
+  "packageManager": "yarn@4.12.0"
 }

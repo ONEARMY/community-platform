@@ -10,7 +10,7 @@ export interface LoaderProps {
 export const Loader = ({ label, sx }: LoaderProps) => {
   return (
     <Flex sx={{ flexWrap: 'wrap', justifyContent: 'center', ...sx }}>
-      <Spinner sx={{ color: commonStyles.colors.darkGrey }} />
+      <Spinner aria-label="Loading..." sx={{ color: commonStyles.colors.darkGrey }} />
       {label && <Text sx={{ width: '100%', textAlign: 'center' }}>{label}</Text>}
     </Flex>
   );

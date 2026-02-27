@@ -8,14 +8,12 @@ import { Provider } from 'mobx-react';
 import { UserRole } from 'oa-shared';
 import { FactoryQuestionItem } from 'src/test/factories/Question';
 import { FactoryUser } from 'src/test/factories/User';
-import { testingThemeStyles } from 'src/test/utils/themeUtils';
+import { theme } from 'oa-themes';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { QuestionPage } from './QuestionPage';
 
 import type { Question } from 'oa-shared';
-
-const Theme = testingThemeStyles;
 
 const activeUser = FactoryUser({
   roles: [UserRole.BETA_TESTER],
@@ -162,7 +160,7 @@ const getWrapper = (question: Question) => {
         user: activeUser,
       }}
     >
-      <ThemeProvider theme={Theme}>
+      <ThemeProvider theme={theme}>
         <RouterProvider router={router} />
       </ThemeProvider>
     </Provider>,

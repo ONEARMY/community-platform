@@ -7,4 +7,4 @@ export { commonStyles, preciousPlasticTheme, projectKampTheme, fixingFashionThem
 
 export { GlobalFonts } from './fonts';
 
-export type { PlatformTheme, ThemeWithName } from './types';
+export type { PlatformTheme } from './types';

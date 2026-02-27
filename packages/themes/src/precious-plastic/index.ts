@@ -1,10 +1,18 @@
+import { baseTheme } from '../common';
+import { getButtons } from '../common/button';
+
 import type { PlatformTheme } from '../types';
-import { styles } from './styles';
+
+export type { ButtonVariants } from '../common/button';
+
+const colors = {
+  ...baseTheme.colors,
+  primary: '#fee77b',
+  accent: { base: '#fee77b', hover: '#ffde45' },
+};
 
 export const Theme: PlatformTheme = {
-  id: 'precious-plastic',
-  siteName: 'Precious Plastic',
-  description:
-    'A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste.',
-  styles,
+  ...baseTheme,
+  buttons: getButtons(colors),
+  colors,
 };

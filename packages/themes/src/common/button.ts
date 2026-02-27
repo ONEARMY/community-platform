@@ -1,4 +1,4 @@
-import type { ThemeWithName } from '../types';
+import type { PlatformTheme } from '../types';
 
 const BASE_BUTTON = {
   fontFamily: '"Varela Round", Arial, sans-serif',
@@ -14,7 +14,7 @@ const BASE_BUTTON = {
   height: '2.75rem',
 };
 
-export const getButtons = (colors: ThemeWithName['colors']) => ({
+export const getButtons = (colors: PlatformTheme['colors']) => ({
   primary: {
     ...BASE_BUTTON,
     color: colors.black,

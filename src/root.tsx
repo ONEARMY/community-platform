@@ -7,7 +7,6 @@ import type { LinksFunction, MetaFunction } from 'react-router';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 import { VITE_THEME } from './config/config';
 import { ClientStyleContext, ServerStyleContext } from './styles/context';
-import { generateTags } from './utils/seo.utils';
 
 interface DocumentProps {
   children: React.ReactNode;
@@ -51,7 +50,11 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
         <Meta />
         <Links />
         {serverStyleData?.map(({ key, ids, css }) => (
-          <style key={key} data-emotion={`${key} ${ids.join(' ')}`} dangerouslySetInnerHTML={{ __html: css }} />
+          <style
+            key={key}
+            data-emotion={`${key} ${ids.join(' ')}`}
+            dangerouslySetInnerHTML={{ __html: css }}
+          />
         ))}
       </head>
       <body>
@@ -86,23 +89,22 @@ export const links: LinksFunction = () => {
 };
 
 export const meta: MetaFunction = () => {
-  const theme = getEnvironmentTheme();
-  const tags = generateTags(theme.siteName, theme.description);
-
   if (import.meta.env.VITE_BRANCH !== 'production') {
-    tags.push({
-      name: 'robots',
-      content: 'noindex',
-    });
+    return [
+      {
+        name: 'robots',
+        content: 'noindex',
+      },
+    ];
   }
 
-  return tags;
+  return [];
 };
 
 export default function Root() {
   return (
     <Document>
-      <ThemeProvider theme={getEnvironmentTheme().styles}>
+      <ThemeProvider theme={getEnvironmentTheme()}>
         <Outlet />
         <Global styles={GlobalStyles} />
       </ThemeProvider>

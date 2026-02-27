@@ -1,10 +1,18 @@
+import { baseTheme } from '../common';
+import { getButtons } from '../common/button';
+
 import type { PlatformTheme } from '../types';
-import { StyledComponentTheme } from './styles';
+
+export type { ButtonVariants } from '../common/button';
+
+const colors = {
+  ...baseTheme.colors,
+  primary: '#8ab57f',
+  accent: { base: '#8ab57f', hover: 'hsl(108, 25%, 68%)' },
+};
 
 export const Theme: PlatformTheme = {
-  id: 'project-kamp',
-  siteName: 'Project Kamp',
-  description:
-    'A series of tools for the Project Kamp community to collaborate around the world. Connect, share and meet each other to try and figure out how to life more sustainable.',
-  styles: StyledComponentTheme,
+  ...baseTheme,
+  colors,
+  buttons: getButtons(colors),
 };

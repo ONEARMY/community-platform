@@ -1,11 +1,4 @@
 export interface PlatformTheme {
-  id: string;
-  siteName: string;
-  description: string;
-  styles: ThemeWithName;
-}
-
-export interface ThemeWithName {
   text: any;
   colors: {
     white: string;

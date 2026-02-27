@@ -1,10 +1,18 @@
+import { baseTheme } from '../common';
+import { getButtons } from '../common/button';
+
 import type { PlatformTheme } from '../types';
-import { StyledComponentTheme } from './styles';
+
+export type { ButtonVariants } from '../common/button';
+
+const colors = {
+  ...baseTheme.colors,
+  primary: '#f82f03',
+  accent: { base: '#f82f03', hover: 'hsl(14, 81%, 63%)' },
+};
 
 export const Theme: PlatformTheme = {
-  id: 'fixing-fashion',
-  siteName: 'Fixing Fashion',
-  description:
-    'A series of tools for the Fixing Fashion community to collaborate around the world. Connect, share and meet each other to reduce textile waste.',
-  styles: StyledComponentTheme,
+  ...baseTheme,
+  colors,
+  buttons: getButtons(colors),
 };

@@ -18,7 +18,7 @@ const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>
       ]);
 
       return (
-        <ThemeProvider theme={preciousPlasticTheme.styles}>
+        <ThemeProvider theme={preciousPlasticTheme}>
           <RouterStub />
         </ThemeProvider>
       );

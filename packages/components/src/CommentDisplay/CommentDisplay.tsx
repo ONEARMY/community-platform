@@ -1,7 +1,5 @@
 import type { Comment } from 'oa-shared';
-import type { ReactNode } from 'react';
 import { useContext } from 'react';
-import type { ThemeUIStyleObject } from 'theme-ui';
 import { Box, Flex, Text } from 'theme-ui';
 import { CommentAvatar } from '../CommentAvatar/CommentAvatar';
 import { CommentBody } from '../CommentBody/CommentBody';
@@ -62,7 +60,9 @@ export const CommentDisplay = (props: IProps) => {
           <CommentAvatar
             displayName={comment.createdBy?.displayName}
             photo={comment.createdBy?.photo?.publicUrl}
-            isCommentAuthor={comment.createdBy?.id ? authors.includes(comment.createdBy?.id) : false}
+            isCommentAuthor={
+              comment.createdBy?.id ? authors.includes(comment.createdBy?.id) : false
+            }
           />
         </Box>
 

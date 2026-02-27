@@ -2,7 +2,6 @@ import { Global } from '@emotion/react';
 import type { Preview } from '@storybook/react-vite';
 import { ThemeProvider } from '@theme-ui/core';
 import { fixingFashionTheme, preciousPlasticTheme, projectKampTheme } from 'oa-themes';
-import React from 'react';
 import { createRoutesStub } from 'react-router';
 import { GlobalStyles } from '../src/GlobalStyles/GlobalStyles';
 

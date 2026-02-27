@@ -1,6 +1,6 @@
 import type { MarkerCluster } from 'leaflet';
 import type { MapPin } from 'oa-shared';
-import * as React from 'react';
+import type { RefObject } from 'react';
 import { Marker } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { createClusterIcon, createMarkerIcon } from './Sprites';
@@ -11,7 +11,7 @@ interface IProps {
   pins: MapPin[];
   onPinClick: (pin: MapPin) => void;
   onClusterClick: (cluster: MarkerCluster) => void;
-  clusterGroupRef?: React.RefObject<any>;
+  clusterGroupRef?: RefObject<any>;
 }
 
 export const Clusters = ({ pins, onPinClick, onClusterClick, clusterGroupRef }: IProps) => {
@@ -20,6 +20,12 @@ export const Clusters = ({ pins, onPinClick, onClusterClick, clusterGroupRef }: 
    * https://github.com/Leaflet/Leaflet.markercluster#clusters-methods
    *
    */
+
+  // Don't render until we have pins - prevents Leaflet cleanup errors on initial data load
+  if (pins.length === 0) {
+    return null;
+  }
+
   return (
     <MarkerClusterGroup
       ref={clusterGroupRef}

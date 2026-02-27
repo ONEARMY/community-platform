@@ -1,4 +1,4 @@
-import type { DivIcon } from 'leaflet';
+import type { DivIcon, LatLng, Marker as LeafletMarker } from 'leaflet';
 import L from 'leaflet';
 import { useRef } from 'react';
 import { Marker } from 'react-leaflet';
@@ -15,22 +15,22 @@ export interface IProps {
     lat: number;
     lng: number;
   };
-  onDrag(lng: number): void;
+  onDrag(latlng: LatLng): void;
   markerIcon?: DivIcon;
   onClick?: () => void;
 }
 
 export const MapPin = (props: IProps) => {
-  const markerRef = useRef(null);
+  const markerRef = useRef<LeafletMarker>(null);
 
   const handleDrag = () => {
-    const marker: any = markerRef.current;
+    const marker = markerRef.current;
 
     if (!marker) {
       return;
     }
 
-    const markerLatLng = marker.leafletElement.getLatLng();
+    const markerLatLng = marker.getLatLng();
     if (props.onDrag) {
       props.onDrag(markerLatLng);
     }
@@ -39,11 +39,13 @@ export const MapPin = (props: IProps) => {
   return (
     <Marker
       draggable
-      onDrag={handleDrag}
+      eventHandlers={{
+        drag: handleDrag,
+        click: props.onClick,
+      }}
       position={[props.position.lat, props.position.lng]}
       ref={markerRef}
       icon={props.markerIcon || customMarker}
-      onclick={props.onClick}
     />
   );
 };

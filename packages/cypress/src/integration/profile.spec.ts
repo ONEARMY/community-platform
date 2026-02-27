@@ -4,7 +4,7 @@ import { MESSAGE_MAX_CHARACTERS } from '../../../../src/pages/User/constants';
 import { contact } from '../../../../src/pages/User/labels';
 import { MOCK_DATA } from '../data';
 import { UserMenuItem } from '../support/commandsUi';
-import { generateNewUserDetails, setIsPreciousPlastic } from '../utils/TestUtils';
+import { generateNewUserDetails } from '../utils/TestUtils';
 
 const { profile_views, subscriber } = MOCK_DATA.users;
 const eventReader = MOCK_DATA.users.event_reader;
@@ -126,8 +126,6 @@ describe('[Profile]', () => {
     });
 
     it('[Can see contribution data for workspaces]', () => {
-      setIsPreciousPlastic();
-
       cy.signIn(subscriber.email, subscriber.password);
 
       cy.step('Can go to contribution data');
@@ -136,8 +134,6 @@ describe('[Profile]', () => {
     });
 
     it('[Tabs hidden without contributions]', () => {
-      setIsPreciousPlastic();
-
       cy.signIn(subscriber.email, subscriber.password);
 
       cy.step('Ensure hidden with no contributions');
@@ -158,7 +154,6 @@ describe('[Profile]', () => {
     });
 
     it('should display questions count on profile tab', () => {
-      setIsPreciousPlastic();
       cy.signIn(subscriber.email, subscriber.password);
 
       cy.visit(`/u/${subscriber.username}`);
@@ -171,7 +166,6 @@ describe('[Profile]', () => {
     });
 
     it('should navigate to questions page when clicking questions count on profile tab', () => {
-      setIsPreciousPlastic();
       cy.signIn(subscriber.email, subscriber.password);
 
       cy.visit(`/u/${subscriber.username}`);
@@ -181,7 +175,6 @@ describe('[Profile]', () => {
     });
 
     it('should show questions in contributions tab', () => {
-      setIsPreciousPlastic();
       cy.signIn(subscriber.email, subscriber.password);
 
       cy.visit(`/u/${subscriber.username}`);
@@ -192,7 +185,6 @@ describe('[Profile]', () => {
     });
 
     it('should link to question page when question in clicked in contributions tab', () => {
-      setIsPreciousPlastic();
       cy.signIn(subscriber.email, subscriber.password);
 
       cy.visit(`/u/${subscriber.username}`);
@@ -233,8 +225,6 @@ describe('[Profile]', () => {
 
   describe('[Upgrade Badge Button]', () => {
     it('[Should not show Go PRO button when user has pro badge]', () => {
-      setIsPreciousPlastic();
-
       cy.step('User with pro badge should not see upgrade button');
       cy.signIn(subscriber.email, subscriber.password);
       cy.visit(`/u/${subscriber.username}`);
@@ -247,8 +237,6 @@ describe('[Profile]', () => {
     });
 
     it('[Should show Go PRO button when user does not have pro badge]', () => {
-      setIsPreciousPlastic();
-
       cy.intercept('GET', '/api/upgrade-badges').as('getUpgradeBadges');
 
       const newUser = generateNewUserDetails();
@@ -280,8 +268,6 @@ describe('[Profile]', () => {
     });
 
     it('[Should not show Go PRO button when viewing another user profile]', () => {
-      setIsPreciousPlastic();
-
       const newUser = generateNewUserDetails();
       cy.signUpNewUser(newUser);
 

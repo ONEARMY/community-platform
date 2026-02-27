@@ -9,7 +9,7 @@ WORKDIR /app
 
 # Set production environment
 ENV NODE_ENV="production"
-ARG YARN_VERSION=3.6.4
+ARG YARN_VERSION=4.12.0
 
 # Install Yarn 3
 RUN corepack enable && \

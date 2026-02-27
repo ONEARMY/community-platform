@@ -1,11 +1,12 @@
-import type { MarkerCluster } from 'leaflet';
+import { MarkerCluster } from 'leaflet';
+import 'leaflet.markercluster';
 import type { MapPin } from 'oa-shared';
 import type { RefObject } from 'react';
 import { Marker } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { createClusterIcon, createMarkerIcon } from './Sprites';
 
-import 'react-leaflet-markercluster/dist/styles.min.css';
+// import 'react-leaflet-markercluster/dist/styles.min.css';
 
 interface IProps {
   pins: MapPin[];
@@ -29,7 +30,9 @@ export const Clusters = ({ pins, onPinClick, onClusterClick, clusterGroupRef }: 
       // Pin Icon size is always 37x37 px
       // This means max overlay of pins is 5px when not clustered
       maxClusterRadius={54}
-      onclusterclick={(e: { layer: MarkerCluster }) => onClusterClick(e.layer)}
+      eventHandlers={{
+        clusterclick: (e: { layer: MarkerCluster }) => onClusterClick(e.layer),
+      }}
     >
       {pins
         .filter(({ lat }) => Boolean(lat))
@@ -38,8 +41,8 @@ export const Clusters = ({ pins, onPinClick, onClusterClick, clusterGroupRef }: 
             key={pin.id}
             position={[pin.lat, pin.lng]}
             icon={createMarkerIcon(pin)}
-            onClick={() => {
-              onPinClick(pin);
+            eventHandlers={{
+              click: () => onPinClick(pin),
             }}
           />
         ))}

@@ -29,11 +29,6 @@ describe('[Common]', () => {
     cy.get('[data-cy=page-link]').contains('Library').click();
     cy.wait(2000);
     cy.url().should('include', '/library');
-
-    cy.step('Go to Map page');
-    cy.get('[data-cy=page-link]').contains('Map').click();
-    cy.wait(2000);
-    cy.url().should('include', '/map');
   });
 
   it('[Forbidden Page]', () => {

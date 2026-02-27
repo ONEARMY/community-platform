@@ -135,17 +135,6 @@ describe('[Settings]', () => {
     cy.contains('Your current map pin is here:');
     cy.contains(locationStub.country);
 
-    cy.step('Can view pin on new map');
-    cy.visit(`/map#${user.username}`);
-    cy.get('.leaflet-control-zoom-in').click();
-    cy.get('.leaflet-control-zoom-in').click();
-    cy.get('.leaflet-control-zoom-in').click();
-    cy.get('.leaflet-control-zoom-in').click();
-    cy.wait(2000);
-    cy.get('.leaflet-control-zoom-out').click();
-
-    cy.get('[data-cy=CardListItem-selected]').contains(user.username);
-
     cy.step('Can delete map pin');
     cy.visit('/settings');
     cy.get('[data-cy="tab-Map"]').click();

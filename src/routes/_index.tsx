@@ -5,5 +5,5 @@ export async function loader() {
 }
 
 export default function Index() {
-  return <></>;
+  return null;
 }

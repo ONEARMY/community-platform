@@ -13,7 +13,7 @@ export const NotificationsSupabase = ({ device }: IProps) => {
     useContext(NotificationsContext);
 
   if (!notifications === undefined) {
-    return <></>;
+    return null;
   }
 
   const markAllRead = async () => {

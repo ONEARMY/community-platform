@@ -13,7 +13,7 @@ import {
   UPDATE_BUTTON_TEXT,
 } from './PatreonIntegration';
 
-import type { IPatreonUser } from 'oa-shared';
+import { UserRole, type IPatreonUser } from 'oa-shared';
 import type { Mock } from 'vitest';
 import { TenantContext, TenantSettingsContext } from 'src/pages/common/TenantContext';
 
@@ -33,6 +33,7 @@ import { patreonService } from 'src/services/patreonService';
 const mockTenantContext: TenantSettingsContext = {
   patreonId: 'mock-patreon-client-id',
   siteName: 'Test Site',
+  siteDescription: '',
   siteUrl: 'https://test.com',
   messageSignOff: 'Test',
   emailFrom: 'test@test.com',
@@ -43,7 +44,12 @@ const mockTenantContext: TenantSettingsContext = {
   profileGuidelines: 'Guidelines',
   questionsGuidelines: 'Questions',
   supportedModules: 'modules',
-  logoUrl: '',
+  colorPrimary: '#fee77b',
+  colorPrimaryHover: '#ffde45',
+  colorAccent: '#fee77b',
+  colorAccentHover: '#ffde45',
+  showImpact: true,
+  createResearchRoles: [UserRole.ADMIN, UserRole.RESEARCH_CREATOR],
   environment: {},
 };
 

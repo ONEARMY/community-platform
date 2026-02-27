@@ -207,8 +207,15 @@ export class SupabaseTestsService {
       tenant_settings: [
         {
           site_name: 'Test Site',
+          site_description: 'Test description',
           site_url: 'https://community.preciousplastic.com',
           academy_resource: 'https://onearmy.github.io/academy/',
+          color_primary: '#fee77b',
+          color_primary_hover: '#ffde45',
+          color_accent: '#fee77b',
+          color_accent_hover: '#ffde45',
+          show_impact: true,
+          create_research_roles: undefined,
           tenant_id: this.tenantId,
         },
       ],

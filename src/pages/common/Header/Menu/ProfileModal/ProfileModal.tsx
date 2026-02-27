@@ -1,15 +1,11 @@
 import styled from '@emotion/styled';
 import { observer } from 'mobx-react';
 import { ReturnPathLink } from 'oa-components';
-import { preciousPlasticTheme } from 'oa-themes';
 import { NavLink } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { UpgradeBadgeLink } from 'src/pages/common/Header/Menu/Profile/UpgradeBadgeLink';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { Box, Flex } from 'theme-ui';
-
-// TODO: Remove direct usage of Theme
-const theme = preciousPlasticTheme.styles;
+import { Box, Flex, useThemeUI } from 'theme-ui';
 
 const ModalContainer = styled(Box)`
   max-width: 100%;
@@ -17,15 +13,15 @@ const ModalContainer = styled(Box)`
   position: absolute;
   right: 10px;
   top: 60px;
-  z-index: ${theme.zIndex.modalProfile};
+  z-index: ${(props) => props.theme.zIndex.modalProfile};
   height: 100%;
 `;
 
 const ModalLink = styled(NavLink)`
-  z-index: ${theme.zIndex.modalProfile};
+  z-index: ${(props) => props.theme.zIndex.modalProfile};
   display: flex;
   flex-direction: column;
-  color: ${theme.colors.black};
+  color: ${(props) => props.theme.colors.black};
   padding: 10px 30px 10px 30px;
   text-align: left;
   width: 100%;
@@ -36,12 +32,13 @@ const ModalLink = styled(NavLink)`
   &:focus,
   &:active,
   &.current {
-    background-color: ${theme.colors.background};
+    background-color: ${(props) => props.theme.colors.background};
   }
 `;
 
 export const ProfileModal = observer(() => {
   const { profile: activeUser, upgradeBadgeForCurrentUser } = useProfileStore();
+  const { theme } = useThemeUI();
 
   const upgradeBadge = upgradeBadgeForCurrentUser;
   const shouldShowUpgrade = !!upgradeBadge;
@@ -59,7 +56,11 @@ export const ProfileModal = observer(() => {
           flexDirection: 'column',
         }}
       >
-        <ModalLink to={'/u/' + activeUser?.username} data-cy="menu-Profile" className={({ isActive }) => (isActive ? 'current' : '')}>
+        <ModalLink
+          to={'/u/' + activeUser?.username}
+          data-cy="menu-Profile"
+          className={({ isActive }) => (isActive ? 'current' : '')}
+        >
           Profile
         </ModalLink>
         {shouldShowUpgrade && (
@@ -76,7 +77,11 @@ export const ProfileModal = observer(() => {
           />
         )}
         <AuthWrapper>
-          <ModalLink to="/settings" data-cy="menu-Settings" className={({ isActive }) => (isActive ? 'current' : '')}>
+          <ModalLink
+            to="/settings"
+            data-cy="menu-Settings"
+            className={({ isActive }) => (isActive ? 'current' : '')}
+          >
             Settings
           </ModalLink>
         </AuthWrapper>

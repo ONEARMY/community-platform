@@ -17,6 +17,7 @@ import { TenantSettingsService } from 'src/services/tenantSettingsService.server
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store';
 import { SubscriptionStoreProvider } from 'src/stores/Subscription/subscription.store';
 import { UsefulVoteStoreProvider } from 'src/stores/UsefulVote/usefulVote.store';
+import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { Flex } from 'theme-ui';
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -33,6 +34,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return data({ tenantSettings, claims: claims.data?.claims || null }, { headers });
 }
+
+export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
+  return generateTags(
+    loaderData?.tenantSettings.siteName || 'Community Platform',
+    loaderData?.tenantSettings.siteDescription,
+  );
+});
 
 // This is a Layout file, it will render for all routes that have _. prefix.
 export default function Index() {

@@ -4,7 +4,6 @@ import { observer } from 'mobx-react';
 import { Button } from 'oa-components';
 import type { NotificationDisplay } from 'oa-shared';
 import { UserRole } from 'oa-shared';
-import type { ThemeWithName } from 'oa-themes';
 import { useEffect, useState } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 import { AuthWrapper } from 'src/common/AuthWrapper';
@@ -20,8 +19,7 @@ import { NotificationsSupabase } from './Menu/Notifications/NotificationsSupabas
 import { MobileMenuContext } from './MobileMenuContext';
 
 const MobileNotificationsWrapper = ({ children }) => {
-  const themeUi = useThemeUI();
-  const theme = themeUi.theme as ThemeWithName;
+  const { theme } = useThemeUI();
 
   return (
     <Flex
@@ -57,7 +55,9 @@ const AnimationContainer = (props: any) => {
     config: { duration: 250 },
   });
 
-  return <animated.div style={{ position: 'relative', ...springStyle }}>{props.children}</animated.div>;
+  return (
+    <animated.div style={{ position: 'relative', ...springStyle }}>{props.children}</animated.div>
+  );
 };
 
 const Header = observer(() => {
@@ -68,7 +68,9 @@ const Header = observer(() => {
   const [isVisible, setIsVisible] = useState(false);
 
   // New notifications states
-  const [notificationsSupabase, setNotificationsSupabase] = useState<NotificationDisplay[] | null>(null);
+  const [notificationsSupabase, setNotificationsSupabase] = useState<NotificationDisplay[] | null>(
+    null,
+  );
   const [isUpdatingNotifications, setIsUpdatingNotifications] = useState<boolean>(true);
 
   const updateNotifications = async () => {

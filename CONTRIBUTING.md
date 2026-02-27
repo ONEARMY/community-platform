@@ -90,6 +90,8 @@ Add to your `.vscode/settings.json`:
    }
 ```
 
+Also make sure you set your vscode default formatter to Biome (CTRL + SHIFT + P > Format Document With... -> Configure Default Formatter -> Biome).
+
 Running `yarn format` from the project root prior to committing will ensure the code you're adding is formatted to align with the standards of this project.
 
 We expect code to follow standard practices:

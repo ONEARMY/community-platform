@@ -4566,6 +4566,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-leaflet/core@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@react-leaflet/core@npm:3.0.0"
+  peerDependencies:
+    leaflet: ^1.9.0
+    react: ^19.0.0
+    react-dom: ^19.0.0
+  checksum: 10/193f4928ff609a922493f05e2f301f53a3d9b8387e90fc6ab4bc4f78f97272cad000fbdf0f1d23069f67cb35d3d855734ce5a5feab98619aebfc3334be2967c7
+  languageName: node
+  linkType: hard
+
 "@react-router/dev@npm:^7.13.1":
   version: 7.13.1
   resolution: "@react-router/dev@npm:7.13.1"
@@ -11276,7 +11287,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.3.1, hoist-non-react-statics@npm:^3.3.2":
+"hoist-non-react-statics@npm:^3.3.1":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -12419,7 +12430,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"leaflet.markercluster@npm:^1.4.1":
+"leaflet.markercluster@npm:^1.5.3":
   version: 1.5.3
   resolution: "leaflet.markercluster@npm:1.5.3"
   peerDependencies:
@@ -12428,7 +12439,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"leaflet@npm:^1.5.1, leaflet@npm:^1.6.0":
+"leaflet@npm:^1.9.4":
   version: 1.9.4
   resolution: "leaflet@npm:1.9.4"
   checksum: 10/7b6a74d503980961a85bdabebf9d1162c26db0e88195800ceea311682b653d621718f2ada3c9aab903a735af9862c9ae278ba550d4429acbd954d43449cd0d77
@@ -12686,7 +12697,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.0.0, loose-envify@npm:^1.4.0":
+"loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -14351,8 +14362,8 @@ __metadata:
     isbot: "npm:^5.1.13"
     jsonwebtoken: "npm:^9.0.2"
     keyv: "npm:^5.1.2"
-    leaflet: "npm:^1.5.1"
-    leaflet.markercluster: "npm:^1.4.1"
+    leaflet: "npm:^1.9.4"
+    leaflet.markercluster: "npm:^1.5.3"
     lint-staged: "npm:^16.2.7"
     marked: "npm:^17.0.1"
     mobx: "npm:6.15.0"
@@ -14369,12 +14380,12 @@ __metadata:
     react-final-form-arrays: "npm:^3.1.3"
     react-ga4: "npm:^2.1.0"
     react-highlight-words: "npm:^0.21.0"
-    react-leaflet: "npm:^2.5.0"
-    react-leaflet-markercluster: "npm:^2.0.0-rc3"
+    react-leaflet: "npm:^5.0.0"
+    react-leaflet-markercluster: "npm:^5.0.0-rc.0"
     react-router: "npm:^7.13.1"
     react-spring: "npm:^10.0.3"
     react-tooltip: "npm:^5.30.0"
-    remix-utils: "npm:^9.0.0"
+    remix-utils: "npm:^9.0.1"
     resend: "npm:6.5.2"
     supabase: "npm:2.53.6"
     theme-ui: "npm:^0.17.2"
@@ -15632,34 +15643,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-leaflet-markercluster@npm:^2.0.0-rc3":
-  version: 2.0.0
-  resolution: "react-leaflet-markercluster@npm:2.0.0"
+"react-leaflet-markercluster@npm:^5.0.0-rc.0":
+  version: 5.0.0-rc.0
+  resolution: "react-leaflet-markercluster@npm:5.0.0-rc.0"
   dependencies:
-    leaflet: "npm:^1.6.0"
-    leaflet.markercluster: "npm:^1.4.1"
-    react-leaflet: "npm:^2.6.3"
+    "@react-leaflet/core": "npm:^3.0.0"
+    leaflet: "npm:^1.9.4"
+    leaflet.markercluster: "npm:^1.5.3"
+    react-leaflet: "npm:^5.0.0"
   peerDependencies:
-    leaflet: ^1.6.0
-    leaflet.markercluster: ^1.4.1
-    react-leaflet: ^2.6.3
-  checksum: 10/80a488843bb7955f5c0043a8633ff2e12fc4d0e4dbf07a47ca78c04d1151c154aa015c917f3bfb94c8257757e86e1ce7a03b88669ab1123e77ac3b80dc943dfa
+    leaflet: ^1.9.4
+    leaflet.markercluster: ^1.5.3
+    react: ^19.0.0
+    react-leaflet: ^5.0.0
+  checksum: 10/7bc51ed504ed4b1ff9efae70db28737b95c0c07b53c0bcbadf726267ef4433920d047c2166a58aee46f4969f504340a4dcf4013266ae30f5c9bb05af48dccb4a
   languageName: node
   linkType: hard
 
-"react-leaflet@npm:^2.5.0, react-leaflet@npm:^2.6.3":
-  version: 2.8.0
-  resolution: "react-leaflet@npm:2.8.0"
+"react-leaflet@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "react-leaflet@npm:5.0.0"
   dependencies:
-    "@babel/runtime": "npm:^7.12.1"
-    fast-deep-equal: "npm:^3.1.3"
-    hoist-non-react-statics: "npm:^3.3.2"
-    warning: "npm:^4.0.3"
+    "@react-leaflet/core": "npm:^3.0.0"
   peerDependencies:
-    leaflet: ^1.6.0
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0  || ^17.0.0
-  checksum: 10/4600fd2c946035820be53423966d998c1e5a4e243b611b855ecb254fc5b09f695b4e424884a5595913999b509bd73c0a6594b5ecd420186b2132ffb37f238389
+    leaflet: ^1.9.0
+    react: ^19.0.0
+    react-dom: ^19.0.0
+  checksum: 10/170bf8d83141c8406fddc8cab41608ec6938efaafa5ae08c2060f9c0739370b84ed61d809c092d9f9ea79461399519f18f1cdf06dcb0e26d61d89eda46fb30be
   languageName: node
   linkType: hard
 
@@ -15969,9 +15979,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remix-utils@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "remix-utils@npm:9.0.0"
+"remix-utils@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "remix-utils@npm:9.0.1"
   dependencies:
     type-fest: "npm:^4.41.0"
   peerDependencies:
@@ -16006,7 +16016,7 @@ __metadata:
       optional: true
     react-router:
       optional: true
-  checksum: 10/8b1fb405e861b544276fd7f96ff1355478f82fcac7a77b777eb8c7ee6bd1f217ea129d1c1d1e69bcc610f2a47adb9a734e036270373a3a45699ea103e7026f71
+  checksum: 10/82bdcf85361a82c5bac0e3aef98572fe5278b1db8f00a8a57def1393c72527448ddd09726f08d95408602109784b9c33b014a477c32bdf844a8b0094c7fd4455
   languageName: node
   linkType: hard
 
@@ -18276,15 +18286,6 @@ __metadata:
   bin:
     wait-on: bin/wait-on
   checksum: 10/f5d9e708f9398fed22d3ef312799c33c3064a4c40ee4c03ea6e40a221f9cbcca11509c8db5923c332cee841903b1fc115eb72235cfa12f33bd8898d8d15c39a7
-  languageName: node
-  linkType: hard
-
-"warning@npm:^4.0.3":
-  version: 4.0.3
-  resolution: "warning@npm:4.0.3"
-  dependencies:
-    loose-envify: "npm:^1.0.0"
-  checksum: 10/e7842aff036e2e07ce7a6cc3225e707775b969fe3d0577ad64bd24660e3a9ce3017f0b8c22a136566dcd3a151f37b8ed1ccee103b3bd82bd8a571bf80b247bc4
   languageName: node
   linkType: hard
 

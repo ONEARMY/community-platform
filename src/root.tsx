@@ -87,7 +87,9 @@ export const links: LinksFunction = () => {
 
 export const meta: MetaFunction = () => {
   const theme = getEnvironmentTheme();
-  const tags = generateTags(theme.siteName, theme.description);
+  const tags = generateTags(theme.siteName, theme.description, '/social-image.jpg', {
+    siteName: theme.siteName,
+  });
 
   if (import.meta.env.VITE_BRANCH !== 'production') {
     tags.push({

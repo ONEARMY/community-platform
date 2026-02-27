@@ -4,7 +4,6 @@ const urlLondon =
 
 describe('[Map]', () => {
   it('[Shows expected pins]', () => {
-    localStorage.setItem('VITE_THEME', 'fixing-fashion');
     cy.viewport('macbook-16');
 
     cy.step('Shows all pins onload');

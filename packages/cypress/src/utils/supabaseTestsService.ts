@@ -214,6 +214,8 @@ export class SupabaseTestsService {
           color_primary_hover: '#ffde45',
           color_accent: '#fee77b',
           color_accent_hover: '#ffde45',
+          show_impact: true,
+          create_research_roles: ['admin','research_creator'],
           tenant_id: this.tenantId,
         },
       ],

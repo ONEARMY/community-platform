@@ -13,7 +13,7 @@ import {
   UPDATE_BUTTON_TEXT,
 } from './PatreonIntegration';
 
-import type { IPatreonUser } from 'oa-shared';
+import { UserRole, type IPatreonUser } from 'oa-shared';
 import type { Mock } from 'vitest';
 import { TenantContext, TenantSettingsContext } from 'src/pages/common/TenantContext';
 
@@ -48,6 +48,8 @@ const mockTenantContext: TenantSettingsContext = {
   colorPrimaryHover: '#ffde45',
   colorAccent: '#fee77b',
   colorAccentHover: '#ffde45',
+  showImpact: true,
+  createResearchRoles: [UserRole.ADMIN, UserRole.RESEARCH_CREATOR],
   environment: {},
 };
 

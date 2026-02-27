@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TenantContext, TenantSettingsContext } from '../common/TenantContext';
 import { FormProvider } from './__mocks__/FormProvider';
 import { SettingsPageUserProfile } from './SettingsPageUserProfile';
-import type { ProfileTag, ProfileType } from 'oa-shared';
+import { UserRole, type ProfileTag, type ProfileType } from 'oa-shared';
 
 const mockUseProfileStore = vi.hoisted(() => vi.fn());
 
@@ -162,6 +162,8 @@ describe('UserSettings', () => {
       colorPrimaryHover: '#ffde45',
       colorAccent: '#fee77b',
       colorAccentHover: '#ffde45',
+      showImpact: true,
+      createResearchRoles: [UserRole.ADMIN, UserRole.RESEARCH_CREATOR],
       environment: {},
     };
 

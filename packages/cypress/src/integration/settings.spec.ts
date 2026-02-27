@@ -226,7 +226,6 @@ it('Notifications', () => {
 
 describe('[Precious Plastic]', () => {
   beforeEach(() => {
-    localStorage.setItem('VITE_THEME', 'precious-plastic');
     cy.visit('/sign-in');
   });
 

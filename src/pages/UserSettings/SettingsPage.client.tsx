@@ -3,7 +3,6 @@ import { observer } from 'mobx-react';
 import type { availableGlyphs } from 'oa-components';
 import { useContext, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { isPreciousPlastic } from 'src/config/config';
 import { isModuleSupported, MODULE } from 'src/modules';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Box, Flex, Text } from 'theme-ui';
@@ -26,7 +25,7 @@ export const SettingsPage = observer(() => {
   const { pathname } = useLocation();
 
   const isMember = !profile?.type?.isSpace;
-  const showImpactTab = !isMember && isPreciousPlastic();
+  const showImpactTab = !isMember && tenantContext?.siteName === 'Precious Plastic';
   const showMapTab = isModuleSupported(tenantContext?.supportedModules || '', MODULE.MAP);
 
   const tabs: ISettingsTab[] = useMemo(
@@ -37,7 +36,10 @@ export const SettingsPage = observer(() => {
         header: isComplete === false && (
           <Flex sx={{ gap: 2, flexDirection: 'column' }} data-cy="CompleteProfileHeader">
             <Text as="h3">✏️ Complete your profile</Text>
-            <Text>In order to post comments or create content, we'd like you to share something about yourself.</Text>
+            <Text>
+              In order to post comments or create content, we'd like you to share something about
+              yourself.
+            </Text>
             {missingFields && missingFields.length > 0 && (
               <Text>
                 Missing required fields:
@@ -112,7 +114,11 @@ export const SettingsPage = observer(() => {
             gap: 4,
           }}
         >
-          <SettingsFormTabList tabs={tabs} currentTab={pathname} onTabChange={(path) => navigate(path)} />
+          <SettingsFormTabList
+            tabs={tabs}
+            currentTab={pathname}
+            onTabChange={(path) => navigate(path)}
+          />
           <Flex
             sx={{
               alignContent: 'stretch',

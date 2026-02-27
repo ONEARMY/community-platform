@@ -17,7 +17,7 @@ export async function getTenantSettings(req, redirect_to) {
 
   const { data } = await client
     .from('tenant_settings')
-    .select('site_name,site_description,site_url,message_sign_off,email_from,site_imagecolor_primary,color_primary_hover,color_accent,color_accent_hover')
+    .select('site_name,site_description,site_url,message_sign_off,email_from,site_imagecolor_primary,color_primary_hover,color_accent,color_accent_hover,show_impact,create_research_roles')
     .single();
 
   return {

@@ -1,3 +1,5 @@
+import { UserRole } from './user';
+
 export class TenantSettings {
   siteName: string;
   siteDescription: string;
@@ -16,6 +18,8 @@ export class TenantSettings {
   colorPrimaryHover: string;
   colorAccent: string;
   colorAccentHover: string;
+  showImpact: boolean;
+  createResearchRoles: UserRole[];
 
   constructor(obj: Partial<TenantSettings>) {
     Object.assign(this, obj);

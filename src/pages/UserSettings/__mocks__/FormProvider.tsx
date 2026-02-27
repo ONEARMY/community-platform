@@ -5,11 +5,6 @@ import { createMemoryRouter, createRoutesFromElements, Route, RouterProvider } f
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store';
 
 export const FormProvider = (element: React.ReactNode, routerInitialEntry?: string) => {
-  if (routerInitialEntry !== undefined) {
-    // impact section is only displayed if isPreciousPlastic() is true
-    window.localStorage.setItem('platformTheme', 'precious-plastic');
-  }
-
   const router = createMemoryRouter(createRoutesFromElements(<Route index element={element} />), {
     initialEntries: [routerInitialEntry ? routerInitialEntry : ''],
   });

@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import Keyv from 'keyv';
-import { TenantSettings } from 'oa-shared';
+import { TenantSettings, UserRole } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
 
 const cache = new Keyv<TenantSettings>({ ttl: 3600000 }); // ttl: 60 minutes
@@ -36,7 +36,9 @@ export class TenantSettingsService {
         color_primary,
         color_primary_hover,
         color_accent,
-        color_accent_hover`,
+        color_accent_hover,
+        show_impact,
+        create_research_roles`,
       )
       .single();
 
@@ -59,10 +61,27 @@ export class TenantSettingsService {
       colorPrimaryHover: data?.color_primary_hover,
       colorAccent: data?.color_accent,
       colorAccentHover: data?.color_accent_hover,
+      showImpact: data?.show_impact,
+      createResearchRoles: this.validateRoles(data?.create_research_roles),
     });
 
     cache.set('tenant-settings', settings);
 
     return settings;
+  }
+
+  private validateRoles(
+    create_research_roles: string[] | undefined | null,
+  ): UserRole[] | undefined {
+    if (!create_research_roles || create_research_roles.length === 0) {
+      return undefined;
+    }
+
+    const validRoles = Object.values(UserRole);
+    const validated = create_research_roles.filter((role) =>
+      validRoles.includes(role as UserRole),
+    ) as UserRole[];
+
+    return validated.length > 0 ? validated : undefined;
   }
 }

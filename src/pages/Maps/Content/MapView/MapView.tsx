@@ -93,7 +93,7 @@ export const MapView = () => {
           Show list view
         </Button>
       </Flex>
-      {mapState.filteredPins?.length && (
+      {mapState.filteredPins && mapState.filteredPins.length > 0 && (
         <Clusters
           pins={mapState.filteredPins}
           onPinClick={mapState.selectPinWithClusterCheck}

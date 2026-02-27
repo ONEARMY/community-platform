@@ -1,6 +1,7 @@
 import type { MarkerCluster } from 'leaflet';
 import type { MapPin } from 'oa-shared';
 import type { RefObject } from 'react';
+import { useEffect } from 'react';
 import { Marker } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { createClusterIcon, createMarkerIcon } from './Sprites';
@@ -20,6 +21,24 @@ export const Clusters = ({ pins, onPinClick, onClusterClick, clusterGroupRef }: 
    * https://github.com/Leaflet/Leaflet.markercluster#clusters-methods
    *
    */
+
+  // Patch Leaflet's event off method to handle undefined _leaflet_events
+  useEffect(() => {
+    if (typeof window !== 'undefined' && (window as any).L) {
+      const L = (window as any).L;
+      if (L.Evented && L.Evented.prototype && !L.Evented.prototype._offPatched) {
+        const originalOff = L.Evented.prototype.off;
+        L.Evented.prototype.off = function (types: any, fn: any, context: any) {
+          // If _leaflet_events is undefined, just return - nothing to remove
+          if (!this._leaflet_events) {
+            return this;
+          }
+          return originalOff.call(this, types, fn, context);
+        };
+        L.Evented.prototype._offPatched = true;
+      }
+    }
+  }, []);
 
   // Don't render until we have pins - prevents Leaflet cleanup errors on initial data load
   if (pins.length === 0) {

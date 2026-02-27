@@ -1,18 +1,13 @@
 import '@testing-library/jest-dom/vitest';
-
 import { createRoutesStub } from 'react-router';
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { ThemeProvider } from '@theme-ui/core';
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store';
 import { FactoryLibraryItem } from 'src/test/factories/Library';
-import { testingThemeStyles } from 'src/test/utils/themeUtils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { LibraryForm } from './Library.form';
-
 import type { MediaFile, Project } from 'oa-shared';
-
-const Theme = testingThemeStyles;
+import { theme } from 'oa-themes';
 
 // Mock timers to prevent async operations from running after tests
 beforeEach(() => {
@@ -165,7 +160,7 @@ const Wrapper = (project: Project, files?: MediaFile[], fileLink?: string) => {
         index: true,
         Component: () => (
           <ProfileStoreProvider>
-            <ThemeProvider theme={Theme}>
+            <ThemeProvider theme={theme}>
               <LibraryForm project={project} files={files} fileLink={fileLink} />
             </ThemeProvider>
           </ProfileStoreProvider>

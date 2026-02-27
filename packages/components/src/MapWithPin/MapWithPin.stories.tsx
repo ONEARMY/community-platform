@@ -1,9 +1,9 @@
+import type { Map as LeafletMap } from 'leaflet';
 import { useRef } from 'react';
 
 import { MapWithPin } from './MapWithPin.client';
 
 import type { Meta, StoryFn } from '@storybook/react-vite';
-import type { Map } from 'react-leaflet';
 
 export default {
   title: 'Map/MapWithPin',
@@ -12,7 +12,7 @@ export default {
 
 export const Default: StoryFn<typeof MapWithPin> = () => {
   const position = { lat: 0, lng: 0 };
-  const newMapRef = useRef<Map>(null);
+  const newMapRef = useRef<LeafletMap>(null);
 
   return (
     <MapWithPin

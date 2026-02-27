@@ -8,7 +8,7 @@ export const profileTypes: Partial<DBProfileType>[] = [
     description: '',
     image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/pp-member.svg',
-    map_pin_name: '',
+    map_pin_name: 'Want to get started',
     order: 1,
     small_image_url:
       'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/one-army/profile-types/map-member.svg',

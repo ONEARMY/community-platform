@@ -19,8 +19,14 @@
     "noImplicitAny": false,
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
-    "typeRoots": ["./node_modules/@types", "./types", "@testing-library/jest-dom", "../src/themes/types", "./node_modules"],
-    "declaration": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types",
+      "@testing-library/jest-dom",
+      "../src/themes/types",
+      "./node_modules"
+    ],
+    "declaration": false,
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": false,
@@ -28,5 +34,12 @@
     "paths": { "*": ["./*"] }
   },
   "include": ["src/**/*", "types", "vite-env.d.ts"],
-  "exclude": ["node_modules", "build", "jest", "src/setupTests.ts", "packages/components", "packages/themes"]
+  "exclude": [
+    "node_modules",
+    "build",
+    "jest",
+    "src/setupTests.ts",
+    "packages/components",
+    "packages/themes"
+  ]
 }

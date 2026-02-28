@@ -25,7 +25,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirect('/research', { headers });
   }
 
-  const username = claims.data.claims.user_metadata.username;
+  const username = claims.data.claims.user_metadata?.username;
   const researchDb = result.item;
   const images = researchServiceServer.getResearchPublicMedia(researchDb, client);
   const research = ResearchItem.fromDB(researchDb, [], images, result.collaborators, username);

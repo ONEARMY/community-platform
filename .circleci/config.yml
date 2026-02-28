@@ -39,35 +39,25 @@ aliases:
 
     # These can also be created as commands, but slighly tidier to just use inline
     # restore/install/save can all be done with a single circle-ci orb, but less flexible and breaks intellisense
-  - &restore_yarn_cache
+  - &install_bun
+    run:
+      name: Install Bun
+      command: curl -fsSL https://bun.sh/install | bash && echo 'export PATH="$HOME/.bun/bin:$PATH"' >> $BASH_ENV
+  - &restore_bun_cache
     restore_cache:
-      name: Restore yarn cache
+      name: Restore bun cache
       keys:
-        # https://circleci.com/docs/2.0/caching/
-        # https://circleci.com/docs/2.0/yarn/
-        # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - v10-yarn-{{ checksum "yarn.lock" }}
-        - v10-yarn-
+        - v1-bun-{{ checksum "bun.lock" }}
+        - v1-bun-
   - &install_packages
     run:
       name: Install Packages
-      # Install packages
-      # NOTE run twice with check to ensure install-state created (previously had issues, doesn't add much time to check)
-      command: |
-        yarn install --immutable
-        yarn install --immutable --immutable-cache
-        if [ ! -f /home/circleci/.yarn/install-state.gz ]; then echo "install-state not created" && exit 1; fi
-      environment:
-        YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
-        YARN_CACHE_FOLDER: /home/circleci/.yarn/cache
-  - &save_yarn_cache
+      command: bun install --frozen-lockfile
+  - &save_bun_cache
     save_cache:
-      # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching
-      # NOTE - ensure always caches to consistent location when using non-circleci user
       paths:
-        - /home/circleci/.yarn/cache
-        - /home/circleci/.yarn/install-state.gz
-      key: v10-yarn-{{ checksum "yarn.lock" }}
+        - /home/circleci/.bun/install/cache
+      key: v1-bun-{{ checksum "bun.lock" }}
 
   - &filter_only_default_branch
     filters:
@@ -85,9 +75,10 @@ commands:
     # parameters:
     steps:
       - checkout
-      - *restore_yarn_cache
+      - *install_bun
+      - *restore_bun_cache
       - *install_packages
-      - *save_yarn_cache
+      - *save_bun_cache
 
 ######################################################################################################
 #  Jobs - Independently specified lists of tasks and environments for execution
@@ -101,9 +92,9 @@ jobs:
     steps:
       - setup_repo
       - run:
-          command: yarn lint
+          command: bun run lint
       - run:
-          command: yarn workspace oa-components lint
+          command: bun run --filter oa-components lint
   # Prepare node module caches so that future tasks run more quickly
   # NOTE - not currently used as we only have one workflow
   setup:
@@ -124,9 +115,9 @@ jobs:
       - setup_repo
       - run:
           # NOTE - run-in-band to try reduce memory leaks (https://github.com/facebook/jest/issues/7874)
-          command: yarn run test:unit
+          command: bun run test:unit
       - run:
-          command: yarn run test:components
+          command: bun run test:components
       - store_artifacts:
           path: coverage
       - store_artifacts:
@@ -164,7 +155,7 @@ jobs:
           command: |
             echo $VITE_SITE_VARIANT
       - run:
-          command: yarn build
+          command: bun run build
       - persist_to_workspace:
           root: .
           paths:
@@ -179,7 +170,7 @@ jobs:
       - attach_workspace:
           at: '.'
       - run:
-          command: yarn storybook:build
+          command: bun run storybook:build
   deploy:
     docker:
       - image: cimg/node:22.18.0

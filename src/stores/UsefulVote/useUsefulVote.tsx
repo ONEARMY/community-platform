@@ -3,7 +3,11 @@ import { useContext, useEffect } from 'react';
 import { SessionContext } from 'src/pages/common/SessionContext';
 import { useUsefulVoteStore } from './usefulVote.store';
 
-export function useUsefulVote(contentType: UsefulContentType, contentId: number, initialUsefulCount: number) {
+export function useUsefulVote(
+  contentType: UsefulContentType,
+  contentId: number,
+  initialUsefulCount: number,
+) {
   const store = useUsefulVoteStore();
   const claims = useContext(SessionContext);
 

@@ -56,7 +56,9 @@ export const SettingsPageUserProfile = observer(() => {
     }
   };
 
-  const existingCoverImages = profile.coverImages ? profile?.coverImages?.slice(0, 4).map((image) => toJS(image)) : [];
+  const existingCoverImages = profile.coverImages
+    ? profile?.coverImages?.slice(0, 4).map((image) => toJS(image))
+    : [];
   const coverImages = new Array(4 - (existingCoverImages?.length || 0));
 
   const initialValues = useMemo<ProfileFormData>(
@@ -87,14 +89,28 @@ export const SettingsPageUserProfile = observer(() => {
       initialValues={initialValues}
       mutators={{ ...arrayMutators }}
       validateOnBlur
-      render={({ dirty, submitFailed, submitting, submitSucceeded, values, handleSubmit, invalid, errors, form }) => {
+      render={({
+        dirty,
+        submitFailed,
+        submitting,
+        submitSucceeded,
+        values,
+        handleSubmit,
+        invalid,
+        errors,
+        form,
+      }) => {
         const isMember = !profileTypes?.find((x) => x.name === values.type)?.isSpace;
 
         return (
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
             <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
             {submitting && <Loader sx={{ alignSelf: 'center' }} />}
-            <SettingsFormNotifications errors={errors} notification={notification} submitFailed={submitFailed} />
+            <SettingsFormNotifications
+              errors={errors}
+              notification={notification}
+              submitFailed={submitFailed}
+            />
 
             <form id={formId} onSubmit={handleSubmit}>
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
@@ -115,7 +131,9 @@ export const SettingsPageUserProfile = observer(() => {
                   />
                 )}
 
-                {!tenantContext?.noMessaging && <PublicContactSection isContactable={values.isContactable} />}
+                {!tenantContext?.noMessaging && (
+                  <PublicContactSection isContactable={values.isContactable} />
+                )}
               </Flex>
             </form>
 

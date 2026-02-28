@@ -112,7 +112,10 @@ export const PatreonIntegration = () => {
               )}
             </>
           ) : (
-            <Text variant="quiet">As a supporter you get a badge on the platform, special insights and voting rights on decisions.</Text>
+            <Text variant="quiet">
+              As a supporter you get a badge on the platform, special insights and voting rights on
+              decisions.
+            </Text>
           )}
         </Flex>
       </Flex>

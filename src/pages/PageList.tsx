@@ -45,4 +45,11 @@ export const getAvailablePageList = (supportedModules: MODULE[]): IPageNavigatio
   return COMMUNITY_PAGES.filter((pageItem) => supportedModules.includes(pageItem.module));
 };
 
-export const COMMUNITY_PAGES: IPageNavigation[] = [news, library, maps, academy, ResearchModule, QuestionModule];
+export const COMMUNITY_PAGES: IPageNavigation[] = [
+  news,
+  library,
+  maps,
+  academy,
+  ResearchModule,
+  QuestionModule,
+];

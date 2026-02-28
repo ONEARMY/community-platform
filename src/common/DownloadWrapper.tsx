@@ -45,7 +45,11 @@ export const DownloadWrapper = (props: IProps) => {
     <UserAction
       loggedIn={
         <>
-          <DonationRequestModalContainer isOpen={openModal} onDidDismiss={() => setOpenModal(false)} profileId={authorProfileId}>
+          <DonationRequestModalContainer
+            isOpen={openModal}
+            onDidDismiss={() => setOpenModal(false)}
+            profileId={authorProfileId}
+          >
             <Flex
               sx={{
                 backgroundColor: '#fff',
@@ -57,7 +61,12 @@ export const DownloadWrapper = (props: IProps) => {
                 alignItems: 'center',
               }}
             >
-              <ExternalLink href={link} onClick={() => setOpenModal(false)} data-cy="DonationRequestSkip" data-testid="DonationRequestSkip">
+              <ExternalLink
+                href={link}
+                onClick={() => setOpenModal(false)}
+                data-cy="DonationRequestSkip"
+                data-testid="DonationRequestSkip"
+              >
                 <Button>Download</Button>
               </ExternalLink>
             </Flex>

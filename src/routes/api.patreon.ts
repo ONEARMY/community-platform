@@ -12,9 +12,16 @@ export const loader = async ({ request }) => {
     return Response.json({}, { headers, status: 401 });
   }
 
-  const { data } = await client.from('profiles').select('patreon,is_supporter').eq('auth_id', claims.data.claims.sub).single();
+  const { data } = await client
+    .from('profiles')
+    .select('patreon,is_supporter')
+    .eq('auth_id', claims.data.claims.sub)
+    .single();
 
-  return Response.json({ isSupporter: data?.is_supporter, patreon: data?.patreon }, { headers, status: 200 });
+  return Response.json(
+    { isSupporter: data?.is_supporter, patreon: data?.patreon },
+    { headers, status: 200 },
+  );
 };
 
 export const action = async ({ request }) => {

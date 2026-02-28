@@ -1,5 +1,12 @@
 import { observer } from 'mobx-react';
-import { Category, FollowIcon, Icon, IconCountWithTooltip, InternalLink, Username } from 'oa-components';
+import {
+  Category,
+  FollowIcon,
+  Icon,
+  IconCountWithTooltip,
+  InternalLink,
+  Username,
+} from 'oa-components';
 import { type ResearchItem, ResearchStatusRecord, UserRole } from 'oa-shared';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { useSubscription } from 'src/stores/Subscription/useSubscription';
@@ -27,7 +34,13 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
   const status = item.status || 'in-progress';
 
   return (
-    <Card as="li" data-cy="ResearchListItem" data-id={item.id} sx={{ position: 'relative', mb: 3 }} variant="responsive">
+    <Card
+      as="li"
+      data-cy="ResearchListItem"
+      data-id={item.id}
+      sx={{ position: 'relative', mb: 3 }}
+      variant="responsive"
+    >
       <Flex sx={{ width: '100%', position: 'relative' }}>
         <Grid
           columns={[1, '60px 2fr 1fr']}
@@ -140,7 +153,8 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
                       transform: 'translateY(2px)',
                     }}
                   >
-                    {collaborators.length + (collaborators.length === 1 ? ' contributor' : ' contributors')}
+                    {collaborators.length +
+                      (collaborators.length === 1 ? ' contributor' : ' contributors')}
                   </Text>
                 )}
                 <Text
@@ -191,10 +205,23 @@ const ResearchListItem = observer(({ item, showWeeklyVotes }: IProps) => {
           >
             {isSubscribed && <FollowIcon tooltip="You are following updates" />}
 
-            <IconCountWithTooltip count={usefulDisplayCount} icon="star-active" text="How useful is it" />
-            <IconCountWithTooltip count={item.commentCount || 0} icon="comment" text="Total comments" />
+            <IconCountWithTooltip
+              count={usefulDisplayCount}
+              icon="star-active"
+              text="How useful is it"
+            />
+            <IconCountWithTooltip
+              count={item.commentCount || 0}
+              icon="comment"
+              text="Total comments"
+            />
 
-            <IconCountWithTooltip count={item.updateCount} dataCy="ItemUpdateText" icon="update" text="Amount of updates" />
+            <IconCountWithTooltip
+              count={item.updateCount}
+              dataCy="ItemUpdateText"
+              icon="update"
+              text="Amount of updates"
+            />
           </Box>
         </Grid>
       </Flex>

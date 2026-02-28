@@ -1,5 +1,11 @@
 import { observer } from 'mobx-react';
-import { ArticleCallToActionSupabase, Button, ConfirmModal, UsefulStatsButton, UserEngagementWrapper } from 'oa-components';
+import {
+  ArticleCallToActionSupabase,
+  Button,
+  ConfirmModal,
+  UsefulStatsButton,
+  UserEngagementWrapper,
+} from 'oa-components';
 import type { Project, ProjectStep } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
@@ -23,7 +29,11 @@ interface ProjectPageProps {
 
 export const ProjectPage = observer(({ item }: ProjectPageProps) => {
   const { profile: activeUser } = useProfileStore();
-  const { hasVoted, usefulCount, toggle: toggleVote } = useUsefulVote('projects', item.id, item.usefulCount);
+  const {
+    hasVoted,
+    usefulCount,
+    toggle: toggleVote,
+  } = useUsefulVote('projects', item.id, item.usefulCount);
   const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -46,7 +56,9 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
   };
 
   const isEditable = useMemo(() => {
-    return !!activeUser && (hasAdminRights(activeUser) || item.author?.username === activeUser.username);
+    return (
+      !!activeUser && (hasAdminRights(activeUser) || item.author?.username === activeUser.username)
+    );
   }, [activeUser, item.author]);
 
   return (
@@ -86,7 +98,9 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
         <Breadcrumbs
           steps={[
             { text: 'Library', link: '/library' },
-            ...(item.category ? [{ text: item.category.name, link: `/library?category=${item.category.id}` }] : []),
+            ...(item.category
+              ? [{ text: item.category.name, link: `/library?category=${item.category.id}` }]
+              : []),
             { text: item.title },
           ]}
         />
@@ -115,10 +129,14 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 type="button"
                 sx={{ fontSize: 2, justifyContent: 'center' }}
                 onClick={() => {
-                  document.querySelector('[data-target="create-comment-container"]')?.scrollIntoView({
-                    behavior: 'smooth',
-                  });
-                  (document.querySelector('[data-cy="comments-form"]') as HTMLTextAreaElement)?.focus();
+                  document
+                    .querySelector('[data-target="create-comment-container"]')
+                    ?.scrollIntoView({
+                      behavior: 'smooth',
+                    });
+                  (
+                    document.querySelector('[data-cy="comments-form"]') as HTMLTextAreaElement
+                  )?.focus();
 
                   return false;
                 }}
@@ -126,7 +144,11 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 Leave a comment
               </Button>
               {item.moderation === 'accepted' && (
-                <UsefulStatsButton hasUserVotedUseful={hasVoted} isLoggedIn={!!activeUser} onUsefulClick={toggleVote} />
+                <UsefulStatsButton
+                  hasUserVotedUseful={hasVoted}
+                  isLoggedIn={!!activeUser}
+                  onUsefulClick={toggleVote}
+                />
               )}
               {item.author?.profileType?.isSpace && item.author?.donationsEnabled && (
                 <>
@@ -164,7 +186,11 @@ export const ProjectPage = observer(({ item }: ProjectPageProps) => {
                 mt: 5,
               }}
             >
-              <CommentSectionSupabase authors={item.author?.id ? [item.author?.id] : []} sourceId={item.id} sourceType="projects" />
+              <CommentSectionSupabase
+                authors={item.author?.id ? [item.author?.id] : []}
+                sourceId={item.id}
+                sourceType="projects"
+              />
             </Card>
           </UserEngagementWrapper>
         )}

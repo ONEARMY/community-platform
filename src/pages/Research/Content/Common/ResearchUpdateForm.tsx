@@ -111,7 +111,16 @@ export const ResearchUpdateForm = (props: IProps) => {
         onSubmit={async (values) => await onSubmit(values)}
         initialValues={initialValues}
         validateOnBlur
-        render={({ dirty, handleSubmit, hasValidationErrors, errors, submitFailed, submitSucceeded, submitting, values }) => {
+        render={({
+          dirty,
+          handleSubmit,
+          hasValidationErrors,
+          errors,
+          submitFailed,
+          submitSucceeded,
+          submitting,
+          values,
+        }) => {
           const errorsClientSide = [errorSet(errors, update)];
 
           const handleSubmitDraft = () => onSubmit(values, true);
@@ -120,7 +129,11 @@ export const ResearchUpdateForm = (props: IProps) => {
             ? Math.min((values as any).images.filter((x) => !!x).length + 1, 10)
             : 1;
 
-          const unsavedChangesDialog = <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />;
+          const unsavedChangesDialog = (
+            <UnsavedChangesDialog
+              hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
+            />
+          );
 
           const sidebar = (
             <>
@@ -191,7 +204,11 @@ export const ResearchUpdateForm = (props: IProps) => {
   );
 };
 
-const getResearchUpdates = (updates: ResearchUpdate[], isCreating: boolean, researchTitle: string): any[] =>
+const getResearchUpdates = (
+  updates: ResearchUpdate[],
+  isCreating: boolean,
+  researchTitle: string,
+): any[] =>
   [
     ...updates
       .filter((u) => !u.deleted)

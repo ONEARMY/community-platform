@@ -77,7 +77,13 @@ export class ResearchItem implements IContentDoc {
     Object.assign(this, obj);
   }
 
-  static fromDB(obj: DBResearchItem, tags: Tag[], images: Image[] = [], collaborators: Author[] = [], currentUsername?: string) {
+  static fromDB(
+    obj: DBResearchItem,
+    tags: Tag[],
+    images: Image[] = [],
+    collaborators: Author[] = [],
+    currentUsername?: string,
+  ) {
     const filteredUpdates = obj.updates?.filter((update) => {
       if (update.deleted) {
         return false;
@@ -204,7 +210,9 @@ function calculateUpdateCommentCount(research: DBResearchItem): number {
     return research.comment_count;
   }
 
-  return research.updates?.filter((x) => x.deleted !== true && x.is_draft !== true).reduce((acc, x) => acc + (x.comment_count || 0), 0);
+  return research.updates
+    ?.filter((x) => x.deleted !== true && x.is_draft !== true)
+    .reduce((acc, x) => acc + (x.comment_count || 0), 0);
 }
 
 export type ResearchFormData = {

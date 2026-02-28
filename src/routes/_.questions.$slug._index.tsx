@@ -28,12 +28,26 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbQuestion = result.data as unknown as DBQuestion;
 
   if (dbQuestion.id) {
-    await contentServiceServer.incrementViewCount(client, 'questions', dbQuestion.total_views, dbQuestion.id);
+    await contentServiceServer.incrementViewCount(
+      client,
+      'questions',
+      dbQuestion.total_views,
+      dbQuestion.id,
+    );
   }
 
-  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(client, dbQuestion.id, 'questions', dbQuestion.tags);
+  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(
+    client,
+    dbQuestion.id,
+    'questions',
+    dbQuestion.tags,
+  );
 
-  const images = storageServiceServer.getPublicUrls(client, dbQuestion.images!, IMAGE_SIZES.GALLERY);
+  const images = storageServiceServer.getPublicUrls(
+    client,
+    dbQuestion.images!,
+    IMAGE_SIZES.GALLERY,
+  );
 
   const question = Question.fromDB(dbQuestion, tags, images);
   question.usefulCount = usefulVotes.count || 0;

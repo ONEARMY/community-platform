@@ -31,7 +31,9 @@ export const MapWithListHeader = ({ viewport }: IProps) => {
 
   if (mapState.loadingMessage) {
     return (
-      <Flex sx={{ background: 'background', height: '100%', width: '100%', justifyContent: 'center' }}>
+      <Flex
+        sx={{ background: 'background', height: '100%', width: '100%', justifyContent: 'center' }}
+      >
         <Loader label={mapState.loadingMessage} sx={{ alignSelf: 'center' }} />
       </Flex>
     );

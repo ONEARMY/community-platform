@@ -35,7 +35,14 @@ export const AddImage = ({ imageUploadHandler }: IProps) => {
 
   return (
     <>
-      <Button small variant="subtle" icon="image" type="button" showIconOnly onClick={() => setIsOpen(true)}>
+      <Button
+        small
+        variant="subtle"
+        icon="image"
+        type="button"
+        showIconOnly
+        onClick={() => setIsOpen(true)}
+      >
         Upload
       </Button>
 

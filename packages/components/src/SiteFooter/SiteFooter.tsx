@@ -26,8 +26,9 @@ const FooterContainer = styled(Flex)`
   position: relative;
   text-align: center;
 
-  @media only screen and (min-width: ${(props) => (props.theme as any).breakpoints[1]}) and (max-width: ${(props) =>
-      (props.theme as any).breakpoints[2]}) {
+  @media only screen and (min-width: ${(props) => (props.theme as any).breakpoints[1]}) and (max-width: ${(
+    props,
+  ) => (props.theme as any).breakpoints[2]}) {
     align-items: flex-start;
     padding-top: 35px;
     padding-bottom: 35px;
@@ -44,8 +45,9 @@ const FooterContainer = styled(Flex)`
 `;
 
 const OneArmyIcon = styled(Icon)`
-  @media only screen and (min-width: ${(props) => (props.theme as any).breakpoints[1]}) and (max-width: ${(props) =>
-      (props.theme as any).breakpoints[2]}) {
+  @media only screen and (min-width: ${(props) => (props.theme as any).breakpoints[1]}) and (max-width: ${(
+    props,
+  ) => (props.theme as any).breakpoints[2]}) {
     position: absolute;
     top: 45px;
     left: 30px;

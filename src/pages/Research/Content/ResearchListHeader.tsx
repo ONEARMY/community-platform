@@ -8,18 +8,18 @@ import {
   Tooltip,
 } from 'oa-components';
 import type { Category, ResearchStatus } from 'oa-shared';
-import { ResearchStatusRecord, UserRole } from 'oa-shared';
-import { useCallback, useEffect, useState } from 'react';
+import { ResearchStatusRecord } from 'oa-shared';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { useClickOutside } from 'src/common/hooks/useClickOutside';
 import { UserAction } from 'src/common/UserAction';
-import { isPreciousPlastic } from 'src/config/config';
 import DraftButton from 'src/pages/common/Drafts/DraftButton';
 import { ListHeader } from 'src/pages/common/Layout/ListHeader';
 import type { FilterSection } from 'src/pages/common/Layout/MobileSortModal';
 import { MobileSortModal } from 'src/pages/common/Layout/MobileSortModal';
+import { TenantContext } from 'src/pages/common/TenantContext';
 import { categoryService } from 'src/services/categoryService';
 import { Box, Button, Flex } from 'theme-ui';
 import { listing } from '../labels';
@@ -44,6 +44,8 @@ const defaultSort: ResearchSortOption = 'LatestUpdated';
 
 export const ResearchFilterHeader = (props: IProps) => {
   const { itemCount, draftCount, handleShowDrafts, showDrafts } = props;
+
+  const tenantContext = useContext(TenantContext);
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -161,14 +163,12 @@ export const ResearchFilterHeader = (props: IProps) => {
     (categoryParam > 0 ? 1 : 0) +
     (status ? 1 : 0);
 
-  const roleRequired = isPreciousPlastic()
-    ? undefined
-    : [UserRole.ADMIN, UserRole.RESEARCH_CREATOR];
+  const createResearchRoles = tenantContext?.createResearchRoles;
 
   const actionComponents = (
     <UserAction
       incompleteProfile={
-        <AuthWrapper roleRequired={roleRequired}>
+        <AuthWrapper roleRequired={tenantContext?.createResearchRoles}>
           <Link to="/settings">
             <Button
               type="button"
@@ -184,7 +184,7 @@ export const ResearchFilterHeader = (props: IProps) => {
         </AuthWrapper>
       }
       loggedIn={
-        <AuthWrapper roleRequired={roleRequired}>
+        <AuthWrapper roleRequired={createResearchRoles}>
           <DraftButton
             showDrafts={showDrafts}
             draftCount={draftCount}
@@ -198,7 +198,8 @@ export const ResearchFilterHeader = (props: IProps) => {
         </AuthWrapper>
       }
       loggedOut={
-        isPreciousPlastic() && (
+        (!createResearchRoles ||
+          (Array.isArray(createResearchRoles) && createResearchRoles.length === 0)) && (
           <ReturnPathLink to="/sign-up">
             <Button type="button" variant="primary" data-cy="sign-up">
               {listing.join}

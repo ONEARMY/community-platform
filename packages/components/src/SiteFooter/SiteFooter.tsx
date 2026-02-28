@@ -13,6 +13,7 @@ const discordButtonWidth = 310;
 const Anchor = styled(ExternalLink)`
   color: #fff;
   text-decoration: underline;
+  white-space: nowrap;
 `;
 
 const FooterContainer = styled(Flex)`
@@ -60,14 +61,14 @@ export const SiteFooter = ({ siteName }: SiteFooterProps) => {
         marginTop: '45px',
       }}
     >
-      <OneArmyIcon glyph={'star-active'} mb={[3, 3, 0]} />
+      <OneArmyIcon glyph="star-active" mb={[3, 3, 0]} />
       <Text ml={[0, 0, 0, 3]} mr={1}>
         {siteName} is a project by <Anchor href="https://onearmy.earth/">One Army</Anchor>.
       </Text>
 
       <Text mt={[2, 2, 0]}>
         Please <Anchor href="https://www.patreon.com/one_army">sponsor the work</Anchor> or{' '}
-        <Anchor href="https://platform.onearmy.earth/">help&nbsp;us&nbsp;build&nbsp;the&nbsp;software</Anchor>.
+        <Anchor href="https://platform.onearmy.earth/">help us build the software</Anchor>.
       </Text>
     </FooterContainer>
   );

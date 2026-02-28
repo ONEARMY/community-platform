@@ -31,15 +31,7 @@
     "bracketSpacing": true,
     "expand": "auto",
     "useEditorconfig": true,
-    "includes": [
-      "**",
-      "!**/build",
-      "!**/storybook-static",
-      "!**/dist",
-      "!shared/lib",
-      "!**/.react-router",
-      "!**/*.md"
-    ]
+    "includes": ["**", "!**/build", "!**/storybook-static", "!**/dist", "!shared/lib", "!**/.react-router", "!**/*.md"]
   },
   "linter": {
     "enabled": true,
@@ -72,6 +64,7 @@
         "noUnreachableSuper": "error",
         "noUnsafeFinally": "error",
         "noUnsafeOptionalChaining": "error",
+        "noUnusedImports": "warn",
         "noUnusedLabels": "error",
         "noUnusedVariables": "error",
         "useIsNan": "error",
@@ -131,16 +124,7 @@
         "useNamespaceKeyword": "error"
       }
     },
-    "includes": [
-      "**",
-      "!**/node_modules",
-      "!**/functions",
-      "!**/build",
-      "!**/lib",
-      "!**/storybook-static",
-      "!**/dist",
-      "!shared/lib"
-    ]
+    "includes": ["**", "!**/node_modules", "!**/functions", "!**/build", "!**/lib", "!**/storybook-static", "!**/dist", "!shared/lib"]
   },
   "javascript": {
     "formatter": {

@@ -13,8 +13,9 @@ import {
   UPDATE_BUTTON_TEXT,
 } from './PatreonIntegration';
 
-import type { IPatreonUser } from 'oa-shared';
+import { UserRole, type IPatreonUser } from 'oa-shared';
 import type { Mock } from 'vitest';
+import { TenantContext, TenantSettingsContext } from 'src/pages/common/TenantContext';
 
 // Mock setup first (hoisted to the top by Vitest)
 vi.mock('src/services/patreonService', () => {
@@ -28,6 +29,33 @@ vi.mock('src/services/patreonService', () => {
 
 // Import the mocked service *after* vi.mock()
 import { patreonService } from 'src/services/patreonService';
+
+const mockTenantContext: TenantSettingsContext = {
+  patreonId: 'mock-patreon-client-id',
+  siteName: 'Test Site',
+  siteDescription: '',
+  siteUrl: 'https://test.com',
+  messageSignOff: 'Test',
+  emailFrom: 'test@test.com',
+  siteImage: 'test.png',
+  noMessaging: false,
+  libraryHeading: 'Library',
+  academyResource: 'Academy',
+  profileGuidelines: 'Guidelines',
+  questionsGuidelines: 'Questions',
+  supportedModules: 'modules',
+  colorPrimary: '#fee77b',
+  colorPrimaryHover: '#ffde45',
+  colorAccent: '#fee77b',
+  colorAccentHover: '#ffde45',
+  showImpact: true,
+  createResearchRoles: [UserRole.ADMIN, UserRole.RESEARCH_CREATOR],
+  environment: {},
+};
+
+const renderWithTenantContext = (component: React.ReactNode) => {
+  return render(<TenantContext.Provider value={mockTenantContext}>{component}</TenantContext.Provider>);
+};
 
 const MOCK_PATREON_TIER_TITLE = 'Patreon Tier Title';
 const mockPatreonSupporter = {
@@ -79,7 +107,7 @@ describe('PatreonIntegration', () => {
       (patreonService.getCurrentUserPatreon as Mock).mockResolvedValue(null);
 
       await act(async () => {
-        render(<PatreonIntegration />);
+        renderWithTenantContext(<PatreonIntegration />);
       });
     });
 
@@ -95,7 +123,7 @@ describe('PatreonIntegration', () => {
       (patreonService.getCurrentUserPatreon as Mock).mockResolvedValue(mockPatreonNotSupporter);
 
       await act(async () => {
-        render(<PatreonIntegration />);
+        renderWithTenantContext(<PatreonIntegration />);
       });
     });
 
@@ -116,7 +144,7 @@ describe('PatreonIntegration', () => {
       vi.clearAllMocks();
       (patreonService.getCurrentUserPatreon as Mock).mockReturnValue(mockPatreonSupporter);
       await act(async () => {
-        render(<PatreonIntegration />);
+        renderWithTenantContext(<PatreonIntegration />);
       });
     });
 
@@ -133,6 +161,24 @@ describe('PatreonIntegration', () => {
         fireEvent.click(screen.getByText(REMOVE_BUTTON_TEXT));
       });
       expect(patreonService.disconnectUserPatreon).toHaveBeenCalled();
+    });
+  });
+
+  describe('without patreonId', () => {
+    it('does not render when patreonId is not provided', () => {
+      const contextWithoutPatreonId = {
+        ...mockTenantContext,
+        patreonId: '',
+      };
+
+      const { container } = render(
+        <TenantContext.Provider value={contextWithoutPatreonId}>
+          <PatreonIntegration />
+        </TenantContext.Provider>,
+      );
+
+      expect(container.firstChild).toBeNull();
+      expect(screen.queryByText(HEADING)).not.toBeInTheDocument();
     });
   });
 });

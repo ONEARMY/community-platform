@@ -1,10 +1,22 @@
 import { ExternalLink, Guidelines } from 'oa-components';
+import { useContext } from 'react';
+import { TenantContext } from 'src/pages/common/TenantContext';
 
 export const QuestionPostingGuidelines = () => {
-  const guidelinesUrl =
-    import.meta.env.VITE_QUESTIONS_GUIDELINES_URL || process.env.VITE_QUESTIONS_GUIDELINES_URL;
+  const tenantContext = useContext(TenantContext);
+  const guidelinesUrl = tenantContext?.questionsGuidelines;
 
   const steps = [
+    ...(guidelinesUrl
+      ? [
+          <>
+            Have a look at our{' '}
+            <ExternalLink sx={{ color: 'blue' }} href={guidelinesUrl}>
+              question guidelines.
+            </ExternalLink>
+          </>,
+        ]
+      : []),
     <>
       Write your question (in English){' '}
       <span role="img" aria-label="raised-hand">
@@ -37,17 +49,6 @@ export const QuestionPostingGuidelines = () => {
       </span>
     </>,
   ];
-
-  if (guidelinesUrl) {
-    steps.unshift(
-      <>
-        Have a look at our{' '}
-        <ExternalLink sx={{ color: 'blue' }} href={guidelinesUrl}>
-          question guidelines.
-        </ExternalLink>
-      </>,
-    );
-  }
 
   return <Guidelines title="How does it work?" steps={steps} />;
 };

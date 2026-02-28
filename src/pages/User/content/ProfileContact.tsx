@@ -1,8 +1,10 @@
 import { ProfileLink } from 'oa-components';
 import type { Profile } from 'oa-shared';
+import { useContext } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 import { UserAction } from 'src/common/UserAction';
-import { isMessagingModuleOff, isUserContactable } from 'src/utils/helpers';
+import { TenantContext } from 'src/pages/common/TenantContext';
+import { isUserContactable } from 'src/utils/helpers';
 import { Box, Flex } from 'theme-ui';
 import { UserContactFormAvailable } from '../contact';
 import { UserContactForm } from '../contact/UserContactForm';
@@ -15,7 +17,8 @@ interface IProps {
 
 export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
   const isUserProfileContactable = isUserContactable(user);
-  const shouldShowContactOutput = !isMessagingModuleOff();
+  const tenantContext = useContext(TenantContext);
+  const shouldShowContactOutput = !tenantContext?.noMessaging;
 
   return (
     <Flex sx={{ flexDirection: 'column' }}>
@@ -32,11 +35,7 @@ export const ProfileContact = ({ user, isViewingOwnProfile }: IProps) => {
                   )
                 }
                 loggedOut={
-                  isUserProfileContactable ? (
-                    <UserContactFormNotLoggedIn user={user} />
-                  ) : (
-                    <UserContactFormNotLoggedIn user={user} />
-                  )
+                  isUserProfileContactable ? <UserContactFormNotLoggedIn user={user} /> : <UserContactFormNotLoggedIn user={user} />
                 }
               />
             )}

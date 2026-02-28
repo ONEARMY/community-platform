@@ -1,7 +1,11 @@
 import '@emotion/react';
 
-import type { ThemeWithName } from 'oa-themes';
+import type { PlatformTheme } from 'oa-themes';
 
 declare module '@emotion/react' {
-  export interface Theme extends ThemeWithName {}
+  export interface Theme extends PlatformTheme {}
+}
+
+declare module '@theme-ui/css' {
+  export interface Theme extends PlatformTheme {}
 }

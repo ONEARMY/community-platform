@@ -5,7 +5,6 @@ import { Flex, Image as ThemeImage } from 'theme-ui';
 import { Arrow } from '../ArrowIcon/ArrowIcon';
 import { usePhotoSwipeLightbox } from '../hooks/usePhotoSwipeLightbox';
 import { ImageGalleryThumbnail } from '../ImageGalleryThumbnail/ImageGalleryThumbnail';
-import { Loader } from '../Loader/Loader';
 
 import 'photoswipe/style.css';
 
@@ -33,7 +32,6 @@ export interface ImageGalleryProps {
 interface IState {
   activeImageIndex: number;
   showLightbox: boolean;
-  showActiveImgLoading: boolean;
   activeImageAspectRatio: number | null;
 }
 
@@ -99,7 +97,6 @@ export const ImageGallery = (props: ImageGalleryProps) => {
   const [state, setState] = useState<IState>({
     activeImageIndex: 0,
     showLightbox: false,
-    showActiveImgLoading: true,
     activeImageAspectRatio: null,
   });
 
@@ -122,7 +119,6 @@ export const ImageGallery = (props: ImageGalleryProps) => {
     setState((prevState) => ({
       ...prevState,
       activeImageIndex: imageIndex,
-      showActiveImgLoading: imageIndex !== prevState.activeImageIndex,
       activeImageAspectRatio: null,
     }));
   };
@@ -130,7 +126,6 @@ export const ImageGallery = (props: ImageGalleryProps) => {
   const setActiveImgLoaded = () => {
     setState((prevState) => ({
       ...prevState,
-      showActiveImgLoading: false,
     }));
   };
 
@@ -175,18 +170,13 @@ export const ImageGallery = (props: ImageGalleryProps) => {
 
   // Detect images wider than 16:9 and remove aspect ratio constraint to prevent letterboxing
   const ASPECT_RATIO_16_9 = 16 / 9;
-  const isWideImage = state.activeImageAspectRatio
-    ? state.activeImageAspectRatio > ASPECT_RATIO_16_9
-    : false;
+  const isWideImage = state.activeImageAspectRatio ? state.activeImageAspectRatio > ASPECT_RATIO_16_9 : false;
   const useFlexibleAspectRatio = isWideImage && !!props.allowPortrait;
   const allowPortrait = !!props.allowPortrait;
 
   return (
     <Flex sx={{ flexDirection: 'column' }}>
       <ImageContainer $flexibleAspectRatio={useFlexibleAspectRatio} $allowPortrait={allowPortrait}>
-        {state.showActiveImgLoading && (
-          <Loader sx={{ position: 'absolute', alignSelf: 'center', zIndex: 1 }} />
-        )}
         <ThemeImage
           ref={imageRef}
           data-cy="active-image"
@@ -196,7 +186,6 @@ export const ImageGallery = (props: ImageGalleryProps) => {
             height: !allowPortrait || !useFlexibleAspectRatio ? '100%' : 'auto',
             cursor: 'pointer',
             objectFit: allowPortrait ? 'contain' : 'cover',
-            opacity: state.showActiveImgLoading ? 0.3 : 1,
             transition: 'opacity 0.2s ease-in-out',
           }}
           src={activeImage.downloadUrl}
@@ -214,9 +203,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
                 right: 0,
                 zIndex: 2,
               }}
-              onClick={() =>
-                setActive(activeImageIndex + 1 < imageNumber ? activeImageIndex + 1 : 0)
-              }
+              onClick={() => setActive(activeImageIndex + 1 < imageNumber ? activeImageIndex + 1 : 0)}
             >
               <Arrow direction="right" sx={{ marginRight: '10px' }} />
             </NavButton>
@@ -226,9 +213,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
                 left: 0,
                 zIndex: 2,
               }}
-              onClick={() =>
-                setActive(activeImageIndex - 1 >= 0 ? activeImageIndex - 1 : imageNumber - 1)
-              }
+              onClick={() => setActive(activeImageIndex - 1 >= 0 ? activeImageIndex - 1 : imageNumber - 1)}
             >
               <Arrow direction="left" sx={{ marginLeft: '10px' }} />
             </NavButton>

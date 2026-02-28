@@ -32,7 +32,7 @@ describe('[Questions]', () => {
     it('[By Everyone]', () => {
       const { description, slug, title } = question;
 
-      const pageTitle = `${title} - Question - Precious Plastic`;
+      const pageTitle = `${title} - Question - Test Site`;
 
       cy.step('Can visit question');
       cy.visit(`/questions/${slug}`);

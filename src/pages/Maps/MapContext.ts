@@ -1,7 +1,6 @@
-import type { LatLngBounds } from 'leaflet';
+import type { LatLngBounds, Map as LeafletMap } from 'leaflet';
 import type { ILatLng, MapPin, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
 import { createContext } from 'react';
-import type { Map as MapType } from 'react-leaflet';
 
 export const MapContext = createContext<{
   allPins: MapPin[] | null;
@@ -9,6 +8,7 @@ export const MapContext = createContext<{
   allTags: ProfileTag[];
   allProfileTypes: ProfileType[];
   allProfileSettings: string[];
+  mapPins: MapPin[];
   filteredPins: MapPin[];
   activeTagFilters: number[];
   activeBadgeFilters: string[];
@@ -33,6 +33,6 @@ export const MapContext = createContext<{
   setView: (location: ILatLng, zoom: number) => void;
   panTo: (location: ILatLng) => void;
   fitBounds: (bounds: LatLngBounds) => void;
-  setMapRef: (ref: MapType) => void;
+  setMapRef: (ref: LeafletMap) => void;
   setClusterGroupRef: (ref: any) => void;
 } | null>(null);

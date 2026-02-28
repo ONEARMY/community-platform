@@ -1,7 +1,6 @@
-import type { ResearchUpdate } from 'oa-shared';
 import { ResearchItem } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
-import { redirect, useLoaderData } from 'react-router';
+import { data, redirect, useLoaderData } from 'react-router';
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common/ResearchUpdateForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
@@ -23,7 +22,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const result = await researchServiceServer.getBySlug(client, params.slug as string);
 
   if (result.error || !result.item) {
-    return Response.json({ research: null }, { headers });
+    return redirect('/research', { headers });
   }
 
   const username = claims.data.claims.user_metadata.username;
@@ -33,7 +32,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const update = research.updates.find((x) => x.id === Number(params.updateId));
 
   if (!update) {
-    return redirect('/research');
+    return redirect('/research', { headers });
   }
 
   if (!(await researchServiceServer.isAllowedToEditResearch(client, research, username))) {
@@ -41,7 +40,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const updateDb = researchDb.updates.find((x) => x.id === Number(params.updateId));
-  const fileLink = updateDb?.file_link;
+  const fileLink = updateDb?.file_link || undefined;
   const files = updateDb?.files?.at(0)
     ? await storageServiceServer.getPathDocuments(
         `research/${research.id}/updates/${update.id}`,
@@ -50,18 +49,16 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       )
     : [];
 
-  return Response.json({ research, update, fileLink, files }, { headers });
+  return data({ research, update, fileLink, files }, { headers });
 }
 
 export default function Index() {
-  const data: any = useLoaderData<typeof loader>();
-  const research = data.research as ResearchItem;
-  const update = data.update as ResearchUpdate;
+  const data = useLoaderData<typeof loader>();
 
   return (
     <ResearchUpdateForm
-      research={research}
-      researchUpdate={update}
+      research={data.research}
+      researchUpdate={data.update}
       fileLink={data.fileLink}
       files={data.files}
     />

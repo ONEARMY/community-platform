@@ -1,9 +1,10 @@
 import { Button, Loader, MoreContainer } from 'oa-components';
 import type { Project } from 'oa-shared';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { logger } from 'src/logger';
 import useDrafts from 'src/pages/common/Drafts/useDraftsSupabase';
+import { TenantContext } from 'src/pages/common/TenantContext';
 import { Flex, Grid, Heading } from 'theme-ui';
 import { listing } from '../../labels';
 import { LibrarySearchParams, libraryService } from '../../library.service';
@@ -11,18 +12,15 @@ import { LibraryListHeader } from './LibraryListHeader';
 import type { LibrarySortOption } from './LibrarySortOptions';
 import { ProjectCard } from './ProjectCard';
 
-const siteName = import.meta.env.VITE_SITE_NAME;
-
 export const LibraryList = () => {
+  const tenantContext = useContext(TenantContext);
   const [isFetching, setIsFetching] = useState(true);
   const [projects, setProjects] = useState<Project[]>([]);
   const [total, setTotal] = useState(0);
-  const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } = useDrafts<Project>(
-    {
-      getDraftCount: libraryService.getDraftCount,
-      getDrafts: libraryService.getDrafts,
-    },
-  );
+  const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } = useDrafts<Project>({
+    getDraftCount: libraryService.getDraftCount,
+    getDrafts: libraryService.getDrafts,
+  });
 
   const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get(LibrarySearchParams.q) || '';
@@ -69,8 +67,7 @@ export const LibraryList = () => {
     setIsFetching(false);
   };
 
-  const showLoadMore =
-    !isFetching && !showDrafts && projects && projects.length > 0 && projects.length < total;
+  const showLoadMore = !isFetching && !showDrafts && projects && projects.length > 0 && projects.length < total;
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
@@ -87,11 +84,7 @@ export const LibraryList = () => {
             return <ProjectCard key={item.id} item={item} />;
           })
         ) : (
-          <>
-            {projects &&
-              projects.length > 0 &&
-              projects.map((item, index) => <ProjectCard key={index} item={item} query={q} />)}
-          </>
+          <>{projects && projects.length > 0 && projects.map((item, index) => <ProjectCard key={index} item={item} query={q} />)}</>
         )}
       </Grid>
 
@@ -119,7 +112,7 @@ export const LibraryList = () => {
       >
         <Flex sx={{ alignItems: 'center', flexDirection: 'column' }}>
           <Heading as="p" sx={{ textAlign: 'center', maxWidth: '500px' }}>
-            Contribute to the {siteName} library,
+            Contribute to the {tenantContext?.siteName || 'Community Platform'} library,
             <br />
             share your project.
           </Heading>

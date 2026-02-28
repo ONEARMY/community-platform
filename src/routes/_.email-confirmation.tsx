@@ -2,7 +2,7 @@ import { Button, HeroBanner } from 'oa-components';
 import { useEffect, useState } from 'react';
 import { Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { redirect, useActionData, useLoaderData, useNavigate } from 'react-router';
+import { data, redirect, useActionData, useLoaderData, useNavigate } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { Card, Flex, Heading, Text } from 'theme-ui';
@@ -14,21 +14,17 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const { client, headers } = createSupabaseServerClient(request);
 
-  const { data } = await client.auth.getClaims();
+  const claims = await client.auth.getClaims();
 
-  if (data?.claims) {
+  if (claims.data?.claims) {
     return redirect('/settings/profile', { headers });
   }
 
-  if (error) {
-    return Response.json({ error }, { headers });
+  if (token || error) {
+    return data({ token, error }, { headers });
   }
 
-  if (token) {
-    return Response.json({ token }, { headers });
-  }
-
-  return redirect('/');
+  return redirect('/', { headers });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -39,7 +35,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const token = url.searchParams.get('token');
 
   if (!token) {
-    return Response.json({ error: 'Your reset link is invalid' }, { status: 400, headers });
+    return data({ error: 'Your reset link is invalid' }, { status: 400, headers });
   }
 
   const tokenVerification = await client.auth.verifyOtp({
@@ -48,18 +44,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   });
 
   if (!tokenVerification.data.user) {
-    return Response.json(
-      { error: 'Your link has expired or is invalid' },
-      { status: 400, headers },
-    );
+    return data({ error: 'Your link has expired or is invalid' }, { status: 400, headers });
   }
 
-  return Response.json({ success: true }, { headers });
+  return data({ success: true }, { headers });
 };
 
 export default function Index() {
   const navigate = useNavigate();
-  const data = useLoaderData();
+  const loaderData = useLoaderData<typeof loader>();
   const actionData = useActionData();
   const [isConfirmed, setIsConfirmed] = useState(false);
 
@@ -103,8 +96,8 @@ export default function Index() {
                         <Heading>{isConfirmed ? 'Email verified!' : 'Email confirmation'}</Heading>
                       </Flex>
 
-                      {data.error ? (
-                        <Text color="red">{data?.error}</Text>
+                      {loaderData.error ? (
+                        <Text color="red">{loaderData?.error}</Text>
                       ) : (
                         <>
                           {actionData?.error && <Text color="red">{actionData?.error}</Text>}

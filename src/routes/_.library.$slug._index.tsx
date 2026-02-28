@@ -1,7 +1,7 @@
-import type { DBProject } from 'oa-shared';
+import type { DBProject, TenantSettings } from 'oa-shared';
 import { Project } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
-import { useLoaderData } from 'react-router';
+import { data, useLoaderData } from 'react-router';
 import { CommentFactory } from 'src/factories/commentFactory.server';
 import { ProjectPage } from 'src/pages/Library/Content/Page/ProjectPage';
 import { NotFoundPage } from 'src/pages/NotFound/NotFound';
@@ -9,6 +9,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
 import { libraryServiceServer } from 'src/services/libraryService.server';
+import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -17,7 +18,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const result = await libraryServiceServer.getBySlug(client, params.slug as string);
 
   if (result.error || !result.data) {
-    return Response.json({ project: null }, { headers });
+    return data({ project: null }, { headers });
   }
 
   const dbProject = result.data as unknown as DBProject;
@@ -49,34 +50,30 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     project.author = await factory.createAuthor(dbProject.author);
   }
 
-  return Response.json({ project }, { headers });
+  const tenantSettings = await new TenantSettingsService(client).get();
+
+  return data({ project, tenantSettings }, { headers });
 }
 
-export function HydrateFallback() {
-  // This is required because all routes are loaded client-side. Avoids a page flicker before css is loaded.
-  // Can be removed once ALL pages are using SSR.
-  return <div></div>;
-}
-
-export const meta = mergeMeta(({ loaderData }) => {
+export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
   const project = (loaderData as any)?.project as Project;
+  const tenantSettings = (loaderData as any)?.tenantSettings as TenantSettings;
 
   if (!project) {
     return [];
   }
 
-  const title = `${project.title} - Library - ${import.meta.env.VITE_SITE_NAME}`;
+  const title = `${project.title} - Library - ${tenantSettings.siteName}`;
 
   return generateTags(title, project.description, project.coverImage?.publicUrl);
 });
 
 export default function Index() {
-  const data = useLoaderData();
-  const project = data.project as Project;
+  const data = useLoaderData<typeof loader>();
 
-  if (!project) {
+  if (!data.project) {
     return <NotFoundPage />;
   }
 
-  return <ProjectPage item={project} />;
+  return <ProjectPage item={data.project} />;
 }

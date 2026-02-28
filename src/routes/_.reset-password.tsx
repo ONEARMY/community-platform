@@ -1,23 +1,26 @@
 import { Button, FieldInput, HeroBanner } from 'oa-components';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { Link, redirect, useActionData, useNavigate } from 'react-router';
+import { data, Link, redirect, useActionData, useNavigate } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { getReturnUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
 import { Card, Flex, Heading, Label, Text } from 'theme-ui';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { client } = createSupabaseServerClient(request);
+  const { client, headers } = createSupabaseServerClient(request);
   const claims = await client.auth.getClaims();
 
   if (claims.data?.claims) {
-    return redirect(getReturnUrl(request));
+    return redirect(getReturnUrl(request), { headers });
   }
 
-  return null;
+  const tenantSettings = await new TenantSettingsService(client).get();
+
+  return data(tenantSettings, { headers });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -33,17 +36,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   });
 
   // Always return success and display a generic message, even when the user doesn't exist, for security reasons.
-  return Response.json({ success: true, email: formData.get('email') }, { headers });
+  return data({ success: true, email: formData.get('email') as string, error: null }, { headers });
 };
 
-export const meta = mergeMeta<typeof loader>(() => {
-  const title = `Login - ${import.meta.env.VITE_SITE_NAME}`;
+export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
+  const title = `Reset Password - ${loaderData?.siteName}`;
 
   return generateTags(title);
 });
 
 export default function Index() {
-  const actionResponse: any = useActionData<typeof action>();
+  const actionResponse = useActionData<typeof action>();
   const navigate = useNavigate();
 
   return (

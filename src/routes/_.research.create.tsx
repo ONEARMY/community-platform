@@ -1,5 +1,5 @@
 import { UserRole } from 'oa-shared';
-import { redirect } from 'react-router';
+import { data, redirect } from 'react-router';
 import ResearchForm from 'src/pages/Research/Content/Common/ResearchForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -27,7 +27,7 @@ export async function loader({ request }) {
     return redirect('/forbidden?page=research-create', { headers });
   }
 
-  return Response.json({}, { headers });
+  return data(null, { headers });
 }
 
 export default function Index() {

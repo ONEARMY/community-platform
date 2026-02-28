@@ -1,29 +1,28 @@
 import { useContext } from 'react';
-import { Outlet } from 'react-router';
+import { data, LoaderFunctionArgs, Outlet } from 'react-router';
 import { isModuleSupported, MODULE } from 'src/modules';
-import { EnvironmentContext } from 'src/pages/common/EnvironmentContext';
 import Main from 'src/pages/common/Layout/Main';
+import { TenantContext } from 'src/pages/common/TenantContext';
+import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 
-export async function loader() {
-  return null;
+export async function loader({ request }: LoaderFunctionArgs) {
+  const { client, headers } = createSupabaseServerClient(request);
+
+  const tenantSettings = await new TenantSettingsService(client).get();
+
+  return data(tenantSettings, { headers });
 }
 
-export function HydrateFallback() {
-  return <div></div>;
-}
-
-export const meta = mergeMeta<typeof loader>(() => {
-  const title = `Questions - ${import.meta.env.VITE_SITE_NAME}`;
-  // const imageUrl = news.heroImage?.publicUrl
-
-  return generateTags(title);
+export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
+  return generateTags(`Questions - ${loaderData?.siteName}`);
 });
 
 export default function Index() {
-  const env = useContext(EnvironmentContext);
+  const tenantContext = useContext(TenantContext);
 
-  if (!isModuleSupported(env?.VITE_SUPPORTED_MODULES || '', MODULE.QUESTION)) {
+  if (!isModuleSupported(tenantContext?.supportedModules || '', MODULE.QUESTIONS)) {
     return null;
   }
 

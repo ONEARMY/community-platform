@@ -6,7 +6,7 @@ import { getSupportedModules } from 'src/modules';
 import { getAvailablePageList } from 'src/pages/PageList';
 import { Flex } from 'theme-ui';
 
-import { EnvironmentContext } from '../../EnvironmentContext';
+import { TenantContext } from '../../TenantContext';
 
 const MenuLink = styled(NavLink)`
   padding: 0px ${(props) => props.theme.space[4]}px;
@@ -27,7 +27,7 @@ const MenuLink = styled(NavLink)`
       display: block;
       position: absolute;
       bottom: -6px;
-      background-color: ${(props) => props.theme.colors.accent.base};
+      background-color: var(--color-primary);
       mask-size: contain;
       mask-image: url(\"${MenuCurrent}\");
       mask-repeat: no-repeat;
@@ -40,17 +40,19 @@ const MenuLink = styled(NavLink)`
 `;
 
 export const MenuDesktop = () => {
-  const env = useContext(EnvironmentContext);
+  const tenantContext = useContext(TenantContext);
 
   return (
     <Flex sx={{ alignItems: 'center', width: '100%' }}>
-      {getAvailablePageList(getSupportedModules(env?.VITE_SUPPORTED_MODULES || '')).map((page) => (
-        <Flex key={page.path}>
-          <MenuLink to={page.path} data-cy="page-link">
-            <Flex>{page.title}</Flex>
-          </MenuLink>
-        </Flex>
-      ))}
+      {getAvailablePageList(getSupportedModules(tenantContext?.supportedModules || '')).map(
+        (page) => (
+          <Flex key={page.path}>
+            <MenuLink to={page.path} data-cy="page-link">
+              <Flex>{page.title}</Flex>
+            </MenuLink>
+          </Flex>
+        ),
+      )}
     </Flex>
   );
 };

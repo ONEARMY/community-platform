@@ -1,12 +1,12 @@
 import type { GridFormFields } from 'oa-components';
 import { ConfirmModal, FieldCheckbox, GridForm, InformationTooltip, InternalLink, Loader } from 'oa-components';
 import type { DBNotificationsPreferences } from 'oa-shared';
-import { useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { UserContactError } from 'src/pages/User/contact';
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError';
-import { isMessagingModuleOff } from 'src/utils/helpers';
 import { Button, Flex, Text } from 'theme-ui';
+import { TenantContext } from '../common/TenantContext';
 
 const formId = 'SupabaseNotifications';
 
@@ -52,10 +52,8 @@ interface IProps {
 export const SupabaseNotificationsForm = (props: IProps) => {
   const { initialValues, isLoading, onSubmit, onUnsubscribe, profileIsContactable, submitResults } = props;
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-  const showMessagingSetting = useMemo(() => {
-    return !isMessagingModuleOff();
-  }, []);
+  const tenantContext = useContext(TenantContext);
+  const showMessagingSetting = !tenantContext?.noMessaging;
 
   const fields = useMemo(() => {
     const allFields = [...baseFields];

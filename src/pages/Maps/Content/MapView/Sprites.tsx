@@ -1,10 +1,9 @@
 import type { MarkerCluster } from 'leaflet';
 import { divIcon, point } from 'leaflet';
 import type { MapPin } from 'oa-shared';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import clusterIcon from 'src/assets/icons/map-cluster.svg';
 import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg';
-import { useThemeUI } from 'theme-ui';
 
 import './sprites.css';
 
@@ -14,20 +13,26 @@ import './sprites.css';
  * such as total pins. Currently none used, but retaining
  */
 export const createClusterIcon = () => {
-  const { theme } = useThemeUI() as any;
-  const path = clusterIcon;
-  let iconAsString: string = '';
+  const iconAsStringRef = useRef<string>('');
+
   useEffect(() => {
-    fetch(path)
+    // Resolve CSS variable to actual hex for SVG attribute replacement
+    // (SVG attributes like fill="#..." don't support CSS variables)
+    const resolved = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-primary')
+      .trim();
+
+    fetch(clusterIcon)
       .then((response) => response.text())
       .then((data) => {
-        iconAsString = data.replaceAll(
+        iconAsStringRef.current = data.replaceAll(
           /#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})/g,
-          theme.colors.accent.base,
+          resolved,
         );
       })
       .catch((fetchError) => console.error(fetchError));
-  }, [path, theme]);
+  }, []);
+
   return (cluster: MarkerCluster) => {
     const className = ['icon'];
     let icon: any;
@@ -35,7 +40,7 @@ export const createClusterIcon = () => {
     const clusterChildCount: number = cluster.getChildCount();
     if (clusterChildCount > 1) {
       className.push('icon-cluster-many');
-      icon = iconAsString;
+      icon = iconAsStringRef.current;
       // Calcute Outline CSS
       if (clusterChildCount > 49) {
         outlineSize = 24;
@@ -43,25 +48,21 @@ export const createClusterIcon = () => {
         outlineSize = 4 + ((clusterChildCount - 2) / 50) * 20;
       }
     } else if (clusterChildCount === 1) {
-      icon = `<img src="${cluster[0].pinType.icon} />`;
+      const childMarkers = cluster.getAllChildMarkers();
+      const firstPin = childMarkers[0]?.options as any;
+      icon = firstPin?.icon ? `<img src="${firstPin.icon}" />` : '';
     }
     const { fontSize, iconSize, lineHeight } = getClusterSizes(cluster);
 
-    // Prepare Outline CSS for groups
     const borderRadius = lineHeight / 2;
-    const themeBaseColorForRgba: RegExpExecArray | null =
-      /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(theme.colors.accent.base);
 
     return divIcon({
       html: `${icon}<span class="icon-cluster-text" style="
-        background: ${theme.colors.accent.base};
+        background: var(--color-primary);
         font-size: ${fontSize}px;
         line-height: ${lineHeight}px;
         border-radius: ${borderRadius}px;
-        outline: ${outlineSize}px solid rgba(
-          ${parseInt(themeBaseColorForRgba![1], 16)},
-          ${parseInt(themeBaseColorForRgba![2], 16)},
-          ${parseInt(themeBaseColorForRgba![3], 16)}, 0.5);
+        outline: ${outlineSize}px solid color-mix(in srgb, var(--color-primary) 50%, transparent);
         ">${clusterChildCount}</span>`,
       className: className.join(' '),
       iconSize: point(iconSize, iconSize, true),

@@ -2,7 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBNews } from 'oa-shared';
 import { News, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
-import { redirect, useLoaderData } from 'react-router';
+import { data, redirect, useLoaderData } from 'react-router';
 import { NewsForm } from 'src/pages/News/Content/Common/NewsForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { newsServiceServer } from 'src/services/newsService.server';
@@ -23,13 +23,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   if (!params.slug) {
-    return Response.json({ news: null }, { headers });
+    return data({ news: null }, { headers });
   }
 
   const result = await newsServiceServer.getBySlug(client, params.slug!);
 
   if (result.error || !result.data) {
-    return Response.json({ news: null }, { headers });
+    return data({ news: null }, { headers });
   }
 
   const dbNews = result.data as unknown as DBNews;
@@ -37,7 +37,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const heroImage = await newsServiceServer.getHeroImage(client, dbNews.hero_image);
   const news = News.fromDB(dbNews, tags, heroImage);
 
-  return Response.json({ news }, { headers });
+  return data({ news }, { headers });
 }
 
 async function isAllowedToEdit(userAuthId: string, client: SupabaseClient) {
@@ -50,15 +50,8 @@ async function isAllowedToEdit(userAuthId: string, client: SupabaseClient) {
   return data?.roles?.includes(UserRole.ADMIN);
 }
 
-export function HydrateFallback() {
-  // This is required because all routes are loaded client-side. Avoids a page flicker before css is loaded.
-  // Can be removed once ALL pages are using SSR.
-  return <div></div>;
-}
-
 export default function Index() {
-  const data = useLoaderData();
-  const news = data.news as News;
+  const data = useLoaderData<typeof loader>();
 
-  return <NewsForm data-testid="news-create-form" parentType="edit" news={news} />;
+  return <NewsForm data-testid="news-create-form" parentType="edit" news={data.news} />;
 }

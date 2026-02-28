@@ -140,29 +140,52 @@ describe('[News.Write]', () => {
       cy.contains(updatedTitle);
       cy.contains(category);
 
+    });
+
+    it('[Profile badge restricts visibility]', () => {
+      const title = `${initialRandomId} Profile badge news`;
+      const expectedSlug = `${initialRandomId}-profile-badge-news`;
+      const newsBody = 'only news';
+
+      cy.visit('/news');
+      const user = users.admin;
+      cy.signIn(user.email, user.password);
+
+      cy.step('Create a news item');
+      cy.visit('/news/create');
+      cy.get('[data-cy=field-title]', { timeout: 20000 });
+      cy.get('[data-cy=field-title]').clear().type(title).blur({ force: true });
+      cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.addToMarkdownField(newsBody);
+      cy.selectTag('Moulds', '[data-cy=category-select]');
+      cy.wait(2000);
+      cy.get('[data-cy=submit]').click();
+      cy.wait(2000);
+      cy.url().should('include', `/news/${expectedSlug}`);
+
       cy.step('Can add profile badge');
-      cy.visit(`/news/${updatedExpectedSlug}/edit`);
+      cy.visit(`/news/${expectedSlug}/edit`);
       cy.wait(1000);
       cy.selectTag('PRO', '[data-cy=profileBadge-select]');
-      cy.get('[data-cy=submit]').click().url().should('include', `/news/${updatedExpectedSlug}`);
+      cy.get('[data-cy=submit]').click().url().should('include', `/news/${expectedSlug}`);
       cy.get('[data-cy=profileBadge]').contains('only news');
 
       cy.step('Not visible to logged out users');
       cy.wait(1000);
       cy.logout();
       cy.reload();
-      cy.url().should('include', `/sign-in?returnUrl=%2Fnews%2F${updatedExpectedSlug}`);
+      cy.url().should('include', `/sign-in?returnUrl=%2Fnews%2F${expectedSlug}`);
 
       cy.step('Not visible on the list view');
       cy.visit('/news');
-      cy.contains(updatedTitle).should('not.exist');
+      cy.contains(title).should('not.exist');
 
       cy.step("Logged in user (who is not an admin) can't view item");
       cy.signUpNewUser();
-      cy.visit(`/news/${updatedExpectedSlug}`);
+      cy.visit(`/news/${expectedSlug}`);
       cy.reload();
       cy.url().should('include', `/news`);
-      cy.url().should('not.include', `updatedExpectedSlug`);
+      cy.url().should('not.include', expectedSlug);
     });
 
     it('[By Anonymous]', () => {

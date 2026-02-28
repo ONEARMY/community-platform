@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom/vitest';
-
 import { createMemoryRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router';
 import { faker } from '@faker-js/faker';
 import { act, render, waitFor, within } from '@testing-library/react';
@@ -7,14 +6,11 @@ import { ThemeProvider } from '@theme-ui/core';
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store';
 import { FactoryResearchItem, FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem';
 import { FactoryUser } from 'src/test/factories/User';
-import { testingThemeStyles } from 'src/test/utils/themeUtils';
+import { theme } from 'oa-themes';
 import { describe, expect, it, vi } from 'vitest';
-
 import { ResearchArticlePage } from './ResearchArticlePage';
-
 import type { Author, ResearchItem } from 'oa-shared';
 
-const Theme = testingThemeStyles;
 
 const mockUser = FactoryUser({ country: 'AF' });
 
@@ -245,7 +241,7 @@ const getWrapper = (research: ResearchItem) => {
 
   return render(
     <ProfileStoreProvider>
-      <ThemeProvider theme={Theme}>
+      <ThemeProvider theme={theme}>
         <RouterProvider router={router} />
       </ThemeProvider>
     </ProfileStoreProvider>,

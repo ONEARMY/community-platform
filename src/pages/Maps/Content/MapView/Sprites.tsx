@@ -4,7 +4,6 @@ import type { MapPin } from 'oa-shared';
 import { useEffect, useRef } from 'react';
 import clusterIcon from 'src/assets/icons/map-cluster.svg';
 import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg';
-import { useThemeUI } from 'theme-ui';
 
 import './sprites.css';
 
@@ -14,18 +13,14 @@ import './sprites.css';
  * such as total pins. Currently none used, but retaining
  */
 export const createClusterIcon = () => {
-  const { theme } = useThemeUI() as any;
-  const accentBase = theme.colors.accent.base;
   const iconAsStringRef = useRef<string>('');
 
   useEffect(() => {
     // Resolve CSS variable to actual hex for SVG attribute replacement
     // (SVG attributes like fill="#..." don't support CSS variables)
-    const resolved = accentBase.startsWith('var(')
-      ? getComputedStyle(document.documentElement)
-          .getPropertyValue(accentBase.slice(4, -1).trim())
-          .trim()
-      : accentBase;
+    const resolved = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-primary')
+      .trim();
 
     fetch(clusterIcon)
       .then((response) => response.text())
@@ -36,7 +31,7 @@ export const createClusterIcon = () => {
         );
       })
       .catch((fetchError) => console.error(fetchError));
-  }, [accentBase]);
+  }, []);
 
   return (cluster: MarkerCluster) => {
     const className = ['icon'];
@@ -63,11 +58,11 @@ export const createClusterIcon = () => {
 
     return divIcon({
       html: `${icon}<span class="icon-cluster-text" style="
-        background: ${accentBase};
+        background: var(--color-primary);
         font-size: ${fontSize}px;
         line-height: ${lineHeight}px;
         border-radius: ${borderRadius}px;
-        outline: ${outlineSize}px solid color-mix(in srgb, ${accentBase} 50%, transparent);
+        outline: ${outlineSize}px solid color-mix(in srgb, var(--color-primary) 50%, transparent);
         ">${clusterChildCount}</span>`,
       className: className.join(' '),
       iconSize: point(iconSize, iconSize, true),

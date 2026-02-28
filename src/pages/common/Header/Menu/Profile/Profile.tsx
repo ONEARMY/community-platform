@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react';
 import { MemberBadge } from 'oa-components';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useState } from 'react';
+import { useClickOutside } from 'src/common/hooks/useClickOutside';
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink';
 import { ProfileModal } from 'src/pages/common/Header/Menu/ProfileModal/ProfileModal';
 import { MobileMenuContext } from 'src/pages/common/Header/MobileMenuContext';
@@ -16,23 +17,6 @@ import './profile.css';
 interface IProps {
   isMobile: boolean;
 }
-
-const useClickOutside = (callback: () => void) => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        callback();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [callback]);
-
-  return ref;
-};
 
 const Profile = observer((props: IProps) => {
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);

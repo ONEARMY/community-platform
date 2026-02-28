@@ -16,6 +16,7 @@ const setPreferences = async (data: NotificationsPreferencesFormData) => {
 
   data.id && body.append('id', data.id.toString());
   body.append('comments', data.comments.toString());
+  body.append('news', data.news.toString());
   body.append('replies', data.replies.toString());
   body.append('research_updates', data.research_updates.toString());
   body.append('is_unsubscribed', 'false');
@@ -31,6 +32,7 @@ const setUnsubscribe = async (id: number | undefined) => {
 
   id && body.append('id', id.toString());
   body.append('comments', 'false');
+  body.append('news', 'false');
   body.append('replies', 'false');
   body.append('research_updates', 'false');
   body.append('is_unsubscribed', 'true');

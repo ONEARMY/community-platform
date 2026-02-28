@@ -85,6 +85,7 @@ describe('notificationsPreferencesViaEmailService', () => {
 
       const testData = {
         comments: true,
+        news: true,
         replies: false,
         research_updates: true,
         userCode: 'user123',
@@ -102,6 +103,7 @@ describe('notificationsPreferencesViaEmailService', () => {
 
       const formData = (fetch as any).mock.calls[0][1].body;
       expect(formData.get('comments')).toBe('true');
+      expect(formData.get('news')).toBe('true');
       expect(formData.get('replies')).toBe('false');
       expect(formData.get('research_updates')).toBe('true');
       expect(formData.get('is_unsubscribed')).toBe('false');
@@ -114,6 +116,7 @@ describe('notificationsPreferencesViaEmailService', () => {
 
       const testData = {
         comments: false,
+        news: false,
         replies: false,
         research_updates: false,
         userCode: 'user123',
@@ -123,6 +126,7 @@ describe('notificationsPreferencesViaEmailService', () => {
 
       const formData = (fetch as any).mock.calls[0][1].body;
       expect(formData.get('comments')).toBe('false');
+      expect(formData.get('news')).toBe('false');
       expect(formData.get('replies')).toBe('false');
       expect(formData.get('research_updates')).toBe('false');
     });
@@ -146,6 +150,7 @@ describe('notificationsPreferencesViaEmailService', () => {
       const formData = (fetch as any).mock.calls[0][1].body;
       expect(formData.get('id')).toBe('456');
       expect(formData.get('comments')).toBe('false');
+      expect(formData.get('news')).toBe('false');
       expect(formData.get('replies')).toBe('false');
       expect(formData.get('research_updates')).toBe('false');
       expect(formData.get('is_unsubscribed')).toBe('true');
@@ -161,6 +166,7 @@ describe('notificationsPreferencesViaEmailService', () => {
       const formData = (fetch as any).mock.calls[0][1].body;
       expect(formData.get('id')).toBeNull();
       expect(formData.get('comments')).toBe('false');
+      expect(formData.get('news')).toBe('false');
       expect(formData.get('replies')).toBe('false');
       expect(formData.get('research_updates')).toBe('false');
       expect(formData.get('is_unsubscribed')).toBe('true');

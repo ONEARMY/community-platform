@@ -23,7 +23,6 @@
     "@faker-js/faker": "^10.1.0",
     "@mdxeditor/editor": "^3.52.0",
     "@mui/base": "next",
-    "@react-router/node": "^7.13.1",
     "country-to-iso": "^1.6.1",
     "date-fns": "^4.1.0",
     "linkify-plugin-mention": "^4.3.2",

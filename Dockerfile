@@ -1,19 +1,14 @@
 # syntax = docker/dockerfile:1
 
-FROM node:22-slim AS base
+FROM oven/bun:1.3.10 AS base
 
-LABEL fly_launch_runtime="Remix"
+LABEL fly_launch_runtime="React Router"
 
-# Remix app lives here
+# App lives here
 WORKDIR /app
 
 # Set production environment
 ENV NODE_ENV="production"
-ARG YARN_VERSION=4.12.0
-
-# Install Yarn 3
-RUN corepack enable && \
-    yarn set version ${YARN_VERSION}
 
 # Add CircleCI context variables as ARGs
 ARG VITE_BRANCH
@@ -25,13 +20,13 @@ FROM base AS build
 
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
+    apt-get install --no-install-recommends -y build-essential pkg-config python-is-python3
 
 # Copy source code
 ADD . .
 
 # Install packages
-RUN yarn install
+RUN bun install
 
 RUN --mount=type=secret,id=VITE_BRANCH \
     --mount=type=secret,id=VITE_SENTRY_DSN \
@@ -44,7 +39,7 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     echo "VITE_GA_TRACKING_ID=\"${VITE_GA_TRACKING_ID}\"" >> .env
 
 # Build application
-RUN yarn run build
+RUN bun run build
 
 # Final stage for app image
 FROM base
@@ -54,5 +49,5 @@ COPY --from=build /app /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD [ "yarn", "run", "start:prod" ]
+CMD [ "bun", "run", "start:prod" ]
 

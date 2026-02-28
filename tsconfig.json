@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2021",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "types": ["@react-router/node", "vite/client"],
+    "types": ["vite/client"],
     "allowJs": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
@@ -19,13 +19,7 @@
     "noImplicitAny": false,
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "./types",
-      "@testing-library/jest-dom",
-      "../src/themes/types",
-      "./node_modules"
-    ],
+    "typeRoots": ["./node_modules/@types", "./types", "@testing-library/jest-dom", "../src/themes/types", "./node_modules"],
     "declaration": true,
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
@@ -34,12 +28,5 @@
     "paths": { "*": ["./*"] }
   },
   "include": ["src/**/*", "types", "vite-env.d.ts"],
-  "exclude": [
-    "node_modules",
-    "build",
-    "jest",
-    "src/setupTests.ts",
-    "packages/components",
-    "packages/themes"
-  ]
+  "exclude": ["node_modules", "build", "jest", "src/setupTests.ts", "packages/components", "packages/themes"]
 }

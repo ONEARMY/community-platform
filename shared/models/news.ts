@@ -24,6 +24,7 @@ export class DBNews implements IDBContentDoc {
   readonly created_by: number | null;
   readonly deleted: boolean | null;
   is_draft: boolean | null;
+  readonly published_at: Date | null;
   readonly subscriber_count?: number;
   readonly title: string;
   readonly total_views?: number;
@@ -50,6 +51,7 @@ export class News implements IContentDoc {
   isDraft: boolean;
   modifiedAt: Date | null;
   profileBadge: ProfileBadge | null;
+  publishedAt: Date | null;
   previousSlugs: string[];
   slug: string;
   subscriberCount: number;
@@ -86,6 +88,7 @@ export class News implements IContentDoc {
       heroImage: heroImage || null,
       modifiedAt: news.modified_at ? new Date(news.modified_at) : null,
       profileBadge: news.profile_badge ? ProfileBadge.fromDB(news.profile_badge) : null,
+      publishedAt: news.published_at ? new Date(news.published_at) : null,
       previousSlugs: news.previous_slugs,
       slug: news.slug,
       subscriberCount: news.subscriber_count || 0,

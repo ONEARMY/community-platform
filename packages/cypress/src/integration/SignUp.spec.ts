@@ -102,4 +102,45 @@ describe('[User sign-up]', () => {
         .should('be.visible');
     });
   });
+
+  describe('[Delete account]', () => {
+    it('Rejects wrong password', () => {
+      const user = generateNewUserDetails();
+      cy.signUpNewUser(user);
+
+      cy.step('Go to Account settings');
+      cy.visit('/settings');
+      cy.get('[data-cy="tab-Account"]').click();
+
+      cy.step('Open delete account section');
+      cy.get('[data-cy="deleteAccountContainer"]').find('[data-cy="accordionContainer"]').click();
+
+      cy.step('Submit with wrong password');
+      cy.get('[data-cy="deleteAccountForm"]').find('[data-cy="password"]').type('wrong_password');
+      cy.get('[data-cy="deleteAccountSubmit"]').click();
+
+      cy.step('Shows error message');
+      cy.contains('Invalid password').should('be.visible');
+    });
+
+    it('Deletes account with correct password', () => {
+      const user = generateNewUserDetails();
+      const { password } = user;
+      cy.signUpNewUser(user);
+
+      cy.step('Go to Account settings');
+      cy.visit('/settings');
+      cy.get('[data-cy="tab-Account"]').click();
+
+      cy.step('Open delete account section');
+      cy.get('[data-cy="deleteAccountContainer"]').find('[data-cy="accordionContainer"]').click();
+
+      cy.step('Submit with correct password');
+      cy.get('[data-cy="deleteAccountForm"]').find('[data-cy="password"]').type(password);
+      cy.get('[data-cy="deleteAccountSubmit"]').click();
+
+      cy.step('Redirected to homepage');
+      cy.url().should('eq', Cypress.config().baseUrl + '/');
+    });
+  });
 });

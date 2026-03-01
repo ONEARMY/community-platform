@@ -25,6 +25,7 @@ export const buttons = {
   removePin: 'Remove map pin',
   save: 'Save profile',
   success: 'Profile saved successfully',
+  deleteAccount: 'Delete my account',
   submit: 'Submit',
   submitNewEmail: 'Save new email address',
   submitNewPassword: 'Save new password',
@@ -56,8 +57,8 @@ export const fields: ILabels = {
     title: 'Add an avatar',
   },
   deleteAccount: {
-    description: 'Please reach out to support.',
-    title: 'Would you like to delete your account?',
+    description: 'Permanently delete your account and all associated data.',
+    title: 'Delete Account',
   },
   displayName: {
     title: 'Display Name',

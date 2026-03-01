@@ -67,7 +67,7 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 
   const title = `${research.title} - Research - ${loaderData?.tenantSettings.siteName}`;
 
-  return generateTags(title, research.description, (publicUpdates?.at(0)?.images?.[0] as any)?.downloadUrl);
+  return generateTags(title, research.description, (publicUpdates?.at(0)?.images?.[0] as any)?.downloadUrl, { type: 'article' });
 });
 
 export default function Index() {

@@ -8,6 +8,7 @@ import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '
 import { createSupabaseServerClient } from './repository/supabase.server';
 import { TenantSettingsService } from './services/tenantSettingsService.server';
 import { ClientStyleContext, ServerStyleContext } from './styles/context';
+import { generateTags } from './utils/seo.utils';
 
 interface DocumentProps {
   children: React.ReactNode;
@@ -22,6 +23,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     colorPrimaryHover: settings.colorPrimaryHover,
     colorAccent: settings.colorAccent,
     colorAccentHover: settings.colorAccentHover,
+    siteName: settings.siteName,
+    siteDescription: settings.siteDescription,
   };
 }
 
@@ -100,17 +103,22 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  const tags = generateTags(
+    data?.siteName || '',
+    data?.siteDescription || undefined,
+    '/social-image.jpg',
+    { siteName: data?.siteName },
+  );
+
   if (import.meta.env.VITE_BRANCH !== 'production') {
-    return [
-      {
-        name: 'robots',
-        content: 'noindex',
-      },
-    ];
+    tags.push({
+      name: 'robots',
+      content: 'noindex',
+    });
   }
 
-  return [];
+  return tags;
 };
 
 export default function Root() {

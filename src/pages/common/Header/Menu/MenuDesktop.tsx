@@ -52,7 +52,7 @@ export const MenuDesktop = () => {
               to={page.path}
               data-cy="page-link"
               onClick={(e) => {
-                if (location.pathname.startsWith(page.path)) {
+                if (location.pathname === page.path) {
                   e.preventDefault();
                 }
               }}

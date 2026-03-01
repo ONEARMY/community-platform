@@ -56,7 +56,7 @@ const MenuMobileLink = (props: IProps) => {
       <MenuLink
         to={props.path}
         onClick={(e) => {
-          if (location.pathname.startsWith(props.path)) {
+          if (location.pathname === props.path) {
             e.preventDefault();
           }
           mobileMenuContext.setIsVisible(false);

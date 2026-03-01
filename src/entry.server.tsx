@@ -1,8 +1,8 @@
-import { PassThrough } from 'node:stream';
 import { CacheProvider } from '@emotion/react';
+import createEmotionServer from '@emotion/server/create-instance';
 import * as Sentry from '@sentry/react-router';
 import { isbot } from 'isbot';
-import { renderToPipeableStream } from 'react-dom/server';
+import { renderToReadableStream } from 'react-dom/server';
 import type { EntryContext } from 'react-router';
 import { ServerRouter } from 'react-router';
 import { SENTRY_CONFIG } from './config/config';
@@ -23,117 +23,91 @@ export default function handleRequest(
     : handleBrowserRequest(request, responseStatusCode, responseHeaders, context);
 }
 
-function handleBotRequest(
+async function handleBotRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   context: EntryContext,
 ) {
-  return new Promise((resolve, reject) => {
-    let shellRendered = false;
-    const { pipe, abort } = renderToPipeableStream(
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), ABORT_DELAY);
+
+  try {
+    const stream = await renderToReadableStream(
       <ServerRouter context={context} url={request.url} />,
       {
-        onAllReady() {
-          shellRendered = true;
-          const body = new PassThrough();
-          const stream = new ReadableStream({
-            start(controller) {
-              body.on('data', (chunk: Buffer) => {
-                controller.enqueue(chunk);
-              });
-              body.on('end', () => {
-                controller.close();
-              });
-              body.on('error', (err) => {
-                controller.error(err);
-              });
-            },
-          });
-
-          responseHeaders.set('Content-Type', 'text/html');
-
-          resolve(
-            new Response(stream, {
-              headers: responseHeaders,
-              status: responseStatusCode,
-            }),
-          );
-
-          pipe(body);
-        },
-        onShellError(error: unknown) {
-          reject(error);
-        },
+        signal: controller.signal,
         onError(error: unknown) {
+          console.error(error);
           responseStatusCode = 500;
-          if (shellRendered) {
-            console.error(error);
-          }
         },
       },
     );
 
-    setTimeout(abort, ABORT_DELAY);
-  });
+    await stream.allReady;
+    clearTimeout(timeoutId);
+
+    responseHeaders.set('Content-Type', 'text/html');
+
+    return new Response(stream, {
+      headers: responseHeaders,
+      status: responseStatusCode,
+    });
+  } catch (error) {
+    clearTimeout(timeoutId);
+    throw error;
+  }
 }
 
-function handleBrowserRequest(
+async function handleBrowserRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   context: EntryContext,
 ) {
-  return new Promise((resolve, reject) => {
-    let shellRendered = false;
-    const cache = createEmotionCache();
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), ABORT_DELAY);
 
-    const { pipe, abort } = renderToPipeableStream(
+  try {
+    const cache = createEmotionCache();
+    const { extractCriticalToChunks, constructStyleTagsFromChunks } = createEmotionServer(cache);
+
+    const stream = await renderToReadableStream(
       <CacheProvider value={cache}>
         <ServerRouter context={context} url={request.url} />
       </CacheProvider>,
       {
-        onShellReady() {
-          shellRendered = true;
-          const body = new PassThrough();
-          const stream = new ReadableStream({
-            start(controller) {
-              body.on('data', (chunk: Buffer) => {
-                controller.enqueue(chunk);
-              });
-              body.on('end', () => {
-                controller.close();
-              });
-              body.on('error', (err) => {
-                controller.error(err);
-              });
-            },
-          });
-
-          responseHeaders.set('Content-Type', 'text/html');
-
-          resolve(
-            new Response(stream, {
-              headers: responseHeaders,
-              status: responseStatusCode,
-            }),
-          );
-
-          pipe(body);
-        },
-        onShellError(error: unknown) {
-          reject(error);
-        },
+        signal: controller.signal,
         onError(error: unknown) {
-          if (shellRendered) {
-            console.error(error);
-          } else {
+          console.error(error);
+          Sentry.captureException(error);
+          if (responseStatusCode === 200) {
             responseStatusCode = 500;
           }
         },
       },
     );
 
-    setTimeout(abort, ABORT_DELAY);
-  });
+    // Wait for the full shell to be ready before style extraction
+    await stream.allReady;
+    clearTimeout(timeoutId);
+
+    // Read the full HTML string from the stream
+    const html = await new Response(stream).text();
+
+    // Extract critical CSS and inject into <head>
+    const chunks = extractCriticalToChunks(html);
+    const styleTags = constructStyleTagsFromChunks(chunks);
+    const htmlWithStyles = html.replace('<head>', `<head>${styleTags}`);
+
+    responseHeaders.set('Content-Type', 'text/html');
+
+    return new Response(htmlWithStyles, {
+      headers: responseHeaders,
+      status: responseStatusCode,
+    });
+  } catch (error) {
+    clearTimeout(timeoutId);
+    throw error;
+  }
 }

@@ -36,27 +36,26 @@ jobs:
         with:
           node-version: '22.18.0'
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
 
       - name: Setup Cache
         uses: actions/cache@v4
-        id: yarn-cache
+        id: bun-cache
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-bun-
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: bun install --frozen-lockfile
 
       - name: Build themes
-        run: yarn workspace oa-themes build
+        run: bun run --filter oa-themes build
 
       - name: Build Storybook
-        run: yarn workspace oa-components build:sb
+        run: bun run --filter oa-components build:sb
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

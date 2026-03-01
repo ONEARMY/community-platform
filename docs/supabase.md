@@ -22,9 +22,9 @@ SUPABASE_KEY=<anon key>
 SUPABASE_SERVICE_ROLE_KEY=<service_role key>
 ```
 
-Run `yarn db:seed` to run the DB migration scripts and update your local database schema. You will have to run this again whenever there are DB schema changes. For more in-depth seeding, please check [Seeding](./db-seeding.md).
+Run `bun run db:seed` to run the DB migration scripts and update your local database schema. You will have to run this again whenever there are DB schema changes. For more in-depth seeding, please check [Seeding](./db-seeding.md).
 
-Now you can start the project with `yarn start`.
+Now you can start the project with `bun start`.
 To sign-up locally, you can get the email confirmation link at http://localhost:54324/monitor
 
 ### Updating local supabase

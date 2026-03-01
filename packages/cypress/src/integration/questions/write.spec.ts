@@ -153,8 +153,11 @@ describe('[Question]', () => {
 
       cy.signIn('demo_admin@example.com', 'demo_admin');
 
-      cy.step('Admin can see the edit button on another user\'s question');
+      cy.step('Question is not authored by the admin');
       cy.visit(`/questions/${question.slug}`);
+      cy.get('[data-cy=Username]').should('not.contain', 'demo_admin');
+
+      cy.step('Admin can see the edit button on another user\'s question');
       cy.get('[data-cy=edit]').should('be.visible');
 
       cy.step('Admin can access the edit page');
@@ -171,6 +174,6 @@ describe('[Question]', () => {
       cy.step('Updated content is visible');
       cy.url().should('include', `/questions/${question.slug}`);
       cy.contains(adminEdit);
-    })
+    });
   });
 });

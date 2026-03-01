@@ -37,7 +37,7 @@ export const Clusters = ({ pins, onPinClick, onClusterClick, clusterGroupRef }: 
 
   // Create the MarkerClusterGroup once and attach it to the map.
   useEffect(() => {
-    const group = MarkerClusterGroup({
+    const group = new MarkerClusterGroup({
       iconCreateFunction: (cluster) => iconCreateFnRef.current(cluster),
       showCoverageOnHover: false,
       spiderfyOnMaxZoom: true,

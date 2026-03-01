@@ -160,7 +160,10 @@ export const ResearchFilterHeader = (props: IProps) => {
           <Select
             options={ResearchSortOptions.toArray(!!q)}
             placeholder={listing.sort}
-            value={sort ? { label: ResearchSortOptions.get(sort), value: sort } : undefined}
+            value={{
+              label: ResearchSortOptions.get(sort || 'LatestUpdated'),
+              value: sort || 'LatestUpdated',
+            }}
             onChange={(sortBy) => updateFilter(ResearchSearchParams.sort, sortBy.value)}
           />
         </FieldContainer>

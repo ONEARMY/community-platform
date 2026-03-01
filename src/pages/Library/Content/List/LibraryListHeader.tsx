@@ -95,7 +95,10 @@ export const LibraryListHeader = (props: IProps) => {
           <Select
             options={LibrarySortOptions.toArray(!!q)}
             placeholder={listing.sort}
-            value={sort ? { label: LibrarySortOptions.get(sort), value: sort } : undefined}
+            value={{
+              label: LibrarySortOptions.get(sort || 'MostUsefulLastWeek'),
+              value: sort || 'MostUsefulLastWeek',
+            }}
             onChange={(sortBy) => updateFilter(LibrarySearchParams.sort, sortBy.value)}
           />
         </FieldContainer>

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import React, { useContext } from 'react';
-import { NavLink } from 'react-router';
+import { NavLink, useLocation } from 'react-router';
 import MenuCurrent from 'src/assets/images/menu-current.svg';
 import { Box } from 'theme-ui';
 
@@ -49,12 +49,16 @@ const MenuLink = styled(NavLink)`
 
 const MenuMobileLink = (props: IProps) => {
   const mobileMenuContext = useContext(MobileMenuContext);
+  const location = useLocation();
 
   return (
     <PanelItem data-cy="mobile-menu-item">
       <MenuLink
         to={props.path}
-        onClick={() => {
+        onClick={(e) => {
+          if (location.pathname.startsWith(props.path)) {
+            e.preventDefault();
+          }
           mobileMenuContext.setIsVisible(false);
           if (props.onClick) {
             props.onClick();

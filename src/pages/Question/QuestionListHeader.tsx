@@ -143,7 +143,10 @@ export const QuestionListHeader = (props: IProps) => {
           <Select
             options={QuestionSortOptions.toArray(!!q)}
             placeholder={listing.sort}
-            value={sort ? { label: QuestionSortOptions.get(sort), value: sort } : undefined}
+            value={{
+              label: QuestionSortOptions.get(sort || 'Newest'),
+              value: sort || 'Newest',
+            }}
             onChange={(sortBy) => updateFilter(QuestionSearchParams.sort, sortBy.value)}
           />
         </FieldContainer>

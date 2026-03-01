@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2021",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "types": ["@react-router/node", "vite/client"],
+    "types": ["vite/client"],
     "allowJs": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
@@ -26,7 +26,7 @@
       "../src/themes/types",
       "./node_modules"
     ],
-    "declaration": true,
+    "declaration": false,
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": false,

@@ -1,7 +1,7 @@
 import type { LatLngExpression, Map as LeafletMap } from 'leaflet';
 // biome-ignore lint/suspicious/noShadowRestrictedNames: this is an external library import
 import { Button, Map } from 'oa-components';
-import { useContext, useEffect, useRef } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import { useMapEvents } from 'react-leaflet';
 import { Box, Flex } from 'theme-ui';
 import { MapContext } from '../../MapContext';
@@ -31,6 +31,12 @@ export const MapView = () => {
   const mapRef = useRef<LeafletMap>(null);
   const clusterGroupRef = useRef<any>(null);
 
+  // Extract stable references — useState setters and useCallback-wrapped
+  // functions from the context never change identity.
+  const setBoundaries = mapState?.setBoundaries;
+  const selectPin = mapState?.selectPin;
+  const fitBounds = mapState?.fitBounds;
+
   useEffect(() => {
     if (mapRef.current && mapState) {
       mapState.setMapRef(mapRef.current);
@@ -43,15 +49,31 @@ export const MapView = () => {
     }
   }, [clusterGroupRef.current, mapState]);
 
+  // All hooks must be declared before any early return (Rules of Hooks).
+  const handleLocationChange = useCallback(() => {
+    if (mapRef.current && setBoundaries) {
+      setBoundaries(mapRef.current.getBounds());
+    }
+  }, [setBoundaries]);
+
+  const handleMapClick = useCallback(() => {
+    selectPin?.(null);
+  }, [selectPin]);
+
+  const handleClusterClick = useCallback(
+    (cluster: any) => {
+      fitBounds?.(cluster.getBounds());
+    },
+    [fitBounds],
+  );
+
+  const handlePinClose = useCallback(() => {
+    selectPin?.(null);
+  }, [selectPin]);
+
   if (!mapState) {
     return null;
   }
-
-  const handleLocationChange = () => {
-    if (mapRef.current) {
-      mapState.setBoundaries(mapRef.current.getBounds());
-    }
-  };
 
   const isViewportGreaterThanTablet = window.innerWidth > 1024;
   const mapCenter: LatLngExpression = mapState.location
@@ -69,10 +91,7 @@ export const MapView = () => {
         style={{ flex: 1, backgroundColor: '#AAD3DF', height: '100%', width: '100%' }}
         zoomControl={isViewportGreaterThanTablet}
       >
-        <MapEventsHandler
-          onLocationChange={handleLocationChange}
-          onMapClick={() => mapState.selectPin(null)}
-        />
+        <MapEventsHandler onLocationChange={handleLocationChange} onMapClick={handleMapClick} />
         <Box
           sx={{
             position: 'absolute',
@@ -109,22 +128,16 @@ export const MapView = () => {
             Show list view
           </Button>
         </Flex>
-        {mapState.filteredPins && mapState.filteredPins.length > 0 && (
+        {mapState.mapPins && mapState.mapPins.length > 0 && (
           <Clusters
-            pins={mapState.filteredPins}
+            pins={mapState.mapPins}
             onPinClick={mapState.selectPinWithClusterCheck}
-            onClusterClick={(cluster) => {
-              mapState.fitBounds(cluster.getBounds());
-            }}
+            onClusterClick={handleClusterClick}
             clusterGroupRef={clusterGroupRef}
           />
         )}
         {mapState.selectedPin && (
-          <Popup
-            activePin={mapState.selectedPin}
-            mapRef={mapRef}
-            onClose={() => mapState.selectPin(null)}
-          />
+          <Popup activePin={mapState.selectedPin} mapRef={mapRef} onClose={handlePinClose} />
         )}
       </Map>
     </Box>

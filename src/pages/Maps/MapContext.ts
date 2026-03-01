@@ -8,6 +8,7 @@ export const MapContext = createContext<{
   allTags: ProfileTag[];
   allProfileTypes: ProfileType[];
   allProfileSettings: string[];
+  mapPins: MapPin[];
   filteredPins: MapPin[];
   activeTagFilters: number[];
   activeBadgeFilters: string[];

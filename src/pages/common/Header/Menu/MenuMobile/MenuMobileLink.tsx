@@ -36,7 +36,7 @@ const MenuLink = styled(NavLink)`
       display: block;
       position: absolute;
       bottom: -5px;
-      background-color: ${(props) => props.theme.colors.accent.base};
+      background-color: var(--color-primary);
       mask-size: contain;
       mask-image": url("${MenuCurrent}");
       mask-repeat: no-repeat;

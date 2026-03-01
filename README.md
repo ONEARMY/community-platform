@@ -213,6 +213,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/rsgb"><img src="https://avatars.githubusercontent.com/u/96707736?v=4?s=60" width="60px;" alt="RSGB"/><br /><sub><b>RSGB</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=rsgb" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/GMetaxakis"><img src="https://avatars.githubusercontent.com/u/4234419?v=4?s=60" width="60px;" alt="Georgios Metaxakis"/><br /><sub><b>Georgios Metaxakis</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=GMetaxakis" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

@@ -1,5 +1,5 @@
-import L, { type MarkerCluster } from 'leaflet';
-import 'leaflet.markercluster';
+import L from 'leaflet';
+import { type MarkerCluster, MarkerClusterGroup } from 'leaflet.markercluster';
 import type { MapPin } from 'oa-shared';
 import { type RefObject, useEffect, useRef } from 'react';
 import { useMap } from 'react-leaflet';
@@ -21,7 +21,7 @@ interface IProps {
  */
 export const Clusters = ({ pins, onPinClick, onClusterClick, clusterGroupRef }: IProps) => {
   const map = useMap();
-  const groupRef = useRef<L.MarkerClusterGroup | null>(null);
+  const groupRef = useRef<MarkerClusterGroup | null>(null);
   const markersRef = useRef<Map<string, L.Marker>>(new Map());
 
   // Keep callbacks in refs so the cluster group and markers always invoke the
@@ -37,7 +37,7 @@ export const Clusters = ({ pins, onPinClick, onClusterClick, clusterGroupRef }: 
 
   // Create the MarkerClusterGroup once and attach it to the map.
   useEffect(() => {
-    const group = L.markerClusterGroup({
+    const group = new MarkerClusterGroup({
       iconCreateFunction: (cluster) => iconCreateFnRef.current(cluster),
       showCoverageOnHover: false,
       spiderfyOnMaxZoom: true,

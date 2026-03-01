@@ -1,64 +1,46 @@
 import { ResearchEditorOverview } from './ResearchEditorOverview';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import type { Meta, StoryFn } from '@storybook/react-vite';
-
-export default {
+const meta: Meta<typeof ResearchEditorOverview> = {
   title: 'Layout/ResearchEditorOverview',
   component: ResearchEditorOverview,
-} as Meta<typeof ResearchEditorOverview>;
+};
+export default meta;
 
-const Template: StoryFn<typeof ResearchEditorOverview> = (args) => (
-  <ResearchEditorOverview {...args} />
-);
+type Story = StoryObj<typeof ResearchEditorOverview>;
 
-export const Default = Template.bind({});
-Default.args = {
-  updates: [
-    {
-      isActive: true,
-      title: 'Update 1',
-      id: 1,
-      isDraft: false,
-    },
-    {
-      isActive: false,
-      title: 'Update 2',
-      id: 2,
-      isDraft: false,
-    },
-    {
-      isActive: false,
-      title: 'Update 3',
-      id: 3,
-      isDraft: false,
-    },
-  ],
-  researchSlug: 'abc',
-  showBackToResearchButton: true,
-  showCreateUpdateButton: true,
+export const Default: Story = {
+  args: {
+    updates: [
+      { isActive: true, title: 'Update 1', id: 1, isDraft: false },
+      { isActive: false, title: 'Update 2', id: 2, isDraft: false },
+      { isActive: false, title: 'Update 3', id: 3, isDraft: false },
+    ],
+    researchSlug: 'abc',
+    showBackToResearchButton: true,
+    showCreateUpdateButton: true,
+  },
 };
 
-export const ShowBackToResearchButton = Template.bind({});
-ShowBackToResearchButton.args = {
-  ...Default.args,
-  showBackToResearchButton: true,
+export const ShowBackToResearchButton: Story = {
+  args: {
+    ...Default.args,
+    showBackToResearchButton: true,
+  },
 };
 
-export const ShowCreateUpdateButton = Template.bind({});
-ShowCreateUpdateButton.args = {
-  ...Default.args,
-  showCreateUpdateButton: true,
+export const ShowCreateUpdateButton: Story = {
+  args: {
+    ...Default.args,
+    showCreateUpdateButton: true,
+  },
 };
 
-export const DraftItem = Template.bind({});
-DraftItem.args = {
-  ...Default.args,
-  updates: [
-    {
-      isActive: false,
-      title: 'Update 1',
-      id: 1,
-      isDraft: true,
-    },
-  ],
+export const DraftItem: Story = {
+  args: {
+    ...Default.args,
+    updates: [
+      { isActive: false, title: 'Update 1', id: 1, isDraft: true },
+    ],
+  },
 };

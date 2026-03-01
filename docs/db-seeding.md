@@ -17,7 +17,7 @@ To sync snaplet (essentially generate snaplet models and docs from `seed.config.
 > Note: every time the config file is changed, this command has to be ran.
 
 ```sh
-yarn db:reset
+bun run db:reset
 ```
 
 Or if you need to run the commands separately:
@@ -26,5 +26,5 @@ Or if you need to run the commands separately:
 npx supabase db reset
 npx @snaplet/seed sync
 npx tsx seed.ts > seed.sql
-yarn format
+bun run format
 ```

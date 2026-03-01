@@ -4,6 +4,9 @@ build
 .circleci
 .github
 .nxs
+.yarn
+.yarnrc.yml
+yarn.lock
 docs
 packages/cypress
 packages/documentation

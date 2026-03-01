@@ -40,4 +40,4 @@ The seed data is maintained in the `/shared/mocks/data directory`.
 
 Running Cypress E2E Tests
 
-`yarn test` to start local environment and open the cypress UI
+`bun test` to start local environment and open the cypress UI

@@ -8,9 +8,9 @@ on:
     paths:
       - 'src/**'
       - 'packages/components/**'
-      - '.github/workflows/pr-preview.yml'
+      - '.github/workflows/pr-preview-fly-deploy.yml'
       - 'package.json'
-      - 'yarn.lock'
+      - 'bun.lockb'
 
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

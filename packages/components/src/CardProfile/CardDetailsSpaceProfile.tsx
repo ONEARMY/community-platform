@@ -60,7 +60,7 @@ export const CardDetailsSpaceProfile = ({ profile, isLink }: IProps) => {
           padding: 2,
         }}
       >
-        <Flex sx={{ gap: 2 }}>
+        <Flex sx={{ gap: 2, minWidth: 0, width: '100%' }}>
           {!hasImage && <MemberBadge profileType={profile.type || undefined} size={30} />}
           <Username
             user={profile}

@@ -2,7 +2,7 @@
 
 A collection of react components for reuse across the platform. Built with [Theme UI](https://theme-ui.com/) for styling.
 
-These components are stored within the [Community Platform monorepo](https://github.com/ONEARMY/community-platform) and configured as a standalone package using [Yarn workspaces](https://yarnpkg.com/features/workspaces/).  
+These components are stored within the [Community Platform monorepo](https://github.com/ONEARMY/community-platform) and configured as a standalone package using [Bun workspaces](https://bun.sh/docs/install/workspaces).  
 The aim of packaging these components separately is to:
 
 1. Encourage separation between presentation layer and business logic
@@ -20,13 +20,13 @@ After [cloning the repo](https://github.com/ONEARMY/community-platform), you can
 
 ```
 cd ./packages/components
-yarn install
-yarn start
+bun install
+bun start
 ```
 
 ## Creating a new Component
 
-You can quickly create a new component using the command `yarn new-component MyNewComponentName`, which
+You can quickly create a new component using the command `bun run new-component MyNewComponentName`, which
 will generate the following items:
 
 ```

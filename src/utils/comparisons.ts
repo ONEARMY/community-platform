@@ -1,6 +1,4 @@
-import pkg from 'lodash';
-
-const { isEqual } = pkg;
+import { isEqual } from 'lodash';
 
 import type { ISelectedTags, Tag } from 'oa-shared';
 

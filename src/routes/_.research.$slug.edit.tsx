@@ -22,7 +22,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirect('/research', { headers });
   }
 
-  const currentUsername = claims.data.claims.user_metadata.username;
+  const currentUsername = claims.data.claims.user_metadata?.username;
   const researchDb = result.item as unknown as DBResearchItem;
   const images = researchServiceServer.getResearchPublicMedia(researchDb, client);
 

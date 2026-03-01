@@ -71,8 +71,9 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
   }
 
   const title = `${profile.displayName} - Profile - ${loaderData?.tenantSettings.siteName}`;
+  const imageUrl = profile.photo?.publicUrl;
 
-  return generateTags(title);
+  return generateTags(title, profile.about || undefined, imageUrl);
 });
 
 export default function Index() {

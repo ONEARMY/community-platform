@@ -1,21 +1,22 @@
 import { VideoPlayer } from './VideoPlayer';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import type { Meta, StoryFn } from '@storybook/react-vite';
-
-export default {
+const meta: Meta<typeof VideoPlayer> = {
   title: 'Components/VideoPlayer',
   component: VideoPlayer,
-} as Meta<typeof VideoPlayer>;
+};
+export default meta;
 
-const Template: StoryFn<typeof VideoPlayer> = (args) => <VideoPlayer {...args} />;
+type Story = StoryObj<typeof VideoPlayer>;
 
-export const Youtube = Template.bind({});
-
-Youtube.args = {
-  videoUrl: 'https://www.youtube.com/watch?v=anqfVCLRQHE',
+export const Youtube: Story = {
+  args: {
+    videoUrl: 'https://www.youtube.com/watch?v=anqfVCLRQHE',
+  },
 };
 
-export const Vimeo = Template.bind({});
-Vimeo.args = {
-  videoUrl: 'https://vimeo.com/492811707',
+export const Vimeo: Story = {
+  args: {
+    videoUrl: 'https://vimeo.com/492811707',
+  },
 };

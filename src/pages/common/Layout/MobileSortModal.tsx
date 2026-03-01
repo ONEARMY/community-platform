@@ -66,7 +66,7 @@ export const MobileSortModal = (props: Props) => {
             flexDirection: 'column',
             px: 3,
             borderBottom: index < sections.length - 1 ? '2px solid' : 'none',
-            borderColor: 'muted',
+            borderColor: 'softgrey',
           }}
         >
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
@@ -137,6 +137,7 @@ export const MobileSortModal = (props: Props) => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            cursor: 'pointer',
           }}
         >
           Apply

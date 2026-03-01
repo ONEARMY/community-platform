@@ -40,6 +40,12 @@ export const QuestionListHeader = (props: IProps) => {
     };
 
     initCategories();
+
+    if (!searchParams.get(QuestionSearchParams.sort)) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(QuestionSearchParams.sort, 'Newest');
+      setSearchParams(params, { replace: true });
+    }
   }, []);
 
   const updateFilter = useCallback(
@@ -143,10 +149,7 @@ export const QuestionListHeader = (props: IProps) => {
           <Select
             options={QuestionSortOptions.toArray(!!q)}
             placeholder={listing.sort}
-            value={{
-              label: QuestionSortOptions.get(sort || 'Newest'),
-              value: sort || 'Newest',
-            }}
+            value={sort ? { label: QuestionSortOptions.get(sort), value: sort } : undefined}
             onChange={(sortBy) => updateFilter(QuestionSearchParams.sort, sortBy.value)}
           />
         </FieldContainer>

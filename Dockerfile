@@ -38,8 +38,8 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     echo "VITE_SENTRY_DSN=\"${VITE_SENTRY_DSN}\"" >> .env && \
     echo "VITE_GA_TRACKING_ID=\"${VITE_GA_TRACKING_ID}\"" >> .env
 
-# Build application
-RUN bun run build
+# Build application (skip tsc type checking - already done in CI)
+RUN bun run build:shared && bun run build:themes && bun run build:components && bun run build:vite
 
 # Final stage for app image
 FROM base

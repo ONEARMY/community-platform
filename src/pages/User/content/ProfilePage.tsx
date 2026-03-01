@@ -1,4 +1,4 @@
-import { observer } from 'mobx-react-lite';
+import { observer } from 'mobx-react';
 import { Button, ExternalLink, InternalLink } from 'oa-components';
 import type { Profile, UserCreatedDocs } from 'oa-shared';
 import { useMemo } from 'react';

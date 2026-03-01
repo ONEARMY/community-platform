@@ -1,7 +1,6 @@
 {
   "name": "oa-themes",
   "version": "1.0.0",
-  "packageManager": "yarn@4.12.0",
   "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.js",

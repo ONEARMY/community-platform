@@ -22,15 +22,25 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const { valid, status, statusText } = await validateRequest(request, claims.data.claims.email, data);
+    const { valid, status, statusText } = await validateRequest(
+      request,
+      claims.data.claims.email!,
+      data,
+    );
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText });
     }
 
-    const userProfile = await client.from('profiles').select('id,username').eq('username', claims.data.claims.user_metadata.username);
+    const userProfile = await client
+      .from('profiles')
+      .select('id,username')
+      .eq('username', claims.data.claims.user_metadata?.username);
 
-    const recipientProfile = await client.from('profiles').select('id,auth_id').eq('username', data.to);
+    const recipientProfile = await client
+      .from('profiles')
+      .select('id,auth_id')
+      .eq('username', data.to);
 
     const from = userProfile.data!.at(0)!.id;
     const to = recipientProfile.data!.at(0)!.id;
@@ -54,7 +64,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         {
           headers,
           status: 429,
-          statusText: "You've contacted a lot of people today! So to protect the platform from spam we haven't sent this message.",
+          statusText:
+            "You've contacted a lot of people today! So to protect the platform from spam we haven't sent this message.",
         },
       );
     }
@@ -105,7 +116,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     });
 
     if (sendResult.error) {
-      return Response.json({ error: sendResult.error }, { headers, status: 429, statusText: sendResult.error });
+      return Response.json(
+        { error: sendResult.error },
+        { headers, status: 429, statusText: sendResult.error },
+      );
     }
 
     return Response.json(null, { headers, status: 201 });

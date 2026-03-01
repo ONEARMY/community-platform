@@ -5,7 +5,7 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/ONEARMY/community-platform)](https://github.com/ONEARMY/community-platform/graphs/contributors/)
 [![discord](https://badges.aleen42.com/src/discord.svg)](https://discord.gg/gJ7Yyk4)
 
-# 🔗 &nbsp; tl;dr Quick Links 
+# 🔗 &nbsp; tl;dr Quick Links
 
 - [Our Project Website](https://www.onearmy.earth/community-platform)
 - [Precious Plastic Community (live site)](http://community.preciousplastic.com/)
@@ -43,7 +43,7 @@ Please make sure to read the [Contributing Guide](/CONTRIBUTING.md) before makin
 
 It also covers lots of handy additional information such as setting up a local server, or finding [good first issues](https://github.com/ONEARMY/community-platform/issues?q=is%3Aissue+is%3Aopen+label%3A%22Good+first+issue%22) to work on.
 
-To startup the project locally use `yarn start`, but before that, follow [Getting Started](/packages/documentation/docs/supabase.md)
+To startup the project locally use `bun start`, but before that, follow [Getting Started](/packages/documentation/docs/supabase.md)
 
 If needed you can [drop us a line here](mailto:platform@onearmy.earth?subject=contact%20from%20github) 👋
 Or join our [Discord channel](https://discord.gg/gJ7Yyk4)
@@ -213,6 +213,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/rsgb"><img src="https://avatars.githubusercontent.com/u/96707736?v=4?s=60" width="60px;" alt="RSGB"/><br /><sub><b>RSGB</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=rsgb" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/GMetaxakis"><img src="https://avatars.githubusercontent.com/u/4234419?v=4?s=60" width="60px;" alt="Georgios Metaxakis"/><br /><sub><b>Georgios Metaxakis</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=GMetaxakis" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

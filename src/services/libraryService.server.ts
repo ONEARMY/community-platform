@@ -58,7 +58,10 @@ const getBySlug = (client: SupabaseClient, slug: string) => {
     .single();
 };
 
-const getUserProjects = async (client: SupabaseClient, username: string): Promise<Partial<Project>[]> => {
+const getUserProjects = async (
+  client: SupabaseClient,
+  username: string,
+): Promise<Partial<Project>[]> => {
   const imageService = new ImageServiceServer(client);
   const { data, error } = await client.rpc('get_user_projects', {
     username_param: username,
@@ -86,7 +89,9 @@ const getUserProjects = async (client: SupabaseClient, username: string): Promis
 const getProjectPublicMedia = (projectDb: DBProject, client: SupabaseClient) => {
   const allImages: Image[] = [];
   if (projectDb.cover_image) {
-    const coverImage = storageServiceServer.getPublicUrls(client, [projectDb.cover_image], IMAGE_SIZES.LANDSCAPE)?.at(0);
+    const coverImage = storageServiceServer
+      .getPublicUrls(client, [projectDb.cover_image], IMAGE_SIZES.LANDSCAPE)
+      ?.at(0);
 
     if (coverImage) {
       allImages.push(coverImage);
@@ -95,12 +100,18 @@ const getProjectPublicMedia = (projectDb: DBProject, client: SupabaseClient) => 
 
   const stepImages = projectDb.steps?.flatMap((x) => x.images)?.filter((x) => !!x) || [];
 
-  const publicStepImages = stepImages ? storageServiceServer.getPublicUrls(client, stepImages, IMAGE_SIZES.GALLERY) : [];
+  const publicStepImages = stepImages
+    ? storageServiceServer.getPublicUrls(client, stepImages, IMAGE_SIZES.GALLERY)
+    : [];
 
   return [...allImages, ...publicStepImages.filter((x) => !!x)];
 };
 
-const isAllowedToEditProject = async (client: SupabaseClient, authorUsername: string, currentUsername: string) => {
+const isAllowedToEditProject = async (
+  client: SupabaseClient,
+  authorUsername: string,
+  currentUsername: string,
+) => {
   if (!currentUsername) {
     return false;
   }
@@ -114,7 +125,11 @@ const isAllowedToEditProject = async (client: SupabaseClient, authorUsername: st
   return data?.at(0)?.roles?.includes(UserRole.ADMIN);
 };
 
-const isAllowedToEditProjectById = async (client: SupabaseClient, id: number, currentUsername: string) => {
+const isAllowedToEditProjectById = async (
+  client: SupabaseClient,
+  id: number,
+  currentUsername: string,
+) => {
   const projectResult = await client.from('projects').select('id,created_by').eq('id', id).single();
 
   const project = projectResult.data as unknown as DBProject;

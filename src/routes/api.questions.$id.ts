@@ -14,11 +14,15 @@ import { validateImages } from 'src/utils/storage';
 import { contentServiceServer } from '../services/contentService.server';
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
+  const id = Number(params.id);
+
+  if (request.method === 'DELETE') {
+    return await deleteQuestion(request, id);
+  }
+
   const { client, headers } = createSupabaseServerClient(request);
 
   try {
-    const id = Number(params.id);
-
     const formData = await request.formData();
     const imagesToKeepIds = formData.getAll('existingImages');
 
@@ -39,7 +43,14 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const currentQuestion = await questionServiceServer.getById(id, client);
 
-    const { valid, status, statusText } = await validateRequest(params, request, claims.data.claims.sub, data, currentQuestion, client);
+    const { valid, status, statusText } = await validateRequest(
+      params,
+      request,
+      claims.data.claims.sub,
+      data,
+      currentQuestion,
+      client,
+    );
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText });
@@ -62,7 +73,11 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     let images: DBMedia[] = [];
 
     if (imagesToKeepIds.length > 0) {
-      const questionImages = await client.from('questions').select('images').eq('id', params.id).single();
+      const questionImages = await client
+        .from('questions')
+        .select('images')
+        .eq('id', params.id)
+        .single();
 
       if (questionImages.data && questionImages.data?.images?.length > 0) {
         images = questionImages.data.images.filter((x) => imagesToKeepIds.includes(x.id));
@@ -70,7 +85,11 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     }
 
     if (uploadedImages.length > 0) {
-      const mediaResult = await storageServiceServer.uploadImage(uploadedImages, `questions/${id}`, client);
+      const mediaResult = await storageServiceServer.uploadImage(
+        uploadedImages,
+        `questions/${id}`,
+        client,
+      );
 
       if (mediaResult) {
         images = [...images, ...mediaResult.media];
@@ -99,7 +118,11 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       throw questionResult.error;
     }
 
-    const newImages = storageServiceServer.getPublicUrls(client, questionResult.data[0].images, IMAGE_SIZES.GALLERY);
+    const newImages = storageServiceServer.getPublicUrls(
+      client,
+      questionResult.data[0].images,
+      IMAGE_SIZES.GALLERY,
+    );
 
     const question = Question.fromDB(questionResult.data[0], [], newImages);
     updateUserActivity(client, claims.data.claims.sub);
@@ -110,6 +133,50 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     return Response.json({}, { headers, status: 500, statusText: 'Error creating question' });
   }
 };
+
+async function deleteQuestion(request: Request, id: number) {
+  const { client, headers } = createSupabaseServerClient(request);
+
+  try {
+    const claims = await client.auth.getClaims();
+
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 });
+    }
+
+    const profileService = new ProfileServiceServer(client);
+    const profile = await profileService.getByAuthId(claims.data.claims.sub);
+
+    if (!profile) {
+      return Response.json({}, { headers, status: 400, statusText: 'User not found' });
+    }
+
+    const question = await questionServiceServer.getById(id, client);
+
+    if (!question) {
+      return Response.json({}, { headers, status: 404, statusText: 'Question not found' });
+    }
+
+    const isCreator = question.created_by === profile.id;
+
+    if (!isCreator && !hasAdminRights(profile)) {
+      return Response.json({}, { headers, status: 403, statusText: 'Unauthorized' });
+    }
+
+    await client
+      .from('questions')
+      .update({
+        modified_at: new Date(),
+        deleted: true,
+      })
+      .eq('id', id);
+
+    return Response.json({}, { status: 200, headers });
+  } catch (error) {
+    console.error('Delete question error:', error);
+    return Response.json({}, { status: 500, headers });
+  }
+}
 
 async function validateRequest(
   params: Params<string>,
@@ -141,7 +208,12 @@ async function validateRequest(
 
   if (
     currentQuestion.slug !== data.slug &&
-    (await contentServiceServer.isDuplicateExistingSlug(data.slug, currentQuestion.id, client, 'questions'))
+    (await contentServiceServer.isDuplicateExistingSlug(
+      data.slug,
+      currentQuestion.id,
+      client,
+      'questions',
+    ))
   ) {
     return {
       status: 409,

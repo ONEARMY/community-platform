@@ -151,4 +151,38 @@ describe('[Question]', () => {
     // Should check an admin can edit other's content
     // })
   });
+
+  describe('[Delete a question]', () => {
+    it('[By Author]', () => {
+      const title = generateAlphaNumeric(8).toLowerCase() + ' Deletable question?';
+      const expectedSlug = title.replace(/\s/g, '-').replace(/\?/g, '');
+      const description = 'This question will be deleted shortly after creation.';
+
+      cy.visit('/questions');
+      const user = generateNewUserDetails();
+      cy.signUpNewUser(user);
+      cy.completeUserProfile(user.username);
+
+      cy.step('Create a question to delete');
+      cy.visit('/questions/create');
+      cy.get('[data-cy=field-title]', { timeout: 20000 });
+      cy.get('[data-cy=field-title]').clear().type(title).blur({ force: true });
+      cy.get('[data-cy=field-description]').type(description, { delay: 5 });
+      cy.get('[data-cy=submit]').click();
+      cy.url().should('include', '/questions/');
+
+      cy.step('Navigate to edit page');
+      cy.get('[data-cy=edit]').click();
+
+      cy.step('Click delete button');
+      cy.get('[data-cy=delete]').click();
+
+      cy.step('Confirm deletion');
+      cy.get('[data-cy=confirm]').click();
+
+      cy.step('Redirected to questions listing');
+      cy.url().should('include', '/questions');
+      cy.contains(title).should('not.exist');
+    });
+  });
 });

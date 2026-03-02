@@ -1,5 +1,5 @@
-import type { MarkerCluster } from 'leaflet';
 import { divIcon, point } from 'leaflet';
+import { MarkerCluster } from 'leaflet.markercluster';
 import type { MapPin } from 'oa-shared';
 import { useEffect, useRef } from 'react';
 import clusterIcon from 'src/assets/icons/map-cluster.svg';

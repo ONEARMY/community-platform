@@ -70,6 +70,12 @@ export const LibraryListHeader = (props: IProps) => {
     };
 
     initCategories();
+
+    if (!searchParams.get(LibrarySearchParams.sort)) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(LibrarySearchParams.sort, 'MostUsefulLastWeek');
+      setSearchParams(params, { replace: true });
+    }
   }, []);
 
   const updateFilter = useCallback(
@@ -165,10 +171,7 @@ export const LibraryListHeader = (props: IProps) => {
           <Select
             options={sortOptions}
             placeholder={listing.sort}
-            value={{
-              label: LibrarySortOptions.get(sort),
-              value: sort,
-            }}
+            value={sort ? { label: LibrarySortOptions.get(sort), value: sort } : undefined}
             onChange={(sortBy) => updateFilter(LibrarySearchParams.sort, sortBy.value)}
           />
         </FieldContainer>

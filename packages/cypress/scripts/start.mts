@@ -95,11 +95,11 @@ async function startAppServer(tenantId: string) {
   const crossEnvArgs = `VITE_SITE_VARIANT=test-ci`;
 
   // run local debug server for testing unless production build specified
-  let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none yarn start`;
+  let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none bun start`;
 
   // create local build if not running on ci (which will have build already generated)
   if (isCi) {
-    serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} yarn start-ci`;
+    serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} bun run start-ci`;
   }
 
   /******************* Run the main commands ******************* */

@@ -1,77 +1,59 @@
-import { countryToAlpha2 } from 'country-to-iso';
 import type { Author } from 'oa-shared';
 import type { HTMLAttributeAnchorTarget } from 'react';
 import type { ThemeUIStyleObject } from 'theme-ui';
 import { Flex, Text } from 'theme-ui';
-import flagUnknownSVG from '../../assets/icons/flag-unknown.svg';
-import { FlagIcon } from '../FlagIcon/FlagIcon';
 import { InternalLink } from '../InternalLink/InternalLink';
 import { UserBadge } from './UserBadge';
 
-export interface IProps {
+export interface DisplayNameProps {
   user: Partial<Author>;
   sx?: ThemeUIStyleObject;
   isLink?: boolean;
   target?: HTMLAttributeAnchorTarget;
 }
 
-const getCountryCode = (country: string | undefined) => {
-  if (!country) {
-    return null;
-  }
-  return countryToAlpha2(country);
-};
+export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProps) => {
+  const { username, displayName, country, badges } = user;
 
-export const Username = ({ user, sx, target, isLink = true }: IProps) => {
-  const { username, badges } = user;
-
-  const countryCode = user.country ? getCountryCode(user.country) : null;
-
-  const UserNameBody = (
-    <Flex data-cy="Username" sx={{ fontFamily: 'body', gap: 1, alignItems: 'center', minWidth: 0 }}>
-      {countryCode ? (
-        <Flex data-testid="Username: known flag">
-          <FlagIcon countryCode={countryCode} />
-        </Flex>
-      ) : (
-        <Flex
-          data-testid="Username: unknown flag"
-          sx={{
-            backgroundImage: `url("${flagUnknownSVG}")`,
-            backgroundSize: 'cover',
-            borderRadius: '3px',
-            height: '14px',
-            width: '21px !important',
-            justifyContent: 'center',
-            alignItems: 'center',
-            lineHeight: 0,
-            overflow: 'hidden',
-          }}
-        ></Flex>
-      )}
-
+  const DisplayNameBody = (
+    <Flex
+      data-cy="DisplayName"
+      sx={{ fontFamily: 'body', gap: 1, alignItems: 'center', minWidth: 0 }}
+    >
       <Text
         sx={{
           color: 'black',
           overflow: 'hidden',
           whiteSpace: 'nowrap',
           textOverflow: 'ellipsis',
-          maxWidth: '100%',
         }}
-        title={username}
+        title={displayName || username}
       >
-        {username}
+        {displayName || username}
       </Text>
 
       {badges &&
         badges.map((badge) => {
           return <UserBadge key={badge.id} badge={badge} />;
         })}
+
+      {country && (
+        <Text
+          sx={{
+            color: 'grey',
+            fontSize: 1,
+            whiteSpace: 'nowrap',
+            flexShrink: 0,
+          }}
+        >
+          {country}
+        </Text>
+      )}
     </Flex>
   );
 
   if (!isLink) {
-    return UserNameBody;
+    return DisplayNameBody;
   }
 
   return (
@@ -104,7 +86,7 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
         ...(sx || {}),
       }}
     >
-      {UserNameBody}
+      {DisplayNameBody}
     </InternalLink>
   );
 };

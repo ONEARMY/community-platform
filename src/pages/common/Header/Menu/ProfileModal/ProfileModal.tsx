@@ -47,7 +47,7 @@ export const ProfileModal = observer(() => {
     <ModalContainer data-cy="user-menu-list">
       <Flex
         sx={{
-          zIndex: theme.zIndex.modalProfile,
+          zIndex: (theme as any).zIndex.modalProfile,
           position: 'relative',
           background: 'white',
           border: '2px solid black',

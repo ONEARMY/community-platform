@@ -4,6 +4,30 @@ build
 .circleci
 .github
 .nxs
+.yarn
+.yarnrc.yml
+yarn.lock
 docs
 packages/cypress
 packages/documentation
+# Build artifacts and caches
+coverage
+reports
+*.log
+.env.local
+.env.*.local
+# Storybook
+**/storybook-static
+# Git
+.git
+.gitignore
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+# Testing
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx

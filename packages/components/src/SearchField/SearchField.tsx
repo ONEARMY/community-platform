@@ -13,13 +13,16 @@ export type Props = {
   onChange: (value: string) => void;
   onClickDelete: () => void;
   onClickSearch: () => void;
+  onBack?: () => void;
   additionalStyle?: ThemeUIStyleObject;
+  isExpanded?: boolean;
 };
 
 export const SearchField = (props: Props) => {
   const {
     autoComplete = 'on',
     autoFocus,
+    isExpanded,
     name = 'rand-name',
     id = 'rand-id',
     dataCy,
@@ -28,6 +31,7 @@ export const SearchField = (props: Props) => {
     onChange,
     onClickDelete,
     onClickSearch,
+    onBack,
     additionalStyle = {},
   } = props;
 
@@ -52,6 +56,7 @@ export const SearchField = (props: Props) => {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         sx={{
+          ...(isExpanded && { paddingLeft: 7 }),
           paddingRight: 11,
           '::-webkit-search-cancel-button': {
             display: 'none',
@@ -62,6 +67,20 @@ export const SearchField = (props: Props) => {
           ...additionalStyle,
         }}
       />
+      <Box sx={{ left: 2, position: 'absolute', display: 'flex', alignItems: 'center' }}>
+        {isExpanded && onBack && (
+          <Icon
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              marginRight: 1,
+            }}
+            glyph="arrow-back"
+            onClick={onBack}
+            size="17"
+          />
+        )}
+      </Box>
       <Box
         sx={{
           right: 2,

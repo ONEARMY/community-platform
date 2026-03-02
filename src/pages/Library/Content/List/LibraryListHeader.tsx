@@ -290,6 +290,7 @@ export const LibraryListHeader = (props: IProps) => {
       <div ref={formRef} style={{ width: '100%' }}>
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
           <SearchField
+            isExpanded
             autoFocus
             dataCy="library-search-box"
             placeHolder={listing.search}
@@ -303,6 +304,9 @@ export const LibraryListHeader = (props: IProps) => {
               searchValue('');
             }}
             onClickSearch={() => searchValue(searchString)}
+            onBack={() => {
+              setIsSearchOpen(false);
+            }}
           />
         </form>
       </div>

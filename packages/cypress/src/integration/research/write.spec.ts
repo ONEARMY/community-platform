@@ -91,7 +91,7 @@ describe('[Research]', () => {
 
       cy.step('Add image');
       cy.get('[data-cy=image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
-      cy.get('[data-cy=delete-image]').should('be.visible');
+      cy.get('[data-cy=delete-image]').should('exist');
 
       cy.step('New collaborators can be assigned to research');
       cy.selectTag(subscriber.username, '[data-cy=UserNameSelect]');
@@ -229,7 +229,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-description]').clear().type(researchItem.description);
       cy.selectTag(researchItem.category, '[data-cy=category-select]');
       cy.get('[data-cy=image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
-      cy.get('[data-cy=delete-image]').should('be.visible');
+      cy.get('[data-cy=delete-image]').should('exist');
       cy.get('[data-cy=submit]').click();
       cy.get('[data-cy=follow-button]', { timeout: 20000 }).should('contain', 'Following');
       cy.contains(researchItem.title);

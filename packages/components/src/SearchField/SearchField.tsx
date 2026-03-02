@@ -4,6 +4,7 @@ import { Icon } from '../Icon/Icon';
 
 export type Props = {
   autoComplete?: string;
+  autoFocus?: boolean;
   name?: string;
   id?: string;
   dataCy: string;
@@ -18,6 +19,7 @@ export type Props = {
 export const SearchField = (props: Props) => {
   const {
     autoComplete = 'on',
+    autoFocus,
     name = 'rand-name',
     id = 'rand-id',
     dataCy,
@@ -40,6 +42,7 @@ export const SearchField = (props: Props) => {
     >
       <Input
         autoComplete={autoComplete}
+        autoFocus={autoFocus}
         name={name}
         id={id}
         variant="inputOutline"

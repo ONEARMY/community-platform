@@ -32,7 +32,7 @@ interface IProps {
   showDrafts: boolean;
 }
 
-const defaultSort: LibrarySortOption = 'MostUsefulLastWeek';
+const DEFAULT_SORT: LibrarySortOption = 'MostUsefulLastWeek';
 
 export const LibraryListHeader = (props: IProps) => {
   const { itemCount, draftCount, handleShowDrafts, showDrafts } = props;
@@ -48,10 +48,10 @@ export const LibraryListHeader = (props: IProps) => {
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
-  const [pendingSort, setPendingSort] = useState<LibrarySortOption>(sort || defaultSort);
+  const [pendingSort, setPendingSort] = useState<LibrarySortOption>(sort || DEFAULT_SORT);
 
   const handleOpenSortModal = () => {
-    setPendingSort(sort || defaultSort);
+    setPendingSort(sort || DEFAULT_SORT);
     setIsSortModalOpen(true);
   };
 
@@ -107,7 +107,7 @@ export const LibraryListHeader = (props: IProps) => {
     }
 
     if (value.length === 0 || !value) {
-      params.set(LibrarySearchParams.sort, defaultSort);
+      params.set(LibrarySearchParams.sort, DEFAULT_SORT);
     }
 
     setSearchParams(params);
@@ -121,7 +121,7 @@ export const LibraryListHeader = (props: IProps) => {
 
   const sortOptions = LibrarySortOptions.toArray(!!q);
 
-  const effectiveDefaultSort = q ? 'MostRelevant' : defaultSort;
+  const effectiveDefaultSort = q ? 'MostRelevant' : DEFAULT_SORT;
   const activeFilterCount =
     (sort && sort !== effectiveDefaultSort ? 1 : 0) + (categoryParam > 0 ? 1 : 0);
 
@@ -131,8 +131,8 @@ export const LibraryListHeader = (props: IProps) => {
   };
 
   const handleResetSort = () => {
-    updateFilter(LibrarySearchParams.sort, defaultSort);
-    setPendingSort(defaultSort);
+    updateFilter(LibrarySearchParams.sort, DEFAULT_SORT);
+    setPendingSort(DEFAULT_SORT);
   };
 
   const formRef = useClickOutside(() => {
@@ -290,6 +290,7 @@ export const LibraryListHeader = (props: IProps) => {
       <div ref={formRef} style={{ width: '100%' }}>
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
           <SearchField
+            autoFocus
             dataCy="library-search-box"
             placeHolder={listing.search}
             value={searchString}

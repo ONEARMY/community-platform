@@ -26,6 +26,7 @@ export const MobileSortModal = (props: Props) => {
       isOpen={isOpen}
       sx={{
         width: '90vw',
+        maxHeight: '80vh',
         p: 0,
       }}
     >
@@ -37,7 +38,6 @@ export const MobileSortModal = (props: Props) => {
           py: 2,
           borderBottom: '2px solid',
           borderColor: 'muted',
-          marginBottom: '20px',
         }}
       >
         <Box sx={{ width: 32 }} />
@@ -59,64 +59,77 @@ export const MobileSortModal = (props: Props) => {
         </Button>
       </Flex>
 
-      {sections.map((section, index) => (
-        <Flex
-          key={section.title}
-          sx={{
-            flexDirection: 'column',
-            px: 3,
-            borderBottom: index < sections.length - 1 ? '2px solid' : 'none',
-            borderColor: 'softgrey',
-          }}
-        >
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-            <li>
-              <Flex
-                sx={{
-                  paddingTop: '10px',
-                  paddingBottom: '10px',
-                  alignItems: 'center',
-                  fontSize: 3,
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Text>{section.title}</Text>
-                <Flex sx={{ width: 22, height: 22, flexShrink: 0 }} />
-              </Flex>
-            </li>
-            {section.options.map((option) => (
-              <li key={option.value}>
-                <Flex
-                  onClick={() => section.onSelect(option.value)}
-                  sx={{
-                    cursor: 'pointer',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingTop: '10px',
-                    paddingBottom: '10px',
-                    fontSize: 2,
-                  }}
-                >
-                  {option.label}
+      <Box
+        sx={{
+          flex: 1,
+          overflowY: 'auto',
+        }}
+      >
+        {sections.map((section, index) => (
+          <Box key={section.title}>
+            <Flex
+              sx={{
+                flexDirection: 'column',
+                px: 3,
+              }}
+            >
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                <li>
                   <Flex
                     sx={{
-                      width: 22,
-                      height: 22,
-                      flexShrink: 0,
+                      paddingTop: '10px',
+                      paddingBottom: '10px',
                       alignItems: 'center',
-                      justifyContent: 'center',
+                      fontSize: 3,
+                      justifyContent: 'space-between',
                     }}
                   >
-                    {section.selectedValue === option.value ? (
-                      <Icon glyph="check" color="green" size={22} />
-                    ) : null}
+                    <Text>{section.title}</Text>
                   </Flex>
-                </Flex>
-              </li>
-            ))}
-          </ul>
-        </Flex>
-      ))}
+                </li>
+                {section.options.map((option) => (
+                  <li key={option.value}>
+                    <Flex
+                      onClick={() => section.onSelect(option.value)}
+                      sx={{
+                        cursor: 'pointer',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        paddingTop: '10px',
+                        paddingBottom: '10px',
+                        fontSize: 2,
+                      }}
+                    >
+                      {option.label}
+                      <Flex
+                        sx={{
+                          width: 22,
+                          height: 22,
+                          flexShrink: 0,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        {section.selectedValue === option.value ? (
+                          <Icon glyph="check" color="green" size={22} />
+                        ) : null}
+                      </Flex>
+                    </Flex>
+                  </li>
+                ))}
+              </ul>
+            </Flex>
+            {index < sections.length - 1 && (
+              <Box
+                sx={{
+                  borderTop: '2px solid',
+                  borderColor: 'softgrey',
+                }}
+              />
+            )}
+          </Box>
+        ))}
+      </Box>
 
       <Flex
         sx={{
@@ -125,7 +138,6 @@ export const MobileSortModal = (props: Props) => {
           borderColor: 'muted',
           paddingTop: '10px',
           paddingBottom: '10px',
-          marginTop: '10px',
           px: 3,
         }}
       >

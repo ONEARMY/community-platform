@@ -40,7 +40,7 @@ const researchStatusOptions: { label: string; value: ResearchStatus | '' }[] = [
   { label: 'Completed', value: 'complete' },
 ];
 
-const defaultSort: ResearchSortOption = 'LatestUpdated';
+const DEFAULT_SORT: ResearchSortOption = 'LatestUpdated';
 
 export const ResearchFilterHeader = (props: IProps) => {
   const { itemCount, draftCount, handleShowDrafts, showDrafts } = props;
@@ -59,7 +59,7 @@ export const ResearchFilterHeader = (props: IProps) => {
   const category = categories?.find((x) => x.id === categoryParam) ?? null;
 
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
-  const [pendingSort, setPendingSort] = useState<ResearchSortOption>(sort || defaultSort);
+  const [pendingSort, setPendingSort] = useState<ResearchSortOption>(sort || DEFAULT_SORT);
   const [pendingStatus, setPendingStatus] = useState<ResearchStatus | ''>(status || '');
 
   const handleApplySort = () => {
@@ -80,17 +80,17 @@ export const ResearchFilterHeader = (props: IProps) => {
 
   const handleResetSort = () => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set(ResearchSearchParams.sort, defaultSort);
+    params.set(ResearchSearchParams.sort, DEFAULT_SORT);
     params.delete(ResearchSearchParams.status);
     setSearchParams(params);
-    setPendingSort(defaultSort);
+    setPendingSort(DEFAULT_SORT);
     setPendingStatus('');
   };
 
   const sortOptions = ResearchSortOptions.toArray(!!q);
 
   const handleOpenSortModal = () => {
-    setPendingSort(sort || defaultSort);
+    setPendingSort(sort || DEFAULT_SORT);
     setPendingStatus(status || '');
     setIsSortModalOpen(true);
   };
@@ -157,13 +157,13 @@ export const ResearchFilterHeader = (props: IProps) => {
     }
 
     if (value.length === 0 || !value) {
-      params.set(ResearchSearchParams.sort, defaultSort);
+      params.set(ResearchSearchParams.sort, DEFAULT_SORT);
     }
 
     setSearchParams(params);
   };
 
-  const effectiveDefaultSort = q ? 'MostRelevant' : defaultSort;
+  const effectiveDefaultSort = q ? 'MostRelevant' : DEFAULT_SORT;
   const activeFilterCount =
     (sort && sort !== effectiveDefaultSort ? 1 : 0) +
     (categoryParam > 0 ? 1 : 0) +
@@ -253,14 +253,8 @@ export const ResearchFilterHeader = (props: IProps) => {
           <Select
             options={researchStatusOptions}
             placeholder={listing.status}
-            value={
-              status
-                ? { label: ResearchStatusRecord[status], value: status }
-                : undefined
-            }
-            onChange={(status) =>
-              updateFilter(ResearchSearchParams.status, status.value)
-            }
+            value={status ? { label: ResearchStatusRecord[status], value: status } : undefined}
+            onChange={(status) => updateFilter(ResearchSearchParams.status, status.value)}
           />
         </FieldContainer>
       </Flex>
@@ -354,6 +348,7 @@ export const ResearchFilterHeader = (props: IProps) => {
       <div ref={formRef} style={{ width: '100%' }}>
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
           <SearchField
+            autoFocus
             dataCy="research-search-box"
             placeHolder={listing.search}
             value={searchString}
@@ -381,9 +376,7 @@ export const ResearchFilterHeader = (props: IProps) => {
         headingTitle={listing.heading}
         categoryComponent={categoryComponent}
         filteringComponents={filteringComponents}
-        mobileFilteringComponents={
-          isSearchOpen ? mobileSearchBar : mobileFilteringComponents
-        }
+        mobileFilteringComponents={isSearchOpen ? mobileSearchBar : mobileFilteringComponents}
         searchString={q || undefined}
       />
       <MobileSortModal

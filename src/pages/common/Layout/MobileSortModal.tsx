@@ -63,6 +63,8 @@ export const MobileSortModal = (props: Props) => {
         sx={{
           flex: 1,
           overflowY: 'auto',
+          mt: 2,
+          mb: 2,
         }}
       >
         {sections.map((section, index) => (
@@ -122,6 +124,8 @@ export const MobileSortModal = (props: Props) => {
             {index < sections.length - 1 && (
               <Box
                 sx={{
+                  mt: 2,
+                  mb: 2,
                   borderTop: '2px solid',
                   borderColor: 'softgrey',
                 }}

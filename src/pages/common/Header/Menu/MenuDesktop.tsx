@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useContext } from 'react';
-import { NavLink } from 'react-router';
+import { NavLink, useLocation } from 'react-router';
 import MenuCurrent from 'src/assets/images/menu-current.svg';
 import { getSupportedModules } from 'src/modules';
 import { getAvailablePageList } from 'src/pages/PageList';
@@ -41,13 +41,22 @@ const MenuLink = styled(NavLink)`
 
 export const MenuDesktop = () => {
   const tenantContext = useContext(TenantContext);
+  const location = useLocation();
 
   return (
     <Flex sx={{ alignItems: 'center', width: '100%' }}>
       {getAvailablePageList(getSupportedModules(tenantContext?.supportedModules || '')).map(
         (page) => (
           <Flex key={page.path}>
-            <MenuLink to={page.path} data-cy="page-link">
+            <MenuLink
+              to={page.path}
+              data-cy="page-link"
+              onClick={(e) => {
+                if (location.pathname === page.path) {
+                  e.preventDefault();
+                }
+              }}
+            >
               <Flex>{page.title}</Flex>
             </MenuLink>
           </Flex>

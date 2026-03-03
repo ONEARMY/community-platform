@@ -235,6 +235,7 @@ export const ResearchFilterHeader = (props: IProps) => {
         gap: 2,
         flexDirection: ['column', 'column', 'row'],
         flexWrap: 'wrap',
+        display: ['none', 'flex', 'flex'],
       }}
     >
       <Flex sx={{ width: ['100%', '100%', '220px'] }}>

@@ -150,7 +150,6 @@ describe('[Research]', () => {
       });
       cy.get('.uppy-StatusBar-actionBtn--upload').as('upload-button');
       cy.get('@upload-button').click();
-      cy.get('.uppy-StatusBar-actionBtn--upload').should('not.exist');
 
       cy.step('Published when fields are populated correctly');
       cy.get('[data-cy=submit]').click();

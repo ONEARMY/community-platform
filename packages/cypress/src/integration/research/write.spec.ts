@@ -157,6 +157,9 @@ describe('[Research]', () => {
       cy.url().should('contain', `${researchURL}#update_`);
       cy.contains(updateTitle).should('be.visible');
       cy.contains(updateDescription).should('be.visible');
+
+      cy.step('Uploaded file is available for download');
+      cy.get('[data-cy=downloadButton]').should('be.visible');
       cy.get('[data-cy="HideDiscussionContainer:button"]').last().click();
       cy.get('[data-cy="CollapsableCommentSection"]')
         .last()
@@ -255,6 +258,15 @@ describe('[Research]', () => {
 
       cy.get('[data-cy=videoUrl]').clear().type(updateVideoUrl).blur();
 
+      cy.step('Add file to draft update');
+      cy.get('[data-cy=file-input-field]').click();
+      cy.get('.uppy-Dashboard-input:first').as('file-input');
+      cy.get('@file-input').selectFile('src/fixtures/files/Example.pdf', {
+        force: true,
+      });
+      cy.get('.uppy-StatusBar-actionBtn--upload').as('upload-button');
+      cy.get('@upload-button').click();
+
       cy.step('Save as Draft');
       cy.get('[data-cy=draft]').click();
 
@@ -283,6 +295,9 @@ describe('[Research]', () => {
       cy.get('[data-cy=submit]').click();
       cy.contains(finalUpdateTitle);
       cy.get('[data-cy=DraftUpdateLabel]').should('not.exist');
+
+      cy.step('Uploaded file is available for download');
+      cy.get('[data-cy=downloadButton]').should('be.visible');
 
       cy.step('All ready for a discussion');
       cy.get('[data-cy="HideDiscussionContainer:button"]').click();

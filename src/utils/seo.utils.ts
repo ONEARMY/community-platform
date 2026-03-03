@@ -27,7 +27,20 @@ export const mergeMeta = <T>(leafMetaFn: MetaFunction<T>): MetaFunction<T> => {
   };
 };
 
-export const generateTags = (title: string, description?: string, imageUrl?: string) => {
+interface GenerateTagsOptions {
+  title: string;
+  description?: string;
+  imageUrl?: string;
+  type?: string;
+  siteName?: string;
+}
+
+export const generateTags = (
+  title: string,
+  description?: string,
+  imageUrl?: string,
+  options?: Pick<GenerateTagsOptions, 'type' | 'siteName'>,
+) => {
   const tags = [
     { title: title },
     {
@@ -35,10 +48,25 @@ export const generateTags = (title: string, description?: string, imageUrl?: str
       content: title,
     },
     {
+      property: 'og:type',
+      content: options?.type || 'website',
+    },
+    {
       name: 'twitter:title',
       content: title,
     },
+    {
+      name: 'twitter:card',
+      content: imageUrl ? 'summary_large_image' : 'summary',
+    },
   ];
+
+  if (options?.siteName) {
+    tags.push({
+      property: 'og:site_name',
+      content: options.siteName,
+    });
+  }
 
   if (description) {
     tags.push({ name: 'description', content: description });

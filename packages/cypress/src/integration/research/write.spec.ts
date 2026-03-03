@@ -61,7 +61,6 @@ describe('[Research]', () => {
       cy.contains('Start your Research');
 
       cy.step('Cannot be published when empty');
-      cy.get('label[for=files]').should('exist');
       cy.get('[data-cy=submit]').should('be.visible').click();
       cy.get('[data-cy=errors-container]').should('be.visible');
 

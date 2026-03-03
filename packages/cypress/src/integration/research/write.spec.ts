@@ -61,8 +61,7 @@ describe('[Research]', () => {
       cy.contains('Start your Research');
 
       cy.step('Cannot be published when empty');
-      cy.wait(1000);
-      cy.get('[data-cy=submit]').click();
+      cy.get('[data-cy=submit]').should('be.visible').click();
       cy.get('[data-cy=errors-container]').should('be.visible');
 
       cy.step('Warn if title not long enough');
@@ -92,6 +91,7 @@ describe('[Research]', () => {
 
       cy.step('Add image');
       cy.get('[data-cy=image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.get('[data-cy=delete-image]').should('exist');
 
       cy.step('New collaborators can be assigned to research');
       cy.selectTag(subscriber.username, '[data-cy=UserNameSelect]');
@@ -130,11 +130,13 @@ describe('[Research]', () => {
 
       cy.step('Cannot be published when empty');
       cy.wait(1000);
-      cy.get('[data-cy=submit]').click();
+
+      cy.get('label[for=files]').should('exist');
+      cy.get('[data-cy=submit]').should('be.visible').click();
       cy.get('[data-cy=errors-container]').should('be.visible');
 
       cy.step('Enter update details');
-      cy.get('[data-cy=intro-title]').wait(0).focus().clear().type(updateTitle).blur({ force: true });
+      cy.get('[data-cy=intro-title]').should('be.visible').clear().type(updateTitle).blur({ force: true });
 
       cy.get('[data-cy=intro-description]').clear().type(updateDescription).blur({ force: true });
 
@@ -232,10 +234,9 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-description]').clear().type(researchItem.description);
       cy.selectTag(researchItem.category, '[data-cy=category-select]');
       cy.get('[data-cy=image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
-      cy.wait(2000);
+      cy.get('[data-cy=delete-image]').should('exist');
       cy.get('[data-cy=submit]').click();
-      cy.wait(2000);
-      cy.get('[data-cy=follow-button]').should('contain', 'Following');
+      cy.get('[data-cy=follow-button]', { timeout: 20000 }).should('contain', 'Following');
       cy.contains(researchItem.title);
 
       cy.step('Users can follow for research updates (for later expectations)');
@@ -287,10 +288,9 @@ describe('[Research]', () => {
       cy.step('Draft updates can be published');
       cy.signIn(researcher.email, researcher.password);
       cy.visit(researchURL);
-      cy.wait(2000);
-      cy.get('[data-cy=edit-update]').click();
+      cy.get('[data-cy=edit-update]').should('be.visible').click();
       cy.contains('Edit your update');
-      cy.wait(1000);
+      cy.get('[data-cy=intro-title]').should('be.visible');
       cy.fillIntroTitle(finalUpdateTitle);
       cy.get('[data-cy=submit]').click();
       cy.contains(finalUpdateTitle);

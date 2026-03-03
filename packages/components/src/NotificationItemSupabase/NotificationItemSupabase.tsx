@@ -1,6 +1,6 @@
 import type { NotificationDisplay } from 'oa-shared';
 import type { ThemeUIStyleObject } from 'theme-ui';
-import { Flex, Text } from 'theme-ui';
+import { Avatar, Flex, Text } from 'theme-ui';
 import { DisplayDate } from '../DisplayDate/DisplayDate';
 import { Icon } from '../Icon/Icon';
 import type { availableGlyphs } from '../Icon/types';
@@ -60,11 +60,14 @@ export const NotificationItemSupabase = (props: IProps) => {
     <Flex data-cy="NotificationListItemSupabase" data-testid="NotificationListItemSupabase">
       <InternalLink onClick={onClick} to={notification.link} sx={{ color: 'black', width: '100%' }}>
         <Flex sx={borderStyle}>
-          {notification.sidebar.image && <>hi</>}
-          {notification.sidebar.icon && (
-            <Flex>
-              <Icon glyph={notification.sidebar.icon as availableGlyphs} size={30} />
-            </Flex>
+          {notification.sidebar.image ? (
+            <Avatar src={notification.sidebar.image} sx={{ width: 30, height: 30 }} />
+          ) : (
+            notification.sidebar.icon && (
+              <Flex>
+                <Icon glyph={notification.sidebar.icon as availableGlyphs} size={30} />
+              </Flex>
+            )
           )}
           <Flex sx={{ flex: 1, flexDirection: 'column', gap: 2 }}>
             <Flex sx={{ justifyContent: 'space-between', gap: 2 }}>

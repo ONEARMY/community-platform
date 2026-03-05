@@ -68,6 +68,7 @@ export const fakeNewsSB = (newsOverloads: Partial<News> = {}): News => ({
   heroImage: null,
   isDraft: false,
   profileBadge: null,
+  publishedAt: faker.date.past(),
   ...newsOverloads,
 });
 

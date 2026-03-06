@@ -1,11 +1,7 @@
-export class DBMedia {
+export interface DBMedia {
   id: string;
   path: string;
   fullPath: string;
-
-  constructor(obj: DBMedia) {
-    Object.assign(this, obj);
-  }
 }
 
 interface IMedia {

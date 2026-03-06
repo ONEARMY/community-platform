@@ -1,16 +1,12 @@
-import type { IDBDocSB, IDoc } from './document';
+import type { IDoc } from './document';
 
-export class DBBanner implements IDBDocSB {
+export interface DBBanner {
   id: number;
   created_at: string;
   modified_at: string | null;
 
   text: string;
   url: string;
-
-  constructor(obj: any) {
-    Object.assign(this, obj);
-  }
 }
 
 export class Banner implements IDoc {

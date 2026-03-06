@@ -1,8 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBMedia, DBProfile, DBProject, Image, MediaFile } from 'oa-shared';
+import type { DBMedia, DBProfile, DBProject, Image, Json, MediaFile } from 'oa-shared';
 import { Project, ProjectStep, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
-import type { Json } from 'src/database.types';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { libraryServiceServer } from 'src/services/libraryService.server';

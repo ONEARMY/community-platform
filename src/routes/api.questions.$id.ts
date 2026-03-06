@@ -1,9 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBMedia, DBQuestion } from 'oa-shared';
+import type { DBMedia, DBQuestion, Json } from 'oa-shared';
 import { Question } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
-import type { Json } from 'src/database.types';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { questionServiceServer } from 'src/services/questionService.server';

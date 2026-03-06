@@ -1,6 +1,6 @@
 import type { Comment } from './comment';
 import type { SubscribableContentTypes } from './common';
-import type { IDBDocSB, IDoc } from './document';
+import type { IDoc } from './document';
 import type { DBMedia, Image } from './media';
 import type { IDBModeration, IModeration, Moderation } from './moderation';
 import type { News } from './news';
@@ -15,7 +15,7 @@ import type { Question } from './question';
 import type { ResearchUpdate } from './research';
 import type { IUserImpact, UserVisitorPreference } from './user';
 
-export class DBProfile {
+export interface DBProfile {
   readonly id: number;
   readonly created_at: string;
   readonly tags?: DBProfileTagJoin[];
@@ -40,10 +40,6 @@ export class DBProfile {
   auth_id: string;
   profile_type: number;
   donations_enabled: boolean;
-
-  constructor(obj: DBProfile) {
-    Object.assign(this, obj);
-  }
 }
 
 export class Profile {
@@ -131,7 +127,7 @@ export type ProfileListItem = Pick<
 type NotificationContent = News | Comment | Question | ResearchUpdate;
 type NotificationSourceContentType = SubscribableContentTypes;
 
-export class DBNotification implements IDBDocSB {
+export interface DBNotification {
   readonly id: number;
   readonly title: string;
   readonly action_type: NotificationActionType;
@@ -147,10 +143,6 @@ export class DBNotification implements IDBDocSB {
   readonly triggered_by: DBProfile;
   readonly triggered_by_id: number;
   readonly tenant_id: string;
-
-  constructor(obj: Partial<DBNotification>) {
-    Object.assign(this, obj);
-  }
 }
 
 export class Notification implements IDoc {
@@ -385,11 +377,11 @@ export type ProfileFormData = {
   visitorPreferenceDetails?: UserVisitorPreference['details'];
 };
 
-export class DBMapPin implements IDBModeration {
+export interface DBMapPin extends IDBModeration {
   readonly id: number;
   readonly profile: DBPinProfile;
   profile_id: number;
-  country: string; // check if necessary
+  country: string;
   country_code: string;
   name: string | null;
   administrative: string | null;

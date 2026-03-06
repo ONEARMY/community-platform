@@ -6,14 +6,14 @@ import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
 import type { IConvertedFileMeta } from './common';
-import type { IContentDoc, IDBContentDoc } from './content';
+import type { IContentDoc } from './content';
 import type { DBMedia, Image } from './media';
 import type { DBProfileBadge } from './profileBadge';
 import { ProfileBadge } from './profileBadge';
 import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
 
-export class DBNews implements IDBContentDoc {
+export interface DBNews {
   readonly id: number;
   readonly created_at: string;
   readonly modified_at: string | null;

@@ -1,9 +1,8 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
-import type { DBProfile, DBQuestion, Image, Moderation } from 'oa-shared';
+import type { DBProfile, DBQuestion, Image, Json, Moderation } from 'oa-shared';
 import { Question } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
-import type { Json } from 'src/database.types';
 import { ITEMS_PER_PAGE } from 'src/pages/Question/constants';
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';

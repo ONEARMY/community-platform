@@ -1,17 +1,13 @@
 export type ProfileCategory = 'member' | 'space';
 
-export class DBProfileTag {
+export interface DBProfileTag {
   id: number;
   created_at: string;
   name: string;
   profile_type: string;
-
-  constructor(obj: Partial<DBProfileTag>) {
-    Object.assign(this, obj);
-  }
 }
 
-export class DBProfileTagJoin {
+export interface DBProfileTagJoin {
   profile_tags: DBProfileTag;
 }
 

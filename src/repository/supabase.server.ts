@@ -1,5 +1,5 @@
 import { createServerClient, parseCookieHeader, serializeCookieHeader } from '@supabase/ssr';
-import type { Database } from 'src/database.types';
+import type { Database } from 'oa-shared';
 
 // Create a single supabase client for interacting with your database
 export function createSupabaseServerClient(request: Request) {

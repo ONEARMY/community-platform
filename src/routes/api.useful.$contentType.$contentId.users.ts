@@ -1,6 +1,5 @@
-import type { DBProfile, ProfileListItem } from 'oa-shared';
+import type { Database, DBProfile, ProfileListItem } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
-import type { Database } from 'src/database.types';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { dbResult } from 'src/utils/supabase.types';

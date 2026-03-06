@@ -3,12 +3,12 @@ import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
 import type { IConvertedFileMeta } from './common';
-import type { IContentDoc, IDBContentDoc } from './content';
+import type { IContentDoc } from './content';
 import type { DBMedia, Image } from './media';
 import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
 
-export class DBQuestion implements IDBContentDoc {
+export interface DBQuestion {
   readonly id: number;
   is_draft: boolean;
   readonly created_at: string;
@@ -29,10 +29,6 @@ export class DBQuestion implements IDBContentDoc {
 
   readonly description: string;
   readonly images: DBMedia[] | null;
-
-  constructor(question: DBQuestion) {
-    Object.assign(this, question);
-  }
 }
 
 export class Question implements IContentDoc {

@@ -1,9 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBProfile, DBProject, DBProjectStep, MediaFile, Moderation } from 'oa-shared';
+import type { DBProfile, DBProject, DBProjectStep, Json, MediaFile, Moderation } from 'oa-shared';
 import { Project, ProjectStep, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
-import type { Json } from 'src/database.types';
 import type { LibrarySortOption } from 'src/pages/Library/Content/List/LibrarySortOptions';
 import { ITEMS_PER_PAGE } from 'src/pages/Library/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';

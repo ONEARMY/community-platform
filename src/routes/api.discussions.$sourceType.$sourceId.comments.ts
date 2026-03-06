@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBAuthor, DBProfile, DiscussionContentType } from 'oa-shared';
-import { DBComment, DiscussionContentTypes } from 'oa-shared';
+import type { DBAuthor, DBComment, DBProfile, DiscussionContentType } from 'oa-shared';
+import { DiscussionContentTypes } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { CommentFactory } from 'src/factories/commentFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -137,10 +137,10 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     notificationsSupabaseServiceServer.createNotificationsNewComment(comment, client, headers);
   }
 
-  const commentDb = new DBComment({
+  const commentDb: DBComment = {
     ...dbResult<DBComment>(commentResult.data),
     profile: (commentResult.data as any).profiles as DBAuthor,
-  });
+  };
 
   const commentFactory = new CommentFactory(new ImageServiceServer(client));
   const comment = await commentFactory.fromDBWithAuthor(commentDb);

@@ -1,9 +1,9 @@
 import type { DBAuthor } from './author';
 import { Author } from './author';
 import type { DiscussionContentType } from './common';
-import type { IDBDocSB, IDoc } from './document';
+import type { IDoc } from './document';
 
-export class DBComment implements IDBDocSB {
+export interface DBComment {
   readonly id: number;
   readonly created_at: string;
   readonly modified_at: string | null;
@@ -18,10 +18,6 @@ export class DBComment implements IDBDocSB {
   readonly parent_id: number | null;
   readonly vote_count?: number;
   readonly has_voted?: boolean;
-
-  constructor(comment: DBComment) {
-    Object.assign(this, comment);
-  }
 }
 
 export class Comment implements IDoc {

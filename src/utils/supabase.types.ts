@@ -1,4 +1,4 @@
-import type { Json } from 'src/database.types';
+import type { Json } from 'oa-shared';
 
 export function toJson<T>(value: T): Json {
   return value as unknown as Json;

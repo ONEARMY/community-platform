@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from 'react-router';
-import type { Database } from 'src/database.types';
+import type { Database } from 'oa-shared';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {

@@ -28,7 +28,7 @@
   padding: 15px;
   word-wrap: anywhere;
   border-color: transparent;
-  font-size: 12px;
+  font-size: 16px;
 
   /* Place on top of each other */
   grid-area: 1 / 1 / 2 / 2;

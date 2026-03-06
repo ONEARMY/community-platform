@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBNotification } from 'oa-shared';
-import { Notification, NotificationDisplay } from 'oa-shared';
+import { Image, Notification, NotificationDisplay } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { dbResultArray } from 'src/utils/supabase.types';
@@ -22,6 +22,18 @@ export const transformNotification = async (
 ) => {
   try {
     const notification = Notification.fromDB(dbNotification);
+
+    if (notification.triggeredBy && dbNotification.triggered_by?.photo) {
+      const { data } = client.storage
+        .from(process.env.TENANT_ID as string)
+        .getPublicUrl(dbNotification.triggered_by.photo.path);
+      if (data?.publicUrl) {
+        notification.triggeredBy.photo = new Image({
+          id: dbNotification.triggered_by.photo.id,
+          publicUrl: data.publicUrl,
+        });
+      }
+    }
 
     const content = await client
       .from(notification.contentType)
@@ -67,7 +79,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       .select(
         `
       *,
-      triggered_by:profiles!notifications_triggered_by_id_fkey(id,username)
+      triggered_by:profiles!notifications_triggered_by_id_fkey(id,username,photo)
     `,
       )
       .eq('owned_by_id', profileResponse?.data?.id);

@@ -32,7 +32,7 @@ const FileDetails = (props: IPropFileDetails) => {
         sx={{
           borderRadius: 1,
           border: '2px solid black',
-          background: 'accent.base',
+          background: 'accent',
           color: 'black',
           justifyContent: 'space-between',
           alignItems: 'center',

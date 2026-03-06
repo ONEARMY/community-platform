@@ -71,6 +71,7 @@ jobs:
         with:
           config: fly-preview.toml
           name: community-platform-pr-${{ github.event.number }}
+          args: --build-arg COMMIT_SHA=${{ github.event.pull_request.head.sha }}
 
       - name: Set Fly.io Secrets
         run: |

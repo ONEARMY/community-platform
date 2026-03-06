@@ -41,7 +41,7 @@ export const ResearchEditorOverview = (props: ResearchEditorOverviewProps) => {
                       whiteSpace: 'nowrap',
                       textOverflow: 'ellipsis',
                       overflow: 'hidden',
-                      background: 'accent.base',
+                      background: 'accent',
                       padding: 1,
                       borderRadius: 1,
                       borderBottomRightRadius: 1,

@@ -13,6 +13,7 @@ export const theme: PlatformTheme = {
 // Keep commonStyles export for backward compatibility
 export { commonStyles };
 
+export type { Colors } from './common';
 export type { ButtonVariants } from './common/button';
 export { GlobalFonts } from './fonts';
 

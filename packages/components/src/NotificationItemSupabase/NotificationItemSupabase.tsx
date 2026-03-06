@@ -61,7 +61,10 @@ export const NotificationItemSupabase = (props: IProps) => {
       <InternalLink onClick={onClick} to={notification.link} sx={{ color: 'black', width: '100%' }}>
         <Flex sx={borderStyle}>
           {notification.sidebar.image ? (
-            <Avatar src={notification.sidebar.image} sx={{ width: 60, height: 60 }} />
+            <Avatar
+              src={notification.sidebar.image}
+              sx={{ width: 60, height: 60, objectFit: 'cover' }}
+            />
           ) : (
             notification.sidebar.icon && (
               <Flex>

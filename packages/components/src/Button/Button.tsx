@@ -1,3 +1,4 @@
+import type { Colors } from 'oa-themes';
 import React from 'react';
 import type { ButtonProps as ThemeUiButtonProps } from 'theme-ui';
 import { Flex, Text, Button as ThemeUiButton } from 'theme-ui';
@@ -11,7 +12,7 @@ export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   small?: boolean;
   large?: boolean;
   showIconOnly?: boolean;
-  iconColor?: string;
+  iconColor?: Colors;
   iconFilter?: string;
 }
 

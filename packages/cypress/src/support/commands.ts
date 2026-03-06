@@ -86,6 +86,7 @@ Cypress.Commands.add('expectNewNotification', (props: ExpectedNewNotification) =
   if (title) {
     cy.get('[data-cy=NotificationListSupabase]').contains(title);
   }
+  cy.get('[data-cy=NotificationListItemSupabase]').first().find('img').should('be.visible');
   cy.get('[data-cy=NotificationListSupabase]').contains(content).click();
 
   cy.url().should('include', path);

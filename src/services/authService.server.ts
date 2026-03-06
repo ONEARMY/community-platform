@@ -29,7 +29,17 @@ const isUsernameAvailable = async (username: string, client: SupabaseClient) => 
   return result.data;
 };
 
+const getProfileByAuthId = async (authId: string, client: SupabaseClient) => {
+  const { data } = await client
+    .from('profiles')
+    .select('id,username,roles')
+    .eq('auth_id', authId)
+    .single();
+  return data;
+};
+
 export const authServiceServer = {
   createUserProfile,
   isUsernameAvailable,
+  getProfileByAuthId,
 };

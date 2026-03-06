@@ -2,6 +2,7 @@ import type { Image, ProfileFormData } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { authServiceServer } from 'src/services/authService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
@@ -81,6 +82,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const data = {
+      userName: formData.get('userName') as string,
       displayName: formData.get('displayName') as string,
       about: formData.get('about') as string,
       country: country === 'null' ? null : country,
@@ -123,6 +125,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     if (!profileData?.id) {
       throw new Error('profile not found');
+    }
+
+    const isChangingUsername = data.userName && data.userName !== profileData.username;
+    if (isChangingUsername) {
+      const isUsernameAvailable = await authServiceServer.isUsernameAvailable(
+        data.userName,
+        client,
+      );
+      if (!isUsernameAvailable) {
+        return Response.json(
+          {},
+          { headers, status: 400, statusText: FRIENDLY_MESSAGES['sign-up/username-taken'] },
+        );
+      }
     }
 
     const profileService = new ProfileServiceServer(client);

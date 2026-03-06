@@ -368,6 +368,7 @@ export class NotificationDisplay {
 }
 
 export type ProfileFormData = {
+  userName: string;
   displayName: string;
   tagIds: number[] | null;
   about: string;

@@ -1,7 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBResearchItem } from 'oa-shared';
+import type { DBMedia, DBResearchItem } from 'oa-shared';
 import { ResearchItem, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
+import type { Json } from 'src/database.types';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -65,7 +66,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         description: data.description,
         slug: data.slug,
         category: data.category,
-        tags: data.tags,
+        tags: data.tags as unknown as string[],
         previous_slugs: previousSlugs,
         is_draft: data.isDraft,
         collaborators: data.collaborators,
@@ -79,7 +80,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       throw researchResult.error;
     }
 
-    const research = ResearchItem.fromDB(researchResult.data, []);
+    const research = ResearchItem.fromDB(researchResult.data as unknown as DBResearchItem, []);
 
     await subscribersServiceServer.updateResearchSubscribers(
       oldResearch,
@@ -103,14 +104,14 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       if (mediaResult?.media && mediaResult.media.length > 0) {
         const result = await client
           .from('research')
-          .update({ image: mediaResult.media[0] })
+          .update({ image: mediaResult.media[0] as unknown as Json })
           .eq('id', research.id)
           .select('image');
 
         if (result.data && result.data.length > 0) {
           const [image] = storageServiceServer.getPublicUrls(
             client,
-            result.data?.at(0)?.image ? [result.data[0].image] : [],
+            result.data?.at(0)?.image ? [result.data[0].image as unknown as DBMedia] : [],
           );
 
           research.image = image;
@@ -147,7 +148,7 @@ async function deleteResearch(request, id: number) {
       await client
         .from('research')
         .update({
-          modified_at: new Date(),
+          modified_at: new Date().toISOString(),
           deleted: true,
         })
         .eq('id', id);

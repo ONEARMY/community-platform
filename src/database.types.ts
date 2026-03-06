@@ -1303,7 +1303,171 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      get_author_vote_counts: {
+        Args: { author_id: number };
+        Returns: { content_type: string; vote_count: number }[];
+      };
+      get_comments_with_votes: {
+        Args: {
+          p_source_type: string;
+          p_source_id: number;
+          p_current_user_id?: number | null;
+        };
+        Returns: {
+          id: number;
+          comment: string;
+          created_at: string;
+          modified_at: string | null;
+          deleted: boolean | null;
+          source_id: number | null;
+          source_type: string;
+          parent_id: number | null;
+          created_by: number | null;
+          profile: Json | null;
+          vote_count: number;
+          has_voted: boolean;
+        }[];
+      };
+      get_projects: {
+        Args: {
+          search_query?: string | null;
+          category_id?: number | null;
+          sort_by?: string;
+          limit_val?: number;
+          offset_val?: number;
+          current_username?: string | null;
+          days_back?: number;
+        };
+        Returns: {
+          id: number;
+          created_at: string;
+          created_by: number | null;
+          modified_at: string | null;
+          description: string;
+          slug: string;
+          cover_image: Json | null;
+          category: Json | null;
+          tags: string[] | null;
+          title: string;
+          moderation: string | null;
+          total_views: number | null;
+          author: Json | null;
+          comment_count: number | null;
+          useful_votes_last_week: number | null;
+        }[];
+      };
+      get_projects_count: {
+        Args: {
+          search_query?: string | null;
+          category_id?: number | null;
+          current_username?: string | null;
+        };
+        Returns: number;
+      };
+      get_research: {
+        Args: {
+          search_query?: string | null;
+          category_id?: number | null;
+          research_status?: Database['public']['Enums']['research_status'] | null;
+          sort_by?: string;
+          limit_val?: number;
+          offset_val?: number;
+          days_back?: number;
+        };
+        Returns: {
+          id: number;
+          created_at: string;
+          created_by: number | null;
+          modified_at: string | null;
+          description: string;
+          slug: string;
+          image: Json | null;
+          status: Database['public']['Enums']['research_status'] | null;
+          category: Json | null;
+          tags: string[] | null;
+          title: string;
+          total_views: number | null;
+          author: Json | null;
+          update_count: number | null;
+          comment_count: number | null;
+          useful_votes_last_week: number | null;
+        }[];
+      };
+      get_research_count: {
+        Args: {
+          search_query?: string | null;
+          category_id?: number | null;
+          research_status?: Database['public']['Enums']['research_status'] | null;
+        };
+        Returns: number;
+      };
+      get_subscribed_users_emails_to_notify: {
+        Args: {
+          p_content_id: number;
+          p_content_type: string;
+        };
+        Returns: {
+          email: string;
+          profile_id: number;
+          profile_created_at: string;
+          display_name: string;
+          comments: boolean;
+          replies: boolean;
+          research_updates: boolean;
+          is_unsubscribed: boolean;
+        }[];
+      };
+      get_useful_votes_count_by_content_id: {
+        Args: {
+          p_content_type: Database['public']['Enums']['useful_content_types'];
+          p_content_ids: number[];
+        };
+        Returns: { content_id: number; count: number }[];
+      };
+      get_user_email_by_id: {
+        Args: { id: string };
+        Returns: { email: string }[];
+      };
+      get_user_email_by_username: {
+        Args: { username: string };
+        Returns: { email: string }[];
+      };
+      get_user_projects: {
+        Args: { username_param: string };
+        Returns: {
+          id: number;
+          comment_count: number | null;
+          cover_image: Json | null;
+          title: string;
+          slug: string;
+          total_useful: number | null;
+        }[];
+      };
+      get_user_questions: {
+        Args: { username_param: string };
+        Returns: {
+          id: number;
+          comment_count: number | null;
+          images: Json[] | null;
+          title: string;
+          slug: string;
+          total_useful: number | null;
+        }[];
+      };
+      get_user_research: {
+        Args: { username_param: string };
+        Returns: {
+          id: number;
+          image: Json | null;
+          title: string;
+          slug: string;
+          total_useful: number | null;
+        }[];
+      };
+      is_username_available: {
+        Args: { username: string };
+        Returns: boolean;
+      };
     };
     Enums: {
       content_types: 'questions' | 'projects' | 'research' | 'news' | 'comments';
@@ -1334,7 +1498,9 @@ export type Database = {
 type PublicSchema = Database[Extract<keyof Database, 'public'>];
 
 export type Tables<
-  PublicTableNameOrOptions extends keyof (PublicSchema['Tables'] & PublicSchema['Views']) | { schema: keyof Database },
+  PublicTableNameOrOptions extends
+    | keyof (PublicSchema['Tables'] & PublicSchema['Views'])
+    | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions['schema']]['Tables'] &
         Database[PublicTableNameOrOptions['schema']]['Views'])

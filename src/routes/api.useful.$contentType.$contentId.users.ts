@@ -1,5 +1,6 @@
 import type { DBProfile, ProfileListItem } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
+import type { Database } from 'src/database.types';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
@@ -33,7 +34,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
           action_url
     )))`,
     )
-    .eq('content_type', contentType)
+    .eq('content_type', contentType as Database['public']['Enums']['useful_content_types'])
     .eq('content_id', Number(contentId))
     .eq('tenant_id', process.env.TENANT_ID!);
 

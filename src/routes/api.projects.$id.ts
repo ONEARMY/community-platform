@@ -1,7 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBMedia, DBProfile, DBProject, MediaFile } from 'oa-shared';
+import type { DBMedia, DBProfile, DBProject, Image, MediaFile } from 'oa-shared';
 import { Project, ProjectStep, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
+import type { Json } from 'src/database.types';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { libraryServiceServer } from 'src/services/libraryService.server';
@@ -137,11 +138,11 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
       const { data } = await client
         .from('project_steps')
-        .update({ images })
+        .update({ images: images as unknown as Json[] })
         .eq('id', stepDb.id)
         .select('images')
         .single();
-      step.images = data?.images;
+      step.images = data?.images as unknown as Image[];
       project.steps.push(step);
     }
 
@@ -253,9 +254,9 @@ async function updateProject(
       file_link: data.fileLink,
       difficulty_level: data.difficultyLevel,
       time: data.time,
-      files,
+      files: files as unknown as Json[],
       moderation,
-      cover_image,
+      cover_image: cover_image as unknown as Json,
     })
     .eq('id', currentProject.id)
     .select();
@@ -284,7 +285,9 @@ async function updateOrReplaceImages(
       .single();
 
     if (existingMedia.data && existingMedia.data.images?.length > 0) {
-      media = existingMedia.data.images.filter((x) => idsToKeep.includes(x.id));
+      media = (existingMedia.data.images as unknown as DBMedia[]).filter((x) =>
+        idsToKeep.includes(x.id),
+      );
     }
     // TODO: delete other images
   }
@@ -318,7 +321,7 @@ async function deleteProject(request: Request, id: number) {
     await client
       .from('projects')
       .update({
-        modified_at: new Date(),
+        modified_at: new Date().toISOString(),
         deleted: true,
       })
       .eq('id', id);

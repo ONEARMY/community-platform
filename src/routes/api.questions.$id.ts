@@ -3,6 +3,7 @@ import type { DBMedia, DBQuestion } from 'oa-shared';
 import { Question } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import type { Json } from 'src/database.types';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { questionServiceServer } from 'src/services/questionService.server';
@@ -39,7 +40,14 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const currentQuestion = await questionServiceServer.getById(id, client);
 
-    const { valid, status, statusText } = await validateRequest(params, request, claims.data.claims.sub, data, currentQuestion, client);
+    const { valid, status, statusText } = await validateRequest(
+      params,
+      request,
+      claims.data.claims.sub,
+      data,
+      currentQuestion,
+      client,
+    );
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText });
@@ -62,15 +70,29 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     let images: DBMedia[] = [];
 
     if (imagesToKeepIds.length > 0) {
-      const questionImages = await client.from('questions').select('images').eq('id', params.id).single();
+      const questionImages = await client
+        .from('questions')
+        .select('images')
+        .eq('id', Number(params.id))
+        .single();
 
-      if (questionImages.data && questionImages.data?.images?.length > 0) {
-        images = questionImages.data.images.filter((x) => imagesToKeepIds.includes(x.id));
+      if (
+        questionImages.data &&
+        questionImages.data.images &&
+        questionImages.data.images.length > 0
+      ) {
+        images = (questionImages.data.images as unknown as DBMedia[]).filter((x) =>
+          imagesToKeepIds.includes(x.id),
+        );
       }
     }
 
     if (uploadedImages.length > 0) {
-      const mediaResult = await storageServiceServer.uploadImage(uploadedImages, `questions/${id}`, client);
+      const mediaResult = await storageServiceServer.uploadImage(
+        uploadedImages,
+        `questions/${id}`,
+        client,
+      );
 
       if (mediaResult) {
         images = [...images, ...mediaResult.media];
@@ -85,23 +107,31 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         category: data.category,
         description: data.description,
         is_draft: data.is_draft,
-        images,
+        images: images as unknown as Json[],
         title: data.title,
         slug: data.slug,
         previous_slugs: previousSlugs,
         tags: data.tags,
-        modified_at: new Date(),
+        modified_at: new Date().toISOString(),
       })
-      .eq('id', params.id)
+      .eq('id', Number(params.id))
       .select();
 
     if (questionResult.error || !questionResult.data) {
       throw questionResult.error;
     }
 
-    const newImages = storageServiceServer.getPublicUrls(client, questionResult.data[0].images, IMAGE_SIZES.GALLERY);
+    const newImages = storageServiceServer.getPublicUrls(
+      client,
+      questionResult.data[0].images as unknown as DBMedia[],
+      IMAGE_SIZES.GALLERY,
+    );
 
-    const question = Question.fromDB(questionResult.data[0], [], newImages);
+    const question = Question.fromDB(
+      questionResult.data[0] as unknown as DBQuestion,
+      [],
+      newImages,
+    );
     updateUserActivity(client, claims.data.claims.sub);
 
     return Response.json({ question }, { headers, status: 200 });
@@ -141,7 +171,12 @@ async function validateRequest(
 
   if (
     currentQuestion.slug !== data.slug &&
-    (await contentServiceServer.isDuplicateExistingSlug(data.slug, currentQuestion.id, client, 'questions'))
+    (await contentServiceServer.isDuplicateExistingSlug(
+      data.slug,
+      currentQuestion.id,
+      client,
+      'questions',
+    ))
   ) {
     return {
       status: 409,

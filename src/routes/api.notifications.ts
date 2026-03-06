@@ -75,7 +75,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       throw error;
     }
 
-    const notifications = data?.length ? await transformNotificationList(data, client) : [];
+    const notifications = data?.length
+      ? await transformNotificationList(data as unknown as DBNotification[], client)
+      : [];
 
     return Response.json({ notifications }, { headers, status: 200 });
   } catch (error) {

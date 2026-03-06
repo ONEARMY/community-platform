@@ -33,12 +33,12 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     }
 
     const result = await client.rpc('get_comments_with_votes', {
-      p_source_type: params.sourceType,
-      p_source_id: params.sourceId,
+      p_source_type: params.sourceType!,
+      p_source_id: Number(params.sourceId),
       p_current_user_id: currentUserId || null,
     });
 
-    const dbComments = result.data as DBComment[];
+    const dbComments = result.data as unknown as DBComment[];
 
     const commentFactory = new CommentFactory(new ImageServiceServer(client));
     const comments = await commentFactory.fromDBCommentsToThreads(dbComments);
@@ -92,16 +92,16 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   const newComment = {
     comment: data.comment,
     source_id_legacy: isNaN(+params.sourceId!) ? params.sourceId : null,
-    source_id: isNaN(+params.sourceId!) ? null : +params.sourceId!,
+    source_id: isNaN(+params.sourceId!) ? null : Number(params.sourceId!),
     source_type: params.sourceType,
     created_by: currentUser.data[0].id,
     parent_id: data.parentId ?? null,
     tenant_id: process.env.TENANT_ID,
-  } as Partial<DBComment>;
+  };
 
   const commentResult = await client
     .from('comments')
-    .insert(newComment)
+    .insert(newComment as any)
     .select(
       `
       id, 
@@ -128,8 +128,8 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     .single();
 
   if (!commentResult.error) {
-    const comment = commentResult.data as DBComment;
-    const profile = currentUser.data[0] as DBProfile;
+    const comment = commentResult.data as unknown as DBComment;
+    const profile = currentUser.data[0] as unknown as DBProfile;
 
     addSubscriptions(comment, profile, client, headers);
 
@@ -137,7 +137,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   }
 
   const commentDb = new DBComment({
-    ...(commentResult.data as DBComment),
+    ...(commentResult.data as unknown as DBComment),
     profile: (commentResult.data as any).profiles as DBAuthor,
   });
 

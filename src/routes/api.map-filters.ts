@@ -1,5 +1,13 @@
 import Keyv from 'keyv';
-import type { DBMapSettings, DefaultMapFilters, FilterResponse, MapFilters } from 'oa-shared';
+import type {
+  DBMapSettings,
+  DBProfileBadge,
+  DBProfileTag,
+  DBProfileType,
+  DefaultMapFilters,
+  FilterResponse,
+  MapFilters,
+} from 'oa-shared';
 import { ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -30,12 +38,12 @@ export const loader = async ({ request }) => {
       console.error({ message: 'Error fetching map pin filters', errors });
     }
 
-    const settings = mapSettings?.data?.at(0) as DBMapSettings | undefined;
+    const settings = mapSettings?.data?.at(0) as unknown as DBMapSettings | undefined;
 
     const filters: MapFilters = {
-      tags: tags?.data?.map((x) => ProfileTag.fromDB(x)),
-      badges: badges?.data?.map((x) => ProfileBadge.fromDB(x)),
-      types: types?.data?.map((x) => ProfileType.fromDB(x)),
+      tags: tags?.data?.map((x) => ProfileTag.fromDB(x as unknown as DBProfileTag)),
+      badges: badges?.data?.map((x) => ProfileBadge.fromDB(x as unknown as DBProfileBadge)),
+      types: types?.data?.map((x) => ProfileType.fromDB(x as unknown as DBProfileType)),
       settings: settings?.setting_filters || undefined,
     };
 

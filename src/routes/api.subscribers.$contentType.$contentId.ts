@@ -26,7 +26,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
       const response = await client
         .from('subscribers')
         .select('*')
-        .eq('content_type', params.contentType)
+        .eq('content_type', params.contentType!)
         .eq('content_id', Number(params.contentId))
         .eq('user_id', profile.id)
         .single();
@@ -36,7 +36,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
       }
 
       await client.from('subscribers').insert({
-        content_type: params.contentType,
+        content_type: params.contentType!,
         content_id: Number(params.contentId),
         user_id: profile.id,
         tenant_id: process.env.TENANT_ID!,
@@ -47,7 +47,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
       await client
         .from('subscribers')
         .delete()
-        .eq('content_type', params.contentType)
+        .eq('content_type', params.contentType!)
         .eq('content_id', Number(params.contentId))
         .eq('user_id', profile.id);
     }

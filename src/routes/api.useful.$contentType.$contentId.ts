@@ -1,4 +1,5 @@
 import type { LoaderFunctionArgs } from 'react-router';
+import type { Database } from 'src/database.types';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 
@@ -29,7 +30,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
   let result;
   if (request.method === 'POST') {
     result = await client.from('useful_votes').insert({
-      content_type: params.contentType,
+      content_type: params.contentType as Database['public']['Enums']['useful_content_types'],
       content_id: Number(params.contentId),
       user_id: profileResult.data[0].id,
       tenant_id: process.env.TENANT_ID!,
@@ -38,7 +39,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
     result = await client
       .from('useful_votes')
       .delete()
-      .eq('content_type', params.contentType)
+      .eq('content_type', params.contentType as Database['public']['Enums']['useful_content_types'])
       .eq('content_id', Number(params.contentId))
       .eq('user_id', profileResult.data[0].id)
       .eq('tenant_id', process.env.TENANT_ID!);

@@ -4,6 +4,7 @@ import type { AuthError } from '@supabase/supabase-js';
 import type { DBNews, DBProfile, Moderation } from 'oa-shared';
 import { News } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
+import type { Json } from 'src/database.types';
 import { ITEMS_PER_PAGE } from 'src/pages/News/constants';
 import type { NewsSortOption } from 'src/pages/News/NewsSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -190,15 +191,15 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       .from('news')
       .insert({
         body: data.body,
-        category: data.category,
+        category: data.category ? Number(data.category) : null,
         created_by: profile.id,
         is_draft: data.isDraft,
         moderation: 'accepted' as Moderation,
-        profile_badge: data.profileBadge,
+        profile_badge: data.profileBadge ? Number(data.profileBadge) : null,
         slug,
         summary: getSummaryFromMarkdown(data.body),
         tags: data.tags,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
         title: data.title,
       })
       .select();
@@ -207,7 +208,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       throw newsResult.error;
     }
 
-    const news = News.fromDB(newsResult.data[0], []);
+    const news = News.fromDB(newsResult.data[0] as unknown as DBNews, []);
     subscribersServiceServer.add('news', news.id, profile.id, client, headers);
 
     if (!news.isDraft) {
@@ -225,7 +226,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         await client
           .from('news')
           .update({
-            hero_image: mediaFiles.media.at(0),
+            hero_image: mediaFiles.media.at(0) as unknown as Json,
           })
           .eq('id', news.id);
 

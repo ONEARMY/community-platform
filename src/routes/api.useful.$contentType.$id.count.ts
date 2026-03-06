@@ -1,5 +1,6 @@
 import type { UsefulContentType } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
+import type { Database } from 'src/database.types';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -28,7 +29,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { data, error } = await client
     .from('useful_votes')
     .select('content_id')
-    .eq('content_type', contentType)
+    .eq('content_type', contentType as Database['public']['Enums']['useful_content_types'])
     .eq('content_id', commentId);
 
   if (error) {

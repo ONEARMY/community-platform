@@ -1,4 +1,5 @@
 import type { LoaderFunctionArgs } from 'react-router';
+import type { Database } from 'src/database.types';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -13,8 +14,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const useful = await client
     .from('useful_votes')
     .select('id, profiles!inner(id)', { count: 'exact' })
-    .eq('content_id', params.contentId)
-    .eq('content_type', params.contentType)
+    .eq('content_id', Number(params.contentId))
+    .eq('content_type', params.contentType as Database['public']['Enums']['useful_content_types'])
     .eq('profiles.auth_id', claims.data.claims.sub);
 
   const voted = useful.count === 1;

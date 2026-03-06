@@ -63,7 +63,7 @@ async function updateComment(
     return Response.json({}, { headers, status: 404, statusText: 'comment not found' });
   }
 
-  const comment = data as DBComment;
+  const comment = data as unknown as DBComment;
 
   if (comment.created_by !== user.id && !isUserAdmin(user)) {
     return Response.json({}, { headers, status: 403, statusText: 'forbidden' });
@@ -88,7 +88,7 @@ async function deleteComment({ client, headers }: Supabase, id: string, user: DB
     return Response.json({}, { headers, status: 404, statusText: 'comment not found' });
   }
 
-  const comment = data as DBComment;
+  const comment = data as unknown as DBComment;
 
   if (comment.created_by !== user.id && !isUserAdmin(user)) {
     return Response.json({}, { headers, status: 403, statusText: 'forbidden' });
@@ -115,7 +115,7 @@ async function getProfileByAuthId(request: Request, authId: string) {
     return null;
   }
 
-  return data[0] as DBProfile;
+  return data[0] as unknown as DBProfile;
 }
 
 function isUserAdmin(user: DBProfile) {

@@ -89,7 +89,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       : await client.rpc('get_user_email_by_username', {
           username: data.to,
         });
-    const receiver = emailResult.data[0];
+    const receiver = emailResult.data![0];
     const messenger = userProfile.data![0];
 
     const emailTemplate = (

@@ -1,8 +1,9 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBProfile, DBProject, DBProjectStep, Moderation } from 'oa-shared';
+import type { DBProfile, DBProject, DBProjectStep, MediaFile, Moderation } from 'oa-shared';
 import { Project, ProjectStep, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import type { Json } from 'src/database.types';
 import type { LibrarySortOption } from 'src/pages/Library/Content/List/LibrarySortOptions';
 import { ITEMS_PER_PAGE } from 'src/pages/Library/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -48,7 +49,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({}, { status: 500, headers });
   }
 
-  const dbItems = data as DBProject[];
+  const dbItems = data as unknown as DBProject[];
   const items = dbItems.map((x) => {
     const images = x.cover_image
       ? storageServiceServer.getPublicUrls(client, [x.cover_image], IMAGE_SIZES.LIST)
@@ -255,7 +256,7 @@ async function createProject(
       difficulty_level: data.difficultyLevel,
       time: data.time,
       moderation: data.moderation,
-      tenant_id: process.env.TENANT_ID,
+      tenant_id: process.env.TENANT_ID!,
     })
     .select();
 
@@ -284,7 +285,7 @@ async function createStep(
       project_id: values.projectId,
       video_url: values.videoUrl,
       order: values.order,
-      tenant_id: process.env.TENANT_ID,
+      tenant_id: process.env.TENANT_ID!,
     })
     .select();
 
@@ -332,13 +333,13 @@ async function uploadAndUpdateFiles(
     const result = await client
       .from('projects')
       .update({
-        files: mediaResult.media,
+        files: mediaResult.media as unknown as Json[],
       })
       .eq('id', project.id)
       .select();
 
     if (result.data) {
-      project.files = result.data[0].files;
+      project.files = result.data[0].files as unknown as MediaFile[];
     }
   }
 }

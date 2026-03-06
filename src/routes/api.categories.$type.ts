@@ -33,7 +33,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const { data } = await client.from('categories').select('id,name,created_at,type');
 
-  const categories = data?.map((category) => Category.fromDB(category as DBCategory));
+  const categories = data?.map((category) => Category.fromDB(category as unknown as DBCategory));
 
   if (categories && categories.length > 0) {
     cache.set('categories', data, 3600000);

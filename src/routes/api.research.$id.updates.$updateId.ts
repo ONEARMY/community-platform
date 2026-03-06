@@ -1,7 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBMedia, DBResearchUpdate, MediaFile } from 'oa-shared';
+import type { DBMedia, DBResearchItem, DBResearchUpdate, MediaFile } from 'oa-shared';
 import { ResearchUpdate } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
+import type { Json } from 'src/database.types';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -58,7 +59,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       .eq('id', updateId)
       .single();
 
-    const oldResearchUpdate = researchUpdateResult.data as DBResearchUpdate;
+    const oldResearchUpdate = researchUpdateResult.data as unknown as DBResearchUpdate;
 
     const uploadedImages = formData.getAll('images') as File[];
     const uploadedFiles = formData.getAll('files') as File[];
@@ -98,8 +99,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         title: data.title,
         description: data.description,
         is_draft: data.isDraft,
-        images,
-        modified_at: new Date(),
+        images: images as unknown as Json[],
+        modified_at: new Date().toISOString(),
         video_url: data.videoUrl,
         files: files.map((x) => ({ id: x.id, name: x.name, size: x.size })),
       })
@@ -111,8 +112,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       throw researchUpdateAfterUpdating.error;
     }
 
-    const researchUpdate = ResearchUpdate.fromDB(researchUpdateAfterUpdating.data, []);
-    researchUpdate.research = researchUpdateAfterUpdating.data.research;
+    const researchUpdate = ResearchUpdate.fromDB(
+      researchUpdateAfterUpdating.data as unknown as DBResearchUpdate,
+      [],
+    );
+    researchUpdate.research = researchUpdateAfterUpdating.data
+      .research as unknown as DBResearchItem;
 
     broadcastCoordinationServiceServer.researchUpdate(
       researchUpdate,
@@ -149,7 +154,9 @@ async function updateOrReplaceImage(
       .single();
 
     if (existingMedia.data && existingMedia.data.images?.length > 0) {
-      media = existingMedia.data.images.filter((x) => idsToKeep.includes(x.id));
+      media = (existingMedia.data.images as unknown as DBMedia[]).filter((x) =>
+        idsToKeep.includes(x.id),
+      );
     }
   }
 
@@ -182,8 +189,12 @@ async function updateOrReplaceFile(
   let mediaToRemove: MediaFile[] = [];
 
   if (existingMedia.data && existingMedia.data.files?.length > 0) {
-    media = existingMedia.data.files.filter((x) => idsToKeep.includes(x.id));
-    mediaToRemove = existingMedia.data.files.filter((x) => !idsToKeep.includes(x.id));
+    media = (existingMedia.data.files as unknown as MediaFile[]).filter((x) =>
+      idsToKeep.includes(x.id),
+    );
+    mediaToRemove = (existingMedia.data.files as unknown as MediaFile[]).filter(
+      (x) => !idsToKeep.includes(x.id),
+    );
   }
 
   if (mediaToRemove.length > 0) {
@@ -223,7 +234,7 @@ async function deleteResearchUpdate(request, id: number, updateId: number) {
   await client
     .from('research_updates')
     .update({
-      modified_at: new Date(),
+      modified_at: new Date().toISOString(),
       deleted: true,
     })
     .eq('id', updateId);

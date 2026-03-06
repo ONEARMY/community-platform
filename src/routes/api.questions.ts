@@ -1,8 +1,9 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
-import type { DBProfile, DBQuestion, Moderation } from 'oa-shared';
+import type { DBProfile, DBQuestion, Image, Moderation } from 'oa-shared';
 import { Question } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
+import type { Json } from 'src/database.types';
 import { ITEMS_PER_PAGE } from 'src/pages/Question/constants';
 import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -173,9 +174,9 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         is_draft: data.is_draft,
         moderation: 'accepted' as Moderation,
         slug,
-        category: data.category,
+        category: data.category ? Number(data.category) : null,
         tags: data.tags,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       })
       .select();
 
@@ -183,7 +184,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json({}, { headers, status: 400, statusText: questionResult.error.details });
     }
 
-    const question = Question.fromDB(questionResult.data[0], []);
+    const question = Question.fromDB(questionResult.data[0] as unknown as DBQuestion, []);
     subscribersServiceServer.add('questions', question.id, profile.id, client, headers);
 
     if (uploadedImages.length > 0) {
@@ -198,12 +199,12 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       if (imageResult?.media && imageResult.media.length > 0) {
         const updateResult = await client
           .from('questions')
-          .update({ images: imageResult.media })
+          .update({ images: imageResult.media as unknown as Json[] })
           .eq('id', questionId)
           .select();
 
         if (updateResult.data) {
-          question.images = updateResult.data[0].images;
+          question.images = updateResult.data[0].images as unknown as Image[];
         }
       }
     }

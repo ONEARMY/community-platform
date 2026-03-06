@@ -1,7 +1,8 @@
-import type { DBResearchItem, ResearchStatus } from 'oa-shared';
+import type { DBResearchItem, Image, ResearchStatus } from 'oa-shared';
 import { ResearchItem } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
+import type { Json } from 'src/database.types';
 import { ITEMS_PER_PAGE } from 'src/pages/Research/constants';
 import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -44,7 +45,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({}, { status: 500, headers });
   }
 
-  const dbItems = data as DBResearchItem[];
+  const dbItems = data as unknown as DBResearchItem[];
 
   if (!dbItems || dbItems.length === 0) {
     return Response.json({ items: [], total: 0 }, { headers });
@@ -137,12 +138,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         title: data.title,
         description: data.description,
         slug,
-        category: data.category,
-        tags: data.tags,
+        category: data.category ? Number(data.category) : null,
+        tags: data.tags as unknown as string[],
         collaborators: data.collaborators,
         status: researchStatus,
         is_draft: data.isDraft,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       })
       .select()
       .single();
@@ -152,10 +153,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const research = ResearchItem.fromDB(
-      researchResult.data,
+      researchResult.data as unknown as DBResearchItem,
       [],
       [],
-      researchResult.data.collaborators,
+      [],
     );
 
     await subscribersServiceServer.addResearchSubscribers(research, profile.id, client, headers);
@@ -174,12 +175,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       if (mediaResult?.media && mediaResult.media.length > 0) {
         const result = await client
           .from('research')
-          .update({ image: mediaResult.media[0] })
+          .update({ image: mediaResult.media[0] as unknown as Json })
           .eq('id', research.id)
           .select();
 
         if (result.data) {
-          research.image = result.data[0].image;
+          research.image = result.data[0].image as unknown as Image | null;
         }
       }
     }

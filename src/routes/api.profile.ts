@@ -1,4 +1,4 @@
-import type { Image, ProfileFormData } from 'oa-shared';
+import type { DBProfile, Image, ProfileFormData } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -58,7 +58,7 @@ export const loader = async ({ request }) => {
     }
 
     const profileFactory = new ProfileFactory(client);
-    const profile = profileFactory.fromDB(data);
+    const profile = profileFactory.fromDB(data as unknown as DBProfile);
 
     return Response.json(profile, { headers, status: 200 });
   } catch (error) {

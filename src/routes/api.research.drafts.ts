@@ -5,6 +5,7 @@ import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
+import { dbResultArray } from 'src/utils/supabase.types';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -88,7 +89,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return Response.json({ items: [] }, { headers });
   }
 
-  const drafts = result.data as unknown as DBResearchItem[];
+  const drafts = dbResultArray<DBResearchItem>(result.data);
   const items = drafts.map((x) => {
     const images = x.image
       ? storageServiceServer.getPublicUrls(client, [x.image], IMAGE_SIZES.LIST)

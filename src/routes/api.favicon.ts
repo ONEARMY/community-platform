@@ -27,7 +27,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { data, error } = await client
     .from('tenant_settings')
     .select('site_favicon')
-    .eq('tenant_id', process.env.TENANT_ID)
+    .eq('tenant_id', process.env.TENANT_ID!)
     .limit(1);
 
   if (error) {

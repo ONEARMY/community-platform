@@ -1,6 +1,7 @@
 import type { DBProfile } from 'oa-shared';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { dbResult } from 'src/utils/supabase.types';
 
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -43,7 +44,7 @@ export const loader = async ({ request }) => {
     .limit(10);
   const profileFactory = new ProfileFactory(client);
 
-  const profiles = data?.map((x) => profileFactory.fromDB(x as unknown as DBProfile));
+  const profiles = data?.map((x) => profileFactory.fromDB(dbResult<DBProfile>(x)));
 
   return Response.json(profiles, { headers, status: 200 });
 };

@@ -1,6 +1,6 @@
 import type { Comment } from './comment';
 import type { SubscribableContentTypes } from './common';
-import type { IDBDocSB, IDoc } from './document';
+import type { IDoc } from './document';
 import type { DBMedia, Image } from './media';
 import type { IDBModeration, IModeration, Moderation } from './moderation';
 import type { News } from './news';
@@ -15,9 +15,9 @@ import type { Question } from './question';
 import type { ResearchUpdate } from './research';
 import type { IUserImpact, UserVisitorPreference } from './user';
 
-export class DBProfile {
+export interface DBProfile {
   readonly id: number;
-  readonly created_at: Date;
+  readonly created_at: string;
   readonly tags?: DBProfileTagJoin[];
   readonly badges?: DBProfileBadgeJoin[];
   readonly pin?: DBMapPin;
@@ -34,16 +34,12 @@ export class DBProfile {
   about: string | null;
   impact: string | null;
   is_contactable: boolean | null;
-  last_active: Date | null;
+  last_active: string | null;
   website: string | null;
   total_views: number;
   auth_id: string;
   profile_type: number;
   donations_enabled: boolean;
-
-  constructor(obj: DBProfile) {
-    Object.assign(this, obj);
-  }
 }
 
 export class Profile {
@@ -90,7 +86,7 @@ export class Profile {
 
     return new Profile({
       id: dbProfile.id,
-      createdAt: dbProfile.created_at,
+      createdAt: new Date(dbProfile.created_at),
       country: dbProfile.country,
       displayName: dbProfile.display_name,
       username: dbProfile.username,
@@ -105,7 +101,7 @@ export class Profile {
       coverImages: coverImages ?? null,
       impact,
       isContactable: dbProfile.is_contactable || null,
-      lastActive: dbProfile.last_active,
+      lastActive: dbProfile.last_active ? new Date(dbProfile.last_active) : null,
       website: dbProfile.website,
       patreon: dbProfile.patreon ?? null,
       totalViews: dbProfile.total_views,
@@ -131,15 +127,15 @@ export type ProfileListItem = Pick<
 type NotificationContent = News | Comment | Question | ResearchUpdate;
 type NotificationSourceContentType = SubscribableContentTypes;
 
-export class DBNotification implements IDBDocSB {
+export interface DBNotification {
   readonly id: number;
   readonly title: string;
   readonly action_type: NotificationActionType;
   readonly content_id: number;
   readonly content_type: NotificationContentType;
-  readonly created_at: Date;
+  readonly created_at: string;
   is_read: boolean;
-  modified_at: Date | null;
+  modified_at: string | null;
   readonly source_content_type: NotificationSourceContentType;
   readonly source_content_id: number;
   readonly owned_by: DBProfile;
@@ -147,10 +143,6 @@ export class DBNotification implements IDBDocSB {
   readonly triggered_by: DBProfile;
   readonly triggered_by_id: number;
   readonly tenant_id: string;
-
-  constructor(obj: Partial<DBNotification>) {
-    Object.assign(this, obj);
-  }
 }
 
 export class Notification implements IDoc {
@@ -385,11 +377,11 @@ export type ProfileFormData = {
   visitorPreferenceDetails?: UserVisitorPreference['details'];
 };
 
-export class DBMapPin implements IDBModeration {
+export interface DBMapPin extends IDBModeration {
   readonly id: number;
   readonly profile: DBPinProfile;
   profile_id: number;
-  country: string; // check if necessary
+  country: string;
   country_code: string;
   name: string | null;
   administrative: string | null;

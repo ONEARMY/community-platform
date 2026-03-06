@@ -2,6 +2,7 @@ import type { DBMapPin } from 'oa-shared';
 import { MapPinFactory } from 'src/factories/mapPinFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
+import { dbResult } from 'src/utils/supabase.types';
 
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -82,7 +83,7 @@ export const loader = async ({ request }) => {
       return Response.json({ mapPin: null }, { headers });
     }
 
-    const pinsDb = data[0] as unknown as DBMapPin;
+    const pinsDb = dbResult<DBMapPin>(data[0]);
     const pinFactory = new MapPinFactory(client);
     const mapPin = pinFactory.fromDBWithProfile(pinsDb);
 

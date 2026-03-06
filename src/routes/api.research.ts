@@ -1,4 +1,4 @@
-import type { DBResearchItem, ResearchStatus } from 'oa-shared';
+import type { DBResearchItem, Image, ResearchStatus } from 'oa-shared';
 import { ResearchItem } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
@@ -11,6 +11,7 @@ import { storageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { convertToSlug } from 'src/utils/slug';
+import { dbResult, dbResultArray, fromJson, toJson } from 'src/utils/supabase.types';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
@@ -44,7 +45,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({}, { status: 500, headers });
   }
 
-  const dbItems = data as DBResearchItem[];
+  const dbItems = dbResultArray<DBResearchItem>(data);
 
   if (!dbItems || dbItems.length === 0) {
     return Response.json({ items: [], total: 0 }, { headers });
@@ -137,12 +138,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         title: data.title,
         description: data.description,
         slug,
-        category: data.category,
-        tags: data.tags,
+        category: data.category ? Number(data.category) : null,
+        tags: dbResult<string[]>(data.tags),
         collaborators: data.collaborators,
         status: researchStatus,
         is_draft: data.isDraft,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       })
       .select()
       .single();
@@ -152,10 +153,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const research = ResearchItem.fromDB(
-      researchResult.data,
+      dbResult<DBResearchItem>(researchResult.data),
       [],
       [],
-      researchResult.data.collaborators,
+      [],
     );
 
     await subscribersServiceServer.addResearchSubscribers(research, profile.id, client, headers);
@@ -174,12 +175,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       if (mediaResult?.media && mediaResult.media.length > 0) {
         const result = await client
           .from('research')
-          .update({ image: mediaResult.media[0] })
+          .update({ image: toJson(mediaResult.media[0]) })
           .eq('id', research.id)
           .select();
 
         if (result.data) {
-          research.image = result.data[0].image;
+          research.image = fromJson<Image>(result.data[0].image);
         }
       }
     }

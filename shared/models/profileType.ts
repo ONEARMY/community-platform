@@ -1,4 +1,4 @@
-export class DBProfileType {
+export interface DBProfileType {
   id: number;
   description: string;
   display_name: string;
@@ -8,10 +8,6 @@ export class DBProfileType {
   name: string;
   order: number;
   is_space: boolean;
-
-  constructor(obj: Partial<DBProfileType>) {
-    Object.assign(this, obj);
-  }
 }
 
 export class ProfileType {

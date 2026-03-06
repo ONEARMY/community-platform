@@ -16,6 +16,7 @@ import { updateUserActivity } from 'src/utils/activity.server';
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImage } from 'src/utils/storage';
+import { dbResult, dbResultArray, toJson } from 'src/utils/supabase.types';
 import { contentServiceServer } from '../services/contentService.server';
 
 export const loader = async ({ request }) => {
@@ -89,7 +90,7 @@ export const loader = async ({ request }) => {
   const queryResult = await query.range(skip, skip + ITEMS_PER_PAGE - 1); // 0 based
 
   const total = queryResult.count;
-  const data = queryResult.data as unknown as DBNews[];
+  const data = dbResultArray<DBNews>(queryResult.data);
   const items = data.map((dbNews) => News.fromDB(dbNews, []));
 
   if (items && items.length > 0) {
@@ -190,15 +191,15 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       .from('news')
       .insert({
         body: data.body,
-        category: data.category,
+        category: data.category ? Number(data.category) : null,
         created_by: profile.id,
         is_draft: data.isDraft,
         moderation: 'accepted' as Moderation,
-        profile_badge: data.profileBadge,
+        profile_badge: data.profileBadge ? Number(data.profileBadge) : null,
         slug,
         summary: getSummaryFromMarkdown(data.body),
         tags: data.tags,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
         title: data.title,
       })
       .select();
@@ -207,7 +208,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       throw newsResult.error;
     }
 
-    const news = News.fromDB(newsResult.data[0], []);
+    const news = News.fromDB(dbResult<DBNews>(newsResult.data[0]), []);
     subscribersServiceServer.add('news', news.id, profile.id, client, headers);
 
     if (!news.isDraft) {
@@ -225,7 +226,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         await client
           .from('news')
           .update({
-            hero_image: mediaFiles.media.at(0),
+            hero_image: toJson(mediaFiles.media.at(0)),
           })
           .eq('id', news.id);
 

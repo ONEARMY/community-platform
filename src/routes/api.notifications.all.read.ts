@@ -27,7 +27,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     await client
       .from('notifications')
       .update({ is_read: true })
-      .eq('owned_by_id', profile?.data?.id);
+      .eq('owned_by_id', profile.data!.id);
 
     updateUserActivity(client, claims.data.claims.sub);
 

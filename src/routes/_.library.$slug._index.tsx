@@ -11,6 +11,7 @@ import { ImageServiceServer } from 'src/services/imageService.server';
 import { libraryServiceServer } from 'src/services/libraryService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
+import { dbResult } from 'src/utils/supabase.types';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -21,7 +22,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return data({ project: null }, { headers });
   }
 
-  const dbProject = result.data as unknown as DBProject;
+  const dbProject = dbResult<DBProject>(result.data);
 
   if (dbProject.id) {
     await contentServiceServer.incrementViewCount(

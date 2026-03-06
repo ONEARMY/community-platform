@@ -8,6 +8,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { newsServiceServer } from 'src/services/newsService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { tagsServiceServer } from 'src/services/tagsService.server';
+import { dbResult } from 'src/utils/supabase.types';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -32,7 +33,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return data({ news: null }, { headers });
   }
 
-  const dbNews = result.data as unknown as DBNews;
+  const dbNews = dbResult<DBNews>(result.data);
   const tags = await tagsServiceServer.getTags(client, dbNews.tags);
   const heroImage = await newsServiceServer.getHeroImage(client, dbNews.hero_image);
   const news = News.fromDB(dbNews, tags, heroImage);

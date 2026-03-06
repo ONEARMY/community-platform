@@ -13,6 +13,7 @@ import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
 import { hasAdminRights } from 'src/utils/helpers';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImage } from 'src/utils/storage';
+import { dbResult, toJson } from 'src/utils/supabase.types';
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -38,7 +39,14 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const currentNews = await newsServiceServer.getById(id, client);
 
-    const { valid, status, statusText } = await validateRequest(params, request, claims.data.claims.sub, data, currentNews, client);
+    const { valid, status, statusText } = await validateRequest(
+      params,
+      request,
+      claims.data.claims.sub,
+      data,
+      currentNews,
+      client,
+    );
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText });
@@ -67,10 +75,10 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         body: data.body,
         category: data.category,
         is_draft: data.isDraft,
-        modified_at: new Date(),
+        modified_at: new Date().toISOString(),
         slug: data.slug,
         previous_slugs: previousSlugs,
-        profile_badge: data.profileBadge,
+        profile_badge: data.profileBadge ? Number(data.profileBadge) : null,
         summary: getSummaryFromMarkdown(data.body),
         tags: data.tags,
         title: data.title,
@@ -83,20 +91,28 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       throw newsResult.error;
     }
 
-    const news = News.fromDB(newsResult.data[0], []);
+    const news = News.fromDB(dbResult<DBNews>(newsResult.data[0]), []);
 
     if (newHeroImage) {
-      const mediaFiles = await storageServiceServer.uploadImage([newHeroImage], `news/${news.id}`, client);
+      const mediaFiles = await storageServiceServer.uploadImage(
+        [newHeroImage],
+        `news/${news.id}`,
+        client,
+      );
 
       if (mediaFiles?.media?.length) {
         await client
           .from('news')
           .update({
-            hero_image: mediaFiles.media.at(0),
+            hero_image: toJson(mediaFiles.media.at(0)),
           })
           .eq('id', news.id);
 
-        const [image] = storageServiceServer.getPublicUrls(client, mediaFiles.media, IMAGE_SIZES.GALLERY);
+        const [image] = storageServiceServer.getPublicUrls(
+          client,
+          mediaFiles.media,
+          IMAGE_SIZES.GALLERY,
+        );
 
         news.heroImage = image;
       }
@@ -139,7 +155,10 @@ async function validateRequest(
     return { status: 400, statusText: 'News not found' };
   }
 
-  if (currentNews.slug !== data.slug && (await contentServiceServer.isDuplicateExistingSlug(data.slug, currentNews.id, client, 'news'))) {
+  if (
+    currentNews.slug !== data.slug &&
+    (await contentServiceServer.isDuplicateExistingSlug(data.slug, currentNews.id, client, 'news'))
+  ) {
     return {
       status: 409,
       statusText: 'This news already exists',

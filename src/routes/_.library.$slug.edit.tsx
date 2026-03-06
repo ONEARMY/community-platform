@@ -8,6 +8,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { libraryServiceServer } from 'src/services/libraryService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
+import { dbResult } from 'src/utils/supabase.types';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -20,8 +21,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   // const username = user.user_metadata.username
   const username = claims.data.claims.user_metadata?.username;
-  const projectDb = (await libraryServiceServer.getBySlug(client, params.slug as string))
-    .data as unknown as DBProject;
+  const projectDb = dbResult<DBProject>(
+    (await libraryServiceServer.getBySlug(client, params.slug as string)).data,
+  );
   if (
     !(await libraryServiceServer.isAllowedToEditProject(
       client,

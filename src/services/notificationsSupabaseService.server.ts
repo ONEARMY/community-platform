@@ -1,13 +1,13 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type {
   DBComment,
+  DBNotification,
   DBProfile,
   DBResearchItem,
   ResearchUpdate,
   SubscribableContentTypes,
   SubscribedUser,
 } from 'oa-shared';
-import { DBNotification } from 'oa-shared';
 import { notificationEmailService } from './notificationEmailService.server';
 
 const getSubscribedUsers = async (
@@ -38,21 +38,18 @@ const createNotifications = async (
   subscriberIds: SubscribedUser[],
 ): Promise<void> => {
   try {
-    const notificationsToInsert = subscriberIds.map(
-      (subscriber) =>
-        new DBNotification({
-          action_type: notification.action_type,
-          content_id: notification.content_id,
-          content_type: notification.content_type,
-          source_content_id: notification.source_content_id,
-          source_content_type: notification.source_content_type,
-          title: notification.title,
-          triggered_by_id: notification.triggered_by_id,
-          owned_by_id: subscriber.profile_id,
-          is_read: false,
-          tenant_id: process.env.TENANT_ID!,
-        }),
-    );
+    const notificationsToInsert = subscriberIds.map((subscriber) => ({
+      action_type: notification.action_type,
+      content_id: notification.content_id,
+      content_type: notification.content_type,
+      source_content_id: notification.source_content_id,
+      source_content_type: notification.source_content_type,
+      title: notification.title,
+      triggered_by_id: notification.triggered_by_id,
+      owned_by_id: subscriber.profile_id,
+      is_read: false,
+      tenant_id: process.env.TENANT_ID!,
+    }));
 
     const response = await client.from('notifications').insert(notificationsToInsert);
 
@@ -98,14 +95,14 @@ const createNotificationsNewComment = async (
       (user) => user.profile_id !== comment.created_by,
     );
 
-    const notification = new DBNotification({
+    const notification = {
       action_type: isReply ? 'newReply' : 'newComment',
       content_id: comment.id!,
       title: title,
       triggered_by_id: comment.created_by!,
       triggered_by: (comment as any).profiles as DBProfile,
       content_type: 'comments',
-    });
+    } as DBNotification;
 
     await createNotifications(client, notification, subscribers);
 
@@ -139,14 +136,14 @@ const createNotificationsResearchUpdate = async (
   try {
     const contentType: SubscribableContentTypes = 'research';
     const subscribers = await getSubscribedUsers(research.id, contentType, client);
-    const notification = new DBNotification({
+    const notification = {
       action_type: 'newContent',
       title: research.title,
       content_id: researchUpdate.id!,
       content_type: 'research_updates',
       triggered_by_id: profile.id,
       triggered_by: profile,
-    });
+    } as DBNotification;
 
     await createNotifications(client, notification, subscribers);
 

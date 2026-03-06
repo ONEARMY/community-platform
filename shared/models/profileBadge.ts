@@ -2,20 +2,16 @@ export enum PremiumTier {
   ONE = 1,
 }
 
-export class DBProfileBadge {
+export interface DBProfileBadge {
   id: number;
   name: string;
   display_name: string;
   image_url: string;
   action_url: string | null;
   premium_tier: number | null;
-
-  constructor(obj: Partial<DBProfileBadge>) {
-    Object.assign(this, obj);
-  }
 }
 
-export class DBProfileBadgeJoin {
+export interface DBProfileBadgeJoin {
   profile_badges: DBProfileBadge;
 }
 

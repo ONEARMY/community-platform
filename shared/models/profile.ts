@@ -17,7 +17,7 @@ import type { IUserImpact, UserVisitorPreference } from './user';
 
 export class DBProfile {
   readonly id: number;
-  readonly created_at: Date;
+  readonly created_at: string;
   readonly tags?: DBProfileTagJoin[];
   readonly badges?: DBProfileBadgeJoin[];
   readonly pin?: DBMapPin;
@@ -34,7 +34,7 @@ export class DBProfile {
   about: string | null;
   impact: string | null;
   is_contactable: boolean | null;
-  last_active: Date | null;
+  last_active: string | null;
   website: string | null;
   total_views: number;
   auth_id: string;
@@ -90,7 +90,7 @@ export class Profile {
 
     return new Profile({
       id: dbProfile.id,
-      createdAt: dbProfile.created_at,
+      createdAt: new Date(dbProfile.created_at),
       country: dbProfile.country,
       displayName: dbProfile.display_name,
       username: dbProfile.username,
@@ -105,7 +105,7 @@ export class Profile {
       coverImages: coverImages ?? null,
       impact,
       isContactable: dbProfile.is_contactable || null,
-      lastActive: dbProfile.last_active,
+      lastActive: dbProfile.last_active ? new Date(dbProfile.last_active) : null,
       website: dbProfile.website,
       patreon: dbProfile.patreon ?? null,
       totalViews: dbProfile.total_views,
@@ -137,9 +137,9 @@ export class DBNotification implements IDBDocSB {
   readonly action_type: NotificationActionType;
   readonly content_id: number;
   readonly content_type: NotificationContentType;
-  readonly created_at: Date;
+  readonly created_at: string;
   is_read: boolean;
-  modified_at: Date | null;
+  modified_at: string | null;
   readonly source_content_type: NotificationSourceContentType;
   readonly source_content_id: number;
   readonly owned_by: DBProfile;

@@ -5,6 +5,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
+import { dbResult } from 'src/utils/supabase.types';
 
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -58,7 +59,7 @@ export const loader = async ({ request }) => {
     }
 
     const profileFactory = new ProfileFactory(client);
-    const profile = profileFactory.fromDB(data as unknown as DBProfile);
+    const profile = profileFactory.fromDB(dbResult<DBProfile>(data));
 
     return Response.json(profile, { headers, status: 200 });
   } catch (error) {

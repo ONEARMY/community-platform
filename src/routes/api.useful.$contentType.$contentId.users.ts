@@ -3,6 +3,7 @@ import type { LoaderFunctionArgs } from 'react-router';
 import type { Database } from 'src/database.types';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { dbResult } from 'src/utils/supabase.types';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -51,7 +52,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       continue;
     }
 
-    const profile = profileFactory.fromDB(row.profiles as unknown as DBProfile);
+    const profile = profileFactory.fromDB(dbResult<DBProfile>(row.profiles));
 
     users.push({
       id: profile.id,

@@ -4,6 +4,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImpactServiceServer } from 'src/services/impactService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
+import { dbResult } from 'src/utils/supabase.types';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -43,7 +44,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 500, statusText: 'Error saving impact' });
     }
 
-    const impact = result.data as unknown as IUserImpact;
+    const impact = dbResult<IUserImpact>(result.data);
 
     updateUserActivity(client, claims.data.claims.sub);
 

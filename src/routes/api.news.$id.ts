@@ -3,7 +3,6 @@ import type { DBNews } from 'oa-shared';
 import { News } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
-import type { Json } from 'src/database.types';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { newsServiceServer } from 'src/services/newsService.server';
@@ -14,6 +13,7 @@ import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
 import { hasAdminRights } from 'src/utils/helpers';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImage } from 'src/utils/storage';
+import { dbResult, toJson } from 'src/utils/supabase.types';
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -91,7 +91,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       throw newsResult.error;
     }
 
-    const news = News.fromDB(newsResult.data[0] as unknown as DBNews, []);
+    const news = News.fromDB(dbResult<DBNews>(newsResult.data[0]), []);
 
     if (newHeroImage) {
       const mediaFiles = await storageServiceServer.uploadImage(
@@ -104,7 +104,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         await client
           .from('news')
           .update({
-            hero_image: mediaFiles.media.at(0) as unknown as Json,
+            hero_image: toJson(mediaFiles.media.at(0)),
           })
           .eq('id', news.id);
 

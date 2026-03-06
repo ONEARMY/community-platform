@@ -12,6 +12,7 @@ import { updateUserActivity } from 'src/utils/activity.server';
 import { hasAdminRights } from 'src/utils/helpers';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImages } from 'src/utils/storage';
+import { dbResult, fromJsonArray } from 'src/utils/supabase.types';
 import { contentServiceServer } from '../services/contentService.server';
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
@@ -81,7 +82,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         questionImages.data.images &&
         questionImages.data.images.length > 0
       ) {
-        images = (questionImages.data.images as unknown as DBMedia[]).filter((x) =>
+        images = fromJsonArray<DBMedia>(questionImages.data.images).filter((x) =>
           imagesToKeepIds.includes(x.id),
         );
       }
@@ -107,7 +108,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         category: data.category,
         description: data.description,
         is_draft: data.is_draft,
-        images: images as unknown as Json[],
+        images: dbResult<Json[]>(images),
         title: data.title,
         slug: data.slug,
         previous_slugs: previousSlugs,
@@ -123,12 +124,12 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const newImages = storageServiceServer.getPublicUrls(
       client,
-      questionResult.data[0].images as unknown as DBMedia[],
+      fromJsonArray<DBMedia>(questionResult.data[0].images),
       IMAGE_SIZES.GALLERY,
     );
 
     const question = Question.fromDB(
-      questionResult.data[0] as unknown as DBQuestion,
+      dbResult<DBQuestion>(questionResult.data[0]),
       [],
       newImages,
     );

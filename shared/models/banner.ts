@@ -2,8 +2,8 @@ import type { IDBDocSB, IDoc } from './document';
 
 export class DBBanner implements IDBDocSB {
   id: number;
-  created_at: Date;
-  modified_at: Date | null;
+  created_at: string;
+  modified_at: string | null;
 
   text: string;
   url: string;

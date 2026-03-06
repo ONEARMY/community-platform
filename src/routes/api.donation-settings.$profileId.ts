@@ -2,6 +2,7 @@ import type { DBMedia } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
+import { fromJson } from 'src/utils/supabase.types';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -33,7 +34,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
           if (profileResult.data.cover_images?.at(0)) {
             donationSettings.imageUrl = new ImageServiceServer(client).getPublicUrl(
-              profileResult.data.cover_images[0] as unknown as DBMedia | null,
+              fromJson<DBMedia | null>(profileResult.data.cover_images[0]),
             )?.publicUrl;
           }
         }

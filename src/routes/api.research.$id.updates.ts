@@ -10,6 +10,7 @@ import { storageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { validateImages } from 'src/utils/storage';
+import { dbResult, fromJsonArray } from 'src/utils/supabase.types';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -36,7 +37,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       .select('id,title,slug,collaborators,author:profiles(id, username)')
       .eq('id', researchId)
       .single();
-    const research = researchResult.data as unknown as DBResearchItem;
+    const research = dbResult<DBResearchItem>(researchResult.data);
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
@@ -85,10 +86,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const dbResearchUpdate = updateResult.data;
     const researchUpdate = ResearchUpdate.fromDB(
-      dbResearchUpdate as unknown as DBResearchUpdate,
+      dbResult<DBResearchUpdate>(dbResearchUpdate),
       [],
     );
-    researchUpdate.research = updateResult.data.research as unknown as DBResearchItem;
+    researchUpdate.research = dbResult<DBResearchItem>(updateResult.data.research);
 
     await uploadAndUpdateImages(
       uploadedImages,
@@ -141,13 +142,13 @@ async function uploadAndUpdateImages(
       const result = await client
         .from('research_updates')
         .update({
-          images: mediaResult.media as unknown as Json[],
+          images: dbResult<Json[]>(mediaResult.media),
         })
         .eq('id', researchUpdate.id)
         .select();
 
       if (result.data) {
-        researchUpdate.images = result.data[0].images as unknown as Image[];
+        researchUpdate.images = fromJsonArray<Image>(result.data[0].images);
       }
     }
   }
@@ -166,13 +167,13 @@ async function uploadAndUpdateFiles(
       const result = await client
         .from('research_updates')
         .update({
-          files: mediaResult.media as unknown as Json[],
+          files: dbResult<Json[]>(mediaResult.media),
         })
         .eq('id', researchUpdate.id)
         .select();
 
       if (result.data) {
-        researchUpdate.files = result.data[0].files as unknown as MediaFile[];
+        researchUpdate.files = fromJsonArray<MediaFile>(result.data[0].files);
       }
     }
   }

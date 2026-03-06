@@ -4,6 +4,7 @@ import { Category } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { isProductionEnvironment } from 'src/config/config';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { dbResult } from 'src/utils/supabase.types';
 
 const cache = new Keyv<Category[]>({ ttl: 3600000 }); // ttl: 60 minutes
 
@@ -33,7 +34,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const { data } = await client.from('categories').select('id,name,created_at,type');
 
-  const categories = data?.map((category) => Category.fromDB(category as unknown as DBCategory));
+  const categories = data?.map((category) => Category.fromDB(dbResult<DBCategory>(category)));
 
   if (categories && categories.length > 0) {
     cache.set('categories', data, 3600000);

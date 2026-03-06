@@ -11,6 +11,7 @@ import type {
 import { ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
 import { isProductionEnvironment } from 'src/config/config';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { dbResult } from 'src/utils/supabase.types';
 
 const cache = new Keyv<FilterResponse>({ ttl: 3600000 }); // expires 60 minutes after being set
 
@@ -38,12 +39,12 @@ export const loader = async ({ request }) => {
       console.error({ message: 'Error fetching map pin filters', errors });
     }
 
-    const settings = mapSettings?.data?.at(0) as unknown as DBMapSettings | undefined;
+    const settings = dbResult<DBMapSettings | undefined>(mapSettings?.data?.at(0));
 
     const filters: MapFilters = {
-      tags: tags?.data?.map((x) => ProfileTag.fromDB(x as unknown as DBProfileTag)),
-      badges: badges?.data?.map((x) => ProfileBadge.fromDB(x as unknown as DBProfileBadge)),
-      types: types?.data?.map((x) => ProfileType.fromDB(x as unknown as DBProfileType)),
+      tags: tags?.data?.map((x) => ProfileTag.fromDB(dbResult<DBProfileTag>(x))),
+      badges: badges?.data?.map((x) => ProfileBadge.fromDB(dbResult<DBProfileBadge>(x))),
+      types: types?.data?.map((x) => ProfileType.fromDB(dbResult<DBProfileType>(x))),
       settings: settings?.setting_filters || undefined,
     };
 

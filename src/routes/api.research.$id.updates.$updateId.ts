@@ -10,6 +10,7 @@ import { researchServiceServer } from 'src/services/researchService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { validateImages } from 'src/utils/storage';
+import { dbResult, fromJsonArray } from 'src/utils/supabase.types';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -59,7 +60,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       .eq('id', updateId)
       .single();
 
-    const oldResearchUpdate = researchUpdateResult.data as unknown as DBResearchUpdate;
+    const oldResearchUpdate = dbResult<DBResearchUpdate>(researchUpdateResult.data);
 
     const uploadedImages = formData.getAll('images') as File[];
     const uploadedFiles = formData.getAll('files') as File[];
@@ -99,7 +100,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         title: data.title,
         description: data.description,
         is_draft: data.isDraft,
-        images: images as unknown as Json[],
+        images: dbResult<Json[]>(images),
         modified_at: new Date().toISOString(),
         video_url: data.videoUrl,
         files: files.map((x) => ({ id: x.id, name: x.name, size: x.size })),
@@ -113,11 +114,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     }
 
     const researchUpdate = ResearchUpdate.fromDB(
-      researchUpdateAfterUpdating.data as unknown as DBResearchUpdate,
+      dbResult<DBResearchUpdate>(researchUpdateAfterUpdating.data),
       [],
     );
-    researchUpdate.research = researchUpdateAfterUpdating.data
-      .research as unknown as DBResearchItem;
+    researchUpdate.research = dbResult<DBResearchItem>(
+      researchUpdateAfterUpdating.data.research,
+    );
 
     broadcastCoordinationServiceServer.researchUpdate(
       researchUpdate,
@@ -154,7 +156,7 @@ async function updateOrReplaceImage(
       .single();
 
     if (existingMedia.data && existingMedia.data.images?.length > 0) {
-      media = (existingMedia.data.images as unknown as DBMedia[]).filter((x) =>
+      media = fromJsonArray<DBMedia>(existingMedia.data.images).filter((x) =>
         idsToKeep.includes(x.id),
       );
     }
@@ -189,10 +191,10 @@ async function updateOrReplaceFile(
   let mediaToRemove: MediaFile[] = [];
 
   if (existingMedia.data && existingMedia.data.files?.length > 0) {
-    media = (existingMedia.data.files as unknown as MediaFile[]).filter((x) =>
+    media = fromJsonArray<MediaFile>(existingMedia.data.files).filter((x) =>
       idsToKeep.includes(x.id),
     );
-    mediaToRemove = (existingMedia.data.files as unknown as MediaFile[]).filter(
+    mediaToRemove = fromJsonArray<MediaFile>(existingMedia.data.files).filter(
       (x) => !idsToKeep.includes(x.id),
     );
   }

@@ -14,6 +14,7 @@ import { subscribersServiceServer } from 'src/services/subscribersService.server
 import { updateUserActivity } from 'src/utils/activity.server';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImages } from 'src/utils/storage';
+import { dbResult, dbResultArray, fromJsonArray } from 'src/utils/supabase.types';
 
 export const loader = async ({ request }) => {
   const url = new URL(request.url);
@@ -74,7 +75,7 @@ export const loader = async ({ request }) => {
   const queryResult = await query.range(skip, skip + ITEMS_PER_PAGE); // 0 based
 
   const total = queryResult.count;
-  const data = queryResult.data as unknown as DBQuestion[];
+  const data = dbResultArray<DBQuestion>(queryResult.data);
 
   const items = data.map((x) => Question.fromDB(x, [], []));
 
@@ -184,7 +185,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json({}, { headers, status: 400, statusText: questionResult.error.details });
     }
 
-    const question = Question.fromDB(questionResult.data[0] as unknown as DBQuestion, []);
+    const question = Question.fromDB(dbResult<DBQuestion>(questionResult.data[0]), []);
     subscribersServiceServer.add('questions', question.id, profile.id, client, headers);
 
     if (uploadedImages.length > 0) {
@@ -199,12 +200,12 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       if (imageResult?.media && imageResult.media.length > 0) {
         const updateResult = await client
           .from('questions')
-          .update({ images: imageResult.media as unknown as Json[] })
+          .update({ images: dbResult<Json[]>(imageResult.media) })
           .eq('id', questionId)
           .select();
 
         if (updateResult.data) {
-          question.images = updateResult.data[0].images as unknown as Image[];
+          question.images = fromJsonArray<Image>(updateResult.data[0].images);
         }
       }
     }

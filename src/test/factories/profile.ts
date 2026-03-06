@@ -16,7 +16,7 @@ export const FactoryDBProfile = (dbProfileOverloads: Partial<DBProfile> = {}): D
   about: '',
   auth_id: '',
   cover_images: null,
-  created_at: faker.date.past(),
+  created_at: faker.date.past().toISOString(),
   impact: null,
   type: {
     id: faker.number.int(),
@@ -33,7 +33,7 @@ export const FactoryDBProfile = (dbProfileOverloads: Partial<DBProfile> = {}): D
   visitor_policy: null,
   is_blocked_from_messaging: null,
   is_contactable: false,
-  last_active: faker.date.past(),
+  last_active: faker.date.past().toISOString(),
   website: faker.internet.url(),
   total_views: 0,
   profile_type: faker.number.int(),

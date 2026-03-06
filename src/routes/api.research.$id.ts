@@ -2,7 +2,6 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBMedia, DBResearchItem } from 'oa-shared';
 import { ResearchItem, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
-import type { Json } from 'src/database.types';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -11,6 +10,7 @@ import { storageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { convertToSlug } from 'src/utils/slug';
+import { dbResult, fromJson, toJson } from 'src/utils/supabase.types';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const id = Number(params.id);
@@ -66,7 +66,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         description: data.description,
         slug: data.slug,
         category: data.category,
-        tags: data.tags as unknown as string[],
+        tags: dbResult<string[]>(data.tags),
         previous_slugs: previousSlugs,
         is_draft: data.isDraft,
         collaborators: data.collaborators,
@@ -80,7 +80,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       throw researchResult.error;
     }
 
-    const research = ResearchItem.fromDB(researchResult.data as unknown as DBResearchItem, []);
+    const research = ResearchItem.fromDB(dbResult<DBResearchItem>(researchResult.data), []);
 
     await subscribersServiceServer.updateResearchSubscribers(
       oldResearch,
@@ -104,14 +104,14 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       if (mediaResult?.media && mediaResult.media.length > 0) {
         const result = await client
           .from('research')
-          .update({ image: mediaResult.media[0] as unknown as Json })
+          .update({ image: toJson(mediaResult.media[0]) })
           .eq('id', research.id)
           .select('image');
 
         if (result.data && result.data.length > 0) {
           const [image] = storageServiceServer.getPublicUrls(
             client,
-            result.data?.at(0)?.image ? [result.data[0].image as unknown as DBMedia] : [],
+            result.data?.at(0)?.image ? [fromJson<DBMedia>(result.data[0].image)!] : [],
           );
 
           research.image = image;

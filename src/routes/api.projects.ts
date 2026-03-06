@@ -14,6 +14,7 @@ import { subscribersServiceServer } from 'src/services/subscribersService.server
 import { updateUserActivity } from 'src/utils/activity.server';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImage } from 'src/utils/storage';
+import { dbResult, dbResultArray, fromJsonArray } from 'src/utils/supabase.types';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
@@ -49,7 +50,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({}, { status: 500, headers });
   }
 
-  const dbItems = data as unknown as DBProject[];
+  const dbItems = dbResultArray<DBProject>(data);
   const items = dbItems.map((x) => {
     const images = x.cover_image
       ? storageServiceServer.getPublicUrls(client, [x.cover_image], IMAGE_SIZES.LIST)
@@ -264,7 +265,7 @@ async function createProject(
     throw projectResult.error;
   }
 
-  return projectResult.data[0] as unknown as DBProject;
+  return dbResult<DBProject>(projectResult.data[0]);
 }
 
 async function createStep(
@@ -293,7 +294,7 @@ async function createStep(
     throw error;
   }
 
-  return data[0] as unknown as DBProjectStep;
+  return dbResult<DBProjectStep>(data[0]);
 }
 
 async function uploadAndUpdateImage(
@@ -333,13 +334,13 @@ async function uploadAndUpdateFiles(
     const result = await client
       .from('projects')
       .update({
-        files: mediaResult.media as unknown as Json[],
+        files: dbResult<Json[]>(mediaResult.media),
       })
       .eq('id', project.id)
       .select();
 
     if (result.data) {
-      project.files = result.data[0].files as unknown as MediaFile[];
+      project.files = fromJsonArray<MediaFile>(result.data[0].files);
     }
   }
 }

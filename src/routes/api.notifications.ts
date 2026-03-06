@@ -3,6 +3,7 @@ import type { DBNotification } from 'oa-shared';
 import { Notification, NotificationDisplay } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { dbResultArray } from 'src/utils/supabase.types';
 
 const transformNotificationList = async (
   dbNotifications: DBNotification[],
@@ -76,7 +77,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     }
 
     const notifications = data?.length
-      ? await transformNotificationList(data as unknown as DBNotification[], client)
+      ? await transformNotificationList(dbResultArray<DBNotification>(data), client)
       : [];
 
     return Response.json({ notifications }, { headers, status: 200 });

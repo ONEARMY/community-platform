@@ -6,6 +6,7 @@ import { ResearchUpdateForm } from 'src/pages/Research/Content/Common';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { researchServiceServer } from 'src/services/researchService.server';
+import { dbResult } from 'src/utils/supabase.types';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -23,7 +24,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const username = claims.data.claims.user_metadata?.username;
-  const researchDb = result.item as unknown as DBResearchItem;
+  const researchDb = dbResult<DBResearchItem>(result.item);
   const research = ResearchItem.fromDB(researchDb, [], [], result.collaborators);
 
   if (!(await researchServiceServer.isAllowedToEditResearch(client, research, username))) {

@@ -10,6 +10,7 @@ import { ProfileServiceServer } from 'src/services/profileService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { convertToSlug } from 'src/utils/slug';
+import { dbResult, fromJsonArray, toJson } from 'src/utils/supabase.types';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -138,11 +139,11 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
       const { data } = await client
         .from('project_steps')
-        .update({ images: images as unknown as Json[] })
+        .update({ images: dbResult<Json[]>(images) })
         .eq('id', stepDb.id)
         .select('images')
         .single();
-      step.images = data?.images as unknown as Image[];
+      step.images = fromJsonArray<Image>(data?.images);
       project.steps.push(step);
     }
 
@@ -254,9 +255,9 @@ async function updateProject(
       file_link: data.fileLink,
       difficulty_level: data.difficultyLevel,
       time: data.time,
-      files: files as unknown as Json[],
+      files: dbResult<Json[]>(files),
       moderation,
-      cover_image: cover_image as unknown as Json,
+      cover_image: toJson(cover_image),
     })
     .eq('id', currentProject.id)
     .select();
@@ -265,7 +266,7 @@ async function updateProject(
     throw projectResult.error;
   }
 
-  return projectResult.data[0] as unknown as DBProject;
+  return dbResult<DBProject>(projectResult.data[0]);
 }
 
 async function updateOrReplaceImages(
@@ -285,7 +286,7 @@ async function updateOrReplaceImages(
       .single();
 
     if (existingMedia.data && existingMedia.data.images?.length > 0) {
-      media = (existingMedia.data.images as unknown as DBMedia[]).filter((x) =>
+      media = fromJsonArray<DBMedia>(existingMedia.data.images).filter((x) =>
         idsToKeep.includes(x.id),
       );
     }

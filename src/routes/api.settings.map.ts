@@ -7,6 +7,7 @@ import { MapPinsServiceServer } from 'src/services/mapPinsService.server';
 import { MapServiceServer } from 'src/services/mapService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
+import { dbResult } from 'src/utils/supabase.types';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -58,7 +59,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const pinFactory = new MapPinFactory(client);
-    const mapPin = pinFactory.fromDBWithProfile(result.data as unknown as DBMapPin);
+    const mapPin = pinFactory.fromDBWithProfile(dbResult<DBMapPin>(result.data));
 
     updateUserActivity(client, claims.data.claims.sub);
 

@@ -8,6 +8,7 @@ import { ImageServiceServer } from 'src/services/imageService.server';
 import { notificationsSupabaseServiceServer } from 'src/services/notificationsSupabaseService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
+import { dbResult, dbResultArray } from 'src/utils/supabase.types';
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -38,7 +39,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       p_current_user_id: currentUserId || null,
     });
 
-    const dbComments = result.data as unknown as DBComment[];
+    const dbComments = dbResultArray<DBComment>(result.data);
 
     const commentFactory = new CommentFactory(new ImageServiceServer(client));
     const comments = await commentFactory.fromDBCommentsToThreads(dbComments);
@@ -128,8 +129,8 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     .single();
 
   if (!commentResult.error) {
-    const comment = commentResult.data as unknown as DBComment;
-    const profile = currentUser.data[0] as unknown as DBProfile;
+    const comment = dbResult<DBComment>(commentResult.data);
+    const profile = dbResult<DBProfile>(currentUser.data[0]);
 
     addSubscriptions(comment, profile, client, headers);
 
@@ -137,7 +138,7 @@ export async function action({ params, request }: LoaderFunctionArgs) {
   }
 
   const commentDb = new DBComment({
-    ...(commentResult.data as unknown as DBComment),
+    ...dbResult<DBComment>(commentResult.data),
     profile: (commentResult.data as any).profiles as DBAuthor,
   });
 

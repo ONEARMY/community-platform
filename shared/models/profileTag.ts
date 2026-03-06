@@ -2,7 +2,7 @@ export type ProfileCategory = 'member' | 'space';
 
 export class DBProfileTag {
   id: number;
-  created_at: Date;
+  created_at: string;
   name: string;
   profile_type: string;
 

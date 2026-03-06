@@ -9,6 +9,7 @@ import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { questionServiceServer } from 'src/services/questionService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
+import { dbResult } from 'src/utils/supabase.types';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -29,7 +30,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return data({ question: null }, { headers });
   }
 
-  const dbQuestion = result.data as unknown as DBQuestion;
+  const dbQuestion = dbResult<DBQuestion>(result.data);
 
   if (!(await isUserAllowedToEdit(dbQuestion, claims.data.claims.sub, client))) {
     return redirect('/forbidden?page=question-edit', { headers });

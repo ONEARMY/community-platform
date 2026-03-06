@@ -2,7 +2,6 @@ import type { DBResearchItem, Image, ResearchStatus } from 'oa-shared';
 import { ResearchItem } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
-import type { Json } from 'src/database.types';
 import { ITEMS_PER_PAGE } from 'src/pages/Research/constants';
 import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.ts';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -12,6 +11,7 @@ import { storageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { convertToSlug } from 'src/utils/slug';
+import { dbResult, dbResultArray, fromJson, toJson } from 'src/utils/supabase.types';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
@@ -45,7 +45,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({}, { status: 500, headers });
   }
 
-  const dbItems = data as unknown as DBResearchItem[];
+  const dbItems = dbResultArray<DBResearchItem>(data);
 
   if (!dbItems || dbItems.length === 0) {
     return Response.json({ items: [], total: 0 }, { headers });
@@ -139,7 +139,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         description: data.description,
         slug,
         category: data.category ? Number(data.category) : null,
-        tags: data.tags as unknown as string[],
+        tags: dbResult<string[]>(data.tags),
         collaborators: data.collaborators,
         status: researchStatus,
         is_draft: data.isDraft,
@@ -153,7 +153,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     const research = ResearchItem.fromDB(
-      researchResult.data as unknown as DBResearchItem,
+      dbResult<DBResearchItem>(researchResult.data),
       [],
       [],
       [],
@@ -175,12 +175,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       if (mediaResult?.media && mediaResult.media.length > 0) {
         const result = await client
           .from('research')
-          .update({ image: mediaResult.media[0] as unknown as Json })
+          .update({ image: toJson(mediaResult.media[0]) })
           .eq('id', research.id)
           .select();
 
         if (result.data) {
-          research.image = result.data[0].image as unknown as Image | null;
+          research.image = fromJson<Image>(result.data[0].image);
         }
       }
     }

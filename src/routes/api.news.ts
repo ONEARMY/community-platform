@@ -4,7 +4,6 @@ import type { AuthError } from '@supabase/supabase-js';
 import type { DBNews, DBProfile, Moderation } from 'oa-shared';
 import { News } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
-import type { Json } from 'src/database.types';
 import { ITEMS_PER_PAGE } from 'src/pages/News/constants';
 import type { NewsSortOption } from 'src/pages/News/NewsSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -17,6 +16,7 @@ import { updateUserActivity } from 'src/utils/activity.server';
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImage } from 'src/utils/storage';
+import { dbResult, dbResultArray, toJson } from 'src/utils/supabase.types';
 import { contentServiceServer } from '../services/contentService.server';
 
 export const loader = async ({ request }) => {
@@ -90,7 +90,7 @@ export const loader = async ({ request }) => {
   const queryResult = await query.range(skip, skip + ITEMS_PER_PAGE - 1); // 0 based
 
   const total = queryResult.count;
-  const data = queryResult.data as unknown as DBNews[];
+  const data = dbResultArray<DBNews>(queryResult.data);
   const items = data.map((dbNews) => News.fromDB(dbNews, []));
 
   if (items && items.length > 0) {
@@ -208,7 +208,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       throw newsResult.error;
     }
 
-    const news = News.fromDB(newsResult.data[0] as unknown as DBNews, []);
+    const news = News.fromDB(dbResult<DBNews>(newsResult.data[0]), []);
     subscribersServiceServer.add('news', news.id, profile.id, client, headers);
 
     if (!news.isDraft) {
@@ -226,7 +226,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         await client
           .from('news')
           .update({
-            hero_image: mediaFiles.media.at(0) as unknown as Json,
+            hero_image: toJson(mediaFiles.media.at(0)),
           })
           .eq('id', news.id);
 

@@ -80,9 +80,9 @@ CREATE OR REPLACE FUNCTION "public"."get_projects"("search_query" "text" DEFAULT
     AS $$DECLARE
     ts_query tsquery;
 BEGIN
-    -- Parse search query once if provided
+    -- Parse search query once if provided, using prefix matching for partial words
     IF search_query IS NOT NULL THEN
-        ts_query := to_tsquery('english', search_query);
+        ts_query := to_tsquery('english', regexp_replace(plainto_tsquery('english', search_query)::text, '''(\w+)''', '''\1'':*', 'g'));
     END IF;
     
     RETURN QUERY
@@ -175,7 +175,7 @@ DECLARE
   ts_query tsquery;
 BEGIN
     IF search_query IS NOT NULL THEN
-      ts_query := to_tsquery('english', search_query);
+      ts_query := to_tsquery('english', regexp_replace(plainto_tsquery('english', search_query)::text, '''(\w+)''', '''\1'':*', 'g'));
     END IF;
 
   RETURN (

@@ -22,6 +22,15 @@ describe('[Research - List Articles]', () => {
     cy.get('[data-cy=ResearchListItem]').should('have.length.at.least', 1);
   });
 
+  it('[Search Functionality - Partial word search]', () => {
+    cy.wait(2000);
+    cy.step('Search with a partial word');
+    cy.get('[data-cy=research-search-box]').clear().type('tes');
+
+    cy.step('Verify partial match returns results');
+    cy.get('[data-cy=ResearchListItem]').should('have.length.at.least', 1);
+  });
+
   it('[Search Functionality - Sorts by Latest Updated]', () => {
     cy.visit(researchPageUrl + '?sort=LatestUpdated');
     cy.step('Verify sorted results are displayed');

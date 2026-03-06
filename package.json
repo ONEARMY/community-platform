@@ -120,6 +120,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.4",
     "@faker-js/faker": "^10.1.0",
+    "@hono/node-server": "^1.19.11",
     "@react-router/dev": "^7.13.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",

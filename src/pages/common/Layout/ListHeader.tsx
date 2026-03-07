@@ -75,9 +75,7 @@ export const ListHeader = (props: IProps) => {
                 width: ['100%', '100%', 'auto'],
               }}
             >
-              <Text sx={{ marginLeft: [0, 0, 2] }}>
-                {`${itemCount} ${itemLabel}`}
-              </Text>
+              <Text sx={{ marginLeft: [0, 0, 2] }}>{`${itemCount} ${itemLabel}`}</Text>
             </Flex>
           )}
         </Flex>
@@ -113,8 +111,7 @@ export const ListHeader = (props: IProps) => {
               }}
             >
               <Text sx={{ marginLeft: [0, 0, 2] }}>
-                {searchString &&
-                  `${itemCount} ${itemLabel} for "${searchString}"`}
+                {searchString && `${itemCount} ${itemLabel} for "${searchString}"`}
               </Text>
             </Flex>
           )}

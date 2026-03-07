@@ -269,7 +269,7 @@ export const ResearchFilterHeader = (props: IProps) => {
             setSearchString(value);
             onSearchInputChange(value);
           }}
-          onClickDelete={() => {
+          onClear={() => {
             setSearchString('');
             searchValue('');
           }}
@@ -358,7 +358,7 @@ export const ResearchFilterHeader = (props: IProps) => {
               setSearchString(value);
               onSearchInputChange(value);
             }}
-            onClickDelete={() => {
+            onClear={() => {
               setSearchString('');
               searchValue('');
             }}

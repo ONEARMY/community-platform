@@ -185,7 +185,7 @@ export const LibraryListHeader = (props: IProps) => {
             setSearchString(value);
             onSearchInputChange(value);
           }}
-          onClickDelete={() => {
+          onClear={() => {
             setSearchString('');
             searchValue('');
           }}
@@ -299,7 +299,7 @@ export const LibraryListHeader = (props: IProps) => {
               setSearchString(value);
               onSearchInputChange(value);
             }}
-            onClickDelete={() => {
+            onClear={() => {
               setSearchString('');
               searchValue('');
             }}

@@ -11,7 +11,7 @@ export type Props = {
   placeHolder: string;
   value: string;
   onChange: (value: string) => void;
-  onClickDelete: () => void;
+  onClear: () => void;
   onClickSearch: () => void;
   onBack?: () => void;
   additionalStyle?: ThemeUIStyleObject;
@@ -29,7 +29,7 @@ export const SearchField = (props: Props) => {
     placeHolder,
     value,
     onChange,
-    onClickDelete,
+    onClear,
     onClickSearch,
     onBack,
     additionalStyle = {},
@@ -57,6 +57,7 @@ export const SearchField = (props: Props) => {
         onChange={(e) => onChange(e.target.value)}
         sx={{
           ...(isExpanded && { paddingLeft: 7 }),
+          ...(isExpanded && { height: '44px' }),
           paddingRight: 11,
           '::-webkit-search-cancel-button': {
             display: 'none',
@@ -97,7 +98,7 @@ export const SearchField = (props: Props) => {
               marginRight: 1,
             }}
             glyph="close"
-            onClick={onClickDelete}
+            onClick={onClear}
             size="17"
           />
         )}

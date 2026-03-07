@@ -44,11 +44,11 @@
   padding-bottom: 27px !important;
 }
 
-/* Mobile: match 40px button height */
+/* Mobile: match 40px button height & prevent iOS Safari zoom (font-size must be >= 16px) */
 @media (max-width: 768px) {
   .grow-wrap > textarea,
   .grow-wrap::after {
-    font-size: 12px;
-    padding: 11px;
+    font-size: 16px;
+    padding: 8px;
   }
 }

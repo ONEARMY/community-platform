@@ -13,6 +13,7 @@ export class DBQuestion implements IDBContentDoc {
   is_draft: boolean;
   readonly created_at: Date;
   readonly modified_at: Date | null;
+  readonly published_at: Date | null;
   readonly author?: DBAuthor;
   readonly comment_count?: number;
   readonly category: DBCategory | null;
@@ -45,6 +46,7 @@ export class Question implements IContentDoc {
   isDraft: boolean;
   modifiedAt: Date | null;
   previousSlugs: string[];
+  publishedAt: Date | null;
   slug: string;
   subscriberCount: number;
   tags: Tag[];
@@ -73,6 +75,7 @@ export class Question implements IContentDoc {
       isDraft: obj.is_draft || false,
       modifiedAt: obj.modified_at ? new Date(obj.modified_at) : null,
       previousSlugs: obj.previous_slugs,
+      publishedAt: obj.published_at ? new Date(obj.published_at) : null,
       slug: obj.slug,
       subscriberCount: obj.subscriber_count || 0,
       tagIds: obj.tags,

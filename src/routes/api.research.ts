@@ -142,6 +142,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         collaborators: data.collaborators,
         status: researchStatus,
         is_draft: data.isDraft,
+        published_at: data.isDraft ? null : new Date(),
         tenant_id: process.env.TENANT_ID,
       })
       .select()

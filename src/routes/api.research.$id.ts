@@ -58,6 +58,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const previousSlugs = contentServiceServer.updatePreviousSlugs(oldResearch, data.slug);
 
+    const isFirstPublish = oldResearch.is_draft && !data.isDraft && !oldResearch.published_at;
+
+    const now = new Date();
+
     const researchResult = await client
       .from('research')
       .update({
@@ -69,7 +73,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         previous_slugs: previousSlugs,
         is_draft: data.isDraft,
         collaborators: data.collaborators,
+        modified_at: now,
         ...(!data.existingImage && { image: null }),
+        ...(isFirstPublish && { published_at: now }),
       })
       .eq('id', id)
       .select()

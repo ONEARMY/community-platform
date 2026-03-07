@@ -1,17 +1,13 @@
-import { observer } from 'mobx-react';
-import type { ThemeWithName } from 'oa-themes';
+import { useContext } from 'react';
 import { Link } from 'react-router';
-import { VERSION } from 'src/config/config';
-import { Box, Flex, Image, Text, useThemeUI } from 'theme-ui';
+import { TenantContext } from 'src/pages/common/TenantContext';
+import { Box, Flex, Image, Text } from 'theme-ui';
 
-const Logo = observer(() => {
-  const themeUi = useThemeUI();
-  const theme = themeUi.theme as ThemeWithName;
+const Logo = () => {
+  const tenantContext = useContext(TenantContext);
+  const name = tenantContext?.siteName;
+  const logo = tenantContext?.siteImage;
 
-  const name = import.meta.env.VITE_SITE_NAME || process.env.VITE_SITE_NAME;
-  const logo = theme.logo;
-
-  const nameAndVersion = `${name} logo ${VERSION}`;
   const logoSize = [50, 50, 100];
 
   return (
@@ -41,8 +37,8 @@ const Logo = observer(() => {
               width: logoSize,
               height: logoSize,
             }}
-            alt={nameAndVersion}
-            title={nameAndVersion}
+            alt={`${name} logo`}
+            title={`${name} logo`}
           />
         </Flex>
         <Text className="sr-only" ml={2} sx={{ display: ['none', 'none', 'block'] }} color="black">
@@ -51,6 +47,6 @@ const Logo = observer(() => {
       </Link>
     </Box>
   );
-});
+};
 
 export default Logo;

@@ -25,8 +25,7 @@ Also check our [Team Principles](./docs/team-principles.md), which guide our wor
 
 ### Prerequisites
 
-- [Node.js v22.18](https://nodejs.org/en/download/)
-- [Yarn v5](https://yarnpkg.com/getting-started/install)
+- [Bun 1.3.10+](https://bun.sh/docs/installation)
 
 ### One time setup
 
@@ -40,13 +39,13 @@ Also check our [Team Principles](./docs/team-principles.md), which guide our wor
 
 3. Install dependencies
    ```
-   yarn install
+   bun install
    ```
 4. [Create a local supabase instance](./docs/supabase.md)
 
 5. Run the app
    ```
-   yarn start
+   bun start
    ```
 
 ## ⚙️ Technology
@@ -90,7 +89,9 @@ Add to your `.vscode/settings.json`:
    }
 ```
 
-Running `yarn format` from the project root prior to committing will ensure the code you're adding is formatted to align with the standards of this project.
+Also make sure you set your vscode default formatter to Biome (CTRL + SHIFT + P > Format Document With... -> Configure Default Formatter -> Biome).
+
+Running `bun run format` from the project root prior to committing will ensure the code you're adding is formatted to align with the standards of this project.
 
 We expect code to follow standard practices:
 

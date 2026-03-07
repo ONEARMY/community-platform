@@ -197,7 +197,7 @@ async function upsertStep(
 }
 
 async function deleteStepsById(ids: number[], client: SupabaseClient) {
-  await client.from('project_steps').delete().in('id');
+  await client.from('project_steps').delete().in('id', ids);
 }
 
 export const libraryServiceServer = {

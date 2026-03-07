@@ -1,49 +1,13 @@
 export interface PlatformTheme {
-  id: string;
-  siteName: string;
-  description: string;
-  styles: ThemeWithName;
-}
-
-export interface ThemeWithName {
-  name: string;
-  logo: string;
-
-  alerts: any;
-
   text: any;
-
-  fonts: {
-    body: string;
-  };
-
-  forms: {
-    input: any;
-    inputOutline: any;
-    error: any;
-    textarea?: any;
-    textareaError?: any;
-  };
-
-  /**
-   * Following properties are taken from DefaultTheme
-   * exported from `styled-components`
-   *
-   * This should ideally be imported rather than manually
-   * inlined. However some behaviour is making this hard to
-   * achieve at the moment.
-   */
-
-  cards?: {
-    primary: any;
-  };
-
   colors: {
+    primary: string;
+    primaryHover: string;
+    accent: string;
+    accentHover: string;
     white: string;
     black: string;
-    primary: string;
     softyellow: string;
-    accent: { base: string; hover: string };
     blue: string;
     red: string;
     red2: string;

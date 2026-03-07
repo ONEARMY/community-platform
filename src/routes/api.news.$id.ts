@@ -10,7 +10,7 @@ import { ProfileServiceServer } from 'src/services/profileService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
-import { hasAdminRightsSupabase } from 'src/utils/helpers';
+import { hasAdminRights } from 'src/utils/helpers';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImage } from 'src/utils/storage';
 
@@ -38,14 +38,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const currentNews = await newsServiceServer.getById(id, client);
 
-    const { valid, status, statusText } = await validateRequest(
-      params,
-      request,
-      claims.data.claims.sub,
-      data,
-      currentNews,
-      client,
-    );
+    const { valid, status, statusText } = await validateRequest(params, request, claims.data.claims.sub, data, currentNews, client);
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText });
@@ -93,11 +86,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const news = News.fromDB(newsResult.data[0], []);
 
     if (newHeroImage) {
-      const mediaFiles = await storageServiceServer.uploadImage(
-        [newHeroImage],
-        `news/${news.id}`,
-        client,
-      );
+      const mediaFiles = await storageServiceServer.uploadImage([newHeroImage], `news/${news.id}`, client);
 
       if (mediaFiles?.media?.length) {
         await client
@@ -107,11 +96,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
           })
           .eq('id', news.id);
 
-        const [image] = storageServiceServer.getPublicUrls(
-          client,
-          mediaFiles.media,
-          IMAGE_SIZES.GALLERY,
-        );
+        const [image] = storageServiceServer.getPublicUrls(client, mediaFiles.media, IMAGE_SIZES.GALLERY);
 
         news.heroImage = image;
       }
@@ -154,10 +139,7 @@ async function validateRequest(
     return { status: 400, statusText: 'News not found' };
   }
 
-  if (
-    currentNews.slug !== data.slug &&
-    (await contentServiceServer.isDuplicateExistingSlug(data.slug, currentNews.id, client, 'news'))
-  ) {
+  if (currentNews.slug !== data.slug && (await contentServiceServer.isDuplicateExistingSlug(data.slug, currentNews.id, client, 'news'))) {
     return {
       status: 409,
       statusText: 'This news already exists',
@@ -172,9 +154,8 @@ async function validateRequest(
   }
 
   const isCreator = currentNews.created_by === profile.id;
-  const hasAdminRights = hasAdminRightsSupabase(profile);
 
-  if (!isCreator && !hasAdminRights) {
+  if (!isCreator && !hasAdminRights(profile)) {
     return { status: 403, statusText: 'Unauthorized' };
   }
 

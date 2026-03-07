@@ -1,25 +1,28 @@
 import { Button, FieldInput, HeroBanner, TextNotification } from 'oa-components';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { Link, redirect, useActionData } from 'react-router';
+import { data, Link, redirect, useActionData } from 'react-router';
 import { PasswordField } from 'src/common/Form/PasswordField';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
+import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { getReturnUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { required } from 'src/utils/validators';
 import { Card, Flex, Heading, Label, Text } from 'theme-ui';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { client } = createSupabaseServerClient(request);
+  const { client, headers } = createSupabaseServerClient(request);
   const claims = await client.auth.getClaims();
 
   if (claims.data?.claims) {
-    return redirect(getReturnUrl(request));
+    return redirect(getReturnUrl(request), { headers });
   }
 
-  return null;
+  const tenantSettings = await new TenantSettingsService(client).get();
+
+  return data(tenantSettings, { headers });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -29,13 +32,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
-  const { error, data } = await client.auth.signInWithPassword({
+  const signInResult = await client.auth.signInWithPassword({
     email,
     password,
   });
 
-  if (error) {
-    if (error.code === 'email_not_confirmed') {
+  if (signInResult.error) {
+    if (signInResult.error.code === 'email_not_confirmed') {
       const url = new URL(request.url);
       const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
       const emailRedirectUrl = `${protocol}//${url.host}/email-confirmation`;
@@ -47,7 +50,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         },
       });
 
-      return Response.json(
+      return data(
         {
           error: 'We need to confirm your email before logging in. Please check your inbox :)',
         },
@@ -55,8 +58,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       );
     }
 
-    console.error(error);
-    return Response.json(
+    console.error(signInResult.error);
+    return data(
       {
         error: 'Invalid email or password.',
       },
@@ -64,14 +67,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
   }
 
-  const fallbackPath = data.user?.user_metadata.username
-    ? `/u/${data.user?.user_metadata.username}`
+  const fallbackPath = signInResult.data.user?.user_metadata.username
+    ? `/u/${signInResult.data.user?.user_metadata.username}`
     : '/';
   const path = getReturnUrl(request, fallbackPath);
 
   try {
     // This will fail if there is already a profile for the current auth_id, or the auth_id is invalid (can be invalid the the credentials are wrong)
-    await new ProfileServiceServer(client).ensureProfile(data.user);
+    await new ProfileServiceServer(client).ensureProfile(signInResult.data.user);
   } catch (error) {
     console.error(error);
   }
@@ -79,14 +82,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return redirect(path, { headers });
 };
 
-export const meta = mergeMeta<typeof loader>(() => {
-  const title = `Login - ${import.meta.env.VITE_SITE_NAME}`;
+export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
+  const title = `Sign In - ${loaderData?.siteName}`;
 
   return generateTags(title);
 });
 
 export default function Index() {
-  const actionResponse: any = useActionData<typeof action>();
+  const actionResponse = useActionData<typeof action>();
 
   return (
     <Main style={{ flex: 1 }}>

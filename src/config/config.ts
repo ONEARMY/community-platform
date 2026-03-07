@@ -23,12 +23,6 @@ const _c = (property: ConfigurationOption, fallbackValue?: string): string => {
   return import.meta.env?.[property] || fallbackValue || '';
 };
 
-const getFromLocalStorageFirst = (property: ConfigurationOption): string => {
-  return typeof localStorage !== 'undefined' && localStorage[property]
-    ? (localStorage.getItem(property) as string)
-    : _c(property, '');
-};
-
 export const getConfigurationOption = _c;
 
 /*********************************************************************************************** /
@@ -70,20 +64,4 @@ export const SENTRY_CONFIG: ISentryConfig = {
   environment: siteVariant,
 };
 
-export const CDN_URL = _c('VITE_CDN_URL', '');
-export const VERSION = _c('VITE_PROJECT_VERSION', '');
 export const GA_TRACKING_ID = _c('VITE_GA_TRACKING_ID');
-export const PATREON_CLIENT_ID = _c('VITE_PATREON_CLIENT_ID');
-export const API_URL = _c('VITE_API_URL', 'https://platform-api-voymtdup6a-uc.a.run.app');
-
-export const VITE_THEME = getFromLocalStorageFirst('VITE_THEME');
-
-export const VITE_PLATFORM_PROFILES = getFromLocalStorageFirst('VITE_PLATFORM_PROFILES');
-
-export const isPreciousPlastic = (): boolean => {
-  return getFromLocalStorageFirst('VITE_THEME') === 'precious-plastic';
-};
-
-export const MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT = isPreciousPlastic() ? 'member' : undefined;
-
-export const NO_MESSAGING = getFromLocalStorageFirst('VITE_NO_MESSAGING');

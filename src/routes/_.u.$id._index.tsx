@@ -1,7 +1,7 @@
 import type { Profile, UserCreatedDocs } from 'oa-shared';
 import { AuthorVotes } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
-import { useLoaderData } from 'react-router';
+import { data, redirect, useLoaderData } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { ProfilePage } from 'src/pages/User/content/ProfilePage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -9,12 +9,14 @@ import { libraryServiceServer } from 'src/services/libraryService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { questionServiceServer } from 'src/services/questionService.server';
 import { researchServiceServer } from 'src/services/researchService.server';
+import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { Text } from 'theme-ui';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
   try {
+    const tenantSettings = await new TenantSettingsService(client).get();
     const profileService = new ProfileServiceServer(client);
 
     const username = params.id as string;
@@ -33,7 +35,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     } as UserCreatedDocs;
 
     if (!profileDb) {
-      return Response.json({ profile: null, headers });
+      return data({ profile: null, tenantSettings }, { headers });
     }
 
     const authorVotesDb = await profileService.getAuthorUsefulVotes(profileDb.id);
@@ -47,23 +49,18 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     const profileFactory = new ProfileFactory(client);
     const profile = profileFactory.fromDB(profileDb, authorVotes);
 
-    return Response.json(
+    return data(
       {
         profile,
         userCreatedDocs,
+        tenantSettings,
       },
       { headers },
     );
   } catch (error) {
     console.error(error);
-    return Response.json({}, { headers });
+    return redirect('/', { headers });
   }
-}
-
-export function HydrateFallback() {
-  // This is required because all routes are loaded client-side. Avoids a page flicker before css is loaded.
-  // Can be removed once ALL pages are using SSR.
-  return <div></div>;
 }
 
 export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
@@ -73,17 +70,16 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
     return [];
   }
 
-  const title = `${profile.displayName} - Profile - ${import.meta.env.VITE_SITE_NAME}`;
+  const title = `${profile.displayName} - Profile - ${loaderData?.tenantSettings.siteName}`;
+  const imageUrl = profile.photo?.publicUrl;
 
-  return generateTags(title);
+  return generateTags(title, profile.about || undefined, imageUrl);
 });
 
 export default function Index() {
-  const data = useLoaderData();
-  const profile = data.profile as Profile;
-  const userCreatedDocs = data.userCreatedDocs as UserCreatedDocs;
+  const data = useLoaderData<typeof loader>();
 
-  if (!profile) {
+  if (!data.profile) {
     return (
       <Text
         sx={{
@@ -98,5 +94,5 @@ export default function Index() {
     );
   }
 
-  return <ProfilePage profile={profile} userCreatedDocs={userCreatedDocs} />;
+  return <ProfilePage profile={data.profile} userCreatedDocs={data.userCreatedDocs} />;
 }

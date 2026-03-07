@@ -88,7 +88,7 @@ export class ProfileStore {
   }
 
   get upgradeBadgeForCurrentUser() {
-    if (!this.profile || !this.upgradeBadges) {
+    if (!this.profile || !this.upgradeBadges || !Array.isArray(this.upgradeBadges)) {
       return undefined;
     }
 
@@ -176,7 +176,9 @@ export const ProfileStoreProvider = ({ children }: { children: React.ReactNode }
     profileStore.initUpgradeBadges();
   }, []);
 
-  return <ProfileStoreContext.Provider value={profileStore}>{children}</ProfileStoreContext.Provider>;
+  return (
+    <ProfileStoreContext.Provider value={profileStore}>{children}</ProfileStoreContext.Provider>
+  );
 };
 
 export const useProfileStore = () => {

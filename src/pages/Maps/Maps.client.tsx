@@ -1,7 +1,6 @@
-import type { LatLngBounds, Marker } from 'leaflet';
+import type { LatLngBounds, Map as LeafletMap, Marker } from 'leaflet';
 import type { ILatLng, MapPin, ProfileBadge, ProfileTag, ProfileType } from 'oa-shared';
-import { useEffect, useMemo, useState } from 'react';
-import type { Map as MapType } from 'react-leaflet';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Box, Flex } from 'theme-ui';
 import { MapList } from './Content/MapView/MapList';
@@ -34,53 +33,83 @@ const MapsPage = () => {
   const [loadingMessage, setLoadingMessage] = useState<string>('Loading...');
   const [isMobile, setIsMobile] = useState(false);
   const [zoom, setZoom] = useState<number>(2);
-  const [mapRef, setMapRef] = useState<MapType | null>(null);
+  const [mapRef, setMapRef] = useState<LeafletMap | null>(null);
   const [clusterGroupRef, setClusterGroupRef] = useState<any>(null);
 
-  const updateMapView = (location: ILatLng, zoomLevel: number) => {
-    if (mapRef?.leafletElement) {
-      mapRef.leafletElement.setView([location.lat, location.lng], zoomLevel);
-    }
-    setPinLocation(location);
-    setZoom(zoomLevel);
-  };
+  const updateMapView = useCallback(
+    (location: ILatLng, zoomLevel: number) => {
+      if (mapRef) {
+        mapRef.setView([location.lat, location.lng], zoomLevel);
+      }
+      setPinLocation(location);
+      setZoom(zoomLevel);
+    },
+    [mapRef],
+  );
 
-  const panMapTo = (location: ILatLng) => {
-    if (mapRef?.leafletElement) {
-      mapRef.leafletElement.panTo([location.lat, location.lng]);
-    }
-  };
+  const panMapTo = useCallback(
+    (location: ILatLng) => {
+      if (mapRef) {
+        mapRef.panTo([location.lat, location.lng]);
+      }
+    },
+    [mapRef],
+  );
 
-  const fitMapBounds = (bounds: LatLngBounds) => {
-    if (mapRef?.leafletElement) {
-      mapRef.leafletElement.fitBounds(bounds);
-    }
-  };
+  const fitMapBounds = useCallback(
+    (bounds: LatLngBounds) => {
+      if (mapRef) {
+        mapRef.fitBounds(bounds);
+      }
+    },
+    [mapRef],
+  );
 
-  const selectPinAndHandleCluster = (pin: MapPin) => {
-    selectPin(pin);
+  const selectPinAndHandleCluster = useCallback(
+    (pin: MapPin) => {
+      selectPin(pin);
 
-    const clusterGroup = clusterGroupRef?.leafletElement;
+      const clusterGroup = clusterGroupRef;
 
-    if (clusterGroup?.getLayers && mapRef) {
-      const allMarkers = clusterGroup.getLayers();
-      const marker = allMarkers.find((m: Marker) => {
-        const pos = m.getLatLng();
-        return pos.lat === Number(pin.lat) && pos.lng === Number(pin.lng);
-      });
+      if (clusterGroup?.getLayers && mapRef) {
+        const allMarkers = clusterGroup.getLayers();
+        const marker = allMarkers.find((m: Marker) => {
+          const pos = m.getLatLng();
+          return pos.lat === Number(pin.lat) && pos.lng === Number(pin.lng);
+        });
 
-      if (marker) {
-        const visibleParent = clusterGroup.getVisibleParent(marker);
-        if (visibleParent !== marker && visibleParent.getBounds) {
-          fitMapBounds(visibleParent.getBounds());
-          return;
+        if (marker) {
+          const visibleParent = clusterGroup.getVisibleParent(marker);
+          if (visibleParent !== marker && visibleParent.getBounds) {
+            fitMapBounds(visibleParent.getBounds());
+            return;
+          }
         }
       }
-    }
 
-    panMapTo({ lat: pin.lat, lng: pin.lng });
-  };
+      panMapTo({ lat: pin.lat, lng: pin.lng });
+    },
+    [clusterGroupRef, mapRef, fitMapBounds, panMapTo],
+  );
 
+  // Pins filtered by tags/types/badges/settings only (no boundary filter).
+  // Used by the map clusters — Leaflet handles viewport clipping internally.
+  const mapPins = useMemo<MapPin[]>(() => {
+    return filterPins(allPins || [], {
+      settings: activeProfileSettingFilters,
+      badges: activeBadgeFilters,
+      types: activeProfileTypeFilters,
+      tags: activeTagFilters,
+    });
+  }, [
+    allPins,
+    activeProfileSettingFilters,
+    activeBadgeFilters,
+    activeProfileTypeFilters,
+    activeTagFilters,
+  ]);
+
+  // Pins filtered by everything including boundaries — used by the list view.
   const filteredPins = useMemo<MapPin[]>(() => {
     return filterPins(allPins || [], {
       settings: activeProfileSettingFilters,
@@ -154,34 +183,26 @@ const MapsPage = () => {
     init();
   }, []);
 
-  const toggleActiveBadgeFilter = (value: string) => {
-    if (activeBadgeFilters.includes(value)) {
-      setActiveBadges(activeBadgeFilters.filter((x) => x !== value));
-    } else {
-      setActiveBadges((values) => [...values, value]);
-    }
-  };
-  const toggleActiveProfileSettingFilter = (value: string) => {
-    if (activeProfileSettingFilters.includes(value)) {
-      setActiveSettings(activeProfileSettingFilters.filter((x) => x !== value));
-    } else {
-      setActiveSettings((values) => [...values, value]);
-    }
-  };
-  const toggleActiveProfileTypeFilter = (value: string) => {
-    if (activeProfileTypeFilters.includes(value)) {
-      setActiveTypes(activeProfileTypeFilters.filter((x) => x !== value));
-    } else {
-      setActiveTypes((values) => [...values, value]);
-    }
-  };
-  const toggleActiveTagFilter = (value: number) => {
-    if (activeTagFilters.includes(value)) {
-      setActiveTags(activeTagFilters.filter((x) => x !== value));
-    } else {
-      setActiveTags((values) => [...values, value]);
-    }
-  };
+  const toggleActiveBadgeFilter = useCallback((value: string) => {
+    setActiveBadges((prev) =>
+      prev.includes(value) ? prev.filter((x) => x !== value) : [...prev, value],
+    );
+  }, []);
+  const toggleActiveProfileSettingFilter = useCallback((value: string) => {
+    setActiveSettings((prev) =>
+      prev.includes(value) ? prev.filter((x) => x !== value) : [...prev, value],
+    );
+  }, []);
+  const toggleActiveProfileTypeFilter = useCallback((value: string) => {
+    setActiveTypes((prev) =>
+      prev.includes(value) ? prev.filter((x) => x !== value) : [...prev, value],
+    );
+  }, []);
+  const toggleActiveTagFilter = useCallback((value: number) => {
+    setActiveTags((prev) =>
+      prev.includes(value) ? prev.filter((x) => x !== value) : [...prev, value],
+    );
+  }, []);
 
   useEffect(() => {
     if (selectedPin) {
@@ -208,42 +229,72 @@ const MapsPage = () => {
     }
   }, [location.hash, allPins, filteredPins]);
 
+  const contextValue = useMemo(
+    () => ({
+      allPins,
+      allProfileTypes,
+      allProfileSettings,
+      allBadges,
+      allTags,
+      location: pinLocation,
+      setLocation: setPinLocation,
+      loadingMessage,
+      selectedPin,
+      selectPin,
+      selectPinWithClusterCheck: selectPinAndHandleCluster,
+      mapPins,
+      filteredPins,
+      activeBadgeFilters,
+      activeProfileSettingFilters,
+      activeProfileTypeFilters,
+      activeTagFilters,
+      toggleActiveBadgeFilter,
+      toggleActiveProfileSettingFilter,
+      toggleActiveProfileTypeFilter,
+      toggleActiveTagFilter,
+      isMobile,
+      setIsMobile,
+      boundaries,
+      setBoundaries,
+      zoom,
+      setZoom,
+      setView: updateMapView,
+      panTo: panMapTo,
+      fitBounds: fitMapBounds,
+      setMapRef,
+      setClusterGroupRef,
+    }),
+    [
+      allPins,
+      allProfileTypes,
+      allProfileSettings,
+      allBadges,
+      allTags,
+      pinLocation,
+      loadingMessage,
+      selectedPin,
+      selectPinAndHandleCluster,
+      mapPins,
+      filteredPins,
+      activeBadgeFilters,
+      activeProfileSettingFilters,
+      activeProfileTypeFilters,
+      activeTagFilters,
+      toggleActiveBadgeFilter,
+      toggleActiveProfileSettingFilter,
+      toggleActiveProfileTypeFilter,
+      toggleActiveTagFilter,
+      isMobile,
+      boundaries,
+      zoom,
+      updateMapView,
+      panMapTo,
+      fitMapBounds,
+    ],
+  );
+
   return (
-    <MapContext.Provider
-      value={{
-        allPins,
-        allProfileTypes,
-        allProfileSettings,
-        allBadges,
-        allTags,
-        location: pinLocation,
-        setLocation: setPinLocation,
-        loadingMessage,
-        selectedPin,
-        selectPin,
-        selectPinWithClusterCheck: selectPinAndHandleCluster,
-        filteredPins,
-        activeBadgeFilters,
-        activeProfileSettingFilters,
-        activeProfileTypeFilters,
-        activeTagFilters,
-        toggleActiveBadgeFilter,
-        toggleActiveProfileSettingFilter,
-        toggleActiveProfileTypeFilter,
-        toggleActiveTagFilter,
-        isMobile,
-        setIsMobile,
-        boundaries,
-        setBoundaries,
-        zoom,
-        setZoom,
-        setView: updateMapView,
-        panTo: panMapTo,
-        fitBounds: fitMapBounds,
-        setMapRef,
-        setClusterGroupRef,
-      }}
-    >
+    <MapContext.Provider value={contextValue}>
       <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)', width: '100%' }}>
         <Flex
           sx={{

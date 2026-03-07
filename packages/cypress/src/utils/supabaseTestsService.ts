@@ -3,14 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { MOCK_DATA } from '../data';
 
 import type { SupabaseClient, User } from '@supabase/supabase-js';
-import type {
-  DBProfile,
-  DBProfileBadge,
-  DBProfileTag,
-  DBProfileType,
-  DBResearchItem,
-  Profile,
-} from 'oa-shared';
+import type { DBProfile, DBProfileBadge, DBProfileTag, DBProfileType, DBResearchItem, Profile, TenantSettings } from 'oa-shared';
 
 type SeedData = {
   [tableName: string]: Array<Record<string, any>>;
@@ -101,11 +94,7 @@ export class SupabaseTestsService {
   }
 
   async getUserProfileByUsername(username: string) {
-    const { data, error } = await this.client
-      .from('profiles')
-      .select()
-      .eq('username', username)
-      .single();
+    const { data, error } = await this.client.from('profiles').select().eq('username', username).single();
 
     if (error || !data) {
       return error;
@@ -121,9 +110,7 @@ export class SupabaseTestsService {
 
     for (let i = 0; i < MOCK_DATA.research.length; i++) {
       const item = MOCK_DATA.research[i];
-      const createdBy: number =
-        profiles.find((profile) => profile.username === item.created_by_username)?.id ||
-        profiles[0].id;
+      const createdBy: number = profiles.find((profile) => profile.username === item.created_by_username)?.id || profiles[0].id;
 
       researchData.push({
         created_at: item.created_at,
@@ -148,9 +135,7 @@ export class SupabaseTestsService {
 
     for (let i = 0; i < MOCK_DATA.research.length; i++) {
       const researchItem = MOCK_DATA.research[i];
-      const createdBy =
-        profiles.find((profile) => profile.username === researchItem.created_by_username).id ||
-        profiles[0].id;
+      const createdBy = profiles.find((profile) => profile.username === researchItem.created_by_username).id || profiles[0].id;
 
       if (researchItem.updates) {
         const { research_updates } = await this.seedDatabase({
@@ -168,11 +153,7 @@ export class SupabaseTestsService {
 
         // Only seed comments for first research
         if (i === 0) {
-          const { comments } = await this.seedComment(
-            profiles,
-            research_updates,
-            'research_update',
-          );
+          const { comments } = await this.seedComment(profiles, research_updates, 'research_update');
 
           await this.seedReply(profiles, comments, research);
         }
@@ -218,6 +199,26 @@ export class SupabaseTestsService {
         ...category,
         tenant_id: this.tenantId,
       })),
+    });
+  }
+
+  async seedTenantSettings() {
+    return await this.seedDatabase({
+      tenant_settings: [
+        {
+          site_name: 'Test Site',
+          site_description: 'Test description',
+          site_url: 'https://community.preciousplastic.com',
+          academy_resource: 'https://onearmy.github.io/academy/',
+          color_primary: '#fee77b',
+          color_primary_hover: '#ffde45',
+          color_accent: '#fee77b',
+          color_accent_hover: '#ffde45',
+          show_impact: true,
+          create_research_roles: undefined,
+          tenant_id: this.tenantId,
+        },
+      ],
     });
   }
 
@@ -401,13 +402,9 @@ export class SupabaseTestsService {
   }
 
   async seedProfileImages(): Promise<{ id: string; path: string; fullPath: string }[]> {
-    const { data: image1Data } = await this.client.storage
-      .from(this.tenantId)
-      .upload('profiles/image1.png', new Blob());
+    const { data: image1Data } = await this.client.storage.from(this.tenantId).upload('profiles/image1.png', new Blob());
 
-    const { data: image2Data } = await this.client.storage
-      .from(this.tenantId)
-      .upload('profiles/image2.png', new Blob());
+    const { data: image2Data } = await this.client.storage.from(this.tenantId).upload('profiles/image2.png', new Blob());
 
     return [image1Data, image2Data];
   }
@@ -431,8 +428,7 @@ export class SupabaseTestsService {
 
     const profiles = await Promise.all(
       accounts.map(async (account) => {
-        const profileType =
-          profileTypes.find((type) => type.name === account.profileType) || profileTypes[0];
+        const profileType = profileTypes.find((type) => type.name === account.profileType) || profileTypes[0];
 
         return await this.createAuthAndProfile(
           account,
@@ -475,14 +471,7 @@ export class SupabaseTestsService {
       authId = authUser.data.user.id;
     }
 
-    return await this.createProfile(
-      user,
-      authId,
-      profileBadgeId,
-      profilTagIds,
-      profileTypeId,
-      profileImages,
-    );
+    return await this.createProfile(user, authId, profileBadgeId, profilTagIds, profileTypeId, profileImages);
   }
 
   async createProfile(
@@ -493,12 +482,7 @@ export class SupabaseTestsService {
     profileTypeId: number,
     profileImages: { id: string; path: string; fullPath: string }[],
   ) {
-    const { data } = await this.adminClient
-      .from('profiles')
-      .select('*')
-      .eq('auth_id', authId)
-      .eq('tenant_id', this.tenantId)
-      .single();
+    const { data } = await this.adminClient.from('profiles').select('*').eq('auth_id', authId).eq('tenant_id', this.tenantId).single();
 
     if (data) {
       return data;

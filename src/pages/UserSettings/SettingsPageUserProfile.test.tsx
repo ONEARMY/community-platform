@@ -1,14 +1,12 @@
 import '@testing-library/jest-dom/vitest';
-
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 import { FactoryUser } from 'src/test/factories/User';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
+import { TenantContext, TenantSettingsContext } from '../common/TenantContext';
 import { FormProvider } from './__mocks__/FormProvider';
 import { SettingsPageUserProfile } from './SettingsPageUserProfile';
-
-import type { ProfileTag, ProfileType } from 'oa-shared';
+import { UserRole, type ProfileTag, type ProfileType } from 'oa-shared';
 
 const mockUseProfileStore = vi.hoisted(() => vi.fn());
 
@@ -128,6 +126,60 @@ describe('UserSettings', () => {
       expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1);
       expect(wrapper.getAllByTestId('photo')).toHaveLength(1);
       expect(wrapper.getAllByTestId('coverImage')).toHaveLength(1);
+    });
+  });
+
+  it('hides PublicContactSection when noMessaging is true', async () => {
+    const mockUser = FactoryUser({
+      type: {
+        id: 1,
+        name: 'Member',
+        isSpace: false,
+      } as ProfileType,
+    });
+
+    mockUseProfileStore.mockReturnValue({
+      profile: mockUser,
+      profileTypes: mockProfileTypes,
+      update: vi.fn(),
+    });
+
+    const mockTenantContext: TenantSettingsContext = {
+      patreonId: '',
+      siteName: 'Test Site',
+      siteDescription: '',
+      siteUrl: 'https://test.com',
+      messageSignOff: 'Test',
+      emailFrom: 'test@test.com',
+      siteImage: 'test.png',
+      noMessaging: true,
+      libraryHeading: 'Library',
+      academyResource: 'Academy',
+      profileGuidelines: 'Guidelines',
+      questionsGuidelines: 'Questions',
+      supportedModules: 'modules',
+      colorPrimary: '#fee77b',
+      colorPrimaryHover: '#ffde45',
+      colorAccent: '#fee77b',
+      colorAccentHover: '#ffde45',
+      showImpact: true,
+      createResearchRoles: [UserRole.ADMIN, UserRole.RESEARCH_CREATOR],
+      environment: {},
+    };
+
+    let wrapper;
+    act(() => {
+      wrapper = FormProvider(
+        <TenantContext.Provider value={mockTenantContext}>
+          <SettingsPageUserProfile />
+        </TenantContext.Provider>,
+      );
+    });
+
+    await waitFor(() => {
+      expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1);
+      expect(wrapper.queryByTestId('PublicContactSection')).toBeNull();
+      expect(wrapper.getAllByTestId('photo')).toHaveLength(1);
     });
   });
 });

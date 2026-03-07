@@ -4,7 +4,7 @@ import { MESSAGE_MAX_CHARACTERS } from '../../../../src/pages/User/constants';
 import { contact } from '../../../../src/pages/User/labels';
 import { MOCK_DATA } from '../data';
 import { UserMenuItem } from '../support/commandsUi';
-import { generateNewUserDetails, setIsPreciousPlastic } from '../utils/TestUtils';
+import { generateNewUserDetails } from '../utils/TestUtils';
 
 const { profile_views, subscriber } = MOCK_DATA.users;
 const eventReader = MOCK_DATA.users.event_reader;
@@ -14,14 +14,13 @@ const workspaceEmpty = MOCK_DATA.users.settings_workplace_empty;
 describe('[Profile]', () => {
   beforeEach(() => {
     cy.visit('/');
-    localStorage.setItem('VITE_NO_MESSAGING', 'false');
   });
 
   describe('[By Anonymous]', () => {
     it('[Can view all public profile information]', () => {
       cy.step('Go to Profile');
       cy.visit(`/u/${eventReader.username}`);
-      cy.title().should('eq', `${eventReader.displayName} - Profile - Precious Plastic`);
+      cy.title().should('eq', `${eventReader.displayName} - Profile - Test Site`);
 
       cy.get('[data-cy=userDisplayName]').contains(eventReader.username);
       cy.get('[data-testid=library-stat]').contains('1');
@@ -51,8 +50,6 @@ describe('[Profile]', () => {
     });
 
     it('[Contact form]', () => {
-      localStorage.setItem('VITE_NO_MESSAGING', 'false');
-
       const contactee = generateNewUserDetails();
 
       cy.step('Can sign-up and have a contact form');
@@ -128,43 +125,7 @@ describe('[Profile]', () => {
       cy.get('[data-cy="UserContactForm-NotAvailable"]').should('not.exist');
     });
 
-    it("[Can't message users when config set]", () => {
-      localStorage.setItem('VITE_NO_MESSAGING', 'true');
-
-      const user = generateNewUserDetails();
-
-      cy.step("Can sign-up and won't have a contact form");
-      cy.signUpNewUser(user);
-      cy.step('Go to Profile');
-      cy.visit(`/u/${user.username}`);
-
-      cy.step('No contact tab');
-      cy.get('[data-cy=contact-tab]').should('not.exist');
-
-      cy.step('No setting to turn it on');
-      cy.visit('/settings');
-      cy.get('[data-cy=PublicContactSection]').should('not.exist');
-
-      cy.step('No contact form even when links are present');
-      cy.get('[data-cy=tab-Profile]').click();
-      cy.setSettingImage('avatar', 'userImage');
-      cy.setSettingBasicUserInfo({
-        displayName: user.username,
-        country: 'Tokelau',
-        description: 'contact checking',
-        website: 'https://greatbritishbakeoff.com',
-      });
-
-      cy.saveSettingsForm();
-
-      cy.visit(`/u/${user.username}`);
-      cy.get('[data-cy=contact-tab]').click();
-      cy.get('[data-cy=UserContactWrapper]').should('not.exist');
-    });
-
     it('[Can see contribution data for workspaces]', () => {
-      setIsPreciousPlastic();
-
       cy.signIn(subscriber.email, subscriber.password);
 
       cy.step('Can go to contribution data');
@@ -173,8 +134,6 @@ describe('[Profile]', () => {
     });
 
     it('[Tabs hidden without contributions]', () => {
-      setIsPreciousPlastic();
-
       cy.signIn(subscriber.email, subscriber.password);
 
       cy.step('Ensure hidden with no contributions');
@@ -195,7 +154,6 @@ describe('[Profile]', () => {
     });
 
     it('should display questions count on profile tab', () => {
-      setIsPreciousPlastic();
       cy.signIn(subscriber.email, subscriber.password);
 
       cy.visit(`/u/${subscriber.username}`);
@@ -208,7 +166,6 @@ describe('[Profile]', () => {
     });
 
     it('should navigate to questions page when clicking questions count on profile tab', () => {
-      setIsPreciousPlastic();
       cy.signIn(subscriber.email, subscriber.password);
 
       cy.visit(`/u/${subscriber.username}`);
@@ -218,20 +175,16 @@ describe('[Profile]', () => {
     });
 
     it('should show questions in contributions tab', () => {
-      setIsPreciousPlastic();
       cy.signIn(subscriber.email, subscriber.password);
 
       cy.visit(`/u/${subscriber.username}`);
 
       cy.get('[data-cy=ContribTab]').click();
       cy.get('[data-testid="question-contributions"]').should('be.visible');
-      cy.get('[data-testid="question-contributions"]')
-        .contains('The first test question?')
-        .should('be.visible');
+      cy.get('[data-testid="question-contributions"]').contains('The first test question?').should('be.visible');
     });
 
     it('should link to question page when question in clicked in contributions tab', () => {
-      setIsPreciousPlastic();
       cy.signIn(subscriber.email, subscriber.password);
 
       cy.visit(`/u/${subscriber.username}`);
@@ -240,9 +193,7 @@ describe('[Profile]', () => {
       cy.get('[data-cy="the-first-test-question-link"]').click();
       cy.wait(2000);
       cy.url().should('include', `/questions/the-first-test-question?utm_source=user-profile`);
-      cy.get('[data-cy="question-title"]')
-        .should('be.visible')
-        .contains('The first test question?');
+      cy.get('[data-cy="question-title"]').should('be.visible').contains('The first test question?');
     });
   });
   describe('badges', () => {
@@ -274,8 +225,6 @@ describe('[Profile]', () => {
 
   describe('[Upgrade Badge Button]', () => {
     it('[Should not show Go PRO button when user has pro badge]', () => {
-      setIsPreciousPlastic();
-
       cy.step('User with pro badge should not see upgrade button');
       cy.signIn(subscriber.email, subscriber.password);
       cy.visit(`/u/${subscriber.username}`);
@@ -288,8 +237,6 @@ describe('[Profile]', () => {
     });
 
     it('[Should show Go PRO button when user does not have pro badge]', () => {
-      setIsPreciousPlastic();
-
       cy.intercept('GET', '/api/upgrade-badges').as('getUpgradeBadges');
 
       const newUser = generateNewUserDetails();
@@ -321,8 +268,6 @@ describe('[Profile]', () => {
     });
 
     it('[Should not show Go PRO button when viewing another user profile]', () => {
-      setIsPreciousPlastic();
-
       const newUser = generateNewUserDetails();
       cy.signUpNewUser(newUser);
 

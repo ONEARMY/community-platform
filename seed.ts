@@ -1,7 +1,6 @@
 import type {
   categoriesChildInputs,
   categoriesScalars,
-  // map_pinsScalars,
   newsScalars,
   profile_badges_relationsScalars,
   profile_badgesScalars,
@@ -22,7 +21,6 @@ import type {
   useful_votesScalars,
 } from '@snaplet/seed';
 import { createSeedClient } from '@snaplet/seed';
-// import * as allData from 'oa-shared/mocks/data'
 import libraryJson from './.snaplet/library.json';
 import questionsJson from './.snaplet/questions.json';
 import { profilesSeed } from './seed/profilesSeed';
@@ -30,10 +28,6 @@ import { usersSeed } from './seed/usersSeed';
 import { convertToSlug } from './src/utils/slug';
 
 const tenant_id = `precious-plastic`;
-
-// const MOCK_DATA = {
-//   ...allData,
-// }
 
 const _QUESTIONS_BASE: Partial<questionsScalars> = {
   tenant_id,
@@ -98,12 +92,6 @@ const _BADGES_RELATIONS_BASE: Partial<profile_badges_relationsScalars> = {
 
 const seedTags = (): tagsChildInputs => [{ ..._TAGS_BASE, name: 'tag 1' }];
 
-// const seedProfileTags = (): profile_tagsChildInputs =>
-//   MOCK_DATA.profileTags.map((tag) => ({
-//     ...tag,
-//     tenant_id,
-//   }))
-
 const seedProfileTypes = (): Partial<profile_typesScalars>[] => [
   {
     ..._TYPES_BASE,
@@ -165,16 +153,6 @@ const seedUpgradeBadges = (badges: profile_badgesScalars[]): Partial<upgrade_bad
     });
   }
 
-  // if (supporterBadge) {
-  //   upgradeBadges.push({
-  //     tenant_id,
-  //     action_label: 'Become a Supporter',
-  //     badge_id: supporterBadge.id,
-  //     is_space: false,
-  //     action_url: '',
-  //   });
-  // }
-
   return upgradeBadges;
 };
 
@@ -212,25 +190,6 @@ const seedBadgesRelations = (
   return relations;
 };
 
-// const seedMapPins = (
-//   profiles: profilesScalars[],
-// ): Partial<map_pinsScalars>[] | void => {
-//   const pins: Partial<map_pinsScalars>[] = []
-//   const pinsSeed = MOCK_DATA.mapPins
-
-//   const minLength = Math.min(pinsSeed.length, profiles.length)
-
-//   for (let i = 0; i < minLength; i++) {
-//     pins.push({
-//       ...pinsSeed[i],
-//       tenant_id,
-//       profile_id: profiles[i].id,
-//     })
-//   }
-
-//   return pins
-// }
-
 const seedCategories = (): categoriesChildInputs => [
   { ..._CATEGORIES_BASE, name: 'Questions', type: 'questions' },
   { ..._CATEGORIES_BASE, name: 'Research', type: 'research' },
@@ -240,19 +199,6 @@ const seedCategories = (): categoriesChildInputs => [
   { ..._CATEGORIES_BASE, name: 'Products', type: 'projects' },
   { ..._CATEGORIES_BASE, name: 'Important Updates', type: 'news' },
 ];
-
-// const seedComments = (
-//   profile: profilesInputs,
-//   questions: questionsInputs[],
-// ): commentsChildInputs =>
-//   Object.values(questionsJson)
-//     .flat()
-//     .flatMap((q) => q?.comments?.[profile.username!.toString()] ?? [])
-//     .map((c) => ({
-//       ..._COMMENTS_BASE,
-//       comment: c,
-//       source_id: questions.find((q) => q.id),
-//     }))
 
 const seedQuestions = (profile: profilesInputs): questionsChildInputs =>
   questionsJson[profile.username!.toString()]?.map((q) => ({
@@ -451,6 +397,8 @@ const main = async () => {
   await seed.tenant_settings([
     {
       site_name: 'Local Development Community',
+      site_description:
+        'A series of tools to collaborate around the world. Connect, share and meet each other to tackle problems.',
       site_url: 'http://localhost:3000',
       message_sign_off: 'The Dev Team',
       email_from: 'platform@onearmy.earth',
@@ -458,7 +406,28 @@ const main = async () => {
         'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/precious-plastic/pp-logo.png',
       site_favicon:
         'https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/precious-plastic/pp-logo.png',
+      academy_resource: 'https://onearmy.github.io/academy/',
+      no_messaging: false,
+      library_heading: 'The largest open source library of plastic recycling tools',
+      profile_guidelines: 'https://community.preciousplastic.com/academy/guides/platform',
+      questions_guidelines:
+        'https://community.preciousplastic.com/academy/guides/guidelines-questions',
+      supported_modules: 'library,map,research,academy,questions,news',
+      donation_settings: {
+        defaultDescription:
+          'All of the content here is free. Your donation supports this library of open source recycling knowledge. Making it possible for everyone in the world to use it and start recycling.',
+        defaultCampaignId: 'ppcpdonor',
+        spaceDescription:
+          'Support this space so they can continue to help recycling plastic and share more Open Source information. Your support fuels the small scale network of plastic recyclers.',
+        defaultImageUrl: '/assets/img/precious-plastic/donation-banner.jpg',
+      },
       tenant_id,
+      color_primary: '#fee77b',
+      color_primary_hover: '#ffde45',
+      color_accent: '#fee77b',
+      color_accent_hover: '#ffde45',
+      show_impact: true,
+      create_research_roles: ['admin', 'research_creator'],
     },
   ]);
 

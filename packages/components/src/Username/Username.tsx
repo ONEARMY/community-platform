@@ -28,7 +28,7 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
   const countryCode = user.country ? getCountryCode(user.country) : null;
 
   const UserNameBody = (
-    <Flex data-cy="Username" sx={{ fontFamily: 'body', gap: 1, alignItems: 'center' }}>
+    <Flex data-cy="Username" sx={{ fontFamily: 'body', gap: 1, alignItems: 'center', minWidth: 0 }}>
       {countryCode ? (
         <Flex data-testid="Username: known flag">
           <FlagIcon countryCode={countryCode} />
@@ -81,6 +81,8 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
       sx={{
         border: '1px solid transparent',
         display: 'inline-flex',
+        minWidth: 0,
+        overflow: 'hidden',
         paddingX: 1,
         paddingY: '3px',
         borderRadius: 1,

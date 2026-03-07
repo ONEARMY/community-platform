@@ -1,11 +1,12 @@
 import { Global, withEmotionCache } from '@emotion/react';
 import { ThemeProvider } from '@theme-ui/core';
 import { GlobalStyles } from 'oa-components';
-import { fixingFashionTheme, preciousPlasticTheme, projectKampTheme } from 'oa-themes';
+import { theme } from 'oa-themes';
 import { useContext, useEffect, useRef } from 'react';
-import type { LinksFunction, MetaFunction } from 'react-router';
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
-import { VITE_THEME } from './config/config';
+import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from 'react-router';
+import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from 'react-router';
+import { createSupabaseServerClient } from './repository/supabase.server';
+import { TenantSettingsService } from './services/tenantSettingsService.server';
 import { ClientStyleContext, ServerStyleContext } from './styles/context';
 import { generateTags } from './utils/seo.utils';
 
@@ -13,10 +14,33 @@ interface DocumentProps {
   children: React.ReactNode;
 }
 
+export async function loader({ request }: LoaderFunctionArgs) {
+  const { client } = createSupabaseServerClient(request);
+  const settings = await new TenantSettingsService(client).get();
+
+  return {
+    colorPrimary: settings.colorPrimary,
+    colorPrimaryHover: settings.colorPrimaryHover,
+    colorAccent: settings.colorAccent,
+    colorAccentHover: settings.colorAccentHover,
+    siteName: settings.siteName,
+    siteDescription: settings.siteDescription,
+  };
+}
+
 const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) => {
+  const loaderData = useLoaderData<typeof loader>();
   const serverStyleData = useContext(ServerStyleContext);
   const clientStyleData = useContext(ClientStyleContext);
   const reinjectStylesRef = useRef(true);
+
+  const cssVars = `
+    --color-primary: ${loaderData.colorPrimary};
+    --color-primary-hover: ${loaderData.colorPrimaryHover};
+    --color-accent: ${loaderData.colorAccent};
+    --color-accent-hover: ${loaderData.colorAccentHover};
+  `;
+
   // const isProd = import.meta.env.VITE_BRANCH === 'production';
 
   // Only executed on client
@@ -50,8 +74,14 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
         <link rel="preconnect" href="https://storage.googleapis.com" crossOrigin="anonymous" />
         <Meta />
         <Links />
+        <style dangerouslySetInnerHTML={{ __html: `:root { ${cssVars} }` }} />
+
         {serverStyleData?.map(({ key, ids, css }) => (
-          <style key={key} data-emotion={`${key} ${ids.join(' ')}`} dangerouslySetInnerHTML={{ __html: css }} />
+          <style
+            key={key}
+            data-emotion={`${key} ${ids.join(' ')}`}
+            dangerouslySetInnerHTML={{ __html: css }}
+          />
         ))}
       </head>
       <body>
@@ -63,18 +93,6 @@ const Document = withEmotionCache(({ children }: DocumentProps, emotionCache) =>
   );
 });
 
-const getEnvironmentTheme = () => {
-  switch (VITE_THEME) {
-    case 'project-kamp':
-      return projectKampTheme;
-    case 'fixing-fashion':
-      return fixingFashionTheme;
-    case 'precious-plastic':
-    default:
-      return preciousPlasticTheme;
-  }
-};
-
 export const links: LinksFunction = () => {
   return [
     {
@@ -85,9 +103,13 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const meta: MetaFunction = () => {
-  const theme = getEnvironmentTheme();
-  const tags = generateTags(theme.siteName, theme.description);
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  const tags = generateTags(
+    data?.siteName || '',
+    data?.siteDescription || undefined,
+    '/social-image.jpg',
+    { siteName: data?.siteName },
+  );
 
   if (import.meta.env.VITE_BRANCH !== 'production') {
     tags.push({
@@ -102,7 +124,7 @@ export const meta: MetaFunction = () => {
 export default function Root() {
   return (
     <Document>
-      <ThemeProvider theme={getEnvironmentTheme().styles}>
+      <ThemeProvider theme={theme}>
         <Outlet />
         <Global styles={GlobalStyles} />
       </ThemeProvider>

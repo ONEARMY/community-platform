@@ -1,9 +1,10 @@
 import { ExternalLink } from 'oa-components';
 import type { ProfileType } from 'oa-shared';
-import type { ThemeWithName } from 'oa-themes';
+import { useContext } from 'react';
 import { Field } from 'react-final-form';
+import { TenantContext } from 'src/pages/common/TenantContext';
 import { buttons, fields, headings } from 'src/pages/UserSettings/labels';
-import { Box, Flex, Grid, Heading, Paragraph, Text, useThemeUI } from 'theme-ui';
+import { Box, Flex, Grid, Heading, Paragraph, Text } from 'theme-ui';
 import { ProfileSection } from '../elements';
 import { ProfileTypeRadioField } from '../fields/ProfileTypeRadio.field';
 
@@ -11,10 +12,8 @@ type ProfileTypeSectionProps = {
   profileTypes: ProfileType[];
 };
 export const ProfileTypeSection = ({ profileTypes }: ProfileTypeSectionProps) => {
-  const profileGuidelinesUrl = import.meta.env.VITE_PROFILE_GUIDELINES_URL || process.env.VITE_PROFILE_GUIDELINES_URL;
+  const tenantContext = useContext(TenantContext);
   const { description, error } = fields.activities;
-  const themeUi = useThemeUI();
-  const theme = themeUi.theme as ThemeWithName;
 
   if (!profileTypes || profileTypes.length < 2) {
     return null;
@@ -29,14 +28,18 @@ export const ProfileTypeSection = ({ profileTypes }: ProfileTypeSectionProps) =>
             <Heading as="h2">{headings.focus}</Heading>
             <Paragraph>
               {description}{' '}
-              <ExternalLink href={profileGuidelinesUrl} sx={{ textDecoration: 'underline', color: 'grey' }} type="button">
+              <ExternalLink
+                href={tenantContext?.profileGuidelines}
+                sx={{ textDecoration: 'underline', color: 'grey' }}
+                type="button"
+              >
                 {buttons.guidelines}
               </ExternalLink>
             </Paragraph>
           </Flex>
 
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
-            {props.meta.error && <Text color={theme.colors.red}>{error}</Text>}
+            {props.meta.error && <Text color="red">{error}</Text>}
 
             <Grid columns={['repeat(auto-fill, minmax(125px, 1fr))']} gap={2}>
               {profileTypes

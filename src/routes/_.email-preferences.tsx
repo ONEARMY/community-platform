@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from 'react-router';
-import { redirect, useLoaderData } from 'react-router';
+import { data, redirect, useLoaderData } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
 import { SupabaseNotificationsViaEmail } from 'src/pages/UserSettings/SupabaseNotificationsViaEmail';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -9,9 +9,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
   const url = new URL(request.url);
 
-  const { data } = await client.auth.getClaims();
+  const claims = await client.auth.getClaims();
 
-  if (data?.claims) {
+  if (claims.data?.claims) {
     return redirect('/settings/notifications', { headers });
   }
 
@@ -19,30 +19,28 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   if (!code) {
     const error = `Oh no! Doesn't look you gave us the info needed to workout who you are.`;
-    return Response.json({ error }, { headers });
+    return data({ code, error }, { headers });
   }
 
-  return Response.json({ code }, { headers });
+  return data({ code, error: null }, { headers });
 };
 
 export default function Index() {
-  const data: any = useLoaderData<typeof loader>();
-  const code = data.code;
-  const error = data.error as string;
+  const data = useLoaderData<typeof loader>();
 
   return (
     <Main style={{ flex: 1 }}>
       <Flex sx={{ justifyContent: 'center', width: '100%', padding: [2, 4, 6] }}>
-        {error && (
+        {data.error && (
           <Alert variant="failure">
-            {error}
+            {data.error}
             <br />
             Click a link in a notification email again, otherwise please report the problem.
           </Alert>
         )}
-        {code && (
+        {data.code && (
           <Card sx={{ borderRadius: 3, padding: 4, maxWidth: '650px' }}>
-            <SupabaseNotificationsViaEmail userCode={code} />
+            <SupabaseNotificationsViaEmail userCode={data.code} />
           </Card>
         )}
       </Flex>

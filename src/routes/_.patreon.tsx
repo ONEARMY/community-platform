@@ -1,8 +1,8 @@
 import type { LoaderFunctionArgs } from 'react-router';
-import { redirect } from 'react-router';
+import { data, redirect } from 'react-router';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { patreonServiceServer } from 'src/services/patreonService.server';
+import { PatreonServiceServer } from 'src/services/patreonService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { Flex, Text } from 'theme-ui';
 
@@ -13,7 +13,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
 
   if (!patreonCode) {
-    return Response.json({ error: 'No code provided' }, { status: 400, headers });
+    return data({ error: 'No code provided' }, { status: 400, headers });
   }
 
   try {
@@ -26,10 +26,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const protocol = url.host.startsWith('localhost') ? 'http:' : 'https:';
     const origin = `${protocol}//${url.host}`;
 
-    await patreonServiceServer.verifyAndUpdatePatreonUser(
+    await new PatreonServiceServer(client).verifyAndUpdatePatreonUser(
       patreonCode,
       claims.data.claims.sub,
-      client,
       origin,
     );
 
@@ -38,7 +37,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     console.error('Error verifying patreon code', error);
   }
 
-  return null;
+  return data({}, { headers });
 }
 
 export const meta = mergeMeta<typeof loader>(() => {

@@ -2,7 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBQuestion, Image } from 'oa-shared';
 import { Question, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
-import { redirect, useLoaderData } from 'react-router';
+import { data, redirect, useLoaderData } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -20,13 +20,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   if (!params.slug) {
-    return Response.json({ question: null }, { headers });
+    return data({ question: null }, { headers });
   }
 
   const result = await questionServiceServer.getBySlug(client, params.slug!);
 
   if (result.error || !result.data) {
-    return Response.json({ question: null }, { headers });
+    return data({ question: null }, { headers });
   }
 
   const dbQuestion = result.data as unknown as DBQuestion;
@@ -42,7 +42,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const question = Question.fromDB(dbQuestion, [], images);
 
-  return Response.json({ question }, { headers });
+  return data({ question }, { headers });
 }
 
 async function isUserAllowedToEdit(
@@ -63,8 +63,9 @@ async function isUserAllowedToEdit(
 }
 
 export default function Index() {
-  const data: any = useLoaderData<typeof loader>();
-  const question = data.question as Question;
+  const data = useLoaderData<typeof loader>();
 
-  return <QuestionForm data-testid="question-create-form" parentType="edit" question={question} />;
+  return (
+    <QuestionForm data-testid="question-create-form" parentType="edit" question={data.question} />
+  );
 }

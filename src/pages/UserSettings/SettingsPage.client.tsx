@@ -3,11 +3,10 @@ import { observer } from 'mobx-react';
 import type { availableGlyphs } from 'oa-components';
 import { useContext, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { isPreciousPlastic } from 'src/config/config';
 import { isModuleSupported, MODULE } from 'src/modules';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import { Box, Flex, Text } from 'theme-ui';
-import { EnvironmentContext } from '../common/EnvironmentContext';
+import { TenantContext } from '../common/TenantContext';
 import { SettingsFormTab } from './SettingsFormTab';
 import { SettingsFormTabList } from './SettingsFormTabList';
 import { SettingsPageAccount } from './SettingsPageAccount';
@@ -20,14 +19,14 @@ import type { ISettingsTab } from './types';
 import '../../styles/leaflet.css';
 
 export const SettingsPage = observer(() => {
-  const env = useContext(EnvironmentContext);
+  const tenantContext = useContext(TenantContext);
   const { isComplete, missingFields, profile } = useProfileStore();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
   const isMember = !profile?.type?.isSpace;
-  const showImpactTab = !isMember && isPreciousPlastic();
-  const showMapTab = isModuleSupported(env?.VITE_SUPPORTED_MODULES || '', MODULE.MAP);
+  const showImpactTab = !isMember && tenantContext?.showImpact;
+  const showMapTab = isModuleSupported(tenantContext?.supportedModules || '', MODULE.MAP);
 
   const tabs: ISettingsTab[] = useMemo(
     () => [

@@ -7,7 +7,7 @@ import type { IContentDoc, IDBContentDoc } from './content';
 import type { IDBDocSB, IDBDownloadable, IDoc, IDownloadable } from './document';
 import type { IFilesForm } from './filesForm';
 import type { DBMedia, IMediaFile, Image, MediaFile } from './media';
-import type { SelectValue } from './other';
+import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
 
 export type ResearchStatus = 'in-progress' | 'complete';
@@ -77,13 +77,7 @@ export class ResearchItem implements IContentDoc {
     Object.assign(this, obj);
   }
 
-  static fromDB(
-    obj: DBResearchItem,
-    tags: Tag[],
-    images: Image[] = [],
-    collaborators: Author[] = [],
-    currentUsername?: string,
-  ) {
+  static fromDB(obj: DBResearchItem, tags: Tag[], images: Image[] = [], collaborators: Author[] = [], currentUsername?: string) {
     const filteredUpdates = obj.updates?.filter((update) => {
       if (update.deleted) {
         return false;
@@ -210,9 +204,7 @@ function calculateUpdateCommentCount(research: DBResearchItem): number {
     return research.comment_count;
   }
 
-  return research.updates
-    ?.filter((x) => x.deleted !== true && x.is_draft !== true)
-    .reduce((acc, x) => acc + (x.comment_count || 0), 0);
+  return research.updates?.filter((x) => x.deleted !== true && x.is_draft !== true).reduce((acc, x) => acc + (x.comment_count || 0), 0);
 }
 
 export type ResearchFormData = {

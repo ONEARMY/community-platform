@@ -2,29 +2,31 @@ import { Button, ExternalLink, FieldInput, HeroBanner, TextNotification } from '
 import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { Field, Form } from 'react-final-form';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { Link, redirect, useActionData } from 'react-router';
+import { data, Link, redirect, useActionData } from 'react-router';
 import { PasswordField } from 'src/common/Form/PasswordField';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { authServiceServer } from 'src/services/authService.server';
+import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { composeValidators, noSpecialCharacters, required } from 'src/utils/validators';
 import { Card, Flex, Heading, Label, Text } from 'theme-ui';
 import { bool, object, ref, string } from 'yup';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { client } = createSupabaseServerClient(request);
+  const { client, headers } = createSupabaseServerClient(request);
   const claims = await client.auth.getClaims();
 
   if (claims.data?.claims) {
-    return redirect('/');
+    return redirect('/', { headers });
   }
+  const tenantSettings = await new TenantSettingsService(client).get();
 
-  return null;
+  return data(tenantSettings, { headers });
 };
 
-export const meta = mergeMeta<typeof loader>(() => {
-  const title = `Sign Up - ${import.meta.env.VITE_SITE_NAME}`;
+export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
+  const title = `Sign Up - ${loaderData?.siteName}`;
 
   return generateTags(title);
 });
@@ -38,13 +40,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const username = formData.get('username') as string;
   if (!(await authServiceServer.isUsernameAvailable(username, client))) {
-    return Response.json({ error: FRIENDLY_MESSAGES['sign-up/username-taken'] }, { headers });
+    return data({ error: FRIENDLY_MESSAGES['sign-up/username-taken'] }, { headers });
   }
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
-  const { data, error } = await client.auth.signUp({
+  const signupResult = await client.auth.signUp({
     email,
     password,
     options: {
@@ -53,23 +55,23 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     },
   });
 
-  if (error) {
-    if (error.code === 'weak_password') {
-      return Response.json({ error: FRIENDLY_MESSAGES['password-weak'] }, { headers });
+  if (signupResult.error) {
+    if (signupResult.error.code === 'weak_password') {
+      return data({ error: FRIENDLY_MESSAGES['password-weak'] }, { headers });
     }
 
-    return Response.json({ error: FRIENDLY_MESSAGES['generic-error'] }, { headers });
+    return data({ error: FRIENDLY_MESSAGES['generic-error'] }, { headers });
   }
 
-  if (data.user) {
+  if (signupResult.data.user) {
     const response = await authServiceServer.createUserProfile(
-      { user: data.user, username },
+      { user: signupResult.data.user, username },
       client,
     );
 
     // This will error if there is already a profile with this auth_id + tenant_id
     if (response.error) {
-      return Response.json({ error: FRIENDLY_MESSAGES['generic-error'] }, { headers });
+      return data({ error: FRIENDLY_MESSAGES['generic-error'] }, { headers });
     }
   }
 
@@ -79,7 +81,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 const rowWidth = ['100%', '100%', `100%`];
 
 export default function Index() {
-  const actionResponse: any = useActionData<typeof action>();
+  const actionResponse = useActionData<typeof action>();
 
   const validationSchema = object({
     username: string().min(2, FRIENDLY_MESSAGES['sign-up/username-short']).required('Required'),

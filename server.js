@@ -1,37 +1,26 @@
-/* eslint-disable no-undef */
-import { createRequestHandler } from '@react-router/express';
-import compression from 'compression';
-import dotenv from 'dotenv';
-import express from 'express';
-import helmet from 'helmet';
+import { Hono } from 'hono';
+import { serveStatic } from 'hono/bun';
+import { compress } from 'hono/compress';
+import { secureHeaders } from 'hono/secure-headers';
+import { createRequestHandler } from 'react-router';
 
-dotenv.config();
-dotenv.config({ path: '.env.local', override: true });
+const isProd = process.env.NODE_ENV === 'production';
 
-const viteDevServer =
-  process.env.NODE_ENV === 'production'
-    ? undefined
-    : await import('vite').then((vite) =>
-        vite.createServer({
-          server: { middlewareMode: true },
-        }),
-      );
+const viteDevServer = isProd
+  ? undefined
+  : await import('vite').then((vite) =>
+      vite.createServer({
+        server: { middlewareMode: true },
+      }),
+    );
 
-const remixHandler = createRequestHandler({
-  build: viteDevServer
-    ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build')
-    : // eslint-disable-next-line import/no-unresolved
-      await import('./build/server/index.js'), // comment necessary because lint runs before build
-});
+const app = new Hono();
 
-const app = express();
+// Compression
+app.use(compress());
 
-app.use(compression());
-
-// http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
-app.disable('x-powered-by');
-
-const wsUrls = process.env.WS_URLS?.split(',').map((url) => url.trim());
+// Security headers (replaces helmet)
+const wsUrls = process.env.WS_URLS?.split(',').map((url) => url.trim()) ?? [];
 
 const imgSrc = [
   "'self'",
@@ -46,18 +35,12 @@ const imgSrc = [
   '*.basemaps.cartocdn.com',
   '*.supabase.co',
   process.env.SUPABASE_API_URL,
-];
+].filter(Boolean);
 
-const cdnUrl = import.meta.env?.VITE_CDN_URL || process.env?.VITE_CDN_URL;
-
-if (cdnUrl) {
-  imgSrc.push(cdnUrl);
-}
-
-// helmet config
 app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
+  secureHeaders({
+    contentSecurityPolicy: {
+      styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
       fontSrc: ["'self'", 'fonts.gstatic.com', 'fonts.googleapis.com'],
       connectSrc: [
         "'self'",
@@ -110,52 +93,75 @@ app.use(
       ],
       imgSrc: imgSrc,
       objectSrc: ["'self'"],
-      // Enforce HTTPS only on production
-      upgradeInsecureRequests: process.env.NODE_ENV === 'production' ? [] : null,
+      upgradeInsecureRequests: isProd ? [] : undefined,
     },
+    strictTransportSecurity: isProd ? 'max-age=31536000; preload' : false,
+    xContentTypeOptions: 'nosniff',
+    referrerPolicy: 'origin',
+    xXssProtection: '1; mode=block',
+    xDnsPrefetchControl: 'on',
   }),
 );
-// Enforce HTTPS only on production
-if (process.env.NODE_ENV === 'production') {
+
+// React Router request handler
+const handler = createRequestHandler(
+  viteDevServer ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build') : await import('./build/server/index.js'),
+);
+
+const port = Number(process.env.PORT) || 3456; // 3456 is default port for ci
+
+if (isProd) {
+  // Fingerprinted assets — cache forever
   app.use(
-    helmet.hsts({
-      maxAge: 31536000,
-      preload: true,
-      includeSubDomains: false,
+    '/assets/*',
+    serveStatic({
+      root: './build/client',
+      onFound: (_path, c) => {
+        c.header('Cache-Control', 'public, max-age=31536000, immutable');
+      },
     }),
   );
-}
-app.use(helmet.dnsPrefetchControl({ allow: true }));
-app.use(helmet.hidePoweredBy());
-app.use(helmet.noSniff());
-app.use(helmet.referrerPolicy({ policy: ['origin'] }));
-app.use(helmet.xssFilter());
-app.use(helmet.hidePoweredBy());
 
-app.use(function (req, res, next) {
-  if (!('JSONResponse' in res)) {
-    return next();
-  }
+  // Other static files — cache for 1 hour
+  app.use(
+    '*',
+    serveStatic({
+      root: './build/client',
+      onFound: (_path, c) => {
+        c.header('Cache-Control', 'public, max-age=3600');
+      },
+    }),
+  );
 
-  res.set('Cache-Control', 'public, max-age=31557600');
-  res.json(res.JSONResponse);
-});
+  // All remaining requests go to React Router
+  app.all('*', (c) => handler(c.req.raw));
 
-// handle asset requests
-if (viteDevServer) {
-  app.use(viteDevServer.middlewares);
+  Bun.serve({
+    port,
+    hostname: '0.0.0.0',
+    fetch: app.fetch,
+  });
+
+  console.log(`Hono server started on http://0.0.0.0:${port}`);
 } else {
-  // Vite fingerprints its assets so we can cache forever.
-  app.use('/assets', express.static('build/client/assets', { immutable: true, maxAge: '1y' }));
+  // Development: Node-compatible HTTP server so Vite middleware works
+  const http = await import('node:http');
+  const { getRequestListener } = await import('@hono/node-server');
+
+  // All requests go to React Router
+  app.all('*', (c) => handler(c.req.raw));
+
+  const honoListener = getRequestListener(app.fetch);
+
+  const server = http.createServer((req, res) => {
+    // Vite middleware handles HMR, module transforms, and client assets.
+    // When it doesn't handle the request it calls next(), falling through to Hono.
+    viteDevServer.middlewares(req, res, () => {
+      honoListener(req, res);
+    });
+  });
+
+  server.listen(port, '0.0.0.0', () => {
+    console.log(`Hono dev server started on http://0.0.0.0:${port}`);
+  });
 }
-
-app.use(express.static('build/client', { maxAge: '1h' }));
-
-app.all('*', remixHandler);
-
-let port = process.env.PORT || 3456; // 3456 is default port for ci
-
-app.listen(port, '0.0.0.0', () => {
-  // eslint-disable-next-line no-console, no-undef
-  console.log(`Express server started on http://0.0.0.0:${port}`);
-});

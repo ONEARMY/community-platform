@@ -1,7 +1,6 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { TenantSettings } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { sendEmail } from '../.server/resend';
 import ReceiverMessage from '../.server/templates/ReceiverMessage';
 
@@ -25,7 +24,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const { valid, status, statusText } = await validateRequest(
       request,
-      claims.data.claims.email,
+      claims.data.claims.email!,
       data,
     );
 
@@ -36,7 +35,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const userProfile = await client
       .from('profiles')
       .select('id,username')
-      .eq('username', claims.data.claims.user_metadata.username);
+      .eq('username', claims.data.claims.user_metadata?.username);
 
     const recipientProfile = await client
       .from('profiles')
@@ -71,7 +70,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       );
     }
 
-    const settings = await getTenantSettings(client);
+    const settings = await new TenantSettingsService(client).get();
 
     const messageResult = await client.from('messages').insert({
       sender_id: from,
@@ -130,22 +129,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return Response.json({ error }, { headers, status: 500, statusText: 'Error sending message' });
   }
 };
-
-export async function getTenantSettings(client: SupabaseClient): Promise<TenantSettings> {
-  const { data } = await client
-    .from('tenant_settings')
-    .select('site_name,site_url,message_sign_off,email_from,site_image')
-    .single();
-
-  return {
-    siteName: data?.site_name || 'The Community Platform',
-    siteUrl: data?.site_url || 'https://community.preciousplastic.com',
-    messageSignOff: data?.message_sign_off || 'One Army',
-    emailFrom: data?.email_from || 'hello@onearmy.earth',
-    siteImage:
-      data?.site_image || 'https://community.preciousplastic.com/assets/img/one-army-logo.png',
-  };
-}
 
 async function validateRequest(request: Request, userEmail: string | null, data: any) {
   if (request.method !== 'POST') {

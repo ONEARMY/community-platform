@@ -20,9 +20,7 @@ describe('[Library]', () => {
       cy.step('Has expected page title');
       cy.title().should('include', `Library`);
       cy.step('Displays Item count');
-      cy.contains(
-        `${MOCK_DATA.projects.filter((p) => !p.deleted && p.moderation === 'accepted').length} ${label}`,
-      );
+      cy.contains(`${MOCK_DATA.projects.filter((p) => !p.deleted && p.moderation === 'accepted').length} ${label}`);
 
       cy.step('Can search for items');
       cy.get('[data-cy=library-search-box]').click().type('brick');
@@ -70,7 +68,7 @@ describe('[Library]', () => {
         cy.get('[data-cy=edit]').should('not.exist');
 
         cy.step('Project has basic info');
-        cy.title().should('eq', `${item.title} - Library - Precious Plastic`);
+        cy.title().should('eq', `${item.title} - Library - Test Site`);
 
         cy.step('All metadata visible');
         cy.get('[data-cy=ContentStatistics-views]').contains(/\d/);
@@ -82,10 +80,7 @@ describe('[Library]', () => {
           expect($summary).to.contain(users.settings_workplace_new.username, 'Author');
           expect($summary).to.contain('Updated', 'Edit');
           expect($summary).to.contain('Make an interlocking brick', 'Title');
-          expect($summary).to.contain(
-            'show you how to make a brick using the injection machine',
-            'Description',
-          );
+          expect($summary).to.contain('show you how to make a brick using the injection machine', 'Description');
           expect($summary).to.contain('3-4 weeks', 'Duration');
           expect($summary).to.contain(DifficultyLevelRecord.hard, 'Difficulty');
 
@@ -106,11 +101,7 @@ describe('[Library]', () => {
 
         cy.step('Breadcrumbs work');
         cy.get('[data-cy=breadcrumbsItem]').first().should('contain', 'Library');
-        cy.get('[data-cy=breadcrumbsItem]')
-          .first()
-          .children()
-          .should('have.attr', 'href')
-          .and('equal', `/library`);
+        cy.get('[data-cy=breadcrumbsItem]').first().children().should('have.attr', 'href').and('equal', `/library`);
 
         cy.get('[data-cy=breadcrumbsItem]').eq(1).should('contain', item.category!.name);
 

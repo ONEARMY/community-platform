@@ -1,8 +1,7 @@
 import type { Comment } from 'oa-shared';
-import type { ReactNode } from 'react';
 import { useContext } from 'react';
-import type { ThemeUIStyleObject } from 'theme-ui';
-import { Box, Flex, Text } from 'theme-ui';
+import { Avatar, Box, Flex, Text } from 'theme-ui';
+import defaultProfileImage from '../../assets/images/default_member.svg';
 import { CommentAvatar } from '../CommentAvatar/CommentAvatar';
 import { CommentBody } from '../CommentBody/CommentBody';
 import { DisplayDate } from '../DisplayDate/DisplayDate';
@@ -56,13 +55,15 @@ export const CommentDisplay = (props: IProps) => {
           sx={{
             flexDirection: 'column',
             position: 'relative',
-            display: 'inline-block',
+            display: ['none', 'inline-block'],
           }}
         >
           <CommentAvatar
             displayName={comment.createdBy?.displayName}
             photo={comment.createdBy?.photo?.publicUrl}
-            isCommentAuthor={comment.createdBy?.id ? authors.includes(comment.createdBy?.id) : false}
+            isCommentAuthor={
+              comment.createdBy?.id ? authors.includes(comment.createdBy?.id) : false
+            }
           />
         </Box>
 
@@ -82,6 +83,22 @@ export const CommentDisplay = (props: IProps) => {
               }}
             >
               <Flex sx={{ alignItems: 'center', gap: 2 }}>
+                <Box sx={{ display: ['flex', 'none'] }}>
+                  <Avatar
+                    src={comment.createdBy?.photo?.publicUrl ?? defaultProfileImage}
+                    sx={{
+                      objectFit: 'cover',
+                      width: '30px',
+                      height: '30px',
+                    }}
+                    alt={
+                      comment.createdBy?.displayName
+                        ? `Avatar of ${comment.createdBy.displayName}`
+                        : 'Avatar of comment author'
+                    }
+                    loading="lazy"
+                  />
+                </Box>
                 {comment.createdBy && <Username user={comment.createdBy} />}
                 <Text sx={{ fontSize: 1, color: 'darkGrey' }}>
                   <DisplayDate createdAt={comment.createdAt} showLabel={false} />

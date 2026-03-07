@@ -1,13 +1,10 @@
 import '@testing-library/jest-dom/vitest';
-
 import { act, waitFor } from '@testing-library/react';
 import { FactoryMapPin } from 'src/test/factories/MapPin';
 import { factoryImage, FactoryUser } from 'src/test/factories/User';
 import { describe, expect, it, vi } from 'vitest';
-
 import { FormProvider } from './__mocks__/FormProvider';
 import { SettingsPageMapPin } from './SettingsPageMapPin';
-
 import type { PinProfile, ProfileType } from 'oa-shared';
 
 const completeProfile = {

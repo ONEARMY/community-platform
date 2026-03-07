@@ -1,3 +1,4 @@
+import type { LatLng } from 'leaflet';
 import { MapPin } from './MapPin.client';
 
 import type { Meta, StoryFn } from '@storybook/react-vite';
@@ -12,8 +13,9 @@ export const Default: StoryFn<typeof MapPin> = () => {
   return (
     <MapPin
       position={position}
-      onDrag={(lng: number) => {
-        position.lng = lng;
+      onDrag={(latlng: LatLng) => {
+        position.lat = latlng.lat;
+        position.lng = latlng.lng;
       }}
     />
   );

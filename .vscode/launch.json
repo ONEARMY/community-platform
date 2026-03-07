@@ -7,14 +7,14 @@
   "configurations": [
     {
       "name": "Community Platform",
-      "command": "yarn start",
+      "command": "bun run start",
       "request": "launch",
       "type": "node-terminal",
       "cwd": "${workspaceFolder}"
     },
     {
       "name": "Community Platform Unit Tests",
-      "command": "yarn test:unit",
+      "command": "bun run test:unit",
       "request": "launch",
       "type": "node-terminal",
       "cwd": "${workspaceFolder}"

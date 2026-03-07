@@ -1,6 +1,5 @@
 import type { DBProfile, IModeration, Profile } from 'oa-shared';
 import { UserRole } from 'oa-shared';
-import { getConfigurationOption, NO_MESSAGING } from 'src/config/config';
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants';
 
 const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi;
@@ -11,8 +10,7 @@ export const stripSpecialCharacters = (text: string) => {
 };
 
 // get special characters from string using the same pattern as stripSpecialCharacters
-export const getSpecialCharacters = (text: string): string[] =>
-  Array.from(text.matchAll(specialCharactersPattern)).map((x) => x[0]);
+export const getSpecialCharacters = (text: string): string[] => Array.from(text.matchAll(specialCharactersPattern)).map((x) => x[0]);
 
 // convert to lower case and remove any special characters
 export const formatLowerNoSpecial = (text: string) => {
@@ -55,20 +53,10 @@ export const getDay = (d: Date) => {
   return `${d.getDate()}`;
 };
 
-export const hasAdminRights = (user?: Partial<Profile>) => {
+export const hasAdminRights = (user?: DBProfile | Partial<Profile>) => {
   if (!user) {
     return false;
   }
-  const roles = user.roles && Array.isArray(user.roles) ? user.roles : [];
-
-  return roles.includes(UserRole.ADMIN);
-};
-
-export const hasAdminRightsSupabase = (user?: DBProfile) => {
-  if (!user) {
-    return false;
-  }
-
   const roles = user.roles && Array.isArray(user.roles) ? user.roles : [];
 
   return roles.includes(UserRole.ADMIN);
@@ -88,10 +76,6 @@ export const isUserBlockedFromMessaging = (user: Partial<Profile> | null | undef
   return user.isBlockedFromMessaging;
 };
 
-export const isMessagingModuleOff = () => {
-  return NO_MESSAGING === 'true';
-};
-
 export const isUserContactable = (user: Partial<Profile>) => {
   if (typeof user.isContactable === 'boolean') {
     return isContactable(user.isContactable);
@@ -101,20 +85,8 @@ export const isUserContactable = (user: Partial<Profile>) => {
 };
 
 export const isContactable = (preference: boolean | null) => {
-  if (isMessagingModuleOff()) {
-    return false;
-  }
-
   return typeof preference === 'boolean' ? preference : DEFAULT_PUBLIC_CONTACT_PREFERENCE;
 };
-
-export const getProjectEmail = (subject: string) => {
-  const site = getConfigurationOption('VITE_THEME', 'precious-plastic');
-  return `mailto:platform@onearmy.earth?subject=${subject}%20${site}`;
-};
-
-export const randomIntFromInterval = (min, max) =>
-  Math.floor(Math.random() * (max - min + 1) + min);
 
 export const buildStatisticsLabel = ({
   stat,

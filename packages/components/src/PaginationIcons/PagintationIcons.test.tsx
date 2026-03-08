@@ -10,6 +10,7 @@ describe('PaginationIcons', () => {
     const { getByTestId, getByTitle } = render(
       <PaginationIcons
         hidden={false}
+        ariaLabel='Navigate Previous page'
         title="Previous"
         directionIcon="chevron-left"
         onClick={() => {}}
@@ -23,6 +24,7 @@ describe('PaginationIcons', () => {
   it('hides the button when hidden prop is true', () => {
     const { getByTestId } = render(
       <PaginationIcons
+        ariaLabel='Navigate Previous page'
         hidden={true}
         title="Previous"
         directionIcon="chevron-left"
@@ -37,6 +39,7 @@ describe('PaginationIcons', () => {
   it('displays the button when hidden prop is false', () => {
     const { getByTestId } = render(
       <PaginationIcons
+        ariaLabel='Navigate next page'
         hidden={false}
         title="Next"
         directionIcon="chevron-right"
@@ -52,6 +55,7 @@ describe('PaginationIcons', () => {
     const handleClick = vi.fn();
     const { getByTestId } = render(
       <PaginationIcons
+        ariaLabel='Navigate next page'
         hidden={false}
         title="Next"
         directionIcon="chevron-right"
@@ -71,6 +75,7 @@ describe('PaginationIcons', () => {
     icons.forEach((icon) => {
       const { getByTestId } = render(
         <PaginationIcons
+        ariaLabel='Navigate next page'
           hidden={false}
           title={`Icon: ${icon}`}
           directionIcon={icon}

@@ -21,6 +21,7 @@ export const PaginationIcons = ({ hidden, title, ariaLabel, directionIcon, onCli
       title={title}
       aria-label={ariaLabel}
       sx={{
+        display: 'flex',
         minWidth: '44px',
         minHeight: '44px',
         justifyContent: 'center',

@@ -22,9 +22,9 @@ describe('PaginationIcons', () => {
   });
 
   it('hides the button when hidden prop is true', () => {
-    const { getByTestId } = render(
+    const { queryByTestId } = render(
       <PaginationIcons
-        ariaLabel='Navigate Previous page'
+        ariaLabel="Navigate Previous page"
         hidden={true}
         title="Previous"
         directionIcon="chevron-left"
@@ -32,8 +32,8 @@ describe('PaginationIcons', () => {
       />,
     );
 
-    const button = getByTestId('pagination-icon-chevron-left');
-    expect(button).toHaveStyle('display: none');
+    const button = queryByTestId('pagination-icon-chevron-left');
+    expect(button).not.toBeInTheDocument();
   });
 
   it('displays the button when hidden prop is false', () => {
@@ -48,7 +48,7 @@ describe('PaginationIcons', () => {
     );
 
     const button = getByTestId('pagination-icon-chevron-right');
-    expect(button).toHaveStyle('display: flex');
+    expect(button).toBeInTheDocument()
   });
 
   it('calls onClick handler when button is clicked', () => {

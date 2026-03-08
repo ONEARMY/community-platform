@@ -1,6 +1,7 @@
 /** @jsxImportSource theme-ui */
 
 import styled from '@emotion/styled';
+import type { Colors } from 'oa-themes';
 import { IconContext } from 'react-icons';
 import {
   FaCloudUploadAlt,
@@ -40,7 +41,7 @@ import type { IGlyphs } from './types';
 
 export interface IProps extends React.ButtonHTMLAttributes<HTMLElement> {
   glyph: keyof IGlyphs;
-  color?: string;
+  color?: Colors;
   filter?: string;
   size?: number | string;
   marginRight?: string;
@@ -209,7 +210,6 @@ export const Icon = (props: IconProps) => {
         opacity: props.opacity ?? '1',
         '& svg': {
           fontSize: definedSize,
-          fill: props.color,
         },
         display: 'flex',
         alignItems: 'center',

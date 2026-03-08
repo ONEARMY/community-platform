@@ -1,8 +1,10 @@
 export interface PlatformTheme {
   text: any;
   colors: {
-    primary: { base: string; hover: string };
-    accent: { base: string; hover: string };
+    primary: string;
+    primaryHover: string;
+    accent: string;
+    accentHover: string;
     white: string;
     black: string;
     softyellow: string;

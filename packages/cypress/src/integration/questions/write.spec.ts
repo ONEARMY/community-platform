@@ -1,3 +1,4 @@
+import { MOCK_DATA } from '../../data';
 import { generateAlphaNumeric, generateNewUserDetails } from '../../utils/TestUtils';
 
 let initialRandomId;
@@ -147,9 +148,33 @@ describe('[Question]', () => {
       cy.url().should('contain', '/sign-in?returnUrl=%2Fquestions%2Fcreate');
     });
 
-    // it('[Admin]', () => {
-    // Should check an admin can edit other's content
-    // })
+    it('[By Admin]', () => {
+      const question = MOCK_DATA.questions[0];
+
+      cy.signIn('demo_admin@example.com', 'demo_admin');
+
+      cy.step('Question is not authored by the admin');
+      cy.visit(`/questions/${question.slug}`);
+      cy.get('[data-cy=Username]').should('not.contain', 'demo_admin');
+
+      cy.step('Admin can see the edit button on another user\'s question');
+      cy.get('[data-cy=edit]').should('be.visible');
+
+      cy.step('Admin can access the edit page');
+      cy.get('[data-cy=edit]').click();
+      cy.url().should('include', `/questions/${question.slug}/edit`);
+
+      cy.step('Admin can edit the question description');
+      cy.get('[data-cy=field-description]').should('be.visible');
+
+      const adminEdit = ' [edited by admin]';
+      cy.get('[data-cy=field-description]').type(adminEdit, { delay: 5 });
+      cy.get('[data-cy=submit]').click();
+
+      cy.step('Updated content is visible');
+      cy.url().should('include', `/questions/${question.slug}`);
+      cy.contains(adminEdit);
+    });
   });
 
   describe('[Delete a question]', () => {

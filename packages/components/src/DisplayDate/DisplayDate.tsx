@@ -5,9 +5,11 @@ import './display-date.css';
 
 type DateType = string | number | Date;
 
+export type PublishedAction = 'Published' | 'Started' | 'Asked';
+
 export interface IProps {
   createdAt: DateType;
-  publishedAction?: 'Published' | 'Started' | 'Asked';
+  publishedAction?: PublishedAction;
   showLabel?: boolean;
   modifiedAt?: DateType | null;
   publishedAt?: DateType | null;

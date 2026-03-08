@@ -1,3 +1,4 @@
+import type { PublishedAction } from 'oa-components';
 import { DisplayDate, Username } from 'oa-components';
 import type { Author } from 'oa-shared';
 import { Flex, Text } from 'theme-ui';
@@ -5,7 +6,7 @@ import { Flex, Text } from 'theme-ui';
 interface IProps {
   author: Author;
   createdAt?: string | number | Date;
-  publishedAction?: string;
+  publishedAction?: PublishedAction;
   modifiedAt?: string | number | Date | null;
   publishedAt?: string | number | Date | null;
 }

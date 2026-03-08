@@ -15,10 +15,15 @@ import { convertToSlug } from 'src/utils/slug';
 import { validateImage } from 'src/utils/storage';
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
+  const id = Number(params.id);
+
+  if (request.method === 'DELETE') {
+    return await deleteNews(request, id);
+  }
+
   const { client, headers } = createSupabaseServerClient(request);
 
   try {
-    const id = Number(params.id);
     const formData = await request.formData();
     const data = {
       body: formData.get('body') as string,
@@ -38,7 +43,14 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const currentNews = await newsServiceServer.getById(id, client);
 
-    const { valid, status, statusText } = await validateRequest(params, request, claims.data.claims.sub, data, currentNews, client);
+    const { valid, status, statusText } = await validateRequest(
+      params,
+      request,
+      claims.data.claims.sub,
+      data,
+      currentNews,
+      client,
+    );
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText });
@@ -86,7 +98,11 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const news = News.fromDB(newsResult.data[0], []);
 
     if (newHeroImage) {
-      const mediaFiles = await storageServiceServer.uploadImage([newHeroImage], `news/${news.id}`, client);
+      const mediaFiles = await storageServiceServer.uploadImage(
+        [newHeroImage],
+        `news/${news.id}`,
+        client,
+      );
 
       if (mediaFiles?.media?.length) {
         await client
@@ -96,7 +112,11 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
           })
           .eq('id', news.id);
 
-        const [image] = storageServiceServer.getPublicUrls(client, mediaFiles.media, IMAGE_SIZES.GALLERY);
+        const [image] = storageServiceServer.getPublicUrls(
+          client,
+          mediaFiles.media,
+          IMAGE_SIZES.GALLERY,
+        );
 
         news.heroImage = image;
       }
@@ -110,6 +130,50 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     return Response.json({}, { headers, status: 500, statusText: 'Error creating news' });
   }
 };
+
+async function deleteNews(request: Request, id: number) {
+  const { client, headers } = createSupabaseServerClient(request);
+
+  try {
+    const claims = await client.auth.getClaims();
+
+    if (!claims.data?.claims) {
+      return Response.json({}, { headers, status: 401 });
+    }
+
+    const profileService = new ProfileServiceServer(client);
+    const profile = await profileService.getByAuthId(claims.data.claims.sub);
+
+    if (!profile) {
+      return Response.json({}, { headers, status: 400, statusText: 'User not found' });
+    }
+
+    const news = await newsServiceServer.getById(id, client);
+
+    if (!news) {
+      return Response.json({}, { headers, status: 404, statusText: 'News not found' });
+    }
+
+    const isCreator = news.created_by === profile.id;
+
+    if (!isCreator && !hasAdminRights(profile)) {
+      return Response.json({}, { headers, status: 403, statusText: 'Unauthorized' });
+    }
+
+    await client
+      .from('news')
+      .update({
+        modified_at: new Date(),
+        deleted: true,
+      })
+      .eq('id', id);
+
+    return Response.json({}, { status: 200, headers });
+  } catch (error) {
+    console.error('Delete news error:', error);
+    return Response.json({}, { status: 500, headers });
+  }
+}
 
 async function validateRequest(
   params: Params<string>,
@@ -139,7 +203,10 @@ async function validateRequest(
     return { status: 400, statusText: 'News not found' };
   }
 
-  if (currentNews.slug !== data.slug && (await contentServiceServer.isDuplicateExistingSlug(data.slug, currentNews.id, client, 'news'))) {
+  if (
+    currentNews.slug !== data.slug &&
+    (await contentServiceServer.isDuplicateExistingSlug(data.slug, currentNews.id, client, 'news'))
+  ) {
     return {
       status: 409,
       statusText: 'This news already exists',

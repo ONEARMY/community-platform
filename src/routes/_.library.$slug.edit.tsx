@@ -18,7 +18,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirectServiceServer.redirectSignIn(`/library/${params.slug}/edit`, headers);
   }
 
-  const authId = data.claims.sub;
+  const authId = claims.data.claims.sub;
   const projectDb = (await libraryServiceServer.getBySlug(client, params.slug as string))
     .data as unknown as DBProject;
   if (

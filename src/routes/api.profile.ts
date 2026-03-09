@@ -1,4 +1,4 @@
-import type { Image, ProfileFormData } from 'oa-shared';
+import { FRIENDLY_MESSAGES, type Image, type ProfileFormData } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';

@@ -2,11 +2,10 @@ import type { DBAuthor } from './author';
 import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
-import type { IConvertedFileMeta } from './common';
 import type { IContentDoc, IDBContentDoc } from './content';
 import type { IDBDocSB, IDBDownloadable, IDoc, IDownloadable } from './document';
 import type { IFilesForm } from './filesForm';
-import type { DBMedia, IMediaFile, Image, MediaFile } from './media';
+import type { DBMedia, FullMedia, IMediaFile } from './media';
 import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
 
@@ -35,7 +34,7 @@ export class DBResearchItem implements IDBContentDoc {
   slug: string;
   previous_slugs: string[] | null;
   description: string;
-  image: DBMedia | null;
+  image: FullMedia | null;
   category_id?: number;
   tags: number[];
   status: ResearchStatus;
@@ -56,7 +55,7 @@ export class ResearchItem implements IContentDoc {
   slug: string;
   previousSlugs: string[];
   description: string;
-  image: Image | null;
+  image: FullMedia | null;
   deleted: boolean;
   usefulCount: number;
   usefulVotesLastWeek?: number;
@@ -77,7 +76,13 @@ export class ResearchItem implements IContentDoc {
     Object.assign(this, obj);
   }
 
-  static fromDB(obj: DBResearchItem, tags: Tag[], images: Image[] = [], collaborators: Author[] = [], currentUsername?: string) {
+  static fromDB(
+    obj: DBResearchItem,
+    tags: Tag[],
+    images: FullMedia[] = [],
+    collaborators: Author[] = [],
+    currentUsername?: string,
+  ) {
     const filteredUpdates = obj.updates?.filter((update) => {
       if (update.deleted) {
         return false;
@@ -164,7 +169,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
   description: string;
   fileDownloadCount: number;
   files: IMediaFile[] | null;
-  images: Image[] | null;
+  images: FullMedia[] | null;
   isDraft: boolean;
   hasFileLink: boolean;
   modifiedAt: Date | null;
@@ -177,7 +182,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
     Object.assign(this, obj);
   }
 
-  static fromDB(obj: DBResearchUpdate, images?: Image[]) {
+  static fromDB(obj: DBResearchUpdate, images?: FullMedia[]) {
     return new ResearchUpdate({
       id: obj.id,
       createdAt: new Date(obj.created_at),
@@ -204,7 +209,9 @@ function calculateUpdateCommentCount(research: DBResearchItem): number {
     return research.comment_count;
   }
 
-  return research.updates?.filter((x) => x.deleted !== true && x.is_draft !== true).reduce((acc, x) => acc + (x.comment_count || 0), 0);
+  return research.updates
+    ?.filter((x) => x.deleted !== true && x.is_draft !== true)
+    .reduce((acc, x) => acc + (x.comment_count || 0), 0);
 }
 
 export type ResearchFormData = {
@@ -213,17 +220,12 @@ export type ResearchFormData = {
   category?: SelectValue;
   tags?: number[];
   collaborators?: string[];
-  image?: IConvertedFileMeta;
-  existingImage: Image | null;
+  image: FullMedia | null;
 };
 
 export interface ResearchUpdateFormData extends IFilesForm {
   title: string;
   description: string;
-  images?: File[];
-  existingImages: Image[] | null;
-  files?: File[];
-  existingFiles?: MediaFile[] | null;
-  fileLink?: string;
+  images: FullMedia[] | null;
   videoUrl?: string;
 }

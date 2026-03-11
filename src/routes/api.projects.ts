@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBProfile, DBProject, DBProjectStep, Moderation } from 'oa-shared';
+import type { DBProfile, DBProject, DBProjectStep, FullMedia, Moderation } from 'oa-shared';
 import { Project, ProjectStep, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
@@ -12,7 +12,6 @@ import { storageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { convertToSlug } from 'src/utils/slug';
-import { validateImage } from 'src/utils/storage';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
@@ -100,7 +99,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       moderation: isDraft ? undefined : ('awaiting-moderation' as Moderation),
       stepCount: parseInt(formData.get('stepCount') as string),
       slug: convertToSlug((formData.get('title') as string) || ''),
-      uploadedCoverImage: formData.get('coverImage') as File | null,
+      coverImage: formData.has('coverImage')
+        ? (JSON.parse(formData.get('coverImage') as string) as FullMedia)
+        : null,
       uploadedFiles: formData.getAll('files') as File[] | null,
     };
 
@@ -130,19 +131,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const projectDb = await createProject(client, data, profile);
     const project = Project.fromDB(projectDb, []);
 
-    if (data.uploadedCoverImage) {
-      const images = await uploadAndUpdateImage(
-        [data.uploadedCoverImage],
-        `projects/${project.id}`,
-        'projects',
-        'cover_image',
-        project.id,
-        client,
-      );
-      if (images && images[0]) {
-        project.coverImage = images[0];
-      }
-    }
+    // Move cover image from users folder to projects folder if exists
+    project.coverImage = data.coverImage;
 
     if (data.uploadedFiles) {
       await uploadAndUpdateFiles(data.uploadedFiles, `projects/${project.id}`, project, client);
@@ -163,7 +153,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 async function uploadSteps(data, formData, projectDb, client) {
   const steps: ProjectStep[] = [];
   for (let i = 0; i < data.stepCount; i++) {
-    const images = formData.getAll(`steps.[${i}].images`) as File[];
+    const existingImagePaths = formData.getAll(`steps.[${i}].images`) as string[];
 
     const stepDb = await createStep(client, {
       title: formData.get(`steps.[${i}].title`) as string,
@@ -174,14 +164,41 @@ async function uploadSteps(data, formData, projectDb, client) {
     });
     const step = ProjectStep.fromDB(stepDb);
 
-    step.images = await uploadAndUpdateImage(
-      images,
-      `projects/${projectDb.id}`,
-      'project_steps',
-      'images',
-      step.id,
-      client,
-    );
+    // Handle pre-uploaded images - move them from user folder to project folder
+    const movedImages: any[] = [];
+    if (existingImagePaths && existingImagePaths.length > 0) {
+      for (const imagePath of existingImagePaths) {
+        if (imagePath) {
+          const fileName = imagePath.split('/').pop() || 'image';
+          const movedImage = await storageServiceServer.moveImage(
+            imagePath,
+            `projects/${projectDb.id}`,
+            fileName,
+            client,
+          );
+          if (movedImage) {
+            movedImages.push(movedImage);
+          }
+        }
+      }
+    }
+
+    // Update step with moved images
+    if (movedImages.length > 0) {
+      const result = await client
+        .from('project_steps')
+        .update({
+          images: movedImages,
+        })
+        .eq('id', step.id)
+        .select();
+
+      if (result.data && result.data[0]) {
+        step.images = storageServiceServer.getPublicUrls(client, result.data[0].images);
+      }
+    } else {
+      step.images = [];
+    }
 
     steps.push(step);
   }
@@ -212,15 +229,7 @@ async function validateRequest(request: Request, data: any, client: SupabaseClie
     return { status: 409, statusText: 'This project already exists' };
   }
 
-  const imageValidation = validateImage(data.uploadedCoverImage);
-
-  if (!imageValidation.valid) {
-    return {
-      value: false,
-      status: 400,
-      statusText: imageValidation.error?.message,
-    };
-  }
+  // No need to validate cover image since it's uploaded immediately via /api/images
 
   return { valid: true };
 }
@@ -293,31 +302,6 @@ async function createStep(
   }
 
   return data[0] as unknown as DBProjectStep;
-}
-
-async function uploadAndUpdateImage(
-  files: File[],
-  path: string,
-  tableName: 'projects' | 'project_steps',
-  fieldName: string,
-  id: number,
-  client: SupabaseClient,
-) {
-  const mediaResult = await storageServiceServer.uploadImage(files, path, client);
-
-  if (mediaResult?.media && mediaResult.media.length > 0) {
-    const result = await client
-      .from(tableName)
-      .update({
-        [fieldName]: fieldName === 'cover_image' ? mediaResult.media[0] : mediaResult.media,
-      })
-      .eq('id', id)
-      .select();
-
-    if (result.data) {
-      return result.data[0][fieldName];
-    }
-  }
 }
 
 async function uploadAndUpdateFiles(

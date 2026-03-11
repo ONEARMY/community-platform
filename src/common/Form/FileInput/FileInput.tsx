@@ -1,17 +1,12 @@
-import type { Meta, UppyFile } from '@uppy/core';
-import Uppy from '@uppy/core';
-import DashboardModal from '@uppy/react/dashboard-modal';
 import { Button } from 'oa-components';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Flex } from 'theme-ui';
+import { useRef, useState } from 'react';
+import { Flex, Text } from 'theme-ui';
 import { FileDisplay } from './FileDisplay';
-import { UPPY_CONFIG } from './UppyConfig';
-import { UPPY_CONFIG_ADMIN } from './UppyConfigAdmin';
 
-type FileType = UppyFile<Meta, Record<string, never>>;
-
-import '@uppy/core/css/style.min.css';
-import '@uppy/dashboard/css/style.min.css';
+const MaxFileSize = {
+  user: 50 * 1048576,
+  admin: 300 * 1048576,
+};
 
 interface IProps {
   onFilesChange?: (files: (Blob | File)[]) => void;
@@ -19,70 +14,68 @@ interface IProps {
   admin: boolean;
 }
 
+type FileWithId = File & { id: string };
+
 export const FileInput = (props: IProps) => {
-  const [open, setOpen] = useState(false);
-  const [fileState, setFileState] = useState<Record<string, FileType>>({}); // Add this state
-  const uploadConfig = props.admin ? UPPY_CONFIG_ADMIN : UPPY_CONFIG;
+  const [files, setFiles] = useState<FileWithId[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const uppyRef = useRef<Uppy | null>(null);
+  const maxFileSize = props.admin ? MaxFileSize.admin : MaxFileSize.user;
 
-  if (!uppyRef.current) {
-    uppyRef.current = new Uppy({
-      ...uploadConfig,
-      onBeforeUpload: () => uploadTriggered(),
-    });
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setError(null);
+    const selectedFiles = Array.from(event.target.files || []);
 
-    // Add event listener for file removal
-    uppyRef.current.on('file-removed', () => {
-      const newState = uppyRef.current!.getState().files;
-      setFileState(newState);
-      // Trigger callback when files are removed
-      props.onFilesChange?.(Object.values(newState).map((file) => file.data) as File[]);
-    });
-    uppyRef.current.on('file-added', () => {
-      const newState = uppyRef.current!.getState().files;
-      setFileState(newState);
-      // Trigger callback when a file is added
-      props.onFilesChange?.(Object.values(newState).map((file) => file.data) as File[]);
-    });
-    uppyRef.current.on('files-added', () => {
-      const newState = uppyRef.current!.getState().files;
-      setFileState(newState);
-      // Trigger callback when multiple files are added
-      props.onFilesChange?.(Object.values(newState).map((file) => file.data) as File[]);
-    });
-  }
-  useEffect(() => {
-    return () => {
-      uppyRef.current?.destroy();
-    };
-  }, []);
+    // Check number of files
+    if (files.length + selectedFiles.length > 5) {
+      setError(`You can only upload up to 5 files`);
+      return;
+    }
 
-  const remove = (id: string) => {
-    uppyRef.current!.removeFile(id);
+    // Validate file sizes
+    const oversizedFiles = selectedFiles.filter((file) => file.size > maxFileSize);
+
+    if (oversizedFiles.length > 0) {
+      const maxSizeMB = Math.floor(maxFileSize / 1048576);
+      setError(`Some files exceed the maximum size of ${maxSizeMB}MB`);
+      return;
+    }
+
+    // Add unique IDs to files
+    const newFiles = selectedFiles.map((file) =>
+      Object.assign(file, { id: `${file.name}-${file.size}-${Date.now()}-${Math.random()}` }),
+    ) as FileWithId[];
+
+    const updatedFiles = [...files, ...newFiles];
+    setFiles(updatedFiles);
+    props.onFilesChange?.(updatedFiles);
+
+    // Reset input value to allow selecting the same file again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
-  const files = useMemo(() => {
-    return Object.values(fileState) as FileType[];
-  }, [fileState]);
-
-  // Memoize callback trigger function
-  const triggerCallback = useCallback(() => {
-    // Ensure we're passing the actual File objects from the data property
-    const fileObjects = files.map((meta) => meta.data) as File[];
-    props.onFilesChange?.(fileObjects);
-  }, [props.onFilesChange, files]);
-
-  const uploadTriggered = () => {
-    setOpen(false);
-    return uppyRef.current!.getState().files;
+  const remove = (id: string) => {
+    const updatedFiles = files.filter((file) => file.id !== id);
+    setFiles(updatedFiles);
+    props.onFilesChange?.(updatedFiles);
   };
 
   return (
     <Flex sx={{ flexDirection: 'column', justifyContent: 'center', gap: 1 }}>
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        onChange={handleFileChange}
+        style={{ display: 'none' }}
+        id="file-input"
+      />
       <Button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => fileInputRef.current?.click()}
         icon="upload"
         variant="outline"
         sx={{ mb: 1, width: 'fit-content ' }}
@@ -90,6 +83,9 @@ export const FileInput = (props: IProps) => {
       >
         Add Files
       </Button>
+
+      {error && <Text sx={{ color: 'error', fontSize: 1, mb: 1 }}>{error}</Text>}
+
       {files.map((file) => (
         <FileDisplay
           key={file.id}
@@ -101,18 +97,6 @@ export const FileInput = (props: IProps) => {
           onRemove={() => remove(file.id)}
         />
       ))}
-
-      <DashboardModal
-        proudlyDisplayPoweredByUppy={false}
-        uppy={uppyRef.current}
-        open={open}
-        data-cy="uppy-dashboard"
-        closeModalOnClickOutside
-        onRequestClose={() => {
-          setOpen(false);
-          triggerCallback();
-        }}
-      />
     </Flex>
   );
 };

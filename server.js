@@ -105,7 +105,9 @@ app.use(
 
 // React Router request handler
 const handler = createRequestHandler(
-  viteDevServer ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build') : await import('./build/server/index.js'),
+  viteDevServer
+    ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build')
+    : await import('./build/server/index.js'),
 );
 
 const port = Number(process.env.PORT) || 3456; // 3456 is default port for ci
@@ -140,6 +142,7 @@ if (isProd) {
     port,
     hostname: '0.0.0.0',
     fetch: app.fetch,
+    maxRequestBodySize: 300 * 1024 * 1024, // 300MB - enforced at Bun level
   });
 
   console.log(`Hono server started on http://0.0.0.0:${port}`);

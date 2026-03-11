@@ -3,7 +3,7 @@ import { Project } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
-import { LibraryForm } from 'src/pages/Library/Content/Common/Library.form';
+import { LibraryForm } from 'src/pages/Library/Content/Common/LibraryForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { libraryServiceServer } from 'src/services/libraryService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';

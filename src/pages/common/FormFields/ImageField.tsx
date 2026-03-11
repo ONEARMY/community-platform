@@ -1,12 +1,12 @@
 import styled from '@emotion/styled';
-import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components';
-import type { IImageForm } from 'oa-shared';
-import { Field, useForm, useFormState } from 'react-final-form';
+import { ImageInput, ImageInputDeleteImage, ImageInputWrapper } from 'oa-components';
+import { FullMedia } from 'oa-shared';
+import { useState } from 'react';
+import { useForm, useFormState } from 'react-final-form';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
-import { ImageInputField } from 'src/common/Form/ImageInput.field';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
-import { COMPARISONS } from 'src/utils/comparisons';
-import { Image as ImageComponent } from 'theme-ui';
+import { storageService } from 'src/services/storageService';
+import { Image as ImageComponent, Spinner, Text } from 'theme-ui';
 
 const ImageInputFieldWrapper = styled.div`
   height: 200px;
@@ -17,22 +17,74 @@ const ImageInputFieldWrapper = styled.div`
 
 type ImageFieldProps = {
   title: string;
+  contentType: 'projects' | 'research' | 'questions' | 'news';
+  contentId?: number | null;
 };
 
 export const ImageField = (props: ImageFieldProps) => {
-  const state = useFormState<IImageForm>();
-  const form = useForm<IImageForm>();
+  const { title, contentType, contentId = null } = props;
+  const state = useFormState<{ image: FullMedia | null }>();
+  const form = useForm<{ image: FullMedia | null }>();
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const handleImageSelect = async (fileMeta: any) => {
+    // If user is clearing the image
+    if (!fileMeta || !fileMeta.photoData) {
+      form.change('image', null);
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadError(null);
+
+    try {
+      // Upload the image first
+      const uploadedImage = await storageService.imageUpload(
+        contentId,
+        contentType,
+        fileMeta.photoData,
+      );
+
+      // Only then set the form state with the uploaded metadata
+      form.change('image', uploadedImage);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      setUploadError('Failed to upload image. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   return (
-    <FormFieldWrapper htmlFor="existingImage" text={props.title} required>
-      {!state.values.existingImage ? (
+    <FormFieldWrapper htmlFor="existingImage" text={title} required>
+      {uploadError && <Text sx={{ color: 'error', fontSize: 1, mb: 2 }}>{uploadError}</Text>}
+      {isUploading ? (
+        <ImageInputFieldWrapper key="image-uploading" data-cy="image-uploading">
+          <FieldContainer
+            style={{
+              height: '100%',
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Spinner />
+            <Text sx={{ ml: 2 }}>Uploading image...</Text>
+          </FieldContainer>
+        </ImageInputFieldWrapper>
+      ) : !state.values.image ? (
         <ImageInputFieldWrapper key="image-upload" data-cy="image-upload">
-          <Field
-            hasText={false}
-            name="image"
-            component={ImageInputField}
-            isEqual={COMPARISONS.image}
-          />
+          <FieldContainer
+            style={{
+              height: '100%',
+              width: '100%',
+              overflow: 'hidden',
+            }}
+          >
+            <ImageInput hasText={false} value={undefined} onFilesChange={handleImageSelect} />
+          </FieldContainer>
         </ImageInputFieldWrapper>
       ) : (
         <ImageInputFieldWrapper key="existing-image" data-cy="existing-image">
@@ -44,10 +96,10 @@ export const ImageField = (props: ImageFieldProps) => {
             }}
           >
             <ImageInputWrapper hasUploadedImg={true}>
-              <ImageComponent src={state.values.existingImage?.publicUrl} />
+              <ImageComponent src={state.values.image?.publicUrl} />
               <ImageInputDeleteImage
                 onClick={() => {
-                  form.change('existingImage', null);
+                  form.change('image', null);
                 }}
               />
             </ImageInputWrapper>

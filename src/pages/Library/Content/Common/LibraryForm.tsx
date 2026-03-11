@@ -1,5 +1,5 @@
 import arrayMutators from 'final-form-arrays';
-import type { MediaFile, Project, ProjectFormData } from 'oa-shared';
+import type { IMediaFile, Project, ProjectFormData } from 'oa-shared';
 import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
@@ -23,7 +23,7 @@ import { LibraryTitleField } from './LibraryTitle.field';
 
 interface LibraryFormProps {
   project?: Project;
-  files?: MediaFile[];
+  files?: IMediaFile[];
   fileLink?: string;
 }
 
@@ -47,8 +47,8 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       tags: project?.tagIds || [],
       time: project?.time,
       difficultyLevel: project?.difficultyLevel,
-      existingImage: project?.coverImage || null,
-      existingFiles: files,
+      image: project?.coverImage || null,
+      files,
       fileLink: fileLink,
       steps: project?.steps
         ?.slice()
@@ -58,12 +58,11 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
           title: x.title,
           description: x.description,
           videoUrl: x.videoUrl || undefined,
-          images: [],
-          existingImages: x.images,
+          images: x.images,
         })) ?? [
-        { title: '', description: '', images: [], existingImages: [] },
-        { title: '', description: '', images: [], existingImages: [] },
-        { title: '', description: '', images: [], existingImages: [] },
+        { title: '', description: '', images: [] },
+        { title: '', description: '', images: [] },
+        { title: '', description: '', images: [] },
       ],
     }),
     [project],
@@ -83,7 +82,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
           const error = 'Category is required';
           setSaveErrorMessage(error);
           throw new Error(error);
-        } else if (!values.image && !values.existingImage?.id) {
+        } else if (!values.image?.id) {
           const error = 'An image is required';
           setSaveErrorMessage(error);
           throw new Error(error);
@@ -122,8 +121,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
           errors['category'] = 'Category is required.';
         }
 
-        if (!values.image && !values.existingImage) {
-          errors['existingImage'] = 'An image is required (either new or existing).';
+        if (!values.image?.id) {
           errors['image'] = 'An image is required (either new or existing).';
         }
 
@@ -141,7 +139,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       }) => {
         const belowBody = (
           <Flex sx={{ flexDirection: 'column' }}>
-            <LibraryStepsContainerField />
+            <LibraryStepsContainerField contentType="projects" contentId={project?.id ?? null} />
           </Flex>
         );
 
@@ -186,10 +184,14 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                   <TagsField title={intro.tags.title} />
                   <LibraryTimeField />
                   <LibraryDifficultyField />
-                  <FilesFields />
+                  <FilesFields contentType="projects" contentId={project?.id ?? null} />
                 </Flex>
                 <Flex data-cy="intro-cover" sx={{ flex: 1, width: '100%' }}>
-                  <ImageField title="Cover Image" />
+                  <ImageField
+                    title="Cover Image"
+                    contentType="projects"
+                    contentId={project?.id ?? null}
+                  />
                 </Flex>
               </Flex>
             </FormWrapper>

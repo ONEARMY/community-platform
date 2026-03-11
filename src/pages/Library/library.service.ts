@@ -1,6 +1,5 @@
 import type { Project, ProjectFormData } from 'oa-shared';
 import { logger } from 'src/logger';
-import { getCleanFileName } from 'src/utils/storage';
 import type { LibrarySortOption } from './Content/List/LibrarySortOptions';
 
 export enum LibrarySearchParams {
@@ -88,25 +87,13 @@ const upsert = async (id: number | null, formData: ProjectFormData, isDraft = fa
   }
 
   if (formData.image) {
-    data.append('coverImage', formData.image.photoData, getCleanFileName(formData.image.name));
-  }
-
-  if (formData.existingImage) {
-    data.append('existingCoverImage', formData.existingImage.id);
+    data.append('coverImage', JSON.stringify(formData.image));
   }
 
   if (formData.files && formData.files.length > 0) {
     for (const file of formData.files) {
       if (file) {
-        data.append('files', file, getCleanFileName(file.name));
-      }
-    }
-  }
-
-  if (formData.existingFiles && formData.existingFiles.length > 0) {
-    for (const file of formData.existingFiles) {
-      if (file) {
-        data.append('existingFiles', file.id);
+        data.append('files', JSON.stringify(file));
       }
     }
   }
@@ -122,18 +109,12 @@ const upsert = async (id: number | null, formData: ProjectFormData, isDraft = fa
       data.append(`steps.[${i}].title`, step.title);
       data.append(`steps.[${i}].description`, step.description);
 
-      if (step.images && step.images.length) {
-        for (const image of step.images) {
-          if (image) {
-            data.append(`steps.[${i}].images`, image.photoData, getCleanFileName(image.name));
-          }
-        }
-      }
-
-      if (step.existingImages) {
-        for (const image of step.existingImages) {
-          if (image) {
-            data.append(`steps.[${i}].existingImages`, image.id);
+      // Only send existing image metadata (images are uploaded immediately)
+      const stepImages = step.images || step.images || [];
+      if (stepImages && stepImages.length > 0) {
+        for (const image of stepImages) {
+          if (image?.path) {
+            data.append(`steps.[${i}].images`, JSON.stringify(image));
           }
         }
       }

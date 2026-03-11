@@ -1,5 +1,12 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { type DBProject, type DBProjectStep, type Image, Project, UserRole } from 'oa-shared';
+import {
+  DBMedia,
+  type DBProject,
+  type DBProjectStep,
+  FullMedia,
+  Project,
+  UserRole,
+} from 'oa-shared';
 
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { ImageServiceServer } from './imageService.server';
@@ -87,7 +94,7 @@ const getUserProjects = async (
 };
 
 const getProjectPublicMedia = (projectDb: DBProject, client: SupabaseClient) => {
-  const allImages: Image[] = [];
+  const allImages: FullMedia[] = [];
   if (projectDb.cover_image) {
     const coverImage = storageServiceServer
       .getPublicUrls(client, [projectDb.cover_image], IMAGE_SIZES.LANDSCAPE)
@@ -159,6 +166,7 @@ async function upsertStep(
     projectId: number;
     videoUrl: string | null;
     order: number;
+    images: DBMedia[] | null;
   },
 ) {
   if (stepId) {
@@ -170,6 +178,7 @@ async function upsertStep(
         project_id: values.projectId,
         video_url: values.videoUrl,
         order: values.order,
+        images: values.images,
       })
       .eq('id', stepId)
       .select();
@@ -186,6 +195,7 @@ async function upsertStep(
         project_id: values.projectId,
         video_url: values.videoUrl,
         order: values.order,
+        images: values.images,
         tenant_id: process.env.TENANT_ID,
       })
       .select();

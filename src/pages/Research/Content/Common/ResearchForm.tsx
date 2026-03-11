@@ -45,8 +45,7 @@ const ResearchForm = ({ research }: IProps) => {
           ? research.collaboratorsUsernames
           : [],
         tags: research?.tagIds || [],
-        existingImage: research?.image,
-        image: undefined,
+        image: research?.image,
       });
     }
   }, [research]);
@@ -99,8 +98,8 @@ const ResearchForm = ({ research }: IProps) => {
       }}
       validate={(values) => {
         const errors = {};
-        if (values.image == null && values.existingImage == null) {
-          errors['image'] = 'An image is required (either new or existing).';
+        if (values.image == null) {
+          errors['image'] = 'An image is required.';
         }
         return errors;
       }}
@@ -187,7 +186,11 @@ const ResearchForm = ({ research }: IProps) => {
             <ResearchFieldCategory />
             <TagsField title={overview.tags.title} />
             <ResearchCollaboratorsField />
-            <ImageField title="Cover Image" />
+            <ImageField
+              title="Cover Image"
+              contentType="research"
+              contentId={research?.id ?? null}
+            />
           </FormWrapper>
         );
       }}

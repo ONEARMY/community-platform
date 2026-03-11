@@ -2,12 +2,10 @@ import type { DBAuthor } from './author';
 import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
-import type { IConvertedFileMeta } from './common';
 import type { IContentDoc, IDBContentDoc } from './content';
 import type { IDBDownloadable, IDownloadable } from './document';
 import type { IFilesForm } from './filesForm';
-import type { IImageForm } from './imageForm';
-import type { DBMedia, IMediaFile, Image } from './media';
+import type { DBMedia, FullMedia, IMediaFile } from './media';
 import type { IDBModeration, IModeration, Moderation } from './moderation';
 import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
@@ -65,7 +63,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
   slug: string;
   previousSlugs: string[];
   description: string;
-  coverImage: Image | null;
+  coverImage: FullMedia | null;
   deleted: boolean;
   category: Category | null;
   totalViews: number;
@@ -89,7 +87,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
     Object.assign(this, obj);
   }
 
-  static fromDB(obj: DBProject, tags: Tag[], images: Image[] = []) {
+  static fromDB(obj: DBProject, tags: Tag[], images: FullMedia[] = []) {
     const steps = obj.steps?.map((update) => ProjectStep.fromDB(update, images)) || [];
 
     return new Project({
@@ -130,7 +128,7 @@ export class DBProjectStep {
   readonly project_id: number;
   title: string;
   description: string;
-  images: DBMedia[] | null;
+  images: FullMedia[] | null;
   video_url: string | null;
   order: number;
 
@@ -144,7 +142,7 @@ export class ProjectStep {
   projectId: number;
   title: string;
   description: string;
-  images: Image[] | null;
+  images: FullMedia[] | null;
   videoUrl: string | null;
   order: number;
 
@@ -152,26 +150,33 @@ export class ProjectStep {
     Object.assign(this, obj);
   }
 
-  static fromDB(obj: DBProjectStep, images?: Image[]) {
+  static fromDB(obj: DBProjectStep, images?: FullMedia[]) {
+    const imageIds = obj.images?.map((x) => x.id) || [];
+    const filteredImages = images?.filter((x) => imageIds.includes(x.id)) || [];
+    // Deduplicate by id
+    const uniqueImagesMap = new Map(filteredImages.map((img) => [img.id, img]));
+    const uniqueImages = Array.from(uniqueImagesMap.values());
+
     return new ProjectStep({
       id: obj.id,
       projectId: obj.project_id,
       title: obj.title,
       description: obj.description,
-      images: images?.filter((x) => obj.images?.map((x) => x.id)?.includes(x.id)) || [],
+      images: uniqueImages,
       videoUrl: obj.video_url,
       order: obj.order,
     });
   }
 }
 
-export interface ProjectFormData extends IFilesForm, IImageForm {
+export interface ProjectFormData extends IFilesForm {
   title: string;
   description: string;
   category?: SelectValue;
   tags?: number[];
   difficultyLevel?: DifficultyLevel;
   time?: string;
+  image: FullMedia | null;
   steps: ProjectStepFormData[];
 }
 
@@ -179,7 +184,6 @@ export type ProjectStepFormData = {
   id?: number;
   title: string;
   description: string;
-  images?: IConvertedFileMeta[];
-  existingImages?: Image[] | null;
+  images: FullMedia[] | null;
   videoUrl?: string;
 };

@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBMedia, DBProfile, DBProject, MediaFile } from 'oa-shared';
+import type { DBMedia, DBProfile, DBProject, IMediaFile, Image } from 'oa-shared';
 import { Project, ProjectStep, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -22,8 +22,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const formData = await request.formData();
 
-    const uploadedCoverImage = formData.get('coverImage') as File | null;
-    const uploadedFiles = formData.getAll('files') as File[] | null;
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
@@ -32,14 +30,18 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       category: formData.has('category') ? (formData.get('category') as string) : null,
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       fileLink: formData.has('fileLink') ? (formData.get('fileLink') as string) : null,
+      coverImage: formData.has('coverImage')
+        ? (JSON.parse(formData.get('coverImage') as string) as Image)
+        : null,
+      files: formData.has('files')
+        ? formData.getAll('files').map((x) => JSON.parse(x as string) as IMediaFile)
+        : null,
       difficultyLevel: formData.has('difficultyLevel')
         ? (formData.get('difficultyLevel') as string)
         : null,
       stepCount: parseInt(formData.get('stepCount') as string),
       slug: convertToSlug(formData.get('title') as string),
     };
-    const existingCoverImageId = formData.get('existingCoverImage') as string;
-    const filesToKeepIds = formData.getAll('existingFiles') as string[];
 
     const claims = await client.auth.getClaims();
 
@@ -64,42 +66,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status, statusText });
     }
 
-    // 1. Upload files
-    if (!existingCoverImageId && currentProject.cover_image?.id) {
-      // remove existing
+    // Remove old cover image if it exists and no new image is provided
+    if (!data.coverImage && currentProject.cover_image?.path) {
       await storageServiceServer.removeImages([currentProject.cover_image.path], client);
     }
 
-    let newCoverImage: DBMedia | undefined = undefined;
-    if (uploadedCoverImage) {
-      const mediaResult = await storageServiceServer.uploadImage(
-        [uploadedCoverImage],
-        `projects/${currentProject.id}`,
-        client,
-      );
-      newCoverImage = mediaResult?.media[0];
-    }
-
-    const files = uploadedFiles
-      ? await updateOrReplaceFile(
-          filesToKeepIds,
-          uploadedFiles,
-          currentProject,
-          `projects/${id}`,
-          client,
-        )
-      : null;
-
     // 2. Update project
-    const projectDb = await updateProject(
-      client,
-      profile!,
-      currentProject,
-      data,
-      files,
-      newCoverImage,
-      existingCoverImageId,
-    );
+    const projectDb = await updateProject(client, profile!, currentProject, data);
     const project = Project.fromDB(projectDb, []);
     const existingStepIds = await libraryServiceServer.getProjectStepIds(projectDb.id, client);
 
@@ -114,34 +87,19 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         stepsToKeepIds.push(+stepId);
       }
 
-      const newImages = formData.getAll(`steps.[${i}].images`) as File[];
-      const existingImagesIds = formData.getAll(`steps.[${i}].existingImages`) as string[];
+      const images = formData.has(`steps.[${i}].images`)
+        ? formData.getAll(`steps.[${i}].images`).map((x) => JSON.parse(x as string) as DBMedia)
+        : null;
 
       const stepDb = await libraryServiceServer.upsertStep(client, stepId, {
         title: formData.get(`steps.[${i}].title`) as string,
         description: formData.get(`steps.[${i}].description`) as string,
         videoUrl: (formData.get(`steps.[${i}].videoUrl`) as string) || null,
+        images: images,
         projectId: projectDb.id,
         order: i + 1,
       });
       const step = ProjectStep.fromDB(stepDb);
-
-      // 4. Upload and set images of each Step
-      const images = await updateOrReplaceImages(
-        existingImagesIds,
-        newImages,
-        stepDb.id,
-        `projects/${id}`,
-        client,
-      );
-
-      const { data } = await client
-        .from('project_steps')
-        .update({ images })
-        .eq('id', stepDb.id)
-        .select('images')
-        .single();
-      step.images = data?.images;
       project.steps.push(step);
     }
 
@@ -219,20 +177,11 @@ async function updateProject(
     difficultyLevel: string | null;
     time: string | null;
     slug: string;
+    coverImage: Image | null;
+    files: IMediaFile[] | null;
   },
-  files: MediaFile[] | null,
-  coverImage?: DBMedia,
-  existingCoverImageId?: string,
 ) {
   const previousSlugs = contentServiceServer.updatePreviousSlugs(currentProject, data.slug);
-
-  let cover_image: DBMedia | null = null;
-
-  if (coverImage) {
-    cover_image = coverImage;
-  } else if (existingCoverImageId) {
-    cover_image = currentProject.cover_image;
-  }
 
   let moderation = currentProject.moderation;
 
@@ -253,9 +202,9 @@ async function updateProject(
       file_link: data.fileLink,
       difficulty_level: data.difficultyLevel,
       time: data.time,
-      files,
+      files: data.files,
       moderation,
-      cover_image,
+      cover_image: data.coverImage || null,
     })
     .eq('id', currentProject.id)
     .select();
@@ -267,38 +216,6 @@ async function updateProject(
   return projectResult.data[0] as unknown as DBProject;
 }
 
-async function updateOrReplaceImages(
-  idsToKeep: string[],
-  newUploads: File[],
-  stepId: number,
-  path: string,
-  client: SupabaseClient,
-) {
-  let media: DBMedia[] = [];
-
-  if (idsToKeep.length > 0) {
-    const existingMedia = await client
-      .from('project_steps')
-      .select('images')
-      .eq('id', stepId)
-      .single();
-
-    if (existingMedia.data && existingMedia.data.images?.length > 0) {
-      media = existingMedia.data.images.filter((x) => idsToKeep.includes(x.id));
-    }
-    // TODO: delete other images
-  }
-
-  if (newUploads.length > 0) {
-    const result = await storageServiceServer.uploadImage(newUploads, path, client);
-
-    if (result) {
-      media = [...media, ...result.media];
-    }
-  }
-
-  return media;
-}
 async function deleteProject(request: Request, id: number) {
   const { client, headers } = createSupabaseServerClient(request);
 
@@ -327,39 +244,4 @@ async function deleteProject(request: Request, id: number) {
   }
 
   return Response.json({}, { status: 500, headers });
-}
-
-async function updateOrReplaceFile(
-  idsToKeep: string[],
-  newUploads: File[],
-  currentProject: DBProject,
-  path: string,
-  client: SupabaseClient,
-) {
-  const existingFiles = currentProject.files;
-
-  let media: MediaFile[] = [];
-  let mediaToRemove: MediaFile[] = [];
-
-  if (existingFiles && existingFiles.length > 0) {
-    media = existingFiles.filter((x) => idsToKeep.includes(x.id));
-    mediaToRemove = existingFiles.filter((x) => !idsToKeep.includes(x.id));
-  }
-
-  if (mediaToRemove.length > 0) {
-    await storageServiceServer.removeFiles(
-      mediaToRemove.map((x) => `${path}/${x.name}`),
-      client,
-    );
-  }
-
-  if (newUploads.length > 0) {
-    const result = await storageServiceServer.uploadFile(newUploads, path, client);
-
-    if (result) {
-      media = [...media, ...result.media];
-    }
-  }
-
-  return media;
 }

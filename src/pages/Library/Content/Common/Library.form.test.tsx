@@ -5,7 +5,7 @@ import { ThemeProvider } from '@theme-ui/core';
 import { ProfileStoreProvider } from 'src/stores/Profile/profile.store';
 import { FactoryLibraryItem } from 'src/test/factories/Library';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { LibraryForm } from './Library.form';
+import { LibraryForm } from './LibraryForm';
 import type { MediaFile, Project } from 'oa-shared';
 import { theme } from 'oa-themes';
 

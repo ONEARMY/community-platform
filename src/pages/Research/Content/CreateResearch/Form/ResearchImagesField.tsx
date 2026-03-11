@@ -17,8 +17,8 @@ const ImageInputFieldWrapper = styled.div`
 
 interface IProps {
   inputsAvailable: number;
-  existingImages: Image[] | null;
-  removeExistingImage: (index: number) => void;
+  images: Image[] | null;
+  removeImage: (index: number) => void;
 }
 
 export const ResearchImagesField = (props: IProps) => {
@@ -34,7 +34,7 @@ export const ResearchImagesField = (props: IProps) => {
           />
         </ImageInputFieldWrapper>
       ))}
-      {props.existingImages?.map((image, i) => (
+      {props.images?.map((image, i) => (
         <ImageInputFieldWrapper key={`existing-image-${i}`} data-cy={`existing-image-${i}`}>
           <FieldContainer
             style={{
@@ -45,7 +45,7 @@ export const ResearchImagesField = (props: IProps) => {
           >
             <ImageInputWrapper hasUploadedImg={true}>
               <ImageComponent src={image.publicUrl} />
-              <ImageInputDeleteImage onClick={() => props.removeExistingImage(i)} />
+              <ImageInputDeleteImage onClick={() => props.removeImage(i)} />
             </ImageInputWrapper>
           </FieldContainer>
         </ImageInputFieldWrapper>

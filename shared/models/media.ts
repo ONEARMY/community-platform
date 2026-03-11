@@ -28,6 +28,8 @@ export class Image implements IMedia {
   }
 }
 
+export type FullMedia = DBMedia & IMedia;
+
 export class MediaFile implements IMediaFile {
   id: string;
   name: string;

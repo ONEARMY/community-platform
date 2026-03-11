@@ -34,12 +34,10 @@ export const ResearchUpdateForm = (props: IProps) => {
   const [initialValues, setInitialValues] = useState<ResearchUpdateFormData>({
     title: '',
     description: '',
-    existingImages: [],
-    existingFiles: [],
+    images: [],
+    files: [],
     fileLink: '',
     videoUrl: '',
-    files: [],
-    images: [],
   });
 
   useEffect(() => {
@@ -47,12 +45,10 @@ export const ResearchUpdateForm = (props: IProps) => {
       setInitialValues({
         title: researchUpdate?.title,
         description: researchUpdate?.description,
-        existingImages: researchUpdate?.images || [],
-        existingFiles: files,
+        images: researchUpdate?.images || [],
+        files: files,
         fileLink: fileLink,
         videoUrl: researchUpdate?.videoUrl || '',
-        files: [],
-        images: [],
       });
     }
   }, [researchUpdate]);
@@ -96,11 +92,11 @@ export const ResearchUpdateForm = (props: IProps) => {
   const isEdit = !!researchUpdate;
   const heading = isEdit ? headings.update.edit : headings.update.create;
 
-  const removeExistingImage = (index: number) => {
+  const removeImage = (index: number) => {
     setInitialValues((prevState: ResearchUpdateFormData) => {
       return {
         ...prevState,
-        existingImages: prevState.existingImages?.filter((_, i) => i !== index) ?? null,
+        images: prevState.images?.filter((_, i) => i !== index) ?? null,
       };
     });
   };
@@ -111,7 +107,16 @@ export const ResearchUpdateForm = (props: IProps) => {
         onSubmit={async (values) => await onSubmit(values)}
         initialValues={initialValues}
         validateOnBlur
-        render={({ dirty, handleSubmit, hasValidationErrors, errors, submitFailed, submitSucceeded, submitting, values }) => {
+        render={({
+          dirty,
+          handleSubmit,
+          hasValidationErrors,
+          errors,
+          submitFailed,
+          submitSucceeded,
+          submitting,
+          values,
+        }) => {
           const errorsClientSide = [errorSet(errors, update)];
 
           const handleSubmitDraft = () => onSubmit(values, true);
@@ -120,7 +125,11 @@ export const ResearchUpdateForm = (props: IProps) => {
             ? Math.min((values as any).images.filter((x) => !!x).length + 1, 10)
             : 1;
 
-          const unsavedChangesDialog = <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />;
+          const unsavedChangesDialog = (
+            <UnsavedChangesDialog
+              hasChanges={dirty && !submitSucceeded && !intentionalNavigation}
+            />
+          );
 
           const sidebar = (
             <>
@@ -170,11 +179,11 @@ export const ResearchUpdateForm = (props: IProps) => {
               <DescriptionField />
               <ResearchImagesField
                 inputsAvailable={numberOfImageInputsAvailable}
-                existingImages={initialValues.existingImages}
-                removeExistingImage={removeExistingImage}
+                images={initialValues.images}
+                removeImage={removeImage}
               />
               <VideoUrlField />
-              <FilesFields />
+              <FilesFields contentType="research" contentId={research.id} />
             </FormWrapper>
           );
         }}
@@ -191,7 +200,11 @@ export const ResearchUpdateForm = (props: IProps) => {
   );
 };
 
-const getResearchUpdates = (updates: ResearchUpdate[], isCreating: boolean, researchTitle: string): any[] =>
+const getResearchUpdates = (
+  updates: ResearchUpdate[],
+  isCreating: boolean,
+  researchTitle: string,
+): any[] =>
   [
     ...updates
       .filter((u) => !u.deleted)

@@ -1,7 +1,6 @@
-import type { MediaFile } from './media';
+import type { IMediaFile } from './media';
 
 export interface IFilesForm {
-  files?: File[];
+  files?: IMediaFile[];
   fileLink?: string;
-  existingFiles?: MediaFile[] | null;
 }

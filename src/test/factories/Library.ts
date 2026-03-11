@@ -57,6 +57,8 @@ export const FactoryLibraryItemStep = (itemOverloads: Partial<ProjectStep> = {})
   projectId: faker.number.int(),
   images: [
     {
+      path: '',
+      fullPath: '',
       publicUrl: faker.internet.url(),
       id: faker.string.uuid(),
     },
@@ -117,24 +119,3 @@ export const FactoryLibraryItemDraft = (itemOverloads: Partial<Project> = {}): P
   usefulCount: faker.number.int(),
   ...itemOverloads,
 });
-
-// export const FactoryLibraryForm = (
-//   itemOverloads: Partial<ProjectFormData> = {},
-// ): ProjectFormData => ({
-//   files: [],
-//   fileLink: faker.internet.url(),
-//   difficultyLevel: faker.helpers.arrayElement<DifficultyLevel>([
-//     'easy',
-//     'medium',
-//     'hard',
-//     'very-hard',
-//   ]),
-//   time: '< 1 hour',
-//   title: faker.lorem.words(4),
-//   description: faker.lorem.paragraph(),
-//   category: { value: faker.number.int().toString(), label: faker.lorem.word() },
-//   tags: [],
-//   existingCoverImage: null,
-//   steps: [],
-//   ...itemOverloads,
-// })

@@ -7,7 +7,6 @@ export * from './content';
 export * from './db';
 export * from './document';
 export * from './filesForm';
-export * from './imageForm';
 export * from './library';
 export * from './maps';
 export * from './media';

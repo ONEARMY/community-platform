@@ -119,6 +119,6 @@ export const FactoryResearchItemFormInput = (
 ): ResearchFormData => ({
   title: faker.lorem.words(),
   description: faker.lorem.paragraphs(),
-  existingImage: null,
+  image: null,
   ...researchItemOverloads,
 });

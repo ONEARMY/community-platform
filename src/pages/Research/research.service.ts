@@ -95,11 +95,7 @@ const upsert = async (id: number | null, research: ResearchFormData, isDraft = f
   }
 
   if (research.image) {
-    data.append('image', research.image.photoData, getCleanFileName(research.image.name));
-  }
-
-  if (research.existingImage) {
-    data.append('existingImage', research.existingImage.id);
+    data.append('image', JSON.stringify(research.image));
   }
 
   const response =
@@ -148,10 +144,10 @@ const upsertUpdate = async (
     }
   }
 
-  if (update.existingImages && update.existingImages.length > 0) {
-    for (const image of update.existingImages) {
+  if (update.images && update.images.length > 0) {
+    for (const image of update.images) {
       if (image) {
-        data.append('existingImages', image.id);
+        data.append('existingImages', JSON.stringify(image));
       }
     }
   }
@@ -159,15 +155,7 @@ const upsertUpdate = async (
   if (update.files && update.files.length > 0) {
     for (const file of update.files) {
       if (file) {
-        data.append('files', file, getCleanFileName(file.name));
-      }
-    }
-  }
-
-  if (update.existingFiles && update.existingFiles.length > 0) {
-    for (const file of update.existingFiles) {
-      if (file) {
-        data.append('existingFiles', file.id);
+        data.append('files', JSON.stringify(file));
       }
     }
   }

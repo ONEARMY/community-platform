@@ -325,12 +325,14 @@ describe('[Library]', () => {
       
       cy.step('Upload cover image');
       cy.get('[data-cy="image-upload"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-intro.jpg', { force: true });
+      cy.get('[data-cy="image-upload"]').parent().find('[data-cy=delete-image]').should('exist');
       
       cy.step('Add step with images');
       cy.get('[data-cy=step_0]').within(() => {
         cy.get('[data-cy=step-title]').clear().type('Step with images').blur();
         cy.get('[data-cy=step-description]').clear().type('Step description').blur();
         cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+        cy.get('[data-cy=delete-image]').should('exist');
       });
       
       cy.get('[data-cy=submit]').click();
@@ -343,11 +345,13 @@ describe('[Library]', () => {
       cy.step('Replace cover image');
       cy.get('[data-cy="image-upload"]').parent().find('[data-cy=delete-image]').click();
       cy.get('[data-cy="image-upload"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
+      cy.get('[data-cy="image-upload"]').parent().find('[data-cy=delete-image]').should('exist');
       
       cy.step('Replace step image');
       cy.get('[data-cy=step_0]').within(() => {
         cy.get('[data-cy=delete-image]').first().click();
         cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
+        cy.get('[data-cy=delete-image]').should('exist');
       });
       
       cy.get('[data-cy=submit]').click();
@@ -374,12 +378,14 @@ describe('[Library]', () => {
       selectDifficultLevel(difficulty as DifficultyLevel);
       
       cy.get('[data-cy="image-upload"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-intro.jpg', { force: true });
+      cy.get('[data-cy="image-upload"]').parent().find('[data-cy=delete-image]').should('exist');
       
       cy.step('Add step');
       cy.get('[data-cy=step_0]').within(() => {
         cy.get('[data-cy=step-title]').clear().type('First step').blur();
         cy.get('[data-cy=step-description]').clear().type('Step description').blur();
         cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+        cy.get('[data-cy=delete-image]').should('exist');
       });
       
       cy.step('Upload file');

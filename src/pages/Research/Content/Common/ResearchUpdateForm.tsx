@@ -106,7 +106,6 @@ export const ResearchUpdateForm = (props: IProps) => {
       <Form<ResearchUpdateFormData>
         onSubmit={async (values) => await onSubmit(values)}
         initialValues={initialValues}
-        validateOnBlur
         render={({
           dirty,
           handleSubmit,

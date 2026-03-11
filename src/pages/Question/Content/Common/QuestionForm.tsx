@@ -31,7 +31,6 @@ export const QuestionForm = (props: IProps) => {
   const [initialValues, setInitialValues] = useState<QuestionFormData>({
     category: null,
     description: '',
-    existingImages: [],
     images: [],
     isDraft: false,
     tags: [],
@@ -55,8 +54,7 @@ export const QuestionForm = (props: IProps) => {
           }
         : null,
       description: question.description,
-      existingImages: question.images,
-      images: null,
+      images: question.images,
       isDraft: question.isDraft,
       tags: question.tagIds,
       title: question.title,
@@ -76,7 +74,6 @@ export const QuestionForm = (props: IProps) => {
         category: formValues.category || null,
         images: formValues.images || null,
         isDraft: isDraft,
-        existingImages: initialValues.existingImages || null,
       });
 
       if (result) {
@@ -93,15 +90,6 @@ export const QuestionForm = (props: IProps) => {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const removeExistingImage = (index: number) => {
-    setInitialValues((prevState: QuestionFormData) => {
-      return {
-        ...prevState,
-        existingImages: prevState.existingImages?.filter((_, i) => i !== index) ?? null,
-      };
-    });
   };
 
   return (
@@ -125,10 +113,6 @@ export const QuestionForm = (props: IProps) => {
           e.preventDefault();
           await onSubmit(values, true);
         };
-
-        const numberOfImageInputsAvailable = (values as any)?.images
-          ? Math.min((values as any).images.filter((x) => !!x).length + 1, QUESTION_MAX_IMAGES)
-          : 1;
 
         const unsavedChangesDialog = (
           <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded && !intentionalNavigation} />
@@ -162,9 +146,9 @@ export const QuestionForm = (props: IProps) => {
             />
             <QuestionDescriptionField />
             <QuestionImagesField
-              inputsAvailable={numberOfImageInputsAvailable}
-              existingImages={initialValues.existingImages}
-              removeExistingImage={removeExistingImage}
+              contentType="questions"
+              contentId={id}
+              maxImages={QUESTION_MAX_IMAGES}
             />
             <CategoryField type="questions" />
             <TagsField title={LABELS.fields.tags.title} />

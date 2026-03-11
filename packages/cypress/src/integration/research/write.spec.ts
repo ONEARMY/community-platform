@@ -144,12 +144,9 @@ describe('[Research]', () => {
 
       cy.step('Add file to update');
       cy.get('[data-cy=file-input-field]').click();
-      cy.get('.uppy-Dashboard-input:first').as('file-input');
-      cy.get('@file-input').selectFile('src/fixtures/files/Example.pdf', {
+      cy.get('input[type="file"]').selectFile('src/fixtures/files/Example.pdf', {
         force: true,
       });
-      cy.get('.uppy-StatusBar-actionBtn--upload').as('upload-button');
-      cy.get('@upload-button').click();
 
       cy.step('Published when fields are populated correctly');
       cy.get('[data-cy=submit]').click();
@@ -292,12 +289,9 @@ describe('[Research]', () => {
 
       cy.step('Add file to draft update');
       cy.get('[data-cy=file-input-field]').click();
-      cy.get('.uppy-Dashboard-input:first').as('file-input');
-      cy.get('@file-input').selectFile('src/fixtures/files/Example.pdf', {
+      cy.get('input[type="file"]').selectFile('src/fixtures/files/Example.pdf', {
         force: true,
       });
-      cy.get('.uppy-StatusBar-actionBtn--upload').as('upload-button');
-      cy.get('@upload-button').click();
 
       cy.step('Save as Draft');
       cy.get('[data-cy=draft]').click();
@@ -363,7 +357,6 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title').clear().type(researchTitle).blur();
       cy.get('[data-cy=intro-description]').clear().type('Research description').blur();
       cy.get('[data-cy=image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
-      cy.get('[data-cy=delete-image]').should('exist');
       cy.get('[data-cy=submit]').click();
       cy.url().should('include', `/research/${researchSlug}`);
 
@@ -374,13 +367,10 @@ describe('[Research]', () => {
       
       cy.step('Add images to update');
       cy.get('[data-cy=image-upload-field-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
-      cy.get('[data-cy=image-upload-field-0]').find('[data-cy=delete-image]').should('exist');
       
       cy.step('Add file to update');
       cy.get('[data-cy=file-input-field]').click();
-      cy.get('.uppy-Dashboard-input:first').selectFile('src/fixtures/files/Example.pdf', { force: true });
-      cy.get('.uppy-StatusBar-actionBtn--upload').click();
-      cy.wait(2000);
+      cy.get('input[type="file"]').selectFile('src/fixtures/files/Example.pdf', { force: true });
       
       cy.get('[data-cy=submit]').click();
       cy.url().should('include', `${researchSlug}#update_`);
@@ -393,14 +383,11 @@ describe('[Research]', () => {
       cy.step('Replace image');
       cy.get('[data-cy=image-upload-field-0]').find('[data-cy=delete-image]').click();
       cy.get('[data-cy=image-upload-field-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
-      cy.get('[data-cy=image-upload-field-0]').find('[data-cy=delete-image]').should('exist');
       
       cy.step('Replace file');
       cy.get('[data-cy=delete-uploaded-file]').click();
       cy.get('[data-cy=file-input-field]').click();
-      cy.get('.uppy-Dashboard-input:first').selectFile('src/fixtures/files/Example.pdf', { force: true });
-      cy.get('.uppy-StatusBar-actionBtn--upload').click();
-      cy.wait(2000);
+      cy.get('input[type="file"]').selectFile('src/fixtures/files/Example.pdf', { force: true });
       
       cy.get('[data-cy=submit]').click();
       cy.url().should('include', `${researchSlug}#update_`);

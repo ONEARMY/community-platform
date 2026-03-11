@@ -2,9 +2,8 @@ import type { DBAuthor } from './author';
 import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
-import type { IConvertedFileMeta } from './common';
 import type { IContentDoc, IDBContentDoc } from './content';
-import type { DBMedia, Image } from './media';
+import type { DBMedia, FullMedia } from './media';
 import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
 
@@ -54,13 +53,13 @@ export class Question implements IContentDoc {
   usefulCount: number;
 
   description: string;
-  images: Image[] | null;
+  images: FullMedia[] | null;
 
   constructor(question: Question) {
     Object.assign(this, question);
   }
 
-  static fromDB(obj: DBQuestion, tags: Tag[], images?: Image[]) {
+  static fromDB(obj: DBQuestion, tags: Tag[], images?: FullMedia[]) {
     return new Question({
       id: obj.id,
       author: obj.author ? Author.fromDB(obj.author) : null,
@@ -87,8 +86,7 @@ export class Question implements IContentDoc {
 export type QuestionFormData = {
   category: SelectValue | null;
   description: string;
-  existingImages: Image[] | null;
-  images: IConvertedFileMeta[] | null;
+  images: DBMedia[] | null;
   isDraft: boolean;
   tags?: number[];
   title: string;

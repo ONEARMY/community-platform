@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { HTTPException } from 'hono/http-exception';
 import type { DBMedia, DBProfile, DBProject, IMediaFile, Image } from 'oa-shared';
 import { Project, ProjectStep, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
@@ -8,6 +9,7 @@ import { libraryServiceServer } from 'src/services/libraryService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
+import { conflictError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -54,17 +56,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const currentProject = await libraryServiceServer.getById(id, client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
-    const { valid, status, statusText } = await validateRequest(
-      request,
-      profile,
-      data,
-      currentProject,
-      client,
-    );
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    await validateRequest(request, profile, data, currentProject, client);
 
     // Remove old cover image if it exists and no new image is provided
     if (!data.coverImage && currentProject.cover_image?.path) {
@@ -115,7 +107,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     return Response.json({ project }, { headers, status: 201 });
   } catch (error) {
     console.error(error);
-    return Response.json({}, { headers, status: 500, statusText: 'Error creating project' });
+
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
+    return Response.json({ error: 'Error updating project', status: 500 }, { status: 500 });
   }
 };
 
@@ -125,24 +122,24 @@ async function validateRequest(
   data: any,
   currentProject: DBProject,
   client: SupabaseClient,
-) {
+): Promise<void> {
   if (!profile) {
-    return { status: 400, statusText: 'User not found' };
+    throw validationError('User not found');
   }
   if (request.method !== 'PUT') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw validationError('Method not allowed');
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'title is required' };
+    throw validationError('Title is required', 'title');
   }
 
   if (!data.description) {
-    return { status: 400, statusText: 'description is required' };
+    throw validationError('Description is required', 'description');
   }
 
   if (!data.isDraft && (!data.stepCount || data.stepCount < 3)) {
-    return { status: 400, statusText: '3 steps are required' };
+    throw validationError('3 steps are required', 'stepCount');
   }
 
   if (
@@ -154,13 +151,8 @@ async function validateRequest(
       'projects',
     ))
   ) {
-    return {
-      status: 409,
-      statusText: 'This project already exists',
-    };
+    throw conflictError('This project already exists');
   }
-
-  return { valid: true };
 }
 
 async function updateProject(

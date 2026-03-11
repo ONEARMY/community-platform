@@ -1,14 +1,15 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBResearchItem } from 'oa-shared';
+import { HTTPException } from 'hono/http-exception';
+import type { DBResearchItem, FullMedia } from 'oa-shared';
 import { ResearchItem, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { researchServiceServer } from 'src/services/researchService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
+import { conflictError, forbiddenError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -32,8 +33,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         : null,
       isDraft: formData.get('draft') === 'true',
       slug: convertToSlug(formData.get('title') as string),
-      uploadedImage: formData.get('image') as File | null,
-      existingImage: formData.get('existingImage') as string | null,
+      image: formData.has('image')
+        ? (JSON.parse(formData.get('image') as string) as FullMedia)
+        : null,
     };
 
     const claims = await client.auth.getClaims();
@@ -44,17 +46,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const oldResearch = await researchServiceServer.getById(id, client);
 
-    const { valid, status, statusText } = await validateRequest(
-      request,
-      claims.data.claims.sub,
-      data,
-      oldResearch,
-      client,
-    );
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    await validateRequest(request, claims.data.claims.sub, data, oldResearch, client);
 
     const previousSlugs = contentServiceServer.updatePreviousSlugs(oldResearch, data.slug);
 
@@ -69,7 +61,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         previous_slugs: previousSlugs,
         is_draft: data.isDraft,
         collaborators: data.collaborators,
-        ...(!data.existingImage && { image: null }),
+        image: data.image,
       })
       .eq('id', id)
       .select()
@@ -88,42 +80,20 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       headers,
     );
 
-    if (data.uploadedImage) {
-      // TODO:remove unused images from storage
-      const mediaResult = await storageServiceServer.uploadImage(
-        [data.uploadedImage],
-        `research/${research.id}`,
-        client,
-      );
-
-      if (mediaResult?.errors?.length) {
-        console.error(mediaResult.errors);
-      }
-
-      if (mediaResult?.media && mediaResult.media.length > 0) {
-        const result = await client
-          .from('research')
-          .update({ image: mediaResult.media[0] })
-          .eq('id', research.id)
-          .select('image');
-
-        if (result.data && result.data.length > 0) {
-          const [image] = storageServiceServer.getPublicUrls(
-            client,
-            result.data?.at(0)?.image ? [result.data[0].image] : [],
-          );
-
-          research.image = image;
-        }
-      }
-    }
-
     updateUserActivity(client, claims.data.claims.sub);
 
     return Response.json({ research }, { headers, status: 201 });
   } catch (error) {
+    // If it's an HTTPException, return its response
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
+    // only log unexpected errors
     console.error(error);
-    return Response.json({}, { headers, status: 500, statusText: 'Error creating research' });
+
+    // For unexpected errors, return a generic error response
+    return Response.json({ error: 'Error updating research', status: 500 }, { status: 500 });
   }
 };
 
@@ -167,46 +137,41 @@ async function validateRequest(
   data: any,
   research: DBResearchItem,
   client: SupabaseClient,
-) {
+): Promise<void> {
   if (request.method !== 'PUT') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw validationError('Method not allowed');
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'title is required' };
+    throw validationError('Title is required', 'title');
   }
 
   if (!data.description) {
-    return { status: 400, statusText: 'description is required' };
+    throw validationError('Description is required', 'description');
   }
 
-  if (!data.isDraft && !data.uploadedImage && !data.existingImage) {
-    return { status: 400, statusText: 'image is required' };
+  if (!data.isDraft && !data.image) {
+    throw validationError('Cover image is required', 'image');
   }
 
   if (
     research.slug !== data.slug &&
     (await contentServiceServer.isDuplicateExistingSlug(data.slug, research.id, client, 'research'))
   ) {
-    return {
-      status: 409,
-      statusText: 'This research already exists',
-    };
+    throw conflictError('This research already exists');
   }
 
   const profile = await new ProfileServiceServer(client).getByAuthId(userAuthId);
 
   if (!profile) {
-    return { status: 400, statusText: 'User not found' };
+    throw validationError('User not found');
   }
 
   if (profile.roles?.includes(UserRole.ADMIN)) {
-    return { valid: true };
+    return;
   }
 
   if (research.created_by !== profile.id && !research.collaborators?.includes(profile.username)) {
-    return { status: 403, statusText: 'forbidden' };
+    throw forbiddenError();
   }
-
-  return { valid: true };
 }

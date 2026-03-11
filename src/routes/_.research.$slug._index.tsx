@@ -1,4 +1,3 @@
-import type { ResearchUpdate } from 'oa-shared';
 import { ResearchItem } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, useLoaderData } from 'react-router';
@@ -28,14 +27,30 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const dbResearch = result.item;
 
   if (dbResearch.id) {
-    await contentServiceServer.incrementViewCount(client, 'research', dbResearch.total_views, dbResearch.id);
+    await contentServiceServer.incrementViewCount(
+      client,
+      'research',
+      dbResearch.total_views,
+      dbResearch.id,
+    );
   }
 
-  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(client, dbResearch.id, 'research', dbResearch.tags);
+  const [usefulVotes, subscribers, tags] = await contentServiceServer.getMetaFields(
+    client,
+    dbResearch.id,
+    'research',
+    dbResearch.tags,
+  );
 
   const images = researchServiceServer.getResearchPublicMedia(dbResearch, client);
 
-  const research = ResearchItem.fromDB(dbResearch, tags, images, result.collaborators, currentUsername);
+  const research = ResearchItem.fromDB(
+    dbResearch,
+    tags,
+    images,
+    result.collaborators,
+    currentUsername,
+  );
   research.usefulCount = usefulVotes.count || 0;
   research.subscriberCount = subscribers.count || 0;
 
@@ -59,7 +74,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
   const research = loaderData?.research as ResearchItem;
-  const publicUpdates = loaderData?.research?.updates as ResearchUpdate[];
 
   if (!research) {
     return [];
@@ -67,7 +81,7 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 
   const title = `${research.title} - Research - ${loaderData?.tenantSettings.siteName}`;
 
-  return generateTags(title, research.description, (publicUpdates?.at(0)?.images?.[0] as any)?.downloadUrl, { type: 'article' });
+  return generateTags(title, research.description, research.image?.publicUrl, { type: 'article' });
 });
 
 export default function Index() {

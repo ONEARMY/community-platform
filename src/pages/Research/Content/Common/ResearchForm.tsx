@@ -76,7 +76,7 @@ const ResearchForm = ({ research }: IProps) => {
         navigate(`/research/${result.research.slug}`);
       }, 100);
     } catch (e) {
-      if (e.cause && e.message) {
+      if (e.message) {
         setSaveErrorMessage(e.message);
       }
       logger.error(e);
@@ -103,7 +103,6 @@ const ResearchForm = ({ research }: IProps) => {
         }
         return errors;
       }}
-      validateOnBlur
       render={({
         errors,
         dirty,

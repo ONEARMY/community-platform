@@ -1,6 +1,5 @@
 import type { QuestionFormData } from 'oa-shared';
 import { DBQuestion, Question } from 'oa-shared';
-import { getCleanFileName } from 'src/utils/storage';
 
 const upsert = async (id: number | null, question: QuestionFormData) => {
   const body = new FormData();
@@ -20,13 +19,7 @@ const upsert = async (id: number | null, question: QuestionFormData) => {
 
   if (question.images && question.images.length > 0) {
     for (const image of question.images) {
-      body.append('images', image.photoData, getCleanFileName(image.name));
-    }
-  }
-
-  if (question.existingImages && question.existingImages.length > 0) {
-    for (const image of question.existingImages) {
-      body.append('existingImages', image.id);
+      body.append('images', JSON.stringify(image));
     }
   }
 

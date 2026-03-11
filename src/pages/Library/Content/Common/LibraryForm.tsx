@@ -112,7 +112,6 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       mutators={{
         ...arrayMutators,
       }}
-      validateOnBlur
       enableReinitialize={true}
       validate={(values) => {
         const errors = {};

@@ -101,6 +101,8 @@ describe('NewsForm', () => {
         isDraft: false,
         heroImage: {
           id: 'image-123',
+          fullPath: 'https://example.com/image.jpg',
+          path: 'https://example.com/image.jpg',
           publicUrl: 'https://example.com/image.jpg',
         },
       });
@@ -197,6 +199,8 @@ describe('NewsForm', () => {
         body: 'Body content',
         heroImage: {
           id: 'image-789',
+          path: 'https://example.com/hero.jpg',
+          fullPath: 'https://example.com/hero.jpg',
           publicUrl: 'https://example.com/hero.jpg',
         },
       });

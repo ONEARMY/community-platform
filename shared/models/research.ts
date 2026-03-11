@@ -34,7 +34,7 @@ export class DBResearchItem implements IDBContentDoc {
   slug: string;
   previous_slugs: string[] | null;
   description: string;
-  image: FullMedia | null;
+  image: DBMedia | null;
   category_id?: number;
   tags: number[];
   status: ResearchStatus;
@@ -220,12 +220,12 @@ export type ResearchFormData = {
   category?: SelectValue;
   tags?: number[];
   collaborators?: string[];
-  image: FullMedia | null;
+  image: DBMedia | null;
 };
 
 export interface ResearchUpdateFormData extends IFilesForm {
   title: string;
   description: string;
-  images: FullMedia[] | null;
+  images: DBMedia[] | null;
   videoUrl?: string;
 }

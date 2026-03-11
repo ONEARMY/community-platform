@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components';
-import type { Image } from 'oa-shared';
+import type { DBMedia } from 'oa-shared';
 import { Field } from 'react-final-form';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { ImageInputField } from 'src/common/Form/ImageInput.field';
@@ -17,7 +17,7 @@ const ImageInputFieldWrapper = styled.div`
 
 interface IProps {
   inputsAvailable: number;
-  images: Image[] | null;
+  images: DBMedia[] | null;
   removeImage: (index: number) => void;
 }
 

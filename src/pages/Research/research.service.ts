@@ -1,5 +1,4 @@
 import type {
-  IConvertedFileMeta,
   ResearchFormData,
   ResearchItem,
   ResearchStatus,
@@ -7,7 +6,6 @@ import type {
   ResearchUpdateFormData,
 } from 'oa-shared';
 import { logger } from 'src/logger';
-import { getCleanFileName } from 'src/utils/storage';
 import type { ResearchSortOption } from './ResearchSortOptions';
 
 const search = async (
@@ -110,15 +108,11 @@ const upsert = async (id: number | null, research: ResearchFormData, isDraft = f
         });
 
   if (response.status !== 200 && response.status !== 201) {
-    if (response.status === 409) {
-      throw new Error('Duplicate research item', { cause: 409 });
-    }
+    // Try to parse error from response body
+    const errorData = await response.json().catch(() => ({}));
+    const errorMessage = errorData.error || 'Error saving research';
 
-    if (response.status === 400) {
-      throw new Error(response.statusText, { cause: 409 });
-    }
-
-    throw new Error('Error saving research', { cause: 500 });
+    throw new Error(errorMessage, { cause: response.status });
   }
 
   return (await response.json()) as { research: ResearchItem };
@@ -137,9 +131,9 @@ const upsertUpdate = async (
   data.append('videoUrl', update.videoUrl || '');
 
   if (update.images && update.images.length > 0) {
-    for (const image of update.images as unknown as IConvertedFileMeta[]) {
+    for (const image of update.images) {
       if (image) {
-        data.append('images', image.photoData, getCleanFileName(image.name));
+        data.append('images', JSON.stringify(image));
       }
     }
   }

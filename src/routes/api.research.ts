@@ -1,4 +1,5 @@
-import type { DBResearchItem, ResearchStatus } from 'oa-shared';
+import { HTTPException } from 'hono/http-exception';
+import type { DBResearchItem, FullMedia, ResearchStatus } from 'oa-shared';
 import { ResearchItem } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
@@ -10,6 +11,7 @@ import { ProfileServiceServer } from 'src/services/profileService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
+import { conflictError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -95,7 +97,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       collaborators: formData.has('collaborators')
         ? (formData.getAll('collaborators') as string[])
         : null,
-      uploadedImage: formData.get('image') as File | null,
+      image: formData.has('image')
+        ? (JSON.parse(formData.get('image') as string) as FullMedia)
+        : null,
     };
 
     const claims = await client.auth.getClaims();
@@ -104,22 +108,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const { valid, status, statusText } = await validateRequest(request, data);
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    await validateRequest(request, data);
 
     const slug = convertToSlug(data.title);
 
     if (await contentServiceServer.isDuplicateNewSlug(slug, client, 'research')) {
-      return Response.json(
-        {},
-        {
-          status: 409,
-          statusText: 'This research already exists',
-        },
-      );
+      throw conflictError('This research already exists');
     }
 
     const profileService = new ProfileServiceServer(client);
@@ -142,6 +136,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         collaborators: data.collaborators,
         status: researchStatus,
         is_draft: data.isDraft,
+        image: data.image,
         tenant_id: process.env.TENANT_ID,
       })
       .select()
@@ -160,55 +155,34 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     await subscribersServiceServer.addResearchSubscribers(research, profile.id, client, headers);
 
-    if (data.uploadedImage) {
-      const mediaResult = await storageServiceServer.uploadImage(
-        [data.uploadedImage],
-        `research/${research.id}`,
-        client,
-      );
-
-      if (mediaResult?.errors) {
-        console.error(mediaResult.errors);
-      }
-
-      if (mediaResult?.media && mediaResult.media.length > 0) {
-        const result = await client
-          .from('research')
-          .update({ image: mediaResult.media[0] })
-          .eq('id', research.id)
-          .select();
-
-        if (result.data) {
-          research.image = result.data[0].image;
-        }
-      }
-    }
-
     updateUserActivity(client, claims.data.claims.sub);
 
     return Response.json({ research }, { headers, status: 201 });
   } catch (error) {
     console.error(error);
-    return Response.json({}, { headers, status: 500, statusText: 'Error creating research' });
+
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
+    return Response.json({ error: 'Error creating research', status: 500 }, { status: 500 });
   }
 };
 
-async function validateRequest(request: Request, data: any) {
+async function validateRequest(request: Request, data: any): Promise<void> {
   if (request.method !== 'POST') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw validationError('Method not allowed');
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'title is required' };
+    throw validationError('Title is required', 'title');
   }
 
   if (!data.description) {
-    return { status: 400, statusText: 'description is required' };
+    throw validationError('Description is required', 'description');
   }
 
   if (!data.isDraft && !data.uploadedImage && !data.existingImage) {
-    return { status: 400, statusText: 'image is required' };
+    throw validationError('Image is required', 'image');
   }
-
-  return { valid: true };
 }

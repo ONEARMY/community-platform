@@ -57,7 +57,7 @@ export const ImageField = (props: ImageFieldProps) => {
   };
 
   return (
-    <FormFieldWrapper htmlFor="existingImage" text={title} required>
+    <FormFieldWrapper htmlFor="image" text={title} required>
       {uploadError && <Text sx={{ color: 'error', fontSize: 1, mb: 2 }}>{uploadError}</Text>}
       {isUploading ? (
         <ImageInputFieldWrapper key="image-uploading" data-cy="image-uploading">

@@ -128,7 +128,7 @@ export class DBProjectStep {
   readonly project_id: number;
   title: string;
   description: string;
-  images: FullMedia[] | null;
+  images: DBMedia[] | null;
   video_url: string | null;
   order: number;
 
@@ -176,7 +176,7 @@ export interface ProjectFormData extends IFilesForm {
   tags?: number[];
   difficultyLevel?: DifficultyLevel;
   time?: string;
-  image: FullMedia | null;
+  image: DBMedia | null;
   steps: ProjectStepFormData[];
 }
 
@@ -184,6 +184,6 @@ export type ProjectStepFormData = {
   id?: number;
   title: string;
   description: string;
-  images: FullMedia[] | null;
+  images: DBMedia[] | null;
   videoUrl?: string;
 };

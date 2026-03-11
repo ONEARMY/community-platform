@@ -1,13 +1,11 @@
 import { marked } from 'marked';
-
 import { processStandaloneYouTubeUrls, processYouTubeLinks } from '../utils/markdown';
 import type { DBAuthor } from './author';
 import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
-import type { IConvertedFileMeta } from './common';
 import type { IContentDoc, IDBContentDoc } from './content';
-import type { DBMedia, Image } from './media';
+import { DBMedia, FullMedia, Image } from './media';
 import type { DBProfileBadge } from './profileBadge';
 import { ProfileBadge } from './profileBadge';
 import type { SelectValue } from './selectValue';
@@ -46,7 +44,7 @@ export class News implements IContentDoc {
   commentCount: number;
   createdAt: Date;
   deleted: boolean;
-  heroImage: Image | null;
+  heroImage: FullMedia | null;
   isDraft: boolean;
   modifiedAt: Date | null;
   profileBadge: ProfileBadge | null;
@@ -64,7 +62,7 @@ export class News implements IContentDoc {
     Object.assign(this, news);
   }
 
-  static fromDB(news: DBNews, tags: Tag[], heroImage?: Image | null) {
+  static fromDB(news: DBNews, tags: Tag[], heroImage?: FullMedia | null) {
     let htmlBody = marked(news.body, {
       breaks: true,
       gfm: true,
@@ -103,7 +101,7 @@ export type NewsFormData = {
   body: string | null;
   category: SelectValue | null;
   existingHeroImage: Image | null;
-  heroImage: IConvertedFileMeta | null;
+  heroImage: DBMedia | null;
   isDraft: boolean | null;
   profileBadge: SelectValue | null;
   tags?: number[];

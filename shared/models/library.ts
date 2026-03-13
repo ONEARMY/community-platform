@@ -54,7 +54,7 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
   }
 
   static toFormData(obj: DBProject, images: Image[]) {
-    const publicCoverImage = images?.find((x) => x.id === obj.cover_image.id);
+    const publicCoverImage = images?.find((x) => x.id === obj.cover_image?.id);
 
     return {
       title: obj.title,
@@ -68,8 +68,8 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
       difficultyLevel: obj.difficulty_level,
       files: obj.files,
       fileLink: obj.file_link,
-      time: obj.time,
-      steps: obj.steps ? obj.steps.map((x) => DBProjectStep.toFormData(x, images)) : null,
+      time: obj.time ?? null,
+      steps: obj.steps ? obj.steps.map((x) => DBProjectStep.toFormData(x, images)) : [],
     } satisfies ProjectFormData;
   }
 }

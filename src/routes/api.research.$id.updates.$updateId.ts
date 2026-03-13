@@ -1,10 +1,10 @@
-import type { DBResearchUpdate, FullMedia, IMediaFile } from 'oa-shared';
+import type { DBMedia, DBResearchUpdate, IMediaFile } from 'oa-shared';
 import { ResearchUpdate } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { researchServiceServer } from 'src/services/researchService.server';
+import { ResearchServiceServer } from 'src/services/researchService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -25,10 +25,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       description: formData.get('description') as string,
       videoUrl: formData.get('videoUrl') as string,
       images: formData.has('images')
-        ? (JSON.parse(formData.get('images') as string) as FullMedia)
+        ? formData.getAll('images').map((x) => JSON.parse(x as string) as DBMedia)
         : null,
       files: formData.has('files')
-        ? (JSON.parse(formData.get('files') as string) as IMediaFile[])
+        ? formData.getAll('files').map((x) => JSON.parse(x as string) as IMediaFile)
         : null,
       fileUrl: formData.get('fileUrl') as string,
       isDraft: formData.get('draft') === 'true',
@@ -49,7 +49,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
-    if (!researchServiceServer.isAllowedToEditUpdate(profile, researchId, updateId, client)) {
+    if (!new ResearchServiceServer(client).isAllowedToEditUpdate(profile, researchId, updateId)) {
       return Response.json({}, { status: 403, headers });
     }
 
@@ -101,7 +101,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 };
 
-async function deleteResearchUpdate(request, id: number, updateId: number) {
+async function deleteResearchUpdate(request: Request, id: number, updateId: number) {
   const { client, headers } = createSupabaseServerClient(request);
 
   const claims = await client.auth.getClaims();
@@ -113,7 +113,7 @@ async function deleteResearchUpdate(request, id: number, updateId: number) {
   const profileService = new ProfileServiceServer(client);
   const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
-  if (!researchServiceServer.isAllowedToEditUpdate(profile, id, updateId, client)) {
+  if (!new ResearchServiceServer(client).isAllowedToEditUpdate(profile, id, updateId)) {
     return Response.json({}, { status: 403, headers });
   }
 

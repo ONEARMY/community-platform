@@ -1,6 +1,6 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
-import type { DBProfile, DBQuestion, Moderation } from 'oa-shared';
+import type { DBMedia, DBProfile, DBQuestion, Moderation } from 'oa-shared';
 import { Question } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/Question/constants';
@@ -8,7 +8,6 @@ import type { QuestionSortOption } from 'src/pages/Question/QuestionSortOptions'
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { discordServiceServer } from 'src/services/discordService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { convertToSlug } from 'src/utils/slug';
@@ -112,6 +111,9 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       is_draft: formData.get('is_draft') === 'true',
       category: formData.has('category') ? (formData.get('category') as string) : null,
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
+      images: formData.has('images')
+        ? formData.getAll('images').map((x) => JSON.parse(x as string) as DBMedia)
+        : null,
     };
 
     const claims = await client.auth.getClaims();
@@ -172,6 +174,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         description: data.description,
         is_draft: data.is_draft,
         moderation: 'accepted' as Moderation,
+        images: data.images,
         slug,
         category: data.category,
         tags: data.tags,
@@ -185,28 +188,6 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     const question = Question.fromDB(questionResult.data[0], []);
     subscribersServiceServer.add('questions', question.id, profile.id, client, headers);
-
-    if (uploadedImages.length > 0) {
-      const questionId = Number(questionResult.data[0].id);
-
-      const imageResult = await storageServiceServer.uploadImage(
-        uploadedImages,
-        `questions/${questionId}`,
-        client,
-      );
-
-      if (imageResult?.media && imageResult.media.length > 0) {
-        const updateResult = await client
-          .from('questions')
-          .update({ images: imageResult.media })
-          .eq('id', questionId)
-          .select();
-
-        if (updateResult.data) {
-          question.images = updateResult.data[0].images;
-        }
-      }
-    }
 
     if (!question.isDraft) {
       notifyDiscord(question, profile, new URL(request.url).origin.replace('http:', 'https:'));

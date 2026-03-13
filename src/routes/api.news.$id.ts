@@ -1,11 +1,11 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
-import type { DBNews, FullMedia } from 'oa-shared';
+import type { DBMedia, DBNews } from 'oa-shared';
 import { News } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
-import { newsServiceServer } from 'src/services/newsService.server';
+import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
@@ -33,7 +33,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       title: formData.get('title') as string,
       slug: convertToSlug(formData.get('title') as string),
       heroImage: formData.has('heroImage')
-        ? (JSON.parse(formData.get('heroImage') as string) as FullMedia)
+        ? (JSON.parse(formData.get('heroImage') as string) as DBMedia)
         : null,
     };
 
@@ -43,7 +43,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const currentNews = await newsServiceServer.getById(id, client);
+    const currentNews = await new NewsServiceServer(client).getById(id);
 
     await validateRequest(params, request, claims.data.claims.sub, data, currentNews, client);
 

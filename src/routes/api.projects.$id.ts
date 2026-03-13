@@ -5,9 +5,9 @@ import { Project, ProjectStep, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
-import { libraryServiceServer } from 'src/services/libraryService.server';
+import { LibraryServiceServer } from 'src/services/libraryService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
+import { StorageServiceServer } from 'src/services/storageService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { conflictError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
@@ -52,21 +52,25 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     }
 
     const profileService = new ProfileServiceServer(client);
+    const libraryService = new LibraryServiceServer(client);
 
-    const currentProject = await libraryServiceServer.getById(id, client);
+    const currentProject = await libraryService.getById(id);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
     await validateRequest(request, profile, data, currentProject, client);
 
-    // Remove old cover image if it exists and no new image is provided
-    if (!data.coverImage && currentProject.cover_image?.path) {
-      await storageServiceServer.removeImages([currentProject.cover_image.path], client);
+    // Remove old cover image if it exists and no new image is provided or a different image is provided
+    if (
+      currentProject.cover_image?.path &&
+      (!data.coverImage || data.coverImage.id !== currentProject.cover_image.id)
+    ) {
+      await new StorageServiceServer(client).removeImages([currentProject.cover_image.path]);
     }
 
     // 2. Update project
     const projectDb = await updateProject(client, profile!, currentProject, data);
     const project = Project.fromDB(projectDb, []);
-    const existingStepIds = await libraryServiceServer.getProjectStepIds(projectDb.id, client);
+    const existingStepIds = await libraryService.getProjectStepIds(projectDb.id);
 
     // 3. Upsert Steps
     const stepsToKeepIds: number[] = [];
@@ -83,7 +87,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         ? formData.getAll(`steps.[${i}].images`).map((x) => JSON.parse(x as string) as DBMedia)
         : null;
 
-      const stepDb = await libraryServiceServer.upsertStep(client, stepId, {
+      const stepDb = await libraryService.upsertStep(stepId, {
         title: formData.get(`steps.[${i}].title`) as string,
         description: formData.get(`steps.[${i}].description`) as string,
         videoUrl: (formData.get(`steps.[${i}].videoUrl`) as string) || null,
@@ -99,7 +103,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const stepsToDelete = existingStepIds.filter((id) => !stepsToKeepIds.includes(id));
 
     if (stepsToDelete.length > 0) {
-      await libraryServiceServer.deleteStepsById([...stepsToDelete], client);
+      await libraryService.deleteStepsById([...stepsToDelete]);
     }
 
     updateUserActivity(client, claims.data.claims.sub);
@@ -217,8 +221,7 @@ async function deleteProject(request: Request, id: number) {
     return Response.json({}, { headers, status: 401 });
   }
 
-  const canEdit = await libraryServiceServer.isAllowedToEditProjectById(
-    client,
+  const canEdit = await new LibraryServiceServer(client).isAllowedToEditProjectById(
     id,
     claims.data.claims.user_metadata?.username,
   );

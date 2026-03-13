@@ -6,11 +6,10 @@ import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { questionServiceServer } from 'src/services/questionService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
+import { StorageServiceServer } from 'src/services/storageService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { hasAdminRights } from 'src/utils/helpers';
 import { convertToSlug } from 'src/utils/slug';
-import { validateImages } from 'src/utils/storage';
 import { contentServiceServer } from '../services/contentService.server';
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
@@ -20,7 +19,6 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const id = Number(params.id);
 
     const formData = await request.formData();
-    const imagesToKeepIds = formData.getAll('existingImages');
 
     const data = {
       title: formData.get('title') as string,
@@ -29,6 +27,9 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       is_draft: formData.get('is_draft') === 'true',
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       slug: convertToSlug(formData.get('title') as string),
+      images: formData.has('images')
+        ? formData.getAll('images').map((x) => JSON.parse(x as string) as DBMedia)
+        : null,
     };
 
     const claims = await client.auth.getClaims();
@@ -39,42 +40,17 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const currentQuestion = await questionServiceServer.getById(id, client);
 
-    const { valid, status, statusText } = await validateRequest(params, request, claims.data.claims.sub, data, currentQuestion, client);
+    const { valid, status, statusText } = await validateRequest(
+      params,
+      request,
+      claims.data.claims.sub,
+      data,
+      currentQuestion,
+      client,
+    );
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText });
-    }
-
-    const uploadedImages = formData.getAll('images') as File[];
-    const imageValidation = validateImages(uploadedImages);
-
-    if (!imageValidation.valid) {
-      return Response.json(
-        {},
-        {
-          headers,
-          status: 400,
-          statusText: imageValidation.errors.join(', '),
-        },
-      );
-    }
-
-    let images: DBMedia[] = [];
-
-    if (imagesToKeepIds.length > 0) {
-      const questionImages = await client.from('questions').select('images').eq('id', params.id).single();
-
-      if (questionImages.data && questionImages.data?.images?.length > 0) {
-        images = questionImages.data.images.filter((x) => imagesToKeepIds.includes(x.id));
-      }
-    }
-
-    if (uploadedImages.length > 0) {
-      const mediaResult = await storageServiceServer.uploadImage(uploadedImages, `questions/${id}`, client);
-
-      if (mediaResult) {
-        images = [...images, ...mediaResult.media];
-      }
     }
 
     const previousSlugs = contentServiceServer.updatePreviousSlugs(currentQuestion, data.slug);
@@ -85,7 +61,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         category: data.category,
         description: data.description,
         is_draft: data.is_draft,
-        images,
+        images: data.images,
         title: data.title,
         slug: data.slug,
         previous_slugs: previousSlugs,
@@ -99,7 +75,10 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       throw questionResult.error;
     }
 
-    const newImages = storageServiceServer.getPublicUrls(client, questionResult.data[0].images, IMAGE_SIZES.GALLERY);
+    const newImages = new StorageServiceServer(client).getPublicUrls(
+      questionResult.data[0].images,
+      IMAGE_SIZES.GALLERY,
+    );
 
     const question = Question.fromDB(questionResult.data[0], [], newImages);
     updateUserActivity(client, claims.data.claims.sub);
@@ -141,7 +120,12 @@ async function validateRequest(
 
   if (
     currentQuestion.slug !== data.slug &&
-    (await contentServiceServer.isDuplicateExistingSlug(data.slug, currentQuestion.id, client, 'questions'))
+    (await contentServiceServer.isDuplicateExistingSlug(
+      data.slug,
+      currentQuestion.id,
+      client,
+      'questions',
+    ))
   ) {
     return {
       status: 409,

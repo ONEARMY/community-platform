@@ -1,4 +1,4 @@
-import type { News, NewsFormData } from 'oa-shared';
+import type { NewsFormData } from 'oa-shared';
 import { useCallback, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
@@ -21,41 +21,26 @@ import { NewsBodyField, NewsImageField } from './FormFields';
 
 interface IProps {
   'data-testid'?: string;
-  news: News | null;
-  parentType: MainFormAction;
+  id: number | null;
+  formData: NewsFormData | null;
+  formAction: MainFormAction;
 }
 
 export const NewsForm = (props: IProps) => {
-  const { news, parentType } = props;
   const navigate = useNavigate();
-
-  // Initialize values directly from news to avoid delay from useEffect
-  const initialValues: NewsFormData = {
-    body: news?.body || '',
-    category: news?.category
-      ? {
-          value: news.category.id?.toString(),
-          label: news.category.name,
-        }
-      : null,
-    existingHeroImage: news?.heroImage || null,
-    isDraft: news?.isDraft || null,
-    heroImage: null,
-    profileBadge: news?.profileBadge
-      ? {
-          value: news.profileBadge.id?.toString(),
-          label: news.profileBadge.displayName,
-        }
-      : null,
-    tags: news?.tagIds || [],
-    title: news?.title || '',
-  };
-
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const id = news?.id || null;
+  const initialValues: NewsFormData = {
+    body: props.formData?.body || '',
+    category: props.formData?.category || null,
+    heroImage: props.formData?.heroImage || null,
+    isDraft: props.formData?.isDraft || null,
+    profileBadge: props.formData?.profileBadge || null,
+    tags: props.formData?.tags || [],
+    title: props.formData?.title || '',
+  };
 
   const onSubmit = async (formValues: Partial<NewsFormData>, isDraft = false) => {
     setIntentionalNavigation(true);
@@ -63,12 +48,11 @@ export const NewsForm = (props: IProps) => {
     setIsSubmitting(true);
 
     try {
-      const result = await newsService.upsert(id, {
+      const result = await newsService.upsert(props.id, {
         body: formValues.body!,
         category: formValues.category || null,
         heroImage: formValues.heroImage || null,
         isDraft: isDraft,
-        existingHeroImage: initialValues.existingHeroImage || null,
         profileBadge: formValues.profileBadge || null,
         tags: formValues.tags,
         title: formValues.title!,
@@ -92,19 +76,20 @@ export const NewsForm = (props: IProps) => {
   const imageUpload = useCallback(
     async (imageFile: File) => {
       if (!imageFile) {
-        return;
+        return null;
       }
       try {
-        const response = await storageService.imageUpload(id, 'news', imageFile);
-        return response.publicUrl;
+        const response = await storageService.imageUpload(props.id, 'news', imageFile);
+        return response || null;
       } catch (e) {
         if (e.cause && e.message) {
           setSaveErrorMessage(e.message);
         }
         logger.error(e);
+        return null;
       }
     },
-    [id],
+    [props.id],
   );
 
   const validateForm = useCallback((values) => {
@@ -120,7 +105,7 @@ export const NewsForm = (props: IProps) => {
 
   return (
     <Form
-      key={id || 'new'}
+      key={props.id || 'new'}
       data-testid={props['data-testid']}
       onSubmit={(values) => onSubmit(values, false)}
       initialValues={initialValues}
@@ -146,8 +131,7 @@ export const NewsForm = (props: IProps) => {
         handleSubmit,
         values,
       }) => {
-        const removeExistingImage = () => {
-          form.change('existingHeroImage', null);
+        const removeImage = () => {
           form.change('heroImage', null);
         };
 
@@ -165,7 +149,7 @@ export const NewsForm = (props: IProps) => {
 
         return (
           <FormWrapper
-            buttonLabel={LABELS.buttons[parentType]}
+            buttonLabel={LABELS.buttons[props.formAction]}
             contentType="news"
             errorsClientSide={errorsClientSide}
             errorSubmitting={saveErrorMessage}
@@ -173,7 +157,7 @@ export const NewsForm = (props: IProps) => {
             handleSubmit={handleSubmit}
             handleSubmitDraft={handleSubmitDraft}
             hasValidationErrors={hasValidationErrors}
-            heading={LABELS.headings[parentType]}
+            heading={LABELS.headings[props.formAction]}
             submitFailed={submitFailed}
             submitting={submitting || isSubmitting}
             unsavedChangesDialog={unsavedChangesDialog}
@@ -184,8 +168,9 @@ export const NewsForm = (props: IProps) => {
               title={LABELS.fields.title.title}
             />
             <NewsImageField
-              existingHeroImage={values.existingHeroImage}
-              removeExistingImage={removeExistingImage}
+              image={values.heroImage}
+              removeImage={removeImage}
+              contentId={props.id || null}
             />
             <CategoryField type="news" />
             <TagsField title={LABELS.fields.tags.title} />

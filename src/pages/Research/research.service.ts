@@ -119,7 +119,7 @@ const upsert = async (id: number | null, research: ResearchFormData, isDraft = f
 };
 
 const upsertUpdate = async (
-  id: number,
+  researchId: number,
   updateId: number | null,
   update: ResearchUpdateFormData,
   isDraft = false,
@@ -138,14 +138,6 @@ const upsertUpdate = async (
     }
   }
 
-  if (update.images && update.images.length > 0) {
-    for (const image of update.images) {
-      if (image) {
-        data.append('existingImages', JSON.stringify(image));
-      }
-    }
-  }
-
   if (update.files && update.files.length > 0) {
     for (const file of update.files) {
       if (file) {
@@ -160,11 +152,11 @@ const upsertUpdate = async (
 
   const response =
     updateId === null
-      ? await fetch(`/api/research/${id}/updates`, {
+      ? await fetch(`/api/research/${researchId}/updates`, {
           method: 'POST',
           body: data,
         })
-      : await fetch(`/api/research/${id}/updates/${updateId}`, {
+      : await fetch(`/api/research/${researchId}/updates/${updateId}`, {
           method: 'PUT',
           body: data,
         });

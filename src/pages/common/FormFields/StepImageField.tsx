@@ -1,11 +1,10 @@
 import styled from '@emotion/styled';
-import { ImageInput, ImageInputDeleteImage, ImageInputWrapper } from 'oa-components';
-import type { Image } from 'oa-shared';
+import { ImageInputV2 } from 'oa-components';
+import type { MediaWithPublicUrl } from 'oa-shared';
 import { useState } from 'react';
 import { useForm, useFormState } from 'react-final-form';
-import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { storageService } from 'src/services/storageService';
-import { Image as ImageComponent, Spinner, Text } from 'theme-ui';
+import { Spinner, Text } from 'theme-ui';
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -18,7 +17,7 @@ interface StepImageFieldProps {
   imageIndex: number;
   contentType: 'projects' | 'research' | 'questions' | 'news';
   contentId?: number | null;
-  images: Image[];
+  images: MediaWithPublicUrl[];
   onImageUploaded?: () => void;
 }
 
@@ -73,24 +72,19 @@ export const StepImageField = ({
   if (imageIndex < images.length) {
     const image = images[imageIndex];
     return (
-      <ImageInputFieldWrapper data-cy={`existing-image-${imageIndex}`}>
-        <FieldContainer
-          style={{
-            height: '100%',
-            width: '100%',
-            overflow: 'hidden',
+      <ImageInputFieldWrapper data-cy={`image-${imageIndex}`}>
+        <ImageInputV2
+          image={image}
+          onFilesChange={(file) => {
+            if (file) {
+              handleImageSelect({ photoData: file });
+            } else {
+              const updatedImages = (images || []).filter((_, i) => i !== imageIndex);
+              form.change(imagesFieldName, updatedImages);
+            }
           }}
-        >
-          <ImageInputWrapper hasUploadedImg={true}>
-            <ImageComponent src={image.publicUrl} />
-            <ImageInputDeleteImage
-              onClick={() => {
-                const updatedImages = (images || []).filter((_, i) => i !== imageIndex);
-                form.change(imagesFieldName, updatedImages);
-              }}
-            />
-          </ImageInputWrapper>
-        </FieldContainer>
+          onError={setUploadError}
+        />
       </ImageInputFieldWrapper>
     );
   }
@@ -100,27 +94,12 @@ export const StepImageField = ({
     <ImageInputFieldWrapper data-cy={`image-upload-${imageIndex}`}>
       {uploadError && <Text sx={{ color: 'error', fontSize: 0, mb: 1 }}>{uploadError}</Text>}
       {isUploading ? (
-        <FieldContainer
-          style={{
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Spinner size={20} />
-        </FieldContainer>
+        <Spinner size={20} />
       ) : (
-        <FieldContainer
-          style={{
-            height: '100%',
-            width: '100%',
-            overflow: 'hidden',
-          }}
-        >
-          <ImageInput hasText={false} value={undefined} onFilesChange={handleImageSelect} />
-        </FieldContainer>
+        <ImageInputV2
+          onFilesChange={(file) => file && handleImageSelect({ photoData: file })}
+          onError={setUploadError}
+        />
       )}
     </ImageInputFieldWrapper>
   );

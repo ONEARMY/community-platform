@@ -1,14 +1,11 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBProfile, DBResearchItem } from 'oa-shared';
+import type { DBMedia, DBProfile, DBResearchItem, IMediaFile } from 'oa-shared';
 import { ResearchUpdate, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
-import { validateImages } from 'src/utils/storage';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -22,6 +19,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       videoUrl: formData.get('videoUrl') as string,
       fileUrl: formData.get('fileUrl') as string,
       isDraft: formData.get('draft') === 'true',
+      images: formData.has('images')
+        ? formData.getAll('images').map((x) => JSON.parse(x as string) as DBMedia)
+        : null,
+      files: formData.has('files')
+        ? formData.getAll('files').map((x) => JSON.parse(x as string) as IMediaFile)
+        : null,
     };
 
     const claims = await client.auth.getClaims();
@@ -49,21 +52,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status, statusText });
     }
 
-    const uploadedImages = formData.getAll('images') as File[];
-    const uploadedFiles = formData.getAll('files') as File[];
-    const imageValidation = validateImages(uploadedImages);
-
-    if (!imageValidation.valid) {
-      return Response.json(
-        {},
-        {
-          headers,
-          status: 400,
-          statusText: imageValidation.errors.join(', '),
-        },
-      );
-    }
-
     const updateResult = await client
       .from('research_updates')
       .insert({
@@ -85,20 +73,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const dbResearchUpdate = updateResult.data;
     const researchUpdate = ResearchUpdate.fromDB(dbResearchUpdate, []);
     researchUpdate.research = updateResult.data.research;
-
-    await uploadAndUpdateImages(
-      uploadedImages,
-      `research/${researchId}/updates/${researchUpdate.id}`,
-      researchUpdate,
-      client,
-    );
-
-    await uploadAndUpdateFiles(
-      uploadedFiles,
-      `research/${researchId}/updates/${researchUpdate.id}`,
-      researchUpdate,
-      client,
-    );
 
     await subscribersServiceServer.addResearchUpdateSubscribers(
       researchUpdate,
@@ -124,56 +98,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 };
 
-async function uploadAndUpdateImages(
-  files: File[],
-  path: string,
-  researchUpdate: ResearchUpdate,
-  client: SupabaseClient,
-) {
-  if (files.length > 0) {
-    const mediaResult = await storageServiceServer.uploadImage(files, path, client);
-
-    if (mediaResult?.media && mediaResult.media.length > 0) {
-      const result = await client
-        .from('research_updates')
-        .update({
-          images: mediaResult.media,
-        })
-        .eq('id', researchUpdate.id)
-        .select();
-
-      if (result.data) {
-        researchUpdate.images = result.data[0].images;
-      }
-    }
-  }
-}
-
-async function uploadAndUpdateFiles(
-  files: File[],
-  path: string,
-  researchUpdate: ResearchUpdate,
-  client: SupabaseClient,
-) {
-  if (files.length > 0) {
-    const mediaResult = await storageServiceServer.uploadFile(files, path, client);
-
-    if (mediaResult?.media && mediaResult.media.length > 0) {
-      const result = await client
-        .from('research_updates')
-        .update({
-          files: mediaResult.media,
-        })
-        .eq('id', researchUpdate.id)
-        .select();
-
-      if (result.data) {
-        researchUpdate.files = result.data[0].files;
-      }
-    }
-  }
-}
-
 function validateRequest(
   request: Request,
   data: any,
@@ -189,6 +113,10 @@ function validateRequest(
   }
 
   if (!data.description) {
+    return { status: 400, statusText: 'description is required' };
+  }
+
+  if (!data.images) {
     return { status: 400, statusText: 'description is required' };
   }
 

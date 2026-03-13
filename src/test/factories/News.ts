@@ -1,6 +1,25 @@
 import { faker } from '@faker-js/faker';
 
-import type { News } from 'oa-shared';
+import type { News, NewsFormData } from 'oa-shared';
+
+export const FactoryNewsFormData = (overloads: Partial<NewsFormData> = {}): NewsFormData => ({
+  body: faker.lorem.paragraph(),
+  category: {
+    label: faker.lorem.words(1),
+    value: faker.number.int().toString(),
+  },
+  heroImage: {
+    id: faker.string.uuid(),
+    path: faker.image.url(),
+    fullPath: faker.image.url(),
+    publicUrl: faker.image.url(),
+  },
+  isDraft: false,
+  profileBadge: null,
+  tags: [faker.number.int(), faker.number.int()],
+  title: faker.lorem.sentence(),
+  ...overloads,
+});
 
 export const FactoryNewsItem = (newsOverloads: Partial<News> = {}): News => ({
   body: faker.lorem.paragraph(),

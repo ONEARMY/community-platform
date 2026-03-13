@@ -375,11 +375,8 @@ export type ProfileFormData = {
   website: string;
   isContactable: boolean;
   type: string;
-  photo?: File;
-  existingPhoto?: Image;
-  existingCoverImages?: Image[];
-  existingCoverImageIds?: string[];
-  coverImages?: File[];
+  photo?: DBMedia;
+  coverImages?: DBMedia[];
   showVisitorPolicy: boolean;
   visitorPreferencePolicy?: UserVisitorPreference['policy'];
   visitorPreferenceDetails?: UserVisitorPreference['details'];

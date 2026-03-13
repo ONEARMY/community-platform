@@ -1,5 +1,5 @@
 import type { DBNews, NewsFormData } from 'oa-shared';
-import { News } from 'oa-shared';
+import { DBMedia, News } from 'oa-shared';
 
 const upsert = async (id: number | null, form: NewsFormData) => {
   const { category, profileBadge, tags, title } = form;
@@ -23,11 +23,7 @@ const upsert = async (id: number | null, form: NewsFormData) => {
   }
 
   if (form.heroImage) {
-    body.append('heroImage', JSON.stringify(form.heroImage));
-  }
-
-  if (form.existingHeroImage) {
-    body.append('existingHeroImage', form.existingHeroImage.id);
+    body.append('heroImage', JSON.stringify(DBMedia.fromPublicMedia(form.heroImage)));
   }
 
   const response =

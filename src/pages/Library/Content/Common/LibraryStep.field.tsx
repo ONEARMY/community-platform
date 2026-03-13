@@ -1,5 +1,5 @@
 import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components';
-import type { FullMedia } from 'oa-shared';
+import type { MediaWithPublicUrl } from 'oa-shared';
 import { useState } from 'react';
 import { Field } from 'react-final-form';
 import { StepImageField } from 'src/pages/common/FormFields';
@@ -23,7 +23,7 @@ import { buttons, errors, steps } from '../../labels';
 interface IProps {
   name: string;
   index: number;
-  images: FullMedia[];
+  images: MediaWithPublicUrl[];
   onDelete: (index: number) => void;
   moveStep: (indexfrom: number, indexTo: number) => void;
   contentType?: 'projects' | 'research' | 'questions' | 'news';

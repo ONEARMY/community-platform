@@ -1,101 +1,124 @@
-import type { Image } from 'oa-shared';
-import { useMemo, useRef, useState } from 'react';
-import Dropzone from 'react-dropzone-esm';
-import type { ThemeUIStyleObject } from 'theme-ui';
-import { Box, Flex, Image as ImageComponent, Text } from 'theme-ui';
+import { MediaWithPublicUrl } from 'oa-shared';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Flex, Image as ImageComponent } from 'theme-ui';
 import { Button } from '../Button/Button';
-import { Modal } from '../Modal/Modal';
-import { ImageInputDeleteImage } from './ImageInputDeleteImage';
-import { ImageInputWrapper } from './ImageInputWrapper';
-import { imageValid } from './imageValid';
+import { ImageInputDeleteOverlay } from './ImageInputDeleteOverlay';
+import { isImageValid } from './isImageValid';
 
 interface IProps {
   onFilesChange: (fileMeta: File | undefined) => void;
-  imageDisplaySx?: ThemeUIStyleObject | undefined;
-  existingImage?: Image;
+  onError?: (error: string) => void;
+  image?: MediaWithPublicUrl;
+  maxFileSize?: number;
 }
+
+const ACCEPTED_FORMATS = '.jpeg,.jpg,.png,.gif,.svg,.webp';
+const DEFAULT_MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export const ImageInputV2 = (props: IProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const { imageDisplaySx, onFilesChange, existingImage } = props;
-
+  const { onFilesChange, onError, image, maxFileSize = DEFAULT_MAX_FILE_SIZE } = props;
   const [file, setFile] = useState<File | null>(null);
-  const [isImageCorrupt, setIsImageCorrupt] = useState(false);
-  const [showErrorModal, setShowErrorModal] = useState(false);
-  const src = useMemo(() => {
+
+  const previewUrl = useMemo(() => {
     if (file) {
       return URL.createObjectURL(file);
     }
+    return image?.publicUrl;
+  }, [file, image]);
+
+  // Cleanup object URL on unmount or when file changes
+  useEffect(() => {
+    return () => {
+      if (file) {
+        URL.revokeObjectURL(URL.createObjectURL(file));
+      }
+    };
   }, [file]);
 
-  const onDrop = async (selectedImage: File[]) => {
-    try {
-      await imageValid(selectedImage[0]);
-      setIsImageCorrupt(false);
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (!selectedFile) return;
 
-      setFile(selectedImage[0]);
-      onFilesChange(selectedImage[0]);
-    } catch (_) {
-      setIsImageCorrupt(true);
-      setShowErrorModal(true);
+    // Reset input to allow selecting the same file again if needed
+    event.target.value = '';
+
+    // Check file size
+    if (selectedFile.size > maxFileSize) {
+      const sizeMB = (maxFileSize / (1024 * 1024)).toFixed(0);
+      const errorMsg = `Image is too large. Maximum size is ${sizeMB}MB.`;
+      onError?.(errorMsg);
+      return;
+    }
+
+    // Validate image format and integrity
+    try {
+      await isImageValid(selectedFile);
+      setFile(selectedFile);
+      onFilesChange(selectedFile);
+    } catch {
+      const errorMsg =
+        'Invalid image file. Please upload a valid image (jpeg, jpg, png, gif, svg, or webp).';
+      onError?.(errorMsg);
     }
   };
 
-  const handleImageDelete = (event: Event) => {
+  const handleImageDelete = (event: React.MouseEvent) => {
     event.stopPropagation();
     setFile(null);
     onFilesChange(undefined);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
+  const handleWrapperClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const hasImage = !!(file || image);
+
   return (
-    <Box p={0} sx={imageDisplaySx ? imageDisplaySx : { height: '100%' }}>
-      <Dropzone
-        accept={{
-          'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.svg', '.webp'],
-        }}
-        multiple={false}
-        onDrop={onDrop}
-      >
-        {({ getRootProps, getInputProps, rootRef }) => (
-          <ImageInputWrapper {...getRootProps()} ref={rootRef} hasUploadedImg={!!existingImage}>
-            <input ref={fileInputRef} data-testid={'image-input'} {...getInputProps()} />
+    <Flex
+      className="image-input__wrapper"
+      onClick={handleWrapperClick}
+      sx={{
+        overflow: 'hidden',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative',
+        borderColor: 'background',
+        borderStyle: hasImage ? 'none' : 'dashed',
+        borderRadius: 1,
+        backgroundColor: 'white',
+        height: '100%',
+        width: '100%',
+        cursor: 'pointer',
+      }}
+    >
+      <input
+        ref={fileInputRef}
+        data-testid="image-input"
+        type="file"
+        accept={ACCEPTED_FORMATS}
+        onChange={handleFileSelect}
+        style={{ display: 'none' }}
+      />
 
-            {src ? <ImageComponent src={src} sx={imageDisplaySx} /> : <ImageComponent src={existingImage?.publicUrl} sx={imageDisplaySx} />}
+      {previewUrl && (
+        <ImageComponent
+          src={previewUrl}
+          sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+      )}
 
-            {!src && !existingImage ? (
-              <Button small variant="outline" icon="image" type="button">
-                Upload
-              </Button>
-            ) : (
-              <ImageInputDeleteImage onClick={(event) => handleImageDelete(event)} />
-            )}
-          </ImageInputWrapper>
-        )}
-      </Dropzone>
-      <Modal width={600} isOpen={showErrorModal} onDismiss={() => setShowErrorModal(false)}>
-        {isImageCorrupt && (
-          <Flex
-            data-cy="ImageUploadError"
-            mt={[1, 1, 1]}
-            sx={{
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              gap: '20px',
-            }}
-          >
-            <Text>The uploaded image appears to be corrupted or a type we don't accept.</Text>
-            <Text>Check your image is valid and one of the following formats: jpeg, jpg, png, gif, heic, svg or webp.</Text>
-            <Button
-              data-cy="ImageUploadError-Button"
-              sx={{ marginTop: '20px', justifyContent: 'center' }}
-              onClick={() => setShowErrorModal(false)}
-            >
-              Try uploading something else
-            </Button>
-          </Flex>
-        )}
-      </Modal>
-    </Box>
+      {!hasImage ? (
+        <Button small variant="outline" icon="image" type="button">
+          Upload
+        </Button>
+      ) : (
+        <ImageInputDeleteOverlay onClick={handleImageDelete} />
+      )}
+    </Flex>
   );
 };

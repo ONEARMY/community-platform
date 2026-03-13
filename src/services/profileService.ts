@@ -7,7 +7,6 @@ import type {
   ProfileFormData,
 } from 'oa-shared';
 import { logger } from 'src/logger';
-import { getCleanFileName } from 'src/utils/storage';
 
 const get = async (): Promise<Profile | undefined> => {
   try {
@@ -31,15 +30,6 @@ const update = async (value: ProfileFormData) => {
   data.append('type', value.type.toString());
   data.append('isContactable', value.isContactable ? 'true' : 'false');
   data.append('website', value.website);
-
-  if (value.existingCoverImages && value.existingCoverImages?.length > 0) {
-    for (const image of value.existingCoverImages) {
-      if (image) {
-        data.append('existingCoverImageIds', image.id);
-      }
-    }
-  }
-
   data.append('showVisitorPolicy', value.showVisitorPolicy ? 'true' : 'false');
 
   if (value.showVisitorPolicy) {
@@ -59,17 +49,15 @@ const update = async (value: ProfileFormData) => {
     }
   }
 
-  if (value.existingPhoto) {
-    data.append('existingPhoto', JSON.stringify(value.existingPhoto));
-  }
-
   if (value.photo) {
-    data.append('photo', value.photo, getCleanFileName(value.photo.name));
+    data.append('photo', JSON.stringify(value.photo));
   }
 
-  if (value.coverImages?.length) {
-    for (let i = 0; i < value.coverImages.length; i++) {
-      data.append('coverImages', value.coverImages[i], getCleanFileName(value.coverImages[i].name));
+  if (value.coverImages && value.coverImages?.length > 0) {
+    for (const image of value.coverImages) {
+      if (image) {
+        data.append('coverImages', JSON.stringify(image));
+      }
     }
   }
 

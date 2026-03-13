@@ -5,10 +5,10 @@ import { data, redirect, useLoaderData } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { ProfilePage } from 'src/pages/User/content/ProfilePage';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { libraryServiceServer } from 'src/services/libraryService.server';
+import { LibraryServiceServer } from 'src/services/libraryService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { questionServiceServer } from 'src/services/questionService.server';
-import { researchServiceServer } from 'src/services/researchService.server';
+import { ResearchServiceServer } from 'src/services/researchService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { Text } from 'theme-ui';
@@ -23,8 +23,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
     const [profileDb, projects, research, questions] = await Promise.all([
       profileService.getByUsername(username),
-      libraryServiceServer.getUserProjects(client, username),
-      researchServiceServer.getUserResearch(client, username),
+      new LibraryServiceServer(client).getUserProjects(username),
+      new ResearchServiceServer(client).getUserResearch(username),
       questionServiceServer.getQuestionsByUser(client, username),
     ]);
 

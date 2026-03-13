@@ -4,7 +4,17 @@ export class DBMedia {
   fullPath: string;
 
   constructor(obj: DBMedia) {
-    Object.assign(this, obj);
+    this.id = obj.id;
+    this.path = obj.path;
+    this.fullPath = obj.fullPath;
+  }
+
+  static fromPublicMedia(obj: MediaWithPublicUrl) {
+    return new DBMedia({
+      id: obj.id,
+      path: obj.path,
+      fullPath: obj.fullPath,
+    });
   }
 }
 
@@ -28,8 +38,6 @@ export class Image implements IMedia {
   }
 }
 
-export type FullMedia = DBMedia & IMedia;
-
 export class MediaFile implements IMediaFile {
   id: string;
   name: string;
@@ -40,3 +48,5 @@ export class MediaFile implements IMediaFile {
     Object.assign(this, obj);
   }
 }
+
+export type MediaWithPublicUrl = DBMedia & Image;

@@ -3,7 +3,7 @@ import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
 import type { IContentDoc, IDBContentDoc } from './content';
-import type { DBMedia, FullMedia } from './media';
+import type { DBMedia, Image, MediaWithPublicUrl } from './media';
 import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
 
@@ -32,6 +32,26 @@ export class DBQuestion implements IDBContentDoc {
   constructor(question: DBQuestion) {
     Object.assign(this, question);
   }
+
+  static toFormData(obj: DBQuestion, images: Image[]) {
+    return {
+      category: obj.category
+        ? { value: obj.category.id.toString(), label: obj.category.name }
+        : null,
+      description: obj.description,
+      images: obj.images
+        ? obj.images
+            .map((dbImage) => {
+              const publicImage = images.find((img) => img.id === dbImage.id);
+              return publicImage ? { ...dbImage, ...publicImage } : null;
+            })
+            .filter((img) => !!img)
+        : null,
+      isDraft: obj.is_draft || false,
+      tags: obj.tags,
+      title: obj.title,
+    } satisfies QuestionFormData;
+  }
 }
 
 export class Question implements IContentDoc {
@@ -53,13 +73,13 @@ export class Question implements IContentDoc {
   usefulCount: number;
 
   description: string;
-  images: FullMedia[] | null;
+  images: Image[] | null;
 
   constructor(question: Question) {
     Object.assign(this, question);
   }
 
-  static fromDB(obj: DBQuestion, tags: Tag[], images?: FullMedia[]) {
+  static fromDB(obj: DBQuestion, tags: Tag[], images?: Image[]) {
     return new Question({
       id: obj.id,
       author: obj.author ? Author.fromDB(obj.author) : null,
@@ -86,8 +106,8 @@ export class Question implements IContentDoc {
 export type QuestionFormData = {
   category: SelectValue | null;
   description: string;
-  images: DBMedia[] | null;
-  isDraft: boolean;
-  tags?: number[];
+  images: MediaWithPublicUrl[] | null;
+  isDraft: boolean | null;
+  tags: number[] | null;
   title: string;
 };

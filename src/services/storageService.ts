@@ -1,7 +1,8 @@
-import type { ContentType, IMediaFile } from 'oa-shared';
-import { getCleanFileName } from 'src/utils/storage';
+import type { ContentType, IMediaFile, MediaWithPublicUrl } from 'oa-shared';
 
-const imageUpload = async (id: number | null, contentType: ContentType, imageFile: File) => {
+type ImageFolder = ContentType | 'profiles';
+
+const imageUpload = async (id: number | null, contentType: ImageFolder, imageFile: File) => {
   const body = new FormData();
   if (id) {
     body.append('id', id.toString());
@@ -19,7 +20,7 @@ const imageUpload = async (id: number | null, contentType: ContentType, imageFil
   }
 
   const data: { image } = await response.json();
-  return data.image;
+  return data.image as MediaWithPublicUrl;
 };
 
 const fileUpload = async (id: number | null, contentType: ContentType, file: File) => {
@@ -41,6 +42,10 @@ const fileUpload = async (id: number | null, contentType: ContentType, file: Fil
 
   const data: { document: IMediaFile } = await response.json();
   return data.document;
+};
+
+const getCleanFileName = (fileName: string) => {
+  return fileName.replace(/[^a-zA-Z0-9._-]/g, '_').replace(/_{2,}/g, '_'); // replace special characters with underscore
 };
 
 export const storageService = {

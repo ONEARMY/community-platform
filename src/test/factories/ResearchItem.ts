@@ -120,5 +120,7 @@ export const FactoryResearchItemFormInput = (
   title: faker.lorem.words(),
   description: faker.lorem.paragraphs(),
   image: null,
-  ...researchItemOverloads,
+  category: researchItemOverloads.category || null,
+  collaborators: researchItemOverloads.collaborators || null,
+  tags: researchItemOverloads.tags || [],
 });

@@ -5,7 +5,7 @@ import { Category } from './category';
 import type { IContentDoc, IDBContentDoc } from './content';
 import type { IDBDocSB, IDBDownloadable, IDoc, IDownloadable } from './document';
 import type { IFilesForm } from './filesForm';
-import type { DBMedia, FullMedia, IMediaFile } from './media';
+import type { DBMedia, IMediaFile, Image, MediaWithPublicUrl } from './media';
 import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
 
@@ -44,6 +44,19 @@ export class DBResearchItem implements IDBContentDoc {
   constructor(obj: Omit<DBResearchItem, 'id'>) {
     Object.assign(this, obj);
   }
+
+  static toFormData(obj: DBResearchItem, publicImage: Image | null) {
+    return {
+      title: obj.title,
+      description: obj.description,
+      image: obj.image && publicImage ? { ...obj.image, ...publicImage } : null,
+      category: obj.category
+        ? { value: obj.category.id.toString(), label: obj.category.name }
+        : null,
+      tags: obj.tags,
+      collaborators: obj.collaborators || [],
+    } satisfies ResearchFormData;
+  }
 }
 
 export class ResearchItem implements IContentDoc {
@@ -55,7 +68,7 @@ export class ResearchItem implements IContentDoc {
   slug: string;
   previousSlugs: string[];
   description: string;
-  image: FullMedia | null;
+  image: Image | null;
   deleted: boolean;
   usefulCount: number;
   usefulVotesLastWeek?: number;
@@ -79,7 +92,7 @@ export class ResearchItem implements IContentDoc {
   static fromDB(
     obj: DBResearchItem,
     tags: Tag[],
-    images: FullMedia[] = [],
+    images: Image[] = [],
     collaborators: Author[] = [],
     currentUsername?: string,
   ) {
@@ -158,6 +171,24 @@ export class DBResearchUpdate implements IDBDocSB, IDBDownloadable {
   constructor(obj: Omit<DBResearchUpdate, 'id'>) {
     Object.assign(this, obj);
   }
+
+  static toFormData(obj: DBResearchUpdate, images: Image[]) {
+    return {
+      title: obj.title,
+      description: obj.description,
+      images: obj.images
+        ? obj.images
+            .map((dbImage) => {
+              const publicImage = images.find((img) => img.id === dbImage.id);
+              return publicImage ? { ...dbImage, ...publicImage } : null;
+            })
+            .filter((img) => !!img)
+        : null,
+      files: obj.files,
+      fileLink: obj.file_link,
+      videoUrl: obj.video_url,
+    } satisfies ResearchUpdateFormData;
+  }
 }
 
 export class ResearchUpdate implements IDoc, IDownloadable {
@@ -169,7 +200,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
   description: string;
   fileDownloadCount: number;
   files: IMediaFile[] | null;
-  images: FullMedia[] | null;
+  images: Image[] | null;
   isDraft: boolean;
   hasFileLink: boolean;
   modifiedAt: Date | null;
@@ -182,7 +213,7 @@ export class ResearchUpdate implements IDoc, IDownloadable {
     Object.assign(this, obj);
   }
 
-  static fromDB(obj: DBResearchUpdate, images?: FullMedia[]) {
+  static fromDB(obj: DBResearchUpdate, images?: Image[]) {
     return new ResearchUpdate({
       id: obj.id,
       createdAt: new Date(obj.created_at),
@@ -217,15 +248,15 @@ function calculateUpdateCommentCount(research: DBResearchItem): number {
 export type ResearchFormData = {
   title: string;
   description: string;
-  category?: SelectValue;
-  tags?: number[];
-  collaborators?: string[];
-  image: DBMedia | null;
+  category: SelectValue | null;
+  tags: number[] | null;
+  collaborators: string[] | null;
+  image: MediaWithPublicUrl | null;
 };
 
 export interface ResearchUpdateFormData extends IFilesForm {
   title: string;
   description: string;
-  images: DBMedia[] | null;
-  videoUrl?: string;
+  images: MediaWithPublicUrl[] | null;
+  videoUrl: string | null;
 }

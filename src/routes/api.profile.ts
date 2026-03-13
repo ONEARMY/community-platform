@@ -1,4 +1,4 @@
-import type { Image, ProfileFormData } from 'oa-shared';
+import type { DBMedia, Image, ProfileFormData } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -90,13 +90,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       showVisitorPolicy: formData.get('showVisitorPolicy') === 'true',
       visitorPreferenceDetails: formData.get('visitorPreferenceDetails') as string,
       visitorPreferencePolicy: formData.get('visitorPreferencePolicy') as string,
-      existingCoverImageIds: formData.has('existingCoverImageIds')
-        ? formData.getAll('existingCoverImageIds')
+      coverImages: formData.has('coverImages')
+        ? formData.getAll('coverImages').map((x) => JSON.parse(x as string) as DBMedia)
         : null,
       tagIds: formData.has('tagIds') ? formData.getAll('tagIds').map((x) => Number(x)) : null,
       website: formData.get('website'),
-      photo: formData.get('photo') as File,
-      coverImages: formData.getAll('coverImages') as File[],
+      photo: formData.has('photo')
+        ? (JSON.parse(formData.get('photo') as string) as DBMedia)
+        : null,
     } as ProfileFormData;
 
     const claims = await client.auth.getClaims();
@@ -160,14 +161,11 @@ async function validateRequest(
   }
 
   if (!memberTypes || !memberTypes?.includes(data.type)) {
-    if (!data.existingPhoto && !data.photo) {
+    if (!data.photo && !data.photo) {
       return { status: 400, statusText: 'photo is required' };
     }
 
-    if (
-      (!data.existingCoverImageIds || data.existingCoverImageIds.length === 0) &&
-      (!data.coverImages || data.coverImages.length === 0)
-    ) {
+    if (!data.coverImages || data.coverImages.length === 0) {
       return { status: 400, statusText: 'cover images are required' };
     }
 

@@ -1,10 +1,10 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
 import type {
+  DBMedia,
   DBProfile,
   DBProject,
   DBProjectStep,
-  FullMedia,
   IMediaFile,
   Moderation,
 } from 'oa-shared';
@@ -16,7 +16,7 @@ import { ITEMS_PER_PAGE } from 'src/pages/Library/constants';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
+import { StorageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { conflictError, validationError } from 'src/utils/httpException';
@@ -59,7 +59,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const dbItems = data as DBProject[];
   const items = dbItems.map((x) => {
     const images = x.cover_image
-      ? storageServiceServer.getPublicUrls(client, [x.cover_image], IMAGE_SIZES.LIST)
+      ? new StorageServiceServer(client).getPublicUrls([x.cover_image], IMAGE_SIZES.LIST)
       : [];
     return Project.fromDB(x, [], images);
   });
@@ -109,7 +109,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       stepCount: parseInt(formData.get('stepCount') as string),
       slug: convertToSlug((formData.get('title') as string) || ''),
       coverImage: formData.has('coverImage')
-        ? (JSON.parse(formData.get('coverImage') as string) as FullMedia)
+        ? (JSON.parse(formData.get('coverImage') as string) as DBMedia)
         : null,
       files: formData.has('files')
         ? formData.getAll('files').map((x) => JSON.parse(x as string) as IMediaFile)
@@ -138,8 +138,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const projectDb = await createProject(client, data, profile);
     const project = Project.fromDB(projectDb, []);
 
-    // Move cover image from users folder to projects folder if exists
-    project.coverImage = data.coverImage;
+    project.coverImage = data.coverImage
+      ? new StorageServiceServer(client).getPublicUrls([data.coverImage])?.at(0) || null
+      : null;
 
     project.steps = await uploadSteps(data, formData, projectDb, client);
     subscribersServiceServer.add('projects', project.id, profile.id, client, headers);
@@ -160,9 +161,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 async function uploadSteps(data, formData: FormData, projectDb: DBProject, client: SupabaseClient) {
   const steps: ProjectStep[] = [];
+  const storage = new StorageServiceServer(client);
+
   for (let i = 0; i < data.stepCount; i++) {
     const stepImages = formData.has(`steps.[${i}].images`)
-      ? formData.getAll(`steps.[${i}].images`).map((x) => JSON.parse(x as string) as FullMedia)
+      ? formData.getAll(`steps.[${i}].images`).map((x) => JSON.parse(x as string) as DBMedia)
       : null;
 
     const stepDb = await createStep(client, {
@@ -173,7 +176,9 @@ async function uploadSteps(data, formData: FormData, projectDb: DBProject, clien
       images: stepImages,
       order: i + 1,
     });
-    const step = ProjectStep.fromDB(stepDb);
+
+    const publicImages = stepImages ? storage.getPublicUrls(stepImages) : undefined;
+    const step = ProjectStep.fromDB(stepDb, publicImages);
 
     steps.push(step);
   }
@@ -258,7 +263,7 @@ async function createStep(
     projectId: number;
     videoUrl: string | null;
     order: number;
-    images: FullMedia[] | null;
+    images: DBMedia[] | null;
   },
 ) {
   const { data, error } = await client

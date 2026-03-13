@@ -2,14 +2,14 @@
 
 import type { AuthError } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
-import type { DBNews, DBProfile, FullMedia, Moderation } from 'oa-shared';
+import type { DBMedia, DBNews, DBProfile, Moderation } from 'oa-shared';
 import { News } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/News/constants';
 import type { NewsSortOption } from 'src/pages/News/NewsSortOptions';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { discordServiceServer } from 'src/services/discordService.server';
-import { newsServiceServer } from 'src/services/newsService.server';
+import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
@@ -109,8 +109,7 @@ export const loader = async ({ request }) => {
         if (votesByContentId.has(item.id)) {
           item.usefulCount = votesByContentId.get(item.id)!;
         }
-        item.heroImage = await newsServiceServer.getHeroImage(
-          client,
+        item.heroImage = await new NewsServiceServer(client).getHeroImage(
           data.find((x) => x.id === item.id)?.hero_image || null,
         );
       }
@@ -133,7 +132,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       title: formData.get('title') as string,
       heroImage: formData.has('heroImage')
-        ? (JSON.parse(formData.get('heroImage') as string) as FullMedia)
+        ? (JSON.parse(formData.get('heroImage') as string) as DBMedia)
         : null,
     };
 

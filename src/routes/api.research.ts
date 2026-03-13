@@ -1,5 +1,5 @@
 import { HTTPException } from 'hono/http-exception';
-import type { DBResearchItem, FullMedia, ResearchStatus } from 'oa-shared';
+import type { DBMedia, DBResearchItem, ResearchStatus } from 'oa-shared';
 import { ResearchItem } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
@@ -8,7 +8,7 @@ import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
+import { StorageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { conflictError, validationError } from 'src/utils/httpException';
@@ -54,7 +54,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const items = dbItems.map((dbResearchItem) => {
     const images = dbResearchItem.image
-      ? storageServiceServer.getPublicUrls(client, [dbResearchItem.image], IMAGE_SIZES.LIST)
+      ? new StorageServiceServer(client).getPublicUrls([dbResearchItem.image], IMAGE_SIZES.LIST)
       : [];
     return ResearchItem.fromDB(dbResearchItem, [], images);
   });
@@ -98,7 +98,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         ? (formData.getAll('collaborators') as string[])
         : null,
       image: formData.has('image')
-        ? (JSON.parse(formData.get('image') as string) as FullMedia)
+        ? (JSON.parse(formData.get('image') as string) as DBMedia)
         : null,
     };
 

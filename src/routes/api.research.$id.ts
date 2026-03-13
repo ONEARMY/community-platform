@@ -1,12 +1,12 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
-import type { DBResearchItem, FullMedia } from 'oa-shared';
+import type { DBMedia, DBResearchItem } from 'oa-shared';
 import { ResearchItem, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { researchServiceServer } from 'src/services/researchService.server';
+import { ResearchServiceServer } from 'src/services/researchService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { conflictError, forbiddenError, validationError } from 'src/utils/httpException';
@@ -34,7 +34,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       isDraft: formData.get('draft') === 'true',
       slug: convertToSlug(formData.get('title') as string),
       image: formData.has('image')
-        ? (JSON.parse(formData.get('image') as string) as FullMedia)
+        ? (JSON.parse(formData.get('image') as string) as DBMedia)
         : null,
     };
 
@@ -44,7 +44,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const oldResearch = await researchServiceServer.getById(id, client);
+    const oldResearch = await new ResearchServiceServer(client).getById(id);
 
     await validateRequest(request, claims.data.claims.sub, data, oldResearch, client);
 
@@ -107,8 +107,7 @@ async function deleteResearch(request, id: number) {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const canEdit = await researchServiceServer.isAllowedToEditResearchById(
-      client,
+    const canEdit = await new ResearchServiceServer(client).isAllowedToEditResearchById(
       id,
       claims.data.claims.user_metadata?.username,
     );

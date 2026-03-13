@@ -1,9 +1,9 @@
 import '@testing-library/jest-dom/vitest';
 import { render, screen } from '@testing-library/react';
-import { FactoryNewsItem } from 'src/test/factories/News';
+import { FactoryNewsFormData } from 'src/test/factories/News';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NewsForm } from './NewsForm';
-import type { News } from 'oa-shared';
+import type { NewsFormData } from 'oa-shared';
 
 // Create mock navigate function
 const mockNavigate = vi.fn();
@@ -85,7 +85,7 @@ describe('NewsForm', () => {
 
   describe('Component Rendering', () => {
     it('renders empty form for new news creation', () => {
-      render(<NewsForm news={null} parentType="create" />);
+      render(<NewsForm id={null} formData={null} formAction="create" />);
 
       // Check that all required fields are present
       expect(screen.getByTestId('news-create-form')).toBeInTheDocument();
@@ -94,26 +94,25 @@ describe('NewsForm', () => {
     });
 
     it('renders form with existing news data in edit mode', () => {
-      const mockNews: News = FactoryNewsItem({
-        id: 123,
+      const mockNewsFormData: NewsFormData = FactoryNewsFormData({
         title: 'Existing News',
         body: 'Existing body content',
         isDraft: false,
         heroImage: {
           id: 'image-123',
-          fullPath: 'https://example.com/image.jpg',
           path: 'https://example.com/image.jpg',
-          publicUrl: 'https://example.com/image.jpg',
+          fullPath: 'https://example.com/image.jpg',
+          publicUrl: 'https://example.com/image.jpg',          
         },
       });
 
-      render(<NewsForm news={mockNews} parentType="edit" />);
+      render(<NewsForm id={123} formData={mockNewsFormData} formAction="edit" />);
 
       expect(screen.getByTestId('news-create-form')).toBeInTheDocument();
     });
 
     it('displays all required form fields', () => {
-      render(<NewsForm news={null} parentType="create" />);
+      render(<NewsForm id={null} formData={null} formAction="create" />);
 
       // All form fields should be present
       expect(screen.getByTestId('title-field')).toBeInTheDocument();
@@ -127,7 +126,7 @@ describe('NewsForm', () => {
 
   describe('Form Validation', () => {
     it('validates required fields exist', () => {
-      render(<NewsForm news={null} parentType="create" />);
+      render(<NewsForm id={null} formData={null} formAction="create" />);
 
       // The form should have title and body fields
       expect(screen.getByTestId('title-field')).toBeInTheDocument();
@@ -135,7 +134,7 @@ describe('NewsForm', () => {
     });
 
     it('initializes with correct empty values for new news', () => {
-      render(<NewsForm news={null} parentType="create" />);
+      render(<NewsForm id={null} formData={null} formAction="create" />);
 
       // Form should render without errors
       const form = screen.getByTestId('news-create-form');
@@ -143,22 +142,17 @@ describe('NewsForm', () => {
     });
 
     it('initializes with existing values for edit mode', () => {
-      const mockNews: News = FactoryNewsItem({
-        id: 456,
+      const mockNewsFormData: NewsFormData = FactoryNewsFormData({
         title: 'Original Title',
         body: 'Original body',
-        slug: 'original-slug',
         isDraft: false,
         category: {
-          id: 1,
-          name: 'Test Category',
-          type: 'news',
-          createdAt: new Date(),
-          modifiedAt: null,
+          label: 'Test Category',
+          value: '1',
         },
       });
 
-      render(<NewsForm news={mockNews} parentType="edit" />);
+      render(<NewsForm id={456} formData={mockNewsFormData} formAction="edit" />);
 
       // Form should render with the news data
       const form = screen.getByTestId('news-create-form');
@@ -168,7 +162,7 @@ describe('NewsForm', () => {
 
   describe('Draft Functionality', () => {
     it('provides draft save capability', () => {
-      render(<NewsForm news={null} parentType="create" />);
+      render(<NewsForm id={null} formData={null} formAction="create" />);
 
       // Draft button should be available
       const form = screen.getByTestId('news-create-form');
@@ -176,15 +170,13 @@ describe('NewsForm', () => {
     });
 
     it('renders draft news correctly', () => {
-      const draftNews: News = FactoryNewsItem({
-        id: 999,
+      const draftNewsFormData: NewsFormData = FactoryNewsFormData({
         title: 'Draft News',
         body: 'Draft content',
         isDraft: true,
-        slug: 'draft-news',
       });
 
-      render(<NewsForm news={draftNews} parentType="edit" />);
+      render(<NewsForm id={999} formData={draftNewsFormData} formAction="edit" />);
 
       const form = screen.getByTestId('news-create-form');
       expect(form).toBeInTheDocument();
@@ -193,8 +185,7 @@ describe('NewsForm', () => {
 
   describe('Image Handling', () => {
     it('shows existing hero image when available', () => {
-      const mockNews: News = FactoryNewsItem({
-        id: 789,
+      const mockNewsFormData: NewsFormData = FactoryNewsFormData({
         title: 'News with Image',
         body: 'Body content',
         heroImage: {
@@ -205,14 +196,14 @@ describe('NewsForm', () => {
         },
       });
 
-      render(<NewsForm news={mockNews} parentType="edit" />);
+      render(<NewsForm id={789} formData={mockNewsFormData} formAction="edit" />);
 
       const form = screen.getByTestId('news-create-form');
       expect(form).toBeInTheDocument();
     });
 
     it('allows image upload for new news', () => {
-      render(<NewsForm news={null} parentType="create" />);
+      render(<NewsForm id={null} formData={null} formAction="create" />);
 
       const form = screen.getByTestId('news-create-form');
       expect(form).toBeInTheDocument();
@@ -226,7 +217,7 @@ describe('NewsForm', () => {
         cause: 'network',
       });
 
-      render(<NewsForm news={null} parentType="create" />);
+      render(<NewsForm id={null} formData={null} formAction="create" />);
 
       const form = screen.getByTestId('news-create-form');
       expect(form).toBeInTheDocument();
@@ -240,7 +231,7 @@ describe('NewsForm', () => {
         isDraft: false,
       });
 
-      render(<NewsForm news={null} parentType="create" />);
+      render(<NewsForm id={null} formData={null} formAction="create" />);
 
       const form = screen.getByTestId('news-create-form');
       expect(form).toBeInTheDocument();
@@ -249,17 +240,14 @@ describe('NewsForm', () => {
 
   describe('Profile Badge Support', () => {
     it('supports profile badge selection', () => {
-      const mockNews: News = FactoryNewsItem({
-        id: 111,
+      const mockNewsFormData: NewsFormData = FactoryNewsFormData({
         profileBadge: {
-          id: 1,
-          name: 'pro',
-          displayName: 'PRO',
-          imageUrl: 'https://example.com/badge.png',
+          label: 'PRO',
+          value: '1',
         },
       });
 
-      render(<NewsForm news={mockNews} parentType="edit" />);
+      render(<NewsForm id={111} formData={mockNewsFormData} formAction="edit" />);
 
       const form = screen.getByTestId('news-create-form');
       expect(form).toBeInTheDocument();
@@ -268,15 +256,15 @@ describe('NewsForm', () => {
 
   describe('Form Actions', () => {
     it('renders form correctly for create mode', () => {
-      render(<NewsForm news={null} parentType="create" />);
+      render(<NewsForm id={null} formData={null} formAction="create" />);
 
       const form = screen.getByTestId('news-create-form');
       expect(form).toBeInTheDocument();
     });
 
     it('renders form correctly for edit mode', () => {
-      const mockNews = FactoryNewsItem({ id: 123 });
-      render(<NewsForm news={mockNews} parentType="edit" />);
+      const mockNewsFormData = FactoryNewsFormData();
+      render(<NewsForm id={123} formData={mockNewsFormData} formAction="edit" />);
 
       const form = screen.getByTestId('news-create-form');
       expect(form).toBeInTheDocument();

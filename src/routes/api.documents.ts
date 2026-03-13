@@ -1,7 +1,7 @@
-import type { ContentType } from 'oa-shared';
+import type { ContentType, IMediaFile } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { storageServiceServer } from 'src/services/storageService.server';
+import { StorageServiceServer } from 'src/services/storageService.server';
 
 export const action = async ({ request }: LoaderFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -9,7 +9,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   try {
     const formData = await request.formData();
     const contentType = formData.get('contentType') as ContentType;
-    const document = formData.get('file') as File;
+    const file = formData.get('file') as File;
     const id = formData.has('id') ? Number(formData.get('id') as string) : null;
 
     const claims = await client.auth.getClaims();
@@ -24,20 +24,25 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json({}, { status, statusText, headers });
     }
 
-    const uploadedFile = await storageServiceServer.uploadFile(
-      [document],
+    const uploadedFile = await new StorageServiceServer(client).uploadFile(
+      [file],
       `${id ? contentType : 'users'}/${id ?? claims.data.claims.sub}`,
-      client,
     );
 
-    if (uploadedFile?.errors && uploadedFile?.errors.length > 0) {
+    if (!uploadedFile || (uploadedFile?.errors && uploadedFile?.errors.length > 0)) {
       throw uploadedFile?.errors;
     }
 
-    return Response.json({ document: { ...uploadedFile!.media[0] } }, { headers });
+    const document: IMediaFile = {
+      id: uploadedFile!.media[0].id,
+      name: uploadedFile!.media[0].name,
+      size: uploadedFile!.media[0].size,
+    };
+
+    return Response.json({ document }, { headers });
   } catch (error) {
     console.error(error);
-    return Response.json({}, { headers, status: 500, statusText: 'Error uploading document' });
+    return Response.json({}, { headers, status: 500 });
   }
 };
 

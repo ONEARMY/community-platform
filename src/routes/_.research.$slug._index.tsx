@@ -7,14 +7,15 @@ import { ResearchArticlePage } from 'src/pages/Research/Content/ResearchArticleP
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
-import { researchServiceServer } from 'src/services/researchService.server';
+import { ResearchServiceServer } from 'src/services/researchService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
 
-  const result = await researchServiceServer.getBySlug(client, params.slug as string);
+  const researchClient = new ResearchServiceServer(client);
+  const result = await researchClient.getBySlug(params.slug as string);
   const tenantSettings = await new TenantSettingsService(client).get();
 
   if (result.error || !result.item) {
@@ -42,7 +43,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     dbResearch.tags,
   );
 
-  const images = researchServiceServer.getResearchPublicMedia(dbResearch, client);
+  const images = researchClient.getResearchPublicMedia(dbResearch);
 
   const research = ResearchItem.fromDB(
     dbResearch,

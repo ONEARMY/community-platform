@@ -1,13 +1,12 @@
 import styled from '@emotion/styled';
-import { ImageInputDeleteImage, ImageInputWrapper } from 'oa-components';
-import type { Image } from 'oa-shared';
-import { Field } from 'react-final-form';
-import { FieldContainer } from 'src/common/Form/FieldContainer';
-import { ImageInputField } from 'src/common/Form/ImageInput.field';
+import { ImageInputV2 } from 'oa-components';
+import type { MediaWithPublicUrl } from 'oa-shared';
+import { useState } from 'react';
+import { useForm } from 'react-final-form';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { fields } from 'src/pages/News/labels';
-import { COMPARISONS } from 'src/utils/comparisons';
-import { Image as ImageComponent } from 'theme-ui';
+import { storageService } from 'src/services/storageService';
+import { Spinner, Text } from 'theme-ui';
 
 const ImageInputFieldWrapper = styled.div`
   width: 620px;
@@ -15,12 +14,42 @@ const ImageInputFieldWrapper = styled.div`
 `;
 
 interface IProps {
-  existingHeroImage: Image | null;
-  removeExistingImage: () => void;
+  image: MediaWithPublicUrl | null;
+  removeImage: () => void;
+  contentId: number | null;
 }
 
 export const NewsImageField = (props: IProps) => {
-  const { existingHeroImage, removeExistingImage } = props;
+  const { image, removeImage, contentId } = props;
+  const form = useForm();
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const handleImageSelect = async (file: File | undefined) => {
+    if (!file) {
+      form.change('heroImage', null);
+      setUploadError(null);
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadError(null);
+
+    try {
+      const uploadedImage = await storageService.imageUpload(contentId, 'news', file);
+      form.change('heroImage', uploadedImage);
+    } catch (error) {
+      console.error('Error uploading hero image:', error);
+      setUploadError('Failed to upload image. Please try again.');
+      form.change('heroImage', null);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleImageError = (error: string) => {
+    setUploadError(error);
+  };
 
   return (
     <FormFieldWrapper
@@ -31,31 +60,42 @@ export const NewsImageField = (props: IProps) => {
       flexWrap="wrap"
       required
     >
-      {!existingHeroImage && (
+      {uploadError && (
+        <Text sx={{ color: 'error', fontSize: 1, mb: 2, width: '100%' }}>{uploadError}</Text>
+      )}
+
+      {!image && !isUploading && (
         <ImageInputFieldWrapper data-cy="heroImage-upload">
-          <Field
-            hasText={false}
-            name="heroImage"
-            component={ImageInputField}
-            isEqual={COMPARISONS.image}
-            required
-          />
+          <ImageInputV2 onFilesChange={handleImageSelect} onError={handleImageError} />
         </ImageInputFieldWrapper>
       )}
-      {existingHeroImage && (
-        <ImageInputFieldWrapper key="existingHeroImage" data-cy="existingHeroImage">
-          <FieldContainer
+
+      {isUploading && (
+        <ImageInputFieldWrapper data-cy="heroImage-uploading">
+          <div
             style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               height: '100%',
-              width: '100%',
-              overflow: 'hidden',
             }}
           >
-            <ImageInputWrapper hasUploadedImg={true}>
-              <ImageComponent src={existingHeroImage.publicUrl} />
-              <ImageInputDeleteImage onClick={() => removeExistingImage()} />
-            </ImageInputWrapper>
-          </FieldContainer>
+            <Spinner />
+            <Text sx={{ ml: 2 }}>Uploading image...</Text>
+          </div>
+        </ImageInputFieldWrapper>
+      )}
+
+      {image && !isUploading && (
+        <ImageInputFieldWrapper key="existingHeroImage" data-cy="existingHeroImage">
+          <ImageInputV2
+            image={image}
+            onFilesChange={(file) => {
+              if (!file) {
+                removeImage();
+              }
+            }}
+          />
         </ImageInputFieldWrapper>
       )}
     </FormFieldWrapper>

@@ -1,6 +1,6 @@
 import type { IMediaFile } from './media';
 
 export interface IFilesForm {
-  files?: IMediaFile[];
-  fileLink?: string;
+  files: IMediaFile[] | null;
+  fileLink: string | null;
 }

@@ -29,7 +29,7 @@ export default function Index() {
               {listing.incompleteProfile}
             </Box>
           }
-          loggedIn={<LibraryForm />}
+          loggedIn={<LibraryForm formData={null} id={null} />}
           loggedOut={<></>}
         />
       )}

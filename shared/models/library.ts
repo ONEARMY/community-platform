@@ -5,7 +5,7 @@ import { Category } from './category';
 import type { IContentDoc, IDBContentDoc } from './content';
 import type { IDBDownloadable, IDownloadable } from './document';
 import type { IFilesForm } from './filesForm';
-import type { DBMedia, FullMedia, IMediaFile } from './media';
+import type { DBMedia, IMediaFile, Image, MediaWithPublicUrl } from './media';
 import type { IDBModeration, IModeration, Moderation } from './moderation';
 import type { SelectValue } from './selectValue';
 import type { Tag } from './tag';
@@ -52,6 +52,26 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
   constructor(obj: Omit<DBProject, 'id'>) {
     Object.assign(this, obj);
   }
+
+  static toFormData(obj: DBProject, images: Image[]) {
+    const publicCoverImage = images?.find((x) => x.id === obj.cover_image.id);
+
+    return {
+      title: obj.title,
+      description: obj.description,
+      image:
+        obj.cover_image && publicCoverImage ? { ...obj.cover_image, ...publicCoverImage } : null,
+      category: obj.category
+        ? { value: obj.category.id.toString(), label: obj.category.name }
+        : null,
+      tags: obj.tags,
+      difficultyLevel: obj.difficulty_level,
+      files: obj.files,
+      fileLink: obj.file_link,
+      time: obj.time,
+      steps: obj.steps ? obj.steps.map((x) => DBProjectStep.toFormData(x, images)) : null,
+    } satisfies ProjectFormData;
+  }
 }
 
 export class Project implements IContentDoc, IDownloadable, IModeration {
@@ -63,7 +83,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
   slug: string;
   previousSlugs: string[];
   description: string;
-  coverImage: FullMedia | null;
+  coverImage: Image | null;
   deleted: boolean;
   category: Category | null;
   totalViews: number;
@@ -87,7 +107,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
     Object.assign(this, obj);
   }
 
-  static fromDB(obj: DBProject, tags: Tag[], images: FullMedia[] = []) {
+  static fromDB(obj: DBProject, tags: Tag[], images: Image[] = []) {
     const steps = obj.steps?.map((update) => ProjectStep.fromDB(update, images)) || [];
 
     return new Project({
@@ -135,6 +155,23 @@ export class DBProjectStep {
   constructor(obj: Omit<DBProjectStep, 'id'>) {
     Object.assign(this, obj);
   }
+
+  static toFormData(obj: DBProjectStep, images: Image[]) {
+    return {
+      id: obj.id,
+      title: obj.title,
+      description: obj.description,
+      images: obj.images
+        ? obj.images
+            .map((dbImage) => {
+              const publicImage = images.find((img) => img.id === dbImage.id);
+              return publicImage ? { ...dbImage, ...publicImage } : null;
+            })
+            .filter((img) => img !== null)
+        : null,
+      videoUrl: obj.video_url,
+    } satisfies ProjectStepFormData;
+  }
 }
 
 export class ProjectStep {
@@ -142,7 +179,7 @@ export class ProjectStep {
   projectId: number;
   title: string;
   description: string;
-  images: FullMedia[] | null;
+  images: Image[] | null;
   videoUrl: string | null;
   order: number;
 
@@ -150,7 +187,7 @@ export class ProjectStep {
     Object.assign(this, obj);
   }
 
-  static fromDB(obj: DBProjectStep, images?: FullMedia[]) {
+  static fromDB(obj: DBProjectStep, images?: Image[]) {
     const imageIds = obj.images?.map((x) => x.id) || [];
     const filteredImages = images?.filter((x) => imageIds.includes(x.id)) || [];
     // Deduplicate by id
@@ -172,18 +209,18 @@ export class ProjectStep {
 export interface ProjectFormData extends IFilesForm {
   title: string;
   description: string;
-  category?: SelectValue;
-  tags?: number[];
-  difficultyLevel?: DifficultyLevel;
-  time?: string;
-  image: DBMedia | null;
+  category: SelectValue | null;
+  tags: number[] | null;
+  difficultyLevel: DifficultyLevel | null;
+  time: string | null;
+  image: MediaWithPublicUrl | null;
   steps: ProjectStepFormData[];
 }
 
 export type ProjectStepFormData = {
-  id?: number;
+  id: number | null;
   title: string;
   description: string;
-  images: DBMedia[] | null;
-  videoUrl?: string;
+  images: MediaWithPublicUrl[] | null;
+  videoUrl: string | null;
 };

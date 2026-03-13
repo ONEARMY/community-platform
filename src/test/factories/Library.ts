@@ -4,9 +4,58 @@ import type {
   DifficultyLevel,
   Moderation,
   Project,
-  // ProjectFormData,
+  ProjectFormData,
   ProjectStep,
+  ProjectStepFormData,
 } from 'oa-shared';
+
+export const FactoryProjectFormData = (
+  overloads: Partial<ProjectFormData> = {},
+): ProjectFormData => ({
+  title: faker.lorem.words(4),
+  description: faker.lorem.paragraph(),
+  category: {
+    label: faker.lorem.word(),
+    value: faker.number.int().toString(),
+  },
+  tags: [faker.number.int(), faker.number.int()],
+  difficultyLevel: faker.helpers.arrayElement<DifficultyLevel>([
+    'easy',
+    'medium',
+    'hard',
+    'very-hard',
+  ]),
+  time: '< 1 hour',
+  image: {
+    id: faker.string.uuid(),
+    path: faker.image.url(),
+    fullPath: faker.image.url(),
+    publicUrl: faker.image.url(),
+  },
+  files: [],
+  fileLink: null,
+  steps: [
+    {
+      id: null,
+      title: faker.lorem.text(),
+      description: faker.lorem.paragraphs(2),
+      images: [],
+      videoUrl: null,
+    },
+  ],
+  ...overloads,
+});
+
+export const FactoryProjectStepFormData = (
+  overloads: Partial<ProjectStepFormData> = {},
+): ProjectStepFormData => ({
+  id: null,
+  title: faker.lorem.text(),
+  description: faker.lorem.paragraphs(2),
+  images: [],
+  videoUrl: null,
+  ...overloads,
+});
 
 export const FactoryLibraryItem = (itemOverloads: Partial<Project> = {}): Project => ({
   files: [],
@@ -57,8 +106,6 @@ export const FactoryLibraryItemStep = (itemOverloads: Partial<ProjectStep> = {})
   projectId: faker.number.int(),
   images: [
     {
-      path: '',
-      fullPath: '',
       publicUrl: faker.internet.url(),
       id: faker.string.uuid(),
     },

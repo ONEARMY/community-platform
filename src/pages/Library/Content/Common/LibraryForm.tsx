@@ -1,6 +1,6 @@
 import arrayMutators from 'final-form-arrays';
-import type { IMediaFile, Project, ProjectFormData } from 'oa-shared';
-import { useMemo, useState } from 'react';
+import type { ProjectFormData } from 'oa-shared';
+import { useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
@@ -22,53 +22,35 @@ import { LibraryTimeField } from './LibraryTime.field';
 import { LibraryTitleField } from './LibraryTitle.field';
 
 interface LibraryFormProps {
-  project?: Project;
-  files?: IMediaFile[];
-  fileLink?: string;
+  id: number | null;
+  formData: ProjectFormData | null;
 }
 
-export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
+export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
   const navigate = useNavigate();
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSavingAsDraft, setIsSavingAsDraft] = useState(false);
 
-  const formValues = useMemo<ProjectFormData>(
-    () => ({
-      title: project?.title || '',
-      description: project?.description || '',
-      category: project?.category
-        ? {
-            value: project.category.id?.toString(),
-            label: project.category.name,
-          }
-        : undefined,
-      tags: project?.tagIds || [],
-      time: project?.time,
-      difficultyLevel: project?.difficultyLevel,
-      image: project?.coverImage || null,
-      files,
-      fileLink: fileLink,
-      steps: project?.steps
-        ?.slice()
-        .sort((a, b) => a.order - b.order)
-        .map((x) => ({
-          id: x.id,
-          title: x.title,
-          description: x.description,
-          videoUrl: x.videoUrl || undefined,
-          images: x.images,
-        })) ?? [
-        { title: '', description: '', images: [] },
-        { title: '', description: '', images: [] },
-        { title: '', description: '', images: [] },
-      ],
-    }),
-    [project],
-  );
+  const initialValues = {
+    title: formData?.title || '',
+    description: formData?.description || '',
+    category: formData?.category || null,
+    tags: formData?.tags || [],
+    time: formData?.time || null,
+    difficultyLevel: formData?.difficultyLevel || null,
+    image: formData?.image || null,
+    files: formData?.files || null,
+    fileLink: formData?.fileLink || null,
+    steps: formData?.steps ?? [
+      { id: null, title: '', description: '', images: [], videoUrl: null },
+      { id: null, title: '', description: '', images: [], videoUrl: null },
+      { id: null, title: '', description: '', images: [], videoUrl: null },
+    ],
+  } satisfies ProjectFormData;
 
-  const headingText = project ? headings.edit : headings.create;
+  const headingText = id ? headings.edit : headings.create;
 
   const onSubmit = async (values: ProjectFormData, isDraft = false) => {
     setIntentionalNavigation(true);
@@ -89,7 +71,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
         }
       }
 
-      const result = await libraryService.upsert(project?.id || null, values, isDraft);
+      const result = await libraryService.upsert(id || null, values, isDraft);
 
       setTimeout(() => {
         navigate(`/library/${result.project.slug}`);
@@ -108,7 +90,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
   return (
     <Form<ProjectFormData>
       onSubmit={(values) => onSubmit(values, false)}
-      initialValues={formValues}
+      initialValues={initialValues}
       mutators={{
         ...arrayMutators,
       }}
@@ -138,7 +120,7 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
       }) => {
         const belowBody = (
           <Flex sx={{ flexDirection: 'column' }}>
-            <LibraryStepsContainerField contentType="projects" contentId={project?.id ?? null} />
+            <LibraryStepsContainerField contentType="projects" contentId={id ?? null} />
           </Flex>
         );
 
@@ -183,14 +165,10 @@ export const LibraryForm = ({ project, files, fileLink }: LibraryFormProps) => {
                   <TagsField title={intro.tags.title} />
                   <LibraryTimeField />
                   <LibraryDifficultyField />
-                  <FilesFields contentType="projects" contentId={project?.id ?? null} />
+                  <FilesFields contentType="projects" contentId={id ?? null} />
                 </Flex>
                 <Flex data-cy="intro-cover" sx={{ flex: 1, width: '100%' }}>
-                  <ImageField
-                    title="Cover Image"
-                    contentType="projects"
-                    contentId={project?.id ?? null}
-                  />
+                  <ImageField title="Cover Image" contentType="projects" contentId={id ?? null} />
                 </Flex>
               </Flex>
             </FormWrapper>

@@ -1,13 +1,12 @@
 import styled from '@emotion/styled';
-import { ImageInput, ImageInputDeleteImage, ImageInputWrapper } from 'oa-components';
-import type { Image } from 'oa-shared';
+import { ImageInputV2 } from 'oa-components';
+import type { MediaWithPublicUrl } from 'oa-shared';
 import { useState } from 'react';
 import { useForm, useFormState } from 'react-final-form';
-import { FieldContainer } from 'src/common/Form/FieldContainer';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { fields } from 'src/pages/Question/labels';
 import { storageService } from 'src/services/storageService';
-import { Image as ImageComponent, Spinner, Text } from 'theme-ui';
+import { Spinner, Text } from 'theme-ui';
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -24,8 +23,8 @@ interface IProps {
 
 export const QuestionImagesField = (props: IProps) => {
   const { contentType, contentId, maxImages } = props;
-  const state = useFormState<{ images: Image[] }>();
-  const form = useForm<{ images: Image[] }>();
+  const state = useFormState<{ images: MediaWithPublicUrl[] }>();
+  const form = useForm<{ images: MediaWithPublicUrl[] }>();
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
@@ -73,18 +72,14 @@ export const QuestionImagesField = (props: IProps) => {
       const image = images[index];
       return (
         <ImageInputFieldWrapper key={`existing-image-${index}`} data-cy={`existing-image-${index}`}>
-          <FieldContainer
-            style={{
-              height: '100%',
-              width: '100%',
-              overflow: 'hidden',
+          <ImageInputV2
+            image={image}
+            onFilesChange={(file) => {
+              if (!file) {
+                handleDeleteImage(index);
+              }
             }}
-          >
-            <ImageInputWrapper hasUploadedImg={true}>
-              <ImageComponent src={image.publicUrl} />
-              <ImageInputDeleteImage onClick={() => handleDeleteImage(index)} />
-            </ImageInputWrapper>
-          </FieldContainer>
+          />
         </ImageInputFieldWrapper>
       );
     }
@@ -94,31 +89,9 @@ export const QuestionImagesField = (props: IProps) => {
       return (
         <ImageInputFieldWrapper key={`image-upload-${index}`} data-cy={`image-upload-${index}`}>
           {isUploading ? (
-            <FieldContainer
-              style={{
-                height: '100%',
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Spinner size={20} />
-            </FieldContainer>
+            <Spinner size={20} />
           ) : (
-            <FieldContainer
-              style={{
-                height: '100%',
-                width: '100%',
-                overflow: 'hidden',
-              }}
-            >
-              <ImageInput
-                hasText={false}
-                value={undefined}
-                onFilesChange={(fileMeta) => handleImageSelect(fileMeta, index)}
-              />
-            </FieldContainer>
+            <ImageInputV2 onFilesChange={(fileMeta) => handleImageSelect(fileMeta, index)} />
           )}
         </ImageInputFieldWrapper>
       );

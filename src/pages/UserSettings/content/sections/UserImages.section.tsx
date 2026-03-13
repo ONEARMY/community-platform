@@ -80,6 +80,7 @@ export const UserImagesSection = observer(({ isMemberProfile, values, form }: IP
         <Text variant="paragraph">{fields.userImage.description}</Text>
 
         <Box
+          data-cy="userImage"
           data-testid="photo"
           sx={{
             width: '120px',
@@ -117,7 +118,7 @@ export const UserImagesSection = observer(({ isMemberProfile, values, form }: IP
                       position: 'relative',
                     }}
                     key={`cover-image-${index}`}
-                    data-cy={`cover-image-${index}`}
+                    data-cy={`coverImages-${index}`}
                   >
                     {uploadingCoverIndex === index ? (
                       <Flex sx={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>

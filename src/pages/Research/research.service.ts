@@ -87,10 +87,8 @@ const upsert = async (id: number | null, research: ResearchFormData, isDraft = f
         });
 
   if (response.status !== 200 && response.status !== 201) {
-    // Try to parse error from response body
-    const errorData = await response.json().catch(() => ({}));
-    const errorMessage = errorData.error || 'Error saving research';
-
+    const errorData = await response.json().catch(() => ({ error: 'Error saving research' }));
+    const errorMessage = errorData.error || errorData.message || 'Error saving research';
     throw new Error(errorMessage, { cause: response.status });
   }
 
@@ -125,11 +123,11 @@ const upsertUpdate = async (
         });
 
   if (response.status !== 200 && response.status !== 201) {
-    if (response.status === 409) {
-      throw new Error('Duplicate research update', { cause: 409 });
-    }
-
-    throw new Error('Error saving research update', { cause: 500 });
+    const errorData = await response
+      .json()
+      .catch(() => ({ error: 'Error saving research update' }));
+    const errorMessage = errorData.error || errorData.message || 'Error saving research update';
+    throw new Error(errorMessage, { cause: response.status });
   }
 
   return (await response.json()) as { researchUpdate: ResearchUpdate };
@@ -141,7 +139,9 @@ const deleteResearch = async (id: number) => {
   });
 
   if (response.status !== 200 && response.status !== 201) {
-    throw new Error('Error deleting research', { cause: 500 });
+    const errorData = await response.json().catch(() => ({ error: 'Error deleting research' }));
+    const errorMessage = errorData.error || errorData.message || 'Error deleting research';
+    throw new Error(errorMessage, { cause: response.status });
   }
 };
 
@@ -155,7 +155,11 @@ const updateResearchStatus = async (id: number, status: ResearchStatus) => {
   });
 
   if (response.status !== 200 && response.status !== 201) {
-    throw new Error('Error updating research status', { cause: 500 });
+    const errorData = await response
+      .json()
+      .catch(() => ({ error: 'Error updating research status' }));
+    const errorMessage = errorData.error || errorData.message || 'Error updating research status';
+    throw new Error(errorMessage, { cause: response.status });
   }
 };
 
@@ -165,7 +169,11 @@ const deleteUpdate = async (id: number, updateId: number | null) => {
   });
 
   if (response.status !== 200 && response.status !== 201) {
-    throw new Error('Error deleting research update', { cause: 500 });
+    const errorData = await response
+      .json()
+      .catch(() => ({ error: 'Error deleting research update' }));
+    const errorMessage = errorData.error || errorData.message || 'Error deleting research update';
+    throw new Error(errorMessage, { cause: response.status });
   }
 };
 

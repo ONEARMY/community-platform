@@ -105,19 +105,9 @@ const upsert = async (id: number | null, formData: ProjectFormData, isDraft = fa
         });
 
   if (response.status !== 200 && response.status !== 201) {
-    if (response.status === 409) {
-      throw new Error('Duplicate project', { cause: 409 });
-    }
-
-    if (response.statusText) {
-      throw new Error(response.statusText, {
-        cause: 400,
-      });
-    }
-
-    throw new Error(response.statusText || 'Error saving the project', {
-      cause: 500,
-    });
+    const errorData = await response.json().catch(() => ({ error: 'Error saving the project' }));
+    const errorMessage = errorData.error || errorData.message || 'Error saving the project';
+    throw new Error(errorMessage, { cause: response.status });
   }
 
   return (await response.json()) as { project: Project };

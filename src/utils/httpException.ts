@@ -23,30 +23,22 @@ function createHTTPException(
   });
 }
 
-/**
- * Validation error helper
- */
 export function validationError(message: string, field?: string) {
   return createHTTPException(400, message, { field });
 }
 
-/**
- * Not found error helper
- */
+export function methodNotAllowedError() {
+  return createHTTPException(405, 'Method not allowed');
+}
+
 export function notFoundError(resource: string) {
   return createHTTPException(404, `${resource} not found`);
 }
 
-/**
- * Forbidden error helper
- */
 export function forbiddenError(message = 'Forbidden') {
   return createHTTPException(403, message);
 }
 
-/**
- * Conflict error helper
- */
 export function conflictError(message: string) {
   return createHTTPException(409, message);
 }

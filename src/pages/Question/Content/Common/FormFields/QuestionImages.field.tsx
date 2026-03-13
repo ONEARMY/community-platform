@@ -71,7 +71,7 @@ export const QuestionImagesField = (props: IProps) => {
     if (index < images.length && !isUploading) {
       const image = images[index];
       return (
-        <ImageInputFieldWrapper key={`existing-image-${index}`} data-cy={`existing-image-${index}`}>
+        <ImageInputFieldWrapper key={`image-${index}`} data-cy={`image-${index}`}>
           <ImageInputV2
             image={image}
             onFilesChange={(file) => {

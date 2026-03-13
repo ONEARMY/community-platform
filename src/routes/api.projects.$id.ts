@@ -16,7 +16,7 @@ import { LibraryServiceServer } from 'src/services/libraryService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
-import { conflictError, validationError } from 'src/utils/httpException';
+import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -140,7 +140,7 @@ async function validateRequest(
     throw validationError('User not found');
   }
   if (request.method !== 'PUT') {
-    throw validationError('Method not allowed');
+    throw methodNotAllowedError();
   }
 
   if (!data.title) {

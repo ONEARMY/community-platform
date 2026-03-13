@@ -13,6 +13,7 @@ import { hasAdminRights } from 'src/utils/helpers';
 import {
   conflictError,
   forbiddenError,
+  methodNotAllowedError,
   notFoundError,
   validationError,
 } from 'src/utils/httpException';
@@ -96,7 +97,7 @@ async function validateRequest(
   client: SupabaseClient,
 ): Promise<void> {
   if (request.method !== 'PUT') {
-    throw validationError('Method not allowed');
+    throw methodNotAllowedError();
   }
 
   if (!params.id) {

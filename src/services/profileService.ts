@@ -48,10 +48,16 @@ const update = async (value: ProfileFormData) => {
     method: 'POST',
   });
 
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: 'Failed to update profile' }));
+    const errorMessage = errorData.error || errorData.message || 'Failed to update profile';
+    throw new Error(errorMessage);
+  }
+
   const result = (await response.json()) as Profile | null;
 
-  if (!response.ok || !result) {
-    throw new Error(response.statusText || 'Failed to update profile');
+  if (!result) {
+    throw new Error('Failed to update profile');
   }
 
   return result;
@@ -74,7 +80,9 @@ const upsertPin = async (pin: MapPinFormData): Promise<MapPin> => {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    const errorData = await response.json().catch(() => ({ error: 'Failed to save map pin' }));
+    const errorMessage = errorData.error || errorData.message || 'Failed to save map pin';
+    throw new Error(errorMessage);
   }
 
   const { mapPin } = await response.json();
@@ -88,7 +96,9 @@ const deletePin = async () => {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    const errorData = await response.json().catch(() => ({ error: 'Failed to delete map pin' }));
+    const errorMessage = errorData.error || errorData.message || 'Failed to delete map pin';
+    throw new Error(errorMessage);
   }
 
   return;
@@ -106,7 +116,11 @@ const updateImpact = async (year: number, fields: IImpactDataField[]): Promise<I
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    const errorData = await response
+      .json()
+      .catch(() => ({ error: 'Failed to update impact data' }));
+    const errorMessage = errorData.error || errorData.message || 'Failed to update impact data';
+    throw new Error(errorMessage);
   }
   const { impact } = await response.json();
 

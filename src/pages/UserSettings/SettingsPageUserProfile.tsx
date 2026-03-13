@@ -48,7 +48,7 @@ export const SettingsPageUserProfile = observer(() => {
     } catch (error) {
       logger.error(error, 'SettingsPage.saveProfile.error');
       setNotification({
-        message: `Save Failed - ${error}`,
+        message: error.toString(),
         icon: 'close',
         show: true,
         variant: 'failure',
@@ -56,17 +56,16 @@ export const SettingsPageUserProfile = observer(() => {
     }
   };
 
-  const existingCoverImages = profile.coverImages
+  const coverImages = profile.coverImages
     ? profile?.coverImages?.slice(0, 4).map((image) => toJS(image))
     : [];
-  const coverImages = new Array(4 - (existingCoverImages?.length || 0));
 
   const initialValues = {
     type: profile.type?.name || 'member',
     displayName: profile.displayName || '',
     about: profile.about || '',
     isContactable: isContactable(profile.isContactable),
-    coverImages: coverImages,
+    coverImages,
     photo: profile.photo ? toJS(profile.photo) : undefined,
     country: profile.country,
     showVisitorPolicy: !!profile.visitorPolicy,
@@ -82,7 +81,7 @@ export const SettingsPageUserProfile = observer(() => {
     <Form
       id={formId}
       onSubmit={async (values) => await saveProfile(values)}
-      initialValues={initialValues}
+      initialValues={{ ...initialValues, username: profile.username }}
       mutators={{ ...arrayMutators }}
       validateOnBlur
       render={({

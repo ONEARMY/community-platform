@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { HTTPException } from 'hono/http-exception';
 import type { DBMedia, DBQuestion, QuestionDTO } from 'oa-shared';
 import { Question } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
@@ -9,6 +10,12 @@ import { questionServiceServer } from 'src/services/questionService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { hasAdminRights } from 'src/utils/helpers';
+import {
+  conflictError,
+  forbiddenError,
+  methodNotAllowedError,
+  validationError,
+} from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 import { contentServiceServer } from '../services/contentService.server';
 
@@ -41,18 +48,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const currentQuestion = await questionServiceServer.getById(id, client);
 
-    const { valid, status, statusText } = await validateRequest(
-      params,
-      request,
-      claims.data.claims.sub,
-      data,
-      currentQuestion,
-      client,
-    );
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    await validateRequest(params, request, claims.data.claims.sub, data, currentQuestion, client);
 
     const previousSlugs = contentServiceServer.updatePreviousSlugs(currentQuestion, slug);
 
@@ -87,7 +83,12 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     return Response.json({ question }, { headers, status: 200 });
   } catch (error) {
     console.error(error);
-    return Response.json({}, { headers, status: 500, statusText: 'Error creating question' });
+
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
+    return Response.json({ error: 'Error updating question' }, { headers, status: 500 });
   }
 };
 
@@ -100,52 +101,49 @@ async function validateRequest(
   client: SupabaseClient,
 ) {
   if (request.method !== 'PUT') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw methodNotAllowedError();
   }
 
   if (!params.id) {
-    return { status: 400, statusText: 'id is required' };
+    throw validationError('ID is required', 'id');
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'title is required' };
+    throw validationError('Title is required', 'title');
   }
 
   if (!data.description) {
-    return { status: 400, statusText: 'description is required' };
+    throw validationError('Description is required', 'description');
   }
 
   if (!currentQuestion) {
-    return { status: 400, statusText: 'Question not found' };
+    throw validationError('Question not found');
   }
 
+  const slug = convertToSlug(data.title);
+
   if (
-    currentQuestion.slug !== data.slug &&
+    currentQuestion.slug !== slug &&
     (await contentServiceServer.isDuplicateExistingSlug(
-      data.slug,
+      slug,
       currentQuestion.id,
       client,
       'questions',
     ))
   ) {
-    return {
-      status: 409,
-      statusText: 'This question already exists',
-    };
+    throw conflictError('This question already exists');
   }
 
   const profileService = new ProfileServiceServer(client);
   const profile = await profileService.getByAuthId(userAuthId);
 
   if (!profile) {
-    return { status: 400, statusText: 'User not found' };
+    throw validationError('User not found');
   }
 
   const isCreator = currentQuestion.created_by === profile.id;
 
   if (!isCreator && !hasAdminRights(profile)) {
-    return { status: 403, statusText: 'Unauthorized' };
+    throw forbiddenError('Forbidden');
   }
-
-  return { valid: true };
 }

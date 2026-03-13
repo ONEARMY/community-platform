@@ -47,7 +47,7 @@ export { Icon } from './Icon/Icon';
 export type { availableGlyphs } from './Icon/types';
 export { IconCountWithTooltip } from './IconCountWithTooltip/IconCountWithTooltip';
 export { ImageGallery } from './ImageGallery/ImageGallery';
-export { ImageInputDeleteOverlay as ImageInputDeleteImage } from './ImageInput/ImageInputDeleteOverlay';
+export { ImageInputDeleteOverlay } from './ImageInput/ImageInputDeleteOverlay';
 export { ImageInputV2 } from './ImageInput/ImageInputV2';
 export { InformationTooltip } from './InformationTooltip/InformationTooltip';
 export { InternalLink } from './InternalLink/InternalLink';

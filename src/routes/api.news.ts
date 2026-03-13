@@ -1,6 +1,5 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
-import type { AuthError } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
 import type { DBMedia, DBNews, DBProfile, Moderation, NewsDTO } from 'oa-shared';
 import { News } from 'oa-shared';
@@ -14,7 +13,7 @@ import { ProfileServiceServer } from 'src/services/profileService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
-import { conflictError, validationError } from 'src/utils/httpException';
+import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 import { contentServiceServer } from '../services/contentService.server';
 
@@ -142,7 +141,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    await validateRequest(request, data, claims.error);
+    await validateRequest(request, data);
 
     const slug = convertToSlug(data.title);
 
@@ -158,7 +157,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     if (profileRequest.error || !profileRequest.data?.at(0)) {
       console.error(profileRequest.error);
-      return Response.json({}, { headers, status: 400, statusText: 'User not found' });
+      throw validationError('User not found');
     }
 
     const profile = profileRequest.data[0] as DBProfile;
@@ -215,17 +214,9 @@ function notifyDiscord(news: News, profile: DBProfile, siteUrl: string) {
   );
 }
 
-async function validateRequest(
-  request: Request,
-  data: any,
-  authError: AuthError | null,
-): Promise<void> {
-  if (authError) {
-    throw validationError(authError?.message || 'Unknown authentication error');
-  }
-
+async function validateRequest(request: Request, data: any): Promise<void> {
   if (request.method !== 'POST') {
-    throw validationError('Method not allowed');
+    throw methodNotAllowedError();
   }
 
   if (!data.title) {

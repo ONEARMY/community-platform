@@ -25,7 +25,9 @@ const upsert = async (id: number | null, form: NewsFormData) => {
         });
 
   if (response.status !== 200 && response.status !== 201) {
-    throw new Error(`Error saving news: ${response.statusText}`, { cause: 500 });
+    const errorData = await response.json().catch(() => ({ error: 'Error saving news' }));
+    const errorMessage = errorData.error || errorData.message || 'Error saving news';
+    throw new Error(errorMessage, { cause: response.status });
   }
 
   const data: { news: DBNews } = await response.json();

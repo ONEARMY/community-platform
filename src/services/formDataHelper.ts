@@ -5,7 +5,11 @@ export function createFormData<T extends Record<string, unknown>>(data: T): Form
     if (value === null || value === undefined) continue;
 
     if (Array.isArray(value)) {
-      value.forEach((item) => formData.append(key, String(item)));
+      if (value[0] && typeof value[0] === 'object') {
+        value.forEach((item) => formData.append(key, JSON.stringify(item)));
+      } else {
+        value.forEach((item) => formData.append(key, String(item)));
+      }
     } else if (typeof value === 'object') {
       formData.append(key, JSON.stringify(value));
     } else {

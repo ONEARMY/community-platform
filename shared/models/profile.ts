@@ -385,10 +385,10 @@ export type ProfileFormData = {
 export type ProfileDTO = {
   displayName: string;
   about: string;
-  country: string;
-  website: string;
   isContactable: boolean;
   type: string;
+  country: string | null;
+  website: string | null;
   photo: DBMedia | null;
   coverImages: DBMedia[] | null;
   tagIds: number[] | null;

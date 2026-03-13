@@ -9,7 +9,12 @@ import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ResearchServiceServer } from 'src/services/researchService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
-import { conflictError, forbiddenError, validationError } from 'src/utils/httpException';
+import {
+  conflictError,
+  forbiddenError,
+  methodNotAllowedError,
+  validationError,
+} from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -138,7 +143,7 @@ async function validateRequest(
   client: SupabaseClient,
 ): Promise<void> {
   if (request.method !== 'PUT') {
-    throw validationError('Method not allowed');
+    throw methodNotAllowedError();
   }
 
   if (!data.title) {

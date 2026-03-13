@@ -1,13 +1,13 @@
 import type { FormApi } from 'final-form';
 import { observer } from 'mobx-react';
-import { ImageInputDeleteImage, ImageInputV2 } from 'oa-components';
+import { ImageInputV2 } from 'oa-components';
 import type { ProfileFormData } from 'oa-shared';
 import { useState } from 'react';
 import { Field } from 'react-final-form';
 import { fields, headings } from 'src/pages/UserSettings/labels';
 import { storageService } from 'src/services/storageService';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
-import { Box, Flex, Heading, Image as ImageComponent, Spinner, Text } from 'theme-ui';
+import { Box, Flex, Heading, Spinner, Text } from 'theme-ui';
 
 interface IProps {
   values: ProfileFormData;
@@ -20,10 +20,16 @@ export const UserImagesSection = observer(({ isMemberProfile, values, form }: IP
   const [uploadingCoverIndex, setUploadingCoverIndex] = useState<number | null>(null);
   const { profile } = useProfileStore();
 
-  const numberOfImageInputsAvailable = 4 - (values.coverImages?.filter((x) => !!x)?.length || 0);
+  // Always show 4 inputs: filled images first, then empty slots
+  const filledImages = (values.coverImages || []).filter((img) => img);
+  const emptySlots = Array(4 - filledImages.length).fill(null);
+  const coverImageSlots = [...filledImages, ...emptySlots];
 
   const handlePhotoSelect = async (file: File | undefined) => {
-    if (!file) return;
+    if (!file) {
+      form.change('photo', undefined);
+      return;
+    }
 
     try {
       setIsUploadingPhoto(true);
@@ -37,15 +43,22 @@ export const UserImagesSection = observer(({ isMemberProfile, values, form }: IP
   };
 
   const handleCoverImageSelect = async (file: File | undefined, index: number) => {
-    if (!file) return;
+    if (!file) {
+      // Remove image at index
+      const updatedImages = coverImageSlots.filter((_, i) => i !== index).filter((img) => img);
+      form.change('coverImages', updatedImages);
+      return;
+    }
 
     try {
       setUploadingCoverIndex(index);
       const uploadedImage = await storageService.imageUpload(profile!.id, 'profiles' as any, file);
 
-      const currentExistingImages = values.coverImages || [];
-      const updatedImages = [...currentExistingImages, uploadedImage];
+      const updatedSlots = [...coverImageSlots];
+      updatedSlots[index] = uploadedImage;
 
+      // Store only filled images, maintaining order
+      const updatedImages = updatedSlots.filter((img) => img);
       form.change('coverImages', updatedImages);
     } catch (error) {
       console.error('Error uploading cover image:', error);
@@ -77,84 +90,52 @@ export const UserImagesSection = observer(({ isMemberProfile, values, form }: IP
             <Flex sx={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
               <Spinner size={32} />
             </Flex>
-          ) : !values.photo ? (
-            <ImageInputV2 onFilesChange={handlePhotoSelect} />
           ) : (
             <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
-              <ImageComponent
-                src={values.photo?.fullPath}
-                sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-              <ImageInputDeleteImage
-                onClick={() => {
-                  form.change('photo', undefined);
-                }}
-              />
+              <ImageInputV2 image={values.photo} onFilesChange={handlePhotoSelect} />
             </Box>
           )}
         </Box>
       </Flex>
 
       {!isMemberProfile && (
-        <Flex data-testid="coverImage" sx={{ flexDirection: 'column', gap: 1 }}>
+        <Flex data-testid="coverImages" sx={{ flexDirection: 'column', gap: 1 }}>
           <Heading variant="subHeading">
             {fields.coverImages.title} <Text color="red">*</Text>
           </Heading>
           <Text variant="paragraph">{fields.coverImages.description}</Text>
 
-          <Flex>
-            <Field name="existingCoverImages">
-              {({ input }) => (
-                <Flex>
-                  {values.coverImages?.map((image, index) => (
-                    <Box
-                      sx={{
-                        width: '150px',
-                        height: '100px',
-                        marginRight: '10px',
-                        position: 'relative',
-                      }}
-                      key={`existing-image-${index}`}
-                      data-cy={`existing-image-${index}`}
-                    >
-                      <ImageComponent
-                        src={image.fullPath}
-                        sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          <Field name="coverImages">
+            {({ input }) => (
+              <Flex>
+                {coverImageSlots.map((image, index) => (
+                  <Box
+                    sx={{
+                      width: '150px',
+                      height: '100px',
+                      marginRight: '10px',
+                      position: 'relative',
+                    }}
+                    key={`cover-image-${index}`}
+                    data-cy={`cover-image-${index}`}
+                  >
+                    {uploadingCoverIndex === index ? (
+                      <Flex sx={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                        <Spinner size={20} />
+                      </Flex>
+                    ) : (
+                      <ImageInputV2
+                        image={image}
+                        onFilesChange={(file: File | undefined) =>
+                          handleCoverImageSelect(file, index)
+                        }
                       />
-                      <ImageInputDeleteImage
-                        onClick={() => {
-                          const currentImages = input.value || [];
-                          const updatedImages = currentImages.filter((_, i) => i !== index);
-                          input.onChange(updatedImages);
-                        }}
-                      />
-                    </Box>
-                  ))}
-                </Flex>
-              )}
-            </Field>
-
-            <Flex>
-              {[...Array(numberOfImageInputsAvailable)].map((_, i) => (
-                <Box
-                  key={`coverImages${i}`}
-                  sx={{
-                    width: '150px',
-                    height: '100px',
-                    marginRight: '10px',
-                  }}
-                >
-                  {uploadingCoverIndex === i ? (
-                    <Flex sx={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                      <Spinner size={20} />
-                    </Flex>
-                  ) : (
-                    <ImageInputV2 onFilesChange={(file) => handleCoverImageSelect(file, i)} />
-                  )}
-                </Box>
-              ))}
-            </Flex>
-          </Flex>
+                    )}
+                  </Box>
+                ))}
+              </Flex>
+            )}
+          </Field>
         </Flex>
       )}
     </Flex>

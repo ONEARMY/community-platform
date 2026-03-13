@@ -1,5 +1,6 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
+import { HTTPException } from 'hono/http-exception';
 import type { DBMedia, DBProfile, DBQuestion, Moderation, QuestionDTO } from 'oa-shared';
 import { Question } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
@@ -10,6 +11,7 @@ import { contentServiceServer } from 'src/services/contentService.server';
 import { discordServiceServer } from 'src/services/discordService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
+import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
 export const loader = async ({ request }) => {
@@ -120,23 +122,12 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     if (!claims.data?.claims) {
       return Response.json({}, { headers, status: 401 });
     }
-    const { valid, status, statusText } = await validateRequest(request, data);
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    await validateRequest(request, data);
 
     const slug = convertToSlug(data.title);
 
     if (await contentServiceServer.isDuplicateNewSlug(slug, client, 'questions')) {
-      return Response.json(
-        {},
-        {
-          headers,
-          status: 409,
-          statusText: 'This question already exists',
-        },
-      );
+      throw conflictError('This question already exists');
     }
 
     const profileRequest = await client
@@ -147,7 +138,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     if (profileRequest.error || !profileRequest.data?.at(0)) {
       console.error(profileRequest.error);
-      return Response.json({}, { headers, status: 400, statusText: 'User not found' });
+      throw validationError('User not found');
     }
 
     const profile = profileRequest.data[0] as DBProfile;
@@ -169,7 +160,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       .select();
 
     if (questionResult.error || !questionResult.data) {
-      return Response.json({}, { headers, status: 400, statusText: questionResult.error.details });
+      throw new Error(questionResult.error?.details || 'Error creating question');
     }
 
     const question = Question.fromDB(questionResult.data[0], []);
@@ -184,7 +175,12 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({ question }, { headers, status: 201 });
   } catch (error) {
     console.error(error);
-    return Response.json({}, { headers, status: 500, statusText: 'Error creating question' });
+
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
+    return Response.json({ error: 'Error creating question' }, { headers, status: 500 });
   }
 };
 
@@ -199,16 +195,14 @@ function notifyDiscord(question: Question, profile: DBProfile, siteUrl: string) 
 
 async function validateRequest(request: Request, data: any) {
   if (request.method !== 'POST') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw methodNotAllowedError();
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'title is required' };
+    throw validationError('Title is required', 'title');
   }
 
   if (!data.description) {
-    return { status: 400, statusText: 'description is required' };
+    throw validationError('Description is required', 'description');
   }
-
-  return { valid: true };
 }

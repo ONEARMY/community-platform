@@ -11,7 +11,7 @@ import { ProfileServiceServer } from 'src/services/profileService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
-import { conflictError, validationError } from 'src/utils/httpException';
+import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -120,7 +120,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
     if (!profile) {
-      return Response.json({}, { headers, status: 400, statusText: 'User not found' });
+      throw validationError('User not found');
     }
 
     const researchStatus: ResearchStatus = 'in-progress';
@@ -171,7 +171,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 function validateRequest(request: Request, data: ResearchDTO) {
   if (request.method !== 'POST') {
-    throw validationError('Method not allowed');
+    throw methodNotAllowedError();
   }
 
   if (!data.title) {

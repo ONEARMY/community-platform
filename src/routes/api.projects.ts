@@ -22,7 +22,7 @@ import { ProfileServiceServer } from 'src/services/profileService.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
-import { conflictError, validationError } from 'src/utils/httpException';
+import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -193,7 +193,7 @@ async function uploadSteps(data, formData: FormData, projectDb: DBProject, clien
 
 async function validateRequest(request: Request, data: any, client: SupabaseClient): Promise<void> {
   if (request.method !== 'POST') {
-    throw validationError('Method not allowed');
+    throw methodNotAllowedError();
   }
 
   if (!data.title) {

@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
-import type { DBMedia, DBNews } from 'oa-shared';
+import type { DBMedia, DBNews, NewsDTO } from 'oa-shared';
 import { News } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -28,14 +28,13 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       body: formData.get('body') as string,
       category: formData.has('category') ? Number(formData.get('category')) : null,
       isDraft: formData.get('is_draft') === 'true',
-      profileBadge: formData.has('profileBadge') ? (formData.get('profileBadge') as string) : null,
+      profileBadge: formData.has('profileBadge') ? Number(formData.get('profileBadge')) : null,
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       title: formData.get('title') as string,
-      slug: convertToSlug(formData.get('title') as string),
       heroImage: formData.has('heroImage')
         ? (JSON.parse(formData.get('heroImage') as string) as DBMedia)
         : null,
-    };
+    } satisfies NewsDTO;
 
     const claims = await client.auth.getClaims();
 
@@ -47,7 +46,8 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     await validateRequest(params, request, claims.data.claims.sub, data, currentNews, client);
 
-    const previousSlugs = contentServiceServer.updatePreviousSlugs(currentNews, data.slug);
+    const slug = convertToSlug(data.title);
+    const previousSlugs = contentServiceServer.updatePreviousSlugs(currentNews, slug);
 
     const newsResult = await client
       .from('news')
@@ -56,7 +56,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         category: data.category,
         is_draft: data.isDraft,
         modified_at: new Date(),
-        slug: data.slug,
+        slug: slug,
         previous_slugs: previousSlugs,
         profile_badge: data.profileBadge,
         summary: getSummaryFromMarkdown(data.body),

@@ -135,3 +135,13 @@ export type NewsFormData = {
   tags?: number[];
   title: string;
 };
+
+export type NewsDTO = {
+  title: string;
+  body: string | null;
+  category: number | null;
+  heroImage: DBMedia | null;
+  isDraft: boolean | null;
+  profileBadge: number | null;
+  tags: number[] | null;
+};

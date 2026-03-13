@@ -1,6 +1,6 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
-import type { DBMedia, DBProfile, DBQuestion, Moderation } from 'oa-shared';
+import type { DBMedia, DBProfile, DBQuestion, Moderation, QuestionDTO } from 'oa-shared';
 import { Question } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/Question/constants';
@@ -11,7 +11,6 @@ import { discordServiceServer } from 'src/services/discordService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { convertToSlug } from 'src/utils/slug';
-import { validateImages } from 'src/utils/storage';
 
 export const loader = async ({ request }) => {
   const url = new URL(request.url);
@@ -108,13 +107,13 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
-      is_draft: formData.get('is_draft') === 'true',
-      category: formData.has('category') ? (formData.get('category') as string) : null,
+      isDraft: formData.get('isDraft') === 'true',
+      category: formData.has('category') ? Number(formData.get('category')) : null,
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       images: formData.has('images')
         ? formData.getAll('images').map((x) => JSON.parse(x as string) as DBMedia)
         : null,
-    };
+    } satisfies QuestionDTO;
 
     const claims = await client.auth.getClaims();
 
@@ -140,19 +139,6 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       );
     }
 
-    const uploadedImages = formData.getAll('images') as File[];
-    const imageValidation = validateImages(uploadedImages);
-
-    if (!imageValidation.valid) {
-      return Response.json(
-        {},
-        {
-          headers,
-          status: 400,
-          statusText: imageValidation.errors.join(', '),
-        },
-      );
-    }
     const profileRequest = await client
       .from('profiles')
       .select('id,username')
@@ -172,7 +158,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         created_by: profile.id,
         title: data.title,
         description: data.description,
-        is_draft: data.is_draft,
+        is_draft: data.isDraft,
         moderation: 'accepted' as Moderation,
         images: data.images,
         slug,

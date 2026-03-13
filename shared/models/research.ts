@@ -260,3 +260,23 @@ export interface ResearchUpdateFormData extends IFilesForm {
   images: MediaWithPublicUrl[] | null;
   videoUrl: string | null;
 }
+
+export type ResearchDTO = {
+  title: string;
+  description: string;
+  category: number | null;
+  tags: number[] | null;
+  collaborators: string[] | null;
+  image: DBMedia | null;
+  isDraft: boolean;
+};
+
+export type ResearchUpdateDTO = {
+  title: string;
+  description: string;
+  images: DBMedia[] | null;
+  videoUrl: string | null;
+  files: IMediaFile[] | null;
+  fileLink: string | null;
+  isDraft: boolean;
+};

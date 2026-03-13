@@ -1,5 +1,5 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
-import type { DBAuthorVotes, DBProfile, ProfileFormData, ProfileType } from 'oa-shared';
+import type { DBAuthorVotes, DBProfile, ProfileDTO, ProfileType } from 'oa-shared';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { ProfileTypesServiceServer } from './profileTypesService.server';
 
@@ -180,7 +180,7 @@ export class ProfileServiceServer {
     return data as DBAuthorVotes[];
   }
 
-  async updateProfile(id: number, values: ProfileFormData) {
+  async updateProfile(id: number, values: ProfileDTO) {
     const types = await new ProfileTypesServiceServer(this.client).get();
     const typeId = types.find((x) => x.name === values.type)!.id;
     const existingProfile = await this.getById(id);

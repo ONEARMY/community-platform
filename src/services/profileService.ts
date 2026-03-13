@@ -1,12 +1,15 @@
-import type {
-  IImpactDataField,
-  IUserImpact,
-  MapPin,
-  MapPinFormData,
-  Profile,
-  ProfileFormData,
+import {
+  DBMedia,
+  type IImpactDataField,
+  type IUserImpact,
+  type MapPin,
+  type MapPinFormData,
+  type Profile,
+  type ProfileDTO,
+  type ProfileFormData,
 } from 'oa-shared';
 import { logger } from 'src/logger';
+import { createFormData } from './formDataHelper';
 
 const get = async (): Promise<Profile | undefined> => {
   try {
@@ -22,44 +25,23 @@ const get = async (): Promise<Profile | undefined> => {
 
 const update = async (value: ProfileFormData) => {
   const url = new URL('/api/profile', window.location.origin);
-  const data = new FormData();
-
-  data.append('displayName', value.displayName);
-  data.append('about', value.about);
-  data.append('country', value.country);
-  data.append('type', value.type.toString());
-  data.append('isContactable', value.isContactable ? 'true' : 'false');
-  data.append('website', value.website);
-  data.append('showVisitorPolicy', value.showVisitorPolicy ? 'true' : 'false');
-
-  if (value.showVisitorPolicy) {
-    if (value.visitorPreferenceDetails) {
-      data.append('visitorPreferenceDetails', value.visitorPreferenceDetails);
-    }
-    if (value.visitorPreferencePolicy) {
-      data.append('visitorPreferencePolicy', value.visitorPreferencePolicy);
-    }
-  }
-
-  if (value.tagIds && value.tagIds?.length > 0) {
-    for (const tagId of value.tagIds) {
-      if (tagId) {
-        data.append('tagIds', tagId.toString());
-      }
-    }
-  }
-
-  if (value.photo) {
-    data.append('photo', JSON.stringify(value.photo));
-  }
-
-  if (value.coverImages && value.coverImages?.length > 0) {
-    for (const image of value.coverImages) {
-      if (image) {
-        data.append('coverImages', JSON.stringify(image));
-      }
-    }
-  }
+  const data = createFormData<ProfileDTO>({
+    displayName: value.displayName,
+    about: value.about,
+    country: value.country,
+    type: value.type.toString(),
+    isContactable: value.isContactable,
+    website: value.website,
+    showVisitorPolicy: value.showVisitorPolicy,
+    visitorPreferenceDetails: value.showVisitorPolicy ? value.visitorPreferenceDetails : undefined,
+    visitorPreferencePolicy: value.showVisitorPolicy ? value.visitorPreferencePolicy || null : null,
+    tagIds: value.tagIds && value.tagIds.length > 0 ? value.tagIds : null,
+    photo: value.photo ? DBMedia.fromPublicMedia(value.photo) : null,
+    coverImages:
+      value.coverImages && value.coverImages.length > 0
+        ? value.coverImages.map(DBMedia.fromPublicMedia)
+        : null,
+  });
 
   const response = await fetch(url, {
     body: data,
@@ -76,15 +58,15 @@ const update = async (value: ProfileFormData) => {
 };
 
 const upsertPin = async (pin: MapPinFormData): Promise<MapPin> => {
-  const data = new FormData();
-
-  data.append('name', pin.name);
-  data.append('country', pin.country);
-  data.append('countryCode', pin.countryCode);
-  data.append('administrative', pin.administrative || '');
-  data.append('postCode', pin.postCode || '');
-  data.append('lat', pin.lat.toString());
-  data.append('lng', pin.lng.toString());
+  const data = createFormData<MapPinFormData>({
+    name: pin.name,
+    country: pin.country,
+    countryCode: pin.countryCode,
+    administrative: pin.administrative || '',
+    postCode: pin.postCode || '',
+    lat: pin.lat,
+    lng: pin.lng,
+  });
 
   const response = await fetch(`/api/settings/map`, {
     method: 'POST',

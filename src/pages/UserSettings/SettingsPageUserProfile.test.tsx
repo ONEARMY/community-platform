@@ -105,6 +105,8 @@ describe('UserSettings', () => {
       coverImages: [
         {
           id: '123',
+          path: avatarUrl,
+          fullPath: avatarUrl,
           publicUrl: avatarUrl,
         },
       ],

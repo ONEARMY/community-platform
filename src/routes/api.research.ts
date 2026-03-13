@@ -1,5 +1,5 @@
 import { HTTPException } from 'hono/http-exception';
-import type { DBMedia, DBResearchItem, ResearchStatus } from 'oa-shared';
+import type { DBMedia, DBResearchItem, ResearchDTO, ResearchStatus } from 'oa-shared';
 import { ResearchItem } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
@@ -92,7 +92,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
       isDraft: formData.get('draft') === 'true',
-      category: formData.has('category') ? (formData.get('category') as string) : null,
+      category: formData.has('category') ? Number(formData.get('category')) : null,
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       collaborators: formData.has('collaborators')
         ? (formData.getAll('collaborators') as string[])
@@ -100,7 +100,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       image: formData.has('image')
         ? (JSON.parse(formData.get('image') as string) as DBMedia)
         : null,
-    };
+    } satisfies ResearchDTO;
 
     const claims = await client.auth.getClaims();
 
@@ -108,7 +108,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    await validateRequest(request, data);
+    validateRequest(request, data);
 
     const slug = convertToSlug(data.title);
 
@@ -169,7 +169,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 };
 
-async function validateRequest(request: Request, data: any): Promise<void> {
+function validateRequest(request: Request, data: ResearchDTO) {
   if (request.method !== 'POST') {
     throw validationError('Method not allowed');
   }
@@ -182,7 +182,7 @@ async function validateRequest(request: Request, data: any): Promise<void> {
     throw validationError('Description is required', 'description');
   }
 
-  if (!data.isDraft && !data.uploadedImage && !data.existingImage) {
+  if (!data.isDraft && !data.image) {
     throw validationError('Image is required', 'image');
   }
 }

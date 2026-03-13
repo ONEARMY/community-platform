@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
-import type { DBMedia, DBResearchItem } from 'oa-shared';
+import type { DBMedia, DBResearchItem, ResearchDTO } from 'oa-shared';
 import { ResearchItem, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -32,12 +32,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         ? (formData.getAll('collaborators') as string[])
         : null,
       isDraft: formData.get('draft') === 'true',
-      slug: convertToSlug(formData.get('title') as string),
       image: formData.has('image')
         ? (JSON.parse(formData.get('image') as string) as DBMedia)
         : null,
-    };
+    } satisfies ResearchDTO;
 
+    const slug = convertToSlug(data.title);
     const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
@@ -48,14 +48,14 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     await validateRequest(request, claims.data.claims.sub, data, oldResearch, client);
 
-    const previousSlugs = contentServiceServer.updatePreviousSlugs(oldResearch, data.slug);
+    const previousSlugs = contentServiceServer.updatePreviousSlugs(oldResearch, slug);
 
     const researchResult = await client
       .from('research')
       .update({
         title: data.title,
         description: data.description,
-        slug: data.slug,
+        slug,
         category: data.category,
         tags: data.tags,
         previous_slugs: previousSlugs,

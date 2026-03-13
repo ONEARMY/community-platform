@@ -5,8 +5,11 @@ import type {
   DBProfile,
   DBProject,
   DBProjectStep,
+  DifficultyLevel,
   IMediaFile,
   Moderation,
+  ProjectDTO,
+  ProjectStepDTO,
 } from 'oa-shared';
 import { Project, ProjectStep, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
@@ -93,29 +96,28 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   try {
     const formData = await request.formData();
-    const isDraft = formData.get('draft') === 'true';
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
-      isDraft,
       time: formData.get('time') as string,
-      category: formData.has('category') ? (formData.get('category') as string) : null,
+      category: formData.has('category') ? Number(formData.get('category')) : null,
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       fileLink: formData.has('fileLink') ? (formData.get('fileLink') as string) : null,
       difficultyLevel: formData.has('difficultyLevel')
-        ? (formData.get('difficultyLevel') as string)
+        ? (formData.get('difficultyLevel') as DifficultyLevel)
         : null,
-      moderation: isDraft ? undefined : ('awaiting-moderation' as Moderation),
+      isDraft: formData.get('draft') === 'true',
       stepCount: parseInt(formData.get('stepCount') as string),
-      slug: convertToSlug((formData.get('title') as string) || ''),
       coverImage: formData.has('coverImage')
         ? (JSON.parse(formData.get('coverImage') as string) as DBMedia)
         : null,
       files: formData.has('files')
         ? formData.getAll('files').map((x) => JSON.parse(x as string) as IMediaFile)
         : null,
-    };
+    } satisfies ProjectDTO;
 
+    const slug = convertToSlug((formData.get('title') as string) || '');
+    let moderation = data.isDraft ? null : ('awaiting-moderation' as Moderation);
     const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
@@ -127,15 +129,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
-    if (!isDraft && profile?.roles?.includes(UserRole.ADMIN)) {
-      data.moderation = 'accepted';
+    if (!data.isDraft && profile?.roles?.includes(UserRole.ADMIN)) {
+      moderation = 'accepted';
     }
 
     if (!profile) {
       return Response.json({}, { headers, status: 400, statusText: 'User not found' });
     }
 
-    const projectDb = await createProject(client, data, profile);
+    const projectDb = await createProject(client, data, slug, moderation, profile);
     const project = Project.fromDB(projectDb, []);
 
     project.coverImage = data.coverImage
@@ -168,14 +170,17 @@ async function uploadSteps(data, formData: FormData, projectDb: DBProject, clien
       ? formData.getAll(`steps.[${i}].images`).map((x) => JSON.parse(x as string) as DBMedia)
       : null;
 
-    const stepDb = await createStep(client, {
-      title: formData.get(`steps.[${i}].title`) as string,
-      description: formData.get(`steps.[${i}].description`) as string,
-      videoUrl: (formData.get(`steps.[${i}].videoUrl`) as string) || null,
-      projectId: projectDb.id,
-      images: stepImages,
-      order: i + 1,
-    });
+    const stepDb = await createStep(
+      client,
+      projectDb.id,
+      {
+        title: formData.get(`steps.[${i}].title`) as string,
+        description: formData.get(`steps.[${i}].description`) as string,
+        videoUrl: (formData.get(`steps.[${i}].videoUrl`) as string) || null,
+        images: stepImages,
+      },
+      i + 1,
+    );
 
     const publicImages = stepImages ? storage.getPublicUrls(stepImages) : undefined;
     const step = ProjectStep.fromDB(stepDb, publicImages);
@@ -214,19 +219,9 @@ async function validateRequest(request: Request, data: any, client: SupabaseClie
 
 async function createProject(
   client: SupabaseClient,
-  data: {
-    title: string;
-    description: string;
-    isDraft: boolean;
-    category: string | null;
-    tags: number[] | null;
-    fileLink: string | null;
-    difficultyLevel: string | null;
-    time: string | null;
-    moderation?: Moderation;
-    slug: string;
-    files: IMediaFile[] | null;
-  },
+  data: ProjectDTO,
+  slug: string,
+  moderation: Moderation | null,
   profile: DBProfile,
 ) {
   const projectResult = await client
@@ -235,7 +230,7 @@ async function createProject(
       created_by: profile.id,
       title: data.title,
       description: data.description,
-      slug: data.slug,
+      slug: slug,
       category: data.category,
       tags: data.tags,
       is_draft: data.isDraft,
@@ -243,7 +238,7 @@ async function createProject(
       difficulty_level: data.difficultyLevel,
       time: data.time,
       files: data.files,
-      moderation: data.moderation,
+      moderation: moderation,
       tenant_id: process.env.TENANT_ID,
     })
     .select();
@@ -257,24 +252,19 @@ async function createProject(
 
 async function createStep(
   client: SupabaseClient,
-  values: {
-    title: string;
-    description: string;
-    projectId: number;
-    videoUrl: string | null;
-    order: number;
-    images: DBMedia[] | null;
-  },
+  projectId: number,
+  values: ProjectStepDTO,
+  order: number,
 ) {
   const { data, error } = await client
     .from('project_steps')
     .insert({
       title: values.title,
       description: values.description,
-      project_id: values.projectId,
+      project_id: projectId,
       video_url: values.videoUrl,
-      order: values.order,
       images: values.images,
+      order: order,
       tenant_id: process.env.TENANT_ID,
     })
     .select();

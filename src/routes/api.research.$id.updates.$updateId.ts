@@ -1,4 +1,4 @@
-import type { DBMedia, DBResearchUpdate, IMediaFile } from 'oa-shared';
+import type { DBMedia, DBResearchUpdate, IMediaFile, ResearchUpdateDTO } from 'oa-shared';
 import { ResearchUpdate } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -30,9 +30,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       files: formData.has('files')
         ? formData.getAll('files').map((x) => JSON.parse(x as string) as IMediaFile)
         : null,
-      fileUrl: formData.get('fileUrl') as string,
+      fileLink: formData.get('fileLink') as string,
       isDraft: formData.get('draft') === 'true',
-    };
+    } satisfies ResearchUpdateDTO;
 
     const claims = await client.auth.getClaims();
 
@@ -70,7 +70,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         images: data.images,
         modified_at: new Date(),
         video_url: data.videoUrl,
-        files: data.files?.map((x) => ({ id: x.id, name: x.name, size: x.size })),
+        files: data.files,
       })
       .eq('id', oldResearchUpdate.id)
       .select('*,research:research(id,title,slug,is_draft)')
@@ -128,7 +128,7 @@ async function deleteResearchUpdate(request: Request, id: number, updateId: numb
   return Response.json({}, { status: 200, headers });
 }
 
-async function validateRequest(request: Request, data: any) {
+async function validateRequest(request: Request, data: ResearchUpdateDTO) {
   if (request.method !== 'PUT') {
     return { status: 405, statusText: 'method not allowed' };
   }

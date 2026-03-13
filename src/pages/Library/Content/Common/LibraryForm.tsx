@@ -40,7 +40,7 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
     tags: formData?.tags || [],
     time: formData?.time || null,
     difficultyLevel: formData?.difficultyLevel || null,
-    image: formData?.image || null,
+    coverImage: formData?.coverImage || null,
     files: formData?.files || null,
     fileLink: formData?.fileLink || null,
     steps: formData?.steps ?? [
@@ -64,8 +64,8 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
           const error = 'Category is required';
           setSaveErrorMessage(error);
           throw new Error(error);
-        } else if (!values.image?.id) {
-          const error = 'An image is required';
+        } else if (!values.coverImage?.id) {
+          const error = 'The Cover Image is required';
           setSaveErrorMessage(error);
           throw new Error(error);
         }
@@ -102,8 +102,8 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
           errors['category'] = 'Category is required.';
         }
 
-        if (!values.image?.id) {
-          errors['image'] = 'An image is required (either new or existing).';
+        if (!values.coverImage?.id) {
+          errors['coverImage'] = 'The Cover Image is required (either new or existing).';
         }
 
         return errors;

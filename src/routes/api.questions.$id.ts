@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBMedia, DBQuestion } from 'oa-shared';
+import type { DBMedia, DBQuestion, QuestionDTO } from 'oa-shared';
 import { Question } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
@@ -24,13 +24,14 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
       category: formData.has('category') ? Number(formData.get('category')) : null,
-      is_draft: formData.get('is_draft') === 'true',
+      isDraft: formData.get('isDraft') === 'true',
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
-      slug: convertToSlug(formData.get('title') as string),
       images: formData.has('images')
         ? formData.getAll('images').map((x) => JSON.parse(x as string) as DBMedia)
         : null,
-    };
+    } satisfies QuestionDTO;
+
+    const slug = convertToSlug(data.title);
 
     const claims = await client.auth.getClaims();
 
@@ -53,17 +54,17 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
       return Response.json({}, { headers, status, statusText });
     }
 
-    const previousSlugs = contentServiceServer.updatePreviousSlugs(currentQuestion, data.slug);
+    const previousSlugs = contentServiceServer.updatePreviousSlugs(currentQuestion, slug);
 
     const questionResult = await client
       .from('questions')
       .update({
         category: data.category,
         description: data.description,
-        is_draft: data.is_draft,
+        is_draft: data.isDraft,
         images: data.images,
         title: data.title,
-        slug: data.slug,
+        slug,
         previous_slugs: previousSlugs,
         tags: data.tags,
         modified_at: new Date(),

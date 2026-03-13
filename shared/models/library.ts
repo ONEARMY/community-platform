@@ -59,7 +59,7 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
     return {
       title: obj.title,
       description: obj.description,
-      image:
+      coverImage:
         obj.cover_image && publicCoverImage ? { ...obj.cover_image, ...publicCoverImage } : null,
       category: obj.category
         ? { value: obj.category.id.toString(), label: obj.category.name }
@@ -213,7 +213,7 @@ export interface ProjectFormData extends IFilesForm {
   tags: number[] | null;
   difficultyLevel: DifficultyLevel | null;
   time: string | null;
-  image: MediaWithPublicUrl | null;
+  coverImage: MediaWithPublicUrl | null;
   steps: ProjectStepFormData[];
 }
 
@@ -222,5 +222,26 @@ export type ProjectStepFormData = {
   title: string;
   description: string;
   images: MediaWithPublicUrl[] | null;
+  videoUrl: string | null;
+};
+
+export type ProjectDTO = {
+  title: string;
+  description: string;
+  category: number | null;
+  tags: number[] | null;
+  difficultyLevel: DifficultyLevel | null;
+  time: string | null;
+  coverImage: DBMedia | null;
+  isDraft: boolean;
+  stepCount: number;
+  files: IMediaFile[] | null;
+  fileLink: string | null;
+};
+
+export type ProjectStepDTO = {
+  title: string;
+  description: string;
+  images: DBMedia[] | null;
   videoUrl: string | null;
 };

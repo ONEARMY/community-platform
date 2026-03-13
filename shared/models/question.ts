@@ -111,3 +111,12 @@ export type QuestionFormData = {
   tags: number[] | null;
   title: string;
 };
+
+export type QuestionDTO = {
+  title: string;
+  description: string;
+  category: number | null;
+  images: DBMedia[] | null;
+  isDraft: boolean | null;
+  tags: number[] | null;
+};

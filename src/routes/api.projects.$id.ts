@@ -1,6 +1,13 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
-import type { DBMedia, DBProfile, DBProject, IMediaFile, Image } from 'oa-shared';
+import type {
+  DBMedia,
+  DBProfile,
+  DBProject,
+  DifficultyLevel,
+  IMediaFile,
+  ProjectDTO,
+} from 'oa-shared';
 import { Project, ProjectStep, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -29,21 +36,20 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       description: formData.get('description') as string,
       isDraft: formData.get('draft') === 'true',
       time: formData.get('time') as string,
-      category: formData.has('category') ? (formData.get('category') as string) : null,
+      category: formData.has('category') ? Number(formData.get('category')) : null,
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       fileLink: formData.has('fileLink') ? (formData.get('fileLink') as string) : null,
       coverImage: formData.has('coverImage')
-        ? (JSON.parse(formData.get('coverImage') as string) as Image)
+        ? (JSON.parse(formData.get('coverImage') as string) as DBMedia)
         : null,
       files: formData.has('files')
         ? formData.getAll('files').map((x) => JSON.parse(x as string) as IMediaFile)
         : null,
       difficultyLevel: formData.has('difficultyLevel')
-        ? (formData.get('difficultyLevel') as string)
+        ? (formData.get('difficultyLevel') as DifficultyLevel)
         : null,
       stepCount: parseInt(formData.get('stepCount') as string),
-      slug: convertToSlug(formData.get('title') as string),
-    };
+    } satisfies ProjectDTO;
 
     const claims = await client.auth.getClaims();
 
@@ -87,14 +93,17 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         ? formData.getAll(`steps.[${i}].images`).map((x) => JSON.parse(x as string) as DBMedia)
         : null;
 
-      const stepDb = await libraryService.upsertStep(stepId, {
-        title: formData.get(`steps.[${i}].title`) as string,
-        description: formData.get(`steps.[${i}].description`) as string,
-        videoUrl: (formData.get(`steps.[${i}].videoUrl`) as string) || null,
-        images: images,
-        projectId: projectDb.id,
-        order: i + 1,
-      });
+      const stepDb = await libraryService.upsertStep(
+        projectDb.id,
+        stepId,
+        {
+          title: formData.get(`steps.[${i}].title`) as string,
+          description: formData.get(`steps.[${i}].description`) as string,
+          videoUrl: (formData.get(`steps.[${i}].videoUrl`) as string) || null,
+          images: images,
+        },
+        i + 1,
+      );
       const step = ProjectStep.fromDB(stepDb);
       project.steps.push(step);
     }
@@ -163,21 +172,10 @@ async function updateProject(
   client: SupabaseClient,
   profile: DBProfile,
   currentProject: DBProject,
-  data: {
-    title: string;
-    description: string;
-    isDraft: boolean;
-    category: string | null;
-    tags: number[] | null;
-    fileLink: string | null;
-    difficultyLevel: string | null;
-    time: string | null;
-    slug: string;
-    coverImage: Image | null;
-    files: IMediaFile[] | null;
-  },
+  data: ProjectDTO,
 ) {
-  const previousSlugs = contentServiceServer.updatePreviousSlugs(currentProject, data.slug);
+  const slug = convertToSlug(data.title);
+  const previousSlugs = contentServiceServer.updatePreviousSlugs(currentProject, slug);
 
   let moderation = currentProject.moderation;
 
@@ -190,7 +188,7 @@ async function updateProject(
     .update({
       title: data.title,
       description: data.description,
-      slug: data.slug,
+      slug,
       previous_slugs: previousSlugs,
       category: data.category,
       tags: data.tags,

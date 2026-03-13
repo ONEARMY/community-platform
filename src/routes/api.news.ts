@@ -2,7 +2,7 @@
 
 import type { AuthError } from '@supabase/supabase-js';
 import { HTTPException } from 'hono/http-exception';
-import type { DBMedia, DBNews, DBProfile, Moderation } from 'oa-shared';
+import type { DBMedia, DBNews, DBProfile, Moderation, NewsDTO } from 'oa-shared';
 import { News } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/News/constants';
@@ -126,15 +126,15 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const formData = await request.formData();
     const data = {
       body: formData.get('body') as string,
-      category: formData.has('category') ? (formData.get('category') as string) : null,
+      category: formData.has('category') ? Number(formData.get('category')) : null,
       isDraft: formData.get('is_draft') === 'true',
-      profileBadge: formData.has('profileBadge') ? (formData.get('profileBadge') as string) : null,
+      profileBadge: formData.has('profileBadge') ? Number(formData.get('profileBadge')) : null,
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       title: formData.get('title') as string,
       heroImage: formData.has('heroImage')
         ? (JSON.parse(formData.get('heroImage') as string) as DBMedia)
         : null,
-    };
+    } satisfies NewsDTO;
 
     const claims = await client.auth.getClaims();
 

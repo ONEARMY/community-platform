@@ -1,5 +1,12 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { DBMedia, type DBProject, type DBProjectStep, Image, Project, UserRole } from 'oa-shared';
+import {
+  type DBProject,
+  type DBProjectStep,
+  Image,
+  Project,
+  ProjectStepDTO,
+  UserRole,
+} from 'oa-shared';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { ImageServiceServer } from './imageService.server';
 import { StorageServiceServer } from './storageService.server';
@@ -151,15 +158,10 @@ export class LibraryServiceServer {
   }
 
   async upsertStep(
+    projectId: number,
     stepId: number | null,
-    values: {
-      title: string;
-      description: string;
-      projectId: number;
-      videoUrl: string | null;
-      order: number;
-      images: DBMedia[] | null;
-    },
+    values: ProjectStepDTO,
+    order: number,
   ) {
     if (stepId) {
       const { data, error } = await this.client
@@ -167,10 +169,10 @@ export class LibraryServiceServer {
         .update({
           title: values.title,
           description: values.description,
-          project_id: values.projectId,
+          project_id: projectId,
           video_url: values.videoUrl,
-          order: values.order,
           images: values.images,
+          order,
         })
         .eq('id', stepId)
         .select();
@@ -184,11 +186,11 @@ export class LibraryServiceServer {
         .insert({
           title: values.title,
           description: values.description,
-          project_id: values.projectId,
+          project_id: projectId,
           video_url: values.videoUrl,
-          order: values.order,
           images: values.images,
           tenant_id: process.env.TENANT_ID,
+          order,
         })
         .select();
       if (error || !data) {

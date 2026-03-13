@@ -1,5 +1,6 @@
-import type { Project, ProjectFormData } from 'oa-shared';
+import { DBMedia, type Project, ProjectDTO, type ProjectFormData } from 'oa-shared';
 import { logger } from 'src/logger';
+import { createFormData } from 'src/services/formDataHelper';
 import type { LibrarySortOption } from './Content/List/LibrarySortOptions';
 
 export enum LibrarySearchParams {
@@ -54,53 +55,21 @@ const getDrafts = async () => {
 };
 
 const upsert = async (id: number | null, formData: ProjectFormData, isDraft = false) => {
-  const data = new FormData();
-  data.append('title', formData.title);
-  data.append('fileLink', formData.fileLink || '');
-
-  if (formData.time) {
-    data.append('time', formData.time);
-  }
-
-  if (formData.difficultyLevel) {
-    data.append('difficultyLevel', formData.difficultyLevel);
-  }
-
-  if (formData.description) {
-    data.append('description', formData.description);
-  }
-
-  if (formData.tags && formData.tags.length > 0) {
-    for (const tag of formData.tags) {
-      if (tag) {
-        data.append('tags', tag.toString());
-      }
-    }
-  }
-
-  if (formData.category) {
-    data.append('category', formData.category?.value.toString());
-  }
-
-  if (isDraft) {
-    data.append('draft', 'true');
-  }
-
-  if (formData.image) {
-    data.append('coverImage', JSON.stringify(formData.image));
-  }
-
-  if (formData.files && formData.files.length > 0) {
-    for (const file of formData.files) {
-      if (file) {
-        data.append('files', JSON.stringify(file));
-      }
-    }
-  }
+  const data = createFormData<ProjectDTO>({
+    title: formData.title,
+    description: formData.description,
+    category: Number(formData.category?.value) || null,
+    coverImage: formData.coverImage ? DBMedia.fromPublicMedia(formData.coverImage) : null,
+    difficultyLevel: formData.difficultyLevel,
+    fileLink: formData.fileLink,
+    files: formData.files,
+    tags: formData.tags,
+    time: formData.time,
+    stepCount: formData.steps.length || 0,
+    isDraft: isDraft,
+  });
 
   if (formData.steps?.length) {
-    data.append('stepCount', formData.steps.length.toString());
-
     for (let i = 0; i < formData.steps.length; i++) {
       const step = formData.steps[i];
       if (step.id) {

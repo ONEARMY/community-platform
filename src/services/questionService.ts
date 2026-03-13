@@ -1,27 +1,16 @@
-import type { QuestionFormData } from 'oa-shared';
-import { DBQuestion, Question } from 'oa-shared';
+import type { QuestionDTO, QuestionFormData } from 'oa-shared';
+import { DBMedia, DBQuestion, Question } from 'oa-shared';
+import { createFormData } from './formDataHelper';
 
 const upsert = async (id: number | null, question: QuestionFormData) => {
-  const body = new FormData();
-  body.append('title', question.title);
-  body.append('description', question.description);
-  body.append('is_draft', question.isDraft ? 'true' : 'false');
-
-  if (question.tags && question.tags.length > 0) {
-    for (const tag of question.tags) {
-      body.append('tags', tag.toString());
-    }
-  }
-
-  if (question.category) {
-    body.append('category', question.category?.value.toString());
-  }
-
-  if (question.images && question.images.length > 0) {
-    for (const image of question.images) {
-      body.append('images', JSON.stringify(image));
-    }
-  }
+  const body = createFormData<QuestionDTO>({
+    title: question.title,
+    description: question.description,
+    category: Number(question.category?.value) || null,
+    images: question.images?.length ? question.images.map(DBMedia.fromPublicMedia) : null,
+    isDraft: question.isDraft,
+    tags: question.tags,
+  });
 
   const response =
     id === null

@@ -1,30 +1,17 @@
 import type { DBNews, NewsFormData } from 'oa-shared';
-import { DBMedia, News } from 'oa-shared';
+import { DBMedia, News, NewsDTO } from 'oa-shared';
+import { createFormData } from './formDataHelper';
 
 const upsert = async (id: number | null, form: NewsFormData) => {
-  const { category, profileBadge, tags, title } = form;
-  const body = new FormData();
-  body.append('title', title);
-  body.append('body', form.body!);
-  body.append('is_draft', form.isDraft ? 'true' : 'false');
-
-  if (tags && tags.length > 0) {
-    for (const tag of tags) {
-      body.append('tags', tag.toString());
-    }
-  }
-
-  if (profileBadge) {
-    body.append('profileBadge', profileBadge.value.toString());
-  }
-
-  if (category) {
-    body.append('category', category?.value.toString());
-  }
-
-  if (form.heroImage) {
-    body.append('heroImage', JSON.stringify(DBMedia.fromPublicMedia(form.heroImage)));
-  }
+  const body = createFormData<NewsDTO>({
+    title: form.title,
+    body: form.body,
+    category: Number(form.category?.value) || null,
+    heroImage: form.heroImage ? DBMedia.fromPublicMedia(form.heroImage) : null,
+    isDraft: form.isDraft,
+    profileBadge: Number(form.profileBadge?.value) || null,
+    tags: form.tags || null,
+  });
 
   const response =
     id === null

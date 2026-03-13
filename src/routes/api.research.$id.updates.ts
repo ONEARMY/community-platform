@@ -1,4 +1,4 @@
-import type { DBMedia, DBProfile, DBResearchItem, IMediaFile } from 'oa-shared';
+import type { DBMedia, DBProfile, DBResearchItem, IMediaFile, ResearchUpdateDTO } from 'oa-shared';
 import { ResearchUpdate, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -17,15 +17,15 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
       videoUrl: formData.get('videoUrl') as string,
-      fileUrl: formData.get('fileUrl') as string,
-      isDraft: formData.get('draft') === 'true',
       images: formData.has('images')
         ? formData.getAll('images').map((x) => JSON.parse(x as string) as DBMedia)
         : null,
       files: formData.has('files')
         ? formData.getAll('files').map((x) => JSON.parse(x as string) as IMediaFile)
         : null,
-    };
+      fileLink: formData.get('fileLink') as string,
+      isDraft: formData.get('draft') === 'true',
+    } satisfies ResearchUpdateDTO;
 
     const claims = await client.auth.getClaims();
 
@@ -100,7 +100,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
 function validateRequest(
   request: Request,
-  data: any,
+  data: ResearchUpdateDTO,
   research: DBResearchItem | null,
   profile: DBProfile | null,
 ) {

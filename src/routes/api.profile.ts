@@ -1,4 +1,4 @@
-import type { DBMedia, Image, ProfileFormData } from 'oa-shared';
+import type { DBMedia, Image, ProfileDTO } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -98,7 +98,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       photo: formData.has('photo')
         ? (JSON.parse(formData.get('photo') as string) as DBMedia)
         : null,
-    } as ProfileFormData;
+    } as ProfileDTO;
 
     const claims = await client.auth.getClaims();
 
@@ -140,7 +140,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 async function validateRequest(
   request: Request,
-  data: ProfileFormData,
+  data: ProfileDTO,
   profile: { id: number } | null,
   memberTypes: string[] | null,
 ) {

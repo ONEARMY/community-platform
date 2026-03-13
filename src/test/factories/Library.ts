@@ -26,7 +26,7 @@ export const FactoryProjectFormData = (
     'very-hard',
   ]),
   time: '< 1 hour',
-  image: {
+  coverImage: {
     id: faker.string.uuid(),
     path: faker.image.url(),
     fullPath: faker.image.url(),

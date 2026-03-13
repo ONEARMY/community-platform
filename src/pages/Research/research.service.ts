@@ -1,11 +1,15 @@
-import type {
-  ResearchFormData,
-  ResearchItem,
-  ResearchStatus,
-  ResearchUpdate,
-  ResearchUpdateFormData,
+import {
+  DBMedia,
+  ResearchDTO,
+  type ResearchFormData,
+  type ResearchItem,
+  type ResearchStatus,
+  type ResearchUpdate,
+  type ResearchUpdateDTO,
+  type ResearchUpdateFormData,
 } from 'oa-shared';
 import { logger } from 'src/logger';
+import { createFormData } from 'src/services/formDataHelper';
 import type { ResearchSortOption } from './ResearchSortOptions';
 
 const search = async (
@@ -61,40 +65,15 @@ const getDrafts = async () => {
 };
 
 const upsert = async (id: number | null, research: ResearchFormData, isDraft = false) => {
-  const data = new FormData();
-  data.append('title', research.title);
-
-  if (research.description) {
-    data.append('description', research.description);
-  }
-
-  if (research.tags && research.tags.length > 0) {
-    for (const tag of research.tags) {
-      if (tag) {
-        data.append('tags', tag.toString());
-      }
-    }
-  }
-
-  if (research.category) {
-    data.append('category', research.category?.value.toString());
-  }
-
-  if (research.collaborators) {
-    for (const collaborator of research.collaborators) {
-      if (collaborator) {
-        data.append('collaborators', collaborator.toString());
-      }
-    }
-  }
-
-  if (isDraft) {
-    data.append('draft', 'true');
-  }
-
-  if (research.image) {
-    data.append('image', JSON.stringify(research.image));
-  }
+  const data = createFormData<ResearchDTO>({
+    title: research.title,
+    description: research.description,
+    category: Number(research.category?.value) || null,
+    collaborators: research.collaborators,
+    image: research.image ? DBMedia.fromPublicMedia(research.image) : null,
+    tags: research.tags,
+    isDraft,
+  });
 
   const response =
     id === null
@@ -124,31 +103,15 @@ const upsertUpdate = async (
   update: ResearchUpdateFormData,
   isDraft = false,
 ) => {
-  const data = new FormData();
-  data.append('title', update.title);
-  data.append('description', update.description);
-  data.append('fileLink', update.fileLink || '');
-  data.append('videoUrl', update.videoUrl || '');
-
-  if (update.images && update.images.length > 0) {
-    for (const image of update.images) {
-      if (image) {
-        data.append('images', JSON.stringify(image));
-      }
-    }
-  }
-
-  if (update.files && update.files.length > 0) {
-    for (const file of update.files) {
-      if (file) {
-        data.append('files', JSON.stringify(file));
-      }
-    }
-  }
-
-  if (isDraft) {
-    data.append('draft', 'true');
-  }
+  const data = createFormData<ResearchUpdateDTO>({
+    title: update.title,
+    description: update.description,
+    fileLink: update.fileLink,
+    files: update.files,
+    images: update.images?.length ? update.images.map(DBMedia.fromPublicMedia) : null,
+    videoUrl: update.videoUrl,
+    isDraft,
+  });
 
   const response =
     updateId === null

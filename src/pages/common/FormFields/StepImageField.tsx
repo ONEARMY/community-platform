@@ -36,9 +36,11 @@ export const StepImageField = ({
 
   const imagesFieldName = `steps[${stepIndex}].images`;
 
-  const handleImageSelect = async (fileMeta: any) => {
+  const handleImageSelect = async (file: File | undefined, index: number) => {
     // If user is clearing the image
-    if (!fileMeta || !fileMeta.photoData) {
+    if (!file) {
+      const updatedImages = (images || []).filter((_, i) => i !== index);
+      form.change(imagesFieldName, updatedImages);
       return;
     }
 
@@ -46,11 +48,7 @@ export const StepImageField = ({
     setUploadError(null);
 
     try {
-      const uploadedImage = await storageService.imageUpload(
-        contentId ?? null,
-        contentType,
-        fileMeta.photoData,
-      );
+      const uploadedImage = await storageService.imageUpload(contentId ?? null, contentType, file);
 
       const currentImages = state.values.steps?.[stepIndex]?.images || [];
       // Add new image and deduplicate by id
@@ -77,7 +75,7 @@ export const StepImageField = ({
           image={image}
           onFilesChange={(file) => {
             if (file) {
-              handleImageSelect({ photoData: file });
+              handleImageSelect(file, imageIndex);
             } else {
               const updatedImages = (images || []).filter((_, i) => i !== imageIndex);
               form.change(imagesFieldName, updatedImages);
@@ -97,7 +95,7 @@ export const StepImageField = ({
         <Spinner size={20} />
       ) : (
         <ImageInputV2
-          onFilesChange={(file) => file && handleImageSelect({ photoData: file })}
+          onFilesChange={(file) => file && handleImageSelect(file, imageIndex)}
           onError={setUploadError}
         />
       )}

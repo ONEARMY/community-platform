@@ -94,14 +94,7 @@ export const QuestionImagesField = (props: IProps) => {
 
       {images.map((image, index) => (
         <ImageInputFieldWrapper key={`existing-image-${index}`} data-cy={`existing-image-${index}`}>
-          <ImageInputV2
-            image={image}
-            onFilesChange={(fileMeta) => {
-              if (!fileMeta) {
-                handleDeleteImage(index);
-              }
-            }}
-          />
+          <ImageInputV2 image={image} onFilesChange={(file) => handleImageSelect(file, index)} />
         </ImageInputFieldWrapper>
       ))}
     </FormFieldWrapper>

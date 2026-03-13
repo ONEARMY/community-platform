@@ -84,7 +84,7 @@ describe('UserSettings', () => {
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1);
       expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1);
       expect(wrapper.getAllByTestId('photo')).toHaveLength(1);
-      expect(wrapper.queryByTestId('coverImage')).toBeNull();
+      expect(wrapper.queryByTestId('coverImages')).toBeNull();
     });
   });
 
@@ -127,7 +127,7 @@ describe('UserSettings', () => {
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1);
       expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1);
       expect(wrapper.getAllByTestId('photo')).toHaveLength(1);
-      expect(wrapper.getAllByTestId('coverImage')).toHaveLength(1);
+      expect(wrapper.getAllByTestId('coverImages')).toHaveLength(1);
     });
   });
 

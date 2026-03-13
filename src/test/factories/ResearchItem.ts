@@ -119,7 +119,7 @@ export const FactoryResearchItemFormInput = (
 ): ResearchFormData => ({
   title: faker.lorem.words(),
   description: faker.lorem.paragraphs(),
-  image: null,
+  coverImage: null,
   category: researchItemOverloads.category || null,
   collaborators: researchItemOverloads.collaborators || null,
   tags: researchItemOverloads.tags || [],

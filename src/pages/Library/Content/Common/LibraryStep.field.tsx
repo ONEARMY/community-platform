@@ -230,12 +230,6 @@ export const LibraryStepField = ({
               images={images}
             />
           ))}
-          {/* Hidden field for validation */}
-          <Field
-            name={`steps[${index}].validation-trigger`}
-            validate={(_, allValues) => validateStepMedia(allValues)}
-            render={() => null}
-          />
         </Flex>
 
         <Flex sx={{ flexDirection: 'column' }}>

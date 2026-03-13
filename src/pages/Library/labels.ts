@@ -45,15 +45,9 @@ export const intro: ILabels = {
     placeholder: 'Select one category',
     title: 'Category',
   },
-  cover_image: {
+  coverImage: {
     description: 'This image should be landscape. We advise 1280x960px',
     title: 'Cover image',
-  },
-  cover_image_alt: {
-    description:
-      'This is the alternative text that is read out if the cover image is not available',
-    placeholder: 'People working on a house',
-    title: 'Cover image alt text',
   },
   description: {
     description: `Provide a short introduction (max ${LIBRARY_DESCRIPTION_MAX_LENGTH} characters)`,

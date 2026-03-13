@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { ImageInputV2 } from 'oa-components';
-import type { MediaWithPublicUrl } from 'oa-shared';
+import type { ProjectFormData } from 'oa-shared';
 import { useState } from 'react';
 import { useForm, useFormState } from 'react-final-form';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
@@ -23,15 +23,15 @@ type ImageFieldProps = {
 
 export const ImageField = (props: ImageFieldProps) => {
   const { title, contentType, contentId = null } = props;
-  const state = useFormState<{ image: MediaWithPublicUrl | null }>();
-  const form = useForm<{ image: MediaWithPublicUrl | null }>();
+  const state = useFormState<ProjectFormData>();
+  const form = useForm<ProjectFormData>();
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
   const handleImageSelect = async (file: File | undefined) => {
     // If user is clearing the image
     if (!file) {
-      form.change('image', null);
+      form.change('coverImage', null);
       setUploadError(null);
       return;
     }
@@ -44,11 +44,11 @@ export const ImageField = (props: ImageFieldProps) => {
       const uploadedImage = await storageService.imageUpload(contentId, contentType, file);
 
       // Only then set the form state with the uploaded metadata
-      form.change('image', uploadedImage);
+      form.change('coverImage', uploadedImage);
     } catch (error) {
       console.error('Error uploading image:', error);
       setUploadError('Failed to upload image. Please try again.');
-      form.change('image', null);
+      form.change('coverImage', null);
     } finally {
       setIsUploading(false);
     }
@@ -77,7 +77,7 @@ export const ImageField = (props: ImageFieldProps) => {
             <ImageInputV2
               onFilesChange={handleImageSelect}
               onError={setUploadError}
-              image={state.values.image || undefined}
+              image={state.values.coverImage || undefined}
             />
           )}
         </FieldContainer>

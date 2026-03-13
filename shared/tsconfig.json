@@ -1,5 +1,4 @@
 {
-  // Note - this allows the shared workspace to be built and imported into other workspaces
   "compilerOptions": {
     "outDir": "./lib",
     "lib": ["ESNext"],
@@ -8,7 +7,8 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "strictPropertyInitialization": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "strict": true
   },
   "exclude": ["../node_modules", "./lib"]
 }

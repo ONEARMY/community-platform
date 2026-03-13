@@ -1,5 +1,5 @@
 import type { QuestionFormData } from 'oa-shared';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
@@ -33,14 +33,18 @@ export const QuestionForm = (props: IProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const id = props?.id || null;
 
-  const initialValues = {
-    title: props.formData?.title || '',
-    description: props.formData?.description || '',
-    category: props.formData?.category || null,
-    images: props.formData?.images || [],
-    tags: props.formData?.tags || null,
-    isDraft: props.formData?.isDraft || null,
-  } satisfies QuestionFormData;
+  const initialValues = useMemo<QuestionFormData>(
+    () =>
+      ({
+        title: props.formData?.title || '',
+        description: props.formData?.description || '',
+        category: props.formData?.category || null,
+        images: props.formData?.images || [],
+        tags: props.formData?.tags || null,
+        isDraft: props.formData?.isDraft || null,
+      }) satisfies QuestionFormData,
+    [],
+  );
 
   const onSubmit = async (formValues: Partial<QuestionFormData>, isDraft: boolean = false) => {
     setIntentionalNavigation(true);

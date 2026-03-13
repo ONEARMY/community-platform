@@ -1,6 +1,6 @@
 import arrayMutators from 'final-form-arrays';
 import type { ProjectFormData } from 'oa-shared';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
@@ -33,22 +33,26 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSavingAsDraft, setIsSavingAsDraft] = useState(false);
 
-  const initialValues = {
-    title: formData?.title || '',
-    description: formData?.description || '',
-    category: formData?.category || null,
-    tags: formData?.tags || [],
-    time: formData?.time || null,
-    difficultyLevel: formData?.difficultyLevel || null,
-    coverImage: formData?.coverImage || null,
-    files: formData?.files || null,
-    fileLink: formData?.fileLink || null,
-    steps: formData?.steps ?? [
-      { id: null, title: '', description: '', images: [], videoUrl: null },
-      { id: null, title: '', description: '', images: [], videoUrl: null },
-      { id: null, title: '', description: '', images: [], videoUrl: null },
-    ],
-  } satisfies ProjectFormData;
+  const initialValues = useMemo<ProjectFormData>(
+    () =>
+      ({
+        title: formData?.title || '',
+        description: formData?.description || '',
+        category: formData?.category || null,
+        tags: formData?.tags || [],
+        time: formData?.time || null,
+        difficultyLevel: formData?.difficultyLevel || null,
+        coverImage: formData?.coverImage || null,
+        files: formData?.files || null,
+        fileLink: formData?.fileLink || null,
+        steps: formData?.steps ?? [
+          { id: null, title: '', description: '', images: [], videoUrl: null },
+          { id: null, title: '', description: '', images: [], videoUrl: null },
+          { id: null, title: '', description: '', images: [], videoUrl: null },
+        ],
+      }) satisfies ProjectFormData,
+    [],
+  );
 
   const headingText = id ? headings.edit : headings.create;
 

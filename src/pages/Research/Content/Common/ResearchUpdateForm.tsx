@@ -1,6 +1,6 @@
 import { Button, ConfirmModal, ResearchEditorOverview } from 'oa-components';
 import type { ResearchItem, ResearchUpdate, ResearchUpdateFormData } from 'oa-shared';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
@@ -29,14 +29,18 @@ export const ResearchUpdateForm = ({ id, formData, research }: IProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
 
-  const initialValues = {
-    title: formData?.title || '',
-    description: formData?.description || '',
-    images: formData?.images || null,
-    files: formData?.files || null,
-    fileLink: formData?.fileLink || null,
-    videoUrl: formData?.videoUrl || '',
-  } satisfies ResearchUpdateFormData;
+  const initialValues = useMemo<ResearchUpdateFormData>(
+    () =>
+      ({
+        title: formData?.title || '',
+        description: formData?.description || '',
+        images: formData?.images || null,
+        files: formData?.files || null,
+        fileLink: formData?.fileLink || null,
+        videoUrl: formData?.videoUrl || '',
+      }) satisfies ResearchUpdateFormData,
+    [],
+  );
 
   const onSubmit = async (formData: ResearchUpdateFormData, isDraft = false) => {
     if (isSaving) {

@@ -1,7 +1,7 @@
 import arrayMutators from 'final-form-arrays';
 import { Button, ResearchEditorOverview } from 'oa-components';
 import type { ResearchFormData, ResearchItem, ResearchStatus } from 'oa-shared';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
@@ -31,14 +31,18 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const initialValues = {
-    title: formData?.title || '',
-    description: formData?.description || '',
-    category: formData?.category || null,
-    collaborators: formData?.collaborators || [],
-    tags: formData?.tags || [],
-    image: formData?.image || null,
-  } satisfies ResearchFormData;
+  const initialValues = useMemo<ResearchFormData>(
+    () =>
+      ({
+        title: formData?.title || '',
+        description: formData?.description || '',
+        category: formData?.category || null,
+        collaborators: formData?.collaborators || [],
+        tags: formData?.tags || [],
+        image: formData?.image || null,
+      }) satisfies ResearchFormData,
+    [],
+  );
 
   const updateStatus = async (status: ResearchStatus) => {
     try {

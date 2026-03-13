@@ -174,11 +174,11 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     return Response.json({ question }, { headers, status: 201 });
   } catch (error) {
-    console.error(error);
-
     if (error instanceof HTTPException) {
       return error.getResponse();
     }
+
+    console.error(error);
 
     return Response.json({ error: 'Error creating question' }, { headers, status: 500 });
   }

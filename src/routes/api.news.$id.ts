@@ -78,12 +78,11 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     return Response.json({ news }, { headers, status: 200 });
   } catch (error) {
-    console.error(error);
-
     if (error instanceof HTTPException) {
       return error.getResponse();
     }
 
+    console.error(error);
     return Response.json({ error: 'Error updating news', status: 500 }, { status: 500 });
   }
 };

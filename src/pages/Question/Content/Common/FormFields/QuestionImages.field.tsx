@@ -23,16 +23,16 @@ interface IProps {
 
 export const QuestionImagesField = (props: IProps) => {
   const { contentType, contentId, maxImages } = props;
-  const state = useFormState<{ images: MediaWithPublicUrl[] }>();
-  const form = useForm<{ images: MediaWithPublicUrl[] }>();
+  const state = useFormState();
+  const form = useForm();
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
-  const images = state.values.images || [];
+  const images = (state.values.images as MediaWithPublicUrl[]) || [];
 
-  const handleImageSelect = async (fileMeta: any, imageIndex: number) => {
-    // If user is clearing the image
-    if (!fileMeta || !fileMeta.photoData) {
+  const handleImageSelect = async (file: File | undefined, imageIndex: number) => {
+    if (!file) {
+      handleDeleteImage(imageIndex);
       return;
     }
 
@@ -40,11 +40,7 @@ export const QuestionImagesField = (props: IProps) => {
     setUploadError(null);
 
     try {
-      const uploadedImage = await storageService.imageUpload(
-        contentId,
-        contentType,
-        fileMeta.photoData,
-      );
+      const uploadedImage = await storageService.imageUpload(contentId, contentType, file);
 
       // Add new image and deduplicate by id
       const allImages = [...images, uploadedImage];
@@ -64,41 +60,7 @@ export const QuestionImagesField = (props: IProps) => {
     form.change('images', updatedImages);
   };
 
-  const renderImageSlot = (index: number) => {
-    const isUploading = uploadingIndex === index;
-
-    // Show existing image
-    if (index < images.length && !isUploading) {
-      const image = images[index];
-      return (
-        <ImageInputFieldWrapper key={`image-${index}`} data-cy={`image-${index}`}>
-          <ImageInputV2
-            image={image}
-            onFilesChange={(file) => {
-              if (!file) {
-                handleDeleteImage(index);
-              }
-            }}
-          />
-        </ImageInputFieldWrapper>
-      );
-    }
-
-    // Show upload field or spinner for the next available slot
-    if (index === images.length) {
-      return (
-        <ImageInputFieldWrapper key={`image-upload-${index}`} data-cy={`image-upload-${index}`}>
-          {isUploading ? (
-            <Spinner size={20} />
-          ) : (
-            <ImageInputV2 onFilesChange={(fileMeta) => handleImageSelect(fileMeta, index)} />
-          )}
-        </ImageInputFieldWrapper>
-      );
-    }
-
-    return null;
-  };
+  const numberOfUploadSlotsAvailable = Math.min(images.length + 1, maxImages);
 
   return (
     <FormFieldWrapper
@@ -110,7 +72,38 @@ export const QuestionImagesField = (props: IProps) => {
       {uploadError && (
         <Text sx={{ color: 'error', fontSize: 1, mb: 2, width: '100%' }}>{uploadError}</Text>
       )}
-      {[...Array(Math.min(images.length + 1, maxImages))].map((_, i) => renderImageSlot(i))}
+
+      {[...Array(numberOfUploadSlotsAvailable)].map((_, index) => {
+        const isUploading = uploadingIndex === index;
+        const hasImage = images[index];
+
+        if (hasImage && !isUploading) {
+          return null;
+        }
+
+        return (
+          <ImageInputFieldWrapper key={`image-upload-${index}`} data-cy={`image-upload-${index}`}>
+            {isUploading ? (
+              <Spinner size={20} />
+            ) : (
+              <ImageInputV2 onFilesChange={(file) => handleImageSelect(file, index)} />
+            )}
+          </ImageInputFieldWrapper>
+        );
+      })}
+
+      {images.map((image, index) => (
+        <ImageInputFieldWrapper key={`existing-image-${index}`} data-cy={`existing-image-${index}`}>
+          <ImageInputV2
+            image={image}
+            onFilesChange={(fileMeta) => {
+              if (!fileMeta) {
+                handleDeleteImage(index);
+              }
+            }}
+          />
+        </ImageInputFieldWrapper>
+      ))}
     </FormFieldWrapper>
   );
 };

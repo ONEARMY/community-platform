@@ -3,7 +3,7 @@ import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import { Button, Loader } from 'oa-components';
 import type { ProfileFormData } from 'oa-shared';
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog';
 import { logger } from 'src/logger';
@@ -60,20 +60,24 @@ export const SettingsPageUserProfile = observer(() => {
     ? profile?.coverImages?.slice(0, 4).map((image) => toJS(image))
     : [];
 
-  const initialValues = {
-    type: profile.type?.name || 'member',
-    displayName: profile.displayName || '',
-    about: profile.about || '',
-    isContactable: isContactable(profile.isContactable),
-    coverImages,
-    photo: profile.photo ? toJS(profile.photo) : undefined,
-    country: profile.country,
-    showVisitorPolicy: !!profile.visitorPolicy,
-    visitorPreferencePolicy: profile.visitorPolicy?.policy || 'open',
-    visitorPreferenceDetails: profile.visitorPolicy?.details,
-    website: profile.website || '',
-    tagIds: profile.tags?.map((x) => x.id) || null,
-  } satisfies ProfileFormData;
+  const initialValues = useMemo<ProfileFormData>(
+    () =>
+      ({
+        type: profile.type?.name || 'member',
+        displayName: profile.displayName || '',
+        about: profile.about || '',
+        isContactable: isContactable(profile.isContactable),
+        coverImages,
+        photo: profile.photo ? toJS(profile.photo) : undefined,
+        country: profile.country,
+        showVisitorPolicy: !!profile.visitorPolicy,
+        visitorPreferencePolicy: profile.visitorPolicy?.policy || 'open',
+        visitorPreferenceDetails: profile.visitorPolicy?.details,
+        website: profile.website || '',
+        tagIds: profile.tags?.map((x) => x.id) || null,
+      }) satisfies ProfileFormData,
+    [],
+  );
 
   const formId = 'userProfileForm';
 

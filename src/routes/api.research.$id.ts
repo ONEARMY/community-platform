@@ -89,15 +89,11 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     return Response.json({ research }, { headers, status: 201 });
   } catch (error) {
-    // If it's an HTTPException, return its response
     if (error instanceof HTTPException) {
       return error.getResponse();
     }
 
-    // only log unexpected errors
     console.error(error);
-
-    // For unexpected errors, return a generic error response
     return Response.json({ error: 'Error updating research', status: 500 }, { status: 500 });
   }
 };

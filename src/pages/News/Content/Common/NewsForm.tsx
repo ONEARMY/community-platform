@@ -1,5 +1,5 @@
 import type { NewsFormData } from 'oa-shared';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
@@ -32,15 +32,19 @@ export const NewsForm = (props: IProps) => {
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const initialValues: NewsFormData = {
-    body: props.formData?.body || '',
-    category: props.formData?.category || null,
-    heroImage: props.formData?.heroImage || null,
-    isDraft: props.formData?.isDraft || null,
-    profileBadge: props.formData?.profileBadge || null,
-    tags: props.formData?.tags || [],
-    title: props.formData?.title || '',
-  };
+  const initialValues = useMemo<NewsFormData>(
+    () =>
+      ({
+        body: props.formData?.body || '',
+        category: props.formData?.category || null,
+        heroImage: props.formData?.heroImage || null,
+        isDraft: props.formData?.isDraft || null,
+        profileBadge: props.formData?.profileBadge || null,
+        tags: props.formData?.tags || [],
+        title: props.formData?.title || '',
+      }) satisfies NewsFormData,
+    [],
+  );
 
   const onSubmit = async (formValues: Partial<NewsFormData>, isDraft = false) => {
     setIntentionalNavigation(true);

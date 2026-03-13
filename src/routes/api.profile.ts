@@ -132,12 +132,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     return Response.json(profile, { headers, status: 200 });
   } catch (error) {
-    console.error(error);
-
     if (error instanceof HTTPException) {
       return error.getResponse();
     }
 
+    console.error(error);
     return Response.json({}, { headers, status: 500 });
   }
 };

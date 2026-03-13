@@ -195,12 +195,11 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
     return Response.json({ news }, { headers, status: 201 });
   } catch (error) {
-    console.error(error);
-
     if (error instanceof HTTPException) {
       return error.getResponse();
     }
 
+    console.error(error);
     return Response.json({ error: 'Error creating news', status: 500 }, { status: 500 });
   }
 };

@@ -159,12 +159,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     return Response.json({ research }, { headers, status: 201 });
   } catch (error) {
-    console.error(error);
-
     if (error instanceof HTTPException) {
       return error.getResponse();
     }
 
+    console.error(error);
     return Response.json({ error: 'Error creating research', status: 500 }, { status: 500 });
   }
 };

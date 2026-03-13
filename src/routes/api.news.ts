@@ -213,7 +213,7 @@ function notifyDiscord(news: News, profile: DBProfile, siteUrl: string) {
   );
 }
 
-async function validateRequest(request: Request, data: any): Promise<void> {
+async function validateRequest(request: Request, data: NewsDTO): Promise<void> {
   if (request.method !== 'POST') {
     throw methodNotAllowedError();
   }

@@ -124,7 +124,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    await validateRequest(request, data, client);
+    await validateRequest(request, data, slug, client);
 
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
@@ -190,7 +190,12 @@ async function uploadSteps(data, formData: FormData, projectDb: DBProject, clien
   return steps;
 }
 
-async function validateRequest(request: Request, data: any, client: SupabaseClient): Promise<void> {
+async function validateRequest(
+  request: Request,
+  data: ProjectDTO,
+  slug: string,
+  client: SupabaseClient,
+): Promise<void> {
   if (request.method !== 'POST') {
     throw methodNotAllowedError();
   }
@@ -209,7 +214,7 @@ async function validateRequest(request: Request, data: any, client: SupabaseClie
     throw validationError('3 steps are required', 'stepCount');
   }
 
-  if (await contentServiceServer.isDuplicateNewSlug(data.slug, client, 'projects')) {
+  if (await contentServiceServer.isDuplicateNewSlug(slug, client, 'projects')) {
     throw conflictError('This project already exists');
   }
 

@@ -1,7 +1,9 @@
+import { HTTPException } from 'hono/http-exception';
 import type { ContentType, MediaWithPublicUrl } from 'oa-shared';
 import { type ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
+import { validationError } from 'src/utils/httpException';
 import { validateImage } from 'src/utils/storage';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -33,7 +35,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
 
     if (uploadResult?.errors && uploadResult?.errors.length > 0) {
-      throw uploadResult?.errors;
+      throw validationError(uploadResult.errors.join(', '));
     }
 
     const [publicMedia] = storage.getPublicUrls([uploadResult.media[0]]);
@@ -42,6 +44,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     return Response.json({ image }, { headers });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
     console.error(error);
     return Response.json({}, { headers, status: 500 });
   }

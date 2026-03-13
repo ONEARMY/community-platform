@@ -41,8 +41,9 @@ export const ResearchImagesField = (props: IProps) => {
       updatedImages[index] = uploadedImage;
       form.change('images', updatedImages);
     } catch (error) {
-      console.error('Error uploading research image:', error);
-      setUploadError('Failed to upload image. Please try again.');
+      setUploadError(
+        error instanceof Error ? error.message : 'Failed to upload image. Please try again.',
+      );
     } finally {
       setUploadingIndex(null);
     }

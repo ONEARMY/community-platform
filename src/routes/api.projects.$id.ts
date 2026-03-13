@@ -63,7 +63,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const currentProject = await libraryService.getById(id);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
-    await validateRequest(request, profile, data, currentProject, client);
+    const slug = convertToSlug(data.title);
+    await validateRequest(request, profile, data, currentProject, slug, client);
 
     // Remove old cover image if it exists and no new image is provided or a different image is provided
     if (
@@ -74,7 +75,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     }
 
     // 2. Update project
-    const projectDb = await updateProject(client, profile!, currentProject, data);
+
+    const projectDb = await updateProject(client, profile!, currentProject, data, slug);
     const project = Project.fromDB(projectDb, []);
     const existingStepIds = await libraryService.getProjectStepIds(projectDb.id);
 
@@ -131,8 +133,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 async function validateRequest(
   request: Request,
   profile: DBProfile | null,
-  data: any,
+  data: ProjectDTO,
   currentProject: DBProject,
+  slug: string,
   client: SupabaseClient,
 ): Promise<void> {
   if (!profile) {
@@ -155,9 +158,9 @@ async function validateRequest(
   }
 
   if (
-    currentProject.slug !== data.slug &&
+    currentProject.slug !== slug &&
     (await contentServiceServer.isDuplicateExistingSlug(
-      data.slug,
+      slug,
       currentProject.id,
       client,
       'projects',
@@ -172,8 +175,8 @@ async function updateProject(
   profile: DBProfile,
   currentProject: DBProject,
   data: ProjectDTO,
+  slug: string,
 ) {
-  const slug = convertToSlug(data.title);
   const previousSlugs = contentServiceServer.updatePreviousSlugs(currentProject, slug);
 
   let moderation = currentProject.moderation;

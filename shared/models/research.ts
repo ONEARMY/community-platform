@@ -49,7 +49,7 @@ export class DBResearchItem implements IDBContentDoc {
     return {
       title: obj.title,
       description: obj.description,
-      image: obj.image && publicImage ? { ...obj.image, ...publicImage } : null,
+      coverImage: obj.image && publicImage ? { ...obj.image, ...publicImage } : null,
       category: obj.category
         ? { value: obj.category.id.toString(), label: obj.category.name }
         : null,
@@ -251,7 +251,7 @@ export type ResearchFormData = {
   category: SelectValue | null;
   tags: number[] | null;
   collaborators: string[] | null;
-  image: MediaWithPublicUrl | null;
+  coverImage: MediaWithPublicUrl | null;
 };
 
 export interface ResearchUpdateFormData extends IFilesForm {
@@ -267,7 +267,7 @@ export type ResearchDTO = {
   category: number | null;
   tags: number[] | null;
   collaborators: string[] | null;
-  image: DBMedia | null;
+  coverImage: DBMedia | null;
   isDraft: boolean;
 };
 

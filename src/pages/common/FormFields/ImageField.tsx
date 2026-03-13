@@ -46,8 +46,9 @@ export const ImageField = (props: ImageFieldProps) => {
       // Only then set the form state with the uploaded metadata
       form.change('coverImage', uploadedImage);
     } catch (error) {
-      console.error('Error uploading image:', error);
-      setUploadError('Failed to upload image. Please try again.');
+      setUploadError(
+        error instanceof Error ? error.message : 'Failed to upload image. Please try again.',
+      );
       form.change('coverImage', null);
     } finally {
       setIsUploading(false);

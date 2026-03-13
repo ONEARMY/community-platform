@@ -44,10 +44,8 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     }
 
     const currentNews = await new NewsServiceServer(client).getById(id);
-
-    await validateRequest(params, request, claims.data.claims.sub, data, currentNews, client);
-
     const slug = convertToSlug(data.title);
+    await validateRequest(params, request, claims.data.claims.sub, data, currentNews, slug, client);
     const previousSlugs = contentServiceServer.updatePreviousSlugs(currentNews, slug);
 
     const newsResult = await client
@@ -91,8 +89,9 @@ async function validateRequest(
   params: Params<string>,
   request: Request,
   userAuthId: string,
-  data: any,
+  data: NewsDTO,
   currentNews: DBNews,
+  slug: string,
   client: SupabaseClient,
 ): Promise<void> {
   if (request.method !== 'PUT') {
@@ -120,8 +119,8 @@ async function validateRequest(
   }
 
   if (
-    currentNews.slug !== data.slug &&
-    (await contentServiceServer.isDuplicateExistingSlug(data.slug, currentNews.id, client, 'news'))
+    currentNews.slug !== slug &&
+    (await contentServiceServer.isDuplicateExistingSlug(slug, currentNews.id, client, 'news'))
   ) {
     throw conflictError('This news already exists');
   }

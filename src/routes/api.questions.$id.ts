@@ -95,7 +95,7 @@ async function validateRequest(
   params: Params<string>,
   request: Request,
   userAuthId: string,
-  data: any,
+  data: QuestionDTO,
   currentQuestion: DBQuestion,
   client: SupabaseClient,
 ) {

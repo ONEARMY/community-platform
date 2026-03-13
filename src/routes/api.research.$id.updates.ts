@@ -58,6 +58,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         title: data.title,
         description: data.description,
         video_url: data.videoUrl,
+        images: data.images,
+        files: data.files,
         is_draft: data.isDraft,
         research_id: researchId,
         created_by: profile.id,

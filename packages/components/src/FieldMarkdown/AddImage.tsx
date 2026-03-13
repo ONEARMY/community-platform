@@ -37,8 +37,10 @@ export const AddImage = ({ imageUploadHandler }: IProps) => {
       }
 
       setIsOpen(false);
-    } catch {
-      setError('Failed to upload image. Please try again.');
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : 'Failed to upload image. Please try again.',
+      );
     } finally {
       setIsLoading(false);
     }

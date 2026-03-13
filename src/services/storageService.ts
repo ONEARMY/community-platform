@@ -16,7 +16,9 @@ const imageUpload = async (id: number | null, contentType: ImageFolder, imageFil
   });
 
   if (response.status !== 200 && response.status !== 201) {
-    throw new Error('Error uploading image', { cause: 500 });
+    const errorData = await response.json().catch(() => ({ error: 'Error saving research' }));
+    const errorMessage = errorData.error || errorData.message || 'Error saving research';
+    throw new Error(errorMessage, { cause: response.status });
   }
 
   const data: { image } = await response.json();

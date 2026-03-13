@@ -37,8 +37,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         ? (formData.getAll('collaborators') as string[])
         : null,
       isDraft: formData.get('draft') === 'true',
-      image: formData.has('image')
-        ? (JSON.parse(formData.get('image') as string) as DBMedia)
+      coverImage: formData.has('coverImage')
+        ? (JSON.parse(formData.get('coverImage') as string) as DBMedia)
         : null,
     } satisfies ResearchDTO;
 
@@ -51,7 +51,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const oldResearch = await new ResearchServiceServer(client).getById(id);
 
-    await validateRequest(request, claims.data.claims.sub, data, oldResearch, client);
+    await validateRequest(request, claims.data.claims.sub, data, oldResearch, slug, client);
 
     const previousSlugs = contentServiceServer.updatePreviousSlugs(oldResearch, slug);
 
@@ -66,7 +66,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         previous_slugs: previousSlugs,
         is_draft: data.isDraft,
         collaborators: data.collaborators,
-        image: data.image,
+        image: data.coverImage,
       })
       .eq('id', id)
       .select()
@@ -134,8 +134,9 @@ async function deleteResearch(request, id: number) {
 async function validateRequest(
   request: Request,
   userAuthId: string,
-  data: any,
+  data: ResearchDTO,
   research: DBResearchItem,
+  slug: string,
   client: SupabaseClient,
 ): Promise<void> {
   if (request.method !== 'PUT') {
@@ -150,13 +151,13 @@ async function validateRequest(
     throw validationError('Description is required', 'description');
   }
 
-  if (!data.isDraft && !data.image) {
+  if (!data.isDraft && !data.coverImage) {
     throw validationError('Cover image is required', 'image');
   }
 
   if (
-    research.slug !== data.slug &&
-    (await contentServiceServer.isDuplicateExistingSlug(data.slug, research.id, client, 'research'))
+    research.slug !== slug &&
+    (await contentServiceServer.isDuplicateExistingSlug(slug, research.id, client, 'research'))
   ) {
     throw conflictError('This research already exists');
   }

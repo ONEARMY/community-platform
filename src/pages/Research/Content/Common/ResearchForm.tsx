@@ -39,7 +39,7 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
         category: formData?.category || null,
         collaborators: formData?.collaborators || [],
         tags: formData?.tags || [],
-        image: formData?.image || null,
+        coverImage: formData?.coverImage || null,
       }) satisfies ResearchFormData,
     [],
   );
@@ -92,8 +92,8 @@ const ResearchForm = ({ id, formData, research }: IProps) => {
       }}
       validate={(values) => {
         const errors = {};
-        if (values.image == null) {
-          errors['image'] = 'An image is required.';
+        if (values.coverImage == null) {
+          errors['coverImage'] = 'Cover image is required.';
         }
         return errors;
       }}

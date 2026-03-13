@@ -86,12 +86,11 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 });
 
 export default function Index() {
-  const data: any = useLoaderData<typeof loader>();
-  const research = data.research as ResearchItem;
+  const data = useLoaderData<typeof loader>();
 
-  if (!research) {
+  if (!data.research) {
     return <NotFoundPage />;
   }
 
-  return <ResearchArticlePage research={research} />;
+  return <ResearchArticlePage research={data.research} />;
 }

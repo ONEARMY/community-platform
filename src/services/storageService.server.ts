@@ -70,7 +70,7 @@ export class StorageServiceServer {
         .upload(`${path}/${file.name}`, file, { upsert: true });
 
       if (result.data === null) {
-        errors.push(`Error uploading file: ${file.name}`);
+        errors.push(file.name + ': ' + result.error?.message);
         continue;
       }
 

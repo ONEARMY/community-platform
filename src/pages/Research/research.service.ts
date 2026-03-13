@@ -70,7 +70,7 @@ const upsert = async (id: number | null, research: ResearchFormData, isDraft = f
     description: research.description,
     category: Number(research.category?.value) || null,
     collaborators: research.collaborators,
-    image: research.image ? DBMedia.fromPublicMedia(research.image) : null,
+    coverImage: research.coverImage ? DBMedia.fromPublicMedia(research.coverImage) : null,
     tags: research.tags,
     isDraft,
   });

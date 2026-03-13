@@ -91,14 +91,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
-      isDraft: formData.get('draft') === 'true',
+      isDraft: formData.get('isDraft') === 'true',
       category: formData.has('category') ? Number(formData.get('category')) : null,
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       collaborators: formData.has('collaborators')
         ? (formData.getAll('collaborators') as string[])
         : null,
-      image: formData.has('image')
-        ? (JSON.parse(formData.get('image') as string) as DBMedia)
+      coverImage: formData.has('coverImage')
+        ? (JSON.parse(formData.get('coverImage') as string) as DBMedia)
         : null,
     } satisfies ResearchDTO;
 
@@ -136,7 +136,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         collaborators: data.collaborators,
         status: researchStatus,
         is_draft: data.isDraft,
-        image: data.image,
+        image: data.coverImage,
         tenant_id: process.env.TENANT_ID,
       })
       .select()
@@ -181,7 +181,7 @@ function validateRequest(request: Request, data: ResearchDTO) {
     throw validationError('Description is required', 'description');
   }
 
-  if (!data.isDraft && !data.image) {
-    throw validationError('Image is required', 'image');
+  if (!data.isDraft && !data.coverImage) {
+    throw validationError('Cover Image is required', 'coverImage');
   }
 }

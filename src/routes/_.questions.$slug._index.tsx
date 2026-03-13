@@ -74,12 +74,11 @@ export const meta = mergeMeta<typeof loader>(({ loaderData }) => {
 });
 
 export default function Index() {
-  const data: any = useLoaderData<typeof loader>();
-  const question = data.question as Question;
+  const data = useLoaderData<typeof loader>();
 
-  if (!question) {
+  if (!data.question) {
     return <NotFoundPage />;
   }
 
-  return <QuestionPage question={question} />;
+  return <QuestionPage question={data.question} />;
 }

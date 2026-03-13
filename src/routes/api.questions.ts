@@ -193,7 +193,7 @@ function notifyDiscord(question: Question, profile: DBProfile, siteUrl: string) 
   );
 }
 
-async function validateRequest(request: Request, data: any) {
+async function validateRequest(request: Request, data: QuestionDTO) {
   if (request.method !== 'POST') {
     throw methodNotAllowedError();
   }

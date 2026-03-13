@@ -187,6 +187,8 @@ export const fakePinProfile = (pinProfileOverLoads: Partial<PinProfile> = {}): P
   username: faker.internet.username(),
   photo: {
     id: faker.string.uuid(),
+    path: faker.image.avatar(),
+    fullPath: faker.image.avatar(),
     publicUrl: faker.image.avatar(),
   },
   type: fakeProfileType(),

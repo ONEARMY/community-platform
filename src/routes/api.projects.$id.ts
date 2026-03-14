@@ -166,7 +166,7 @@ async function validateRequest(
       'projects',
     ))
   ) {
-    throw conflictError('This project already exists');
+    throw conflictError('A project with this name already exists');
   }
 }
 

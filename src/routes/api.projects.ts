@@ -215,7 +215,7 @@ async function validateRequest(
   }
 
   if (await contentServiceServer.isDuplicateNewSlug(slug, client, 'projects')) {
-    throw conflictError('This project already exists');
+    throw conflictError('A project with this name already exists');
   }
 
   // No need to validate cover image since it's uploaded immediately via /api/images

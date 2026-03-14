@@ -90,7 +90,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title').clear().type(expected.title).blur();
 
       cy.step('Add image');
-      cy.get('[data-cy=image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
 
       cy.step('New collaborators can be assigned to research');
@@ -213,9 +213,10 @@ describe('[Research]', () => {
 
       cy.step('Create a research article with image');
       cy.visit('/research/create');
+      cy.contains('Start your Research');
       cy.get('[data-cy=intro-title').clear().type(title).blur();
       cy.get('[data-cy=intro-description]').clear().type(description).blur();
-      cy.get('[data-cy=image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
       cy.get('[data-cy=submit]').click();
       cy.url().should('include', `/research/${slug}`);
@@ -226,7 +227,7 @@ describe('[Research]', () => {
       
       cy.step('Delete existing image and upload new one');
       cy.get('[data-cy=delete-image]').click();
-      cy.get('[data-cy=image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
+      cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
       
       cy.get('[data-cy=submit]').click();
@@ -262,7 +263,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title').clear().type(researchItem.title).blur();
       cy.get('[data-cy=intro-description]').clear().type(researchItem.description);
       cy.selectTag(researchItem.category, '[data-cy=category-select]');
-      cy.get('[data-cy=image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
       cy.get('[data-cy=submit]').click();
       cy.get('[data-cy=follow-button]', { timeout: 20000 }).should('contain', 'Following');
@@ -354,19 +355,22 @@ describe('[Research]', () => {
 
       cy.step('Create research article');
       cy.visit('/research/create');
+      cy.contains('Start your Research');
       cy.get('[data-cy=intro-title').clear().type(researchTitle).blur();
       cy.get('[data-cy=intro-description]').clear().type('Research description').blur();
-      cy.get('[data-cy=image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=submit]').click();
       cy.url().should('include', `/research/${researchSlug}`);
 
       cy.step('Create update with image and file');
       cy.get('[data-cy=addResearchUpdateButton]').click();
+      cy.contains('New update');
+      cy.get('[data-cy=intro-title]').should('be.visible');
       cy.fillIntroTitle(updateTitle);
       cy.get('[data-cy=intro-description]').clear().type(updateDescription).blur();
       
       cy.step('Add images to update');
-      cy.get('[data-cy=image-upload-field-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.get('[data-cy=image-input-field-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       
       cy.step('Add file to update');
       cy.get('[data-cy=file-input-field]').click();
@@ -376,13 +380,15 @@ describe('[Research]', () => {
       cy.url().should('include', `${researchSlug}#update_`);
 
       cy.step('Edit update and replace media');
-      cy.get('[data-cy=edit-update]').click();
+      cy.get('[data-cy=edit-update]').should('be.visible').click();
+      cy.contains('Edit your update');
+      cy.get('[data-cy=intro-title]').should('be.visible');
       cy.fillIntroTitle(updatedTitle);
       cy.get('[data-cy=intro-description]').clear().type(updatedDescription).blur();
       
       cy.step('Replace image');
-      cy.get('[data-cy=image-upload-field-0]').find('[data-cy=delete-image]').click();
-      cy.get('[data-cy=image-upload-field-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
+      cy.get('[data-cy=image-input-field-0]').find('[data-cy=delete-image]').click();
+      cy.get('[data-cy=image-input-field-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
       
       cy.step('Replace file');
       cy.get('[data-cy=delete-uploaded-file]').click();

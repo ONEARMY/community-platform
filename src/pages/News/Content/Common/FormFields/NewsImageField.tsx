@@ -96,6 +96,7 @@ export const NewsImageField = (props: IProps) => {
                 removeImage();
               }
             }}
+            onError={setUploadError}
           />
         </ImageInputFieldWrapper>
       )}

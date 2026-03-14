@@ -87,7 +87,10 @@ export const QuestionImagesField = (props: IProps) => {
             {isUploading ? (
               <Spinner size={20} />
             ) : (
-              <ImageInputV2 onFilesChange={(file) => handleImageSelect(file, index)} />
+              <ImageInputV2
+                onFilesChange={(file) => handleImageSelect(file, index)}
+                onError={setUploadError}
+              />
             )}
           </ImageInputFieldWrapper>
         );
@@ -95,7 +98,11 @@ export const QuestionImagesField = (props: IProps) => {
 
       {images.map((image, index) => (
         <ImageInputFieldWrapper key={`existing-image-${index}`} data-cy={`existing-image-${index}`}>
-          <ImageInputV2 image={image} onFilesChange={(file) => handleImageSelect(file, index)} />
+          <ImageInputV2
+            image={image}
+            onFilesChange={(file) => handleImageSelect(file, index)}
+            onError={setUploadError}
+          />
         </ImageInputFieldWrapper>
       ))}
     </FormFieldWrapper>

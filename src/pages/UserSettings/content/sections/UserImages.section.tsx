@@ -19,6 +19,8 @@ export const UserImagesSection = observer(({ isMemberProfile, values, form }: IP
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const [uploadingCoverIndex, setUploadingCoverIndex] = useState<number | null>(null);
   const { profile } = useProfileStore();
+  const [coverError, setCoverError] = useState<string | null>(null);
+  const [photoError, setPhotoError] = useState<string | null>(null);
 
   // Always show 4 inputs: filled images first, then empty slots
   const filledImages = (values.coverImages || []).filter((img) => img);
@@ -78,7 +80,11 @@ export const UserImagesSection = observer(({ isMemberProfile, values, form }: IP
           </Heading>
         )}
         <Text variant="paragraph">{fields.userImage.description}</Text>
-
+        {photoError && (
+          <Text data-cy="photo-error" sx={{ color: 'error', fontSize: 1, mb: 2, width: '100%' }}>
+            {photoError}
+          </Text>
+        )}
         <Box
           data-cy="userImage"
           data-testid="photo"
@@ -93,7 +99,11 @@ export const UserImagesSection = observer(({ isMemberProfile, values, form }: IP
             </Flex>
           ) : (
             <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
-              <ImageInputV2 image={values.photo} onFilesChange={handlePhotoSelect} />
+              <ImageInputV2
+                image={values.photo}
+                onFilesChange={handlePhotoSelect}
+                onError={setPhotoError}
+              />
             </Box>
           )}
         </Box>
@@ -106,6 +116,11 @@ export const UserImagesSection = observer(({ isMemberProfile, values, form }: IP
           </Heading>
           <Text variant="paragraph">{fields.coverImages.description}</Text>
 
+          {coverError && (
+            <Text data-cy="cover-error" sx={{ color: 'error', fontSize: 1, mb: 2, width: '100%' }}>
+              {coverError}
+            </Text>
+          )}
           <Field name="coverImages">
             {({ input }) => (
               <Flex>
@@ -130,6 +145,7 @@ export const UserImagesSection = observer(({ isMemberProfile, values, form }: IP
                         onFilesChange={(file: File | undefined) =>
                           handleCoverImageSelect(file, index)
                         }
+                        onError={setCoverError}
                       />
                     )}
                   </Box>

@@ -103,6 +103,7 @@ export const ResearchImagesField = (props: IProps) => {
                 removeImage(i);
               }
             }}
+            onError={setUploadError}
           />
         </ImageInputFieldWrapper>
       ))}

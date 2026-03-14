@@ -38,7 +38,9 @@ export const ImageInputV2 = (props: IProps) => {
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
-    if (!selectedFile) return;
+    if (!selectedFile) {
+      return;
+    }
 
     // Reset input to allow selecting the same file again if needed
     event.target.value = '';

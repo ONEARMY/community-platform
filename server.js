@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { serveStatic } from 'hono/bun';
-import { compress } from 'hono/compress';
 import { secureHeaders } from 'hono/secure-headers';
+import { compress } from 'hono-compress';
 import { createRequestHandler } from 'react-router';
 
 const isProd = process.env.NODE_ENV === 'production';
@@ -105,7 +105,9 @@ app.use(
 
 // React Router request handler
 const handler = createRequestHandler(
-  viteDevServer ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build') : await import('./build/server/index.js'),
+  viteDevServer
+    ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build')
+    : await import('./build/server/index.js'),
 );
 
 const port = Number(process.env.PORT) || 3456; // 3456 is default port for ci

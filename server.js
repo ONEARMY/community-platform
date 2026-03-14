@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { bodyLimit } from 'hono/body-limit';
 import { serveStatic } from 'hono/bun';
 import { compress } from 'hono/compress';
 import { HTTPException } from 'hono/http-exception';
@@ -44,6 +45,12 @@ app.onError((err, c) => {
 
 // Compression
 app.use(compress());
+
+// Allow larger uploads only for document upload endpoint (must come before global limit)
+app.use('/api/documents', bodyLimit({ maxSize: 300 * 1024 * 1024 }));
+
+// Global body size limit (10MB for most routes)
+app.use('*', bodyLimit({ maxSize: 10 * 1024 * 1024 }));
 
 // Security headers (replaces helmet)
 const wsUrls = process.env.WS_URLS?.split(',').map((url) => url.trim()) ?? [];
@@ -168,7 +175,7 @@ if (isProd) {
     port,
     hostname: '0.0.0.0',
     fetch: app.fetch,
-    maxRequestBodySize: 300 * 1024 * 1024, // 300MB - enforced at Bun level
+    maxRequestBodySize: 300 * 1024 * 1024, // Must accommodate /api/documents - protected by Hono middleware
   });
 
   console.log(`Hono server started on http://0.0.0.0:${port}`);

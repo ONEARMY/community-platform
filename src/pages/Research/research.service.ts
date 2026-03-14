@@ -1,13 +1,15 @@
-import type {
-  IConvertedFileMeta,
-  ResearchFormData,
-  ResearchItem,
-  ResearchStatus,
-  ResearchUpdate,
-  ResearchUpdateFormData,
+import {
+  DBMedia,
+  ResearchDTO,
+  type ResearchFormData,
+  type ResearchItem,
+  type ResearchStatus,
+  type ResearchUpdate,
+  type ResearchUpdateDTO,
+  type ResearchUpdateFormData,
 } from 'oa-shared';
 import { logger } from 'src/logger';
-import { getCleanFileName } from 'src/utils/storage';
+import { createFormData } from 'src/services/formDataHelper';
 import type { ResearchSortOption } from './ResearchSortOptions';
 
 const search = async (
@@ -63,44 +65,15 @@ const getDrafts = async () => {
 };
 
 const upsert = async (id: number | null, research: ResearchFormData, isDraft = false) => {
-  const data = new FormData();
-  data.append('title', research.title);
-
-  if (research.description) {
-    data.append('description', research.description);
-  }
-
-  if (research.tags && research.tags.length > 0) {
-    for (const tag of research.tags) {
-      if (tag) {
-        data.append('tags', tag.toString());
-      }
-    }
-  }
-
-  if (research.category) {
-    data.append('category', research.category?.value.toString());
-  }
-
-  if (research.collaborators) {
-    for (const collaborator of research.collaborators) {
-      if (collaborator) {
-        data.append('collaborators', collaborator.toString());
-      }
-    }
-  }
-
-  if (isDraft) {
-    data.append('draft', 'true');
-  }
-
-  if (research.image) {
-    data.append('image', research.image.photoData, getCleanFileName(research.image.name));
-  }
-
-  if (research.existingImage) {
-    data.append('existingImage', research.existingImage.id);
-  }
+  const data = createFormData<ResearchDTO>({
+    title: research.title,
+    description: research.description,
+    category: Number(research.category?.value) || null,
+    collaborators: research.collaborators,
+    coverImage: research.coverImage ? DBMedia.fromPublicMedia(research.coverImage) : null,
+    tags: research.tags,
+    isDraft,
+  });
 
   const response =
     id === null
@@ -114,85 +87,47 @@ const upsert = async (id: number | null, research: ResearchFormData, isDraft = f
         });
 
   if (response.status !== 200 && response.status !== 201) {
-    if (response.status === 409) {
-      throw new Error('Duplicate research item', { cause: 409 });
-    }
-
-    if (response.status === 400) {
-      throw new Error(response.statusText, { cause: 409 });
-    }
-
-    throw new Error('Error saving research', { cause: 500 });
+    const errorData = await response.json().catch(() => ({ error: 'Error saving research' }));
+    const errorMessage = errorData.error || errorData.message || 'Error saving research';
+    throw new Error(errorMessage, { cause: response.status });
   }
 
   return (await response.json()) as { research: ResearchItem };
 };
 
 const upsertUpdate = async (
-  id: number,
+  researchId: number,
   updateId: number | null,
   update: ResearchUpdateFormData,
   isDraft = false,
 ) => {
-  const data = new FormData();
-  data.append('title', update.title);
-  data.append('description', update.description);
-  data.append('fileLink', update.fileLink || '');
-  data.append('videoUrl', update.videoUrl || '');
-
-  if (update.images && update.images.length > 0) {
-    for (const image of update.images as unknown as IConvertedFileMeta[]) {
-      if (image) {
-        data.append('images', image.photoData, getCleanFileName(image.name));
-      }
-    }
-  }
-
-  if (update.existingImages && update.existingImages.length > 0) {
-    for (const image of update.existingImages) {
-      if (image) {
-        data.append('existingImages', image.id);
-      }
-    }
-  }
-
-  if (update.files && update.files.length > 0) {
-    for (const file of update.files) {
-      if (file) {
-        data.append('files', file, getCleanFileName(file.name));
-      }
-    }
-  }
-
-  if (update.existingFiles && update.existingFiles.length > 0) {
-    for (const file of update.existingFiles) {
-      if (file) {
-        data.append('existingFiles', file.id);
-      }
-    }
-  }
-
-  if (isDraft) {
-    data.append('draft', 'true');
-  }
+  const data = createFormData<ResearchUpdateDTO>({
+    title: update.title,
+    description: update.description,
+    fileLink: update.fileLink,
+    files: update.files,
+    images: update.images?.length ? update.images.map(DBMedia.fromPublicMedia) : null,
+    videoUrl: update.videoUrl,
+    isDraft,
+  });
 
   const response =
     updateId === null
-      ? await fetch(`/api/research/${id}/updates`, {
+      ? await fetch(`/api/research/${researchId}/updates`, {
           method: 'POST',
           body: data,
         })
-      : await fetch(`/api/research/${id}/updates/${updateId}`, {
+      : await fetch(`/api/research/${researchId}/updates/${updateId}`, {
           method: 'PUT',
           body: data,
         });
 
   if (response.status !== 200 && response.status !== 201) {
-    if (response.status === 409) {
-      throw new Error('Duplicate research update', { cause: 409 });
-    }
-
-    throw new Error('Error saving research update', { cause: 500 });
+    const errorData = await response
+      .json()
+      .catch(() => ({ error: 'Error saving research update' }));
+    const errorMessage = errorData.error || errorData.message || 'Error saving research update';
+    throw new Error(errorMessage, { cause: response.status });
   }
 
   return (await response.json()) as { researchUpdate: ResearchUpdate };
@@ -204,7 +139,9 @@ const deleteResearch = async (id: number) => {
   });
 
   if (response.status !== 200 && response.status !== 201) {
-    throw new Error('Error deleting research', { cause: 500 });
+    const errorData = await response.json().catch(() => ({ error: 'Error deleting research' }));
+    const errorMessage = errorData.error || errorData.message || 'Error deleting research';
+    throw new Error(errorMessage, { cause: response.status });
   }
 };
 
@@ -218,7 +155,11 @@ const updateResearchStatus = async (id: number, status: ResearchStatus) => {
   });
 
   if (response.status !== 200 && response.status !== 201) {
-    throw new Error('Error updating research status', { cause: 500 });
+    const errorData = await response
+      .json()
+      .catch(() => ({ error: 'Error updating research status' }));
+    const errorMessage = errorData.error || errorData.message || 'Error updating research status';
+    throw new Error(errorMessage, { cause: response.status });
   }
 };
 
@@ -228,7 +169,11 @@ const deleteUpdate = async (id: number, updateId: number | null) => {
   });
 
   if (response.status !== 200 && response.status !== 201) {
-    throw new Error('Error deleting research update', { cause: 500 });
+    const errorData = await response
+      .json()
+      .catch(() => ({ error: 'Error deleting research update' }));
+    const errorMessage = errorData.error || errorData.message || 'Error deleting research update';
+    throw new Error(errorMessage, { cause: response.status });
   }
 };
 

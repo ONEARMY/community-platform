@@ -1,10 +1,12 @@
-import type { Image, ProfileFormData } from 'oa-shared';
+import { HTTPException } from 'hono/http-exception';
+import type { DBMedia, ProfileDTO, UserVisitorPreference } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { ProfileFactory } from 'src/factories/profileFactory.server';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ProfileTypesServiceServer } from 'src/services/profileTypesService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
+import { validationError } from 'src/utils/httpException';
 
 export const loader = async ({ request }) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -74,30 +76,28 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData();
     const country = formData.get('country');
 
-    let existingPhoto: Image | null = null;
-
-    if (formData.has('existingPhoto')) {
-      existingPhoto = JSON.parse(formData.get('existingPhoto') as string);
-    }
-
     const data = {
-      displayName: formData.get('displayName') as string,
-      about: formData.get('about') as string,
-      country: country === 'null' ? null : country,
-      type: formData.get('type'),
-      existingPhoto,
+      displayName: String(formData.get('displayName')),
+      about: String(formData.get('about')),
+      country: country === 'null' ? null : String(country),
+      type: String(formData.get('type')),
       isContactable: formData.get('isContactable') === 'true',
       showVisitorPolicy: formData.get('showVisitorPolicy') === 'true',
-      visitorPreferenceDetails: formData.get('visitorPreferenceDetails') as string,
-      visitorPreferencePolicy: formData.get('visitorPreferencePolicy') as string,
-      existingCoverImageIds: formData.has('existingCoverImageIds')
-        ? formData.getAll('existingCoverImageIds')
+      visitorPreferenceDetails: formData.get(
+        'visitorPreferenceDetails',
+      ) as UserVisitorPreference['details'],
+      visitorPreferencePolicy: formData.get(
+        'visitorPreferencePolicy',
+      ) as UserVisitorPreference['policy'],
+      coverImages: formData.has('coverImages')
+        ? formData.getAll('coverImages').map((x) => JSON.parse(x as string) as DBMedia)
         : null,
       tagIds: formData.has('tagIds') ? formData.getAll('tagIds').map((x) => Number(x)) : null,
-      website: formData.get('website'),
-      photo: formData.get('photo') as File,
-      coverImages: formData.getAll('coverImages') as File[],
-    } as ProfileFormData;
+      website: String(formData.get('website')),
+      photo: formData.has('photo')
+        ? (JSON.parse(formData.get('photo') as string) as DBMedia)
+        : null,
+    } satisfies ProfileDTO;
 
     const claims = await client.auth.getClaims();
 
@@ -122,7 +122,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
 
     if (!profileData?.id) {
-      throw new Error('profile not found');
+      throw validationError('Profile not found', 'id');
     }
 
     const profileService = new ProfileServiceServer(client);
@@ -132,6 +132,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     return Response.json(profile, { headers, status: 200 });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
     console.error(error);
     return Response.json({}, { headers, status: 500 });
   }
@@ -139,7 +143,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 async function validateRequest(
   request: Request,
-  data: ProfileFormData,
+  data: ProfileDTO,
   profile: { id: number } | null,
   memberTypes: string[] | null,
 ) {
@@ -148,31 +152,28 @@ async function validateRequest(
   }
 
   if (!profile?.id) {
-    return { status: 400, statusText: 'profile not found' };
+    throw validationError('Profile not found', 'id');
   }
 
   if (!data.displayName) {
-    return { status: 400, statusText: 'displayName is required' };
+    throw validationError('displayName is required', 'displayName');
   }
 
   if (!data.type) {
-    return { status: 400, statusText: 'type is required' };
+    throw validationError('type is required', 'type');
   }
 
   if (!memberTypes || !memberTypes?.includes(data.type)) {
-    if (!data.existingPhoto && !data.photo) {
-      return { status: 400, statusText: 'photo is required' };
+    if (!data.photo && !data.photo) {
+      throw validationError('photo is required', 'photo');
     }
 
-    if (
-      (!data.existingCoverImageIds || data.existingCoverImageIds.length === 0) &&
-      (!data.coverImages || data.coverImages.length === 0)
-    ) {
-      return { status: 400, statusText: 'cover images are required' };
+    if (!data.coverImages || data.coverImages.length === 0) {
+      throw validationError('cover images are required', 'coverImages');
     }
 
     if (data.showVisitorPolicy && !data.visitorPreferencePolicy) {
-      return { status: 400, statusText: 'visitor policy is required' };
+      throw validationError('visitor policy is required', 'visitorPreferencePolicy');
     }
   }
 

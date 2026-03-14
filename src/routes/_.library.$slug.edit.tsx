@@ -1,13 +1,12 @@
-import type { DBProject } from 'oa-shared';
-import { Project } from 'oa-shared';
+import { DBProject } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
 import { ClientOnly } from 'remix-utils/client-only';
-import { LibraryForm } from 'src/pages/Library/Content/Common/Library.form';
+import { LibraryForm } from 'src/pages/Library/Content/Common/LibraryForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { libraryServiceServer } from 'src/services/libraryService.server';
+import { LibraryServiceServer } from 'src/services/libraryService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
+import { StorageServiceServer } from 'src/services/storageService.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -18,48 +17,31 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirectServiceServer.redirectSignIn(`/library/${params.slug}/edit`, headers);
   }
 
-  // const username = user.user_metadata.username
   const username = claims.data.claims.user_metadata?.username;
-  const projectDb = (await libraryServiceServer.getBySlug(client, params.slug as string))
+  const libraryService = new LibraryServiceServer(client);
+
+  const projectDb = (await libraryService.getBySlug(params.slug as string))
     .data as unknown as DBProject;
-  if (
-    !(await libraryServiceServer.isAllowedToEditProject(
-      client,
-      projectDb.author?.username || '',
-      username,
-    ))
-  ) {
+
+  if (!(await libraryService.isAllowedToEditProject(projectDb.author?.username || '', username))) {
     return redirect('/forbidden?page=library-edit', { headers });
   }
 
-  const images = libraryServiceServer.getProjectPublicMedia(projectDb, client);
-
-  const project = Project.fromDB(projectDb, [], images);
-
-  const fileLink = projectDb?.file_link || undefined;
-  const files = projectDb?.files?.at(0)
-    ? await storageServiceServer.getPathDocuments(
-        `projects/${projectDb.id}`,
-        `/api/documents/project/${projectDb.id}`,
-        client,
-      )
+  const allImages = projectDb.steps?.flatMap((x) => x.images).filter((x) => !!x) || [];
+  if (projectDb.cover_image) {
+    allImages.push(projectDb.cover_image);
+  }
+  const publicImages = projectDb?.cover_image
+    ? new StorageServiceServer(client).getPublicUrls(allImages)
     : [];
 
-  return data({ project, files, fileLink }, { headers });
+  const formData = DBProject.toFormData(projectDb, publicImages);
+
+  return data({ formData, id: projectDb.id }, { headers });
 }
 
 export default function Index() {
-  const loaderData = useLoaderData<typeof loader>();
+  const { id, formData } = useLoaderData<typeof loader>();
 
-  return (
-    <ClientOnly>
-      {() => (
-        <LibraryForm
-          project={loaderData.project}
-          files={loaderData.files}
-          fileLink={loaderData.fileLink}
-        />
-      )}
-    </ClientOnly>
-  );
+  return <ClientOnly>{() => <LibraryForm id={id} formData={formData} />}</ClientOnly>;
 }

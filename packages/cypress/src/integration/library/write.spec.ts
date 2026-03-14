@@ -170,7 +170,7 @@ describe('[Library]', () => {
 
       cy.wait(1000);
       cy.get('[data-cy=errors-container]').should('be.visible');
-      cy.contains('Duplicate project').should('be.visible');
+      cy.contains('A project with this name already exists').should('be.visible');
 
       cy.step('A basic draft is created');
       cy.fillIntroTitle(`qwerty ${randomId}`);
@@ -206,7 +206,7 @@ describe('[Library]', () => {
 
       cy.get('[data-cy=fileLink]').type(fileLink);
       cy.step('Upload a cover for the intro');
-      cy.get('[data-cy="image-upload"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-intro.jpg', { force: true });
+      cy.get('[data-cy="image-input"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-intro.jpg', { force: true });
 
       fillStep(1, steps[0].title, steps[0].text, imagePaths);
       fillStep(2, steps[2].title, steps[2].text, [], steps[2].videoURL);
@@ -302,6 +302,113 @@ describe('[Library]', () => {
       cy.get('[data-cy=intro-title]').clear().blur({ force: true });
       cy.get('[data-cy=page-link][href*="/library"]').click();
       cy.url().should('match', /\/library?/);
+    });
+
+    it('[Edit project - Replace images]', () => {
+      const randomId = generateAlphaNumeric(8).toLowerCase();
+      const initialTitle = `${randomId} Project for image edit`;
+      const slug = `${randomId}-project-for-image-edit`;
+      const updatedDescription = 'Updated with new images';
+      const category = 'Moulds';
+      const time = '1-2 weeks';
+      const difficulty = 'Medium';
+
+      cy.signIn(creator.email, creator.password);
+
+      cy.step('Create a project with images');
+      cy.visit('/library/create');
+      cy.fillIntroTitle(initialTitle);
+      cy.get('[data-cy=intro-description]').type('Initial description');
+      selectCategory(category as Category);
+      selectTimeDuration(time as Duration);
+      selectDifficultLevel(difficulty as DifficultyLevel);
+      
+      cy.step('Upload cover image');
+      cy.get('[data-cy="image-input"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-intro.jpg', { force: true });
+      cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').should('exist');
+      
+      cy.step('Add step with images');
+      cy.get('[data-cy=step_0]').within(() => {
+        cy.get('[data-cy=step-title]').clear().type('Step with images').blur();
+        cy.get('[data-cy=step-description]').clear().type('Step description').blur();
+        cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+        cy.get('[data-cy=delete-image]').should('exist');
+      });
+      
+      cy.get('[data-cy=submit]').click();
+      cy.url().should('include', `/library/${slug}`);
+
+      cy.step('Edit project and replace images');
+      cy.get('[data-cy=edit]').click();
+      cy.get('[data-cy=intro-description]').clear().type(updatedDescription);
+      
+      cy.step('Replace cover image');
+      cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').click();
+      cy.get('[data-cy="image-input"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
+      cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').should('exist');
+      
+      cy.step('Replace step image');
+      cy.get('[data-cy=step_0]').within(() => {
+        cy.get('[data-cy=delete-image]').first().click();
+        cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
+        cy.get('[data-cy=delete-image]').should('exist');
+      });
+      
+      cy.get('[data-cy=submit]').click();
+      cy.url().should('include', `/library/${slug}`);
+      cy.contains(updatedDescription);
+    });
+
+    it('[Create and edit project with files]', () => {
+      const randomId = generateAlphaNumeric(8).toLowerCase();
+      const title = `${randomId} Project with files`;
+      const slug = `${randomId}-project-with-files`;
+      const category = 'Moulds';
+      const time = '1-2 weeks';
+      const difficulty = 'Medium';
+
+      cy.signIn(creator.email, creator.password);
+
+      cy.step('Create a project with file upload');
+      cy.visit('/library/create');
+      cy.fillIntroTitle(title);
+      cy.get('[data-cy=intro-description]').type('Project with downloadable files');
+      selectCategory(category as Category);
+      selectTimeDuration(time as Duration);
+      selectDifficultLevel(difficulty as DifficultyLevel);
+      
+      cy.get('[data-cy="image-input"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-intro.jpg', { force: true });
+      cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').should('exist');
+      
+      cy.step('Add step');
+      cy.get('[data-cy=step_0]').within(() => {
+        cy.get('[data-cy=step-title]').clear().type('First step').blur();
+        cy.get('[data-cy=step-description]').clear().type('Step description').blur();
+        cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+        cy.get('[data-cy=delete-image]').should('exist');
+      });
+      
+      cy.step('Upload file');
+      cy.get('[data-cy=file-input-field]').click();
+      cy.get('input[type="file"]').selectFile('src/fixtures/files/Example.pdf', { force: true });
+      cy.wait(2000);
+      
+      cy.get('[data-cy=submit]').click();
+      cy.url().should('include', `/library/${slug}`);
+      cy.get('[data-cy=downloadButton]').should('be.visible');
+
+      cy.step('Edit project and replace file');
+      cy.get('[data-cy=edit]').click();
+      
+      cy.step('Remove old file and upload new one');
+      cy.get('[data-cy=delete-uploaded-file]').click();
+      cy.get('[data-cy=file-input-field]').click();
+      cy.get('input[type="file"]').selectFile('src/fixtures/files/Example.pdf', { force: true });
+      cy.wait(2000);
+      
+      cy.get('[data-cy=submit]').click();
+      cy.url().should('include', `/library/${slug}`);
+      cy.get('[data-cy=downloadButton]').should('be.visible');
     });
 
     // it('[Admin]', () => {

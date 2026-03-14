@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { serveStatic } from 'hono/bun';
 import { compress } from 'hono/compress';
+import { HTTPException } from 'hono/http-exception';
 import { secureHeaders } from 'hono/secure-headers';
 import { createRequestHandler } from 'react-router';
 
@@ -15,6 +16,31 @@ const viteDevServer = isProd
     );
 
 const app = new Hono();
+
+app.onError((err, c) => {
+  // React Router handles all route actions internally and we're now catching HTTPException within the actions themselves, app.onError won't catch those errors.
+  // However, it's still a good safety net for:
+  // - Errors in Hono middleware (compression, secure headers)
+  // - Errors in static file serving
+  // - Any unexpected errors at the Hono layer
+
+  // Handle HTTPException (from hono/http-exception)
+  if (err instanceof HTTPException) {
+    return err.getResponse();
+  }
+
+  // Log unexpected errors
+  console.error('Unexpected error:', err);
+
+  // Return generic error response
+  return c.json(
+    {
+      error: 'Internal Server Error',
+      status: 500,
+    },
+    500,
+  );
+});
 
 // Compression
 app.use(compress());
@@ -105,7 +131,9 @@ app.use(
 
 // React Router request handler
 const handler = createRequestHandler(
-  viteDevServer ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build') : await import('./build/server/index.js'),
+  viteDevServer
+    ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build')
+    : await import('./build/server/index.js'),
 );
 
 const port = Number(process.env.PORT) || 3456; // 3456 is default port for ci
@@ -140,6 +168,7 @@ if (isProd) {
     port,
     hostname: '0.0.0.0',
     fetch: app.fetch,
+    maxRequestBodySize: 300 * 1024 * 1024, // 300MB - enforced at Bun level
   });
 
   console.log(`Hono server started on http://0.0.0.0:${port}`);

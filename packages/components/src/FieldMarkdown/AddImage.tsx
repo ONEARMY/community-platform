@@ -1,49 +1,73 @@
 import { insertImage$, usePublisher } from '@mdxeditor/editor';
+import { DBMedia } from 'oa-shared';
 import { useState } from 'react';
 import { Box, Flex } from 'theme-ui';
-
 import { Button } from '../Button/Button';
-import { ImageInput } from '../ImageInput/ImageInput';
-import type { IFileMeta } from '../ImageInput/types';
+import { ImageInputV2 } from '../ImageInput/ImageInputV2';
 import { Loader } from '../Loader/Loader';
 import { Modal } from '../Modal/Modal';
 
 interface IProps {
-  imageUploadHandler: (image: File) => Promise<string>;
+  imageUploadHandler: (image: File) => Promise<DBMedia | null>;
 }
 
 export const AddImage = ({ imageUploadHandler }: IProps) => {
   const insertImage = usePublisher(insertImage$);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const onFilesChange = async (fileMeta: IFileMeta) => {
+  const onFilesChange = async (file: File | undefined) => {
+    if (!file) return;
+
     setIsLoading(true);
+    setError(null);
 
-    if (fileMeta) {
-      const file = await imageUploadHandler(fileMeta.photoData);
+    try {
+      const mediaFile = await imageUploadHandler(file);
 
-      insertImage({
-        src: file,
-        altText: fileMeta.name,
-        title: fileMeta.name,
-      });
+      if (mediaFile) {
+        insertImage({
+          src: mediaFile.fullPath,
+          altText: mediaFile.path,
+          title: mediaFile.path,
+        });
+      } else {
+        setError('Failed to upload image. Please try again.');
+      }
+
+      setIsOpen(false);
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : 'Failed to upload image. Please try again.',
+      );
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
-    setIsOpen(false);
+  };
+
+  const handleError = (errorMsg: string) => {
+    setError(errorMsg);
   };
 
   return (
     <>
-      <Button small variant="subtle" icon="image" type="button" showIconOnly onClick={() => setIsOpen(true)}>
+      <Button
+        small
+        variant="subtle"
+        icon="image"
+        type="button"
+        showIconOnly
+        onClick={() => setIsOpen(true)}
+      >
         Upload
       </Button>
 
       <Modal isOpen={isOpen} width={600} onDismiss={() => setIsOpen(false)}>
         <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-          {isLoading && <>Loading</>}
+          {error && <Box sx={{ color: 'error', fontSize: 1 }}>{error}</Box>}
           <Box sx={{ height: '300px' }}>
-            <ImageInput onFilesChange={onFilesChange} />
+            <ImageInputV2 onFilesChange={onFilesChange} onError={handleError} />
           </Box>
           <Flex>
             {isLoading ? (

@@ -1,13 +1,11 @@
 import { marked } from 'marked';
-
 import { processStandaloneYouTubeUrls, processYouTubeLinks } from '../utils/markdown';
 import type { DBAuthor } from './author';
 import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
-import type { IConvertedFileMeta } from './common';
 import type { IContentDoc, IDBContentDoc } from './content';
-import type { DBMedia, Image } from './media';
+import { DBMedia, Image, MediaWithPublicUrl } from './media';
 import type { DBProfileBadge } from './profileBadge';
 import { ProfileBadge } from './profileBadge';
 import type { SelectValue } from './selectValue';
@@ -35,7 +33,36 @@ export class DBNews implements IDBContentDoc {
   readonly useful_count?: number;
   readonly body: string;
   readonly hero_image: DBMedia | null;
+
+  static toFormData(news: DBNews, publicHeroImage: Image | null) {
+    let htmlBody = marked(news.body, {
+      breaks: true,
+      gfm: true,
+    }) as string;
+
+    htmlBody = processYouTubeLinks(htmlBody);
+    htmlBody = processStandaloneYouTubeUrls(htmlBody);
+
+    return {
+      body: news.body,
+      category: news.category
+        ? { value: news.category.id.toString(), label: news.category.name }
+        : null,
+      isDraft: news.is_draft || false,
+      heroImage:
+        news.hero_image && publicHeroImage ? { ...news.hero_image, ...publicHeroImage } : null,
+      profileBadge: news.profile_badge
+        ? { value: news.profile_badge.id.toString(), label: news.profile_badge.name }
+        : null,
+      tags: news.tags,
+      title: news.title,
+    } satisfies NewsFormData;
+  }
 }
+
+export type EditNews = Omit<News, 'heroImage'> & {
+  heroImage: DBMedia | null;
+};
 
 export class News implements IContentDoc {
   id: number;
@@ -102,10 +129,19 @@ export class News implements IContentDoc {
 export type NewsFormData = {
   body: string | null;
   category: SelectValue | null;
-  existingHeroImage: Image | null;
-  heroImage: IConvertedFileMeta | null;
+  heroImage: MediaWithPublicUrl | null;
   isDraft: boolean | null;
   profileBadge: SelectValue | null;
   tags?: number[];
   title: string;
+};
+
+export type NewsDTO = {
+  title: string;
+  body: string | null;
+  category: number | null;
+  heroImage: DBMedia | null;
+  isDraft: boolean | null;
+  profileBadge: number | null;
+  tags: number[] | null;
 };

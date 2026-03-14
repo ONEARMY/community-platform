@@ -1,11 +1,12 @@
 import { FieldMarkdown } from 'oa-components';
+import { DBMedia } from 'oa-shared';
 import { Field } from 'react-final-form';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
 import { fields } from 'src/pages/News/labels';
 import { required } from 'src/utils/validators';
 
 interface IProps {
-  imageUpload: (image: File) => Promise<string>;
+  imageUpload: (image: File) => Promise<DBMedia | null>;
 }
 
 export const NewsBodyField = ({ imageUpload }: IProps) => {

@@ -1,4 +1,5 @@
-import type { DBResearchItem, ResearchStatus } from 'oa-shared';
+import { HTTPException } from 'hono/http-exception';
+import type { DBMedia, DBResearchItem, ResearchDTO, ResearchStatus } from 'oa-shared';
 import { ResearchItem } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
@@ -7,9 +8,10 @@ import type { ResearchSortOption } from 'src/pages/Research/ResearchSortOptions.
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
+import { StorageServiceServer } from 'src/services/storageService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
+import { conflictError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -52,7 +54,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const items = dbItems.map((dbResearchItem) => {
     const images = dbResearchItem.image
-      ? storageServiceServer.getPublicUrls(client, [dbResearchItem.image], IMAGE_SIZES.LIST)
+      ? new StorageServiceServer(client).getPublicUrls([dbResearchItem.image], IMAGE_SIZES.LIST)
       : [];
     return ResearchItem.fromDB(dbResearchItem, [], images);
   });
@@ -89,14 +91,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
-      isDraft: formData.get('draft') === 'true',
-      category: formData.has('category') ? (formData.get('category') as string) : null,
+      isDraft: formData.get('isDraft') === 'true',
+      category: formData.has('category') ? Number(formData.get('category')) : null,
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       collaborators: formData.has('collaborators')
         ? (formData.getAll('collaborators') as string[])
         : null,
-      uploadedImage: formData.get('image') as File | null,
-    };
+      coverImage: formData.has('coverImage')
+        ? (JSON.parse(formData.get('coverImage') as string) as DBMedia)
+        : null,
+    } satisfies ResearchDTO;
 
     const claims = await client.auth.getClaims();
 
@@ -104,29 +108,19 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const { valid, status, statusText } = await validateRequest(request, data);
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    validateRequest(request, data);
 
     const slug = convertToSlug(data.title);
 
     if (await contentServiceServer.isDuplicateNewSlug(slug, client, 'research')) {
-      return Response.json(
-        {},
-        {
-          status: 409,
-          statusText: 'This research already exists',
-        },
-      );
+      throw conflictError('This research already exists');
     }
 
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
     if (!profile) {
-      return Response.json({}, { headers, status: 400, statusText: 'User not found' });
+      throw validationError('User not found');
     }
 
     const researchStatus: ResearchStatus = 'in-progress';
@@ -142,6 +136,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         collaborators: data.collaborators,
         status: researchStatus,
         is_draft: data.isDraft,
+        image: data.coverImage,
         tenant_id: process.env.TENANT_ID,
       })
       .select()
@@ -160,55 +155,33 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     await subscribersServiceServer.addResearchSubscribers(research, profile.id, client, headers);
 
-    if (data.uploadedImage) {
-      const mediaResult = await storageServiceServer.uploadImage(
-        [data.uploadedImage],
-        `research/${research.id}`,
-        client,
-      );
-
-      if (mediaResult?.errors) {
-        console.error(mediaResult.errors);
-      }
-
-      if (mediaResult?.media && mediaResult.media.length > 0) {
-        const result = await client
-          .from('research')
-          .update({ image: mediaResult.media[0] })
-          .eq('id', research.id)
-          .select();
-
-        if (result.data) {
-          research.image = result.data[0].image;
-        }
-      }
-    }
-
     updateUserActivity(client, claims.data.claims.sub);
 
     return Response.json({ research }, { headers, status: 201 });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
     console.error(error);
-    return Response.json({}, { headers, status: 500, statusText: 'Error creating research' });
+    return Response.json({ error: 'Error creating research', status: 500 }, { status: 500 });
   }
 };
 
-async function validateRequest(request: Request, data: any) {
+function validateRequest(request: Request, data: ResearchDTO) {
   if (request.method !== 'POST') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw methodNotAllowedError();
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'title is required' };
+    throw validationError('Title is required', 'title');
   }
 
   if (!data.description) {
-    return { status: 400, statusText: 'description is required' };
+    throw validationError('Description is required', 'description');
   }
 
-  if (!data.isDraft && !data.uploadedImage && !data.existingImage) {
-    return { status: 400, statusText: 'image is required' };
+  if (!data.isDraft && !data.coverImage) {
+    throw validationError('Cover Image is required', 'coverImage');
   }
-
-  return { valid: true };
 }

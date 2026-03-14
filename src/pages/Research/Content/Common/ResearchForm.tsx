@@ -1,7 +1,7 @@
 import arrayMutators from 'final-form-arrays';
 import { Button, ResearchEditorOverview } from 'oa-components';
 import type { ResearchFormData, ResearchItem, ResearchStatus } from 'oa-shared';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
@@ -20,40 +20,33 @@ import { ResearchTitleField } from './FormFields/ResearchTitleField';
 import ResearchFieldCategory from './ResearchCategorySelect';
 
 interface IProps {
-  research?: ResearchItem;
+  id: number | null;
+  formData: ResearchFormData | null;
+  research: ResearchItem | null;
 }
 
-const ResearchForm = ({ research }: IProps) => {
-  const [initialValues, setInitialValues] = useState<ResearchFormData>();
+const ResearchForm = ({ id, formData, research }: IProps) => {
   const navigate = useNavigate();
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    if (research) {
-      setInitialValues({
-        title: research?.title,
-        description: research?.description,
-        category: research?.category
-          ? {
-              value: research.category.id?.toString(),
-              label: research.category.name,
-            }
-          : undefined,
-        collaborators: Array.isArray(research?.collaboratorsUsernames)
-          ? research.collaboratorsUsernames
-          : [],
-        tags: research?.tagIds || [],
-        existingImage: research?.image,
-        image: undefined,
-      });
-    }
-  }, [research]);
+  const initialValues = useMemo<ResearchFormData>(
+    () =>
+      ({
+        title: formData?.title || '',
+        description: formData?.description || '',
+        category: formData?.category || null,
+        collaborators: formData?.collaborators || [],
+        tags: formData?.tags || [],
+        coverImage: formData?.coverImage || null,
+      }) satisfies ResearchFormData,
+    [],
+  );
 
   const updateStatus = async (status: ResearchStatus) => {
     try {
-      await researchService.updateResearchStatus(research!.id, status);
+      await researchService.updateResearchStatus(id!, status);
       navigate(`/research/${research!.slug}`);
     } catch (err) {
       console.error(err);
@@ -67,7 +60,7 @@ const ResearchForm = ({ research }: IProps) => {
     setIsSubmitting(true);
 
     try {
-      const result = await researchService.upsert(research?.id || null, values, isDraft);
+      const result = await researchService.upsert(id || null, values, isDraft);
 
       if (!isDraft) {
         fireConfetti();
@@ -77,7 +70,7 @@ const ResearchForm = ({ research }: IProps) => {
         navigate(`/research/${result.research.slug}`);
       }, 100);
     } catch (e) {
-      if (e.cause && e.message) {
+      if (e.message) {
         setSaveErrorMessage(e.message);
       }
       logger.error(e);
@@ -88,7 +81,7 @@ const ResearchForm = ({ research }: IProps) => {
     }
   };
 
-  const heading = research ? headings.overview.edit : headings.overview.create;
+  const heading = id ? headings.overview.edit : headings.overview.create;
 
   return (
     <Form<ResearchFormData>
@@ -99,12 +92,11 @@ const ResearchForm = ({ research }: IProps) => {
       }}
       validate={(values) => {
         const errors = {};
-        if (values.image == null && values.existingImage == null) {
-          errors['image'] = 'An image is required (either new or existing).';
+        if (values.coverImage == null) {
+          errors['coverImage'] = 'Cover image is required.';
         }
         return errors;
       }}
-      validateOnBlur
       render={({
         errors,
         dirty,
@@ -124,7 +116,7 @@ const ResearchForm = ({ research }: IProps) => {
 
         const sidebar = (
           <>
-            {research?.id && (
+            {id && (
               <Button
                 data-cy="draft"
                 onClick={() =>
@@ -132,7 +124,7 @@ const ResearchForm = ({ research }: IProps) => {
                 }
                 variant={research?.status === 'complete' ? 'info' : 'success'}
                 type="submit"
-                disabled={!research?.id}
+                disabled={!id}
                 sx={{
                   width: '100%',
                   display: 'block',
@@ -187,7 +179,7 @@ const ResearchForm = ({ research }: IProps) => {
             <ResearchFieldCategory />
             <TagsField title={overview.tags.title} />
             <ResearchCollaboratorsField />
-            <ImageField title="Cover Image" />
+            <ImageField title="Cover Image" contentType="research" contentId={id} />
           </FormWrapper>
         );
       }}

@@ -1,13 +1,16 @@
-import styled from '@emotion/styled';
-import { Button, FieldInput, FieldTextarea, ImageInputDeleteImage, ImageInputWrapper, Modal } from 'oa-components';
-import type { Image, IUploadedFileMeta } from 'oa-shared';
+import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components';
+import type { MediaWithPublicUrl } from 'oa-shared';
 import { useState } from 'react';
 import { Field } from 'react-final-form';
-import { FieldContainer } from 'src/common/Form/FieldContainer';
-import { ImageInputField } from 'src/common/Form/ImageInput.field';
+import { StepImageField } from 'src/pages/common/FormFields';
 import { COMPARISONS } from 'src/utils/comparisons';
-import { composeValidators, draftValidationWrapper, minValue, required } from 'src/utils/validators';
-import { Card, Flex, Heading, Image as ImageComponent, Label, Text } from 'theme-ui';
+import {
+  composeValidators,
+  draftValidationWrapper,
+  minValue,
+  required,
+} from 'src/utils/validators';
+import { Card, Flex, Heading, Label, Text } from 'theme-ui';
 import {
   LIBRARY_MIN_REQUIRED_STEPS,
   LIBRARY_TITLE_MAX_LENGTH,
@@ -17,19 +20,14 @@ import {
 } from '../../constants';
 import { buttons, errors, steps } from '../../labels';
 
-const ImageInputFieldWrapper = styled.div`
-  width: 150px;
-  height: 100px;
-  margin-right: 10px;
-`;
-
 interface IProps {
   name: string;
   index: number;
-  images: IUploadedFileMeta[];
-  existingImages: Image[];
+  images: MediaWithPublicUrl[];
   onDelete: (index: number) => void;
   moveStep: (indexfrom: number, indexTo: number) => void;
+  contentType?: 'projects' | 'research' | 'questions' | 'news';
+  contentId?: number | null;
 }
 
 /**
@@ -38,7 +36,15 @@ interface IProps {
  * - minimum character length of 100 characters
  * - maximum character length of 1000 characters
  */
-export const LibraryStepField = ({ name, index, images, existingImages, onDelete, moveStep }: IProps) => {
+export const LibraryStepField = ({
+  name,
+  index,
+  images,
+  onDelete,
+  moveStep,
+  contentType = 'projects',
+  contentId = null,
+}: IProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const toggleDeleteModal = () => {
@@ -61,12 +67,10 @@ export const LibraryStepField = ({ name, index, images, existingImages, onDelete
     }
 
     // More robust checking for images - ensure array exists AND has items
-    const hasNewImages = Array.isArray(stepValues.images) && stepValues.images?.filter((x) => !!x).length > 0;
-    const hasExistingImages = Array.isArray(stepValues.existingImages) && stepValues.existingImages.length > 0;
-    const hasAnyImages = hasNewImages || hasExistingImages;
+    const hasImages = Array.isArray(stepValues.images) && stepValues.images.length > 0;
 
     if (stepValues.videoUrl) {
-      if (hasAnyImages) {
+      if (hasImages) {
         return errors.videoUrl.both;
       }
 
@@ -75,7 +79,7 @@ export const LibraryStepField = ({ name, index, images, existingImages, onDelete
       return urlValid ? null : errors.videoUrl.invalidUrl;
     }
 
-    return hasAnyImages ? null : errors.videoUrl.empty;
+    return hasImages ? null : errors.videoUrl.empty;
   };
 
   const { deleteButton } = buttons.steps;
@@ -86,7 +90,8 @@ export const LibraryStepField = ({ name, index, images, existingImages, onDelete
 
   const isAboveMinimumStep = index >= LIBRARY_MIN_REQUIRED_STEPS;
 
-  const numberOfImageInputsAvailable = images ? Math.min(images.filter((x) => !!x).length + 1, 10) : 1;
+  // Show one more slot than existing images (up to 10 total)
+  const numberOfImageInputsAvailable = Math.min((images?.length || 0) + 1, 10);
 
   return (
     <Card data-cy={`step_${index}`} mt={5} key={index}>
@@ -138,7 +143,13 @@ export const LibraryStepField = ({ name, index, images, existingImages, onDelete
                 </Button>
               </Flex>
               <Flex px={1}>
-                <Button data-cy="confirm" data-testid="confirm" variant="outline" onClick={() => confirmDelete()} type="button">
+                <Button
+                  data-cy="confirm"
+                  data-testid="confirm"
+                  variant="outline"
+                  onClick={() => confirmDelete()}
+                  type="button"
+                >
                   {deleteButton.title}
                 </Button>
               </Flex>
@@ -160,7 +171,11 @@ export const LibraryStepField = ({ name, index, images, existingImages, onDelete
             maxLength={LIBRARY_TITLE_MAX_LENGTH}
             minLength={LIBRARY_TITLE_MIN_LENGTH}
             validate={(value, allValues) =>
-              draftValidationWrapper(value, allValues, composeValidators(required, minValue(LIBRARY_TITLE_MIN_LENGTH)))
+              draftValidationWrapper(
+                value,
+                allValues,
+                composeValidators(required, minValue(LIBRARY_TITLE_MIN_LENGTH)),
+              )
             }
             validateFields={[]}
             isEqual={COMPARISONS.textInput}
@@ -183,7 +198,11 @@ export const LibraryStepField = ({ name, index, images, existingImages, onDelete
             component={FieldTextarea}
             style={{ resize: 'vertical', height: '300px' }}
             validate={(value, allValues) =>
-              draftValidationWrapper(value, allValues, composeValidators(required, minValue(STEP_DESCRIPTION_MIN_LENGTH)))
+              draftValidationWrapper(
+                value,
+                allValues,
+                composeValidators(required, minValue(STEP_DESCRIPTION_MIN_LENGTH)),
+              )
             }
             validateFields={[]}
             isEqual={COMPARISONS.textInput}
@@ -201,46 +220,15 @@ export const LibraryStepField = ({ name, index, images, existingImages, onDelete
             marginBottom: 3,
           }}
         >
-          {/* Display existing images */}
-          <Field name={`${name}.existingImages`}>
-            {({ input }) => (
-              <>
-                {existingImages?.map((image, index) => (
-                  <ImageInputFieldWrapper key={`existing-image-${index}`} data-cy={`existing-image-${index}`}>
-                    <FieldContainer
-                      style={{
-                        height: '100%',
-                        width: '100%',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      <ImageInputWrapper hasUploadedImg={true}>
-                        <ImageComponent src={image.publicUrl} />
-                        <Field
-                          name={`steps[${index}].existing-image[${index}]`}
-                          validate={(_, allValues) => validateStepMedia(allValues)}
-                          render={() => (
-                            <ImageInputDeleteImage
-                              onClick={() => {
-                                const currentImages = input.value || [];
-                                const updatedImages = currentImages.filter((_, i) => i !== index);
-                                input.onChange(updatedImages);
-                              }}
-                            />
-                          )}
-                        />
-                      </ImageInputWrapper>
-                    </FieldContainer>
-                  </ImageInputFieldWrapper>
-                ))}
-              </>
-            )}
-          </Field>
-
           {[...Array(numberOfImageInputsAvailable)].map((_, i) => (
-            <ImageInputFieldWrapper key={`image-upload-${i}`} data-cy={`image-upload-${i}`}>
-              <Field hasText={false} name={`steps[${index}].images[${i}]`} component={ImageInputField} isEqual={COMPARISONS.image} />
-            </ImageInputFieldWrapper>
+            <StepImageField
+              key={`step-image-${i}`}
+              stepIndex={index}
+              imageIndex={i}
+              contentType={contentType}
+              contentId={contentId}
+              images={images}
+            />
           ))}
         </Flex>
 

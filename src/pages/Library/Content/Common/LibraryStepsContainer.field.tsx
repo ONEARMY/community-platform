@@ -28,7 +28,13 @@ const AnimatedStep = ({ children, animationKey }: IPropsAnimation) => {
   );
 };
 
-export const LibraryStepsContainerField = () => {
+export const LibraryStepsContainerField = ({
+  contentType = 'projects',
+  contentId = null,
+}: {
+  contentType?: 'projects' | 'research' | 'questions' | 'news';
+  contentId?: number | null;
+}) => {
   return (
     <FieldArray name="steps" isEqual={COMPARISONS.step}>
       {({ fields }) => (
@@ -58,10 +64,11 @@ export const LibraryStepsContainerField = () => {
                   }
                 }}
                 images={fields.value[index].images || []}
-                existingImages={fields.value[index].existingImages || []}
                 onDelete={(fieldIndex: number) => {
                   fields.remove(fieldIndex);
                 }}
+                contentType={contentType}
+                contentId={contentId}
               />
             </AnimatedStep>
           ))}
@@ -79,7 +86,6 @@ export const LibraryStepsContainerField = () => {
                   title: '',
                   description: '',
                   images: [],
-                  existingImages: [],
                 });
               }}
             >

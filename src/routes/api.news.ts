@@ -126,7 +126,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
     const data = {
       body: formData.get('body') as string,
       category: formData.has('category') ? Number(formData.get('category')) : null,
-      isDraft: formData.get('is_draft') === 'true',
+      isDraft: formData.get('isDraft') === 'true',
       profileBadge: formData.has('profileBadge') ? Number(formData.get('profileBadge')) : null,
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       title: formData.get('title') as string,

@@ -67,17 +67,25 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
   }
 
-  const fallbackPath = signInResult.data.user?.user_metadata.username
-    ? `/u/${signInResult.data.user?.user_metadata.username}`
-    : '/';
-  const path = getReturnUrl(request, fallbackPath);
+  let profile: { id: number; username: string } | null = null;
 
   try {
     // This will fail if there is already a profile for the current auth_id, or the auth_id is invalid (can be invalid the the credentials are wrong)
-    await new ProfileServiceServer(client).ensureProfile(signInResult.data.user);
+    profile = await new ProfileServiceServer(client).ensureProfile(signInResult.data.user.id);
   } catch (error) {
     console.error(error);
   }
+
+  if (!profile) {
+    const returnUrl = getReturnUrl(request);
+    const chooseUsernameUrl = returnUrl
+      ? `/choose-username?returnUrl=${encodeURIComponent(returnUrl)}`
+      : '/choose-username';
+    return redirect(chooseUsernameUrl, { headers });
+  }
+
+  const fallbackPath = `/u/${profile.username}`;
+  const path = getReturnUrl(request, fallbackPath);
 
   return redirect(path, { headers });
 };

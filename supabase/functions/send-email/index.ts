@@ -3,6 +3,7 @@ import React from 'react';
 import { Webhook } from 'standardwebhooks';
 import { Resend } from 'resend';
 import { render } from '@react-email/components';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 import { EmailChangeNewEmail } from './_templates/email-change-new.tsx';
 import { MagicLinkEmail } from './_templates/magic-link.tsx';
@@ -17,6 +18,17 @@ import { ModerationEmail } from './_templates/moderation-email.tsx';
 const hookSecret = Deno.env.get('SEND_EMAIL_HOOK_SECRET') as string;
 const resend = new Resend(Deno.env.get('RESEND_API_KEY') as string);
 const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
+
+const supabaseAdmin = createClient(supabaseUrl, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '');
+
+const getUsername = async (authId: string): Promise<string | null> => {
+  const { data } = await supabaseAdmin
+    .from('profiles')
+    .select('username')
+    .eq('auth_id', authId)
+    .single();
+  return data?.username ?? null;
+};
 
 type EmailData = {
   email_action_type: string;
@@ -63,21 +75,19 @@ Deno.serve(async (req) => {
       }
       case 'signup': {
         subject = 'Welcome! Please confirm your email';
-        details.username = user['user_metadata'].username;
-
         html = await render(React.createElement(SignUpEmail, details));
         break;
       }
       case 'login': {
         subject = 'Fancy magic link for login!';
-        details.username = user['user_metadata'].username;
+        details.username = (await getUsername(user.id)) ?? '';
 
         html = await render(React.createElement(MagicLinkEmail, details));
         break;
       }
       case 'recovery': {
         subject = 'So you need to reset your password?';
-        details.username = user['user_metadata'].username;
+        details.username = (await getUsername(user.id)) ?? '';
 
         html = await render(React.createElement(ResetPasswordEmail, details));
         break;
@@ -86,7 +96,7 @@ Deno.serve(async (req) => {
         const newEmail = user['new_email']!;
         subject = "You're changing your email";
         to = newEmail;
-        details.username = user['user_metadata'].username;
+        details.username = (await getUsername(user.id)) ?? '';
 
         html = await render(
           React.createElement(EmailChangeNewEmail, {

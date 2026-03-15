@@ -1,4 +1,4 @@
-import { Button, Loader } from 'oa-components';
+import { Loader, Pagination } from 'oa-components';
 import type { News } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
@@ -23,6 +23,8 @@ export const NewsListing = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get('q') || '';
   const sort = searchParams.get('sort') as NewsSortOption;
+  const pageNumber = parseInt(searchParams.get('pageNo') || '0');
+  const itemsPerPage = 10;
 
   useEffect(() => {
     if (!sort) {
@@ -36,9 +38,10 @@ export const NewsListing = () => {
       setSearchParams(params, { replace: true });
     } else {
       // search only when sort is set (avoids duplicate requests)
-      fetchNews();
+      const skip = pageNumber * itemsPerPage;
+      fetchNews(skip);
     }
-  }, [q, sort]);
+  }, [q, sort, pageNumber]);
 
   const fetchNews = async (skip: number = 0) => {
     setIsFetching(true);
@@ -46,13 +49,7 @@ export const NewsListing = () => {
     try {
       const result = await newsContentService.search(q, sort, skip);
       if (result) {
-        if (skip) {
-          // if skipFrom is set, means we are requesting another page that should be appended
-          setNews((news) => [...news, ...result.items]);
-        } else {
-          setNews(result.items);
-        }
-
+        setNews(result.items);
         setTotal(result.total);
       }
     } catch (error) {
@@ -62,7 +59,13 @@ export const NewsListing = () => {
     setIsFetching(false);
   };
 
-  const showLoadMore = !isFetching && news && news.length > 0 && news.length < total;
+  const updatePageNumber = (value: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('pageNo', value.toString());
+    setSearchParams(params, { replace: true });
+  };
+
+  const showLoadMore = !isFetching && news && news.length > 0;
 
   const newsList = showDrafts ? drafts : news;
 
@@ -108,9 +111,11 @@ export const NewsListing = () => {
 
         {showLoadMore && (
           <Flex sx={{ justifyContent: 'center' }}>
-            <Button type="button" onClick={() => fetchNews(news.length)} data-cy="load-more">
-              {listing.loadMore}
-            </Button>
+            <Pagination
+              totalPages={Math.ceil(total / itemsPerPage)}
+              onPageChange={updatePageNumber}
+              page={pageNumber}
+            />
           </Flex>
         )}
       </Flex>

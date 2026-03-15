@@ -1,4 +1,4 @@
-import { Button, Loader } from 'oa-components';
+import { Loader, Pagination } from 'oa-components';
 import type { Question } from 'oa-shared';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
@@ -26,6 +26,8 @@ export const QuestionListing = () => {
   const q = searchParams.get('q') || '';
   const category = searchParams.get('category') || '';
   const sort = searchParams.get('sort') as QuestionSortOption;
+  const pageNumber = parseInt(searchParams.get('pageNo') || '0');
+  const itemsPerPage = 21;
 
   useEffect(() => {
     if (!sort) {
@@ -40,9 +42,10 @@ export const QuestionListing = () => {
       setSearchParams(params, { replace: true });
     } else {
       // search only when sort is set (avoids duplicate requests)
-      fetchQuestions();
+      const skip = pageNumber * itemsPerPage;
+      fetchQuestions(skip);
     }
-  }, [q, category, sort]);
+  }, [q, category, sort, pageNumber]);
 
   const fetchQuestions = async (skip: number = 0) => {
     setIsFetching(true);
@@ -51,13 +54,7 @@ export const QuestionListing = () => {
       const result = await questionService.search(q, category, sort, skip);
 
       if (result) {
-        if (skip) {
-          // if skipFrom is set, means we are requesting another page that should be appended
-          setQuestions((questions) => [...questions, ...result.items]);
-        } else {
-          setQuestions(result.items);
-        }
-
+        setQuestions(result.items);
         setTotal(result.total);
       }
     } catch (error) {
@@ -71,10 +68,16 @@ export const QuestionListing = () => {
 
   const questionsList = showDrafts ? drafts : questions;
 
+  const updatePageNumber = (value: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('pageNo', value.toString());
+    setSearchParams(params, { replace: true });
+  };
+
   return (
     <Flex sx={{ flexDirection: 'column', gap: [2, 3] }}>
       <QuestionListHeader
-        itemCount={isFetching ? undefined: total}
+        itemCount={isFetching ? undefined : total}
         draftCount={isFetchingDrafts ? undefined : draftCount}
         handleShowDrafts={handleShowDrafts}
         showDrafts={showDrafts}
@@ -109,13 +112,11 @@ export const QuestionListing = () => {
 
       {showLoadMore && (
         <Flex sx={{ justifyContent: 'center' }}>
-          <Button
-            type="button"
-            onClick={() => fetchQuestions(questions.length)}
-            data-cy="load-more"
-          >
-            {listing.loadMore}
-          </Button>
+          <Pagination
+            totalPages={Math.ceil(total / itemsPerPage)}
+            onPageChange={updatePageNumber}
+            page={pageNumber}
+          />
         </Flex>
       )}
 

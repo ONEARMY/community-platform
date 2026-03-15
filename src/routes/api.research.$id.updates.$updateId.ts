@@ -1,3 +1,4 @@
+import { HTTPException } from 'hono/http-exception';
 import type { DBMedia, DBResearchUpdate, IMediaFile, ResearchUpdateDTO } from 'oa-shared';
 import { ResearchUpdate } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
@@ -6,6 +7,7 @@ import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordi
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ResearchServiceServer } from 'src/services/researchService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
+import { methodNotAllowedError, validationError } from 'src/utils/httpException';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -40,11 +42,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const { valid, status, statusText } = await validateRequest(request, data);
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    validateRequest(request, data);
 
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
@@ -96,6 +94,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     return Response.json({ researchUpdate }, { headers, status: 201 });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
     console.error(error);
     return Response.json({}, { headers, status: 500, statusText: 'Error creating research' });
   }
@@ -128,18 +129,16 @@ async function deleteResearchUpdate(request: Request, id: number, updateId: numb
   return Response.json({}, { status: 200, headers });
 }
 
-async function validateRequest(request: Request, data: ResearchUpdateDTO) {
+function validateRequest(request: Request, data: ResearchUpdateDTO) {
   if (request.method !== 'PUT') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw methodNotAllowedError();
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'title is required' };
+    throw validationError('title is required', 'title');
   }
 
   if (!data.description) {
-    return { status: 400, statusText: 'description is required' };
+    throw validationError('description is required', 'description');
   }
-
-  return { valid: true };
 }

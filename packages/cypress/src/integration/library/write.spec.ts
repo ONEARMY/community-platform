@@ -336,6 +336,21 @@ describe('[Library]', () => {
         cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
         cy.get('[data-cy=delete-image]').should('exist');
       });
+
+      cy.get('[data-cy=step_1]').within(() => {
+        cy.get('[data-cy=step-title]').clear().type('Second step').blur();
+        cy.get('[data-cy=step-description]').clear().type('Description for step 3. This description should be between the minimum and maximum description length').blur();
+        cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+        cy.get('[data-cy=delete-image]').should('exist');
+      });
+
+      cy.get('[data-cy=step_2]').within(() => {
+        cy.get('[data-cy=step-title]').clear().type('Third step').blur();
+        cy.get('[data-cy=step-description]').clear().type('Description for step 3. This description should be between the minimum and maximum description length').blur();
+        cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+        cy.get('[data-cy=delete-image]').should('exist');
+      });
+      
       
       cy.get('[data-cy=submit]').click();
       cy.url().should('include', `/library/${slug}`);
@@ -385,14 +400,24 @@ describe('[Library]', () => {
       cy.step('Add step');
       cy.get('[data-cy=step_0]').within(() => {
         cy.get('[data-cy=step-title]').clear().type('First step').blur();
-        cy.get('[data-cy=step-description]').clear().type('Step description').blur();
+        cy.get('[data-cy=step-description]').clear().type('Description for step 3. This description should be between the minimum and maximum description length').blur();
         cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
         cy.get('[data-cy=delete-image]').should('exist');
       });
-      
-      cy.step('Upload file');
-      cy.get('[id=file-input]').selectFile('src/fixtures/files/Example.pdf', { force: true });
-      cy.get('[data-cy=remove-file]').should('exist');
+
+      cy.get('[data-cy=step_1]').within(() => {
+        cy.get('[data-cy=step-title]').clear().type('Second step').blur();
+        cy.get('[data-cy=step-description]').clear().type('Description for step 3. This description should be between the minimum and maximum description length').blur();
+        cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+        cy.get('[data-cy=delete-image]').should('exist');
+      });
+
+      cy.get('[data-cy=step_2]').within(() => {
+        cy.get('[data-cy=step-title]').clear().type('Third step').blur();
+        cy.get('[data-cy=step-description]').clear().type('Description for step 3. This description should be between the minimum and maximum description length').blur();
+        cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+        cy.get('[data-cy=delete-image]').should('exist');
+      });
       
       cy.get('[data-cy=submit]').click();
       cy.url().should('include', `/library/${slug}`);

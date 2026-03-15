@@ -1,3 +1,4 @@
+import { HTTPException } from 'hono/http-exception';
 import type { DBMedia, DBProfile, DBResearchItem, IMediaFile, ResearchUpdateDTO } from 'oa-shared';
 import { ResearchUpdate, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
@@ -6,6 +7,7 @@ import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordi
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { subscribersServiceServer } from 'src/services/subscribersService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
+import { forbiddenError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -46,11 +48,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 400, statusText: 'User not found' });
     }
 
-    const { valid, status, statusText } = validateRequest(request, data, research, profile);
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
+    validateRequest(request, data, research, profile);
 
     const updateResult = await client
       .from('research_updates')
@@ -95,6 +93,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     return Response.json({ researchUpdate }, { headers, status: 201 });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
     console.error(error);
     return Response.json({}, { headers, status: 500, statusText: 'Error creating research' });
   }
@@ -107,27 +109,27 @@ function validateRequest(
   profile: DBProfile | null,
 ) {
   if (request.method !== 'POST') {
-    return { status: 405, statusText: 'method not allowed' };
+    throw methodNotAllowedError();
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'title is required' };
+    throw validationError('title is required', 'title');
   }
 
   if (!data.description) {
-    return { status: 400, statusText: 'description is required' };
+    throw validationError('description is required', 'description');
   }
 
   if (!data.images) {
-    return { status: 400, statusText: 'description is required' };
+    throw validationError('images are required', 'images');
   }
 
   if (!research) {
-    return { status: 400, statusText: 'Research not found' };
+    throw validationError('Research not found', 'research');
   }
 
   if (!profile) {
-    return { status: 400, statusText: 'User not found' };
+    throw validationError('User not found', 'profile');
   }
 
   if (
@@ -135,8 +137,6 @@ function validateRequest(
     !research.collaborators?.includes(profile.username) &&
     !profile.roles?.includes(UserRole.ADMIN)
   ) {
-    return { status: 403, statusText: 'Forbidden' };
+    throw forbiddenError('You do not have permission to add updates to this research');
   }
-
-  return { valid: true };
 }

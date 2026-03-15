@@ -204,7 +204,7 @@ export const ResearchFilterHeader = (props: IProps) => {
 
   return (
     <ListHeader
-      itemCount={showDrafts ? draftCount : itemCount}
+      itemCount={(showDrafts ? draftCount : itemCount) || 0}
       actionComponents={actionComponents}
       showDrafts={showDrafts}
       headingTitle={listing.heading}

@@ -33,7 +33,7 @@ export const loader = async ({ request }) => {
         profile_badges(
           id,
           name,
-            display_name,
+          display_name,
           image_url,
           action_url
         )
@@ -42,6 +42,7 @@ export const loader = async ({ request }) => {
       created_at,
       created_by,
       modified_at,
+      published_at,
       comment_count,
       description,
       is_draft,
@@ -63,7 +64,7 @@ export const loader = async ({ request }) => {
   }
 
   if (sort === 'Newest') {
-    query = query.order('created_at', { ascending: false });
+    query = query.order('published_at', { ascending: false });
   } else if (sort === 'Comments') {
     query = query.order('comment_count', { ascending: false });
   } else if (sort === 'LeastComments') {
@@ -172,6 +173,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         description: data.description,
         is_draft: data.is_draft,
         moderation: 'accepted' as Moderation,
+        published_at: data.is_draft ? null : new Date(),
         slug,
         category: data.category,
         tags: data.tags,

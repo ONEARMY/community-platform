@@ -78,7 +78,7 @@ describe('[Library]', () => {
 
         cy.get('[data-cy=library-basis]').then(($summary) => {
           expect($summary).to.contain(users.settings_workplace_new.username, 'Author');
-          expect($summary).to.contain('Updated', 'Edit');
+          expect($summary).to.contain('edit', 'Edit');
           expect($summary).to.contain('Make an interlocking brick', 'Title');
           expect($summary).to.contain('show you how to make a brick using the injection machine', 'Description');
           expect($summary).to.contain('3-4 weeks', 'Duration');

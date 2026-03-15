@@ -69,13 +69,7 @@ const ResearchList = () => {
       );
 
       if (result) {
-        if (skip) {
-          // if skipFrom is set, means we are requesting another page that should be appended
-          setResearchItems((items) => [...items, ...result.items]);
-        } else {
-          setResearchItems(result.items);
-        }
-
+        setResearchItems(result.items);
         setTotal(result.total);
       }
     } catch (error) {

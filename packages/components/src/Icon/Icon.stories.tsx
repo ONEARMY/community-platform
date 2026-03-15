@@ -1,8 +1,7 @@
 import { Flex } from 'theme-ui';
-
 import { glyphs, Icon } from './Icon';
-
 import type { Meta, StoryFn } from '@storybook/react-vite';
+import { Colors } from 'oa-themes';
 
 export default {
   title: 'Components/Icon',
@@ -29,10 +28,14 @@ export const Available: StoryFn<typeof Icon> = () => (
   </Flex>
 );
 
-export const Colours: StoryFn<typeof Icon> = () => (
-  <>
-    {['#37ecba', '#47d5b9', '#57c1c5', '#72afd3'].map((color, key) => (
-      <Icon glyph="delete" key={key} color={color} size={'lg'} />
-    ))}
-  </>
-);
+export const Colours: StoryFn<typeof Icon> = () => {
+  const colors: Colors[] = ['bluetag', 'silver', 'betaGreen', 'activeYellow'];
+
+  return (
+    <>
+      {colors.map((color, key) => (
+        <Icon glyph="delete" key={key} color={color} size={'lg'} />
+      ))}
+    </>
+  );
+};

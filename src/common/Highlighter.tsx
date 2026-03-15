@@ -3,7 +3,7 @@ import { Text } from 'theme-ui';
 
 const HighLighted = ({ children }: { children: string }) => {
   return (
-    <Text data-cy="HightedText" sx={{ background: 'accent.hover' }}>
+    <Text data-cy="HightedText" sx={{ background: 'accentHover' }}>
       {children}
     </Text>
   );

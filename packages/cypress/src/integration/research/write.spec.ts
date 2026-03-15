@@ -143,7 +143,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=videoUrl]').clear().type(updateVideoUrl).blur({ force: true });
 
       cy.step('Add file to update');
-      cy.get('[data-cy=file-input-field]').selectFile('src/fixtures/files/Example.pdf', {
+      cy.get('[id=file-input]').selectFile('src/fixtures/files/Example.pdf', {
         force: true,
       });
 
@@ -288,7 +288,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=videoUrl]').clear().type(updateVideoUrl).blur();
 
       cy.step('Add file to draft update');
-      cy.get('[data-cy=file-input-field]').selectFile('src/fixtures/files/Example.pdf', {
+      cy.get('[id=file-input]').selectFile('src/fixtures/files/Example.pdf', {
         force: true,
       });
 
@@ -371,7 +371,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=image-input-field-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       
       cy.step('Add file to update');
-      cy.get('[data-cy=file-input-field]').selectFile('src/fixtures/files/Example.pdf', { force: true });
+      cy.get('[id=file-input]').selectFile('src/fixtures/files/Example.pdf', { force: true });
       
       cy.get('[data-cy=submit]').click();
       cy.url().should('include', `${researchSlug}#update_`);
@@ -389,7 +389,7 @@ describe('[Research]', () => {
       
       cy.step('Replace file');
       cy.get('[data-cy=remove-file]').click();
-      cy.get('[data-cy=file-input-field]').selectFile('src/fixtures/files/Example.pdf', { force: true });
+      cy.get('[id=file-input]').selectFile('src/fixtures/files/Example.pdf', { force: true });
       
       cy.get('[data-cy=submit]').click();
       cy.url().should('include', `${researchSlug}#update_`);

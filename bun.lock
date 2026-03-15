@@ -33,9 +33,10 @@
         "debounce": "^3.0.0",
         "final-form": "4.20.2",
         "final-form-arrays": "^3.0.2",
-        "hono": "^4.7.0",
+        "hono": "^4.12.7",
+        "hono-compress": "^1.0.1",
         "isbot": "^5.1.13",
-        "jsonwebtoken": "^9.0.2",
+        "jsonwebtoken": "^9.0.3",
         "keyv": "^5.1.2",
         "leaflet": "^1.9.4",
         "leaflet.markercluster": "^1.5.3",
@@ -2155,7 +2156,9 @@
 
     "hoist-non-react-statics": ["hoist-non-react-statics@3.3.2", "", { "dependencies": { "react-is": "^16.7.0" } }, "sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw=="],
 
-    "hono": ["hono@4.12.3", "", {}, "sha512-SFsVSjp8sj5UumXOOFlkZOG6XS9SJDKw0TbwFeV+AJ8xlST8kxK5Z/5EYa111UY8732lK2S/xB653ceuaoGwpg=="],
+    "hono": ["hono@4.12.8", "", {}, "sha512-VJCEvtrezO1IAR+kqEYnxUOoStaQPGrCmX3j4wDTNOcD1uRPFpGlwQUIW8niPuvHXaTUxeOUl5MMDGrl+tmO9A=="],
+
+    "hono-compress": ["hono-compress@1.0.1", "", { "optionalDependencies": { "@rollup/rollup-linux-x64-gnu": "^4.57.1" }, "peerDependencies": { "hono": "^4.11.8" } }, "sha512-RUL2dNUJHp27xxI9i0H67RFVk6l5iKnGWvnI0Op5GigMbwdla5pP2OEa91WxM2CgiZXVSpnZmSWsy2/ec8LCxg=="],
 
     "hook-std": ["hook-std@4.0.0", "", {}, "sha512-IHI4bEVOt3vRUDJ+bFA9VUJlo7SzvFARPNLw75pqSmAOP2HmTWfFJtPvLBrDrlgjEYXY9zs7SFdHPQaJShkSCQ=="],
 

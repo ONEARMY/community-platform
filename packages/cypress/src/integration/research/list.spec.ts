@@ -37,18 +37,16 @@ describe('[Research - List Articles]', () => {
     cy.get('[data-cy=ResearchListItem]').first().contains('A test research');
   });
 
-  it('[Pagination - Displays additional articles]', () => {
+  it('[Pagination - Navigates to next page]', () => {
     cy.step('Verify pagination is visible');
-    let itemCount;
-    cy.get('[data-cy=ResearchListItem]').then((items) => {
-      itemCount = items.length;
-    });
-    cy.get('[data-cy=loadMoreButton]').should('be.visible');
-    cy.get('[data-cy=loadMoreButton]').click();
+    cy.get('[data-cy=pagination]').should('be.visible');
+    cy.get('[data-cy=pagination-icon-chevron-right]').should('be.visible');
 
-    cy.step('Verify additional articles are loaded');
-    cy.then(() => {
-      cy.get('[data-cy=ResearchListItem]').should('have.length.greaterThan', itemCount);
-    });
+    cy.step('Click next page');
+    cy.get('[data-cy=pagination-icon-chevron-right]').click();
+
+    cy.step('Verify page changed');
+    cy.url().should('include', 'page=1');
+    cy.get('[data-cy=ResearchListItem]').should('have.length.greaterThan', 0);
   });
 });

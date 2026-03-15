@@ -51,8 +51,17 @@ describe('[Questions]', () => {
 
     it('should load more questions', () => {
       cy.get('[data-cy=question-list-item]:eq(21)').should('not.exist');
-      cy.get('[data-cy=load-more]').click();
+      cy.get('[data-cy=pagination-icon-chevron-right]').click();
       cy.get('[data-cy=question-list-item]:eq(21)').should('exist');
+    });
+
+    it('should show previous questions', () => {
+      // First navigate to the next page
+      cy.get('[data-cy=pagination-icon-chevron-right]').click();
+      cy.get('[data-cy=question-list-item]:eq(21)').should('exist');
+      // Then go back to previous page
+      cy.get('[data-cy=pagination-icon-chevron-left]').click();
+      cy.get('[data-cy=question-list-item]:eq(21)').should('not.exist');
     });
   });
 });

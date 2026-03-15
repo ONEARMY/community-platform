@@ -123,7 +123,7 @@ export class StorageServiceServer {
         .upload(`${path}/${fileName}`, file);
 
       if (result.data === null) {
-        errors.push(`Error uploading file: ${file.name}`);
+        errors.push(result.error.message);
         continue;
       }
 

@@ -46,11 +46,12 @@ app.onError((err, c) => {
 // Compression
 app.use(compress());
 
-// Allow larger uploads only for document upload endpoint (must come before global limit)
-app.use('/api/documents', bodyLimit({ maxSize: 300 * 1024 * 1024 }));
-
-// Global body size limit (10MB for most routes)
-app.use('*', bodyLimit({ maxSize: 10 * 1024 * 1024 }));
+app.use('*', async (c, next) => {
+  if (c.req.path.startsWith('/api/documents')) {
+    return next(); // Skip limit — Bun's 300MB cap is the backstop
+  }
+  return bodyLimit({ maxSize: 10 * 1024 * 1024 })(c, next);
+});
 
 // Security headers (replaces helmet)
 const wsUrls = process.env.WS_URLS?.split(',').map((url) => url.trim()) ?? [];

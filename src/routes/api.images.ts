@@ -3,7 +3,7 @@ import type { ContentType, MediaWithPublicUrl } from 'oa-shared';
 import { type ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { StorageServiceServer } from 'src/services/storageService.server';
-import { validationError } from 'src/utils/httpException';
+import { methodNotAllowedError, validationError } from 'src/utils/httpException';
 import { validateImage } from 'src/utils/storage';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -21,11 +21,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status: 401 });
     }
 
-    const { valid, status } = await validateRequest(request, imageFile);
-
-    if (!valid) {
-      return Response.json({}, { status, headers });
-    }
+    await validateRequest(request, imageFile);
 
     const storage = new StorageServiceServer(client);
 
@@ -55,14 +51,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 async function validateRequest(request: Request, imageFile: File) {
   if (request.method !== 'POST') {
-    return { status: 405 };
+    throw methodNotAllowedError();
   }
 
-  const { valid, error } = validateImage(imageFile);
+  const { error } = validateImage(imageFile);
 
-  if (!valid || error) {
-    return { status: 400 };
+  if (error) {
+    throw validationError(error.message);
   }
-
-  return { valid: true };
 }

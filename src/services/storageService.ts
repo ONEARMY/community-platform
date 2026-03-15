@@ -15,9 +15,15 @@ const imageUpload = async (id: number | null, contentType: ImageFolder, imageFil
     body,
   });
 
+  if (response.status === 413) {
+    throw new Error('The image is too large, the maximum allowed is 10MB', {
+      cause: response.status,
+    });
+  }
+
   if (response.status !== 200 && response.status !== 201) {
-    const errorData = await response.json().catch(() => ({ error: 'Error saving research' }));
-    const errorMessage = errorData.error || errorData.message || 'Error saving research';
+    const errorData = await response.json().catch(() => ({ error: 'Error saving image' }));
+    const errorMessage = errorData.error || errorData.message || 'Error saving image';
     throw new Error(errorMessage, { cause: response.status });
   }
 
@@ -38,8 +44,16 @@ const fileUpload = async (id: number | null, contentType: ContentType, file: Fil
     body,
   });
 
+  if (response.status === 413) {
+    throw new Error('The file is too large', {
+      cause: response.status,
+    });
+  }
+
   if (response.status !== 200 && response.status !== 201) {
-    throw new Error('Error uploading document', { cause: 500 });
+    const errorData = await response.json().catch(() => ({ error: 'Error saving file' }));
+    const errorMessage = errorData.error || errorData.message || 'Error saving file';
+    throw new Error(errorMessage, { cause: response.status });
   }
 
   const data: { document: IMediaFile } = await response.json();

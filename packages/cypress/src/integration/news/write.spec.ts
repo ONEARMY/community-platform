@@ -113,7 +113,7 @@ describe('[News.Write]', () => {
 
       cy.step('Replace hero image');
       cy.get('[data-cy=existingHeroImage]').should('exist');
-      cy.get('[data-cy=existingHeroImage]').find('[data-cy=delete-image]').click();
+      cy.get('[data-cy=existingHeroImage]').find('[data-cy=delete-image]').click({force: true});
       cy.get('[data-cy=heroImage-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
       cy.get('[data-cy=heroImage-upload]').parent().find('[data-cy=delete-image]').should('exist');
 

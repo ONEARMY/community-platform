@@ -104,8 +104,9 @@ describe('[User sign-up]', () => {
   });
 
   describe('[Delete account]', () => {
-    it('Rejects wrong password', () => {
+    it('Rejects wrong password then deletes account with correct one', () => {
       const user = generateNewUserDetails();
+      const { password } = user;
       cy.signUpNewUser(user);
 
       cy.step('Go to Account settings');
@@ -124,22 +125,9 @@ describe('[User sign-up]', () => {
 
       cy.step('Shows error message');
       cy.contains('Invalid password').should('be.visible');
-    });
 
-    it('Deletes account with correct password', () => {
-      const user = generateNewUserDetails();
-      const { password } = user;
-      cy.signUpNewUser(user);
-
-      cy.step('Go to Account settings');
-      cy.visit('/settings');
-      cy.get('[data-cy="tab-Account"]').click();
-
-      cy.step('Open delete account section');
-      cy.get('[data-cy="deleteAccountContainer"]').find('[data-cy="accordionContainer"]').click();
-
-      cy.step('Submit with correct password');
-      cy.get('[data-cy="deleteAccountPassword"]').type(password);
+      cy.step('Clear and submit with correct password');
+      cy.get('[data-cy="deleteAccountPassword"]').clear().type(password);
       cy.get('[data-cy="deleteAccountSubmit"]').click();
 
       cy.step('Confirm deletion');

@@ -1,5 +1,12 @@
 import type { GridFormFields } from 'oa-components';
-import { ConfirmModal, FieldCheckbox, GridForm, InformationTooltip, InternalLink, Loader } from 'oa-components';
+import {
+  ConfirmModal,
+  FieldCheckbox,
+  GridForm,
+  InformationTooltip,
+  InternalLink,
+  Loader,
+} from 'oa-components';
 import type { DBNotificationsPreferences } from 'oa-shared';
 import { useContext, useMemo, useState } from 'react';
 import { Field, Form } from 'react-final-form';
@@ -12,27 +19,53 @@ const formId = 'SupabaseNotifications';
 
 const baseFields: GridFormFields[] = [
   {
-    component: <Field component={FieldCheckbox} data-cy={`${formId}-field-comments`} name="comments" />,
+    component: (
+      <Field component={FieldCheckbox} data-cy={`${formId}-field-comments`} name="comments" />
+    ),
     description: 'Top-level comments on your contributions or contributions you follow',
     glyph: 'comment',
     name: 'New comments',
   },
   {
-    component: <Field component={FieldCheckbox} data-cy={`${formId}-field-replies`} name="replies" />,
+    component: (
+      <Field component={FieldCheckbox} data-cy={`${formId}-field-replies`} name="replies" />
+    ),
     description:
       "Replies under your comment or a comment thread that you follow. Note that you can always choose to follow or unfollow a single reply thread in the comment's options.",
     glyph: 'reply',
     name: 'New replies',
   },
   {
-    component: <Field component={FieldCheckbox} data-cy={`${formId}-field-research_updates`} name="research_updates" />,
+    component: (
+      <Field
+        component={FieldCheckbox}
+        data-cy={`${formId}-field-research_updates`}
+        name="research_updates"
+      />
+    ),
     description: 'Updates for the research that you follow.',
     glyph: 'update',
     name: 'Research Updates',
   },
   {
     component: (
-      <InformationTooltip glyph="information" size={22} tooltip="Afriad we've got to send these to you,<br/>so you can't opt-out. " />
+      <Field
+        component={FieldCheckbox}
+        data-cy={`${formId}-field-news`}
+        name="news"
+      />
+    ),
+    description: 'Receive all our news updates.',
+    glyph: 'thunderbolt',
+    name: 'Latest news',
+  },
+  {
+    component: (
+      <InformationTooltip
+        glyph="information"
+        size={22}
+        tooltip="Afriad we've got to send these to you,<br/>so you can't opt-out. "
+      />
     ),
     description: 'Password resets, email verifications and other service emails',
     glyph: 'service-email',
@@ -50,7 +83,8 @@ interface IProps {
 }
 
 export const SupabaseNotificationsForm = (props: IProps) => {
-  const { initialValues, isLoading, onSubmit, onUnsubscribe, profileIsContactable, submitResults } = props;
+  const { initialValues, isLoading, onSubmit, onUnsubscribe, profileIsContactable, submitResults } =
+    props;
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const tenantContext = useContext(TenantContext);
   const showMessagingSetting = !tenantContext?.noMessaging;

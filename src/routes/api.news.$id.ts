@@ -4,6 +4,7 @@ import { News } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
+import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordinationService.server';
 import { contentServiceServer } from 'src/services/contentService.server';
 import { newsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
@@ -38,7 +39,14 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const currentNews = await newsServiceServer.getById(id, client);
 
-    const { valid, status, statusText } = await validateRequest(params, request, claims.data.claims.sub, data, currentNews, client);
+    const { valid, status, statusText } = await validateRequest(
+      params,
+      request,
+      claims.data.claims.sub,
+      data,
+      currentNews,
+      client,
+    );
 
     if (!valid) {
       return Response.json({}, { headers, status, statusText });
@@ -84,9 +92,24 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     }
 
     const news = News.fromDB(newsResult.data[0], []);
+    const profileService = new ProfileServiceServer(client);
+    const profile = await profileService.getByAuthId(claims.data.claims.sub);
+
+    broadcastCoordinationServiceServer.news(
+      newsResult.data[0],
+      profile,
+      client,
+      headers,
+      request,
+      currentNews,
+    );
 
     if (newHeroImage) {
-      const mediaFiles = await storageServiceServer.uploadImage([newHeroImage], `news/${news.id}`, client);
+      const mediaFiles = await storageServiceServer.uploadImage(
+        [newHeroImage],
+        `news/${news.id}`,
+        client,
+      );
 
       if (mediaFiles?.media?.length) {
         await client
@@ -96,7 +119,11 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
           })
           .eq('id', news.id);
 
-        const [image] = storageServiceServer.getPublicUrls(client, mediaFiles.media, IMAGE_SIZES.GALLERY);
+        const [image] = storageServiceServer.getPublicUrls(
+          client,
+          mediaFiles.media,
+          IMAGE_SIZES.GALLERY,
+        );
 
         news.heroImage = image;
       }
@@ -139,7 +166,10 @@ async function validateRequest(
     return { status: 400, statusText: 'News not found' };
   }
 
-  if (currentNews.slug !== data.slug && (await contentServiceServer.isDuplicateExistingSlug(data.slug, currentNews.id, client, 'news'))) {
+  if (
+    currentNews.slug !== data.slug &&
+    (await contentServiceServer.isDuplicateExistingSlug(data.slug, currentNews.id, client, 'news'))
+  ) {
     return {
       status: 409,
       statusText: 'This news already exists',

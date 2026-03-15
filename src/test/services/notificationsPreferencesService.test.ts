@@ -53,6 +53,7 @@ describe('notificationsPreferencesService', () => {
       const formData = {
         id: 123,
         comments: true,
+        news: true,
         replies: false,
         research_updates: true,
       };
@@ -81,6 +82,7 @@ describe('notificationsPreferencesService', () => {
 
       const formData = {
         comments: false,
+        news: false,
         replies: true,
         research_updates: false,
       };
@@ -102,6 +104,7 @@ describe('notificationsPreferencesService', () => {
       const formData = {
         id: undefined,
         comments: true,
+        news: true,
         replies: true,
         research_updates: true,
       };
@@ -131,6 +134,7 @@ describe('notificationsPreferencesService', () => {
 
       expect(body.get('id')).toBe('456');
       expect(body.get('comments')).toBe('false');
+      expect(body.get('news')).toBe('false');
       expect(body.get('replies')).toBe('false');
       expect(body.get('research_updates')).toBe('false');
       expect(body.get('is_unsubscribed')).toBe('true');
@@ -147,6 +151,7 @@ describe('notificationsPreferencesService', () => {
 
       expect(body.get('id')).toBeNull();
       expect(body.get('comments')).toBe('false');
+      expect(body.get('news')).toBe('false');
       expect(body.get('replies')).toBe('false');
       expect(body.get('research_updates')).toBe('false');
       expect(body.get('is_unsubscribed')).toBe('true');

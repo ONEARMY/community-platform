@@ -18,7 +18,7 @@ export const Default: StoryFn<typeof SearchField> = () => {
       placeHolder="Default search"
       value={searchValue}
       onChange={(value: string) => setSearchValue(value)}
-      onClickDelete={() => setSearchValue('')}
+      onClear={() => setSearchValue('')}
       onClickSearch={() => {}}
     />
   );

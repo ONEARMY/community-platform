@@ -12,6 +12,7 @@ import constructionSVG from '../../assets/icons/construction.svg';
 import contactSVG from '../../assets/icons/contact.svg';
 import copyLinkSVG from '../../assets/icons/copy-link.svg';
 import closeSVG from '../../assets/icons/cross-close.svg';
+import crossCloseModalSVG from '../../assets/icons/cross-close-modal.svg';
 import declinedSVG from '../../assets/icons/declined.svg';
 import deleteSVG from '../../assets/icons/delete.svg';
 import discussionSVG from '../../assets/icons/discussion.svg';
@@ -104,6 +105,7 @@ export const iconMap = {
   chevronUp: <ImageIcon src={chevronUpSVG} />,
   collaborator: <ImageIcon src={collaboratorSVG} />,
   close: <ImageIcon src={closeSVG} data-cy="close" />,
+  crossCloseModal: <ImageIcon src={crossCloseModalSVG} data-cy="close-modal" />,
   comment: <ImageIcon src={commentSVG} />,
   commentOutline: <ImageIcon src={commentOutlineSVG} />,
   construction: <ImageIcon src={constructionSVG} />,

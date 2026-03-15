@@ -392,7 +392,7 @@ describe('[Library]', () => {
       
       cy.step('Upload file');
       cy.get('[id=file-input]').selectFile('src/fixtures/files/Example.pdf', { force: true });
-      cy.wait(2000);
+      cy.get('[data-cy=remove-file]').should('exist');
       
       cy.get('[data-cy=submit]').click();
       cy.url().should('include', `/library/${slug}`);
@@ -404,7 +404,7 @@ describe('[Library]', () => {
       cy.step('Remove old file and upload new one');
       cy.get('[data-cy=remove-file]').click();
       cy.get('[id=file-input]').selectFile('src/fixtures/files/Example.pdf', { force: true });
-      cy.wait(2000);
+      cy.get('[data-cy=remove-file]').should('exist');
       
       cy.get('[data-cy=submit]').click();
       cy.url().should('include', `/library/${slug}`);

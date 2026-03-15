@@ -214,7 +214,7 @@ describe('[Research]', () => {
       cy.step('Create a research article with image');
       cy.visit('/research/create');
       cy.contains('Start your Research');
-      cy.get('[data-cy=intro-title').should('not.be.disabled').clear().type(title).blur();
+      cy.get('[data-cy=intro-title').clear().should('not.be.disabled').type(title).blur();
       cy.get('[data-cy=intro-description]').clear().type(description).blur();
       cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
@@ -223,7 +223,7 @@ describe('[Research]', () => {
 
       cy.step('Edit research and replace cover image');
       cy.get('[data-cy=edit]').click();
-      cy.get('[data-cy=intro-description]').should('not.be.disabled').clear().type(updatedDescription).blur();
+      cy.get('[data-cy=intro-description]').clear().should('not.be.disabled').type(updatedDescription).blur();
       
       cy.step('Delete existing image and upload new one');
       cy.get('[data-cy=delete-image]').click();
@@ -292,6 +292,7 @@ describe('[Research]', () => {
       cy.get('[id=file-input]').selectFile('src/fixtures/files/Example.pdf', {
         force: true,
       });
+      cy.get('[data-cy=remove-file]').should('exist');
 
       cy.step('Save as Draft');
       cy.get('[data-cy=draft]').click();
@@ -373,7 +374,8 @@ describe('[Research]', () => {
       
       cy.step('Add file to update');
       cy.get('[id=file-input]').selectFile('src/fixtures/files/Example.pdf', { force: true });
-      
+      cy.get('[data-cy=remove-file]').should('exist');
+
       cy.get('[data-cy=submit]').click();
       cy.url().should('include', `${researchSlug}#update_`);
 
@@ -391,7 +393,8 @@ describe('[Research]', () => {
       cy.step('Replace file');
       cy.get('[data-cy=remove-file]').click();
       cy.get('[id=file-input]').selectFile('src/fixtures/files/Example.pdf', { force: true });
-      
+      cy.get('[data-cy=remove-file]').should('exist');
+
       cy.get('[data-cy=submit]').click();
       cy.url().should('include', `${researchSlug}#update_`);
       cy.contains(updatedTitle);

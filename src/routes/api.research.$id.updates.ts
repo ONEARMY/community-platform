@@ -24,7 +24,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         ? formData.getAll('files').map((x) => JSON.parse(x as string) as IMediaFile)
         : null,
       fileLink: formData.get('fileLink') as string,
-      isDraft: formData.get('draft') === 'true',
+      isDraft: formData.get('isDraft') === 'true',
     } satisfies ResearchUpdateDTO;
 
     const claims = await client.auth.getClaims();

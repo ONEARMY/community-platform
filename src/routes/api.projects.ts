@@ -106,7 +106,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       difficultyLevel: formData.has('difficultyLevel')
         ? (formData.get('difficultyLevel') as DifficultyLevel)
         : null,
-      isDraft: formData.get('draft') === 'true',
+      isDraft: formData.get('isDraft') === 'true',
       stepCount: parseInt(formData.get('stepCount') as string),
       coverImage: formData.has('coverImage')
         ? (JSON.parse(formData.get('coverImage') as string) as DBMedia)

@@ -36,7 +36,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       collaborators: formData.has('collaborators')
         ? (formData.getAll('collaborators') as string[])
         : null,
-      isDraft: formData.get('draft') === 'true',
+      isDraft: formData.get('isDraft') === 'true',
       coverImage: formData.has('coverImage')
         ? (JSON.parse(formData.get('coverImage') as string) as DBMedia)
         : null,

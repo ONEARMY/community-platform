@@ -34,7 +34,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
-      isDraft: formData.get('draft') === 'true',
+      isDraft: formData.get('isDraft') === 'true',
       time: formData.get('time') as string,
       category: formData.has('category') ? Number(formData.get('category')) : null,
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,

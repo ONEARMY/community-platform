@@ -4,6 +4,7 @@ import { UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { updateUserActivity } from 'src/utils/activity.server';
+import { dbResult } from 'src/utils/supabase.types';
 
 type Supabase = {
   headers: Headers;
@@ -63,7 +64,7 @@ async function updateComment(
     return Response.json({}, { headers, status: 404, statusText: 'comment not found' });
   }
 
-  const comment = data as DBComment;
+  const comment = dbResult<DBComment>(data);
 
   if (comment.created_by !== user.id && !isUserAdmin(user)) {
     return Response.json({}, { headers, status: 403, statusText: 'forbidden' });
@@ -88,7 +89,7 @@ async function deleteComment({ client, headers }: Supabase, id: string, user: DB
     return Response.json({}, { headers, status: 404, statusText: 'comment not found' });
   }
 
-  const comment = data as DBComment;
+  const comment = dbResult<DBComment>(data);
 
   if (comment.created_by !== user.id && !isUserAdmin(user)) {
     return Response.json({}, { headers, status: 403, statusText: 'forbidden' });
@@ -115,7 +116,7 @@ async function getProfileByAuthId(request: Request, authId: string) {
     return null;
   }
 
-  return data[0] as DBProfile;
+  return dbResult<DBProfile>(data[0]);
 }
 
 function isUserAdmin(user: DBProfile) {

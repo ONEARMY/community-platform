@@ -1,25 +1,11 @@
-import type { IDBDocSB, IDoc } from './document';
+import type { IDoc } from './document';
 
-export class DBTag implements IDBDocSB {
+export interface DBTag {
   id: number;
-  created_at: Date;
-  modified_at: Date | null;
+  created_at: string;
+  modified_at: string | null;
 
   name: string;
-
-  constructor(obj: any) {
-    Object.assign(this, obj);
-  }
-
-  static toDB(tag: Tag) {
-    const { createdAt, id, modifiedAt, name } = tag;
-    return new DBTag({
-      id,
-      created_at: new Date(createdAt),
-      modified_at: modifiedAt ? new Date(modifiedAt) : null,
-      name,
-    });
-  }
 }
 
 export class Tag implements IDoc {

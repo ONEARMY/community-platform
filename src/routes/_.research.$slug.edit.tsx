@@ -6,6 +6,7 @@ import ResearchForm from 'src/pages/Research/Content/Common/ResearchForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { researchServiceServer } from 'src/services/researchService.server';
+import { dbResult } from 'src/utils/supabase.types';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -23,7 +24,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const currentUsername = claims.data.claims.user_metadata?.username;
-  const researchDb = result.item as unknown as DBResearchItem;
+  const researchDb = dbResult<DBResearchItem>(result.item);
   const images = researchServiceServer.getResearchPublicMedia(researchDb, client);
 
   const research = ResearchItem.fromDB(researchDb, [], images, currentUsername);

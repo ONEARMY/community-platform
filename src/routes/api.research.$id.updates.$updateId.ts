@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBMedia, DBResearchUpdate, MediaFile } from 'oa-shared';
+import type { DBMedia, DBResearchItem, DBResearchUpdate, Json, MediaFile } from 'oa-shared';
 import { ResearchUpdate } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -9,6 +9,7 @@ import { researchServiceServer } from 'src/services/researchService.server';
 import { storageServiceServer } from 'src/services/storageService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { validateImages } from 'src/utils/storage';
+import { dbResult, fromJsonArray } from 'src/utils/supabase.types';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -58,7 +59,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       .eq('id', updateId)
       .single();
 
-    const oldResearchUpdate = researchUpdateResult.data as DBResearchUpdate;
+    const oldResearchUpdate = dbResult<DBResearchUpdate>(researchUpdateResult.data);
 
     const uploadedImages = formData.getAll('images') as File[];
     const uploadedFiles = formData.getAll('files') as File[];
@@ -98,8 +99,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         title: data.title,
         description: data.description,
         is_draft: data.isDraft,
-        images,
-        modified_at: new Date(),
+        images: dbResult<Json[]>(images),
+        modified_at: new Date().toISOString(),
         video_url: data.videoUrl,
         files: files.map((x) => ({ id: x.id, name: x.name, size: x.size })),
       })
@@ -111,8 +112,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       throw researchUpdateAfterUpdating.error;
     }
 
-    const researchUpdate = ResearchUpdate.fromDB(researchUpdateAfterUpdating.data, []);
-    researchUpdate.research = researchUpdateAfterUpdating.data.research;
+    const researchUpdate = ResearchUpdate.fromDB(
+      dbResult<DBResearchUpdate>(researchUpdateAfterUpdating.data),
+      [],
+    );
+    researchUpdate.research = dbResult<DBResearchItem>(
+      researchUpdateAfterUpdating.data.research,
+    );
 
     broadcastCoordinationServiceServer.researchUpdate(
       researchUpdate,
@@ -149,7 +155,9 @@ async function updateOrReplaceImage(
       .single();
 
     if (existingMedia.data && existingMedia.data.images?.length > 0) {
-      media = existingMedia.data.images.filter((x) => idsToKeep.includes(x.id));
+      media = fromJsonArray<DBMedia>(existingMedia.data.images).filter((x) =>
+        idsToKeep.includes(x.id),
+      );
     }
   }
 
@@ -182,8 +190,12 @@ async function updateOrReplaceFile(
   let mediaToRemove: MediaFile[] = [];
 
   if (existingMedia.data && existingMedia.data.files?.length > 0) {
-    media = existingMedia.data.files.filter((x) => idsToKeep.includes(x.id));
-    mediaToRemove = existingMedia.data.files.filter((x) => !idsToKeep.includes(x.id));
+    media = fromJsonArray<MediaFile>(existingMedia.data.files).filter((x) =>
+      idsToKeep.includes(x.id),
+    );
+    mediaToRemove = fromJsonArray<MediaFile>(existingMedia.data.files).filter(
+      (x) => !idsToKeep.includes(x.id),
+    );
   }
 
   if (mediaToRemove.length > 0) {
@@ -223,7 +235,7 @@ async function deleteResearchUpdate(request, id: number, updateId: number) {
   await client
     .from('research_updates')
     .update({
-      modified_at: new Date(),
+      modified_at: new Date().toISOString(),
       deleted: true,
     })
     .eq('id', updateId);

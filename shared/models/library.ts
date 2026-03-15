@@ -3,7 +3,7 @@ import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
 import type { IConvertedFileMeta } from './common';
-import type { IContentDoc, IDBContentDoc } from './content';
+import type { IContentDoc } from './content';
 import type { IDBDownloadable, IDownloadable } from './document';
 import type { IFilesForm } from './filesForm';
 import type { IImageForm } from './imageForm';
@@ -20,9 +20,9 @@ export const DifficultyLevelRecord: Record<DifficultyLevel, string> = {
   'very-hard': 'Very Hard',
 };
 
-export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration {
+export interface DBProject extends IDBDownloadable, IDBModeration {
   readonly id: number;
-  readonly created_at: Date;
+  readonly created_at: string;
   readonly deleted: boolean | null;
   readonly author?: DBAuthor;
   readonly update_count?: number;
@@ -34,7 +34,7 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
   readonly category: DBCategory | null;
   readonly steps: DBProjectStep[] | null;
   created_by: number | null;
-  modified_at: Date | null;
+  modified_at: string | null;
   title: string;
   slug: string;
   previous_slugs: string[] | null;
@@ -50,10 +50,6 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
   file_download_count?: number;
   moderation: Moderation;
   moderation_feedback: string;
-
-  constructor(obj: Omit<DBProject, 'id'>) {
-    Object.assign(this, obj);
-  }
 }
 
 export class Project implements IContentDoc, IDownloadable, IModeration {
@@ -125,7 +121,7 @@ export class Project implements IContentDoc, IDownloadable, IModeration {
   }
 }
 
-export class DBProjectStep {
+export interface DBProjectStep {
   readonly id: number;
   readonly project_id: number;
   title: string;
@@ -133,10 +129,6 @@ export class DBProjectStep {
   images: DBMedia[] | null;
   video_url: string | null;
   order: number;
-
-  constructor(obj: Omit<DBProjectStep, 'id'>) {
-    Object.assign(this, obj);
-  }
 }
 
 export class ProjectStep {

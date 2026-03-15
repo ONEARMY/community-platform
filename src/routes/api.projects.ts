@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBProfile, DBProject, DBProjectStep, Moderation } from 'oa-shared';
+import type { DBProfile, DBProject, DBProjectStep, Json, MediaFile, Moderation } from 'oa-shared';
 import { Project, ProjectStep, UserRole } from 'oa-shared';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
@@ -13,6 +13,7 @@ import { subscribersServiceServer } from 'src/services/subscribersService.server
 import { updateUserActivity } from 'src/utils/activity.server';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImage } from 'src/utils/storage';
+import { dbResult, dbResultArray, fromJsonArray } from 'src/utils/supabase.types';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
@@ -48,7 +49,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return Response.json({}, { status: 500, headers });
   }
 
-  const dbItems = data as DBProject[];
+  const dbItems = dbResultArray<DBProject>(data);
   const items = dbItems.map((x) => {
     const images = x.cover_image
       ? storageServiceServer.getPublicUrls(client, [x.cover_image], IMAGE_SIZES.LIST)
@@ -255,7 +256,7 @@ async function createProject(
       difficulty_level: data.difficultyLevel,
       time: data.time,
       moderation: data.moderation,
-      tenant_id: process.env.TENANT_ID,
+      tenant_id: process.env.TENANT_ID!,
     })
     .select();
 
@@ -263,7 +264,7 @@ async function createProject(
     throw projectResult.error;
   }
 
-  return projectResult.data[0] as unknown as DBProject;
+  return dbResult<DBProject>(projectResult.data[0]);
 }
 
 async function createStep(
@@ -284,7 +285,7 @@ async function createStep(
       project_id: values.projectId,
       video_url: values.videoUrl,
       order: values.order,
-      tenant_id: process.env.TENANT_ID,
+      tenant_id: process.env.TENANT_ID!,
     })
     .select();
 
@@ -292,7 +293,7 @@ async function createStep(
     throw error;
   }
 
-  return data[0] as unknown as DBProjectStep;
+  return dbResult<DBProjectStep>(data[0]);
 }
 
 async function uploadAndUpdateImage(
@@ -332,13 +333,13 @@ async function uploadAndUpdateFiles(
     const result = await client
       .from('projects')
       .update({
-        files: mediaResult.media,
+        files: dbResult<Json[]>(mediaResult.media),
       })
       .eq('id', project.id)
       .select();
 
     if (result.data) {
-      project.files = result.data[0].files;
+      project.files = fromJsonArray<MediaFile>(result.data[0].files);
     }
   }
 }

@@ -1,6 +1,6 @@
 // TODO: split this in separate files once we update remix to NOT use file-based routing
 
-import type { DBProfile, DBQuestion, Moderation } from 'oa-shared';
+import type { DBProfile, DBQuestion, Image, Json, Moderation } from 'oa-shared';
 import { Question } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { ITEMS_PER_PAGE } from 'src/pages/Question/constants';
@@ -13,6 +13,7 @@ import { subscribersServiceServer } from 'src/services/subscribersService.server
 import { updateUserActivity } from 'src/utils/activity.server';
 import { convertToSlug } from 'src/utils/slug';
 import { validateImages } from 'src/utils/storage';
+import { dbResult, dbResultArray, fromJsonArray } from 'src/utils/supabase.types';
 
 export const loader = async ({ request }) => {
   const url = new URL(request.url);
@@ -73,7 +74,7 @@ export const loader = async ({ request }) => {
   const queryResult = await query.range(skip, skip + ITEMS_PER_PAGE); // 0 based
 
   const total = queryResult.count;
-  const data = queryResult.data as unknown as DBQuestion[];
+  const data = dbResultArray<DBQuestion>(queryResult.data);
 
   const items = data.map((x) => Question.fromDB(x, [], []));
 
@@ -173,9 +174,9 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         is_draft: data.is_draft,
         moderation: 'accepted' as Moderation,
         slug,
-        category: data.category,
+        category: data.category ? Number(data.category) : null,
         tags: data.tags,
-        tenant_id: process.env.TENANT_ID,
+        tenant_id: process.env.TENANT_ID!,
       })
       .select();
 
@@ -183,7 +184,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       return Response.json({}, { headers, status: 400, statusText: questionResult.error.details });
     }
 
-    const question = Question.fromDB(questionResult.data[0], []);
+    const question = Question.fromDB(dbResult<DBQuestion>(questionResult.data[0]), []);
     subscribersServiceServer.add('questions', question.id, profile.id, client, headers);
 
     if (uploadedImages.length > 0) {
@@ -198,12 +199,12 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
       if (imageResult?.media && imageResult.media.length > 0) {
         const updateResult = await client
           .from('questions')
-          .update({ images: imageResult.media })
+          .update({ images: dbResult<Json[]>(imageResult.media) })
           .eq('id', questionId)
           .select();
 
         if (updateResult.data) {
-          question.images = updateResult.data[0].images;
+          question.images = fromJsonArray<Image>(updateResult.data[0].images);
         }
       }
     }

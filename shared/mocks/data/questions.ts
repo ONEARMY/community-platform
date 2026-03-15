@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 
 export const questions = [
   {
-    created_at: new Date().toUTCString(),
+    created_at: new Date().toISOString(),
     deleted: false,
     comment_count: 3,
     description: 'test info with a link to https://www.onearmy.earth/',
@@ -11,7 +11,7 @@ export const questions = [
     total_views: 3,
   },
   {
-    created_at: new Date().toUTCString(),
+    created_at: new Date().toISOString(),
     created_by: 'demo_user',
     deleted: false,
     comment_count: 3,
@@ -21,7 +21,7 @@ export const questions = [
     total_views: 43,
   },
   {
-    created_at: new Date().toUTCString(),
+    created_at: new Date().toISOString(),
     deleted: false,
     comment_count: 0,
     description: "What's the deal with screenings?",
@@ -33,7 +33,7 @@ export const questions = [
 
 for (let i = 0; i < 20; i++) {
   questions.push({
-    created_at: faker.date.past().toUTCString(),
+    created_at: faker.date.past().toISOString(),
     deleted: false,
     comment_count: 12,
     description: faker.lorem.sentence(),

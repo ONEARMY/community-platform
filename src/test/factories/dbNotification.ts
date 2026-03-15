@@ -8,7 +8,7 @@ export const factoryDBNotification = (
   action_type: 'newComment',
   content_id: 1,
   content_type: 'comments',
-  created_at: new Date('2024-01-01T00:00:00Z'),
+  created_at: '2024-01-01T00:00:00Z',
   is_read: false,
   modified_at: null,
   owned_by: {} as any,

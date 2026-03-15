@@ -13,6 +13,7 @@ import { storageServiceServer } from 'src/services/storageService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
 import { contentServiceServer } from '../services/contentService.server';
+import { dbResult } from 'src/utils/supabase.types';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -25,7 +26,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return data({ question: null, tenantSettings }, { headers });
   }
 
-  const dbQuestion = result.data as unknown as DBQuestion;
+  const dbQuestion = dbResult<DBQuestion>(result.data);
 
   if (dbQuestion.id) {
     await contentServiceServer.incrementViewCount(client, 'questions', dbQuestion.total_views, dbQuestion.id);

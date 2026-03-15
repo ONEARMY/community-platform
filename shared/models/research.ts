@@ -3,8 +3,8 @@ import { Author } from './author';
 import type { DBCategory } from './category';
 import { Category } from './category';
 import type { IConvertedFileMeta } from './common';
-import type { IContentDoc, IDBContentDoc } from './content';
-import type { IDBDocSB, IDBDownloadable, IDoc, IDownloadable } from './document';
+import type { IContentDoc } from './content';
+import type { IDBDownloadable, IDoc, IDownloadable } from './document';
 import type { IFilesForm } from './filesForm';
 import type { DBMedia, IMediaFile, Image, MediaFile } from './media';
 import type { SelectValue } from './selectValue';
@@ -16,9 +16,9 @@ export const ResearchStatusRecord: Record<ResearchStatus, string> = {
   complete: 'Completed',
 };
 
-export class DBResearchItem implements IDBContentDoc {
+export interface DBResearchItem {
   readonly id: number;
-  readonly created_at: Date;
+  readonly created_at: string;
   readonly deleted: boolean | null;
   readonly author?: DBAuthor;
   readonly update_count?: number;
@@ -30,7 +30,7 @@ export class DBResearchItem implements IDBContentDoc {
   readonly category: DBCategory | null;
   readonly updates: DBResearchUpdate[];
   created_by: number | null;
-  modified_at: Date | null;
+  modified_at: string | null;
   title: string;
   slug: string;
   previous_slugs: string[] | null;
@@ -41,10 +41,6 @@ export class DBResearchItem implements IDBContentDoc {
   status: ResearchStatus;
   is_draft: boolean;
   collaborators: string[] | null;
-
-  constructor(obj: Omit<DBResearchItem, 'id'>) {
-    Object.assign(this, obj);
-  }
 }
 
 export class ResearchItem implements IContentDoc {
@@ -132,27 +128,23 @@ export class ResearchItem implements IContentDoc {
   }
 }
 
-export class DBResearchUpdate implements IDBDocSB, IDBDownloadable {
+export interface DBResearchUpdate extends IDBDownloadable {
   readonly id: number;
   readonly research_id: number;
-  readonly created_at: Date;
+  readonly created_at: string;
   readonly deleted: boolean | null;
   readonly is_draft: boolean | null;
   readonly comment_count?: number;
   readonly file_download_count?: number;
   readonly update_author?: DBAuthor;
   created_by: number | null;
-  modified_at: Date | null;
+  modified_at: string | null;
   title: string;
   description: string;
   images: DBMedia[] | null;
   file_link: string | null;
   files: IMediaFile[] | null;
   video_url: string | null;
-
-  constructor(obj: Omit<DBResearchUpdate, 'id'>) {
-    Object.assign(this, obj);
-  }
 }
 
 export class ResearchUpdate implements IDoc, IDownloadable {

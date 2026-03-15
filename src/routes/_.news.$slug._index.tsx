@@ -12,6 +12,7 @@ import { ProfileServiceServer } from 'src/services/profileService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
+import { dbResult } from 'src/utils/supabase.types';
 import { contentServiceServer } from '../services/contentService.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -24,7 +25,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return data({ news: null, tenantSettings }, { headers });
   }
 
-  const dbNews = result.data as unknown as DBNews;
+  const dbNews = dbResult<DBNews>(result.data);
   const profileBadgeId = dbNews.profile_badge?.id;
 
   if (!profileBadgeId) {

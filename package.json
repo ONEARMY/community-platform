@@ -32,6 +32,7 @@
     "storybook": "bun run --filter oa-components start",
     "storybook:build": "bun run build:shared && bun run build:themes && bun run --filter oa-components build:sb",
     "docs": "bun run --filter oa-docs start",
+    "db:types": "supabase gen types --local > shared/database.types.ts",
     "db:reset": "npx supabase db reset && bun run db:seed",
     "db:seed": "npx @snaplet/seed sync && npx tsx seed.ts > seed.sql",
     "commit": "git-cz",

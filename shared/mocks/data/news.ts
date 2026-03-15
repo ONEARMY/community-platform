@@ -5,7 +5,7 @@ export const news: Partial<DBNews>[] = [
     body: 'Test info with a link to [OneArmy](https://www.onearmy.earth/).\n![test-img](https://wbskztclbriekwpehznv.supabase.co/storage/v1/object/public/precious-plastic/pp-logo.png)',
     category: null,
     comment_count: 2,
-    created_at: new Date(),
+    created_at: new Date().toISOString(),
     deleted: false,
     // hero_image: {
     //   id: '30',
@@ -23,7 +23,7 @@ export const news: Partial<DBNews>[] = [
     body: 'This is a test mock for the filtering question.',
     category: null,
     comment_count: 2,
-    created_at: new Date(),
+    created_at: new Date().toISOString(),
     deleted: false,
     // hero_image: {
     //   id: '31',
@@ -41,7 +41,7 @@ export const news: Partial<DBNews>[] = [
     body: "What's the deal with screenings?",
     category: null,
     comment_count: 2,
-    created_at: new Date(),
+    created_at: new Date().toISOString(),
     deleted: false,
     // hero_image: {
     //   id: '32',

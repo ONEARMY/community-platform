@@ -1,6 +1,8 @@
+import type { DBMedia } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ImageServiceServer } from 'src/services/imageService.server';
+import { fromJson } from 'src/utils/supabase.types';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -8,12 +10,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   try {
     const donationSettingsResult = await client.from('tenant_settings').select('donation_settings');
     const data = donationSettingsResult.data?.at(0);
+    const ds = data?.donation_settings as Record<string, string> | null | undefined;
 
     const donationSettings = {
       spaceName: '',
-      campaignId: data?.donation_settings?.defaultCampaignId,
-      description: data?.donation_settings?.defaultDescription,
-      imageUrl: data?.donation_settings?.defaultImageUrl,
+      campaignId: ds?.defaultCampaignId,
+      description: ds?.defaultDescription,
+      imageUrl: ds?.defaultImageUrl,
     };
 
     if (params.profileId) {
@@ -21,17 +24,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         const profileResult = await client
           .from('profiles')
           .select('display_name,cover_images,donations_enabled')
-          .eq('id', params.profileId)
+          .eq('id', Number(params.profileId))
           .single();
 
         if (profileResult.data?.donations_enabled) {
           donationSettings.spaceName = profileResult.data.display_name;
           donationSettings.campaignId = `${process.env.TENANT_ID}-${params.profileId}`;
-          donationSettings.description = data?.donation_settings?.spaceDescription;
+          donationSettings.description = ds?.spaceDescription;
 
           if (profileResult.data.cover_images?.at(0)) {
             donationSettings.imageUrl = new ImageServiceServer(client).getPublicUrl(
-              profileResult.data.cover_images[0],
+              fromJson<DBMedia | null>(profileResult.data.cover_images[0]),
             )?.publicUrl;
           }
         }

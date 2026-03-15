@@ -1,5 +1,5 @@
-import type { QuestionFormData } from 'oa-shared';
-import { DBQuestion, Question } from 'oa-shared';
+import type { DBQuestion, QuestionFormData } from 'oa-shared';
+import { Question } from 'oa-shared';
 import { getCleanFileName } from 'src/utils/storage';
 
 const upsert = async (id: number | null, question: QuestionFormData) => {
@@ -51,7 +51,7 @@ const upsert = async (id: number | null, question: QuestionFormData) => {
 
   const newQuestion = await response.json();
 
-  return Question.fromDB(new DBQuestion(newQuestion.question), []);
+  return Question.fromDB(newQuestion.question as DBQuestion, []);
 };
 
 export const questionService = {

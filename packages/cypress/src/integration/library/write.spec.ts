@@ -207,6 +207,8 @@ describe('[Library]', () => {
       cy.get('[data-cy=fileLink]').type(fileLink);
       cy.step('Upload a cover for the intro');
       cy.get('[data-cy="image-input"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-intro.jpg', { force: true });
+      cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').should('exist');
+
 
       fillStep(1, steps[0].title, steps[0].text, imagePaths);
       fillStep(2, steps[2].title, steps[2].text, [], steps[2].videoURL);

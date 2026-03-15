@@ -23,7 +23,7 @@ export const NewsListing = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get('q') || '';
   const sort = searchParams.get('sort') as NewsSortOption;
-  const pageNumber = parseInt(searchParams.get('page') || '0');
+  const pageNumber = parseInt(searchParams.get('pageNo') || '0');
   const itemsPerPage = 10;
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export const NewsListing = () => {
 
   const updatePageNumber = (value: number) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('page', value.toString());
+    params.set('pageNo', value.toString());
     setSearchParams(params, { replace: true });
   };
 

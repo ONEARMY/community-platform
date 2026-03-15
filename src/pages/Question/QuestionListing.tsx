@@ -26,7 +26,7 @@ export const QuestionListing = () => {
   const q = searchParams.get('q') || '';
   const category = searchParams.get('category') || '';
   const sort = searchParams.get('sort') as QuestionSortOption;
-  const pageNumber = parseInt(searchParams.get('page') || '0');
+  const pageNumber = parseInt(searchParams.get('pageNo') || '0');
   const itemsPerPage = 21;
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export const QuestionListing = () => {
 
   const updatePageNumber = (value: number) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('page', value.toString());
+    params.set('pageNo', value.toString());
     setSearchParams(params, { replace: true });
   };
 

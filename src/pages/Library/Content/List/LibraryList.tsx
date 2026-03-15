@@ -27,7 +27,7 @@ export const LibraryList = () => {
   const q = searchParams.get(LibrarySearchParams.q) || '';
   const category = searchParams.get(LibrarySearchParams.category) || '';
   const sort = searchParams.get(LibrarySearchParams.sort) as LibrarySortOption;
-  const pageNumber = parseInt(searchParams.get('page') || '0');
+  const pageNumber = parseInt(searchParams.get('pageNo') || '0');
   const itemsPerPage = 12;
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export const LibraryList = () => {
 
   const updatePageNumber = (value: number) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('page', value.toString());
+    params.set('pageNo', value.toString());
     setSearchParams(params, { replace: true });
   };
 

@@ -20,7 +20,18 @@ const changePassword = async (oldPassword: string, newPassword: string) => {
   });
 };
 
+const deleteAccount = async (password: string) => {
+  const data = new FormData();
+  data.append('password', password);
+
+  return await fetch('/api/account/delete', {
+    method: 'POST',
+    body: data,
+  });
+};
+
 export const accountService = {
   changeEmail,
   changePassword,
+  deleteAccount,
 };

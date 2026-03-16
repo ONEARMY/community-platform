@@ -86,12 +86,41 @@ export class SupabaseTestsService {
   }
 
   async clearStorage(tenantId: string) {
-    await this.adminClient.storage.emptyBucket(tenantId);
+    await this.manuallyEmptyBucket(tenantId);
     await this.adminClient.storage.deleteBucket(tenantId);
 
-    await this.adminClient.storage.emptyBucket(tenantId + '-documents');
+    await this.manuallyEmptyBucket(tenantId + '-documents');
     await this.adminClient.storage.deleteBucket(tenantId + '-documents');
   }
+
+  async manuallyEmptyBucket (bucketName: string, path = '') {
+    const limit = 100;
+    let offset = 0;
+
+    while (true) {
+      const { data, error } = await this.adminClient.storage
+        .from(bucketName)
+        .list(path, { limit, offset });
+
+      if (error || !data || data.length === 0) break;
+
+      const folders = data.filter((item) => item.metadata === null);
+      const files = data.filter((item) => item.metadata !== null);
+
+      if (files.length > 0) {
+        const paths = files.map((f) => (path ? `${path}/${f.name}` : f.name));
+        await this.adminClient.storage.from(bucketName).remove(paths);
+      }
+
+      for (const folder of folders) {
+        const folderPath = path ? `${path}/${folder.name}` : folder.name;
+        await this.manuallyEmptyBucket(bucketName, folderPath);
+      }
+
+      if (data.length < limit) break; // last page
+      offset += limit;
+    }
+  };
 
   async getUserProfileByUsername(username: string) {
     const { data, error } = await this.client.from('profiles').select().eq('username', username).single();

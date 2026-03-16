@@ -1,17 +1,27 @@
 import debounce from 'debounce';
-import { CategoryHorizonalList, ReturnPathLink, SearchField, Select, Tooltip } from 'oa-components';
+import {
+  ButtonIcon,
+  CategoryHorizonalList,
+  ReturnPathLink,
+  SearchField,
+  Select,
+  Tooltip,
+} from 'oa-components';
 import type { Category, ResearchStatus } from 'oa-shared';
 import { ResearchStatusRecord } from 'oa-shared';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { AuthWrapper } from 'src/common/AuthWrapper';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
+import { useClickOutside } from 'src/common/hooks/useClickOutside';
 import { UserAction } from 'src/common/UserAction';
 import DraftButton from 'src/pages/common/Drafts/DraftButton';
 import { ListHeader } from 'src/pages/common/Layout/ListHeader';
+import type { FilterSection } from 'src/pages/common/Layout/MobileSortModal';
+import { MobileSortModal } from 'src/pages/common/Layout/MobileSortModal';
 import { TenantContext } from 'src/pages/common/TenantContext';
 import { categoryService } from 'src/services/categoryService';
-import { Button, Flex } from 'theme-ui';
+import { Box, Button, Flex } from 'theme-ui';
 import { listing } from '../labels';
 import type { ResearchSortOption } from '../ResearchSortOptions';
 import { ResearchSortOptions } from '../ResearchSortOptions';
@@ -30,6 +40,8 @@ const researchStatusOptions: { label: string; value: ResearchStatus | '' }[] = [
   { label: 'Completed', value: 'complete' },
 ];
 
+const DEFAULT_SORT: ResearchSortOption = 'LatestUpdated';
+
 export const ResearchFilterHeader = (props: IProps) => {
   const { itemCount, draftCount, handleShowDrafts, showDrafts } = props;
 
@@ -39,11 +51,67 @@ export const ResearchFilterHeader = (props: IProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get(ResearchSearchParams.q);
   const [searchString, setSearchString] = useState<string>(q ?? '');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  const categoryParam = Number(searchParams.get(ResearchSearchParams.category));
-  const category = categories?.find((x) => x.id === categoryParam) ?? null;
   const sort = searchParams.get(ResearchSearchParams.sort) as ResearchSortOption;
   const status = (searchParams.get(ResearchSearchParams.status) as ResearchStatus) || '';
+  const categoryParam = Number(searchParams.get(ResearchSearchParams.category));
+  const category = categories?.find((x) => x.id === categoryParam) ?? null;
+
+  const [isSortModalOpen, setIsSortModalOpen] = useState(false);
+  const [pendingSort, setPendingSort] = useState<ResearchSortOption>(sort || DEFAULT_SORT);
+  const [pendingStatus, setPendingStatus] = useState<ResearchStatus | ''>(status || '');
+
+  const handleApplySort = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (pendingSort) {
+      params.set(ResearchSearchParams.sort, pendingSort);
+    } else {
+      params.delete(ResearchSearchParams.sort);
+    }
+    if (pendingStatus) {
+      params.set(ResearchSearchParams.status, pendingStatus);
+    } else {
+      params.delete(ResearchSearchParams.status);
+    }
+    setSearchParams(params);
+    handleCloseSortModal();
+  };
+
+  const handleResetSort = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set(ResearchSearchParams.sort, DEFAULT_SORT);
+    params.delete(ResearchSearchParams.status);
+    setSearchParams(params);
+    setPendingSort(DEFAULT_SORT);
+    setPendingStatus('');
+  };
+
+  const sortOptions = ResearchSortOptions.toArray(!!q);
+
+  const handleOpenSortModal = () => {
+    setPendingSort(sort || DEFAULT_SORT);
+    setPendingStatus(status || '');
+    setIsSortModalOpen(true);
+  };
+
+  const handleCloseSortModal = () => {
+    setIsSortModalOpen(false);
+  };
+
+  const handleToggleSearchOpen = () => {
+    setIsSearchOpen((x) => !x);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    searchValue(searchString);
+    setIsSearchOpen(false);
+  };
+
+  const formRef = useClickOutside(() => {
+    setIsSearchOpen(false);
+  });
 
   useEffect(() => {
     const initCategories = async () => {
@@ -89,12 +157,20 @@ export const ResearchFilterHeader = (props: IProps) => {
     }
 
     if (value.length === 0 || !value) {
-      params.set(ResearchSearchParams.sort, 'LatestUpdated');
+      params.set(ResearchSearchParams.sort, DEFAULT_SORT);
     }
 
     setSearchParams(params);
   };
+
+  const effectiveDefaultSort = q ? 'MostRelevant' : DEFAULT_SORT;
+  const activeFilterCount =
+    (sort && sort !== effectiveDefaultSort ? 1 : 0) +
+    (categoryParam > 0 ? 1 : 0) +
+    (status ? 1 : 0);
+
   const createResearchRoles = tenantContext?.createResearchRoles;
+
   const actionComponents = (
     <UserAction
       incompleteProfile={
@@ -159,6 +235,7 @@ export const ResearchFilterHeader = (props: IProps) => {
         gap: 2,
         flexDirection: ['column', 'column', 'row'],
         flexWrap: 'wrap',
+        display: ['none', 'flex', 'flex'],
       }}
     >
       <Flex sx={{ width: ['100%', '100%', '220px'] }}>
@@ -192,7 +269,7 @@ export const ResearchFilterHeader = (props: IProps) => {
             setSearchString(value);
             onSearchInputChange(value);
           }}
-          onClickDelete={() => {
+          onClear={() => {
             setSearchString('');
             searchValue('');
           }}
@@ -202,14 +279,119 @@ export const ResearchFilterHeader = (props: IProps) => {
     </Flex>
   );
 
+  const modalSections: FilterSection[] = [
+    {
+      title: 'Status',
+      options: researchStatusOptions,
+      selectedValue: pendingStatus,
+      onSelect: (value) => setPendingStatus(value as ResearchStatus | ''),
+    },
+    {
+      title: 'Sort',
+      options: sortOptions,
+      selectedValue: pendingSort,
+      onSelect: (value) => setPendingSort(value as ResearchSortOption),
+    },
+  ];
+
+  const mobileFilteringComponents = (
+    <Flex sx={{ display: ['flex', 'none', 'none'], gap: '5px' }}>
+      <Flex sx={{ position: 'relative' }}>
+        <ButtonIcon
+          onClick={handleOpenSortModal}
+          icon="sliders"
+          sx={{
+            borderRadius: 1,
+            padding: '9px',
+            '&:hover': {
+              backgroundColor: 'background',
+            },
+          }}
+        />
+        {activeFilterCount > 0 && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '-4px',
+              right: '-4px',
+              minWidth: '18px',
+              height: '18px',
+              borderRadius: '50%',
+              backgroundColor: 'red',
+              color: 'background',
+              fontSize: 0,
+              fontWeight: 'bold',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {activeFilterCount}
+          </Box>
+        )}
+      </Flex>
+      <ButtonIcon
+        onClick={handleToggleSearchOpen}
+        icon="search"
+        sx={{
+          border: 'none',
+          background: 'transparent',
+          '&:hover': {
+            backgroundColor: 'background',
+          },
+        }}
+      />
+    </Flex>
+  );
+
+  const mobileSearchBar = (
+    <Flex sx={{ display: ['flex', 'none', 'none'], width: '100%' }}>
+      <div ref={formRef} style={{ width: '100%' }}>
+        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+          <SearchField
+            isExpanded
+            autoFocus
+            dataCy="research-search-box"
+            placeHolder={listing.search}
+            value={searchString}
+            onChange={(value) => {
+              setSearchString(value);
+              onSearchInputChange(value);
+            }}
+            onClear={() => {
+              setSearchString('');
+              searchValue('');
+            }}
+            onClickSearch={() => searchValue(searchString)}
+            onBack={() => {
+              setIsSearchOpen(false);
+            }}
+          />
+        </form>
+      </div>
+    </Flex>
+  );
+
   return (
-    <ListHeader
-      itemCount={showDrafts ? draftCount : itemCount}
-      actionComponents={actionComponents}
-      showDrafts={showDrafts}
-      headingTitle={listing.heading}
-      categoryComponent={categoryComponent}
-      filteringComponents={filteringComponents}
-    />
+    <>
+      <ListHeader
+        itemCount={showDrafts ? draftCount : itemCount}
+        actionComponents={isSearchOpen ? null : actionComponents}
+        showDrafts={showDrafts}
+        headingTitle={listing.heading}
+        categoryComponent={categoryComponent}
+        filteringComponents={filteringComponents}
+        mobileFilteringComponents={isSearchOpen ? mobileSearchBar : mobileFilteringComponents}
+        searchString={q || undefined}
+      />
+      <MobileSortModal
+        isOpen={isSortModalOpen}
+        onDismiss={handleCloseSortModal}
+        title="Filter and sort"
+        sections={modalSections}
+        onApply={handleApplySort}
+        onReset={handleResetSort}
+      />
+    </>
   );
 };

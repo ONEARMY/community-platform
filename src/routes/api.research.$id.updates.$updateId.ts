@@ -7,7 +7,7 @@ import { broadcastCoordinationServiceServer } from 'src/services/broadcastCoordi
 import { ProfileServiceServer } from 'src/services/profileService.server';
 import { ResearchServiceServer } from 'src/services/researchService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
-import { methodNotAllowedError, validationError } from 'src/utils/httpException';
+import { forbiddenError, methodNotAllowedError, validationError } from 'src/utils/httpException';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { client, headers } = createSupabaseServerClient(request);
@@ -48,7 +48,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
     if (!new ResearchServiceServer(client).isAllowedToEditUpdate(profile, researchId, updateId)) {
-      return Response.json({}, { status: 403, headers });
+      throw forbiddenError();
     }
 
     const researchUpdateResult = await client
@@ -140,5 +140,9 @@ function validateRequest(request: Request, data: ResearchUpdateDTO) {
 
   if (!data.description) {
     throw validationError('description is required', 'description');
+  }
+
+  if (!data.images && !data.videoUrl) {
+    throw validationError('images or video URL are required', 'images');
   }
 }

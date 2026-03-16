@@ -120,8 +120,8 @@ function validateRequest(
     throw validationError('description is required', 'description');
   }
 
-  if (!data.images) {
-    throw validationError('images are required', 'images');
+  if (!data.images && !data.videoUrl) {
+    throw validationError('images or video URL are required', 'images');
   }
 
   if (!research) {

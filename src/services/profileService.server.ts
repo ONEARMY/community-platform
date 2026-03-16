@@ -334,16 +334,6 @@ export class ProfileServiceServer {
     }
   }
 
-  async ensureProfile(authId: string): Promise<{ id: number; username: string } | null> {
-    const { data } = await this.client
-      .from('profiles')
-      .select('id, username')
-      .eq('auth_id', authId)
-      .maybeSingle();
-
-    return data;
-  }
-
   /**
    * Calculate the moderation status for a profile's map pin based on profile type changes.
    *    If a profile changes from a space to 'member', the pin is automatically accepted.

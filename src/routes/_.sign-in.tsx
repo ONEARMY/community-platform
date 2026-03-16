@@ -5,7 +5,7 @@ import { data, Link, redirect, useActionData } from 'react-router';
 import { PasswordField } from 'src/common/Form/PasswordField';
 import Main from 'src/pages/common/Layout/Main';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { ProfileServiceServer } from 'src/services/profileService.server';
+import { authServiceServer } from 'src/services/authService.server';
 import { TenantSettingsService } from 'src/services/tenantSettingsService.server';
 import { getReturnUrl } from 'src/utils/redirect.server';
 import { generateTags, mergeMeta } from 'src/utils/seo.utils';
@@ -70,8 +70,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   let profile: { id: number; username: string } | null = null;
 
   try {
-    // This will fail if there is already a profile for the current auth_id, or the auth_id is invalid (can be invalid the the credentials are wrong)
-    profile = await new ProfileServiceServer(client).ensureProfile(signInResult.data.user.id);
+    profile = await authServiceServer.getProfileByAuthId(signInResult.data.user.id, client);
   } catch (error) {
     console.error(error);
   }

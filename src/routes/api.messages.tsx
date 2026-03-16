@@ -83,7 +83,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw messageResult.error;
     }
 
-    const emailResult = await client.rpc('get_user_email_by_id', { id: toAuthId });
+    const emailResult = toAuthId
+      ? await client.rpc('get_user_email_by_id', { id: toAuthId })
+      : await client.rpc('get_user_email_by_username', { username: data.to });
     const receiver = emailResult.data[0];
     const messenger = userProfile.data![0];
 

@@ -80,14 +80,14 @@ Deno.serve(async (req) => {
       }
       case 'login': {
         subject = 'Fancy magic link for login!';
-        details.username = (await getUsername(user.id)) ?? '';
+        details.username = (await getUsername(user.id)) ?? user.email ?? '';
 
         html = await render(React.createElement(MagicLinkEmail, details));
         break;
       }
       case 'recovery': {
         subject = 'So you need to reset your password?';
-        details.username = (await getUsername(user.id)) ?? '';
+        details.username = (await getUsername(user.id)) ?? user.email ?? '';
 
         html = await render(React.createElement(ResetPasswordEmail, details));
         break;
@@ -96,7 +96,7 @@ Deno.serve(async (req) => {
         const newEmail = user['new_email']!;
         subject = "You're changing your email";
         to = newEmail;
-        details.username = (await getUsername(user.id)) ?? '';
+        details.username = (await getUsername(user.id)) ?? user.email ?? '';
 
         html = await render(
           React.createElement(EmailChangeNewEmail, {

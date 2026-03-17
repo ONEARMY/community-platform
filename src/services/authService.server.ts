@@ -2,7 +2,7 @@ import type { SupabaseClient, User } from '@supabase/supabase-js';
 
 type CreateProfileArgs = {
   user: User;
-  username: string;
+  username?: string | null;
 };
 
 const createUserProfile = async (args: CreateProfileArgs, client: SupabaseClient) => {
@@ -17,8 +17,8 @@ const createUserProfile = async (args: CreateProfileArgs, client: SupabaseClient
 
   return await client.from('profiles').insert({
     auth_id: args.user.id,
-    username: args.username,
-    display_name: args.username,
+    username: args.username || null,
+    display_name: args.username || '',
     tenant_id: process.env.TENANT_ID,
     profile_type: data[0].id,
   });
@@ -34,7 +34,7 @@ const getProfileByAuthId = async (authId: string, client: SupabaseClient) => {
     .from('profiles')
     .select('id,username,roles')
     .eq('auth_id', authId)
-    .single();
+    .maybeSingle();
   return data;
 };
 

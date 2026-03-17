@@ -25,7 +25,7 @@ const update = async (value: ProfileFormData) => {
   const url = new URL('/api/profile', window.location.origin);
   const data = new FormData();
 
-  data.append('userName', value.userName);
+  data.append('userName', value.userName || '');
   data.append('displayName', value.displayName);
   data.append('about', value.about);
   data.append('country', value.country);
@@ -79,10 +79,11 @@ const update = async (value: ProfileFormData) => {
     method: 'POST',
   });
 
-  const result = (await response.json()) as Profile | null;
+  const result = await response.json();
 
   if (!response.ok || !result) {
-    throw new Error(response.statusText || 'Failed to update profile');
+    const message = result?.error || 'Failed to update profile';
+    throw new Error(message);
   }
 
   return result;

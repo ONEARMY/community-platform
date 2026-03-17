@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS "public"."profiles" (
     "country" "text",
     "about" "text",
     "tenant_id" "text" NOT NULL,
-    "username" "text" DEFAULT ''::"text" NOT NULL,
+    "username" "text",
     "roles" "text"[],
     "impact" "json",
     "is_blocked_from_messaging" boolean,
@@ -144,12 +144,12 @@ CREATE OR REPLACE FUNCTION "public"."is_username_available"("username" "text") R
     LANGUAGE "sql" STABLE SECURITY DEFINER
     SET search_path = public, pg_temp
     AS $_$
-  SELECT NOT EXISTS (
+  SELECT CASE WHEN $1 IS NULL THEN false
+  ELSE NOT EXISTS (
     SELECT 1 FROM profiles
     WHERE username = $1
     AND tenant_id = ((SELECT current_setting('request.headers', true))::json ->> 'x-tenant-id')
-  );
+  ) END;
 $_$;
 
-ALTER TABLE ONLY "public"."profiles"
-    ADD CONSTRAINT "profiles_username_key" UNIQUE ("username", "tenant_id");
+CREATE UNIQUE INDEX "profiles_username_key" ON "public"."profiles" ("username", "tenant_id") WHERE "username" IS NOT NULL;

@@ -127,16 +127,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       throw new Error('profile not found');
     }
 
-    const isChangingUsername = data.userName && data.userName !== profileData.username;
-    if (isChangingUsername) {
+    if (data.userName && data.userName !== profileData.username) {
       const isUsernameAvailable = await authServiceServer.isUsernameAvailable(
         data.userName,
         client,
       );
       if (!isUsernameAvailable) {
         return Response.json(
-          {},
-          { headers, status: 400, statusText: FRIENDLY_MESSAGES['sign-up/username-taken'] },
+          { error: FRIENDLY_MESSAGES['sign-up/username-taken'] },
+          { headers, status: 400 },
         );
       }
     }

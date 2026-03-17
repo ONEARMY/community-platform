@@ -67,20 +67,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
   }
 
-  let profile: { id: number; username: string } | null = null;
-
-  try {
-    profile = await authServiceServer.getProfileByAuthId(signInResult.data.user.id, client);
-  } catch (error) {
-    console.error(error);
-  }
+  let profile = await authServiceServer.getProfileByAuthId(signInResult.data.user.id, client);
 
   if (!profile) {
-    const returnUrl = getReturnUrl(request);
-    const chooseUsernameUrl = returnUrl
-      ? `/choose-username?returnUrl=${encodeURIComponent(returnUrl)}`
-      : '/choose-username';
-    return redirect(chooseUsernameUrl, { headers });
+    await authServiceServer.createUserProfile(
+      { user: signInResult.data.user, username: null },
+      client,
+    );
+    return redirect('/settings', { headers });
+  }
+
+  if (!profile.username) {
+    return redirect('/settings', { headers });
   }
 
   const fallbackPath = `/u/${profile.username}`;

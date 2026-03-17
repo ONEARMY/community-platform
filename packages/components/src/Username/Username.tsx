@@ -58,7 +58,7 @@ export const Username = ({ user, sx, target, isLink = true }: IProps) => {
           textOverflow: 'ellipsis',
           maxWidth: '100%',
         }}
-        title={username}
+        title={username || undefined}
       >
         {username}
       </Text>

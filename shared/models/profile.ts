@@ -22,7 +22,7 @@ export class DBProfile {
   readonly badges?: DBProfileBadgeJoin[];
   readonly pin?: DBMapPin;
   readonly type?: DBProfileType;
-  username: string;
+  username: string | null;
   display_name: string;
   photo: DBMedia | null;
   cover_images: DBMedia[] | null;
@@ -49,7 +49,7 @@ export class DBProfile {
 export class Profile {
   id: number;
   createdAt: Date;
-  username: string;
+  username: string | null;
   displayName: string;
   country: string;
   about: string | null;
@@ -368,7 +368,7 @@ export class NotificationDisplay {
 }
 
 export type ProfileFormData = {
-  userName: string;
+  userName: string | null;
   displayName: string;
   tagIds: number[] | null;
   about: string;

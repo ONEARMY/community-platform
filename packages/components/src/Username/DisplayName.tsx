@@ -27,7 +27,7 @@ export const DisplayName = ({ user, sx, target, isLink = true }: DisplayNameProp
           whiteSpace: 'nowrap',
           textOverflow: 'ellipsis',
         }}
-        title={displayName || username}
+        title={displayName || username || undefined}
       >
         {displayName || username}
       </Text>

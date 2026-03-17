@@ -71,7 +71,7 @@ describe('[Questions]', () => {
       // Then go back to previous page
       cy.get('[data-cy=pagination-icon-chevron-left]').click();
       cy.get('[data-cy=question-list-item]').should('have.length', 21);
-      cy.url().should('not.include', 'pageNo=');
+      cy.url().should('include', 'pageNo=0');
     });
   });
 });

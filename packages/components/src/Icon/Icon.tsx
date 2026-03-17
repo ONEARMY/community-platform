@@ -75,6 +75,7 @@ export const glyphs: IGlyphs = {
   'chevron-right': iconMap.chevronRight,
   'chevron-up': iconMap.chevronUp,
   close: iconMap.close,
+  'close-modal': iconMap.crossCloseModal,
   declined: iconMap.declined,
   delete: iconMap.delete,
   difficulty: <FaSignal />,

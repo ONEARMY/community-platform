@@ -20,6 +20,7 @@ export class NewsServiceServer {
        created_at,
        created_by,
        modified_at,
+       published_at,
        comment_count,
        body,
        is_draft,

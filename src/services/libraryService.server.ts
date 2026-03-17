@@ -23,6 +23,7 @@ export class LibraryServiceServer {
         created_at,
         created_by,
         modified_at,
+        published_at,
         title,
         description,
         slug,

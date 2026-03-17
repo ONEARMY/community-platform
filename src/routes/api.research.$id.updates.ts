@@ -59,6 +59,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         images: data.images,
         files: data.files,
         is_draft: data.isDraft,
+        published_at: data.isDraft ? null : new Date(),
         research_id: researchId,
         created_by: profile.id,
         tenant_id: process.env.TENANT_ID,

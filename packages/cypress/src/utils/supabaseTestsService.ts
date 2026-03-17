@@ -64,7 +64,7 @@ export class SupabaseTestsService {
         continue;
       }
 
-      results[table] = await this.client.from(table).select();
+      results[table] = result;
     }
 
     return results;
@@ -86,12 +86,41 @@ export class SupabaseTestsService {
   }
 
   async clearStorage(tenantId: string) {
-    await this.adminClient.storage.emptyBucket(tenantId);
+    await this.manuallyEmptyBucket(tenantId);
     await this.adminClient.storage.deleteBucket(tenantId);
 
-    await this.adminClient.storage.emptyBucket(tenantId + '-documents');
+    await this.manuallyEmptyBucket(tenantId + '-documents');
     await this.adminClient.storage.deleteBucket(tenantId + '-documents');
   }
+
+  async manuallyEmptyBucket (bucketName: string, path = '') {
+    const limit = 100;
+    let offset = 0;
+
+    while (true) {
+      const { data, error } = await this.adminClient.storage
+        .from(bucketName)
+        .list(path, { limit, offset });
+
+      if (error || !data || data.length === 0) break;
+
+      const folders = data.filter((item) => item.metadata === null);
+      const files = data.filter((item) => item.metadata !== null);
+
+      if (files.length > 0) {
+        const paths = files.map((f) => (path ? `${path}/${f.name}` : f.name));
+        await this.adminClient.storage.from(bucketName).remove(paths);
+      }
+
+      for (const folder of folders) {
+        const folderPath = path ? `${path}/${folder.name}` : folder.name;
+        await this.manuallyEmptyBucket(bucketName, folderPath);
+      }
+
+      if (data.length < limit) break; // last page
+      offset += limit;
+    }
+  };
 
   async getUserProfileByUsername(username: string) {
     const { data, error } = await this.client.from('profiles').select().eq('username', username).single();
@@ -123,6 +152,7 @@ export class SupabaseTestsService {
         status: item.status,
         created_by: createdBy,
         is_draft: item.is_draft,
+        published_at: item.is_draft ? null : item.created_at,
         tags: [tagsData.data[0].id, tagsData.data[1].id],
         category: categories.data[i % 2].id,
         tenant_id: this.tenantId,
@@ -147,6 +177,7 @@ export class SupabaseTestsService {
             title: item.title,
             research_id: research.data[i].id,
             created_by: createdBy,
+            published_at: item.created_at,
             tenant_id: this.tenantId,
           })),
         });
@@ -231,6 +262,7 @@ export class SupabaseTestsService {
         tenant_id: this.tenantId,
         created_by: profiles[0].id,
         category: categories.data[0].id,
+        published_at: question.created_at,
       })),
     });
 
@@ -296,6 +328,7 @@ export class SupabaseTestsService {
         tags: [tagsData.data[0].id, tagsData.data[1].id],
         category: categories.data[0].id,
         tenant_id: this.tenantId,
+        published_at: news.created_at,
       })),
     });
 
@@ -337,6 +370,7 @@ export class SupabaseTestsService {
         deleted: item.deleted,
         moderation: item.moderation,
         tenant_id: this.tenantId,
+        published_at: item.createdAt,
         ...(item.moderationFeedback ? { moderation_feedback: item.moderationFeedback } : {}),
       });
     }

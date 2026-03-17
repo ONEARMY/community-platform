@@ -25,6 +25,7 @@ export class ResearchServiceServer {
        created_at,
        created_by,
        modified_at,
+       published_at,
        title,
        description,
        slug,
@@ -47,18 +48,19 @@ export class ResearchServiceServer {
           )
         )),
        updates:research_updates(
-        id, 
-        created_at, 
-        title, 
-        description, 
-        images, 
-        files, 
-        file_link, 
-        file_download_count, 
-        video_url, 
-        is_draft, 
-        comment_count, 
-        modified_at, 
+        id,
+        created_at,
+        modified_at,
+        published_at,
+        title,
+        description,
+        images,
+        files,
+        file_link,
+        file_download_count,
+        video_url,
+        is_draft,
+        comment_count,
         deleted,
         update_author:profiles(id, display_name, username, photo, country, badges:profile_badges_relations(
           profile_badges(
@@ -106,7 +108,7 @@ export class ResearchServiceServer {
     return this.client
       .from('research_updates')
       .select(
-        'id, research_id, created_at, title, description, images, file_ids, file_link, video_url, is_draft, comment_count, modified_at, deleted',
+        'id, research_id, created_at, modified_at, published_at, title, description, images, file_ids, file_link, video_url, is_draft, comment_count, deleted',
       )
       .eq('id', updateId)
       .eq('research_id', researchId)

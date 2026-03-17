@@ -98,6 +98,7 @@ export const FactoryLibraryItem = (itemOverloads: Partial<Project> = {}): Projec
   commentCount: 0,
   author: null,
   tags: [],
+  publishedAt: faker.date.past(),
   ...itemOverloads,
 });
 
@@ -164,5 +165,6 @@ export const FactoryLibraryItemDraft = (itemOverloads: Partial<Project> = {}): P
   subscriberCount: faker.number.int(),
   totalViews: faker.number.int(),
   usefulCount: faker.number.int(),
+  publishedAt: faker.date.past(),
   ...itemOverloads,
 });

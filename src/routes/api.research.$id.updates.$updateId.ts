@@ -58,6 +58,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       .single();
 
     const oldResearchUpdate = researchUpdateResult.data as DBResearchUpdate;
+    const isFirstPublish =
+      oldResearchUpdate.is_draft && !data.isDraft && !oldResearchUpdate.published_at;
 
     const researchUpdateAfterUpdating = await client
       .from('research_updates')
@@ -69,6 +71,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         modified_at: new Date(),
         video_url: data.videoUrl,
         files: data.files,
+        ...(isFirstPublish && { published_at: new Date() }),
       })
       .eq('id', oldResearchUpdate.id)
       .select('*,research:research(id,title,slug,is_draft)')

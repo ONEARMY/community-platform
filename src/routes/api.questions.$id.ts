@@ -52,6 +52,11 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const previousSlugs = contentServiceServer.updatePreviousSlugs(currentQuestion, slug);
 
+    const isFirstPublish =
+      currentQuestion.is_draft && !data.isDraft && !currentQuestion.published_at;
+
+    const now = new Date();
+
     const questionResult = await client
       .from('questions')
       .update({
@@ -63,7 +68,8 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         slug,
         previous_slugs: previousSlugs,
         tags: data.tags,
-        modified_at: new Date(),
+        modified_at: now,
+        ...(isFirstPublish && { published_at: now }),
       })
       .eq('id', params.id)
       .select();

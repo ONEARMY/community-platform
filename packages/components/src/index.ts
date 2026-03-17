@@ -22,6 +22,7 @@ export { ContentStatistics } from './ContentStatistics/ContentStatistics';
 export type { IStatistic } from './ContentStatistics/types';
 export { CreateComment } from './CreateComment/CreateComment';
 export { CreateReply } from './CreateReply/CreateReply';
+export type { PublishedAction } from './DisplayDate/DisplayDate';
 export { DisplayDate } from './DisplayDate/DisplayDate';
 // export { DisplayMarkdownStylingWrapper } from './DisplayMarkdown/DisplayMarkdownStylingWrapper'
 export { DonationRequestModal } from './DonationRequestModal/DonationRequestModal';

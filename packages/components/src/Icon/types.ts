@@ -19,6 +19,7 @@ export type availableGlyphs =
   | 'chevron-right'
   | 'chevron-up'
   | 'close'
+  | 'close-modal'
   | 'comment'
   | 'comment-outline'
   | 'construction'

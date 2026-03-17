@@ -36,7 +36,7 @@ declare global {
       ): Chainable<void>;
       signIn(email: string, password: string): Chainable<void>;
       logout(): Chainable<void>;
-      fillSignupForm(username: string, email: string, password: string): Chainable<void>;
+      fillSignupForm(email: string, password: string): Chainable<void>;
       fillIntroTitle(intro: string);
       fillSettingMapPin(pin: IMapPin);
 
@@ -166,11 +166,10 @@ Cypress.Commands.add('setSettingPublicContact', () => {
   cy.get('[data-cy=isContactable').click({ force: true });
 });
 
-Cypress.Commands.add('fillSignupForm', (username: string, email: string, password: string) => {
+Cypress.Commands.add('fillSignupForm', (email: string, password: string) => {
   cy.log('Fill in sign-up form');
   cy.visit('/sign-up');
   cy.wait(2000);
-  cy.get('[data-cy=username]').clear().type(username);
   cy.get('[data-cy=email]').clear().type(email);
   cy.get('[data-cy=password]').clear().type(password);
   cy.get('[data-cy=confirm-password]').clear().type(password);
@@ -270,9 +269,9 @@ Cypress.Commands.add('addReply', (reply: string) => {
 
 Cypress.Commands.add('signUpNewUser', (user?) => {
   cy.log('Generate new user details');
-  const { username, email, password } = user || generateNewUserDetails();
+  const { email, password } = user || generateNewUserDetails();
 
-  cy.fillSignupForm(username, email, password);
+  cy.fillSignupForm(email, password);
   cy.get('[data-cy=submit]').click();
   cy.url().should('include', 'sign-up-message');
 });
@@ -280,6 +279,7 @@ Cypress.Commands.add('signUpNewUser', (user?) => {
 Cypress.Commands.add('completeUserProfile', (username) => {
   cy.log('Complete user profile');
   cy.visit('/settings');
+  cy.get('[data-cy=userName]').clear().type(username);
   cy.setSettingImage('avatar', 'userImage');
   cy.setSettingBasicUserInfo({
     description: `${username} profile description.`,

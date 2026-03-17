@@ -8,6 +8,7 @@ import { fields, headings } from 'src/pages/UserSettings/labels';
 import { useProfileStore } from 'src/stores/Profile/profile.store';
 import {
   composeValidators,
+  minValue,
   noSpecialCharacters,
   required,
   validateUrl,
@@ -50,7 +51,7 @@ export const UserInfosSection = observer(({ formValues }: IProps) => {
             data-cy="userName"
             name="userName"
             component={FieldInput}
-            validate={composeValidators(required, noSpecialCharacters)}
+            validate={composeValidators(required, noSpecialCharacters, minValue(2))}
             validateFields={[]}
           />
         </Flex>

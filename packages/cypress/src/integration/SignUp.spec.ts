@@ -9,12 +9,6 @@ describe('[User sign-up]', () => {
 
   describe('[New user]', () => {
     it('Validate sign-up form', () => {
-      cy.step('Username is too short');
-      cy.get('[data-cy=username]').click();
-      cy.get('[data-cy=username]').clear().type('a');
-      cy.get('[data-cy=consent]').uncheck().check();
-      cy.contains(FRIENDLY_MESSAGES['sign-up/username-short']).should('be.visible');
-
       cy.step('Email is invalid');
       cy.get('[data-cy=email]').click();
       cy.get('[data-cy=email]').clear().type('a');
@@ -38,26 +32,13 @@ describe('[User sign-up]', () => {
   });
 
   describe('[Cannot duplicate existing user]', () => {
-    it('Prevents duplicate name', () => {
-      const user = generateNewUserDetails();
-      const { email, username, password } = user;
-
-      cy.signUpNewUser(user);
-      cy.logout();
-      cy.fillSignupForm(username, email, password);
-      cy.get('[data-cy=submit]').click();
-      cy.get('[data-cy="TextNotification: failure"]')
-        .contains(FRIENDLY_MESSAGES['sign-up/username-taken'])
-        .should('be.visible');
-    });
-
     it('Prevents duplicate email', () => {
       const user = generateNewUserDetails();
-      const { email, username, password } = user;
+      const { email, password } = user;
 
       cy.signUpNewUser(user);
       cy.logout();
-      cy.fillSignupForm(`${username}-new`, email, password);
+      cy.fillSignupForm(email, password);
       cy.get('[data-cy=submit]').click();
       cy.get('[data-cy="TextNotification: failure"]')
         .contains(FRIENDLY_MESSAGES['generic-error'])

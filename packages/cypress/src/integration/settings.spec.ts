@@ -1,3 +1,4 @@
+import { FRIENDLY_MESSAGES } from 'oa-shared';
 import { MOCK_DATA } from '../data';
 import { SingaporeStubResponse } from '../fixtures/searchResults';
 import { UserMenuItem } from '../support/commandsUi';
@@ -78,6 +79,9 @@ describe('[Settings]', () => {
     cy.get('[data-cy=save]').click();
     cy.get('[data-cy=errors-container]').should('be.visible');
     cy.get('[data-cy=CompleteProfileHeader]').should('be.visible');
+
+    cy.step('Can set username');
+    cy.get('[data-cy=userName]').clear().type(user.username);
 
     cy.step('Can set the required fields');
     cy.setSettingBasicUserInfo({
@@ -165,6 +169,9 @@ describe('[Settings]', () => {
     cy.get('[data-cy=save]').click();
     cy.get('[data-cy=errors-container]').should('be.visible');
 
+    cy.step('Set username');
+    cy.get('[data-cy=userName]').clear().type(user.username);
+
     cy.step('Populate profile');
     cy.setSettingBasicUserInfo({
       displayName,
@@ -194,6 +201,54 @@ describe('[Settings]', () => {
     cy.get('[data-cy="contact-tab"]').click({ force: true });
     cy.contains(`Other users are able to contact you`);
     cy.get('[data-cy="profile-website"]').should('have.attr', 'href', website);
+  });
+
+  it('Cannot use a taken username', () => {
+    const user1 = generateNewUserDetails();
+    const user2 = generateNewUserDetails();
+
+    cy.signUpNewUser(user1);
+    cy.completeUserProfile(user1.username);
+    cy.logout();
+
+    cy.signUpNewUser(user2);
+    cy.visit('/settings');
+    cy.get('[data-cy=userName]').clear().type(user1.username);
+    cy.get('[data-cy=displayName]').clear().type('Test User');
+    cy.get('[data-cy=info-about]').clear().type('Test description');
+    cy.setSettingImage('avatar', 'userImage');
+    cy.get('[data-cy=save]').click();
+
+    cy.get('[data-cy="TextNotification: failure"]')
+      .contains(FRIENDLY_MESSAGES['sign-up/username-taken'])
+      .should('be.visible');
+  });
+
+  it('Cannot use a username that is too short', () => {
+    const user = generateNewUserDetails();
+
+    cy.signUpNewUser(user);
+    cy.visit('/settings');
+    cy.get('[data-cy=userName]').clear().type('a');
+    cy.get('[data-cy=save]').click();
+    cy.get('[data-cy=errors-container]').should('be.visible');
+  });
+
+  it('Can change username', () => {
+    const user = generateNewUserDetails();
+    const newUsername = `${user.username}_new`;
+
+    cy.signUpNewUser(user);
+    cy.completeUserProfile(user.username);
+
+    cy.step('Change username in settings');
+    cy.visit('/settings');
+    cy.get('[data-cy=userName]').clear().type(newUsername);
+    cy.saveSettingsForm();
+
+    cy.step('Profile accessible at new username');
+    cy.visit(`u/${newUsername}`);
+    cy.contains(newUsername);
   });
 });
 
@@ -244,6 +299,9 @@ describe('[Precious Plastic]', () => {
     cy.step("Can't save without required fields being populated");
     cy.get('[data-cy=save]').click();
     cy.get('[data-cy=errors-container]').should('be.visible');
+
+    cy.step('Set username');
+    cy.get('[data-cy=userName]').clear().type(user.username);
 
     cy.step('Populate profile');
     cy.setSettingBasicUserInfo({

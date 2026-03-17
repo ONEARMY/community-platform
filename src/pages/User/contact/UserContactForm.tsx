@@ -33,7 +33,7 @@ export const UserContactForm = observer(({ user }: Props) => {
   const onSubmit = async (formValues, form) => {
     setSubmitResults(null);
     const response = await messageService.sendMessage({
-      to: user.username,
+      to: user.username!,
       message: formValues.message,
       name: formValues.name,
     });

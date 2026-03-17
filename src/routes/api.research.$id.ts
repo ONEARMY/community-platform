@@ -210,7 +210,10 @@ async function validateRequest(
     return { valid: true };
   }
 
-  if (research.created_by !== profile.id && !research.collaborators?.includes(profile.username)) {
+  if (
+    research.created_by !== profile.id &&
+    (!profile.username || !research.collaborators?.includes(profile.username))
+  ) {
     return { status: 403, statusText: 'forbidden' };
   }
 

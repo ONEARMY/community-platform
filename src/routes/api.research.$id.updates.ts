@@ -203,7 +203,7 @@ function validateRequest(
 
   if (
     profile.id !== research.author?.id &&
-    !research.collaborators?.includes(profile.username) &&
+    (!profile.username || !research.collaborators?.includes(profile.username)) &&
     !profile.roles?.includes(UserRole.ADMIN)
   ) {
     return { status: 403, statusText: 'Forbidden' };

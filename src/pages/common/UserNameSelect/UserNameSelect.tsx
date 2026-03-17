@@ -30,10 +30,12 @@ export const UserNameSelect = (props: IProps) => {
     }
 
     const profiles = await profilesService.search(inputVal);
-    const options = profiles.map((x) => ({
-      label: x.username,
-      value: x.username,
-    }));
+    const options = profiles
+      .filter((x) => x.username)
+      .map((x) => ({
+        label: x.username!,
+        value: x.username!,
+      }));
 
     setOptions(options);
   };

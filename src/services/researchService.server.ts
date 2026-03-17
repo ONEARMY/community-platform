@@ -22,6 +22,7 @@ const getBySlug = async (client: SupabaseClient, slug: string) => {
        created_at,
        created_by,
        modified_at,
+       published_at,
        title,
        description,
        slug,
@@ -44,18 +45,19 @@ const getBySlug = async (client: SupabaseClient, slug: string) => {
           )
         )),
        updates:research_updates(
-        id, 
-        created_at, 
-        title, 
-        description, 
-        images, 
-        files, 
-        file_link, 
-        file_download_count, 
-        video_url, 
-        is_draft, 
-        comment_count, 
-        modified_at, 
+        id,
+        created_at,
+        modified_at,
+        published_at,
+        title,
+        description,
+        images,
+        files,
+        file_link,
+        file_download_count,
+        video_url,
+        is_draft,
+        comment_count,
         deleted,
         update_author:profiles(id, display_name, username, photo, country, badges:profile_badges_relations(
           profile_badges(
@@ -103,7 +105,7 @@ const getUpdate = async (client: SupabaseClient, researchId: number, updateId: n
   return client
     .from('research_updates')
     .select(
-      'id, research_id, created_at, title, description, images, file_ids, file_link, video_url, is_draft, comment_count, modified_at, deleted',
+      'id, research_id, created_at, modified_at, published_at, title, description, images, file_ids, file_link, video_url, is_draft, comment_count, deleted',
     )
     .eq('id', updateId)
     .eq('research_id', researchId)

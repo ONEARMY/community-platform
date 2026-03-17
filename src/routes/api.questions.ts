@@ -147,6 +147,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         description: data.description,
         is_draft: data.is_draft,
         moderation: 'accepted' as Moderation,
+        published_at: data.is_draft ? null : new Date(),
         slug,
         category: data.category,
         tags: data.tags,

@@ -316,7 +316,7 @@ export const LibraryListHeader = (props: IProps) => {
   return (
     <>
       <ListHeader
-        itemCount={showDrafts ? draftCount : itemCount}
+        itemCount={(showDrafts ? draftCount : itemCount) || 0}
         actionComponents={isSearchOpen ? null : actionComponents}
         showDrafts={showDrafts}
         headingTitle={tenantContext?.libraryHeading || ''}

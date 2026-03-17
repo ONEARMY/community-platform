@@ -41,7 +41,8 @@ CREATE TABLE IF NOT EXISTS "public"."questions" (
     "fts" "tsvector" GENERATED ALWAYS AS ("to_tsvector"('"english"'::"regconfig", (("title" || ' '::"text") || "description"))) STORED,
     "images" "json"[],
     "legacy_id" "text",
-    "is_draft" boolean DEFAULT false NOT NULL
+    "is_draft" boolean DEFAULT false NOT NULL,
+    "published_at" timestamp with time zone
 );
 
 CREATE OR REPLACE FUNCTION "public"."questions_search_fields"("public"."questions") RETURNS "text"
@@ -52,7 +53,7 @@ CREATE OR REPLACE FUNCTION "public"."questions_search_fields"("public"."question
 $_$;
 
 CREATE OR REPLACE FUNCTION public.get_questions(search_query text DEFAULT NULL::text, category_id bigint DEFAULT NULL::bigint, sort_by text DEFAULT 'Newest'::text, limit_val integer DEFAULT 20, offset_val integer DEFAULT 0)
- RETURNS TABLE(id bigint, created_at timestamp with time zone, created_by bigint, modified_at timestamp with time zone, description text, slug text, category json, tags bigint[], title text, total_views bigint, is_draft boolean, comment_count bigint, images json[], author json)
+ RETURNS TABLE(id bigint, created_at timestamp with time zone, created_by bigint, modified_at timestamp with time zone, published_at timestamp with time zone, description text, slug text, category json, tags bigint[], title text, total_views bigint, is_draft boolean, comment_count bigint, images json[], author json)
  LANGUAGE plpgsql
  SET search_path TO 'public', 'pg_temp'
 AS $function$
@@ -69,6 +70,7 @@ BEGIN
     q.created_at,
     q.created_by,
     q.modified_at,
+    q.published_at,
     q.description,
     q.slug,
     (SELECT json_build_object('id', c.id, 'name', c.name) FROM categories c WHERE c.id = q.category) AS category,
@@ -113,14 +115,14 @@ BEGIN
   ORDER BY
     CASE WHEN search_query IS NOT NULL THEN ts_rank_cd(q.fts, ts_query) END DESC NULLS LAST,
     CASE
-      WHEN sort_by = 'Newest' THEN extract(epoch from q.created_at)
+      WHEN sort_by = 'Newest' THEN extract(epoch from q.published_at)
       WHEN sort_by = 'Comments' THEN q.comment_count
       ELSE 0
     END DESC NULLS LAST,
     CASE
       WHEN sort_by = 'LeastComments' THEN q.comment_count
     END ASC NULLS LAST,
-    q.created_at DESC
+    q.published_at DESC
   LIMIT limit_val OFFSET offset_val;
 END;
 $function$

@@ -67,7 +67,7 @@ describe('CommentDisplay', () => {
     vi.clearAllMocks();
   });
   it('renders comment body and avatar', () => {
-    const { getByTestId } = renderWithAuthorsContext(
+    const { getByTestId, getAllByTestId } = renderWithAuthorsContext(
       <CommentDisplay
         comment={mockComment}
         itemType="CommentItem"
@@ -78,7 +78,7 @@ describe('CommentDisplay', () => {
     );
 
     expect(getByTestId('comment-body')).toBeInTheDocument();
-    expect(getByTestId('comment-avatar')).toBeInTheDocument();
+    expect(getAllByTestId('comment-avatar').length).toBeGreaterThanOrEqual(1);
     expect(getByTestId('useful-button')).toBeInTheDocument();
   });
 

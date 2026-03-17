@@ -141,6 +141,7 @@ describe('Research Article', () => {
         createdAt,
         isDraft: false,
         modifiedAt,
+        publishedAt: createdAt,
         title: 'A title',
         description: 'A description',
         deleted: false,
@@ -155,7 +156,7 @@ describe('Research Article', () => {
       // Assert
       await waitFor(() => {
         expect(() => wrapper.getAllByText((content) => content.includes('Created'))).not.toThrow();
-        expect(() => wrapper.getAllByText((content) => content.includes('Updated'))).not.toThrow();
+        expect(() => wrapper.getAllByText((content) => content.includes('edit'))).not.toThrow();
       });
     });
   });

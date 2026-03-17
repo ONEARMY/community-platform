@@ -1,12 +1,14 @@
 import { Flex, Heading, Text } from 'theme-ui';
 
 interface IProps {
-  itemCount?: number;
+  itemCount: number;
   actionComponents: React.ReactNode;
   headingTitle: string;
   categoryComponent: React.ReactNode;
   filteringComponents: React.ReactNode;
   showDrafts: boolean;
+  mobileFilteringComponents?: React.ReactNode;
+  searchString?: string;
 }
 
 export const ListHeader = (props: IProps) => {
@@ -17,10 +19,11 @@ export const ListHeader = (props: IProps) => {
     showDrafts,
     categoryComponent,
     filteringComponents,
+    mobileFilteringComponents,
+    searchString,
   } = props;
 
   const itemLabel = itemCount === 1 ? 'item' : 'items';
-
   return (
     <>
       <Flex
@@ -47,7 +50,7 @@ export const ListHeader = (props: IProps) => {
       <Flex
         sx={{
           justifyContent: 'space-between',
-          flexDirection: ['column', 'column', 'row'],
+          flexDirection: ['column', 'row', 'row'],
           gap: [2, 2, 2],
           paddingX: [2, 0],
           maxWidth: '100%',
@@ -59,6 +62,7 @@ export const ListHeader = (props: IProps) => {
             gap: [2, 2, 2],
             width: ['100%', '100%', 'auto'],
             alignItems: ['flex-start', 'flex-start', 'center'],
+            display: ['none', 'flex', 'flex'],
           }}
         >
           {!showDrafts && filteringComponents}
@@ -79,10 +83,38 @@ export const ListHeader = (props: IProps) => {
           sx={{
             gap: 2,
             alignSelf: ['flex-start', 'flex-start', 'flex-end'],
-            display: ['none', 'none', 'flex'],
+            display: ['flex', 'flex', 'flex'],
+            justifyContent: ['space-between', 'space-between', 'flex-start'],
+            width: ['100%', 'auto', 'auto'],
+            flexShrink: 0,
           }}
         >
+          {mobileFilteringComponents ?? null}
           {actionComponents}
+        </Flex>
+        <Flex
+          sx={{
+            flexDirection: ['column', 'column', 'row'],
+            gap: [2, 2, 2],
+            width: ['100%', '100%', 'auto'],
+            alignItems: ['flex-start', 'flex-start', 'center'],
+            display: ['flex', 'none', 'none'],
+          }}
+        >
+          {itemCount !== undefined && itemCount != null && (
+            <Flex
+              sx={{
+                flexDirection: 'row',
+                justifyContent: ['space-between', 'space-between', 'flex-start'],
+                alignItems: 'center',
+                width: ['100%', '100%', 'auto'],
+              }}
+            >
+              <Text sx={{ marginLeft: [0, 0, 2] }}>
+                {searchString && `${itemCount} ${itemLabel} for "${searchString}"`}
+              </Text>
+            </Flex>
+          )}
         </Flex>
       </Flex>
     </>

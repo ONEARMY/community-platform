@@ -35,7 +35,8 @@ CREATE TABLE IF NOT EXISTS "public"."projects" (
     "fts" "tsvector",
     "total_views" bigint,
     "comment_count" integer,
-    "legacy_id" "text"
+    "legacy_id" "text",
+    "published_at" timestamp with time zone
 );
 
 ALTER TABLE ONLY "public"."projects"
@@ -143,7 +144,7 @@ BEGIN
         -- Add relevance ranking when search query is provided
         CASE WHEN search_query IS NOT NULL THEN ts_rank_cd(p.fts, ts_query) END DESC NULLS LAST,
         CASE
-            WHEN sort_by = 'Newest' THEN extract(epoch from p.created_at)
+            WHEN sort_by = 'Newest' THEN extract(epoch from p.published_at)
             WHEN sort_by = 'LatestUpdated' THEN extract(epoch from p.modified_at)
             WHEN sort_by = 'MostComments' THEN p.comment_count
             WHEN sort_by = 'MostDownloads' THEN p.file_download_count
@@ -163,7 +164,7 @@ BEGIN
         CASE
             WHEN sort_by = 'LeastComments' THEN p.comment_count
         END ASC NULLS LAST,
-        p.created_at DESC
+        p.published_at DESC
     LIMIT limit_val OFFSET offset_val;
 END;$$;
 

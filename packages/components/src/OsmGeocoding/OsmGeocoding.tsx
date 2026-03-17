@@ -95,7 +95,7 @@ export const OsmGeocoding = ({
           setQueryLocationService(true);
           setSearchValue(value);
         }}
-        onClickDelete={() => {
+        onClear={() => {
           setSearchValue('');
           setQueryLocationService(false);
         }}

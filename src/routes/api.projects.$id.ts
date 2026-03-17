@@ -236,9 +236,13 @@ async function updateProject(
 
   let moderation = currentProject.moderation;
 
+  const isFirstPublish = currentProject.is_draft && !data.isDraft && !currentProject.published_at;
+
   if (currentProject.is_draft && !data.isDraft) {
     moderation = profile?.roles?.includes(UserRole.ADMIN) ? 'accepted' : 'awaiting-moderation';
   }
+
+  const now = new Date();
 
   const projectResult = await client
     .from('projects')
@@ -256,6 +260,8 @@ async function updateProject(
       files,
       moderation,
       cover_image,
+      modified_at: now,
+      ...(isFirstPublish && { published_at: now }),
     })
     .eq('id', currentProject.id)
     .select();

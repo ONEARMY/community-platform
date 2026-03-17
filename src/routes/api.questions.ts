@@ -24,58 +24,33 @@ export const loader = async ({ request }) => {
 
   const { client, headers } = createSupabaseServerClient(request);
 
-  let query = client
-    .from('questions')
-    .select(
-      `
-      id,
-      author:profiles(id, display_name, username, photo, country, badges:profile_badges_relations(
-        profile_badges(
-          id,
-          name,
-            display_name,
-          image_url,
-          action_url
-        )
-      )),
-      category:category(id,name),
-      created_at,
-      created_by,
-      modified_at,
-      comment_count,
-      description,
-      is_draft,
-      slug,
-      tags,
-      title,
-      total_views`,
-      { count: 'exact' },
-    )
-    .eq('is_draft', false)
-    .or('deleted.is.null,deleted.neq.true');
+  const { data, error } = await client.rpc('get_questions', {
+    search_query: q || null,
+    category_id: category,
+    sort_by: sort,
+    offset_val: skip,
+    limit_val: ITEMS_PER_PAGE,
+  });
 
-  if (q) {
-    query = query.textSearch('questions_search_fields', q);
+  const countResult = await client.rpc('get_questions_count', {
+    search_query: q || null,
+    category_id: category,
+  });
+
+  if (error) {
+    console.error(error);
+    return Response.json({}, { status: 500, headers });
   }
 
-  if (category) {
-    query = query.eq('category', category);
+  const total = countResult.data || 0;
+
+  const dbItems = data as DBQuestion[];
+
+  if (!dbItems || dbItems.length === 0) {
+    return Response.json({ items: [], total: 0 }, { headers });
   }
 
-  if (sort === 'Newest') {
-    query = query.order('created_at', { ascending: false });
-  } else if (sort === 'Comments') {
-    query = query.order('comment_count', { ascending: false });
-  } else if (sort === 'LeastComments') {
-    query = query.order('comment_count', { ascending: true });
-  }
-
-  const queryResult = await query.range(skip, skip + ITEMS_PER_PAGE); // 0 based
-
-  const total = queryResult.count;
-  const data = queryResult.data as unknown as DBQuestion[];
-
-  const items = data.map((x) => Question.fromDB(x, [], []));
+  const items = dbItems.map((x) => Question.fromDB(x, [], []));
 
   if (items && items.length > 0) {
     // Populate useful votes
@@ -172,6 +147,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
         description: data.description,
         is_draft: data.is_draft,
         moderation: 'accepted' as Moderation,
+        published_at: data.is_draft ? null : new Date(),
         slug,
         category: data.category,
         tags: data.tags,

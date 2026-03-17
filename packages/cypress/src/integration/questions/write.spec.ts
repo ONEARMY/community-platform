@@ -203,7 +203,7 @@ describe('[Question]', () => {
       cy.get('[data-cy=delete]').click();
 
       cy.step('Confirm deletion');
-      cy.get('[data-cy=confirm]').click();
+      cy.get('[data-cy="Confirm.modal: Confirm"]').click();
 
       cy.step('Redirected to questions listing');
       cy.url().should('include', '/questions');

@@ -396,7 +396,7 @@ describe('[Research]', () => {
       
       cy.step('Replace image');
       cy.get('[data-cy=image-upload-0]').find('[data-cy=delete-image]').click({force: true});
-      cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
+      cy.get('[data-cy=new-image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
       cy.get('[data-cy=image-upload-0]').find('[data-cy=delete-image]').should('exist');
       
       cy.step('Replace file');

@@ -70,7 +70,11 @@ export class DBProject implements IDBContentDoc, IDBDownloadable, IDBModeration 
       files: obj.files,
       fileLink: obj.file_link,
       time: obj.time ?? null,
-      steps: obj.steps ? obj.steps.map((x) => DBProjectStep.toFormData(x, images)) : [],
+      steps: obj.steps
+        ? obj.steps
+            .sort((a, b) => a.order - b.order)
+            .map((x) => DBProjectStep.toFormData(x, images))
+        : [],
     } satisfies ProjectFormData;
   }
 }

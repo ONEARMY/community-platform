@@ -363,11 +363,13 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title').clear().type(researchTitle).blur();
       cy.get('[data-cy=intro-description]').clear().type('Research description').blur();
       cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.get('[data-cy=delete-image]').should('exist');
       cy.get('[data-cy=submit]').click();
       cy.url().should('include', `/research/${researchSlug}`);
 
       cy.step('Create update with image and file');
-      cy.get('[data-cy=addResearchUpdateButton]').click();
+      cy.get('[data-cy=addResearchUpdateButton]').should('exist').click();
+      cy.wait(2000);
       cy.contains('New update');
       cy.get('[data-cy=intro-title]').should('be.visible');
       cy.fillIntroTitle(updateTitle);
@@ -375,6 +377,7 @@ describe('[Research]', () => {
       
       cy.step('Add images to update');
       cy.get('[data-cy=image-input-field-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.get('[data-cy=delete-image]').should('exist');
       
       cy.step('Add file to update');
       cy.get('[id=file-input]').selectFile('src/fixtures/files/Example.pdf', { force: true });
@@ -385,6 +388,7 @@ describe('[Research]', () => {
 
       cy.step('Edit update and replace media');
       cy.get('[data-cy=edit-update]').should('be.visible').click();
+      cy.wait(2000);
       cy.contains('Edit your update');
       cy.get('[data-cy=intro-title]').should('be.visible');
       cy.fillIntroTitle(updatedTitle);
@@ -393,6 +397,7 @@ describe('[Research]', () => {
       cy.step('Replace image');
       cy.get('[data-cy=image-input-field-0]').find('[data-cy=delete-image]').click({force: true});
       cy.get('[data-cy=image-input-field-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
+      cy.get('[data-cy=delete-image]').should('exist');
       
       cy.step('Replace file');
       cy.get('[data-cy=remove-file]').click();

@@ -105,6 +105,7 @@
     "react-tooltip": "^5.30.0",
     "remix-utils": "^9.0.1",
     "resend": "6.5.2",
+    "sharp": "^0.34.5",
     "styled-system": "^5.1.5",
     "theme-ui": "^0.17.2",
     "tslog": "^4.10.2",

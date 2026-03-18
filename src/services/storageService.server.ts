@@ -2,6 +2,7 @@ import type { TransformOptions } from '@supabase/storage-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBMedia } from 'oa-shared';
 import { Image, MediaFile } from 'oa-shared';
+import sharp from 'sharp';
 
 export class StorageServiceServer {
   constructor(private client: SupabaseClient) {}
@@ -65,16 +66,134 @@ export class StorageServiceServer {
     const media: DBMedia[] = [];
 
     for (const file of files) {
-      const result = await this.client.storage
-        .from(process.env.TENANT_ID as string)
-        .upload(`${path}/${file.name}`, file, { upsert: true });
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
 
-      if (result.data === null) {
-        errors.push(file.name + ': ' + result.error?.message);
-        continue;
+        // Determine format and dimensions
+        const metadata = await sharp(buffer).metadata();
+
+        // Check if image needs processing
+        // Always process JPEG/PNG for WebP conversion
+        // Process other formats if: dimensions too large OR file size > 1MB
+        const isJpegOrPng =
+          metadata.format === 'jpeg' || metadata.format === 'jpg' || metadata.format === 'png';
+        const needsProcessing =
+          isJpegOrPng ||
+          (metadata.width &&
+            metadata.height &&
+            (metadata.width > 2048 || metadata.height > 2048)) ||
+          buffer.length > 1024 * 1024; // 1MB in bytes
+
+        let finalBuffer: Buffer;
+        let finalContentType = file.type;
+        let finalFileName = file.name;
+
+        if (needsProcessing) {
+          let processedImage = sharp(buffer);
+
+          // Only resize if dimensions exceed limits
+          const needsResize =
+            metadata.width && metadata.height && (metadata.width > 2048 || metadata.height > 2048);
+
+          if (needsResize) {
+            processedImage = processedImage.resize(2048, 2048, {
+              fit: 'inside',
+              withoutEnlargement: true,
+              kernel: 'lanczos3', // High-quality resizing
+            });
+          }
+
+          switch (metadata.format) {
+            case 'jpeg':
+            case 'jpg':
+              // Convert JPEG to WebP for better compression (25-35% smaller)
+              processedImage = processedImage.webp({
+                quality: 82, // Slightly higher quality for JPEG conversions
+                alphaQuality: 100,
+                effort: 6,
+                smartSubsample: true,
+              });
+              finalContentType = 'image/webp';
+              // Update filename extension from .jpg/.jpeg to .webp
+              finalFileName = file.name.replace(/\.(jpg|jpeg)$/i, '.webp');
+              break;
+            case 'png':
+              // Convert PNG to WebP for better compression (25-35% smaller)
+              processedImage = processedImage.webp({
+                quality: 85, // Slightly higher quality for PNG conversions
+                alphaQuality: 100, // Preserve transparency quality
+                effort: 6, // Maximum compression effort
+                smartSubsample: true,
+              });
+              finalContentType = 'image/webp';
+              // Update filename extension from .png to .webp
+              finalFileName = file.name.replace(/\.png$/i, '.webp');
+              break;
+            case 'webp':
+              processedImage = processedImage.webp({
+                quality: 80, // WebP is efficient, 80 provides excellent quality
+                alphaQuality: 100, // Preserve transparency quality
+                effort: 6, // Maximum compression effort (0-6)
+                smartSubsample: true, // Better quality/size balance
+              });
+              finalContentType = 'image/webp';
+              break;
+            case 'gif':
+              // Keep GIF format to preserve animations and transparency
+              processedImage = processedImage.gif();
+              finalContentType = 'image/gif';
+              break;
+            case 'tiff':
+              processedImage = processedImage.tiff({
+                compression: 'lzw', // Lossless compression
+                quality: 85,
+              });
+              finalContentType = 'image/tiff';
+              break;
+            case 'avif':
+              processedImage = processedImage.avif({
+                quality: 80,
+                effort: 6,
+              });
+              finalContentType = 'image/avif';
+              break;
+            default:
+              // Keep original format for other types (preserves transparency, animations, etc.)
+              processedImage = processedImage.toFormat(metadata.format as any);
+          }
+
+          const processedBuffer = await processedImage.toBuffer();
+
+          // Use processed version only if it's smaller, otherwise keep original
+          if (processedBuffer.length < buffer.length) {
+            finalBuffer = processedBuffer;
+          } else {
+            finalBuffer = buffer;
+            finalContentType = file.type; // Keep original content type
+            finalFileName = file.name; // Keep original filename
+          }
+        } else {
+          // Non-JPEG/PNG image already optimized (dimensions ≤ 2048x2048 and size ≤ 1MB)
+          finalBuffer = buffer;
+        }
+
+        const result = await this.client.storage
+          .from(process.env.TENANT_ID as string)
+          .upload(`${path}/${finalFileName}`, finalBuffer, {
+            upsert: true,
+            contentType: finalContentType,
+          });
+
+        if (result.data === null) {
+          errors.push(file.name + ': ' + result.error?.message);
+          continue;
+        }
+
+        media.push(result.data);
+      } catch (error) {
+        errors.push(file.name + ': ' + (error instanceof Error ? error.message : 'Unknown error'));
       }
-
-      media.push(result.data);
     }
 
     return { media, errors };

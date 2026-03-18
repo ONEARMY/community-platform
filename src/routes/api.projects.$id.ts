@@ -78,6 +78,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     const projectDb = await updateProject(client, profile!, currentProject, data, slug);
     const project = Project.fromDB(projectDb, []);
+    const storage = new StorageServiceServer(client);
+
+    project.coverImage = projectDb.cover_image
+      ? storage.getPublicUrls([projectDb.cover_image])?.at(0) || null
+      : null;
+
     const existingStepIds = await libraryService.getProjectStepIds(projectDb.id);
 
     // 3. Upsert Steps
@@ -106,7 +112,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         },
         i + 1,
       );
-      const step = ProjectStep.fromDB(stepDb);
+
+      const publicImages = images ? storage.getPublicUrls(images) : undefined;
+      const step = ProjectStep.fromDB(stepDb, publicImages);
       project.steps.push(step);
     }
 

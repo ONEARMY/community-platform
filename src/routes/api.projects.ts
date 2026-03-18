@@ -140,8 +140,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const projectDb = await createProject(client, data, slug, moderation, profile);
     const project = Project.fromDB(projectDb, []);
 
-    project.coverImage = data.coverImage
-      ? new StorageServiceServer(client).getPublicUrls([data.coverImage])?.at(0) || null
+    project.coverImage = projectDb.cover_image
+      ? new StorageServiceServer(client).getPublicUrls([projectDb.cover_image])?.at(0) || null
       : null;
 
     project.steps = await uploadSteps(data, formData, projectDb, client);
@@ -243,6 +243,7 @@ async function createProject(
       difficulty_level: data.difficultyLevel,
       time: data.time,
       files: data.files,
+      cover_image: data.coverImage,
       moderation: moderation,
       tenant_id: process.env.TENANT_ID,
     })

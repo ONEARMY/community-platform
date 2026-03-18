@@ -376,7 +376,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-description]').clear().type(updateDescription).blur();
       
       cy.step('Add images to update');
-      cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+      cy.get('[data-cy=new-image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
       
       cy.step('Add file to update');
@@ -397,7 +397,7 @@ describe('[Research]', () => {
       cy.step('Replace image');
       cy.get('[data-cy=image-upload-0]').find('[data-cy=delete-image]').click({force: true});
       cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
-      cy.get('[data-cy=delete-image]').should('exist');
+      cy.get('[data-cy=image-upload-0]').find('[data-cy=delete-image]').should('exist');
       
       cy.step('Replace file');
       cy.get('[data-cy=remove-file]').click();

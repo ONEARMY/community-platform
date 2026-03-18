@@ -61,8 +61,6 @@ export const QuestionImagesField = (props: IProps) => {
     form.change('images', updatedImages);
   };
 
-  const numberOfUploadSlotsAvailable = Math.min(images.length + 1, maxImages);
-
   return (
     <FormFieldWrapper
       htmlFor="images"
@@ -74,30 +72,9 @@ export const QuestionImagesField = (props: IProps) => {
         <Text sx={{ color: 'error', fontSize: 1, mb: 2, width: '100%' }}>{uploadError}</Text>
       )}
 
-      {[...Array(numberOfUploadSlotsAvailable)].map((_, index) => {
-        const isUploading = uploadingIndex === index;
-        const hasImage = images[index];
-
-        if (hasImage && !isUploading) {
-          return null;
-        }
-
-        return (
-          <ImageInputFieldWrapper key={`image-upload-${index}`} data-cy={`image-upload-${index}`}>
-            {isUploading ? (
-              <Spinner size={20} />
-            ) : (
-              <ImageInputV2
-                onFilesChange={(file) => handleImageSelect(file, index)}
-                onError={setUploadError}
-              />
-            )}
-          </ImageInputFieldWrapper>
-        );
-      })}
-
+      {/* Show existing images in order */}
       {images.map((image, index) => (
-        <ImageInputFieldWrapper key={`existing-image-${index}`} data-cy={`existing-image-${index}`}>
+        <ImageInputFieldWrapper key={`image-upload-${index}`} data-cy={`image-upload-${index}`}>
           <ImageInputV2
             image={image}
             onFilesChange={(file) => handleImageSelect(file, index)}
@@ -105,6 +82,20 @@ export const QuestionImagesField = (props: IProps) => {
           />
         </ImageInputFieldWrapper>
       ))}
+
+      {/* Show upload slot at the end if under the limit */}
+      {images.length < maxImages && (
+        <ImageInputFieldWrapper key="new-image-upload" data-cy="new-image-upload">
+          {uploadingIndex === images.length ? (
+            <Spinner size={20} />
+          ) : (
+            <ImageInputV2
+              onFilesChange={(file) => handleImageSelect(file, images.length)}
+              onError={setUploadError}
+            />
+          )}
+        </ImageInputFieldWrapper>
+      )}
     </FormFieldWrapper>
   );
 };

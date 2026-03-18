@@ -55,10 +55,6 @@ export const ResearchImagesField = (props: IProps) => {
 
   const currentImages: DBMedia[] = state.values.images || [];
 
-  const numberOfImageInputsAvailable = currentImages
-    ? Math.min(currentImages.filter((x) => !!x).length + 1, 10)
-    : 1;
-
   const removeImage = (index: number) => {
     form.change(
       'images',
@@ -72,30 +68,8 @@ export const ResearchImagesField = (props: IProps) => {
         <Text sx={{ color: 'error', fontSize: 1, mb: 2, width: '100%' }}>{uploadError}</Text>
       )}
 
-      {[...Array(numberOfImageInputsAvailable)].map((_, i) => {
-        const isUploading = uploadingIndex === i;
-        const hasImage = currentImages[i];
-
-        if (hasImage && !isUploading) {
-          return null; // Don't show upload slot if already uploaded
-        }
-
-        return (
-          <ImageInputFieldWrapper key={`image-upload-${i}`} data-cy={`image-upload-${i}`}>
-            {isUploading ? (
-              <Spinner size={20} />
-            ) : (
-              <ImageInputV2
-                onFilesChange={(file) => handleImageSelect(file, i)}
-                onError={handleImageError}
-              />
-            )}
-          </ImageInputFieldWrapper>
-        );
-      })}
-
       {state.values.images?.map((image: MediaWithPublicUrl, i: number) => (
-        <ImageInputFieldWrapper key={`existing-image-${i}`} data-cy={`existing-image-${i}`}>
+        <ImageInputFieldWrapper key={`image-upload-${i}`} data-cy={`image-upload-${i}`}>
           <ImageInputV2
             image={image}
             onFilesChange={(file) => {
@@ -107,6 +81,19 @@ export const ResearchImagesField = (props: IProps) => {
           />
         </ImageInputFieldWrapper>
       ))}
+
+      {currentImages.length < 10 && (
+        <ImageInputFieldWrapper data-cy="new-image-upload">
+          {uploadingIndex === currentImages.length ? (
+            <Spinner size={20} />
+          ) : (
+            <ImageInputV2
+              onFilesChange={(file) => handleImageSelect(file, currentImages.length)}
+              onError={handleImageError}
+            />
+          )}
+        </ImageInputFieldWrapper>
+      )}
     </FormFieldWrapper>
   );
 };

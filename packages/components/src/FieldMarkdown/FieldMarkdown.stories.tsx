@@ -1,4 +1,4 @@
-import { DBMedia } from 'oa-shared';
+import { MediaWithPublicUrl } from 'oa-shared';
 import { FieldMarkdown } from './FieldMarkdown';
 
 import type { Meta, StoryFn } from '@storybook/react-vite';
@@ -8,7 +8,7 @@ export default {
   component: FieldMarkdown,
 } as Meta<typeof FieldMarkdown>;
 
-const imageUpload = () => Promise.resolve({} as DBMedia);
+const imageUpload = () => Promise.resolve({} as MediaWithPublicUrl);
 
 export const Default: StoryFn<typeof FieldMarkdown> = () => (
   <FieldMarkdown

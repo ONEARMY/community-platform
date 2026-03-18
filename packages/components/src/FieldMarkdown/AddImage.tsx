@@ -1,5 +1,5 @@
 import { insertImage$, usePublisher } from '@mdxeditor/editor';
-import { DBMedia } from 'oa-shared';
+import { MediaWithPublicUrl } from 'oa-shared';
 import { useState } from 'react';
 import { Box, Flex } from 'theme-ui';
 import { Button } from '../Button/Button';
@@ -8,17 +8,19 @@ import { Loader } from '../Loader/Loader';
 import { Modal } from '../Modal/Modal';
 
 interface IProps {
-  imageUploadHandler: (image: File) => Promise<DBMedia | null>;
+  imageUploadHandler: (image: File) => Promise<MediaWithPublicUrl | null>;
 }
 
 export const AddImage = ({ imageUploadHandler }: IProps) => {
   const insertImage = usePublisher(insertImage$);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const onFilesChange = async (file: File | undefined) => {
-    if (!file) return;
+    if (!file) {
+      return;
+    }
 
     setIsLoading(true);
     setError(null);
@@ -28,9 +30,7 @@ export const AddImage = ({ imageUploadHandler }: IProps) => {
 
       if (mediaFile) {
         insertImage({
-          src: mediaFile.fullPath,
-          altText: mediaFile.path,
-          title: mediaFile.path,
+          src: mediaFile.publicUrl,
         });
       } else {
         setError('Failed to upload image. Please try again.');
@@ -63,7 +63,7 @@ export const AddImage = ({ imageUploadHandler }: IProps) => {
         Upload
       </Button>
 
-      <Modal isOpen={isOpen} width={600} onDismiss={() => setIsOpen(false)}>
+      <Modal isOpen={isOpen} width={600} onDismiss={() => {}}>
         <Flex sx={{ flexDirection: 'column', gap: 2 }}>
           {error && <Box sx={{ color: 'error', fontSize: 1 }}>{error}</Box>}
           <Box sx={{ height: '300px' }}>

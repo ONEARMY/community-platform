@@ -366,7 +366,7 @@ describe('[Library]', () => {
       
       cy.step('Replace step image');
       cy.get('[data-cy=step_0]').within(() => {
-        cy.get('[data-cy=delete-image]').first().click();
+        cy.get('[data-cy=delete-image]').first().click({force: true});
         cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
         cy.get('[data-cy=delete-image]').should('exist');
       });

@@ -397,6 +397,10 @@ describe('[Library]', () => {
       cy.get('[data-cy="image-input"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-intro.jpg', { force: true });
       cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').should('exist');
       
+      cy.step('Upload a file');
+      cy.get('[id=file-input]').selectFile('src/fixtures/files/Example.pdf', { force: true });
+      cy.get('[data-cy=remove-file]').should('exist');
+      
       cy.step('Add step');
       cy.get('[data-cy=step_0]').within(() => {
         cy.get('[data-cy=step-title]').clear().type('First step').blur();
@@ -435,9 +439,5 @@ describe('[Library]', () => {
       cy.url().should('include', `/library/${slug}`);
       cy.get('[data-cy=downloadButton]').should('be.visible');
     });
-
-    // it('[Admin]', () => {
-    // Should check an admin can edit other's content
-    // })
   });
 });

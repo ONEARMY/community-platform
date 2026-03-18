@@ -214,7 +214,7 @@ describe('[Research]', () => {
       cy.step('Create a research article with image');
       cy.visit('/research/create');
       cy.contains('Start your Research');
-      cy.get('[data-cy=intro-title').clear().should('not.be.disabled').type(title).blur();
+      cy.get('[data-cy=intro-title').clear().should('not.be.disabled').type(title, {force: true}).blur();
       cy.get('[data-cy=intro-description]').clear().type(description).blur();
       cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
@@ -356,7 +356,7 @@ describe('[Research]', () => {
       cy.step('Create research article');
       cy.visit('/research/create');
       cy.contains('Start your Research');
-      cy.get('[data-cy=intro-title').should('not.be.disabled').clear().type(researchTitle).blur();
+      cy.get('[data-cy=intro-title').should('not.be.disabled').clear().type(researchTitle, { force: true }).blur();
       cy.get('[data-cy=intro-description]').clear().type('Research description').blur();
       cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=submit]').click();

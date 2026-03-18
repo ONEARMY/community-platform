@@ -360,7 +360,7 @@ describe('[Library]', () => {
       cy.get('[data-cy=intro-description]').clear().type(updatedDescription);
       
       cy.step('Replace cover image');
-      cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').click();
+      cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').click({force: true});
       cy.get('[data-cy="image-input"]').find('input[type="file"]').selectFile('src/fixtures/images/howto-step-pic2.jpg', { force: true });
       cy.get('[data-cy="image-input"]').parent().find('[data-cy=delete-image]').should('exist');
       

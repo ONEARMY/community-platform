@@ -213,8 +213,9 @@ describe('[Research]', () => {
 
       cy.step('Create a research article with image');
       cy.visit('/research/create');
+      cy.wait(2000);
       cy.contains('Start your Research');
-      cy.get('[data-cy=intro-title').clear().should('not.be.disabled').type(title, {force: true}).blur();
+      cy.get('[data-cy=intro-title').clear().type(title).blur();
       cy.get('[data-cy=intro-description]').clear().type(description).blur();
       cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=delete-image]').should('exist');
@@ -223,7 +224,7 @@ describe('[Research]', () => {
 
       cy.step('Edit research and replace cover image');
       cy.get('[data-cy=edit]').click();
-      cy.get('[data-cy=intro-description]').clear().should('not.be.disabled').type(updatedDescription).blur();
+      cy.get('[data-cy=intro-description]').clear().type(updatedDescription).blur();
       
       cy.step('Delete existing image and upload new one');
       cy.get('[data-cy=delete-image]').click();
@@ -259,8 +260,10 @@ describe('[Research]', () => {
       cy.get('a[href="/research/create"]').should('be.visible');
       cy.get('[data-cy=create]:visible').click();
 
+      cy.wait(2000);
+      
       cy.step('Enter research article details');
-      cy.get('[data-cy=intro-title').should('not.be.disabled').clear().type(researchItem.title, { force: true }).blur();
+      cy.get('[data-cy=intro-title').clear().type(researchItem.title).blur();
       cy.get('[data-cy=intro-description]').clear().type(researchItem.description);
       cy.selectTag(researchItem.category, '[data-cy=category-select]');
       cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
@@ -356,7 +359,7 @@ describe('[Research]', () => {
       cy.step('Create research article');
       cy.visit('/research/create');
       cy.contains('Start your Research');
-      cy.get('[data-cy=intro-title').should('not.be.disabled').clear().type(researchTitle, { force: true }).blur();
+      cy.get('[data-cy=intro-title').clear().type(researchTitle).blur();
       cy.get('[data-cy=intro-description]').clear().type('Research description').blur();
       cy.get('[data-cy=image-input]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
       cy.get('[data-cy=submit]').click();

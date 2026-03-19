@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { serveStatic } from 'hono/bun';
+import { compress } from 'hono/compress';
 import { secureHeaders } from 'hono/secure-headers';
-import { compress } from 'hono-compress';
 import { createRequestHandler } from 'react-router';
 
 const isProd = process.env.NODE_ENV === 'production';

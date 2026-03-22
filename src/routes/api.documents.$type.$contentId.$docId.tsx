@@ -96,8 +96,6 @@ async function resolveFileFromStorage(
   // The name field contains the full path in storage
   const fullPath = data.name;
 
-  console.log({ docId, bucket, fullPath, name: data.name });
-
   return { fullPath, name: data.name };
 }
 

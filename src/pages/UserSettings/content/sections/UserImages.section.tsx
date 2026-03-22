@@ -2,6 +2,7 @@ import type { FormApi } from 'final-form';
 import { observer } from 'mobx-react';
 import { ImageInputV2 } from 'oa-components';
 import type { ProfileFormData } from 'oa-shared';
+import { commonStyles } from 'oa-themes';
 import { useState } from 'react';
 import { Field } from 'react-final-form';
 import { fields, headings } from 'src/pages/UserSettings/labels';
@@ -95,7 +96,7 @@ export const UserImagesSection = observer(({ isMemberProfile, values, form }: IP
         >
           {isUploadingPhoto ? (
             <Flex sx={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-              <Spinner size={32} />
+              <Spinner size={32} sx={{ color: commonStyles.colors.darkGrey }} />
             </Flex>
           ) : (
             <Box sx={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -137,7 +138,7 @@ export const UserImagesSection = observer(({ isMemberProfile, values, form }: IP
                   >
                     {uploadingCoverIndex === index ? (
                       <Flex sx={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                        <Spinner size={20} />
+                        <Spinner size={20} sx={{ color: commonStyles.colors.darkGrey }} />
                       </Flex>
                     ) : (
                       <ImageInputV2

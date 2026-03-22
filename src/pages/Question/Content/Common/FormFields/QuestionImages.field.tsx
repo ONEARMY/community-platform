@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { ImageInputV2 } from 'oa-components';
 import type { MediaWithPublicUrl } from 'oa-shared';
+import { commonStyles } from 'oa-themes';
 import { useState } from 'react';
 import { useForm, useFormState } from 'react-final-form';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
@@ -85,9 +86,9 @@ export const QuestionImagesField = (props: IProps) => {
 
       {/* Show upload slot at the end if under the limit */}
       {images.length < maxImages && (
-        <ImageInputFieldWrapper key="new-image-upload" data-cy="new-image-upload">
+        <ImageInputFieldWrapper data-cy="new-image-upload">
           {uploadingIndex === images.length ? (
-            <Spinner size={20} />
+            <Spinner size={20} sx={{ color: commonStyles.colors.darkGrey }} />
           ) : (
             <ImageInputV2
               onFilesChange={(file) => handleImageSelect(file, images.length)}

@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { ImageInputV2 } from 'oa-components';
 import { DBMedia, MediaWithPublicUrl, ResearchUpdateFormData } from 'oa-shared';
+import { commonStyles } from 'oa-themes';
 import { useState } from 'react';
 import { useForm, useFormState } from 'react-final-form';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
@@ -85,7 +86,7 @@ export const ResearchImagesField = (props: IProps) => {
       {currentImages.length < 10 && (
         <ImageInputFieldWrapper data-cy="new-image-upload">
           {uploadingIndex === currentImages.length ? (
-            <Spinner size={20} />
+            <Spinner size={20} sx={{ color: commonStyles.colors.darkGrey }} />
           ) : (
             <ImageInputV2
               onFilesChange={(file) => handleImageSelect(file, currentImages.length)}

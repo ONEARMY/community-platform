@@ -1,6 +1,7 @@
 import { FieldInput } from 'oa-components';
 import type { IFilesForm, MediaFile, ProjectFormData } from 'oa-shared';
 import { UserRole } from 'oa-shared';
+import { commonStyles } from 'oa-themes';
 import { useState } from 'react';
 import { Field, useForm, useFormState } from 'react-final-form';
 import { ClientOnly } from 'remix-utils/client-only';
@@ -155,7 +156,7 @@ const UploadNewFiles = ({
             <>
               {isUploading ? (
                 <Flex sx={{ alignItems: 'center', mb: 2 }}>
-                  <Spinner />
+                  <Spinner sx={{ color: commonStyles.colors.darkGrey }} />
                   <Text sx={{ ml: 2 }}>Uploading files...</Text>
                 </Flex>
               ) : (
@@ -174,7 +175,7 @@ const UploadNewFiles = ({
         >
           {isUploading ? (
             <Flex sx={{ alignItems: 'center', mb: 2 }}>
-              <Spinner />
+              <Spinner sx={{ color: commonStyles.colors.darkGrey }} />
               <Text sx={{ ml: 2 }}>Uploading files...</Text>
             </Flex>
           ) : (

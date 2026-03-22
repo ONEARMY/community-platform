@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { ImageInputV2 } from 'oa-components';
 import type { ProjectFormData } from 'oa-shared';
+import { commonStyles } from 'oa-themes';
 import { useState } from 'react';
 import { useForm, useFormState } from 'react-final-form';
 import { FieldContainer } from 'src/common/Form/FieldContainer';
@@ -71,7 +72,7 @@ export const ImageField = (props: ImageFieldProps) => {
         >
           {isUploading ? (
             <>
-              <Spinner />
+              <Spinner sx={{ color: commonStyles.colors.darkGrey }} />
               <Text sx={{ ml: 2 }}>Uploading image...</Text>
             </>
           ) : (

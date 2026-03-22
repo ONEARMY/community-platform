@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { ImageInputV2 } from 'oa-components';
 import type { MediaWithPublicUrl } from 'oa-shared';
+import { commonStyles } from 'oa-themes';
 import { useState } from 'react';
 import { useForm, useFormState } from 'react-final-form';
 import { storageService } from 'src/services/storageService';
@@ -93,7 +94,7 @@ export const StepImageField = ({
     <ImageInputFieldWrapper data-cy={`image-upload-${imageIndex}`}>
       {uploadError && <Text sx={{ color: 'error', fontSize: 0, mb: 1 }}>{uploadError}</Text>}
       {isUploading ? (
-        <Spinner size={20} />
+        <Spinner size={20} sx={{ color: commonStyles.colors.darkGrey }} />
       ) : (
         <ImageInputV2
           onFilesChange={(file) => file && handleImageSelect(file, imageIndex)}

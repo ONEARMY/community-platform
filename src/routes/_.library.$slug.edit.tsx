@@ -1,7 +1,6 @@
 import { DBProject } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
-import { ClientOnly } from 'remix-utils/client-only';
 import { LibraryForm } from 'src/pages/Library/Content/Common/LibraryForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { LibraryServiceServer } from 'src/services/libraryService.server';
@@ -31,7 +30,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   if (projectDb.cover_image) {
     allImages.push(projectDb.cover_image);
   }
-  const publicImages = projectDb?.cover_image
+  const publicImages = allImages.length
     ? new StorageServiceServer(client).getPublicUrls(allImages)
     : [];
 
@@ -43,5 +42,5 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export default function Index() {
   const { id, formData } = useLoaderData<typeof loader>();
 
-  return <ClientOnly>{() => <LibraryForm id={id} formData={formData} />}</ClientOnly>;
+  return <LibraryForm id={id} formData={formData} />;
 }

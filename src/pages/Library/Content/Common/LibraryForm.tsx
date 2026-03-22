@@ -140,43 +140,41 @@ export const LibraryForm = ({ id, formData }: LibraryFormProps) => {
         );
 
         return (
-          <>
-            <FormWrapper
-              belowBody={belowBody}
-              buttonLabel={buttons.publish}
-              contentType="research"
-              errorsClientSide={errorsClientSide}
-              errorSubmitting={saveErrorMessage}
-              guidelines={<LibraryPostingGuidelines />}
-              handleSubmit={handleSubmit}
-              handleSubmitDraft={handleSubmitDraft}
-              hasValidationErrors={hasValidationErrors}
-              heading={headingText}
-              submitFailed={submitFailed}
-              submitting={submitting || isSubmitting}
-              unsavedChangesDialog={unsavedChangesDialog}
+          <FormWrapper
+            belowBody={belowBody}
+            buttonLabel={buttons.publish}
+            contentType="research"
+            errorsClientSide={errorsClientSide}
+            errorSubmitting={saveErrorMessage}
+            guidelines={<LibraryPostingGuidelines />}
+            handleSubmit={handleSubmit}
+            handleSubmitDraft={handleSubmitDraft}
+            hasValidationErrors={hasValidationErrors}
+            heading={headingText}
+            submitFailed={submitFailed}
+            submitting={submitting || isSubmitting}
+            unsavedChangesDialog={unsavedChangesDialog}
+          >
+            <Flex
+              sx={{
+                gap: 4,
+                flexDirection: ['column', 'row'],
+              }}
             >
-              <Flex
-                sx={{
-                  gap: 4,
-                  flexDirection: ['column', 'row'],
-                }}
-              >
-                <Flex sx={{ flexDirection: 'column', gap: 2, flex: 1 }}>
-                  <LibraryTitleField />
-                  <LibraryDescriptionField />
-                  <LibraryCategoryField />
-                  <TagsField title={intro.tags.title} />
-                  <LibraryTimeField />
-                  <LibraryDifficultyField />
-                  <FilesFields contentType="projects" contentId={id ?? null} />
-                </Flex>
-                <Flex data-cy="intro-cover" sx={{ flex: 1, width: '100%' }}>
-                  <ImageField title="Cover Image" contentType="projects" contentId={id ?? null} />
-                </Flex>
+              <Flex sx={{ flexDirection: 'column', gap: 2, flex: 1 }}>
+                <LibraryTitleField />
+                <LibraryDescriptionField />
+                <LibraryCategoryField />
+                <TagsField title={intro.tags.title} />
+                <LibraryTimeField />
+                <LibraryDifficultyField />
+                <FilesFields contentType="projects" contentId={id ?? null} />
               </Flex>
-            </FormWrapper>
-          </>
+              <Flex data-cy="intro-cover" sx={{ flex: 1, width: '100%' }}>
+                <ImageField title="Cover Image" contentType="projects" contentId={id ?? null} />
+              </Flex>
+            </Flex>
+          </FormWrapper>
         );
       }}
     />

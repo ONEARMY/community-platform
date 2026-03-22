@@ -4,8 +4,10 @@ import type { MediaWithPublicUrl } from 'oa-shared';
 import { commonStyles } from 'oa-themes';
 import { useState } from 'react';
 import { useForm, useFormState } from 'react-final-form';
+import { steps } from 'src/pages/Library/labels';
 import { storageService } from 'src/services/storageService';
 import { Spinner, Text } from 'theme-ui';
+import { FormFieldWrapper } from './FormFieldWrapper';
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -13,23 +15,25 @@ const ImageInputFieldWrapper = styled.div`
   margin-right: 10px;
 `;
 
-interface StepImageFieldProps {
+const MAX_IMAGES = 10;
+
+interface StepImagesFieldProps {
   stepIndex: number;
-  imageIndex: number;
   contentType: 'projects' | 'research' | 'questions' | 'news';
   contentId?: number | null;
   images: MediaWithPublicUrl[];
+  fieldName: string;
   onImageUploaded?: () => void;
 }
 
-export const StepImageField = ({
+export const StepImagesField = ({
   stepIndex,
-  imageIndex,
   contentType,
   contentId,
   images,
+  fieldName,
   onImageUploaded,
-}: StepImageFieldProps) => {
+}: StepImagesFieldProps) => {
   const state = useFormState();
   const form = useForm();
   const [isUploading, setIsUploading] = useState(false);
@@ -37,11 +41,8 @@ export const StepImageField = ({
 
   const imagesFieldName = `steps[${stepIndex}].images`;
 
-  const handleImageSelect = async (file: File | undefined, index: number) => {
-    // If user is clearing the image
+  const handleImageSelect = async (file: File | undefined) => {
     if (!file) {
-      const updatedImages = (images || []).filter((_, i) => i !== index);
-      form.change(imagesFieldName, updatedImages);
       return;
     }
 
@@ -68,39 +69,48 @@ export const StepImageField = ({
     }
   };
 
-  // Show existing images in the first slot
-  if (imageIndex < images.length) {
-    const image = images[imageIndex];
-    return (
-      <ImageInputFieldWrapper data-cy={`image-${imageIndex}`}>
-        <ImageInputV2
-          image={image}
-          onFilesChange={(file) => {
-            if (file) {
-              handleImageSelect(file, imageIndex);
-            } else {
-              const updatedImages = (images || []).filter((_, i) => i !== imageIndex);
-              form.change(imagesFieldName, updatedImages);
-            }
-          }}
-          onError={setUploadError}
-        />
-      </ImageInputFieldWrapper>
-    );
-  }
+  const removeImage = (imageIndex: number) => {
+    const updatedImages = (images || []).filter((_, i) => i !== imageIndex);
+    form.change(imagesFieldName, updatedImages);
+  };
 
-  // Show upload field or spinner
   return (
-    <ImageInputFieldWrapper data-cy={`image-upload-${imageIndex}`}>
-      {uploadError && <Text sx={{ color: 'error', fontSize: 0, mb: 1 }}>{uploadError}</Text>}
-      {isUploading ? (
-        <Spinner size={20} sx={{ color: commonStyles.colors.darkGrey }} />
-      ) : (
-        <ImageInputV2
-          onFilesChange={(file) => file && handleImageSelect(file, imageIndex)}
-          onError={setUploadError}
-        />
+    <FormFieldWrapper
+      htmlFor={fieldName}
+      text={steps.images.title}
+      flexDirection="row"
+      flexWrap="wrap"
+    >
+      {uploadError && (
+        <Text sx={{ color: 'error', fontSize: 1, mb: 2, width: '100%' }}>{uploadError}</Text>
       )}
-    </ImageInputFieldWrapper>
+
+      {images?.map((image, i) => (
+        <ImageInputFieldWrapper key={`image-${i}`} data-cy={`image-${i}`}>
+          <ImageInputV2
+            image={image}
+            onFilesChange={(file) => {
+              if (!file) {
+                removeImage(i);
+              }
+            }}
+            onError={setUploadError}
+          />
+        </ImageInputFieldWrapper>
+      ))}
+
+      {images.length < MAX_IMAGES && (
+        <ImageInputFieldWrapper data-cy="new-image-upload">
+          {isUploading ? (
+            <Spinner size={20} sx={{ color: commonStyles.colors.darkGrey }} />
+          ) : (
+            <ImageInputV2
+              onFilesChange={(file) => handleImageSelect(file)}
+              onError={setUploadError}
+            />
+          )}
+        </ImageInputFieldWrapper>
+      )}
+    </FormFieldWrapper>
   );
 };

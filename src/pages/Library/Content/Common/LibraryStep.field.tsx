@@ -2,7 +2,7 @@ import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components';
 import type { MediaWithPublicUrl } from 'oa-shared';
 import { useState } from 'react';
 import { Field } from 'react-final-form';
-import { StepImageField } from 'src/pages/common/FormFields';
+import { StepImagesField } from 'src/pages/common/FormFields';
 import { COMPARISONS } from 'src/utils/comparisons';
 import {
   composeValidators,
@@ -89,9 +89,6 @@ export const LibraryStepField = ({
   };
 
   const isAboveMinimumStep = index >= LIBRARY_MIN_REQUIRED_STEPS;
-
-  // Show one more slot than existing images (up to 10 total)
-  const numberOfImageInputsAvailable = Math.min((images?.length || 0) + 1, 10);
 
   return (
     <Card data-cy={`step_${index}`} mt={5} key={index}>
@@ -210,27 +207,13 @@ export const LibraryStepField = ({
           />
         </Flex>
 
-        <Label sx={_labelStyle} htmlFor={`${name}.description`}>
-          {`${steps.images.title} *`}
-        </Label>
-        <Flex
-          sx={{
-            flexDirection: ['column', 'row'],
-            alignItems: 'center',
-            marginBottom: 3,
-          }}
-        >
-          {[...Array(numberOfImageInputsAvailable)].map((_, i) => (
-            <StepImageField
-              key={`step-image-${i}`}
-              stepIndex={index}
-              imageIndex={i}
-              contentType={contentType}
-              contentId={contentId}
-              images={images}
-            />
-          ))}
-        </Flex>
+        <StepImagesField
+          stepIndex={index}
+          contentType={contentType}
+          contentId={contentId}
+          images={images}
+          fieldName={name}
+        />
 
         <Flex sx={{ flexDirection: 'column' }}>
           <Field

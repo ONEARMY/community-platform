@@ -41,6 +41,7 @@ export class StorageServiceServer {
               }
             : undefined,
         );
+
         result.push(
           new Image({
             id: x.id,

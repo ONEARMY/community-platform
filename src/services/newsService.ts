@@ -1,35 +1,17 @@
 import type { DBNews, NewsFormData } from 'oa-shared';
-import { News } from 'oa-shared';
-import { getCleanFileName } from 'src/utils/storage';
+import { DBMedia, News, NewsDTO } from 'oa-shared';
+import { createFormData } from './formDataHelper';
 
 const upsert = async (id: number | null, form: NewsFormData) => {
-  const { category, profileBadge, tags, title } = form;
-  const body = new FormData();
-  body.append('title', title);
-  body.append('body', form.body!);
-  body.append('is_draft', form.isDraft ? 'true' : 'false');
-
-  if (tags && tags.length > 0) {
-    for (const tag of tags) {
-      body.append('tags', tag.toString());
-    }
-  }
-
-  if (profileBadge) {
-    body.append('profileBadge', profileBadge.value.toString());
-  }
-
-  if (category) {
-    body.append('category', category?.value.toString());
-  }
-
-  if (form.heroImage) {
-    body.append('heroImage', form.heroImage.photoData, getCleanFileName(form.heroImage.name));
-  }
-
-  if (form.existingHeroImage) {
-    body.append('existingHeroImage', form.existingHeroImage.id);
-  }
+  const body = createFormData<NewsDTO>({
+    title: form.title,
+    body: form.body,
+    category: Number(form.category?.value) || null,
+    heroImage: form.heroImage ? DBMedia.fromPublicMedia(form.heroImage) : null,
+    isDraft: form.isDraft,
+    profileBadge: Number(form.profileBadge?.value) || null,
+    tags: form.tags || null,
+  });
 
   const response =
     id === null
@@ -43,7 +25,9 @@ const upsert = async (id: number | null, form: NewsFormData) => {
         });
 
   if (response.status !== 200 && response.status !== 201) {
-    throw new Error(`Error saving news: ${response.statusText}`, { cause: 500 });
+    const errorData = await response.json().catch(() => ({ error: 'Error saving news' }));
+    const errorMessage = errorData.error || errorData.message || 'Error saving news';
+    throw new Error(errorMessage, { cause: response.status });
   }
 
   const data: { news: DBNews } = await response.json();

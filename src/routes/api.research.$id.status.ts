@@ -1,7 +1,7 @@
 import type { ResearchStatus } from 'oa-shared';
 import type { ActionFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { researchServiceServer } from 'src/services/researchService.server';
+import { ResearchServiceServer } from 'src/services/researchService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -28,8 +28,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return Response.json({}, { headers, status, statusText });
     }
 
-    const canEdit = await researchServiceServer.isAllowedToEditResearchById(
-      client,
+    const canEdit = await new ResearchServiceServer(client).isAllowedToEditResearchById(
       id,
       claims.data.claims.user_metadata?.username,
     );

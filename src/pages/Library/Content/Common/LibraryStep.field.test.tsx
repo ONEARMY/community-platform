@@ -10,7 +10,6 @@ describe('LibraryStepField', () => {
       name: '',
       index: 0,
       images: [],
-      existingImages: [],
       onDelete: vi.fn(() => null),
       moveStep: vi.fn(() => null),
       removeExistingImage: vi.fn(() => null),

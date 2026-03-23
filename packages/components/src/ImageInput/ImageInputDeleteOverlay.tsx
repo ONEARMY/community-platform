@@ -35,10 +35,10 @@ const UploadImageOverlay = (props: BoxProps): JSX.Element => (
 );
 
 interface IProps {
-  onClick: (event: Event) => void;
+  onClick: (event: React.MouseEvent) => void;
 }
 
-export const ImageInputDeleteImage = ({ onClick }: IProps) => {
+export const ImageInputDeleteOverlay = ({ onClick }: IProps) => {
   return (
     <UploadImageOverlay>
       <Button

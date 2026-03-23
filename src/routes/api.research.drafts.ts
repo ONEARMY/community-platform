@@ -4,7 +4,7 @@ import type { LoaderFunctionArgs } from 'react-router';
 import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
+import { StorageServiceServer } from 'src/services/storageService.server';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -88,11 +88,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return Response.json({ items: [] }, { headers });
   }
 
+  const storage = new StorageServiceServer(client);
+
   const drafts = result.data as unknown as DBResearchItem[];
   const items = drafts.map((x) => {
-    const images = x.image
-      ? storageServiceServer.getPublicUrls(client, [x.image], IMAGE_SIZES.LIST)
-      : [];
+    const images = x.image ? storage.getPublicUrls([x.image], IMAGE_SIZES.LIST) : [];
 
     return ResearchItem.fromDB(x, [], images);
   });

@@ -1,6 +1,6 @@
 import { Button, ConfirmModal } from 'oa-components';
-import type { Question, QuestionFormData } from 'oa-shared';
-import { useEffect, useState } from 'react';
+import type { QuestionFormData } from 'oa-shared';
+import { useMemo, useState } from 'react';
 import { Form } from 'react-final-form';
 import { useNavigate } from 'react-router';
 import { FormWrapper } from 'src/common/Form/FormWrapper';
@@ -22,28 +22,19 @@ import { QUESTION_MAX_IMAGES, QUESTION_MIN_TITLE_LENGTH } from '../../constants'
 
 interface IProps {
   'data-testid'?: string;
-  question: Question | null;
-  parentType: MainFormAction;
+  id: number | null;
+  formData: QuestionFormData | null;
+  formAction: MainFormAction;
 }
 
 export const QuestionForm = (props: IProps) => {
-  const { question, parentType } = props;
   const navigate = useNavigate();
-  const [initialValues, setInitialValues] = useState<QuestionFormData>({
-    category: null,
-    description: '',
-    existingImages: [],
-    images: [],
-    isDraft: false,
-    tags: [],
-    title: '',
-  });
   const [saveErrorMessage, setSaveErrorMessage] = useState<string | null>(null);
   const [intentionalNavigation, setIntentionalNavigation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const id = question?.id || null;
-  const isEdit = parentType === 'edit';
+  const id = props?.id || null;
+  const isEdit = props.formAction === 'edit';
 
   const handleDelete = async () => {
     if (!id) {
@@ -54,26 +45,18 @@ export const QuestionForm = (props: IProps) => {
     window.location.assign('/questions');
   };
 
-  useEffect(() => {
-    if (!question) {
-      return;
-    }
-
-    setInitialValues({
-      category: question.category
-        ? {
-            value: question.category.id?.toString(),
-            label: question.category.name,
-          }
-        : null,
-      description: question.description,
-      existingImages: question.images,
-      images: null,
-      isDraft: question.isDraft,
-      tags: question.tagIds,
-      title: question.title,
-    });
-  }, [question]);
+  const initialValues = useMemo<QuestionFormData>(
+    () =>
+      ({
+        title: props.formData?.title || '',
+        description: props.formData?.description || '',
+        category: props.formData?.category || null,
+        images: props.formData?.images || [],
+        tags: props.formData?.tags || null,
+        isDraft: props.formData?.isDraft || null,
+      }) satisfies QuestionFormData,
+    [],
+  );
 
   const onSubmit = async (formValues: Partial<QuestionFormData>, isDraft: boolean = false) => {
     setIntentionalNavigation(true);
@@ -84,11 +67,10 @@ export const QuestionForm = (props: IProps) => {
       const result = await questionService.upsert(id, {
         title: formValues.title!,
         description: formValues.description!,
-        tags: formValues.tags,
+        tags: formValues.tags || null,
         category: formValues.category || null,
         images: formValues.images || null,
         isDraft: isDraft,
-        existingImages: initialValues.existingImages || null,
       });
 
       if (result) {
@@ -105,15 +87,6 @@ export const QuestionForm = (props: IProps) => {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const removeExistingImage = (index: number) => {
-    setInitialValues((prevState: QuestionFormData) => {
-      return {
-        ...prevState,
-        existingImages: prevState.existingImages?.filter((_, i) => i !== index) ?? null,
-      };
-    });
   };
 
   return (
@@ -138,10 +111,6 @@ export const QuestionForm = (props: IProps) => {
             e.preventDefault();
             await onSubmit(values, true);
           };
-
-          const numberOfImageInputsAvailable = (values as any)?.images
-            ? Math.min((values as any).images.filter((x) => !!x).length + 1, QUESTION_MAX_IMAGES)
-            : 1;
 
           const unsavedChangesDialog = (
             <UnsavedChangesDialog
@@ -173,7 +142,7 @@ export const QuestionForm = (props: IProps) => {
 
           return (
             <FormWrapper
-              buttonLabel={LABELS.buttons[parentType]}
+              buttonLabel={LABELS.buttons[props.formAction]}
               contentType="questions"
               errorsClientSide={errorsClientSide}
               errorSubmitting={saveErrorMessage}
@@ -181,7 +150,7 @@ export const QuestionForm = (props: IProps) => {
               handleSubmit={handleSubmit}
               handleSubmitDraft={handleSubmitDraft}
               hasValidationErrors={hasValidationErrors}
-              heading={LABELS.headings[parentType]}
+              heading={LABELS.headings[props.formAction]}
               sidebar={sidebar}
               submitFailed={submitFailed}
               submitting={submitting || isSubmitting}
@@ -194,9 +163,9 @@ export const QuestionForm = (props: IProps) => {
               />
               <QuestionDescriptionField />
               <QuestionImagesField
-                inputsAvailable={numberOfImageInputsAvailable}
-                existingImages={initialValues.existingImages}
-                removeExistingImage={removeExistingImage}
+                contentType="questions"
+                contentId={id}
+                maxImages={QUESTION_MAX_IMAGES}
               />
               <CategoryField type="questions" />
               <TagsField title={LABELS.fields.tags.title} />

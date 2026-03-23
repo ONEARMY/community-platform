@@ -1,18 +1,24 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBNews } from 'oa-shared';
+import { HTTPException } from 'hono/http-exception';
+import type { DBMedia, DBNews, NewsDTO } from 'oa-shared';
 import { News } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
-import { IMAGE_SIZES } from 'src/config/imageTransforms';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 import { contentServiceServer } from 'src/services/contentService.server';
-import { newsServiceServer } from 'src/services/newsService.server';
+import { NewsServiceServer } from 'src/services/newsService.server';
 import { ProfileServiceServer } from 'src/services/profileService.server';
-import { storageServiceServer } from 'src/services/storageService.server';
 import { updateUserActivity } from 'src/utils/activity.server';
 import { getSummaryFromMarkdown } from 'src/utils/getSummaryFromMarkdown';
 import { hasAdminRights } from 'src/utils/helpers';
+import {
+  conflictError,
+  forbiddenError,
+  methodNotAllowedError,
+  notFoundError,
+  unauthorizedError,
+  validationError,
+} from 'src/utils/httpException';
 import { convertToSlug } from 'src/utils/slug';
-import { validateImage } from 'src/utils/storage';
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
   const id = Number(params.id);
@@ -28,50 +34,25 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     const data = {
       body: formData.get('body') as string,
       category: formData.has('category') ? Number(formData.get('category')) : null,
-      isDraft: formData.get('is_draft') === 'true',
-      profileBadge: formData.has('profileBadge') ? (formData.get('profileBadge') as string) : null,
+      isDraft: formData.get('isDraft') === 'true',
+      profileBadge: formData.has('profileBadge') ? Number(formData.get('profileBadge')) : null,
       tags: formData.has('tags') ? formData.getAll('tags').map((x) => Number(x)) : null,
       title: formData.get('title') as string,
-      slug: convertToSlug(formData.get('title') as string),
-    };
+      heroImage: formData.has('heroImage')
+        ? (JSON.parse(formData.get('heroImage') as string) as DBMedia)
+        : null,
+    } satisfies NewsDTO;
 
     const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
-      return Response.json({}, { headers, status: 401 });
+      throw unauthorizedError();
     }
 
-    const currentNews = await newsServiceServer.getById(id, client);
-
-    const { valid, status, statusText } = await validateRequest(
-      params,
-      request,
-      claims.data.claims.sub,
-      data,
-      currentNews,
-      client,
-    );
-
-    if (!valid) {
-      return Response.json({}, { headers, status, statusText });
-    }
-
-    const existingHeroImage = formData.get('existingHeroImage') as string | null;
-    const newHeroImage = formData.get('heroImage') as File | null;
-    const imageValidation = validateImage(newHeroImage);
-
-    if (!imageValidation.valid && imageValidation.error) {
-      return Response.json(
-        {},
-        {
-          headers,
-          status: 400,
-          statusText: imageValidation.error.message,
-        },
-      );
-    }
-
-    const previousSlugs = contentServiceServer.updatePreviousSlugs(currentNews, data.slug);
+    const currentNews = await new NewsServiceServer(client).getById(id);
+    const slug = convertToSlug(data.title);
+    await validateRequest(params, request, claims.data.claims.sub, data, currentNews, slug, client);
+    const previousSlugs = contentServiceServer.updatePreviousSlugs(currentNews, slug);
 
     const isFirstPublish = currentNews.is_draft && !data.isDraft && !currentNews.published_at;
 
@@ -83,14 +64,14 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         body: data.body,
         category: data.category,
         is_draft: data.isDraft,
-        modified_at: now,
-        slug: data.slug,
+        modified_at: new Date(),
+        slug: slug,
         previous_slugs: previousSlugs,
         profile_badge: data.profileBadge,
         summary: getSummaryFromMarkdown(data.body),
         tags: data.tags,
         title: data.title,
-        ...(!existingHeroImage && { hero_image: null }),
+        hero_image: data.heroImage,
         ...(isFirstPublish && { published_at: now }),
       })
       .eq('id', id)
@@ -102,37 +83,16 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
     const news = News.fromDB(newsResult.data[0], []);
 
-    if (newHeroImage) {
-      const mediaFiles = await storageServiceServer.uploadImage(
-        [newHeroImage],
-        `news/${news.id}`,
-        client,
-      );
-
-      if (mediaFiles?.media?.length) {
-        await client
-          .from('news')
-          .update({
-            hero_image: mediaFiles.media.at(0),
-          })
-          .eq('id', news.id);
-
-        const [image] = storageServiceServer.getPublicUrls(
-          client,
-          mediaFiles.media,
-          IMAGE_SIZES.GALLERY,
-        );
-
-        news.heroImage = image;
-      }
-    }
-
     updateUserActivity(client, claims.data.claims.sub);
 
     return Response.json({ news }, { headers, status: 200 });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
     console.error(error);
-    return Response.json({}, { headers, status: 500, statusText: 'Error creating news' });
+    return Response.json({ error: 'Error updating news', status: 500 }, { status: 500 });
   }
 };
 
@@ -143,26 +103,26 @@ async function deleteNews(request: Request, id: number) {
     const claims = await client.auth.getClaims();
 
     if (!claims.data?.claims) {
-      return Response.json({}, { headers, status: 401 });
+      throw unauthorizedError();
     }
 
     const profileService = new ProfileServiceServer(client);
     const profile = await profileService.getByAuthId(claims.data.claims.sub);
 
     if (!profile) {
-      return Response.json({}, { headers, status: 400, statusText: 'User not found' });
+      throw validationError('User not found');
     }
 
-    const news = await newsServiceServer.getById(id, client);
+    const news = await new NewsServiceServer(client).getById(id);
 
     if (!news) {
-      return Response.json({}, { headers, status: 404, statusText: 'News not found' });
+      throw notFoundError('News');
     }
 
     const isCreator = news.created_by === profile.id;
 
     if (!isCreator && !hasAdminRights(profile)) {
-      return Response.json({}, { headers, status: 403, statusText: 'Unauthorized' });
+      throw forbiddenError('Unauthorized');
     }
 
     await client
@@ -175,6 +135,10 @@ async function deleteNews(request: Request, id: number) {
 
     return Response.json({}, { status: 200, headers });
   } catch (error) {
+    if (error instanceof HTTPException) {
+      return error.getResponse();
+    }
+
     console.error('Delete news error:', error);
     return Response.json({}, { status: 500, headers });
   }
@@ -184,52 +148,52 @@ async function validateRequest(
   params: Params<string>,
   request: Request,
   userAuthId: string,
-  data: any,
+  data: NewsDTO,
   currentNews: DBNews,
+  slug: string,
   client: SupabaseClient,
-) {
+): Promise<void> {
   if (request.method !== 'PUT') {
-    return { status: 405, statusText: 'Method not allowed' };
+    throw methodNotAllowedError();
   }
 
   if (!params.id) {
-    return { status: 400, statusText: 'id is required' };
+    throw validationError('ID is required', 'id');
   }
 
   if (!data.title) {
-    return { status: 400, statusText: 'Title is required' };
+    throw validationError('Title is required', 'title');
   }
 
   if (!data.body) {
-    return { status: 400, statusText: 'Body is required' };
+    throw validationError('Body is required', 'body');
+  }
+
+  if (!data.heroImage) {
+    throw validationError('Hero Image is required', 'heroImage');
   }
 
   if (!currentNews) {
-    return { status: 400, statusText: 'News not found' };
+    throw notFoundError('News');
   }
 
   if (
-    currentNews.slug !== data.slug &&
-    (await contentServiceServer.isDuplicateExistingSlug(data.slug, currentNews.id, client, 'news'))
+    currentNews.slug !== slug &&
+    (await contentServiceServer.isDuplicateExistingSlug(slug, currentNews.id, client, 'news'))
   ) {
-    return {
-      status: 409,
-      statusText: 'This news already exists',
-    };
+    throw conflictError('This news already exists');
   }
 
   const profileService = new ProfileServiceServer(client);
   const profile = await profileService.getByAuthId(userAuthId);
 
   if (!profile) {
-    return { status: 400, statusText: 'User not found' };
+    throw validationError('User not found');
   }
 
   const isCreator = currentNews.created_by === profile.id;
 
   if (!isCreator && !hasAdminRights(profile)) {
-    return { status: 403, statusText: 'Unauthorized' };
+    throw forbiddenError('Unauthorized');
   }
-
-  return { valid: true };
 }

@@ -57,7 +57,7 @@ describe('[Library]', () => {
         }
 
         images.forEach((image, index) => {
-          cy.get(`[data-cy=image-upload-${index}]`).find(':file').selectFile(image, { force: true });
+          cy.get(`[data-cy=new-image-upload]`).find(':file').selectFile(image, { force: true });
         });
       }
     });
@@ -333,7 +333,7 @@ describe('[Library]', () => {
       cy.get('[data-cy=step_0]').within(() => {
         cy.get('[data-cy=step-title]').clear().type('Step with images').blur();
         cy.get('[data-cy=step-description]').clear().type('Description for step 2. This description should be between the minimum and maximum description length').blur();
-        cy.get('[data-cy=image-upload-0]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
+        cy.get('[data-cy=new-image-upload]').find(':file').selectFile('src/fixtures/images/howto-step-pic1.jpg', { force: true });
         cy.get('[data-cy=delete-image]').should('exist');
       });
 

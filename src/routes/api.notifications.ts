@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DBNotification } from 'oa-shared';
-import { Image, Notification, NotificationDisplay } from 'oa-shared';
+import { Notification, NotificationDisplay } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
 
@@ -27,10 +27,12 @@ export const transformNotification = async (
         .from(process.env.TENANT_ID as string)
         .getPublicUrl(dbNotification.triggered_by.photo.path);
       if (data?.publicUrl) {
-        notification.triggeredBy.photo = new Image({
+        notification.triggeredBy.photo = {
           id: dbNotification.triggered_by.photo.id,
+          path: dbNotification.triggered_by.photo.path,
+          fullPath: dbNotification.triggered_by.photo.fullPath,
           publicUrl: data.publicUrl,
-        });
+        };
       }
     }
 

@@ -1,5 +1,6 @@
+import type { FileObject } from '@supabase/storage-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBResearchUpdate, IDBDownloadable } from 'oa-shared';
+import type { IDBDownloadable } from 'oa-shared';
 import type { LoaderFunctionArgs, Params } from 'react-router';
 import { redirect } from 'react-router';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
@@ -24,7 +25,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   return result;
 }
 
-async function resolveUrl(params: Params<string>, client: SupabaseClient, headers) {
+async function resolveUrl(params: Params<string>, client: SupabaseClient, headers: Headers) {
   const tableName = resolveType(params.type!);
   const contentId = +params.contentId!;
   const docId = params.docId!;
@@ -37,22 +38,16 @@ async function resolveUrl(params: Params<string>, client: SupabaseClient, header
     return await resolveFileLink(tableName, contentId, client, headers);
   }
 
-  const path = await resolvePath(tableName, contentId, client);
   const bucket = `${process.env.TENANT_ID}-documents`;
 
-  if (!path) {
-    return Response.json({}, { status: 400, headers });
-  }
+  // Query storage.objects table to get the actual file path
+  const fileMetadata = await resolveFileFromStorage(docId, bucket, client);
 
-  const { data } = await client.storage.from(bucket).list(path);
-
-  const file = data?.find((x) => x.id === docId);
-
-  if (!data || !file) {
+  if (!fileMetadata) {
     return Response.json({}, { status: 404, headers });
   }
 
-  const result = await client.storage.from(bucket).createSignedUrl(`${path}/${file.name}`, 3600, {
+  const result = await client.storage.from(bucket).createSignedUrl(fileMetadata.fullPath, 3600, {
     download: true,
   });
 
@@ -80,6 +75,30 @@ async function resolveFileLink(
   return redirect(data.file_link);
 }
 
+async function resolveFileFromStorage(
+  docId: string,
+  bucket: string,
+  client: SupabaseClient,
+): Promise<{ fullPath: string; name: string } | null> {
+  // Use RPC function to query storage.objects table (which is in storage schema)
+  const { data, error } = await client
+    .rpc('get_storage_object_path', {
+      object_id: docId,
+      bucket_name: bucket,
+    })
+    .single<FileObject>();
+
+  if (!data || error) {
+    console.error('Failed to resolve file from storage.objects:', error);
+    return null;
+  }
+
+  // The name field contains the full path in storage
+  const fullPath = data.name;
+
+  return { fullPath, name: data.name };
+}
+
 async function incrementDownloadCount(type: string, contentId: number, client: SupabaseClient) {
   const tableName = resolveType(type)!;
 
@@ -96,33 +115,4 @@ async function incrementDownloadCount(type: string, contentId: number, client: S
       file_download_count: (downloadableDoc.file_download_count || 0) + 1,
     })
     .eq('id', +contentId);
-}
-
-async function resolvePath(
-  tableName: string,
-  contentId: number,
-  client: SupabaseClient,
-): Promise<string | null> {
-  if (tableName === 'projects' || tableName === 'research') {
-    return `${tableName}/${contentId}`;
-  }
-
-  if (tableName === 'research_updates') {
-    const { data, error } = await client
-      .from('research_updates')
-      .select('id,research_id')
-      .eq('id', +contentId)
-      .single();
-
-    if (!data) {
-      console.error(error);
-      return null;
-    }
-
-    const update = data as DBResearchUpdate;
-
-    return `research/${update.research_id}/updates/${update.id}`;
-  }
-
-  return null;
 }

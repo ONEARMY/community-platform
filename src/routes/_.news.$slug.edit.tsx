@@ -1,13 +1,12 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { DBNews } from 'oa-shared';
-import { News, UserRole } from 'oa-shared';
+import { DBNews, NewsFormData, UserRole } from 'oa-shared';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data, redirect, useLoaderData } from 'react-router';
 import { NewsForm } from 'src/pages/News/Content/Common/NewsForm';
 import { createSupabaseServerClient } from 'src/repository/supabase.server';
-import { newsServiceServer } from 'src/services/newsService.server';
+import { NewsServiceServer } from 'src/services/newsService.server';
 import { redirectServiceServer } from 'src/services/redirectService.server';
-import { tagsServiceServer } from 'src/services/tagsService.server';
+import { StorageServiceServer } from 'src/services/storageService.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, headers } = createSupabaseServerClient(request);
@@ -23,21 +22,24 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   if (!params.slug) {
-    return data({ news: null }, { headers });
+    return data({ formData: null, id: null }, { headers });
   }
 
-  const result = await newsServiceServer.getBySlug(client, params.slug!);
+  const result = await new NewsServiceServer(client).getBySlug(params.slug!);
 
   if (result.error || !result.data) {
-    return data({ news: null }, { headers });
+    return data({ formData: null, id: null }, { headers });
   }
 
   const dbNews = result.data as unknown as DBNews;
-  const tags = await tagsServiceServer.getTags(client, dbNews.tags);
-  const heroImage = await newsServiceServer.getHeroImage(client, dbNews.hero_image);
-  const news = News.fromDB(dbNews, tags, heroImage);
 
-  return data({ news }, { headers });
+  const publicImage = dbNews.hero_image
+    ? new StorageServiceServer(client).getPublicUrl(dbNews.hero_image)
+    : null;
+
+  const formData: NewsFormData = DBNews.toFormData(dbNews, publicImage);
+
+  return data({ formData, id: result.data.id }, { headers });
 }
 
 async function isAllowedToEdit(userAuthId: string, client: SupabaseClient) {
@@ -51,7 +53,7 @@ async function isAllowedToEdit(userAuthId: string, client: SupabaseClient) {
 }
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>();
+  const { formData, id } = useLoaderData<typeof loader>();
 
-  return <NewsForm data-testid="news-create-form" parentType="edit" news={data.news} />;
+  return <NewsForm data-testid="news-create-form" formAction="edit" id={id} formData={formData} />;
 }

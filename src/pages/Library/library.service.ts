@@ -1,6 +1,6 @@
-import type { Project, ProjectFormData } from 'oa-shared';
+import { DBMedia, type Project, ProjectDTO, type ProjectFormData } from 'oa-shared';
 import { logger } from 'src/logger';
-import { getCleanFileName } from 'src/utils/storage';
+import { createFormData } from 'src/services/formDataHelper';
 import type { LibrarySortOption } from './Content/List/LibrarySortOptions';
 
 export enum LibrarySearchParams {
@@ -55,65 +55,21 @@ const getDrafts = async () => {
 };
 
 const upsert = async (id: number | null, formData: ProjectFormData, isDraft = false) => {
-  const data = new FormData();
-  data.append('title', formData.title);
-  data.append('fileLink', formData.fileLink || '');
-
-  if (formData.time) {
-    data.append('time', formData.time);
-  }
-
-  if (formData.difficultyLevel) {
-    data.append('difficultyLevel', formData.difficultyLevel);
-  }
-
-  if (formData.description) {
-    data.append('description', formData.description);
-  }
-
-  if (formData.tags && formData.tags.length > 0) {
-    for (const tag of formData.tags) {
-      if (tag) {
-        data.append('tags', tag.toString());
-      }
-    }
-  }
-
-  if (formData.category) {
-    data.append('category', formData.category?.value.toString());
-  }
-
-  if (isDraft) {
-    data.append('draft', 'true');
-  }
-
-  if (formData.image) {
-    data.append('coverImage', formData.image.photoData, getCleanFileName(formData.image.name));
-  }
-
-  if (formData.existingImage) {
-    data.append('existingCoverImage', formData.existingImage.id);
-  }
-
-  if (formData.files && formData.files.length > 0) {
-    for (const file of formData.files) {
-      if (file) {
-        data.append('files', file, getCleanFileName(file.name));
-      }
-    }
-  }
-
-  if (formData.existingFiles && formData.existingFiles.length > 0) {
-    for (const file of formData.existingFiles) {
-      if (file) {
-        data.append('existingFiles', file.id);
-      }
-    }
-  }
+  const data = createFormData<ProjectDTO>({
+    title: formData.title,
+    description: formData.description,
+    category: Number(formData.category?.value) || null,
+    coverImage: formData.coverImage ? DBMedia.fromPublicMedia(formData.coverImage) : null,
+    difficultyLevel: formData.difficultyLevel,
+    fileLink: formData.fileLink,
+    files: formData.files,
+    tags: formData.tags,
+    time: formData.time,
+    stepCount: formData.steps.length || 0,
+    isDraft: isDraft,
+  });
 
   if (formData.steps?.length) {
-    data.append('stepCount', formData.steps.length.toString());
-
     for (let i = 0; i < formData.steps.length; i++) {
       const step = formData.steps[i];
       if (step.id) {
@@ -122,18 +78,12 @@ const upsert = async (id: number | null, formData: ProjectFormData, isDraft = fa
       data.append(`steps.[${i}].title`, step.title);
       data.append(`steps.[${i}].description`, step.description);
 
-      if (step.images && step.images.length) {
-        for (const image of step.images) {
-          if (image) {
-            data.append(`steps.[${i}].images`, image.photoData, getCleanFileName(image.name));
-          }
-        }
-      }
-
-      if (step.existingImages) {
-        for (const image of step.existingImages) {
-          if (image) {
-            data.append(`steps.[${i}].existingImages`, image.id);
+      // Only send existing image metadata (images are uploaded immediately)
+      const stepImages = step.images || step.images || [];
+      if (stepImages && stepImages.length > 0) {
+        for (const image of stepImages) {
+          if (image?.path) {
+            data.append(`steps.[${i}].images`, JSON.stringify(image));
           }
         }
       }
@@ -155,19 +105,9 @@ const upsert = async (id: number | null, formData: ProjectFormData, isDraft = fa
         });
 
   if (response.status !== 200 && response.status !== 201) {
-    if (response.status === 409) {
-      throw new Error('Duplicate project', { cause: 409 });
-    }
-
-    if (response.statusText) {
-      throw new Error(response.statusText, {
-        cause: 400,
-      });
-    }
-
-    throw new Error(response.statusText || 'Error saving the project', {
-      cause: 500,
-    });
+    const errorData = await response.json().catch(() => ({ error: 'Error saving the project' }));
+    const errorMessage = errorData.error || errorData.message || 'Error saving the project';
+    throw new Error(errorMessage, { cause: response.status });
   }
 
   return (await response.json()) as { project: Project };

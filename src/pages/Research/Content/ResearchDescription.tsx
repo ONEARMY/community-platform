@@ -1,5 +1,12 @@
 import { max } from 'date-fns';
-import { AuthorDisplay, Category, DisplayDate, LinkifyText, TagList, Username } from 'oa-components';
+import {
+  AuthorDisplay,
+  Category,
+  DisplayDate,
+  LinkifyText,
+  TagList,
+  Username,
+} from 'oa-components';
 import { type ResearchItem, ResearchStatusRecord } from 'oa-shared';
 import { useMemo } from 'react';
 import { DraftTag } from 'src/pages/common/Drafts/DraftTag';
@@ -15,7 +22,10 @@ const ResearchDescription = (props: IProps) => {
   const { research } = props;
 
   const lastUpdated = useMemo(() => {
-    const dates = [research?.modifiedAt, ...(research?.updates?.map((update) => update?.modifiedAt) || [])]
+    const dates = [
+      research?.modifiedAt,
+      ...(research?.updates?.map((update) => update?.modifiedAt) || []),
+    ]
       .filter((date): date is Date => date !== null)
       .map((date) => new Date(date));
 
@@ -78,8 +88,12 @@ const ResearchDescription = (props: IProps) => {
             {research.isDraft && <DraftTag />}
 
             <Text variant="auxiliary">
-              <DisplayDate createdAt={research.createdAt}
-                publishedAt={research.publishedAt} modifiedAt={lastUpdated.toISOString()} publishedAction="Started" />
+              <DisplayDate
+                createdAt={research.createdAt}
+                publishedAt={research.publishedAt}
+                modifiedAt={lastUpdated.toISOString()}
+                publishedAction="Started"
+              />
             </Text>
 
             {research.category && <Category category={research.category} sx={{ fontSize: 2 }} />}

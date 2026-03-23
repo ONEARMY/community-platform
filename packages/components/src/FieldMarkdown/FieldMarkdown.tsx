@@ -25,11 +25,12 @@ import { AddImage } from './AddImage';
 
 import '@mdxeditor/editor/style.css';
 import './style.css';
+import { MediaWithPublicUrl } from 'oa-shared';
 
 type FieldProps = FieldRenderProps<any, any> & { children?: React.ReactNode };
 
 export interface IProps extends FieldProps {
-  imageUploadHandler: (image: File) => Promise<string>;
+  imageUploadHandler: (image: File) => Promise<MediaWithPublicUrl | null>;
   disabled?: boolean;
   children?: React.ReactNode;
   'data-cy'?: string;

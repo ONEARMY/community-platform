@@ -1,20 +1,13 @@
-import styled from '@emotion/styled';
 import { ImageInputV2 } from 'oa-components';
 import type { MediaWithPublicUrl } from 'oa-shared';
 import { commonStyles } from 'oa-themes';
 import { useState } from 'react';
 import { useForm, useFormState } from 'react-final-form';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
+import { ImageInputFieldWrapper } from 'src/pages/common/FormFields/ImageInputFieldWrapper';
 import { fields } from 'src/pages/Question/labels';
 import { storageService } from 'src/services/storageService';
 import { Spinner, Text } from 'theme-ui';
-
-const ImageInputFieldWrapper = styled.div`
-  width: 150px;
-  height: 100px;
-  margin-right: 10px;
-  margin-bottom: 6px;
-`;
 
 interface IProps {
   contentType: 'questions';

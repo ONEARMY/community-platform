@@ -1,19 +1,12 @@
-import styled from '@emotion/styled';
 import { ImageInputV2 } from 'oa-components';
 import { DBMedia, MediaWithPublicUrl, ResearchUpdateFormData } from 'oa-shared';
 import { commonStyles } from 'oa-themes';
 import { useState } from 'react';
 import { useForm, useFormState } from 'react-final-form';
 import { FormFieldWrapper } from 'src/pages/common/FormFields';
+import { ImageInputFieldWrapper } from 'src/pages/common/FormFields/ImageInputFieldWrapper';
 import { storageService } from 'src/services/storageService';
 import { Spinner, Text } from 'theme-ui';
-
-const ImageInputFieldWrapper = styled.div`
-  width: 150px;
-  height: 100px;
-  margin-right: 10px;
-  margin-bottom: 6px;
-`;
 
 interface IProps {
   contentId: number;

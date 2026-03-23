@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import { ImageInputV2 } from 'oa-components';
 import type { MediaWithPublicUrl } from 'oa-shared';
 import { commonStyles } from 'oa-themes';
@@ -8,12 +7,7 @@ import { steps } from 'src/pages/Library/labels';
 import { storageService } from 'src/services/storageService';
 import { Spinner, Text } from 'theme-ui';
 import { FormFieldWrapper } from './FormFieldWrapper';
-
-const ImageInputFieldWrapper = styled.div`
-  width: 150px;
-  height: 100px;
-  margin-right: 10px;
-`;
+import { ImageInputFieldWrapper } from './ImageInputFieldWrapper';
 
 const MAX_IMAGES = 10;
 

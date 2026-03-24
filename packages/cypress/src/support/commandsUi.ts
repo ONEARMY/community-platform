@@ -167,29 +167,21 @@ Cypress.Commands.add('setSettingPublicContact', () => {
 });
 
 Cypress.Commands.add('fillSignupForm', (username: string, email: string, password: string) => {
-  // Add tenant ID to email if not already present (e.g., demo_user@example.com -> demo_user+ABC-node-1@example.com)
-  const tenantId = Cypress.env('TENANT_ID');
-  const tenantAwareEmail = email.includes(`+${tenantId}@`) ? email : email.replace('@', `+${tenantId}@`);
-  
   cy.log('Fill in sign-up form');
   cy.visit('/sign-up');
   cy.wait(2000);
   cy.get('[data-cy=username]').clear().type(username);
-  cy.get('[data-cy=email]').clear().type(tenantAwareEmail);
+  cy.get('[data-cy=email]').clear().type(email);
   cy.get('[data-cy=password]').clear().type(password);
   cy.get('[data-cy=confirm-password]').clear().type(password);
   cy.get('[data-cy=consent]').check();
 });
 
 Cypress.Commands.add('signIn', (email: string, password: string) => {
-  // Add tenant ID to email if not already present (e.g., demo_user@example.com -> demo_user+ABC-node-1@example.com)
-  const tenantId = Cypress.env('TENANT_ID');
-  const tenantAwareEmail = email.includes(`+${tenantId}@`) ? email : email.replace('@', `+${tenantId}@`);
-  
   cy.log('Fill in sign in form');
   cy.visit('/sign-in');
   cy.wait(2000);
-  cy.get('[data-cy=email]').clear().type(tenantAwareEmail);
+  cy.get('[data-cy=email]').clear().type(email);
   cy.get('[data-cy=password]').clear().type(password);
   cy.get('[data-cy=submit]').click();
   cy.get('[data-cy=loader]').should('not.exist');

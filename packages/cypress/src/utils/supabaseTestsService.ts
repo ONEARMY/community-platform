@@ -38,13 +38,11 @@ export class SupabaseTestsService {
   }
 
   async deleteAccounts() {
-    const result = await this.adminClient.auth.admin.listUsers();
+    const result = await this.adminClient.auth.admin.listUsers({ perPage: 1000 });
 
     for (const user of result.data.users) {
-      // Delete ALL users belonging to this tenant (identified by +tenantId in email)
-      // This includes:
-      // - Seeded users: admin+ABC-node-1@test.com
-      // - Dynamic users: delivered+ci_abc123+ABC-node-1@resend.dev
+      // tenantId already includes the CI_NODE (e.g., "ABC-node-1")
+      // so this correctly scopes to only this node's users
       if (user.email?.includes(`+${this.tenantId}@`)) {
         await this.adminClient.auth.admin.deleteUser(user.id);
       }
@@ -121,7 +119,7 @@ export class SupabaseTestsService {
   };
 
   async getUserProfileByUsername(username: string) {
-    const { data, error } = await this.client.from('profiles').select().eq('username', username).single();
+    const { data, error } = await this.client.from('profiles').select().eq('username', username).maybeSingle();
 
     if (error || !data) {
       return error;
@@ -448,13 +446,6 @@ export class SupabaseTestsService {
     profileTypes: DBProfileType[],
     profileImages: { id: string; path: string; fullPath: string }[],
   ) {
-    // STEP 1: Clean up any existing users for this tenant (from previous failed runs)
-    console.log(`Cleaning up existing users for tenant ${this.tenantId}...`);
-    await this.deleteAccounts();
-    
-    // Wait a moment for cleanup to propagate
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
     const accounts = Object.values(MOCK_DATA.users).map((user) => ({
       ...user,
       // Make email unique per tenant using + addressing (e.g., admin+ABC123@test.com)
@@ -464,19 +455,19 @@ export class SupabaseTestsService {
     }));
 
     // STEP 2: Create fresh users (should all succeed now)
-    const profiles = await Promise.all(
-      accounts.map(async (account) => {
-        const profileType = profileTypes.find((type) => type.name === account.profileType) || profileTypes[0];
+    const profiles: DBProfile[] = [];
 
-        return await this.createAuthAndProfile(
-          account,
-          profileBadges[0].id,
-          [profileTags[0].id, profileTags[1].id],
-          profileType.id,
-          profileImages,
-        );
-      }),
-    );
+    for (const account of accounts) {
+      const profileType = profileTypes.find((t) => t.name === account.profileType) || profileTypes[0];
+      const profile = await this.createAuthAndProfile(
+        account,
+        profileBadges[0].id,
+        [profileTags[0].id, profileTags[1].id],
+        profileType.id,
+        profileImages,
+      );
+      profiles.push(profile);
+    }
 
     return { profiles };
   }
@@ -501,19 +492,17 @@ export class SupabaseTestsService {
 
     if (authUser.error?.code === 'email_exists' || authUser.error?.code === 'user_already_exists') {
       // User already exists from a previous spec in this same test run - that's fine!
-      // Just find and reuse it
+      // Just find and reuse it via RPC function
       console.log(`User ${user.email} already exists, reusing...`);
-      const { data: existingUser, error } = await this.adminClient
-        .from('auth.users')
-        .select('id')
-        .eq('email', user.email)
-        .single();
+      const { data, error } = await this.client
+        .rpc('get_user_id_by_email', { email: user.email });
 
-      if (error || !existingUser) {
-        throw new Error(`User ${user.email} reported as existing but not found in auth.users table: ${error?.message}`);
+      if (error || !data || data.length === 0) {
+        throw new Error(`User ${user.email} reported as existing but not found: ${error?.message}`);
       }
       
-      authId = existingUser.id;
+      authId = data[0].id;
+      console.log({things: data[0]})
     } else if (authUser.error) {
       throw new Error(`Failed to create user ${user.email}: ${authUser.error.message}`);
     } else if (authUser.data?.user?.id) {
@@ -533,11 +522,14 @@ export class SupabaseTestsService {
     profileTypeId: number,
     profileImages: { id: string; path: string; fullPath: string }[],
   ) {
-    const { data } = await this.adminClient.from('profiles').select('*').eq('auth_id', authId).eq('tenant_id', this.tenantId).single();
+    const { data } = await this.adminClient.from('profiles').select('*').eq('auth_id', authId).eq('tenant_id', this.tenantId).maybeSingle();
 
     if (data) {
+      console.log(`Profile already exists for ${user.username}, reusing...`);
       return data;
     }
+
+    console.log(`Creating profile for ${user.username} with auth_id ${authId} and roles:`, user.roles);
 
     const profileDB: Partial<DBProfile> & { tenant_id: string } = {
       created_at: user.createdAt,
@@ -560,8 +552,12 @@ export class SupabaseTestsService {
 
     const profileResult = await this.adminClient.from('profiles').insert(profileDB).select('*');
 
+    if (profileResult.error) {
+      throw new Error(`Failed to create profile for ${user.username}: ${profileResult.error.message}`);
+    }
+
     if (!profileResult.data || profileResult.data.length === 0) {
-      console.error('Failed to create profile');
+      throw new Error(`Profile creation returned no data for ${user.username}`);
     }
 
     if (profileResult.data[0].username === 'demo_user') {
@@ -576,7 +572,7 @@ export class SupabaseTestsService {
       });
     }
 
-    Promise.all(
+    await Promise.all(
       profilTagIds.map(async (profileTag) => {
         return this.seedDatabase({
           profile_tags_relations: [

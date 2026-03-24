@@ -498,11 +498,24 @@ export class SupabaseTestsService {
     let authId: string;
 
     if (authUser.error?.code === 'email_exists') {
-      const existingUser = existingUsers.find((existingUser) => existingUser.email === user.email);
+      // Try to find in cached list first
+      let existingUser = existingUsers.find((existingUser) => existingUser.email === user.email);
+      
+      // If not in cached list, fetch directly (user might have been created after cache)
+      if (!existingUser) {
+        const { data } = await this.adminClient.auth.admin.listUsers();
+        existingUser = data.users.find(u => u.email === user.email);
+      }
+
+      if (!existingUser) {
+        throw new Error(`User with email ${user.email} exists but could not be found`);
+      }
 
       authId = existingUser.id;
     } else if (authUser.data?.user?.id) {
       authId = authUser.data.user.id;
+    } else {
+      throw new Error(`Failed to create or find user: ${user.email}`);
     }
 
     return await this.createProfile(user, authId, profileBadgeId, profilTagIds, profileTypeId, profileImages);

@@ -34,23 +34,19 @@ export const DeleteAccountForm = () => {
       const result = await accountService.deleteAccount(pendingPassword);
 
       if (!result.ok) {
-        const data = await result.json();
-
-        if (data.error) {
-          setSubmitResults({ type: 'error', message: data.error });
-        } else {
-          setSubmitResults({
-            type: 'error',
-            message: 'Oops, something went wrong!',
-          });
-        }
-
+        setSubmitResults({
+          type: 'error',
+          message: result.statusText || 'Oops, something went wrong!',
+        });
         return;
       }
 
       navigate('/');
-    } catch (error) {
-      setSubmitResults({ type: 'error', message: error.message });
+    } catch {
+      setSubmitResults({
+        type: 'error',
+        message: 'Oops, something went wrong!',
+      });
     }
   };
 
@@ -58,10 +54,7 @@ export const DeleteAccountForm = () => {
     <Flex data-cy="deleteAccountContainer" sx={{ flexDirection: 'column', gap: 2 }}>
       <UserContactError submitResults={submitResults} />
 
-      <Accordion
-        title={fields.deleteAccount.title}
-        subtitle={fields.deleteAccount.description}
-      >
+      <Accordion title={fields.deleteAccount.title} subtitle={fields.deleteAccount.description}>
         <Form
           onSubmit={onSubmit}
           id={formId}
